@@ -4,7 +4,7 @@ A minimalist Flutter game engine.
 
 ## WIP
 
-Audio doesn't work on iOS; the rest should (not tested).
+Audio does not work on iOS; the rest should (not tested).
 
 Help is appreciated, check the Audio section for more details.
 
@@ -90,7 +90,19 @@ You must have an appropriate folder structure and add the files to the `pubspec.
 It has to be an MP3 file.
 
 This uses the [audioplayers](https://github.com/luanpotter/audioplayer) lib, in order to allow playing multiple sounds simultaneously (crucial in a game).
-Therefore, it doesn't work on iOS yet; check their README for more details on that.
+Therefore, it does not work on iOS yet; check their README for more details on that.
+
+If you want to play indefinitely, just use loop:
+
+```
+    Flame.audio.loop('music.mp3');
+```
+
+Beware: in order to use loop or any platform binding callbacks, you need to call this utility function first thing on your application code:
+
+```
+    Flame.util.enableEvents();
+```
 
 ### Images
 
@@ -112,13 +124,14 @@ Just use:
       canvas.drawImageRect(image, rect, rect, paint);
     });
 ```
+
 Similarly to Audio, you can instantiate your own copy of Image:
 
 ```
     Image image = await new Images().load('asd');
 ```
 
-If you are using the Component module, you probably shouldn't use this one; use SpriteComponent instead!
+If you are using the Component module, you probably should not use this one; use SpriteComponent instead!
 
 You must have an appropriate folder structure and add the files to the `pubspec.yaml` file, as explained above.
 
@@ -137,7 +150,7 @@ But you can use the default implementation, `SpriteComponent`, which makes rende
 
     const size = 128.0; // size that will be drawn on the screen
     // it will resize the image according
-    SpriteComponent player = new SpriteComponent(size, 'player.png');
+    SpriteComponent player = new SpriteComponent.square(size, 'player.png');
     // the image sprite will be loaded by the Images module
     
     // screen coordinates
@@ -147,6 +160,12 @@ But you can use the default implementation, `SpriteComponent`, which makes rende
     // tip: use canvas.translate to convert coordiantes
     
     player.render(canvas); // it will render if the image is ready
+```
+
+You can also use the rectangle constructor if you want a non-square sprite:
+
+```
+    var object = new SpriteComponent.rectangle(width, height, imagePath);
 ```
 
 ### Game Loop
@@ -163,11 +182,11 @@ Extend the abstract class Game and just implement render and update; they will b
         List<Component> objs = new List();
 
         update(double t) {
-            components.forEach((Component obj) { obj.update(t); });
+            components.forEach((Component obj) => obj.update(t));
         }
 
         render(Canvas canvas) {
-            components.forEach((Component obj) { obj.render(canvas); });
+            components.forEach((Component obj) => obj.render(canvas));
         }
     }    
    
@@ -182,9 +201,10 @@ The update method receives the delta time in milliseconds since last update and 
 
 ### Util
 
-This module will incorporate a few utility functions that are good to have in any game environment. For now, there is only one:
+This module will incorporate a few utility functions that are good to have in any game environment. For now, there is only two:
 
  * initialDimensions : returns a Future with the dimension (Size) of the screen. This has to be done in a hacky way because of the reasons described in the code.
+ * enableEvents : this is also a hack that allows you to use the Service bindings with platform specific code callbacks. Normally they would only work if you called runApp with a widget, since we draw on canvas for the game, that's never called. This makes sure it works.
 
 Ideas are appreciated!
 
