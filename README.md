@@ -22,7 +22,7 @@ Just drop it in your `pubspec.yaml`:
 
 ```
 dependencies:
-  flame: ^0.1.0
+  flame: ^0.3.0
 ```
 
 Soon I will add an example game here.
