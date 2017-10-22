@@ -24,9 +24,9 @@ class Util {
   }
 
   void enableEvents() {
-    new CustomBinder();
+    new _CustomBinder();
   }
 }
 
-class CustomBinder extends BindingBase with ServicesBinding {
+class _CustomBinder extends BindingBase with ServicesBinding {
 }

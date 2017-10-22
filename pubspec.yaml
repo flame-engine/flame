@@ -1,6 +1,6 @@
 name: flame
 description: A minimalist Flutter game engine
-version: 0.3.0
+version: 0.4.0
 author: Luan Nico <luannico27@gmail.com>
 homepage: https://github.com/luanpotter/flame
 
@@ -9,7 +9,7 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  audioplayers: ^0.1.0
+  audioplayers: ^0.2.0
   path_provider: ^0.2.1+1
 
 environment:

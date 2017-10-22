@@ -22,7 +22,7 @@ Just drop it in your `pubspec.yaml`:
 
 ```
 dependencies:
-  flame: ^0.3.0
+  flame: ^0.4.0
 ```
 
 Soon I will add an example game here.
@@ -114,6 +114,12 @@ Finally, you can pre-load your audios. Audios need to be stored in the memory th
 
 You can load all your audios in beginning so that they always play smoothly.
 
+There's lots of logs; that's reminiscent of the original AudioPlayer plugin. Useful while debug, but afterwards you can disable them with:
+
+```
+    Flame.audio.disableLog();
+```
+
 ### Images
 
 Flutter has a collection of types related to images, and converting everything properly form a local asset to the Image that can be drawn on Canvas is a small pain.
@@ -153,7 +159,9 @@ This class represent a single object on the screen, being a floating rectangle o
 
 The base abstract class has the common expected methods update and render to be implemented.
 
-But you can use the default implementation, `SpriteComponent`, which makes rendering sprites really easy:
+The intermediate inheritance `PositionComponent` adds x, y and angle to your Components, as well as some useful methods like distance and angleBetween.
+
+And finally, the most complete implementation, `SpriteComponent`, which makes rendering sprites really easy:
 
 ```
     import 'package:flame/component.dart';

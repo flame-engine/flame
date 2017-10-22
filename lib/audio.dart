@@ -10,12 +10,16 @@ import 'package:path_provider/path_provider.dart';
 class Audio {
   Map<String, File> loadedFiles = new Map();
 
+  void disableLog() {
+    AudioPlayer.logEnabled = false;
+  }
+
   Future<ByteData> _fetchAsset(String fileName) async {
     return await rootBundle.load('assets/audio/' + fileName);
   }
 
   Future<File> _fetchToMemory(String fileName) async {
-    final file = new File('${(await getTemporaryDirectory()).path}/${fileName}');
+    final file = new File('${(await getTemporaryDirectory()).path}/$fileName');
     return await file.writeAsBytes((await _fetchAsset(fileName)).buffer.asUint8List());
   }
 

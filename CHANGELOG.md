@@ -1,3 +1,8 @@
+## [0.4.0]
+ - Upgraded AudioPlayers, added method to disable logging
+ - Created PositionComponent with some useful methods
+ - A few refactorings
+
 ## [0.3.0]
  - Added a pre-load method for Audio module 
 

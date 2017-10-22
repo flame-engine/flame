@@ -10,9 +10,20 @@ abstract class Component {
 
 }
 
-abstract class SpriteComponent extends Component {
-
+abstract class PositionComponent extends Component {
   double x, y, angle;
+
+  double angleBetween(PositionComponent c) {
+    return (atan2(c.x - this.x, this.y - c.y) - PI/2) % (2*PI);
+  }
+
+  double distance(PositionComponent c) {
+    return sqrt(pow(this.y - c.y, 2) + pow(this.x - c.x, 2));
+  }
+
+}
+
+abstract class SpriteComponent extends PositionComponent {
 
   double width, height;
   Image image;
@@ -27,7 +38,7 @@ abstract class SpriteComponent extends Component {
 
   render(Canvas canvas) {
     canvas.translate(x, y);
-    canvas.rotate(PI /2 + angle);
+    canvas.rotate(PI/2 + angle);
     canvas.translate(-width/2, -height/2);
     if (image != null) {
       Rect src = new Rect.fromLTWH(0.0, 0.0, image.width.toDouble(), image.height.toDouble());
