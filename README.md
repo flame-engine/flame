@@ -98,11 +98,21 @@ If you want to play indefinitely, just use loop:
     Flame.audio.loop('music.mp3');
 ```
 
-Beware: in order to use loop or any platform binding callbacks, you need to call this utility function first thing on your application code:
+**Beware**: in order to use loop or any platform binding callbacks, you need to call this utility function first thing on your application code:
 
 ```
     Flame.util.enableEvents();
 ```
+
+**TODO**: find a way to know if events are enabled and call this automatically somehow.
+
+Finally, you can pre-load your audios. Audios need to be stored in the memory the first time they are requested; therefore, the first time you play each mp3 you might get a delay. In order to pre-load your audios, just use:
+
+```
+    Flame.audio.load('explosion.mp3');
+```
+
+You can load all your audios in beginning so that they always play smoothly.
 
 ### Images
 
