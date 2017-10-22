@@ -9,5 +9,8 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  audioplayers:
-  path_provider:
+  audioplayers: ^0.1.0
+  path_provider: ^0.2.1+1
+
+environment:
+  sdk: ">=1.8.0 <2.0.0"
