@@ -16,6 +16,17 @@ Currently it provides you with: a few utilities, images/sprites, audio, a game l
 
 You can use whatever ones you want, as they are all independent.
 
+## Usage
+
+Just drop it in your `pubspec.yaml`:
+
+```
+dependencies:
+  flame: ^0.1.0
+```
+
+Soon I will add an example game here.
+
 ## Structure
 
 The only structure you are required to comply is a assets folder with two subfolders: audio and images.
