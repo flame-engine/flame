@@ -10,7 +10,8 @@ Help is appreciated, check the Audio section for more details.
 
 ## Goals
 
-The goal of this project is to provided a minimalist set of out-of-the-way solutions for the common problems every game developed in Flutter will share.
+The goal of this project is to provided a minimalist set of out-of-the-way solutions for the
+common problems every game developed in Flutter will share.
 
 Currently it provides you with: a few utilities, images/sprites, audio, a game loop and a component/object system.
 
@@ -89,7 +90,8 @@ You must have an appropriate folder structure and add the files to the `pubspec.
 
 It has to be an MP3 file.
 
-This uses the [audioplayers](https://github.com/luanpotter/audioplayer) lib, in order to allow playing multiple sounds simultaneously (crucial in a game).
+This uses the [audioplayers](https://github.com/luanpotter/audioplayer) lib, in
+order to allow playing multiple sounds simultaneously (crucial in a game).
 Therefore, it does not work on iOS yet; check their README for more details on that.
 
 If you want to play indefinitely, just use loop:
@@ -98,7 +100,8 @@ If you want to play indefinitely, just use loop:
     Flame.audio.loop('music.mp3');
 ```
 
-**Beware**: in order to use loop or any platform binding callbacks, you need to call this utility function first thing on your application code:
+**Beware**: in order to use loop or any platform binding callbacks, you need to call this
+utility function first thing on your application code:
 
 ```
     Flame.util.enableEvents();
@@ -106,7 +109,9 @@ If you want to play indefinitely, just use loop:
 
 **TODO**: find a way to know if events are enabled and call this automatically somehow.
 
-Finally, you can pre-load your audios. Audios need to be stored in the memory the first time they are requested; therefore, the first time you play each mp3 you might get a delay. In order to pre-load your audios, just use:
+Finally, you can pre-load your audios. Audios need to be stored in the memory the first
+time they are requested; therefore, the first time you play each mp3 you might get a
+delay. In order to pre-load your audios, just use:
 
 ```
     Flame.audio.load('explosion.mp3');
@@ -114,7 +119,8 @@ Finally, you can pre-load your audios. Audios need to be stored in the memory th
 
 You can load all your audios in beginning so that they always play smoothly.
 
-There's lots of logs; that's reminiscent of the original AudioPlayer plugin. Useful while debug, but afterwards you can disable them with:
+There's lots of logs; that's reminiscent of the original AudioPlayer plugin. Useful while
+debug, but afterwards you can disable them with:
 
 ```
     Flame.audio.disableLog();
@@ -122,7 +128,8 @@ There's lots of logs; that's reminiscent of the original AudioPlayer plugin. Use
 
 ### Images
 
-Flutter has a collection of types related to images, and converting everything properly form a local asset to the Image that can be drawn on Canvas is a small pain.
+Flutter has a collection of types related to images, and converting everything properly
+form a local asset to the Image that can be drawn on Canvas is a small pain.
 
 This module allows you to obtain an Image that can be drawn on a Canvas using the `drawImageRect` method.
 
@@ -135,8 +142,8 @@ Just use:
     
     // or
     Flame.images.load('player.png').then((Image image) {
-      Paint paint = new Paint()..color = new Color(0xffffffff);
-      Rect rect = new Rect.fromLTWH(0.0, 0.0, image.width.toDouble(), image.height.toDouble());
+      var paint = new Paint()..color = new Color(0xffffffff);
+      var rect = new Rect.fromLTWH(0.0, 0.0, image.width.toDouble(), image.height.toDouble());
       canvas.drawImageRect(image, rect, rect, paint);
     });
 ```
@@ -159,7 +166,8 @@ This class represent a single object on the screen, being a floating rectangle o
 
 The base abstract class has the common expected methods update and render to be implemented.
 
-The intermediate inheritance `PositionComponent` adds x, y and angle to your Components, as well as some useful methods like distance and angleBetween.
+The intermediate inheritance `PositionComponent` adds x, y and angle to your Components,
+as well as some useful methods like distance and angleBetween.
 
 And finally, the most complete implementation, `SpriteComponent`, which makes rendering sprites really easy:
 
@@ -168,7 +176,7 @@ And finally, the most complete implementation, `SpriteComponent`, which makes re
 
     const size = 128.0; // size that will be drawn on the screen
     // it will resize the image according
-    SpriteComponent player = new SpriteComponent.square(size, 'player.png');
+    var player = new SpriteComponent.square(size, 'player.png');
     // the image sprite will be loaded by the Images module
     
     // screen coordinates
@@ -197,7 +205,7 @@ Extend the abstract class Game and just implement render and update; they will b
     import 'package:flame/component.dart';
 
     class MyGame extends Game {
-        List<Component> objs = new List();
+        var objs = <Component>[];
 
         update(double t) {
             components.forEach((Component obj) => obj.update(t));
@@ -208,21 +216,26 @@ Extend the abstract class Game and just implement render and update; they will b
         }
     }    
    
-    Game game = new MyGame();
+    var game = new MyGame();
     game.objs.add(new SpriteObject( ... ));
     game.start();
 ``` 
 
 The render method takes the canvas ready for drawing the current state of the game.
 
-The update method receives the delta time in milliseconds since last update and allows you to move the next state.
+The update method receives the delta time in milliseconds since last update and allows
+you to move the next state.
 
 ### Util
 
-This module will incorporate a few utility functions that are good to have in any game environment. For now, there is only two:
+This module will incorporate a few utility functions that are good to have in any game
+environment. For now, there is only two:
 
- * initialDimensions : returns a Future with the dimension (Size) of the screen. This has to be done in a hacky way because of the reasons described in the code.
- * enableEvents : this is also a hack that allows you to use the Service bindings with platform specific code callbacks. Normally they would only work if you called runApp with a widget, since we draw on canvas for the game, that's never called. This makes sure it works.
+ * initialDimensions : returns a Future with the dimension (Size) of the screen. This has
+   to be done in a hacky way because of the reasons described in the code.
+ * enableEvents : this is also a hack that allows you to use the Service bindings with
+   platform specific code callbacks. Normally they would only work if you called runApp
+   with a widget, since we draw on canvas for the game, that's never called. This makes sure it works.
 
 Ideas are appreciated!
 
