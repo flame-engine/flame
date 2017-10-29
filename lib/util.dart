@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'dart:async';
 import 'dart:ui';
 
+import 'dart:ui' as ui show TextStyle;
+
 class Util {
   Future<Size> initialDimensions() async {
     // https://github.com/flutter/flutter/issues/5259
@@ -25,6 +27,13 @@ class Util {
 
   void enableEvents() {
     new _CustomBinder();
+  }
+
+  Paragraph text(String text, { double fontSize = 24.0, Color color = Colors.white, fontFamily: 'Arial', double maxWidth = 180.0 }) {
+    ParagraphBuilder paragraph = new ParagraphBuilder(new ParagraphStyle());
+    paragraph.pushStyle(new ui.TextStyle(color: color, fontSize: fontSize, fontFamily: fontFamily));
+    paragraph.addText(text);
+    return paragraph.build()..layout(new ParagraphConstraints(width: maxWidth));
   }
 }
 
