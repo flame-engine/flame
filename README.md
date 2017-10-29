@@ -23,7 +23,7 @@ Just drop it in your `pubspec.yaml`:
 
 ```
 dependencies:
-  flame: ^0.4.0
+  flame: ^0.5.0
 ```
 
 Soon I will add an example game here.
@@ -236,6 +236,7 @@ environment. For now, there is only two:
  * enableEvents : this is also a hack that allows you to use the Service bindings with
    platform specific code callbacks. Normally they would only work if you called runApp
    with a widget, since we draw on canvas for the game, that's never called. This makes sure it works.
+ * text : helper to write text to the Canvas; the methods are a bit convoluted, this might give a hand.
 
 Ideas are appreciated!
 
