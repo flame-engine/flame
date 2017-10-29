@@ -1,3 +1,6 @@
+## [0.5.0]
+ - Adding a text method to Util to more easily render a Paragraph
+
 ## [0.4.0]
  - Upgraded AudioPlayers, added method to disable logging
  - Created PositionComponent with some useful methods
