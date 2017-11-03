@@ -26,7 +26,7 @@ dependencies:
   flame: ^0.5.0
 ```
 
-Soon I will add an example game here.
+And start using it! There is a very good QuickStart tutorial [here](https://medium.com/@luanpotter27/a-comprehensive-flame-tutorial-or-how-to-make-games-with-flutter-74f22c4ecbfa), with everything you need to know!
 
 ## Structure
 
