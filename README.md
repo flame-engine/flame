@@ -15,6 +15,7 @@ These features are things that I saw evolving into games using flutter that I be
  * `bool destroy()` method on `Component`
  * Find an unobtrusive compromise to automatically call `Flame.util.enableEvents();`
  * Maybe create a `BasicGame` child for `Game`, with sensible defaults like: calling enableEvents, list of Components approach with proper canvas reset, etc.
+ * Think of a good structure to add tests (might be hard to do)
 
 ## Goals
 
