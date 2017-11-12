@@ -2,16 +2,23 @@
 
 A minimalist Flutter game engine.
 
-## WIP
+**Now audio works on iOS, thanks to @feroult!**
 
-Audio does not work on iOS; the rest should (not tested).
+## Roadmap
 
-Help is appreciated, check the Audio section for more details.
+Any help is appreciated! Comment, suggestions, issues, PR's! Give us a star to help!
+
+These features are things that I saw evolving into games using flutter that I believe should be introduced into the engine:
+
+ * Sprite Sheets (create an `Sprite` class that can be used inside `Component`s, instead of a bare string)
+ * Easier animations (maybe a `AnimationComponent`, with optional support for SpriteSheet)
+ * `bool destroy()` method on `Component`
+ * Find an unobtrusive compromise to automatically call `Flame.util.enableEvents();`
+ * Maybe create a `BasicGame` child for `Game`, with sensible defaults like: calling enableEvents, list of Components approach with proper canvas reset, etc.
 
 ## Goals
 
-The goal of this project is to provided a minimalist set of out-of-the-way solutions for the
-common problems every game developed in Flutter will share.
+The goal of this project is to provided a minimalist set of out-of-the-way solutions for the common problems every game developed in Flutter will share.
 
 Currently it provides you with: a few utilities, images/sprites, audio, a game loop and a component/object system.
 
@@ -23,7 +30,7 @@ Just drop it in your `pubspec.yaml`:
 
 ```
 dependencies:
-  flame: ^0.5.0
+  flame: ^0.6.0
 ```
 
 And start using it! There is a very good QuickStart tutorial [here](https://medium.com/@luanpotter27/a-comprehensive-flame-tutorial-or-how-to-make-games-with-flutter-74f22c4ecbfa), with everything you need to know!
@@ -88,11 +95,10 @@ Or, if you prefer:
 
 You must have an appropriate folder structure and add the files to the `pubspec.yaml` file, as explained above.
 
-It has to be an MP3 file.
+It has to be an MP3 or a OGG file (tested with WAV and it didn't work).
 
 This uses the [audioplayers](https://github.com/luanpotter/audioplayer) lib, in
 order to allow playing multiple sounds simultaneously (crucial in a game).
-Therefore, it does not work on iOS yet; check their README for more details on that.
 
 If you want to play indefinitely, just use loop:
 
