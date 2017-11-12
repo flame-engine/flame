@@ -2,7 +2,7 @@
 
 A minimalist Flutter game engine.
 
-**Now audio works on iOS, thanks to @feroult!**
+**Now audio works on iOS, thanks to [@feroult](https://github.com/feroult)!**
 
 ## Roadmap
 
