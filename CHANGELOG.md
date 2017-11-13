@@ -1,3 +1,9 @@
+## [0.6.1]
+ - Bump required dart version
+
+## [0.6.0]
+ - Adding audio suport for iOS (bumping audioplayers version)
+
 ## [0.5.0]
  - Adding a text method to Util to more easily render a Paragraph
 
