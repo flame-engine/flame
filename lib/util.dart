@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'dart:async';
-import 'dart:ui';
 
+import 'dart:ui';
 import 'dart:ui' as ui show TextStyle;
 
 class Util {
@@ -26,7 +25,7 @@ class Util {
   }
 
   void enableEvents() {
-    new _CustomBinder();
+    window.onPlatformMessage = BinaryMessages.handlePlatformMessage;
   }
 
   Paragraph text(String text, { double fontSize = 24.0, Color color = Colors.white, fontFamily: 'Arial', double maxWidth = 180.0 }) {
@@ -35,7 +34,4 @@ class Util {
     paragraph.addText(text);
     return paragraph.build()..layout(new ParagraphConstraints(width: maxWidth));
   }
-}
-
-class _CustomBinder extends BindingBase with ServicesBinding {
 }
