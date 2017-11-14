@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-
 import 'dart:async';
 import 'dart:ui';
-
 import 'dart:ui' as ui show TextStyle;
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Util {
   Future<Size> initialDimensions() async {
@@ -29,13 +28,21 @@ class Util {
     new _CustomBinder();
   }
 
-  Paragraph text(String text, { double fontSize = 24.0, Color color = Colors.white, fontFamily: 'Arial', double maxWidth = 180.0 }) {
+  void fullScreen() {
+    SystemChrome.setEnabledSystemUIOverlays([]);
+  }
+
+  Paragraph text(String text,
+      {double fontSize = 24.0,
+      Color color = Colors.white,
+      fontFamily: 'Arial',
+      double maxWidth = 180.0}) {
     ParagraphBuilder paragraph = new ParagraphBuilder(new ParagraphStyle());
-    paragraph.pushStyle(new ui.TextStyle(color: color, fontSize: fontSize, fontFamily: fontFamily));
+    paragraph.pushStyle(new ui.TextStyle(
+        color: color, fontSize: fontSize, fontFamily: fontFamily));
     paragraph.addText(text);
     return paragraph.build()..layout(new ParagraphConstraints(width: maxWidth));
   }
 }
 
-class _CustomBinder extends BindingBase with ServicesBinding {
-}
+class _CustomBinder extends BindingBase with ServicesBinding {}
