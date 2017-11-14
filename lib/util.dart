@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:ui';
 import 'dart:ui' as ui show TextStyle;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -25,7 +24,7 @@ class Util {
   }
 
   void enableEvents() {
-    new _CustomBinder();
+    window.onPlatformMessage = BinaryMessages.handlePlatformMessage;
   }
 
   void fullScreen() {
@@ -44,5 +43,3 @@ class Util {
     return paragraph.build()..layout(new ParagraphConstraints(width: maxWidth));
   }
 }
-
-class _CustomBinder extends BindingBase with ServicesBinding {}
