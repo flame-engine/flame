@@ -5,6 +5,7 @@ author: Luan Nico <luannico27@gmail.com>
 homepage: https://github.com/luanpotter/flame
 
 flutter:
+  uses-material-design: false
 
 dependencies:
   flutter:
