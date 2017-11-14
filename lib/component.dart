@@ -54,7 +54,7 @@ abstract class SpriteComponent extends PositionComponent {
       final Size imageSize = new Size(
           image.width.toDouble(), image.height.toDouble());
       final FittedSizes sizes = applyBoxFit(
-          BoxFit.fill, imageSize, outputRect.size);
+          BoxFit.cover, imageSize, outputRect.size);
       final Rect inputSubrect = Alignment.center.inscribe(
           sizes.source, Offset.zero & imageSize);
       final Rect outputSubrect = Alignment.center.inscribe(
