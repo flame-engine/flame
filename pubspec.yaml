@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   audioplayers: ^0.3.0
   path_provider: ^0.2.1+1
+  box2d: ^0.3.0
 
 environment:
   sdk: ">=1.13.0 <2.0.0"
