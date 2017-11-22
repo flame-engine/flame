@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Util {
+  void fullScreen() {
+    SystemChrome.setEnabledSystemUIOverlays([]);
+  }
+
   Future<Size> initialDimensions() async {
     // https://github.com/flutter/flutter/issues/5259
     // "In release mode we start off at 0x0 but we don't in debug mode"
@@ -14,21 +18,13 @@ class Util {
         var completer = new Completer<Size>();
         window.onMetricsChanged = () {
           if (!window.physicalSize.isEmpty) {
-            completer.complete(window.physicalSize);
+            completer.complete(window.physicalSize / window.devicePixelRatio);
           }
         };
         return completer.future;
       }
-      return window.physicalSize;
+      return window.physicalSize / window.devicePixelRatio;
     });
-  }
-
-  void enableEvents() {
-    window.onPlatformMessage = BinaryMessages.handlePlatformMessage;
-  }
-
-  void fullScreen() {
-    SystemChrome.setEnabledSystemUIOverlays([]);
   }
 
   Paragraph text(String text,
