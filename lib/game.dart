@@ -1,8 +1,9 @@
-import 'dart:ui';
 import 'dart:typed_data';
+import 'dart:ui';
+
+import 'package:flutter/gestures.dart';
 
 abstract class Game {
-
   void update(double t);
 
   void render(Canvas canvas);
@@ -12,8 +13,10 @@ abstract class Game {
 
     window.onBeginFrame = (now) {
       var recorder = new PictureRecorder();
-      var canvas = new Canvas(recorder, new Rect.fromLTWH(
-          0.0, 0.0, window.physicalSize.width, window.physicalSize.height));
+      var canvas = new Canvas(
+          recorder,
+          new Rect.fromLTWH(
+              0.0, 0.0, window.physicalSize.width, window.physicalSize.height));
 
       Duration delta = now - previous;
       if (previous == Duration.ZERO) {
@@ -27,8 +30,8 @@ abstract class Game {
       render(canvas);
 
       var deviceTransform = new Float64List(16)
-        ..[0] = 1.0 // window.devicePixelRatio
-        ..[5] = 1.0 // window.devicePixelRatio
+        ..[0] = window.devicePixelRatio
+        ..[5] = window.devicePixelRatio
         ..[10] = 1.0
         ..[15] = 1.0;
 
@@ -42,5 +45,13 @@ abstract class Game {
     };
 
     window.scheduleFrame();
+  }
+
+  void addGestureRecognizer(GestureRecognizer recognizer) {
+    GestureBinding.instance.pointerRouter.addGlobalRoute((PointerEvent e) {
+      if (e is PointerDownEvent) {
+        recognizer.addPointer(e);
+      }
+    });
   }
 }
