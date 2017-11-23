@@ -35,7 +35,7 @@ class Viewport extends ViewportTransform {
   double getCenterHorizontalScreenPercentage({double screens: 1.0}) {
     var width = dimensions.width * screens;
 //    print("width: $width");
-    var x = center.x * screens;
+    var x = center.x + ((screens - 1) * dimensions.width / 2);
     double rest = x.abs() % width;
     double scroll = rest / width;
     return x > 0 ? scroll : 1 - scroll;
