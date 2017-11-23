@@ -22,11 +22,11 @@ abstract class Box2DComponent extends Component {
 
   Box2DComponent(this.dimensions,
       {int worldPoolSize: DEFAULT_WORLD_POOL_SIZE,
-      int worldPoolContainerSize: DEFAULT_WORLD_POOL_CONTAINER_SIZE,
-      double gravity: DEFAULT_GRAVITY,
-      this.velocityIterations: DEFAULT_VELOCITY_ITERATIONS,
-      this.positionIterations: DEFAULT_POSITION_ITERATIONS,
-      double scale: DEFAULT_SCALE}) {
+        int worldPoolContainerSize: DEFAULT_WORLD_POOL_CONTAINER_SIZE,
+        double gravity: DEFAULT_GRAVITY,
+        this.velocityIterations: DEFAULT_VELOCITY_ITERATIONS,
+        this.positionIterations: DEFAULT_POSITION_ITERATIONS,
+        double scale: DEFAULT_SCALE}) {
     this.world = new World.withPool(new Vector2(0.0, gravity),
         new DefaultWorldPool(worldPoolSize, worldPoolContainerSize));
     this.viewport = new Viewport(dimensions, scale);
@@ -109,7 +109,7 @@ class Viewport extends ViewportTransform {
 
   Viewport(this.dimensions, this.scale)
       : super(new Vector2(dimensions.width / 2, dimensions.height / 2),
-            new Vector2(dimensions.width / 2, dimensions.height / 2), scale);
+      new Vector2(dimensions.width / 2, dimensions.height / 2), scale);
 
   double worldAlignBottom(double height) =>
       -(dimensions.height / 2 / scale) + height;
@@ -124,12 +124,19 @@ class Viewport extends ViewportTransform {
     return percent * (dimensions.width / scale);
   }
 
-  double get centerHorizontalScreenPercentage {
-    double x = center[0];
-    var width = dimensions.width;
-    double rest = (x - width).abs() % width;
+  /**
+   * Computes the scroll percentage of total screen width of the current viwerport
+   * center position.
+   *
+   * @param screens multiplies the visible screen with to create a bigger virtual
+   * screen.
+   * @return the percentage in the range of [0, 1]
+   */
+  double getCenterHorizontalScreenPercentage({double screens: 1.0}) {
+    var width = dimensions.width * screens;
+    double rest = (center[0] - width).abs() % width;
     double scroll = rest / width;
-    return x > 0 ? scroll : 1 - scroll;
+    return center[0] > 0 ? scroll : 1 - scroll;
   }
 }
 
@@ -155,8 +162,8 @@ abstract class BodyComponent extends Component {
   void render(Canvas canvas) {
     body.getFixtureList();
     for (Fixture fixture = body.getFixtureList();
-        fixture != null;
-        fixture = fixture.getNext()) {
+    fixture != null;
+    fixture = fixture.getNext()) {
       switch (fixture.getType()) {
         case ShapeType.CHAIN:
           throw new Exception("not implemented");
@@ -210,7 +217,8 @@ abstract class BodyComponent extends Component {
   }
 
   void drawPolygon(Canvas canvas, List<Offset> points) {
-    final path = new Path()..addPolygon(points, true);
+    final path = new Path()
+      ..addPolygon(points, true);
     final Paint paint = new Paint()
       ..color = new Color.fromARGB(255, 255, 255, 255);
 //      ..style = PaintingStyle.stroke;
