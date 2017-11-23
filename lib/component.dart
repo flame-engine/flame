@@ -100,8 +100,10 @@ class ParallaxComponent extends PositionComponent {
       return;
     }
 
+    canvas.save();
     prepareCanvas(canvas);
     _drawLayers(canvas);
+    canvas.restore();
   }
 
   void _drawLayers(Canvas canvas) {
