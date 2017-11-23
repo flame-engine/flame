@@ -56,25 +56,46 @@ abstract class Box2DComponent extends Component {
    * percentage of the total viewport.
    *
    * @param component to follow.
-   * @param focusWidth width percentage of the focus window. Null means no horizontal following.
-   * TODO: implement vertical following
+   * @param horizontal percentage of the horizontal viewport. Null means no horizontal following.
+   * @param vertical percentage of the vertical viewport. Null means no vertical following.
    */
-  void cameraFollow(BodyComponent component, {double focusWidth}) {
+  void cameraFollow(BodyComponent component,
+      {double horizontal, double vertical}) {
     Vector2 position = component.getPosition();
 
-    Vector2 temp = new Vector2.zero();
-    viewport.getWorldToScreen(position, temp);
+    double x = viewport.center.x;
+    double y = viewport.center.y;
 
-    var margin = focusWidth / 2 * dimensions.width / 2;
-    var focus = dimensions.width / 2 - temp.x;
+    if (horizontal != null) {
+      Vector2 temp = new Vector2.zero();
+      viewport.getWorldToScreen(position, temp);
 
-    if (focus.abs() > margin) {
-      viewport.setCamera(
-          dimensions.width / 2 +
-              (position.x * viewport.scale) +
-              (focus > 0 ? margin : -margin),
-          viewport.center.y,
-          viewport.scale);
+      var margin = horizontal / 2 * dimensions.width / 2;
+      var focus = dimensions.width / 2 - temp.x;
+
+      if (focus.abs() > margin) {
+        x = dimensions.width / 2 +
+            (position.x * viewport.scale) +
+            (focus > 0 ? margin : -margin);
+      }
+    }
+
+    if (vertical != null) {
+      Vector2 temp = new Vector2.zero();
+      viewport.getWorldToScreen(position, temp);
+
+      var margin = vertical / 2 * dimensions.height / 2;
+      var focus = dimensions.height / 2 - temp.y;
+
+      if (focus.abs() > margin) {
+        y = dimensions.height / 2 +
+            (position.y * viewport.scale) +
+            (focus <0 ? margin : -margin);
+      }
+    }
+
+    if (x != viewport.center.x || y != viewport.center.y) {
+      viewport.setCamera(x, y, viewport.scale);
     }
   }
 
