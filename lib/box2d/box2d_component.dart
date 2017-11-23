@@ -114,6 +114,12 @@ class Viewport extends ViewportTransform {
   double alignBottom(double height) =>
       -(dimensions.height / 2 / scale) + height;
 
+  /**
+   * Computes the number of horizontal pixels of this viewport considering a
+   * percentage of its width.
+   *
+   * @param percent percetage of the width in [0, 1] range
+   */
   double width(double percent) {
     return percent * (dimensions.width / 2 / scale);
   }
