@@ -47,11 +47,4 @@ abstract class Game {
     window.scheduleFrame();
   }
 
-  void addGestureRecognizer(GestureRecognizer recognizer) {
-    GestureBinding.instance.pointerRouter.addGlobalRoute((PointerEvent e) {
-      if (e is PointerDownEvent) {
-        recognizer.addPointer(e);
-      }
-    });
-  }
 }
