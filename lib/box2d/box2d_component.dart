@@ -61,7 +61,7 @@ abstract class Box2DComponent extends Component {
    */
   void cameraFollow(BodyComponent component,
       {double horizontal, double vertical}) {
-    Vector2 position = component.getPosition();
+    Vector2 position = component.center;
 
     double x = viewport.center.x;
     double y = viewport.center.y;
@@ -90,7 +90,7 @@ abstract class Box2DComponent extends Component {
       if (focus.abs() > margin) {
         y = dimensions.height / 2 +
             (position.y * viewport.scale) +
-            (focus <0 ? margin : -margin);
+            (focus < 0 ? margin : -margin);
       }
     }
 
@@ -160,7 +160,7 @@ abstract class BodyComponent extends Component {
     }
   }
 
-  Vector2 getPosition();
+  Vector2 get center => this.body.worldCenter;
 
   void _renderCircle(Canvas canvas, Fixture fixture) {
     Vector2 center = new Vector2.zero();
