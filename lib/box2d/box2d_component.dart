@@ -22,11 +22,11 @@ abstract class Box2DComponent extends Component {
 
   Box2DComponent(this.dimensions,
       {int worldPoolSize: DEFAULT_WORLD_POOL_SIZE,
-        int worldPoolContainerSize: DEFAULT_WORLD_POOL_CONTAINER_SIZE,
-        double gravity: DEFAULT_GRAVITY,
-        this.velocityIterations: DEFAULT_VELOCITY_ITERATIONS,
-        this.positionIterations: DEFAULT_POSITION_ITERATIONS,
-        double scale: DEFAULT_SCALE}) {
+      int worldPoolContainerSize: DEFAULT_WORLD_POOL_CONTAINER_SIZE,
+      double gravity: DEFAULT_GRAVITY,
+      this.velocityIterations: DEFAULT_VELOCITY_ITERATIONS,
+      this.positionIterations: DEFAULT_POSITION_ITERATIONS,
+      double scale: DEFAULT_SCALE}) {
     this.world = new World.withPool(new Vector2(0.0, gravity),
         new DefaultWorldPool(worldPoolSize, worldPoolContainerSize));
     this.viewport = new Viewport(dimensions, scale);
@@ -109,7 +109,7 @@ class Viewport extends ViewportTransform {
 
   Viewport(this.dimensions, this.scale)
       : super(new Vector2(dimensions.width / 2, dimensions.height / 2),
-      new Vector2(dimensions.width / 2, dimensions.height / 2), scale);
+            new Vector2(dimensions.width / 2, dimensions.height / 2), scale);
 
   double worldAlignBottom(double height) =>
       -(dimensions.height / 2 / scale) + height;
@@ -122,6 +122,14 @@ class Viewport extends ViewportTransform {
    */
   double worldWidth(double percent) {
     return percent * (dimensions.width / scale);
+  }
+
+  double get centerHorizontalScreenPercentage {
+    double x = center[0];
+    var width = dimensions.width;
+    double rest = (x - width).abs() % width;
+    double scroll = rest / width;
+    return x > 0 ? scroll : 1 - scroll;
   }
 }
 
@@ -147,8 +155,8 @@ abstract class BodyComponent extends Component {
   void render(Canvas canvas) {
     body.getFixtureList();
     for (Fixture fixture = body.getFixtureList();
-    fixture != null;
-    fixture = fixture.getNext()) {
+        fixture != null;
+        fixture = fixture.getNext()) {
       switch (fixture.getType()) {
         case ShapeType.CHAIN:
           throw new Exception("not implemented");
@@ -202,8 +210,7 @@ abstract class BodyComponent extends Component {
   }
 
   void drawPolygon(Canvas canvas, List<Offset> points) {
-    final path = new Path()
-      ..addPolygon(points, true);
+    final path = new Path()..addPolygon(points, true);
     final Paint paint = new Paint()
       ..color = new Color.fromARGB(255, 255, 255, 255);
 //      ..style = PaintingStyle.stroke;
