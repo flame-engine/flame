@@ -52,9 +52,11 @@ abstract class Box2DComponent extends Component {
     components.add(component);
   }
 
+  void initializeWorld();
+
   /**
-   * Follow the body component using sliding a focus window defined as a
-   * percentage of the total viewport.
+   * Follows the spececified body component using a sliding focus window
+   * defined as a percentage of the total viewport.
    *
    * @param component to follow.
    * @param horizontal percentage of the horizontal viewport. Null means no horizontal following.
@@ -99,8 +101,6 @@ abstract class Box2DComponent extends Component {
       viewport.setCamera(x, y, viewport.scale);
     }
   }
-
-  void initializeWorld();
 }
 
 abstract class BodyComponent extends Component {
