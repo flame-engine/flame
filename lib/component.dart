@@ -71,11 +71,10 @@ class ParallaxRenderer {
   String filename;
   Future future;
 
-  Size size;
   Image image;
   double scroll = 0.0;
 
-  ParallaxRenderer(this.filename, this.size) {
+  ParallaxRenderer(this.filename) {
     this.future = _load();
   }
 
@@ -85,15 +84,15 @@ class ParallaxRenderer {
     });
   }
 
-  void render(canvas) {
+  void render(canvas, Rect rect) {
     if (image == null) {
       return;
     }
 
-    Rect leftRect =
-        new Rect.fromLTWH(0.0, 0.0, (1 - scroll) * size.width, size.height);
+    Rect leftRect = new Rect.fromLTWH(
+        rect.left, rect.top, (1 - scroll) * rect.width, rect.height);
     Rect rightRect = new Rect.fromLTWH(
-        (1 - scroll) * size.width, 0.0, scroll * size.width, size.height);
+        (1 - scroll) * rect.width, rect.top, rect.width, rect.height);
 
     paintImage(
         canvas: canvas,
@@ -130,7 +129,7 @@ class ParallaxComponent extends PositionComponent {
   void load(List<String> filenames) {
     var futures =
         filenames.fold(new List<Future>(), (List<Future> result, filename) {
-      var layer = new ParallaxRenderer(filename, size);
+      var layer = new ParallaxRenderer(filename);
       layers.add(layer);
       result.add(layer.future);
       return result;
@@ -157,8 +156,10 @@ class ParallaxComponent extends PositionComponent {
   }
 
   void _drawLayers(Canvas canvas) {
+    Rect rect = new Rect.fromPoints(
+        new Offset(0.0, 0.0), new Offset(size.width, size.height));
     layers.forEach((layer) {
-      layer.render(canvas);
+      layer.render(canvas, rect);
     });
   }
 

@@ -176,10 +176,10 @@ abstract class BodyComponent extends Component {
       points.add(new Offset(vertices[i].x, vertices[i].y));
     }
 
-    drawPolygon(canvas, points);
+    renderPolygon(canvas, points);
   }
 
-  void drawPolygon(Canvas canvas, List<Offset> points) {
+  void renderPolygon(Canvas canvas, List<Offset> points) {
     final path = new Path()..addPolygon(points, true);
     final Paint paint = new Paint()
       ..color = new Color.fromARGB(255, 255, 255, 255);
