@@ -17,7 +17,7 @@ abstract class Box2DComponent extends Component {
   int positionIterations;
 
   World world;
-  List<BodyComponent> components = new List();
+  List<Component> components = new List();
 
   Viewport viewport;
 
@@ -48,7 +48,7 @@ abstract class Box2DComponent extends Component {
     });
   }
 
-  void add(BodyComponent component) {
+  void add(Component component) {
     components.add(component);
   }
 

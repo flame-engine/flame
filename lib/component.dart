@@ -67,31 +67,76 @@ abstract class SpriteComponent extends PositionComponent {
   update(double t) {}
 }
 
+class ParallaxRenderer {
+  String filename;
+
+  Size size;
+
+  Image image;
+
+  double scroll = 0.0;
+
+  ParallaxRenderer(this.filename, this.size);
+
+  Future load() {
+    return Flame.images.load(filename).then((image) {
+      this.image = image;
+    });
+  }
+
+  void render(canvas) {
+    Rect leftRect =
+        new Rect.fromLTWH(0.0, 0.0, (1 - scroll) * size.width, size.height);
+    Rect rightRect = new Rect.fromLTWH(
+        (1 - scroll) * size.width, 0.0, scroll * size.width, size.height);
+
+    paintImage(
+        canvas: canvas,
+        image: image,
+        rect: leftRect,
+        fit: BoxFit.cover,
+        alignment: Alignment.centerRight);
+
+    paintImage(
+        canvas: canvas,
+        image: image,
+        rect: rightRect,
+        fit: BoxFit.cover,
+        alignment: Alignment.centerLeft);
+  }
+}
+
 class ParallaxComponent extends PositionComponent {
   final BASE_SPEED = 30;
   final LAYER_DELTA = 40;
 
-  List<Image> images = new List();
-  List<double> scrolls = new List();
+  List<ParallaxRenderer> layers = new List();
   Size size;
   bool loaded = false;
 
-  ParallaxComponent(this.size, List<String> filenames) {
-    _load(filenames);
-  }
+  ParallaxComponent(this.size);
 
-  void _load(List<String> filenames) {
+  /**
+   * Loads the images defined by this list of filenames. All images
+   * are positioned at its scroll center.
+   *
+   * @param filenames Image filenames
+   */
+  void load(List<String> filenames) {
     var futures =
         filenames.fold(new List<Future>(), (List<Future> result, filename) {
-      result.add(Flame.images.load(filename).then((image) {
-        images.add(image);
-        scrolls.add(0.0);
-      }));
+      var layer = new ParallaxRenderer(filename, size);
+      layers.add(layer);
+      result.add(layer.load());
       return result;
     });
     Future.wait(futures).then((r) {
       loaded = true;
     });
+  }
+
+  void updateScroll(int layerIndex, scroll) {
+    layers[layerIndex].scroll = scroll;
   }
 
   @override
@@ -107,27 +152,8 @@ class ParallaxComponent extends PositionComponent {
   }
 
   void _drawLayers(Canvas canvas) {
-    images.asMap().forEach((index, image) {
-      var scroll = scrolls[index];
-
-      Rect leftRect =
-          new Rect.fromLTWH(0.0, 0.0, (1 - scroll) * size.width, size.height);
-      Rect rightRect = new Rect.fromLTWH(
-          (1 - scroll) * size.width, 0.0, scroll * size.width, size.height);
-
-      paintImage(
-          canvas: canvas,
-          image: image,
-          rect: leftRect,
-          fit: BoxFit.cover,
-          alignment: Alignment.centerRight);
-
-      paintImage(
-          canvas: canvas,
-          image: image,
-          rect: rightRect,
-          fit: BoxFit.cover,
-          alignment: Alignment.centerLeft);
+    layers.forEach((layer) {
+      layer.render(canvas);
     });
   }
 
@@ -136,13 +162,13 @@ class ParallaxComponent extends PositionComponent {
     if (!loaded) {
       return;
     }
-    for (var i = 0; i < scrolls.length; i++) {
-      var scroll = scrolls[i];
+    for (var i = 0; i < layers.length; i++) {
+      var scroll = layers[i].scroll;
       scroll += (BASE_SPEED + i * LAYER_DELTA) * delta / size.width;
       if (scroll > 1) {
         scroll = scroll % 1;
       }
-      scrolls[i] = scroll;
+      layers[i].scroll = scroll;
     }
   }
 }
