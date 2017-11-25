@@ -7,7 +7,6 @@ import 'package:flutter/painting.dart';
 import 'flame.dart';
 
 abstract class Component {
-
   void update(double t);
 
   void render(Canvas c);
