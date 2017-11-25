@@ -7,6 +7,7 @@ import 'package:flutter/painting.dart';
 import 'flame.dart';
 
 abstract class Component {
+
   void update(double t);
 
   void render(Canvas c);
@@ -69,22 +70,27 @@ abstract class SpriteComponent extends PositionComponent {
 
 class ParallaxRenderer {
   String filename;
+  Future future;
 
   Size size;
-
   Image image;
-
   double scroll = 0.0;
 
-  ParallaxRenderer(this.filename, this.size);
+  ParallaxRenderer(this.filename, this.size) {
+    this.future = _load();
+  }
 
-  Future load() {
+  Future _load() {
     return Flame.images.load(filename).then((image) {
       this.image = image;
     });
   }
 
   void render(canvas) {
+    if (image == null) {
+      return;
+    }
+
     Rect leftRect =
         new Rect.fromLTWH(0.0, 0.0, (1 - scroll) * size.width, size.height);
     Rect rightRect = new Rect.fromLTWH(
@@ -127,7 +133,7 @@ class ParallaxComponent extends PositionComponent {
         filenames.fold(new List<Future>(), (List<Future> result, filename) {
       var layer = new ParallaxRenderer(filename, size);
       layers.add(layer);
-      result.add(layer.load());
+      result.add(layer.future);
       return result;
     });
     Future.wait(futures).then((r) {
