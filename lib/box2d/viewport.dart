@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:box2d/box2d.dart';
+import 'package:flame/box2d/box2d_component.dart';
 
 class Viewport extends ViewportTransform {
   Size dimensions;
@@ -40,4 +41,53 @@ class Viewport extends ViewportTransform {
     double scroll = rest / width;
     return x > 0 ? scroll : 1 - scroll;
   }
+
+  /**
+   * Follows the spececified body component using a sliding focus window
+   * defined as a percentage of the total viewport.
+   *
+   * @param component to follow.
+   * @param horizontal percentage of the horizontal viewport. Null means no horizontal following.
+   * @param vertical percentage of the vertical viewport. Null means no vertical following.
+   */
+  void cameraFollow(BodyComponent component,
+      {double horizontal, double vertical}) {
+    Vector2 position = component.center;
+
+    double x = center.x;
+    double y = center.y;
+
+    if (horizontal != null) {
+      Vector2 temp = new Vector2.zero();
+      getWorldToScreen(position, temp);
+
+      var margin = horizontal / 2 * dimensions.width / 2;
+      var focus = dimensions.width / 2 - temp.x;
+
+      if (focus.abs() > margin) {
+        x = dimensions.width / 2 +
+            (position.x * scale) +
+            (focus > 0 ? margin : -margin);
+      }
+    }
+
+    if (vertical != null) {
+      Vector2 temp = new Vector2.zero();
+      getWorldToScreen(position, temp);
+
+      var margin = vertical / 2 * dimensions.height / 2;
+      var focus = dimensions.height / 2 - temp.y;
+
+      if (focus.abs() > margin) {
+        y = dimensions.height / 2 +
+            (position.y * scale) +
+            (focus < 0 ? margin : -margin);
+      }
+    }
+
+    if (x != center.x || y != center.y) {
+      setCamera(x, y, scale);
+    }
+  }
+
 }

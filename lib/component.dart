@@ -84,29 +84,26 @@ class ParallaxRenderer {
     });
   }
 
-  void render(canvas, Rect rect) {
+  bool get loaded => image != null;
+
+  void render(Canvas canvas, Rect rect) {
     if (image == null) {
       return;
     }
 
-    Rect leftRect = new Rect.fromLTWH(
-        rect.left, rect.top, (1 - scroll) * rect.width, rect.height);
-    Rect rightRect = new Rect.fromLTWH(
-        (1 - scroll) * rect.width, rect.top, rect.width, rect.height);
+    var imageHeight = image.height / window.devicePixelRatio;
+    var imageWidth =
+        (rect.height / imageHeight) * (image.width / window.devicePixelRatio);
+    var count = rect.width / imageWidth;
+
+    Rect fullRect = new Rect.fromLTWH(
+        -scroll * imageWidth, rect.top, (count + 1) * imageWidth, rect.height);
 
     paintImage(
         canvas: canvas,
         image: image,
-        rect: leftRect,
-        fit: BoxFit.cover,
-        alignment: Alignment.centerRight);
-
-    paintImage(
-        canvas: canvas,
-        image: image,
-        rect: rightRect,
-        fit: BoxFit.cover,
-        alignment: Alignment.centerLeft);
+        rect: fullRect,
+        repeat: ImageRepeat.repeatX);
   }
 }
 

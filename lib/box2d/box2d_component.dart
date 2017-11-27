@@ -54,52 +54,10 @@ abstract class Box2DComponent extends Component {
 
   void initializeWorld();
 
-  /**
-   * Follows the spececified body component using a sliding focus window
-   * defined as a percentage of the total viewport.
-   *
-   * @param component to follow.
-   * @param horizontal percentage of the horizontal viewport. Null means no horizontal following.
-   * @param vertical percentage of the vertical viewport. Null means no vertical following.
-   */
   void cameraFollow(BodyComponent component,
       {double horizontal, double vertical}) {
-    Vector2 position = component.center;
-
-    double x = viewport.center.x;
-    double y = viewport.center.y;
-
-    if (horizontal != null) {
-      Vector2 temp = new Vector2.zero();
-      viewport.getWorldToScreen(position, temp);
-
-      var margin = horizontal / 2 * dimensions.width / 2;
-      var focus = dimensions.width / 2 - temp.x;
-
-      if (focus.abs() > margin) {
-        x = dimensions.width / 2 +
-            (position.x * viewport.scale) +
-            (focus > 0 ? margin : -margin);
-      }
-    }
-
-    if (vertical != null) {
-      Vector2 temp = new Vector2.zero();
-      viewport.getWorldToScreen(position, temp);
-
-      var margin = vertical / 2 * dimensions.height / 2;
-      var focus = dimensions.height / 2 - temp.y;
-
-      if (focus.abs() > margin) {
-        y = dimensions.height / 2 +
-            (position.y * viewport.scale) +
-            (focus < 0 ? margin : -margin);
-      }
-    }
-
-    if (x != viewport.center.x || y != viewport.center.y) {
-      viewport.setCamera(x, y, viewport.scale);
-    }
+    viewport.cameraFollow(component,
+        horizontal: horizontal, vertical: vertical);
   }
 }
 
