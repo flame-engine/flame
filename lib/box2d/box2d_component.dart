@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:box2d/box2d.dart' hide Timer;
 import 'package:flame/box2d/viewport.dart';
-import 'package:flame/component.dart';
+import 'package:flame/components/component.dart';
 
 abstract class Box2DComponent extends Component {
   static const int DEFAULT_WORLD_POOL_SIZE = 100;
