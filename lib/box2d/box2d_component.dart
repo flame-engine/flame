@@ -54,10 +54,8 @@ abstract class Box2DComponent extends Component {
 
   void initializeWorld();
 
-  void cameraFollow(BodyComponent component,
-      {double horizontal, double vertical}) {
-    viewport.cameraFollow(component,
-        horizontal: horizontal, vertical: vertical);
+  void cameraFollow(BodyComponent component, {double horizontal, double vertical}) {
+    viewport.cameraFollow(component, horizontal: horizontal, vertical: vertical);
   }
 }
 
