@@ -10,6 +10,14 @@ import 'package:path_provider/path_provider.dart';
 class Audio {
   Map<String, File> loadedFiles = new Map();
 
+  void clear(String fileName) {
+    loadedFiles.remove(fileName);
+  }
+
+  void clearCache() {
+    loadedFiles.clear();
+  }
+
   void disableLog() {
     AudioPlayer.logEnabled = false;
   }

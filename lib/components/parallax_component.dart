@@ -1,71 +1,10 @@
 import 'dart:async';
-import 'dart:math';
 import 'dart:ui';
 
-import 'package:flutter/painting.dart';
+import 'component.dart';
+import '../flame.dart';
 
-import 'flame.dart';
-
-abstract class Component {
-  void update(double t);
-
-  void render(Canvas c);
-}
-
-abstract class PositionComponent extends Component {
-  double x = 0.0, y = 0.0, angle = 0.0;
-
-  double angleBetween(PositionComponent c) {
-    return (atan2(c.x - this.x, this.y - c.y) - PI / 2) % (2 * PI);
-  }
-
-  double distance(PositionComponent c) {
-    return sqrt(pow(this.y - c.y, 2) + pow(this.x - c.x, 2));
-  }
-
-  void prepareCanvas(Canvas canvas) {
-    canvas.translate(x, y);
-    canvas.rotate(angle); // TODO: rotate around center
-  }
-}
-
-abstract class SpriteComponent extends PositionComponent {
-  double width, height;
-  Image image;
-
-  final Paint paint = new Paint()..color = new Color(0xffffffff);
-
-  SpriteComponent.square(double size, String imagePath)
-      : this.rectangle(size, size, imagePath);
-
-  SpriteComponent.rectangle(this.width, this.height, String imagePath) {
-    Flame.images.load(imagePath).then((image) {
-      this.image = image;
-    });
-  }
-
-  render(Canvas canvas) {
-    if (image != null) {
-      prepareCanvas(canvas);
-      _drawImage(canvas);
-    }
-  }
-
-  void _drawImage(Canvas canvas) {
-    final Rect outputRect = new Rect.fromLTWH(0.0, 0.0, width, height);
-    final Size imageSize =
-        new Size(image.width.toDouble(), image.height.toDouble());
-    final FittedSizes sizes =
-        applyBoxFit(BoxFit.cover, imageSize, outputRect.size);
-    final Rect inputSubrect =
-        Alignment.center.inscribe(sizes.source, Offset.zero & imageSize);
-    final Rect outputSubrect =
-        Alignment.center.inscribe(sizes.destination, outputRect);
-    canvas.drawImageRect(image, inputSubrect, outputSubrect, paint);
-  }
-
-  update(double t) {}
-}
+import 'package:flutter/src/painting/images.dart';
 
 class ParallaxRenderer {
   String filename;
@@ -113,7 +52,7 @@ class ParallaxComponent extends PositionComponent {
 
   List<ParallaxRenderer> layers = new List();
   Size size;
-  bool loaded = false;
+  bool _loaded = false;
 
   ParallaxComponent(this.size);
 
@@ -125,14 +64,14 @@ class ParallaxComponent extends PositionComponent {
    */
   void load(List<String> filenames) {
     var futures =
-        filenames.fold(new List<Future>(), (List<Future> result, filename) {
+    filenames.fold(new List<Future>(), (List<Future> result, filename) {
       var layer = new ParallaxRenderer(filename);
       layers.add(layer);
       result.add(layer.future);
       return result;
     });
     Future.wait(futures).then((r) {
-      loaded = true;
+      _loaded = true;
     });
   }
 
@@ -141,8 +80,13 @@ class ParallaxComponent extends PositionComponent {
   }
 
   @override
+  bool loaded() {
+    return _loaded;
+  }
+
+  @override
   void render(Canvas canvas) {
-    if (!loaded) {
+    if (!this.loaded()) {
       return;
     }
 
@@ -162,7 +106,7 @@ class ParallaxComponent extends PositionComponent {
 
   @override
   void update(double delta) {
-    if (!loaded) {
+    if (!this.loaded()) {
       return;
     }
     for (var i = 0; i < layers.length; i++) {
