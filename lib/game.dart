@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'components/component.dart';
+import 'flame.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
@@ -141,5 +143,32 @@ class GameRenderBox extends RenderBox {
   @override
   void paint(PaintingContext context, Offset offset) {
     game.render(context.canvas);
+  }
+}
+
+class BaseGame extends Game {
+
+  List<Component> components = new List();
+
+  @override
+  void start() {
+    Flame.initialize();
+    super.start();
+  }
+
+  @override
+  void render(Canvas canvas) {
+    canvas.save();
+    components.forEach((comp) {
+      comp.render(canvas);
+      canvas.restore();
+      canvas.save();
+    });
+  }
+
+  @override
+  void update(double t) {
+    components.forEach((c) => c.update(t));
+    components.removeWhere((c) => c.destroy());
   }
 }
