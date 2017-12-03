@@ -12,10 +12,10 @@ class Sprite {
   Sprite(String fileName, {double x = 0.0, double y = 0.0, double width = -1.0, double height = -1.0}) {
     Flame.images.load(fileName).then((img) {
       if (width == -1.0) {
-        width = img.width as double;
+        width = img.width.toDouble();
       }
       if (height == -1.0) {
-        width = img.height as double;
+        height = img.height.toDouble();
       }
       this.image = img;
       this.src = new Rect.fromLTWH(x, y, width, height);

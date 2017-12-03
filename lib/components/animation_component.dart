@@ -14,7 +14,6 @@ class AnimationComponent extends PositionComponent {
   AnimationComponent.spriteList(this.width, this.height, this.sprites, { this.stepTime, this.lifeTime });
 
   AnimationComponent.sequenced(this.width, this.height, String imagePath, int amount, { double textureX = 0.0, double textureY = 0.0, double textureWidth = -1.0, double textureHeight = -1.0}) {
-    angle = 0.0;
     if (textureWidth == -1) {
       textureWidth = this.width;
     }
