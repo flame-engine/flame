@@ -28,17 +28,17 @@ class Util {
     });
   }
 
-  Paragraph text(String text,
-      {double fontSize = 24.0,
-        Color color = Colors.white,
-        fontFamily: 'Arial',
-        double maxWidth = 180.0}) {
+  Paragraph text(String text, { double fontSize = 24.0, Color color = Colors.white, fontFamily: 'Arial', double maxWidth = 180.0 }) {
     ParagraphBuilder paragraph = new ParagraphBuilder(new ParagraphStyle());
     paragraph.pushStyle(new ui.TextStyle(
         color: color, fontSize: fontSize, fontFamily: fontFamily));
     paragraph.addText(text);
     return paragraph.build()
       ..layout(new ParagraphConstraints(width: maxWidth));
+  }
+
+  void enableEvents() {
+    window.onPlatformMessage = BinaryMessages.handlePlatformMessage;
   }
 
   void addGestureRecognizer(GestureRecognizer recognizer) {
@@ -48,5 +48,4 @@ class Util {
       }
     });
   }
-
 }
