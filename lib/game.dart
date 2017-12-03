@@ -13,6 +13,10 @@ abstract class Game {
   // the previous time (game clock)
   Duration _previous = Duration.ZERO;
 
+  // determines if the game loop should revert back to
+  // the previous Flutter callbacks on the next frame
+  bool _stop = false;
+
   /// Called when the game is updating.
   ///   [t] is the time since the previous update.
   void update(double t);
@@ -36,11 +40,7 @@ abstract class Game {
 
   /// Stops the game by replacing the injected render callbacks with
   /// the original Flutter callbacks.
-  void stop() {
-    window.onBeginFrame = _previousOnBeginFrame;
-    window.onDrawFrame = _previousOnDrawFrame;
-    window.onPointerDataPacket = _previousOnPointerDataPacket;
-  }
+  void stop() => _stop = true;
 
   void _onBeginFrame(Duration now) {
     var recorder = new PictureRecorder();
@@ -74,5 +74,16 @@ abstract class Game {
     window.render(builder.build());
   }
 
-  void _onDrawFrame() => window.scheduleFrame();
+  void _onDrawFrame() {
+    if (_stop) {
+      window.onBeginFrame = _previousOnBeginFrame;
+      window.onDrawFrame = _previousOnDrawFrame;
+      // todo  if using touch input to "stop", then an exception is thrown
+      // todo  where the input is "state.down" and never goes to "state.up"
+      window.onPointerDataPacket = _previousOnPointerDataPacket;
+      _stop = false;
+    }
+
+    window.scheduleFrame();
+  }
 }
