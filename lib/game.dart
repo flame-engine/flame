@@ -164,6 +164,7 @@ class BaseGame extends Game {
       canvas.restore();
       canvas.save();
     });
+    canvas.restore();
   }
 
   @override
