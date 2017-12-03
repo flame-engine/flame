@@ -1,34 +1,48 @@
 import 'dart:ui';
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 abstract class Game {
+  // these are all the previously held callbacks from the Flutter engine
+  // this is probably a poor solution to injecting our own rendering stuff
   FrameCallback _previousOnBeginFrame;
   VoidCallback _previousOnDrawFrame;
   PointerDataPacketCallback _previousOnPointerDataPacket;
 
+  // the previous time (game clock)
   Duration _previous = Duration.ZERO;
 
+  /// Called when the game is updating.
+  ///   [t] is the time since the previous update.
   void update(double t);
 
+  /// Called when the game is rendering.
+  ///   [canvas] is what you will render your components on.
   void render(Canvas canvas);
 
-  start() {
+  /// Starts the game by injecting render callbacks into the Flutter engine.
+  void start({@required PointerDataPacketCallback onInput}) {
     _previousOnBeginFrame = window.onBeginFrame;
     _previousOnDrawFrame = window.onDrawFrame;
     _previousOnPointerDataPacket = window.onPointerDataPacket;
 
-    window.onBeginFrame = _gameLoop;
+    window.onBeginFrame = _onBeginFrame;
+    window.onDrawFrame = _onDrawFrame;
+    window.onPointerDataPacket = onInput;
 
     window.scheduleFrame();
   }
 
-  stop() {
+  /// Stops the game by replacing the injected render callbacks with
+  /// the original Flutter callbacks.
+  void stop() {
     window.onBeginFrame = _previousOnBeginFrame;
     window.onDrawFrame = _previousOnDrawFrame;
     window.onPointerDataPacket = _previousOnPointerDataPacket;
   }
 
-  FrameCallback get _gameLoop => (now) {
+  void _onBeginFrame(Duration now) {
     var recorder = new PictureRecorder();
     var canvas = new Canvas(
       recorder,
@@ -58,7 +72,7 @@ abstract class Game {
       ..pop();
 
     window.render(builder.build());
-    window.scheduleFrame();
   }
-;
+
+  void _onDrawFrame() => window.scheduleFrame();
 }
