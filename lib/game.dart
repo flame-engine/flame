@@ -1,59 +1,11 @@
-import 'dart:typed_data';
 import 'dart:ui';
 
-import 'components/component.dart';
-import 'flame.dart';
-import 'package:flutter/gestures.dart';
+import 'package:flame/components/component.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
 abstract class Game {
-  void update(double t);
-
-  void render(Canvas canvas);
-
-  start() {
-    var previous = Duration.ZERO;
-
-    window.onBeginFrame = (now) {
-      var recorder = new PictureRecorder();
-      var canvas = new Canvas(
-          recorder,
-          new Rect.fromLTWH(
-              0.0, 0.0, window.physicalSize.width, window.physicalSize.height));
-
-      Duration delta = now - previous;
-      if (previous == Duration.ZERO) {
-        delta = Duration.ZERO;
-      }
-      previous = now;
-
-      var t = delta.inMicroseconds / Duration.MICROSECONDS_PER_SECOND;
-
-      update(t);
-      render(canvas);
-
-      var deviceTransform = new Float64List(16)
-        ..[0] = window.devicePixelRatio
-        ..[5] = window.devicePixelRatio
-        ..[10] = 1.0
-        ..[15] = 1.0;
-
-      var builder = new SceneBuilder()
-        ..pushTransform(deviceTransform)
-        ..addPicture(Offset.zero, recorder.endRecording())
-        ..pop();
-
-      window.render(builder.build());
-      window.scheduleFrame();
-    };
-
-    window.scheduleFrame();
-  }
-}
-
-abstract class GameWidget {
   void update(double t);
 
   void render(Canvas canvas);
@@ -72,7 +24,7 @@ abstract class GameWidget {
 }
 
 class GameRenderObjectWidget extends SingleChildRenderObjectWidget {
-  GameWidget game;
+  Game game;
 
   GameRenderObjectWidget(this.game);
 
@@ -84,7 +36,7 @@ class GameRenderObjectWidget extends SingleChildRenderObjectWidget {
 class GameRenderBox extends RenderBox {
   BuildContext context;
 
-  GameWidget game;
+  Game game;
 
   int _frameCallbackId;
 
@@ -147,14 +99,7 @@ class GameRenderBox extends RenderBox {
 }
 
 class BaseGame extends Game {
-
   List<Component> components = new List();
-
-  @override
-  void start() {
-    Flame.initialize();
-    super.start();
-  }
 
   @override
   void render(Canvas canvas) {
