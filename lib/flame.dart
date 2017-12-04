@@ -3,6 +3,7 @@ library flame;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 import 'audio.dart';
 import 'images.dart';
@@ -15,6 +16,10 @@ class Flame {
 
   static void initialize() {
     FlameBiding.ensureInitialized();
+  }
+
+  static void initializeWidget() {
+    WidgetsFlutterBinding.ensureInitialized();
   }
 }
 
