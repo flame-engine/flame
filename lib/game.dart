@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:flame/component.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
@@ -52,40 +51,44 @@ abstract class Game {
   }
 }
 
-abstract class GameWidget extends StatelessWidget implements Component {
+abstract class GameWidget {
   void update(double t);
 
   void render(Canvas canvas);
 
-  @override
-  Widget build(BuildContext context) {
-    return new Center(
-        child: new Directionality(
-            textDirection: TextDirection.ltr,
-            child: new GameRenderObjectWidget(this)));
+  Widget _widget;
+
+  Widget get widget {
+    if (_widget == null) {
+      _widget = new Center(
+          child: new Directionality(
+              textDirection: TextDirection.ltr,
+              child: new GameRenderObjectWidget(this)));
+    }
+    return _widget;
   }
 }
 
 class GameRenderObjectWidget extends SingleChildRenderObjectWidget {
-  Component component;
+  GameWidget game;
 
-  GameRenderObjectWidget(this.component);
+  GameRenderObjectWidget(this.game);
 
   @override
   RenderObject createRenderObject(BuildContext context) =>
-      new GameRenderBox(context, this.component);
+      new GameRenderBox(context, this.game);
 }
 
 class GameRenderBox extends RenderBox {
   BuildContext context;
 
-  Component component;
+  GameWidget game;
 
   int _frameCallbackId;
 
   Duration previous = Duration.ZERO;
 
-  GameRenderBox(this.context, this.component);
+  GameRenderBox(this.context, this.game);
 
   @override
   bool get sizedByParent => true;
@@ -123,7 +126,7 @@ class GameRenderBox extends RenderBox {
   }
 
   void _update(Duration now) {
-    component.update(_computeDeltaT(now));
+    game.update(_computeDeltaT(now));
   }
 
   double _computeDeltaT(Duration now) {
@@ -137,6 +140,6 @@ class GameRenderBox extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    component.render(context.canvas);
+    game.render(context.canvas);
   }
 }
