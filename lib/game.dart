@@ -78,7 +78,12 @@ class GameRenderObjectWidget extends SingleChildRenderObjectWidget {
 
 class GameRenderBox extends RenderBox {
   BuildContext context;
+
   Component component;
+
+  int _frameCallbackId;
+
+  Duration previous = Duration.ZERO;
 
   GameRenderBox(this.context, this.component);
 
@@ -114,9 +119,6 @@ class GameRenderBox extends RenderBox {
     _update(timestamp);
     markNeedsPaint();
   }
-
-  var previous = Duration.ZERO;
-  int _frameCallbackId;
 
   void _update(Duration now) {
     component.update(_computeDeltaT(now));
