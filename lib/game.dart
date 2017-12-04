@@ -87,8 +87,10 @@ class GameRenderBox extends RenderBox {
 
   GameRenderBox(this.context, this.component);
 
+  @override
   bool get sizedByParent => true;
 
+  @override
   void performLayout() {
     // TODO: notify game?
   }
@@ -130,8 +132,7 @@ class GameRenderBox extends RenderBox {
       delta = Duration.ZERO;
     }
     previous = now;
-    var t = delta.inMicroseconds / Duration.MICROSECONDS_PER_SECOND;
-    return t;
+    return delta.inMicroseconds / Duration.MICROSECONDS_PER_SECOND;
   }
 
   @override
