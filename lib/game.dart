@@ -1,7 +1,11 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:flame/component.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/widgets.dart';
 
 abstract class Game {
   void update(double t);
@@ -46,5 +50,90 @@ abstract class Game {
 
     window.scheduleFrame();
   }
+}
 
+abstract class GameWidget extends StatelessWidget implements Component {
+  void update(double t);
+
+  void render(Canvas canvas);
+
+  @override
+  Widget build(BuildContext context) {
+    return new Center(
+        child: new Directionality(
+            textDirection: TextDirection.ltr,
+            child: new GameRenderObjectWidget(this)));
+  }
+}
+
+class GameRenderObjectWidget extends SingleChildRenderObjectWidget {
+  Component component;
+
+  GameRenderObjectWidget(this.component);
+
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      new GameRenderBox(context, this.component);
+}
+
+class GameRenderBox extends RenderBox {
+  BuildContext context;
+  Component component;
+
+  GameRenderBox(this.context, this.component);
+
+  bool get sizedByParent => true;
+
+  void performLayout() {
+    // TODO: notify game?
+  }
+
+  @override
+  void attach(PipelineOwner owner) {
+    super.attach(owner);
+    _scheduleTick();
+  }
+
+  @override
+  void detach() {
+    super.detach();
+    _unscheduleTick();
+  }
+
+  void _scheduleTick() {
+    _frameCallbackId = SchedulerBinding.instance.scheduleFrameCallback(_tick);
+  }
+
+  void _unscheduleTick() {
+    SchedulerBinding.instance.cancelFrameCallbackWithId(_frameCallbackId);
+  }
+
+  void _tick(Duration timestamp) {
+    if (!attached) return;
+    _scheduleTick();
+    _update(timestamp);
+    markNeedsPaint();
+  }
+
+  var previous = Duration.ZERO;
+  int _frameCallbackId;
+
+  void _update(Duration now) {
+    component.update(_computeDeltaT(now));
+  }
+
+  double _computeDeltaT(Duration now) {
+    Duration delta = now - previous;
+    if (previous == Duration.ZERO) {
+      delta = Duration.ZERO;
+    }
+    previous = now;
+    var t = delta.inMicroseconds / Duration.MICROSECONDS_PER_SECOND;
+    return t;
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    component.render(context.canvas);
+  }
 }
