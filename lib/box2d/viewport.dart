@@ -4,16 +4,23 @@ import 'package:box2d/box2d.dart';
 import 'package:flame/box2d/box2d_component.dart';
 
 class Viewport extends ViewportTransform {
-  Size dimensions;
+  Size size;
 
   double scale;
 
-  Viewport(this.dimensions, this.scale)
-      : super(new Vector2(dimensions.width / 2, dimensions.height / 2),
-            new Vector2(dimensions.width / 2, dimensions.height / 2), scale);
+  Viewport(this.size, this.scale)
+      : super(new Vector2(size.width / 2, size.height / 2),
+            new Vector2(size.width / 2, size.height / 2), scale);
 
-  double worldAlignBottom(double height) =>
-      -(dimensions.height / 2 / scale) + height;
+  double worldAlignBottom(double height) => -(size.height / 2 / scale) + height;
+
+  /**
+   * Resizes the current view port.
+   */
+  void resize(Size size) {
+    extents = new Vector2.copy(new Vector2(size.width / 2, size.height / 2));
+    center = new Vector2.copy(new Vector2(size.width / 2, size.height / 2));
+  }
 
   /**
    * Computes the number of horizontal world meters of this viewport considering a
@@ -22,7 +29,7 @@ class Viewport extends ViewportTransform {
    * @param percent percetage of the width in [0, 1] range
    */
   double worldWidth(double percent) {
-    return percent * (dimensions.width / scale);
+    return percent * (size.width / scale);
   }
 
   /**
@@ -34,9 +41,8 @@ class Viewport extends ViewportTransform {
    * @return the percentage in the range of [0, 1]
    */
   double getCenterHorizontalScreenPercentage({double screens: 1.0}) {
-    var width = dimensions.width * screens;
-//    print("width: $width");
-    var x = center.x + ((screens - 1) * dimensions.width / 2);
+    var width = size.width * screens;
+    var x = center.x + ((screens - 1) * size.width / 2);
     double rest = x.abs() % width;
     double scroll = rest / width;
     return x > 0 ? scroll : 1 - scroll;
@@ -61,11 +67,11 @@ class Viewport extends ViewportTransform {
       Vector2 temp = new Vector2.zero();
       getWorldToScreen(position, temp);
 
-      var margin = horizontal / 2 * dimensions.width / 2;
-      var focus = dimensions.width / 2 - temp.x;
+      var margin = horizontal / 2 * size.width / 2;
+      var focus = size.width / 2 - temp.x;
 
       if (focus.abs() > margin) {
-        x = dimensions.width / 2 +
+        x = size.width / 2 +
             (position.x * scale) +
             (focus > 0 ? margin : -margin);
       }
@@ -75,11 +81,11 @@ class Viewport extends ViewportTransform {
       Vector2 temp = new Vector2.zero();
       getWorldToScreen(position, temp);
 
-      var margin = vertical / 2 * dimensions.height / 2;
-      var focus = dimensions.height / 2 - temp.y;
+      var margin = vertical / 2 * size.height / 2;
+      var focus = size.height / 2 - temp.y;
 
       if (focus.abs() > margin) {
-        y = dimensions.height / 2 +
+        y = size.height / 2 +
             (position.y * scale) +
             (focus < 0 ? margin : -margin);
       }
@@ -89,5 +95,4 @@ class Viewport extends ViewportTransform {
       setCamera(x, y, scale);
     }
   }
-
 }

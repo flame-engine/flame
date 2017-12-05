@@ -12,6 +12,8 @@ abstract class Game {
 
   void render(Canvas canvas);
 
+  void resize(Size size);
+
   Widget _widget;
 
   Widget get widget {
@@ -52,6 +54,12 @@ class GameRenderBox extends RenderBox {
   @override
   void performLayout() {
     // TODO: notify game?
+  }
+
+  @override
+  void performResize() {
+    super.performResize();
+    game.resize(constraints.biggest);
   }
 
   @override

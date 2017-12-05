@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'component.dart';
-import '../flame.dart';
-
 import 'package:flutter/src/painting/images.dart';
+
+import '../flame.dart';
+import 'component.dart';
 
 class ParallaxRenderer {
   String filename;
@@ -23,7 +23,7 @@ class ParallaxRenderer {
     });
   }
 
-  bool get loaded => image != null;
+  bool loaded() => image != null;
 
   void render(Canvas canvas, Rect rect) {
     if (image == null) {
@@ -50,11 +50,11 @@ class ParallaxComponent extends PositionComponent {
   final BASE_SPEED = 30;
   final LAYER_DELTA = 40;
 
-  List<ParallaxRenderer> layers = new List();
-  Size size;
+  List<ParallaxRenderer> _layers = new List();
+  Size _size;
   bool _loaded = false;
 
-  ParallaxComponent(this.size);
+  ParallaxComponent(this._size);
 
   /**
    * Loads the images defined by this list of filenames. All images
@@ -64,9 +64,9 @@ class ParallaxComponent extends PositionComponent {
    */
   void load(List<String> filenames) {
     var futures =
-    filenames.fold(new List<Future>(), (List<Future> result, filename) {
+        filenames.fold(new List<Future>(), (List<Future> result, filename) {
       var layer = new ParallaxRenderer(filename);
-      layers.add(layer);
+      _layers.add(layer);
       result.add(layer.future);
       return result;
     });
@@ -76,7 +76,7 @@ class ParallaxComponent extends PositionComponent {
   }
 
   void updateScroll(int layerIndex, scroll) {
-    layers[layerIndex].scroll = scroll;
+    _layers[layerIndex].scroll = scroll;
   }
 
   @override
@@ -98,8 +98,8 @@ class ParallaxComponent extends PositionComponent {
 
   void _drawLayers(Canvas canvas) {
     Rect rect = new Rect.fromPoints(
-        new Offset(0.0, 0.0), new Offset(size.width, size.height));
-    layers.forEach((layer) {
+        new Offset(0.0, 0.0), new Offset(_size.width, _size.height));
+    _layers.forEach((layer) {
       layer.render(canvas, rect);
     });
   }
@@ -109,13 +109,13 @@ class ParallaxComponent extends PositionComponent {
     if (!this.loaded()) {
       return;
     }
-    for (var i = 0; i < layers.length; i++) {
-      var scroll = layers[i].scroll;
-      scroll += (BASE_SPEED + i * LAYER_DELTA) * delta / size.width;
+    for (var i = 0; i < _layers.length; i++) {
+      var scroll = _layers[i].scroll;
+      scroll += (BASE_SPEED + i * LAYER_DELTA) * delta / _size.width;
       if (scroll > 1) {
         scroll = scroll % 1;
       }
-      layers[i].scroll = scroll;
+      _layers[i].scroll = scroll;
     }
   }
 }
