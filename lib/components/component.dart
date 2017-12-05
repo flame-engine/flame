@@ -9,6 +9,8 @@ abstract class Component {
 
   void render(Canvas c);
 
+  void resize(Size size) {}
+
   bool loaded() {
     return true;
   }
@@ -41,7 +43,8 @@ class SpriteComponent extends PositionComponent {
 
   final Paint paint = new Paint()..color = new Color(0xffffffff);
 
-  SpriteComponent.square(double size, String imagePath) : this.rectangle(size, size, imagePath);
+  SpriteComponent.square(double size, String imagePath)
+      : this.rectangle(size, size, imagePath);
 
   SpriteComponent.rectangle(this.width, this.height, String imagePath) {
     this.sprite = new Sprite(imagePath);
@@ -63,7 +66,5 @@ class SpriteComponent extends PositionComponent {
   }
 
   @override
-  void update(double t) {
-  }
+  void update(double t) {}
 }
-

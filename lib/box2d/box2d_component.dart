@@ -54,8 +54,10 @@ abstract class Box2DComponent extends Component {
 
   void initializeWorld();
 
-  void cameraFollow(BodyComponent component, {double horizontal, double vertical}) {
-    viewport.cameraFollow(component, horizontal: horizontal, vertical: vertical);
+  void cameraFollow(BodyComponent component,
+      {double horizontal, double vertical}) {
+    viewport.cameraFollow(component,
+        horizontal: horizontal, vertical: vertical);
   }
 }
 
@@ -139,7 +141,6 @@ abstract class BodyComponent extends Component {
     final path = new Path()..addPolygon(points, true);
     final Paint paint = new Paint()
       ..color = new Color.fromARGB(255, 255, 255, 255);
-//      ..style = PaintingStyle.stroke;
     canvas.drawPath(path, paint);
   }
 }
