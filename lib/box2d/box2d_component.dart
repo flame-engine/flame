@@ -54,6 +54,9 @@ abstract class Box2DComponent extends Component {
   @override
   void resize(Size size) {
     viewport.resize(size);
+    components.forEach((c) {
+      c.resize(size);
+    });
   }
 
   void add(Component component) {

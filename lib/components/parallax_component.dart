@@ -46,7 +46,7 @@ class ParallaxRenderer {
   }
 }
 
-class ParallaxComponent extends PositionComponent {
+abstract class ParallaxComponent extends PositionComponent {
   final BASE_SPEED = 30;
   final LAYER_DELTA = 40;
 
@@ -54,7 +54,10 @@ class ParallaxComponent extends PositionComponent {
   Size _size;
   bool _loaded = false;
 
-  ParallaxComponent(this._size);
+  @override
+  void resize(Size size) {
+    this._size = size;
+  }
 
   /**
    * Loads the images defined by this list of filenames. All images
@@ -86,7 +89,7 @@ class ParallaxComponent extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    if (!this.loaded()) {
+    if (!loaded()) {
       return;
     }
 
