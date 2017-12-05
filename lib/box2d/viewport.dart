@@ -18,8 +18,11 @@ class Viewport extends ViewportTransform {
    * Resizes the current view port.
    */
   void resize(Size size) {
-    extents = new Vector2.copy(new Vector2(size.width / 2, size.height / 2));
-    center = new Vector2.copy(new Vector2(size.width / 2, size.height / 2));
+    this.size = size;
+    this.extents =
+        new Vector2.copy(new Vector2(size.width / 2, size.height / 2));
+    this.center =
+        new Vector2.copy(new Vector2(size.width / 2, size.height / 2));
   }
 
   /**

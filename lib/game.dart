@@ -52,11 +52,6 @@ class GameRenderBox extends RenderBox {
   bool get sizedByParent => true;
 
   @override
-  void performLayout() {
-    // TODO: notify game?
-  }
-
-  @override
   void performResize() {
     super.performResize();
     game.resize(constraints.biggest);
