@@ -1,9 +1,11 @@
 import 'dart:ui';
 
-import 'package:flame/components/component.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
+
+import 'components/component.dart';
 
 abstract class Game {
   void update(double t);
@@ -98,8 +100,18 @@ class GameRenderBox extends RenderBox {
   }
 }
 
-class BaseGame extends Game {
-  List<Component> components = new List();
+abstract class BaseGame extends Game {
+  final List<Component> components = new List();
+
+  @override
+  bool destroy() {
+    return false;
+  }
+
+  @override
+  bool loaded() {
+    return true;
+  }
 
   @override
   void render(Canvas canvas) {
