@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flutter/src/painting/images.dart';
+import 'package:flutter/src/painting/decoration_image.dart';
 
 import '../flame.dart';
 import 'component.dart';
