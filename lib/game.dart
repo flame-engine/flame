@@ -28,7 +28,7 @@ abstract class Game {
 }
 
 class GameRenderObjectWidget extends SingleChildRenderObjectWidget {
-  Game game;
+  final Game game;
 
   GameRenderObjectWidget(this.game);
 
@@ -105,16 +105,6 @@ class GameRenderBox extends RenderBox {
 
 abstract class BaseGame extends Game {
   final List<Component> components = new List();
-
-  @override
-  bool destroy() {
-    return false;
-  }
-
-  @override
-  bool loaded() {
-    return true;
-  }
 
   @override
   void render(Canvas canvas) {
