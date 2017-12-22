@@ -10,11 +10,8 @@ Any help is appreciated! Comment, suggestions, issues, PR's! Give us a star to h
 
 These features are things that I saw evolving into games using flutter that I believe should be introduced into the engine:
 
- * Sprite Sheets (create an `Sprite` class that can be used inside `Component`s, instead of a bare string)
- * Easier animations (maybe a `AnimationComponent`, with optional support for SpriteSheet)
- * `bool destroy()` method on `Component`
- * Find an unobtrusive compromise to automatically call `Flame.util.enableEvents();`
- * Maybe create a `BasicGame` child for `Game`, with sensible defaults like: calling enableEvents, list of Components approach with proper canvas reset, etc.
+ * Rotation around sprint center (currently it rotates around the corner)
+ * Find an unobtrusive compromise to automatically call `Flame.util.enableEvents();` and fix the `--supermixin` problem
  * Think of a good structure to add tests (might be hard to do)
 
 ## Goals
