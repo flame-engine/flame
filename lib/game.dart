@@ -6,6 +6,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
 import 'components/component.dart';
+import 'position.dart';
 
 abstract class Game {
   void update(double t);
@@ -104,13 +105,16 @@ class GameRenderBox extends RenderBox {
 }
 
 abstract class BaseGame extends Game {
-  final List<Component> components = new List();
+
+  List<Component> components = new List();
   Size size;
+  Position camera = new Position.empty();
 
   @override
   void render(Canvas canvas) {
     canvas.save();
     components.forEach((comp) {
+      canvas.translate(-camera.x, -camera.y);
       comp.render(canvas);
       canvas.restore();
       canvas.save();

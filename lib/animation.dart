@@ -1,4 +1,4 @@
-import '../sprite.dart';
+import 'sprite.dart';
 
 class Animation {
   List<Sprite> sprites;
