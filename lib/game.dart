@@ -105,6 +105,7 @@ class GameRenderBox extends RenderBox {
 
 abstract class BaseGame extends Game {
   final List<Component> components = new List();
+  Size size;
 
   @override
   void render(Canvas canvas) {
@@ -121,5 +122,11 @@ abstract class BaseGame extends Game {
   void update(double t) {
     components.forEach((c) => c.update(t));
     components.removeWhere((c) => c.destroy());
+  }
+
+  @override
+  void resize(Size size) {
+    this.size = size;
+    components.forEach((c) => c.resize(size));
   }
 }
