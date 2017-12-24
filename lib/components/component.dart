@@ -1,7 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/sprite.dart';
+import '../sprite.dart';
+import '../position.dart';
 import 'package:flutter/painting.dart';
 
 abstract class Component {
@@ -39,6 +40,10 @@ abstract class PositionComponent extends Component {
     canvas.translate(width/2, height/2);
     canvas.rotate(angle);
     canvas.translate(-width/2, -height/2);
+  }
+
+  Position toPosition() {
+    return new Position(x, y);
   }
 
   Rect toRect() {

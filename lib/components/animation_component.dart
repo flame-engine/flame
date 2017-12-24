@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'component.dart';
-import 'animation.dart';
+import 'package:flame/animation.dart';
 import '../sprite.dart';
 
 class AnimationComponent extends PositionComponent {
