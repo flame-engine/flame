@@ -19,6 +19,10 @@ abstract class Component {
   bool destroy() {
     return false;
   }
+
+  bool isHud() {
+    return false;
+  }
 }
 
 abstract class PositionComponent extends Component {

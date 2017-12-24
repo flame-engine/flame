@@ -114,7 +114,9 @@ abstract class BaseGame extends Game {
   void render(Canvas canvas) {
     canvas.save();
     components.forEach((comp) {
-      canvas.translate(-camera.x, -camera.y);
+      if (!comp.isHud()) {
+        canvas.translate(-camera.x, -camera.y);
+      }
       comp.render(canvas);
       canvas.restore();
       canvas.save();
