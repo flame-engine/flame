@@ -33,8 +33,10 @@ class AnimationComponent extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    prepareCanvas(canvas);
-    animation.getSprite().render(canvas, width, height);
+    if (animation.loaded() && x != null && y != null) {
+      prepareCanvas(canvas);
+      animation.getSprite().render(canvas, width, height);
+    }
   }
 
   @override

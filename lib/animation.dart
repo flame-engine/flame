@@ -34,4 +34,8 @@ class Animation {
   void update(double t) {
     this.lifeTime += t;
   }
+
+  bool loaded() {
+    return !sprites.any((sprite) => !sprite.loaded());
+  }
 }
