@@ -10,7 +10,6 @@ Any help is appreciated! Comment, suggestions, issues, PR's! Give us a star to h
 
 These features are things that I saw evolving into games using flutter that I believe should be introduced into the engine:
 
- * Rotation around sprint center (currently it rotates around the corner)
  * Find an unobtrusive compromise to automatically call `Flame.util.enableEvents();` and fix the `--supermixin` problem
  * Think of a good structure to add tests (might be hard to do)
 
