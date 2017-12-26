@@ -73,7 +73,7 @@ class SpriteComponent extends PositionComponent {
 
   @override
   render(Canvas canvas) {
-    if (sprite.loaded()) {
+    if (sprite.loaded() && x != null && y != null) {
       prepareCanvas(canvas);
       sprite.render(canvas, width, height);
     }
