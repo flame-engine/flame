@@ -110,6 +110,15 @@ abstract class BaseGame extends Game {
   Size size;
   Position camera = new Position.empty();
 
+  void add(Component c) {
+    this.components.add(c);
+
+    // first time resize
+    if (size != null) {
+      c.resize(size);
+    }
+  }
+
   @override
   void render(Canvas canvas) {
     canvas.save();
