@@ -13,6 +13,8 @@ class AnimationComponent extends PositionComponent {
     this.height = height;
   }
 
+  AnimationComponent.byAnimation(this.animation);
+
   AnimationComponent.sequenced(width, height, String imagePath, int amount, { double textureX = 0.0, double textureY = 0.0, double textureWidth = -1.0, double textureHeight = -1.0}) {
     this.width = width;
     this.height = height;
