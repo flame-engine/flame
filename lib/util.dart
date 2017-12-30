@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:ui';
-import 'dart:ui' as ui show TextStyle;
 
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:flutter/services.dart';
 
 class Util {
@@ -28,13 +27,12 @@ class Util {
     });
   }
 
-  Paragraph text(String text, { double fontSize = 24.0, Color color = Colors.white, fontFamily: 'Arial', double maxWidth = 180.0 }) {
-    ParagraphBuilder paragraph = new ParagraphBuilder(new ParagraphStyle());
-    paragraph.pushStyle(new ui.TextStyle(
-        color: color, fontSize: fontSize, fontFamily: fontFamily));
-    paragraph.addText(text);
-    return paragraph.build()
-      ..layout(new ParagraphConstraints(width: maxWidth));
+  material.TextPainter text(String text, { fontSize = 24.0, color = material.Colors.white, fontFamily: 'Arial', maxWidth = 180.0, textAlign: TextAlign.left, textDirection: TextDirection.ltr }) {
+    material.TextStyle style = new material.TextStyle(color: color, fontSize: fontSize, fontFamily: fontFamily);
+    material.TextSpan span = new material.TextSpan(style: style, text: text);
+    material.TextPainter tp = new material.TextPainter(text: span, textAlign: textAlign, textDirection: textDirection);
+    tp.layout();
+    return tp;
   }
 
   void enableEvents() {
