@@ -9,6 +9,10 @@ class Sprite {
 
   static final Paint paint = new Paint()..color = Colors.white;
 
+  Sprite.fromImage(this.image) {
+    this.src = new Rect.fromLTWH(0.0, 0.0, image.width.toDouble(), image.height.toDouble());
+  }
+
   Sprite(String fileName, {double x = 0.0, double y = 0.0, double width = -1.0, double height = -1.0}) {
     Flame.images.load(fileName).then((img) {
       if (width == -1.0) {
