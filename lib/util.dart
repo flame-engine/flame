@@ -5,6 +5,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/services.dart';
 
+import 'position.dart';
+
 class Util {
   void fullScreen() {
     SystemChrome.setEnabledSystemUIOverlays([]);
@@ -45,5 +47,11 @@ class Util {
         recognizer.addPointer(e);
       }
     });
+  }
+
+  void drawWhere(Canvas c, Position p, void Function(Canvas) fn) {
+    c.translate(p.x, p.y);
+    fn(c);
+    c.translate(-p.x, -p.y);
   }
 }
