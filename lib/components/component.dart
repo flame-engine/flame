@@ -60,6 +60,8 @@ class SpriteComponent extends PositionComponent {
 
   final Paint paint = new Paint()..color = new Color(0xffffffff);
 
+  SpriteComponent();
+
   SpriteComponent.square(double size, String imagePath)
       : this.rectangle(size, size, imagePath);
 
