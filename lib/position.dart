@@ -22,4 +22,12 @@ class Position {
   double length() {
     return math.sqrt(math.pow(this.x, 2) + math.pow(this.y, 2));
   }
+
+  Position rotate(double angle) {
+    double nx = math.cos(angle) * this.x - math.sin(angle) * this.y;
+    double ny = math.sin(angle) * this.x + math.cos(angle) * this.y;
+    this.x = nx;
+    this.y = ny;
+    return this;
+  }
 }
