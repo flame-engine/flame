@@ -15,6 +15,10 @@ class Images {
     loadedFiles.clear();
   }
 
+  Future<List<Image>> loadAll(List<String> fileNames) async {
+    return Future.wait(fileNames.map(load));
+  }
+
   Future<Image> load(String fileName) async {
     if (!loadedFiles.containsKey(fileName)) {
       loadedFiles[fileName] = await _fetchToMemory(fileName);
