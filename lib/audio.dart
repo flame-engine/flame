@@ -42,16 +42,16 @@ class Audio {
     return loadedFiles[fileName];
   }
 
-  Future<int> play(String fileName, { volume: 1.0 }) async {
+  Future<AudioPlayer> play(String fileName, { volume: 1.0 }) async {
     File file = await load(fileName);
-    return await new AudioPlayer().play(file.path, isLocal: true, volume: volume);
+    return await new AudioPlayer()..play(file.path, isLocal: true, volume: volume);
   }
 
-  Future<int> loop(String fileName, { volume: 1.0 }) async {
+  Future<AudioPlayer> loop(String fileName, { volume: 1.0 }) async {
     File file = await load(fileName);
     AudioPlayer player = new AudioPlayer();
     player.setCompletionHandler(() => player.play(file.path, isLocal: true, volume: volume));
-    return await player.play(file.path, isLocal: true);
+    return await player..play(file.path, isLocal: true);
   }
 
 }
