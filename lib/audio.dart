@@ -31,6 +31,10 @@ class Audio {
     return await file.writeAsBytes((await _fetchAsset(fileName)).buffer.asUint8List());
   }
 
+  Future<List<File>> loadAll(List<String> fileNames) async {
+    return Future.wait(fileNames.map(load));
+  }
+
   Future<File> load(String fileName) async {
     if (!loadedFiles.containsKey(fileName)) {
       loadedFiles[fileName] = await _fetchToMemory(fileName);
