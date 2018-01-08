@@ -10,7 +10,7 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  audioplayers: ^0.4.0
+  audioplayers: ^0.4.1
   path_provider: ^0.2.1+1
   box2d: ^0.3.0
 
