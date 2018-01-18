@@ -29,7 +29,7 @@ class Util {
     });
   }
 
-  material.TextPainter text(String text, { fontSize = 24.0, color = material.Colors.white, fontFamily: 'Arial', maxWidth = 180.0, textAlign: TextAlign.left, textDirection: TextDirection.ltr }) {
+  material.TextPainter text(String text, { fontSize = 24.0, color = material.Colors.black, fontFamily: 'Arial', textAlign: TextAlign.left, textDirection: TextDirection.ltr }) {
     material.TextStyle style = new material.TextStyle(color: color, fontSize: fontSize, fontFamily: fontFamily);
     material.TextSpan span = new material.TextSpan(style: style, text: text);
     material.TextPainter tp = new material.TextPainter(text: span, textAlign: textAlign, textDirection: textDirection);
