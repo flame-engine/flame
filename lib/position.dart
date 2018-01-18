@@ -1,12 +1,21 @@
 import 'dart:math' as math;
-import 'dart:ui' show Offset;
+import 'dart:ui' as ui;
 
+/*
+ * An ordered pair representation (point, position, offset).
+ * It differs from the default implementations provided (math.Point and ui.Offset) as it's mutable.
+ * Also, it offers helpful converters and a some useful methods for manipulation.
+ */
 class Position {
   double x, y;
 
   Position(this.x, this.y);
 
   Position.empty() : this(0.0, 0.0);
+
+  Position.fromOffset(ui.Offset offset) : this(offset.dx, offset.dy);
+
+  Position.fromPoint(math.Point point) : this(point.x, point.y);
 
   Position add(Position other) {
     this.x += other.x;
@@ -32,7 +41,11 @@ class Position {
     return this;
   }
 
-  Offset toOffset() {
-    return new Offset(x, y);
+  ui.Offset toOffset() {
+    return new ui.Offset(x, y);
+  }
+
+  math.Point toPoint() {
+    return new math.Point(x, y);
   }
 }
