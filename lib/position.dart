@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui' show Offset;
 
 class Position {
   double x, y;
@@ -29,5 +30,9 @@ class Position {
     this.x = nx;
     this.y = ny;
     return this;
+  }
+
+  Offset toOffset() {
+    return new Offset(x, y);
   }
 }
