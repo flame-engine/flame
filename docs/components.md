@@ -8,7 +8,7 @@ The intermediate inheritance `PositionComponent` adds `x`, `y`, `width`, `height
 
 The most commonly used implementation, `SpriteComponent`, can be created with a `Sprite`:
 
-```
+```dart
     import 'package:flame/component.dart';
 
     Sprite sprite = new Sprite('player.png');
