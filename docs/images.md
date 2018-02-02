@@ -1,0 +1,76 @@
+# Images
+
+If you are using the Component module and doing something simple, you probably won't need to use these classes; use `SpriteComponent` or `AnimationComponent` instead.
+
+You must have an appropriate folder structure and add the files to the `pubspec.yaml` file, as explained above.
+
+It has to be a PNG file. It can have transparency.
+
+## Sprite
+
+Flame offers a `Sprite` class that represents a piece of an image (or the whole).
+
+You can create a `Sprite` giving it a pre-loaded `Image` via the `fromImage` constructor, or you can use the nameless constructor to pass a file name and have the image loaded asynchronously.
+
+For example, this will create a sprite representing the whole image of the file passed, automatically triggering its loading:
+
+```dart
+    Sprite player = new Sprite('player.png');
+```
+
+You could also specify the coordinates in the original image where the sprite is located; this allows you to use sprite sheets and reduce the number of images in memory; for example:
+
+```dart
+    Sprite playerFrame = new Sprite('player.png', x = 32.0, width = 16.0);
+```
+
+The default values are `0.0` for `x` and `y` and `-1` for `width` and `height` (meaning it will use the full width/height of the source image).
+
+The `Sprite` class has a `loaded` method that returns wether the image has been loaded, and a render method, that allows you to render the image into a `Canvas`:
+
+```dart
+    Sprite block = new Sprite('block.png');
+
+    // in your render method
+    block.render(canvas, 16.0, 16.0); //canvas, width, height
+```
+
+You must pass the size to the render method, and the image will be resized accordingly.
+
+The render method will do nothing while the sprite has not been loaded, so you don't need to worry. The image is cached in the `Images` class, so you can safely create many sprites with the same fileName.
+
+## Flame.images
+
+The `Flame.images` is a lower level utility for loading images, very similar to the `Flame.audio` instance.
+
+Flutter has a collection of types related to images, and converting everything properly form a local asset to the Image that can be drawn on Canvas is a small pain. This class allows you to obtain an Image that can be drawn on a Canvas using the `drawImageRect` method.
+
+It automatically caches any image loaded by filename, so you can safely call it many times.
+
+To load and draw an image, you can use the `load` method, like so:
+
+```dart
+    import 'package:flame/flame.dart';
+
+    // inside an async context
+    Image image = await Flame.images.load('player.png');
+    
+    // or
+    Flame.images.load('player.png').then((Image image) {
+      var paint = new Paint()..color = new Color(0xffffffff);
+      var rect = new Rect.fromLTWH(0.0, 0.0, image.width.toDouble(), image.height.toDouble());
+      canvas.drawImageRect(image, rect, rect, paint);
+    });
+```
+
+The methods for loading and clearing the cache are identical to the Audio ones: `load`, `loadAll`, `clear` and `clearAll`. They return a `Future` for the Image loaded.
+
+Also similarly to Audio, you can instantiate your own copy of `Images` (each instance shares a different cache):
+
+```dart
+    Image image = await new Images().load('asd');
+```
+
+## Animation
+
+[TODO] talk about animations

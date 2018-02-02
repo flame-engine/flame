@@ -2,43 +2,40 @@
 
 A minimalist Flutter game engine.
 
-**Now audio works on iOS, thanks to [@feroult](https://github.com/feroult)!**
-
-## Roadmap
-
 Any help is appreciated! Comment, suggestions, issues, PR's! Give us a star to help!
-
-These features are things that I saw evolving into games using flutter that I believe should be introduced into the engine:
-
- * Find an unobtrusive compromise to automatically call `Flame.util.enableEvents();` and fix the `--supermixin` problem
- * Think of a good structure to add tests (might be hard to do)
 
 ## Goals
 
-The goal of this project is to provided a minimalist set of out-of-the-way solutions for the common problems every game developed in Flutter will share.
+The goal of this project is to provided a complete set of out-of-the-way solutions for the common problems every game developed in Flutter will share.
 
-Currently it provides you with: a few utilities, images/sprites, audio, a game loop and a component/object system.
+Currently it provides you with: a few utilities, images/sprites/sprite sheets, audio, a game loop and a component/object system.
 
-You can use whatever ones you want, as they are all independent.
+You can use whatever ones you want, as they are all somewhat independent.
 
 ## Usage
 
 Just drop it in your `pubspec.yaml`:
 
-```
+```yaml
 dependencies:
-  flame: ^0.6.1
+  flame: ^0.8.1
 ```
 
-And start using it! There is a very good QuickStart tutorial [here](https://medium.com/@luanpotter27/a-comprehensive-flame-tutorial-or-how-to-make-games-with-flutter-74f22c4ecbfa), with everything you need to know!
+And start using it!
+
+The complete documentation can be found [here](docs/README.md).
+
+Bellow is an overview that should suffice to build a simple game, and work your way up from there.
+
+There is a very good QuickStart tutorial for version `0.6.1` [here](https://medium.com/@luanpotter27/a-comprehensive-flame-tutorial-or-how-to-make-games-with-flutter-74f22c4ecbfa). The API has changed a lot, so refer this documentation for updated information. Soon I plan to release an updated tutorial.
 
 ## Structure
 
-The only structure you are required to comply is a assets folder with two subfolders: audio and images.
+The only structure you are required to comply is a assets folder with two sub folders: audio and images.
 
 An example:
 
-```
+```dart
   Flame.audio.play('explosion.mp3');
 
   Flame.images.load('player.png');
@@ -51,7 +48,7 @@ The file structure would have to be:
 .
 └── assets
     ├── audio
-    │   └── explosion.mp3
+    │   └── explosion.mp3
     └── images
         ├── enemy.png
         └── player.png
@@ -73,95 +70,41 @@ The modular approach allows you to use any of these modules independently, or to
 
 ### Audio
 
-To play audio, it's really simple! Just run, at any moment:
+To play an audio, just use the `Flame.audio.play` method:
 
-```
+```dart
     import 'package:flame/flame.dart';
 
     Flame.audio.play('explosion.mp3');
 ```
 
-Or, if you prefer:
+You can pre-load your audios in the beginning and avoid delays with the `loadAll` method:
 
-```
-    import 'package:flame/audio.dart';
-
-    Audio audio = new Audio();
-    audio.play('explosion.mp3');
+```dart
+    // in a async prepare function for your game
+    await Flame.audio.loadAll(['explosion.mp3']);
 ```
 
-You must have an appropriate folder structure and add the files to the `pubspec.yaml` file, as explained above.
-
-It has to be an MP3 or a OGG file (tested with WAV and it didn't work).
-
-This uses the [audioplayers](https://github.com/luanpotter/audioplayer) lib, in
-order to allow playing multiple sounds simultaneously (crucial in a game).
-
-If you want to play indefinitely, just use loop:
-
-```
-    Flame.audio.loop('music.mp3');
-```
-
-**Beware**: in order to use loop or any platform binding callbacks, you need to call this
-utility function first thing on your application code:
-
-```
-    Flame.util.enableEvents();
-```
-
-**TODO**: find a way to know if events are enabled and call this automatically somehow.
-
-Finally, you can pre-load your audios. Audios need to be stored in the memory the first
-time they are requested; therefore, the first time you play each mp3 you might get a
-delay. In order to pre-load your audios, just use:
-
-```
-    Flame.audio.load('explosion.mp3');
-```
-
-You can load all your audios in beginning so that they always play smoothly.
-
-There's lots of logs; that's reminiscent of the original AudioPlayer plugin. Useful while
-debug, but afterwards you can disable them with:
-
-```
-    Flame.audio.disableLog();
-```
+[Complete Audio Guide](docs/audio.md)
 
 ### Images
 
-Flutter has a collection of types related to images, and converting everything properly
-form a local asset to the Image that can be drawn on Canvas is a small pain.
+If you are using the Component module and doing something simple, you probably won't need to use these classes; use `SpriteComponent` or `AnimationComponent` instead.
 
-This module allows you to obtain an Image that can be drawn on a Canvas using the `drawImageRect` method.
+If you want to load an image and render it on the `Canvas`, you can use the `Sprite` class:
 
-Just use:
-```
-    import 'package:flame/flame.dart';
+```dart
+    import 'package:flame/sprite.dart';
 
-    // inside an async context
-    Image image = await Flame.images.load('player.png');
-    
-    // or
-    Flame.images.load('player.png').then((Image image) {
-      var paint = new Paint()..color = new Color(0xffffffff);
-      var rect = new Rect.fromLTWH(0.0, 0.0, image.width.toDouble(), image.height.toDouble());
-      canvas.drawImageRect(image, rect, rect, paint);
-    });
+    Sprite sprite = new Sprite('player.png');
+
+    // in your render loop
+    sprite.render(canvas, width, height);
 ```
 
-Similarly to Audio, you can instantiate your own copy of Image:
+Note that the render method will do nothing while the image has not been loaded; you can check for completion using the `loaded` method.
 
-```
-    Image image = await new Images().load('asd');
-```
-
-If you are using the Component module, you probably should not use this one; use SpriteComponent instead!
-
-You must have an appropriate folder structure and add the files to the `pubspec.yaml` file, as explained above.
-
-It has to be a PNG file. It can have transparency.
+[Complete Images Guide](docs/images.md)
 
 ### Component
 
@@ -169,82 +112,111 @@ This class represent a single object on the screen, being a floating rectangle o
 
 The base abstract class has the common expected methods update and render to be implemented.
 
-The intermediate inheritance `PositionComponent` adds x, y and angle to your Components,
-as well as some useful methods like distance and angleBetween.
+The intermediate inheritance `PositionComponent` adds `x`, `y`, `width`, `height` and `angle` to your Components, as well as some useful methods like distance and angleBetween.
 
-And finally, the most complete implementation, `SpriteComponent`, which makes rendering sprites really easy:
+The most commonly used implementation, `SpriteComponent`, can be created with a `Sprite`:
 
 ```
     import 'package:flame/component.dart';
 
-    const size = 128.0; // size that will be drawn on the screen
-    // it will resize the image according
-    var player = new SpriteComponent.square(size, 'player.png');
-    // the image sprite will be loaded by the Images module
+    Sprite sprite = new Sprite('player.png');
+
+    const size = 128.0;
+    var player = new SpriteComponent.fromSprite(size, size, sprite); // width, height, sprite
     
     // screen coordinates
-    player.x = ...
-    player.y = ...
-    player.angle = ...
-    // tip: use canvas.translate to convert coordiantes
+    player.x = ... // 0 by default
+    player.y = ... // 0 by default
+    player.angle = ... // 0 by default
     
-    player.render(canvas); // it will render if the image is ready
+    player.render(canvas); // it will render only if the image is loaded and the x, y, width and height parameters are not null
 ```
 
-You can also use the rectangle constructor if you want a non-square sprite:
+Every `Component` has a few other methods that you can optionally implement, that are used by the `BaseGame` class. If you are not using the base game, you can alternatively use these methods on your own game loop.
 
-```
-    var object = new SpriteComponent.rectangle(width, height, imagePath);
-```
+The `resize` method is called whenever the screen is resized, and in the beginning once when the component is added via the `add` method. You need to apply here any changes to the x, y, width and height of your component, or any other changes, due to the screen resizing. You can start these variables here, as the sprite won't be rendered until everything is set.
+
+The `destroy` method can be implemented to return true and warn the `BaseGame` that your object is marked for destruction, and it will be remove after the current update loop. It will then no longer be rendered or updated.
+
+The `isHUD` method can be implemented to return true (default false) to make the `BaseGame` ignore the `camera` for this element.
+
+There are also other implementations:
+
+* The `AnimationComponent` takes an `Animation` object and renders a cyclic animated sprite (more details about Animations [here](docs/images.md#Animation))
+* The `ParallaxComponent` can render a parallax background with several frames
+* The `Box2DComponent`, that has a physics engine built-in (using the [Box2D](https://github.com/google/box2d.dart) port for Dart)
+
+[Complete Components Guide](docs/components.md)
+[TODO] make the in-depth guide for Components
 
 ### Game Loop
 
-The Game Loop module is a simple abstraction over the game loop concept.
+The Game Loop module is a simple abstraction over the game loop concept. Basically most games are built upon two methods: 
 
-Extend the abstract class Game and just implement render and update; they will be called properly once you start.
+* The render method takes the canvas ready for drawing the current state of the game.
+* The update method receives the delta time in milliseconds since last update and allows you to move the next state.
 
+The class `Game` can be subclassed and will provide both these methods for you to implement. In return it will provide you with a `widget` property that returns the game widget, that can be rendered in your app.
+
+You can either render it directly in your `runApp`, or you can have a bigger structure, with routing, other screens and menus for your game.
+
+To start, just add your game widget directly to your runApp, like so:
+
+```dart
+    main() {
+        Game game = new MyGameImpl();
+        runApp(game.widget);
+    }
 ```
-    import 'package:flame/game.dart';
-    import 'package:flame/component.dart';
 
-    class MyGame extends Game {
-        var objs = <Component>[];
+Instead of implementing the low level `Game` class, you should probably use the more full-featured `BaseGame` class.
 
-        update(double t) {
-            components.forEach((Component obj) => obj.update(t));
+The `BaseGame` implements a `Component` based `Game` for you; basically it has a list of `Component`s and repasses the `update` and `render` calls appropriately. You can still extend those methods to add custom behavior, and you will get a few other features for free, like the repassing of `resize` methods (every time the screen is resized the information will be passed to the resize methods of all your components) and also a basic camera feature (that will translate all your non-HUD components in order to center in the camera you specified).
+
+A very simple `BaseGame` implementation example can be seen below:
+
+```dart
+    class MyCrate extends SpriteComponent {
+
+        // creates a component that renders the crate.png sprite, with size 16 x 16
+        MyCrate() : SpriteComponent.fromSprite(16.0, 16.0, new Sprite('crate.png'));
+
+        @override
+        void resize(Size size) {
+            // we don't need to set the x and y in the constructor, we can set then here
+            this.x = (size.width - this.width)/ 2;
+            this.y = (size.height - this.height) / 2;
         }
+    }
 
-        render(Canvas canvas) {
-            components.forEach((Component obj) => obj.render(canvas));
+    class MyGame extends BaseGame {
+        MyGame() {
+            add(new MyCrate()); // this will call resize the first time as well
         }
-    }    
-   
-    var game = new MyGame();
-    game.objs.add(new SpriteObject( ... ));
-    game.start();
-``` 
+    }
+```
 
-The render method takes the canvas ready for drawing the current state of the game.
+### Input
 
-The update method receives the delta time in milliseconds since last update and allows
-you to move the next state.
+In order to handle user input, you can use the libraries provided by Flutter for regular apps: [Gesture Recognizers](https://flutter.io/gestures/).
 
-### Util
+However, in order to bind them, use the `Flame.util.addGestureRecognizer` method; in doing so, you'll make sure they are properly unbound when the game widget is not being rendered, and so the rest of your screens will work appropriately.
 
-This module will incorporate a few utility functions that are good to have in any game
-environment. For now, there is only two:
+For example, to add a tap listener ("on click"):
 
- * initialDimensions : returns a Future with the dimension (Size) of the screen. This has
-   to be done in a hacky way because of the reasons described in the code.
- * enableEvents : this is also a hack that allows you to use the Service bindings with
-   platform specific code callbacks. Normally they would only work if you called runApp
-   with a widget, since we draw on canvas for the game, that's never called. This makes sure it works.
- * text : helper to write text to the Canvas; the methods are a bit convoluted, this might give a hand.
+```dart
+    Flame.util.addGestureRecognizer(new TapGestureRecognizer()
+        ..onTapDown = (TapDownDetails evt) => game.handleInput(evt.globalPosition.dx, evt.globalPosition.dy));
+```
 
-Ideas are appreciated!
+Where `game` is a reference to your game object and `handleInput` is a method you create to handle the input inside your game.
+
+If your game doesn't have other screens, just call this after your `runApp` call, in the `main` method.
 
 ## Credits
 
- * My own [audioplayers](https://github.com/luanpotter/audioplayer) lib, wich in turn is forked from [rxlabz's](https://github.com/rxlabz/audioplayer).
+ * All the friendly contributors and people who are helping in the community.
+ * My own [audioplayers](https://github.com/luanpotter/audioplayer) lib, which in turn is forked from [rxlabz's](https://github.com/rxlabz/audioplayer).
+ * The Dart port of [Box2D](https://github.com/google/box2d.dart).
  * [inu-no-policemen's post on reddit](https://www.reddit.com/r/dartlang/comments/69luui/minimal_flutter_game_loop/), which helped me a lot with the basics
  * Everyone who answered my beginner's questions on Stack Overflow
