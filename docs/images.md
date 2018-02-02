@@ -73,4 +73,32 @@ Also similarly to Audio, you can instantiate your own copy of `Images` (each ins
 
 ## Animation
 
-[TODO] talk about animations
+The Animation class helps you create a cyclic animation of sprites.
+
+You can create it by passing a list of equal sized sprites and the stepTime (that is, how many seconds it takes to move to the next frame):
+
+```dart
+  Animation a = new Animation.spriteList(sprites, stepTime: 0.02);
+```
+
+A better alternative to generate a list of sprites is to use the `sequenced` constructor:
+
+```dart
+  const amountOfFrames = 8;
+  Animation a = Animation.sequenced('player.png', amountOfFrames, textureWidth: 16.0);
+```
+
+In which you pass the file name, the number of frames and the sprite sheet is automatically split for you according to the 4 optional parameters:
+
+* textureX : x position on the original image to start (defaults to 0)
+* textureY : y position on the original image to start (defaults to 0)
+* textureWidth : width of each frame (defaults to -1, that is, full width of the sprite sheet)
+* textureHeight : height of each frame (defaults to -1, that is, full height of the sprite sheet)
+
+So, in our example, we are saying that we have 8 frames for our player animation, and they are displayed in a row. So if the player height is also 16 pixels, the sprite sheet is 128x16, containing 8 16x16 frames.
+
+This constructor makes creating an Animation very easy using sprite sheets.
+
+Animations, after created, have an update and render method; the latter renders the current frame, and the former ticks the internal clock to update the frames.
+
+Animations are normally used inside `AnimationComponent`s, but custom components with several Animations can be created as well.
