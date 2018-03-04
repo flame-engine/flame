@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'component.dart';
 import 'package:flame/animation.dart';
-import '../sprite.dart';
 
 class AnimationComponent extends PositionComponent {
 
@@ -13,29 +12,20 @@ class AnimationComponent extends PositionComponent {
     this.height = height;
   }
 
-  AnimationComponent.byAnimation(this.animation);
-
   AnimationComponent.sequenced(width, height, String imagePath, int amount, { double textureX = 0.0, double textureY = 0.0, double textureWidth = -1.0, double textureHeight = -1.0}) {
     this.width = width;
     this.height = height;
+    this.animation = new Animation.sequenced(imagePath, amount, textureX: textureX, textureY: textureY, textureWidth: textureWidth, textureHeight: textureHeight);
+  }
 
-    if (textureWidth == -1) {
-      textureWidth = this.width;
-    }
-    if (textureHeight == -1) {
-      textureHeight = this.height;
-    }
-
-    animation = new Animation();
-    animation.sprites = new List<Sprite>(amount);
-    for (var i = 0; i < amount; i++) {
-      animation.sprites[i] = new Sprite(imagePath, x: textureX + i*textureWidth, y: textureY, width: textureWidth, height: textureHeight);
-    }
+  @override
+  bool loaded() {
+    return this.animation.loaded();
   }
 
   @override
   void render(Canvas canvas) {
-    if (animation.loaded() && x != null && y != null) {
+    if (loaded() && x != null && y != null) {
       prepareCanvas(canvas);
       animation.getSprite().render(canvas, width, height);
     }
