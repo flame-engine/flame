@@ -1,3 +1,8 @@
+## [0.8.1]
+
+- The Components Overhaul Update: This is major update, even though we are keeping things in alpha (version 0.*)
+- Several major upgrades regarding the component system, new component types, Sprites and SpriteSheets, better image caching, several improvements with structure, a BaseGame, a new Game as a widget, that allows you to embed inside apps and a stop method. More minor changes.
+
 ## [0.6.1]
  - Bump required dart version
 
