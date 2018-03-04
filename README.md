@@ -212,6 +212,8 @@ Where `game` is a reference to your game object and `handleInput` is a method yo
 
 If your game doesn't have other screens, just call this after your `runApp` call, in the `main` method.
 
+[Complete Input Guide](docs/input.md)
+
 ## Credits
 
  * All the friendly contributors and people who are helping in the community.
