@@ -15,4 +15,23 @@ Where `game` is a reference to your game object and `handleInput` is a method yo
 
 If your game doesn't have other screens, just call this after your `runApp` call, in the `main` method.
 
-[TODO] add examples for other kinds of gestures
+Here are some example of more complex Gesture Recognizers:
+
+```dart
+    MyGame() {
+        // other init...
+
+        Flame.util.addGestureRecognizer(createDragRecognizer());
+        Flame.util.addGestureRecognizer(createTapRecognizer());
+    }
+
+    GestureRecognizer createDragRecognizer() {
+        return new ImmediateMultiDragGestureRecognizer()
+            ..onStart = (Offset position) => this.handleDrag(position);
+    }
+
+    TapGestureRecognizer createTapRecognizer() {
+        return new TapGestureRecognizer()
+            ..onTapUp = (TapUpDetails details) => this.handleTap(details.globalPosition);;
+    }
+```
