@@ -38,4 +38,50 @@ There are also other implementations:
 * The `ParallaxComponent` can render a parallax background with several frames
 * The `Box2DComponent`, that has a physics engine built-in (using the [Box2D](https://github.com/google/box2d.dart) port for Dart)
 
-[TODO] make the in-depth guide for Components!
+## Animation Component
+
+This component uses an instance of the [Animation](docs/images.md#Animation) class to represent a Component that has a sprite that runs a single cyclic animation.
+
+This will create a simple three frame animation
+
+```dart
+    List<Sprite> sprites = [0, 1, 2].map((i) => new Sprite('player_${i}.png')).toList();
+    this.player = new AnimationComponent(64.0, 64.0, new Animation.spriteList(sprites, stepTime: 0.01));
+```
+
+If you have a spritesheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](docs/images.md#Animation)):
+
+```dart
+    this.player = new AnimationComponent.sequenced(64.0, 64.0, 'player.png', 2);
+```
+
+If you are not using `BaseGame`, don't forget this component needs to be update'd even if static, because the animation object needs to be ticked to move the frames.
+
+## Parallax Component
+
+This Component can be sued to render pretty backgrounds, by drawing several transparent images on top of each other, each dislocated by a tiny amount.
+
+The rationale is that when you look at the horizon and moving, closer objects seem to move faster than distant ones.
+
+This component simulates this effect, making a very realistic background.
+
+Create it like so:
+
+```dart
+    this.bg = new ParallaxComponent();
+    this.bg.load([ 'bg/1.png', 'bg/2.png', 'bg/3.png' ]);
+```
+
+Then, render it as any other component.
+
+Like the AnimationComponent, even if your parallax is static, you must call update on this component, so it runs its animation.
+
+## Box2D Component
+
+Flame comes with a basic integration with the Flutter implementation of [Box2D](https://github.com/google/box2d.dart).
+
+The whole concept of a box2d's World is mapped to the `Box2DComponent` component; every Body should be a `BodyComponent`, and added directly to the `Box2DComponent`, and not to the game list.
+
+So you can have HUD and other non-physics-related components in your game list, and also as many `Box2DComponents` as you'd like (normally one, I guess), and then add your physical entities to your Components instance. When the Component is updated, it will use box2d physics engine to properly update every child.
+
+You can see a more complete example of box2d usage on [this WIP game](https://github.com/feroult/haunt) made by @feroult (beware, though, it uses 0.6.x version of flame, but the Box2D related apis are unchanged).

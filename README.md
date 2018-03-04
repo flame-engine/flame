@@ -147,7 +147,6 @@ There are also other implementations:
 * The `Box2DComponent`, that has a physics engine built-in (using the [Box2D](https://github.com/google/box2d.dart) port for Dart)
 
 [Complete Components Guide](docs/components.md)
-[TODO] make the in-depth guide for Components
 
 ### Game Loop
 
