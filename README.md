@@ -27,6 +27,8 @@ The complete documentation can be found [here](doc/README.md).
 
 Bellow is an overview that should suffice to build a simple game, and work your way up from there.
 
+The [flame-example](https://github.com/luanpotter/flame-example/tree/0.8.x) game has been updated to use the newer APIs (0.8.2) on a new branch.
+
 There is a very good QuickStart tutorial for version `0.6.1` [here](https://medium.com/@luanpotter27/a-comprehensive-flame-tutorial-or-how-to-make-games-with-flutter-74f22c4ecbfa). The API has changed a lot, so refer this documentation for updated information. Soon I plan to release an updated tutorial.
 
 ## Structure
