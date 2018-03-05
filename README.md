@@ -23,7 +23,7 @@ dependencies:
 
 And start using it!
 
-The complete documentation can be found [here](docs/README.md).
+The complete documentation can be found [here](doc/README.md).
 
 Bellow is an overview that should suffice to build a simple game, and work your way up from there.
 
@@ -85,7 +85,7 @@ You can pre-load your audios in the beginning and avoid delays with the `loadAll
     await Flame.audio.loadAll(['explosion.mp3']);
 ```
 
-[Complete Audio Guide](docs/audio.md)
+[Complete Audio Guide](doc/audio.md)
 
 ### Images
 
@@ -104,7 +104,7 @@ If you want to load an image and render it on the `Canvas`, you can use the `Spr
 
 Note that the render method will do nothing while the image has not been loaded; you can check for completion using the `loaded` method.
 
-[Complete Images Guide](docs/images.md)
+[Complete Images Guide](doc/images.md)
 
 ### Component
 
@@ -142,11 +142,11 @@ The `isHUD` method can be implemented to return true (default false) to make the
 
 There are also other implementations:
 
-* The `AnimationComponent` takes an `Animation` object and renders a cyclic animated sprite (more details about Animations [here](docs/images.md#Animation))
+* The `AnimationComponent` takes an `Animation` object and renders a cyclic animated sprite (more details about Animations [here](doc/images.md#Animation))
 * The `ParallaxComponent` can render a parallax background with several frames
 * The `Box2DComponent`, that has a physics engine built-in (using the [Box2D](https://github.com/google/box2d.dart) port for Dart)
 
-[Complete Components Guide](docs/components.md)
+[Complete Components Guide](doc/components.md)
 
 ### Game Loop
 
@@ -212,7 +212,7 @@ Where `game` is a reference to your game object and `handleInput` is a method yo
 
 If your game doesn't have other screens, just call this after your `runApp` call, in the `main` method.
 
-[Complete Input Guide](docs/input.md)
+[Complete Input Guide](doc/input.md)
 
 ## Credits
 
