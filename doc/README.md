@@ -1,6 +1,6 @@
 # Documentation
 
-This is the index of the documentation for Flame, updated to version `0.8.1`.
+This is the index of the documentation for Flame, updated to version `0.8.3`.
 
 ## Modules
 

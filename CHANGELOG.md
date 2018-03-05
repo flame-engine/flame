@@ -1,3 +1,6 @@
+## [0.8.3]
+- Need to review audioplayers 0.5.x
+
 ## [0.8.2]
 - Added better documentation, tutorials and examples
 - Minor tweaks in the API
