@@ -18,7 +18,7 @@ Just drop it in your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flame: ^0.8.1
+  flame: ^0.8.2
 ```
 
 And start using it!

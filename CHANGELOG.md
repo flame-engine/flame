@@ -1,5 +1,9 @@
-## [0.8.1]
+## [0.8.2]
+- Added better documentation, tutorials and examples
+- Minor tweaks in the API
+- New audioplayers version
 
+## [0.8.1]
 - The Components Overhaul Update: This is major update, even though we are keeping things in alpha (version 0.*)
 - Several major upgrades regarding the component system, new component types, Sprites and SpriteSheets, better image caching, several improvements with structure, a BaseGame, a new Game as a widget, that allows you to embed inside apps and a stop method. More minor changes.
 
@@ -18,7 +22,7 @@
  - A few refactorings
 
 ## [0.3.0]
- - Added a pre-load method for Audio module 
+ - Added a pre-load method for Audio module
 
 ## [0.2.0]
  - Added a loop method for playing audio on loop
