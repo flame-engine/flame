@@ -34,13 +34,13 @@ The `isHUD` method can be implemented to return true (default false) to make the
 
 There are also other implementations:
 
-* The `AnimationComponent` takes an `Animation` object and renders a cyclic animated sprite (more details about Animations [here](docs/images.md#Animation))
+* The `AnimationComponent` takes an `Animation` object and renders a cyclic animated sprite (more details about Animations [here](doc/images.md#Animation))
 * The `ParallaxComponent` can render a parallax background with several frames
 * The `Box2DComponent`, that has a physics engine built-in (using the [Box2D](https://github.com/google/box2d.dart) port for Dart)
 
 ## Animation Component
 
-This component uses an instance of the [Animation](docs/images.md#Animation) class to represent a Component that has a sprite that runs a single cyclic animation.
+This component uses an instance of the [Animation](doc/images.md#Animation) class to represent a Component that has a sprite that runs a single cyclic animation.
 
 This will create a simple three frame animation
 
@@ -49,7 +49,7 @@ This will create a simple three frame animation
     this.player = new AnimationComponent(64.0, 64.0, new Animation.spriteList(sprites, stepTime: 0.01));
 ```
 
-If you have a spritesheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](docs/images.md#Animation)):
+If you have a spritesheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](doc/images.md#Animation)):
 
 ```dart
     this.player = new AnimationComponent.sequenced(64.0, 64.0, 'player.png', 2);
