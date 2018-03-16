@@ -15,7 +15,11 @@ class Position {
 
   Position.fromOffset(ui.Offset offset) : this(offset.dx, offset.dy);
 
+  Position.fromSize(ui.Size size) : this(size.width, size.height);
+
   Position.fromPoint(math.Point point) : this(point.x, point.y);
+
+  Position.fromPosition(Position position) : this(position.x, position.y);
 
   Position add(Position other) {
     this.x += other.x;
@@ -23,9 +27,17 @@ class Position {
     return this;
   }
 
+  Position minus(Position other) {
+    return this.add(other.clone().opposite());
+  }
+
   Position opposite() {
-    this.x *= -1;
-    this.y *= -1;
+    return this.times(-1.0);
+  }
+
+  Position times(double scalar) {
+    this.x *= scalar;
+    this.y *= scalar;
     return this;
   }
 
@@ -45,7 +57,20 @@ class Position {
     return new ui.Offset(x, y);
   }
 
+  ui.Size toSize() {
+    return new ui.Size(x, y);
+  }
+
   math.Point toPoint() {
     return new math.Point(x, y);
+  }
+
+  Position clone() {
+    return new Position.fromPosition(this);
+  }
+
+  @override
+  String toString() {
+    return "($x, $y)";
   }
 }
