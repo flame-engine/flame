@@ -41,6 +41,10 @@ class Position {
     return this;
   }
 
+  double dotProduct(Position p) {
+    return this.x * p.x + this.y * p.y;
+  }
+
   double length() {
     return math.sqrt(math.pow(this.x, 2) + math.pow(this.y, 2));
   }
@@ -72,5 +76,9 @@ class Position {
   @override
   String toString() {
     return "($x, $y)";
+  }
+
+  static ui.Rect rectFrom(Position topLeft, Position size) {
+    return new ui.Rect.fromLTWH(topLeft.x, topLeft.y, size.x, size.y);
   }
 }

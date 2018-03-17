@@ -29,6 +29,26 @@ abstract class PositionComponent extends Component {
   double x = 0.0, y = 0.0, angle = 0.0;
   double width = 0.0, height = 0.0;
 
+  Position get position => new Position(x, y);
+  void set position(Position position) {
+    this.x = position.x;
+    this.y = position.y;
+  }
+
+  Position get size => new Position(width, height);
+  void set size(Position size) {
+    this.width = size.x;
+    this.height = size.y;
+  }
+
+  Rect get rect => new Rect.fromLTWH(x, y, width, height);
+  void set rect(Rect rect) {
+    this.x = rect.left;
+    this.y = rect.top;
+    this.width = rect.width;
+    this.height = rect.height;
+  }
+
   double angleBetween(PositionComponent c) {
     return (atan2(c.x - this.x, this.y - c.y) - PI / 2) % (2 * PI);
   }
@@ -44,14 +64,6 @@ abstract class PositionComponent extends Component {
     canvas.translate(width/2, height/2);
     canvas.rotate(angle);
     canvas.translate(-width/2, -height/2);
-  }
-
-  Position toPosition() {
-    return new Position(x, y);
-  }
-
-  Rect toRect() {
-    return new Rect.fromLTWH(x, y, width, height);
   }
 }
 
