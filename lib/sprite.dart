@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/position.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart' show Colors;
 
@@ -30,9 +31,16 @@ class Sprite {
     return image != null && src != null;
   }
 
+  void renderPosition(Canvas canvas, Position p, Position size) {
+    renderRect(canvas, Position.rectFrom(p, size));
+  }
+
   void render(Canvas canvas, double width, double height) {
+    renderRect(canvas, new Rect.fromLTWH(0.0, 0.0, width, height));
+  }
+
+  void renderRect(Canvas canvas, Rect dst) {
     if (this.loaded()) {
-      Rect dst = new Rect.fromLTWH(0.0, 0.0, width, height);
       canvas.drawImageRect(image, src, dst, paint);
     }
   }

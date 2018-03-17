@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'dart:ui' as ui;
+import 'package:box2d/box2d.dart' as b2d;
 
 /*
  * An ordered pair representation (point, position, offset).
@@ -20,6 +21,8 @@ class Position {
   Position.fromPoint(math.Point point) : this(point.x, point.y);
 
   Position.fromPosition(Position position) : this(position.x, position.y);
+
+  Position.fromVector(b2d.Vector2 vector) : this(vector.x, vector.y);
 
   Position add(Position other) {
     this.x += other.x;
@@ -69,6 +72,10 @@ class Position {
     return new math.Point(x, y);
   }
 
+  b2d.Vector2 toVector() {
+    return new b2d.Vector2(x, y);
+  }
+
   Position clone() {
     return new Position.fromPosition(this);
   }
@@ -80,5 +87,13 @@ class Position {
 
   static ui.Rect rectFrom(Position topLeft, Position size) {
     return new ui.Rect.fromLTWH(topLeft.x, topLeft.y, size.x, size.y);
+  }
+
+  static ui.Rect bounds(List<Position> pts) {
+    double minx = pts.map((e) => e.x).reduce(math.min);
+    double maxx = pts.map((e) => e.x).reduce(math.max);
+    double miny = pts.map((e) => e.y).reduce(math.min);
+    double maxy = pts.map((e) => e.y).reduce(math.max);
+    return new ui.Rect.fromPoints(new ui.Offset(minx, miny), new ui.Offset(maxx, maxy));
   }
 }
