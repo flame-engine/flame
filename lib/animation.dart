@@ -1,9 +1,11 @@
+import 'dart:math' as math;
 import 'sprite.dart';
 
 class Animation {
   List<Sprite> sprites;
   double stepTime = 0.1;
   double lifeTime = 0.0;
+  bool loop = true;
 
   Animation() {
     this.sprites = [];
@@ -28,7 +30,7 @@ class Animation {
 
   Sprite getSprite() {
     int i = (lifeTime / stepTime).round();
-    return sprites[i % sprites.length];
+    return sprites[loop ? i % sprites.length : math.min(i, sprites.length - 1)];
   }
 
   void update(double t) {
