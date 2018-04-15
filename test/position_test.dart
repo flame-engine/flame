@@ -27,7 +27,7 @@ void main() {
     });
 
     test('test rotate', () {
-      Position p = new Position(1.0, 0.0).rotate(math.PI / 2);
+      Position p = new Position(1.0, 0.0).rotate(math.pi / 2);
       expectDouble(p.x, 0.0);
       expectDouble(p.y, 1.0);
     });

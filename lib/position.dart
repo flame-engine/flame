@@ -82,7 +82,7 @@ class Position {
 
   @override
   String toString() {
-    return "($x, $y)";
+    return '($x, $y)';
   }
 
   static ui.Rect rectFrom(Position topLeft, Position size) {
