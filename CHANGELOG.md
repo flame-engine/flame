@@ -1,3 +1,6 @@
+## [0.8.4]
+- Added more consistent APIs and tests
+
 ## [0.8.3]
 - Need to review audioplayers 0.5.x
 
