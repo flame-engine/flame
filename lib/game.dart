@@ -45,7 +45,7 @@ class GameRenderBox extends RenderBox {
 
   int _frameCallbackId;
 
-  Duration previous = Duration.ZERO;
+  Duration previous = Duration.zero;
 
   GameRenderBox(this.context, this.game);
 
@@ -91,11 +91,11 @@ class GameRenderBox extends RenderBox {
 
   double _computeDeltaT(Duration now) {
     Duration delta = now - previous;
-    if (previous == Duration.ZERO) {
-      delta = Duration.ZERO;
+    if (previous == Duration.zero) {
+      delta = Duration.zero;
     }
     previous = now;
-    return delta.inMicroseconds / Duration.MICROSECONDS_PER_SECOND;
+    return delta.inMicroseconds / Duration.microsecondsPerSecond;
   }
 
   @override
