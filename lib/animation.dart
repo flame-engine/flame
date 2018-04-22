@@ -28,9 +28,15 @@ class Animation {
     }
   }
 
+  int get currentStep => (lifeTime / stepTime).round();
+
   Sprite getSprite() {
-    int i = (lifeTime / stepTime).round();
+    int i = currentStep;
     return sprites[loop ? i % sprites.length : math.min(i, sprites.length - 1)];
+  }
+
+  bool done() {
+    return loop ? false : currentStep >= sprites.length;
   }
 
   void update(double t) {
