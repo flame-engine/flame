@@ -106,7 +106,8 @@ class GameRenderBox extends RenderBox {
 
 abstract class BaseGame extends Game {
 
-  List<Component> components = new List();
+  List<Component> components = [];
+  List<Component> _addLater = [];
   Size size;
   Position camera = new Position.empty();
 
@@ -117,6 +118,10 @@ abstract class BaseGame extends Game {
     if (size != null) {
       c.resize(size);
     }
+  }
+
+  void addLater(Component c) {
+    this._addLater.add(c);
   }
 
   @override
@@ -137,6 +142,9 @@ abstract class BaseGame extends Game {
 
   @override
   void update(double t) {
+    components.addAll(_addLater);
+    _addLater.clear();
+
     components.forEach((c) => c.update(t));
     components.removeWhere((c) => c.destroy());
   }
