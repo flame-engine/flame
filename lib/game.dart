@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
@@ -14,6 +15,8 @@ abstract class Game {
   void render(Canvas canvas);
 
   void resize(Size size);
+
+  void didChangeAppLifecycleState(AppLifecycleState state) {}
 
   Widget _widget;
 
@@ -34,11 +37,10 @@ class GameRenderObjectWidget extends SingleChildRenderObjectWidget {
   GameRenderObjectWidget(this.game);
 
   @override
-  RenderObject createRenderObject(BuildContext context) =>
-      new GameRenderBox(context, this.game);
+  RenderObject createRenderObject(BuildContext context) => new GameRenderBox(context, this.game);
 }
 
-class GameRenderBox extends RenderBox {
+class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   BuildContext context;
 
   Game game;
@@ -62,12 +64,14 @@ class GameRenderBox extends RenderBox {
   void attach(PipelineOwner owner) {
     super.attach(owner);
     _scheduleTick();
+    _bindLifecycleListener();
   }
 
   @override
   void detach() {
     super.detach();
     _unscheduleTick();
+    _unbindLifecycleListener();
   }
 
   void _scheduleTick() {
@@ -101,6 +105,19 @@ class GameRenderBox extends RenderBox {
   @override
   void paint(PaintingContext context, Offset offset) {
     game.render(context.canvas);
+  }
+
+  void _bindLifecycleListener() {
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  void _unbindLifecycleListener() {
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    game.didChangeAppLifecycleState(state);
   }
 }
 
@@ -153,5 +170,9 @@ abstract class BaseGame extends Game {
   void resize(Size size) {
     this.size = size;
     components.forEach((c) => c.resize(size));
+  }
+
+  double currentTime() {
+    return new DateTime.now().millisecondsSinceEpoch.toDouble() / 1000;
   }
 }
