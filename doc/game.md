@@ -3,7 +3,7 @@
 The Game Loop module is a simple abstraction over the game loop concept. Basically most games are built upon two methods: 
 
 * The render method takes the canvas ready for drawing the current state of the game.
-* The update method receives the delta time in milliseconds since last update and allows you to move the next state.
+* The update method receives the delta time in seconds since last update and allows you to move the next state.
 
 The class `Game` can be subclassed and will provide both these methods for you to implement. In return it will provide you with a `widget` property that returns the game widget, that can be rendered in your app.
 
