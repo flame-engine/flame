@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the HttpResponse class from the dart:io library, for the Dart programming language.">
+  <title>HttpResponse class - dart:io library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-io/dart-io-library.html">dart:io</a></li>
+    <li class="self-crumb">HttpResponse abstract class</li>
+  </ol>
+  <div class="self-name">HttpResponse</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>dart:io library</h5>
+    <ol>
+      <li class="section-title"><a href="dart-io/dart-io-library.html#classes">Classes</a></li>
+      <li><a href="dart-io/BytesBuilder-class.html">BytesBuilder</a></li>
+      <li><a href="dart-io/CompressionOptions-class.html">CompressionOptions</a></li>
+      <li><a href="dart-io/ContentType-class.html">ContentType</a></li>
+      <li><a href="dart-io/Cookie-class.html">Cookie</a></li>
+      <li><a href="dart-io/Datagram-class.html">Datagram</a></li>
+      <li><a href="dart-io/DetachedSocket-class.html">DetachedSocket</a></li>
+      <li><a href="dart-io/Directory-class.html">Directory</a></li>
+      <li><a href="dart-io/File-class.html">File</a></li>
+      <li><a href="dart-io/FileMode-class.html">FileMode</a></li>
+      <li><a href="dart-io/FileStat-class.html">FileStat</a></li>
+      <li><a href="dart-io/FileSystemCreateEvent-class.html">FileSystemCreateEvent</a></li>
+      <li><a href="dart-io/FileSystemDeleteEvent-class.html">FileSystemDeleteEvent</a></li>
+      <li><a href="dart-io/FileSystemEntity-class.html">FileSystemEntity</a></li>
+      <li><a href="dart-io/FileSystemEntityType-class.html">FileSystemEntityType</a></li>
+      <li><a href="dart-io/FileSystemEvent-class.html">FileSystemEvent</a></li>
+      <li><a href="dart-io/FileSystemModifyEvent-class.html">FileSystemModifyEvent</a></li>
+      <li><a href="dart-io/FileSystemMoveEvent-class.html">FileSystemMoveEvent</a></li>
+      <li><a href="dart-io/GZipCodec-class.html">GZipCodec</a></li>
+      <li><a href="dart-io/HeaderValue-class.html">HeaderValue</a></li>
+      <li><a href="dart-io/HttpClient-class.html">HttpClient</a></li>
+      <li><a href="dart-io/HttpClientBasicCredentials-class.html">HttpClientBasicCredentials</a></li>
+      <li><a href="dart-io/HttpClientCredentials-class.html">HttpClientCredentials</a></li>
+      <li><a href="dart-io/HttpClientDigestCredentials-class.html">HttpClientDigestCredentials</a></li>
+      <li><a href="dart-io/HttpClientRequest-class.html">HttpClientRequest</a></li>
+      <li><a href="dart-io/HttpClientResponse-class.html">HttpClientResponse</a></li>
+      <li><a href="dart-io/HttpConnectionInfo-class.html">HttpConnectionInfo</a></li>
+      <li><a href="dart-io/HttpConnectionsInfo-class.html">HttpConnectionsInfo</a></li>
+      <li><a href="dart-io/HttpDate-class.html">HttpDate</a></li>
+      <li><a href="dart-io/HttpHeaders-class.html">HttpHeaders</a></li>
+      <li><a href="dart-io/HttpOverrides-class.html">HttpOverrides</a></li>
+      <li><a href="dart-io/HttpRequest-class.html">HttpRequest</a></li>
+      <li><a href="dart-io/HttpResponse-class.html">HttpResponse</a></li>
+      <li><a href="dart-io/HttpServer-class.html">HttpServer</a></li>
+      <li><a href="dart-io/HttpSession-class.html">HttpSession</a></li>
+      <li><a href="dart-io/HttpStatus-class.html">HttpStatus</a></li>
+      <li><a href="dart-io/InternetAddress-class.html">InternetAddress</a></li>
+      <li><a href="dart-io/InternetAddressType-class.html">InternetAddressType</a></li>
+      <li><a href="dart-io/IOOverrides-class.html">IOOverrides</a></li>
+      <li><a href="dart-io/IOSink-class.html">IOSink</a></li>
+      <li><a href="dart-io/Link-class.html">Link</a></li>
+      <li><a href="dart-io/NetworkInterface-class.html">NetworkInterface</a></li>
+      <li><a href="dart-io/OSError-class.html">OSError</a></li>
+      <li><a href="dart-io/Platform-class.html">Platform</a></li>
+      <li><a href="dart-io/Process-class.html">Process</a></li>
+      <li><a href="dart-io/ProcessInfo-class.html">ProcessInfo</a></li>
+      <li><a href="dart-io/ProcessResult-class.html">ProcessResult</a></li>
+      <li><a href="dart-io/ProcessSignal-class.html">ProcessSignal</a></li>
+      <li><a href="dart-io/RandomAccessFile-class.html">RandomAccessFile</a></li>
+      <li><a href="dart-io/RawDatagramSocket-class.html">RawDatagramSocket</a></li>
+      <li><a href="dart-io/RawSecureServerSocket-class.html">RawSecureServerSocket</a></li>
+      <li><a href="dart-io/RawSecureSocket-class.html">RawSecureSocket</a></li>
+      <li><a href="dart-io/RawServerSocket-class.html">RawServerSocket</a></li>
+      <li><a href="dart-io/RawSocket-class.html">RawSocket</a></li>
+      <li><a href="dart-io/RawSocketEvent-class.html">RawSocketEvent</a></li>
+      <li><a href="dart-io/RawSynchronousSocket-class.html">RawSynchronousSocket</a></li>
+      <li><a href="dart-io/RawZLibFilter-class.html">RawZLibFilter</a></li>
+      <li><a href="dart-io/RedirectInfo-class.html">RedirectInfo</a></li>
+      <li><a href="dart-io/SecureServerSocket-class.html">SecureServerSocket</a></li>
+      <li><a href="dart-io/SecureSocket-class.html">SecureSocket</a></li>
+      <li><a href="dart-io/SecurityContext-class.html">SecurityContext</a></li>
+      <li><a href="dart-io/ServerSocket-class.html">ServerSocket</a></li>
+      <li><a href="dart-io/Socket-class.html">Socket</a></li>
+      <li><a href="dart-io/SocketDirection-class.html">SocketDirection</a></li>
+      <li><a href="dart-io/SocketOption-class.html">SocketOption</a></li>
+      <li><a href="dart-io/Stdin-class.html">Stdin</a></li>
+      <li><a href="dart-io/StdioType-class.html">StdioType</a></li>
+      <li><a href="dart-io/Stdout-class.html">Stdout</a></li>
+      <li><a href="dart-io/SystemEncoding-class.html">SystemEncoding</a></li>
+      <li><a href="dart-io/WebSocket-class.html">WebSocket</a></li>
+      <li><a href="dart-io/WebSocketStatus-class.html">WebSocketStatus</a></li>
+      <li><a href="dart-io/WebSocketTransformer-class.html">WebSocketTransformer</a></li>
+      <li><a href="dart-io/X509Certificate-class.html">X509Certificate</a></li>
+      <li><a href="dart-io/ZLibCodec-class.html">ZLibCodec</a></li>
+      <li><a href="dart-io/ZLibDecoder-class.html">ZLibDecoder</a></li>
+      <li><a href="dart-io/ZLibEncoder-class.html">ZLibEncoder</a></li>
+      <li><a href="dart-io/ZLibOption-class.html">ZLibOption</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#constants">Constants</a></li>
+      <li><a href="dart-io/APPEND-constant.html">APPEND</a></li>
+      <li><a href="dart-io/GZIP-constant.html">GZIP</a></li>
+      <li><a href="dart-io/READ-constant.html">READ</a></li>
+      <li><a href="dart-io/SYSTEM_ENCODING-constant.html">SYSTEM_ENCODING</a></li>
+      <li><a href="dart-io/WRITE-constant.html">WRITE</a></li>
+      <li><a href="dart-io/WRITE_ONLY-constant.html">WRITE_ONLY</a></li>
+      <li><a href="dart-io/WRITE_ONLY_APPEND-constant.html">WRITE_ONLY_APPEND</a></li>
+      <li><a href="dart-io/ZLIB-constant.html">ZLIB</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#properties">Properties</a></li>
+      <li><a href="dart-io/exitCode.html">exitCode</a></li>
+      <li><a href="dart-io/pid.html">pid</a></li>
+      <li><a href="dart-io/stderr.html">stderr</a></li>
+      <li><a href="dart-io/stdin.html">stdin</a></li>
+      <li><a href="dart-io/stdout.html">stdout</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#functions">Functions</a></li>
+      <li><a href="dart-io/exit.html">exit</a></li>
+      <li><a href="dart-io/sleep.html">sleep</a></li>
+      <li><a href="dart-io/stdioType.html">stdioType</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#enums">Enums</a></li>
+      <li><a href="dart-io/FileLock-class.html">FileLock</a></li>
+      <li><a href="dart-io/ProcessStartMode-class.html">ProcessStartMode</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#typedefs">Typedefs</a></li>
+      <li><a href="dart-io/BadCertificateCallback.html">BadCertificateCallback</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#exceptions">Exceptions</a></li>
+      <li><a href="dart-io/CertificateException-class.html">CertificateException</a></li>
+      <li><a href="dart-io/FileSystemException-class.html">FileSystemException</a></li>
+      <li><a href="dart-io/HandshakeException-class.html">HandshakeException</a></li>
+      <li><a href="dart-io/HttpException-class.html">HttpException</a></li>
+      <li><a href="dart-io/IOException-class.html">IOException</a></li>
+      <li><a href="dart-io/ProcessException-class.html">ProcessException</a></li>
+      <li><a href="dart-io/RedirectException-class.html">RedirectException</a></li>
+      <li><a href="dart-io/SignalException-class.html">SignalException</a></li>
+      <li><a href="dart-io/SocketException-class.html">SocketException</a></li>
+      <li><a href="dart-io/StdinException-class.html">StdinException</a></li>
+      <li><a href="dart-io/StdoutException-class.html">StdoutException</a></li>
+      <li><a href="dart-io/TlsException-class.html">TlsException</a></li>
+      <li><a href="dart-io/WebSocketException-class.html">WebSocketException</a></li>
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>HttpResponse class</h1>
+
+    <section class="desc markdown">
+      <p>An HTTP response, which returns the headers and data
+from the server to the client in response to an HTTP request.</p>
+<p>Every HttpRequest object provides access to the associated <a href="dart-io/HttpResponse-class.html">HttpResponse</a>
+object through the <code>response</code> property.
+The server sends its response to the client by writing to the
+HttpResponse object.</p>
+<h2>Writing the response</h2>
+<p>This class implements <a href="dart-io/IOSink-class.html">IOSink</a>.
+After the header has been set up, the methods
+from IOSink, such as <code>writeln()</code>, can be used to write
+the body of the HTTP response.
+Use the <code>close()</code> method to close the response and send it to the client.</p>
+<pre class="language-dart"><code>server.listen((HttpRequest request) {
+  request.response.write('Hello, world!');
+  request.response.close();
+});
+</code></pre>
+<p>When one of the IOSink methods is used for the
+first time, the request header is sent. Calling any methods that
+change the header after it is sent throws an exception.</p>
+<h2>Setting the headers</h2>
+<p>The HttpResponse object has a number of properties for setting up
+the HTTP headers of the response.
+When writing string data through the IOSink, the encoding used
+is determined from the "charset" parameter of the
+"Content-Type" header.</p>
+<pre class="language-dart"><code>HttpResponse response = ...
+response.headers.contentType
+    = new ContentType("application", "json", charset: "utf-8");
+response.write(...);  // Strings written will be UTF-8 encoded.
+</code></pre>
+<p>If no charset is provided the default of ISO-8859-1 (Latin 1) will
+be used.</p>
+<pre class="language-dart"><code>HttpResponse response = ...
+response.headers.add(HttpHeaders.CONTENT_TYPE, "text/plain");
+response.write(...);  // Strings written will be ISO-8859-1 encoded.
+</code></pre>
+<p>An exception is thrown if you use the <code>write()</code> method
+while an unsupported content-type is set.</p>
+    </section>
+    
+    <section>
+      <dl class="dl-horizontal">
+
+        <dt>Implements</dt>
+        <dd>
+          <ul class="comma-separated clazz-relationships">
+            <li><a href="dart-io/IOSink-class.html">IOSink</a></li>
+          </ul>
+        </dd>
+
+
+
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="constructors">
+      <h2>Constructors</h2>
+
+      <dl class="constructor-summary-list">
+        <dt id="HttpResponse" class="callable">
+          <span class="name"><a href="dart-io/HttpResponse/HttpResponse.html">HttpResponse</a></span><span class="signature">()</span>
+        </dt>
+        <dd>
+          
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="bufferOutput" class="property">
+          <span class="name"><a href="dart-io/HttpResponse/bufferOutput.html">bufferOutput</a></span>
+          <span class="signature">&#8596; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd>
+          Gets or sets if the <code>HttpResponse</code> should buffer output. <a href="dart-io/HttpResponse/bufferOutput.html">[...]</a>
+          <div class="features">read / write</div>
+</dd>
+        <dt id="connectionInfo" class="property">
+          <span class="name"><a href="dart-io/HttpResponse/connectionInfo.html">connectionInfo</a></span>
+          <span class="signature">&#8594; <a href="dart-io/HttpConnectionInfo-class.html">HttpConnectionInfo</a></span>
+        </dt>
+        <dd>
+          Gets information about the client connection. Returns <code>null</code> if the
+socket is not available.
+          <div class="features">read-only</div>
+</dd>
+        <dt id="contentLength" class="property">
+          <span class="name"><a href="dart-io/HttpResponse/contentLength.html">contentLength</a></span>
+          <span class="signature">&#8596; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          Gets and sets the content length of the response. If the size of
+the response is not known in advance set the content length to
+-1 - which is also the default if not set.
+          <div class="features">read / write</div>
+</dd>
+        <dt id="cookies" class="property">
+          <span class="name"><a href="dart-io/HttpResponse/cookies.html">cookies</a></span>
+          <span class="signature">&#8594; <a href="dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-io/Cookie-class.html">Cookie</a></span>&gt;</span></span>
+        </dt>
+        <dd>
+          Cookies to set in the client (in the 'set-cookie' header).
+          <div class="features">read-only</div>
+</dd>
+        <dt id="deadline" class="property">
+          <span class="name"><a href="dart-io/HttpResponse/deadline.html">deadline</a></span>
+          <span class="signature">&#8596; <a href="dart-core/Duration-class.html">Duration</a></span>
+        </dt>
+        <dd>
+          Set and get the <code>deadline</code> for the response. The deadline is timed from the
+time it's set. Setting a new deadline will override any previous deadline.
+When a deadline is exceeded, the response will be closed and any further
+data ignored. <a href="dart-io/HttpResponse/deadline.html">[...]</a>
+          <div class="features">read / write</div>
+</dd>
+        <dt id="headers" class="property">
+          <span class="name"><a href="dart-io/HttpResponse/headers.html">headers</a></span>
+          <span class="signature">&#8594; <a href="dart-io/HttpHeaders-class.html">HttpHeaders</a></span>
+        </dt>
+        <dd>
+          Returns the response headers. <a href="dart-io/HttpResponse/headers.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="persistentConnection" class="property">
+          <span class="name"><a href="dart-io/HttpResponse/persistentConnection.html">persistentConnection</a></span>
+          <span class="signature">&#8596; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd>
+          Gets and sets the persistent connection state. The initial value
+of this property is the persistent connection state from the
+request.
+          <div class="features">read / write</div>
+</dd>
+        <dt id="reasonPhrase" class="property">
+          <span class="name"><a href="dart-io/HttpResponse/reasonPhrase.html">reasonPhrase</a></span>
+          <span class="signature">&#8596; <a href="dart-core/String-class.html">String</a></span>
+        </dt>
+        <dd>
+          Gets and sets the reason phrase. If no reason phrase is explicitly
+set a default reason phrase is provided. <a href="dart-io/HttpResponse/reasonPhrase.html">[...]</a>
+          <div class="features">read / write</div>
+</dd>
+        <dt id="statusCode" class="property">
+          <span class="name"><a href="dart-io/HttpResponse/statusCode.html">statusCode</a></span>
+          <span class="signature">&#8596; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          Gets and sets the status code. Any integer value is accepted. For
+the official HTTP status codes use the fields from
+<code>HttpStatus</code>. If no status code is explicitly set the default
+value <code>HttpStatus.OK</code> is used. <a href="dart-io/HttpResponse/statusCode.html">[...]</a>
+          <div class="features">read / write</div>
+</dd>
+        <dt id="done" class="property inherited">
+          <span class="name"><a href="dart-io/IOSink/done.html">done</a></span>
+          <span class="signature">&#8594; <a href="dart-async/Future-class.html">Future</a></span>
+        </dt>
+        <dd class="inherited">
+          Get a future that will complete when the consumer closes, or when an
+error occurs. This future is identical to the future returned by
+<a href="dart-io/IOSink/close.html">close</a>.
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="encoding" class="property inherited">
+          <span class="name"><a href="dart-io/IOSink/encoding.html">encoding</a></span>
+          <span class="signature">&#8596; <a href="dart-convert/Encoding-class.html">Encoding</a></span>
+        </dt>
+        <dd class="inherited">
+          The <code>Encoding</code> used when writing strings. Depending on the
+underlying consumer this property might be mutable.
+          <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="hashCode" class="property inherited">
+          <span class="name"><a href="dart-core/Object/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd class="inherited">
+          The hash code for this object. <a href="dart-core/Object/hashCode.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a href="dart-core/Object/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; <a href="dart-core/Type-class.html">Type</a></span>
+        </dt>
+        <dd class="inherited">
+          A representation of the runtime type of the object.
+          <div class="features">read-only, inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="detachSocket" class="callable">
+          <span class="name"><a href="dart-io/HttpResponse/detachSocket.html">detachSocket</a></span><span class="signature">(<wbr>{<span class="parameter" id="detachSocket-param-writeHeaders"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">writeHeaders</span>: <span class="default-value">true</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-io/Socket-class.html">Socket</a></span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Detaches the underlying socket from the HTTP server. When the
+socket is detached the HTTP server will no longer perform any
+operations on it. <a href="dart-io/HttpResponse/detachSocket.html">[...]</a>
+          
+</dd>
+        <dt id="redirect" class="callable">
+          <span class="name"><a href="dart-io/HttpResponse/redirect.html">redirect</a></span><span class="signature">(<wbr><span class="parameter" id="redirect-param-location"><span class="type-annotation"><a href="dart-core/Uri-class.html">Uri</a></span> <span class="parameter-name">location</span>, {</span> <span class="parameter" id="redirect-param-status"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">status</span>: <span class="default-value">HttpStatus.MOVED_TEMPORARILY</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a></span>
+          </span>
+        </dt>
+        <dd>
+          Respond with a redirect to <code>location</code>. <a href="dart-io/HttpResponse/redirect.html">[...]</a>
+          
+</dd>
+        <dt id="add" class="callable inherited">
+          <span class="name"><a href="dart-io/IOSink/add.html">add</a></span><span class="signature">(<wbr><span class="parameter" id="add-param-data"><span class="type-annotation"><a href="dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/int-class.html">int</a></span>&gt;</span></span> <span class="parameter-name">data</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Adds byte <code>data</code> to the target consumer, ignoring <a href="dart-io/IOSink/encoding.html">encoding</a>. <a href="dart-io/IOSink/add.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="addError" class="callable inherited">
+          <span class="name"><a href="dart-io/IOSink/addError.html">addError</a></span><span class="signature">(<wbr><span class="parameter" id="addError-param-error"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">error</span>, [</span> <span class="parameter" id="addError-param-stackTrace"><span class="type-annotation"><a href="dart-core/StackTrace-class.html">StackTrace</a></span> <span class="parameter-name">stackTrace</span></span> ])
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Passes the error to the target consumer as an error event. <a href="dart-io/IOSink/addError.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="addStream" class="callable inherited">
+          <span class="name"><a href="dart-io/IOSink/addStream.html">addStream</a></span><span class="signature">(<wbr><span class="parameter" id="addStream-param-stream"><span class="type-annotation"><a href="dart-async/Stream-class.html">Stream</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/int-class.html">int</a></span>&gt;</span></span>&gt;</span></span> <span class="parameter-name">stream</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Adds all elements of the given <code>stream</code> to <code>this</code>. <a href="dart-io/IOSink/addStream.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="close" class="callable inherited">
+          <span class="name"><a href="dart-io/IOSink/close.html">close</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Close the target consumer. <a href="dart-io/IOSink/close.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="flush" class="callable inherited">
+          <span class="name"><a href="dart-io/IOSink/flush.html">flush</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a <a href="dart-async/Future-class.html">Future</a> that completes once all buffered data is accepted by the
+underlying <a href="dart-async/StreamConsumer-class.html">StreamConsumer</a>. <a href="dart-io/IOSink/flush.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Invoked when a non-existent method or property is accessed. <a href="dart-core/Object/noSuchMethod.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toString" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a string representation of this object.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="write" class="callable inherited">
+          <span class="name"><a href="dart-io/IOSink/write.html">write</a></span><span class="signature">(<wbr><span class="parameter" id="write-param-obj"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">obj</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Converts <code>obj</code> to a String by invoking <a href="dart-core/Object/toString.html">Object.toString</a> and
+<a href="dart-io/IOSink/add.html">add</a>s the encoding of the result to the target consumer. <a href="dart-io/IOSink/write.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="writeAll" class="callable inherited">
+          <span class="name"><a href="dart-io/IOSink/writeAll.html">writeAll</a></span><span class="signature">(<wbr><span class="parameter" id="writeAll-param-objects"><span class="type-annotation"><a href="dart-core/Iterable-class.html">Iterable</a></span> <span class="parameter-name">objects</span>, [</span> <span class="parameter" id="writeAll-param-separator"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">separator</span> = <span class="default-value">""</span></span> ])
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Iterates over the given <code>objects</code> and <a href="dart-io/IOSink/write.html">write</a>s them in sequence. <a href="dart-io/IOSink/writeAll.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="writeCharCode" class="callable inherited">
+          <span class="name"><a href="dart-io/IOSink/writeCharCode.html">writeCharCode</a></span><span class="signature">(<wbr><span class="parameter" id="writeCharCode-param-charCode"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">charCode</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Writes the character of <code>charCode</code>. <a href="dart-io/IOSink/writeCharCode.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="writeln" class="callable inherited">
+          <span class="name"><a href="dart-io/IOSink/writeln.html">writeln</a></span><span class="signature">(<wbr>[<span class="parameter" id="writeln-param-obj"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">obj</span> = <span class="default-value">""</span></span> ])
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Converts <code>obj</code> to a String by invoking <a href="dart-core/Object/toString.html">Object.toString</a> and
+writes the result to <code>this</code>, followed by a newline. <a href="dart-io/IOSink/writeln.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor inherited" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation">dynamic</span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          The equality operator. <a href="dart-core/Object/operator_equals.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+
+
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <ol>
+      <li class="section-title"><a href="dart-io/HttpResponse-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-io/HttpResponse/HttpResponse.html">HttpResponse</a></li>
+    
+      <li class="section-title">
+        <a href="dart-io/HttpResponse-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-io/HttpResponse/bufferOutput.html">bufferOutput</a></li>
+      <li><a href="dart-io/HttpResponse/connectionInfo.html">connectionInfo</a></li>
+      <li><a href="dart-io/HttpResponse/contentLength.html">contentLength</a></li>
+      <li><a href="dart-io/HttpResponse/cookies.html">cookies</a></li>
+      <li><a href="dart-io/HttpResponse/deadline.html">deadline</a></li>
+      <li><a href="dart-io/HttpResponse/headers.html">headers</a></li>
+      <li><a href="dart-io/HttpResponse/persistentConnection.html">persistentConnection</a></li>
+      <li><a href="dart-io/HttpResponse/reasonPhrase.html">reasonPhrase</a></li>
+      <li><a href="dart-io/HttpResponse/statusCode.html">statusCode</a></li>
+      <li class="inherited"><a href="dart-io/IOSink/done.html">done</a></li>
+      <li class="inherited"><a href="dart-io/IOSink/encoding.html">encoding</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-io/HttpResponse-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-io/HttpResponse/detachSocket.html">detachSocket</a></li>
+      <li><a href="dart-io/HttpResponse/redirect.html">redirect</a></li>
+      <li class="inherited"><a href="dart-io/IOSink/add.html">add</a></li>
+      <li class="inherited"><a href="dart-io/IOSink/addError.html">addError</a></li>
+      <li class="inherited"><a href="dart-io/IOSink/addStream.html">addStream</a></li>
+      <li class="inherited"><a href="dart-io/IOSink/close.html">close</a></li>
+      <li class="inherited"><a href="dart-io/IOSink/flush.html">flush</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/Object/toString.html">toString</a></li>
+      <li class="inherited"><a href="dart-io/IOSink/write.html">write</a></li>
+      <li class="inherited"><a href="dart-io/IOSink/writeAll.html">writeAll</a></li>
+      <li class="inherited"><a href="dart-io/IOSink/writeCharCode.html">writeCharCode</a></li>
+      <li class="inherited"><a href="dart-io/IOSink/writeln.html">writeln</a></li>
+    
+      <li class="section-title inherited"><a href="dart-io/HttpResponse-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

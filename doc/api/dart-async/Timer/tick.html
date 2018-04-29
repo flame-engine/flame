@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the tick property from the Timer class, for the Dart programming language.">
+  <title>tick property - Timer class - dart:async library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-async/dart-async-library.html">dart:async</a></li>
+    <li><a href="dart-async/Timer-class.html">Timer</a></li>
+    <li class="self-crumb">tick property</li>
+  </ol>
+  <div class="self-name">tick</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>Timer class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-async/Timer-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-async/Timer/Timer.html">Timer</a></li>
+      <li><a href="dart-async/Timer/Timer.periodic.html">periodic</a></li>
+    
+      <li class="section-title">
+        <a href="dart-async/Timer-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-async/Timer/isActive.html">isActive</a></li>
+      <li><a href="dart-async/Timer/tick.html">tick</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-async/Timer-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-async/Timer/cancel.html">cancel</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/Object/toString.html">toString</a></li>
+    
+      <li class="section-title inherited"><a href="dart-async/Timer-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+      <li class="section-title"><a href="dart-async/Timer-class.html#static-methods">Static methods</a></li>
+      <li><a href="dart-async/Timer/run.html">run</a></li>
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>tick property</h1>
+
+
+        <section id="getter">
+        
+        <section class="multi-line-signature">
+          <span class="returntype"><a href="dart-core/int-class.html">int</a></span>
+          <span class="name ">tick</span>
+  
+</section>
+        
+        <section class="desc markdown">
+  <p>The number of durations preceding the most recent timer event.</p>
+<p>The value starts at zero and is incremented each time a timer event
+occurs, so each callback will see a larger value than the previous one.</p>
+<p>If a periodic timer with a non-zero duration is delayed too much,
+so more than one tick should have happened,
+all but the last tick in the past are considered "missed",
+and no callback is invoked for them.
+The <a href="dart-async/Timer/tick.html">tick</a> count reflects the number of durations that have passed and
+not the number of callback invocations that have happened.</p>
+</section>
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span> </h2>
+  <pre class="language-dart"><code class="language-dart">int get tick;</code></pre>
+</section>
+</section>
+        
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

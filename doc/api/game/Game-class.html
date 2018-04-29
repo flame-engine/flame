@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the Game class from the game library, for the Dart programming language.">
+  <title>Game class - game library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="game/game-library.html">game</a></li>
+    <li class="self-crumb">Game abstract class</li>
+  </ol>
+  <div class="self-name">Game</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>game library</h5>
+    <ol>
+      <li class="section-title"><a href="game/game-library.html#classes">Classes</a></li>
+      <li><a href="game/BaseGame-class.html">BaseGame</a></li>
+      <li><a href="game/Game-class.html">Game</a></li>
+    
+    
+    
+    
+    
+    
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>Game class</h1>
+
+    <section class="desc markdown">
+      <p>Represents a generic game.</p>
+<p>Subclass this to implement the <a href="game/Game/update.html">update</a> and <a href="game/Game/render.html">render</a> methods.
+Flame will deal with calling these methods properly when the game's <a href="game/Game/widget.html">widget</a> is rendered.</p>
+    </section>
+    
+    <section>
+      <dl class="dl-horizontal">
+
+
+
+        <dt>Implemented by</dt>
+        <dd><ul class="comma-separated clazz-relationships">
+          <li><a href="game/BaseGame-class.html">BaseGame</a></li>
+        </ul></dd>
+
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="constructors">
+      <h2>Constructors</h2>
+
+      <dl class="constructor-summary-list">
+        <dt id="Game" class="callable">
+          <span class="name"><a href="game/Game/Game.html">Game</a></span><span class="signature">()</span>
+        </dt>
+        <dd>
+          
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="widget" class="property">
+          <span class="name"><a href="game/Game/widget.html">widget</a></span>
+          <span class="signature">&#8594; Widget</span>
+        </dt>
+        <dd>
+          Returns the game widget. Put this in your structure to start rendering and updating the game. <a href="game/Game/widget.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="hashCode" class="property inherited">
+          <span class="name"><a href="dart-core/Object/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd class="inherited">
+          The hash code for this object. <a href="dart-core/Object/hashCode.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a href="dart-core/Object/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; <a href="dart-core/Type-class.html">Type</a></span>
+        </dt>
+        <dd class="inherited">
+          A representation of the runtime type of the object.
+          <div class="features">read-only, inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="lifecycleStateChange" class="callable">
+          <span class="name"><a href="game/Game/lifecycleStateChange.html">lifecycleStateChange</a></span><span class="signature">(<wbr><span class="parameter" id="lifecycleStateChange-param-state"><span class="type-annotation"><a href="dart-ui/AppLifecycleState-class.html">AppLifecycleState</a></span> <span class="parameter-name">state</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          This is the lifecycle state change hook; every time the game is resumed, paused or suspended, this is called. <a href="game/Game/lifecycleStateChange.html">[...]</a>
+          
+</dd>
+        <dt id="render" class="callable">
+          <span class="name"><a href="game/Game/render.html">render</a></span><span class="signature">(<wbr><span class="parameter" id="render-param-canvas"><span class="type-annotation"><a href="dart-ui/Canvas-class.html">Canvas</a></span> <span class="parameter-name">canvas</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Implement this method to render the current game state in the <code>canvas</code>.
+          
+</dd>
+        <dt id="resize" class="callable">
+          <span class="name"><a href="game/Game/resize.html">resize</a></span><span class="signature">(<wbr><span class="parameter" id="resize-param-size"><span class="type-annotation"><a href="dart-ui/Size-class.html">Size</a></span> <span class="parameter-name">size</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          This is the resize hook; every time the game widget is resized, this hook is called. <a href="game/Game/resize.html">[...]</a>
+          
+</dd>
+        <dt id="update" class="callable">
+          <span class="name"><a href="game/Game/update.html">update</a></span><span class="signature">(<wbr><span class="parameter" id="update-param-t"><span class="type-annotation"><a href="dart-core/double-class.html">double</a></span> <span class="parameter-name">t</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Implement this method to update the game state, given that a time <code>t</code> has passed. <a href="game/Game/update.html">[...]</a>
+          
+</dd>
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Invoked when a non-existent method or property is accessed. <a href="dart-core/Object/noSuchMethod.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toString" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a string representation of this object.
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor inherited" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation">dynamic</span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          The equality operator. <a href="dart-core/Object/operator_equals.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+
+
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <ol>
+      <li class="section-title"><a href="game/Game-class.html#constructors">Constructors</a></li>
+      <li><a href="game/Game/Game.html">Game</a></li>
+    
+      <li class="section-title">
+        <a href="game/Game-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="game/Game/widget.html">widget</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="game/Game-class.html#instance-methods">Methods</a></li>
+      <li><a href="game/Game/lifecycleStateChange.html">lifecycleStateChange</a></li>
+      <li><a href="game/Game/render.html">render</a></li>
+      <li><a href="game/Game/resize.html">resize</a></li>
+      <li><a href="game/Game/update.html">update</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/Object/toString.html">toString</a></li>
+    
+      <li class="section-title inherited"><a href="game/Game-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the translate method from the Offset class, for the Dart programming language.">
+  <title>translate method - Offset class - dart:ui library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-ui/dart-ui-library.html">dart:ui</a></li>
+    <li><a href="dart-ui/Offset-class.html">Offset</a></li>
+    <li class="self-crumb">translate method</li>
+  </ol>
+  <div class="self-name">translate</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>Offset class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-ui/Offset-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-ui/Offset/Offset.html">Offset</a></li>
+    
+      <li class="section-title">
+        <a href="dart-ui/Offset-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-ui/Offset/direction.html">direction</a></li>
+      <li><a href="dart-ui/Offset/distance.html">distance</a></li>
+      <li><a href="dart-ui/Offset/distanceSquared.html">distanceSquared</a></li>
+      <li><a href="dart-ui/Offset/dx.html">dx</a></li>
+      <li><a href="dart-ui/Offset/dy.html">dy</a></li>
+      <li><a href="dart-ui/Offset/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-ui/OffsetBase/isFinite.html">isFinite</a></li>
+      <li class="inherited"><a href="dart-ui/OffsetBase/isInfinite.html">isInfinite</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-ui/Offset-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-ui/Offset/scale.html">scale</a></li>
+      <li><a href="dart-ui/Offset/toString.html">toString</a></li>
+      <li><a href="dart-ui/Offset/translate.html">translate</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    
+      <li class="section-title"><a href="dart-ui/Offset-class.html#operators">Operators</a></li>
+      <li><a href="dart-ui/Offset/operator_modulo.html">operator %</a></li>
+      <li><a href="dart-ui/Offset/operator_bitwise_and.html">operator &</a></li>
+      <li><a href="dart-ui/Offset/operator_multiply.html">operator *</a></li>
+      <li><a href="dart-ui/Offset/operator_plus.html">operator +</a></li>
+      <li><a href="dart-ui/Offset/operator_minus.html">operator -</a></li>
+      <li><a href="dart-ui/Offset/operator_divide.html">operator /</a></li>
+      <li><a href="dart-ui/Offset/operator_equals.html">operator ==</a></li>
+      <li><a href="dart-ui/Offset/operator_unary_minus.html">operator unary-</a></li>
+      <li><a href="dart-ui/Offset/operator_truncate_divide.html">operator ~/</a></li>
+      <li class="inherited"><a href="dart-ui/OffsetBase/operator_less.html">operator <</a></li>
+      <li class="inherited"><a href="dart-ui/OffsetBase/operator_less_equal.html">operator <=</a></li>
+      <li class="inherited"><a href="dart-ui/OffsetBase/operator_greater.html">operator ></a></li>
+      <li class="inherited"><a href="dart-ui/OffsetBase/operator_greater_equal.html">operator >=</a></li>
+    
+    
+      <li class="section-title"><a href="dart-ui/Offset-class.html#static-methods">Static methods</a></li>
+      <li><a href="dart-ui/Offset/lerp.html">lerp</a></li>
+    
+      <li class="section-title"><a href="dart-ui/Offset-class.html#constants">Constants</a></li>
+      <li><a href="dart-ui/Offset/infinite-constant.html">infinite</a></li>
+      <li><a href="dart-ui/Offset/zero-constant.html">zero</a></li>
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>translate method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype"><a href="dart-ui/Offset-class.html">Offset</a></span>
+      <span class="name ">translate</span>
+(<wbr><span class="parameter" id="translate-param-translateX"><span class="type-annotation"><a href="dart-core/double-class.html">double</a></span> <span class="parameter-name">translateX</span>, </span> <span class="parameter" id="translate-param-translateY"><span class="type-annotation"><a href="dart-core/double-class.html">double</a></span> <span class="parameter-name">translateY</span></span>)
+    </section>
+    <section class="desc markdown">
+      <p>Returns a new offset with translateX added to the x component and
+translateY added to the y component.</p>
+<p>If the arguments come from another <a href="dart-ui/Offset-class.html">Offset</a>, consider using the <code>+</code> or <code>-</code>
+operators instead:</p>
+<pre class="language-dart"><code class="language-dart">Offset a = const Offset(10.0, 10.0);
+Offset b = const Offset(10.0, 10.0);
+Offset c = a + b; // same as: a.translate(b.dx, b.dy)
+Offset d = a - b; // same as: a.translate(-b.dx, -b.dy)
+</code></pre>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">Offset translate(double translateX, double translateY) =&gt; new Offset(dx + translateX, dy + translateY);</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

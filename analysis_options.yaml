@@ -1,4 +1,8 @@
 analyzer:
+  language:
+    enablePreviewDart2: true
+    enableStrictCallChecks: true
+    enableSuperMixins: true
   strong-mode: true
 
 # Source of linter options:

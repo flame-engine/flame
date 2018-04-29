@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the Point class from the dart:math library, for the Dart programming language.">
+  <title>Point class - dart:math library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-math/dart-math-library.html">dart:math</a></li>
+    <li class="self-crumb">Point<span class="signature">&lt;<wbr><span class="type-parameter">T extends <a href="dart-core/num-class.html">num</a></span>&gt;</span> class</li>
+  </ol>
+  <div class="self-name">Point</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>dart:math library</h5>
+    <ol>
+      <li class="section-title"><a href="dart-math/dart-math-library.html#classes">Classes</a></li>
+      <li><a href="dart-math/MutableRectangle-class.html">MutableRectangle</a></li>
+      <li><a href="dart-math/Point-class.html">Point</a></li>
+      <li><a href="dart-math/Random-class.html">Random</a></li>
+      <li><a href="dart-math/Rectangle-class.html">Rectangle</a></li>
+    
+      <li class="section-title"><a href="dart-math/dart-math-library.html#constants">Constants</a></li>
+      <li><a class="deprecated" href="dart-math/E-constant.html">E</a></li>
+      <li><a href="dart-math/e-constant.html">e</a></li>
+      <li><a class="deprecated" href="dart-math/LN2-constant.html">LN2</a></li>
+      <li><a href="dart-math/ln2-constant.html">ln2</a></li>
+      <li><a class="deprecated" href="dart-math/LN10-constant.html">LN10</a></li>
+      <li><a href="dart-math/ln10-constant.html">ln10</a></li>
+      <li><a class="deprecated" href="dart-math/LOG2E-constant.html">LOG2E</a></li>
+      <li><a href="dart-math/log2e-constant.html">log2e</a></li>
+      <li><a class="deprecated" href="dart-math/LOG10E-constant.html">LOG10E</a></li>
+      <li><a href="dart-math/log10e-constant.html">log10e</a></li>
+      <li><a class="deprecated" href="dart-math/PI-constant.html">PI</a></li>
+      <li><a href="dart-math/pi-constant.html">pi</a></li>
+      <li><a class="deprecated" href="dart-math/SQRT1_2-constant.html">SQRT1_2</a></li>
+      <li><a href="dart-math/sqrt1_2-constant.html">sqrt1_2</a></li>
+      <li><a class="deprecated" href="dart-math/SQRT2-constant.html">SQRT2</a></li>
+      <li><a href="dart-math/sqrt2-constant.html">sqrt2</a></li>
+    
+    
+      <li class="section-title"><a href="dart-math/dart-math-library.html#functions">Functions</a></li>
+      <li><a href="dart-math/acos.html">acos</a></li>
+      <li><a href="dart-math/asin.html">asin</a></li>
+      <li><a href="dart-math/atan.html">atan</a></li>
+      <li><a href="dart-math/atan2.html">atan2</a></li>
+      <li><a href="dart-math/cos.html">cos</a></li>
+      <li><a href="dart-math/exp.html">exp</a></li>
+      <li><a href="dart-math/log.html">log</a></li>
+      <li><a href="dart-math/max.html">max</a></li>
+      <li><a href="dart-math/min.html">min</a></li>
+      <li><a href="dart-math/pow.html">pow</a></li>
+      <li><a href="dart-math/sin.html">sin</a></li>
+      <li><a href="dart-math/sqrt.html">sqrt</a></li>
+      <li><a href="dart-math/tan.html">tan</a></li>
+    
+    
+    
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>Point&lt;<wbr><span class="type-parameter">T extends num</span>&gt; class</h1>
+
+    <section class="desc markdown">
+      <p>A utility class for representing two-dimensional positions.</p>
+    </section>
+    
+
+    <section class="summary offset-anchor" id="constructors">
+      <h2>Constructors</h2>
+
+      <dl class="constructor-summary-list">
+        <dt id="Point" class="callable">
+          <span class="name"><a href="dart-math/Point/Point.html">Point</a></span><span class="signature">(<span class="parameter" id="-param-x"><span class="type-annotation">T</span> <span class="parameter-name">x</span>, </span> <span class="parameter" id="-param-y"><span class="type-annotation">T</span> <span class="parameter-name">y</span></span>)</span>
+        </dt>
+        <dd>
+          
+          <div class="constructor-modifier features">const</div>
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="hashCode" class="property">
+          <span class="name"><a href="dart-math/Point/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          The hash code for this object. <a href="dart-math/Point/hashCode.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="magnitude" class="property">
+          <span class="name"><a href="dart-math/Point/magnitude.html">magnitude</a></span>
+          <span class="signature">&#8594; <a href="dart-core/double-class.html">double</a></span>
+        </dt>
+        <dd>
+          Get the straight line (Euclidean) distance between the origin (0, 0) and
+this point.
+          <div class="features">read-only</div>
+</dd>
+        <dt id="x" class="property">
+          <span class="name"><a href="dart-math/Point/x.html">x</a></span>
+          <span class="signature">&#8594; T</span>
+        </dt>
+        <dd>
+          
+          <div class="features">final</div>
+</dd>
+        <dt id="y" class="property">
+          <span class="name"><a href="dart-math/Point/y.html">y</a></span>
+          <span class="signature">&#8594; T</span>
+        </dt>
+        <dd>
+          
+          <div class="features">final</div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a href="dart-core/Object/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; <a href="dart-core/Type-class.html">Type</a></span>
+        </dt>
+        <dd class="inherited">
+          A representation of the runtime type of the object.
+          <div class="features">read-only, inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="distanceTo" class="callable">
+          <span class="name"><a href="dart-math/Point/distanceTo.html">distanceTo</a></span><span class="signature">(<wbr><span class="parameter" id="distanceTo-param-other"><span class="type-annotation"><a href="dart-math/Point-class.html">Point</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns the distance between <code>this</code> and <code>other</code>.
+          
+</dd>
+        <dt id="squaredDistanceTo" class="callable">
+          <span class="name"><a href="dart-math/Point/squaredDistanceTo.html">squaredDistanceTo</a></span><span class="signature">(<wbr><span class="parameter" id="squaredDistanceTo-param-other"><span class="type-annotation"><a href="dart-math/Point-class.html">Point</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; T</span>
+          </span>
+        </dt>
+        <dd>
+          Returns the squared distance between <code>this</code> and <code>other</code>. <a href="dart-math/Point/squaredDistanceTo.html">[...]</a>
+          
+</dd>
+        <dt id="toString" class="callable">
+          <span class="name"><a href="dart-math/Point/toString.html">toString</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns a string representation of this object.
+          
+</dd>
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Invoked when a non-existent method or property is accessed. <a href="dart-core/Object/noSuchMethod.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator *" class="callable">
+          <span class="name"><a href="dart-math/Point/operator_multiply.html">operator *</a></span><span class="signature">(<wbr><span class="parameter" id="*-param-factor"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">factor</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-math/Point-class.html">Point</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Scale this point by <code>factor</code> as if it were a vector. <a href="dart-math/Point/operator_multiply.html">[...]</a>
+          
+</dd>
+        <dt id="operator +" class="callable">
+          <span class="name"><a href="dart-math/Point/operator_plus.html">operator +</a></span><span class="signature">(<wbr><span class="parameter" id="+-param-other"><span class="type-annotation"><a href="dart-math/Point-class.html">Point</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-math/Point-class.html">Point</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Add <code>other</code> to <code>this</code>, as if both points were vectors. <a href="dart-math/Point/operator_plus.html">[...]</a>
+          
+</dd>
+        <dt id="operator -" class="callable">
+          <span class="name"><a href="dart-math/Point/operator_minus.html">operator -</a></span><span class="signature">(<wbr><span class="parameter" id="--param-other"><span class="type-annotation"><a href="dart-math/Point-class.html">Point</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-math/Point-class.html">Point</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Subtract <code>other</code> from <code>this</code>, as if both points were vectors. <a href="dart-math/Point/operator_minus.html">[...]</a>
+          
+</dd>
+        <dt id="operator ==" class="callable">
+          <span class="name"><a href="dart-math/Point/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation">dynamic</span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd>
+          A <code>Point</code> is only equal to another <code>Point</code> with the same coordinates. <a href="dart-math/Point/operator_equals.html">[...]</a>
+          
+</dd>
+      </dl>
+    </section>
+
+
+
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <ol>
+      <li class="section-title"><a href="dart-math/Point-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-math/Point/Point.html">Point</a></li>
+    
+      <li class="section-title">
+        <a href="dart-math/Point-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-math/Point/hashCode.html">hashCode</a></li>
+      <li><a href="dart-math/Point/magnitude.html">magnitude</a></li>
+      <li><a href="dart-math/Point/x.html">x</a></li>
+      <li><a href="dart-math/Point/y.html">y</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-math/Point-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-math/Point/distanceTo.html">distanceTo</a></li>
+      <li><a href="dart-math/Point/squaredDistanceTo.html">squaredDistanceTo</a></li>
+      <li><a href="dart-math/Point/toString.html">toString</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    
+      <li class="section-title"><a href="dart-math/Point-class.html#operators">Operators</a></li>
+      <li><a href="dart-math/Point/operator_multiply.html">operator *</a></li>
+      <li><a href="dart-math/Point/operator_plus.html">operator +</a></li>
+      <li><a href="dart-math/Point/operator_minus.html">operator -</a></li>
+      <li><a href="dart-math/Point/operator_equals.html">operator ==</a></li>
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

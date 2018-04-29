@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the parse method from the Uri class, for the Dart programming language.">
+  <title>parse method - Uri class - dart:core library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-core/dart-core-library.html">dart:core</a></li>
+    <li><a href="dart-core/Uri-class.html">Uri</a></li>
+    <li class="self-crumb">parse method</li>
+  </ol>
+  <div class="self-name">parse</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>Uri class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-core/Uri-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-core/Uri/Uri.html">Uri</a></li>
+      <li><a href="dart-core/Uri/Uri.dataFromBytes.html">dataFromBytes</a></li>
+      <li><a href="dart-core/Uri/Uri.dataFromString.html">dataFromString</a></li>
+      <li><a href="dart-core/Uri/Uri.directory.html">directory</a></li>
+      <li><a href="dart-core/Uri/Uri.file.html">file</a></li>
+      <li><a href="dart-core/Uri/Uri.http.html">http</a></li>
+      <li><a href="dart-core/Uri/Uri.https.html">https</a></li>
+    
+      <li class="section-title">
+        <a href="dart-core/Uri-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-core/Uri/authority.html">authority</a></li>
+      <li><a href="dart-core/Uri/data.html">data</a></li>
+      <li><a href="dart-core/Uri/fragment.html">fragment</a></li>
+      <li><a href="dart-core/Uri/hasAbsolutePath.html">hasAbsolutePath</a></li>
+      <li><a href="dart-core/Uri/hasAuthority.html">hasAuthority</a></li>
+      <li><a href="dart-core/Uri/hasEmptyPath.html">hasEmptyPath</a></li>
+      <li><a href="dart-core/Uri/hasFragment.html">hasFragment</a></li>
+      <li><a href="dart-core/Uri/hashCode.html">hashCode</a></li>
+      <li><a href="dart-core/Uri/hasPort.html">hasPort</a></li>
+      <li><a href="dart-core/Uri/hasQuery.html">hasQuery</a></li>
+      <li><a href="dart-core/Uri/hasScheme.html">hasScheme</a></li>
+      <li><a href="dart-core/Uri/host.html">host</a></li>
+      <li><a href="dart-core/Uri/isAbsolute.html">isAbsolute</a></li>
+      <li><a href="dart-core/Uri/origin.html">origin</a></li>
+      <li><a href="dart-core/Uri/path.html">path</a></li>
+      <li><a href="dart-core/Uri/pathSegments.html">pathSegments</a></li>
+      <li><a href="dart-core/Uri/port.html">port</a></li>
+      <li><a href="dart-core/Uri/query.html">query</a></li>
+      <li><a href="dart-core/Uri/queryParameters.html">queryParameters</a></li>
+      <li><a href="dart-core/Uri/queryParametersAll.html">queryParametersAll</a></li>
+      <li><a href="dart-core/Uri/scheme.html">scheme</a></li>
+      <li><a href="dart-core/Uri/userInfo.html">userInfo</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-core/Uri-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-core/Uri/isScheme.html">isScheme</a></li>
+      <li><a href="dart-core/Uri/normalizePath.html">normalizePath</a></li>
+      <li><a href="dart-core/Uri/removeFragment.html">removeFragment</a></li>
+      <li><a href="dart-core/Uri/replace.html">replace</a></li>
+      <li><a href="dart-core/Uri/resolve.html">resolve</a></li>
+      <li><a href="dart-core/Uri/resolveUri.html">resolveUri</a></li>
+      <li><a href="dart-core/Uri/toFilePath.html">toFilePath</a></li>
+      <li><a href="dart-core/Uri/toString.html">toString</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    
+      <li class="section-title"><a href="dart-core/Uri-class.html#operators">Operators</a></li>
+      <li><a href="dart-core/Uri/operator_equals.html">operator ==</a></li>
+    
+      <li class="section-title"><a href="dart-core/Uri-class.html#static-properties">Static properties</a></li>
+      <li><a href="dart-core/Uri/base.html">base</a></li>
+    
+      <li class="section-title"><a href="dart-core/Uri-class.html#static-methods">Static methods</a></li>
+      <li><a href="dart-core/Uri/decodeComponent.html">decodeComponent</a></li>
+      <li><a href="dart-core/Uri/decodeFull.html">decodeFull</a></li>
+      <li><a href="dart-core/Uri/decodeQueryComponent.html">decodeQueryComponent</a></li>
+      <li><a href="dart-core/Uri/encodeComponent.html">encodeComponent</a></li>
+      <li><a href="dart-core/Uri/encodeFull.html">encodeFull</a></li>
+      <li><a href="dart-core/Uri/encodeQueryComponent.html">encodeQueryComponent</a></li>
+      <li><a href="dart-core/Uri/parse.html">parse</a></li>
+      <li><a href="dart-core/Uri/parseIPv4Address.html">parseIPv4Address</a></li>
+      <li><a href="dart-core/Uri/parseIPv6Address.html">parseIPv6Address</a></li>
+      <li><a href="dart-core/Uri/splitQueryString.html">splitQueryString</a></li>
+      <li><a href="dart-core/Uri/tryParse.html">tryParse</a></li>
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>parse method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype"><a href="dart-core/Uri-class.html">Uri</a></span>
+      <span class="name ">parse</span>
+(<wbr><span class="parameter" id="parse-param-uri"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">uri</span>, [</span> <span class="parameter" id="parse-param-start"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">start</span> = <span class="default-value">0</span>, </span> <span class="parameter" id="parse-param-end"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">end</span></span> ])
+    </section>
+    <section class="desc markdown">
+      <p>Creates a new <code>Uri</code> object by parsing a URI string.</p>
+<p>If <code>start</code> and <code>end</code> are provided, only the substring from <code>start</code>
+to <code>end</code> is parsed as a URI.</p>
+<p>If the string is not valid as a URI or URI reference,
+a <a href="dart-core/FormatException-class.html">FormatException</a> is thrown.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">static Uri parse(String uri, [int start = 0, int end]) {
+  &#47;&#47; This parsing will not validate percent-encoding, IPv6, etc.
+  &#47;&#47; When done splitting into parts, it will call, e.g., [_makeFragment]
+  &#47;&#47; to do the final parsing.
+  &#47;&#47;
+  &#47;&#47; Important parts of the RFC 3986 used here:
+  &#47;&#47; URI           = scheme &quot;:&quot; hier-part [ &quot;?&quot; query ] [ &quot;#&quot; fragment ]
+  &#47;&#47;
+  &#47;&#47; hier-part     = &quot;&#47;&#47;&quot; authority path-abempty
+  &#47;&#47;               &#47; path-absolute
+  &#47;&#47;               &#47; path-rootless
+  &#47;&#47;               &#47; path-empty
+  &#47;&#47;
+  &#47;&#47; URI-reference = URI &#47; relative-ref
+  &#47;&#47;
+  &#47;&#47; absolute-URI  = scheme &quot;:&quot; hier-part [ &quot;?&quot; query ]
+  &#47;&#47;
+  &#47;&#47; relative-ref  = relative-part [ &quot;?&quot; query ] [ &quot;#&quot; fragment ]
+  &#47;&#47;
+  &#47;&#47; relative-part = &quot;&#47;&#47;&quot; authority path-abempty
+  &#47;&#47;               &#47; path-absolute
+  &#47;&#47;               &#47; path-noscheme
+  &#47;&#47;               &#47; path-empty
+  &#47;&#47;
+  &#47;&#47; scheme        = ALPHA *( ALPHA &#47; DIGIT &#47; &quot;+&quot; &#47; &quot;-&quot; &#47; &quot;.&quot; )
+  &#47;&#47;
+  &#47;&#47; authority     = [ userinfo &quot;@&quot; ] host [ &quot;:&quot; port ]
+  &#47;&#47; userinfo      = *( unreserved &#47; pct-encoded &#47; sub-delims &#47; &quot;:&quot; )
+  &#47;&#47; host          = IP-literal &#47; IPv4address &#47; reg-name
+  &#47;&#47; port          = *DIGIT
+  &#47;&#47; reg-name      = *( unreserved &#47; pct-encoded &#47; sub-delims )
+  &#47;&#47;
+  &#47;&#47; path          = path-abempty    ; begins with &quot;&#47;&quot; or is empty
+  &#47;&#47;               &#47; path-absolute   ; begins with &quot;&#47;&quot; but not &quot;&#47;&#47;&quot;
+  &#47;&#47;               &#47; path-noscheme   ; begins with a non-colon segment
+  &#47;&#47;               &#47; path-rootless   ; begins with a segment
+  &#47;&#47;               &#47; path-empty      ; zero characters
+  &#47;&#47;
+  &#47;&#47; path-abempty  = *( &quot;&#47;&quot; segment )
+  &#47;&#47; path-absolute = &quot;&#47;&quot; [ segment-nz *( &quot;&#47;&quot; segment ) ]
+  &#47;&#47; path-noscheme = segment-nz-nc *( &quot;&#47;&quot; segment )
+  &#47;&#47; path-rootless = segment-nz *( &quot;&#47;&quot; segment )
+  &#47;&#47; path-empty    = 0&lt;pchar&gt;
+  &#47;&#47;
+  &#47;&#47; segment       = *pchar
+  &#47;&#47; segment-nz    = 1*pchar
+  &#47;&#47; segment-nz-nc = 1*( unreserved &#47; pct-encoded &#47; sub-delims &#47; &quot;@&quot; )
+  &#47;&#47;               ; non-zero-length segment without any colon &quot;:&quot;
+  &#47;&#47;
+  &#47;&#47; pchar         = unreserved &#47; pct-encoded &#47; sub-delims &#47; &quot;:&quot; &#47; &quot;@&quot;
+  &#47;&#47;
+  &#47;&#47; query         = *( pchar &#47; &quot;&#47;&quot; &#47; &quot;?&quot; )
+  &#47;&#47;
+  &#47;&#47; fragment      = *( pchar &#47; &quot;&#47;&quot; &#47; &quot;?&quot; )
+  end ??= uri.length;
+
+  &#47;&#47; Special case data:URIs. Ignore case when testing.
+  if (end &gt;= start + 5) {
+    int dataDelta = _startsWithData(uri, start);
+    if (dataDelta == 0) {
+      &#47;&#47; The case is right.
+      if (start &gt; 0 || end &lt; uri.length) uri = uri.substring(start, end);
+      return UriData._parse(uri, 5, null).uri;
+    } else if (dataDelta == 0x20) {
+      return UriData._parse(uri.substring(start + 5, end), 0, null).uri;
+    }
+    &#47;&#47; Otherwise the URI doesn&#39;t start with &quot;data:&quot; or any case variant of it.
+  }
+
+  &#47;&#47; The following index-normalization belongs with the scanning, but is
+  &#47;&#47; easier to do here because we already have extracted variables from the
+  &#47;&#47; indices list.
+  var indices = new List&lt;int&gt;(8);
+
+  &#47;&#47; Set default values for each position.
+  &#47;&#47; The value will either be correct in some cases where it isn&#39;t set
+  &#47;&#47; by the scanner, or it is clearly recognizable as an unset value.
+  indices
+    ..[0] = 0
+    ..[_schemeEndIndex] = start - 1
+    ..[_hostStartIndex] = start - 1
+    ..[_notSimpleIndex] = start - 1
+    ..[_portStartIndex] = start
+    ..[_pathStartIndex] = start
+    ..[_queryStartIndex] = end
+    ..[_fragmentStartIndex] = end;
+  var state = _scan(uri, start, end, _uriStart, indices);
+  &#47;&#47; Some states that should be non-simple, but the URI ended early.
+  &#47;&#47; Paths that end at a &quot;..&quot; must be normalized to end in &quot;..&#47;&quot;.
+  if (state &gt;= _nonSimpleEndStates) {
+    indices[_notSimpleIndex] = end;
+  }
+  int schemeEnd = indices[_schemeEndIndex];
+  if (schemeEnd &gt;= start) {
+    &#47;&#47; Rescan the scheme part now that we know it&#39;s not a path.
+    state = _scan(uri, start, schemeEnd, _schemeStart, indices);
+    if (state == _schemeStart) {
+      &#47;&#47; Empty scheme.
+      indices[_notSimpleIndex] = schemeEnd;
+    }
+  }
+  &#47;&#47; The returned positions are limited by the scanners ability to write only
+  &#47;&#47; one position per character, and only the current position.
+  &#47;&#47; Scanning from left to right, we only know whether something is a scheme
+  &#47;&#47; or a path when we see a `:` or `&#47;`, and likewise we only know if the first
+  &#47;&#47; `&#47;` is part of the path or is leading an authority component when we see
+  &#47;&#47; the next character.
+
+  int hostStart = indices[_hostStartIndex] + 1;
+  int portStart = indices[_portStartIndex];
+  int pathStart = indices[_pathStartIndex];
+  int queryStart = indices[_queryStartIndex];
+  int fragmentStart = indices[_fragmentStartIndex];
+
+  &#47;&#47; We may discover scheme while handling special cases.
+  String scheme;
+
+  &#47;&#47; Derive some positions that weren&#39;t set to normalize the indices.
+  &#47;&#47; If pathStart isn&#39;t set (it&#39;s before scheme end or host start), then
+  &#47;&#47; the path is empty.
+  if (fragmentStart &lt; queryStart) queryStart = fragmentStart;
+  if (pathStart &lt; hostStart || pathStart &lt;= schemeEnd) {
+    pathStart = queryStart;
+  }
+  &#47;&#47; If there is an authority with no port, set the port position
+  &#47;&#47; to be at the end of the authority (equal to pathStart).
+  &#47;&#47; This also handles a &quot;:&quot; in a user-info component incorrectly setting
+  &#47;&#47; the port start position.
+  if (portStart &lt; hostStart) portStart = pathStart;
+
+  assert(hostStart == start || schemeEnd &lt;= hostStart);
+  assert(hostStart &lt;= portStart);
+  assert(schemeEnd &lt;= pathStart);
+  assert(portStart &lt;= pathStart);
+  assert(pathStart &lt;= queryStart);
+  assert(queryStart &lt;= fragmentStart);
+
+  bool isSimple = indices[_notSimpleIndex] &lt; start;
+
+  if (isSimple) {
+    &#47;&#47; Check&#47;do normalizations that weren&#39;t detected by the scanner.
+    &#47;&#47; This includes removal of empty port or userInfo,
+    &#47;&#47; or scheme specific port and path normalizations.
+    if (hostStart &gt; schemeEnd + 3) {
+      &#47;&#47; Always be non-simple if URI contains user-info.
+      &#47;&#47; The scanner doesn&#39;t set the not-simple position in this case because
+      &#47;&#47; it&#39;s setting the host-start position instead.
+      isSimple = false;
+    } else if (portStart &gt; start &amp;&amp; portStart + 1 == pathStart) {
+      &#47;&#47; If the port is empty, it should be omitted.
+      &#47;&#47; Pathological case, don&#39;t bother correcting it.
+      isSimple = false;
+    } else if (queryStart &lt; end &amp;&amp;
+            (queryStart == pathStart + 2 &amp;&amp;
+                uri.startsWith(&quot;..&quot;, pathStart)) ||
+        (queryStart &gt; pathStart + 2 &amp;&amp;
+            uri.startsWith(&quot;&#47;..&quot;, queryStart - 3))) {
+      &#47;&#47; The path ends in a &quot;..&quot; segment. This should be normalized to &quot;..&#47;&quot;.
+      &#47;&#47; We didn&#39;t detect this while scanning because a query or fragment was
+      &#47;&#47; detected at the same time (which is why we only need to check this
+      &#47;&#47; if there is something after the path).
+      isSimple = false;
+    } else {
+      &#47;&#47; There are a few scheme-based normalizations that
+      &#47;&#47; the scanner couldn&#39;t check.
+      &#47;&#47; That means that the input is very close to simple, so just do
+      &#47;&#47; the normalizations.
+      if (schemeEnd == start + 4) {
+        &#47;&#47; Do scheme based normalizations for file, http.
+        if (uri.startsWith(&quot;file&quot;, start)) {
+          scheme = &quot;file&quot;;
+          if (hostStart &lt;= start) {
+            &#47;&#47; File URIs should have an authority.
+            &#47;&#47; Paths after an authority should be absolute.
+            String schemeAuth = &quot;file:&#47;&#47;&quot;;
+            int delta = 2;
+            if (!uri.startsWith(&quot;&#47;&quot;, pathStart)) {
+              schemeAuth = &quot;file:&#47;&#47;&#47;&quot;;
+              delta = 3;
+            }
+            uri = schemeAuth + uri.substring(pathStart, end);
+            schemeEnd -= start;
+            hostStart = 7;
+            portStart = 7;
+            pathStart = 7;
+            queryStart += delta - start;
+            fragmentStart += delta - start;
+            start = 0;
+            end = uri.length;
+          } else if (pathStart == queryStart) {
+            &#47;&#47; Uri has authority and empty path. Add &quot;&#47;&quot; as path.
+            if (start == 0 &amp;&amp; end == uri.length) {
+              uri = uri.replaceRange(pathStart, queryStart, &quot;&#47;&quot;);
+              queryStart += 1;
+              fragmentStart += 1;
+              end += 1;
+            } else {
+              uri = &quot;${uri.substring(start, pathStart)}&#47;&quot;
+                  &quot;${uri.substring(queryStart, end)}&quot;;
+              schemeEnd -= start;
+              hostStart -= start;
+              portStart -= start;
+              pathStart -= start;
+              queryStart += 1 - start;
+              fragmentStart += 1 - start;
+              start = 0;
+              end = uri.length;
+            }
+          }
+        } else if (uri.startsWith(&quot;http&quot;, start)) {
+          scheme = &quot;http&quot;;
+          &#47;&#47; HTTP URIs should not have an explicit port of 80.
+          if (portStart &gt; start &amp;&amp;
+              portStart + 3 == pathStart &amp;&amp;
+              uri.startsWith(&quot;80&quot;, portStart + 1)) {
+            if (start == 0 &amp;&amp; end == uri.length) {
+              uri = uri.replaceRange(portStart, pathStart, &quot;&quot;);
+              pathStart -= 3;
+              queryStart -= 3;
+              fragmentStart -= 3;
+              end -= 3;
+            } else {
+              uri = uri.substring(start, portStart) +
+                  uri.substring(pathStart, end);
+              schemeEnd -= start;
+              hostStart -= start;
+              portStart -= start;
+              pathStart -= 3 + start;
+              queryStart -= 3 + start;
+              fragmentStart -= 3 + start;
+              start = 0;
+              end = uri.length;
+            }
+          }
+        }
+      } else if (schemeEnd == start + 5 &amp;&amp; uri.startsWith(&quot;https&quot;, start)) {
+        scheme = &quot;https&quot;;
+        &#47;&#47; HTTPS URIs should not have an explicit port of 443.
+        if (portStart &gt; start &amp;&amp;
+            portStart + 4 == pathStart &amp;&amp;
+            uri.startsWith(&quot;443&quot;, portStart + 1)) {
+          if (start == 0 &amp;&amp; end == uri.length) {
+            uri = uri.replaceRange(portStart, pathStart, &quot;&quot;);
+            pathStart -= 4;
+            queryStart -= 4;
+            fragmentStart -= 4;
+            end -= 3;
+          } else {
+            uri = uri.substring(start, portStart) +
+                uri.substring(pathStart, end);
+            schemeEnd -= start;
+            hostStart -= start;
+            portStart -= start;
+            pathStart -= 4 + start;
+            queryStart -= 4 + start;
+            fragmentStart -= 4 + start;
+            start = 0;
+            end = uri.length;
+          }
+        }
+      }
+    }
+  }
+
+  if (isSimple) {
+    if (start &gt; 0 || end &lt; uri.length) {
+      uri = uri.substring(start, end);
+      schemeEnd -= start;
+      hostStart -= start;
+      portStart -= start;
+      pathStart -= start;
+      queryStart -= start;
+      fragmentStart -= start;
+    }
+    return new _SimpleUri(uri, schemeEnd, hostStart, portStart, pathStart,
+        queryStart, fragmentStart, scheme);
+  }
+
+  return new _Uri.notSimple(uri, start, end, schemeEnd, hostStart, portStart,
+      pathStart, queryStart, fragmentStart, scheme);
+}</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

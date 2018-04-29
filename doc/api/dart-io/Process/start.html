@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the start method from the Process class, for the Dart programming language.">
+  <title>start method - Process class - dart:io library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-io/dart-io-library.html">dart:io</a></li>
+    <li><a href="dart-io/Process-class.html">Process</a></li>
+    <li class="self-crumb">start method</li>
+  </ol>
+  <div class="self-name">start</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>Process class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-io/Process-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-io/Process/Process.html">Process</a></li>
+    
+      <li class="section-title">
+        <a href="dart-io/Process-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-io/Process/exitCode.html">exitCode</a></li>
+      <li><a href="dart-io/Process/pid.html">pid</a></li>
+      <li><a href="dart-io/Process/stderr.html">stderr</a></li>
+      <li><a href="dart-io/Process/stdin.html">stdin</a></li>
+      <li><a href="dart-io/Process/stdout.html">stdout</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-io/Process-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-io/Process/kill.html">kill</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/Object/toString.html">toString</a></li>
+    
+      <li class="section-title inherited"><a href="dart-io/Process-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+      <li class="section-title"><a href="dart-io/Process-class.html#static-methods">Static methods</a></li>
+      <li><a href="dart-io/Process/killPid.html">killPid</a></li>
+      <li><a href="dart-io/Process/run.html">run</a></li>
+      <li><a href="dart-io/Process/runSync.html">runSync</a></li>
+      <li><a href="dart-io/Process/start.html">start</a></li>
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>start method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype"><a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-io/Process-class.html">Process</a></span>&gt;</span></span>
+      <span class="name ">start</span>
+(<wbr><span class="parameter" id="start-param-executable"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">executable</span>, </span> <span class="parameter" id="start-param-arguments"><span class="type-annotation"><a href="dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">arguments</span>, {</span> <span class="parameter" id="start-param-workingDirectory"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">workingDirectory</span>, </span> <span class="parameter" id="start-param-environment"><span class="type-annotation"><a href="dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">environment</span>, </span> <span class="parameter" id="start-param-includeParentEnvironment"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">includeParentEnvironment</span>: <span class="default-value">true</span>, </span> <span class="parameter" id="start-param-runInShell"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">runInShell</span>: <span class="default-value">false</span>, </span> <span class="parameter" id="start-param-mode"><span class="type-annotation"><a href="dart-io/ProcessStartMode-class.html">ProcessStartMode</a></span> <span class="parameter-name">mode</span>: <span class="default-value">ProcessStartMode.NORMAL</span></span> })
+    </section>
+    <section class="desc markdown">
+      <p>Starts a process running the <code>executable</code> with the specified
+<code>arguments</code>. Returns a <code>Future&lt;Process&gt;</code> that completes with a
+Process instance when the process has been successfully
+started. That <a href="dart-io/Process-class.html">Process</a> object can be used to interact with the
+process. If the process cannot be started the returned <a href="dart-async/Future-class.html">Future</a>
+completes with an exception.</p>
+<p>Use <code>workingDirectory</code> to set the working directory for the process. Note
+that the change of directory occurs before executing the process on some
+platforms, which may have impact when using relative paths for the
+executable and the arguments.</p>
+<p>Use <code>environment</code> to set the environment variables for the process. If not
+set the environment of the parent process is inherited. Currently, only
+US-ASCII environment variables are supported and errors are likely to occur
+if an environment variable with code-points outside the US-ASCII range is
+passed in.</p>
+<p>If <code>includeParentEnvironment</code> is <code>true</code>, the process's environment will
+include the parent process's environment, with <code>environment</code> taking
+precedence. Default is <code>true</code>.</p>
+<p>If <code>runInShell</code> is <code>true</code>, the process will be spawned through a system
+shell. On Linux and OS X, <code>/bin/sh</code> is used, while
+<code>%WINDIR%\system32\cmd.exe</code> is used on Windows.</p>
+<p>Users must read all data coming on the <a href="dart-io/Process/stdout.html">stdout</a> and <a href="dart-io/Process/stderr.html">stderr</a>
+streams of processes started with <code>Process.start</code>. If the user
+does not read all data on the streams the underlying system
+resources will not be released since there is still pending data.</p>
+<p>The following code uses <code>Process.start</code> to grep for <code>main</code> in the
+file <code>test.dart</code> on Linux.</p>
+<pre class="language-dart"><code>Process.start('grep', ['-i', 'main', 'test.dart']).then((process) {
+  stdout.addStream(process.stdout);
+  stderr.addStream(process.stderr);
+});
+</code></pre>
+<p>If <code>mode</code> is <a href="dart-io/ProcessStartMode-class.html">ProcessStartMode.NORMAL</a> (the default) a child
+process will be started with <code>stdin</code>, <code>stdout</code> and <code>stderr</code>
+connected.</p>
+<p>If <code>mode</code> is <a href="dart-io/ProcessStartMode-class.html">ProcessStartMode.DETACHED</a> a detached process will
+be created. A detached process has no connection to its parent,
+and can keep running on its own when the parent dies. The only
+information available from a detached process is its <code>pid</code>. There
+is no connection to its <code>stdin</code>, <code>stdout</code> or <code>stderr</code>, nor will
+the process' exit code become available when it terminates.</p>
+<p>If <code>mode</code> is <a href="dart-io/ProcessStartMode-class.html">ProcessStartMode.DETACHED_WITH_STDIO</a> a detached
+process will be created where the <code>stdin</code>, <code>stdout</code> and <code>stderr</code>
+are connected. The creator can communicate with the child through
+these. The detached process will keep running even if these
+communication channels are closed. The process' exit code will
+not become available when it terminated.</p>
+<p>The default value for <code>mode</code> is <code>ProcessStartMode.NORMAL</code>.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">external static Future&lt;Process&gt; start(
+    String executable, List&lt;String&gt; arguments,
+    {String workingDirectory,
+    Map&lt;String, String&gt; environment,
+    bool includeParentEnvironment: true,
+    bool runInShell: false,
+    ProcessStartMode mode: ProcessStartMode.NORMAL});</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

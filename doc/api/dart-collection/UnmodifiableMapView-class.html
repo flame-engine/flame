@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the UnmodifiableMapView class from the dart:collection library, for the Dart programming language.">
+  <title>UnmodifiableMapView class - dart:collection library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-collection/dart-collection-library.html">dart:collection</a></li>
+    <li class="self-crumb">UnmodifiableMapView<span class="signature">&lt;<wbr><span class="type-parameter">K</span>, <span class="type-parameter">V</span>&gt;</span> class</li>
+  </ol>
+  <div class="self-name">UnmodifiableMapView</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>dart:collection library</h5>
+    <ol>
+      <li class="section-title"><a href="dart-collection/dart-collection-library.html#classes">Classes</a></li>
+      <li><a href="dart-collection/DoubleLinkedQueue-class.html">DoubleLinkedQueue</a></li>
+      <li><a href="dart-collection/DoubleLinkedQueueEntry-class.html">DoubleLinkedQueueEntry</a></li>
+      <li><a href="dart-collection/HashMap-class.html">HashMap</a></li>
+      <li><a href="dart-collection/HashSet-class.html">HashSet</a></li>
+      <li><a href="dart-collection/HasNextIterator-class.html">HasNextIterator</a></li>
+      <li><a href="dart-collection/IterableBase-class.html">IterableBase</a></li>
+      <li><a href="dart-collection/IterableMixin-class.html">IterableMixin</a></li>
+      <li><a href="dart-collection/LinkedHashMap-class.html">LinkedHashMap</a></li>
+      <li><a href="dart-collection/LinkedHashSet-class.html">LinkedHashSet</a></li>
+      <li><a href="dart-collection/LinkedList-class.html">LinkedList</a></li>
+      <li><a href="dart-collection/LinkedListEntry-class.html">LinkedListEntry</a></li>
+      <li><a href="dart-collection/ListBase-class.html">ListBase</a></li>
+      <li><a href="dart-collection/ListMixin-class.html">ListMixin</a></li>
+      <li><a href="dart-collection/ListQueue-class.html">ListQueue</a></li>
+      <li><a href="dart-collection/MapBase-class.html">MapBase</a></li>
+      <li><a href="dart-collection/MapMixin-class.html">MapMixin</a></li>
+      <li><a href="dart-collection/MapView-class.html">MapView</a></li>
+      <li><a href="dart-collection/Queue-class.html">Queue</a></li>
+      <li><a href="dart-collection/SetBase-class.html">SetBase</a></li>
+      <li><a href="dart-collection/SetMixin-class.html">SetMixin</a></li>
+      <li><a href="dart-collection/SplayTreeMap-class.html">SplayTreeMap</a></li>
+      <li><a href="dart-collection/SplayTreeSet-class.html">SplayTreeSet</a></li>
+      <li><a href="dart-collection/UnmodifiableListView-class.html">UnmodifiableListView</a></li>
+      <li><a href="dart-collection/UnmodifiableMapBase-class.html">UnmodifiableMapBase</a></li>
+      <li><a href="dart-collection/UnmodifiableMapView-class.html">UnmodifiableMapView</a></li>
+    
+    
+    
+    
+    
+    
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>UnmodifiableMapView&lt;<wbr><span class="type-parameter">K</span>, <span class="type-parameter">V</span>&gt; class</h1>
+
+    <section class="desc markdown">
+      <p>View of a <a href="dart-core/Map-class.html">Map</a> that disallow modifying the map.</p>
+<p>A wrapper around a <code>Map</code> that forwards all members to the map provided in
+the constructor, except for operations that modify the map.
+Modifying operations throw instead.</p>
+    </section>
+    
+    <section>
+      <dl class="dl-horizontal">
+        <dt>Inheritance</dt>
+        <dd><ul class="gt-separated dark clazz-relationships">
+          <li><a href="dart-core/Object-class.html">Object</a></li>
+          <li><a href="dart-collection/MapView-class.html">MapView</a><span class="signature">&lt;<wbr><span class="type-parameter">K</span>, <span class="type-parameter">V</span>&gt;</span></li>
+          <li>UnmodifiableMapView</li>
+        </ul></dd>
+
+
+
+
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="constructors">
+      <h2>Constructors</h2>
+
+      <dl class="constructor-summary-list">
+        <dt id="UnmodifiableMapView" class="callable">
+          <span class="name"><a href="dart-collection/UnmodifiableMapView/UnmodifiableMapView.html">UnmodifiableMapView</a></span><span class="signature">(<span class="parameter" id="-param-map"><span class="type-annotation"><a href="dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter">K</span>, <span class="type-parameter">V</span>&gt;</span></span> <span class="parameter-name">map</span></span>)</span>
+        </dt>
+        <dd>
+          
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor inherited" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="entries" class="property inherited">
+          <span class="name"><a href="dart-collection/MapView/entries.html">entries</a></span>
+          <span class="signature">&#8594; <a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/MapEntry-class.html">MapEntry</a><span class="signature">&lt;<wbr><span class="type-parameter">K</span>, <span class="type-parameter">V</span>&gt;</span></span>&gt;</span></span>
+        </dt>
+        <dd class="inherited">
+          The map entries of <a href="dart-collection/UnmodifiableMapView-class.html">this</a>.
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="hashCode" class="property inherited">
+          <span class="name"><a href="dart-core/Object/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd class="inherited">
+          The hash code for this object. <a href="dart-core/Object/hashCode.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="isEmpty" class="property inherited">
+          <span class="name"><a href="dart-collection/MapView/isEmpty.html">isEmpty</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          Returns true if there is no key/value pair in the map.
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="isNotEmpty" class="property inherited">
+          <span class="name"><a href="dart-collection/MapView/isNotEmpty.html">isNotEmpty</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          Returns true if there is at least one key/value pair in the map.
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="keys" class="property inherited">
+          <span class="name"><a href="dart-collection/MapView/keys.html">keys</a></span>
+          <span class="signature">&#8594; <a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">K</span>&gt;</span></span>
+        </dt>
+        <dd class="inherited">
+          The keys of <a href="dart-collection/UnmodifiableMapView-class.html">this</a>. <a href="dart-collection/MapView/keys.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="length" class="property inherited">
+          <span class="name"><a href="dart-collection/MapView/length.html">length</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd class="inherited">
+          The number of key/value pairs in the map.
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a href="dart-core/Object/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; <a href="dart-core/Type-class.html">Type</a></span>
+        </dt>
+        <dd class="inherited">
+          A representation of the runtime type of the object.
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="values" class="property inherited">
+          <span class="name"><a href="dart-collection/MapView/values.html">values</a></span>
+          <span class="signature">&#8594; <a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">V</span>&gt;</span></span>
+        </dt>
+        <dd class="inherited">
+          The values of <a href="dart-collection/UnmodifiableMapView-class.html">this</a>. <a href="dart-collection/MapView/values.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="cast" class="callable">
+          <span class="name"><a href="dart-collection/UnmodifiableMapView/cast.html">cast</a></span><span class="signature">&lt;<wbr><span class="type-parameter">RK</span>, <span class="type-parameter">RV</span>&gt;</span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter">RK</span>, <span class="type-parameter">RV</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          
+          
+</dd>
+        <dt id="retype" class="callable">
+          <span class="name"><a href="dart-collection/UnmodifiableMapView/retype.html">retype</a></span><span class="signature">&lt;<wbr><span class="type-parameter">RK</span>, <span class="type-parameter">RV</span>&gt;</span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter">RK</span>, <span class="type-parameter">RV</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          
+          
+</dd>
+        <dt id="addAll" class="callable inherited">
+          <span class="name"><a href="dart-collection/UnmodifiableMapView/addAll.html">addAll</a></span><span class="signature">(<wbr><span class="parameter" id="addAll-param-other"><span class="type-annotation"><a href="dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter">K</span>, <span class="type-parameter">V</span>&gt;</span></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          This operation is not supported by an unmodifiable map.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="addEntries" class="callable inherited">
+          <span class="name"><a href="dart-collection/MapView/addEntries.html">addEntries</a></span><span class="signature">(<wbr><span class="parameter" id="addEntries-param-entries"><span class="type-annotation"><a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/Object-class.html">Object</a></span>&gt;</span></span> <span class="parameter-name">entries</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Adds all key/value pairs of <code>newEntries</code> to this map. <a href="dart-collection/MapView/addEntries.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="clear" class="callable inherited">
+          <span class="name"><a href="dart-collection/UnmodifiableMapView/clear.html">clear</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          This operation is not supported by an unmodifiable map.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="containsKey" class="callable inherited">
+          <span class="name"><a href="dart-collection/MapView/containsKey.html">containsKey</a></span><span class="signature">(<wbr><span class="parameter" id="containsKey-param-key"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">key</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns true if this map contains the given <code>key</code>. <a href="dart-collection/MapView/containsKey.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="containsValue" class="callable inherited">
+          <span class="name"><a href="dart-collection/MapView/containsValue.html">containsValue</a></span><span class="signature">(<wbr><span class="parameter" id="containsValue-param-value"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">value</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns true if this map contains the given <code>value</code>. <a href="dart-collection/MapView/containsValue.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="forEach" class="callable inherited">
+          <span class="name"><a href="dart-collection/MapView/forEach.html">forEach</a></span><span class="signature">(<wbr><span class="parameter" id="forEach-param-action"><span class="type-annotation">void</span> <span class="parameter-name">action</span>(<span class="parameter" id="action-param-key"><span class="type-annotation">K</span> <span class="parameter-name">key</span>, </span> <span class="parameter" id="action-param-value"><span class="type-annotation">V</span> <span class="parameter-name">value</span></span>)</span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Applies <code>f</code> to each key/value pair of the map. <a href="dart-collection/MapView/forEach.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="map" class="callable inherited">
+          <span class="name"><a href="dart-collection/MapView/map.html">map</a></span><span class="signature">&lt;<wbr><span class="type-parameter">K2</span>, <span class="type-parameter">V2</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="map-param-transform"><span class="type-annotation"><a href="dart-core/MapEntry-class.html">MapEntry</a><span class="signature">&lt;<wbr><span class="type-parameter">K2</span>, <span class="type-parameter">V2</span>&gt;</span></span> <span class="parameter-name">transform</span>(<span class="parameter" id="transform-param-key"><span class="type-annotation">K</span> <span class="parameter-name">key</span>, </span> <span class="parameter" id="transform-param-value"><span class="type-annotation">V</span> <span class="parameter-name">value</span></span>)</span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter">K2</span>, <span class="type-parameter">V2</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a new map where all entries of this map are transformed by
+the given <code>f</code> function.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Invoked when a non-existent method or property is accessed. <a href="dart-core/Object/noSuchMethod.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="putIfAbsent" class="callable inherited">
+          <span class="name"><a href="dart-collection/UnmodifiableMapView/putIfAbsent.html">putIfAbsent</a></span><span class="signature">(<wbr><span class="parameter" id="putIfAbsent-param-key"><span class="type-annotation">K</span> <span class="parameter-name">key</span>, </span> <span class="parameter" id="putIfAbsent-param-ifAbsent"><span class="type-annotation">V</span> <span class="parameter-name">ifAbsent</span>()</span>)
+            <span class="returntype parameter">&#8594; V</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          This operation is not supported by an unmodifiable map.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="remove" class="callable inherited">
+          <span class="name"><a href="dart-collection/UnmodifiableMapView/remove.html">remove</a></span><span class="signature">(<wbr><span class="parameter" id="remove-param-key"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">key</span></span>)
+            <span class="returntype parameter">&#8594; V</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          This operation is not supported by an unmodifiable map.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="removeWhere" class="callable inherited">
+          <span class="name"><a href="dart-collection/MapView/removeWhere.html">removeWhere</a></span><span class="signature">(<wbr><span class="parameter" id="removeWhere-param-test"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">test</span>(<span class="parameter" id="test-param-key"><span class="type-annotation">K</span> <span class="parameter-name">key</span>, </span> <span class="parameter" id="test-param-value"><span class="type-annotation">V</span> <span class="parameter-name">value</span></span>)</span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Removes all entries of this map that satisfy the given <code>predicate</code>.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toString" class="callable inherited">
+          <span class="name"><a href="dart-collection/MapView/toString.html">toString</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a string representation of this object.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="update" class="callable inherited">
+          <span class="name"><a href="dart-collection/MapView/update.html">update</a></span><span class="signature">(<wbr><span class="parameter" id="update-param-key"><span class="type-annotation">K</span> <span class="parameter-name">key</span>, </span> <span class="parameter" id="update-param-update"><span class="type-annotation">V</span> <span class="parameter-name">update</span>(<span class="parameter" id="update-param-value"><span class="type-annotation">V</span> <span class="parameter-name">value</span></span>), {</span> <span class="parameter" id="update-param-ifAbsent"><span class="type-annotation">V</span> <span class="parameter-name">ifAbsent</span>()</span> })
+            <span class="returntype parameter">&#8594; V</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Updates the value for the provided <code>key</code>. <a href="dart-collection/MapView/update.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="updateAll" class="callable inherited">
+          <span class="name"><a href="dart-collection/MapView/updateAll.html">updateAll</a></span><span class="signature">(<wbr><span class="parameter" id="updateAll-param-update"><span class="type-annotation">V</span> <span class="parameter-name">update</span>(<span class="parameter" id="update-param-key"><span class="type-annotation">K</span> <span class="parameter-name">key</span>, </span> <span class="parameter" id="update-param-value"><span class="type-annotation">V</span> <span class="parameter-name">value</span></span>)</span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Updates all values. <a href="dart-collection/MapView/updateAll.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor inherited" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation">dynamic</span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          The equality operator. <a href="dart-core/Object/operator_equals.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="operator []" class="callable inherited">
+          <span class="name"><a href="dart-collection/MapView/operator_get.html">operator []</a></span><span class="signature">(<wbr><span class="parameter" id="[]-param-key"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">key</span></span>)
+            <span class="returntype parameter">&#8594; V</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns the value for the given <code>key</code> or null if <code>key</code> is not in the map. <a href="dart-collection/MapView/operator_get.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="operator []=" class="callable inherited">
+          <span class="name"><a href="dart-collection/UnmodifiableMapView/operator_put.html">operator []=</a></span><span class="signature">(<wbr><span class="parameter" id="[]=-param-key"><span class="type-annotation">K</span> <span class="parameter-name">key</span>, </span> <span class="parameter" id="[]=-param-value"><span class="type-annotation">V</span> <span class="parameter-name">value</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          This operation is not supported by an unmodifiable map.
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+
+
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <ol>
+      <li class="section-title"><a href="dart-collection/UnmodifiableMapView-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-collection/UnmodifiableMapView/UnmodifiableMapView.html">UnmodifiableMapView</a></li>
+    
+      <li class="section-title inherited">
+        <a href="dart-collection/UnmodifiableMapView-class.html#instance-properties">Properties</a>
+      </li>
+      <li class="inherited"><a href="dart-collection/MapView/entries.html">entries</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-collection/MapView/isEmpty.html">isEmpty</a></li>
+      <li class="inherited"><a href="dart-collection/MapView/isNotEmpty.html">isNotEmpty</a></li>
+      <li class="inherited"><a href="dart-collection/MapView/keys.html">keys</a></li>
+      <li class="inherited"><a href="dart-collection/MapView/length.html">length</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+      <li class="inherited"><a href="dart-collection/MapView/values.html">values</a></li>
+    
+      <li class="section-title"><a href="dart-collection/UnmodifiableMapView-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-collection/UnmodifiableMapView/cast.html">cast</a></li>
+      <li><a href="dart-collection/UnmodifiableMapView/retype.html">retype</a></li>
+      <li class="inherited"><a href="dart-collection/UnmodifiableMapView/addAll.html">addAll</a></li>
+      <li class="inherited"><a href="dart-collection/MapView/addEntries.html">addEntries</a></li>
+      <li class="inherited"><a href="dart-collection/UnmodifiableMapView/clear.html">clear</a></li>
+      <li class="inherited"><a href="dart-collection/MapView/containsKey.html">containsKey</a></li>
+      <li class="inherited"><a href="dart-collection/MapView/containsValue.html">containsValue</a></li>
+      <li class="inherited"><a href="dart-collection/MapView/forEach.html">forEach</a></li>
+      <li class="inherited"><a href="dart-collection/MapView/map.html">map</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-collection/UnmodifiableMapView/putIfAbsent.html">putIfAbsent</a></li>
+      <li class="inherited"><a href="dart-collection/UnmodifiableMapView/remove.html">remove</a></li>
+      <li class="inherited"><a href="dart-collection/MapView/removeWhere.html">removeWhere</a></li>
+      <li class="inherited"><a href="dart-collection/MapView/toString.html">toString</a></li>
+      <li class="inherited"><a href="dart-collection/MapView/update.html">update</a></li>
+      <li class="inherited"><a href="dart-collection/MapView/updateAll.html">updateAll</a></li>
+    
+      <li class="section-title inherited"><a href="dart-collection/UnmodifiableMapView-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+      <li class="inherited"><a href="dart-collection/MapView/operator_get.html">operator []</a></li>
+      <li class="inherited"><a href="dart-collection/UnmodifiableMapView/operator_put.html">operator []=</a></li>
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

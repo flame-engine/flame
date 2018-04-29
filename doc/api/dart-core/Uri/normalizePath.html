@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the normalizePath method from the Uri class, for the Dart programming language.">
+  <title>normalizePath method - Uri class - dart:core library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-core/dart-core-library.html">dart:core</a></li>
+    <li><a href="dart-core/Uri-class.html">Uri</a></li>
+    <li class="self-crumb">normalizePath abstract method</li>
+  </ol>
+  <div class="self-name">normalizePath</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>Uri class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-core/Uri-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-core/Uri/Uri.html">Uri</a></li>
+      <li><a href="dart-core/Uri/Uri.dataFromBytes.html">dataFromBytes</a></li>
+      <li><a href="dart-core/Uri/Uri.dataFromString.html">dataFromString</a></li>
+      <li><a href="dart-core/Uri/Uri.directory.html">directory</a></li>
+      <li><a href="dart-core/Uri/Uri.file.html">file</a></li>
+      <li><a href="dart-core/Uri/Uri.http.html">http</a></li>
+      <li><a href="dart-core/Uri/Uri.https.html">https</a></li>
+    
+      <li class="section-title">
+        <a href="dart-core/Uri-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-core/Uri/authority.html">authority</a></li>
+      <li><a href="dart-core/Uri/data.html">data</a></li>
+      <li><a href="dart-core/Uri/fragment.html">fragment</a></li>
+      <li><a href="dart-core/Uri/hasAbsolutePath.html">hasAbsolutePath</a></li>
+      <li><a href="dart-core/Uri/hasAuthority.html">hasAuthority</a></li>
+      <li><a href="dart-core/Uri/hasEmptyPath.html">hasEmptyPath</a></li>
+      <li><a href="dart-core/Uri/hasFragment.html">hasFragment</a></li>
+      <li><a href="dart-core/Uri/hashCode.html">hashCode</a></li>
+      <li><a href="dart-core/Uri/hasPort.html">hasPort</a></li>
+      <li><a href="dart-core/Uri/hasQuery.html">hasQuery</a></li>
+      <li><a href="dart-core/Uri/hasScheme.html">hasScheme</a></li>
+      <li><a href="dart-core/Uri/host.html">host</a></li>
+      <li><a href="dart-core/Uri/isAbsolute.html">isAbsolute</a></li>
+      <li><a href="dart-core/Uri/origin.html">origin</a></li>
+      <li><a href="dart-core/Uri/path.html">path</a></li>
+      <li><a href="dart-core/Uri/pathSegments.html">pathSegments</a></li>
+      <li><a href="dart-core/Uri/port.html">port</a></li>
+      <li><a href="dart-core/Uri/query.html">query</a></li>
+      <li><a href="dart-core/Uri/queryParameters.html">queryParameters</a></li>
+      <li><a href="dart-core/Uri/queryParametersAll.html">queryParametersAll</a></li>
+      <li><a href="dart-core/Uri/scheme.html">scheme</a></li>
+      <li><a href="dart-core/Uri/userInfo.html">userInfo</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-core/Uri-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-core/Uri/isScheme.html">isScheme</a></li>
+      <li><a href="dart-core/Uri/normalizePath.html">normalizePath</a></li>
+      <li><a href="dart-core/Uri/removeFragment.html">removeFragment</a></li>
+      <li><a href="dart-core/Uri/replace.html">replace</a></li>
+      <li><a href="dart-core/Uri/resolve.html">resolve</a></li>
+      <li><a href="dart-core/Uri/resolveUri.html">resolveUri</a></li>
+      <li><a href="dart-core/Uri/toFilePath.html">toFilePath</a></li>
+      <li><a href="dart-core/Uri/toString.html">toString</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    
+      <li class="section-title"><a href="dart-core/Uri-class.html#operators">Operators</a></li>
+      <li><a href="dart-core/Uri/operator_equals.html">operator ==</a></li>
+    
+      <li class="section-title"><a href="dart-core/Uri-class.html#static-properties">Static properties</a></li>
+      <li><a href="dart-core/Uri/base.html">base</a></li>
+    
+      <li class="section-title"><a href="dart-core/Uri-class.html#static-methods">Static methods</a></li>
+      <li><a href="dart-core/Uri/decodeComponent.html">decodeComponent</a></li>
+      <li><a href="dart-core/Uri/decodeFull.html">decodeFull</a></li>
+      <li><a href="dart-core/Uri/decodeQueryComponent.html">decodeQueryComponent</a></li>
+      <li><a href="dart-core/Uri/encodeComponent.html">encodeComponent</a></li>
+      <li><a href="dart-core/Uri/encodeFull.html">encodeFull</a></li>
+      <li><a href="dart-core/Uri/encodeQueryComponent.html">encodeQueryComponent</a></li>
+      <li><a href="dart-core/Uri/parse.html">parse</a></li>
+      <li><a href="dart-core/Uri/parseIPv4Address.html">parseIPv4Address</a></li>
+      <li><a href="dart-core/Uri/parseIPv6Address.html">parseIPv6Address</a></li>
+      <li><a href="dart-core/Uri/splitQueryString.html">splitQueryString</a></li>
+      <li><a href="dart-core/Uri/tryParse.html">tryParse</a></li>
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>normalizePath method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype"><a href="dart-core/Uri-class.html">Uri</a></span>
+      <span class="name ">normalizePath</span>
+(<wbr>)
+    </section>
+    <section class="desc markdown">
+      <p>Returns a URI where the path has been normalized.</p>
+<p>A normalized path does not contain <code>.</code> segments or non-leading <code>..</code>
+segments.
+Only a relative path with no scheme or authority may contain
+leading <code>..</code> segments,
+a path that starts with <code>/</code> will also drop any leading <code>..</code> segments.</p>
+<p>This uses the same normalization strategy as <code>new Uri().resolve(this)</code>.</p>
+<p>Does not change any part of the URI except the path.</p>
+<p>The default implementation of <code>Uri</code> always normalizes paths, so calling
+this function has no effect.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">Uri normalizePath();</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

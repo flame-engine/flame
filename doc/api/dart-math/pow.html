@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the pow function from the dart:math library, for the Dart programming language.">
+  <title>pow function - dart:math library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-math/dart-math-library.html">dart:math</a></li>
+    <li class="self-crumb">pow function</li>
+  </ol>
+  <div class="self-name">pow</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>dart:math library</h5>
+    <ol>
+      <li class="section-title"><a href="dart-math/dart-math-library.html#classes">Classes</a></li>
+      <li><a href="dart-math/MutableRectangle-class.html">MutableRectangle</a></li>
+      <li><a href="dart-math/Point-class.html">Point</a></li>
+      <li><a href="dart-math/Random-class.html">Random</a></li>
+      <li><a href="dart-math/Rectangle-class.html">Rectangle</a></li>
+    
+      <li class="section-title"><a href="dart-math/dart-math-library.html#constants">Constants</a></li>
+      <li><a class="deprecated" href="dart-math/E-constant.html">E</a></li>
+      <li><a href="dart-math/e-constant.html">e</a></li>
+      <li><a class="deprecated" href="dart-math/LN2-constant.html">LN2</a></li>
+      <li><a href="dart-math/ln2-constant.html">ln2</a></li>
+      <li><a class="deprecated" href="dart-math/LN10-constant.html">LN10</a></li>
+      <li><a href="dart-math/ln10-constant.html">ln10</a></li>
+      <li><a class="deprecated" href="dart-math/LOG2E-constant.html">LOG2E</a></li>
+      <li><a href="dart-math/log2e-constant.html">log2e</a></li>
+      <li><a class="deprecated" href="dart-math/LOG10E-constant.html">LOG10E</a></li>
+      <li><a href="dart-math/log10e-constant.html">log10e</a></li>
+      <li><a class="deprecated" href="dart-math/PI-constant.html">PI</a></li>
+      <li><a href="dart-math/pi-constant.html">pi</a></li>
+      <li><a class="deprecated" href="dart-math/SQRT1_2-constant.html">SQRT1_2</a></li>
+      <li><a href="dart-math/sqrt1_2-constant.html">sqrt1_2</a></li>
+      <li><a class="deprecated" href="dart-math/SQRT2-constant.html">SQRT2</a></li>
+      <li><a href="dart-math/sqrt2-constant.html">sqrt2</a></li>
+    
+    
+      <li class="section-title"><a href="dart-math/dart-math-library.html#functions">Functions</a></li>
+      <li><a href="dart-math/acos.html">acos</a></li>
+      <li><a href="dart-math/asin.html">asin</a></li>
+      <li><a href="dart-math/atan.html">atan</a></li>
+      <li><a href="dart-math/atan2.html">atan2</a></li>
+      <li><a href="dart-math/cos.html">cos</a></li>
+      <li><a href="dart-math/exp.html">exp</a></li>
+      <li><a href="dart-math/log.html">log</a></li>
+      <li><a href="dart-math/max.html">max</a></li>
+      <li><a href="dart-math/min.html">min</a></li>
+      <li><a href="dart-math/pow.html">pow</a></li>
+      <li><a href="dart-math/sin.html">sin</a></li>
+      <li><a href="dart-math/sqrt.html">sqrt</a></li>
+      <li><a href="dart-math/tan.html">tan</a></li>
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-left-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>pow function</h1>
+
+    <section class="multi-line-signature">
+        <span class="returntype"><a href="dart-core/num-class.html">num</a></span>
+        <span class="name ">pow</span>
+(<wbr><span class="parameter" id="pow-param-x"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">x</span>, </span> <span class="parameter" id="pow-param-exponent"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">exponent</span></span>)
+    </section>
+    <section class="desc markdown">
+      <p>Returns <code>x</code> to the power of <code>exponent</code>.</p>
+<p>If <code>x</code> is an <a href="dart-core/int-class.html">int</a> and <code>exponent</code> is a non-negative <a href="dart-core/int-class.html">int</a>, the result is
+an <a href="dart-core/int-class.html">int</a>, otherwise both arguments are converted to doubles first, and the
+result is a <a href="dart-core/double-class.html">double</a>.</p>
+<p>For integers, the power is always equal to the mathematical result of <code>x</code> to
+the power <code>exponent</code>, only limited by the available memory.</p>
+<p>For doubles, <code>pow(x, y)</code> handles edge cases as follows:</p><ul><li>if <code>y</code> is zero (0.0 or -0.0), the result is always 1.0.</li><li>if <code>x</code> is 1.0, the result is always 1.0.</li><li>otherwise, if either <code>x</code> or <code>y</code> is NaN then the result is NaN.</li><li>if <code>x</code> is negative (but not -0.0) and <code>y</code> is a finite non-integer, the
+result is NaN.</li><li>if <code>x</code> is Infinity and <code>y</code> is negative, the result is 0.0.</li><li>if <code>x</code> is Infinity and <code>y</code> is positive, the result is Infinity.</li><li>if <code>x</code> is 0.0 and <code>y</code> is negative, the result is Infinity.</li><li>if <code>x</code> is 0.0 and <code>y</code> is positive, the result is 0.0.</li><li>if <code>x</code> is -Infinity or -0.0 and <code>y</code> is an odd integer, then the result is
+<code>-pow(-x ,y)</code>.</li><li>if <code>x</code> is -Infinity or -0.0 and <code>y</code> is not an odd integer, then the result
+is the same as <code>pow(-x , y)</code>.</li><li>if <code>y</code> is Infinity and the absolute value of <code>x</code> is less than 1, the
+result is 0.0.</li><li>if <code>y</code> is Infinity and <code>x</code> is -1, the result is 1.0.</li><li>if <code>y</code> is Infinity and the absolute value of <code>x</code> is greater than 1,
+the result is Infinity.</li><li>if <code>y</code> is -Infinity, the result is <code>1/pow(x, Infinity)</code>.</li></ul>
+<p>This corresponds to the <code>pow</code> function defined in the IEEE Standard 754-2008.</p>
+<p>Notice that an <a href="dart-core/int-class.html">int</a> result cannot overflow, but a <a href="dart-core/double-class.html">double</a> result might
+be <a href="dart-core/double/infinity-constant.html">double.infinity</a>.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">external num pow(num x, num exponent);</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

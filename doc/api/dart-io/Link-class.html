@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the Link class from the dart:io library, for the Dart programming language.">
+  <title>Link class - dart:io library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-io/dart-io-library.html">dart:io</a></li>
+    <li class="self-crumb">Link abstract class</li>
+  </ol>
+  <div class="self-name">Link</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>dart:io library</h5>
+    <ol>
+      <li class="section-title"><a href="dart-io/dart-io-library.html#classes">Classes</a></li>
+      <li><a href="dart-io/BytesBuilder-class.html">BytesBuilder</a></li>
+      <li><a href="dart-io/CompressionOptions-class.html">CompressionOptions</a></li>
+      <li><a href="dart-io/ContentType-class.html">ContentType</a></li>
+      <li><a href="dart-io/Cookie-class.html">Cookie</a></li>
+      <li><a href="dart-io/Datagram-class.html">Datagram</a></li>
+      <li><a href="dart-io/DetachedSocket-class.html">DetachedSocket</a></li>
+      <li><a href="dart-io/Directory-class.html">Directory</a></li>
+      <li><a href="dart-io/File-class.html">File</a></li>
+      <li><a href="dart-io/FileMode-class.html">FileMode</a></li>
+      <li><a href="dart-io/FileStat-class.html">FileStat</a></li>
+      <li><a href="dart-io/FileSystemCreateEvent-class.html">FileSystemCreateEvent</a></li>
+      <li><a href="dart-io/FileSystemDeleteEvent-class.html">FileSystemDeleteEvent</a></li>
+      <li><a href="dart-io/FileSystemEntity-class.html">FileSystemEntity</a></li>
+      <li><a href="dart-io/FileSystemEntityType-class.html">FileSystemEntityType</a></li>
+      <li><a href="dart-io/FileSystemEvent-class.html">FileSystemEvent</a></li>
+      <li><a href="dart-io/FileSystemModifyEvent-class.html">FileSystemModifyEvent</a></li>
+      <li><a href="dart-io/FileSystemMoveEvent-class.html">FileSystemMoveEvent</a></li>
+      <li><a href="dart-io/GZipCodec-class.html">GZipCodec</a></li>
+      <li><a href="dart-io/HeaderValue-class.html">HeaderValue</a></li>
+      <li><a href="dart-io/HttpClient-class.html">HttpClient</a></li>
+      <li><a href="dart-io/HttpClientBasicCredentials-class.html">HttpClientBasicCredentials</a></li>
+      <li><a href="dart-io/HttpClientCredentials-class.html">HttpClientCredentials</a></li>
+      <li><a href="dart-io/HttpClientDigestCredentials-class.html">HttpClientDigestCredentials</a></li>
+      <li><a href="dart-io/HttpClientRequest-class.html">HttpClientRequest</a></li>
+      <li><a href="dart-io/HttpClientResponse-class.html">HttpClientResponse</a></li>
+      <li><a href="dart-io/HttpConnectionInfo-class.html">HttpConnectionInfo</a></li>
+      <li><a href="dart-io/HttpConnectionsInfo-class.html">HttpConnectionsInfo</a></li>
+      <li><a href="dart-io/HttpDate-class.html">HttpDate</a></li>
+      <li><a href="dart-io/HttpHeaders-class.html">HttpHeaders</a></li>
+      <li><a href="dart-io/HttpOverrides-class.html">HttpOverrides</a></li>
+      <li><a href="dart-io/HttpRequest-class.html">HttpRequest</a></li>
+      <li><a href="dart-io/HttpResponse-class.html">HttpResponse</a></li>
+      <li><a href="dart-io/HttpServer-class.html">HttpServer</a></li>
+      <li><a href="dart-io/HttpSession-class.html">HttpSession</a></li>
+      <li><a href="dart-io/HttpStatus-class.html">HttpStatus</a></li>
+      <li><a href="dart-io/InternetAddress-class.html">InternetAddress</a></li>
+      <li><a href="dart-io/InternetAddressType-class.html">InternetAddressType</a></li>
+      <li><a href="dart-io/IOOverrides-class.html">IOOverrides</a></li>
+      <li><a href="dart-io/IOSink-class.html">IOSink</a></li>
+      <li><a href="dart-io/Link-class.html">Link</a></li>
+      <li><a href="dart-io/NetworkInterface-class.html">NetworkInterface</a></li>
+      <li><a href="dart-io/OSError-class.html">OSError</a></li>
+      <li><a href="dart-io/Platform-class.html">Platform</a></li>
+      <li><a href="dart-io/Process-class.html">Process</a></li>
+      <li><a href="dart-io/ProcessInfo-class.html">ProcessInfo</a></li>
+      <li><a href="dart-io/ProcessResult-class.html">ProcessResult</a></li>
+      <li><a href="dart-io/ProcessSignal-class.html">ProcessSignal</a></li>
+      <li><a href="dart-io/RandomAccessFile-class.html">RandomAccessFile</a></li>
+      <li><a href="dart-io/RawDatagramSocket-class.html">RawDatagramSocket</a></li>
+      <li><a href="dart-io/RawSecureServerSocket-class.html">RawSecureServerSocket</a></li>
+      <li><a href="dart-io/RawSecureSocket-class.html">RawSecureSocket</a></li>
+      <li><a href="dart-io/RawServerSocket-class.html">RawServerSocket</a></li>
+      <li><a href="dart-io/RawSocket-class.html">RawSocket</a></li>
+      <li><a href="dart-io/RawSocketEvent-class.html">RawSocketEvent</a></li>
+      <li><a href="dart-io/RawSynchronousSocket-class.html">RawSynchronousSocket</a></li>
+      <li><a href="dart-io/RawZLibFilter-class.html">RawZLibFilter</a></li>
+      <li><a href="dart-io/RedirectInfo-class.html">RedirectInfo</a></li>
+      <li><a href="dart-io/SecureServerSocket-class.html">SecureServerSocket</a></li>
+      <li><a href="dart-io/SecureSocket-class.html">SecureSocket</a></li>
+      <li><a href="dart-io/SecurityContext-class.html">SecurityContext</a></li>
+      <li><a href="dart-io/ServerSocket-class.html">ServerSocket</a></li>
+      <li><a href="dart-io/Socket-class.html">Socket</a></li>
+      <li><a href="dart-io/SocketDirection-class.html">SocketDirection</a></li>
+      <li><a href="dart-io/SocketOption-class.html">SocketOption</a></li>
+      <li><a href="dart-io/Stdin-class.html">Stdin</a></li>
+      <li><a href="dart-io/StdioType-class.html">StdioType</a></li>
+      <li><a href="dart-io/Stdout-class.html">Stdout</a></li>
+      <li><a href="dart-io/SystemEncoding-class.html">SystemEncoding</a></li>
+      <li><a href="dart-io/WebSocket-class.html">WebSocket</a></li>
+      <li><a href="dart-io/WebSocketStatus-class.html">WebSocketStatus</a></li>
+      <li><a href="dart-io/WebSocketTransformer-class.html">WebSocketTransformer</a></li>
+      <li><a href="dart-io/X509Certificate-class.html">X509Certificate</a></li>
+      <li><a href="dart-io/ZLibCodec-class.html">ZLibCodec</a></li>
+      <li><a href="dart-io/ZLibDecoder-class.html">ZLibDecoder</a></li>
+      <li><a href="dart-io/ZLibEncoder-class.html">ZLibEncoder</a></li>
+      <li><a href="dart-io/ZLibOption-class.html">ZLibOption</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#constants">Constants</a></li>
+      <li><a href="dart-io/APPEND-constant.html">APPEND</a></li>
+      <li><a href="dart-io/GZIP-constant.html">GZIP</a></li>
+      <li><a href="dart-io/READ-constant.html">READ</a></li>
+      <li><a href="dart-io/SYSTEM_ENCODING-constant.html">SYSTEM_ENCODING</a></li>
+      <li><a href="dart-io/WRITE-constant.html">WRITE</a></li>
+      <li><a href="dart-io/WRITE_ONLY-constant.html">WRITE_ONLY</a></li>
+      <li><a href="dart-io/WRITE_ONLY_APPEND-constant.html">WRITE_ONLY_APPEND</a></li>
+      <li><a href="dart-io/ZLIB-constant.html">ZLIB</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#properties">Properties</a></li>
+      <li><a href="dart-io/exitCode.html">exitCode</a></li>
+      <li><a href="dart-io/pid.html">pid</a></li>
+      <li><a href="dart-io/stderr.html">stderr</a></li>
+      <li><a href="dart-io/stdin.html">stdin</a></li>
+      <li><a href="dart-io/stdout.html">stdout</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#functions">Functions</a></li>
+      <li><a href="dart-io/exit.html">exit</a></li>
+      <li><a href="dart-io/sleep.html">sleep</a></li>
+      <li><a href="dart-io/stdioType.html">stdioType</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#enums">Enums</a></li>
+      <li><a href="dart-io/FileLock-class.html">FileLock</a></li>
+      <li><a href="dart-io/ProcessStartMode-class.html">ProcessStartMode</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#typedefs">Typedefs</a></li>
+      <li><a href="dart-io/BadCertificateCallback.html">BadCertificateCallback</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#exceptions">Exceptions</a></li>
+      <li><a href="dart-io/CertificateException-class.html">CertificateException</a></li>
+      <li><a href="dart-io/FileSystemException-class.html">FileSystemException</a></li>
+      <li><a href="dart-io/HandshakeException-class.html">HandshakeException</a></li>
+      <li><a href="dart-io/HttpException-class.html">HttpException</a></li>
+      <li><a href="dart-io/IOException-class.html">IOException</a></li>
+      <li><a href="dart-io/ProcessException-class.html">ProcessException</a></li>
+      <li><a href="dart-io/RedirectException-class.html">RedirectException</a></li>
+      <li><a href="dart-io/SignalException-class.html">SignalException</a></li>
+      <li><a href="dart-io/SocketException-class.html">SocketException</a></li>
+      <li><a href="dart-io/StdinException-class.html">StdinException</a></li>
+      <li><a href="dart-io/StdoutException-class.html">StdoutException</a></li>
+      <li><a href="dart-io/TlsException-class.html">TlsException</a></li>
+      <li><a href="dart-io/WebSocketException-class.html">WebSocketException</a></li>
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>Link class</h1>
+
+    <section class="desc markdown">
+      <p><a href="dart-io/Link-class.html">Link</a> objects are references to filesystem links.</p>
+    </section>
+    
+    <section>
+      <dl class="dl-horizontal">
+
+        <dt>Implements</dt>
+        <dd>
+          <ul class="comma-separated clazz-relationships">
+            <li><a href="dart-io/FileSystemEntity-class.html">FileSystemEntity</a></li>
+          </ul>
+        </dd>
+
+
+
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="constructors">
+      <h2>Constructors</h2>
+
+      <dl class="constructor-summary-list">
+        <dt id="Link" class="callable">
+          <span class="name"><a href="dart-io/Link/Link.html">Link</a></span><span class="signature">(<span class="parameter" id="-param-path"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span></span>)</span>
+        </dt>
+        <dd>
+          Creates a Link object.
+          <div class="constructor-modifier features">factory</div>
+        </dd>
+        <dt id="Link.fromUri" class="callable">
+          <span class="name"><a href="dart-io/Link/Link.fromUri.html">Link.fromUri</a></span><span class="signature">(<span class="parameter" id="fromUri-param-uri"><span class="type-annotation"><a href="dart-core/Uri-class.html">Uri</a></span> <span class="parameter-name">uri</span></span>)</span>
+        </dt>
+        <dd>
+          Creates a <a href="dart-io/Link-class.html">Link</a> object. <a href="dart-io/Link/Link.fromUri.html">[...]</a>
+          <div class="constructor-modifier features">factory</div>
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="absolute" class="property">
+          <span class="name"><a href="dart-io/Link/absolute.html">absolute</a></span>
+          <span class="signature">&#8594; <a href="dart-io/Link-class.html">Link</a></span>
+        </dt>
+        <dd>
+          Returns a <a href="dart-io/Link-class.html">Link</a> instance whose path is the absolute path to <a href="dart-io/Link-class.html">this</a>. <a href="dart-io/Link/absolute.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="hashCode" class="property inherited">
+          <span class="name"><a href="dart-core/Object/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd class="inherited">
+          The hash code for this object. <a href="dart-core/Object/hashCode.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="isAbsolute" class="property inherited">
+          <span class="name"><a href="dart-io/FileSystemEntity/isAbsolute.html">isAbsolute</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          Returns a <a href="dart-core/bool-class.html">bool</a> indicating whether this object's path is absolute. <a href="dart-io/FileSystemEntity/isAbsolute.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="parent" class="property inherited">
+          <span class="name"><a href="dart-io/FileSystemEntity/parent.html">parent</a></span>
+          <span class="signature">&#8594; <a href="dart-io/Directory-class.html">Directory</a></span>
+        </dt>
+        <dd class="inherited">
+          The directory containing <a href="dart-io/Link-class.html">this</a>.
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="path" class="property inherited">
+          <span class="name"><a href="dart-io/FileSystemEntity/path.html">path</a></span>
+          <span class="signature">&#8594; <a href="dart-core/String-class.html">String</a></span>
+        </dt>
+        <dd class="inherited">
+          
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a href="dart-core/Object/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; <a href="dart-core/Type-class.html">Type</a></span>
+        </dt>
+        <dd class="inherited">
+          A representation of the runtime type of the object.
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="uri" class="property inherited">
+          <span class="name"><a href="dart-io/FileSystemEntity/uri.html">uri</a></span>
+          <span class="signature">&#8594; <a href="dart-core/Uri-class.html">Uri</a></span>
+        </dt>
+        <dd class="inherited">
+          Returns a <a href="dart-core/Uri-class.html">Uri</a> representing the file system entity's location. <a href="dart-io/FileSystemEntity/uri.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="create" class="callable">
+          <span class="name"><a href="dart-io/Link/create.html">create</a></span><span class="signature">(<wbr><span class="parameter" id="create-param-target"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">target</span>, {</span> <span class="parameter" id="create-param-recursive"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">recursive</span>: <span class="default-value">false</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-io/Link-class.html">Link</a></span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Creates a symbolic link. Returns a <code>Future&lt;Link&gt;</code> that completes with
+the link when it has been created. If the link exists,
+the future will complete with an error. <a href="dart-io/Link/create.html">[...]</a>
+          
+</dd>
+        <dt id="createSync" class="callable">
+          <span class="name"><a href="dart-io/Link/createSync.html">createSync</a></span><span class="signature">(<wbr><span class="parameter" id="createSync-param-target"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">target</span>, {</span> <span class="parameter" id="createSync-param-recursive"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">recursive</span>: <span class="default-value">false</span></span> })
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Synchronously create the link. Calling <a href="dart-io/Link/createSync.html">createSync</a> on an existing link
+will throw an exception. <a href="dart-io/Link/createSync.html">[...]</a>
+          
+</dd>
+        <dt id="rename" class="callable">
+          <span class="name"><a href="dart-io/Link/rename.html">rename</a></span><span class="signature">(<wbr><span class="parameter" id="rename-param-newPath"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">newPath</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-io/Link-class.html">Link</a></span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Renames this link. Returns a <code>Future&lt;Link&gt;</code> that completes
+with a <a href="dart-io/Link-class.html">Link</a> instance for the renamed link. <a href="dart-io/Link/rename.html">[...]</a>
+          
+</dd>
+        <dt id="renameSync" class="callable">
+          <span class="name"><a href="dart-io/Link/renameSync.html">renameSync</a></span><span class="signature">(<wbr><span class="parameter" id="renameSync-param-newPath"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">newPath</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-io/Link-class.html">Link</a></span>
+          </span>
+        </dt>
+        <dd>
+          Synchronously renames this link. Returns a <a href="dart-io/Link-class.html">Link</a>
+instance for the renamed link. <a href="dart-io/Link/renameSync.html">[...]</a>
+          
+</dd>
+        <dt id="resolveSymbolicLinks" class="callable">
+          <span class="name"><a href="dart-io/Link/resolveSymbolicLinks.html">resolveSymbolicLinks</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/String-class.html">String</a></span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Resolves the path of a file system object relative to the
+current working directory. <a href="dart-io/Link/resolveSymbolicLinks.html">[...]</a>
+          
+</dd>
+        <dt id="resolveSymbolicLinksSync" class="callable">
+          <span class="name"><a href="dart-io/Link/resolveSymbolicLinksSync.html">resolveSymbolicLinksSync</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd>
+          Resolves the path of a file system object relative to the
+current working directory. <a href="dart-io/Link/resolveSymbolicLinksSync.html">[...]</a>
+          
+</dd>
+        <dt id="target" class="callable">
+          <span class="name"><a href="dart-io/Link/target.html">target</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/String-class.html">String</a></span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Gets the target of the link. Returns a future that completes with
+the path to the target. <a href="dart-io/Link/target.html">[...]</a>
+          
+</dd>
+        <dt id="targetSync" class="callable">
+          <span class="name"><a href="dart-io/Link/targetSync.html">targetSync</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd>
+          Synchronously gets the target of the link. Returns the path to the target. <a href="dart-io/Link/targetSync.html">[...]</a>
+          
+</dd>
+        <dt id="update" class="callable">
+          <span class="name"><a href="dart-io/Link/update.html">update</a></span><span class="signature">(<wbr><span class="parameter" id="update-param-target"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">target</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-io/Link-class.html">Link</a></span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Updates the link. Returns a <code>Future&lt;Link&gt;</code> that completes with the
+link when it has been updated.  Calling <a href="dart-io/Link/update.html">update</a> on a non-existing link
+will complete its returned future with an exception. <a href="dart-io/Link/update.html">[...]</a>
+          
+</dd>
+        <dt id="updateSync" class="callable">
+          <span class="name"><a href="dart-io/Link/updateSync.html">updateSync</a></span><span class="signature">(<wbr><span class="parameter" id="updateSync-param-target"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">target</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Synchronously updates the link. Calling <a href="dart-io/Link/updateSync.html">updateSync</a> on a non-existing link
+will throw an exception. <a href="dart-io/Link/updateSync.html">[...]</a>
+          
+</dd>
+        <dt id="delete" class="callable inherited">
+          <span class="name"><a href="dart-io/FileSystemEntity/delete.html">delete</a></span><span class="signature">(<wbr>{<span class="parameter" id="delete-param-recursive"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">recursive</span>: <span class="default-value">false</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-io/FileSystemEntity-class.html">FileSystemEntity</a></span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Deletes this <a href="dart-io/FileSystemEntity-class.html">FileSystemEntity</a>. <a href="dart-io/FileSystemEntity/delete.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="deleteSync" class="callable inherited">
+          <span class="name"><a href="dart-io/FileSystemEntity/deleteSync.html">deleteSync</a></span><span class="signature">(<wbr>{<span class="parameter" id="deleteSync-param-recursive"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">recursive</span>: <span class="default-value">false</span></span> })
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Synchronously deletes this <a href="dart-io/FileSystemEntity-class.html">FileSystemEntity</a>. <a href="dart-io/FileSystemEntity/deleteSync.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="exists" class="callable inherited">
+          <span class="name"><a href="dart-io/FileSystemEntity/exists.html">exists</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Checks whether the file system entity with this path exists. Returns
+a <code>Future&lt;bool&gt;</code> that completes with the result. <a href="dart-io/FileSystemEntity/exists.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="existsSync" class="callable inherited">
+          <span class="name"><a href="dart-io/FileSystemEntity/existsSync.html">existsSync</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Synchronously checks whether the file system entity with this path
+exists. <a href="dart-io/FileSystemEntity/existsSync.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Invoked when a non-existent method or property is accessed. <a href="dart-core/Object/noSuchMethod.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="stat" class="callable inherited">
+          <span class="name"><a href="dart-io/FileSystemEntity/stat.html">stat</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-io/FileStat-class.html">FileStat</a></span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Calls the operating system's stat() function on the <a href="dart-io/FileSystemEntity/path.html">path</a> of this
+<a href="dart-io/FileSystemEntity-class.html">FileSystemEntity</a>. <a href="dart-io/FileSystemEntity/stat.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="statSync" class="callable inherited">
+          <span class="name"><a href="dart-io/FileSystemEntity/statSync.html">statSync</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-io/FileStat-class.html">FileStat</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Synchronously calls the operating system's stat() function on the
+<a href="dart-io/FileSystemEntity/path.html">path</a> of this <a href="dart-io/FileSystemEntity-class.html">FileSystemEntity</a>. <a href="dart-io/FileSystemEntity/statSync.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toString" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a string representation of this object.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="watch" class="callable inherited">
+          <span class="name"><a href="dart-io/FileSystemEntity/watch.html">watch</a></span><span class="signature">(<wbr>{<span class="parameter" id="watch-param-events"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">events</span>: <span class="default-value">FileSystemEvent.ALL</span>, </span> <span class="parameter" id="watch-param-recursive"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">recursive</span>: <span class="default-value">false</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-async/Stream-class.html">Stream</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-io/FileSystemEvent-class.html">FileSystemEvent</a></span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Start watching the <a href="dart-io/FileSystemEntity-class.html">FileSystemEntity</a> for changes. <a href="dart-io/FileSystemEntity/watch.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor inherited" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation">dynamic</span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          The equality operator. <a href="dart-core/Object/operator_equals.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+
+
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <ol>
+      <li class="section-title"><a href="dart-io/Link-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-io/Link/Link.html">Link</a></li>
+      <li><a href="dart-io/Link/Link.fromUri.html">fromUri</a></li>
+    
+      <li class="section-title">
+        <a href="dart-io/Link-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-io/Link/absolute.html">absolute</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/isAbsolute.html">isAbsolute</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/parent.html">parent</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/path.html">path</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/uri.html">uri</a></li>
+    
+      <li class="section-title"><a href="dart-io/Link-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-io/Link/create.html">create</a></li>
+      <li><a href="dart-io/Link/createSync.html">createSync</a></li>
+      <li><a href="dart-io/Link/rename.html">rename</a></li>
+      <li><a href="dart-io/Link/renameSync.html">renameSync</a></li>
+      <li><a href="dart-io/Link/resolveSymbolicLinks.html">resolveSymbolicLinks</a></li>
+      <li><a href="dart-io/Link/resolveSymbolicLinksSync.html">resolveSymbolicLinksSync</a></li>
+      <li><a href="dart-io/Link/target.html">target</a></li>
+      <li><a href="dart-io/Link/targetSync.html">targetSync</a></li>
+      <li><a href="dart-io/Link/update.html">update</a></li>
+      <li><a href="dart-io/Link/updateSync.html">updateSync</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/delete.html">delete</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/deleteSync.html">deleteSync</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/exists.html">exists</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/existsSync.html">existsSync</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/stat.html">stat</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/statSync.html">statSync</a></li>
+      <li class="inherited"><a href="dart-core/Object/toString.html">toString</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/watch.html">watch</a></li>
+    
+      <li class="section-title inherited"><a href="dart-io/Link-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

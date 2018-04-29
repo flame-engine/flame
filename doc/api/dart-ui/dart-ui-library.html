@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="dart:ui library API docs, for the Dart programming language.">
+  <title>dart:ui library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li class="self-crumb">dart:ui library</li>
+  </ol>
+  <div class="self-name">dart:ui</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5><span class="package-name">flame</span> <span class="package-kind">package</span></h5>
+    <ol>
+          <li class="section-title">Libraries</li>
+          <li><a href="animation/animation-library.html">animation</a></li>
+          <li><a href="components_animation_component/components_animation_component-library.html">animation_component</a></li>
+          <li><a href="audio/audio-library.html">audio</a></li>
+          <li><a href="box2d_box2d_component/box2d_box2d_component-library.html">box2d_component</a></li>
+          <li><a href="components_component/components_component-library.html">component</a></li>
+          <li><a href="flame/flame-library.html">flame</a></li>
+          <li><a href="game/game-library.html">game</a></li>
+          <li><a href="images/images-library.html">images</a></li>
+          <li><a href="components_parallax_component/components_parallax_component-library.html">parallax_component</a></li>
+          <li><a href="position/position-library.html">position</a></li>
+          <li><a href="sprite/sprite-library.html">sprite</a></li>
+          <li><a href="util/util-library.html">util</a></li>
+          <li><a href="box2d_viewport/box2d_viewport-library.html">viewport</a></li>
+          <li class="section-title">Dart</li>
+          <li><a href="dart-async/dart-async-library.html">dart:async</a></li>
+          <li><a href="dart-collection/dart-collection-library.html">dart:collection</a></li>
+          <li><a href="dart-convert/dart-convert-library.html">dart:convert</a></li>
+          <li><a href="dart-core/dart-core-library.html">dart:core</a></li>
+          <li><a href="dart-developer/dart-developer-library.html">dart:developer</a></li>
+          <li><a href="dart-math/dart-math-library.html">dart:math</a></li>
+          <li><a href="dart-typed_data/dart-typed_data-library.html">dart:typed_data</a></li>
+          <li><a href="dart-ui/dart-ui-library.html">dart:ui</a></li>
+          <li class="section-subtitle">VM</li>
+            <li class="section-subitem"><a href="dart-io/dart-io-library.html">dart:io</a></li>
+            <li class="section-subitem"><a href="dart-isolate/dart-isolate-library.html">dart:isolate</a></li>
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>dart:ui library</h1>
+
+    <section class="desc markdown">
+      <p>Built-in types and core primitives for a Flutter application.</p>
+<p>To use, import <code>dart:ui</code>.</p>
+<p>This library exposes the lowest-level services that Flutter frameworks use
+to bootstrap applications, such as classes for driving the input, graphics
+text, layout, and rendering subsystems.</p>
+    </section>
+    
+    <section class="summary offset-anchor" id="classes">
+      <h2>Classes</h2>
+
+      <dl>
+        <dt id="Canvas">
+          <span class="name "><a href="dart-ui/Canvas-class.html">Canvas</a></span>
+        </dt>
+        <dd>
+          An interface for recording graphical operations. <a href="dart-ui/Canvas-class.html">[...]</a>
+        </dd>
+        <dt id="Codec">
+          <span class="name "><a href="dart-ui/Codec-class.html">Codec</a></span>
+        </dt>
+        <dd>
+          A handle to an image codec.
+        </dd>
+        <dt id="Color">
+          <span class="name "><a href="dart-ui/Color-class.html">Color</a></span>
+        </dt>
+        <dd>
+          An immutable 32 bit color value in ARGB format. <a href="dart-ui/Color-class.html">[...]</a>
+        </dd>
+        <dt id="ColorFilter">
+          <span class="name "><a href="dart-ui/ColorFilter-class.html">ColorFilter</a></span>
+        </dt>
+        <dd>
+          A description of a color filter to apply when drawing a shape or compositing
+a layer with a particular <a href="dart-ui/Paint-class.html">Paint</a>. A color filter is a function that takes
+two colors, and outputs one color. When applied during compositing, it is
+independently applied to each pixel of the layer being drawn before the
+entire layer is merged with the destination. <a href="dart-ui/ColorFilter-class.html">[...]</a>
+        </dd>
+        <dt id="FontWeight">
+          <span class="name "><a href="dart-ui/FontWeight-class.html">FontWeight</a></span>
+        </dt>
+        <dd>
+          The thickness of the glyphs used to draw the text
+        </dd>
+        <dt id="FrameInfo">
+          <span class="name "><a href="dart-ui/FrameInfo-class.html">FrameInfo</a></span>
+        </dt>
+        <dd>
+          Information for a single frame of an animation. <a href="dart-ui/FrameInfo-class.html">[...]</a>
+        </dd>
+        <dt id="Gradient">
+          <span class="name "><a href="dart-ui/Gradient-class.html">Gradient</a></span>
+        </dt>
+        <dd>
+          A shader (as used by <a href="dart-ui/Paint/shader.html">Paint.shader</a>) that renders a color gradient. <a href="dart-ui/Gradient-class.html">[...]</a>
+        </dd>
+        <dt id="Image">
+          <span class="name "><a href="dart-ui/Image-class.html">Image</a></span>
+        </dt>
+        <dd>
+          Opaque handle to raw decoded image data (pixels). <a href="dart-ui/Image-class.html">[...]</a>
+        </dd>
+        <dt id="ImageFilter">
+          <span class="name "><a href="dart-ui/ImageFilter-class.html">ImageFilter</a></span>
+        </dt>
+        <dd>
+          A filter operation to apply to a raster image. <a href="dart-ui/ImageFilter-class.html">[...]</a>
+        </dd>
+        <dt id="ImageShader">
+          <span class="name "><a href="dart-ui/ImageShader-class.html">ImageShader</a></span>
+        </dt>
+        <dd>
+          A shader (as used by <a href="dart-ui/Paint/shader.html">Paint.shader</a>) that tiles an image.
+        </dd>
+        <dt id="Locale">
+          <span class="name "><a href="dart-ui/Locale-class.html">Locale</a></span>
+        </dt>
+        <dd>
+          An identifier used to select a user's language and formatting preferences,
+consisting of a language and a country. This is a subset of locale
+identifiers as defined by BCP 47. <a href="dart-ui/Locale-class.html">[...]</a>
+        </dd>
+        <dt id="MaskFilter">
+          <span class="name "><a href="dart-ui/MaskFilter-class.html">MaskFilter</a></span>
+        </dt>
+        <dd>
+          A mask filter to apply to shapes as they are painted. A mask filter is a
+function that takes a bitmap of color pixels, and returns another bitmap of
+color pixels. <a href="dart-ui/MaskFilter-class.html">[...]</a>
+        </dd>
+        <dt id="Offset">
+          <span class="name "><a href="dart-ui/Offset-class.html">Offset</a></span>
+        </dt>
+        <dd>
+          An immutable 2D floating-point offset. <a href="dart-ui/Offset-class.html">[...]</a>
+        </dd>
+        <dt id="OffsetBase">
+          <span class="name "><a href="dart-ui/OffsetBase-class.html">OffsetBase</a></span>
+        </dt>
+        <dd>
+          Base class for <a href="dart-ui/Size-class.html">Size</a> and <a href="dart-ui/Offset-class.html">Offset</a>, which are both ways to describe
+a distance as a two-dimensional axis-aligned vector.
+        </dd>
+        <dt id="Paint">
+          <span class="name "><a href="dart-ui/Paint-class.html">Paint</a></span>
+        </dt>
+        <dd>
+          A description of the style to use when drawing on a <a href="dart-ui/Canvas-class.html">Canvas</a>. <a href="dart-ui/Paint-class.html">[...]</a>
+        </dd>
+        <dt id="Paragraph">
+          <span class="name "><a href="dart-ui/Paragraph-class.html">Paragraph</a></span>
+        </dt>
+        <dd>
+          A paragraph of text. <a href="dart-ui/Paragraph-class.html">[...]</a>
+        </dd>
+        <dt id="ParagraphBuilder">
+          <span class="name "><a href="dart-ui/ParagraphBuilder-class.html">ParagraphBuilder</a></span>
+        </dt>
+        <dd>
+          Builds a <a href="dart-ui/Paragraph-class.html">Paragraph</a> containing text with the given styling information. <a href="dart-ui/ParagraphBuilder-class.html">[...]</a>
+        </dd>
+        <dt id="ParagraphConstraints">
+          <span class="name "><a href="dart-ui/ParagraphConstraints-class.html">ParagraphConstraints</a></span>
+        </dt>
+        <dd>
+          Layout constraints for <a href="dart-ui/Paragraph-class.html">Paragraph</a> objects. <a href="dart-ui/ParagraphConstraints-class.html">[...]</a>
+        </dd>
+        <dt id="ParagraphStyle">
+          <span class="name "><a href="dart-ui/ParagraphStyle-class.html">ParagraphStyle</a></span>
+        </dt>
+        <dd>
+          An opaque object that determines the configuration used by
+<a href="dart-ui/ParagraphBuilder-class.html">ParagraphBuilder</a> to position lines within a <a href="dart-ui/Paragraph-class.html">Paragraph</a> of text.
+        </dd>
+        <dt id="Path">
+          <span class="name "><a href="dart-ui/Path-class.html">Path</a></span>
+        </dt>
+        <dd>
+          A complex, one-dimensional subset of a plane. <a href="dart-ui/Path-class.html">[...]</a>
+        </dd>
+        <dt id="Picture">
+          <span class="name "><a href="dart-ui/Picture-class.html">Picture</a></span>
+        </dt>
+        <dd>
+          An object representing a sequence of recorded graphical operations. <a href="dart-ui/Picture-class.html">[...]</a>
+        </dd>
+        <dt id="PictureRecorder">
+          <span class="name "><a href="dart-ui/PictureRecorder-class.html">PictureRecorder</a></span>
+        </dt>
+        <dd>
+          Records a <a href="dart-ui/Picture-class.html">Picture</a> containing a sequence of graphical operations. <a href="dart-ui/PictureRecorder-class.html">[...]</a>
+        </dd>
+        <dt id="PointerData">
+          <span class="name "><a href="dart-ui/PointerData-class.html">PointerData</a></span>
+        </dt>
+        <dd>
+          Information about the state of a pointer.
+        </dd>
+        <dt id="PointerDataPacket">
+          <span class="name "><a href="dart-ui/PointerDataPacket-class.html">PointerDataPacket</a></span>
+        </dt>
+        <dd>
+          A sequence of reports about the state of pointers.
+        </dd>
+        <dt id="Radius">
+          <span class="name "><a href="dart-ui/Radius-class.html">Radius</a></span>
+        </dt>
+        <dd>
+          A radius for either circular or elliptical shapes.
+        </dd>
+        <dt id="Rect">
+          <span class="name "><a href="dart-ui/Rect-class.html">Rect</a></span>
+        </dt>
+        <dd>
+          An immutable, 2D, axis-aligned, floating-point rectangle whose coordinates
+are relative to a given origin. <a href="dart-ui/Rect-class.html">[...]</a>
+        </dd>
+        <dt id="RRect">
+          <span class="name "><a href="dart-ui/RRect-class.html">RRect</a></span>
+        </dt>
+        <dd>
+          An immutable rounded rectangle with the custom radii for all four corners.
+        </dd>
+        <dt id="RSTransform">
+          <span class="name "><a href="dart-ui/RSTransform-class.html">RSTransform</a></span>
+        </dt>
+        <dd>
+          A transform consisting of a translation, a rotation, and a uniform scale. <a href="dart-ui/RSTransform-class.html">[...]</a>
+        </dd>
+        <dt id="Scene">
+          <span class="name "><a href="dart-ui/Scene-class.html">Scene</a></span>
+        </dt>
+        <dd>
+          An opaque object representing a composited scene. <a href="dart-ui/Scene-class.html">[...]</a>
+        </dd>
+        <dt id="SceneBuilder">
+          <span class="name "><a href="dart-ui/SceneBuilder-class.html">SceneBuilder</a></span>
+        </dt>
+        <dd>
+          Builds a <a href="dart-ui/Scene-class.html">Scene</a> containing the given visuals. <a href="dart-ui/SceneBuilder-class.html">[...]</a>
+        </dd>
+        <dt id="SceneHost">
+          <span class="name "><a href="dart-ui/SceneHost-class.html">SceneHost</a></span>
+        </dt>
+        <dd>
+          (Fuchsia-only) Hosts content provided by another application.
+        </dd>
+        <dt id="SemanticsAction">
+          <span class="name "><a href="dart-ui/SemanticsAction-class.html">SemanticsAction</a></span>
+        </dt>
+        <dd>
+          The possible actions that can be conveyed from the operating system
+accessibility APIs to a semantics node.
+        </dd>
+        <dt id="SemanticsFlag">
+          <span class="name "><a href="dart-ui/SemanticsFlag-class.html">SemanticsFlag</a></span>
+        </dt>
+        <dd>
+          A Boolean value that can be associated with a semantics node.
+        </dd>
+        <dt id="SemanticsUpdate">
+          <span class="name "><a href="dart-ui/SemanticsUpdate-class.html">SemanticsUpdate</a></span>
+        </dt>
+        <dd>
+          An opaque object representing a batch of semantics updates. <a href="dart-ui/SemanticsUpdate-class.html">[...]</a>
+        </dd>
+        <dt id="SemanticsUpdateBuilder">
+          <span class="name "><a href="dart-ui/SemanticsUpdateBuilder-class.html">SemanticsUpdateBuilder</a></span>
+        </dt>
+        <dd>
+          An object that creates <a href="dart-ui/SemanticsUpdate-class.html">SemanticsUpdate</a> objects. <a href="dart-ui/SemanticsUpdateBuilder-class.html">[...]</a>
+        </dd>
+        <dt id="Shader">
+          <span class="name "><a href="dart-ui/Shader-class.html">Shader</a></span>
+        </dt>
+        <dd>
+          Base class for objects such as <a href="dart-ui/Gradient-class.html">Gradient</a> and <a href="dart-ui/ImageShader-class.html">ImageShader</a> which
+correspond to shaders as used by <a href="dart-ui/Paint/shader.html">Paint.shader</a>.
+        </dd>
+        <dt id="Size">
+          <span class="name "><a href="dart-ui/Size-class.html">Size</a></span>
+        </dt>
+        <dd>
+          Holds a 2D floating-point size. <a href="dart-ui/Size-class.html">[...]</a>
+        </dd>
+        <dt id="TextBox">
+          <span class="name "><a href="dart-ui/TextBox-class.html">TextBox</a></span>
+        </dt>
+        <dd>
+          A rectangle enclosing a run of text. <a href="dart-ui/TextBox-class.html">[...]</a>
+        </dd>
+        <dt id="TextDecoration">
+          <span class="name "><a href="dart-ui/TextDecoration-class.html">TextDecoration</a></span>
+        </dt>
+        <dd>
+          A linear decoration to draw near the text.
+        </dd>
+        <dt id="TextPosition">
+          <span class="name "><a href="dart-ui/TextPosition-class.html">TextPosition</a></span>
+        </dt>
+        <dd>
+          A visual position in a string of text.
+        </dd>
+        <dt id="TextStyle">
+          <span class="name "><a href="dart-ui/TextStyle-class.html">TextStyle</a></span>
+        </dt>
+        <dd>
+          An opaque object that determines the size, position, and rendering of text.
+        </dd>
+        <dt id="Vertices">
+          <span class="name "><a href="dart-ui/Vertices-class.html">Vertices</a></span>
+        </dt>
+        <dd>
+          A set of vertex data used by <a href="dart-ui/Canvas/drawVertices.html">Canvas.drawVertices</a>.
+        </dd>
+        <dt id="Window">
+          <span class="name "><a href="dart-ui/Window-class.html">Window</a></span>
+        </dt>
+        <dd>
+          The most basic interface to the host operating system's user interface. <a href="dart-ui/Window-class.html">[...]</a>
+        </dd>
+        <dt id="WindowPadding">
+          <span class="name "><a href="dart-ui/WindowPadding-class.html">WindowPadding</a></span>
+        </dt>
+        <dd>
+          A representation of distances for each of the four edges of a rectangle,
+used to encode the view insets and padding that applications should place
+around their user interface, as exposed by <a href="dart-ui/Window/viewInsets.html">Window.viewInsets</a> and
+<a href="dart-ui/Window/padding.html">Window.padding</a>. View insets and padding are preferrably read via
+<code>MediaQuery.of</code>. <a href="dart-ui/WindowPadding-class.html">[...]</a>
+        </dd>
+      </dl>
+    </section>
+
+
+    <section class="summary offset-anchor" id="properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="window" class="property">
+          <span class="name"><a href="dart-ui/window.html">window</a></span>
+          <span class="signature">&#8594; <a href="dart-ui/Window-class.html">Window</a></span>
+        </dt>
+        <dd>
+          The <code>Window</code> singleton. This object exposes the size of the display, the
+core scheduler API, the input event callback, the graphics drawing API, and
+other such core services.
+          <div class="features">final</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="functions">
+      <h2>Functions</h2>
+
+      <dl class="callables">
+        <dt id="decodeImageFromList" class="callable">
+          <span class="name"><a href="dart-ui/decodeImageFromList.html">decodeImageFromList</a></span><span class="signature">(<wbr><span class="parameter" id="decodeImageFromList-param-list"><span class="type-annotation"><a href="dart-typed_data/Uint8List-class.html">Uint8List</a></span> <span class="parameter-name">list</span>, </span> <span class="parameter" id="decodeImageFromList-param-callback"><span class="type-annotation"><a href="dart-ui/ImageDecoderCallback.html">ImageDecoderCallback</a></span> <span class="parameter-name">callback</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Loads a single image frame from a byte array into an <a href="dart-ui/Image-class.html">Image</a> object. <a href="dart-ui/decodeImageFromList.html">[...]</a>
+          
+</dd>
+        <dt id="hashList" class="callable">
+          <span class="name"><a href="dart-ui/hashList.html">hashList</a></span><span class="signature">(<wbr><span class="parameter" id="hashList-param-arguments"><span class="type-annotation"><a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/Object-class.html">Object</a></span>&gt;</span></span> <span class="parameter-name">arguments</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Combine the <a href="dart-core/Object/hashCode.html">Object.hashCode</a> values of an arbitrary number of objects from
+an <a href="dart-core/Iterable-class.html">Iterable</a> into one value. This function will return the same value if
+given null as if given an empty list.
+          
+</dd>
+        <dt id="hashValues" class="callable">
+          <span class="name"><a href="dart-ui/hashValues.html">hashValues</a></span><span class="signature">(<wbr><span class="parameter" id="hashValues-param-arg01"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg01</span>, </span> <span class="parameter" id="hashValues-param-arg02"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg02</span>, [</span> <span class="parameter" id="hashValues-param-arg03"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg03</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg04"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg04</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg05"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg05</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg06"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg06</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg07"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg07</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg08"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg08</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg09"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg09</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg10"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg10</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg11"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg11</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg12"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg12</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg13"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg13</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg14"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg14</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg15"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg15</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg16"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg16</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg17"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg17</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg18"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg18</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg19"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg19</span> = <span class="default-value">_hashEnd</span>, </span> <span class="parameter" id="hashValues-param-arg20"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">arg20</span> = <span class="default-value">_hashEnd</span></span> ])
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Combine up to twenty objects' hash codes into one value. <a href="dart-ui/hashValues.html">[...]</a>
+          
+</dd>
+        <dt id="instantiateImageCodec" class="callable">
+          <span class="name"><a href="dart-ui/instantiateImageCodec.html">instantiateImageCodec</a></span><span class="signature">(<wbr><span class="parameter" id="instantiateImageCodec-param-list"><span class="type-annotation"><a href="dart-typed_data/Uint8List-class.html">Uint8List</a></span> <span class="parameter-name">list</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-ui/Codec-class.html">Codec</a></span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Instantiates an image codec <a href="dart-ui/Codec-class.html">Codec</a> object. <a href="dart-ui/instantiateImageCodec.html">[...]</a>
+          
+</dd>
+        <dt id="lerpDouble" class="callable">
+          <span class="name"><a href="dart-ui/lerpDouble.html">lerpDouble</a></span><span class="signature">(<wbr><span class="parameter" id="lerpDouble-param-a"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">a</span>, </span> <span class="parameter" id="lerpDouble-param-b"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">b</span>, </span> <span class="parameter" id="lerpDouble-param-t"><span class="type-annotation"><a href="dart-core/double-class.html">double</a></span> <span class="parameter-name">t</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd>
+          Linearly interpolate between two numbers.
+          
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="enums">
+      <h2>Enums</h2>
+
+      <dl>
+        <dt id="AppLifecycleState">
+          <a href="dart-ui/AppLifecycleState-class.html">AppLifecycleState</a>
+        </dt>
+        <dd>
+          States that an application can be in. <a href="dart-ui/AppLifecycleState-class.html">[...]</a>
+        </dd>
+        <dt id="BlendMode">
+          <a href="dart-ui/BlendMode-class.html">BlendMode</a>
+        </dt>
+        <dd>
+          Algorithms to use when painting on the canvas. <a href="dart-ui/BlendMode-class.html">[...]</a>
+        </dd>
+        <dt id="BlurStyle">
+          <a href="dart-ui/BlurStyle-class.html">BlurStyle</a>
+        </dt>
+        <dd>
+          Styles to use for blurs in <a href="dart-ui/MaskFilter-class.html">MaskFilter</a> objects.
+        </dd>
+        <dt id="ClipOp">
+          <a href="dart-ui/ClipOp-class.html">ClipOp</a>
+        </dt>
+        <dd>
+          Defines how a new clip region should be merged with the existing clip
+region. <a href="dart-ui/ClipOp-class.html">[...]</a>
+        </dd>
+        <dt id="FilterQuality">
+          <a href="dart-ui/FilterQuality-class.html">FilterQuality</a>
+        </dt>
+        <dd>
+          Quality levels for image filters. <a href="dart-ui/FilterQuality-class.html">[...]</a>
+        </dd>
+        <dt id="FontStyle">
+          <a href="dart-ui/FontStyle-class.html">FontStyle</a>
+        </dt>
+        <dd>
+          Whether to slant the glyphs in the font
+        </dd>
+        <dt id="ImageByteFormat">
+          <a href="dart-ui/ImageByteFormat-class.html">ImageByteFormat</a>
+        </dt>
+        <dd>
+          The format in which image bytes should be returned when using
+<a href="dart-ui/Image/toByteData.html">Image.toByteData</a>.
+        </dd>
+        <dt id="PaintingStyle">
+          <a href="dart-ui/PaintingStyle-class.html">PaintingStyle</a>
+        </dt>
+        <dd>
+          Strategies for painting shapes and paths on a canvas. <a href="dart-ui/PaintingStyle-class.html">[...]</a>
+        </dd>
+        <dt id="PathFillType">
+          <a href="dart-ui/PathFillType-class.html">PathFillType</a>
+        </dt>
+        <dd>
+          Determines the winding rule that decides how the interior of a <a href="dart-ui/Path-class.html">Path</a> is
+calculated. <a href="dart-ui/PathFillType-class.html">[...]</a>
+        </dd>
+        <dt id="PointerChange">
+          <a href="dart-ui/PointerChange-class.html">PointerChange</a>
+        </dt>
+        <dd>
+          How the pointer has changed since the last report.
+        </dd>
+        <dt id="PointerDeviceKind">
+          <a href="dart-ui/PointerDeviceKind-class.html">PointerDeviceKind</a>
+        </dt>
+        <dd>
+          The kind of pointer device.
+        </dd>
+        <dt id="PointMode">
+          <a href="dart-ui/PointMode-class.html">PointMode</a>
+        </dt>
+        <dd>
+          Defines how a list of points is interpreted when drawing a set of points. <a href="dart-ui/PointMode-class.html">[...]</a>
+        </dd>
+        <dt id="StrokeCap">
+          <a href="dart-ui/StrokeCap-class.html">StrokeCap</a>
+        </dt>
+        <dd>
+          Styles to use for line endings. <a href="dart-ui/StrokeCap-class.html">[...]</a>
+        </dd>
+        <dt id="StrokeJoin">
+          <a href="dart-ui/StrokeJoin-class.html">StrokeJoin</a>
+        </dt>
+        <dd>
+          Styles to use for line joins. <a href="dart-ui/StrokeJoin-class.html">[...]</a>
+        </dd>
+        <dt id="TextAffinity">
+          <a href="dart-ui/TextAffinity-class.html">TextAffinity</a>
+        </dt>
+        <dd>
+          Whether a <a href="dart-ui/TextPosition-class.html">TextPosition</a> is visually upstream or downstream of its offset. <a href="dart-ui/TextAffinity-class.html">[...]</a>
+        </dd>
+        <dt id="TextAlign">
+          <a href="dart-ui/TextAlign-class.html">TextAlign</a>
+        </dt>
+        <dd>
+          Whether and how to align text horizontally.
+        </dd>
+        <dt id="TextBaseline">
+          <a href="dart-ui/TextBaseline-class.html">TextBaseline</a>
+        </dt>
+        <dd>
+          A horizontal line used for aligning text.
+        </dd>
+        <dt id="TextDecorationStyle">
+          <a href="dart-ui/TextDecorationStyle-class.html">TextDecorationStyle</a>
+        </dt>
+        <dd>
+          The style in which to draw a text decoration
+        </dd>
+        <dt id="TextDirection">
+          <a href="dart-ui/TextDirection-class.html">TextDirection</a>
+        </dt>
+        <dd>
+          A direction in which text flows. <a href="dart-ui/TextDirection-class.html">[...]</a>
+        </dd>
+        <dt id="TileMode">
+          <a href="dart-ui/TileMode-class.html">TileMode</a>
+        </dt>
+        <dd>
+          Defines what happens at the edge of the gradient. <a href="dart-ui/TileMode-class.html">[...]</a>
+        </dd>
+        <dt id="VertexMode">
+          <a href="dart-ui/VertexMode-class.html">VertexMode</a>
+        </dt>
+        <dd>
+          Defines how a list of points is interpreted when drawing a set of triangles. <a href="dart-ui/VertexMode-class.html">[...]</a>
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="typedefs">
+      <h2>Typedefs</h2>
+
+      <dl class="callables">
+        <dt id="FrameCallback" class="callable">
+          <span class="name"><a href="dart-ui/FrameCallback.html">FrameCallback</a></span><span class="signature">(<wbr><span class="parameter" id="FrameCallback-param-duration"><span class="type-annotation"><a href="dart-core/Duration-class.html">Duration</a></span> <span class="parameter-name">duration</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Signature for <code>Window.onBeginFrame</code>.
+          
+</dd>
+        <dt id="ImageDecoderCallback" class="callable">
+          <span class="name"><a href="dart-ui/ImageDecoderCallback.html">ImageDecoderCallback</a></span><span class="signature">(<wbr><span class="parameter" id="ImageDecoderCallback-param-result"><span class="type-annotation"><a href="dart-ui/Image-class.html">Image</a></span> <span class="parameter-name">result</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Callback signature for <code>decodeImageFromList</code>.
+          
+</dd>
+        <dt id="PlatformMessageCallback" class="callable">
+          <span class="name"><a href="dart-ui/PlatformMessageCallback.html">PlatformMessageCallback</a></span><span class="signature">(<wbr><span class="parameter" id="PlatformMessageCallback-param-name"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">name</span>, </span> <span class="parameter" id="PlatformMessageCallback-param-data"><span class="type-annotation"><a href="dart-typed_data/ByteData-class.html">ByteData</a></span> <span class="parameter-name">data</span>, </span> <span class="parameter" id="PlatformMessageCallback-param-callback"><span class="type-annotation"><a href="dart-ui/PlatformMessageResponseCallback.html">PlatformMessageResponseCallback</a></span> <span class="parameter-name">callback</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Signature for <code>Window.onPlatformMessage</code>.
+          
+</dd>
+        <dt id="PlatformMessageResponseCallback" class="callable">
+          <span class="name"><a href="dart-ui/PlatformMessageResponseCallback.html">PlatformMessageResponseCallback</a></span><span class="signature">(<wbr><span class="parameter" id="PlatformMessageResponseCallback-param-data"><span class="type-annotation"><a href="dart-typed_data/ByteData-class.html">ByteData</a></span> <span class="parameter-name">data</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Signature for responses to platform messages. <a href="dart-ui/PlatformMessageResponseCallback.html">[...]</a>
+          
+</dd>
+        <dt id="PointerDataPacketCallback" class="callable">
+          <span class="name"><a href="dart-ui/PointerDataPacketCallback.html">PointerDataPacketCallback</a></span><span class="signature">(<wbr><span class="parameter" id="PointerDataPacketCallback-param-packet"><span class="type-annotation"><a href="dart-ui/PointerDataPacket-class.html">PointerDataPacket</a></span> <span class="parameter-name">packet</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Signature for <code>Window.onPointerDataPacket</code>.
+          
+</dd>
+        <dt id="SemanticsActionCallback" class="callable">
+          <span class="name"><a href="dart-ui/SemanticsActionCallback.html">SemanticsActionCallback</a></span><span class="signature">(<wbr><span class="parameter" id="SemanticsActionCallback-param-id"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span>, </span> <span class="parameter" id="SemanticsActionCallback-param-action"><span class="type-annotation"><a href="dart-ui/SemanticsAction-class.html">SemanticsAction</a></span> <span class="parameter-name">action</span>, </span> <span class="parameter" id="SemanticsActionCallback-param-args"><span class="type-annotation"><a href="dart-typed_data/ByteData-class.html">ByteData</a></span> <span class="parameter-name">args</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Signature for <code>Window.onSemanticsAction</code>.
+          
+</dd>
+        <dt id="VoidCallback" class="callable">
+          <span class="name"><a href="dart-ui/VoidCallback.html">VoidCallback</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Signature of callbacks that have no arguments and return no data.
+          
+</dd>
+      </dl>
+    </section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <h5>dart:ui library</h5>
+    <ol>
+      <li class="section-title"><a href="dart-ui/dart-ui-library.html#classes">Classes</a></li>
+      <li><a href="dart-ui/Canvas-class.html">Canvas</a></li>
+      <li><a href="dart-ui/Codec-class.html">Codec</a></li>
+      <li><a href="dart-ui/Color-class.html">Color</a></li>
+      <li><a href="dart-ui/ColorFilter-class.html">ColorFilter</a></li>
+      <li><a href="dart-ui/FontWeight-class.html">FontWeight</a></li>
+      <li><a href="dart-ui/FrameInfo-class.html">FrameInfo</a></li>
+      <li><a href="dart-ui/Gradient-class.html">Gradient</a></li>
+      <li><a href="dart-ui/Image-class.html">Image</a></li>
+      <li><a href="dart-ui/ImageFilter-class.html">ImageFilter</a></li>
+      <li><a href="dart-ui/ImageShader-class.html">ImageShader</a></li>
+      <li><a href="dart-ui/Locale-class.html">Locale</a></li>
+      <li><a href="dart-ui/MaskFilter-class.html">MaskFilter</a></li>
+      <li><a href="dart-ui/Offset-class.html">Offset</a></li>
+      <li><a href="dart-ui/OffsetBase-class.html">OffsetBase</a></li>
+      <li><a href="dart-ui/Paint-class.html">Paint</a></li>
+      <li><a href="dart-ui/Paragraph-class.html">Paragraph</a></li>
+      <li><a href="dart-ui/ParagraphBuilder-class.html">ParagraphBuilder</a></li>
+      <li><a href="dart-ui/ParagraphConstraints-class.html">ParagraphConstraints</a></li>
+      <li><a href="dart-ui/ParagraphStyle-class.html">ParagraphStyle</a></li>
+      <li><a href="dart-ui/Path-class.html">Path</a></li>
+      <li><a href="dart-ui/Picture-class.html">Picture</a></li>
+      <li><a href="dart-ui/PictureRecorder-class.html">PictureRecorder</a></li>
+      <li><a href="dart-ui/PointerData-class.html">PointerData</a></li>
+      <li><a href="dart-ui/PointerDataPacket-class.html">PointerDataPacket</a></li>
+      <li><a href="dart-ui/Radius-class.html">Radius</a></li>
+      <li><a href="dart-ui/Rect-class.html">Rect</a></li>
+      <li><a href="dart-ui/RRect-class.html">RRect</a></li>
+      <li><a href="dart-ui/RSTransform-class.html">RSTransform</a></li>
+      <li><a href="dart-ui/Scene-class.html">Scene</a></li>
+      <li><a href="dart-ui/SceneBuilder-class.html">SceneBuilder</a></li>
+      <li><a href="dart-ui/SceneHost-class.html">SceneHost</a></li>
+      <li><a href="dart-ui/SemanticsAction-class.html">SemanticsAction</a></li>
+      <li><a href="dart-ui/SemanticsFlag-class.html">SemanticsFlag</a></li>
+      <li><a href="dart-ui/SemanticsUpdate-class.html">SemanticsUpdate</a></li>
+      <li><a href="dart-ui/SemanticsUpdateBuilder-class.html">SemanticsUpdateBuilder</a></li>
+      <li><a href="dart-ui/Shader-class.html">Shader</a></li>
+      <li><a href="dart-ui/Size-class.html">Size</a></li>
+      <li><a href="dart-ui/TextBox-class.html">TextBox</a></li>
+      <li><a href="dart-ui/TextDecoration-class.html">TextDecoration</a></li>
+      <li><a href="dart-ui/TextPosition-class.html">TextPosition</a></li>
+      <li><a href="dart-ui/TextStyle-class.html">TextStyle</a></li>
+      <li><a href="dart-ui/Vertices-class.html">Vertices</a></li>
+      <li><a href="dart-ui/Window-class.html">Window</a></li>
+      <li><a href="dart-ui/WindowPadding-class.html">WindowPadding</a></li>
+    
+    
+      <li class="section-title"><a href="dart-ui/dart-ui-library.html#properties">Properties</a></li>
+      <li><a href="dart-ui/window.html">window</a></li>
+    
+      <li class="section-title"><a href="dart-ui/dart-ui-library.html#functions">Functions</a></li>
+      <li><a href="dart-ui/decodeImageFromList.html">decodeImageFromList</a></li>
+      <li><a href="dart-ui/hashList.html">hashList</a></li>
+      <li><a href="dart-ui/hashValues.html">hashValues</a></li>
+      <li><a href="dart-ui/instantiateImageCodec.html">instantiateImageCodec</a></li>
+      <li><a href="dart-ui/lerpDouble.html">lerpDouble</a></li>
+    
+      <li class="section-title"><a href="dart-ui/dart-ui-library.html#enums">Enums</a></li>
+      <li><a href="dart-ui/AppLifecycleState-class.html">AppLifecycleState</a></li>
+      <li><a href="dart-ui/BlendMode-class.html">BlendMode</a></li>
+      <li><a href="dart-ui/BlurStyle-class.html">BlurStyle</a></li>
+      <li><a href="dart-ui/ClipOp-class.html">ClipOp</a></li>
+      <li><a href="dart-ui/FilterQuality-class.html">FilterQuality</a></li>
+      <li><a href="dart-ui/FontStyle-class.html">FontStyle</a></li>
+      <li><a href="dart-ui/ImageByteFormat-class.html">ImageByteFormat</a></li>
+      <li><a href="dart-ui/PaintingStyle-class.html">PaintingStyle</a></li>
+      <li><a href="dart-ui/PathFillType-class.html">PathFillType</a></li>
+      <li><a href="dart-ui/PointerChange-class.html">PointerChange</a></li>
+      <li><a href="dart-ui/PointerDeviceKind-class.html">PointerDeviceKind</a></li>
+      <li><a href="dart-ui/PointMode-class.html">PointMode</a></li>
+      <li><a href="dart-ui/StrokeCap-class.html">StrokeCap</a></li>
+      <li><a href="dart-ui/StrokeJoin-class.html">StrokeJoin</a></li>
+      <li><a href="dart-ui/TextAffinity-class.html">TextAffinity</a></li>
+      <li><a href="dart-ui/TextAlign-class.html">TextAlign</a></li>
+      <li><a href="dart-ui/TextBaseline-class.html">TextBaseline</a></li>
+      <li><a href="dart-ui/TextDecorationStyle-class.html">TextDecorationStyle</a></li>
+      <li><a href="dart-ui/TextDirection-class.html">TextDirection</a></li>
+      <li><a href="dart-ui/TileMode-class.html">TileMode</a></li>
+      <li><a href="dart-ui/VertexMode-class.html">VertexMode</a></li>
+    
+      <li class="section-title"><a href="dart-ui/dart-ui-library.html#typedefs">Typedefs</a></li>
+      <li><a href="dart-ui/FrameCallback.html">FrameCallback</a></li>
+      <li><a href="dart-ui/ImageDecoderCallback.html">ImageDecoderCallback</a></li>
+      <li><a href="dart-ui/PlatformMessageCallback.html">PlatformMessageCallback</a></li>
+      <li><a href="dart-ui/PlatformMessageResponseCallback.html">PlatformMessageResponseCallback</a></li>
+      <li><a href="dart-ui/PointerDataPacketCallback.html">PointerDataPacketCallback</a></li>
+      <li><a href="dart-ui/SemanticsActionCallback.html">SemanticsActionCallback</a></li>
+      <li><a href="dart-ui/VoidCallback.html">VoidCallback</a></li>
+    
+    </ol>
+  </div><!--/sidebar-offcanvas-right-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

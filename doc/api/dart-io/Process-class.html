@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the Process class from the dart:io library, for the Dart programming language.">
+  <title>Process class - dart:io library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-io/dart-io-library.html">dart:io</a></li>
+    <li class="self-crumb">Process abstract class</li>
+  </ol>
+  <div class="self-name">Process</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>dart:io library</h5>
+    <ol>
+      <li class="section-title"><a href="dart-io/dart-io-library.html#classes">Classes</a></li>
+      <li><a href="dart-io/BytesBuilder-class.html">BytesBuilder</a></li>
+      <li><a href="dart-io/CompressionOptions-class.html">CompressionOptions</a></li>
+      <li><a href="dart-io/ContentType-class.html">ContentType</a></li>
+      <li><a href="dart-io/Cookie-class.html">Cookie</a></li>
+      <li><a href="dart-io/Datagram-class.html">Datagram</a></li>
+      <li><a href="dart-io/DetachedSocket-class.html">DetachedSocket</a></li>
+      <li><a href="dart-io/Directory-class.html">Directory</a></li>
+      <li><a href="dart-io/File-class.html">File</a></li>
+      <li><a href="dart-io/FileMode-class.html">FileMode</a></li>
+      <li><a href="dart-io/FileStat-class.html">FileStat</a></li>
+      <li><a href="dart-io/FileSystemCreateEvent-class.html">FileSystemCreateEvent</a></li>
+      <li><a href="dart-io/FileSystemDeleteEvent-class.html">FileSystemDeleteEvent</a></li>
+      <li><a href="dart-io/FileSystemEntity-class.html">FileSystemEntity</a></li>
+      <li><a href="dart-io/FileSystemEntityType-class.html">FileSystemEntityType</a></li>
+      <li><a href="dart-io/FileSystemEvent-class.html">FileSystemEvent</a></li>
+      <li><a href="dart-io/FileSystemModifyEvent-class.html">FileSystemModifyEvent</a></li>
+      <li><a href="dart-io/FileSystemMoveEvent-class.html">FileSystemMoveEvent</a></li>
+      <li><a href="dart-io/GZipCodec-class.html">GZipCodec</a></li>
+      <li><a href="dart-io/HeaderValue-class.html">HeaderValue</a></li>
+      <li><a href="dart-io/HttpClient-class.html">HttpClient</a></li>
+      <li><a href="dart-io/HttpClientBasicCredentials-class.html">HttpClientBasicCredentials</a></li>
+      <li><a href="dart-io/HttpClientCredentials-class.html">HttpClientCredentials</a></li>
+      <li><a href="dart-io/HttpClientDigestCredentials-class.html">HttpClientDigestCredentials</a></li>
+      <li><a href="dart-io/HttpClientRequest-class.html">HttpClientRequest</a></li>
+      <li><a href="dart-io/HttpClientResponse-class.html">HttpClientResponse</a></li>
+      <li><a href="dart-io/HttpConnectionInfo-class.html">HttpConnectionInfo</a></li>
+      <li><a href="dart-io/HttpConnectionsInfo-class.html">HttpConnectionsInfo</a></li>
+      <li><a href="dart-io/HttpDate-class.html">HttpDate</a></li>
+      <li><a href="dart-io/HttpHeaders-class.html">HttpHeaders</a></li>
+      <li><a href="dart-io/HttpOverrides-class.html">HttpOverrides</a></li>
+      <li><a href="dart-io/HttpRequest-class.html">HttpRequest</a></li>
+      <li><a href="dart-io/HttpResponse-class.html">HttpResponse</a></li>
+      <li><a href="dart-io/HttpServer-class.html">HttpServer</a></li>
+      <li><a href="dart-io/HttpSession-class.html">HttpSession</a></li>
+      <li><a href="dart-io/HttpStatus-class.html">HttpStatus</a></li>
+      <li><a href="dart-io/InternetAddress-class.html">InternetAddress</a></li>
+      <li><a href="dart-io/InternetAddressType-class.html">InternetAddressType</a></li>
+      <li><a href="dart-io/IOOverrides-class.html">IOOverrides</a></li>
+      <li><a href="dart-io/IOSink-class.html">IOSink</a></li>
+      <li><a href="dart-io/Link-class.html">Link</a></li>
+      <li><a href="dart-io/NetworkInterface-class.html">NetworkInterface</a></li>
+      <li><a href="dart-io/OSError-class.html">OSError</a></li>
+      <li><a href="dart-io/Platform-class.html">Platform</a></li>
+      <li><a href="dart-io/Process-class.html">Process</a></li>
+      <li><a href="dart-io/ProcessInfo-class.html">ProcessInfo</a></li>
+      <li><a href="dart-io/ProcessResult-class.html">ProcessResult</a></li>
+      <li><a href="dart-io/ProcessSignal-class.html">ProcessSignal</a></li>
+      <li><a href="dart-io/RandomAccessFile-class.html">RandomAccessFile</a></li>
+      <li><a href="dart-io/RawDatagramSocket-class.html">RawDatagramSocket</a></li>
+      <li><a href="dart-io/RawSecureServerSocket-class.html">RawSecureServerSocket</a></li>
+      <li><a href="dart-io/RawSecureSocket-class.html">RawSecureSocket</a></li>
+      <li><a href="dart-io/RawServerSocket-class.html">RawServerSocket</a></li>
+      <li><a href="dart-io/RawSocket-class.html">RawSocket</a></li>
+      <li><a href="dart-io/RawSocketEvent-class.html">RawSocketEvent</a></li>
+      <li><a href="dart-io/RawSynchronousSocket-class.html">RawSynchronousSocket</a></li>
+      <li><a href="dart-io/RawZLibFilter-class.html">RawZLibFilter</a></li>
+      <li><a href="dart-io/RedirectInfo-class.html">RedirectInfo</a></li>
+      <li><a href="dart-io/SecureServerSocket-class.html">SecureServerSocket</a></li>
+      <li><a href="dart-io/SecureSocket-class.html">SecureSocket</a></li>
+      <li><a href="dart-io/SecurityContext-class.html">SecurityContext</a></li>
+      <li><a href="dart-io/ServerSocket-class.html">ServerSocket</a></li>
+      <li><a href="dart-io/Socket-class.html">Socket</a></li>
+      <li><a href="dart-io/SocketDirection-class.html">SocketDirection</a></li>
+      <li><a href="dart-io/SocketOption-class.html">SocketOption</a></li>
+      <li><a href="dart-io/Stdin-class.html">Stdin</a></li>
+      <li><a href="dart-io/StdioType-class.html">StdioType</a></li>
+      <li><a href="dart-io/Stdout-class.html">Stdout</a></li>
+      <li><a href="dart-io/SystemEncoding-class.html">SystemEncoding</a></li>
+      <li><a href="dart-io/WebSocket-class.html">WebSocket</a></li>
+      <li><a href="dart-io/WebSocketStatus-class.html">WebSocketStatus</a></li>
+      <li><a href="dart-io/WebSocketTransformer-class.html">WebSocketTransformer</a></li>
+      <li><a href="dart-io/X509Certificate-class.html">X509Certificate</a></li>
+      <li><a href="dart-io/ZLibCodec-class.html">ZLibCodec</a></li>
+      <li><a href="dart-io/ZLibDecoder-class.html">ZLibDecoder</a></li>
+      <li><a href="dart-io/ZLibEncoder-class.html">ZLibEncoder</a></li>
+      <li><a href="dart-io/ZLibOption-class.html">ZLibOption</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#constants">Constants</a></li>
+      <li><a href="dart-io/APPEND-constant.html">APPEND</a></li>
+      <li><a href="dart-io/GZIP-constant.html">GZIP</a></li>
+      <li><a href="dart-io/READ-constant.html">READ</a></li>
+      <li><a href="dart-io/SYSTEM_ENCODING-constant.html">SYSTEM_ENCODING</a></li>
+      <li><a href="dart-io/WRITE-constant.html">WRITE</a></li>
+      <li><a href="dart-io/WRITE_ONLY-constant.html">WRITE_ONLY</a></li>
+      <li><a href="dart-io/WRITE_ONLY_APPEND-constant.html">WRITE_ONLY_APPEND</a></li>
+      <li><a href="dart-io/ZLIB-constant.html">ZLIB</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#properties">Properties</a></li>
+      <li><a href="dart-io/exitCode.html">exitCode</a></li>
+      <li><a href="dart-io/pid.html">pid</a></li>
+      <li><a href="dart-io/stderr.html">stderr</a></li>
+      <li><a href="dart-io/stdin.html">stdin</a></li>
+      <li><a href="dart-io/stdout.html">stdout</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#functions">Functions</a></li>
+      <li><a href="dart-io/exit.html">exit</a></li>
+      <li><a href="dart-io/sleep.html">sleep</a></li>
+      <li><a href="dart-io/stdioType.html">stdioType</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#enums">Enums</a></li>
+      <li><a href="dart-io/FileLock-class.html">FileLock</a></li>
+      <li><a href="dart-io/ProcessStartMode-class.html">ProcessStartMode</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#typedefs">Typedefs</a></li>
+      <li><a href="dart-io/BadCertificateCallback.html">BadCertificateCallback</a></li>
+    
+      <li class="section-title"><a href="dart-io/dart-io-library.html#exceptions">Exceptions</a></li>
+      <li><a href="dart-io/CertificateException-class.html">CertificateException</a></li>
+      <li><a href="dart-io/FileSystemException-class.html">FileSystemException</a></li>
+      <li><a href="dart-io/HandshakeException-class.html">HandshakeException</a></li>
+      <li><a href="dart-io/HttpException-class.html">HttpException</a></li>
+      <li><a href="dart-io/IOException-class.html">IOException</a></li>
+      <li><a href="dart-io/ProcessException-class.html">ProcessException</a></li>
+      <li><a href="dart-io/RedirectException-class.html">RedirectException</a></li>
+      <li><a href="dart-io/SignalException-class.html">SignalException</a></li>
+      <li><a href="dart-io/SocketException-class.html">SocketException</a></li>
+      <li><a href="dart-io/StdinException-class.html">StdinException</a></li>
+      <li><a href="dart-io/StdoutException-class.html">StdoutException</a></li>
+      <li><a href="dart-io/TlsException-class.html">TlsException</a></li>
+      <li><a href="dart-io/WebSocketException-class.html">WebSocketException</a></li>
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>Process class</h1>
+
+    <section class="desc markdown">
+      <p>The means to execute a program.</p>
+<p>Use the static <a href="dart-io/Process/start.html">start</a> and <a href="dart-io/Process/run.html">run</a> methods to start a new process.
+The run method executes the process non-interactively to completion.
+In contrast, the start method allows your code to interact with the
+running process.</p>
+<h2>Start a process with the run method</h2>
+<p>The following code sample uses the run method to create a process
+that runs the UNIX command <code>ls</code>, which lists the contents of a directory.
+The run method completes with a <a href="dart-io/ProcessResult-class.html">ProcessResult</a> object when the process
+terminates. This provides access to the output and exit code from the
+process. The run method does not return a Process object; this prevents your
+code from interacting with the running process.</p>
+<pre class="language-dart"><code>import 'dart:io';
+
+main() {
+  // List all files in the current directory in UNIX-like systems.
+  Process.run('ls', ['-l']).then((ProcessResult results) {
+    print(results.stdout);
+  });
+}
+</code></pre>
+<h2>Start a process with the start method</h2>
+<p>The following example uses start to create the process.
+The start method returns a <a href="dart-async/Future-class.html">Future</a> for a Process object.
+When the future completes the process is started and
+your code can interact with the
+Process: writing to stdin, listening to stdout, and so on.</p>
+<p>The following sample starts the UNIX <code>cat</code> utility, which when given no
+command-line arguments, echos its input.
+The program writes to the process's standard input stream
+and prints data from its standard output stream.</p>
+<pre class="language-dart"><code>import 'dart:io';
+import 'dart:convert';
+
+main() {
+  Process.start('cat', []).then((Process process) {
+    process.stdout
+        .transform(utf8.decoder)
+        .listen((data) { print(data); });
+    process.stdin.writeln('Hello, world!');
+    process.stdin.writeln('Hello, galaxy!');
+    process.stdin.writeln('Hello, universe!');
+  });
+}
+</code></pre>
+<h2>Standard I/O streams</h2>
+<p>As seen in the previous code sample, you can interact with the Process's
+standard output stream through the getter <a href="dart-io/Process/stdout.html">stdout</a>,
+and you can interact with the Process's standard input stream through
+the getter <a href="dart-io/Process/stdin.html">stdin</a>.
+In addition, Process provides a getter <a href="dart-io/Process/stderr.html">stderr</a> for using the Process's
+standard error stream.</p>
+<p>A Process's streams are distinct from the top-level streams
+for the current program.</p>
+<h2>Exit codes</h2>
+<p>Call the <a href="dart-io/Process/exitCode.html">exitCode</a> method to get the exit code of the process.
+The exit code indicates whether the program terminated successfully
+(usually indicated with an exit code of 0) or with an error.</p>
+<p>If the start method is used, the exitCode is available through a future
+on the Process object (as shown in the example below).
+If the run method is used, the exitCode is available
+through a getter on the ProcessResult instance.</p>
+<pre class="language-dart"><code>import 'dart:io';
+
+main() {
+  Process.start('ls', ['-l']).then((process) {
+    // Get the exit code from the new process.
+    process.exitCode.then((exitCode) {
+      print('exit code: $exitCode');
+    });
+  });
+}
+</code></pre>
+<h2>Other resources</h2>
+<p><a href="https://www.dartlang.org/dart-by-example/#dart-io-and-command-line-apps">Dart by Example</a>
+provides additional task-oriented code samples that show how to use
+various API from the <a href="dart-io/dart-io-library.html">dart:io</a> library.</p>
+    </section>
+    
+
+    <section class="summary offset-anchor" id="constructors">
+      <h2>Constructors</h2>
+
+      <dl class="constructor-summary-list">
+        <dt id="Process" class="callable">
+          <span class="name"><a href="dart-io/Process/Process.html">Process</a></span><span class="signature">()</span>
+        </dt>
+        <dd>
+          
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="exitCode" class="property">
+          <span class="name"><a href="dart-io/Process/exitCode.html">exitCode</a></span>
+          <span class="signature">&#8594; <a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/int-class.html">int</a></span>&gt;</span></span>
+        </dt>
+        <dd>
+          Returns a <code>Future</code> which completes with the exit code of the process
+when the process completes. <a href="dart-io/Process/exitCode.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="pid" class="property">
+          <span class="name"><a href="dart-io/Process/pid.html">pid</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          Returns the process id of the process.
+          <div class="features">read-only</div>
+</dd>
+        <dt id="stderr" class="property">
+          <span class="name"><a href="dart-io/Process/stderr.html">stderr</a></span>
+          <span class="signature">&#8594; <a href="dart-async/Stream-class.html">Stream</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/int-class.html">int</a></span>&gt;</span></span>&gt;</span></span>
+        </dt>
+        <dd>
+          Returns the standard error stream of the process as a <code>Stream</code>.
+          <div class="features">read-only</div>
+</dd>
+        <dt id="stdin" class="property">
+          <span class="name"><a href="dart-io/Process/stdin.html">stdin</a></span>
+          <span class="signature">&#8594; <a href="dart-io/IOSink-class.html">IOSink</a></span>
+        </dt>
+        <dd>
+          Returns the standard input stream of the process as an <a href="dart-io/IOSink-class.html">IOSink</a>.
+          <div class="features">read-only</div>
+</dd>
+        <dt id="stdout" class="property">
+          <span class="name"><a href="dart-io/Process/stdout.html">stdout</a></span>
+          <span class="signature">&#8594; <a href="dart-async/Stream-class.html">Stream</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/int-class.html">int</a></span>&gt;</span></span>&gt;</span></span>
+        </dt>
+        <dd>
+          Returns the standard output stream of the process as a <code>Stream</code>.
+          <div class="features">read-only</div>
+</dd>
+        <dt id="hashCode" class="property inherited">
+          <span class="name"><a href="dart-core/Object/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd class="inherited">
+          The hash code for this object. <a href="dart-core/Object/hashCode.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a href="dart-core/Object/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; <a href="dart-core/Type-class.html">Type</a></span>
+        </dt>
+        <dd class="inherited">
+          A representation of the runtime type of the object.
+          <div class="features">read-only, inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="kill" class="callable">
+          <span class="name"><a href="dart-io/Process/kill.html">kill</a></span><span class="signature">(<wbr>[<span class="parameter" id="kill-param-signal"><span class="type-annotation"><a href="dart-io/ProcessSignal-class.html">ProcessSignal</a></span> <span class="parameter-name">signal</span> = <span class="default-value">ProcessSignal.SIGTERM</span></span> ])
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd>
+          Kills the process. <a href="dart-io/Process/kill.html">[...]</a>
+          
+</dd>
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Invoked when a non-existent method or property is accessed. <a href="dart-core/Object/noSuchMethod.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toString" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a string representation of this object.
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor inherited" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation">dynamic</span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          The equality operator. <a href="dart-core/Object/operator_equals.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+
+    <section class="summary offset-anchor" id="static-methods">
+      <h2>Static Methods</h2>
+      <dl class="callables">
+        <dt id="killPid" class="callable">
+          <span class="name"><a href="dart-io/Process/killPid.html">killPid</a></span><span class="signature">(<wbr><span class="parameter" id="killPid-param-pid"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">pid</span>, [</span> <span class="parameter" id="killPid-param-signal"><span class="type-annotation"><a href="dart-io/ProcessSignal-class.html">ProcessSignal</a></span> <span class="parameter-name">signal</span> = <span class="default-value">ProcessSignal.SIGTERM</span></span> ])
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd>
+          Kills the process with id <code>pid</code>. <a href="dart-io/Process/killPid.html">[...]</a>
+          
+</dd>
+        <dt id="run" class="callable">
+          <span class="name"><a href="dart-io/Process/run.html">run</a></span><span class="signature">(<wbr><span class="parameter" id="run-param-executable"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">executable</span>, </span> <span class="parameter" id="run-param-arguments"><span class="type-annotation"><a href="dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">arguments</span>, {</span> <span class="parameter" id="run-param-workingDirectory"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">workingDirectory</span>, </span> <span class="parameter" id="run-param-environment"><span class="type-annotation"><a href="dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">environment</span>, </span> <span class="parameter" id="run-param-includeParentEnvironment"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">includeParentEnvironment</span>: <span class="default-value">true</span>, </span> <span class="parameter" id="run-param-runInShell"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">runInShell</span>: <span class="default-value">false</span>, </span> <span class="parameter" id="run-param-stdoutEncoding"><span class="type-annotation"><a href="dart-convert/Encoding-class.html">Encoding</a></span> <span class="parameter-name">stdoutEncoding</span>: <span class="default-value">SYSTEM_ENCODING</span>, </span> <span class="parameter" id="run-param-stderrEncoding"><span class="type-annotation"><a href="dart-convert/Encoding-class.html">Encoding</a></span> <span class="parameter-name">stderrEncoding</span>: <span class="default-value">SYSTEM_ENCODING</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-io/ProcessResult-class.html">ProcessResult</a></span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Starts a process and runs it non-interactively to completion. The
+process run is <code>executable</code> with the specified <code>arguments</code>. <a href="dart-io/Process/run.html">[...]</a>
+          
+</dd>
+        <dt id="runSync" class="callable">
+          <span class="name"><a href="dart-io/Process/runSync.html">runSync</a></span><span class="signature">(<wbr><span class="parameter" id="runSync-param-executable"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">executable</span>, </span> <span class="parameter" id="runSync-param-arguments"><span class="type-annotation"><a href="dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">arguments</span>, {</span> <span class="parameter" id="runSync-param-workingDirectory"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">workingDirectory</span>, </span> <span class="parameter" id="runSync-param-environment"><span class="type-annotation"><a href="dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">environment</span>, </span> <span class="parameter" id="runSync-param-includeParentEnvironment"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">includeParentEnvironment</span>: <span class="default-value">true</span>, </span> <span class="parameter" id="runSync-param-runInShell"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">runInShell</span>: <span class="default-value">false</span>, </span> <span class="parameter" id="runSync-param-stdoutEncoding"><span class="type-annotation"><a href="dart-convert/Encoding-class.html">Encoding</a></span> <span class="parameter-name">stdoutEncoding</span>: <span class="default-value">SYSTEM_ENCODING</span>, </span> <span class="parameter" id="runSync-param-stderrEncoding"><span class="type-annotation"><a href="dart-convert/Encoding-class.html">Encoding</a></span> <span class="parameter-name">stderrEncoding</span>: <span class="default-value">SYSTEM_ENCODING</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-io/ProcessResult-class.html">ProcessResult</a></span>
+          </span>
+        </dt>
+        <dd>
+          Starts a process and runs it to completion. This is a synchronous
+call and will block until the child process terminates. <a href="dart-io/Process/runSync.html">[...]</a>
+          
+</dd>
+        <dt id="start" class="callable">
+          <span class="name"><a href="dart-io/Process/start.html">start</a></span><span class="signature">(<wbr><span class="parameter" id="start-param-executable"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">executable</span>, </span> <span class="parameter" id="start-param-arguments"><span class="type-annotation"><a href="dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">arguments</span>, {</span> <span class="parameter" id="start-param-workingDirectory"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">workingDirectory</span>, </span> <span class="parameter" id="start-param-environment"><span class="type-annotation"><a href="dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">environment</span>, </span> <span class="parameter" id="start-param-includeParentEnvironment"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">includeParentEnvironment</span>: <span class="default-value">true</span>, </span> <span class="parameter" id="start-param-runInShell"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">runInShell</span>: <span class="default-value">false</span>, </span> <span class="parameter" id="start-param-mode"><span class="type-annotation"><a href="dart-io/ProcessStartMode-class.html">ProcessStartMode</a></span> <span class="parameter-name">mode</span>: <span class="default-value">ProcessStartMode.NORMAL</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-io/Process-class.html">Process</a></span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Starts a process running the <code>executable</code> with the specified
+<code>arguments</code>. Returns a <code>Future&lt;Process&gt;</code> that completes with a
+Process instance when the process has been successfully
+started. That <a href="dart-io/Process-class.html">Process</a> object can be used to interact with the
+process. If the process cannot be started the returned <a href="dart-async/Future-class.html">Future</a>
+completes with an exception. <a href="dart-io/Process/start.html">[...]</a>
+          
+</dd>
+      </dl>
+    </section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <ol>
+      <li class="section-title"><a href="dart-io/Process-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-io/Process/Process.html">Process</a></li>
+    
+      <li class="section-title">
+        <a href="dart-io/Process-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-io/Process/exitCode.html">exitCode</a></li>
+      <li><a href="dart-io/Process/pid.html">pid</a></li>
+      <li><a href="dart-io/Process/stderr.html">stderr</a></li>
+      <li><a href="dart-io/Process/stdin.html">stdin</a></li>
+      <li><a href="dart-io/Process/stdout.html">stdout</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-io/Process-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-io/Process/kill.html">kill</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/Object/toString.html">toString</a></li>
+    
+      <li class="section-title inherited"><a href="dart-io/Process-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+      <li class="section-title"><a href="dart-io/Process-class.html#static-methods">Static methods</a></li>
+      <li><a href="dart-io/Process/killPid.html">killPid</a></li>
+      <li><a href="dart-io/Process/run.html">run</a></li>
+      <li><a href="dart-io/Process/runSync.html">runSync</a></li>
+      <li><a href="dart-io/Process/start.html">start</a></li>
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

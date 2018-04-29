@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the Zone class from the dart:async library, for the Dart programming language.">
+  <title>Zone class - dart:async library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-async/dart-async-library.html">dart:async</a></li>
+    <li class="self-crumb">Zone abstract class</li>
+  </ol>
+  <div class="self-name">Zone</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>dart:async library</h5>
+    <ol>
+      <li class="section-title"><a href="dart-async/dart-async-library.html#classes">Classes</a></li>
+      <li><a href="dart-async/Completer-class.html">Completer</a></li>
+      <li><a class="deprecated" href="dart-async/DeferredLibrary-class.html">DeferredLibrary</a></li>
+      <li><a href="dart-async/EventSink-class.html">EventSink</a></li>
+      <li><a href="dart-async/Future-class.html">Future</a></li>
+      <li><a href="dart-async/FutureOr-class.html">FutureOr</a></li>
+      <li><a href="dart-async/Stream-class.html">Stream</a></li>
+      <li><a href="dart-async/StreamConsumer-class.html">StreamConsumer</a></li>
+      <li><a href="dart-async/StreamController-class.html">StreamController</a></li>
+      <li><a href="dart-async/StreamIterator-class.html">StreamIterator</a></li>
+      <li><a href="dart-async/StreamSink-class.html">StreamSink</a></li>
+      <li><a href="dart-async/StreamSubscription-class.html">StreamSubscription</a></li>
+      <li><a href="dart-async/StreamTransformer-class.html">StreamTransformer</a></li>
+      <li><a href="dart-async/StreamTransformerBase-class.html">StreamTransformerBase</a></li>
+      <li><a href="dart-async/StreamView-class.html">StreamView</a></li>
+      <li><a href="dart-async/SynchronousStreamController-class.html">SynchronousStreamController</a></li>
+      <li><a href="dart-async/Timer-class.html">Timer</a></li>
+      <li><a href="dart-async/Zone-class.html">Zone</a></li>
+      <li><a href="dart-async/ZoneDelegate-class.html">ZoneDelegate</a></li>
+      <li><a href="dart-async/ZoneSpecification-class.html">ZoneSpecification</a></li>
+    
+    
+    
+      <li class="section-title"><a href="dart-async/dart-async-library.html#functions">Functions</a></li>
+      <li><a href="dart-async/runZoned.html">runZoned</a></li>
+      <li><a href="dart-async/scheduleMicrotask.html">scheduleMicrotask</a></li>
+    
+    
+      <li class="section-title"><a href="dart-async/dart-async-library.html#typedefs">Typedefs</a></li>
+      <li><a href="dart-async/ControllerCallback.html">ControllerCallback</a></li>
+      <li><a href="dart-async/ControllerCancelCallback.html">ControllerCancelCallback</a></li>
+      <li><a href="dart-async/CreatePeriodicTimerHandler.html">CreatePeriodicTimerHandler</a></li>
+      <li><a href="dart-async/CreateTimerHandler.html">CreateTimerHandler</a></li>
+      <li><a href="dart-async/ErrorCallbackHandler.html">ErrorCallbackHandler</a></li>
+      <li><a href="dart-async/ForkHandler.html">ForkHandler</a></li>
+      <li><a href="dart-async/HandleUncaughtErrorHandler.html">HandleUncaughtErrorHandler</a></li>
+      <li><a href="dart-async/PrintHandler.html">PrintHandler</a></li>
+      <li><a href="dart-async/RegisterBinaryCallbackHandler.html">RegisterBinaryCallbackHandler</a></li>
+      <li><a href="dart-async/RegisterCallbackHandler.html">RegisterCallbackHandler</a></li>
+      <li><a href="dart-async/RegisterUnaryCallbackHandler.html">RegisterUnaryCallbackHandler</a></li>
+      <li><a href="dart-async/RunBinaryHandler.html">RunBinaryHandler</a></li>
+      <li><a href="dart-async/RunHandler.html">RunHandler</a></li>
+      <li><a href="dart-async/RunUnaryHandler.html">RunUnaryHandler</a></li>
+      <li><a href="dart-async/ScheduleMicrotaskHandler.html">ScheduleMicrotaskHandler</a></li>
+      <li><a href="dart-async/ZoneBinaryCallback.html">ZoneBinaryCallback</a></li>
+      <li><a href="dart-async/ZoneCallback.html">ZoneCallback</a></li>
+      <li><a href="dart-async/ZoneUnaryCallback.html">ZoneUnaryCallback</a></li>
+    
+      <li class="section-title"><a href="dart-async/dart-async-library.html#exceptions">Exceptions</a></li>
+      <li><a href="dart-async/AsyncError-class.html">AsyncError</a></li>
+      <li><a href="dart-async/DeferredLoadException-class.html">DeferredLoadException</a></li>
+      <li><a href="dart-async/TimeoutException-class.html">TimeoutException</a></li>
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>Zone class</h1>
+
+    <section class="desc markdown">
+      <p>A zone represents an environment that remains stable across asynchronous
+calls.</p>
+<p>Code is always executed in the context of a zone, available as
+<a href="dart-async/Zone/current.html">Zone.current</a>. The initial <code>main</code> function runs in the context of the
+default zone (<a href="dart-async/Zone/root-constant.html">Zone.root</a>). Code can be run in a different zone using either
+<a href="dart-async/runZoned.html">runZoned</a>, to create a new zone, or <a href="dart-async/Zone/run.html">Zone.run</a> to run code in the context of
+an existing zone likely created using <a href="dart-async/Zone/fork.html">Zone.fork</a>.</p>
+<p>Developers can create a new zone that overrides some of the functionality of
+an existing zone. For example, custom zones can replace of modify the
+behavior of <code>print</code>, timers, microtasks or how uncaught errors are handled.</p>
+<p>The <a href="dart-async/Zone-class.html">Zone</a> class is not subclassable, but users can provide custom zones by
+forking an existing zone (usually <a href="dart-async/Zone/current.html">Zone.current</a>) with a <a href="dart-async/ZoneSpecification-class.html">ZoneSpecification</a>.
+This is similar to creating a new class that extends the base <code>Zone</code> class
+and that overrides some methods, except without actually creating a new
+class. Instead the overriding methods are provided as functions that
+explicitly take the equivalent of their own class, the "super" class and the
+<code>this</code> object as parameters.</p>
+<p>Asynchronous callbacks always run in the context of the zone where they were
+scheduled. This is implemented using two steps:</p><ol><li>the callback is first registered using one of <a href="dart-async/Zone/registerCallback.html">registerCallback</a>,
+  <a href="dart-async/Zone/registerUnaryCallback.html">registerUnaryCallback</a>, or <a href="dart-async/Zone/registerBinaryCallback.html">registerBinaryCallback</a>. This allows the zone
+  to record that a callback exists and potentially modify it (by returning a
+  different callback). The code doing the registration (e.g., <code>Future.then</code>)
+  also remembers the current zone so that it can later run the callback in
+  that zone.</li><li>At a later point the registered callback is run in the remembered zone.</li></ol>
+<p>This is all handled internally by the platform code and most users don't need
+to worry about it. However, developers of new asynchronous operations,
+provided by the underlying system or through native extensions, must follow
+the protocol to be zone compatible.</p>
+<p>For convenience, zones provide <a href="dart-async/Zone/bindCallback.html">bindCallback</a> (and the corresponding
+<a href="dart-async/Zone/bindUnaryCallback.html">bindUnaryCallback</a> and <a href="dart-async/Zone/bindBinaryCallback.html">bindBinaryCallback</a>) to make it easier to respect
+the zone contract: these functions first invoke the corresponding <code>register</code>
+functions and then wrap the returned function so that it runs in the current
+zone when it is later asynchronously invoked.</p>
+<p>Similarly, zones provide <a href="dart-async/Zone/bindCallbackGuarded.html">bindCallbackGuarded</a> (and the corresponding
+<a href="dart-async/Zone/bindUnaryCallbackGuarded.html">bindUnaryCallbackGuarded</a> and <a href="dart-async/Zone/bindBinaryCallbackGuarded.html">bindBinaryCallbackGuarded</a>), when the
+callback should be invoked through <a href="dart-async/Zone/runGuarded.html">Zone.runGuarded</a>.</p>
+    </section>
+    
+
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="errorZone" class="property">
+          <span class="name"><a href="dart-async/Zone/errorZone.html">errorZone</a></span>
+          <span class="signature">&#8594; <a href="dart-async/Zone-class.html">Zone</a></span>
+        </dt>
+        <dd>
+          The error zone is the one that is responsible for dealing with uncaught
+errors. <a href="dart-async/Zone/errorZone.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="parent" class="property">
+          <span class="name"><a href="dart-async/Zone/parent.html">parent</a></span>
+          <span class="signature">&#8594; <a href="dart-async/Zone-class.html">Zone</a></span>
+        </dt>
+        <dd>
+          The parent zone of the this zone. <a href="dart-async/Zone/parent.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="hashCode" class="property inherited">
+          <span class="name"><a href="dart-core/Object/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd class="inherited">
+          The hash code for this object. <a href="dart-core/Object/hashCode.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a href="dart-core/Object/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; <a href="dart-core/Type-class.html">Type</a></span>
+        </dt>
+        <dd class="inherited">
+          A representation of the runtime type of the object.
+          <div class="features">read-only, inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="bindBinaryCallback" class="callable">
+          <span class="name"><a href="dart-async/Zone/bindBinaryCallback.html">bindBinaryCallback</a></span><span class="signature">&lt;<wbr><span class="type-parameter">R</span>, <span class="type-parameter">T1</span>, <span class="type-parameter">T2</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="bindBinaryCallback-param-callback"><span class="type-annotation">R</span> <span class="parameter-name">callback</span>(<span class="parameter" id="callback-param-argument1"><span class="type-annotation">T1</span> <span class="parameter-name">argument1</span>, </span> <span class="parameter" id="callback-param-argument2"><span class="type-annotation">T2</span> <span class="parameter-name">argument2</span></span>)</span>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/ZoneBinaryCallback.html">ZoneBinaryCallback</a><span class="signature">&lt;<wbr><span class="type-parameter">R</span>, <span class="type-parameter">T1</span>, <span class="type-parameter">T2</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Registers the provided <code>callback</code> and returns a function that will
+ execute in this zone. <a href="dart-async/Zone/bindBinaryCallback.html">[...]</a>
+          
+</dd>
+        <dt id="bindBinaryCallbackGuarded" class="callable">
+          <span class="name"><a href="dart-async/Zone/bindBinaryCallbackGuarded.html">bindBinaryCallbackGuarded</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T1</span>, <span class="type-parameter">T2</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="bindBinaryCallbackGuarded-param-callback"><span class="type-annotation">void</span> <span class="parameter-name">callback</span>(<span class="parameter" id="callback-param-argument1"><span class="type-annotation">T1</span> <span class="parameter-name">argument1</span>, </span> <span class="parameter" id="callback-param-argument2"><span class="type-annotation">T2</span> <span class="parameter-name">argument2</span></span>)</span>)
+            <span class="returntype parameter">&#8594; void Function<span class="signature">(<span class="parameter" id="bindBinaryCallbackGuarded-param-"><span class="type-annotation">T1</span>, </span> <span class="parameter" id="bindBinaryCallbackGuarded-param-"><span class="type-annotation">T2</span></span>)</span></span>
+          </span>
+        </dt>
+        <dd>
+          Registers the provided <code>callback</code> and returns a function that will
+ execute in this zone. <a href="dart-async/Zone/bindBinaryCallbackGuarded.html">[...]</a>
+          
+</dd>
+        <dt id="bindCallback" class="callable">
+          <span class="name"><a href="dart-async/Zone/bindCallback.html">bindCallback</a></span><span class="signature">&lt;<wbr><span class="type-parameter">R</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="bindCallback-param-callback"><span class="type-annotation">R</span> <span class="parameter-name">callback</span>()</span>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/ZoneCallback.html">ZoneCallback</a><span class="signature">&lt;<wbr><span class="type-parameter">R</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Registers the provided <code>callback</code> and returns a function that will
+ execute in this zone. <a href="dart-async/Zone/bindCallback.html">[...]</a>
+          
+</dd>
+        <dt id="bindCallbackGuarded" class="callable">
+          <span class="name"><a href="dart-async/Zone/bindCallbackGuarded.html">bindCallbackGuarded</a></span><span class="signature">(<wbr><span class="parameter" id="bindCallbackGuarded-param-callback"><span class="type-annotation">void</span> <span class="parameter-name">callback</span>()</span>)
+            <span class="returntype parameter">&#8594; void Function<span class="signature">()</span></span>
+          </span>
+        </dt>
+        <dd>
+          Registers the provided <code>callback</code> and returns a function that will
+execute in this zone. <a href="dart-async/Zone/bindCallbackGuarded.html">[...]</a>
+          
+</dd>
+        <dt id="bindUnaryCallback" class="callable">
+          <span class="name"><a href="dart-async/Zone/bindUnaryCallback.html">bindUnaryCallback</a></span><span class="signature">&lt;<wbr><span class="type-parameter">R</span>, <span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="bindUnaryCallback-param-callback"><span class="type-annotation">R</span> <span class="parameter-name">callback</span>(<span class="parameter" id="callback-param-argument"><span class="type-annotation">T</span> <span class="parameter-name">argument</span></span>)</span>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/ZoneUnaryCallback.html">ZoneUnaryCallback</a><span class="signature">&lt;<wbr><span class="type-parameter">R</span>, <span class="type-parameter">T</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Registers the provided <code>callback</code> and returns a function that will
+ execute in this zone. <a href="dart-async/Zone/bindUnaryCallback.html">[...]</a>
+          
+</dd>
+        <dt id="bindUnaryCallbackGuarded" class="callable">
+          <span class="name"><a href="dart-async/Zone/bindUnaryCallbackGuarded.html">bindUnaryCallbackGuarded</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="bindUnaryCallbackGuarded-param-callback"><span class="type-annotation">void</span> <span class="parameter-name">callback</span>(<span class="parameter" id="callback-param-argument"><span class="type-annotation">T</span> <span class="parameter-name">argument</span></span>)</span>)
+            <span class="returntype parameter">&#8594; void Function<span class="signature">(<span class="parameter" id="bindUnaryCallbackGuarded-param-"><span class="type-annotation">T</span></span>)</span></span>
+          </span>
+        </dt>
+        <dd>
+          Registers the provided <code>callback</code> and returns a function that will
+execute in this zone. <a href="dart-async/Zone/bindUnaryCallbackGuarded.html">[...]</a>
+          
+</dd>
+        <dt id="createPeriodicTimer" class="callable">
+          <span class="name"><a href="dart-async/Zone/createPeriodicTimer.html">createPeriodicTimer</a></span><span class="signature">(<wbr><span class="parameter" id="createPeriodicTimer-param-period"><span class="type-annotation"><a href="dart-core/Duration-class.html">Duration</a></span> <span class="parameter-name">period</span>, </span> <span class="parameter" id="createPeriodicTimer-param-callback"><span class="type-annotation">void</span> <span class="parameter-name">callback</span>(<span class="parameter" id="callback-param-timer"><span class="type-annotation"><a href="dart-async/Timer-class.html">Timer</a></span> <span class="parameter-name">timer</span></span>)</span>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/Timer-class.html">Timer</a></span>
+          </span>
+        </dt>
+        <dd>
+          Creates a periodic Timer where the callback is executed in this zone.
+          
+</dd>
+        <dt id="createTimer" class="callable">
+          <span class="name"><a href="dart-async/Zone/createTimer.html">createTimer</a></span><span class="signature">(<wbr><span class="parameter" id="createTimer-param-duration"><span class="type-annotation"><a href="dart-core/Duration-class.html">Duration</a></span> <span class="parameter-name">duration</span>, </span> <span class="parameter" id="createTimer-param-callback"><span class="type-annotation">void</span> <span class="parameter-name">callback</span>()</span>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/Timer-class.html">Timer</a></span>
+          </span>
+        </dt>
+        <dd>
+          Creates a Timer where the callback is executed in this zone.
+          
+</dd>
+        <dt id="errorCallback" class="callable">
+          <span class="name"><a href="dart-async/Zone/errorCallback.html">errorCallback</a></span><span class="signature">(<wbr><span class="parameter" id="errorCallback-param-error"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">error</span>, </span> <span class="parameter" id="errorCallback-param-stackTrace"><span class="type-annotation"><a href="dart-core/StackTrace-class.html">StackTrace</a></span> <span class="parameter-name">stackTrace</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/AsyncError-class.html">AsyncError</a></span>
+          </span>
+        </dt>
+        <dd>
+          Intercepts errors when added programmatically to a <code>Future</code> or <code>Stream</code>. <a href="dart-async/Zone/errorCallback.html">[...]</a>
+          
+</dd>
+        <dt id="fork" class="callable">
+          <span class="name"><a href="dart-async/Zone/fork.html">fork</a></span><span class="signature">(<wbr>{<span class="parameter" id="fork-param-specification"><span class="type-annotation"><a href="dart-async/ZoneSpecification-class.html">ZoneSpecification</a></span> <span class="parameter-name">specification</span>, </span> <span class="parameter" id="fork-param-zoneValues"><span class="type-annotation"><a href="dart-core/Map-class.html">Map</a></span> <span class="parameter-name">zoneValues</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-async/Zone-class.html">Zone</a></span>
+          </span>
+        </dt>
+        <dd>
+          Creates a new zone as a child of <code>this</code>. <a href="dart-async/Zone/fork.html">[...]</a>
+          
+</dd>
+        <dt id="handleUncaughtError" class="callable">
+          <span class="name"><a href="dart-async/Zone/handleUncaughtError.html">handleUncaughtError</a></span><span class="signature">(<wbr><span class="parameter" id="handleUncaughtError-param-error"><span class="type-annotation">dynamic</span> <span class="parameter-name">error</span>, </span> <span class="parameter" id="handleUncaughtError-param-stackTrace"><span class="type-annotation"><a href="dart-core/StackTrace-class.html">StackTrace</a></span> <span class="parameter-name">stackTrace</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Handles uncaught asynchronous errors. <a href="dart-async/Zone/handleUncaughtError.html">[...]</a>
+          
+</dd>
+        <dt id="inSameErrorZone" class="callable">
+          <span class="name"><a href="dart-async/Zone/inSameErrorZone.html">inSameErrorZone</a></span><span class="signature">(<wbr><span class="parameter" id="inSameErrorZone-param-otherZone"><span class="type-annotation"><a href="dart-async/Zone-class.html">Zone</a></span> <span class="parameter-name">otherZone</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns true if <code>this</code> and <code>otherZone</code> are in the same error zone. <a href="dart-async/Zone/inSameErrorZone.html">[...]</a>
+          
+</dd>
+        <dt id="print" class="callable">
+          <span class="name"><a href="dart-async/Zone/print.html">print</a></span><span class="signature">(<wbr><span class="parameter" id="print-param-line"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">line</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Prints the given <code>line</code>. <a href="dart-async/Zone/print.html">[...]</a>
+          
+</dd>
+        <dt id="registerBinaryCallback" class="callable">
+          <span class="name"><a href="dart-async/Zone/registerBinaryCallback.html">registerBinaryCallback</a></span><span class="signature">&lt;<wbr><span class="type-parameter">R</span>, <span class="type-parameter">T1</span>, <span class="type-parameter">T2</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="registerBinaryCallback-param-callback"><span class="type-annotation">R</span> <span class="parameter-name">callback</span>(<span class="parameter" id="callback-param-arg1"><span class="type-annotation">T1</span> <span class="parameter-name">arg1</span>, </span> <span class="parameter" id="callback-param-arg2"><span class="type-annotation">T2</span> <span class="parameter-name">arg2</span></span>)</span>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/ZoneBinaryCallback.html">ZoneBinaryCallback</a><span class="signature">&lt;<wbr><span class="type-parameter">R</span>, <span class="type-parameter">T1</span>, <span class="type-parameter">T2</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Registers the given callback in this zone. <a href="dart-async/Zone/registerBinaryCallback.html">[...]</a>
+          
+</dd>
+        <dt id="registerCallback" class="callable">
+          <span class="name"><a href="dart-async/Zone/registerCallback.html">registerCallback</a></span><span class="signature">&lt;<wbr><span class="type-parameter">R</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="registerCallback-param-callback"><span class="type-annotation">R</span> <span class="parameter-name">callback</span>()</span>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/ZoneCallback.html">ZoneCallback</a><span class="signature">&lt;<wbr><span class="type-parameter">R</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Registers the given callback in this zone. <a href="dart-async/Zone/registerCallback.html">[...]</a>
+          
+</dd>
+        <dt id="registerUnaryCallback" class="callable">
+          <span class="name"><a href="dart-async/Zone/registerUnaryCallback.html">registerUnaryCallback</a></span><span class="signature">&lt;<wbr><span class="type-parameter">R</span>, <span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="registerUnaryCallback-param-callback"><span class="type-annotation">R</span> <span class="parameter-name">callback</span>(<span class="parameter" id="callback-param-arg"><span class="type-annotation">T</span> <span class="parameter-name">arg</span></span>)</span>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/ZoneUnaryCallback.html">ZoneUnaryCallback</a><span class="signature">&lt;<wbr><span class="type-parameter">R</span>, <span class="type-parameter">T</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd>
+          Registers the given callback in this zone. <a href="dart-async/Zone/registerUnaryCallback.html">[...]</a>
+          
+</dd>
+        <dt id="run" class="callable">
+          <span class="name"><a href="dart-async/Zone/run.html">run</a></span><span class="signature">&lt;<wbr><span class="type-parameter">R</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="run-param-action"><span class="type-annotation">R</span> <span class="parameter-name">action</span>()</span>)
+            <span class="returntype parameter">&#8594; R</span>
+          </span>
+        </dt>
+        <dd>
+          Executes <code>action</code> in this zone. <a href="dart-async/Zone/run.html">[...]</a>
+          
+</dd>
+        <dt id="runBinary" class="callable">
+          <span class="name"><a href="dart-async/Zone/runBinary.html">runBinary</a></span><span class="signature">&lt;<wbr><span class="type-parameter">R</span>, <span class="type-parameter">T1</span>, <span class="type-parameter">T2</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="runBinary-param-action"><span class="type-annotation">R</span> <span class="parameter-name">action</span>(<span class="parameter" id="action-param-argument1"><span class="type-annotation">T1</span> <span class="parameter-name">argument1</span>, </span> <span class="parameter" id="action-param-argument2"><span class="type-annotation">T2</span> <span class="parameter-name">argument2</span></span>), </span> <span class="parameter" id="runBinary-param-argument1"><span class="type-annotation">T1</span> <span class="parameter-name">argument1</span>, </span> <span class="parameter" id="runBinary-param-argument2"><span class="type-annotation">T2</span> <span class="parameter-name">argument2</span></span>)
+            <span class="returntype parameter">&#8594; R</span>
+          </span>
+        </dt>
+        <dd>
+          Executes the given <code>action</code> with <code>argument1</code> and <code>argument2</code> in this
+zone. <a href="dart-async/Zone/runBinary.html">[...]</a>
+          
+</dd>
+        <dt id="runBinaryGuarded" class="callable">
+          <span class="name"><a href="dart-async/Zone/runBinaryGuarded.html">runBinaryGuarded</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T1</span>, <span class="type-parameter">T2</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="runBinaryGuarded-param-action"><span class="type-annotation">void</span> <span class="parameter-name">action</span>(<span class="parameter" id="action-param-argument1"><span class="type-annotation">T1</span> <span class="parameter-name">argument1</span>, </span> <span class="parameter" id="action-param-argument2"><span class="type-annotation">T2</span> <span class="parameter-name">argument2</span></span>), </span> <span class="parameter" id="runBinaryGuarded-param-argument1"><span class="type-annotation">T1</span> <span class="parameter-name">argument1</span>, </span> <span class="parameter" id="runBinaryGuarded-param-argument2"><span class="type-annotation">T2</span> <span class="parameter-name">argument2</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Executes the given <code>action</code> with <code>argument1</code> and <code>argument2</code> in this
+zone and catches synchronous errors. <a href="dart-async/Zone/runBinaryGuarded.html">[...]</a>
+          
+</dd>
+        <dt id="runGuarded" class="callable">
+          <span class="name"><a href="dart-async/Zone/runGuarded.html">runGuarded</a></span><span class="signature">(<wbr><span class="parameter" id="runGuarded-param-action"><span class="type-annotation">void</span> <span class="parameter-name">action</span>()</span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Executes the given <code>action</code> in this zone and catches synchronous
+errors. <a href="dart-async/Zone/runGuarded.html">[...]</a>
+          
+</dd>
+        <dt id="runUnary" class="callable">
+          <span class="name"><a href="dart-async/Zone/runUnary.html">runUnary</a></span><span class="signature">&lt;<wbr><span class="type-parameter">R</span>, <span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="runUnary-param-action"><span class="type-annotation">R</span> <span class="parameter-name">action</span>(<span class="parameter" id="action-param-argument"><span class="type-annotation">T</span> <span class="parameter-name">argument</span></span>), </span> <span class="parameter" id="runUnary-param-argument"><span class="type-annotation">T</span> <span class="parameter-name">argument</span></span>)
+            <span class="returntype parameter">&#8594; R</span>
+          </span>
+        </dt>
+        <dd>
+          Executes the given <code>action</code> with <code>argument</code> in this zone. <a href="dart-async/Zone/runUnary.html">[...]</a>
+          
+</dd>
+        <dt id="runUnaryGuarded" class="callable">
+          <span class="name"><a href="dart-async/Zone/runUnaryGuarded.html">runUnaryGuarded</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="runUnaryGuarded-param-action"><span class="type-annotation">void</span> <span class="parameter-name">action</span>(<span class="parameter" id="action-param-argument"><span class="type-annotation">T</span> <span class="parameter-name">argument</span></span>), </span> <span class="parameter" id="runUnaryGuarded-param-argument"><span class="type-annotation">T</span> <span class="parameter-name">argument</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Executes the given <code>action</code> with <code>argument</code> in this zone and
+catches synchronous errors. <a href="dart-async/Zone/runUnaryGuarded.html">[...]</a>
+          
+</dd>
+        <dt id="scheduleMicrotask" class="callable">
+          <span class="name"><a href="dart-async/Zone/scheduleMicrotask.html">scheduleMicrotask</a></span><span class="signature">(<wbr><span class="parameter" id="scheduleMicrotask-param-callback"><span class="type-annotation">void</span> <span class="parameter-name">callback</span>()</span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Runs <code>callback</code> asynchronously in this zone. <a href="dart-async/Zone/scheduleMicrotask.html">[...]</a>
+          
+</dd>
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Invoked when a non-existent method or property is accessed. <a href="dart-core/Object/noSuchMethod.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toString" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a string representation of this object.
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator []" class="callable">
+          <span class="name"><a href="dart-async/Zone/operator_get.html">operator []</a></span><span class="signature">(<wbr><span class="parameter" id="[]-param-key"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">key</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd>
+          Retrieves the zone-value associated with <code>key</code>. <a href="dart-async/Zone/operator_get.html">[...]</a>
+          
+</dd>
+        <dt id="operator ==" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation">dynamic</span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          The equality operator. <a href="dart-core/Object/operator_equals.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="static-properties">
+      <h2>Static Properties</h2>
+
+      <dl class="properties">
+        <dt id="current" class="property">
+          <span class="name"><a href="dart-async/Zone/current.html">current</a></span>
+          <span class="signature">&#8594; <a href="dart-async/Zone-class.html">Zone</a></span>
+        </dt>
+        <dd>
+          The zone that is currently active.
+          <div class="features">read-only</div>
+</dd>
+      </dl>
+    </section>
+
+
+    <section class="summary offset-anchor" id="constants">
+      <h2>Constants</h2>
+
+      <dl class="properties">
+        <dt id="ROOT" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-async/Zone/ROOT-constant.html">ROOT</a></span>
+          <span class="signature">&#8594; const <a href="dart-async/Zone-class.html">Zone</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use root instead&quot;)</div>
+  <div>
+            <span class="signature"><code>root</code></span>
+          </div>
+        </dd>
+        <dt id="root" class="constant">
+          <span class="name "><a href="dart-async/Zone/root-constant.html">root</a></span>
+          <span class="signature">&#8594; const <a href="dart-async/Zone-class.html">Zone</a></span>
+        </dt>
+        <dd>
+          The root zone. <a href="dart-async/Zone/root-constant.html">[...]</a>
+          
+  <div>
+            <span class="signature"><code>_rootZone</code></span>
+          </div>
+        </dd>
+      </dl>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <ol>
+    
+      <li class="section-title">
+        <a href="dart-async/Zone-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-async/Zone/errorZone.html">errorZone</a></li>
+      <li><a href="dart-async/Zone/parent.html">parent</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-async/Zone-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-async/Zone/bindBinaryCallback.html">bindBinaryCallback</a></li>
+      <li><a href="dart-async/Zone/bindBinaryCallbackGuarded.html">bindBinaryCallbackGuarded</a></li>
+      <li><a href="dart-async/Zone/bindCallback.html">bindCallback</a></li>
+      <li><a href="dart-async/Zone/bindCallbackGuarded.html">bindCallbackGuarded</a></li>
+      <li><a href="dart-async/Zone/bindUnaryCallback.html">bindUnaryCallback</a></li>
+      <li><a href="dart-async/Zone/bindUnaryCallbackGuarded.html">bindUnaryCallbackGuarded</a></li>
+      <li><a href="dart-async/Zone/createPeriodicTimer.html">createPeriodicTimer</a></li>
+      <li><a href="dart-async/Zone/createTimer.html">createTimer</a></li>
+      <li><a href="dart-async/Zone/errorCallback.html">errorCallback</a></li>
+      <li><a href="dart-async/Zone/fork.html">fork</a></li>
+      <li><a href="dart-async/Zone/handleUncaughtError.html">handleUncaughtError</a></li>
+      <li><a href="dart-async/Zone/inSameErrorZone.html">inSameErrorZone</a></li>
+      <li><a href="dart-async/Zone/print.html">print</a></li>
+      <li><a href="dart-async/Zone/registerBinaryCallback.html">registerBinaryCallback</a></li>
+      <li><a href="dart-async/Zone/registerCallback.html">registerCallback</a></li>
+      <li><a href="dart-async/Zone/registerUnaryCallback.html">registerUnaryCallback</a></li>
+      <li><a href="dart-async/Zone/run.html">run</a></li>
+      <li><a href="dart-async/Zone/runBinary.html">runBinary</a></li>
+      <li><a href="dart-async/Zone/runBinaryGuarded.html">runBinaryGuarded</a></li>
+      <li><a href="dart-async/Zone/runGuarded.html">runGuarded</a></li>
+      <li><a href="dart-async/Zone/runUnary.html">runUnary</a></li>
+      <li><a href="dart-async/Zone/runUnaryGuarded.html">runUnaryGuarded</a></li>
+      <li><a href="dart-async/Zone/scheduleMicrotask.html">scheduleMicrotask</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/Object/toString.html">toString</a></li>
+    
+      <li class="section-title"><a href="dart-async/Zone-class.html#operators">Operators</a></li>
+      <li><a href="dart-async/Zone/operator_get.html">operator []</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+      <li class="section-title"><a href="dart-async/Zone-class.html#static-properties">Static properties</a></li>
+      <li><a href="dart-async/Zone/current.html">current</a></li>
+    
+    
+      <li class="section-title"><a href="dart-async/Zone-class.html#constants">Constants</a></li>
+      <li><a class="deprecated" href="dart-async/Zone/ROOT-constant.html">ROOT</a></li>
+      <li><a href="dart-async/Zone/root-constant.html">root</a></li>
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

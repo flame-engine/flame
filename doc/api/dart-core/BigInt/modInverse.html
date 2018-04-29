@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the modInverse method from the BigInt class, for the Dart programming language.">
+  <title>modInverse method - BigInt class - dart:core library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-core/dart-core-library.html">dart:core</a></li>
+    <li><a href="dart-core/BigInt-class.html">BigInt</a></li>
+    <li class="self-crumb">modInverse abstract method</li>
+  </ol>
+  <div class="self-name">modInverse</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>BigInt class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-core/BigInt-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-core/BigInt/BigInt.from.html">from</a></li>
+    
+      <li class="section-title">
+        <a href="dart-core/BigInt-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-core/BigInt/bitLength.html">bitLength</a></li>
+      <li><a href="dart-core/BigInt/isEven.html">isEven</a></li>
+      <li><a href="dart-core/BigInt/isNegative.html">isNegative</a></li>
+      <li><a href="dart-core/BigInt/isOdd.html">isOdd</a></li>
+      <li><a href="dart-core/BigInt/isValidInt.html">isValidInt</a></li>
+      <li><a href="dart-core/BigInt/sign.html">sign</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-core/BigInt-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-core/BigInt/abs.html">abs</a></li>
+      <li><a href="dart-core/BigInt/compareTo.html">compareTo</a></li>
+      <li><a href="dart-core/BigInt/gcd.html">gcd</a></li>
+      <li><a href="dart-core/BigInt/modInverse.html">modInverse</a></li>
+      <li><a href="dart-core/BigInt/modPow.html">modPow</a></li>
+      <li><a href="dart-core/BigInt/pow.html">pow</a></li>
+      <li><a href="dart-core/BigInt/remainder.html">remainder</a></li>
+      <li><a href="dart-core/BigInt/toDouble.html">toDouble</a></li>
+      <li><a href="dart-core/BigInt/toInt.html">toInt</a></li>
+      <li><a href="dart-core/BigInt/toRadixString.html">toRadixString</a></li>
+      <li><a href="dart-core/BigInt/toSigned.html">toSigned</a></li>
+      <li><a href="dart-core/BigInt/toString.html">toString</a></li>
+      <li><a href="dart-core/BigInt/toUnsigned.html">toUnsigned</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    
+      <li class="section-title"><a href="dart-core/BigInt-class.html#operators">Operators</a></li>
+      <li><a href="dart-core/BigInt/operator_modulo.html">operator %</a></li>
+      <li><a href="dart-core/BigInt/operator_bitwise_and.html">operator &</a></li>
+      <li><a href="dart-core/BigInt/operator_multiply.html">operator *</a></li>
+      <li><a href="dart-core/BigInt/operator_plus.html">operator +</a></li>
+      <li><a href="dart-core/BigInt/operator_minus.html">operator -</a></li>
+      <li><a href="dart-core/BigInt/operator_divide.html">operator /</a></li>
+      <li><a href="dart-core/BigInt/operator_less.html">operator <</a></li>
+      <li><a href="dart-core/BigInt/operator_shift_left.html">operator <<</a></li>
+      <li><a href="dart-core/BigInt/operator_less_equal.html">operator <=</a></li>
+      <li><a href="dart-core/BigInt/operator_greater.html">operator ></a></li>
+      <li><a href="dart-core/BigInt/operator_greater_equal.html">operator >=</a></li>
+      <li><a href="dart-core/BigInt/operator_shift_right.html">operator >></a></li>
+      <li><a href="dart-core/BigInt/operator_bitwise_exclusive_or.html">operator ^</a></li>
+      <li><a href="dart-core/BigInt/operator_unary_minus.html">operator unary-</a></li>
+      <li><a href="dart-core/BigInt/operator_bitwise_or.html">operator |</a></li>
+      <li><a href="dart-core/BigInt/operator_bitwise_negate.html">operator ~</a></li>
+      <li><a href="dart-core/BigInt/operator_truncate_divide.html">operator ~/</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+      <li class="section-title"><a href="dart-core/BigInt-class.html#static-properties">Static properties</a></li>
+      <li><a href="dart-core/BigInt/one.html">one</a></li>
+      <li><a href="dart-core/BigInt/two.html">two</a></li>
+      <li><a href="dart-core/BigInt/zero.html">zero</a></li>
+    
+      <li class="section-title"><a href="dart-core/BigInt-class.html#static-methods">Static methods</a></li>
+      <li><a href="dart-core/BigInt/parse.html">parse</a></li>
+      <li><a href="dart-core/BigInt/tryParse.html">tryParse</a></li>
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>modInverse method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype"><a href="dart-core/BigInt-class.html">BigInt</a></span>
+      <span class="name ">modInverse</span>
+(<wbr><span class="parameter" id="modInverse-param-modulus"><span class="type-annotation"><a href="dart-core/BigInt-class.html">BigInt</a></span> <span class="parameter-name">modulus</span></span>)
+    </section>
+    <section class="desc markdown">
+      <p>Returns the modular multiplicative inverse of this big integer
+modulo <code>modulus</code>.</p>
+<p>The <code>modulus</code> must be positive.</p>
+<p>It is an error if no modular inverse exists.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">&#47;&#47; Returns 1&#47;this % modulus, with modulus &gt; 0.
+BigInt modInverse(BigInt modulus);</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

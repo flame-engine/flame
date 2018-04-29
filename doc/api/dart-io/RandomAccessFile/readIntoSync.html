@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the readIntoSync method from the RandomAccessFile class, for the Dart programming language.">
+  <title>readIntoSync method - RandomAccessFile class - dart:io library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-io/dart-io-library.html">dart:io</a></li>
+    <li><a href="dart-io/RandomAccessFile-class.html">RandomAccessFile</a></li>
+    <li class="self-crumb">readIntoSync abstract method</li>
+  </ol>
+  <div class="self-name">readIntoSync</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>RandomAccessFile class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-io/RandomAccessFile-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-io/RandomAccessFile/RandomAccessFile.html">RandomAccessFile</a></li>
+    
+      <li class="section-title">
+        <a href="dart-io/RandomAccessFile-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-io/RandomAccessFile/path.html">path</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-io/RandomAccessFile-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-io/RandomAccessFile/close.html">close</a></li>
+      <li><a href="dart-io/RandomAccessFile/closeSync.html">closeSync</a></li>
+      <li><a href="dart-io/RandomAccessFile/flush.html">flush</a></li>
+      <li><a href="dart-io/RandomAccessFile/flushSync.html">flushSync</a></li>
+      <li><a href="dart-io/RandomAccessFile/length.html">length</a></li>
+      <li><a href="dart-io/RandomAccessFile/lengthSync.html">lengthSync</a></li>
+      <li><a href="dart-io/RandomAccessFile/lock.html">lock</a></li>
+      <li><a href="dart-io/RandomAccessFile/lockSync.html">lockSync</a></li>
+      <li><a href="dart-io/RandomAccessFile/position.html">position</a></li>
+      <li><a href="dart-io/RandomAccessFile/positionSync.html">positionSync</a></li>
+      <li><a href="dart-io/RandomAccessFile/read.html">read</a></li>
+      <li><a href="dart-io/RandomAccessFile/readByte.html">readByte</a></li>
+      <li><a href="dart-io/RandomAccessFile/readByteSync.html">readByteSync</a></li>
+      <li><a href="dart-io/RandomAccessFile/readInto.html">readInto</a></li>
+      <li><a href="dart-io/RandomAccessFile/readIntoSync.html">readIntoSync</a></li>
+      <li><a href="dart-io/RandomAccessFile/readSync.html">readSync</a></li>
+      <li><a href="dart-io/RandomAccessFile/setPosition.html">setPosition</a></li>
+      <li><a href="dart-io/RandomAccessFile/setPositionSync.html">setPositionSync</a></li>
+      <li><a href="dart-io/RandomAccessFile/toString.html">toString</a></li>
+      <li><a href="dart-io/RandomAccessFile/truncate.html">truncate</a></li>
+      <li><a href="dart-io/RandomAccessFile/truncateSync.html">truncateSync</a></li>
+      <li><a href="dart-io/RandomAccessFile/unlock.html">unlock</a></li>
+      <li><a href="dart-io/RandomAccessFile/unlockSync.html">unlockSync</a></li>
+      <li><a href="dart-io/RandomAccessFile/writeByte.html">writeByte</a></li>
+      <li><a href="dart-io/RandomAccessFile/writeByteSync.html">writeByteSync</a></li>
+      <li><a href="dart-io/RandomAccessFile/writeFrom.html">writeFrom</a></li>
+      <li><a href="dart-io/RandomAccessFile/writeFromSync.html">writeFromSync</a></li>
+      <li><a href="dart-io/RandomAccessFile/writeString.html">writeString</a></li>
+      <li><a href="dart-io/RandomAccessFile/writeStringSync.html">writeStringSync</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    
+      <li class="section-title inherited"><a href="dart-io/RandomAccessFile-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>readIntoSync method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype"><a href="dart-core/int-class.html">int</a></span>
+      <span class="name ">readIntoSync</span>
+(<wbr><span class="parameter" id="readIntoSync-param-buffer"><span class="type-annotation"><a href="dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/int-class.html">int</a></span>&gt;</span></span> <span class="parameter-name">buffer</span>, [</span> <span class="parameter" id="readIntoSync-param-start"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">start</span> = <span class="default-value">0</span>, </span> <span class="parameter" id="readIntoSync-param-end"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">end</span></span> ])
+    </section>
+    <section class="desc markdown">
+      <p>Synchronously reads into an existing <a href="dart-core/List-class.html">List<int></int></a> from the file. If <code>start</code>
+is present, the bytes will be filled into <code>buffer</code> from at index <code>start</code>,
+otherwise index 0.  If <code>end</code> is present, the <code>end</code> - <code>start</code> bytes will be
+read into <code>buffer</code>, otherwise up to <code>buffer.length</code>. If <code>end</code> == <code>start</code>
+nothing happens.</p>
+<p>Throws a <a href="dart-io/FileSystemException-class.html">FileSystemException</a> if the operation fails.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">int readIntoSync(List&lt;int&gt; buffer, [int start = 0, int end]);</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

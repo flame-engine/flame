@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the existsSync method from the FileSystemEntity class, for the Dart programming language.">
+  <title>existsSync method - FileSystemEntity class - dart:io library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-io/dart-io-library.html">dart:io</a></li>
+    <li><a href="dart-io/FileSystemEntity-class.html">FileSystemEntity</a></li>
+    <li class="self-crumb">existsSync abstract method</li>
+  </ol>
+  <div class="self-name">existsSync</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>FileSystemEntity class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-io/FileSystemEntity-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-io/FileSystemEntity/FileSystemEntity.html">FileSystemEntity</a></li>
+    
+      <li class="section-title">
+        <a href="dart-io/FileSystemEntity-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-io/FileSystemEntity/absolute.html">absolute</a></li>
+      <li><a href="dart-io/FileSystemEntity/isAbsolute.html">isAbsolute</a></li>
+      <li><a href="dart-io/FileSystemEntity/parent.html">parent</a></li>
+      <li><a href="dart-io/FileSystemEntity/path.html">path</a></li>
+      <li><a href="dart-io/FileSystemEntity/uri.html">uri</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-io/FileSystemEntity-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-io/FileSystemEntity/delete.html">delete</a></li>
+      <li><a href="dart-io/FileSystemEntity/deleteSync.html">deleteSync</a></li>
+      <li><a href="dart-io/FileSystemEntity/exists.html">exists</a></li>
+      <li><a href="dart-io/FileSystemEntity/existsSync.html">existsSync</a></li>
+      <li><a href="dart-io/FileSystemEntity/rename.html">rename</a></li>
+      <li><a href="dart-io/FileSystemEntity/renameSync.html">renameSync</a></li>
+      <li><a href="dart-io/FileSystemEntity/resolveSymbolicLinks.html">resolveSymbolicLinks</a></li>
+      <li><a href="dart-io/FileSystemEntity/resolveSymbolicLinksSync.html">resolveSymbolicLinksSync</a></li>
+      <li><a href="dart-io/FileSystemEntity/stat.html">stat</a></li>
+      <li><a href="dart-io/FileSystemEntity/statSync.html">statSync</a></li>
+      <li><a href="dart-io/FileSystemEntity/watch.html">watch</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/Object/toString.html">toString</a></li>
+    
+      <li class="section-title inherited"><a href="dart-io/FileSystemEntity-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+      <li class="section-title"><a href="dart-io/FileSystemEntity-class.html#static-properties">Static properties</a></li>
+      <li><a href="dart-io/FileSystemEntity/isWatchSupported.html">isWatchSupported</a></li>
+    
+      <li class="section-title"><a href="dart-io/FileSystemEntity-class.html#static-methods">Static methods</a></li>
+      <li><a href="dart-io/FileSystemEntity/identical.html">identical</a></li>
+      <li><a href="dart-io/FileSystemEntity/identicalSync.html">identicalSync</a></li>
+      <li><a href="dart-io/FileSystemEntity/isDirectory.html">isDirectory</a></li>
+      <li><a href="dart-io/FileSystemEntity/isDirectorySync.html">isDirectorySync</a></li>
+      <li><a href="dart-io/FileSystemEntity/isFile.html">isFile</a></li>
+      <li><a href="dart-io/FileSystemEntity/isFileSync.html">isFileSync</a></li>
+      <li><a href="dart-io/FileSystemEntity/isLink.html">isLink</a></li>
+      <li><a href="dart-io/FileSystemEntity/isLinkSync.html">isLinkSync</a></li>
+      <li><a href="dart-io/FileSystemEntity/parentOf.html">parentOf</a></li>
+      <li><a href="dart-io/FileSystemEntity/type.html">type</a></li>
+      <li><a href="dart-io/FileSystemEntity/typeSync.html">typeSync</a></li>
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>existsSync method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype"><a href="dart-core/bool-class.html">bool</a></span>
+      <span class="name ">existsSync</span>
+(<wbr>)
+    </section>
+    <section class="desc markdown">
+      <p>Synchronously checks whether the file system entity with this path
+exists.</p>
+<p>Since FileSystemEntity is abstract, every FileSystemEntity object
+is actually an instance of one of the subclasses <a href="dart-io/File-class.html">File</a>,
+<a href="dart-io/Directory-class.html">Directory</a>, and <a href="dart-io/Link-class.html">Link</a>.  Calling <a href="dart-io/FileSystemEntity/existsSync.html">existsSync</a> on an instance of
+one of these subclasses checks whether the object exists in the
+file system object exists and is of the correct type (file,
+directory, or link).  To check whether a path points to an object
+on the file system, regardless of the object's type, use the
+<a href="dart-io/FileSystemEntity/typeSync.html">typeSync</a> static method.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">bool existsSync();</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the fsWatchIsSupported method from the IOOverrides class, for the Dart programming language.">
+  <title>fsWatchIsSupported method - IOOverrides class - dart:io library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-io/dart-io-library.html">dart:io</a></li>
+    <li><a href="dart-io/IOOverrides-class.html">IOOverrides</a></li>
+    <li class="self-crumb">fsWatchIsSupported method</li>
+  </ol>
+  <div class="self-name">fsWatchIsSupported</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>IOOverrides class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-io/IOOverrides-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-io/IOOverrides/IOOverrides.html">IOOverrides</a></li>
+    
+      <li class="section-title inherited">
+        <a href="dart-io/IOOverrides-class.html#instance-properties">Properties</a>
+      </li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-io/IOOverrides-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-io/IOOverrides/createDirectory.html">createDirectory</a></li>
+      <li><a href="dart-io/IOOverrides/createFile.html">createFile</a></li>
+      <li><a href="dart-io/IOOverrides/createLink.html">createLink</a></li>
+      <li><a href="dart-io/IOOverrides/fseGetType.html">fseGetType</a></li>
+      <li><a href="dart-io/IOOverrides/fseGetTypeSync.html">fseGetTypeSync</a></li>
+      <li><a href="dart-io/IOOverrides/fseIdentical.html">fseIdentical</a></li>
+      <li><a href="dart-io/IOOverrides/fseIdenticalSync.html">fseIdenticalSync</a></li>
+      <li><a href="dart-io/IOOverrides/fsWatch.html">fsWatch</a></li>
+      <li><a href="dart-io/IOOverrides/fsWatchIsSupported.html">fsWatchIsSupported</a></li>
+      <li><a href="dart-io/IOOverrides/getCurrentDirectory.html">getCurrentDirectory</a></li>
+      <li><a href="dart-io/IOOverrides/getSystemTempDirectory.html">getSystemTempDirectory</a></li>
+      <li><a href="dart-io/IOOverrides/setCurrentDirectory.html">setCurrentDirectory</a></li>
+      <li><a href="dart-io/IOOverrides/socketConnect.html">socketConnect</a></li>
+      <li><a href="dart-io/IOOverrides/stat.html">stat</a></li>
+      <li><a href="dart-io/IOOverrides/statSync.html">statSync</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/Object/toString.html">toString</a></li>
+    
+      <li class="section-title inherited"><a href="dart-io/IOOverrides-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+      <li class="section-title"><a href="dart-io/IOOverrides-class.html#static-properties">Static properties</a></li>
+      <li><a href="dart-io/IOOverrides/current.html">current</a></li>
+      <li><a href="dart-io/IOOverrides/global.html">global</a></li>
+    
+      <li class="section-title"><a href="dart-io/IOOverrides-class.html#static-methods">Static methods</a></li>
+      <li><a href="dart-io/IOOverrides/runWithIOOverrides.html">runWithIOOverrides</a></li>
+      <li><a href="dart-io/IOOverrides/runZoned.html">runZoned</a></li>
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>fsWatchIsSupported method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype"><a href="dart-core/bool-class.html">bool</a></span>
+      <span class="name ">fsWatchIsSupported</span>
+(<wbr>)
+    </section>
+    <section class="desc markdown">
+      <p>Returns <code>true</code> when <a href="dart-io/FileSystemEntity/watch.html">FileSystemEntity.watch</a> is supported.</p>
+<p>When this override is installed, this function overrides the behavior of
+<code>FileSystemEntity.isWatchSupported</code>.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">bool fsWatchIsSupported() =&gt; _FileSystemWatcher.isSupported;</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

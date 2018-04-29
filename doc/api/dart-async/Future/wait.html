@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the wait method from the Future class, for the Dart programming language.">
+  <title>wait method - Future class - dart:async library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-async/dart-async-library.html">dart:async</a></li>
+    <li><a href="dart-async/Future-class.html">Future<span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></a></li>
+    <li class="self-crumb">wait&lt;<wbr><span class="type-parameter">T</span>&gt; method</li>
+  </ol>
+  <div class="self-name">wait</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>Future class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-async/Future-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-async/Future/Future.html">Future</a></li>
+      <li><a href="dart-async/Future/Future.delayed.html">delayed</a></li>
+      <li><a href="dart-async/Future/Future.error.html">error</a></li>
+      <li><a href="dart-async/Future/Future.microtask.html">microtask</a></li>
+      <li><a href="dart-async/Future/Future.sync.html">sync</a></li>
+      <li><a href="dart-async/Future/Future.value.html">value</a></li>
+    
+      <li class="section-title inherited">
+        <a href="dart-async/Future-class.html#instance-properties">Properties</a>
+      </li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-async/Future-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-async/Future/asStream.html">asStream</a></li>
+      <li><a href="dart-async/Future/catchError.html">catchError</a></li>
+      <li><a href="dart-async/Future/then.html">then</a></li>
+      <li><a href="dart-async/Future/timeout.html">timeout</a></li>
+      <li><a href="dart-async/Future/whenComplete.html">whenComplete</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/Object/toString.html">toString</a></li>
+    
+      <li class="section-title inherited"><a href="dart-async/Future-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+      <li class="section-title"><a href="dart-async/Future-class.html#static-methods">Static methods</a></li>
+      <li><a href="dart-async/Future/any.html">any</a></li>
+      <li><a href="dart-async/Future/doWhile.html">doWhile</a></li>
+      <li><a href="dart-async/Future/forEach.html">forEach</a></li>
+      <li><a href="dart-async/Future/wait.html">wait</a></li>
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>wait&lt;<wbr><span class="type-parameter">T</span>&gt; method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype"><a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span>&gt;</span></span>
+      <span class="name ">wait</span>
+&lt;<wbr><span class="type-parameter">T</span>&gt;(<wbr><span class="parameter" id="wait-param-futures"><span class="type-annotation"><a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span>&gt;</span></span> <span class="parameter-name">futures</span>, {</span> <span class="parameter" id="wait-param-eagerError"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">eagerError</span>: <span class="default-value">false</span>, </span> <span class="parameter" id="wait-param-cleanUp"><span class="type-annotation">void</span> <span class="parameter-name">cleanUp</span>(<span class="parameter" id="cleanUp-param-successValue"><span class="type-annotation">T</span> <span class="parameter-name">successValue</span></span>)</span> })
+    </section>
+    <section class="desc markdown">
+      <p>Waits for multiple futures to complete and collects their results.</p>
+<p>Returns a future which will complete once all the provided futures
+have completed, either with their results, or with an error if either
+of the provided futures fail.</p>
+<p>The value of the returned future will be a list of all the values that
+were produced.</p>
+<p>If any future completes with an error,
+then the returned future completes with that error.
+If further futures also complete with errors, those errors are discarded.</p>
+<p>If <code>eagerError</code> is true, the returned future completes with an error
+immediately on the first error from one of the futures. Otherwise all
+futures must complete before the returned future is completed (still with
+the first error; the remaining errors are silently dropped).</p>
+<p>In the case of an error, <code>cleanUp</code> (if provided), is invoked on any
+non-null result of successful futures.
+This makes it possible to <code>cleanUp</code> resources that would otherwise be
+lost (since the returned future does not provide access to these values).
+The <code>cleanUp</code> function is unused if there is no error.</p>
+<p>The call to <code>cleanUp</code> should not throw. If it does, the error will be an
+uncaught asynchronous error.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">static Future&lt;List&lt;T&gt;&gt; wait&lt;T&gt;(Iterable&lt;Future&lt;T&gt;&gt; futures,
+    {bool eagerError: false, void cleanUp(T successValue)}) {
+  final _Future&lt;List&lt;T&gt;&gt; result = new _Future&lt;List&lt;T&gt;&gt;();
+  List&lt;T&gt; values; &#47;&#47; Collects the values. Set to null on error.
+  int remaining = 0; &#47;&#47; How many futures are we waiting for.
+  var error; &#47;&#47; The first error from a future.
+  StackTrace stackTrace; &#47;&#47; The stackTrace that came with the error.
+
+  &#47;&#47; Handle an error from any of the futures.
+  &#47;&#47; TODO(jmesserly): use `void` return type once it can be inferred for the
+  &#47;&#47; `then` call below.
+  handleError(theError, theStackTrace) {
+    remaining--;
+    if (values != null) {
+      if (cleanUp != null) {
+        for (var value in values) {
+          if (value != null) {
+            &#47;&#47; Ensure errors from cleanUp are uncaught.
+            new Future.sync(() {
+              cleanUp(value);
+            });
+          }
+        }
+      }
+      values = null;
+      if (remaining == 0 || eagerError) {
+        result._completeError(theError, theStackTrace);
+      } else {
+        error = theError;
+        stackTrace = theStackTrace;
+      }
+    } else if (remaining == 0 &amp;&amp; !eagerError) {
+      result._completeError(error, stackTrace);
+    }
+  }
+
+  try {
+    &#47;&#47; As each future completes, put its value into the corresponding
+    &#47;&#47; position in the list of values.
+    for (var future in futures) {
+      int pos = remaining;
+      future.then((T value) {
+        remaining--;
+        if (values != null) {
+          values[pos] = value;
+          if (remaining == 0) {
+            result._completeWithValue(values);
+          }
+        } else {
+          if (cleanUp != null &amp;&amp; value != null) {
+            &#47;&#47; Ensure errors from cleanUp are uncaught.
+            new Future.sync(() {
+              cleanUp(value);
+            });
+          }
+          if (remaining == 0 &amp;&amp; !eagerError) {
+            result._completeError(error, stackTrace);
+          }
+        }
+      }, onError: handleError);
+      &#47;&#47; Increment the &#39;remaining&#39; after the call to &#39;then&#39;.
+      &#47;&#47; If that call throws, we don&#39;t expect any future callback from
+      &#47;&#47; the future, and we also don&#39;t increment remaining.
+      remaining++;
+    }
+    if (remaining == 0) {
+      return new Future.value(const []);
+    }
+    values = new List&lt;T&gt;(remaining);
+  } catch (e, st) {
+    &#47;&#47; The error must have been thrown while iterating over the futures
+    &#47;&#47; list, or while installing a callback handler on the future.
+    if (remaining == 0 || eagerError) {
+      &#47;&#47; Throw a new Future.error.
+      &#47;&#47; Don&#39;t just call `result._completeError` since that would propagate
+      &#47;&#47; the error too eagerly, not giving the callers time to install
+      &#47;&#47; error handlers.
+      &#47;&#47; Also, don&#39;t use `_asyncCompleteError` since that one doesn&#39;t give
+      &#47;&#47; zones the chance to intercept the error.
+      return new Future.error(e, st);
+    } else {
+      &#47;&#47; Don&#39;t allocate a list for values, thus indicating that there was an
+      &#47;&#47; error.
+      &#47;&#47; Set error to the caught exception.
+      error = e;
+      stackTrace = st;
+    }
+  }
+  return result;
+}</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

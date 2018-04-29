@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the int class from the dart:core library, for the Dart programming language.">
+  <title>int class - dart:core library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-core/dart-core-library.html">dart:core</a></li>
+    <li class="self-crumb">int abstract class</li>
+  </ol>
+  <div class="self-name">int</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>dart:core library</h5>
+    <ol>
+      <li class="section-title"><a href="dart-core/dart-core-library.html#classes">Classes</a></li>
+      <li><a href="dart-core/BidirectionalIterator-class.html">BidirectionalIterator</a></li>
+      <li><a href="dart-core/BigInt-class.html">BigInt</a></li>
+      <li><a href="dart-core/bool-class.html">bool</a></li>
+      <li><a href="dart-core/Comparable-class.html">Comparable</a></li>
+      <li><a href="dart-core/DateTime-class.html">DateTime</a></li>
+      <li><a href="dart-core/Deprecated-class.html">Deprecated</a></li>
+      <li><a href="dart-core/double-class.html">double</a></li>
+      <li><a href="dart-core/Duration-class.html">Duration</a></li>
+      <li><a href="dart-core/Expando-class.html">Expando</a></li>
+      <li><a href="dart-core/Function-class.html">Function</a></li>
+      <li><a href="dart-core/int-class.html">int</a></li>
+      <li><a href="dart-core/Invocation-class.html">Invocation</a></li>
+      <li><a href="dart-core/Iterable-class.html">Iterable</a></li>
+      <li><a href="dart-core/Iterator-class.html">Iterator</a></li>
+      <li><a href="dart-core/List-class.html">List</a></li>
+      <li><a href="dart-core/Map-class.html">Map</a></li>
+      <li><a href="dart-core/MapEntry-class.html">MapEntry</a></li>
+      <li><a href="dart-core/Match-class.html">Match</a></li>
+      <li><a href="dart-core/Null-class.html">Null</a></li>
+      <li><a href="dart-core/num-class.html">num</a></li>
+      <li><a href="dart-core/Object-class.html">Object</a></li>
+      <li><a href="dart-core/Pattern-class.html">Pattern</a></li>
+      <li><a href="dart-core/pragma-class.html">pragma</a></li>
+      <li><a href="dart-core/Provisional-class.html">Provisional</a></li>
+      <li><a href="dart-core/RegExp-class.html">RegExp</a></li>
+      <li><a href="dart-core/RuneIterator-class.html">RuneIterator</a></li>
+      <li><a href="dart-core/Runes-class.html">Runes</a></li>
+      <li><a href="dart-core/Set-class.html">Set</a></li>
+      <li><a href="dart-core/Sink-class.html">Sink</a></li>
+      <li><a href="dart-core/StackTrace-class.html">StackTrace</a></li>
+      <li><a href="dart-core/Stopwatch-class.html">Stopwatch</a></li>
+      <li><a href="dart-core/String-class.html">String</a></li>
+      <li><a href="dart-core/StringBuffer-class.html">StringBuffer</a></li>
+      <li><a href="dart-core/StringSink-class.html">StringSink</a></li>
+      <li><a href="dart-core/Symbol-class.html">Symbol</a></li>
+      <li><a href="dart-core/Type-class.html">Type</a></li>
+      <li><a href="dart-core/Uri-class.html">Uri</a></li>
+      <li><a href="dart-core/UriData-class.html">UriData</a></li>
+    
+      <li class="section-title"><a href="dart-core/dart-core-library.html#constants">Constants</a></li>
+      <li><a href="dart-core/deprecated-constant.html">deprecated</a></li>
+      <li><a href="dart-core/override-constant.html">override</a></li>
+      <li><a href="dart-core/provisional-constant.html">provisional</a></li>
+      <li><a class="deprecated" href="dart-core/proxy-constant.html">proxy</a></li>
+    
+    
+      <li class="section-title"><a href="dart-core/dart-core-library.html#functions">Functions</a></li>
+      <li><a href="dart-core/identical.html">identical</a></li>
+      <li><a href="dart-core/identityHashCode.html">identityHashCode</a></li>
+      <li><a href="dart-core/print.html">print</a></li>
+    
+    
+      <li class="section-title"><a href="dart-core/dart-core-library.html#typedefs">Typedefs</a></li>
+      <li><a href="dart-core/Comparator.html">Comparator</a></li>
+    
+      <li class="section-title"><a href="dart-core/dart-core-library.html#exceptions">Exceptions</a></li>
+      <li><a href="dart-core/AbstractClassInstantiationError-class.html">AbstractClassInstantiationError</a></li>
+      <li><a href="dart-core/ArgumentError-class.html">ArgumentError</a></li>
+      <li><a href="dart-core/AssertionError-class.html">AssertionError</a></li>
+      <li><a href="dart-core/CastError-class.html">CastError</a></li>
+      <li><a href="dart-core/ConcurrentModificationError-class.html">ConcurrentModificationError</a></li>
+      <li><a href="dart-core/CyclicInitializationError-class.html">CyclicInitializationError</a></li>
+      <li><a href="dart-core/Error-class.html">Error</a></li>
+      <li><a href="dart-core/Exception-class.html">Exception</a></li>
+      <li><a href="dart-core/FallThroughError-class.html">FallThroughError</a></li>
+      <li><a href="dart-core/FormatException-class.html">FormatException</a></li>
+      <li><a href="dart-core/IndexError-class.html">IndexError</a></li>
+      <li><a href="dart-core/IntegerDivisionByZeroException-class.html">IntegerDivisionByZeroException</a></li>
+      <li><a href="dart-core/NoSuchMethodError-class.html">NoSuchMethodError</a></li>
+      <li><a href="dart-core/NullThrownError-class.html">NullThrownError</a></li>
+      <li><a href="dart-core/OutOfMemoryError-class.html">OutOfMemoryError</a></li>
+      <li><a href="dart-core/RangeError-class.html">RangeError</a></li>
+      <li><a href="dart-core/StackOverflowError-class.html">StackOverflowError</a></li>
+      <li><a href="dart-core/StateError-class.html">StateError</a></li>
+      <li><a href="dart-core/TypeError-class.html">TypeError</a></li>
+      <li><a href="dart-core/UnimplementedError-class.html">UnimplementedError</a></li>
+      <li><a href="dart-core/UnsupportedError-class.html">UnsupportedError</a></li>
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>int class</h1>
+
+    <section class="desc markdown">
+      <p>An arbitrarily large integer.</p>
+<p><strong>Note:</strong> When compiling to JavaScript, integers are
+implemented as JavaScript numbers. When compiling to JavaScript,
+integers are therefore restricted to 53 significant bits because
+all JavaScript numbers are double-precision floating point
+values. The behavior of the operators and methods in the <a href="dart-core/int-class.html">int</a>
+class therefore sometimes differs between the Dart VM and Dart code
+compiled to JavaScript.</p>
+<p>It is a compile-time error for a class to attempt to extend or implement int.</p>
+    </section>
+    
+    <section>
+      <dl class="dl-horizontal">
+        <dt>Inheritance</dt>
+        <dd><ul class="gt-separated dark clazz-relationships">
+          <li><a href="dart-core/Object-class.html">Object</a></li>
+          <li><a href="dart-core/num-class.html">num</a></li>
+          <li>int</li>
+        </ul></dd>
+
+
+
+
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="constructors">
+      <h2>Constructors</h2>
+
+      <dl class="constructor-summary-list">
+        <dt id="int.fromEnvironment" class="callable">
+          <span class="name"><a href="dart-core/int/int.fromEnvironment.html">int.fromEnvironment</a></span><span class="signature">(<span class="parameter" id="fromEnvironment-param-name"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">name</span>, {</span> <span class="parameter" id="fromEnvironment-param-defaultValue"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">defaultValue</span></span> })</span>
+        </dt>
+        <dd>
+          Returns the integer value of the given environment declaration <code>name</code>. <a href="dart-core/int/int.fromEnvironment.html">[...]</a>
+          <div class="constructor-modifier features">const</div>
+          <div class="constructor-modifier features">factory</div>
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="bitLength" class="property">
+          <span class="name"><a href="dart-core/int/bitLength.html">bitLength</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          Returns the minimum number of bits required to store this integer. <a href="dart-core/int/bitLength.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="isEven" class="property">
+          <span class="name"><a href="dart-core/int/isEven.html">isEven</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd>
+          Returns true if and only if this integer is even.
+          <div class="features">read-only</div>
+</dd>
+        <dt id="isOdd" class="property">
+          <span class="name"><a href="dart-core/int/isOdd.html">isOdd</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd>
+          Returns true if and only if this integer is odd.
+          <div class="features">read-only</div>
+</dd>
+        <dt id="sign" class="property">
+          <span class="name"><a href="dart-core/int/sign.html">sign</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          Returns the sign of this integer. <a href="dart-core/int/sign.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="hashCode" class="property inherited">
+          <span class="name"><a href="dart-core/Object/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd class="inherited">
+          The hash code for this object. <a href="dart-core/Object/hashCode.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="isFinite" class="property inherited">
+          <span class="name"><a href="dart-core/num/isFinite.html">isFinite</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          True if the number is finite; otherwise, false. <a href="dart-core/num/isFinite.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="isInfinite" class="property inherited">
+          <span class="name"><a href="dart-core/num/isInfinite.html">isInfinite</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          True if the number is positive infinity or negative infinity; otherwise,
+false.
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="isNaN" class="property inherited">
+          <span class="name"><a href="dart-core/num/isNaN.html">isNaN</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          True if the number is the double Not-a-Number value; otherwise, false.
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="isNegative" class="property inherited">
+          <span class="name"><a href="dart-core/num/isNegative.html">isNegative</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          True if the number is negative; otherwise, false. <a href="dart-core/num/isNegative.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a href="dart-core/Object/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; <a href="dart-core/Type-class.html">Type</a></span>
+        </dt>
+        <dd class="inherited">
+          A representation of the runtime type of the object.
+          <div class="features">read-only, inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="abs" class="callable">
+          <span class="name"><a href="dart-core/int/abs.html">abs</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns the absolute value of this integer. <a href="dart-core/int/abs.html">[...]</a>
+          
+</dd>
+        <dt id="ceil" class="callable">
+          <span class="name"><a href="dart-core/int/ceil.html">ceil</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns <code>this</code>.
+          
+</dd>
+        <dt id="ceilToDouble" class="callable">
+          <span class="name"><a href="dart-core/int/ceilToDouble.html">ceilToDouble</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns <code>this.toDouble()</code>.
+          
+</dd>
+        <dt id="floor" class="callable">
+          <span class="name"><a href="dart-core/int/floor.html">floor</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns <code>this</code>.
+          
+</dd>
+        <dt id="floorToDouble" class="callable">
+          <span class="name"><a href="dart-core/int/floorToDouble.html">floorToDouble</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns <code>this.toDouble()</code>.
+          
+</dd>
+        <dt id="gcd" class="callable">
+          <span class="name"><a href="dart-core/int/gcd.html">gcd</a></span><span class="signature">(<wbr><span class="parameter" id="gcd-param-other"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns the greatest common divisor of this integer and <code>other</code>. <a href="dart-core/int/gcd.html">[...]</a>
+          
+</dd>
+        <dt id="modInverse" class="callable">
+          <span class="name"><a href="dart-core/int/modInverse.html">modInverse</a></span><span class="signature">(<wbr><span class="parameter" id="modInverse-param-modulus"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">modulus</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns the modular multiplicative inverse of this integer
+modulo <code>modulus</code>. <a href="dart-core/int/modInverse.html">[...]</a>
+          
+</dd>
+        <dt id="modPow" class="callable">
+          <span class="name"><a href="dart-core/int/modPow.html">modPow</a></span><span class="signature">(<wbr><span class="parameter" id="modPow-param-exponent"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">exponent</span>, </span> <span class="parameter" id="modPow-param-modulus"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">modulus</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns this integer to the power of <code>exponent</code> modulo <code>modulus</code>. <a href="dart-core/int/modPow.html">[...]</a>
+          
+</dd>
+        <dt id="round" class="callable">
+          <span class="name"><a href="dart-core/int/round.html">round</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns <code>this</code>.
+          
+</dd>
+        <dt id="roundToDouble" class="callable">
+          <span class="name"><a href="dart-core/int/roundToDouble.html">roundToDouble</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns <code>this.toDouble()</code>.
+          
+</dd>
+        <dt id="toRadixString" class="callable">
+          <span class="name"><a href="dart-core/int/toRadixString.html">toRadixString</a></span><span class="signature">(<wbr><span class="parameter" id="toRadixString-param-radix"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">radix</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd>
+          Converts <a href="dart-core/int-class.html">this</a> to a string representation in the given <code>radix</code>. <a href="dart-core/int/toRadixString.html">[...]</a>
+          
+</dd>
+        <dt id="toSigned" class="callable">
+          <span class="name"><a href="dart-core/int/toSigned.html">toSigned</a></span><span class="signature">(<wbr><span class="parameter" id="toSigned-param-width"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">width</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns the least significant <code>width</code> bits of this integer, extending the
+highest retained bit to the sign.  This is the same as truncating the value
+to fit in <code>width</code> bits using an signed 2-s complement representation.  The
+returned value has the same bit value in all positions higher than <code>width</code>. <a href="dart-core/int/toSigned.html">[...]</a>
+          
+</dd>
+        <dt id="toString" class="callable">
+          <span class="name"><a href="dart-core/int/toString.html">toString</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns a String-representation of this integer. <a href="dart-core/int/toString.html">[...]</a>
+          
+</dd>
+        <dt id="toUnsigned" class="callable">
+          <span class="name"><a href="dart-core/int/toUnsigned.html">toUnsigned</a></span><span class="signature">(<wbr><span class="parameter" id="toUnsigned-param-width"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">width</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns the least significant <code>width</code> bits of this integer as a
+non-negative number (i.e. unsigned representation).  The returned value has
+zeros in all bit positions higher than <code>width</code>. <a href="dart-core/int/toUnsigned.html">[...]</a>
+          
+</dd>
+        <dt id="truncate" class="callable">
+          <span class="name"><a href="dart-core/int/truncate.html">truncate</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns <code>this</code>.
+          
+</dd>
+        <dt id="truncateToDouble" class="callable">
+          <span class="name"><a href="dart-core/int/truncateToDouble.html">truncateToDouble</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns <code>this.toDouble()</code>.
+          
+</dd>
+        <dt id="clamp" class="callable inherited">
+          <span class="name"><a href="dart-core/num/clamp.html">clamp</a></span><span class="signature">(<wbr><span class="parameter" id="clamp-param-lowerLimit"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">lowerLimit</span>, </span> <span class="parameter" id="clamp-param-upperLimit"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">upperLimit</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/num-class.html">num</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns this <a href="dart-core/num-class.html">num</a> clamped to be in the range <code>lowerLimit</code>-<code>upperLimit</code>. <a href="dart-core/num/clamp.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="compareTo" class="callable inherited">
+          <span class="name"><a href="dart-core/num/compareTo.html">compareTo</a></span><span class="signature">(<wbr><span class="parameter" id="compareTo-param-other"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Compares this to <code>other</code>. <a href="dart-core/num/compareTo.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Invoked when a non-existent method or property is accessed. <a href="dart-core/Object/noSuchMethod.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="remainder" class="callable inherited">
+          <span class="name"><a href="dart-core/num/remainder.html">remainder</a></span><span class="signature">(<wbr><span class="parameter" id="remainder-param-other"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/num-class.html">num</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns the remainder of the truncating division of <code>this</code> by <code>other</code>. <a href="dart-core/num/remainder.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toDouble" class="callable inherited">
+          <span class="name"><a href="dart-core/num/toDouble.html">toDouble</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Return this <a href="dart-core/num-class.html">num</a> as a <a href="dart-core/double-class.html">double</a>. <a href="dart-core/num/toDouble.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toInt" class="callable inherited">
+          <span class="name"><a href="dart-core/num/toInt.html">toInt</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Truncates this <a href="dart-core/num-class.html">num</a> to an integer and returns the result as an <a href="dart-core/int-class.html">int</a>.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toStringAsExponential" class="callable inherited">
+          <span class="name"><a href="dart-core/num/toStringAsExponential.html">toStringAsExponential</a></span><span class="signature">(<wbr>[<span class="parameter" id="toStringAsExponential-param-fractionDigits"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">fractionDigits</span></span> ])
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns an exponential string-representation of <code>this</code>. <a href="dart-core/num/toStringAsExponential.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toStringAsFixed" class="callable inherited">
+          <span class="name"><a href="dart-core/num/toStringAsFixed.html">toStringAsFixed</a></span><span class="signature">(<wbr><span class="parameter" id="toStringAsFixed-param-fractionDigits"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">fractionDigits</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a decimal-point string-representation of <code>this</code>. <a href="dart-core/num/toStringAsFixed.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toStringAsPrecision" class="callable inherited">
+          <span class="name"><a href="dart-core/num/toStringAsPrecision.html">toStringAsPrecision</a></span><span class="signature">(<wbr><span class="parameter" id="toStringAsPrecision-param-precision"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">precision</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Converts <code>this</code> to a double and returns a string representation with
+exactly <code>precision</code> significant digits. <a href="dart-core/num/toStringAsPrecision.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator &amp;" class="callable">
+          <span class="name"><a href="dart-core/int/operator_bitwise_and.html">operator &</a></span><span class="signature">(<wbr><span class="parameter" id="&-param-other"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Bit-wise and operator. <a href="dart-core/int/operator_bitwise_and.html">[...]</a>
+          
+</dd>
+        <dt id="operator &lt;&lt;" class="callable">
+          <span class="name"><a href="dart-core/int/operator_shift_left.html">operator <<</a></span><span class="signature">(<wbr><span class="parameter" id="<<-param-shiftAmount"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">shiftAmount</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Shift the bits of this integer to the left by <code>shiftAmount</code>. <a href="dart-core/int/operator_shift_left.html">[...]</a>
+          
+</dd>
+        <dt id="operator &gt;&gt;" class="callable">
+          <span class="name"><a href="dart-core/int/operator_shift_right.html">operator >></a></span><span class="signature">(<wbr><span class="parameter" id=">>-param-shiftAmount"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">shiftAmount</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Shift the bits of this integer to the right by <code>shiftAmount</code>. <a href="dart-core/int/operator_shift_right.html">[...]</a>
+          
+</dd>
+        <dt id="operator ^" class="callable">
+          <span class="name"><a href="dart-core/int/operator_bitwise_exclusive_or.html">operator ^</a></span><span class="signature">(<wbr><span class="parameter" id="^-param-other"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Bit-wise exclusive-or operator. <a href="dart-core/int/operator_bitwise_exclusive_or.html">[...]</a>
+          
+</dd>
+        <dt id="operator unary-" class="callable">
+          <span class="name"><a href="dart-core/int/operator_unary_minus.html">operator unary-</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Return the negative value of this integer. <a href="dart-core/int/operator_unary_minus.html">[...]</a>
+          
+</dd>
+        <dt id="operator |" class="callable">
+          <span class="name"><a href="dart-core/int/operator_bitwise_or.html">operator |</a></span><span class="signature">(<wbr><span class="parameter" id="|-param-other"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Bit-wise or operator. <a href="dart-core/int/operator_bitwise_or.html">[...]</a>
+          
+</dd>
+        <dt id="operator ~" class="callable">
+          <span class="name"><a href="dart-core/int/operator_bitwise_negate.html">operator ~</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          The bit-wise negate operator. <a href="dart-core/int/operator_bitwise_negate.html">[...]</a>
+          
+</dd>
+        <dt id="operator %" class="callable inherited">
+          <span class="name"><a href="dart-core/num/operator_modulo.html">operator %</a></span><span class="signature">(<wbr><span class="parameter" id="%-param-other"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/num-class.html">num</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Euclidean modulo operator. <a href="dart-core/num/operator_modulo.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="operator *" class="callable inherited">
+          <span class="name"><a href="dart-core/num/operator_multiply.html">operator *</a></span><span class="signature">(<wbr><span class="parameter" id="*-param-other"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/num-class.html">num</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Multiplication operator.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="operator +" class="callable inherited">
+          <span class="name"><a href="dart-core/num/operator_plus.html">operator +</a></span><span class="signature">(<wbr><span class="parameter" id="+-param-other"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/num-class.html">num</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Addition operator.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="operator -" class="callable inherited">
+          <span class="name"><a href="dart-core/num/operator_minus.html">operator -</a></span><span class="signature">(<wbr><span class="parameter" id="--param-other"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/num-class.html">num</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Subtraction operator.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="operator /" class="callable inherited">
+          <span class="name"><a href="dart-core/num/operator_divide.html">operator /</a></span><span class="signature">(<wbr><span class="parameter" id="/-param-other"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Division operator.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="operator &lt;" class="callable inherited">
+          <span class="name"><a href="dart-core/num/operator_less.html">operator <</a></span><span class="signature">(<wbr><span class="parameter" id="<-param-other"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Relational less than operator.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="operator &lt;=" class="callable inherited">
+          <span class="name"><a href="dart-core/num/operator_less_equal.html">operator <=</a></span><span class="signature">(<wbr><span class="parameter" id="<=-param-other"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Relational less than or equal operator.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="operator ==" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation">dynamic</span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          The equality operator. <a href="dart-core/Object/operator_equals.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="operator &gt;" class="callable inherited">
+          <span class="name"><a href="dart-core/num/operator_greater.html">operator ></a></span><span class="signature">(<wbr><span class="parameter" id=">-param-other"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Relational greater than operator.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="operator &gt;=" class="callable inherited">
+          <span class="name"><a href="dart-core/num/operator_greater_equal.html">operator >=</a></span><span class="signature">(<wbr><span class="parameter" id=">=-param-other"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Relational greater than or equal operator.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="operator ~/" class="callable inherited">
+          <span class="name"><a href="dart-core/num/operator_truncate_divide.html">operator ~/</a></span><span class="signature">(<wbr><span class="parameter" id="~/-param-other"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Truncating division operator. <a href="dart-core/num/operator_truncate_divide.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+
+    <section class="summary offset-anchor" id="static-methods">
+      <h2>Static Methods</h2>
+      <dl class="callables">
+        <dt id="parse" class="callable">
+          <span class="name"><a href="dart-core/int/parse.html">parse</a></span><span class="signature">(<wbr><span class="parameter" id="parse-param-source"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">source</span>, {</span> <span class="parameter" id="parse-param-radix"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">radix</span>, </span> <span class="parameter" id="parse-param-onError"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">onError</span>(<span class="parameter" id="onError-param-source"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">source</span></span>)</span> })
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Parse <code>source</code> as a, possibly signed, integer literal and return its value. <a href="dart-core/int/parse.html">[...]</a>
+          
+</dd>
+        <dt id="tryParse" class="callable">
+          <span class="name"><a href="dart-core/int/tryParse.html">tryParse</a></span><span class="signature">(<wbr><span class="parameter" id="tryParse-param-source"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">source</span>, {</span> <span class="parameter" id="tryParse-param-radix"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">radix</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Parse <code>source</code> as a, possibly signed, integer literal and return its value. <a href="dart-core/int/tryParse.html">[...]</a>
+          
+</dd>
+      </dl>
+    </section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <ol>
+      <li class="section-title"><a href="dart-core/int-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-core/int/int.fromEnvironment.html">fromEnvironment</a></li>
+    
+      <li class="section-title">
+        <a href="dart-core/int-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-core/int/bitLength.html">bitLength</a></li>
+      <li><a href="dart-core/int/isEven.html">isEven</a></li>
+      <li><a href="dart-core/int/isOdd.html">isOdd</a></li>
+      <li><a href="dart-core/int/sign.html">sign</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/num/isFinite.html">isFinite</a></li>
+      <li class="inherited"><a href="dart-core/num/isInfinite.html">isInfinite</a></li>
+      <li class="inherited"><a href="dart-core/num/isNaN.html">isNaN</a></li>
+      <li class="inherited"><a href="dart-core/num/isNegative.html">isNegative</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-core/int-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-core/int/abs.html">abs</a></li>
+      <li><a href="dart-core/int/ceil.html">ceil</a></li>
+      <li><a href="dart-core/int/ceilToDouble.html">ceilToDouble</a></li>
+      <li><a href="dart-core/int/floor.html">floor</a></li>
+      <li><a href="dart-core/int/floorToDouble.html">floorToDouble</a></li>
+      <li><a href="dart-core/int/gcd.html">gcd</a></li>
+      <li><a href="dart-core/int/modInverse.html">modInverse</a></li>
+      <li><a href="dart-core/int/modPow.html">modPow</a></li>
+      <li><a href="dart-core/int/round.html">round</a></li>
+      <li><a href="dart-core/int/roundToDouble.html">roundToDouble</a></li>
+      <li><a href="dart-core/int/toRadixString.html">toRadixString</a></li>
+      <li><a href="dart-core/int/toSigned.html">toSigned</a></li>
+      <li><a href="dart-core/int/toString.html">toString</a></li>
+      <li><a href="dart-core/int/toUnsigned.html">toUnsigned</a></li>
+      <li><a href="dart-core/int/truncate.html">truncate</a></li>
+      <li><a href="dart-core/int/truncateToDouble.html">truncateToDouble</a></li>
+      <li class="inherited"><a href="dart-core/num/clamp.html">clamp</a></li>
+      <li class="inherited"><a href="dart-core/num/compareTo.html">compareTo</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/num/remainder.html">remainder</a></li>
+      <li class="inherited"><a href="dart-core/num/toDouble.html">toDouble</a></li>
+      <li class="inherited"><a href="dart-core/num/toInt.html">toInt</a></li>
+      <li class="inherited"><a href="dart-core/num/toStringAsExponential.html">toStringAsExponential</a></li>
+      <li class="inherited"><a href="dart-core/num/toStringAsFixed.html">toStringAsFixed</a></li>
+      <li class="inherited"><a href="dart-core/num/toStringAsPrecision.html">toStringAsPrecision</a></li>
+    
+      <li class="section-title"><a href="dart-core/int-class.html#operators">Operators</a></li>
+      <li><a href="dart-core/int/operator_bitwise_and.html">operator &</a></li>
+      <li><a href="dart-core/int/operator_shift_left.html">operator <<</a></li>
+      <li><a href="dart-core/int/operator_shift_right.html">operator >></a></li>
+      <li><a href="dart-core/int/operator_bitwise_exclusive_or.html">operator ^</a></li>
+      <li><a href="dart-core/int/operator_unary_minus.html">operator unary-</a></li>
+      <li><a href="dart-core/int/operator_bitwise_or.html">operator |</a></li>
+      <li><a href="dart-core/int/operator_bitwise_negate.html">operator ~</a></li>
+      <li class="inherited"><a href="dart-core/num/operator_modulo.html">operator %</a></li>
+      <li class="inherited"><a href="dart-core/num/operator_multiply.html">operator *</a></li>
+      <li class="inherited"><a href="dart-core/num/operator_plus.html">operator +</a></li>
+      <li class="inherited"><a href="dart-core/num/operator_minus.html">operator -</a></li>
+      <li class="inherited"><a href="dart-core/num/operator_divide.html">operator /</a></li>
+      <li class="inherited"><a href="dart-core/num/operator_less.html">operator <</a></li>
+      <li class="inherited"><a href="dart-core/num/operator_less_equal.html">operator <=</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+      <li class="inherited"><a href="dart-core/num/operator_greater.html">operator ></a></li>
+      <li class="inherited"><a href="dart-core/num/operator_greater_equal.html">operator >=</a></li>
+      <li class="inherited"><a href="dart-core/num/operator_truncate_divide.html">operator ~/</a></li>
+    
+    
+      <li class="section-title"><a href="dart-core/int-class.html#static-methods">Static methods</a></li>
+      <li><a href="dart-core/int/parse.html">parse</a></li>
+      <li><a href="dart-core/int/tryParse.html">tryParse</a></li>
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

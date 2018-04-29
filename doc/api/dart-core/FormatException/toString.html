@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the toString method from the FormatException class, for the Dart programming language.">
+  <title>toString method - FormatException class - dart:core library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-core/dart-core-library.html">dart:core</a></li>
+    <li><a href="dart-core/FormatException-class.html">FormatException</a></li>
+    <li class="self-crumb">toString method</li>
+  </ol>
+  <div class="self-name">toString</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>FormatException class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-core/FormatException-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-core/FormatException/FormatException.html">FormatException</a></li>
+    
+      <li class="section-title">
+        <a href="dart-core/FormatException-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-core/FormatException/message.html">message</a></li>
+      <li><a href="dart-core/FormatException/offset.html">offset</a></li>
+      <li><a href="dart-core/FormatException/source.html">source</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-core/FormatException-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-core/FormatException/toString.html">toString</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    
+      <li class="section-title inherited"><a href="dart-core/FormatException-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>toString method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype"><a href="dart-core/String-class.html">String</a></span>
+      <span class="name ">toString</span>
+(<wbr>)
+    </section>
+    <section class="desc markdown">
+      <p>Returns a description of the format exception.</p>
+<p>The description always contains the <a href="dart-core/FormatException/message.html">message</a>.</p>
+<p>If <a href="dart-core/FormatException/source.html">source</a> is present and is a string, the description will contain
+(at least a part of) the source.
+If <a href="dart-core/FormatException/offset.html">offset</a> is also provided, the part of the source included will
+contain that offset, and the offset will be marked.</p>
+<p>If the source is a string and it contains a line break before offset,
+only the line containing offset will be included, and its line number
+will also be part of the description. Line and character offsets are
+1-based.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">String toString() {
+  String report = &quot;FormatException&quot;;
+  if (message != null &amp;&amp; &quot;&quot; != message) {
+    report = &quot;$report: $message&quot;;
+  }
+  int offset = this.offset;
+  if (source is! String) {
+    if (offset != null) {
+      report += &quot; (at offset $offset)&quot;;
+    }
+    return report;
+  }
+  if (offset != null &amp;&amp; (offset &lt; 0 || offset &gt; source.length)) {
+    offset = null;
+  }
+  &#47;&#47; Source is string and offset is null or valid.
+  if (offset == null) {
+    String source = this.source;
+    if (source.length &gt; 78) {
+      source = source.substring(0, 75) + &quot;...&quot;;
+    }
+    return &quot;$report\n$source&quot;;
+  }
+  int lineNum = 1;
+  int lineStart = 0;
+  bool previousCharWasCR = false;
+  for (int i = 0; i &lt; offset; i++) {
+    int char = source.codeUnitAt(i);
+    if (char == 0x0a) {
+      if (lineStart != i || !previousCharWasCR) {
+        lineNum++;
+      }
+      lineStart = i + 1;
+      previousCharWasCR = false;
+    } else if (char == 0x0d) {
+      lineNum++;
+      lineStart = i + 1;
+      previousCharWasCR = true;
+    }
+  }
+  if (lineNum &gt; 1) {
+    report += &quot; (at line $lineNum, character ${offset - lineStart + 1})\n&quot;;
+  } else {
+    report += &quot; (at character ${offset + 1})\n&quot;;
+  }
+  int lineEnd = source.length;
+  for (int i = offset; i &lt; source.length; i++) {
+    int char = source.codeUnitAt(i);
+    if (char == 0x0a || char == 0x0d) {
+      lineEnd = i;
+      break;
+    }
+  }
+  int length = lineEnd - lineStart;
+  int start = lineStart;
+  int end = lineEnd;
+  String prefix = &quot;&quot;;
+  String postfix = &quot;&quot;;
+  if (length &gt; 78) {
+    &#47;&#47; Can&#39;t show entire line. Try to anchor at the nearest end, if
+    &#47;&#47; one is within reach.
+    int index = offset - lineStart;
+    if (index &lt; 75) {
+      end = start + 75;
+      postfix = &quot;...&quot;;
+    } else if (end - offset &lt; 75) {
+      start = end - 75;
+      prefix = &quot;...&quot;;
+    } else {
+      &#47;&#47; Neither end is near, just pick an area around the offset.
+      start = offset - 36;
+      end = offset + 36;
+      prefix = postfix = &quot;...&quot;;
+    }
+  }
+  String slice = source.substring(start, end);
+  int markOffset = offset - start + prefix.length;
+  return &quot;$report$prefix$slice$postfix\n${&quot; &quot; * markOffset}^\n&quot;;
+}</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

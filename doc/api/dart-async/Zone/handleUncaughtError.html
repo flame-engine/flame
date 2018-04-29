@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the handleUncaughtError method from the Zone class, for the Dart programming language.">
+  <title>handleUncaughtError method - Zone class - dart:async library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-async/dart-async-library.html">dart:async</a></li>
+    <li><a href="dart-async/Zone-class.html">Zone</a></li>
+    <li class="self-crumb">handleUncaughtError abstract method</li>
+  </ol>
+  <div class="self-name">handleUncaughtError</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>Zone class</h5>
+    <ol>
+    
+      <li class="section-title">
+        <a href="dart-async/Zone-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-async/Zone/errorZone.html">errorZone</a></li>
+      <li><a href="dart-async/Zone/parent.html">parent</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-async/Zone-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-async/Zone/bindBinaryCallback.html">bindBinaryCallback</a></li>
+      <li><a href="dart-async/Zone/bindBinaryCallbackGuarded.html">bindBinaryCallbackGuarded</a></li>
+      <li><a href="dart-async/Zone/bindCallback.html">bindCallback</a></li>
+      <li><a href="dart-async/Zone/bindCallbackGuarded.html">bindCallbackGuarded</a></li>
+      <li><a href="dart-async/Zone/bindUnaryCallback.html">bindUnaryCallback</a></li>
+      <li><a href="dart-async/Zone/bindUnaryCallbackGuarded.html">bindUnaryCallbackGuarded</a></li>
+      <li><a href="dart-async/Zone/createPeriodicTimer.html">createPeriodicTimer</a></li>
+      <li><a href="dart-async/Zone/createTimer.html">createTimer</a></li>
+      <li><a href="dart-async/Zone/errorCallback.html">errorCallback</a></li>
+      <li><a href="dart-async/Zone/fork.html">fork</a></li>
+      <li><a href="dart-async/Zone/handleUncaughtError.html">handleUncaughtError</a></li>
+      <li><a href="dart-async/Zone/inSameErrorZone.html">inSameErrorZone</a></li>
+      <li><a href="dart-async/Zone/print.html">print</a></li>
+      <li><a href="dart-async/Zone/registerBinaryCallback.html">registerBinaryCallback</a></li>
+      <li><a href="dart-async/Zone/registerCallback.html">registerCallback</a></li>
+      <li><a href="dart-async/Zone/registerUnaryCallback.html">registerUnaryCallback</a></li>
+      <li><a href="dart-async/Zone/run.html">run</a></li>
+      <li><a href="dart-async/Zone/runBinary.html">runBinary</a></li>
+      <li><a href="dart-async/Zone/runBinaryGuarded.html">runBinaryGuarded</a></li>
+      <li><a href="dart-async/Zone/runGuarded.html">runGuarded</a></li>
+      <li><a href="dart-async/Zone/runUnary.html">runUnary</a></li>
+      <li><a href="dart-async/Zone/runUnaryGuarded.html">runUnaryGuarded</a></li>
+      <li><a href="dart-async/Zone/scheduleMicrotask.html">scheduleMicrotask</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/Object/toString.html">toString</a></li>
+    
+      <li class="section-title"><a href="dart-async/Zone-class.html#operators">Operators</a></li>
+      <li><a href="dart-async/Zone/operator_get.html">operator []</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+      <li class="section-title"><a href="dart-async/Zone-class.html#static-properties">Static properties</a></li>
+      <li><a href="dart-async/Zone/current.html">current</a></li>
+    
+    
+      <li class="section-title"><a href="dart-async/Zone-class.html#constants">Constants</a></li>
+      <li><a class="deprecated" href="dart-async/Zone/ROOT-constant.html">ROOT</a></li>
+      <li><a href="dart-async/Zone/root-constant.html">root</a></li>
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>handleUncaughtError method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype">void</span>
+      <span class="name ">handleUncaughtError</span>
+(<wbr><span class="parameter" id="handleUncaughtError-param-error"><span class="type-annotation">dynamic</span> <span class="parameter-name">error</span>, </span> <span class="parameter" id="handleUncaughtError-param-stackTrace"><span class="type-annotation"><a href="dart-core/StackTrace-class.html">StackTrace</a></span> <span class="parameter-name">stackTrace</span></span>)
+    </section>
+    <section class="desc markdown">
+      <p>Handles uncaught asynchronous errors.</p>
+<p>There are two kind of asynchronous errors that are handled by this
+function:</p><ol><li>Uncaught errors that were thrown in asynchronous callbacks, for example,
+  a <code>throw</code> in the function passed to <a href="dart-async/Timer/run.html">Timer.run</a>.</li><li>Asynchronous errors that are pushed through <a href="dart-async/Future-class.html">Future</a> and <a href="dart-async/Stream-class.html">Stream</a>
+  chains, but for which no child registered an error handler.
+  Most asynchronous classes, like <a href="dart-async/Future-class.html">Future</a> or <a href="dart-async/Stream-class.html">Stream</a> push errors to their
+  listeners. Errors are propagated this way until either a listener handles
+  the error (for example with <a href="dart-async/Future/catchError.html">Future.catchError</a>), or no listener is
+  available anymore. In the latter case, futures and streams invoke the
+  zone's <a href="dart-async/Zone/handleUncaughtError.html">handleUncaughtError</a>.</li></ol>
+<p>By default, when handled by the root zone, uncaught asynchronous errors are
+treated like uncaught synchronous exceptions.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">void handleUncaughtError(error, StackTrace stackTrace);</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

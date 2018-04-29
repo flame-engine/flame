@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the Duration class from the dart:core library, for the Dart programming language.">
+  <title>Duration class - dart:core library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-core/dart-core-library.html">dart:core</a></li>
+    <li class="self-crumb">Duration class</li>
+  </ol>
+  <div class="self-name">Duration</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>dart:core library</h5>
+    <ol>
+      <li class="section-title"><a href="dart-core/dart-core-library.html#classes">Classes</a></li>
+      <li><a href="dart-core/BidirectionalIterator-class.html">BidirectionalIterator</a></li>
+      <li><a href="dart-core/BigInt-class.html">BigInt</a></li>
+      <li><a href="dart-core/bool-class.html">bool</a></li>
+      <li><a href="dart-core/Comparable-class.html">Comparable</a></li>
+      <li><a href="dart-core/DateTime-class.html">DateTime</a></li>
+      <li><a href="dart-core/Deprecated-class.html">Deprecated</a></li>
+      <li><a href="dart-core/double-class.html">double</a></li>
+      <li><a href="dart-core/Duration-class.html">Duration</a></li>
+      <li><a href="dart-core/Expando-class.html">Expando</a></li>
+      <li><a href="dart-core/Function-class.html">Function</a></li>
+      <li><a href="dart-core/int-class.html">int</a></li>
+      <li><a href="dart-core/Invocation-class.html">Invocation</a></li>
+      <li><a href="dart-core/Iterable-class.html">Iterable</a></li>
+      <li><a href="dart-core/Iterator-class.html">Iterator</a></li>
+      <li><a href="dart-core/List-class.html">List</a></li>
+      <li><a href="dart-core/Map-class.html">Map</a></li>
+      <li><a href="dart-core/MapEntry-class.html">MapEntry</a></li>
+      <li><a href="dart-core/Match-class.html">Match</a></li>
+      <li><a href="dart-core/Null-class.html">Null</a></li>
+      <li><a href="dart-core/num-class.html">num</a></li>
+      <li><a href="dart-core/Object-class.html">Object</a></li>
+      <li><a href="dart-core/Pattern-class.html">Pattern</a></li>
+      <li><a href="dart-core/pragma-class.html">pragma</a></li>
+      <li><a href="dart-core/Provisional-class.html">Provisional</a></li>
+      <li><a href="dart-core/RegExp-class.html">RegExp</a></li>
+      <li><a href="dart-core/RuneIterator-class.html">RuneIterator</a></li>
+      <li><a href="dart-core/Runes-class.html">Runes</a></li>
+      <li><a href="dart-core/Set-class.html">Set</a></li>
+      <li><a href="dart-core/Sink-class.html">Sink</a></li>
+      <li><a href="dart-core/StackTrace-class.html">StackTrace</a></li>
+      <li><a href="dart-core/Stopwatch-class.html">Stopwatch</a></li>
+      <li><a href="dart-core/String-class.html">String</a></li>
+      <li><a href="dart-core/StringBuffer-class.html">StringBuffer</a></li>
+      <li><a href="dart-core/StringSink-class.html">StringSink</a></li>
+      <li><a href="dart-core/Symbol-class.html">Symbol</a></li>
+      <li><a href="dart-core/Type-class.html">Type</a></li>
+      <li><a href="dart-core/Uri-class.html">Uri</a></li>
+      <li><a href="dart-core/UriData-class.html">UriData</a></li>
+    
+      <li class="section-title"><a href="dart-core/dart-core-library.html#constants">Constants</a></li>
+      <li><a href="dart-core/deprecated-constant.html">deprecated</a></li>
+      <li><a href="dart-core/override-constant.html">override</a></li>
+      <li><a href="dart-core/provisional-constant.html">provisional</a></li>
+      <li><a class="deprecated" href="dart-core/proxy-constant.html">proxy</a></li>
+    
+    
+      <li class="section-title"><a href="dart-core/dart-core-library.html#functions">Functions</a></li>
+      <li><a href="dart-core/identical.html">identical</a></li>
+      <li><a href="dart-core/identityHashCode.html">identityHashCode</a></li>
+      <li><a href="dart-core/print.html">print</a></li>
+    
+    
+      <li class="section-title"><a href="dart-core/dart-core-library.html#typedefs">Typedefs</a></li>
+      <li><a href="dart-core/Comparator.html">Comparator</a></li>
+    
+      <li class="section-title"><a href="dart-core/dart-core-library.html#exceptions">Exceptions</a></li>
+      <li><a href="dart-core/AbstractClassInstantiationError-class.html">AbstractClassInstantiationError</a></li>
+      <li><a href="dart-core/ArgumentError-class.html">ArgumentError</a></li>
+      <li><a href="dart-core/AssertionError-class.html">AssertionError</a></li>
+      <li><a href="dart-core/CastError-class.html">CastError</a></li>
+      <li><a href="dart-core/ConcurrentModificationError-class.html">ConcurrentModificationError</a></li>
+      <li><a href="dart-core/CyclicInitializationError-class.html">CyclicInitializationError</a></li>
+      <li><a href="dart-core/Error-class.html">Error</a></li>
+      <li><a href="dart-core/Exception-class.html">Exception</a></li>
+      <li><a href="dart-core/FallThroughError-class.html">FallThroughError</a></li>
+      <li><a href="dart-core/FormatException-class.html">FormatException</a></li>
+      <li><a href="dart-core/IndexError-class.html">IndexError</a></li>
+      <li><a href="dart-core/IntegerDivisionByZeroException-class.html">IntegerDivisionByZeroException</a></li>
+      <li><a href="dart-core/NoSuchMethodError-class.html">NoSuchMethodError</a></li>
+      <li><a href="dart-core/NullThrownError-class.html">NullThrownError</a></li>
+      <li><a href="dart-core/OutOfMemoryError-class.html">OutOfMemoryError</a></li>
+      <li><a href="dart-core/RangeError-class.html">RangeError</a></li>
+      <li><a href="dart-core/StackOverflowError-class.html">StackOverflowError</a></li>
+      <li><a href="dart-core/StateError-class.html">StateError</a></li>
+      <li><a href="dart-core/TypeError-class.html">TypeError</a></li>
+      <li><a href="dart-core/UnimplementedError-class.html">UnimplementedError</a></li>
+      <li><a href="dart-core/UnsupportedError-class.html">UnsupportedError</a></li>
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>Duration class</h1>
+
+    <section class="desc markdown">
+      <p>A span of time, such as 27 days, 4 hours, 12 minutes, and 3 seconds.</p>
+<p>A <code>Duration</code> represents a difference from one point in time to another. The
+duration may be "negative" if the difference is from a later time to an
+earlier.</p>
+<p>Durations are context independent. For example, a duration of 2 days is
+always 48 hours, even when it is added to a <code>DateTime</code> just when the
+time zone is about to do a daylight-savings switch. (See <a href="dart-core/DateTime/add.html">DateTime.add</a>).</p>
+<p>Despite the same name, a <code>Duration</code> object does not implement "Durations"
+as specified by ISO 8601. In particular, a duration object does not keep
+track of the individually provided members (such as "days" or "hours"), but
+only uses these arguments to compute the length of the corresponding time
+interval.</p>
+<p>To create a new Duration object, use this class's single constructor
+giving the appropriate arguments:</p>
+<pre class="language-dart"><code>Duration fastestMarathon = new Duration(hours:2, minutes:3, seconds:2);
+</code></pre>
+<p>The <a href="dart-core/Duration-class.html">Duration</a> is the sum of all individual parts.
+This means that individual parts can be larger than the next-bigger unit.
+For example, <a href="dart-core/Duration/inMinutes.html">inMinutes</a> can be greater than 59.</p>
+<pre class="language-dart"><code>assert(fastestMarathon.inMinutes == 123);
+</code></pre>
+<p>All individual parts are allowed to be negative.</p>
+<p>Use one of the properties, such as <a href="dart-core/Duration/inDays.html">inDays</a>,
+to retrieve the integer value of the Duration in the specified time unit.
+Note that the returned value is rounded down.
+For example,</p>
+<pre class="language-dart"><code>Duration aLongWeekend = new Duration(hours:88);
+assert(aLongWeekend.inDays == 3);
+</code></pre>
+<p>This class provides a collection of arithmetic
+and comparison operators,
+plus a set of constants useful for converting time units.</p>
+<p>See <a href="dart-core/DateTime-class.html">DateTime</a> to represent a point in time.
+See <a href="dart-core/Stopwatch-class.html">Stopwatch</a> to measure time-spans.</p>
+    </section>
+    
+    <section>
+      <dl class="dl-horizontal">
+
+        <dt>Implements</dt>
+        <dd>
+          <ul class="comma-separated clazz-relationships">
+            <li><a href="dart-core/Comparable-class.html">Comparable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/Duration-class.html">Duration</a></span>&gt;</span></li>
+          </ul>
+        </dd>
+
+
+
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="constructors">
+      <h2>Constructors</h2>
+
+      <dl class="constructor-summary-list">
+        <dt id="Duration" class="callable">
+          <span class="name"><a href="dart-core/Duration/Duration.html">Duration</a></span><span class="signature">({<span class="parameter" id="-param-days"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">days</span>: <span class="default-value">0</span>, </span> <span class="parameter" id="-param-hours"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">hours</span>: <span class="default-value">0</span>, </span> <span class="parameter" id="-param-minutes"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">minutes</span>: <span class="default-value">0</span>, </span> <span class="parameter" id="-param-seconds"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">seconds</span>: <span class="default-value">0</span>, </span> <span class="parameter" id="-param-milliseconds"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">milliseconds</span>: <span class="default-value">0</span>, </span> <span class="parameter" id="-param-microseconds"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">microseconds</span>: <span class="default-value">0</span></span> })</span>
+        </dt>
+        <dd>
+          Creates a new Duration object whose value
+is the sum of all individual parts. <a href="dart-core/Duration/Duration.html">[...]</a>
+          <div class="constructor-modifier features">const</div>
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="hashCode" class="property">
+          <span class="name"><a href="dart-core/Duration/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          The hash code for this object. <a href="dart-core/Duration/hashCode.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="inDays" class="property">
+          <span class="name"><a href="dart-core/Duration/inDays.html">inDays</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          Returns the number of whole days spanned by this Duration.
+          <div class="features">read-only</div>
+</dd>
+        <dt id="inHours" class="property">
+          <span class="name"><a href="dart-core/Duration/inHours.html">inHours</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          Returns the number of whole hours spanned by this Duration. <a href="dart-core/Duration/inHours.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="inMicroseconds" class="property">
+          <span class="name"><a href="dart-core/Duration/inMicroseconds.html">inMicroseconds</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          Returns number of whole microseconds spanned by this Duration.
+          <div class="features">read-only</div>
+</dd>
+        <dt id="inMilliseconds" class="property">
+          <span class="name"><a href="dart-core/Duration/inMilliseconds.html">inMilliseconds</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          Returns number of whole milliseconds spanned by this Duration. <a href="dart-core/Duration/inMilliseconds.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="inMinutes" class="property">
+          <span class="name"><a href="dart-core/Duration/inMinutes.html">inMinutes</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          Returns the number of whole minutes spanned by this Duration. <a href="dart-core/Duration/inMinutes.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="inSeconds" class="property">
+          <span class="name"><a href="dart-core/Duration/inSeconds.html">inSeconds</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          Returns the number of whole seconds spanned by this Duration. <a href="dart-core/Duration/inSeconds.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="isNegative" class="property">
+          <span class="name"><a href="dart-core/Duration/isNegative.html">isNegative</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd>
+          Returns whether this <code>Duration</code> is negative. <a href="dart-core/Duration/isNegative.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a href="dart-core/Object/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; <a href="dart-core/Type-class.html">Type</a></span>
+        </dt>
+        <dd class="inherited">
+          A representation of the runtime type of the object.
+          <div class="features">read-only, inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="abs" class="callable">
+          <span class="name"><a href="dart-core/Duration/abs.html">abs</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Duration-class.html">Duration</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns a new <code>Duration</code> representing the absolute value of this
+<code>Duration</code>. <a href="dart-core/Duration/abs.html">[...]</a>
+          
+</dd>
+        <dt id="compareTo" class="callable">
+          <span class="name"><a href="dart-core/Duration/compareTo.html">compareTo</a></span><span class="signature">(<wbr><span class="parameter" id="compareTo-param-other"><span class="type-annotation"><a href="dart-core/Duration-class.html">Duration</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/int-class.html">int</a></span>
+          </span>
+        </dt>
+        <dd>
+          Compares this Duration to <code>other</code>, returning zero if the values are equal. <a href="dart-core/Duration/compareTo.html">[...]</a>
+          
+</dd>
+        <dt id="toString" class="callable">
+          <span class="name"><a href="dart-core/Duration/toString.html">toString</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns a string representation of this <code>Duration</code>. <a href="dart-core/Duration/toString.html">[...]</a>
+          
+</dd>
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Invoked when a non-existent method or property is accessed. <a href="dart-core/Object/noSuchMethod.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator *" class="callable">
+          <span class="name"><a href="dart-core/Duration/operator_multiply.html">operator *</a></span><span class="signature">(<wbr><span class="parameter" id="*-param-factor"><span class="type-annotation"><a href="dart-core/num-class.html">num</a></span> <span class="parameter-name">factor</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Duration-class.html">Duration</a></span>
+          </span>
+        </dt>
+        <dd>
+          Multiplies this Duration by the given <code>factor</code> and returns the result
+as a new Duration object. <a href="dart-core/Duration/operator_multiply.html">[...]</a>
+          
+</dd>
+        <dt id="operator +" class="callable">
+          <span class="name"><a href="dart-core/Duration/operator_plus.html">operator +</a></span><span class="signature">(<wbr><span class="parameter" id="+-param-other"><span class="type-annotation"><a href="dart-core/Duration-class.html">Duration</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Duration-class.html">Duration</a></span>
+          </span>
+        </dt>
+        <dd>
+          Adds this Duration and <code>other</code> and
+returns the sum as a new Duration object.
+          
+</dd>
+        <dt id="operator -" class="callable">
+          <span class="name"><a href="dart-core/Duration/operator_minus.html">operator -</a></span><span class="signature">(<wbr><span class="parameter" id="--param-other"><span class="type-annotation"><a href="dart-core/Duration-class.html">Duration</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Duration-class.html">Duration</a></span>
+          </span>
+        </dt>
+        <dd>
+          Subtracts <code>other</code> from this Duration and
+returns the difference as a new Duration object.
+          
+</dd>
+        <dt id="operator &lt;" class="callable">
+          <span class="name"><a href="dart-core/Duration/operator_less.html">operator <</a></span><span class="signature">(<wbr><span class="parameter" id="<-param-other"><span class="type-annotation"><a href="dart-core/Duration-class.html">Duration</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns <code>true</code> if the value of this Duration
+is less than the value of <code>other</code>.
+          
+</dd>
+        <dt id="operator &lt;=" class="callable">
+          <span class="name"><a href="dart-core/Duration/operator_less_equal.html">operator <=</a></span><span class="signature">(<wbr><span class="parameter" id="<=-param-other"><span class="type-annotation"><a href="dart-core/Duration-class.html">Duration</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns <code>true</code> if the value of this Duration
+is less than or equal to the value of <code>other</code>.
+          
+</dd>
+        <dt id="operator ==" class="callable">
+          <span class="name"><a href="dart-core/Duration/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation">dynamic</span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns <code>true</code> if this Duration is the same object as <code>other</code>.
+          
+</dd>
+        <dt id="operator &gt;" class="callable">
+          <span class="name"><a href="dart-core/Duration/operator_greater.html">operator ></a></span><span class="signature">(<wbr><span class="parameter" id=">-param-other"><span class="type-annotation"><a href="dart-core/Duration-class.html">Duration</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns <code>true</code> if the value of this Duration
+is greater than the value of <code>other</code>.
+          
+</dd>
+        <dt id="operator &gt;=" class="callable">
+          <span class="name"><a href="dart-core/Duration/operator_greater_equal.html">operator >=</a></span><span class="signature">(<wbr><span class="parameter" id=">=-param-other"><span class="type-annotation"><a href="dart-core/Duration-class.html">Duration</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns <code>true</code> if the value of this Duration
+is greater than or equal to the value of <code>other</code>.
+          
+</dd>
+        <dt id="operator unary-" class="callable">
+          <span class="name"><a href="dart-core/Duration/operator_unary_minus.html">operator unary-</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Duration-class.html">Duration</a></span>
+          </span>
+        </dt>
+        <dd>
+          Returns a new <code>Duration</code> representing this <code>Duration</code> negated. <a href="dart-core/Duration/operator_unary_minus.html">[...]</a>
+          
+</dd>
+        <dt id="operator ~/" class="callable">
+          <span class="name"><a href="dart-core/Duration/operator_truncate_divide.html">operator ~/</a></span><span class="signature">(<wbr><span class="parameter" id="~/-param-quotient"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">quotient</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Duration-class.html">Duration</a></span>
+          </span>
+        </dt>
+        <dd>
+          Divides this Duration by the given <code>quotient</code> and returns the truncated
+result as a new Duration object. <a href="dart-core/Duration/operator_truncate_divide.html">[...]</a>
+          
+</dd>
+      </dl>
+    </section>
+
+
+
+    <section class="summary offset-anchor" id="constants">
+      <h2>Constants</h2>
+
+      <dl class="properties">
+        <dt id="HOURS_PER_DAY" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-core/Duration/HOURS_PER_DAY-constant.html">HOURS_PER_DAY</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use hoursPerDay instead&quot;)</div>
+  <div>
+            <span class="signature"><code>hoursPerDay</code></span>
+          </div>
+        </dd>
+        <dt id="hoursPerDay" class="constant">
+          <span class="name "><a href="dart-core/Duration/hoursPerDay-constant.html">hoursPerDay</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          
+  <div>
+            <span class="signature"><code>24</code></span>
+          </div>
+        </dd>
+        <dt id="MICROSECONDS_PER_DAY" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-core/Duration/MICROSECONDS_PER_DAY-constant.html">MICROSECONDS_PER_DAY</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use microsecondsPerDay instead&quot;)</div>
+  <div>
+            <span class="signature"><code>microsecondsPerDay</code></span>
+          </div>
+        </dd>
+        <dt id="MICROSECONDS_PER_HOUR" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-core/Duration/MICROSECONDS_PER_HOUR-constant.html">MICROSECONDS_PER_HOUR</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use microsecondsPerHour instead&quot;)</div>
+  <div>
+            <span class="signature"><code>microsecondsPerHour</code></span>
+          </div>
+        </dd>
+        <dt id="MICROSECONDS_PER_MILLISECOND" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-core/Duration/MICROSECONDS_PER_MILLISECOND-constant.html">MICROSECONDS_PER_MILLISECOND</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use microsecondsPerMillisecond instead&quot;)</div>
+  <div>
+            <span class="signature"><code>microsecondsPerMillisecond</code></span>
+          </div>
+        </dd>
+        <dt id="MICROSECONDS_PER_MINUTE" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-core/Duration/MICROSECONDS_PER_MINUTE-constant.html">MICROSECONDS_PER_MINUTE</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use microsecondsPerMinute instead&quot;)</div>
+  <div>
+            <span class="signature"><code>microsecondsPerMinute</code></span>
+          </div>
+        </dd>
+        <dt id="MICROSECONDS_PER_SECOND" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-core/Duration/MICROSECONDS_PER_SECOND-constant.html">MICROSECONDS_PER_SECOND</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use microsecondsPerSecond instead&quot;)</div>
+  <div>
+            <span class="signature"><code>microsecondsPerSecond</code></span>
+          </div>
+        </dd>
+        <dt id="microsecondsPerDay" class="constant">
+          <span class="name "><a href="dart-core/Duration/microsecondsPerDay-constant.html">microsecondsPerDay</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          
+  <div>
+            <span class="signature"><code>microsecondsPerHour * hoursPerDay</code></span>
+          </div>
+        </dd>
+        <dt id="microsecondsPerHour" class="constant">
+          <span class="name "><a href="dart-core/Duration/microsecondsPerHour-constant.html">microsecondsPerHour</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          
+  <div>
+            <span class="signature"><code>microsecondsPerMinute * minutesPerHour</code></span>
+          </div>
+        </dd>
+        <dt id="microsecondsPerMillisecond" class="constant">
+          <span class="name "><a href="dart-core/Duration/microsecondsPerMillisecond-constant.html">microsecondsPerMillisecond</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          
+  <div>
+            <span class="signature"><code>1000</code></span>
+          </div>
+        </dd>
+        <dt id="microsecondsPerMinute" class="constant">
+          <span class="name "><a href="dart-core/Duration/microsecondsPerMinute-constant.html">microsecondsPerMinute</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          
+  <div>
+            <span class="signature"><code>microsecondsPerSecond * secondsPerMinute</code></span>
+          </div>
+        </dd>
+        <dt id="microsecondsPerSecond" class="constant">
+          <span class="name "><a href="dart-core/Duration/microsecondsPerSecond-constant.html">microsecondsPerSecond</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          
+  <div>
+            <span class="signature"><code>microsecondsPerMillisecond * millisecondsPerSecond</code></span>
+          </div>
+        </dd>
+        <dt id="MILLISECONDS_PER_DAY" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-core/Duration/MILLISECONDS_PER_DAY-constant.html">MILLISECONDS_PER_DAY</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use millisecondsPerDay instead&quot;)</div>
+  <div>
+            <span class="signature"><code>millisecondsPerDay</code></span>
+          </div>
+        </dd>
+        <dt id="MILLISECONDS_PER_HOUR" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-core/Duration/MILLISECONDS_PER_HOUR-constant.html">MILLISECONDS_PER_HOUR</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use millisecondsPerHour instead&quot;)</div>
+  <div>
+            <span class="signature"><code>millisecondsPerHour</code></span>
+          </div>
+        </dd>
+        <dt id="MILLISECONDS_PER_MINUTE" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-core/Duration/MILLISECONDS_PER_MINUTE-constant.html">MILLISECONDS_PER_MINUTE</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use millisecondsPerMinute instead&quot;)</div>
+  <div>
+            <span class="signature"><code>millisecondsPerMinute</code></span>
+          </div>
+        </dd>
+        <dt id="MILLISECONDS_PER_SECOND" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-core/Duration/MILLISECONDS_PER_SECOND-constant.html">MILLISECONDS_PER_SECOND</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use millisecondsPerSecond instead&quot;)</div>
+  <div>
+            <span class="signature"><code>millisecondsPerSecond</code></span>
+          </div>
+        </dd>
+        <dt id="millisecondsPerDay" class="constant">
+          <span class="name "><a href="dart-core/Duration/millisecondsPerDay-constant.html">millisecondsPerDay</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          
+  <div>
+            <span class="signature"><code>millisecondsPerHour * hoursPerDay</code></span>
+          </div>
+        </dd>
+        <dt id="millisecondsPerHour" class="constant">
+          <span class="name "><a href="dart-core/Duration/millisecondsPerHour-constant.html">millisecondsPerHour</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          
+  <div>
+            <span class="signature"><code>millisecondsPerMinute * minutesPerHour</code></span>
+          </div>
+        </dd>
+        <dt id="millisecondsPerMinute" class="constant">
+          <span class="name "><a href="dart-core/Duration/millisecondsPerMinute-constant.html">millisecondsPerMinute</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          
+  <div>
+            <span class="signature"><code>millisecondsPerSecond * secondsPerMinute</code></span>
+          </div>
+        </dd>
+        <dt id="millisecondsPerSecond" class="constant">
+          <span class="name "><a href="dart-core/Duration/millisecondsPerSecond-constant.html">millisecondsPerSecond</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          
+  <div>
+            <span class="signature"><code>1000</code></span>
+          </div>
+        </dd>
+        <dt id="MINUTES_PER_DAY" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-core/Duration/MINUTES_PER_DAY-constant.html">MINUTES_PER_DAY</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use minutesPerDay instead&quot;)</div>
+  <div>
+            <span class="signature"><code>minutesPerDay</code></span>
+          </div>
+        </dd>
+        <dt id="MINUTES_PER_HOUR" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-core/Duration/MINUTES_PER_HOUR-constant.html">MINUTES_PER_HOUR</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use minutesPerHour instead&quot;)</div>
+  <div>
+            <span class="signature"><code>minutesPerHour</code></span>
+          </div>
+        </dd>
+        <dt id="minutesPerDay" class="constant">
+          <span class="name "><a href="dart-core/Duration/minutesPerDay-constant.html">minutesPerDay</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          
+  <div>
+            <span class="signature"><code>minutesPerHour * hoursPerDay</code></span>
+          </div>
+        </dd>
+        <dt id="minutesPerHour" class="constant">
+          <span class="name "><a href="dart-core/Duration/minutesPerHour-constant.html">minutesPerHour</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          
+  <div>
+            <span class="signature"><code>60</code></span>
+          </div>
+        </dd>
+        <dt id="SECONDS_PER_DAY" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-core/Duration/SECONDS_PER_DAY-constant.html">SECONDS_PER_DAY</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use secondsPerDay instead&quot;)</div>
+  <div>
+            <span class="signature"><code>secondsPerDay</code></span>
+          </div>
+        </dd>
+        <dt id="SECONDS_PER_HOUR" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-core/Duration/SECONDS_PER_HOUR-constant.html">SECONDS_PER_HOUR</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use secondsPerHour instead&quot;)</div>
+  <div>
+            <span class="signature"><code>secondsPerHour</code></span>
+          </div>
+        </dd>
+        <dt id="SECONDS_PER_MINUTE" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-core/Duration/SECONDS_PER_MINUTE-constant.html">SECONDS_PER_MINUTE</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use secondsPerMinute instead&quot;)</div>
+  <div>
+            <span class="signature"><code>secondsPerMinute</code></span>
+          </div>
+        </dd>
+        <dt id="secondsPerDay" class="constant">
+          <span class="name "><a href="dart-core/Duration/secondsPerDay-constant.html">secondsPerDay</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          
+  <div>
+            <span class="signature"><code>secondsPerHour * hoursPerDay</code></span>
+          </div>
+        </dd>
+        <dt id="secondsPerHour" class="constant">
+          <span class="name "><a href="dart-core/Duration/secondsPerHour-constant.html">secondsPerHour</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          
+  <div>
+            <span class="signature"><code>secondsPerMinute * minutesPerHour</code></span>
+          </div>
+        </dd>
+        <dt id="secondsPerMinute" class="constant">
+          <span class="name "><a href="dart-core/Duration/secondsPerMinute-constant.html">secondsPerMinute</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          
+          
+  <div>
+            <span class="signature"><code>60</code></span>
+          </div>
+        </dd>
+        <dt id="ZERO" class="constant">
+          <span class="name deprecated"><a class="deprecated" href="dart-core/Duration/ZERO-constant.html">ZERO</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/Duration-class.html">Duration</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">@<a href="dart-core/Deprecated-class.html">Deprecated</a>(&quot;Use zero instead&quot;)</div>
+  <div>
+            <span class="signature"><code>zero</code></span>
+          </div>
+        </dd>
+        <dt id="zero" class="constant">
+          <span class="name "><a href="dart-core/Duration/zero-constant.html">zero</a></span>
+          <span class="signature">&#8594; const <a href="dart-core/Duration-class.html">Duration</a></span>
+        </dt>
+        <dd>
+          
+          
+  <div>
+            <span class="signature"><code>const <a href="dart-core/Duration/Duration.html">Duration</a>(seconds: 0)</code></span>
+          </div>
+        </dd>
+      </dl>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <ol>
+      <li class="section-title"><a href="dart-core/Duration-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-core/Duration/Duration.html">Duration</a></li>
+    
+      <li class="section-title">
+        <a href="dart-core/Duration-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-core/Duration/hashCode.html">hashCode</a></li>
+      <li><a href="dart-core/Duration/inDays.html">inDays</a></li>
+      <li><a href="dart-core/Duration/inHours.html">inHours</a></li>
+      <li><a href="dart-core/Duration/inMicroseconds.html">inMicroseconds</a></li>
+      <li><a href="dart-core/Duration/inMilliseconds.html">inMilliseconds</a></li>
+      <li><a href="dart-core/Duration/inMinutes.html">inMinutes</a></li>
+      <li><a href="dart-core/Duration/inSeconds.html">inSeconds</a></li>
+      <li><a href="dart-core/Duration/isNegative.html">isNegative</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-core/Duration-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-core/Duration/abs.html">abs</a></li>
+      <li><a href="dart-core/Duration/compareTo.html">compareTo</a></li>
+      <li><a href="dart-core/Duration/toString.html">toString</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    
+      <li class="section-title"><a href="dart-core/Duration-class.html#operators">Operators</a></li>
+      <li><a href="dart-core/Duration/operator_multiply.html">operator *</a></li>
+      <li><a href="dart-core/Duration/operator_plus.html">operator +</a></li>
+      <li><a href="dart-core/Duration/operator_minus.html">operator -</a></li>
+      <li><a href="dart-core/Duration/operator_less.html">operator <</a></li>
+      <li><a href="dart-core/Duration/operator_less_equal.html">operator <=</a></li>
+      <li><a href="dart-core/Duration/operator_equals.html">operator ==</a></li>
+      <li><a href="dart-core/Duration/operator_greater.html">operator ></a></li>
+      <li><a href="dart-core/Duration/operator_greater_equal.html">operator >=</a></li>
+      <li><a href="dart-core/Duration/operator_unary_minus.html">operator unary-</a></li>
+      <li><a href="dart-core/Duration/operator_truncate_divide.html">operator ~/</a></li>
+    
+    
+    
+      <li class="section-title"><a href="dart-core/Duration-class.html#constants">Constants</a></li>
+      <li><a class="deprecated" href="dart-core/Duration/HOURS_PER_DAY-constant.html">HOURS_PER_DAY</a></li>
+      <li><a href="dart-core/Duration/hoursPerDay-constant.html">hoursPerDay</a></li>
+      <li><a class="deprecated" href="dart-core/Duration/MICROSECONDS_PER_DAY-constant.html">MICROSECONDS_PER_DAY</a></li>
+      <li><a class="deprecated" href="dart-core/Duration/MICROSECONDS_PER_HOUR-constant.html">MICROSECONDS_PER_HOUR</a></li>
+      <li><a class="deprecated" href="dart-core/Duration/MICROSECONDS_PER_MILLISECOND-constant.html">MICROSECONDS_PER_MILLISECOND</a></li>
+      <li><a class="deprecated" href="dart-core/Duration/MICROSECONDS_PER_MINUTE-constant.html">MICROSECONDS_PER_MINUTE</a></li>
+      <li><a class="deprecated" href="dart-core/Duration/MICROSECONDS_PER_SECOND-constant.html">MICROSECONDS_PER_SECOND</a></li>
+      <li><a href="dart-core/Duration/microsecondsPerDay-constant.html">microsecondsPerDay</a></li>
+      <li><a href="dart-core/Duration/microsecondsPerHour-constant.html">microsecondsPerHour</a></li>
+      <li><a href="dart-core/Duration/microsecondsPerMillisecond-constant.html">microsecondsPerMillisecond</a></li>
+      <li><a href="dart-core/Duration/microsecondsPerMinute-constant.html">microsecondsPerMinute</a></li>
+      <li><a href="dart-core/Duration/microsecondsPerSecond-constant.html">microsecondsPerSecond</a></li>
+      <li><a class="deprecated" href="dart-core/Duration/MILLISECONDS_PER_DAY-constant.html">MILLISECONDS_PER_DAY</a></li>
+      <li><a class="deprecated" href="dart-core/Duration/MILLISECONDS_PER_HOUR-constant.html">MILLISECONDS_PER_HOUR</a></li>
+      <li><a class="deprecated" href="dart-core/Duration/MILLISECONDS_PER_MINUTE-constant.html">MILLISECONDS_PER_MINUTE</a></li>
+      <li><a class="deprecated" href="dart-core/Duration/MILLISECONDS_PER_SECOND-constant.html">MILLISECONDS_PER_SECOND</a></li>
+      <li><a href="dart-core/Duration/millisecondsPerDay-constant.html">millisecondsPerDay</a></li>
+      <li><a href="dart-core/Duration/millisecondsPerHour-constant.html">millisecondsPerHour</a></li>
+      <li><a href="dart-core/Duration/millisecondsPerMinute-constant.html">millisecondsPerMinute</a></li>
+      <li><a href="dart-core/Duration/millisecondsPerSecond-constant.html">millisecondsPerSecond</a></li>
+      <li><a class="deprecated" href="dart-core/Duration/MINUTES_PER_DAY-constant.html">MINUTES_PER_DAY</a></li>
+      <li><a class="deprecated" href="dart-core/Duration/MINUTES_PER_HOUR-constant.html">MINUTES_PER_HOUR</a></li>
+      <li><a href="dart-core/Duration/minutesPerDay-constant.html">minutesPerDay</a></li>
+      <li><a href="dart-core/Duration/minutesPerHour-constant.html">minutesPerHour</a></li>
+      <li><a class="deprecated" href="dart-core/Duration/SECONDS_PER_DAY-constant.html">SECONDS_PER_DAY</a></li>
+      <li><a class="deprecated" href="dart-core/Duration/SECONDS_PER_HOUR-constant.html">SECONDS_PER_HOUR</a></li>
+      <li><a class="deprecated" href="dart-core/Duration/SECONDS_PER_MINUTE-constant.html">SECONDS_PER_MINUTE</a></li>
+      <li><a href="dart-core/Duration/secondsPerDay-constant.html">secondsPerDay</a></li>
+      <li><a href="dart-core/Duration/secondsPerHour-constant.html">secondsPerHour</a></li>
+      <li><a href="dart-core/Duration/secondsPerMinute-constant.html">secondsPerMinute</a></li>
+      <li><a class="deprecated" href="dart-core/Duration/ZERO-constant.html">ZERO</a></li>
+      <li><a href="dart-core/Duration/zero-constant.html">zero</a></li>
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

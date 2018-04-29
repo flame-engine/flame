@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the removeOnExitListener method from the Isolate class, for the Dart programming language.">
+  <title>removeOnExitListener method - Isolate class - dart:isolate library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-isolate/dart-isolate-library.html">dart:isolate</a></li>
+    <li><a href="dart-isolate/Isolate-class.html">Isolate</a></li>
+    <li class="self-crumb">removeOnExitListener method</li>
+  </ol>
+  <div class="self-name">removeOnExitListener</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>Isolate class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-isolate/Isolate-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-isolate/Isolate/Isolate.html">Isolate</a></li>
+    
+      <li class="section-title">
+        <a href="dart-isolate/Isolate-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-isolate/Isolate/controlPort.html">controlPort</a></li>
+      <li><a href="dart-isolate/Isolate/errors.html">errors</a></li>
+      <li><a href="dart-isolate/Isolate/pauseCapability.html">pauseCapability</a></li>
+      <li><a href="dart-isolate/Isolate/terminateCapability.html">terminateCapability</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-isolate/Isolate-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-isolate/Isolate/addErrorListener.html">addErrorListener</a></li>
+      <li><a href="dart-isolate/Isolate/addOnExitListener.html">addOnExitListener</a></li>
+      <li><a href="dart-isolate/Isolate/kill.html">kill</a></li>
+      <li><a href="dart-isolate/Isolate/pause.html">pause</a></li>
+      <li><a href="dart-isolate/Isolate/ping.html">ping</a></li>
+      <li><a href="dart-isolate/Isolate/removeErrorListener.html">removeErrorListener</a></li>
+      <li><a href="dart-isolate/Isolate/removeOnExitListener.html">removeOnExitListener</a></li>
+      <li><a href="dart-isolate/Isolate/resume.html">resume</a></li>
+      <li><a href="dart-isolate/Isolate/setErrorsFatal.html">setErrorsFatal</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/Object/toString.html">toString</a></li>
+    
+      <li class="section-title inherited"><a href="dart-isolate/Isolate-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+      <li class="section-title"><a href="dart-isolate/Isolate-class.html#static-properties">Static properties</a></li>
+      <li><a href="dart-isolate/Isolate/current.html">current</a></li>
+      <li><a href="dart-isolate/Isolate/packageConfig.html">packageConfig</a></li>
+      <li><a href="dart-isolate/Isolate/packageRoot.html">packageRoot</a></li>
+    
+      <li class="section-title"><a href="dart-isolate/Isolate-class.html#static-methods">Static methods</a></li>
+      <li><a href="dart-isolate/Isolate/resolvePackageUri.html">resolvePackageUri</a></li>
+      <li><a href="dart-isolate/Isolate/spawn.html">spawn</a></li>
+      <li><a href="dart-isolate/Isolate/spawnUri.html">spawnUri</a></li>
+    
+      <li class="section-title"><a href="dart-isolate/Isolate-class.html#constants">Constants</a></li>
+      <li><a class="deprecated" href="dart-isolate/Isolate/BEFORE_NEXT_EVENT-constant.html">BEFORE_NEXT_EVENT</a></li>
+      <li><a href="dart-isolate/Isolate/beforeNextEvent-constant.html">beforeNextEvent</a></li>
+      <li><a class="deprecated" href="dart-isolate/Isolate/IMMEDIATE-constant.html">IMMEDIATE</a></li>
+      <li><a href="dart-isolate/Isolate/immediate-constant.html">immediate</a></li>
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>removeOnExitListener method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype">void</span>
+      <span class="name ">removeOnExitListener</span>
+(<wbr><span class="parameter" id="removeOnExitListener-param-responsePort"><span class="type-annotation"><a href="dart-isolate/SendPort-class.html">SendPort</a></span> <span class="parameter-name">responsePort</span></span>)
+    </section>
+    <section class="desc markdown">
+      <p>Stops listening for exit messages from the isolate.</p>
+<p>Requests for the isolate to not send exit messages on <code>responsePort</code>.
+If the isolate isn't expecting to send exit messages on <code>responsePort</code>,
+because the port hasn't been added using <a href="dart-isolate/Isolate/addOnExitListener.html">addOnExitListener</a>,
+or because it has already been removed, the request is ignored.</p>
+<p>If the same port has been passed via <a href="dart-isolate/Isolate/addOnExitListener.html">addOnExitListener</a> more than once,
+only one call to <code>removeOnExitListener</code> is needed to stop it from receiving
+exit messages.</p>
+<p>Closing the receive port that is associated with the <code>responsePort</code> does
+not stop the isolate from sending uncaught errors, they are just going to
+be lost.</p>
+<p>An exit message may still be sent if the isolate terminates
+before this request is received and processed.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">external void removeOnExitListener(SendPort responsePort);</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

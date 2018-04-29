@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the open method from the HttpClient class, for the Dart programming language.">
+  <title>open method - HttpClient class - dart:io library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-io/dart-io-library.html">dart:io</a></li>
+    <li><a href="dart-io/HttpClient-class.html">HttpClient</a></li>
+    <li class="self-crumb">open abstract method</li>
+  </ol>
+  <div class="self-name">open</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>HttpClient class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-io/HttpClient-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-io/HttpClient/HttpClient.html">HttpClient</a></li>
+    
+      <li class="section-title">
+        <a href="dart-io/HttpClient-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-io/HttpClient/authenticate.html">authenticate</a></li>
+      <li><a href="dart-io/HttpClient/authenticateProxy.html">authenticateProxy</a></li>
+      <li><a href="dart-io/HttpClient/autoUncompress.html">autoUncompress</a></li>
+      <li><a href="dart-io/HttpClient/badCertificateCallback.html">badCertificateCallback</a></li>
+      <li><a href="dart-io/HttpClient/findProxy.html">findProxy</a></li>
+      <li><a href="dart-io/HttpClient/idleTimeout.html">idleTimeout</a></li>
+      <li><a href="dart-io/HttpClient/maxConnectionsPerHost.html">maxConnectionsPerHost</a></li>
+      <li><a href="dart-io/HttpClient/userAgent.html">userAgent</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-io/HttpClient-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-io/HttpClient/addCredentials.html">addCredentials</a></li>
+      <li><a href="dart-io/HttpClient/addProxyCredentials.html">addProxyCredentials</a></li>
+      <li><a href="dart-io/HttpClient/close.html">close</a></li>
+      <li><a href="dart-io/HttpClient/delete.html">delete</a></li>
+      <li><a href="dart-io/HttpClient/deleteUrl.html">deleteUrl</a></li>
+      <li><a href="dart-io/HttpClient/get.html">get</a></li>
+      <li><a href="dart-io/HttpClient/getUrl.html">getUrl</a></li>
+      <li><a href="dart-io/HttpClient/head.html">head</a></li>
+      <li><a href="dart-io/HttpClient/headUrl.html">headUrl</a></li>
+      <li><a href="dart-io/HttpClient/open.html">open</a></li>
+      <li><a href="dart-io/HttpClient/openUrl.html">openUrl</a></li>
+      <li><a href="dart-io/HttpClient/patch.html">patch</a></li>
+      <li><a href="dart-io/HttpClient/patchUrl.html">patchUrl</a></li>
+      <li><a href="dart-io/HttpClient/post.html">post</a></li>
+      <li><a href="dart-io/HttpClient/postUrl.html">postUrl</a></li>
+      <li><a href="dart-io/HttpClient/put.html">put</a></li>
+      <li><a href="dart-io/HttpClient/putUrl.html">putUrl</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/Object/toString.html">toString</a></li>
+    
+      <li class="section-title inherited"><a href="dart-io/HttpClient-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+      <li class="section-title"><a href="dart-io/HttpClient-class.html#static-methods">Static methods</a></li>
+      <li><a href="dart-io/HttpClient/findProxyFromEnvironment.html">findProxyFromEnvironment</a></li>
+    
+      <li class="section-title"><a href="dart-io/HttpClient-class.html#constants">Constants</a></li>
+      <li><a href="dart-io/HttpClient/DEFAULT_HTTP_PORT-constant.html">DEFAULT_HTTP_PORT</a></li>
+      <li><a href="dart-io/HttpClient/DEFAULT_HTTPS_PORT-constant.html">DEFAULT_HTTPS_PORT</a></li>
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>open method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype"><a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-io/HttpClientRequest-class.html">HttpClientRequest</a></span>&gt;</span></span>
+      <span class="name ">open</span>
+(<wbr><span class="parameter" id="open-param-method"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">method</span>, </span> <span class="parameter" id="open-param-host"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">host</span>, </span> <span class="parameter" id="open-param-port"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">port</span>, </span> <span class="parameter" id="open-param-path"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span></span>)
+    </section>
+    <section class="desc markdown">
+      <p>Opens a HTTP connection.</p>
+<p>The HTTP method to use is specified in <code>method</code>, the server is
+specified using <code>host</code> and <code>port</code>, and the path (including
+a possible query) is specified using <code>path</code>.
+The path may also contain a URI fragment, which will be ignored.</p>
+<p>The <code>Host</code> header for the request will be set to the value
+<code>host</code>:<code>port</code>. This can be overridden through the
+<a href="dart-io/HttpClientRequest-class.html">HttpClientRequest</a> interface before the request is sent.  NOTE
+if <code>host</code> is an IP address this will still be set in the <code>Host</code>
+header.</p>
+<p>For additional information on the sequence of events during an
+HTTP transaction, and the objects returned by the futures, see
+the overall documentation for the class <a href="dart-io/HttpClient-class.html">HttpClient</a>.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">Future&lt;HttpClientRequest&gt; open(
+    String method, String host, int port, String path);</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

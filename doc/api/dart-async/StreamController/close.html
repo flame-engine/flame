@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the close method from the StreamController class, for the Dart programming language.">
+  <title>close method - StreamController class - dart:async library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-async/dart-async-library.html">dart:async</a></li>
+    <li><a href="dart-async/StreamController-class.html">StreamController<span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></a></li>
+    <li class="self-crumb">close abstract method</li>
+  </ol>
+  <div class="self-name">close</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>StreamController class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-async/StreamController-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-async/StreamController/StreamController.html">StreamController</a></li>
+      <li><a href="dart-async/StreamController/StreamController.broadcast.html">broadcast</a></li>
+    
+      <li class="section-title">
+        <a href="dart-async/StreamController-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-async/StreamController/hasListener.html">hasListener</a></li>
+      <li><a href="dart-async/StreamController/isClosed.html">isClosed</a></li>
+      <li><a href="dart-async/StreamController/isPaused.html">isPaused</a></li>
+      <li><a href="dart-async/StreamController/onCancel.html">onCancel</a></li>
+      <li><a href="dart-async/StreamController/onListen.html">onListen</a></li>
+      <li><a href="dart-async/StreamController/onPause.html">onPause</a></li>
+      <li><a href="dart-async/StreamController/onResume.html">onResume</a></li>
+      <li><a href="dart-async/StreamController/sink.html">sink</a></li>
+      <li><a href="dart-async/StreamController/stream.html">stream</a></li>
+      <li class="inherited"><a href="dart-async/StreamSink/done.html">done</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-async/StreamController-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-async/StreamController/add.html">add</a></li>
+      <li><a href="dart-async/StreamController/addError.html">addError</a></li>
+      <li><a href="dart-async/StreamController/addStream.html">addStream</a></li>
+      <li><a href="dart-async/StreamController/close.html">close</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/Object/toString.html">toString</a></li>
+    
+      <li class="section-title inherited"><a href="dart-async/StreamController-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>close method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype"><a href="dart-async/Future-class.html">Future</a></span>
+      <span class="name ">close</span>
+(<wbr>)
+    </section>
+    <section class="desc markdown">
+      <p>Closes the stream.</p>
+<p>Listeners receive the done event at a later microtask. This behavior can be
+overridden by using <code>sync</code> controllers. Note, however, that sync
+controllers have to satisfy the preconditions mentioned in the
+documentation of the constructors.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">Future close();</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

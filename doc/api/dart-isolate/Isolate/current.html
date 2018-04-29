@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the current property from the Isolate class, for the Dart programming language.">
+  <title>current property - Isolate class - dart:isolate library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-isolate/dart-isolate-library.html">dart:isolate</a></li>
+    <li><a href="dart-isolate/Isolate-class.html">Isolate</a></li>
+    <li class="self-crumb">current property</li>
+  </ol>
+  <div class="self-name">current</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>Isolate class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-isolate/Isolate-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-isolate/Isolate/Isolate.html">Isolate</a></li>
+    
+      <li class="section-title">
+        <a href="dart-isolate/Isolate-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-isolate/Isolate/controlPort.html">controlPort</a></li>
+      <li><a href="dart-isolate/Isolate/errors.html">errors</a></li>
+      <li><a href="dart-isolate/Isolate/pauseCapability.html">pauseCapability</a></li>
+      <li><a href="dart-isolate/Isolate/terminateCapability.html">terminateCapability</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-isolate/Isolate-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-isolate/Isolate/addErrorListener.html">addErrorListener</a></li>
+      <li><a href="dart-isolate/Isolate/addOnExitListener.html">addOnExitListener</a></li>
+      <li><a href="dart-isolate/Isolate/kill.html">kill</a></li>
+      <li><a href="dart-isolate/Isolate/pause.html">pause</a></li>
+      <li><a href="dart-isolate/Isolate/ping.html">ping</a></li>
+      <li><a href="dart-isolate/Isolate/removeErrorListener.html">removeErrorListener</a></li>
+      <li><a href="dart-isolate/Isolate/removeOnExitListener.html">removeOnExitListener</a></li>
+      <li><a href="dart-isolate/Isolate/resume.html">resume</a></li>
+      <li><a href="dart-isolate/Isolate/setErrorsFatal.html">setErrorsFatal</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/Object/toString.html">toString</a></li>
+    
+      <li class="section-title inherited"><a href="dart-isolate/Isolate-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+      <li class="section-title"><a href="dart-isolate/Isolate-class.html#static-properties">Static properties</a></li>
+      <li><a href="dart-isolate/Isolate/current.html">current</a></li>
+      <li><a href="dart-isolate/Isolate/packageConfig.html">packageConfig</a></li>
+      <li><a href="dart-isolate/Isolate/packageRoot.html">packageRoot</a></li>
+    
+      <li class="section-title"><a href="dart-isolate/Isolate-class.html#static-methods">Static methods</a></li>
+      <li><a href="dart-isolate/Isolate/resolvePackageUri.html">resolvePackageUri</a></li>
+      <li><a href="dart-isolate/Isolate/spawn.html">spawn</a></li>
+      <li><a href="dart-isolate/Isolate/spawnUri.html">spawnUri</a></li>
+    
+      <li class="section-title"><a href="dart-isolate/Isolate-class.html#constants">Constants</a></li>
+      <li><a class="deprecated" href="dart-isolate/Isolate/BEFORE_NEXT_EVENT-constant.html">BEFORE_NEXT_EVENT</a></li>
+      <li><a href="dart-isolate/Isolate/beforeNextEvent-constant.html">beforeNextEvent</a></li>
+      <li><a class="deprecated" href="dart-isolate/Isolate/IMMEDIATE-constant.html">IMMEDIATE</a></li>
+      <li><a href="dart-isolate/Isolate/immediate-constant.html">immediate</a></li>
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>current property</h1>
+
+
+        <section id="getter">
+        
+        <section class="multi-line-signature">
+          <span class="returntype"><a href="dart-isolate/Isolate-class.html">Isolate</a></span>
+          <span class="name ">current</span>
+  
+</section>
+        
+        <section class="desc markdown">
+  <p>Return an <a href="dart-isolate/Isolate-class.html">Isolate</a> object representing the current isolate.</p>
+<p>The current isolate for code using <a href="dart-isolate/Isolate/current.html">current</a>
+is the isolate running the code.</p>
+<p>The isolate object provides the capabilities required to inspect,
+pause or kill the isolate, and allows granting these capabilities
+to others.</p>
+<p>It is possible to pause the current isolate, but doing so <em>without</em>
+first passing the ability to resume it again to another isolate,
+is a sure way to hang your program.</p>
+</section>
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span> </h2>
+  <pre class="language-dart"><code class="language-dart">external static Isolate get current;</code></pre>
+</section>
+</section>
+        
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

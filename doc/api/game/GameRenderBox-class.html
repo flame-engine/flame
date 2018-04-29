@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the GameRenderBox class from the game library, for the Dart programming language.">
+  <title>GameRenderBox class - game library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="game/game-library.html">game</a></li>
+    <li class="self-crumb">GameRenderBox class</li>
+  </ol>
+  <div class="self-name">GameRenderBox</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>game library</h5>
+    <ol>
+      <li class="section-title"><a href="game/game-library.html#classes">Classes</a></li>
+      <li><a href="game/BaseGame-class.html">BaseGame</a></li>
+      <li><a href="game/Game-class.html">Game</a></li>
+      <li><a href="game/GameRenderBox-class.html">GameRenderBox</a></li>
+      <li><a href="game/GameRenderObjectWidget-class.html">GameRenderObjectWidget</a></li>
+    
+    
+    
+    
+    
+    
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>GameRenderBox class</h1>
+
+    
+
+    <section class="summary offset-anchor" id="constructors">
+      <h2>Constructors</h2>
+
+      <dl class="constructor-summary-list">
+        <dt id="GameRenderBox" class="callable">
+          <span class="name"><a href="game/GameRenderBox/GameRenderBox.html">GameRenderBox</a></span><span class="signature">(<span class="parameter" id="-param-context"><span class="type-annotation">BuildContext</span> <span class="parameter-name">context</span>, </span> <span class="parameter" id="-param-game"><span class="type-annotation"><a href="game/Game-class.html">Game</a></span> <span class="parameter-name">game</span></span>)</span>
+        </dt>
+        <dd>
+          
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="context" class="property">
+          <span class="name"><a href="game/GameRenderBox/context.html">context</a></span>
+          <span class="signature">&#8596; BuildContext</span>
+        </dt>
+        <dd>
+          
+          <div class="features">read / write</div>
+</dd>
+        <dt id="game" class="property">
+          <span class="name"><a href="game/GameRenderBox/game.html">game</a></span>
+          <span class="signature">&#8596; <a href="game/Game-class.html">Game</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">read / write</div>
+</dd>
+        <dt id="previous" class="property">
+          <span class="name"><a href="game/GameRenderBox/previous.html">previous</a></span>
+          <span class="signature">&#8596; <a href="dart-core/Duration-class.html">Duration</a></span>
+        </dt>
+        <dd>
+          
+          <div class="features">read / write</div>
+</dd>
+        <dt id="sizedByParent" class="property">
+          <span class="name"><a href="game/GameRenderBox/sizedByParent.html">sizedByParent</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd>
+          Whether the constraints are the only input to the sizing algorithm (in
+particular, child nodes have no impact). <a href="game/GameRenderBox/sizedByParent.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="alwaysNeedsCompositing" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/alwaysNeedsCompositing.html">alwaysNeedsCompositing</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          Whether this render object always needs compositing. <a href="game/GameRenderBox/alwaysNeedsCompositing.html">[...]</a>
+          <div class="features">@protected, read-only, inherited</div>
+</dd>
+        <dt id="attached" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/attached.html">attached</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          Whether this node is in a tree whose root is attached to something. <a href="game/GameRenderBox/attached.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="constraints" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/constraints.html">constraints</a></span>
+          <span class="signature">&#8594; BoxConstraints</span>
+        </dt>
+        <dd class="inherited">
+          The box constraints most recently received from the parent.
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="debugCanParentUseSize" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/debugCanParentUseSize.html">debugCanParentUseSize</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          Whether the parent render object is permitted to use this render object's
+size. <a href="game/GameRenderBox/debugCanParentUseSize.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="debugCreator" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/debugCreator.html">debugCreator</a></span>
+          <span class="signature">&#8596; dynamic</span>
+        </dt>
+        <dd class="inherited">
+          The object responsible for creating this render object. <a href="game/GameRenderBox/debugCreator.html">[...]</a>
+          <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="debugDoingThisLayout" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/debugDoingThisLayout.html">debugDoingThisLayout</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          Whether <a href="game/GameRenderBox/performLayout.html">performLayout</a> for this render object is currently running. <a href="game/GameRenderBox/debugDoingThisLayout.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="debugDoingThisPaint" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/debugDoingThisPaint.html">debugDoingThisPaint</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          Whether <a href="game/GameRenderBox/paint.html">paint</a> for this render object is currently running. <a href="game/GameRenderBox/debugDoingThisPaint.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="debugDoingThisResize" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/debugDoingThisResize.html">debugDoingThisResize</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          Whether <a href="game/GameRenderBox/performResize.html">performResize</a> for this render object is currently running. <a href="game/GameRenderBox/debugDoingThisResize.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="debugLayer" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/debugLayer.html">debugLayer</a></span>
+          <span class="signature">&#8594; OffsetLayer</span>
+        </dt>
+        <dd class="inherited">
+          In debug mode, the compositing layer that this render object uses to repaint. <a href="game/GameRenderBox/debugLayer.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="debugNeedsLayout" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/debugNeedsLayout.html">debugNeedsLayout</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          Whether this render object's layout information is dirty. <a href="game/GameRenderBox/debugNeedsLayout.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="debugNeedsPaint" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/debugNeedsPaint.html">debugNeedsPaint</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          Whether this render object's paint information is dirty. <a href="game/GameRenderBox/debugNeedsPaint.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="debugSemantics" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/debugSemantics.html">debugSemantics</a></span>
+          <span class="signature">&#8594; SemanticsNode</span>
+        </dt>
+        <dd class="inherited">
+          The semantics of this render object. <a href="game/GameRenderBox/debugSemantics.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="depth" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/depth.html">depth</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd class="inherited">
+          The depth of this node in the tree. <a href="game/GameRenderBox/depth.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="hashCode" class="property inherited">
+          <span class="name"><a href="dart-core/Object/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd class="inherited">
+          The hash code for this object. <a href="dart-core/Object/hashCode.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="hasSize" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/hasSize.html">hasSize</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          Whether this render object has undergone layout and has a <a href="game/GameRenderBox/size.html">size</a>.
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="isRepaintBoundary" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/isRepaintBoundary.html">isRepaintBoundary</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          Whether this render object repaints separately from its parent. <a href="game/GameRenderBox/isRepaintBoundary.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="layer" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/layer.html">layer</a></span>
+          <span class="signature">&#8594; OffsetLayer</span>
+        </dt>
+        <dd class="inherited">
+          The compositing layer that this render object uses to repaint. <a href="game/GameRenderBox/layer.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="needsCompositing" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/needsCompositing.html">needsCompositing</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          Whether we or one of our descendants has a compositing layer. <a href="game/GameRenderBox/needsCompositing.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="owner" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/owner.html">owner</a></span>
+          <span class="signature">&#8594; PipelineOwner</span>
+        </dt>
+        <dd class="inherited">
+          The owner for this node (null if unattached). <a href="game/GameRenderBox/owner.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="paintBounds" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/paintBounds.html">paintBounds</a></span>
+          <span class="signature">&#8594; <a href="dart-ui/Rect-class.html">Rect</a></span>
+        </dt>
+        <dd class="inherited">
+          Returns a rectangle that contains all the pixels painted by this box. <a href="game/GameRenderBox/paintBounds.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="parent" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/parent.html">parent</a></span>
+          <span class="signature">&#8594; AbstractNode</span>
+        </dt>
+        <dd class="inherited">
+          The parent of this node in the tree.
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="parentData" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/parentData.html">parentData</a></span>
+          <span class="signature">&#8596; ParentData</span>
+        </dt>
+        <dd class="inherited">
+          Data for use by the parent render object. <a href="game/GameRenderBox/parentData.html">[...]</a>
+          <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a href="dart-core/Object/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; <a href="dart-core/Type-class.html">Type</a></span>
+        </dt>
+        <dd class="inherited">
+          A representation of the runtime type of the object.
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="semanticBounds" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/semanticBounds.html">semanticBounds</a></span>
+          <span class="signature">&#8594; <a href="dart-ui/Rect-class.html">Rect</a></span>
+        </dt>
+        <dd class="inherited">
+          The bounding box, in the local coordinate system, of this
+object, for accessibility purposes.
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="size" class="property inherited">
+          <span class="name"><a href="game/GameRenderBox/size.html">size</a></span>
+          <span class="signature">&#8596; <a href="dart-ui/Size-class.html">Size</a></span>
+        </dt>
+        <dd class="inherited">
+          The size of this render box computed during layout. <a href="game/GameRenderBox/size.html">[...]</a>
+          <div class="features">@protected, read / write, inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="attach" class="callable">
+          <span class="name"><a href="game/GameRenderBox/attach.html">attach</a></span><span class="signature">(<wbr><span class="parameter" id="attach-param-owner"><span class="type-annotation">PipelineOwner</span> <span class="parameter-name">owner</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          
+          
+</dd>
+        <dt id="detach" class="callable">
+          <span class="name"><a href="game/GameRenderBox/detach.html">detach</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Mark this node as detached. <a href="game/GameRenderBox/detach.html">[...]</a>
+          
+</dd>
+        <dt id="didChangeAppLifecycleState" class="callable">
+          <span class="name"><a href="game/GameRenderBox/didChangeAppLifecycleState.html">didChangeAppLifecycleState</a></span><span class="signature">(<wbr><span class="parameter" id="didChangeAppLifecycleState-param-state"><span class="type-annotation"><a href="dart-ui/AppLifecycleState-class.html">AppLifecycleState</a></span> <span class="parameter-name">state</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Called when the system puts the app in the background or returns
+the app to the foreground. <a href="game/GameRenderBox/didChangeAppLifecycleState.html">[...]</a>
+          
+</dd>
+        <dt id="paint" class="callable">
+          <span class="name"><a href="game/GameRenderBox/paint.html">paint</a></span><span class="signature">(<wbr><span class="parameter" id="paint-param-context"><span class="type-annotation">PaintingContext</span> <span class="parameter-name">context</span>, </span> <span class="parameter" id="paint-param-offset"><span class="type-annotation"><a href="dart-ui/Offset-class.html">Offset</a></span> <span class="parameter-name">offset</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Paint this render object into the given context at the given offset. <a href="game/GameRenderBox/paint.html">[...]</a>
+          
+</dd>
+        <dt id="performResize" class="callable">
+          <span class="name"><a href="game/GameRenderBox/performResize.html">performResize</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          
+          
+</dd>
+        <dt id="adoptChild" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/adoptChild.html">adoptChild</a></span><span class="signature">(<wbr><span class="parameter" id="adoptChild-param-child"><span class="type-annotation">RenderObject</span> <span class="parameter-name">child</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Called by subclasses when they decide a render object is a child. <a href="game/GameRenderBox/adoptChild.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="applyPaintTransform" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/applyPaintTransform.html">applyPaintTransform</a></span><span class="signature">(<wbr><span class="parameter" id="applyPaintTransform-param-child"><span class="type-annotation">RenderObject</span> <span class="parameter-name">child</span>, </span> <span class="parameter" id="applyPaintTransform-param-transform"><span class="type-annotation">Matrix4</span> <span class="parameter-name">transform</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Multiply the transform from the parent's coordinate system to this box's
+coordinate system into the given transform. <a href="game/GameRenderBox/applyPaintTransform.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="assembleSemanticsNode" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/assembleSemanticsNode.html">assembleSemanticsNode</a></span><span class="signature">(<wbr><span class="parameter" id="assembleSemanticsNode-param-node"><span class="type-annotation">SemanticsNode</span> <span class="parameter-name">node</span>, </span> <span class="parameter" id="assembleSemanticsNode-param-config"><span class="type-annotation">SemanticsConfiguration</span> <span class="parameter-name">config</span>, </span> <span class="parameter" id="assembleSemanticsNode-param-children"><span class="type-annotation"><a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">SemanticsNode</span>&gt;</span></span> <span class="parameter-name">children</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Assemble the <code>SemanticsNode</code> for this <code>RenderObject</code>. <a href="game/GameRenderBox/assembleSemanticsNode.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="clearSemantics" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/clearSemantics.html">clearSemantics</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Removes all semantics from this render object and its descendants. <a href="game/GameRenderBox/clearSemantics.html">[...]</a>
+          <div class="features">@mustCallSuper, inherited</div>
+</dd>
+        <dt id="computeDistanceToActualBaseline" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/computeDistanceToActualBaseline.html">computeDistanceToActualBaseline</a></span><span class="signature">(<wbr><span class="parameter" id="computeDistanceToActualBaseline-param-baseline"><span class="type-annotation"><a href="dart-ui/TextBaseline-class.html">TextBaseline</a></span> <span class="parameter-name">baseline</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns the distance from the y-coordinate of the position of the box to
+the y-coordinate of the first given baseline in the box's contents, if
+any, or null otherwise. <a href="game/GameRenderBox/computeDistanceToActualBaseline.html">[...]</a>
+          <div class="features">@protected, inherited</div>
+</dd>
+        <dt id="computeMaxIntrinsicHeight" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/computeMaxIntrinsicHeight.html">computeMaxIntrinsicHeight</a></span><span class="signature">(<wbr><span class="parameter" id="computeMaxIntrinsicHeight-param-width"><span class="type-annotation"><a href="dart-core/double-class.html">double</a></span> <span class="parameter-name">width</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Computes the value returned by <a href="game/GameRenderBox/getMaxIntrinsicHeight.html">getMaxIntrinsicHeight</a>. Do not call this
+function directly, instead, call <a href="game/GameRenderBox/getMaxIntrinsicHeight.html">getMaxIntrinsicHeight</a>. <a href="game/GameRenderBox/computeMaxIntrinsicHeight.html">[...]</a>
+          <div class="features">@protected, inherited</div>
+</dd>
+        <dt id="computeMaxIntrinsicWidth" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/computeMaxIntrinsicWidth.html">computeMaxIntrinsicWidth</a></span><span class="signature">(<wbr><span class="parameter" id="computeMaxIntrinsicWidth-param-height"><span class="type-annotation"><a href="dart-core/double-class.html">double</a></span> <span class="parameter-name">height</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Computes the value returned by <a href="game/GameRenderBox/getMaxIntrinsicWidth.html">getMaxIntrinsicWidth</a>. Do not call this
+function directly, instead, call <a href="game/GameRenderBox/getMaxIntrinsicWidth.html">getMaxIntrinsicWidth</a>. <a href="game/GameRenderBox/computeMaxIntrinsicWidth.html">[...]</a>
+          <div class="features">@protected, inherited</div>
+</dd>
+        <dt id="computeMinIntrinsicHeight" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/computeMinIntrinsicHeight.html">computeMinIntrinsicHeight</a></span><span class="signature">(<wbr><span class="parameter" id="computeMinIntrinsicHeight-param-width"><span class="type-annotation"><a href="dart-core/double-class.html">double</a></span> <span class="parameter-name">width</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Computes the value returned by <a href="game/GameRenderBox/getMinIntrinsicHeight.html">getMinIntrinsicHeight</a>. Do not call this
+function directly, instead, call <a href="game/GameRenderBox/getMinIntrinsicHeight.html">getMinIntrinsicHeight</a>. <a href="game/GameRenderBox/computeMinIntrinsicHeight.html">[...]</a>
+          <div class="features">@protected, inherited</div>
+</dd>
+        <dt id="computeMinIntrinsicWidth" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/computeMinIntrinsicWidth.html">computeMinIntrinsicWidth</a></span><span class="signature">(<wbr><span class="parameter" id="computeMinIntrinsicWidth-param-height"><span class="type-annotation"><a href="dart-core/double-class.html">double</a></span> <span class="parameter-name">height</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Computes the value returned by <a href="game/GameRenderBox/getMinIntrinsicWidth.html">getMinIntrinsicWidth</a>. Do not call this
+function directly, instead, call <a href="game/GameRenderBox/getMinIntrinsicWidth.html">getMinIntrinsicWidth</a>. <a href="game/GameRenderBox/computeMinIntrinsicWidth.html">[...]</a>
+          <div class="features">@protected, inherited</div>
+</dd>
+        <dt id="debugAdoptSize" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/debugAdoptSize.html">debugAdoptSize</a></span><span class="signature">(<wbr><span class="parameter" id="debugAdoptSize-param-value"><span class="type-annotation"><a href="dart-ui/Size-class.html">Size</a></span> <span class="parameter-name">value</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-ui/Size-class.html">Size</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Claims ownership of the given <a href="dart-ui/Size-class.html">Size</a>. <a href="game/GameRenderBox/debugAdoptSize.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="debugAssertDoesMeetConstraints" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/debugAssertDoesMeetConstraints.html">debugAssertDoesMeetConstraints</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Verify that the object's constraints are being met. Override
+this function in a subclass to verify that your state matches
+the constraints object. This function is only called in checked
+mode and only when needsLayout is false. If the constraints are
+not met, it should assert or throw an exception.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="debugDescribeChildren" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/debugDescribeChildren.html">debugDescribeChildren</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">DiagnosticsNode</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          
+          <div class="features">inherited</div>
+</dd>
+        <dt id="debugFillProperties" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/debugFillProperties.html">debugFillProperties</a></span><span class="signature">(<wbr><span class="parameter" id="debugFillProperties-param-properties"><span class="type-annotation">DiagnosticPropertiesBuilder</span> <span class="parameter-name">properties</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          
+          <div class="features">inherited</div>
+</dd>
+        <dt id="debugHandleEvent" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/debugHandleEvent.html">debugHandleEvent</a></span><span class="signature">(<wbr><span class="parameter" id="debugHandleEvent-param-event"><span class="type-annotation">PointerEvent</span> <span class="parameter-name">event</span>, </span> <span class="parameter" id="debugHandleEvent-param-entry"><span class="type-annotation">HitTestEntry</span> <span class="parameter-name">entry</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Implements the <code>debugPaintPointersEnabled</code> debugging feature. <a href="game/GameRenderBox/debugHandleEvent.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="debugPaint" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/debugPaint.html">debugPaint</a></span><span class="signature">(<wbr><span class="parameter" id="debugPaint-param-context"><span class="type-annotation">PaintingContext</span> <span class="parameter-name">context</span>, </span> <span class="parameter" id="debugPaint-param-offset"><span class="type-annotation"><a href="dart-ui/Offset-class.html">Offset</a></span> <span class="parameter-name">offset</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Override this method to paint debugging information.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="debugPaintBaselines" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/debugPaintBaselines.html">debugPaintBaselines</a></span><span class="signature">(<wbr><span class="parameter" id="debugPaintBaselines-param-context"><span class="type-annotation">PaintingContext</span> <span class="parameter-name">context</span>, </span> <span class="parameter" id="debugPaintBaselines-param-offset"><span class="type-annotation"><a href="dart-ui/Offset-class.html">Offset</a></span> <span class="parameter-name">offset</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          In debug mode, paints a line for each baseline. <a href="game/GameRenderBox/debugPaintBaselines.html">[...]</a>
+          <div class="features">@protected, inherited</div>
+</dd>
+        <dt id="debugPaintPointers" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/debugPaintPointers.html">debugPaintPointers</a></span><span class="signature">(<wbr><span class="parameter" id="debugPaintPointers-param-context"><span class="type-annotation">PaintingContext</span> <span class="parameter-name">context</span>, </span> <span class="parameter" id="debugPaintPointers-param-offset"><span class="type-annotation"><a href="dart-ui/Offset-class.html">Offset</a></span> <span class="parameter-name">offset</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          In debug mode, paints a rectangle if this render box has counted more
+pointer downs than pointer up events. <a href="game/GameRenderBox/debugPaintPointers.html">[...]</a>
+          <div class="features">@protected, inherited</div>
+</dd>
+        <dt id="debugPaintSize" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/debugPaintSize.html">debugPaintSize</a></span><span class="signature">(<wbr><span class="parameter" id="debugPaintSize-param-context"><span class="type-annotation">PaintingContext</span> <span class="parameter-name">context</span>, </span> <span class="parameter" id="debugPaintSize-param-offset"><span class="type-annotation"><a href="dart-ui/Offset-class.html">Offset</a></span> <span class="parameter-name">offset</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          In debug mode, paints a border around this render box. <a href="game/GameRenderBox/debugPaintSize.html">[...]</a>
+          <div class="features">@protected, inherited</div>
+</dd>
+        <dt id="debugRegisterRepaintBoundaryPaint" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/debugRegisterRepaintBoundaryPaint.html">debugRegisterRepaintBoundaryPaint</a></span><span class="signature">(<wbr>{<span class="parameter" id="debugRegisterRepaintBoundaryPaint-param-includedParent"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">includedParent</span>: <span class="default-value">true</span>, </span> <span class="parameter" id="debugRegisterRepaintBoundaryPaint-param-includedChild"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">includedChild</span>: <span class="default-value">false</span></span> })
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Called, in checked mode, if <a href="game/GameRenderBox/isRepaintBoundary.html">isRepaintBoundary</a> is true, when either the
+this render object or its parent attempt to paint. <a href="game/GameRenderBox/debugRegisterRepaintBoundaryPaint.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="debugResetSize" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/debugResetSize.html">debugResetSize</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          If a subclass has a "size" (the state controlled by <code>parentUsesSize</code>,
+whatever it is in the subclass, e.g. the actual <code>size</code> property of
+<code>RenderBox</code>), and the subclass verifies that in checked mode this "size"
+property isn't used when <a href="game/GameRenderBox/debugCanParentUseSize.html">debugCanParentUseSize</a> isn't set, then that
+subclass should override <a href="game/GameRenderBox/debugResetSize.html">debugResetSize</a> to reapply the current values of
+<a href="game/GameRenderBox/debugCanParentUseSize.html">debugCanParentUseSize</a> to that state.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="describeApproximatePaintClip" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/describeApproximatePaintClip.html">describeApproximatePaintClip</a></span><span class="signature">(<wbr><span class="parameter" id="describeApproximatePaintClip-param-child"><span class="type-annotation">RenderObject</span> <span class="parameter-name">child</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-ui/Rect-class.html">Rect</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a rect in this object's coordinate system that describes
+the approximate bounding box of the clip rect that would be
+applied to the given child during the paint phase, if any. <a href="game/GameRenderBox/describeApproximatePaintClip.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="describeSemanticsConfiguration" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/describeSemanticsConfiguration.html">describeSemanticsConfiguration</a></span><span class="signature">(<wbr><span class="parameter" id="describeSemanticsConfiguration-param-config"><span class="type-annotation">SemanticsConfiguration</span> <span class="parameter-name">config</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Report the semantics of this node, for example for accessibility purposes. <a href="game/GameRenderBox/describeSemanticsConfiguration.html">[...]</a>
+          <div class="features">@protected, inherited</div>
+</dd>
+        <dt id="didChangeLocale" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/didChangeLocale.html">didChangeLocale</a></span><span class="signature">(<wbr><span class="parameter" id="didChangeLocale-param-locale"><span class="type-annotation"><a href="dart-ui/Locale-class.html">Locale</a></span> <span class="parameter-name">locale</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Called when the system tells the app that the user's locale has
+changed. For example, if the user changes the system language
+settings. <a href="game/GameRenderBox/didChangeLocale.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="didChangeMetrics" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/didChangeMetrics.html">didChangeMetrics</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Called when the application's dimensions change. For example,
+when a phone is rotated. <a href="game/GameRenderBox/didChangeMetrics.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="didChangeTextScaleFactor" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/didChangeTextScaleFactor.html">didChangeTextScaleFactor</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Called when the platform's text scale factor changes. <a href="game/GameRenderBox/didChangeTextScaleFactor.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="didHaveMemoryPressure" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/didHaveMemoryPressure.html">didHaveMemoryPressure</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Called when the system is running low on memory. <a href="game/GameRenderBox/didHaveMemoryPressure.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="didPopRoute" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/didPopRoute.html">didPopRoute</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Called when the system tells the app to pop the current route.
+For example, on Android, this is called when the user presses
+the back button. <a href="game/GameRenderBox/didPopRoute.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="didPushRoute" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/didPushRoute.html">didPushRoute</a></span><span class="signature">(<wbr><span class="parameter" id="didPushRoute-param-route"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">route</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Called when the host tells the app to push a new route onto the
+navigator. <a href="game/GameRenderBox/didPushRoute.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="dropChild" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/dropChild.html">dropChild</a></span><span class="signature">(<wbr><span class="parameter" id="dropChild-param-child"><span class="type-annotation">RenderObject</span> <span class="parameter-name">child</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Called by subclasses when they decide a render object is no longer a child. <a href="game/GameRenderBox/dropChild.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="getDistanceToActualBaseline" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/getDistanceToActualBaseline.html">getDistanceToActualBaseline</a></span><span class="signature">(<wbr><span class="parameter" id="getDistanceToActualBaseline-param-baseline"><span class="type-annotation"><a href="dart-ui/TextBaseline-class.html">TextBaseline</a></span> <span class="parameter-name">baseline</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Calls <a href="game/GameRenderBox/computeDistanceToActualBaseline.html">computeDistanceToActualBaseline</a> and caches the result. <a href="game/GameRenderBox/getDistanceToActualBaseline.html">[...]</a>
+          <div class="features">@mustCallSuper, @protected, inherited</div>
+</dd>
+        <dt id="getDistanceToBaseline" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/getDistanceToBaseline.html">getDistanceToBaseline</a></span><span class="signature">(<wbr><span class="parameter" id="getDistanceToBaseline-param-baseline"><span class="type-annotation"><a href="dart-ui/TextBaseline-class.html">TextBaseline</a></span> <span class="parameter-name">baseline</span>, {</span> <span class="parameter" id="getDistanceToBaseline-param-onlyReal"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">onlyReal</span>: <span class="default-value">false</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns the distance from the y-coordinate of the position of the box to
+the y-coordinate of the first given baseline in the box's contents. <a href="game/GameRenderBox/getDistanceToBaseline.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="getMaxIntrinsicHeight" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/getMaxIntrinsicHeight.html">getMaxIntrinsicHeight</a></span><span class="signature">(<wbr><span class="parameter" id="getMaxIntrinsicHeight-param-width"><span class="type-annotation"><a href="dart-core/double-class.html">double</a></span> <span class="parameter-name">width</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns the smallest height beyond which increasing the height never
+decreases the preferred width. The preferred width is the value that
+would be returned by <a href="game/GameRenderBox/getMinIntrinsicWidth.html">getMinIntrinsicWidth</a> for that height. <a href="game/GameRenderBox/getMaxIntrinsicHeight.html">[...]</a>
+          <div class="features">@mustCallSuper, inherited</div>
+</dd>
+        <dt id="getMaxIntrinsicWidth" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/getMaxIntrinsicWidth.html">getMaxIntrinsicWidth</a></span><span class="signature">(<wbr><span class="parameter" id="getMaxIntrinsicWidth-param-height"><span class="type-annotation"><a href="dart-core/double-class.html">double</a></span> <span class="parameter-name">height</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns the smallest width beyond which increasing the width never
+decreases the preferred height. The preferred height is the value that
+would be returned by <a href="game/GameRenderBox/getMinIntrinsicHeight.html">getMinIntrinsicHeight</a> for that width. <a href="game/GameRenderBox/getMaxIntrinsicWidth.html">[...]</a>
+          <div class="features">@mustCallSuper, inherited</div>
+</dd>
+        <dt id="getMinIntrinsicHeight" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/getMinIntrinsicHeight.html">getMinIntrinsicHeight</a></span><span class="signature">(<wbr><span class="parameter" id="getMinIntrinsicHeight-param-width"><span class="type-annotation"><a href="dart-core/double-class.html">double</a></span> <span class="parameter-name">width</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns the minimum height that this box could be without failing to
+correctly paint its contents within itself, without clipping. <a href="game/GameRenderBox/getMinIntrinsicHeight.html">[...]</a>
+          <div class="features">@mustCallSuper, inherited</div>
+</dd>
+        <dt id="getMinIntrinsicWidth" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/getMinIntrinsicWidth.html">getMinIntrinsicWidth</a></span><span class="signature">(<wbr><span class="parameter" id="getMinIntrinsicWidth-param-height"><span class="type-annotation"><a href="dart-core/double-class.html">double</a></span> <span class="parameter-name">height</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/double-class.html">double</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns the minimum width that this box could be without failing to
+correctly paint its contents within itself, without clipping. <a href="game/GameRenderBox/getMinIntrinsicWidth.html">[...]</a>
+          <div class="features">@mustCallSuper, inherited</div>
+</dd>
+        <dt id="getTransformTo" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/getTransformTo.html">getTransformTo</a></span><span class="signature">(<wbr><span class="parameter" id="getTransformTo-param-ancestor"><span class="type-annotation">RenderObject</span> <span class="parameter-name">ancestor</span></span>)
+            <span class="returntype parameter">&#8594; Matrix4</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Applies the paint transform up the tree to <code>ancestor</code>. <a href="game/GameRenderBox/getTransformTo.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="globalToLocal" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/globalToLocal.html">globalToLocal</a></span><span class="signature">(<wbr><span class="parameter" id="globalToLocal-param-point"><span class="type-annotation"><a href="dart-ui/Offset-class.html">Offset</a></span> <span class="parameter-name">point</span>, {</span> <span class="parameter" id="globalToLocal-param-ancestor"><span class="type-annotation">RenderObject</span> <span class="parameter-name">ancestor</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-ui/Offset-class.html">Offset</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Convert the given point from the global coordinate system in logical pixels
+to the local coordinate system for this box. <a href="game/GameRenderBox/globalToLocal.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="handleEvent" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/handleEvent.html">handleEvent</a></span><span class="signature">(<wbr><span class="parameter" id="handleEvent-param-event"><span class="type-annotation">PointerEvent</span> <span class="parameter-name">event</span>, </span> <span class="parameter" id="handleEvent-param-entry"><span class="type-annotation">HitTestEntry</span> <span class="parameter-name">entry</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Override this method to handle pointer events that hit this render object. <a href="game/GameRenderBox/handleEvent.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="hitTest" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/hitTest.html">hitTest</a></span><span class="signature">(<wbr><span class="parameter" id="hitTest-param-result"><span class="type-annotation">HitTestResult</span> <span class="parameter-name">result</span>, {</span> <span class="parameter" id="hitTest-param-position"><span class="type-annotation"><a href="dart-ui/Offset-class.html">Offset</a></span> <span class="parameter-name">position</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Determines the set of render objects located at the given position. <a href="game/GameRenderBox/hitTest.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="hitTestChildren" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/hitTestChildren.html">hitTestChildren</a></span><span class="signature">(<wbr><span class="parameter" id="hitTestChildren-param-result"><span class="type-annotation">HitTestResult</span> <span class="parameter-name">result</span>, {</span> <span class="parameter" id="hitTestChildren-param-position"><span class="type-annotation"><a href="dart-ui/Offset-class.html">Offset</a></span> <span class="parameter-name">position</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Override this method to check whether any children are located at the
+given position. <a href="game/GameRenderBox/hitTestChildren.html">[...]</a>
+          <div class="features">@protected, inherited</div>
+</dd>
+        <dt id="hitTestSelf" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/hitTestSelf.html">hitTestSelf</a></span><span class="signature">(<wbr><span class="parameter" id="hitTestSelf-param-position"><span class="type-annotation"><a href="dart-ui/Offset-class.html">Offset</a></span> <span class="parameter-name">position</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Override this method if this render object can be hit even if its
+children were not hit. <a href="game/GameRenderBox/hitTestSelf.html">[...]</a>
+          <div class="features">@protected, inherited</div>
+</dd>
+        <dt id="invokeLayoutCallback" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/invokeLayoutCallback.html">invokeLayoutCallback</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T extends Constraints</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="invokeLayoutCallback-param-callback"><span class="type-annotation">LayoutCallback<span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span> <span class="parameter-name">callback</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Allows mutations to be made to this object's child list (and any
+descendants) as well as to any other dirty nodes in the render tree owned
+by the same <code>PipelineOwner</code> as this object. The <code>callback</code> argument is
+invoked synchronously, and the mutations are allowed only during that
+callback's execution. <a href="game/GameRenderBox/invokeLayoutCallback.html">[...]</a>
+          <div class="features">@protected, inherited</div>
+</dd>
+        <dt id="layout" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/layout.html">layout</a></span><span class="signature">(<wbr><span class="parameter" id="layout-param-constraints"><span class="type-annotation">Constraints</span> <span class="parameter-name">constraints</span>, {</span> <span class="parameter" id="layout-param-parentUsesSize"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">parentUsesSize</span>: <span class="default-value">false</span></span> })
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Compute the layout for this render object. <a href="game/GameRenderBox/layout.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="localToGlobal" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/localToGlobal.html">localToGlobal</a></span><span class="signature">(<wbr><span class="parameter" id="localToGlobal-param-point"><span class="type-annotation"><a href="dart-ui/Offset-class.html">Offset</a></span> <span class="parameter-name">point</span>, {</span> <span class="parameter" id="localToGlobal-param-ancestor"><span class="type-annotation">RenderObject</span> <span class="parameter-name">ancestor</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-ui/Offset-class.html">Offset</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Convert the given point from the local coordinate system for this box to
+the global coordinate system in logical pixels. <a href="game/GameRenderBox/localToGlobal.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="markNeedsCompositingBitsUpdate" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/markNeedsCompositingBitsUpdate.html">markNeedsCompositingBitsUpdate</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Mark the compositing state for this render object as dirty. <a href="game/GameRenderBox/markNeedsCompositingBitsUpdate.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="markNeedsLayout" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/markNeedsLayout.html">markNeedsLayout</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Mark this render object's layout information as dirty, and either register
+this object with its <code>PipelineOwner</code>, or defer to the parent, depending on
+whether this object is a relayout boundary or not respectively. <a href="game/GameRenderBox/markNeedsLayout.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="markNeedsLayoutForSizedByParentChange" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/markNeedsLayoutForSizedByParentChange.html">markNeedsLayoutForSizedByParentChange</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Mark this render object's layout information as dirty (like
+<a href="game/GameRenderBox/markNeedsLayout.html">markNeedsLayout</a>), and additionally also handle any necessary work to
+handle the case where <a href="game/GameRenderBox/sizedByParent.html">sizedByParent</a> has changed value. <a href="game/GameRenderBox/markNeedsLayoutForSizedByParentChange.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="markNeedsPaint" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/markNeedsPaint.html">markNeedsPaint</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Mark this render object as having changed its visual appearance. <a href="game/GameRenderBox/markNeedsPaint.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="markNeedsSemanticsUpdate" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/markNeedsSemanticsUpdate.html">markNeedsSemanticsUpdate</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Mark this node as needing an update to its semantics description. <a href="game/GameRenderBox/markNeedsSemanticsUpdate.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="markParentNeedsLayout" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/markParentNeedsLayout.html">markParentNeedsLayout</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Mark this render object's layout information as dirty, and then defer to
+the parent. <a href="game/GameRenderBox/markParentNeedsLayout.html">[...]</a>
+          <div class="features">@protected, inherited</div>
+</dd>
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Invoked when a non-existent method or property is accessed. <a href="dart-core/Object/noSuchMethod.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="performLayout" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/performLayout.html">performLayout</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Do the work of computing the layout for this render object. <a href="game/GameRenderBox/performLayout.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="reassemble" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/reassemble.html">reassemble</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Cause the entire subtree rooted at the given <code>RenderObject</code> to be marked
+dirty for layout, paint, etc, so that the effects of a hot reload can be
+seen, or so that the effect of changing a global debug flag (such as
+<code>debugPaintSizeEnabled</code>) can be applied. <a href="game/GameRenderBox/reassemble.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="redepthChild" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/redepthChild.html">redepthChild</a></span><span class="signature">(<wbr><span class="parameter" id="redepthChild-param-child"><span class="type-annotation">AbstractNode</span> <span class="parameter-name">child</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Adjust the <a href="game/GameRenderBox/depth.html">depth</a> of the given <code>child</code> to be greater than this node's own
+<a href="game/GameRenderBox/depth.html">depth</a>. <a href="game/GameRenderBox/redepthChild.html">[...]</a>
+          <div class="features">@protected, inherited</div>
+</dd>
+        <dt id="redepthChildren" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/redepthChildren.html">redepthChildren</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Adjust the <a href="game/GameRenderBox/depth.html">depth</a> of this node's children, if any. <a href="game/GameRenderBox/redepthChildren.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="replaceRootLayer" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/replaceRootLayer.html">replaceRootLayer</a></span><span class="signature">(<wbr><span class="parameter" id="replaceRootLayer-param-rootLayer"><span class="type-annotation">OffsetLayer</span> <span class="parameter-name">rootLayer</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Replace the layer. This is only valid for the root of a render
+object subtree (whatever object <a href="game/GameRenderBox/scheduleInitialPaint.html">scheduleInitialPaint</a> was
+called on). <a href="game/GameRenderBox/replaceRootLayer.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="rotate" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/rotate.html">rotate</a></span><span class="signature">(<wbr>{<span class="parameter" id="rotate-param-oldAngle"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">oldAngle</span>, </span> <span class="parameter" id="rotate-param-newAngle"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">newAngle</span>, </span> <span class="parameter" id="rotate-param-time"><span class="type-annotation"><a href="dart-core/Duration-class.html">Duration</a></span> <span class="parameter-name">time</span></span> })
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Rotate this render object (not yet implemented).
+          <div class="features">inherited</div>
+</dd>
+        <dt id="scheduleInitialLayout" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/scheduleInitialLayout.html">scheduleInitialLayout</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Bootstrap the rendering pipeline by scheduling the very first layout. <a href="game/GameRenderBox/scheduleInitialLayout.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="scheduleInitialPaint" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/scheduleInitialPaint.html">scheduleInitialPaint</a></span><span class="signature">(<wbr><span class="parameter" id="scheduleInitialPaint-param-rootLayer"><span class="type-annotation">ContainerLayer</span> <span class="parameter-name">rootLayer</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Bootstrap the rendering pipeline by scheduling the very first paint. <a href="game/GameRenderBox/scheduleInitialPaint.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="scheduleInitialSemantics" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/scheduleInitialSemantics.html">scheduleInitialSemantics</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Bootstrap the semantics reporting mechanism by marking this node
+as needing a semantics update. <a href="game/GameRenderBox/scheduleInitialSemantics.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="setupParentData" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/setupParentData.html">setupParentData</a></span><span class="signature">(<wbr><span class="parameter" id="setupParentData-param-child"><span class="type-annotation">RenderObject</span> <span class="parameter-name">child</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Override to setup parent data correctly for your children. <a href="game/GameRenderBox/setupParentData.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="showOnScreen" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/showOnScreen.html">showOnScreen</a></span><span class="signature">(<wbr>[<span class="parameter" id="showOnScreen-param-child"><span class="type-annotation">RenderObject</span> <span class="parameter-name">child</span></span> ])
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Attempt to make this or a descendant RenderObject visible on screen. <a href="game/GameRenderBox/showOnScreen.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toDiagnosticsNode" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/toDiagnosticsNode.html">toDiagnosticsNode</a></span><span class="signature">(<wbr>{<span class="parameter" id="toDiagnosticsNode-param-name"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">name</span>, </span> <span class="parameter" id="toDiagnosticsNode-param-style"><span class="type-annotation">DiagnosticsTreeStyle</span> <span class="parameter-name">style</span></span> })
+            <span class="returntype parameter">&#8594; DiagnosticsNode</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toString" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/toString.html">toString</a></span><span class="signature">(<wbr>{<span class="parameter" id="toString-param-minLevel"><span class="type-annotation">DiagnosticLevel</span> <span class="parameter-name">minLevel</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toStringDeep" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/toStringDeep.html">toStringDeep</a></span><span class="signature">(<wbr>{<span class="parameter" id="toStringDeep-param-prefixLineOne"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">prefixLineOne</span>: <span class="default-value">''</span>, </span> <span class="parameter" id="toStringDeep-param-prefixOtherLines"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">prefixOtherLines</span>: <span class="default-value">''</span>, </span> <span class="parameter" id="toStringDeep-param-minLevel"><span class="type-annotation">DiagnosticLevel</span> <span class="parameter-name">minLevel</span>: <span class="default-value">DiagnosticLevel.debug</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a description of the tree rooted at this node.
+If the prefix argument is provided, then every line in the output
+will be prefixed by that string.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toStringShallow" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/toStringShallow.html">toStringShallow</a></span><span class="signature">(<wbr>{<span class="parameter" id="toStringShallow-param-joiner"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">joiner</span>: <span class="default-value">'; '</span>, </span> <span class="parameter" id="toStringShallow-param-minLevel"><span class="type-annotation">DiagnosticLevel</span> <span class="parameter-name">minLevel</span>: <span class="default-value">DiagnosticLevel.debug</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a one-line detailed description of the render object.
+This description is often somewhat long. <a href="game/GameRenderBox/toStringShallow.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toStringShort" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/toStringShort.html">toStringShort</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a human understandable name.
+          <div class="features">inherited</div>
+</dd>
+        <dt id="visitChildren" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/visitChildren.html">visitChildren</a></span><span class="signature">(<wbr><span class="parameter" id="visitChildren-param-visitor"><span class="type-annotation">RenderObjectVisitor</span> <span class="parameter-name">visitor</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Calls visitor for each immediate child of this render object. <a href="game/GameRenderBox/visitChildren.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="visitChildrenForSemantics" class="callable inherited">
+          <span class="name"><a href="game/GameRenderBox/visitChildrenForSemantics.html">visitChildrenForSemantics</a></span><span class="signature">(<wbr><span class="parameter" id="visitChildrenForSemantics-param-visitor"><span class="type-annotation">RenderObjectVisitor</span> <span class="parameter-name">visitor</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Called when collecting the semantics of this node. <a href="game/GameRenderBox/visitChildrenForSemantics.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor inherited" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation">dynamic</span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          The equality operator. <a href="dart-core/Object/operator_equals.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+
+
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <ol>
+      <li class="section-title"><a href="game/GameRenderBox-class.html#constructors">Constructors</a></li>
+      <li><a href="game/GameRenderBox/GameRenderBox.html">GameRenderBox</a></li>
+    
+      <li class="section-title">
+        <a href="game/GameRenderBox-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="game/GameRenderBox/context.html">context</a></li>
+      <li><a href="game/GameRenderBox/game.html">game</a></li>
+      <li><a href="game/GameRenderBox/previous.html">previous</a></li>
+      <li><a href="game/GameRenderBox/sizedByParent.html">sizedByParent</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/alwaysNeedsCompositing.html">alwaysNeedsCompositing</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/attached.html">attached</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/constraints.html">constraints</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugCanParentUseSize.html">debugCanParentUseSize</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugCreator.html">debugCreator</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugDoingThisLayout.html">debugDoingThisLayout</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugDoingThisPaint.html">debugDoingThisPaint</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugDoingThisResize.html">debugDoingThisResize</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugLayer.html">debugLayer</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugNeedsLayout.html">debugNeedsLayout</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugNeedsPaint.html">debugNeedsPaint</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugSemantics.html">debugSemantics</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/depth.html">depth</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/hasSize.html">hasSize</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/isRepaintBoundary.html">isRepaintBoundary</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/layer.html">layer</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/needsCompositing.html">needsCompositing</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/owner.html">owner</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/paintBounds.html">paintBounds</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/parent.html">parent</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/parentData.html">parentData</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/semanticBounds.html">semanticBounds</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/size.html">size</a></li>
+    
+      <li class="section-title"><a href="game/GameRenderBox-class.html#instance-methods">Methods</a></li>
+      <li><a href="game/GameRenderBox/attach.html">attach</a></li>
+      <li><a href="game/GameRenderBox/detach.html">detach</a></li>
+      <li><a href="game/GameRenderBox/didChangeAppLifecycleState.html">didChangeAppLifecycleState</a></li>
+      <li><a href="game/GameRenderBox/paint.html">paint</a></li>
+      <li><a href="game/GameRenderBox/performResize.html">performResize</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/adoptChild.html">adoptChild</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/applyPaintTransform.html">applyPaintTransform</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/assembleSemanticsNode.html">assembleSemanticsNode</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/clearSemantics.html">clearSemantics</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/computeDistanceToActualBaseline.html">computeDistanceToActualBaseline</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/computeMaxIntrinsicHeight.html">computeMaxIntrinsicHeight</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/computeMaxIntrinsicWidth.html">computeMaxIntrinsicWidth</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/computeMinIntrinsicHeight.html">computeMinIntrinsicHeight</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/computeMinIntrinsicWidth.html">computeMinIntrinsicWidth</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugAdoptSize.html">debugAdoptSize</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugAssertDoesMeetConstraints.html">debugAssertDoesMeetConstraints</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugDescribeChildren.html">debugDescribeChildren</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugFillProperties.html">debugFillProperties</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugHandleEvent.html">debugHandleEvent</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugPaint.html">debugPaint</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugPaintBaselines.html">debugPaintBaselines</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugPaintPointers.html">debugPaintPointers</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugPaintSize.html">debugPaintSize</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugRegisterRepaintBoundaryPaint.html">debugRegisterRepaintBoundaryPaint</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/debugResetSize.html">debugResetSize</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/describeApproximatePaintClip.html">describeApproximatePaintClip</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/describeSemanticsConfiguration.html">describeSemanticsConfiguration</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/didChangeLocale.html">didChangeLocale</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/didChangeMetrics.html">didChangeMetrics</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/didChangeTextScaleFactor.html">didChangeTextScaleFactor</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/didHaveMemoryPressure.html">didHaveMemoryPressure</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/didPopRoute.html">didPopRoute</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/didPushRoute.html">didPushRoute</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/dropChild.html">dropChild</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/getDistanceToActualBaseline.html">getDistanceToActualBaseline</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/getDistanceToBaseline.html">getDistanceToBaseline</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/getMaxIntrinsicHeight.html">getMaxIntrinsicHeight</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/getMaxIntrinsicWidth.html">getMaxIntrinsicWidth</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/getMinIntrinsicHeight.html">getMinIntrinsicHeight</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/getMinIntrinsicWidth.html">getMinIntrinsicWidth</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/getTransformTo.html">getTransformTo</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/globalToLocal.html">globalToLocal</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/handleEvent.html">handleEvent</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/hitTest.html">hitTest</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/hitTestChildren.html">hitTestChildren</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/hitTestSelf.html">hitTestSelf</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/invokeLayoutCallback.html">invokeLayoutCallback</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/layout.html">layout</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/localToGlobal.html">localToGlobal</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/markNeedsCompositingBitsUpdate.html">markNeedsCompositingBitsUpdate</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/markNeedsLayout.html">markNeedsLayout</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/markNeedsLayoutForSizedByParentChange.html">markNeedsLayoutForSizedByParentChange</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/markNeedsPaint.html">markNeedsPaint</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/markNeedsSemanticsUpdate.html">markNeedsSemanticsUpdate</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/markParentNeedsLayout.html">markParentNeedsLayout</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/performLayout.html">performLayout</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/reassemble.html">reassemble</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/redepthChild.html">redepthChild</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/redepthChildren.html">redepthChildren</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/replaceRootLayer.html">replaceRootLayer</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/rotate.html">rotate</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/scheduleInitialLayout.html">scheduleInitialLayout</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/scheduleInitialPaint.html">scheduleInitialPaint</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/scheduleInitialSemantics.html">scheduleInitialSemantics</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/setupParentData.html">setupParentData</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/showOnScreen.html">showOnScreen</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/toDiagnosticsNode.html">toDiagnosticsNode</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/toString.html">toString</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/toStringDeep.html">toStringDeep</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/toStringShallow.html">toStringShallow</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/toStringShort.html">toStringShort</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/visitChildren.html">visitChildren</a></li>
+      <li class="inherited"><a href="game/GameRenderBox/visitChildrenForSemantics.html">visitChildrenForSemantics</a></li>
+    
+      <li class="section-title inherited"><a href="game/GameRenderBox-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

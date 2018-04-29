@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the Rectangle.fromPoints constructor from the Class Rectangle class from the dart:math library, for the Dart programming language.">
+  <title>Rectangle.fromPoints constructor - Rectangle class - dart:math library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-math/dart-math-library.html">dart:math</a></li>
+    <li><a href="dart-math/Rectangle-class.html">Rectangle<span class="signature">&lt;<wbr><span class="type-parameter">T extends num</span>&gt;</span></a></li>
+    <li class="self-crumb">Rectangle.fromPoints factory constructor</li>
+  </ol>
+  <div class="self-name">Rectangle.fromPoints</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>Rectangle class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-math/Rectangle-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-math/Rectangle/Rectangle.html">Rectangle</a></li>
+      <li><a href="dart-math/Rectangle/Rectangle.fromPoints.html">fromPoints</a></li>
+    
+      <li class="section-title">
+        <a href="dart-math/Rectangle-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-math/Rectangle/height.html">height</a></li>
+      <li><a href="dart-math/Rectangle/left.html">left</a></li>
+      <li><a href="dart-math/Rectangle/top.html">top</a></li>
+      <li><a href="dart-math/Rectangle/width.html">width</a></li>
+      <li class="inherited"><a href="dart-math/Rectangle/bottom.html">bottom</a></li>
+      <li class="inherited"><a href="dart-math/Rectangle/bottomLeft.html">bottomLeft</a></li>
+      <li class="inherited"><a href="dart-math/Rectangle/bottomRight.html">bottomRight</a></li>
+      <li class="inherited"><a href="dart-math/Rectangle/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-math/Rectangle/right.html">right</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+      <li class="inherited"><a href="dart-math/Rectangle/topLeft.html">topLeft</a></li>
+      <li class="inherited"><a href="dart-math/Rectangle/topRight.html">topRight</a></li>
+    
+      <li class="section-title inherited"><a href="dart-math/Rectangle-class.html#instance-methods">Methods</a></li>
+      <li class="inherited"><a href="dart-math/Rectangle/boundingBox.html">boundingBox</a></li>
+      <li class="inherited"><a href="dart-math/Rectangle/containsPoint.html">containsPoint</a></li>
+      <li class="inherited"><a href="dart-math/Rectangle/containsRectangle.html">containsRectangle</a></li>
+      <li class="inherited"><a href="dart-math/Rectangle/intersection.html">intersection</a></li>
+      <li class="inherited"><a href="dart-math/Rectangle/intersects.html">intersects</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-math/Rectangle/toString.html">toString</a></li>
+    
+      <li class="section-title inherited"><a href="dart-math/Rectangle-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-math/Rectangle/operator_equals.html">operator ==</a></li>
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-left-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>Rectangle&lt;<wbr><span class="type-parameter">T extends num</span>&gt;.fromPoints constructor</h1>
+
+    <section class="multi-line-signature">
+      
+      <span class="name ">Rectangle&lt;<wbr><span class="type-parameter">T extends num</span>&gt;.fromPoints</span>(<wbr><span class="parameter" id="fromPoints-param-a"><span class="type-annotation"><a href="dart-math/Point-class.html">Point</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span> <span class="parameter-name">a</span>, </span> <span class="parameter" id="fromPoints-param-b"><span class="type-annotation"><a href="dart-math/Point-class.html">Point</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span> <span class="parameter-name">b</span></span>)
+    </section>
+
+    <section class="desc markdown">
+      <p>Create a rectangle spanned by the points <code>a</code> and <code>b</code>;</p>
+<p>The rectangle contains the points
+with x-coordinate between <code>a.x</code> and <code>b.x</code>, and
+with y-coordinate between <code>a.y</code> and <code>b.y</code>, both inclusive.</p>
+<p>If the distance between <code>a.x</code> and <code>b.x</code> is not representable
+(which can happen if one or both is a double),
+the actual right edge might be slightly off from <code>max(a.x, b.x)</code>.
+Similar for the y-coordinates and the bottom edge.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">factory Rectangle.fromPoints(Point&lt;T&gt; a, Point&lt;T&gt; b) {
+  T left = min(a.x, b.x);
+  T width = max(a.x, b.x) - left;
+  T top = min(a.y, b.y);
+  T height = max(a.y, b.y) - top;
+  return new Rectangle&lt;T&gt;(left, top, width, height);
+}</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

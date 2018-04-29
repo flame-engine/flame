@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the LinkedList class from the dart:collection library, for the Dart programming language.">
+  <title>LinkedList class - dart:collection library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-collection/dart-collection-library.html">dart:collection</a></li>
+    <li class="self-crumb">LinkedList<span class="signature">&lt;<wbr><span class="type-parameter">E extends <a href="dart-collection/LinkedListEntry-class.html">LinkedListEntry</a><span class="signature">&lt;<wbr><span class="type-parameter">E</span>&gt;</span></span>&gt;</span> class</li>
+  </ol>
+  <div class="self-name">LinkedList</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>dart:collection library</h5>
+    <ol>
+      <li class="section-title"><a href="dart-collection/dart-collection-library.html#classes">Classes</a></li>
+      <li><a href="dart-collection/DoubleLinkedQueue-class.html">DoubleLinkedQueue</a></li>
+      <li><a href="dart-collection/DoubleLinkedQueueEntry-class.html">DoubleLinkedQueueEntry</a></li>
+      <li><a href="dart-collection/HashMap-class.html">HashMap</a></li>
+      <li><a href="dart-collection/HashSet-class.html">HashSet</a></li>
+      <li><a href="dart-collection/HasNextIterator-class.html">HasNextIterator</a></li>
+      <li><a href="dart-collection/IterableBase-class.html">IterableBase</a></li>
+      <li><a href="dart-collection/IterableMixin-class.html">IterableMixin</a></li>
+      <li><a href="dart-collection/LinkedHashMap-class.html">LinkedHashMap</a></li>
+      <li><a href="dart-collection/LinkedHashSet-class.html">LinkedHashSet</a></li>
+      <li><a href="dart-collection/LinkedList-class.html">LinkedList</a></li>
+      <li><a href="dart-collection/LinkedListEntry-class.html">LinkedListEntry</a></li>
+      <li><a href="dart-collection/ListBase-class.html">ListBase</a></li>
+      <li><a href="dart-collection/ListMixin-class.html">ListMixin</a></li>
+      <li><a href="dart-collection/ListQueue-class.html">ListQueue</a></li>
+      <li><a href="dart-collection/MapBase-class.html">MapBase</a></li>
+      <li><a href="dart-collection/MapMixin-class.html">MapMixin</a></li>
+      <li><a href="dart-collection/MapView-class.html">MapView</a></li>
+      <li><a href="dart-collection/Queue-class.html">Queue</a></li>
+      <li><a href="dart-collection/SetBase-class.html">SetBase</a></li>
+      <li><a href="dart-collection/SetMixin-class.html">SetMixin</a></li>
+      <li><a href="dart-collection/SplayTreeMap-class.html">SplayTreeMap</a></li>
+      <li><a href="dart-collection/SplayTreeSet-class.html">SplayTreeSet</a></li>
+      <li><a href="dart-collection/UnmodifiableListView-class.html">UnmodifiableListView</a></li>
+      <li><a href="dart-collection/UnmodifiableMapBase-class.html">UnmodifiableMapBase</a></li>
+      <li><a href="dart-collection/UnmodifiableMapView-class.html">UnmodifiableMapView</a></li>
+    
+    
+    
+    
+    
+    
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>LinkedList&lt;<wbr><span class="type-parameter">E extends LinkedListEntry&lt;<wbr><span class="type-parameter">E</span>&gt;</span>&gt; class</h1>
+
+    <section class="desc markdown">
+      <p>A specialized double-linked list of elements that extends <a href="dart-collection/LinkedListEntry-class.html">LinkedListEntry</a>.</p>
+<p>This is not a generic data structure. It only accepts elements that extend
+the <a href="dart-collection/LinkedListEntry-class.html">LinkedListEntry</a> class. See the <a href="dart-collection/Queue-class.html">Queue</a> implementations for
+generic collections that allow constant time adding and removing at the ends.</p>
+<p>This is not a <a href="dart-core/List-class.html">List</a> implementation. Despite its name, this class does not
+implement the <a href="dart-core/List-class.html">List</a> interface. It does not allow constant time lookup by
+index.</p>
+<p>Because the elements themselves contain the links of this linked list,
+each element can be in only one list at a time. To add an element to another
+list, it must first be removed from its current list (if any).</p>
+<p>In return, each element knows its own place in the linked list, as well as
+which list it is in. This allows constant time <a href="dart-collection/LinkedListEntry/insertAfter.html">LinkedListEntry.insertAfter</a>,
+<a href="dart-collection/LinkedListEntry/insertBefore.html">LinkedListEntry.insertBefore</a> and <a href="dart-collection/LinkedListEntry/unlink.html">LinkedListEntry.unlink</a> operations
+when all you have is the element.</p>
+<p>A <code>LinkedList</code> also allows constant time adding and removing at either end,
+and a constant time length getter.</p>
+    </section>
+    
+    <section>
+      <dl class="dl-horizontal">
+        <dt>Inheritance</dt>
+        <dd><ul class="gt-separated dark clazz-relationships">
+          <li><a href="dart-core/Object-class.html">Object</a></li>
+          <li><a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">E</span>&gt;</span></li>
+          <li>LinkedList</li>
+        </ul></dd>
+
+
+
+
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="constructors">
+      <h2>Constructors</h2>
+
+      <dl class="constructor-summary-list">
+        <dt id="LinkedList" class="callable">
+          <span class="name"><a href="dart-collection/LinkedList/LinkedList.html">LinkedList</a></span><span class="signature">()</span>
+        </dt>
+        <dd>
+          Construct a new empty linked list.
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="first" class="property">
+          <span class="name"><a href="dart-collection/LinkedList/first.html">first</a></span>
+          <span class="signature">&#8594; E</span>
+        </dt>
+        <dd>
+          Returns the first element. <a href="dart-collection/LinkedList/first.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="isEmpty" class="property">
+          <span class="name"><a href="dart-collection/LinkedList/isEmpty.html">isEmpty</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd>
+          Returns <code>true</code> if there are no elements in this collection. <a href="dart-collection/LinkedList/isEmpty.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="iterator" class="property">
+          <span class="name"><a href="dart-collection/LinkedList/iterator.html">iterator</a></span>
+          <span class="signature">&#8594; <a href="dart-core/Iterator-class.html">Iterator</a><span class="signature">&lt;<wbr><span class="type-parameter">E</span>&gt;</span></span>
+        </dt>
+        <dd>
+          Returns a new <code>Iterator</code> that allows iterating the elements of this
+<code>Iterable</code>. <a href="dart-collection/LinkedList/iterator.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="last" class="property">
+          <span class="name"><a href="dart-collection/LinkedList/last.html">last</a></span>
+          <span class="signature">&#8594; E</span>
+        </dt>
+        <dd>
+          Returns the last element. <a href="dart-collection/LinkedList/last.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="length" class="property">
+          <span class="name"><a href="dart-collection/LinkedList/length.html">length</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd>
+          Returns the number of elements in <a href="dart-collection/LinkedList-class.html">this</a>. <a href="dart-collection/LinkedList/length.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="single" class="property">
+          <span class="name"><a href="dart-collection/LinkedList/single.html">single</a></span>
+          <span class="signature">&#8594; E</span>
+        </dt>
+        <dd>
+          Checks that this iterable has only one element, and returns that element. <a href="dart-collection/LinkedList/single.html">[...]</a>
+          <div class="features">read-only</div>
+</dd>
+        <dt id="hashCode" class="property inherited">
+          <span class="name"><a href="dart-core/Object/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; <a href="dart-core/int-class.html">int</a></span>
+        </dt>
+        <dd class="inherited">
+          The hash code for this object. <a href="dart-core/Object/hashCode.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="isNotEmpty" class="property inherited">
+          <span class="name"><a href="dart-core/Iterable/isNotEmpty.html">isNotEmpty</a></span>
+          <span class="signature">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+        </dt>
+        <dd class="inherited">
+          Returns true if there is at least one element in this collection. <a href="dart-core/Iterable/isNotEmpty.html">[...]</a>
+          <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a href="dart-core/Object/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; <a href="dart-core/Type-class.html">Type</a></span>
+        </dt>
+        <dd class="inherited">
+          A representation of the runtime type of the object.
+          <div class="features">read-only, inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="add" class="callable">
+          <span class="name"><a href="dart-collection/LinkedList/add.html">add</a></span><span class="signature">(<wbr><span class="parameter" id="add-param-entry"><span class="type-annotation">E</span> <span class="parameter-name">entry</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Add <code>entry</code> to the end of the linked list.
+          
+</dd>
+        <dt id="addAll" class="callable">
+          <span class="name"><a href="dart-collection/LinkedList/addAll.html">addAll</a></span><span class="signature">(<wbr><span class="parameter" id="addAll-param-entries"><span class="type-annotation"><a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">E</span>&gt;</span></span> <span class="parameter-name">entries</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Add <code>entries</code> to the end of the linked list.
+          
+</dd>
+        <dt id="addFirst" class="callable">
+          <span class="name"><a href="dart-collection/LinkedList/addFirst.html">addFirst</a></span><span class="signature">(<wbr><span class="parameter" id="addFirst-param-entry"><span class="type-annotation">E</span> <span class="parameter-name">entry</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Add <code>entry</code> to the beginning of the linked list.
+          
+</dd>
+        <dt id="clear" class="callable">
+          <span class="name"><a href="dart-collection/LinkedList/clear.html">clear</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Remove all elements from this linked list.
+          
+</dd>
+        <dt id="forEach" class="callable">
+          <span class="name"><a href="dart-collection/LinkedList/forEach.html">forEach</a></span><span class="signature">(<wbr><span class="parameter" id="forEach-param-action"><span class="type-annotation">void</span> <span class="parameter-name">action</span>(<span class="parameter" id="action-param-entry"><span class="type-annotation">E</span> <span class="parameter-name">entry</span></span>)</span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+        </dt>
+        <dd>
+          Call <code>action</code> with each entry in this linked list. <a href="dart-collection/LinkedList/forEach.html">[...]</a>
+          
+</dd>
+        <dt id="remove" class="callable">
+          <span class="name"><a href="dart-collection/LinkedList/remove.html">remove</a></span><span class="signature">(<wbr><span class="parameter" id="remove-param-entry"><span class="type-annotation">E</span> <span class="parameter-name">entry</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd>
+          Remove <code>entry</code> from the linked list. <a href="dart-collection/LinkedList/remove.html">[...]</a>
+          
+</dd>
+        <dt id="any" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/any.html">any</a></span><span class="signature">(<wbr><span class="parameter" id="any-param-test"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">test</span>(<span class="parameter" id="test-param-element"><span class="type-annotation">E</span> <span class="parameter-name">element</span></span>)</span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Checks whether any element of this iterable satisfies <code>test</code>. <a href="dart-core/Iterable/any.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="cast" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/cast.html">cast</a></span><span class="signature">&lt;<wbr><span class="type-parameter">R</span>&gt;</span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">R</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Makes this iterable useful as an <code>Iterable&lt;R&gt;</code>, if necessary. <a href="dart-core/Iterable/cast.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="contains" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/contains.html">contains</a></span><span class="signature">(<wbr><span class="parameter" id="contains-param-element"><span class="type-annotation"><a href="dart-core/Object-class.html">Object</a></span> <span class="parameter-name">element</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns true if the collection contains an element equal to <code>element</code>. <a href="dart-core/Iterable/contains.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="elementAt" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/elementAt.html">elementAt</a></span><span class="signature">(<wbr><span class="parameter" id="elementAt-param-index"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">index</span></span>)
+            <span class="returntype parameter">&#8594; E</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns the <code>index</code>th element. <a href="dart-core/Iterable/elementAt.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="every" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/every.html">every</a></span><span class="signature">(<wbr><span class="parameter" id="every-param-test"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">test</span>(<span class="parameter" id="test-param-element"><span class="type-annotation">E</span> <span class="parameter-name">element</span></span>)</span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Checks whether every element of this iterable satisfies <code>test</code>. <a href="dart-core/Iterable/every.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="expand" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/expand.html">expand</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="expand-param-f"><span class="type-annotation"><a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span> <span class="parameter-name">f</span>(<span class="parameter" id="f-param-element"><span class="type-annotation">E</span> <span class="parameter-name">element</span></span>)</span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Expands each element of this <a href="dart-core/Iterable-class.html">Iterable</a> into zero or more elements. <a href="dart-core/Iterable/expand.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="firstWhere" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/firstWhere.html">firstWhere</a></span><span class="signature">(<wbr><span class="parameter" id="firstWhere-param-test"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">test</span>(<span class="parameter" id="test-param-element"><span class="type-annotation">E</span> <span class="parameter-name">element</span></span>), {</span> <span class="parameter" id="firstWhere-param-orElse"><span class="type-annotation">E</span> <span class="parameter-name">orElse</span>()</span> })
+            <span class="returntype parameter">&#8594; E</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns the first element that satisfies the given predicate <code>test</code>. <a href="dart-core/Iterable/firstWhere.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="fold" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/fold.html">fold</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="fold-param-initialValue"><span class="type-annotation">T</span> <span class="parameter-name">initialValue</span>, </span> <span class="parameter" id="fold-param-combine"><span class="type-annotation">T</span> <span class="parameter-name">combine</span>(<span class="parameter" id="combine-param-previousValue"><span class="type-annotation">T</span> <span class="parameter-name">previousValue</span>, </span> <span class="parameter" id="combine-param-element"><span class="type-annotation">E</span> <span class="parameter-name">element</span></span>)</span>)
+            <span class="returntype parameter">&#8594; T</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Reduces a collection to a single value by iteratively combining each
+element of the collection with an existing value <a href="dart-core/Iterable/fold.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="followedBy" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/followedBy.html">followedBy</a></span><span class="signature">(<wbr><span class="parameter" id="followedBy-param-other"><span class="type-annotation"><a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">E</span>&gt;</span></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">E</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns the lazy concatentation of this iterable and <code>other</code>. <a href="dart-core/Iterable/followedBy.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="join" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/join.html">join</a></span><span class="signature">(<wbr>[<span class="parameter" id="join-param-separator"><span class="type-annotation"><a href="dart-core/String-class.html">String</a></span> <span class="parameter-name">separator</span> = <span class="default-value">""</span></span> ])
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Converts each element to a <a href="dart-core/String-class.html">String</a> and concatenates the strings. <a href="dart-core/Iterable/join.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="lastWhere" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/lastWhere.html">lastWhere</a></span><span class="signature">(<wbr><span class="parameter" id="lastWhere-param-test"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">test</span>(<span class="parameter" id="test-param-element"><span class="type-annotation">E</span> <span class="parameter-name">element</span></span>), {</span> <span class="parameter" id="lastWhere-param-orElse"><span class="type-annotation">E</span> <span class="parameter-name">orElse</span>()</span> })
+            <span class="returntype parameter">&#8594; E</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns the last element that satisfies the given predicate <code>test</code>. <a href="dart-core/Iterable/lastWhere.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="map" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/map.html">map</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="map-param-f"><span class="type-annotation">T</span> <span class="parameter-name">f</span>(<span class="parameter" id="f-param-e"><span class="type-annotation">E</span> <span class="parameter-name">e</span></span>)</span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a new lazy <a href="dart-core/Iterable-class.html">Iterable</a> with elements that are created by
+calling <code>f</code> on each element of this <code>Iterable</code> in iteration order. <a href="dart-core/Iterable/map.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Invoked when a non-existent method or property is accessed. <a href="dart-core/Object/noSuchMethod.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="reduce" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/reduce.html">reduce</a></span><span class="signature">(<wbr><span class="parameter" id="reduce-param-combine"><span class="type-annotation">E</span> <span class="parameter-name">combine</span>(<span class="parameter" id="combine-param-value"><span class="type-annotation">E</span> <span class="parameter-name">value</span>, </span> <span class="parameter" id="combine-param-element"><span class="type-annotation">E</span> <span class="parameter-name">element</span></span>)</span>)
+            <span class="returntype parameter">&#8594; E</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Reduces a collection to a single value by iteratively combining elements
+of the collection using the provided function. <a href="dart-core/Iterable/reduce.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="retype" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/retype.html">retype</a></span><span class="signature">&lt;<wbr><span class="type-parameter">R</span>&gt;</span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">R</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Provides a view of this iterable as an iterable of <code>R</code> instances. <a href="dart-core/Iterable/retype.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="singleWhere" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/singleWhere.html">singleWhere</a></span><span class="signature">(<wbr><span class="parameter" id="singleWhere-param-test"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">test</span>(<span class="parameter" id="test-param-element"><span class="type-annotation">E</span> <span class="parameter-name">element</span></span>), {</span> <span class="parameter" id="singleWhere-param-orElse"><span class="type-annotation">E</span> <span class="parameter-name">orElse</span>()</span> })
+            <span class="returntype parameter">&#8594; E</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns the single element that satisfies <code>test</code>. <a href="dart-core/Iterable/singleWhere.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="skip" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/skip.html">skip</a></span><span class="signature">(<wbr><span class="parameter" id="skip-param-count"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">count</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">E</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns an <a href="dart-core/Iterable-class.html">Iterable</a> that provides all but the first <code>count</code> elements. <a href="dart-core/Iterable/skip.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="skipWhile" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/skipWhile.html">skipWhile</a></span><span class="signature">(<wbr><span class="parameter" id="skipWhile-param-test"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">test</span>(<span class="parameter" id="test-param-value"><span class="type-annotation">E</span> <span class="parameter-name">value</span></span>)</span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">E</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns an <code>Iterable</code> that skips leading elements while <code>test</code> is satisfied. <a href="dart-core/Iterable/skipWhile.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="take" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/take.html">take</a></span><span class="signature">(<wbr><span class="parameter" id="take-param-count"><span class="type-annotation"><a href="dart-core/int-class.html">int</a></span> <span class="parameter-name">count</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">E</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a lazy iterable of the <code>count</code> first elements of this iterable. <a href="dart-core/Iterable/take.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="takeWhile" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/takeWhile.html">takeWhile</a></span><span class="signature">(<wbr><span class="parameter" id="takeWhile-param-test"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">test</span>(<span class="parameter" id="test-param-value"><span class="type-annotation">E</span> <span class="parameter-name">value</span></span>)</span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">E</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a lazy iterable of the leading elements satisfying <code>test</code>. <a href="dart-core/Iterable/takeWhile.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toList" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/toList.html">toList</a></span><span class="signature">(<wbr>{<span class="parameter" id="toList-param-growable"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">growable</span>: <span class="default-value">true</span></span> })
+            <span class="returntype parameter">&#8594; <a href="dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">E</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Creates a <a href="dart-core/List-class.html">List</a> containing the elements of this <a href="dart-core/Iterable-class.html">Iterable</a>. <a href="dart-core/Iterable/toList.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toSet" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/toSet.html">toSet</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Set-class.html">Set</a><span class="signature">&lt;<wbr><span class="type-parameter">E</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Creates a <a href="dart-core/Set-class.html">Set</a> containing the same elements as this iterable. <a href="dart-core/Iterable/toSet.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="toString" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/toString.html">toString</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/String-class.html">String</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a string representation of (some of) the elements of <code>this</code>. <a href="dart-core/Iterable/toString.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="where" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/where.html">where</a></span><span class="signature">(<wbr><span class="parameter" id="where-param-test"><span class="type-annotation"><a href="dart-core/bool-class.html">bool</a></span> <span class="parameter-name">test</span>(<span class="parameter" id="test-param-element"><span class="type-annotation">E</span> <span class="parameter-name">element</span></span>)</span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">E</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a new lazy <a href="dart-core/Iterable-class.html">Iterable</a> with all elements that satisfy the
+predicate <code>test</code>. <a href="dart-core/Iterable/where.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+        <dt id="whereType" class="callable inherited">
+          <span class="name"><a href="dart-core/Iterable/whereType.html">whereType</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          Returns a new lazy <a href="dart-core/Iterable-class.html">Iterable</a> with all elements that have type <code>T</code>. <a href="dart-core/Iterable/whereType.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor inherited" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+          <span class="name"><a href="dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation">dynamic</span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="dart-core/bool-class.html">bool</a></span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          The equality operator. <a href="dart-core/Object/operator_equals.html">[...]</a>
+          <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+
+
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <ol>
+      <li class="section-title"><a href="dart-collection/LinkedList-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-collection/LinkedList/LinkedList.html">LinkedList</a></li>
+    
+      <li class="section-title">
+        <a href="dart-collection/LinkedList-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-collection/LinkedList/first.html">first</a></li>
+      <li><a href="dart-collection/LinkedList/isEmpty.html">isEmpty</a></li>
+      <li><a href="dart-collection/LinkedList/iterator.html">iterator</a></li>
+      <li><a href="dart-collection/LinkedList/last.html">last</a></li>
+      <li><a href="dart-collection/LinkedList/length.html">length</a></li>
+      <li><a href="dart-collection/LinkedList/single.html">single</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/isNotEmpty.html">isNotEmpty</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-collection/LinkedList-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-collection/LinkedList/add.html">add</a></li>
+      <li><a href="dart-collection/LinkedList/addAll.html">addAll</a></li>
+      <li><a href="dart-collection/LinkedList/addFirst.html">addFirst</a></li>
+      <li><a href="dart-collection/LinkedList/clear.html">clear</a></li>
+      <li><a href="dart-collection/LinkedList/forEach.html">forEach</a></li>
+      <li><a href="dart-collection/LinkedList/remove.html">remove</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/any.html">any</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/cast.html">cast</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/contains.html">contains</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/elementAt.html">elementAt</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/every.html">every</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/expand.html">expand</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/firstWhere.html">firstWhere</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/fold.html">fold</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/followedBy.html">followedBy</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/join.html">join</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/lastWhere.html">lastWhere</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/map.html">map</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/reduce.html">reduce</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/retype.html">retype</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/singleWhere.html">singleWhere</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/skip.html">skip</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/skipWhile.html">skipWhile</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/take.html">take</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/takeWhile.html">takeWhile</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/toList.html">toList</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/toSet.html">toSet</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/toString.html">toString</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/where.html">where</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/whereType.html">whereType</a></li>
+    
+      <li class="section-title inherited"><a href="dart-collection/LinkedList-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

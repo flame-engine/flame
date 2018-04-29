@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the then method from the Future class, for the Dart programming language.">
+  <title>then method - Future class - dart:async library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-async/dart-async-library.html">dart:async</a></li>
+    <li><a href="dart-async/Future-class.html">Future<span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></a></li>
+    <li class="self-crumb">then&lt;<wbr><span class="type-parameter">S</span>&gt; abstract method</li>
+  </ol>
+  <div class="self-name">then</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>Future class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-async/Future-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-async/Future/Future.html">Future</a></li>
+      <li><a href="dart-async/Future/Future.delayed.html">delayed</a></li>
+      <li><a href="dart-async/Future/Future.error.html">error</a></li>
+      <li><a href="dart-async/Future/Future.microtask.html">microtask</a></li>
+      <li><a href="dart-async/Future/Future.sync.html">sync</a></li>
+      <li><a href="dart-async/Future/Future.value.html">value</a></li>
+    
+      <li class="section-title inherited">
+        <a href="dart-async/Future-class.html#instance-properties">Properties</a>
+      </li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-async/Future-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-async/Future/asStream.html">asStream</a></li>
+      <li><a href="dart-async/Future/catchError.html">catchError</a></li>
+      <li><a href="dart-async/Future/then.html">then</a></li>
+      <li><a href="dart-async/Future/timeout.html">timeout</a></li>
+      <li><a href="dart-async/Future/whenComplete.html">whenComplete</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-core/Object/toString.html">toString</a></li>
+    
+      <li class="section-title inherited"><a href="dart-async/Future-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+      <li class="section-title"><a href="dart-async/Future-class.html#static-methods">Static methods</a></li>
+      <li><a href="dart-async/Future/any.html">any</a></li>
+      <li><a href="dart-async/Future/doWhile.html">doWhile</a></li>
+      <li><a href="dart-async/Future/forEach.html">forEach</a></li>
+      <li><a href="dart-async/Future/wait.html">wait</a></li>
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>then&lt;<wbr><span class="type-parameter">S</span>&gt; method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype"><a href="dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">S</span>&gt;</span></span>
+      <span class="name ">then</span>
+&lt;<wbr><span class="type-parameter">S</span>&gt;(<wbr><span class="parameter" id="then-param-onValue"><span class="type-annotation"><a href="dart-async/FutureOr-class.html">FutureOr</a><span class="signature">&lt;<wbr><span class="type-parameter">S</span>&gt;</span></span> <span class="parameter-name">onValue</span>(<span class="parameter" id="onValue-param-value"><span class="type-annotation">T</span> <span class="parameter-name">value</span></span>), {</span> <span class="parameter" id="then-param-onError"><span class="type-annotation"><a href="dart-core/Function-class.html">Function</a></span> <span class="parameter-name">onError</span></span> })
+    </section>
+    <section class="desc markdown">
+      <p>Register callbacks to be called when this future completes.</p>
+<p>When this future completes with a value,
+the <code>onValue</code> callback will be called with that value.
+If this future is already completed, the callback will not be called
+immediately, but will be scheduled in a later microtask.</p>
+<p>If <code>onError</code> is provided, and this future completes with an error,
+the <code>onError</code> callback is called with that error and its stack trace.
+The <code>onError</code> callback must accept either one argument or two arguments.
+If <code>onError</code> accepts two arguments,
+it is called with both the error and the stack trace,
+otherwise it is called with just the error object.</p>
+<p>Returns a new <a href="dart-async/Future-class.html">Future</a>
+which is completed with the result of the call to <code>onValue</code>
+(if this future completes with a value)
+or to <code>onError</code> (if this future completes with an error).</p>
+<p>If the invoked callback throws,
+the returned future is completed with the thrown error
+and a stack trace for the error.
+In the case of <code>onError</code>,
+if the exception thrown is <code>identical</code> to the error argument to <code>onError</code>,
+the throw is considered a rethrow,
+and the original stack trace is used instead.</p>
+<p>If the callback returns a <a href="dart-async/Future-class.html">Future</a>,
+the future returned by <code>then</code> will be completed with
+the same result as the future returned by the callback.</p>
+<p>If <code>onError</code> is not given, and this future completes with an error,
+the error is forwarded directly to the returned future.</p>
+<p>In most cases, it is more readable to use <a href="dart-async/Future/catchError.html">catchError</a> separately, possibly
+with a <code>test</code> parameter, instead of handling both value and error in a
+single <a href="dart-async/Future/then.html">then</a> call.</p>
+<p>Note that futures don't delay reporting of errors until listeners are
+added. If the first <code>then</code> or <code>catchError</code> call happens after this future
+has completed with an error then the error is reported as unhandled error.
+See the description on <a href="dart-async/Future-class.html">Future</a>.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">Future&lt;S&gt; then&lt;S&gt;(FutureOr&lt;S&gt; onValue(T value), {Function onError});</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the fold method from the ListQueue class, for the Dart programming language.">
+  <title>fold method - ListQueue class - dart:collection library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-collection/dart-collection-library.html">dart:collection</a></li>
+    <li><a href="dart-collection/ListQueue-class.html">ListQueue<span class="signature">&lt;<wbr><span class="type-parameter">E</span>&gt;</span></a></li>
+    <li class="self-crumb">fold&lt;<wbr><span class="type-parameter">T</span>&gt; method</li>
+  </ol>
+  <div class="self-name">fold</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>ListQueue class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-collection/ListQueue-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-collection/ListQueue/ListQueue.html">ListQueue</a></li>
+      <li><a href="dart-collection/ListQueue/ListQueue.from.html">from</a></li>
+      <li><a href="dart-collection/ListQueue/ListQueue.of.html">of</a></li>
+    
+      <li class="section-title">
+        <a href="dart-collection/ListQueue-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-collection/ListQueue/first.html">first</a></li>
+      <li><a href="dart-collection/ListQueue/isEmpty.html">isEmpty</a></li>
+      <li><a href="dart-collection/ListQueue/iterator.html">iterator</a></li>
+      <li><a href="dart-collection/ListQueue/last.html">last</a></li>
+      <li><a href="dart-collection/ListQueue/length.html">length</a></li>
+      <li><a href="dart-collection/ListQueue/single.html">single</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/isNotEmpty.html">isNotEmpty</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-collection/ListQueue-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-collection/ListQueue/add.html">add</a></li>
+      <li><a href="dart-collection/ListQueue/addAll.html">addAll</a></li>
+      <li><a href="dart-collection/ListQueue/addFirst.html">addFirst</a></li>
+      <li><a href="dart-collection/ListQueue/addLast.html">addLast</a></li>
+      <li><a href="dart-collection/ListQueue/cast.html">cast</a></li>
+      <li><a href="dart-collection/ListQueue/clear.html">clear</a></li>
+      <li><a href="dart-collection/ListQueue/elementAt.html">elementAt</a></li>
+      <li><a href="dart-collection/ListQueue/forEach.html">forEach</a></li>
+      <li><a href="dart-collection/ListQueue/remove.html">remove</a></li>
+      <li><a href="dart-collection/ListQueue/removeFirst.html">removeFirst</a></li>
+      <li><a href="dart-collection/ListQueue/removeLast.html">removeLast</a></li>
+      <li><a href="dart-collection/ListQueue/removeWhere.html">removeWhere</a></li>
+      <li><a href="dart-collection/ListQueue/retainWhere.html">retainWhere</a></li>
+      <li><a href="dart-collection/ListQueue/retype.html">retype</a></li>
+      <li><a href="dart-collection/ListQueue/toList.html">toList</a></li>
+      <li><a href="dart-collection/ListQueue/toString.html">toString</a></li>
+      <li class="inherited"><a href="dart-collection/ListQueue/any.html">any</a></li>
+      <li class="inherited"><a href="dart-collection/ListQueue/contains.html">contains</a></li>
+      <li class="inherited"><a href="dart-collection/ListQueue/every.html">every</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/expand.html">expand</a></li>
+      <li class="inherited"><a href="dart-collection/ListQueue/firstWhere.html">firstWhere</a></li>
+      <li class="inherited"><a href="dart-collection/ListQueue/fold.html">fold</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/followedBy.html">followedBy</a></li>
+      <li class="inherited"><a href="dart-collection/ListQueue/join.html">join</a></li>
+      <li class="inherited"><a href="dart-collection/ListQueue/lastWhere.html">lastWhere</a></li>
+      <li class="inherited"><a href="dart-collection/ListQueue/map.html">map</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-collection/ListQueue/reduce.html">reduce</a></li>
+      <li class="inherited"><a href="dart-collection/ListQueue/singleWhere.html">singleWhere</a></li>
+      <li class="inherited"><a href="dart-collection/ListQueue/skip.html">skip</a></li>
+      <li class="inherited"><a href="dart-collection/ListQueue/skipWhile.html">skipWhile</a></li>
+      <li class="inherited"><a href="dart-collection/ListQueue/take.html">take</a></li>
+      <li class="inherited"><a href="dart-collection/ListQueue/takeWhile.html">takeWhile</a></li>
+      <li class="inherited"><a href="dart-collection/ListQueue/toSet.html">toSet</a></li>
+      <li class="inherited"><a href="dart-collection/ListQueue/where.html">where</a></li>
+      <li class="inherited"><a href="dart-core/Iterable/whereType.html">whereType</a></li>
+    
+      <li class="section-title inherited"><a href="dart-collection/ListQueue-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>fold&lt;<wbr><span class="type-parameter">T</span>&gt; method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype">T</span>
+      <span class="name ">fold</span>
+&lt;<wbr><span class="type-parameter">T</span>&gt;(<wbr><span class="parameter" id="fold-param-initialValue"><span class="type-annotation">T</span> <span class="parameter-name">initialValue</span>, </span> <span class="parameter" id="fold-param-combine"><span class="type-annotation">T</span> <span class="parameter-name">combine</span>(<span class="parameter" id="combine-param-previousValue"><span class="type-annotation">T</span> <span class="parameter-name">previousValue</span>, </span> <span class="parameter" id="combine-param-element"><span class="type-annotation">E</span> <span class="parameter-name">element</span></span>)</span>)
+    </section>
+    <section class="desc markdown">
+      <p>Reduces a collection to a single value by iteratively combining each
+element of the collection with an existing value</p>
+<p>Uses <code>initialValue</code> as the initial value,
+then iterates through the elements and updates the value with
+each element using the <code>combine</code> function, as if by:</p>
+<pre class="language-dart"><code>var value = initialValue;
+for (E element in this) {
+  value = combine(value, element);
+}
+return value;
+</code></pre>
+<p>Example of calculating the sum of an iterable:</p>
+<pre class="language-dart"><code>iterable.fold(0, (prev, element) =&gt; prev + element);
+</code></pre>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">T fold&lt;T&gt;(T initialValue, T combine(T previousValue, E element)) {
+  var value = initialValue;
+  int length = this.length;
+  for (int i = 0; i &lt; length; i++) {
+    value = combine(value, elementAt(i));
+    if (length != this.length) {
+      throw new ConcurrentModificationError(this);
+    }
+  }
+  return value;
+}</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

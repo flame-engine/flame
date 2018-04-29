@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the resolveSymbolicLinksSync method from the Directory class, for the Dart programming language.">
+  <title>resolveSymbolicLinksSync method - Directory class - dart:io library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flame</a></li>
+    <li><a href="dart-io/dart-io-library.html">dart:io</a></li>
+    <li><a href="dart-io/Directory-class.html">Directory</a></li>
+    <li class="self-crumb">resolveSymbolicLinksSync abstract method</li>
+  </ol>
+  <div class="self-name">resolveSymbolicLinksSync</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>Directory class</h5>
+    <ol>
+      <li class="section-title"><a href="dart-io/Directory-class.html#constructors">Constructors</a></li>
+      <li><a href="dart-io/Directory/Directory.html">Directory</a></li>
+      <li><a href="dart-io/Directory/Directory.fromUri.html">fromUri</a></li>
+    
+      <li class="section-title">
+        <a href="dart-io/Directory-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="dart-io/Directory/absolute.html">absolute</a></li>
+      <li><a href="dart-io/Directory/path.html">path</a></li>
+      <li><a href="dart-io/Directory/uri.html">uri</a></li>
+      <li class="inherited"><a href="dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/isAbsolute.html">isAbsolute</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/parent.html">parent</a></li>
+      <li class="inherited"><a href="dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="dart-io/Directory-class.html#instance-methods">Methods</a></li>
+      <li><a href="dart-io/Directory/create.html">create</a></li>
+      <li><a href="dart-io/Directory/createSync.html">createSync</a></li>
+      <li><a href="dart-io/Directory/createTemp.html">createTemp</a></li>
+      <li><a href="dart-io/Directory/createTempSync.html">createTempSync</a></li>
+      <li><a href="dart-io/Directory/list.html">list</a></li>
+      <li><a href="dart-io/Directory/listSync.html">listSync</a></li>
+      <li><a href="dart-io/Directory/rename.html">rename</a></li>
+      <li><a href="dart-io/Directory/renameSync.html">renameSync</a></li>
+      <li><a href="dart-io/Directory/resolveSymbolicLinks.html">resolveSymbolicLinks</a></li>
+      <li><a href="dart-io/Directory/resolveSymbolicLinksSync.html">resolveSymbolicLinksSync</a></li>
+      <li><a href="dart-io/Directory/toString.html">toString</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/delete.html">delete</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/deleteSync.html">deleteSync</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/exists.html">exists</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/existsSync.html">existsSync</a></li>
+      <li class="inherited"><a href="dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/stat.html">stat</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/statSync.html">statSync</a></li>
+      <li class="inherited"><a href="dart-io/FileSystemEntity/watch.html">watch</a></li>
+    
+      <li class="section-title inherited"><a href="dart-io/Directory-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+      <li class="section-title"><a href="dart-io/Directory-class.html#static-properties">Static properties</a></li>
+      <li><a href="dart-io/Directory/current.html">current</a></li>
+      <li><a href="dart-io/Directory/systemTemp.html">systemTemp</a></li>
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>resolveSymbolicLinksSync method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype"><a href="dart-core/String-class.html">String</a></span>
+      <span class="name ">resolveSymbolicLinksSync</span>
+(<wbr>)
+    </section>
+    <section class="desc markdown">
+      <p>Resolves the path of a file system object relative to the
+current working directory.</p>
+<p>Resolves all symbolic links on the path and resolves all <code>..</code> and <code>.</code> path
+segments.</p>
+<p><a href="dart-io/Directory/resolveSymbolicLinksSync.html">resolveSymbolicLinksSync</a> uses the operating system's native
+file system API to resolve the path, using the <code>realpath</code> function
+on linux and OS X, and the <code>GetFinalPathNameByHandle</code> function on
+Windows. If the path does not point to an existing file system object,
+<code>resolveSymbolicLinksSync</code> throws a <code>FileSystemException</code>.</p>
+<p>On Windows the <code>..</code> segments are resolved <em>before</em> resolving the symbolic
+link, and on other platforms the symbolic links are <em>resolved to their
+target</em> before applying a <code>..</code> that follows.</p>
+<p>To ensure the same behavior on all platforms resolve <code>..</code> segments before
+calling <code>resolveSymbolicLinksSync</code>. One way of doing this is with the <code>Uri</code>
+class:</p>
+<pre class="language-dart"><code>var path = Uri.parse('.').resolveUri(new Uri.file(input)).toFilePath();
+if (path == '') path = '.';
+var resolved = new File(path).resolveSymbolicLinksSync();
+print(resolved);
+</code></pre>
+<p>since <code>Uri.resolve</code> removes <code>..</code> segments. This will result in the Windows
+behavior.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">String resolveSymbolicLinksSync();</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame 0.8.4
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>
