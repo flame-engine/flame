@@ -16,8 +16,8 @@ class Animation {
   Animation.sequenced(String imagePath, int amount,
       {double textureX = 0.0,
       double textureY = 0.0,
-      double textureWidth = -1.0,
-      double textureHeight = -1.0}) {
+      double textureWidth = null,
+      double textureHeight = null}) {
     sprites = new List<Sprite>(amount);
     for (var i = 0; i < amount; i++) {
       sprites[i] = new Sprite(imagePath,

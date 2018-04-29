@@ -24,7 +24,7 @@ You could also specify the coordinates in the original image where the sprite is
     Sprite playerFrame = new Sprite('player.png', x = 32.0, width = 16.0);
 ```
 
-The default values are `0.0` for `x` and `y` and `-1` for `width` and `height` (meaning it will use the full width/height of the source image).
+The default values are `0.0` for `x` and `y` and `null` for `width` and `height` (meaning it will use the full width/height of the source image).
 
 The `Sprite` class has a `loaded` method that returns wether the image has been loaded, and a render method, that allows you to render the image into a `Canvas`:
 
@@ -92,8 +92,8 @@ In which you pass the file name, the number of frames and the sprite sheet is au
 
 * textureX : x position on the original image to start (defaults to 0)
 * textureY : y position on the original image to start (defaults to 0)
-* textureWidth : width of each frame (defaults to -1, that is, full width of the sprite sheet)
-* textureHeight : height of each frame (defaults to -1, that is, full height of the sprite sheet)
+* textureWidth : width of each frame (defaults to null, that is, full width of the sprite sheet)
+* textureHeight : height of each frame (defaults to null, that is, full height of the sprite sheet)
 
 So, in our example, we are saying that we have 8 frames for our player animation, and they are displayed in a row. So if the player height is also 16 pixels, the sprite sheet is 128x16, containing 8 16x16 frames.
 
