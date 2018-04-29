@@ -34,7 +34,7 @@ class Sprite {
       this.src = new Rect.fromLTWH(x, y, width, height);
   }
 
-  static Future<Sprite> loadSprite(String fileName, {double x = 0.0, double y = 0.0, double width = -1.0, double height = -1.0}) async {
+  static Future<Sprite> loadSprite(String fileName, {double x = 0.0, double y = 0.0, double width = null, double height = null}) async {
     Image image = await Flame.images.load(fileName);
     return new Sprite.fromImage(image, x: x, y: y, width: width, height: height);
   }
