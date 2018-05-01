@@ -2,26 +2,42 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:box2d/box2d.dart' as b2d;
 
-/*
- * An ordered pair representation (point, position, offset).
- * It differs from the default implementations provided (math.Point and ui.Offset) as it's mutable.
- * Also, it offers helpful converters and a some useful methods for manipulation.
- */
+/// An ordered pair representation (point, position, offset).
+///
+/// It differs from the default implementations provided (math.Point and ui.Offset) as it's mutable.
+/// Also, it offers helpful converters and a some useful methods for manipulation.
+/// It always uses double values to store the coordinates.
 class Position {
+
+  /// Coordinates
   double x, y;
 
+  /// Basic constructor
   Position(this.x, this.y);
 
+  /// Creates a point at the origin
   Position.empty() : this(0.0, 0.0);
 
+  /// Creates converting integers to double.
+  ///
+  /// Internal representation is still using double, the conversion is made in the constructor only.
+  Position.fromInts(int x, int y) : this(x.toDouble(), y.toDouble());
+
+  /// Creates using an [ui.Offset]
   Position.fromOffset(ui.Offset offset) : this(offset.dx, offset.dy);
 
+  /// Creates using an [ui.Size]
   Position.fromSize(ui.Size size) : this(size.width, size.height);
 
+  /// Creates using an [math.Point]
   Position.fromPoint(math.Point point) : this(point.x, point.y);
 
+  /// Creates using another [Position]; i.e., clones this position.
+  ///
+  /// This is usefull because this class is mutable, so beware of mutability issues.
   Position.fromPosition(Position position) : this(position.x, position.y);
 
+  /// Creates using a [b2d.Vector2]
   Position.fromVector(b2d.Vector2 vector) : this(vector.x, vector.y);
 
   Position add(Position other) {
