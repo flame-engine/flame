@@ -14,7 +14,6 @@ import 'position.dart';
 /// Subclass this to implement the [update] and [render] methods.
 /// Flame will deal with calling these methods properly when the game's [widget] is rendered.
 abstract class Game {
-
   /// Implement this method to update the game state, given that a time [t] has passed.
   ///
   /// Keep the updates as short as possible. [t] is in seconds, with microsseconds precision.
@@ -58,7 +57,8 @@ class _GameRenderObjectWidget extends SingleChildRenderObjectWidget {
   _GameRenderObjectWidget(this.game);
 
   @override
-  RenderObject createRenderObject(BuildContext context) => new _GameRenderBox(context, this.game);
+  RenderObject createRenderObject(BuildContext context) =>
+      new _GameRenderBox(context, this.game);
 }
 
 class _GameRenderBox extends RenderBox with WidgetsBindingObserver {
@@ -150,7 +150,6 @@ class _GameRenderBox extends RenderBox with WidgetsBindingObserver {
 /// This is the recommended strucutre to use for most games.
 /// It is based on the Component system.
 abstract class BaseGame extends Game {
-
   /// The list of components to be updated and rendered by the base game.
   List<Component> components = [];
 
@@ -200,12 +199,12 @@ abstract class BaseGame extends Game {
   /// It translates the camera unless hud, call the render method and restore the canvas.
   /// This makes sure the canvas is not messed up by one component and all components render independently.
   void renderComponent(Canvas canvas, Component c) {
-      if (!c.isHud()) {
-        canvas.translate(-camera.x, -camera.y);
-      }
-      c.render(canvas);
-      canvas.restore();
-      canvas.save();
+    if (!c.isHud()) {
+      canvas.translate(-camera.x, -camera.y);
+    }
+    c.render(canvas);
+    canvas.restore();
+    canvas.save();
   }
 
   /// This implementation of update updates every component in the list.
@@ -265,6 +264,7 @@ abstract class BaseGame extends Game {
   ///
   /// This is compatible with the `dt` value used in the [update] method.
   double currentTime() {
-    return new DateTime.now().microsecondsSinceEpoch.toDouble() / Duration.microsecondsPerSecond;
+    return new DateTime.now().microsecondsSinceEpoch.toDouble() /
+        Duration.microsecondsPerSecond;
   }
 }

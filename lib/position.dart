@@ -8,7 +8,6 @@ import 'package:box2d/box2d.dart' as b2d;
 /// Also, it offers helpful converters and a some useful methods for manipulation.
 /// It always uses double values to store the coordinates.
 class Position {
-
   /// Coordinates
   double x, y;
 
@@ -110,6 +109,7 @@ class Position {
     double maxx = pts.map((e) => e.x).reduce(math.max);
     double miny = pts.map((e) => e.y).reduce(math.min);
     double maxy = pts.map((e) => e.y).reduce(math.max);
-    return new ui.Rect.fromPoints(new ui.Offset(minx, miny), new ui.Offset(maxx, maxy));
+    return new ui.Rect.fromPoints(
+        new ui.Offset(minx, miny), new ui.Offset(maxx, maxy));
   }
 }

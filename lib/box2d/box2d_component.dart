@@ -21,13 +21,14 @@ abstract class Box2DComponent extends Component {
 
   Viewport viewport;
 
-  Box2DComponent({this.dimensions: const Size(0.0, 0.0),
-    int worldPoolSize: DEFAULT_WORLD_POOL_SIZE,
-    int worldPoolContainerSize: DEFAULT_WORLD_POOL_CONTAINER_SIZE,
-    double gravity: DEFAULT_GRAVITY,
-    this.velocityIterations: DEFAULT_VELOCITY_ITERATIONS,
-    this.positionIterations: DEFAULT_POSITION_ITERATIONS,
-    double scale: DEFAULT_SCALE}) {
+  Box2DComponent(
+      {this.dimensions: const Size(0.0, 0.0),
+      int worldPoolSize: DEFAULT_WORLD_POOL_SIZE,
+      int worldPoolContainerSize: DEFAULT_WORLD_POOL_CONTAINER_SIZE,
+      double gravity: DEFAULT_GRAVITY,
+      this.velocityIterations: DEFAULT_VELOCITY_ITERATIONS,
+      this.positionIterations: DEFAULT_POSITION_ITERATIONS,
+      double scale: DEFAULT_SCALE}) {
     this.world = new World.withPool(new Vector2(0.0, gravity),
         new DefaultWorldPool(worldPoolSize, worldPoolContainerSize));
     this.viewport = new Viewport(dimensions, scale);
@@ -94,8 +95,8 @@ abstract class BodyComponent extends Component {
   void render(Canvas canvas) {
     body.getFixtureList();
     for (Fixture fixture = body.getFixtureList();
-    fixture != null;
-    fixture = fixture.getNext()) {
+        fixture != null;
+        fixture = fixture.getNext()) {
       switch (fixture.getType()) {
         case ShapeType.CHAIN:
           throw new Exception("not implemented");
@@ -149,8 +150,7 @@ abstract class BodyComponent extends Component {
   }
 
   void renderPolygon(Canvas canvas, List<Offset> points) {
-    final path = new Path()
-      ..addPolygon(points, true);
+    final path = new Path()..addPolygon(points, true);
     final Paint paint = new Paint()
       ..color = new Color.fromARGB(255, 255, 255, 255);
     canvas.drawPath(path, paint);

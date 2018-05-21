@@ -4,7 +4,6 @@ import 'component.dart';
 import 'package:flame/animation.dart';
 
 class AnimationComponent extends PositionComponent {
-
   Animation animation;
 
   AnimationComponent(double width, double height, this.animation) {
@@ -12,10 +11,18 @@ class AnimationComponent extends PositionComponent {
     this.height = height;
   }
 
-  AnimationComponent.sequenced(width, height, String imagePath, int amount, { double textureX = 0.0, double textureY = 0.0, double textureWidth = null, double textureHeight = null}) {
+  AnimationComponent.sequenced(width, height, String imagePath, int amount,
+      {double textureX = 0.0,
+      double textureY = 0.0,
+      double textureWidth = null,
+      double textureHeight = null}) {
     this.width = width;
     this.height = height;
-    this.animation = new Animation.sequenced(imagePath, amount, textureX: textureX, textureY: textureY, textureWidth: textureWidth, textureHeight: textureHeight);
+    this.animation = new Animation.sequenced(imagePath, amount,
+        textureX: textureX,
+        textureY: textureY,
+        textureWidth: textureWidth,
+        textureHeight: textureHeight);
   }
 
   @override

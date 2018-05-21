@@ -29,16 +29,17 @@ class Util {
     });
   }
 
-  material.TextPainter text(String text, {
-    double fontSize: 24.0,
-    Color color: material.Colors.black,
-    String fontFamily: 'Arial',
-    TextAlign textAlign: TextAlign.left,
-    TextDirection textDirection: TextDirection.ltr
-  }) {
-    material.TextStyle style = new material.TextStyle(color: color, fontSize: fontSize, fontFamily: fontFamily);
+  material.TextPainter text(String text,
+      {double fontSize: 24.0,
+      Color color: material.Colors.black,
+      String fontFamily: 'Arial',
+      TextAlign textAlign: TextAlign.left,
+      TextDirection textDirection: TextDirection.ltr}) {
+    material.TextStyle style = new material.TextStyle(
+        color: color, fontSize: fontSize, fontFamily: fontFamily);
     material.TextSpan span = new material.TextSpan(style: style, text: text);
-    material.TextPainter tp = new material.TextPainter(text: span, textAlign: textAlign, textDirection: textDirection);
+    material.TextPainter tp = new material.TextPainter(
+        text: span, textAlign: textAlign, textDirection: textDirection);
     tp.layout();
     return tp;
   }
