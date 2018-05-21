@@ -61,9 +61,9 @@ abstract class PositionComponent extends Component {
     canvas.translate(x, y);
 
     // rotate around center
-    canvas.translate(width/2, height/2);
+    canvas.translate(width / 2, height / 2);
     canvas.rotate(angle);
-    canvas.translate(-width/2, -height/2);
+    canvas.translate(-width / 2, -height / 2);
   }
 }
 

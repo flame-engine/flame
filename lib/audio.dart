@@ -28,7 +28,8 @@ class Audio {
 
   Future<File> _fetchToMemory(String fileName) async {
     final file = new File('${(await getTemporaryDirectory()).path}/$fileName');
-    return await file.writeAsBytes((await _fetchAsset(fileName)).buffer.asUint8List());
+    return await file
+        .writeAsBytes((await _fetchAsset(fileName)).buffer.asUint8List());
   }
 
   Future<List<File>> loadAll(List<String> fileNames) async {
@@ -42,16 +43,18 @@ class Audio {
     return loadedFiles[fileName];
   }
 
-  Future<AudioPlayer> play(String fileName, { volume: 1.0 }) async {
+  Future<AudioPlayer> play(String fileName, {volume: 1.0}) async {
     File file = await load(fileName);
-    return await new AudioPlayer()..play(file.path, isLocal: true, volume: volume);
+    return await new AudioPlayer()
+      ..play(file.path, isLocal: true, volume: volume);
   }
 
-  Future<AudioPlayer> loop(String fileName, { volume: 1.0 }) async {
+  Future<AudioPlayer> loop(String fileName, {volume: 1.0}) async {
     File file = await load(fileName);
     AudioPlayer player = new AudioPlayer();
-    player.setCompletionHandler(() => player.play(file.path, isLocal: true, volume: volume));
-    return await player..play(file.path, isLocal: true);
+    player.setCompletionHandler(
+        () => player.play(file.path, isLocal: true, volume: volume));
+    return await player
+      ..play(file.path, isLocal: true);
   }
-
 }

@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'dart:async';
 
 class Images {
-
   Map<String, Image> loadedFiles = new Map();
 
   void clear(String fileName) {
