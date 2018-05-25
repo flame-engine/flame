@@ -17,7 +17,7 @@ class Util {
     // "In release mode we start off at 0x0 but we don't in debug mode"
     return await new Future<Size>(() {
       if (window.physicalSize.isEmpty) {
-        var completer = new Completer<Size>();
+        final completer = new Completer<Size>();
         window.onMetricsChanged = () {
           if (!window.physicalSize.isEmpty) {
             completer.complete(window.physicalSize / window.devicePixelRatio);
@@ -29,17 +29,28 @@ class Util {
     });
   }
 
-  material.TextPainter text(String text,
-      {double fontSize: 24.0,
-      Color color: material.Colors.black,
-      String fontFamily: 'Arial',
-      TextAlign textAlign: TextAlign.left,
-      TextDirection textDirection: TextDirection.ltr}) {
+  material.TextPainter text(
+    String text, {
+    double fontSize: 24.0,
+    Color color: material.Colors.black,
+    String fontFamily: 'Arial',
+    TextAlign textAlign: TextAlign.left,
+    TextDirection textDirection: TextDirection.ltr,
+  }) {
     material.TextStyle style = new material.TextStyle(
-        color: color, fontSize: fontSize, fontFamily: fontFamily);
-    material.TextSpan span = new material.TextSpan(style: style, text: text);
+      color: color,
+      fontSize: fontSize,
+      fontFamily: fontFamily,
+    );
+    material.TextSpan span = new material.TextSpan(
+      style: style,
+      text: text,
+    );
     material.TextPainter tp = new material.TextPainter(
-        text: span, textAlign: textAlign, textDirection: textDirection);
+      text: span,
+      textAlign: textAlign,
+      textDirection: textDirection,
+    );
     tp.layout();
     return tp;
   }

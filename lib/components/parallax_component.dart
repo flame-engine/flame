@@ -8,7 +8,7 @@ import 'component.dart';
 
 class ParallaxRenderer {
   String filename;
-  Future future;
+  Future<Image> future;
 
   Image image;
   double scroll = 0.0;
@@ -17,7 +17,7 @@ class ParallaxRenderer {
     this.future = _load();
   }
 
-  Future _load() {
+  Future<Image> _load() {
     return Flame.images.load(filename).then((image) {
       this.image = image;
     });
@@ -39,10 +39,11 @@ class ParallaxRenderer {
         -scroll * imageWidth, rect.top, (count + 1) * imageWidth, rect.height);
 
     paintImage(
-        canvas: canvas,
-        image: image,
-        rect: fullRect,
-        repeat: ImageRepeat.repeatX);
+      canvas: canvas,
+      image: image,
+      rect: fullRect,
+      repeat: ImageRepeat.repeatX,
+    );
   }
 }
 
@@ -59,23 +60,18 @@ abstract class ParallaxComponent extends PositionComponent {
     this._size = size;
   }
 
-  /**
-   * Loads the images defined by this list of filenames. All images
-   * are positioned at its scroll center.
-   *
-   * @param filenames Image filenames
-   */
+  /// Loads the images defined by this list of filenames. All images are positioned at its scroll center.
+  ///
+  /// @param filenames Image filenames
   void load(List<String> filenames) {
-    var futures =
-        filenames.fold(new List<Future>(), (List<Future> result, filename) {
-      var layer = new ParallaxRenderer(filename);
+    final futures = filenames.fold(<Future<Image>>[],
+        (List<Future<Image>> result, String filename) {
+      final layer = new ParallaxRenderer(filename);
       _layers.add(layer);
       result.add(layer.future);
       return result;
     });
-    Future.wait(futures).then((r) {
-      _loaded = true;
-    });
+    Future.wait(futures).then((r) => _loaded = true);
   }
 
   void updateScroll(int layerIndex, scroll) {
@@ -101,10 +97,8 @@ abstract class ParallaxComponent extends PositionComponent {
 
   void _drawLayers(Canvas canvas) {
     Rect rect = new Rect.fromPoints(
-        new Offset(0.0, 0.0), new Offset(_size.width, _size.height));
-    _layers.forEach((layer) {
-      layer.render(canvas, rect);
-    });
+        const Offset(0.0, 0.0), new Offset(_size.width, _size.height));
+    _layers.forEach((layer) => layer.render(canvas, rect));
   }
 
   @override
@@ -112,8 +106,8 @@ abstract class ParallaxComponent extends PositionComponent {
     if (!this.loaded()) {
       return;
     }
-    for (var i = 0; i < _layers.length; i++) {
-      var scroll = _layers[i].scroll;
+    for (int i = 0; i < _layers.length; i++) {
+      double scroll = _layers[i].scroll;
       scroll += (BASE_SPEED + i * LAYER_DELTA) * delta / _size.width;
       if (scroll > 1) {
         scroll = scroll % 1;

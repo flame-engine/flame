@@ -234,6 +234,7 @@ abstract class BaseGame extends Game {
   /// Returns `false` by default. Override to use the debug mode.
   /// In debug mode, the [_recordDt] method actually records every `dt` for statistics.
   /// Then, you can use the [fps] method to check the game FPS.
+  /// You can also use this value to enable other debug behaviors for your game.
   bool debugMode() => false;
 
   /// This is a hook that comes from the RenderBox to allow recording of render times and statistics.

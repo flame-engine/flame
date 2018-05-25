@@ -14,9 +14,7 @@ class Viewport extends ViewportTransform {
 
   double worldAlignBottom(double height) => -(size.height / 2 / scale) + height;
 
-  /**
-   * Resizes the current view port.
-   */
+  /// Resizes the current view port.
   void resize(Size size) {
     this.size = size;
     this.extents =
@@ -25,24 +23,17 @@ class Viewport extends ViewportTransform {
         new Vector2.copy(new Vector2(size.width / 2, size.height / 2));
   }
 
-  /**
-   * Computes the number of horizontal world meters of this viewport considering a
-   * percentage of its width.
-   *
-   * @param percent percetage of the width in [0, 1] range
-   */
+  /// Computes the number of horizontal world meters of this viewport considering a percentage of its width.
+  ///
+  /// @param percent percetage of the width in [0, 1] range.
   double worldWidth(double percent) {
     return percent * (size.width / scale);
   }
 
-  /**
-   * Computes the scroll percentage of total screen width of the current viwerport
-   * center position.
-   *
-   * @param screens multiplies the visible screen with to create a bigger virtual
-   * screen.
-   * @return the percentage in the range of [0, 1]
-   */
+  /// Computes the scroll percentage of total screen width of the current viwerport center position.
+  ///
+  /// @param screens multiplies the visible screen with to create a bigger virtual screen.
+  /// @return the percentage in the range of [0, 1]
   double getCenterHorizontalScreenPercentage({double screens: 1.0}) {
     var width = size.width * screens;
     var x = center.x + ((screens - 1) * size.width / 2);
@@ -51,14 +42,11 @@ class Viewport extends ViewportTransform {
     return x > 0 ? scroll : 1 - scroll;
   }
 
-  /**
-   * Follows the spececified body component using a sliding focus window
-   * defined as a percentage of the total viewport.
-   *
-   * @param component to follow.
-   * @param horizontal percentage of the horizontal viewport. Null means no horizontal following.
-   * @param vertical percentage of the vertical viewport. Null means no vertical following.
-   */
+  /// Follows the spececified body component using a sliding focus window defined as a percentage of the total viewport.
+  ///
+  /// @param component to follow.
+  /// @param horizontal percentage of the horizontal viewport. Null means no horizontal following.
+  /// @param vertical percentage of the vertical viewport. Null means no vertical following.
   void cameraFollow(BodyComponent component,
       {double horizontal, double vertical}) {
     Vector2 position = component.center;
