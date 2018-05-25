@@ -4,7 +4,7 @@ import 'package:flame/box2d/viewport.dart';
 import 'package:test/test.dart';
 
 void main() {
-  var viewport = new Viewport(new Size(100.0, 100.0), 1.0);
+  final viewport = new Viewport(new Size(100.0, 100.0), 1.0);
 
   group("getCenterHorizontalScreenPercentage", () {
     test("center starts in the middle", () {

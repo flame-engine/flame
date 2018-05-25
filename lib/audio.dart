@@ -8,7 +8,7 @@ import 'package:audioplayers/audioplayer.dart';
 import 'package:path_provider/path_provider.dart';
 
 class Audio {
-  Map<String, File> loadedFiles = new Map();
+  Map<String, File> loadedFiles = {};
 
   void clear(String fileName) {
     loadedFiles.remove(fileName);

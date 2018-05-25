@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'dart:async';
 
 class Images {
-  Map<String, Image> loadedFiles = new Map();
+  Map<String, Image> loadedFiles = {};
 
   void clear(String fileName) {
     loadedFiles.remove(fileName);
@@ -29,9 +29,7 @@ class Images {
     ByteData data = await rootBundle.load('assets/images/' + name);
     Uint8List bytes = new Uint8List.view(data.buffer);
     Completer<Image> completer = new Completer();
-    decodeImageFromList(bytes, (image) {
-      completer.complete(image);
-    });
+    decodeImageFromList(bytes, (image) => completer.complete(image));
     return completer.future;
   }
 }

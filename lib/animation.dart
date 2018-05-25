@@ -13,18 +13,23 @@ class Animation {
 
   Animation.spriteList(this.sprites, {this.stepTime, this.lifeTime});
 
-  Animation.sequenced(String imagePath, int amount,
-      {double textureX = 0.0,
-      double textureY = 0.0,
-      double textureWidth = null,
-      double textureHeight = null}) {
-    sprites = new List<Sprite>(amount);
+  Animation.sequenced(
+    String imagePath,
+    int amount, {
+    double textureX = 0.0,
+    double textureY = 0.0,
+    double textureWidth = null,
+    double textureHeight = null,
+  }) {
+    this.sprites = new List<Sprite>(amount);
     for (var i = 0; i < amount; i++) {
-      sprites[i] = new Sprite(imagePath,
-          x: textureX + i * textureWidth,
-          y: textureY,
-          width: textureWidth,
-          height: textureHeight);
+      this.sprites[i] = new Sprite(
+        imagePath,
+        x: textureX + i * textureWidth,
+        y: textureY,
+        width: textureWidth,
+        height: textureHeight,
+      );
     }
   }
 

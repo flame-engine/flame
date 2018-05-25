@@ -17,20 +17,20 @@ abstract class Box2DComponent extends Component {
   int positionIterations;
 
   World world;
-  List<Component> components = new List();
-
+  List<Component> components = [];
   Viewport viewport;
 
-  Box2DComponent(
-      {this.dimensions: const Size(0.0, 0.0),
-      int worldPoolSize: DEFAULT_WORLD_POOL_SIZE,
-      int worldPoolContainerSize: DEFAULT_WORLD_POOL_CONTAINER_SIZE,
-      double gravity: DEFAULT_GRAVITY,
-      this.velocityIterations: DEFAULT_VELOCITY_ITERATIONS,
-      this.positionIterations: DEFAULT_POSITION_ITERATIONS,
-      double scale: DEFAULT_SCALE}) {
-    this.world = new World.withPool(new Vector2(0.0, gravity),
-        new DefaultWorldPool(worldPoolSize, worldPoolContainerSize));
+  Box2DComponent({
+    this.dimensions: const Size(0.0, 0.0),
+    int worldPoolSize: DEFAULT_WORLD_POOL_SIZE,
+    int worldPoolContainerSize: DEFAULT_WORLD_POOL_CONTAINER_SIZE,
+    double gravity: DEFAULT_GRAVITY,
+    this.velocityIterations: DEFAULT_VELOCITY_ITERATIONS,
+    this.positionIterations: DEFAULT_POSITION_ITERATIONS,
+    double scale: DEFAULT_SCALE,
+  }) {
+    final pool = new DefaultWorldPool(worldPoolSize, worldPoolContainerSize);
+    this.world = new World.withPool(new Vector2(0.0, gravity), pool);
     this.viewport = new Viewport(dimensions, scale);
   }
 
@@ -66,10 +66,16 @@ abstract class Box2DComponent extends Component {
 
   void initializeWorld();
 
-  void cameraFollow(BodyComponent component,
-      {double horizontal, double vertical}) {
-    viewport.cameraFollow(component,
-        horizontal: horizontal, vertical: vertical);
+  void cameraFollow(
+    BodyComponent component, {
+    double horizontal,
+    double vertical,
+  }) {
+    viewport.cameraFollow(
+      component,
+      horizontal: horizontal,
+      vertical: vertical,
+    );
   }
 }
 
@@ -80,7 +86,7 @@ abstract class BodyComponent extends Component {
 
   Body body;
 
-  BodyComponent(this.box) {}
+  BodyComponent(this.box);
 
   World get world => box.world;
 
@@ -127,7 +133,7 @@ abstract class BodyComponent extends Component {
 
   void renderCircle(Canvas canvas, Offset center, double radius) {
     final Paint paint = new Paint()
-      ..color = new Color.fromARGB(255, 255, 255, 255);
+      ..color = const Color.fromARGB(255, 255, 255, 255);
     canvas.drawCircle(center, radius, paint);
   }
 
@@ -152,7 +158,7 @@ abstract class BodyComponent extends Component {
   void renderPolygon(Canvas canvas, List<Offset> points) {
     final path = new Path()..addPolygon(points, true);
     final Paint paint = new Paint()
-      ..color = new Color.fromARGB(255, 255, 255, 255);
+      ..color = const Color.fromARGB(255, 255, 255, 255);
     canvas.drawPath(path, paint);
   }
 }
