@@ -6,6 +6,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
+import 'package:ordered_set/ordered_set.dart';
+import 'package:ordered_set/comparing.dart';
+
 import 'components/component.dart';
 import 'position.dart';
 
@@ -151,7 +154,7 @@ class _GameRenderBox extends RenderBox with WidgetsBindingObserver {
 /// It is based on the Component system.
 abstract class BaseGame extends Game {
   /// The list of components to be updated and rendered by the base game.
-  List<Component> components = [];
+  OrderedSet<Component> components = new OrderedSet(Comparing.on((c) => c.priority()));
 
   /// Components added by the [addLater] method
   List<Component> _addLater = [];
