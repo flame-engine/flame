@@ -42,6 +42,14 @@ abstract class Component {
   ///
   /// HUD objects ignore the [BaseGame.camera] when rendered (so their position coordinates are considered relative to the device screen).
   bool isHud() => false;
+
+  /// Render priority of this component. This allows you to control the order in which your components are rendered.
+  ///
+  /// Components are always updated and rendered in the order defined by this number.
+  /// The smaller the priority, the sooner your component will be updated/rendered.
+  /// It can be any integer (negative, zero, or positive).
+  /// If two components share the same priority, they will probably be drawn in the order they were added.
+  int priority() => 0;
 }
 
 /// A [Component] implementation that represents a component that has a specific, possibly mutatable position on the screen.
