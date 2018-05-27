@@ -30,7 +30,7 @@ abstract class Component {
   /// Wether this component has been loaded yet. If not loaded, [BaseGame] will not try to render it.
   ///
   /// Sprite based components can use this to let [BaseGame] know not to try to render when the [Sprite] has not been loaded yet.
-  /// Note that for a more consistent experience, you can pre-load all your assets beforehand with [Flame.images.loadAll].
+  /// Note that for a more consistent experience, you can pre-load all your assets beforehand with Flame.images.loadAll.
   bool loaded() => true;
 
   /// Wether this should be destroyed or not.
