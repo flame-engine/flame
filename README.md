@@ -1,6 +1,6 @@
 # :fire: flame
 
-![Logo](https://i.imgur.com/vFDilXT.png)
+![](https://i.imgur.com/vFDilXT.png | width=400)
 A minimalist Flutter game engine.
 
 Any help is appreciated! Comment, suggestions, issues, PR's! Give us a star to help!
