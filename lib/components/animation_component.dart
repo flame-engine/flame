@@ -6,12 +6,12 @@ import 'package:flame/animation.dart';
 class AnimationComponent extends PositionComponent {
   Animation animation;
 
-  AnimationComponent();
-
   AnimationComponent(double width, double height, this.animation) {
     this.width = width;
     this.height = height;
   }
+
+  AnimationComponent.empty();
 
   AnimationComponent.sequenced(
     width,
