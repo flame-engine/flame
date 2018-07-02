@@ -77,11 +77,15 @@ class Sprite {
     return new Position(_imageWidth, _imageHeight);
   }
 
+  Position get size {
+    return new Position(src.width, src.height);
+  }
+
   void renderPosition(Canvas canvas, Position p, [Position size]) {
     if (!this.loaded()) {
       return;
     }
-    size ??= originalSize;
+    size ??= this.size;
     renderRect(canvas, Position.rectFrom(p, size));
   }
 
@@ -89,8 +93,8 @@ class Sprite {
     if (!this.loaded()) {
       return;
     }
-    width ??= _imageWidth;
-    height ??= _imageHeight;
+    width ??= this.size.x;
+    height ??= this.size.y;
     renderRect(canvas, new Rect.fromLTWH(0.0, 0.0, width, height));
   }
 
