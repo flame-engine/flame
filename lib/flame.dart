@@ -1,22 +1,22 @@
 library flame;
 
+import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import 'audio.dart';
 import 'images.dart';
 import 'util.dart';
 
 /// This class holds static references to some useful objects to use in your game.
 ///
-/// You can access shared instances of [Audio], [Images] and [Util].
+/// You can access shared instances of [AudioCache], [Images] and [Util].
 /// Most games should need only one instance of each, and should use this class to manage that reference.
 class Flame {
 
-  /// Access a shared instance of the [Audio] class.
-  static Audio audio = new Audio();
+  /// Access a shared instance of the [AudioCache] class.
+  static AudioCache audio = new AudioCache(prefix: 'audio/');
 
   /// Access a shared instance of the [Images] class.
   static Images images = new Images();
