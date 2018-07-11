@@ -8,3 +8,4 @@
 packages
 pubspec.lock
 doc/api/
+.flutter-plugins
