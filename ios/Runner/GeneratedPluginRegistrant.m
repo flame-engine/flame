@@ -3,13 +3,13 @@
 //
 
 #import "GeneratedPluginRegistrant.h"
-#import <audioplayers/AudioplayerPlugin.h>
+#import <audioplayers/AudioplayersPlugin.h>
 #import <path_provider/PathProviderPlugin.h>
 
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
-  [AudioplayerPlugin registerWithRegistrar:[registry registrarForPlugin:@"AudioplayerPlugin"]];
+  [AudioplayersPlugin registerWithRegistrar:[registry registrarForPlugin:@"AudioplayersPlugin"]];
   [FLTPathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPathProviderPlugin"]];
 }
 
