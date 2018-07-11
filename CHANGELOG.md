@@ -1,3 +1,6 @@
+## [0.9.0]
+- Several API changes, using new audioplayers 0.6.x
+
 ## [0.8.4]
 - Added more consistent APIs and tests
 
