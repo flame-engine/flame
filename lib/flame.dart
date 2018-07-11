@@ -8,6 +8,9 @@ import 'package:flutter/widgets.dart';
 import 'audio.dart';
 import 'images.dart';
 import 'util.dart';
+import 'gamepad.dart';
+
+export 'gamepad.dart';
 
 /// This class holds static references to some useful objects to use in your game.
 ///
@@ -23,6 +26,9 @@ class Flame {
 
   /// Access a shared instance of the [Util] class.
   static Util util = new Util();
+
+  /// Access a shared instance of the [Gamepad] class.
+  static Gamepad gamepad = new Gamepad();
 
   /// TODO verify if this is still needed (I don't think so)
   static void initialize() {
