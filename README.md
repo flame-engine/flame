@@ -121,18 +121,18 @@ The intermediate inheritance `PositionComponent` adds `x`, `y`, `width`, `height
 The most commonly used implementation, `SpriteComponent`, can be created with a `Sprite`:
 
 ```dart
-    import 'package:flame/component.dart';
+    import 'package:flame/components/component.dart';
 
     Sprite sprite = new Sprite('player.png');
 
     const size = 128.0;
     var player = new SpriteComponent.fromSprite(size, size, sprite); // width, height, sprite
-    
+
     // screen coordinates
     player.x = ... // 0 by default
     player.y = ... // 0 by default
     player.angle = ... // 0 by default
-    
+
     player.render(canvas); // it will render only if the image is loaded and the x, y, width and height parameters are not null
 ```
 
