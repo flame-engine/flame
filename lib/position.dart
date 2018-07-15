@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 import 'dart:ui' as ui;
-import 'package:box2d/box2d.dart' as b2d;
+import 'package:box2d_flame/box2d.dart' as b2d;
 
 /// An ordered pair representation (point, position, offset).
 ///
