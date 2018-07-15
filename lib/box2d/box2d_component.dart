@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:box2d/box2d.dart' hide Timer;
+import 'package:box2d_flame/box2d.dart' hide Timer;
 import 'package:flame/box2d/viewport.dart';
 import 'package:flame/components/component.dart';
 
