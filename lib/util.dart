@@ -45,13 +45,13 @@ class Util {
   /// Returns a [material.TextPainter] that allows for text rendering and size measuring.
   ///
   /// Rendering text on the Canvas is not as trivial as it should.
-  /// This methods puts all exposes all possible parameters you might want to pass to render text, with sensible defaults.
+  /// This methods exposes all possible parameters you might want to pass to render text, with sensible defaults.
   /// Only the [text] is mandatory.
   /// It returns a [material.TextPainter]. that have the properties: paint, width and height.
   /// Example usage:
   ///
   ///     final tp = Flame.util.text('Score: $score', fontSize: 48.0, fontFamily: 'Awesome Font');
-  ///     p.paint(c, Offset(size.width - p.width - 10, size.height - p.height - 10));
+  ///     tp.paint(c, Offset(size.width - p.width - 10, size.height - p.height - 10));
   ///
   material.TextPainter text(
     String text, {
