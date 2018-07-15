@@ -1,3 +1,6 @@
+## [0.9.1]
+- Updated audioplayers and box2d to fix bugs
+
 ## [0.9.0]
 - Several API changes, using new audioplayers 0.6.x
 
