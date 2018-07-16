@@ -30,6 +30,10 @@ class Viewport extends ViewportTransform {
     return percent * (size.width / scale);
   }
 
+  double get width => size.width / scale / window.devicePixelRatio;
+
+  double get height => size.height / scale / window.devicePixelRatio;
+
   /// Computes the scroll percentage of total screen width of the current viwerport center position.
   ///
   /// @param screens multiplies the visible screen with to create a bigger virtual screen.
