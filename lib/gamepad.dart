@@ -44,7 +44,7 @@ const ANDROID_MAPPING = {
 
 /// Gampad functionalities
 ///
-/// To use this class, access it via [Flame.gampad].
+/// To use this class, access it via [Flame.gamepad].
 class Gamepad {
 
   KeyListener listener;
