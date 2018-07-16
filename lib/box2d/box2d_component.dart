@@ -10,7 +10,7 @@ abstract class Box2DComponent extends Component {
   static const double DEFAULT_GRAVITY = -10.0;
   static const int DEFAULT_VELOCITY_ITERATIONS = 10;
   static const int DEFAULT_POSITION_ITERATIONS = 10;
-  static const double DEFAULT_SCALE = 8.0;
+  static const double DEFAULT_SCALE = 1.0;
 
   Size dimensions;
   int velocityIterations;
@@ -21,7 +21,7 @@ abstract class Box2DComponent extends Component {
   Viewport viewport;
 
   Box2DComponent({
-    this.dimensions: const Size(0.0, 0.0),
+    this.dimensions: null,
     int worldPoolSize: DEFAULT_WORLD_POOL_SIZE,
     int worldPoolContainerSize: DEFAULT_WORLD_POOL_CONTAINER_SIZE,
     double gravity: DEFAULT_GRAVITY,
@@ -29,6 +29,9 @@ abstract class Box2DComponent extends Component {
     this.positionIterations: DEFAULT_POSITION_ITERATIONS,
     double scale: DEFAULT_SCALE,
   }) {
+    if (this.dimensions == null) {
+      this.dimensions = window.physicalSize;
+    }
     final pool = new DefaultWorldPool(worldPoolSize, worldPoolContainerSize);
     this.world = new World.withPool(new Vector2(0.0, gravity), pool);
     this.viewport = new Viewport(dimensions, scale);
@@ -62,6 +65,10 @@ abstract class Box2DComponent extends Component {
 
   void add(Component component) {
     components.add(component);
+  }
+
+  void addAll(List<Component> component) {
+    components.addAll(component);
   }
 
   void initializeWorld();
