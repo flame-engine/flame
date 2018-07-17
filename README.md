@@ -218,6 +218,12 @@ If your game doesn't have other screens, just call this after your `runApp` call
 
 [Complete Input Guide](doc/input.md)
 
+### Gamepad
+
+Gamepad is partially supported on Android, you easily listen to key up and down events using `Flame.gamepad.addListener` method, check the link below for the complete guide
+
+[Complete Gamepad Guide](doc/gamepad.md)
+
 ## Credits
 
  * All the friendly contributors and people who are helping in the community.
