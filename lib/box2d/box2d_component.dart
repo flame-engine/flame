@@ -17,7 +17,7 @@ abstract class Box2DComponent extends Component {
   int positionIterations;
 
   World world;
-  List<Component> components = [];
+  List<BodyComponent> components = [];
   Viewport viewport;
 
   Box2DComponent({
@@ -51,7 +51,9 @@ abstract class Box2DComponent extends Component {
       return;
     }
     components.forEach((c) {
-      c.render(canvas);
+      if (c.body.isActive()) {
+        c.render(canvas);
+      }
     });
   }
 
@@ -63,12 +65,17 @@ abstract class Box2DComponent extends Component {
     });
   }
 
-  void add(Component component) {
+  void add(BodyComponent component) {
     components.add(component);
   }
 
-  void addAll(List<Component> component) {
+  void addAll(List<BodyComponent> component) {
     components.addAll(component);
+  }
+
+  void remove(BodyComponent component) {
+    components.remove(component);
+    world.destroyBody(component.body);
   }
 
   void initializeWorld();
