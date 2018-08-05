@@ -223,7 +223,7 @@ abstract class BaseGame extends Game {
     components.removeWhere((c) => c.destroy());
   }
 
-  /// This implementation of reisze repasses the resize call to every component in the list, enabling each one to make their decisions as how to handle the resize.
+  /// This implementation of resize repasses the resize call to every component in the list, enabling each one to make their decisions as how to handle the resize.
   ///
   /// You can override it futher to add more custom behaviour.
   @override
