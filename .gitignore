@@ -9,3 +9,6 @@ packages
 pubspec.lock
 doc/api/
 .flutter-plugins
+
+android/
+ios/
