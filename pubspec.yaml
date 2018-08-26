@@ -13,8 +13,7 @@ dependencies:
   audioplayers: ^0.7.5
   ordered_set: ^1.1.1
   path_provider: ^0.4.1
-  box2d_flame:
-    path: ../flutter/box2d.dart
+  box2d_flame: ^0.4.2
 
 dev_dependencies:
   test: ^1.3.0
