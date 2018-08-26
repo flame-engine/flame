@@ -1,3 +1,6 @@
+## [0.9.2]
+- Fixes to work with Dart 2.1
+
 ## [0.9.1]
 - Updated audioplayers and box2d to fix bugs
 
