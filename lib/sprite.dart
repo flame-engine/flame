@@ -104,4 +104,16 @@ class Sprite {
     }
     canvas.drawImageRect(image, src, dst, paint);
   }
+
+  /// Renders this sprite centered in the position [p], i.e., on [p] - [size] / 2.
+  ///
+  /// If [size] is not provided, the original size of the src image is used.
+  /// If the asset is not yet loaded, it does nothing.
+  void renderCentered(Canvas canvas, Position p, [Position size]) {
+    if (!this.loaded()) {
+      return;
+    }
+    size ??= this.size;
+    renderRect(canvas, new Rect.fromLTWH(p.x - size.x/2, p.y - size.y/2, size.x, size.y));
+  }
 }
