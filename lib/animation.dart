@@ -1,9 +1,7 @@
-import 'dart:math' as math;
 import 'sprite.dart';
 
 /// Represents a single animation frame
 class Frame {
-
   /// The [Sprite] to be displayed
   Sprite sprite;
 
@@ -16,7 +14,6 @@ class Frame {
 
 /// Represents an animation, that is, a list of sprites that change with time.
 class Animation {
-
   /// The frames that compose this animation.
   List<Frame> frames = [];
 
@@ -27,7 +24,7 @@ class Animation {
   ///
   /// It's ticked by the update method. It's reset every frame change.
   double clock = 0.0;
- 
+
   /// Wether the animation loops after the last sprite of the list, going back to the first, or keeps returning the last when done.
   bool loop = true;
 
@@ -109,7 +106,7 @@ class Animation {
 
   /// Sets a different step time to each frame. The sizes of the arrays must match.
   void set variableStepTimes(List<double> stepTimes) {
-    assert (stepTimes.length == frames.length);
+    assert(stepTimes.length == frames.length);
     for (int i = 0; i < frames.length; i++) {
       frames[i].stepTime = stepTimes[i];
     }
