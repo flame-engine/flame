@@ -114,6 +114,7 @@ class Sprite {
       return;
     }
     size ??= this.size;
-    renderRect(canvas, new Rect.fromLTWH(p.x - size.x/2, p.y - size.y/2, size.x, size.y));
+    renderRect(canvas,
+        new Rect.fromLTWH(p.x - size.x / 2, p.y - size.y / 2, size.x, size.y));
   }
 }

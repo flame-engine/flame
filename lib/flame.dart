@@ -17,7 +17,6 @@ export 'gamepad.dart';
 /// You can access shared instances of [AudioCache], [Images] and [Util].
 /// Most games should need only one instance of each, and should use this class to manage that reference.
 class Flame {
-
   /// Access a shared instance of the [AudioCache] class.
   static AudioCache audio = new AudioCache(prefix: 'audio/');
 

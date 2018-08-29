@@ -7,7 +7,6 @@ import 'package:synchronized/synchronized.dart';
 typedef void Stoppable();
 
 class AudioPool {
-
   AudioCache cache;
   Map<String, AudioPlayer> currentPlayers = {};
   List<AudioPlayer> availablePlayers = [];
@@ -18,7 +17,11 @@ class AudioPool {
 
   Lock _lock = new Lock();
 
-  AudioPool(this.sound, { this.repeating = false, this.maxPlayers = 1, this.minPlayers = 1, String prefix = 'audio/sfx/' }) {
+  AudioPool(this.sound,
+      {this.repeating = false,
+      this.maxPlayers = 1,
+      this.minPlayers = 1,
+      String prefix = 'audio/sfx/'}) {
     cache = new AudioCache(prefix: prefix);
   }
 
@@ -28,7 +31,7 @@ class AudioPool {
     }
   }
 
-  Future<Stoppable> start({ double volume = 1.0 }) async {
+  Future<Stoppable> start({double volume = 1.0}) async {
     return _lock.synchronized(() async {
       if (availablePlayers.isEmpty) {
         availablePlayers.add(await _createNewAudioPlayer());

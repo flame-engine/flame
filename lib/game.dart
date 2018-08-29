@@ -154,7 +154,8 @@ class _GameRenderBox extends RenderBox with WidgetsBindingObserver {
 /// It is based on the Component system.
 abstract class BaseGame extends Game {
   /// The list of components to be updated and rendered by the base game.
-  OrderedSet<Component> components = new OrderedSet(Comparing.on((c) => c.priority()));
+  OrderedSet<Component> components =
+      new OrderedSet(Comparing.on((c) => c.priority()));
 
   /// Components added by the [addLater] method
   List<Component> _addLater = [];
