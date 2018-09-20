@@ -81,6 +81,18 @@ class Sprite {
     return new Position(src.width, src.height);
   }
 
+  /// Renders this Sprite on the position [p], scaled by the [scale] factor provided.
+  ///
+  /// It renders with src size multiplied by [scale] in both directions.
+  /// Anchor is on top left as default.
+  /// If not loaded, does nothing.
+  void renderScaled(Canvas canvas, Position p, [double scale = 1.0]) {
+    if (!this.loaded()) {
+      return;
+    }
+    renderPosition(canvas, p, size.times(scale));
+  }
+
   void renderPosition(Canvas canvas, Position p, [Position size]) {
     if (!this.loaded()) {
       return;
