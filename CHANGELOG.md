@@ -1,5 +1,7 @@
-## [0.9.3]
+## [0.9.4]
+- Bumps audioplayers version
 
+## [0.9.3]
 - Fixes issue when switching between games where new game would not attach
 
 ## [0.9.2]
