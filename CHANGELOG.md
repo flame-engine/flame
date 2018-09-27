@@ -1,3 +1,7 @@
+## [0.9.3]
+
+- Fixes issue when switching between games where new game would not attach
+
 ## [0.9.2]
 - Fixes to work with Dart 2.1
 
