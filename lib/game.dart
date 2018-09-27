@@ -62,6 +62,11 @@ class _GameRenderObjectWidget extends SingleChildRenderObjectWidget {
   @override
   RenderObject createRenderObject(BuildContext context) =>
       new _GameRenderBox(context, this.game);
+
+  @override
+  void updateRenderObject(BuildContext context, _GameRenderBox _gameRenderBox) {
+    _gameRenderBox.game = game;
+  }
 }
 
 class _GameRenderBox extends RenderBox with WidgetsBindingObserver {
