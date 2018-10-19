@@ -1,3 +1,7 @@
+## [0.9.5]
+- Add `elapsed` property to Animation (thanks, @ianliu)
+- Fixed minor typo on documentation
+
 ## [0.9.4]
 - Bumps audioplayers version
 

@@ -20,7 +20,7 @@ Just drop it in your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flame: ^0.9.4
+  flame: ^0.9.5
 ```
 
 And start using it!
