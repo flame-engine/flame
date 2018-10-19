@@ -25,6 +25,9 @@ class Animation {
   /// It's ticked by the update method. It's reset every frame change.
   double clock = 0.0;
 
+  /// Total elapsed time of this animation, in seconds, since start or a reset.
+  double elapsed = 0.0;
+
   /// Wether the animation loops after the last sprite of the list, going back to the first, or keeps returning the last when done.
   bool loop = true;
 
@@ -120,6 +123,7 @@ class Animation {
   /// Resets the animation, like it'd just been created.
   void reset() {
     this.clock = 0.0;
+    this.elapsed = 0.0;
     this.currentIndex = 0;
   }
 
@@ -141,6 +145,7 @@ class Animation {
   /// Updates this animation, ticking the lifeTime by an amount [dt] (in seconds).
   void update(double dt) {
     clock += dt;
+    elapsed += dt;
     if (!loop && isLastFrame) {
       return;
     }
