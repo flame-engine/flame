@@ -28,7 +28,7 @@ class Animation {
   /// Total elapsed time of this animation, in seconds, since start or a reset.
   double elapsed = 0.0;
 
-  /// Wether the animation loops after the last sprite of the list, going back to the first, or keeps returning the last when done.
+  /// Whether the animation loops after the last sprite of the list, going back to the first, or keeps returning the last when done.
   bool loop = true;
 
   /// Creates an empty animation
