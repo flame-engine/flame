@@ -7,9 +7,9 @@ import 'package:flame/game.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
-/// A component that turns lets your component be composed others
+/// A component that lets your component be composed by others
 /// It resembles [BaseGame]. It has an [components] property and an [add] method
-abstract class ComposedComponent implements Component {
+mixin ComposedComponent on Component, Resizable {
   OrderedSet<Component> components = new OrderedSet(Comparing.on((c) => c.priority()));
 
   @override
@@ -43,4 +43,14 @@ abstract class ComposedComponent implements Component {
     }
   }
 
+  List<Resizable> children() => this.components.where((r) => r is Resizable).cast<Resizable>();
+
+  @override
+  void resize(Size size) {
+    if(this is Resizable){
+      Resizable thisResizable = this as Resizable;
+      thisResizable.size = size;
+      components.forEach((c) => c.resize(size));
+    }
+  }
 }
