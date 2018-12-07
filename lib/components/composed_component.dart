@@ -9,7 +9,7 @@ import 'package:ordered_set/ordered_set.dart';
 
 /// A component that lets your component be composed by others
 /// It resembles [BaseGame]. It has an [components] property and an [add] method
-mixin ComposedComponent on Component, Resizable {
+mixin ComposedComponent on Component {
   OrderedSet<Component> components = new OrderedSet(Comparing.on((c) => c.priority()));
 
   @override
@@ -34,7 +34,7 @@ mixin ComposedComponent on Component, Resizable {
   void add(Component c) {
     this.components.add(c);
 
-    if(this is Resizable){
+    if (this is Resizable) {
       // first time resize
       Resizable thisResizable = this as Resizable;
       if (thisResizable.size != null) {
@@ -43,14 +43,6 @@ mixin ComposedComponent on Component, Resizable {
     }
   }
 
-  List<Resizable> children() => this.components.where((r) => r is Resizable).cast<Resizable>();
-
-  @override
-  void resize(Size size) {
-    if(this is Resizable){
-      Resizable thisResizable = this as Resizable;
-      thisResizable.size = size;
-      components.forEach((c) => c.resize(size));
-    }
-  }
+  List<Resizable> children() =>
+      this.components.where((r) => r is Resizable).cast<Resizable>().toList();
 }
