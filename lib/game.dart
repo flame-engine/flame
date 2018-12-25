@@ -154,7 +154,7 @@ class _GameRenderBox extends RenderBox with WidgetsBindingObserver {
 
 /// This is a more complete and opinionated implementation of Game.
 ///
-/// It still needs to be subclasses to add your game log, but the [update], [render] and [resize] methods have default implementations.
+/// It still needs to be subclasses to add your game logic, but the [update], [render] and [resize] methods have default implementations.
 /// This is the recommended structure to use for most games.
 /// It is based on the Component system.
 abstract class BaseGame extends Game {
