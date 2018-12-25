@@ -19,7 +19,7 @@ import 'position.dart';
 abstract class Game {
   /// Implement this method to update the game state, given that a time [t] has passed.
   ///
-  /// Keep the updates as short as possible. [t] is in seconds, with microsseconds precision.
+  /// Keep the updates as short as possible. [t] is in seconds, with microseconds precision.
   void update(double t);
 
   /// Implement this method to render the current game state in the [canvas].
@@ -152,10 +152,10 @@ class _GameRenderBox extends RenderBox with WidgetsBindingObserver {
   }
 }
 
-/// This is a more complete and opinated implementation of Game.
+/// This is a more complete and opinionated implementation of Game.
 ///
-/// It still needs to be subclases to add your game log, but the [update], [render] and [resize] methods have default implementations.
-/// This is the recommended strucutre to use for most games.
+/// It still needs to be subclasses to add your game log, but the [update], [render] and [resize] methods have default implementations.
+/// This is the recommended structure to use for most games.
 /// It is based on the Component system.
 abstract class BaseGame extends Game {
   /// The list of components to be updated and rendered by the base game.
@@ -174,28 +174,37 @@ abstract class BaseGame extends Game {
   /// List of deltas used in debug mode to calculate FPS
   List<double> _dts = [];
 
-  /// Adds a new component to the components list.
+  /// This method is called for every component added, both via [add] and [addLater] methods.
   ///
-  /// Also sets the current size on the component (because the resize hook won't be called).
-  void add(Component c) {
-    this.components.add(c);
-
+  /// You can use this to setup your mixins, pre-calculate stuff on every component, or anything you desire.
+  /// By default this calls the first time resize for every component, so don't forget to call super.preAdd when overriding.
+  void preAdd(Component c) {
     // first time resize
     if (size != null) {
       c.resize(size);
     }
   }
 
+  /// Adds a new component to the components list.
+  ///
+  /// Also calls [preAdd], witch in turn sets the current size on the component (because the resize hook won't be called).
+  void add(Component c) {
+    this.preAdd(c);
+    this.components.add(c);
+  }
+
   /// Registers a component to be added on the components on the next tick.
   ///
   /// Use this to add components in places where a concurrent issue with the update method might happen.
+  /// Also calls [preAdd] for the component added.
   void addLater(Component c) {
+    this.preAdd(c);
     this._addLater.add(c);
   }
 
   /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.
   ///
-  /// You can override it futher to add more custom behaviour.
+  /// You can override it further to add more custom behaviour.
   @override
   void render(Canvas canvas) {
     canvas.save();
@@ -238,7 +247,7 @@ abstract class BaseGame extends Game {
     components.forEach((c) => c.resize(size));
   }
 
-  /// Returns wether thdis [Game] is in debug mode or not.
+  /// Returns whether this [Game] is in debug mode or not.
   ///
   /// Returns `false` by default. Override to use the debug mode.
   /// In debug mode, the [_recordDt] method actually records every `dt` for statistics.
