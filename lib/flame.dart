@@ -17,6 +17,10 @@ export 'gamepad.dart';
 /// You can access shared instances of [AudioCache], [Images] and [Util].
 /// Most games should need only one instance of each, and should use this class to manage that reference.
 class Flame {
+  // Flame asset bundle, defaults to root
+  static AssetBundle _bundle;
+  static AssetBundle get bundle => _bundle == null ? rootBundle : _bundle;
+
   /// Access a shared instance of the [AudioCache] class.
   static AudioCache audio = new AudioCache(prefix: 'audio/');
 
@@ -30,8 +34,9 @@ class Flame {
   static Gamepad gamepad = new Gamepad();
 
   /// TODO verify if this is still needed (I don't think so)
-  static void initialize() {
+  static void initialize([AssetBundle bundle]) {
     FlameBiding.ensureInitialized();
+    _bundle = bundle;
   }
 
   /// TODO verify if this is still needed (I don't think so)
