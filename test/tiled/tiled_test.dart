@@ -1,25 +1,27 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/components/component.dart';
 import 'package:flame/flame.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart' show Colors;
+import 'package:flutter/services.dart' show CachingAssetBundle;
 import 'package:test/test.dart';
-import 'package:tmx/tmx.dart';
+import 'package:tmx/tmx.dart' show TileMap, TileMapParser;
 
 void main() {
   test('my first widget test', () async {
-    // Flame.initialize(new TestAssetBundle());
-    // var tiled = new TiledComponent('x');
-    // await tiled.future;
+    Flame.initialize(new TestAssetBundle());
+    var tiled = new TiledComponent('x');
+    await tiled.future;
     expect(1, equals(1));
   });
 }
 
 class TiledComponent extends Component {
   String filename;
+  TileMap map;
+  Image image;
   Future future;
 
   TiledComponent(this.filename) {
@@ -27,18 +29,27 @@ class TiledComponent extends Component {
   }
 
   Future _load() async {
-    await Flame.bundle.loadString('/assets/tiles/' + filename).then((contents) {
+    this.map = await _loadMap();
+    this.image = await Flame.images
+        .load(map.tilesets[0].images[0].source, prefix: 'tiles');
+  }
+
+  Future<TileMap> _loadMap() {
+    return Flame.bundle
+        .loadString('/assets/tiles/' + filename)
+        .then((contents) {
       var parser = new TileMapParser();
-      TileMap map = parser.parse(contents);
-      var x = map.tilesets[0].images[0];
-      print('images: ${x.source}');
-      // Flame.images.load('x.png', prefix: 'tiles');
+      return parser.parse(contents);
     });
   }
 
   @override
   void render(Canvas c) {
-    // TODO: implement render
+    if (image == null) {
+      return;
+    }
+    Paint paint = new Paint()..color = Colors.white;
+    c.drawImage(image, Offset(0, 0), paint);
   }
 
   @override
@@ -49,17 +60,12 @@ class TiledComponent extends Component {
 
 class TestAssetBundle extends CachingAssetBundle {
   @override
-  Future<ByteData> load(String key) async {
-    print('load :$key');
-    if (key == 'resources/test')
-      return ByteData.view(
-          Uint8List.fromList(utf8.encode('Hello World!')).buffer);
-    return null;
-  }
+  Future<ByteData> load(String key) async =>
+      new File('test/tiled/assets/map-level1.png')
+          .readAsBytes()
+          .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer));
 
   @override
-  Future<String> loadString(String key, {bool cache = true}) {
-    print('loadString :$key');
-    return new File('test/tiled/assets/map.tmx').readAsString();
-  }
+  Future<String> loadString(String key, {bool cache = true}) =>
+      new File('test/tiled/assets/map.tmx').readAsString();
 }
