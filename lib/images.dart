@@ -19,16 +19,15 @@ class Images {
     return Future.wait(fileNames.map(load));
   }
 
-  Future<Image> load(String fileName, {String prefix = 'images/'}) async {
-    var path = prefix + fileName;
-    if (!loadedFiles.containsKey(path)) {
-      loadedFiles[path] = await _fetchToMemory(path);
+  Future<Image> load(String fileName) async {
+    if (!loadedFiles.containsKey(fileName)) {
+      loadedFiles[fileName] = await _fetchToMemory(fileName);
     }
-    return loadedFiles[path];
+    return loadedFiles[fileName];
   }
 
   Future<Image> _fetchToMemory(String name) async {
-    ByteData data = await Flame.bundle.load('assets/' + name);
+    ByteData data = await Flame.bundle.load('assets/images/' + name);
     Uint8List bytes = new Uint8List.view(data.buffer);
     Completer<Image> completer = new Completer();
     decodeImageFromList(bytes, (image) => completer.complete(image));
