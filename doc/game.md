@@ -28,7 +28,7 @@ A very simple `BaseGame` implementation example can be seen below:
     class MyCrate extends SpriteComponent {
 
         // creates a component that renders the crate.png sprite, with size 16 x 16
-        MyCrate() : SpriteComponent.fromSprite(16.0, 16.0, new Sprite('crate.png'));
+        MyCrate() : super.fromSprite(16.0, 16.0, new Sprite('crate.png'));
 
         @override
         void resize(Size size) {
