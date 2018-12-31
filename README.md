@@ -28,7 +28,7 @@ And start using it!
 The complete documentation can be found [here](doc/README.md).
 
 Bellow is an overview that should suffice to build a simple game, and work your way up from there.
-
+from
 The [flame-example](https://github.com/luanpotter/flame-example/tree/0.8.x) game has been updated to use the newer APIs (0.8.2) on a new branch.
 
 There is a very good QuickStart tutorial for version `0.6.1` [here](https://medium.com/@luanpotter27/a-comprehensive-flame-tutorial-or-how-to-make-games-with-flutter-74f22c4ecbfa). The API has changed a lot, so refer this documentation for updated information. Soon I plan to release an updated tutorial.
@@ -126,7 +126,8 @@ The most commonly used implementation, `SpriteComponent`, can be created with a 
     Sprite sprite = new Sprite('player.png');
 
     const size = 128.0;
-    var player = new SpriteComponent.fromSprite(size, size, sprite); // width, height, sprite
+    var player = new SpriteComponent.
+    ite(size, size, sprite); // width, height, sprite
 
     // screen coordinates
     player.x = ... // 0 by default
@@ -182,7 +183,7 @@ A very simple `BaseGame` implementation example can be seen below:
     class MyCrate extends SpriteComponent {
 
         // creates a component that renders the crate.png sprite, with size 16 x 16
-        MyCrate() : SpriteComponent.fromSprite(16.0, 16.0, new Sprite('crate.png'));
+        MyCrate() : super.fromSprite(16.0, 16.0, new Sprite('crate.png'));
 
         @override
         void resize(Size size) {
