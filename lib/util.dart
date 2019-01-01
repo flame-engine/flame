@@ -14,8 +14,15 @@ class Util {
   /// Sets the app to be fullscreen (no buttons bar os notifications on top).
   ///
   /// Most games should probably be this way.
-  void fullScreen() {
-    SystemChrome.setEnabledSystemUIOverlays([]);
+  Future<void> fullScreen() {
+    return SystemChrome.setEnabledSystemUIOverlays([]);
+  }
+
+  /// Sets the preferred orietation (landscape or protrait for the app).
+  ///
+  /// When it opens, it will automatically change orientation to the preferred one (if possible).
+  Future<void> setOrientation(DeviceOrientation orientation) {
+    return SystemChrome.setPreferredOrientations([orientation]);
   }
 
   /// Waits for the initial screen dimensions to be avaliable.
@@ -77,11 +84,6 @@ class Util {
     );
     tp.layout();
     return tp;
-  }
-
-  /// TODO verify if this is still needed (I don't think so)
-  void enableEvents() {
-    window.onPlatformMessage = BinaryMessages.handlePlatformMessage;
   }
 
   /// This properly binds a gesture recognizer to your game.
