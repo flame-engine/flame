@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flame/components/component.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart' show Colors;
-import 'package:tmx/tmx.dart' show TileMap, TileMapParser;
+import 'package:tmx/tmx.dart' show TileMap, TileMapParser, Layer;
 
 class TiledComponent extends Component {
   String filename;
@@ -37,7 +37,19 @@ class TiledComponent extends Component {
       return;
     }
 
-    map.layers[0].tiles.forEach((tile) {
+    map.layers.forEach((layer) {
+      if (layer.visible) {
+        _renderLayer(c, layer);
+      }
+    });
+  }
+
+  void _renderLayer(Canvas c, Layer layer) {
+    layer.tiles.forEach((tile) {
+      if (tile.gid == 0) {
+        return;
+      }
+
       var rect = tile.computeDrawRect();
       var src = Rect.fromLTWH(rect.left.toDouble(), rect.top.toDouble(),
           rect.width.toDouble(), rect.height.toDouble());
@@ -45,7 +57,6 @@ class TiledComponent extends Component {
           rect.width.toDouble(), rect.height.toDouble());
       c.drawImageRect(image, src, dst, paint);
     });
-    // c.drawImage(image, Offset(0, 110), paint);
   }
 
   @override
