@@ -15,8 +15,8 @@ dependencies:
   path_provider: ^0.4.1
   box2d_flame: ^0.4.2
   synchronized: ^1.5.1+1
-  tmx: 
-    path: ../tmx.dart
+  tiled: 
+    path: ../tiled.dart
   convert: ^2.0.1
 
 dev_dependencies:
