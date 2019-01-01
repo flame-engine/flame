@@ -6,10 +6,11 @@ import 'package:flame/flame.dart';
 import 'package:flutter/material.dart' show Colors;
 
 class Sprite {
+  Paint paint = whitePaint;
   Image image;
   Rect src;
 
-  static final Paint paint = new Paint()..color = Colors.white;
+  static final Paint whitePaint = new Paint()..color = Colors.white;
 
   Sprite(
     String fileName, {
