@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flame/components/component.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart' show Colors;
-import 'package:tmx/tmx.dart' show TileMap, TileMapParser, Layer;
+import 'package:tiled/tiled.dart' hide Image;
 
 class TiledComponent extends Component {
   String filename;

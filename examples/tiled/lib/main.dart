@@ -1,6 +1,6 @@
+import 'package:flame/components/tiled_component.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flame/tiled/tiled_component.dart';
 
 void main() {
   var game = new TiledGame();
