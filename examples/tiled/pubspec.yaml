@@ -20,3 +20,4 @@ flutter:
   assets:
     - assets/tiles/map.tmx
     - assets/images/map-level1.png
+    - assets/images/map-level2.png

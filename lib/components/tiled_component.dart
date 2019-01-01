@@ -9,7 +9,9 @@ class TiledComponent extends Component {
   String filename;
   TileMap map;
   Image image;
+  Map<String, Image> images = new Map<String, Image>();
   Future future;
+  bool _loaded = false;
 
   static Paint paint = new Paint()..color = Colors.white;
 
@@ -20,6 +22,8 @@ class TiledComponent extends Component {
   Future _load() async {
     this.map = await _loadMap();
     this.image = await Flame.images.load(map.tilesets[0].image.source);
+    this.images = await _loadImages(map);
+    this._loaded = true;
   }
 
   Future<TileMap> _loadMap() {
@@ -29,7 +33,17 @@ class TiledComponent extends Component {
     });
   }
 
-  bool loaded() => image != null;
+  Future<Map<String, Image>> _loadImages(TileMap map) async {
+    var result = new Map<String, Image>();
+    await Future.forEach(map.tilesets, (tileset) async {
+      await Future.forEach(tileset.images, (tmxImage) async {
+        result[tmxImage.source] = await Flame.images.load(tmxImage.source);
+      });
+    });
+    return result;
+  }
+
+  bool loaded() => _loaded;
 
   @override
   void render(Canvas c) {
@@ -50,11 +64,14 @@ class TiledComponent extends Component {
         return;
       }
 
+      var image = images[tile.image.source];
+
       var rect = tile.computeDrawRect();
       var src = Rect.fromLTWH(rect.left.toDouble(), rect.top.toDouble(),
           rect.width.toDouble(), rect.height.toDouble());
       var dst = Rect.fromLTWH(tile.x.toDouble(), tile.y.toDouble(),
           rect.width.toDouble(), rect.height.toDouble());
+
       c.drawImageRect(image, src, dst, paint);
     });
   }
