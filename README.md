@@ -6,6 +6,10 @@ A minimalist Flutter game engine.
 
 Any help is appreciated! Comment, suggestions, issues, PR's! Give us a star to help!
 
+## Help
+
+We have a Discord with a channel for Flame help, join it [here](https://discord.gg/pxrBmy4)
+
 ## Goals
 
 The goal of this project is to provided a complete set of out-of-the-way solutions for the common problems every game developed in Flutter will share.
