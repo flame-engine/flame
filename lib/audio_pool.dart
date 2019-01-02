@@ -6,6 +6,10 @@ import 'package:synchronized/synchronized.dart';
 
 typedef void Stoppable();
 
+/// An AudioPool is a provider of AudioPlayers that leaves them pre-loaded to minimize delays.
+///
+/// All AudioPlayers loaded are for the same [sound]. If you want multiple sounds use multiple [AudioPool].
+/// Use this class if you'd like have extremely quick firing, repetitive and simultaneous sounds, like shooting a laser in a fast-paced spaceship game.
 class AudioPool {
   AudioCache cache;
   Map<String, AudioPlayer> currentPlayers = {};
