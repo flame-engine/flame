@@ -92,10 +92,12 @@ abstract class PositionComponent extends Component {
   }
 
   void prepareCanvas(Canvas canvas) {
-    double ax = x - anchor.relativePosition.dx * width;
-    double ay = y - anchor.relativePosition.dy * height;
-    canvas.translate(ax, ay);
+    canvas.translate(x, y);
+
     canvas.rotate(angle);
+    double dx = - anchor.relativePosition.dx * width;
+    double dy = - anchor.relativePosition.dy * height;
+    canvas.translate(dx, dy);
   }
 }
 
