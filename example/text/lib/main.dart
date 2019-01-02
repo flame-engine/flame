@@ -25,7 +25,7 @@ class MyTextBox extends TextBoxComponent {
         rect.deflate(boxConfig.margin),
         new Paint()
           ..color = BasicPalette.black.color
-          ..strokeWidth = 2);
+          ..style = PaintingStyle.stroke);
   }
 }
 
