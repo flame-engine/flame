@@ -1,16 +1,14 @@
 import 'dart:ui';
-import 'dart:async';
 
-import 'package:flame/position.dart';
-import 'package:flame/flame.dart';
-import 'package:flutter/material.dart' show Colors;
+import 'dart:async';
+import 'flame.dart';
+import 'position.dart';
+import 'palette.dart';
 
 class Sprite {
-  Paint paint = whitePaint;
+  Paint paint = BasicPalette.white.paint;
   Image image;
   Rect src;
-
-  static final Paint whitePaint = new Paint()..color = Colors.white;
 
   Sprite(
     String fileName, {
@@ -69,6 +67,7 @@ class Sprite {
   }
 
   double get _imageWidth => this.image.width.toDouble();
+
   double get _imageHeight => this.image.height.toDouble();
 
   Position get originalSize {
@@ -127,7 +126,6 @@ class Sprite {
       return;
     }
     size ??= this.size;
-    renderRect(canvas,
-        new Rect.fromLTWH(p.x - size.x / 2, p.y - size.y / 2, size.x, size.y));
+    renderRect(canvas, new Rect.fromLTWH(p.x - size.x / 2, p.y - size.y / 2, size.x, size.y));
   }
 }

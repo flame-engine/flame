@@ -1,9 +1,11 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/painting.dart';
+
 import '../sprite.dart';
 import '../position.dart';
-import 'package:flutter/painting.dart';
+import '../anchor.dart';
 
 /// This represents a Component for your game.
 ///
@@ -27,7 +29,7 @@ abstract class Component {
   /// You can use the [Resizable] mixin if you want an implementation of this hook that keeps track of the current size.
   void resize(Size size) {}
 
-  /// Wether this component has been loaded yet. If not loaded, [BaseGame] will not try to render it.
+  /// Whether this component has been loaded yet. If not loaded, [BaseGame] will not try to render it.
   ///
   /// Sprite based components can use this to let [BaseGame] know not to try to render when the [Sprite] has not been loaded yet.
   /// Note that for a more consistent experience, you can pre-load all your assets beforehand with Flame.images.loadAll.
@@ -38,7 +40,7 @@ abstract class Component {
   /// It will be called once per component per loop, and if it returns true, [BaseGame] will mark your component for deletion and remove it before the next loop.
   bool destroy() => false;
 
-  /// Wether this component is HUD object or not.
+  /// Whether this component is HUD object or not.
   ///
   /// HUD objects ignore the [BaseGame.camera] when rendered (so their position coordinates are considered relative to the device screen).
   bool isHud() => false;
@@ -52,12 +54,14 @@ abstract class Component {
   int priority() => 0;
 }
 
-/// A [Component] implementation that represents a component that has a specific, possibly mutatable position on the screen.
+/// A [Component] implementation that represents a component that has a specific, possibly dynamic position on the screen.
 ///
 /// It represents a rectangle of dimension ([width], [height]), on the position ([x], [y]), rotate around its center with angle [angle].
+/// It also uses the [anchor] property to properly position itself.
 abstract class PositionComponent extends Component {
   double x = 0.0, y = 0.0, angle = 0.0;
   double width = 0.0, height = 0.0;
+  Anchor anchor = Anchor.topLeft;
 
   Position toPosition() => new Position(x, y);
   void setByPosition(Position position) {
@@ -88,27 +92,24 @@ abstract class PositionComponent extends Component {
   }
 
   void prepareCanvas(Canvas canvas) {
-    canvas.translate(x, y);
-
-    // rotate around center
-    canvas.translate(width / 2, height / 2);
+    double ax = x - anchor.relativePosition.dx * width;
+    double ay = y - anchor.relativePosition.dy * height;
+    canvas.translate(ax, ay);
     canvas.rotate(angle);
-    canvas.translate(-width / 2, -height / 2);
   }
 }
 
+/// A [PositionComponent] that renders a single [Sprite] at the designated position, scaled to have the designated size and rotated to the designated angle.
+///
+/// This is the most commonly used child of [Component].
 class SpriteComponent extends PositionComponent {
   Sprite sprite;
 
-  final Paint paint = new Paint()..color = new Color(0xffffffff);
-
   SpriteComponent();
 
-  SpriteComponent.square(double size, String imagePath)
-      : this.rectangle(size, size, imagePath);
+  SpriteComponent.square(double size, String imagePath) : this.rectangle(size, size, imagePath);
 
-  SpriteComponent.rectangle(double width, double height, String imagePath)
-      : this.fromSprite(width, height, new Sprite(imagePath));
+  SpriteComponent.rectangle(double width, double height, String imagePath) : this.fromSprite(width, height, new Sprite(imagePath));
 
   SpriteComponent.fromSprite(double width, double height, this.sprite) {
     this.width = width;
@@ -117,15 +118,13 @@ class SpriteComponent extends PositionComponent {
 
   @override
   render(Canvas canvas) {
-    if (sprite != null && sprite.loaded() && x != null && y != null) {
-      prepareCanvas(canvas);
-      sprite.render(canvas, width, height);
-    }
+    prepareCanvas(canvas);
+    sprite.render(canvas, width, height);
   }
 
   @override
   bool loaded() {
-    return this.sprite.loaded();
+    return sprite != null && sprite.loaded() && x != null && y != null;
   }
 
   @override
