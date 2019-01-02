@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:flame/components/component.dart';
@@ -10,7 +9,8 @@ import 'package:ordered_set/ordered_set.dart';
 /// A component that lets your component be composed by others
 /// It resembles [BaseGame]. It has an [components] property and an [add] method
 mixin ComposedComponent on Component {
-  OrderedSet<Component> components = new OrderedSet(Comparing.on((c) => c.priority()));
+  OrderedSet<Component> components =
+      new OrderedSet(Comparing.on((c) => c.priority()));
 
   @override
   render(Canvas canvas) {

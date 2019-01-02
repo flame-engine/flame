@@ -19,7 +19,7 @@ class DebugComponent extends PositionComponent {
   /// Don't do anything (change as desired)
   void update(double t) {}
 
-  /// Renders the recatangle
+  /// Renders the rectangle
   void render(Canvas c) {
     prepareCanvas(c);
     c.drawRect(new Rect.fromLTWH(0.0, 0.0, width, height), paint);
