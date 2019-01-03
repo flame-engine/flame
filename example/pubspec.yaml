@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   flame:
-    path: ../../
+    path: ../
   flutter:
     sdk: flutter
 
