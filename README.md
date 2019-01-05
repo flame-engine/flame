@@ -8,7 +8,7 @@ Any help is appreciated! Comment, suggestions, issues, PR's! Give us a star to h
 
 ## Help
 
-We have a Discord with a channel for Flame help, join it [here](https://discord.gg/pxrBmy4)
+We have a Flame help channel on Fireslime's Discord, join it [here](https://discord.gg/pxrBmy4)
 
 ## Goals
 
