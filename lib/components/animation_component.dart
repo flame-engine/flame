@@ -36,16 +36,12 @@ class AnimationComponent extends PositionComponent {
   }
 
   @override
-  bool loaded() {
-    return this.animation.loaded();
-  }
+  bool loaded() => animation.loaded();
 
   @override
   void render(Canvas canvas) {
-    if (loaded()) {
-      prepareCanvas(canvas);
-      animation.getSprite().render(canvas, width, height);
-    }
+    prepareCanvas(canvas);
+    animation.getSprite().render(canvas, width, height);
   }
 
   @override

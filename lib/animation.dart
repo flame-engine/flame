@@ -1,14 +1,14 @@
 import 'sprite.dart';
 
-/// Represents a single animation frame
+/// Represents a single animation frame.
 class Frame {
-  /// The [Sprite] to be displayed
+  /// The [Sprite] to be displayed.
   Sprite sprite;
 
-  /// The duration to display it, in seconds
+  /// The duration to display it, in seconds.
   double stepTime;
 
-  /// Create based on the parameters
+  /// Create based on the parameters.
   Frame(this.sprite, this.stepTime);
 }
 

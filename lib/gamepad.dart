@@ -42,7 +42,7 @@ const ANDROID_MAPPING = {
   109: GAMEPAD_BUTTON_SELECT
 };
 
-/// Gampad functionalities
+/// Gamepad functionalities
 ///
 /// To use this class, access it via [Flame.gamepad].
 class Gamepad {

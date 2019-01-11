@@ -1,3 +1,10 @@
+## [0.10.0]
+- Fixing a few minor bugs, typos, improving docs
+- Adding the Palette concept: easy access to white and black colors/paints, create your palette to keep your game organized.
+- Adding the Anchor concept: specify where thins should anchor, added to PositionComponent and to the new text releated features.
+- Added a whole bunch of text related components: TextConfig allows you to easily define your typography information, TextComponent allows for easy rendering of stuff and TextBox can make sized texts and also typing effects.
+- Improved Utils to have better and more concise APIs, removed unused stuff.
+
 ## [0.9.5]
 - Add `elapsed` property to Animation (thanks, @ianliu)
 - Fixed minor typo on documentation
