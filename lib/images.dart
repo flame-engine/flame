@@ -1,7 +1,8 @@
-import 'package:flutter/services.dart' show rootBundle;
+import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
-import 'dart:async';
+
+import 'package:flame/flame.dart';
 
 class Images {
   Map<String, Image> loadedFiles = {};
@@ -26,7 +27,7 @@ class Images {
   }
 
   Future<Image> _fetchToMemory(String name) async {
-    ByteData data = await rootBundle.load('assets/images/' + name);
+    ByteData data = await Flame.bundle.load('assets/images/' + name);
     Uint8List bytes = new Uint8List.view(data.buffer);
     Completer<Image> completer = new Completer();
     decodeImageFromList(bytes, (image) => completer.complete(image));
