@@ -85,3 +85,9 @@ The whole concept of a box2d's World is mapped to the `Box2DComponent` component
 So you can have HUD and other non-physics-related components in your game list, and also as many `Box2DComponents` as you'd like (normally one, I guess), and then add your physical entities to your Components instance. When the Component is updated, it will use box2d physics engine to properly update every child.
 
 You can see a more complete example of box2d usage on [this WIP game](https://github.com/feroult/haunt) made by @feroult (beware, though, it uses 0.6.x version of flame, but the Box2D related apis are unchanged).
+
+## Tiled Component
+
+Currently we have a very basic implementation of a Tiled component. This API uses the lib [Tiled](https://github.com/feroult/tiled.dart) to parse map files and render visible layers.
+
+A example of how to use the API can be found [here](https://github.com/luanpotter/flame/tree/master/examples/tiled). 
