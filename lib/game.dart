@@ -217,6 +217,9 @@ abstract class BaseGame extends Game {
   /// It translates the camera unless hud, call the render method and restore the canvas.
   /// This makes sure the canvas is not messed up by one component and all components render independently.
   void renderComponent(Canvas canvas, Component c) {
+    if (!c.loaded()) {
+      return;
+    }
     if (!c.isHud()) {
       canvas.translate(-camera.x, -camera.y);
     }

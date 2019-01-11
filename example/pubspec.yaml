@@ -1,0 +1,17 @@
+name: position_component
+description: A new Flutter project.
+
+version: 0.1.0
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  flame:
+    path: ../
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

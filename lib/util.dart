@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter/services.dart';
 
 import 'position.dart';
@@ -47,43 +46,6 @@ class Util {
       }
       return window.physicalSize / window.devicePixelRatio;
     });
-  }
-
-  /// Returns a [material.TextPainter] that allows for text rendering and size measuring.
-  ///
-  /// Rendering text on the Canvas is not as trivial as it should.
-  /// This methods exposes all possible parameters you might want to pass to render text, with sensible defaults.
-  /// Only the [text] is mandatory.
-  /// It returns a [material.TextPainter]. that have the properties: paint, width and height.
-  /// Example usage:
-  ///
-  ///     final tp = Flame.util.text('Score: $score', fontSize: 48.0, fontFamily: 'Awesome Font');
-  ///     tp.paint(c, Offset(size.width - p.width - 10, size.height - p.height - 10));
-  ///
-  material.TextPainter text(
-    String text, {
-    double fontSize: 24.0,
-    Color color: material.Colors.black,
-    String fontFamily: 'Arial',
-    TextAlign textAlign: TextAlign.left,
-    TextDirection textDirection: TextDirection.ltr,
-  }) {
-    material.TextStyle style = new material.TextStyle(
-      color: color,
-      fontSize: fontSize,
-      fontFamily: fontFamily,
-    );
-    material.TextSpan span = new material.TextSpan(
-      style: style,
-      text: text,
-    );
-    material.TextPainter tp = new material.TextPainter(
-      text: span,
-      textAlign: textAlign,
-      textDirection: textDirection,
-    );
-    tp.layout();
-    return tp;
   }
 
   /// This properly binds a gesture recognizer to your game.
