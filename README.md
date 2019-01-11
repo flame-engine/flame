@@ -130,7 +130,7 @@ The most commonly used implementation, `SpriteComponent`, can be created with a 
     Sprite sprite = new Sprite('player.png');
 
     const size = 128.0;
-    var player = new SpriteComponent.fromSprite(size, size, sprite); // width, height, sprite
+    var player = new super.fromSprite(size, size, sprite); // width, height, sprite
 
     // screen coordinates
     player.x = ... // 0 by default
