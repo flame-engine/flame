@@ -36,35 +36,11 @@ config.render(canvas, Offset(size.width - 10, size.height - 10);
 
 ## Text Components
 
-Flame provides two text components that make it even easier to render text in your game: `TextBoxComponent` and `TextComponent`.
-
-
-### TextBoxComponent
-
-`TextBoxComponent` like its name suggest, is used to render a text inside a bounding box, creating line breaks according to the provided box size.
-
-Example usage:
-
-```dart
-class MyTextBox extends TextBoxComponent {
-  MyTextBox(String text) : super(text, config: tiny, boxConfig: TextBoxConfig(timePerChar: 0.05));
-
-  @override
-  void drawBackground(Canvas c) {
-    Rect rect = Rect.fromLTWH(0, 0, width, height);
-    c.drawRect(rect, new Paint()..color = Color(0xFFFF00FF));
-    c.drawRect(
-        rect.deflate(boxConfig.margin),
-        new Paint()
-          ..color = BasicPalette.black.color
-          ..style = PaintingStyle.stroke);
-  }
-}
-```
+Flame provides two text components that make it even easier to render text in your game: `TextComponent` and `TextBoxComponent`.
 
 ### TextComponent
 
-`TextComponent` is very similar to `TextBoxComponent`, except it renders only one line.
+`TextComponent` is a simple component that renders a single line of text.
 
 Example usage:
 
@@ -83,6 +59,29 @@ class MyGame extends BaseGame {
       ..anchor = Anchor.topCenter
       ..x = size.width / 2
       ..y = 32.0);
+  }
+}
+```
+
+### TextBoxComponent
+
+`TextBoxComponent` is very similar to `TextComponent`, but as its name suggest, is used to render a text inside a bounding box, creating line breaks according to the provided box size.
+
+Example usage:
+
+```dart
+class MyTextBox extends TextBoxComponent {
+  MyTextBox(String text) : super(text, config: tiny, boxConfig: TextBoxConfig(timePerChar: 0.05));
+
+  @override
+  void drawBackground(Canvas c) {
+    Rect rect = Rect.fromLTWH(0, 0, width, height);
+    c.drawRect(rect, new Paint()..color = Color(0xFFFF00FF));
+    c.drawRect(
+        rect.deflate(boxConfig.margin),
+        new Paint()
+          ..color = BasicPalette.black.color
+          ..style = PaintingStyle.stroke);
   }
 }
 ```
