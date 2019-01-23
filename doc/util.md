@@ -10,35 +10,6 @@ The Position class is an utility class that helps by allowing easy conversions t
 
 It also differs from the default implementations provided (math.Point and ui.Offset) as it's mutable and offers some useful methods for manipulation.
 
-## Text
-
-In order to render text to the Canvas, you can use the utility method `text`:
-
-```dart
-    var txt = Flame.util.text('Once upon a time...', fontSize: 12.0, color: 0xFF00FF00);
-    txt.paint(canvas, new Offset(10.0, 10.0)); // position
-```
-
-The string to be rendered is mandatory, and then there is a myriad of parameters with default values:
-
-* fontSize : font size, in pts (default `24.0`)
-* color : the color, as a `ui.Color` (see below, default black)
-* fontFamily : a commonly available font, like Arial (default), or a custom font added in your pubspec (see [here](https://flutter.io/custom-fonts/) how to do it)
-* textAlign : `TextAlign` enum, can be `left`, `right`, `center`, `justify` (among others, default `left`)
-* textDirection : `TextDirection` enum, can be `ltr` (default, left to right, probably you want this one) or `rtl` (right to left, use only if using fonts from different languages)
-
-To create a Color object, just pass in the color as an integer in the ARGB format.
-
-You can use Dart's hexadecimal notation to make it really easy; for instance: `0xFF00FF00` is fully opaque green (the 'mask' would be `0xAARRGGBB`).
-
-There is a color enum to make it easy to use common colors; it is in the material flutter package:
-
-```dart
-    import 'package:flutter/material.dart' as material;
-
-    Color color = material.Colors.black;
-```
-
 ## Util Class
 
 This class, accessible via `Flame.util`, has some sparse functions that are independent and good to have. They are:
