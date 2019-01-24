@@ -14,19 +14,9 @@ const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font',
 
 * fontFamily : a commonly available font, like Arial (default), or a custom font added in your pubspec (see [here](https://flutter.io/custom-fonts/) how to do it)
 * fontSize : font size, in pts (default `24.0`)
-* color : the color, as a `ui.Color` (see below, default black)
+* color : the color, as a `ui.Color` (default black)
 
-To create a Color object, just pass in the color as an integer in the ARGB format.
-
-You can use Dart's hexadecimal notation to make it really easy; for instance: `0xFF00FF00` is fully opaque green (the 'mask' would be `0xAARRGGBB`).
-
-There is a color enum to make it easy to use common colors; it is in the material flutter package:
-
-```dart
-    import 'package:flutter/material.dart' as material;
-
-    Color color = material.Colors.black;
-```
+For more information regarding colors and how to create then, see the [Colors and the Palette](palette.md) guide.
 
 After the creation of the config you can use its `render` method to draw some string on a canvas:
 
