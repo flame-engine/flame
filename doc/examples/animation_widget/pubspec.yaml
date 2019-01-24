@@ -1,0 +1,22 @@
+name: animation_widget
+description: A sample Flame project to showcase the animationAsWidget method.
+
+version: 0.1.0
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flame:
+    path: ../../../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/minotaur.png # thanks https://elthen.itch.io/2d-pixel-art-minotaur-sprites

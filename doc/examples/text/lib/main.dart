@@ -15,7 +15,8 @@ TextConfig regular = TextConfig(color: BasicPalette.white.color);
 TextConfig tiny = regular.withFontSize(12.0);
 
 class MyTextBox extends TextBoxComponent {
-  MyTextBox(String text) : super(text, config: tiny, boxConfig: TextBoxConfig(timePerChar: 0.05));
+  MyTextBox(String text)
+      : super(text, config: tiny, boxConfig: TextBoxConfig(timePerChar: 0.05));
 
   @override
   void drawBackground(Canvas c) {
@@ -52,7 +53,8 @@ class MyGame extends BaseGame {
       ..x = size.width
       ..y = size.height);
 
-    add(MyTextBox('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget ligula eu lectus lobortis condimentum.')
+    add(MyTextBox(
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget ligula eu lectus lobortis condimentum.')
       ..anchor = Anchor.bottomLeft
       ..y = size.height);
   }

@@ -9,7 +9,6 @@ import 'anchor.dart';
 /// It does not hold information regarding the position of the text to be render neither the text itself (the string).
 /// To hold all those information, use the Text component.
 class TextConfig {
-
   /// The font size to be used, in points.
   final double fontSize;
 
@@ -70,9 +69,11 @@ class TextConfig {
   ///
   ///     const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font', anchor: Anchor.rightBottom);
   ///     config.render(c, Offset(size.width - 10, size.height - 10);
-  void render(Canvas canvas, String text, Position p, { Anchor anchor: Anchor.topLeft }) {
+  void render(Canvas canvas, String text, Position p,
+      {Anchor anchor: Anchor.topLeft}) {
     material.TextPainter tp = toTextPainter(text);
-    Position translatedPosition = anchor.translate(p, Position.fromSize(tp.size));
+    Position translatedPosition =
+        anchor.translate(p, Position.fromSize(tp.size));
     tp.paint(canvas, translatedPosition.toOffset());
   }
 
@@ -149,7 +150,7 @@ class TextConfig {
   /// Creates a new [TextConfig] changing only the [textAlign].
   ///
   /// This does not change the original (as it's immutable).
-  TextConfig withTextAlign (TextAlign textAlign) {
+  TextConfig withTextAlign(TextAlign textAlign) {
     return TextConfig(
       fontSize: fontSize,
       color: color,

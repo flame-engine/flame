@@ -3,7 +3,11 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart' as widgets;
 
+import 'animation.dart';
+import 'components/animation_component.dart';
+import 'game.dart';
 import 'position.dart';
 
 /// Some utilities that did not fit anywhere else.
@@ -17,7 +21,7 @@ class Util {
     return SystemChrome.setEnabledSystemUIOverlays([]);
   }
 
-  /// Sets the preferred orietation (landscape or protrait for the app).
+  /// Sets the preferred orientation (landscape or portrait for the app).
   ///
   /// When it opens, it will automatically change orientation to the preferred one (if possible).
   Future<void> setOrientation(DeviceOrientation orientation) {
@@ -67,5 +71,16 @@ class Util {
     c.translate(p.x, p.y);
     fn(c);
     c.translate(-p.x, -p.y);
+  }
+
+  /// Returns a regular Flutter widget representing this animation, rendered with the specified size.
+  ///
+  /// This actually creates an [EmbeddedGameWidget] with a [SimpleGame] whose only content is an [AnimationComponent] created from the provided [animation].
+  /// You can use this implementation as base to easily create your own widgets based on more complex games.
+  /// This is intended to be used by non-game apps that want to add a sprite sheet animation.
+  widgets.Widget animationAsWidget(Position size, Animation animation) {
+    return EmbeddedGameWidget(
+        SimpleGame(AnimationComponent(size.x, size.y, animation)),
+        size: size);
   }
 }
