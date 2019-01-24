@@ -95,8 +95,8 @@ abstract class PositionComponent extends Component {
     canvas.translate(x, y);
 
     canvas.rotate(angle);
-    double dx = - anchor.relativePosition.dx * width;
-    double dy = - anchor.relativePosition.dy * height;
+    double dx = -anchor.relativePosition.dx * width;
+    double dy = -anchor.relativePosition.dy * height;
     canvas.translate(dx, dy);
   }
 }
@@ -109,9 +109,11 @@ class SpriteComponent extends PositionComponent {
 
   SpriteComponent();
 
-  SpriteComponent.square(double size, String imagePath) : this.rectangle(size, size, imagePath);
+  SpriteComponent.square(double size, String imagePath)
+      : this.rectangle(size, size, imagePath);
 
-  SpriteComponent.rectangle(double width, double height, String imagePath) : this.fromSprite(width, height, new Sprite(imagePath));
+  SpriteComponent.rectangle(double width, double height, String imagePath)
+      : this.fromSprite(width, height, new Sprite(imagePath));
 
   SpriteComponent.fromSprite(double width, double height, this.sprite) {
     this.width = width;

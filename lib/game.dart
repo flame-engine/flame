@@ -38,6 +38,7 @@ abstract class Game {
 
   void _recordDt(double dt) {}
 
+  Offset _offset = Offset.zero;
   Widget _widget;
 
   /// Returns the game widget. Put this in your structure to start rendering and updating the game.
@@ -135,7 +136,10 @@ class _GameRenderBox extends RenderBox with WidgetsBindingObserver {
 
   @override
   void paint(PaintingContext context, Offset offset) {
+    context.canvas.save();
+    context.canvas.translate(game._offset.dx, game._offset.dy);
     game.render(context.canvas);
+    context.canvas.restore();
   }
 
   void _bindLifecycleListener() {
@@ -177,7 +181,8 @@ abstract class BaseGame extends Game {
   /// This method is called for every component added, both via [add] and [addLater] methods.
   ///
   /// You can use this to setup your mixins, pre-calculate stuff on every component, or anything you desire.
-  /// By default this calls the first time resize for every component, so don't forget to call super.preAdd when overriding.
+  /// By default, this calls the first time resize for every component, so don't forget to call super.preAdd when overriding.
+  @mustCallSuper
   void preAdd(Component c) {
     // first time resize
     if (size != null) {
@@ -187,7 +192,7 @@ abstract class BaseGame extends Game {
 
   /// Adds a new component to the components list.
   ///
-  /// Also calls [preAdd], witch in turn sets the current size on the component (because the resize hook won't be called).
+  /// Also calls [preAdd], witch in turn sets the current size on the component (because the resize hook won't be called until a new resize happens).
   void add(Component c) {
     this.preAdd(c);
     this.components.add(c);
@@ -196,7 +201,7 @@ abstract class BaseGame extends Game {
   /// Registers a component to be added on the components on the next tick.
   ///
   /// Use this to add components in places where a concurrent issue with the update method might happen.
-  /// Also calls [preAdd] for the component added.
+  /// Also calls [preAdd] for the component added, immediately.
   void addLater(Component c) {
     this.preAdd(c);
     this._addLater.add(c);
@@ -205,6 +210,7 @@ abstract class BaseGame extends Game {
   /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.
   ///
   /// You can override it further to add more custom behaviour.
+  /// Beware of however you are rendering components if not using this; you must be careful to save and restore the canvas to avoid components messing up with each other.
   @override
   void render(Canvas canvas) {
     canvas.save();
@@ -231,7 +237,7 @@ abstract class BaseGame extends Game {
   /// This implementation of update updates every component in the list.
   ///
   /// It also actually adds the components that were added by the [addLater] method, and remove those that are marked for destruction via the [Component.destroy] method.
-  /// You can override it futher to add more custom behaviour.
+  /// You can override it further to add more custom behaviour.
   @override
   void update(double t) {
     components.addAll(_addLater);
@@ -241,10 +247,12 @@ abstract class BaseGame extends Game {
     components.removeWhere((c) => c.destroy());
   }
 
-  /// This implementation of resize repasses the resize call to every component in the list, enabling each one to make their decisions as how to handle the resize.
+  /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.
   ///
-  /// You can override it futher to add more custom behaviour.
+  /// It also updates the [size] field of the class to be used by later added components and other methods.
+  /// You can override it further to add more custom behaviour, but you should seriously consider calling the super implementation as well.
   @override
+  @mustCallSuper
   void resize(Size size) {
     this.size = size;
     components.forEach((c) => c.resize(size));
@@ -255,7 +263,7 @@ abstract class BaseGame extends Game {
   /// Returns `false` by default. Override to use the debug mode.
   /// In debug mode, the [_recordDt] method actually records every `dt` for statistics.
   /// Then, you can use the [fps] method to check the game FPS.
-  /// You can also use this value to enable other debug behaviors for your game.
+  /// You can also use this value to enable other debug behaviors for your game, like bounding box rendering, for instance.
   bool debugMode() => false;
 
   /// This is a hook that comes from the RenderBox to allow recording of render times and statistics.
@@ -288,5 +296,71 @@ abstract class BaseGame extends Game {
   double currentTime() {
     return new DateTime.now().microsecondsSinceEpoch.toDouble() /
         Duration.microsecondsPerSecond;
+  }
+}
+
+/// This is a helper implementation of a [BaseGame] designed to allow to easily create a game with a single component.
+///
+/// This is useful to add sprites, animations and other Flame components "directly" to your non-game Flutter widget tree, when combined with [EmbeddedGameWidget].
+class SimpleGame extends BaseGame {
+  SimpleGame(Component c) {
+    add(c);
+  }
+}
+
+/// This a widget to embed a game inside the Widget tree. You can use it in pair with [SimpleGame] or any other more complex [Game], as desired.
+///
+/// It handles for you positioning, size constraints and other factors that arise when your game is embedded within the component tree.
+/// Provided it with a [Game] instance for your game and the optional size of the widget.
+/// Creating this without a fixed size might mess up how other components are rendered with relation to this one in the tree.
+/// You can bind Gesture Recognizers immediately around this to add controls to your widgets, with easy coordinate conversions.
+class EmbeddedGameWidget extends StatefulWidget {
+  final Game game;
+  final Position size;
+
+  EmbeddedGameWidget(this.game, {this.size});
+
+  @override
+  State<StatefulWidget> createState() {
+    return new _EmbeddedGameWidgetState(game, size: size);
+  }
+}
+
+class _EmbeddedGameWidgetState extends State<EmbeddedGameWidget> {
+  final Game game;
+  final Position size;
+
+  _EmbeddedGameWidgetState(this.game, {this.size});
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+  }
+
+  @override
+  void didUpdateWidget(EmbeddedGameWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+  }
+
+  void _afterLayout(_) {
+    RenderBox box = context.findRenderObject();
+    game._offset = box.localToGlobal(Offset.zero);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (size == null) {
+      return game.widget;
+    }
+    return Container(
+      child: game.widget,
+      constraints: BoxConstraints(
+          minWidth: size.x,
+          maxWidth: size.x,
+          minHeight: size.y,
+          maxHeight: size.y),
+    );
   }
 }

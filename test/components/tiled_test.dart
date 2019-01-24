@@ -17,10 +17,9 @@ void main() {
 
 class TestAssetBundle extends CachingAssetBundle {
   @override
-  Future<ByteData> load(String key) async =>
-      new File('assets/map-level1.png')
-          .readAsBytes()
-          .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer));
+  Future<ByteData> load(String key) async => new File('assets/map-level1.png')
+      .readAsBytes()
+      .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer));
 
   @override
   Future<String> loadString(String key, {bool cache = true}) =>
