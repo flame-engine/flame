@@ -31,7 +31,8 @@ There is a color enum to make it easy to use common colors; it is in the materia
 After the creation of the config you can use its `render` method to draw some string on a canvas:
 
 ```dart
-config.render(canvas, Offset(size.width - 10, size.height - 10);
+config.render(canvas, "Flame is awesome", Position(10, 10));
+
 ```
 
 ## Text Components
