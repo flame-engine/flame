@@ -127,16 +127,18 @@ The most commonly used implementation, `SpriteComponent`, can be created with a 
 ```dart
     import 'package:flame/components/component.dart';
 
+    // on your constructor or init logic
     Sprite sprite = new Sprite('player.png');
 
     const size = 128.0;
-    var player = new super.fromSprite(size, size, sprite); // width, height, sprite
+    final player = new SpriteComponent.fromSprite(size, size, sprite); // width, height, sprite
 
     // screen coordinates
     player.x = ... // 0 by default
     player.y = ... // 0 by default
     player.angle = ... // 0 by default
 
+    // on your render method...
     player.render(canvas); // it will render only if the image is loaded and the x, y, width and height parameters are not null
 ```
 
