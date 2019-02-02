@@ -25,7 +25,7 @@ There are a lot of websites out there that provide a plethora of assets, some ch
 For our example, let's say you want to animate a mighty minotaur in your regular Flutter app. We go to itch.io and find this awesome asset pack, that comes, as expected, in sprite sheet format.
 
 <p align="center"> 
-    <img src="https://img.itch.zone/aW1nLzE2NjE3ODEuZ2lm/original/%2Fv3Vs2.gif" />
+    <img src="minotaur.gif" />
     <br />
     <small>GIF showcasing the awesome minotaur animations created by <a href="https://elthen.itch.io/2d-pixel-art-minotaur-sprites">elthen</a>.</small>
 </p>
@@ -33,7 +33,7 @@ For our example, let's say you want to animate a mighty minotaur in your regular
 I'm actually gonna crop and paste using imagemagick just the frames we are going to actually use, but that's just for simplicity and reducing the app size; remember, with sprite sheets, you decide what you use. Of course, you don't need to have stuff you never use in your sheets. Here is the final result:
 
 <p align="center"> 
-    <img src="https://raw.githubusercontent.com/luanpotter/flame/master/doc/examples/animation_widget/assets/images/minotaur.png" />
+    <img src="minotaur.png" />
     <br />
     <small>Spritesheet extract by me from the original files, available in the examples for the Flame repository. All credits to <a href="https://elthen.itch.io/">elthen</a>.</small>
 </p>
@@ -133,7 +133,7 @@ In our case, we only need to set the `textureWidth` to 96.0, as the original wid
 Now, just run your app, and, hurray!, we get a slick animation!
 
 <p align="center"> 
-    <img src="result.webm" />
+    <img src="result.gif" />
     <br />
     <small>The final result, as recorded in the emulator!</small>
 </p>
