@@ -7,7 +7,7 @@ Flutter provides lots of cool and slick animations out of the box, most related 
 A sprite sheet is a single image that has multiple images (Sprites) inside, each one being accessed via it's defining rectangle (x, y, width, and height). Maybe every sprite inside has the same size, like a tileset; for example:
 
 <p align="center"> 
-    <img width="50%" src="tileset.png" />
+    <img width="432" src="tileset.png" />
     <br />
     <small>This is the Dunjo Tileset, it was created by <a href="https://arks.itch.io/dungeon-platform-tileset">arks</a>.</small>
 </p>
