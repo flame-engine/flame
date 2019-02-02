@@ -8,7 +8,8 @@ A sprite sheet is a single image that has multiple images (Sprites) inside, each
 
 <p align="center"> 
     <img src="tileset.png" />
-    <small>This is the Dunjo Tileset, it was created by [arks](https://arks.itch.io/dungeon-platform-tileset).</small>
+    <br />
+    <small>This is the Dunjo Tileset, it was created by <a href="https://arks.itch.io/dungeon-platform-tileset">arks</a>.</small>
 </p>
 
 Let's say you want to have several icons in your app. Instead of loading to memory dozens of small images, you can load a single one and use Sprites to refer to each icon. That's how fonts work under the hood (though normally those are SVG nowadays).
