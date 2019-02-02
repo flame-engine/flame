@@ -24,13 +24,19 @@ There are a lot of websites out there that provide a plethora of assets, some ch
 
 For our example, let's say you want to animate a mighty minotaur in your regular Flutter app. We go to itch.io and find this awesome asset pack, that comes, as expected, in sprite sheet format.
 
-![Minotaur GIF](https://img.itch.zone/aW1nLzE2NjE3ODEuZ2lm/original/%2Fv3Vs2.gif)
-GIF showcasing the awesome minotaur animations created by [elthen](https://elthen.itch.io/2d-pixel-art-minotaur-sprites).
+<p align="center"> 
+    <img src="https://img.itch.zone/aW1nLzE2NjE3ODEuZ2lm/original/%2Fv3Vs2.gif" />
+    <br />
+    <small>GIF showcasing the awesome minotaur animations created by <a href="https://elthen.itch.io/2d-pixel-art-minotaur-sprites">elthen</a>.</small>
+</p>
 
 I'm actually gonna crop and paste using imagemagick just the frames we are going to actually use, but that's just for simplicity and reducing the app size; remember, with sprite sheets, you decide what you use. Of course, you don't need to have stuff you never use in your sheets. Here is the final result:
 
-![Minotaur Selected Spritesheet](https://raw.githubusercontent.com/luanpotter/flame/master/doc/examples/animation_widget/assets/images/minotaur.png)
-Spritesheet extract by me from the original files, available in the examples for the Flame repository. All credits to [elthen](https://elthen.itch.io).
+<p align="center"> 
+    <img src="https://raw.githubusercontent.com/luanpotter/flame/master/doc/examples/animation_widget/assets/images/minotaur.png" />
+    <br />
+    <small>Spritesheet extract by me from the original files, available in the examples for the Flame repository. All credits to <a href="https://elthen.itch.io/">elthen</a>.</small>
+</p>
 
 Now, how are we going to render this as an animation, updating the frames clockwork, to have a fluid, functional, sprite sheet animation? Enters [flame](https://github.com/luanpotter/flame), the modular game engine. Yes, it's a game engine, but it's very small and modular, so you can easily pick and choose. I'm assuming your app isn't an actual game, though if it's a more interactive style experience, with game loops, updates, and renderers, you should consider using 100% flame instead (or alongside) of Flutter widgets. For a tutorial on game development on Flame, I do recommend the more up-to-date article posted by the awesome folks at [GeekyAnts](https://blog.geekyants.com/@geekyants): [Building A 2D game in Flutter](https://blog.geekyants.com/building-a-2d-game-in-flutter-a-comprehensive-guide-913f647846bc).
 
@@ -40,8 +46,11 @@ If you don't have a Flame game, don't worry. Flame allows you to embed complete 
 
 First things off, get a hold of your sprite sheet. That can be most images format, but since this is pixel art, a PNG is a must. We have our minotaur sample, you can choose other of your liking. Wanna add a ticking clock with fancy effects or a bomb that goes off? You can find all those beautiful assets online. The simplest way is to have a row of sprites of the same size, in the animation order, though it's fully configurable. Firstly, the folder structure. Flutter expects you to have an `assets` folder on your project root, and Flame expects an `images` folder, because you might have audio, fonts and other sorts of assets. Inside, put your image files.
 
-![Folder Structure Print](folder_strucutre.png)
-This is the folder structure to create. `animation_widget` is the root folder (created by `flutter create`), inside an assets/images folder, and inside, all your assets.
+<p align="center"> 
+    <img src="folder_strucutre.png" />
+    <br />
+    <small>This is the folder structure to create. `animation_widget` is the root folder (created by `flutter create`), inside an assets/images folder, and inside, all your assets.</small>
+</p>
 
 Also, don't forget to add everything to the `pubspec.yml`, where every asset must be declared; it should look something like this:
 
@@ -123,7 +132,11 @@ In our case, we only need to set the `textureWidth` to 96.0, as the original wid
 
 Now, just run your app, and, hurray!, we get a slick animation!
 
-![Final Result](result.webm)
+<p align="center"> 
+    <img src="result.webm" />
+    <br />
+    <small>The final result, as recorded in the emulator!</small>
+</p>
 
 So, how much did you love flame? Already thinking about the neat graphics you'll add to your apps? Be sure to check flame as an actual game engine, there is much more complex and cool stuff, that can work both as a standalone game or inside a Flutter widget tree (all features are like that). Also, Flame is built in a modular way, so you pick and choose, and also, I strongly encourage you to go through the implementation and see how things are done. If you want to change any details, you might get a lot of insight from the source code.
 
