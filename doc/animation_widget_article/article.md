@@ -62,13 +62,13 @@ flutter:
 
 ## Adding Flame
 
-Flame's latest release is `0.11.0`, but this feature is available since `0.10.0`. Add the latest dependency to your `dependencies` in pubspec file and don't forget to run a `flutter pub get` to download everything:
+Flame's latest release is `0.10.1`, but this feature is available since `0.10.0`. Add the latest dependency to your `dependencies` in pubspec file and don't forget to run a `flutter pub get` to download everything:
 
 ```yaml
 dependencies:
   flutter:
     sdk: flutter
-  flame: 0.11.0
+  flame: 0.10.1
 
 dev_dependencies:
   flutter_test:

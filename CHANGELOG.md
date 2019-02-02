@@ -1,3 +1,9 @@
+## [0.10.1]
+- Fixes some typos
+- Improved docs
+- Extracted gamepads to a new lib, lots of improvements there (thanks, @erickzanardo)
+- Added more examples and an article
+
 ## [0.10.0]
 - Fixing a few minor bugs, typos, improving docs
 - Adding the Palette concept: easy access to white and black colors/paints, create your palette to keep your game organized.
