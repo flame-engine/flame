@@ -47,7 +47,7 @@ If you don't have a Flame game, don't worry. Flame allows you to embed complete 
 First things off, get a hold of your sprite sheet. That can be most images format, but since this is pixel art, a PNG is a must. We have our minotaur sample, you can choose other of your liking. Wanna add a ticking clock with fancy effects or a bomb that goes off? You can find all those beautiful assets online. The simplest way is to have a row of sprites of the same size, in the animation order, though it's fully configurable. Firstly, the folder structure. Flutter expects you to have an `assets` folder on your project root, and Flame expects an `images` folder, because you might have audio, fonts and other sorts of assets. Inside, put your image files.
 
 <p align="center"> 
-    <img src="folder_strucutre.png" />
+    <img width="50%" src="folder_strucutre.png" />
     <br />
     <small>This is the folder structure to create. `animation_widget` is the root folder (created by `flutter create`), inside an assets/images folder, and inside, all your assets.</small>
 </p>
