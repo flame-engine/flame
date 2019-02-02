@@ -56,6 +56,10 @@ class Util {
   ///
   /// Use this in order to get it to work in case your app also contains other widgets.
   void addGestureRecognizer(GestureRecognizer recognizer) {
+    if (GestureBinding.instance == null) {
+      throw new Exception("GestureBinding is not initialized yet, this probably happened because addGestureRecognizer was called before the runApp method");
+    }
+
     GestureBinding.instance.pointerRouter.addGlobalRoute((PointerEvent e) {
       if (e is PointerDownEvent) {
         recognizer.addPointer(e);
