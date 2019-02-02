@@ -138,7 +138,9 @@ Now, just run your app, and, hurray!, we get a slick animation!
     <small>The final result, as recorded in the emulator!</small>
 </p>
 
-Neat hum? Already thinking about the neat graphics you'll add to your apps? Be sure to check flame as an actual game engine, there is much more complex and cool stuff, that can work both as a standalone game or inside a Flutter widget tree (all features are like that). Also, Flame is built in a modular way, so you pick and choose, and also, I strongly encourage you to go through the implementation and see how things are done. If you want to change any details, you might get a lot of insight from the source code.
+Neat hum? And that's just he beginning. Explore Flame to add more complex, dynamic, even interactive animations, with different timings, behaviors and effects. You can start and stop your animations based on commands. You can do much, much more. Populate your apps with prettiness :)
+
+Already thinking about the neat graphics you'll add to your apps? Be sure to check flame as an actual game engine, there is much more complex and cool stuff, that can work both as a standalone game or inside a Flutter widget tree (all features are like that). Also, Flame is built in a modular way, so you pick and choose, and also, I strongly encourage you to go through the implementation and see how things are done. If you want to change any details, you might get a lot of insight from the source code.
 
 This whole example is inside the examples folder for flame, and you can see [the source code](https://github.com/luanpotter/flame/tree/master/doc/examples/animation_widget), if you have any doubts or wanna test or run yourself. Also, the article is [committed as well](https://github.com/luanpotter/flame/tree/master/doc/animation_widget_article).
 
