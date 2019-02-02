@@ -21,15 +21,15 @@ There are a lot of websites out there that provide a plethora of assets, some ch
 
 For our example, let's say you want to animate a mighty minotaur in your regular Flutter app. We go to itch.io and find this awesome asset pack, that comes, as expected, in sprite sheet format.
 
-!(Minotaur GIF)[https://img.itch.zone/aW1nLzE2NjE3ODEuZ2lm/original/%2Fv3Vs2.gif]
-GIF showcasing the awesome minotaur animations created by (elthen)[https://elthen.itch.io/2d-pixel-art-minotaur-sprites].
+![Minotaur GIF](https://img.itch.zone/aW1nLzE2NjE3ODEuZ2lm/original/%2Fv3Vs2.gif)
+GIF showcasing the awesome minotaur animations created by [elthen](https://elthen.itch.io/2d-pixel-art-minotaur-sprites).
 
 I'm actually gonna crop and paste using imagemagick just the frames we are going to actually use, but that's just for simplicity and reducing the app size; remember, with sprite sheets, you decide what you use. Of course, you don't need to have stuff you never use in your sheets. Here is the final result:
 
-!(Minotaur Selected Spritesheet)[https://raw.githubusercontent.com/luanpotter/flame/master/doc/examples/animation_widget/assets/images/minotaur.png]
+![Minotaur Selected Spritesheet](https://raw.githubusercontent.com/luanpotter/flame/master/doc/examples/animation_widget/assets/images/minotaur.png)
 Spritesheet extract by me from the original files, available in the examples for the Flame repository. All credits to [elthen](https://elthen.itch.io).
 
-Now, how are we going to render this as an animation, updating the frames clockwork, to have a fluid, functional, sprite sheet animation? Enters [flame](https://github.com/luanpotter/flame), the modular game engine. Yes, it's a game engine, but it's very small and modular, so you can easily pick and choose. I'm assuming your app isn't an actual game, though if it's a more interactive style experience, with game loops, updates, and renderers, you should consider using 100% flame instead (or alongside) of Flutter widgets. For a tutorial on game development on Flame, I do recommend the more up-to-date article posted by the awesome folks at [GeekyAnts](https://blog.geekyants.com/@geekyants): (Building A 2D game in Flutter)[https://blog.geekyants.com/building-a-2d-game-in-flutter-a-comprehensive-guide-913f647846bc].
+Now, how are we going to render this as an animation, updating the frames clockwork, to have a fluid, functional, sprite sheet animation? Enters [flame](https://github.com/luanpotter/flame), the modular game engine. Yes, it's a game engine, but it's very small and modular, so you can easily pick and choose. I'm assuming your app isn't an actual game, though if it's a more interactive style experience, with game loops, updates, and renderers, you should consider using 100% flame instead (or alongside) of Flutter widgets. For a tutorial on game development on Flame, I do recommend the more up-to-date article posted by the awesome folks at [GeekyAnts](https://blog.geekyants.com/@geekyants): [Building A 2D game in Flutter](https://blog.geekyants.com/building-a-2d-game-in-flutter-a-comprehensive-guide-913f647846bc).
 
 If you don't have a Flame game, don't worry. Flame allows you to embed complete and complex games right inside your widget tree from regular Flutter apps. And now there are some brand new helpers to allow you to easily do the most simple and request things flame provides: drawing sprite sheet animations. How come? Well, let's get right into it.
 
