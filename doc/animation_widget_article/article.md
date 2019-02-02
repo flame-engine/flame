@@ -6,8 +6,10 @@ Flutter provides lots of cool and slick animations out of the box, most related 
 
 A sprite sheet is a single image that has multiple images (Sprites) inside, each one being accessed via it's defining rectangle (x, y, width, and height). Maybe every sprite inside has the same size, like a tileset; for example:
 
-![Dunjo tileset](https://raw.githubusercontent.com/luanpotter/dunjo-tileset-helper/master/tileset.png)
-This is the Dunjo Tileset, it was created by [arks](https://arks.itch.io/dungeon-platform-tileset).
+<p align="center"> 
+    <img src="tileset.png" />
+    <small>This is the Dunjo Tileset, it was created by [arks](https://arks.itch.io/dungeon-platform-tileset).</small>
+</p>
 
 Let's say you want to have several icons in your app. Instead of loading to memory dozens of small images, you can load a single one and use Sprites to refer to each icon. That's how fonts work under the hood (though normally those are SVG nowadays).
 
