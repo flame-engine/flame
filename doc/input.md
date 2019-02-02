@@ -35,3 +35,4 @@ Here are some example of more complex Gesture Recognizers:
             ..onTapUp = (TapUpDetails details) => this.handleTap(details.globalPosition);;
     }
 ```
+__ATTENTION:__ `Flame.util.addGestureRecognizer` must be called after the `runApp`, otherwise Flutter's `GestureBinding` will not be initialized yet and exceptions will occur.
