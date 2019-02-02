@@ -18,13 +18,24 @@ Currently it provides you with: a few utilities, images/sprites/sprite sheets, a
 
 You can use whatever ones you want, as they are all somewhat independent.
 
+## External Modules
+
+Flame is modular, and you can always pick and choose. Some modules are extracted to separate plugins; some are bundled with flame, and some must be added separetly.
+
+* [audioplayers](https://github.com/luanpotter/audioplayers) is the audio engine behind flame. It's included.
+* [tiled](https://github.com/feroult/tiled.dart) adds support for parsing and using TMX files from Tiled. It's included.
+* [box2d](https://github.com/feroult/box2d.dart) adds wrappers over Box2D for the physics engine. It's included.
+
+* [flame_gamepad](https://github.com/fireslime/flame_gamepad) adds support to gamepad. Aandroid only. It's not included, add to your pubspec as desired.
+* [play_games](https://github.com/luanpotter/play_games) integrates to Google Play Games Servies (GPGS). Adds login, achievements, saved games and leaderboard. Android only. It's not included, add to your pubspec as desired. Be sure to check the instructions on how to configure, as it's not trivial.
+
 ## Usage
 
 Just drop it in your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flame: ^0.10.0
+  flame: ^0.10.1
 ```
 
 And start using it!
@@ -33,7 +44,7 @@ The complete documentation can be found [here](doc/README.md).
 
 Bellow is an overview that should suffice to build a simple game, and work your way up from there.
 
-The [flame-example](https://github.com/luanpotter/flame-example/tree/0.10.x) game has been updated to use the newer APIs (0.10.0) on a new branch.
+The [flame-example](https://github.com/luanpotter/flame-example/tree/0.10.x) game has been updated to use the newer APIs (0.10.x) on a new branch.
 
 There is a very good QuickStart tutorial for version `0.6.1` [here](https://medium.com/@luanpotter27/a-comprehensive-flame-tutorial-or-how-to-make-games-with-flutter-74f22c4ecbfa). The API has changed a lot, so refer this documentation for updated information. Soon I plan to release an updated tutorial.
 
