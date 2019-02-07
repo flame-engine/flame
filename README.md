@@ -18,6 +18,12 @@ Currently it provides you with: a few utilities, images/sprites/sprite sheets, a
 
 You can use whatever ones you want, as they are all somewhat independent.
 
+## Donate
+
+Donate to support Flame's development:
+
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=VJS3922363XNU&currency_code=USD&source=url)
+
 ## External Modules
 
 Flame is modular, and you can always pick and choose. Some modules are extracted to separate plugins; some are bundled with flame, and some must be added separetly.
