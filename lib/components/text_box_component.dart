@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'dart:math' as math;
-
-import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart' as widgets;
 
 import 'component.dart';
 import 'resizable.dart';
@@ -52,7 +51,7 @@ class TextBoxComponent extends PositionComponent with Resizable {
     _lines = [''];
     text.split(' ').forEach((word) {
       String possibleLine = _lines.last + ' ' + word;
-      TextPainter p = config.toTextPainter(possibleLine);
+      widgets.TextPainter p = config.toTextPainter(possibleLine);
       if (_lineHeight == null) {
         _lineHeight = p.height;
       }
