@@ -1,3 +1,6 @@
+## [0.10.2]
+- Fixed some warnings and formatting
+
 ## [0.10.1]
 - Fixes some typos
 - Improved docs
