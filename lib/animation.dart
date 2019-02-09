@@ -61,8 +61,8 @@ class Animation {
     int amount, {
     double textureX = 0.0,
     double textureY = 0.0,
-    double textureWidth = null,
-    double textureHeight = null,
+    double textureWidth,
+    double textureHeight,
     double stepTime = 0.1,
   }) {
     this.frames = new List<Frame>(amount);
@@ -85,8 +85,8 @@ class Animation {
     List<double> stepTimes, {
     double textureX = 0.0,
     double textureY = 0.0,
-    double textureWidth = null,
-    double textureHeight = null,
+    double textureWidth,
+    double textureHeight,
   }) {
     this.frames = new List<Frame>(amount);
     for (var i = 0; i < amount; i++) {
@@ -108,7 +108,7 @@ class Animation {
   bool get isLastFrame => currentIndex == frames.length - 1;
 
   /// Sets a different step time to each frame. The sizes of the arrays must match.
-  void set variableStepTimes(List<double> stepTimes) {
+  set variableStepTimes(List<double> stepTimes) {
     assert(stepTimes.length == frames.length);
     for (int i = 0; i < frames.length; i++) {
       frames[i].stepTime = stepTimes[i];
