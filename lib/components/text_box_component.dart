@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'dart:math' as math;
 
-import 'package:flutter/src/painting/text_painter.dart';
+import 'package:flutter/widgets.dart';
 
 import 'component.dart';
 import 'resizable.dart';
