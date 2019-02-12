@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Flutter provides lots of cool and slick animations out of the box, most related to movement and tweens (continuous changes in size, position, color, et cetera). However, one particular thing that it's really hard to do using only the native APIs is a simple sprite sheet animation. Or any sprite sheet handling, for that matters.
+Flutter provides lots of cool and slick animations out of the box, most related to movement and tweens (continuous changes in size, position, color, et cetera). However, one particular thing that it's really hard to do using only the native APIs is a simple sprite sheet animation. Or any sprite sheet handling, for that matter.
 
 A sprite sheet is a single image that has multiple images (Sprites) inside, each one being accessed via it's defining rectangle (x, y, width, and height). Maybe every sprite inside has the same size, like a tileset; for example:
 
@@ -138,7 +138,7 @@ Now, just run your app, and, hurray!, we get a slick animation!
     <small>The final result, as recorded in the emulator!</small>
 </p>
 
-Neat hum? And that's just he beginning. Explore Flame to add more complex, dynamic, even interactive animations, with different timings, behaviors and effects. You can start and stop your animations based on commands. You can do much, much more. Populate your apps with prettiness :)
+Pretty sweet, huh? And that's just the beginning. Explore Flame to add more complex, dynamic, even interactive animations, with different timings, behaviors and effects. You can start and stop your animations based on commands. You can do much, much more. Populate your apps with prettiness :)
 
 Already thinking about the neat graphics you'll add to your apps? Be sure to check flame as an actual game engine, there is much more complex and cool stuff, that can work both as a standalone game or inside a Flutter widget tree (all features are like that). Also, Flame is built in a modular way, so you pick and choose, and also, I strongly encourage you to go through the implementation and see how things are done. If you want to change any details, you might get a lot of insight from the source code.
 
