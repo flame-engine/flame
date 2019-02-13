@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 import 'dart:math' as math;
 import 'package:flutter/widgets.dart' as widgets;
@@ -64,7 +65,7 @@ class TextBoxComponent extends PositionComponent with Resizable {
       }
     });
 
-    _cache = _redrawCache();
+    redrawLater();
   }
 
   void _updateMaxWidth(double w) {
@@ -128,11 +129,14 @@ class TextBoxComponent extends PositionComponent with Resizable {
   double get currentHeight => _withMargins((currentLine + 1) * _lineHeight);
 
   void render(Canvas c) {
+    if (_cache == null) {
+      return;
+    }
     prepareCanvas(c);
     c.drawImage(_cache, Offset.zero, BasicPalette.white.paint);
   }
 
-  Image _redrawCache() {
+  Future<Image> _redrawCache() {
     PictureRecorder recorder = new PictureRecorder();
     Canvas c = new Canvas(recorder,
         new Rect.fromLTWH(0.0, 0.0, width.toDouble(), height.toDouble()));
@@ -161,11 +165,15 @@ class TextBoxComponent extends PositionComponent with Resizable {
         .paint(c, new Offset(_boxConfig.margin, dy));
   }
 
+  void redrawLater() async {
+    _cache = await _redrawCache();
+  }
+
   void update(double dt) {
     int prevCurrentChar = currentChar;
     _lifeTime += dt;
     if (prevCurrentChar != currentChar) {
-      _cache = _redrawCache();
+      redrawLater();
     }
   }
 }
