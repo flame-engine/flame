@@ -20,7 +20,11 @@ You can use whatever ones you want, as they are all somewhat independent.
 
 ## Donate
 
-Donate to support Flame's development:
+Support us by becoming a patron on Patreon
+
+[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/fireslime)
+
+or making a single donation on PayPal:
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=VJS3922363XNU&currency_code=USD&source=url)
 
