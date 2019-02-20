@@ -22,7 +22,7 @@ You can use whatever ones you want, as they are all somewhat independent.
 
 Support us by becoming a patron on Patreon
 
-[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button@2x.png)](https://www.patreon.com/fireslime)
+[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button@2x.png | width=150)](https://www.patreon.com/fireslime)
 
 or making a single donation on PayPal:
 
