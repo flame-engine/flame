@@ -59,7 +59,7 @@ If you are not using `BaseGame`, don't forget this component needs to be update'
 
 ## Parallax Component
 
-This Component can be sued to render pretty backgrounds, by drawing several transparent images on top of each other, each dislocated by a tiny amount.
+This Component can be used to render pretty backgrounds, by drawing several transparent images on top of each other, each dislocated by a tiny amount.
 
 The rationale is that when you look at the horizon and moving, closer objects seem to move faster than distant ones.
 
