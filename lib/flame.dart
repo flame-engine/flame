@@ -27,9 +27,20 @@ class Flame {
   /// Access a shared instance of the [Util] class.
   static Util util = new Util();
 
-  /// TODO verify if this is still needed (I don't think so)
-  static void initialize([AssetBundle bundle]) {
-    FlameBiding.ensureInitialized();
+  static Future<void> init(
+      {AssetBundle bundle,
+      bool fullScreen = true,
+      DeviceOrientation orientation}) async {
+    initializeWidget();
+
+    if (fullScreen) {
+      await util.fullScreen();
+    }
+
+    if (orientation != null) {
+      await util.setOrientation(orientation);
+    }
+
     _bundle = bundle;
   }
 

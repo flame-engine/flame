@@ -55,6 +55,13 @@ abstract class Game {
   }
 }
 
+abstract class GameWidget extends StatelessWidget with Game {
+  @override
+  Widget build(BuildContext context) {
+    return this.widget;
+  }
+}
+
 class _GameRenderObjectWidget extends SingleChildRenderObjectWidget {
   final Game game;
 
