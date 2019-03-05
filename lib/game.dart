@@ -1,13 +1,12 @@
-import 'dart:ui';
 import 'dart:math' as math;
+import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:ordered_set/ordered_set.dart';
 import 'package:ordered_set/comparing.dart';
+import 'package:ordered_set/ordered_set.dart';
 
 import 'components/component.dart';
 import 'position.dart';
@@ -44,7 +43,7 @@ abstract class Game extends StatelessWidget {
 
   /// Returns the game widget. Put this in your structure to start rendering and updating the game.
   /// You can add it directly to the runApp method or inside your widget structure (if you use vanilla screens and widgets).
-  @deprecated
+  @Deprecated('Use Game is a Widget')
   Widget get widget => builder.build(this);
 
   @override
