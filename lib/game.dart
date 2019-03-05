@@ -1,13 +1,12 @@
-import 'dart:ui';
 import 'dart:math' as math;
+import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:ordered_set/ordered_set.dart';
 import 'package:ordered_set/comparing.dart';
+import 'package:ordered_set/ordered_set.dart';
 
 import 'components/component.dart';
 import 'position.dart';
@@ -16,7 +15,10 @@ import 'position.dart';
 ///
 /// Subclass this to implement the [update] and [render] methods.
 /// Flame will deal with calling these methods properly when the game's [widget] is rendered.
-abstract class Game {
+abstract class Game extends StatelessWidget {
+  // Widget Builder for this Game
+  final builder = new WidgetBuilder();
+
   /// Implement this method to update the game state, given that a time [t] has passed.
   ///
   /// Keep the updates as short as possible. [t] is in seconds, with microseconds precision.
@@ -36,23 +38,24 @@ abstract class Game {
   /// Check [AppLifecycleState] for details about the events received.
   void lifecycleStateChange(AppLifecycleState state) {}
 
+  /// Used for debugging
   void _recordDt(double dt) {}
 
-  Offset _offset = Offset.zero;
-  Widget _widget;
-
   /// Returns the game widget. Put this in your structure to start rendering and updating the game.
-  ///
   /// You can add it directly to the runApp method or inside your widget structure (if you use vanilla screens and widgets).
-  Widget get widget {
-    if (_widget == null) {
-      _widget = new Center(
-          child: new Directionality(
-              textDirection: TextDirection.ltr,
-              child: new _GameRenderObjectWidget(this)));
-    }
-    return _widget;
-  }
+  @Deprecated('Use Game as a Widget')
+  Widget get widget => builder.build(this);
+
+  @override
+  Widget build(BuildContext context) => builder.build(this);
+}
+
+class WidgetBuilder {
+  Offset offset = Offset.zero;
+  Widget build(Game game) => new Center(
+      child: new Directionality(
+          textDirection: TextDirection.ltr,
+          child: new _GameRenderObjectWidget(game)));
 }
 
 class _GameRenderObjectWidget extends SingleChildRenderObjectWidget {
@@ -137,7 +140,7 @@ class _GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void paint(PaintingContext context, Offset offset) {
     context.canvas.save();
-    context.canvas.translate(game._offset.dx, game._offset.dy);
+    context.canvas.translate(game.builder.offset.dx, game.builder.offset.dy);
     game.render(context.canvas);
     context.canvas.restore();
   }
@@ -346,7 +349,7 @@ class _EmbeddedGameWidgetState extends State<EmbeddedGameWidget> {
 
   void _afterLayout(_) {
     RenderBox box = context.findRenderObject();
-    game._offset = box.localToGlobal(Offset.zero);
+    game.builder.offset = box.localToGlobal(Offset.zero);
   }
 
   @override
