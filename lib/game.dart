@@ -16,7 +16,10 @@ import 'position.dart';
 ///
 /// Subclass this to implement the [update] and [render] methods.
 /// Flame will deal with calling these methods properly when the game's [widget] is rendered.
-abstract class Game {
+abstract class Game extends StatelessWidget {
+  // Widget context for this Game
+  final context = new WidgetContext();
+
   /// Implement this method to update the game state, given that a time [t] has passed.
   ///
   /// Keep the updates as short as possible. [t] is in seconds, with microseconds precision.
@@ -36,29 +39,29 @@ abstract class Game {
   /// Check [AppLifecycleState] for details about the events received.
   void lifecycleStateChange(AppLifecycleState state) {}
 
+  /// Used for debugging
   void _recordDt(double dt) {}
 
-  Offset _offset = Offset.zero;
-  Widget _widget;
-
   /// Returns the game widget. Put this in your structure to start rendering and updating the game.
-  ///
   /// You can add it directly to the runApp method or inside your widget structure (if you use vanilla screens and widgets).
-  Widget get widget {
-    if (_widget == null) {
-      _widget = new Center(
-          child: new Directionality(
-              textDirection: TextDirection.ltr,
-              child: new _GameRenderObjectWidget(this)));
-    }
-    return _widget;
-  }
+  Widget get widget => context.getWidget(this);
+
+  @override
+  Widget build(BuildContext context) => this.widget;
 }
 
-abstract class GameWidget extends StatelessWidget with Game {
-  @override
-  Widget build(BuildContext context) {
-    return this.widget;
+class WidgetContext {
+  Offset offset = Offset.zero;
+  Widget widget;
+
+  Widget getWidget(Game game) {
+    if (widget == null) {
+      widget = new Center(
+          child: new Directionality(
+              textDirection: TextDirection.ltr,
+              child: new _GameRenderObjectWidget(game)));
+    }
+    return widget;
   }
 }
 
@@ -144,7 +147,7 @@ class _GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void paint(PaintingContext context, Offset offset) {
     context.canvas.save();
-    context.canvas.translate(game._offset.dx, game._offset.dy);
+    context.canvas.translate(game.context.offset.dx, game.context.offset.dy);
     game.render(context.canvas);
     context.canvas.restore();
   }
@@ -353,7 +356,7 @@ class _EmbeddedGameWidgetState extends State<EmbeddedGameWidget> {
 
   void _afterLayout(_) {
     RenderBox box = context.findRenderObject();
-    game._offset = box.localToGlobal(Offset.zero);
+    game.context.offset = box.localToGlobal(Offset.zero);
   }
 
   @override
