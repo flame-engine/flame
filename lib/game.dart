@@ -43,7 +43,7 @@ abstract class Game extends StatelessWidget {
 
   /// Returns the game widget. Put this in your structure to start rendering and updating the game.
   /// You can add it directly to the runApp method or inside your widget structure (if you use vanilla screens and widgets).
-  @Deprecated('Use Game is a Widget')
+  @Deprecated('Use Game as a Widget')
   Widget get widget => builder.build(this);
 
   @override
