@@ -24,10 +24,6 @@ Support us by becoming a patron on Patreon
 
 [![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/fireslime)
 
-or making a single donation on PayPal:
-
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=VJS3922363XNU&currency_code=USD&source=url)
-
 ## External Modules
 
 Flame is modular, and you can always pick and choose. Some modules are extracted to separate plugins; some are bundled with flame, and some must be added separetly.
@@ -50,13 +46,16 @@ dependencies:
 
 And start using it!
 
+## Documentation
+
 The complete documentation can be found [here](doc/README.md).
 
-Bellow is an overview that should suffice to build a simple game, and work your way up from there.
+## Getting started
 
-The [flame-example](https://github.com/luanpotter/flame-example/tree/0.10.x) game has been updated to use the newer APIs (0.10.x) on a new branch.
+Check out this great series of articles/tutorials written by [Alekhin](https://github.com/japalekhin)
 
-There is a very good QuickStart tutorial for version `0.6.1` [here](https://medium.com/@luanpotter27/a-comprehensive-flame-tutorial-or-how-to-make-games-with-flutter-74f22c4ecbfa). The API has changed a lot, so refer this documentation for updated information. Soon I plan to release an updated tutorial.
+ - [Create a Mobile Game with Flutter and Flame – Beginner Tutorial](https://jap.alekhin.io/create-mobile-game-flutter-flame-beginner-tutorial)
+ - [2D Casual Mobile Game Tutorial – Step by Step with Flame and Flutter (Part 1 of 5)](https://jap.alekhin.io/2d-casual-mobile-game-tutorial-flame-flutter-part-1)
 
 ## Structure
 
