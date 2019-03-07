@@ -106,6 +106,9 @@ class Animation {
 
   /// Automatically creates an Animation Object using animation data provided by the json file
   /// provided by Aseprite
+  ///
+  /// [imagePath]: Source of the spritesheet animation
+  /// [dataPath]: Animation's exported data in json format
   static Future<Animation> fromAsepriteData(String imagePath, String dataPath) async {
     String content = await rootBundle.loadString(dataPath);
     Map<String, dynamic> json = jsonDecode(content);
