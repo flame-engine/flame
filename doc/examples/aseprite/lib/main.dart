@@ -14,11 +14,14 @@ class MyGame extends BaseGame {
   _start() async {
     Size size = await Flame.util.initialDimensions();
 
-    final animation = await FlameAnimation.Animation.fromAsepriteData("chopper.png", "./assets/chopper.json");
-    final animationComponent = AnimationComponent(100, 100, animation);
+    final animation = await FlameAnimation.Animation.fromAsepriteData(
+      "chopper.png",
+      "./assets/chopper.json"
+    );
+    final animationComponent = AnimationComponent(200, 200, animation);
 
-    animationComponent.x = (size.width / 2) - 50;
-    animationComponent.y = (size.height / 2) - 50;
+    animationComponent.x = (size.width / 2) - 100;
+    animationComponent.y = (size.height / 2) - 100;
 
     add(animationComponent);
   }
