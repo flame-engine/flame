@@ -99,6 +99,17 @@ So, in our example, we are saying that we have 8 frames for our player animation
 
 This constructor makes creating an Animation very easy using sprite sheets.
 
+If you use Aseprite for your animations, Flame does provide some support for Aseprite animation's JSON data, to use this feature, you will need to export the Sprite Sheet's JSON data, and use something like the following snippet:
+
+```dart
+    Animation animation = await Animation.fromAsepriteData(
+      "chopper.png", // Sprite Sheet image path
+      "./assets/chopper.json" // Sprite Sheet animation JSON data
+    );
+```
+
+_Note: trimmed sprite sheets are not supported by flame, so if you export your sprite sheet this way, it will have the trimmed size, not the sprite original size._
+
 Animations, after created, have an update and render method; the latter renders the current frame, and the former ticks the internal clock to update the frames.
 
 Animations are normally used inside `AnimationComponent`s, but custom components with several Animations can be created as well.
