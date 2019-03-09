@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:flutter/services.dart' show rootBundle;
 
+import 'flame.dart';
 import 'sprite.dart';
 
 /// Represents a single animation frame.
@@ -110,7 +110,7 @@ class Animation {
   /// [imagePath]: Source of the spritesheet animation
   /// [dataPath]: Animation's exported data in json format
   static Future<Animation> fromAsepriteData(String imagePath, String dataPath) async {
-    String content = await rootBundle.loadString(dataPath);
+    String content = await Flame.assets.readFile(dataPath);
     Map<String, dynamic> json = jsonDecode(content);
 
     Map<String, dynamic> jsonFrames = json["frames"];
