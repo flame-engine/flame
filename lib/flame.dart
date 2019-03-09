@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'images.dart';
+import 'assets_cache.dart';
 import 'util.dart';
 
 /// This class holds static references to some useful objects to use in your game.
@@ -26,6 +27,9 @@ class Flame {
 
   /// Access a shared instance of the [Util] class.
   static Util util = new Util();
+
+  /// Access a shard instance of [AssetsCache] class.
+  static AssetsCache assets = new AssetsCache();
 
   static Future<void> init(
       {AssetBundle bundle,

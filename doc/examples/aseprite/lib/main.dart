@@ -16,7 +16,7 @@ class MyGame extends BaseGame {
 
     final animation = await FlameAnimation.Animation.fromAsepriteData(
       "chopper.png",
-      "./assets/chopper.json"
+      "chopper.json"
     );
     final animationComponent = AnimationComponent(200, 200, animation);
 
