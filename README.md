@@ -56,7 +56,7 @@ Check out this great series of articles/tutorials written by [Alekhin](https://g
 
  - [Create a Mobile Game with Flutter and Flame – Beginner Tutorial](https://jap.alekhin.io/create-mobile-game-flutter-flame-beginner-tutorial)
  - [2D Casual Mobile Game Tutorial – Step by Step with Flame and Flutter (Part 1 of 5)](https://jap.alekhin.io/2d-casual-mobile-game-tutorial-flame-flutter-part-1)
- - [https://jap.alekhin.io/game-graphics-and-animation-tutorial-flame-flutter-part-2](Game Graphics and Animation Tutorial – Step by Step with Flame and Flutter (Part 2 of 5))
+ - [Game Graphics and Animation Tutorial – Step by Step with Flame and Flutter (Part 2 of 5)](https://jap.alekhin.io/game-graphics-and-animation-tutorial-flame-flutter-part-2)
 
 ## Structure
 
