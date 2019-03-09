@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'flame.dart';
 import 'sprite.dart';
 
 /// Represents a single animation frame.
@@ -99,6 +102,40 @@ class Animation {
       );
       this.frames[i] = new Frame(sprite, stepTimes[i]);
     }
+  }
+
+  /// Automatically creates an Animation Object using animation data provided by the json file
+  /// provided by Aseprite
+  ///
+  /// [imagePath]: Source of the spritesheet animation
+  /// [dataPath]: Animation's exported data in json format
+  static Future<Animation> fromAsepriteData(String imagePath, String dataPath) async {
+    String content = await Flame.assets.readFile(dataPath);
+    Map<String, dynamic> json = jsonDecode(content);
+
+    Map<String, dynamic> jsonFrames = json["frames"];
+
+    var frames = jsonFrames.values.map((value) {
+      final frameData = value["frame"];
+      final int x = frameData["x"];
+      final int y = frameData["y"];
+      final int width = frameData["w"];
+      final int height = frameData["h"];
+
+      final stepTime = value["duration"] / 1000;
+
+      Sprite sprite = new Sprite(
+        imagePath,
+        x: x.toDouble(),
+        y: y.toDouble(),
+        width: width.toDouble(),
+        height: height.toDouble(),
+      );
+
+      return new Frame(sprite, stepTime);
+    });
+
+    return Animation(frames.toList(), loop: true);
   }
 
   /// The current frame that should be displayed.
