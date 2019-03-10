@@ -3,12 +3,12 @@ import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
 
 void main() {
-  var game = new TiledGame();
-  runApp(game.widget);
+  TiledGame game = TiledGame();
+  runApp(game);
 }
 
 class TiledGame extends BaseGame {
   TiledGame() {
-    add(new TiledComponent('map.tmx'));
+    add(TiledComponent('map.tmx'));
   }
 }

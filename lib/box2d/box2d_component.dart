@@ -32,9 +32,9 @@ abstract class Box2DComponent extends Component {
     if (this.dimensions == null) {
       this.dimensions = window.physicalSize;
     }
-    final pool = new DefaultWorldPool(worldPoolSize, worldPoolContainerSize);
-    this.world = new World.withPool(new Vector2(0.0, gravity), pool);
-    this.viewport = new Viewport(dimensions, scale);
+    final pool = DefaultWorldPool(worldPoolSize, worldPoolContainerSize);
+    this.world = World.withPool(Vector2(0.0, gravity), pool);
+    this.viewport = Viewport(dimensions, scale);
   }
 
   @override
@@ -47,7 +47,7 @@ abstract class Box2DComponent extends Component {
 
   @override
   void render(canvas) {
-    if (viewport.size == new Size(0.0, 0.0)) {
+    if (viewport.size == Size(0.0, 0.0)) {
       return;
     }
     components.forEach((c) {
@@ -119,13 +119,13 @@ abstract class BodyComponent extends Component {
         fixture = fixture.getNext()) {
       switch (fixture.getType()) {
         case ShapeType.CHAIN:
-          throw new Exception("not implemented");
+          throw Exception('not implemented');
           break;
         case ShapeType.CIRCLE:
           _renderCircle(canvas, fixture);
           break;
         case ShapeType.EDGE:
-          throw new Exception("not implemented");
+          throw Exception('not implemented');
           break;
         case ShapeType.POLYGON:
           _renderPolygon(canvas, fixture);
@@ -137,16 +137,16 @@ abstract class BodyComponent extends Component {
   Vector2 get center => this.body.worldCenter;
 
   void _renderCircle(Canvas canvas, Fixture fixture) {
-    Vector2 center = new Vector2.zero();
+    Vector2 center = Vector2.zero();
     CircleShape circle = fixture.getShape();
     body.getWorldPointToOut(circle.p, center);
     viewport.getWorldToScreen(center, center);
     renderCircle(
-        canvas, new Offset(center.x, center.y), circle.radius * viewport.scale);
+        canvas, Offset(center.x, center.y), circle.radius * viewport.scale);
   }
 
   void renderCircle(Canvas canvas, Offset center, double radius) {
-    final Paint paint = new Paint()
+    final Paint paint = Paint()
       ..color = const Color.fromARGB(255, 255, 255, 255);
     canvas.drawCircle(center, radius, paint);
   }
@@ -154,24 +154,24 @@ abstract class BodyComponent extends Component {
   void _renderPolygon(Canvas canvas, Fixture fixture) {
     PolygonShape polygon = fixture.getShape();
     assert(polygon.count <= MAX_POLYGON_VERTICES);
-    List<Vector2> vertices = new Vec2Array().get(polygon.count);
+    List<Vector2> vertices = Vec2Array().get(polygon.count);
 
     for (int i = 0; i < polygon.count; ++i) {
       body.getWorldPointToOut(polygon.vertices[i], vertices[i]);
       viewport.getWorldToScreen(vertices[i], vertices[i]);
     }
 
-    List<Offset> points = new List();
+    List<Offset> points = [];
     for (int i = 0; i < polygon.count; i++) {
-      points.add(new Offset(vertices[i].x, vertices[i].y));
+      points.add(Offset(vertices[i].x, vertices[i].y));
     }
 
     renderPolygon(canvas, points);
   }
 
   void renderPolygon(Canvas canvas, List<Offset> points) {
-    final path = new Path()..addPolygon(points, true);
-    final Paint paint = new Paint()
+    final path = Path()..addPolygon(points, true);
+    final Paint paint = Paint()
       ..color = const Color.fromARGB(255, 255, 255, 255);
     canvas.drawPath(path, paint);
   }

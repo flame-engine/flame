@@ -41,7 +41,7 @@ class Animation {
   ///
   /// All frames have the same [stepTime].
   Animation.spriteList(List<Sprite> sprites, {double stepTime, this.loop}) {
-    this.frames = sprites.map((s) => new Frame(s, stepTime)).toList();
+    this.frames = sprites.map((s) => Frame(s, stepTime)).toList();
   }
 
   /// Creates an animation given a list of frames.
@@ -57,7 +57,7 @@ class Animation {
   /// [textureHeight]: height of each frame (defaults to null, that is, full height of the sprite sheet)
   ///
   /// For example, if you have a spritesheet where each row is an animation, and each frame is 32x32
-  ///     new Animation.sequenced('sheet.png', 8, textureY: 32.0 * i, textureWidth: 32.0, textureHeight: 32.0);
+  ///     Animation.sequenced('sheet.png', 8, textureY: 32.0 * i, textureWidth: 32.0, textureHeight: 32.0);
   /// This will create the i-th animation on the 'sheet.png', given it has 8 frames.
   Animation.sequenced(
     String imagePath,
@@ -68,16 +68,16 @@ class Animation {
     double textureHeight,
     double stepTime = 0.1,
   }) {
-    this.frames = new List<Frame>(amount);
+    this.frames = List<Frame>(amount);
     for (var i = 0; i < amount; i++) {
-      Sprite sprite = new Sprite(
+      Sprite sprite = Sprite(
         imagePath,
         x: textureX + i * textureWidth,
         y: textureY,
         width: textureWidth,
         height: textureHeight,
       );
-      this.frames[i] = new Frame(sprite, stepTime);
+      this.frames[i] = Frame(sprite, stepTime);
     }
   }
 
@@ -91,16 +91,16 @@ class Animation {
     double textureWidth,
     double textureHeight,
   }) {
-    this.frames = new List<Frame>(amount);
+    this.frames = List<Frame>(amount);
     for (var i = 0; i < amount; i++) {
-      Sprite sprite = new Sprite(
+      Sprite sprite = Sprite(
         imagePath,
         x: textureX + i * textureWidth,
         y: textureY,
         width: textureWidth,
         height: textureHeight,
       );
-      this.frames[i] = new Frame(sprite, stepTimes[i]);
+      this.frames[i] = Frame(sprite, stepTimes[i]);
     }
   }
 
@@ -109,22 +109,23 @@ class Animation {
   ///
   /// [imagePath]: Source of the spritesheet animation
   /// [dataPath]: Animation's exported data in json format
-  static Future<Animation> fromAsepriteData(String imagePath, String dataPath) async {
+  static Future<Animation> fromAsepriteData(
+      String imagePath, String dataPath) async {
     String content = await Flame.assets.readFile(dataPath);
     Map<String, dynamic> json = jsonDecode(content);
 
-    Map<String, dynamic> jsonFrames = json["frames"];
+    Map<String, dynamic> jsonFrames = json['frames'];
 
     var frames = jsonFrames.values.map((value) {
-      final frameData = value["frame"];
-      final int x = frameData["x"];
-      final int y = frameData["y"];
-      final int width = frameData["w"];
-      final int height = frameData["h"];
+      final frameData = value['frame'];
+      final int x = frameData['x'];
+      final int y = frameData['y'];
+      final int width = frameData['w'];
+      final int height = frameData['h'];
 
-      final stepTime = value["duration"] / 1000;
+      final stepTime = value['duration'] / 1000;
 
-      Sprite sprite = new Sprite(
+      Sprite sprite = Sprite(
         imagePath,
         x: x.toDouble(),
         y: y.toDouble(),
@@ -132,7 +133,7 @@ class Animation {
         height: height.toDouble(),
       );
 
-      return new Frame(sprite, stepTime);
+      return Frame(sprite, stepTime);
     });
 
     return Animation(frames.toList(), loop: true);

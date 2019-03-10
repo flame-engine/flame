@@ -20,16 +20,16 @@ class Flame {
   static AssetBundle get bundle => _bundle == null ? rootBundle : _bundle;
 
   /// Access a shared instance of the [AudioCache] class.
-  static AudioCache audio = new AudioCache(prefix: 'audio/');
+  static AudioCache audio = AudioCache(prefix: 'audio/');
 
   /// Access a shared instance of the [Images] class.
-  static Images images = new Images();
+  static Images images = Images();
 
   /// Access a shared instance of the [Util] class.
-  static Util util = new Util();
+  static Util util = Util();
 
   /// Access a shard instance of [AssetsCache] class.
-  static AssetsCache assets = new AssetsCache();
+  static AssetsCache assets = AssetsCache();
 
   static Future<void> init(
       {AssetBundle bundle,
@@ -62,7 +62,7 @@ class FlameBiding extends BindingBase with GestureBinding, ServicesBinding {
   static FlameBiding instance;
 
   static FlameBiding ensureInitialized() {
-    if (FlameBiding.instance == null) new FlameBiding();
+    if (FlameBiding.instance == null) FlameBiding();
     return FlameBiding.instance;
   }
 }

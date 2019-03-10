@@ -75,24 +75,28 @@ class Position {
     return this;
   }
 
+  double distance(Position other) {
+    return this.minus(other).length();
+  }
+
   ui.Offset toOffset() {
-    return new ui.Offset(x, y);
+    return ui.Offset(x, y);
   }
 
   ui.Size toSize() {
-    return new ui.Size(x, y);
+    return ui.Size(x, y);
   }
 
   math.Point toPoint() {
-    return new math.Point(x, y);
+    return math.Point(x, y);
   }
 
   b2d.Vector2 toVector() {
-    return new b2d.Vector2(x, y);
+    return b2d.Vector2(x, y);
   }
 
   Position clone() {
-    return new Position.fromPosition(this);
+    return Position.fromPosition(this);
   }
 
   @override
@@ -101,7 +105,7 @@ class Position {
   }
 
   static ui.Rect rectFrom(Position topLeft, Position size) {
-    return new ui.Rect.fromLTWH(topLeft.x, topLeft.y, size.x, size.y);
+    return ui.Rect.fromLTWH(topLeft.x, topLeft.y, size.x, size.y);
   }
 
   static ui.Rect bounds(List<Position> pts) {
@@ -109,7 +113,6 @@ class Position {
     double maxx = pts.map((e) => e.x).reduce(math.max);
     double miny = pts.map((e) => e.y).reduce(math.min);
     double maxy = pts.map((e) => e.y).reduce(math.max);
-    return new ui.Rect.fromPoints(
-        new ui.Offset(minx, miny), new ui.Offset(maxx, maxy));
+    return ui.Rect.fromPoints(ui.Offset(minx, miny), ui.Offset(maxx, maxy));
   }
 }

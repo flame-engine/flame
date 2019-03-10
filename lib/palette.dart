@@ -3,7 +3,7 @@ import 'dart:ui';
 class PaletteEntry {
   final Color color;
 
-  Paint get paint => new Paint()..color = color;
+  Paint get paint => Paint()..color = color;
 
   const PaletteEntry(this.color);
 

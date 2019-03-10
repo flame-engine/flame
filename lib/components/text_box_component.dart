@@ -137,9 +137,9 @@ class TextBoxComponent extends PositionComponent with Resizable {
   }
 
   Future<Image> _redrawCache() {
-    PictureRecorder recorder = new PictureRecorder();
-    Canvas c = new Canvas(recorder,
-        new Rect.fromLTWH(0.0, 0.0, width.toDouble(), height.toDouble()));
+    PictureRecorder recorder = PictureRecorder();
+    Canvas c = Canvas(
+        recorder, Rect.fromLTWH(0.0, 0.0, width.toDouble(), height.toDouble()));
     _fullRender(c);
     return recorder.endRecording().toImage(width.toInt(), height.toInt());
   }
@@ -156,13 +156,13 @@ class TextBoxComponent extends PositionComponent with Resizable {
       charCount += _lines[line].length;
       _config
           .toTextPainter(_lines[line])
-          .paint(c, new Offset(_boxConfig.margin, dy));
+          .paint(c, Offset(_boxConfig.margin, dy));
       dy += _lineHeight;
     }
     int max = math.min(currentChar - charCount, _lines[_currentLine].length);
     _config
         .toTextPainter(_lines[_currentLine].substring(0, max))
-        .paint(c, new Offset(_boxConfig.margin, dy));
+        .paint(c, Offset(_boxConfig.margin, dy));
   }
 
   void redrawLater() async {

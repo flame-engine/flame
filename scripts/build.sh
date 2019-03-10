@@ -3,5 +3,3 @@
 dartanalyzer .
 flutter format .
 flutter test
-
-dartdoc

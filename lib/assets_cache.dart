@@ -26,6 +26,6 @@ class AssetsCache {
   }
 
   Future<String> _readFile(String fileName) async {
-    return await rootBundle.loadString("assets/" + fileName);
+    return await rootBundle.loadString('assets/$fileName');
   }
 }

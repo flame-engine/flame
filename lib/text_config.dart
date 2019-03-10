@@ -90,16 +90,16 @@ class TextConfig {
   /// However, you probably want to use the [render] method witch already renders for you considering the anchor.
   /// That way, you don't need to perform the math for yourself.
   material.TextPainter toTextPainter(String text) {
-    material.TextStyle style = new material.TextStyle(
+    material.TextStyle style = material.TextStyle(
       color: color,
       fontSize: fontSize,
       fontFamily: fontFamily,
     );
-    material.TextSpan span = new material.TextSpan(
+    material.TextSpan span = material.TextSpan(
       style: style,
       text: text,
     );
-    material.TextPainter tp = new material.TextPainter(
+    material.TextPainter tp = material.TextPainter(
       text: span,
       textAlign: textAlign,
       textDirection: textDirection,

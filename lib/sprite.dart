@@ -25,7 +25,7 @@ class Sprite {
         height = img.height.toDouble();
       }
       this.image = img;
-      this.src = new Rect.fromLTWH(x, y, width, height);
+      this.src = Rect.fromLTWH(x, y, width, height);
     });
   }
 
@@ -42,7 +42,7 @@ class Sprite {
     if (height == null) {
       height = image.height.toDouble();
     }
-    this.src = new Rect.fromLTWH(x, y, width, height);
+    this.src = Rect.fromLTWH(x, y, width, height);
   }
 
   static Future<Sprite> loadSprite(
@@ -53,7 +53,7 @@ class Sprite {
     double height = null,
   }) async {
     Image image = await Flame.images.load(fileName);
-    return new Sprite.fromImage(
+    return Sprite.fromImage(
       image,
       x: x,
       y: y,
@@ -74,11 +74,11 @@ class Sprite {
     if (!loaded()) {
       return null;
     }
-    return new Position(_imageWidth, _imageHeight);
+    return Position(_imageWidth, _imageHeight);
   }
 
   Position get size {
-    return new Position(src.width, src.height);
+    return Position(src.width, src.height);
   }
 
   /// Renders this Sprite on the position [p], scaled by the [scale] factor provided.
@@ -107,7 +107,7 @@ class Sprite {
     }
     width ??= this.size.x;
     height ??= this.size.y;
-    renderRect(canvas, new Rect.fromLTWH(0.0, 0.0, width, height));
+    renderRect(canvas, Rect.fromLTWH(0.0, 0.0, width, height));
   }
 
   void renderRect(Canvas canvas, Rect dst) {
@@ -127,6 +127,6 @@ class Sprite {
     }
     size ??= this.size;
     renderRect(canvas,
-        new Rect.fromLTWH(p.x - size.x / 2, p.y - size.y / 2, size.x, size.y));
+        Rect.fromLTWH(p.x - size.x / 2, p.y - size.y / 2, size.x, size.y));
   }
 }
