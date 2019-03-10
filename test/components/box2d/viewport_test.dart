@@ -4,25 +4,25 @@ import 'package:flame/box2d/viewport.dart';
 import 'package:test/test.dart';
 
 void main() {
-  final viewport = new Viewport(new Size(100.0, 100.0), 1.0);
+  final viewport = Viewport(Size(100.0, 100.0), 1.0);
 
-  group("getCenterHorizontalScreenPercentage", () {
-    test("center starts in the middle", () {
+  group('getCenterHorizontalScreenPercentage', () {
+    test('center starts in the middle', () {
       viewport.setCamera(50.0, viewport.center.y, 1.0);
       expect(viewport.getCenterHorizontalScreenPercentage(), equals(0.5));
     });
 
-    test("it increases when it move to right", () {
+    test('it increases when it move to right', () {
       viewport.setCamera(75.0, viewport.center.y, 1.0);
       expect(viewport.getCenterHorizontalScreenPercentage(), equals(0.75));
     });
 
-    test("it decreases when it moves to left", () {
+    test('it decreases when it moves to left', () {
       viewport.setCamera(25.0, viewport.center.y, 1.0);
       expect(viewport.getCenterHorizontalScreenPercentage(), equals(0.25));
     });
 
-    test("it flips on edges", () {
+    test('it flips on edges', () {
       viewport.setCamera(110.0, viewport.center.y, 1.0);
       expect(viewport.getCenterHorizontalScreenPercentage(), equals(0.10));
 
@@ -30,7 +30,7 @@ void main() {
       expect(viewport.getCenterHorizontalScreenPercentage(), equals(0.90));
     });
 
-    test("it increases slower with more screens", () {
+    test('it increases slower with more screens', () {
       viewport.setCamera(50.0, viewport.center.y, 1.0);
       expect(viewport.getCenterHorizontalScreenPercentage(screens: 2.0),
           equals(0.5));
@@ -44,7 +44,7 @@ void main() {
           equals(0.55));
     });
 
-    test("it flips on edges also with more screens", () {
+    test('it flips on edges also with more screens', () {
       viewport.setCamera(170.0, viewport.center.y, 1.0);
       expect(viewport.getCenterHorizontalScreenPercentage(screens: 2.0),
           equals(0.10));

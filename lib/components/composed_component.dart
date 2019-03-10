@@ -10,7 +10,7 @@ import 'package:ordered_set/ordered_set.dart';
 /// It resembles [BaseGame]. It has an [components] property and an [add] method
 mixin ComposedComponent on Component {
   OrderedSet<Component> components =
-      new OrderedSet(Comparing.on((c) => c.priority()));
+      OrderedSet(Comparing.on((c) => c.priority()));
 
   @override
   render(Canvas canvas) {

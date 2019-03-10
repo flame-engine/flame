@@ -63,19 +63,19 @@ abstract class PositionComponent extends Component {
   double width = 0.0, height = 0.0;
   Anchor anchor = Anchor.topLeft;
 
-  Position toPosition() => new Position(x, y);
+  Position toPosition() => Position(x, y);
   void setByPosition(Position position) {
     this.x = position.x;
     this.y = position.y;
   }
 
-  Position toSize() => new Position(width, height);
+  Position toSize() => Position(width, height);
   void setBySize(Position size) {
     this.width = size.x;
     this.height = size.y;
   }
 
-  Rect toRect() => new Rect.fromLTWH(x, y, width, height);
+  Rect toRect() => Rect.fromLTWH(x, y, width, height);
   void setByRect(Rect rect) {
     this.x = rect.left;
     this.y = rect.top;
@@ -113,7 +113,7 @@ class SpriteComponent extends PositionComponent {
       : this.rectangle(size, size, imagePath);
 
   SpriteComponent.rectangle(double width, double height, String imagePath)
-      : this.fromSprite(width, height, new Sprite(imagePath));
+      : this.fromSprite(width, height, Sprite(imagePath));
 
   SpriteComponent.fromSprite(double width, double height, this.sprite) {
     this.width = width;

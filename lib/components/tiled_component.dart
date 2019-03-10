@@ -10,11 +10,11 @@ class TiledComponent extends Component {
   String filename;
   TileMap map;
   Image image;
-  Map<String, Image> images = new Map<String, Image>();
+  Map<String, Image> images = Map<String, Image>();
   Future future;
   bool _loaded = false;
 
-  static Paint paint = new Paint()..color = Colors.white;
+  static Paint paint = Paint()..color = Colors.white;
 
   TiledComponent(this.filename) {
     this.future = _load();
@@ -29,13 +29,13 @@ class TiledComponent extends Component {
 
   Future<TileMap> _loadMap() {
     return Flame.bundle.loadString('assets/tiles/' + filename).then((contents) {
-      var parser = new TileMapParser();
+      var parser = TileMapParser();
       return parser.parse(contents);
     });
   }
 
   Future<Map<String, Image>> _loadImages(TileMap map) async {
-    var result = new Map<String, Image>();
+    Map<String, Image> result = {};
     await Future.forEach(map.tilesets, (tileset) async {
       await Future.forEach(tileset.images, (tmxImage) async {
         result[tmxImage.source] = await Flame.images.load(tmxImage.source);

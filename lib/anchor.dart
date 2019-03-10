@@ -18,7 +18,7 @@ class Anchor {
   const Anchor(this.relativePosition);
 
   Position translate(Position p, Position size) {
-    return p.clone().minus(new Position(
-        size.x * relativePosition.dx, size.y * relativePosition.dy));
+    return p.clone().minus(
+        Position(size.x * relativePosition.dx, size.y * relativePosition.dy));
   }
 }

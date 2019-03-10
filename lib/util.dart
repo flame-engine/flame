@@ -38,9 +38,9 @@ class Util {
   Future<Size> initialDimensions() async {
     // https://github.com/flutter/flutter/issues/5259
     // "In release mode we start off at 0x0 but we don't in debug mode"
-    return await new Future<Size>(() {
+    return await Future<Size>(() {
       if (window.physicalSize.isEmpty) {
-        final completer = new Completer<Size>();
+        final completer = Completer<Size>();
         window.onMetricsChanged = () {
           if (!window.physicalSize.isEmpty) {
             completer.complete(window.physicalSize / window.devicePixelRatio);
@@ -57,8 +57,8 @@ class Util {
   /// Use this in order to get it to work in case your app also contains other widgets.
   void addGestureRecognizer(GestureRecognizer recognizer) {
     if (GestureBinding.instance == null) {
-      throw new Exception(
-          "GestureBinding is not initialized yet, this probably happened because addGestureRecognizer was called before the runApp method");
+      throw Exception(
+          'GestureBinding is not initialized yet, this probably happened because addGestureRecognizer was called before the runApp method');
     }
 
     GestureBinding.instance.pointerRouter.addGlobalRoute((PointerEvent e) {

@@ -9,18 +9,16 @@ class Viewport extends ViewportTransform {
   double scale;
 
   Viewport(this.size, this.scale)
-      : super(new Vector2(size.width / 2, size.height / 2),
-            new Vector2(size.width / 2, size.height / 2), scale);
+      : super(Vector2(size.width / 2, size.height / 2),
+            Vector2(size.width / 2, size.height / 2), scale);
 
   double worldAlignBottom(double height) => -(size.height / 2 / scale) + height;
 
   /// Resizes the current view port.
   void resize(Size size) {
     this.size = size;
-    this.extents =
-        new Vector2.copy(new Vector2(size.width / 2, size.height / 2));
-    this.center =
-        new Vector2.copy(new Vector2(size.width / 2, size.height / 2));
+    this.extents = Vector2.copy(Vector2(size.width / 2, size.height / 2));
+    this.center = Vector2.copy(Vector2(size.width / 2, size.height / 2));
   }
 
   /// Computes the number of horizontal world meters of this viewport considering a percentage of its width.
@@ -59,7 +57,7 @@ class Viewport extends ViewportTransform {
     double y = center.y;
 
     if (horizontal != null) {
-      Vector2 temp = new Vector2.zero();
+      Vector2 temp = Vector2.zero();
       getWorldToScreen(position, temp);
 
       var margin = horizontal / 2 * size.width / 2;
@@ -73,7 +71,7 @@ class Viewport extends ViewportTransform {
     }
 
     if (vertical != null) {
-      Vector2 temp = new Vector2.zero();
+      Vector2 temp = Vector2.zero();
       getWorldToScreen(position, temp);
 
       var margin = vertical / 2 * size.height / 2;

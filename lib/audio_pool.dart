@@ -19,14 +19,14 @@ class AudioPool {
   bool repeating;
   int minPlayers, maxPlayers;
 
-  Lock _lock = new Lock();
+  Lock _lock = Lock();
 
   AudioPool(this.sound,
       {this.repeating = false,
       this.maxPlayers = 1,
       this.minPlayers = 1,
       String prefix = 'audio/sfx/'}) {
-    cache = new AudioCache(prefix: prefix);
+    cache = AudioCache(prefix: prefix);
   }
 
   void init() async {
@@ -66,7 +66,7 @@ class AudioPool {
   }
 
   Future<AudioPlayer> _createNewAudioPlayer() async {
-    AudioPlayer player = new AudioPlayer();
+    AudioPlayer player = AudioPlayer();
     String url = (await cache.load(sound)).path;
     await player.setUrl(url);
     await player.setReleaseMode(ReleaseMode.STOP);

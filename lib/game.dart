@@ -14,10 +14,10 @@ import 'position.dart';
 /// Represents a generic game.
 ///
 /// Subclass this to implement the [update] and [render] methods.
-/// Flame will deal with calling these methods properly when the game's [widget] is rendered.
+/// Flame will deal with calling these methods properly when the game's widget is rendered.
 abstract class Game extends StatelessWidget {
   // Widget Builder for this Game
-  final builder = new WidgetBuilder();
+  final builder = WidgetBuilder();
 
   /// Implement this method to update the game state, given that a time [t] has passed.
   ///
@@ -52,10 +52,10 @@ abstract class Game extends StatelessWidget {
 
 class WidgetBuilder {
   Offset offset = Offset.zero;
-  Widget build(Game game) => new Center(
-      child: new Directionality(
+  Widget build(Game game) => Center(
+      child: Directionality(
           textDirection: TextDirection.ltr,
-          child: new _GameRenderObjectWidget(game)));
+          child: _GameRenderObjectWidget(game)));
 }
 
 class _GameRenderObjectWidget extends SingleChildRenderObjectWidget {
@@ -65,7 +65,7 @@ class _GameRenderObjectWidget extends SingleChildRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) =>
-      new _GameRenderBox(context, this.game);
+      _GameRenderBox(context, this.game);
 
   @override
   void updateRenderObject(BuildContext context, _GameRenderBox _gameRenderBox) {
@@ -167,7 +167,7 @@ class _GameRenderBox extends RenderBox with WidgetsBindingObserver {
 abstract class BaseGame extends Game {
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components =
-      new OrderedSet(Comparing.on((c) => c.priority()));
+      OrderedSet(Comparing.on((c) => c.priority()));
 
   /// Components added by the [addLater] method
   List<Component> _addLater = [];
@@ -176,7 +176,7 @@ abstract class BaseGame extends Game {
   Size size;
 
   /// Camera position; every non-HUD component is translated so that the camera is drawn in the center of the screen
-  Position camera = new Position.empty();
+  Position camera = Position.empty();
 
   /// List of deltas used in debug mode to calculate FPS
   List<double> _dts = [];
@@ -297,7 +297,7 @@ abstract class BaseGame extends Game {
   ///
   /// This is compatible with the `dt` value used in the [update] method.
   double currentTime() {
-    return new DateTime.now().microsecondsSinceEpoch.toDouble() /
+    return DateTime.now().microsecondsSinceEpoch.toDouble() /
         Duration.microsecondsPerSecond;
   }
 }
@@ -325,7 +325,7 @@ class EmbeddedGameWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return new _EmbeddedGameWidgetState(game, size: size);
+    return _EmbeddedGameWidgetState(game, size: size);
   }
 }
 
@@ -355,10 +355,10 @@ class _EmbeddedGameWidgetState extends State<EmbeddedGameWidget> {
   @override
   Widget build(BuildContext context) {
     if (size == null) {
-      return game.widget;
+      return game;
     }
     return Container(
-      child: game.widget,
+      child: game,
       constraints: BoxConstraints(
           minWidth: size.x,
           maxWidth: size.x,

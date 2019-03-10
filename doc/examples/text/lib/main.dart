@@ -9,7 +9,7 @@ import 'package:flame/palette.dart';
 import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(new MyGame().widget);
+void main() => runApp(MyGame());
 
 TextConfig regular = TextConfig(color: BasicPalette.white.color);
 TextConfig tiny = regular.withFontSize(12.0);
@@ -21,10 +21,10 @@ class MyTextBox extends TextBoxComponent {
   @override
   void drawBackground(Canvas c) {
     Rect rect = Rect.fromLTWH(0, 0, width, height);
-    c.drawRect(rect, new Paint()..color = Color(0xFFFF00FF));
+    c.drawRect(rect, Paint()..color = Color(0xFFFF00FF));
     c.drawRect(
         rect.deflate(boxConfig.margin),
-        new Paint()
+        Paint()
           ..color = BasicPalette.black.color
           ..style = PaintingStyle.stroke);
   }

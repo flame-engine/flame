@@ -22,6 +22,6 @@ class Profiler {
   }
 
   static double currentTime() =>
-      new DateTime.now().microsecondsSinceEpoch.toDouble() /
+      DateTime.now().microsecondsSinceEpoch.toDouble() /
       Duration.microsecondsPerMillisecond;
 }

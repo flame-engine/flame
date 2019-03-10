@@ -12,7 +12,7 @@ class DebugComponent extends PositionComponent {
   Color color = const Color(0xFFFF00FF);
 
   /// The actual paint used; by default it paints with stroke only and [color].
-  Paint get paint => new Paint()
+  Paint get paint => Paint()
     ..color = color
     ..style = PaintingStyle.stroke;
 
@@ -22,7 +22,7 @@ class DebugComponent extends PositionComponent {
   /// Renders the rectangle
   void render(Canvas c) {
     prepareCanvas(c);
-    c.drawRect(new Rect.fromLTWH(0.0, 0.0, width, height), paint);
+    c.drawRect(Rect.fromLTWH(0.0, 0.0, width, height), paint);
   }
 
   /// Don't do anything (change as desired)

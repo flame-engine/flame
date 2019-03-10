@@ -23,14 +23,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   void _clickFab(GlobalKey<ScaffoldState> key) {
-    key.currentState.showSnackBar(new SnackBar(
-      content: new Text('You clicked the FAB!'),
+    key.currentState.showSnackBar(SnackBar(
+      content: Text('You clicked the FAB!'),
     ));
   }
 
   @override
   Widget build(BuildContext context) {
-    final key = new GlobalKey<ScaffoldState>();
+    final key = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: key,
       appBar: AppBar(

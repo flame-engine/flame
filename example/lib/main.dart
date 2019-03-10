@@ -7,7 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(new MyGame().widget);
+void main() => runApp(MyGame());
 
 class Palette {
   static const PaletteEntry white = BasicPalette.white;
@@ -47,6 +47,6 @@ class Square extends PositionComponent {
 
 class MyGame extends BaseGame {
   MyGame() {
-    add(new Square(64.0));
+    add(Square(64.0));
   }
 }

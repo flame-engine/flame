@@ -23,23 +23,23 @@ Size size = const Size(1.0, 1.0);
 void main() {
   group('resizable test', () {
     test('propagate resize to children', () {
-      MyComponent a = new MyComponent('a');
-      MyComponent b = new MyComponent('b', myChildren: [a]);
+      MyComponent a = MyComponent('a');
+      MyComponent b = MyComponent('b', myChildren: [a]);
       b.resize(size);
       expect(a.size, size);
     });
 
     test('game calls resize on add', () {
-      MyComponent a = new MyComponent('a');
-      MyGame game = new MyGame();
+      MyComponent a = MyComponent('a');
+      MyGame game = MyGame();
       game.resize(size);
       game.add(a);
       expect(a.size, size);
     });
 
     test('game calls resize after added', () {
-      MyComponent a = new MyComponent('a');
-      MyGame game = new MyGame();
+      MyComponent a = MyComponent('a');
+      MyGame game = MyGame();
       game.add(a);
       game.resize(size);
       expect(a.size, size);

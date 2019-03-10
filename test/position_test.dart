@@ -10,15 +10,15 @@ void expectDouble(double d1, double d2) {
 void main() {
   group('position test', () {
     test('test add', () {
-      Position p = new Position(0.0, 5.0);
-      Position p2 = p.add(new Position(5.0, 5.0));
+      Position p = Position(0.0, 5.0);
+      Position p2 = p.add(Position(5.0, 5.0));
       expect(p, p2);
       expectDouble(p.x, 5.0);
       expectDouble(p.y, 10.0);
     });
 
     test('test clone', () {
-      Position p = new Position(1.0, 0.0);
+      Position p = Position(1.0, 0.0);
       Position clone = p.clone();
 
       clone.times(2.0);
@@ -27,14 +27,21 @@ void main() {
     });
 
     test('test rotate', () {
-      Position p = new Position(1.0, 0.0).rotate(math.pi / 2);
+      Position p = Position(1.0, 0.0).rotate(math.pi / 2);
       expectDouble(p.x, 0.0);
       expectDouble(p.y, 1.0);
     });
 
     test('test length', () {
-      Position p = new Position(3.0, 4.0);
+      Position p = Position(3.0, 4.0);
       expectDouble(p.length(), 5.0);
+    });
+
+    test('test distance', () {
+      Position p1 = Position(10.0, 20.0);
+      Position p2 = Position(13.0, 24.0);
+      double result = p1.distance(p2);
+      expectDouble(result, 5.0);
     });
   });
 }
