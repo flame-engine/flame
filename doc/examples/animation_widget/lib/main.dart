@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/animation.dart' as animation;
 import 'package:flame/flame.dart';
 import 'package:flame/position.dart';
@@ -22,6 +24,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  Position _position = Position(256.0, 256.0);
+
+  @override
+  void initState() {
+    super.initState();
+    changePosition();
+  }
+
+  void changePosition() async {
+    await Future.delayed(Duration(seconds: 1));
+    setState(() {
+      _position = Position(10 + _position.x, 10 + _position.y);
+    });
+  }
+
   void _clickFab(GlobalKey<ScaffoldState> key) {
     key.currentState.showSnackBar(SnackBar(
       content: Text('You clicked the FAB!'),
@@ -44,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Text('with a complex widget tree and also'),
             Text('some pretty sprite sheet animations :)'),
             Flame.util.animationAsWidget(
-                Position(256.0, 256.0),
+                _position,
                 animation.Animation.sequenced('minotaur.png', 19,
                     textureWidth: 96.0)),
             Text('Neat, hum?'),
