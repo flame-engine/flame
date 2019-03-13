@@ -325,15 +325,12 @@ class EmbeddedGameWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _EmbeddedGameWidgetState(game, size: size);
+    return _EmbeddedGameWidgetState();
   }
 }
 
 class _EmbeddedGameWidgetState extends State<EmbeddedGameWidget> {
-  final Game game;
-  final Position size;
-
-  _EmbeddedGameWidgetState(this.game, {this.size});
+  _EmbeddedGameWidgetState();
 
   @override
   void initState() {
@@ -349,21 +346,21 @@ class _EmbeddedGameWidgetState extends State<EmbeddedGameWidget> {
 
   void _afterLayout(_) {
     RenderBox box = context.findRenderObject();
-    game.builder.offset = box.localToGlobal(Offset.zero);
+    widget.game.builder.offset = box.localToGlobal(Offset.zero);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (size == null) {
-      return game;
+    if (widget.size == null) {
+      return widget.game;
     }
     return Container(
-      child: game,
+      child: widget.game,
       constraints: BoxConstraints(
-          minWidth: size.x,
-          maxWidth: size.x,
-          minHeight: size.y,
-          maxHeight: size.y),
+          minWidth: widget.size.x,
+          maxWidth: widget.size.x,
+          minHeight: widget.size.y,
+          maxHeight: widget.size.y),
     );
   }
 }
