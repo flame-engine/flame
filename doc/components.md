@@ -55,7 +55,7 @@ If you have a spritesheet, you can use the `sequenced` constructor, identical to
     this.player = new AnimationComponent.sequenced(64.0, 64.0, 'player.png', 2);
 ```
 
-If you are not using `BaseGame`, don't forget this component needs to be update'd even if static, because the animation object needs to be ticked to move the frames.]]
+If you are not using `BaseGame`, don't forget this component needs to be update'd even if static, because the animation object needs to be ticked to move the frames.
 
 
 ## Composed componend
@@ -123,5 +123,3 @@ You can see a more complete example of box2d usage on [this WIP game](https://gi
 Currently we have a very basic implementation of a Tiled component. This API uses the lib [Tiled](https://github.com/feroult/tiled.dart) to parse map files and render visible layers.
 
 A example of how to use the API can be found [here](https://github.com/luanpotter/flame/tree/master/examples/tiled). 
-
-
