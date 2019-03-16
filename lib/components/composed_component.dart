@@ -5,9 +5,9 @@ import 'package:flame/components/resizable.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
-/// A mixin that helps you to make a `Component` wraps other components. It is useful to group visual components through a hierarchy. When implemented, makes every item in its `components` collection field be updated and rendered with the same conditions .
+/// A mixin that helps you to make a `Component` wraps other components. It is useful to group visual components through a hierarchy. When implemented, makes every item in its `components` collection field be updated and rendered with the same conditions.
 ///
-/// Example of usage, where the visibility of two components is handled by a wrapper:
+/// Example of usage, where visibility of two components are handled by a wrapper:
 ///
 /// ```dart
 ///  class GameOverPanel extends PositionComponent with Resizable, ComposedComponent {

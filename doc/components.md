@@ -58,11 +58,11 @@ If you have a spritesheet, you can use the `sequenced` constructor, identical to
 If you are not using `BaseGame`, don't forget this component needs to be update'd even if static, because the animation object needs to be ticked to move the frames.
 
 
-## Composed componend
+## Composed component
 
-A mixin that helps you to make a `Component` wraps other components. It is useful to group visual components through a hierarchy. Ehen implemented, makes every item in its `components` colection field be updated and rendered with teh same conditions .
+A mixin that helps you to make a `Component` wraps other components. It is useful to group visual components through a hierarchy. When implemented, makes every item in its `components` collection field be updated and rendered with the same conditions.
 
-Example of usage, where vitibility oof two components are handled by a wrapper:
+Example of usage, where visibility of two components are handled by a wrapper:
 
 ```dart
 class GameOverPanel extends PositionComponent with Resizable, ComposedComponent {
