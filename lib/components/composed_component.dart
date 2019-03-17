@@ -2,12 +2,36 @@ import 'dart:ui';
 
 import 'package:flame/components/component.dart';
 import 'package:flame/components/resizable.dart';
-import 'package:flame/game.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
-/// A component that lets your component be composed by others
-/// It resembles [BaseGame]. It has an [components] property and an [add] method
+/// A mixin that helps you to make a `Component` wraps other components. It is useful to group visual components through a hierarchy. When implemented, makes every item in its `components` collection field be updated and rendered with the same conditions.
+///
+/// Example of usage, where visibility of two components are handled by a wrapper:
+///
+/// ```dart
+///  class GameOverPanel extends PositionComponent with Resizable, ComposedComponent {
+///   bool visible = false;
+///
+///   GameOverText gameOverText;
+///   GameOverButton gameOverButton;
+///
+///   GameOverPanel(Image spriteImage) : super() {
+///     gameOverText = GameOverText(spriteImage); // GameOverText is a Component
+///     gameOverButton = GameOverButton(spriteImage); // GameOverRestart is a SpriteComponent
+///
+///     components..add(gameOverText)..add(gameOverButton);
+///   }
+///
+///   @override
+///   void render(Canvas canvas) {
+///     if (visible) {
+///       super.render(canvas);
+///     } // If not, neither of its `components` will be rendered
+///   }
+/// }
+/// ```
+///
 mixin ComposedComponent on Component {
   OrderedSet<Component> components =
       OrderedSet(Comparing.on((c) => c.priority()));
