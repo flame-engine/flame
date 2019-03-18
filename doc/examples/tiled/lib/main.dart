@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 void main() {
   TiledGame game = TiledGame();
-  runApp(game);
+  runApp(game.widget);
 }
 
 class TiledGame extends BaseGame {
