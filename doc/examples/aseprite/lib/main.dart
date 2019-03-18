@@ -4,7 +4,7 @@ import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/components/animation_component.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyGame());
+void main() => runApp(MyGame().widget);
 
 class MyGame extends BaseGame {
   MyGame() {

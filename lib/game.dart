@@ -349,10 +349,10 @@ class _EmbeddedGameWidgetState extends State<EmbeddedGameWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.size == null) {
-      return widget.game;
+      return widget.game.widget;
     }
     return Container(
-      child: widget.game,
+      child: widget.game.widget,
       constraints: BoxConstraints(
           minWidth: widget.size.x,
           maxWidth: widget.size.x,
