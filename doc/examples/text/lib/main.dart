@@ -9,7 +9,7 @@ import 'package:flame/palette.dart';
 import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyGame());
+void main() => runApp(MyGame().widget);
 
 TextConfig regular = TextConfig(color: BasicPalette.white.color);
 TextConfig tiny = regular.withFontSize(12.0);
