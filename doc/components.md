@@ -35,6 +35,7 @@ The `isHUD` method can be implemented to return true (default false) to make the
 There are also other implementations:
 
 * The `AnimationComponent` takes an `Animation` object and renders a cyclic animated sprite (more details about Animations [here](doc/images.md#Animation))
+* The `SvgComponent` takes an `Svg` object and renders the SVG on the game
 * The `ParallaxComponent` can render a parallax background with several frames
 * The `Box2DComponent`, that has a physics engine built-in (using the [Box2D](https://github.com/google/box2d.dart) port for Dart)
 
@@ -56,6 +57,17 @@ If you have a spritesheet, you can use the `sequenced` constructor, identical to
 ```
 
 If you are not using `BaseGame`, don't forget this component needs to be update'd even if static, because the animation object needs to be ticked to move the frames.
+
+## SvgComponent
+
+This component uses an instance of `Svg` class to represent a Component that has a svg that is rendered on the game:
+
+```dart
+    Svg svg = Svg("android.svg");
+    android = SvgComponent.fromSvg(100, 100, svg);
+    android.x = 100;
+    android.y = 100;
+```
 
 ## Parallax Component
 

@@ -1,4 +1,3 @@
-import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/svg.dart';
 import 'package:flame/components/component.dart' show SvgComponent;
@@ -16,8 +15,6 @@ class MyGame extends BaseGame {
   }
 
   _start() async {
-    Size size = await Flame.util.initialDimensions();
-
     Svg svg = Svg("android.svg");
     android = SvgComponent.fromSvg(100, 100, svg);
     android.x = 100;
