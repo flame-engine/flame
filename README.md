@@ -50,6 +50,8 @@ And start using it!
 
 The complete documentation can be found [here](doc/README.md).
 
+A very cool docs site can be found [here](https://flame-engine.org/).
+
 ## Getting started
 
 Check out this great series of articles/tutorials written by [Alekhin](https://github.com/japalekhin)
