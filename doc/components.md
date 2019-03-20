@@ -69,6 +69,35 @@ This component uses an instance of `Svg` class to represent a Component that has
     android.y = 100;
 ```
 
+## Composed component
+
+A mixin that helps you to make a `Component` wraps other components. It is useful to group visual components through a hierarchy. When implemented, makes every item in its `components` collection field be updated and rendered with the same conditions.
+
+Example of usage, where visibility of two components are handled by a wrapper:
+
+```dart
+class GameOverPanel extends PositionComponent with Resizable, ComposedComponent {
+  bool visible = false;
+
+  GameOverText gameOverText;
+  GameOverButton gameOverButton;
+
+  GameOverPanel(Image spriteImage) : super() {
+    gameOverText = GameOverText(spriteImage); // GameOverText is a Component
+    gameOverButton = GameOverButton(spriteImage); // GameOverRestart is a SpriteComponent
+
+    components..add(gameOverText)..add(gameOverButton);
+  }
+
+  @override
+  void render(Canvas canvas) {
+    if (visible) {
+      super.render(canvas);
+    } // If not, neither of its `components` will be rendered
+  }
+}
+```
+
 ## Parallax Component
 
 This Component can be used to render pretty backgrounds, by drawing several transparent images on top of each other, each dislocated by a tiny amount.
