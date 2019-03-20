@@ -63,7 +63,7 @@ If you are not using `BaseGame`, don't forget this component needs to be update'
 This component uses an instance of `Svg` class to represent a Component that has a svg that is rendered on the game:
 
 ```dart
-    Svg svg = Svg("android.svg");
+    Svg svg = Svg('android.svg');
     android = SvgComponent.fromSvg(100, 100, svg);
     android.x = 100;
     android.y = 100;
