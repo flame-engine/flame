@@ -1,3 +1,6 @@
+## [next]
+- Svg support
+
 ## [0.10.2]
 - Fixed some warnings and formatting
 
