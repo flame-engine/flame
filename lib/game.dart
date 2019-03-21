@@ -15,7 +15,7 @@ import 'position.dart';
 ///
 /// Subclass this to implement the [update] and [render] methods.
 /// Flame will deal with calling these methods properly when the game's widget is rendered.
-abstract class Game  {
+abstract class Game {
   // Widget Builder for this Game
   final builder = WidgetBuilder();
 
@@ -44,7 +44,6 @@ abstract class Game  {
   /// Returns the game widget. Put this in your structure to start rendering and updating the game.
   /// You can add it directly to the runApp method or inside your widget structure (if you use vanilla screens and widgets).
   Widget get widget => builder.build(this);
-
 }
 
 class WidgetBuilder {
@@ -55,7 +54,7 @@ class WidgetBuilder {
           child: _GameRenderObjectWidget(game)));
 }
 
-class _GameRenderObjectWidget extends SingleChildRenderObjectWidget {
+class _GameRenderObjectWidget extends LeafRenderObjectWidget {
   final Game game;
 
   _GameRenderObjectWidget(this.game);
@@ -137,7 +136,7 @@ class _GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void paint(PaintingContext context, Offset offset) {
     context.canvas.save();
-    context.canvas.translate(game.builder.offset.dx, game.builder.offset.dy);
+    context.canvas.translate(game.builder.offset.dx + offset.dx, game.builder.offset.dy+ offset.dy);
     game.render(context.canvas);
     context.canvas.restore();
   }
@@ -314,50 +313,45 @@ class SimpleGame extends BaseGame {
 /// Provided it with a [Game] instance for your game and the optional size of the widget.
 /// Creating this without a fixed size might mess up how other components are rendered with relation to this one in the tree.
 /// You can bind Gesture Recognizers immediately around this to add controls to your widgets, with easy coordinate conversions.
-class EmbeddedGameWidget extends StatefulWidget {
+class EmbeddedGameWidget extends LeafRenderObjectWidget{
   final Game game;
   final Position size;
-
   EmbeddedGameWidget(this.game, {this.size});
 
+
   @override
-  State<StatefulWidget> createState() {
-    return _EmbeddedGameWidgetState();
+  RenderBox createRenderObject(BuildContext context) {
+    if(size != null){
+      return RenderEmbeddedGameBox(
+          _GameRenderBox(context, game),
+          widgetSize: this.size
+      );
+    }
+    return _GameRenderBox(context, game);
+
+  }
+
+  @override
+  void updateRenderObject(BuildContext context, RenderBox renderObject) {
+    if(size != null){
+      RenderEmbeddedGameBox _renderObject = renderObject as RenderEmbeddedGameBox;
+      _renderObject..game = _GameRenderBox(context, game)..widgetSize = this.size;
+    } else {
+      _GameRenderBox _renderObject = renderObject as _GameRenderBox;
+      _renderObject..game = game;
+    }
+
   }
 }
 
-class _EmbeddedGameWidgetState extends State<EmbeddedGameWidget> {
-  _EmbeddedGameWidgetState();
+class RenderEmbeddedGameBox extends RenderConstrainedBox{
+  _GameRenderBox game;
+  Position widgetSize;
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
-  }
+  RenderEmbeddedGameBox(this.game, {this.widgetSize}) :  super(child: game, additionalConstraints: BoxConstraints(
+      minWidth: widgetSize.x,
+      maxWidth: widgetSize.x,
+      minHeight: widgetSize.y,
+      maxHeight: widgetSize.y));
 
-  @override
-  void didUpdateWidget(EmbeddedGameWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
-  }
-
-  void _afterLayout(_) {
-    RenderBox box = context.findRenderObject();
-    widget.game.builder.offset = box.localToGlobal(Offset.zero);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget.size == null) {
-      return widget.game.widget;
-    }
-    return Container(
-      child: widget.game.widget,
-      constraints: BoxConstraints(
-          minWidth: widget.size.x,
-          maxWidth: widget.size.x,
-          minHeight: widget.size.y,
-          maxHeight: widget.size.y),
-    );
-  }
 }
