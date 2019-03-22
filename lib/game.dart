@@ -15,7 +15,7 @@ import 'position.dart';
 ///
 /// Subclass this to implement the [update] and [render] methods.
 /// Flame will deal with calling these methods properly when the game's widget is rendered.
-abstract class Game  {
+abstract class Game {
   // Widget Builder for this Game
   final builder = WidgetBuilder();
 
@@ -44,7 +44,6 @@ abstract class Game  {
   /// Returns the game widget. Put this in your structure to start rendering and updating the game.
   /// You can add it directly to the runApp method or inside your widget structure (if you use vanilla screens and widgets).
   Widget get widget => builder.build(this);
-
 }
 
 class WidgetBuilder {

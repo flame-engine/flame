@@ -24,7 +24,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   Position _position = Position(256.0, 256.0);
 
   @override
