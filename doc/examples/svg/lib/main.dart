@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyGame());
 
 class MyGame extends BaseGame {
-
   Svg svgInstance;
   SvgComponent android;
 
@@ -31,5 +30,4 @@ class MyGame extends BaseGame {
 
     svgInstance.renderPosition(canvas, Position(100, 200), 300, 300);
   }
-
 }

@@ -143,7 +143,7 @@ class SvgComponent extends PositionComponent {
     this.width = width;
     this.height = height;
   }
- 
+
   @override
   void render(Canvas canvas) {
     prepareCanvas(canvas);

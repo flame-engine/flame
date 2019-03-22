@@ -41,7 +41,8 @@ class Animation {
   ///
   /// All frames have the same [stepTime].
 
-  Animation.spriteList(List<Sprite> sprites, {double stepTime, this.loop = true}) {
+  Animation.spriteList(List<Sprite> sprites,
+      {double stepTime, this.loop = true}) {
     frames = sprites.map((s) => Frame(s, stepTime)).toList();
   }
 

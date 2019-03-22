@@ -29,7 +29,8 @@ class Svg {
   /// Renders the svg on the [canvas] on the given [position] using the dimmensions provided on [width] and [height]
   ///
   /// If not loaded, does nothing
-  void renderPosition(Canvas canvas, Position position, double width, double height) {
+  void renderPosition(
+      Canvas canvas, Position position, double width, double height) {
     if (!loaded()) {
       return;
     }

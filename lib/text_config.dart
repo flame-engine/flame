@@ -53,11 +53,11 @@ class TextConfig {
   ///
   /// Every parameter can be specified.
   const TextConfig({
-    this.fontSize= 24.0,
-    this.color= const Color(0xFF000000),
-    this.fontFamily= 'Arial',
-    this.textAlign= TextAlign.left,
-    this.textDirection= TextDirection.ltr,
+    this.fontSize = 24.0,
+    this.color = const Color(0xFF000000),
+    this.fontFamily = 'Arial',
+    this.textAlign = TextAlign.left,
+    this.textDirection = TextDirection.ltr,
   });
 
   /// Renders a given [text] in a given position [p] using the provided [canvas] and [anchor].
@@ -70,7 +70,7 @@ class TextConfig {
   ///     const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font', anchor: Anchor.rightBottom);
   ///     config.render(c, Offset(size.width - 10, size.height - 10);
   void render(Canvas canvas, String text, Position p,
-      {Anchor anchor= Anchor.topLeft}) {
+      {Anchor anchor = Anchor.topLeft}) {
     final material.TextPainter tp = toTextPainter(text);
     final Position translatedPosition =
         anchor.translate(p, Position.fromSize(tp.size));
