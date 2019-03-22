@@ -1,3 +1,7 @@
+## [next]
+- Svg support
+- Adding `Animation#reversed` allowing a new reversed animation to be created from an existing animation.
+
 ## [0.10.2]
 - Fixed some warnings and formatting
 
