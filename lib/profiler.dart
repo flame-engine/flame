@@ -9,15 +9,15 @@ class Profiler {
   List<double> dts = [];
 
   Profiler(this.name) {
-    this.tick();
+    tick();
   }
 
   void tick() {
-    this.dts.add(currentTime());
+    dts.add(currentTime());
   }
 
   void end() {
-    this.tick();
+    tick();
     Records.save(this);
   }
 

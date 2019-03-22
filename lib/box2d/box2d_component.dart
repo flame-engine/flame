@@ -29,12 +29,12 @@ abstract class Box2DComponent extends Component {
     this.positionIterations: DEFAULT_POSITION_ITERATIONS,
     double scale: DEFAULT_SCALE,
   }) {
-    if (this.dimensions == null) {
-      this.dimensions = window.physicalSize;
+    if (dimensions == null) {
+      dimensions = window.physicalSize;
     }
     final pool = DefaultWorldPool(worldPoolSize, worldPoolContainerSize);
-    this.world = World.withPool(Vector2(0.0, gravity), pool);
-    this.viewport = Viewport(dimensions, scale);
+    world = World.withPool(Vector2(0.0, gravity), pool);
+    viewport = Viewport(dimensions, scale);
   }
 
   @override
@@ -47,7 +47,7 @@ abstract class Box2DComponent extends Component {
 
   @override
   void render(canvas) {
-    if (viewport.size == Size(0.0, 0.0)) {
+    if (viewport.size == Size.zero) {
       return;
     }
     components.forEach((c) {
@@ -134,7 +134,7 @@ abstract class BodyComponent extends Component {
     }
   }
 
-  Vector2 get center => this.body.worldCenter;
+  Vector2 get center => body.worldCenter;
 
   void _renderCircle(Canvas canvas, Fixture fixture) {
     Vector2 center = Vector2.zero();

@@ -17,14 +17,14 @@ class TiledComponent extends Component {
   static Paint paint = Paint()..color = Colors.white;
 
   TiledComponent(this.filename) {
-    this.future = _load();
+    future = _load();
   }
 
   Future _load() async {
-    this.map = await _loadMap();
-    this.image = await Flame.images.load(map.tilesets[0].image.source);
-    this.images = await _loadImages(map);
-    this._loaded = true;
+    map = await _loadMap();
+    image = await Flame.images.load(map.tilesets[0].image.source);
+    images = await _loadImages(map);
+    _loaded = true;
   }
 
   Future<TileMap> _loadMap() {

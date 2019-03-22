@@ -25,14 +25,14 @@ class TextComponent extends PositionComponent {
   }
 
   TextComponent(this._text, {TextConfig config = const TextConfig()}) {
-    this._config = config;
+    _config = config;
     _updateBox();
   }
 
   void _updateBox() {
     TextPainter tp = config.toTextPainter(text);
-    this.width = tp.width;
-    this.height = tp.height;
+    width = tp.width;
+    height = tp.height;
   }
 
   @override

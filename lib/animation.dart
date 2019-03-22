@@ -41,7 +41,7 @@ class Animation {
   ///
   /// All frames have the same [stepTime].
   Animation.spriteList(List<Sprite> sprites, {double stepTime, this.loop}) {
-    this.frames = sprites.map((s) => Frame(s, stepTime)).toList();
+    frames = sprites.map((s) => Frame(s, stepTime)).toList();
   }
 
   /// Creates an animation given a list of frames.
@@ -68,7 +68,7 @@ class Animation {
     double textureHeight,
     double stepTime = 0.1,
   }) {
-    this.frames = List<Frame>(amount);
+    frames = List<Frame>(amount);
     for (var i = 0; i < amount; i++) {
       Sprite sprite = Sprite(
         imagePath,
@@ -77,7 +77,7 @@ class Animation {
         width: textureWidth,
         height: textureHeight,
       );
-      this.frames[i] = Frame(sprite, stepTime);
+      frames[i] = Frame(sprite, stepTime);
     }
   }
 
@@ -91,7 +91,7 @@ class Animation {
     double textureWidth,
     double textureHeight,
   }) {
-    this.frames = List<Frame>(amount);
+    frames = List<Frame>(amount);
     for (var i = 0; i < amount; i++) {
       Sprite sprite = Sprite(
         imagePath,
@@ -100,7 +100,7 @@ class Animation {
         width: textureWidth,
         height: textureHeight,
       );
-      this.frames[i] = Frame(sprite, stepTimes[i]);
+      frames[i] = Frame(sprite, stepTimes[i]);
     }
   }
 
@@ -155,14 +155,14 @@ class Animation {
 
   /// Sets a fixed step time to all frames.
   void set stepTime(double stepTime) {
-    this.frames.forEach((frame) => frame.stepTime = stepTime);
+    frames.forEach((frame) => frame.stepTime = stepTime);
   }
 
   /// Resets the animation, like it'd just been created.
   void reset() {
-    this.clock = 0.0;
-    this.elapsed = 0.0;
-    this.currentIndex = 0;
+    clock = 0.0;
+    elapsed = 0.0;
+    currentIndex = 0;
   }
 
   /// Gets tha current [Sprite] that should be shown.
