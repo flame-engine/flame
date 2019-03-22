@@ -14,13 +14,15 @@ class MyGame extends BaseGame {
   _start() async {
     Size size = await Flame.util.initialDimensions();
 
-    final animation = await FlameAnimation.Animation.sequenced('chopper.png', 4, textureWidth: 48, textureHeight: 48, stepTime: 0.15);
+    final animation = await FlameAnimation.Animation.sequenced('chopper.png', 4,
+        textureWidth: 48, textureHeight: 48, stepTime: 0.15);
 
     final animationComponent = AnimationComponent(100, 100, animation);
     animationComponent.x = size.width / 2 - 100;
     animationComponent.y = 100;
 
-    final reversedAnimationComponent = AnimationComponent(100, 100, animation.reversed());
+    final reversedAnimationComponent =
+        AnimationComponent(100, 100, animation.reversed());
     reversedAnimationComponent.x = size.width / 2;
     reversedAnimationComponent.y = 100;
 
@@ -28,4 +30,3 @@ class MyGame extends BaseGame {
     add(reversedAnimationComponent);
   }
 }
-

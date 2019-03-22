@@ -22,12 +22,12 @@ abstract class Box2DComponent extends Component {
 
   Box2DComponent({
     this.dimensions,
-    int worldPoolSize= DEFAULT_WORLD_POOL_SIZE,
-    int worldPoolContainerSize= DEFAULT_WORLD_POOL_CONTAINER_SIZE,
-    double gravity= DEFAULT_GRAVITY,
-    this.velocityIterations= DEFAULT_VELOCITY_ITERATIONS,
-    this.positionIterations= DEFAULT_POSITION_ITERATIONS,
-    double scale= DEFAULT_SCALE,
+    int worldPoolSize = DEFAULT_WORLD_POOL_SIZE,
+    int worldPoolContainerSize = DEFAULT_WORLD_POOL_CONTAINER_SIZE,
+    double gravity = DEFAULT_GRAVITY,
+    this.velocityIterations = DEFAULT_VELOCITY_ITERATIONS,
+    this.positionIterations = DEFAULT_POSITION_ITERATIONS,
+    double scale = DEFAULT_SCALE,
   }) {
     dimensions ??= window.physicalSize;
     final pool = DefaultWorldPool(worldPoolSize, worldPoolContainerSize);

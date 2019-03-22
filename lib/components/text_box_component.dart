@@ -16,10 +16,10 @@ class TextBoxConfig {
   final double dismissDelay;
 
   const TextBoxConfig({
-    this.maxWidth= 200.0,
-    this.margin= 8.0,
-    this.timePerChar= 0.0,
-    this.dismissDelay= 0.0,
+    this.maxWidth = 200.0,
+    this.margin = 8.0,
+    this.timePerChar = 0.0,
+    this.dismissDelay = 0.0,
   });
 }
 
@@ -157,7 +157,8 @@ class TextBoxComponent extends PositionComponent with Resizable {
           .paint(c, Offset(_boxConfig.margin, dy));
       dy += _lineHeight;
     }
-    final int max = math.min(currentChar - charCount, _lines[_currentLine].length);
+    final int max =
+        math.min(currentChar - charCount, _lines[_currentLine].length);
     _config
         .toTextPainter(_lines[_currentLine].substring(0, max))
         .paint(c, Offset(_boxConfig.margin, dy));
