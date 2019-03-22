@@ -313,7 +313,7 @@ class SimpleGame extends BaseGame {
 /// Provided it with a [Game] instance for your game and the optional size of the widget.
 /// Creating this without a fixed size might mess up how other components are rendered with relation to this one in the tree.
 /// You can bind Gesture Recognizers immediately around this to add controls to your widgets, with easy coordinate conversions.
-class EmbeddedGameWidget extends LeafRenderObjectWidget{
+class EmbeddedGameWidget extends LeafRenderObjectWidget {
   final Game game;
   final Position size;
   EmbeddedGameWidget(this.game, {this.size});
@@ -321,10 +321,10 @@ class EmbeddedGameWidget extends LeafRenderObjectWidget{
 
   @override
   RenderBox createRenderObject(BuildContext context) {
-    if(size != null){
+    if(size != null) {
       return RenderEmbeddedGameBox(
           _GameRenderBox(context, game),
-          widgetSize: this.size
+          widgetSize: this.size,
       );
     }
     return _GameRenderBox(context, game);
@@ -338,7 +338,7 @@ class EmbeddedGameWidget extends LeafRenderObjectWidget{
       _renderObject..game = _GameRenderBox(context, game)..widgetSize = this.size;
     } else {
       _GameRenderBox _renderObject = renderObject as _GameRenderBox;
-      _renderObject..game = game;
+      _renderObject.game = game;
     }
 
   }
