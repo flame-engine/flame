@@ -41,7 +41,7 @@ The render method will do nothing while the sprite has not been loaded, so you d
 
 ## Svg
 
-Flame provide a simple API to render SVG images on your game.
+Flame provides a simple API to render SVG images on your game.
 
 To use it just import the `Svg` class from `'package:flame/svg.dart'`, and use the following snippet to render it on the canvas:
 

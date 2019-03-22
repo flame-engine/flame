@@ -64,7 +64,7 @@ This component uses an instance of `Svg` class to represent a Component that has
 
 ```dart
     Svg svg = Svg('android.svg');
-    android = SvgComponent.fromSvg(100, 100, svg);
+    SvgComponent android = SvgComponent.fromSvg(100, 100, svg);
     android.x = 100;
     android.y = 100;
 ```
