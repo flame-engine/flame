@@ -39,6 +39,22 @@ You must pass the size to the render method, and the image will be resized accor
 
 The render method will do nothing while the sprite has not been loaded, so you don't need to worry. The image is cached in the `Images` class, so you can safely create many sprites with the same fileName.
 
+## Svg
+
+Flame provides a simple API to render SVG images on your game.
+
+To use it just import the `Svg` class from `'package:flame/svg.dart'`, and use the following snippet to render it on the canvas:
+
+```dart
+    Svg svgInstance = Svg('android.svg');
+
+    final position = Position(100, 100);
+    final width = 300;
+    final height = 300;
+
+    svgInstance.renderPosition(canvas, position, width, height);
+```
+
 ## Flame.images
 
 The `Flame.images` is a lower level utility for loading images, very similar to the `Flame.audio` instance.
