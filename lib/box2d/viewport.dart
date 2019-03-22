@@ -37,10 +37,10 @@ class Viewport extends ViewportTransform {
   /// @param screens multiplies the visible screen with to create a bigger virtual screen.
   /// @return the percentage in the range of [0, 1]
   double getCenterHorizontalScreenPercentage({double screens: 1.0}) {
-    var width = size.width * screens;
-    var x = center.x + ((screens - 1) * size.width / 2);
-    double rest = x.abs() % width;
-    double scroll = rest / width;
+    final width = size.width * screens;
+    final x = center.x + ((screens - 1) * size.width / 2);
+    final double rest = x.abs() % width;
+    final double scroll = rest / width;
     return x > 0 ? scroll : 1 - scroll;
   }
 
@@ -51,17 +51,17 @@ class Viewport extends ViewportTransform {
   /// @param vertical percentage of the vertical viewport. Null means no vertical following.
   void cameraFollow(BodyComponent component,
       {double horizontal, double vertical}) {
-    Vector2 position = component.center;
+    final Vector2 position = component.center;
 
     double x = center.x;
     double y = center.y;
 
     if (horizontal != null) {
-      Vector2 temp = Vector2.zero();
+      final Vector2 temp = Vector2.zero();
       getWorldToScreen(position, temp);
 
-      var margin = horizontal / 2 * size.width / 2;
-      var focus = size.width / 2 - temp.x;
+      final margin = horizontal / 2 * size.width / 2;
+      final focus = size.width / 2 - temp.x;
 
       if (focus.abs() > margin) {
         x = size.width / 2 +
@@ -71,11 +71,11 @@ class Viewport extends ViewportTransform {
     }
 
     if (vertical != null) {
-      Vector2 temp = Vector2.zero();
+      final Vector2 temp = Vector2.zero();
       getWorldToScreen(position, temp);
 
-      var margin = vertical / 2 * size.height / 2;
-      var focus = size.height / 2 - temp.y;
+      final margin = vertical / 2 * size.height / 2;
+      final focus = size.height / 2 - temp.y;
 
       if (focus.abs() > margin) {
         y = size.height / 2 +

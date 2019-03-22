@@ -68,8 +68,8 @@ class Position {
   }
 
   Position rotate(double angle) {
-    double nx = math.cos(angle) * x - math.sin(angle) * y;
-    double ny = math.sin(angle) * x + math.cos(angle) * y;
+    final double nx = math.cos(angle) * x - math.sin(angle) * y;
+    final double ny = math.sin(angle) * x + math.cos(angle) * y;
     x = nx;
     y = ny;
     return this;
@@ -109,10 +109,10 @@ class Position {
   }
 
   static ui.Rect bounds(List<Position> pts) {
-    double minx = pts.map((e) => e.x).reduce(math.min);
-    double maxx = pts.map((e) => e.x).reduce(math.max);
-    double miny = pts.map((e) => e.y).reduce(math.min);
-    double maxy = pts.map((e) => e.y).reduce(math.max);
+    final double minx = pts.map((e) => e.x).reduce(math.min);
+    final double maxx = pts.map((e) => e.x).reduce(math.max);
+    final double miny = pts.map((e) => e.y).reduce(math.min);
+    final double maxy = pts.map((e) => e.y).reduce(math.max);
     return ui.Rect.fromPoints(ui.Offset(minx, miny), ui.Offset(maxx, maxy));
   }
 }

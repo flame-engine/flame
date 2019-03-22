@@ -60,7 +60,7 @@ mixin ComposedComponent on Component {
 
     if (this is Resizable) {
       // first time resize
-      Resizable thisResizable = this as Resizable;
+      final Resizable thisResizable = this as Resizable;
       if (thisResizable.size != null) {
         c.resize(thisResizable.size);
       }

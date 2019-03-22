@@ -14,16 +14,12 @@ class Sprite {
     String fileName, {
     double x = 0.0,
     double y = 0.0,
-    double width = null,
-    double height = null,
+    double width,
+    double height,
   }) {
     Flame.images.load(fileName).then((img) {
-      if (width == null) {
-        width = img.width.toDouble();
-      }
-      if (height == null) {
-        height = img.height.toDouble();
-      }
+      width ??= img.width.toDouble();
+      height ??= img.height.toDouble();
       image = img;
       src = Rect.fromLTWH(x, y, width, height);
     });
@@ -33,15 +29,11 @@ class Sprite {
     this.image, {
     double x = 0.0,
     double y = 0.0,
-    double width = null,
-    double height = null,
+    double width,
+    double height,
   }) {
-    if (width == null) {
-      width = image.width.toDouble();
-    }
-    if (height == null) {
-      height = image.height.toDouble();
-    }
+    width ??= image.width.toDouble();
+    height ??= image.height.toDouble();
     src = Rect.fromLTWH(x, y, width, height);
   }
 
@@ -49,10 +41,10 @@ class Sprite {
     String fileName, {
     double x = 0.0,
     double y = 0.0,
-    double width = null,
-    double height = null,
+    double width,
+    double height,
   }) async {
-    Image image = await Flame.images.load(fileName);
+    final Image image = await Flame.images.load(fileName);
     return Sprite.fromImage(
       image,
       x: x,

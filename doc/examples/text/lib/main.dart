@@ -20,8 +20,8 @@ class MyTextBox extends TextBoxComponent {
 
   @override
   void drawBackground(Canvas c) {
-    Rect rect = Rect.fromLTWH(0, 0, width, height);
-    c.drawRect(rect, Paint()..color = Color(0xFFFF00FF));
+    final Rect rect = Rect.fromLTWH(0, 0, width, height);
+    c.drawRect(rect, Paint()..color = const Color(0xFFFF00FF));
     c.drawRect(
         rect.deflate(boxConfig.margin),
         Paint()
@@ -36,7 +36,7 @@ class MyGame extends BaseGame {
   }
 
   _start() async {
-    Size size = await Flame.util.initialDimensions();
+    final Size size = await Flame.util.initialDimensions();
 
     add(TextComponent('Hello, Flame', config: regular)
       ..anchor = Anchor.topCenter

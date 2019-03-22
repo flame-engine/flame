@@ -119,7 +119,7 @@ class _GameRenderBox extends RenderBox with WidgetsBindingObserver {
   }
 
   void _update(Duration now) {
-    double dt = _computeDeltaT(now);
+    final double dt = _computeDeltaT(now);
     game._recordDt(dt);
     game.update(dt);
   }
@@ -280,12 +280,12 @@ abstract class BaseGame extends Game {
   /// So it's technically updates per second, but the relation between updates and renders is 1:1.
   /// Returns 0 if empty.
   double fps([int average = 1]) {
-    List<double> dts = _dts.sublist(math.max(0, _dts.length - average));
+    final List<double> dts = _dts.sublist(math.max(0, _dts.length - average));
     if (dts.isEmpty) {
       return 0.0;
     }
-    double dtSum = dts.reduce((s, t) => s + t);
-    double averageDt = dtSum / average;
+    final double dtSum = dts.reduce((s, t) => s + t);
+    final double averageDt = dtSum / average;
     return 1 / averageDt;
   }
 
@@ -341,7 +341,7 @@ class _EmbeddedGameWidgetState extends State<EmbeddedGameWidget> {
   }
 
   void _afterLayout(_) {
-    RenderBox box = context.findRenderObject();
+    final RenderBox box = context.findRenderObject();
     widget.game.builder.offset = box.localToGlobal(Offset.zero);
   }
 

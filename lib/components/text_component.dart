@@ -30,7 +30,7 @@ class TextComponent extends PositionComponent {
   }
 
   void _updateBox() {
-    TextPainter tp = config.toTextPainter(text);
+    final TextPainter tp = config.toTextPainter(text);
     width = tp.width;
     height = tp.height;
   }

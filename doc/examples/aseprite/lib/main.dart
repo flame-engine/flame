@@ -12,7 +12,7 @@ class MyGame extends BaseGame {
   }
 
   _start() async {
-    Size size = await Flame.util.initialDimensions();
+    final Size size = await Flame.util.initialDimensions();
 
     final animation = await FlameAnimation.Animation.fromAsepriteData(
         'chopper.png', 'chopper.json');

@@ -19,7 +19,7 @@ class AudioPool {
   bool repeating;
   int minPlayers, maxPlayers;
 
-  Lock _lock = Lock();
+  final Lock _lock = Lock();
 
   AudioPool(this.sound,
       {this.repeating = false,
@@ -40,13 +40,13 @@ class AudioPool {
       if (availablePlayers.isEmpty) {
         availablePlayers.add(await _createNewAudioPlayer());
       }
-      AudioPlayer player = availablePlayers.removeAt(0);
+      final AudioPlayer player = availablePlayers.removeAt(0);
       currentPlayers[player.playerId] = player;
       await player.setVolume(volume);
       await player.resume();
-      Stoppable stop = () {
+      final Stoppable stop = () {
         _lock.synchronized(() async {
-          AudioPlayer p = currentPlayers.remove(player.playerId);
+          final AudioPlayer p = currentPlayers.remove(player.playerId);
           p.completionHandler = null;
           await p.stop();
           if (availablePlayers.length >= maxPlayers) {
@@ -66,8 +66,8 @@ class AudioPool {
   }
 
   Future<AudioPlayer> _createNewAudioPlayer() async {
-    AudioPlayer player = AudioPlayer();
-    String url = (await cache.load(sound)).path;
+    final AudioPlayer player = AudioPlayer();
+    final String url = (await cache.load(sound)).path;
     await player.setUrl(url);
     await player.setReleaseMode(ReleaseMode.STOP);
     return player;

@@ -10,7 +10,7 @@ import 'package:test/test.dart';
 void main() {
   test('my first widget test', () async {
     await Flame.init(bundle: TestAssetBundle());
-    var tiled = TiledComponent('x');
+    final tiled = TiledComponent('x');
     await tiled.future;
     expect(1, equals(1));
   });

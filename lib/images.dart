@@ -27,9 +27,9 @@ class Images {
   }
 
   Future<Image> _fetchToMemory(String name) async {
-    ByteData data = await Flame.bundle.load('assets/images/' + name);
-    Uint8List bytes = Uint8List.view(data.buffer);
-    Completer<Image> completer = Completer();
+    final ByteData data = await Flame.bundle.load('assets/images/' + name);
+    final Uint8List bytes = Uint8List.view(data.buffer);
+    final Completer<Image> completer = Completer();
     decodeImageFromList(bytes, (image) => completer.complete(image));
     return completer.future;
   }
