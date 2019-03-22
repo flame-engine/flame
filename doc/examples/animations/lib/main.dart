@@ -24,7 +24,6 @@ class MyGame extends BaseGame {
     reversedAnimationComponent.x = size.width / 2;
     reversedAnimationComponent.y = 100;
 
-
     add(animationComponent);
     add(reversedAnimationComponent);
   }
