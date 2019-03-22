@@ -40,12 +40,13 @@ class Animation {
   /// Creates an animation based on the parameters.
   ///
   /// All frames have the same [stepTime].
-  Animation.spriteList(List<Sprite> sprites, {double stepTime, this.loop}) {
+
+  Animation.spriteList(List<Sprite> sprites, {double stepTime, this.loop = true}) {
     frames = sprites.map((s) => Frame(s, stepTime)).toList();
   }
 
   /// Creates an animation given a list of frames.
-  Animation(this.frames, {this.loop});
+  Animation(this.frames, {this.loop = true});
 
   /// Automatically creates a sequenced animation, that is, an animation based on a sprite sheet.
   ///
@@ -198,6 +199,11 @@ class Animation {
         break;
       }
     }
+  }
+
+  /// Returns a new Animation based on this animation, but with its frames in reversed order
+  Animation reversed() {
+    return Animation(this.frames.reversed.toList(), loop: this.loop);
   }
 
   /// Wether all sprites composing this animation are loaded.
