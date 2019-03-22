@@ -71,7 +71,7 @@ class Animation {
   }) {
     frames = List<Frame>(amount);
     for (var i = 0; i < amount; i++) {
-      Sprite sprite = Sprite(
+      final Sprite sprite = Sprite(
         imagePath,
         x: textureX + i * textureWidth,
         y: textureY,
@@ -94,7 +94,7 @@ class Animation {
   }) {
     frames = List<Frame>(amount);
     for (var i = 0; i < amount; i++) {
-      Sprite sprite = Sprite(
+      final Sprite sprite = Sprite(
         imagePath,
         x: textureX + i * textureWidth,
         y: textureY,
@@ -112,12 +112,12 @@ class Animation {
   /// [dataPath]: Animation's exported data in json format
   static Future<Animation> fromAsepriteData(
       String imagePath, String dataPath) async {
-    String content = await Flame.assets.readFile(dataPath);
-    Map<String, dynamic> json = jsonDecode(content);
+    final String content = await Flame.assets.readFile(dataPath);
+    final Map<String, dynamic> json = jsonDecode(content);
 
-    Map<String, dynamic> jsonFrames = json['frames'];
+    final Map<String, dynamic> jsonFrames = json['frames'];
 
-    var frames = jsonFrames.values.map((value) {
+    final frames = jsonFrames.values.map((value) {
       final frameData = value['frame'];
       final int x = frameData['x'];
       final int y = frameData['y'];
@@ -126,7 +126,7 @@ class Animation {
 
       final stepTime = value['duration'] / 1000;
 
-      Sprite sprite = Sprite(
+      final Sprite sprite = Sprite(
         imagePath,
         x: x.toDouble(),
         y: y.toDouble(),
@@ -203,7 +203,7 @@ class Animation {
 
   /// Returns a new Animation based on this animation, but with its frames in reversed order
   Animation reversed() {
-    return Animation(this.frames.reversed.toList(), loop: this.loop);
+    return Animation(frames.reversed.toList(), loop: loop);
   }
 
   /// Wether all sprites composing this animation are loaded.

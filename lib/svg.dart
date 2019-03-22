@@ -10,7 +10,7 @@ class Svg {
 
   Svg(String fileName) {
     Flame.assets.readFile(fileName).then((svgString) async {
-      this.svgRoot = await svg.fromSvgString(svgString, svgString);
+      svgRoot = await svg.fromSvgString(svgString, svgString);
     });
   }
 
@@ -18,7 +18,7 @@ class Svg {
   ///
   /// If not loaded, does nothing
   void render(Canvas canvas, double width, double height) {
-    if (!this.loaded()) {
+    if (!loaded()) {
       return;
     }
 
@@ -30,7 +30,7 @@ class Svg {
   ///
   /// If not loaded, does nothing
   void renderPosition(Canvas canvas, Position position, double width, double height) {
-    if (!this.loaded()) {
+    if (!loaded()) {
       return;
     }
 

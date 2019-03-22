@@ -96,8 +96,8 @@ abstract class PositionComponent extends Component {
     canvas.translate(x, y);
 
     canvas.rotate(angle);
-    double dx = -anchor.relativePosition.dx * width;
-    double dy = -anchor.relativePosition.dy * height;
+    final double dx = -anchor.relativePosition.dx * width;
+    final double dy = -anchor.relativePosition.dy * height;
     canvas.translate(dx, dy);
   }
 }
@@ -145,7 +145,7 @@ class SvgComponent extends PositionComponent {
   }
  
   @override
-  render(Canvas canvas) {
+  void render(Canvas canvas) {
     prepareCanvas(canvas);
     svg.render(canvas, width, height);
   }

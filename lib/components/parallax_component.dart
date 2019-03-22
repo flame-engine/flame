@@ -14,7 +14,7 @@ class ParallaxRenderer {
   double scroll = 0.0;
 
   ParallaxRenderer(this.filename) {
-    this.future = _load();
+    future = _load();
   }
 
   Future<Image> _load() {
@@ -30,12 +30,12 @@ class ParallaxRenderer {
       return;
     }
 
-    var imageHeight = image.height / window.devicePixelRatio;
-    var imageWidth =
+    final imageHeight = image.height / window.devicePixelRatio;
+    final imageWidth =
         (rect.height / imageHeight) * (image.width / window.devicePixelRatio);
-    var count = rect.width / imageWidth;
+    final count = rect.width / imageWidth;
 
-    Rect fullRect = Rect.fromLTWH(
+    final Rect fullRect = Rect.fromLTWH(
         -scroll * imageWidth, rect.top, (count + 1) * imageWidth, rect.height);
 
     paintImage(
@@ -51,7 +51,7 @@ abstract class ParallaxComponent extends PositionComponent {
   final BASE_SPEED = 30;
   final LAYER_DELTA = 40;
 
-  List<ParallaxRenderer> _layers = [];
+  final List<ParallaxRenderer> _layers = [];
   Size _size;
   bool _loaded = false;
 
@@ -96,7 +96,7 @@ abstract class ParallaxComponent extends PositionComponent {
   }
 
   void _drawLayers(Canvas canvas) {
-    Rect rect = Rect.fromPoints(
+    final Rect rect = Rect.fromPoints(
         const Offset(0.0, 0.0), Offset(_size.width, _size.height));
     _layers.forEach((layer) => layer.render(canvas, rect));
   }

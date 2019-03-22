@@ -53,11 +53,11 @@ class TextConfig {
   ///
   /// Every parameter can be specified.
   const TextConfig({
-    this.fontSize: 24.0,
-    this.color: const Color(0xFF000000),
-    this.fontFamily: 'Arial',
-    this.textAlign: TextAlign.left,
-    this.textDirection: TextDirection.ltr,
+    this.fontSize= 24.0,
+    this.color= const Color(0xFF000000),
+    this.fontFamily= 'Arial',
+    this.textAlign= TextAlign.left,
+    this.textDirection= TextDirection.ltr,
   });
 
   /// Renders a given [text] in a given position [p] using the provided [canvas] and [anchor].
@@ -70,9 +70,9 @@ class TextConfig {
   ///     const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font', anchor: Anchor.rightBottom);
   ///     config.render(c, Offset(size.width - 10, size.height - 10);
   void render(Canvas canvas, String text, Position p,
-      {Anchor anchor: Anchor.topLeft}) {
-    material.TextPainter tp = toTextPainter(text);
-    Position translatedPosition =
+      {Anchor anchor= Anchor.topLeft}) {
+    final material.TextPainter tp = toTextPainter(text);
+    final Position translatedPosition =
         anchor.translate(p, Position.fromSize(tp.size));
     tp.paint(canvas, translatedPosition.toOffset());
   }
@@ -90,16 +90,16 @@ class TextConfig {
   /// However, you probably want to use the [render] method witch already renders for you considering the anchor.
   /// That way, you don't need to perform the math for yourself.
   material.TextPainter toTextPainter(String text) {
-    material.TextStyle style = material.TextStyle(
+    final material.TextStyle style = material.TextStyle(
       color: color,
       fontSize: fontSize,
       fontFamily: fontFamily,
     );
-    material.TextSpan span = material.TextSpan(
+    final material.TextSpan span = material.TextSpan(
       style: style,
       text: text,
     );
-    material.TextPainter tp = material.TextPainter(
+    final material.TextPainter tp = material.TextPainter(
       text: span,
       textAlign: textAlign,
       textDirection: textDirection,
