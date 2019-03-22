@@ -24,8 +24,8 @@ class Sprite {
       if (height == null) {
         height = img.height.toDouble();
       }
-      this.image = img;
-      this.src = Rect.fromLTWH(x, y, width, height);
+      image = img;
+      src = Rect.fromLTWH(x, y, width, height);
     });
   }
 
@@ -42,7 +42,7 @@ class Sprite {
     if (height == null) {
       height = image.height.toDouble();
     }
-    this.src = Rect.fromLTWH(x, y, width, height);
+    src = Rect.fromLTWH(x, y, width, height);
   }
 
   static Future<Sprite> loadSprite(
@@ -66,9 +66,9 @@ class Sprite {
     return image != null && src != null;
   }
 
-  double get _imageWidth => this.image.width.toDouble();
+  double get _imageWidth => image.width.toDouble();
 
-  double get _imageHeight => this.image.height.toDouble();
+  double get _imageHeight => image.height.toDouble();
 
   Position get originalSize {
     if (!loaded()) {
@@ -87,14 +87,14 @@ class Sprite {
   /// Anchor is on top left as default.
   /// If not loaded, does nothing.
   void renderScaled(Canvas canvas, Position p, [double scale = 1.0]) {
-    if (!this.loaded()) {
+    if (!loaded()) {
       return;
     }
     renderPosition(canvas, p, size.times(scale));
   }
 
   void renderPosition(Canvas canvas, Position p, [Position size]) {
-    if (!this.loaded()) {
+    if (!loaded()) {
       return;
     }
     size ??= this.size;
@@ -102,16 +102,16 @@ class Sprite {
   }
 
   void render(Canvas canvas, [double width, double height]) {
-    if (!this.loaded()) {
+    if (!loaded()) {
       return;
     }
-    width ??= this.size.x;
-    height ??= this.size.y;
+    width ??= size.x;
+    height ??= size.y;
     renderRect(canvas, Rect.fromLTWH(0.0, 0.0, width, height));
   }
 
   void renderRect(Canvas canvas, Rect dst) {
-    if (!this.loaded()) {
+    if (!loaded()) {
       return;
     }
     canvas.drawImageRect(image, src, dst, paint);
@@ -122,7 +122,7 @@ class Sprite {
   /// If [size] is not provided, the original size of the src image is used.
   /// If the asset is not yet loaded, it does nothing.
   void renderCentered(Canvas canvas, Position p, [Position size]) {
-    if (!this.loaded()) {
+    if (!loaded()) {
       return;
     }
     size ??= this.size;

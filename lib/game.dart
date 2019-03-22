@@ -61,7 +61,7 @@ class _GameRenderObjectWidget extends SingleChildRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) =>
-      _GameRenderBox(context, this.game);
+      _GameRenderBox(context, game);
 
   @override
   void updateRenderObject(BuildContext context, _GameRenderBox _gameRenderBox) {
@@ -193,8 +193,8 @@ abstract class BaseGame extends Game {
   ///
   /// Also calls [preAdd], witch in turn sets the current size on the component (because the resize hook won't be called until a new resize happens).
   void add(Component c) {
-    this.preAdd(c);
-    this.components.add(c);
+    preAdd(c);
+    components.add(c);
   }
 
   /// Registers a component to be added on the components on the next tick.
@@ -202,8 +202,8 @@ abstract class BaseGame extends Game {
   /// Use this to add components in places where a concurrent issue with the update method might happen.
   /// Also calls [preAdd] for the component added, immediately.
   void addLater(Component c) {
-    this.preAdd(c);
-    this._addLater.add(c);
+    preAdd(c);
+    _addLater.add(c);
   }
 
   /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.

@@ -56,7 +56,7 @@ mixin ComposedComponent on Component {
   }
 
   void add(Component c) {
-    this.components.add(c);
+    components.add(c);
 
     if (this is Resizable) {
       // first time resize
@@ -68,5 +68,5 @@ mixin ComposedComponent on Component {
   }
 
   List<Resizable> children() =>
-      this.components.where((r) => r is Resizable).cast<Resizable>().toList();
+      components.where((r) => r is Resizable).cast<Resizable>().toList();
 }

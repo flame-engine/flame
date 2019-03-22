@@ -57,7 +57,7 @@ abstract class ParallaxComponent extends PositionComponent {
 
   @override
   void resize(Size size) {
-    this._size = size;
+    _size = size;
   }
 
   /// Loads the images defined by this list of filenames. All images are positioned at its scroll center.
@@ -103,7 +103,7 @@ abstract class ParallaxComponent extends PositionComponent {
 
   @override
   void update(double delta) {
-    if (!this.loaded()) {
+    if (!loaded()) {
       return;
     }
     for (int i = 0; i < _layers.length; i++) {

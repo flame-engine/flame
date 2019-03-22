@@ -17,8 +17,8 @@ class Viewport extends ViewportTransform {
   /// Resizes the current view port.
   void resize(Size size) {
     this.size = size;
-    this.extents = Vector2.copy(Vector2(size.width / 2, size.height / 2));
-    this.center = Vector2.copy(Vector2(size.width / 2, size.height / 2));
+    extents = Vector2.copy(Vector2(size.width / 2, size.height / 2));
+    center = Vector2.copy(Vector2(size.width / 2, size.height / 2));
   }
 
   /// Computes the number of horizontal world meters of this viewport considering a percentage of its width.

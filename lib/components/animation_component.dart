@@ -25,7 +25,7 @@ class AnimationComponent extends PositionComponent {
   }) {
     this.width = width;
     this.height = height;
-    this.animation = Animation.sequenced(
+    animation = Animation.sequenced(
       imagePath,
       amount,
       textureX: textureX,
