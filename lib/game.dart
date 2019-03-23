@@ -14,7 +14,7 @@ import 'position.dart';
 /// Represents a generic game.
 ///
 /// Subclass this to implement the [update] and [render] methods.
-/// Flame will deal with calling these methods qroperly when the game's widget is rendered.
+/// Flame will deal with calling these methods properly when the game's widget is rendered.
 abstract class Game {
   // Widget Builder for this Game
   final builder = WidgetBuilder();
