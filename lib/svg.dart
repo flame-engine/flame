@@ -5,7 +5,7 @@ import 'flame.dart';
 import 'position.dart';
 
 class Svg {
-  DrawableRoot svgRoot = null;
+  DrawableRoot svgRoot;
   Size size;
 
   Svg(String fileName) {

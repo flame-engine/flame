@@ -62,7 +62,8 @@ class FlameBiding extends BindingBase with GestureBinding, ServicesBinding {
   static FlameBiding instance;
 
   static FlameBiding ensureInitialized() {
-    if (FlameBiding.instance == null) FlameBiding();
+    if (FlameBiding.instance == null)
+      FlameBiding();
     return FlameBiding.instance;
   }
 }

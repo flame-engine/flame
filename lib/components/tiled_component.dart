@@ -10,7 +10,7 @@ class TiledComponent extends Component {
   String filename;
   TileMap map;
   Image image;
-  Map<String, Image> images = Map<String, Image>();
+  Map<String, Image> images = <String, Image>{};
   Future future;
   bool _loaded = false;
 

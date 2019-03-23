@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flutter/src/painting/text_painter.dart';
+import 'package:flutter/painting.dart';
 
 import 'component.dart';
 import '../position.dart';
@@ -10,14 +10,14 @@ class TextComponent extends PositionComponent {
   String _text;
   TextConfig _config;
 
-  get text => _text;
+  String get text => _text;
 
   set text(String text) {
     _text = text;
     _updateBox();
   }
 
-  get config => _config;
+  TextConfig get config => _config;
 
   set config(TextConfig config) {
     _config = config;

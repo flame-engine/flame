@@ -126,6 +126,7 @@ class TextBoxComponent extends PositionComponent with Resizable {
 
   double get currentHeight => _withMargins((currentLine + 1) * _lineHeight);
 
+  @override
   void render(Canvas c) {
     if (_cache == null) {
       return;
@@ -168,6 +169,7 @@ class TextBoxComponent extends PositionComponent with Resizable {
     _cache = await _redrawCache();
   }
 
+  @override
   void update(double dt) {
     final int prevCurrentChar = currentChar;
     _lifeTime += dt;

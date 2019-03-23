@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _clickFab(GlobalKey<ScaffoldState> key) {
     key.currentState.showSnackBar(SnackBar(
-      content: Text('You clicked the FAB!'),
+      content: const Text('You clicked the FAB!'),
     ));
   }
 
@@ -51,28 +51,28 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       key: key,
       appBar: AppBar(
-        title: Text('Animation as a Widget Demo'),
+        title: const Text('Animation as a Widget Demo'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('Hi there! This is a regular Flutter app,'),
-            Text('with a complex widget tree and also'),
-            Text('some pretty sprite sheet animations :)'),
+            const Text('Hi there! This is a regular Flutter app,'),
+            const Text('with a complex widget tree and also'),
+            const Text('some pretty sprite sheet animations :)'),
             Flame.util.animationAsWidget(
                 _position,
                 animation.Animation.sequenced('minotaur.png', 19,
                     textureWidth: 96.0)),
-            Text('Neat, hum?'),
-            Text('Sprites from Elthen\'s amazing work on itch.io:'),
-            Text('https://elthen.itch.io/2d-pixel-art-minotaur-sprites'),
+            const Text('Neat, hum?'),
+            const Text('Sprites from Elthen\'s amazing work on itch.io:'),
+            const Text('https://elthen.itch.io/2d-pixel-art-minotaur-sprites'),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _clickFab(key),
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flutter/src/painting/decoration_image.dart';
+import 'package:flutter/painting.dart';
 
 import '../flame.dart';
 import 'component.dart';
@@ -48,8 +48,8 @@ class ParallaxRenderer {
 }
 
 abstract class ParallaxComponent extends PositionComponent {
-  final BASE_SPEED = 30;
-  final LAYER_DELTA = 40;
+  final baseSpeed = 30;
+  final layerDelta = 40;
 
   final List<ParallaxRenderer> _layers = [];
   Size _size;
@@ -108,7 +108,7 @@ abstract class ParallaxComponent extends PositionComponent {
     }
     for (int i = 0; i < _layers.length; i++) {
       double scroll = _layers[i].scroll;
-      scroll += (BASE_SPEED + i * LAYER_DELTA) * delta / _size.width;
+      scroll += (baseSpeed + i * layerDelta) * delta / _size.width;
       if (scroll > 1) {
         scroll = scroll % 1;
       }
