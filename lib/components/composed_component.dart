@@ -37,7 +37,7 @@ mixin ComposedComponent on Component {
       OrderedSet(Comparing.on((c) => c.priority()));
 
   @override
-  render(Canvas canvas) {
+  void render(Canvas canvas) {
     canvas.save();
     components.forEach((comp) => _renderComponent(canvas, comp));
     canvas.restore();

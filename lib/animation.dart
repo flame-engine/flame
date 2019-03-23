@@ -34,6 +34,9 @@ class Animation {
   /// Whether the animation loops after the last sprite of the list, going back to the first, or keeps returning the last when done.
   bool loop = true;
 
+  /// Creates an animation given a list of frames.
+  Animation(this.frames, {this.loop = true});
+
   /// Creates an empty animation
   Animation.empty();
 
@@ -46,8 +49,7 @@ class Animation {
     frames = sprites.map((s) => Frame(s, stepTime)).toList();
   }
 
-  /// Creates an animation given a list of frames.
-  Animation(this.frames, {this.loop = true});
+
 
   /// Automatically creates a sequenced animation, that is, an animation based on a sprite sheet.
   ///
@@ -156,7 +158,7 @@ class Animation {
   }
 
   /// Sets a fixed step time to all frames.
-  void set stepTime(double stepTime) {
+  set stepTime(double stepTime) {
     frames.forEach((frame) => frame.stepTime = stepTime);
   }
 

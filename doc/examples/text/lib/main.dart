@@ -16,7 +16,7 @@ TextConfig tiny = regular.withFontSize(12.0);
 
 class MyTextBox extends TextBoxComponent {
   MyTextBox(String text)
-      : super(text, config: tiny, boxConfig: TextBoxConfig(timePerChar: 0.05));
+      : super(text, config: tiny, boxConfig: const TextBoxConfig(timePerChar: 0.05));
 
   @override
   void drawBackground(Canvas c) {
@@ -35,7 +35,7 @@ class MyGame extends BaseGame {
     _start();
   }
 
-  _start() async {
+  void _start() async {
     final Size size = await Flame.util.initialDimensions();
 
     add(TextComponent('Hello, Flame', config: regular)

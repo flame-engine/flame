@@ -6,6 +6,7 @@ import 'package:flame/box2d/box2d_component.dart';
 class Viewport extends ViewportTransform {
   Size size;
 
+  @override
   double scale;
 
   Viewport(this.size, this.scale)
@@ -36,7 +37,7 @@ class Viewport extends ViewportTransform {
   ///
   /// @param screens multiplies the visible screen with to create a bigger virtual screen.
   /// @return the percentage in the range of [0, 1]
-  double getCenterHorizontalScreenPercentage({double screens: 1.0}) {
+  double getCenterHorizontalScreenPercentage({double screens = 1.0}) {
     final width = size.width * screens;
     final x = center.x + ((screens - 1) * size.width / 2);
     final double rest = x.abs() % width;

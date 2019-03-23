@@ -112,7 +112,9 @@ class _GameRenderBox extends RenderBox with WidgetsBindingObserver {
   }
 
   void _tick(Duration timestamp) {
-    if (!attached) return;
+    if (!attached) {
+      return;
+    }
     _scheduleTick();
     _update(timestamp);
     markNeedsPaint();
@@ -166,7 +168,7 @@ abstract class BaseGame extends Game {
       OrderedSet(Comparing.on((c) => c.priority()));
 
   /// Components added by the [addLater] method
-  List<Component> _addLater = [];
+  final List<Component> _addLater = [];
 
   /// Current screen size, updated every resize via the [resize] method hook
   Size size;
@@ -175,7 +177,7 @@ abstract class BaseGame extends Game {
   Position camera = Position.empty();
 
   /// List of deltas used in debug mode to calculate FPS
-  List<double> _dts = [];
+  final List<double> _dts = [];
 
   /// This method is called for every component added, both via [add] and [addLater] methods.
   ///
