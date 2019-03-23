@@ -37,7 +37,7 @@ mixin ComposedComponent on Component {
       OrderedSet(Comparing.on((c) => c.priority()));
 
   @override
-  render(Canvas canvas) {
+  void render(Canvas canvas) {
     canvas.save();
     components.forEach((comp) => _renderComponent(canvas, comp));
     canvas.restore();
@@ -56,11 +56,11 @@ mixin ComposedComponent on Component {
   }
 
   void add(Component c) {
-    this.components.add(c);
+    components.add(c);
 
     if (this is Resizable) {
       // first time resize
-      Resizable thisResizable = this as Resizable;
+      final Resizable thisResizable = this as Resizable;
       if (thisResizable.size != null) {
         c.resize(thisResizable.size);
       }
@@ -68,5 +68,5 @@ mixin ComposedComponent on Component {
   }
 
   List<Resizable> children() =>
-      this.components.where((r) => r is Resizable).cast<Resizable>().toList();
+      components.where((r) => r is Resizable).cast<Resizable>().toList();
 }

@@ -34,18 +34,22 @@ class Animation {
   /// Whether the animation loops after the last sprite of the list, going back to the first, or keeps returning the last when done.
   bool loop = true;
 
+  /// Creates an animation given a list of frames.
+  Animation(this.frames, {this.loop = true});
+
   /// Creates an empty animation
   Animation.empty();
 
   /// Creates an animation based on the parameters.
   ///
   /// All frames have the same [stepTime].
-  Animation.spriteList(List<Sprite> sprites, {double stepTime, this.loop = true}) {
-    this.frames = sprites.map((s) => Frame(s, stepTime)).toList();
+
+  Animation.spriteList(List<Sprite> sprites,
+      {double stepTime, this.loop = true}) {
+    frames = sprites.map((s) => Frame(s, stepTime)).toList();
   }
 
-  /// Creates an animation given a list of frames.
-  Animation(this.frames, {this.loop = true});
+
 
   /// Automatically creates a sequenced animation, that is, an animation based on a sprite sheet.
   ///
@@ -68,16 +72,16 @@ class Animation {
     double textureHeight,
     double stepTime = 0.1,
   }) {
-    this.frames = List<Frame>(amount);
+    frames = List<Frame>(amount);
     for (var i = 0; i < amount; i++) {
-      Sprite sprite = Sprite(
+      final Sprite sprite = Sprite(
         imagePath,
         x: textureX + i * textureWidth,
         y: textureY,
         width: textureWidth,
         height: textureHeight,
       );
-      this.frames[i] = Frame(sprite, stepTime);
+      frames[i] = Frame(sprite, stepTime);
     }
   }
 
@@ -91,16 +95,16 @@ class Animation {
     double textureWidth,
     double textureHeight,
   }) {
-    this.frames = List<Frame>(amount);
+    frames = List<Frame>(amount);
     for (var i = 0; i < amount; i++) {
-      Sprite sprite = Sprite(
+      final Sprite sprite = Sprite(
         imagePath,
         x: textureX + i * textureWidth,
         y: textureY,
         width: textureWidth,
         height: textureHeight,
       );
-      this.frames[i] = Frame(sprite, stepTimes[i]);
+      frames[i] = Frame(sprite, stepTimes[i]);
     }
   }
 
@@ -111,12 +115,12 @@ class Animation {
   /// [dataPath]: Animation's exported data in json format
   static Future<Animation> fromAsepriteData(
       String imagePath, String dataPath) async {
-    String content = await Flame.assets.readFile(dataPath);
-    Map<String, dynamic> json = jsonDecode(content);
+    final String content = await Flame.assets.readFile(dataPath);
+    final Map<String, dynamic> json = jsonDecode(content);
 
-    Map<String, dynamic> jsonFrames = json['frames'];
+    final Map<String, dynamic> jsonFrames = json['frames'];
 
-    var frames = jsonFrames.values.map((value) {
+    final frames = jsonFrames.values.map((value) {
       final frameData = value['frame'];
       final int x = frameData['x'];
       final int y = frameData['y'];
@@ -125,7 +129,7 @@ class Animation {
 
       final stepTime = value['duration'] / 1000;
 
-      Sprite sprite = Sprite(
+      final Sprite sprite = Sprite(
         imagePath,
         x: x.toDouble(),
         y: y.toDouble(),
@@ -154,15 +158,15 @@ class Animation {
   }
 
   /// Sets a fixed step time to all frames.
-  void set stepTime(double stepTime) {
-    this.frames.forEach((frame) => frame.stepTime = stepTime);
+  set stepTime(double stepTime) {
+    frames.forEach((frame) => frame.stepTime = stepTime);
   }
 
   /// Resets the animation, like it'd just been created.
   void reset() {
-    this.clock = 0.0;
-    this.elapsed = 0.0;
-    this.currentIndex = 0;
+    clock = 0.0;
+    elapsed = 0.0;
+    currentIndex = 0;
   }
 
   /// Gets tha current [Sprite] that should be shown.
@@ -202,7 +206,7 @@ class Animation {
 
   /// Returns a new Animation based on this animation, but with its frames in reversed order
   Animation reversed() {
-    return Animation(this.frames.reversed.toList(), loop: this.loop);
+    return Animation(frames.reversed.toList(), loop: loop);
   }
 
   /// Wether all sprites composing this animation are loaded.

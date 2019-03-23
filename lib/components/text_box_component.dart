@@ -16,10 +16,10 @@ class TextBoxConfig {
   final double dismissDelay;
 
   const TextBoxConfig({
-    this.maxWidth: 200.0,
-    this.margin: 8.0,
-    this.timePerChar: 0.0,
-    this.dismissDelay: 0.0,
+    this.maxWidth = 200.0,
+    this.margin = 8.0,
+    this.timePerChar = 0.0,
+    this.dismissDelay = 0.0,
   });
 }
 
@@ -51,11 +51,9 @@ class TextBoxComponent extends PositionComponent with Resizable {
     _text = text;
     _lines = [''];
     text.split(' ').forEach((word) {
-      String possibleLine = _lines.last + ' ' + word;
-      widgets.TextPainter p = config.toTextPainter(possibleLine);
-      if (_lineHeight == null) {
-        _lineHeight = p.height;
-      }
+      final String possibleLine = _lines.last + ' ' + word;
+      final widgets.TextPainter p = config.toTextPainter(possibleLine);
+      _lineHeight ??= p.height;
       if (p.width <= _boxConfig.maxWidth - 2 * _boxConfig.margin) {
         _lines.last = possibleLine;
         _updateMaxWidth(p.width);
@@ -84,7 +82,7 @@ class TextBoxComponent extends PositionComponent with Resizable {
 
   int get currentLine {
     int totalCharCount = 0;
-    int _currentChar = currentChar;
+    final int _currentChar = currentChar;
     for (int i = 0; i < _lines.length; i++) {
       totalCharCount += _lines[i].length;
       if (totalCharCount > _currentChar) {
@@ -115,10 +113,10 @@ class TextBoxComponent extends PositionComponent with Resizable {
   double get currentWidth {
     int i = 0;
     int totalCharCount = 0;
-    int _currentChar = currentChar;
-    int _currentLine = currentLine;
+    final int _currentChar = currentChar;
+    final int _currentLine = currentLine;
     return _lines.sublist(0, _currentLine + 1).map((line) {
-      int charCount =
+      final int charCount =
           (i < _currentLine) ? line.length : (_currentChar - totalCharCount);
       totalCharCount += line.length;
       i++;
@@ -128,6 +126,7 @@ class TextBoxComponent extends PositionComponent with Resizable {
 
   double get currentHeight => _withMargins((currentLine + 1) * _lineHeight);
 
+  @override
   void render(Canvas c) {
     if (_cache == null) {
       return;
@@ -137,8 +136,8 @@ class TextBoxComponent extends PositionComponent with Resizable {
   }
 
   Future<Image> _redrawCache() {
-    PictureRecorder recorder = PictureRecorder();
-    Canvas c = Canvas(
+    final PictureRecorder recorder = PictureRecorder();
+    final Canvas c = Canvas(
         recorder, Rect.fromLTWH(0.0, 0.0, width.toDouble(), height.toDouble()));
     _fullRender(c);
     return recorder.endRecording().toImage(width.toInt(), height.toInt());
@@ -149,7 +148,7 @@ class TextBoxComponent extends PositionComponent with Resizable {
   void _fullRender(Canvas c) {
     drawBackground(c);
 
-    int _currentLine = currentLine;
+    final int _currentLine = currentLine;
     int charCount = 0;
     double dy = _boxConfig.margin;
     for (int line = 0; line < _currentLine; line++) {
@@ -159,7 +158,8 @@ class TextBoxComponent extends PositionComponent with Resizable {
           .paint(c, Offset(_boxConfig.margin, dy));
       dy += _lineHeight;
     }
-    int max = math.min(currentChar - charCount, _lines[_currentLine].length);
+    final int max =
+        math.min(currentChar - charCount, _lines[_currentLine].length);
     _config
         .toTextPainter(_lines[_currentLine].substring(0, max))
         .paint(c, Offset(_boxConfig.margin, dy));
@@ -169,8 +169,9 @@ class TextBoxComponent extends PositionComponent with Resizable {
     _cache = await _redrawCache();
   }
 
+  @override
   void update(double dt) {
-    int prevCurrentChar = currentChar;
+    final int prevCurrentChar = currentChar;
     _lifeTime += dt;
     if (prevCurrentChar != currentChar) {
       redrawLater();

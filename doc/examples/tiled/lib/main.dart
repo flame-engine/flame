@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
 
 void main() {
-  TiledGame game = TiledGame();
+  final TiledGame game = TiledGame();
   runApp(game.widget);
 }
 

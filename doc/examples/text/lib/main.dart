@@ -16,12 +16,12 @@ TextConfig tiny = regular.withFontSize(12.0);
 
 class MyTextBox extends TextBoxComponent {
   MyTextBox(String text)
-      : super(text, config: tiny, boxConfig: TextBoxConfig(timePerChar: 0.05));
+      : super(text, config: tiny, boxConfig: const TextBoxConfig(timePerChar: 0.05));
 
   @override
   void drawBackground(Canvas c) {
-    Rect rect = Rect.fromLTWH(0, 0, width, height);
-    c.drawRect(rect, Paint()..color = Color(0xFFFF00FF));
+    final Rect rect = Rect.fromLTWH(0, 0, width, height);
+    c.drawRect(rect, Paint()..color = const Color(0xFFFF00FF));
     c.drawRect(
         rect.deflate(boxConfig.margin),
         Paint()
@@ -35,8 +35,8 @@ class MyGame extends BaseGame {
     _start();
   }
 
-  _start() async {
-    Size size = await Flame.util.initialDimensions();
+  void _start() async {
+    final Size size = await Flame.util.initialDimensions();
 
     add(TextComponent('Hello, Flame', config: regular)
       ..anchor = Anchor.topCenter

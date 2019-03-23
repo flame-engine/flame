@@ -41,7 +41,7 @@ class Square extends PositionComponent {
   @override
   void update(double t) {
     angle += SPEED * t;
-    angle %= (2 * math.pi);
+    angle %= 2 * math.pi;
   }
 }
 
