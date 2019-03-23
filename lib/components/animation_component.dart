@@ -20,12 +20,12 @@ class AnimationComponent extends PositionComponent {
     int amount, {
     double textureX = 0.0,
     double textureY = 0.0,
-    double textureWidth = null,
-    double textureHeight = null,
+    double textureWidth,
+    double textureHeight,
   }) {
     this.width = width;
     this.height = height;
-    this.animation = Animation.sequenced(
+    animation = Animation.sequenced(
       imagePath,
       amount,
       textureX: textureX,

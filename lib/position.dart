@@ -40,43 +40,43 @@ class Position {
   Position.fromVector(b2d.Vector2 vector) : this(vector.x, vector.y);
 
   Position add(Position other) {
-    this.x += other.x;
-    this.y += other.y;
+    x += other.x;
+    y += other.y;
     return this;
   }
 
   Position minus(Position other) {
-    return this.add(other.clone().opposite());
+    return add(other.clone().opposite());
   }
 
   Position opposite() {
-    return this.times(-1.0);
+    return times(-1.0);
   }
 
   Position times(double scalar) {
-    this.x *= scalar;
-    this.y *= scalar;
+    x *= scalar;
+    y *= scalar;
     return this;
   }
 
   double dotProduct(Position p) {
-    return this.x * p.x + this.y * p.y;
+    return x * p.x + y * p.y;
   }
 
   double length() {
-    return math.sqrt(math.pow(this.x, 2) + math.pow(this.y, 2));
+    return math.sqrt(math.pow(x, 2) + math.pow(y, 2));
   }
 
   Position rotate(double angle) {
-    double nx = math.cos(angle) * this.x - math.sin(angle) * this.y;
-    double ny = math.sin(angle) * this.x + math.cos(angle) * this.y;
-    this.x = nx;
-    this.y = ny;
+    final double nx = math.cos(angle) * x - math.sin(angle) * y;
+    final double ny = math.sin(angle) * x + math.cos(angle) * y;
+    x = nx;
+    y = ny;
     return this;
   }
 
   double distance(Position other) {
-    return this.minus(other).length();
+    return minus(other).length();
   }
 
   ui.Offset toOffset() {
@@ -109,10 +109,10 @@ class Position {
   }
 
   static ui.Rect bounds(List<Position> pts) {
-    double minx = pts.map((e) => e.x).reduce(math.min);
-    double maxx = pts.map((e) => e.x).reduce(math.max);
-    double miny = pts.map((e) => e.y).reduce(math.min);
-    double maxy = pts.map((e) => e.y).reduce(math.max);
+    final double minx = pts.map((e) => e.x).reduce(math.min);
+    final double maxx = pts.map((e) => e.x).reduce(math.max);
+    final double miny = pts.map((e) => e.y).reduce(math.min);
+    final double maxy = pts.map((e) => e.y).reduce(math.max);
     return ui.Rect.fromPoints(ui.Offset(minx, miny), ui.Offset(maxx, maxy));
   }
 }

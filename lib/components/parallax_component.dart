@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flutter/src/painting/decoration_image.dart';
+import 'package:flutter/painting.dart';
 
 import '../flame.dart';
 import 'component.dart';
@@ -14,7 +14,7 @@ class ParallaxRenderer {
   double scroll = 0.0;
 
   ParallaxRenderer(this.filename) {
-    this.future = _load();
+    future = _load();
   }
 
   Future<Image> _load() {
@@ -30,12 +30,12 @@ class ParallaxRenderer {
       return;
     }
 
-    var imageHeight = image.height / window.devicePixelRatio;
-    var imageWidth =
+    final imageHeight = image.height / window.devicePixelRatio;
+    final imageWidth =
         (rect.height / imageHeight) * (image.width / window.devicePixelRatio);
-    var count = rect.width / imageWidth;
+    final count = rect.width / imageWidth;
 
-    Rect fullRect = Rect.fromLTWH(
+    final Rect fullRect = Rect.fromLTWH(
         -scroll * imageWidth, rect.top, (count + 1) * imageWidth, rect.height);
 
     paintImage(
@@ -48,16 +48,16 @@ class ParallaxRenderer {
 }
 
 abstract class ParallaxComponent extends PositionComponent {
-  final BASE_SPEED = 30;
-  final LAYER_DELTA = 40;
+  final baseSpeed = 30;
+  final layerDelta = 40;
 
-  List<ParallaxRenderer> _layers = [];
+  final List<ParallaxRenderer> _layers = [];
   Size _size;
   bool _loaded = false;
 
   @override
   void resize(Size size) {
-    this._size = size;
+    _size = size;
   }
 
   /// Loads the images defined by this list of filenames. All images are positioned at its scroll center.
@@ -96,19 +96,19 @@ abstract class ParallaxComponent extends PositionComponent {
   }
 
   void _drawLayers(Canvas canvas) {
-    Rect rect = Rect.fromPoints(
+    final Rect rect = Rect.fromPoints(
         const Offset(0.0, 0.0), Offset(_size.width, _size.height));
     _layers.forEach((layer) => layer.render(canvas, rect));
   }
 
   @override
   void update(double delta) {
-    if (!this.loaded()) {
+    if (!loaded()) {
       return;
     }
     for (int i = 0; i < _layers.length; i++) {
       double scroll = _layers[i].scroll;
-      scroll += (BASE_SPEED + i * LAYER_DELTA) * delta / _size.width;
+      scroll += (baseSpeed + i * layerDelta) * delta / _size.width;
       if (scroll > 1) {
         scroll = scroll % 1;
       }

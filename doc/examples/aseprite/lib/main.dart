@@ -1,6 +1,6 @@
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
+import 'package:flame/animation.dart' as flame_animation;
 import 'package:flame/components/animation_component.dart';
 import 'package:flutter/material.dart';
 
@@ -11,10 +11,10 @@ class MyGame extends BaseGame {
     _start();
   }
 
-  _start() async {
-    Size size = await Flame.util.initialDimensions();
+ void _start() async {
+    final Size size = await Flame.util.initialDimensions();
 
-    final animation = await FlameAnimation.Animation.fromAsepriteData(
+    final animation = await flame_animation.Animation.fromAsepriteData(
         'chopper.png', 'chopper.json');
     final animationComponent = AnimationComponent(200, 200, animation);
 

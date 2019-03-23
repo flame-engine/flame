@@ -15,7 +15,7 @@ import 'position.dart';
 ///
 /// Subclass this to implement the [update] and [render] methods.
 /// Flame will deal with calling these methods properly when the game's widget is rendered.
-abstract class Game  {
+abstract class Game {
   // Widget Builder for this Game
   final builder = WidgetBuilder();
 
@@ -44,7 +44,6 @@ abstract class Game  {
   /// Returns the game widget. Put this in your structure to start rendering and updating the game.
   /// You can add it directly to the runApp method or inside your widget structure (if you use vanilla screens and widgets).
   Widget get widget => builder.build(this);
-
 }
 
 class WidgetBuilder {
@@ -62,7 +61,7 @@ class _GameRenderObjectWidget extends SingleChildRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) =>
-      _GameRenderBox(context, this.game);
+      _GameRenderBox(context, game);
 
   @override
   void updateRenderObject(BuildContext context, _GameRenderBox _gameRenderBox) {
@@ -113,14 +112,16 @@ class _GameRenderBox extends RenderBox with WidgetsBindingObserver {
   }
 
   void _tick(Duration timestamp) {
-    if (!attached) return;
+    if (!attached) {
+      return;
+    }
     _scheduleTick();
     _update(timestamp);
     markNeedsPaint();
   }
 
   void _update(Duration now) {
-    double dt = _computeDeltaT(now);
+    final double dt = _computeDeltaT(now);
     game._recordDt(dt);
     game.update(dt);
   }
@@ -167,7 +168,7 @@ abstract class BaseGame extends Game {
       OrderedSet(Comparing.on((c) => c.priority()));
 
   /// Components added by the [addLater] method
-  List<Component> _addLater = [];
+  final List<Component> _addLater = [];
 
   /// Current screen size, updated every resize via the [resize] method hook
   Size size;
@@ -176,7 +177,7 @@ abstract class BaseGame extends Game {
   Position camera = Position.empty();
 
   /// List of deltas used in debug mode to calculate FPS
-  List<double> _dts = [];
+  final List<double> _dts = [];
 
   /// This method is called for every component added, both via [add] and [addLater] methods.
   ///
@@ -194,8 +195,8 @@ abstract class BaseGame extends Game {
   ///
   /// Also calls [preAdd], witch in turn sets the current size on the component (because the resize hook won't be called until a new resize happens).
   void add(Component c) {
-    this.preAdd(c);
-    this.components.add(c);
+    preAdd(c);
+    components.add(c);
   }
 
   /// Registers a component to be added on the components on the next tick.
@@ -203,8 +204,8 @@ abstract class BaseGame extends Game {
   /// Use this to add components in places where a concurrent issue with the update method might happen.
   /// Also calls [preAdd] for the component added, immediately.
   void addLater(Component c) {
-    this.preAdd(c);
-    this._addLater.add(c);
+    preAdd(c);
+    _addLater.add(c);
   }
 
   /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.
@@ -281,12 +282,12 @@ abstract class BaseGame extends Game {
   /// So it's technically updates per second, but the relation between updates and renders is 1:1.
   /// Returns 0 if empty.
   double fps([int average = 1]) {
-    List<double> dts = _dts.sublist(math.max(0, _dts.length - average));
+    final List<double> dts = _dts.sublist(math.max(0, _dts.length - average));
     if (dts.isEmpty) {
       return 0.0;
     }
-    double dtSum = dts.reduce((s, t) => s + t);
-    double averageDt = dtSum / average;
+    final double dtSum = dts.reduce((s, t) => s + t);
+    final double averageDt = dtSum / average;
     return 1 / averageDt;
   }
 
@@ -342,7 +343,7 @@ class _EmbeddedGameWidgetState extends State<EmbeddedGameWidget> {
   }
 
   void _afterLayout(_) {
-    RenderBox box = context.findRenderObject();
+    final RenderBox box = context.findRenderObject();
     widget.game.builder.offset = box.localToGlobal(Offset.zero);
   }
 
