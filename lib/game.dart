@@ -14,7 +14,7 @@ import 'position.dart';
 /// Represents a generic game.
 ///
 /// Subclass this to implement the [update] and [render] methods.
-/// Flame will deal with calling these methods properly when the game's widget is rendered.
+/// Flame will deal with calling these methods qroperly when the game's widget is rendered.
 abstract class Game {
   // Widget Builder for this Game
   final builder = WidgetBuilder();
@@ -48,111 +48,8 @@ abstract class Game {
 
 class WidgetBuilder {
   Offset offset = Offset.zero;
-  Widget build(Game game) => Center(
-      child: Directionality(
-          textDirection: TextDirection.ltr,
-          child: _GameRenderObjectWidget(game)));
-}
-
-class _GameRenderObjectWidget extends LeafRenderObjectWidget {
-  final Game game;
-
-  _GameRenderObjectWidget(this.game);
-
-  @override
-  RenderObject createRenderObject(BuildContext context) =>
-      _GameRenderBox(context, this.game);
-
-  @override
-  void updateRenderObject(BuildContext context, _GameRenderBox _gameRenderBox) {
-    _gameRenderBox.game = game;
-  }
-}
-
-class _GameRenderBox extends RenderBox with WidgetsBindingObserver {
-  BuildContext context;
-
-  Game game;
-
-  int _frameCallbackId;
-
-  Duration previous = Duration.zero;
-
-  _GameRenderBox(this.context, this.game);
-
-  @override
-  bool get sizedByParent => true;
-
-  @override
-  void performResize() {
-    super.performResize();
-    game.resize(constraints.biggest);
-  }
-
-  @override
-  void attach(PipelineOwner owner) {
-    super.attach(owner);
-    _scheduleTick();
-    _bindLifecycleListener();
-  }
-
-  @override
-  void detach() {
-    super.detach();
-    _unscheduleTick();
-    _unbindLifecycleListener();
-  }
-
-  void _scheduleTick() {
-    _frameCallbackId = SchedulerBinding.instance.scheduleFrameCallback(_tick);
-  }
-
-  void _unscheduleTick() {
-    SchedulerBinding.instance.cancelFrameCallbackWithId(_frameCallbackId);
-  }
-
-  void _tick(Duration timestamp) {
-    if (!attached) return;
-    _scheduleTick();
-    _update(timestamp);
-    markNeedsPaint();
-  }
-
-  void _update(Duration now) {
-    double dt = _computeDeltaT(now);
-    game._recordDt(dt);
-    game.update(dt);
-  }
-
-  double _computeDeltaT(Duration now) {
-    Duration delta = now - previous;
-    if (previous == Duration.zero) {
-      delta = Duration.zero;
-    }
-    previous = now;
-    return delta.inMicroseconds / Duration.microsecondsPerSecond;
-  }
-
-  @override
-  void paint(PaintingContext context, Offset offset) {
-    context.canvas.save();
-    context.canvas.translate(game.builder.offset.dx + offset.dx, game.builder.offset.dy+ offset.dy);
-    game.render(context.canvas);
-    context.canvas.restore();
-  }
-
-  void _bindLifecycleListener() {
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  void _unbindLifecycleListener() {
-    WidgetsBinding.instance.removeObserver(this);
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    game.lifecycleStateChange(state);
-  }
+  Widget build(Game game) => Directionality(
+      textDirection: TextDirection.ltr, child: EmbeddedGameWidget(game));
 }
 
 /// This is a more complete and opinionated implementation of Game.
@@ -318,40 +215,128 @@ class EmbeddedGameWidget extends LeafRenderObjectWidget {
   final Position size;
   EmbeddedGameWidget(this.game, {this.size});
 
-
   @override
   RenderBox createRenderObject(BuildContext context) {
-    if(size != null) {
-      return RenderEmbeddedGameBox(
-          _GameRenderBox(context, game),
-          widgetSize: this.size,
+    if (size != null) {
+      return ConstrainedGameBox(
+        GameRenderBox(context, game),
+        widgetSize: this.size,
       );
     }
-    return _GameRenderBox(context, game);
-
+    return GameRenderBox(context, game);
   }
 
   @override
   void updateRenderObject(BuildContext context, RenderBox renderObject) {
-    if(size != null){
-      RenderEmbeddedGameBox _renderObject = renderObject as RenderEmbeddedGameBox;
-      _renderObject..game = _GameRenderBox(context, game)..widgetSize = this.size;
+    if (size != null) {
+      ConstrainedGameBox _renderObject = renderObject as ConstrainedGameBox;
+      _renderObject
+        ..game = GameRenderBox(context, game)
+        ..widgetSize = this.size;
     } else {
-      _GameRenderBox _renderObject = renderObject as _GameRenderBox;
+      GameRenderBox _renderObject = renderObject as GameRenderBox;
       _renderObject.game = game;
     }
-
   }
 }
 
-class RenderEmbeddedGameBox extends RenderConstrainedBox{
-  _GameRenderBox game;
+class ConstrainedGameBox extends RenderConstrainedBox {
+  GameRenderBox game;
   Position widgetSize;
 
-  RenderEmbeddedGameBox(this.game, {this.widgetSize}) :  super(child: game, additionalConstraints: BoxConstraints(
-      minWidth: widgetSize.x,
-      maxWidth: widgetSize.x,
-      minHeight: widgetSize.y,
-      maxHeight: widgetSize.y));
+  ConstrainedGameBox(this.game, {this.widgetSize})
+      : super(
+            child: game,
+            additionalConstraints: BoxConstraints(
+                minWidth: widgetSize.x,
+                maxWidth: widgetSize.x,
+                minHeight: widgetSize.y,
+                maxHeight: widgetSize.y));
+}
 
+class GameRenderBox extends RenderBox with WidgetsBindingObserver {
+  BuildContext context;
+
+  Game game;
+
+  int _frameCallbackId;
+
+  Duration previous = Duration.zero;
+
+  GameRenderBox(this.context, this.game);
+
+  @override
+  bool get sizedByParent => true;
+
+  @override
+  void performResize() {
+    super.performResize();
+    game.resize(constraints.biggest);
+  }
+
+  @override
+  void attach(PipelineOwner owner) {
+    super.attach(owner);
+    _scheduleTick();
+    _bindLifecycleListener();
+  }
+
+  @override
+  void detach() {
+    super.detach();
+    _unscheduleTick();
+    _unbindLifecycleListener();
+  }
+
+  void _scheduleTick() {
+    _frameCallbackId = SchedulerBinding.instance.scheduleFrameCallback(_tick);
+  }
+
+  void _unscheduleTick() {
+    SchedulerBinding.instance.cancelFrameCallbackWithId(_frameCallbackId);
+  }
+
+  void _tick(Duration timestamp) {
+    if (!attached) return;
+    _scheduleTick();
+    _update(timestamp);
+    markNeedsPaint();
+  }
+
+  void _update(Duration now) {
+    double dt = _computeDeltaT(now);
+    game._recordDt(dt);
+    game.update(dt);
+  }
+
+  double _computeDeltaT(Duration now) {
+    Duration delta = now - previous;
+    if (previous == Duration.zero) {
+      delta = Duration.zero;
+    }
+    previous = now;
+    return delta.inMicroseconds / Duration.microsecondsPerSecond;
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    context.canvas.save();
+    context.canvas.translate(
+        game.builder.offset.dx + offset.dx, game.builder.offset.dy + offset.dy);
+    game.render(context.canvas);
+    context.canvas.restore();
+  }
+
+  void _bindLifecycleListener() {
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  void _unbindLifecycleListener() {
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    game.lifecycleStateChange(state);
+  }
 }
