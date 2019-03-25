@@ -29,7 +29,7 @@ class AudioPool {
     cache = AudioCache(prefix: prefix);
   }
 
-  void init() async {
+  Future init() async {
     for (int i = 0; i < minPlayers; i++) {
       availablePlayers.add(await _createNewAudioPlayer());
     }
