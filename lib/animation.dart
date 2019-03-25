@@ -49,8 +49,6 @@ class Animation {
     frames = sprites.map((s) => Frame(s, stepTime)).toList();
   }
 
-
-
   /// Automatically creates a sequenced animation, that is, an animation based on a sprite sheet.
   ///
   /// From a single image source, it creates multiple sprites based on the parameters:
