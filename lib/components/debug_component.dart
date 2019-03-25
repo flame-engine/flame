@@ -17,18 +17,24 @@ class DebugComponent extends PositionComponent {
     ..style = PaintingStyle.stroke;
 
   /// Don't do anything (change as desired)
+  @override
   void update(double t) {}
 
   /// Renders the rectangle
+  @override
   void render(Canvas c) {
     prepareCanvas(c);
     c.drawRect(Rect.fromLTWH(0.0, 0.0, width, height), paint);
   }
 
   /// Don't do anything (change as desired)
+  @override
   void resize(Size size) {}
 
+  @override
   bool loaded() => true;
+  @override
   bool destroy() => false;
+  @override
   bool isHud() => false;
 }

@@ -66,38 +66,38 @@ abstract class PositionComponent extends Component {
 
   Position toPosition() => Position(x, y);
   void setByPosition(Position position) {
-    this.x = position.x;
-    this.y = position.y;
+    x = position.x;
+    y = position.y;
   }
 
   Position toSize() => Position(width, height);
   void setBySize(Position size) {
-    this.width = size.x;
-    this.height = size.y;
+    width = size.x;
+    height = size.y;
   }
 
   Rect toRect() => Rect.fromLTWH(x, y, width, height);
   void setByRect(Rect rect) {
-    this.x = rect.left;
-    this.y = rect.top;
-    this.width = rect.width;
-    this.height = rect.height;
+    x = rect.left;
+    y = rect.top;
+    width = rect.width;
+    height = rect.height;
   }
 
   double angleBetween(PositionComponent c) {
-    return (atan2(c.x - this.x, this.y - c.y) - pi / 2) % (2 * pi);
+    return (atan2(c.x - x, y - c.y) - pi / 2) % (2 * pi);
   }
 
   double distance(PositionComponent c) {
-    return sqrt(pow(this.y - c.y, 2) + pow(this.x - c.x, 2));
+    return sqrt(pow(y - c.y, 2) + pow(x - c.x, 2));
   }
 
   void prepareCanvas(Canvas canvas) {
     canvas.translate(x, y);
 
     canvas.rotate(angle);
-    double dx = -anchor.relativePosition.dx * width;
-    double dy = -anchor.relativePosition.dy * height;
+    final double dx = -anchor.relativePosition.dx * width;
+    final double dy = -anchor.relativePosition.dy * height;
     canvas.translate(dx, dy);
   }
 }
@@ -122,7 +122,7 @@ class SpriteComponent extends PositionComponent {
   }
 
   @override
-  render(Canvas canvas) {
+  void render(Canvas canvas) {
     prepareCanvas(canvas);
     sprite.render(canvas, width, height);
   }
@@ -143,9 +143,9 @@ class SvgComponent extends PositionComponent {
     this.width = width;
     this.height = height;
   }
- 
+
   @override
-  render(Canvas canvas) {
+  void render(Canvas canvas) {
     prepareCanvas(canvas);
     svg.render(canvas, width, height);
   }

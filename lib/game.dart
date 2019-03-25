@@ -63,7 +63,7 @@ abstract class BaseGame extends Game {
       OrderedSet(Comparing.on((c) => c.priority()));
 
   /// Components added by the [addLater] method
-  List<Component> _addLater = [];
+  final List<Component> _addLater = [];
 
   /// Current screen size, updated every resize via the [resize] method hook
   Size size;
@@ -72,7 +72,7 @@ abstract class BaseGame extends Game {
   Position camera = Position.empty();
 
   /// List of deltas used in debug mode to calculate FPS
-  List<double> _dts = [];
+  final List<double> _dts = [];
 
   /// This method is called for every component added, both via [add] and [addLater] methods.
   ///
@@ -90,8 +90,8 @@ abstract class BaseGame extends Game {
   ///
   /// Also calls [preAdd], witch in turn sets the current size on the component (because the resize hook won't be called until a new resize happens).
   void add(Component c) {
-    this.preAdd(c);
-    this.components.add(c);
+    preAdd(c);
+    components.add(c);
   }
 
   /// Registers a component to be added on the components on the next tick.
@@ -99,8 +99,8 @@ abstract class BaseGame extends Game {
   /// Use this to add components in places where a concurrent issue with the update method might happen.
   /// Also calls [preAdd] for the component added, immediately.
   void addLater(Component c) {
-    this.preAdd(c);
-    this._addLater.add(c);
+    preAdd(c);
+    _addLater.add(c);
   }
 
   /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.
@@ -177,12 +177,12 @@ abstract class BaseGame extends Game {
   /// So it's technically updates per second, but the relation between updates and renders is 1:1.
   /// Returns 0 if empty.
   double fps([int average = 1]) {
-    List<double> dts = _dts.sublist(math.max(0, _dts.length - average));
+    final List<double> dts = _dts.sublist(math.max(0, _dts.length - average));
     if (dts.isEmpty) {
       return 0.0;
     }
-    double dtSum = dts.reduce((s, t) => s + t);
-    double averageDt = dtSum / average;
+    final double dtSum = dts.reduce((s, t) => s + t);
+    final double averageDt = dtSum / average;
     return 1 / averageDt;
   }
 
@@ -220,7 +220,7 @@ class EmbeddedGameWidget extends LeafRenderObjectWidget {
     if (size != null) {
       return ConstrainedGameBox(
         GameRenderBox(context, game),
-        widgetSize: this.size,
+        widgetSize: size,
       );
     }
     return GameRenderBox(context, game);
@@ -229,12 +229,13 @@ class EmbeddedGameWidget extends LeafRenderObjectWidget {
   @override
   void updateRenderObject(BuildContext context, RenderBox renderObject) {
     if (size != null) {
-      ConstrainedGameBox _renderObject = renderObject as ConstrainedGameBox;
+      final ConstrainedGameBox _renderObject =
+          renderObject as ConstrainedGameBox;
       _renderObject
         ..game = GameRenderBox(context, game)
-        ..widgetSize = this.size;
+        ..widgetSize = size;
     } else {
-      GameRenderBox _renderObject = renderObject as GameRenderBox;
+      final GameRenderBox _renderObject = renderObject as GameRenderBox;
       _renderObject.game = game;
     }
   }
@@ -297,14 +298,16 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   }
 
   void _tick(Duration timestamp) {
-    if (!attached) return;
+    if (!attached) {
+      return;
+    }
     _scheduleTick();
     _update(timestamp);
     markNeedsPaint();
   }
 
   void _update(Duration now) {
-    double dt = _computeDeltaT(now);
+    final double dt = _computeDeltaT(now);
     game._recordDt(dt);
     game.update(dt);
   }

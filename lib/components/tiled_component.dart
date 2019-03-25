@@ -10,32 +10,32 @@ class TiledComponent extends Component {
   String filename;
   TileMap map;
   Image image;
-  Map<String, Image> images = Map<String, Image>();
+  Map<String, Image> images = <String, Image>{};
   Future future;
   bool _loaded = false;
 
   static Paint paint = Paint()..color = Colors.white;
 
   TiledComponent(this.filename) {
-    this.future = _load();
+    future = _load();
   }
 
   Future _load() async {
-    this.map = await _loadMap();
-    this.image = await Flame.images.load(map.tilesets[0].image.source);
-    this.images = await _loadImages(map);
-    this._loaded = true;
+    map = await _loadMap();
+    image = await Flame.images.load(map.tilesets[0].image.source);
+    images = await _loadImages(map);
+    _loaded = true;
   }
 
   Future<TileMap> _loadMap() {
     return Flame.bundle.loadString('assets/tiles/' + filename).then((contents) {
-      var parser = TileMapParser();
+      final parser = TileMapParser();
       return parser.parse(contents);
     });
   }
 
   Future<Map<String, Image>> _loadImages(TileMap map) async {
-    Map<String, Image> result = {};
+    final Map<String, Image> result = {};
     await Future.forEach(map.tilesets, (tileset) async {
       await Future.forEach(tileset.images, (tmxImage) async {
         result[tmxImage.source] = await Flame.images.load(tmxImage.source);
@@ -44,6 +44,7 @@ class TiledComponent extends Component {
     return result;
   }
 
+  @override
   bool loaded() => _loaded;
 
   @override
@@ -65,12 +66,12 @@ class TiledComponent extends Component {
         return;
       }
 
-      var image = images[tile.image.source];
+      final image = images[tile.image.source];
 
-      var rect = tile.computeDrawRect();
-      var src = Rect.fromLTWH(rect.left.toDouble(), rect.top.toDouble(),
+      final rect = tile.computeDrawRect();
+      final src = Rect.fromLTWH(rect.left.toDouble(), rect.top.toDouble(),
           rect.width.toDouble(), rect.height.toDouble());
-      var dst = Rect.fromLTWH(tile.x.toDouble(), tile.y.toDouble(),
+      final dst = Rect.fromLTWH(tile.x.toDouble(), tile.y.toDouble(),
           rect.width.toDouble(), rect.height.toDouble());
 
       c.drawImageRect(image, src, dst, paint);
