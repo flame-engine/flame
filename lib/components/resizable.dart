@@ -9,7 +9,7 @@ class Resizable {
   Size size;
 
   /// Implementation provided by this mixin to the resize hook.
-  resize(Size size) {
+  void resize(Size size) {
     this.size = size;
     children().where((e) => e != null).forEach((e) => e.resize(size));
   }

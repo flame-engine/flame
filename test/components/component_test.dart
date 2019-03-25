@@ -7,7 +7,7 @@ import 'package:flame/position.dart';
 void main() {
   group('component test', () {
     test('test get/set x/y or position', () {
-      PositionComponent c = SpriteComponent();
+      final PositionComponent c = SpriteComponent();
       c.x = 2.2;
       c.y = 3.4;
       expect(c.toPosition().x, 2.2);
@@ -19,7 +19,7 @@ void main() {
     });
 
     test('test get/set widt/height or size', () {
-      PositionComponent c = SpriteComponent();
+      final PositionComponent c = SpriteComponent();
       c.width = 2.2;
       c.height = 3.4;
       expect(c.toSize().x, 2.2);
@@ -31,7 +31,7 @@ void main() {
     });
 
     test('test get/set rect', () {
-      PositionComponent c = SpriteComponent();
+      final PositionComponent c = SpriteComponent();
       c.x = 0.0;
       c.y = 1.0;
       c.width = 2.0;

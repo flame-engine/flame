@@ -5,10 +5,9 @@ import 'package:flame/components/component.dart' show SvgComponent;
 
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyGame());
+void main() => runApp(MyGame().widget);
 
 class MyGame extends BaseGame {
-
   Svg svgInstance;
   SvgComponent android;
 
@@ -16,7 +15,7 @@ class MyGame extends BaseGame {
     _start();
   }
 
-  _start() async {
+  void _start() {
     svgInstance = Svg('android.svg');
     android = SvgComponent.fromSvg(100, 100, svgInstance);
     android.x = 100;
@@ -31,5 +30,4 @@ class MyGame extends BaseGame {
 
     svgInstance.renderPosition(canvas, Position(100, 200), 300, 300);
   }
-
 }

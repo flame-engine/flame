@@ -21,20 +21,18 @@ abstract class Box2DComponent extends Component {
   Viewport viewport;
 
   Box2DComponent({
-    this.dimensions: null,
-    int worldPoolSize: DEFAULT_WORLD_POOL_SIZE,
-    int worldPoolContainerSize: DEFAULT_WORLD_POOL_CONTAINER_SIZE,
-    double gravity: DEFAULT_GRAVITY,
-    this.velocityIterations: DEFAULT_VELOCITY_ITERATIONS,
-    this.positionIterations: DEFAULT_POSITION_ITERATIONS,
-    double scale: DEFAULT_SCALE,
+    this.dimensions,
+    int worldPoolSize = DEFAULT_WORLD_POOL_SIZE,
+    int worldPoolContainerSize = DEFAULT_WORLD_POOL_CONTAINER_SIZE,
+    double gravity = DEFAULT_GRAVITY,
+    this.velocityIterations = DEFAULT_VELOCITY_ITERATIONS,
+    this.positionIterations = DEFAULT_POSITION_ITERATIONS,
+    double scale = DEFAULT_SCALE,
   }) {
-    if (this.dimensions == null) {
-      this.dimensions = window.physicalSize;
-    }
+    dimensions ??= window.physicalSize;
     final pool = DefaultWorldPool(worldPoolSize, worldPoolContainerSize);
-    this.world = World.withPool(Vector2(0.0, gravity), pool);
-    this.viewport = Viewport(dimensions, scale);
+    world = World.withPool(Vector2(0.0, gravity), pool);
+    viewport = Viewport(dimensions, scale);
   }
 
   @override
@@ -47,7 +45,7 @@ abstract class Box2DComponent extends Component {
 
   @override
   void render(canvas) {
-    if (viewport.size == Size(0.0, 0.0)) {
+    if (viewport.size == Size.zero) {
       return;
     }
     components.forEach((c) {
@@ -134,11 +132,11 @@ abstract class BodyComponent extends Component {
     }
   }
 
-  Vector2 get center => this.body.worldCenter;
+  Vector2 get center => body.worldCenter;
 
   void _renderCircle(Canvas canvas, Fixture fixture) {
-    Vector2 center = Vector2.zero();
-    CircleShape circle = fixture.getShape();
+    final Vector2 center = Vector2.zero();
+    final CircleShape circle = fixture.getShape();
     body.getWorldPointToOut(circle.p, center);
     viewport.getWorldToScreen(center, center);
     renderCircle(
@@ -152,16 +150,16 @@ abstract class BodyComponent extends Component {
   }
 
   void _renderPolygon(Canvas canvas, Fixture fixture) {
-    PolygonShape polygon = fixture.getShape();
+    final PolygonShape polygon = fixture.getShape();
     assert(polygon.count <= MAX_POLYGON_VERTICES);
-    List<Vector2> vertices = Vec2Array().get(polygon.count);
+    final List<Vector2> vertices = Vec2Array().get(polygon.count);
 
     for (int i = 0; i < polygon.count; ++i) {
       body.getWorldPointToOut(polygon.vertices[i], vertices[i]);
       viewport.getWorldToScreen(vertices[i], vertices[i]);
     }
 
-    List<Offset> points = [];
+    final List<Offset> points = [];
     for (int i = 0; i < polygon.count; i++) {
       points.add(Offset(vertices[i].x, vertices[i].y));
     }
