@@ -1,6 +1,8 @@
-## [next]
+## [0.10.3]
 - Svg support
 - Adding `Animation#reversed` allowing a new reversed animation to be created from an existing animation.
+- Fix games inside regular apps when the component is inside a sliver
+- Support asesprite animations
 
 ## [0.10.2]
 - Fixed some warnings and formatting
