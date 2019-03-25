@@ -16,7 +16,8 @@ TextConfig tiny = regular.withFontSize(12.0);
 
 class MyTextBox extends TextBoxComponent {
   MyTextBox(String text)
-      : super(text, config: tiny, boxConfig: const TextBoxConfig(timePerChar: 0.05));
+      : super(text,
+            config: tiny, boxConfig: const TextBoxConfig(timePerChar: 0.05));
 
   @override
   void drawBackground(Canvas c) {

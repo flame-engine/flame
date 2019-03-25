@@ -11,7 +11,7 @@ class MyGame extends BaseGame {
     _start();
   }
 
- void _start() async {
+  void _start() async {
     final Size size = await Flame.util.initialDimensions();
 
     final animation = await flame_animation.Animation.fromAsepriteData(
