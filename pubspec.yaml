@@ -17,7 +17,7 @@ dependencies:
   synchronized: ^1.5.1+1
   tiled: ^0.2.1
   convert: ^2.0.1
-  flutter_svg: 0.12.0
+  flutter_svg: ^0.12.0
 
 dev_dependencies:
   flutter_test:
