@@ -30,7 +30,10 @@ class Ball extends PositionComponent {
         this.x = gameSize.width - this.width - 1;
       else
         this.x = 1;
+
       foward = !foward;
+      print("boin");
+      Flame.audio.playSfx("boin.mp3", volume: 1.2);
     }
   }
 }
@@ -44,7 +47,8 @@ class MyGame extends BaseGame {
     Size size = await Flame.util.initialDimensions();
 
     Flame.audio.disableLog();
-    Flame.audio.loopMusic("music.mp3", volume: 0.6);
+    Flame.audio.load("boin.mp3");
+    Flame.audio.loopMusic("music.mp3", volume: 0.4);
 
     add(
       Ball(size)

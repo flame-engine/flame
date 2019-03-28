@@ -18,3 +18,4 @@ dev_dependencies:
 flutter:
   assets:
     - assets/audio/music.mp3
+    - assets/audio/boin.mp3
