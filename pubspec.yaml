@@ -10,9 +10,9 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  audioplayers: ^0.7.7
+  audioplayers: ^0.10.0
   ordered_set: ^1.1.2
-  path_provider: ^0.4.1
+  path_provider: ^0.5.0
   box2d_flame: ^0.4.2
   synchronized: ^1.5.1+1
   tiled: ^0.2.1
