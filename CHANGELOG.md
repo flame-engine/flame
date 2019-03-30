@@ -1,3 +1,7 @@
+## next
+
+- New audio API
+
 ## [0.10.3]
 - Svg support
 - Adding `Animation#reversed` allowing a new reversed animation to be created from an existing animation.
