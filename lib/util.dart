@@ -28,7 +28,7 @@ class Util {
     return SystemChrome.setPreferredOrientations([orientation]);
   }
 
-  /// Waits for the initial screen dimensions to be avaliable.
+  /// Waits for the initial screen dimensions to be available.
   ///
   /// Because of flutter's issue #5259, when the app starts the size might be 0x0.
   /// This waits for the information to be properly updated.

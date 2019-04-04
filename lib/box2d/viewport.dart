@@ -15,7 +15,7 @@ class Viewport extends ViewportTransform {
 
   double worldAlignBottom(double height) => -(size.height / 2 / scale) + height;
 
-  /// Resizes the current view port.
+  /// Resizes the current viewport.
   void resize(Size size) {
     this.size = size;
     extents = Vector2.copy(Vector2(size.width / 2, size.height / 2));
@@ -24,7 +24,7 @@ class Viewport extends ViewportTransform {
 
   /// Computes the number of horizontal world meters of this viewport considering a percentage of its width.
   ///
-  /// @param percent percetage of the width in [0, 1] range.
+  /// @param percent percentage of the width in [0, 1] range.
   double worldWidth(double percent) {
     return percent * (size.width / scale);
   }
@@ -33,7 +33,7 @@ class Viewport extends ViewportTransform {
 
   double get height => size.height / scale / window.devicePixelRatio;
 
-  /// Computes the scroll percentage of total screen width of the current viwerport center position.
+  /// Computes the scroll percentage of total screen width of the current viewport center position.
   ///
   /// @param screens multiplies the visible screen with to create a bigger virtual screen.
   /// @return the percentage in the range of [0, 1]
@@ -45,7 +45,7 @@ class Viewport extends ViewportTransform {
     return x > 0 ? scroll : 1 - scroll;
   }
 
-  /// Follows the spececified body component using a sliding focus window defined as a percentage of the total viewport.
+  /// Follows the specified body component using a sliding focus window defined as a percentage of the total viewport.
   ///
   /// @param component to follow.
   /// @param horizontal percentage of the horizontal viewport. Null means no horizontal following.

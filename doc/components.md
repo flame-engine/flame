@@ -50,7 +50,7 @@ This will create a simple three frame animation
     this.player = new AnimationComponent(64.0, 64.0, new Animation.spriteList(sprites, stepTime: 0.01));
 ```
 
-If you have a spritesheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](doc/images.md#Animation)):
+If you have a sprite sheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](doc/images.md#Animation)):
 
 ```dart
     this.player = new AnimationComponent.sequenced(64.0, 64.0, 'player.png', 2);
