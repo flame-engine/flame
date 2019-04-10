@@ -1,3 +1,6 @@
+## [0.10.4]
+- Fix breaking change on svg plugin
+
 ## [0.10.3]
 - Svg support
 - Adding `Animation#reversed` allowing a new reversed animation to be created from an existing animation.
