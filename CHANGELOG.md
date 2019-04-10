@@ -1,6 +1,8 @@
 ## next
-
 - New audio API
+
+## [0.10.4]
+- Fix breaking change on svg plugin
 
 ## [0.10.3]
 - Svg support
