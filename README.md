@@ -41,10 +41,12 @@ Just drop it in your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flame: ^0.10.4
+  flame: ^0.11.0
 ```
 
 And start using it!
+
+Be sure to be using at least Flutter beta channel (1.4.9-hotfix.1). There was a breaking change on Flutter that we fixed but it's not on the stable channel yet. We intend to switch to stable once this change is released. For more information about flutter channels, please check [this link](https://github.com/flutter/flutter/wiki/Flutter-build-release-channels).
 
 ## Documentation
 

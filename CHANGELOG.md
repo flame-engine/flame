@@ -1,3 +1,9 @@
+## [0.11.0]
+- Implementing low latency api from audioplayers (breaking change)
+- Improved examples by adding some instructions on how to run
+- Add notice on readme about the channel
+- Upgrade path_provider to fix conflicts
+
 ## [0.10.4]
 - Fix breaking change on svg plugin
 
