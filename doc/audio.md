@@ -6,15 +6,18 @@ To play an audio, it's really simple! Just run, at any moment:
     import 'package:flame/flame.dart';
 
     Flame.audio.play('explosion.mp3');
+    Flame.audio.playLongAudio('music.mp3');
 ```
 
 Or, if you prefer:
 
 ```dart
-    import 'package:flame/audio.dart';
+    import 'package:flame/flame_audio.dart';
 
-    Audio audio = new Audio();
-    audio.play('explosion.mp3');
+    FlameAudio audio = new FlameAudio();
+
+    audio.play('explosion.mp3'); // Or
+    audio.playLongAudio('music.mp3');
 ```
 
 The difference is that each instance shares a different cache. Normally you would want to use the `Flame.audio` instance and totally share the cache.
@@ -28,8 +31,11 @@ This uses the [audioplayers](https://github.com/luanpotter/audioplayer) lib, in 
 If you want to play indefinitely, just use `loop` function:
 
 ```dart
-    Flame.audio.loop('music.mp3');
+    Flame.audio.loop('music.mp3'); // Or
+    Flame.audio.loopLongAudio('music.mp3');
 ```
+
+The difference between the `play/loop` and `playLongAudio/loopLongAudio` is that `play/loop` makes uses of optimezed features that allow sounds to be looped without gaps between their iterations, and almost no drop on the game frame rate will happen. You should whenever possible, prefer these methods. `playLongAudio/loopLongAudio` allows for audios of any length to be played, but they do create frame rate drop, and the looped audio will feature a small gap between iterations.
 
 Finally, you can pre-load your audios. Audios need to be stored in the memory the first time they are requested; therefore, the first time you play each mp3 you might get a delay. In order to pre-load your audios, just use:
 

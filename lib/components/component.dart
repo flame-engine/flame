@@ -10,7 +10,7 @@ import '../anchor.dart';
 
 /// This represents a Component for your game.
 ///
-/// Components can be bullets flying on the screen, a spaship or your player's fighter.
+/// Components can be bullets flying on the screen, a spaceship or your player's fighter.
 /// Anything that either renders or updates can be added to the list on [BaseGame]. It will deal with calling those methods for you.
 /// Components also have other methods that can help you out if you want to overwrite them.
 abstract class Component {
@@ -36,7 +36,7 @@ abstract class Component {
   /// Note that for a more consistent experience, you can pre-load all your assets beforehand with Flame.images.loadAll.
   bool loaded() => true;
 
-  /// Wether this should be destroyed or not.
+  /// Whether this should be destroyed or not.
   ///
   /// It will be called once per component per loop, and if it returns true, [BaseGame] will mark your component for deletion and remove it before the next loop.
   bool destroy() => false;
