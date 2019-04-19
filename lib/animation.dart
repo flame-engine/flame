@@ -58,7 +58,7 @@ class Animation {
   /// [textureWidth]: width of each frame (defaults to null, that is, full width of the sprite sheet)
   /// [textureHeight]: height of each frame (defaults to null, that is, full height of the sprite sheet)
   ///
-  /// For example, if you have a spritesheet where each row is an animation, and each frame is 32x32
+  /// For example, if you have a sprite sheet where each row is an animation, and each frame is 32x32
   ///     Animation.sequenced('sheet.png', 8, textureY: 32.0 * i, textureWidth: 32.0, textureHeight: 32.0);
   /// This will create the i-th animation on the 'sheet.png', given it has 8 frames.
   Animation.sequenced(
@@ -109,7 +109,7 @@ class Animation {
   /// Automatically creates an Animation Object using animation data provided by the json file
   /// provided by Aseprite
   ///
-  /// [imagePath]: Source of the spritesheet animation
+  /// [imagePath]: Source of the sprite sheet animation
   /// [dataPath]: Animation's exported data in json format
   static Future<Animation> fromAsepriteData(
       String imagePath, String dataPath) async {
@@ -160,14 +160,14 @@ class Animation {
     frames.forEach((frame) => frame.stepTime = stepTime);
   }
 
-  /// Resets the animation, like it'd just been created.
+  /// Resets the animation, like it would just have been created.
   void reset() {
     clock = 0.0;
     elapsed = 0.0;
     currentIndex = 0;
   }
 
-  /// Gets tha current [Sprite] that should be shown.
+  /// Gets the current [Sprite] that should be shown.
   ///
   /// In case it reaches the end:
   ///  * If [loop] is true, it will return the last sprite. Otherwise, it will go back to the first.
@@ -175,7 +175,7 @@ class Animation {
     return currentFrame.sprite;
   }
 
-  /// If [loop] is false, returns wether the animation is done (fixed in the last Sprite).
+  /// If [loop] is false, returns whether the animation is done (fixed in the last Sprite).
   ///
   /// Always returns false otherwise.
   bool done() {
@@ -207,7 +207,7 @@ class Animation {
     return Animation(frames.reversed.toList(), loop: loop);
   }
 
-  /// Wether all sprites composing this animation are loaded.
+  /// Whether all sprites composing this animation are loaded.
   bool loaded() {
     return frames.every((frame) => frame.sprite.loaded());
   }
