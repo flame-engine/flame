@@ -28,14 +28,14 @@ Support us by becoming a patron on Patreon
 
 ## External Modules
 
-Flame is modular, and you can always pick and choose. Some modules are extracted to separate plugins; some are bundled with flame, and some must be added separetly.
+Flame is modular, and you can always pick and choose. Some modules are extracted to separate plugins; some are bundled with flame, and some must be added separately.
 
 * [audioplayers](https://github.com/luanpotter/audioplayers) is the audio engine behind flame. It's included.
 * [tiled](https://github.com/feroult/tiled.dart) adds support for parsing and using TMX files from Tiled. It's included.
 * [box2d](https://github.com/feroult/box2d.dart) adds wrappers over Box2D for the physics engine. It's included.
 
 * [flame_gamepad](https://github.com/fireslime/flame_gamepad) adds support to gamepad. Android only. It's not included, add to your pubspec as desired.
-* [play_games](https://github.com/luanpotter/play_games) integrates to Google Play Games Servies (GPGS). Adds login, achievements, saved games and leaderboard. Android only. It's not included, add to your pubspec as desired. Be sure to check the instructions on how to configure, as it's not trivial.
+* [play_games](https://github.com/luanpotter/play_games) integrates to Google Play Games Services (GPGS). Adds login, achievements, saved games and leaderboard. Android only. It's not included, add to your pubspec as desired. Be sure to check the instructions on how to configure, as it's not trivial.
 
 ## Usage
 

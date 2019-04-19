@@ -33,7 +33,7 @@ class Position {
 
   /// Creates using another [Position]; i.e., clones this position.
   ///
-  /// This is usefull because this class is mutable, so beware of mutability issues.
+  /// This is useful because this class is mutable, so beware of mutability issues.
   Position.fromPosition(Position position) : this(position.x, position.y);
 
   /// Creates using a [b2d.Vector2]
