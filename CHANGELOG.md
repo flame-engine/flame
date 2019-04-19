@@ -1,5 +1,6 @@
-## [Next]
-- Fixed lack of paint update when using AnimationAsWidget as pointed in #78
+## [0.11.1]
+- Fixed lack of paint update when using AnimationAsWidget as pointed in #78 (thanks, @renancarujo)
+- Added travis (thanks, @renancarujo)
 
 ## [0.11.0]
 - Implementing low latency api from audioplayers (breaking change)
