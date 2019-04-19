@@ -4,7 +4,7 @@
 
 Flutter provides lots of cool and slick animations out of the box, most related to movement and tweens (continuous changes in size, position, color, et cetera). However, one particular thing that it's really hard to do using only the native APIs is a simple sprite sheet animation. Or any sprite sheet handling, for that matter.
 
-A sprite sheet is a single image that has multiple images (Sprites) inside, each one being accessed via it's defining rectangle (x, y, width, and height). Maybe every sprite inside has the same size, like a tileset; for example:
+A sprite sheet is a single image that has multiple images (sprites) inside, each one being accessed via it's defining rectangle (x, y, width, and height). Maybe every sprite inside has the same size, like a tileset; for example:
 
 <p align="center"> 
     <img width="432" src="tileset-big.png" />
@@ -12,13 +12,13 @@ A sprite sheet is a single image that has multiple images (Sprites) inside, each
     <small>This is the Dunjo Tileset, it was created by <a href="https://arks.itch.io/dungeon-platform-tileset">arks</a>.</small>
 </p>
 
-Let's say you want to have several icons in your app. Instead of loading to memory dozens of small images, you can load a single one and use Sprites to refer to each icon. That's how fonts work under the hood (though normally those are SVG nowadays).
+Let's say you want to have several icons in your app. Instead of loading to memory dozens of small images, you can load a single one and use sprites to refer to each icon. That's how fonts work under the hood (though normally those are SVG nowadays).
 
 This practice is very common in web development, because of the infamous request overhead. Making a single request is (used to be? HTTP2 tries to solve this) way faster than several requests each with headers, wrappers, TCP/IP protocol packages and shenanigans you don't really see happening. But it's also very common in game development, and might be useful for your packaged mobile assets, because of how graphics cards work. Without digging too much into the topic, basically loading a single image is faster because the GPU doesn't need to keep switching the loaded images. Maybe some modern GPUs might even optimize this for multiple images, but having control over what gets bundled with what might be crucial if want to hit that sweet sweet 60 FPS mark.
 
 Finally, especially when talking about animations, images of the sort are all distributed in sprite sheet format, and it's easier to add to your folder structure, understand and maintain, than having hundreds of files mixed up and needing to keep adding entries to your pubspec.yaml.
 
-But I digress, this is an article about how to make Spritesheet animations, so if the title wasn't enough to encourage you to do so, nor this brief explanation of the concept, let's see if some graphics are.
+But I digress, this is an article about how to make sprite sheet animations, so if the title wasn't enough to encourage you to do so, nor this brief explanation of the concept, let's see if some graphics are.
 
 There are a lot of websites out there that provide a plethora of assets, some cheap, some free, some even free for commercial usage, assets being sprite sheets for animations, tilesets, icon sets and much more. One that I highly recommend is [itch.io](itch.io). It's an awesome community of people who really love indie gaming, and I do recommend to check it out rather than Steam next time you want a more innovative title to play. But not only complete and WIP games are cataloged, but also resources and assets. There is a large collection of commercially free sprite sheets, like the Dunjo Tileset of the image before.
 
@@ -35,19 +35,19 @@ I'm actually gonna crop and paste using imagemagick just the frames we are going
 <p align="center"> 
     <img src="minotaur.png" />
     <br />
-    <small>Spritesheet extract by me from the original files, available in the examples for the Flame repository. All credits to <a href="https://elthen.itch.io/">elthen</a>.</small>
+    <small>Sprite sheet extract by me from the original files, available in the examples for the Flame repository. All credits to <a href="https://elthen.itch.io/">elthen</a>.</small>
 </p>
 
 Now, how are we going to render this as an animation, updating the frames clockwork, to have a fluid, functional, sprite sheet animation? Enters [flame](https://github.com/luanpotter/flame), the modular game engine. Yes, it's a game engine, but it's very small and modular, so you can easily pick and choose. I'm assuming your app isn't an actual game, though if it's a more interactive style experience, with game loops, updates, and renderers, you should consider using 100% flame instead (or alongside) of Flutter widgets. For a tutorial on game development on Flame, I do recommend the more up-to-date article posted by the awesome folks at [GeekyAnts](https://blog.geekyants.com/@geekyants): [Building A 2D game in Flutter](https://blog.geekyants.com/building-a-2d-game-in-flutter-a-comprehensive-guide-913f647846bc).
 
 If you don't have a Flame game, don't worry. Flame allows you to embed complete and complex games right inside your widget tree from regular Flutter apps. And now there are some brand new helpers to allow you to easily do the most simple and request things flame provides: drawing sprite sheet animations. How come? Well, let's get right into it.
 
-## Importing the Spritesheet
+## Importing the sprite sheet
 
 First things off, get a hold of your sprite sheet. That can be most images format, but since this is pixel art, a PNG is a must. We have our minotaur sample, you can choose other of your liking. Wanna add a ticking clock with fancy effects or a bomb that goes off? You can find all those beautiful assets online. The simplest way is to have a row of sprites of the same size, in the animation order, though it's fully configurable. Firstly, the folder structure. Flutter expects you to have an `assets` folder on your project root, and Flame expects an `images` folder, because you might have audio, fonts and other sorts of assets. Inside, put your image files.
 
 <p align="center"> 
-    <img width="50%" src="folder_strucutre.png" />
+    <img width="50%" src="folder_structure.png" />
     <br />
     <small>This is the folder structure to create. `animation_widget` is the root folder (created by `flutter create`), inside an assets/images folder, and inside, all your assets.</small>
 </p>
@@ -124,7 +124,7 @@ How we do the magic then? Just add the following to your widget tree:
     Flame.util.animationAsWidget(Position(WIDTH, HEIGHT), animation.Animation.sequenced('minotaur.png', AMOUNT, textureWidth: FRAME_WIDTH))
 ```
 
-The first parameter's `WIDTH` and `HEIGHT` are the actual size of the widget on the screen. This does not need to match the sprite size, as Flame will scale it for you. You might, however, wanna keep the aspect, so things don't get distorted. In your case, the minotaur asset is a row of 96x96 pixels, so squares, therefore we can scale keeping `WIDTH/HEIGHT = 1`. We will choose the size as 256 px. The `sequenced` constructor is a helper that easily creates the animation assuming equal-sized frames in a row, in order. You can configure the start x, start y, texture width and height, but those will default gracefully to (0,0) and the actual width and height of the file. You can create your animation passing in the frame list, each frame with a different step time and Sprite (source rectangle).
+The first parameter's `WIDTH` and `HEIGHT` are the actual size of the widget on the screen. This does not need to match the sprite size, as Flame will scale it for you. You might, however, wanna keep the aspect, so things don't get distorted. In your case, the minotaur asset is a row of 96x96 pixels, so squares, therefore we can scale keeping `WIDTH/HEIGHT = 1`. We will choose the size as 256 px. The `sequenced` constructor is a helper that easily creates the animation assuming equal-sized frames in a row, in order. You can configure the start x, start y, texture width and height, but those will default gracefully to (0,0) and the actual width and height of the file. You can create your animation passing in the frame list, each frame with a different step time and sprite (source rectangle).
 
 In our case, we only need to set the `textureWidth` to 96.0, as the original width for the image is actually 19 x 96. Don't mix up texture coordinates, or source coordinates, that's the x, y inside the sprite sheet image and the size relating to that file, and the actual place and size the image/animation is going to be drawn on screen! Those are two very distinct things. We don't need to set the actual position as the widget tree will dictate that for us, we just provide the size as it's going to be a fixed size widget.
 

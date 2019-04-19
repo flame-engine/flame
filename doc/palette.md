@@ -1,6 +1,6 @@
 # Palette
 
-Throught your game you are going to need to use colors in lots of places. There are two classes on `dart:ui` that can be used, `Color` and `Paint`.
+Throughout your game you are going to need to use colors in lots of places. There are two classes on `dart:ui` that can be used, `Color` and `Paint`.
 
 The `Color` class is nothing but a wrapper over a single simple ARGB color in hexadecimal integer format, so, to create a Color object, just pass in the color as an integer in the ARGB format.
 
@@ -22,7 +22,7 @@ You can create such a Paint like so:
   Paint green = new Paint()..color = const Color(0xFF00FF00);
 ```
 
-To help that and also keep your game's color palette consistent, Flame adds the Palette class. You can use it to both easily access Colors and Paints where needed and also to define as constants the colors your game use, so you don't get those mixe up.
+To help that and also keep your game's color palette consistent, Flame adds the Palette class. You can use it to both easily access Colors and Paints where needed and also to define as constants the colors your game use, so you don't get those mixed up.
 
 The `BasicPalette` class is an example of what a palette can look like, and adds black and white as colors. So to use black or white you can access those directly from the BasicPalette; for example, using `color`:
 
