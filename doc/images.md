@@ -26,7 +26,7 @@ You could also specify the coordinates in the original image where the sprite is
 
 The default values are `0.0` for `x` and `y` and `null` for `width` and `height` (meaning it will use the full width/height of the source image).
 
-The `Sprite` class has a `loaded` method that returns wether the image has been loaded, and a render method, that allows you to render the image into a `Canvas`:
+The `Sprite` class has a `loaded` method that returns whether the image has been loaded, and a render method, that allows you to render the image into a `Canvas`:
 
 ```dart
     Sprite block = new Sprite('block.png');
