@@ -16,7 +16,7 @@ before_script:
   - flutter doctor
 script:
   - set -e
-  # - ./format.sh
+  - ./format.sh
   - set +e
   - flutter test
 cache:
