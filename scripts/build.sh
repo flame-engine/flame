@@ -1,5 +1,8 @@
 #!/bin/bash
 
-dartanalyzer .
+# run this first time:
+# flutter update-packages
+
+flutter analyze --flutter-repo
 flutter format .
 flutter test
