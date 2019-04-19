@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import 'flame_audio.dart';
 import 'images.dart';
 import 'assets_cache.dart';
 import 'util.dart';
@@ -19,8 +20,8 @@ class Flame {
   static AssetBundle _bundle;
   static AssetBundle get bundle => _bundle == null ? rootBundle : _bundle;
 
-  /// Access a shared instance of the [AudioCache] class.
-  static AudioCache audio = AudioCache(prefix: 'audio/');
+  /// Access a shared instance of the [FlameAudio] class.
+  static FlameAudio audio = FlameAudio();
 
   /// Access a shared instance of the [Images] class.
   static Images images = Images();
