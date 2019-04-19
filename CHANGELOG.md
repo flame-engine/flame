@@ -1,5 +1,6 @@
-## [Next]
+## [next]
 - Fixed lack of paint update when using AnimationAsWidget as pointed in #78
+- Fixed bug on animatons with a single frame
 
 ## [0.11.0]
 - Implementing low latency api from audioplayers (breaking change)
