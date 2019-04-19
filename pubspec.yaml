@@ -1,6 +1,6 @@
 name: flame
 description: A minimalist Flutter game engine, provides a nice set of somewhat independent modules you can choose from.
-version: 0.11.0
+version: 0.11.1
 author: Luan Nico <luannico27@gmail.com>
 homepage: https://github.com/luanpotter/flame
 
