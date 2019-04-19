@@ -1,5 +1,6 @@
 ## [next]
 - Fixed bug on animatons with a single frame
+- Fixed warning on using specific version o flutter_svg on pubspec
 
 ## [0.11.1]
 - Fixed lack of paint update when using AnimationAsWidget as pointed in #78
