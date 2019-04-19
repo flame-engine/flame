@@ -43,9 +43,11 @@ class Animation {
   /// Creates an animation based on the parameters.
   ///
   /// All frames have the same [stepTime].
-
   Animation.spriteList(List<Sprite> sprites,
       {double stepTime, this.loop = true}) {
+    if (sprites.isEmpty) {
+      throw Exception('You must have at least one frame!');
+    }
     frames = sprites.map((s) => Frame(s, stepTime)).toList();
   }
 
@@ -147,6 +149,9 @@ class Animation {
   /// Returns whether the animation is on the last frame.
   bool get isLastFrame => currentIndex == frames.length - 1;
 
+  /// Returns whether the animation has only a single frame (and is, thus, a still image).
+  bool get isSingleFrame => frames.length == 1;
+
   /// Sets a different step time to each frame. The sizes of the arrays must match.
   set variableStepTimes(List<double> stepTimes) {
     assert(stepTimes.length == frames.length);
@@ -186,6 +191,9 @@ class Animation {
   void update(double dt) {
     clock += dt;
     elapsed += dt;
+    if (isSingleFrame) {
+      return;
+    }
     if (!loop && isLastFrame) {
       return;
     }
