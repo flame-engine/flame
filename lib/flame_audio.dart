@@ -6,18 +6,18 @@ class FlameAudio {
   AudioCache audioCache = AudioCache(prefix: 'audio/');
 
   /// Plays a single run of the given [file]
-  Future<AudioPlayer> play(String file, { volume = 1.0 }) {
+  Future<AudioPlayer> play(String file, {volume = 1.0}) {
     return audioCache.play(file, volume: volume, mode: PlayerMode.LOW_LATENCY);
   }
 
   /// Plays, and keep looping the given [file]
-  Future<AudioPlayer> loop(String file, { volume = 1.0 }) {
+  Future<AudioPlayer> loop(String file, {volume = 1.0}) {
     return audioCache.loop(file, volume: volume, mode: PlayerMode.LOW_LATENCY);
   }
 
   /// Plays a single run of the given file [file]
   /// This method supports long audio files
-  Future<AudioPlayer> playLongAudio(String file, { volume = 1.0 }) {
+  Future<AudioPlayer> playLongAudio(String file, {volume = 1.0}) {
     return audioCache.play(file, volume: volume);
   }
 
@@ -25,7 +25,7 @@ class FlameAudio {
   /// This method supports long audio files
   ///
   /// NOTE: Length audio files on Android have an audio gap between loop iterations, this happens due to limitations on Android's native media player features, if you need a gapless loop, prefer the loop method
-  Future<AudioPlayer> loopLongAudio(String file, { volume = 1.0 }) {
+  Future<AudioPlayer> loopLongAudio(String file, {volume = 1.0}) {
     return audioCache.play(file, volume: volume);
   }
 
