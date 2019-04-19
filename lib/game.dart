@@ -217,43 +217,20 @@ class EmbeddedGameWidget extends LeafRenderObjectWidget {
 
   @override
   RenderBox createRenderObject(BuildContext context) {
-    if (size != null) {
-      return ConstrainedGameBox(
-        GameRenderBox(context, game),
-        widgetSize: size,
-      );
-    }
-    return GameRenderBox(context, game);
+    return RenderConstrainedBox(
+      child: GameRenderBox(context, game),
+      additionalConstraints: BoxConstraints.expand(width: size?.x, height: size?.y)
+    );
   }
 
   @override
-  void updateRenderObject(BuildContext context, RenderBox renderObject) {
-    if (size != null) {
-      final ConstrainedGameBox _renderObject =
-          renderObject as ConstrainedGameBox;
-      _renderObject
-        ..game = GameRenderBox(context, game)
-        ..widgetSize = size;
-    } else {
-      final GameRenderBox _renderObject = renderObject as GameRenderBox;
-      _renderObject.game = game;
-    }
+  void updateRenderObject(BuildContext context, RenderConstrainedBox renderBox) {
+    renderBox
+    ..child = GameRenderBox(context, game)
+    ..additionalConstraints = BoxConstraints.expand(width: size?.x, height: size?.y);
   }
 }
 
-class ConstrainedGameBox extends RenderConstrainedBox {
-  GameRenderBox game;
-  Position widgetSize;
-
-  ConstrainedGameBox(this.game, {this.widgetSize})
-      : super(
-            child: game,
-            additionalConstraints: BoxConstraints(
-                minWidth: widgetSize.x,
-                maxWidth: widgetSize.x,
-                minHeight: widgetSize.y,
-                maxHeight: widgetSize.y));
-}
 
 class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   BuildContext context;
