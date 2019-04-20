@@ -99,6 +99,18 @@ class Position {
     return Position.fromPosition(this);
   }
 
+  bool equals(Position p) {
+    return p.x == x && p.y == y;
+  }
+
+  @override
+  bool operator ==(other) {
+    return other is Position && equals(other);
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
+
   @override
   String toString() {
     return '($x, $y)';

@@ -43,5 +43,23 @@ void main() {
       final double result = p1.distance(p2);
       expectDouble(result, 5.0);
     });
+
+    test('equality', () {
+      final Position p1 = Position.empty();
+      final Position p2 = Position.empty();
+      expect(p1 == p2, true);
+    });
+
+    test('non equality', () {
+      final Position p1 = Position.empty();
+      final Position p2 = Position(1.0, 0.0);
+      expect(p1 == p2, false);
+    });
+
+    test('hashCode', () {
+      final Position p1 = Position(2.0, -1.0);
+      final Position p2 = Position(1.0, 0.0);
+      expect(p1.hashCode == p2.hashCode, false);
+    });
   });
 }
