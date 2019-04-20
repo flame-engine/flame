@@ -76,7 +76,7 @@ class Position {
   }
 
   double distance(Position other) {
-    return minus(other).length();
+    return clone().minus(other).length();
   }
 
   ui.Offset toOffset() {
