@@ -67,6 +67,7 @@ class Position {
     return math.sqrt(math.pow(x, 2) + math.pow(y, 2));
   }
 
+  /// Rotate around origin; [angle] in radians.
   Position rotate(double angle) {
     final double nx = math.cos(angle) * x - math.sin(angle) * y;
     final double ny = math.sin(angle) * x + math.cos(angle) * y;
@@ -77,6 +78,10 @@ class Position {
 
   double distance(Position other) {
     return clone().minus(other).length();
+  }
+
+  Position scaleTo(double newLength) {
+    return times(newLength / length());
   }
 
   ui.Offset toOffset() {
