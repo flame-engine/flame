@@ -61,5 +61,17 @@ void main() {
       final Position p2 = Position(1.0, 0.0);
       expect(p1.hashCode == p2.hashCode, false);
     });
+
+    test('scaleTo', () {
+      final Position p = Position(1.0, 0.0);
+
+      p.rotate(math.pi / 4).scaleTo(2.0);
+      expect(p.length(), 2.0);
+
+      p.rotate(-math.pi / 4);
+      expect(p.length(), 2.0);
+      expect(p.x, 2.0);
+      expect(p.y, 0.0);
+    });
   });
 }
