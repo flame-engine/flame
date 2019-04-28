@@ -92,8 +92,14 @@ class Position {
   }
 
   /// Changes the [length] of this vector to the one provided, without chaning direction.
+  ///
+  /// If you try to scale the zero (empty) vector, it will remain unchanged, and no error will be thrown.
   Position scaleTo(double newLength) {
-    return times(newLength.abs() / length());
+    final l = length();
+    if (l == 0) {
+      return this;
+    }
+    return times(newLength.abs() / l);
   }
 
   /// Limits the [length] of this vector to the one provided, without changing direction.
