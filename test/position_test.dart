@@ -33,8 +33,14 @@ void main() {
     });
 
     test('test length', () {
-      final Position p = Position(3.0, 4.0);
-      expectDouble(p.length(), 5.0);
+      final Position p1 = Position(3.0, 4.0);
+      expectDouble(p1.length(), 5.0);
+
+      final Position p2 = Position(2.0, 0.0);
+      expectDouble(p2.length(), 2.0);
+
+      final Position p3 = Position(0.0, 1.5);
+      expectDouble(p3.length(), 1.5);
     });
 
     test('test distance', () {
@@ -72,6 +78,23 @@ void main() {
       expect(p.length(), 2.0);
       expect(p.x, 2.0);
       expect(p.y, 0.0);
+    });
+
+    test('limit', () {
+      final Position p1 = Position(1.0, 0.0);
+      p1.limit(0.75);
+      expect(p1.length(), 0.75);
+      expect(p1.x, 0.75);
+      expect(p1.y, 0.0);
+
+      final Position p2 = Position(1.0, 1.0);
+      p2.limit(3.0);
+      expectDouble(p2.length(), math.sqrt(2));
+      expect(p2.x, 1.0);
+      expect(p2.y, 1.0);
+      p2.limit(1.0);
+      expectDouble(p2.length(), 1.0);
+      expect(p2.x, p2.y);
     });
   });
 }

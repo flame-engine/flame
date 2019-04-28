@@ -39,18 +39,20 @@ class Position {
   /// Creates using a [b2d.Vector2]
   Position.fromVector(b2d.Vector2 vector) : this(vector.x, vector.y);
 
+  /// Adds the coordinates from another vector.
+  ///
+  /// This method changes `this` instance and returns itself.
   Position add(Position other) {
     x += other.x;
     y += other.y;
     return this;
   }
 
+  /// Substracts the coordinates from another vector.
+  ///
+  /// This method changes `this` instance and returns itself.
   Position minus(Position other) {
     return add(other.clone().opposite());
-  }
-
-  Position opposite() {
-    return times(-1.0);
   }
 
   Position times(double scalar) {
@@ -59,12 +61,21 @@ class Position {
     return this;
   }
 
+  Position opposite() {
+    return times(-1.0);
+  }
+
+  Position div(double scalar) {
+    return times(1 / scalar);
+  }
+
   double dotProduct(Position p) {
     return x * p.x + y * p.y;
   }
 
+  /// The length (or magnitude) of this vector.
   double length() {
-    return math.sqrt(math.pow(x, 2) + math.pow(y, 2));
+    return math.sqrt(dotProduct(this));
   }
 
   /// Rotate around origin; [angle] in radians.
@@ -80,8 +91,17 @@ class Position {
     return clone().minus(other).length();
   }
 
+  /// Changes the [length] of this vector to the one provided, without chaning direction.
   Position scaleTo(double newLength) {
-    return times(newLength / length());
+    return times(newLength.abs() / length());
+  }
+
+  /// Limits the [length] of this vector to the one provided, without changing direction.
+  ///
+  /// If this vector's length is bigger than [maxLength], it becomes [maxLength]; otherwise, nothing changes.
+  Position limit(double maxLength) {
+    final newLength = length().clamp(0.0, maxLength.abs());
+    return scaleTo(newLength);
   }
 
   ui.Offset toOffset() {
