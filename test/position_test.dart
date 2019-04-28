@@ -80,6 +80,11 @@ void main() {
       expect(p.y, 0.0);
     });
 
+    test('scaleTo the zero vector', () {
+      final Position p = Position.empty();
+      expect(p.scaleTo(1.0).length(), 0.0);
+    });
+
     test('limit', () {
       final Position p1 = Position(1.0, 0.0);
       p1.limit(0.75);
