@@ -39,18 +39,20 @@ class Position {
   /// Creates using a [b2d.Vector2]
   Position.fromVector(b2d.Vector2 vector) : this(vector.x, vector.y);
 
+  /// Adds the coordinates from another vector.
+  ///
+  /// This method changes `this` instance and returns itself.
   Position add(Position other) {
     x += other.x;
     y += other.y;
     return this;
   }
 
+  /// Substracts the coordinates from another vector.
+  ///
+  /// This method changes `this` instance and returns itself.
   Position minus(Position other) {
     return add(other.clone().opposite());
-  }
-
-  Position opposite() {
-    return times(-1.0);
   }
 
   Position times(double scalar) {
@@ -59,14 +61,24 @@ class Position {
     return this;
   }
 
+  Position opposite() {
+    return times(-1.0);
+  }
+
+  Position div(double scalar) {
+    return times(1 / scalar);
+  }
+
   double dotProduct(Position p) {
     return x * p.x + y * p.y;
   }
 
+  /// The length (or magnitude) of this vector.
   double length() {
-    return math.sqrt(math.pow(x, 2) + math.pow(y, 2));
+    return math.sqrt(dotProduct(this));
   }
 
+  /// Rotate around origin; [angle] in radians.
   Position rotate(double angle) {
     final double nx = math.cos(angle) * x - math.sin(angle) * y;
     final double ny = math.sin(angle) * x + math.cos(angle) * y;
@@ -76,7 +88,26 @@ class Position {
   }
 
   double distance(Position other) {
-    return minus(other).length();
+    return clone().minus(other).length();
+  }
+
+  /// Changes the [length] of this vector to the one provided, without chaning direction.
+  ///
+  /// If you try to scale the zero (empty) vector, it will remain unchanged, and no error will be thrown.
+  Position scaleTo(double newLength) {
+    final l = length();
+    if (l == 0) {
+      return this;
+    }
+    return times(newLength.abs() / l);
+  }
+
+  /// Limits the [length] of this vector to the one provided, without changing direction.
+  ///
+  /// If this vector's length is bigger than [maxLength], it becomes [maxLength]; otherwise, nothing changes.
+  Position limit(double maxLength) {
+    final newLength = length().clamp(0.0, maxLength.abs());
+    return scaleTo(newLength);
   }
 
   ui.Offset toOffset() {
@@ -98,6 +129,18 @@ class Position {
   Position clone() {
     return Position.fromPosition(this);
   }
+
+  bool equals(Position p) {
+    return p.x == x && p.y == y;
+  }
+
+  @override
+  bool operator ==(other) {
+    return other is Position && equals(other);
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 
   @override
   String toString() {

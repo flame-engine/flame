@@ -1,5 +1,11 @@
+## [0.11.2]
+- Fixed bug on animatons with a single frame
+- Fixed warning on using specific version o flutter_svg on pubspec
+- ParallaxComponent is not abstract anymore, as it does not include any abstract method
+- Added some functionality to Position class
+
 ## [0.11.1]
-- Fixed lack of paint update when using AnimationAsWidget as pointed in #78 (thanks, @renancarujo)
+- Fixed lack of paint update when using AnimationAsWidget as pointed in #78
 - Added travis (thanks, @renancarujo)
 
 ## [0.11.0]

@@ -47,7 +47,7 @@ class ParallaxRenderer {
   }
 }
 
-abstract class ParallaxComponent extends PositionComponent {
+class ParallaxComponent extends PositionComponent {
   final baseSpeed = 30;
   final layerDelta = 40;
 
