@@ -48,7 +48,9 @@ dependencies:
 
 And start using it!
 
-Be sure to be using at least Flutter beta channel (1.4.9-hotfix.1). There was a breaking change on Flutter that we fixed but it's not on the stable channel yet. We intend to switch to stable once this change is released. For more information about flutter channels, please check [this link](https://github.com/flutter/flutter/wiki/Flutter-build-release-channels).
+__Important__
+
+We strive to keep Flame working on the Flutter's dev channel, currently on version 1.6.1, be sure to check which channel are you using if you encounter any trouble.
 
 ## Documentation
 
