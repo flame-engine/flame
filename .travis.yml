@@ -10,7 +10,7 @@ addons:
       - libstdc++6
       - fonts-droid
 before_script:
-  - git clone https://github.com/flutter/flutter.git -b beta --depth 1
+  - git clone https://github.com/flutter/flutter.git -b dev --depth 1
   - mv flutter $HOME/flutter
   - export PATH=$HOME/flutter/bin:$PATH
   - flutter doctor
