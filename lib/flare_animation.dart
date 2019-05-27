@@ -6,13 +6,17 @@ import "package:flare_flutter/flare.dart";
 import "package:flare_flutter/flare_actor.dart";
 
 class FlareAnimation {
-
   final FlutterActorArtboard _artboard;
 
   String _animationName;
   final List<FlareAnimationLayer> _animationLayers = [];
 
-  double x = 0.0, y = 0.0, _width = 0.0, _height = 0.0, xScale = 0.0, yScale = 0.0;
+  double x = 0.0,
+      y = 0.0,
+      _width = 0.0,
+      _height = 0.0,
+      xScale = 0.0,
+      yScale = 0.0;
 
   Picture _picture;
 
@@ -39,7 +43,7 @@ class FlareAnimation {
   }
 
   set width(double newWidth) {
-    _width = newWidth;  
+    _width = newWidth;
     xScale = _width / _artboard.width;
   }
 

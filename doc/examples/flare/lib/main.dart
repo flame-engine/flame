@@ -12,14 +12,13 @@ void main() {
   final game = MyGame();
   runApp(game.widget);
 
-   Flame.util.addGestureRecognizer(TapGestureRecognizer()
-      ..onTapDown = (TapDownDetails evt) {
-        game.cycleAnimation();
-      });
+  Flame.util.addGestureRecognizer(TapGestureRecognizer()
+    ..onTapDown = (TapDownDetails evt) {
+      game.cycleAnimation();
+    });
 }
 
 class MyGame extends BaseGame {
-
   final TextConfig fpsTextConfig = TextConfig(color: const Color(0xFFFFFFFF));
 
   final paint = Paint()..color = Color(0xFFe5e5e5e5);
@@ -98,13 +97,9 @@ class MyGame extends BaseGame {
 
     if (loaded) {
       canvas.drawRect(
-        Rect.fromLTWH(flareAnimation.x,
-          flareAnimation.y,
-          flareAnimation.width,
-          flareAnimation.height
-        ),
-        paint
-      );
+          Rect.fromLTWH(flareAnimation.x, flareAnimation.y,
+              flareAnimation.width, flareAnimation.height),
+          paint);
       flareAnimation.render(canvas);
 
       flareAnimation2.render(canvas);
@@ -127,4 +122,3 @@ class MyGame extends BaseGame {
     }
   }
 }
-
