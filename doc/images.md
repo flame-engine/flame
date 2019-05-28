@@ -137,7 +137,7 @@ Flame provides a simple wrapper of [Flare](https://www.2dimensions.com/about-fla
 Check the following snippet on how to use this wrapper:
 
 ```dart
-class MyGame extends BaseGame {
+class MyGame extends Game {
   FlareAnimation flareAnimation;
   bool loaded = false;
 
@@ -160,7 +160,6 @@ class MyGame extends BaseGame {
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
 
     if (loaded) {
       flareAnimation.render(canvas);
@@ -175,3 +174,5 @@ class MyGame extends BaseGame {
   }
 }
 ```
+
+FlareAnimations are normally used inside `FlareComponent`s, that way `BaseGame` will handle calling `render` and `update` automatically.

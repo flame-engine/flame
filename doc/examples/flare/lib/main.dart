@@ -27,9 +27,6 @@ class MyGame extends BaseGame {
   int _currentAnimation = 0;
 
   FlareAnimation flareAnimation;
-  FlareComponent flareAnimation2;
-  FlareComponent flareAnimation3;
-  FlareComponent flareAnimation4;
   bool loaded = false;
 
   MyGame() {
@@ -60,19 +57,19 @@ class MyGame extends BaseGame {
     flareAnimation.height = 228;
 
     // Second animation
-    flareAnimation2 = FlareComponent("assets/Bob_Minion.flr", "Wave", 306, 228);
+    final flareAnimation2 = FlareComponent("assets/Bob_Minion.flr", "Wave", 306, 228);
     flareAnimation2.x = 50;
     flareAnimation2.y = 240;
     add(flareAnimation2);
 
     // Third animation
-    flareAnimation3 = FlareComponent("assets/Bob_Minion.flr", "Jump", 306, 228);
+    final flareAnimation3 = FlareComponent("assets/Bob_Minion.flr", "Jump", 306, 228);
     flareAnimation3.x = 50;
     flareAnimation3.y = 400;
     add(flareAnimation3);
 
     // Third animation
-    flareAnimation4 =
+    final flareAnimation4 =
         FlareComponent("assets/Bob_Minion.flr", "Dance", 306, 228);
     flareAnimation4.x = 50;
     flareAnimation4.y = 550;

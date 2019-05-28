@@ -22,14 +22,18 @@ class FlareComponent extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    _flareAnimation.render(canvas);
+    if (_flareAnimation != null) {
+      _flareAnimation.render(canvas);
+    }
   }
 
   @override
   void update(double dt) {
-    _flareAnimation.x = x;
-    _flareAnimation.y = y;
+    if (_flareAnimation != null) {
+      _flareAnimation.x = x;
+      _flareAnimation.y = y;
 
-    _flareAnimation.update(dt);
+      _flareAnimation.update(dt);
+    }
   }
 }
