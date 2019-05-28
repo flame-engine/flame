@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flare_animation.dart';
+import 'package:flame/components/flare_component.dart';
 import 'package:flame/text_config.dart';
 import 'package:flame/position.dart';
 
@@ -26,9 +27,9 @@ class MyGame extends BaseGame {
   int _currentAnimation = 0;
 
   FlareAnimation flareAnimation;
-  FlareAnimation flareAnimation2;
-  FlareAnimation flareAnimation3;
-  FlareAnimation flareAnimation4;
+  FlareComponent flareAnimation2;
+  FlareComponent flareAnimation3;
+  FlareComponent flareAnimation4;
   bool loaded = false;
 
   MyGame() {
@@ -59,34 +60,23 @@ class MyGame extends BaseGame {
     flareAnimation.height = 228;
 
     // Second animation
-    flareAnimation2 = await FlareAnimation.load("assets/Bob_Minion.flr");
-    flareAnimation2.updateAnimation("Wave");
-
+    flareAnimation2 = FlareComponent("assets/Bob_Minion.flr", "Wave", 306, 228);
     flareAnimation2.x = 50;
     flareAnimation2.y = 240;
-
-    flareAnimation2.width = 306;
-    flareAnimation2.height = 228;
+    add(flareAnimation2);
 
     // Third animation
-    flareAnimation3 = await FlareAnimation.load("assets/Bob_Minion.flr");
-    flareAnimation3.updateAnimation("Jump");
-
+    flareAnimation3 = FlareComponent("assets/Bob_Minion.flr", "Jump", 306, 228);
     flareAnimation3.x = 50;
     flareAnimation3.y = 400;
-
-    flareAnimation3.width = 306;
-    flareAnimation3.height = 228;
+    add(flareAnimation3);
 
     // Third animation
-    flareAnimation4 = await FlareAnimation.load("assets/Bob_Minion.flr");
-    flareAnimation4.updateAnimation("Dance");
-
+    flareAnimation4 =
+        FlareComponent("assets/Bob_Minion.flr", "Dance", 306, 228);
     flareAnimation4.x = 50;
     flareAnimation4.y = 550;
-
-    flareAnimation4.width = 306;
-    flareAnimation4.height = 228;
+    add(flareAnimation4);
 
     loaded = true;
   }
@@ -100,11 +90,8 @@ class MyGame extends BaseGame {
           Rect.fromLTWH(flareAnimation.x, flareAnimation.y,
               flareAnimation.width, flareAnimation.height),
           paint);
-      flareAnimation.render(canvas);
 
-      flareAnimation2.render(canvas);
-      flareAnimation3.render(canvas);
-      flareAnimation4.render(canvas);
+      flareAnimation.render(canvas);
     }
 
     if (debugMode()) {
@@ -114,11 +101,9 @@ class MyGame extends BaseGame {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (loaded) {
       flareAnimation.update(dt);
-      flareAnimation2.update(dt);
-      flareAnimation3.update(dt);
-      flareAnimation4.update(dt);
     }
   }
 }

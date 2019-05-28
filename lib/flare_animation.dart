@@ -71,8 +71,11 @@ class FlareAnimation {
     }
   }
 
-  @override
   void render(Canvas canvas) {
+    if (_picture == null) {
+      return;
+    }
+
     canvas.save();
     canvas.translate(x, y);
 
@@ -80,7 +83,6 @@ class FlareAnimation {
     canvas.restore();
   }
 
-  @override
   void update(double elapsedSeconds) {
     int lastFullyMixed = -1;
     double lastMix = 0.0;
