@@ -160,7 +160,6 @@ class MyGame extends Game {
 
   @override
   void render(Canvas canvas) {
-
     if (loaded) {
       flareAnimation.render(canvas);
     }

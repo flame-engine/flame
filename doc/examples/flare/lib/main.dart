@@ -56,19 +56,18 @@ class MyGame extends BaseGame {
     flareAnimation.width = 306;
     flareAnimation.height = 228;
 
-    // Second animation
-    final flareAnimation2 = FlareComponent("assets/Bob_Minion.flr", "Wave", 306, 228);
+    final flareAnimation2 =
+        FlareComponent("assets/Bob_Minion.flr", "Wave", 306, 228);
     flareAnimation2.x = 50;
     flareAnimation2.y = 240;
     add(flareAnimation2);
 
-    // Third animation
-    final flareAnimation3 = FlareComponent("assets/Bob_Minion.flr", "Jump", 306, 228);
+    final flareAnimation3 =
+        FlareComponent("assets/Bob_Minion.flr", "Jump", 306, 228);
     flareAnimation3.x = 50;
     flareAnimation3.y = 400;
     add(flareAnimation3);
 
-    // Third animation
     final flareAnimation4 =
         FlareComponent("assets/Bob_Minion.flr", "Dance", 306, 228);
     flareAnimation4.x = 50;
