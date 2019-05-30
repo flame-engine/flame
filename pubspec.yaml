@@ -18,6 +18,11 @@ dependencies:
   tiled: ^0.2.1
   convert: ^2.0.1
   flutter_svg: ^0.13.0+1
+  flare_flutter:
+    git:
+      url: git://github.com/2d-inc/Flare-Flutter.git
+      ref: dev
+      path: flare_flutter
 
 dev_dependencies:
   flutter_test:
