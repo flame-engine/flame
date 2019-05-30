@@ -69,6 +69,22 @@ This component uses an instance of `Svg` class to represent a Component that has
     android.y = 100;
 ```
 
+## FlareAnimation Component
+
+This component wraps an instance of the [FlareAnimation](doc/images.md#FlareAnimation), it receives the filename of the Flare animation file, which animation from that file you want to use, and the `width` and `height` of the rendered animation.
+
+```dart
+    final fileName = "assets/Bob_Minion.flr";
+    final animation = "Wave";
+    final width = 306;
+    final height = 228;
+
+    FlareComponent flareAnimation = FlareComponent(fileName, animation, width, height);
+    flareAnimation.x = 50;
+    flareAnimation.y = 240;
+    add(flareAnimation);
+```
+
 ## Composed component
 
 A mixin that helps you to make a `Component` wraps other components. It is useful to group visual components through a hierarchy. When implemented, makes every item in its `components` collection field be updated and rendered with the same conditions.

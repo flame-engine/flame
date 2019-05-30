@@ -129,3 +129,49 @@ _Note: trimmed sprite sheets are not supported by flame, so if you export your s
 Animations, after created, have an update and render method; the latter renders the current frame, and the former ticks the internal clock to update the frames.
 
 Animations are normally used inside `AnimationComponent`s, but custom components with several Animations can be created as well.
+
+## FlareAnimation
+
+Flame provides a simple wrapper of [Flare](https://www.2dimensions.com/about-flare) animations so you can use them on Flame games.
+
+Check the following snippet on how to use this wrapper:
+
+```dart
+class MyGame extends Game {
+  FlareAnimation flareAnimation;
+  bool loaded = false;
+
+  MyGame() {
+    _start();
+  }
+
+  void _start() async {
+    flareAnimation = await FlareAnimation.load("assets/FLARE_FILE.flr");
+    flareAnimation.updateAnimation("ANIMATION_NAME");
+
+    flareAnimation.x = 50;
+    flareAnimation.y = 50;
+
+    flareAnimation.width = 306;
+    flareAnimation.height = 228;
+
+    loaded = true;
+  }
+
+  @override
+  void render(Canvas canvas) {
+    if (loaded) {
+      flareAnimation.render(canvas);
+    }
+  }
+
+  @override
+  void update(double dt) {
+    if (loaded) {
+      flareAnimation.update(dt);
+    }
+  }
+}
+```
+
+FlareAnimations are normally used inside `FlareComponent`s, that way `BaseGame` will handle calling `render` and `update` automatically.
