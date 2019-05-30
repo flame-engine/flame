@@ -76,7 +76,7 @@ abstract class PositionComponent extends Component {
     height = size.y;
   }
 
-  Rect toRect() => Rect.fromLTWH(x, y, width, height);
+  Rect toRect() => Rect.fromLTWH(x - anchor.relativePosition.dx * width, y - anchor.relativePosition.dy * height, width, height);
   void setByRect(Rect rect) {
     x = rect.left;
     y = rect.top;
