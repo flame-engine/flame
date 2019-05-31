@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/audio_cache.dart';
 
@@ -30,13 +32,13 @@ class FlameAudio {
   }
 
   /// Prefetch an audio in the cache
-  Future<void> load(String file) async {
-    await audioCache.load(file);
+  Future<File> load(String file) {
+    return audioCache.load(file);
   }
 
   /// Prefetch a list of audios in the cache
-  Future<void> loadAll(List<String> files) async {
-    await audioCache.loadAll(files);
+  Future<List<File>> loadAll(List<String> files) {
+    return audioCache.loadAll(files);
   }
 
   /// Clears the file in the cache

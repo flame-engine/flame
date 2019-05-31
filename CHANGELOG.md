@@ -1,3 +1,8 @@
+## 0.12.0
+- Updating flutter_svg and pubspec to support the latest flutter version (1.6.0)
+- Adding Flare Support
+- Fixing PositionComponent#toRect which was not considering the anchor property (thanks, @illiapoplawski)
+
 ## [0.11.2]
 - Fixed bug on animatons with a single frame
 - Fixed warning on using specific version o flutter_svg on pubspec
