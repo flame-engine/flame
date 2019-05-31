@@ -6,7 +6,7 @@ This is the index of the documentation for Flame, updated to version `0.8.3`.
 
 * [Structure](structure.md)
 * [Audio](audio.md)
-* [Images](images.md)
+* [Images/Animations](images.md)
 * [Text Rendering](text.md)
 * [Colors and the Palette](palette.md)
 * [Components](components.md)

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # run this first time:
 # flutter update-packages
