@@ -114,13 +114,15 @@ class Position {
 
   /// Returns the angle of this vector from another [Position] in radians.
   double angleFrom(Position other) {
-    //Technically the origin is not a vector so you cannot find the angle between
-    //itself and another vector so just default to calculating the angle between
-    //the non-origin point and the origin to avoid division by zero
-    if(x == 0 && y == 0)
+    // Technically the origin is not a vector so you cannot find the angle between
+    // itself and another vector so just default to calculating the angle between
+    // the non-origin point and the origin to avoid division by zero
+    if (x == 0 && y == 0) {
       return other.angle();
-    if(other.x == 0 && other.y == 0)
+    }
+    if (other.x == 0 && other.y == 0) {
       return angle();
+    }
 
     return math.acos(dotProduct(other) / (length() * other.length()));
   }
