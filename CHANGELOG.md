@@ -1,4 +1,4 @@
-## [next]
+## 0.12.2
 - Added more functionality to the Position class (thanks, @illiapoplawski)
 
 ## 0.12.1
