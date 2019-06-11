@@ -96,7 +96,7 @@ class Position {
   Position rotateDelta(double radians) {
     return rotate(angle() + radians);
   }
-  
+
   /// Change current rotation by delta angle; [angle] in degrees.
   Position rotateDeltaDeg(double degrees) {
     return rotateDeg(angleDeg() + degrees);
