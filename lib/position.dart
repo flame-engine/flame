@@ -87,6 +87,51 @@ class Position {
     return this;
   }
 
+  /// Rotate around origin; [angle] in degrees.
+  Position rotateDeg(double angle) {
+    return rotate(angle * math.pi / 180);
+  }
+
+  /// Change current rotation by delta angle; [angle] in radians.
+  Position rotateDelta(double radians) {
+    return rotate(angle() + radians);
+  }
+  
+  /// Change current rotation by delta angle; [angle] in degrees.
+  Position rotateDeltaDeg(double degrees) {
+    return rotateDeg(angleDeg() + degrees);
+  }
+
+  /// Returns the angle of this vector from origin in radians.
+  double angle() {
+    return math.atan2(y, x);
+  }
+
+  /// Returns the angle of this vector from origin in degrees.
+  double angleDeg() {
+    return angle() * 180 / math.pi;
+  }
+
+  /// Returns the angle of this vector from another [Position] in radians.
+  double angleFrom(Position other) {
+    // Technically the origin is not a vector so you cannot find the angle between
+    // itself and another vector so just default to calculating the angle between
+    // the non-origin point and the origin to avoid division by zero
+    if (x == 0 && y == 0) {
+      return other.angle();
+    }
+    if (other.x == 0 && other.y == 0) {
+      return angle();
+    }
+
+    return math.acos(dotProduct(other) / (length() * other.length()));
+  }
+
+  /// Returns the angle of this vector from another [Position] in degrees.
+  double angleFromDeg(Position other) {
+    return angleFrom(other) * 180 / math.pi;
+  }
+
   double distance(Position other) {
     return clone().minus(other).length();
   }
@@ -100,6 +145,11 @@ class Position {
       return this;
     }
     return times(newLength.abs() / l);
+  }
+
+  /// Normalizes this vector, without changing direction.
+  Position normalize() {
+    return scaleTo(1.0);
   }
 
   /// Limits the [length] of this vector to the one provided, without changing direction.
@@ -138,6 +188,21 @@ class Position {
   bool operator ==(other) {
     return other is Position && equals(other);
   }
+
+  /// Negate.
+  Position operator -() => clone()..opposite();
+
+  /// Subtract two vectors.
+  Position operator -(Position other) => clone()..minus(other);
+
+  /// Add two vectors.
+  Position operator +(Position other) => clone()..add(other);
+
+  /// Scale.
+  Position operator /(double scale) => clone()..div(scale);
+
+  /// Scale.
+  Position operator *(double scale) => clone()..times(scale);
 
   @override
   int get hashCode => toString().hashCode;
