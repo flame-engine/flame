@@ -1,3 +1,6 @@
+## [next]
+- Added more functionality to the Position class (thanks, @illiapoplawski)
+
 ## 0.12.1
 - Fixed PositionComponent#setByRect to comply with toRect (thanks, @illiapoplawski)
 
