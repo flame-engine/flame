@@ -1,3 +1,6 @@
+## next
+- Downgrading flame support to stable channel.
+
 ## 0.12.2
 - Added more functionality to the Position class (thanks, @illiapoplawski)
 
