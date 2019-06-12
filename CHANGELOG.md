@@ -1,4 +1,4 @@
-## next
+## 0.13.0
 - Downgrading flame support to stable channel.
 
 ## 0.12.2
