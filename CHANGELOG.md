@@ -1,3 +1,6 @@
+## next
+- Adding Timer utility class
+
 ## 0.13.0
 - Downgrading flame support to stable channel.
 
