@@ -8,14 +8,12 @@ class Timer {
   double _current = 0;
   bool _running = false;
 
-  Timer(this._limit, { repeat = false, callback }) {
+  Timer(this._limit, { bool repeat = false, void Function() callback }) {
     _repeat = repeat;
     _callback = callback;
   }
 
-  double get current {
-    return _current;
-  }
+  double get current => _current;
 
   void update(double dt) {
     if (_running) {
@@ -43,7 +41,7 @@ class Timer {
     _current = 0;
     _running = true;
   }
-  
+
   void stop() {
     _current = 0;
     _running = false;
