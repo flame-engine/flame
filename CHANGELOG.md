@@ -1,5 +1,6 @@
 ## next
 - Adding Timer utility class
+- Adding `destroyOnFinish` flag for AnimationComponent
 
 ## 0.13.0
 - Downgrading flame support to stable channel.
