@@ -70,7 +70,7 @@ To load and draw an image, you can use the `load` method, like so:
 
     // inside an async context
     Image image = await Flame.images.load('player.png');
-    
+
     // or
     Flame.images.load('player.png').then((Image image) {
       var paint = new Paint()..color = new Color(0xffffffff);
@@ -97,6 +97,26 @@ You can create it by passing a list of equal sized sprites and the stepTime (tha
   Animation a = new Animation.spriteList(sprites, stepTime: 0.02);
 ```
 
+After the animation is created, you need to call its `update` method and render the current frame's sprite on your game instance, for example:
+
+```
+class MyGame extends Game {
+  Animation a;
+
+  MyGame() {
+    a = Animation(...);
+  }
+
+  void update(double dt) {
+    a.update(dt);
+  }
+
+  void render(Canvas c) {
+    a.getSprite().render(c);
+  }
+}
+```
+
 A better alternative to generate a list of sprites is to use the `sequenced` constructor:
 
 ```dart
@@ -110,6 +130,7 @@ In which you pass the file name, the number of frames and the sprite sheet is au
 * textureY : y position on the original image to start (defaults to 0)
 * textureWidth : width of each frame (defaults to null, that is, full width of the sprite sheet)
 * textureHeight : height of each frame (defaults to null, that is, full height of the sprite sheet)
+* destroyOnFinish : a bool indicating if this AnimationComponent should be destroyed when the animation has reached its end
 
 So, in our example, we are saying that we have 8 frames for our player animation, and they are displayed in a row. So if the player height is also 16 pixels, the sprite sheet is 128x16, containing 8 16x16 frames.
 
