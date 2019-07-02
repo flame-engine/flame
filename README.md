@@ -26,6 +26,10 @@ Support us by becoming a patron on Patreon
 
 [![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/fireslime)
 
+Or making a single donation buying us a coffee:
+
+[![Buy Me A Coffee](https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png)](https://www.buymeacoffee.com/fireslime)
+
 You can also show support by showing on your repository that your game is made with Flame by using one of the following badges:
 
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
