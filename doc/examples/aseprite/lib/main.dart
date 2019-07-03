@@ -10,9 +10,8 @@ void main() async{
 }
 
 class MyGame extends BaseGame {
-  Size screenSize;
-
-  MyGame(this.screenSize) {
+  MyGame(Size screenSize) {
+    size = screenSize;
     _start();
   }
 
@@ -21,8 +20,8 @@ class MyGame extends BaseGame {
         'chopper.png', 'chopper.json');
     final animationComponent = AnimationComponent(200, 200, animation);
 
-    animationComponent.x = (screenSize.width / 2) - 100;
-    animationComponent.y = (screenSize.height / 2) - 100;
+    animationComponent.x = (size.width / 2) - 100;
+    animationComponent.y = (size.height / 2) - 100;
 
     add(animationComponent);
   }
