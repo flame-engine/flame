@@ -40,9 +40,8 @@ class Ball extends PositionComponent {
 }
 
 class MyGame extends BaseGame {
-  Size screenSize;
-
-  MyGame(this.screenSize) {
+  MyGame(Size screenSize) {
+    size = screenSize;
     _start();
   }
 
@@ -52,8 +51,8 @@ class MyGame extends BaseGame {
     Flame.audio.load('boin.mp3');
     Flame.audio.loop('music.mp3', volume: 0.4);
 
-    add(Ball(this.screenSize)
-      ..y = (this.screenSize.height / 2) - 50
+    add(Ball(size)
+      ..y = (size.height / 2) - 50
       ..width = 100
       ..height = 100);
   }

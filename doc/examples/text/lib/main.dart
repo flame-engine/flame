@@ -35,27 +35,26 @@ class MyTextBox extends TextBoxComponent {
 }
 
 class MyGame extends BaseGame {
-  Size screenSize;
-
-  MyGame(this.screenSize) {
+  MyGame(Size screenSize) {
+    size = screenSize;
     add(TextComponent('Hello, Flame', config: regular)
       ..anchor = Anchor.topCenter
-      ..x = screenSize.width / 2
+      ..x = size.width / 2
       ..y = 32.0);
 
     add(TextComponent('center', config: tiny)
       ..anchor = Anchor.center
-      ..x = screenSize.width / 2
-      ..y = screenSize.height / 2);
+      ..x = size.width / 2
+      ..y = size.height / 2);
 
     add(TextComponent('bottomRight', config: tiny)
       ..anchor = Anchor.bottomRight
-      ..x = screenSize.width
-      ..y = screenSize.height);
+      ..x = size.width
+      ..y = size.height);
 
     add(MyTextBox(
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget ligula eu lectus lobortis condimentum.')
       ..anchor = Anchor.bottomLeft
-      ..y = screenSize.height);
+      ..y = size.height);
   }
 }
