@@ -9,7 +9,10 @@ import 'package:flame/palette.dart';
 import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyGame().widget);
+void main() async {
+  final Size size = await Flame.util.initialDimensions();
+  runApp(MyGame(size).widget);
+}
 
 TextConfig regular = TextConfig(color: BasicPalette.white.color);
 TextConfig tiny = regular.withFontSize(12.0);
@@ -32,13 +35,8 @@ class MyTextBox extends TextBoxComponent {
 }
 
 class MyGame extends BaseGame {
-  MyGame() {
-    _start();
-  }
-
-  void _start() async {
-    final Size size = await Flame.util.initialDimensions();
-
+  MyGame(Size screenSize) {
+    size = screenSize;
     add(TextComponent('Hello, Flame', config: regular)
       ..anchor = Anchor.topCenter
       ..x = size.width / 2

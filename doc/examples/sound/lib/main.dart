@@ -3,7 +3,10 @@ import 'package:flame/game.dart';
 import 'package:flame/components/component.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyGame().widget);
+void main() async {
+  final Size size = await Flame.util.initialDimensions();
+  runApp(MyGame(size).widget);
+}
 
 class Ball extends PositionComponent {
   final Size gameSize;
@@ -37,12 +40,12 @@ class Ball extends PositionComponent {
 }
 
 class MyGame extends BaseGame {
-  MyGame() {
+  MyGame(Size screenSize) {
+    size = screenSize;
     _start();
   }
 
   void _start() async {
-    final Size size = await Flame.util.initialDimensions();
 
     Flame.audio.disableLog();
     Flame.audio.load('boin.mp3');
