@@ -1,4 +1,4 @@
-## next
+## 0.13.1
 - Adding Timer utility class
 - Adding `destroyOnFinish` flag for AnimationComponent
 - Fixing release mode on examples that needed screen size
