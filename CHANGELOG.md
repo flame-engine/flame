@@ -2,6 +2,7 @@
 - Adding Timer utility class
 - Adding `destroyOnFinish` flag for AnimationComponent
 - Fixing release mode on examples that needed screen size
+- Bumping dependencies versions (audioplayers and path_provider)
 
 ## 0.13.0
 - Downgrading flame support to stable channel.
