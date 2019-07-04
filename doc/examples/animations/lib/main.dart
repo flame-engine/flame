@@ -5,9 +5,11 @@ import 'package:flame/animation.dart' as flame_animation;
 import 'package:flame/components/animation_component.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  final game = MyGame();
+void main() async {
+  final Size size = await Flame.util.initialDimensions();
+  final game = MyGame(size);
   runApp(game.widget);
+
   Flame.util.addGestureRecognizer(TapGestureRecognizer()
       ..onTapDown = (TapDownDetails evt) {
         game.addAnimation();
@@ -18,10 +20,6 @@ class MyGame extends BaseGame {
   final animation = flame_animation.Animation.sequenced('chopper.png', 4,
       textureWidth: 48, textureHeight: 48, stepTime: 0.15);
 
-  MyGame() {
-    _start();
-  }
-
   void addAnimation() {
     final animationComponent = AnimationComponent(100, 100, animation, destroyOnFinish: true);
     animationComponent.x = size.width / 2 - 50;
@@ -30,8 +28,8 @@ class MyGame extends BaseGame {
     add(animationComponent);
   }
 
-  void _start() async {
-    final Size size = await Flame.util.initialDimensions();
+  MyGame(Size screenSize) {
+    size = screenSize;
 
     final animationComponent = AnimationComponent(100, 100, animation);
     animationComponent.x = size.width / 2 - 100;
