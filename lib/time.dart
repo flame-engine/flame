@@ -50,4 +50,7 @@ class Timer {
     _current = 0;
     _running = false;
   }
+
+  /// A value between 0 and 1 indicating the timer progress
+  double get progress => _current / _limit;
 }
