@@ -37,6 +37,10 @@ class Timer {
     return _current >= _limit;
   }
 
+  bool isRunning() {
+    return _running;
+  }
+
   void start() {
     _current = 0;
     _running = true;
