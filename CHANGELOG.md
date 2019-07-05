@@ -1,3 +1,6 @@
+## nexte
+- Adding Timer#isRunning method
+
 ## 0.13.1
 - Adding Timer utility class
 - Adding `destroyOnFinish` flag for AnimationComponent
