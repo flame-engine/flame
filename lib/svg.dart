@@ -23,7 +23,7 @@ class Svg {
     }
 
     svgRoot.scaleCanvasToViewBox(canvas, Size(width, height));
-    svgRoot.draw(canvas, null);
+    svgRoot.draw(canvas, null, null);
   }
 
   /// Renders the svg on the [canvas] on the given [position] using the dimmensions provided on [width] and [height]
