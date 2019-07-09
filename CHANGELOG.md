@@ -1,4 +1,6 @@
 ## next
+
+## 0.14.0
 - Adding Timer#isRunning method
 - Adding Timer#progress getter
 

@@ -46,7 +46,6 @@ class MyGame extends BaseGame {
   }
 
   void _start() async {
-
     Flame.audio.disableLog();
     Flame.audio.load('boin.mp3');
     Flame.audio.loop('music.mp3', volume: 0.4);

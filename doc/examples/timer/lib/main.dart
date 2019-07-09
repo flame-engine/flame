@@ -39,7 +39,8 @@ class MyGame extends Game {
 
   @override
   void render(Canvas canvas) {
-    textConfig.render(canvas, "Countdown: ${countdown.current.toString()}", Position(10, 100));
+    textConfig.render(canvas, "Countdown: ${countdown.current.toString()}",
+        Position(10, 100));
     textConfig.render(canvas, "Elapsed time: $elapsedSecs", Position(10, 150));
   }
 }
