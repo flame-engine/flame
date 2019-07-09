@@ -69,7 +69,7 @@ And start using it!
 
 __Important__
 
-We strive to keep Flame working on the Flutter's stable channel, currently on version 1.5.4-hotfix.2, be sure to check which channel are you using if you encounter any trouble.
+We strive to keep Flame working on the Flutter's stable channel, currently on version v1.7.8+hotfix.2, be sure to check which channel are you using if you encounter any trouble.
 
 ## Documentation
 
