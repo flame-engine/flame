@@ -1,4 +1,4 @@
-## nexte
+## next
 - Adding Timer#isRunning method
 - Adding Timer#progress getter
 
