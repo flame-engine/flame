@@ -17,8 +17,8 @@ dependencies:
   synchronized: ^2.1.0
   tiled: ^0.2.1
   convert: ^2.0.1
-  flutter_svg: ^0.11.0
-  flare_flutter: ^1.5.0
+  flutter_svg: ^0.13.0+2
+  flare_flutter: ^1.5.3
 
 dev_dependencies:
   flutter_test:
@@ -27,4 +27,4 @@ dev_dependencies:
 
 environment:
   sdk: ">=2.2.0 <3.0.0"
-  flutter: ">=1.5.0 <1.6.0"
+  flutter: ">=1.6.0"
