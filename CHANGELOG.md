@@ -3,6 +3,7 @@
 ## 0.14.0
 - Adding Timer#isRunning method
 - Adding Timer#progress getter
+- Updating Flame to work with Flutter >= 1.6.0
 
 ## 0.13.1
 - Adding Timer utility class
