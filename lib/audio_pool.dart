@@ -44,10 +44,13 @@ class AudioPool {
       currentPlayers[player.playerId] = player;
       await player.setVolume(volume);
       await player.resume();
+
+      StreamSubscription<void> subscription;
+
       final Stoppable stop = () {
         _lock.synchronized(() async {
           final AudioPlayer p = currentPlayers.remove(player.playerId);
-          p.completionHandler = null;
+          subscription?.cancel();
           await p.stop();
           if (availablePlayers.length >= maxPlayers) {
             await p.release();
@@ -56,11 +59,15 @@ class AudioPool {
           }
         });
       };
-      if (repeating) {
-        player.completionHandler = player.resume;
-      } else {
-        player.completionHandler = stop;
-      }
+
+      subscription = player.onPlayerCompletion.listen((_) {
+        if (repeating) {
+          player.resume();
+        } else {
+          stop();
+        }
+      });
+
       return stop;
     });
   }
