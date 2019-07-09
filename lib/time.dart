@@ -1,4 +1,3 @@
-
 /// Simple utility class that helps handling time counting and implementing interval like events.
 ///
 class Timer {
@@ -8,7 +7,7 @@ class Timer {
   double _current = 0;
   bool _running = false;
 
-  Timer(this._limit, { bool repeat = false, void Function() callback }) {
+  Timer(this._limit, {bool repeat = false, void Function() callback}) {
     _repeat = repeat;
     _callback = callback;
   }

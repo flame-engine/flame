@@ -7,7 +7,8 @@ class AnimationComponent extends PositionComponent {
   Animation animation;
   bool destroyOnFinish;
 
-  AnimationComponent(double width, double height, this.animation, { this.destroyOnFinish = false }) {
+  AnimationComponent(double width, double height, this.animation,
+      {this.destroyOnFinish = false}) {
     this.width = width;
     this.height = height;
   }
@@ -23,7 +24,6 @@ class AnimationComponent extends PositionComponent {
     double textureY = 0.0,
     double textureWidth,
     double textureHeight,
-
     this.destroyOnFinish = false,
   }) {
     this.width = width;

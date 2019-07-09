@@ -4,7 +4,7 @@ import 'package:flame/animation.dart' as flame_animation;
 import 'package:flame/components/animation_component.dart';
 import 'package:flutter/material.dart';
 
-void main() async{
+void main() async {
   final Size size = await Flame.util.initialDimensions();
   runApp(MyGame(size).widget);
 }
