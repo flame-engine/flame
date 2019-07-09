@@ -1,4 +1,4 @@
-[![Pub](https://img.shields.io/pub/v/flame.svg?style=popout)](https://pub.dartlang.org/packages/flame) [![Build Status - Travis](https://travis-ci.org/luanpotter/flame.svg?branch=master)](https://travis-ci.org/luanpotter/flame) [![Discord](https://img.shields.io/discord/509714518008528896.svg)](https://discord.gg/pxrBmy4)
+[![Pub](https://img.shields.io/pub/v/flame.svg?style=popout)](https://pub.dartlang.org/packages/flame) [![Build Status - Travis](https://travis-ci.org/flame-engine/flame.svg?branch=master)](https://travis-ci.org/flame-engine/flame) [![Discord](https://img.shields.io/discord/509714518008528896.svg)](https://discord.gg/pxrBmy4)
 
 # :fire: flame
 
