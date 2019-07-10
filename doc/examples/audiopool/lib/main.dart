@@ -15,7 +15,8 @@ void main() async {
   final MyGame game = MyGame(size);
   runApp(game.widget);
 
-  final TapGestureRecognizer taps = TapGestureRecognizer()..onTapDown = (_) => game.tap();
+  final TapGestureRecognizer taps = TapGestureRecognizer()
+    ..onTapDown = (_) => game.tap();
   Flame.util.addGestureRecognizer(taps);
 }
 
@@ -29,8 +30,10 @@ class MyGame extends BaseGame {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height), BasicPalette.black.paint);
-    regular.render(canvas, 'hit me!', Position.fromSize(size).div(2), anchor: Anchor.center);
+    canvas.drawRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height),
+        BasicPalette.black.paint);
+    regular.render(canvas, 'hit me!', Position.fromSize(size).div(2),
+        anchor: Anchor.center);
     super.render(canvas);
   }
 
