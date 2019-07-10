@@ -22,27 +22,31 @@ class SpriteSheet {
     );
   }
 
-  Sprite getSprite(int row, int column) => _sprites[row][column];
+  Sprite getSprite(int row, int column) {
+    final Sprite s = _sprites[row][column];
+
+    assert(s != null, 'No sprite found for row $row and column $column');
+
+    return s;
+  }
 
   /// Creates an animation from this SpriteSheet
   ///
   /// An [from]  and a [to]  parameter can be specified to create an animation from a subset of the columns on the row
   Animation createAnimation(int row, { double stepTime, loop = true, int from = 0, int to }) {
-    List<Sprite> spriteRow = _sprites[row];
+    final spriteRow = _sprites[row];
 
-    if (spriteRow != null) {
-      to ??= spriteRow.length;
+    assert(spriteRow != null, 'There is no row for $row index');
 
-      final spriteList = spriteRow.sublist(from, to);
+    to ??= spriteRow.length;
 
-      return Animation.spriteList(
+    final spriteList = spriteRow.sublist(from, to);
+
+    return Animation.spriteList(
         spriteList,
         stepTime: stepTime,
         loop: loop,
-      );
-    }
-
-    return null;
+    );
   }
 }
 
