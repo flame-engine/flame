@@ -1,5 +1,11 @@
 ## next
 
+## 0.14.1
+- Fixed build on travis
+- Updated readme badges
+- Fixed changelog
+- Fixed warning on audiopool, added audiopool example in docs
+
 ## 0.14.0
 - Adding Timer#isRunning method
 - Adding Timer#progress getter
