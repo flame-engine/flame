@@ -223,4 +223,4 @@ You can also get a single frame of the sprite sheet using the `getSprite` method
 spritesheet.getSprite(0, 0) // row, column;
 ```
 
-You can see a full example of the SpriteSheet class [here](doc/examples/spritesheet)
+You can see a full example of the SpriteSheet class [here](doc/examples/spritesheet).

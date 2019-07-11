@@ -1,6 +1,7 @@
 import 'sprite.dart';
 import 'animation.dart';
 
+/// Utility class to help extract animations and sprites from a spritesheet image
 class SpriteSheet {
   String imageName;
   int textureWidth;
@@ -37,9 +38,9 @@ class SpriteSheet {
 
   /// Creates an animation from this SpriteSheet
   ///
-  /// An [from]  and a [to]  parameter can be specified to create an animation from a subset of the columns on the row
+  /// An [from] and a [to]  parameter can be specified to create an animation from a subset of the columns on the row
   Animation createAnimation(int row,
-      {double stepTime, loop = true, int from = 0, int to}) {
+      {double stepTime, bool loop = true, int from = 0, int to}) {
     final spriteRow = _sprites[row];
 
     assert(spriteRow != null, 'There is no row for $row index');
