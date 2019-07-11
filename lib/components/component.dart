@@ -104,6 +104,22 @@ abstract class PositionComponent extends Component {
     return sqrt(pow(y - c.y, 2) + pow(x - c.x, 2));
   }
 
+  void renderDebugMode(Canvas canvas) {
+    canvas.drawRect(Rect.fromLTWH(0.0, 0.0, width, height), _debugPaint);
+    debugTextConfig.render(
+        canvas,
+        "x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}",
+        Position(-50, -15));
+
+    Rect rect = toRect();
+    final dx = rect.right;
+    final dy = rect.bottom;
+    debugTextConfig.render(
+        canvas,
+        "x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}",
+        Position(width - 50, height));
+  }
+
   void prepareCanvas(Canvas canvas) {
     canvas.translate(x, y);
 
@@ -113,19 +129,7 @@ abstract class PositionComponent extends Component {
     canvas.translate(dx, dy);
 
     if (debugMode) {
-      canvas.drawRect(Rect.fromLTWH(0.0, 0.0, width, height), _debugPaint);
-      debugTextConfig.render(
-          canvas,
-          "x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}",
-          Position(-50, -15));
-
-      Rect rect = toRect();
-      final dx = rect.right;
-      final dy = rect.bottom;
-      debugTextConfig.render(
-          canvas,
-          "x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}",
-          Position(width - 50, height));
+      renderDebugMode(canvas);
     }
   }
 }
