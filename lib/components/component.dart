@@ -7,6 +7,7 @@ import '../svg.dart';
 import '../sprite.dart';
 import '../position.dart';
 import '../anchor.dart';
+import '../text_config.dart';
 
 /// This represents a Component for your game.
 ///
@@ -64,6 +65,16 @@ abstract class PositionComponent extends Component {
   double width = 0.0, height = 0.0;
   Anchor anchor = Anchor.topLeft;
 
+  bool debugMode = false;
+
+  Color get debugColor => Color(0xFFFF00FF);
+
+  Paint get _debugPaint => Paint()
+    ..color = debugColor
+    ..style = PaintingStyle.stroke;
+
+  TextConfig get debugTextConfig => TextConfig(color: debugColor, fontSize: 12);
+
   Position toPosition() => Position(x, y);
   void setByPosition(Position position) {
     x = position.x;
@@ -100,6 +111,22 @@ abstract class PositionComponent extends Component {
     final double dx = -anchor.relativePosition.dx * width;
     final double dy = -anchor.relativePosition.dy * height;
     canvas.translate(dx, dy);
+
+    if (debugMode) {
+      canvas.drawRect(Rect.fromLTWH(0.0, 0.0, width, height), _debugPaint);
+      debugTextConfig.render(
+          canvas,
+          "x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}",
+          Position(-50, -15));
+
+      Rect rect = toRect();
+      final dx = rect.right;
+      final dy = rect.bottom;
+      debugTextConfig.render(
+          canvas,
+          "x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}",
+          Position(width - 50, height));
+    }
   }
 }
 
