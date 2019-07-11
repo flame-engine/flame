@@ -1,4 +1,5 @@
 ## next
+- Refactoring BaseGame debugMode
 
 ## 0.14.1
 - Fixed build on travis
