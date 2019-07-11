@@ -1,6 +1,7 @@
 ## next
 - Refactoring BaseGame debugMode
 - Adding SpriteSheet class
+- Fixing AnimationComponent.empty()
 
 ## 0.14.1
 - Fixed build on travis
