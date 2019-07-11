@@ -196,3 +196,31 @@ class MyGame extends Game {
 ```
 
 FlareAnimations are normally used inside `FlareComponent`s, that way `BaseGame` will handle calling `render` and `update` automatically.
+
+## SpriteSheet
+
+Sprite sheets are big images with several frames of the same sprite on it and is a very good way to organize and keep your animations stored. Flame provides a very simple utility class to deal with SpriteSheets, with it you can load your sprite sheet image and extract animations from it. Bellow is a very simple example of using it:
+
+```dart
+import 'package:flame/spritesheet.dart';
+
+final spritesheet = SpriteSheet(
+  imageName: 'spritesheet.png',
+  textureWidth: 16,
+  textureHeight: 16,
+  columns: 10,
+  rows: 2,
+);
+
+final animation = spritesheet.createAnimation(0, stepTime: 0.1);
+```
+
+Now you can use the animation directly or use it in an animation component.
+
+You can also get a single frame of the sprite sheet using the `getSprite` method:
+
+```dart
+spritesheet.getSprite(0, 0) // row, column;
+```
+
+You can see a full example of the SpriteSheet class [here](doc/examples/spritesheet)
