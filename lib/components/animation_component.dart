@@ -5,7 +5,7 @@ import 'package:flame/animation.dart';
 
 class AnimationComponent extends PositionComponent {
   Animation animation;
-  bool destroyOnFinish;
+  bool destroyOnFinish = false;
 
   AnimationComponent(double width, double height, this.animation,
       {this.destroyOnFinish = false}) {
