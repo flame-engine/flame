@@ -12,6 +12,7 @@ This is the index of the documentation for Flame, updated to version `0.8.3`.
 * [Components](components.md)
 * [The Game Loop](game.md)
 * [Input](input.md)
+* [Tiled](tiled.md)
 * [Util](util.md)
 * [Box2d](box2d.md)
 * [Debug](debug.md)
