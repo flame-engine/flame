@@ -71,7 +71,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 animation.Animation.sequenced('minotaur.png', 19,
                     textureWidth: 96.0)),
             const Text('Neat, hum?'),
-            const Text('By the way, you can also use static sprites as widgets:'),
+            const Text(
+                'By the way, you can also use static sprites as widgets:'),
             Flame.util.spriteAsWidget(const Size(100, 100), _sprite),
             const SizedBox(height: 40),
             const Text('Sprites from Elthen\'s amazing work on itch.io:'),
