@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' as widgets;
 
 import 'animation.dart';
+import 'sprite.dart';
 import 'components/animation_component.dart';
 import 'game.dart';
 import 'position.dart';
@@ -88,4 +89,26 @@ class Util {
         SimpleGame(AnimationComponent(size.x, size.y, animation)),
         size: size);
   }
+
+  /// Returns a regular Flutter widget represeting this sprite, rendered with the specified size.
+  ///
+  /// This will create a [CustomPaint] widget using a [CustomPainter] for rendering the [Sprite]
+  /// Be aware that the Sprite must have been loaded, otherwise it can't be rendered
+  widgets.CustomPaint spriteAsWidget(Size size, Sprite sprite) => widgets.CustomPaint(size: size, painter: _SpriteCustomPainter(sprite));
+}
+
+class _SpriteCustomPainter extends widgets.CustomPainter {
+  Sprite _sprite;
+
+  _SpriteCustomPainter(this._sprite);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (_sprite.loaded()) {
+      _sprite.render(canvas, size.width, size.height);
+    }
+  }
+
+  @override
+  bool shouldRepaint(widgets.CustomPainter old) => false;
 }

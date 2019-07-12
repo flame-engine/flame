@@ -1,11 +1,17 @@
 import 'dart:async';
 
 import 'package:flame/animation.dart' as animation;
+import 'package:flame/sprite.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+Sprite _sprite;
+
+void main() async {
+  _sprite = await Sprite.loadSprite('minotaur.png', width: 96, height: 96);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -65,6 +71,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 animation.Animation.sequenced('minotaur.png', 19,
                     textureWidth: 96.0)),
             const Text('Neat, hum?'),
+            const Text('By the way, you can also use static sprites as widgets:'),
+            Flame.util.spriteAsWidget(const Size(100, 100), _sprite),
+            const SizedBox(height: 40),
             const Text('Sprites from Elthen\'s amazing work on itch.io:'),
             const Text('https://elthen.itch.io/2d-pixel-art-minotaur-sprites'),
           ],
