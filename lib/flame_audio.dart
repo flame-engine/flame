@@ -28,7 +28,7 @@ class FlameAudio {
   ///
   /// NOTE: Length audio files on Android have an audio gap between loop iterations, this happens due to limitations on Android's native media player features, if you need a gapless loop, prefer the loop method
   Future<AudioPlayer> loopLongAudio(String file, {volume = 1.0}) {
-    return audioCache.play(file, volume: volume);
+    return audioCache.loop(file, volume: volume);
   }
 
   /// Prefetch an audio in the cache

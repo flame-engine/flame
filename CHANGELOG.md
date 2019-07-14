@@ -2,6 +2,7 @@
 - Refactoring BaseGame debugMode
 - Adding SpriteSheet class
 - Fixing AnimationComponent.empty()
+- Fixing FlameAudio.loopLongAudio
 
 ## 0.14.1
 - Fixed build on travis
