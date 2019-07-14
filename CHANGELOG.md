@@ -1,6 +1,7 @@
 ## next
 - Refactoring BaseGame debugMode
 - Adding SpriteSheet class
+- Adding Flame.util.spriteAsWidget
 - Fixing AnimationComponent.empty()
 - Fixing FlameAudio.loopLongAudio
 
