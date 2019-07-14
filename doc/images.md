@@ -39,6 +39,10 @@ You must pass the size to the render method, and the image will be resized accor
 
 The render method will do nothing while the sprite has not been loaded, so you don't need to worry. The image is cached in the `Images` class, so you can safely create many sprites with the same fileName.
 
+Sprites can also be used as widgets, to do so, just use `Flame.util.spriteAsWidget`
+
+A complete example of using sprite as widegets can be found [here](examples/animation_widget).
+
 ## Svg
 
 Flame provides a simple API to render SVG images on your game.
@@ -150,6 +154,11 @@ _Note: trimmed sprite sheets are not supported by flame, so if you export your s
 Animations, after created, have an update and render method; the latter renders the current frame, and the former ticks the internal clock to update the frames.
 
 Animations are normally used inside `AnimationComponent`s, but custom components with several Animations can be created as well.
+
+
+Animations can also be used as widgets, to do so, just use `Flame.util.animationAsWidget`
+
+A complete example of using animations as widegets can be found [here](examples/animation_widget).
 
 ## FlareAnimation
 
