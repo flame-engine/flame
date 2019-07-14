@@ -99,7 +99,7 @@ class Util {
 }
 
 class _SpriteCustomPainter extends widgets.CustomPainter {
-  Sprite _sprite;
+  final Sprite _sprite;
 
   _SpriteCustomPainter(this._sprite);
 
