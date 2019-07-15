@@ -1,4 +1,4 @@
-## next
+## 0.14.2
 - Refactoring BaseGame debugMode
 - Adding SpriteSheet class
 - Adding Flame.util.spriteAsWidget
