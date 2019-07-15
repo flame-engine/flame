@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:test/test.dart';
 
 import 'package:flame/game.dart';
-import 'package:flame/components/debug_component.dart';
+import 'package:flame/components/component.dart';
 import 'package:flame/components/resizable.dart';
 
-class MyComponent extends DebugComponent with Resizable {
+class MyComponent extends PositionComponent with Resizable {
   String name;
   List<MyComponent> myChildren;
 
@@ -14,6 +14,12 @@ class MyComponent extends DebugComponent with Resizable {
 
   @override
   List<Resizable> children() => myChildren;
+
+  @override
+  void update(double dt) {}
+
+  @override
+  void render(Canvas c) {}
 }
 
 class MyGame extends BaseGame {}

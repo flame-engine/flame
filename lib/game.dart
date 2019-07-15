@@ -80,6 +80,9 @@ abstract class BaseGame extends Game {
   /// By default, this calls the first time resize for every component, so don't forget to call super.preAdd when overriding.
   @mustCallSuper
   void preAdd(Component c) {
+    if (debugMode() && c is PositionComponent) {
+      (c as PositionComponent).debugMode = true;
+    }
     // first time resize
     if (size != null) {
       c.resize(size);

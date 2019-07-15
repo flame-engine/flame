@@ -39,6 +39,10 @@ You must pass the size to the render method, and the image will be resized accor
 
 The render method will do nothing while the sprite has not been loaded, so you don't need to worry. The image is cached in the `Images` class, so you can safely create many sprites with the same fileName.
 
+Sprites can also be used as widgets, to do so, just use `Flame.util.spriteAsWidget`
+
+A complete example of using sprite as widegets can be found [here](examples/animation_widget).
+
 ## Svg
 
 Flame provides a simple API to render SVG images on your game.
@@ -151,6 +155,11 @@ Animations, after created, have an update and render method; the latter renders 
 
 Animations are normally used inside `AnimationComponent`s, but custom components with several Animations can be created as well.
 
+
+Animations can also be used as widgets, to do so, just use `Flame.util.animationAsWidget`
+
+A complete example of using animations as widegets can be found [here](examples/animation_widget).
+
 ## FlareAnimation
 
 Flame provides a simple wrapper of [Flare](https://www.2dimensions.com/about-flare) animations so you can use them on Flame games.
@@ -196,3 +205,31 @@ class MyGame extends Game {
 ```
 
 FlareAnimations are normally used inside `FlareComponent`s, that way `BaseGame` will handle calling `render` and `update` automatically.
+
+## SpriteSheet
+
+Sprite sheets are big images with several frames of the same sprite on it and is a very good way to organize and keep your animations stored. Flame provides a very simple utility class to deal with SpriteSheets, with it you can load your sprite sheet image and extract animations from it. Bellow is a very simple example of using it:
+
+```dart
+import 'package:flame/spritesheet.dart';
+
+final spritesheet = SpriteSheet(
+  imageName: 'spritesheet.png',
+  textureWidth: 16,
+  textureHeight: 16,
+  columns: 10,
+  rows: 2,
+);
+
+final animation = spritesheet.createAnimation(0, stepTime: 0.1);
+```
+
+Now you can use the animation directly or use it in an animation component.
+
+You can also get a single frame of the sprite sheet using the `getSprite` method:
+
+```dart
+spritesheet.getSprite(0, 0) // row, column;
+```
+
+You can see a full example of the SpriteSheet class [here](doc/examples/spritesheet).
