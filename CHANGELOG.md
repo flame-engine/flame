@@ -1,4 +1,9 @@
-## next
+## 0.14.2
+- Refactoring BaseGame debugMode
+- Adding SpriteSheet class
+- Adding Flame.util.spriteAsWidget
+- Fixing AnimationComponent.empty()
+- Fixing FlameAudio.loopLongAudio
 
 ## 0.14.1
 - Fixed build on travis
