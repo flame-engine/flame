@@ -81,7 +81,7 @@ abstract class BaseGame extends Game {
   @mustCallSuper
   void preAdd(Component c) {
     if (debugMode() && c is PositionComponent) {
-      (c as PositionComponent).debugMode = true;
+      c.debugMode = true;
     }
     // first time resize
     if (size != null) {
