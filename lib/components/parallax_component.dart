@@ -20,6 +20,7 @@ class ParallaxRenderer {
   Future<Image> _load() {
     return Flame.images.load(filename).then((image) {
       this.image = image;
+      return image;
     });
   }
 
