@@ -1,6 +1,7 @@
 ## next
 - Refactoring ParallaxComponent (thanks @spydon)
 - Fixing flare animation with embed images
+- Adding override paint parameter to Sprite, and refactoring it have named optional parameters
 
 ## 0.14.2
 - Refactoring BaseGame debugMode
