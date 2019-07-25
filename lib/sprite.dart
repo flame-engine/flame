@@ -78,47 +78,53 @@ class Sprite {
   /// It renders with src size multiplied by [scale] in both directions.
   /// Anchor is on top left as default.
   /// If not loaded, does nothing.
-  void renderScaled(Canvas canvas, Position p, [double scale = 1.0]) {
+  void renderScaled(Canvas canvas, Position p,
+      [double scale = 1.0, Paint overridePaint]) {
     if (!loaded()) {
       return;
     }
-    renderPosition(canvas, p, size.times(scale));
+    renderPosition(canvas, p, size.times(scale), overridePaint);
   }
 
-  void renderPosition(Canvas canvas, Position p, [Position size]) {
+  void renderPosition(Canvas canvas, Position p,
+      [Position size, Paint overridePaint]) {
     if (!loaded()) {
       return;
     }
     size ??= this.size;
-    renderRect(canvas, Position.rectFrom(p, size));
+    renderRect(canvas, Position.rectFrom(p, size), overridePaint);
   }
 
-  void render(Canvas canvas, [double width, double height]) {
+  void render(Canvas canvas,
+      [double width, double height, Paint overridePaint]) {
     if (!loaded()) {
       return;
     }
     width ??= size.x;
     height ??= size.y;
-    renderRect(canvas, Rect.fromLTWH(0.0, 0.0, width, height));
-  }
-
-  void renderRect(Canvas canvas, Rect dst) {
-    if (!loaded()) {
-      return;
-    }
-    canvas.drawImageRect(image, src, dst, paint);
+    renderRect(canvas, Rect.fromLTWH(0.0, 0.0, width, height), overridePaint);
   }
 
   /// Renders this sprite centered in the position [p], i.e., on [p] - [size] / 2.
   ///
   /// If [size] is not provided, the original size of the src image is used.
   /// If the asset is not yet loaded, it does nothing.
-  void renderCentered(Canvas canvas, Position p, [Position size]) {
+  void renderCentered(Canvas canvas, Position p,
+      [Position size, Paint overridePaint]) {
     if (!loaded()) {
       return;
     }
     size ??= this.size;
-    renderRect(canvas,
-        Rect.fromLTWH(p.x - size.x / 2, p.y - size.y / 2, size.x, size.y));
+    renderRect(
+        canvas,
+        Rect.fromLTWH(p.x - size.x / 2, p.y - size.y / 2, size.x, size.y),
+        overridePaint);
+  }
+
+  void renderRect(Canvas canvas, Rect dst, [Paint overridePaint]) {
+    if (!loaded()) {
+      return;
+    }
+    canvas.drawImageRect(image, src, dst, overridePaint ?? paint);
   }
 }
