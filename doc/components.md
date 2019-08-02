@@ -166,6 +166,8 @@ Once you are done with setting the parameters to your needs, render the Parallax
 Like the AnimationComponent, even if your parallax is static, you must call update on this component, so it runs its animation.
 Also, don't forget to add you images to the `pubspec.yaml` file as assets or they wont be found.
 
+An example implementation can be found in the [examples directory](https://github.com/flame-engine/flame/tree/master/doc/examples/parallax).
+
 ## Box2D Component
 
 Flame comes with a basic integration with the Flutter implementation of [Box2D](https://github.com/google/box2d.dart).
