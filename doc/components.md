@@ -133,7 +133,7 @@ Create it like this:
   this.bg = ParallaxComponent(images);
 ```
 
-This creates a static background, if your want it to move you have to set the named optional parameters `baseSpeed` and `layerDelta`. For example if you want to move your background images along the X-axis and have the images further away you would do the following:
+This creates a static background, if you want it to move you have to set the named optional parameters `baseSpeed` and `layerDelta`. For example if you want to move your background images along the X-axis and have the images further away you would do the following:
 
 ```dart
   this.bg = ParallaxComponent(images, baseSpeed: Offset(50, 0), layerDelta: Offset(20, 0));
@@ -145,7 +145,7 @@ You can set the baseSpeed and layerDelta at any time, for example if your charac
   this.bg.layerDelta = Offset(40, 0);
 ```
 
-By default the images are aligned to the bottom left, repeated along the X-axis and scaled proportionally so that the image covers the height of the screen. If you want to change this behaviour, for example if you are not making a side scrolling game, you set the `repeat`, `alignment` and `fill` parameters for each ParallaxImage.
+By default the images are aligned to the bottom left, repeated along the X-axis and scaled proportionally so that the image covers the height of the screen. If you want to change this behaviour, for example if you are not making a side scrolling game, you can set the `repeat`, `alignment` and `fill` parameters for each ParallaxImage.
 
 Advanced example:
 ```dart
