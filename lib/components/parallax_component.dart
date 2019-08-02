@@ -45,6 +45,8 @@ class ParallaxLayer {
 
   bool loaded() => _image != null;
 
+  Offset currentOffset() => _scroll;
+
   void resize(Size size) {
     if (!loaded()) {
       _screenSize = size;
@@ -155,6 +157,10 @@ class ParallaxComponent extends PositionComponent {
       {this.baseSpeed = Offset.zero, this.layerDelta = Offset.zero}) {
     _load(images);
   }
+
+  /// The base offset of the parallax, can be used in an outer update loop
+  /// if you want to transition the parallax to a certain position.
+  Offset currentOffset() => _layers[0].currentOffset();
 
   @override
   bool loaded() => _loaded;
