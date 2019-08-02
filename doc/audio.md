@@ -14,7 +14,7 @@ Or, if you prefer:
 ```dart
     import 'package:flame/flame_audio.dart';
 
-    FlameAudio audio = new FlameAudio();
+    FlameAudio audio = FlameAudio();
 
     audio.play('explosion.mp3'); // Or
     audio.playLongAudio('music.mp3');

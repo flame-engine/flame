@@ -13,7 +13,7 @@ To start, just add your game widget directly to your runApp, like so:
 
 ```dart
     main() {
-        Game game = new MyGameImpl();
+        Game game = MyGameImpl();
         runApp(game.widget);
     }
 ```
