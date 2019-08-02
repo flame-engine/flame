@@ -19,7 +19,7 @@ Some more complex methods might also take a Paint, which is a more complete opti
 You can create such a Paint like so:
 
 ```dart
-  Paint green = new Paint()..color = const Color(0xFF00FF00);
+  Paint green = Paint()..color = const Color(0xFF00FF00);
 ```
 
 To help that and also keep your game's color palette consistent, Flame adds the Palette class. You can use it to both easily access Colors and Paints where needed and also to define as constants the colors your game use, so you don't get those mixed up.
