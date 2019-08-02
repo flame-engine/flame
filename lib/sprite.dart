@@ -79,30 +79,30 @@ class Sprite {
   /// Anchor is on top left as default.
   /// If not loaded, does nothing.
   void renderScaled(Canvas canvas, Position p,
-      [double scale = 1.0, Paint overridePaint]) {
+      {double scale = 1.0, Paint overridePaint}) {
     if (!loaded()) {
       return;
     }
-    renderPosition(canvas, p, size.times(scale), overridePaint);
+    renderPosition(canvas, p, size: size.times(scale), overridePaint: overridePaint);
   }
 
   void renderPosition(Canvas canvas, Position p,
-      [Position size, Paint overridePaint]) {
+      {Position size, Paint overridePaint}) {
     if (!loaded()) {
       return;
     }
     size ??= this.size;
-    renderRect(canvas, Position.rectFrom(p, size), overridePaint);
+    renderRect(canvas, Position.rectFrom(p, size), overridePaint: overridePaint);
   }
 
   void render(Canvas canvas,
-      [double width, double height, Paint overridePaint]) {
+      {double width, double height, Paint overridePaint}) {
     if (!loaded()) {
       return;
     }
     width ??= size.x;
     height ??= size.y;
-    renderRect(canvas, Rect.fromLTWH(0.0, 0.0, width, height), overridePaint);
+    renderRect(canvas, Rect.fromLTWH(0.0, 0.0, width, height), overridePaint: overridePaint);
   }
 
   /// Renders this sprite centered in the position [p], i.e., on [p] - [size] / 2.
@@ -110,7 +110,7 @@ class Sprite {
   /// If [size] is not provided, the original size of the src image is used.
   /// If the asset is not yet loaded, it does nothing.
   void renderCentered(Canvas canvas, Position p,
-      [Position size, Paint overridePaint]) {
+      {Position size, Paint overridePaint}) {
     if (!loaded()) {
       return;
     }
@@ -118,10 +118,10 @@ class Sprite {
     renderRect(
         canvas,
         Rect.fromLTWH(p.x - size.x / 2, p.y - size.y / 2, size.x, size.y),
-        overridePaint);
+        overridePaint: overridePaint);
   }
 
-  void renderRect(Canvas canvas, Rect dst, [Paint overridePaint]) {
+  void renderRect(Canvas canvas, Rect dst, {Paint overridePaint}) {
     if (!loaded()) {
       return;
     }

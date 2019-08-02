@@ -156,7 +156,7 @@ class SpriteComponent extends PositionComponent {
   @override
   void render(Canvas canvas) {
     prepareCanvas(canvas);
-    sprite.render(canvas, width, height);
+    sprite.render(canvas, width: width, height: height);
   }
 
   @override
