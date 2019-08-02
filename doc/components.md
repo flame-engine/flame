@@ -11,10 +11,10 @@ The most commonly used implementation, `SpriteComponent`, can be created with a 
 ```dart
     import 'package:flame/components/component.dart';
 
-    Sprite sprite = new Sprite('player.png');
+    Sprite sprite = Sprite('player.png');
 
     const size = 128.0;
-    var player = new SpriteComponent.fromSprite(size, size, sprite); // width, height, sprite
+    var player = SpriteComponent.fromSprite(size, size, sprite); // width, height, sprite
 
     // screen coordinates
     player.x = ... // 0 by default
@@ -47,13 +47,13 @@ This will create a simple three frame animation
 
 ```dart
     List<Sprite> sprites = [0, 1, 2].map((i) => new Sprite('player_${i}.png')).toList();
-    this.player = new AnimationComponent(64.0, 64.0, new Animation.spriteList(sprites, stepTime: 0.01));
+    this.player = AnimationComponent(64.0, 64.0, new Animation.spriteList(sprites, stepTime: 0.01));
 ```
 
 If you have a sprite sheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](doc/images.md#Animation)):
 
 ```dart
-    this.player = new AnimationComponent.sequenced(64.0, 64.0, 'player.png', 2);
+    this.player = AnimationComponent.sequenced(64.0, 64.0, 'player.png', 2);
 ```
 
 If you are not using `BaseGame`, don't forget this component needs to be update'd even if static, because the animation object needs to be ticked to move the frames.
@@ -125,7 +125,7 @@ This component simulates this effect, making a very realistic background.
 Create it like so:
 
 ```dart
-    this.bg = new ParallaxComponent();
+    this.bg = ParallaxComponent();
     this.bg.load([ 'bg/1.png', 'bg/2.png', 'bg/3.png' ]);
 ```
 
