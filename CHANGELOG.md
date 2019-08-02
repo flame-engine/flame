@@ -1,4 +1,5 @@
 ## next
+- Refactoring ParallaxComponent (thanks @spydon)
 - Fixing flare animation with embed images
 
 ## 0.14.2
