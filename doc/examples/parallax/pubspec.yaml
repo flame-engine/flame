@@ -1,0 +1,25 @@
+name: parallax
+description: Flame sample game showcasing the parallax features
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flame:
+    path: ../../../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  assets:
+    - assets/images/bg.png
+    - assets/images/mountain-far.png
+    - assets/images/mountains.png
+    - assets/images/trees.png
+    - assets/images/foreground-trees.png
