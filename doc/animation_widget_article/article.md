@@ -82,7 +82,7 @@ Let's you have your `build` method in one of your pages; pretty normal Flutter s
 ```dart
   @override
   Widget build(BuildContext context) {
-    final key = new GlobalKey<ScaffoldState>();
+    final key = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: key,
       appBar: AppBar(

@@ -15,13 +15,13 @@ You can create a `Sprite` giving it a pre-loaded `Image` via the `fromImage` con
 For example, this will create a sprite representing the whole image of the file passed, automatically triggering its loading:
 
 ```dart
-    Sprite player = new Sprite('player.png');
+    Sprite player = Sprite('player.png');
 ```
 
 You could also specify the coordinates in the original image where the sprite is located; this allows you to use sprite sheets and reduce the number of images in memory; for example:
 
 ```dart
-    Sprite playerFrame = new Sprite('player.png', x = 32.0, width = 16.0);
+    Sprite playerFrame = Sprite('player.png', x = 32.0, width = 16.0);
 ```
 
 The default values are `0.0` for `x` and `y` and `null` for `width` and `height` (meaning it will use the full width/height of the source image).
@@ -29,7 +29,7 @@ The default values are `0.0` for `x` and `y` and `null` for `width` and `height`
 The `Sprite` class has a `loaded` method that returns whether the image has been loaded, and a render method, that allows you to render the image into a `Canvas`:
 
 ```dart
-    Sprite block = new Sprite('block.png');
+    Sprite block = Sprite('block.png');
 
     // in your render method
     block.render(canvas, 16.0, 16.0); //canvas, width, height
@@ -38,6 +38,8 @@ The `Sprite` class has a `loaded` method that returns whether the image has been
 You must pass the size to the render method, and the image will be resized accordingly.
 
 The render method will do nothing while the sprite has not been loaded, so you don't need to worry. The image is cached in the `Images` class, so you can safely create many sprites with the same fileName.
+
+All render methods from the Sprite class can receive a `Paint` instance on the optional named parameter `overridePaint` that parameter will override the current `Sprite` paint instance for that render call.
 
 Sprites can also be used as widgets, to do so, just use `Flame.util.spriteAsWidget`
 
@@ -77,8 +79,8 @@ To load and draw an image, you can use the `load` method, like so:
 
     // or
     Flame.images.load('player.png').then((Image image) {
-      var paint = new Paint()..color = new Color(0xffffffff);
-      var rect = new Rect.fromLTWH(0.0, 0.0, image.width.toDouble(), image.height.toDouble());
+      var paint = Paint()..color = Color(0xffffffff);
+      var rect = Rect.fromLTWH(0.0, 0.0, image.width.toDouble(), image.height.toDouble());
       canvas.drawImageRect(image, rect, rect, paint);
     });
 ```
@@ -98,7 +100,7 @@ The Animation class helps you create a cyclic animation of sprites.
 You can create it by passing a list of equal sized sprites and the stepTime (that is, how many seconds it takes to move to the next frame):
 
 ```dart
-  Animation a = new Animation.spriteList(sprites, stepTime: 0.02);
+  Animation a = Animation.spriteList(sprites, stepTime: 0.02);
 ```
 
 After the animation is created, you need to call its `update` method and render the current frame's sprite on your game instance, for example:
