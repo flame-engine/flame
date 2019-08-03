@@ -1,4 +1,4 @@
-## next
+## 0.15.0
 - Refactoring ParallaxComponent (thanks @spydon)
 - Fixing flare animation with embed images
 - Adding override paint parameter to Sprite, and refactoring it have named optional parameters
