@@ -83,7 +83,8 @@ class Sprite {
     if (!loaded()) {
       return;
     }
-    renderPosition(canvas, p, size: size.times(scale), overridePaint: overridePaint);
+    renderPosition(canvas, p,
+        size: size.times(scale), overridePaint: overridePaint);
   }
 
   void renderPosition(Canvas canvas, Position p,
@@ -92,7 +93,8 @@ class Sprite {
       return;
     }
     size ??= this.size;
-    renderRect(canvas, Position.rectFrom(p, size), overridePaint: overridePaint);
+    renderRect(canvas, Position.rectFrom(p, size),
+        overridePaint: overridePaint);
   }
 
   void render(Canvas canvas,
@@ -102,7 +104,8 @@ class Sprite {
     }
     width ??= size.x;
     height ??= size.y;
-    renderRect(canvas, Rect.fromLTWH(0.0, 0.0, width, height), overridePaint: overridePaint);
+    renderRect(canvas, Rect.fromLTWH(0.0, 0.0, width, height),
+        overridePaint: overridePaint);
   }
 
   /// Renders this sprite centered in the position [p], i.e., on [p] - [size] / 2.
@@ -115,8 +118,7 @@ class Sprite {
       return;
     }
     size ??= this.size;
-    renderRect(
-        canvas,
+    renderRect(canvas,
         Rect.fromLTWH(p.x - size.x / 2, p.y - size.y / 2, size.x, size.y),
         overridePaint: overridePaint);
   }
