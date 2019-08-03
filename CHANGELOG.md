@@ -1,3 +1,9 @@
+## [next]
+
+## 0.15.1
+- Bumped version of svg dependency
+- Fixed warnings
+
 ## 0.15.0
 - Refactoring ParallaxComponent (thanks @spydon)
 - Fixing flare animation with embed images
