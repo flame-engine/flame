@@ -138,6 +138,7 @@ class ParallaxLayer {
       if (_screenSize != null) {
         resize(_screenSize);
       }
+      return _image;
     });
   }
 }
