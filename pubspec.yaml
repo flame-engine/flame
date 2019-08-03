@@ -17,7 +17,7 @@ dependencies:
   synchronized: ^2.1.0
   tiled: ^0.2.1
   convert: ^2.0.1
-  flutter_svg: ^0.13.0+2
+  flutter_svg: ^0.13.1
   flare_flutter: ^1.5.4
 
 dev_dependencies:
