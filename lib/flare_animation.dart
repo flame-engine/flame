@@ -25,6 +25,7 @@ class FlareAnimation {
   static load(String fileName) async {
     final actor = FlutterActor();
     await actor.loadFromBundle(Flame.bundle, fileName);
+    await actor.loadImages();
 
     final artboard = actor.artboard.makeInstance();
     artboard.makeInstance();

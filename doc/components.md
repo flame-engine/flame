@@ -11,10 +11,10 @@ The most commonly used implementation, `SpriteComponent`, can be created with a 
 ```dart
     import 'package:flame/components/component.dart';
 
-    Sprite sprite = new Sprite('player.png');
+    Sprite sprite = Sprite('player.png');
 
     const size = 128.0;
-    var player = new SpriteComponent.fromSprite(size, size, sprite); // width, height, sprite
+    var player = SpriteComponent.fromSprite(size, size, sprite); // width, height, sprite
 
     // screen coordinates
     player.x = ... // 0 by default
@@ -47,13 +47,13 @@ This will create a simple three frame animation
 
 ```dart
     List<Sprite> sprites = [0, 1, 2].map((i) => new Sprite('player_${i}.png')).toList();
-    this.player = new AnimationComponent(64.0, 64.0, new Animation.spriteList(sprites, stepTime: 0.01));
+    this.player = AnimationComponent(64.0, 64.0, new Animation.spriteList(sprites, stepTime: 0.01));
 ```
 
 If you have a sprite sheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](doc/images.md#Animation)):
 
 ```dart
-    this.player = new AnimationComponent.sequenced(64.0, 64.0, 'player.png', 2);
+    this.player = AnimationComponent.sequenced(64.0, 64.0, 'player.png', 2);
 ```
 
 If you are not using `BaseGame`, don't forget this component needs to be update'd even if static, because the animation object needs to be ticked to move the frames.
@@ -116,22 +116,57 @@ class GameOverPanel extends PositionComponent with Resizable, ComposedComponent 
 
 ## Parallax Component
 
-This Component can be used to render pretty backgrounds, by drawing several transparent images on top of each other, each dislocated by a tiny amount.
+This Component can be used to render pretty backgrounds by drawing several transparent images on top of each other, each dislocated by a tiny amount.
 
 The rationale is that when you look at the horizon and moving, closer objects seem to move faster than distant ones.
 
-This component simulates this effect, making a very realistic background.
+This component simulates this effect, making a more realistic background with a feeling of depth.
 
-Create it like so:
+Create it like this:
 
 ```dart
-    this.bg = new ParallaxComponent();
-    this.bg.load([ 'bg/1.png', 'bg/2.png', 'bg/3.png' ]);
+  final images = [
+    ParallaxImage("mountains.jpg"),
+    ParallaxImage("forest.jpg"),
+    ParallaxImage("city.jpg"),
+  ];
+  this.bg = ParallaxComponent(images);
 ```
 
-Then, render it as any other component.
+This creates a static background, if you want it to move you have to set the named optional parameters `baseSpeed` and `layerDelta`. For example if you want to move your background images along the X-axis and have the images further away you would do the following:
+
+```dart
+  this.bg = ParallaxComponent(images, baseSpeed: Offset(50, 0), layerDelta: Offset(20, 0));
+```
+You can set the baseSpeed and layerDelta at any time, for example if your character jumps or your game speeds up.
+
+```dart
+  this.bg.baseSpeed = Offset(100, 0);
+  this.bg.layerDelta = Offset(40, 0);
+```
+
+By default the images are aligned to the bottom left, repeated along the X-axis and scaled proportionally so that the image covers the height of the screen. If you want to change this behaviour, for example if you are not making a side scrolling game, you can set the `repeat`, `alignment` and `fill` parameters for each ParallaxImage.
+
+Advanced example:
+```dart
+  final images = [
+    ParallaxImage("stars.jpg", repeat: ImageRepeat.repeat, alignment: Alignment.center, fill: LayerFill.width),
+    ParallaxImage("planets.jpg", repeat: ImageRepeat.repeatY, alignment: Alignment.bottomLeft, fill: LayerFill.none),
+    ParallaxImage("dust.jpg", repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
+  ];
+  this.bg = ParallaxComponent(images, baseSpeed: Offset(50, 0), layerDelta: Offset(20, 0));
+```
+
+* The stars image in this example will be repeatedly drawn in both axis, align in the center and be scaled to fill the screen width.
+* The planets image will be repeated in Y-axis, aligned to the bottom left of the screen and not be scaled.
+* The dust image will be repeated in X-axis, aligned to the top right and scaled to fill the screen height.
+
+Once you are done with setting the parameters to your needs, render the ParallaxComponent as any other component.
 
 Like the AnimationComponent, even if your parallax is static, you must call update on this component, so it runs its animation.
+Also, don't forget to add you images to the `pubspec.yaml` file as assets or they wont be found.
+
+An example implementation can be found in the [examples directory](https://github.com/flame-engine/flame/tree/master/doc/examples/parallax).
 
 ## Box2D Component
 

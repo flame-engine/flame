@@ -106,7 +106,7 @@ class _SpriteCustomPainter extends widgets.CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (_sprite.loaded()) {
-      _sprite.render(canvas, size.width, size.height);
+      _sprite.render(canvas, width: size.width, height: size.height);
     }
   }
 

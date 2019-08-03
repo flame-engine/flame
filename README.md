@@ -62,7 +62,7 @@ Just drop it in your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flame: ^0.14.2
+  flame: ^0.15.0
 ```
 
 And start using it!
@@ -155,7 +155,7 @@ If you want to load an image and render it on the `Canvas`, you can use the `Spr
 ```dart
     import 'package:flame/sprite.dart';
 
-    Sprite sprite = new Sprite('player.png');
+    Sprite sprite = Sprite('player.png');
 
     // in your render loop
     sprite.render(canvas, width, height);
@@ -179,10 +179,10 @@ The most commonly used implementation, `SpriteComponent`, can be created with a 
     import 'package:flame/components/component.dart';
 
     // on your constructor or init logic
-    Sprite sprite = new Sprite('player.png');
+    Sprite sprite = Sprite('player.png');
 
     const size = 128.0;
-    final player = new SpriteComponent.fromSprite(size, size, sprite); // width, height, sprite
+    final player = SpriteComponent.fromSprite(size, size, sprite); // width, height, sprite
 
     // screen coordinates
     player.x = ... // 0 by default
@@ -224,7 +224,7 @@ To start, just add your game widget directly to your runApp, like so:
 
 ```dart
     main() {
-        Game game = new MyGameImpl();
+        Game game = MyGameImpl();
         runApp(game.widget);
     }
 ```
