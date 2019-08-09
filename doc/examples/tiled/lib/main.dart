@@ -1,7 +1,6 @@
 import 'package:flame/components/tiled_component.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/position.dart';
 import 'package:flame/animation.dart';
 import 'package:flame/components/animation_component.dart';
 import 'package:flutter/widgets.dart' hide Animation;
