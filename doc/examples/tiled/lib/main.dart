@@ -29,7 +29,8 @@ class TiledGame extends BaseGame {
       return;
     }
     for (TmxObject obj in obj.tmxObjects) {
-      final Rect rect = Rect.fromLTWH(obj.x.toDouble(), obj.y.toDouble(), 30.0, 30.0);
+      final Rect rect =
+          Rect.fromLTWH(obj.x.toDouble(), obj.y.toDouble(), 30.0, 30.0);
       final position = Position(obj.x.toDouble(), obj.y.toDouble());
       a.getSprite().renderPosition(canvas, position);
     }
