@@ -21,12 +21,14 @@ class TiledGame extends BaseGame {
   }
 
   void __addCoinsInMap(TiledComponent tiledMap) async {
-    final ObjectGroup obj = await tiledMap.getObjectGroupFromLayer("AnimatedCoins");
+    final ObjectGroup obj =
+        await tiledMap.getObjectGroupFromLayer("AnimatedCoins");
     if (obj == null) {
       return;
     }
     for (TmxObject obj in obj.tmxObjects) {
-      final comp = AnimationComponent(20.0, 20.0, Animation.sequenced('coins.png', 8, textureWidth: 20));
+      final comp = AnimationComponent(
+          20.0, 20.0, Animation.sequenced('coins.png', 8, textureWidth: 20));
       comp.x = obj.x.toDouble();
       comp.y = obj.y.toDouble();
       add(comp);
