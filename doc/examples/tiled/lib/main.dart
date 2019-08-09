@@ -17,10 +17,10 @@ class TiledGame extends BaseGame {
   TiledGame() {
     final TiledComponent tiledMap = TiledComponent('map.tmx');
     add(tiledMap);
-    __addCoinsInMap(tiledMap);
+    _addCoinsInMap(tiledMap);
   }
 
-  void __addCoinsInMap(TiledComponent tiledMap) async {
+  void _addCoinsInMap(TiledComponent tiledMap) async {
     final ObjectGroup obj =
         await tiledMap.getObjectGroupFromLayer("AnimatedCoins");
     if (obj == null) {
