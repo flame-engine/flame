@@ -69,10 +69,9 @@ class TiledComponent extends Component {
       final image = images[tile.image.source];
 
       final rect = tile.computeDrawRect();
-      final src = Rect.fromLTWH(rect.left.toDouble(), rect.top.toDouble(),
-          rect.width.toDouble(), rect.height.toDouble());
-      final dst = Rect.fromLTWH(tile.x.toDouble(), tile.y.toDouble(),
-          rect.width.toDouble(), rect.height.toDouble());
+      final src =
+          Rect.fromLTWH(rect.left.toDouble(), rect.top.toDouble(), rect.width.toDouble(), rect.height.toDouble());
+      final dst = Rect.fromLTWH(tile.x.toDouble(), tile.y.toDouble(), rect.width.toDouble(), rect.height.toDouble());
 
       c.drawImageRect(image, src, dst, paint);
     });
@@ -81,11 +80,9 @@ class TiledComponent extends Component {
   @override
   void update(double t) {}
 
-  ObjectGroup getObjectGroupLayerByName(String name) {
-    if (!loaded()) {
-      return null;
-    }
-    return map.objectGroups
-        .firstWhere((objectGroup) => objectGroup.name == name);
+  Future<ObjectGroup> getObjectGroupFromLayer(String name) {
+    return future.then((onValue) {
+      return map.objectGroups.firstWhere((objectGroup) => objectGroup.name == name);
+    });
   }
 }
