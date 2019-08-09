@@ -3,6 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/position.dart';
 import 'package:flame/animation.dart';
+import 'package:flame/components/animation_component.dart';
 import 'package:flutter/widgets.dart' hide Animation;
 import 'package:tiled/tiled.dart' show ObjectGroup, TmxObject;
 
@@ -13,32 +14,22 @@ void main() {
 }
 
 class TiledGame extends BaseGame {
-  TiledComponent tiledMap;
-  Animation a;
   TiledGame() {
-    tiledMap = TiledComponent('map.tmx');
+    final TiledComponent tiledMap = TiledComponent('map.tmx');
     add(tiledMap);
-    a = Animation.sequenced('coins.png', 8, textureWidth: 20);
+    __addCoinsInMap(tiledMap);
   }
 
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    final ObjectGroup obj = tiledMap.getObjectLayerByName("AnimatedCoins");
+  void __addCoinsInMap(TiledComponent tiledMap) async {
+    final ObjectGroup obj = await tiledMap.getObjectGroupFromLayer("AnimatedCoins");
     if (obj == null) {
       return;
     }
     for (TmxObject obj in obj.tmxObjects) {
-      final Rect rect =
-          Rect.fromLTWH(obj.x.toDouble(), obj.y.toDouble(), 30.0, 30.0);
-      final position = Position(obj.x.toDouble(), obj.y.toDouble());
-      a.getSprite().renderPosition(canvas, position);
+      final comp = AnimationComponent(20.0, 20.0, Animation.sequenced('coins.png', 8, textureWidth: 20));
+      comp.x = obj.x.toDouble();
+      comp.y = obj.y.toDouble();
+      add(comp);
     }
-  }
-
-  @override
-  void update(double t) {
-    super.update(t);
-    a.update(t);
   }
 }
