@@ -1,4 +1,5 @@
 ## [next]
+- Exposing tile objects on TiledComponent (thanks @renatoferreira656)
 
 ## 0.15.1
 - Bumped version of svg dependency
