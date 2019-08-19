@@ -1,0 +1,16 @@
+name: tapeables
+description: A flame game showcasing the use of tapeable components
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flame:
+      path: ../../../
+
+flutter:
+  uses-material-design: true

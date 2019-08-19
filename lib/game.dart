@@ -10,6 +10,8 @@ import 'package:ordered_set/ordered_set.dart';
 
 import 'components/component.dart';
 import 'position.dart';
+import 'components/events/gestures.dart';
+import 'flame.dart';
 
 /// Represents a generic game.
 ///
@@ -74,6 +76,40 @@ abstract class BaseGame extends Game {
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
 
+  bool _registeredTapDetector = false;
+
+  bool _checkTapOverlap(Tapeable c, Offset o) {
+      final pointRect = Rect.fromLTWH(o.dx, o.dy, 1, 1);
+
+      return c.toRect().overlaps(pointRect);
+  }
+
+  List<Tapeable> get _tapeableComponents => components
+          .where((c) => c is Tapeable)
+          .map((c) => c as Tapeable)
+          .toList();
+
+  TapGestureRecognizer _handleTapGesture() => TapGestureRecognizer()
+          ..onTapUp = (TapUpDetails details) {
+              _tapeableComponents.forEach((c) {
+                  if (_checkTapOverlap(c, details.globalPosition)) {
+                      c.onTapUp(details);
+                  }
+              });
+          }
+          ..onTapDown = (TapDownDetails details) {
+              _tapeableComponents.forEach((c) {
+                  if (_checkTapOverlap(c, details.globalPosition)) {
+                      c.onTapDown(details);
+                  }
+              });
+          }
+          ..onTapCancel = () {
+              _tapeableComponents.forEach((c) {
+                  c.onTapCancel();
+              });
+          };
+
   /// This method is called for every component added, both via [add] and [addLater] methods.
   ///
   /// You can use this to setup your mixins, pre-calculate stuff on every component, or anything you desire.
@@ -83,6 +119,12 @@ abstract class BaseGame extends Game {
     if (debugMode() && c is PositionComponent) {
       c.debugMode = true;
     }
+
+    if (!_registeredTapDetector && c is Tapeable) {
+        Flame.util.addGestureRecognizer(_handleTapGesture());
+        _registeredTapDetector = true;
+    }
+
     // first time resize
     if (size != null) {
       c.resize(size);
