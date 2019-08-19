@@ -79,36 +79,34 @@ abstract class BaseGame extends Game {
   bool _registeredTapDetector = false;
 
   bool _checkTapOverlap(Tapeable c, Offset o) {
-      final pointRect = Rect.fromLTWH(o.dx, o.dy, 1, 1);
+    final pointRect = Rect.fromLTWH(o.dx, o.dy, 1, 1);
 
-      return c.toRect().overlaps(pointRect);
+    return c.toRect().overlaps(pointRect);
   }
 
-  List<Tapeable> get _tapeableComponents => components
-          .where((c) => c is Tapeable)
-          .map((c) => c as Tapeable)
-          .toList();
+  List<Tapeable> get _tapeableComponents =>
+      components.where((c) => c is Tapeable).map((c) => c as Tapeable).toList();
 
   TapGestureRecognizer _handleTapGesture() => TapGestureRecognizer()
-          ..onTapUp = (TapUpDetails details) {
-              _tapeableComponents.forEach((c) {
-                  if (_checkTapOverlap(c, details.globalPosition)) {
-                      c.onTapUp(details);
-                  }
-              });
-          }
-          ..onTapDown = (TapDownDetails details) {
-              _tapeableComponents.forEach((c) {
-                  if (_checkTapOverlap(c, details.globalPosition)) {
-                      c.onTapDown(details);
-                  }
-              });
-          }
-          ..onTapCancel = () {
-              _tapeableComponents.forEach((c) {
-                  c.onTapCancel();
-              });
-          };
+    ..onTapUp = (TapUpDetails details) {
+      _tapeableComponents.forEach((c) {
+        if (_checkTapOverlap(c, details.globalPosition)) {
+          c.onTapUp(details);
+        }
+      });
+    }
+    ..onTapDown = (TapDownDetails details) {
+      _tapeableComponents.forEach((c) {
+        if (_checkTapOverlap(c, details.globalPosition)) {
+          c.onTapDown(details);
+        }
+      });
+    }
+    ..onTapCancel = () {
+      _tapeableComponents.forEach((c) {
+        c.onTapCancel();
+      });
+    };
 
   /// This method is called for every component added, both via [add] and [addLater] methods.
   ///
@@ -121,8 +119,8 @@ abstract class BaseGame extends Game {
     }
 
     if (!_registeredTapDetector && c is Tapeable) {
-        Flame.util.addGestureRecognizer(_handleTapGesture());
-        _registeredTapDetector = true;
+      Flame.util.addGestureRecognizer(_handleTapGesture());
+      _registeredTapDetector = true;
     }
 
     // first time resize
