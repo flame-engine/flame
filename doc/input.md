@@ -36,3 +36,41 @@ Here are some example of more complex Gesture Recognizers:
     }
 ```
 __ATTENTION:__ `Flame.util.addGestureRecognizer` must be called after the `runApp`, otherwise Flutter's `GestureBinding` will not be initialized yet and exceptions will occur.
+
+## Tapeable components
+
+Flame also offers a simple helper to make it easier to handle tap events on `PositionComponent`, by using the `mixin` `Tapeable` your components can override the following methods, enabling easy to use tap events on your Component. 
+
+```dart
+  void onTapCancel() {}
+  void onTapDown(TapDownDetails details) {}
+  void onTapUp(TapUpDetails details) {}
+```
+
+Minimal component example:
+
+```
+import 'package:flame/components/component.dart';
+import 'package:flame/components/events/gestures.dart';
+
+class TapeableComponent extends PositionComponent with Tapeable {
+
+  // update, render ommited
+
+  @override
+  void onTapUp(TapUpDetails details) {
+    print("tap up");
+  }
+
+  @override
+  void onTapDown(TapDownDetails details) {
+    print("tap down");
+  }
+
+  @override
+  void onTapCancel() {
+    print("tap cancel");
+  }
+}
+
+__ATTENTION:__ Since Tapeable uses `Flame.util.addGestureRecognizer` no `Tapeable` component can be added on the Game before the `runApp` method has been called.
