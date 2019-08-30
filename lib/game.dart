@@ -46,6 +46,9 @@ abstract class Game {
   /// Returns the game widget. Put this in your structure to start rendering and updating the game.
   /// You can add it directly to the runApp method or inside your widget structure (if you use vanilla screens and widgets).
   Widget get widget => builder.build(this);
+
+  // Called when the Game widget is attached
+  void onAttach() { }
 }
 
 class WidgetBuilder {
@@ -75,8 +78,6 @@ abstract class BaseGame extends Game {
 
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
-
-  bool _registeredTapDetector = false;
 
   bool _checkTapOverlap(Tapeable c, Offset o) {
     final pointRect = Rect.fromLTWH(o.dx, o.dy, 1, 1);
@@ -116,11 +117,6 @@ abstract class BaseGame extends Game {
   void preAdd(Component c) {
     if (debugMode() && c is PositionComponent) {
       c.debugMode = true;
-    }
-
-    if (!_registeredTapDetector && c is Tapeable) {
-      Flame.util.addGestureRecognizer(_handleTapGesture());
-      _registeredTapDetector = true;
     }
 
     // first time resize
@@ -236,6 +232,11 @@ abstract class BaseGame extends Game {
     return DateTime.now().microsecondsSinceEpoch.toDouble() /
         Duration.microsecondsPerSecond;
   }
+
+  @override
+  void onAttach() {
+      Flame.util.addGestureRecognizer(_handleTapGesture());
+  }
 }
 
 /// This is a helper implementation of a [BaseGame] designed to allow to easily create a game with a single component.
@@ -299,6 +300,8 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void attach(PipelineOwner owner) {
     super.attach(owner);
+    game.onAttach();
+
     _scheduleTick();
     _bindLifecycleListener();
   }
