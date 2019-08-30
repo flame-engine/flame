@@ -6,8 +6,6 @@ import 'package:flame/components/events/gestures.dart';
 void main() {
   final game = MyGame();
   runApp(game.widget);
-
-  game.addComps();
 }
 
 class TapeableSquare extends PositionComponent with Tapeable {
@@ -49,7 +47,7 @@ class TapeableSquare extends PositionComponent with Tapeable {
 }
 
 class MyGame extends BaseGame {
-  void addComps() {
-    add(TapeableSquare());
-  }
+    MyGame() {
+        add(TapeableSquare());
+    }
 }
