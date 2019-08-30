@@ -84,8 +84,8 @@ abstract class BaseGame extends Game {
     return c.toRect().overlaps(pointRect);
   }
 
-  List<Tapeable> get _tapeableComponents =>
-      components.where((c) => c is Tapeable).map((c) => c as Tapeable).toList();
+  Iterable<Tapeable> get _tapeableComponents =>
+      components.where((c) => c is Tapeable).cast<Tapeable>();
 
   TapGestureRecognizer _handleTapGesture() => TapGestureRecognizer()
     ..onTapUp = (TapUpDetails details) {
