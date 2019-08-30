@@ -47,7 +47,7 @@ class TapeableSquare extends PositionComponent with Tapeable {
 }
 
 class MyGame extends BaseGame {
-    MyGame() {
-        add(TapeableSquare());
-    }
+  MyGame() {
+    add(TapeableSquare());
+  }
 }
