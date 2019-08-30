@@ -48,7 +48,7 @@ abstract class Game {
   Widget get widget => builder.build(this);
 
   // Called when the Game widget is attached
-  void onAttach() { }
+  void onAttach() {}
 }
 
 class WidgetBuilder {
@@ -235,7 +235,7 @@ abstract class BaseGame extends Game {
 
   @override
   void onAttach() {
-      Flame.util.addGestureRecognizer(_handleTapGesture());
+    Flame.util.addGestureRecognizer(_handleTapGesture());
   }
 }
 
