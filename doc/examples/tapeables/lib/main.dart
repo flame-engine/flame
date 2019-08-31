@@ -14,8 +14,9 @@ class TapeableSquare extends PositionComponent with Tapeable {
 
   bool _beenPressed = false;
 
-  TapeableSquare() {
-    x = y = width = height = 100;
+  TapeableSquare({double y = 100}) {
+    x = width = height = 100;
+    this.y = y;
   }
 
   @override
@@ -49,5 +50,6 @@ class TapeableSquare extends PositionComponent with Tapeable {
 class MyGame extends BaseGame {
   MyGame() {
     add(TapeableSquare());
+    add(TapeableSquare(y: 400));
   }
 }

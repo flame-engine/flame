@@ -69,6 +69,13 @@ class Util {
     });
   }
 
+  /// This properly removes the bind of a gesture recognizer to your game.
+  ///
+  /// Use this in order to clear any added recognizers that you have added before
+  void removeGestureRecognizer(GestureRecognizer recognizer) {
+    recognizer.dispose();
+  }
+
   /// Utility method to render stuff on a specific place.
   ///
   /// Some render methods don't allow to pass a offset.

@@ -18,6 +18,23 @@ import 'flame.dart';
 /// Subclass this to implement the [update] and [render] methods.
 /// Flame will deal with calling these methods properly when the game's widget is rendered.
 abstract class Game {
+  TapGestureRecognizer _createTapGestureRecognizer() => TapGestureRecognizer()
+    ..onTapUp = (TapUpDetails details) {
+      onTapUp(details);
+    }
+    ..onTapDown = (TapDownDetails details) {
+      onTapDown(details);
+    }
+    ..onTapCancel = () {
+      onTapCancel();
+    };
+
+  void onTapCancel() {}
+  void onTapDown(TapDownDetails details) {}
+  void onTapUp(TapUpDetails details) {}
+
+  TapGestureRecognizer _gestureRecognizer;
+
   // Widget Builder for this Game
   final builder = WidgetBuilder();
 
@@ -48,7 +65,17 @@ abstract class Game {
   Widget get widget => builder.build(this);
 
   // Called when the Game widget is attached
-  void onAttach() {}
+  void onAttach() {
+    _gestureRecognizer = _createTapGestureRecognizer();
+    Flame.util.addGestureRecognizer(_gestureRecognizer);
+  }
+
+  // Called when the Game widget is detached
+  void onDetach() {
+    if (_gestureRecognizer != null) {
+      Flame.util.removeGestureRecognizer(_gestureRecognizer);
+    }
+  }
 }
 
 class WidgetBuilder {
@@ -88,26 +115,30 @@ abstract class BaseGame extends Game {
   Iterable<Tapeable> get _tapeableComponents =>
       components.where((c) => c is Tapeable).cast<Tapeable>();
 
-  TapGestureRecognizer _handleTapGesture() => TapGestureRecognizer()
-    ..onTapUp = (TapUpDetails details) {
-      _tapeableComponents.forEach((c) {
-        if (_checkTapOverlap(c, details.globalPosition)) {
-          c.onTapUp(details);
-        }
-      });
-    }
-    ..onTapDown = (TapDownDetails details) {
-      _tapeableComponents.forEach((c) {
-        if (_checkTapOverlap(c, details.globalPosition)) {
-          c.onTapDown(details);
-        }
-      });
-    }
-    ..onTapCancel = () {
-      _tapeableComponents.forEach((c) {
-        c.onTapCancel();
-      });
-    };
+  @override
+  void onTapCancel() {
+    _tapeableComponents.forEach((c) {
+      c.onTapCancel();
+    });
+  }
+
+  @override
+  void onTapDown(TapDownDetails details) {
+    _tapeableComponents.forEach((c) {
+      if (_checkTapOverlap(c, details.globalPosition)) {
+        c.onTapDown(details);
+      }
+    });
+  }
+
+  @override
+  void onTapUp(TapUpDetails details) {
+    _tapeableComponents.forEach((c) {
+      if (_checkTapOverlap(c, details.globalPosition)) {
+        c.onTapUp(details);
+      }
+    });
+  }
 
   /// This method is called for every component added, both via [add] and [addLater] methods.
   ///
@@ -232,11 +263,6 @@ abstract class BaseGame extends Game {
     return DateTime.now().microsecondsSinceEpoch.toDouble() /
         Duration.microsecondsPerSecond;
   }
-
-  @override
-  void onAttach() {
-    Flame.util.addGestureRecognizer(_handleTapGesture());
-  }
 }
 
 /// This is a helper implementation of a [BaseGame] designed to allow to easily create a game with a single component.
@@ -309,6 +335,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void detach() {
     super.detach();
+    game.onDetach();
     _unscheduleTick();
     _unbindLifecycleListener();
   }
