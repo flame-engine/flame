@@ -1,5 +1,6 @@
 ## [next]
 - Exposing tile objects on TiledComponent (thanks @renatoferreira656)
+- Adding integrated API for taps on Game class and adding Tapeables mixin for PositionComponents
 
 ## 0.15.1
 - Bumped version of svg dependency
