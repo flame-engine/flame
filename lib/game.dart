@@ -68,7 +68,7 @@ abstract class BaseGame extends Game {
   /// Current screen size, updated every resize via the [resize] method hook
   Size size;
 
-  /// Camera position; every non-HUD component is translated so that the camera is drawn in the center of the screen
+  /// Camera position; every non-HUD component is translated so that the camera position is the top-left corner of the screen.
   Position camera = Position.empty();
 
   /// List of deltas used in debug mode to calculate FPS
