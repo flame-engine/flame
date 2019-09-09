@@ -20,8 +20,7 @@ To start, just add your game widget directly to your runApp, like so:
 
 Instead of implementing the low level `Game` class, you should probably use the more full-featured `BaseGame` class.
 
-The `BaseGame` implements a `Component` based `Game` for you; basically it has a list of `Component`s and repasses the `update` and `render` calls appropriately. You can still extend those methods to add custom behavior, and you will get a few other features for free, like the repassing of `resize` methods (every time the screen is resized the information will be passed to the resize methods of all your components) and also a basic camera feature. The `BaseGame.camera` controls which point in
-coordinate space should be the top-left of the screen (defaults to [0,0] like a regular `Canvas`).
+The `BaseGame` implements a `Component` based `Game` for you; basically it has a list of `Component`s and repasses the `update` and `render` calls appropriately. You can still extend those methods to add custom behavior, and you will get a few other features for free, like the repassing of `resize` methods (every time the screen is resized the information will be passed to the resize methods of all your components) and also a basic camera feature. The `BaseGame.camera` controls which point in coordinate space should be the top-left of the screen (defaults to [0,0] like a regular `Canvas`).
 
 A very simple `BaseGame` implementation example can be seen below:
 
