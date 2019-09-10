@@ -66,6 +66,9 @@ abstract class Game {
 
   // Called when the Game widget is attached
   void onAttach() {
+    if (_gestureRecognizer != null) {
+      Flame.util.removeGestureRecognizer(_gestureRecognizer);
+    }
     _gestureRecognizer = _createTapGestureRecognizer();
     Flame.util.addGestureRecognizer(_gestureRecognizer);
   }
@@ -106,20 +109,14 @@ abstract class BaseGame extends Game {
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
 
-  bool _checkTapOverlap(Tapeable c, Offset o) {
-    final pointRect = Rect.fromLTWH(o.dx, o.dy, 1, 1);
-
-    return c.toRect().overlaps(pointRect);
-  }
+  bool _checkTapOverlap(Tapeable c, Offset o) => c.toRect().contains(o);
 
   Iterable<Tapeable> get _tapeableComponents =>
       components.where((c) => c is Tapeable).cast();
 
   @override
   void onTapCancel() {
-    _tapeableComponents.forEach((c) {
-      c.onTapCancel();
-    });
+    _tapeableComponents.forEach((c) => c.onTapCancel());
   }
 
   @override
