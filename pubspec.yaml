@@ -4,9 +4,6 @@ version: 0.15.1
 author: Luan Nico <luannico27@gmail.com>
 homepage: https://github.com/flame-engine/flame
 
-flutter:
-  uses-material-design: false
-
 dependencies:
   flutter:
     sdk: flutter
