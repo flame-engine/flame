@@ -55,7 +55,7 @@ import 'package:flame/components/events/gestures.dart';
 
 class TapeableComponent extends PositionComponent with Tapeable {
 
-  // update, render ommited
+  // update and render omitted
 
   @override
   void onTapUp(TapUpDetails details) {
