@@ -113,7 +113,7 @@ abstract class BaseGame extends Game {
   }
 
   Iterable<Tapeable> get _tapeableComponents =>
-      components.where((c) => c is Tapeable).cast<Tapeable>();
+      components.where((c) => c is Tapeable).cast();
 
   @override
   void onTapCancel() {
