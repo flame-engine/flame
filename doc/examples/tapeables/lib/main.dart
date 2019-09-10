@@ -9,8 +9,8 @@ void main() {
 }
 
 class TapeableSquare extends PositionComponent with Tapeable {
-  static final Paint _white = Paint()..color = const Color(0xffffffff);
-  static final Paint _grey = Paint()..color = const Color(0xffa5a5a5);
+  static final Paint _white = Paint()..color = const Color(0xFFFFFFFF);
+  static final Paint _grey = Paint()..color = const Color(0xFFA5A5A5);
 
   bool _beenPressed = false;
 
@@ -24,11 +24,7 @@ class TapeableSquare extends PositionComponent with Tapeable {
 
   @override
   void render(Canvas canvas) {
-    if (_beenPressed) {
-      canvas.drawRect(toRect(), _grey);
-    } else {
-      canvas.drawRect(toRect(), _white);
-    }
+    canvas.drawRect(toRect(), _beenPressed ? _grey : _white);
   }
 
   @override
