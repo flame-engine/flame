@@ -39,7 +39,7 @@ __ATTENTION:__ `Flame.util.addGestureRecognizer` must be called after the `runAp
 
 ## Tapeable components
 
-Flame also offers a simple helper to make it easier to handle tap events on `PositionComponent`, by using the `mixin` `Tapeable` your components can override the following methods, enabling easy to use tap events on your Component.
+Flame also offers a simple helper to make it easier to handle tap events on `PositionComponent`, by using the mixin `Tapeable` your components can override the following methods, enabling easy to use tap events on your Component.
 
 ```dart
   void onTapCancel() {}
