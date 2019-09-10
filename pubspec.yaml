@@ -25,3 +25,6 @@ dev_dependencies:
 environment:
   sdk: ">=2.2.0 <3.0.0"
   flutter: ">=1.6.0"
+
+flutter:
+  uses-material-design: false

@@ -13,4 +13,4 @@ dependencies:
       path: ../../../
 
 flutter:
-  uses-material-design: true
+  uses-material-design: false
