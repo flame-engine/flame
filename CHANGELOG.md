@@ -1,4 +1,6 @@
 ## [next]
+
+## 0.15.2
 - Exposing tile objects on TiledComponent (thanks @renatoferreira656)
 - Adding integrated API for taps on Game class and adding Tapeables mixin for PositionComponents
 
