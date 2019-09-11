@@ -21,3 +21,4 @@ flutter:
     - assets/tiles/map.tmx
     - assets/images/map-level1.png
     - assets/images/map-level2.png
+    - assets/images/coins.png

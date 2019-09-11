@@ -80,4 +80,11 @@ class TiledComponent extends Component {
 
   @override
   void update(double t) {}
+
+  Future<ObjectGroup> getObjectGroupFromLayer(String name) {
+    return future.then((onValue) {
+      return map.objectGroups
+          .firstWhere((objectGroup) => objectGroup.name == name);
+    });
+  }
 }

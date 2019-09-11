@@ -10,12 +10,31 @@ import 'package:ordered_set/ordered_set.dart';
 
 import 'components/component.dart';
 import 'position.dart';
+import 'components/events/gestures.dart';
+import 'flame.dart';
 
 /// Represents a generic game.
 ///
 /// Subclass this to implement the [update] and [render] methods.
 /// Flame will deal with calling these methods properly when the game's widget is rendered.
 abstract class Game {
+  TapGestureRecognizer _createTapGestureRecognizer() => TapGestureRecognizer()
+    ..onTapUp = (TapUpDetails details) {
+      onTapUp(details);
+    }
+    ..onTapDown = (TapDownDetails details) {
+      onTapDown(details);
+    }
+    ..onTapCancel = () {
+      onTapCancel();
+    };
+
+  void onTapCancel() {}
+  void onTapDown(TapDownDetails details) {}
+  void onTapUp(TapUpDetails details) {}
+
+  TapGestureRecognizer _gestureRecognizer;
+
   // Widget Builder for this Game
   final builder = WidgetBuilder();
 
@@ -44,6 +63,22 @@ abstract class Game {
   /// Returns the game widget. Put this in your structure to start rendering and updating the game.
   /// You can add it directly to the runApp method or inside your widget structure (if you use vanilla screens and widgets).
   Widget get widget => builder.build(this);
+
+  // Called when the Game widget is attached
+  void onAttach() {
+    if (_gestureRecognizer != null) {
+      Flame.util.removeGestureRecognizer(_gestureRecognizer);
+    }
+    _gestureRecognizer = _createTapGestureRecognizer();
+    Flame.util.addGestureRecognizer(_gestureRecognizer);
+  }
+
+  // Called when the Game widget is detached
+  void onDetach() {
+    if (_gestureRecognizer != null) {
+      Flame.util.removeGestureRecognizer(_gestureRecognizer);
+    }
+  }
 }
 
 class WidgetBuilder {
@@ -68,11 +103,39 @@ abstract class BaseGame extends Game {
   /// Current screen size, updated every resize via the [resize] method hook
   Size size;
 
-  /// Camera position; every non-HUD component is translated so that the camera is drawn in the center of the screen
+  /// Camera position; every non-HUD component is translated so that the camera position is the top-left corner of the screen.
   Position camera = Position.empty();
 
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
+
+  bool _checkTapOverlap(Tapeable c, Offset o) => c.toRect().contains(o);
+
+  Iterable<Tapeable> get _tapeableComponents =>
+      components.where((c) => c is Tapeable).cast();
+
+  @override
+  void onTapCancel() {
+    _tapeableComponents.forEach((c) => c.onTapCancel());
+  }
+
+  @override
+  void onTapDown(TapDownDetails details) {
+    _tapeableComponents.forEach((c) {
+      if (_checkTapOverlap(c, details.globalPosition)) {
+        c.onTapDown(details);
+      }
+    });
+  }
+
+  @override
+  void onTapUp(TapUpDetails details) {
+    _tapeableComponents.forEach((c) {
+      if (_checkTapOverlap(c, details.globalPosition)) {
+        c.onTapUp(details);
+      }
+    });
+  }
 
   /// This method is called for every component added, both via [add] and [addLater] methods.
   ///
@@ -83,6 +146,7 @@ abstract class BaseGame extends Game {
     if (debugMode() && c is PositionComponent) {
       c.debugMode = true;
     }
+
     // first time resize
     if (size != null) {
       c.resize(size);
@@ -259,6 +323,8 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void attach(PipelineOwner owner) {
     super.attach(owner);
+    game.onAttach();
+
     _scheduleTick();
     _bindLifecycleListener();
   }
@@ -266,6 +332,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void detach() {
     super.detach();
+    game.onDetach();
     _unscheduleTick();
     _unbindLifecycleListener();
   }
