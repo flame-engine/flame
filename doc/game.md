@@ -49,4 +49,4 @@ A very simple `BaseGame` implementation example can be seen below:
 
 Flame's `BaseGame` class provides a method called `debugMode`, which by default returns false. It can however, be overridden to enable debug features over the components of the game. __Be aware__ that the state returned by this method is passed through its component when they added to the game, so if you change the `debugMode` in runtime, it may not affect already added components.
 
-To see more anout debugMode on Flame, please refer to the [Debug Docs](doc/debug.md)
+To see more anout debugMode on Flame, please refer to the [Debug Docs](/doc/debug.md)
