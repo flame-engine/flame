@@ -29,6 +29,62 @@ class Util {
     return SystemChrome.setPreferredOrientations([orientation]);
   }
 
+  /// Sets the preferred orientation of the app to landscape only.
+  ///
+  /// When it opens, it will automatically change orientation to the preferred one (if possible).
+  Future<void> setLandscape() {
+    return SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+  }
+
+  /// Sets the preferred orientation of the app to `DeviceOrientation.landscapeLeft` only.
+  ///
+  /// When it opens, it will automatically change orientation to the preferred one (if possible).
+  Future<void> setLandscapeLeftOnly() {
+    return SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+      DeviceOrientation.landscapeLeft,
+    ]);
+  }
+
+  /// Sets the preferred orientation of the app to `DeviceOrientation.landscapeRight` only.
+  ///
+  /// When it opens, it will automatically change orientation to the preferred one (if possible).
+  Future<void> setLandscapeRightOnly() {
+    return SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+      DeviceOrientation.landscapeRight,
+    ]);
+  }
+
+  /// Sets the preferred orientation of the app to portrait only.
+  ///
+  /// When it opens, it will automatically change orientation to the preferred one (if possible).
+  Future<void> setPortrait() {
+    return SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
+  /// Sets the preferred orientation of the app to `DeviceOrientation.portraitUp` only.
+  ///
+  /// When it opens, it will automatically change orientation to the preferred one (if possible).
+  Future<void> setPortraitUpOnly() {
+    return SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+      DeviceOrientation.portraitUp,
+    ]);
+  }
+
+  /// Sets the preferred orientation of the app to `DeviceOrientation.portraitDown` only.
+  ///
+  /// When it opens, it will automatically change orientation to the preferred one (if possible).
+  Future<void> setPortraitDownOnly() {
+    return SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
   /// Waits for the initial screen dimensions to be available.
   ///
   /// Because of flutter's issue #5259, when the app starts the size might be 0x0.
