@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
+import 'package:flame/components/composed_component.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
@@ -9,9 +10,10 @@ import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
 import 'components/component.dart';
-import 'position.dart';
-import 'components/events/gestures.dart';
+import 'components/mixins/has_game_ref.dart';
+import 'components/mixins/tapeable.dart';
 import 'flame.dart';
+import 'position.dart';
 
 /// Represents a generic game.
 ///
@@ -109,32 +111,21 @@ abstract class BaseGame extends Game {
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
 
-  bool _checkTapOverlap(Tapeable c, Offset o) => c.toRect().contains(o);
-
-  Iterable<Tapeable> get _tapeableComponents =>
-      components.where((c) => c is Tapeable).cast();
+  Iterable<Tapeable> get _tapeableComponents => components.where((c) => c is Tapeable).cast();
 
   @override
   void onTapCancel() {
-    _tapeableComponents.forEach((c) => c.onTapCancel());
+    _tapeableComponents.forEach((c) => c.handleTapCancel());
   }
 
   @override
   void onTapDown(TapDownDetails details) {
-    _tapeableComponents.forEach((c) {
-      if (_checkTapOverlap(c, details.globalPosition)) {
-        c.onTapDown(details);
-      }
-    });
+    _tapeableComponents.forEach((c) => c.handleTapDown(details));
   }
 
   @override
   void onTapUp(TapUpDetails details) {
-    _tapeableComponents.forEach((c) {
-      if (_checkTapOverlap(c, details.globalPosition)) {
-        c.onTapUp(details);
-      }
-    });
+    _tapeableComponents.forEach((c) => c.handleTapUp(details));
   }
 
   /// This method is called for every component added, both via [add] and [addLater] methods.
@@ -150,6 +141,14 @@ abstract class BaseGame extends Game {
     // first time resize
     if (size != null) {
       c.resize(size);
+    }
+
+    if (c is HasGameRef) {
+      (c as HasGameRef).gameRef = this;
+    }
+
+    if (c is ComposedComponent) {
+      c.components.forEach(preAdd);
     }
   }
 

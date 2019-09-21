@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components/component.dart';
-import 'package:flame/components/events/gestures.dart';
+import 'package:flame/components/mixins/tapeable.dart';
 
 void main() {
   final game = MyGame();

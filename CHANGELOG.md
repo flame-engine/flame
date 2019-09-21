@@ -1,4 +1,7 @@
 ## [next]
+- Improve our mixin structure (breaking change)
+- Adds HasGameRef mixin
+- Fixes for ComposedComponent
 
 ## 0.15.2
 - Exposing tile objects on TiledComponent (thanks @renatoferreira656)

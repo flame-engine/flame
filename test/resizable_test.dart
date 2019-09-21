@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 import 'package:flame/game.dart';
 import 'package:flame/components/component.dart';
-import 'package:flame/components/resizable.dart';
+import 'package:flame/components/mixins/resizable.dart';
 
 class MyComponent extends PositionComponent with Resizable {
   String name;
@@ -13,7 +13,7 @@ class MyComponent extends PositionComponent with Resizable {
   MyComponent(this.name, {this.myChildren = const []});
 
   @override
-  List<Resizable> children() => myChildren;
+  Iterable<Resizable> resizableChildren() => myChildren;
 
   @override
   void update(double dt) {}

@@ -67,7 +67,7 @@ abstract class PositionComponent extends Component {
 
   bool debugMode = false;
 
-  Color get debugColor => Color(0xFFFF00FF);
+  Color get debugColor => const Color(0xFFFF00FF);
 
   Paint get _debugPaint => Paint()
     ..color = debugColor
