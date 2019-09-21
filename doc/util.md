@@ -15,8 +15,8 @@ It also differs from the default implementations provided (math.Point and ui.Off
 This class, accessible via `Flame.util`, has some sparse functions that are independent and good to have. They are:
 
  * fullScreen : call once in the main method, makes your app full screen (no top nor bottom bars)
- * addGestureRecognizer discussed [here](#Input)
- * text : discussed [here](#Text)
+ * addGestureRecognizer discussed [here](doc/input.md#Input)
+ * text : discussed [here](doc/text.md#Text)
  * initialDimensions : returns a Future with the dimension (Size) of the screen. This has to be done in a hacky way because of the reasons described in the code. If you are using `BaseGame`, you probably won't need to use these, as very `Component` will receive this information
  * drawWhere : a very simple function that manually applies an offset to a canvas, render stuff given via a function and then reset the canvas, without using the canvas built-in save/restore functionality. This might be useful because `BaseGame` uses the state of the canvas, and you should not mess with it.
 
