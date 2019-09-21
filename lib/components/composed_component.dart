@@ -76,13 +76,13 @@ mixin ComposedComponent on Component, HasGameRef, Tapeable {
 
   // Finds all children of type T, recursively
   Iterable<T> _findT<T>() => components.expand((c) {
-    final List<T> r = [];
-    if (c is T) {
-      r.add(c as T);
-    }
-    if (c is ComposedComponent) {
-      r.addAll(c._findT<T>());
-    }
-    return r;
-  }).cast();
+        final List<T> r = [];
+        if (c is T) {
+          r.add(c as T);
+        }
+        if (c is ComposedComponent) {
+          r.addAll(c._findT<T>());
+        }
+        return r;
+      }).cast();
 }
