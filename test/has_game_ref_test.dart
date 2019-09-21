@@ -14,10 +14,8 @@ class MyGame extends BaseGame {
 }
 
 class MyComponent extends PositionComponent with HasGameRef<MyGame> {
-
   @override
-  void update(double dt) {
-  }
+  void update(double dt) {}
 
   @override
   void render(Canvas c) {}

@@ -111,7 +111,8 @@ abstract class BaseGame extends Game {
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
 
-  Iterable<Tapeable> get _tapeableComponents => components.where((c) => c is Tapeable).cast();
+  Iterable<Tapeable> get _tapeableComponents =>
+      components.where((c) => c is Tapeable).cast();
 
   @override
   void onTapCancel() {

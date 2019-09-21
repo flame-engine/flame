@@ -30,8 +30,8 @@ class MyTap extends PositionComponent with Tapeable, Resizable {
   bool checkTapOverlap(Offset o) => true;
 }
 
-class MyComposed extends Component with HasGameRef, Tapeable, ComposedComponent {
-
+class MyComposed extends Component
+    with HasGameRef, Tapeable, ComposedComponent {
   @override
   void update(double dt) {}
 
