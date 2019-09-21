@@ -34,14 +34,14 @@ The `isHUD` method can be implemented to return true (default false) to make the
 
 There are also other implementations:
 
-* The `AnimationComponent` takes an `Animation` object and renders a cyclic animated sprite (more details about Animations [here](doc/images.md#Animation))
+* The `AnimationComponent` takes an `Animation` object and renders a cyclic animated sprite (more details about Animations [here](/doc/images.md#Animation))
 * The `SvgComponent` takes an `Svg` object and renders the SVG on the game
 * The `ParallaxComponent` can render a parallax background with several frames
 * The `Box2DComponent`, that has a physics engine built-in (using the [Box2D](https://github.com/google/box2d.dart) port for Dart)
 
 ## Animation Component
 
-This component uses an instance of the [Animation](doc/images.md#Animation) class to represent a Component that has a sprite that runs a single cyclic animation.
+This component uses an instance of the [Animation](/doc/images.md#Animation) class to represent a Component that has a sprite that runs a single cyclic animation.
 
 This will create a simple three frame animation
 
@@ -50,7 +50,7 @@ This will create a simple three frame animation
     this.player = AnimationComponent(64.0, 64.0, new Animation.spriteList(sprites, stepTime: 0.01));
 ```
 
-If you have a sprite sheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](doc/images.md#Animation)):
+If you have a sprite sheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](/doc/images.md#Animation)):
 
 ```dart
     this.player = AnimationComponent.sequenced(64.0, 64.0, 'player.png', 2);
@@ -71,7 +71,7 @@ This component uses an instance of `Svg` class to represent a Component that has
 
 ## FlareAnimation Component
 
-This component wraps an instance of the [FlareAnimation](doc/images.md#FlareAnimation), it receives the filename of the Flare animation file, which animation from that file you want to use, and the `width` and `height` of the rendered animation.
+This component wraps an instance of the [FlareAnimation](/doc/images.md#FlareAnimation), it receives the filename of the Flare animation file, which animation from that file you want to use, and the `width` and `height` of the rendered animation.
 
 ```dart
     final fileName = "assets/Bob_Minion.flr";
@@ -166,7 +166,7 @@ Once you are done with setting the parameters to your needs, render the Parallax
 Like the AnimationComponent, even if your parallax is static, you must call update on this component, so it runs its animation.
 Also, don't forget to add you images to the `pubspec.yaml` file as assets or they wont be found.
 
-An example implementation can be found in the [examples directory](doc/examples/parallax).
+An example implementation can be found in the [examples directory](/doc/examples/parallax).
 
 ## Box2D Component
 
@@ -182,4 +182,4 @@ You can see a more complete example of box2d usage on [this WIP game](https://gi
 
 Currently we have a very basic implementation of a Tiled component. This API uses the lib [Tiled](https://github.com/feroult/tiled.dart) to parse map files and render visible layers.
 
-A example of how to use the API can be found [here](doc/examples/tiled).
+A example of how to use the API can be found [here](/doc/examples/tiled).

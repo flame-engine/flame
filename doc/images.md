@@ -160,7 +160,7 @@ Animations are normally used inside `AnimationComponent`s, but custom components
 
 Animations can also be used as widgets, to do so, just use `Flame.util.animationAsWidget`
 
-A complete example of using animations as widegets can be found [here](doc/examples/animation_widget).
+A complete example of using animations as widegets can be found [here](/doc/examples/animation_widget).
 
 ## FlareAnimation
 
@@ -234,4 +234,4 @@ You can also get a single frame of the sprite sheet using the `getSprite` method
 spritesheet.getSprite(0, 0) // row, column;
 ```
 
-You can see a full example of the SpriteSheet class [here](doc/examples/spritesheet).
+You can see a full example of the SpriteSheet class [here](/doc/examples/spritesheet).
