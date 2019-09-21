@@ -160,7 +160,7 @@ Animations are normally used inside `AnimationComponent`s, but custom components
 
 Animations can also be used as widgets, to do so, just use `Flame.util.animationAsWidget`
 
-A complete example of using animations as widegets can be found [here](examples/animation_widget).
+A complete example of using animations as widegets can be found [here](doc/examples/animation_widget).
 
 ## FlareAnimation
 

@@ -1,6 +1,6 @@
 # Game Loop
 
-The Game Loop module is a simple abstraction over the game loop concept. Basically most games are built upon two methods: 
+The Game Loop module is a simple abstraction over the game loop concept. Basically most games are built upon two methods:
 
 * The render method takes the canvas ready for drawing the current state of the game.
 * The update method receives the delta time in seconds since last update and allows you to move the next state.

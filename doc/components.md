@@ -166,7 +166,7 @@ Once you are done with setting the parameters to your needs, render the Parallax
 Like the AnimationComponent, even if your parallax is static, you must call update on this component, so it runs its animation.
 Also, don't forget to add you images to the `pubspec.yaml` file as assets or they wont be found.
 
-An example implementation can be found in the [examples directory](https://github.com/flame-engine/flame/tree/master/doc/examples/parallax).
+An example implementation can be found in the [examples directory](doc/examples/parallax).
 
 ## Box2D Component
 
@@ -182,4 +182,4 @@ You can see a more complete example of box2d usage on [this WIP game](https://gi
 
 Currently we have a very basic implementation of a Tiled component. This API uses the lib [Tiled](https://github.com/feroult/tiled.dart) to parse map files and render visible layers.
 
-A example of how to use the API can be found [here](https://github.com/luanpotter/flame/tree/master/examples/tiled). 
+A example of how to use the API can be found [here](doc/examples/tiled).
