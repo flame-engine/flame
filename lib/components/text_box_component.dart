@@ -4,7 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/widgets.dart' as widgets;
 
 import 'component.dart';
-import 'resizable.dart';
+import 'mixins/resizable.dart';
 import '../text_config.dart';
 import '../palette.dart';
 import '../position.dart';

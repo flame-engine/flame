@@ -11,11 +11,11 @@ class Resizable {
   /// Implementation provided by this mixin to the resize hook.
   void resize(Size size) {
     this.size = size;
-    children().where((e) => e != null).forEach((e) => e.resize(size));
+    resizableChildren().where((e) => e != null).forEach((e) => e.resize(size));
   }
 
   /// Overwrite this to add children to this [Resizable].
   ///
   /// If a [Resizable] has children, its children as resized as well.
-  List<Resizable> children() => [];
+  Iterable<Resizable> resizableChildren() => [];
 }

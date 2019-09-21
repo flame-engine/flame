@@ -1,11 +1,16 @@
 import 'dart:ui';
 
-import 'package:flame/components/component.dart';
-import 'package:flame/components/resizable.dart';
+import 'package:flame/components/mixins/has_game_ref.dart';
+import 'package:flame/components/mixins/tapeable.dart';
+import 'package:flame/game.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
-/// A mixin that helps you to make a `Component` wraps other components. It is useful to group visual components through a hierarchy. When implemented, makes every item in its `components` collection field be updated and rendered with the same conditions.
+import 'component.dart';
+import 'mixins/resizable.dart';
+
+/// A mixin that helps you to make a `Component` wraps other components. It is useful to group visual components through a hierarchy.
+/// When implemented, makes every item in its `components` collection field be updated and rendered with the same conditions.
 ///
 /// Example of usage, where visibility of two components are handled by a wrapper:
 ///
@@ -32,7 +37,7 @@ import 'package:ordered_set/ordered_set.dart';
 /// }
 /// ```
 ///
-mixin ComposedComponent on Component {
+mixin ComposedComponent on Component, HasGameRef, Tapeable {
   OrderedSet<Component> components =
       OrderedSet(Comparing.on((c) => c.priority()));
 
@@ -56,17 +61,28 @@ mixin ComposedComponent on Component {
   }
 
   void add(Component c) {
-    components.add(c);
-
-    if (this is Resizable) {
-      // first time resize
-      final Resizable thisResizable = this as Resizable;
-      if (thisResizable.size != null) {
-        c.resize(thisResizable.size);
-      }
+    if (gameRef is BaseGame) {
+      (gameRef as BaseGame).preAdd(c);
     }
+    components.add(c);
   }
 
-  List<Resizable> children() =>
-      components.where((r) => r is Resizable).cast<Resizable>().toList();
+  // this is an important override for the Tapeable mixin
+  @override
+  Iterable<Tapeable> tapeableChildren() => _findT<Tapeable>();
+
+  // this is an important override for the Resizable mixin
+  Iterable<Resizable> resizableChildren() => _findT<Resizable>();
+
+  // Finds all children of type T, recursively
+  Iterable<T> _findT<T>() => components.expand((c) {
+    final List<T> r = [];
+    if (c is T) {
+      r.add(c as T);
+    }
+    if (c is ComposedComponent) {
+      r.addAll(c._findT<T>());
+    }
+    return r;
+  }).cast();
 }
