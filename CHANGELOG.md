@@ -1,4 +1,6 @@
 ## [next]
+- Added no-parameter alias functions for setting the game's orientation.
+- Updated documentation on Util section.
 
 ## 0.15.2
 - Exposing tile objects on TiledComponent (thanks @renatoferreira656)
