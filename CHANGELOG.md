@@ -2,6 +2,7 @@
 - Improve our mixin structure (breaking change)
 - Adds HasGameRef mixin
 - Fixes for ComposedComponent
+- Added no-parameter alias functions for setting the game's orientation.
 
 ## 0.15.2
 - Exposing tile objects on TiledComponent (thanks @renatoferreira656)
