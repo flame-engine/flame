@@ -12,14 +12,42 @@ It also differs from the default implementations provided (math.Point and ui.Off
 
 ## Util Class
 
-This class, accessible via `Flame.util`, has some sparse functions that are independent and good to have. They are:
+This class, accessible via `Flame.util`, has some sparse functions that are independent and good to have.
 
- * fullScreen : call once in the main method, makes your app full screen (no top nor bottom bars)
- * addGestureRecognizer discussed [here](/doc/input.md#Input)
- * text : discussed [here](/doc/text.md#Text)
- * initialDimensions : returns a Future with the dimension (Size) of the screen. This has to be done in a hacky way because of the reasons described in the code. If you are using `BaseGame`, you probably won't need to use these, as very `Component` will receive this information
- * drawWhere : a very simple function that manually applies an offset to a canvas, render stuff given via a function and then reset the canvas, without using the canvas built-in save/restore functionality. This might be useful because `BaseGame` uses the state of the canvas, and you should not mess with it.
+It is recommended that the functions in this class be called via the `Flame.util` getter to utilize a single instance prepared by the Flame engine.
 
+### `Flame.util.fullScreen()`
+
+When called, this disables all `SystemUiOverlay` making the app full screen.
+When called in the main method, makes your app full screen (no top nor bottom bars)
+
+### `Flame.util.setLandscape()`
+
+This method sets the orientation of the whole application (effectively, also the game) to landscape and depending on operating system and device setting, should allow both left and right landscape orientations. To set the app orientation to landscape on a specific direction, use either `Flame.util.setLandscapeLeftOnly` or `Flame.util.setLandscapeRightOnly`.
+
+### `Flame.util.setPortrait()`
+
+This method sets the orientation of the whole application (effectively, also the game) to portrait and depending on operating system and device setting, should allow both up and down landscape orientations. To set the app orientation to portrait on a specific direction, use either `Flame.util.setPortraitUpOnly` or `Flame.util.setPortraitDownOnly`.
+
+### `Flame.util.setOrientation()` and `Flame.util.setOrientations()`
+
+If a finer control on the allowed orientations is required (without having to deal with `SystemChrome` directly), `setOrientation` (accepts a single `DeviceOrientation` as a parameter) and `setOrientations` (accepts a `List<DeviceOrientation>` for possible orientations) can be used.
+
+### `Flame.util.initialDimensions()`
+
+Returns a `Future` with the dimension (`Size`) of the screen. This has to be done in a hacky way because of the reasons described in the code. If you are using `BaseGame`, you probably won't need to use these, as very `Component` will receive this information.
+
+**Note**: Call this function first thing in an `async`hronous `main` and `await` its value to avoid the "size bug" that affects certain devices when building for production.
+
+### `Flame.util.addGestureRecognizer()` and `Flame.util.removeGestureRecognizer()`
+
+These two functions help with registering (and de-registering) gesture recognizers so that the game can accept input. More about these two functions [here](/doc/input.md#Input).
+
+### Other functions
+
+* `text`: discussed [here](/doc/text.md#Text)
+* `drawWhere`: a very simple function that manually applies an offset to the `Canvas`, render stuff given via a function and then reset the `Canvas`, without using the `Canvas`' built-in `save`/`restore` functionality. This might be useful because `BaseGame` uses the state of the canvas, and you should not mess with it.
+ 
 ## Timer
 
 Flame provides a simple utility class to help you handle countdowns and event like events.
