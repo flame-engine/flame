@@ -14,7 +14,7 @@ It also differs from the default implementations provided (math.Point and ui.Off
 
 This class, accessible via `Flame.util`, has some sparse functions that are independent and good to have.
 
-It's recommended that the functions in this class be called via the `Flame.util` getter to utilize a single instance prepared by the Flame engine.
+It is recommended that the functions in this class be called via the `Flame.util` getter to utilize a single instance prepared by the Flame engine.
 
 ### `Flame.util.fullScreen()`
 
@@ -41,14 +41,13 @@ Returns a `Future` with the dimension (`Size`) of the screen. This has to be don
 
 ### `Flame.util.addGestureRecognizer()` and `Flame.util.removeGestureRecognizer()`
 
-These two functions help with registering (and de-registering) gesture recognizers so that the game can accept input.
+These two functions help with registering (and de-registering) gesture recognizers so that the game can accept input. More about these two functions [here](/doc/input.md#Input).
 
 ### Other functions
 
-* `text`: discussed [here](#Text)
+* `text`: discussed [here](/doc/text.md#Text)
 * `drawWhere`: a very simple function that manually applies an offset to the `Canvas`, render stuff given via a function and then reset the `Canvas`, without using the `Canvas`' built-in `save`/`restore` functionality. This might be useful because `BaseGame` uses the state of the canvas, and you should not mess with it.
  
-
 ## Timer
 
 Flame provides a simple utility class to help you handle countdowns and event like events.

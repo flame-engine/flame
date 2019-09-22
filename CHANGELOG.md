@@ -1,4 +1,7 @@
 ## [next]
+- Improve our mixin structure (breaking change)
+- Adds HasGameRef mixin
+- Fixes for ComposedComponent
 - Added no-parameter alias functions for setting the game's orientation.
 - Updated documentation on Util section.
 

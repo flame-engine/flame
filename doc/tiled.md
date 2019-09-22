@@ -4,4 +4,4 @@
 
 Right now Tiled support on Flame is quite simple and it only renders the map on the screen, other advanced features are not yet supported.
 
-You can check a working example [here](examples/tiled).
+You can check a working example [here](/doc/examples/tiled).
