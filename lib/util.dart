@@ -22,18 +22,27 @@ class Util {
     return SystemChrome.setEnabledSystemUIOverlays([]);
   }
 
-  /// Sets the preferred orientation (landscape or portrait for the app).
+  /// Sets the preferred orientation (landscape or portrait) for the app.
   ///
-  /// When it opens, it will automatically change orientation to the preferred one (if possible).
+  /// When it opens, it will automatically change orientation to the preferred one (if possible) depending on the physical orientation of the device.
   Future<void> setOrientation(DeviceOrientation orientation) {
-    return SystemChrome.setPreferredOrientations([orientation]);
+    return SystemChrome.setPreferredOrientations(
+      <DeviceOrientation>[orientation],
+    );
+  }
+
+  /// Sets the preferred orientations (landscape left, right, portrait up, or down) for the app.
+  ///
+  /// When it opens, it will automatically change orientation to the preferred one (if possible) depending on the physical orientation of the device.
+  Future<void> setOrientations(List<DeviceOrientation> orientations) {
+    return SystemChrome.setPreferredOrientations(orientations);
   }
 
   /// Sets the preferred orientation of the app to landscape only.
   ///
   /// When it opens, it will automatically change orientation to the preferred one (if possible).
   Future<void> setLandscape() {
-    return SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+    return setOrientations(<DeviceOrientation>[
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
@@ -43,25 +52,21 @@ class Util {
   ///
   /// When it opens, it will automatically change orientation to the preferred one (if possible).
   Future<void> setLandscapeLeftOnly() {
-    return SystemChrome.setPreferredOrientations(<DeviceOrientation>[
-      DeviceOrientation.landscapeLeft,
-    ]);
+    return setOrientation(DeviceOrientation.landscapeLeft);
   }
 
   /// Sets the preferred orientation of the app to `DeviceOrientation.landscapeRight` only.
   ///
   /// When it opens, it will automatically change orientation to the preferred one (if possible).
   Future<void> setLandscapeRightOnly() {
-    return SystemChrome.setPreferredOrientations(<DeviceOrientation>[
-      DeviceOrientation.landscapeRight,
-    ]);
+    return setOrientation(DeviceOrientation.landscapeRight);
   }
 
   /// Sets the preferred orientation of the app to portrait only.
   ///
   /// When it opens, it will automatically change orientation to the preferred one (if possible).
   Future<void> setPortrait() {
-    return SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+    return setOrientations(<DeviceOrientation>[
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
@@ -71,18 +76,14 @@ class Util {
   ///
   /// When it opens, it will automatically change orientation to the preferred one (if possible).
   Future<void> setPortraitUpOnly() {
-    return SystemChrome.setPreferredOrientations(<DeviceOrientation>[
-      DeviceOrientation.portraitUp,
-    ]);
+    return setOrientation(DeviceOrientation.portraitUp);
   }
 
   /// Sets the preferred orientation of the app to `DeviceOrientation.portraitDown` only.
   ///
   /// When it opens, it will automatically change orientation to the preferred one (if possible).
   Future<void> setPortraitDownOnly() {
-    return SystemChrome.setPreferredOrientations(<DeviceOrientation>[
-      DeviceOrientation.portraitDown,
-    ]);
+    return setOrientation(DeviceOrientation.portraitDown);
   }
 
   /// Waits for the initial screen dimensions to be available.
