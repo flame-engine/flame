@@ -100,7 +100,7 @@ class Util {
       if (window.physicalSize.isEmpty) {
         final completer = Completer<Size>();
         window.onMetricsChanged = () {
-          if (!window.physicalSize.isEmpty) {
+          if (!window.physicalSize.isEmpty && !completer.isCompleted) {
             completer.complete(window.physicalSize / window.devicePixelRatio);
           }
         };
