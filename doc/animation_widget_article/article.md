@@ -20,7 +20,7 @@ Finally, especially when talking about animations, images of the sort are all di
 
 But I digress, this is an article about how to make sprite sheet animations, so if the title wasn't enough to encourage you to do so, nor this brief explanation of the concept, let's see if some graphics are.
 
-There are a lot of websites out there that provide a plethora of assets, some cheap, some free, some even free for commercial usage, assets being sprite sheets for animations, tilesets, icon sets and much more. One that I highly recommend is [itch.io](itch.io). It's an awesome community of people who really love indie gaming, and I do recommend to check it out rather than Steam next time you want a more innovative title to play. But not only complete and WIP games are cataloged, but also resources and assets. There is a large collection of commercially free sprite sheets, like the Dunjo Tileset of the image before.
+There are a lot of websites out there that provide a plethora of assets, some cheap, some free, some even free for commercial usage, assets being sprite sheets for animations, tilesets, icon sets and much more. One that I highly recommend is [itch.io](https://itch.io). It's an awesome community of people who really love indie gaming, and I do recommend to check it out rather than Steam next time you want a more innovative title to play. But not only complete and WIP games are cataloged, but also resources and assets. There is a large collection of commercially free sprite sheets, like the Dunjo Tileset of the image before.
 
 For our example, let's say you want to animate a mighty minotaur in your regular Flutter app. We go to itch.io and find this awesome asset pack, that comes, as expected, in sprite sheet format.
 
