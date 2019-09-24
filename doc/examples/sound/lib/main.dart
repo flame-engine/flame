@@ -12,7 +12,7 @@ class Ball extends PositionComponent {
   final Size gameSize;
   final paint = Paint()..color = const Color(0xFFFFFFFF);
 
-  bool foward = true;
+  bool forward = true;
 
   Ball(this.gameSize);
 
@@ -23,16 +23,16 @@ class Ball extends PositionComponent {
 
   @override
   void update(double delta) {
-    x += (foward ? 1 : -1) * 100 * delta;
+    x += (forward ? 1 : -1) * 100 * delta;
 
     if (x <= 0 || x + width >= gameSize.width) {
-      if (foward) {
+      if (forward) {
         x = gameSize.width - width - 1;
       } else {
         x = 1;
       }
 
-      foward = !foward;
+      forward = !forward;
       print('boin');
       Flame.audio.play('boin.mp3', volume: 1.2);
     }
