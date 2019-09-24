@@ -1,3 +1,3 @@
 # audiopool
 
-An example project to demosntrate the usage of audiopool in flame.
+An example project to demonstrate the usage of audiopool in flame.

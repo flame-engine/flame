@@ -43,7 +43,7 @@ All render methods from the Sprite class can receive a `Paint` instance on the o
 
 Sprites can also be used as widgets, to do so, just use `Flame.util.spriteAsWidget`
 
-A complete example of using sprite as widegets can be found [here](examples/animation_widget).
+A complete example of using sprite as widgets can be found [here](examples/animation_widget).
 
 ## Svg
 
@@ -160,7 +160,7 @@ Animations are normally used inside `AnimationComponent`s, but custom components
 
 Animations can also be used as widgets, to do so, just use `Flame.util.animationAsWidget`
 
-A complete example of using animations as widegets can be found [here](/doc/examples/animation_widget).
+A complete example of using animations as widgets can be found [here](/doc/examples/animation_widget).
 
 ## FlareAnimation
 

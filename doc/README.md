@@ -24,9 +24,9 @@ Check out this great series of articles/tutorials written by [Alekhin](https://g
  * [Scoring, Storage, and Sound Tutorial – Step by Step with Flame and Flutter (Part 4 of 5)](https://jap.alekhin.io/scoring-storage-sound-tutorial-flame-flutter-part-4)
  * [Game Finishing and Packaging Tutorial – Step by Step with Flame and Flutter (Part 5 of 5)](https://jap.alekhin.io/game-finishing-packaging-tutorial-flame-flutter-part-5)
 
-## Instalation
+## Installation
 
-As a pub package, you should depend. Just drop it in your `pubspec.yaml`:
+Put the pub package as your dependency by dropping the following in your `pubspec.yaml`:
 
 
 ```yaml
