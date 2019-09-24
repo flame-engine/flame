@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components/component.dart';
-import 'package:flame/components/mixins/tapeable.dart';
+import 'package:flame/components/mixins/tapable.dart';
 
 void main() {
   final game = MyGame();
   runApp(game.widget);
 }
 
-class TapeableSquare extends PositionComponent with Tapeable {
+class TapableSquare extends PositionComponent with Tapable {
   static final Paint _white = Paint()..color = const Color(0xFFFFFFFF);
   static final Paint _grey = Paint()..color = const Color(0xFFA5A5A5);
 
   bool _beenPressed = false;
 
-  TapeableSquare({double y = 100}) {
+  TapableSquare({double y = 100}) {
     x = width = height = 100;
     this.y = y;
   }
@@ -45,7 +45,7 @@ class TapeableSquare extends PositionComponent with Tapeable {
 
 class MyGame extends BaseGame {
   MyGame() {
-    add(TapeableSquare());
-    add(TapeableSquare(y: 400));
+    add(TapableSquare());
+    add(TapableSquare(y: 400));
   }
 }
