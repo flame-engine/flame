@@ -11,7 +11,7 @@ import 'package:ordered_set/ordered_set.dart';
 
 import 'components/component.dart';
 import 'components/mixins/has_game_ref.dart';
-import 'components/mixins/tapeable.dart';
+import 'components/mixins/tapable.dart';
 import 'flame.dart';
 import 'position.dart';
 
@@ -111,22 +111,22 @@ abstract class BaseGame extends Game {
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
 
-  Iterable<Tapeable> get _tapeableComponents =>
-      components.where((c) => c is Tapeable).cast();
+  Iterable<Tapable> get _tapableComponents =>
+      components.where((c) => c is Tapable).cast();
 
   @override
   void onTapCancel() {
-    _tapeableComponents.forEach((c) => c.handleTapCancel());
+    _tapableComponents.forEach((c) => c.handleTapCancel());
   }
 
   @override
   void onTapDown(TapDownDetails details) {
-    _tapeableComponents.forEach((c) => c.handleTapDown(details));
+    _tapableComponents.forEach((c) => c.handleTapDown(details));
   }
 
   @override
   void onTapUp(TapUpDetails details) {
-    _tapeableComponents.forEach((c) => c.handleTapUp(details));
+    _tapableComponents.forEach((c) => c.handleTapUp(details));
   }
 
   /// This method is called for every component added, both via [add] and [addLater] methods.

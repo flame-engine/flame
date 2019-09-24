@@ -1,3 +1,3 @@
-# tapeables
+# tapables
 
-A Flame game showcasing how to use a tapeable component
+A Flame game showcasing how to use a tapable component

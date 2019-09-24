@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flame/components/composed_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/components/mixins/resizable.dart';
-import 'package:flame/components/mixins/tapeable.dart';
+import 'package:flame/components/mixins/tapable.dart';
 import 'package:flutter/gestures.dart';
 import 'package:test/test.dart';
 
@@ -12,7 +12,7 @@ import 'package:flame/components/component.dart';
 
 class MyGame extends BaseGame {}
 
-class MyTap extends PositionComponent with Tapeable, Resizable {
+class MyTap extends PositionComponent with Tapable, Resizable {
   bool tapped = false;
 
   @override
@@ -31,7 +31,7 @@ class MyTap extends PositionComponent with Tapeable, Resizable {
 }
 
 class MyComposed extends Component
-    with HasGameRef, Tapeable, ComposedComponent {
+    with HasGameRef, Tapable, ComposedComponent {
   @override
   void update(double dt) {}
 
@@ -42,7 +42,7 @@ class MyComposed extends Component
   Rect toRect() => Rect.zero;
 }
 
-class PositionComponentNoNeedForRect extends PositionComponent with Tapeable {
+class PositionComponentNoNeedForRect extends PositionComponent with Tapable {
   @override
   void render(Canvas c) {}
 

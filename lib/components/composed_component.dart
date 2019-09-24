@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components/mixins/has_game_ref.dart';
-import 'package:flame/components/mixins/tapeable.dart';
+import 'package:flame/components/mixins/tapable.dart';
 import 'package:flame/game.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
@@ -37,7 +37,7 @@ import 'mixins/resizable.dart';
 /// }
 /// ```
 ///
-mixin ComposedComponent on Component, HasGameRef, Tapeable {
+mixin ComposedComponent on Component, HasGameRef, Tapable {
   OrderedSet<Component> components =
       OrderedSet(Comparing.on((c) => c.priority()));
 
@@ -67,9 +67,9 @@ mixin ComposedComponent on Component, HasGameRef, Tapeable {
     components.add(c);
   }
 
-  // this is an important override for the Tapeable mixin
+  // this is an important override for the Tapable mixin
   @override
-  Iterable<Tapeable> tapeableChildren() => _findT<Tapeable>();
+  Iterable<Tapable> tapableChildren() => _findT<Tapable>();
 
   // this is an important override for the Resizable mixin
   Iterable<Resizable> resizableChildren() => _findT<Resizable>();
