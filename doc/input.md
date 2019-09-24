@@ -37,9 +37,9 @@ Here are some example of more complex Gesture Recognizers:
 ```
 __ATTENTION:__ `Flame.util.addGestureRecognizer` must be called after the `runApp`, otherwise Flutter's `GestureBinding` will not be initialized yet and exceptions will occur.
 
-## Tapeable components
+## Tapable components
 
-Flame also offers a simple helper to make it easier to handle tap events on `PositionComponent`, by using the mixin `Tapeable` your components can override the following methods, enabling easy to use tap events on your Component.
+Flame also offers a simple helper to make it easier to handle tap events on `PositionComponent`, by using the mixin `Tapable` your components can override the following methods, enabling easy to use tap events on your Component.
 
 ```dart
   void onTapCancel() {}
@@ -53,7 +53,7 @@ Minimal component example:
 import 'package:flame/components/component.dart';
 import 'package:flame/components/events/gestures.dart';
 
-class TapeableComponent extends PositionComponent with Tapeable {
+class TapableComponent extends PositionComponent with Tapable {
 
   // update and render omitted
 
