@@ -1,7 +1,9 @@
 ## [next]
+
+## 0.16.0
 - Improve our mixin structure (breaking change)
 - Adds HasGameRef mixin
-- Fixes for ComposedComponent
+- Fixes for ComposedComponent (for tapables and other apis using preAdd)
 - Added no-parameter alias functions for setting the game's orientation.
 - Prevent double completion on onMetricsChanged callback
 
