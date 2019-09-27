@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'flame_audio.dart';
+import 'bgm.dart';
 import 'images.dart';
 import 'assets_cache.dart';
 import 'util.dart';
@@ -22,6 +23,9 @@ class Flame {
 
   /// Access a shared instance of the [FlameAudio] class.
   static FlameAudio audio = FlameAudio();
+
+  /// Access a shared instance of the [Bgm] class.
+  static Bgm bgm = Bgm();
 
   /// Access a shared instance of the [Images] class.
   static Images images = Images();
