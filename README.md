@@ -146,6 +146,8 @@ You can pre-load your audios in the beginning and avoid delays with the `loadAll
 
 [Complete Audio Guide](doc/audio.md)
 
+[Looping Background Music Guide](doc/bgm.md)
+
 ### Images
 
 If you are using the Component module and doing something simple, you probably won't need to use these classes; use `SpriteComponent` or `AnimationComponent` instead.
