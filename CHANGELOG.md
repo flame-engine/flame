@@ -1,4 +1,5 @@
 ## [next]
+- Added `Bgm` class for easy looping background music management.
 
 ## 0.16.0
 - Improve our mixin structure (breaking change)
