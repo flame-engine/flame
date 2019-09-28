@@ -12,6 +12,7 @@ import 'package:flutter/widgets.dart';
 /// provided in case this functionality needs to be unloaded but the app needs
 /// to keep running.
 class Bgm extends WidgetsBindingObserver {
+  bool _isRegistered = false;
   AudioPlayer audioPlayer;
   bool isPlaying = false;
 
@@ -19,12 +20,20 @@ class Bgm extends WidgetsBindingObserver {
   ///
   /// This must be called for auto-pause and resume to work properly.
   void initialize() {
+    if (_isRegistered) {
+      return;
+    }
+    _isRegistered = true;
     WidgetsBinding.instance.addObserver(this);
   }
 
   /// Dispose the [WidgetsBinding] observer.
   void dispose() {
+    if (!_isRegistered) {
+      return;
+    }
     WidgetsBinding.instance.removeObserver(this);
+    _isRegistered = false;
   }
 
   /// Plays and loops a background music file specified by [filename].
