@@ -25,7 +25,11 @@ class Flame {
   static FlameAudio audio = FlameAudio();
 
   /// Access a shared instance of the [Bgm] class.
-  static Bgm bgm = Bgm();
+  static Bgm _bgm;
+  static Bgm get bgm {
+    _bgm ??= Bgm();
+    return _bgm;
+  }
 
   /// Access a shared instance of the [Images] class.
   static Images images = Images();
