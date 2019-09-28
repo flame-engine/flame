@@ -47,6 +47,7 @@ class Bgm extends WidgetsBindingObserver {
 
   /// Stops the currently playing background music track (if any).
   void stop() async {
+    isPlaying = false;
     await audioPlayer.stop();
   }
 
