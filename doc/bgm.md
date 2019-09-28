@@ -1,5 +1,23 @@
 # Looping Background Music
 
+The `Bgm` class with the management of loooping background music tracks with regards to application (or game) lifecycle state changes.
+
+When the application is paused, terminated, or sent to background, `Bgm` will automatically pause the currently playing music track. Similarly, when the application is resumed, `Bgm` will resume the background music. Manual pause and resume is also supported.
+
+For this class to function properly, the observer must be registered by calling the following:
+
+```dart
+Flame.bgm.initialize();
+```
+
+**IMPORTANT Note:** The `initialize` function must be called at a point in time where an instance of the `WidgetsBinding` class already exists. It's safe to assume that this case is true at any point after `runApp` has been called at least once.
+
+In cases where you're done with background music but still want to keep the application/game running, use the `dispose` function to remove the observer.
+
+```dart
+Flame.bgm.dispose();
+```
+
 To play a looping background music track, run:
 
 ```dart
