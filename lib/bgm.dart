@@ -15,7 +15,10 @@ class Bgm extends WidgetsBindingObserver {
   AudioPlayer audioPlayer;
   bool isPlaying = false;
 
-  Bgm() {
+  /// Registers a [WidgetsBinding] observer.
+  ///
+  /// This must be called for auto-pause and resume to work properly.
+  void initialize() {
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -34,7 +37,7 @@ class Bgm extends WidgetsBindingObserver {
   void play(String filename, {double volume}) async {
     volume ??= 1;
 
-    if (audioPlayer.state != AudioPlayerState.STOPPED) {
+    if (audioPlayer != null && audioPlayer.state != AudioPlayerState.STOPPED) {
       audioPlayer.stop();
     }
 
@@ -48,20 +51,26 @@ class Bgm extends WidgetsBindingObserver {
   /// Stops the currently playing background music track (if any).
   void stop() async {
     isPlaying = false;
-    await audioPlayer.stop();
+    if (audioPlayer != null) {
+      await audioPlayer.stop();
+    }
   }
 
   /// Resumes the currently played (but resumed) background music.
   void resume() {
-    isPlaying = true;
-    audioPlayer.resume();
+    if (audioPlayer != null) {
+      isPlaying = true;
+      audioPlayer.resume();
+    }
   }
 
   /// Pauses the background music without unloading or resetting the audio
   /// player.
   void pause() {
-    isPlaying = false;
-    audioPlayer.pause();
+    if (audioPlayer != null) {
+      isPlaying = false;
+      audioPlayer.pause();
+    }
   }
 
   /// Prefetch an audio and store it in the cache.
@@ -92,7 +101,9 @@ class Bgm extends WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      if (isPlaying && audioPlayer.state == AudioPlayerState.PAUSED) {
+      if (isPlaying &&
+          audioPlayer != null &&
+          audioPlayer.state == AudioPlayerState.PAUSED) {
         audioPlayer.resume();
       }
     } else {
