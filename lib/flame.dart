@@ -26,10 +26,7 @@ class Flame {
 
   /// Access a shared instance of the [Bgm] class.
   static Bgm _bgm;
-  static Bgm get bgm {
-    _bgm ??= Bgm();
-    return _bgm;
-  }
+  static Bgm get bgm => _bgm ??= Bgm();
 
   /// Access a shared instance of the [Images] class.
   static Images images = Images();
