@@ -43,6 +43,7 @@ And start using it!
    - [Game Loop](game.md)
    - [Components](components.md)
    - [Audio](audio.md)
+     - [Looping Background Music](bgm.md)
    - [Input](input.md)
  * Rendering
    - [Images, Sprites and Animations](images.md)
