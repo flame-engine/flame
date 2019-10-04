@@ -35,6 +35,8 @@ If you want to play indefinitely, just use `loop` function:
     Flame.audio.loopLongAudio('music.mp3');
 ```
 
+Alternatively, you can use [the `Bgm` class (via `Flame.bgm`)](bgm.md) to play looping background music tracks. The `Bgm` class lets Flame manage the auto pausing and resuming of background music tracks when pausing/resuming the game/app.
+
 The difference between the `play/loop` and `playLongAudio/loopLongAudio` is that `play/loop` makes uses of optimized features that allow sounds to be looped without gaps between their iterations, and almost no drop on the game frame rate will happen. You should whenever possible, prefer these methods. `playLongAudio/loopLongAudio` allows for audios of any length to be played, but they do create frame rate drop, and the looped audio will feature a small gap between iterations.
 
 Finally, you can pre-load your audios. Audios need to be stored in the memory the first time they are requested; therefore, the first time you play each mp3 you might get a delay. In order to pre-load your audios, just use:
