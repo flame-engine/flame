@@ -42,8 +42,10 @@ And start using it!
    - [Structure](structure.md)
    - [Game Loop](game.md)
    - [Components](components.md)
-   - [Audio](audio.md)
    - [Input](input.md)
+ * Audio
+   - [General Audio](audio.md)
+   - [Looping Background Music](bgm.md)
  * Rendering
    - [Images, Sprites and Animations](images.md)
    - [Text Rendering](text.md)
