@@ -64,6 +64,8 @@ abstract class PositionComponent extends Component {
   double x = 0.0, y = 0.0, angle = 0.0;
   double width = 0.0, height = 0.0;
   Anchor anchor = Anchor.topLeft;
+  bool renderFlipX = false;
+  bool renderFlipY = false;
 
   bool debugMode = false;
 
@@ -127,6 +129,11 @@ abstract class PositionComponent extends Component {
     final double dx = -anchor.relativePosition.dx * width;
     final double dy = -anchor.relativePosition.dy * height;
     canvas.translate(dx, dy);
+
+    // Handle inverted rendering by moving center and flipping.
+    canvas.translate(width / 2, height / 2);
+    canvas.scale(renderFlipX ? -1.0 : 1.0, renderFlipY ? -1.0 : 1.0);
+    canvas.translate(-width / 2, -height / 2);
 
     if (debugMode) {
       renderDebugMode(canvas);
