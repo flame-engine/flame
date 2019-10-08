@@ -24,6 +24,11 @@ The most commonly used implementation, `SpriteComponent`, can be created with a 
     player.render(canvas); // it will render only if the image is loaded and the x, y, width and height parameters are not null
 ```
 
+In the event that you want to easily change the direction of your components rendering, you can also use
+`renderFlipX` and `renderFlipY` to flip anything drawn to canvas during `render(Canvas canvas)`. 
+This is available on all `PositionComponent` objects, and is especially useful on `SpriteComponent` and
+`AnimationComponent`. Simply set `component.renderFlipX = true` for example reverse the horizontal rendering.
+
 Every `Component` has a few other methods that you can optionally implement, that are used by the `BaseGame` class. If you are not using the base game, you can alternatively use these methods on your own game loop.
 
 The `resize` method is called whenever the screen is resized, and in the beginning once when the component is added via the `add` method. You need to apply here any changes to the x, y, width and height of your component, or any other changes, due to the screen resizing. You can start these variables here, as the sprite won't be rendered until everything is set.
