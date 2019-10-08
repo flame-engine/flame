@@ -1,5 +1,8 @@
 ## [next]
+
+## 0.16.1
 - Added `Bgm` class for easy looping background music management.
+- Added options for flip rendering of PositionComponents easily (horizontal and vertical).
 
 ## 0.16.0
 - Improve our mixin structure (breaking change)
