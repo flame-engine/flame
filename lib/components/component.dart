@@ -131,9 +131,11 @@ abstract class PositionComponent extends Component {
     canvas.translate(dx, dy);
 
     // Handle inverted rendering by moving center and flipping.
-    canvas.translate(width / 2, height / 2);
-    canvas.scale(renderFlipX ? -1.0 : 1.0, renderFlipY ? -1.0 : 1.0);
-    canvas.translate(-width / 2, -height / 2);
+    if (renderFlipX || renderFlipY) {
+      canvas.translate(width / 2, height / 2);
+      canvas.scale(renderFlipX ? -1.0 : 1.0, renderFlipY ? -1.0 : 1.0);
+      canvas.translate(-width / 2, -height / 2);
+    }
 
     if (debugMode) {
       renderDebugMode(canvas);
