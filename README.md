@@ -10,7 +10,7 @@ Any help is appreciated! Comment, suggestions, issues, PR's! Give us a star to h
 
 ## Help
 
-We have a Flame help channel on Fireslime's Discord, join it [here](https://discord.gg/pxrBmy4)
+We have a Flame help channel on Fireslime's Discord, join it [here](https://discord.gg/pxrBmy4). Also we now have a [FAQ](FAQ.md), so please search your questions there first.
 
 ## Goals
 
@@ -41,6 +41,7 @@ You can also show support by showing on your repository that your game is made w
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=flat-square)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=for-the-badge)](https://flame-engine.org)
 ```
+
 ## Contributing
 
 Found a bug on Flame and want to contribute with a PR? PRs are always very welcome, just be sure to create your PR from the `develop` branch.
