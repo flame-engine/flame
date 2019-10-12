@@ -14,7 +14,7 @@ In order to draw over the notch, you must add the following line to your `styles
 <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
 ```
 
-For more details, please check [this PR](https://github.com/impulse/flutters/commit/25d4ce726cd18e426483e605fe3668ec68b3c12c) from @impulse.
+For more details, please check [this PR](https://github.com/impulse/flutters/commit/25d4ce726cd18e426483e605fe3668ec68b3c12c) from [impulse](https://github.com/impulse).
 
 ## Examples
 
