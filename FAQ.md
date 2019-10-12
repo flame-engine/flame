@@ -8,11 +8,11 @@ Flame only provides a thin wrapper over the [audioplayers](https://github.com/lu
 
 ## Drawing over the notch
 
-In order to draw over the notch, you must add the following line to your ´styles.xml´ file:
+In order to draw over the notch, you must add the following line to your `styles.xml` file:
 
-´´´xml
+```xml
 <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
-´´´
+```
 
 For more details, please check [this PR](https://github.com/impulse/flutters/commit/25d4ce726cd18e426483e605fe3668ec68b3c12c) from @impulse.
 
