@@ -22,7 +22,7 @@ We have a few examples! The simplest of all is in [the root example folder](/exa
 
 However there is an [examples folder inside the docs](/doc/examples) that contains many more examples. Most newer features we are adding we are trying to add a specific example for that. Those are directed to specific features.
 
-If you want a more full-fledged game, please check [BGUG](https://github.com/fireslime/bgug), FireSlime's open source fast paced side-scrolling platformer. It is mostly up-to-date with Flame and uses a good chunck of the featues offered by the engine. Other examples game are [feroult](https://github.com/feroult)'s [Haunt](https://github.com/feroult/haunt), which is outdated but showcases Box2D, and also [renancaraujo](https://github.com/renancaraujo)'s port of the [trex](https://github.com/flame-engine/trex-flame) chrome game in Flame.
+If you want a more full-fledged game, please check [BGUG](https://github.com/fireslime/bgug), FireSlime's open source fast paced side-scrolling platformer. It is mostly up-to-date with Flame and uses a good chunck of the featues offered by the engine. Other examples game are [feroult](https://github.com/feroult)'s [Haunt](https://github.com/feroult/haunt), which is outdated but showcases Box2D,[renancaraujo](https://github.com/renancaraujo)'s port of the [trex](https://github.com/flame-engine/trex-flame) chrome game in Flame, and also [Bob Box](https://github.com/fireslime/bounce_box), which is easy to grasp and a good display of our core features.
 
 ## What is the difference between Game and BaseGame?
 
