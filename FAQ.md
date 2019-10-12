@@ -4,7 +4,7 @@ This file contains Frequently Asked Questions and their answers. Please feel fre
 
 ## Any audio/music/sounds related problems
 
-Flame only provides a thin wrapper over the [audioplayers](https://github.com/luanpotter/audioplayers) library. Please make extra sure the problem you are having is with Flame. If you have a low-level or hardware related audio problem, probably it's something related to audioplayers, so please feel free to head to that repository to search your problem or open your issue. If you indeed have a problem with the Flame wrap around audioplayers, please feel free to open an issue.
+Flame only provides a thin wrapper over the [audioplayers](https://github.com/luanpotter/audioplayers) library. Please make extra sure the problem you are having is with Flame. If you have a low-level or hardware related audio problem, probably it's something related to audioplayers, so please feel free to head to that repository to search your problem or open your issue. If you indeed have a problem with the Flame wrap around audioplayers, then open an issue here.
 
 ## Drawing over the notch (for Android)
 
