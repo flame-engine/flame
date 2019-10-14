@@ -6,14 +6,13 @@ import 'line_segment.dart';
 double _sq(x) => pow(x, 2);
 
 /// This represents a circle (or sometimes a circumference) in 2D Euclidian space.
-/// 
+///
 /// A circle is the locus of points in a 2D plane such as their distance to a fixed point ([center]) is less or equal than a fixed number ([radius]).
 /// The circumference is the 1D boundary of the circle.
 /// The circle can be expressed as the locus of points such as:
 /// (x - center.x)^2 + (y - center.y)^2 <= radius^2
 /// This class uses doubles to represent the coordinates. forrrest
 class Circle {
-
   /// The center of this circle.
   Position center;
 
@@ -46,15 +45,20 @@ class Circle {
     return footInsideCircle && footInsideSegment;
   }
 
-  bool overlapsLineSegment(LineSegment line) => intesectLineSegment(line).isNotEmpty;
+  bool overlapsLineSegment(LineSegment line) =>
+      intesectLineSegment(line).isNotEmpty;
 
   bool overlapsLine(LineSegment line) => intesectsLine(line).isNotEmpty;
 
-  List<Position> intesectLineSegment(LineSegment line, { double epsilon = double.minPositive }) {
-    return intesectsLine(line, epsilon: epsilon).where((e) => line.contains(e)).toList();
+  List<Position> intesectLineSegment(LineSegment line,
+      {double epsilon = double.minPositive}) {
+    return intesectsLine(line, epsilon: epsilon)
+        .where((e) => line.contains(e))
+        .toList();
   }
 
-  List<Position> intesectsLine(LineSegment line, { double epsilon = double.minPositive }) {
+  List<Position> intesectsLine(LineSegment line,
+      {double epsilon = double.minPositive}) {
     final double cx = center.x;
     final double cy = center.y;
 
@@ -72,16 +76,16 @@ class Circle {
     if (A <= epsilon || det < 0) {
       return [];
     } else if (det == 0) {
-        final double t = -B / (2 * A);
-        return [Position(point1.x + t * dx, point1.y + t * dy)];
+      final double t = -B / (2 * A);
+      return [Position(point1.x + t * dx, point1.y + t * dy)];
     } else {
-        final double t1 = (-B + sqrt(det)) / (2 * A);
-        final Position i1 = Position(point1.x + t1 * dx, point1.y + t1 * dy);
+      final double t1 = (-B + sqrt(det)) / (2 * A);
+      final Position i1 = Position(point1.x + t1 * dx, point1.y + t1 * dy);
 
-        final double t2 = (-B - sqrt(det)) / (2 * A);
-        final Position i2 = Position(point1.x + t2 * dx, point1.y + t2 * dy);
+      final double t2 = (-B - sqrt(det)) / (2 * A);
+      final Position i2 = Position(point1.x + t2 * dx, point1.y + t2 * dy);
 
-        return [ i1, i2 ];
+      return [i1, i2];
     }
   }
 

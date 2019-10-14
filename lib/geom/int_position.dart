@@ -2,11 +2,11 @@ import 'package:flame/position.dart';
 
 ///
 /// This is equivalent to the [Position] class but for Integers.
-/// 
+///
 /// Both it's 2D coordinates (x, y) are ints.
 class IntPosition {
-
-  static final RegExp _matcher = RegExp('IntPosition\\(x\\: (\\-?\\d*), y\\: (\\-?\\d*)\\)');
+  static final RegExp _matcher =
+      RegExp('IntPosition\\(x\\: (\\-?\\d*), y\\: (\\-?\\d*)\\)');
 
   final int x, y;
 
@@ -18,9 +18,11 @@ class IntPosition {
 
   IntPosition.fromPosition(Position p) : this(p.x.toInt(), p.y.toInt());
 
-  IntPosition.fromString(String str) : this._fromMatch(_matcher.allMatches(str).first);
+  IntPosition.fromString(String str)
+      : this._fromMatch(_matcher.allMatches(str).first);
 
-  IntPosition._fromMatch(Match match) : this(int.parse(match.group(1)), int.parse(match.group(2)));
+  IntPosition._fromMatch(Match match)
+      : this(int.parse(match.group(1)), int.parse(match.group(2)));
 
   Position toPosition() => Position(x.toDouble(), y.toDouble());
 
@@ -51,8 +53,8 @@ class IntPosition {
   @override
   int get hashCode => toString().hashCode;
 
-  factory IntPosition.fromJson(Map<String, dynamic> json) => IntPosition(json['x'] as int, json['y'] as int);
+  factory IntPosition.fromJson(Map<String, dynamic> json) =>
+      IntPosition(json['x'] as int, json['y'] as int);
 
-  Map<String, dynamic> toJson() => { 'x': x, 'y': y };
-
+  Map<String, dynamic> toJson() => {'x': x, 'y': y};
 }

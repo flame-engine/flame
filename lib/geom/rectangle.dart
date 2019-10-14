@@ -9,7 +9,7 @@ import 'int_rect.dart';
 import 'line_segment.dart';
 
 /// This represents an axis-aligned rectangle in a 2D Euclidian space.
-/// 
+///
 /// A rectangle is a quadrilateral polygon with 2 pairs of equal length sides and 4 right angles.
 /// Axis-aligned means each side is parallel to one of the Cartesian axis.
 /// A square is a particular case of Rectangle where [w] == [h].
@@ -17,12 +17,11 @@ import 'line_segment.dart';
 /// It serves pretty much the same purpose as the [Rect] class from dart:ui, but it has an additional range of methods for geometry operations using the other classes on this package.
 /// You can easily convert it to and from dart's [Rect] class.
 class Rectangle {
-
   /// The coordinates and size of this rectangle, as doubles.
   double x, y, w, h;
 
   /// Creates a [Rectangle] providing it's coordinates (x and y) and dimenions (width and height), in this order.
-  /// 
+  ///
   /// The acronym is for left, top, width and height.
   Rectangle.fromLTWH(this.x, this.y, this.w, this.h);
 
@@ -31,7 +30,7 @@ class Rectangle {
       : this.fromLTWH(rect.left, rect.top, rect.width, rect.height);
 
   /// Creates a [Rectangle] from the [IntRect] class.
-  /// 
+  ///
   /// It converts the integer parameters to doubles.
   Rectangle.fromIntRect(IntRect rect) {
     x = rect.left.toDouble();
@@ -49,7 +48,7 @@ class Rectangle {
   }
 
   /// Creates a [Rectangle] providing its position [p] (top left corner) and its dimension [size].
-  /// 
+  ///
   /// They are provided as [Position]'s intances (so doubles).
   Rectangle.fromPositions(Position p, Position size) {
     x = p.x;
@@ -59,18 +58,18 @@ class Rectangle {
   }
 
   /// Creates a [Rectangle] providing its position [p] (top left corner) and its dimension [size].
-  /// 
+  ///
   /// They are provided as [IntPosition]'s intances and converted to double.
   Rectangle.fromIntPositions(IntPosition p, IntPosition size)
       : this.fromPositions(p.toPosition(), size.toPosition());
 
   /// Creates an empty [Rectangle] (that is, width and height equal to zero).
-  /// 
+  ///
   /// By convention, operations that create empty [Rectangle]s use this to create all of them in the position (0, 0) (as it's irrelevant for empty rectangles).
   static Rectangle empty() => Rectangle.fromLTWH(0, 0, 0, 0);
 
   /// Returns whether this is empty or not (either width or height is zero).
-  /// 
+  ///
   /// By convention, if it's empty, all parameters should be zero (though not mandatory).
   bool get isEmpty => w == 0 || h == 0;
 
@@ -93,14 +92,14 @@ class Rectangle {
   double get height => h;
 
   /// Returns whether this [Rectangle] overlaps another [Rectangle].
-  /// 
+  ///
   /// This means that the intersection is non-empty.
   bool overlapsRectangle(Rectangle other) {
     return !intersection(other).isEmpty;
   }
 
   /// Returns the smallest [Rectangle] fully containing the union of this with the [other] [Rectangle].
-  /// 
+  ///
   /// This is not a set union! The result of this method does contain the path union, but is an axis-aligned Rectangle, so it might be bigger than the strict union.
   Rectangle union(Rectangle other) {
     if (other.isEmpty) {
@@ -202,7 +201,8 @@ class Rectangle {
 
   bool overlapsCircle(Circle circle) {
     final bool centerInRect = containsPosition(circle.center);
-    final bool insersectSides = sides().any((s) => circle.containsLineSegment(s));
+    final bool insersectSides =
+        sides().any((s) => circle.containsLineSegment(s));
     return centerInRect || insersectSides;
   }
 

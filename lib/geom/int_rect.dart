@@ -9,15 +9,15 @@ import 'rectangle.dart';
 
 ///
 /// This is equivalent to the [Rectangle] class, but with Integers.
-/// 
+///
 /// All of its coordinates (x, y, width and height) are ints.
 class IntRect with Overlapable {
-
   int x, y, w, h;
 
   IntRect.fromLTWH(this.x, this.y, this.w, this.h);
 
-  IntRect.fromDouble(double x, double y, double w, double h) : this.fromLTWH(x.toInt(), y.toInt(), w.toInt(), h.toInt());
+  IntRect.fromDouble(double x, double y, double w, double h)
+      : this.fromLTWH(x.toInt(), y.toInt(), w.toInt(), h.toInt());
 
   IntRect.fromRect(Rect other) {
     x = other.left.toInt();
@@ -104,7 +104,8 @@ class IntRect with Overlapable {
     if (isEmpty) {
       return const Rect.fromLTWH(0.0, 0.0, 0.0, 0.0);
     }
-    return Rect.fromLTWH(left.toDouble(), top.toDouble(), width.toDouble(), height.toDouble());
+    return Rect.fromLTWH(
+        left.toDouble(), top.toDouble(), width.toDouble(), height.toDouble());
   }
 
   Position toLT() {

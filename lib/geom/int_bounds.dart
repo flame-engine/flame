@@ -3,17 +3,17 @@ import 'overlapable.dart';
 
 ///
 /// This is an [Overlapable] composed of an arbitrary union of rects.
-/// 
+///
 /// If any of the rects overlaps, this overlaps.
 class IntBounds with Overlapable {
   List<IntRect> rects;
 
   /// Creates this with a list of [IntRect].
-  /// 
+  ///
   /// This shape represents the union of those rectangles.
   IntBounds(this.rects);
 
-  /// Creates this from a single [IntRect] 
+  /// Creates this from a single [IntRect]
   IntBounds.fromRect(IntRect rect) : rects = [rect];
 
   @override
