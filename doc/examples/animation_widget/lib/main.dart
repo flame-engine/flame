@@ -39,16 +39,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void changePosition() async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     setState(() {
       _position = Position(10 + _position.x, 10 + _position.y);
     });
   }
 
   void _clickFab(GlobalKey<ScaffoldState> key) {
-    key.currentState.showSnackBar(SnackBar(
-      content: const Text('You clicked the FAB!'),
-    ));
+    key.currentState.showSnackBar(
+      const SnackBar(
+        content: const Text('You clicked the FAB!'),
+      ),
+    );
   }
 
   @override
