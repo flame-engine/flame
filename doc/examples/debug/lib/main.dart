@@ -46,8 +46,7 @@ class AndroidComponent extends SvgComponent with Resizable {
 }
 
 class MyGame extends BaseGame {
-  final TextConfig fpsTextConfig =
-      const TextConfig(color: const Color(0xFFFFFFFF));
+  final fpsTextConfig = const TextConfig(color: const Color(0xFFFFFFFF));
 
   MyGame() {
     _start();
@@ -57,16 +56,16 @@ class MyGame extends BaseGame {
   bool debugMode() => true;
 
   void _start() {
-    final AndroidComponent android = AndroidComponent();
+    final android = AndroidComponent();
     android.x = 100;
     android.y = 400;
 
-    final AndroidComponent android2 = AndroidComponent();
+    final android2 = AndroidComponent();
     android2.x = 100;
     android2.y = 400;
     android2.yDirection = -1;
 
-    final AndroidComponent android3 = AndroidComponent();
+    final android3 = AndroidComponent();
     android3.x = 100;
     android3.y = 400;
     android3.xDirection = -1;
