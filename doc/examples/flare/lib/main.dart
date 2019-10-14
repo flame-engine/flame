@@ -23,7 +23,7 @@ class MyGame extends BaseGame {
   final TextConfig fpsTextConfig =
       const TextConfig(color: const Color(0xFFFFFFFF));
 
-  final paint = Paint()..color = const Color(0xFFe5e5e5e5);
+  final paint = Paint()..color = const Color(0xFFE5E5E5E5);
   final List<String> _animations = ["Stand", "Wave", "Jump", "Dance"];
   int _currentAnimation = 0;
 
