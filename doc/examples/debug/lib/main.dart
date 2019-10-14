@@ -11,7 +11,9 @@ import 'package:flutter/material.dart';
 void main() async {
   await Flame.util.initialDimensions();
 
-  runApp(MyGame().widget);
+  final myGame = MyGame();
+  runApp(myGame.widget);
+  myGame.start();
 }
 
 class AndroidComponent extends SvgComponent with Resizable {
@@ -48,14 +50,10 @@ class AndroidComponent extends SvgComponent with Resizable {
 class MyGame extends BaseGame {
   final fpsTextConfig = const TextConfig(color: const Color(0xFFFFFFFF));
 
-  MyGame() {
-    _start();
-  }
-
   @override
   bool debugMode() => true;
 
-  void _start() {
+  void start() {
     final android = AndroidComponent();
     android.x = 100;
     android.y = 400;
