@@ -41,7 +41,7 @@ void main() {
       expect(c.toRect().width, 2.0);
       expect(c.toRect().height, 2.0);
 
-      c.setByRect(Rect.fromLTWH(10.0, 10.0, 1.0, 1.0));
+      c.setByRect(const Rect.fromLTWH(10.0, 10.0, 1.0, 1.0));
       expect(c.x, 10.0);
       expect(c.y, 10.0);
       expect(c.width, 1.0);
