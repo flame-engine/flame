@@ -3,7 +3,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/svg.dart';
 import 'package:flame/position.dart';
 import 'package:flame/components/component.dart' show SvgComponent;
-import 'package:flame/components/resizable.dart';
+import 'package:flame/components/mixins/resizable.dart';
 import 'package:flame/text_config.dart';
 
 import 'package:flutter/material.dart';
@@ -11,7 +11,9 @@ import 'package:flutter/material.dart';
 void main() async {
   await Flame.util.initialDimensions();
 
-  runApp(MyGame().widget);
+  final myGame = MyGame();
+  runApp(myGame.widget);
+  myGame.start();
 }
 
 class AndroidComponent extends SvgComponent with Resizable {
@@ -23,7 +25,9 @@ class AndroidComponent extends SvgComponent with Resizable {
 
   @override
   void update(double dt) {
-    if (size == null) return;
+    if (size == null) {
+      return;
+    }
 
     x += xDirection * SPEED * dt;
 
@@ -44,26 +48,22 @@ class AndroidComponent extends SvgComponent with Resizable {
 }
 
 class MyGame extends BaseGame {
-  final TextConfig fpsTextConfig = TextConfig(color: const Color(0xFFFFFFFF));
-
-  MyGame() {
-    _start();
-  }
+  final fpsTextConfig = const TextConfig(color: const Color(0xFFFFFFFF));
 
   @override
   bool debugMode() => true;
 
-  void _start() {
-    AndroidComponent android = AndroidComponent();
+  void start() {
+    final android = AndroidComponent();
     android.x = 100;
     android.y = 400;
 
-    AndroidComponent android2 = AndroidComponent();
+    final android2 = AndroidComponent();
     android2.x = 100;
     android2.y = 400;
     android2.yDirection = -1;
 
-    AndroidComponent android3 = AndroidComponent();
+    final android3 = AndroidComponent();
     android3.x = 100;
     android3.y = 400;
     android3.xDirection = -1;

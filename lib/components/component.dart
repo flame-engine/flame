@@ -113,7 +113,7 @@ abstract class PositionComponent extends Component {
         "x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}",
         Position(-50, -15));
 
-    Rect rect = toRect();
+    final Rect rect = toRect();
     final dx = rect.right;
     final dy = rect.bottom;
     debugTextConfig.render(

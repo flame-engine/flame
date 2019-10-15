@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
 class MyGame extends BaseGame {
-  static final Paint paint = Paint()..color = Color(0xFFFFFFFF);
+  static final Paint paint = Paint()..color = const Color(0xFFFFFFFF);
 
   var movingLeft = false;
   var movingRight = false;

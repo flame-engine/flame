@@ -22,7 +22,7 @@ class FlareAnimation {
 
   FlareAnimation(this._artboard);
 
-  static load(String fileName) async {
+  static Future<FlareAnimation> load(String fileName) async {
     final actor = FlutterActor();
     await actor.loadFromBundle(Flame.bundle, fileName);
     await actor.loadImages();
@@ -59,7 +59,7 @@ class FlareAnimation {
     if (_animationName != null && _artboard != null) {
       _animationLayers.clear();
 
-      ActorAnimation animation = _artboard.getAnimation(_animationName);
+      final ActorAnimation animation = _artboard.getAnimation(_animationName);
       if (animation != null) {
         _animationLayers.add(FlareAnimationLayer()
           ..name = _animationName
@@ -88,10 +88,10 @@ class FlareAnimation {
     int lastFullyMixed = -1;
     double lastMix = 0.0;
 
-    List<FlareAnimationLayer> completed = [];
+    final List<FlareAnimationLayer> completed = [];
 
     for (int i = 0; i < _animationLayers.length; i++) {
-      FlareAnimationLayer layer = _animationLayers[i];
+      final FlareAnimationLayer layer = _animationLayers[i];
       layer.mix += elapsedSeconds;
       layer.time += elapsedSeconds;
 
