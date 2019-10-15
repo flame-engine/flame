@@ -9,6 +9,7 @@ packages
 pubspec.lock
 doc/api/
 .flutter-plugins
+.vscode/
 
 android/
 ios/

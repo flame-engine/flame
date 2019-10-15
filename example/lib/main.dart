@@ -34,7 +34,7 @@ class Square extends PositionComponent {
     prepareCanvas(c);
 
     c.drawRect(Rect.fromLTWH(0, 0, width, height), Palette.white.paint);
-    c.drawRect(Rect.fromLTWH(0, 0, 3, 3), Palette.red.paint);
+    c.drawRect(const Rect.fromLTWH(0, 0, 3, 3), Palette.red.paint);
     c.drawRect(Rect.fromLTWH(width / 2, height / 2, 3, 3), Palette.blue.paint);
   }
 

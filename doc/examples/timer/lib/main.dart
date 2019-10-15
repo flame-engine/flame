@@ -17,7 +17,8 @@ void main() {
 }
 
 class MyGame extends Game {
-  final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
+  final TextConfig textConfig =
+      const TextConfig(color: const Color(0xFFFFFFFF));
   Timer countdown;
   Timer interval;
 
