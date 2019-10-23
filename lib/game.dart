@@ -19,7 +19,6 @@ import 'position.dart';
 /// Subclass this to implement the [update] and [render] methods.
 /// Flame will deal with calling these methods properly when the game's widget is rendered.
 abstract class Game {
-
   void onTap() {}
   void onTapCancel() {}
   void onTapDown(TapDownDetails details) {}
@@ -55,10 +54,10 @@ abstract class Game {
   Widget get widget => builder.build(this);
 
   // Called when the Game widget is attached
-  void onAttach() { }
+  void onAttach() {}
 
   // Called when the Game widget is detached
-  void onDetach() { }
+  void onDetach() {}
 }
 
 class WidgetBuilder {
@@ -66,16 +65,15 @@ class WidgetBuilder {
 
   Widget build(Game game) {
     return GestureDetector(
-        onTap: () => game.onTap(),
-        onTapCancel: () => game.onTapCancel(),
-        onTapDown: (TapDownDetails d) => game.onTapDown(d),
-        onTapUp: (TapUpDetails d) => game.onTapUp(d),
-        child: Container(
-            color: const Color(0xFF000000),
-            child: Directionality(
-                textDirection: TextDirection.ltr, child: EmbeddedGameWidget(game)
-            )
-        ),
+      onTap: () => game.onTap(),
+      onTapCancel: () => game.onTapCancel(),
+      onTapDown: (TapDownDetails d) => game.onTapDown(d),
+      onTapUp: (TapUpDetails d) => game.onTapUp(d),
+      child: Container(
+          color: const Color(0xFF000000),
+          child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: EmbeddedGameWidget(game))),
     );
   }
 }
