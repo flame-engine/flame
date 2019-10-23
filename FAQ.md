@@ -16,6 +16,22 @@ In order to draw over the notch, you must add the following line to your `styles
 
 For more details, please check [this PR](https://github.com/impulse/flutters/commit/25d4ce726cd18e426483e605fe3668ec68b3c12c) from [impulse](https://github.com/impulse).
 
+## Common exceptions/errors
+
+### ServicesBinding.defaultBinaryMessenger was accessed before the binding was initialized
+
+Since Flutter 1.10.x, when using some of `Flame.util` methods, like the methods for enforcing the device orientation, before the `runApp` statement, the following exception can happen:
+
+```
+E/flutter (16523): [ERROR:flutter/lib/ui/ui_dart_state.cc(151)] Unhandled Exception: ServicesBinding.defaultBinaryMessenger was accessed before the binding was initialized.
+E/flutter (16523): If you're running an application and need to access the binary messenger before `runApp()` has been called (for example, during plugin initialization), then you need to explicitly call the `WidgetsFlutterBinding.ensureInitialized()` first.
+E/flutter (16523): If you're running a test, you can call the `TestWidgetsFlutterBinding.ensureInitialized()` as the first line in your test's `main()` method to initialize the binding.
+```
+
+To prevent that exception from happening, add the following line before calling those utilities methods:
+
+`WidgetsFlutterBinding.ensureInitialized();`
+
 ## Examples
 
 We have a few examples! The simplest of all is in [the root example folder](/example/). This folder must be called `example` and contain a single project, so it's a very simple generic example game.
