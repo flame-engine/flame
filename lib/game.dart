@@ -12,7 +12,6 @@ import 'package:ordered_set/ordered_set.dart';
 import 'components/component.dart';
 import 'components/mixins/has_game_ref.dart';
 import 'components/mixins/tapable.dart';
-import 'flame.dart';
 import 'position.dart';
 
 /// Represents a generic game.
@@ -20,22 +19,11 @@ import 'position.dart';
 /// Subclass this to implement the [update] and [render] methods.
 /// Flame will deal with calling these methods properly when the game's widget is rendered.
 abstract class Game {
-  TapGestureRecognizer _createTapGestureRecognizer() => TapGestureRecognizer()
-    ..onTapUp = (TapUpDetails details) {
-      onTapUp(details);
-    }
-    ..onTapDown = (TapDownDetails details) {
-      onTapDown(details);
-    }
-    ..onTapCancel = () {
-      onTapCancel();
-    };
 
+  void onTap() {}
   void onTapCancel() {}
   void onTapDown(TapDownDetails details) {}
   void onTapUp(TapUpDetails details) {}
-
-  TapGestureRecognizer _gestureRecognizer;
 
   // Widget Builder for this Game
   final builder = WidgetBuilder();
@@ -67,26 +55,29 @@ abstract class Game {
   Widget get widget => builder.build(this);
 
   // Called when the Game widget is attached
-  void onAttach() {
-    if (_gestureRecognizer != null) {
-      Flame.util.removeGestureRecognizer(_gestureRecognizer);
-    }
-    _gestureRecognizer = _createTapGestureRecognizer();
-    Flame.util.addGestureRecognizer(_gestureRecognizer);
-  }
+  void onAttach() { }
 
   // Called when the Game widget is detached
-  void onDetach() {
-    if (_gestureRecognizer != null) {
-      Flame.util.removeGestureRecognizer(_gestureRecognizer);
-    }
-  }
+  void onDetach() { }
 }
 
 class WidgetBuilder {
   Offset offset = Offset.zero;
-  Widget build(Game game) => Directionality(
-      textDirection: TextDirection.ltr, child: EmbeddedGameWidget(game));
+
+  Widget build(Game game) {
+    return GestureDetector(
+        onTap: () => game.onTap(),
+        onTapCancel: () => game.onTapCancel(),
+        onTapDown: (TapDownDetails d) => game.onTapDown(d),
+        onTapUp: (TapUpDetails d) => game.onTapUp(d),
+        child: Container(
+            color: const Color(0xFF000000),
+            child: Directionality(
+                textDirection: TextDirection.ltr, child: EmbeddedGameWidget(game)
+            )
+        ),
+    );
+  }
 }
 
 /// This is a more complete and opinionated implementation of Game.
