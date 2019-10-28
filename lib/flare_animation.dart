@@ -16,7 +16,8 @@ class FlareAnimation {
       _width = 0.0,
       _height = 0.0,
       xScale = 0.0,
-      yScale = 0.0;
+      yScale = 0.0,
+      angle = 0.0;
 
   Picture _picture;
 
@@ -79,6 +80,7 @@ class FlareAnimation {
 
     canvas.save();
     canvas.translate(x, y);
+    canvas.rotate(angle);
 
     canvas.drawPicture(_picture);
     canvas.restore();
