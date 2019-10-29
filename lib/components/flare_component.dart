@@ -8,6 +8,9 @@ class FlareComponent extends PositionComponent {
 
   FlareComponent(
       String fileName, String animation, double width, double height) {
+    this.width = width;
+    this.height = height;
+
     FlareAnimation.load(fileName).then((loadedFlareAnimation) {
       _flareAnimation = loadedFlareAnimation;
 
@@ -22,15 +25,13 @@ class FlareComponent extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    _flareAnimation.render(canvas);
+    prepareCanvas(canvas);
+    _flareAnimation.render(canvas, x: 0, y: 0);
   }
 
   @override
   void update(double dt) {
     if (_flareAnimation != null) {
-      _flareAnimation.x = x;
-      _flareAnimation.y = y;
-
       _flareAnimation.update(dt);
     }
   }
