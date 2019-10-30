@@ -11,12 +11,7 @@ class FlareAnimation {
   String _animationName;
   final List<FlareAnimationLayer> _animationLayers = [];
 
-  double x = 0.0,
-      y = 0.0,
-      _width = 0.0,
-      _height = 0.0,
-      xScale = 0.0,
-      yScale = 0.0;
+  double _width = 0.0, _height = 0.0, _xScale = 0.0, _yScale = 0.0;
 
   Picture _picture;
 
@@ -45,12 +40,12 @@ class FlareAnimation {
 
   set width(double newWidth) {
     _width = newWidth;
-    xScale = _width / _artboard.width;
+    _xScale = _width / _artboard.width;
   }
 
   set height(double newHeight) {
     _height = newHeight;
-    yScale = _height / _artboard.height;
+    _yScale = _height / _artboard.height;
   }
 
   void updateAnimation(String animation) {
@@ -72,7 +67,7 @@ class FlareAnimation {
     }
   }
 
-  void render(Canvas canvas) {
+  void render(Canvas canvas, {double x = 0.0, double y = 0.0}) {
     if (_picture == null) {
       return;
     }
@@ -128,7 +123,7 @@ class FlareAnimation {
     final r = PictureRecorder();
     final c = Canvas(r);
 
-    c.scale(xScale, yScale);
+    c.scale(_xScale, _yScale);
     _artboard.draw(c);
 
     _picture = r.endRecording();

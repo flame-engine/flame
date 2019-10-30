@@ -10,6 +10,8 @@ import 'package:flame/position.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   final game = MyGame();
   runApp(game.widget);
 
@@ -51,9 +53,6 @@ class MyGame extends BaseGame {
     flareAnimation = await FlareAnimation.load("assets/Bob_Minion.flr");
     flareAnimation.updateAnimation("Stand");
 
-    flareAnimation.x = 50;
-    flareAnimation.y = 50;
-
     flareAnimation.width = 306;
     flareAnimation.height = 228;
 
@@ -84,11 +83,11 @@ class MyGame extends BaseGame {
 
     if (loaded) {
       canvas.drawRect(
-          Rect.fromLTWH(flareAnimation.x, flareAnimation.y,
-              flareAnimation.width, flareAnimation.height),
-          paint);
+        Rect.fromLTWH(50, 50, flareAnimation.width, flareAnimation.height),
+        paint,
+      );
 
-      flareAnimation.render(canvas);
+      flareAnimation.render(canvas, x: 50, y: 50);
     }
 
     if (debugMode()) {

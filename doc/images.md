@@ -181,9 +181,6 @@ class MyGame extends Game {
     flareAnimation = await FlareAnimation.load("assets/FLARE_FILE.flr");
     flareAnimation.updateAnimation("ANIMATION_NAME");
 
-    flareAnimation.x = 50;
-    flareAnimation.y = 50;
-
     flareAnimation.width = 306;
     flareAnimation.height = 228;
 
@@ -193,7 +190,7 @@ class MyGame extends Game {
   @override
   void render(Canvas canvas) {
     if (loaded) {
-      flareAnimation.render(canvas);
+      flareAnimation.render(canvas, x: 50, y: 50);
     }
   }
 
@@ -207,6 +204,7 @@ class MyGame extends Game {
 ```
 
 FlareAnimations are normally used inside `FlareComponent`s, that way `BaseGame` will handle calling `render` and `update` automatically.
+You can see a full example of the SpriteSheet class [here](/doc/examples/flare).
 
 ## SpriteSheet
 
