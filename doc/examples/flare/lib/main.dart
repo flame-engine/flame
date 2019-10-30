@@ -84,7 +84,8 @@ class MyGame extends BaseGame {
     if (loaded) {
       canvas.drawRect(
           Rect.fromLTWH(50, 50, flareAnimation.width, flareAnimation.height),
-          paint);
+          paint,
+      );
 
       flareAnimation.render(canvas, x: 50, y: 50);
     }
