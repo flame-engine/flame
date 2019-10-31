@@ -114,6 +114,8 @@ class Util {
   ///
   /// Use this in order to get it to work in case your app also contains other widgets.
   ///
+  /// Read more at: https://flame-engine.org/docs/input.md
+  ///
   /// @Deprecated('This method can lead to confuse behaviour, use the gestures methods provided by the Game class')
   void addGestureRecognizer(GestureRecognizer recognizer) {
     if (GestureBinding.instance == null) {
