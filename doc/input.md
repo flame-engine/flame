@@ -40,6 +40,10 @@ The `Game` class has a vast number of methods for handling touch controls, to us
   void onScaleEnd(ScaleEndDetails details) {}
 ```
 
+Since many detectors conflict with each other, (for example, you can't register both Vertical and Horizontal drags) by default only the __tap detectors__ are already registered.
+
+To change that behaviour, you can override methods that enable or disable that gesutre detector for the game, for example, to enable vertical drag detectors, you should override the `useVerticalDragDetectors` to return `true`, all the other detectors have equivalent methods and follow the same logic.
+
 All those methods are basically a mirror from the callbacks available on the [GestureDetector widget](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html), you can also read more about Flutter's gestures [here](https://api.flutter.dev/flutter/gestures/gestures-library.html).
 
 ## Example
