@@ -63,6 +63,7 @@ class MyGame extends Game {
   }
 }
 ```
+You can also check a more complete example [here](/doc/examples/gestures).
 
 ## Tapable components
 
