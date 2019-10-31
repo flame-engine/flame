@@ -40,6 +40,26 @@ The `Game` class has a vast number of methods for handling touch controls, to us
   void onScaleEnd(ScaleEndDetails details) {}
 ```
 
+All those methods are basically a mirror from the callbacks available on the [GestureDetector widget](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html), you can also read more about Flutter's gestures [here](https://api.flutter.dev/flutter/gestures/gestures-library.html).
+
+## Example
+
+```dart
+class MyGame extends Game {
+  // Other methods ommited
+
+  @override
+  void onTapDown(TapDownDetails details) {
+    print("Player tap down on ${details.globalPosition.dx} - ${details.globalPosition.dy}");
+  }
+
+  @override
+  void onTapUp(TapUpDetails details) {
+    print("Player tap up on ${details.globalPosition.dx} - ${details.globalPosition.dy}");
+  }
+}
+```
+
 ## Tapable components
 
 Flame also offers a simple helper to make it easier to handle tap events on `PositionComponent`, by using the mixin `Tapable` your components can override the following methods, enabling easy to use tap events on your Component.

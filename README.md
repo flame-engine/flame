@@ -265,6 +265,24 @@ A very simple `BaseGame` implementation example can be seen below:
 
 `Game` class provides a whole set of methods which can be overridden to get access to touch events.
 
+__Example__
+
+```dart
+class MyGame extends Game {
+  // Other methods ommited
+
+  @override
+  void onTapDown(TapDownDetails details) {
+    print("Player tap down on ${details.globalPosition.dx} - ${details.globalPosition.dy}");
+  }
+
+  @override
+  void onTapUp(TapUpDetails details) {
+    print("Player tap up on ${details.globalPosition.dx} - ${details.globalPosition.dy}");
+  }
+}
+```
+
 [Complete Input Guide](doc/input.md)
 
 ## Credits
