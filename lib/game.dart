@@ -23,6 +23,37 @@ abstract class Game {
   void onTapCancel() {}
   void onTapDown(TapDownDetails details) {}
   void onTapUp(TapUpDetails details) {}
+  void onSecondaryTapDown(TapDownDetails details) {}
+  void onSecondaryTapUp(TapUpDetails details) {}
+  void onSecondaryTapCancel() {}
+  void onDoubleTap() {}
+  void onLongPress() {}
+  void onLongPressStart(LongPressStartDetails details) {}
+  void onLongPressMoveUpdate(LongPressMoveUpdateDetails details) {}
+  void onLongPressUp() {}
+  void onLongPressEnd(LongPressEndDetails details) {}
+  void onVerticalDragDown(DragDownDetails details) {}
+  void onVerticalDragStart(DragStartDetails details) {}
+  void onVerticalDragUpdate(DragUpdateDetails details) {}
+  void onVerticalDragEnd(DragEndDetails details) {}
+  void onVerticalDragCancel() {}
+  void onHorizontalDragDown(DragDownDetails details) {}
+  void onHorizontalDragStart(DragStartDetails details) {}
+  void onHorizontalDragUpdate(DragUpdateDetails details) {}
+  void onHorizontalDragEnd(DragEndDetails details) {}
+  void onHorizontalDragCancel() {}
+  void onForcePressStart(ForcePressDetails details) {}
+  void onForcePressPeak(ForcePressDetails details) {}
+  void onForcePressUpdate(ForcePressDetails details) {}
+  void onForcePressEnd(ForcePressDetails details) {}
+  void onPanDown(DragDownDetails details) {}
+  void onPanStart(DragStartDetails details) {}
+  void onPanUpdate(DragUpdateDetails details) {}
+  void onPanEnd(DragEndDetails details) {}
+  void onPanCancel() {}
+  void onScaleStart(ScaleStartDetails details) {}
+  void onScaleUpdate(ScaleUpdateDetails details) {}
+  void onScaleEnd(ScaleEndDetails details) {}
 
   // Widget Builder for this Game
   final builder = WidgetBuilder();
@@ -69,6 +100,37 @@ class WidgetBuilder {
       onTapCancel: () => game.onTapCancel(),
       onTapDown: (TapDownDetails d) => game.onTapDown(d),
       onTapUp: (TapUpDetails d) => game.onTapUp(d),
+      onSecondaryTapDown: (TapDownDetails d) => game.onSecondaryTapDown(d),
+      onSecondaryTapUp: (TapUpDetails d) => game.onSecondaryTapUp(d),
+      onSecondaryTapCancel: () => game.onSecondaryTapCancel(),
+      onDoubleTap: () => game.onDoubleTap(),
+      onLongPress: () => game.onLongPress(),
+      onLongPressStart: (LongPressStartDetails d) => game.onLongPressStart(d),
+      onLongPressMoveUpdate: (LongPressMoveUpdateDetails d) => game.onLongPressMoveUpdate(d),
+      onLongPressUp: () => game.onLongPressUp(),
+      onLongPressEnd: (LongPressEndDetails d) => game.onLongPressEnd(d),
+      onVerticalDragDown: (DragDownDetails d) => game.onVerticalDragDown(d),
+      onVerticalDragStart: (DragStartDetails d) => game.onVerticalDragStart(d),
+      onVerticalDragUpdate: (DragUpdateDetails d) => game.onVerticalDragUpdate(d),
+      onVerticalDragEnd: (DragEndDetails d) => game.onVerticalDragEnd(d),
+      onVerticalDragCancel: () => game.onVerticalDragCancel(),
+      onHorizontalDragDown: (DragDownDetails d) => game.onHorizontalDragDown(d),
+      onHorizontalDragStart: (DragStartDetails d) => game.onHorizontalDragStart(d),
+      onHorizontalDragUpdate: (DragUpdateDetails d) => game.onHorizontalDragUpdate(d),
+      onHorizontalDragEnd: (DragEndDetails d) => game.onHorizontalDragEnd(d),
+      onHorizontalDragCancel: () => game.onHorizontalDragCancel(),
+      onForcePressStart: (ForcePressDetails d) => game.onForcePressStart(d),
+      onForcePressPeak: (ForcePressDetails d) => game.onForcePressPeak(d),
+      onForcePressUpdate: (ForcePressDetails d) => game.onForcePressUpdate(d),
+      onForcePressEnd: (ForcePressDetails d) => game.onForcePressEnd(d),
+      onPanDown: (DragDownDetails d) => game.onPanDown(d),
+      onPanStart: (DragStartDetails d) => game.onPanStart(d),
+      onPanUpdate: (DragUpdateDetails d) => game.onPanUpdate(d),
+      onPanEnd: (DragEndDetails d) => game.onPanEnd(d),
+      onPanCancel: () => game.onPanCancel(),
+      onScaleStart: (ScaleStartDetails d) => game.onScaleStart(d),
+      onScaleUpdate: (ScaleUpdateDetails d) => game.onScaleUpdate(d),
+      onScaleEnd: (ScaleEndDetails d) => game.onScaleEnd(d),
       child: Container(
           color: const Color(0xFF000000),
           child: Directionality(
