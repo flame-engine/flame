@@ -106,17 +106,21 @@ class WidgetBuilder {
       onDoubleTap: () => game.onDoubleTap(),
       onLongPress: () => game.onLongPress(),
       onLongPressStart: (LongPressStartDetails d) => game.onLongPressStart(d),
-      onLongPressMoveUpdate: (LongPressMoveUpdateDetails d) => game.onLongPressMoveUpdate(d),
+      onLongPressMoveUpdate: (LongPressMoveUpdateDetails d) =>
+          game.onLongPressMoveUpdate(d),
       onLongPressUp: () => game.onLongPressUp(),
       onLongPressEnd: (LongPressEndDetails d) => game.onLongPressEnd(d),
       onVerticalDragDown: (DragDownDetails d) => game.onVerticalDragDown(d),
       onVerticalDragStart: (DragStartDetails d) => game.onVerticalDragStart(d),
-      onVerticalDragUpdate: (DragUpdateDetails d) => game.onVerticalDragUpdate(d),
+      onVerticalDragUpdate: (DragUpdateDetails d) =>
+          game.onVerticalDragUpdate(d),
       onVerticalDragEnd: (DragEndDetails d) => game.onVerticalDragEnd(d),
       onVerticalDragCancel: () => game.onVerticalDragCancel(),
       onHorizontalDragDown: (DragDownDetails d) => game.onHorizontalDragDown(d),
-      onHorizontalDragStart: (DragStartDetails d) => game.onHorizontalDragStart(d),
-      onHorizontalDragUpdate: (DragUpdateDetails d) => game.onHorizontalDragUpdate(d),
+      onHorizontalDragStart: (DragStartDetails d) =>
+          game.onHorizontalDragStart(d),
+      onHorizontalDragUpdate: (DragUpdateDetails d) =>
+          game.onHorizontalDragUpdate(d),
       onHorizontalDragEnd: (DragEndDetails d) => game.onHorizontalDragEnd(d),
       onHorizontalDragCancel: () => game.onHorizontalDragCancel(),
       onForcePressStart: (ForcePressDetails d) => game.onForcePressStart(d),
