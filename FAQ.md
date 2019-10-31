@@ -52,6 +52,12 @@ If you are using `BaseGame`, you have a `camera` attribute that allows you to of
 
 For a more in-depth tutorial on how the camera works (in general & in Flame) and how to use it, check [erickzanardo](https://github.com/erickzanardo)'s [excellent tutorial](https://fireslime.xyz/articles/20190911_Basic_Camera_Usage_In_Flame.html), published via FireSlime.
 
+## How to handle touch events on your game?
+
+You can always use all the Widgets and features that Flutter already provide for that, but Flame wraps gesture detector callbacks on its base Game class so it can ben a little easier to handle those events, you can find more about it on the input documentation page:
+
+https://flame-engine.org/docs/input.md
+
 ## Other questions?
 
 Didn't find what you needed here? Please head to [FireSlime's Discord channel](https://discord.gg/pxrBmy4) where the community might help you with more questions.
