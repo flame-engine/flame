@@ -111,7 +111,9 @@ class MyGame extends Game {
   }
 
   @override
-  void update(double dt) {}
+  void update(double dt) {
+    interval.update(dt);
+  }
 
   @override
   void render(Canvas canvas) {
