@@ -55,11 +55,14 @@ Flame provides a simple utility class to help you handle countdowns and event li
 __Countdown example:__
 
 ```dart
-import 'package:flame/game.dart';
-import 'package:flame/time.dart';
-import 'package:flame/text_config.dart';
+import 'dart:ui';
 
-class MyGame extends MyGame {
+import 'package:flame/game.dart';
+import 'package:flame/position.dart';
+import 'package:flame/text_config.dart';
+import 'package:flame/time.dart';
+
+class MyGame extends Game {
   final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
   final countdown = Timer(2);
 
@@ -77,7 +80,8 @@ class MyGame extends MyGame {
 
   @override
   void render(Canvas canvas) {
-    textConfig.render(canvas, "Countdown: ${countdown.current.toString()}", Position(10, 100));
+    textConfig.render(canvas, "Countdown: ${countdown.current.toString()}",
+        Position(10, 100));
   }
 }
 
@@ -86,11 +90,14 @@ class MyGame extends MyGame {
 __Interval example:__
 
 ```dart
-import 'package:flame/game.dart';
-import 'package:flame/time.dart';
-import 'package:flame/text_config.dart';
+import 'dart:ui';
 
-class MyGame extends MyGame {
+import 'package:flame/game.dart';
+import 'package:flame/position.dart';
+import 'package:flame/text_config.dart';
+import 'package:flame/time.dart';
+
+class MyGame extends Game {
   final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
   Timer interval;
 
@@ -104,8 +111,7 @@ class MyGame extends MyGame {
   }
 
   @override
-  void update(double dt) {
-  }
+  void update(double dt) {}
 
   @override
   void render(Canvas canvas) {
