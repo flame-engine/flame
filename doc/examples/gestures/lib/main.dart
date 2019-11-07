@@ -24,10 +24,12 @@ class MyGame extends Game with TapDetector, DoubleTapDetector, PanDetector {
   void onTap() {
     _paint = _paint == _whitePaint ? _bluePaint : _whitePaint;
   }
+
   @override
   void onDoubleTap() {
     _paint = _greenPaint;
   }
+
   @override
   void onPanUpdate(DragUpdateDetails details) {
     _rect = _rect.translate(details.delta.dx, details.delta.dy);
