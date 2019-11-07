@@ -1,55 +1,70 @@
 # Input
 
-The `Game` class has a vast number of methods for handling touch controls, to use it, just override the method you want to use, and that method will start receiving events, below there is the whole list of available methods:
+Inside `package:flame/gestures.dart` you can find a whole set of `mixin` which can be included on your game class instance to be able to receive touch input events. Bellow you can see the full list of these `mixin`s and its methods:
 
 ```dart
-  void onTap() {}
-  void onTapCancel() {}
-  void onTapDown(TapDownDetails details) {}
-  void onTapUp(TapUpDetails details) {}
-  void onSecondaryTapDown(TapDownDetails details) {}
-  void onSecondaryTapUp(TapUpDetails details) {}
-  void onSecondaryTapCancel() {}
-  void onDoubleTap() {}
-  void onLongPress() {}
-  void onLongPressStart(LongPressStartDetails details) {}
-  void onLongPressMoveUpdate(LongPressMoveUpdateDetails details) {}
-  void onLongPressUp() {}
-  void onLongPressEnd(LongPressEndDetails details) {}
-  void onVerticalDragDown(DragDownDetails details) {}
-  void onVerticalDragStart(DragStartDetails details) {}
-  void onVerticalDragUpdate(DragUpdateDetails details) {}
-  void onVerticalDragEnd(DragEndDetails details) {}
-  void onVerticalDragCancel() {}
-  void onHorizontalDragDown(DragDownDetails details) {}
-  void onHorizontalDragStart(DragStartDetails details) {}
-  void onHorizontalDragUpdate(DragUpdateDetails details) {}
-  void onHorizontalDragEnd(DragEndDetails details) {}
-  void onHorizontalDragCancel() {}
-  void onForcePressStart(ForcePressDetails details) {}
-  void onForcePressPeak(ForcePressDetails details) {}
-  void onForcePressUpdate(ForcePressDetails details) {}
-  void onForcePressEnd(ForcePressDetails details) {}
-  void onPanDown(DragDownDetails details) {}
-  void onPanStart(DragStartDetails details) {}
-  void onPanUpdate(DragUpdateDetails details) {}
-  void onPanEnd(DragEndDetails details) {}
-  void onPanCancel() {}
-  void onScaleStart(ScaleStartDetails details) {}
-  void onScaleUpdate(ScaleUpdateDetails details) {}
-  void onScaleEnd(ScaleEndDetails details) {}
+- TapDetector
+  - onTap
+  - onTapCancel
+  - onTapDown
+  - onTapUp
+
+- SecondaryTapDetector
+  - onSecondaryTapDown
+  - onSecondaryTapUp
+  - onSecondaryTapCancel
+
+- DoubleTapDetector
+  - onDoubleTap
+
+- LongPressDetector
+  - onLongPress
+  - onLongPressStart
+  - onLongPressMoveUpdate
+  - onLongPressUp
+  - onLongPressEnd
+
+- VerticalDragDetector
+  - onVerticalDragDown
+  - onVerticalDragStart
+  - onVerticalDragUpdate
+  - onVerticalDragEnd
+  - onVerticalDragCancel
+
+- HorizontalDragDetector
+  - onHorizontalDragDown
+  - onHorizontalDragStart
+  - onHorizontalDragUpdate
+  - onHorizontalDragEnd
+  - onHorizontalDragCancel
+
+- ForcePressDetector
+  - onForcePressStart
+  - onForcePressPeak
+  - onForcePressUpdate
+  - onForcePressEnd
+
+- PanDetector
+  - onPanDown
+  - onPanStart
+  - onPanUpdate
+  - onPanEnd
+  - onPanCancel
+
+- ScaleDetector
+  - onScaleStart
+  - onScaleUpdate
+  - onScaleEnd
 ```
 
-Since many detectors conflict with each other, (for example, you can't register both Vertical and Horizontal drags) by default only the __tap detectors__ are already registered.
+Many of these detectors can conflict with each other, for example, you can't register both Vertical and Horizontal drags, so not all of then can be used together.
 
-To change that behaviour, you can override methods that enable or disable that gesutre detector for the game, for example, to enable vertical drag detectors, you should override the `useVerticalDragDetectors` to return `true`, all the other detectors have equivalent methods and follow the same logic.
-
-All those methods are basically a mirror from the callbacks available on the [GestureDetector widget](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html), you can also read more about Flutter's gestures [here](https://api.flutter.dev/flutter/gestures/gestures-library.html).
+All of these methods are basically a mirror from the callbacks available on the [GestureDetector widget](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html), you can also read more about Flutter's gestures [here](https://api.flutter.dev/flutter/gestures/gestures-library.html).
 
 ## Example
 
 ```dart
-class MyGame extends Game {
+class MyGame extends Game with TapDetector {
   // Other methods ommited
 
   @override
