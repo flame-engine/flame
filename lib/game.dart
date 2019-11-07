@@ -13,65 +13,13 @@ import 'components/component.dart';
 import 'components/mixins/has_game_ref.dart';
 import 'components/mixins/tapable.dart';
 import 'position.dart';
+import 'gestures.dart';
 
 /// Represents a generic game.
 ///
 /// Subclass this to implement the [update] and [render] methods.
 /// Flame will deal with calling these methods properly when the game's widget is rendered.
 abstract class Game {
-  bool useTapDetectors() => true;
-  void onTap() {}
-  void onTapCancel() {}
-  void onTapDown(TapDownDetails details) {}
-  void onTapUp(TapUpDetails details) {}
-
-  bool useSecondaryTapDetectors() => false;
-  void onSecondaryTapDown(TapDownDetails details) {}
-  void onSecondaryTapUp(TapUpDetails details) {}
-  void onSecondaryTapCancel() {}
-
-  bool useDoubleTapDetectors() => false;
-  void onDoubleTap() {}
-
-  bool useLongPressDetectors() => false;
-  void onLongPress() {}
-  void onLongPressStart(LongPressStartDetails details) {}
-  void onLongPressMoveUpdate(LongPressMoveUpdateDetails details) {}
-  void onLongPressUp() {}
-  void onLongPressEnd(LongPressEndDetails details) {}
-
-  bool useVerticalDragDetectors() => false;
-  void onVerticalDragDown(DragDownDetails details) {}
-  void onVerticalDragStart(DragStartDetails details) {}
-  void onVerticalDragUpdate(DragUpdateDetails details) {}
-  void onVerticalDragEnd(DragEndDetails details) {}
-  void onVerticalDragCancel() {}
-
-  bool useHorizontalDragDetectors() => false;
-  void onHorizontalDragDown(DragDownDetails details) {}
-  void onHorizontalDragStart(DragStartDetails details) {}
-  void onHorizontalDragUpdate(DragUpdateDetails details) {}
-  void onHorizontalDragEnd(DragEndDetails details) {}
-  void onHorizontalDragCancel() {}
-
-  bool useForcePressDetectors() => false;
-  void onForcePressStart(ForcePressDetails details) {}
-  void onForcePressPeak(ForcePressDetails details) {}
-  void onForcePressUpdate(ForcePressDetails details) {}
-  void onForcePressEnd(ForcePressDetails details) {}
-
-  bool usePanDetectors() => false;
-  void onPanDown(DragDownDetails details) {}
-  void onPanStart(DragStartDetails details) {}
-  void onPanUpdate(DragUpdateDetails details) {}
-  void onPanEnd(DragEndDetails details) {}
-  void onPanCancel() {}
-
-  bool useScaleDetectors() => false;
-  void onScaleStart(ScaleStartDetails details) {}
-  void onScaleUpdate(ScaleUpdateDetails details) {}
-  void onScaleEnd(ScaleEndDetails details) {}
-
   // Widget Builder for this Game
   final builder = WidgetBuilder();
 
@@ -114,61 +62,142 @@ class WidgetBuilder {
   Widget build(Game game) {
     return GestureDetector(
       // Taps
-      onTap: !game.useTapDetectors() ? null : () => game.onTap(),
-      onTapCancel: !game.useTapDetectors() ? null : () => game.onTapCancel(),
-      onTapDown: !game.useTapDetectors() ? null : (TapDownDetails d) => game.onTapDown(d),
-      onTapUp: !game.useTapDetectors() ? null : (TapUpDetails d) => game.onTapUp(d),
+      onTap: game is TapDetector ? () => (game as TapDetector).onTap() : null,
+      onTapCancel: game is TapDetector
+          ? () => (game as TapDetector).onTapCancel()
+          : null,
+      onTapDown: game is TapDetector
+          ? (TapDownDetails d) => (game as TapDetector).onTapDown(d)
+          : null,
+      onTapUp: game is TapDetector
+          ? (TapUpDetails d) => (game as TapDetector).onTapUp(d)
+          : null,
 
       // Secondary taps
-      onSecondaryTapDown: !game.useSecondaryTapDetectors() ? null : (TapDownDetails d) => game.onSecondaryTapDown(d),
-      onSecondaryTapUp: !game.useSecondaryTapDetectors() ? null : (TapUpDetails d) => game.onSecondaryTapUp(d),
-      onSecondaryTapCancel: !game.useSecondaryTapDetectors() ? null : () => game.onSecondaryTapCancel(),
+      onSecondaryTapDown: game is SecondaryTapDetector
+          ? (TapDownDetails d) =>
+              (game as SecondaryTapDetector).onSecondaryTapDown(d)
+          : null,
+      onSecondaryTapUp: game is SecondaryTapDetector
+          ? (TapUpDetails d) =>
+              (game as SecondaryTapDetector).onSecondaryTapUp(d)
+          : null,
+      onSecondaryTapCancel: game is SecondaryTapDetector
+          ? () => (game as SecondaryTapDetector).onSecondaryTapCancel()
+          : null,
 
       // Double tap
-      onDoubleTap: !game.useDoubleTapDetectors() ? null : () => game.onDoubleTap(),
+      onDoubleTap: game is DoubleTapDetector
+          ? () => (game as DoubleTapDetector).onDoubleTap()
+          : null,
 
       // Long presses
-      onLongPress: !game.useLongPressDetectors() ? null : () => game.onLongPress(),
-      onLongPressStart: !game.useLongPressDetectors() ? null : (LongPressStartDetails d) => game.onLongPressStart(d),
-      onLongPressMoveUpdate: !game.useLongPressDetectors() ? null : (LongPressMoveUpdateDetails d) =>
-          game.onLongPressMoveUpdate(d),
-      onLongPressUp: !game.useLongPressDetectors() ? null : () => game.onLongPressUp(),
-      onLongPressEnd: !game.useLongPressDetectors() ? null : (LongPressEndDetails d) => game.onLongPressEnd(d),
+      onLongPress: game is LongPressDetector
+          ? () => (game as LongPressDetector).onLongPress()
+          : null,
+      onLongPressStart: game is LongPressDetector
+          ? (LongPressStartDetails d) =>
+              (game as LongPressDetector).onLongPressStart(d)
+          : null,
+      onLongPressMoveUpdate: game is LongPressDetector
+          ? (LongPressMoveUpdateDetails d) =>
+              (game as LongPressDetector).onLongPressMoveUpdate(d)
+          : null,
+      onLongPressUp: game is LongPressDetector
+          ? () => (game as LongPressDetector).onLongPressUp()
+          : null,
+      onLongPressEnd: game is LongPressDetector
+          ? (LongPressEndDetails d) =>
+              (game as LongPressDetector).onLongPressEnd(d)
+          : null,
 
       // Vertical drag
-      onVerticalDragDown: !game.useVerticalDragDetectors() ? null : (DragDownDetails d) => game.onVerticalDragDown(d),
-      onVerticalDragStart: !game.useVerticalDragDetectors() ? null : (DragStartDetails d) => game.onVerticalDragStart(d),
-      onVerticalDragUpdate: !game.useVerticalDragDetectors() ? null : (DragUpdateDetails d) =>
-          game.onVerticalDragUpdate(d),
-      onVerticalDragEnd: !game.useVerticalDragDetectors() ? null : (DragEndDetails d) => game.onVerticalDragEnd(d),
-      onVerticalDragCancel: !game.useVerticalDragDetectors() ? null : () => game.onVerticalDragCancel(),
+      onVerticalDragDown: game is VerticalDragDetector
+          ? (DragDownDetails d) =>
+              (game as VerticalDragDetector).onVerticalDragDown(d)
+          : null,
+      onVerticalDragStart: game is VerticalDragDetector
+          ? (DragStartDetails d) =>
+              (game as VerticalDragDetector).onVerticalDragStart(d)
+          : null,
+      onVerticalDragUpdate: game is VerticalDragDetector
+          ? (DragUpdateDetails d) =>
+              (game as VerticalDragDetector).onVerticalDragUpdate(d)
+          : null,
+      onVerticalDragEnd: game is VerticalDragDetector
+          ? (DragEndDetails d) =>
+              (game as VerticalDragDetector).onVerticalDragEnd(d)
+          : null,
+      onVerticalDragCancel: game is VerticalDragDetector
+          ? () => (game as VerticalDragDetector).onVerticalDragCancel()
+          : null,
 
       // Horizontal drag
-      onHorizontalDragDown: !game.useHorizontalDragDetectors() ? null : (DragDownDetails d) => game.onHorizontalDragDown(d),
-      onHorizontalDragStart: !game.useHorizontalDragDetectors() ? null : (DragStartDetails d) =>
-          game.onHorizontalDragStart(d),
-      onHorizontalDragUpdate: !game.useHorizontalDragDetectors() ? null : (DragUpdateDetails d) =>
-          game.onHorizontalDragUpdate(d),
-      onHorizontalDragEnd: !game.useHorizontalDragDetectors() ? null : (DragEndDetails d) => game.onHorizontalDragEnd(d),
-      onHorizontalDragCancel: !game.useHorizontalDragDetectors() ? null : () => game.onHorizontalDragCancel(),
+      onHorizontalDragDown: game is HorizontalDragDetector
+          ? (DragDownDetails d) =>
+              (game as HorizontalDragDetector).onHorizontalDragDown(d)
+          : null,
+      onHorizontalDragStart: game is HorizontalDragDetector
+          ? (DragStartDetails d) =>
+              (game as HorizontalDragDetector).onHorizontalDragStart(d)
+          : null,
+      onHorizontalDragUpdate: game is HorizontalDragDetector
+          ? (DragUpdateDetails d) =>
+              (game as HorizontalDragDetector).onHorizontalDragUpdate(d)
+          : null,
+      onHorizontalDragEnd: game is HorizontalDragDetector
+          ? (DragEndDetails d) =>
+              (game as HorizontalDragDetector).onHorizontalDragEnd(d)
+          : null,
+      onHorizontalDragCancel: game is HorizontalDragDetector
+          ? () => (game as HorizontalDragDetector).onHorizontalDragCancel()
+          : null,
 
       // Force presses
-      onForcePressStart: !game.useForcePressDetectors() ? null : (ForcePressDetails d) => game.onForcePressStart(d),
-      onForcePressPeak:  !game.useForcePressDetectors() ? null : (ForcePressDetails d) => game.onForcePressPeak(d),
-      onForcePressUpdate:  !game.useForcePressDetectors() ? null : (ForcePressDetails d) => game.onForcePressUpdate(d),
-      onForcePressEnd:  !game.useForcePressDetectors() ? null : (ForcePressDetails d) => game.onForcePressEnd(d),
+      onForcePressStart: game is ForcePressDetector
+          ? (ForcePressDetails d) =>
+              (game as ForcePressDetector).onForcePressStart(d)
+          : null,
+      onForcePressPeak: game is ForcePressDetector
+          ? (ForcePressDetails d) =>
+              (game as ForcePressDetector).onForcePressPeak(d)
+          : null,
+      onForcePressUpdate: game is ForcePressDetector
+          ? (ForcePressDetails d) =>
+              (game as ForcePressDetector).onForcePressUpdate(d)
+          : null,
+      onForcePressEnd: game is ForcePressDetector
+          ? (ForcePressDetails d) =>
+              (game as ForcePressDetector).onForcePressEnd(d)
+          : null,
 
       // Pan
-      onPanDown: !game.usePanDetectors() ? null : (DragDownDetails d) => game.onPanDown(d),
-      onPanStart: !game.usePanDetectors() ? null : (DragStartDetails d) => game.onPanStart(d),
-      onPanUpdate: !game.usePanDetectors() ? null : (DragUpdateDetails d) => game.onPanUpdate(d),
-      onPanEnd: !game.usePanDetectors() ? null : (DragEndDetails d) => game.onPanEnd(d),
-      onPanCancel: !game.usePanDetectors() ? null : () => game.onPanCancel(),
+      onPanDown: game is PanDetector
+          ? (DragDownDetails d) => (game as PanDetector).onPanDown(d)
+          : null,
+      onPanStart: game is PanDetector
+          ? (DragStartDetails d) => (game as PanDetector).onPanStart(d)
+          : null,
+      onPanUpdate: game is PanDetector
+          ? (DragUpdateDetails d) => (game as PanDetector).onPanUpdate(d)
+          : null,
+      onPanEnd: game is PanDetector
+          ? (DragEndDetails d) => (game as PanDetector).onPanEnd(d)
+          : null,
+      onPanCancel: game is PanDetector
+          ? () => (game as PanDetector).onPanCancel()
+          : null,
 
       // Scales
-      onScaleStart: !game.useScaleDetectors() ? null : (ScaleStartDetails d) => game.onScaleStart(d),
-      onScaleUpdate: !game.useScaleDetectors() ? null : (ScaleUpdateDetails d) => game.onScaleUpdate(d),
-      onScaleEnd: !game.useScaleDetectors() ? null : (ScaleEndDetails d) => game.onScaleEnd(d),
+      onScaleStart: game is ScaleDetector
+          ? (ScaleStartDetails d) => (game as ScaleDetector).onScaleStart(d)
+          : null,
+      onScaleUpdate: game is ScaleDetector
+          ? (ScaleUpdateDetails d) => (game as ScaleDetector).onScaleUpdate(d)
+          : null,
+      onScaleEnd: game is ScaleDetector
+          ? (ScaleEndDetails d) => (game as ScaleDetector).onScaleEnd(d)
+          : null,
 
       child: Container(
           color: const Color(0xFF000000),
@@ -184,7 +213,7 @@ class WidgetBuilder {
 /// It still needs to be subclasses to add your game logic, but the [update], [render] and [resize] methods have default implementations.
 /// This is the recommended structure to use for most games.
 /// It is based on the Component system.
-abstract class BaseGame extends Game {
+abstract class BaseGame extends Game with TapDetector {
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components =
       OrderedSet(Comparing.on((c) => c.priority()));
