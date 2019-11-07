@@ -263,12 +263,12 @@ A very simple `BaseGame` implementation example can be seen below:
 
 ### Input
 
-`Game` class provides a whole set of methods which can be overridden to get access to touch events.
+Inside `package:flame/gestures.dart` you can find a whole set of `mixin` which can be included on your game class instance to be able to receive touch input events
 
 __Example__
 
 ```dart
-class MyGame extends Game {
+class MyGame extends Game with TapDetector {
   // Other methods ommited
 
   @override
