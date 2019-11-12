@@ -1,4 +1,6 @@
 ## [next]
+
+## 0.17.0
 - Fixing FlareAnimation API to match convention
 - Fixing FlareComponent renderization
 - New GestureDetector API to Game
