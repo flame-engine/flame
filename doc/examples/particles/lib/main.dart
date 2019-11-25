@@ -12,6 +12,8 @@ import 'package:flame/components/particles/accelerated_particle.dart';
 import 'package:flame/components/particles/paint_particle.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame/position.dart';
+import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -34,11 +36,16 @@ class MyGame extends BaseGame {
   static const gridSize = 5;
   static const steps = 5;
 
+  /// Miscellaneous values used
+  /// by examples below
+  final Random rnd = Random();
+  final StepTween steppedTween = StepTween(begin: 0, end: 5);
+  final TextConfig fpsTextConfig = const TextConfig(
+    color: const Color(0xFFFFFFFF),
+  );
+
   Offset cellSize;
   Offset halfCellSize;
-
-  Random rnd = Random();
-  StepTween steppedTween = StepTween(begin: 0, end: 5);
 
   MyGame(Size screenSize) {
     size = screenSize;
@@ -339,23 +346,56 @@ class MyGame extends BaseGame {
   }
 
   /// [PaintParticle] allows to perform basic composite operations
-  /// by specifying custom [Paint]. Be aware that it's very easy to
-  /// get bad performance misusing composites.
+  /// by specifying custom [Paint].
+  /// Be aware that it's very easy to get *really* bad performance
+  /// misusing composites.
   Particle paintParticle() {
+    final List<Color> colors = [
+      const Color(0xffff0000),
+      const Color(0xff00ff00),
+      const Color(0xff0000ff),
+    ];
+    final List<Offset> positions = [
+      const Offset(-10, 10),
+      const Offset(10, 10),
+      const Offset(0, -14),
+    ];
+
     return Particle.generate(
-      count: 10,
-      generator: (i) => AcceleratedParticle(
-        speed:
-            Offset(rnd.nextDouble() * 600 - 300, -rnd.nextDouble() * 600) * .4,
-        acceleration: const Offset(0, 600),
-        child: PaintParticle(
-          paint: Paint()..blendMode = BlendMode.difference,
+      count: 3,
+      generator: (i) => PaintParticle(
+        paint: Paint()..blendMode = BlendMode.difference,
+        child: MovingParticle(
+          curve: SineCurve(),
+          from: positions[i],
+          to: i == 0 ? positions.last : positions[i - 1],
           child: CircleParticle(
-            radius: 12.0,
-            paint: Paint()..color = randomMaterialColor(),
+            radius: 20.0,
+            paint: Paint()..color = colors[i],
           ),
         ),
       ),
     );
+  }
+
+  @override
+  bool debugMode() => true;
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+
+    if (debugMode()) {
+      fpsTextConfig.render(canvas, '${fps(120).toStringAsFixed(2)}fps',
+          Position(0, size.height - 24));
+    }
+  }
+}
+
+/// A curve which maps sinus output (-1..1,0..pi)
+/// to an oscillating (0..1..0,0..1), essentially "ease-in-out and back"
+class SineCurve extends Curve {
+  @override
+  double transformInternal(double t) {
+    return (sin(pi * (t * 2 - 1 / 2)) + 1) / 2;
   }
 }
