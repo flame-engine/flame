@@ -352,7 +352,7 @@ class MyGame extends BaseGame {
           paint: Paint()..blendMode = BlendMode.difference,
           child: CircleParticle(
             radius: 12.0,
-            paint: Paint()..color = randomMaterialColor()
+            paint: Paint()..color = randomMaterialColor(),
           ),
         ),
       ),
