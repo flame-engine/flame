@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 
 import '../particle_component.dart';
 
+/// A single [Particle] which manages multiple children
+/// by proxying all lifecycle hooks.
 class ComposedParticle extends Particle {
   final List<Particle> children;
 
@@ -35,7 +37,7 @@ class ComposedParticle extends Particle {
   @override
   void update(double dt) {
     super.update(dt);
-    
+
     for (var child in children) {
       child.update(dt);
     }

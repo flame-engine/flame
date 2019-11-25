@@ -16,12 +16,11 @@ typedef ParticleGenerator = Particle Function(int);
 /// some particular behavior which then could be nested and combined together
 /// to create specifically required experience.
 abstract class Particle extends Component {
-
   /// Generates given amount of particles,
   /// combining them into one [ComposedParticle]
   /// Useful for procedural particle generation.
   static Particle generate({
-    int count = 10, 
+    int count = 10,
     @required ParticleGenerator generator,
     double lifespan,
     Duration duration,
@@ -32,7 +31,7 @@ abstract class Particle extends Component {
       children: List<Particle>.generate(count, generator),
     );
   }
-  
+
   Timer _timer;
   bool _shouldBeDestroyed = false;
 

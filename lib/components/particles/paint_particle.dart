@@ -18,7 +18,7 @@ class PaintParticle extends CurvedParticle with SingleChildParticle {
 
   /// Defines Canvas layer bounds
   /// for applying this particle composite effect.
-  /// Any child content outside this bounds will be clipped. 
+  /// Any child content outside this bounds will be clipped.
   final Rect bounds;
 
   PaintParticle({
@@ -27,7 +27,6 @@ class PaintParticle extends CurvedParticle with SingleChildParticle {
 
     // Reasonably large rect for most particles
     this.bounds = const Rect.fromLTRB(-50, -50, 50, 50),
-
     double lifespan,
     Duration duration,
   }) : super(

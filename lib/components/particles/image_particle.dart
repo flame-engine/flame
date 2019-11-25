@@ -4,6 +4,9 @@ import 'package:flutter/foundation.dart';
 
 import '../particle_component.dart';
 
+/// A [Particle] which renders given [Image] on a [Canvas]
+/// image is centered. If any other behavior is needed, consider
+/// using [ComputedParticle].
 class ImageParticle extends Particle {
   /// dart.ui [Image] to draw
   Image image;
@@ -23,7 +26,8 @@ class ImageParticle extends Particle {
     final destHeight = size?.height ?? srcHeight;
 
     src = Rect.fromLTWH(0, 0, srcWidth, srcHeight);
-    dest = Rect.fromLTWH(-destWidth / 2, -destHeight / 2, destWidth, destHeight);
+    dest =
+        Rect.fromLTWH(-destWidth / 2, -destHeight / 2, destWidth, destHeight);
   }
 
   @override

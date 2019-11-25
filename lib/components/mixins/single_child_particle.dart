@@ -4,20 +4,20 @@ import '../particle_component.dart';
 
 /// Implements basic behavior for nesting [Particle] instances
 /// into each other.
-/// 
+///
 /// ```dart
 /// class BehaviorParticle extends Particle with SingleChildParticle {
 ///   Particle child;
-/// 
+///
 ///   BehaviorParticle({
 ///     @required this.child
 ///   });
-///    
+///
 ///   @override
 ///   update(double dt) {
 ///     // Will ensure that child [Particle] is properly updated
 ///     super.update(dt);
-/// 
+///
 ///     // ... Custom behavior
 ///   }
 /// }

@@ -18,8 +18,8 @@ class AcceleratedParticle extends CurvedParticle with SingleChildParticle {
   final Offset acceleration;
   Offset speed;
   Offset position;
-  
-  AcceleratedParticle({ 
+
+  AcceleratedParticle({
     @required this.child,
     this.acceleration = Offset.zero,
     this.speed = Offset.zero,
