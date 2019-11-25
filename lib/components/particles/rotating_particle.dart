@@ -12,11 +12,11 @@ import 'curved_particle.dart';
 class RotatingParticle extends CurvedParticle with SingleChildParticle {
   @override
   Particle child;
-  
+
   final double from;
   final double to;
 
-  RotatingParticle({ 
+  RotatingParticle({
     @required this.child,
     this.from = 0,
     this.to = 2 * pi,
