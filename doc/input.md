@@ -1,41 +1,84 @@
 # Input
 
-In order to handle user input, you can use the libraries provided by Flutter for regular apps: [Gesture Recognizers](https://flutter.io/gestures/).
-
-However, in order to bind them, use the `Flame.util.addGestureRecognizer` method; in doing so, you'll make sure they are properly unbound when the game widget is not being rendered, and so the rest of your screens will work appropriately.
-
-For example, to add a tap listener ("on click"):
+Inside `package:flame/gestures.dart` you can find a whole set of `mixin` which can be included on your game class instance to be able to receive touch input events. Bellow you can see the full list of these `mixin`s and its methods:
 
 ```dart
-    Flame.util.addGestureRecognizer(new TapGestureRecognizer()
-        ..onTapDown = (TapDownDetails evt) => game.handleInput(evt.globalPosition.dx, evt.globalPosition.dy));
+- TapDetector
+  - onTap
+  - onTapCancel
+  - onTapDown
+  - onTapUp
+
+- SecondaryTapDetector
+  - onSecondaryTapDown
+  - onSecondaryTapUp
+  - onSecondaryTapCancel
+
+- DoubleTapDetector
+  - onDoubleTap
+
+- LongPressDetector
+  - onLongPress
+  - onLongPressStart
+  - onLongPressMoveUpdate
+  - onLongPressUp
+  - onLongPressEnd
+
+- VerticalDragDetector
+  - onVerticalDragDown
+  - onVerticalDragStart
+  - onVerticalDragUpdate
+  - onVerticalDragEnd
+  - onVerticalDragCancel
+
+- HorizontalDragDetector
+  - onHorizontalDragDown
+  - onHorizontalDragStart
+  - onHorizontalDragUpdate
+  - onHorizontalDragEnd
+  - onHorizontalDragCancel
+
+- ForcePressDetector
+  - onForcePressStart
+  - onForcePressPeak
+  - onForcePressUpdate
+  - onForcePressEnd
+
+- PanDetector
+  - onPanDown
+  - onPanStart
+  - onPanUpdate
+  - onPanEnd
+  - onPanCancel
+
+- ScaleDetector
+  - onScaleStart
+  - onScaleUpdate
+  - onScaleEnd
 ```
 
-Where `game` is a reference to your game object and `handleInput` is a method you create to handle the input inside your game.
+Many of these detectors can conflict with each other, for example, you can't register both Vertical and Horizontal drags, so not all of then can be used together.
 
-If your game doesn't have other screens, just call this after your `runApp` call, in the `main` method.
+All of these methods are basically a mirror from the callbacks available on the [GestureDetector widget](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html), you can also read more about Flutter's gestures [here](https://api.flutter.dev/flutter/gestures/gestures-library.html).
 
-Here are some example of more complex Gesture Recognizers:
+## Example
 
 ```dart
-    MyGame() {
-        // other init...
+class MyGame extends Game with TapDetector {
+  // Other methods ommited
 
-        Flame.util.addGestureRecognizer(createDragRecognizer());
-        Flame.util.addGestureRecognizer(createTapRecognizer());
-    }
+  @override
+  void onTapDown(TapDownDetails details) {
+    print("Player tap down on ${details.globalPosition.dx} - ${details.globalPosition.dy}");
+  }
 
-    GestureRecognizer createDragRecognizer() {
-        return new ImmediateMultiDragGestureRecognizer()
-            ..onStart = (Offset position) => this.handleDrag(position);
-    }
-
-    TapGestureRecognizer createTapRecognizer() {
-        return new TapGestureRecognizer()
-            ..onTapUp = (TapUpDetails details) => this.handleTap(details.globalPosition);;
-    }
+  @override
+  void onTapUp(TapUpDetails details) {
+    print("Player tap up on ${details.globalPosition.dx} - ${details.globalPosition.dy}");
+  }
+}
 ```
-__ATTENTION:__ `Flame.util.addGestureRecognizer` must be called after the `runApp`, otherwise Flutter's `GestureBinding` will not be initialized yet and exceptions will occur.
+You can also check a more complete example [here](/doc/examples/gestures).
 
 ## Tapable components
 
