@@ -9,9 +9,7 @@ class TimerComponent extends Component {
   TimerComponent(this.timer);
 
   @override
-  void update(double dt) {
-    timer.update(dt);
-  }
+  void update(double dt) => timer.update(dt);
 
   @override
   void render(Canvas canvas) {}
