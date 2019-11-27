@@ -151,13 +151,12 @@ abstract class BodyComponent extends Component {
     renderChain(canvas, points);
   }
 
-  void  renderChain(Canvas canvas, List<Offset> points) {
-      final Paint paint = Paint()
+  void renderChain(Canvas canvas, List<Offset> points) {
+    final Paint paint = Paint()
       ..color = const Color.fromARGB(255, 255, 255, 255);
-       final path = Path()..addPolygon(points, true);
-       canvas.drawPath(path, paint);
-    }
-
+    final path = Path()..addPolygon(points, true);
+    canvas.drawPath(path, paint);
+  }
 
   void _renderCircle(Canvas canvas, Fixture fixture) {
     final Vector2 center = Vector2.zero();
