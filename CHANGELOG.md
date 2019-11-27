@@ -1,5 +1,5 @@
 ## [next]
-- Added default render fucntion for Box2D ChainShape
+- Added default render function for Box2D ChainShape
 
 ## 0.17.0
 - Fixing FlareAnimation API to match convention
