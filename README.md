@@ -63,7 +63,7 @@ Just drop it in your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flame: ^0.16.1
+  flame: ^0.17.0
 ```
 
 And start using it!
@@ -263,20 +263,25 @@ A very simple `BaseGame` implementation example can be seen below:
 
 ### Input
 
-In order to handle user input, you can use the libraries provided by Flutter for regular apps: [Gesture Recognizers](https://flutter.io/gestures/).
+Inside `package:flame/gestures.dart` you can find a whole set of `mixin` which can be included on your game class instance to be able to receive touch input events
 
-However, in order to bind them, use the `Flame.util.addGestureRecognizer` method; in doing so, you'll make sure they are properly unbound when the game widget is not being rendered, and so the rest of your screens will work appropriately.
-
-For example, to add a tap listener ("on click"):
+__Example__
 
 ```dart
-    Flame.util.addGestureRecognizer(new TapGestureRecognizer()
-        ..onTapDown = (TapDownDetails evt) => game.handleInput(evt.globalPosition.dx, evt.globalPosition.dy));
+class MyGame extends Game with TapDetector {
+  // Other methods ommited
+
+  @override
+  void onTapDown(TapDownDetails details) {
+    print("Player tap down on ${details.globalPosition.dx} - ${details.globalPosition.dy}");
+  }
+
+  @override
+  void onTapUp(TapUpDetails details) {
+    print("Player tap up on ${details.globalPosition.dx} - ${details.globalPosition.dy}");
+  }
+}
 ```
-
-Where `game` is a reference to your game object and `handleInput` is a method you create to handle the input inside your game.
-
-If your game doesn't have other screens, just call this after your `runApp` call, in the `main` method.
 
 [Complete Input Guide](doc/input.md)
 

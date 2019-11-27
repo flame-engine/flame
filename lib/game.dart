@@ -12,31 +12,14 @@ import 'package:ordered_set/ordered_set.dart';
 import 'components/component.dart';
 import 'components/mixins/has_game_ref.dart';
 import 'components/mixins/tapable.dart';
-import 'flame.dart';
 import 'position.dart';
+import 'gestures.dart';
 
 /// Represents a generic game.
 ///
 /// Subclass this to implement the [update] and [render] methods.
 /// Flame will deal with calling these methods properly when the game's widget is rendered.
 abstract class Game {
-  TapGestureRecognizer _createTapGestureRecognizer() => TapGestureRecognizer()
-    ..onTapUp = (TapUpDetails details) {
-      onTapUp(details);
-    }
-    ..onTapDown = (TapDownDetails details) {
-      onTapDown(details);
-    }
-    ..onTapCancel = () {
-      onTapCancel();
-    };
-
-  void onTapCancel() {}
-  void onTapDown(TapDownDetails details) {}
-  void onTapUp(TapUpDetails details) {}
-
-  TapGestureRecognizer _gestureRecognizer;
-
   // Widget Builder for this Game
   final builder = WidgetBuilder();
 
@@ -67,26 +50,162 @@ abstract class Game {
   Widget get widget => builder.build(this);
 
   // Called when the Game widget is attached
-  void onAttach() {
-    if (_gestureRecognizer != null) {
-      Flame.util.removeGestureRecognizer(_gestureRecognizer);
-    }
-    _gestureRecognizer = _createTapGestureRecognizer();
-    Flame.util.addGestureRecognizer(_gestureRecognizer);
-  }
+  void onAttach() {}
 
   // Called when the Game widget is detached
-  void onDetach() {
-    if (_gestureRecognizer != null) {
-      Flame.util.removeGestureRecognizer(_gestureRecognizer);
-    }
-  }
+  void onDetach() {}
 }
 
 class WidgetBuilder {
   Offset offset = Offset.zero;
-  Widget build(Game game) => Directionality(
-      textDirection: TextDirection.ltr, child: EmbeddedGameWidget(game));
+
+  Widget build(Game game) {
+    return GestureDetector(
+      // Taps
+      onTap: game is TapDetector ? () => (game as TapDetector).onTap() : null,
+      onTapCancel: game is TapDetector
+          ? () => (game as TapDetector).onTapCancel()
+          : null,
+      onTapDown: game is TapDetector
+          ? (TapDownDetails d) => (game as TapDetector).onTapDown(d)
+          : null,
+      onTapUp: game is TapDetector
+          ? (TapUpDetails d) => (game as TapDetector).onTapUp(d)
+          : null,
+
+      // Secondary taps
+      onSecondaryTapDown: game is SecondaryTapDetector
+          ? (TapDownDetails d) =>
+              (game as SecondaryTapDetector).onSecondaryTapDown(d)
+          : null,
+      onSecondaryTapUp: game is SecondaryTapDetector
+          ? (TapUpDetails d) =>
+              (game as SecondaryTapDetector).onSecondaryTapUp(d)
+          : null,
+      onSecondaryTapCancel: game is SecondaryTapDetector
+          ? () => (game as SecondaryTapDetector).onSecondaryTapCancel()
+          : null,
+
+      // Double tap
+      onDoubleTap: game is DoubleTapDetector
+          ? () => (game as DoubleTapDetector).onDoubleTap()
+          : null,
+
+      // Long presses
+      onLongPress: game is LongPressDetector
+          ? () => (game as LongPressDetector).onLongPress()
+          : null,
+      onLongPressStart: game is LongPressDetector
+          ? (LongPressStartDetails d) =>
+              (game as LongPressDetector).onLongPressStart(d)
+          : null,
+      onLongPressMoveUpdate: game is LongPressDetector
+          ? (LongPressMoveUpdateDetails d) =>
+              (game as LongPressDetector).onLongPressMoveUpdate(d)
+          : null,
+      onLongPressUp: game is LongPressDetector
+          ? () => (game as LongPressDetector).onLongPressUp()
+          : null,
+      onLongPressEnd: game is LongPressDetector
+          ? (LongPressEndDetails d) =>
+              (game as LongPressDetector).onLongPressEnd(d)
+          : null,
+
+      // Vertical drag
+      onVerticalDragDown: game is VerticalDragDetector
+          ? (DragDownDetails d) =>
+              (game as VerticalDragDetector).onVerticalDragDown(d)
+          : null,
+      onVerticalDragStart: game is VerticalDragDetector
+          ? (DragStartDetails d) =>
+              (game as VerticalDragDetector).onVerticalDragStart(d)
+          : null,
+      onVerticalDragUpdate: game is VerticalDragDetector
+          ? (DragUpdateDetails d) =>
+              (game as VerticalDragDetector).onVerticalDragUpdate(d)
+          : null,
+      onVerticalDragEnd: game is VerticalDragDetector
+          ? (DragEndDetails d) =>
+              (game as VerticalDragDetector).onVerticalDragEnd(d)
+          : null,
+      onVerticalDragCancel: game is VerticalDragDetector
+          ? () => (game as VerticalDragDetector).onVerticalDragCancel()
+          : null,
+
+      // Horizontal drag
+      onHorizontalDragDown: game is HorizontalDragDetector
+          ? (DragDownDetails d) =>
+              (game as HorizontalDragDetector).onHorizontalDragDown(d)
+          : null,
+      onHorizontalDragStart: game is HorizontalDragDetector
+          ? (DragStartDetails d) =>
+              (game as HorizontalDragDetector).onHorizontalDragStart(d)
+          : null,
+      onHorizontalDragUpdate: game is HorizontalDragDetector
+          ? (DragUpdateDetails d) =>
+              (game as HorizontalDragDetector).onHorizontalDragUpdate(d)
+          : null,
+      onHorizontalDragEnd: game is HorizontalDragDetector
+          ? (DragEndDetails d) =>
+              (game as HorizontalDragDetector).onHorizontalDragEnd(d)
+          : null,
+      onHorizontalDragCancel: game is HorizontalDragDetector
+          ? () => (game as HorizontalDragDetector).onHorizontalDragCancel()
+          : null,
+
+      // Force presses
+      onForcePressStart: game is ForcePressDetector
+          ? (ForcePressDetails d) =>
+              (game as ForcePressDetector).onForcePressStart(d)
+          : null,
+      onForcePressPeak: game is ForcePressDetector
+          ? (ForcePressDetails d) =>
+              (game as ForcePressDetector).onForcePressPeak(d)
+          : null,
+      onForcePressUpdate: game is ForcePressDetector
+          ? (ForcePressDetails d) =>
+              (game as ForcePressDetector).onForcePressUpdate(d)
+          : null,
+      onForcePressEnd: game is ForcePressDetector
+          ? (ForcePressDetails d) =>
+              (game as ForcePressDetector).onForcePressEnd(d)
+          : null,
+
+      // Pan
+      onPanDown: game is PanDetector
+          ? (DragDownDetails d) => (game as PanDetector).onPanDown(d)
+          : null,
+      onPanStart: game is PanDetector
+          ? (DragStartDetails d) => (game as PanDetector).onPanStart(d)
+          : null,
+      onPanUpdate: game is PanDetector
+          ? (DragUpdateDetails d) => (game as PanDetector).onPanUpdate(d)
+          : null,
+      onPanEnd: game is PanDetector
+          ? (DragEndDetails d) => (game as PanDetector).onPanEnd(d)
+          : null,
+      onPanCancel: game is PanDetector
+          ? () => (game as PanDetector).onPanCancel()
+          : null,
+
+      // Scales
+      onScaleStart: game is ScaleDetector
+          ? (ScaleStartDetails d) => (game as ScaleDetector).onScaleStart(d)
+          : null,
+      onScaleUpdate: game is ScaleDetector
+          ? (ScaleUpdateDetails d) => (game as ScaleDetector).onScaleUpdate(d)
+          : null,
+      onScaleEnd: game is ScaleDetector
+          ? (ScaleEndDetails d) => (game as ScaleDetector).onScaleEnd(d)
+          : null,
+
+      child: Container(
+          color: const Color(0xFF000000),
+          child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: EmbeddedGameWidget(game))),
+    );
+  }
 }
 
 /// This is a more complete and opinionated implementation of Game.
@@ -94,7 +213,7 @@ class WidgetBuilder {
 /// It still needs to be subclasses to add your game logic, but the [update], [render] and [resize] methods have default implementations.
 /// This is the recommended structure to use for most games.
 /// It is based on the Component system.
-abstract class BaseGame extends Game {
+abstract class BaseGame extends Game with TapDetector {
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components =
       OrderedSet(Comparing.on((c) => c.priority()));

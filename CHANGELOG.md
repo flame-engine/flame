@@ -1,7 +1,10 @@
 ## [next]
+
+## 0.17.0
 - Fixing FlareAnimation API to match convention
 - Fixing FlareComponent renderization
 - Added default render fucntion for Box2D ChainShape
+- New GestureDetector API to Game
 
 ## 0.16.1
 - Added `Bgm` class for easy looping background music management.
