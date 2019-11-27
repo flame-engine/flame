@@ -1,6 +1,7 @@
 ## [next]
 - Fixing FlareAnimation API to match convention
 - Fixing FlareComponent renderization
+- Added default render fucntion for Box2D ChainShape
 
 ## 0.16.1
 - Added `Bgm` class for easy looping background music management.
