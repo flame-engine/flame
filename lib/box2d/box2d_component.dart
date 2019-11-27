@@ -117,7 +117,7 @@ abstract class BodyComponent extends Component {
         fixture = fixture.getNext()) {
       switch (fixture.getType()) {
         case ShapeType.CHAIN:
-          throw Exception('not implemented');
+          _renderChain(canvas, fixture);
           break;
         case ShapeType.CIRCLE:
           _renderCircle(canvas, fixture);
@@ -133,6 +133,31 @@ abstract class BodyComponent extends Component {
   }
 
   Vector2 get center => body.worldCenter;
+
+  void _renderChain(Canvas canvas, Fixture fixture) {
+    final ChainShape chainShape = fixtureDef.getShape();
+    final List<Vector2> vertices = Vec2Array().get(chainShape.getVertexCount());
+
+    for (int i = 0; i < chainShape.getVertexCount(); ++i) {
+      body.getWorldPointToOut(chainShape.getVertex(i), vertices[i]);
+      viewport.getWorldToScreen(vertices[i], vertices[i]);
+    }
+
+    final List<Offset> points = [];
+    for (int i = 0; i < chainShape.getVertexCount(); i++) {
+      points.add(Offset(vertices[i].x, vertices[i].y));
+    }
+
+    renderChain(canvas, points);
+  }
+
+  void  renderChain(Canvas canvas, List<Offset> points) {
+      final Paint paint = Paint()
+      ..color = const Color.fromARGB(255, 255, 255, 255);
+       final path = Path()..addPolygon(points, true);
+       canvas.drawPath(path, paint);
+    }
+
 
   void _renderCircle(Canvas canvas, Fixture fixture) {
     final Vector2 center = Vector2.zero();
