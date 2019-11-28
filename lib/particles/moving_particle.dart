@@ -21,11 +21,9 @@ class MovingParticle extends CurvedParticle with SingleChildParticle {
     @required this.to,
     this.from = Offset.zero,
     double lifespan,
-    Duration duration,
     Curve curve = Curves.linear,
   }) : super(
           lifespan: lifespan,
-          duration: duration,
           curve: curve,
         );
 

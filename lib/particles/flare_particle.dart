@@ -11,10 +11,8 @@ class FlareParticle extends Particle {
   FlareParticle({
     @required this.flare,
     double lifespan,
-    Duration duration,
   }) : super(
           lifespan: lifespan,
-          duration: duration,
         );
 
   @override

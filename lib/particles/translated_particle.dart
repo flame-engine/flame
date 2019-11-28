@@ -16,10 +16,8 @@ class TranslatedParticle extends Particle with SingleChildParticle {
     @required this.child,
     @required this.offset,
     double lifespan,
-    Duration duration,
   }) : super(
           lifespan: lifespan,
-          duration: duration,
         );
 
   @override

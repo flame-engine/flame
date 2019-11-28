@@ -10,10 +10,8 @@ class CurvedParticle extends Particle {
   CurvedParticle({
     this.curve = Curves.linear,
     double lifespan,
-    Duration duration,
   }) : super(
           lifespan: lifespan,
-          duration: duration,
         );
 
   @override

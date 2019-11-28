@@ -109,13 +109,11 @@ class MyGame extends BaseGame {
       add(
         // Bind all the particles to a [Component] update
         // lifecycle from the [BaseGame].
-        ParticleComponent(
-          particle: TranslatedParticle(
-            duration: sceneDuration,
-            offset: cellCenter,
-            child: particle,
-          ),
-        ),
+        TranslatedParticle(
+          lifespan: 1,
+          offset: cellCenter,
+          child: particle,
+        ).asComponent(),
       );
     } while (particles.isNotEmpty);
   }
@@ -494,19 +492,34 @@ class MyGame extends BaseGame {
     );
   }
 
+  /// [Particle] base class exposes a number
+  /// of convenience wrappers to make positioning.
+  ///
+  /// Just remember that the less chaining and nesting - the
+  /// better for performance!
   Particle chainingBehaviors() {
-    return Particle.generate(
-      count: 10,
-      generator: (i) => CircleParticle(
-        paint: Paint()..color = randomMaterialColor(),
-      )
-          .translated(
-            -halfCellSize,
-          )
-          .accelerated(
-            acceleration: randomCellOffset(),
-          ),
+    final paint = Paint()..color = randomMaterialColor();
+    final rect = ComputedParticle(
+      renderer: (canvas, _) => canvas.drawRect(
+        Rect.fromCenter(center: Offset.zero, width: 10, height: 10),
+        paint,
+      ),
     );
+
+    return ComposedParticle(children: <Particle>[
+      rect
+          .rotating(to: pi / 2)
+          .moving(to: -cellSize)
+          .scaled(2)
+          .accelerated(acceleration: halfCellSize * 5)
+          .translated(halfCellSize),
+      rect
+          .rotating(to: -pi)
+          .moving(to: cellSize.scale(1, -1))
+          .scaled(2)
+          .translated(halfCellSize.scale(-1, 1))
+          .accelerated(acceleration: halfCellSize.scale(-5, 5))
+    ]);
   }
 
   @override

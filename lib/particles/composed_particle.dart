@@ -11,10 +11,8 @@ class ComposedParticle extends Particle {
   ComposedParticle({
     @required this.children,
     double lifespan,
-    Duration duration,
   }) : super(
           lifespan: lifespan,
-          duration: duration,
         );
 
   @override

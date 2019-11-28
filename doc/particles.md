@@ -68,7 +68,7 @@ game.add(
             generator: (i) => CircleParticle(paint: Paint()..color = Colors.red)
                 .accelerating(randomOffset())
         )
-        .component()
+        .asComponent()
 );
 
 // Computed Particle
@@ -93,7 +93,7 @@ game.add(
                 );
             }
         )
-        .component()
+        .asComponent()
 )
 ```
 

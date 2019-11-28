@@ -16,17 +16,17 @@ class SpriteParticle extends Particle {
     this.size,
     this.overridePaint,
     double lifespan,
-    Duration duration,
   }) : super(
           lifespan: lifespan,
-          duration: duration,
         );
 
   @override
   void render(Canvas canvas) {
-    sprite.renderCentered(canvas, Position.empty(), 
+    sprite.renderCentered(
+      canvas,
+      Position.empty(),
       overridePaint: overridePaint,
-      size: size
+      size: size,
     );
   }
 }
