@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
-import '../mixins/single_child_particle.dart';
-import '../particle_component.dart';
+import '../components/mixins/single_child_particle.dart';
+import '../particle.dart';
 import 'curved_particle.dart';
 
 /// A particle which renders its child with certain [Paint]

@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
-import '../particle_component.dart';
+import '../particle.dart';
 
 /// A [Particle] which renders given [Image] on a [Canvas]
 /// image is centered. If any other behavior is needed, consider

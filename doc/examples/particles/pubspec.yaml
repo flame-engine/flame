@@ -18,4 +18,5 @@ dev_dependencies:
 
 flutter:
   assets:
-    - assets/images/zap.png
+    - assets/images/
+    - assets/diamond.flr
