@@ -1,4 +1,6 @@
-# render_flip
+# Particles
 
-A Flame game showcasing how to use render flipping on a `PositionComponent`
-to control the rendered direction.
+A Flame application showcasing multiple different examples of using
+Flame particle system as well as some sample effects which could be used in your projects.
+
+![Particles Example](/doc/examples/particles/assets/particles-example.webm)

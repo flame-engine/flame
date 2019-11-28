@@ -1,8 +1,11 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components/particle_component.dart';
 import 'package:flame/particles/accelerated_particle.dart';
 import 'package:flame/particles/moving_particle.dart';
+import 'package:flame/particles/rotating_particle.dart';
+import 'package:flame/particles/scaled_particle.dart';
 import 'package:flame/particles/translated_particle.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
@@ -28,11 +31,9 @@ abstract class Particle {
     int count = 10,
     @required ParticleGenerator generator,
     double lifespan,
-    Duration duration,
   }) {
     return ComposedParticle(
       lifespan: lifespan,
-      duration: duration,
       children: List<Particle>.generate(count, generator),
     );
   }
@@ -54,18 +55,8 @@ abstract class Particle {
     /// Particle lifespan in [Timer] format,
     /// double in seconds with microsecond precision
     double lifespan,
-
-    /// Another way to set lifespan, using Flutter
-    /// [Duration] class
-    Duration duration,
   }) {
-    /// Either [double] lifespan or [Duration] duration,
-    /// defaulting to 500 milliseconds of life (or .5, in [Timer] double)
-    lifespan = lifespan ??
-        (duration ?? const Duration(milliseconds: 500)).inMicroseconds /
-            Duration.microsecondsPerSecond;
-
-    setLifespan(lifespan);
+    setLifespan(lifespan ?? .5);
   }
 
   /// This method will return true as
@@ -112,7 +103,7 @@ abstract class Particle {
   }
 
   /// Wtaps this particle with [TranslatedParticle]
-  /// statically repositioning it for the time 
+  /// statically repositioning it for the time
   /// of the lifespan.
   Particle translated(Offset offset) {
     return TranslatedParticle(
@@ -123,7 +114,7 @@ abstract class Particle {
   }
 
   /// Wraps this particle with [MovingParticle]
-  /// allowing it to move from one [Offset] 
+  /// allowing it to move from one [Offset]
   /// on the canvas to another one.
   Particle moving({
     Offset from = Offset.zero,
@@ -156,11 +147,36 @@ abstract class Particle {
     );
   }
 
+  /// Rotates this particle to a fixed angle
+  /// in radians with [RotatingParticle]
+  Particle rotated([double angle = 0]) {
+    return RotatingParticle(
+        child: this, lifespan: _lifespan, from: angle, to: angle);
+  }
+
+  /// Rotates this particle from given angle
+  /// to another one in radians with [RotatingParticle]
+  Particle rotating({
+    double from = 0,
+    double to = pi,
+  }) {
+    return RotatingParticle(
+      child: this,
+      lifespan: _lifespan,
+      from: from,
+      to: to,
+    );
+  }
+
+  /// Wraps this particle with [ScaledParticle]
+  /// allowing to change size of it and/or its children
+  Particle scaled(double scale) {
+    return ScaledParticle(scale: scale, child: this, lifespan: _lifespan);
+  }
+
   /// Wraps this particle with [ParticleComponent]
   /// to be used within the [BaseGame] component system.
-  Component component() {
-    return ParticleComponent(
-      particle: this
-    );
+  Component asComponent() {
+    return ParticleComponent(particle: this);
   }
 }

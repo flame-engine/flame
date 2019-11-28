@@ -17,18 +17,16 @@ class AnimationParticle extends Particle {
     this.size,
     this.overridePaint,
     double lifespan,
-    Duration duration,
     this.alignAnimationTime = true,
   }) : super(
           lifespan: lifespan,
-          duration: duration,
         );
 
   @override
   void setLifespan(double lifespan) {
     super.setLifespan(lifespan);
 
-    if (alignAnimationTime) {
+    if (alignAnimationTime && lifespan != null) {
       animation.stepTime = lifespan / animation.frames.length;
       animation.reset();
     }
@@ -36,10 +34,12 @@ class AnimationParticle extends Particle {
 
   @override
   void render(Canvas canvas) {
-    animation.getSprite().renderCentered(canvas, Position.empty(), 
-      overridePaint: overridePaint,
-      size: size
-    );
+    animation.getSprite().renderCentered(
+          canvas,
+          Position.empty(),
+          overridePaint: overridePaint,
+          size: size,
+        );
   }
 
   @override

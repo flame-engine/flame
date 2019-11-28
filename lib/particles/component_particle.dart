@@ -16,10 +16,8 @@ class ComponentParticle extends Particle {
     this.size,
     this.overridePaint,
     double lifespan,
-    Duration duration,
   }) : super(
           lifespan: lifespan,
-          duration: duration,
         );
 
   @override

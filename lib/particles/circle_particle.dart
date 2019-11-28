@@ -15,10 +15,8 @@ class CircleParticle extends Particle {
     @required this.paint,
     this.radius = 10.0,
     double lifespan,
-    Duration duration,
   }) : super(
           lifespan: lifespan,
-          duration: duration,
         );
 
   @override

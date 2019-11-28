@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -25,10 +26,8 @@ class AcceleratedParticle extends CurvedParticle with SingleChildParticle {
     this.speed = Offset.zero,
     this.position = Offset.zero,
     double lifespan,
-    Duration duration,
   }) : super(
           lifespan: lifespan,
-          duration: duration,
         );
 
   @override
@@ -42,7 +41,7 @@ class AcceleratedParticle extends CurvedParticle with SingleChildParticle {
   @override
   void update(double t) {
     speed += acceleration * t;
-    position += speed * t;
+    position += speed * t - (acceleration * pow(t, 2)) / 2;
 
     super.update(t);
   }

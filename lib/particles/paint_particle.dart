@@ -28,10 +28,8 @@ class PaintParticle extends CurvedParticle with SingleChildParticle {
     // Reasonably large rect for most particles
     this.bounds = const Rect.fromLTRB(-50, -50, 50, 50),
     double lifespan,
-    Duration duration,
   }) : super(
           lifespan: lifespan,
-          duration: duration,
         );
 
   @override

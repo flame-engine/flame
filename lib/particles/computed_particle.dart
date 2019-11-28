@@ -22,7 +22,6 @@ class ComputedParticle extends Particle {
     Duration duration,
   }) : super(
           lifespan: lifespan,
-          duration: duration,
         );
 
   @override
