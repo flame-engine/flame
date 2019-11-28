@@ -135,7 +135,7 @@ abstract class BodyComponent extends Component {
   Vector2 get center => body.worldCenter;
 
   void _renderChain(Canvas canvas, Fixture fixture) {
-    final ChainShape chainShape = fixtureDef.getShape();
+    final ChainShape chainShape = fixture.getShape();
     final List<Vector2> vertices = Vec2Array().get(chainShape.getVertexCount());
 
     for (int i = 0; i < chainShape.getVertexCount(); ++i) {
