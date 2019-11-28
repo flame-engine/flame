@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
-import '../particle_component.dart';
+import '../particle.dart';
 
 /// A function which should render desired contents
 /// onto a given canvas. External state needed for

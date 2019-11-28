@@ -1,6 +1,6 @@
 import 'package:flutter/animation.dart';
 
-import '../particle_component.dart';
+import '../particle.dart';
 
 /// A [Particle] which applies certain [Curve] for
 /// easing or other purposes to its [progress] getter.
@@ -11,7 +11,10 @@ class CurvedParticle extends Particle {
     this.curve = Curves.linear,
     double lifespan,
     Duration duration,
-  }) : super(lifespan: lifespan, duration: duration);
+  }) : super(
+          lifespan: lifespan,
+          duration: duration,
+        );
 
   @override
   double get progress => curve.transform(super.progress);

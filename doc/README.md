@@ -50,6 +50,7 @@ And start using it!
    - [Images, Sprites and Animations](images.md)
    - [Text Rendering](text.md)
    - [Colors and the Palette](palette.md)
+   - [Particles](particles.md)
  * Other Modules
    - [Util](util.md)
    - [Gamepad](gamepad.md)

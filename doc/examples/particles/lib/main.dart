@@ -1,33 +1,36 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 
+import 'package:flame/animation.dart';
+import 'package:flame/components/component.dart';
 import 'package:flame/components/particle_component.dart';
-import 'package:flame/components/particles/circle_particle.dart';
-import 'package:flame/components/particles/moving_particle.dart';
-import 'package:flame/components/particles/translated_particle.dart';
-import 'package:flame/components/particles/computed_particle.dart';
-import 'package:flame/components/particles/image_particle.dart';
-import 'package:flame/components/particles/rotating_particle.dart';
-import 'package:flame/components/particles/accelerated_particle.dart';
-import 'package:flame/components/particles/paint_particle.dart';
+import 'package:flame/flare_animation.dart';
+import 'package:flame/particles/circle_particle.dart';
+import 'package:flame/particles/composed_particle.dart';
+import 'package:flame/particles/curved_particle.dart';
+import 'package:flame/particles/moving_particle.dart';
+import 'package:flame/particles/sprite_particle.dart';
+import 'package:flame/particles/translated_particle.dart';
+import 'package:flame/particles/computed_particle.dart';
+import 'package:flame/particles/image_particle.dart';
+import 'package:flame/particles/rotating_particle.dart';
+import 'package:flame/particles/accelerated_particle.dart';
+import 'package:flame/particles/paint_particle.dart';
+import 'package:flame/particles/animation_particle.dart';
+import 'package:flame/particles/component_particle.dart';
+import 'package:flame/particles/flare_particle.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame/time.dart' as flame_time;
+import 'package:flame/particle.dart';
 import 'package:flame/position.dart';
+import 'package:flame/sprite.dart';
+import 'package:flame/spritesheet.dart';
 import 'package:flame/text_config.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Animation, Image;
 
-void main() async {
-  Size gameSize;
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Future.wait([
-    Flame.util.initialDimensions().then((size) => gameSize = size),
-    Flame.images.loadAll(const ['zap.png']),
-  ]);
-
-  final game = MyGame(gameSize);
-  runApp(game.widget);
-}
+void main() async => runApp((await loadGame()).widget);
 
 class MyGame extends BaseGame {
   /// Defines dimensions of the sample
@@ -40,20 +43,28 @@ class MyGame extends BaseGame {
   /// by examples below
   final Random rnd = Random();
   final StepTween steppedTween = StepTween(begin: 0, end: 5);
+  final trafficLight = TrafficLightComponent();
   final TextConfig fpsTextConfig = const TextConfig(
     color: const Color(0xFFFFFFFF),
   );
 
+  /// Defines the lifespan of all the particles in these examples
+  final sceneDuration = const Duration(seconds: 1);
+
   Offset cellSize;
   Offset halfCellSize;
+  FlareAnimation flareAnimation;
 
-  MyGame(Size screenSize) {
+  MyGame({
+    Size screenSize,
+    this.flareAnimation,
+  }) {
     size = screenSize;
     cellSize = Offset(size.width / gridSize, size.height / gridSize);
     halfCellSize = cellSize * .5;
 
     // Spawn new particles every second
-    Timer.periodic(const Duration(seconds: 1), (_) => spawnParticles());
+    Timer.periodic(sceneDuration, (_) => spawnParticles());
   }
 
   /// Showcases various different uses of [Particle]
@@ -70,6 +81,7 @@ class MyGame extends BaseGame {
       easedMovingParticle(),
       intervalMovingParticle(),
       computedParticle(),
+      chainingBehaviors(),
       steppedComputedParticle(),
       reuseParticles(),
       imageParticle(),
@@ -77,6 +89,11 @@ class MyGame extends BaseGame {
       rotatingImage(),
       acceleratedParticles(),
       paintParticle(),
+      spriteParticle(),
+      animationParticle(),
+      fireworkParticle(),
+      componentParticle(),
+      flareParticle(),
     ];
 
     // Place all the [Particle] instances
@@ -90,25 +107,17 @@ class MyGame extends BaseGame {
           cellSize.scale(col.toDouble(), row.toDouble()) + (cellSize * .5);
 
       add(
-        TranslatedParticle(
-          lifespan: 1.0,
-          offset: cellCenter,
-          child: particle,
+        // Bind all the particles to a [Component] update
+        // lifecycle from the [BaseGame].
+        ParticleComponent(
+          particle: TranslatedParticle(
+            duration: sceneDuration,
+            offset: cellCenter,
+            child: particle,
+          ),
         ),
       );
     } while (particles.isNotEmpty);
-  }
-
-  /// Returns random [Offset] within a virtual
-  /// grid cell
-  Offset randomCellOffset() {
-    return cellSize.scale(rnd.nextDouble(), rnd.nextDouble()) - halfCellSize;
-  }
-
-  /// Returns random [Color] from primary swatches
-  /// of material palette
-  Color randomMaterialColor() {
-    return Colors.primaries[rnd.nextInt(Colors.primaries.length)];
   }
 
   /// Simple static circle, doesn't move or
@@ -228,7 +237,6 @@ class MyGame extends BaseGame {
   /// many [Particle] together and having all the computations in place.
   Particle computedParticle() {
     return ComputedParticle(
-      lifespan: 2,
       renderer: (canvas, particle) => canvas.drawCircle(
         Offset.zero,
         particle.progress * halfCellSize.dx,
@@ -338,8 +346,8 @@ class MyGame extends BaseGame {
       count: 10,
       generator: (i) => AcceleratedParticle(
         speed:
-            Offset(rnd.nextDouble() * 600 - 300, -rnd.nextDouble() * 600) * .4,
-        acceleration: const Offset(0, 600),
+            Offset(rnd.nextDouble() * 600 - 300, -rnd.nextDouble() * 600) * .2,
+        acceleration: const Offset(0, 200),
         child: rotatingImage(initialAngle: rnd.nextDouble() * pi),
       ),
     );
@@ -378,6 +386,129 @@ class MyGame extends BaseGame {
     );
   }
 
+  /// [SpriteParticle] allows easily embed
+  /// Flame's [Sprite] into the effect.
+  Particle spriteParticle() {
+    return SpriteParticle(
+      sprite: Sprite('zap.png'),
+      size: Position.fromOffset(cellSize * .5),
+    );
+  }
+
+  /// An [AnimationParticle] takes a Flame [Animation]
+  /// and plays it during the particle lifespan.
+  Particle animationParticle() {
+    return AnimationParticle(
+      animation: getBoomAnimation(),
+      size: Position(128, 128),
+    );
+  }
+
+  /// [ComponentParticle] proxies particle lifecycle hooks
+  /// to its child [Component]. In example below, [Component] is
+  /// reused between particle effects and has internal behavior
+  /// which is independent from the parent [Particle].
+  Particle componentParticle() {
+    return MovingParticle(
+      from: -halfCellSize * .2,
+      to: halfCellSize * .2,
+      curve: SineCurve(),
+      child: ComponentParticle(component: trafficLight),
+    );
+  }
+
+  /// Not very realistic firework, yet it highlights
+  /// use of [ComputedParticle] within other particles,
+  /// mixing predefined and fully custom behavior.
+  Particle fireworkParticle() {
+    // A pallete to paint over the "sky"
+    final List<Paint> paints = [
+      Colors.amber,
+      Colors.amberAccent,
+      Colors.red,
+      Colors.redAccent,
+      Colors.yellow,
+      Colors.yellowAccent,
+      // Adds a nice "lense" tint
+      // to overall effect
+      Colors.blue,
+    ].map<Paint>((color) => Paint()..color = color).toList();
+
+    return Particle.generate(
+      count: 10,
+      generator: (i) {
+        final initialSpeed = randomCellOffset();
+        final deceleration = initialSpeed * -1;
+        const gravity = const Offset(0, 40);
+
+        return AcceleratedParticle(
+          speed: initialSpeed,
+          acceleration: deceleration + gravity,
+          child: ComputedParticle(renderer: (canvas, particle) {
+            final paint = randomElement(paints);
+            // Override the color to dynamically update opacity
+            paint.color = paint.color.withOpacity(1 - particle.progress);
+
+            canvas.drawCircle(
+              Offset.zero,
+              // Closer to the end of lifespan particles
+              // will turn into larger glaring circles
+              rnd.nextDouble() * particle.progress > .6
+                  ? rnd.nextDouble() * (50 * particle.progress)
+                  : 2 + (3 * particle.progress),
+              paint,
+            );
+          }),
+        );
+      },
+    );
+  }
+
+  /// [FlareParticle] renders fiven [FlareAnimation] inside
+  /// as you can see, animation could be reused across
+  /// different particles.
+  Particle flareParticle() {
+    final flare = ComposedParticle(children: <Particle>[
+      // Circle Particle for background
+      CircleParticle(
+          paint: Paint()..color = Colors.white12,
+          radius: flareAnimation.width / 2),
+      FlareParticle(flare: flareAnimation),
+    ]);
+
+    final List<Offset> corners = [
+      -halfCellSize,
+      halfCellSize,
+    ];
+
+    return RotatingParticle(
+      to: pi,
+      child: Particle.generate(
+        count: 2,
+        generator: (i) => MovingParticle(
+          to: corners[i] * .4,
+          curve: SineCurve(),
+          child: flare,
+        ),
+      ),
+    );
+  }
+
+  Particle chainingBehaviors() {
+    return Particle.generate(
+      count: 10,
+      generator: (i) => CircleParticle(
+        paint: Paint()..color = randomMaterialColor(),
+      )
+          .translated(
+            -halfCellSize,
+          )
+          .accelerated(
+            acceleration: randomCellOffset(),
+          ),
+    );
+  }
+
   @override
   bool debugMode() => true;
   @override
@@ -389,6 +520,68 @@ class MyGame extends BaseGame {
           Position(0, size.height - 24));
     }
   }
+
+  /// Returns random [Offset] within a virtual
+  /// grid cell
+  Offset randomCellOffset() {
+    return cellSize.scale(rnd.nextDouble(), rnd.nextDouble()) - halfCellSize;
+  }
+
+  /// Returns random [Color] from primary swatches
+  /// of material palette
+  Color randomMaterialColor() {
+    return Colors.primaries[rnd.nextInt(Colors.primaries.length)];
+  }
+
+  /// Returns a random element from a given list
+  T randomElement<T>(List<T> list) {
+    return list[rnd.nextInt(list.length)];
+  }
+
+  /// Sample "explosion" animation for [AnimationParticle] example
+  Animation getBoomAnimation() {
+    const columns = 8;
+    const rows = 8;
+    const frames = columns * rows;
+    const imagePath = 'boom3.png';
+    final spriteImage = Flame.images.loadedFiles[imagePath];
+    final spritesheet = SpriteSheet(
+      rows: rows,
+      columns: columns,
+      imageName: imagePath,
+      textureWidth: spriteImage.width ~/ columns,
+      textureHeight: spriteImage.height ~/ rows,
+    );
+    final sprites = List<Sprite>.generate(
+      frames,
+      (i) => spritesheet.getSprite(i ~/ rows, i % columns),
+    );
+
+    return Animation.spriteList(sprites);
+  }
+}
+
+Future<BaseGame> loadGame() async {
+  Size gameSize;
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Future.wait([
+    Flame.util.initialDimensions().then((size) => gameSize = size),
+    Flame.images.loadAll(const [
+      'zap.png',
+
+      /// Credits to Stumpy Strust from
+      /// https://opengameart.org/content/explosion-sheet
+      'boom3.png',
+    ]),
+  ]);
+  const flareSize = 32.0;
+  final flareAnimation = await FlareAnimation.load('assets/diamond.flr');
+  flareAnimation.updateAnimation('Spin');
+  flareAnimation.width = flareSize;
+  flareAnimation.height = flareSize;
+
+  return MyGame(screenSize: gameSize, flareAnimation: flareAnimation);
 }
 
 /// A curve which maps sinus output (-1..1,0..pi)
@@ -397,5 +590,35 @@ class SineCurve extends Curve {
   @override
   double transformInternal(double t) {
     return (sin(pi * (t * 2 - 1 / 2)) + 1) / 2;
+  }
+}
+
+/// Sample for [ComponentParticle], changes its colors
+/// each 2s of registered lifetime.
+class TrafficLightComponent extends Component {
+  final Rect rect = Rect.fromCenter(center: Offset.zero, height: 32, width: 32);
+  final flame_time.Timer colorChangeTimer = flame_time.Timer(2, repeat: true);
+  final colors = <Color>[
+    Colors.green,
+    Colors.orange,
+    Colors.red,
+  ];
+
+  TrafficLightComponent() {
+    colorChangeTimer.start();
+  }
+
+  @override
+  void render(Canvas c) {
+    c.drawRect(rect, Paint()..color = currentColor);
+  }
+
+  @override
+  void update(double dt) {
+    colorChangeTimer.update(dt);
+  }
+
+  Color get currentColor {
+    return colors[(colorChangeTimer.progress * colors.length).toInt()];
   }
 }

@@ -1,8 +1,7 @@
 import 'dart:ui';
 
+import 'package:flame/particle.dart';
 import 'package:flutter/foundation.dart';
-
-import '../particle_component.dart';
 
 /// A single [Particle] which manages multiple children
 /// by proxying all lifecycle hooks.

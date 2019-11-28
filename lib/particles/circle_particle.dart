@@ -2,8 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
-import '../../time.dart';
-import '../particle_component.dart';
+import '../particle.dart';
 
 /// Plain circle with no other behaviors
 /// Consider composing with other [Particle]
