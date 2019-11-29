@@ -1,6 +1,6 @@
 # Particles
 
-Flame offerst a basic, yet robust and extendable particle system. The core concept of this system is `Particle` class, which is very similar in its behavior to the `Component`.
+Flame offers a basic, yet robust and extendable particle system. The core concept of this system is the `Particle` class, which is very similar in its behavior to the `ParticleComponent`.
 
 The most basic usage of `Particle` with `BaseGame` would look as following:
 
