@@ -123,4 +123,25 @@ class MyGame extends Game {
 
 ```
 
+Timer instances can also be used inside a `BaseGame` game by using the `TimerComponent` class.
 
+__Timer Component__
+
+```dart
+import 'package:flame/time.dart';
+import 'package:flame/components/timer_component.dart';
+import 'package:flame/game.dart';
+
+class MyBaseGame extends BaseGame {
+  MyBaseGame() {
+    add(
+      TimerComponent(
+        Timer(10, repeat: true, callback: () {
+          print("10 seconds elapsed");
+        })
+        ..start()
+      )
+    );
+  }
+}
+```

@@ -1,4 +1,6 @@
 ## [next]
+- Added default render function for Box2D ChainShape
+- Adding TimerComponent
 
 ## 0.17.0
 - Fixing FlareAnimation API to match convention
