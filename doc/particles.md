@@ -142,6 +142,8 @@ Flame ships with a few built-in `Particle` behaviors:
 * The `ComponentParticle`, renders Flame `Component` within a `Particle` effect
 * The `FlareParticle`, renders Flare animation within a `Particle` effect
 
+More examples of using these behaviors together are available [here](/doc/examples/particles/lib/main.dart). All the implementations are available in [particles](/lib/particles) folder in Flame sources.
+
 ## Translated Particle
 
 Simply translates underlying `Particle` to a specified `Offset` within the rendering `Canvas`.
