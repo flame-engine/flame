@@ -1,22 +1,63 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/time.dart';
 import 'package:flame/text_config.dart';
 import 'package:flame/position.dart';
+import 'package:flame/gestures.dart';
+import 'package:flame/components/timer_component.dart';
 
 void main() {
-  final game = MyGame();
-  runApp(game.widget);
-
-  Flame.util.addGestureRecognizer(TapGestureRecognizer()
-    ..onTapDown = (TapDownDetails evt) {
-      game.countdown.start();
-    });
+  runApp(GameWidget());
 }
 
-class MyGame extends Game {
+class GameWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(routes: {
+      '/': (BuildContext context) => Column(children: [
+            RaisedButton(
+                child: const Text("Game"),
+                onPressed: () {
+                  Navigator.of(context).pushNamed("/game");
+                }),
+            RaisedButton(
+                child: const Text("BaseGame"),
+                onPressed: () {
+                  Navigator.of(context).pushNamed("/base_game");
+                })
+          ]),
+      '/game': (BuildContext context) => MyGame().widget,
+      '/base_game': (BuildContext context) => MyBaseGame().widget
+    });
+  }
+}
+
+class RenderedTimeComponent extends TimerComponent {
+  final TextConfig textConfig =
+      const TextConfig(color: const Color(0xFFFFFFFF));
+
+  RenderedTimeComponent(Timer timer) : super(timer);
+
+  @override
+  void render(Canvas canvas) {
+    textConfig.render(
+        canvas, "Elapsed time: ${timer.current}", Position(10, 150));
+  }
+}
+
+class MyBaseGame extends BaseGame with TapDetector, DoubleTapDetector {
+  @override
+  void onTapDown(_) {
+    add(RenderedTimeComponent(Timer(1)..start()));
+  }
+
+  @override
+  void onDoubleTap() {
+    add(RenderedTimeComponent(Timer(5)..start()));
+  }
+}
+
+class MyGame extends Game with TapDetector {
   final TextConfig textConfig =
       const TextConfig(color: const Color(0xFFFFFFFF));
   Timer countdown;
@@ -30,6 +71,11 @@ class MyGame extends Game {
       elapsedSecs += 1;
     });
     interval.start();
+  }
+
+  @override
+  void onTapDown(_) {
+    countdown.start();
   }
 
   @override
