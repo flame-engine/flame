@@ -97,7 +97,7 @@ game.add(
 )
 ```
 
-You can find more examples of using different built-int particles in various combinations [here](/docs/examples/particles/lib/main.dart).
+You can find more examples of using different built-int particles in various combinations [here](/doc/examples/particles/lib/main.dart).
 
 ## Lifecycle
 
