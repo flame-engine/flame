@@ -1,4 +1,6 @@
 ## [next]
+
+## 0.17.1
 - Added default render function for Box2D ChainShape
 - Adding TimerComponent
 - Added particles subsystem (thanks @av)
