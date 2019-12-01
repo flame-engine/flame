@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:flame/animation.dart';
 import 'package:flame/components/component.dart';
-import 'package:flame/components/particle_component.dart';
 import 'package:flame/flare_animation.dart';
 import 'package:flame/particles/circle_particle.dart';
 import 'package:flame/particles/composed_particle.dart';
