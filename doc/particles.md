@@ -101,12 +101,11 @@ You can find more examples of using different built-int particles in various com
 
 ## Lifecycle
 
-Behavior common to all `Particle`s is that all of them accept either `lifespan` or `duration`. These values are used to make `ParticleCoponent` self-destoy, once its internal `Particle` has reached the end of its life. Time within the `Particle` itself is tracked using the Flame `Timer`. It could be configured with either `double`, representing seconds (with microsecond precision), or with Dart  built-in: `Duration` by passing _either_ of these into corresponding `Particle` constructor. 
+Behavior common to all `Particle`s is that all of them accept `lifespan` parameter. This value is used to make `ParticleCoponent` self-destoy, once its internal `Particle` has reached the end of its life. Time within the `Particle` itself is tracked using the Flame `Timer`. It could be configured with `double`, representing seconds (with microsecond precision)by passing it into the corresponding `Particle` constructor. 
 
 ```dart
 Particle(lifespan: .2); // will live for 200ms
 Particle(lifespan: 4); // will live for 4s
-Particle(duration: const Duration(milliseconds: 169)); // will live for 169ms
 ```
 
 It is also possible to reset `Particle` lifespan by using `setLifespan` method, which accepts a `double` of seconds. 
@@ -122,7 +121,7 @@ During its lifetime, `Particle` tracks the time it was alive and exposes it with
 
 ```dart
 final duration = const Duration(seconds: 2);
-final particle = Particle(duration: const Duration(seconds));
+final particle = Particle(lifespan: duration.inMicroseconds / Durations.microsecondsPerSecond);
 
 game.add(ParticleComponent(particle: particle));
 
@@ -371,11 +370,7 @@ class GlitchParticle extends Particle with SingleChildParticle {
     GlitchParticle({
       @required this.child,
       double lifespan,
-      Duration duration,
-    }) : super(
-            lifespan: lifespan,
-            duration: duration,
-          );
+    }) : super(lifespan: lifespan);
 
     @override
     render(Canvas canvas)  {
