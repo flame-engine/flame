@@ -25,6 +25,7 @@ abstract class Game {
 
   /// Returns the game background color.
   /// By default it will return a black color.
+  /// It cannot be changed at runtime, because the game widget does not get rebuild when this value changes.
   Color backgroundColor() => const Color(0xFF000000);
 
   /// Implement this method to update the game state, given that a time [t] has passed.
