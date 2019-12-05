@@ -23,6 +23,10 @@ abstract class Game {
   // Widget Builder for this Game
   final builder = WidgetBuilder();
 
+  /// Returns the game background color.
+  /// By default it will return a black color.
+  Color backgroundColor() => const Color(0xFF000000);
+
   /// Implement this method to update the game state, given that a time [t] has passed.
   ///
   /// Keep the updates as short as possible. [t] is in seconds, with microseconds precision.
@@ -200,7 +204,7 @@ class WidgetBuilder {
           : null,
 
       child: Container(
-          color: const Color(0xFF000000),
+          color: game.backgroundColor(),
           child: Directionality(
               textDirection: TextDirection.ltr,
               child: EmbeddedGameWidget(game))),
@@ -399,6 +403,7 @@ class SimpleGame extends BaseGame {
 class EmbeddedGameWidget extends LeafRenderObjectWidget {
   final Game game;
   final Position size;
+
   EmbeddedGameWidget(this.game, {this.size});
 
   @override
