@@ -24,7 +24,7 @@ class SpriteStackComponent extends PositionComponent {
       int columns,
       int rows}) {
     if (_sprites[imageName] == null) {
-      _sprites[imageName] = new Map();
+      _sprites[imageName] = Map();
     }
     x = 100;
     y = 100;
@@ -53,6 +53,11 @@ class SpriteStackComponent extends PositionComponent {
 
   @override
   bool loaded() {
+    // If the instance is already generating or is generated we dont have to check all the sprites.
+    if (_generated || _generating) {
+      return _generated;
+    }
+
     for (var row = 0; row < spriteSheet.rows; row++) {
       for (var column = 0; column < spriteSheet.columns; column++) {
         var sprite = spriteSheet.getSprite(row, column);
@@ -61,6 +66,7 @@ class SpriteStackComponent extends PositionComponent {
         }
       }
     }
+
     generate();
     return _generated;
   }
@@ -71,8 +77,8 @@ class SpriteStackComponent extends PositionComponent {
     }
 
     _generating = true;
-    var pictureRecorder = PictureRecorder();
-    var canvas =
+    final pictureRecorder = PictureRecorder();
+    final canvas =
         Canvas(pictureRecorder, Rect.fromLTWH(0.0, 0.0, width, height));
 
     double index = 0;
@@ -92,9 +98,9 @@ class SpriteStackComponent extends PositionComponent {
       }
     }
 
-    var pic = pictureRecorder.endRecording();
-    var image = await pic.toImage(width.toInt(), height.toInt());
-    var sprite = Sprite.fromImage(
+    final pic = pictureRecorder.endRecording();
+    final image = await pic.toImage(width.toInt(), height.toInt());
+    final sprite = Sprite.fromImage(
       image,
       x: 0,
       y: 0,
