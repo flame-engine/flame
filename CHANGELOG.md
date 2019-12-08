@@ -1,5 +1,6 @@
 ## [next]
-- Added backgroundColor method for overriding the game background (thanks @wolfenrain) 
+- Added backgroundColor method for overriding the game background (thanks @wolfenrain)
+- Update AudioPlayers version to 0.13.5
 
 ## 0.17.1
 - Added default render function for Box2D ChainShape
