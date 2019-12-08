@@ -4,6 +4,7 @@ import 'package:flame/components/component.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final Size size = await Flame.util.initialDimensions();
   runApp(MyGame(size).widget);
 }
@@ -34,7 +35,7 @@ class Ball extends PositionComponent {
 
       forward = !forward;
       print('boin');
-      Flame.audio.play('boin.mp3', volume: 1.2);
+      Flame.audio.play('boin.mp3', volume: 1.0);
     }
   }
 }
