@@ -6,7 +6,7 @@ homepage: https://github.com/flame-engine/flame
 dependencies:
   flutter:
     sdk: flutter
-  audioplayers: ^0.13.0
+  audioplayers: ^0.13.5
   ordered_set: ^1.1.2
   path_provider: ^1.1.0
   box2d_flame: ^0.4.2
