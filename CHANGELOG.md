@@ -3,6 +3,7 @@
 ## 0.17.2
 - Added backgroundColor method for overriding the game background (thanks @wolfenrain)
 - Update AudioPlayers version to 0.13.5
+- Bump SVG dependency plus fix example app
 
 ## 0.17.1
 - Added default render function for Box2D ChainShape
