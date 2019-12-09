@@ -1,4 +1,6 @@
 ## [next]
+
+## 0.17.2
 - Added backgroundColor method for overriding the game background (thanks @wolfenrain)
 - Update AudioPlayers version to 0.13.5
 

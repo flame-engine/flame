@@ -31,7 +31,7 @@ Put the pub package as your dependency by dropping the following in your `pubspe
 
 ```yaml
 dependencies:
-  flame: ^0.17.1
+  flame: ^0.17.2
 ```
 
 And start using it!
