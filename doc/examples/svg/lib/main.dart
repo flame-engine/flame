@@ -5,7 +5,12 @@ import 'package:flame/components/component.dart' show SvgComponent;
 
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyGame().widget);
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final game = MyGame();
+  runApp(game.widget);
+}
 
 class MyGame extends BaseGame {
   Svg svgInstance;
