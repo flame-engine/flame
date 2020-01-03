@@ -132,7 +132,9 @@ class TextBoxComponent extends PositionComponent with Resizable {
       return;
     }
     prepareCanvas(c);
-    c.drawImage(_cache, Offset.zero, BasicPalette.white.paint);
+    c.drawImage(_cache,
+        Offset.zero,
+        BasicPalette.white.paint..filterQuality = FilterQuality.high);
   }
 
   Future<Image> _redrawCache() {
