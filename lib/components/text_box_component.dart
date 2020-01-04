@@ -24,6 +24,9 @@ class TextBoxConfig {
 }
 
 class TextBoxComponent extends PositionComponent with Resizable {
+  static final Paint _imagePaint =
+      BasicPalette.white.paint..filterQuality = FilterQuality.high;
+
   Position p = Position.empty();
 
   String _text;
@@ -132,9 +135,7 @@ class TextBoxComponent extends PositionComponent with Resizable {
       return;
     }
     prepareCanvas(c);
-    c.drawImage(_cache,
-        Offset.zero,
-        BasicPalette.white.paint..filterQuality = FilterQuality.high);
+    c.drawImage(_cache, Offset.zero, _imagePaint);
   }
 
   Future<Image> _redrawCache() {
