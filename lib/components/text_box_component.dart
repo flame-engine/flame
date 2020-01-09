@@ -24,8 +24,8 @@ class TextBoxConfig {
 }
 
 class TextBoxComponent extends PositionComponent with Resizable {
-  static final Paint _imagePaint =
-      BasicPalette.white.paint..filterQuality = FilterQuality.high;
+  static final Paint _imagePaint = BasicPalette.white.paint
+    ..filterQuality = FilterQuality.high;
 
   Position p = Position.empty();
 
