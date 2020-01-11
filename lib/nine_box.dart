@@ -26,7 +26,7 @@ class NineBox {
   ///
   /// If [tileSize] is not provided, the width of the sprite is assumed as the size.
   /// Otherwise the width and height properties of the sprite are ignored.
-  /// 
+  ///
   /// If [destTileSize] is not provided, the evaluated [tileSize] is used instead
   /// (so no scaling happens).
   NineBox(this.sprite, {int tileSize, int destTileSize}) {
@@ -44,23 +44,27 @@ class NineBox {
     _drawTile(c, _getDest(x, y), 0, 0);
     _drawTile(c, _getDest(x, y + height - destTileSize), 0, 2);
     _drawTile(c, _getDest(x + width - destTileSize, y), 2, 0);
-    _drawTile(c, _getDest(x + width - destTileSize, y + height - destTileSize), 2, 2);
+    _drawTile(
+        c, _getDest(x + width - destTileSize, y + height - destTileSize), 2, 2);
 
     // horizontal sides
     final mx = width - 2 * destTileSize;
     _drawTile(c, _getDest(x + destTileSize, y, width: mx), 1, 0);
-    _drawTile(
-        c, _getDest(x + destTileSize, y + height - destTileSize, width: mx), 1, 2);
+    _drawTile(c,
+        _getDest(x + destTileSize, y + height - destTileSize, width: mx), 1, 2);
 
     // vertical sides
     final my = height - 2 * destTileSize;
     _drawTile(c, _getDest(x, y + destTileSize, height: my), 0, 1);
-    _drawTile(
-        c, _getDest(x + width - destTileSize, y + destTileSize, height: my), 2, 1);
+    _drawTile(c,
+        _getDest(x + width - destTileSize, y + destTileSize, height: my), 2, 1);
 
     // center
     _drawTile(
-        c, _getDest(x + destTileSize, y + destTileSize, width: mx, height: my), 1, 1);
+        c,
+        _getDest(x + destTileSize, y + destTileSize, width: mx, height: my),
+        1,
+        1);
   }
 
   Rect _getDest(double x, double y, {double width, double height}) {
@@ -70,7 +74,7 @@ class NineBox {
   }
 
   double get _tileSizeDouble => tileSize.toDouble();
-  
+
   double get _destTileSizeDouble => destTileSize.toDouble();
 
   void _drawTile(Canvas c, Rect dest, int i, int j) {
