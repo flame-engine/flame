@@ -14,7 +14,6 @@ void main() async {
 }
 
 class MyGame extends Game {
-
   Size size;
   NineBox nineBox;
 
@@ -26,7 +25,8 @@ class MyGame extends Game {
   @override
   void render(Canvas canvas) {
     final length = 300.0;
-    nineBox.draw(canvas, (size.width - length) / 2, (size.height - length) / 2, length, length);
+    nineBox.draw(canvas, (size.width - length) / 2, (size.height - length) / 2,
+        length, length);
   }
 
   @override
