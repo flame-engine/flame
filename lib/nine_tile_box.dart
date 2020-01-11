@@ -9,7 +9,7 @@ import 'package:flame/sprite.dart';
 /// and a new rectangle can be draw by keeping the 4 corners, expanding the 4 sides only
 /// in the direction in which they are located and expanding the center in both directions.
 /// That allows you to have non distored borders.
-class NineBox {
+class NineTileBox {
   /// The sprite used to render the box, must be a 3x3 grid of square tiles.
   Sprite sprite;
 
@@ -29,9 +29,14 @@ class NineBox {
   ///
   /// If [destTileSize] is not provided, the evaluated [tileSize] is used instead
   /// (so no scaling happens).
-  NineBox(this.sprite, {int tileSize, int destTileSize}) {
+  NineTileBox(this.sprite, {int tileSize, int destTileSize}) {
     this.tileSize = tileSize ?? sprite.src.width.toInt();
     this.destTileSize = destTileSize ?? tileSize;
+  }
+
+  /// Renders this nine box with the dimensions provided by [rect].
+  void drawRect(Canvas c, Rect rect) {
+    draw(c, rect.left, rect.top, rect.width, rect.height);
   }
 
   /// Renders this nine box as a rectangle of coordinates ([x], [y]) and size ([width], [height]).
