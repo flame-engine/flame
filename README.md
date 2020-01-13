@@ -63,7 +63,7 @@ Just drop it in your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flame: ^0.17.2
+  flame: ^0.17.3
 ```
 
 And start using it!

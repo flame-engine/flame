@@ -1,4 +1,4 @@
-## [next]
+## 0.17.3
 - Tweaking text box rendering to reduce pixelated text (thanks, @kurtome)
 - Adding NineTileBox component
 
