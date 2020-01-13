@@ -188,3 +188,15 @@ You can see a more complete example of box2d usage on [this WIP game](https://gi
 Currently we have a very basic implementation of a Tiled component. This API uses the lib [Tiled](https://github.com/feroult/tiled.dart) to parse map files and render visible layers.
 
 A example of how to use the API can be found [here](/doc/examples/tiled).
+
+# Nine Tile Box Component
+
+A Nine Tile Box is a rectangle drawn using a grid sprite.
+
+The grid sprite is a 3x3 grid and with 9 blocks, representing the 4 courners, the 4 sides and the middle.
+
+The corners are drawn at the same size, the sides are streched on the side direction and the middle is expanded both ways.
+
+Using this, you can get a box/rectangle that expands well to any sizes. This is useful for making panels, dialogs, borders.
+
+Check the example app `nine_tile_box` details on how to use it.
