@@ -1,4 +1,6 @@
 ## [next]
+- Tweaking text box rendering to reduce pixelated text (thanks, @kurtome)
+- Adding NineTileBox component
 
 ## 0.17.2
 - Added backgroundColor method for overriding the game background (thanks @wolfenrain)
