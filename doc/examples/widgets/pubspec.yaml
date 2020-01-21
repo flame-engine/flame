@@ -1,0 +1,20 @@
+name: widgets
+description: A Flutter project showcasing Flame's widgets.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flame:
+      path: ../../../
+  dashbook: ^0.0.2
+
+  cupertino_icons: ^0.1.2
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/nine_tile_box.png
