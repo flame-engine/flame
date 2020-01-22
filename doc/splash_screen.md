@@ -1,6 +1,6 @@
 ## Splash screen
 
-![](ssdemo.gif)
+![](https://raw.githubusercontent.com/flame-engine/flame_splash_screen/master/demogif.gif)
 
 Style your flame game with a beautiful splash screen.
 
