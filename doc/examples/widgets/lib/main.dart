@@ -10,7 +10,7 @@ void main() async {
   final nineTileBoxImage = await Flame.images.load('nine_tile_box.png');
   final dashbook = Dashbook();
 
-  dashbook.storiesOf('SpritesheetContainer').decorator(CenterDecorator()).add(
+  dashbook.storiesOf('NineTileBox').decorator(CenterDecorator()).add(
       'default',
       (ctx) => Container(
             width: ctx.numberProperty('width', 200),

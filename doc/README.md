@@ -54,6 +54,7 @@ And start using it!
  * Other Modules
    - [Util](util.md)
    - [Gamepad](gamepad.md)
+   - [Widgets](widgets.md)
    - [Box2D](box2d.md)
    - [Tiled](tiled.md)
    - [Debugging](debug.md)
