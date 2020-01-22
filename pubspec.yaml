@@ -14,7 +14,7 @@ dependencies:
   tiled: ^0.2.1
   convert: ^2.0.1
   flutter_svg: ^0.15.0
-  flare_flutter: ^1.5.4
+  flare_flutter: ^2.0.1
 
 dev_dependencies:
   flutter_test:
