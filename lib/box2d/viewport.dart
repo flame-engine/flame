@@ -59,7 +59,7 @@ class Viewport extends ViewportTransform {
 
     if (horizontal != null) {
       final Vector2 temp = Vector2.zero();
-      getWorldToScreen(position, temp);
+      getWorldToScreen(position);
 
       final margin = horizontal / 2 * size.width / 2;
       final focus = size.width / 2 - temp.x;
@@ -73,7 +73,7 @@ class Viewport extends ViewportTransform {
 
     if (vertical != null) {
       final Vector2 temp = Vector2.zero();
-      getWorldToScreen(position, temp);
+      getWorldToScreen(position);
 
       final margin = vertical / 2 * size.height / 2;
       final focus = size.height / 2 - temp.y;
