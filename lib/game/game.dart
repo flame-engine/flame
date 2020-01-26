@@ -61,7 +61,15 @@ abstract class Game {
   void onAttach() {}
 
   // Called when the Game widget is detached
-  void onDetach() {}
+  @mustCallSuper
+  void onDetach() {
+    // Keeping this here, because if we leave this on HasWidgetsOverlay
+    // and somebody overrides this and forgets to call the stream close
+    // we can face some leaks.
+    if (this is HasWidgetsOverlay) {
+      (this as HasWidgetsOverlay).widgetOverlayController.close();
+    }
+  }
 }
 
 class OverlayWidget {
