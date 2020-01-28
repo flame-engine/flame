@@ -1,5 +1,6 @@
 ## 0.17.4
 - Fixing compilations errors regarding changes on `box2_flame`
+- Add splash screen docs
 
 ## 0.17.3
 - Tweaking text box rendering to reduce pixelated text (thanks, @kurtome)
