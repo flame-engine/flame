@@ -57,3 +57,4 @@ And start using it!
    - [Box2D](box2d.md)
    - [Tiled](tiled.md)
    - [Debugging](debug.md)
+   - [Splash screen](splash_screen.md)
