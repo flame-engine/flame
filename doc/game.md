@@ -45,8 +45,34 @@ A very simple `BaseGame` implementation example can be seen below:
     }
 ```
 
+## Flutter Widgets and Game instances
+
+Since a Flame game is a widget itself, it is quite easy to use Flutter widgets and Flame game together. But to make it even easier, Flame provides a `mixin` called `HasWidgetsOverlay` which will enable any Flutter widget to be show on top of your game instance, this makes it very easy to create things like a pause menu, or an inventory screen for example.
+
+To use it, simple add the `HasWidgetsOverlay` `mixin` on your game class, by doing so, you will have two new methods available `addWidgetOverlay` and `removeWidgetOverlay`, like the name suggests, they can be used to add, or remove widgets overlay above your game, they can be used like as show below:
+
+```dart
+addWidgetOverlay(
+  "PauseMenu", // Your overlay identifier
+  Center(child:
+      Container(
+          width: 100,
+          height: 100,
+          color: const Color(0xFFFF0000),
+          child: const Center(child: const Text("Paused")),
+      ),
+  ) // Your widget, this can be any Flutter widget
+);
+
+removeWidgetOverlay("PauseMenu"); // Use the overlay identifier to remove the overlay
+```
+
+Here you can see a [working example](/doc/examples/with_widgets_overlay) of this feature.
+
 ## BaseGame debug mode
 
 Flame's `BaseGame` class provides a method called `debugMode`, which by default returns false. It can however, be overridden to enable debug features over the components of the game. __Be aware__ that the state returned by this method is passed through its component when they added to the game, so if you change the `debugMode` in runtime, it may not affect already added components.
 
 To see more about debugMode on Flame, please refer to the [Debug Docs](/doc/debug.md)
+
+
