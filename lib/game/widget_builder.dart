@@ -155,18 +155,16 @@ class WidgetBuilder {
 }
 
 class OverlayGameWidget extends StatefulWidget {
-
   final Widget child;
   final HasWidgetsOverlay game;
 
-  OverlayGameWidget({ this.child, this.game });
+  OverlayGameWidget({this.child, this.game});
 
   @override
   State<StatefulWidget> createState() => _OverlayGameWidgetState(game);
 }
 
 class _OverlayGameWidgetState extends State<OverlayGameWidget> {
-
   final Map<String, Widget> _overlays = {};
 
   _OverlayGameWidgetState(HasWidgetsOverlay game) {
@@ -185,15 +183,14 @@ class _OverlayGameWidgetState extends State<OverlayGameWidget> {
   Widget build(BuildContext context) {
     return Directionality(
         textDirection: TextDirection.ltr,
-        child: Stack(children: [
+        child: Stack(
+            children: [
           widget.child,
-        ]..addAll(_overlays.values.toList()))
-    );
+        ]..addAll(_overlays.values.toList())));
   }
 }
 
 class OverlayWidgetBuilder extends WidgetBuilder {
-
   OverlayWidgetBuilder();
 
   @override
@@ -203,4 +200,3 @@ class OverlayWidgetBuilder extends WidgetBuilder {
     return OverlayGameWidget(child: container, game: game);
   }
 }
-

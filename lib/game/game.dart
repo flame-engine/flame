@@ -83,21 +83,17 @@ mixin HasWidgetsOverlay on Game {
   @override
   final builder = OverlayWidgetBuilder();
 
-  final StreamController<OverlayWidget> widgetOverlayController = StreamController();
+  final StreamController<OverlayWidget> widgetOverlayController =
+      StreamController();
 
   void addWidgetOverlay(String overlayName, Widget widget) {
-    widgetOverlayController.sink.add(
-        OverlayWidget(overlayName, widget)
-    );
+    widgetOverlayController.sink.add(OverlayWidget(overlayName, widget));
   }
 
   void removeWidgetOverlay(String overlayName) {
-    widgetOverlayController.sink.add(
-        OverlayWidget(overlayName, null)
-    );
+    widgetOverlayController.sink.add(OverlayWidget(overlayName, null));
   }
 }
-
 
 /// This is a more complete and opinionated implementation of Game.
 ///
