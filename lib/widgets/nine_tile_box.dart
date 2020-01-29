@@ -13,30 +13,24 @@ class _Painter extends widgets.CustomPainter {
       @required this.tileSize,
       @required this.destTileSize});
 
+  Sprite _getSpriteTile(double x, double y) =>
+      Sprite.fromImage(image, x: x, y: y, width: tileSize, height: tileSize);
+
   @override
   void paint(Canvas canvas, Size size) {
-    final topLeftCorner =
-        Sprite.fromImage(image, x: 0, y: 0, width: tileSize, height: tileSize);
-    final topRightCorner = Sprite.fromImage(image,
-        x: tileSize * 2, y: 0, width: tileSize, height: tileSize);
+    final topLeftCorner = _getSpriteTile(0, 0);
+    final topRightCorner = _getSpriteTile(tileSize * 2, 0);
 
-    final bottomLeftCorner = Sprite.fromImage(image,
-        x: 0, y: 2 * tileSize, width: tileSize, height: tileSize);
-    final bottomRightCorner = Sprite.fromImage(image,
-        x: tileSize * 2, y: 2 * tileSize, width: tileSize, height: tileSize);
+    final bottomLeftCorner = _getSpriteTile(0, 2 * tileSize);
+    final bottomRightCorner = _getSpriteTile(tileSize * 2, 2 * tileSize);
 
-    final topSide = Sprite.fromImage(image,
-        x: tileSize, y: 0, width: tileSize, height: tileSize);
-    final bottomSide = Sprite.fromImage(image,
-        x: tileSize, y: tileSize * 2, width: tileSize, height: tileSize);
+    final topSide = _getSpriteTile(tileSize, 0);
+    final bottomSide = _getSpriteTile(tileSize, tileSize * 2);
 
-    final leftSide = Sprite.fromImage(image,
-        x: 0, y: tileSize, width: tileSize, height: tileSize);
-    final rightSide = Sprite.fromImage(image,
-        x: tileSize * 2, y: tileSize, width: tileSize, height: tileSize);
+    final leftSide = _getSpriteTile(0, tileSize);
+    final rightSide = _getSpriteTile(tileSize * 2, tileSize);
 
-    final middle = Sprite.fromImage(image,
-        x: tileSize, y: tileSize, width: tileSize, height: tileSize);
+    final middle = _getSpriteTile(tileSize, tileSize);
 
     // Middle
     for (var y = destTileSize;
