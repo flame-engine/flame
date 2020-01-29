@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart' as widgets;
 import 'package:meta/meta.dart';
 import '../sprite.dart';
@@ -105,11 +106,12 @@ class NineTileBox extends widgets.StatelessWidget {
     @required this.image,
     @required this.tileSize,
     @required this.destTileSize,
+    Key key,
     this.child,
     this.width,
     this.height,
     this.padding,
-  });
+  }) : super(key: key);
 
   @override
   widgets.Widget build(widgets.BuildContext context) {
