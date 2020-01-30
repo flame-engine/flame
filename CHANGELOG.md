@@ -1,3 +1,6 @@
+## [next]
+- Improving FlareComponent API and updating FlareFlutter dependency
+
 ## 0.17.4
 - Fixing compilations errors regarding changes on `box2_flame`
 - Add splash screen docs
