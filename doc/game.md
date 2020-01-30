@@ -67,6 +67,8 @@ addWidgetOverlay(
 removeWidgetOverlay("PauseMenu"); // Use the overlay identifier to remove the overlay
 ```
 
+Under the hood, Flame uses a [Stack widget](https://api.flutter.dev/flutter/widgets/Stack-class.html) to display the overlay, so it is important to __note that the order which the ovarlays are added matter__, where the last added ovarlay, will be in the front of those added before.
+
 Here you can see a [working example](/doc/examples/with_widgets_overlay) of this feature.
 
 ## BaseGame debug mode
