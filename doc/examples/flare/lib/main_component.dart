@@ -1,10 +1,10 @@
 import 'dart:ui';
 import 'package:flame/gestures.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components/flare_component.dart';
 import 'package:flame/text_config.dart';
 import 'package:flame/position.dart';
+import 'package:flame/palette.dart';
 
 import 'package:flutter/material.dart';
 
@@ -16,11 +16,10 @@ void main() {
 }
 
 class MyGame extends BaseGame with TapDetector, DoubleTapDetector {
-  final TextConfig fpsTextConfig =
-      const TextConfig(color: const Color(0xFFFFFFFF));
+  final TextConfig fpsTextConfig = TextConfig(color: BasicPalette.white.color);
 
   final paint = Paint()..color = const Color(0xFFE5E5E5E5);
-  final List<String> _animations = ["Stand", "Wave", "Jump", "Dance"];
+  final List<String> _animations = ['Stand', 'Wave', 'Jump', 'Dance'];
   int _currentAnimation = 0;
   FlareComponent flareComponent;
 
@@ -57,7 +56,7 @@ class MyGame extends BaseGame with TapDetector, DoubleTapDetector {
   }
 
   void _start() async {
-    flareComponent = FlareComponent("assets/Bob_Minion.flr", "Stand", 306, 228);
+    flareComponent = FlareComponent('assets/Bob_Minion.flr', 'Stand', 306, 228);
     flareComponent.x = 50;
     flareComponent.y = 240;
     add(flareComponent);
