@@ -155,20 +155,22 @@ class WidgetBuilder {
 }
 
 class OverlayGameWidget extends StatefulWidget {
-  final Widget child;
+  final Widget gameChild;
   final HasWidgetsOverlay game;
 
-  OverlayGameWidget({this.child, this.game});
+  OverlayGameWidget({this.gameChild, this.game});
 
   @override
-  State<StatefulWidget> createState() => _OverlayGameWidgetState(game);
+  State<StatefulWidget> createState() => _OverlayGameWidgetState();
 }
 
 class _OverlayGameWidgetState extends State<OverlayGameWidget> {
   final Map<String, Widget> _overlays = {};
 
-  _OverlayGameWidgetState(HasWidgetsOverlay game) {
-    game.widgetOverlayController.stream.listen((overlay) {
+  @override
+  void initState() {
+    super.initState();
+    widget.game.widgetOverlayController.stream.listen((overlay) {
       setState(() {
         if (overlay.widget == null) {
           _overlays.remove(overlay.name);
@@ -183,7 +185,8 @@ class _OverlayGameWidgetState extends State<OverlayGameWidget> {
   Widget build(BuildContext context) {
     return Directionality(
         textDirection: TextDirection.ltr,
-        child: Stack(children: [widget.child, ..._overlays.values.toList()]));
+        child:
+            Stack(children: [widget.gameChild, ..._overlays.values.toList()]));
   }
 }
 
@@ -194,6 +197,6 @@ class OverlayWidgetBuilder extends WidgetBuilder {
   Widget build(Game game) {
     final container = super.build(game);
 
-    return OverlayGameWidget(child: container, game: game);
+    return OverlayGameWidget(gameChild: container, game: game);
   }
 }
