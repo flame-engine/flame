@@ -20,8 +20,13 @@ void main() async {
               tileSize: 16,
               destTileSize: 50,
               child: const Center(
-                  child: const Text('Cool label',
-                      style: const TextStyle(color: const Color(0xFFFFFFFF)))),
+                child: const Text(
+                  'Cool label',
+                  style: const TextStyle(
+                    color: const Color(0xFFFFFFFF),
+                  ),
+                ),
+              ),
             ),
           ));
 
