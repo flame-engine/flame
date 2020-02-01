@@ -1,5 +1,6 @@
 ## [next]
 - Improving FlareComponent API and updating FlareFlutter dependency
+- Adding HasWidgetsOverlay mixin
 
 ## 0.17.4
 - Fixing compilations errors regarding changes on `box2_flame`
