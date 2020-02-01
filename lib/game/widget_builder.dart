@@ -183,10 +183,7 @@ class _OverlayGameWidgetState extends State<OverlayGameWidget> {
   Widget build(BuildContext context) {
     return Directionality(
         textDirection: TextDirection.ltr,
-        child: Stack(
-            children: [
-          widget.child,
-        ]..addAll(_overlays.values.toList())));
+        child: Stack(children: [widget.child, ..._overlays.values.toList()]));
   }
 }
 
