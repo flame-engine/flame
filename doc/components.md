@@ -90,6 +90,10 @@ This component wraps an instance of the [FlareAnimation](/doc/images.md#FlareAni
     add(flareAnimation);
 ```
 
+You can also change the current playing animation using the `updateAnimation` method.
+
+For a working example, check this [source file](/doc/examples/flare/lib/main_component.dart).
+
 ## Composed component
 
 A mixin that helps you to make a `Component` wraps other components. It is useful to group visual components through a hierarchy. When implemented, makes every item in its `components` collection field be updated and rendered with the same conditions.

@@ -1,5 +1,11 @@
+## 0.18.0
+- Improving FlareComponent API and updating FlareFlutter dependency
+- Adding HasWidgetsOverlay mixin
+- Adding NineTileBox widget
+
 ## 0.17.4
 - Fixing compilations errors regarding changes on `box2_flame`
+- Add splash screen docs
 
 ## 0.17.3
 - Tweaking text box rendering to reduce pixelated text (thanks, @kurtome)

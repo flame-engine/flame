@@ -31,7 +31,7 @@ Put the pub package as your dependency by dropping the following in your `pubspe
 
 ```yaml
 dependencies:
-  flame: ^0.17.4
+  flame: ^0.18.0
 ```
 
 And start using it!
@@ -54,6 +54,8 @@ And start using it!
  * Other Modules
    - [Util](util.md)
    - [Gamepad](gamepad.md)
+   - [Widgets](widgets.md)
    - [Box2D](box2d.md)
    - [Tiled](tiled.md)
    - [Debugging](debug.md)
+   - [Splash screen](splash_screen.md)
