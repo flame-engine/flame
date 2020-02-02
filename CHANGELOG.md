@@ -1,4 +1,4 @@
-## [next]
+## 0.18.0
 - Improving FlareComponent API and updating FlareFlutter dependency
 - Adding HasWidgetsOverlay mixin
 - Adding NineTileBox widget
