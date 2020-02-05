@@ -1,3 +1,6 @@
+## [next]
+- Expose stepTime paramter from the Animation class to the animation component
+
 ## 0.18.0
 - Improving FlareComponent API and updating FlareFlutter dependency
 - Adding HasWidgetsOverlay mixin
