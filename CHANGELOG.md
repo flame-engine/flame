@@ -1,4 +1,4 @@
-## 0.18.1
+## next
 - Updated versions for bugfixes + improved macOS support.
 - Update flutter_svg to 0.17.1 [Breaking Change]
 - Update audioplayers to 0.14.0
