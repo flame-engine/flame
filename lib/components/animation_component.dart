@@ -24,6 +24,7 @@ class AnimationComponent extends PositionComponent {
     double textureY = 0.0,
     double textureWidth,
     double textureHeight,
+    double stepTime,
     this.destroyOnFinish = false,
   }) {
     this.width = width;
@@ -35,6 +36,7 @@ class AnimationComponent extends PositionComponent {
       textureY: textureY,
       textureWidth: textureWidth,
       textureHeight: textureHeight,
+      stepTime: stepTime ?? 0.1,
     );
   }
 
