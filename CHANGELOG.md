@@ -1,10 +1,10 @@
-## [next]
+## 0.18.1
 - Expose stepTime paramter from the Animation class to the animation component
-- Updated versions for bugfixes + improved macOS support.
-- Update flutter_svg to 0.17.1
-- Update audioplayers to 0.14.0
-- Update path_provider to 1.6.0
-- Update ordered_set to 1.1.5
+- Updated versions for bugfixes + improved macOS support. (thanks @flowhorn)
+- Update flutter_svg to 0.17.1 (thanks @flowhorn)
+- Update audioplayers to 0.14.0 (thanks @flowhorn)
+- Update path_provider to 1.6.0 (thanks @flowhorn)
+- Update ordered_set to 1.1.5 (thanks @flowhorn)
 
 ## 0.18.0
 - Improving FlareComponent API and updating FlareFlutter dependency
