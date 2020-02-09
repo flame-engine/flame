@@ -1,3 +1,10 @@
+## next
+- Updated versions for bugfixes + improved macOS support.
+- Update flutter_svg to 0.17.1 [Breaking Change]
+- Update audioplayers to 0.14.0
+- Update path_provider to 1.6.0
+- Update ordered_set to 1.1.5
+
 ## 0.18.0
 - Improving FlareComponent API and updating FlareFlutter dependency
 - Adding HasWidgetsOverlay mixin
