@@ -1,6 +1,7 @@
-## next
+## [next]
+- Expose stepTime paramter from the Animation class to the animation component
 - Updated versions for bugfixes + improved macOS support.
-- Update flutter_svg to 0.17.1 [Breaking Change]
+- Update flutter_svg to 0.17.1
 - Update audioplayers to 0.14.0
 - Update path_provider to 1.6.0
 - Update ordered_set to 1.1.5
