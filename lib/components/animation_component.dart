@@ -25,7 +25,7 @@ class AnimationComponent extends PositionComponent {
     double textureWidth,
     double textureHeight,
     double stepTime,
-    bool loop,
+    bool loop = true,
     this.destroyOnFinish = false,
   }) {
     this.width = width;
