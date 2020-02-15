@@ -71,6 +71,7 @@ class Animation {
     double textureWidth,
     double textureHeight,
     double stepTime = 0.1,
+    this.loop = true,
   }) {
     frames = List<Frame>(amount);
     for (var i = 0; i < amount; i++) {
@@ -94,6 +95,7 @@ class Animation {
     double textureY = 0.0,
     double textureWidth,
     double textureHeight,
+    this.loop = true,
   }) {
     frames = List<Frame>(amount);
     for (var i = 0; i < amount; i++) {
