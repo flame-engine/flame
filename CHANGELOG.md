@@ -1,3 +1,6 @@
+## [next]
+- Add loop for AnimationComponent.sequenced()
+
 ## 0.18.1
 - Expose stepTime paramter from the Animation class to the animation component
 - Updated versions for bugfixes + improved macOS support. (thanks @flowhorn)
