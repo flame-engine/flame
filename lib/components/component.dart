@@ -61,11 +61,11 @@ abstract class Component {
 /// It represents a rectangle of dimension ([width], [height]), on the position ([x], [y]), rotate around its center with angle [angle].
 /// It also uses the [anchor] property to properly position itself.
 abstract class PositionComponent extends Component {
-  double x, y, angle;
-  double width, height;
-  Anchor anchor;
-  bool renderFlipX;
-  bool renderFlipY;
+  double x = 0.0, y = 0.0, angle = 0.0;
+  double width = 0.0, height = 0.0;
+  Anchor anchor = Anchor.topLeft;
+  bool renderFlipX = false;
+  bool renderFlipY = false;
 
   bool debugMode = false;
 
@@ -76,19 +76,6 @@ abstract class PositionComponent extends Component {
     ..style = PaintingStyle.stroke;
 
   TextConfig get debugTextConfig => TextConfig(color: debugColor, fontSize: 12);
-
-  /*abstract***PositionComponent(
-      {
-        this.x = 0.0,
-        this.y = 0.0,
-        this.angle = 0.0,
-        this.width = 0.0,
-        this.height = 0.0,
-        this.anchor = Anchor.topLeft,
-        this.renderFlipX = false,
-        this.renderFlipY = false,
-      }
-  ) {}*/
 
   Position toPosition() => Position(x, y);
   void setByPosition(Position position) {
