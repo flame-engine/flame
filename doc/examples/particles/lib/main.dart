@@ -25,7 +25,7 @@ import 'package:flame/time.dart' as flame_time;
 import 'package:flame/particle.dart';
 import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame/spritesheet.dart';
+//import 'package:flame/spritesheet.dart';
 import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart' hide Animation, Image;
 
@@ -554,22 +554,13 @@ class MyGame extends BaseGame {
   Animation getBoomAnimation() {
     const columns = 8;
     const rows = 8;
-    const frames = columns * rows;
-    const imagePath = 'boom3.png';
-    final spriteImage = Flame.images.loadedFiles[imagePath];
-    final spritesheet = SpriteSheet(
-      rows: rows,
-      columns: columns,
-      imageName: imagePath,
-      textureWidth: spriteImage.width ~/ columns,
-      textureHeight: spriteImage.height ~/ rows,
+    final spriteImage = Flame.images.loadedFiles['boom3.png'];
+    return Animation.fromImage(
+      spriteImage,
+      frameWidth:  spriteImage.width ~/ columns,
+      frameHeight: spriteImage.height ~/ rows,
+      frameCount:  columns * rows,
     );
-    final sprites = List<Sprite>.generate(
-      frames,
-      (i) => spritesheet.getSprite(i ~/ rows, i % columns),
-    );
-
-    return Animation.spriteList(sprites);
   }
 }
 

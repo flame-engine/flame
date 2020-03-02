@@ -6,17 +6,29 @@ import 'package:flutter/material.dart';
 
 void main() async {
   final Size size = await Flame.util.initialDimensions();
+
+  await Flame.images.load('chopper.png');
+
   final game = MyGame(size);
   runApp(game.widget);
 }
 
 class MyGame extends BaseGame {
-  final animation = flame_animation.Animation.sequenced('chopper.png', 4,
-      textureWidth: 48, textureHeight: 48, stepTime: 0.15);
+  final animation = flame_animation.Animation.fromImage(
+      Flame.images.fromCache('chopper.png'),
+      frameCount: 4,
+      frameWidth: 48,
+      frameHeight: 48,
+      stepTime: 0.15
+  );
 
   AnimationComponent buildAnimation() {
-    final ac = AnimationComponent(100, 100, animation);
-    ac.x = size.width / 2 - ac.width / 2;
+    final ac = AnimationComponent(
+        animation,
+        width: 100,
+        height: 100,
+        x: size.width / 2 - 100 / 2
+    );
     return ac;
   }
 

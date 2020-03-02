@@ -3,11 +3,11 @@ import 'dart:ui';
 
 import 'package:flutter/painting.dart';
 
-import '../svg.dart';
-import '../sprite.dart';
-import '../position.dart';
-import '../anchor.dart';
-import '../text_config.dart';
+import 'package:flame/svg.dart';
+import 'package:flame/sprite.dart';
+import 'package:flame/position.dart';
+import 'package:flame/anchor.dart';
+import 'package:flame/text_config.dart';
 
 /// This represents a Component for your game.
 ///
@@ -61,11 +61,11 @@ abstract class Component {
 /// It represents a rectangle of dimension ([width], [height]), on the position ([x], [y]), rotate around its center with angle [angle].
 /// It also uses the [anchor] property to properly position itself.
 abstract class PositionComponent extends Component {
-  double x = 0.0, y = 0.0, angle = 0.0;
-  double width = 0.0, height = 0.0;
-  Anchor anchor = Anchor.topLeft;
-  bool renderFlipX = false;
-  bool renderFlipY = false;
+  double x, y, angle;
+  double width, height;
+  Anchor anchor;
+  bool renderFlipX;
+  bool renderFlipY;
 
   bool debugMode = false;
 
@@ -76,6 +76,19 @@ abstract class PositionComponent extends Component {
     ..style = PaintingStyle.stroke;
 
   TextConfig get debugTextConfig => TextConfig(color: debugColor, fontSize: 12);
+
+  /*abstract***PositionComponent(
+      {
+        this.x = 0.0,
+        this.y = 0.0,
+        this.angle = 0.0,
+        this.width = 0.0,
+        this.height = 0.0,
+        this.anchor = Anchor.topLeft,
+        this.renderFlipX = false,
+        this.renderFlipY = false,
+      }
+  ) {}*/
 
   Position toPosition() => Position(x, y);
   void setByPosition(Position position) {
@@ -149,17 +162,43 @@ abstract class PositionComponent extends Component {
 class SpriteComponent extends PositionComponent {
   Sprite sprite;
 
-  SpriteComponent();
+  SpriteComponent.empty();
 
+  SpriteComponent(
+      this.sprite,
+      {
+        double x = 0.0,
+        double y = 0.0,
+        double angle = 0.0,
+        double width,
+        double height,
+        Anchor anchor = Anchor.topLeft,
+        bool renderFlipX = false,
+        bool renderFlipY = false,
+      }
+  ) {
+    this.x = x;
+    this.y = y;
+    this.angle = angle;
+    this.width = width ?? sprite.src?.width ?? 0.0;
+    this.height = height ?? sprite.src?.height ?? 0.0;
+    this.anchor = anchor;
+    this.renderFlipX = renderFlipX;
+    this.renderFlipY = renderFlipY;
+  }
+
+  // Deprecate.
   SpriteComponent.square(double size, String imagePath)
       : this.rectangle(size, size, imagePath);
-
+  // Deprecate.  What about the load time?
   SpriteComponent.rectangle(double width, double height, String imagePath)
-      : this.fromSprite(width, height, Sprite(imagePath));
-
-  SpriteComponent.fromSprite(double width, double height, this.sprite) {
-    this.width = width;
-    this.height = height;
+      //: this(Sprite.fromFile(imagePath), width: width, height: height);
+  {
+    _loadAsync(width, height, imagePath);
+  }
+  // Deprecate.  Quick fix for the load time... if I did this right??? //TODO test
+  void _loadAsync(double width, double height, String imagePath) async {
+    SpriteComponent(await Sprite.fromFile(imagePath), width: width, height: height);
   }
 
   @override
@@ -180,6 +219,30 @@ class SpriteComponent extends PositionComponent {
 class SvgComponent extends PositionComponent {
   Svg svg;
 
+  SvgComponent(
+      this.svg,
+      {
+        double x = 0.0,
+        double y = 0.0,
+        double angle = 0.0,  //TODO test
+        double width,
+        double height,
+        Anchor anchor = Anchor.topLeft,  //TODO test
+        bool renderFlipX = false,  //TODO test
+        bool renderFlipY = false,  //TODO test
+      }
+      ) {
+    this.x = x;
+    this.y = y;
+    this.angle = angle;
+    this.width = width ?? svg.size?.width ?? 0.0;  //TODO test
+    this.height = height ?? svg.size?.height ?? 0.0;  //TODO test
+    this.anchor = anchor;
+    this.renderFlipX = renderFlipX;
+    this.renderFlipY = renderFlipY;
+  }
+
+  // Deprecate?
   SvgComponent.fromSvg(double width, double height, this.svg) {
     this.width = width;
     this.height = height;

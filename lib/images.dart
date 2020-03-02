@@ -15,6 +15,11 @@ class Images {
     loadedFiles.clear();
   }
 
+  // Slightly more predictable overload to the map.
+  Image fromCache(fileName) {
+    return loadedFiles[fileName];
+  }
+
   Future<List<Image>> loadAll(List<String> fileNames) async {
     return Future.wait(fileNames.map(load));
   }

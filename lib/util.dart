@@ -154,7 +154,7 @@ class Util {
   /// This is intended to be used by non-game apps that want to add a sprite sheet animation.
   widgets.Widget animationAsWidget(Position size, Animation animation) {
     return EmbeddedGameWidget(
-        SimpleGame(AnimationComponent(size.x, size.y, animation)),
+        SimpleGame(AnimationComponent(animation, width: size.x, height: size.y)),
         size: size);
   }
 

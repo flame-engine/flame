@@ -1,49 +1,50 @@
 import 'dart:ui';
-
 import 'dart:async';
-import 'flame.dart';
-import 'position.dart';
-import 'palette.dart';
+
+import 'package:flame/flame.dart';
+import 'package:flame/position.dart';
+import 'package:flame/palette.dart';
 
 class Sprite {
   Paint paint = BasicPalette.white.paint;
   Image image;
   Rect src;
 
+  Sprite.empty();
+
   Sprite(
-    String fileName, {
-    double x = 0.0,
-    double y = 0.0,
-    double width,
-    double height,
-  }) {
-    Flame.images.load(fileName).then((img) {
-      width ??= img.width.toDouble();
-      height ??= img.height.toDouble();
-      image = img;
-      src = Rect.fromLTWH(x, y, width, height);
-    });
-  }
+    Image image,
+    {
+      int x = 0,
+      int y = 0,
+      int width,
+      int height,
+    }
+  ) : this.fromImage(image, x: x, y: y, width: width, height: height);
 
   Sprite.fromImage(
-    this.image, {
-    double x = 0.0,
-    double y = 0.0,
-    double width,
-    double height,
-  }) {
-    width ??= image.width.toDouble();
-    height ??= image.height.toDouble();
-    src = Rect.fromLTWH(x, y, width, height);
+    this.image,
+    {
+      int x = 0,
+      int y = 0,
+      int width,
+      int height,
+    }
+  ) {
+    width ??= image.width;
+    height ??= image.height;
+    src = Rect.fromLTWH(x.toDouble(), y.toDouble(), width.toDouble(), height.toDouble());
   }
 
-  static Future<Sprite> loadSprite(
-    String fileName, {
-    double x = 0.0,
-    double y = 0.0,
-    double width,
-    double height,
-  }) async {
+  static Future<Sprite> fromFile(
+    String fileName,
+    {
+      int x = 0,
+      int y = 0,
+      int width,
+      int height,
+    }
+  ) async {
     final Image image = await Flame.images.load(fileName);
     return Sprite.fromImage(
       image,

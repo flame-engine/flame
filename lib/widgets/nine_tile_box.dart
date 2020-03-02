@@ -6,7 +6,7 @@ import 'dart:ui';
 
 class _Painter extends widgets.CustomPainter {
   final Image image;
-  final double tileSize;
+  final int tileSize;
   final double destTileSize;
 
   _Painter({
@@ -15,7 +15,7 @@ class _Painter extends widgets.CustomPainter {
     @required this.destTileSize,
   });
 
-  Sprite _getSpriteTile(double x, double y) =>
+  Sprite _getSpriteTile(int x, int y) =>
       Sprite.fromImage(image, x: x, y: y, width: tileSize, height: tileSize);
 
   @override
@@ -88,7 +88,7 @@ class _Painter extends widgets.CustomPainter {
 
 class NineTileBox extends widgets.StatelessWidget {
   final Image image;
-  final double tileSize;
+  final int tileSize;
   final double destTileSize;
   final double width;
   final double height;

@@ -1,7 +1,8 @@
+import 'dart:ui';
 import 'dart:convert';
 
-import 'flame.dart';
-import 'sprite.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/sprite.dart';
 
 /// Represents a single animation frame.
 class Frame {
@@ -21,7 +22,7 @@ class Animation {
   List<Frame> frames = [];
 
   /// Index of the current frame that should be displayed.
-  int currentIndex = 0;
+  int currentFrame = 0;
 
   /// Current clock time (total time) of this animation, in seconds, since last frame.
   ///
@@ -34,87 +35,169 @@ class Animation {
   /// Whether the animation loops after the last sprite of the list, going back to the first, or keeps returning the last when done.
   bool loop = true;
 
+  /// Pauses the animation.
+  bool paused = false;
+
   /// Creates an animation given a list of frames.
-  Animation(this.frames, {this.loop = true});
+  ///
+  /// [loop]: whether the animation loops (defaults to true)
+  /// [paused]: returns the animation in a paused state (default is false)
+  /// [reverse]: reverses the animation frames if set to true (default is false)
+  Animation(
+      this.frames,
+      {
+        this.loop = true,
+        this.paused = false,
+        bool reverse = false,
+      }
+  ) {
+    if (reverse)
+      frames = frames.reversed.toList();
+  }
 
   /// Creates an empty animation
   Animation.empty();
 
-  /// Creates an animation based on the parameters.
+  /// Creates an animation given a list of sprites.
   ///
-  /// All frames have the same [stepTime].
-  Animation.spriteList(List<Sprite> sprites,
-      {double stepTime, this.loop = true}) {
+  /// [stepTime]: the duration of each frame, in seconds (defaults to 0.1)
+  /// [stepTimes]: list of stepTime values, one for each frame (overrides stepTime if given)
+  /// [loop]: whether the animation loops (defaults to true)
+  /// [paused]: returns the animation in a paused state (default is false)
+  /// [reverse]: reverses the animation frames if set to true (default is false)
+  Animation.fromSpriteList(
+      List<Sprite> sprites,
+      {
+        double stepTime = 0.1,
+        List<double> stepTimes,
+        this.loop = true,
+        this.paused = false,
+        bool reverse = false,
+      }
+  ) {
     if (sprites.isEmpty) {
       throw Exception('You must have at least one frame!');
     }
-    frames = sprites.map((s) => Frame(s, stepTime)).toList();
+    frames = List<Frame>(sprites.length);
+    for (var i = 0; i < frames.length; i++) {
+      frames[i] = Frame(sprites[i], stepTimes == null ? stepTime : stepTimes[i] ?? stepTime);
+    }
   }
 
-  /// Automatically creates a sequenced animation, that is, an animation based on a sprite sheet.
+  /// Creates an animation from a sprite sheet.
   ///
   /// From a single image source, it creates multiple sprites based on the parameters:
-  /// [amount]: how many sprites this animation is composed of
-  /// [textureX]: x position on the original image to start (defaults to 0)
-  /// [textureY]: y position on the original image to start (defaults to 0)
-  /// [textureWidth]: width of each frame (defaults to null, that is, full width of the sprite sheet)
-  /// [textureHeight]: height of each frame (defaults to null, that is, full height of the sprite sheet)
+  /// [frameX]: x position on the original image to start (defaults to 0)
+  /// [frameY]: y position on the original image to start (defaults to 0)
+  /// [frameWidth]: width of each frame (defaults to null, that is, full width of the sprite sheet)
+  /// [frameHeight]: height of each frame (defaults to null, that is, full height of the sprite sheet)
+  /// [firstFrame]: which frame in the sprite sheet starts this animation (zero based, defaults to 0)
+  /// [frameCount]: how many sprites this animation is composed of (defaults to 1)
+  /// [stepTime]: the duration of each frame, in seconds (defaults to 0.1)
+  /// [stepTimes]: list of stepTime values, one for each frame (overrides stepTime if given)
+  /// [loop]: whether the animation loops (defaults to true)
+  /// [paused]: returns the animation in a paused state (default is false)
+  /// [reverse]: reverses the animation frames if set to true (default is false)
   ///
-  /// For example, if you have a sprite sheet where each row is an animation, and each frame is 32x32
-  ///     Animation.sequenced('sheet.png', 8, textureY: 32.0 * i, textureWidth: 32.0, textureHeight: 32.0);
-  /// This will create the i-th animation on the 'sheet.png', given it has 8 frames.
-  Animation.sequenced(
-    String imagePath,
-    int amount, {
-    double textureX = 0.0,
-    double textureY = 0.0,
-    double textureWidth,
-    double textureHeight,
-    double stepTime = 0.1,
-  }) {
-    frames = List<Frame>(amount);
-    for (var i = 0; i < amount; i++) {
-      final Sprite sprite = Sprite(
-        imagePath,
-        x: textureX + i * textureWidth,
-        y: textureY,
-        width: textureWidth,
-        height: textureHeight,
+  /// For example, if you have a 320x320 sprite sheet filled with 32x32 frames (10x10 columns/rows),
+  /// this will grab 8 frames of animation from the start of the third row:
+  ///     Animation.fromImage(image, frameWidth: 32, frameHeight: 32, firstFrame: 20, frameCount: 8);
+  /// Alternatively, so will this:
+  ///     Animation.fromImage(image, frameY: 32 * 2, frameWidth: 32, frameHeight: 32, firstFrame: 0, frameCount: 8);
+  /// The slicer auto-wraps when X is out of bounds, so even this will grab the same as above:
+  ///     Animation.fromImage(image, frameX: 32 * 20, frameWidth: 32, frameHeight: 32, frameCount: 8);
+  Animation.fromImage(
+      Image image,
+      {
+        int frameX = 0,
+        int frameY = 0,
+        int frameWidth,
+        int frameHeight,
+        int firstFrame = 0,
+        int frameCount = 1,
+        double stepTime = 0.1,
+        List<double> stepTimes,
+        this.loop = true,
+        this.paused = false,
+        bool reverse = false,
+      }
+  ) {
+    int x = frameX, y = frameY;
+    x += firstFrame * frameWidth; // Exceeding image.width handled later.
+    Sprite sprite;
+    frames = List<Frame>(frameCount);
+    for (var i = 0; i < frameCount; i++) {
+      // Wrap extreme X values to the next row(s).
+      // This avoids two things:
+      //   1) column/row counting and props; and
+      //   2) needing to calc frameY in a large sheet (if using just frameX and not firstFrame).
+      if (x >= image.width) {
+        y += (x ~/ image.width) * frameHeight;
+        x = x % image.width;
+      }
+      sprite = Sprite.fromImage(
+        image,
+        x:      x,
+        y:      y,
+        width:  frameWidth,
+        height: frameHeight,
       );
-      frames[i] = Frame(sprite, stepTime);
+      frames[i] = Frame(sprite, stepTimes == null ? stepTime : stepTimes[i] ?? stepTime);
+      x += frameWidth;
     }
+    if (reverse)
+      frames = frames.reversed.toList();
   }
 
-  /// Works just like [Animation.sequenced], but it takes a list of variable [stepTimes], associating each one with one frame in the sequence.
-  Animation.variableSequenced(
-    String imagePath,
-    int amount,
-    List<double> stepTimes, {
-    double textureX = 0.0,
-    double textureY = 0.0,
-    double textureWidth,
-    double textureHeight,
-  }) {
-    frames = List<Frame>(amount);
-    for (var i = 0; i < amount; i++) {
-      final Sprite sprite = Sprite(
-        imagePath,
-        x: textureX + i * textureWidth,
-        y: textureY,
-        width: textureWidth,
-        height: textureHeight,
-      );
-      frames[i] = Frame(sprite, stepTimes[i]);
-    }
+  /// Asynchronous wrapper to [fromImage] for files (cached or not).
+  static Future<Animation> fromFile(
+      String filepath,
+      {
+        int frameX = 0,
+        int frameY = 0,
+        int frameWidth,
+        int frameHeight,
+        int firstFrame = 0,
+        int frameCount = 1,
+        double stepTime = 0.1,
+        List<double> stepTimes,
+        bool loop = true,
+        bool paused = false,
+        bool reverse = false,
+      }
+  ) async {
+    final Image image = await Flame.images.load(filepath);
+    return Animation.fromImage(
+      image,
+      frameX:      frameX,
+      frameY:      frameY,
+      frameWidth:  frameWidth,
+      frameHeight: frameHeight,
+      firstFrame:  firstFrame,
+      frameCount:  frameCount,
+      stepTime:    stepTime,
+      stepTimes:   stepTimes,
+      loop:        loop,
+      paused:      paused,
+      reverse:     reverse,
+    );
   }
 
-  /// Automatically creates an Animation Object using animation data provided by the json file
-  /// provided by Aseprite
+  /// Creates an Animation using animation data provided by the json file
+  /// provided by Aseprite.
   ///
   /// [imagePath]: Source of the sprite sheet animation
   /// [dataPath]: Animation's exported data in json format
   static Future<Animation> fromAsepriteData(
-      String imagePath, String dataPath) async {
+      String imagePath,
+      String dataPath,
+      {
+        bool loop = true,
+        bool paused = false,
+        bool reverse = false,
+      }
+  ) async {
+    final Image image = await Flame.images.load(imagePath);
     final String content = await Flame.assets.readFile(dataPath);
     final Map<String, dynamic> json = jsonDecode(content);
 
@@ -129,25 +212,22 @@ class Animation {
 
       final stepTime = value['duration'] / 1000;
 
-      final Sprite sprite = Sprite(
-        imagePath,
-        x: x.toDouble(),
-        y: y.toDouble(),
-        width: width.toDouble(),
-        height: height.toDouble(),
+      final Sprite sprite = Sprite.fromImage(
+        image,
+        x:      x,
+        y:      y,
+        width:  width,
+        height: height,
       );
 
       return Frame(sprite, stepTime);
     });
 
-    return Animation(frames.toList(), loop: true);
+    return Animation(frames.toList(), loop: loop, paused: paused, reverse: reverse);
   }
 
-  /// The current frame that should be displayed.
-  Frame get currentFrame => frames[currentIndex];
-
   /// Returns whether the animation is on the last frame.
-  bool get isLastFrame => currentIndex == frames.length - 1;
+  bool get isLastFrame => currentFrame == frames.length - 1;
 
   /// Returns whether the animation has only a single frame (and is, thus, a still image).
   bool get isSingleFrame => frames.length == 1;
@@ -169,26 +249,27 @@ class Animation {
   void reset() {
     clock = 0.0;
     elapsed = 0.0;
-    currentIndex = 0;
+    currentFrame = 0;
   }
 
   /// Gets the current [Sprite] that should be shown.
-  ///
-  /// In case it reaches the end:
-  ///  * If [loop] is true, it will return the last sprite. Otherwise, it will go back to the first.
-  Sprite getSprite() {
-    return currentFrame.sprite;
+  Sprite getCurrentSprite() {
+    return frames[currentFrame].sprite;
   }
 
   /// If [loop] is false, returns whether the animation is done (fixed in the last Sprite).
   ///
   /// Always returns false otherwise.
   bool done() {
-    return loop ? false : (isLastFrame && clock >= currentFrame.stepTime);
+    return loop ? false : (isLastFrame && clock >= frames.last.stepTime);
   }
 
   /// Updates this animation, ticking the lifeTime by an amount [dt] (in seconds).
   void update(double dt) {
+    if (paused) {
+      // Return before any time vars incremented.
+      return;
+    }
     clock += dt;
     elapsed += dt;
     if (isSingleFrame) {
@@ -197,13 +278,13 @@ class Animation {
     if (!loop && isLastFrame) {
       return;
     }
-    while (clock > currentFrame.stepTime) {
+    while (clock > frames[currentFrame].stepTime) {
       if (!isLastFrame) {
-        clock -= currentFrame.stepTime;
-        currentIndex++;
+        clock -= frames[currentFrame].stepTime;
+        currentFrame++;
       } else if (loop) {
-        clock -= currentFrame.stepTime;
-        currentIndex = 0;
+        clock -= frames[currentFrame].stepTime;
+        currentFrame = 0;
       } else {
         break;
       }
@@ -212,7 +293,7 @@ class Animation {
 
   /// Returns a new Animation based on this animation, but with its frames in reversed order
   Animation reversed() {
-    return Animation(frames.reversed.toList(), loop: loop);
+    return Animation(frames, loop: loop, paused: paused, reverse: true);
   }
 
   /// Whether all sprites composing this animation are loaded.

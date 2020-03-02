@@ -27,7 +27,14 @@ class TiledGame extends BaseGame {
     }
     for (TmxObject obj in obj.tmxObjects) {
       final comp = AnimationComponent(
-          20.0, 20.0, Animation.sequenced('coins.png', 8, textureWidth: 20));
+          Animation.fromImage(
+              Flame.images.fromCache('coins.png'),
+              frameCount: 8,
+              frameWidth: 20
+          ),
+          height: 20.0,
+          width: 20.0,
+      );
       comp.x = obj.x.toDouble();
       comp.y = obj.y.toDouble();
       add(comp);

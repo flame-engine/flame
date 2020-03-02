@@ -1,12 +1,18 @@
+import 'dart:ui';
+import 'package:flutter/material.dart' hide Animation, Image;
+
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/spritesheet.dart';
+import 'package:flame/animation.dart';
+import 'package:flame/sprite.dart';
 import 'package:flame/components/animation_component.dart';
 import 'package:flame/components/component.dart';
-import 'package:flutter/material.dart';
 
 void main() async {
   final Size size = await Flame.util.initialDimensions();
+
+  await Flame.images.load('spritesheet.png');
+
   final game = MyGame(size);
   runApp(game.widget);
 }
@@ -15,39 +21,70 @@ class MyGame extends BaseGame {
   MyGame(Size screenSize) {
     size = screenSize;
 
-    final spritesheet = SpriteSheet(
-      imageName: 'spritesheet.png',
-      textureWidth: 16,
-      textureHeight: 18,
-      columns: 11,
-      rows: 2,
+    final Image spritesheet = Flame.images.fromCache('spritesheet.png');
+    const spriteWidth  = 16;
+    const spriteHeight = 18;
+
+    final vampireAnimation = Animation.fromImage(
+      spritesheet,
+      frameWidth:  spriteWidth,
+      frameHeight: spriteHeight,
+      frameCount:  8,
+      stepTime:    0.1,
+    );
+    final ghostAnimation = Animation.fromImage(
+      spritesheet,
+      frameY:      spriteHeight * 1,
+      frameWidth:  spriteWidth,
+      frameHeight: spriteHeight,
+      frameCount:  8,
+      stepTime:    0.1,
     );
 
-    final vampireAnimation =
-        spritesheet.createAnimation(0, stepTime: 0.1, to: 7);
-    final ghostAnimation = spritesheet.createAnimation(1, stepTime: 0.1, to: 7);
-
-    final vampireComponent = AnimationComponent(80, 90, vampireAnimation);
-    vampireComponent.x = 150;
-    vampireComponent.y = 100;
-
-    final ghostComponent = AnimationComponent(80, 90, ghostAnimation);
-    ghostComponent.x = 150;
-    ghostComponent.y = 220;
+    final vampireComponent = AnimationComponent(
+      vampireAnimation,
+      width:  80,
+      height: 90,
+      x:      150,
+      y:      100,
+    );
+    final ghostComponent = AnimationComponent(
+      ghostAnimation,
+      width:  80,
+      height: 90,
+      x:      150,
+      y:      220,
+    );
 
     add(vampireComponent);
     add(ghostComponent);
 
     // Some plain sprites
-    final vampireSpriteComponent =
-        SpriteComponent.fromSprite(80, 90, spritesheet.getSprite(0, 0));
-    vampireSpriteComponent.x = 50;
-    vampireSpriteComponent.y = 100;
+    final vampireSpriteComponent = SpriteComponent(
+      Sprite.fromImage(
+        spritesheet,
+        width:  spriteWidth,
+        height: spriteHeight,
+      ),
+      width:  80,
+      height: 90,
+      x:      50,
+      y:      100,
+    );
 
-    final ghostSpriteComponent =
-        SpriteComponent.fromSprite(80, 90, spritesheet.getSprite(1, 0));
-    ghostSpriteComponent.x = 50;
-    ghostSpriteComponent.y = 220;
+    final ghostSpriteComponent = SpriteComponent(
+      Sprite.fromImage(
+        spritesheet,
+        x:      spriteWidth  * 0,
+        y:      spriteHeight * 1,
+        width:  spriteWidth,
+        height: spriteHeight,
+      ),
+      width:  80,
+      height: 90,
+      x:      50,
+      y:      220,
+    );
 
     add(vampireSpriteComponent);
     add(ghostSpriteComponent);

@@ -2,12 +2,13 @@ import 'package:test/test.dart';
 import 'dart:ui';
 
 import 'package:flame/components/component.dart';
+import 'package:flame/sprite.dart';
 import 'package:flame/position.dart';
 
 void main() {
   group('component test', () {
     test('test get/set x/y or position', () {
-      final PositionComponent c = SpriteComponent();
+      final PositionComponent c = SpriteComponent(Sprite.empty());
       c.x = 2.2;
       c.y = 3.4;
       expect(c.toPosition().x, 2.2);
@@ -19,7 +20,7 @@ void main() {
     });
 
     test('test get/set widt/height or size', () {
-      final PositionComponent c = SpriteComponent();
+      final PositionComponent c = SpriteComponent(Sprite.empty());
       c.width = 2.2;
       c.height = 3.4;
       expect(c.toSize().x, 2.2);
@@ -31,7 +32,7 @@ void main() {
     });
 
     test('test get/set rect', () {
-      final PositionComponent c = SpriteComponent();
+      final PositionComponent c = SpriteComponent(Sprite.empty());
       c.x = 0.0;
       c.y = 1.0;
       c.width = 2.0;

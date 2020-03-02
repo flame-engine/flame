@@ -1,43 +1,37 @@
 import 'dart:ui';
 
-import 'component.dart';
+import 'package:flame/components/component.dart';
 import 'package:flame/animation.dart';
+import 'package:flame/anchor.dart';
 
 class AnimationComponent extends PositionComponent {
   Animation animation;
-  bool destroyOnFinish = false;
-
-  AnimationComponent(double width, double height, this.animation,
-      {this.destroyOnFinish = false}) {
-    this.width = width;
-    this.height = height;
-  }
+  bool destroyOnFinish;
 
   AnimationComponent.empty();
 
-  AnimationComponent.sequenced(
-    width,
-    height,
-    String imagePath,
-    int amount, {
-    double textureX = 0.0,
-    double textureY = 0.0,
-    double textureWidth,
-    double textureHeight,
-    double stepTime,
-    this.destroyOnFinish = false,
-  }) {
-    this.width = width;
-    this.height = height;
-    animation = Animation.sequenced(
-      imagePath,
-      amount,
-      textureX: textureX,
-      textureY: textureY,
-      textureWidth: textureWidth,
-      textureHeight: textureHeight,
-      stepTime: stepTime ?? 0.1,
-    );
+  AnimationComponent(
+      this.animation,
+      {
+        double x = 0.0,
+        double y = 0.0,
+        double angle = 0.0,
+        double width,
+        double height,
+        Anchor anchor = Anchor.topLeft,
+        bool renderFlipX = false,
+        bool renderFlipY = false,
+        this.destroyOnFinish = false,
+      }
+  ) {
+    this.x = x;
+    this.y = y;
+    this.angle = angle;
+    this.width = width ?? animation.frames.first?.sprite.src?.width ?? 0.0;
+    this.height = height ?? animation.frames.first?.sprite.src?.height ?? 0.0;
+    this.anchor = anchor;
+    this.renderFlipX = renderFlipX;
+    this.renderFlipY = renderFlipY;
   }
 
   @override
@@ -49,7 +43,7 @@ class AnimationComponent extends PositionComponent {
   @override
   void render(Canvas canvas) {
     prepareCanvas(canvas);
-    animation.getSprite().render(canvas, width: width, height: height);
+    animation.getCurrentSprite().render(canvas, width: width, height: height);
   }
 
   @override

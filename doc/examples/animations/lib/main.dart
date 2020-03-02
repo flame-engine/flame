@@ -10,6 +10,8 @@ void main() async {
   final game = MyGame(size);
   runApp(game.widget);
 
+  await Flame.images.load('chopper.png');
+
   Flame.util.addGestureRecognizer(TapGestureRecognizer()
     ..onTapDown = (TapDownDetails evt) {
       game.addAnimation();
@@ -17,14 +19,23 @@ void main() async {
 }
 
 class MyGame extends BaseGame {
-  final animation = flame_animation.Animation.sequenced('chopper.png', 4,
-      textureWidth: 48, textureHeight: 48, stepTime: 0.15);
+  final animation = flame_animation.Animation.fromImage(
+      Flame.images.fromCache('chopper.png'),
+      frameCount: 4,
+      frameWidth: 48,
+      frameHeight: 48,
+      stepTime: 0.15
+  );
 
   void addAnimation() {
-    final animationComponent =
-        AnimationComponent(100, 100, animation, destroyOnFinish: true);
-    animationComponent.x = size.width / 2 - 50;
-    animationComponent.y = 200;
+    final animationComponent = AnimationComponent(
+        animation,
+        width: 100,
+        height: 100,
+        x: size.width / 2 - 50,
+        y: 200,
+        destroyOnFinish: true
+    );
 
     add(animationComponent);
   }
@@ -32,14 +43,21 @@ class MyGame extends BaseGame {
   MyGame(Size screenSize) {
     size = screenSize;
 
-    final animationComponent = AnimationComponent(100, 100, animation);
-    animationComponent.x = size.width / 2 - 100;
-    animationComponent.y = 100;
+    final animationComponent = AnimationComponent(
+        animation,
+        width: 100,
+        height: 100,
+        x: size.width / 2 - 100,
+        y: 100,
+    );
 
-    final reversedAnimationComponent =
-        AnimationComponent(100, 100, animation.reversed());
-    reversedAnimationComponent.x = size.width / 2;
-    reversedAnimationComponent.y = 100;
+    final reversedAnimationComponent = AnimationComponent(
+        animation.reversed(),
+        width: 100,
+        height: 100,
+        x: size.width / 2,
+        y: 100,
+    );
 
     add(animationComponent);
     add(reversedAnimationComponent);

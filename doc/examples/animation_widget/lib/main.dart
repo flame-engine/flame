@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 Sprite _sprite;
 
 void main() async {
-  _sprite = await Sprite.loadSprite('minotaur.png', width: 96, height: 96);
+  _sprite = await Sprite.fromFile('minotaur.png', width: 96, height: 96);
   runApp(MyApp());
 }
 
@@ -70,8 +70,12 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text('some pretty sprite sheet animations :)'),
             Flame.util.animationAsWidget(
                 _position,
-                animation.Animation.sequenced('minotaur.png', 19,
-                    textureWidth: 96.0)),
+                animation.Animation.fromImage(
+                    _sprite.image,
+                    frameCount: 19,
+                    frameWidth: 96.0
+                )
+            ),
             const Text('Neat, hum?'),
             const Text(
                 'By the way, you can also use static sprites as widgets:'),

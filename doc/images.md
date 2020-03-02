@@ -105,7 +105,7 @@ You can create it by passing a list of equal sized sprites and the stepTime (tha
 
 After the animation is created, you need to call its `update` method and render the current frame's sprite on your game instance, for example:
 
-```
+```dart
 class MyGame extends Game {
   Animation a;
 

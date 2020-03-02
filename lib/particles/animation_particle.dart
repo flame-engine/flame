@@ -34,7 +34,7 @@ class AnimationParticle extends Particle {
 
   @override
   void render(Canvas canvas) {
-    animation.getSprite().renderCentered(
+    animation.getCurrentSprite().renderCentered(
           canvas,
           Position.empty(),
           overridePaint: overridePaint,
