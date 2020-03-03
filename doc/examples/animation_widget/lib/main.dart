@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 animation.Animation.fromImage(
                     _sprite.image,
                     frameCount: 19,
-                    frameWidth: 96.0
+                    frameWidth: 96,
                 )
             ),
             const Text('Neat, hum?'),

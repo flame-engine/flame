@@ -387,7 +387,7 @@ class MyGame extends BaseGame {
   /// Flame's [Sprite] into the effect.
   Particle spriteParticle() {
     return SpriteParticle(
-      sprite: Sprite('zap.png'),
+      sprite: Sprite(Flame.images.loadedFiles['zap.png']),
       size: Position.fromOffset(cellSize * .5),
     );
   }

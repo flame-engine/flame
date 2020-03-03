@@ -9,6 +9,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final size = await Flame.util.initialDimensions();
 
+  await Flame.images.load('nine-box.png');
+
   final game = MyGame(size);
   runApp(game.widget);
 }
@@ -18,7 +20,7 @@ class MyGame extends Game {
   NineTileBox nineTileBox;
 
   MyGame(this.size) {
-    final sprite = Sprite('nine-box.png');
+    final sprite = Sprite(Flame.images.fromCache('nine-box.png'));
     nineTileBox = NineTileBox(sprite, tileSize: 8, destTileSize: 24);
   }
 
