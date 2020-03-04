@@ -10,11 +10,16 @@ class TextComponent extends PositionComponent {
   String _text;
   TextConfig _config;
 
+  TextPainter _tp;
+  Offset _translatedOffset;
+
   String get text => _text;
 
   set text(String text) {
-    _text = text;
-    _updateBox();
+    if (_text != text) {
+      _text = text;
+      _updateBox();
+    }
   }
 
   TextConfig get config => _config;
@@ -30,15 +35,23 @@ class TextComponent extends PositionComponent {
   }
 
   void _updateBox() {
-    final TextPainter tp = config.toTextPainter(text);
-    width = tp.width;
-    height = tp.height;
+    _tp = config.toTextPainter(_text);
+    width = _tp.width;
+    height = _tp.height;
+
+    _updateOffset(Position.empty());
+  }
+
+  void _updateOffset(Position p) {
+    final Position translatedPosition =
+        anchor.translate(p, Position.fromSize(_tp.size));
+    _translatedOffset = translatedPosition.toOffset();
   }
 
   @override
   void render(Canvas c) {
     prepareCanvas(c);
-    config.render(c, text, Position.empty());
+    _tp.paint(c, _translatedOffset);
   }
 
   @override
