@@ -10,8 +10,6 @@ class Sprite {
   Image image;
   Rect src;
 
-  Sprite.empty();
-
   Sprite(
     Image image,
     {
@@ -35,6 +33,8 @@ class Sprite {
     height ??= image.height;
     src = Rect.fromLTWH(x.toDouble(), y.toDouble(), width.toDouble(), height.toDouble());
   }
+
+  Sprite.empty();
 
   static Future<Sprite> fromFile(
     String fileName,

@@ -44,6 +44,9 @@ abstract class Game {
   /// The default implementation does nothing; override to use the hook.
   void resize(Size size) {}
 
+  /// Global canvas X & Y scaling for low-res games. Also used to correct gesture coordinates.
+  Position scale = Position(1.0, 1.0);
+
   /// This is the lifecycle state change hook; every time the game is resumed, paused or suspended, this is called.
   ///
   /// The default implementation does nothing; override to use the hook.
@@ -152,6 +155,10 @@ abstract class BaseGame extends Game with TapDetector {
 
     if (c is HasGameRef) {
       (c as HasGameRef).gameRef = this;
+    }
+
+    if (c is Tapable) {
+      (c as Tapable).gameCanvasScale = this.scale;
     }
 
     if (c is ComposedComponent) {
@@ -381,6 +388,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     context.canvas.save();
     context.canvas.translate(
         game.builder.offset.dx + offset.dx, game.builder.offset.dy + offset.dy);
+    context.canvas.scale(game.scale.x, game.scale.y);
     game.render(context.canvas);
     context.canvas.restore();
   }

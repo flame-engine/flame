@@ -1,15 +1,17 @@
 import 'dart:ui';
 
+import 'package:flame/position.dart';
 import 'package:flutter/gestures.dart';
 
-mixin Tapable {
+mixin Tapable<T extends Position> {
+  T gameCanvasScale;
   Rect toRect();
 
   void onTapCancel() {}
   void onTapDown(TapDownDetails details) {}
   void onTapUp(TapUpDetails details) {}
 
-  bool checkTapOverlap(Offset o) => toRect().contains(o);
+  bool checkTapOverlap(Offset o) => toRect().contains(o.scale(1.0 / gameCanvasScale.x, 1.0 / gameCanvasScale.y));
 
   void handleTapDown(TapDownDetails details) {
     if (checkTapOverlap(details.globalPosition)) {

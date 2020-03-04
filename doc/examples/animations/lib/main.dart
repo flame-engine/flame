@@ -26,6 +26,14 @@ class MyGame extends BaseGame {
       frameHeight: 48,
       stepTime: 0.15
   );
+  final animationReversed = flame_animation.Animation.fromImage(
+      Flame.images.fromCache('chopper.png'),
+      frameCount: 4,
+      frameWidth: 48,
+      frameHeight: 48,
+      stepTime: 0.15,
+      reverse: true
+  );
 
   void addAnimation() {
     final animationComponent = AnimationComponent(
@@ -52,7 +60,7 @@ class MyGame extends BaseGame {
     );
 
     final reversedAnimationComponent = AnimationComponent(
-        animation.reversed(),
+        animationReversed,
         width: 100,
         height: 100,
         x: size.width / 2,

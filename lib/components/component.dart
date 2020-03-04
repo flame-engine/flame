@@ -149,8 +149,6 @@ abstract class PositionComponent extends Component {
 class SpriteComponent extends PositionComponent {
   Sprite sprite;
 
-  SpriteComponent.empty();
-
   SpriteComponent(
       this.sprite,
       {
@@ -173,6 +171,8 @@ class SpriteComponent extends PositionComponent {
     this.renderFlipX = renderFlipX;
     this.renderFlipY = renderFlipY;
   }
+
+  SpriteComponent.empty();
 
   // Deprecate.
   SpriteComponent.square(double size, String imagePath)
