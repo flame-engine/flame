@@ -1,5 +1,6 @@
 ## [next]
 - Add loop for AnimationComponent.sequenced()
+- TextComponent optimization (thanks @Gericop)
 
 ## 0.18.1
 - Expose stepTime paramter from the Animation class to the animation component
