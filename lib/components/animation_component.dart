@@ -38,7 +38,7 @@ class AnimationComponent extends PositionComponent {
   bool loaded() => animation.loaded();
 
   @override
-  bool destroy() => destroyOnFinish && animation.isLastFrame;
+  bool destroy() => destroyOnFinish && animation.done(); //animation.isLastFrame;
 
   @override
   void render(Canvas canvas) {

@@ -4,17 +4,7 @@ If using the `BaseGame` class instead of the `Game` class, as your core game loo
 
 | Table of Contents |
 | :-- |
-| [Comonent (abstract class)](#component-abstract-class) |
-| [PositionComponent (abstract class)](#positioncomponent-abstract-class) |
-| [ComposedComponent (mixin)](#composedcomponent-mixin) |
-| [SpriteComponent](#SpriteComponent) |
-| [AnimationComponent](#AnimationComponent) |
-| [SvgComponent](#SvgComponent) |
-| [FlareComponent](#FlareComponent) |
-| [ParallaxComponent](#ParallaxComponent) |
-| [TiledComponent](#TiledComponent) |
-| [NineTileBoxComponent](#NineTileBoxComponent) |
-| [Box2DComponent](#Box2DComponent) |
+| [Comonent (abstract class)](#component-abstract-class) <br/> [PositionComponent (abstract class)](#positioncomponent-abstract-class) <br/> [ComposedComponent (mixin)](#composedcomponent-mixin) <br/> [SpriteComponent](#SpriteComponent) <br/> [AnimationComponent](#AnimationComponent) <br/> [SvgComponent](#SvgComponent) <br/> [FlareComponent](#FlareComponent) <br/> [ParallaxComponent](#ParallaxComponent) <br/> [TiledComponent](#TiledComponent) <br/> [NineTileBoxComponent](#NineTileBoxComponent) <br/> [Box2DComponent](#Box2DComponent) |
 
 ## Component (abstract class)
 
@@ -112,6 +102,10 @@ this.player = AnimationComponent(
   y:      10, // starting Y position
 );
 ```
+
+`AnimationComponent` adds an additional optional named parameter:
+
+* `destroyOnFinish:` automatically execute `detroy()` on this object when animation finishes (defaults to false)
 
 If you are not using `BaseGame`, don't forget this component needs `update()` to be called to tick the internal clock to move the frames.
 
