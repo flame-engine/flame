@@ -4,7 +4,7 @@ If using the `BaseGame` class instead of the `Game` class, as your core game loo
 
 | Table of Contents |
 | :-- |
-| [Comonent (abstract class)](#component-abstract-class) <br/> [PositionComponent (abstract class)](#positioncomponent-abstract-class) <br/> [ComposedComponent (mixin)](#composedcomponent-mixin) <br/> [SpriteComponent](#SpriteComponent) <br/> [AnimationComponent](#AnimationComponent) <br/> [SvgComponent](#SvgComponent) <br/> [FlareComponent](#FlareComponent) <br/> [ParallaxComponent](#ParallaxComponent) <br/> [TiledComponent](#TiledComponent) <br/> [NineTileBoxComponent](#NineTileBoxComponent) <br/> [Box2DComponent](#Box2DComponent) |
+| [Component (abstract class)](#component-abstract-class) <br/> [PositionComponent (abstract class)](#positioncomponent-abstract-class) <br/> [ComposedComponent (mixin)](#composedcomponent-mixin) <br/> [SpriteComponent](#SpriteComponent) <br/> [AnimationComponent](#AnimationComponent) <br/> [SvgComponent](#SvgComponent) <br/> [FlareComponent](#FlareComponent) <br/> [ParallaxComponent](#ParallaxComponent) <br/> [TiledComponent](#TiledComponent) <br/> [NineTileBoxComponent](#NineTileBoxComponent) <br/> [Box2DComponent](#Box2DComponent) |
 
 ## Component (abstract class)
 
