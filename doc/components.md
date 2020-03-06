@@ -1,6 +1,20 @@
 # Component System
 
-If using the `BaseGame` class instead of the `Game` class, as your core game loop, you can use Flame's component system to manage your game objects. 
+If using the `BaseGame` class instead of the `Game` class, as your core game loop, you can use Flame's component system to manage your game objects.
+
+| Table of Contents |
+| :-- |
+| [Comonent (abstract class)](#component-abstract-class) |
+| [PositionComponent (abstract class)](#positioncomponent-abstract-class) |
+| [ComposedComponent (mixin)](#composedcomponent-mixin) |
+| [SpriteComponent](#SpriteComponent) |
+| [AnimationComponent](#AnimationComponent) |
+| [SvgComponent](#SvgComponent) |
+| [FlareComponent](#FlareComponent) |
+| [ParallaxComponent](#ParallaxComponent) |
+| [TiledComponent](#TiledComponent) |
+| [NineTileBoxComponent](#NineTileBoxComponent) |
+| [Box2DComponent](#Box2DComponent) |
 
 ## Component (abstract class)
 
@@ -101,8 +115,9 @@ this.player = AnimationComponent(
 
 If you are not using `BaseGame`, don't forget this component needs `update()` to be called to tick the internal clock to move the frames.
 
-See the [`animations` example app](/doc/examples/animations).
-See the [`spritesheet` example app](/doc/examples/spritesheet).
+See the [**animations** example app](/doc/examples/animations).
+
+See the [**spritesheet** example app](/doc/examples/spritesheet).
 
 ## SvgComponent
 
@@ -121,7 +136,7 @@ SvgComponent android = SvgComponent(
 );
 ```
 
-See the [`svg` example app](/doc/examples/svg).
+See the [**svg** example app](/doc/examples/svg).
 
 ## FlareComponent
 
@@ -141,7 +156,7 @@ add(flareAnimation);
 
 You can also change the current playing animation using the `updateAnimation` method.
 
-See the [`flare` example app](/doc/examples/flare).
+See the [**flare** example app](/doc/examples/flare).
 
 ## ParallaxComponent
 
@@ -195,13 +210,13 @@ Once you are done with setting the parameters to your needs, render the Parallax
 Like the AnimationComponent, even if your parallax is static, you must call update on this component, so it runs its animation.
 Also, don't forget to add you images to the `pubspec.yaml` file as assets or they wont be found.
 
-See the [`parallax` example app](/doc/examples/parallax).
+See the [**parallax** example app](/doc/examples/parallax).
 
 ## TiledComponent
 
 Currently we have a very basic implementation of a Tiled component. This API uses the lib [Tiled](https://github.com/feroult/tiled.dart) to parse map files and render visible layers.
 
-See the [`tiled` example app](/doc/examples/tiled).
+See the [**tiled** example app](/doc/examples/tiled).
 
 ## NineTileBoxComponent
 
@@ -213,7 +228,7 @@ The corners are drawn at the same size, the sides are stretched on the side dire
 
 Using this, you can get a box/rectangle that expands well to any sizes. This is useful for making panels, dialogs, borders.
 
-See the [`nine_tile_box` example app](/doc/examples/nine_tile_box).
+See the [**nine_tile_box** example app](/doc/examples/nine_tile_box).
 
 ## Box2DComponent
 

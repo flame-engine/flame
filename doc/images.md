@@ -1,12 +1,12 @@
 # Images, Sprites, and Animations
 
-These are the base image-related classes that can be used either on their own, or as part of a [component](doc/components.md) in the component system of [`BaseGame`](/README.md#game-loop).
+These are the base image-related classes that can be used either on their own, or as part of a [component](/doc/components.md) in the component system of [`BaseGame`](/README.md#game-loop).
 
 You must have an appropriate folder structure and add all image files to the `pubspec.yaml` file (as explained in the [README](/README.md#structure).
 
 ## Image
 
-The [`Image` class](https://api.flutter.dev/flutter/dart-ui/Image-class.html) that Flame uses comes from the [`dart:ui` library](https://api.flutter.dev/flutter/dart-ui/dart-ui-library.html):
+The [`Image`](https://api.flutter.dev/flutter/dart-ui/Image-class.html) class that Flame uses comes from the [`dart:ui`](https://api.flutter.dev/flutter/dart-ui/dart-ui-library.html) library:
 
 ```dart
 import 'dart:ui';
@@ -25,7 +25,7 @@ To render an `Image` on the `Canvas`, it needs to be used in a `Sprite` or `Anim
 
 ## Sprite
 
-The `Sprite` class represents a single piece of an image (or the whole image). There multiple constructors for creating a `Sprite`, depending on the source:
+The `Sprite` class represents an entire image (or a single clipping from an image). There are multiple constructors for creating a `Sprite`, depending on the source:
 
 * `Sprite()` (same as `Sprite.fromImage()`) creates a `Sprite` from a cached `Image` object
 * `Sprite.fromImage()` creates a `Sprite` from a cached `Image` object **(best practice)**
@@ -37,6 +37,8 @@ For example, this will create a sprite representing the whole image of the file 
 ```dart
 Sprite player = await Sprite.fromFile('player.png');
 ```
+
+The `Sprite` class has a `loaded()` method that returns whether the image has been loaded.
 
 You can also specify the coordinates in the original image where the sprite is located; this allows you to use sprite sheets and reduce the number of images in memory; for example:
 
@@ -51,7 +53,7 @@ Sprite playerFrame = Sprite.fromImage(playerSheet, x: 32, width: 16);
 * `width:` width of each frame (defaults to null, that is, full width of the image)
 * `height:` height of each frame (defaults to null, that is, full height of the image)
 
-The `Sprite` class has a `loaded()` method that returns whether the image has been loaded, and a render method that allows you to render the image into a `Canvas`:
+The `render()` method allows you to render the image into a `Canvas`:
 
 ```dart
 Sprite block = await Sprite.fromFile('block.png');
@@ -66,9 +68,7 @@ The render method will do nothing while the sprite has not been loaded, so you d
 
 All render methods from the Sprite class can receive a `Paint` instance on the optional named parameter `overridePaint` that parameter will override the current `Sprite` paint instance for that render call.
 
-Sprites can also be used as widgets, to do so, just use `Flame.util.spriteAsWidget`
-
-A complete example of using sprite as widgets can be found [here](examples/animation_widget).
+Sprites can also be used as widgets, to do so, just use `Flame.util.spriteAsWidget`. See the [**animation_widget** example app](/doc/examples/animation_widget).
 
 ## Svg
 
@@ -120,7 +120,7 @@ Image image = await new Images().load('asd');
 
 ## Animation
 
-The `Animation` class helps you create a cyclic animation of sprites. There multiple constructors for creating an `Animation`, depending on the source:
+The `Animation` class helps you create a cyclic animation of sprites. There are multiple constructors for creating an `Animation`, depending on the source:
 
 * `Animation()` creates an `Animation` from a List of `Frame`s **(not common use)**
 * `Animation.fromSpriteList()` creates an `Animation` from a List of `Sprite`s
@@ -129,7 +129,7 @@ The `Animation` class helps you create a cyclic animation of sprites. There mult
 * `Animation.fromFile()` (an async method) creates an `Animation` from a sprite sheet file (cached or not)
 * `Animation.fromAsepriteData()` (an async method) creates an `Animation` from [Aseprite](https://github.com/aseprite/aseprite) PNG and JSON file pairs
 
-An important parameter in animation construction is the `stepTime` value (or the `stepTimes[]` List). `stepTime` is how many seconds to show each frame. The `stepTimes[]` List allows for variable timing across the frames of the animation. The default `stepTime` is `0.1` seconds. The `stepTimes[]` List, if given, overrides the `stepTime` value, if given.
+An important parameter in animation construction is the `stepTime` value (or the `stepTimes[]` List). `stepTime` is how many seconds to show each frame. The `stepTimes[]` list allows for variable timing across the frames of the animation. The default `stepTime` is `0.1` seconds. The `stepTimes[]` list, if given, overrides the `stepTime` value, if given.
 
 ```dart
 Image image = Flame.images.fromCache('spritesheet.png');
@@ -191,9 +191,7 @@ Animation animation = await Animation.fromAsepriteData(
 
 _Note: Flame does not yet support reading of trimmed-sprite-sheet data (that is, data about tightly-packed frames of different sizes and/or rotations) such as sprites in TPS files._
 
-Animations can also be used as widgets, to do so, just use `Flame.util.animationAsWidget`
-
-A complete example of using animations as widgets can be found [here](/doc/examples/animation_widget).
+Animations can also be used as widgets, to do so, just use `Flame.util.animationAsWidget`. See the [**animation_widget** example app](/doc/examples/animation_widget).
 
 ## FlareAnimation
 
@@ -236,4 +234,4 @@ class MyGame extends Game {
 }
 ```
 
-You can see a full example of the Flare class [here](/doc/examples/flare).
+See the [**flare** example app](/doc/examples/flare).

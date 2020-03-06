@@ -82,7 +82,7 @@ A very cool docs site can be found [here](https://flame-engine.org/).
 
 Check out this great series of articles/tutorials written by [Alekhin](https://github.com/japalekhin)
 
-Note that they are a bit outdated and don't show how to use the [Component](doc/components.md) system, but still useful.
+Note that these are a bit outdated and don't show how to use the [Component](doc/components.md) system, but still useful.
 
  - [Create a Mobile Game with Flutter and Flame – Beginner Tutorial](https://jap.alekhin.io/create-mobile-game-flutter-flame-beginner-tutorial)
  - [2D Casual Mobile Game Tutorial – Step by Step with Flame and Flutter (Part 1 of 5)](https://jap.alekhin.io/2d-casual-mobile-game-tutorial-flame-flutter-part-1)
