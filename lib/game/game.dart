@@ -165,6 +165,7 @@ abstract class BaseGame extends Game with TapDetector {
   void add(Component c) {
     preAdd(c);
     components.add(c);
+    c.onMount();
   }
 
   /// Registers a component to be added on the components on the next tick.
