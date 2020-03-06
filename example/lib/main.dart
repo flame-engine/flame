@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/anchor.dart';
 import 'package:flame/components/component.dart';
+import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
@@ -15,13 +16,8 @@ class Palette {
   static const PaletteEntry blue = PaletteEntry(Color(0xFF0000FF));
 }
 
-class Square extends PositionComponent {
+class Square extends PositionComponent with HasGameRef<MyGame> {
   static const SPEED = 0.25;
-
-  Square(double size) {
-    width = height = size;
-    anchor = Anchor.center;
-  }
 
   @override
   void resize(Size size) {
@@ -43,10 +39,18 @@ class Square extends PositionComponent {
     angle += SPEED * t;
     angle %= 2 * math.pi;
   }
+
+  @override
+  void onMount() {
+    width = height = gameRef.squareSize;
+    anchor = Anchor.center;
+  }
 }
 
 class MyGame extends BaseGame {
+  final double squareSize = 128;
+
   MyGame() {
-    add(Square(64.0));
+    add(Square());
   }
 }
