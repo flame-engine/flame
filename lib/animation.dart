@@ -90,17 +90,17 @@ class Animation {
   /// Creates an animation from a sprite sheet.
   ///
   /// From a single image source, it creates multiple sprites based on the parameters:
-  /// [frameX]: x position on the original image to start (defaults to 0)
-  /// [frameY]: y position on the original image to start (defaults to 0)
+  /// [frameX]: x position in the image to start slicing from (defaults to 0)
+  /// [frameY]: x position in the image to start slicing from (defaults to 0)
   /// [frameWidth]: width of each frame (defaults to null, that is, full width of the sprite sheet)
   /// [frameHeight]: height of each frame (defaults to null, that is, full height of the sprite sheet)
   /// [firstFrame]: which frame in the sprite sheet starts this animation (zero based, defaults to 0)
   /// [frameCount]: how many sprites this animation is composed of (defaults to 1)
   /// [stepTime]: the duration of each frame, in seconds (defaults to 0.1)
   /// [stepTimes]: list of stepTime values, one for each frame (overrides stepTime if given)
-  /// [reverse]: reverses the animation frames if set to true (default is false)
+  /// [reverse]: reverses the animation frames if set to true (defaults to false)
   /// [loop]: whether the animation loops (defaults to true)
-  /// [paused]: returns the animation in a paused state (default is false)
+  /// [paused]: returns the animation in a paused state (defaults to false)
   ///
   /// For example, if you have a 320x320 sprite sheet filled with 32x32 frames (10x10 columns/rows),
   /// this will grab 8 frames of animation from the start of the third row:
@@ -151,9 +151,40 @@ class Animation {
     currentFrame = reverse ? frames.length - 1 : 0;
   }
 
+  /// Shortcut wrapper to [fromImage] for skipping a discrete Image get.
+  Animation.fromImageCache(
+      String fileName,
+      {
+        int frameX = 0,
+        int frameY = 0,
+        int frameWidth,
+        int frameHeight,
+        int firstFrame = 0,
+        int frameCount = 1,
+        double stepTime = 0.1,
+        List<double> stepTimes,
+        bool reverse = false,
+        bool loop = true,
+        bool paused = false,
+      }
+  ) : this.fromImage(
+      Flame.images.fromCache(fileName),
+      frameX:      frameX,
+      frameY:      frameY,
+      frameWidth:  frameWidth,
+      frameHeight: frameHeight,
+      firstFrame:  firstFrame,
+      frameCount:  frameCount,
+      stepTime:    stepTime,
+      stepTimes:   stepTimes,
+      reverse:     reverse,
+      loop:        loop,
+      paused:      paused,
+  );
+
   /// Asynchronous wrapper to [fromImage] for files (cached or not).
   static Future<Animation> fromFile(
-      String filepath,
+      String fileName,
       {
         int frameX = 0,
         int frameY = 0,
@@ -168,7 +199,7 @@ class Animation {
         bool paused = false,
       }
   ) async {
-    final Image image = await Flame.images.load(filepath);
+    final Image image = await Flame.images.load(fileName);
     return Animation.fromImage(
       image,
       frameX:      frameX,

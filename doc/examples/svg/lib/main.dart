@@ -22,9 +22,13 @@ class MyGame extends BaseGame {
 
   void _start() {
     svgInstance = Svg('android.svg');
-    android = SvgComponent.fromSvg(100, 100, svgInstance);
-    android.x = 100;
-    android.y = 100;
+    android = SvgComponent(
+      svgInstance,
+      width:  100,
+      height: 100,
+      x:      10,
+      y:      10,
+    );
 
     add(android);
   }

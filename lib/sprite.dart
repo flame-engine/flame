@@ -20,6 +20,8 @@ class Sprite {
     }
   ) : this.fromImage(image, x: x, y: y, width: width, height: height);
 
+  Sprite.empty();
+
   Sprite.fromImage(
     this.image,
     {
@@ -34,7 +36,15 @@ class Sprite {
     src = Rect.fromLTWH(x.toDouble(), y.toDouble(), width.toDouble(), height.toDouble());
   }
 
-  Sprite.empty();
+  Sprite.fromImageCache(
+    String fileName,
+    {
+      int x = 0,
+      int y = 0,
+      int width,
+      int height,
+    }
+  ) : this.fromImage(Flame.images.fromCache(fileName), x: x, y: y, width: width, height: height);
 
   static Future<Sprite> fromFile(
     String fileName,

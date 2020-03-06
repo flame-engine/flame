@@ -82,6 +82,8 @@ A very cool docs site can be found [here](https://flame-engine.org/).
 
 Check out this great series of articles/tutorials written by [Alekhin](https://github.com/japalekhin)
 
+Note that they are a bit outdated and don't show how to use the [Component](doc/components.md) system, but still useful.
+
  - [Create a Mobile Game with Flutter and Flame – Beginner Tutorial](https://jap.alekhin.io/create-mobile-game-flutter-flame-beginner-tutorial)
  - [2D Casual Mobile Game Tutorial – Step by Step with Flame and Flutter (Part 1 of 5)](https://jap.alekhin.io/2d-casual-mobile-game-tutorial-flame-flutter-part-1)
  - [Game Graphics and Animation Tutorial – Step by Step with Flame and Flutter (Part 2 of 5)](https://jap.alekhin.io/game-graphics-and-animation-tutorial-flame-flutter-part-2)
@@ -98,10 +100,10 @@ The only structure you are required to comply is a assets folder with two sub fo
 An example:
 
 ```dart
-  Flame.audio.play('explosion.mp3');
+Flame.audio.play('explosion.mp3');
 
-  Flame.images.load('player.png');
-  Flame.images.load('enemy.png');
+Flame.images.load('player.png');
+Flame.images.load('enemy.png');
 ```
 
 The file structure would have to be:
@@ -132,85 +134,96 @@ The modular approach allows you to use any of these modules independently, or to
 
 ### Audio
 
-To play an audio, just use the `Flame.audio.play` method:
+You can pre-load your audios up front and avoid delays with the `loadAll()` method:
 
 ```dart
-    import 'package:flame/flame.dart';
-
-    Flame.audio.play('explosion.mp3');
+// in an async prepare function for your game
+await Flame.audio.loadAll(['explosion.mp3']);
 ```
 
-You can pre-load your audios in the beginning and avoid delays with the `loadAll` method:
+To play an audio, just use the `Flame.audio.play()` method:
 
 ```dart
-    // in a async prepare function for your game
-    await Flame.audio.loadAll(['explosion.mp3']);
+import 'package:flame/flame.dart';
+
+Flame.audio.play('explosion.mp3');
 ```
 
 [Complete Audio Guide](doc/audio.md)
 
 [Looping Background Music Guide](doc/bgm.md)
 
-### Images
+### Images, Sprites, and Animations
 
-If you are using the Component module and doing something simple, you probably won't need to use these classes; use `SpriteComponent` or `AnimationComponent` instead.
-
-If you want to load an image and render it on the `Canvas`, you can use the `Sprite` class:
+You can pre-load your images up front and avoid delays with the `loadAll()` method:
 
 ```dart
-    import 'package:flame/sprite.dart';
-
-    Sprite sprite = Sprite('player.png');
-
-    // in your render loop
-    sprite.render(canvas, width, height);
+// in an async prepare function for your game
+await Flame.images.loadAll(['player.png', 'enemy.png']);
 ```
 
-Note that the render method will do nothing while the image has not been loaded; you can check for completion using the `loaded` method.
+If you want to load an `Image` and render it on the `Canvas`, you can use the `Sprite` class:
+
+```dart
+import 'package:flame/flame.dart';
+import 'package:flame/sprite.dart';
+
+Image image = await Flame.images.load('player.png');
+
+Sprite sprite = Sprite(image);
+
+// in your render loop
+sprite.render(canvas);
+```
+
+An `Animation` can be defined from an `Image` in a similar way using the `Animation.fromImage()` constructor.
+
+Note that the render method will do nothing while the image is being loaded. You can check for completion using the `loaded` method, or use `async` functions to handle loading up front.
 
 [Complete Images Guide](doc/images.md)
 
-### Component
+### Component System
 
-This class represent a single object on the screen, being a floating rectangle or a rotating sprite.
+If using the `BaseGame` class instead of the `Game` class, as your core game loop, you can use Flame's component system to manage your game objects. 
 
-The base abstract class has the common expected methods update and render to be implemented.
+The base abstract `Component` class implements and automatically calls the usual methods of `update()` and `render()` (among other utility methods).
 
-The intermediate inheritance `PositionComponent` adds `x`, `y`, `width`, `height` and `angle` to your Components, as well as some useful methods like distance and angleBetween.
+The intermediate inheritance `PositionComponent` class controls the position and final size of your game objects by adding `x`, `y`, `width`, `height` and `angle`, as well as some useful methods like `distance()` and `angleBetween()`.
 
-The most commonly used implementation, `SpriteComponent`, can be created with a `Sprite`:
+The high-level components of `SpriteComponent` and `AnimationComponent` are intended for easy component creation from their respective `Sprite` and `Animation` objects.
+
+For example, to create a `SpriteComponent` from a `Sprite`:
 
 ```dart
-    import 'package:flame/components/component.dart';
+import 'package:flame/components/component.dart';
 
-    // on your constructor or init logic
-    Sprite sprite = Sprite('player.png');
+// on your constructor or init logic
+Image image = Flame.images.fromCache('player.png');
+Sprite sprite = Sprite.fromImage(image);
 
-    const size = 128.0;
-    final player = SpriteComponent.fromSprite(size, size, sprite); // width, height, sprite
-
-    // screen coordinates
-    player.x = ... // 0 by default
-    player.y = ... // 0 by default
-    player.angle = ... // 0 by default
-
-    // on your render method...
-    player.render(canvas); // it will render only if the image is loaded and the x, y, width and height parameters are not null
+const size = 128.0; // render size, not sprite source size
+final player = SpriteComponent(
+  sprite,
+  width:  size,
+  height: size,
+  x:      ..., // starting X position
+  y:      ..., // starting Y position
+  angle:  ..., // starting rotation (in radians)
+);
 ```
 
-Every `Component` has a few other methods that you can optionally implement, that are used by the `BaseGame` class. If you are not using the base game, you can alternatively use these methods on your own game loop.
+Every `Component` has a few other methods that you can optionally implement, that are used by the `BaseGame` class. If you are not using `BaseGame`, you can alternatively use these methods on your own game loop.
 
-The `resize` method is called whenever the screen is resized, and in the beginning once when the component is added via the `add` method. You need to apply here any changes to the x, y, width and height of your component, or any other changes, due to the screen resizing. You can start these variables here, as the sprite won't be rendered until everything is set.
+The `resize()` method is called whenever the screen is resized, and in the beginning once when the component is added via the `add()` method. You need to apply here any changes to the x, y, width and height of your component, or any other changes, due to the screen resizing. You can start these variables here, as the sprite won't be rendered until everything is set.
 
-The `destroy` method can be implemented to return true and warn the `BaseGame` that your object is marked for destruction, and it will be remove after the current update loop. It will then no longer be rendered or updated.
+The `destroy()` method can be implemented to return true and warn the `BaseGame` that your object is marked for destruction, and it will be remove after the current update loop. It will then no longer be rendered or updated.
 
-The `isHUD` method can be implemented to return true (default false) to make the `BaseGame` ignore the `camera` for this element.
+The `isHUD()` method can be implemented to return true (default false) to make the `BaseGame` ignore the `camera` for this element.
 
-There are also other implementations:
+Other high-level components:
 
-* The `AnimationComponent` takes an `Animation` object and renders a cyclic animated sprite (more details about Animations [here](doc/images.md#Animation))
-* The `ParallaxComponent` can render a parallax background with several frames
-* The `Box2DComponent`, that has a physics engine built-in (using the [Box2D](https://github.com/google/box2d.dart) port for Dart)
+* `ParallaxComponent` can render a parallax background with several frames
+* `Box2DComponent` has a physics engine built-in (using the [Box2D](https://github.com/google/box2d.dart) port for Dart)
 
 [Complete Components Guide](doc/components.md)
 
@@ -218,47 +231,55 @@ There are also other implementations:
 
 The Game Loop module is a simple abstraction over the game loop concept. Basically most games are built upon two methods: 
 
-* The render method takes the canvas ready for drawing the current state of the game.
-* The update method receives the delta time in milliseconds since last update and allows you to move the next state.
+* `render()` makes the canvas ready for drawing the current state of the game.
+* `update()` receives the delta time in milliseconds since last update and allows you to move the next state.
 
-The class `Game` can be subclassed and will provide both these methods for you to implement. In return it will provide you with a `widget` property that returns the game widget, that can be rendered in your app.
+The lower-level `Game` class can be subclassed and will provide both these methods for you to implement. In return it will provide you with a `widget` property that returns the game widget, that can be rendered in your app.
 
 You can either render it directly in your `runApp`, or you can have a bigger structure, with routing, other screens and menus for your game.
 
 To start, just add your game widget directly to your runApp, like so:
 
 ```dart
-    main() {
-        Game game = MyGameImpl();
-        runApp(game.widget);
-    }
+void main() {
+    Game game = MyGameImpl();
+    runApp(game.widget);
+}
 ```
 
-Instead of implementing the low level `Game` class, you should probably use the more full-featured `BaseGame` class.
-
-The `BaseGame` implements a `Component` based `Game` for you; basically it has a list of `Component`s and repasses the `update` and `render` calls appropriately. You can still extend those methods to add custom behavior, and you will get a few other features for free, like the repassing of `resize` methods (every time the screen is resized the information will be passed to the resize methods of all your components) and also a basic camera feature (that will translate all your non-HUD components in order to center in the camera you specified).
+The more fully-featured `BaseGame` class implements a component-based `Game` class for you. Basically, it keep a list of `Component`s and passes the `update()` and `render()` calls appropriately. You can still extend those methods to add custom behavior. You will also get a few other features for free. Like, the passing of `resize()` methods (every time the screen is resized the information will be passed to the resize methods of all your components). Also, a basic camera feature (that will translate all your non-HUD components in order to center in the camera you specified).
 
 A very simple `BaseGame` implementation example can be seen below:
 
 ```dart
-    class MyCrate extends SpriteComponent {
+void main() async {
+  ...
+  await Flame.images.load('crate.png');
+}
 
-        // creates a component that renders the crate.png sprite, with size 16 x 16
-        MyCrate() : SpriteComponent.fromSprite(16.0, 16.0, new Sprite('crate.png'));
+class MyCrate extends SpriteComponent {
+    static final Image image = Flame.images.fromCache('crate.png');
 
-        @override
-        void resize(Size size) {
-            // we don't need to set the x and y in the constructor, we can set then here
-            this.x = (size.width - this.width)/ 2;
-            this.y = (size.height - this.height) / 2;
-        }
+    // creates a component that renders the crate.png sprite, with size 16 x 16
+    MyCrate() : super(
+      Sprite.fromImage(image),
+      width:  16.0,
+      height: 16.0,
+    );
+
+    @override
+    void resize(Size size) {
+        // we don't need to set x and y in the constructor, we can set them here
+        this.x = (size.width - this.width)/ 2;
+        this.y = (size.height - this.height) / 2;
     }
+}
 
-    class MyGame extends BaseGame {
-        MyGame() {
-            add(new MyCrate()); // this will call resize the first time as well
-        }
+class MyGame extends BaseGame {
+    MyGame() {
+        add(new MyCrate()); // this will call resize the first time as well
     }
+}
 ```
 
 ### Input

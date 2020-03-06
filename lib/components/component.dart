@@ -211,19 +211,19 @@ class SvgComponent extends PositionComponent {
       {
         double x = 0.0,
         double y = 0.0,
-        double angle = 0.0,  //TODO test
-        double width,
-        double height,
-        Anchor anchor = Anchor.topLeft,  //TODO test
-        bool renderFlipX = false,  //TODO test
-        bool renderFlipY = false,  //TODO test
+        double angle = 0.0,
+        double width = 10.0,
+        double height = 10.0,
+        Anchor anchor = Anchor.topLeft,
+        bool renderFlipX = false,
+        bool renderFlipY = false,
       }
-      ) {
+  ) {
     this.x = x;
     this.y = y;
     this.angle = angle;
-    this.width = width ?? svg.size?.width ?? 0.0;  //TODO test
-    this.height = height ?? svg.size?.height ?? 0.0;  //TODO test
+    this.width = width ?? 10.0;
+    this.height = height ?? 10.0;
     this.anchor = anchor;
     this.renderFlipX = renderFlipX;
     this.renderFlipY = renderFlipY;

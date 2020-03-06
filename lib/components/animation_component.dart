@@ -8,8 +8,6 @@ class AnimationComponent extends PositionComponent {
   Animation animation;
   bool destroyOnFinish;
 
-  AnimationComponent.empty();
-
   AnimationComponent(
       this.animation,
       {
@@ -33,6 +31,8 @@ class AnimationComponent extends PositionComponent {
     this.renderFlipX = renderFlipX;
     this.renderFlipY = renderFlipY;
   }
+
+  AnimationComponent.empty();
 
   @override
   bool loaded() => animation.loaded();
