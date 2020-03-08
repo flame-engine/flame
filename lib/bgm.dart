@@ -4,7 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/widgets.dart';
 
-/// The looping **b**ack**g**round **m**usic class.
+/// The looping background music class.
 ///
 /// This class helps with looping background music management that reacts to
 /// application lifecycle state changes. On construction, the instance is added

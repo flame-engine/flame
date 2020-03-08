@@ -8,7 +8,7 @@ import 'package:flame/sprite.dart';
 /// How it works is that you have a template image in a 3x3 grid, made up of 9 tiles,
 /// and a new rectangle can be draw by keeping the 4 corners, expanding the 4 sides only
 /// in the direction in which they are located and expanding the center in both directions.
-/// That allows you to have non distored borders.
+/// That allows you to have non distorted borders.
 class NineTileBox {
   /// The sprite used to render the box, must be a 3x3 grid of square tiles.
   Sprite sprite;
@@ -21,7 +21,7 @@ class NineTileBox {
 
   /// Creates a nine-box instance.
   ///
-  /// [srite] is the 3x3 grid and [tileSize] is the size of each tile.
+  /// [sprite] is the 3x3 grid and [tileSize] is the size of each tile.
   /// The src sprite must a square of size 3*[tileSize].
   ///
   /// If [tileSize] is not provided, the width of the sprite is assumed as the size.
