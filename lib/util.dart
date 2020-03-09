@@ -158,7 +158,7 @@ class Util {
         size: size);
   }
 
-  /// Returns a regular Flutter widget represeting this sprite, rendered with the specified size.
+  /// Returns a regular Flutter widget representing this sprite, rendered with the specified size.
   ///
   /// This will create a [CustomPaint] widget using a [CustomPainter] for rendering the [Sprite]
   /// Be aware that the Sprite must have been loaded, otherwise it can't be rendered
