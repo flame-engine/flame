@@ -57,8 +57,8 @@ abstract class Component {
 
   /// Called when the component has been added and preperad by the game instance.
   ///
-  /// This can be used to make initializations on your component as when this method is called
-  /// things like resize, and mixins are already set for the component.
+  /// This can be used to make initializations on your component as, when this method is called,
+  /// things like resize (and other mixins) are already set and usable.
   void onMount() {}
 }
 
