@@ -37,6 +37,8 @@ The `destroy` method can be implemented to return true and warn the `BaseGame` t
 
 The `isHUD` method can be implemented to return true (default false) to make the `BaseGame` ignore the `camera` for this element.
 
+The `onMount` method can be overridden to run initialization code for the component. When this method is called, BaseGame ensures that all the mixins which would change this component behaviour are already resolved.
+
 There are also other implementations:
 
 * The `AnimationComponent` takes an `Animation` object and renders a cyclic animated sprite (more details about Animations [here](/doc/images.md#Animation))
