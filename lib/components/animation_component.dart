@@ -16,8 +16,8 @@ class AnimationComponent extends PositionComponent {
   AnimationComponent.empty();
 
   AnimationComponent.sequenced(
-    width,
-    height,
+    double width,
+    double height,
     String imagePath,
     int amount, {
     double textureX = 0.0,
