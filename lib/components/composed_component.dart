@@ -49,6 +49,9 @@ mixin ComposedComponent on Component, HasGameRef, Tapable {
   }
 
   void _renderComponent(Canvas canvas, Component c) {
+    if (!c.loaded()) {
+      return;
+    }
     c.render(canvas);
     canvas.restore();
     canvas.save();
