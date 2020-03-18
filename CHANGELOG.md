@@ -1,7 +1,9 @@
 ## [next]
-- Add loop for AnimationComponent.sequenced()
+- Add loop for AnimationComponent.sequenced() (thanks @wenxiangjiang)
 - TextComponent optimization (thanks @Gericop)
 - Adding Component#onMount
+- Check if chidren are loaded before rendering on ComposedComponent (thanks @wenxiangjiang)
+- Amend type for width and height properties on Animation.sequenced (thanks @wenxiangjiang)
 
 ## 0.18.1
 - Expose stepTime paramter from the Animation class to the animation component
