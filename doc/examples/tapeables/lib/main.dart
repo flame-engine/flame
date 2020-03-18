@@ -5,7 +5,14 @@ import 'package:flame/components/mixins/tapable.dart';
 
 void main() {
   final game = MyGame();
-  runApp(game.widget);
+
+  final widget = Container(
+      padding: const EdgeInsets.all(50),
+      color: const Color(0xFFA9A9A9),
+      child: game.widget,
+  );
+
+  runApp(widget);
 }
 
 class TapableSquare extends PositionComponent with Tapable {
