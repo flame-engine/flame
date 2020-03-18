@@ -4,6 +4,7 @@
 - Adding Component#onMount
 - Check if chidren are loaded before rendering on ComposedComponent (thanks @wenxiangjiang)
 - Amend type for width and height properties on Animation.sequenced (thanks @wenxiangjiang)
+- Fixing Tapable position checking
 
 ## 0.18.1
 - Expose stepTime paramter from the Animation class to the animation component
