@@ -7,9 +7,9 @@ void main() {
   final game = MyGame();
 
   final widget = Container(
-      padding: const EdgeInsets.all(50),
-      color: const Color(0xFFA9A9A9),
-      child: game.widget,
+    padding: const EdgeInsets.all(50),
+    color: const Color(0xFFA9A9A9),
+    child: game.widget,
   );
 
   runApp(widget);
