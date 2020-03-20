@@ -55,6 +55,7 @@ class Animation {
   ///
   /// From a single image source, it creates multiple sprites based on the parameters:
   /// [amount]: how many sprites this animation is composed of
+  /// [amountPerRow]: how many sprites per row
   /// [textureX]: x position on the original image to start (defaults to 0)
   /// [textureY]: y position on the original image to start (defaults to 0)
   /// [textureWidth]: width of each frame (defaults to null, that is, full width of the sprite sheet)
@@ -66,19 +67,21 @@ class Animation {
   Animation.sequenced(
     String imagePath,
     int amount, {
+    int amountPerRow,
     double textureX = 0.0,
     double textureY = 0.0,
     double textureWidth,
     double textureHeight,
     double stepTime = 0.1,
     this.loop = true,
-  }) {
+  }) : assert(amountPerRow == null || amount >= amountPerRow) {
+    amountPerRow ??= amount;
     frames = List<Frame>(amount);
     for (var i = 0; i < amount; i++) {
       final Sprite sprite = Sprite(
         imagePath,
-        x: textureX + i * textureWidth,
-        y: textureY,
+        x: textureX + (i % amountPerRow) * textureWidth,
+        y: textureY + (i ~/ amountPerRow) * textureHeight,
         width: textureWidth,
         height: textureHeight,
       );
@@ -91,18 +94,20 @@ class Animation {
     String imagePath,
     int amount,
     List<double> stepTimes, {
+    int amountPerRow,
     double textureX = 0.0,
     double textureY = 0.0,
     double textureWidth,
     double textureHeight,
     this.loop = true,
-  }) {
+  }) : assert(amountPerRow == null || amount >= amountPerRow) {
+    amountPerRow ??= amount;
     frames = List<Frame>(amount);
     for (var i = 0; i < amount; i++) {
       final Sprite sprite = Sprite(
         imagePath,
-        x: textureX + i * textureWidth,
-        y: textureY,
+        x: textureX + (i % amountPerRow) * textureWidth,
+        y: textureY + (i ~/ amountPerRow) * textureHeight,
         width: textureWidth,
         height: textureHeight,
       );
