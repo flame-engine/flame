@@ -22,9 +22,14 @@ class MyGame extends BaseGame {
       textureWidth: 48, textureHeight: 48, stepTime: 0.15);
 
   void addAnimation() {
-    final animationComponent = AnimationComponent.sequenced(291, 178, 'creture.png', 18,
-        amountPerRow: 10, textureWidth: 291, textureHeight: 178, stepTime: 0.15,
-        loop: false, destroyOnFinish: true);
+    final animationComponent = AnimationComponent.sequenced(
+        291, 178, 'creture.png', 18,
+        amountPerRow: 10,
+        textureWidth: 291,
+        textureHeight: 178,
+        stepTime: 0.15,
+        loop: false,
+        destroyOnFinish: true);
     animationComponent.x = (size.width - 291) / 2;
     animationComponent.y = 250;
 
