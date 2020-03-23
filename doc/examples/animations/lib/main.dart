@@ -6,6 +6,7 @@ import 'package:flame/components/animation_component.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final Size size = await Flame.util.initialDimensions();
   final game = MyGame(size);
   runApp(game.widget);
@@ -21,10 +22,11 @@ class MyGame extends BaseGame {
       textureWidth: 48, textureHeight: 48, stepTime: 0.15);
 
   void addAnimation() {
-    final animationComponent =
-        AnimationComponent(100, 100, animation, destroyOnFinish: true);
-    animationComponent.x = size.width / 2 - 50;
-    animationComponent.y = 200;
+    final animationComponent = AnimationComponent.sequenced(291, 178, 'creture.png', 18,
+        amountPerRow: 10, textureWidth: 291, textureHeight: 178, stepTime: 0.15,
+        loop: false, destroyOnFinish: true);
+    animationComponent.x = (size.width - 291) / 2;
+    animationComponent.y = 250;
 
     add(animationComponent);
   }
