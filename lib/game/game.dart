@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
+import 'package:flutter/foundation.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
@@ -66,7 +67,7 @@ abstract class Game {
     // Keeping this here, because if we leave this on HasWidgetsOverlay
     // and somebody overrides this and forgets to call the stream close
     // we can face some leaks.
-    if (this is HasWidgetsOverlay) {
+    if (this is HasWidgetsOverlay && kReleaseMode) {
       (this as HasWidgetsOverlay).widgetOverlayController.close();
     }
   }
