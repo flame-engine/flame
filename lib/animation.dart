@@ -55,7 +55,9 @@ class Animation {
   ///
   /// From a single image source, it creates multiple sprites based on the parameters:
   /// [amount]: how many sprites this animation is composed of
-  /// [amountPerRow]: how many sprites per row
+  /// [amountPerRow]: If the sprites used to create a animation are not on the same row,
+  ///     you can use this parameter to specify how many sprites per row.
+  ///     For detailed, please refer to example at "/doc/examples/animations".
   /// [textureX]: x position on the original image to start (defaults to 0)
   /// [textureY]: y position on the original image to start (defaults to 0)
   /// [textureWidth]: width of each frame (defaults to null, that is, full width of the sprite sheet)
