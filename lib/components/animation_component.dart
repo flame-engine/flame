@@ -20,6 +20,7 @@ class AnimationComponent extends PositionComponent {
     double height,
     String imagePath,
     int amount, {
+    int amountPerRow,
     double textureX = 0.0,
     double textureY = 0.0,
     double textureWidth,
@@ -33,6 +34,7 @@ class AnimationComponent extends PositionComponent {
     animation = Animation.sequenced(
       imagePath,
       amount,
+      amountPerRow: amountPerRow,
       textureX: textureX,
       textureY: textureY,
       textureWidth: textureWidth,
