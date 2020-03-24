@@ -5,6 +5,7 @@
 - Check if chidren are loaded before rendering on ComposedComponent (thanks @wenxiangjiang)
 - Amend type for width and height properties on Animation.sequenced (thanks @wenxiangjiang)
 - Fixing Tapable position checking
+- Support line feed when create animation from a single image source (thanks @wenxiangjiang)
 
 ## 0.18.1
 - Expose stepTime paramter from the Animation class to the animation component
