@@ -67,6 +67,9 @@ abstract class Game {
     // Keeping this here, because if we leave this on HasWidgetsOverlay
     // and somebody overrides this and forgets to call the stream close
     // we can face some leaks.
+
+    // Also we only do this in release mode, otherwise when using hot reload
+    // the controller would be closed and errors would happen
     if (this is HasWidgetsOverlay && kReleaseMode) {
       (this as HasWidgetsOverlay).widgetOverlayController.close();
     }
