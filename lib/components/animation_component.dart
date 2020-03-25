@@ -16,15 +16,17 @@ class AnimationComponent extends PositionComponent {
   AnimationComponent.empty();
 
   AnimationComponent.sequenced(
-    width,
-    height,
+    double width,
+    double height,
     String imagePath,
     int amount, {
+    int amountPerRow,
     double textureX = 0.0,
     double textureY = 0.0,
     double textureWidth,
     double textureHeight,
     double stepTime,
+    bool loop = true,
     this.destroyOnFinish = false,
   }) {
     this.width = width;
@@ -32,11 +34,13 @@ class AnimationComponent extends PositionComponent {
     animation = Animation.sequenced(
       imagePath,
       amount,
+      amountPerRow: amountPerRow,
       textureX: textureX,
       textureY: textureY,
       textureWidth: textureWidth,
       textureHeight: textureHeight,
       stepTime: stepTime ?? 0.1,
+      loop: loop,
     );
   }
 

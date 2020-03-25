@@ -1,3 +1,15 @@
+## 0.18.2
+- Add loop for AnimationComponent.sequenced() (thanks @wenxiangjiang)
+- TextComponent optimization (thanks @Gericop)
+- Adding Component#onMount
+- Check if chidren are loaded before rendering on ComposedComponent (thanks @wenxiangjiang)
+- Amend type for width and height properties on Animation.sequenced (thanks @wenxiangjiang)
+- Fixing Tapable position checking
+- Support line feed when create animation from a single image source (thanks @wenxiangjiang)
+- Fixing TextBoxComponent start/end of line bugs (thanks @kurtome)
+- Prevent widgets overlay controller from closing when in debug mode
+
+
 ## 0.18.1
 - Expose stepTime paramter from the Animation class to the animation component
 - Updated versions for bugfixes + improved macOS support. (thanks @flowhorn)

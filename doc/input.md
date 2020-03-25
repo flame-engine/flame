@@ -94,7 +94,7 @@ Minimal component example:
 
 ```dart
 import 'package:flame/components/component.dart';
-import 'package:flame/components/events/gestures.dart';
+import 'package:flame/components/mixins/tapable.dart';
 
 class TapableComponent extends PositionComponent with Tapable {
 

@@ -54,6 +54,12 @@ abstract class Component {
   /// It can be any integer (negative, zero, or positive).
   /// If two components share the same priority, they will probably be drawn in the order they were added.
   int priority() => 0;
+
+  /// Called when the component has been added and preperad by the game instance.
+  ///
+  /// This can be used to make initializations on your component as, when this method is called,
+  /// things like resize (and other mixins) are already set and usable.
+  void onMount() {}
 }
 
 /// A [Component] implementation that represents a component that has a specific, possibly dynamic position on the screen.
