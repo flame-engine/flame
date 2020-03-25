@@ -1,4 +1,4 @@
-## [next]
+## 0.18.2
 - Add loop for AnimationComponent.sequenced() (thanks @wenxiangjiang)
 - TextComponent optimization (thanks @Gericop)
 - Adding Component#onMount
