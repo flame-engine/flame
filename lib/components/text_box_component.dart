@@ -52,13 +52,18 @@ class TextBoxComponent extends PositionComponent with Resizable {
     _boxConfig = boxConfig;
     _config = config;
     _text = text;
-    _lines = [''];
+    _lines = [];
     text.split(' ').forEach((word) {
-      final String possibleLine = _lines.last + ' ' + word;
+      final String possibleLine =
+          _lines.isEmpty ? word : _lines.last + ' ' + word;
       final widgets.TextPainter p = config.toTextPainter(possibleLine);
       _lineHeight ??= p.height;
       if (p.width <= _boxConfig.maxWidth - 2 * _boxConfig.margin) {
-        _lines.last = possibleLine;
+        if (_lines.isNotEmpty) {
+          _lines.last = possibleLine;
+        } else {
+          _lines.add(possibleLine);
+        }
         _updateMaxWidth(p.width);
       } else {
         _lines.add(word);
@@ -80,8 +85,8 @@ class TextBoxComponent extends PositionComponent with Resizable {
   bool get finished => _lifeTime > totalCharTime + _boxConfig.dismissDelay;
 
   int get currentChar => _boxConfig.timePerChar == 0.0
-      ? _text.length - 1
-      : math.min(_lifeTime ~/ _boxConfig.timePerChar, _text.length - 1);
+      ? _text.length
+      : math.min(_lifeTime ~/ _boxConfig.timePerChar, _text.length);
 
   int get currentLine {
     int totalCharCount = 0;

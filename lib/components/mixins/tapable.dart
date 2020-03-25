@@ -12,14 +12,14 @@ mixin Tapable {
   bool checkTapOverlap(Offset o) => toRect().contains(o);
 
   void handleTapDown(TapDownDetails details) {
-    if (checkTapOverlap(details.globalPosition)) {
+    if (checkTapOverlap(details.localPosition)) {
       onTapDown(details);
     }
     tapableChildren().forEach((c) => c.handleTapDown(details));
   }
 
   void handleTapUp(TapUpDetails details) {
-    if (checkTapOverlap(details.globalPosition)) {
+    if (checkTapOverlap(details.localPosition)) {
       onTapUp(details);
     }
     tapableChildren().forEach((c) => c.handleTapUp(details));

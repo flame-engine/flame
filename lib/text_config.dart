@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:flame/components/text_component.dart';
 import 'package:flutter/material.dart' as material;
 
 import 'position.dart';
@@ -8,6 +9,8 @@ import 'anchor.dart';
 ///
 /// It does not hold information regarding the position of the text to be render neither the text itself (the string).
 /// To hold all those information, use the Text component.
+///
+/// It is used by [TextComponent].
 class TextConfig {
   /// The font size to be used, in points.
   final double fontSize;
