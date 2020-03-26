@@ -1,5 +1,7 @@
 # Input
 
+## Gestures
+
 Inside `package:flame/gestures.dart` you can find a whole set of `mixin` which can be included on your game class instance to be able to receive touch input events. Bellow you can see the full list of these `mixin`s and its methods:
 
 ```dart
@@ -116,3 +118,29 @@ class TapableComponent extends PositionComponent with Tapable {
   }
 }
 ```
+
+## Keyboard
+
+Flame provides a simple way to access Flutter's features regarding accessing Keyboard input events.
+
+To use it just add the `KeyboardEvents` mixin to your game class. By doing so you will need to implement the `onKeyEvent` method, this method is called everytime a keyboard event happens, and it receives an instance of the Flutter class `RawKeyEvent`, which can be used to get information about the event, like if it was a key down or key up event, the pressed key and etc.
+
+Minimal example:
+
+```dart
+import 'package:flame/game.dart';
+import 'package:flame/keyboard.dart';
+import 'package:flutter/services.dart';
+
+class MyGame extends Game with KeyboardEvents {
+  // update and render omitted
+
+  @override
+  void onKeyEvent(e) {
+    final bool isKeyDown = e is RawKeyDownEvent;
+    print(" Key: ${e.data.keyLabel} - isKeyDown: $isKeyDown");
+  }
+}
+```
+
+You can also check a more complete example [here](/doc/examples/keyboard).
