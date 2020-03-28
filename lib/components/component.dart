@@ -60,6 +60,9 @@ abstract class Component {
   /// This can be used to make initializations on your component as, when this method is called,
   /// things like resize (and other mixins) are already set and usable.
   void onMount() {}
+
+  /// Called right before the component is destroyed and removed from the game
+  void onDestroy() {}
 }
 
 /// A [Component] implementation that represents a component that has a specific, possibly dynamic position on the screen.

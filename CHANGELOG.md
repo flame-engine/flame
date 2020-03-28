@@ -1,4 +1,5 @@
 ## [next] 
+- Adding Component#onDestroy
 
 ## 0.18.2
 - Add loop for AnimationComponent.sequenced() (thanks @wenxiangjiang)
