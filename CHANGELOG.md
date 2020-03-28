@@ -1,3 +1,6 @@
+## 0.18.3-beta
+- Using beta version of AP with web support
+
 ## 0.18.2
 - Add loop for AnimationComponent.sequenced() (thanks @wenxiangjiang)
 - TextComponent optimization (thanks @Gericop)
