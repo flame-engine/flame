@@ -1,4 +1,5 @@
-## [next]
+## [next] 
+- Adding Component#onDestroy
 - Adding Keyboard events API
 
 ## 0.18.2
