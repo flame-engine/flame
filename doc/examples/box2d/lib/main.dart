@@ -57,9 +57,10 @@ class MyPlanet extends BodyComponent {
     Paint blue = PaletteEntry(Colors.blue).paint;
     c.drawCircle(p, radius, red);
     double angle = body.getAngle();
-    c.drawCircle(p, math.sin(angle)*radius, black);
-    Offset lineRotation = Offset(math.sin(angle)*radius, math.cos(angle)*radius);
-    c.drawLine(p, p+lineRotation, blue);
+    c.drawCircle(p, math.sin(angle) * radius, black);
+    Offset lineRotation =
+        Offset(math.sin(angle) * radius, math.cos(angle) * radius);
+    c.drawLine(p, p + lineRotation, blue);
   }
 
   @override
@@ -93,4 +94,3 @@ class GameController {
 
   Widget get widget => _game.widget;
 }
-
