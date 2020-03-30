@@ -1,4 +1,4 @@
-[![Pub](https://img.shields.io/pub/v/flame.svg?style=popout)](https://pub.dartlang.org/packages/flame) [![Build Status - Travis](https://img.shields.io/github/workflow/status/flame-engine/flame/Test/master?label=tests)](https://travis-ci.org/flame-engine/flame) [![Discord](https://img.shields.io/discord/509714518008528896.svg)](https://discord.gg/pxrBmy4)
+[![Pub](https://img.shields.io/pub/v/flame.svg?style=popout)](https://pub.dartlang.org/packages/flame) ![Test](https://github.com/flame-engine/flame/workflows/Test/badge.svg?branch=master&event=push) [![Discord](https://img.shields.io/discord/509714518008528896.svg)](https://discord.gg/pxrBmy4)
 
 # :fire: flame
 
