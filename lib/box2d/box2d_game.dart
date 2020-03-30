@@ -12,7 +12,7 @@ class Box2DGame extends BaseGame {
 
   @override
   void add(Component c) {
-    if(c is BodyComponent) {
+    if (c is BodyComponent) {
       box.add(c);
     } else {
       super.add(c);
@@ -21,7 +21,7 @@ class Box2DGame extends BaseGame {
 
   @override
   void addLater(Component c) {
-    if(c is BodyComponent) {
+    if (c is BodyComponent) {
       _addLater.add(c);
     } else {
       super.addLater(c);
@@ -33,7 +33,8 @@ class Box2DGame extends BaseGame {
     super.update(t);
     box.update(t);
     box.components
-        .where((c) => c.destroy()).toList()
+        .where((c) => c.destroy())
+        .toList()
         .forEach((c) => box.remove(c));
     box.addAll(_addLater);
     _addLater.clear();
