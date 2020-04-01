@@ -15,6 +15,8 @@ class Frame {
   Frame(this.sprite, this.stepTime);
 }
 
+typedef OnCompleteAnimation = Function();
+
 /// Represents an animation, that is, a list of sprites that change with time.
 class Animation {
   /// The frames that compose this animation.
@@ -33,6 +35,9 @@ class Animation {
 
   /// Whether the animation loops after the last sprite of the list, going back to the first, or keeps returning the last when done.
   bool loop = true;
+
+  /// Registered method to be triggered when the animation finish's, this variable is set by the method addOnCompleteAnimation
+  OnCompleteAnimation _onCompleteAnimation;
 
   /// Creates an animation given a list of frames.
   Animation(this.frames, {this.loop = true});
@@ -196,6 +201,11 @@ class Animation {
     return loop ? false : (isLastFrame && clock >= currentFrame.stepTime);
   }
 
+  /// Register the method to be trigged when an animation is complete.
+  void addOnCompleteAnimation(OnCompleteAnimation onCompleteAnimation) {
+    _onCompleteAnimation = onCompleteAnimation;
+  }
+
   /// Updates this animation, ticking the lifeTime by an amount [dt] (in seconds).
   void update(double dt) {
     clock += dt;
@@ -204,6 +214,9 @@ class Animation {
       return;
     }
     if (!loop && isLastFrame) {
+      if (_onCompleteAnimation != null){
+        _onCompleteAnimation();
+      }
       return;
     }
     while (clock > currentFrame.stepTime) {
