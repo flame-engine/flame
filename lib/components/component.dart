@@ -157,6 +157,7 @@ abstract class PositionComponent extends Component {
 /// This is the most commonly used child of [Component].
 class SpriteComponent extends PositionComponent {
   Sprite sprite;
+  Paint overridePaint;
 
   SpriteComponent();
 
@@ -174,7 +175,8 @@ class SpriteComponent extends PositionComponent {
   @override
   void render(Canvas canvas) {
     prepareCanvas(canvas);
-    sprite.render(canvas, width: width, height: height);
+    sprite.render(canvas,
+        width: width, height: height, overridePaint: overridePaint);
   }
 
   @override
