@@ -67,7 +67,7 @@ A very cool docs site can be found [here](https://flame-engine.org/).
 
 ## Credits
 
- * [Fireslime](https://fireslime.xyz) who is the team responsible for maintining Flame
+ * [Fireslime](https://fireslime.xyz), the team responsible for maintaining Flame
  * All the friendly contributors and people who are helping in the community.
  * My own [audioplayers](https://github.com/luanpotter/audioplayer) lib, which in turn is forked from [rxlabz's](https://github.com/rxlabz/audioplayer).
  * The Dart port of [Box2D](https://github.com/google/box2d.dart).
