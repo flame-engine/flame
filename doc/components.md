@@ -39,6 +39,8 @@ The `isHUD` method can be implemented to return true (default false) to make the
 
 The `onMount` method can be overridden to run initialization code for the component. When this method is called, BaseGame ensures that all the mixins which would change this component behaviour are already resolved.
 
+The `onDestroy` method can be overridden to run code before the component is removed from the game.
+
 There are also other implementations:
 
 * The `AnimationComponent` takes an `Animation` object and renders a cyclic animated sprite (more details about Animations [here](/doc/images.md#Animation))

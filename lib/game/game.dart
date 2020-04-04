@@ -8,6 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
@@ -16,6 +17,7 @@ import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
 import '../position.dart';
 import '../gestures.dart';
+import '../keyboard.dart';
 
 import 'widget_builder.dart';
 
@@ -58,8 +60,17 @@ abstract class Game {
   /// You can add it directly to the runApp method or inside your widget structure (if you use vanilla screens and widgets).
   Widget get widget => builder.build(this);
 
+  void _handleKeyEvent(e) {
+    (this as KeyboardEvents).onKeyEvent(e);
+  }
+
   // Called when the Game widget is attached
-  void onAttach() {}
+  @mustCallSuper
+  void onAttach() {
+    if (this is KeyboardEvents) {
+      RawKeyboard.instance.addListener(_handleKeyEvent);
+    }
+  }
 
   // Called when the Game widget is detached
   @mustCallSuper
@@ -72,6 +83,10 @@ abstract class Game {
     // the controller would be closed and errors would happen
     if (this is HasWidgetsOverlay && kReleaseMode) {
       (this as HasWidgetsOverlay).widgetOverlayController.close();
+    }
+
+    if (this is KeyboardEvents) {
+      RawKeyboard.instance.removeListener(_handleKeyEvent);
     }
   }
 }
@@ -218,7 +233,15 @@ abstract class BaseGame extends Game with TapDetector {
     _addLater.clear();
 
     components.forEach((c) => c.update(t));
-    components.removeWhere((c) => c.destroy());
+    components.removeWhere((c) {
+      final destroy = c.destroy();
+
+      if (destroy) {
+        c.onDestroy();
+      }
+
+      return destroy;
+    });
   }
 
   /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.

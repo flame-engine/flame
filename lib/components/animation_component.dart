@@ -5,6 +5,7 @@ import 'package:flame/animation.dart';
 
 class AnimationComponent extends PositionComponent {
   Animation animation;
+  Paint overridePaint;
   bool destroyOnFinish = false;
 
   AnimationComponent(double width, double height, this.animation,
@@ -53,7 +54,8 @@ class AnimationComponent extends PositionComponent {
   @override
   void render(Canvas canvas) {
     prepareCanvas(canvas);
-    animation.getSprite().render(canvas, width: width, height: height);
+    animation.getSprite().render(canvas,
+        width: width, height: height, overridePaint: overridePaint);
   }
 
   @override
