@@ -1,7 +1,9 @@
-## [next] 
+## [next]
 - Adding Component#onDestroy
 - Adding Keyboard events API
 - Adding Box2DGame, an extension of BaseGame to simplify lifecycle of Box2D components
+- Adding AnimationComponent#overridePaint
+- Adding SpriteComponent#overridePaint
 
 ## 0.18.2
 - Add loop for AnimationComponent.sequenced() (thanks @wenxiangjiang)
