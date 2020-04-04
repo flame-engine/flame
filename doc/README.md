@@ -2,31 +2,23 @@
 
 ## About Flame
 
-Flame is a minimalist Flutter game engine built on top of [Flutter](https://flutter.dev/).
+Flame is a modular Flutter game engine that provides a complete set of out-of-the-way solutions for games, taking advantage of the powerful infrastructure provided by Flutter but simplifying the code you need to build your projects.
 
-## Goals
+It empowers you with a simple yet effective game loop implementation, and all the surrounding utilities you might need to use in a game: images, sprites, sprite sheets, animations, audio, input, components/object system, et cetera.
 
-The goal of this project is to provided a complete set of out-of-the-way solutions for the common problems every game developed in Flutter will share.
-Currently it provides you with: a few utilities, images/sprites/sprite sheets, audio, a game loop and a component/object system.
+You can pick and choose whichever parts you want, as they are all somewhat independent and modular.
 
-You can use whatever ones you want, as they are all somewhat independent.
+We also support easy-to-use integrations with famous third parties and tools, like Riveapp, box2d, tiled, Google Play Games, gamepad support and more.
 
-## Learning resources
-
-The community has created some articles and examples of a good usage of Flame.
-
-Check out this great series of articles/tutorials written by [Alekhin](https://github.com/japalekhin):
-
- * [Create a Mobile Game with Flutter and Flame – Beginner Tutorial (Part 0 of 5)](https://jap.alekhin.io/create-mobile-game-flutter-flame-beginner-tutorial)
- * [2D Casual Mobile Game Tutorial – Step by Step with Flame and Flutter (Part 1 of 5)](https://jap.alekhin.io/2d-casual-mobile-game-tutorial-flame-flutter-part-1)
- * [Game Graphics and Animation Tutorial – Step by Step with Flame and Flutter (Part 2 of 5)](https://jap.alekhin.io/game-graphics-and-animation-tutorial-flame-flutter-part-2)
- * [Views and Dialog Boxes Tutorial – Step by Step with Flame and Flutter (Part 3 of 5)](https://jap.alekhin.io/views-dialog-boxes-tutorial-flame-flutter-part-3)
- * [Scoring, Storage, and Sound Tutorial – Step by Step with Flame and Flutter (Part 4 of 5)](https://jap.alekhin.io/scoring-storage-sound-tutorial-flame-flutter-part-4)
- * [Game Finishing and Packaging Tutorial – Step by Step with Flame and Flutter (Part 5 of 5)](https://jap.alekhin.io/game-finishing-packaging-tutorial-flame-flutter-part-5)
+The engine and ecosystem is being constantly improved by the community, so please feel free to reach out, open issues, PRs, make suggestions. Give us a star if you feel like it :)
 
 ## Installation
 
 Put the pub package as your dependency by dropping the following in your `pubspec.yaml`:
+
+## Getting started
+
+Check out the [awesome flame repository](https://github.com/flame-engine/awesome-flame#articles--tutorials), there is quite a lot of good tutorials and articles to get you started with Flame.
 
 
 ```yaml
