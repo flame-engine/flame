@@ -2,6 +2,7 @@
 - Adding Component#onDestroy
 - Adding Keyboard events API
 - Adding Box2DGame, an extension of BaseGame to simplify lifecycle of Box2D components
+- Add onAnimateComplete for Animation (thanks @diegomgarcia)
 - Adding AnimationComponent#overridePaint
 - Adding SpriteComponent#overridePaint
 
