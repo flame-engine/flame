@@ -1,11 +1,11 @@
-## [next]
+## 0.18.3
 - Adding Component#onDestroy
 - Adding Keyboard events API
 - Adding Box2DGame, an extension of BaseGame to simplify lifecycle of Box2D components
 - Add onAnimateComplete for Animation (thanks @diegomgarcia)
 - Adding AnimationComponent#overridePaint
 - Adding SpriteComponent#overridePaint
-- Updating AudioPlayers to enable Web Auido support
+- Updating AudioPlayers to enable Web Audio support
 
 ## 0.18.2
 - Add loop for AnimationComponent.sequenced() (thanks @wenxiangjiang)
