@@ -5,6 +5,7 @@
 - Add onAnimateComplete for Animation (thanks @diegomgarcia)
 - Adding AnimationComponent#overridePaint
 - Adding SpriteComponent#overridePaint
+- Updating AudioPlayers to enable Web Auido support
 
 ## 0.18.2
 - Add loop for AnimationComponent.sequenced() (thanks @wenxiangjiang)
