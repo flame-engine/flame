@@ -2,7 +2,15 @@
 
 ## About Flame
 
-Flame is a minimalist Flutter game engine built on top of [Flutter](https://flutter.dev/).
+Flame is a modular Flutter game engine that provides a complete set of out-of-the-way solutions for games, taking advantage of the powerful infrastructure provided by Flutter but simplifying the code you need to build your projects.
+
+It empowers you with a simple yet effective game loop implementation, and all the surrounding utilities you might need to use in a game: images, sprites, sprite sheets, animations, audio, input, components/object system, et cetera.
+
+You can pick and choose whichever parts you want, as they are all somewhat independent and modular.
+
+We also support easy-to-use integrations with famous third parties and tools, like Riveapp, box2d, tiled, Google Play Games, gamepad support and more.
+
+The engine and ecosystem is being constantly improved by the community, so please feel free to reach out, open issues, PRs, make suggestions. Give us a star if you feel like it :)
 
 ## Installation
 
