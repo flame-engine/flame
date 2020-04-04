@@ -23,7 +23,7 @@ Check out the [awesome flame repository](https://github.com/flame-engine/awesome
 
 ```yaml
 dependencies:
-  flame: ^0.18.2
+  flame: ^0.18.3
 ```
 
 And start using it!
