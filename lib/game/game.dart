@@ -229,7 +229,7 @@ abstract class BaseGame extends Game with TapDetector {
   /// You can override it further to add more custom behaviour.
   @override
   void update(double t) {
-    components.addAll(_addLater);
+    _addLater.forEach(add);
     _addLater.clear();
 
     components.forEach((c) => c.update(t));
