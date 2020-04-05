@@ -1,5 +1,5 @@
 ## [next]
-- Fixing component lifecycle calls on Component#addLater
+- Fixing component lifecycle calls on BaseGame#addLater
 
 ## 0.18.3
 - Adding Component#onDestroy
