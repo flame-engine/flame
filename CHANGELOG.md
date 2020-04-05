@@ -1,4 +1,5 @@
 ## [next]
+- Fixing component lifecycle calls on Component#addLater
 
 ## 0.18.3
 - Adding Component#onDestroy
