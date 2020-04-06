@@ -176,6 +176,8 @@ abstract class BaseGame extends Game with TapDetector {
     if (c is ComposedComponent) {
       c.components.forEach(preAdd);
     }
+
+    c.onMount();
   }
 
   /// Adds a new component to the components list.
@@ -184,7 +186,6 @@ abstract class BaseGame extends Game with TapDetector {
   void add(Component c) {
     preAdd(c);
     components.add(c);
-    c.onMount();
   }
 
   /// Registers a component to be added on the components on the next tick.
@@ -229,7 +230,7 @@ abstract class BaseGame extends Game with TapDetector {
   /// You can override it further to add more custom behaviour.
   @override
   void update(double t) {
-    _addLater.forEach(add);
+    components.addAll(_addLater);
     _addLater.clear();
 
     components.forEach((c) => c.update(t));
