@@ -233,15 +233,7 @@ abstract class BaseGame extends Game with TapDetector {
     _addLater.clear();
 
     components.forEach((c) => c.update(t));
-    components.removeWhere((c) {
-      final destroy = c.destroy();
-
-      if (destroy) {
-        c.onDestroy();
-      }
-
-      return destroy;
-    });
+    components.removeWhere((c) => c.destroy()).forEach((c) => c.onDestroy());
   }
 
   /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.

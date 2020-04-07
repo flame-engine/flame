@@ -7,7 +7,7 @@ dependencies:
   flutter:
     sdk: flutter
   audioplayers: ^0.15.0
-  ordered_set: ^1.1.5
+  ordered_set: ^2.0.0
   path_provider: ^1.6.0
   box2d_flame: ^0.4.5
   synchronized: ^2.1.0
