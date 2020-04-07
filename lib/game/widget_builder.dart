@@ -158,7 +158,7 @@ class OverlayGameWidget extends StatefulWidget {
   final Widget gameChild;
   final HasWidgetsOverlay game;
 
-  OverlayGameWidget({Key key, this.gameChild, this.game}): super(key: key);
+  OverlayGameWidget({Key key, this.gameChild, this.game}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _OverlayGameWidgetState();
@@ -197,6 +197,7 @@ class OverlayWidgetBuilder extends WidgetBuilder {
   Widget build(Game game) {
     final container = super.build(game);
 
-    return OverlayGameWidget(gameChild: container, game: game, key: UniqueKey());
+    return OverlayGameWidget(
+        gameChild: container, game: game, key: UniqueKey());
   }
 }
