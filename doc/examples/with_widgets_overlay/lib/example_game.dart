@@ -36,4 +36,3 @@ class ExampleGame extends Game with HasWidgetsOverlay, TapDetector {
     }
   }
 }
-
