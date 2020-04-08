@@ -1,5 +1,6 @@
 ## [next]
-- Fixing component lifecycle calls on BaseGame#addLater
+ - Fixing component lifecycle calls on BaseGame#addLater
+ - Fixing Component#onDestroy, which was been called multiple times sometimes
 
 ## 0.18.3
 - Adding Component#onDestroy
