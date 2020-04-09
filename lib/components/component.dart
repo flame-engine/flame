@@ -154,10 +154,7 @@ abstract class PositionComponent extends Component {
   }
 
   void addEffect(PositionComponentEffect effect) {
-    _effects.add(
-        effect
-        ..component = this
-    );
+    _effects.add(effect..component = this);
   }
 
   @mustCallSuper
