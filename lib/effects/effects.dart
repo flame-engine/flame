@@ -2,6 +2,7 @@ import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
 
 import 'dart:math';
+import 'dart:ui';
 
 import '../position.dart';
 import '../components/component.dart';
@@ -10,11 +11,66 @@ abstract class PositionComponentEffect {
   void update(double dt);
   bool hasFinished();
   PositionComponent component;
+}
 
+double _direction(double p, double d) => p < d ? -1 : 1;
+double _size(double a, double b) => (a - b).abs();
+
+class ScaleEffect extends PositionComponentEffect {
+  Size size;
+  double speed;
+  Curve curve;
+
+  double _scaleTime;
+  double _ellapsedTime = 0.0;
+
+  Size _original;
+  Size _diff;
+  final Position _dir = Position(0, 0);
+
+  ScaleEffect({
+    @required this.size,
+    @required this.speed,
+    this.curve,
+  });
+
+  @override
+  set component(_comp) {
+    super.component = _comp;
+
+    _original = Size(component.width, component.height);
+    _diff = Size(
+      _size(_original.width, size.width),
+      _size(_original.height, size.height),
+    );
+
+    _dir.x = _direction(size.width, _original.width);
+    _dir.y = _direction(size.height, _original.height);
+
+    _scaleTime = max(
+      _diff.width / speed,
+      _diff.height / speed,
+    );
+  }
+
+  @override
+  void update(double dt) {
+    if (!hasFinished()) {
+      final double percent = min(1.0, _ellapsedTime / _scaleTime);
+      final double c = curve != null ? curve.transform(percent) : 1.0;
+
+      component.width = _original.width + _diff.width * c * _dir.x;
+      component.height = _original.height + _diff.height * c * _dir.y;
+    }
+
+    _ellapsedTime += dt;
+  }
+
+  @override
+  bool hasFinished() => _ellapsedTime >= _scaleTime;
 }
 
 class MoveEffect extends PositionComponentEffect {
-
   Position destination;
   double speed;
   Curve curve;
@@ -31,9 +87,6 @@ class MoveEffect extends PositionComponentEffect {
 
   double _ellapsedTime = 0.0;
 
-
-  bool _valuesInitted = false;
-
   MoveEffect({
     @required this.destination,
     @required this.speed,
@@ -41,23 +94,26 @@ class MoveEffect extends PositionComponentEffect {
   });
 
   @override
+  set component(_comp) {
+    super.component = _comp;
+
+    _xOriginal = component.x;
+    _yOriginal = component.y;
+
+    _xDistance = _size(destination.x, component.x);
+    _yDistance = _size(destination.y, component.y);
+
+    _xDirection = _direction(destination.x, component.x);
+    _yDirection = _direction(destination.y, component.y);
+
+    _travelTime = max(
+      _xDistance / speed,
+      _yDistance / speed,
+    );
+  }
+
+  @override
   void update(double dt) {
-    if (!_valuesInitted) {
-      _xOriginal = component.x;
-      _xDistance = (destination.x - component.x).abs();
-      final _xTravelTime = _xDistance / speed;
-      _xDirection = destination.x < component.x ? - 1 : 1;
-
-      _yOriginal = component.y;
-      _yDistance = (destination.y - component.y).abs();
-      final _yTravelTime = _yDistance / speed;
-      _yDirection = destination.y < component.y ? - 1 : 1;
-
-      _travelTime = max(_xTravelTime, _yTravelTime);
-
-      _valuesInitted = true;
-    }
-
     if (!hasFinished()) {
       final double percent = min(1.0, _ellapsedTime / _travelTime);
       final double c = curve != null ? curve.transform(percent) : 1.0;
@@ -68,6 +124,7 @@ class MoveEffect extends PositionComponentEffect {
 
     _ellapsedTime += dt;
   }
+
   @override
-  bool hasFinished()  => _ellapsedTime >= _travelTime;
+  bool hasFinished() => _ellapsedTime >= _travelTime;
 }
