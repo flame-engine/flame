@@ -1,3 +1,8 @@
+## 0.19.0
+ - Fixing component lifecycle calls on BaseGame#addLater
+ - Fixing Component#onDestroy, which was been called multiple times sometimes
+ - Fixing Widget Overlay usage over many game instances
+
 ## 0.18.3
 - Adding Component#onDestroy
 - Adding Keyboard events API
