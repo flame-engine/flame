@@ -2,13 +2,18 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flame/anchor.dart';
+import 'package:flame/gestures.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyGame().widget);
+void main() {
+  final game = MyGame()..runOnCreation = false;
+
+  runApp(game.widget);
+}
 
 class Palette {
   static const PaletteEntry white = BasicPalette.white;
@@ -47,10 +52,22 @@ class Square extends PositionComponent with HasGameRef<MyGame> {
   }
 }
 
-class MyGame extends BaseGame {
+class MyGame extends BaseGame with TapDetector {
   final double squareSize = 128;
+  bool running = false;
 
   MyGame() {
     add(Square());
+  }
+
+  @override
+  void onTap() {
+    if (running) {
+      pauseEngine();
+    } else {
+      resumeEngine();
+    }
+
+    running = !running;
   }
 }
