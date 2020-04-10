@@ -164,7 +164,7 @@ A complete example of using animations as widgets can be found [here](/doc/examp
 
 ## FlareAnimation
 
-Flame provides a simple wrapper of [Flare](https://www.2dimensions.com/about-flare) animations so you can use them on Flame games.
+Flame provides a simple wrapper of [Flare](https://rive.app/#LearnMore) animations so you can use them on Flame games.
 
 Check the following snippet on how to use this wrapper:
 
