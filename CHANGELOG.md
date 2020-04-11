@@ -1,4 +1,9 @@
+# CHANGELOG
+
 ## [next]
+
+## 0.19.1-beta
+- Bump AP version to allow for web support
 
 ## 0.19.0
  - Fixing component lifecycle calls on BaseGame#addLater
