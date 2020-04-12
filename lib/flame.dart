@@ -41,8 +41,6 @@ class Flame {
       {AssetBundle bundle,
       bool fullScreen = true,
       DeviceOrientation orientation}) async {
-    initializeWidget();
-
     if (fullScreen) {
       await util.fullScreen();
     }
@@ -53,24 +51,5 @@ class Flame {
 
     _bundle = bundle;
   }
-
-  /// TODO verify if this is still needed (I don't think so)
-  static void initializeWidget() {
-    WidgetsFlutterBinding.ensureInitialized();
-  }
 }
 
-/// This class never needs to be used.
-///
-/// It only exists here in order for [BindingBase] to setup Flutter services.
-/// TODO: this could possibly be private, verify if it'd work.
-class FlameBiding extends BindingBase with GestureBinding, ServicesBinding {
-  static FlameBiding instance;
-
-  static FlameBiding ensureInitialized() {
-    if (FlameBiding.instance == null) {
-      FlameBiding();
-    }
-    return FlameBiding.instance;
-  }
-}
