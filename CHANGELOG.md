@@ -1,4 +1,5 @@
 ## [next]
+ - Adding Game#pauseEngine and Game#resumeEngine methods
 
 ## 0.19.0
  - Fixing component lifecycle calls on BaseGame#addLater
