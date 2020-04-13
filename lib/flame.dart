@@ -41,6 +41,8 @@ class Flame {
       {AssetBundle bundle,
       bool fullScreen = true,
       DeviceOrientation orientation}) async {
+    initializeWidget();
+
     if (fullScreen) {
       await util.fullScreen();
     }
@@ -50,6 +52,10 @@ class Flame {
     }
 
     _bundle = bundle;
+  }
+
+  static void initializeWidget() {
+    WidgetsFlutterBinding.ensureInitialized();
   }
 }
 
