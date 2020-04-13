@@ -397,7 +397,8 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
 
   void _unscheduleTick() {
     _running = false;
-    SchedulerBinding.instance.cancelFrameCallbackWithId(_frameCallbackId);
+    if (_frameCallbackId != null)
+      SchedulerBinding.instance.cancelFrameCallbackWithId(_frameCallbackId);
   }
 
   void _tick(Duration timestamp) {
