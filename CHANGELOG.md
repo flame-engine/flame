@@ -2,6 +2,7 @@
 
 ## [next]
  - Bump AudioPlayers version to allow for web support
+ - Adding Game#pauseEngine and Game#resumeEngine methods
  - Removing FlameBinding since it isn't used and clashes with newest flutter
 
 ## 0.19.0
