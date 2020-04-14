@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## [next]
+
 ## 1.19.1
  - Bump AudioPlayers version to allow for web support
  - Adding Game#pauseEngine and Game#resumeEngine methods
