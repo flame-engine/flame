@@ -2,7 +2,7 @@
 
 ## [next]
 
-## 0.19.1-beta
+## 0.19.1
 - Bump AudioPlayers version to allow for web support
 
 ## 0.19.0
