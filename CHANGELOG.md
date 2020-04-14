@@ -1,3 +1,10 @@
+# CHANGELOG
+
+## 1.19.1
+ - Bump AudioPlayers version to allow for web support
+ - Adding Game#pauseEngine and Game#resumeEngine methods
+ - Removing FlameBinding since it isn't used and clashes with newest flutter
+
 ## 0.19.0
  - Fixing component lifecycle calls on BaseGame#addLater
  - Fixing Component#onDestroy, which was been called multiple times sometimes
