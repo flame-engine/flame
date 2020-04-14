@@ -10,7 +10,7 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  final game = MyGame()..runOnCreation = false;
+  final game = MyGame();
 
   runApp(game.widget);
 }
@@ -54,7 +54,7 @@ class Square extends PositionComponent with HasGameRef<MyGame> {
 
 class MyGame extends BaseGame with TapDetector {
   final double squareSize = 128;
-  bool running = false;
+  bool running = true;
 
   MyGame() {
     add(Square());
