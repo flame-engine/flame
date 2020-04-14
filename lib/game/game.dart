@@ -89,6 +89,18 @@ abstract class Game {
       RawKeyboard.instance.removeListener(_handleKeyEvent);
     }
   }
+
+  /// Flag to tell the game loop if it should start running upon creation
+  bool runOnCreation = true;
+
+  /// Pauses the engine game loop execution
+  void pauseEngine() => _pauseEngineFn?.call();
+
+  /// Resumes the engine game loop execution
+  void resumeEngine() => _resumeEngineFn?.call();
+
+  VoidCallback _pauseEngineFn;
+  VoidCallback _resumeEngineFn;
 }
 
 class OverlayWidget {
@@ -334,6 +346,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   Game game;
 
   int _frameCallbackId;
+  bool _running = false;
 
   Duration previous = Duration.zero;
 
@@ -353,7 +366,19 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     super.attach(owner);
     game.onAttach();
 
-    _scheduleTick();
+    game._pauseEngineFn = () {
+      if (_running) {
+        previous = Duration.zero;
+        _unscheduleTick();
+      }
+    };
+
+    game._resumeEngineFn = () {
+      if (!_running) _scheduleTick();
+    };
+
+    if (game.runOnCreation) _scheduleTick();
+
     _bindLifecycleListener();
   }
 
@@ -366,11 +391,15 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   }
 
   void _scheduleTick() {
+    _running = true;
     _frameCallbackId = SchedulerBinding.instance.scheduleFrameCallback(_tick);
   }
 
   void _unscheduleTick() {
-    SchedulerBinding.instance.cancelFrameCallbackWithId(_frameCallbackId);
+    _running = false;
+    if (_frameCallbackId != null) {
+      SchedulerBinding.instance.cancelFrameCallbackWithId(_frameCallbackId);
+    }
   }
 
   void _tick(Duration timestamp) {
