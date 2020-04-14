@@ -1,7 +1,8 @@
 # CHANGELOG
 
 ## [next]
-- Bump AudioPlayers version to allow for web support
+ - Bump AudioPlayers version to allow for web support
+ - Removing FlameBinding since it isn't used and clashes with newest flutter
 
 ## 0.19.0
  - Fixing component lifecycle calls on BaseGame#addLater
