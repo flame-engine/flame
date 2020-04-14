@@ -1,5 +1,6 @@
 ## [next]
  - Adding Game#pauseEngine and Game#resumeEngine methods
+ - Removing FlameBinding since it isn't used and clashes with newest flutter
 
 ## 0.19.0
  - Fixing component lifecycle calls on BaseGame#addLater
