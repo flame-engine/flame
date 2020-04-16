@@ -19,6 +19,7 @@ import '../position.dart';
 import '../gestures.dart';
 import '../keyboard.dart';
 
+import 'game_loop.dart';
 import 'widget_builder.dart';
 
 /// Represents a generic game.
@@ -342,15 +343,12 @@ class EmbeddedGameWidget extends LeafRenderObjectWidget {
 
 class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   BuildContext context;
-
   Game game;
+  GameLoop gameLoop;
 
-  int _frameCallbackId;
-  bool _running = false;
-
-  Duration previous = Duration.zero;
-
-  GameRenderBox(this.context, this.game);
+  GameRenderBox(this.context, this.game) {
+    gameLoop = GameLoop(gameLoopCallback);
+  }
 
   @override
   bool get sizedByParent => true;
@@ -366,18 +364,12 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     super.attach(owner);
     game.onAttach();
 
-    game._pauseEngineFn = () {
-      if (_running) {
-        previous = Duration.zero;
-        _unscheduleTick();
-      }
-    };
+    game._pauseEngineFn = gameLoop.pause;
+    game._resumeEngineFn = gameLoop.resume;
 
-    game._resumeEngineFn = () {
-      if (!_running) _scheduleTick();
-    };
-
-    if (game.runOnCreation) _scheduleTick();
+    if (game.runOnCreation) {
+      gameLoop.scheduleTick();
+    }
 
     _bindLifecycleListener();
   }
@@ -386,44 +378,17 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   void detach() {
     super.detach();
     game.onDetach();
-    _unscheduleTick();
+    gameLoop.unscheduleTick();
     _unbindLifecycleListener();
   }
 
-  void _scheduleTick() {
-    _running = true;
-    _frameCallbackId = SchedulerBinding.instance.scheduleFrameCallback(_tick);
-  }
-
-  void _unscheduleTick() {
-    _running = false;
-    if (_frameCallbackId != null) {
-      SchedulerBinding.instance.cancelFrameCallbackWithId(_frameCallbackId);
-    }
-  }
-
-  void _tick(Duration timestamp) {
+  void gameLoopCallback(double dt) {
     if (!attached) {
       return;
     }
-    _scheduleTick();
-    _update(timestamp);
-    markNeedsPaint();
-  }
-
-  void _update(Duration now) {
-    final double dt = _computeDeltaT(now);
     game._recordDt(dt);
     game.update(dt);
-  }
-
-  double _computeDeltaT(Duration now) {
-    Duration delta = now - previous;
-    if (previous == Duration.zero) {
-      delta = Duration.zero;
-    }
-    previous = now;
-    return delta.inMicroseconds / Duration.microsecondsPerSecond;
+    markNeedsPaint();
   }
 
   @override
