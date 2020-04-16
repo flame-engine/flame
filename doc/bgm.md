@@ -1,6 +1,6 @@
 # Looping Background Music
 
-The `Bgm` class with the management of loooping background music tracks with regards to application (or game) lifecycle state changes.
+The `Bgm` class with the management of looping background music tracks with regards to application (or game) lifecycle state changes.
 
 When the application is paused, terminated, or sent to background, `Bgm` will automatically pause the currently playing music track. Similarly, when the application is resumed, `Bgm` will resume the background music. Manual pause and resume is also supported.
 

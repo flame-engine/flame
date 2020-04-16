@@ -201,9 +201,9 @@ A example of how to use the API can be found [here](/doc/examples/tiled).
 
 A Nine Tile Box is a rectangle drawn using a grid sprite.
 
-The grid sprite is a 3x3 grid and with 9 blocks, representing the 4 courners, the 4 sides and the middle.
+The grid sprite is a 3x3 grid and with 9 blocks, representing the 4 corners, the 4 sides and the middle.
 
-The corners are drawn at the same size, the sides are streched on the side direction and the middle is expanded both ways.
+The corners are drawn at the same size, the sides are stretched on the side direction and the middle is expanded both ways.
 
 Using this, you can get a box/rectangle that expands well to any sizes. This is useful for making panels, dialogs, borders.
 
