@@ -15,7 +15,6 @@ class SpriteButton extends StatefulWidget {
     @required this.label,
     @required this.sprite,
     @required this.pressedSprite,
-
     this.width,
     this.height,
   });
@@ -33,31 +32,32 @@ class _ButtonState extends State<SpriteButton> {
     final height = widget.height ?? 50;
 
     return GestureDetector(
-        onTapDown: (_) {
-          setState(() {
-            _pressed = true;
-          });
-        },
-        onTapUp: (_) {
-          setState(() {
-            _pressed = false;
-          });
+      onTapDown: (_) {
+        setState(() {
+          _pressed = true;
+        });
+      },
+      onTapUp: (_) {
+        setState(() {
+          _pressed = false;
+        });
 
-          widget.onPressed?.call();
-        },
-        child: Container(
-            width: width,
-            height: height,
-            child: CustomPaint(
-                painter: _ButtonPainer(_pressed ? widget.pressedSprite : widget.sprite),
-                child: Center(
-                    child: Container(
-                        padding: _pressed ? const EdgeInsets.only(top: 5) : null,
-                        child: widget.label,
-                    ),
-                ),
+        widget.onPressed?.call();
+      },
+      child: Container(
+        width: width,
+        height: height,
+        child: CustomPaint(
+          painter:
+              _ButtonPainer(_pressed ? widget.pressedSprite : widget.sprite),
+          child: Center(
+            child: Container(
+              padding: _pressed ? const EdgeInsets.only(top: 5) : null,
+              child: widget.label,
             ),
+          ),
         ),
+      ),
     );
   }
 }

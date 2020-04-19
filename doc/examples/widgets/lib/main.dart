@@ -12,7 +12,12 @@ void main() async {
   final nineTileBoxImage = await Flame.images.load('nine_tile_box.png');
   await Flame.images.load('buttons.png');
 
-  final _buttons = SpriteSheet(imageName: 'buttons.png', textureHeight: 20, textureWidth: 60, columns: 1, rows: 2);
+  final _buttons = SpriteSheet(
+      imageName: 'buttons.png',
+      textureHeight: 20,
+      textureWidth: 60,
+      columns: 1,
+      rows: 2);
 
   final dashbook = Dashbook();
 
@@ -37,16 +42,19 @@ void main() async {
           ));
 
   dashbook.storiesOf('SpriteButton').decorator(CenterDecorator()).add(
-      'default',
-      (ctx) => Container(padding: const EdgeInsets.all(20), child: SpriteButton(
-          onPressed: () {
-            print('Pressed');
-          },
-          label: const Text('Sprite Button', style: const TextStyle(color: const Color(0xFF5D275D))),
-          sprite: _buttons.getSprite(0, 0),
-          pressedSprite: _buttons.getSprite(1, 0),
-      )),
-  );
+        'default',
+        (ctx) => Container(
+            padding: const EdgeInsets.all(20),
+            child: SpriteButton(
+              onPressed: () {
+                print('Pressed');
+              },
+              label: const Text('Sprite Button',
+                  style: const TextStyle(color: const Color(0xFF5D275D))),
+              sprite: _buttons.getSprite(0, 0),
+              pressedSprite: _buttons.getSprite(1, 0),
+            )),
+      );
 
   runApp(dashbook);
 }
