@@ -4,8 +4,9 @@ import 'package:flutter/foundation.dart';
 
 import 'flame.dart';
 
+/// sprite atlas with an image and a set of rects and transforms
 class SpriteBatch {
-  Image atlas;
+  final Image atlas;
   List<Rect> rects = [];
   List<RSTransform> transforms = [];
   List<Color> colors = [];
@@ -16,17 +17,17 @@ class SpriteBatch {
   static final defaultTransform = RSTransform(1, 0, 0, 0);
   static const defaultColor = const Color(0x00000000); // transparent
 
-  SpriteBatch(String fileName) {
-    Flame.images.load(fileName).then((image) => atlas = image);
+  SpriteBatch(this.atlas);
+
+  static Future<SpriteBatch> withAsset(String imageName) async {
+    return SpriteBatch(await Flame.images.load(imageName));
   }
 
-  SpriteBatch.fromImage(this.atlas);
+  int get width => atlas.width;
 
-  int get width => atlas?.width;
+  int get height => atlas.height;
 
-  int get height => atlas?.height;
-
-  Size get size => atlas == null ? null : Size(width.toDouble(), height.toDouble());
+  Size get size => Size(width.toDouble(), height.toDouble());
 
   void addTransform({
     @required Rect rect,
