@@ -11,10 +11,11 @@ dependencies:
     sdk: flutter
   flame:
       path: ../../../
-  dashbook: ^0.0.2
+  dashbook: ^0.0.4
 
   cupertino_icons: ^0.1.2
 flutter:
   uses-material-design: true
   assets:
     - assets/images/nine_tile_box.png
+    - assets/images/buttons.png
