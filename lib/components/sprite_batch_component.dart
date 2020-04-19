@@ -4,7 +4,7 @@ import '../sprite_batch.dart';
 import 'component.dart';
 
 class SpriteBatchComponent extends Component {
-  SpriteBatch spriteBatch;
+  final SpriteBatch spriteBatch;
   BlendMode blendMode;
   Rect cullRect;
   Paint paint;
@@ -25,9 +25,6 @@ class SpriteBatchComponent extends Component {
       paint: paint,
     );
   }
-
-  @override
-  bool loaded() => spriteBatch?.atlas != null;
 
   @override
   void update(double t) {}

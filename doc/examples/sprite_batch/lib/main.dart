@@ -7,6 +7,7 @@ import 'package:flame/sprite_batch.dart';
 import 'package:flame/components/sprite_batch_component.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final Size size = await Flame.util.initialDimensions();
   final game = MyGame(size);
   runApp(game.widget);
@@ -17,17 +18,12 @@ class MyGame extends BaseGame {
 
   MyGame(Size screenSize) {
     size = screenSize;
-  }
-
-  @override
-  void onAttach() {
-    super.onAttach();
 
     initData();
   }
 
-  void initData() {
-    spriteBatch = SpriteBatch('boom3.png');
+  void initData() async {
+    spriteBatch = await SpriteBatch.withAsset('boom3.png');
 
     spriteBatch.add(
       rect: const Rect.fromLTWH(128 * 4.0, 128 * 4.0, 64, 128),
