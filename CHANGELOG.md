@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Adding SpriteButton Widget
 
 ## 0.19.1
  - Bump AudioPlayers version to allow for web support
