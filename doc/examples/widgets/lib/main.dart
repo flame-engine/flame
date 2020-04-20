@@ -17,7 +17,8 @@ void main() async {
       textureHeight: 20,
       textureWidth: 60,
       columns: 1,
-      rows: 2);
+      rows: 2,
+  );
 
   final dashbook = Dashbook();
 
