@@ -16,7 +16,6 @@ import '../position.dart';
 import '../gestures.dart';
 import 'game.dart';
 
-
 /// This is a more complete and opinionated implementation of Game.
 ///
 /// It still needs to be subclasses to add your game logic, but the [update], [render] and [resize] methods have default implementations.
@@ -25,7 +24,7 @@ import 'game.dart';
 abstract class BaseGame extends Game with TapDetector {
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components =
-  OrderedSet(Comparing.on((c) => c.priority()));
+      OrderedSet(Comparing.on((c) => c.priority()));
 
   /// Components added by the [addLater] method
   final List<Component> _addLater = [];
@@ -191,4 +190,3 @@ abstract class BaseGame extends Game with TapDetector {
         Duration.microsecondsPerSecond;
   }
 }
-

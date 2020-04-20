@@ -23,7 +23,7 @@ class EmbeddedGameWidget extends LeafRenderObjectWidget {
     return RenderConstrainedBox(
         child: GameRenderBox(context, game),
         additionalConstraints:
-        BoxConstraints.expand(width: size?.x, height: size?.y));
+            BoxConstraints.expand(width: size?.x, height: size?.y));
   }
 
   @override
@@ -32,7 +32,6 @@ class EmbeddedGameWidget extends LeafRenderObjectWidget {
     renderBox
       ..child = GameRenderBox(context, game)
       ..additionalConstraints =
-      BoxConstraints.expand(width: size?.x, height: size?.y);
+          BoxConstraints.expand(width: size?.x, height: size?.y);
   }
 }
-

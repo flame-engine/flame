@@ -115,5 +115,3 @@ mixin HasWidgetsOverlay on Game {
     widgetOverlayController.sink.add(OverlayWidget(overlayName, null));
   }
 }
-
-
