@@ -6,9 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' as widgets;
 
 import 'animation.dart';
+import 'game/embedded_game_widget.dart';
+import 'game/simple_game.dart';
 import 'sprite.dart';
 import 'components/animation_component.dart';
-import 'game.dart';
 import 'position.dart';
 
 /// Some utilities that did not fit anywhere else.
