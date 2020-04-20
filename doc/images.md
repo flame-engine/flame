@@ -43,7 +43,19 @@ All render methods from the Sprite class can receive a `Paint` instance on the o
 
 Sprites can also be used as widgets, to do so, just use `Flame.util.spriteAsWidget`
 
-A complete example of using sprite as widgets can be found [here](examples/animation_widget).
+A complete example of using sprite as widgets can be found [here](/doc/examples/animation_widget).
+
+## SpriteBatch
+
+If you have a sprite sheet (also called an image atlas, which is an image with smaller images inside), and would like to render it effectively - `SpriteBatch` does the job.
+
+Give it the filename of the image, and then add rectangles which describes various part of the image, in addition to transforms (position, scale and rotation) and optional colors.
+
+You render it with an `Canvas` and an optional `Paint`, `BlendMode` and `CullRect`.
+
+An `SpriteBatchComponent` is also available for your convenience.
+
+See example [here](/doc/examples/sprite_batch).
 
 ## Svg
 
