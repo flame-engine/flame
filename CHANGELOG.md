@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+- Adding SpriteButton Widget
 - Added SpriteBatch API, which renders sprites effectively using Canvas.drawAtlas
 
 ## 0.19.1
