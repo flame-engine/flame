@@ -61,6 +61,9 @@ class ScaleEffect extends PositionComponentEffect {
 
       component.width = _original.width + _diff.width * c * _dir.x;
       component.height = _original.height + _diff.height * c * _dir.y;
+    } else {
+      component.width = size.width;
+      component.height = size.height;
     }
 
     _ellapsedTime += dt;
@@ -120,6 +123,9 @@ class MoveEffect extends PositionComponentEffect {
 
       component.x = _xOriginal + _xDistance * c * _xDirection;
       component.y = _yOriginal + _yDistance * c * _yDirection;
+    } else {
+      component.x = destination.x;
+      component.y = destination.y;
     }
 
     _ellapsedTime += dt;
