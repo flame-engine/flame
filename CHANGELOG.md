@@ -1,10 +1,11 @@
 # CHANGELOG
 
 ## [next]
-- Added SpriteBatch API, which renders sprites effectively using Canvas.drawAtlas
+- Adding SpriteBatch API, which renders sprites effectively using Canvas.drawAtlas
 - Refactor game.dart classes into separate files
 - Split up gameloop into separate GameLoop class
-- Create Sprites example
+- Adding sprites example
+- BaseGame is not abstract anymore ( and removed SimpleGame )
 
 ## 0.19.1
  - Bump AudioPlayers version to allow for web support
