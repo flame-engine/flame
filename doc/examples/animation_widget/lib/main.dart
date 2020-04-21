@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 Sprite _sprite;
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   _sprite = await Sprite.loadSprite('minotaur.png', width: 96, height: 96);
   runApp(MyApp());
 }
@@ -71,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Flame.util.animationAsWidget(
                 _position,
                 animation.Animation.sequenced('minotaur.png', 19,
-                    textureWidth: 96.0)),
+                    textureWidth: 96.0, textureHeight: 96)),
             const Text('Neat, hum?'),
             const Text(
                 'By the way, you can also use static sprites as widgets:'),

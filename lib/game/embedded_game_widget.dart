@@ -6,7 +6,7 @@ import '../position.dart';
 import 'game_render_box.dart';
 import 'game.dart';
 
-/// This a widget to embed a game inside the Widget tree. You can use it in pair with [SimpleGame] or any other more complex [Game], as desired.
+/// This a widget to embed a game inside the Widget tree. You can use it in pair with [BaseGame] or any other more complex [Game], as desired.
 ///
 /// It handles for you positioning, size constraints and other factors that arise when your game is embedded within the component tree.
 /// Provided it with a [Game] instance for your game and the optional size of the widget.
