@@ -6,8 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' as widgets;
 
 import 'animation.dart';
+import 'game/base_game.dart';
 import 'game/embedded_game_widget.dart';
-import 'game/simple_game.dart';
 import 'sprite.dart';
 import 'components/animation_component.dart';
 import 'position.dart';
@@ -155,7 +155,7 @@ class Util {
   /// This is intended to be used by non-game apps that want to add a sprite sheet animation.
   widgets.Widget animationAsWidget(Position size, Animation animation) {
     return EmbeddedGameWidget(
-        SimpleGame(AnimationComponent(size.x, size.y, animation)),
+        BaseGame()..add(AnimationComponent(size.x, size.y, animation)),
         size: size);
   }
 
