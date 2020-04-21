@@ -15,8 +15,8 @@ class SpriteButton extends StatefulWidget {
     @required this.label,
     @required this.sprite,
     @required this.pressedSprite,
-    this.width,
-    this.height,
+    this.width = 200,
+    this.height = 50,
   });
 
   @override
@@ -28,19 +28,15 @@ class _ButtonState extends State<SpriteButton> {
 
   @override
   Widget build(_) {
-    final width = widget.width ?? 200;
-    final height = widget.height ?? 50;
+    final width = widget.width;
+    final height = widget.height;
 
     return GestureDetector(
       onTapDown: (_) {
-        setState(() {
-          _pressed = true;
-        });
+        setState(() => _pressed = true);
       },
       onTapUp: (_) {
-        setState(() {
-          _pressed = false;
-        });
+        setState(() => _pressed = false);
 
         widget.onPressed?.call();
       },

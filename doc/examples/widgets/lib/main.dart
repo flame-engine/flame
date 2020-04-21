@@ -56,6 +56,8 @@ void main() async {
             ),
             sprite: _buttons.getSprite(0, 0),
             pressedSprite: _buttons.getSprite(1, 0),
+            width: ctx.numberProperty('width', 250),
+            height: ctx.numberProperty('height', 75),
           ),
         ),
       );
