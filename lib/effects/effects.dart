@@ -22,7 +22,7 @@ class ScaleEffect extends PositionComponentEffect {
   Curve curve;
 
   double _scaleTime;
-  double _ellapsedTime = 0.0;
+  double _elapsedTime = 0.0;
 
   Size _original;
   Size _diff;
@@ -56,7 +56,7 @@ class ScaleEffect extends PositionComponentEffect {
   @override
   void update(double dt) {
     if (!hasFinished()) {
-      final double percent = min(1.0, _ellapsedTime / _scaleTime);
+      final double percent = min(1.0, _elapsedTime / _scaleTime);
       final double c = curve != null ? curve.transform(percent) : 1.0;
 
       component.width = _original.width + _diff.width * c * _dir.x;
@@ -66,11 +66,11 @@ class ScaleEffect extends PositionComponentEffect {
       component.height = size.height;
     }
 
-    _ellapsedTime += dt;
+    _elapsedTime += dt;
   }
 
   @override
-  bool hasFinished() => _ellapsedTime >= _scaleTime;
+  bool hasFinished() => _elapsedTime >= _scaleTime;
 }
 
 class MoveEffect extends PositionComponentEffect {
@@ -88,7 +88,7 @@ class MoveEffect extends PositionComponentEffect {
   double _yDistance;
   double _yDirection;
 
-  double _ellapsedTime = 0.0;
+  double _elapsedTime = 0.0;
 
   MoveEffect({
     @required this.destination,
@@ -118,7 +118,7 @@ class MoveEffect extends PositionComponentEffect {
   @override
   void update(double dt) {
     if (!hasFinished()) {
-      final double percent = min(1.0, _ellapsedTime / _travelTime);
+      final double percent = min(1.0, _elapsedTime / _travelTime);
       final double c = curve != null ? curve.transform(percent) : 1.0;
 
       component.x = _xOriginal + _xDistance * c * _xDirection;
@@ -128,9 +128,9 @@ class MoveEffect extends PositionComponentEffect {
       component.y = destination.y;
     }
 
-    _ellapsedTime += dt;
+    _elapsedTime += dt;
   }
 
   @override
-  bool hasFinished() => _ellapsedTime >= _travelTime;
+  bool hasFinished() => _elapsedTime >= _travelTime;
 }

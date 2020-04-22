@@ -211,7 +211,7 @@ Check the example app `nine_tile_box` details on how to use it.
 
 ## Effects
 
-Flame provides a set of effects that can be applied to certain type of components, these effects can be used to animate some properties of your components, check bellow a list of those effects.
+Flame provides a set of effects that can be applied to a certain type of components, these effects can be used to animate some properties of your components, check below for a list of those effects.
 
 Examples of the running effects can be found [here](/doc/examples/effects);
 
