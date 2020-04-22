@@ -5,7 +5,8 @@
 - Refactor game.dart classes into separate files
 - Split up gameloop into separate GameLoop class
 - Adding sprites example
-- BaseGame is not abstract anymore ( and removed SimpleGame )
+- Made BaseGame non-abstract and removed SimpleGame
+- Adding SpriteButton Widget
 
 ## 0.19.1
  - Bump AudioPlayers version to allow for web support
