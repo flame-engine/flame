@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
+import 'dart:math' as math;
 
 import 'package:flame/components/component.dart';
 import 'package:flame/flame.dart';
@@ -60,7 +61,8 @@ class TiledComponent extends Component {
     });
   }
 
-  void _renderLayer(Canvas c, Layer layer) {
+
+  void _renderLayer(Canvas c, Layer layer){
     layer.tiles.forEach((tile) {
       if (tile.gid == 0) {
         return;
@@ -74,10 +76,84 @@ class TiledComponent extends Component {
       final dst = Rect.fromLTWH(tile.x.toDouble(), tile.y.toDouble(),
           rect.width.toDouble(), rect.height.toDouble());
 
-      c.drawImageRect(image, src, dst, paint);
+      //Rotating & Drawing our Tiles
+      switch(tile.rotation){
+        case 0:
+          //0 ° Rotation
+          c.drawImageRect(image, src, dst, paint);
+          break;
+        case 1:
+          //90 ° Rotation
+          c.save();
+          c.translate( dst.center.dx, dst.center.dy );
+          c.rotate((3 * math.pi/2));
+          c.translate( -dst.center.dx, -dst.center.dy );
+          c.drawImageRect(image, src, dst, paint);
+          c.restore();
+          break;
+        case 2:
+          //180 ° Rotation
+          c.save();
+          c.translate( dst.center.dx, dst.center.dy );
+          c.rotate(math.pi);
+          c.translate( -dst.center.dx, -dst.center.dy );
+          c.drawImageRect(image, src, dst, paint);
+          c.restore();
+          break;
+        case 3:
+          //270 ° Rotation
+          c.save();
+          c.translate( dst.center.dx, dst.center.dy );
+          c.rotate(math.pi/2);
+          c.translate( -dst.center.dx, -dst.center.dy );
+          c.drawImageRect(image, src, dst, paint);
+          c.restore();
+          break;
+        case 4:
+          //0 ° + Vertical Flip
+          c.save();
+          c.translate( dst.center.dx, dst.center.dy );
+          c.scale(1, -1);
+          c.translate( -dst.center.dx, -dst.center.dy );
+          c.drawImageRect(image, src, dst, paint);
+          c.restore();
+          break;
+        case 5:
+          //90 ° + Vertical Flip
+          c.save();
+          c.translate( dst.center.dx, dst.center.dy );
+          c.rotate((3 * math.pi/2));
+          c.scale(1, -1);
+          c.translate( -dst.center.dx, -dst.center.dy );
+          c.drawImageRect(image, src, dst, paint);
+          c.restore();
+          break;
+        case 6:
+          //0 ° + Horizontal Flip
+          c.save();
+          c.translate( dst.center.dx, dst.center.dy );
+          c.scale(-1, 1);
+          c.translate( -dst.center.dx, -dst.center.dy );
+          c.drawImageRect(image, src, dst, paint);
+          c.restore();
+          break;
+        case 7:
+          //90 ° + Horizontal Flip
+          c.save();
+          c.translate( dst.center.dx, dst.center.dy );
+          c.rotate((3 * math.pi/2));
+          c.scale(-1, 1);
+          c.translate( -dst.center.dx, -dst.center.dy );
+          c.drawImageRect(image, src, dst, paint);
+          c.restore();
+          break;
+        default:
+          c.drawImageRect(image, src, dst, paint);
+          break;
+      }
     });
   }
-
+  
   @override
   void update(double t) {}
 
