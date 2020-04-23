@@ -155,8 +155,9 @@ class Util {
   /// This is intended to be used by non-game apps that want to add a sprite sheet animation.
   widgets.Widget animationAsWidget(Position size, Animation animation) {
     return EmbeddedGameWidget(
-        BaseGame()..add(AnimationComponent(size.x, size.y, animation)),
-        size: size);
+      BaseGame()..add(AnimationComponent(size.x, size.y, animation)),
+      size: size,
+    );
   }
 
   /// Returns a regular Flutter widget representing this sprite, rendered with the specified size.
