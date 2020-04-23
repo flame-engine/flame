@@ -70,9 +70,14 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text('with a complex widget tree and also'),
             const Text('some pretty sprite sheet animations :)'),
             Flame.util.animationAsWidget(
-                _position,
-                animation.Animation.sequenced('minotaur.png', 19,
-                    textureWidth: 96.0, textureHeight: 96)),
+              _position,
+              animation.Animation.sequenced(
+                'minotaur.png',
+                19,
+                textureWidth: 96.0,
+                textureHeight: 96,
+              ),
+            ),
             const Text('Neat, hum?'),
             const Text(
                 'By the way, you can also use static sprites as widgets:'),
