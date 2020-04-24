@@ -59,16 +59,38 @@ class TiledComponent extends Component {
         _renderLayer(c, layer);
       }
     });
+
+    map.objectGroups.forEach((objects) {
+      if (objects.visible) {
+        _renderObjectGroup(c, objects);
+      }
+    });
   }
 
-  void _drawRotatedImageRect(canvas, src, dst, image, {double rotate = 0, double scaleX = 1, double scaleY = 1}) {
+  void _drawRotatedImageRect(Canvas canvas, src, dst, image, Offset origin, {double rotate = 0, double scaleX = 1, double scaleY = 1}) {
     canvas.save();
-    canvas.translate( dst.center.dx, dst.center.dy );
+    canvas.translate( origin.dx, origin.dy );
     canvas.rotate(rotate);
     canvas.scale(scaleX, scaleY);
-    canvas.translate( -dst.center.dx, -dst.center.dy );
+    canvas.translate( -origin.dx, -origin.dy);
     canvas.drawImageRect(image, src, dst, paint);
     canvas.restore();
+  }
+
+  void _renderObjectGroup(Canvas c, ObjectGroup objects) {
+    objects.tmxObjects.forEach((tmx) {
+      if (tmx.gid != null && tmx.visible) {
+        final tile = map.getTileByGID(tmx.gid);
+        final image = images[tile.image.source];
+
+        final rect = tile.computeDrawRect();
+        final src = Rect.fromLTWH(rect.left.toDouble(), rect.top.toDouble(),
+            rect.width.toDouble(), rect.height.toDouble());
+        final dst = Rect.fromLTWH(tmx.x.toDouble(), tmx.y.toDouble()-rect.height.toDouble(),
+            rect.width.toDouble(), rect.height.toDouble());
+        _drawRotatedImageRect(c, src, dst, image, dst.bottomLeft,rotate: tmx.rotation.toDouble()*(math.pi/180));
+      }
+    });
   }
 
   void _renderLayer(Canvas c, Layer layer) {
@@ -87,25 +109,25 @@ class TiledComponent extends Component {
 
       switch(tile.rotation) {
         case 1:
-          _drawRotatedImageRect(c, src, dst, image, rotate: (3 * math.pi/2));
+          _drawRotatedImageRect(c, src, dst, image, dst.center, rotate: (3 * math.pi/2));
           break;
         case 2:
-          _drawRotatedImageRect(c, src, dst, image, rotate: math.pi);
+          _drawRotatedImageRect(c, src, dst, image, dst.center, rotate: math.pi);
           break;
         case 3:
-          _drawRotatedImageRect(c, src, dst, image, rotate: math.pi/2);
+          _drawRotatedImageRect(c, src, dst, image, dst.center, rotate: math.pi/2);
           break;
         case 4:
-          _drawRotatedImageRect(c, src, dst, image, scaleY: -1);
+          _drawRotatedImageRect(c, src, dst, image, dst.center, scaleY: -1);
           break;
         case 5:
-          _drawRotatedImageRect(c, src, dst, image, rotate: (3 * math.pi/2), scaleY: -1);
+          _drawRotatedImageRect(c, src, dst, image, dst.center, rotate: (3 * math.pi/2), scaleY: -1);
           break;
         case 6:
-          _drawRotatedImageRect(c, src, dst, image, scaleX: -1);
+          _drawRotatedImageRect(c, src, dst, image, dst.center, scaleX: -1);
           break;
         case 7:
-          _drawRotatedImageRect(c, src, dst, image, rotate: (3 * math.pi/2), scaleX: -1);
+          _drawRotatedImageRect(c, src, dst, image, dst.center, rotate: (3 * math.pi/2), scaleX: -1);
           break;
         default:
           c.drawImageRect(image, src, dst, paint);
