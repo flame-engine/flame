@@ -3,6 +3,7 @@
 ## [next]
 - Adding SpriteButton Widget
 - Added SpriteBatch API, which renders sprites effectively using Canvas.drawAtlas
+- Added support for rotated tiles on TiledComponent
 
 ## 0.19.1
  - Bump AudioPlayers version to allow for web support

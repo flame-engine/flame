@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
+import 'dart:math' as math;
 
 import 'package:flame/components/component.dart';
 import 'package:flame/flame.dart';
@@ -60,6 +61,16 @@ class TiledComponent extends Component {
     });
   }
 
+  void _drawRotatedImageRect(canvas, src, dst, image, {double rotate = 0, double scaleX = 1, double scaleY = 1}) {
+    canvas.save();
+    canvas.translate( dst.center.dx, dst.center.dy );
+    canvas.rotate(rotate);
+    canvas.scale(scaleX, scaleY);
+    canvas.translate( -dst.center.dx, -dst.center.dy );
+    canvas.drawImageRect(image, src, dst, paint);
+    canvas.restore();
+  }
+
   void _renderLayer(Canvas c, Layer layer) {
     layer.tiles.forEach((tile) {
       if (tile.gid == 0) {
@@ -74,7 +85,32 @@ class TiledComponent extends Component {
       final dst = Rect.fromLTWH(tile.x.toDouble(), tile.y.toDouble(),
           rect.width.toDouble(), rect.height.toDouble());
 
-      c.drawImageRect(image, src, dst, paint);
+      switch(tile.rotation) {
+        case 1:
+          _drawRotatedImageRect(c, src, dst, image, rotate: (3 * math.pi/2));
+          break;
+        case 2:
+          _drawRotatedImageRect(c, src, dst, image, rotate: math.pi);
+          break;
+        case 3:
+          _drawRotatedImageRect(c, src, dst, image, rotate: math.pi/2);
+          break;
+        case 4:
+          _drawRotatedImageRect(c, src, dst, image, scaleY: -1);
+          break;
+        case 5:
+          _drawRotatedImageRect(c, src, dst, image, rotate: (3 * math.pi/2), scaleY: -1);
+          break;
+        case 6:
+          _drawRotatedImageRect(c, src, dst, image, scaleX: -1);
+          break;
+        case 7:
+          _drawRotatedImageRect(c, src, dst, image, rotate: (3 * math.pi/2), scaleX: -1);
+          break;
+        default:
+          c.drawImageRect(image, src, dst, paint);
+          break;
+      }
     });
   }
 
