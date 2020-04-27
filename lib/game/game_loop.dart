@@ -2,29 +2,14 @@ import 'package:flutter/scheduler.dart';
 
 class GameLoop {
   Function callback;
-  int _frameCallbackId;
-  bool _running = false;
   Duration previous = Duration.zero;
+  Ticker _ticker;
 
-  GameLoop(this.callback);
-
-  void scheduleTick() {
-    _running = true;
-    _frameCallbackId = SchedulerBinding.instance.scheduleFrameCallback(_tick);
-  }
-
-  void unscheduleTick() {
-    _running = false;
-    if (_frameCallbackId != null) {
-      SchedulerBinding.instance.cancelFrameCallbackWithId(_frameCallbackId);
-    }
+  GameLoop(this.callback) {
+    _ticker = Ticker(_tick);
   }
 
   void _tick(Duration timestamp) {
-    if (!_running) {
-      return;
-    }
-    scheduleTick();
     final double dt = _computeDeltaT(timestamp);
     callback(dt);
   }
@@ -38,16 +23,20 @@ class GameLoop {
     return delta.inMicroseconds / Duration.microsecondsPerSecond;
   }
 
+  void start() {
+    _ticker.start();
+  }
+
+  void stop() {
+    _ticker.stop();
+  }
+
   void pause() {
-    if (_running) {
-      previous = Duration.zero;
-      unscheduleTick();
-    }
+    _ticker.muted = true;
+    previous = Duration.zero;
   }
 
   void resume() {
-    if (!_running) {
-      scheduleTick();
-    }
+    _ticker.muted = false;
   }
 }
