@@ -27,7 +27,8 @@ class Ball extends BodyComponent {
   Paint _randomPaint() {
     math.Random rng = math.Random();
     return PaletteEntry(Color.fromARGB(rng.nextInt(255), rng.nextInt(255),
-        rng.nextInt(255), rng.nextInt(255))).paint;
+            rng.nextInt(255), rng.nextInt(255)))
+        .paint;
   }
 
   void _createBody(double radius, Vector2 position) {
