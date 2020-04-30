@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flame:
-    path: ../../../
+    path: ../../../../
 
 dev_dependencies:
   flutter_test:
