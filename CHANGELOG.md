@@ -12,6 +12,7 @@
 - Adding SpriteButton Widget
 - Added SpriteBatch API, which renders sprites effectively using Canvas.drawAtlas
 - Introducing basic effects API, including MoveEffect and ScaleEffect
+- Adding ContactCallback controls in Box2DGame
 
 ## 0.19.1
  - Bump AudioPlayers version to allow for web support
