@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'package:box2d_contact_callbacks/boundaries.dart';
 import 'package:flame/box2d/box2d_component.dart';
 import 'package:flame/box2d/box2d_game.dart';
-import 'package:flame/box2d/contact_listeners.dart';
+import 'package:flame/box2d/contact_callbacks.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
