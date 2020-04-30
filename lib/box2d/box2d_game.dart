@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/box2d/box2d_component.dart';
-import 'package:flame/box2d/contact_listeners.dart';
+import 'package:flame/box2d/contact_callbacks.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/game/base_game.dart';
 
