@@ -2,12 +2,14 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/painting.dart';
+import 'package:meta/meta.dart';
 
 import '../svg.dart';
 import '../sprite.dart';
 import '../position.dart';
 import '../anchor.dart';
 import '../text_config.dart';
+import '../effects/effects.dart';
 
 /// This represents a Component for your game.
 ///
@@ -75,8 +77,8 @@ abstract class PositionComponent extends Component {
   Anchor anchor = Anchor.topLeft;
   bool renderFlipX = false;
   bool renderFlipY = false;
-
   bool debugMode = false;
+  List<PositionComponentEffect> _effects = [];
 
   Color get debugColor => const Color(0xFFFF00FF);
 
@@ -150,6 +152,17 @@ abstract class PositionComponent extends Component {
       renderDebugMode(canvas);
     }
   }
+
+  void addEffect(PositionComponentEffect effect) {
+    _effects.add(effect..component = this);
+  }
+
+  @mustCallSuper
+  @override
+  void update(double dt) {
+    _effects.forEach((e) => e.update(dt));
+    _effects.removeWhere((e) => e.hasFinished());
+  }
 }
 
 /// A [PositionComponent] that renders a single [Sprite] at the designated position, scaled to have the designated size and rotated to the designated angle.
@@ -183,9 +196,6 @@ class SpriteComponent extends PositionComponent {
   bool loaded() {
     return sprite != null && sprite.loaded() && x != null && y != null;
   }
-
-  @override
-  void update(double t) {}
 }
 
 class SvgComponent extends PositionComponent {
@@ -206,7 +216,4 @@ class SvgComponent extends PositionComponent {
   bool loaded() {
     return svg != null && svg.loaded() && x != null && y != null;
   }
-
-  @override
-  void update(double t) {}
 }
