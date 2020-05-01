@@ -208,3 +208,9 @@ The corners are drawn at the same size, the sides are stretched on the side dire
 Using this, you can get a box/rectangle that expands well to any sizes. This is useful for making panels, dialogs, borders.
 
 Check the example app `nine_tile_box` details on how to use it.
+
+## Effects
+
+Flame provides a set of effects that can be applied to a certain type of components, these effects can be used to animate some properties of your components, like position or dimensions. You can check the list of those effects [here](/doc/effects)
+
+Examples of the running effects can be found [here](/doc/examples/effects.md);

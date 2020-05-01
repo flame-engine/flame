@@ -37,6 +37,7 @@ class FlareComponent extends PositionComponent {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (loaded()) {
       _flareAnimation.update(dt);
     }
