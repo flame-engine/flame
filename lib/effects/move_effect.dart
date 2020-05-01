@@ -70,4 +70,3 @@ class MoveEffect extends PositionComponentEffect {
   @override
   bool hasFinished() => _elapsedTime >= _travelTime;
 }
-
