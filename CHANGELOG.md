@@ -1,6 +1,11 @@
 # CHANGELOG
 
 ## [next]
+- Adding SpriteBatch API, which renders sprites effectively using Canvas.drawAtlas
+- Refactor game.dart classes into separate files
+- Split up gameloop into separate GameLoop class
+- Adding sprites example
+- Made BaseGame non-abstract and removed SimpleGame
 - Adding SpriteButton Widget
 - Added SpriteBatch API, which renders sprites effectively using Canvas.drawAtlas
 - Introducing basic effects API, including MoveEffect and ScaleEffect

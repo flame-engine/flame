@@ -217,7 +217,7 @@ class MyGame extends BaseGame {
     return Particle.generate(
       count: 5,
       generator: (i) => MovingParticle(
-        curve: Interval(.2, .6, curve: Curves.easeInOutCubic),
+        curve: const Interval(.2, .6, curve: Curves.easeInOutCubic),
         to: randomCellOffset() * .5,
         child: CircleParticle(
           radius: 5 + rnd.nextDouble() * 5,
