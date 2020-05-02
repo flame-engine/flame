@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'package:box2d_contact_callbacks/boundaries.dart';
 import 'package:flame/box2d/box2d_component.dart';
 import 'package:flame/box2d/box2d_game.dart';
 import 'package:flame/box2d/contact_callbacks.dart';
@@ -7,6 +6,8 @@ import 'package:flame/flame.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:box2d_flame/box2d.dart';
+
+import 'boundaries.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,16 +68,14 @@ class Ball extends BodyComponent {
   }
 }
 
-class BallContactCallback implements ContactCallback {
+class BallContactCallback implements ContactCallback<Ball, Ball> {
   @override
-  List<Type> objects = [Ball, Ball];
+  ContactTypes types = ContactTypes(Ball, Ball);
 
   BallContactCallback();
 
   @override
-  void begin(Object contact1, Object contact2) {
-    Ball ball1 = contact1 as Ball;
-    Ball ball2 = contact2 as Ball;
+  void begin(Ball ball1, Ball ball2) {
     if (ball1.currentPaint != ball1.originalPaint) {
       ball1.currentPaint = ball2.currentPaint;
     } else {
@@ -85,7 +84,7 @@ class BallContactCallback implements ContactCallback {
   }
 
   @override
-  void end(Object ship, Object material) {}
+  void end(Ball ball1, Ball ball2) {}
 }
 
 class MyGame extends Box2DGame {
