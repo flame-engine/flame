@@ -1,10 +1,25 @@
 import 'package:box2d_flame/box2d.dart';
 
-mixin ContactCallback {
-  List<Type> objects;
+class ContactTypes {
+  final Type type1, type2;
 
-  void begin(Object a, Object b);
-  void end(Object a, Object b);
+  ContactTypes(this.type1, this.type2);
+
+  bool has(Type type) => type1 == type || type2 == type;
+
+  // If it contains at least one type from the other ContactTypes
+  bool hasOneIn(ContactTypes other) => has(other.type1) || has(other.type2);
+
+  bool equals(ContactTypes other) =>
+      (type1 == other.type1 && type2 == other.type2) ||
+          (type2 == other.type1 && type1 == other.type2);
+}
+
+mixin ContactCallback<Type1, Type2> {
+  ContactTypes types;
+
+  void begin(Type1 a, Type2 b);
+  void end(Type1 a, Type2 b);
 }
 
 class ContactCallbacks extends ContactListener {
@@ -23,18 +38,17 @@ class ContactCallbacks extends ContactListener {
   }
 
   bool _inOrder(ContactCallback c, Object a, Object b) =>
-      c.objects.indexOf(a.runtimeType) < c.objects.indexOf(b.runtimeType);
+      c.types.type1 == a.runtimeType;
 
   void _maybeCallback(Contact contact, ContactCallback callback, Function f) {
     final Object a = contact.fixtureA.userData;
     final Object b = contact.fixtureB.userData;
-    final Set<Type> current = {a.runtimeType, b.runtimeType};
-    final Set<Type> wanted = callback.objects.toSet();
+    final ContactTypes current = ContactTypes(a.runtimeType, b.runtimeType);
+    final ContactTypes wanted = callback.types;
 
-    if (current.containsAll(wanted) && wanted.containsAll(current)) {
+    if (current.equals(wanted)) {
       _inOrder(callback, a, b) ? f(a, b) : f(b, a);
-    } else if (wanted.contains(AnyObject) &&
-        current.intersection(wanted.toSet()).isNotEmpty) {
+    } else if (wanted.has(AnyObject) && current.hasOneIn(wanted)) {
       !_inOrder(callback, a, b) ? f(a, b) : f(b, a);
     }
   }
