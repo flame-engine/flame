@@ -1,4 +1,5 @@
 import 'package:box2d_flame/box2d.dart';
+import 'package:flame/box2d/box2d_component.dart';
 
 class ContactTypes {
   final Type type1, type2;
@@ -18,8 +19,8 @@ class ContactTypes {
 mixin ContactCallback<Type1, Type2> {
   ContactTypes types;
 
-  void begin(Type1 a, Type2 b);
-  void end(Type1 a, Type2 b);
+  void begin(Type1 a, Type2 b, Contact contact);
+  void end(Type1 a, Type2 b, Contact contact);
 }
 
 class ContactCallbacks extends ContactListener {
@@ -46,10 +47,8 @@ class ContactCallbacks extends ContactListener {
     final ContactTypes current = ContactTypes(a.runtimeType, b.runtimeType);
     final ContactTypes wanted = callback.types;
 
-    if (current.equals(wanted)) {
-      _inOrder(callback, a, b) ? f(a, b) : f(b, a);
-    } else if (wanted.has(AnyObject) && current.hasOneIn(wanted)) {
-      !_inOrder(callback, a, b) ? f(a, b) : f(b, a);
+    if (current.equals(wanted) || (wanted.has(BodyComponent) && current.hasOneIn(wanted))) {
+      _inOrder(callback, a, b) ? f(a, b, contact) : f(b, a, contact);
     }
   }
 
@@ -67,6 +66,3 @@ class ContactCallbacks extends ContactListener {
   @override
   void preSolve(Contact contact, Manifold oldManifold) {}
 }
-
-// Used to handle collision with bodies of any other type
-class AnyObject {}
