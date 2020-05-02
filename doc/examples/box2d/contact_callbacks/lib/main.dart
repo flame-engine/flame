@@ -75,7 +75,7 @@ class BallContactCallback implements ContactCallback<Ball, Ball> {
   BallContactCallback();
 
   @override
-  void begin(Ball ball1, Ball ball2) {
+  void begin(Ball ball1, Ball ball2, Contact contact) {
     if (ball1.currentPaint != ball1.originalPaint) {
       ball1.currentPaint = ball2.currentPaint;
     } else {
@@ -84,7 +84,7 @@ class BallContactCallback implements ContactCallback<Ball, Ball> {
   }
 
   @override
-  void end(Ball ball1, Ball ball2) {}
+  void end(Ball ball1, Ball ball2, Contact contact) {}
 }
 
 class MyGame extends Box2DGame {
