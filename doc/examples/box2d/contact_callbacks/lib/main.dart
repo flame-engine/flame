@@ -35,17 +35,17 @@ class Ball extends BodyComponent {
     final CircleShape shape = CircleShape();
     shape.radius = radius;
 
-    final fixtureDef = FixtureDef();
-    // To be able to determine object in collision
-    fixtureDef.setUserData(this);
-    fixtureDef.shape = shape;
-    fixtureDef.restitution = 1.0;
-    fixtureDef.density = 1.0;
-    fixtureDef.friction = 0.1;
+    final fixtureDef = FixtureDef()
+      // To be able to determine object in collision
+      ..setUserData(this)
+      ..shape = shape
+      ..restitution = 1.0
+      ..density = 1.0
+      ..friction = 0.1;
 
-    final bodyDef = BodyDef();
-    bodyDef.position = position;
-    bodyDef.type = BodyType.DYNAMIC;
+    final bodyDef = BodyDef()
+      ..position = position
+      ..type = BodyType.DYNAMIC;
 
     body = world.createBody(bodyDef)..createFixtureFromFixtureDef(fixtureDef);
   }

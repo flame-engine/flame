@@ -42,15 +42,15 @@ class Wall extends BodyComponent {
     final PolygonShape shape = PolygonShape();
     shape.setAsEdge(start, end);
 
-    final fixtureDef = FixtureDef();
-    fixtureDef.setUserData(this); // To be able to determine object in collision
-    fixtureDef.shape = shape;
-    fixtureDef.restitution = 0.0;
-    fixtureDef.friction = 0.1;
+    final fixtureDef = FixtureDef()
+      ..setUserData(this) // To be able to determine object in collision
+      ..shape = shape
+      ..restitution = 0.0
+      ..friction = 0.1;
 
-    final bodyDef = BodyDef();
-    bodyDef.position = Vector2.zero();
-    bodyDef.type = BodyType.STATIC;
+    final bodyDef = BodyDef()
+      ..position = Vector2.zero()
+      ..type = BodyType.STATIC;
 
     body = world.createBody(bodyDef)..createFixtureFromFixtureDef(fixtureDef);
   }
