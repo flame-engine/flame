@@ -17,6 +17,7 @@ void main() async {
 
 class Ball extends BodyComponent {
   Paint originalPaint, currentPaint;
+  bool giveNudge = false;
 
   Ball(Vector2 position, Box2DComponent box) : super(box) {
     originalPaint = _randomPaint();
@@ -66,16 +67,30 @@ class Ball extends BodyComponent {
         Offset(math.sin(angle) * radius, math.cos(angle) * radius);
     c.drawLine(p, p + lineRotation, blue);
   }
+
+  @override
+  void update(double t) {
+    super.update(t);
+    if (giveNudge) {
+      body.applyLinearImpulse(Vector2(0, 10000), body.getLocalCenter(), true);
+      giveNudge = false;
+    }
+  }
 }
 
-class BallContactCallback implements ContactCallback<Ball, Ball> {
-  @override
-  ContactTypes types = ContactTypes(Ball, Ball);
+class WhiteBall extends Ball {
+  WhiteBall(Vector2 position, Box2DComponent box) : super(position, box) {
+    originalPaint = BasicPalette.white.paint;
+    currentPaint = originalPaint;
+  }
+}
 
-  BallContactCallback();
-
+class BallContactCallback extends ContactCallback<Ball, Ball> {
   @override
   void begin(Ball ball1, Ball ball2, Contact contact) {
+    if (ball1 is WhiteBall || ball2 is WhiteBall) {
+      return;
+    }
     if (ball1.currentPaint != ball1.originalPaint) {
       ball1.currentPaint = ball2.currentPaint;
     } else {
@@ -87,11 +102,33 @@ class BallContactCallback implements ContactCallback<Ball, Ball> {
   void end(Ball ball1, Ball ball2, Contact contact) {}
 }
 
+class WhiteBallContactCallback extends ContactCallback<Ball, WhiteBall> {
+  @override
+  void begin(Ball ball, WhiteBall whiteBall, Contact contact) {
+    ball.giveNudge = true;
+  }
+
+  @override
+  void end(Ball ball, WhiteBall whiteBall, Contact contact) {}
+}
+
+class BallWallContactCallback extends ContactCallback<Ball, Wall> {
+  @override
+  void begin(Ball ball, Wall wall, Contact contact) {
+    wall.paint = ball.currentPaint;
+  }
+
+  @override
+  void end(Ball ball1, Wall wall, Contact contact) {}
+}
+
 class MyGame extends Box2DGame {
   MyGame(Box2DComponent box) : super(box) {
     final List<BodyComponent> boundaries = createBoundaries(box);
     boundaries.forEach(add);
     addContactCallback(BallContactCallback());
+    addContactCallback(BallWallContactCallback());
+    addContactCallback(WhiteBallContactCallback());
   }
 
   @override
@@ -99,7 +136,11 @@ class MyGame extends Box2DGame {
     super.onTapDown(details);
     final Vector2 position =
         Vector2(details.globalPosition.dx, details.globalPosition.dy);
-    add(Ball(position, box));
+    if (math.Random().nextInt(10) < 2) {
+      add(WhiteBall(position, box));
+    } else {
+      add(Ball(position, box));
+    }
   }
 }
 
