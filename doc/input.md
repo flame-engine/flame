@@ -67,7 +67,7 @@ All of these methods are basically a mirror from the callbacks available on the 
 
 ```dart
 class MyGame extends Game with TapDetector {
-  // Other methods ommited
+  // Other methods omitted
 
   @override
   void onTapDown(TapDownDetails details) {
@@ -123,7 +123,7 @@ class TapableComponent extends PositionComponent with Tapable {
 
 Flame provides a simple way to access Flutter's features regarding accessing Keyboard input events.
 
-To use it just add the `KeyboardEvents` mixin to your game class. By doing so you will need to implement the `onKeyEvent` method, this method is called everytime a keyboard event happens, and it receives an instance of the Flutter class `RawKeyEvent`, which can be used to get information about the event, like if it was a key down or key up event, the pressed key and etc.
+To use it just add the `KeyboardEvents` mixin to your game class. By doing so you will need to implement the `onKeyEvent` method, this method is called every time a keyboard event happens, and it receives an instance of the Flutter class `RawKeyEvent`, which can be used to get information about the event, like if it was a key down or key up event, the pressed key and etc.
 
 Minimal example:
 

@@ -53,7 +53,4 @@ class TextComponent extends PositionComponent {
     prepareCanvas(c);
     _tp.paint(c, _translatedOffset);
   }
-
-  @override
-  void update(double t) {}
 }

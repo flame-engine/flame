@@ -23,7 +23,7 @@ When using `Particle` with custom `Game` implementation, please ensure that `Par
 
 Main approaches to implement desired particle effects:
 * Composition of existing behaviors
-* Use behavior chaining (just a syntaxic sugar over first one)
+* Use behavior chaining (just a syntactic sugar over first one)
 * Using `ComputedParticle`
 
 Composition works in a similar fashion to those of Flutter widgets by defining the effect from top to bottom. Chaining allows to express same composition trees more fluently by defining behaviors from bottom to top. Computed particles in their turn fully delegate implementation of the behavior to your code. Any of the approaches, though, could be used in conjunction with existing behaviors, where needed.
@@ -101,7 +101,7 @@ You can find more examples of using different built-int particles in various com
 
 ## Lifecycle
 
-Behavior common to all `Particle`s is that all of them accept `lifespan` parameter. This value is used to make `ParticleCoponent` self-destoy, once its internal `Particle` has reached the end of its life. Time within the `Particle` itself is tracked using the Flame `Timer`. It could be configured with `double`, representing seconds (with microsecond precision)by passing it into the corresponding `Particle` constructor. 
+Behavior common to all `Particle`s is that all of them accept `lifespan` parameter. This value is used to make `ParticleCoponent` self-destroy, once its internal `Particle` has reached the end of its life. Time within the `Particle` itself is tracked using the Flame `Timer`. It could be configured with `double`, representing seconds (with microsecond precision)by passing it into the corresponding `Particle` constructor. 
 
 ```dart
 Particle(lifespan: .2); // will live for 200ms
@@ -357,7 +357,7 @@ game.add(
 ## Nesting behavior
 
 Flame's implementation of particles follows same pattern of extreme composition as Flutter widgets. That
-is achieved by incapsulating small pieces of behavior in every of particles and then nesting these behaviors together to achieve desired visual effect.
+is achieved by encapsulating small pieces of behavior in every of particles and then nesting these behaviors together to achieve desired visual effect.
 
 Two entities allowing `Particle` to nest each other are: `SingleChildParticle` mixin and `ComposedParticle` class.
 

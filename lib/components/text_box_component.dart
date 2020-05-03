@@ -179,6 +179,7 @@ class TextBoxComponent extends PositionComponent with Resizable {
 
   @override
   void update(double dt) {
+    super.update(dt);
     final int prevCurrentChar = currentChar;
     _lifeTime += dt;
     if (prevCurrentChar != currentChar) {

@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import '../gestures.dart';
+import 'embedded_game_widget.dart';
 import 'game.dart';
 
 class WidgetBuilder {
