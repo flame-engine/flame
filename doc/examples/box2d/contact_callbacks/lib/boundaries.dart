@@ -43,12 +43,12 @@ class Wall extends BodyComponent {
     shape.setAsEdge(start, end);
 
     final fixtureDef = FixtureDef()
-      ..setUserData(this) // To be able to determine object in collision
       ..shape = shape
       ..restitution = 0.0
       ..friction = 0.1;
 
     final bodyDef = BodyDef()
+      ..setUserData(this) // To be able to determine object in collision
       ..position = Vector2.zero()
       ..type = BodyType.STATIC;
 
