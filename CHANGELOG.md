@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## [next]
+
 ## 0.20.0
 - Refactor game.dart classes into separate files
 - Split up gameloop into separate GameLoop class
