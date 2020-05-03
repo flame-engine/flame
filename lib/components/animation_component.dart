@@ -60,6 +60,7 @@ class AnimationComponent extends PositionComponent {
 
   @override
   void update(double t) {
+    super.update(t);
     animation.update(t);
   }
 }

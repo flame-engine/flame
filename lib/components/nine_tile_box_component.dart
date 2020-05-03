@@ -16,7 +16,4 @@ class NineTileBoxComponent extends PositionComponent {
   void render(Canvas c) {
     nineTileBox.drawRect(c, toRect());
   }
-
-  @override
-  void update(double t) {}
 }
