@@ -26,15 +26,12 @@ final bodyDef = BodyDef()
   ..setUserData(this);
 ```
 
-To do this you have to make an implementation of `ContactCallback` where you set which two types that it should react when they come in contact.
+Now you have to make an implementation of `ContactCallback` where you set which two types that it should react when they come in contact.
 If you have two `BodyComponent`s named Ball and Wall and you want to do something when they come in contact you would do like this:
 
 ```dart
-class BallContactCallback implements ContactCallback<Ball, Wall> {
-  @override
-  ContactTypes types = ContactTypes(Ball, Wall);
-
-  BallContactCallback();
+class BallWallCallback implements ContactCallback<Ball, Wall> {
+  BallWallCallback();
 
   @override
   void begin(Ball ball, Wall wall) {
@@ -46,19 +43,19 @@ class BallContactCallback implements ContactCallback<Ball, Wall> {
 }
 ```
 
-and then you simply add `BallContactCallback` to your `Box2DGame`:
+and then you simply add `BallWallCallback` to your `Box2DGame`:
 
 ```dart
 class MyGame extends Box2DGame {
   MyGame(Box2DComponent box) : super(box) {
-    addContactCallback(BallContactCallback());
+    addContactCallback(BallWallCallback());
   }
 }
 ```
 
 Every time `Ball` and `Wall` gets in contact `begin` will be called, and once the objects stop being in contact `end` will be called.
 
-If you want an object to interact with all other bodies, put `BodyComponent` as the second parameter of your `ContactCallback` like this:
+If you want an object to interact with all other bodies, put `BodyComponent` as the one of the parameters of your `ContactCallback` like this:
 
 `class BallAnythingCallback implements ContactCallback<Ball, BodyComponent> ...`
 
