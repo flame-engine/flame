@@ -28,8 +28,8 @@ class Ball extends BodyComponent {
 
   Paint _randomPaint() {
     math.Random rng = math.Random();
-    return PaletteEntry(Color.fromARGB(rng.nextInt(255), rng.nextInt(255),
-            rng.nextInt(255), rng.nextInt(255)))
+    return PaletteEntry(Color.fromARGB(100 + rng.nextInt(155),
+            100 + rng.nextInt(155), 100 + rng.nextInt(155), 255))
         .paint;
   }
 
