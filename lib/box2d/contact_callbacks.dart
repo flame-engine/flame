@@ -44,7 +44,8 @@ class ContactCallbacks extends ContactListener {
     final Object b = contact.fixtureB.getBody().userData;
     final ContactTypes wanted = callback.types;
 
-    if (wanted.match(a, b) || (wanted.has(BodyComponent) && wanted.hasOne(a, b))) {
+    if (wanted.match(a, b) ||
+        (wanted.has(BodyComponent) && wanted.hasOne(a, b))) {
       wanted.inOrder(a, b) ? f(a, b, contact) : f(b, a, contact);
     }
   }
