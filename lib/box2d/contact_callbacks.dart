@@ -1,26 +1,27 @@
 import 'package:box2d_flame/box2d.dart';
 import 'package:flame/box2d/box2d_component.dart';
 
-class ContactTypes {
-  final Type type1, type2;
+class ContactTypes<T1, T2> {
+  // If o1 is, or inherits from, T1 or T2
+  bool has(Object o1) => o1 is T1 || o1 is T2;
+  bool hasOne(Object o1, Object o2) => has(o1) || has(o2);
 
-  ContactTypes(this.type1, this.type2);
+  // Only makes sense to call with objects that you know is in [T1, T2]
+  bool inOrder(Object o1, Object o2) => o1 is T1 && o2 is T2;
 
-  bool has(Type type) => type1 == type || type2 == type;
-
-  // If it contains at least one type from the other ContactTypes
-  bool hasOneIn(ContactTypes other) => has(other.type1) || has(other.type2);
-
-  bool equals(ContactTypes other) =>
-      (type1 == other.type1 && type2 == other.type2) ||
-          (type2 == other.type1 && type1 == other.type2);
+  // Remember that this is not symmetric, it checks if the types in `o1` and
+  // `o2` are the same or inherits from the types in `other`
+  bool match(Object o1, Object o2) =>
+      (o1 is T1 && o2 is T2) || (o2 is T1 && o1 is T2);
 }
 
-mixin ContactCallback<Type1, Type2> {
-  ContactTypes types;
+abstract class ContactCallback<Type1, Type2> {
+  ContactTypes<Type1, Type2> types = ContactTypes<Type1, Type2>();
 
   void begin(Type1 a, Type2 b, Contact contact);
   void end(Type1 a, Type2 b, Contact contact);
+  void preSolve(Type1 a, Type2 b, Contact contact, Manifold oldManifold) {}
+  void postSolve(Type1 a, Type2 b, Contact contact, ContactImpulse impulse) {}
 }
 
 class ContactCallbacks extends ContactListener {
@@ -38,17 +39,13 @@ class ContactCallbacks extends ContactListener {
     _callbacks.clear();
   }
 
-  bool _inOrder(ContactCallback c, Object a, Object b) =>
-      c.types.type1 == a.runtimeType;
-
   void _maybeCallback(Contact contact, ContactCallback callback, Function f) {
     final Object a = contact.fixtureA.userData;
     final Object b = contact.fixtureB.userData;
-    final ContactTypes current = ContactTypes(a.runtimeType, b.runtimeType);
     final ContactTypes wanted = callback.types;
 
-    if (current.equals(wanted) || (wanted.has(BodyComponent) && current.hasOneIn(wanted))) {
-      _inOrder(callback, a, b) ? f(a, b, contact) : f(b, a, contact);
+    if (wanted.match(a, b) || (wanted.has(BodyComponent) && wanted.hasOne(a, b))) {
+      wanted.inOrder(a, b) ? f(a, b, contact) : f(b, a, contact);
     }
   }
 
@@ -61,8 +58,24 @@ class ContactCallbacks extends ContactListener {
       _callbacks.forEach((c) => _maybeCallback(contact, c, c.end));
 
   @override
-  void postSolve(Contact contact, ContactImpulse impulse) {}
+  void preSolve(Contact contact, Manifold oldManifold) {
+    _callbacks.forEach((c) {
+      final void Function(Object, Object, Contact) preSolveAux =
+          (Object a, Object b, Contact contact) {
+        c.preSolve(a, b, contact, oldManifold);
+      };
+      _maybeCallback(contact, c, preSolveAux);
+    });
+  }
 
   @override
-  void preSolve(Contact contact, Manifold oldManifold) {}
+  void postSolve(Contact contact, ContactImpulse impulse) {
+    _callbacks.forEach((c) {
+      final void Function(Object, Object, Contact) postSolveAux =
+          (Object a, Object b, Contact contact) {
+        c.postSolve(a, b, contact, impulse);
+      };
+      _maybeCallback(contact, c, postSolveAux);
+    });
+  }
 }
