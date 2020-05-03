@@ -18,6 +18,14 @@ A simple `Box2DGame` implementation example can be seen in the [examples folder]
 
 If you are using `Box2DGame` you can take advantage of its way of handling contacts between two `BodyComponent`s.
 
+When creating the body definition for your `BodyComponent` make sure that you set the userdata to the current object, otherwise it will not be possible to detect collisions.
+Like this:
+```dart
+final bodyDef = BodyDef()
+  // To be able to determine object in collision
+  ..setUserData(this);
+```
+
 To do this you have to make an implementation of `ContactCallback` where you set which two types that it should react when they come in contact.
 If you have two `BodyComponent`s named Ball and Wall and you want to do something when they come in contact you would do like this:
 

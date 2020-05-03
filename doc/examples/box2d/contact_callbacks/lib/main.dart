@@ -38,14 +38,14 @@ class Ball extends BodyComponent {
     shape.radius = radius;
 
     final fixtureDef = FixtureDef()
-      // To be able to determine object in collision
-      ..setUserData(this)
       ..shape = shape
       ..restitution = 1.0
       ..density = 1.0
       ..friction = 0.1;
 
     final bodyDef = BodyDef()
+      // To be able to determine object in collision
+      ..setUserData(this)
       ..position = position
       ..type = BodyType.DYNAMIC;
 
