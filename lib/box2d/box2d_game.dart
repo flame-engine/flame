@@ -8,7 +8,9 @@ class Box2DGame extends BaseGame {
   final Box2DComponent box;
   final List<BodyComponent> _addLater = [];
 
-  Box2DGame(this.box) : super();
+  Box2DGame(this.box) : super() {
+    add(box);
+  }
 
   @override
   void add(Component c) {
@@ -31,18 +33,11 @@ class Box2DGame extends BaseGame {
   @override
   void update(double t) {
     super.update(t);
-    box.update(t);
     box.components
         .where((c) => c.destroy())
         .toList()
         .forEach((c) => box.remove(c));
     box.addAll(_addLater);
     _addLater.clear();
-  }
-
-  @override
-  void render(Canvas c) {
-    super.render(c);
-    box.render(c);
   }
 }
