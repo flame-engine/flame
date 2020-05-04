@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## [next]
-- Fix Box2DGame to follow render prio
+- Fix Box2DGame to follow render priority
 
 ## 0.20.0
 - Refactor game.dart classes into separate files
