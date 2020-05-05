@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+- Adding method to load image bases on base64 data url.
 - Fix Box2DGame to follow render priority
 
 ## 0.20.0
