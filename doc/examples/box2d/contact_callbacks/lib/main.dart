@@ -12,7 +12,9 @@ import 'boundaries.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.util.fullScreen();
-  runApp(GameController().widget);
+  final MyBox2D box = MyBox2D();
+  final MyGame game = MyGame(box);
+  runApp(game.widget);
 }
 
 class Ball extends BodyComponent {
@@ -149,15 +151,4 @@ class MyBox2D extends Box2DComponent {
 
   @override
   void initializeWorld() {}
-}
-
-class GameController {
-  MyGame _game;
-
-  GameController() {
-    final MyBox2D box = MyBox2D();
-    _game = MyGame(box);
-  }
-
-  Widget get widget => _game.widget;
 }
