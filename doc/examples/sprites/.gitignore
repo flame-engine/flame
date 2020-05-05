@@ -73,3 +73,5 @@ macos
 test
 .flutter-plugins-dependencies
 web
+
+lib/generated_plugin_registrant.dart
