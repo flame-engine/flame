@@ -8,8 +8,8 @@ import 'package:flame/palette.dart';
 List<Wall> createBoundaries(Box2DComponent box) {
   final Viewport viewport = box.viewport;
   final Vector2 screenSize = Vector2(viewport.width, viewport.height);
-  final Vector2 topLeft = (screenSize/2)*-1;
-  final Vector2 bottomRight = screenSize/2;
+  final Vector2 topLeft = (screenSize / 2) * -1;
+  final Vector2 bottomRight = screenSize / 2;
   final Vector2 topRight = Vector2(bottomRight.x, topLeft.y);
   final Vector2 bottomLeft = Vector2(topLeft.x, bottomRight.y);
 
