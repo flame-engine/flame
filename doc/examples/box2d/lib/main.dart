@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:box2d_flame/box2d.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Flame.util.fullScreen();
   runApp(GameController().widget);
 }
@@ -19,8 +20,8 @@ class MyPlanet extends BodyComponent {
   // After 20 seconds the circle will be removed, to show that we don't get
   // any concurrent modification exceptions.
   MyPlanet(Box2DComponent box) : super(box) {
-    Vector2 leftCorner = viewport.getScreenToWorld(Vector2.zero());
-    _createBody(50.0, leftCorner);
+    Vector2 center = viewport.getScreenToWorld(viewport.center);
+    _createBody(50.0, center);
   }
 
   void _createBody(double radius, Vector2 position) {
@@ -40,8 +41,7 @@ class MyPlanet extends BodyComponent {
     bodyDef.angularVelocity = 4.0;
     bodyDef.type = BodyType.DYNAMIC;
 
-    this.body = world.createBody(bodyDef)
-      ..createFixtureFromFixtureDef(fixtureDef);
+    body = world.createBody(bodyDef)..createFixtureFromFixtureDef(fixtureDef);
   }
 
   @override
