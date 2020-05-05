@@ -15,8 +15,11 @@ Please delete options that are not relevant.
 
 # Checklist:
 
+If something is unclear, please submit the PR anyways and ask about what you thought was unclear.
+
 - [ ] This branch is based on `develop`
 - [ ] This PR is targeted to merge into `develop` (not `master`)
 - [ ] I have formatted my code with `flutter format`
 - [ ] I have made corresponding changes to the documentation
 - [ ] I have added examples for new features in `doc/examples`
+- [ ] The continuous integration (CI) is passing
