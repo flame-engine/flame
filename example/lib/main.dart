@@ -41,6 +41,7 @@ class Square extends PositionComponent with HasGameRef<MyGame> {
 
   @override
   void update(double t) {
+    super.update(t);
     angle += SPEED * t;
     angle %= 2 * math.pi;
   }

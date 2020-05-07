@@ -1,6 +1,19 @@
 # Audio
 
-To play an audio, it's really simple! Just run, at any moment:
+To play an audio is really simple!
+
+Start by adding an entry in your `pubspec.yaml` for each file you want to use (and make sure at the files exist in path that you provide).
+
+For the examples below, your `pubspec.yaml` file needs to contain something like this:
+
+```yaml
+flutter:
+  assets:
+    - assets/audio/explosion.mp3
+    - assets/audio/music.mp3
+```
+
+Then simply run:
 
 ```dart
     import 'package:flame/flame.dart';

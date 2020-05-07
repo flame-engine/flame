@@ -4,7 +4,7 @@ One cool feature when developing games with Flutter is the ability to use Flutte
 
 Here you can find all the available widgets provided by Flame.
 
-You can also see all the widgets showcased inside a [Dashbook](https://github.com/erickzanardo/dashbook) sandbox [here](/doc/examples/widgets)
+You can also see all the widgets showcased inside a [Dashbook](https://github.com/erickzanardo/dashbook) sandbox [here](/docs/examples/widgets)
 
 ## Nine Tile Box
 
