@@ -69,12 +69,12 @@ removeWidgetOverlay("PauseMenu"); // Use the overlay identifier to remove the ov
 
 Under the hood, Flame uses a [Stack widget](https://api.flutter.dev/flutter/widgets/Stack-class.html) to display the overlay, so it is important to __note that the order which the overlays are added matter__, where the last added overlay, will be in the front of those added before.
 
-Here you can see a [working example](/doc/examples/with_widgets_overlay) of this feature.
+Here you can see a [working example](/docs/examples/with_widgets_overlay) of this feature.
 
 ## BaseGame debug mode
 
 Flame's `BaseGame` class provides a method called `debugMode`, which by default returns false. It can however, be overridden to enable debug features over the components of the game. __Be aware__ that the state returned by this method is passed through its component when they added to the game, so if you change the `debugMode` in runtime, it may not affect already added components.
 
-To see more about debugMode on Flame, please refer to the [Debug Docs](/doc/debug.md)
+To see more about debugMode on Flame, please refer to the [Debug Docs](/docs/debug.md)
 
 

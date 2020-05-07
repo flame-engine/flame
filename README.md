@@ -6,19 +6,19 @@
 
 A minimalist Flutter game engine.
 
-Any help is appreciated! Comment, suggestions, issues, PR's! Give us a star to help!
+Any help is appreciated! Comments, suggestions, issues, PRs! Give us a star to show your support!
 
 ## Help
 
-We have a Flame help channel on Fireslime's Discord, join it [here](https://discord.gg/pxrBmy4). Also we now have a [FAQ](FAQ.md), so please search your questions there first.
+We have a Flame help channel on Fireslime's Discord, join it [here](https://discord.gg/pxrBmy4). Also we now have a [FAQ](FAQ.md), so please search for your question there first.
 
 ## Goals
 
-The goal of this project is to provided a complete set of out-of-the-way solutions for the common problems every game developed in Flutter will share.
+The goal of this project is to provide a complete set of out-of-the-way solutions for the common problems every game developed in Flutter will share.
 
-Currently it provides you with: a few utilities, images/sprites/sprite sheets, audio, a game loop and a component/object system.
+Currently it provides you with: a few utilities, images/sprites/sprite sheets, audio, a physics engine, a game loop and a component/object system.
 
-You can use whatever ones you want, as they are all somewhat independent.
+You can use whichever ones you want, as they are all somewhat independent.
 
 ## Support
 
@@ -26,7 +26,7 @@ Support us by becoming a patron on Patreon
 
 [![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/fireslime)
 
-Or making a single donation buying us a coffee:
+Or making a single donation by buying us a coffee:
 
 [![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/fireslime)
 
@@ -44,7 +44,7 @@ You can also show support by showing on your repository that your game is made w
 
 ## Contributing
 
-Found a bug on Flame and want to contribute with a PR? PRs are always very welcome, just be sure to create your PR from the `develop` branch.
+Found a bug in Flame and want to contribute with a PR? PRs are always very welcome, just be sure to create your PR from the `develop` branch.
 
 ## Getting started
 
@@ -61,7 +61,9 @@ We also offer a curated list of Games, Libraries and Articles over at [awesome-f
 
 ## Documentation
 
-The complete documentation can be found [here](doc/README.md).
+The complete documentation can be found [here](docs/README.md).
+
+A lot of examples of different features can be found [here](docs/examples) and a good starting example can be found [here](./example).
 
 A very cool docs site can be found [here](https://flame-engine.org/).
 
