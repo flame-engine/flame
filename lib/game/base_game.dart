@@ -66,13 +66,13 @@ class BaseGame extends Game with TapDetector {
       c.debugMode = true;
     }
 
+    if (c is HasGameRef) {
+      (c as HasGameRef).gameRef = this;
+    }
+
     // first time resize
     if (size != null) {
       c.resize(size);
-    }
-
-    if (c is HasGameRef) {
-      (c as HasGameRef).gameRef = this;
     }
 
     if (c is ComposedComponent) {

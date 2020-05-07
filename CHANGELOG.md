@@ -1,13 +1,19 @@
 # CHANGELOG
 
+## 0.20.1
+- Adding method to load image bases on base64 data url.
+- Fix Box2DGame to follow render priority
+- Fix games trying to use gameRef inside the resize function
+
 ## 0.20.0
 - Refactor game.dart classes into separate files
-- Split up gameloop into separate GameLoop class
+- Adding a GameLoop class which uses a Ticker for updating game
 - Adding sprites example
 - Made BaseGame non-abstract and removed SimpleGame
 - Adding SpriteButton Widget
 - Added SpriteBatch API, which renders sprites effectively using Canvas.drawAtlas
 - Introducing basic effects API, including MoveEffect and ScaleEffect
+- Adding ContactCallback controls in Box2DGame
 
 ## 0.19.1
  - Bump AudioPlayers version to allow for web support
