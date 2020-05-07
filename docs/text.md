@@ -16,13 +16,12 @@ const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font',
 * fontSize : font size, in pts (default `24.0`)
 * color : the color, as a `ui.Color` (default black)
 
-For more information regarding colors and how to create then, see the [Colors and the Palette](/docs/palette.md) guide.
+For more information regarding colors and how to create then, see the [Colors and the Palette](./palette.md) guide.
 
 After the creation of the config you can use its `render` method to draw some string on a canvas:
 
 ```dart
 config.render(canvas, "Flame is awesome", Position(10, 10));
-
 ```
 
 ## Text Components
@@ -56,7 +55,7 @@ class MyGame extends BaseGame {
 
 ### TextBoxComponent
 
-`TextBoxComponent` is very similar to `TextComponent`, but as its name suggest, is used to render a text inside a bounding box, creating line breaks according to the provided box size.
+`TextBoxComponent` is very similar to `TextComponent`, but as its name suggest it is used to render text inside a bounding box, creating line breaks according to the provided box size.
 
 Example usage:
 
@@ -77,4 +76,4 @@ class MyTextBox extends TextBoxComponent {
 }
 ```
 
-Both components are showcased on a working example [here](https://github.com/luanpotter/flame/tree/master/doc/examples/text)
+Both components are showcased in a working example [here](https://github.com/luanpotter/flame/tree/master/doc/examples/text)
