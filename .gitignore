@@ -10,6 +10,8 @@ pubspec.lock
 doc/api/
 .flutter-plugins
 .vscode/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
 
 android/
 ios/

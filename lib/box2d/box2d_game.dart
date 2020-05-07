@@ -1,14 +1,19 @@
 import 'dart:ui';
 
 import 'package:flame/box2d/box2d_component.dart';
+import 'package:flame/box2d/contact_callbacks.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/game/base_game.dart';
 
 class Box2DGame extends BaseGame {
   final Box2DComponent box;
   final List<BodyComponent> _addLater = [];
+  final ContactCallbacks _contactCallbacks = ContactCallbacks();
 
-  Box2DGame(this.box) : super();
+  Box2DGame(this.box) : super() {
+    add(box);
+    box.world.setContactListener(_contactCallbacks);
+  }
 
   @override
   void add(Component c) {
@@ -31,7 +36,6 @@ class Box2DGame extends BaseGame {
   @override
   void update(double t) {
     super.update(t);
-    box.update(t);
     box.components
         .where((c) => c.destroy())
         .toList()
@@ -40,9 +44,15 @@ class Box2DGame extends BaseGame {
     _addLater.clear();
   }
 
-  @override
-  void render(Canvas c) {
-    super.render(c);
-    box.render(c);
+  void addContactCallback(ContactCallback callback) {
+    _contactCallbacks.register(callback);
+  }
+
+  void removeContactCallback(ContactCallback callback) {
+    _contactCallbacks.deregister(callback);
+  }
+
+  void clearContactCallbacks() {
+    _contactCallbacks.clear();
   }
 }
