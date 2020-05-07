@@ -35,7 +35,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     game.resumeEngineFn = gameLoop.resume;
 
     if (game.runOnCreation) {
-      gameLoop.scheduleTick();
+      gameLoop.start();
     }
 
     _bindLifecycleListener();
@@ -45,7 +45,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   void detach() {
     super.detach();
     game.onDetach();
-    gameLoop.unscheduleTick();
+    gameLoop.stop();
     _unbindLifecycleListener();
   }
 
