@@ -43,14 +43,14 @@ The `onDestroy` method can be overridden to run code before the component is rem
 
 There are also other implementations:
 
-* The `AnimationComponent` takes an `Animation` object and renders a cyclic animated sprite (more details about Animations [here](/docs/images.md#Animation))
+* The `AnimationComponent` takes an `Animation` object and renders a cyclic animated sprite (more details about Animations [here](./images.md#Animation))
 * The `SvgComponent` takes an `Svg` object and renders the SVG on the game
 * The `ParallaxComponent` can render a parallax background with several frames
 * The `Box2DComponent`, that has a physics engine built-in (using the [Box2D](https://github.com/google/box2d.dart) port for Dart)
 
 ## Animation Component
 
-This component uses an instance of the [Animation](/docs/images.md#Animation) class to represent a Component that has a sprite that runs a single cyclic animation.
+This component uses an instance of the [Animation](./images.md#Animation) class to represent a Component that has a sprite that runs a single cyclic animation.
 
 This will create a simple three frame animation
 
@@ -59,7 +59,7 @@ This will create a simple three frame animation
     this.player = AnimationComponent(64.0, 64.0, new Animation.spriteList(sprites, stepTime: 0.01));
 ```
 
-If you have a sprite sheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](/docs/images.md#Animation)):
+If you have a sprite sheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](./images.md#Animation)):
 
 ```dart
     this.player = AnimationComponent.sequenced(64.0, 64.0, 'player.png', 2);
@@ -80,7 +80,7 @@ This component uses an instance of `Svg` class to represent a Component that has
 
 ## FlareAnimation Component
 
-This component wraps an instance of the [FlareAnimation](/docs/images.md#FlareAnimation), it receives the filename of the Flare animation file, which animation from that file you want to use, and the `width` and `height` of the rendered animation.
+This component wraps an instance of the [FlareAnimation](./images.md#FlareAnimation), it receives the filename of the Flare animation file, which animation from that file you want to use, and the `width` and `height` of the rendered animation.
 
 ```dart
     final fileName = "assets/Bob_Minion.flr";
@@ -96,7 +96,7 @@ This component wraps an instance of the [FlareAnimation](/docs/images.md#FlareAn
 
 You can also change the current playing animation using the `updateAnimation` method.
 
-For a working example, check this [source file](/docs/examples/flare/lib/main_component.dart).
+For a working example, check this [source file](./examples/flare/lib/main_component.dart).
 
 ## Composed component
 
@@ -179,7 +179,7 @@ Once you are done with setting the parameters to your needs, render the Parallax
 Like the AnimationComponent, even if your parallax is static, you must call update on this component, so it runs its animation.
 Also, don't forget to add you images to the `pubspec.yaml` file as assets or they wont be found.
 
-An example implementation can be found in the [examples directory](/docs/examples/parallax).
+An example implementation can be found in the [examples directory](./examples/parallax).
 
 ## Box2D Component
 
@@ -215,4 +215,4 @@ Check the example app `nine_tile_box` details on how to use it.
 
 Flame provides a set of effects that can be applied to a certain type of components, these effects can be used to animate some properties of your components, like position or dimensions. You can check the list of those effects [here](./effects.md)
 
-Examples of the running effects can be found [here](/docs/examples/effects.md);
+Examples of the running effects can be found [here](./examples/effects.md);
