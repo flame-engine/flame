@@ -50,7 +50,7 @@ All render methods from the Sprite class can receive a `Paint` instance as the o
 
 Sprites can also be used as widgets, to do so just use `Flame.util.spriteAsWidget`
 
-A complete example using sprite as widgets can be found [here](./examples/animation_widget).
+A complete example using sprite as widgets can be found [here](/docs/examples/animation_widget).
 
 ## SpriteBatch
 
@@ -62,7 +62,7 @@ You render it with a `Canvas` and an optional `Paint`, `BlendMode` and `CullRect
 
 A `SpriteBatchComponent` is also available for your convenience.
 
-See example [here](./examples/sprite_batch).
+See example [here](/docs/examples/sprite_batch).
 
 ## Svg
 
@@ -179,7 +179,7 @@ Animations are normally used inside `AnimationComponent`s, but custom components
 
 Animations can also be used as widgets, to do so, just use `Flame.util.animationAsWidget`
 
-A complete example of using animations as widgets can be found [here](./examples/animation_widget).
+A complete example of using animations as widgets can be found [here](/docs/examples/animation_widget).
 
 ## FlareAnimation
 
@@ -223,7 +223,7 @@ class MyGame extends Game {
 ```
 
 FlareAnimations are normally used inside `FlareComponent`s, that way `BaseGame` will handle calling `render` and `update` automatically.
-You can see a full example of the SpriteSheet class [here](./examples/flare).
+You can see a full example of the SpriteSheet class [here](/docs/examples/flare).
 
 ## SpriteSheet
 
@@ -251,4 +251,4 @@ You can also get a single frame of the sprite sheet using the `getSprite` method
 spritesheet.getSprite(0, 0) // row, column;
 ```
 
-You can see a full example of the SpriteSheet class [here](./examples/spritesheet).
+You can see a full example of the SpriteSheet class [here](/docs/examples/spritesheet).

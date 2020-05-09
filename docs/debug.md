@@ -4,4 +4,4 @@ Flame provides some features for debugging, these features are enabled when the 
 
 BaseGame will also start to record the fps when in debug mode, you can access the current fps by using the method `fps`.
 
-To see a working example of the debugging features, [check this example](./examples/debug).
+To see a working example of the debugging features, [check this example](/docs/examples/debug).

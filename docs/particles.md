@@ -96,7 +96,7 @@ game.add(
 )
 ```
 
-You can find more examples of using different built-int particles in various combinations [here](./examples/particles/lib/main.dart).
+You can find more examples of using different built-int particles in various combinations [here](/docs/examples/particles/lib/main.dart).
 
 ## Lifecycle
 
@@ -141,7 +141,7 @@ Flame ships with a few built-in `Particle` behaviors:
 * The `ComponentParticle`, renders Flame `Component` within a `Particle` effect
 * The `FlareParticle`, renders Flare animation within a `Particle` effect
 
-More examples of using these behaviors together are available [here](./examples/particles/lib/main.dart). All the implementations are available in [particles](/lib/particles) folder in the Flame source.
+More examples of using these behaviors together are available [here](/docs/examples/particles/lib/main.dart). All the implementations are available in [particles](/lib/particles) folder in the Flame source.
 
 ## Translated Particle
 
