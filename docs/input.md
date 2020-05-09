@@ -123,7 +123,9 @@ class TapableComponent extends PositionComponent with Tapable {
 
 Flame provides a simple way to access Flutter's features regarding accessing Keyboard input events.
 
-To use it just add the `KeyboardEvents` mixin to your game class. By doing so you will need to implement the `onKeyEvent` method, this method is called every time a keyboard event happens, and it receives an instance of the Flutter class `RawKeyEvent`. The event can be used to get information about what occurred, like if it was a key down or key up event, a pressed key etc.
+To use it, just add the `KeyboardEvents` mixin to your game class.
+When doing this you will need to implement the `onKeyEvent` method, this method is called every time a keyboard event happens, and it receives an instance of the Flutter class `RawKeyEvent`. 
+This event can be used to get information about what occurred, like if it was a key down or key up event, and which key was pressed etc.
 
 Minimal example:
 
