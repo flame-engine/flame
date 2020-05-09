@@ -78,7 +78,7 @@ abstract class PositionComponent extends Component {
   bool renderFlipX = false;
   bool renderFlipY = false;
   bool debugMode = false;
-  List<PositionComponentEffect> _effects = [];
+  final List<PositionComponentEffect> _effects = [];
 
   Color get debugColor => const Color(0xFFFF00FF);
 

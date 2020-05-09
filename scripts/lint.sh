@@ -1,9 +1,9 @@
 if [[ $(flutter format -n .) ]]; then
-    echo "files not formatted"
+    echo "formatting issue"
     exit 1
 fi
 
 if [[ $(dartanalyzer lib/) ]]; then
-  echo "lintint issue"
+  echo "lint issue"
   exit 1
 fi
