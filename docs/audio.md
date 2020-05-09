@@ -2,7 +2,7 @@
 
 To play an audio is really simple!
 
-Start by adding an entry in your `pubspec.yaml` for each file you want to use (and make sure at the files exist in path that you provide).
+Start by adding an entry in your `pubspec.yaml` for each file you want to use (and make sure that the files exist in the paths that you provide).
 
 For the examples below, your `pubspec.yaml` file needs to contain something like this:
 

@@ -31,7 +31,7 @@ NineTileBox(
 
 ## SpriteButton
 
-`SpriteButton` is a simple widget that creates a button based on Flame sprites. This can be very useful when trying to create retro looking buttons. For example when creating that look can be easy to achieve when drawing the button in a drawing software, instead of making it directly in Flutter.
+`SpriteButton` is a simple widget that creates a button based on Flame sprites. This can be very useful when trying to create retro looking buttons. For example when creating that look can be more easily achievable by drawing the button in a drawing software, instead of making it directly in Flutter.
 
 Remember that the Sprites must have already been loaded when passing it to the widget.
 
