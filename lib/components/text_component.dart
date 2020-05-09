@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/painting.dart';
 
 import 'component.dart';
-import '../position.dart';
 import '../text_config.dart';
 
 class TextComponent extends PositionComponent {
@@ -11,7 +10,6 @@ class TextComponent extends PositionComponent {
   TextConfig _config;
 
   TextPainter _tp;
-  Offset _translatedOffset;
 
   String get text => _text;
 
@@ -38,19 +36,11 @@ class TextComponent extends PositionComponent {
     _tp = config.toTextPainter(_text);
     width = _tp.width;
     height = _tp.height;
-
-    _updateOffset(Position.empty());
-  }
-
-  void _updateOffset(Position p) {
-    final Position translatedPosition =
-        anchor.translate(p, Position.fromSize(_tp.size));
-    _translatedOffset = translatedPosition.toOffset();
   }
 
   @override
   void render(Canvas c) {
     prepareCanvas(c);
-    _tp.paint(c, _translatedOffset);
+    _tp.paint(c, Offset.zero);
   }
 }
