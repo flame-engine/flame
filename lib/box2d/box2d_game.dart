@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flame/box2d/box2d_component.dart';
 import 'package:flame/box2d/contact_callbacks.dart';
 import 'package:flame/components/component.dart';
