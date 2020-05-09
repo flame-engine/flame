@@ -1,8 +1,6 @@
 library flame;
 
 import 'package:audioplayers/audio_cache.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
