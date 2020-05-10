@@ -4,12 +4,12 @@ Flame has some dedicated classes to help you render text.
 
 # TextConfig
 
-A Text Config contains all typographical information required to render texts; i.e., font size and color, family, etc.
+A Text Config contains all typographical information required to render text; i.e., font size and color, family, etc.
 
 Example usage:
 
 ```dart
-const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font', anchor: Anchor.rightBottom);
+const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font');
 ```
 
 * fontFamily : a commonly available font, like Arial (default), or a custom font added in your pubspec (see [here](https://flutter.io/custom-fonts/) how to do it)
@@ -22,6 +22,12 @@ After the creation of the config you can use its `render` method to draw some st
 
 ```dart
 config.render(canvas, "Flame is awesome", Position(10, 10));
+```
+
+If you want to set the anchor of the text you can also do that in the render call, with the optional parameter `anchor`:
+
+```dart
+config.render(canvas, "Flame is awesome", Position(10, 10), anchor: Anchor.topCenter);
 ```
 
 ## Text Components
