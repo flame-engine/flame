@@ -70,7 +70,8 @@ class Ball extends BodyComponent {
     final blue = PaletteEntry(Colors.blue).paint;
     c.drawCircle(p, radius, currentPaint);
     final angle = body.getAngle();
-    final lineRotation = Offset(math.sin(angle) * radius, math.cos(angle) * radius);
+    final lineRotation =
+        Offset(math.sin(angle) * radius, math.cos(angle) * radius);
     c.drawLine(p, p + lineRotation, blue);
   }
 

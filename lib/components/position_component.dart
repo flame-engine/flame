@@ -20,10 +20,10 @@ import 'component.dart';
 abstract class PositionComponent extends Component {
   /// X position of this component on the screen (measured from the top left corner).
   double x = 0.0;
-  
+
   /// Y position of this component on the screen (measured from the top left corner).
   double y = 0.0;
-  
+
   /// Angle (with respect to the x-axis) this component should be rendered with.
   /// It is rotated around its anchor.
   double angle = 0.0;
@@ -31,7 +31,7 @@ abstract class PositionComponent extends Component {
   /// Width (size) that this component is rendered with.
   /// This is not necessarily the source width of the asset.
   double width = 0.0;
-  
+
   /// Height (size) that this component is rendered with.
   /// This is not necessarily the source height of the asset.
   double height = 0.0;
@@ -53,7 +53,8 @@ abstract class PositionComponent extends Component {
   bool debugMode = false;
 
   final List<PositionComponentEffect> _effects = [];
-  final OrderedSet<Component> _children = OrderedSet(Comparing.on((c) => c.priority()));
+  final OrderedSet<Component> _children =
+      OrderedSet(Comparing.on((c) => c.priority()));
 
   Color get debugColor => const Color(0xFFFF00FF);
 
@@ -134,7 +135,8 @@ abstract class PositionComponent extends Component {
     _effects.add(effect..component = this);
   }
 
-  void propagateToChildren<T extends PositionComponent>(void Function(T, Rect) handler) {
+  void propagateToChildren<T extends PositionComponent>(
+      void Function(T, Rect) handler) {
     final rect = toRect();
     if (this is T) {
       handler(this as T, rect);

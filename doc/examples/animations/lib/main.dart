@@ -58,8 +58,9 @@ class MyGame extends BaseGame {
     animationComponent.x = m;
     animationComponent.y = y;
     add(animationComponent);
-    
-    final reversedAnimationComponent = AnimationComponent(s, s, animation.reversed());
+
+    final reversedAnimationComponent =
+        AnimationComponent(s, s, animation.reversed());
     reversedAnimationComponent.x = 2 * m + s;
     reversedAnimationComponent.y = y;
     add(reversedAnimationComponent);

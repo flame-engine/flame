@@ -30,7 +30,8 @@ class MyGame extends BaseGame {
   @override
   void render(Canvas canvas) {
     canvas.drawRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height), black);
-    regular.render(canvas, 'hit me!', Position.fromSize(size).div(2), anchor: Anchor.center);
+    regular.render(canvas, 'hit me!', Position.fromSize(size).div(2),
+        anchor: Anchor.center);
     super.render(canvas);
   }
 

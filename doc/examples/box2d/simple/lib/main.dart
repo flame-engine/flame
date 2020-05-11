@@ -59,7 +59,8 @@ class MyPlanet extends BodyComponent {
     c.drawCircle(p, radius, red);
     final angle = body.getAngle();
     c.drawCircle(p, math.sin(angle) * radius, black);
-    final lineRotation = Offset(math.sin(angle) * radius, math.cos(angle) * radius);
+    final lineRotation =
+        Offset(math.sin(angle) * radius, math.cos(angle) * radius);
     c.drawLine(p, p + lineRotation, blue);
   }
 

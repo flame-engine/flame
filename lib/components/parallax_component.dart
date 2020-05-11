@@ -195,8 +195,7 @@ class ParallaxComponent extends PositionComponent {
 
   void _load(List<ParallaxImage> images) {
     _layers = images.map((image) => ParallaxLayer(image)).toList();
-    Future
-      .wait(_layers.map((layer) => layer.future))
-      .then((_) => _loaded = true);
+    Future.wait(_layers.map((layer) => layer.future))
+        .then((_) => _loaded = true);
   }
 }

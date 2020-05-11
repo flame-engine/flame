@@ -28,7 +28,8 @@ class SpriteComponent extends PositionComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    sprite.render(canvas, width: width, height: height, overridePaint: overridePaint);
+    sprite.render(canvas,
+        width: width, height: height, overridePaint: overridePaint);
   }
 
   @override

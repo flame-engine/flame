@@ -54,7 +54,8 @@ class AnimationComponent extends PositionComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    animation.getSprite().render(canvas, width: width, height: height, overridePaint: overridePaint);
+    animation.getSprite().render(canvas,
+        width: width, height: height, overridePaint: overridePaint);
   }
 
   @override

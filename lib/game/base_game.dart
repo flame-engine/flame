@@ -21,8 +21,7 @@ import 'game.dart';
 /// It still needs to be subclasses to add your game logic, but the [update], [render] and [resize] methods have default implementations.
 /// This is the recommended structure to use for most games.
 /// It is based on the Component system.
-class 
-BaseGame extends Game with TapDetector {
+class BaseGame extends Game with TapDetector {
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components =
       OrderedSet(Comparing.on((c) => c.priority()));
@@ -54,7 +53,8 @@ BaseGame extends Game with TapDetector {
   void onTapDown(TapDownDetails details) {
     components.forEach((c) {
       if (c is PositionComponent) {
-        c.propagateToChildren<Tapable>((child, rect) => child.handleTapDown(rect, details));
+        c.propagateToChildren<Tapable>(
+            (child, rect) => child.handleTapDown(rect, details));
       }
     });
   }
@@ -64,7 +64,8 @@ BaseGame extends Game with TapDetector {
   void onTapUp(TapUpDetails details) {
     components.forEach((c) {
       if (c is PositionComponent) {
-        c.propagateToChildren<Tapable>((child, rect) => child.handleTapUp(rect, details));
+        c.propagateToChildren<Tapable>(
+            (child, rect) => child.handleTapUp(rect, details));
       }
     });
   }
