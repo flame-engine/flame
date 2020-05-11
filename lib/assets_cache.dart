@@ -24,7 +24,7 @@ class AssetsCache {
     }
 
     assert(_files[fileName] is _StringAsset,
-        '"${fileName}" is not a String Asset');
+        '"$fileName" is not a String Asset');
 
     return _files[fileName].value;
   }
@@ -36,7 +36,7 @@ class AssetsCache {
     }
 
     assert(_files[fileName] is _BinaryAsset,
-        '"${fileName}" is not a Binary Asset');
+        '"$fileName" is not a Binary Asset');
 
     return _files[fileName].value;
   }
