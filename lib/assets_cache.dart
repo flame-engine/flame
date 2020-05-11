@@ -23,8 +23,8 @@ class AssetsCache {
       _files[fileName] = await _readFile(fileName);
     }
 
-    assert(_files[fileName] is _StringAsset,
-        '"$fileName" is not a String Asset');
+    assert(
+        _files[fileName] is _StringAsset, '"$fileName" is not a String Asset');
 
     return _files[fileName].value;
   }
@@ -35,8 +35,8 @@ class AssetsCache {
       _files[fileName] = await _readBinary(fileName);
     }
 
-    assert(_files[fileName] is _BinaryAsset,
-        '"$fileName" is not a Binary Asset');
+    assert(
+        _files[fileName] is _BinaryAsset, '"$fileName" is not a Binary Asset');
 
     return _files[fileName].value;
   }
