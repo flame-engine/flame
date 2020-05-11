@@ -1,7 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flame/svg.dart';
 import 'package:flame/position.dart';
-import 'package:flame/components/component.dart' show SvgComponent;
+import 'package:flame/components/svg_component.dart' show SvgComponent;
 
 import 'package:flutter/material.dart';
 

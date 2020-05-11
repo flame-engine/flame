@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
-import 'package:flame/components/component.dart';
+import 'package:flame/components/position_component.dart';
 import 'package:flame/components/mixins/tapable.dart';
 
 void main() {

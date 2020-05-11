@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'component.dart';
-import 'package:flame/animation.dart';
+import '../animation.dart';
+import 'position_component.dart';
 
 class AnimationComponent extends PositionComponent {
   Animation animation;
@@ -53,9 +53,8 @@ class AnimationComponent extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    prepareCanvas(canvas);
-    animation.getSprite().render(canvas,
-        width: width, height: height, overridePaint: overridePaint);
+    super.render(canvas);
+    animation.getSprite().render(canvas, width: width, height: height, overridePaint: overridePaint);
   }
 
   @override

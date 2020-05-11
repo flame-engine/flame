@@ -1,19 +1,19 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
-import 'package:flame/components/composed_component.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
-import 'package:flutter/foundation.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
 import '../components/component.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
-import '../position.dart';
+import '../components/position_component.dart';
 import '../gestures.dart';
+import '../position.dart';
 import 'game.dart';
 
 /// This is a more complete and opinionated implementation of Game.
@@ -21,7 +21,8 @@ import 'game.dart';
 /// It still needs to be subclasses to add your game logic, but the [update], [render] and [resize] methods have default implementations.
 /// This is the recommended structure to use for most games.
 /// It is based on the Component system.
-class BaseGame extends Game with TapDetector {
+class 
+BaseGame extends Game with TapDetector {
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components =
       OrderedSet(Comparing.on((c) => c.priority()));
@@ -38,22 +39,34 @@ class BaseGame extends Game with TapDetector {
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
 
-  Iterable<Tapable> get _tapableComponents =>
-      components.where((c) => c is Tapable).cast();
-
+  @mustCallSuper
   @override
   void onTapCancel() {
-    _tapableComponents.forEach((c) => c.handleTapCancel());
+    components.forEach((c) {
+      if (c is PositionComponent) {
+        c.propagateToChildren<Tapable>((child, _) => child.handleTapCancel());
+      }
+    });
   }
 
+  @mustCallSuper
   @override
   void onTapDown(TapDownDetails details) {
-    _tapableComponents.forEach((c) => c.handleTapDown(details));
+    components.forEach((c) {
+      if (c is PositionComponent) {
+        c.propagateToChildren<Tapable>((child, rect) => child.handleTapDown(rect, details));
+      }
+    });
   }
 
+  @mustCallSuper
   @override
   void onTapUp(TapUpDetails details) {
-    _tapableComponents.forEach((c) => c.handleTapUp(details));
+    components.forEach((c) {
+      if (c is PositionComponent) {
+        c.propagateToChildren<Tapable>((child, rect) => child.handleTapUp(rect, details));
+      }
+    });
   }
 
   /// This method is called for every component added, both via [add] and [addLater] methods.
@@ -73,10 +86,6 @@ class BaseGame extends Game with TapDetector {
     // first time resize
     if (size != null) {
       c.resize(size);
-    }
-
-    if (c is ComposedComponent) {
-      c.components.forEach(preAdd);
     }
 
     c.onMount();
@@ -103,6 +112,7 @@ class BaseGame extends Game with TapDetector {
   ///
   /// You can override it further to add more custom behaviour.
   /// Beware of however you are rendering components if not using this; you must be careful to save and restore the canvas to avoid components messing up with each other.
+  @mustCallSuper
   @override
   void render(Canvas canvas) {
     canvas.save();
@@ -130,6 +140,7 @@ class BaseGame extends Game with TapDetector {
   ///
   /// It also actually adds the components that were added by the [addLater] method, and remove those that are marked for destruction via the [Component.destroy] method.
   /// You can override it further to add more custom behaviour.
+  @mustCallSuper
   @override
   void update(double t) {
     components.addAll(_addLater);

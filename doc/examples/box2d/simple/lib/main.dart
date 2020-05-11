@@ -53,14 +53,13 @@ class MyPlanet extends BodyComponent {
 
   @override
   void renderCircle(Canvas c, Offset p, double radius) {
-    Paint red = PaletteEntry(Colors.red).paint;
-    Paint black = PaletteEntry(Colors.black).paint;
-    Paint blue = PaletteEntry(Colors.blue).paint;
+    final red = PaletteEntry(Colors.red).paint;
+    final black = PaletteEntry(Colors.black).paint;
+    final blue = PaletteEntry(Colors.blue).paint;
     c.drawCircle(p, radius, red);
-    double angle = body.getAngle();
+    final angle = body.getAngle();
     c.drawCircle(p, math.sin(angle) * radius, black);
-    Offset lineRotation =
-        Offset(math.sin(angle) * radius, math.cos(angle) * radius);
+    final lineRotation = Offset(math.sin(angle) * radius, math.cos(angle) * radius);
     c.drawLine(p, p + lineRotation, blue);
   }
 

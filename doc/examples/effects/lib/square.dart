@@ -1,4 +1,4 @@
-import 'package:flame/components/component.dart';
+import 'package:flame/components/position_component.dart';
 
 import 'dart:ui';
 
@@ -12,6 +12,7 @@ class Square extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(toRect(), _paint);
+    super.render(canvas);
+    canvas.drawRect(Rect.fromLTWH(0, 0, width, height), _paint);
   }
 }

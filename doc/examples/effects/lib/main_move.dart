@@ -9,13 +9,16 @@ import './square.dart';
 class MyGame extends BaseGame with TapDetector {
   Square square;
   MyGame() {
-    add(square = Square()
-      ..x = 100
-      ..y = 100);
+    add(
+      square = Square()
+        ..x = 100
+        ..y = 100
+    );
   }
 
   @override
-  void onTapUp(details) {
+  void onTapUp(TapUpDetails details) {
+    super.onTapUp(details);
     square.addEffect(MoveEffect(
       destination: Position(
         details.localPosition.dx,

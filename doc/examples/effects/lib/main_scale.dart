@@ -11,10 +11,12 @@ class MyGame extends BaseGame with TapDetector {
   bool grow = true;
 
   MyGame() {
-    add(square = Square()
-      ..anchor = Anchor.center
-      ..x = 200
-      ..y = 200);
+    add(
+      square = Square()
+        ..anchor = Anchor.center
+        ..x = 200
+        ..y = 200
+      );
   }
 
   @override

@@ -1,9 +1,8 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
-import 'package:flame/components/component.dart';
+import 'package:flame/components/sprite_component.dart';
 import 'package:flame/game.dart';
 
 void main() async {

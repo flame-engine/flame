@@ -2,7 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/svg.dart';
 import 'package:flame/position.dart';
-import 'package:flame/components/component.dart' show SvgComponent;
+import 'package:flame/components/svg_component.dart';
 import 'package:flame/components/mixins/resizable.dart';
 import 'package:flame/text_config.dart';
 
@@ -25,6 +25,7 @@ class AndroidComponent extends SvgComponent with Resizable {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (size == null) {
       return;
     }

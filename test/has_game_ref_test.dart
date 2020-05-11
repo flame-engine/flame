@@ -1,10 +1,7 @@
-import 'dart:ui';
-
 import 'package:flame/components/mixins/has_game_ref.dart';
+import 'package:flame/components/position_component.dart';
 import 'package:flame/game/base_game.dart';
 import 'package:test/test.dart';
-
-import 'package:flame/components/component.dart';
 
 class MyGame extends BaseGame {
   bool calledFoo = false;
@@ -14,12 +11,6 @@ class MyGame extends BaseGame {
 }
 
 class MyComponent extends PositionComponent with HasGameRef<MyGame> {
-  @override
-  void update(double dt) {}
-
-  @override
-  void render(Canvas c) {}
-
   void foo() {
     gameRef.foo();
   }

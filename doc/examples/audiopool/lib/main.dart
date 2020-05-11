@@ -11,17 +11,16 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   final Size size = await Flame.util.initialDimensions();
   final MyGame game = MyGame(size);
   runApp(game.widget);
-
-  final TapGestureRecognizer taps = TapGestureRecognizer()
-    ..onTapDown = (_) => game.tap();
-  Flame.util.addGestureRecognizer(taps);
 }
 
-TextConfig regular = TextConfig(color: BasicPalette.white.color);
-AudioPool pool = AudioPool('laser.mp3');
+final regular = TextConfig(color: BasicPalette.white.color);
+final pool = AudioPool('laser.mp3');
+final black = BasicPalette.black.paint;
 
 class MyGame extends BaseGame {
   MyGame(Size screenSize) {
@@ -30,14 +29,14 @@ class MyGame extends BaseGame {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height),
-        BasicPalette.black.paint);
-    regular.render(canvas, 'hit me!', Position.fromSize(size).div(2),
-        anchor: Anchor.center);
+    canvas.drawRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height), black);
+    regular.render(canvas, 'hit me!', Position.fromSize(size).div(2), anchor: Anchor.center);
     super.render(canvas);
   }
 
-  void tap() {
+  @override
+  void onTapDown(TapDownDetails details) {
+    super.onTapDown(details);
     pool.start();
   }
 }

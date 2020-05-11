@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'component.dart';
-import 'package:flame/flare_animation.dart';
+import '../flare_animation.dart';
+import 'position_component.dart';
 
 class FlareComponent extends PositionComponent {
   FlareAnimation _flareAnimation;
@@ -31,7 +31,7 @@ class FlareComponent extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    prepareCanvas(canvas);
+    super.render(canvas);
     _flareAnimation.render(canvas, x: 0, y: 0);
   }
 

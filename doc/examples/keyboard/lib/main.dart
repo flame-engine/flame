@@ -15,10 +15,7 @@ class MyGame extends Game with KeyboardEvents {
 
   @override
   void update(double dt) {
-    _rect = _rect.translate(
-      _dir * dt * 100,
-      0,
-    );
+    _rect = _rect.translate(_dir * dt * 100, 0);
   }
 
   @override

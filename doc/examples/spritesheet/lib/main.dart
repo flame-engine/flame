@@ -2,7 +2,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/spritesheet.dart';
 import 'package:flame/components/animation_component.dart';
-import 'package:flame/components/component.dart';
+import 'package:flame/components/sprite_component.dart';
 import 'package:flutter/material.dart';
 
 void main() async {

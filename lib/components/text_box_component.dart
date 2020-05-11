@@ -1,13 +1,14 @@
 import 'dart:async';
-import 'dart:ui';
 import 'dart:math' as math;
+import 'dart:ui';
+
 import 'package:flutter/widgets.dart' as widgets;
 
-import 'component.dart';
-import 'mixins/resizable.dart';
-import '../text_config.dart';
 import '../palette.dart';
 import '../position.dart';
+import '../text_config.dart';
+import 'mixins/resizable.dart';
+import 'position_component.dart';
 
 class TextBoxConfig {
   final double maxWidth;
@@ -136,11 +137,10 @@ class TextBoxComponent extends PositionComponent with Resizable {
 
   @override
   void render(Canvas c) {
-    if (_cache == null) {
-      return;
+    super.render(c);
+    if (_cache != null) {
+      c.drawImage(_cache, Offset.zero, _imagePaint);
     }
-    prepareCanvas(c);
-    c.drawImage(_cache, Offset.zero, _imagePaint);
   }
 
   Future<Image> _redrawCache() {

@@ -5,14 +5,20 @@ import 'package:flame/components/animation_component.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final Size size = await Flame.util.initialDimensions();
   final game = MyGame(size);
   runApp(game.widget);
 }
 
 class MyGame extends BaseGame {
-  final animation = flame_animation.Animation.sequenced('chopper.png', 4,
-      textureWidth: 48, textureHeight: 48, stepTime: 0.15);
+  final animation = flame_animation.Animation.sequenced(
+    'chopper.png',
+    4,
+    textureWidth: 48,
+    textureHeight: 48,
+    stepTime: 0.15,
+  );
 
   AnimationComponent buildAnimation() {
     final ac = AnimationComponent(100, 100, animation);

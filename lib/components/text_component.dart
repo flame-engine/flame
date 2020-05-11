@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/painting.dart';
 
-import 'component.dart';
 import '../text_config.dart';
+import 'position_component.dart';
 
 class TextComponent extends PositionComponent {
   String _text;
@@ -40,7 +40,7 @@ class TextComponent extends PositionComponent {
 
   @override
   void render(Canvas c) {
-    prepareCanvas(c);
+    super.render(c);
     _tp.paint(c, Offset.zero);
   }
 }

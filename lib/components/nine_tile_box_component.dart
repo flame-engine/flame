@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:flame/components/component.dart';
-import 'package:flame/nine_tile_box.dart';
+import '../nine_tile_box.dart';
+import 'position_component.dart';
 
 /// This class is a thin wrapper on top of [NineTileBox] as a component.
 class NineTileBoxComponent extends PositionComponent {
@@ -13,7 +13,8 @@ class NineTileBoxComponent extends PositionComponent {
   NineTileBoxComponent(this.nineTileBox);
 
   @override
-  void render(Canvas c) {
-    nineTileBox.drawRect(c, toRect());
+  void render(Canvas canvas) {
+    super.render(canvas);
+    nineTileBox.drawRect(canvas, Rect.fromLTWH(0.0, 0.0, width, height));
   }
 }

@@ -1,7 +1,8 @@
 import 'package:test/test.dart';
 import 'dart:ui';
 
-import 'package:flame/components/component.dart';
+import 'package:flame/components/position_component.dart';
+import 'package:flame/components/sprite_component.dart';
 import 'package:flame/position.dart';
 
 void main() {

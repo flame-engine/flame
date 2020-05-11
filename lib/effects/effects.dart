@@ -1,4 +1,4 @@
-import '../components/component.dart';
+import '../components/position_component.dart';
 
 export './move_effect.dart';
 export './scale_effect.dart';

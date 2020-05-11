@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flame/components/component.dart';
-import 'package:flame/flame.dart';
 import 'package:flutter/painting.dart';
+
+import '../flame.dart';
+import 'position_component.dart';
 
 /// Specifications with a path to an image and how it should be drawn in
 /// relation to the device screen
@@ -168,6 +169,7 @@ class ParallaxComponent extends PositionComponent {
 
   @override
   void resize(Size size) {
+    super.resize(size);
     _layers.forEach((layer) => layer.resize(size));
   }
 
@@ -183,19 +185,18 @@ class ParallaxComponent extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
+
     if (!loaded()) {
       return;
     }
-
-    canvas.save();
-    prepareCanvas(canvas);
     _layers.forEach((layer) => layer.render(canvas));
-    canvas.restore();
   }
 
   void _load(List<ParallaxImage> images) {
     _layers = images.map((image) => ParallaxLayer(image)).toList();
-    Future.wait(_layers.map((layer) => layer.future))
-        .then((_) => _loaded = true);
+    Future
+      .wait(_layers.map((layer) => layer.future))
+      .then((_) => _loaded = true);
   }
 }
