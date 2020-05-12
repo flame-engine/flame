@@ -6,7 +6,7 @@ The `Color` class is nothing but a wrapper over a single simple ARGB color in he
 
 You can use Dart's hexadecimal notation to make it really easy; for instance: `0xFF00FF00` is fully opaque green (the 'mask' would be `0xAARRGGBB`). Do note the first two hexadecimal digits are for the alpha channel (transparency), unlike on regular (non-A) RGB. The max(FF = 255) means fully opaque.
 
-There is a color enum to make it easy to use common colors, it resides in the material flutter package:
+In the material flutter package there is a color enum to make it easy to use common colors:
 
 ```dart
     import 'package:flutter/material.dart' as material;
