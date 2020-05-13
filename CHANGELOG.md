@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+- Updated the doc structure and minor language fixes
 
 ## 0.20.2
 - Fix text component bug with anchor being applied twice

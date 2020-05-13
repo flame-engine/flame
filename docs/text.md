@@ -4,25 +4,30 @@ Flame has some dedicated classes to help you render text.
 
 # TextConfig
 
-A Text Config contains all typographical information required to render texts; i.e., font size and color, family, etc.
+A Text Config contains all typographical information required to render text; i.e., font size and color, family, etc.
 
 Example usage:
 
 ```dart
-const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font', anchor: Anchor.rightBottom);
+const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font');
 ```
 
 * fontFamily : a commonly available font, like Arial (default), or a custom font added in your pubspec (see [here](https://flutter.io/custom-fonts/) how to do it)
 * fontSize : font size, in pts (default `24.0`)
 * color : the color, as a `ui.Color` (default black)
 
-For more information regarding colors and how to create then, see the [Colors and the Palette](/doc/palette.md) guide.
+For more information regarding colors and how to create then, see the [Colors and the Palette](/docs/palette.md) guide.
 
 After the creation of the config you can use its `render` method to draw some string on a canvas:
 
 ```dart
 config.render(canvas, "Flame is awesome", Position(10, 10));
+```
 
+If you want to set the anchor of the text you can also do that in the render call, with the optional parameter `anchor`:
+
+```dart
+config.render(canvas, "Flame is awesome", Position(10, 10), anchor: Anchor.topCenter);
 ```
 
 ## Text Components
@@ -56,7 +61,7 @@ class MyGame extends BaseGame {
 
 ### TextBoxComponent
 
-`TextBoxComponent` is very similar to `TextComponent`, but as its name suggest, is used to render a text inside a bounding box, creating line breaks according to the provided box size.
+`TextBoxComponent` is very similar to `TextComponent`, but as its name suggest it is used to render text inside a bounding box, creating line breaks according to the provided box size.
 
 Example usage:
 
@@ -77,4 +82,4 @@ class MyTextBox extends TextBoxComponent {
 }
 ```
 
-Both components are showcased on a working example [here](https://github.com/luanpotter/flame/tree/master/doc/examples/text)
+Both components are showcased in a working example [here](https://github.com/luanpotter/flame/tree/master/doc/examples/text)
