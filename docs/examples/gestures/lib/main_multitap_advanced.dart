@@ -26,11 +26,7 @@ class MyGame extends Game with MultiTouchTapDetector, PanDetector {
   @override
   void onTapDown(int pointerId, TapDownDetails details) {
     _taps[pointerId] = Rect.fromLTWH(
-        details.globalPosition.dx,
-        details.globalPosition.dy,
-        50,
-        50
-    );
+        details.globalPosition.dx, details.globalPosition.dy, 50, 50);
   }
 
   @override
@@ -57,8 +53,10 @@ class MyGame extends Game with MultiTouchTapDetector, PanDetector {
   @override
   void onPanEnd(details) {
     _panRect = Rect.fromLTRB(
-        _start.dx, _start.dy,
-        _end.dx, _end.dy,
+      _start.dx,
+      _start.dy,
+      _end.dx,
+      _end.dy,
     );
   }
 

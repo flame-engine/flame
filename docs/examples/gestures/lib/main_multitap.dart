@@ -22,11 +22,7 @@ class MyGame extends Game with MultiTouchTapDetector {
   @override
   void onTapDown(int pointerId, TapDownDetails details) {
     _taps[pointerId] = Rect.fromLTWH(
-        details.globalPosition.dx,
-        details.globalPosition.dy,
-        50,
-        50
-    );
+        details.globalPosition.dx, details.globalPosition.dy, 50, 50);
   }
 
   @override
