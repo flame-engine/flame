@@ -1,5 +1,14 @@
 import 'package:flutter/gestures.dart';
 
+// Multi touch detector
+mixin MultiTouchTapDetector {
+  void onTap(int pointerId) {}
+  void onTapCancel(int pointerId) {}
+  void onTapDown(int pointerId, TapDownDetails details) {}
+  void onTapUp(int pointerId, TapUpDetails details) {}
+}
+
+// Basic touch detectors
 mixin TapDetector {
   void onTap() {}
   void onTapCancel() {}

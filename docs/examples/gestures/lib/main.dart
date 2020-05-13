@@ -7,6 +7,7 @@ void main() {
   runApp(game.widget);
 }
 
+/// Includes an example including basic detectors
 class MyGame extends Game with TapDetector, DoubleTapDetector, PanDetector {
   final _whitePaint = Paint()..color = const Color(0xFFFFFFFF);
   final _bluePaint = Paint()..color = const Color(0xFF0000FF);
