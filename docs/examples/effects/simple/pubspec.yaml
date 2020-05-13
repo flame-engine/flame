@@ -1,4 +1,4 @@
-name: effects
+name: effects2
 description: A Flame game showcasing the use of the effects api
 
 version: 1.0.0+1
@@ -10,4 +10,4 @@ dependencies:
   flutter:
     sdk: flutter
   flame:
-    path: ../../../
+    path: ../../../..

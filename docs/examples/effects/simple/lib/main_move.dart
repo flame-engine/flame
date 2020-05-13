@@ -4,7 +4,7 @@ import 'package:flame/gestures.dart';
 import 'package:flame/effects/effects.dart';
 import 'package:flame/position.dart';
 
-import './square.dart';
+import 'square.dart';
 
 class MyGame extends BaseGame with TapDetector {
   Square square;
