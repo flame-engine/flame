@@ -15,33 +15,27 @@ import 'package:flare_dart/math/aabb.dart';
 import 'package:flare_dart/math/mat2d.dart';
 import 'package:flare_dart/math/vec2d.dart';
 
-class FlareActorPipelineOwner extends PipelineOwner {
-
-}
+class FlareActorPipelineOwner extends PipelineOwner {}
 
 class FlareActorComponent extends PositionComponent {
-
   final pipelineOwner = FlareActorPipelineOwner(); // todo: review this
 
-
-  FlareActorComponent(
-      this.filename, {
-        this.animation,
-        this.alignment = Alignment.center,
-        this.isPaused = false,
-        this.snapToEnd = false,
-        this.controller,
-        this.callback,
-        this.color,
-        this.shouldClip = true,
-        this.sizeFromArtboard = false,
-        this.artboard,
-        this.boundsNode,
-        this.fit = BoxFit.contain
-      }) : flareProvider = null;
+  FlareActorComponent(this.filename,
+      {this.animation,
+      this.alignment = Alignment.center,
+      this.isPaused = false,
+      this.snapToEnd = false,
+      this.controller,
+      this.callback,
+      this.color,
+      this.shouldClip = true,
+      this.sizeFromArtboard = false,
+      this.artboard,
+      this.boundsNode,
+      this.fit = BoxFit.contain})
+      : flareProvider = null;
 
   FlareActorRenderObject _renderObject;
-
 
   // fields ported from flare actor widget
   final String filename;
@@ -59,13 +53,10 @@ class FlareActorComponent extends PositionComponent {
   final String boundsNode; //
   final bool sizeFromArtboard; //
 
-
-
-
   @override
   void onMount() {
     super.onMount();
-    _renderObject =  FlareActorRenderObject()
+    _renderObject = FlareActorRenderObject()
       ..assetProvider =
           flareProvider ?? AssetFlare(bundle: rootBundle, name: filename)
       ..alignment = alignment
@@ -80,7 +71,6 @@ class FlareActorComponent extends PositionComponent {
       ..useIntrinsicSize = sizeFromArtboard
       ..artboardName = artboard;
     loadRenderBox();
-
   }
 
   void loadRenderBox() {
@@ -106,13 +96,11 @@ class FlareActorComponent extends PositionComponent {
     _renderObject.advance(dt);
   }
 
-
   // Paint procedures ported from FlareRenderBox.paint with some changes that
   // makes sense on a flame context
   void _paintActor(Canvas c, AABB bounds) {
     final size = toSize().toSize();
     final offset = toPosition().toOffset();
-
 
     double contentWidth = bounds[2] - bounds[0];
     double contentHeight = bounds[3] - bounds[1];
@@ -134,12 +122,12 @@ class FlareActorComponent extends PositionComponent {
         break;
       case BoxFit.contain:
         double minScale =
-        min(size.width / contentWidth, size.height / contentHeight);
+            min(size.width / contentWidth, size.height / contentHeight);
         scaleX = scaleY = minScale;
         break;
       case BoxFit.cover:
         double maxScale =
-        max(size.width / contentWidth, size.height / contentHeight);
+            max(size.width / contentWidth, size.height / contentHeight);
         scaleX = scaleY = maxScale;
         break;
       case BoxFit.fitHeight:
@@ -155,7 +143,7 @@ class FlareActorComponent extends PositionComponent {
         break;
       case BoxFit.scaleDown:
         double minScale =
-        min(size.width / contentWidth, size.height / contentHeight);
+            min(size.width / contentWidth, size.height / contentHeight);
         scaleX = scaleY = minScale < 1.0 ? minScale : 1.0;
         break;
     }
