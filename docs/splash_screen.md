@@ -4,7 +4,7 @@
 
 Style your flame game with a beautiful splash screen.
 
-Flame splash screen is a very customizable splash screen package. 
+FlameSplashScreen is a very customizable splash screen package. 
 
 ```dart
 FlameSplashScreen(

@@ -1,6 +1,6 @@
 # Structure
 
-The only structure you are required to comply is a assets folder with two sub folders: audio and images.
+The only structure you are required to comply is having an assets folder with two sub folders: audio and images.
 
 An example:
 

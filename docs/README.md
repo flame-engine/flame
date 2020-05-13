@@ -10,16 +10,11 @@ You can pick and choose whichever parts you want, as they are all somewhat indep
 
 We also support easy-to-use integrations with famous third parties and tools, like Riveapp, box2d, tiled, Google Play Games, gamepad support and more.
 
-The engine and ecosystem is being constantly improved by the community, so please feel free to reach out, open issues, PRs, make suggestions. Give us a star if you feel like it :)
+The engine and ecosystem is being constantly improved by the community, so please feel free to reach out, open issues, PRs and make suggestions. Give us a star if you want to help give the engine exposure and grow the community.
 
 ## Installation
 
 Put the pub package as your dependency by dropping the following in your `pubspec.yaml`:
-
-## Getting started
-
-Check out the [awesome flame repository](https://github.com/flame-engine/awesome-flame#articles--tutorials), there is quite a lot of good tutorials and articles to get you started with Flame.
-
 
 ```yaml
 dependencies:
@@ -27,6 +22,10 @@ dependencies:
 ```
 
 And start using it!
+
+## Getting started
+
+Check out the [awesome flame repository](https://github.com/flame-engine/awesome-flame#articles--tutorials), there is quite a lot of good tutorials and articles to get you started with Flame.
 
 ## Topics
 

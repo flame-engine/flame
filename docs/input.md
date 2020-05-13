@@ -2,9 +2,9 @@
 
 ## Gestures
 
-Inside `package:flame/gestures.dart` you can find a whole set of `mixin` which can be included on your game class instance to be able to receive touch input events. Bellow you can see the full list of these `mixin`s and its methods:
+Inside `package:flame/gestures.dart` you can find a whole set of `mixin`s which can be included on your game class instance to be able to receive touch input events. Below you can see the full list of these `mixin`s and its methods:
 
-```dart
+```
 - TapDetector
   - onTap
   - onTapCancel
@@ -59,7 +59,7 @@ Inside `package:flame/gestures.dart` you can find a whole set of `mixin` which c
   - onScaleEnd
 ```
 
-Many of these detectors can conflict with each other, for example, you can't register both Vertical and Horizontal drags, so not all of then can be used together.
+Many of these detectors can conflict with each other. For example, you can't register both Vertical and Horizontal drags, so not all of them can be used together.
 
 All of these methods are basically a mirror from the callbacks available on the [GestureDetector widget](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html), you can also read more about Flutter's gestures [here](https://api.flutter.dev/flutter/gestures/gestures-library.html).
 
@@ -80,11 +80,11 @@ class MyGame extends Game with TapDetector {
   }
 }
 ```
-You can also check a more complete example [here](/doc/examples/gestures).
+You can also check a more complete example [here](/docs/examples/gestures).
 
 ## Tapable components
 
-Flame also offers a simple helper to make it easier to handle tap events on `PositionComponent`, by using the mixin `Tapable` your components can override the following methods, enabling easy to use tap events on your Component.
+Flame also offers a simple helper to make it easier to handle tap events on `PositionComponent`. By using the mixin `Tapable` your components can override the following methods, enabling easy to use tap events on your Component.
 
 ```dart
   void onTapCancel() {}
@@ -123,7 +123,9 @@ class TapableComponent extends PositionComponent with Tapable {
 
 Flame provides a simple way to access Flutter's features regarding accessing Keyboard input events.
 
-To use it just add the `KeyboardEvents` mixin to your game class. By doing so you will need to implement the `onKeyEvent` method, this method is called every time a keyboard event happens, and it receives an instance of the Flutter class `RawKeyEvent`, which can be used to get information about the event, like if it was a key down or key up event, the pressed key and etc.
+To use it, just add the `KeyboardEvents` mixin to your game class.
+When doing this you will need to implement the `onKeyEvent` method, this method is called every time a keyboard event happens, and it receives an instance of the Flutter class `RawKeyEvent`. 
+This event can be used to get information about what occurred, like if it was a key down or key up event, and which key was pressed etc.
 
 Minimal example:
 
@@ -143,4 +145,4 @@ class MyGame extends Game with KeyboardEvents {
 }
 ```
 
-You can also check a more complete example [here](/doc/examples/keyboard).
+You can also check a more complete example [here](/docs/examples/keyboard).
