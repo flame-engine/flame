@@ -1,11 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/gestures.dart';
 
+import './gesture_detector.dart' as flame_detector;
 import '../gestures.dart';
 import 'embedded_game_widget.dart';
 import 'game.dart';
 
-bool _hasBasicGestureDetectors(Game game) =>
+bool _hasGestureDetectors(Game game) =>
   game is TapDetector ||
   game is SecondaryTapDetector ||
   game is DoubleTapDetector ||
@@ -14,36 +15,11 @@ bool _hasBasicGestureDetectors(Game game) =>
   game is HorizontalDragDetector ||
   game is ForcePressDetector ||
   game is PanDetector ||
-  game is ScaleDetector;
+  game is ScaleDetector ||
+  game is MultiTouchTapDetector;
 
-bool _hasAdvancedGesturesDetectors(Game game) => game is MultiTouchTapDetector;
-
-Widget _applyAdvancedGesturesDetectors(Game game, Widget child) {
-    return RawGestureDetector(
-        gestures: {
-          MultiTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<MultiTapGestureRecognizer>(
-            () => MultiTapGestureRecognizer(),
-            (MultiTapGestureRecognizer instance) {
-              if (game is MultiTouchTapDetector) {
-                final tapDetectorGame = game as MultiTouchTapDetector;
-                instance.onTapDown = (pointerId, d) => tapDetectorGame.onTapDown(pointerId, d);
-                instance.onTapUp = (pointerId, d) => tapDetectorGame.onTapUp(pointerId, d);
-                instance.onTapCancel = (pointerId) => tapDetectorGame.onTapCancel(pointerId);
-                instance.onTap = (pointerId) => tapDetectorGame.onTap(pointerId);
-              }
-            }
-          )
-        },
-        child: Container(
-                   color: game.backgroundColor(),
-                   child: Directionality(
-                       textDirection: TextDirection.ltr,
-                       child: EmbeddedGameWidget(game))),
-    );
-}
-
-Widget _applyBasicGesturesDetectors(Game game, Widget child) {
-    return GestureDetector(
+Widget _applyGesturesDetectors(Game game, Widget child) {
+    return flame_detector.GestureDetector(
       // Taps
       onTap: game is TapDetector ? () => (game as TapDetector).onTap() : null,
       onTapCancel: game is TapDetector
@@ -54,6 +30,18 @@ Widget _applyBasicGesturesDetectors(Game game, Widget child) {
           : null,
       onTapUp: game is TapDetector
           ? (TapUpDetails d) => (game as TapDetector).onTapUp(d)
+          : null,
+
+      // MultiTaps
+      onMultiTap: game is MultiTouchTapDetector ? (int pointerId) => (game as MultiTouchTapDetector).onTap(pointerId) : null,
+      onMultiTapCancel: game is MultiTouchTapDetector 
+          ? (int pointerId) => (game as MultiTouchTapDetector).onTapCancel(pointerId)
+          : null,
+      onMultiTapDown: game is MultiTouchTapDetector 
+          ? (int pointerId, TapDownDetails d) => (game as MultiTouchTapDetector).onTapDown(pointerId, d)
+          : null,
+      onMultiTapUp: game is MultiTouchTapDetector
+          ? (int pointerId, TapUpDetails d) => (game as MultiTouchTapDetector).onTapUp(pointerId, d)
           : null,
 
       // Secondary taps
@@ -198,12 +186,8 @@ class WidgetBuilder {
         ),
     );
 
-    if (_hasBasicGestureDetectors(game)) {
-      widget = _applyBasicGesturesDetectors(game, widget);
-    }
-
-    if (_hasAdvancedGesturesDetectors(game)) {
-      widget = _applyAdvancedGesturesDetectors(game, widget);
+    if (_hasGestureDetectors(game)) {
+      widget = _applyGesturesDetectors(game, widget);
     }
 
     return widget;
