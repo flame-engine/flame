@@ -1,12 +1,16 @@
 import 'dart:ui';
+
+import 'package:flame/components/component.dart';
+import 'package:flame/components/mixins/resizable.dart';
+import 'package:flame/flare/flare_flame.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/game.dart';
-import 'package:flame/flare_animation.dart';
-import 'package:flame/components/flare_component.dart';
 import 'package:flame/text_config.dart';
 import 'package:flame/position.dart';
-
+import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flare_flutter/flare_controls.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,19 +19,25 @@ void main() {
   runApp(game.widget);
 }
 
-class MyGame extends BaseGame with TapDetector {
-  final TextConfig fpsTextConfig =
-      const TextConfig(color: const Color(0xFFFFFFFF));
+class MyGame extends BaseGame with TapDetector, DoubleTapDetector {
+  final TextConfig fpsTextConfig = TextConfig(color: BasicPalette.white.color);
 
   final paint = Paint()..color = const Color(0xFFE5E5E5E5);
-  final List<String> _animations = ["Stand", "Wave", "Jump", "Dance"];
+  final List<String> _animations = ['Wave', 'Dance'];
   int _currentAnimation = 0;
+  MinionComponent minionComponent;
+  MinionController minionController;
 
-  FlareAnimation flareAnimation;
   bool loaded = false;
 
   MyGame() {
-    _start();
+    minionController = MinionController();
+    minionComponent = MinionComponent(minionController);
+    minionComponent.x = 0;
+    minionComponent.y = 0;
+    add(BGComponent());
+    add(minionComponent);
+    minionComponent.playStand();
   }
 
   @override
@@ -35,70 +45,73 @@ class MyGame extends BaseGame with TapDetector {
 
   @override
   void onTap() {
+    minionComponent.playJump();
+  }
+
+  @override
+  void onDoubleTap() {
     cycleAnimation();
   }
 
   void cycleAnimation() {
-    if (_currentAnimation == 3) {
+    if (_currentAnimation == 1) {
       _currentAnimation = 0;
     } else {
       _currentAnimation++;
     }
-
-    flareAnimation.updateAnimation(_animations[_currentAnimation]);
+    minionComponent.minionController.play(_animations[_currentAnimation]);
   }
 
-  void _start() async {
-    flareAnimation = await FlareAnimation.load("assets/Bob_Minion.flr");
-    flareAnimation.updateAnimation("Stand");
-
-    flareAnimation.width = 306;
-    flareAnimation.height = 228;
-
-    final flareAnimation2 =
-        FlareComponent("assets/Bob_Minion.flr", "Wave", 306, 228);
-    flareAnimation2.x = 50;
-    flareAnimation2.y = 240;
-    add(flareAnimation2);
-
-    final flareAnimation3 =
-        FlareComponent("assets/Bob_Minion.flr", "Jump", 306, 228);
-    flareAnimation3.x = 50;
-    flareAnimation3.y = 400;
-    add(flareAnimation3);
-
-    final flareAnimation4 =
-        FlareComponent("assets/Bob_Minion.flr", "Dance", 306, 228);
-    flareAnimation4.x = 50;
-    flareAnimation4.y = 550;
-    add(flareAnimation4);
-
-    loaded = true;
-  }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
 
-    if (loaded) {
-      canvas.drawRect(
-        Rect.fromLTWH(50, 50, flareAnimation.width, flareAnimation.height),
-        paint,
-      );
-
-      flareAnimation.render(canvas, x: 50, y: 50);
-    }
-
     if (debugMode()) {
       fpsTextConfig.render(canvas, fps(120).toString(), Position(0, 10));
     }
   }
+}
+
+class MinionController extends FlareControls {}
+
+class MinionComponent extends FlareActorComponent {
+  MinionController minionController;
+
+  MinionComponent(this.minionController)
+      : super(
+          'assets/Bob_Minion.flr',
+          controller: minionController,
+        ) {
+    width = 306;
+    height = 228;
+  }
+
+  void playStand() {
+    minionController.play("Stand");
+  }
+
+  void playDance() {
+    minionController.play("Dance");
+  }
+
+  void playJump() {
+    minionController.play("Jump");
+  }
+
+  void playWave() {
+    minionController.play("Wave");
+  }
+}
+
+class BGComponent extends Component with Resizable {
+  @override
+  void render(Canvas c) {
+    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    final paint = Paint()..color = const Color(0xFFFFFFFF);
+    c.drawRect(rect, paint);
+  }
 
   @override
-  void update(double dt) {
-    super.update(dt);
-    if (loaded) {
-      flareAnimation.update(dt);
-    }
-  }
+  void update(double t) {}
 }
