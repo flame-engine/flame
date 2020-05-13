@@ -24,7 +24,7 @@ abstract class PositionComponentEffect {
     if (isAlternating) {
       _curveDirection = isMax() ? -1 : (isMin() ? 1 : _curveDirection);
     } else if (isInfinite && isMax()){
-      percentage = 0.0;
+      _curveTime = 0.0;
     }
     percentage = min(1.0, max(0.0, _curveTime / travelTime));
   }
