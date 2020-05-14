@@ -20,20 +20,21 @@ class FlareActorPipelineOwner extends PipelineOwner {}
 class FlareActorComponent extends PositionComponent {
   final pipelineOwner = FlareActorPipelineOwner(); // todo: review this
 
-  FlareActorComponent(this.filename,
-      {this.animation,
-      this.alignment = Alignment.center,
-      this.isPaused = false,
-      this.snapToEnd = false,
-      this.controller,
-      this.callback,
-      this.color,
-      this.shouldClip = true,
-      this.sizeFromArtboard = false,
-      this.artboard,
-      this.boundsNode,
-      this.fit = BoxFit.contain})
-      : flareProvider = null;
+  FlareActorComponent(
+    this.filename, {
+    this.animation,
+    this.alignment = Alignment.center,
+    this.isPaused = false,
+    this.snapToEnd = false,
+    this.controller,
+    this.callback,
+    this.color,
+    this.shouldClip = true,
+    this.sizeFromArtboard = false,
+    this.artboard,
+    this.boundsNode,
+    this.fit = BoxFit.contain,
+  }) : flareProvider = null;
 
   FlareActorRenderObject _renderObject;
 
