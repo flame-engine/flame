@@ -22,13 +22,13 @@ class MoveEffect extends PositionComponentEffect {
   double _yDistance;
   double _yDirection;
 
-  MoveEffect({
-    @required this.destination,
-    @required this.speed,
-    this.curve,
-    isInfinite = false,
-    isAlternating = false
-  }) : super(isInfinite, isAlternating);
+  MoveEffect(
+      {@required this.destination,
+      @required this.speed,
+      this.curve,
+      isInfinite = false,
+      isAlternating = false})
+      : super(isInfinite, isAlternating);
 
   @override
   set component(_comp) {

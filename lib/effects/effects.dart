@@ -23,7 +23,7 @@ abstract class PositionComponentEffect {
     _curveTime += dt * _curveDirection;
     if (isAlternating) {
       _curveDirection = isMax() ? -1 : (isMin() ? 1 : _curveDirection);
-    } else if (isInfinite && isMax()){
+    } else if (isInfinite && isMax()) {
       _curveTime = 0.0;
     }
     percentage = min(1.0, max(0.0, _curveTime / travelTime));
@@ -35,7 +35,8 @@ abstract class PositionComponentEffect {
 
   bool hasFinished() =>
       (!isInfinite && !isAlternating && isMax()) ||
-          (!isInfinite && isAlternating && isMin()) || isDisposed;
+      (!isInfinite && isAlternating && isMin()) ||
+      isDisposed;
   bool isMax() => percentage == null ? false : percentage == 1.0;
   bool isMin() => percentage == null ? false : percentage == 0.0;
 }
