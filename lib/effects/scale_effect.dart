@@ -19,13 +19,13 @@ class ScaleEffect extends PositionComponentEffect {
   Size _diff;
   final Position _dir = Position.empty();
 
-  ScaleEffect({
-    @required this.size,
-    @required this.speed,
-    this.curve,
-    isInfinite = false,
-    isAlternating = false
-  }) : super(isInfinite, isAlternating);
+  ScaleEffect(
+      {@required this.size,
+      @required this.speed,
+      this.curve,
+      isInfinite = false,
+      isAlternating = false})
+      : super(isInfinite, isAlternating);
 
   @override
   set component(_comp) {
