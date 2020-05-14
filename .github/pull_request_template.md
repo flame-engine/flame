@@ -19,6 +19,7 @@ If something is unclear, please submit the PR anyways and ask about what you tho
 
 - [ ] This branch is based on `develop`
 - [ ] This PR is targeted to merge into `develop` (not `master`)
+- [ ] I have added an entry on `[next]` in `CHANGELOG.md`
 - [ ] I have formatted my code with `flutter format`
 - [ ] I have made corresponding changes to the documentation
 - [ ] I have added examples for new features in `doc/examples`
