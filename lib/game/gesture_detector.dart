@@ -58,6 +58,7 @@ class GestureDetector extends StatelessWidget {
     this.onMultiTapUp,
     this.onMultiTapDown,
     this.onMultiTapCancel,
+    this.onMultiDrag,
     this.behavior,
     this.excludeFromSemantics = false,
     this.dragStartBehavior = DragStartBehavior.start,
@@ -426,6 +427,8 @@ class GestureDetector extends StatelessWidget {
   final GestureMultiTapDownCallback onMultiTapDown;
   final GestureMultiTapUpCallback onMultiTapUp;
 
+  final GestureMultiDragStartCallback onMultiDrag;
+
   /// How this gesture detector should behave during hit testing.
   ///
   /// This defaults to [HitTestBehavior.deferToChild] if [child] is not null and
@@ -607,6 +610,17 @@ class GestureDetector extends StatelessWidget {
       );
     }
 
+    if (onMultiDrag != null) {
+      gestures[ImmediateMultiDragGestureRecognizer] =
+          GestureRecognizerFactoryWithHandlers<ImmediateMultiDragGestureRecognizer>(
+        () => ImmediateMultiDragGestureRecognizer(debugOwner: this),
+        (ImmediateMultiDragGestureRecognizer instance) {
+          instance
+              ..onStart = onMultiDrag;
+        },
+      );
+    }
+
     if (onMultiTapDown != null ||
         onMultiTapUp != null ||
         onMultiTap != null ||
@@ -623,6 +637,7 @@ class GestureDetector extends StatelessWidget {
         },
       );
     }
+
 
     return RawGestureDetector(
       gestures: gestures,
