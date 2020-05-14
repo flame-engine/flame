@@ -135,6 +135,7 @@ Lifespan is passed down to all the descendants of given `Particle` if it support
 Flame ships with a few built-in `Particle` behaviors:
 * The `TranslatedParticle`, translates its `child` by given `Offset`
 * The `MovingParticle`, moves its `child` between two predefined `Offset`, supports `Curve`
+* The `ConstantVelocityMovingParticle`, moves its `child` between two predefined `Offset` at a constant `velocity`, supports `Curve`
 * The `AcceleratedParticle`, allows basic physics based effects, like gravitation or speed dampening
 * The `CircleParticle`, renders circles of all shapes and sizes
 * The `SpriteParticle`, renders Flame `Sprite` within a `Particle` effect
@@ -175,6 +176,24 @@ game.add(
             // game canvas
             from: game.size.topLeft(Offset.zero),
             to: game.size.bottomRight(Offset.zero),
+            child: Particle(),
+        )
+    )
+);
+```
+
+## Constant Velocity Moving Particle
+
+Moves child `Particle` between `from` and `to` `Offset`s at a constant velocity during its lifespan. It will be destroyed when it get's to `to` or Supports `Curve` via `CurvedParticle`.
+
+```dart
+game.add(
+    ParticleComponent(
+        particle: ConstantVelocityMovingParticle(
+            from: game.size.topLeft(Offset.zero),
+            to: game.size.bottomRight(Offset.zero),
+            velocity: 100, // 100 pixels per second
+            lifespan: 10, // 10 seconds
             child: Particle(),
         )
     )
