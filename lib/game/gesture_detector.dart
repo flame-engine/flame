@@ -612,11 +612,11 @@ class GestureDetector extends StatelessWidget {
 
     if (onMultiDrag != null) {
       gestures[ImmediateMultiDragGestureRecognizer] =
-          GestureRecognizerFactoryWithHandlers<ImmediateMultiDragGestureRecognizer>(
+          GestureRecognizerFactoryWithHandlers<
+              ImmediateMultiDragGestureRecognizer>(
         () => ImmediateMultiDragGestureRecognizer(debugOwner: this),
         (ImmediateMultiDragGestureRecognizer instance) {
-          instance
-              ..onStart = onMultiDrag;
+          instance..onStart = onMultiDrag;
         },
       );
     }
@@ -637,7 +637,6 @@ class GestureDetector extends StatelessWidget {
         },
       );
     }
-
 
     return RawGestureDetector(
       gestures: gestures,

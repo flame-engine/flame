@@ -175,13 +175,13 @@ Widget _applyGesturesDetectors(Game game, Widget child) {
 
     onMultiDrag: game is MultiTouchDragDetector
         ? (Offset o) {
-          final drag = DragEvent();
-          drag.initialPosition = o;
+            final drag = DragEvent();
+            drag.initialPosition = o;
 
-          (game as MultiTouchDragDetector).onReceiveDrag(drag);
+            (game as MultiTouchDragDetector).onReceiveDrag(drag);
 
-          return drag;
-        }
+            return drag;
+          }
         : null,
 
     child: child,

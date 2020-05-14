@@ -44,9 +44,9 @@ class MyGame extends Game with MultiTouchTapDetector, MultiTouchDragDetector {
     onPanStart(event.initialPosition);
 
     event
-        ..onUpdate = onPanUpdate
-        ..onEnd = onPanEnd
-        ..onCancel = onPanCancel;
+      ..onUpdate = onPanUpdate
+      ..onEnd = onPanEnd
+      ..onCancel = onPanCancel;
   }
 
   void onPanCancel() {
