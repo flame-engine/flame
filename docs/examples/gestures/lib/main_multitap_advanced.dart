@@ -7,8 +7,8 @@ void main() {
   runApp(game.widget);
 }
 
-/// Includes an example mixing basic and advanced detectors
-class MyGame extends Game with MultiTouchTapDetector, PanDetector {
+/// Includes an example mixing two advanced detectors
+class MyGame extends Game with MultiTouchTapDetector, MultiTouchDragDetector {
   final _whitePaint = Paint()..color = const Color(0xFFFFFFFF);
 
   Paint _paint;
@@ -40,17 +40,30 @@ class MyGame extends Game with MultiTouchTapDetector, PanDetector {
   }
 
   @override
-  void onPanStart(details) {
-    _end = null;
-    _start = details.localPosition;
+  void onReceiveDrag(DragEvent event) {
+    onPanStart(event.initialPosition);
+
+    event
+        ..onUpdate = onPanUpdate
+        ..onEnd = onPanEnd
+        ..onCancel = onPanCancel;
   }
 
-  @override
+  void onPanCancel() {
+    _end = null;
+    _start = null;
+    _panRect = null;
+  }
+
+  void onPanStart(Offset position) {
+    _end = null;
+    _start = position;
+  }
+
   void onPanUpdate(details) {
     _end = details.localPosition;
   }
 
-  @override
   void onPanEnd(details) {
     _panRect = Rect.fromLTRB(
       _start.dx,

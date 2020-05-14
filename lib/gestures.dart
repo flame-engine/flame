@@ -8,6 +8,33 @@ mixin MultiTouchTapDetector {
   void onTapUp(int pointerId, TapUpDetails details) {}
 }
 
+class DragEvent extends Drag {
+  Offset initialPosition;
+
+  void Function(DragUpdateDetails) onUpdate;
+  void Function() onCancel;
+  void Function(DragEndDetails) onEnd;
+
+  @override
+  void update(details) {
+    onUpdate?.call(details);
+  }
+
+  @override
+  void cancel() {
+    onCancel?.call();
+  }
+
+  @override
+  void end(details) {
+    onEnd?.call(details);
+  }
+}
+
+mixin MultiTouchDragDetector {
+  void onReceiveDrag(DragEvent drag) {}
+}
+
 // Basic touch detectors
 mixin TapDetector {
   void onTap() {}

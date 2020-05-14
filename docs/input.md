@@ -57,6 +57,16 @@ Inside `package:flame/gestures.dart` you can find a whole set of `mixin`s which 
   - onScaleStart
   - onScaleUpdate
   - onScaleEnd
+
+
+ - MultiTouchTapDetector
+  - onTap
+  - onTapCancel
+  - onTapDown
+  - onTapUp
+
+ - MultiTouchDragDetector
+  - onReceiveDrag
 ```
 
 Many of these detectors can conflict with each other. For example, you can't register both Vertical and Horizontal drags, so not all of them can be used together.
@@ -124,7 +134,7 @@ class TapableComponent extends PositionComponent with Tapable {
 Flame provides a simple way to access Flutter's features regarding accessing Keyboard input events.
 
 To use it, just add the `KeyboardEvents` mixin to your game class.
-When doing this you will need to implement the `onKeyEvent` method, this method is called every time a keyboard event happens, and it receives an instance of the Flutter class `RawKeyEvent`. 
+When doing this you will need to implement the `onKeyEvent` method, this method is called every time a keyboard event happens, and it receives an instance of the Flutter class `RawKeyEvent`.
 This event can be used to get information about what occurred, like if it was a key down or key up event, and which key was pressed etc.
 
 Minimal example:

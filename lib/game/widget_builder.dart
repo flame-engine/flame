@@ -16,7 +16,8 @@ bool _hasGestureDetectors(Game game) =>
     game is ForcePressDetector ||
     game is PanDetector ||
     game is ScaleDetector ||
-    game is MultiTouchTapDetector;
+    game is MultiTouchTapDetector ||
+    game is MultiTouchDragDetector;
 
 Widget _applyGesturesDetectors(Game game, Widget child) {
   return flame_detector.GestureDetector(
@@ -170,6 +171,17 @@ Widget _applyGesturesDetectors(Game game, Widget child) {
         : null,
     onScaleEnd: game is ScaleDetector
         ? (ScaleEndDetails d) => (game as ScaleDetector).onScaleEnd(d)
+        : null,
+
+    onMultiDrag: game is MultiTouchDragDetector
+        ? (Offset o) {
+          final drag = DragEvent();
+          drag.initialPosition = o;
+
+          (game as MultiTouchDragDetector).onReceiveDrag(drag);
+
+          return drag;
+        }
         : null,
 
     child: child,
