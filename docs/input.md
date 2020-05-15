@@ -58,7 +58,6 @@ Inside `package:flame/gestures.dart` you can find a whole set of `mixin`s which 
   - onScaleUpdate
   - onScaleEnd
 
-
  - MultiTouchTapDetector
   - onTap
   - onTapCancel

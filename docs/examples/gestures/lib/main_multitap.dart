@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
+import 'package:flame/palette.dart';
 
 void main() {
   final game = MyGame();
@@ -9,7 +10,7 @@ void main() {
 
 /// Includes an example including advanced detectors
 class MyGame extends Game with MultiTouchTapDetector {
-  final _whitePaint = Paint()..color = const Color(0xFFFFFFFF);
+  final _whitePaint = BasicPalette.white.paint;
 
   Paint _paint;
 
@@ -22,7 +23,11 @@ class MyGame extends Game with MultiTouchTapDetector {
   @override
   void onTapDown(int pointerId, TapDownDetails details) {
     _taps[pointerId] = Rect.fromLTWH(
-        details.globalPosition.dx, details.globalPosition.dy, 50, 50);
+      details.globalPosition.dx,
+      details.globalPosition.dy,
+      50,
+      50,
+    );
   }
 
   @override
