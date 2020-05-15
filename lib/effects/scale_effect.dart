@@ -46,12 +46,12 @@ class ScaleEffect extends PositionComponentEffect {
 
   @override
   void update(double dt) {
-    super.update(dt);
     if (!hasFinished()) {
       final double c = curve?.transform(percentage) ?? 1.0;
 
       component.width = _original.width + _diff.width * c * _dir.x;
       component.height = _original.height + _diff.height * c * _dir.y;
     }
+    super.update(dt);
   }
 }
