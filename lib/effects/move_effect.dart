@@ -49,12 +49,10 @@ class MoveEffect extends PositionComponentEffect {
 
   @override
   void update(double dt) {
-    if (!hasFinished()) {
-      final double c = curve?.transform(percentage ?? 0.0) ?? 1.0;
-
-      component.x = _xOriginal + _xDistance * c * _xDirection;
-      component.y = _yOriginal + _yDistance * c * _yDirection;
-    }
     super.update(dt);
+    final double c = curve?.transform(percentage) ?? 1.0;
+
+    component.x = _xOriginal + _xDistance * c * _xDirection;
+    component.y = _yOriginal + _yDistance * c * _yDirection;
   }
 }
