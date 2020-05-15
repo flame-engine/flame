@@ -153,22 +153,27 @@ class BaseGame extends Game with TapDetector {
   /// Returns whether this [Game] is in debug mode or not.
   ///
   /// Returns `false` by default. Override to use the debug mode.
-  /// In debug mode, the [recordDt] method actually records every `dt` for statistics.
-  /// Then, you can use the [fps] method to check the game FPS.
-  /// You can also use this value to enable other debug behaviors for your game, like bounding box rendering, for instance.
+  /// You can use this value to enable debug behaviors for your game, many components show extra information on screen when on debug mode
   bool debugMode() => false;
+
+  /// Returns whether this [Game] is should record fps or not
+  ///
+  /// Returns `false` by default. Override to use the `fps` counter method.
+  /// In recording fps, the [recordDt] method actually records every `dt` for statistics.
+  /// Then, you can use the [fps] method to check the game FPS.
+  bool recordFps() => false;
 
   /// This is a hook that comes from the RenderBox to allow recording of render times and statistics.
   @override
   void recordDt(double dt) {
-    if (debugMode()) {
+    if (recordFps()) {
       _dts.add(dt);
     }
   }
 
   /// Returns the average FPS for the last [average] measures.
   ///
-  /// The values are only saved if in debug mode (override [debugMode] to use this).
+  /// The values are only saved if in debug mode (override [recordFps] to use this).
   /// Selects the last [average] dts, averages then, and returns the inverse value.
   /// So it's technically updates per second, but the relation between updates and renders is 1:1.
   /// Returns 0 if empty.
