@@ -1,18 +1,18 @@
 # Effects
 An effect can be applied to any `PositionComponent`, there are currently two effects that you can use and that is the MoveEffect and the ScaleEffect.
 
-If you want to create an effect that only runs once, specify the three first parameters Size/Position, Speed and Curve.
+If you want to create an effect that only runs once only specify the required parameters of your wanted Effect class.
 
 ## More advanced effects
 Then there are two optional boolean parameters called `isInfinite` and `isAlternating`, by combining them you can get different effects.
 
 If both of them are true the effect will be infinite and when it is done with going through the `curve` it will go back in reverse through the `curve`.
 
-If `inInfinite` is true and `isAlternating` is false the effect will be applied from start to end of the curve and then restart from the start, in infinity.
+If `isInfinite` is true and `isAlternating` is false the effect will be applied from start to end of the curve and then restart from the start, for an infinite amount of time.
 
-If `inInfinite` is false and `isAlternating` is true the effect will go from the beginning of the curve and then back again but after that stop.
+If `isInfinite` is false and `isAlternating` is true the effect will go from the beginning of the curve and then back again but after that stop.
 
-`inInfinite` and `isAlternating` are false by default and then the effect is just applied once, from the beginning of the curve til the end.
+`isInfinite` and `isAlternating` are false by default and then the effect is just applied once, from the beginning of the curve until the end.
 
 ## MoveEffect
 
