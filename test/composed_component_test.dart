@@ -19,7 +19,9 @@ class MyTap extends PositionComponent with Tapable, Resizable {
   void render(Canvas c) {}
 
   @override
-  void update(double t) {}
+  void update(double t) {
+    super.update(t);
+  }
 
   @override
   void onTapDown(TapDownDetails details) {
@@ -46,7 +48,9 @@ class PositionComponentNoNeedForRect extends PositionComponent with Tapable {
   void render(Canvas c) {}
 
   @override
-  void update(double t) {}
+  void update(double t) {
+    super.update(t);
+  }
 }
 
 const Size size = Size(1.0, 1.0);
@@ -60,7 +64,7 @@ void main() {
 
       game.size = size;
       game.add(wrapper);
-      game.onTapDown(TapDownDetails(globalPosition: const Offset(0.0, 0.0)));
+      game.onTapDown(1, TapDownDetails(globalPosition: const Offset(0.0, 0.0)));
 
       expect(child.size, size);
       expect(child.tapped, true);
