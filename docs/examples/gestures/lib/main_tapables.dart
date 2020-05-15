@@ -21,13 +21,16 @@ class TapableSquare extends PositionComponent with Tapable {
 
   bool _beenPressed = false;
 
-  TapableSquare({double y = 100}) {
-    x = width = height = 100;
+  TapableSquare({double y = 100, double x = 100}) {
+    width = height = 100;
+    this.x = x;
     this.y = y;
   }
 
   @override
-  void update(double dt) {}
+  void update(double dt) {
+    super.update(dt);
+  }
 
   @override
   void render(Canvas canvas) {
@@ -52,7 +55,7 @@ class TapableSquare extends PositionComponent with Tapable {
 
 class MyGame extends BaseGame {
   MyGame() {
-    add(TapableSquare());
-    add(TapableSquare(y: 400));
+    add(TapableSquare(x: 300, y: 100));
+    add(TapableSquare(y: 100));
   }
 }
