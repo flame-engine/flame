@@ -11,7 +11,8 @@ import '../particles/curved_particle.dart';
 /// Similar to [MovingParticle], however this moves at a constant velocity
 /// It will be destroyed when the lifespan is finished or when it reaches [Offset to]
 /// This is useful for games that use bullets or projectiles
-class ConstantVelocityMovingParticle extends CurvedParticle with SingleChildParticle {
+class ConstantVelocityMovingParticle extends CurvedParticle
+    with SingleChildParticle {
   @override
   Particle child;
 
@@ -30,15 +31,15 @@ class ConstantVelocityMovingParticle extends CurvedParticle with SingleChildPart
     double lifespan,
     Curve curve = Curves.linear,
   }) : super(
-    lifespan: lifespan,
-    curve: curve,
-  ) {
+          lifespan: lifespan,
+          curve: curve,
+        ) {
     _distanceToTravel = (to - from).distance;
   }
 
-  @override 
+  @override
   void update(double t) {
-    _distanceTraveled += velocity*t;
+    _distanceTraveled += velocity * t;
     if (_distanceTraveled >= _distanceToTravel) {
       _hasReachedEnd = true;
     }
@@ -51,7 +52,8 @@ class ConstantVelocityMovingParticle extends CurvedParticle with SingleChildPart
   @override
   void render(Canvas c) {
     c.save();
-    final Offset current = Offset.lerp(from, to, _distanceTraveled/_distanceToTravel);
+    final Offset current =
+        Offset.lerp(from, to, _distanceTraveled / _distanceToTravel);
     c.translate(current.dx, current.dy);
     super.render(c);
     c.restore();
