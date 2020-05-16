@@ -9,6 +9,7 @@ import 'package:flame/particles/circle_particle.dart';
 import 'package:flame/particles/composed_particle.dart';
 import 'package:flame/particles/curved_particle.dart';
 import 'package:flame/particles/moving_particle.dart';
+import 'package:flame/particles/constant_velocity_moving_particle.dart';
 import 'package:flame/particles/sprite_particle.dart';
 import 'package:flame/particles/translated_particle.dart';
 import 'package:flame/particles/computed_particle.dart';
@@ -79,6 +80,7 @@ class MyGame extends BaseGame {
       alignedMovingParticles(),
       easedMovingParticle(),
       intervalMovingParticle(),
+      constantVelocityMovingParticle(),
       computedParticle(),
       chainingBehaviors(),
       steppedComputedParticle(),
@@ -223,6 +225,21 @@ class MyGame extends BaseGame {
           radius: 5 + rnd.nextDouble() * 5,
           paint: Paint()..color = Colors.greenAccent,
         ),
+      ),
+    );
+  }
+
+  /// Same example as above, but using awesome [Inverval]
+  /// curve, which "schedules" transition to happen between
+  /// certain values of progress. In this example, circles will
+  /// move from their initial to their final position
+  /// when progress is changing from 0.2 to 0.6 respectively.
+  Particle constantVelocityMovingParticle() {
+    return ConstantVelocityMovingParticle(
+      to: randomCellOffset() * .5,
+      child: CircleParticle(
+        radius: 5 + rnd.nextDouble() * 5,
+        paint: Paint()..color = Colors.greenAccent,
       ),
     );
   }
