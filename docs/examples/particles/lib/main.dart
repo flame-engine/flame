@@ -236,9 +236,11 @@ class MyGame extends BaseGame {
   /// when progress is changing from 0.2 to 0.6 respectively.
   Particle constantVelocityMovingParticle() {
     return ConstantVelocityMovingParticle(
-      to: randomCellOffset() * .5,
+      to: Offset(300,300),
+      velocity: 40,
+      lifespan: 200,
       child: CircleParticle(
-        radius: 5 + rnd.nextDouble() * 5,
+        radius: 10,
         paint: Paint()..color = Colors.greenAccent,
       ),
     );
