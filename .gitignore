@@ -7,7 +7,7 @@
 .pub/
 packages
 pubspec.lock
-doc/api/
+docs/api/
 .flutter-plugins
 .vscode/
 **/.flutter-plugins
