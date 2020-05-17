@@ -33,19 +33,19 @@ class MyGame extends BaseGame with TapDetector {
     final dx = details.localPosition.dx;
     final dy = details.localPosition.dy;
     greenSquare.addEffect(MoveEffect(
-        destination: Position(dx, dy),
-        speed: 250.0,
-        curve: Curves.bounceInOut,
-        isInfinite: true,
-        isAlternating: true,
+      destination: Position(dx, dy),
+      speed: 250.0,
+      curve: Curves.bounceInOut,
+      isInfinite: true,
+      isAlternating: true,
     ));
     redSquare.clearEffects();
     redSquare.addEffect(ScaleEffect(
-        size: Size(dx, dy),
-        speed: 250.0,
-        curve: Curves.easeInCubic,
-        isInfinite: true,
-        isAlternating: true,
+      size: Size(dx, dy),
+      speed: 250.0,
+      curve: Curves.easeInCubic,
+      isInfinite: true,
+      isAlternating: true,
     ));
   }
 }
