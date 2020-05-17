@@ -10,30 +10,32 @@ void main() async {
   final Size size = await Flame.util.initialDimensions();
   final game = MyGame(size);
   runApp(game.widget);
-
-  Flame.util.addGestureRecognizer(TapGestureRecognizer()
-    ..onTapDown = (TapDownDetails evt) {
-      game.addAnimation();
-    });
 }
 
 class MyGame extends BaseGame {
   final animation = flame_animation.Animation.sequenced('chopper.png', 4,
-      textureWidth: 48, textureHeight: 48, stepTime: 0.15);
+      textureWidth: 48, textureHeight: 48, stepTime: 0.15, loop: true);
 
-  void addAnimation() {
+  void addAnimation(double x, double y) {
+    const textureWidth = 291.0;
+    const textureHeight = 178.0;
     final animationComponent = AnimationComponent.sequenced(
-        291, 178, 'creture.png', 18,
+        291, 178, 'creature.png', 18,
         amountPerRow: 10,
-        textureWidth: 291,
-        textureHeight: 178,
+        textureWidth: textureWidth,
+        textureHeight: textureHeight,
         stepTime: 0.15,
-        loop: false,
+        loop: true,
         destroyOnFinish: true);
-    animationComponent.x = (size.width - 291) / 2;
-    animationComponent.y = 250;
+    animationComponent.x = x - textureWidth / 2;
+    animationComponent.y = y - textureHeight / 2;
 
     add(animationComponent);
+  }
+
+  @override
+  void onTapDown(TapDownDetails evt) {
+    addAnimation(evt.globalPosition.dx, evt.globalPosition.dy);
   }
 
   MyGame(Size screenSize) {
