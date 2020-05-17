@@ -3,6 +3,7 @@
 ## [next]
 - Updated the doc structure and minor language fixes
 - Adding AssetsCache.readBinaryFile
+- Adding support for multi touch tap and drag events
 - Fix animations example
 
 ## 0.20.2

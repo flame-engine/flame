@@ -21,7 +21,7 @@ import 'game.dart';
 /// It still needs to be subclasses to add your game logic, but the [update], [render] and [resize] methods have default implementations.
 /// This is the recommended structure to use for most games.
 /// It is based on the Component system.
-class BaseGame extends Game with TapDetector {
+class BaseGame extends Game with MultiTouchTapDetector {
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components =
       OrderedSet(Comparing.on((c) => c.priority()));
@@ -42,18 +42,18 @@ class BaseGame extends Game with TapDetector {
       components.where((c) => c is Tapable).cast();
 
   @override
-  void onTapCancel() {
-    _tapableComponents.forEach((c) => c.handleTapCancel());
+  void onTapCancel(int pointerId) {
+    _tapableComponents.forEach((c) => c.handleTapCancel(pointerId));
   }
 
   @override
-  void onTapDown(TapDownDetails details) {
-    _tapableComponents.forEach((c) => c.handleTapDown(details));
+  void onTapDown(int pointerId, TapDownDetails details) {
+    _tapableComponents.forEach((c) => c.handleTapDown(pointerId, details));
   }
 
   @override
-  void onTapUp(TapUpDetails details) {
-    _tapableComponents.forEach((c) => c.handleTapUp(details));
+  void onTapUp(int pointerId, TapUpDetails details) {
+    _tapableComponents.forEach((c) => c.handleTapUp(pointerId, details));
   }
 
   /// This method is called for every component added, both via [add] and [addLater] methods.
