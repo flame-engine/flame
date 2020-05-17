@@ -3,6 +3,7 @@
 ## [next]
 - Updated the doc structure and minor language fixes
 - Adding AssetsCache.readBinaryFile
+- Fix animations example
 
 ## 0.20.2
 - Fix text component bug with anchor being applied twice
