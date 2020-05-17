@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:infinite_effects/square.dart';
+import './square.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,13 +37,15 @@ class MyGame extends BaseGame with TapDetector {
         speed: 250.0,
         curve: Curves.bounceInOut,
         isInfinite: true,
-        isAlternating: true));
+        isAlternating: true,
+    ));
     redSquare.clearEffects();
     redSquare.addEffect(ScaleEffect(
         size: Size(dx, dy),
         speed: 250.0,
         curve: Curves.easeInCubic,
         isInfinite: true,
-        isAlternating: true));
+        isAlternating: true,
+    ));
   }
 }

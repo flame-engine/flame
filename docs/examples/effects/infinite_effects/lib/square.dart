@@ -1,3 +1,4 @@
+import 'package:flame/anchor.dart';
 import 'package:flame/components/component.dart';
 
 import 'dart:ui';
@@ -10,6 +11,7 @@ class Square extends PositionComponent {
     height = 100;
     this.x = x;
     this.y = y;
+    anchor = Anchor.center;
   }
 
   @override
