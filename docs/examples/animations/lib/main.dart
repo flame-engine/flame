@@ -27,8 +27,8 @@ class MyGame extends BaseGame {
         stepTime: 0.15,
         loop: true,
         destroyOnFinish: true);
-    animationComponent.x = x-textureWidth/2;
-    animationComponent.y = y-textureHeight/2;
+    animationComponent.x = x - textureWidth / 2;
+    animationComponent.y = y - textureHeight / 2;
 
     add(animationComponent);
   }
