@@ -1,7 +1,6 @@
 # CHANGELOG
 
-## [next]
-- Updated the doc structure and minor language fixes
+## 0.21.0
 - Adding AssetsCache.readBinaryFile
 - Splitting debugMode from recordFps mode
 - Adding support for multi touch tap and drag events

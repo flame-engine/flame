@@ -89,7 +89,7 @@ class MyGame extends Game with TapDetector {
   }
 }
 ```
-You can also check a more complete example [here](/docs/examples/gestures).
+You can also check a more complete example [here](/doc/examples/gestures).
 
 ## Tapable components
 
@@ -154,4 +154,4 @@ class MyGame extends Game with KeyboardEvents {
 }
 ```
 
-You can also check a more complete example [here](/docs/examples/keyboard).
+You can also check a more complete example [here](/doc/examples/keyboard).
