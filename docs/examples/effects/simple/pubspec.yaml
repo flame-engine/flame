@@ -10,4 +10,4 @@ dependencies:
   flutter:
     sdk: flutter
   flame:
-    path: ../../../
+    path: ../../../..
