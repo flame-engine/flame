@@ -144,4 +144,4 @@ Already thinking about the neat graphics you'll add to your apps? Be sure to che
 
 This whole example is inside the examples folder for flame, and you can see [the source code](https://github.com/luanpotter/flame/tree/master/doc/examples/animation_widget), if you have any doubts or wanna test or run yourself. Also, the article is [committed as well](https://github.com/luanpotter/flame/tree/master/doc/animation_widget_article).
 
-If you liked Flame, leave your clap, star on GitHub, and please check out our [repository](https://github.com/luanpotter/flame) with full doc, examples, and issues you can ask. Also, for more in-depth questions, be sure to check our [Discord channel](https://discord.gg/pxrBmy4), where we try to answer questions and solve problems.
+If you liked Flame, leave your clap, star on GitHub, and please check out our [repository](https://github.com/luanpotter/flame) with full docs, examples, and issues you can ask. Also, for more in-depth questions, be sure to check our [Discord channel](https://discord.gg/pxrBmy4), where we try to answer questions and solve problems.
