@@ -48,4 +48,4 @@ square.addEffect(ScaleEffect(
 
 # Examples
 
-Full examples can be found [here](/docs/examples/effects/simple) and [here](/docs/examples/effects/infinite_effects).
+Full examples can be found [here](/doc/examples/effects/simple) and [here](/doc/examples/effects/infinite_effects).

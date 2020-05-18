@@ -61,9 +61,9 @@ We also offer a curated list of Games, Libraries and Articles over at [awesome-f
 
 ## Documentation
 
-The complete documentation can be found [here](docs/README.md).
+The complete documentation can be found [here](doc/README.md).
 
-A lot of examples of different features can be found [here](docs/examples) and a good starting example can be found [here](./example).
+A lot of examples of different features can be found [here](doc/examples) and a good starting example can be found [here](./example).
 
 A very cool docs site can be found [here](https://flame-engine.org/).
 
