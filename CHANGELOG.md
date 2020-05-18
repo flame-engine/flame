@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+- Fix broken link in widgets docs
 
 ## 0.20.2
 - Fix text component bug with anchor being applied twice
