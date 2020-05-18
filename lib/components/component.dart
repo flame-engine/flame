@@ -157,6 +157,14 @@ abstract class PositionComponent extends Component {
     _effects.add(effect..component = this);
   }
 
+  void removeEffect(PositionComponentEffect effect) {
+    effect.dispose();
+  }
+
+  void clearEffects() {
+    _effects.forEach(removeEffect);
+  }
+
   @mustCallSuper
   @override
   void update(double dt) {
