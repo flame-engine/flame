@@ -4,7 +4,7 @@ One cool feature when developing games with Flutter is the ability to use Flutte
 
 Here you can find all the available widgets provided by Flame.
 
-You can also see all the widgets showcased inside a [Dashbook](https://github.com/erickzanardo/dashbook) sandbox [here](/docs/examples/widgets)
+You can also see all the widgets showcased inside a [Dashbook](https://github.com/erickzanardo/dashbook) sandbox [here](/doc/examples/widgets)
 
 ## Nine Tile Box
 
@@ -14,7 +14,7 @@ The grid sprite is a 3x3 grid and with 9 blocks, representing the 4 corners, the
 
 The corners are drawn at the same size, the sides are stretched on the side direction and the middle is expanded both ways.
 
-The `NineTileBox` widget implements a Container using that standard. This pattern is also implemented in game by the `NineTileBoxComponent` where you can use this same feature, but directly into the game Canvas, to know more about this, check the component docs [here](/docs/components.md#nine-tile-box-component).
+The `NineTileBox` widget implements a Container using that standard. This pattern is also implemented in game by the `NineTileBoxComponent` where you can use this same feature, but directly into the game Canvas, to know more about this, check the component docs [here](/doc/components.md#nine-tile-box-component).
 
 Here you can find an example of its usage:
 
