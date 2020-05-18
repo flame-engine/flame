@@ -22,5 +22,5 @@ If something is unclear, please submit the PR anyways and ask about what you tho
 - [ ] I have added an entry under `[next]` in `CHANGELOG.md`
 - [ ] I have formatted my code with `flutter format`
 - [ ] I have made corresponding changes to the documentation
-- [ ] I have added examples for new features in `docs/examples`
+- [ ] I have added examples for new features in `doc/examples`
 - [ ] The continuous integration (CI) is passing
