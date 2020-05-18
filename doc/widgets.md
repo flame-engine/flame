@@ -14,7 +14,7 @@ The grid sprite is a 3x3 grid and with 9 blocks, representing the 4 corners, the
 
 The corners are drawn at the same size, the sides are stretched on the side direction and the middle is expanded both ways.
 
-The `NineTileBox` widget implements a Container using that standard. This pattern is also implemented in game by the `NineTileBoxComponent` where you can use this same feature, but directly into the game Canvas, to know more about this, check the component docs [here](doc/components.md#nine-tile-box-component).
+The `NineTileBox` widget implements a Container using that standard. This pattern is also implemented in game by the `NineTileBoxComponent` where you can use this same feature, but directly into the game Canvas, to know more about this, check the component docs [here](/doc/components.md#nine-tile-box-component).
 
 Here you can find an example of its usage:
 
@@ -31,11 +31,11 @@ NineTileBox(
 
 ## SpriteButton
 
-`SpriteButton` is a simple widget that create a button based on Flame sprites, this can be very usefull when trying to create retro looking buttons for example, where creating that look can be easy to achieve drawing the button on a drawing software instead of making it directly on Flutter.
+`SpriteButton` is a simple widget that creates a button based on Flame sprites. This can be very useful when trying to create retro looking buttons. For example when creating that look can be more easily achievable by drawing the button in a drawing software, instead of making it directly in Flutter.
 
 Remember that the Sprites must have already been loaded when passing it to the widget.
 
-How to use:
+How to use it:
 
 ```dart
 SpriteButton(

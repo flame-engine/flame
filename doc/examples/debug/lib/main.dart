@@ -25,6 +25,7 @@ class AndroidComponent extends SvgComponent with Resizable {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (size == null) {
       return;
     }
@@ -52,6 +53,9 @@ class MyGame extends BaseGame {
 
   @override
   bool debugMode() => true;
+
+  @override
+  bool recordFps() => true;
 
   void start() {
     final android = AndroidComponent();

@@ -5,6 +5,7 @@ import 'package:flame/components/animation_component.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final Size size = await Flame.util.initialDimensions();
   runApp(MyGame(size).widget);
 }

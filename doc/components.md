@@ -25,7 +25,7 @@ The most commonly used implementation, `SpriteComponent`, can be created with a 
 ```
 
 In the event that you want to easily change the direction of your components rendering, you can also use
-`renderFlipX` and `renderFlipY` to flip anything drawn to canvas during `render(Canvas canvas)`. 
+`renderFlipX` and `renderFlipY` to flip anything drawn to canvas during `render(Canvas canvas)`.
 This is available on all `PositionComponent` objects, and is especially useful on `SpriteComponent` and
 `AnimationComponent`. Simply set `component.renderFlipX = true` for example reverse the horizontal rendering.
 
@@ -191,11 +191,13 @@ So you can have HUD and other non-physics-related components in your game list, 
 
 You can see a more complete example of box2d usage on [this WIP game](https://github.com/feroult/haunt) made by @feroult (beware, though, it uses 0.6.x version of flame, but the Box2D related apis are unchanged).
 
+More information about Box2D can be found [here](/doc/box2d.md).
+
 ## Tiled Component
 
 Currently we have a very basic implementation of a Tiled component. This API uses the lib [Tiled](https://github.com/feroult/tiled.dart) to parse map files and render visible layers.
 
-A example of how to use the API can be found [here](/doc/examples/tiled).
+An example of how to use the API can be found [here](/doc/examples/tiled).
 
 # Nine Tile Box Component
 
@@ -211,6 +213,6 @@ Check the example app `nine_tile_box` details on how to use it.
 
 ## Effects
 
-Flame provides a set of effects that can be applied to a certain type of components, these effects can be used to animate some properties of your components, like position or dimensions. You can check the list of those effects [here](/doc/effects)
+Flame provides a set of effects that can be applied to a certain type of components, these effects can be used to animate some properties of your components, like position or dimensions. You can check the list of those effects [here](/doc/effects.md)
 
 Examples of the running effects can be found [here](/doc/examples/effects.md);
