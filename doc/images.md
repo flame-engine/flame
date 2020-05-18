@@ -2,9 +2,16 @@
 
 If you are using the Component module and doing something simple, you probably won't need to use these classes; use `SpriteComponent` or `AnimationComponent` instead.
 
-You must have an appropriate folder structure and add the files to the `pubspec.yaml` file, as explained above.
+You must have an appropriate folder structure and add the files to the `pubspec.yaml` file, like this:
 
-It has to be a PNG file. It can have transparency.
+```yaml
+flutter:
+  assets:
+    - assets/images/player.png
+    - assets/images/enemy.png
+```
+
+It has to be a PNG file and it can have transparency.
 
 ## Sprite
 
@@ -18,7 +25,7 @@ For example, this will create a sprite representing the whole image of the file 
     Sprite player = Sprite('player.png');
 ```
 
-You could also specify the coordinates in the original image where the sprite is located; this allows you to use sprite sheets and reduce the number of images in memory; for example:
+You could also specify the coordinates in the original image where the sprite is located. This allows you to use sprite sheets and reduce the number of images in memory, for example:
 
 ```dart
     Sprite playerFrame = Sprite('player.png', x = 32.0, width = 16.0);
@@ -26,7 +33,7 @@ You could also specify the coordinates in the original image where the sprite is
 
 The default values are `0.0` for `x` and `y` and `null` for `width` and `height` (meaning it will use the full width/height of the source image).
 
-The `Sprite` class has a `loaded` method that returns whether the image has been loaded, and a render method, that allows you to render the image into a `Canvas`:
+The `Sprite` class has a `loaded` method that returns whether the image has been loaded, and a render method, that allows you to render the image onto a `Canvas`:
 
 ```dart
     Sprite block = Sprite('block.png');
@@ -37,13 +44,13 @@ The `Sprite` class has a `loaded` method that returns whether the image has been
 
 You must pass the size to the render method, and the image will be resized accordingly.
 
-The render method will do nothing while the sprite has not been loaded, so you don't need to worry. The image is cached in the `Images` class, so you can safely create many sprites with the same fileName.
+The render method will do nothing while the sprite has not been loaded, so you don't need to worry. The image is cached in the `Images` class, so you can safely create many sprites with the same filename.
 
-All render methods from the Sprite class can receive a `Paint` instance on the optional named parameter `overridePaint` that parameter will override the current `Sprite` paint instance for that render call.
+All render methods from the Sprite class can receive a `Paint` instance as the optional named parameter `overridePaint` that parameter will override the current `Sprite` paint instance for that render call.
 
-Sprites can also be used as widgets, to do so, just use `Flame.util.spriteAsWidget`
+Sprites can also be used as widgets, to do so just use `Flame.util.spriteAsWidget`
 
-A complete example of using sprite as widgets can be found [here](/doc/examples/animation_widget).
+A complete example using sprite as widgets can be found [here](/doc/examples/animation_widget).
 
 ## SpriteBatch
 
@@ -51,15 +58,15 @@ If you have a sprite sheet (also called an image atlas, which is an image with s
 
 Give it the filename of the image, and then add rectangles which describes various part of the image, in addition to transforms (position, scale and rotation) and optional colors.
 
-You render it with an `Canvas` and an optional `Paint`, `BlendMode` and `CullRect`.
+You render it with a `Canvas` and an optional `Paint`, `BlendMode` and `CullRect`.
 
-An `SpriteBatchComponent` is also available for your convenience.
+A `SpriteBatchComponent` is also available for your convenience.
 
 See example [here](/doc/examples/sprite_batch).
 
 ## Svg
 
-Flame provides a simple API to render SVG images on your game.
+Flame provides a simple API to render SVG images in your game.
 
 To use it just import the `Svg` class from `'package:flame/svg.dart'`, and use the following snippet to render it on the canvas:
 
@@ -77,11 +84,11 @@ To use it just import the `Svg` class from `'package:flame/svg.dart'`, and use t
 
 The `Flame.images` is a lower level utility for loading images, very similar to the `Flame.audio` instance.
 
-Flutter has a collection of types related to images, and converting everything properly form a local asset to the Image that can be drawn on Canvas is a small pain. This class allows you to obtain an Image that can be drawn on a Canvas using the `drawImageRect` method.
+Flutter has a collection of types related to images, and converting everything properly from a local asset to the Image that can be drawn on Canvas is a bit of a pain. This class allows you to obtain an Image that can be drawn on a Canvas using the `drawImageRect` method.
 
 It automatically caches any image loaded by filename, so you can safely call it many times.
 
-To load and draw an image, you can use the `load` method, like so:
+To load and draw an image, you can use the `load` method, like this:
 
 ```dart
     import 'package:flame/flame.dart';
@@ -109,7 +116,7 @@ Also similarly to Audio, you can instantiate your own copy of `Images` (each ins
 
 The Animation class helps you create a cyclic animation of sprites.
 
-You can create it by passing a list of equal sized sprites and the stepTime (that is, how many seconds it takes to move to the next frame):
+You can create it by passing a list of equally sized sprites and the stepTime (that is, how many seconds it takes to move to the next frame):
 
 ```dart
   Animation a = Animation.spriteList(sprites, stepTime: 0.02);
@@ -117,7 +124,7 @@ You can create it by passing a list of equal sized sprites and the stepTime (tha
 
 After the animation is created, you need to call its `update` method and render the current frame's sprite on your game instance, for example:
 
-```
+```dart
 class MyGame extends Game {
   Animation a;
 
@@ -154,7 +161,7 @@ So, in our example, we are saying that we have 8 frames for our player animation
 
 This constructor makes creating an Animation very easy using sprite sheets.
 
-If you use Aseprite for your animations, Flame does provide some support for Aseprite animation's JSON data, to use this feature, you will need to export the Sprite Sheet's JSON data, and use something like the following snippet:
+If you use Aseprite for your animations, Flame does provide some support for Aseprite animation's JSON data. To use this feature you will need to export the Sprite Sheet's JSON data, and use something like the following snippet:
 
 ```dart
     Animation animation = await Animation.fromAsepriteData(
@@ -176,7 +183,7 @@ A complete example of using animations as widgets can be found [here](/doc/examp
 
 ## FlareAnimation
 
-Flame provides a simple wrapper of [Flare](https://rive.app/#LearnMore) animations so you can use them on Flame games.
+Flame provides a simple wrapper of [Flare](https://rive.app/#LearnMore) animations so you can use them in Flame games.
 
 Check the following snippet on how to use this wrapper:
 
@@ -220,7 +227,7 @@ You can see a full example of the SpriteSheet class [here](/doc/examples/flare).
 
 ## SpriteSheet
 
-Sprite sheets are big images with several frames of the same sprite on it and is a very good way to organize and keep your animations stored. Flame provides a very simple utility class to deal with SpriteSheets, with it you can load your sprite sheet image and extract animations from it. Bellow is a very simple example of using it:
+Sprite sheets are big images with several frames of the same sprite on it and is a very good way to organize and keep your animations stored. Flame provides a very simple utility class to deal with SpriteSheets, with it you can load your sprite sheet image and extract animations from it. Below is a very simple example of how to use it:
 
 ```dart
 import 'package:flame/spritesheet.dart';

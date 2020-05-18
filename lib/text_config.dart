@@ -70,8 +70,8 @@ class TextConfig {
   ///
   /// Example usage:
   ///
-  ///     const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font', anchor: Anchor.rightBottom);
-  ///     config.render(c, Offset(size.width - 10, size.height - 10);
+  ///     const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font');
+  ///     config.render(c, Offset(size.width - 10, size.height - 10, anchor: Anchor.bottomRight);
   void render(Canvas canvas, String text, Position p,
       {Anchor anchor = Anchor.topLeft}) {
     final material.TextPainter tp = toTextPainter(text);

@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
+import 'package:flame/palette.dart';
 
 void main() {
   final game = MyGame();
   runApp(game.widget);
 }
 
+/// Includes an example including basic detectors
 class MyGame extends Game with TapDetector, DoubleTapDetector, PanDetector {
-  final _whitePaint = Paint()..color = const Color(0xFFFFFFFF);
+  final _whitePaint = BasicPalette.white.paint;
   final _bluePaint = Paint()..color = const Color(0xFF0000FF);
   final _greenPaint = Paint()..color = const Color(0xFF00FF00);
 
