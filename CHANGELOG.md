@@ -4,6 +4,9 @@
 - Updated the doc structure and minor language fixes
 - Adding AssetsCache.readBinaryFile
 - Splitting debugMode from recordFps mode
+- Adding support for multi touch tap and drag events
+- Fix animations example
+- Add possibility for infinite and alternating effects
 
 ## 0.20.2
 - Fix text component bug with anchor being applied twice
