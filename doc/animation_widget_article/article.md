@@ -132,7 +132,7 @@ In our case, we only need to set the `textureWidth` to 96.0, as the original wid
 
 Now, just run your app, and, hurray!, we get a slick animation!
 
-<p align="center"> 
+<p align="center">
     <img width="30%" src="result.gif" />
     <br />
     <small>The final result, as recorded in the emulator!</small>
