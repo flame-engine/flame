@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Fixing BaseGame tap detectors issues
 
 ## 0.21.0
 - Adding AssetsCache.readBinaryFile
