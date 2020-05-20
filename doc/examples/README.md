@@ -6,4 +6,4 @@ To run this examples after cloning, first run `flutter create .` inside the desi
 
 After that, run `flutter pub get` to get all dependencies as defined in the pubspec.yml file.
 
-Finaly, you should be able to `flutter run` just fine.
+Finally, you should be able to `flutter run` just fine.
