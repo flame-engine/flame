@@ -9,7 +9,8 @@ void main() {
 }
 
 /// Includes an example including basic detectors
-class MyGame extends Game with TapDetector, DoubleTapDetector, PanDetector, LongPressDetector {
+class MyGame extends Game
+    with TapDetector, DoubleTapDetector, PanDetector, LongPressDetector {
   final _whitePaint = BasicPalette.white.paint;
   final _bluePaint = Paint()..color = const Color(0xFF0000FF);
   final _greenPaint = Paint()..color = const Color(0xFF00FF00);

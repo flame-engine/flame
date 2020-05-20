@@ -44,8 +44,8 @@ class BaseGame extends Game {
   void preAdd(Component c) {
     if (c is Tapable) {
       assert(
-          this is HasTapableComponents,
-          'Tapable Components can only be added to a BaseGame with HasTapableComponents',
+        this is HasTapableComponents,
+        'Tapable Components can only be added to a BaseGame with HasTapableComponents',
       );
     }
 
