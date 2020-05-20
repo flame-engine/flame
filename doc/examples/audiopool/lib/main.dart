@@ -11,6 +11,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final Size size = await Flame.util.initialDimensions();
   final MyGame game = MyGame(size);
   runApp(game.widget);
