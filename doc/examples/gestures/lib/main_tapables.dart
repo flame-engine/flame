@@ -28,11 +28,6 @@ class TapableSquare extends PositionComponent with Tapable {
   }
 
   @override
-  void update(double dt) {
-    super.update(dt);
-  }
-
-  @override
   void render(Canvas canvas) {
     canvas.drawRect(toRect(), _beenPressed ? _grey : _white);
   }
@@ -53,9 +48,9 @@ class TapableSquare extends PositionComponent with Tapable {
   }
 }
 
-class MyGame extends BaseGame {
+class MyGame extends BaseGame with HasTapableComponents {
   MyGame() {
-    add(TapableSquare(x: 300, y: 100));
     add(TapableSquare(y: 100));
+    add(TapableSquare(y: 250));
   }
 }

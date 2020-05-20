@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 
+import './game/game.dart';
+
 // Multi touch detector
-mixin MultiTouchTapDetector {
+mixin MultiTouchTapDetector on Game {
   void onTap(int pointerId) {}
   void onTapCancel(int pointerId) {}
   void onTapDown(int pointerId, TapDownDetails details) {}
@@ -31,29 +33,29 @@ class DragEvent extends Drag {
   }
 }
 
-mixin MultiTouchDragDetector {
+mixin MultiTouchDragDetector on Game {
   void onReceiveDrag(DragEvent drag) {}
 }
 
 // Basic touch detectors
-mixin TapDetector {
+mixin TapDetector on Game {
   void onTap() {}
   void onTapCancel() {}
   void onTapDown(TapDownDetails details) {}
   void onTapUp(TapUpDetails details) {}
 }
 
-mixin SecondaryTapDetector {
+mixin SecondaryTapDetector on Game {
   void onSecondaryTapDown(TapDownDetails details) {}
   void onSecondaryTapUp(TapUpDetails details) {}
   void onSecondaryTapCancel() {}
 }
 
-mixin DoubleTapDetector {
+mixin DoubleTapDetector on Game {
   void onDoubleTap() {}
 }
 
-mixin LongPressDetector {
+mixin LongPressDetector on Game {
   void onLongPress() {}
   void onLongPressStart(LongPressStartDetails details) {}
   void onLongPressMoveUpdate(LongPressMoveUpdateDetails details) {}
@@ -61,7 +63,7 @@ mixin LongPressDetector {
   void onLongPressEnd(LongPressEndDetails details) {}
 }
 
-mixin VerticalDragDetector {
+mixin VerticalDragDetector on Game {
   void onVerticalDragDown(DragDownDetails details) {}
   void onVerticalDragStart(DragStartDetails details) {}
   void onVerticalDragUpdate(DragUpdateDetails details) {}
@@ -69,7 +71,7 @@ mixin VerticalDragDetector {
   void onVerticalDragCancel() {}
 }
 
-mixin HorizontalDragDetector {
+mixin HorizontalDragDetector on Game {
   void onHorizontalDragDown(DragDownDetails details) {}
   void onHorizontalDragStart(DragStartDetails details) {}
   void onHorizontalDragUpdate(DragUpdateDetails details) {}
@@ -77,14 +79,14 @@ mixin HorizontalDragDetector {
   void onHorizontalDragCancel() {}
 }
 
-mixin ForcePressDetector {
+mixin ForcePressDetector on Game {
   void onForcePressStart(ForcePressDetails details) {}
   void onForcePressPeak(ForcePressDetails details) {}
   void onForcePressUpdate(ForcePressDetails details) {}
   void onForcePressEnd(ForcePressDetails details) {}
 }
 
-mixin PanDetector {
+mixin PanDetector on Game {
   void onPanDown(DragDownDetails details) {}
   void onPanStart(DragStartDetails details) {}
   void onPanUpdate(DragUpdateDetails details) {}
@@ -92,7 +94,7 @@ mixin PanDetector {
   void onPanCancel() {}
 }
 
-mixin ScaleDetector {
+mixin ScaleDetector on Game {
   void onScaleStart(ScaleStartDetails details) {}
   void onScaleUpdate(ScaleUpdateDetails details) {}
   void onScaleEnd(ScaleEndDetails details) {}

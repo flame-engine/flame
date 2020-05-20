@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 
+import '../../game/base_game.dart';
+
 mixin Tapable {
   Rect toRect();
 
@@ -43,4 +45,21 @@ mixin Tapable {
   ///
   /// If a [Tapable] has children, its children be taped as well.
   Iterable<Tapable> tapableChildren() => [];
+}
+
+mixin HasTapableComponents on BaseGame {
+  Iterable<Tapable> get _tapableComponents =>
+      components.where((c) => c is Tapable).cast();
+
+  void onTapCancel(int pointerId) {
+    _tapableComponents.forEach((c) => c.handleTapCancel(pointerId));
+  }
+
+  void onTapDown(int pointerId, TapDownDetails details) {
+    _tapableComponents.forEach((c) => c.handleTapDown(pointerId, details));
+  }
+
+  void onTapUp(int pointerId, TapUpDetails details) {
+    _tapableComponents.forEach((c) => c.handleTapUp(pointerId, details));
+  }
 }
