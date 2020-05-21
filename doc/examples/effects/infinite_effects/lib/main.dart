@@ -1,6 +1,6 @@
 import 'package:flame/effects/move_effect.dart';
 import 'package:flame/effects/scale_effect.dart';
-import 'package:flame/effects/rotational_effect.dart';
+import 'package:flame/effects/rotate_effect.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/material.dart';
@@ -59,9 +59,9 @@ class MyGame extends BaseGame with TapDetector {
       isAlternating: true,
     ));
 
-    orangeSquare.addEffect(RotationalEffect(
-      rotation: (dx + dy) % (2 * pi),
-      speed: 1.0,
+    orangeSquare.addEffect(RotateEffect(
+      radians: (dx + dy) % (2 * pi),
+      speed: 1.0, // Radians per second
       curve: Curves.easeInOut,
       isInfinite: true,
       isAlternating: true,
