@@ -10,7 +10,7 @@ import 'package:test/test.dart';
 
 import 'package:flame/components/component.dart';
 
-class MyGame extends BaseGame {}
+class MyGame extends BaseGame with HasTapableComponents {}
 
 class MyTap extends PositionComponent with Tapable, Resizable {
   bool tapped = false;
