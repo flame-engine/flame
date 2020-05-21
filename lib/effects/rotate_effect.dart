@@ -3,8 +3,8 @@ import 'package:meta/meta.dart';
 
 import './effects.dart';
 
-class RotationalEffect extends PositionComponentEffect {
-  double rotation;
+class RotateEffect extends PositionComponentEffect {
+  double radians;
   double speed;
   Curve curve;
 
@@ -12,9 +12,9 @@ class RotationalEffect extends PositionComponentEffect {
   double _peakAngle;
   double _direction;
 
-  RotationalEffect({
-    @required this.rotation,
-    @required this.speed,
+  RotateEffect({
+    @required this.radians, // The angle to rotate to
+    @required this.speed, // In radians per second
     this.curve,
     isInfinite = false,
     isAlternating = false,
@@ -24,7 +24,7 @@ class RotationalEffect extends PositionComponentEffect {
   set component(_comp) {
     super.component = _comp;
     _originalAngle = component.angle;
-    _peakAngle = _originalAngle + rotation;
+    _peakAngle = _originalAngle + radians;
     _direction = _peakAngle.sign;
     travelTime = (_peakAngle / speed).abs();
   }
