@@ -17,7 +17,7 @@ void main() async {
   runApp(MyGame().widget);
 }
 
-class MyGame extends BaseGame with TapDetector {
+class MyGame extends BaseGame {
   Square greenSquare;
   Square redSquare;
   Square orangeSquare;
@@ -35,7 +35,7 @@ class MyGame extends BaseGame with TapDetector {
   }
 
   @override
-  void onTapUp(details) {
+  void onTapUp(int pointerId, TapUpDetails details) {
     final dx = details.localPosition.dx;
     final dy = details.localPosition.dy;
 
