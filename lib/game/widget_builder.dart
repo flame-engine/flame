@@ -52,35 +52,37 @@ Widget _applyAdvancedGesturesDetectors(Game game, Widget child) {
   if (_tapHandlers.isNotEmpty) {
     gestures[MultiTapGestureRecognizer] =
         GestureRecognizerFactoryWithHandlers<MultiTapGestureRecognizer>(
-            () => MultiTapGestureRecognizer(),
-            (MultiTapGestureRecognizer instance) {
-      instance.onTapDown = (pointerId, d) =>
-          _tapHandlers.forEach((h) => h.onTapDown?.call(pointerId, d));
-      instance.onTapUp = (pointerId, d) =>
-          _tapHandlers.forEach((h) => h.onTapUp?.call(pointerId, d));
-      instance.onTapCancel = (pointerId) =>
-          _tapHandlers.forEach((h) => h.onTapCancel?.call(pointerId));
-      instance.onTap =
-          (pointerId) => _tapHandlers.forEach((h) => h.onTap?.call(pointerId));
-    });
+      () => MultiTapGestureRecognizer(),
+      (MultiTapGestureRecognizer instance) {
+        instance.onTapDown = (pointerId, d) =>
+            _tapHandlers.forEach((h) => h.onTapDown?.call(pointerId, d));
+        instance.onTapUp = (pointerId, d) =>
+            _tapHandlers.forEach((h) => h.onTapUp?.call(pointerId, d));
+        instance.onTapCancel = (pointerId) =>
+            _tapHandlers.forEach((h) => h.onTapCancel?.call(pointerId));
+        instance.onTap = (pointerId) =>
+            _tapHandlers.forEach((h) => h.onTap?.call(pointerId));
+      },
+    );
   }
 
   if (game is MultiTouchDragDetector) {
     gestures[ImmediateMultiDragGestureRecognizer] =
         GestureRecognizerFactoryWithHandlers<
-                ImmediateMultiDragGestureRecognizer>(
-            () => ImmediateMultiDragGestureRecognizer(),
-            (ImmediateMultiDragGestureRecognizer instance) {
-      instance
-        ..onStart = (Offset o) {
-          final drag = DragEvent();
-          drag.initialPosition = o;
+            ImmediateMultiDragGestureRecognizer>(
+      () => ImmediateMultiDragGestureRecognizer(),
+      (ImmediateMultiDragGestureRecognizer instance) {
+        instance
+          ..onStart = (Offset o) {
+            final drag = DragEvent();
+            drag.initialPosition = o;
 
-          game.onReceiveDrag(drag);
+            game.onReceiveDrag(drag);
 
-          return drag;
-        };
-    });
+            return drag;
+          };
+      },
+    );
   }
 
   return RawGestureDetector(
