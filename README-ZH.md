@@ -6,6 +6,8 @@
 
 [English](README.md) | 简体中文
 
+> 本篇为社区版翻译, 目前针对版本: 0.21.0
+
 一款极简的Flutter游戏引擎.
 
 感激你对我们的任何支持! 评论, 建议, 提issues, Pull Request(贡献&推送)! 给我们点一颗Star, 支持我们! 
@@ -14,7 +16,7 @@
 
 我们在Fireslime的Discord上有一个互助频道, [点击加入](https://discord.gg/pxrBmy4). 现在我们也有了[FAQ](FAQ.md), 所以提问前请先在这里看看你有没有需要的答案.
 
-国内用户欢迎加入[Flame QQ交流群](https://jq.qq.com/?_wv=1027&k=5ETLFm3)(用户不多, 欲入从速)
+国内用户欢迎加入[Flame QQ交流群](https://jq.qq.com/?_wv=1027&k=5ETLFm3)(非官方, 针对国内用户的讨论群, 较新)
 
 ## 项目目标
 
