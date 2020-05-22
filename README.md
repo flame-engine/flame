@@ -4,6 +4,8 @@
 
 <img src="https://i.imgur.com/vFDilXT.png" width="400">
 
+English | [简体中文](README-ZH.md)
+
 A minimalist Flutter game engine.
 
 Any help is appreciated! Comments, suggestions, issues, PRs! Give us a star to show your support!
