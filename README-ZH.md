@@ -6,8 +6,6 @@
 
 [English](README.md) | 简体中文
 
-翻译: [HarrisonQI](https://github.com/HarrisonQi)
-
 一款极简的Flutter游戏引擎.
 
 感激你对我们的任何支持! 评论, 建议, 提issues, Pull Request(贡献&推送)! 给我们点一颗Star, 支持我们! 
@@ -64,7 +62,7 @@
 
 我们还在[awesome-flame](https://github.com/flame-engine/awesome-flame)项目上提供了一些精选的游戏, 库和文章.
 
-## Documentation
+## 文档&说明
 
 你可以在在这里看到完整的[开发文档](doc/README.md)
 
@@ -72,9 +70,10 @@
 
 你可以[点击此处](https://flame-engine.org/)查看非常棒的网站文档.
 
-## Credits
+## 感谢
 
  * [Fireslime](https://fireslime.xyz), 负责维护Flame的团队.
+ * 翻译: [HarrisonQI](https://github.com/HarrisonQi)
  * 所有友善的贡献者和在社区中提供帮助的人.
  * 我的 [audioplayers](https://github.com/luanpotter/audioplayer) 库, 来源于[rxlabz](https://github.com/rxlabz/audioplayer)的fork.
  * Dart的 [Box2D](https://github.com/google/box2d.dart).
