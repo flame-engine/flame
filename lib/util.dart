@@ -164,6 +164,8 @@ class Util {
   ///
   /// This will create a [CustomPaint] widget using a [CustomPainter] for rendering the [Sprite]
   /// Be aware that the Sprite must have been loaded, otherwise it can't be rendered
+  ///
+  /// @Deprecated('Use FlameSpriteWidget instead')
   widgets.CustomPaint spriteAsWidget(Size size, Sprite sprite) =>
       widgets.CustomPaint(size: size, painter: _SpriteCustomPainter(sprite));
 }

@@ -19,3 +19,5 @@ flutter:
   assets:
     - assets/images/nine_tile_box.png
     - assets/images/buttons.png
+    - assets/images/shield.png
+    - assets/images/bomb_ptero.png
