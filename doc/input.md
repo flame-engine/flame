@@ -95,7 +95,7 @@ You can also check a more complete example [here](/doc/examples/gestures).
 
 ## Tapable components
 
-Flame also offers a simple helper to make it easier to handle tap events on `PositionComponent`. By added the `HasTapableComponents` mixin to your game, and using the mixin `Tapable` your components can override the following methods, enabling easy to use tap events on your Component.
+Flame also offers a simple helper to make it easier to handle tap events on `PositionComponent`. By adding the `HasTapableComponents` mixin to your game, and using the mixin `Tapable` on your components can override the following methods, enabling easy to use tap events on yours components.
 
 ```dart
   void onTapCancel() {}
