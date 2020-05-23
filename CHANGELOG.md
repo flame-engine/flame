@@ -2,6 +2,7 @@
 
 ## [next]
  - Fixing BaseGame tap detectors issues
+ - Upgrade Flutter SVG to fix for flame web
 
 ## 0.21.0
 - Adding AssetsCache.readBinaryFile
