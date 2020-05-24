@@ -1,3 +1,4 @@
+import 'package:flame/gestures.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -12,7 +13,7 @@ void main() async {
   runApp(game.widget);
 }
 
-class MyGame extends BaseGame {
+class MyGame extends BaseGame with TapDetector {
   final animation = flame_animation.Animation.sequenced('chopper.png', 4,
       textureWidth: 48, textureHeight: 48, stepTime: 0.15, loop: true);
 
