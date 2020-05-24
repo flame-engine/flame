@@ -3,12 +3,12 @@ import 'package:flame/effects/scale_effect.dart';
 import 'package:flame/effects/rotate_effect.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/position.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:math';
 
-import 'package:flame/flame.dart';
-import 'package:flame/game.dart';
 import './square.dart';
 
 void main() async {
@@ -17,7 +17,7 @@ void main() async {
   runApp(MyGame().widget);
 }
 
-class MyGame extends BaseGame {
+class MyGame extends BaseGame with TapDetector {
   Square greenSquare;
   Square redSquare;
   Square orangeSquare;
@@ -35,7 +35,7 @@ class MyGame extends BaseGame {
   }
 
   @override
-  void onTapUp(int pointerId, TapUpDetails details) {
+  void onTapUp(TapUpDetails details) {
     final dx = details.localPosition.dx;
     final dy = details.localPosition.dy;
 
