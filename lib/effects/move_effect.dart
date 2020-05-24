@@ -44,6 +44,8 @@ class MoveEffect extends PositionComponentEffect {
     _yDirection = _direction(destination.y, component.y);
 
     final totalDistance = sqrt(pow(_xDistance, 2) + pow(_yDistance, 2));
+    print(totalDistance);
+    print(speed);
     travelTime = totalDistance / speed;
   }
 
