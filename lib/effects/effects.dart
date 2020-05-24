@@ -3,6 +3,7 @@ import '../components/component.dart';
 
 export './move_effect.dart';
 export './scale_effect.dart';
+export './rotate_effect.dart';
 
 abstract class PositionComponentEffect {
   bool _isDisposed = false;
