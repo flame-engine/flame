@@ -5,6 +5,7 @@ if [[ $(flutter format -n .) ]]; then
     exit 1
 fi
 
+flutter pub get
 result=`dartanalyzer lib/`
 if ! echo "$result" | grep -q "No issues found!"; then
   echo "$result"
@@ -13,6 +14,7 @@ if ! echo "$result" | grep -q "No issues found!"; then
 fi
 
 cd example/
+flutter pub get
 result=`dartanalyzer .`
 if ! echo "$result" | grep -q "No issues found!"; then
   echo "$result"
@@ -24,6 +26,7 @@ cd ..
 for f in doc/examples/**/pubspec.yaml; do
   d=`dirname $f`
   cd $d
+  flutter pub get
   result=`dartanalyzer .`
   if ! echo "$result" | grep -q "No issues found!"; then
     echo "$result"
