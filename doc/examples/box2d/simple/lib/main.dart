@@ -15,6 +15,10 @@ void main() async {
 }
 
 class MyPlanet extends BodyComponent {
+  static final red = const PaletteEntry(Colors.red).paint;
+  static final black = const PaletteEntry(Colors.black).paint;
+  static final blue = const PaletteEntry(Colors.blue).paint;
+
   double totalTime = 0;
   // Creates a BodyComponent that renders a red circle (with a black moving
   // pulsating circle on the inside) that can interact with other body
@@ -53,13 +57,12 @@ class MyPlanet extends BodyComponent {
 
   @override
   void renderCircle(Canvas c, Offset p, double radius) {
-    Paint red = PaletteEntry(Colors.red).paint;
-    Paint black = PaletteEntry(Colors.black).paint;
-    Paint blue = PaletteEntry(Colors.blue).paint;
     c.drawCircle(p, radius, red);
-    double angle = body.getAngle();
+
+    final angle = body.getAngle();
     c.drawCircle(p, math.sin(angle) * radius, black);
-    Offset lineRotation =
+
+    final lineRotation =
         Offset(math.sin(angle) * radius, math.cos(angle) * radius);
     c.drawLine(p, p + lineRotation, blue);
   }
