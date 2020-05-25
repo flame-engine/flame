@@ -20,8 +20,6 @@ void main() async {
 
 class MyGame extends BaseGame with TapDetector {
   Square greenSquare;
-  Square redSquare;
-  Square orangeSquare;
 
   MyGame() {
     final green = Paint()..color = const Color(0xAA338833);
@@ -33,7 +31,6 @@ class MyGame extends BaseGame with TapDetector {
   void onTapUp(TapUpDetails details) {
     final dx = details.localPosition.dx;
     final dy = details.localPosition.dy;
-
     greenSquare.clearEffects();
 
     final move1 = MoveEffect(
@@ -62,7 +59,7 @@ class MyGame extends BaseGame with TapDetector {
 
     final rotate = RotateEffect(
       radians: (dx + dy) % pi,
-      speed: 2.0, // Radians per second
+      speed: 2.0,
       curve: Curves.decelerate,
       isInfinite: false,
       isAlternating: false,
@@ -70,8 +67,6 @@ class MyGame extends BaseGame with TapDetector {
 
     final sequence = SequenceEffect(
         effects: [move1, scale, move2, rotate],
-        //effects: [rotate],
-        //effects: [scale],
         isInfinite: true, isAlternating: true);
     greenSquare.addEffect(sequence);
   }
