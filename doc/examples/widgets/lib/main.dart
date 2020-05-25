@@ -2,7 +2,6 @@ import 'package:flutter/material.dart' hide Animation;
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
-import 'package:flame/animation.dart';
 import 'package:dashbook/dashbook.dart';
 
 import 'package:flame/widgets/nine_tile_box.dart';
