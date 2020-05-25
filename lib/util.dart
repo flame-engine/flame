@@ -153,6 +153,8 @@ class Util {
   /// This actually creates an [EmbeddedGameWidget] with a [SimpleGame] whose only content is an [AnimationComponent] created from the provided [animation].
   /// You can use this implementation as base to easily create your own widgets based on more complex games.
   /// This is intended to be used by non-game apps that want to add a sprite sheet animation.
+  ///
+  /// @Deprecated('Use FlameSpriteAnimation instead')
   widgets.Widget animationAsWidget(Position size, Animation animation) {
     return EmbeddedGameWidget(
       BaseGame()..add(AnimationComponent(size.x, size.y, animation)),

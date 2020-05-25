@@ -64,7 +64,7 @@ class _FlameAnimationWidget extends State<FlameAnimationWidget>
       _lastUpdated = DateTime.now().millisecond;
       _controller.repeat(
           // -/+ 60 fps
-          period: Duration(milliseconds: 16));
+          period: const Duration(milliseconds: 16));
     });
   }
 
