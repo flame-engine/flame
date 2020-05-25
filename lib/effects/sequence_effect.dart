@@ -40,7 +40,6 @@ class SequenceEffect extends PositionComponentEffect {
     });
     travelTime = effects.fold(0, (time, effect) => time + effect.travelTime *
         (effect.isAlternating ? 2 : 1));
-    effects.forEach((element) {print("$element ${element.travelTime}");});
     component.setBySize(originalSize);
     component.setByPosition(originalPosition);
     _currentEffect = effects.first;
@@ -49,10 +48,10 @@ class SequenceEffect extends PositionComponentEffect {
 
   @override
   void update(double dt) {
-    super.update(dt);
     if (hasFinished()) {
       return;
     }
+    super.update(dt);
 
     _currentEffect.update(dt + _driftModifier);
     _driftModifier = 0.0;
@@ -61,20 +60,13 @@ class SequenceEffect extends PositionComponentEffect {
       _currentEffect.isAlternating = _currentWasAlternating;
       _currentIndex++;
       final iterationSize = isAlternating ? effects.length * 2 : effects.length;
-      if (isInfinite &&
-          _currentIndex != 0 &&
-          _currentIndex % iterationSize == 0) {
-        reset();
+      if (_currentIndex != 0 && _currentIndex % iterationSize == 0) {
+        isInfinite ? reset() : dispose();
         return;
       }
       final orderedEffects =
           curveDirection.isNegative ? effects.reversed.toList() : effects;
       _currentEffect = orderedEffects[_currentIndex % effects.length];
-      print("Index: ${_currentIndex % effects.length}");
-      print(_currentIndex);
-      print(curveDirection);
-      print(_currentEffect);
-      print(orderedEffects);
       _currentWasAlternating = _currentEffect.isAlternating;
       if (isAlternating &&
           !_currentEffect.isAlternating &&
@@ -91,11 +83,5 @@ class SequenceEffect extends PositionComponentEffect {
     super.reset();
     _currentIndex = 0;
     component = component;
-  }
-
-  @override
-  bool hasFinished() {
-    return super.hasFinished() &&
-        effects.every((effect) => effect.hasFinished());
   }
 }
