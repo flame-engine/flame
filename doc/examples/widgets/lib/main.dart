@@ -87,24 +87,23 @@ void main() async {
     rows: 1,
   );
   final _animation = _animationSpriteSheet.createAnimation(
-      0,
-      stepTime: 0.2,
-      to: 3,
-      loop: true,
+    0,
+    stepTime: 0.2,
+    to: 3,
+    loop: true,
   );
-  dashbook.storiesOf('FlameAnimationWidget').decorator(CenterDecorator())
-      .add(
-          'default',
-          (ctx) => Container(
-              width: ctx.numberProperty('container width', 400),
-              height: ctx.numberProperty('container height', 200),
-              padding: const EdgeInsets.all(20),
-              child: FlameAnimationWidget(
-                  animation: _animation,
-                  play: ctx.boolProperty('playing', true),
-                  center: ctx.boolProperty('center', true),
-              ),
+  dashbook.storiesOf('FlameAnimationWidget').decorator(CenterDecorator()).add(
+        'default',
+        (ctx) => Container(
+          width: ctx.numberProperty('container width', 400),
+          height: ctx.numberProperty('container height', 200),
+          padding: const EdgeInsets.all(20),
+          child: FlameAnimationWidget(
+            animation: _animation,
+            play: ctx.boolProperty('playing', true),
+            center: ctx.boolProperty('center', true),
           ),
+        ),
       );
 
   runApp(dashbook);

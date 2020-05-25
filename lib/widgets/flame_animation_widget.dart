@@ -14,14 +14,14 @@ class FlameAnimationWidget extends StatefulWidget {
     this.animation,
     this.play = true,
     this.center = false,
-  }): assert(animation.loaded(), 'Animation must be loaded');
+  }) : assert(animation.loaded(), 'Animation must be loaded');
 
   @override
   State createState() => _FlameAnimationWidget();
 }
 
-class _FlameAnimationWidget extends State<FlameAnimationWidget> with SingleTickerProviderStateMixin {
-
+class _FlameAnimationWidget extends State<FlameAnimationWidget>
+    with SingleTickerProviderStateMixin {
   AnimationController _controller;
   int _lastUpdated;
 
@@ -39,19 +39,17 @@ class _FlameAnimationWidget extends State<FlameAnimationWidget> with SingleTicke
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-        vsync: this
-    )
-    ..addListener(() {
-      final now = DateTime.now().millisecond;
+    _controller = AnimationController(vsync: this)
+      ..addListener(() {
+        final now = DateTime.now().millisecond;
 
-      final dt = max(0, (now - _lastUpdated) / 1000);
-      widget.animation.update(dt);
+        final dt = max(0, (now - _lastUpdated) / 1000);
+        widget.animation.update(dt);
 
-      setState(() {
-        _lastUpdated = now;
+        setState(() {
+          _lastUpdated = now;
+        });
       });
-    });
 
     widget.animation.onCompleteAnimation = _pauseAnimation;
 
@@ -66,8 +64,7 @@ class _FlameAnimationWidget extends State<FlameAnimationWidget> with SingleTicke
       _lastUpdated = DateTime.now().millisecond;
       _controller.repeat(
           // -/+ 60 fps
-          period: Duration(milliseconds: 16)
-      );
+          period: Duration(milliseconds: 16));
     });
   }
 
@@ -85,6 +82,7 @@ class _FlameAnimationWidget extends State<FlameAnimationWidget> with SingleTicke
 
   @override
   Widget build(ctx) {
-    return FlameSpriteWidget(sprite: widget.animation.getSprite(), center: widget.center);
+    return FlameSpriteWidget(
+        sprite: widget.animation.getSprite(), center: widget.center);
   }
 }
