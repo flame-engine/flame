@@ -10,7 +10,7 @@ import '../position.dart';
 class SequenceEffect extends PositionComponentEffect {
   final List<PositionComponentEffect> effects;
   int _currentIndex = 0;
-  PositionComponentEffect _currentEffect;
+  PositionComponentEffect currentEffect;
   bool _currentWasAlternating;
   double _driftModifier = 0.0;
 
@@ -38,12 +38,14 @@ class SequenceEffect extends PositionComponentEffect {
         currentSize = Position.fromSize(effect.size);
       }
     });
-    travelTime = effects.fold(0, (time, effect) => time + effect.travelTime *
-        (effect.isAlternating ? 2 : 1));
+    travelTime = effects.fold(
+        0,
+        (time, effect) =>
+            time + effect.travelTime * (effect.isAlternating ? 2 : 1));
     component.setBySize(originalSize);
     component.setByPosition(originalPosition);
-    _currentEffect = effects.first;
-    _currentWasAlternating = _currentEffect.isAlternating;
+    currentEffect = effects.first;
+    _currentWasAlternating = currentEffect.isAlternating;
   }
 
   @override
@@ -53,11 +55,11 @@ class SequenceEffect extends PositionComponentEffect {
     }
     super.update(dt);
 
-    _currentEffect.update(dt + _driftModifier);
+    currentEffect.update(dt + _driftModifier);
     _driftModifier = 0.0;
-    if (_currentEffect.hasFinished()) {
-      _driftModifier = _currentEffect.driftTime;
-      _currentEffect.isAlternating = _currentWasAlternating;
+    if (currentEffect.hasFinished()) {
+      _driftModifier = currentEffect.driftTime;
+      currentEffect.isAlternating = _currentWasAlternating;
       _currentIndex++;
       final iterationSize = isAlternating ? effects.length * 2 : effects.length;
       if (_currentIndex != 0 && _currentIndex % iterationSize == 0) {
@@ -66,14 +68,14 @@ class SequenceEffect extends PositionComponentEffect {
       }
       final orderedEffects =
           curveDirection.isNegative ? effects.reversed.toList() : effects;
-      _currentEffect = orderedEffects[_currentIndex % effects.length];
-      _currentWasAlternating = _currentEffect.isAlternating;
+      currentEffect = orderedEffects[_currentIndex % effects.length];
+      _currentWasAlternating = currentEffect.isAlternating;
       if (isAlternating &&
-          !_currentEffect.isAlternating &&
+          !currentEffect.isAlternating &&
           curveDirection.isNegative) {
         // Make the effect go in reverse
-        _currentEffect.isAlternating = true;
-        _currentEffect.percentage = 1.0;
+        currentEffect.isAlternating = true;
+        currentEffect.percentage = 1.0;
       }
     }
   }
