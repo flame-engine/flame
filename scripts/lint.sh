@@ -1,4 +1,5 @@
-#!/usr/bin/env bash -xe
+#!/usr/bin/env bash
+set -xe
 
 if [[ $(flutter format -n .) ]]; then
   echo "flutter format issue"
