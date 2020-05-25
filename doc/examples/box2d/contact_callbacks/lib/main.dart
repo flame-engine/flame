@@ -3,6 +3,7 @@ import 'package:flame/box2d/box2d_component.dart';
 import 'package:flame/box2d/box2d_game.dart';
 import 'package:flame/box2d/contact_callbacks.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/gestures.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:box2d_flame/box2d.dart';
@@ -24,15 +25,20 @@ class Ball extends BodyComponent {
   Ball(Vector2 position, Box2DComponent box) : super(box) {
     originalPaint = _randomPaint();
     currentPaint = originalPaint;
-    Vector2 worldPosition = viewport.getScreenToWorld(position);
+    final worldPosition = viewport.getScreenToWorld(position);
     _createBody(5.0, worldPosition);
   }
 
   Paint _randomPaint() {
-    math.Random rng = math.Random();
-    return PaletteEntry(Color.fromARGB(100 + rng.nextInt(155),
-            100 + rng.nextInt(155), 100 + rng.nextInt(155), 255))
-        .paint;
+    final rng = math.Random();
+    return PaletteEntry(
+      Color.fromARGB(
+        100 + rng.nextInt(155),
+        100 + rng.nextInt(155),
+        100 + rng.nextInt(155),
+        255,
+      ),
+    ).paint;
   }
 
   void _createBody(double radius, Vector2 position) {
@@ -62,10 +68,11 @@ class Ball extends BodyComponent {
 
   @override
   void renderCircle(Canvas c, Offset p, double radius) {
-    Paint blue = PaletteEntry(Colors.blue).paint;
+    final blue = const PaletteEntry(Colors.blue).paint;
     c.drawCircle(p, radius, currentPaint);
-    double angle = body.getAngle();
-    Offset lineRotation =
+
+    final angle = body.getAngle();
+    final lineRotation =
         Offset(math.sin(angle) * radius, math.cos(angle) * radius);
     c.drawLine(p, p + lineRotation, blue);
   }
@@ -124,9 +131,9 @@ class BallWallContactCallback extends ContactCallback<Ball, Wall> {
   void end(Ball ball1, Wall wall, Contact contact) {}
 }
 
-class MyGame extends Box2DGame {
+class MyGame extends Box2DGame with TapDetector {
   MyGame(Box2DComponent box) : super(box) {
-    final List<BodyComponent> boundaries = createBoundaries(box);
+    final boundaries = createBoundaries(box);
     boundaries.forEach(add);
     addContactCallback(BallContactCallback());
     addContactCallback(BallWallContactCallback());

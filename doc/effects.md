@@ -46,6 +46,26 @@ square.addEffect(ScaleEffect(
 ));
 ```
 
+## RotateEffect
+
+Applied to `PositionComponent`s, this effect can be used to rotate the component, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
+
+The angle (`radians`) is in radians and the speed is in radians per second, so if you for example want to turn 180° in 2 seconds you set `radians: pi` and `speed: 0.25`.
+
+Usage example:
+```dart
+import 'dart:math';
+
+import 'package:flame/effects/effects.dart';
+
+// Square is a PositionComponent
+square.addEffect(RotateEffect(
+  radians: 2 * pi, // In radians
+  speed: 1.0, // Radians per second
+  curve: Curves.easeInOut,
+));
+```
+ 
 # Examples
 
 Full examples can be found [here](/doc/examples/effects/simple) and [here](/doc/examples/effects/infinite_effects).
