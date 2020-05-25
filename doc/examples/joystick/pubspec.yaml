@@ -1,4 +1,4 @@
-name: joystick_component
+name: joystick
 description: A sample Flame project to showcase the Joystick component.
 
 version: 0.1.0
@@ -19,4 +19,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/minotaur.png # thanks https://elthen.itch.io/2d-pixel-art-minotaur-sprites
+    - assets/images/joystick-base.png
+    - assets/images/joystick-knob.png
+    - assets/images/player.png

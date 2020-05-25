@@ -15,7 +15,7 @@ class DynamicJoystick extends Joystick {
     visible = false;
     fixedPosition = false;
     // Setting the visuals of the base and knob
-    base.sprite = Sprite('joystick_socket.png');
+    base.sprite = Sprite('joystick_base.png');
     knob.sprite = Sprite('joystick_knob.png');
   }
 

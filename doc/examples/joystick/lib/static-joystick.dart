@@ -14,7 +14,7 @@ class StaticJoystick extends Joystick {
     visible = true;
     fixedPosition = true;
     // Setting the visuals of the base and knob
-    base.sprite = Sprite('joystick_socket.png');
+    base.sprite = Sprite('joystick_base.png');
     knob.sprite = Sprite('joystick_knob.png');
   }
 
@@ -26,8 +26,8 @@ class StaticJoystick extends Joystick {
     base.width = base.height = side;
     movementRadius = side * sqrt2 / 2; // half the hypotenuse of the square
 
-    // Placing the joystick in the bottom right corner of the screen
-    setPosition(size.width * 0.8, size.height * 0.8);
+    // Placing the joystick in the bottom-center of the screen
+    setPosition(size.width / 2, size.height - movementRadius - side);
   }
 }
 

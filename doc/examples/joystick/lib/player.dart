@@ -5,7 +5,7 @@ import 'package:flame/components/component.dart';
 import 'package:flame/sprite.dart';
 
 class Player extends SpriteComponent {
-  double maxSpeed = 100; // pixels per second
+  double maxSpeed = 0; // pixels per second
   Offset velocity = Offset.zero;
 
   Player() {
@@ -26,6 +26,7 @@ class Player extends SpriteComponent {
     width = height = size.width * 0.12;
     x = size.width / 2;
     y = size.height / 2;
+    maxSpeed = size.width / 3;
   }
 
   @override
