@@ -67,11 +67,12 @@ void main() async {
   dashbook.storiesOf('FlameSpriteWidget').decorator(CenterDecorator()).add(
         'default',
         (ctx) => Container(
-          width: ctx.numberProperty('container width', 200),
+          width: ctx.numberProperty('container width', 400),
           height: ctx.numberProperty('container height', 200),
           padding: const EdgeInsets.all(20),
           child: FlameSpriteWidget(
             sprite: shieldSprite,
+            center: ctx.boolProperty('center', true),
           ),
         ),
       );

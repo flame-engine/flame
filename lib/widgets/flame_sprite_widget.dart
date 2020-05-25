@@ -28,7 +28,7 @@ class _FlameSpritePainer extends CustomPainter {
   _FlameSpritePainer(this._sprite, this._center);
 
   @override
-  bool shouldRepaint(_FlameSpritePainer old) => old._sprite != _sprite;
+  bool shouldRepaint(_FlameSpritePainer old) => old._sprite != _sprite || old._center != _center;
 
   @override
   void paint(Canvas canvas, Size size) {
