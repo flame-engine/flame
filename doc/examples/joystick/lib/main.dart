@@ -1,8 +1,8 @@
 import 'package:flame/flame.dart';
 import 'package:flutter/widgets.dart';
 
-import 'dynamic-joystick.dart';
-import 'static-joystick.dart';
+import 'dynamic_joystick.dart';
+import 'static_joystick.dart';
 
 void main() {
   Flame.initializeWidget();
