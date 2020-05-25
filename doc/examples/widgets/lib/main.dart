@@ -1,12 +1,14 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Animation;
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
+import 'package:flame/animation.dart';
 import 'package:dashbook/dashbook.dart';
 
 import 'package:flame/widgets/nine_tile_box.dart';
 import 'package:flame/widgets/sprite_button.dart';
 import 'package:flame/widgets/flame_sprite_widget.dart';
+import 'package:flame/widgets/flame_animation_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +37,6 @@ void main() async {
           ));
 
   await Flame.images.load('buttons.png');
-
   final _buttons = SpriteSheet(
     imageName: 'buttons.png',
     textureHeight: 20,
@@ -75,6 +76,35 @@ void main() async {
             center: ctx.boolProperty('center', true),
           ),
         ),
+      );
+
+  await Flame.images.load('bomb_ptero.png');
+  final _animationSpriteSheet = SpriteSheet(
+    imageName: 'bomb_ptero.png',
+    textureHeight: 32,
+    textureWidth: 48,
+    columns: 4,
+    rows: 1,
+  );
+  final _animation = _animationSpriteSheet.createAnimation(
+      0,
+      stepTime: 0.2,
+      to: 3,
+      loop: true,
+  );
+  dashbook.storiesOf('FlameAnimationWidget').decorator(CenterDecorator())
+      .add(
+          'default',
+          (ctx) => Container(
+              width: ctx.numberProperty('container width', 400),
+              height: ctx.numberProperty('container height', 200),
+              padding: const EdgeInsets.all(20),
+              child: FlameAnimationWidget(
+                  animation: _animation,
+                  play: ctx.boolProperty('playing', true),
+                  center: ctx.boolProperty('center', true),
+              ),
+          ),
       );
 
   runApp(dashbook);

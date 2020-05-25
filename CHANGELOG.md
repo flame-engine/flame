@@ -2,6 +2,8 @@
 
 ## [next]
  - Fixing BaseGame tap detectors issues
+ - Adding FlameSpriteWidget
+ - Adding FlameAnimationWidget
 
 ## 0.21.0
 - Adding AssetsCache.readBinaryFile
