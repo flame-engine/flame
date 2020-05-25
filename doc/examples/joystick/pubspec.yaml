@@ -1,0 +1,22 @@
+name: joystick_component
+description: A sample Flame project to showcase the Joystick component.
+
+version: 0.1.0
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flame:
+    path: ../../../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/minotaur.png # thanks https://elthen.itch.io/2d-pixel-art-minotaur-sprites
