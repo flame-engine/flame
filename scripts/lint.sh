@@ -6,7 +6,7 @@ if [[ $(flutter format -n .) ]]; then
 fi
 
 flutter pub get
-result=`dartanalyzer lib/`
+result=$(dartanalyzer lib/)
 if ! echo "$result" | grep -q "No issues found!"; then
   echo "$result"
   echo "dartanalyzer issue: lib"
@@ -15,7 +15,7 @@ fi
 
 cd example/
 flutter pub get
-result=`dartanalyzer .`
+result=$(dartanalyzer .)
 if ! echo "$result" | grep -q "No issues found!"; then
   echo "$result"
   echo "dartanalyzer issue: example"
@@ -23,11 +23,13 @@ if ! echo "$result" | grep -q "No issues found!"; then
 fi
 cd ..
 
-for f in doc/examples/**/pubspec.yaml; do
-  d=`dirname $f`
+changed_examples=$(git diff --name-only develop... doc/examples \
+  | xargs -I {} dirname {} | sed 's/\/lib$//' | uniq \
+  | xargs -I {} find {} -name pubspec.yaml | xargs -I {} dirname {})
+for d in $changed_examples; do
   cd $d
   flutter pub get
-  result=`dartanalyzer .`
+  result=$(dartanalyzer .)
   if ! echo "$result" | grep -q "No issues found!"; then
     echo "$result"
     echo "dartanalyzer issue: $d"
