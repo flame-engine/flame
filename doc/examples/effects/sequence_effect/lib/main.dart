@@ -67,7 +67,8 @@ class MyGame extends BaseGame with TapDetector {
 
     final sequence = SequenceEffect(
         effects: [move1, scale, move2, rotate],
-        isInfinite: true, isAlternating: true);
+        isInfinite: true,
+        isAlternating: true);
     greenSquare.addEffect(sequence);
   }
 }
