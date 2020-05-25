@@ -29,12 +29,12 @@ analyzer() {
 analyzer "example"
 
 #  Examples that are changed
-changed=$(git diff --name-only develop... doc/examples \
+changed=$(git diff --name-only develop doc/examples \
   | xargs -I {} dirname {} | sed 's/\/lib$//' | uniq \
   | xargs -I {} find {} -name pubspec.yaml | xargs -I {} dirname {})
 
 # Examples that are affected by changed code
-affected=$(git diff --name-only develop... lib/ \
+affected=$(git diff --name-only develop lib/ \
   | xargs -I {} basename {} | xargs -I {} grep -r -l --include \*.dart {} doc/examples/ \
   | xargs -I {} dirname {} | sed 's/\/lib$//' | uniq \
   | xargs -I {} find {} -name pubspec.yaml | xargs -I {} dirname {})
