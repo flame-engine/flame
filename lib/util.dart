@@ -117,7 +117,8 @@ class Util {
   ///
   /// Read more at: https://flame-engine.org/docs/input.md
   ///
-  /// @Deprecated('This method can lead to confuse behaviour, use the gestures methods provided by the Game class')
+  @Deprecated(
+      'This method can lead to confuse behaviour, use the gestures methods provided by the Game class')
   void addGestureRecognizer(GestureRecognizer recognizer) {
     if (GestureBinding.instance == null) {
       throw Exception(
@@ -154,7 +155,7 @@ class Util {
   /// You can use this implementation as base to easily create your own widgets based on more complex games.
   /// This is intended to be used by non-game apps that want to add a sprite sheet animation.
   ///
-  /// @Deprecated('Use FlameSpriteAnimation instead')
+  @Deprecated('Use FlameSpriteAnimation instead')
   widgets.Widget animationAsWidget(Position size, Animation animation) {
     return EmbeddedGameWidget(
       BaseGame()..add(AnimationComponent(size.x, size.y, animation)),
@@ -167,7 +168,7 @@ class Util {
   /// This will create a [CustomPaint] widget using a [CustomPainter] for rendering the [Sprite]
   /// Be aware that the Sprite must have been loaded, otherwise it can't be rendered
   ///
-  /// @Deprecated('Use FlameSpriteWidget instead')
+  @Deprecated('Use FlameSpriteWidget instead')
   widgets.CustomPaint spriteAsWidget(Size size, Sprite sprite) =>
       widgets.CustomPaint(size: size, painter: _SpriteCustomPainter(sprite));
 }
