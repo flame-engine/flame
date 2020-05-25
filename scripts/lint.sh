@@ -23,10 +23,20 @@ if ! echo "$result" | grep -q "No issues found!"; then
 fi
 cd ..
 
-changed_examples=$(git diff --name-only develop... doc/examples \
+#  Examples that are changed
+changed=$(git diff --name-only develop... doc/examples \
   | xargs -I {} dirname {} | sed 's/\/lib$//' | uniq \
   | xargs -I {} find {} -name pubspec.yaml | xargs -I {} dirname {})
-for d in $changed_examples; do
+
+# Examples that are affected by changed code
+affected=$(git diff --name-only develop... lib/ \
+  | xargs -I {} basename {} | xargs -I {} grep -r -l --include \*.dart {} doc/examples/ \
+  | xargs -I {} dirname {} | sed 's/\/lib$//' | uniq \
+  | xargs -I {} find {} -name pubspec.yaml | xargs -I {} dirname {})
+
+both=("${changed[@]}" "${affected[@]}")
+lint_examples=$(printf "%s\n" "${both[@]}" | sort -u)
+for d in $lint_examples; do
   cd $d
   flutter pub get
   result=$(dartanalyzer .)
