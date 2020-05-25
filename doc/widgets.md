@@ -56,8 +56,22 @@ How to use it:
 
 ```dart
 FlameSpriteWidget(
-  sprite: shieldSprite,
-  center: true,
+        sprite: shieldSprite,
+        center: true,
 ),
 
+```
+
+## FlameAnimationWidget
+
+`FlameAnimationWidget` is a widget used to display [Animations](https://github.com/flame-engine/flame/blob/master/lib/animation.dart) inside a widget tree.
+
+How to use it:
+
+```dart
+FlameAnimationWidget(
+        animation: _animation,
+        play: true,
+        center: true,
+),
 ```
