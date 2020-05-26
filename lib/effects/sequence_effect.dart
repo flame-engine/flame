@@ -18,6 +18,8 @@ class SequenceEffect extends PositionComponentEffect {
   }) : super(isInfinite, isAlternating) {
     /// All effects need to be finite, otherwise the sequence will get stuck
     assert(effects.every((effect) => !effect.isInfinite));
+    /// No effects can be added to components from the start
+    assert(effects.every((effect) => effect.component == null));
   }
 
   void _prepare(PositionComponent _comp) {
