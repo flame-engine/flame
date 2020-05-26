@@ -20,6 +20,10 @@ abstract class PositionComponentEffect {
   double driftTime = 0.0;
   int curveDirection = 1;
 
+  /// If the effect is alternating the travel time is double the normal
+  /// travel time
+  double get totalTravelTime => travelTime * (isAlternating ? 2 : 1);
+
   PositionComponentEffect(this.isInfinite, this.isAlternating);
 
   void update(double dt) {

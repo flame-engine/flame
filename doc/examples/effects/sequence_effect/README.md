@@ -1,3 +1,3 @@
-# Infinite effects
+# Sequence effect
 
-A Flame game showcasing how to create infinite alternating effects.
+A Flame game showcasing how to put effects in a sequence.
