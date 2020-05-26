@@ -1,3 +1,4 @@
+import 'package:flame/components/component.dart';
 import 'package:meta/meta.dart';
 
 import './effects.dart';
@@ -14,11 +15,14 @@ class SequenceEffect extends PositionComponentEffect {
     @required this.effects,
     isInfinite = false,
     isAlternating = false,
-  }) : super(isInfinite, isAlternating);
+  }) : super(isInfinite, isAlternating) {
+    /// All effects need to be finite, otherwise the sequence will get stuck
+    assert(effects.every((effect) => !effect.isInfinite));
+  }
 
-  @override
-  set component(_comp) {
+  void _prepare(PositionComponent _comp) {
     super.component = _comp;
+    _currentIndex = 0;
     final originalSize = _comp.toSize();
     final originalPosition = _comp.toPosition();
     Position currentSize = _comp.toSize();
@@ -35,13 +39,18 @@ class SequenceEffect extends PositionComponentEffect {
       }
     });
     travelTime = effects.fold(
-        0,
-        (time, effect) =>
-            time + effect.travelTime * (effect.isAlternating ? 2 : 1));
+      0,
+      (time, effect) => time + effect.totalTravelTime,
+    );
     component.setBySize(originalSize);
     component.setByPosition(originalPosition);
     currentEffect = effects.first;
     _currentWasAlternating = currentEffect.isAlternating;
+  }
+
+  @override
+  set component(PositionComponent _comp) {
+    _prepare(_comp);
   }
 
   @override
@@ -79,7 +88,6 @@ class SequenceEffect extends PositionComponentEffect {
   @override
   void reset() {
     super.reset();
-    _currentIndex = 0;
-    component = component;
+    _prepare(component);
   }
 }

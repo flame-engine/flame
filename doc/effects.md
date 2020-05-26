@@ -68,7 +68,9 @@ square.addEffect(RotateEffect(
 
 ## SequenceEffect
 
-This effect is a combination of other effects. You provide it with a list of your predefined effects, that are not added to a component.
+This effect is a combination of other effects. You provide it with a list of your predefined effects.
+ 
+The effects in the list should only be passed to the SequenceEffect, never added to a PositionComponent with `addEffect`.
 
 Note that no effects added to the sequence can have their `isInfinite` property set to `true`, because then naturally the sequence will get stuck once it gets to that effect.
 
