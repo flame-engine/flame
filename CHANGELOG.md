@@ -6,7 +6,7 @@
  - Add linting to all the examples
  - Run linting only on affected and changed examples
  - Add SequenceEffect
- - Fixed but with travelTime in RotateEffect
+ - Fixed bug with travelTime in RotateEffect
 
 ## 0.21.0
 - Adding AssetsCache.readBinaryFile
