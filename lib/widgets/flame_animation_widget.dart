@@ -23,7 +23,7 @@ class FlameAnimationWidget extends StatefulWidget {
 class _FlameAnimationWidget extends State<FlameAnimationWidget>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
-  int _lastUpdated;
+  double _lastUpdated;
 
   @override
   void didUpdateWidget(oldWidget) {
@@ -41,9 +41,9 @@ class _FlameAnimationWidget extends State<FlameAnimationWidget>
 
     _controller = AnimationController(vsync: this)
       ..addListener(() {
-        final now = DateTime.now().millisecond;
+        final now = DateTime.now().millisecond.toDouble();
 
-        final dt = max(0, (now - _lastUpdated) / 1000);
+        final dt = max(0, (now - _lastUpdated) / 1000).toDouble();
         widget.animation.update(dt);
 
         setState(() {
@@ -61,7 +61,7 @@ class _FlameAnimationWidget extends State<FlameAnimationWidget>
   void _initAnimation() {
     setState(() {
       widget.animation.reset();
-      _lastUpdated = DateTime.now().millisecond;
+      _lastUpdated = DateTime.now().millisecond.toDouble();
       _controller.repeat(
           // -/+ 60 fps
           period: const Duration(milliseconds: 16));
