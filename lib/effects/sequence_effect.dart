@@ -23,23 +23,22 @@ class SequenceEffect extends PositionComponentEffect {
     assert(effects.every((effect) => effect.component == null));
   }
 
-  void _prepare(PositionComponent _comp) {
-    super.component = _comp;
+  @override
+  void initialize(PositionComponent _comp) {
+    super.initialize(_comp);
     _currentIndex = 0;
     final originalSize = _comp.toSize();
     final originalPosition = _comp.toPosition();
-    Position currentSize = _comp.toSize();
-    Position currentPosition = _comp.toPosition();
+    final originalAngle = _comp.angle;
     effects.forEach((effect) {
       effect.reset();
-      _comp.setBySize(currentSize);
-      _comp.setByPosition(currentPosition);
-      effect.component = _comp;
-      if (effect is MoveEffect) {
-        currentPosition = effect.destination;
-      } else if (effect is ScaleEffect) {
-        currentSize = Position.fromSize(effect.size);
-      }
+      _comp.setBySize(endSize);
+      _comp.setByPosition(endPosition);
+      _comp.angle = endAngle;
+      effect.initialize(_comp);
+      endSize = effect.endSize;
+      endPosition = effect.endPosition;
+      endAngle = effect.endAngle;
     });
     travelTime = effects.fold(
       0,
@@ -47,13 +46,9 @@ class SequenceEffect extends PositionComponentEffect {
     );
     component.setBySize(originalSize);
     component.setByPosition(originalPosition);
+    component.angle = originalAngle;
     currentEffect = effects.first;
     _currentWasAlternating = currentEffect.isAlternating;
-  }
-
-  @override
-  set component(PositionComponent _comp) {
-    _prepare(_comp);
   }
 
   @override
@@ -91,6 +86,6 @@ class SequenceEffect extends PositionComponentEffect {
   @override
   void reset() {
     super.reset();
-    _prepare(component);
+    initialize(component);
   }
 }

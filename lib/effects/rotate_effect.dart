@@ -21,8 +21,11 @@ class RotateEffect extends PositionComponentEffect {
   }) : super(isInfinite, isAlternating);
 
   @override
-  set component(_comp) {
-    super.component = _comp;
+  void initialize(_comp) {
+    super.initialize(_comp);
+    if(!isAlternating) {
+      endAngle = _comp.angle + radians;
+    }
     _originalAngle = component.angle;
     _peakAngle = _originalAngle + radians;
     _direction = _peakAngle.sign;
