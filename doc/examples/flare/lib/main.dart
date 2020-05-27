@@ -1,6 +1,5 @@
 import 'dart:ui';
-import 'package:flutter/gestures.dart';
-import 'package:flame/flame.dart';
+import 'package:flame/gestures.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flare_animation.dart';
 import 'package:flame/components/flare_component.dart';
@@ -14,14 +13,9 @@ void main() {
 
   final game = MyGame();
   runApp(game.widget);
-
-  Flame.util.addGestureRecognizer(TapGestureRecognizer()
-    ..onTapDown = (TapDownDetails evt) {
-      game.cycleAnimation();
-    });
 }
 
-class MyGame extends BaseGame {
+class MyGame extends BaseGame with TapDetector {
   final TextConfig fpsTextConfig =
       const TextConfig(color: const Color(0xFFFFFFFF));
 
@@ -38,6 +32,11 @@ class MyGame extends BaseGame {
 
   @override
   bool debugMode() => true;
+
+  @override
+  void onTap() {
+    cycleAnimation();
+  }
 
   void cycleAnimation() {
     if (_currentAnimation == 3) {
