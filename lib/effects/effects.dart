@@ -1,5 +1,8 @@
 import 'dart:math';
+import 'package:flutter/foundation.dart';
+
 import '../components/component.dart';
+import '../position.dart';
 
 export './move_effect.dart';
 export './scale_effect.dart';
@@ -7,6 +10,8 @@ export './rotate_effect.dart';
 export './sequence_effect.dart';
 
 abstract class PositionComponentEffect {
+  PositionComponent component;
+
   bool _isDisposed = false;
   bool get isDisposed => _isDisposed;
 
@@ -19,6 +24,11 @@ abstract class PositionComponentEffect {
   double currentTime = 0.0;
   double driftTime = 0.0;
   int curveDirection = 1;
+
+  /// Used to be able to determine the end state of a sequence of effects
+  Position endPosition;
+  double endAngle;
+  Position endSize;
 
   /// If the effect is alternating the travel time is double the normal
   /// travel time
@@ -40,9 +50,18 @@ abstract class PositionComponentEffect {
     percentage = min(1.0, max(0.0, currentTime / travelTime));
   }
 
-  void dispose() => _isDisposed = true;
+  @mustCallSuper
+  void initialize(PositionComponent _comp) {
+    /// If these aren't modified by the extending effect it is assumed that the
+    /// effect didn't bring the component to another state than the one it
+    /// started in
+    component = _comp;
+    endPosition = _comp.toPosition();
+    endAngle = _comp.angle;
+    endSize = _comp.toSize();
+  }
 
-  PositionComponent component;
+  void dispose() => _isDisposed = true;
 
   bool hasFinished() =>
       (!isInfinite && !isAlternating && isMax()) ||
@@ -50,6 +69,7 @@ abstract class PositionComponentEffect {
       isDisposed;
   bool isMax() => percentage == null ? false : percentage == 1.0;
   bool isMin() => percentage == null ? false : percentage == 0.0;
+
 
   void reset() {
     _isDisposed = false;
