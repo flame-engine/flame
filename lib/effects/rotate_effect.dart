@@ -23,7 +23,7 @@ class RotateEffect extends PositionComponentEffect {
   @override
   void initialize(_comp) {
     super.initialize(_comp);
-    if(!isAlternating) {
+    if (!isAlternating) {
       endAngle = _comp.angle + radians;
     }
     _originalAngle = component.angle;

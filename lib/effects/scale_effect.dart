@@ -30,7 +30,7 @@ class ScaleEffect extends PositionComponentEffect {
   @override
   void initialize(_comp) {
     super.initialize(_comp);
-    if(!isAlternating) {
+    if (!isAlternating) {
       endSize = Position.fromSize(size);
     }
 

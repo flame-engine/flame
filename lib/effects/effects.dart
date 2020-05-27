@@ -70,7 +70,6 @@ abstract class PositionComponentEffect {
   bool isMax() => percentage == null ? false : percentage == 1.0;
   bool isMin() => percentage == null ? false : percentage == 0.0;
 
-
   void reset() {
     _isDisposed = false;
     percentage = null;

@@ -33,7 +33,7 @@ class MoveEffect extends PositionComponentEffect {
   @override
   void initialize(_comp) {
     super.initialize(_comp);
-    if(!isAlternating) {
+    if (!isAlternating) {
       endPosition = destination;
     }
 
