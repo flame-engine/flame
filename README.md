@@ -4,11 +4,13 @@
 
 English | [简体中文](README-ZH.md)
 
-A minimalist Flutter game engine.
+A minimalistic Flutter game engine.
 
 ## Help
 
-We have a Flame help channel on Fireslime's Discord, join it [here](https://discord.gg/pxrBmy4). Also we now have a [FAQ](FAQ.md), so please search for your question there first.
+We have a Flame help channel on Fireslime's Discord, join it [here](https://discord.gg/pxrBmy4). 
+
+We also have a [FAQ](FAQ.md), so please search for your question there first.
 
 ## Goals
 
@@ -34,11 +36,11 @@ You can also support us by becoming a patron on Patreon:
 
 [![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/fireslime)
 
-Or making a single donation by buying us a coffee:
+Or by making a single donation by buying us a coffee:
 
 [![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/fireslime)
 
-You can also show support by showing on your repository that your game is made with Flame by using one of the following badges:
+You can also show on your repository that your game is made with Flame by using one of the following badges:
 
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=flat-square)](https://flame-engine.org)
