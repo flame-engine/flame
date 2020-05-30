@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   flame:
       path: ../../../
-  dashbook: ^0.0.5
+  dashbook: ^0.0.6
 
   cupertino_icons: ^0.1.2
 flutter:

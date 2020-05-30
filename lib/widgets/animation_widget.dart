@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart' hide Animation;
 import 'package:flame/animation.dart';
 
+import '../anchor.dart';
 import './sprite_widget.dart';
 
 import 'dart:math';
 
 class AnimationWidget extends StatefulWidget {
   final Animation animation;
-  final bool center;
+  final Anchor anchor;
   final bool play;
 
   AnimationWidget({
     this.animation,
     this.play = true,
-    this.center = false,
+    this.anchor = Anchor.topLeft,
   }) : assert(animation.loaded(), 'Animation must be loaded');
 
   @override
@@ -83,6 +84,6 @@ class _AnimationWidget extends State<AnimationWidget>
   @override
   Widget build(ctx) {
     return SpriteWidget(
-        sprite: widget.animation.getSprite(), center: widget.center);
+        sprite: widget.animation.getSprite(), anchor: widget.anchor);
   }
 }

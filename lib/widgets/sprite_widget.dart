@@ -1,35 +1,36 @@
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 import '../sprite.dart';
+import '../anchor.dart';
 
 import 'dart:math';
 
 class SpriteWidget extends StatelessWidget {
   final Sprite sprite;
-  final bool center;
+  final Anchor anchor;
 
   SpriteWidget({
     @required this.sprite,
-    this.center = false,
+    this.anchor = Anchor.topLeft,
   }) : assert(sprite.loaded(), 'Sprite must be loaded');
 
   @override
   Widget build(_) {
     return Container(
-      child: CustomPaint(painter: _FlameSpritePainer(sprite, center)),
+      child: CustomPaint(painter: _SpritePainer(sprite, anchor)),
     );
   }
 }
 
-class _FlameSpritePainer extends CustomPainter {
+class _SpritePainer extends CustomPainter {
   final Sprite _sprite;
-  final bool _center;
+  final Anchor _anchor;
 
-  _FlameSpritePainer(this._sprite, this._center);
+  _SpritePainer(this._sprite, this._anchor);
 
   @override
-  bool shouldRepaint(_FlameSpritePainer old) =>
-      old._sprite != _sprite || old._center != _center;
+  bool shouldRepaint(_SpritePainer old) =>
+      old._sprite != _sprite || old._anchor != _anchor;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -38,20 +39,17 @@ class _FlameSpritePainer extends CustomPainter {
 
     final rate = min(widthRate, heightRate);
 
-    final rect = Rect.fromLTWH(
-      0,
-      0,
-      _sprite.size.x * rate,
-      _sprite.size.y * rate,
+    final w = _sprite.size.x * rate;
+    final h = _sprite.size.y * rate;
+
+    final double dx = _anchor.relativePosition.dx * size.width;
+    final double dy = _anchor.relativePosition.dy * size.height;
+
+    canvas.translate(
+      dx - w * _anchor.relativePosition.dx,
+      dy - h * _anchor.relativePosition.dy,
     );
 
-    if (_center) {
-      canvas.translate(
-        size.width / 2 - rect.width / 2,
-        size.height / 2 - rect.height / 2,
-      );
-    }
-
-    _sprite.renderRect(canvas, rect);
+    _sprite.render(canvas, width: w, height: h);
   }
 }
