@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart' hide Animation;
 import 'package:flame/animation.dart';
 
-import './flame_sprite_widget.dart';
+import './sprite_widget.dart';
 
 import 'dart:math';
 
-class FlameAnimationWidget extends StatefulWidget {
+class AnimationWidget extends StatefulWidget {
   final Animation animation;
   final bool center;
   final bool play;
 
-  FlameAnimationWidget({
+  AnimationWidget({
     this.animation,
     this.play = true,
     this.center = false,
   }) : assert(animation.loaded(), 'Animation must be loaded');
 
   @override
-  State createState() => _FlameAnimationWidget();
+  State createState() => _AnimationWidget();
 }
 
-class _FlameAnimationWidget extends State<FlameAnimationWidget>
+class _AnimationWidget extends State<AnimationWidget>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
   double _lastUpdated;
@@ -82,7 +82,7 @@ class _FlameAnimationWidget extends State<FlameAnimationWidget>
 
   @override
   Widget build(ctx) {
-    return FlameSpriteWidget(
+    return SpriteWidget(
         sprite: widget.animation.getSprite(), center: widget.center);
   }
 }

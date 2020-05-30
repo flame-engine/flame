@@ -2,8 +2,8 @@
 
 ## [next]
  - Fixing BaseGame tap detectors issues
- - Adding FlameSpriteWidget
- - Adding FlameAnimationWidget
+ - Adding SpriteWidget
+ - Adding AnimationWidget
  - Upgrade Flutter SVG to fix for flame web
  - Add linting to all the examples
 

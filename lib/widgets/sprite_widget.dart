@@ -4,11 +4,11 @@ import '../sprite.dart';
 
 import 'dart:math';
 
-class FlameSpriteWidget extends StatelessWidget {
+class SpriteWidget extends StatelessWidget {
   final Sprite sprite;
   final bool center;
 
-  FlameSpriteWidget({
+  SpriteWidget({
     @required this.sprite,
     this.center = false,
   }) : assert(sprite.loaded(), 'Sprite must be loaded');
