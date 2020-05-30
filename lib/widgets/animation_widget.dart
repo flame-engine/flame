@@ -9,11 +9,11 @@ import 'dart:math';
 class AnimationWidget extends StatefulWidget {
   final Animation animation;
   final Anchor anchor;
-  final bool play;
+  final bool playing;
 
   AnimationWidget({
     this.animation,
-    this.play = true,
+    this.playing = true,
     this.anchor = Anchor.topLeft,
   }) : assert(animation.loaded(), 'Animation must be loaded');
 
@@ -29,7 +29,7 @@ class _AnimationWidget extends State<AnimationWidget>
   @override
   void didUpdateWidget(oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.play) {
+    if (widget.playing) {
       _initAnimation();
     } else {
       _pauseAnimation();
@@ -54,7 +54,7 @@ class _AnimationWidget extends State<AnimationWidget>
 
     widget.animation.onCompleteAnimation = _pauseAnimation;
 
-    if (widget.play) {
+    if (widget.playing) {
       _initAnimation();
     }
   }
