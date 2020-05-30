@@ -1,16 +1,35 @@
 import 'dart:async';
 
+import 'package:flame/flame.dart';
 import 'package:flame/animation.dart' as animation;
 import 'package:flame/sprite.dart';
-import 'package:flame/flame.dart';
+import 'package:flame/spritesheet.dart';
 import 'package:flame/position.dart';
+import 'package:flame/widgets/animation_widget.dart';
+import 'package:flame/widgets/sprite_widget.dart';
 import 'package:flutter/material.dart';
 
 Sprite _sprite;
+animation.Animation _animation;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   _sprite = await Sprite.loadSprite('minotaur.png', width: 96, height: 96);
+
+  await Flame.images.load('minotaur.png');
+  final _animationSpriteSheet = SpriteSheet(
+    imageName: 'minotaur.png',
+    columns: 19,
+    rows: 1,
+    textureWidth: 96,
+    textureHeight: 96,
+  );
+  _animation = _animationSpriteSheet.createAnimation(
+    0,
+    stepTime: 0.2,
+    to: 19,
+  );
+
   runApp(MyApp());
 }
 
@@ -69,20 +88,19 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text('Hi there! This is a regular Flutter app,'),
             const Text('with a complex widget tree and also'),
             const Text('some pretty sprite sheet animations :)'),
-            Flame.util.animationAsWidget(
-              _position,
-              animation.Animation.sequenced(
-                'minotaur.png',
-                19,
-                textureWidth: 96.0,
-                textureHeight: 96,
-              ),
+            Container(
+              width: 200,
+              height: 200,
+              child: AnimationWidget(animation: _animation),
             ),
             const Text('Neat, hum?'),
             const Text(
                 'By the way, you can also use static sprites as widgets:'),
-            Flame.util.spriteAsWidget(const Size(100, 100), _sprite),
-            const SizedBox(height: 40),
+            Container(
+              width: 200,
+              height: 200,
+              child: SpriteWidget(sprite: _sprite),
+            ),
             const Text('Sprites from Elthen\'s amazing work on itch.io:'),
             const Text('https://elthen.itch.io/2d-pixel-art-minotaur-sprites'),
           ],

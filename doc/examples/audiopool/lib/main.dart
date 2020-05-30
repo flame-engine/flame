@@ -7,7 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/position.dart';
 import 'package:flame/text_config.dart';
-import 'package:flutter/gestures.dart';
+import 'package:flame/gestures.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -15,16 +15,12 @@ void main() async {
   final Size size = await Flame.util.initialDimensions();
   final MyGame game = MyGame(size);
   runApp(game.widget);
-
-  final TapGestureRecognizer taps = TapGestureRecognizer()
-    ..onTapDown = (_) => game.tap();
-  Flame.util.addGestureRecognizer(taps);
 }
 
 TextConfig regular = TextConfig(color: BasicPalette.white.color);
 AudioPool pool = AudioPool('laser.mp3');
 
-class MyGame extends BaseGame {
+class MyGame extends BaseGame with TapDetector {
   MyGame(Size screenSize) {
     size = screenSize;
   }
@@ -38,7 +34,8 @@ class MyGame extends BaseGame {
     super.render(canvas);
   }
 
-  void tap() {
+  @override
+  void onTap() {
     pool.start();
   }
 }

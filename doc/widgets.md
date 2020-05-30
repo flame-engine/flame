@@ -47,3 +47,31 @@ SpriteButton(
           pressedSprite: _pressedSpriteButton,
 )
 ```
+
+## SpriteWidget
+
+`SpriteWidget` is a widget used to display [Sprites](https://github.com/flame-engine/flame/blob/master/lib/sprite.dart) inside a widget tree.
+
+How to use it:
+
+```dart
+SpriteWidget(
+        sprite: shieldSprite,
+        center: true,
+),
+
+```
+
+## AnimationWidget
+
+`AnimationWidget` is a widget used to display [Animations](https://github.com/flame-engine/flame/blob/master/lib/animation.dart) inside a widget tree.
+
+How to use it:
+
+```dart
+AnimationWidget(
+        animation: _animation,
+        playing: true,
+        center: true,
+),
+```
