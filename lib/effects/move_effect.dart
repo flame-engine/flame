@@ -31,8 +31,11 @@ class MoveEffect extends PositionComponentEffect {
   }) : super(isInfinite, isAlternating);
 
   @override
-  set component(_comp) {
-    super.component = _comp;
+  void initialize(_comp) {
+    super.initialize(_comp);
+    if (!isAlternating) {
+      endPosition = destination;
+    }
 
     _xOriginal = component.x;
     _yOriginal = component.y;

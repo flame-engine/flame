@@ -28,8 +28,11 @@ class ScaleEffect extends PositionComponentEffect {
   }) : super(isInfinite, isAlternating);
 
   @override
-  set component(_comp) {
-    super.component = _comp;
+  void initialize(_comp) {
+    super.initialize(_comp);
+    if (!isAlternating) {
+      endSize = Position.fromSize(size);
+    }
 
     _original = Size(component.width, component.height);
     _diff = Size(
