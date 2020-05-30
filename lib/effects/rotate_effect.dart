@@ -13,7 +13,7 @@ class RotateEffect extends PositionComponentEffect {
   double _direction;
 
   RotateEffect({
-    @required this.radians, // The angle to rotate to
+    @required this.radians, // As many radians as you want to rotate
     @required this.speed, // In radians per second
     this.curve,
     isInfinite = false,
@@ -21,12 +21,15 @@ class RotateEffect extends PositionComponentEffect {
   }) : super(isInfinite, isAlternating);
 
   @override
-  set component(_comp) {
-    super.component = _comp;
+  void initialize(_comp) {
+    super.initialize(_comp);
+    if (!isAlternating) {
+      endAngle = _comp.angle + radians;
+    }
     _originalAngle = component.angle;
     _peakAngle = _originalAngle + radians;
     _direction = _peakAngle.sign;
-    travelTime = (_peakAngle / speed).abs();
+    travelTime = (radians / speed).abs();
   }
 
   @override
