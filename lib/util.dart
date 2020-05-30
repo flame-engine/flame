@@ -118,7 +118,8 @@ class Util {
   /// Read more at: https://flame-engine.org/docs/input.md
   ///
   @Deprecated(
-      'This method can lead to confuse behaviour, use the gestures methods provided by the Game class')
+    'This method can lead to confuse behaviour, use the gestures methods provided by the Game class',
+  )
   void addGestureRecognizer(GestureRecognizer recognizer) {
     if (GestureBinding.instance == null) {
       throw Exception(

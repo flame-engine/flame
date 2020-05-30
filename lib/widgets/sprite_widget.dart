@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
+import 'dart:math';
+
 import '../sprite.dart';
 import '../anchor.dart';
-
-import 'dart:math';
 
 class SpriteWidget extends StatelessWidget {
   final Sprite sprite;
@@ -29,8 +29,9 @@ class _SpritePainer extends CustomPainter {
   _SpritePainer(this._sprite, this._anchor);
 
   @override
-  bool shouldRepaint(_SpritePainer old) =>
-      old._sprite != _sprite || old._anchor != _anchor;
+  bool shouldRepaint(_SpritePainer old) {
+    return old._sprite != _sprite || old._anchor != _anchor;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
