@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart' hide Animation;
 import 'package:flame/animation.dart';
 
+import 'dart:math';
+
 import '../anchor.dart';
 import './sprite_widget.dart';
-
-import 'dart:math';
 
 class AnimationWidget extends StatefulWidget {
   final Animation animation;
@@ -64,15 +64,13 @@ class _AnimationWidget extends State<AnimationWidget>
       widget.animation.reset();
       _lastUpdated = DateTime.now().millisecond.toDouble();
       _controller.repeat(
-          // -/+ 60 fps
+          // Approximately 60 fps
           period: const Duration(milliseconds: 16));
     });
   }
 
   void _pauseAnimation() {
-    setState(() {
-      _controller.stop();
-    });
+    setState(() => _controller.stop());
   }
 
   @override
@@ -84,6 +82,8 @@ class _AnimationWidget extends State<AnimationWidget>
   @override
   Widget build(ctx) {
     return SpriteWidget(
-        sprite: widget.animation.getSprite(), anchor: widget.anchor);
+      sprite: widget.animation.getSprite(),
+      anchor: widget.anchor,
+    );
   }
 }
