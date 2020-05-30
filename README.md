@@ -18,12 +18,13 @@ The goal of this project is to provide a complete set of out-of-the-way solution
 
 Currently it provides you with: 
  - a game loop 
- - a physics engine
+ - bundles a physics engine (box2d)
  - audio support
  - effects and particles
  - gesture and input support
  - images, sprites and sprite sheets
  - a component/object system
+ - basic Rive support
  - and a few utilities to make development easier
 
 You can use whichever ones you want, as they are all somewhat independent.
