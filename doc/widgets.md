@@ -48,28 +48,28 @@ SpriteButton(
 )
 ```
 
-## FlameSpriteWidget
+## SpriteWidget
 
-`FlameSpriteWidget` is a widget used to display [Sprites](https://github.com/flame-engine/flame/blob/master/lib/sprite.dart) inside a widget tree.
+`SpriteWidget` is a widget used to display [Sprites](https://github.com/flame-engine/flame/blob/master/lib/sprite.dart) inside a widget tree.
 
 How to use it:
 
 ```dart
-FlameSpriteWidget(
+SpriteWidget(
         sprite: shieldSprite,
         center: true,
 ),
 
 ```
 
-## FlameAnimationWidget
+## AnimationWidget
 
-`FlameAnimationWidget` is a widget used to display [Animations](https://github.com/flame-engine/flame/blob/master/lib/animation.dart) inside a widget tree.
+`AnimationWidget` is a widget used to display [Animations](https://github.com/flame-engine/flame/blob/master/lib/animation.dart) inside a widget tree.
 
 How to use it:
 
 ```dart
-FlameAnimationWidget(
+AnimationWidget(
         animation: _animation,
         play: true,
         center: true,

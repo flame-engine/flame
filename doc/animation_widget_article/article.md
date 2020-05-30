@@ -4,7 +4,7 @@
 
 As for Flame 0.22.0 there is a new way to use Animations and Sprites inside your widget tree.
 
-Flame now includes a widget catalog and inside it you will find `FlameAnimationWidget` and `FlameSpriteWidget`.
+Flame now includes a widget catalog and inside it you will find `AnimationWidget` and `SpriteWidget`.
 
 Check the example mentioned on this article to see the updated version.
 

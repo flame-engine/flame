@@ -6,8 +6,8 @@ import 'package:dashbook/dashbook.dart';
 
 import 'package:flame/widgets/nine_tile_box.dart';
 import 'package:flame/widgets/sprite_button.dart';
-import 'package:flame/widgets/flame_sprite_widget.dart';
-import 'package:flame/widgets/flame_animation_widget.dart';
+import 'package:flame/widgets/sprite_widget.dart';
+import 'package:flame/widgets/animation_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,13 +64,13 @@ void main() async {
       );
 
   final shieldSprite = await Sprite.loadSprite('shield.png');
-  dashbook.storiesOf('FlameSpriteWidget').decorator(CenterDecorator()).add(
+  dashbook.storiesOf('SpriteWidget').decorator(CenterDecorator()).add(
         'default',
         (ctx) => Container(
           width: ctx.numberProperty('container width', 400),
           height: ctx.numberProperty('container height', 200),
           padding: const EdgeInsets.all(20),
-          child: FlameSpriteWidget(
+          child: SpriteWidget(
             sprite: shieldSprite,
             center: ctx.boolProperty('center', true),
           ),
@@ -91,13 +91,13 @@ void main() async {
     to: 3,
     loop: true,
   );
-  dashbook.storiesOf('FlameAnimationWidget').decorator(CenterDecorator()).add(
+  dashbook.storiesOf('AnimationWidget').decorator(CenterDecorator()).add(
         'default',
         (ctx) => Container(
           width: ctx.numberProperty('container width', 400),
           height: ctx.numberProperty('container height', 200),
           padding: const EdgeInsets.all(20),
-          child: FlameAnimationWidget(
+          child: AnimationWidget(
             animation: _animation,
             play: ctx.boolProperty('playing', true),
             center: ctx.boolProperty('center', true),

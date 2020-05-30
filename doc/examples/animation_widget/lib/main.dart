@@ -5,8 +5,8 @@ import 'package:flame/animation.dart' as animation;
 import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
 import 'package:flame/position.dart';
-import 'package:flame/widgets/flame_animation_widget.dart';
-import 'package:flame/widgets/flame_sprite_widget.dart';
+import 'package:flame/widgets/animation_widget.dart';
+import 'package:flame/widgets/sprite_widget.dart';
 import 'package:flutter/material.dart';
 
 Sprite _sprite;
@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Container(
               width: 200,
               height: 200,
-              child: FlameAnimationWidget(animation: _animation),
+              child: AnimationWidget(animation: _animation),
             ),
             const Text('Neat, hum?'),
             const Text(
@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Container(
               width: 200,
               height: 200,
-              child: FlameSpriteWidget(sprite: _sprite),
+              child: SpriteWidget(sprite: _sprite),
             ),
             const Text('Sprites from Elthen\'s amazing work on itch.io:'),
             const Text('https://elthen.itch.io/2d-pixel-art-minotaur-sprites'),
