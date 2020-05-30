@@ -131,7 +131,7 @@ void main() async {
           height: ctx.numberProperty('container height', 200),
           child: AnimationWidget(
             animation: _animation,
-            play: ctx.boolProperty('playing', true),
+            playing: ctx.boolProperty('playing', true),
             anchor: parseAnchor(
                 ctx.listProperty('anchor', 'Anchor.center', anchorOptions)),
           ),

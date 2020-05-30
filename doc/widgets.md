@@ -71,7 +71,7 @@ How to use it:
 ```dart
 AnimationWidget(
         animation: _animation,
-        play: true,
+        playing: true,
         center: true,
 ),
 ```
