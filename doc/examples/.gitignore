@@ -1,9 +1,0 @@
-# Web related
-**/*/lib/generated_plugin_registrant.dart
-
-# Platforms
-**/*/android
-**/*/ios
-**/*/web
-**/*/macos
-**/*/test

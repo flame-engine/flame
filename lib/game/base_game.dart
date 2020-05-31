@@ -2,7 +2,6 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flame/components/composed_component.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 import 'package:flutter/foundation.dart';
@@ -13,7 +12,6 @@ import '../components/component.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
 import '../position.dart';
-import '../gestures.dart';
 import 'game.dart';
 
 /// This is a more complete and opinionated implementation of Game.
@@ -21,7 +19,7 @@ import 'game.dart';
 /// It still needs to be subclasses to add your game logic, but the [update], [render] and [resize] methods have default implementations.
 /// This is the recommended structure to use for most games.
 /// It is based on the Component system.
-class BaseGame extends Game with MultiTouchTapDetector {
+class BaseGame extends Game {
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components =
       OrderedSet(Comparing.on((c) => c.priority()));
@@ -38,30 +36,19 @@ class BaseGame extends Game with MultiTouchTapDetector {
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
 
-  Iterable<Tapable> get _tapableComponents =>
-      components.where((c) => c is Tapable).cast();
-
-  @override
-  void onTapCancel(int pointerId) {
-    _tapableComponents.forEach((c) => c.handleTapCancel(pointerId));
-  }
-
-  @override
-  void onTapDown(int pointerId, TapDownDetails details) {
-    _tapableComponents.forEach((c) => c.handleTapDown(pointerId, details));
-  }
-
-  @override
-  void onTapUp(int pointerId, TapUpDetails details) {
-    _tapableComponents.forEach((c) => c.handleTapUp(pointerId, details));
-  }
-
   /// This method is called for every component added, both via [add] and [addLater] methods.
   ///
   /// You can use this to setup your mixins, pre-calculate stuff on every component, or anything you desire.
   /// By default, this calls the first time resize for every component, so don't forget to call super.preAdd when overriding.
   @mustCallSuper
   void preAdd(Component c) {
+    if (c is Tapable) {
+      assert(
+        this is HasTapableComponents,
+        'Tapable Components can only be added to a BaseGame with HasTapableComponents',
+      );
+    }
+
     if (debugMode() && c is PositionComponent) {
       c.debugMode = true;
     }

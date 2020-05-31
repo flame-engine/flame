@@ -1,11 +1,22 @@
 # CHANGELOG
 
+## 0.22.0
+ - Fixing BaseGame tap detectors issues
+ - Adding SpriteWidget
+ - Adding AnimationWidget
+ - Upgrade Flutter SVG to fix for flame web
+ - Add linting to all the examples
+ - Run linting only on affected and changed examples
+ - Add SequenceEffect
+ - Fixed bug with travelTime in RotateEffect
+
 ## 0.21.0
 - Adding AssetsCache.readBinaryFile
 - Splitting debugMode from recordFps mode
 - Adding support for multi touch tap and drag events
 - Fix animations example
 - Add possibility for infinite and alternating effects
+- Add rotational effect for PositionComponents
 
 ## 0.20.2
 - Fix text component bug with anchor being applied twice

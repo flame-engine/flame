@@ -1,10 +1,11 @@
-import 'package:flame/flame.dart';
-import 'package:flame/game.dart';
 import 'package:flame/animation.dart' as flame_animation;
 import 'package:flame/components/animation_component.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final Size size = await Flame.util.initialDimensions();
   final game = MyGame(size);
   runApp(game.widget);
