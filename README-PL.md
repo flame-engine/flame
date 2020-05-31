@@ -1,5 +1,7 @@
 [![Pub](https://img.shields.io/pub/v/flame.svg?style=popout)](https://pub.dartlang.org/packages/flame) ![Test](https://github.com/flame-engine/flame/workflows/Test/badge.svg?branch=master&event=push) [![Discord](https://img.shields.io/discord/509714518008528896.svg)](https://discord.gg/pxrBmy4)
 
+_Jest to nieoficjalne tłumaczenie. W chwili tłumaczenia wersja v0.22.0._
+
 <img src="https://i.imgur.com/vFDilXT.png" width="400">
 
 [English](https://github.com/flame-engine/flame) | [简体中文](README-ZH.md) | [Polski](https://github.com/mbiesiad/flame/blob/pl_PL/README-PL.md)
