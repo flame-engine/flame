@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## [next]
+
 ## 0.22.0
  - Fixing BaseGame tap detectors issues
  - Adding SpriteWidget
