@@ -2,46 +2,46 @@
 
 <img src="https://i.imgur.com/vFDilXT.png" width="400">
 
-English | [简体中文](README-ZH.md)
+English | [简体中文](README-ZH.md) | [Polski](https://github.com/mbiesiad/flame/blob/pl_PL/README-PL.md)
 
-A minimalistic Flutter game engine.
+Minimalistyczny silnik gry Flutter.
 
-## Help
+## Pomoc
 
-We have a Flame help channel on Fireslime's Discord, join it [here](https://discord.gg/pxrBmy4).
+Mamy kanał pomocy Flame na Discord Fireslime, dołącz do niego [tutaj](https://discord.gg/pxrBmy4).
 
-We also have a [FAQ](FAQ.md), so please search for your question there first.
+Mamy też najczęściej zadawane pytania - [FAQ](FAQ.md), więc najpierw wyszukaj tam swoje pytanie.
 
-## Goals
+## Cele
 
-The goal of this project is to provide a complete set of out-of-the-way solutions for the common problems every game developed in Flutter will share.
+Celem tego projektu jest dostarczenie kompletnego zestawu nietypowych rozwiązań dla typowych problemów, z którymi każda gra opracowana we Flutter będzie się dzielić.
 
-Currently it provides you with:
- - a game loop
- - a component/object system
- - bundles a physics engine (box2d)
- - audio support
- - effects and particles
- - gesture and input support
- - images, sprites and sprite sheets
- - basic Rive support
- - and a few other utilities to make development easier
+Obecnie zapewnia elementy takie jak:
+  - pętla gry
+  - system komponent/obiekt
+  - dołącza silnik fizyki (box2d)
+  - wsparcie audio
+  - efekty i cząstki
+  - obsługa gestów i wprowadzania danych
+  - obrazy, duszki (sprites) i arkusze duszka
+  - podstawowe wsparcie Rive
+  - i kilka innych narzędzi ułatwiających programowanie
 
-You can use whichever ones you want, as they are all somewhat independent.
+Możesz użyć dowolnego z nich, ponieważ wszystkie są nieco niezależne.
 
-## Support
+## Wsparcie
 
-The simplest way to show us your support is by giving the project a star.
+Najprostszym sposobem, aby pokazać nam swoje wsparcie, jest przyznanie gwiazdki (star) dla projektu.
 
-You can also support us by becoming a patron on Patreon:
+Możesz nas wesprzeć, zostając patronem na Patreon:
 
 [![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/fireslime)
 
-Or by making a single donation by buying us a coffee:
+Lub przekazując jakąś darowiznę, kupując nam kawę:
 
 [![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/fireslime)
 
-You can also show on your repository that your game is made with Flame by using one of the following badges:
+Możesz również pokazać w swoim repozytorium, że twoja gra została wykonana przy użyciu Flame'a, używając jednej z następujących odznak:
 
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=flat-square)](https://flame-engine.org)
@@ -53,40 +53,39 @@ You can also show on your repository that your game is made with Flame by using 
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=for-the-badge)](https://flame-engine.org)
 ```
 
-## Contributing
+## Współtworzenie
 
-Any help is appreciated! Comments, suggestions, issues, PRs.
+Każda pomoc jest mile widziana! Komentarze, sugestie, issues, PR.
 
-Have you found a bug or have a suggestion of how to enhance Flame, open an issue and we will take a look at it as soon as possible.
+Jeśli znalazłeś błąd lub masz sugestię, jak ulepszyć Flame, otwórz issue, a my zajmiemy się nim jak najszybciej.
 
-Do you want to contribute with a PR? PRs are always welcome, just be sure to create it from the `develop` branch and follow the [checklist](.github/pull_request_template.md) which will appear when you open it.
+Czy chcesz przyczynić się do projektu tworząc PR? PR są zawsze mile widziane, po prostu utwórz je z gałęzi `develop` i postępuj zgodnie z [listą kontrolną](.github/pull_request_template.md) która pojawi się po otwarciu.
 
-## Getting started
+## Rozpocznij
+Sprawdź tę wspaniałą serię artykułów/samouczków napisanych przez [Alekhin](https://github.com/japalekhin)
 
-Check out this great series of articles/tutorials written by [Alekhin](https://github.com/japalekhin)
+ - [Utwórz grę mobilną za pomocą Flutter'a i Flame'a - tutorial dla początkujących](https://jap.alekhin.io/create-mobile-game-flutter-flame-beginner-tutorial)
+ - [Samouczek 2D na urządzenia mobilne - krok po kroku z Flame i Flutter (część 1 z 5)](https://jap.alekhin.io/2d-casual-mobile-game-tutorial-flame-flutter-part-1)
+ - [Samouczek grafiki i animacji gry - krok po kroku z Flame i Flutter (część 2 z 5)](https://jap.alekhin.io/game-graphics-and-animation-tutorial-flame-flutter-part-2)
+ - [Samouczek widoków i okien dialogowych - krok po kroku z Flame i Flutter (część 3 z 5)](https://jap.alekhin.io/views-dialog-boxes-tutorial-flame-flutter-part-3)
+ - [Samouczek dotyczący przyznawania punktów, przechowywania i dźwięku - krok po kroku z Flame i Flutter (część 4 z 5)](https://jap.alekhin.io/scoring-storage-sound-tutorial-flame-flutter-part-4)
+ - [Samouczek wykańczania i pakowania - krok po kroku z Flame i Flutter (część 5 z 5)](https://jap.alekhin.io/game-finishing-packaging-tutorial-flame-flutter-part-5)
 
- - [Create a Mobile Game with Flutter and Flame – Beginner Tutorial](https://jap.alekhin.io/create-mobile-game-flutter-flame-beginner-tutorial)
- - [2D Casual Mobile Game Tutorial – Step by Step with Flame and Flutter (Part 1 of 5)](https://jap.alekhin.io/2d-casual-mobile-game-tutorial-flame-flutter-part-1)
- - [Game Graphics and Animation Tutorial – Step by Step with Flame and Flutter (Part 2 of 5)](https://jap.alekhin.io/game-graphics-and-animation-tutorial-flame-flutter-part-2)
- - [Views and Dialog Boxes Tutorial – Step by Step with Flame and Flutter (Part 3 of 5)](https://jap.alekhin.io/views-dialog-boxes-tutorial-flame-flutter-part-3)
- - [Scoring, Storage, and Sound Tutorial – Step by Step with Flame and Flutter (Part 4 of 5)](https://jap.alekhin.io/scoring-storage-sound-tutorial-flame-flutter-part-4)
- - [Game Finishing and Packaging Tutorial – Step by Step with Flame and Flutter (Part 5 of 5)](https://jap.alekhin.io/game-finishing-packaging-tutorial-flame-flutter-part-5)
+Oferujemy również wyselekcjonowaną listę gier, bibliotek i artykułów na stronie [awesome-flame](https://github.com/flame-engine/awesome-flame).
 
-We also offer a curated list of Games, Libraries and Articles over at [awesome-flame](https://github.com/flame-engine/awesome-flame).
+Pamiętaj, że niektóre artykuły mogą być nieco nieaktualne, ale nadal są przydatne.
 
-Note that some of the articles might be slightly outdated, but they are still useful.
+## Dokumentacja
 
-## Documentation
+Pełna dokumentacja znajduje się [tutaj](doc/README.md).
 
-The complete documentation can be found [here](doc/README.md).
+Wiele przykładów różnych funkcji można znaleźć [tutaj](doc/examples), a dobry przykład na start można znaleźć [tutaj](/example).
 
-Many examples of different features can be found [here](doc/examples) and a good starting example can be found [here](/example).
+Oficjalną stronę Flame, która zawiera również dokumentację, można znaleźć [tutaj](https://flame-engine.org/).
 
-The official site for Flame, which also contains the documentation can be found [here](https://flame-engine.org/).
+## Uznanie
 
-## Credits
-
- * [Fireslime](https://fireslime.xyz), the team responsible for maintaining Flame.
- * All the friendly contributors and people who are helping in the community.
- * [Luanpotter](https://github.com/luanpotter)'s (the Flame founder) [audioplayers](https://github.com/luanpotter/audioplayer) lib, which in turn is forked from [rxlabz's](https://github.com/rxlabz/audioplayer).
- * The Dart port of [Box2D](https://github.com/google/box2d.dart).
+ * [Fireslime](https://fireslime.xyz), zespół odpowiedzialny za utrzymanie Flame'a.
+ * Wszyscy życzliwi współtwórcy i ludzie, którzy pomagają w społeczności.
+ * [Luanpotter](https://github.com/luanpotter)'a (założyciel Flame) biblioteka [audioplayers](https://github.com/luanpotter/audioplayer) lib, która z kolei jest rozwidlona (zforkowana) z [rxlabz's](https://github.com/rxlabz/audioplayer).
+ * Port Dart w [Box2D](https://github.com/google/box2d.dart).
