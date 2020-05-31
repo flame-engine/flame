@@ -32,8 +32,8 @@ class Wall extends BodyComponent {
 
   @override
   void renderPolygon(Canvas canvas, List<Offset> coordinates) {
-    Offset start = coordinates[0];
-    Offset end = coordinates[1];
+    final start = coordinates[0];
+    final end = coordinates[1];
     canvas.drawLine(start, end, paint);
   }
 

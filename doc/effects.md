@@ -46,6 +46,46 @@ square.addEffect(ScaleEffect(
 ));
 ```
 
+## RotateEffect
+
+Applied to `PositionComponent`s, this effect can be used to rotate the component, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
+
+The angle (`radians`) is in radians and the speed is in radians per second, so if you for example want to turn 180° in 2 seconds you set `radians: pi` and `speed: 0.25`.
+
+Usage example:
+```dart
+import 'dart:math';
+
+import 'package:flame/effects/effects.dart';
+
+// Square is a PositionComponent
+square.addEffect(RotateEffect(
+  radians: 2 * pi, // In radians
+  speed: 1.0, // Radians per second
+  curve: Curves.easeInOut,
+));
+```
+
+## SequenceEffect
+
+This effect is a combination of other effects. You provide it with a list of your predefined effects.
+ 
+The effects in the list should only be passed to the SequenceEffect, never added to a PositionComponent with `addEffect`.
+
+Note that no effect (except the last) added to the sequence should have their `isInfinite` property set to `true`, because then naturally the sequence will get stuck once it gets to that effect.
+
+You can make the sequence go in a loop by setting both `isInfinite: true` and `isAlternating: true`.
+
+Usage example:
+```dart
+final sequence = SequenceEffect(
+    effects: [move1, scale, move2, rotate],
+    isInfinite: true, 
+    isAlternating: true);
+myComponent.addEffect(sequence);
+```
+An example of how to use the SequenceEffect can be found [here](/doc/examples/effects/sequence_effect).
+ 
 # Examples
 
 Full examples can be found [here](/doc/examples/effects/simple) and [here](/doc/examples/effects/infinite_effects).

@@ -1,36 +1,47 @@
 [![Pub](https://img.shields.io/pub/v/flame.svg?style=popout)](https://pub.dartlang.org/packages/flame) ![Test](https://github.com/flame-engine/flame/workflows/Test/badge.svg?branch=master&event=push) [![Discord](https://img.shields.io/discord/509714518008528896.svg)](https://discord.gg/pxrBmy4)
 
-# :fire: flame
-
 <img src="https://i.imgur.com/vFDilXT.png" width="400">
 
-A minimalist Flutter game engine.
+English | [简体中文](README-ZH.md)
 
-Any help is appreciated! Comments, suggestions, issues, PRs! Give us a star to show your support!
+A minimalistic Flutter game engine.
 
 ## Help
 
-We have a Flame help channel on Fireslime's Discord, join it [here](https://discord.gg/pxrBmy4). Also we now have a [FAQ](FAQ.md), so please search for your question there first.
+We have a Flame help channel on Fireslime's Discord, join it [here](https://discord.gg/pxrBmy4).
+
+We also have a [FAQ](FAQ.md), so please search for your question there first.
 
 ## Goals
 
 The goal of this project is to provide a complete set of out-of-the-way solutions for the common problems every game developed in Flutter will share.
 
-Currently it provides you with: a few utilities, images/sprites/sprite sheets, audio, a physics engine, a game loop and a component/object system.
+Currently it provides you with:
+ - a game loop
+ - a component/object system
+ - bundles a physics engine (box2d)
+ - audio support
+ - effects and particles
+ - gesture and input support
+ - images, sprites and sprite sheets
+ - basic Rive support
+ - and a few other utilities to make development easier
 
 You can use whichever ones you want, as they are all somewhat independent.
 
 ## Support
 
-Support us by becoming a patron on Patreon
+The simplest way to show us your support is by giving the project a star.
+
+You can also support us by becoming a patron on Patreon:
 
 [![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/fireslime)
 
-Or making a single donation by buying us a coffee:
+Or by making a single donation by buying us a coffee:
 
 [![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/fireslime)
 
-You can also show support by showing on your repository that your game is made with Flame by using one of the following badges:
+You can also show on your repository that your game is made with Flame by using one of the following badges:
 
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=flat-square)](https://flame-engine.org)
@@ -44,7 +55,11 @@ You can also show support by showing on your repository that your game is made w
 
 ## Contributing
 
-Found a bug in Flame and want to contribute with a PR? PRs are always very welcome, just be sure to create your PR from the `develop` branch.
+Any help is appreciated! Comments, suggestions, issues, PRs.
+
+Have you found a bug or have a suggestion of how to enhance Flame, open an issue and we will take a look at it as soon as possible.
+
+Do you want to contribute with a PR? PRs are always welcome, just be sure to create it from the `develop` branch and follow the [checklist](.github/pull_request_template.md) which will appear when you open it.
 
 ## Getting started
 
@@ -59,19 +74,19 @@ Check out this great series of articles/tutorials written by [Alekhin](https://g
 
 We also offer a curated list of Games, Libraries and Articles over at [awesome-flame](https://github.com/flame-engine/awesome-flame).
 
+Note that some of the articles might be slightly outdated, but they are still useful.
+
 ## Documentation
 
 The complete documentation can be found [here](doc/README.md).
 
-A lot of examples of different features can be found [here](doc/examples) and a good starting example can be found [here](./example).
+Many examples of different features can be found [here](doc/examples) and a good starting example can be found [here](/example).
 
-A very cool docs site can be found [here](https://flame-engine.org/).
+The official site for Flame, which also contains the documentation can be found [here](https://flame-engine.org/).
 
 ## Credits
 
- * [Fireslime](https://fireslime.xyz), the team responsible for maintaining Flame
+ * [Fireslime](https://fireslime.xyz), the team responsible for maintaining Flame.
  * All the friendly contributors and people who are helping in the community.
- * My own [audioplayers](https://github.com/luanpotter/audioplayer) lib, which in turn is forked from [rxlabz's](https://github.com/rxlabz/audioplayer).
+ * [Luanpotter](https://github.com/luanpotter)'s (the Flame founder) [audioplayers](https://github.com/luanpotter/audioplayer) lib, which in turn is forked from [rxlabz's](https://github.com/rxlabz/audioplayer).
  * The Dart port of [Box2D](https://github.com/google/box2d.dart).
- * [inu-no-policemen's post on reddit](https://www.reddit.com/r/dartlang/comments/69luui/minimal_flutter_game_loop/), which helped me a lot with the basics
- * Everyone who answered my beginner's questions on Stack Overflow
