@@ -2,7 +2,7 @@
 
 <img src="https://i.imgur.com/vFDilXT.png" width="400">
 
-English | [简体中文](README-ZH.md)
+English | [简体中文](README-ZH.md) | [Polski](https://github.com/mbiesiad/flame/blob/pl_PL/README-PL.md)
 
 A minimalistic Flutter game engine.
 
