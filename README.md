@@ -8,7 +8,7 @@ A minimalistic Flutter game engine.
 
 ## Help
 
-We have a Flame help channel on Fireslime's Discord, join it [here](https://discord.gg/pxrBmy4). 
+We have a Flame help channel on Fireslime's Discord, join it [here](https://discord.gg/pxrBmy4).
 
 We also have a [FAQ](FAQ.md), so please search for your question there first.
 
@@ -16,8 +16,8 @@ We also have a [FAQ](FAQ.md), so please search for your question there first.
 
 The goal of this project is to provide a complete set of out-of-the-way solutions for the common problems every game developed in Flutter will share.
 
-Currently it provides you with: 
- - a game loop 
+Currently it provides you with:
+ - a game loop
  - a component/object system
  - bundles a physics engine (box2d)
  - audio support
@@ -58,7 +58,7 @@ You can also show on your repository that your game is made with Flame by using 
 Any help is appreciated! Comments, suggestions, issues, PRs.
 
 Have you found a bug or have a suggestion of how to enhance Flame, open an issue and we will take a look at it as soon as possible.
- 
+
 Do you want to contribute with a PR? PRs are always welcome, just be sure to create it from the `develop` branch and follow the [checklist](.github/pull_request_template.md) which will appear when you open it.
 
 ## Getting started
