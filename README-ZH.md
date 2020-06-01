@@ -70,12 +70,12 @@
 ## 立即开始
 
 简体中文教程 [Alekhin](https://github.com/japalekhin) Tutorial Series (Simplified Chinese) by [HarrisonQI](https://github.com/HarrisonQi) 
-- [Flutter游戏开发(flame) Flame介绍](https://www.bugcatt.com/archives/279)
-- [Flutter 游戏开发(flame) 开发2D休闲游戏：消灭小飞蝇(1/5)](https://www.bugcatt.com/archives/292)
-- [Flutter 游戏开发(flame) 图形和动画(2/5)](https://www.bugcatt.com/archives/560)
-- [Flutter 游戏开发(flame) 界面和弹窗(3/5)](https://www.bugcatt.com/archives/562)
-- [Flutter 游戏开发(flame) 分数, 存档和音效(4/5)](https://www.bugcatt.com/archives/564)
-- [Flutter 游戏开发(flame) 收尾和打包(5/5)](https://www.bugcatt.com/archives/731)
+- [Flame介绍](https://www.bugcatt.com/archives/279)
+- [2D休闲游戏：消灭小飞蝇(1/5)](https://www.bugcatt.com/archives/292)
+- [图形和动画(2/5)](https://www.bugcatt.com/archives/560)
+- [界面和弹窗(3/5)](https://www.bugcatt.com/archives/562)
+- [分数, 存档和音效(4/5)](https://www.bugcatt.com/archives/564)
+- [收尾和打包(5/5)](https://www.bugcatt.com/archives/731)
 
 我们还在[awesome-flame](https://github.com/flame-engine/awesome-flame)项目上提供了一些精选的游戏, 库和文章.
 
