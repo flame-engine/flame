@@ -8,13 +8,13 @@
 
 > 本篇为社区版翻译, 目前针对版本: 0.21.0
 
-一款极简的Flutter游戏引擎.
-
-感激你对我们的任何支持! 评论, 建议, 提issues, Pull Request(贡献&推送)! 给我们点一颗Star, 支持我们! 
+一款简约的Flutter游戏引擎.
 
 ## 问题互助
 
-我们在Fireslime的Discord上有一个互助频道, [点击加入](https://discord.gg/pxrBmy4). 现在我们也有了[FAQ](FAQ.md), 所以提问前请先在这里看看你有没有需要的答案.
+我们在Fireslime的Discord上有一个互助频道, [点击加入](https://discord.gg/pxrBmy4).
+
+我们也有[FAQ](FAQ.md), 所以提问前请先在这里看看你有没有需要的答案.
 
 国内用户欢迎加入[Flame QQ交流群](https://jq.qq.com/?_wv=1027&k=5ETLFm3)(非官方, 针对国内用户的讨论群, 较新)
 
@@ -22,21 +22,32 @@
 
 这个项目的目的是为使用Flutter进行开发的每个游戏都会遇到的常见问题提供一套完整的解决方案.
 
-目前它提供了: 一些好用的工具, image(图像)/sprites(精灵)/sprite sheets(精灵表单), audio(音效), physics engine(物理引擎), game loop(游戏场景/游戏循环)和component/object(组件/对象)系统.
+目前它提供了:
+- 游戏循环(game loop)
+- 组件/对象系统
+- 内置物理引擎(box2d)
+- 音频支持
+- 特效与粒子效果
+- 手势和输入支持
+- 图片, 精灵(sprite)以及精灵组
+- 基础Rive支持
+- 和一些简化开发的实用工具类
 
 你可以按需使用它们, 因为它们在某种程度上是相互独立的.
 
 ## 支持我们
 
-欢迎在Patreon上赞助我们
+顺手点一颗Star, 就可以提供你的帮助!
+
+你也可以成为赞助者, 通过Patreon来支持我们:
 
 [![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/fireslime)
 
-或者买杯咖啡捐赠我们:
+或者通过买杯咖啡捐赠我们:
 
 [![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/fireslime)
 
-你也可以在游戏中展示下面的标志, 表示游戏是通过Flame制作来支持我们:
+你也可以在仓库中展示下面的徽章之一, 表示游戏是通过Flame制作来支持我们:
 
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=flat-square)](https://flame-engine.org)
@@ -50,7 +61,11 @@
 
 ## 贡献
 
-发现了Flame的一个Bug, 想通过Pull Request做贡献? 只要确保你使用的分支是`develop`, 我们非常欢迎你的PR! 
+我们感激你以任何形式帮助我们! 评论, 建议, 提issues, 以及PR(Pull Request).
+
+如果你找到了bug或者有使Flame更好的建议, 创建一个issue. 我们将会尽快处理.
+
+你想通过PR做贡献吗? PR总是受欢迎的, 只要确保你的分支是`develop`, 并遵循[PR模板](.github/pull_request_template.md)即可.
 
 ## 立即开始
 
@@ -68,16 +83,14 @@
 
 你可以在在这里看到完整的[开发文档](doc/README.md)
 
-你也可以在[这里](doc/examples)看到很多不同功能的示例(文档/demo), [点击此处](./example)来查看一个入门示范.
+你也可以在[这里](doc/examples)看到许多不同功能的示例(文档/demo), [点击此处](./example)来查看一个入门demo.
 
-你可以[点击此处](https://flame-engine.org/)查看非常棒的网站文档.
+Flame的官方网站(其中包含文档), 请[点击此处](https://flame-engine.org/)
 
 ## 感谢
 
  * [Fireslime](https://fireslime.xyz), 负责维护Flame的团队.
  * 翻译: [HarrisonQI](https://github.com/HarrisonQi)
  * 所有友善的贡献者和在社区中提供帮助的人.
- * 我的 [audioplayers](https://github.com/luanpotter/audioplayer) 库, 来源于[rxlabz](https://github.com/rxlabz/audioplayer)的fork.
+ * [Luanpotter](https://github.com/luanpotter)'s (the Flame founder)的 [audioplayers](https://github.com/luanpotter/audioplayer) 库, 来源于[rxlabz](https://github.com/rxlabz/audioplayer)的fork.
  * Dart的 [Box2D](https://github.com/google/box2d.dart).
- * [inu-no-policemen's在reddit上的文章](https://www.reddit.com/r/dartlang/comments/69luui/minimal_flutter_game_loop/)奠定了我的基础.
- * 在Stack Overflow上回答了我作为初学者提问的所有人.
