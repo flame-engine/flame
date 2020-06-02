@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import 'package:flame/box2d/box2d_component.dart';
+import 'package:flame/box2d/box2d_game.dart';
 import 'package:flame/box2d/box2d_game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/palette.dart';
