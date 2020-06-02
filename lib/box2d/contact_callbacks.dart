@@ -1,5 +1,6 @@
 import 'package:box2d_flame/box2d.dart';
-import 'package:flame/box2d/box2d_component.dart';
+
+import 'body_component.dart';
 
 class ContactTypes<T1, T2> {
   // If o1 is, or inherits from, T1 or T2

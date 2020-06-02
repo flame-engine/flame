@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:box2d_flame/box2d.dart';
-import 'package:flame/box2d/box2d_component.dart';
+import 'package:flame/box2d/box2d_game.dart';
 import 'package:flame/box2d/viewport.dart';
 import 'package:flame/palette.dart';
 
