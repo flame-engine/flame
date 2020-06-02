@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import 'package:flame/box2d/box2d_game.dart';
+import 'package:flame/box2d/body_component.dart';
 import 'package:flame/box2d/box2d_game.dart';
 import 'package:flame/box2d/contact_callbacks.dart';
 import 'package:flame/flame.dart';
@@ -13,16 +13,14 @@ import 'boundaries.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.util.fullScreen();
-  final MyBox2D box = MyBox2D();
-  final MyGame game = MyGame(box);
-  runApp(game.widget);
+  runApp(MyGame().widget);
 }
 
 class Ball extends BodyComponent {
   Paint originalPaint, currentPaint;
   bool giveNudge = false;
 
-  Ball(Vector2 position, Box2DComponent box) : super(box) {
+  Ball(Vector2 position, Box2DGame box2d) : super(box2d) {
     originalPaint = _randomPaint();
     currentPaint = originalPaint;
     final worldPosition = viewport.getScreenToWorld(position);
@@ -88,7 +86,7 @@ class Ball extends BodyComponent {
 }
 
 class WhiteBall extends Ball {
-  WhiteBall(Vector2 position, Box2DComponent box) : super(position, box) {
+  WhiteBall(Vector2 position, Box2DGame game) : super(position, game) {
     originalPaint = BasicPalette.white.paint;
     currentPaint = originalPaint;
   }
@@ -132,8 +130,8 @@ class BallWallContactCallback extends ContactCallback<Ball, Wall> {
 }
 
 class MyGame extends Box2DGame with TapDetector {
-  MyGame(Box2DComponent box) : super(box) {
-    final boundaries = createBoundaries(box);
+  MyGame() : super(scale: 4.0, gravity: Vector2(0, -10.0)) {
+    final boundaries = createBoundaries(this);
     boundaries.forEach(add);
     addContactCallback(BallContactCallback());
     addContactCallback(BallWallContactCallback());
@@ -146,16 +144,9 @@ class MyGame extends Box2DGame with TapDetector {
     final Vector2 position =
         Vector2(details.globalPosition.dx, details.globalPosition.dy);
     if (math.Random().nextInt(10) < 2) {
-      add(WhiteBall(position, box));
+      add(WhiteBall(position, this));
     } else {
-      add(Ball(position, box));
+      add(Ball(position, this));
     }
   }
-}
-
-class MyBox2D extends Box2DComponent {
-  MyBox2D() : super(scale: 4.0, gravity: -10.0);
-
-  @override
-  void initializeWorld() {}
 }

@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import 'package:flame/box2d/box2d_game.dart';
+import 'package:flame/box2d/body_component.dart';
 import 'package:flame/box2d/box2d_game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/palette.dart';
@@ -9,9 +9,7 @@ import 'package:box2d_flame/box2d.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.util.fullScreen();
-  final MyBox2D box = MyBox2D();
-  final MyGame game = MyGame(box);
-  runApp(game.widget);
+  runApp(MyGame().widget);
 }
 
 class MyPlanet extends BodyComponent {
@@ -25,7 +23,7 @@ class MyPlanet extends BodyComponent {
   // components that are added to the same Box2DGame/Box2DComponent.
   // After 20 seconds the circle will be removed, to show that we don't get
   // any concurrent modification exceptions.
-  MyPlanet(Box2DComponent box) : super(box) {
+  MyPlanet(Box2DGame game) : super(game) {
     _createBody(50.0, Vector2.zero());
   }
 
@@ -75,14 +73,8 @@ class MyPlanet extends BodyComponent {
 }
 
 class MyGame extends Box2DGame {
-  MyGame(Box2DComponent box) : super(box) {
-    add(MyPlanet(box));
+  MyGame() : super(scale: 4.0, gravity: Vector2.zero()) {
+    add(MyPlanet(this));
   }
 }
 
-class MyBox2D extends Box2DComponent {
-  MyBox2D() : super(scale: 4.0, gravity: 0.0);
-
-  @override
-  void initializeWorld() {}
-}
