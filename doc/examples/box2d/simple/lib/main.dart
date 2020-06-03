@@ -77,4 +77,3 @@ class MyGame extends Box2DGame {
     add(MyPlanet(this));
   }
 }
-
