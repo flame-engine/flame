@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Fix Box2DComponent render priority
 
 ## 0.22.0
  - Fixing BaseGame tap detectors issues
