@@ -59,9 +59,11 @@ abstract class PositionComponentEffect {
   @mustCallSuper
   void initialize(PositionComponent _comp) {
     component = _comp;
+
     /// You need to set the travelTime during the initialization of the
     /// extending effect
     travelTime = null;
+
     /// If these aren't modified by the extending effect it is assumed that the
     /// effect didn't bring the component to another state than the one it
     /// started in
