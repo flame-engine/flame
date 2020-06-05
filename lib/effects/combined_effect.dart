@@ -16,8 +16,10 @@ class CombinedEffect extends PositionComponentEffect {
     bool isAlternating = false,
   }) : super(isInfinite, isAlternating) {
     final types = effects.map((e) => e.runtimeType);
-    // All effect types have to be different so that they don't clash
-    assert(types.toSet().length == types.length);
+    assert(
+      types.toSet().length == types.length,
+      "All effect types have to be different so that they don't clash",
+    );
   }
 
   @override

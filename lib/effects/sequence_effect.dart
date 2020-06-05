@@ -15,8 +15,10 @@ class SequenceEffect extends PositionComponentEffect {
     isInfinite = false,
     isAlternating = false,
   }) : super(isInfinite, isAlternating) {
-    /// No effects can be added to components from the start
-    assert(effects.every((effect) => effect.component == null));
+    assert(
+      effects.every((effect) => effect.component == null),
+      "No effects can be added to components from the start",
+    );
   }
 
   @override

@@ -104,7 +104,7 @@ final combination = CombinedEffect(
     isAlternating: true);
 myComponent.addEffect(combination);
 ```
-An example of how to use the CombinedEffect can be found [here](/doc/examples/effects/sequence_effect).
+An example of how to use the CombinedEffect can be found [here](/doc/examples/effects/combined_effect).
  
 # Examples
 
