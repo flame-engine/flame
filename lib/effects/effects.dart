@@ -43,19 +43,24 @@ abstract class PositionComponentEffect {
   }
 
   void update(double dt) {
+    _updateDriftTime();
     if (isAlternating) {
       curveDirection = isMax() ? -1 : (isMin() ? 1 : curveDirection);
     } else if (isInfinite && isMax()) {
       currentTime = 0.0;
     }
-    _updateDriftTime();
-    currentTime += dt * curveDirection - driftTime;
-    percentage = min(1.0, max(0.0, currentTime / travelTime));
+    final driftMultiplier = (isAlternating && isMax() ? 2 : 1) * curveDirection;
+    if (!hasFinished()) {
+      currentTime += dt * curveDirection + driftTime * driftMultiplier;
+      percentage = min(1.0, max(0.0, currentTime / travelTime));
+    }
   }
 
   @mustCallSuper
   void initialize(PositionComponent _comp) {
     component = _comp;
+    /// You need to set the travelTime during the initialization of the
+    /// extending effect
     travelTime = null;
     /// If these aren't modified by the extending effect it is assumed that the
     /// effect didn't bring the component to another state than the one it
@@ -87,10 +92,10 @@ abstract class PositionComponentEffect {
   }
 
   void _updateDriftTime() {
-    if ((isInfinite || isAlternating) && isMax()) {
-      driftTime = (currentTime - travelTime) * (isAlternating ? 2 : -1);
-    } else if (isInfinite && isAlternating && isMin()) {
-      driftTime = currentTime;
+    if (isMax()) {
+      driftTime = currentTime - travelTime;
+    } else if (isMin()) {
+      driftTime = currentTime.abs();
     } else {
       driftTime = 0;
     }
