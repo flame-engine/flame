@@ -86,7 +86,7 @@ myComponent.addEffect(sequence);
 ```
 An example of how to use the SequenceEffect can be found [here](/doc/examples/effects/sequence_effect).
  
-## CombineEffect
+## CombinedEffect
 
 This effect runs several different type of effects simultaneously. You provide it with a list of your predefined effects and an offset in time which should pass in between starting each effect.
  
