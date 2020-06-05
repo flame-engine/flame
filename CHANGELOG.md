@@ -2,6 +2,7 @@
 
 ## [next]
  - Fix Box2DComponent render priority
+ - Fix PositionComponentEffect drifting
 
 ## 0.22.0
  - Fixing BaseGame tap detectors issues
