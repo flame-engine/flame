@@ -2,7 +2,7 @@
 
 ## [next]
  - Fix Box2DComponent render priority
- - Update to newest box2d_flame that fixes torque bug
+ - Update to newest box2d_flame which fixes torque bug
 
 ## 0.22.0
  - Fixing BaseGame tap detectors issues
