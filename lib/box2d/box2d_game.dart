@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:box2d_flame/box2d.dart' hide Timer;
-import 'package:flame/game/base_game.dart';
-import 'package:flame/box2d/viewport.dart';
 
+import '../game/base_game.dart';
+import 'viewport.dart';
 import 'body_component.dart';
 import 'contact_callbacks.dart';
 
