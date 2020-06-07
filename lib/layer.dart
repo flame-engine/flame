@@ -1,6 +1,7 @@
 import 'dart:ui';
+import 'package:meta/meta.dart';
 
-class Layer {
+abstract class Layer {
   List<LayerProcessor> preProcessors = [];
   List<LayerProcessor> postProcessors = [];
 
@@ -9,6 +10,7 @@ class Layer {
   PictureRecorder _recorder;
   Canvas _canvas;
 
+  @mustCallSuper
   void render(Canvas canvas, {double x = 0.0, double y = 0.0}) {
     if (_picture == null) {
       return;
@@ -39,6 +41,27 @@ class Layer {
 
     _recorder = null;
     _canvas = null;
+  }
+
+  void drawLayer();
+}
+
+abstract class PreRenderedLayer extends Layer {
+  PreRenderedLayer() {
+    beginRendering();
+    drawLayer();
+    finishRendering();
+  }
+}
+
+abstract class DynamicLayer extends Layer {
+  @override
+  void render(Canvas canvas, {double x = 0.0, double y = 0.0}) {
+    beginRendering();
+    drawLayer();
+    finishRendering();
+
+    super.render(canvas, x: x, y: y);
   }
 }
 
