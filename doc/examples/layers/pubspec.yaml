@@ -23,5 +23,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/sprites.png
-    - assets/images/bomb_ptero.png
+    - assets/images/background.png
+    - assets/images/enemy.png
+    - assets/images/player.png

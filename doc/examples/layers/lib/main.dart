@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart' hide Animation;
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame/spritesheet.dart';
-import 'package:flame/animation.dart';
 import 'package:flame/layer.dart';
 import 'package:flame/flame.dart';
 
@@ -13,62 +11,70 @@ void main() async {
 
   await Flame.util.fullScreen();
 
-  final sprite = await Sprite.loadSprite('sprites.png');
+  final playerSprite = await Sprite.loadSprite('player.png');
+  final enemySprite = await Sprite.loadSprite('enemy.png');
+  final backgroundSprite = await Sprite.loadSprite('background.png');
 
-  await Flame.images.load('bomb_ptero.png');
-  final spriteSheet = SpriteSheet(
-      imageName: 'bomb_ptero.png',
-      textureWidth: 48,
-      textureHeight: 32,
-      columns: 4,
-      rows: 1);
+  runApp(LayerGame(playerSprite, enemySprite, backgroundSprite).widget);
+}
 
-  final animation = spriteSheet.createAnimation(0, stepTime: 0.2, to: 3);
-  runApp(LayerGame(sprite, animation).widget);
+class GameLayer extends DynamicLayer {
+  final Sprite playerSprite;
+  final Sprite enemySprite;
+
+  GameLayer(this.playerSprite, this.enemySprite) {
+    preProcessors.add(ShadowProcessor());
+  }
+
+  @override
+  void drawLayer() {
+    playerSprite.renderRect(
+      canvas,
+      const Rect.fromLTWH(50, 50, 150, 150),
+    );
+    enemySprite.renderRect(
+      canvas,
+      const Rect.fromLTWH(250, 150, 100, 50),
+    );
+  }
+}
+
+class BackgroundLayer extends PreRenderedLayer {
+  final Sprite sprite;
+
+  BackgroundLayer(this.sprite) {
+    preProcessors.add(ShadowProcessor());
+  }
+
+  @override
+  void drawLayer() {
+    sprite.renderRect(
+      canvas,
+      const Rect.fromLTWH(50, 200, 300, 150),
+    );
+  }
 }
 
 class LayerGame extends Game {
-  Sprite sprite;
-  Animation animation;
-  Layer layerWithDropShadow;
-  Layer animationLayerWithDropShadow;
-  Layer layerWithoutDropShadow;
+  Sprite playerSprite;
+  Sprite enemySprite;
+  Sprite backgroundSprite;
 
-  LayerGame(this.sprite, this.animation) {
-    layerWithDropShadow = Layer()..preProcessors.add(ShadowProcessor());
-    animationLayerWithDropShadow = Layer()
-      ..preProcessors.add(ShadowProcessor());
+  Layer gameLayer;
+  Layer backgroundLayer;
 
-    layerWithoutDropShadow = Layer();
-
-    layerWithoutDropShadow.beginRendering();
-    layerWithDropShadow.beginRendering();
-
-    sprite.renderRect(
-        layerWithoutDropShadow.canvas, const Rect.fromLTWH(50, 50, 200, 200));
-    sprite.renderRect(
-        layerWithDropShadow.canvas, const Rect.fromLTWH(50, 50, 200, 200));
-
-    layerWithoutDropShadow.finishRendering();
-    layerWithDropShadow.finishRendering();
+  LayerGame(this.playerSprite, this.enemySprite, this.backgroundSprite) {
+    gameLayer = GameLayer(playerSprite, enemySprite);
+    backgroundLayer = BackgroundLayer(backgroundSprite);
   }
 
   @override
-  void update(double dt) {
-    animation.update(dt);
-  }
+  void update(double dt) {}
 
   @override
   void render(Canvas canvas) {
-    layerWithoutDropShadow.render(canvas);
-    layerWithDropShadow.render(canvas, y: 250);
-
-    animationLayerWithDropShadow.beginRendering();
-    animation.getSprite().renderRect(animationLayerWithDropShadow.canvas,
-        const Rect.fromLTWH(0, 0, 150, 100));
-    animationLayerWithDropShadow
-      ..finishRendering()
-      ..render(canvas, x: 100, y: 600);
+    gameLayer.render(canvas);
+    backgroundLayer.render(canvas);
   }
 
   @override
