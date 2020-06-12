@@ -9,14 +9,13 @@ import 'box2d_game.dart';
 abstract class BodyComponent extends Component {
   static const maxPolygonVertices = 10;
 
-  final Box2DGame box;
+  final Box2DGame game;
   Body body;
   bool _shouldRemove = false;
 
-  BodyComponent(this.box);
+  BodyComponent(this.game);
 
-  World get world => box.world;
-  Viewport get viewport => box.viewport;
+  Viewport get _viewport => game.viewport;
 
   void remove() => _shouldRemove = true;
 
@@ -62,7 +61,7 @@ abstract class BodyComponent extends Component {
 
     for (int i = 0; i < chainShape.getVertexCount(); ++i) {
       body.getWorldPointToOut(chainShape.getVertex(i), vertices[i]);
-      vertices[i] = viewport.getWorldToScreen(vertices[i]);
+      vertices[i] = _viewport.getWorldToScreen(vertices[i]);
     }
 
     final List<Offset> points = [];
@@ -84,9 +83,9 @@ abstract class BodyComponent extends Component {
     var center = Vector2.zero();
     final CircleShape circle = fixture.getShape();
     body.getWorldPointToOut(circle.p, center);
-    center = viewport.getWorldToScreen(center);
+    center = _viewport.getWorldToScreen(center);
     renderCircle(
-        canvas, Offset(center.x, center.y), circle.radius * viewport.scale);
+        canvas, Offset(center.x, center.y), circle.radius * _viewport.scale);
   }
 
   void renderCircle(Canvas canvas, Offset center, double radius) {
@@ -102,7 +101,7 @@ abstract class BodyComponent extends Component {
 
     for (int i = 0; i < polygon.count; ++i) {
       body.getWorldPointToOut(polygon.vertices[i], vertices[i]);
-      vertices[i] = viewport.getWorldToScreen(vertices[i]);
+      vertices[i] = _viewport.getWorldToScreen(vertices[i]);
     }
 
     final List<Offset> points = [];
