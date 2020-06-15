@@ -5,6 +5,7 @@
  - Fix PositionComponentEffect drifting
  - Add possibility to combine effects
  - Update to newest box2d_flame which fixes torque bug
+ - Upgrade tiled and flutter_svg dependencies
 
 ## 0.22.0
  - Fixing BaseGame tap detectors issues
@@ -15,7 +16,6 @@
  - Run linting only on affected and changed examples
  - Add SequenceEffect
  - Fixed bug with travelTime in RotateEffect
- - Upgrade tiled and flutter_svg dependencies
 
 ## 0.21.0
 - Adding AssetsCache.readBinaryFile
