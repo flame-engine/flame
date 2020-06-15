@@ -30,7 +30,11 @@ class Svg {
   ///
   /// If not loaded, does nothing
   void renderPosition(
-      Canvas canvas, Position position, double width, double height) {
+    Canvas canvas,
+    Position position,
+    double width,
+    double height,
+  ) {
     if (!loaded()) {
       return;
     }
