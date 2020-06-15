@@ -28,7 +28,7 @@ class TiledComponent extends Component {
   }
 
   Future<TileMap> _loadMap() {
-    return Flame.bundle.loadString('assets/tiles/' + filename).then((contents) {
+    return Flame.bundle.loadString('assets/tiles/$filename').then((contents) {
       final parser = TileMapParser();
       return parser.parse(contents);
     });
@@ -61,20 +61,22 @@ class TiledComponent extends Component {
   }
 
   void _renderLayer(Canvas c, Layer layer) {
-    layer.tiles.forEach((tile) {
-      if (tile.gid == 0) {
-        return;
-      }
+    layer.tiles.forEach((tileRow) {
+      tileRow.forEach((tile) {
+        if (tile.gid == 0) {
+          return;
+        }
 
-      final image = images[tile.image.source];
+        final image = images[tile.image.source];
 
-      final rect = tile.computeDrawRect();
-      final src = Rect.fromLTWH(rect.left.toDouble(), rect.top.toDouble(),
-          rect.width.toDouble(), rect.height.toDouble());
-      final dst = Rect.fromLTWH(tile.x.toDouble(), tile.y.toDouble(),
-          rect.width.toDouble(), rect.height.toDouble());
+        final rect = tile.computeDrawRect();
+        final src = Rect.fromLTWH(rect.left.toDouble(), rect.top.toDouble(),
+            rect.width.toDouble(), rect.height.toDouble());
+        final dst = Rect.fromLTWH(tile.x.toDouble(), tile.y.toDouble(),
+            rect.width.toDouble(), rect.height.toDouble());
 
-      c.drawImageRect(image, src, dst, paint);
+        c.drawImageRect(image, src, dst, paint);
+      });
     });
   }
 
