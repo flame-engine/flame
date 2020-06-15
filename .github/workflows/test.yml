@@ -13,7 +13,7 @@ jobs:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'dev'
+          channel: 'beta'
       - run: flutter pub get
       - run: ./scripts/lint.sh
       - run: flutter test
