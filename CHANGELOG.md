@@ -15,6 +15,7 @@
  - Run linting only on affected and changed examples
  - Add SequenceEffect
  - Fixed bug with travelTime in RotateEffect
+ - Upgrade tiled and flutter_svg dependencies
 
 ## 0.21.0
 - Adding AssetsCache.readBinaryFile
