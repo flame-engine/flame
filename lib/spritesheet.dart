@@ -30,7 +30,12 @@ class SpriteSheet {
   }
 
   Sprite _mapImagePath(
-      String imageName, int textureWidth, int textureHeight, int x, int y) {
+    String imageName,
+    int textureWidth,
+    int textureHeight,
+    int x,
+    int y,
+  ) {
     return Sprite(
       imageName,
       x: (x * textureWidth).toDouble(),
@@ -57,7 +62,12 @@ class SpriteSheet {
   }
 
   Sprite _mapImage(
-      Image image, int textureWidth, int textureHeight, int x, int y) {
+    Image image,
+    int textureWidth,
+    int textureHeight,
+    int x,
+    int y,
+  ) {
     return Sprite.fromImage(
       image,
       x: (x * textureWidth).toDouble(),
