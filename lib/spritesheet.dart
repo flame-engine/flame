@@ -21,14 +21,23 @@ class SpriteSheet {
     @required this.rows,
   }) {
     _sprites = List.generate(
-        rows,
-        (y) => List.generate(
-            columns,
-            (x) => Sprite(imageName,
-                x: (x * textureWidth).toDouble(),
-                y: (y * textureHeight).toDouble(),
-                width: textureWidth.toDouble(),
-                height: textureHeight.toDouble())));
+      rows,
+      (y) => List.generate(
+        columns,
+        (x) => _mapImagePath(imageName, textureWidth, textureHeight, x, y),
+      ),
+    );
+  }
+
+  Sprite _mapImagePath(
+      String imageName, int textureWidth, int textureHeight, int x, int y) {
+    return Sprite(
+      imageName,
+      x: (x * textureWidth).toDouble(),
+      y: (y * textureHeight).toDouble(),
+      width: textureWidth.toDouble(),
+      height: textureHeight.toDouble(),
+    );
   }
 
   SpriteSheet.fromImage({
@@ -39,14 +48,23 @@ class SpriteSheet {
     @required this.rows,
   }) {
     _sprites = List.generate(
-        rows,
-        (y) => List.generate(
-            columns,
-            (x) => Sprite.fromImage(image,
-                x: (x * textureWidth).toDouble(),
-                y: (y * textureHeight).toDouble(),
-                width: textureWidth.toDouble(),
-                height: textureHeight.toDouble())));
+      rows,
+      (y) => List.generate(
+        columns,
+        (x) => _mapImage(image, textureWidth, textureHeight, x, y),
+      ),
+    );
+  }
+
+  Sprite _mapImage(
+      Image image, int textureWidth, int textureHeight, int x, int y) {
+    return Sprite.fromImage(
+      image,
+      x: (x * textureWidth).toDouble(),
+      y: (y * textureHeight).toDouble(),
+      width: textureWidth.toDouble(),
+      height: textureHeight.toDouble(),
+    );
   }
 
   Sprite getSprite(int row, int column) {
