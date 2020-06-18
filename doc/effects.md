@@ -86,6 +86,26 @@ myComponent.addEffect(sequence);
 ```
 An example of how to use the SequenceEffect can be found [here](/doc/examples/effects/sequence_effect).
  
+## CombinedEffect
+
+This effect runs several different type of effects simultaneously. You provide it with a list of your predefined effects and an offset in time which should pass in between starting each effect.
+ 
+The effects in the list should only be passed to the CombinedEffect, never added to a PositionComponent with `addEffect`.
+
+Note that no effects should be of the same type since they will clash when trying to modify the PositionComponent.
+
+You can make the combined effect go in a loop by setting both `isInfinite: true` and `isAlternating: true`.
+
+Usage example:
+```dart
+final combination = CombinedEffect(
+    effects: [move, scale, rotate],
+    isInfinite: true, 
+    isAlternating: true);
+myComponent.addEffect(combination);
+```
+An example of how to use the CombinedEffect can be found [here](/doc/examples/effects/combined_effect).
+ 
 # Examples
 
-Full examples can be found [here](/doc/examples/effects/simple) and [here](/doc/examples/effects/infinite_effects).
+Full examples can be found [here](/doc/examples/effects/simple), [here](/doc/examples/effects/infinite_effects) and [here](/doc/examples/effects/combined_effects).
