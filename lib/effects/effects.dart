@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import '../components/component.dart';
 import '../position.dart';
@@ -17,8 +18,10 @@ abstract class PositionComponentEffect {
 
   /// If the animation should first follow the initial curve and then follow the
   /// curve backwards
-  bool isAlternating;
   bool isInfinite;
+  bool isAlternating;
+  final bool _initialIsInfinite;
+  final bool _initialIsAlternating;
   double percentage;
   double travelTime;
   double currentTime = 0.0;
@@ -34,28 +37,36 @@ abstract class PositionComponentEffect {
   /// travel time
   double get totalTravelTime => travelTime * (isAlternating ? 2 : 1);
 
-  PositionComponentEffect(this.isInfinite, this.isAlternating);
+  PositionComponentEffect(this._initialIsInfinite, this._initialIsAlternating) {
+    isInfinite = _initialIsInfinite;
+    isAlternating = _initialIsAlternating;
+  }
 
   void update(double dt) {
-    currentTime += dt * curveDirection;
-    if (hasFinished() && !isDisposed) {
-      driftTime = isAlternating ? currentTime.abs() : currentTime - travelTime;
-    }
-
+    _updateDriftTime();
     if (isAlternating) {
       curveDirection = isMax() ? -1 : (isMin() ? 1 : curveDirection);
     } else if (isInfinite && isMax()) {
       currentTime = 0.0;
     }
-    percentage = min(1.0, max(0.0, currentTime / travelTime));
+    final driftMultiplier = (isAlternating && isMax() ? 2 : 1) * curveDirection;
+    if (!hasFinished()) {
+      currentTime += dt * curveDirection + driftTime * driftMultiplier;
+      percentage = min(1.0, max(0.0, currentTime / travelTime));
+    }
   }
 
   @mustCallSuper
   void initialize(PositionComponent _comp) {
+    component = _comp;
+
+    /// You need to set the travelTime during the initialization of the
+    /// extending effect
+    travelTime = null;
+
     /// If these aren't modified by the extending effect it is assumed that the
     /// effect didn't bring the component to another state than the one it
     /// started in
-    component = _comp;
     endPosition = _comp.toPosition();
     endAngle = _comp.angle;
     endSize = _comp.toSize();
@@ -63,10 +74,12 @@ abstract class PositionComponentEffect {
 
   void dispose() => _isDisposed = true;
 
-  bool hasFinished() =>
-      (!isInfinite && !isAlternating && isMax()) ||
-      (!isInfinite && isAlternating && isMin()) ||
-      isDisposed;
+  bool hasFinished() {
+    return (!isInfinite && !isAlternating && isMax()) ||
+        (!isInfinite && isAlternating && isMin()) ||
+        isDisposed;
+  }
+
   bool isMax() => percentage == null ? false : percentage == 1.0;
   bool isMin() => percentage == null ? false : percentage == 0.0;
 
@@ -75,5 +88,18 @@ abstract class PositionComponentEffect {
     percentage = null;
     currentTime = 0.0;
     curveDirection = 1;
+    driftTime = 0.0;
+    isInfinite = _initialIsInfinite;
+    isAlternating = _initialIsAlternating;
+  }
+
+  void _updateDriftTime() {
+    if (isMax()) {
+      driftTime = currentTime - travelTime;
+    } else if (isMin()) {
+      driftTime = currentTime.abs();
+    } else {
+      driftTime = 0;
+    }
   }
 }
