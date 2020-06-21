@@ -13,7 +13,11 @@ abstract class BodyComponent extends Component {
   Body body;
   bool _shouldRemove = false;
 
-  BodyComponent(this.game);
+  BodyComponent(this.game) {
+    body = createBody();
+  }
+
+  Body createBody();
 
   World get world => game.world;
   Viewport get viewport => game.viewport;
