@@ -23,13 +23,12 @@ class MyPlanet extends BodyComponent {
   // components that are added to the same Box2DGame/Box2DComponent.
   // After 20 seconds the circle will be removed, to show that we don't get
   // any concurrent modification exceptions.
-  MyPlanet(Box2DGame game) : super(game) {
-    _createBody(50.0, Vector2.zero());
-  }
+  MyPlanet(Box2DGame game) : super(game);
 
-  void _createBody(double radius, Vector2 position) {
+  @override
+  Body createBody() {
     final CircleShape shape = CircleShape();
-    shape.radius = radius;
+    shape.radius = 50.0;
 
     final fixtureDef = FixtureDef();
     // To be able to determine object in collision
@@ -40,11 +39,11 @@ class MyPlanet extends BodyComponent {
     fixtureDef.friction = 0.1;
 
     final bodyDef = BodyDef();
-    bodyDef.position = position;
+    bodyDef.position = Vector2.zero();
     bodyDef.angularVelocity = 4.0;
     bodyDef.type = BodyType.DYNAMIC;
 
-    body = world.createBody(bodyDef)..createFixtureFromFixtureDef(fixtureDef);
+    return world.createBody(bodyDef)..createFixtureFromFixtureDef(fixtureDef);
   }
 
   @override

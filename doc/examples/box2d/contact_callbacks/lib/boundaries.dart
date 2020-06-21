@@ -27,9 +27,7 @@ class Wall extends BodyComponent {
   final Vector2 start;
   final Vector2 end;
 
-  Wall(this.start, this.end, Box2DGame game) : super(game) {
-    _createBody(start, end);
-  }
+  Wall(this.start, this.end, Box2DGame game) : super(game);
 
   @override
   void renderPolygon(Canvas canvas, List<Offset> coordinates) {
@@ -38,7 +36,8 @@ class Wall extends BodyComponent {
     canvas.drawLine(start, end, paint);
   }
 
-  void _createBody(Vector2 start, Vector2 end) {
+  @override
+  Body createBody() {
     final PolygonShape shape = PolygonShape();
     shape.setAsEdge(start, end);
 
@@ -52,6 +51,6 @@ class Wall extends BodyComponent {
       ..position = Vector2.zero()
       ..type = BodyType.STATIC;
 
-    body = world.createBody(bodyDef)..createFixtureFromFixtureDef(fixtureDef);
+    return world.createBody(bodyDef)..createFixtureFromFixtureDef(fixtureDef);
   }
 }
