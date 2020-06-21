@@ -48,6 +48,22 @@ class Box2DGame extends BaseGame {
     viewport.resize(size);
   }
 
+  @override
+  void lifecycleStateChange(AppLifecycleState state) {
+    super.lifecycleStateChange(state);
+
+    switch (state) {
+      case AppLifecycleState.resumed:
+        resumeEngine();
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+        pauseEngine();
+        break;
+    }
+  }
+
   void remove(BodyComponent component) {
     world.destroyBody(component.body);
     component.remove();
