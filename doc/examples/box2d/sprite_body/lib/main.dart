@@ -44,8 +44,7 @@ class Ship extends SpriteBodyComponent {
     final bodyDef = BodyDef();
     bodyDef.position = viewport.getScreenToWorld(_position);
     bodyDef.type = BodyType.DYNAMIC;
-    return world.createBody(bodyDef)
-      ..createFixtureFromFixtureDef(fixtureDef);
+    return world.createBody(bodyDef)..createFixtureFromFixtureDef(fixtureDef);
   }
 
   @override
