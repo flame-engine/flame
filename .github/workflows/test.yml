@@ -15,6 +15,7 @@ jobs:
         with:
           channel: 'beta'
       - run: flutter --version
+      - run: dartanalyzer --version
       - run: flutter pub get
       - run: ./scripts/lint.sh
       - run: flutter test
