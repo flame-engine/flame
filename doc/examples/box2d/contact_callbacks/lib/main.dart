@@ -19,12 +19,13 @@ void main() async {
 class Ball extends BodyComponent {
   Paint originalPaint, currentPaint;
   bool giveNudge = false;
+  final double _radius = 5.0;
+  Vector2 _position;
 
   Ball(Vector2 position, Box2DGame box2d) : super(box2d) {
     originalPaint = _randomPaint();
     currentPaint = originalPaint;
-    final worldPosition = viewport.getScreenToWorld(position);
-    _createBody(5.0, worldPosition);
+    _position = viewport.getScreenToWorld(position);
   }
 
   Paint _randomPaint() {
@@ -39,9 +40,10 @@ class Ball extends BodyComponent {
     ).paint;
   }
 
-  void _createBody(double radius, Vector2 position) {
+  @override
+  Body createBody() {
     final CircleShape shape = CircleShape();
-    shape.radius = radius;
+    shape.radius = _radius;
 
     final fixtureDef = FixtureDef()
       ..shape = shape
@@ -52,10 +54,10 @@ class Ball extends BodyComponent {
     final bodyDef = BodyDef()
       // To be able to determine object in collision
       ..setUserData(this)
-      ..position = position
+      ..position = _position
       ..type = BodyType.DYNAMIC;
 
-    body = world.createBody(bodyDef)..createFixtureFromFixtureDef(fixtureDef);
+    return world.createBody(bodyDef)..createFixtureFromFixtureDef(fixtureDef);
   }
 
   @override
