@@ -7,7 +7,7 @@ if [[ $(flutter format -n .) ]]; then
 fi
 
 flutter pub get
-result=$(dartanalyzer lib/)
+result=$(flutter analyze .)
 if ! echo "$result" | grep -q "No issues found!"; then
   echo "$result"
   echo "dartanalyzer issue: lib"
@@ -17,7 +17,7 @@ fi
 analyzer() {
   cd $1
   flutter pub get
-  result=$(dartanalyzer .)
+  result=$(flutter analyze .)
   if ! echo "$result" | grep -q "No issues found!"; then
     echo "$result"
     echo "dartanalyzer issue: $1"
