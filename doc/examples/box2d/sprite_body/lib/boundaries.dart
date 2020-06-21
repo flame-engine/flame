@@ -24,21 +24,13 @@ List<Wall> createBoundaries(Box2DGame game) {
 
 class Wall extends BodyComponent {
   Paint paint = BasicPalette.white.paint;
-  final Vector2 start;
-  final Vector2 end;
+  Vector2 start;
+  Vector2 end;
 
-  Wall(this.start, this.end, Box2DGame game) : super(game) {
-    _createBody(start, end);
-  }
+  Wall(this.start, this.end, Box2DGame game) : super(game);
 
   @override
-  void renderPolygon(Canvas canvas, List<Offset> coordinates) {
-    final start = coordinates[0];
-    final end = coordinates[1];
-    canvas.drawLine(start, end, paint);
-  }
-
-  void _createBody(Vector2 start, Vector2 end) {
+  Body createBody() {
     final PolygonShape shape = PolygonShape();
     shape.setAsEdge(start, end);
 
@@ -52,6 +44,6 @@ class Wall extends BodyComponent {
       ..position = Vector2.zero()
       ..type = BodyType.STATIC;
 
-    body = world.createBody(bodyDef)..createFixtureFromFixtureDef(fixtureDef);
+    return world.createBody(bodyDef)..createFixtureFromFixtureDef(fixtureDef);
   }
 }
