@@ -18,13 +18,14 @@ abstract class SpriteBodyComponent extends BodyComponent {
   /// Make sure that your width and height matches the one of the body created
   /// by createBody()
   SpriteBodyComponent(
-      this.initialWidth,
-      this.initialHeight,
-      Box2DGame game,
-      ) : super(game) {
+    this.initialWidth,
+    this.initialHeight,
+    Box2DGame game,
+  ) : super(game) {
     final sprite = createSprite();
-    spriteComponent = SpriteComponent.fromSprite(initialWidth, initialHeight, sprite)
-      ..anchor = Anchor.center;
+    spriteComponent =
+        SpriteComponent.fromSprite(initialWidth, initialHeight, sprite)
+          ..anchor = Anchor.center;
 
     game.addLater(spriteComponent);
   }
@@ -38,8 +39,9 @@ abstract class SpriteBodyComponent extends BodyComponent {
     Vector2 center;
     void updateCenter(Vector2 shapeCenter) {
       center ??= shapeCenter;
-      center = (center + shapeCenter)/2;
+      center = (center + shapeCenter) / 2;
     }
+
     do {
       final shape = fixture.getShape();
       if (shape is PolygonShape) {
@@ -48,7 +50,7 @@ abstract class SpriteBodyComponent extends BodyComponent {
         updateCenter(shape.p);
       }
       fixture = fixture.getNext();
-    } while(fixture != null);
+    } while (fixture != null);
     return center;
   }
 
@@ -71,7 +73,6 @@ abstract class SpriteBodyComponent extends BodyComponent {
     //  ..height = height;
   }
 
-
   @override
   void render(Canvas c) {
     super.render(c);
@@ -83,7 +84,8 @@ abstract class SpriteBodyComponent extends BodyComponent {
       c.save();
       c.translate(screenPosition.x, screenPosition.y);
       c.rotate(-body.getAngle());
-      sprite.renderScaled(c, flame.Position(-width/2, -height/2), scale: scale);
+      sprite.renderScaled(c, flame.Position(-width / 2, -height / 2),
+          scale: scale);
       c.translate(-screenPosition.x, -screenPosition.y);
       c.restore();
     }
