@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
         body: _myGame == null ? const Text('Wait') : _myGame.widget,
         floatingActionButton: FloatingActionButton(
           onPressed: () => newGame(),
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
         ));
   }
 
