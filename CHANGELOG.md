@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Adding BaseGame#remove
 
 ## 0.22.1
  - Fix Box2DComponent render priority

@@ -25,12 +25,6 @@ class Square extends PositionComponent with HasGameRef<MyGame> {
   static const SPEED = 0.25;
 
   @override
-  void resize(Size size) {
-    x = size.width / 2;
-    y = size.height / 2;
-  }
-
-  @override
   void render(Canvas c) {
     prepareCanvas(c);
 
@@ -53,16 +47,41 @@ class Square extends PositionComponent with HasGameRef<MyGame> {
   }
 }
 
-class MyGame extends BaseGame with TapDetector {
+class MyGame extends BaseGame with DoubleTapDetector, TapDetector {
   final double squareSize = 128;
   bool running = true;
 
   MyGame() {
-    add(Square());
+    add(Square()
+      ..x = 100
+      ..y = 100);
   }
 
   @override
-  void onTap() {
+  void onTapUp(details) {
+    final touchArea = Rect.fromCenter(
+      center: details.localPosition,
+      width: 20,
+      height: 20,
+    );
+
+    bool handled = false;
+    components.forEach((c) {
+      if (c is PositionComponent && c.toRect().overlaps(touchArea)) {
+        handled = true;
+        remove(c);
+      }
+    });
+
+    if (!handled) {
+      addLater(Square()
+        ..x = touchArea.left
+        ..y = touchArea.top);
+    }
+  }
+
+  @override
+  void onDoubleTap() {
     if (running) {
       pauseEngine();
     } else {

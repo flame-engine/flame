@@ -27,6 +27,9 @@ class BaseGame extends Game {
   /// Components added by the [addLater] method
   final List<Component> _addLater = [];
 
+  /// Components to be removed on the next update
+  final List<Component> _removeLater = [];
+
   /// Current screen size, updated every resize via the [resize] method hook
   Size size;
 
@@ -86,6 +89,11 @@ class BaseGame extends Game {
     _addLater.add(c);
   }
 
+  /// Removes a component from the components list
+  void remove(Component c) {
+    _removeLater.add(c);
+  }
+
   /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.
   ///
   /// You can override it further to add more custom behaviour.
@@ -119,6 +127,9 @@ class BaseGame extends Game {
   /// You can override it further to add more custom behaviour.
   @override
   void update(double t) {
+    _removeLater.forEach((c) => components.remove(c));
+    _removeLater.clear();
+
     components.addAll(_addLater);
     _addLater.clear();
 
