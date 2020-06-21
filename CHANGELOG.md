@@ -1,7 +1,8 @@
 # CHANGELOG
 
 ## [next]
-
+ - Upgrade tiled and flutter_svg dependencies
+ 
 ## 0.22.1
  - Fix Box2DComponent render priority
  - Fix PositionComponentEffect drifting
