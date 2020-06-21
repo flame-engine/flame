@@ -1,9 +1,11 @@
+import 'package:meta/meta.dart';
 import 'sprite.dart';
 import 'animation.dart';
 
+import 'dart:ui';
+
 /// Utility class to help extract animations and sprites from a spritesheet image
 class SpriteSheet {
-  String imageName;
   int textureWidth;
   int textureHeight;
   int columns;
@@ -11,21 +13,68 @@ class SpriteSheet {
 
   List<List<Sprite>> _sprites;
 
-  SpriteSheet(
-      {this.imageName,
-      this.textureWidth,
-      this.textureHeight,
-      this.columns,
-      this.rows}) {
+  SpriteSheet({
+    @required String imageName,
+    @required this.textureWidth,
+    @required this.textureHeight,
+    @required this.columns,
+    @required this.rows,
+  }) {
     _sprites = List.generate(
-        rows,
-        (y) => List.generate(
-            columns,
-            (x) => Sprite(imageName,
-                x: (x * textureWidth).toDouble(),
-                y: (y * textureHeight).toDouble(),
-                width: textureWidth.toDouble(),
-                height: textureHeight.toDouble())));
+      rows,
+      (y) => List.generate(
+        columns,
+        (x) => _mapImagePath(imageName, textureWidth, textureHeight, x, y),
+      ),
+    );
+  }
+
+  Sprite _mapImagePath(
+    String imageName,
+    int textureWidth,
+    int textureHeight,
+    int x,
+    int y,
+  ) {
+    return Sprite(
+      imageName,
+      x: (x * textureWidth).toDouble(),
+      y: (y * textureHeight).toDouble(),
+      width: textureWidth.toDouble(),
+      height: textureHeight.toDouble(),
+    );
+  }
+
+  SpriteSheet.fromImage({
+    @required Image image,
+    @required this.textureWidth,
+    @required this.textureHeight,
+    @required this.columns,
+    @required this.rows,
+  }) {
+    _sprites = List.generate(
+      rows,
+      (y) => List.generate(
+        columns,
+        (x) => _mapImage(image, textureWidth, textureHeight, x, y),
+      ),
+    );
+  }
+
+  Sprite _mapImage(
+    Image image,
+    int textureWidth,
+    int textureHeight,
+    int x,
+    int y,
+  ) {
+    return Sprite.fromImage(
+      image,
+      x: (x * textureWidth).toDouble(),
+      y: (y * textureHeight).toDouble(),
+      width: textureWidth.toDouble(),
+      height: textureHeight.toDouble(),
+    );
   }
 
   Sprite getSprite(int row, int column) {
