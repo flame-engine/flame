@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Add component that renders a sprite on a BodyComponent
 
 ## 0.22.1
  - Fix Box2DComponent render priority
