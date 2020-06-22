@@ -102,6 +102,9 @@ class MyGame extends BaseGame
 
   @override
   void joystickAction(JoystickActionEvent event) {
+    if (event.id == 2 && event.event == ActionEvent.DOWN) {
+      onTap();
+    }
     print(event);
   }
 
