@@ -2,10 +2,14 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flame/anchor.dart';
-import 'package:flame/gestures.dart';
 import 'package:flame/components/component.dart';
+import 'package:flame/components/joystick/Joystick_action.dart';
+import 'package:flame/components/joystick/Joystick_directional.dart';
+import 'package:flame/components/joystick/joystick_component.dart';
+import 'package:flame/components/joystick/joystick_events.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/game.dart';
+import 'package:flame/gestures.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
@@ -53,12 +57,36 @@ class Square extends PositionComponent with HasGameRef<MyGame> {
   }
 }
 
-class MyGame extends BaseGame with TapDetector {
+class MyGame extends BaseGame
+    with TapDetector, MultiTouchDragDetector
+    implements JoystickListener {
   final double squareSize = 128;
   bool running = true;
-
+  final joystick =
+      JoystickComponent(directional: JoystickDirectional(), actions: [
+    JoystickAction(
+      actionId: 1,
+      size: 50,
+      margin: const EdgeInsets.all(50),
+      enableDirection: true,
+    ),
+    JoystickAction(
+      actionId: 2,
+      size: 50,
+      margin: const EdgeInsets.only(right: 50, bottom: 120),
+      color: Colors.cyan,
+    )
+  ]);
   MyGame() {
     add(Square());
+    add(joystick);
+    joystick.addObserver(this);
+  }
+
+  @override
+  void onReceiveDrag(DragEvent drag) {
+    joystick.onReceiveDrag(drag);
+    super.onReceiveDrag(drag);
   }
 
   @override
@@ -70,5 +98,15 @@ class MyGame extends BaseGame with TapDetector {
     }
 
     running = !running;
+  }
+
+  @override
+  void joystickAction(JoystickActionEvent event) {
+    print(event);
+  }
+
+  @override
+  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+    print(event);
   }
 }
