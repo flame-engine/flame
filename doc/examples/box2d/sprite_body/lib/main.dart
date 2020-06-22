@@ -1,12 +1,7 @@
-import 'dart:math' as math;
-import 'package:flame/box2d/body_component.dart';
 import 'package:flame/box2d/box2d_game.dart';
-import 'package:flame/box2d/contact_callbacks.dart';
 import 'package:flame/box2d/sprite_body_component.dart';
-import 'package:flame/components/component.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:box2d_flame/box2d.dart';

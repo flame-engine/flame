@@ -1,10 +1,7 @@
 import 'dart:ui';
 
-import 'package:box2d_flame/box2d.dart';
-import 'package:flame/anchor.dart';
-import 'package:flame/components/component.dart';
-import 'package:flame/position.dart' as flame;
-
+import '../anchor.dart';
+import '../components/component.dart';
 import '../sprite.dart';
 import 'body_component.dart';
 import 'box2d_game.dart';
