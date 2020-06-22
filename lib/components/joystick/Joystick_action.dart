@@ -21,6 +21,7 @@ class JoystickAction {
   final bool enableDirection;
   final Color color;
 
+  bool isPressed = false;
   Rect _rectAction;
   Rect _rectBackgroundDirection;
   bool _dragging = false;
@@ -28,6 +29,7 @@ class JoystickAction {
   Offset _dragPosition;
   Paint _paintBackground;
   Paint _paintAction;
+  Paint _paintActionPressed;
   JoystickController _joystickController;
   double _sizeBackgroundDirection;
   DragEvent _currentDragEvent;
@@ -79,13 +81,20 @@ class JoystickAction {
       radius: _sizeBackgroundDirection / 2,
     );
 
-    _paintBackground = Paint()
-      ..color = color.withOpacity(0.5)
-      ..style = PaintingStyle.fill;
+    if (spriteBackgroundDirection == null)
+      _paintBackground = Paint()
+        ..color = color.withOpacity(0.5)
+        ..style = PaintingStyle.fill;
 
-    _paintAction = Paint()
-      ..color = color.withOpacity(0.8)
-      ..style = PaintingStyle.fill;
+    if (sprite == null)
+      _paintAction = Paint()
+        ..color = color.withOpacity(0.8)
+        ..style = PaintingStyle.fill;
+
+    if (spritePressed == null)
+      _paintActionPressed = Paint()
+        ..color = color.withOpacity(0.5)
+        ..style = PaintingStyle.fill;
 
     _dragPosition = _rectAction.center;
   }
@@ -119,7 +128,7 @@ class JoystickAction {
           _rectAction.top + radiusAction,
         ),
         radiusAction,
-        _paintAction,
+        isPressed ? _paintActionPressed : _paintAction,
       );
     }
   }
@@ -198,12 +207,14 @@ class JoystickAction {
   }
 
   void pressed() {
+    isPressed = true;
     if (spritePressed != null) {
       _spriteAction = spritePressed;
     }
   }
 
   void unPressed() {
+    isPressed = false;
     _spriteAction = sprite;
   }
 
