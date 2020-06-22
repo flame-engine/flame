@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flame/components/joystick/joystick_component.dart';
+import 'package:flame/components/joystick/joystick_events.dart';
+import 'package:flame/gestures.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -19,7 +21,6 @@ class JoystickAction {
   final bool enableDirection;
   final Color color;
 
-  int _pointerDragging;
   Rect _rect;
   Rect _rectBackgroundDirection;
   bool _dragging = false;
@@ -29,6 +30,8 @@ class JoystickAction {
   Paint _paintBackground;
   Paint _paintAction;
   JoystickController _joystickController;
+
+  DragEvent _currentDragEvent;
 
   JoystickAction({
     @required this.actionId,
@@ -171,11 +174,10 @@ class JoystickAction {
     }
   }
 
-  void actionDown(int pointer, Offset localPosition) {
-    if (!_dragging && _rect != null && _rect.contains(localPosition)) {
-      _pointerDragging = pointer;
+  void onReceiveDrag(DragEvent event) {
+    if (!_dragging && _rect != null && _rect.contains(event.initialPosition)) {
       if (enableDirection) {
-        _dragPosition = localPosition;
+        _dragPosition = event.initialPosition;
         _dragging = true;
       }
       _joystickController.joystickAction(
@@ -185,30 +187,52 @@ class JoystickAction {
         ),
       );
       pressed();
+      _currentDragEvent = event;
+      _currentDragEvent
+        ..onUpdate = onPanUpdate
+        ..onEnd = onPanEnd
+        ..onCancel = onPanCancel;
     }
   }
 
-  void actionMove(int pointer, Offset localPosition) {
-    if (pointer == _pointerDragging) {
-      if (_dragging) {
-        _dragPosition = localPosition;
-      }
-    }
-  }
+//  void actionDown(int pointer, Offset localPosition) {
+//    if (!_dragging && _rect != null && _rect.contains(localPosition)) {
+//      _pointerDragging = pointer;
+//      if (enableDirection) {
+//        _dragPosition = localPosition;
+//        _dragging = true;
+//      }
+//      _joystickController.joystickAction(
+//        JoystickActionEvent(
+//          id: actionId,
+//          event: ActionEvent.DOWN,
+//        ),
+//      );
+//      pressed();
+//    }
+//  }
 
-  void actionUp(int pointer) {
-    if (pointer == _pointerDragging) {
-      _dragging = false;
-      _dragPosition = _rectBackgroundDirection.center;
-      _joystickController.joystickAction(
-        JoystickActionEvent(
-          id: actionId,
-          event: ActionEvent.UP,
-        ),
-      );
-      unPressed();
-    }
-  }
+//  void actionMove(int pointer, Offset localPosition) {
+//    if (pointer == _pointerDragging) {
+//      if (_dragging) {
+//        _dragPosition = localPosition;
+//      }
+//    }
+//  }
+
+//  void actionUp(int pointer) {
+//    if (pointer == _pointerDragging) {
+//      _dragging = false;
+//      _dragPosition = _rectBackgroundDirection.center;
+//      _joystickController.joystickAction(
+//        JoystickActionEvent(
+//          id: actionId,
+//          event: ActionEvent.UP,
+//        ),
+//      );
+//      unPressed();
+//    }
+//  }
 
   void pressed() {
     if (spritePressed != null) {
@@ -218,5 +242,37 @@ class JoystickAction {
 
   void unPressed() {
     _sprite = sprite;
+  }
+
+  void onPanUpdate(DragUpdateDetails details) {
+    if (_dragging) {
+      _dragPosition = details.localPosition;
+    }
+  }
+
+  void onPanEnd(DragEndDetails p1) {
+    _currentDragEvent = null;
+    _dragging = false;
+    _dragPosition = _rectBackgroundDirection.center;
+    _joystickController.joystickAction(
+      JoystickActionEvent(
+        id: actionId,
+        event: ActionEvent.UP,
+      ),
+    );
+    unPressed();
+  }
+
+  void onPanCancel() {
+    _currentDragEvent = null;
+    _dragging = false;
+    _dragPosition = _rectBackgroundDirection.center;
+    _joystickController.joystickAction(
+      JoystickActionEvent(
+        id: actionId,
+        event: ActionEvent.UP,
+      ),
+    );
+    unPressed();
   }
 }

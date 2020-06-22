@@ -3,44 +3,10 @@ import 'dart:ui';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/joystick/Joystick_action.dart';
 import 'package:flame/components/joystick/Joystick_directional.dart';
+import 'package:flame/components/joystick/joystick_events.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/game/base_game.dart';
-
-enum JoystickMoveDirectional {
-  MOVE_UP,
-  MOVE_UP_LEFT,
-  MOVE_UP_RIGHT,
-  MOVE_RIGHT,
-  MOVE_DOWN,
-  MOVE_DOWN_RIGHT,
-  MOVE_DOWN_LEFT,
-  MOVE_LEFT,
-  IDLE
-}
-
-class JoystickDirectionalEvent {
-  final JoystickMoveDirectional directional;
-  final double intensity;
-  final double radAngle;
-
-  JoystickDirectionalEvent({
-    this.directional,
-    this.intensity = 0.0,
-    this.radAngle = 0.0,
-  });
-}
-
-enum ActionEvent { DOWN, UP, MOVE }
-
-class JoystickActionEvent {
-  final int id;
-  final double intensity;
-  final double radAngle;
-  final ActionEvent event;
-
-  JoystickActionEvent(
-      {this.id, this.intensity = 0.0, this.radAngle = 0.0, this.event});
-}
+import 'package:flame/gestures.dart';
 
 abstract class JoystickListener {
   void joystickChangeDirectional(JoystickDirectionalEvent event);
@@ -61,6 +27,8 @@ abstract class JoystickController extends Component with HasGameRef<BaseGame> {
   void addObserver(JoystickListener listener) {
     _observers.add(listener);
   }
+
+  void onReceiveDrag(DragEvent drag) {}
 
   @override
   bool isHud() => true;
@@ -96,5 +64,11 @@ class JoystickComponent extends JoystickController {
     directional?.initialize(size, this);
     actions?.forEach((action) => action.initialize(size, this));
     super.resize(size);
+  }
+
+  @override
+  void onReceiveDrag(DragEvent event) {
+    directional?.onReceiveDrag(event);
+    actions?.forEach((action) => action.onReceiveDrag(event));
   }
 }
