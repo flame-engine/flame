@@ -14,14 +14,14 @@ void main() {
   runApp(game.widget);
 }
 
-/// Includes an example including basic detectors
-class MyGame extends Game
+class MyGame extends BaseGame
     with MultiTouchDragDetector
     implements JoystickListener {
   final _whitePaint = BasicPalette.white.paint;
   final _bluePaint = Paint()..color = const Color(0xFF0000FF);
   final _greenPaint = Paint()..color = const Color(0xFF00FF00);
   final double speed = 159;
+  double currentSpeed = 0;
   double _radAngle;
   bool _move = false;
   Paint _paint;
@@ -35,10 +35,12 @@ class MyGame extends Game
         actionId: 1,
         size: 50,
         margin: const EdgeInsets.all(50),
+        color: const Color(0xFF0000FF),
       ),
       JoystickAction(
         actionId: 2,
         size: 50,
+        color: const Color(0xFF00FF00),
         margin: const EdgeInsets.only(
           right: 50,
           bottom: 120,
@@ -55,6 +57,8 @@ class MyGame extends Game
 
   MyGame() {
     _paint = _whitePaint;
+    joystick.addObserver(this);
+    add(joystick);
   }
 
   @override
@@ -62,13 +66,26 @@ class MyGame extends Game
     if (_move) {
       moveFromAngle(dt);
     }
+    super.update(dt);
   }
 
   @override
   void render(Canvas canvas) {
     if (_rect != null) {
+      canvas.save();
+      canvas.translate(_rect.center.dx, _rect.center.dy);
+      canvas.rotate(_radAngle == 0.0 ? 0.0 : _radAngle + (pi / 2));
+      canvas.translate(-_rect.center.dx, -_rect.center.dy);
       canvas.drawRect(_rect, _paint);
+      canvas.restore();
     }
+    super.render(canvas);
+  }
+
+  @override
+  void onReceiveDrag(DragEvent drag) {
+    joystick.onReceiveDrag(drag);
+    super.onReceiveDrag(drag);
   }
 
   @override
@@ -97,12 +114,15 @@ class MyGame extends Game
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
     _move = event.directional != JoystickMoveDirectional.IDLE;
-    _radAngle = event.radAngle;
+    if (_move) {
+      _radAngle = event.radAngle;
+      currentSpeed = speed * event.intensity;
+    }
   }
 
   void moveFromAngle(double dtUpdate) {
-    final double nextX = (speed * dtUpdate) * cos(_radAngle);
-    final double nextY = (speed * dtUpdate) * sin(_radAngle);
+    final double nextX = (currentSpeed * dtUpdate) * cos(_radAngle);
+    final double nextY = (currentSpeed * dtUpdate) * sin(_radAngle);
     final Offset nextPoint = Offset(nextX, nextY);
 
     final Offset diffBase = Offset(
