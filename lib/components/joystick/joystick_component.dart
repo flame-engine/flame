@@ -41,10 +41,14 @@ class JoystickComponent extends JoystickController {
   JoystickComponent({this.actions, this.directional});
 
   void addAction(JoystickAction action) {
-    if (actions != null && gameRef?.size != null) {
+    if (gameRef?.size != null) {
       action.initialize(gameRef.size, this);
-      actions.add(action);
+      actions?.add(action);
     }
+  }
+
+  void removeAction(int actionId) {
+    actions?.removeWhere((action) => action.actionId == actionId);
   }
 
   @override
