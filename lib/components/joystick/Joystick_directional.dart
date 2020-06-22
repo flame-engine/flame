@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flame/components/joystick/joystick_component.dart';
+import 'package:flame/components/joystick/joystick_events.dart';
+import 'package:flame/gestures.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
@@ -28,11 +30,11 @@ class JoystickDirectional {
 
   double _tileSize;
 
-  int _pointerDragging = 0;
-
   JoystickController _joystickController;
 
   Size _screenSize;
+
+  DragEvent _currentDragEvent;
 
   JoystickDirectional({
     this.spriteBackgroundDirectional,
@@ -214,10 +216,8 @@ class JoystickDirectional {
     }
   }
 
-  void directionalDown(int pointer, Offset localPosition) {
-    if (_backgroundRect == null) return;
-
-    _updateDirectionalRect(localPosition);
+  void onReceiveDrag(DragEvent event) {
+    _updateDirectionalRect(event.initialPosition);
 
     Rect directional = Rect.fromLTWH(
       _backgroundRect.left - 50,
@@ -225,37 +225,21 @@ class JoystickDirectional {
       _backgroundRect.width + 100,
       _backgroundRect.height + 100,
     );
-    if (!_dragging && directional.contains(localPosition)) {
+    if (!_dragging && directional.contains(event.initialPosition)) {
       _dragging = true;
-      _dragPosition = localPosition;
-      _pointerDragging = pointer;
-    }
-  }
-
-  void directionalMove(int pointer, Offset localPosition) {
-    if (pointer == _pointerDragging) {
-      if (_dragging) {
-        _dragPosition = localPosition;
-      }
-    }
-  }
-
-  void directionalUp(int pointer) {
-    if (pointer == _pointerDragging) {
-      _dragging = false;
-      _dragPosition = _backgroundRect.center;
-      _joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
-        directional: JoystickMoveDirectional.IDLE,
-        intensity: 0.0,
-        radAngle: 0.0,
-      ));
+      _dragPosition = event.initialPosition;
+      _currentDragEvent = event;
+      _currentDragEvent
+        ..onUpdate = onPanUpdate
+        ..onEnd = onPanEnd
+        ..onCancel = onPanCancel;
     }
   }
 
   void _updateDirectionalRect(Offset position) {
     if (_screenSize != null &&
-        (position.dx > _screenSize.width / 3 ||
-            position.dy < _screenSize.height / 3 ||
+        (position.dx > _screenSize.width / 2 ||
+            position.dy < _screenSize.height / 2 ||
             isFixed)) return;
 
     _backgroundRect = Rect.fromCircle(center: position, radius: size / 2);
@@ -263,5 +247,33 @@ class JoystickDirectional {
     Offset osKnob =
         Offset(_backgroundRect.center.dx, _backgroundRect.center.dy);
     _knobRect = Rect.fromCircle(center: osKnob, radius: size / 4);
+  }
+
+  void onPanUpdate(DragUpdateDetails details) {
+    if (_dragging) {
+      _dragPosition = details.localPosition;
+    }
+  }
+
+  void onPanEnd(DragEndDetails p1) {
+    _dragging = false;
+    _dragPosition = _backgroundRect.center;
+    _joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
+      directional: JoystickMoveDirectional.IDLE,
+      intensity: 0.0,
+      radAngle: 0.0,
+    ));
+    _currentDragEvent = null;
+  }
+
+  void onPanCancel() {
+    _dragging = false;
+    _dragPosition = _backgroundRect.center;
+    _joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
+      directional: JoystickMoveDirectional.IDLE,
+      intensity: 0.0,
+      radAngle: 0.0,
+    ));
+    _currentDragEvent = null;
   }
 }
