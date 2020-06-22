@@ -10,7 +10,7 @@ enum JoystickMoveDirectional {
   IDLE
 }
 
-enum ActionEvent { DOWN, UP, MOVE }
+enum ActionEvent { DOWN, UP, MOVE, CANCEL }
 
 class JoystickDirectionalEvent {
   final JoystickMoveDirectional directional;
