@@ -22,15 +22,16 @@ void main() async {
 class Ship extends SpriteBodyComponent {
   final Vector2 _position;
 
-  Ship(this._position, Box2DGame box2d) : super(10, 15, box2d);
+  Ship(this._position, Box2DGame game)
+      : super(Sprite('ship.png'), 10, 15, game);
 
   @override
   Body createBody() {
     final PolygonShape shape = PolygonShape();
 
-    final v1 = Vector2(0, initialHeight / 2);
-    final v2 = Vector2(initialWidth / 2, -initialHeight / 2);
-    final v3 = Vector2(-initialWidth / 2, -initialHeight / 2);
+    final v1 = Vector2(0, height / 2);
+    final v2 = Vector2(width / 2, -height / 2);
+    final v3 = Vector2(-width / 2, -height / 2);
     final vertices = [v1, v2, v3];
     shape.set(vertices, vertices.length);
 
@@ -43,12 +44,10 @@ class Ship extends SpriteBodyComponent {
 
     final bodyDef = BodyDef();
     bodyDef.position = viewport.getScreenToWorld(_position);
+    bodyDef.angle = (_position.x + _position.y) / 2 * 3.14;
     bodyDef.type = BodyType.DYNAMIC;
     return world.createBody(bodyDef)..createFixtureFromFixtureDef(fixtureDef);
   }
-
-  @override
-  Sprite createSprite() => Sprite('ship.png');
 }
 
 class MyGame extends Box2DGame with TapDetector {
