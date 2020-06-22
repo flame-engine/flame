@@ -8,13 +8,17 @@ There is a simple example game [here](https://github.com/feroult/haunt) that can
 
 There are some updated examples of how to use it [here](/doc/examples/box2d), but they are not full game implementations.
 
-## BaseGame extension
+## Box2DGame (BaseGame extension)
 
 If you are going to use Box2D in your project it can be a good idea to use the Box2D specific extension of the `BaseGame` class.
 
-It is called `Box2DGame` and it will control the adding and removal of Box2D's BodyComponents from your root `Box2DComponent`.
+It is called `Box2DGame` and it will control the adding and removal of Box2D's BodyComponents from an internal `Box2DComponent`.
 
 A simple `Box2DGame` implementation example can be seen in the [examples folder](/doc/examples/box2d/simple).
+
+## SpriteBodyComponent
+
+See [SpriteBodyComponent](/doc/components.md#) under Components.
 
 ## Contact callbacks
 
