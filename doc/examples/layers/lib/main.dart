@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart' hide Animation;
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame/layer.dart';
+import 'package:flame/layer/layer.dart';
 import 'package:flame/flame.dart';
 
 import 'dart:ui';
