@@ -42,6 +42,7 @@ Check out the [awesome flame repository](https://github.com/flame-engine/awesome
    - [Text Rendering](text.md)
    - [Colors and the Palette](palette.md)
    - [Particles](particles.md)
+   - [Layers](layers.md)
  * Other Modules
    - [Util](util.md)
    - [Gamepad](gamepad.md)
