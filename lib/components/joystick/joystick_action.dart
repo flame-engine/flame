@@ -201,7 +201,7 @@ class JoystickAction {
           event: ActionEvent.DOWN,
         ),
       );
-      pressed();
+      tapDown();
       _currentDragEvent = event;
       _currentDragEvent
         ..onUpdate = onPanUpdate
@@ -238,7 +238,7 @@ class JoystickAction {
         event: ActionEvent.UP,
       ),
     );
-    unPressed();
+    tapUp();
   }
 
   void onPanCancel() {
@@ -251,6 +251,6 @@ class JoystickAction {
         event: ActionEvent.CANCEL,
       ),
     );
-    unPressed();
+    tapUp();
   }
 }
