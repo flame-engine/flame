@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Adding BaseGame#markToRemove
  - Upgrade tiled and flutter_svg dependencies
  
 ## 0.22.1
