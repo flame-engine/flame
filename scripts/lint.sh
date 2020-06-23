@@ -22,7 +22,7 @@ analyzer() {
   result=$(flutter analyze .)
   if ! echo "$result" | grep -q "No issues found!"; then
     echo "$result"
-    echo "dartanalyzer issue: $1"
+    echo "flutter analyze issue: $1"
     exit 1
   fi
   cd - > /dev/null
