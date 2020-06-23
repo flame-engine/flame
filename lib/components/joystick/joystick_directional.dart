@@ -15,6 +15,8 @@ class JoystickDirectional {
   final bool isFixed;
   final EdgeInsets margin;
   final Color color;
+  final double opacityBackground;
+  final double opacityKnob;
 
   Paint _paintBackground;
   Paint _paintKnob;
@@ -42,19 +44,21 @@ class JoystickDirectional {
     this.margin = const EdgeInsets.only(left: 100, bottom: 100),
     this.size = 80,
     this.color = Colors.blueGrey,
+    this.opacityBackground = 0.5,
+    this.opacityKnob = 0.8,
   }) {
     if (spriteBackgroundDirectional != null) {
       _backgroundSprite = spriteBackgroundDirectional;
     } else {
       _paintBackground = Paint()
-        ..color = color.withOpacity(0.5)
+        ..color = color.withOpacity(opacityBackground)
         ..style = PaintingStyle.fill;
     }
     if (spriteKnobDirectional != null) {
       _knobSprite = spriteKnobDirectional;
     } else {
       _paintKnob = Paint()
-        ..color = color.withOpacity(0.8)
+        ..color = color.withOpacity(opacityKnob)
         ..style = PaintingStyle.fill;
     }
 

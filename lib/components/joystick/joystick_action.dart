@@ -20,6 +20,8 @@ class JoystickAction {
   final JoystickActionAlign align;
   final bool enableDirection;
   final Color color;
+  final double opacityBackground;
+  final double opacityKnob;
 
   bool isPressed = false;
   Rect _rectAction;
@@ -45,6 +47,8 @@ class JoystickAction {
     this.margin = EdgeInsets.zero,
     this.color = Colors.blueGrey,
     this.align = JoystickActionAlign.BOTTOM_RIGHT,
+    this.opacityBackground = 0.5,
+    this.opacityKnob = 0.8,
   }) {
     _spriteAction = sprite;
     _sizeBackgroundDirection = sizeFactorBackgroundDirection * size;
@@ -83,17 +87,17 @@ class JoystickAction {
 
     if (spriteBackgroundDirection == null)
       _paintBackground = Paint()
-        ..color = color.withOpacity(0.5)
+        ..color = color.withOpacity(opacityBackground)
         ..style = PaintingStyle.fill;
 
     if (sprite == null)
       _paintAction = Paint()
-        ..color = color.withOpacity(0.8)
+        ..color = color.withOpacity(opacityKnob)
         ..style = PaintingStyle.fill;
 
     if (spritePressed == null)
       _paintActionPressed = Paint()
-        ..color = color.withOpacity(0.5)
+        ..color = color.withOpacity(opacityBackground)
         ..style = PaintingStyle.fill;
 
     _dragPosition = _rectAction.center;
@@ -206,14 +210,14 @@ class JoystickAction {
     }
   }
 
-  void pressed() {
+  void tapDown() {
     isPressed = true;
     if (spritePressed != null) {
       _spriteAction = spritePressed;
     }
   }
 
-  void unPressed() {
+  void tapUp() {
     isPressed = false;
     _spriteAction = sprite;
   }
