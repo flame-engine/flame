@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## [next]
- - Add Joystick
+ - Add Joystick Component
  - Upgrade tiled and flutter_svg dependencies
 
 ## 0.22.1
