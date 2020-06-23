@@ -16,19 +16,14 @@ for f in doc/examples/**/pubspec.yaml; do
   cd - > /dev/null
 done
 
-analyzer() {
-  cd $1
-  flutter pub get
-  result=$(flutter analyze .)
-  if ! echo "$result" | grep -q "No issues found!"; then
-    echo "$result"
-    echo "flutter analyze issue: $1"
-    exit 1
-  fi
-  cd - > /dev/null
-}
-
-analyzer .
+cd .
+flutter pub get
+result=$(flutter analyze .)
+if ! echo "$result" | grep -q "No issues found!"; then
+  echo "$result"
+  echo "flutter analyze issue: $1"
+  exit 1
+fi
 
 echo "success"
 exit 0
