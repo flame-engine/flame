@@ -45,7 +45,7 @@ A very simple `BaseGame` implementation example can be seen below:
     }
 ```
 
-To remove components from the list on a `BaseGame` the `remove` can be used.
+To remove components from the list on a `BaseGame` the `markToRemove` method can be used.
 
 ## Flutter Widgets and Game instances
 

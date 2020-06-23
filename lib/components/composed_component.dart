@@ -75,7 +75,7 @@ mixin ComposedComponent on Component, HasGameRef, Tapable {
     components.add(c);
   }
 
-  void remove(Component component) {
+  void markToRemove(Component component) {
     _removeLater.add(component);
   }
 

@@ -89,8 +89,8 @@ class BaseGame extends Game {
     _addLater.add(c);
   }
 
-  /// Removes a component from the components list
-  void remove(Component c) {
+  /// Marks a component to be removed from the components list on the next game loop cycle
+  void markToRemove(Component c) {
     _removeLater.add(c);
   }
 
