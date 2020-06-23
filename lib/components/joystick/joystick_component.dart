@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flame/components/component.dart';
-import 'package:flame/components/joystick/Joystick_action.dart';
-import 'package:flame/components/joystick/Joystick_directional.dart';
+import 'package:flame/components/joystick/joystick_action.dart';
+import 'package:flame/components/joystick/joystick_directional.dart';
 import 'package:flame/components/joystick/joystick_events.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/game/base_game.dart';
