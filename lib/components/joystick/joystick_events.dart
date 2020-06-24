@@ -23,8 +23,7 @@ class JoystickDirectionalEvent {
     this.radAngle = 0.0,
   });
 
-  static JoystickMoveDirectional calculateDirectionalByRadAngle(
-      double degrees) {
+  static JoystickMoveDirectional calculateDirectionalByDegrees(double degrees) {
     if (degrees > -22.5 && degrees <= 22.5) {
       return JoystickMoveDirectional.MOVE_RIGHT;
     } else if (degrees > 22.5 && degrees <= 67.5) {
