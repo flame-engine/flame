@@ -7,9 +7,10 @@ class FlareComponent extends PositionComponent {
   FlareAnimation _flareAnimation;
 
   FlareComponent(
-      String fileName, String animation, double width, double height) {
+      String fileName, String animation, double width, double height, {double angle = 0.0}) {
     this.width = width;
     this.height = height;
+    this.angle = angle;
 
     FlareAnimation.load(fileName).then((loadedFlareAnimation) {
       _flareAnimation = loadedFlareAnimation;
@@ -17,6 +18,7 @@ class FlareComponent extends PositionComponent {
       _flareAnimation.updateAnimation(animation);
       _flareAnimation.width = width;
       _flareAnimation.height = height;
+      _flareAnimation.angle = angle;
     });
   }
 
@@ -61,8 +63,9 @@ class FlareComponent extends PositionComponent {
 
   @override
   set angle(_angle) {
+    super.angle = _angle;
     if (loaded()) {
-      _flareAnimation.angle = angle;
+      _flareAnimation.angle = _angle;
     }
   }
 }
