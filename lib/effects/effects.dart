@@ -39,10 +39,10 @@ abstract class PositionComponentEffect {
   double get totalTravelTime => travelTime * (isAlternating ? 2 : 1);
 
   PositionComponentEffect(
-      this._initialIsInfinite,
-      this._initialIsAlternating, {
-        this.onComplete,
-      }) {
+    this._initialIsInfinite,
+    this._initialIsAlternating, {
+    this.onComplete,
+  }) {
     isInfinite = _initialIsInfinite;
     isAlternating = _initialIsAlternating;
   }
@@ -58,7 +58,7 @@ abstract class PositionComponentEffect {
     if (!hasFinished()) {
       currentTime += dt * curveDirection + driftTime * driftMultiplier;
       percentage = min(1.0, max(0.0, currentTime / travelTime));
-      if (hasFinished()){
+      if (hasFinished()) {
         onComplete?.call();
       }
     }
