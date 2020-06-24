@@ -6,6 +6,8 @@ import 'package:flame/gestures.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
+import '../../position.dart';
+
 class JoystickDirectional {
   static const double _backgroundAspectRatio = 2.2;
 
@@ -62,7 +64,7 @@ class JoystickDirectional {
         ..style = PaintingStyle.fill;
     }
 
-    _tileSize = size / 2;
+    _tileSize = (size / 2) * _backgroundAspectRatio / 3;
   }
 
   void initialize(Size _screenSize, JoystickController joystickController) {
@@ -117,17 +119,14 @@ class JoystickDirectional {
       final double degrees = _radAngle * 180 / pi;
 
       // Distance between the center of joystick background & drag position
-      final Point centerPoint =
-          Point(_backgroundRect.center.dx, _backgroundRect.center.dy);
-      double dist =
-          centerPoint.distanceTo(Point(_dragPosition.dx, _dragPosition.dy));
+      final centerPosition = Position.fromOffset(_backgroundRect.center);
+      final dragPosition = Position.fromOffset(_dragPosition);
+      double dist = centerPosition.distance(dragPosition);
 
       // The maximum distance for the knob position the edge of
       // the background + half of its own size. The knob can wander in the
       // background image, but not outside.
-      dist = dist < (_tileSize * _backgroundAspectRatio / 3)
-          ? dist
-          : (_tileSize * _backgroundAspectRatio / 3);
+      dist = min(dist, _tileSize);
 
       // Calculation the knob position
       final double nextX = dist * cos(_radAngle);
@@ -139,7 +138,7 @@ class JoystickDirectional {
           _knobRect.center;
       _knobRect = _knobRect.shift(diff);
 
-      final double _intensity = dist / (_tileSize * _backgroundAspectRatio / 3);
+      final double _intensity = dist / _tileSize;
 
       if (_intensity == 0) {
         _joystickController.joystickChangeDirectional(JoystickDirectionalEvent(

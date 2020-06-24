@@ -8,7 +8,7 @@ import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/game/base_game.dart';
 import 'package:flame/gestures.dart';
 
-abstract class JoystickListener {
+mixin JoystickListener {
   void joystickChangeDirectional(JoystickDirectionalEvent event);
   void joystickAction(JoystickActionEvent event);
 }

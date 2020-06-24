@@ -12,7 +12,7 @@ class Player extends Component implements JoystickListener {
   final _greenPaint = Paint()..color = const Color(0xFF00FF00);
   final double speed = 159;
   double currentSpeed = 0;
-  double _radAngle;
+  double radAngle;
   bool _move = false;
   Paint _paint;
 
@@ -27,7 +27,7 @@ class Player extends Component implements JoystickListener {
     if (_rect != null) {
       canvas.save();
       canvas.translate(_rect.center.dx, _rect.center.dy);
-      canvas.rotate(_radAngle == 0.0 ? 0.0 : _radAngle + (pi / 2));
+      canvas.rotate(radAngle == 0.0 ? 0.0 : radAngle + (pi / 2));
       canvas.translate(-_rect.center.dx, -_rect.center.dy);
       canvas.drawRect(_rect, _paint);
       canvas.restore();
@@ -68,14 +68,14 @@ class Player extends Component implements JoystickListener {
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
     _move = event.directional != JoystickMoveDirectional.IDLE;
     if (_move) {
-      _radAngle = event.radAngle;
+      radAngle = event.radAngle;
       currentSpeed = speed * event.intensity;
     }
   }
 
   void moveFromAngle(double dtUpdate) {
-    final double nextX = (currentSpeed * dtUpdate) * cos(_radAngle);
-    final double nextY = (currentSpeed * dtUpdate) * sin(_radAngle);
+    final double nextX = (currentSpeed * dtUpdate) * cos(radAngle);
+    final double nextY = (currentSpeed * dtUpdate) * sin(radAngle);
     final Offset nextPoint = Offset(nextX, nextY);
 
     final Offset diffBase = Offset(
