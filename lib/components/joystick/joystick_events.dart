@@ -35,8 +35,12 @@ class JoystickActionEvent {
   final double radAngle;
   final ActionEvent event;
 
-  JoystickActionEvent(
-      {this.id, this.intensity = 0.0, this.radAngle = 0.0, this.event});
+  JoystickActionEvent({
+    this.id,
+    this.intensity = 0.0,
+    this.radAngle = 0.0,
+    this.event,
+  });
 
   @override
   String toString() {

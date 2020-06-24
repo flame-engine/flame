@@ -7,6 +7,8 @@ import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../position.dart';
+
 enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
 
 class JoystickAction {
@@ -35,6 +37,7 @@ class JoystickAction {
   JoystickController _joystickController;
   double _sizeBackgroundDirection;
   DragEvent _currentDragEvent;
+  double _tileSize;
 
   JoystickAction({
     @required this.actionId,
@@ -52,6 +55,7 @@ class JoystickAction {
   }) {
     _spriteAction = sprite;
     _sizeBackgroundDirection = sizeFactorBackgroundDirection * size;
+    _tileSize = _sizeBackgroundDirection / 3;
   }
 
   void initialize(Size _screenSize, JoystickController joystickController) {
@@ -85,20 +89,23 @@ class JoystickAction {
       radius: _sizeBackgroundDirection / 2,
     );
 
-    if (spriteBackgroundDirection == null)
+    if (spriteBackgroundDirection == null) {
       _paintBackground = Paint()
         ..color = color.withOpacity(opacityBackground)
         ..style = PaintingStyle.fill;
+    }
 
-    if (sprite == null)
+    if (sprite == null) {
       _paintAction = Paint()
         ..color = color.withOpacity(opacityKnob)
         ..style = PaintingStyle.fill;
+    }
 
-    if (spritePressed == null)
+    if (spritePressed == null) {
       _paintActionPressed = Paint()
         ..color = color.withOpacity(opacityBackground)
         ..style = PaintingStyle.fill;
+    }
 
     _dragPosition = _rectAction.center;
   }
@@ -145,19 +152,15 @@ class JoystickAction {
       );
 
       // Distance between the center of joystick background & drag position
-      final Point centerPoint = Point(
-        _rectBackgroundDirection.center.dx,
-        _rectBackgroundDirection.center.dy,
-      );
-      double dist =
-          centerPoint.distanceTo(Point(_dragPosition.dx, _dragPosition.dy));
+      final centerPosition =
+          Position.fromOffset(_rectBackgroundDirection.center);
+      final dragPosition = Position.fromOffset(_dragPosition);
+      double dist = centerPosition.distance(dragPosition);
 
       // The maximum distance for the knob position the edge of
       // the background + half of its own size. The knob can wander in the
       // background image, but not outside.
-      dist = dist < (_sizeBackgroundDirection / 3)
-          ? dist
-          : (_sizeBackgroundDirection / 3);
+      dist = min(dist, _tileSize);
 
       // Calculation the knob position
       final double nextX = dist * cos(_radAngle);
@@ -169,9 +172,10 @@ class JoystickAction {
             _rectBackgroundDirection.center.dy + nextPoint.dy,
           ) -
           _rectAction.center;
+
       _rectAction = _rectAction.shift(diff);
 
-      final double _intensity = dist / (_sizeBackgroundDirection / 3);
+      final double _intensity = dist / _tileSize;
 
       _joystickController.joystickAction(
         JoystickActionEvent(
