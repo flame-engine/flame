@@ -28,7 +28,8 @@ class MoveEffect extends PositionComponentEffect {
     this.curve,
     isInfinite = false,
     isAlternating = false,
-  }) : super(isInfinite, isAlternating);
+    Function onComplete
+  }) : super(isInfinite, isAlternating, onComplete: onComplete);
 
   @override
   void initialize(_comp) {
