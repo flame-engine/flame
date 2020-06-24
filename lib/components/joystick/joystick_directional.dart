@@ -9,8 +9,6 @@ import 'package:flutter/material.dart';
 import '../../position.dart';
 
 class JoystickDirectional {
-  static const double _backgroundAspectRatio = 2.2;
-
   final double size;
   final Sprite spriteBackgroundDirectional;
   final Sprite spriteKnobDirectional;
@@ -64,7 +62,7 @@ class JoystickDirectional {
         ..style = PaintingStyle.fill;
     }
 
-    _tileSize = (size / 2) * _backgroundAspectRatio / 3;
+    _tileSize = size / 2;
   }
 
   void initialize(Size _screenSize, JoystickController joystickController) {
@@ -133,8 +131,10 @@ class JoystickDirectional {
       final double nextY = dist * sin(_radAngle);
       final Offset nextPoint = Offset(nextX, nextY);
 
-      final Offset diff = Offset(_backgroundRect.center.dx + nextPoint.dx,
-              _backgroundRect.center.dy + nextPoint.dy) -
+      final Offset diff = Offset(
+            _backgroundRect.center.dx + nextPoint.dx,
+            _backgroundRect.center.dy + nextPoint.dy,
+          ) -
           _knobRect.center;
       _knobRect = _knobRect.shift(diff);
 
