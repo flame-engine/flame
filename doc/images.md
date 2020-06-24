@@ -202,7 +202,7 @@ class MyGame extends Game {
 
     flareAnimation.width = 306;
     flareAnimation.height = 228;
-    flareAnimation.angle = radians(90);
+    flareAnimation.angle = flareAnimation.angle = (90 * (pi / 180.0));;
 
     loaded = true;
   }
