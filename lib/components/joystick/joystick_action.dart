@@ -55,7 +55,7 @@ class JoystickAction {
   }) {
     _spriteAction = sprite;
     _sizeBackgroundDirection = sizeFactorBackgroundDirection * size;
-    _tileSize = _sizeBackgroundDirection / 3;
+    _tileSize = _sizeBackgroundDirection / 2;
   }
 
   void initialize(Size _screenSize, JoystickController joystickController) {
