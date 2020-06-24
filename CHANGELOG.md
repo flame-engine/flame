@@ -2,6 +2,7 @@
 
 ## [next]
  - Add Joystick Component
+ - Adding BaseGame#markToRemove
  - Upgrade tiled and flutter_svg dependencies
 
 ## 0.22.1
