@@ -23,6 +23,30 @@ class JoystickDirectionalEvent {
     this.radAngle = 0.0,
   });
 
+  static JoystickMoveDirectional calculateDirectionalByRadAngle(
+      double degrees) {
+    if (degrees > -22.5 && degrees <= 22.5) {
+      return JoystickMoveDirectional.MOVE_RIGHT;
+    } else if (degrees > 22.5 && degrees <= 67.5) {
+      return JoystickMoveDirectional.MOVE_DOWN_RIGHT;
+    } else if (degrees > 67.5 && degrees <= 112.5) {
+      return JoystickMoveDirectional.MOVE_DOWN;
+    } else if (degrees > 112.5 && degrees <= 157.5) {
+      return JoystickMoveDirectional.MOVE_DOWN_LEFT;
+    } else if ((degrees > 157.5 && degrees <= 180) ||
+        (degrees >= -180 && degrees <= -157.5)) {
+      return JoystickMoveDirectional.MOVE_LEFT;
+    } else if (degrees > -157.5 && degrees <= -112.5) {
+      return JoystickMoveDirectional.MOVE_UP_LEFT;
+    } else if (degrees > -112.5 && degrees <= -67.5) {
+      return JoystickMoveDirectional.MOVE_UP;
+    } else if (degrees > -67.5 && degrees <= -22.5) {
+      return JoystickMoveDirectional.MOVE_UP_RIGHT;
+    } else {
+      return JoystickMoveDirectional.IDLE;
+    }
+  }
+
   @override
   String toString() {
     return 'JoystickDirectionalEvent{directional: $directional, intensity: $intensity, radAngle: $radAngle}';
