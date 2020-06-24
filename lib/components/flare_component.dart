@@ -58,4 +58,11 @@ class FlareComponent extends PositionComponent {
       _flareAnimation.height = height;
     }
   }
+
+  @override
+  set angle(_angle) {
+    if (loaded()) {
+      _flareAnimation.angle = angle;
+    }
+  }
 }

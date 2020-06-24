@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:math';
 import 'package:flame/gestures.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flare_animation.dart';
@@ -54,6 +55,7 @@ class MyGame extends BaseGame with TapDetector {
 
     flareAnimation.width = 306;
     flareAnimation.height = 228;
+    flareAnimation.angle = (90 * (pi / 180.0));
 
     final flareAnimation2 =
         FlareComponent("assets/Bob_Minion.flr", "Wave", 306, 228);
