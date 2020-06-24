@@ -145,8 +145,8 @@ class JoystickDirectional {
       if (_intensity == 0) {
         directional = JoystickMoveDirectional.IDLE;
       } else {
-        directional = JoystickDirectionalEvent.calculateDirectionalByRadAngle(
-          _radAngle,
+        directional = JoystickDirectionalEvent.calculateDirectionalByDegrees(
+          degrees,
         );
       }
 
