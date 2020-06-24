@@ -14,7 +14,8 @@ class SequenceEffect extends PositionComponentEffect {
     @required this.effects,
     isInfinite = false,
     isAlternating = false,
-  }) : super(isInfinite, isAlternating) {
+    Function onComplete,
+  }) : super(isInfinite, isAlternating, onComplete: onComplete) {
     assert(
       effects.every((effect) => effect.component == null),
       "No effects can be added to components from the start",

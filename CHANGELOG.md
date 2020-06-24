@@ -3,6 +3,7 @@
 ## [next]
  - Adding BaseGame#markToRemove
  - Upgrade tiled and flutter_svg dependencies
+ - onComplete callback for effects
  
 ## 0.22.1
  - Fix Box2DComponent render priority
