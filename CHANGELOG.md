@@ -3,6 +3,7 @@
 ## [next]
  - Adding BaseGame#markToRemove
  - Upgrade tiled and flutter_svg dependencies
+ - Adding rotation for flare-animation
  
 ## 0.22.1
  - Fix Box2DComponent render priority
