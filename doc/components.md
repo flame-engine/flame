@@ -87,8 +87,9 @@ This component wraps an instance of the [FlareAnimation](/doc/images.md#FlareAni
     final animation = "Wave";
     final width = 306;
     final height = 228;
+    final angle = (90 * (pi / 180.0));
 
-    FlareComponent flareAnimation = FlareComponent(fileName, animation, width, height);
+    FlareComponent flareAnimation = FlareComponent(fileName, animation, width, height, angle);
     flareAnimation.x = 50;
     flareAnimation.y = 240;
     add(flareAnimation);
