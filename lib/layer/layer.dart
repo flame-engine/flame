@@ -53,6 +53,10 @@ abstract class Layer {
 
 abstract class PreRenderedLayer extends Layer {
   PreRenderedLayer() {
+    reRender();
+  }
+
+  void reRender() {
     beginRendering();
     drawLayer();
     finishRendering();
