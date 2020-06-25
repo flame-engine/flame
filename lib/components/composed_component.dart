@@ -41,6 +41,8 @@ mixin ComposedComponent on Component, HasGameRef, Tapable {
   OrderedSet<Component> components =
       OrderedSet(Comparing.on((c) => c.priority()));
 
+  final List<Component> _removeLater = [];
+
   @override
   void render(Canvas canvas) {
     canvas.save();
@@ -59,6 +61,9 @@ mixin ComposedComponent on Component, HasGameRef, Tapable {
 
   @override
   void update(double t) {
+    _removeLater.forEach((c) => components.remove(c));
+    _removeLater.clear();
+
     components.forEach((c) => c.update(t));
     components.removeWhere((c) => c.destroy());
   }
@@ -68,6 +73,10 @@ mixin ComposedComponent on Component, HasGameRef, Tapable {
       (gameRef as BaseGame).preAdd(c);
     }
     components.add(c);
+  }
+
+  void markToRemove(Component component) {
+    _removeLater.add(component);
   }
 
   // this is an important override for the Tapable mixin

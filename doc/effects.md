@@ -14,6 +14,8 @@ If `isInfinite` is false and `isAlternating` is true the effect will go from the
 
 `isInfinite` and `isAlternating` are false by default and then the effect is just applied once, from the beginning of the curve until the end.
 
+When an effect is completed the callback `onComplete` will be called, it can be set as an optional argument to your effect.
+
 ## MoveEffect
 
 Applied to `PositionComponent`s, this effect can be used to move the component to a new position, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
@@ -86,6 +88,26 @@ myComponent.addEffect(sequence);
 ```
 An example of how to use the SequenceEffect can be found [here](/doc/examples/effects/sequence_effect).
  
+## CombinedEffect
+
+This effect runs several different type of effects simultaneously. You provide it with a list of your predefined effects and an offset in time which should pass in between starting each effect.
+ 
+The effects in the list should only be passed to the CombinedEffect, never added to a PositionComponent with `addEffect`.
+
+Note that no effects should be of the same type since they will clash when trying to modify the PositionComponent.
+
+You can make the combined effect go in a loop by setting both `isInfinite: true` and `isAlternating: true`.
+
+Usage example:
+```dart
+final combination = CombinedEffect(
+    effects: [move, scale, rotate],
+    isInfinite: true, 
+    isAlternating: true);
+myComponent.addEffect(combination);
+```
+An example of how to use the CombinedEffect can be found [here](/doc/examples/effects/combined_effect).
+ 
 # Examples
 
-Full examples can be found [here](/doc/examples/effects/simple) and [here](/doc/examples/effects/infinite_effects).
+Full examples can be found [here](/doc/examples/effects/simple), [here](/doc/examples/effects/infinite_effects) and [here](/doc/examples/effects/combined_effects).
