@@ -1,6 +1,16 @@
 # CHANGELOG
 
 ## [next]
+ - Adding BaseGame#markToRemove
+ - Upgrade tiled and flutter_svg dependencies
+ - onComplete callback for effects
+ 
+## 0.22.1
+ - Fix Box2DComponent render priority
+ - Fix PositionComponentEffect drifting
+ - Add possibility to combine effects
+ - Update to newest box2d_flame which fixes torque bug
+ - Adding SpriteSheet.fromImage
 
 ## 0.22.0
  - Fixing BaseGame tap detectors issues
