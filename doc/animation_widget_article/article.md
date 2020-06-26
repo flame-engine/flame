@@ -123,7 +123,7 @@ Note that it could be any component, however complex, inside your widgets tree. 
 ```dart
 import 'package:flame/animation.dart' as animation; // imports the Animation class under animation.Animation
 import 'package:flame/flame.dart'; // imports the Flame helper class
-import 'package:flame/position.dart'; // imports the Position class
+import 'vector2d.dart'; // imports the Position class
 ```
 
 How we do the magic then? Just add the following to your widget tree:

@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'position.dart';
+import 'vector2d.dart';
 
 class Anchor {
   static const Anchor topLeft = Anchor(Offset(0.0, 0.0));
@@ -17,8 +17,8 @@ class Anchor {
 
   const Anchor(this.relativePosition);
 
-  Position translate(Position p, Position size) {
+  Vector2d translate(Vector2d p, Vector2d size) {
     return p.clone().minus(
-        Position(size.x * relativePosition.dx, size.y * relativePosition.dy));
+        Vector2d(size.x * relativePosition.dx, size.y * relativePosition.dy));
   }
 }

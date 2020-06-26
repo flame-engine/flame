@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flame/components/text_component.dart';
 import 'package:flutter/material.dart' as material;
 
-import 'position.dart';
+import 'vector2d.dart';
 import 'anchor.dart';
 
 /// A Text Config contains all typographical information required to render texts; i.e., font size and color, family, etc.
@@ -72,11 +72,11 @@ class TextConfig {
   ///
   ///     const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font');
   ///     config.render(c, Offset(size.width - 10, size.height - 10, anchor: Anchor.bottomRight);
-  void render(Canvas canvas, String text, Position p,
+  void render(Canvas canvas, String text, Vector2d p,
       {Anchor anchor = Anchor.topLeft}) {
     final material.TextPainter tp = toTextPainter(text);
-    final Position translatedPosition =
-        anchor.translate(p, Position.fromSize(tp.size));
+    final Vector2d translatedPosition =
+        anchor.translate(p, Vector2d.fromSize(tp.size));
     tp.paint(canvas, translatedPosition.toOffset());
   }
 

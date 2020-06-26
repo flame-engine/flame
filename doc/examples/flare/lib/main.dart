@@ -4,7 +4,7 @@ import 'package:flame/game.dart';
 import 'package:flame/flare_animation.dart';
 import 'package:flame/components/flare_component.dart';
 import 'package:flame/text_config.dart';
-import 'package:flame/position.dart';
+import 'package:flame/vector2d.dart';
 
 import 'package:flutter/material.dart';
 
@@ -90,7 +90,7 @@ class MyGame extends BaseGame with TapDetector {
     }
 
     if (debugMode()) {
-      fpsTextConfig.render(canvas, fps(120).toString(), Position(0, 10));
+      fpsTextConfig.render(canvas, fps(120).toString(), Vector2d(0, 10));
     }
   }
 

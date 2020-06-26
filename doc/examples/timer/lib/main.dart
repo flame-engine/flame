@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/time.dart';
 import 'package:flame/text_config.dart';
-import 'package:flame/position.dart';
+import 'package:flame/vector2d.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/components/timer_component.dart';
 
@@ -41,7 +41,7 @@ class RenderedTimeComponent extends TimerComponent {
   @override
   void render(Canvas canvas) {
     textConfig.render(
-        canvas, "Elapsed time: ${timer.current}", Position(10, 150));
+        canvas, "Elapsed time: ${timer.current}", Vector2d(10, 150));
   }
 }
 
@@ -87,7 +87,7 @@ class MyGame extends Game with TapDetector {
   @override
   void render(Canvas canvas) {
     textConfig.render(canvas, "Countdown: ${countdown.current.toString()}",
-        Position(10, 100));
-    textConfig.render(canvas, "Elapsed time: $elapsedSecs", Position(10, 150));
+        Vector2d(10, 100));
+    textConfig.render(canvas, "Elapsed time: $elapsedSecs", Vector2d(10, 150));
   }
 }

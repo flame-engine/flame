@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'dart:math';
 
 import './effects.dart';
-import '../position.dart';
+import '../vector2d.dart';
 
 double _direction(double p, double d) => (p - d).sign;
 double _size(double a, double b) => (a - b).abs();
@@ -17,7 +17,7 @@ class ScaleEffect extends PositionComponentEffect {
 
   Size _original;
   Size _diff;
-  final Position _dir = Position.empty();
+  final Vector2d _dir = Vector2d.zero();
 
   ScaleEffect({
     @required this.size,
@@ -32,7 +32,7 @@ class ScaleEffect extends PositionComponentEffect {
   void initialize(_comp) {
     super.initialize(_comp);
     if (!isAlternating) {
-      endSize = Position.fromSize(size);
+      endSize = Vector2d.fromSize(size);
     }
 
     _original = Size(component.width, component.height);

@@ -11,7 +11,7 @@ import 'package:ordered_set/ordered_set.dart';
 import '../components/component.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
-import '../position.dart';
+import '../vector2d.dart';
 import 'game.dart';
 
 /// This is a more complete and opinionated implementation of Game.
@@ -34,7 +34,7 @@ class BaseGame extends Game {
   Size size;
 
   /// Camera position; every non-HUD component is translated so that the camera position is the top-left corner of the screen.
-  Position camera = Position.empty();
+  Vector2d camera = Vector2d.zero();
 
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];

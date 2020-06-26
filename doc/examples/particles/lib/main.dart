@@ -23,7 +23,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/time.dart' as flame_time;
 import 'package:flame/particle.dart';
-import 'package:flame/position.dart';
+import 'package:flame/vector2d.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
 import 'package:flame/text_config.dart';
@@ -388,7 +388,7 @@ class MyGame extends BaseGame {
   Particle spriteParticle() {
     return SpriteParticle(
       sprite: Sprite('zap.png'),
-      size: Position.fromOffset(cellSize * .5),
+      size: Vector2d.fromOffset(cellSize * .5),
     );
   }
 
@@ -397,7 +397,7 @@ class MyGame extends BaseGame {
   Particle animationParticle() {
     return AnimationParticle(
       animation: getBoomAnimation(),
-      size: Position(128, 128),
+      size: Vector2d(128, 128),
     );
   }
 
@@ -529,7 +529,7 @@ class MyGame extends BaseGame {
 
     if (debugMode()) {
       fpsTextConfig.render(canvas, '${fps(120).toStringAsFixed(2)}fps',
-          Position(0, size.height - 24));
+          Vector2d(0, size.height - 24));
     }
   }
 

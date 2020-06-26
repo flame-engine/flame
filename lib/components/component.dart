@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 
 import '../svg.dart';
 import '../sprite.dart';
-import '../position.dart';
+import '../vector2d.dart';
 import '../anchor.dart';
 import '../text_config.dart';
 import '../effects/effects.dart';
@@ -88,14 +88,14 @@ abstract class PositionComponent extends Component {
 
   TextConfig get debugTextConfig => TextConfig(color: debugColor, fontSize: 12);
 
-  Position toPosition() => Position(x, y);
-  void setByPosition(Position position) {
+  Vector2d toPosition() => Vector2d(x, y);
+  void setByPosition(Vector2d position) {
     x = position.x;
     y = position.y;
   }
 
-  Position toSize() => Position(width, height);
-  void setBySize(Position size) {
+  Vector2d toSize() => Vector2d(width, height);
+  void setBySize(Vector2d size) {
     width = size.x;
     height = size.y;
   }
@@ -122,7 +122,7 @@ abstract class PositionComponent extends Component {
     debugTextConfig.render(
         canvas,
         "x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}",
-        Position(-50, -15));
+        Vector2d(-50, -15));
 
     final Rect rect = toRect();
     final dx = rect.right;
@@ -130,7 +130,7 @@ abstract class PositionComponent extends Component {
     debugTextConfig.render(
         canvas,
         "x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}",
-        Position(width - 50, height));
+        Vector2d(width - 50, height));
   }
 
   void prepareCanvas(Canvas canvas) {

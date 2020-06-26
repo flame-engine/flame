@@ -7,7 +7,7 @@ import 'component.dart';
 import 'mixins/resizable.dart';
 import '../text_config.dart';
 import '../palette.dart';
-import '../position.dart';
+import '../vector2d.dart';
 
 class TextBoxConfig {
   final double maxWidth;
@@ -27,7 +27,7 @@ class TextBoxComponent extends PositionComponent with Resizable {
   static final Paint _imagePaint = BasicPalette.white.paint
     ..filterQuality = FilterQuality.high;
 
-  Position p = Position.empty();
+  Vector2d p = Vector2d.zero();
 
   String _text;
   TextConfig _config;

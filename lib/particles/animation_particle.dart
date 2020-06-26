@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart';
 
 import '../animation.dart';
 import '../particle.dart';
-import '../position.dart';
+import '../vector2d.dart';
 
 class AnimationParticle extends Particle {
   final Animation animation;
-  final Position size;
+  final Vector2d size;
   final Paint overridePaint;
   final bool alignAnimationTime;
 
@@ -36,7 +36,7 @@ class AnimationParticle extends Particle {
   void render(Canvas canvas) {
     animation.getSprite().renderCentered(
           canvas,
-          Position.empty(),
+          Vector2d.zero(),
           overridePaint: overridePaint,
           size: size,
         );

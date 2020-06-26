@@ -58,7 +58,7 @@ __Countdown example:__
 import 'dart:ui';
 
 import 'package:flame/game.dart';
-import 'package:flame/position.dart';
+import 'vector2d.dart';
 import 'package:flame/text_config.dart';
 import 'package:flame/time.dart';
 
@@ -93,7 +93,7 @@ __Interval example:__
 import 'dart:ui';
 
 import 'package:flame/game.dart';
-import 'package:flame/position.dart';
+import 'vector2d.dart';
 import 'package:flame/text_config.dart';
 import 'package:flame/time.dart';
 

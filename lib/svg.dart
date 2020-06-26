@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'flame.dart';
-import 'position.dart';
+import 'vector2d.dart';
 
 class Svg {
   DrawableRoot svgRoot;
@@ -31,7 +31,7 @@ class Svg {
   /// If not loaded, does nothing
   void renderPosition(
     Canvas canvas,
-    Position position,
+    Vector2d position,
     double width,
     double height,
   ) {

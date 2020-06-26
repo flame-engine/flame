@@ -3,12 +3,12 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 
 import '../particle.dart';
-import '../position.dart';
+import '../vector2d.dart';
 import '../sprite.dart';
 
 class SpriteParticle extends Particle {
   final Sprite sprite;
-  final Position size;
+  final Vector2d size;
   final Paint overridePaint;
 
   SpriteParticle({
@@ -24,7 +24,7 @@ class SpriteParticle extends Particle {
   void render(Canvas canvas) {
     sprite.renderCentered(
       canvas,
-      Position.empty(),
+      Vector2d.zero(),
       overridePaint: overridePaint,
       size: size,
     );

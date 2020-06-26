@@ -10,7 +10,7 @@ import 'game/base_game.dart';
 import 'game/embedded_game_widget.dart';
 import 'sprite.dart';
 import 'components/animation_component.dart';
-import 'position.dart';
+import 'vector2d.dart';
 
 /// Some utilities that did not fit anywhere else.
 ///
@@ -144,7 +144,7 @@ class Util {
   ///
   /// Some render methods don't allow to pass a offset.
   /// This method translate the canvas, draw what you want, and then translate back.
-  void drawWhere(Canvas c, Position p, void Function(Canvas) fn) {
+  void drawWhere(Canvas c, Vector2d p, void Function(Canvas) fn) {
     c.translate(p.x, p.y);
     fn(c);
     c.translate(-p.x, -p.y);
@@ -157,7 +157,7 @@ class Util {
   /// This is intended to be used by non-game apps that want to add a sprite sheet animation.
   ///
   @Deprecated('Use SpriteAnimation instead')
-  widgets.Widget animationAsWidget(Position size, Animation animation) {
+  widgets.Widget animationAsWidget(Vector2d size, Animation animation) {
     return EmbeddedGameWidget(
       BaseGame()..add(AnimationComponent(size.x, size.y, animation)),
       size: size,
