@@ -17,7 +17,6 @@ class Anchor {
   const Anchor(this.x, this.y);
 
   Vector2d translate(Vector2d p, Vector2d size) {
-    return p - Vector2d(x, y)
-      ..multiply(size);
+    return p - (Vector2d(x, y)..multiply(size));
   }
 }
