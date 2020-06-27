@@ -29,7 +29,7 @@ class MyGame extends BaseGame with TapDetector {
   void render(Canvas canvas) {
     canvas.drawRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height),
         BasicPalette.black.paint);
-    regular.render(canvas, 'hit me!', Vector2d.fromSize(size).div(2),
+    regular.render(canvas, 'hit me!', Vector2d.fromSize(size)..div(2),
         anchor: Anchor.center);
     super.render(canvas);
   }

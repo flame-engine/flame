@@ -11,7 +11,7 @@ void main() {
   group('position test', () {
     test('test add', () {
       final Vector2d p = Vector2d(0.0, 5.0);
-      final Vector2d p2 = p.add(Vector2d(5.0, 5.0));
+      final Vector2d p2 = p..add(Vector2d(5.0, 5.0));
       expect(p, p2);
       expectDouble(p.x, 5.0);
       expectDouble(p.y, 10.0);
@@ -21,7 +21,7 @@ void main() {
       final Vector2d p = Vector2d(1.0, 0.0);
       final Vector2d clone = p.clone();
 
-      clone.multiply(2.0);
+      clone.scale(2.0);
       expectDouble(p.x, 1.0);
       expectDouble(clone.x, 2.0);
     });
@@ -82,7 +82,7 @@ void main() {
 
     test('scaleTo the zero vector', () {
       final Vector2d p = Vector2d.zero();
-      expect(p.scaleTo(1.0).length(), 0.0);
+      expect((p..scaleTo(1.0)).length(), 0.0);
     });
 
     test('limit', () {

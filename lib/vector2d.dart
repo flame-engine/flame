@@ -34,45 +34,42 @@ class Vector2d {
   /// Clones a [Vector2d]
   ///
   /// This is useful because this class is mutable, so beware of mutability issues.
-  Vector2d.fromPosition(Vector2d position) : this(position.x, position.y);
+  Vector2d.fromVector2d(Vector2d position) : this(position.x, position.y);
 
   /// Creates a [Vector2d] using a [b2d.Vector2]
   Vector2d.fromVector2(b2d.Vector2 vector) : this(vector.x, vector.y);
 
   /// Adds the coordinates from another vector.
-  ///
-  /// This method changes `this` instance and returns itself.
-  Vector2d add(Vector2d other) {
+  void add(Vector2d other) {
     x += other.x;
     y += other.y;
-    return this;
   }
 
   /// Subtracts the coordinates from another vector.
-  ///
-  /// This method changes `this` instance and returns itself.
-  Vector2d minus(Vector2d other) {
-    return add(other.clone().opposite());
+  void minus(Vector2d other) {
+    x -= other.x;
+    y -= other.y;
   }
 
-  Vector2d multiply(double scalar) {
+  /// Scales the vector by a factor [scalar]
+  void scale(double scalar) {
     x *= scalar;
     y *= scalar;
-    return this;
   }
 
-  Vector2d multiplyVector(Vector2d vector) {
+  /// Divides (scales down) by a factor [scalar]
+  void div(double scalar) {
+    scale(1 / scalar);
+  }
+
+  /// Vector multiplication
+  void multiply(Vector2d vector) {
     x *= vector.x;
     y *= vector.y;
-    return this;
   }
 
   Vector2d opposite() {
-    return multiply(-1.0);
-  }
-
-  Vector2d div(double scalar) {
-    return multiply(1 / scalar);
+    return clone()..scale(-1.0);
   }
 
   double dotProduct(Vector2d p) {
@@ -138,52 +135,37 @@ class Vector2d {
     return angleFrom(other) * 180 / math.pi;
   }
 
+  /// Returns the distance between two vectors
   double distance(Vector2d other) {
-    return clone().minus(other).length();
+    return (this-other).length();
   }
 
-  /// Changes the [length] of this vector to the one provided, without chaning direction.
+  /// Changes the [length] of this vector to the one provided, without changing the direction.
   ///
   /// If you try to scale the zero (empty) vector, it will remain unchanged, and no error will be thrown.
-  Vector2d scaleTo(double newLength) {
+  void scaleTo(double newLength) {
     final l = length();
     if (l == 0) {
-      return this;
+      return;
     }
-    return multiply(newLength.abs() / l);
+    scale(newLength.abs() / l);
   }
 
   /// Normalizes this vector, without changing direction.
-  Vector2d normalize() {
-    return scaleTo(1.0);
+  void normalize() {
+    scaleTo(1.0);
   }
 
   /// Limits the [length] of this vector to the one provided, without changing direction.
   ///
   /// If this vector's length is bigger than [maxLength], it becomes [maxLength]; otherwise, nothing changes.
-  Vector2d limit(double maxLength) {
+  void limit(double maxLength) {
     final newLength = length().clamp(0.0, maxLength.abs());
-    return scaleTo(newLength);
-  }
-
-  ui.Offset toOffset() {
-    return ui.Offset(x, y);
-  }
-
-  ui.Size toSize() {
-    return ui.Size(x, y);
-  }
-
-  math.Point toPoint() {
-    return math.Point(x, y);
-  }
-
-  b2d.Vector2 toVector2() {
-    return b2d.Vector2(x, y);
+    scaleTo(newLength);
   }
 
   Vector2d clone() {
-    return Vector2d.fromPosition(this);
+    return Vector2d.fromVector2d(this);
   }
 
   bool equals(Vector2d p) {
@@ -208,7 +190,23 @@ class Vector2d {
   Vector2d operator /(double scale) => clone()..div(scale);
 
   /// Scale.
-  Vector2d operator *(double scale) => clone()..multiply(scale);
+  Vector2d operator *(double scale) => clone()..scale(scale);
+
+  ui.Offset toOffset() {
+    return ui.Offset(x, y);
+  }
+
+  ui.Size toSize() {
+    return ui.Size(x, y);
+  }
+
+  math.Point toPoint() {
+    return math.Point(x, y);
+  }
+
+  b2d.Vector2 toVector2() {
+    return b2d.Vector2(x, y);
+  }
 
   @override
   int get hashCode => toString().hashCode;
