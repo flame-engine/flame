@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'vector2d.dart';
 
 class Anchor {
