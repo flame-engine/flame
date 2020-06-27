@@ -5,6 +5,8 @@
  - Upgrade tiled and flutter_svg dependencies
  - onComplete callback for effects
  - Adding Layers
+ - Rename Position to Vector2d
+ - Utilize .. for Vector2d instead of returning "this"
  
 ## 0.22.1
  - Fix Box2DComponent render priority
