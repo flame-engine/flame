@@ -137,7 +137,7 @@ class Vector2d {
 
   /// Returns the distance between two vectors
   double distance(Vector2d other) {
-    return (this-other).length();
+    return (this - other).length();
   }
 
   /// Changes the [length] of this vector to the one provided, without changing the direction.
