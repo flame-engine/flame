@@ -39,10 +39,17 @@ abstract class Component {
   /// Note that for a more consistent experience, you can pre-load all your assets beforehand with Flame.images.loadAll.
   bool loaded() => true;
 
+  /// Holds the value used for [Component.destroy] method.
+  bool _mustDestroy = false;
+
+  /// Force the [Component.destroy] to return true.
+  /// It's an alternative for handling the component destruction, otherwise use the overriden of [Component.destroy] method.
+  void prepareDestroy => _mustDestroy = true;
+
   /// Whether this should be destroyed or not.
   ///
   /// It will be called once per component per loop, and if it returns true, [BaseGame] will mark your component for deletion and remove it before the next loop.
-  bool destroy() => false;
+  bool destroy() => _mustDestroy;
 
   /// Whether this component is HUD object or not.
   ///

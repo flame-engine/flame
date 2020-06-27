@@ -5,6 +5,7 @@
  - Upgrade tiled and flutter_svg dependencies
  - onComplete callback for effects
  - Adding Layers
+ - Adding alternative for Component destroy handling
  
 ## 0.22.1
  - Fix Box2DComponent render priority
