@@ -123,22 +123,22 @@ Note that it could be any component, however complex, inside your widgets tree. 
 ```dart
 import 'package:flame/animation.dart' as animation; // imports the Animation class under animation.Animation
 import 'package:flame/flame.dart'; // imports the Flame helper class
-import 'vector2d.dart'; // imports the Position class
+import 'package:flame/vector2d.dart'; // imports the Position class
 ```
 
-How we do the magic then? Just add the following to your widget tree:
+How do we do the magic then? Just add the following to your widget tree:
 
 ```dart
-    Flame.util.animationAsWidget(Position(WIDTH, HEIGHT), animation.Animation.sequenced('minotaur.png', AMOUNT, textureWidth: FRAME_WIDTH))
+    Flame.util.animationAsWidget(Vector2d(width, height), animation.Animation.sequenced('minotaur.png', amount, textureWidth: frameWidth))
 ```
 
-The first parameter's `WIDTH` and `HEIGHT` are the actual size of the widget on the screen. This does not need to match the sprite size, as Flame will scale it for you. You might, however, wanna keep the aspect, so things don't get distorted. In your case, the minotaur asset is a row of 96x96 pixels, so squares, therefore we can scale keeping `WIDTH/HEIGHT = 1`. We will choose the size as 256 px. The `sequenced` constructor is a helper that easily creates the animation assuming equal-sized frames in a row, in order. You can configure the start x, start y, texture width and height, but those will default gracefully to (0,0) and the actual width and height of the file. You can create your animation passing in the frame list, each frame with a different step time and sprite (source rectangle).
+The first parameter's `width` and `height` are the actual size of the widget on the screen. This does not need to match the sprite size, as Flame will scale it for you. You might, however, wanna keep the aspect, so things don't get distorted. In your case, the minotaur asset is a row of 96x96 pixels, so squares, therefore we can scale keeping `width/height = 1`. We will choose the size as 256 px. The `sequenced` constructor is a helper that easily creates the animation assuming equal-sized frames in a row, in order. You can configure the start x, start y, texture width and height, but those will default gracefully to (0,0) and the actual width and height of the file. You can create your animation passing in the frame list, each frame with a different step time and sprite (source rectangle).
 
-In our case, we only need to set the `textureWidth` to 96.0, as the original width for the image is actually 19 x 96. Don't mix up texture coordinates, or source coordinates, that's the x, y inside the sprite sheet image and the size relating to that file, and the actual place and size the image/animation is going to be drawn on screen! Those are two very distinct things. We don't need to set the actual position as the widget tree will dictate that for us, we just provide the size as it's going to be a fixed size widget.
+In our case, we only need to set the `textureWidth` to 96.0, since the original width for the image is actually 19 x 96. Don't mix up texture coordinates, or source coordinates, that's the (x, y) inside the sprite sheet image and the size relating to that file, and the actual place and size the image/animation is going to be drawn on screen! Those are two very distinct things. We don't need to set the actual position since the widget tree will dictate that for us, we just provide the size since it's going to be a fixed size widget.
 
 ## Results
 
-Now, just run your app, and, hurray!, we get a slick animation!
+Now just run your app, and hurray! We get a slick animation!
 
 <p align="center">
     <img width="30%" src="result.gif" />
