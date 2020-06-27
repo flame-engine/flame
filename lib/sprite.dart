@@ -84,7 +84,7 @@ class Sprite {
       return;
     }
     renderPosition(canvas, p,
-        size: size.times(scale), overridePaint: overridePaint);
+        size: size.multiply(scale), overridePaint: overridePaint);
   }
 
   void renderPosition(Canvas canvas, Vector2d p,

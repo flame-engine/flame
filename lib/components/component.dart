@@ -100,11 +100,11 @@ abstract class PositionComponent extends Component {
     height = size.y;
   }
 
-  Rect toRect() => Rect.fromLTWH(x - anchor.relativePosition.dx * width,
-      y - anchor.relativePosition.dy * height, width, height);
+  Rect toRect() => Rect.fromLTWH(x - anchor.x * width, y - anchor.y * height,
+      width, height);
   void setByRect(Rect rect) {
-    x = rect.left + anchor.relativePosition.dx * rect.width;
-    y = rect.top + anchor.relativePosition.dy * rect.height;
+    x = rect.left + anchor.x * rect.width;
+    y = rect.top + anchor.y * rect.height;
     width = rect.width;
     height = rect.height;
   }
@@ -137,8 +137,8 @@ abstract class PositionComponent extends Component {
     canvas.translate(x, y);
 
     canvas.rotate(angle);
-    final double dx = -anchor.relativePosition.dx * width;
-    final double dy = -anchor.relativePosition.dy * height;
+    final double dx = -anchor.x * width;
+    final double dy = -anchor.y * height;
     canvas.translate(dx, dy);
 
     // Handle inverted rendering by moving center and flipping.

@@ -21,7 +21,7 @@ void main() {
       final Vector2d p = Vector2d(1.0, 0.0);
       final Vector2d clone = p.clone();
 
-      clone.times(2.0);
+      clone.multiply(2.0);
       expectDouble(p.x, 1.0);
       expectDouble(clone.x, 2.0);
     });

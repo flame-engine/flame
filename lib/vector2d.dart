@@ -55,18 +55,24 @@ class Vector2d {
     return add(other.clone().opposite());
   }
 
-  Vector2d times(double scalar) {
+  Vector2d multiply(double scalar) {
     x *= scalar;
     y *= scalar;
     return this;
   }
 
+  Vector2d multiplyVector(Vector2d vector) {
+    x *= vector.x;
+    y *= vector.y;
+    return this;
+  }
+
   Vector2d opposite() {
-    return times(-1.0);
+    return multiply(-1.0);
   }
 
   Vector2d div(double scalar) {
-    return times(1 / scalar);
+    return multiply(1 / scalar);
   }
 
   double dotProduct(Vector2d p) {
@@ -144,7 +150,7 @@ class Vector2d {
     if (l == 0) {
       return this;
     }
-    return times(newLength.abs() / l);
+    return multiply(newLength.abs() / l);
   }
 
   /// Normalizes this vector, without changing direction.
@@ -202,7 +208,7 @@ class Vector2d {
   Vector2d operator /(double scale) => clone()..div(scale);
 
   /// Scale.
-  Vector2d operator *(double scale) => clone()..times(scale);
+  Vector2d operator *(double scale) => clone()..multiply(scale);
 
   @override
   int get hashCode => toString().hashCode;
