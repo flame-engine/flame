@@ -5,7 +5,8 @@
  - Upgrade tiled and flutter_svg dependencies
  - onComplete callback for effects
  - Adding Layers
- 
+ - Update tiled dep to 0.5.0 and add support for rotation with improved api
+
 ## 0.22.1
  - Fix Box2DComponent render priority
  - Fix PositionComponentEffect drifting
