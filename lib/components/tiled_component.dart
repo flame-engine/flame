@@ -11,16 +11,16 @@ import 'package:tiled/tiled.dart' hide Image;
 /// This class converts that representation to a simpler one, that uses one angle (with pi/2 steps) and two flips (H or V).
 /// More reference: https://doc.mapeditor.org/en/stable/reference/tmx-map-format/#tile-flipping
 class _SimpleFlips {
-  // angle (in steps of pi/2 rads), clockwise
+  /// The angle (in steps of pi/2 rads), clockwise, around the center of the tile.
   final int angle;
-  // whether to flip across a central vertical axis.
+  /// Whether to flip across a central vertical axis (passing through the center).
   final bool flipH;
-  // whether to flip across a central horizontal axis.
+  /// Whether to flip across a central horizontal axis (passing through the center).
   final bool flipV;
 
   _SimpleFlips(this.angle, this.flipH, this.flipV);
 
-  // This is the conversion
+  /// This is the conversion from the truth table that I drew.
   factory _SimpleFlips.fromFlips(Flips flips) {
     int angle;
     bool flipV, flipH;
@@ -66,6 +66,7 @@ class _SimpleFlips {
   }
 }
 
+/// This component renders a tile map based on a TMX file from Tiled.
 class TiledComponent extends Component {
   String filename;
   TileMap map;
@@ -77,6 +78,8 @@ class TiledComponent extends Component {
 
   static Paint paint = Paint()..color = Colors.white;
 
+  /// Creates this TiledComponent with the filename (for the tmx file resource)
+  /// and destTileSize is the tile size to be rendered (not the tile size in the texture, that one is configured inside Tiled).
   TiledComponent(this.filename, this.destTileSize) {
     future = _load();
   }
@@ -160,6 +163,8 @@ class TiledComponent extends Component {
   @override
   void update(double t) {}
 
+  /// This returns an object group fetch by name from a given layer.
+  /// Use this to add custom behaviour to special objects and groups.
   Future<ObjectGroup> getObjectGroupFromLayer(String name) {
     return future.then((onValue) {
       return map.objectGroups
