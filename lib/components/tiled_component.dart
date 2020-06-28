@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:async';
 import 'dart:ui';
 
@@ -6,6 +7,64 @@ import 'package:flame/flame.dart';
 import 'package:flutter/material.dart' show Colors;
 import 'package:tiled/tiled.dart' hide Image;
 
+/// Tiled represents all flips and rotation using three possible flips: horizontal, vertical and diagonal.
+/// This class converts that representation to a simpler one, that uses one angle (with pi/2 steps) and two flips (H or V).
+class _SimpleFlips {
+  // angle (in steps of pi/2 rads), clockwise
+  final int angle;
+  // whether to flip across a central vertical axis.
+  final bool flipH;
+  // whether to flip across a central horizontal axis.
+  final bool flipV;
+
+  _SimpleFlips(this.angle, this.flipH, this.flipV);
+
+  // This is the conversion
+  factory _SimpleFlips.fromFlips(Flips flips) {
+    int angle;
+    bool flipV, flipH;
+
+    if (!flips.diagonally && !flips.vertically && !flips.horizontally) {
+      angle = 0;
+      flipV = false;
+      flipH = false;
+    } else if (!flips.diagonally && !flips.vertically && flips.horizontally) {
+      angle = 0;
+      flipV = false;
+      flipH = true;
+    } else if (!flips.diagonally && flips.vertically && !flips.horizontally) {
+      angle = 0;
+      flipV = true;
+      flipH = false;
+    } else if (!flips.diagonally && flips.vertically && flips.horizontally) {
+      angle = 2;
+      flipV = false;
+      flipH = false;
+    } else if (flips.diagonally && !flips.vertically && !flips.horizontally) {
+      angle = 1;
+      flipV = false;
+      flipH = true;
+    } else if (flips.diagonally && !flips.vertically && flips.horizontally) {
+      angle = 1;
+      flipV = false;
+      flipH = false;
+    } else if (flips.diagonally && flips.vertically && !flips.horizontally) {
+      angle = 3;
+      flipV = false;
+      flipH = false;
+    } else if (flips.diagonally && flips.vertically && flips.horizontally) {
+      angle = 1;
+      flipV = true;
+      flipH = false;
+    } else {
+      // this should be exhaustive
+      throw 'Invalid combination of booleans: $flips';
+    }
+
+    return _SimpleFlips(angle, flipH, flipV);
+  }
+}
+
 class TiledComponent extends Component {
   String filename;
   TileMap map;
@@ -13,10 +72,11 @@ class TiledComponent extends Component {
   Map<String, Image> images = <String, Image>{};
   Future future;
   bool _loaded = false;
+  double destTileSize;
 
   static Paint paint = Paint()..color = Colors.white;
 
-  TiledComponent(this.filename) {
+  TiledComponent(this.filename, this.destTileSize) {
     future = _load();
   }
 
@@ -70,12 +130,28 @@ class TiledComponent extends Component {
         final image = images[tile.image.source];
 
         final rect = tile.computeDrawRect();
-        final src = Rect.fromLTWH(rect.left.toDouble(), rect.top.toDouble(),
-            rect.width.toDouble(), rect.height.toDouble());
-        final dst = Rect.fromLTWH(tile.x.toDouble(), tile.y.toDouble(),
-            rect.width.toDouble(), rect.height.toDouble());
+        final src = Rect.fromLTWH(
+          rect.left.toDouble(),
+          rect.top.toDouble(),
+          rect.width.toDouble(),
+          rect.height.toDouble(),
+        );
+        final dst = Rect.fromLTWH(
+          tile.x * destTileSize,
+          tile.y * destTileSize,
+          destTileSize,
+          destTileSize,
+        );
+
+        final flips = _SimpleFlips.fromFlips(tile.flips);
+        c.save();
+        c.translate(dst.center.dx, dst.center.dy);
+        c.rotate(flips.angle * math.pi / 2);
+        c.scale(flips.flipV ? -1.0 : 1.0, flips.flipH ? -1.0 : 1.0);
+        c.translate(-dst.center.dx, -dst.center.dy);
 
         c.drawImageRect(image, src, dst, paint);
+        c.restore();
       });
     });
   }
