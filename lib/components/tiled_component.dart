@@ -13,8 +13,10 @@ import 'package:tiled/tiled.dart' hide Image;
 class _SimpleFlips {
   /// The angle (in steps of pi/2 rads), clockwise, around the center of the tile.
   final int angle;
+
   /// Whether to flip across a central vertical axis (passing through the center).
   final bool flipH;
+
   /// Whether to flip across a central horizontal axis (passing through the center).
   final bool flipV;
 
