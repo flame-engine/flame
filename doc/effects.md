@@ -14,6 +14,8 @@ If `isInfinite` is false and `isAlternating` is true the effect will go from the
 
 `isInfinite` and `isAlternating` are false by default and then the effect is just applied once, from the beginning of the curve until the end.
 
+When an effect is completed the callback `onComplete` will be called, it can be set as an optional argument to your effect.
+
 ## MoveEffect
 
 Applied to `PositionComponent`s, this effect can be used to move the component to a new position, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
