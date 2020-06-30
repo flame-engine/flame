@@ -244,5 +244,44 @@ class Player extends Component implements JoystickListener {
 
 ```
 
+### JoystickDirectionalEvent
+
+```dart
+
+  JoystickDirectionalEvent({
+    JoystickMoveDirectional directional,
+    double intensity = 0.0,
+    double radAngle = 0.0,
+  });
+
+  enum JoystickMoveDirectional {
+    MOVE_UP,
+    MOVE_UP_LEFT,
+    MOVE_UP_RIGHT,
+    MOVE_RIGHT,
+    MOVE_DOWN,
+    MOVE_DOWN_RIGHT,
+    MOVE_DOWN_LEFT,
+    MOVE_LEFT,
+    IDLE
+  }
+
+```
+
+### JoystickActionEvent
+
+```dart
+
+  JoystickActionEvent({
+      int id,
+      double intensity = 0.0,
+      double radAngle = 0.0,
+      ActionEvent event,
+   });
+
+  enum ActionEvent { DOWN, UP, MOVE, CANCEL }
+
+```
+
 You can also check a more complete example [here](/doc/examples/joystick).
 
