@@ -163,3 +163,86 @@ class MyGame extends Game with KeyboardEvents {
 ```
 
 You can also check a more complete example [here](/doc/examples/keyboard).
+
+## Joystick
+
+Minimal example:
+
+```dart
+import 'package:flame/components/joystick/joystick_action.dart';
+import 'package:flame/components/joystick/joystick_component.dart';
+import 'package:flame/components/joystick/joystick_directional.dart';
+import 'package:flame/game.dart';
+import 'package:flame/gestures.dart';
+import 'package:flutter/material.dart';
+
+class MyGame extends BaseGame with MultiTouchDragDetector {
+  final player = Player();
+  final joystick = JoystickComponent(
+    directional: JoystickDirectional(
+      spriteBackgroundDirectional: Sprite('directional_background.png'), // optional
+      spriteKnobDirectional: Sprite('directional_knob.png'), // optional
+      isFixed: true, // optional
+      margin: const EdgeInsets.only(left: 100, bottom: 100), // optional
+      size: 80, // optional
+      color: Colors.blueGrey, // optional
+      opacityBackground: 0.5, // optional
+      opacityKnob: 0.8, // optional
+    ),
+    actions: [
+      JoystickAction(
+        actionId: 1, // required
+        sprite: Sprite('action.png'), // optional
+        spritePressed: Sprite('action_pressed.png'), // optional
+        spriteBackgroundDirection: Sprite('action_direction_background.png'), // optional
+        enableDirection: false, // optional
+        size: 50, // optional
+        sizeFactorBackgroundDirection: 1.5, // optional
+        margin: const EdgeInsets.all(50), // optional
+        color: Colors.blueGrey, // optional
+        align: JoystickActionAlign.BOTTOM_RIGHT, // optional
+        opacityBackground: 0.5, // optional
+        opacityKnob: 0.8, // optional
+      ),
+    ],
+  );
+
+  MyGame() {
+    joystick.addObserver(player);
+    add(player);
+    add(joystick);
+  }
+
+  @override
+  void onReceiveDrag(DragEvent drag) {
+    joystick.onReceiveDrag(drag);
+    super.onReceiveDrag(drag);
+  }
+}
+
+class Player extends Component implements JoystickListener {
+
+  @override
+  void render(Canvas canvas) {}
+
+  @override
+  void update(double dt) {}
+
+  @override
+  void joystickAction(JoystickActionEvent event) {
+    // Do anything when click in action button.
+    print('Action: $event');
+  }
+
+  @override
+  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+    // Do anything when interact with directional.
+    print('Directional: $event');
+  }
+
+}
+
+```
+
+You can also check a more complete example [here](/doc/examples/joystick).
+
