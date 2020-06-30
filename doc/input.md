@@ -179,7 +179,7 @@ import 'package:flutter/material.dart';
 class MyGame extends BaseGame with MultiTouchDragDetector {
   final player = Player();
   final joystick = JoystickComponent(
-    joystickPriority: 0,
+    componentPriority: 0,
     directional: JoystickDirectional(
       spriteBackgroundDirectional: Sprite('directional_background.png'), // optional
       spriteKnobDirectional: Sprite('directional_knob.png'), // optional

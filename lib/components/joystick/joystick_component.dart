@@ -37,12 +37,12 @@ abstract class JoystickController extends Component with HasGameRef<BaseGame> {
 class JoystickComponent extends JoystickController {
   final List<JoystickAction> actions;
   final JoystickDirectional directional;
-  final int joystickPriority;
+  final int componentPriority;
 
   JoystickComponent({
     this.actions,
     this.directional,
-    this.joystickPriority = 0,
+    this.componentPriority = 0,
   });
 
   void addAction(JoystickAction action) {
@@ -83,6 +83,6 @@ class JoystickComponent extends JoystickController {
 
   @override
   int priority() {
-    return joystickPriority;
+    return componentPriority;
   }
 }
