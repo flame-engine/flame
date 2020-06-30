@@ -166,7 +166,13 @@ You can also check a more complete example [here](/doc/examples/keyboard).
 
 ## Joystick
 
-Minimal example:
+Flame provides a component capable of creating a virtual joystick for taking input for your game. It can be configure with a variaty of combinations, like using two sticks, or only one stick and some pressable buttons, and so on.
+
+To use this feature. You need to create a `JoystickComponent`, configure it the way you want, and add it to your game.
+
+To receive the inputs from the joystick component, you need to have a class which implements a `JoystickListener`, and that class needs to be added as an observer of the joystick component previous created. That implementer of the the `JoystickListener` could be any class, but one common practice is for it to be your component that will be controlled by the joystick, like a player component for example.
+
+Check this example to get a better understanding:
 
 ```dart
 import 'package:flame/components/joystick/joystick_action.dart';
