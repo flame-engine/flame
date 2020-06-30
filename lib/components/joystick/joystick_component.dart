@@ -37,8 +37,13 @@ abstract class JoystickController extends Component with HasGameRef<BaseGame> {
 class JoystickComponent extends JoystickController {
   final List<JoystickAction> actions;
   final JoystickDirectional directional;
+  final int joystickPriority;
 
-  JoystickComponent({this.actions, this.directional});
+  JoystickComponent({
+    this.actions,
+    this.directional,
+    this.joystickPriority = 0,
+  });
 
   void addAction(JoystickAction action) {
     if (gameRef?.size != null) {
@@ -74,5 +79,10 @@ class JoystickComponent extends JoystickController {
   void onReceiveDrag(DragEvent event) {
     directional?.onReceiveDrag(event);
     actions?.forEach((action) => action.onReceiveDrag(event));
+  }
+
+  @override
+  int priority() {
+    return joystickPriority;
   }
 }
