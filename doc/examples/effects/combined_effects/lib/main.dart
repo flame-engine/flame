@@ -65,6 +65,7 @@ class MyGame extends BaseGame with TapDetector {
       isInfinite: false,
       isAlternating: true,
       offset: 0.5,
+      onComplete: () => print("onComplete callback"),
     );
     greenSquare.addEffect(combination);
   }
