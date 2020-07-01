@@ -2,6 +2,7 @@
 
 ## [next]
  - Adding MemoryCache class
+ - Fixing games crashes on Web
 
 ## 0.23.0
  - Add Joystick Component

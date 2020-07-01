@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' as material;
 
 import 'position.dart';
 import 'anchor.dart';
+import 'memory_cache.dart';
 
 /// A Text Config contains all typographical information required to render texts; i.e., font size and color, family, etc.
 ///
@@ -52,10 +53,12 @@ class TextConfig {
   /// For proper fonts of languages like Hebrew or Arabic, replace this with [TextDirection.rtl].
   final TextDirection textDirection;
 
+  final MemoryCache _textPainterCache = MemoryCache<String, material.TextPainter>();
+
   /// Creates a constant [TextConfig] with sensible defaults.
   ///
   /// Every parameter can be specified.
-  const TextConfig({
+  TextConfig({
     this.fontSize = 24.0,
     this.color = const Color(0xFF000000),
     this.fontFamily = 'Arial',
@@ -93,22 +96,26 @@ class TextConfig {
   /// However, you probably want to use the [render] method witch already renders for you considering the anchor.
   /// That way, you don't need to perform the math for yourself.
   material.TextPainter toTextPainter(String text) {
-    final material.TextStyle style = material.TextStyle(
-      color: color,
-      fontSize: fontSize,
-      fontFamily: fontFamily,
-    );
-    final material.TextSpan span = material.TextSpan(
-      style: style,
-      text: text,
-    );
-    final material.TextPainter tp = material.TextPainter(
-      text: span,
-      textAlign: textAlign,
-      textDirection: textDirection,
-    );
-    tp.layout();
-    return tp;
+    if (!_textPainterCache.containsKey(text)) {
+      final material.TextStyle style = material.TextStyle(
+          color: color,
+          fontSize: fontSize,
+          fontFamily: fontFamily,
+      );
+      final material.TextSpan span = material.TextSpan(
+          style: style,
+          text: text,
+      );
+      final material.TextPainter tp = material.TextPainter(
+          text: span,
+          textAlign: textAlign,
+          textDirection: textDirection,
+      );
+      tp.layout();
+
+      _textPainterCache.setValue(text, tp);
+    }
+    return _textPainterCache.getValue(text);
   }
 
   /// Creates a new [TextConfig] changing only the [fontSize].
