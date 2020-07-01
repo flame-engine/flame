@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Add Joystick Component
  - Adding BaseGame#markToRemove
  - Upgrade tiled and flutter_svg dependencies
  - onComplete callback for effects
