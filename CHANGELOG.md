@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Adding MemoryCache class
 
 ## 0.23.0
  - Add Joystick Component
