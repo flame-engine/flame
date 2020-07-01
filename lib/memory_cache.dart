@@ -1,8 +1,9 @@
+import 'dart:collection';
+
 /// Simple class to cache values on the cache
 ///
 class MemoryCache<K, V> {
-  final Map<K, V> _cache = {};
-  final List<K> _addedOrder = [];
+  final LinkedHashMap<K, V> _cache = LinkedHashMap();
   final int cacheSize;
 
   MemoryCache({this.cacheSize = 10});
@@ -10,10 +11,9 @@ class MemoryCache<K, V> {
   void setValue(K key, V value) {
     if (!_cache.containsKey(key)) {
       _cache[key] = value;
-      _addedOrder.add(key);
 
-      while (_addedOrder.length > cacheSize) {
-        final k = _addedOrder.removeAt(0);
+      while (_cache.length > cacheSize) {
+        final k = _cache.keys.first;
         _cache.remove(k);
       }
     }
