@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Outsourcing SVG support to an external package
 
 ## 0.23.0
  - Add Joystick Component
