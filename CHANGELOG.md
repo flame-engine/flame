@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [next]
+## 0.23.0
  - Add Joystick Component
  - Adding BaseGame#markToRemove
  - Upgrade tiled and flutter_svg dependencies
