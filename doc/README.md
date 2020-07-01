@@ -18,7 +18,7 @@ Put the pub package as your dependency by dropping the following in your `pubspe
 
 ```yaml
 dependencies:
-  flame: ^0.22.1
+  flame: ^0.23.0
 ```
 
 And start using it!
