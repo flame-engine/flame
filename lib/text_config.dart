@@ -53,7 +53,8 @@ class TextConfig {
   /// For proper fonts of languages like Hebrew or Arabic, replace this with [TextDirection.rtl].
   final TextDirection textDirection;
 
-  final MemoryCache _textPainterCache = MemoryCache<String, material.TextPainter>();
+  final MemoryCache _textPainterCache =
+      MemoryCache<String, material.TextPainter>();
 
   /// Creates a constant [TextConfig] with sensible defaults.
   ///
@@ -98,18 +99,18 @@ class TextConfig {
   material.TextPainter toTextPainter(String text) {
     if (!_textPainterCache.containsKey(text)) {
       final material.TextStyle style = material.TextStyle(
-          color: color,
-          fontSize: fontSize,
-          fontFamily: fontFamily,
+        color: color,
+        fontSize: fontSize,
+        fontFamily: fontFamily,
       );
       final material.TextSpan span = material.TextSpan(
-          style: style,
-          text: text,
+        style: style,
+        text: text,
       );
       final material.TextPainter tp = material.TextPainter(
-          text: span,
-          textAlign: textAlign,
-          textDirection: textDirection,
+        text: span,
+        textAlign: textAlign,
+        textDirection: textDirection,
       );
       tp.layout();
 

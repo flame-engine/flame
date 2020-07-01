@@ -46,7 +46,8 @@ class TextBoxComponent extends PositionComponent with Resizable {
 
   TextBoxConfig get boxConfig => _boxConfig;
 
-  TextBoxComponent(String text, {
+  TextBoxComponent(
+    String text, {
     TextConfig config,
     TextBoxConfig boxConfig,
   }) {

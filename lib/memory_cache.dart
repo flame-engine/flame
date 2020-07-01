@@ -1,12 +1,11 @@
-
 /// Simple class to cache values on the cache
 ///
-class MemoryCache <K, V> {
+class MemoryCache<K, V> {
   final Map<K, V> _cache = {};
   final List<K> _addedOrder = [];
   final int cacheSize;
 
-  MemoryCache({ this.cacheSize = 10 });
+  MemoryCache({this.cacheSize = 10});
 
   void setValue(K key, V value) {
     if (!_cache.containsKey(key)) {
