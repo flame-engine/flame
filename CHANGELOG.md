@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## [next]
+
 ## 0.23.0
  - Add Joystick Component
  - Adding BaseGame#markToRemove
