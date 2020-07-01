@@ -72,7 +72,7 @@ class JoystickDirectional {
         Offset(margin.left, _screenSize.height - margin.bottom);
     _backgroundRect = Rect.fromCircle(center: osBackground, radius: size / 2);
 
-    Offset osKnob =
+    final Offset osKnob =
         Offset(_backgroundRect.center.dx, _backgroundRect.center.dy);
     _knobRect = Rect.fromCircle(center: osKnob, radius: size / 4);
 

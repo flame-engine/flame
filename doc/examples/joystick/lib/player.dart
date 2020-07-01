@@ -12,7 +12,7 @@ class Player extends Component implements JoystickListener {
   final _greenPaint = Paint()..color = const Color(0xFF00FF00);
   final double speed = 159;
   double currentSpeed = 0;
-  double radAngle;
+  double radAngle = 0;
   bool _move = false;
   Paint _paint;
 
