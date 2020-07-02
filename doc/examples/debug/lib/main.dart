@@ -48,7 +48,7 @@ class AndroidComponent extends SpriteComponent with Resizable {
 }
 
 class MyGame extends BaseGame {
-  final fpsTextConfig = const TextConfig(color: const Color(0xFFFFFFFF));
+  final fpsTextConfig = TextConfig(color: const Color(0xFFFFFFFF));
 
   @override
   bool debugMode() => true;
