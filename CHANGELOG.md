@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.24.0
+ - Outsourcing SVG support to an external package
+ - Adding MemoryCache class
+ - Fixing games crashes on Web
+ - Update tiled dependency to 0.6.0 (objects' properties are now double)
+
 ## 0.23.0
  - Add Joystick Component
  - Adding BaseGame#markToRemove
