@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [next]
+## 0.24.0
  - Outsourcing SVG support to an external package
  - Adding MemoryCache class
  - Fixing games crashes on Web
