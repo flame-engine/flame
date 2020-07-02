@@ -2,11 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
-import '../flare_animation.dart';
+import '../flare/flare_actor_component.dart';
 import '../particle.dart';
 
 class FlareParticle extends Particle {
-  final FlareAnimation flare;
+  final FlareActorComponent flare;
 
   FlareParticle({
     @required this.flare,

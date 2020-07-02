@@ -2,14 +2,13 @@ import 'dart:ui';
 
 import 'package:flame/components/component.dart';
 import 'package:flame/components/mixins/resizable.dart';
-import 'package:flame/flare/flare_flame.dart';
+import 'package:flame/flare/flare_actor_component.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/game.dart';
 import 'package:flame/text_config.dart';
 import 'package:flame/position.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flare_flutter/flare_controls.dart';
 
 void main() {
@@ -62,7 +61,6 @@ class MyGame extends BaseGame with TapDetector, DoubleTapDetector {
     minionComponent.minionController.play(_animations[_currentAnimation]);
   }
 
-
   @override
   void render(Canvas canvas) {
     super.render(canvas);
@@ -82,10 +80,9 @@ class MinionComponent extends FlareActorComponent {
       : super(
           'assets/Bob_Minion.flr',
           controller: minionController,
-        ) {
-    width = 306;
-    height = 228;
-  }
+          width: 306,
+          height: 228,
+        );
 
   void playStand() {
     minionController.play("Stand");

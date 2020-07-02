@@ -1,10 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/components/component.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 
 import 'package:flare_flutter/asset_provider.dart';
 import 'package:flare_flutter/flare_actor.dart';
@@ -15,14 +13,25 @@ import 'package:flare_dart/math/aabb.dart';
 import 'package:flare_dart/math/mat2d.dart';
 import 'package:flare_dart/math/vec2d.dart';
 
-class FlareActorPipelineOwner extends PipelineOwner {}
+import 'package:flame/components/component.dart';
+import 'package:flame/flame.dart';
 
+class _FlareActorComponentPipelineOwner extends PipelineOwner {}
+
+/// A [PositionComponent] that renders a flare animation from [filename].
+///
+/// It has a similar API to the [FlareActor] widget.
 class FlareActorComponent extends PositionComponent {
-  final pipelineOwner = FlareActorPipelineOwner(); // todo: review this
+  // Flare only allows the renderbox to be loaded if it is considered "attached", we need this ugly dumb thing here to do that.
+  final _pipelineOwner = _FlareActorComponentPipelineOwner();
 
   FlareActorComponent(
     this.filename, {
+    @required double width,
+    @required double height,
+    this.boundsNode,
     this.animation,
+    this.fit = BoxFit.contain,
     this.alignment = Alignment.center,
     this.isPaused = false,
     this.snapToEnd = false,
@@ -32,34 +41,84 @@ class FlareActorComponent extends PositionComponent {
     this.shouldClip = true,
     this.sizeFromArtboard = false,
     this.artboard,
+  }) : flareProvider = null{
+    this.width = width;
+    this.height = height;
+  }
+
+  FlareActorComponent.asset(
+    this.flareProvider, {
+    @required double width,
+    @required double height,
     this.boundsNode,
+    this.animation,
     this.fit = BoxFit.contain,
-  }) : flareProvider = null;
+    this.alignment = Alignment.center,
+    this.isPaused = false,
+    this.snapToEnd = false,
+    this.controller,
+    this.callback,
+    this.color,
+    this.shouldClip = true,
+    this.sizeFromArtboard = false,
+    this.artboard,
+  }) : filename = null {
+    this.width = width;
+    this.height = height;
+  }
 
   FlareActorRenderObject _renderObject;
 
-  // fields ported from flare actor widget
+  // Fields are ported from flare actor widget
+
+  /// Mirror to [FlareActor.filename]
   final String filename;
-  final AssetProvider flareProvider; //
+
+  /// Mirror to [FlareActor.flareProvider]
+  final AssetProvider flareProvider;
+
+  /// Mirror to [FlareActor.artboard]
   final String artboard;
-  final String animation; //
-  final bool snapToEnd; //
+
+  /// Mirror to [FlareActor.animation]
+  final String animation;
+
+  /// Mirror to [FlareActor.snapToEnd]
+  final bool snapToEnd;
+
+  /// Mirror to [FlareActor.fit]
   final BoxFit fit;
-  final Alignment alignment; //
-  final bool isPaused; //
+
+  /// Mirror to [FlareActor.alignment]
+  final Alignment alignment;
+
+  /// Mirror to [FlareActor.isPaused]
+  final bool isPaused;
+
+  /// Mirror to [FlareActor.shouldClip]
   final bool shouldClip;
+
+  /// Mirror to [FlareActor.controller]
   final FlareController controller;
-  final FlareCompletedCallback callback; //
-  final Color color; //
-  final String boundsNode; //
-  final bool sizeFromArtboard; //
+
+  /// Mirror to [FlareActor.callback]
+  final FlareCompletedCallback callback;
+
+  /// Mirror to [FlareActor.color]
+  final Color color;
+
+  /// Mirror to [FlareActor.boundsNode]
+  final String boundsNode;
+
+  /// Mirror to [FlareActor.sizeFromArtboard]
+  final bool sizeFromArtboard;
 
   @override
   void onMount() {
     super.onMount();
     _renderObject = FlareActorRenderObject()
       ..assetProvider =
-          flareProvider ?? AssetFlare(bundle: rootBundle, name: filename)
+          flareProvider ?? AssetFlare(bundle: Flame.bundle, name: filename)
       ..alignment = alignment
       ..animationName = animation
       ..snapToEnd = snapToEnd
@@ -75,7 +134,7 @@ class FlareActorComponent extends PositionComponent {
   }
 
   void loadRenderBox() {
-    _renderObject.attach(pipelineOwner);
+    _renderObject.attach(_pipelineOwner);
     if (!_renderObject.warmLoad()) {
       _renderObject.coldLoad();
     }
@@ -103,10 +162,10 @@ class FlareActorComponent extends PositionComponent {
     final size = toSize().toSize();
     final offset = toPosition().toOffset();
 
-    double contentWidth = bounds[2] - bounds[0];
-    double contentHeight = bounds[3] - bounds[1];
-    double x = -1 * bounds[0] - contentWidth / 2.0;
-    double y = -1 * bounds[1] - contentHeight / 2.0;
+    final contentWidth = bounds[2] - bounds[0];
+    final contentHeight = bounds[3] - bounds[1];
+    final x = -1 * bounds[0] - contentWidth / 2.0;
+    final y = -1 * bounds[1] - contentHeight / 2.0;
 
     double scaleX = 1.0, scaleY = 1.0;
 
@@ -122,28 +181,28 @@ class FlareActorComponent extends PositionComponent {
         scaleY = size.height / contentHeight;
         break;
       case BoxFit.contain:
-        double minScale =
+        final minScale =
             min(size.width / contentWidth, size.height / contentHeight);
         scaleX = scaleY = minScale;
         break;
       case BoxFit.cover:
-        double maxScale =
+        final maxScale =
             max(size.width / contentWidth, size.height / contentHeight);
         scaleX = scaleY = maxScale;
         break;
       case BoxFit.fitHeight:
-        double minScale = size.height / contentHeight;
+        final minScale = size.height / contentHeight;
         scaleX = scaleY = minScale;
         break;
       case BoxFit.fitWidth:
-        double minScale = size.width / contentWidth;
+        final minScale = size.width / contentWidth;
         scaleX = scaleY = minScale;
         break;
       case BoxFit.none:
         scaleX = scaleY = 1.0;
         break;
       case BoxFit.scaleDown:
-        double minScale =
+        final minScale =
             min(size.width / contentWidth, size.height / contentHeight);
         scaleX = scaleY = minScale < 1.0 ? minScale : 1.0;
         break;
@@ -171,3 +230,4 @@ class FlareActorComponent extends PositionComponent {
     super.onDestroy();
   }
 }
+

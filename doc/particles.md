@@ -305,14 +305,13 @@ class RectComponent extends Component {
 ```
 
 ## Flare Particle
-A container for `FlareAnimation`, it propagates `update` and `render` hooks to its child.
+A container for `FlareActorComponent`, it propagates `update` and `render` hooks to its child.
 
 ```dart
 // During game initialisation
 const flareSize = 32.0;
-final flareAnimation = await FlareAnimation.load('assets/sparkle.flr');
-flareAnimation.updateAnimation('Shine');
-flareAnimation.width = flareSize;
+final flareAnimation = FlareActorComponent('assets/sparkle.flr');
+flareAnimation.width = flareSize; 
 flareAnimation.height = flareSize;
 
 // Somewhere in game
