@@ -16,8 +16,7 @@ void main() {
 }
 
 class MyGame extends BaseGame with TapDetector {
-  final TextConfig fpsTextConfig =
-      const TextConfig(color: const Color(0xFFFFFFFF));
+  final TextConfig fpsTextConfig = TextConfig(color: const Color(0xFFFFFFFF));
 
   final paint = Paint()..color = const Color(0xFFE5E5E5E5);
   final List<String> _animations = ["Stand", "Wave", "Jump", "Dance"];

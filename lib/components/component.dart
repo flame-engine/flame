@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
-import '../svg.dart';
 import '../sprite.dart';
 import '../position.dart';
 import '../anchor.dart';
@@ -203,25 +202,5 @@ class SpriteComponent extends PositionComponent {
   @override
   bool loaded() {
     return sprite != null && sprite.loaded() && x != null && y != null;
-  }
-}
-
-class SvgComponent extends PositionComponent {
-  Svg svg;
-
-  SvgComponent.fromSvg(double width, double height, this.svg) {
-    this.width = width;
-    this.height = height;
-  }
-
-  @override
-  void render(Canvas canvas) {
-    prepareCanvas(canvas);
-    svg.render(canvas, width, height);
-  }
-
-  @override
-  bool loaded() {
-    return svg != null && svg.loaded() && x != null && y != null;
   }
 }
