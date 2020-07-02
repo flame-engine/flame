@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Update flare integration API
 
 ## 0.23.0
  - Add Joystick Component
