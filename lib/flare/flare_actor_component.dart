@@ -41,7 +41,7 @@ class FlareActorComponent extends PositionComponent {
     this.shouldClip = true,
     this.sizeFromArtboard = false,
     this.artboard,
-  }) : flareProvider = null{
+  }) : flareProvider = null {
     this.width = width;
     this.height = height;
   }
@@ -230,4 +230,3 @@ class FlareActorComponent extends PositionComponent {
     super.onDestroy();
   }
 }
-
