@@ -15,7 +15,7 @@ class TextBoxConfig {
   final double timePerChar;
   final double dismissDelay;
 
-  const TextBoxConfig({
+  TextBoxConfig({
     this.maxWidth = 200.0,
     this.margin = 8.0,
     this.timePerChar = 0.0,
@@ -46,11 +46,13 @@ class TextBoxComponent extends PositionComponent with Resizable {
 
   TextBoxConfig get boxConfig => _boxConfig;
 
-  TextBoxComponent(String text,
-      {TextConfig config = const TextConfig(),
-      TextBoxConfig boxConfig = const TextBoxConfig()}) {
-    _boxConfig = boxConfig;
-    _config = config;
+  TextBoxComponent(
+    String text, {
+    TextConfig config,
+    TextBoxConfig boxConfig,
+  }) {
+    _boxConfig = boxConfig ?? TextBoxConfig();
+    _config = config ?? TextConfig();
     _text = text;
     _lines = [];
     text.split(' ').forEach((word) {

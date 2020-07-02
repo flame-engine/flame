@@ -1,7 +1,9 @@
 # CHANGELOG
 
 ## [next]
-- Update tiled dependency to 0.6.0 (objects' properties are now double)
+ - Adding MemoryCache class
+ - Fixing games crashes on Web
+ - Update tiled dependency to 0.6.0 (objects' properties are now double)
 
 ## 0.23.0
  - Add Joystick Component
