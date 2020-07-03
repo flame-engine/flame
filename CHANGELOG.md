@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Updated the TiledComponent to use the SpriteBatch API for efficient drawing to canvas.
 
 ## 0.24.0
  - Outsourcing SVG support to an external package
