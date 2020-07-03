@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flame/components/component.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/sprite_batch.dart';
 import 'package:flutter/material.dart' show Colors;
 import 'package:tiled/tiled.dart' hide Image;
 
@@ -73,23 +74,27 @@ class TiledComponent extends Component {
   String filename;
   TileMap map;
   Image image;
-  Map<String, Image> images = <String, Image>{};
+  Map<String, SpriteBatch> batches = <String, SpriteBatch>{};
   Future future;
   bool _loaded = false;
-  double destTileSize;
+  Size destTileSize;
 
   static Paint paint = Paint()..color = Colors.white;
 
   /// Creates this TiledComponent with the filename (for the tmx file resource)
   /// and destTileSize is the tile size to be rendered (not the tile size in the texture, that one is configured inside Tiled).
-  TiledComponent(this.filename, this.destTileSize) {
+  TiledComponent(
+    this.filename, {
+    this.destTileSize,
+  }) {
     future = _load();
   }
 
   Future _load() async {
     map = await _loadMap();
     image = await Flame.images.load(map.tilesets[0].image.source);
-    images = await _loadImages(map);
+    batches = await _loadImages(map);
+    _drawTiles(map);
     _loaded = true;
   }
 
@@ -100,14 +105,52 @@ class TiledComponent extends Component {
     });
   }
 
-  Future<Map<String, Image>> _loadImages(TileMap map) async {
-    final Map<String, Image> result = {};
+  Future<Map<String, SpriteBatch>> _loadImages(TileMap map) async {
+    final Map<String, SpriteBatch> result = {};
     await Future.forEach(map.tilesets, (tileset) async {
       await Future.forEach(tileset.images, (tmxImage) async {
-        result[tmxImage.source] = await Flame.images.load(tmxImage.source);
+        result[tmxImage.source] = await SpriteBatch.withAsset(tmxImage.source);
       });
     });
     return result;
+  }
+
+  void _drawTiles(TileMap map) async {
+    map.layers.where((layer) => layer.visible).forEach((layer) {
+      layer.tiles.forEach((tileRow) {
+        tileRow.forEach((tile) {
+          if (tile.gid == 0) {
+            return;
+          }
+
+          final batch = batches[tile.image.source];
+
+          final rect = tile.computeDrawRect();
+
+          final src = Rect.fromLTWH(
+            rect.left.toDouble(),
+            rect.top.toDouble(),
+            rect.width.toDouble(),
+            rect.height.toDouble(),
+          );
+
+          final flips = _SimpleFlips.fromFlips(tile.flips);
+          final tileSize = destTileSize ?? Size(tile.width.toDouble(), tile.height.toDouble());
+
+          batch.add(
+            rect: src,
+            offset: Offset(
+              tile.x.toDouble() * tileSize.width +
+                  (tile.flips.horizontally ? tileSize.width : 0),
+              tile.y.toDouble() * tileSize.height +
+                  (tile.flips.vertically ? tileSize.height : 0),
+            ),
+            rotation: flips.angle * math.pi / 2,
+            scale: tileSize.width / tile.width,
+          );
+        });
+      });
+    });
   }
 
   @override
@@ -119,46 +162,8 @@ class TiledComponent extends Component {
       return;
     }
 
-    map.layers.forEach((layer) {
-      if (layer.visible) {
-        _renderLayer(c, layer);
-      }
-    });
-  }
-
-  void _renderLayer(Canvas c, Layer layer) {
-    layer.tiles.forEach((tileRow) {
-      tileRow.forEach((tile) {
-        if (tile.gid == 0) {
-          return;
-        }
-
-        final image = images[tile.image.source];
-
-        final rect = tile.computeDrawRect();
-        final src = Rect.fromLTWH(
-          rect.left.toDouble(),
-          rect.top.toDouble(),
-          rect.width.toDouble(),
-          rect.height.toDouble(),
-        );
-        final dst = Rect.fromLTWH(
-          tile.x * destTileSize,
-          tile.y * destTileSize,
-          destTileSize,
-          destTileSize,
-        );
-
-        final flips = _SimpleFlips.fromFlips(tile.flips);
-        c.save();
-        c.translate(dst.center.dx, dst.center.dy);
-        c.rotate(flips.angle * math.pi / 2);
-        c.scale(flips.flipV ? -1.0 : 1.0, flips.flipH ? -1.0 : 1.0);
-        c.translate(-dst.center.dx, -dst.center.dy);
-
-        c.drawImageRect(image, src, dst, paint);
-        c.restore();
-      });
+    batches.forEach((_, batch) {
+      batch.render(c);
     });
   }
 

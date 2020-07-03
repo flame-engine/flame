@@ -15,7 +15,10 @@ void main() {
 
 class TiledGame extends BaseGame {
   TiledGame() {
-    final TiledComponent tiledMap = TiledComponent('map.tmx', 16.0);
+    final TiledComponent tiledMap = TiledComponent(
+      'map.tmx',
+      destTileSize: const Size(16.0, 16.0),
+    );
     add(tiledMap);
     _addCoinsInMap(tiledMap);
   }
