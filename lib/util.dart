@@ -89,7 +89,7 @@ class Util {
 
   /// Waits for the initial screen dimensions to be available.
   ///
-  /// Because of flutter's issue #5259, when the app starts the size might be 0x0.
+  /// Because of flutter's issue [#5259](https://github.com/flutter/flutter/issues/5259), when the app starts the size might be 0x0.
   /// This waits for the information to be properly updated.
   ///
   /// A best practice would be to implement there resize hooks on your game and components and don't use this at all.
