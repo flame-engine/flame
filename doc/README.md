@@ -34,6 +34,7 @@ Check out the [awesome flame repository](https://github.com/flame-engine/awesome
    - [Game Loop](game.md)
    - [Components](components.md)
    - [Input](input.md)
+   - [Platforms](platforms.md)
  * Audio
    - [General Audio](audio.md)
    - [Looping Background Music](bgm.md)
