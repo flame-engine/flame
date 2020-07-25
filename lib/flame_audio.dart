@@ -34,7 +34,8 @@ class FlameAudio {
   }
 
   void _warnWebFecthing() {
-    print('Prefetching audio is not supported by Audiplayers on web yet, to prefetch audio on web, try using the http package to get the file and the browser will handle cache');
+    print(
+        'Prefetching audio is not supported by Audiplayers on web yet, to prefetch audio on web, try using the http package to get the file and the browser will handle cache');
   }
 
   /// Prefetch an audio in the cache
