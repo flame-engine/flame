@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Externalizing Tiled support to an external package
  - Preventing some crashed that could happen on web when some methods were called
 
 ## 0.24.0
