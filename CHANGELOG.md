@@ -1,7 +1,7 @@
 # CHANGELOG
 
-## [next]
- - Add component that renders a sprite on a BodyComponent
+## 1.0.0
+ - Move all box2d related code and examples to the flame_box2d repo
 
 ## 0.22.1
  - Fix Box2DComponent render priority
