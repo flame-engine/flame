@@ -4,9 +4,9 @@ Although Flame does not implements Box2d itself, it bundles a forked port of the
 
 The source of the bundled box2d on Flame can be found [here](https://github.com/flame-engine/box2d.dart).
 
-There is a simple example game [here](https://github.com/feroult/haunt) that can be used as reference of how to use box2d on Flame, although it is a little bit outdated and doesn't use `Box2DGame`.
+To use Box2D in your game you should add flame_box2d to your pubspec.yaml, which can be seen in the examples.
 
-There are some updated examples of how to use it [here](/doc/examples/box2d), but they are not full game implementations.
+The examples of how to use it can be found [here](https://github.com/flame-engine/flame_box2d/blob/master/examples/), but they are not full game implementations.
 
 ## Box2DGame (BaseGame extension)
 
@@ -14,7 +14,7 @@ If you are going to use Box2D in your project it can be a good idea to use the B
 
 It is called `Box2DGame` and it will control the adding and removal of Box2D's BodyComponents as well as your normal components.
 
-A simple `Box2DGame` implementation example can be seen in the [examples folder](/doc/examples/box2d/simple).
+Simple `Box2DGame` implementation examples can be seen in the [examples folder](https://github.com/flame-engine/flame_box2d/blob/master/examples/).
 
 ## SpriteBodyComponent
 
@@ -65,4 +65,4 @@ If you want an object to interact with all other bodies, put `BodyComponent` as 
 
 `class BallAnythingCallback implements ContactCallback<Ball, BodyComponent> ...`
 
-An implementation example can be seen in the [examples folder](/doc/examples/box2d/contact_callbacks).
+An implementation example can be seen in the [examples folder](https://github.com/flame-engine/flame_box2d/blob/master/examples/contact_callbacks).
