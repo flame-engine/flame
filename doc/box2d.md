@@ -18,7 +18,7 @@ A simple `Box2DGame` implementation example can be seen in the [examples folder]
 
 ## SpriteBodyComponent
 
-See [SpriteBodyComponent](/doc/components.md#) under Components.
+Often you want to render a sprite on top of the BodyComponent that you are going to use in your Box2DGame. This component will handle the scaling and positioning of your sprite on top of the body.
 
 ## Contact callbacks
 

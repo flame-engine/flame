@@ -195,6 +195,7 @@ More information about Box2D can be found [here](/doc/box2d.md) and a few simple
 
 ## SpriteBodyComponent
 
+See [SpriteBodyComponent](/doc/box2d.md#spritebodycomponent) in the box2d documentation.
 Often you want to render a sprite on top of the BodyComponent that you are going to use in [Box2DGame](/doc/box2d.md), then this component will handle the scaling and positioning of your sprite on top of the body.
 
 ## Tiled Component
