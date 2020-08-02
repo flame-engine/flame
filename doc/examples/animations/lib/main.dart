@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Flame.images.loadAll(['creture.png', 'chopper.png']);
+  await Flame.images.loadAll(['creature.png', 'chopper.png']);
 
   final Size size = await Flame.util.initialDimensions();
   final game = MyGame(size);
@@ -37,7 +37,7 @@ class MyGame extends BaseGame with TapDetector {
       textureWidth: textureWidth,
       textureHeight: textureHeight,
       stepTime: 0.15,
-      loop: true,
+      loop: false,
       destroyOnFinish: true,
     );
     animationComponent.x = x - textureWidth / 2;
