@@ -18,7 +18,9 @@ class MyGame extends BaseGame {
 
   void _start() async {
     final animation = await flame_animation.Animation.fromAsepriteData(
-        'chopper.png', 'chopper.json');
+      'chopper.png',
+      'chopper.json',
+    );
     final animationComponent = AnimationComponent(200, 200, animation);
 
     animationComponent.x = (size.width / 2) - 100;
