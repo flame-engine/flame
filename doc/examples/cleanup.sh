@@ -6,3 +6,4 @@ rm -rf */ios
 rm -rf */web
 rm -rf */macos
 rm -rf */test
+rm -rf */.dart_tool
