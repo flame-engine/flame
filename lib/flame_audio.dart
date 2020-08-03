@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/audio_cache.dart';
 
@@ -31,13 +33,27 @@ class FlameAudio {
     return audioCache.loop(file, volume: volume);
   }
 
+  void _warnWebFecthing() {
+    print(
+      'Prefetching audio is not supported by Audiplayers on web yet, to prefetch audio on web, try using the http package to get the file and the browser will handle cache',
+    );
+  }
+
   /// Prefetch an audio in the cache
   Future<File> load(String file) {
+    if (kIsWeb) {
+      _warnWebFecthing();
+      return null;
+    }
     return audioCache.load(file);
   }
 
   /// Prefetch a list of audios in the cache
   Future<List<File>> loadAll(List<String> files) {
+    if (kIsWeb) {
+      _warnWebFecthing();
+      return null;
+    }
     return audioCache.loadAll(files);
   }
 
