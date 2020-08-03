@@ -1,7 +1,8 @@
 import 'dart:ui';
 
-import 'package:flame/components/component.dart';
-import 'package:flame/nine_tile_box.dart';
+import 'component.dart';
+import 'position_component.dart';
+import '../nine_tile_box.dart';
 
 /// This class is a thin wrapper on top of [NineTileBox] as a component.
 class NineTileBoxComponent extends PositionComponent {

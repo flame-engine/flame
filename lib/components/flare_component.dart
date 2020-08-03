@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'component.dart';
-import 'package:flame/flare_animation.dart';
+import '../flare_animation.dart';
+import 'position_component.dart';
 
 class FlareComponent extends PositionComponent {
   FlareAnimation _flareAnimation;
