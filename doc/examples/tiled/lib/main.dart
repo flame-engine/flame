@@ -22,7 +22,7 @@ class TiledGame extends BaseGame {
 
   void _addCoinsInMap(TiledComponent tiledMap) async {
     final ObjectGroup objGroup =
-        await tiledMap.getObjectGroupFromLayer("AnimatedCoins");
+        await tiledMap.getObjectGroupFromLayer('AnimatedCoins');
     if (objGroup == null) {
       return;
     }

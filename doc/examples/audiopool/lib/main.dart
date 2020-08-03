@@ -21,16 +21,17 @@ TextConfig regular = TextConfig(color: BasicPalette.white.color);
 AudioPool pool = AudioPool('laser.mp3');
 
 class MyGame extends BaseGame with TapDetector {
+  static final black = BasicPalette.black.paint;
+
   MyGame(Size screenSize) {
     size = screenSize;
   }
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height),
-        BasicPalette.black.paint);
-    regular.render(canvas, 'hit me!', Position.fromSize(size).div(2),
-        anchor: Anchor.center);
+    canvas.drawRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height), black);
+    final p = Position.fromSize(size).div(2);
+    regular.render(canvas, 'hit me!', p, anchor: Anchor.center);
     super.render(canvas);
   }
 
