@@ -94,7 +94,7 @@ class TiledComponent extends Component {
     map = await _loadMap();
     image = await Flame.images.load(map.tilesets[0].image.source);
     batches = await _loadImages(map);
-    _drawTiles(map);
+    generate();
     _loaded = true;
   }
 
@@ -115,7 +115,15 @@ class TiledComponent extends Component {
     return result;
   }
 
-  void _drawTiles(TileMap map) async {
+  /// Generate the sprite batches from the existing tilemap.
+  void generate() {
+    for (var batch in batches.keys) {
+      batches[batch].clear;
+    }
+    _drawTiles(map);
+  }
+
+  void _drawTiles(TileMap map) {
     map.layers.where((layer) => layer.visible).forEach((layer) {
       layer.tiles.forEach((tileRow) {
         tileRow.forEach((tile) {
