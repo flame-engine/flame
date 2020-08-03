@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
-class MyGame extends BaseGame {
+class MyGame extends Game {
   static final Paint paint = Paint()..color = const Color(0xFFFFFFFF);
 
   var movingLeft = false;
@@ -24,19 +24,19 @@ class MyGame extends BaseGame {
 
       final keyLabel = e.data.logicalKey.keyLabel;
 
-      if (keyLabel == "a") {
+      if (keyLabel == 'a') {
         movingLeft = isKeyDown;
       }
 
-      if (keyLabel == "d") {
+      if (keyLabel == 'd') {
         movingRight = isKeyDown;
       }
 
-      if (keyLabel == "w") {
+      if (keyLabel == 'w') {
         movingUp = isKeyDown;
       }
 
-      if (keyLabel == "s") {
+      if (keyLabel == 's') {
         movingDown = isKeyDown;
       }
     });
