@@ -1,4 +1,4 @@
-import 'package:flame/components/component.dart';
+import 'package:flame/components/position_component.dart';
 
 import 'dart:ui';
 
