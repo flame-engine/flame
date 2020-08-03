@@ -1,8 +1,7 @@
 import 'dart:ui';
 
-import 'component.dart';
-import 'position_component.dart';
 import '../nine_tile_box.dart';
+import 'position_component.dart';
 
 /// This class is a thin wrapper on top of [NineTileBox] as a component.
 class NineTileBoxComponent extends PositionComponent {
