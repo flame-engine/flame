@@ -10,7 +10,7 @@ import 'sprite_animation.dart';
 import 'game/base_game.dart';
 import 'game/embedded_game_widget.dart';
 import 'sprite.dart';
-import 'components/animation_component.dart';
+import 'components/sprite_animation_component.dart';
 import 'position.dart';
 
 /// Some utilities that did not fit anywhere else.
