@@ -1,4 +1,3 @@
-import 'package:flame/sprite_animation.dart';
 import 'package:flame/widgets/animation_widget.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
@@ -25,19 +24,19 @@ class SpriteWidget extends StatelessWidget {
   @override
   Widget build(_) {
     return Container(
-      child: CustomPaint(painter: _SpritePainer(sprite, anchor)),
+      child: CustomPaint(painter: _SpritePainter(sprite, anchor)),
     );
   }
 }
 
-class _SpritePainer extends CustomPainter {
+class _SpritePainter extends CustomPainter {
   final Sprite _sprite;
   final Anchor _anchor;
 
-  _SpritePainer(this._sprite, this._anchor);
+  _SpritePainter(this._sprite, this._anchor);
 
   @override
-  bool shouldRepaint(_SpritePainer old) {
+  bool shouldRepaint(_SpritePainter old) {
     return old._sprite != _sprite || old._anchor != _anchor;
   }
 

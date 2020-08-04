@@ -3,7 +3,6 @@ import 'dart:ui';
 import '../sprite_animation.dart';
 import 'position_component.dart';
 
-
 class SpriteAnimationComponent extends PositionComponent {
   SpriteAnimation animation;
   Paint overridePaint;

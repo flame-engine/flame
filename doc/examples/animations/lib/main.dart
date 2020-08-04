@@ -25,7 +25,6 @@ class MyGame extends BaseGame with TapDetector {
     loop: true,
   );
 
-
   void addAnimation(double x, double y) {
     const textureWidth = 291.0;
     const textureHeight = 178.0;
@@ -62,12 +61,15 @@ class MyGame extends BaseGame with TapDetector {
     animationComponent.x = size.width / 2 - s;
     animationComponent.y = s;
 
-    final reversedAnimationComponent =
-    SpriteAnimationComponent(s, s, animation.reversed());
+    final reversedAnimationComponent = SpriteAnimationComponent(
+      s,
+      s,
+      animation.reversed(),
+    );
     reversedAnimationComponent.x = size.width / 2;
     reversedAnimationComponent.y = s;
 
     add(animationComponent);
     add(reversedAnimationComponent);
-    }
+  }
 }

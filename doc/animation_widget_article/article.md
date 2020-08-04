@@ -1,8 +1,8 @@
 # Sprite Sheet Animations in Flutter
 
-### UPDATE 05/27/2020
+### UPDATE 09/04/2020
 
-As for Flame 0.22.0 there is a new way to use Animations and Sprites inside your widget tree.
+As for Flame 1.0, the `animationAsWidget` has been removed in favor of a direct usage of `SpriteAnimationWidget`.
 
 Flame now includes a widget catalog and inside it you will find `SpriteAnimationWidget` and `SpriteWidget`.
 
@@ -10,7 +10,7 @@ Check the example mentioned on this article to see the updated version.
 
 ## Introduction
 
-Flutter provides lots of cool and slick animations out of the box, most related to movement and tweens (continuous changes in size, position, color, et cetera). However, one particular thing that it's really hard to do using only the native APIs is a simple sprite sheet animation. Or any sprite sheet handling, for that matter.
+Flutter provides lots of cool and slick animations out of the box, most related to movement and tweens (continuous changes in size, position, color, etc). However, one particular thing that it's really hard to do using only the native APIs is a simple sprite sheet animation. Or any sprite sheet handling, for that matter.
 
 A sprite sheet is a single image that has multiple images (sprites) inside, each one being accessed via it's defining rectangle (x, y, width, and height). Maybe every sprite inside has the same size, like a tileset; for example:
 
@@ -121,7 +121,7 @@ Let's you have your `build` method in one of your pages; pretty normal Flutter s
 Note that it could be any component, however complex, inside your widgets tree. Note also that I have omitted the "magic" of the equation here. How is it that we create a component for an animation? Very basically (more details in the flame tutorial), Flame provides components, one of which is the `SpriteAnimationComponent` that receives a `SpriteAnimation` object describing the animation and does exactly what we want. All components live inside a `Game` instance, that can add custom logic relating to the game loop. For our case, we just want to create a simple, empty game and add a single `AnimationComponent` with a simple `Animation` inside. So Flame provides a helper to do that, the `Flame.util.animationAsWidget` method. It takes the size of the object as a Flame's `Position` instance (a generic class to represent a pair of doubles), and also takes in an `Animation` instance representing our frame list. To use that, let's import both `Flame` and the `Animation` class. However, since Flutter adds it's own animation classes, let's use an alias in order to not mess up the names. Therefore, add these imports to the top of the file:
 
 ```dart
-import 'sprite_animation.dart'; // imports the SpriteAnimation class
+import 'package:flame/sprite_animation.dart'; // imports the SpriteAnimation class
 import 'package:flame/flame.dart'; // imports the Flame helper class
 import 'package:flame/position.dart'; // imports the Position class
 ```

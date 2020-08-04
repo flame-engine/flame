@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Animation;
+import 'package:flutter/material.dart';
 import 'package:flame/sprite_animation.dart';
 
 import 'dart:math';
