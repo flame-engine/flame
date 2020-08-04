@@ -1,14 +1,15 @@
 import 'dart:ui';
 
-import '../animation.dart';
+import '../sprite_animation.dart';
 import 'position_component.dart';
 
-class AnimationComponent extends PositionComponent {
-  Animation animation;
+
+class SpriteAnimationComponent extends PositionComponent {
+  SpriteAnimation animation;
   Paint overridePaint;
   bool destroyOnFinish = false;
 
-  AnimationComponent(
+  SpriteAnimationComponent(
     double width,
     double height,
     this.animation, {
@@ -18,9 +19,9 @@ class AnimationComponent extends PositionComponent {
     this.height = height;
   }
 
-  AnimationComponent.empty();
+  SpriteAnimationComponent.empty();
 
-  AnimationComponent.sequenced(
+  SpriteAnimationComponent.sequenced(
     double width,
     double height,
     String imagePath,
@@ -36,7 +37,7 @@ class AnimationComponent extends PositionComponent {
   }) {
     this.width = width;
     this.height = height;
-    animation = Animation.sequenced(
+    animation = SpriteAnimation.sequenced(
       imagePath,
       amount,
       amountPerRow: amountPerRow,

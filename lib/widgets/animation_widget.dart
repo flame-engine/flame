@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart' hide Animation;
-import 'package:flame/animation.dart';
+import 'package:flame/sprite_animation.dart';
 
 import 'dart:math';
 
 import '../anchor.dart';
 import './sprite_widget.dart';
 
-class AnimationWidget extends StatefulWidget {
-  final Animation animation;
+/// A [StatefulWidget] that render a [SpriteAnimation].
+class SpriteAnimationWidget extends StatefulWidget {
+  /// The [SpriteAnimation] to be rendered
+  final SpriteAnimation animation;
+
+  /// The positioning [Anchor]
   final Anchor anchor;
+
+  /// Should the [animation] be playing or not
   final bool playing;
 
-  AnimationWidget({
+  SpriteAnimationWidget({
     this.animation,
     this.playing = true,
     this.anchor = Anchor.topLeft,
@@ -21,7 +27,7 @@ class AnimationWidget extends StatefulWidget {
   State createState() => _AnimationWidget();
 }
 
-class _AnimationWidget extends State<AnimationWidget>
+class _AnimationWidget extends State<SpriteAnimationWidget>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
   double _lastUpdated;
@@ -52,7 +58,7 @@ class _AnimationWidget extends State<AnimationWidget>
         });
       });
 
-    widget.animation.onCompleteAnimation = _pauseAnimation;
+    widget.animation.onComplete = _pauseAnimation;
 
     if (widget.playing) {
       _initAnimation();

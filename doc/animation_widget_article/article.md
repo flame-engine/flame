@@ -4,7 +4,7 @@
 
 As for Flame 0.22.0 there is a new way to use Animations and Sprites inside your widget tree.
 
-Flame now includes a widget catalog and inside it you will find `AnimationWidget` and `SpriteWidget`.
+Flame now includes a widget catalog and inside it you will find `SpriteAnimationWidget` and `SpriteWidget`.
 
 Check the example mentioned on this article to see the updated version.
 
@@ -118,10 +118,10 @@ Let's you have your `build` method in one of your pages; pretty normal Flutter s
   }
 ```
 
-Note that it could be any component, however complex, inside your widgets tree. Note also that I have omitted the "magic" of the equation here. How is it that we create a component for an animation? Very basically (more details in the flame tutorial), Flame provides components, one of which is the `AnimationComponent` that receives an `Animation` object describing the animation and does exactly what we want. All components live inside a `Game` instance, that can add custom logic relating to the game loop. For our case, we just want to create a simple, empty game and add a single `AnimationComponent` with a simple `Animation` inside. So Flame provides a helper to do that, the `Flame.util.animationAsWidget` method. It takes the size of the object as a Flame's `Position` instance (a generic class to represent a pair of doubles), and also takes in an `Animation` instance representing our frame list. To use that, let's import both `Flame` and the `Animation` class. However, since Flutter adds it's own animation classes, let's use an alias in order to not mess up the names. Therefore, add these imports to the top of the file:
+Note that it could be any component, however complex, inside your widgets tree. Note also that I have omitted the "magic" of the equation here. How is it that we create a component for an animation? Very basically (more details in the flame tutorial), Flame provides components, one of which is the `SpriteAnimationComponent` that receives a `SpriteAnimation` object describing the animation and does exactly what we want. All components live inside a `Game` instance, that can add custom logic relating to the game loop. For our case, we just want to create a simple, empty game and add a single `AnimationComponent` with a simple `Animation` inside. So Flame provides a helper to do that, the `Flame.util.animationAsWidget` method. It takes the size of the object as a Flame's `Position` instance (a generic class to represent a pair of doubles), and also takes in an `Animation` instance representing our frame list. To use that, let's import both `Flame` and the `Animation` class. However, since Flutter adds it's own animation classes, let's use an alias in order to not mess up the names. Therefore, add these imports to the top of the file:
 
 ```dart
-import 'package:flame/animation.dart' as animation; // imports the Animation class under animation.Animation
+import 'sprite_animation.dart'; // imports the SpriteAnimation class
 import 'package:flame/flame.dart'; // imports the Flame helper class
 import 'package:flame/position.dart'; // imports the Position class
 ```
@@ -129,7 +129,7 @@ import 'package:flame/position.dart'; // imports the Position class
 How we do the magic then? Just add the following to your widget tree:
 
 ```dart
-    Flame.util.animationAsWidget(Position(WIDTH, HEIGHT), animation.Animation.sequenced('minotaur.png', AMOUNT, textureWidth: FRAME_WIDTH))
+    Flame.util.animationAsWidget(Position(WIDTH, HEIGHT), SpriteAnimation.sequenced('minotaur.png', AMOUNT, textureWidth: FRAME_WIDTH))
 ```
 
 The first parameter's `WIDTH` and `HEIGHT` are the actual size of the widget on the screen. This does not need to match the sprite size, as Flame will scale it for you. You might, however, wanna keep the aspect, so things don't get distorted. In your case, the minotaur asset is a row of 96x96 pixels, so squares, therefore we can scale keeping `WIDTH/HEIGHT = 1`. We will choose the size as 256 px. The `sequenced` constructor is a helper that easily creates the animation assuming equal-sized frames in a row, in order. You can configure the start x, start y, texture width and height, but those will default gracefully to (0,0) and the actual width and height of the file. You can create your animation passing in the frame list, each frame with a different step time and sprite (source rectangle).

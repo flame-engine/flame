@@ -129,7 +129,7 @@ void main() async {
         (ctx) => Container(
           width: ctx.numberProperty('container width', 400),
           height: ctx.numberProperty('container height', 200),
-          child: AnimationWidget(
+          child: SpriteAnimationWidget(
             animation: _animation,
             playing: ctx.boolProperty('playing', true),
             anchor: parseAnchor(

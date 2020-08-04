@@ -1,3 +1,5 @@
+import 'package:flame/sprite_animation.dart';
+import 'package:flame/widgets/animation_widget.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 import 'dart:math';
@@ -5,8 +7,14 @@ import 'dart:math';
 import '../sprite.dart';
 import '../anchor.dart';
 
+/// A [StatefulWidget] that renders a still [Sprite].
+///
+/// To render an animation, use [SpriteAnimationWidget].
 class SpriteWidget extends StatelessWidget {
+  /// The [Sprite] to be rendered
   final Sprite sprite;
+
+  /// The positioning [Anchor] for the [sprite]
   final Anchor anchor;
 
   SpriteWidget({

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/animation.dart';
+import 'package:flame/sprite_animation.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/flare_animation.dart';
 import 'package:flame/particles/circle_particle.dart';
@@ -392,10 +392,10 @@ class MyGame extends BaseGame {
     );
   }
 
-  /// An [AnimationParticle] takes a Flame [Animation]
+  /// An [SpriteAnimationParticle] takes a Flame [SpriteAnimation]
   /// and plays it during the particle lifespan.
   Particle animationParticle() {
-    return AnimationParticle(
+    return SpriteAnimationParticle(
       animation: getBoomAnimation(),
       size: Position(128, 128),
     );
@@ -550,8 +550,8 @@ class MyGame extends BaseGame {
     return list[rnd.nextInt(list.length)];
   }
 
-  /// Sample "explosion" animation for [AnimationParticle] example
-  Animation getBoomAnimation() {
+  /// Sample "explosion" animation for [SpriteAnimationParticle] example
+  SpriteAnimation getBoomAnimation() {
     const columns = 8;
     const rows = 8;
     const frames = columns * rows;
@@ -569,7 +569,7 @@ class MyGame extends BaseGame {
       (i) => spritesheet.getSprite(i ~/ rows, i % columns),
     );
 
-    return Animation.spriteList(sprites);
+    return SpriteAnimation.spriteList(sprites);
   }
 }
 

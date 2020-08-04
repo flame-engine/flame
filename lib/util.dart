@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart' as widgets;
 
-import 'animation.dart';
+import 'sprite_animation.dart';
 import 'game/base_game.dart';
 import 'game/embedded_game_widget.dart';
 import 'sprite.dart';
@@ -162,14 +162,14 @@ class Util {
 
   /// Returns a regular Flutter widget representing this animation, rendered with the specified size.
   ///
-  /// This actually creates an [EmbeddedGameWidget] with a [SimpleGame] whose only content is an [AnimationComponent] created from the provided [animation].
+  /// This actually creates an [EmbeddedGameWidget] with a [SimpleGame] whose only content is an [SpriteAnimationComponent] created from the provided [animation].
   /// You can use this implementation as base to easily create your own widgets based on more complex games.
   /// This is intended to be used by non-game apps that want to add a sprite sheet animation.
   ///
-  @Deprecated('Use SpriteAnimation instead')
-  widgets.Widget animationAsWidget(Position size, Animation animation) {
+  @Deprecated('Use SpriteAnimationWidget instead')
+  widgets.Widget animationAsWidget(Position size, SpriteAnimation animation) {
     return EmbeddedGameWidget(
-      BaseGame()..add(AnimationComponent(size.x, size.y, animation)),
+      BaseGame()..add(SpriteAnimationComponent(size.x, size.y, animation)),
       size: size,
     );
   }

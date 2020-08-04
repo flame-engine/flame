@@ -2,17 +2,17 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
-import '../animation.dart';
+import '../sprite_animation.dart';
 import '../particle.dart';
 import '../position.dart';
 
-class AnimationParticle extends Particle {
-  final Animation animation;
+class SpriteAnimationParticle extends Particle {
+  final SpriteAnimation animation;
   final Position size;
   final Paint overridePaint;
   final bool alignAnimationTime;
 
-  AnimationParticle({
+  SpriteAnimationParticle({
     @required this.animation,
     this.size,
     this.overridePaint,
