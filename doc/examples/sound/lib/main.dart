@@ -1,6 +1,6 @@
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/components/component.dart';
+import 'package:flame/components/position_component.dart';
 import 'package:flutter/material.dart';
 
 void main() async {

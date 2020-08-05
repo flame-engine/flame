@@ -1,7 +1,7 @@
-import 'package:flame/components/component.dart';
 import 'package:meta/meta.dart';
 
 import './effects.dart';
+import '../components/position_component.dart';
 
 class SequenceEffect extends PositionComponentEffect {
   final List<PositionComponentEffect> effects;
