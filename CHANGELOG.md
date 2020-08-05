@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.0.0
+ - Move all box2d related code and examples to the flame_box2d repo
+
 ## [next]
  - Preventing some crashed that could happen on web when some methods were called
 

@@ -181,17 +181,21 @@ Also, don't forget to add you images to the `pubspec.yaml` file as assets or the
 
 An example implementation can be found in the [examples directory](/doc/examples/parallax).
 
-## Box2D Component
+## Box2D (Formerly Box2DComponent)
+
+The preferred way to use box2d in flame is to use the BaseGame extension [Box2DGame](/doc/box2d.md).
 
 Flame comes with a basic integration with the Flutter implementation of [Box2D](https://github.com/google/box2d.dart).
 
-The whole concept of a box2d's World is mapped to the `Box2DComponent` component; every Body should be a `BodyComponent`, and added directly to the `Box2DComponent`, and not to the game list.
+The whole concept of a box2d's world is mapped to `world` in the `Box2DGame` component; every Body should be a `BodyComponent`, and added to the `Box2DGame`.
 
-So you can have HUD and other non-physics-related components in your game list, and also as many `Box2DComponents` as you'd like (normally one, I guess), and then add your physical entities to your Components instance. When the Component is updated, it will use box2d physics engine to properly update every child.
+So you can have HUD and other non-physics-related components in your game's component list along with your physical entities. When the update is called, it will use box2d physics engine to properly update every child.
 
-You can see a more complete example of box2d usage on [this WIP game](https://github.com/feroult/haunt) made by @feroult (beware, though, it uses 0.6.x version of flame, but the Box2D related apis are unchanged).
+More information about Box2D can be found [here](/doc/box2d.md) and a few simple examples can be found [here](/doc/examples/box2d).
 
-More information about Box2D can be found [here](/doc/box2d.md).
+## SpriteBodyComponent
+
+See [SpriteBodyComponent](/doc/box2d.md#spritebodycomponent) in the box2d documentation.
 
 ## Tiled Component
 
