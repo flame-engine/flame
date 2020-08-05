@@ -33,8 +33,7 @@ class GameWidget extends StatelessWidget {
 }
 
 class RenderedTimeComponent extends TimerComponent {
-  final TextConfig textConfig =
-      const TextConfig(color: const Color(0xFFFFFFFF));
+  final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
 
   RenderedTimeComponent(Timer timer) : super(timer);
 
@@ -58,8 +57,7 @@ class MyBaseGame extends BaseGame with TapDetector, DoubleTapDetector {
 }
 
 class MyGame extends Game with TapDetector {
-  final TextConfig textConfig =
-      const TextConfig(color: const Color(0xFFFFFFFF));
+  final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
   Timer countdown;
   Timer interval;
 

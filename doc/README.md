@@ -18,7 +18,7 @@ Put the pub package as your dependency by dropping the following in your `pubspe
 
 ```yaml
 dependencies:
-  flame: ^0.22.1
+  flame: ^0.24.0
 ```
 
 And start using it!
@@ -34,6 +34,7 @@ Check out the [awesome flame repository](https://github.com/flame-engine/awesome
    - [Game Loop](game.md)
    - [Components](components.md)
    - [Input](input.md)
+   - [Platforms](platforms.md)
  * Audio
    - [General Audio](audio.md)
    - [Looping Background Music](bgm.md)
@@ -42,6 +43,7 @@ Check out the [awesome flame repository](https://github.com/flame-engine/awesome
    - [Text Rendering](text.md)
    - [Colors and the Palette](palette.md)
    - [Particles](particles.md)
+   - [Layers](layers.md)
  * Other Modules
    - [Util](util.md)
    - [Gamepad](gamepad.md)

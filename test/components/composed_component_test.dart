@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components/composed_component.dart';
+import 'package:flame/components/position_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/components/mixins/resizable.dart';
 import 'package:flame/components/mixins/tapable.dart';

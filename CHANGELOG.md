@@ -3,6 +3,23 @@
 ## 1.0.0
  - Move all box2d related code and examples to the flame_box2d repo
 
+## [next]
+ - Preventing some crashed that could happen on web when some methods were called
+
+## 0.24.0
+ - Outsourcing SVG support to an external package
+ - Adding MemoryCache class
+ - Fixing games crashes on Web
+ - Update tiled dependency to 0.6.0 (objects' properties are now double)
+
+## 0.23.0
+ - Add Joystick Component
+ - Adding BaseGame#markToRemove
+ - Upgrade tiled and flutter_svg dependencies
+ - onComplete callback for effects
+ - Adding Layers
+ - Update tiled dep to 0.5.0 and add support for rotation with improved api
+
 ## 0.22.1
  - Fix Box2DComponent render priority
  - Fix PositionComponentEffect drifting

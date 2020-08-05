@@ -29,9 +29,9 @@ class MyGame extends Game with KeyboardEvents {
   @override
   void onKeyEvent(e) {
     final bool isKeyDown = e is RawKeyDownEvent;
-    if (e.data.keyLabel == "a") {
+    if (e.data.keyLabel == 'a') {
       _dir = isKeyDown ? -1 : 0;
-    } else if (e.data.keyLabel == "d") {
+    } else if (e.data.keyLabel == 'd') {
       _dir = isKeyDown ? 1 : 0;
     }
   }
