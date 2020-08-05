@@ -99,6 +99,7 @@ class BaseGame extends Game {
   /// You can override it further to add more custom behaviour.
   /// Beware of however you are rendering components if not using this; you must be careful to save and restore the canvas to avoid components messing up with each other.
   @override
+  @mustCallSuper
   void render(Canvas canvas) {
     canvas.save();
     components.forEach((comp) => renderComponent(canvas, comp));
@@ -126,6 +127,7 @@ class BaseGame extends Game {
   /// It also actually adds the components that were added by the [addLater] method, and remove those that are marked for destruction via the [Component.destroy] method.
   /// You can override it further to add more custom behaviour.
   @override
+  @mustCallSuper
   void update(double t) {
     _removeLater.forEach((c) => components.remove(c));
     _removeLater.clear();
