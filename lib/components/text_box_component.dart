@@ -1,13 +1,14 @@
 import 'dart:async';
-import 'dart:ui';
 import 'dart:math' as math;
+import 'dart:ui';
+
 import 'package:flutter/widgets.dart' as widgets;
 
-import 'component.dart';
-import 'mixins/resizable.dart';
-import '../text_config.dart';
 import '../palette.dart';
 import '../position.dart';
+import '../text_config.dart';
+import 'mixins/resizable.dart';
+import 'position_component.dart';
 
 class TextBoxConfig {
   final double maxWidth;

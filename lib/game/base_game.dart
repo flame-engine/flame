@@ -1,16 +1,17 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
-import 'package:flame/components/composed_component.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
-import 'package:flutter/foundation.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
 import '../components/component.dart';
+import '../components/composed_component.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
+import '../components/position_component.dart';
 import '../position.dart';
 import 'game.dart';
 
