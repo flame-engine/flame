@@ -68,7 +68,9 @@ See example [here](/doc/examples/sprite_batch).
 
 Flame provides a simple API to render SVG images in your game.
 
-To use it just import the `Svg` class from `'package:flame/svg.dart'`, and use the following snippet to render it on the canvas:
+Svg support is provided by the `flame_svg` external package, be sure to put it on your pubspec to use it
+
+To use it just import the `Svg` class from `'package:flame_svg/flame_svg.dart'`, and use the following snippet to render it on the canvas:
 
 ```dart
     Svg svgInstance = Svg('android.svg');

@@ -15,14 +15,14 @@ void main() {
 
 class TiledGame extends BaseGame {
   TiledGame() {
-    final TiledComponent tiledMap = TiledComponent('map.tmx');
+    final TiledComponent tiledMap = TiledComponent('map.tmx', 16.0);
     add(tiledMap);
     _addCoinsInMap(tiledMap);
   }
 
   void _addCoinsInMap(TiledComponent tiledMap) async {
     final ObjectGroup objGroup =
-        await tiledMap.getObjectGroupFromLayer("AnimatedCoins");
+        await tiledMap.getObjectGroupFromLayer('AnimatedCoins');
     if (objGroup == null) {
       return;
     }
@@ -30,8 +30,12 @@ class TiledGame extends BaseGame {
       final comp = AnimationComponent(
         20.0,
         20.0,
-        Animation.sequenced('coins.png', 8,
-            textureWidth: 20, textureHeight: 20),
+        Animation.sequenced(
+          'coins.png',
+          8,
+          textureWidth: 20,
+          textureHeight: 20,
+        ),
       );
       comp.x = obj.x.toDouble();
       comp.y = obj.y.toDouble();

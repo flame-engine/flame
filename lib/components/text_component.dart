@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/painting.dart';
 
-import 'component.dart';
 import '../text_config.dart';
+import 'position_component.dart';
 
 class TextComponent extends PositionComponent {
   String _text;
@@ -27,8 +27,8 @@ class TextComponent extends PositionComponent {
     _updateBox();
   }
 
-  TextComponent(this._text, {TextConfig config = const TextConfig()}) {
-    _config = config;
+  TextComponent(this._text, {TextConfig config}) {
+    _config = config ?? TextConfig();
     _updateBox();
   }
 

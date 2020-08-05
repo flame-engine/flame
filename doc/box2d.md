@@ -1,6 +1,6 @@
 # Box2D
 
-Although Flame does not implements Box2d itself, it bundles a forked port of the Java Box2d to Dart by Google.
+Although Flame does not implement Box2d itself, it bundles a forked port of the Java Box2d to Dart by Google.
 
 The source of the bundled box2d on Flame can be found [here](https://github.com/flame-engine/box2d.dart).
 

@@ -1,17 +1,19 @@
 import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../components/component.dart';
+import '../components/position_component.dart';
 import '../position.dart';
 
 export './move_effect.dart';
-export './scale_effect.dart';
 export './rotate_effect.dart';
+export './scale_effect.dart';
 export './sequence_effect.dart';
 
 abstract class PositionComponentEffect {
   PositionComponent component;
+  Function() onComplete;
 
   bool _isDisposed = false;
   bool get isDisposed => _isDisposed;
@@ -37,7 +39,11 @@ abstract class PositionComponentEffect {
   /// travel time
   double get totalTravelTime => travelTime * (isAlternating ? 2 : 1);
 
-  PositionComponentEffect(this._initialIsInfinite, this._initialIsAlternating) {
+  PositionComponentEffect(
+    this._initialIsInfinite,
+    this._initialIsAlternating, {
+    this.onComplete,
+  }) {
     isInfinite = _initialIsInfinite;
     isAlternating = _initialIsAlternating;
   }
@@ -53,6 +59,9 @@ abstract class PositionComponentEffect {
     if (!hasFinished()) {
       currentTime += dt * curveDirection + driftTime * driftMultiplier;
       percentage = min(1.0, max(0.0, currentTime / travelTime));
+      if (hasFinished()) {
+        onComplete?.call();
+      }
     }
   }
 

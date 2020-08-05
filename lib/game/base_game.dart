@@ -1,16 +1,17 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
-import 'package:flame/components/composed_component.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
-import 'package:flutter/foundation.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
 import '../components/component.dart';
+import '../components/composed_component.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
+import '../components/position_component.dart';
 import '../position.dart';
 import 'game.dart';
 
@@ -26,6 +27,9 @@ class BaseGame extends Game {
 
   /// Components added by the [addLater] method
   final List<Component> _addLater = [];
+
+  /// Components to be removed on the next update
+  final List<Component> _removeLater = [];
 
   /// Current screen size, updated every resize via the [resize] method hook
   Size size;
@@ -86,6 +90,11 @@ class BaseGame extends Game {
     _addLater.add(c);
   }
 
+  /// Marks a component to be removed from the components list on the next game loop cycle
+  void markToRemove(Component c) {
+    _removeLater.add(c);
+  }
+
   /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.
   ///
   /// You can override it further to add more custom behaviour.
@@ -119,6 +128,9 @@ class BaseGame extends Game {
   /// You can override it further to add more custom behaviour.
   @override
   void update(double t) {
+    _removeLater.forEach((c) => components.remove(c));
+    _removeLater.clear();
+
     components.addAll(_addLater);
     _addLater.clear();
 

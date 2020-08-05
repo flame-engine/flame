@@ -1,7 +1,7 @@
-import 'package:flame/components/component.dart';
 import 'package:meta/meta.dart';
 
 import './effects.dart';
+import '../components/position_component.dart';
 
 class SequenceEffect extends PositionComponentEffect {
   final List<PositionComponentEffect> effects;
@@ -14,7 +14,8 @@ class SequenceEffect extends PositionComponentEffect {
     @required this.effects,
     isInfinite = false,
     isAlternating = false,
-  }) : super(isInfinite, isAlternating) {
+    Function onComplete,
+  }) : super(isInfinite, isAlternating, onComplete: onComplete) {
     assert(
       effects.every((effect) => effect.component == null),
       "No effects can be added to components from the start",

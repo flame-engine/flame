@@ -43,7 +43,7 @@ class MyGame extends BaseGame {
   final Random rnd = Random();
   final StepTween steppedTween = StepTween(begin: 0, end: 5);
   final trafficLight = TrafficLightComponent();
-  final TextConfig fpsTextConfig = const TextConfig(
+  final TextConfig fpsTextConfig = TextConfig(
     color: const Color(0xFFFFFFFF),
   );
 

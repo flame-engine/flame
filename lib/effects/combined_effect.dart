@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:flame/components/component.dart';
 import 'package:meta/meta.dart';
 
 import './effects.dart';
+import '../components/position_component.dart';
 
 class CombinedEffect extends PositionComponentEffect {
   final List<PositionComponentEffect> effects;
@@ -14,7 +14,8 @@ class CombinedEffect extends PositionComponentEffect {
     this.offset = 0.0,
     bool isInfinite = false,
     bool isAlternating = false,
-  }) : super(isInfinite, isAlternating) {
+    Function onComplete,
+  }) : super(isInfinite, isAlternating, onComplete: onComplete) {
     final types = effects.map((e) => e.runtimeType);
     assert(
       types.toSet().length == types.length,

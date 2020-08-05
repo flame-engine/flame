@@ -45,6 +45,8 @@ A very simple `BaseGame` implementation example can be seen below:
     }
 ```
 
+To remove components from the list on a `BaseGame` the `markToRemove` method can be used.
+
 ## Flutter Widgets and Game instances
 
 Since a Flame game is a widget itself, it is quite easy to use Flutter widgets and Flame game together. But to make it even easier, Flame provides a `mixin` called `HasWidgetsOverlay` which will enable any Flutter widget to be show on top of your game instance, this makes it very easy to create things like a pause menu, or an inventory screen for example.
