@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/flame.dart';
-import 'package:flame/animation.dart' as animation;
+import 'package:flame/sprite_animation.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
 import 'package:flame/position.dart';
@@ -10,7 +10,7 @@ import 'package:flame/widgets/sprite_widget.dart';
 import 'package:flutter/material.dart';
 
 Sprite _sprite;
-animation.Animation _animation;
+SpriteAnimation _animation;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Container(
               width: 200,
               height: 200,
-              child: AnimationWidget(animation: _animation),
+              child: SpriteAnimationWidget(animation: _animation),
             ),
             const Text('Neat, hum?'),
             const Text(

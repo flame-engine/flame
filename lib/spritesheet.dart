@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 import 'sprite.dart';
-import 'animation.dart';
+import 'sprite_animation.dart';
 
 import 'dart:ui';
 
@@ -85,10 +85,10 @@ class SpriteSheet {
     return s;
   }
 
-  /// Creates an animation from this SpriteSheet
+  /// Creates a sprite animation from this SpriteSheet
   ///
   /// An [from] and a [to]  parameter can be specified to create an animation from a subset of the columns on the row
-  Animation createAnimation(int row,
+  SpriteAnimation createAnimation(int row,
       {double stepTime, bool loop = true, int from = 0, int to}) {
     final spriteRow = _sprites[row];
 
@@ -98,7 +98,7 @@ class SpriteSheet {
 
     final spriteList = spriteRow.sublist(from, to);
 
-    return Animation.spriteList(
+    return SpriteAnimation.spriteList(
       spriteList,
       stepTime: stepTime,
       loop: loop,

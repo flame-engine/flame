@@ -1,5 +1,5 @@
-import 'package:flame/animation.dart';
-import 'package:flame/components/animation_component.dart';
+import 'package:flame/sprite_animation.dart';
+import 'package:flame/components/sprite_animation_component.dart';
 import 'package:flame/components/tiled_component.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -27,10 +27,10 @@ class TiledGame extends BaseGame {
       return;
     }
     objGroup.tmxObjects.forEach((TmxObject obj) {
-      final comp = AnimationComponent(
+      final comp = SpriteAnimationComponent(
         20.0,
         20.0,
-        Animation.sequenced(
+        SpriteAnimation.sequenced(
           'coins.png',
           8,
           textureWidth: 20,

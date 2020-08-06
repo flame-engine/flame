@@ -48,7 +48,7 @@ The render method will do nothing while the sprite has not been loaded, so you d
 
 All render methods from the Sprite class can receive a `Paint` instance as the optional named parameter `overridePaint` that parameter will override the current `Sprite` paint instance for that render call.
 
-Sprites can also be used as widgets, to do so just use `Flame.util.spriteAsWidget`
+Sprites can also be used as widgets, to do so just use `SpriteWidget` class.
 
 A complete example using sprite as widgets can be found [here](/doc/examples/animation_widget).
 
@@ -177,9 +177,6 @@ _Note: trimmed sprite sheets are not supported by flame, so if you export your s
 Animations, after created, have an update and render method; the latter renders the current frame, and the former ticks the internal clock to update the frames.
 
 Animations are normally used inside `AnimationComponent`s, but custom components with several Animations can be created as well.
-
-
-Animations can also be used as widgets, to do so, just use `Flame.util.animationAsWidget`
 
 A complete example of using animations as widgets can be found [here](/doc/examples/animation_widget).
 

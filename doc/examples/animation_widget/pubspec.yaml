@@ -1,5 +1,5 @@
 name: animation_widget
-description: A sample Flame project to showcase the animationAsWidget method.
+description: A sample Flame project to showcase the SpriteAnimationWidget widget.
 
 version: 0.1.0
 

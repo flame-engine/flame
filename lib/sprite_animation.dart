@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'flame.dart';
 import 'sprite.dart';
 
-/// Represents a single animation frame.
-class Frame {
+/// Represents a single sprite animation frame.
+class SpriteAnimationFrame {
   /// The [Sprite] to be displayed.
   Sprite sprite;
 
@@ -12,15 +12,15 @@ class Frame {
   double stepTime;
 
   /// Create based on the parameters.
-  Frame(this.sprite, this.stepTime);
+  SpriteAnimationFrame(this.sprite, this.stepTime);
 }
 
-typedef OnCompleteAnimation = void Function();
+typedef OnCompleteSpriteAnimation = void Function();
 
-/// Represents an animation, that is, a list of sprites that change with time.
-class Animation {
+/// Represents a sprite animation, that is, a list of sprites that change with time.
+class SpriteAnimation {
   /// The frames that compose this animation.
-  List<Frame> frames = [];
+  List<SpriteAnimationFrame> frames = [];
 
   /// Index of the current frame that should be displayed.
   int currentIndex = 0;
@@ -37,23 +37,23 @@ class Animation {
   bool loop = true;
 
   /// Registered method to be triggered when the animation complete.
-  OnCompleteAnimation onCompleteAnimation;
+  OnCompleteSpriteAnimation onComplete;
 
   /// Creates an animation given a list of frames.
-  Animation(this.frames, {this.loop = true});
+  SpriteAnimation(this.frames, {this.loop = true});
 
   /// Creates an empty animation
-  Animation.empty();
+  SpriteAnimation.empty();
 
   /// Creates an animation based on the parameters.
   ///
   /// All frames have the same [stepTime].
-  Animation.spriteList(List<Sprite> sprites,
+  SpriteAnimation.spriteList(List<Sprite> sprites,
       {double stepTime, this.loop = true}) {
     if (sprites.isEmpty) {
       throw Exception('You must have at least one frame!');
     }
-    frames = sprites.map((s) => Frame(s, stepTime)).toList();
+    frames = sprites.map((s) => SpriteAnimationFrame(s, stepTime)).toList();
   }
 
   /// Automatically creates a sequenced animation, that is, an animation based on a sprite sheet.
@@ -71,7 +71,7 @@ class Animation {
   /// For example, if you have a sprite sheet where each row is an animation, and each frame is 32x32
   ///     Animation.sequenced('sheet.png', 8, textureY: 32.0 * i, textureWidth: 32.0, textureHeight: 32.0);
   /// This will create the i-th animation on the 'sheet.png', given it has 8 frames.
-  Animation.sequenced(
+  SpriteAnimation.sequenced(
     String imagePath,
     int amount, {
     int amountPerRow,
@@ -83,7 +83,7 @@ class Animation {
     this.loop = true,
   }) : assert(amountPerRow == null || amount >= amountPerRow) {
     amountPerRow ??= amount;
-    frames = List<Frame>(amount);
+    frames = List<SpriteAnimationFrame>(amount);
     for (var i = 0; i < amount; i++) {
       final Sprite sprite = Sprite(
         imagePath,
@@ -92,12 +92,12 @@ class Animation {
         width: textureWidth,
         height: textureHeight,
       );
-      frames[i] = Frame(sprite, stepTime);
+      frames[i] = SpriteAnimationFrame(sprite, stepTime);
     }
   }
 
-  /// Works just like [Animation.sequenced], but it takes a list of variable [stepTimes], associating each one with one frame in the sequence.
-  Animation.variableSequenced(
+  /// Works just like [SpriteAnimation.sequenced], but it takes a list of variable [stepTimes], associating each one with one frame in the sequence.
+  SpriteAnimation.variableSequenced(
     String imagePath,
     int amount,
     List<double> stepTimes, {
@@ -109,7 +109,7 @@ class Animation {
     this.loop = true,
   }) : assert(amountPerRow == null || amount >= amountPerRow) {
     amountPerRow ??= amount;
-    frames = List<Frame>(amount);
+    frames = List<SpriteAnimationFrame>(amount);
     for (var i = 0; i < amount; i++) {
       final Sprite sprite = Sprite(
         imagePath,
@@ -118,7 +118,7 @@ class Animation {
         width: textureWidth,
         height: textureHeight,
       );
-      frames[i] = Frame(sprite, stepTimes[i]);
+      frames[i] = SpriteAnimationFrame(sprite, stepTimes[i]);
     }
   }
 
@@ -127,7 +127,7 @@ class Animation {
   ///
   /// [imagePath]: Source of the sprite sheet animation
   /// [dataPath]: Animation's exported data in json format
-  static Future<Animation> fromAsepriteData(
+  static Future<SpriteAnimation> fromAsepriteData(
       String imagePath, String dataPath) async {
     final String content = await Flame.assets.readFile(dataPath);
     final Map<String, dynamic> json = jsonDecode(content);
@@ -151,14 +151,14 @@ class Animation {
         height: height.toDouble(),
       );
 
-      return Frame(sprite, stepTime);
+      return SpriteAnimationFrame(sprite, stepTime);
     });
 
-    return Animation(frames.toList(), loop: true);
+    return SpriteAnimation(frames.toList(), loop: true);
   }
 
   /// The current frame that should be displayed.
-  Frame get currentFrame => frames[currentIndex];
+  SpriteAnimationFrame get currentFrame => frames[currentIndex];
 
   /// Returns whether the animation is on the last frame.
   bool get isLastFrame => currentIndex == frames.length - 1;
@@ -209,7 +209,7 @@ class Animation {
       return;
     }
     if (!loop && isLastFrame) {
-      onCompleteAnimation?.call();
+      onComplete?.call();
       return;
     }
     while (clock > currentFrame.stepTime) {
@@ -226,8 +226,8 @@ class Animation {
   }
 
   /// Returns a new Animation based on this animation, but with its frames in reversed order
-  Animation reversed() {
-    return Animation(frames.reversed.toList(), loop: loop);
+  SpriteAnimation reversed() {
+    return SpriteAnimation(frames.reversed.toList(), loop: loop);
   }
 
   /// Whether all sprites composing this animation are loaded.
