@@ -4,13 +4,7 @@ import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart' as widgets;
 
-import 'animation.dart';
-import 'game/base_game.dart';
-import 'game/embedded_game_widget.dart';
-import 'sprite.dart';
-import 'components/animation_component.dart';
 import 'position.dart';
 
 /// Some utilities that did not fit anywhere else.
@@ -159,43 +153,4 @@ class Util {
     fn(c);
     c.translate(-p.x, -p.y);
   }
-
-  /// Returns a regular Flutter widget representing this animation, rendered with the specified size.
-  ///
-  /// This actually creates an [EmbeddedGameWidget] with a [SimpleGame] whose only content is an [AnimationComponent] created from the provided [animation].
-  /// You can use this implementation as base to easily create your own widgets based on more complex games.
-  /// This is intended to be used by non-game apps that want to add a sprite sheet animation.
-  ///
-  @Deprecated('Use SpriteAnimation instead')
-  widgets.Widget animationAsWidget(Position size, Animation animation) {
-    return EmbeddedGameWidget(
-      BaseGame()..add(AnimationComponent(size.x, size.y, animation)),
-      size: size,
-    );
-  }
-
-  /// Returns a regular Flutter widget representing this sprite, rendered with the specified size.
-  ///
-  /// This will create a [CustomPaint] widget using a [CustomPainter] for rendering the [Sprite]
-  /// Be aware that the Sprite must have been loaded, otherwise it can't be rendered
-  ///
-  @Deprecated('Use SpriteWidget instead')
-  widgets.CustomPaint spriteAsWidget(Size size, Sprite sprite) =>
-      widgets.CustomPaint(size: size, painter: _SpriteCustomPainter(sprite));
-}
-
-class _SpriteCustomPainter extends widgets.CustomPainter {
-  final Sprite _sprite;
-
-  _SpriteCustomPainter(this._sprite);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (_sprite.loaded()) {
-      _sprite.render(canvas, width: size.width, height: size.height);
-    }
-  }
-
-  @override
-  bool shouldRepaint(widgets.CustomPainter old) => false;
 }

@@ -1,3 +1,4 @@
+import 'package:flame/widgets/animation_widget.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 import 'dart:math';
@@ -5,8 +6,14 @@ import 'dart:math';
 import '../sprite.dart';
 import '../anchor.dart';
 
+/// A [StatefulWidget] that renders a still [Sprite].
+///
+/// To render an animation, use [SpriteAnimationWidget].
 class SpriteWidget extends StatelessWidget {
+  /// The [Sprite] to be rendered
   final Sprite sprite;
+
+  /// The positioning [Anchor] for the [sprite]
   final Anchor anchor;
 
   SpriteWidget({
@@ -17,19 +24,19 @@ class SpriteWidget extends StatelessWidget {
   @override
   Widget build(_) {
     return Container(
-      child: CustomPaint(painter: _SpritePainer(sprite, anchor)),
+      child: CustomPaint(painter: _SpritePainter(sprite, anchor)),
     );
   }
 }
 
-class _SpritePainer extends CustomPainter {
+class _SpritePainter extends CustomPainter {
   final Sprite _sprite;
   final Anchor _anchor;
 
-  _SpritePainer(this._sprite, this._anchor);
+  _SpritePainter(this._sprite, this._anchor);
 
   @override
-  bool shouldRepaint(_SpritePainer old) {
+  bool shouldRepaint(_SpritePainter old) {
     return old._sprite != _sprite || old._anchor != _anchor;
   }
 

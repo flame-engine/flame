@@ -2,8 +2,8 @@ import 'package:flame/gestures.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/animation.dart' as flame_animation;
-import 'package:flame/components/animation_component.dart';
+import 'package:flame/sprite_animation.dart';
+import 'package:flame/components/sprite_animation_component.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -16,7 +16,7 @@ void main() async {
 }
 
 class MyGame extends BaseGame with TapDetector {
-  final animation = flame_animation.Animation.sequenced(
+  final animation = SpriteAnimation.sequenced(
     'chopper.png',
     4,
     textureWidth: 48,
@@ -28,7 +28,8 @@ class MyGame extends BaseGame with TapDetector {
   void addAnimation(double x, double y) {
     const textureWidth = 291.0;
     const textureHeight = 178.0;
-    final animationComponent = AnimationComponent.sequenced(
+
+    final animationComponent = SpriteAnimationComponent.sequenced(
       291,
       178,
       'creature.png',
@@ -40,6 +41,7 @@ class MyGame extends BaseGame with TapDetector {
       loop: false,
       destroyOnFinish: true,
     );
+
     animationComponent.x = x - textureWidth / 2;
     animationComponent.y = y - textureHeight / 2;
 
@@ -55,12 +57,15 @@ class MyGame extends BaseGame with TapDetector {
     size = screenSize;
 
     const s = 100.0;
-    final animationComponent = AnimationComponent(s, s, animation);
+    final animationComponent = SpriteAnimationComponent(s, s, animation);
     animationComponent.x = size.width / 2 - s;
     animationComponent.y = s;
 
-    final reversedAnimationComponent =
-        AnimationComponent(s, s, animation.reversed());
+    final reversedAnimationComponent = SpriteAnimationComponent(
+      s,
+      s,
+      animation.reversed(),
+    );
     reversedAnimationComponent.x = size.width / 2;
     reversedAnimationComponent.y = s;
 
