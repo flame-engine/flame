@@ -1,12 +1,12 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 
 import '../../game/base_game.dart';
+import '../position_component.dart';
 
-mixin Tapable {
-  Rect toRect();
-
+mixin Tapable on PositionComponent {
   void onTapCancel() {}
   void onTapDown(TapDownDetails details) {}
   void onTapUp(TapUpDetails details) {}
@@ -15,22 +15,21 @@ mixin Tapable {
 
   bool _checkPointerId(int pointerId) => _currentPointerId == pointerId;
 
-  bool checkTapOverlap(Offset o) => toRect().contains(o);
+  bool checkTapOverlap(Rect rect, Offset o) => rect.contains(o);
 
-  void handleTapDown(int pointerId, TapDownDetails details) {
-    if (checkTapOverlap(details.localPosition)) {
+  void handleTapDown(Rect rect, int pointerId, TapDownDetails details) {
+    if (checkTapOverlap(rect, details.localPosition)) {
       _currentPointerId = pointerId;
       onTapDown(details);
     }
-    tapableChildren().forEach((c) => c.handleTapDown(pointerId, details));
   }
 
-  void handleTapUp(int pointerId, TapUpDetails details) {
-    if (_checkPointerId(pointerId) && checkTapOverlap(details.localPosition)) {
+  void handleTapUp(Rect rect, int pointerId, TapUpDetails details) {
+    if (_checkPointerId(pointerId) &&
+        checkTapOverlap(rect, details.localPosition)) {
       _currentPointerId = null;
       onTapUp(details);
     }
-    tapableChildren().forEach((c) => c.handleTapUp(pointerId, details));
   }
 
   void handleTapCancel(int pointerId) {
@@ -38,28 +37,38 @@ mixin Tapable {
       _currentPointerId = null;
       onTapCancel();
     }
-    tapableChildren().forEach((c) => c.handleTapCancel(pointerId));
   }
-
-  /// Overwrite this to add children to this [Tapable].
-  ///
-  /// If a [Tapable] has children, its children be taped as well.
-  Iterable<Tapable> tapableChildren() => [];
 }
 
 mixin HasTapableComponents on BaseGame {
-  Iterable<Tapable> get _tapableComponents =>
-      components.where((c) => c is Tapable).cast();
+  Iterable<PositionComponent> _positionComponents() {
+    return components.whereType<PositionComponent>();
+  }
 
+  @mustCallSuper
   void onTapCancel(int pointerId) {
-    _tapableComponents.forEach((c) => c.handleTapCancel(pointerId));
+    _positionComponents().forEach((c) {
+      c.propagateToChildren<Tapable>(
+        (child, _) => child.handleTapCancel(pointerId),
+      );
+    });
   }
 
+  @mustCallSuper
   void onTapDown(int pointerId, TapDownDetails details) {
-    _tapableComponents.forEach((c) => c.handleTapDown(pointerId, details));
+    _positionComponents().forEach((c) {
+      c.propagateToChildren<Tapable>(
+        (child, rect) => child.handleTapDown(rect, pointerId, details),
+      );
+    });
   }
 
+  @mustCallSuper
   void onTapUp(int pointerId, TapUpDetails details) {
-    _tapableComponents.forEach((c) => c.handleTapUp(pointerId, details));
+    _positionComponents().forEach((c) {
+      c.propagateToChildren<Tapable>(
+        (child, rect) => child.handleTapUp(rect, pointerId, details),
+      );
+    });
   }
 }

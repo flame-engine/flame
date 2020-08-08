@@ -17,8 +17,7 @@ class Square extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    prepareCanvas(canvas);
-    final rect = Rect.fromLTWH(0, 0, width, height);
-    canvas.drawRect(rect, _paint);
+    super.render(canvas);
+    canvas.drawRect(toZeroRect(), _paint);
   }
 }

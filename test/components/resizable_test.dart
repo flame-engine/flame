@@ -14,9 +14,6 @@ class MyComponent extends PositionComponent with Resizable {
 
   @override
   Iterable<Resizable> resizableChildren() => myChildren;
-
-  @override
-  void render(Canvas c) {}
 }
 
 class MyGame extends BaseGame {}

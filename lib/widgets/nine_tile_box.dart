@@ -37,49 +37,80 @@ class _Painter extends widgets.CustomPainter {
     final horizontalWidget = size.width - destTileSize * 2;
     final verticalHeight = size.height - destTileSize * 2;
 
+    void render(Sprite sprite, double x, double y, double w, double h) {
+      sprite.renderRect(canvas, Rect.fromLTWH(x, y, w, h));
+    }
+
     // Middle
-    middle.renderRect(
-        canvas,
-        Rect.fromLTWH(
-          destTileSize,
-          destTileSize,
-          horizontalWidget,
-          verticalHeight,
-        ));
+    render(
+      middle,
+      destTileSize,
+      destTileSize,
+      horizontalWidget,
+      verticalHeight,
+    );
 
     // Top and bottom side
-    topSide.renderRect(
-        canvas, Rect.fromLTWH(destTileSize, 0, horizontalWidget, destTileSize));
-
-    bottomSide.renderRect(
-        canvas,
-        Rect.fromLTWH(destTileSize, size.height - destTileSize,
-            horizontalWidget, destTileSize));
+    render(
+      topSide,
+      destTileSize,
+      0,
+      horizontalWidget,
+      destTileSize,
+    );
+    render(
+      bottomSide,
+      destTileSize,
+      size.height - destTileSize,
+      horizontalWidget,
+      destTileSize,
+    );
 
     // Left and right side
-    leftSide.renderRect(
-        canvas, Rect.fromLTWH(0, destTileSize, destTileSize, verticalHeight));
-    rightSide.renderRect(
-        canvas,
-        Rect.fromLTWH(size.width - destTileSize, destTileSize, destTileSize,
-            verticalHeight));
+    render(
+      leftSide,
+      0,
+      destTileSize,
+      destTileSize,
+      verticalHeight,
+    );
+    render(
+      rightSide,
+      size.width - destTileSize,
+      destTileSize,
+      destTileSize,
+      verticalHeight,
+    );
 
     // Corners
-    topLeftCorner.renderRect(
-        canvas, Rect.fromLTWH(0, 0, destTileSize, destTileSize));
-    topRightCorner.renderRect(
-        canvas,
-        Rect.fromLTWH(
-            size.width - destTileSize, 0, destTileSize, destTileSize));
-
-    bottomLeftCorner.renderRect(
-        canvas,
-        Rect.fromLTWH(
-            0, size.height - destTileSize, destTileSize, destTileSize));
-    bottomRightCorner.renderRect(
-        canvas,
-        Rect.fromLTWH(size.width - destTileSize, size.height - destTileSize,
-            destTileSize, destTileSize));
+    render(
+      topLeftCorner,
+      0,
+      0,
+      destTileSize,
+      destTileSize,
+    );
+    render(
+      topRightCorner,
+      size.width - destTileSize,
+      0,
+      destTileSize,
+      destTileSize,
+    );
+    render(
+      bottomLeftCorner,
+      0,
+      size.height - destTileSize,
+      destTileSize,
+      destTileSize,
+    );
+    render(
+      bottomRightCorner,
+      size.width - destTileSize,
+      size.height - destTileSize,
+      destTileSize,
+      destTileSize,
+    );
   }
 
   @override

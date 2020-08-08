@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 
 import '../flame.dart';
@@ -21,10 +22,12 @@ class ParallaxImage {
   /// How to fill the screen with the image, always proportionally scaled.
   final LayerFill fill;
 
-  ParallaxImage(this.filename,
-      {this.repeat = ImageRepeat.repeatX,
-      this.alignment = Alignment.bottomLeft,
-      this.fill = LayerFill.height});
+  ParallaxImage(
+    this.filename, {
+    this.repeat = ImageRepeat.repeatX,
+    this.alignment = Alignment.bottomLeft,
+    this.fill = LayerFill.height,
+  });
 }
 
 /// Represents one layer in the parallax, draws out an image on a canvas in the
@@ -155,8 +158,11 @@ class ParallaxComponent extends PositionComponent {
   List<ParallaxLayer> _layers;
   bool _loaded = false;
 
-  ParallaxComponent(List<ParallaxImage> images,
-      {this.baseSpeed = Offset.zero, this.layerDelta = Offset.zero}) {
+  ParallaxComponent(
+    List<ParallaxImage> images, {
+    this.baseSpeed = Offset.zero,
+    this.layerDelta = Offset.zero,
+  }) {
     _load(images);
   }
 
@@ -167,8 +173,10 @@ class ParallaxComponent extends PositionComponent {
   @override
   bool loaded() => _loaded;
 
+  @mustCallSuper
   @override
   void resize(Size size) {
+    super.resize(size);
     _layers.forEach((layer) => layer.resize(size));
   }
 
@@ -178,18 +186,21 @@ class ParallaxComponent extends PositionComponent {
     if (!loaded()) {
       return;
     }
-    _layers.forEach((layer) => layer
-        .update(baseSpeed * t + layerDelta * (_layers.indexOf(layer) * t)));
+    _layers.forEach((layer) {
+      layer.update(baseSpeed * t + layerDelta * (_layers.indexOf(layer) * t));
+    });
   }
 
+  @mustCallSuper
   @override
   void render(Canvas canvas) {
     if (!loaded()) {
       return;
     }
 
+    super.render(canvas);
+
     canvas.save();
-    prepareCanvas(canvas);
     _layers.forEach((layer) => layer.render(canvas));
     canvas.restore();
   }

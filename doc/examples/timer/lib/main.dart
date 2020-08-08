@@ -16,14 +16,14 @@ class GameWidget extends StatelessWidget {
     return MaterialApp(routes: {
       '/': (BuildContext context) => Column(children: [
             RaisedButton(
-                child: const Text("Game"),
+                child: const Text('Game'),
                 onPressed: () {
-                  Navigator.of(context).pushNamed("/game");
+                  Navigator.of(context).pushNamed('/game');
                 }),
             RaisedButton(
-                child: const Text("BaseGame"),
+                child: const Text('BaseGame'),
                 onPressed: () {
-                  Navigator.of(context).pushNamed("/base_game");
+                  Navigator.of(context).pushNamed('/base_game');
                 })
           ]),
       '/game': (BuildContext context) => MyGame().widget,
@@ -40,7 +40,10 @@ class RenderedTimeComponent extends TimerComponent {
   @override
   void render(Canvas canvas) {
     textConfig.render(
-        canvas, "Elapsed time: ${timer.current}", Position(10, 150));
+      canvas,
+      'Elapsed time: ${timer.current}',
+      Position(10, 150),
+    );
   }
 }
 
@@ -84,8 +87,11 @@ class MyGame extends Game with TapDetector {
 
   @override
   void render(Canvas canvas) {
-    textConfig.render(canvas, "Countdown: ${countdown.current.toString()}",
-        Position(10, 100));
-    textConfig.render(canvas, "Elapsed time: $elapsedSecs", Position(10, 150));
+    textConfig.render(
+      canvas,
+      'Countdown: ${countdown.current}',
+      Position(10, 100),
+    );
+    textConfig.render(canvas, 'Elapsed time: $elapsedSecs', Position(10, 150));
   }
 }

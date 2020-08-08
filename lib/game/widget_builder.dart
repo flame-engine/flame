@@ -258,9 +258,9 @@ class _OverlayGameWidgetState extends State<OverlayGameWidget> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-        textDirection: TextDirection.ltr,
-        child:
-            Stack(children: [widget.gameChild, ..._overlays.values.toList()]));
+      textDirection: TextDirection.ltr,
+      child: Stack(children: [widget.gameChild, ..._overlays.values.toList()]),
+    );
   }
 }
 
@@ -272,6 +272,9 @@ class OverlayWidgetBuilder extends WidgetBuilder {
     final container = super.build(game);
 
     return OverlayGameWidget(
-        gameChild: container, game: game, key: UniqueKey());
+      gameChild: container,
+      game: game,
+      key: UniqueKey(),
+    );
   }
 }
