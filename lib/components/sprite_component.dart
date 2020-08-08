@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
+
 import '../sprite.dart';
 import 'component.dart';
 import 'position_component.dart';
@@ -8,9 +10,14 @@ import 'position_component.dart';
 /// position, scaled to have the designated size and rotated to the specified
 /// angle.
 ///
-/// This a commonly used child of [Component].
+/// This a commonly used subclass of [Component].
 class SpriteComponent extends PositionComponent {
+  /// The [sprite] to be rendered by this component.
   Sprite sprite;
+
+  /// Use this to override the colour used (to apply tint or opacity).
+  ///
+  /// If not provided the default is full white (no tint).
   Paint overridePaint;
 
   SpriteComponent();
@@ -26,15 +33,20 @@ class SpriteComponent extends PositionComponent {
     this.height = height;
   }
 
+  @mustCallSuper
   @override
   void render(Canvas canvas) {
-    prepareCanvas(canvas);
-    sprite.render(canvas,
-        width: width, height: height, overridePaint: overridePaint);
+    super.render(canvas);
+    sprite.render(
+      canvas,
+      width: width,
+      height: height,
+      overridePaint: overridePaint,
+    );
   }
 
   @override
   bool loaded() {
-    return sprite != null && sprite.loaded() && x != null && y != null;
+    return sprite?.loaded() == true && x != null && y != null;
   }
 }

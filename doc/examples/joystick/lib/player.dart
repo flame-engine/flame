@@ -76,16 +76,13 @@ class Player extends Component implements JoystickListener {
   void moveFromAngle(double dtUpdate) {
     final double nextX = (currentSpeed * dtUpdate) * cos(radAngle);
     final double nextY = (currentSpeed * dtUpdate) * sin(radAngle);
-    final Offset nextPoint = Offset(nextX, nextY);
 
     final Offset diffBase = Offset(
-          _rect.center.dx + nextPoint.dx,
-          _rect.center.dy + nextPoint.dy,
+          _rect.center.dx + nextX,
+          _rect.center.dy + nextY,
         ) -
         _rect.center;
 
-    final Rect newPosition = _rect.shift(diffBase);
-
-    _rect = newPosition;
+    _rect = _rect.shift(diffBase);
   }
 }

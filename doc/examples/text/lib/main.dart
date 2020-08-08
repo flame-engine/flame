@@ -52,7 +52,8 @@ class MyGame extends BaseGame {
       ..y = size.height);
 
     add(MyTextBox(
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget ligula eu lectus lobortis condimentum.')
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget ligula eu lectus lobortis condimentum.',
+    )
       ..anchor = Anchor.bottomLeft
       ..y = size.height);
   }
