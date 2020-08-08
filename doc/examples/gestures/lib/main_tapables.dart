@@ -29,7 +29,8 @@ class TapableSquare extends PositionComponent with Tapable {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(toRect(), _beenPressed ? _grey : _white);
+    super.render(canvas);
+    canvas.drawRect(toZeroRect(), _beenPressed ? _grey : _white);
   }
 
   @override
