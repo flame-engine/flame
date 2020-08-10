@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:flame/animation.dart';
 import 'package:flame/components/component.dart';
-import 'package:flame/flare_animation.dart';
 import 'package:flame/particles/circle_particle.dart';
 import 'package:flame/particles/composed_particle.dart';
 import 'package:flame/particles/curved_particle.dart';
@@ -18,7 +17,6 @@ import 'package:flame/particles/accelerated_particle.dart';
 import 'package:flame/particles/paint_particle.dart';
 import 'package:flame/particles/animation_particle.dart';
 import 'package:flame/particles/component_particle.dart';
-import 'package:flame/particles/flare_particle.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/time.dart' as flame_time;
@@ -52,11 +50,9 @@ class MyGame extends BaseGame {
 
   Offset cellSize;
   Offset halfCellSize;
-  FlareAnimation flareAnimation;
 
   MyGame({
-    Size screenSize,
-    this.flareAnimation,
+    Size screenSize
   }) {
     size = screenSize;
     cellSize = Offset(size.width / gridSize, size.height / gridSize);
@@ -458,36 +454,6 @@ class MyGame extends BaseGame {
           }),
         );
       },
-    );
-  }
-
-  /// [FlareParticle] renders fiven [FlareAnimation] inside
-  /// as you can see, animation could be reused across
-  /// different particles.
-  Particle flareParticle() {
-    final flare = ComposedParticle(children: <Particle>[
-      // Circle Particle for background
-      CircleParticle(
-          paint: Paint()..color = Colors.white12,
-          radius: flareAnimation.width / 2),
-      FlareParticle(flare: flareAnimation),
-    ]);
-
-    final List<Offset> corners = [
-      -halfCellSize,
-      halfCellSize,
-    ];
-
-    return RotatingParticle(
-      to: pi,
-      child: Particle.generate(
-        count: 2,
-        generator: (i) => MovingParticle(
-          to: corners[i] * .4,
-          curve: SineCurve(),
-          child: flare,
-        ),
-      ),
     );
   }
 

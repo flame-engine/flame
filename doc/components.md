@@ -92,24 +92,22 @@ it also can receive a FlareController that can play multiple animations and cont
     import 'package:flame_flare/flame_flare.dart';
 
     // your implementation of FlareController
-    class BurrController extends FlareControls {
+    class WashingtonController extends FlareControls {
         
-        ActorNode sinnersNode;
-        ActorNode saintsNode;
+        ActorNode rightHandNode;
         
         void initialize(FlutterActorArtboard artboard) {
             super.initialize(artboard);
             
             // get flare node
-            sinnersNode = artboard.getNode("sinners");
-            saintsNode = artboard.getNode("saints");
+            rightHand = artboard.getNode("right_hand");
         }
     }
 
-    final fileName = "assets/wait_for_it.flr";
+    final fileName = "assets/george_washington.flr";
     final width = 1776;
     final height = 1804;
-    final controller = BurrController();
+    final controller = WashingtonController(); //instantiate controller
     
     FlareActorComponent flareAnimation = FlareActorComponent(
       fileName,
@@ -123,13 +121,13 @@ it also can receive a FlareController that can play multiple animations and cont
     add(flareAnimation);
 
     // to play an animation
-    controller.play("theodosia");
+    controller.play("rise_up");
 
     // you can add another animation to play at the same time
-    controller.play("shes_mine");
+    controller.play("close_door_way_out");
     
     // also, get a flare node and modify it
-    controller.sinnersNode.rotation = math.pi;
+    controller.rightHandNode.rotation = math.pi;
 ```
 
 You can also change the current playing animation using the `updateAnimation` method.
