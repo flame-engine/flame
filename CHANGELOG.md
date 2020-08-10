@@ -4,6 +4,7 @@
  - Externalizing Tiled support to its own package
  - Preventing some crashed that could happen on web when some methods were called
  - Add mustCallSuper to BaseGame `update` and `render` methods
+ - Moved FPS code from BaseGame to a mixin, BaseGame uses the new mixin.
 
 ## 0.24.0
  - Outsourcing SVG support to an external package
