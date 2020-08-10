@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'game/game.dart';
 
-mixin FPS on Game {
+mixin FPSCounter on Game {
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
 
