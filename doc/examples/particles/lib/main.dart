@@ -52,7 +52,7 @@ class MyGame extends BaseGame {
   Offset halfCellSize;
 
   MyGame({
-    Size screenSize
+    Size screenSize,
   }) {
     size = screenSize;
     cellSize = Offset(size.width / gridSize, size.height / gridSize);
@@ -88,7 +88,6 @@ class MyGame extends BaseGame {
       animationParticle(),
       fireworkParticle(),
       componentParticle(),
-      flareParticle(),
     ];
 
     // Place all the [Particle] instances
@@ -489,6 +488,7 @@ class MyGame extends BaseGame {
 
   @override
   bool debugMode() => true;
+
   @override
   void render(Canvas canvas) {
     super.render(canvas);
@@ -553,13 +553,8 @@ Future<BaseGame> loadGame() async {
       'boom3.png',
     ]),
   ]);
-  const flareSize = 32.0;
-  final flareAnimation = await FlareAnimation.load('assets/diamond.flr');
-  flareAnimation.updateAnimation('Spin');
-  flareAnimation.width = flareSize;
-  flareAnimation.height = flareSize;
 
-  return MyGame(screenSize: gameSize, flareAnimation: flareAnimation);
+  return MyGame(screenSize: gameSize);
 }
 
 /// A curve which maps sinus output (-1..1,0..pi)
