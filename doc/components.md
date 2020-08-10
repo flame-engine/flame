@@ -78,20 +78,58 @@ This component uses an instance of `Svg` class to represent a Component that has
     android.y = 100;
 ```
 
-## FlareAnimation Component
+## FlareActor Component
 
-This component wraps an instance of the [FlareAnimation](/doc/images.md#FlareAnimation), it receives the filename of the Flare animation file, which animation from that file you want to use, and the `width` and `height` of the rendered animation.
+*Note*: The previous implementation of a Flare integration API using `FlareAnimation` and `FlareComponent` has been deprecated.
+
+To use Flare within Flame, use the [`flame_flare`](https://github.com/flame-engine/flame_flare) package.
+
+This is the interface to use a [flare animation](https://pub.dev/packages/flare_flutter) within flame.
+`FlareActorComponent` has almost the same API as of flare's FlareActor widget. It receives the animation filename (that are loaded by default with `Flame.bundle`),
+it also can receive a FlareController that can play multiple animations and control nodes.
 
 ```dart
-    final fileName = "assets/Bob_Minion.flr";
-    final animation = "Wave";
-    final width = 306;
-    final height = 228;
+    import 'package:flame_flare/flame_flare.dart';
 
-    FlareComponent flareAnimation = FlareComponent(fileName, animation, width, height);
+    // your implementation of FlareController
+    class BurrController extends FlareControls {
+        
+        ActorNode sinnersNode;
+        ActorNode saintsNode;
+        
+        void initialize(FlutterActorArtboard artboard) {
+            super.initialize(artboard);
+            
+            // get flare node
+            sinnersNode = artboard.getNode("sinners");
+            saintsNode = artboard.getNode("saints");
+        }
+    }
+
+    final fileName = "assets/wait_for_it.flr";
+    final width = 1776;
+    final height = 1804;
+    final controller = BurrController();
+    
+    FlareActorComponent flareAnimation = FlareActorComponent(
+      fileName,
+      controller: controller,
+      width: 306,
+      height: 228,
+    );
+ 
     flareAnimation.x = 50;
     flareAnimation.y = 240;
     add(flareAnimation);
+
+    // to play an animation
+    controller.play("theodosia");
+
+    // you can add another animation to play at the same time
+    controller.play("shes_mine");
+    
+    // also, get a flare node and modify it
+    controller.sinnersNode.rotation = math.pi;
 ```
 
 You can also change the current playing animation using the `updateAnimation` method.

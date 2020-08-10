@@ -305,14 +305,18 @@ class RectComponent extends Component {
 ```
 
 ## Flare Particle
-A container for `FlareAnimation`, it propagates `update` and `render` hooks to its child.
+
+To use Flare within Flame, use the [`flame_flare`](https://github.com/flame-engine/flame_flare) package.
+
+A container for `FlareActorAnimation`, it propagates `update` and `render` hooks to its child.
 
 ```dart
+import 'package:flame_flare/flame_flare.dart';
+
 // During game initialisation
 const flareSize = 32.0;
-final flareAnimation = await FlareAnimation.load('assets/sparkle.flr');
-flareAnimation.updateAnimation('Shine');
-flareAnimation.width = flareSize;
+final flareAnimation = FlareActorAnimation('assets/sparkle.flr');
+flareAnimation.width = flareSize; 
 flareAnimation.height = flareSize;
 
 // Somewhere in game
