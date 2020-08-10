@@ -5,6 +5,7 @@
  - Preventing some crashed that could happen on web when some methods were called
  - Add mustCallSuper to BaseGame `update` and `render` methods
  - Moved FPS code from BaseGame to a mixin, BaseGame uses the new mixin.
+ - Deprecate flare API in favor of the package `flame_flare`
 
 ## 0.24.0
  - Outsourcing SVG support to an external package
