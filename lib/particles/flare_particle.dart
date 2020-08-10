@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import '../flare_animation.dart';
 import '../particle.dart';
 
+@Deprecated("Use flame_flare package instead")
 class FlareParticle extends Particle {
   final FlareAnimation flare;
 
