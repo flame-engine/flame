@@ -1,7 +1,7 @@
-import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flame/components/composed_component.dart';
+import 'package:flame/fps_counter.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 import 'package:flutter/foundation.dart';
@@ -19,7 +19,7 @@ import 'game.dart';
 /// It still needs to be subclasses to add your game logic, but the [update], [render] and [resize] methods have default implementations.
 /// This is the recommended structure to use for most games.
 /// It is based on the Component system.
-class BaseGame extends Game {
+class BaseGame extends Game with FPSCounter {
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components =
       OrderedSet(Comparing.on((c) => c.priority()));
@@ -35,9 +35,6 @@ class BaseGame extends Game {
 
   /// Camera position; every non-HUD component is translated so that the camera position is the top-left corner of the screen.
   Position camera = Position.empty();
-
-  /// List of deltas used in debug mode to calculate FPS
-  final List<double> _dts = [];
 
   /// This method is called for every component added, both via [add] and [addLater] methods.
   ///
@@ -156,36 +153,8 @@ class BaseGame extends Game {
   /// You can use this value to enable debug behaviors for your game, many components show extra information on screen when on debug mode
   bool debugMode() => false;
 
-  /// Returns whether this [Game] is should record fps or not
-  ///
-  /// Returns `false` by default. Override to use the `fps` counter method.
-  /// In recording fps, the [recordDt] method actually records every `dt` for statistics.
-  /// Then, you can use the [fps] method to check the game FPS.
-  bool recordFps() => false;
-
-  /// This is a hook that comes from the RenderBox to allow recording of render times and statistics.
   @override
-  void recordDt(double dt) {
-    if (recordFps()) {
-      _dts.add(dt);
-    }
-  }
-
-  /// Returns the average FPS for the last [average] measures.
-  ///
-  /// The values are only saved if in debug mode (override [recordFps] to use this).
-  /// Selects the last [average] dts, averages then, and returns the inverse value.
-  /// So it's technically updates per second, but the relation between updates and renders is 1:1.
-  /// Returns 0 if empty.
-  double fps([int average = 1]) {
-    final List<double> dts = _dts.sublist(math.max(0, _dts.length - average));
-    if (dts.isEmpty) {
-      return 0.0;
-    }
-    final double dtSum = dts.reduce((s, t) => s + t);
-    final double averageDt = dtSum / average;
-    return 1 / averageDt;
-  }
+  bool recordFps() => false;
 
   /// Returns the current time in seconds with microseconds precision.
   ///
