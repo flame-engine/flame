@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## [next]
+
 ## 0.25.0
  - Externalizing Tiled support to its own package `flame_tiled`
  - Preventing some crashs that could happen on web when some methods were called
