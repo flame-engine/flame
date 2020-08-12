@@ -78,20 +78,56 @@ This component uses an instance of `Svg` class to represent a Component that has
     android.y = 100;
 ```
 
-## FlareAnimation Component
+## FlareActor Component
 
-This component wraps an instance of the [FlareAnimation](/doc/images.md#FlareAnimation), it receives the filename of the Flare animation file, which animation from that file you want to use, and the `width` and `height` of the rendered animation.
+*Note*: The previous implementation of a Flare integration API using `FlareAnimation` and `FlareComponent` has been deprecated.
+
+To use Flare within Flame, use the [`flame_flare`](https://github.com/flame-engine/flame_flare) package.
+
+This is the interface to use a [flare animation](https://pub.dev/packages/flare_flutter) within flame.
+`FlareActorComponent` has almost the same API as of flare's FlareActor widget. It receives the animation filename (that are loaded by default with `Flame.bundle`),
+it also can receive a FlareController that can play multiple animations and control nodes.
 
 ```dart
-    final fileName = "assets/Bob_Minion.flr";
-    final animation = "Wave";
-    final width = 306;
-    final height = 228;
+    import 'package:flame_flare/flame_flare.dart';
 
-    FlareComponent flareAnimation = FlareComponent(fileName, animation, width, height);
+    // your implementation of FlareController
+    class WashingtonController extends FlareControls {
+        
+        ActorNode rightHandNode;
+        
+        void initialize(FlutterActorArtboard artboard) {
+            super.initialize(artboard);
+            
+            // get flare node
+            rightHand = artboard.getNode('right_hand');
+        }
+    }
+
+    final fileName = 'assets/george_washington.flr';
+    final width = 1776;
+    final height = 1804;
+    final controller = WashingtonController(); //instantiate controller
+    
+    FlareActorComponent flareAnimation = FlareActorComponent(
+      fileName,
+      controller: controller,
+      width: 306,
+      height: 228,
+    );
+ 
     flareAnimation.x = 50;
     flareAnimation.y = 240;
     add(flareAnimation);
+
+    // to play an animation
+    controller.play('rise_up');
+
+    // you can add another animation to play at the same time
+    controller.play('close_door_way_out');
+    
+    // also, get a flare node and modify it
+    controller.rightHandNode.rotation = math.pi;
 ```
 
 You can also change the current playing animation using the `updateAnimation` method.
@@ -139,9 +175,9 @@ Create it like this:
 
 ```dart
   final images = [
-    ParallaxImage("mountains.jpg"),
-    ParallaxImage("forest.jpg"),
-    ParallaxImage("city.jpg"),
+    ParallaxImage('mountains.jpg'),
+    ParallaxImage('forest.jpg'),
+    ParallaxImage('city.jpg'),
   ];
   this.bg = ParallaxComponent(images);
 ```
@@ -163,9 +199,9 @@ By default the images are aligned to the bottom left, repeated along the X-axis 
 Advanced example:
 ```dart
   final images = [
-    ParallaxImage("stars.jpg", repeat: ImageRepeat.repeat, alignment: Alignment.center, fill: LayerFill.width),
-    ParallaxImage("planets.jpg", repeat: ImageRepeat.repeatY, alignment: Alignment.bottomLeft, fill: LayerFill.none),
-    ParallaxImage("dust.jpg", repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
+    ParallaxImage('stars.jpg', repeat: ImageRepeat.repeat, alignment: Alignment.center, fill: LayerFill.width),
+    ParallaxImage('planets.jpg', repeat: ImageRepeat.repeatY, alignment: Alignment.bottomLeft, fill: LayerFill.none),
+    ParallaxImage('dust.jpg', repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
   ];
   this.bg = ParallaxComponent(images, baseSpeed: Offset(50, 0), layerDelta: Offset(20, 0));
 ```

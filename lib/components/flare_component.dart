@@ -3,6 +3,7 @@ import 'dart:ui';
 import '../flare_animation.dart';
 import 'position_component.dart';
 
+@Deprecated("Use flame_flare package instead")
 class FlareComponent extends PositionComponent {
   FlareAnimation _flareAnimation;
 

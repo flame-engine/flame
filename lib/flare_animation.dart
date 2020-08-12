@@ -5,6 +5,7 @@ import "flame.dart";
 import "package:flare_flutter/flare.dart";
 import "package:flare_flutter/flare_actor.dart";
 
+@Deprecated("Use flame_flare package instead")
 class FlareAnimation {
   final FlutterActorArtboard _artboard;
 
