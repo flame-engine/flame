@@ -26,3 +26,8 @@ To build the game for production, using skia, use the following:
 
 `$ flutter build web --release --dart-define=FLUTTER_WEB_USE_SKIA=true`
 
+## Experimental support
+
+Support on web, even on the Flame side is still experimental, and some methods may not work, for example `Flame.util.setOrientation` or `Flame.util.fullScreen` don't work on web, they can be called, but nothing will happen.
+
+Another example, pre caching audio using `Flame.audio` also don't work due to Audioplayers not supporting it on web. This can ben workarounded by using the `http` package, and requesting a get to the audiofile, that will make the browser cache the file prodcing the same effect seem on mobile.
