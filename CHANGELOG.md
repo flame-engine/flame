@@ -2,10 +2,14 @@
 
 ## 1.0.0
  - Move all box2d related code and examples to the flame_box2d repo
-
-## [next]
- - Preventing some crashed that could happen on web when some methods were called
  - Rename Animation to SpriteAnimation
+
+## 0.25.0
+ - Externalizing Tiled support to its own package `flame_tiled`
+ - Preventing some crashs that could happen on web when some methods were called
+ - Add mustCallSuper to BaseGame `update` and `render` methods
+ - Moved FPS code from BaseGame to a mixin, BaseGame uses the new mixin.
+ - Deprecate flare API in favor of the package `flame_flare`
 
 ## 0.24.0
  - Outsourcing SVG support to an external package
