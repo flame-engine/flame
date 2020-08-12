@@ -308,7 +308,7 @@ class RectComponent extends Component {
 
 To use Flare within Flame, use the [`flame_flare`](https://github.com/flame-engine/flame_flare) package.
 
-A container for `FlareActorAnimation`, it propagates `update` and `render` hooks to its child.
+It will provide a class `FlareParticle` that is a container for `FlareActorAnimation`, it propagates `update` and `render` hooks to its child.
 
 ```dart
 import 'package:flame_flare/flame_flare.dart';
