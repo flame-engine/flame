@@ -35,7 +35,6 @@ class Ball extends PositionComponent {
       }
 
       forward = !forward;
-      print('boin');
       Flame.audio.play('boin.mp3', volume: 1.0);
     }
   }

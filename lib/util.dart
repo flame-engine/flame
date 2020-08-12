@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart' as widgets;
 
 import 'animation.dart';
@@ -20,6 +21,9 @@ class Util {
   ///
   /// Most games should probably be this way.
   Future<void> fullScreen() {
+    if (kIsWeb) {
+      return Future.value();
+    }
     return SystemChrome.setEnabledSystemUIOverlays([]);
   }
 
@@ -27,6 +31,9 @@ class Util {
   ///
   /// When it opens, it will automatically change orientation to the preferred one (if possible) depending on the physical orientation of the device.
   Future<void> setOrientation(DeviceOrientation orientation) {
+    if (kIsWeb) {
+      return Future.value();
+    }
     return SystemChrome.setPreferredOrientations(
       <DeviceOrientation>[orientation],
     );
@@ -36,6 +43,9 @@ class Util {
   ///
   /// When it opens, it will automatically change orientation to the preferred one (if possible) depending on the physical orientation of the device.
   Future<void> setOrientations(List<DeviceOrientation> orientations) {
+    if (kIsWeb) {
+      return Future.value();
+    }
     return SystemChrome.setPreferredOrientations(orientations);
   }
 
@@ -89,7 +99,7 @@ class Util {
 
   /// Waits for the initial screen dimensions to be available.
   ///
-  /// Because of flutter's issue #5259, when the app starts the size might be 0x0.
+  /// Because of flutter's issue [#5259](https://github.com/flutter/flutter/issues/5259), when the app starts the size might be 0x0.
   /// This waits for the information to be properly updated.
   ///
   /// A best practice would be to implement there resize hooks on your game and components and don't use this at all.
