@@ -100,11 +100,11 @@ it also can receive a FlareController that can play multiple animations and cont
             super.initialize(artboard);
             
             // get flare node
-            rightHand = artboard.getNode("right_hand");
+            rightHand = artboard.getNode('right_hand');
         }
     }
 
-    final fileName = "assets/george_washington.flr";
+    final fileName = 'assets/george_washington.flr';
     final width = 1776;
     final height = 1804;
     final controller = WashingtonController(); //instantiate controller
@@ -121,10 +121,10 @@ it also can receive a FlareController that can play multiple animations and cont
     add(flareAnimation);
 
     // to play an animation
-    controller.play("rise_up");
+    controller.play('rise_up');
 
     // you can add another animation to play at the same time
-    controller.play("close_door_way_out");
+    controller.play('close_door_way_out');
     
     // also, get a flare node and modify it
     controller.rightHandNode.rotation = math.pi;
@@ -175,9 +175,9 @@ Create it like this:
 
 ```dart
   final images = [
-    ParallaxImage("mountains.jpg"),
-    ParallaxImage("forest.jpg"),
-    ParallaxImage("city.jpg"),
+    ParallaxImage('mountains.jpg'),
+    ParallaxImage('forest.jpg'),
+    ParallaxImage('city.jpg'),
   ];
   this.bg = ParallaxComponent(images);
 ```
@@ -199,9 +199,9 @@ By default the images are aligned to the bottom left, repeated along the X-axis 
 Advanced example:
 ```dart
   final images = [
-    ParallaxImage("stars.jpg", repeat: ImageRepeat.repeat, alignment: Alignment.center, fill: LayerFill.width),
-    ParallaxImage("planets.jpg", repeat: ImageRepeat.repeatY, alignment: Alignment.bottomLeft, fill: LayerFill.none),
-    ParallaxImage("dust.jpg", repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
+    ParallaxImage('stars.jpg', repeat: ImageRepeat.repeat, alignment: Alignment.center, fill: LayerFill.width),
+    ParallaxImage('planets.jpg', repeat: ImageRepeat.repeatY, alignment: Alignment.bottomLeft, fill: LayerFill.none),
+    ParallaxImage('dust.jpg', repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
   ];
   this.bg = ParallaxComponent(images, baseSpeed: Offset(50, 0), layerDelta: Offset(20, 0));
 ```
