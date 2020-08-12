@@ -1,8 +1,8 @@
 # CHANGELOG
 
-## [next]
- - Externalizing Tiled support to its own package
- - Preventing some crashed that could happen on web when some methods were called
+## 0.25.0
+ - Externalizing Tiled support to its own package `flame_tiled`
+ - Preventing some crashs that could happen on web when some methods were called
  - Add mustCallSuper to BaseGame `update` and `render` methods
  - Moved FPS code from BaseGame to a mixin, BaseGame uses the new mixin.
  - Deprecate flare API in favor of the package `flame_flare`
