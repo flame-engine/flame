@@ -148,7 +148,7 @@ class TextBoxComponent extends PositionComponent with Resizable {
 
   Future<Image> _redrawCache() {
     final PictureRecorder recorder = PictureRecorder();
-    final Canvas c = Canvas(recorder, toZeroRect());
+    final Canvas c = Canvas(recorder, toOriginRect());
     _fullRender(c);
     return recorder.endRecording().toImage(width.toInt(), height.toInt());
   }

@@ -18,6 +18,6 @@ class Square extends PositionComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    canvas.drawRect(toZeroRect(), _paint);
+    canvas.drawRect(toOriginRect(), _paint);
   }
 }

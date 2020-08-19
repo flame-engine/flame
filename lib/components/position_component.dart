@@ -87,7 +87,7 @@ abstract class PositionComponent extends Component {
   /// Returns the size of this component starting at (0, 0).
   /// Effectively this is it's position with respect to itself.
   /// Use this if the canvas is already translated by (x, y).
-  Rect toZeroRect() => Rect.fromLTWH(0, 0, width, height);
+  Rect toOriginRect() => Rect.fromLTWH(0, 0, width, height);
 
   /// Returns the relative position/size of this component.
   /// Relative because it might be translated by their parents (which is not considered here).
@@ -116,7 +116,7 @@ abstract class PositionComponent extends Component {
   }
 
   void renderDebugMode(Canvas canvas) {
-    canvas.drawRect(toZeroRect(), _debugPaint);
+    canvas.drawRect(toOriginRect(), _debugPaint);
     debugTextConfig.render(
         canvas,
         'x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}',
@@ -131,7 +131,7 @@ abstract class PositionComponent extends Component {
         Position(width - 50, height));
   }
 
-  void prepareCanvas(Canvas canvas) {
+  void _prepareCanvas(Canvas canvas) {
     canvas.translate(x, y);
 
     canvas.rotate(angle);
@@ -201,7 +201,7 @@ abstract class PositionComponent extends Component {
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    prepareCanvas(canvas);
+    _prepareCanvas(canvas);
 
     if (debugMode) {
       renderDebugMode(canvas);

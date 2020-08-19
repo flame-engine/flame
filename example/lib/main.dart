@@ -31,7 +31,7 @@ class Square extends PositionComponent with HasGameRef<MyGame> {
   void render(Canvas c) {
     super.render(c);
 
-    c.drawRect(toZeroRect(), white);
+    c.drawRect(toOriginRect(), white);
     c.drawRect(const Rect.fromLTWH(0, 0, 3, 3), red);
     c.drawRect(Rect.fromLTWH(width / 2, height / 2, 3, 3), blue);
   }
