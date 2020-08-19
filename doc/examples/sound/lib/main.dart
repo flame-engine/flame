@@ -20,7 +20,7 @@ class Ball extends PositionComponent {
   @override
   void render(Canvas c) {
     super.render(c);
-    c.drawOval(toZeroRect(), paint);
+    c.drawOval(toOriginRect(), paint);
   }
 
   @override
