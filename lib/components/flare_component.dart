@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
+
 import '../flare_animation.dart';
 import 'position_component.dart';
 
@@ -8,7 +10,11 @@ class FlareComponent extends PositionComponent {
   FlareAnimation _flareAnimation;
 
   FlareComponent(
-      String fileName, String animation, double width, double height) {
+    String fileName,
+    String animation,
+    double width,
+    double height,
+  ) {
     this.width = width;
     this.height = height;
 
@@ -30,9 +36,10 @@ class FlareComponent extends PositionComponent {
   @override
   bool loaded() => _flareAnimation != null;
 
+  @mustCallSuper
   @override
   void render(Canvas canvas) {
-    prepareCanvas(canvas);
+    super.render(canvas);
     _flareAnimation.render(canvas, x: 0, y: 0);
   }
 

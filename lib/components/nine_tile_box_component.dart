@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
+
 import '../nine_tile_box.dart';
 import 'position_component.dart';
 
@@ -12,8 +14,10 @@ class NineTileBoxComponent extends PositionComponent {
   /// It uses the x, y, width and height coordinates from the [PositionComponent] to render.
   NineTileBoxComponent(this.nineTileBox);
 
+  @mustCallSuper
   @override
   void render(Canvas c) {
-    nineTileBox.drawRect(c, toRect());
+    super.render(c);
+    nineTileBox.drawRect(c, toOriginRect());
   }
 }

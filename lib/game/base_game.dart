@@ -9,7 +9,6 @@ import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
 import '../components/component.dart';
-import '../components/composed_component.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
 import '../components/position_component.dart';
@@ -62,10 +61,6 @@ class BaseGame extends Game with FPSCounter {
     // first time resize
     if (size != null) {
       c.resize(size);
-    }
-
-    if (c is ComposedComponent) {
-      c.components.forEach(preAdd);
     }
 
     c.onMount();
