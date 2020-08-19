@@ -48,10 +48,10 @@ abstract class PositionComponent extends Component {
   /// The [angle] is rotated around this point.
   Anchor anchor = Anchor.topLeft;
 
-  /// Wether this component should be flipped on the X axis before being rendered.
+  /// Whether this component should be flipped on the X axis before being rendered.
   bool renderFlipX = false;
 
-  /// Wether this component should be flipped ofn the Y axis before being rendered.
+  /// Whether this component should be flipped ofn the Y axis before being rendered.
   bool renderFlipY = false;
 
   /// This is set by the BaseGame to tell this component to render additional debug information,
