@@ -27,14 +27,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Testing addingOverlay'),
-        ),
-        body: _myGame == null ? const Text('Wait') : _myGame.widget,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => newGame(),
-          child: const Icon(Icons.add),
-        ));
+      appBar: AppBar(
+        title: const Text('Testing addingOverlay'),
+      ),
+      body: _myGame == null ? const Text('Wait') : _myGame.widget,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => newGame(),
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 
   void newGame() {

@@ -19,7 +19,8 @@ class Ball extends PositionComponent {
 
   @override
   void render(Canvas c) {
-    c.drawOval(toRect(), paint);
+    super.render(c);
+    c.drawOval(toOriginRect(), paint);
   }
 
   @override
@@ -43,17 +44,16 @@ class Ball extends PositionComponent {
 class MyGame extends BaseGame {
   MyGame(Size screenSize) {
     size = screenSize;
-    _start();
-  }
 
-  void _start() async {
     Flame.audio.disableLog();
     Flame.audio.load('boin.mp3');
     Flame.audio.loop('music.mp3', volume: 0.4);
 
-    add(Ball(size)
-      ..y = (size.height / 2) - 50
-      ..width = 100
-      ..height = 100);
+    add(
+      Ball(size)
+        ..y = (size.height / 2) - 50
+        ..width = 100
+        ..height = 100,
+    );
   }
 }

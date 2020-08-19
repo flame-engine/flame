@@ -70,8 +70,9 @@ class _AnimationWidget extends State<SpriteAnimationWidget>
       widget.animation.reset();
       _lastUpdated = DateTime.now().millisecond.toDouble();
       _controller.repeat(
-          // Approximately 60 fps
-          period: const Duration(milliseconds: 16));
+        // Approximately 60 fps
+        period: const Duration(milliseconds: 16),
+      );
     });
   }
 

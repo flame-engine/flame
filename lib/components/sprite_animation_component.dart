@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
+
 import '../sprite_animation.dart';
 import 'position_component.dart';
 
@@ -55,9 +57,10 @@ class SpriteAnimationComponent extends PositionComponent {
   @override
   bool destroy() => destroyOnFinish && animation.isLastFrame;
 
+  @mustCallSuper
   @override
   void render(Canvas canvas) {
-    prepareCanvas(canvas);
+    super.render(canvas);
     animation.getSprite().render(
           canvas,
           width: width,

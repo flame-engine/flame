@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame/components/composed_component.dart';
 import 'package:flame/components/position_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/components/mixins/resizable.dart';
@@ -9,20 +8,10 @@ import 'package:flame/game/base_game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:test/test.dart';
 
-import 'package:flame/components/component.dart';
-
 class MyGame extends BaseGame with HasTapableComponents {}
 
 class MyTap extends PositionComponent with Tapable, Resizable {
   bool tapped = false;
-
-  @override
-  void render(Canvas c) {}
-
-  @override
-  void update(double t) {
-    super.update(t);
-  }
 
   @override
   void onTapDown(TapDownDetails details) {
@@ -30,29 +19,15 @@ class MyTap extends PositionComponent with Tapable, Resizable {
   }
 
   @override
-  bool checkTapOverlap(Offset o) => true;
+  bool checkTapOverlap(Rect c, Offset o) => true;
 }
 
-class MyComposed extends Component with HasGameRef, Tapable, ComposedComponent {
-  @override
-  void update(double dt) {}
-
-  @override
-  void render(Canvas c) {}
-
+class MyComposed extends PositionComponent with HasGameRef, Tapable {
   @override
   Rect toRect() => Rect.zero;
 }
 
-class PositionComponentNoNeedForRect extends PositionComponent with Tapable {
-  @override
-  void render(Canvas c) {}
-
-  @override
-  void update(double t) {
-    super.update(t);
-  }
-}
+class PositionComponentNoNeedForRect extends PositionComponent with Tapable {}
 
 const Size size = Size(1.0, 1.0);
 
@@ -61,7 +36,7 @@ void main() {
     test('taps and resizes children', () {
       final MyGame game = MyGame();
       final MyTap child = MyTap();
-      final MyComposed wrapper = MyComposed()..add(child);
+      final MyComposed wrapper = MyComposed()..addChild(game, child);
 
       game.size = size;
       game.add(wrapper);
