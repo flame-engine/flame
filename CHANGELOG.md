@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+- Improving Flame image auto cache
 
 ## 0.25.0
  - Externalizing Tiled support to its own package `flame_tiled`

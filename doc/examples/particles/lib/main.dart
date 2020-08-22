@@ -292,7 +292,7 @@ class MyGame extends BaseGame {
   Particle imageParticle() {
     return ImageParticle(
       size: const Size.square(24),
-      image: Flame.images.loadedFiles['zap.png'],
+      image: Flame.images.loadedFiles['zap.png'].loadedImage,
     );
   }
 
@@ -522,7 +522,7 @@ class MyGame extends BaseGame {
     const rows = 8;
     const frames = columns * rows;
     const imagePath = 'boom3.png';
-    final spriteImage = Flame.images.loadedFiles[imagePath];
+    final spriteImage = Flame.images.loadedFiles[imagePath].loadedImage;
     final spritesheet = SpriteSheet(
       rows: rows,
       columns: columns,
