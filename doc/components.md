@@ -141,7 +141,7 @@ A mixin that helps you to make a `Component` wraps other components. It is usefu
 Example of usage, where visibility of two components are handled by a wrapper:
 
 ```dart
-class GameOverPanel extends PositionComponent with Resizable, ComposedComponent {
+class GameOverPanel extends PositionComponent with HasGameRef, Tapable, ComposedComponent {
   bool visible = false;
 
   GameOverText gameOverText;
