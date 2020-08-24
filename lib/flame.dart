@@ -35,10 +35,16 @@ class Flame {
   /// Access a shard instance of [AssetsCache] class.
   static AssetsCache assets = AssetsCache();
 
+  /// help init fullScreen,orientation...
+  ///
+  /// [fullScreen] Sets the app to be fullscreen(default true)
+  /// [orientation] Sets the preferred orientation (landscape or portrait) for the app. When this is set,the orientations will not be used.
+  /// [orientations] Sets the preferred orientations (landscape left, right, portrait up, or down) for the app.
   static Future<void> init(
       {AssetBundle bundle,
       bool fullScreen = true,
-      DeviceOrientation orientation}) async {
+      DeviceOrientation orientation,
+      List<DeviceOrientation> orientations}) async {
     initializeWidget();
 
     if (fullScreen) {
@@ -48,9 +54,21 @@ class Flame {
     if (orientation != null) {
       await util.setOrientation(orientation);
     }
-
+    if (orientation == null && orientations != null) {
+      await util.setOrientations(orientations);
+    }
     _bundle = bundle;
   }
+
+  static List<DeviceOrientation> landscape() => <DeviceOrientation>[
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ];
+
+  static List<DeviceOrientation> portrait() => <DeviceOrientation>[
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ];
 
   static void initializeWidget() {
     WidgetsFlutterBinding.ensureInitialized();

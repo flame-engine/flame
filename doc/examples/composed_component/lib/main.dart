@@ -10,9 +10,11 @@ import 'package:flame/components/text_component.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
-  await Flame.init(fullScreen: true, orientations: Flame.landscape());
+  await Flame.init(
+      fullScreen: true, orientation: DeviceOrientation.landscapeLeft);
   final size = await Flame.util.initialDimensions();
   runApp(MyGame(size).widget);
 }
