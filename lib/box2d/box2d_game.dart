@@ -16,6 +16,7 @@ class Box2DGame extends BaseGame {
   @override
   void add(Component c) {
     if (c is BodyComponent) {
+      preAdd(c);
       box.add(c);
     } else {
       super.add(c);
@@ -25,6 +26,7 @@ class Box2DGame extends BaseGame {
   @override
   void addLater(Component c) {
     if (c is BodyComponent) {
+      preAdd(c);
       _addLater.add(c);
     } else {
       super.addLater(c);
