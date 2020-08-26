@@ -2,6 +2,7 @@
 
 ## [next]
  - fix bug in the Box2DGame's add and addLater method , when the Component extends BodyComponent and mixin HasGameRef or other mixins ,the mixins will not be set correctly
+ - ComposedComponent support HasGameRef with generic(HasGameRef<T>)
 
 ## 0.25.0
  - Externalizing Tiled support to its own package `flame_tiled`
