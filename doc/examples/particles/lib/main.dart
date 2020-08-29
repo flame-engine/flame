@@ -51,6 +51,9 @@ class MyGame extends BaseGame {
   Offset cellSize;
   Offset halfCellSize;
 
+  @override
+  bool recordFps() => true;
+
   MyGame({
     Size screenSize,
   }) {
