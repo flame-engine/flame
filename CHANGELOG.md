@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Improving Flame image auto cache
  - fix bug in the Box2DGame's add and addLater method , when the Component extends BodyComponent and mixin HasGameRef or other mixins ,the mixins will not be set correctly
 
 ## 0.25.0
