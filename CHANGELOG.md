@@ -4,6 +4,10 @@
  - Move all box2d related code and examples to the flame_box2d repo
  - Rename Animation to SpriteAnimation
 
+## 0.26.0
+ - Improving Flame image auto cache
+ - Fix bug in the Box2DGame's add and addLater method , when the Component extends BodyComponent and mixin HasGameRef or other mixins ,the mixins will not be set correctly
+
 ## 0.25.0
  - Externalizing Tiled support to its own package `flame_tiled`
  - Preventing some crashs that could happen on web when some methods were called
