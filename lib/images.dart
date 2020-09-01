@@ -6,7 +6,7 @@ import 'dart:convert' show base64;
 import 'package:flame/flame.dart';
 
 class Images {
-  Map<String, Image> loadedFiles = {};
+  Map<String, ImageAssetLoader> loadedFiles = {};
 
   void clear(String fileName) {
     loadedFiles.remove(fileName);
@@ -22,16 +22,16 @@ class Images {
 
   Future<Image> load(String fileName) async {
     if (!loadedFiles.containsKey(fileName)) {
-      loadedFiles[fileName] = await _fetchToMemory(fileName);
+      loadedFiles[fileName] = ImageAssetLoader(_fetchToMemory(fileName));
     }
-    return loadedFiles[fileName];
+    return await loadedFiles[fileName].retreive();
   }
 
   Future<Image> fromBase64(String fileName, String base64) async {
     if (!loadedFiles.containsKey(fileName)) {
-      loadedFiles[fileName] = await _fetchFromBase64(base64);
+      loadedFiles[fileName] = ImageAssetLoader(_fetchFromBase64(base64));
     }
-    return loadedFiles[fileName];
+    return await loadedFiles[fileName].retreive();
   }
 
   Future<Image> _fetchFromBase64(String base64Data) async {
@@ -50,5 +50,18 @@ class Images {
     final Completer<Image> completer = Completer();
     decodeImageFromList(bytes, (image) => completer.complete(image));
     return completer.future;
+  }
+}
+
+class ImageAssetLoader {
+  ImageAssetLoader(this.future);
+
+  Image loadedImage;
+  Future<Image> future;
+
+  Future<Image> retreive() async {
+    loadedImage ??= await future;
+
+    return loadedImage;
   }
 }
