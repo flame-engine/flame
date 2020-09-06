@@ -17,9 +17,17 @@ class MyGame extends BaseGame {
   void init() async {
     final tileset = await IsometricTileset.load('tiles.png', 32);
     final matrix = [
-      [-1, 1, 0, 0],
-      [1, 1, 0, 2],
+      [-1, 1, 1, 1, 0, 0],
+      [-1, 1, 2, 1, 0, 0],
+      [-1, 0, 1, 1, 0, 0],
+      [-1, 1, 1, 1, 0, 0],
+      [1, 1, 1, 1, 0, 2],
+      [1, 3, 3, 3, 0, 2],
     ];
-    add(IsometricTileMapComponent(tileset, matrix));
+    add(
+      IsometricTileMapComponent(tileset, matrix)
+        ..x = 100
+        ..y = 100,
+    );
   }
 }

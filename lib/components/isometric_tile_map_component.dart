@@ -46,7 +46,7 @@ class IsometricTileMapComponent extends PositionComponent {
   void render(Canvas c) {
     prepareCanvas(c);
 
-    final s = effectiveTileSize.toDouble();
+    final s = effectiveTileSize.toDouble() / 2;
     matrix.asMap().forEach((i, line) {
       line.asMap().forEach((j, element) {
         if (element == -1) {
@@ -54,8 +54,20 @@ class IsometricTileMapComponent extends PositionComponent {
         }
 
         final sprite = tileset.getTile(element);
-        sprite.renderPosition(c, Position(j * s, i * s));
+        sprite.renderPosition(c, cartToIso(Position(j * s, i * s)));
       });
     });
+  }
+
+  Position isoToCart(Position p) {
+    final x = (2 * p.y + p.x) / 2;
+    final y = (2 * p.y - p.x) / 2;
+    return Position(x, y);
+  }
+
+  Position cartToIso(Position p) {
+    final x = p.x - p.y;
+    final y = (p.x + p.y) / 2;
+    return Position(x, y);
   }
 }
