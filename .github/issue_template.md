@@ -33,4 +33,4 @@ This issue is related to running on which platform? (Select all that apply)
 
 ## Minimal reproducible code (Required for bugs)
 
-Include a minimal code that produces the problem, add it inline using code block markdown, or a link to github repository:
+Include a minimal code that produces the problem (add it inline using code block markdown), or a link to Github repository:
