@@ -14,7 +14,7 @@ Describe your issue here
 Flame version:
 
 <!--
-NOTE: Flame supports stable and beta channel of Flutter, issues out of those channels may not be prioritized, or closed.
+NOTE: Flame supports the stable and beta Flutter channels; issues outside of those channels may not be prioritized, or closed.
 -->
 
 Flutter doctor:
