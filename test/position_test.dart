@@ -9,9 +9,7 @@ void expectDouble(double d1, double d2) {
 void main() {
   group('position test', () {
     test('test add', () {
-      final Vector2 p = Vector2(0.0, 5.0);
-      final Vector2 p2 = p + Vector2(5.0, 5.0);
-      expect(p, p2);
+      final Vector2 p = Vector2(0.0, 5.0) + Vector2(5.0, 5.0);
       expectDouble(p.x, 5.0);
       expectDouble(p.y, 10.0);
     });
@@ -98,7 +96,7 @@ void main() {
       expect(p2.x, 1.0);
       expect(p2.y, 1.0);
       p2.clampScalar(0, 1.0);
-      expectDouble(p2.length, 1.0);
+      expectDouble(p2.length, math.sqrt(2));
       expect(p2.x, p2.y);
     });
   });
