@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flame/game/base_game.dart';
 import 'package:flame/vector.dart';
 import 'package:test/test.dart';
