@@ -7,6 +7,7 @@ import 'package:flame/components/joystick/joystick_events.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/game/base_game.dart';
 import 'package:flame/gestures.dart';
+import 'package:flame/vector.dart';
 
 mixin JoystickListener {
   void joystickChangeDirectional(JoystickDirectionalEvent event);
@@ -69,7 +70,7 @@ class JoystickComponent extends JoystickController {
   }
 
   @override
-  void resize(Size size) {
+  void resize(Vector2 size) {
     directional?.initialize(size, this);
     actions?.forEach((action) => action.initialize(size, this));
     super.resize(size);

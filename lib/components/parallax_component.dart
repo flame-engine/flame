@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 import '../flame.dart';
 import 'position_component.dart';
@@ -37,7 +38,7 @@ class ParallaxLayer {
   Future<Image> future;
 
   Image _image;
-  Size _screenSize;
+  Vector2 _screenSize;
   Rect _paintArea;
   Offset _scroll;
   Offset _imageSize;
@@ -51,7 +52,7 @@ class ParallaxLayer {
 
   Offset currentOffset() => _scroll;
 
-  void resize(Size size) {
+  void resize(Vector2 size) {
     if (!loaded()) {
       _screenSize = size;
       return;
@@ -60,9 +61,9 @@ class ParallaxLayer {
     double scale(LayerFill fill) {
       switch (fill) {
         case LayerFill.height:
-          return _image.height / size.height;
+          return _image.height / size.y;
         case LayerFill.width:
-          return _image.width / size.width;
+          return _image.width / size.x;
         default:
           return _scale;
       }
@@ -75,12 +76,12 @@ class ParallaxLayer {
 
     // Number of images that can fit on the canvas plus one
     // to have something to scroll to without leaving canvas empty
-    final countX = 1 + size.width / _imageSize.dx;
-    final countY = 1 + size.height / _imageSize.dy;
+    final countX = 1 + size.x / _imageSize.dx;
+    final countY = 1 + size.y / _imageSize.dy;
 
     // Percentage of the image size that will overflow
-    final overflowX = (_imageSize.dx * countX - size.width) / _imageSize.dx;
-    final overflowY = (_imageSize.dy * countY - size.height) / _imageSize.dy;
+    final overflowX = (_imageSize.dx * countX - size.x) / _imageSize.dx;
+    final overflowY = (_imageSize.dy * countY - size.y) / _imageSize.dy;
 
     // Align image to correct side of the screen
     final alignment = parallaxImage.alignment;
@@ -175,7 +176,7 @@ class ParallaxComponent extends PositionComponent {
 
   @mustCallSuper
   @override
-  void resize(Size size) {
+  void resize(Vector2 size) {
     super.resize(size);
     _layers.forEach((layer) => layer.resize(size));
   }

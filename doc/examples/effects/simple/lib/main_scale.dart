@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/anchor.dart';
+import 'package:flame/vector.dart';
 import 'package:flame/effects/effects.dart';
 
 import './square.dart';
@@ -23,7 +24,7 @@ class MyGame extends BaseGame with TapDetector {
 
     grow = !grow;
     square.addEffect(ScaleEffect(
-      size: Size(s, s),
+      size: Vector2(s, s),
       speed: 250.0,
       curve: Curves.bounceInOut,
     ));

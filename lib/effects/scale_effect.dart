@@ -1,23 +1,22 @@
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
+import 'package:vector_math/vector_math_64.dart';
 
-import 'dart:ui';
 import 'dart:math';
 
 import './effects.dart';
-import '../position.dart';
 
 double _direction(double p, double d) => (p - d).sign;
 double _size(double a, double b) => (a - b).abs();
 
 class ScaleEffect extends PositionComponentEffect {
-  Size size;
+  Vector2 size;
   double speed;
   Curve curve;
 
-  Size _original;
-  Size _diff;
-  final Position _dir = Position.empty();
+  Vector2 _original;
+  Vector2 _diff;
+  final Vector2 _dir = Vector2.zero();
 
   ScaleEffect({
     @required this.size,
@@ -32,19 +31,19 @@ class ScaleEffect extends PositionComponentEffect {
   void initialize(_comp) {
     super.initialize(_comp);
     if (!isAlternating) {
-      endSize = Position.fromSize(size);
+      endSize = size.clone();
     }
 
-    _original = Size(component.width, component.height);
-    _diff = Size(
-      _size(_original.width, size.width),
-      _size(_original.height, size.height),
+    _original = component.toSize();
+    _diff = Vector2(
+      _size(_original.x, size.x),
+      _size(_original.y, size.y),
     );
 
-    _dir.x = _direction(size.width, _original.width);
-    _dir.y = _direction(size.height, _original.height);
+    _dir.x = _direction(size.x, _original.x);
+    _dir.y = _direction(size.y, _original.y);
 
-    final scaleDistance = sqrt(pow(_diff.width, 2) + pow(_diff.height, 2));
+    final scaleDistance = sqrt(pow(_diff.x, 2) + pow(_diff.y, 2));
     travelTime = scaleDistance / speed;
   }
 
@@ -53,7 +52,7 @@ class ScaleEffect extends PositionComponentEffect {
     super.update(dt);
     final double c = curve?.transform(percentage) ?? 1.0;
 
-    component.width = _original.width + _diff.width * c * _dir.x;
-    component.height = _original.height + _diff.height * c * _dir.y;
+    component.width = _original.x + _diff.x * c * _dir.x;
+    component.height = _original.y + _diff.y * c * _dir.y;
   }
 }

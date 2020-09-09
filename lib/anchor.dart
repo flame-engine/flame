@@ -1,25 +1,25 @@
-import 'dart:ui';
-
-import 'position.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 class Anchor {
-  static const Anchor topLeft = Anchor(Offset(0.0, 0.0));
-  static const Anchor topCenter = Anchor(Offset(0.5, 0.0));
-  static const Anchor topRight = Anchor(Offset(1.0, 0.0));
-  static const Anchor centerLeft = Anchor(Offset(0.0, 0.5));
-  static const Anchor center = Anchor(Offset(0.5, 0.5));
-  static const Anchor centerRight = Anchor(Offset(1.0, 0.5));
-  static const Anchor bottomLeft = Anchor(Offset(0.0, 1.0));
-  static const Anchor bottomCenter = Anchor(Offset(0.5, 1.0));
-  static const Anchor bottomRight = Anchor(Offset(1.0, 1.0));
+  static const Anchor topLeft = Anchor(0.0, 0.0);
+  static const Anchor topCenter = Anchor(0.5, 0.0);
+  static const Anchor topRight = Anchor(1.0, 0.0);
+  static const Anchor centerLeft = Anchor(0.0, 0.5);
+  static const Anchor center = Anchor(0.5, 0.5);
+  static const Anchor centerRight = Anchor(1.0, 0.5);
+  static const Anchor bottomLeft = Anchor(0.0, 1.0);
+  static const Anchor bottomCenter = Anchor(0.5, 1.0);
+  static const Anchor bottomRight = Anchor(1.0, 1.0);
 
-  final Offset relativePosition;
+  final double x;
+  final double y;
 
-  const Anchor(this.relativePosition);
+  Vector2 get relativePosition => Vector2(x, y);
 
-  Position translate(Position p, Position size) {
-    return p.clone().minus(
-          Position(size.x * relativePosition.dx, size.y * relativePosition.dy),
-        );
+  const Anchor(this.x, this.y);
+
+  Vector2 translate(Vector2 p, Vector2 size) {
+    return p - size.clone()
+      ..multiply(relativePosition);
   }
 }
