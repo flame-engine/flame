@@ -3,9 +3,9 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/widgets.dart' as widgets;
+import 'package:vector_math/vector_math_64.dart';
 
 import '../palette.dart';
-import '../position.dart';
 import '../text_config.dart';
 import 'mixins/resizable.dart';
 import 'position_component.dart';
@@ -28,7 +28,7 @@ class TextBoxComponent extends PositionComponent with Resizable {
   static final Paint _imagePaint = BasicPalette.white.paint
     ..filterQuality = FilterQuality.high;
 
-  Position p = Position.empty();
+  Vector2 p = Vector2.zero();
 
   String _text;
   TextConfig _config;

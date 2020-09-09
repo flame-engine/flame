@@ -2,7 +2,7 @@ import 'package:flame/effects/move_effect.dart';
 import 'package:flame/effects/scale_effect.dart';
 import 'package:flame/effects/rotate_effect.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/position.dart';
+import 'package:flame/vector.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +44,7 @@ class MyGame extends BaseGame with TapDetector {
     orangeSquare.clearEffects();
 
     greenSquare.addEffect(MoveEffect(
-      destination: Position(dx, dy),
+      destination: Vector2(dx, dy),
       speed: 250.0,
       curve: Curves.bounceInOut,
       isInfinite: true,
@@ -52,7 +52,7 @@ class MyGame extends BaseGame with TapDetector {
     ));
 
     redSquare.addEffect(ScaleEffect(
-      size: Size(dx, dy),
+      size: Vector2(dx, dy),
       speed: 250.0,
       curve: Curves.easeInCubic,
       isInfinite: true,

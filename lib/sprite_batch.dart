@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 
 import 'flame.dart';
+import 'vector.dart';
 
 /// sprite atlas with an image and a set of rects and transforms
 class SpriteBatch {
@@ -27,7 +28,7 @@ class SpriteBatch {
 
   int get height => atlas.height;
 
-  Size get size => Size(width.toDouble(), height.toDouble());
+  Vector2 get size => Vector2(width.toDouble(), height.toDouble());
 
   void addTransform({
     @required Rect rect,

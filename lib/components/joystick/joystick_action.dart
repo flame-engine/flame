@@ -1,13 +1,16 @@
 import 'dart:math';
+import 'dart:ui';
 
+import 'package:box2d_flame/box2d.dart';
 import 'package:flame/components/joystick/joystick_component.dart';
 import 'package:flame/components/joystick/joystick_events.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame/vector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../position.dart';
+import '../../vector.dart';
 
 enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
 
@@ -58,7 +61,7 @@ class JoystickAction {
     _tileSize = _sizeBackgroundDirection / 2;
   }
 
-  void initialize(Size _screenSize, JoystickController joystickController) {
+  void initialize(Vector2 _screenSize, JoystickController joystickController) {
     _joystickController = joystickController;
     final double radius = size / 2;
     double dx = 0, dy = 0;
@@ -69,15 +72,15 @@ class JoystickAction {
         break;
       case JoystickActionAlign.BOTTOM_LEFT:
         dx = margin.left + radius;
-        dy = _screenSize.height - (margin.bottom + radius);
+        dy = _screenSize.y - (margin.bottom + radius);
         break;
       case JoystickActionAlign.TOP_RIGHT:
-        dx = _screenSize.width - (margin.right + radius);
+        dx = _screenSize.x - (margin.right + radius);
         dy = margin.top + radius;
         break;
       case JoystickActionAlign.BOTTOM_RIGHT:
-        dx = _screenSize.width - (margin.right + radius);
-        dy = _screenSize.height - (margin.bottom + radius);
+        dx = _screenSize.x - (margin.right + radius);
+        dy = _screenSize.y - (margin.bottom + radius);
         break;
     }
     _rectAction = Rect.fromCircle(
@@ -153,9 +156,9 @@ class JoystickAction {
 
       // Distance between the center of joystick background & drag position
       final centerPosition =
-          Position.fromOffset(_rectBackgroundDirection.center);
-      final dragPosition = Position.fromOffset(_dragPosition);
-      double dist = centerPosition.distance(dragPosition);
+          VectorUtil.fromOffset(_rectBackgroundDirection.center);
+      final dragPosition = VectorUtil.fromOffset(_dragPosition);
+      double dist = centerPosition.distanceTo(dragPosition);
 
       // The maximum distance for the knob position the edge of
       // the background + half of its own size. The knob can wander in the

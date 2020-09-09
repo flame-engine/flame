@@ -4,11 +4,11 @@ import 'dart:math';
 import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 import '../anchor.dart';
 import '../effects/effects.dart';
 import '../game.dart';
-import '../position.dart';
 import '../text_config.dart';
 import 'component.dart';
 
@@ -72,14 +72,14 @@ abstract class PositionComponent extends Component {
 
   TextConfig get debugTextConfig => TextConfig(color: debugColor, fontSize: 12);
 
-  Position toPosition() => Position(x, y);
-  void setByPosition(Position position) {
+  Vector2 toPosition() => Vector2(x, y);
+  void setByPosition(Vector2 position) {
     x = position.x;
     y = position.y;
   }
 
-  Position toSize() => Position(width, height);
-  void setBySize(Position size) {
+  Vector2 toSize() => Vector2(width, height);
+  void setBySize(Vector2 size) {
     width = size.x;
     height = size.y;
   }
@@ -92,8 +92,8 @@ abstract class PositionComponent extends Component {
   /// Returns the relative position/size of this component.
   /// Relative because it might be translated by their parents (which is not considered here).
   Rect toRect() => Rect.fromLTWH(
-        x - anchor.relativePosition.dx * width,
-        y - anchor.relativePosition.dy * height,
+        x - anchor.relativePosition.x * width,
+        y - anchor.relativePosition.y * height,
         width,
         height,
       );
@@ -101,8 +101,8 @@ abstract class PositionComponent extends Component {
   /// Mutates x, y, width and height using the provided [rect] as basis.
   /// This is a relative rect, same definition that [toRect] use (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
   void setByRect(Rect rect) {
-    x = rect.left + anchor.relativePosition.dx * rect.width;
-    y = rect.top + anchor.relativePosition.dy * rect.height;
+    x = rect.left + anchor.relativePosition.x * rect.width;
+    y = rect.top + anchor.relativePosition.y * rect.height;
     width = rect.width;
     height = rect.height;
   }
@@ -112,7 +112,7 @@ abstract class PositionComponent extends Component {
   }
 
   double distance(PositionComponent c) {
-    return c.toPosition().distance(toPosition());
+    return c.toPosition().distanceTo(toPosition());
   }
 
   void renderDebugMode(Canvas canvas) {
@@ -120,7 +120,7 @@ abstract class PositionComponent extends Component {
     debugTextConfig.render(
         canvas,
         'x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}',
-        Position(-50, -15));
+        Vector2(-50, -15));
 
     final Rect rect = toRect();
     final dx = rect.right;
@@ -128,15 +128,15 @@ abstract class PositionComponent extends Component {
     debugTextConfig.render(
         canvas,
         'x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}',
-        Position(width - 50, height));
+        Vector2(width - 50, height));
   }
 
   void _prepareCanvas(Canvas canvas) {
     canvas.translate(x, y);
 
     canvas.rotate(angle);
-    final double dx = -anchor.relativePosition.dx * width;
-    final double dy = -anchor.relativePosition.dy * height;
+    final double dx = -anchor.relativePosition.x * width;
+    final double dy = -anchor.relativePosition.y * height;
     canvas.translate(dx, dy);
 
     // Handle inverted rendering by moving center and flipping.
@@ -193,7 +193,7 @@ abstract class PositionComponent extends Component {
 
   @mustCallSuper
   @override
-  void resize(Size size) {
+  void resize(Vector2 size) {
     super.resize(size);
     _children.forEach((child) => child.resize(size));
   }
