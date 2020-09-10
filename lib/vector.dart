@@ -52,16 +52,16 @@ class VectorUtil {
   /// Rotates the gives [Vector2] with [angle] in radians
   static void rotate(Vector2 v, double angle) {
     v.setValues(
-        v.x * cos(angle) - v.y * sin(angle),
-        v.x * sin(angle) + v.y * cos(angle),
+      v.x * cos(angle) - v.y * sin(angle),
+      v.x * sin(angle) + v.y * cos(angle),
     );
   }
 
   /// Returns a new [Vector2] that is [v] rotated with [angle] in radians
   static Vector2 rotated(Vector2 v, double angle) {
     return Vector2(
-        v.x * cos(angle) - v.y * sin(angle),
-        v.x * sin(angle) + v.y * cos(angle),
+      v.x * cos(angle) - v.y * sin(angle),
+      v.x * sin(angle) + v.y * cos(angle),
     );
   }
 
