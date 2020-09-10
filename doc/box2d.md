@@ -1,8 +1,8 @@
 # Box2D
 
-Although Flame does not implement Box2d itself, it bundles a forked port of the Java Box2d to Dart by Google.
+Although Flame does not fully implement Box2d itself, it bundles a forked and refactored port of the Java Box2d to Dart by Google.
 
-The source of the bundled box2d on Flame can be found [here](https://github.com/flame-engine/box2d.dart).
+The source of the box2d version that Flame can use can be found [here](https://github.com/flame-engine/box2d.dart).
 
 To use Box2D in your game you should add flame_box2d to your pubspec.yaml, which can be seen in the examples.
 
