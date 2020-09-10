@@ -160,12 +160,12 @@ class JoystickAction {
       final dragPosition = VectorUtil.fromOffset(_dragPosition);
       double dist = centerPosition.distanceTo(dragPosition);
 
-      // The maximum distance for the knob position the edge of
+      // The maximum distance for the knob position to the edge of
       // the background + half of its own size. The knob can wander in the
       // background image, but not outside.
       dist = min(dist, _tileSize);
 
-      // Calculation the knob position
+      // Calculate the knob position
       final double nextX = dist * cos(_radAngle);
       final double nextY = dist * sin(_radAngle);
       final Offset nextPoint = Offset(nextX, nextY);
