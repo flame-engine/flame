@@ -19,7 +19,7 @@ The goal of this project is to provide a complete set of out-of-the-way solution
 Currently it provides you with:
  - a game loop
  - a component/object system
- - bundles a physics engine (box2d)
+ - a physics engine (box2d)
  - audio support
  - effects and particles
  - gesture and input support
