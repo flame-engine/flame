@@ -74,6 +74,8 @@ Mouse only events
 ```
  - MouseMovementDetector
   - onMouseMove
+ - ScrollDetector
+  - onScroll
 ```
 
 Many of these detectors can conflict with each other. For example, you can't register both Vertical and Horizontal drags, so not all of them can be used together.

@@ -2,6 +2,7 @@
 
 ## [next]
  - Adding MouseMovementDetector
+ - Adding ScrollDetector
 
 ## 0.26.0
  - Improving Flame image auto cache
