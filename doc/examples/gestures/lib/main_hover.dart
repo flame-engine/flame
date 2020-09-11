@@ -10,7 +10,6 @@ void main() {
 }
 
 class MyGame extends Game with HoverDetector {
-
   static const SPEED = 200;
 
   Position position = Position(0, 0);
@@ -24,13 +23,13 @@ class MyGame extends Game with HoverDetector {
   @override
   void render(Canvas canvas) {
     canvas.drawRect(
-        Rect.fromLTWH(
-            position.x,
-            position.y,
-            50,
-            50,
-        ),
-        BasicPalette.white.paint,
+      Rect.fromLTWH(
+        position.x,
+        position.y,
+        50,
+        50,
+      ),
+      BasicPalette.white.paint,
     );
   }
 
