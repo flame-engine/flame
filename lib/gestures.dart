@@ -99,3 +99,7 @@ mixin ScaleDetector on Game {
   void onScaleUpdate(ScaleUpdateDetails details) {}
   void onScaleEnd(ScaleEndDetails details) {}
 }
+
+mixin HoverDetector on Game {
+  void onHover(PointerHoverEvent event) {}
+}
