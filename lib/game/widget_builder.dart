@@ -206,10 +206,10 @@ Widget _applyBasicGesturesDetectors(Game game, Widget child) {
   );
 }
 
-Widget _applyMouseDetectors( game, Widget child) {
+Widget _applyMouseDetectors(game, Widget child) {
   return MouseRegion(
-      child: child,
-      onHover: game is HoverDetector ? game.onHover : null,
+    child: child,
+    onHover: game is HoverDetector ? game.onHover : null,
   );
 }
 
