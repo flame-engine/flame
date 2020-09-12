@@ -15,7 +15,7 @@ class MyGame extends Game with MouseMovementDetector {
   Position position = Position(0, 0);
   Position target;
 
-  Paint _blue = Paint()..color = Color(0xFF0000FF);
+  final Paint _blue = Paint()..color = const Color(0xFF0000FF);
 
   bool _onTarget = false;
 
