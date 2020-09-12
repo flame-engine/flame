@@ -100,6 +100,6 @@ mixin ScaleDetector on Game {
   void onScaleEnd(ScaleEndDetails details) {}
 }
 
-mixin HoverDetector on Game {
-  void onHover(PointerHoverEvent event) {}
+mixin MouseMovementDetector on Game {
+  void onMouseMove(PointerHoverEvent event) {}
 }
