@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame/time.dart';
 import 'package:flame/text_config.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/vector.dart';
+import 'package:flame/vector2.dart';
 import 'package:flame/components/timer_component.dart';
 
 void main() {
