@@ -67,7 +67,8 @@ void main() {
     });
 
     test('scaleTo', () {
-      final Vector2 p = Vector2Operations.rotated(Vector2(1.0, 0.0), math.pi / 4);
+      final Vector2 p =
+          Vector2Operations.rotated(Vector2(1.0, 0.0), math.pi / 4);
       Vector2Operations.scaleTo(p, 2.0);
 
       expect(p.length, 2.0);

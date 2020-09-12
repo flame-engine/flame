@@ -111,7 +111,8 @@ class Util {
         };
         return completer.future;
       }
-      return Vector2Operations.fromSize(window.physicalSize / window.devicePixelRatio);
+      return Vector2Operations.fromSize(
+          window.physicalSize / window.devicePixelRatio);
     });
   }
 

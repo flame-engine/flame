@@ -117,7 +117,8 @@ class JoystickDirectional {
       final double degrees = _radAngle * 180 / pi;
 
       // Distance between the center of joystick background & drag position
-      final centerPosition = Vector2Operations.fromOffset(_backgroundRect.center);
+      final centerPosition =
+          Vector2Operations.fromOffset(_backgroundRect.center);
       final dragPosition = Vector2Operations.fromOffset(_dragPosition);
       double dist = centerPosition.distanceTo(dragPosition);
 
