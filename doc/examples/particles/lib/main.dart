@@ -21,7 +21,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/time.dart' as flame_time;
 import 'package:flame/particle.dart';
-import 'package:flame/vector.dart';
+import 'package:flame/vector2.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
 import 'package:flame/text_config.dart';
@@ -108,7 +108,7 @@ class MyGame extends BaseGame {
         // lifecycle from the [BaseGame].
         TranslatedParticle(
           lifespan: 1,
-          offset: VectorUtil.toOffset(cellCenter),
+          offset: Vector2Operations.toOffset(cellCenter),
           child: particle,
         ).asComponent(),
       );
@@ -405,8 +405,8 @@ class MyGame extends BaseGame {
   /// which is independent from the parent [Particle].
   Particle componentParticle() {
     return MovingParticle(
-      from: VectorUtil.toOffset(-halfCellSize * .2),
-      to: VectorUtil.toOffset(halfCellSize * .2),
+      from: Vector2Operations.toOffset(-halfCellSize * .2),
+      to: Vector2Operations.toOffset(halfCellSize * .2),
       curve: SineCurve(),
       child: ComponentParticle(component: trafficLight),
     );
@@ -473,8 +473,8 @@ class MyGame extends BaseGame {
       ),
     );
 
-    final cellSizeOffset = VectorUtil.toOffset(cellSize);
-    final halfCellSizeOffset = VectorUtil.toOffset(halfCellSize);
+    final cellSizeOffset = Vector2Operations.toOffset(cellSize);
+    final halfCellSizeOffset = Vector2Operations.toOffset(halfCellSize);
 
     return ComposedParticle(children: <Particle>[
       rect

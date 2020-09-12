@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 
 import '../particle.dart';
-import '../vector.dart';
+import '../vector2.dart';
 
 /// A [Particle] which renders given [Image] on a [Canvas]
 /// image is centered. If any other behavior is needed, consider

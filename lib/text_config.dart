@@ -5,7 +5,7 @@ import 'package:vector_math/vector_math_64.dart';
 
 import 'anchor.dart';
 import 'memory_cache.dart';
-import 'vector.dart';
+import 'vector2.dart';
 
 /// A Text Config contains all typographical information required to render texts; i.e., font size and color, family, etc.
 ///
@@ -81,8 +81,8 @@ class TextConfig {
       {Anchor anchor = Anchor.topLeft}) {
     final material.TextPainter tp = toTextPainter(text);
     final Vector2 translatedPosition =
-        anchor.translate(p, VectorUtil.fromSize(tp.size));
-    tp.paint(canvas, VectorUtil.toOffset(translatedPosition));
+        anchor.translate(p, Vector2Operations.fromSize(tp.size));
+    tp.paint(canvas, Vector2Operations.toOffset(translatedPosition));
   }
 
   /// Returns a [material.TextPainter] that allows for text rendering and size measuring.

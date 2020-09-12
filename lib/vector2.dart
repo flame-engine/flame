@@ -6,7 +6,7 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:vector_math/vector_math_64.dart';
 
-class VectorUtil {
+class Vector2Operations {
   /// Creates converting integers to double.
   ///
   /// Internal representation is still using double, the conversion is made in the constructor only.
