@@ -6,7 +6,7 @@ import 'package:vector_math/vector_math_64.dart';
 
 import 'flame.dart';
 import 'palette.dart';
-import 'vector.dart';
+import 'vector2.dart';
 
 class Sprite {
   Paint paint = BasicPalette.white.paint;
@@ -95,7 +95,7 @@ class Sprite {
       return;
     }
     size ??= this.size;
-    renderRect(canvas, VectorUtil.rectFrom(p, size),
+    renderRect(canvas, Vector2Operations.rectFrom(p, size),
         overridePaint: overridePaint);
   }
 

@@ -7,7 +7,7 @@ import 'package:flame/components/joystick/joystick_events.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/game/base_game.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/vector.dart';
+import 'package:flame/vector2.dart';
 
 mixin JoystickListener {
   void joystickChangeDirectional(JoystickDirectionalEvent event);

@@ -1,4 +1,4 @@
-import 'package:flame/vector.dart';
+import 'package:flame/vector2.dart';
 import 'package:test/test.dart';
 import 'dart:math' as math;
 
@@ -25,7 +25,7 @@ void main() {
 
     test('test rotate', () {
       final Vector2 p = Vector2(1.0, 0.0);
-      VectorUtil.rotate(p, math.pi / 2);
+      Vector2Operations.rotate(p, math.pi / 2);
       expectDouble(p.x, 0.0);
       expectDouble(p.y, 1.0);
     });
@@ -67,12 +67,12 @@ void main() {
     });
 
     test('scaleTo', () {
-      final Vector2 p = VectorUtil.rotated(Vector2(1.0, 0.0), math.pi / 4);
-      VectorUtil.scaleTo(p, 2.0);
+      final Vector2 p = Vector2Operations.rotated(Vector2(1.0, 0.0), math.pi / 4);
+      Vector2Operations.scaleTo(p, 2.0);
 
       expect(p.length, 2.0);
 
-      VectorUtil.rotate(p, -math.pi / 4);
+      Vector2Operations.rotate(p, -math.pi / 4);
       expect(p.length, 2.0);
       expect(p.x, 2.0);
       expect(p.y, 0.0);

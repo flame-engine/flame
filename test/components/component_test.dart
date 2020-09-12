@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components/position_component.dart';
 import 'package:flame/components/sprite_component.dart';
-import 'package:flame/vector.dart';
+import 'package:flame/vector2.dart';
 import 'package:test/test.dart';
 
 void main() {

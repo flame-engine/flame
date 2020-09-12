@@ -2,7 +2,7 @@ import 'package:flame/effects/move_effect.dart';
 import 'package:flame/effects/scale_effect.dart';
 import 'package:flame/effects/rotate_effect.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/vector.dart';
+import 'package:flame/vector2.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';

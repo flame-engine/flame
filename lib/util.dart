@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flame/vector.dart';
+import 'package:flame/vector2.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
@@ -105,13 +105,13 @@ class Util {
         final completer = Completer<Vector2>();
         window.onMetricsChanged = () {
           if (!window.physicalSize.isEmpty && !completer.isCompleted) {
-            completer.complete(VectorUtil.fromSize(
+            completer.complete(Vector2Operations.fromSize(
                 window.physicalSize / window.devicePixelRatio));
           }
         };
         return completer.future;
       }
-      return VectorUtil.fromSize(window.physicalSize / window.devicePixelRatio);
+      return Vector2Operations.fromSize(window.physicalSize / window.devicePixelRatio);
     });
   }
 
