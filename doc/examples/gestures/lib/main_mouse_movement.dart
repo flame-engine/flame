@@ -25,11 +25,11 @@ class MyGame extends Game with MouseMovementDetector {
   }
 
   Rect _toRect() => Rect.fromLTWH(
-      position.x,
-      position.y,
-      50,
-      50,
-  );
+        position.x,
+        position.y,
+        50,
+        50,
+      );
 
   @override
   void render(Canvas canvas) {
