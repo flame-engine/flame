@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flame/components/component.dart';
@@ -47,6 +48,7 @@ class IsometricTileMapComponent extends PositionComponent {
     prepareCanvas(c);
 
     final s = effectiveTileSize.toDouble() / 2;
+    final size = Position.fromInts(effectiveTileSize, effectiveTileSize);
     matrix.asMap().forEach((i, line) {
       line.asMap().forEach((j, element) {
         if (element == -1) {
@@ -54,7 +56,8 @@ class IsometricTileMapComponent extends PositionComponent {
         }
 
         final sprite = tileset.getTile(element);
-        sprite.renderPosition(c, cartToIso(Position(j * s, i * s)));
+        final p = cartToIso(Position(j * s, i * s));
+        sprite.renderRect(c, Position.rectFrom(p, size));
       });
     });
   }
