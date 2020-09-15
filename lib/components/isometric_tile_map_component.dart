@@ -54,7 +54,6 @@ class IsometricTileMapComponent extends PositionComponent {
   void render(Canvas c) {
     prepareCanvas(c);
 
-    final s = effectiveTileSize.toDouble() / 2;
     final size = Position.fromInts(effectiveTileSize, effectiveTileSize);
     matrix.asMap().forEach((i, line) {
       line.asMap().forEach((j, element) {
@@ -63,10 +62,19 @@ class IsometricTileMapComponent extends PositionComponent {
         }
 
         final sprite = tileset.getTile(element);
-        final p = cartToIso(Position(j * s, i * s));
+        final p = getBlockPositionInts(j, i);
         sprite.renderRect(c, Position.rectFrom(p, size));
       });
     });
+  }
+
+  Position getBlockPosition(Block block) {
+    return getBlockPositionInts(block.x, block.y);
+  }
+
+  Position getBlockPositionInts(int i, int j) {
+    final s = effectiveTileSize.toDouble() / 2;
+    return cartToIso(Position(i * s, j * s)).minus(Position(s, 0));
   }
 
   Position isoToCart(Position p) {
@@ -82,11 +90,17 @@ class IsometricTileMapComponent extends PositionComponent {
   }
 
   Block getBlock(Position p) {
-    final s = effectiveTileSize.toDouble();
+    final s = effectiveTileSize.toDouble() / 2;
     final cart = isoToCart(p.clone().minus(toPosition()));
-    print(cart);
     final px = cart.x ~/ s;
     final py = cart.y ~/ s;
     return Block(px, py);
+  }
+
+  bool containsBlock(Block block) {
+    return block.x >= 0 &&
+        block.x < matrix.length &&
+        block.y >= 0 &&
+        block.y < matrix[block.x].length;
   }
 }
