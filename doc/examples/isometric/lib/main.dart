@@ -16,7 +16,7 @@ class MyGame extends BaseGame {
   }
   void init() async {
     final tileset = await IsometricTileset.load('tiles.png', 32);
-    final matrix = [
+    final layer0 = [
       [-1, 1, 1, 1, 0, 0],
       [-1, 1, 2, 1, 0, 0],
       [-1, 0, 1, 1, 0, 0],
@@ -24,10 +24,26 @@ class MyGame extends BaseGame {
       [1, 1, 1, 1, 0, 2],
       [1, 3, 3, 3, 0, 2],
     ];
+    final layer1 = [
+      [-1, 0, 0, 1, -1, -1],
+      [-1, 0, -1, 1, -1, -1],
+      [-1, -1, 0, 1, -1, -1],
+      [-1, 0, 0, 1, -1, -1],
+      [0, 0, 0, 1, -1, -1],
+      [0, -1, -1, -1, -1, -1],
+    ];
+    const x = 500.0;
+    const y = 500.0;
+    const s = 64;
     add(
-      IsometricTileMapComponent(tileset, matrix)
-        ..x = 100
-        ..y = 100,
+      IsometricTileMapComponent(tileset, layer0, destTileSize: s)
+        ..x = x
+        ..y = y,
+    );
+    add(
+      IsometricTileMapComponent(tileset, layer1, destTileSize: s)
+        ..x = x
+        ..y = y - s / 2,
     );
   }
 }
