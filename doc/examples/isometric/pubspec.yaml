@@ -19,3 +19,4 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/tiles.png
+    - assets/images/selector.png

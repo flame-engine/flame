@@ -24,11 +24,7 @@ class Selector extends SpriteComponent {
   bool show = false;
 
   Selector(double s)
-      : super.fromSprite(
-          s,
-          s,
-          Sprite('tiles.png', x: 64, y: 0, width: 32, height: 32),
-        );
+      : super.fromSprite(s, s, Sprite('selector.png', width: 32, height: 32));
 
   @override
   void render(Canvas canvas) {
@@ -50,7 +46,7 @@ class MyGame extends BaseGame with MouseMovementDetector {
   void init() async {
     final tileset = await IsometricTileset.load('tiles.png', 32);
     final layer0 = [
-      [-1, 1, 1, 1, 0, 0],
+      [3, 1, 1, 1, 0, 0],
       [-1, 1, 2, 1, 0, 0],
       [-1, 0, 1, 1, 0, 0],
       [-1, 1, 1, 1, 0, 0],
@@ -92,12 +88,23 @@ class MyGame extends BaseGame with MouseMovementDetector {
   }
 
   @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+
+    canvas.drawRect(
+      const Rect.fromLTWH(x - 1, y - 1, 3, 3),
+      Paint()..color = const Color(0xFFFF00FF),
+    );
+  }
+
+  @override
   void onMouseMove(PointerHoverEvent event) {
+    if (base == null || selector == null) {
+      return; // loading
+    }
     final screenPosition = Position.fromOffset(event.position);
-    final blockCoords = base.getBlock(screenPosition);
-    final blockPosition =
-        base.cartToIso(Position.fromInts(blockCoords.x * s, blockCoords.y * s));
-    selector.setByPosition(blockPosition.add(topLeft));
-    selector.show = true;
+    final block = base.getBlock(screenPosition);
+    selector.show = base.containsBlock(block);
+    selector.setByPosition(base.getBlockPosition(block).add(topLeft));
   }
 }
