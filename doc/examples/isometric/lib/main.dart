@@ -45,7 +45,7 @@ class MyGame extends BaseGame with MouseMovementDetector {
   }
   void init() async {
     final tileset = await IsometricTileset.load('tiles.png', 32);
-    final layer0 = [
+    final matrix = [
       [3, 1, 1, 1, 0, 0],
       [-1, 1, 2, 1, 0, 0],
       [-1, 0, 1, 1, 0, 0],
@@ -53,37 +53,11 @@ class MyGame extends BaseGame with MouseMovementDetector {
       [1, 1, 1, 1, 0, 2],
       [1, 3, 3, 3, 0, 2],
     ];
-    final layer1 = [
-      [-1, 0, 0, 1, -1, -1],
-      [-1, 0, -1, 1, -1, -1],
-      [-1, -1, 0, 1, -1, -1],
-      [-1, 0, 0, 1, -1, 2],
-      [0, 0, 0, 1, -1, -1],
-      [0, -1, -1, -1, -1, -1],
-    ];
-    final layer2 = [
-      [-1, -1, -1, -1, -1, -1],
-      [-1, -1, -1, -1, -1, -1],
-      [-1, -1, 1, -1, -1, -1],
-      [-1, -1, -1, -1, -1, -1],
-      [-1, -1, 1, -1, -1, -1],
-      [-1, -1, -1, -1, -1, -1],
-    ];
     add(
-      base = IsometricTileMapComponent(tileset, layer0, destTileSize: s)
+      base = IsometricTileMapComponent(tileset, matrix, destTileSize: s)
         ..x = x
         ..y = y,
     );
-    // add(
-    //   IsometricTileMapComponent(tileset, layer1, destTileSize: s)
-    //     ..x = x
-    //     ..y = y - s / 2,
-    // );
-    // add(
-    //   IsometricTileMapComponent(tileset, layer2, destTileSize: s)
-    //     ..x = x
-    //     ..y = y - 2 * s / 2,
-    // );
     add(selector = Selector(s.toDouble()));
   }
 
