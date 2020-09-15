@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flame/components/component.dart';
@@ -32,6 +31,14 @@ class IsometricTileset {
     final image = await Flame.images.load(fileName);
     return IsometricTileset(image, size);
   }
+}
+
+class Block {
+  int x, y;
+  Block(this.x, this.y);
+
+  @override
+  String toString() => '($x, $y)';
 }
 
 class IsometricTileMapComponent extends PositionComponent {
@@ -72,5 +79,14 @@ class IsometricTileMapComponent extends PositionComponent {
     final x = p.x - p.y;
     final y = (p.x + p.y) / 2;
     return Position(x, y);
+  }
+
+  Block getBlock(Position p) {
+    final s = effectiveTileSize.toDouble();
+    final cart = isoToCart(p.clone().minus(toPosition()));
+    print(cart);
+    final px = cart.x ~/ s;
+    final py = cart.y ~/ s;
+    return Block(px, py);
   }
 }
