@@ -44,13 +44,11 @@ class MyGame extends BaseGame {
 
     add(TextComponent('center', config: tiny)
       ..anchor = Anchor.center
-      ..x = size.x / 2
-      ..y = size.y / 2);
+      ..setByPosition(size / 2));
 
     add(TextComponent('bottomRight', config: tiny)
       ..anchor = Anchor.bottomRight
-      ..x = size.x
-      ..y = size.y);
+      ..setByPosition(size));
 
     add(MyTextBox(
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget ligula eu lectus lobortis condimentum.',
