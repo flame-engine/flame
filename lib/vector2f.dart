@@ -1,7 +1,5 @@
 library flame.vector_math;
 
-export 'package:vector_math/vector_math_64.dart' show Vector2;
-
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
