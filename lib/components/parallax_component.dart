@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flame/vector2f.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 import '../flame.dart';
 import 'position_component.dart';
@@ -38,10 +38,10 @@ class ParallaxLayer {
   Future<Image> future;
 
   Image _image;
-  Vector2 _screenSize;
+  Vector2F _screenSize;
   Rect _paintArea;
-  Vector2 _scroll;
-  Vector2 _imageSize;
+  Vector2F _scroll;
+  Vector2F _imageSize;
   double _scale = 1.0;
 
   ParallaxLayer(this.parallaxImage) {
@@ -50,9 +50,9 @@ class ParallaxLayer {
 
   bool loaded() => _image != null;
 
-  Vector2 currentOffset() => _scroll;
+  Vector2F currentOffset() => _scroll;
 
-  void resize(Vector2 size) {
+  void resize(Vector2F size) {
     if (!loaded()) {
       _screenSize = size;
       return;
@@ -73,7 +73,7 @@ class ParallaxLayer {
 
     // The image size so that it fulfills the LayerFill parameter
     _imageSize =
-        Vector2(_image.width.toDouble(), _image.height.toDouble()) / _scale;
+        Vector2F(_image.width.toDouble(), _image.height.toDouble()) / _scale;
 
     // Number of images that can fit on the canvas plus one
     // to have something to scroll to without leaving canvas empty
@@ -88,15 +88,14 @@ class ParallaxLayer {
     final alignment = parallaxImage.alignment;
     final marginX = alignment.x == 0 ? overflowX / 2 : alignment.x;
     final marginY = alignment.y == 0 ? overflowY / 2 : alignment.y;
-    _scroll ??= Vector2(marginX, marginY);
+    _scroll ??= Vector2F(marginX, marginY);
 
-    // Size of the area to paint the images in
-    final rectWidth = countX * _imageSize.x;
-    final rectHeight = countY * _imageSize.y;
-    _paintArea = Rect.fromLTWH(0, 0, rectWidth, rectHeight);
+    // Size of the area to paint the images on
+    final paintSize = Vector2F(countX, countY)..multiply(_imageSize);
+    _paintArea = paintSize.toRect();
   }
 
-  void update(Vector2 delta) {
+  void update(Vector2F delta) {
     if (!loaded()) {
       return;
     }
@@ -105,13 +104,13 @@ class ParallaxLayer {
     _scroll += delta..divide(_imageSize);
     switch (parallaxImage.repeat) {
       case ImageRepeat.repeat:
-        _scroll = Vector2(_scroll.x % 1, _scroll.y % 1);
+        _scroll = Vector2F(_scroll.x % 1, _scroll.y % 1);
         break;
       case ImageRepeat.repeatX:
-        _scroll = Vector2(_scroll.x % 1, _scroll.y);
+        _scroll = Vector2F(_scroll.x % 1, _scroll.y);
         break;
       case ImageRepeat.repeatY:
-        _scroll = Vector2(_scroll.x, _scroll.y % 1);
+        _scroll = Vector2F(_scroll.x, _scroll.y % 1);
         break;
       case ImageRepeat.noRepeat:
         break;
@@ -155,8 +154,8 @@ enum LayerFill { height, width, none }
 /// A full parallax, several layers of images drawn out on the screen and each
 /// layer moves with different speeds to give an effect of depth.
 class ParallaxComponent extends PositionComponent {
-  Vector2 baseSpeed;
-  Vector2 layerDelta;
+  Vector2F baseSpeed;
+  Vector2F layerDelta;
   List<ParallaxLayer> _layers;
   bool _loaded = false;
 
@@ -165,21 +164,21 @@ class ParallaxComponent extends PositionComponent {
     this.baseSpeed,
     this.layerDelta,
   }) {
-    baseSpeed ??= Vector2.zero();
-    layerDelta ??= Vector2.zero();
+    baseSpeed ??= Vector2F.zero();
+    layerDelta ??= Vector2F.zero();
     _load(images);
   }
 
   /// The base offset of the parallax, can be used in an outer update loop
   /// if you want to transition the parallax to a certain position.
-  Vector2 currentOffset() => _layers[0].currentOffset();
+  Vector2F currentOffset() => _layers[0].currentOffset();
 
   @override
   bool loaded() => _loaded;
 
   @mustCallSuper
   @override
-  void resize(Vector2 size) {
+  void resize(Vector2F size) {
     super.resize(size);
     _layers.forEach((layer) => layer.resize(size));
   }

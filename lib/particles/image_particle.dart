@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 
 import '../particle.dart';
-import '../vector2.dart';
+import '../vector2f.dart';
 
 /// A [Particle] which renders given [Image] on a [Canvas]
 /// image is centered. If any other behavior is needed, consider
@@ -17,7 +17,7 @@ class ImageParticle extends Particle {
 
   ImageParticle({
     @required this.image,
-    Vector2 size,
+    Vector2F size,
     double lifespan,
   }) : super(lifespan: lifespan) {
     final srcWidth = image.width.toDouble();

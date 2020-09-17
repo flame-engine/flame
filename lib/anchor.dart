@@ -1,4 +1,4 @@
-import 'package:vector_math/vector_math_64.dart';
+import 'vector2f.dart';
 
 class Anchor {
   static const Anchor topLeft = Anchor(0.0, 0.0);
@@ -14,11 +14,11 @@ class Anchor {
   final double x;
   final double y;
 
-  Vector2 get relativePosition => Vector2(x, y);
+  Vector2F get relativePosition => Vector2F(x, y);
 
   const Anchor(this.x, this.y);
 
-  Vector2 translate(Vector2 p, Vector2 size) {
+  Vector2F translate(Vector2F p, Vector2F size) {
     return p - size.clone()
       ..multiply(relativePosition);
   }

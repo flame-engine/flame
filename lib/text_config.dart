@@ -1,11 +1,10 @@
 import 'dart:ui';
 import 'package:flame/components/text_component.dart';
 import 'package:flutter/material.dart' as material;
-import 'package:vector_math/vector_math_64.dart';
 
 import 'anchor.dart';
 import 'memory_cache.dart';
-import 'vector2.dart';
+import 'vector2f.dart';
 
 /// A Text Config contains all typographical information required to render texts; i.e., font size and color, family, etc.
 ///
@@ -77,12 +76,12 @@ class TextConfig {
   ///
   ///     const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font');
   ///     config.render(c, Offset(size.width - 10, size.height - 10, anchor: Anchor.bottomRight);
-  void render(Canvas canvas, String text, Vector2 p,
+  void render(Canvas canvas, String text, Vector2F p,
       {Anchor anchor = Anchor.topLeft}) {
     final material.TextPainter tp = toTextPainter(text);
-    final Vector2 translatedPosition =
-        anchor.translate(p, Vector2Operations.fromSize(tp.size));
-    tp.paint(canvas, Vector2Operations.toOffset(translatedPosition));
+    final Vector2F translatedPosition =
+        anchor.translate(p, Vector2F.fromSize(tp.size));
+    tp.paint(canvas, translatedPosition.toOffset());
   }
 
   /// Returns a [material.TextPainter] that allows for text rendering and size measuring.

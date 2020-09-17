@@ -7,12 +7,12 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/text_config.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/vector2.dart';
+import 'package:flame/vector2f.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Vector2 size = await Flame.util.initialDimensions();
+  final Vector2F size = await Flame.util.initialDimensions();
   final MyGame game = MyGame(size);
   runApp(game.widget);
 }
@@ -23,7 +23,7 @@ AudioPool pool = AudioPool('laser.mp3');
 class MyGame extends BaseGame with TapDetector {
   static final black = BasicPalette.black.paint;
 
-  MyGame(Vector2 screenSize) {
+  MyGame(Vector2F screenSize) {
     size = screenSize;
   }
 

@@ -1,18 +1,18 @@
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite_animation.dart';
-import 'package:flame/vector2.dart';
+import 'package:flame/vector2f.dart';
 import 'package:flame/components/sprite_animation_component.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Vector2 size = await Flame.util.initialDimensions();
+  final Vector2F size = await Flame.util.initialDimensions();
   runApp(MyGame(size).widget);
 }
 
 class MyGame extends BaseGame {
-  MyGame(Vector2 screenSize) {
+  MyGame(Vector2F screenSize) {
     size = screenSize;
     _start();
   }
@@ -23,7 +23,7 @@ class MyGame extends BaseGame {
       'chopper.json',
     );
     final animationComponent = SpriteAnimationComponent(200, 200, animation)
-      ..setByPosition(size / 2 - Vector2(100, 100));
+      ..setByPosition(size / 2 - Vector2F(100, 100));
 
     add(animationComponent);
   }

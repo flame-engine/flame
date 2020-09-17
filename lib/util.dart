@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flame/vector2.dart';
+import 'package:flame/vector2f.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
@@ -105,14 +105,13 @@ class Util {
         final completer = Completer<Vector2>();
         window.onMetricsChanged = () {
           if (!window.physicalSize.isEmpty && !completer.isCompleted) {
-            completer.complete(Vector2Operations.fromSize(
+            completer.complete(Vector2F.fromSize(
                 window.physicalSize / window.devicePixelRatio));
           }
         };
         return completer.future;
       }
-      return Vector2Operations.fromSize(
-          window.physicalSize / window.devicePixelRatio);
+      return Vector2F.fromSize(window.physicalSize / window.devicePixelRatio);
     });
   }
 
@@ -149,7 +148,7 @@ class Util {
   ///
   /// Some render methods don't allow to pass a offset.
   /// This method translate the canvas, draw what you want, and then translate back.
-  void drawWhere(Canvas c, Vector2 p, void Function(Canvas) fn) {
+  void drawWhere(Canvas c, Vector2F p, void Function(Canvas) fn) {
     c.translate(p.x, p.y);
     fn(c);
     c.translate(-p.x, -p.y);
