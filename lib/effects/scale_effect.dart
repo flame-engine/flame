@@ -1,22 +1,22 @@
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 import 'dart:math';
 
+import '../vector2f.dart';
 import './effects.dart';
 
 double _direction(double p, double d) => (p - d).sign;
 double _size(double a, double b) => (a - b).abs();
 
 class ScaleEffect extends PositionComponentEffect {
-  Vector2 size;
+  Vector2F size;
   double speed;
   Curve curve;
 
-  Vector2 _original;
-  Vector2 _diff;
-  final Vector2 _dir = Vector2.zero();
+  Vector2F _original;
+  Vector2F _diff;
+  final Vector2F _dir = Vector2F.zero();
 
   ScaleEffect({
     @required this.size,
@@ -35,7 +35,7 @@ class ScaleEffect extends PositionComponentEffect {
     }
 
     _original = component.toSize();
-    _diff = Vector2(
+    _diff = Vector2F(
       _size(_original.x, size.x),
       _size(_original.y, size.y),
     );

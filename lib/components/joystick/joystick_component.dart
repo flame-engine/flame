@@ -1,13 +1,13 @@
 import 'dart:ui';
 
-import 'package:flame/components/component.dart';
-import 'package:flame/components/joystick/joystick_action.dart';
-import 'package:flame/components/joystick/joystick_directional.dart';
-import 'package:flame/components/joystick/joystick_events.dart';
-import 'package:flame/components/mixins/has_game_ref.dart';
-import 'package:flame/game/base_game.dart';
-import 'package:flame/gestures.dart';
-import 'package:flame/vector2.dart';
+import 'joystick_action.dart';
+import 'joystick_directional.dart';
+import 'joystick_events.dart';
+import '../component.dart';
+import '../mixins/has_game_ref.dart';
+import '../../game/base_game.dart';
+import '../../gestures.dart';
+import '../../vector2f.dart';
 
 mixin JoystickListener {
   void joystickChangeDirectional(JoystickDirectionalEvent event);
@@ -70,7 +70,7 @@ class JoystickComponent extends JoystickController {
   }
 
   @override
-  void resize(Vector2 size) {
+  void resize(Vector2F size) {
     directional?.initialize(size, this);
     actions?.forEach((action) => action.initialize(size, this));
     super.resize(size);

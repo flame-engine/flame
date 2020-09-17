@@ -1,16 +1,16 @@
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 import 'dart:math';
 
+import '../vector2f.dart';
 import './effects.dart';
 
 double _direction(double p, double d) => (p - d).sign;
 double _distance(double a, double b) => (a - b).abs();
 
 class MoveEffect extends PositionComponentEffect {
-  Vector2 destination;
+  Vector2F destination;
   double speed;
   Curve curve;
 

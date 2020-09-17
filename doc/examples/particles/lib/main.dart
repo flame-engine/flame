@@ -21,7 +21,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/time.dart' as flame_time;
 import 'package:flame/particle.dart';
-import 'package:flame/vector2.dart';
+import 'package:flame/vector2f.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
 import 'package:flame/text_config.dart';
@@ -48,14 +48,14 @@ class MyGame extends BaseGame {
   /// Defines the lifespan of all the particles in these examples
   final sceneDuration = const Duration(seconds: 1);
 
-  Vector2 cellSize;
-  Vector2 halfCellSize;
+  Vector2F cellSize;
+  Vector2F halfCellSize;
 
   @override
   bool recordFps() => true;
 
   MyGame({
-    Vector2 screenSize,
+    Vector2F screenSize,
   }) {
     size = screenSize;
     cellSize = size / gridSize;
@@ -101,14 +101,14 @@ class MyGame extends BaseGame {
       final double col = particles.length % gridSize;
       final double row = (particles.length ~/ gridSize).toDouble();
       final cellCenter =
-          (cellSize.clone()..multiply(Vector2(col, row))) + (cellSize * .5);
+          (cellSize.clone()..multiply(Vector2F(col, row))) + (cellSize * .5);
 
       add(
         // Bind all the particles to a [Component] update
         // lifecycle from the [BaseGame].
         TranslatedParticle(
           lifespan: 1,
-          offset: Vector2Operations.toOffset(cellCenter),
+          offset: cellCenter.toOffset(),
           child: particle,
         ).asComponent(),
       );
@@ -294,7 +294,7 @@ class MyGame extends BaseGame {
   /// be reused across particles. See example below for more details.
   Particle imageParticle() {
     return ImageParticle(
-      size: Vector2.all(24),
+      size: Vector2F.all(24),
       image: Flame.images.loadedFiles['zap.png'].loadedImage,
     );
   }
@@ -395,7 +395,7 @@ class MyGame extends BaseGame {
   Particle animationParticle() {
     return SpriteAnimationParticle(
       animation: getBoomAnimation(),
-      size: Vector2(128, 128),
+      size: Vector2F(128, 128),
     );
   }
 
@@ -405,8 +405,8 @@ class MyGame extends BaseGame {
   /// which is independent from the parent [Particle].
   Particle componentParticle() {
     return MovingParticle(
-      from: Vector2Operations.toOffset(-halfCellSize * .2),
-      to: Vector2Operations.toOffset(halfCellSize * .2),
+      from: (-halfCellSize * .2).toOffset(),
+      to: (halfCellSize * .2).toOffset(),
       curve: SineCurve(),
       child: ComponentParticle(component: trafficLight),
     );
@@ -473,8 +473,8 @@ class MyGame extends BaseGame {
       ),
     );
 
-    final cellSizeOffset = Vector2Operations.toOffset(cellSize);
-    final halfCellSizeOffset = Vector2Operations.toOffset(halfCellSize);
+    final cellSizeOffset = cellSize.toOffset();
+    final halfCellSizeOffset = halfCellSize.toOffset();
 
     return ComposedParticle(children: <Particle>[
       rect
@@ -501,7 +501,7 @@ class MyGame extends BaseGame {
 
     if (debugMode()) {
       fpsTextConfig.render(
-          canvas, '${fps(120).toStringAsFixed(2)}fps', Vector2(0, size.y - 24));
+          canvas, '${fps(120).toStringAsFixed(2)}fps', Vector2F(0, size.y - 24));
     }
   }
 
@@ -549,7 +549,7 @@ class MyGame extends BaseGame {
 }
 
 Future<BaseGame> loadGame() async {
-  Vector2 gameSize;
+  Vector2F gameSize;
   WidgetsFlutterBinding.ensureInitialized();
 
   await Future.wait([

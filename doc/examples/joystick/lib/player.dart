@@ -5,7 +5,7 @@ import 'package:flame/components/component.dart';
 import 'package:flame/components/joystick/joystick_component.dart';
 import 'package:flame/components/joystick/joystick_events.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/vector2.dart';
+import 'package:flame/vector2f.dart';
 
 class Player extends Component implements JoystickListener {
   final _whitePaint = BasicPalette.white.paint;
@@ -43,7 +43,7 @@ class Player extends Component implements JoystickListener {
   }
 
   @override
-  void resize(Vector2 size) {
+  void resize(Vector2F size) {
     _rect = Rect.fromLTWH(
       (size.x / 2) - 25,
       (size.y / 2) - 25,

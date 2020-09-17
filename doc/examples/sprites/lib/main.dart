@@ -3,18 +3,18 @@ import 'dart:math';
 import 'package:flame/components/sprite_component.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/vector2.dart';
+import 'package:flame/vector2f.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Vector2 size = await Flame.util.initialDimensions();
+  final Vector2F size = await Flame.util.initialDimensions();
   final game = MyGame(size);
   runApp(game.widget);
 }
 
 class MyGame extends BaseGame {
-  MyGame(Vector2 screenSize) {
+  MyGame(Vector2F screenSize) {
     size = screenSize;
   }
 

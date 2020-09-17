@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 import '../components/position_component.dart';
+import '../vector2f.dart';
 
 export './move_effect.dart';
 export './rotate_effect.dart';
@@ -31,9 +31,9 @@ abstract class PositionComponentEffect {
   int curveDirection = 1;
 
   /// Used to be able to determine the end state of a sequence of effects
-  Vector2 endPosition;
+  Vector2F endPosition;
   double endAngle;
-  Vector2 endSize;
+  Vector2F endSize;
 
   /// If the effect is alternating the travel time is double the normal
   /// travel time
