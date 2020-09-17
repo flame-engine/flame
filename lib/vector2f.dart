@@ -288,8 +288,10 @@ class Vector2F implements Vector2 {
   @override
   Vector2F normalizeInto(Vector2 out) => _delegate.normalizeInto(out);
 
+  /// DEPRECATED: Use [normalize].
   @override
-  double normalizeLength() => _delegate.normalizeLength();
+  @deprecated
+  double normalizeLength() => _delegate.normalize();
 
   @override
   Vector2F normalized() => _delegate.normalized();
