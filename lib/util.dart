@@ -97,12 +97,12 @@ class Util {
   ///
   /// A best practice would be to implement there resize hooks on your game and components and don't use this at all.
   /// Make sure your components are able to render and update themselves for any possible screen size.
-  Future<Vector2> initialDimensions() async {
+  Future<Vector2F> initialDimensions() async {
     // https://github.com/flutter/flutter/issues/5259
     // "In release mode we start off at 0x0 but we don't in debug mode"
-    return await Future<Vector2>(() {
+    return await Future<Vector2F>(() {
       if (window.physicalSize.isEmpty) {
-        final completer = Completer<Vector2>();
+        final completer = Completer<Vector2F>();
         window.onMetricsChanged = () {
           if (!window.physicalSize.isEmpty && !completer.isCompleted) {
             completer.complete(Vector2F.fromSize(
