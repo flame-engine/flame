@@ -500,8 +500,8 @@ class MyGame extends BaseGame {
     super.render(canvas);
 
     if (debugMode()) {
-      fpsTextConfig.render(
-          canvas, '${fps(120).toStringAsFixed(2)}fps', Vector2F(0, size.y - 24));
+      fpsTextConfig.render(canvas, '${fps(120).toStringAsFixed(2)}fps',
+          Vector2F(0, size.y - 24));
     }
   }
 
