@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'flame.dart';
 import 'sprite.dart';
 
+import 'assets.dart';
+
 /// Represents a single sprite animation frame.
 class SpriteAnimationFrame {
   /// The [Sprite] to be displayed.
@@ -72,7 +74,7 @@ class SpriteAnimation {
   ///     Animation.sequenced('sheet.png', 8, textureY: 32.0 * i, textureWidth: 32.0, textureHeight: 32.0);
   /// This will create the i-th animation on the 'sheet.png', given it has 8 frames.
   SpriteAnimation.sequenced(
-    String imagePath,
+    ImageAsset imageAsset,
     int amount, {
     int amountPerRow,
     double textureX = 0.0,
@@ -86,7 +88,7 @@ class SpriteAnimation {
     frames = List<SpriteAnimationFrame>(amount);
     for (var i = 0; i < amount; i++) {
       final Sprite sprite = Sprite(
-        imagePath,
+        imageAsset,
         x: textureX + (i % amountPerRow) * textureWidth,
         y: textureY + (i ~/ amountPerRow) * textureHeight,
         width: textureWidth,
@@ -98,7 +100,7 @@ class SpriteAnimation {
 
   /// Works just like [SpriteAnimation.sequenced], but it takes a list of variable [stepTimes], associating each one with one frame in the sequence.
   SpriteAnimation.variableSequenced(
-    String imagePath,
+    ImageAsset imageAsset,
     int amount,
     List<double> stepTimes, {
     int amountPerRow,
@@ -112,7 +114,7 @@ class SpriteAnimation {
     frames = List<SpriteAnimationFrame>(amount);
     for (var i = 0; i < amount; i++) {
       final Sprite sprite = Sprite(
-        imagePath,
+        imageAsset,
         x: textureX + (i % amountPerRow) * textureWidth,
         y: textureY + (i ~/ amountPerRow) * textureHeight,
         width: textureWidth,
@@ -128,7 +130,7 @@ class SpriteAnimation {
   /// [imagePath]: Source of the sprite sheet animation
   /// [dataPath]: Animation's exported data in json format
   static Future<SpriteAnimation> fromAsepriteData(
-      String imagePath, String dataPath) async {
+      ImageAsset imageAsset, String dataPath) async {
     final String content = await Flame.assets.readFile(dataPath);
     final Map<String, dynamic> json = jsonDecode(content);
 
@@ -144,7 +146,7 @@ class SpriteAnimation {
       final stepTime = value['duration'] / 1000;
 
       final Sprite sprite = Sprite(
-        imagePath,
+        imageAsset,
         x: x.toDouble(),
         y: y.toDouble(),
         width: width.toDouble(),

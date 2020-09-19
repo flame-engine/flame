@@ -1,66 +1,38 @@
 import 'dart:ui';
 
-import 'dart:async';
-import 'flame.dart';
 import 'position.dart';
 import 'palette.dart';
+import 'assets.dart';
 
 class Sprite {
   Paint paint = BasicPalette.white.paint;
-  Image image;
+  ImageAsset imageAsset;
   Rect src;
 
   Sprite(
-    String fileName, {
+    this.imageAsset, {
     double x = 0.0,
     double y = 0.0,
     double width,
     double height,
   }) {
-    Flame.images.load(fileName).then((img) {
-      width ??= img.width.toDouble();
-      height ??= img.height.toDouble();
-      image = img;
-      src = Rect.fromLTWH(x, y, width, height);
-    });
+    imageAsset.onLoad(() => _init(x, y, width, height));
   }
 
-  Sprite.fromImage(
-    this.image, {
-    double x = 0.0,
-    double y = 0.0,
-    double width,
-    double height,
-  }) {
+  void _init(double x, double y, double width, double height) {
+    final image = imageAsset.image;
     width ??= image.width.toDouble();
     height ??= image.height.toDouble();
     src = Rect.fromLTWH(x, y, width, height);
   }
 
-  static Future<Sprite> loadSprite(
-    String fileName, {
-    double x = 0.0,
-    double y = 0.0,
-    double width,
-    double height,
-  }) async {
-    final Image image = await Flame.images.load(fileName);
-    return Sprite.fromImage(
-      image,
-      x: x,
-      y: y,
-      width: width,
-      height: height,
-    );
-  }
-
   bool loaded() {
-    return image != null && src != null;
+    return imageAsset.loaded();
   }
 
-  double get _imageWidth => image.width.toDouble();
+  double get _imageWidth => imageAsset.image.width.toDouble();
 
-  double get _imageHeight => image.height.toDouble();
+  double get _imageHeight => imageAsset.image.height.toDouble();
 
   Position get originalSize {
     if (!loaded()) {
@@ -127,6 +99,6 @@ class Sprite {
     if (!loaded()) {
       return;
     }
-    canvas.drawImageRect(image, src, dst, overridePaint ?? paint);
+    canvas.drawImageRect(imageAsset.image, src, dst, overridePaint ?? paint);
   }
 }
