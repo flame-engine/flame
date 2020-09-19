@@ -90,17 +90,16 @@ class IsometricTileMapComponent extends PositionComponent {
     prepareCanvas(c);
 
     final size = Position.fromInts(effectiveTileSize, effectiveTileSize);
-    matrix.asMap().forEach((i, line) {
-      line.asMap().forEach((j, element) {
-        if (element == -1) {
-          return;
+    for (int i = 0; i < matrix.length; i++) {
+      for (int j = 0; j < matrix[i].length; j++) {
+        final element = matrix[i][j];
+        if (element != -1) {
+          final sprite = tileset.getTile(element);
+          final p = getBlockPositionInts(j, i);
+          sprite.renderRect(c, Position.rectFrom(p, size));
         }
-
-        final sprite = tileset.getTile(element);
-        final p = getBlockPositionInts(j, i);
-        sprite.renderRect(c, Position.rectFrom(p, size));
-      });
-    });
+      }
+    }
   }
 
   /// Get the position in witch a block must be in the isometric space.
