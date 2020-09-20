@@ -25,7 +25,7 @@ class SpriteAnimationComponent extends PositionComponent {
   SpriteAnimationComponent.sequenced(
     double width,
     double height,
-    String imagePath,
+    Image image,
     int amount, {
     int amountPerRow,
     double textureX = 0.0,
@@ -39,7 +39,7 @@ class SpriteAnimationComponent extends PositionComponent {
     this.width = width;
     this.height = height;
     animation = SpriteAnimation.sequenced(
-      imagePath,
+      image,
       amount,
       amountPerRow: amountPerRow,
       textureX: textureX,
@@ -51,8 +51,34 @@ class SpriteAnimationComponent extends PositionComponent {
     );
   }
 
-  @override
-  bool loaded() => animation.loaded();
+  SpriteAnimationComponent.variableSequenced(
+    double width,
+    double height,
+    Image image,
+    int amount,
+    List<double> stepTimes, {
+    int amountPerRow,
+    double textureX = 0.0,
+    double textureY = 0.0,
+    double textureWidth,
+    double textureHeight,
+    bool loop = true,
+  }) {
+    this.width = width;
+    this.height = height;
+
+    animation = SpriteAnimation.variableSequenced(
+      image,
+      amount,
+      stepTimes,
+      amountPerRow: amountPerRow,
+      textureX: textureX,
+      textureY: textureY,
+      textureWidth: textureWidth,
+      textureHeight: textureHeight,
+      loop: loop,
+    );
+  }
 
   @override
   bool destroy() => destroyOnFinish && animation.isLastFrame;

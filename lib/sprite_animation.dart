@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'flame.dart';
 import 'sprite.dart';
@@ -72,7 +73,7 @@ class SpriteAnimation {
   ///     Animation.sequenced('sheet.png', 8, textureY: 32.0 * i, textureWidth: 32.0, textureHeight: 32.0);
   /// This will create the i-th animation on the 'sheet.png', given it has 8 frames.
   SpriteAnimation.sequenced(
-    String imagePath,
+    Image image,
     int amount, {
     int amountPerRow,
     double textureX = 0.0,
@@ -80,25 +81,22 @@ class SpriteAnimation {
     double textureWidth,
     double textureHeight,
     double stepTime = 0.1,
-    this.loop = true,
-  }) : assert(amountPerRow == null || amount >= amountPerRow) {
-    amountPerRow ??= amount;
-    frames = List<SpriteAnimationFrame>(amount);
-    for (var i = 0; i < amount; i++) {
-      final Sprite sprite = Sprite(
-        imagePath,
-        x: textureX + (i % amountPerRow) * textureWidth,
-        y: textureY + (i ~/ amountPerRow) * textureHeight,
-        width: textureWidth,
-        height: textureHeight,
-      );
-      frames[i] = SpriteAnimationFrame(sprite, stepTime);
-    }
-  }
+    bool loop = true,
+  }) : this.variableSequenced(
+          image,
+          amount,
+          List.generate(amount, (_) => stepTime),
+          amountPerRow: amountPerRow,
+          textureX: textureX,
+          textureY: textureX,
+          textureWidth: textureWidth,
+          textureHeight: textureHeight,
+          loop: loop,
+        );
 
   /// Works just like [SpriteAnimation.sequenced], but it takes a list of variable [stepTimes], associating each one with one frame in the sequence.
   SpriteAnimation.variableSequenced(
-    String imagePath,
+    Image image,
     int amount,
     List<double> stepTimes, {
     int amountPerRow,
@@ -112,7 +110,7 @@ class SpriteAnimation {
     frames = List<SpriteAnimationFrame>(amount);
     for (var i = 0; i < amount; i++) {
       final Sprite sprite = Sprite(
-        imagePath,
+        image,
         x: textureX + (i % amountPerRow) * textureWidth,
         y: textureY + (i ~/ amountPerRow) * textureHeight,
         width: textureWidth,
@@ -128,7 +126,9 @@ class SpriteAnimation {
   /// [imagePath]: Source of the sprite sheet animation
   /// [dataPath]: Animation's exported data in json format
   static Future<SpriteAnimation> fromAsepriteData(
-      String imagePath, String dataPath) async {
+    Image image,
+    String dataPath,
+  ) async {
     final String content = await Flame.assets.readFile(dataPath);
     final Map<String, dynamic> json = jsonDecode(content);
 
@@ -144,7 +144,7 @@ class SpriteAnimation {
       final stepTime = value['duration'] / 1000;
 
       final Sprite sprite = Sprite(
-        imagePath,
+        image,
         x: x.toDouble(),
         y: y.toDouble(),
         width: width.toDouble(),
@@ -228,11 +228,6 @@ class SpriteAnimation {
   /// Returns a new Animation based on this animation, but with its frames in reversed order
   SpriteAnimation reversed() {
     return SpriteAnimation(frames.reversed.toList(), loop: loop);
-  }
-
-  /// Whether all sprites composing this animation are loaded.
-  bool loaded() {
-    return frames.every((frame) => frame.sprite.loaded());
   }
 
   /// Computes the total duration of this animation (before it's done or repeats).
