@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart';
 
 import '../particle.dart';
 import '../components/component.dart';
-import '../vector2f.dart';
+import '../vector2_extension.dart';
 
 class ComponentParticle extends Particle {
   final Component component;
-  final Vector2F size;
+  final Vector2 size;
   final Paint overridePaint;
 
   ComponentParticle({

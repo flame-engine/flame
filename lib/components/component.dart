@@ -1,8 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/painting.dart';
-
-import '../vector2f.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 /// This represents a Component for your game.
 ///
@@ -24,7 +23,7 @@ abstract class Component {
   ///
   /// It receives the new size.
   /// You can use the [Resizable] mixin if you want an implementation of this hook that keeps track of the current size.
-  void resize(Vector2F size) {}
+  void resize(Vector2 size) {}
 
   /// Whether this component has been loaded yet. If not loaded, [BaseGame] will not try to render it.
   ///

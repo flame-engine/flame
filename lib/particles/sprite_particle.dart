@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart';
 
 import '../particle.dart';
 import '../sprite.dart';
-import '../vector2f.dart';
+import '../vector2_extension.dart';
 
 class SpriteParticle extends Particle {
   final Sprite sprite;
-  final Vector2F size;
+  final Vector2 size;
   final Paint overridePaint;
 
   SpriteParticle({
@@ -24,7 +24,7 @@ class SpriteParticle extends Particle {
   void render(Canvas canvas) {
     sprite.renderCentered(
       canvas,
-      Vector2F.zero(),
+      Vector2.zero(),
       overridePaint: overridePaint,
       size: size,
     );

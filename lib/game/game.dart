@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 
 import '../keyboard.dart';
 
-import '../vector2f.dart';
+import '../vector2_extension.dart';
 import 'widget_builder.dart';
 
 /// Represents a generic game.
@@ -36,7 +36,7 @@ abstract class Game {
   /// This is the resize hook; every time the game widget is resized, this hook is called.
   ///
   /// The default implementation does nothing; override to use the hook.
-  void resize(Vector2F size) {}
+  void resize(Vector2 size) {}
 
   /// This is the lifecycle state change hook; every time the game is resumed, paused or suspended, this is called.
   ///

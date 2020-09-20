@@ -1,6 +1,6 @@
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/vector2f.dart';
+import 'package:flame/vector2_extension.dart';
 import 'package:flame/components/sprite_component.dart';
 import 'package:flame/components/mixins/resizable.dart';
 import 'package:flame/text_config.dart';
@@ -81,7 +81,7 @@ class MyGame extends BaseGame {
     super.render(canvas);
 
     if (debugMode()) {
-      fpsTextConfig.render(canvas, fps(120).toString(), Vector2F(0, 50));
+      fpsTextConfig.render(canvas, fps(120).toString(), Vector2(0, 50));
     }
   }
 }

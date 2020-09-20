@@ -1,5 +1,5 @@
 import 'package:flame/game/base_game.dart';
-import 'package:flame/vector2f.dart';
+import 'package:flame/vector2_extension.dart';
 import 'package:test/test.dart';
 
 import 'package:flame/components/position_component.dart';
@@ -17,7 +17,7 @@ class MyComponent extends PositionComponent with Resizable {
 
 class MyGame extends BaseGame {}
 
-Vector2F size = Vector2F(1.0, 1.0);
+Vector2 size = Vector2(1.0, 1.0);
 
 void main() {
   group('resizable test', () {

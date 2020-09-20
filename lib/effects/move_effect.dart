@@ -3,14 +3,14 @@ import 'package:meta/meta.dart';
 
 import 'dart:math';
 
-import '../vector2f.dart';
+import '../vector2_extension.dart';
 import './effects.dart';
 
 double _direction(double p, double d) => (p - d).sign;
 double _distance(double a, double b) => (a - b).abs();
 
 class MoveEffect extends PositionComponentEffect {
-  Vector2F destination;
+  Vector2 destination;
   double speed;
   Curve curve;
 

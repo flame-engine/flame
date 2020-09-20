@@ -2,7 +2,7 @@ import 'package:flame/gestures.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/vector2f.dart';
+import 'package:flame/vector2_extension.dart';
 import 'package:flame/sprite_animation.dart';
 import 'package:flame/components/sprite_animation_component.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.images.loadAll(['creature.png', 'chopper.png']);
 
-  final Vector2F size = await Flame.util.initialDimensions();
+  final Vector2 size = await Flame.util.initialDimensions();
   final game = MyGame(size);
   runApp(game.widget);
 }
@@ -54,7 +54,7 @@ class MyGame extends BaseGame with TapDetector {
     addAnimation(evt.globalPosition.dx, evt.globalPosition.dy);
   }
 
-  MyGame(Vector2F screenSize) {
+  MyGame(Vector2 screenSize) {
     size = screenSize;
 
     const s = 100.0;

@@ -7,7 +7,7 @@ import '../component.dart';
 import '../mixins/has_game_ref.dart';
 import '../../game/base_game.dart';
 import '../../gestures.dart';
-import '../../vector2f.dart';
+import '../../vector2_extension.dart';
 
 mixin JoystickListener {
   void joystickChangeDirectional(JoystickDirectionalEvent event);
@@ -70,7 +70,7 @@ class JoystickComponent extends JoystickController {
   }
 
   @override
-  void resize(Vector2F size) {
+  void resize(Vector2 size) {
     directional?.initialize(size, this);
     actions?.forEach((action) => action.initialize(size, this));
     super.resize(size);

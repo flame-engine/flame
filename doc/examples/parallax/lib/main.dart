@@ -1,7 +1,7 @@
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components/parallax_component.dart';
-import 'package:flame/vector2f.dart';
+import 'package:flame/vector2_extension.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -22,8 +22,8 @@ class MyGame extends BaseGame {
 
     final parallaxComponent = ParallaxComponent(
       images,
-      baseSpeed: Vector2F(20, 0),
-      layerDelta: Vector2F(30, 0),
+      baseSpeed: Vector2(20, 0),
+      layerDelta: Vector2(30, 0),
     );
 
     add(parallaxComponent);
