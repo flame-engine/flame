@@ -9,7 +9,7 @@ import '../anchor.dart';
 import '../effects/effects.dart';
 import '../game.dart';
 import '../text_config.dart';
-import '../vector2f.dart';
+import '../vector2_extension.dart';
 import 'component.dart';
 
 /// A [Component] implementation that represents a component that has a
@@ -72,14 +72,14 @@ abstract class PositionComponent extends Component {
 
   TextConfig get debugTextConfig => TextConfig(color: debugColor, fontSize: 12);
 
-  Vector2F toPosition() => Vector2F(x, y);
-  void setByPosition(Vector2F position) {
+  Vector2 toPosition() => Vector2(x, y);
+  void setByPosition(Vector2 position) {
     x = position.x;
     y = position.y;
   }
 
-  Vector2F toSize() => Vector2F(width, height);
-  void setBySize(Vector2F size) {
+  Vector2 toSize() => Vector2(width, height);
+  void setBySize(Vector2 size) {
     width = size.x;
     height = size.y;
   }
@@ -120,7 +120,7 @@ abstract class PositionComponent extends Component {
     debugTextConfig.render(
         canvas,
         'x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}',
-        Vector2F(-50, -15));
+        Vector2(-50, -15));
 
     final Rect rect = toRect();
     final dx = rect.right;
@@ -128,7 +128,7 @@ abstract class PositionComponent extends Component {
     debugTextConfig.render(
         canvas,
         'x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}',
-        Vector2F(width - 50, height));
+        Vector2(width - 50, height));
   }
 
   void _prepareCanvas(Canvas canvas) {
@@ -193,7 +193,7 @@ abstract class PositionComponent extends Component {
 
   @mustCallSuper
   @override
-  void resize(Vector2F size) {
+  void resize(Vector2 size) {
     super.resize(size);
     _children.forEach((child) => child.resize(size));
   }

@@ -4,7 +4,7 @@ import 'dart:async';
 
 import 'flame.dart';
 import 'palette.dart';
-import 'vector2f.dart';
+import 'vector2_extension.dart';
 
 class Sprite {
   Paint paint = BasicPalette.white.paint;
@@ -63,15 +63,15 @@ class Sprite {
 
   double get _imageHeight => image.height.toDouble();
 
-  Vector2F get originalSize {
+  Vector2 get originalSize {
     if (!loaded()) {
       return null;
     }
-    return Vector2F(_imageWidth, _imageHeight);
+    return Vector2(_imageWidth, _imageHeight);
   }
 
-  Vector2F get size {
-    return Vector2F(src.width, src.height);
+  Vector2 get size {
+    return Vector2(src.width, src.height);
   }
 
   /// Renders this Sprite on the position [p], scaled by the [scale] factor provided.
@@ -79,7 +79,7 @@ class Sprite {
   /// It renders with src size multiplied by [scale] in both directions.
   /// Anchor is on top left as default.
   /// If not loaded, does nothing.
-  void renderScaled(Canvas canvas, Vector2F p,
+  void renderScaled(Canvas canvas, Vector2 p,
       {double scale = 1.0, Paint overridePaint}) {
     if (!loaded()) {
       return;
@@ -87,14 +87,13 @@ class Sprite {
     renderPosition(canvas, p, size: size * scale, overridePaint: overridePaint);
   }
 
-  void renderPosition(Canvas canvas, Vector2F p,
-      {Vector2F size, Paint overridePaint}) {
+  void renderPosition(Canvas canvas, Vector2 p,
+      {Vector2 size, Paint overridePaint}) {
     if (!loaded()) {
       return;
     }
     size ??= this.size;
-    renderRect(canvas, Vector2F.rectFrom(p, size),
-        overridePaint: overridePaint);
+    renderRect(canvas, p.toRect(size), overridePaint: overridePaint);
   }
 
   void render(Canvas canvas,
@@ -112,8 +111,8 @@ class Sprite {
   ///
   /// If [size] is not provided, the original size of the src image is used.
   /// If the asset is not yet loaded, it does nothing.
-  void renderCentered(Canvas canvas, Vector2F p,
-      {Vector2F size, Paint overridePaint}) {
+  void renderCentered(Canvas canvas, Vector2 p,
+      {Vector2 size, Paint overridePaint}) {
     if (!loaded()) {
       return;
     }

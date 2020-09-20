@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/effects/effects.dart';
-import 'package:flame/vector2f.dart';
+import 'package:flame/vector2_extension.dart';
 
 import './square.dart';
 
@@ -17,7 +17,7 @@ class MyGame extends BaseGame with TapDetector {
   @override
   void onTapUp(details) {
     square.addEffect(MoveEffect(
-      destination: Vector2F.fromOffset(details.localPosition),
+      destination: Vector2Factory.fromOffset(details.localPosition),
       speed: 250.0,
       curve: Curves.bounceInOut,
     ));

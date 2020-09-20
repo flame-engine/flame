@@ -4,12 +4,12 @@ import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite_batch.dart';
-import 'package:flame/vector2f.dart';
+import 'package:flame/vector2_extension.dart';
 import 'package:flame/components/sprite_batch_component.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Vector2F size = await Flame.util.initialDimensions();
+  final Vector2 size = await Flame.util.initialDimensions();
   final game = MyGame(size);
   runApp(game.widget);
 }
@@ -17,7 +17,7 @@ void main() async {
 class MyGame extends BaseGame {
   SpriteBatch spriteBatch;
 
-  MyGame(Vector2F screenSize) {
+  MyGame(Vector2 screenSize) {
     size = screenSize;
 
     initData();

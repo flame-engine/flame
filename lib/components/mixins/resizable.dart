@@ -1,4 +1,4 @@
-import '../../vector2f.dart';
+import '../../vector2_extension.dart';
 
 /// Useful mixin to add to your components if you want to hold a reference to the current screen size.
 ///
@@ -6,10 +6,10 @@ import '../../vector2f.dart';
 /// Also, it updates its [children], if any.
 class Resizable {
   /// This is the current updated screen size.
-  Vector2F size;
+  Vector2 size;
 
   /// Implementation provided by this mixin to the resize hook.
-  void resize(Vector2F size) {
+  void resize(Vector2 size) {
     this.size = size;
     resizableChildren().where((e) => e != null).forEach((e) => e.resize(size));
   }

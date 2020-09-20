@@ -5,7 +5,7 @@ import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/components/mixins/resizable.dart';
 import 'package:flame/components/mixins/tapable.dart';
 import 'package:flame/game/base_game.dart';
-import 'package:flame/vector2f.dart';
+import 'package:flame/vector2_extension.dart';
 import 'package:flutter/gestures.dart';
 import 'package:test/test.dart';
 
@@ -30,7 +30,7 @@ class MyComposed extends PositionComponent with HasGameRef, Tapable {
 
 class PositionComponentNoNeedForRect extends PositionComponent with Tapable {}
 
-Vector2F size = Vector2F(1.0, 1.0);
+Vector2 size = Vector2(1.0, 1.0);
 
 void main() {
   group('composable component test', () {

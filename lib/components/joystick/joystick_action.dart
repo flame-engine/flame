@@ -5,11 +5,10 @@ import 'package:flame/components/joystick/joystick_component.dart';
 import 'package:flame/components/joystick/joystick_events.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame/vector2f.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../vector2f.dart';
+import '../../vector2_extension.dart';
 
 enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
 
@@ -60,7 +59,7 @@ class JoystickAction {
     _tileSize = _sizeBackgroundDirection / 2;
   }
 
-  void initialize(Vector2F _screenSize, JoystickController joystickController) {
+  void initialize(Vector2 _screenSize, JoystickController joystickController) {
     _joystickController = joystickController;
     final double radius = size / 2;
     double dx = 0, dy = 0;
@@ -155,8 +154,8 @@ class JoystickAction {
 
       // Distance between the center of joystick background & drag position
       final centerPosition =
-          Vector2F.fromOffset(_rectBackgroundDirection.center);
-      final dragPosition = Vector2F.fromOffset(_dragPosition);
+          Vector2Factory.fromOffset(_rectBackgroundDirection.center);
+      final dragPosition = Vector2Factory.fromOffset(_dragPosition);
       double dist = centerPosition.distanceTo(dragPosition);
 
       // The maximum distance for the knob position to the edge of

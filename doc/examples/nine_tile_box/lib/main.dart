@@ -2,7 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/nine_tile_box.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame/vector2f.dart';
+import 'package:flame/vector2_extension.dart';
 
 import 'package:flutter/material.dart';
 
@@ -15,7 +15,7 @@ void main() async {
 }
 
 class MyGame extends Game {
-  Vector2F size;
+  Vector2 size;
   NineTileBox nineTileBox;
 
   MyGame(this.size) {

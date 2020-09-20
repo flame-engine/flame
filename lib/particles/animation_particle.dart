@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart';
 
 import '../sprite_animation.dart';
 import '../particle.dart';
-import '../vector2f.dart';
+import '../vector2_extension.dart';
 
 class SpriteAnimationParticle extends Particle {
   final SpriteAnimation animation;
-  final Vector2F size;
+  final Vector2 size;
   final Paint overridePaint;
   final bool alignAnimationTime;
 
@@ -36,7 +36,7 @@ class SpriteAnimationParticle extends Particle {
   void render(Canvas canvas) {
     animation.getSprite().renderCentered(
           canvas,
-          Vector2F.zero(),
+          Vector2.zero(),
           overridePaint: overridePaint,
           size: size,
         );

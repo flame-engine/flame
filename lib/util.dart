@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flame/vector2f.dart';
+import 'package:flame/vector2_extension.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
@@ -97,21 +97,22 @@ class Util {
   ///
   /// A best practice would be to implement there resize hooks on your game and components and don't use this at all.
   /// Make sure your components are able to render and update themselves for any possible screen size.
-  Future<Vector2F> initialDimensions() async {
+  Future<Vector2> initialDimensions() async {
     // https://github.com/flutter/flutter/issues/5259
     // "In release mode we start off at 0x0 but we don't in debug mode"
-    return await Future<Vector2F>(() {
+    return await Future<Vector2>(() {
       if (window.physicalSize.isEmpty) {
-        final completer = Completer<Vector2F>();
+        final completer = Completer<Vector2>();
         window.onMetricsChanged = () {
           if (!window.physicalSize.isEmpty && !completer.isCompleted) {
-            completer.complete(Vector2F.fromSize(
+            completer.complete(Vector2Factory.fromSize(
                 window.physicalSize / window.devicePixelRatio));
           }
         };
         return completer.future;
       }
-      return Vector2F.fromSize(window.physicalSize / window.devicePixelRatio);
+      return Vector2Factory.fromSize(
+          window.physicalSize / window.devicePixelRatio);
     });
   }
 
@@ -148,7 +149,7 @@ class Util {
   ///
   /// Some render methods don't allow to pass a offset.
   /// This method translate the canvas, draw what you want, and then translate back.
-  void drawWhere(Canvas c, Vector2F p, void Function(Canvas) fn) {
+  void drawWhere(Canvas c, Vector2 p, void Function(Canvas) fn) {
     c.translate(p.x, p.y);
     fn(c);
     c.translate(-p.x, -p.y);

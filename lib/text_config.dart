@@ -4,7 +4,7 @@ import 'package:flutter/material.dart' as material;
 
 import 'anchor.dart';
 import 'memory_cache.dart';
-import 'vector2f.dart';
+import 'vector2_extension.dart';
 
 /// A Text Config contains all typographical information required to render texts; i.e., font size and color, family, etc.
 ///
@@ -76,11 +76,11 @@ class TextConfig {
   ///
   ///     const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font');
   ///     config.render(c, Offset(size.width - 10, size.height - 10, anchor: Anchor.bottomRight);
-  void render(Canvas canvas, String text, Vector2F p,
+  void render(Canvas canvas, String text, Vector2 p,
       {Anchor anchor = Anchor.topLeft}) {
     final material.TextPainter tp = toTextPainter(text);
-    final Vector2F translatedPosition =
-        anchor.translate(p, Vector2F.fromSize(tp.size));
+    final Vector2 translatedPosition =
+        anchor.translate(p, Vector2Factory.fromSize(tp.size));
     tp.paint(canvas, translatedPosition.toOffset());
   }
 

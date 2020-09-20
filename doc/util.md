@@ -60,7 +60,7 @@ import 'dart:ui';
 import 'package:flame/game.dart';
 import 'package:flame/text_config.dart';
 import 'package:flame/time.dart';
-import 'package:flame/vector2f.dart';
+import 'package:flame/vector2_extension.dart';
 
 class MyGame extends Game {
   final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
@@ -81,7 +81,7 @@ class MyGame extends Game {
   @override
   void render(Canvas canvas) {
     textConfig.render(canvas, "Countdown: ${countdown.current.toString()}",
-        Vector2F(10, 100));
+        Vector2(10, 100));
   }
 }
 
@@ -95,7 +95,7 @@ import 'dart:ui';
 import 'package:flame/game.dart';
 import 'package:flame/text_config.dart';
 import 'package:flame/time.dart';
-import 'package:flame/vector2f.dart';
+import 'package:flame/vector2_extension.dart';
 
 class MyGame extends Game {
   final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
@@ -117,7 +117,7 @@ class MyGame extends Game {
 
   @override
   void render(Canvas canvas) {
-    textConfig.render(canvas, "Elapsed time: $elapsedSecs", Vector2F(10, 150));
+    textConfig.render(canvas, "Elapsed time: $elapsedSecs", Vector2(10, 150));
   }
 }
 
