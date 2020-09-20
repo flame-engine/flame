@@ -13,14 +13,16 @@ void main() async {
 class MyGame extends BaseGame {
   MyGame(Size screenSize) {
     size = screenSize;
-    _start();
   }
 
-  void _start() async {
+  @override
+  Future<void> onLoad() async {
+    final image = await Flame.images.load('chopper.png');
     final animation = await SpriteAnimation.fromAsepriteData(
-      'chopper.png',
+      image,
       'chopper.json',
     );
+
     final animationComponent = SpriteAnimationComponent(200, 200, animation);
 
     animationComponent.x = (size.width / 2) - 100;

@@ -91,6 +91,12 @@ abstract class Game {
 
   VoidCallback pauseEngineFn;
   VoidCallback resumeEngineFn;
+
+  /// Use this method to load the assets need for the game instance to run
+  Future<void> onLoad() async {}
+
+  /// Returns the widget which will be show while the instance is loading
+  Widget loadingWidget() => Container();
 }
 
 class OverlayWidget {

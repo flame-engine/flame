@@ -22,11 +22,11 @@ class SpriteComponent extends PositionComponent {
 
   SpriteComponent();
 
-  SpriteComponent.square(double size, String imagePath)
-      : this.rectangle(size, size, imagePath);
+  SpriteComponent.square(double size, Image image)
+      : this.rectangle(size, size, image);
 
-  SpriteComponent.rectangle(double width, double height, String imagePath)
-      : this.fromSprite(width, height, Sprite(imagePath));
+  SpriteComponent.rectangle(double width, double height, Image image)
+      : this.fromSprite(width, height, Sprite(image));
 
   SpriteComponent.fromSprite(double width, double height, this.sprite) {
     this.width = width;
@@ -43,10 +43,5 @@ class SpriteComponent extends PositionComponent {
       height: height,
       overridePaint: overridePaint,
     );
-  }
-
-  @override
-  bool loaded() {
-    return sprite?.loaded() == true && x != null && y != null;
   }
 }

@@ -4,7 +4,8 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite_animation.dart';
 import 'package:flame/components/sprite_animation_component.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Image;
+import 'dart:ui';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,14 +17,24 @@ void main() async {
 }
 
 class MyGame extends BaseGame with TapDetector {
-  final animation = SpriteAnimation.sequenced(
-    'chopper.png',
-    4,
-    textureWidth: 48,
-    textureHeight: 48,
-    stepTime: 0.15,
-    loop: true,
-  );
+  Image chopper;
+  Image creature;
+  SpriteAnimation animation;
+
+  @override
+  Future<void> onLoad() async {
+    chopper = await Flame.images.load('chopper.png');
+    creature = await Flame.images.load('creature.png');
+
+    animation = SpriteAnimation.sequenced(
+      chopper,
+      4,
+      textureWidth: 48,
+      textureHeight: 48,
+      stepTime: 0.15,
+      loop: true,
+    );
+  }
 
   void addAnimation(double x, double y) {
     const textureWidth = 291.0;
@@ -32,7 +43,7 @@ class MyGame extends BaseGame with TapDetector {
     final animationComponent = SpriteAnimationComponent.sequenced(
       291,
       178,
-      'creature.png',
+      creature,
       18,
       amountPerRow: 10,
       textureWidth: textureWidth,
