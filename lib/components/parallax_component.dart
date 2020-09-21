@@ -93,7 +93,7 @@ class ParallaxLayer {
 
     // Size of the area to paint the images on
     final paintSize = Vector2(countX, countY)..multiply(_imageSize);
-    _paintArea = paintSize.toOrigoRect();
+    _paintArea = paintSize.toOriginRect();
   }
 
   void update(Vector2 delta) {

@@ -505,8 +505,11 @@ class MyGame extends BaseGame {
 
   /// Returns random [Offset] within a virtual
   /// grid cell
-  Vector2 randomCellOffset() {
-    return cellSize * Vector2(rnd.nextDouble(), rnd.nextDouble()) - halfCellSize;
+  Offset randomCellOffset() {
+    return Offset(
+      cellSize.x * rnd.nextDouble() - halfCellSize.x,
+      cellSize.y * rnd.nextDouble() - halfCellSize.y,
+    );
   }
 
   /// Returns random [Color] from primary swatches

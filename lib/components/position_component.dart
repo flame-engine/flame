@@ -72,8 +72,8 @@ abstract class PositionComponent extends Component {
 
   TextConfig get debugTextConfig => TextConfig(color: debugColor, fontSize: 12);
 
-  Vector2 toPosition() => Vector2(x, y);
-  void setByPosition(Vector2 position) {
+  Vector2 get position => Vector2(x, y);
+  void setPosition(Vector2 position) {
     x = position.x;
     y = position.y;
   }
@@ -112,7 +112,7 @@ abstract class PositionComponent extends Component {
   }
 
   double distance(PositionComponent c) {
-    return c.toPosition().distanceTo(toPosition());
+    return c.position.distanceTo(position);
   }
 
   void renderDebugMode(Canvas canvas) {
@@ -120,7 +120,8 @@ abstract class PositionComponent extends Component {
     debugTextConfig.render(
         canvas,
         'x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}',
-        Vector2(-50, -15));
+        Vector2(-50, -15),
+    );
 
     final Rect rect = toRect();
     final dx = rect.right;
@@ -128,7 +129,8 @@ abstract class PositionComponent extends Component {
     debugTextConfig.render(
         canvas,
         'x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}',
-        Vector2(width - 50, height));
+        Vector2(width - 50, height),
+    );
   }
 
   void _prepareCanvas(Canvas canvas) {
