@@ -76,7 +76,7 @@ abstract class PositionComponentEffect {
     /// If these aren't modified by the extending effect it is assumed that the
     /// effect didn't bring the component to another state than the one it
     /// started in
-    endPosition = _comp.toPosition();
+    endPosition = _comp.position;
     endAngle = _comp.angle;
     endSize = _comp.toSize();
   }

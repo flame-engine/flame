@@ -11,10 +11,10 @@ void main() {
       final PositionComponent c = SpriteComponent();
       c.x = 2.2;
       c.y = 3.4;
-      expect(c.toPosition().x, 2.2);
-      expect(c.toPosition().y, 3.4);
+      expect(c.position.x, 2.2);
+      expect(c.position.y, 3.4);
 
-      c.setByPosition(Vector2(1.0, 0.0));
+      c.setPosition(Vector2(1.0, 0.0));
       expect(c.x, 1.0);
       expect(c.y, 0.0);
     });
