@@ -5,7 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
-import '../vector2_extension.dart';
+import '../vector2.dart';
 import 'game_loop.dart';
 import 'game.dart';
 

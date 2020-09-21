@@ -9,7 +9,7 @@ import '../anchor.dart';
 import '../effects/effects.dart';
 import '../game.dart';
 import '../text_config.dart';
-import '../vector2_extension.dart';
+import '../vector2.dart';
 import 'component.dart';
 
 /// A [Component] implementation that represents a component that has a

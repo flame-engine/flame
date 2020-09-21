@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 
 import '../keyboard.dart';
 
-import '../vector2_extension.dart';
+import '../vector2.dart';
 import 'widget_builder.dart';
 
 /// Represents a generic game.

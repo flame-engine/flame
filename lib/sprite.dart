@@ -4,7 +4,7 @@ import 'dart:async';
 
 import 'flame.dart';
 import 'palette.dart';
-import 'vector2_extension.dart';
+import 'vector2.dart';
 
 class Sprite {
   Paint paint = BasicPalette.white.paint;

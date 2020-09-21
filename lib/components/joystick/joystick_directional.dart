@@ -6,7 +6,7 @@ import 'package:flame/gestures.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
-import '../../vector2_extension.dart';
+import '../../vector2.dart';
 
 class JoystickDirectional {
   final double size;

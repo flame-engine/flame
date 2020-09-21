@@ -1,7 +1,7 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
-import '../vector2_extension.dart';
+import '../vector2.dart';
 import 'game_render_box.dart';
 import 'game.dart';
 

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import '../particle.dart';
 import '../sprite.dart';
-import '../vector2_extension.dart';
+import '../vector2.dart';
 
 class SpriteParticle extends Particle {
   final Sprite sprite;

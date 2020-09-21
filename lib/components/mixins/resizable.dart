@@ -1,4 +1,4 @@
-import '../../vector2_extension.dart';
+import '../../vector2.dart';
 
 /// Useful mixin to add to your components if you want to hold a reference to the current screen size.
 ///

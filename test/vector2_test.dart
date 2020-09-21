@@ -1,4 +1,4 @@
-import 'package:flame/vector2_extension.dart';
+import 'package:flame/vector2.dart';
 import 'package:test/test.dart';
 import 'dart:math' as math;
 
