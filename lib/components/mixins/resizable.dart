@@ -11,7 +11,7 @@ class Resizable {
   /// Implementation provided by this mixin to the resize hook.
   void resize(Vector2 size) {
     this.size = size;
-    resizableChildren().where((e) => e != null).forEach((e) => e.resize(size));
+    resizableChildren().forEach((e) => e?.resize(size));
   }
 
   /// Overwrite this to add children to this [Resizable].
