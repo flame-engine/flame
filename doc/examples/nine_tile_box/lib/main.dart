@@ -26,9 +26,9 @@ class MyGame extends Game {
   @override
   void render(Canvas canvas) {
     const length = 300.0;
-    final x = (size.x - length) / 2;
-    final y = (size.y - length) / 2;
-    nineTileBox.draw(canvas, x, y, length, length);
+    final boxSize = Vector2.all(length);
+    final position = (size - boxSize) / 2;
+    nineTileBox.draw(canvas, position, boxSize);
   }
 
   @override
