@@ -118,18 +118,18 @@ abstract class PositionComponent extends Component {
   void renderDebugMode(Canvas canvas) {
     canvas.drawRect(toOriginRect(), _debugPaint);
     debugTextConfig.render(
-        canvas,
-        'x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}',
-        Vector2(-50, -15),
+      canvas,
+      'x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}',
+      Vector2(-50, -15),
     );
 
     final Rect rect = toRect();
     final dx = rect.right;
     final dy = rect.bottom;
     debugTextConfig.render(
-        canvas,
-        'x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}',
-        Vector2(width - 50, height),
+      canvas,
+      'x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}',
+      Vector2(width - 50, height),
     );
   }
 

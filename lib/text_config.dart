@@ -80,7 +80,6 @@ class TextConfig {
       {Anchor anchor = Anchor.topLeft}) {
     final material.TextPainter tp = toTextPainter(text);
     final Vector2 translatedPosition =
-
         anchor.translate(p, Vector2Factory.fromSize(tp.size));
     tp.paint(canvas, translatedPosition.toOffset());
   }
