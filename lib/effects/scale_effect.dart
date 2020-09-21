@@ -1,8 +1,6 @@
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
 
-import 'dart:math';
-
 import '../extensions/vector2.dart';
 import './effects.dart';
 
