@@ -7,7 +7,7 @@ import '../extensions/vector2.dart';
 import './effects.dart';
 
 double _direction(double p, double d) => (p - d).sign;
-double _size(double a, double b) => (a - b).abs();
+double _length(double a, double b) => (a - b).abs();
 
 class ScaleEffect extends PositionComponentEffect {
   Vector2 size;
@@ -36,14 +36,14 @@ class ScaleEffect extends PositionComponentEffect {
 
     _original = component.toSize();
     _diff = Vector2(
-      _size(_original.x, size.x),
-      _size(_original.y, size.y),
+      _length(_original.x, size.x),
+      _length(_original.y, size.y),
     );
 
     _dir.x = _direction(size.x, _original.x);
     _dir.y = _direction(size.y, _original.y);
 
-    final scaleDistance = sqrt(pow(_diff.x, 2) + pow(_diff.y, 2));
+    final scaleDistance = _diff.length;
     travelTime = scaleDistance / speed;
   }
 
@@ -51,8 +51,6 @@ class ScaleEffect extends PositionComponentEffect {
   void update(double dt) {
     super.update(dt);
     final double c = curve?.transform(percentage) ?? 1.0;
-
-    component.width = _original.x + _diff.x * c * _dir.x;
-    component.height = _original.y + _diff.y * c * _dir.y;
+    component.setBySize(_original + (_diff.clone()..multiply(_dir)) * c);
   }
 }
