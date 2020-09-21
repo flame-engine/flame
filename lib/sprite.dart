@@ -79,16 +79,24 @@ class Sprite {
   /// It renders with src size multiplied by [scale] in both directions.
   /// Anchor is on top left as default.
   /// If not loaded, does nothing.
-  void renderScaled(Canvas canvas, Vector2 p,
-      {double scale = 1.0, Paint overridePaint}) {
+  void renderScaled(
+    Canvas canvas,
+    Vector2 p, {
+    double scale = 1.0,
+    Paint overridePaint,
+  }) {
     if (!loaded()) {
       return;
     }
     renderPosition(canvas, p, size: size * scale, overridePaint: overridePaint);
   }
 
-  void renderPosition(Canvas canvas, Vector2 p,
-      {Vector2 size, Paint overridePaint}) {
+  void renderPosition(
+    Canvas canvas,
+    Vector2 p, {
+    Vector2 size,
+    Paint overridePaint,
+  }) {
     if (!loaded()) {
       return;
     }
@@ -96,8 +104,12 @@ class Sprite {
     renderRect(canvas, p.toRect(size), overridePaint: overridePaint);
   }
 
-  void render(Canvas canvas,
-      {double width, double height, Paint overridePaint}) {
+  void render(
+    Canvas canvas, {
+    double width,
+    double height,
+    Paint overridePaint,
+  }) {
     if (!loaded()) {
       return;
     }
@@ -111,8 +123,12 @@ class Sprite {
   ///
   /// If [size] is not provided, the original size of the src image is used.
   /// If the asset is not yet loaded, it does nothing.
-  void renderCentered(Canvas canvas, Vector2 p,
-      {Vector2 size, Paint overridePaint}) {
+  void renderCentered(
+    Canvas canvas,
+    Vector2 p, {
+    Vector2 size,
+    Paint overridePaint,
+  }) {
     if (!loaded()) {
       return;
     }
@@ -122,7 +138,11 @@ class Sprite {
         overridePaint: overridePaint);
   }
 
-  void renderRect(Canvas canvas, Rect dst, {Paint overridePaint}) {
+  void renderRect(
+    Canvas canvas,
+    Rect dst, {
+    Paint overridePaint,
+  }) {
     if (!loaded()) {
       return;
     }
