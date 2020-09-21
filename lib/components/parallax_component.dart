@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/extensions/vector2.dart';
+import 'package:flame/extensions/rect.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 import '../flame.dart';
 import 'position_component.dart';
@@ -39,8 +39,8 @@ class ParallaxLayer {
   Future<Image> future;
 
   Image _image;
-  Vector2 _screenSize;
   Rect _paintArea;
+  Vector2 _screenSize;
   Vector2 _scroll;
   Vector2 _imageSize;
   double _scale = 1.0;
@@ -78,21 +78,21 @@ class ParallaxLayer {
 
     // Number of images that can fit on the canvas plus one
     // to have something to scroll to without leaving canvas empty
-    final countX = 1 + size.x / _imageSize.x;
-    final countY = 1 + size.y / _imageSize.y;
+    final count = Vector2.all(1) + size.clone()
+      ..divide(_imageSize);
 
     // Percentage of the image size that will overflow
-    final overflowX = (_imageSize.x * countX - size.x) / _imageSize.x;
-    final overflowY = (_imageSize.y * countY - size.y) / _imageSize.y;
+    final overflow = ((_imageSize.clone()..multiply(count)) - size)
+      ..divide(_imageSize);
 
     // Align image to correct side of the screen
     final alignment = parallaxImage.alignment;
-    final marginX = alignment.x == 0 ? overflowX / 2 : alignment.x;
-    final marginY = alignment.y == 0 ? overflowY / 2 : alignment.y;
+    final marginX = alignment.x == 0 ? overflow.x / 2 : alignment.x;
+    final marginY = alignment.y == 0 ? overflow.y / 2 : alignment.y;
     _scroll ??= Vector2(marginX, marginY);
 
     // Size of the area to paint the images on
-    final paintSize = Vector2(countX, countY)..multiply(_imageSize);
+    final paintSize = count..multiply(_imageSize);
     _paintArea = paintSize.toOriginRect();
   }
 

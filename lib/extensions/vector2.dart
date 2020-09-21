@@ -44,25 +44,3 @@ extension Vector2Extension on Vector2 {
     }
   }
 }
-
-// Until [extension] will allow static methods we need to keep these functions
-// in a utility class
-class Vector2Factory {
-  /// Creates a [Vector2] using an [Offset]
-  static Vector2 fromOffset(Offset offset) => Vector2(offset.dx, offset.dy);
-
-  /// Creates a [Vector2] using an [Size]
-  static Vector2 fromSize(Size size) => Vector2(size.width, size.height);
-
-  /// Creates a [Vector2] using a [Point]
-  static Vector2 fromPoint(Point point) => Vector2(point.x, point.y);
-
-  /// Creates bounds in from of a [Rect] from a list of [Vector2]
-  static Rect fromBounds(List<Vector2> pts) {
-    final double minx = pts.map((e) => e.x).reduce(min);
-    final double maxx = pts.map((e) => e.x).reduce(max);
-    final double miny = pts.map((e) => e.y).reduce(min);
-    final double maxy = pts.map((e) => e.y).reduce(max);
-    return Rect.fromPoints(Offset(minx, miny), Offset(maxx, maxy));
-  }
-}

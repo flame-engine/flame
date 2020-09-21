@@ -5,7 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
-import '../extensions/vector2.dart';
+import '../extensions/size.dart';
 import 'game_loop.dart';
 import 'game.dart';
 
@@ -24,7 +24,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void performResize() {
     super.performResize();
-    game.resize(Vector2Factory.fromSize(constraints.biggest));
+    game.resize(constraints.biggest.toVector2());
   }
 
   @override
@@ -62,8 +62,8 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void paint(PaintingContext context, Offset offset) {
     context.canvas.save();
-    context.canvas.translate(
-        game.builder.offset.dx + offset.dx, game.builder.offset.dy + offset.dy);
+    final delta = game.builder.offset + offset;
+    context.canvas.translate(delta.dx, delta.dy);
     game.render(context.canvas);
     context.canvas.restore();
   }
