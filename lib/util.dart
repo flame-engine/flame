@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
+
+import 'extensions/size.dart';
+import 'extensions/vector2.dart';
 
 /// Some utilities that did not fit anywhere else.
 ///
@@ -105,14 +107,13 @@ class Util {
         final completer = Completer<Vector2>();
         window.onMetricsChanged = () {
           if (!window.physicalSize.isEmpty && !completer.isCompleted) {
-            completer.complete(Vector2Factory.fromSize(
-                window.physicalSize / window.devicePixelRatio));
+            completer.complete(
+                (window.physicalSize / window.devicePixelRatio).toVector2());
           }
         };
         return completer.future;
       }
-      return Vector2Factory.fromSize(
-          window.physicalSize / window.devicePixelRatio);
+      return (window.physicalSize / window.devicePixelRatio).toVector2();
     });
   }
 

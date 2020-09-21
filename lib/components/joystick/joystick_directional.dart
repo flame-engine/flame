@@ -6,6 +6,7 @@ import 'package:flame/gestures.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
+import '../../extensions/offset.dart';
 import '../../extensions/vector2.dart';
 
 class JoystickDirectional {
@@ -117,8 +118,8 @@ class JoystickDirectional {
       final double degrees = _radAngle * 180 / pi;
 
       // Distance between the center of joystick background & drag position
-      final centerPosition = Vector2Factory.fromOffset(_backgroundRect.center);
-      final dragPosition = Vector2Factory.fromOffset(_dragPosition);
+      final centerPosition = _backgroundRect.center.toVector2();
+      final dragPosition = _dragPosition.toVector2();
       double dist = centerPosition.distanceTo(dragPosition);
 
       // The maximum distance for the knob position the edge of

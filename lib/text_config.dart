@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' as material;
 
 import 'anchor.dart';
 import 'memory_cache.dart';
+import 'extensions/size.dart';
 import 'extensions/vector2.dart';
 
 /// A Text Config contains all typographical information required to render texts; i.e., font size and color, family, etc.
@@ -79,8 +80,7 @@ class TextConfig {
   void render(Canvas canvas, String text, Vector2 p,
       {Anchor anchor = Anchor.topLeft}) {
     final material.TextPainter tp = toTextPainter(text);
-    final Vector2 translatedPosition =
-        anchor.translate(p, Vector2Factory.fromSize(tp.size));
+    final Vector2 translatedPosition = anchor.translate(p, tp.size.toVector2());
     tp.paint(canvas, translatedPosition.toOffset());
   }
 
