@@ -43,7 +43,7 @@ class Bgm extends WidgetsBindingObserver {
   ///
   /// It is safe to call this function even when a current BGM track is
   /// playing.
-  void play(String filename, {double volume}) async {
+  Future<void> play(String filename, {double volume}) async {
     volume ??= 1;
 
     if (audioPlayer != null && audioPlayer.state != AudioPlayerState.STOPPED) {
@@ -51,14 +51,11 @@ class Bgm extends WidgetsBindingObserver {
     }
 
     isPlaying = true;
-    audioPlayer = await Flame.audio.loopLongAudio(
-      filename,
-      volume: volume,
-    );
+    audioPlayer = await Flame.audio.loopLongAudio(filename, volume: volume);
   }
 
   /// Stops the currently playing background music track (if any).
-  void stop() async {
+  Future<void> stop() async {
     isPlaying = false;
     if (audioPlayer != null) {
       await audioPlayer.stop();
@@ -66,28 +63,28 @@ class Bgm extends WidgetsBindingObserver {
   }
 
   /// Resumes the currently played (but resumed) background music.
-  void resume() {
+  Future<void> resume() async {
     if (audioPlayer != null) {
       isPlaying = true;
-      audioPlayer.resume();
+      await audioPlayer.resume();
     }
   }
 
   /// Pauses the background music without unloading or resetting the audio
   /// player.
-  void pause() {
+  Future<void> pause() async {
     if (audioPlayer != null) {
       isPlaying = false;
-      audioPlayer.pause();
+      await audioPlayer.pause();
     }
   }
 
-  /// Prefetch an audio and store it in the cache.
+  /// Pre-fetch an audio and store it in the cache.
   ///
   /// Alias of `FlameAudio.load();`.
   Future<File> load(String file) => Flame.audio.load(file);
 
-  /// Prefetch a list of audios and store them in the cache.
+  /// Pre-fetch a list of audios and store them in the cache.
   ///
   /// Alias of `FlameAudio.loadAll();`.
   Future<List<File>> loadAll(List<String> files) => Flame.audio.loadAll(files);
@@ -98,8 +95,8 @@ class Bgm extends WidgetsBindingObserver {
   void clear(String file) => Flame.audio.clear(file);
 
   /// Clears all the audios in the cache.
-  /// Alias of `FlameAudio.clearAll();`.
   ///
+  /// Alias of `FlameAudio.clearAll();`.
   void clearAll() => Flame.audio.clearAll();
 
   /// Handler for AppLifecycleState changes.
@@ -110,13 +107,11 @@ class Bgm extends WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      if (isPlaying &&
-          audioPlayer != null &&
-          audioPlayer.state == AudioPlayerState.PAUSED) {
+      if (isPlaying && audioPlayer?.state == AudioPlayerState.PAUSED) {
         audioPlayer.resume();
       }
     } else {
-      audioPlayer.pause();
+      audioPlayer?.pause();
     }
   }
 }
