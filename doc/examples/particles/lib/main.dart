@@ -21,7 +21,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/time.dart' as flame_time;
 import 'package:flame/particle.dart';
-import 'package:flame/vector2.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
 import 'package:flame/text_config.dart';

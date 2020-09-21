@@ -1,5 +1,5 @@
 import 'package:flame/game/base_game.dart';
-import 'package:flame/vector2.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:test/test.dart';
 
 import 'package:flame/components/position_component.dart';

@@ -1,4 +1,4 @@
-import 'vector2.dart';
+import 'extensions/vector2.dart';
 
 class Anchor {
   static const Anchor topLeft = Anchor(0.0, 0.0);
