@@ -2,7 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/nine_tile_box.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame/vector2.dart';
+import 'package:flame/extensions/vector2.dart';
 
 import 'package:flutter/material.dart';
 
