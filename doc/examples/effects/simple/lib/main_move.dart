@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/effects/effects.dart';
-import 'package:flame/vector2_extension.dart';
+import 'package:flame/vector2.dart';
 
 import './square.dart';
 
