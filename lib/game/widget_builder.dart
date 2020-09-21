@@ -1,8 +1,8 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/widgets.dart';
 
-import '../gestures.dart';
 import '../components/mixins/tapable.dart';
+import '../gestures.dart';
 import 'embedded_game_widget.dart';
 import 'game.dart';
 
