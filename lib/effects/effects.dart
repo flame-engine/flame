@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../components/position_component.dart';
-import '../vector2_extension.dart';
+import '../vector2.dart';
 
 export './move_effect.dart';
 export './rotate_effect.dart';

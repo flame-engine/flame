@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart' as widgets;
 
 import '../palette.dart';
 import '../text_config.dart';
-import '../vector2_extension.dart';
+import '../vector2.dart';
 import 'mixins/resizable.dart';
 import 'position_component.dart';
 

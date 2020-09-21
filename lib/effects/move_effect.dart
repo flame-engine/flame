@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 
 import 'dart:math';
 
-import '../vector2_extension.dart';
+import '../vector2.dart';
 import './effects.dart';
 
 double _direction(double p, double d) => (p - d).sign;

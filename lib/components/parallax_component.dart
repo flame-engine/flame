@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flame/vector2_extension.dart';
+import 'package:flame/vector2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 import 'package:vector_math/vector_math_64.dart';

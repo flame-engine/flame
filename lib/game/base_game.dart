@@ -11,7 +11,7 @@ import '../components/component.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
 import '../components/position_component.dart';
-import '../vector2_extension.dart';
+import '../vector2.dart';
 import 'game.dart';
 
 /// This is a more complete and opinionated implementation of Game.

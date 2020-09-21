@@ -60,7 +60,7 @@ import 'dart:ui';
 import 'package:flame/game.dart';
 import 'package:flame/text_config.dart';
 import 'package:flame/time.dart';
-import 'package:flame/vector2_extension.dart';
+import 'package:flame/vector2.dart';
 
 class MyGame extends Game {
   final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
@@ -95,7 +95,7 @@ import 'dart:ui';
 import 'package:flame/game.dart';
 import 'package:flame/text_config.dart';
 import 'package:flame/time.dart';
-import 'package:flame/vector2_extension.dart';
+import 'package:flame/vector2.dart';
 
 class MyGame extends Game {
   final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));

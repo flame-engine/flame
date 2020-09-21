@@ -4,7 +4,7 @@ import 'package:flutter/material.dart' as material;
 
 import 'anchor.dart';
 import 'memory_cache.dart';
-import 'vector2_extension.dart';
+import 'vector2.dart';
 
 /// A Text Config contains all typographical information required to render texts; i.e., font size and color, family, etc.
 ///

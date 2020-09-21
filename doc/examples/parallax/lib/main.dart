@@ -1,7 +1,7 @@
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components/parallax_component.dart';
-import 'package:flame/vector2_extension.dart';
+import 'package:flame/vector2.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
