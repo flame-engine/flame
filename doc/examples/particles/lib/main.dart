@@ -54,9 +54,7 @@ class MyGame extends BaseGame {
   @override
   bool recordFps() => true;
 
-  MyGame({
-    Vector2 screenSize,
-  }) {
+  MyGame({Vector2 screenSize}) {
     size = screenSize;
     cellSize = size / gridSize;
     halfCellSize = cellSize * .5;
@@ -507,11 +505,8 @@ class MyGame extends BaseGame {
 
   /// Returns random [Offset] within a virtual
   /// grid cell
-  Offset randomCellOffset() {
-    return Offset(
-      cellSize.x * rnd.nextDouble() - halfCellSize.x,
-      cellSize.y * rnd.nextDouble() - halfCellSize.y,
-    );
+  Vector2 randomCellOffset() {
+    return cellSize * Vector2(rnd.nextDouble(), rnd.nextDouble()) - halfCellSize;
   }
 
   /// Returns random [Color] from primary swatches
