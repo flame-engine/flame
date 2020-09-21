@@ -3,7 +3,7 @@ export 'dart:ui' show Size;
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:vector_math/vector_math_64.dart';
+import 'vector2.dart';
 
 extension SizeExtension on Size {
   /// Creates an [Offset] from the [Size]
