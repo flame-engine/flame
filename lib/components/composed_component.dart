@@ -1,13 +1,13 @@
 import 'dart:ui';
 
-import 'package:flame/components/mixins/has_game_ref.dart';
-import 'package:flame/components/mixins/tapable.dart';
-import 'package:flame/game/base_game.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
+import '../game/base_game.dart';
 import 'component.dart';
+import 'mixins/has_game_ref.dart';
 import 'mixins/resizable.dart';
+import 'mixins/tapable.dart';
 
 /// A mixin that helps you to make a `Component` wraps other components. It is useful to group visual components through a hierarchy.
 /// When implemented, makes every item in its `components` collection field be updated and rendered with the same conditions.

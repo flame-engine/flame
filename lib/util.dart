@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart' as widgets;
 
 import 'animation.dart';
+import 'components/animation_component.dart';
 import 'game/base_game.dart';
 import 'game/embedded_game_widget.dart';
-import 'sprite.dart';
-import 'components/animation_component.dart';
 import 'position.dart';
+import 'sprite.dart';
 
 /// Some utilities that did not fit anywhere else.
 ///

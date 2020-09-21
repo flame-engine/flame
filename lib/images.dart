@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'dart:convert' show base64;
 import 'dart:typed_data';
 import 'dart:ui';
-import 'dart:convert' show base64;
 
-import 'package:flame/flame.dart';
+import 'flame.dart';
 
 class Images {
   Map<String, ImageAssetLoader> loadedFiles = {};

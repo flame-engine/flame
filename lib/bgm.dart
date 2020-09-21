@@ -1,8 +1,9 @@
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flame/flame.dart';
 import 'package:flutter/widgets.dart';
+
+import 'flame.dart';
 
 /// The looping background music class.
 ///
