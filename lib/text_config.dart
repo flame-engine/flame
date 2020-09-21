@@ -77,8 +77,12 @@ class TextConfig {
   ///
   ///     const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font');
   ///     config.render(c, Offset(size.width - 10, size.height - 10, anchor: Anchor.bottomRight);
-  void render(Canvas canvas, String text, Vector2 p,
-      {Anchor anchor = Anchor.topLeft}) {
+  void render(
+    Canvas canvas,
+    String text,
+    Vector2 p, {
+    Anchor anchor = Anchor.topLeft,
+  }) {
     final material.TextPainter tp = toTextPainter(text);
     final Vector2 translatedPosition = anchor.translate(p, tp.size.toVector2());
     tp.paint(canvas, translatedPosition.toOffset());
