@@ -4,6 +4,7 @@
  - Move all box2d related code and examples to the flame_box2d repo
  - Rename Animation to SpriteAnimation
  - Create extension of Vector2 and unify all tuples to use that class
+ - Remove Position class in favor of new Vector2 extension
 
 ## 0.26.0
  - Improving Flame image auto cache
