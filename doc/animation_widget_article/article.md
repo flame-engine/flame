@@ -129,7 +129,7 @@ import 'package:flame/vector2.dart'; // imports the Vector2 class
 How do we do the magic then? Just add the following to your widget tree:
 
 ```dart
-    Flame.util.animationAsWidget(Vector2F(WIDTH, HEIGHT), SpriteAnimation.sequenced('minotaur.png', AMOUNT, textureWidth: FRAME_WIDTH))
+    Flame.util.animationAsWidget(Vector2(WIDTH, HEIGHT), SpriteAnimation.sequenced('minotaur.png', AMOUNT, textureWidth: FRAME_WIDTH))
 ```
 
 The first parameter's `WIDTH` and `HEIGHT` are the actual size of the widget on the screen. This does not need to match the sprite size, as Flame will scale it for you. You might, however, wanna keep the aspect, so things don't get distorted. In your case, the minotaur asset is a row of 96x96 pixels, so squares, therefore we can scale keeping `WIDTH/HEIGHT = 1`. We will choose the size as 256 px. The `sequenced` constructor is a helper that easily creates the animation assuming equal-sized frames in a row, in order. You can configure the start x, start y, texture width and height, but those will default gracefully to (0,0) and the actual width and height of the file. You can create your animation passing in the frame list, each frame with a different step time and sprite (source rectangle).
