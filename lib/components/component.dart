@@ -1,7 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/painting.dart';
-import 'package:vector_math/vector_math_64.dart';
+
+import '../extensions/vector2.dart';
 
 /// This represents a Component for your game.
 ///
