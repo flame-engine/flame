@@ -2,6 +2,8 @@
 
 ## [next]
  - Improved the accuracy of the `FPSCounter` by using Flutter's internal frame timings.
+ - Adding MouseMovementDetector
+ - Fixes BGM error
 
 ## 0.26.0
  - Improving Flame image auto cache

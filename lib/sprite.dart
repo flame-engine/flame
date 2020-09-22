@@ -1,9 +1,9 @@
+import 'dart:async';
 import 'dart:ui';
 
-import 'dart:async';
 import 'flame.dart';
-import 'position.dart';
 import 'palette.dart';
+import 'position.dart';
 
 class Sprite {
   Paint paint = BasicPalette.white.paint;

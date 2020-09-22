@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
+import '../components/component.dart';
 import '../particle.dart';
 import '../position.dart';
-import '../components/component.dart';
 
 class ComponentParticle extends Particle {
   final Component component;

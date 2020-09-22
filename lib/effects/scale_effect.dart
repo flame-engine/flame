@@ -1,8 +1,8 @@
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
-
-import 'dart:ui';
-import 'dart:math';
 
 import './effects.dart';
 import '../position.dart';

@@ -1,14 +1,13 @@
-import 'dart:ui';
 import 'dart:async';
+import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart' hide WidgetBuilder;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
 import '../keyboard.dart';
-
 import 'widget_builder.dart';
 
 /// Represents a generic game.
