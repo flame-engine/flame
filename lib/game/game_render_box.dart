@@ -15,6 +15,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
 
   GameRenderBox(this.context, this.game) {
     gameLoop = GameLoop(gameLoopCallback);
+    WidgetsBinding.instance.addTimingsCallback(game.onTimingsCallback);
   }
 
   @override

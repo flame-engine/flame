@@ -43,7 +43,11 @@ abstract class Game {
   void lifecycleStateChange(AppLifecycleState state) {}
 
   /// Used for debugging
+  @Deprecated('Gets called for backward compatibility, will be removed in v1')
   void recordDt(double dt) {}
+
+  /// Use for caluclating the FPS.
+  void onTimingsCallback(List<FrameTiming> timings) {}
 
   /// Returns the game widget. Put this in your structure to start rendering and updating the game.
   /// You can add it directly to the runApp method or inside your widget structure (if you use vanilla screens and widgets).
