@@ -14,6 +14,8 @@ If `isInfinite` is false and `isAlternating` is true the effect will go from the
 
 `isInfinite` and `isAlternating` are false by default and then the effect is just applied once, from the beginning of the curve until the end.
 
+`isRelative` is used on some effects, it is false by default. If it is set to true it means that the effect starts at the PositionComponent's value and adds whatever value you give to it. If it is false it will treat the value you give it as absolute and it will go to the value you give it no matter where it started.
+
 When an effect is completed the callback `onComplete` will be called, it can be set as an optional argument to your effect.
 
 ## MoveEffect

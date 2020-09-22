@@ -28,7 +28,7 @@ class CombinedEffect extends PositionComponentEffect {
     super.initialize(_comp);
     effects.forEach((effect) {
       effect.initialize(_comp);
-      final isSameSize = effect.endSize == _comp.toSize();
+      final isSameSize = effect.endSize == _comp.size;
       final isSamePosition = effect.endPosition == _comp.position;
       final isSameAngle = effect.endAngle == _comp.angle;
       endSize = isSameSize ? endSize : effect.endSize;
