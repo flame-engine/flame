@@ -1,17 +1,17 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/components/particle_component.dart';
-import 'package:flame/particles/accelerated_particle.dart';
-import 'package:flame/particles/moving_particle.dart';
-import 'package:flame/particles/rotating_particle.dart';
-import 'package:flame/particles/scaled_particle.dart';
-import 'package:flame/particles/translated_particle.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 
 import 'components/component.dart';
+import 'components/particle_component.dart';
+import 'particles/accelerated_particle.dart';
 import 'particles/composed_particle.dart';
+import 'particles/moving_particle.dart';
+import 'particles/rotating_particle.dart';
+import 'particles/scaled_particle.dart';
+import 'particles/translated_particle.dart';
 import 'time.dart';
 
 /// A function which returns [Particle] when called
