@@ -2,6 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/nine_tile_box.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame/extensions/vector2.dart';
 
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ void main() async {
 }
 
 class MyGame extends Game {
-  Size size;
+  Vector2 size;
   NineTileBox nineTileBox;
 
   MyGame(this.size) {
@@ -25,9 +26,9 @@ class MyGame extends Game {
   @override
   void render(Canvas canvas) {
     const length = 300.0;
-    final x = (size.width - length) / 2;
-    final y = (size.height - length) / 2;
-    nineTileBox.draw(canvas, x, y, length, length);
+    final boxSize = Vector2.all(length);
+    final position = (size - boxSize) / 2;
+    nineTileBox.draw(canvas, position, boxSize);
   }
 
   @override

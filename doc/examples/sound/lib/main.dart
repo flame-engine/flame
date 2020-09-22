@@ -1,16 +1,17 @@
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/components/position_component.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Size size = await Flame.util.initialDimensions();
+  final Vector2 size = await Flame.util.initialDimensions();
   runApp(MyGame(size).widget);
 }
 
 class Ball extends PositionComponent {
-  final Size gameSize;
+  final Vector2 gameSize;
   final paint = Paint()..color = const Color(0xFFFFFFFF);
 
   bool forward = true;
@@ -28,9 +29,9 @@ class Ball extends PositionComponent {
     super.update(dt);
     x += (forward ? 1 : -1) * 100 * dt;
 
-    if (x <= 0 || x + width >= gameSize.width) {
+    if (x <= 0 || x + width >= gameSize.x) {
       if (forward) {
-        x = gameSize.width - width - 1;
+        x = gameSize.x - width - 1;
       } else {
         x = 1;
       }
@@ -42,7 +43,7 @@ class Ball extends PositionComponent {
 }
 
 class MyGame extends BaseGame {
-  MyGame(Size screenSize) {
+  MyGame(Vector2 screenSize) {
     size = screenSize;
 
     Flame.audio.disableLog();
@@ -51,7 +52,7 @@ class MyGame extends BaseGame {
 
     add(
       Ball(size)
-        ..y = (size.height / 2) - 50
+        ..y = (size.y / 2) - 50
         ..width = 100
         ..height = 100,
     );

@@ -29,7 +29,7 @@ class CombinedEffect extends PositionComponentEffect {
     effects.forEach((effect) {
       effect.initialize(_comp);
       final isSameSize = effect.endSize == _comp.toSize();
-      final isSamePosition = effect.endPosition == _comp.toPosition();
+      final isSamePosition = effect.endPosition == _comp.position;
       final isSameAngle = effect.endAngle == _comp.angle;
       endSize = isSameSize ? endSize : effect.endSize;
       endPosition = isSamePosition ? endPosition : effect.endPosition;

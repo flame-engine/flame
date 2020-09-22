@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
-import 'package:flame/components/composed_component.dart';
 import 'package:flame/fps_counter.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
@@ -12,7 +11,7 @@ import '../components/component.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
 import '../components/position_component.dart';
-import '../position.dart';
+import '../extensions/vector2.dart';
 import 'game.dart';
 
 /// This is a more complete and opinionated implementation of Game.
@@ -32,10 +31,10 @@ class BaseGame extends Game with FPSCounter {
   final List<Component> _removeLater = [];
 
   /// Current screen size, updated every resize via the [resize] method hook
-  Size size;
+  Vector2 size;
 
   /// Camera position; every non-HUD component is translated so that the camera position is the top-left corner of the screen.
-  Position camera = Position.empty();
+  Vector2 camera = Vector2.zero();
 
   /// This method is called for every component added, both via [add] and [addLater] methods.
   ///
@@ -139,7 +138,7 @@ class BaseGame extends Game with FPSCounter {
   /// You can override it further to add more custom behaviour, but you should seriously consider calling the super implementation as well.
   @override
   @mustCallSuper
-  void resize(Size size) {
+  void resize(Vector2 size) {
     this.size = size;
     components.forEach((c) => c.resize(size));
   }

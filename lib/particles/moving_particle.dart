@@ -8,7 +8,7 @@ import '../components/mixins/single_child_particle.dart';
 import '../particles/curved_particle.dart';
 
 /// Statically offset given child [Particle] by given [Offset]
-/// If you're loking to move the child, consider [MovingParticle]
+/// If you're looking to move the child, consider [MovingParticle]
 class MovingParticle extends CurvedParticle with SingleChildParticle {
   @override
   Particle child;
