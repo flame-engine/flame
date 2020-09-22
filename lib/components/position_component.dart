@@ -78,7 +78,7 @@ abstract class PositionComponent extends Component {
     y = position.y;
   }
 
-  Vector2 toSize() => Vector2(width, height);
+  Vector2 get size => Vector2(width, height);
   void setBySize(Vector2 size) {
     width = size.x;
     height = size.y;

@@ -22,6 +22,7 @@ abstract class PositionComponentEffect {
   /// curve backwards
   bool isInfinite;
   bool isAlternating;
+  final bool isRelative;
   final bool _initialIsInfinite;
   final bool _initialIsAlternating;
   double percentage;
@@ -42,6 +43,7 @@ abstract class PositionComponentEffect {
   PositionComponentEffect(
     this._initialIsInfinite,
     this._initialIsAlternating, {
+    this.isRelative,
     this.onComplete,
   }) {
     isInfinite = _initialIsInfinite;
@@ -78,7 +80,7 @@ abstract class PositionComponentEffect {
     /// started in
     endPosition = _comp.position;
     endAngle = _comp.angle;
-    endSize = _comp.toSize();
+    endSize = _comp.size;
   }
 
   void dispose() => _isDisposed = true;
