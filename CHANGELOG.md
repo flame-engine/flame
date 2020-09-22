@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Improved the accuracy of the `FPSCounter` by using Flutter's internal frame timings.
  - Adding MouseMovementDetector
  - Fixes BGM error
 
