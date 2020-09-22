@@ -50,12 +50,12 @@ class _SpritePainter extends CustomPainter {
     final w = _sprite.size.x * rate;
     final h = _sprite.size.y * rate;
 
-    final double dx = _anchor.relativePosition.dx * size.width;
-    final double dy = _anchor.relativePosition.dy * size.height;
+    final double dx = _anchor.relativePosition.x * size.width;
+    final double dy = _anchor.relativePosition.y * size.height;
 
     canvas.translate(
-      dx - w * _anchor.relativePosition.dx,
-      dy - h * _anchor.relativePosition.dy,
+      dx - w * _anchor.relativePosition.x,
+      dy - h * _anchor.relativePosition.y,
     );
 
     _sprite.render(canvas, width: w, height: h);

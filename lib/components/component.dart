@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/painting.dart';
 
+import '../extensions/vector2.dart';
+
 /// This represents a Component for your game.
 ///
 /// Components can be bullets flying on the screen, a spaceship or your player's fighter.
@@ -22,7 +24,7 @@ abstract class Component {
   ///
   /// It receives the new size.
   /// You can use the [Resizable] mixin if you want an implementation of this hook that keeps track of the current size.
-  void resize(Size size) {}
+  void resize(Vector2 size) {}
 
   /// Whether this component has been loaded yet. If not loaded, [BaseGame] will not try to render it.
   ///

@@ -7,10 +7,11 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/text_config.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
-  final Size size = await Flame.util.initialDimensions();
+  final Vector2 size = await Flame.util.initialDimensions();
   runApp(MyGame(size).widget);
 }
 
@@ -34,27 +35,25 @@ class MyTextBox extends TextBoxComponent {
 }
 
 class MyGame extends BaseGame {
-  MyGame(Size screenSize) {
+  MyGame(Vector2 screenSize) {
     size = screenSize;
     add(TextComponent('Hello, Flame', config: regular)
       ..anchor = Anchor.topCenter
-      ..x = size.width / 2
+      ..x = size.x / 2
       ..y = 32.0);
 
     add(TextComponent('center', config: tiny)
       ..anchor = Anchor.center
-      ..x = size.width / 2
-      ..y = size.height / 2);
+      ..setPosition(size / 2));
 
     add(TextComponent('bottomRight', config: tiny)
       ..anchor = Anchor.bottomRight
-      ..x = size.width
-      ..y = size.height);
+      ..setPosition(size));
 
     add(MyTextBox(
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget ligula eu lectus lobortis condimentum.',
     )
       ..anchor = Anchor.bottomLeft
-      ..y = size.height);
+      ..y = size.y);
   }
 }

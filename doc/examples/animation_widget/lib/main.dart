@@ -4,7 +4,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite_animation.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
-import 'package:flame/position.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/widgets/animation_widget.dart';
 import 'package:flame/widgets/sprite_widget.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +50,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Position _position = Position(256.0, 256.0);
+  Vector2 _position = Vector2(256.0, 256.0);
 
   @override
   void initState() {
@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void changePosition() async {
     await Future.delayed(const Duration(seconds: 1));
     setState(() {
-      _position = Position(10 + _position.x, 10 + _position.y);
+      _position = Vector2(10 + _position.x, 10 + _position.y);
     });
   }
 

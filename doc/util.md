@@ -58,9 +58,9 @@ __Countdown example:__
 import 'dart:ui';
 
 import 'package:flame/game.dart';
-import 'package:flame/position.dart';
 import 'package:flame/text_config.dart';
 import 'package:flame/time.dart';
+import 'package:flame/vector2.dart';
 
 class MyGame extends Game {
   final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
@@ -81,7 +81,7 @@ class MyGame extends Game {
   @override
   void render(Canvas canvas) {
     textConfig.render(canvas, "Countdown: ${countdown.current.toString()}",
-        Position(10, 100));
+        Vector2(10, 100));
   }
 }
 
@@ -93,9 +93,9 @@ __Interval example:__
 import 'dart:ui';
 
 import 'package:flame/game.dart';
-import 'package:flame/position.dart';
 import 'package:flame/text_config.dart';
 import 'package:flame/time.dart';
+import 'package:flame/vector2.dart';
 
 class MyGame extends Game {
   final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
@@ -117,7 +117,7 @@ class MyGame extends Game {
 
   @override
   void render(Canvas canvas) {
-    textConfig.render(canvas, "Elapsed time: $elapsedSecs", Position(10, 150));
+    textConfig.render(canvas, "Elapsed time: $elapsedSecs", Vector2(10, 150));
   }
 }
 

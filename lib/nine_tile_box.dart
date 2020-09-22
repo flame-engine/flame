@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame/extensions/vector2.dart';
 
 /// This allows you to create a rectangle textured with a 9-sliced image.
 ///
@@ -36,46 +37,49 @@ class NineTileBox {
 
   /// Renders this nine box with the dimensions provided by [rect].
   void drawRect(Canvas c, Rect rect) {
-    draw(c, rect.left, rect.top, rect.width, rect.height);
+    final position = Vector2(rect.left, rect.top);
+    final size = Vector2(rect.width, rect.height);
+    draw(c, position, size);
   }
 
-  /// Renders this nine box as a rectangle of coordinates ([x], [y]) and size ([width], [height]).
-  void draw(Canvas c, double x, double y, double width, double height) {
+  /// Renders this nine box as a rectangle at [position] with size [size].
+  void draw(Canvas c, Vector2 position, Vector2 size) {
     if (!sprite.loaded()) {
       return;
     }
 
     // corners
-    _drawTile(c, _getDest(x, y), 0, 0);
-    _drawTile(c, _getDest(x, y + height - destTileSize), 0, 2);
-    _drawTile(c, _getDest(x + width - destTileSize, y), 2, 0);
-    _drawTile(
-        c, _getDest(x + width - destTileSize, y + height - destTileSize), 2, 2);
+    _drawTile(c, _getDest(position), 0, 0);
+    final bottomLeft = position + Vector2(0, size.y - destTileSize);
+    _drawTile(c, _getDest(bottomLeft), 0, 2);
+    final topRight = position + Vector2(size.x - destTileSize, 0);
+    _drawTile(c, _getDest(topRight), 2, 0);
+    final bottomRight = Vector2(topRight.x, bottomLeft.y);
+    _drawTile(c, _getDest(bottomRight), 2, 2);
 
     // horizontal sides
-    final mx = width - 2 * destTileSize;
-    _drawTile(c, _getDest(x + destTileSize, y, width: mx), 1, 0);
-    _drawTile(c,
-        _getDest(x + destTileSize, y + height - destTileSize, width: mx), 1, 2);
+    final mx = size.x - 2 * destTileSize;
+    final middleLeft = position + Vector2(destTileSize.toDouble(), 0);
+    _drawTile(c, _getDest(middleLeft, width: mx), 1, 0);
+    final middleRight = middleLeft + Vector2(0, size.y - destTileSize);
+    _drawTile(c, _getDest(middleRight, width: mx), 1, 2);
 
     // vertical sides
-    final my = height - 2 * destTileSize;
-    _drawTile(c, _getDest(x, y + destTileSize, height: my), 0, 1);
-    _drawTile(c,
-        _getDest(x + width - destTileSize, y + destTileSize, height: my), 2, 1);
+    final my = size.y - 2 * destTileSize;
+    final topCenter = position + Vector2(0, destTileSize.toDouble());
+    _drawTile(c, _getDest(topCenter, height: my), 0, 1);
+    final bottomCenter = topCenter + Vector2(size.x - destTileSize, 0);
+    _drawTile(c, _getDest(bottomCenter, height: my), 2, 1);
 
     // center
-    _drawTile(
-        c,
-        _getDest(x + destTileSize, y + destTileSize, width: mx, height: my),
-        1,
-        1);
+    final center = position + Vector2.all(destTileSize.toDouble());
+    _drawTile(c, _getDest(center, width: mx, height: my), 1, 1);
   }
 
-  Rect _getDest(double x, double y, {double width, double height}) {
+  Rect _getDest(Vector2 position, {double width, double height}) {
     final w = width ?? _destTileSizeDouble;
     final h = height ?? _destTileSizeDouble;
-    return Rect.fromLTWH(x, y, w, h);
+    return Rect.fromLTWH(position.x, position.y, w, h);
   }
 
   double get _tileSizeDouble => tileSize.toDouble();

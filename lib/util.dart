@@ -5,7 +5,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 
-import 'position.dart';
+import 'extensions/size.dart';
+import 'extensions/vector2.dart';
 
 /// Some utilities that did not fit anywhere else.
 ///
@@ -98,20 +99,21 @@ class Util {
   ///
   /// A best practice would be to implement there resize hooks on your game and components and don't use this at all.
   /// Make sure your components are able to render and update themselves for any possible screen size.
-  Future<Size> initialDimensions() async {
+  Future<Vector2> initialDimensions() async {
     // https://github.com/flutter/flutter/issues/5259
     // "In release mode we start off at 0x0 but we don't in debug mode"
-    return await Future<Size>(() {
+    return await Future<Vector2>(() {
       if (window.physicalSize.isEmpty) {
-        final completer = Completer<Size>();
+        final completer = Completer<Vector2>();
         window.onMetricsChanged = () {
           if (!window.physicalSize.isEmpty && !completer.isCompleted) {
-            completer.complete(window.physicalSize / window.devicePixelRatio);
+            completer.complete(
+                (window.physicalSize / window.devicePixelRatio).toVector2());
           }
         };
         return completer.future;
       }
-      return window.physicalSize / window.devicePixelRatio;
+      return (window.physicalSize / window.devicePixelRatio).toVector2();
     });
   }
 
@@ -148,7 +150,7 @@ class Util {
   ///
   /// Some render methods don't allow to pass a offset.
   /// This method translate the canvas, draw what you want, and then translate back.
-  void drawWhere(Canvas c, Position p, void Function(Canvas) fn) {
+  void drawWhere(Canvas c, Vector2 p, void Function(Canvas) fn) {
     c.translate(p.x, p.y);
     fn(c);
     c.translate(-p.x, -p.y);

@@ -1,9 +1,10 @@
 import 'dart:ui';
 
 import 'dart:async';
+
 import 'flame.dart';
-import 'position.dart';
 import 'palette.dart';
+import 'extensions/vector2.dart';
 
 class Sprite {
   Paint paint = BasicPalette.white.paint;
@@ -62,15 +63,15 @@ class Sprite {
 
   double get _imageHeight => image.height.toDouble();
 
-  Position get originalSize {
+  Vector2 get originalSize {
     if (!loaded()) {
       return null;
     }
-    return Position(_imageWidth, _imageHeight);
+    return Vector2(_imageWidth, _imageHeight);
   }
 
-  Position get size {
-    return Position(src.width, src.height);
+  Vector2 get size {
+    return Vector2(src.width, src.height);
   }
 
   /// Renders this Sprite on the position [p], scaled by the [scale] factor provided.
@@ -78,27 +79,37 @@ class Sprite {
   /// It renders with src size multiplied by [scale] in both directions.
   /// Anchor is on top left as default.
   /// If not loaded, does nothing.
-  void renderScaled(Canvas canvas, Position p,
-      {double scale = 1.0, Paint overridePaint}) {
+  void renderScaled(
+    Canvas canvas,
+    Vector2 p, {
+    double scale = 1.0,
+    Paint overridePaint,
+  }) {
     if (!loaded()) {
       return;
     }
-    renderPosition(canvas, p,
-        size: size.times(scale), overridePaint: overridePaint);
+    renderPosition(canvas, p, size: size * scale, overridePaint: overridePaint);
   }
 
-  void renderPosition(Canvas canvas, Position p,
-      {Position size, Paint overridePaint}) {
+  void renderPosition(
+    Canvas canvas,
+    Vector2 p, {
+    Vector2 size,
+    Paint overridePaint,
+  }) {
     if (!loaded()) {
       return;
     }
     size ??= this.size;
-    renderRect(canvas, Position.rectFrom(p, size),
-        overridePaint: overridePaint);
+    renderRect(canvas, p.toRect(size), overridePaint: overridePaint);
   }
 
-  void render(Canvas canvas,
-      {double width, double height, Paint overridePaint}) {
+  void render(
+    Canvas canvas, {
+    double width,
+    double height,
+    Paint overridePaint,
+  }) {
     if (!loaded()) {
       return;
     }
@@ -112,8 +123,12 @@ class Sprite {
   ///
   /// If [size] is not provided, the original size of the src image is used.
   /// If the asset is not yet loaded, it does nothing.
-  void renderCentered(Canvas canvas, Position p,
-      {Position size, Paint overridePaint}) {
+  void renderCentered(
+    Canvas canvas,
+    Vector2 p, {
+    Vector2 size,
+    Paint overridePaint,
+  }) {
     if (!loaded()) {
       return;
     }
@@ -123,7 +138,11 @@ class Sprite {
         overridePaint: overridePaint);
   }
 
-  void renderRect(Canvas canvas, Rect dst, {Paint overridePaint}) {
+  void renderRect(
+    Canvas canvas,
+    Rect dst, {
+    Paint overridePaint,
+  }) {
     if (!loaded()) {
       return;
     }
