@@ -223,4 +223,23 @@ class Position {
     final double maxy = pts.map((e) => e.y).reduce(math.max);
     return ui.Rect.fromPoints(ui.Offset(minx, miny), ui.Offset(maxx, maxy));
   }
+
+  /// Linearly interpolates between [a] and [b] by [t].
+  /// 
+  /// The parameter t is clamped to the range [0, 1].
+  /// When t = 0 returns a.
+  /// When t = 1 return b.
+  /// When t = 0.5 returns the midpoint of a and b.
+  static Position lerp(Position a, Position b, double t) {
+    t = t.clamp(0, 1);
+    return Position(ui.lerpDouble(a.x, b.x, t), ui.lerpDouble(a.y, b.y, t));
+  }
+  
+  /// Linearly interpolates between [a] and [b] by [t] with no limit to [t].
+  /// 
+  /// The parameter [t] is not clamped and a value based on [a] and [b] is supported. 
+  /// If [t] is less than zero, or greater than one, then lerpUnclamped will result in a return value outside the range [a] to [b].
+  static Position lerpUnclamped(Position a, Position b, double t) {
+    return Position(ui.lerpDouble(a.x, b.x, t), ui.lerpDouble(a.y, b.y, t));
+  }
 }
