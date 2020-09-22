@@ -2,7 +2,7 @@
 
 ## [next]
  - Adding MouseMovementDetector
- - Fixes #436 and improve Bgm code a bit
+ - Fixes BGM error
 
 ## 0.26.0
  - Improving Flame image auto cache
