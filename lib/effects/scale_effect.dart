@@ -19,7 +19,8 @@ class ScaleEffect extends PositionComponentEffect {
     isAlternating = false,
     isRelative = true,
     Function onComplete,
-  }) : super(isInfinite, isAlternating, isRelative: isRelative, onComplete: onComplete);
+  }) : super(isInfinite, isAlternating,
+            isRelative: isRelative, onComplete: onComplete);
 
   @override
   void initialize(_comp) {
