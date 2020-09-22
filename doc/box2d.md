@@ -1,10 +1,14 @@
 # Box2D
 
-Although Flame does not fully implement Box2d itself, it bundles a forked and refactored port of the Java Box2d to Dart by Google.
+Although Flame does not fully implement Box2d itself, we maintain a forked and refactored port of the Java Box2d to Dart.
 
 The source of the box2d version that Flame can use can be found [here](https://github.com/flame-engine/box2d.dart).
 
 To use Box2D in your game you should add flame_box2d to your pubspec.yaml, which can be seen in the examples.
+
+It can be a bit confusing at first that there are two projects, [box2d.dart](https://github.com/flame-engine/box2d.dart) and [flame_box2d](https://github.com/flame-engine/flame_box2d), so I'll explain them quickly here:
+* box2d.dart is the actual physics engine, but that one can be used by any dart project, it doesn't have to have any connection to Flame or Flutter.
+* flame_box2d is the bridge between flame and box2d, it contains classes that will make your life a lot easier when using it with flame (for example Box2DGame).
 
 The examples of how to use it can be found [here](https://github.com/flame-engine/flame_box2d/blob/master/examples/), but they are not full game implementations.
 
