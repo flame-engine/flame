@@ -1,7 +1,7 @@
-import 'package:flame/box2d/box2d_component.dart';
-import 'package:flame/box2d/contact_callbacks.dart';
-import 'package:flame/components/component.dart';
-import 'package:flame/game/base_game.dart';
+import '../components/component.dart';
+import '../game/base_game.dart';
+import 'box2d_component.dart';
+import 'contact_callbacks.dart';
 
 class Box2DGame extends BaseGame {
   final Box2DComponent box;

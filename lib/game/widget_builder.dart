@@ -1,8 +1,8 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/widgets.dart';
 
-import '../gestures.dart';
 import '../components/mixins/tapable.dart';
+import '../gestures.dart';
 import 'embedded_game_widget.dart';
 import 'game.dart';
 
@@ -21,6 +21,8 @@ bool _hasAdvancedGesturesDetectors(Game game) =>
     game is MultiTouchTapDetector ||
     game is MultiTouchDragDetector ||
     game is HasTapableComponents;
+
+bool _hasMouseDetectors(Game game) => game is MouseMovementDetector;
 
 class _GenericTapEventHandler {
   void Function(int pointerId) onTap;
@@ -204,6 +206,13 @@ Widget _applyBasicGesturesDetectors(Game game, Widget child) {
   );
 }
 
+Widget _applyMouseDetectors(game, Widget child) {
+  return MouseRegion(
+    child: child,
+    onHover: game is MouseMovementDetector ? game.onMouseMove : null,
+  );
+}
+
 class WidgetBuilder {
   Offset offset = Offset.zero;
 
@@ -222,6 +231,10 @@ class WidgetBuilder {
 
     if (_hasAdvancedGesturesDetectors(game)) {
       widget = _applyAdvancedGesturesDetectors(game, widget);
+    }
+
+    if (_hasMouseDetectors(game)) {
+      widget = _applyMouseDetectors(game, widget);
     }
 
     return widget;

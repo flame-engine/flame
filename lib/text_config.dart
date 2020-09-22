@@ -1,10 +1,11 @@
 import 'dart:ui';
-import 'package:flame/components/text_component.dart';
+
 import 'package:flutter/material.dart' as material;
 
-import 'position.dart';
 import 'anchor.dart';
+import 'components/text_component.dart';
 import 'memory_cache.dart';
+import 'position.dart';
 
 /// A Text Config contains all typographical information required to render texts; i.e., font size and color, family, etc.
 ///

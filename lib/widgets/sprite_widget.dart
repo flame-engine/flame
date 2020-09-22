@@ -1,9 +1,10 @@
-import 'package:flutter/widgets.dart';
-import 'package:meta/meta.dart';
 import 'dart:math';
 
-import '../sprite.dart';
+import 'package:flutter/widgets.dart';
+import 'package:meta/meta.dart';
+
 import '../anchor.dart';
+import '../sprite.dart';
 
 class SpriteWidget extends StatelessWidget {
   final Sprite sprite;
