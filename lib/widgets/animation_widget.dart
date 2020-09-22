@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart' hide Animation;
-import 'package:flame/animation.dart';
-
 import 'dart:math';
 
-import '../anchor.dart';
+import 'package:flutter/material.dart' hide Animation;
+
 import './sprite_widget.dart';
+import '../anchor.dart';
+import '../animation.dart';
 
 class AnimationWidget extends StatefulWidget {
   final Animation animation;
