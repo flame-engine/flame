@@ -17,7 +17,7 @@ class MoveEffect extends PositionComponentEffect {
     this.curve,
     isInfinite = false,
     isAlternating = false,
-    isRelative = true,
+    isRelative = false,
     Function onComplete,
   }) : super(isInfinite, isAlternating,
             isRelative: isRelative, onComplete: onComplete);

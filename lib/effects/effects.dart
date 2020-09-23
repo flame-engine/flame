@@ -43,7 +43,7 @@ abstract class PositionComponentEffect {
   PositionComponentEffect(
     this._initialIsInfinite,
     this._initialIsAlternating, {
-    this.isRelative,
+    this.isRelative = false,
     this.onComplete,
   }) {
     isInfinite = _initialIsInfinite;
