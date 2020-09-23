@@ -5,6 +5,7 @@
  - Rename Animation to SpriteAnimation
  - Create extension of Vector2 and unify all tuples to use that class
  - Remove Position class in favor of new Vector2 extension
+ - Remove Box2D as a dependency
 
 ## 0.26.0
  - Improving Flame image auto cache
