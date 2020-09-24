@@ -3,12 +3,13 @@ import 'package:flame/components/position_component.dart';
 
 import 'dart:ui';
 
+import 'package:flame/extensions/vector2.dart';
+
 class Square extends PositionComponent {
   final Paint _paint;
 
   Square(this._paint, double x, double y, {double angle = 0.0}) {
-    width = 100;
-    height = 100;
+    size = Vector2(width, height);
     this.x = x;
     this.y = y;
     this.angle = angle;
@@ -18,6 +19,6 @@ class Square extends PositionComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    canvas.drawRect(toOriginRect(), _paint);
+    canvas.drawRect(size.toRect(), _paint);
   }
 }

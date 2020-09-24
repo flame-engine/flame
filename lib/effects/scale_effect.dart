@@ -41,6 +41,6 @@ class ScaleEffect extends PositionComponentEffect {
   void update(double dt) {
     super.update(dt);
     final double progress = curve?.transform(percentage) ?? 1.0;
-    component.setBySize(_startSize + _delta * progress);
+    component.size = _startSize + _delta * progress;
   }
 }

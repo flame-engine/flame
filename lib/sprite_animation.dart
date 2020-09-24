@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flame/extensions/vector2.dart';
+
 import 'flame.dart';
 import 'sprite.dart';
 
@@ -75,22 +77,23 @@ class SpriteAnimation {
     String imagePath,
     int amount, {
     int amountPerRow,
-    double textureX = 0.0,
-    double textureY = 0.0,
-    double textureWidth,
-    double textureHeight,
+    Vector2 texturePosition,
+    Vector2 textureSize,
     double stepTime = 0.1,
     this.loop = true,
   }) : assert(amountPerRow == null || amount >= amountPerRow) {
     amountPerRow ??= amount;
+    texturePosition ??= Vector2.zero();
     frames = List<SpriteAnimationFrame>(amount);
     for (var i = 0; i < amount; i++) {
+      final position = Vector2(
+        texturePosition.x + (i % amountPerRow) * textureSize.x,
+        texturePosition.y + (i ~/ amountPerRow) * textureSize.y,
+      );
       final Sprite sprite = Sprite(
         imagePath,
-        x: textureX + (i % amountPerRow) * textureWidth,
-        y: textureY + (i ~/ amountPerRow) * textureHeight,
-        width: textureWidth,
-        height: textureHeight,
+        position: position,
+        size: textureSize,
       );
       frames[i] = SpriteAnimationFrame(sprite, stepTime);
     }
@@ -102,21 +105,21 @@ class SpriteAnimation {
     int amount,
     List<double> stepTimes, {
     int amountPerRow,
-    double textureX = 0.0,
-    double textureY = 0.0,
-    double textureWidth,
-    double textureHeight,
+    Vector2 texturePosition,
+    Vector2 textureSize,
     this.loop = true,
   }) : assert(amountPerRow == null || amount >= amountPerRow) {
     amountPerRow ??= amount;
     frames = List<SpriteAnimationFrame>(amount);
     for (var i = 0; i < amount; i++) {
+      final position = Vector2(
+        texturePosition.x + (i % amountPerRow) * textureSize.x,
+        texturePosition.y + (i ~/ amountPerRow) * textureSize.y,
+      );
       final Sprite sprite = Sprite(
         imagePath,
-        x: textureX + (i % amountPerRow) * textureWidth,
-        y: textureY + (i ~/ amountPerRow) * textureHeight,
-        width: textureWidth,
-        height: textureHeight,
+        position: position,
+        size: textureSize,
       );
       frames[i] = SpriteAnimationFrame(sprite, stepTimes[i]);
     }
@@ -136,19 +139,17 @@ class SpriteAnimation {
 
     final frames = jsonFrames.values.map((value) {
       final frameData = value['frame'];
-      final int x = frameData['x'];
-      final int y = frameData['y'];
-      final int width = frameData['w'];
-      final int height = frameData['h'];
+      final double x = frameData['x'];
+      final double y = frameData['y'];
+      final double width = frameData['w'];
+      final double height = frameData['h'];
 
       final stepTime = value['duration'] / 1000;
 
       final Sprite sprite = Sprite(
         imagePath,
-        x: x.toDouble(),
-        y: y.toDouble(),
-        width: width.toDouble(),
-        height: height.toDouble(),
+        position: Vector2(x, y),
+        size: Vector2(width, height),
       );
 
       return SpriteAnimationFrame(sprite, stepTime);

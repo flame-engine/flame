@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/foundation.dart';
 
 import '../flare_animation.dart';
@@ -12,24 +13,27 @@ class FlareComponent extends PositionComponent {
   FlareComponent(
     String fileName,
     String animation,
-    double width,
-    double height,
+    Vector2 size,
   ) {
-    this.width = width;
-    this.height = height;
+    super.size = size;
 
     FlareAnimation.load(fileName).then((loadedFlareAnimation) {
       _flareAnimation = loadedFlareAnimation;
-
       _flareAnimation.updateAnimation(animation);
-      _flareAnimation.width = width;
-      _flareAnimation.height = height;
+      _flareAnimation.size = size;
     });
   }
 
   void updateAnimation(String animation) {
     if (loaded()) {
       _flareAnimation.updateAnimation(animation);
+    }
+  }
+
+  void updateSize(Vector2 newSize) {
+    super.size = newSize;
+    if (loaded()) {
+      _flareAnimation.size = size;
     }
   }
 
@@ -48,22 +52,6 @@ class FlareComponent extends PositionComponent {
     super.update(dt);
     if (loaded()) {
       _flareAnimation.update(dt);
-    }
-  }
-
-  @override
-  set width(_width) {
-    super.width = _width;
-    if (loaded()) {
-      _flareAnimation.width = width;
-    }
-  }
-
-  @override
-  set height(_height) {
-    super.height = _height;
-    if (loaded()) {
-      _flareAnimation.height = height;
     }
   }
 }
