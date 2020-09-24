@@ -38,7 +38,7 @@ class SpriteSheet {
     int x,
     int y,
   ) {
-    Vector2 size = Vector2(textureWidth.toDouble(), textureHeight.toDouble());
+    final size = Vector2(textureWidth.toDouble(), textureHeight.toDouble());
     return Sprite(
       imageName,
       position: Vector2(x.toDouble(), y.toDouble())..multiply(size),
