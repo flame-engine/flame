@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 
 import 'flame_audio.dart';
 import 'bgm.dart';
-import 'images.dart';
+import 'assets/images.dart';
 import 'assets_cache.dart';
 import 'util.dart';
 

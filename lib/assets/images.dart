@@ -6,14 +6,21 @@ import 'dart:convert' show base64;
 import 'package:flame/flame.dart';
 
 class Images {
-  Map<String, ImageAssetLoader> loadedFiles = {};
+  final Map<String, _ImageAssetLoader> _loadedFiles = {};
 
   void clear(String fileName) {
-    loadedFiles.remove(fileName);
+    _loadedFiles.remove(fileName);
   }
 
   void clearCache() {
-    loadedFiles.clear();
+    _loadedFiles.clear();
+  }
+
+  Image fromCache(String fileName) {
+    final image = _loadedFiles[fileName];
+    assert(image?.loadedImage != null,
+        'Tried to access an inexistent entry on cache "$fileName"');
+    return image.loadedImage;
   }
 
   Future<List<Image>> loadAll(List<String> fileNames) async {
@@ -21,17 +28,17 @@ class Images {
   }
 
   Future<Image> load(String fileName) async {
-    if (!loadedFiles.containsKey(fileName)) {
-      loadedFiles[fileName] = ImageAssetLoader(_fetchToMemory(fileName));
+    if (!_loadedFiles.containsKey(fileName)) {
+      _loadedFiles[fileName] = _ImageAssetLoader(_fetchToMemory(fileName));
     }
-    return await loadedFiles[fileName].retreive();
+    return await _loadedFiles[fileName].retreive();
   }
 
   Future<Image> fromBase64(String fileName, String base64) async {
-    if (!loadedFiles.containsKey(fileName)) {
-      loadedFiles[fileName] = ImageAssetLoader(_fetchFromBase64(base64));
+    if (!_loadedFiles.containsKey(fileName)) {
+      _loadedFiles[fileName] = _ImageAssetLoader(_fetchFromBase64(base64));
     }
-    return await loadedFiles[fileName].retreive();
+    return await _loadedFiles[fileName].retreive();
   }
 
   Future<Image> _fetchFromBase64(String base64Data) async {
@@ -53,8 +60,8 @@ class Images {
   }
 }
 
-class ImageAssetLoader {
-  ImageAssetLoader(this.future);
+class _ImageAssetLoader {
+  _ImageAssetLoader(this.future);
 
   Image loadedImage;
   Future<Image> future;

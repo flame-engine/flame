@@ -14,38 +14,6 @@ class SpriteSheet {
   List<List<Sprite>> _sprites;
 
   SpriteSheet({
-    @required String imageName,
-    @required this.textureWidth,
-    @required this.textureHeight,
-    @required this.columns,
-    @required this.rows,
-  }) {
-    _sprites = List.generate(
-      rows,
-      (y) => List.generate(
-        columns,
-        (x) => _mapImagePath(imageName, textureWidth, textureHeight, x, y),
-      ),
-    );
-  }
-
-  Sprite _mapImagePath(
-    String imageName,
-    int textureWidth,
-    int textureHeight,
-    int x,
-    int y,
-  ) {
-    return Sprite(
-      imageName,
-      x: (x * textureWidth).toDouble(),
-      y: (y * textureHeight).toDouble(),
-      width: textureWidth.toDouble(),
-      height: textureHeight.toDouble(),
-    );
-  }
-
-  SpriteSheet.fromImage({
     @required Image image,
     @required this.textureWidth,
     @required this.textureHeight,
@@ -56,19 +24,19 @@ class SpriteSheet {
       rows,
       (y) => List.generate(
         columns,
-        (x) => _mapImage(image, textureWidth, textureHeight, x, y),
+        (x) => _mapImagePath(image, textureWidth, textureHeight, x, y),
       ),
     );
   }
 
-  Sprite _mapImage(
+  Sprite _mapImagePath(
     Image image,
     int textureWidth,
     int textureHeight,
     int x,
     int y,
   ) {
-    return Sprite.fromImage(
+    return Sprite(
       image,
       x: (x * textureWidth).toDouble(),
       y: (y * textureHeight).toDouble(),
