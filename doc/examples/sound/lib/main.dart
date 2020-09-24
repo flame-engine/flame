@@ -50,10 +50,8 @@ class MyGame extends BaseGame {
     Flame.audio.load('boin.mp3');
     Flame.audio.loop('music.mp3', volume: 0.4);
 
-    add(
-      Ball(size)
-        ..y = (size.y / 2) - 50
-        ..size = Vector2(100, 100)
-    );
+    add(Ball(size)
+      ..y = (size.y / 2) - 50
+      ..size = Vector2(100, 100));
   }
 }
