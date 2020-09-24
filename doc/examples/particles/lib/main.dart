@@ -65,6 +65,12 @@ class MyGame extends BaseGame {
     Timer.periodic(sceneDuration, (_) => spawnParticles());
   }
 
+  @override
+  Future<void> onLoad() async {
+    await images.load('zap.png');
+    await images.load('boom3.png');
+  }
+
   /// Showcases various different uses of [Particle]
   /// and its derivatives
   void spawnParticles() {
@@ -295,7 +301,7 @@ class MyGame extends BaseGame {
   Particle imageParticle() {
     return ImageParticle(
       size: const Size.square(24),
-      image: Flame.images.loadedFiles['zap.png'].loadedImage,
+      image: images.fromCache('zap.png'),
     );
   }
 
@@ -385,7 +391,7 @@ class MyGame extends BaseGame {
   /// Flame's [Sprite] into the effect.
   Particle spriteParticle() {
     return SpriteParticle(
-      sprite: Sprite('zap.png'),
+      sprite: Sprite(images.fromCache('zap.png')),
       size: Position.fromOffset(cellSize * .5),
     );
   }
@@ -524,12 +530,11 @@ class MyGame extends BaseGame {
     const columns = 8;
     const rows = 8;
     const frames = columns * rows;
-    const imagePath = 'boom3.png';
-    final spriteImage = Flame.images.loadedFiles[imagePath].loadedImage;
+    final spriteImage = images.fromCache('boom3.png');
     final spritesheet = SpriteSheet(
       rows: rows,
       columns: columns,
-      imageName: imagePath,
+      image: spriteImage,
       textureWidth: spriteImage.width ~/ columns,
       textureHeight: spriteImage.height ~/ rows,
     );
@@ -543,19 +548,8 @@ class MyGame extends BaseGame {
 }
 
 Future<BaseGame> loadGame() async {
-  Size gameSize;
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Future.wait([
-    Flame.util.initialDimensions().then((size) => gameSize = size),
-    Flame.images.loadAll(const [
-      'zap.png',
-
-      /// Credits to Stumpy Strust from
-      /// https://opengameart.org/content/explosion-sheet
-      'boom3.png',
-    ]),
-  ]);
+  Flame.initializeWidget();
+  final gameSize = await Flame.util.initialDimensions();
 
   return MyGame(screenSize: gameSize);
 }

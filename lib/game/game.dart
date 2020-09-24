@@ -7,9 +7,10 @@ import 'package:flutter/widgets.dart' hide WidgetBuilder;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-import '../keyboard.dart';
-
 import 'widget_builder.dart';
+
+import '../keyboard.dart';
+import '../assets/images.dart';
 
 /// Represents a generic game.
 ///
@@ -18,6 +19,8 @@ import 'widget_builder.dart';
 abstract class Game {
   // Widget Builder for this Game
   final builder = WidgetBuilder();
+
+  final images = Images();
 
   /// Returns the game background color.
   /// By default it will return a black color.
@@ -78,6 +81,8 @@ abstract class Game {
     if (this is KeyboardEvents) {
       RawKeyboard.instance.removeListener(_handleKeyEvent);
     }
+
+    images.clearCache();
   }
 
   /// Flag to tell the game loop if it should start running upon creation

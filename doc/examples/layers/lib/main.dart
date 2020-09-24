@@ -7,15 +7,11 @@ import 'package:flame/flame.dart';
 import 'dart:ui';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  Flame.initializeWidget();
 
   await Flame.util.fullScreen();
 
-  final playerSprite = await Sprite.loadSprite('player.png');
-  final enemySprite = await Sprite.loadSprite('enemy.png');
-  final backgroundSprite = await Sprite.loadSprite('background.png');
-
-  runApp(LayerGame(playerSprite, enemySprite, backgroundSprite).widget);
+  runApp(LayerGame().widget);
 }
 
 class GameLayer extends DynamicLayer {
@@ -56,14 +52,15 @@ class BackgroundLayer extends PreRenderedLayer {
 }
 
 class LayerGame extends Game {
-  Sprite playerSprite;
-  Sprite enemySprite;
-  Sprite backgroundSprite;
-
   Layer gameLayer;
   Layer backgroundLayer;
 
-  LayerGame(this.playerSprite, this.enemySprite, this.backgroundSprite) {
+  @override
+  Future<void> onLoad() async {
+    final playerSprite = Sprite(await images.load('player.png'));
+    final enemySprite = Sprite(await images.load('enemy.png'));
+    final backgroundSprite = Sprite(await images.load('background.png'));
+
     gameLayer = GameLayer(playerSprite, enemySprite);
     backgroundLayer = BackgroundLayer(backgroundSprite);
   }
