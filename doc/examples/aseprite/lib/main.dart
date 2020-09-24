@@ -22,8 +22,9 @@ class MyGame extends BaseGame {
       'chopper.png',
       'chopper.json',
     );
-    final animationComponent = SpriteAnimationComponent(200, 200, animation)
-      ..setPosition(size / 2 - Vector2(100, 100));
+    final spriteSize = Vector2.all(200);
+    final animationComponent = SpriteAnimationComponent(spriteSize, animation)
+      ..position = size / 2 - Vector2(100, 100);
 
     add(animationComponent);
   }

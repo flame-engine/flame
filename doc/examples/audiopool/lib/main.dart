@@ -29,7 +29,7 @@ class MyGame extends BaseGame with TapDetector {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(size.toOriginRect(), black);
+    canvas.drawRect(size.toRect(), black);
     final p = size / 2;
     regular.render(canvas, 'hit me!', p, anchor: Anchor.center);
     super.render(canvas);

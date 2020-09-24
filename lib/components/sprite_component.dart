@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/foundation.dart';
 
 import '../sprite.dart';
@@ -23,14 +24,13 @@ class SpriteComponent extends PositionComponent {
   SpriteComponent();
 
   SpriteComponent.square(double size, String imagePath)
-      : this.rectangle(size, size, imagePath);
+      : this.rectangle(Vector2(size, size), imagePath);
 
-  SpriteComponent.rectangle(double width, double height, String imagePath)
-      : this.fromSprite(width, height, Sprite(imagePath));
+  SpriteComponent.rectangle(Vector2 size, String imagePath)
+      : this.fromSprite(size, Sprite(imagePath));
 
-  SpriteComponent.fromSprite(double width, double height, this.sprite) {
-    this.width = width;
-    this.height = height;
+  SpriteComponent.fromSprite(Vector2 size, this.sprite) {
+    super.size.setFrom(size);
   }
 
   @mustCallSuper

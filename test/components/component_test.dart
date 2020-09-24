@@ -9,34 +9,30 @@ void main() {
   group('component test', () {
     test('test get/set x/y or position', () {
       final PositionComponent c = SpriteComponent();
-      c.x = 2.2;
-      c.y = 3.4;
-      expect(c.position.x, 2.2);
-      expect(c.position.y, 3.4);
+      c.position = Vector2(2.2, 3.4);
+      expect(c.x, 2.2);
+      expect(c.y, 3.4);
 
-      c.setPosition(Vector2(1.0, 0.0));
+      c.position = Vector2(1.0, 0.0);
       expect(c.x, 1.0);
       expect(c.y, 0.0);
     });
 
     test('test get/set width/height or size', () {
       final PositionComponent c = SpriteComponent();
-      c.width = 2.2;
-      c.height = 3.4;
+      c.size = Vector2(2.2, 3.4);
       expect(c.size.x, 2.2);
       expect(c.size.y, 3.4);
 
-      c.setBySize(Vector2(1.0, 0.0));
+      c.size = Vector2(1.0, 0.0);
       expect(c.width, 1.0);
       expect(c.height, 0.0);
     });
 
     test('test get/set rect', () {
       final PositionComponent c = SpriteComponent();
-      c.x = 0.0;
-      c.y = 1.0;
-      c.width = 2.0;
-      c.height = 2.0;
+      c.position = Vector2(0.0, 1.0);
+      c.size = Vector2(2.0, 2.0);
       expect(c.toRect().left, 0.0);
       expect(c.toRect().top, 1.0);
       expect(c.toRect().width, 2.0);

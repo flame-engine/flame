@@ -21,7 +21,7 @@ class Ball extends PositionComponent {
   @override
   void render(Canvas c) {
     super.render(c);
-    c.drawOval(toOriginRect(), paint);
+    c.drawOval(size.toRect(), paint);
   }
 
   @override
@@ -53,8 +53,7 @@ class MyGame extends BaseGame {
     add(
       Ball(size)
         ..y = (size.y / 2) - 50
-        ..width = 100
-        ..height = 100,
+        ..size = Vector2(100, 100)
     );
   }
 }

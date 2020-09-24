@@ -5,6 +5,7 @@ import "package:flare_flutter/flare.dart";
 import "package:flare_flutter/flare_actor.dart";
 
 import "flame.dart";
+import "extensions/vector2.dart";
 
 @Deprecated("Use flame_flare package instead")
 class FlareAnimation {
@@ -13,7 +14,8 @@ class FlareAnimation {
   String _animationName;
   final List<FlareAnimationLayer> _animationLayers = [];
 
-  double _width = 0.0, _height = 0.0, _xScale = 0.0, _yScale = 0.0;
+  final Vector2 _size = Vector2.zero();
+  final Vector2 _scale = Vector2.zero();
 
   Picture _picture;
 
@@ -32,23 +34,15 @@ class FlareAnimation {
     return FlareAnimation(artboard);
   }
 
-  double get width {
-    return _width;
+  double get width => size.x;
+  double get height => size.y;
+  
+  set size(Vector2 newSize) {
+    _size.setFrom(newSize);
+    _scale.setValues(_size.x / _artboard.width, _size.y / _artboard.height);
   }
-
-  double get height {
-    return _height;
-  }
-
-  set width(double newWidth) {
-    _width = newWidth;
-    _xScale = _width / _artboard.width;
-  }
-
-  set height(double newHeight) {
-    _height = newHeight;
-    _yScale = _height / _artboard.height;
-  }
+  
+  Vector2 get size => _size;
 
   void updateAnimation(String animation) {
     _animationName = animation;
@@ -73,10 +67,8 @@ class FlareAnimation {
     if (_picture == null) {
       return;
     }
-
     canvas.save();
     canvas.translate(x, y);
-
     canvas.drawPicture(_picture);
     canvas.restore();
   }
@@ -125,7 +117,7 @@ class FlareAnimation {
     final r = PictureRecorder();
     final c = Canvas(r);
 
-    c.scale(_xScale, _yScale);
+    c.scale(_scale.x, _scale.y);
     _artboard.draw(c);
 
     _picture = r.endRecording();

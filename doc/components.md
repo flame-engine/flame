@@ -4,7 +4,7 @@ This class represent a single object on the screen, being a floating rectangle o
 
 The base abstract class has the common expected methods update and render to be implemented.
 
-The intermediate inheritance `PositionComponent` adds `x`, `y`, `width`, `height` and `angle` to your Components, as well as some useful methods like distance and angleBetween.
+The intermediate inheritance `PositionComponent` adds `position`, `size` and `angle` to your Components, as well as some useful methods like distance and angleBetween.
 
 The most commonly used implementation, `SpriteComponent`, can be created with a `Sprite`:
 
@@ -13,12 +13,11 @@ The most commonly used implementation, `SpriteComponent`, can be created with a 
 
     Sprite sprite = Sprite('player.png');
 
-    const size = 128.0;
-    var player = SpriteComponent.fromSprite(size, size, sprite); // width, height, sprite
+    final size = Vector2.all(128.0);
+    var player = SpriteComponent.fromSprite(size, sprite); // width, height, sprite
 
     // screen coordinates
-    player.x = ... // 0 by default
-    player.y = ... // 0 by default
+    player.position = ... // Vector2(0.0, 0,0) by default
     player.angle = ... // 0 by default
 
     player.render(canvas); // it will render only if the image is loaded and the x, y, width and height parameters are not null

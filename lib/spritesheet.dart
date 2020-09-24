@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
+
 import 'sprite.dart';
 import 'sprite_animation.dart';
+import 'extensions/vector2.dart';
 
 /// Utility class to help extract animations and sprites from a spritesheet image
 class SpriteSheet {
@@ -36,12 +38,11 @@ class SpriteSheet {
     int x,
     int y,
   ) {
+    Vector2 size = Vector2(textureWidth.toDouble(), textureHeight.toDouble());
     return Sprite(
       imageName,
-      x: (x * textureWidth).toDouble(),
-      y: (y * textureHeight).toDouble(),
-      width: textureWidth.toDouble(),
-      height: textureHeight.toDouble(),
+      position: Vector2(x.toDouble(), y.toDouble())..multiply(size),
+      size: size,
     );
   }
 

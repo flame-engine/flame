@@ -20,32 +20,26 @@ class MyGame extends BaseGame with TapDetector {
   final animation = SpriteAnimation.sequenced(
     'chopper.png',
     4,
-    textureWidth: 48,
-    textureHeight: 48,
+    textureSize: Vector2.all(48),
     stepTime: 0.15,
     loop: true,
   );
 
   void addAnimation(double x, double y) {
-    const textureWidth = 291.0;
-    const textureHeight = 178.0;
+    final size = Vector2(291, 178);
 
     final animationComponent = SpriteAnimationComponent.sequenced(
-      291,
-      178,
+      size,
       'creature.png',
       18,
       amountPerRow: 10,
-      textureWidth: textureWidth,
-      textureHeight: textureHeight,
+      textureSize: size,
       stepTime: 0.15,
       loop: false,
       destroyOnFinish: true,
     );
 
-    animationComponent.x = x - textureWidth / 2;
-    animationComponent.y = y - textureHeight / 2;
-
+    animationComponent.position = animationComponent.position - size / 2;
     add(animationComponent);
   }
 
@@ -57,18 +51,17 @@ class MyGame extends BaseGame with TapDetector {
   MyGame(Vector2 screenSize) {
     size = screenSize;
 
-    const s = 100.0;
-    final animationComponent = SpriteAnimationComponent(s, s, animation);
-    animationComponent.x = size.x / 2 - s;
-    animationComponent.y = s;
+    final spriteSize = Vector2.all(100.0);
+    final animationComponent = SpriteAnimationComponent(spriteSize, animation);
+    animationComponent.x = size.x / 2 - spriteSize.x;
+    animationComponent.y = spriteSize.y;
 
     final reversedAnimationComponent = SpriteAnimationComponent(
-      s,
-      s,
+      spriteSize,
       animation.reversed(),
     );
     reversedAnimationComponent.x = size.x / 2;
-    reversedAnimationComponent.y = s;
+    reversedAnimationComponent.y = spriteSize.y;
 
     add(animationComponent);
     add(reversedAnimationComponent);
