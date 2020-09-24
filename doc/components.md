@@ -55,27 +55,18 @@ This will create a simple three frame animation
 
 ```dart
     List<Sprite> sprites = [0, 1, 2].map((i) => new Sprite('player_${i}.png')).toList();
-    this.player = AnimationComponent(64.0, 64.0, new Animation.spriteList(sprites, stepTime: 0.01));
+    final size = Vector2(64.0, 64.0);
+    this.player = AnimationComponent(size, new Animation.spriteList(sprites, stepTime: 0.01));
 ```
 
 If you have a sprite sheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](/doc/images.md#Animation)):
 
 ```dart
-    this.player = AnimationComponent.sequenced(64.0, 64.0, 'player.png', 2);
+    final size = Vector2(64.0, 64.0);
+    this.player = AnimationComponent.sequenced(size, 'player.png', 2);
 ```
 
 If you are not using `BaseGame`, don't forget this component needs to be update'd even if static, because the animation object needs to be ticked to move the frames.
-
-## SvgComponent
-
-This component uses an instance of `Svg` class to represent a Component that has a svg that is rendered on the game:
-
-```dart
-    Svg svg = Svg('android.svg');
-    SvgComponent android = SvgComponent.fromSvg(100, 100, svg);
-    android.x = 100;
-    android.y = 100;
-```
 
 ## FlareActor Component
 
@@ -104,8 +95,7 @@ it also can receive a FlareController that can play multiple animations and cont
     }
 
     final fileName = 'assets/george_washington.flr';
-    final width = 1776;
-    final height = 1804;
+    final size = Vector2(1776, 1804);
     final controller = WashingtonController(); //instantiate controller
     
     FlareActorComponent flareAnimation = FlareActorComponent(
@@ -189,8 +179,8 @@ This creates a static background, if you want it to move you have to set the nam
 You can set the baseSpeed and layerDelta at any time, for example if your character jumps or your game speeds up.
 
 ```dart
-  this.bg.baseSpeed = Offset(100, 0);
-  this.bg.layerDelta = Offset(40, 0);
+  this.bg.baseSpeed = Vector2(100, 0);
+  this.bg.layerDelta = Vector2(40, 0);
 ```
 
 By default the images are aligned to the bottom left, repeated along the X-axis and scaled proportionally so that the image covers the height of the screen. If you want to change this behaviour, for example if you are not making a side scrolling game, you can set the `repeat`, `alignment` and `fill` parameters for each ParallaxImage.
@@ -202,7 +192,7 @@ Advanced example:
     ParallaxImage('planets.jpg', repeat: ImageRepeat.repeatY, alignment: Alignment.bottomLeft, fill: LayerFill.none),
     ParallaxImage('dust.jpg', repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
   ];
-  this.bg = ParallaxComponent(images, baseSpeed: Offset(50, 0), layerDelta: Offset(20, 0));
+  this.bg = ParallaxComponent(images, baseSpeed: Vector2(50, 0), layerDelta: Vector2(20, 0));
 ```
 
 * The stars image in this example will be repeatedly drawn in both axis, align in the center and be scaled to fill the screen width.
