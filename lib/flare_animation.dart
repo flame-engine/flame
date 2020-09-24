@@ -36,12 +36,12 @@ class FlareAnimation {
 
   double get width => size.x;
   double get height => size.y;
-  
+
   set size(Vector2 newSize) {
     _size.setFrom(newSize);
     _scale.setValues(_size.x / _artboard.width, _size.y / _artboard.height);
   }
-  
+
   Vector2 get size => _size;
 
   void updateAnimation(String animation) {
