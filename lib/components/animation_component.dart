@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'component.dart';
 import '../animation.dart';
+import 'component.dart';
 
 class AnimationComponent extends PositionComponent {
   Animation animation;

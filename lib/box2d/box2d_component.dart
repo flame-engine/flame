@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:box2d_flame/box2d.dart' hide Timer;
-import 'package:flame/box2d/viewport.dart';
-import 'package:flame/components/component.dart';
+import 'viewport.dart';
+import '../components/component.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
