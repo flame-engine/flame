@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -6,8 +7,8 @@ import '../components/component.dart';
 import '../position.dart';
 
 export './move_effect.dart';
-export './scale_effect.dart';
 export './rotate_effect.dart';
+export './scale_effect.dart';
 export './sequence_effect.dart';
 
 abstract class PositionComponentEffect {

@@ -1,9 +1,10 @@
-import 'dart:ui';
 import 'dart:math';
+import 'dart:ui';
 
-import "flame.dart";
 import "package:flare_flutter/flare.dart";
 import "package:flare_flutter/flare_actor.dart";
+
+import "flame.dart";
 
 @Deprecated("Use flame_flare package instead")
 class FlareAnimation {

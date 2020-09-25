@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/painting.dart';
 
-import 'component.dart';
 import '../text_config.dart';
+import 'component.dart';
 
 class TextComponent extends PositionComponent {
   String _text;

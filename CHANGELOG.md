@@ -1,9 +1,11 @@
 # CHANGELOG
 
 ## [next]
+ - Improved the accuracy of the `FPSCounter` by using Flutter's internal frame timings.
  - Adding MouseMovementDetector
  - Adding ScrollDetector
-
+ - Fixes BGM error
+ 
 ## 0.26.0
  - Improving Flame image auto cache
  - Fix bug in the Box2DGame's add and addLater method , when the Component extends BodyComponent and mixin HasGameRef or other mixins ,the mixins will not be set correctly
