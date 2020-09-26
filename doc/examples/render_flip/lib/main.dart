@@ -12,22 +12,18 @@ void main() async {
 }
 
 class MyGame extends BaseGame {
-  final animation = SpriteAnimation.sequenced(
-    'chopper.png',
-    4,
-    textureWidth: 48,
-    textureHeight: 48,
-    stepTime: 0.15,
-  );
+  SpriteAnimation animation;
 
-  SpriteAnimationComponent buildAnimation() {
-    final ac = SpriteAnimationComponent(100, 100, animation);
-    ac.x = size.width / 2 - ac.width / 2;
-    return ac;
-  }
-
-  MyGame(Size screenSize) {
-    size = screenSize;
+  @override
+  Future<void> onLoad() async {
+    final image = await images.load('chopper.png');
+    animation = SpriteAnimation.sequenced(
+      image,
+      4,
+      textureWidth: 48,
+      textureHeight: 48,
+      stepTime: 0.15,
+    );
 
     final regular = buildAnimation();
     regular.y = 100;
@@ -42,5 +38,15 @@ class MyGame extends BaseGame {
     flipY.y = 500;
     flipY.renderFlipY = true;
     add(flipY);
+  }
+
+  SpriteAnimationComponent buildAnimation() {
+    final ac = SpriteAnimationComponent(100, 100, animation);
+    ac.x = size.width / 2 - ac.width / 2;
+    return ac;
+  }
+
+  MyGame(Size screenSize) {
+    size = screenSize;
   }
 }

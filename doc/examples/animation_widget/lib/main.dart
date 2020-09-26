@@ -19,7 +19,7 @@ void main() async {
 
   await Flame.images.load('minotaur.png');
   final _animationSpriteSheet = SpriteSheet(
-    imageName: 'minotaur.png',
+    image: image,
     columns: 19,
     rows: 1,
     textureWidth: 96,
