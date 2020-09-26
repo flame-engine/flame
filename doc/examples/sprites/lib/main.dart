@@ -18,15 +18,10 @@ class MyGame extends BaseGame {
   }
 
   @override
-  void onAttach() {
-    super.onAttach();
-
-    initSprites();
-  }
-
-  void initSprites() async {
+  Future<void> onLoad() async {
     final r = Random();
-    List.generate(500, (i) => SpriteComponent.square(32, 'test.png'))
+    final image = await images.load('test.png');
+    List.generate(500, (i) => SpriteComponent.square(32, image))
         .forEach((sprite) {
       sprite.x = r.nextInt(size.width.toInt()).toDouble();
       sprite.y = r.nextInt(size.height.toInt()).toDouble();
