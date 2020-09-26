@@ -54,6 +54,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     if (!attached) {
       return;
     }
+    // ignore: deprecated_member_use_from_same_package
     game.recordDt(dt);
     game.update(dt);
     markNeedsPaint();
