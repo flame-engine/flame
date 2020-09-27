@@ -1,7 +1,7 @@
 import 'dart:ui';
 
+import '../flare_animation.dart';
 import 'component.dart';
-import 'package:flame/flare_animation.dart';
 
 @Deprecated("Use flame_flare package instead")
 class FlareComponent extends PositionComponent {

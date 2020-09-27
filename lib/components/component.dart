@@ -4,11 +4,11 @@ import 'dart:ui';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
-import '../sprite.dart';
-import '../position.dart';
 import '../anchor.dart';
-import '../text_config.dart';
 import '../effects/effects.dart';
+import '../position.dart';
+import '../sprite.dart';
+import '../text_config.dart';
 
 /// This represents a Component for your game.
 ///
