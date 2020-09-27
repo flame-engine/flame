@@ -1,5 +1,6 @@
 import 'package:flame/components/sprite_component.dart';
 import 'package:flame/extensions/vector2.dart';
+import 'package:flame/extensions/offset.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components/isometric_tile_map_component.dart';
@@ -15,7 +16,7 @@ final topLeft = Vector2(x, y);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Size size = await Flame.util.initialDimensions();
+  final size = await Flame.util.initialDimensions();
   final game = MyGame(size);
   runApp(game.widget);
 }
@@ -40,7 +41,7 @@ class MyGame extends BaseGame with MouseMovementDetector {
   IsometricTileMapComponent base;
   Selector selector;
 
-  MyGame(Size size) {
+  MyGame(Vector2 size) {
     init();
   }
 
@@ -77,9 +78,9 @@ class MyGame extends BaseGame with MouseMovementDetector {
     if (base == null || selector == null) {
       return; // loading
     }
-    final screenPosition = Position.fromOffset(event.position);
+    final screenPosition = event.position.toVector2();
     final block = base.getBlock(screenPosition);
     selector.show = base.containsBlock(block);
-    selector.setByPosition(base.getBlockPosition(block).add(topLeft));
+    selector.setPosition(base.getBlockPosition(block) + topLeft);
   }
 }

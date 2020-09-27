@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'package:flame/components/component.dart';
+import 'package:flame/components/position_component.dart';
 
 import '../flame.dart';
-import '../position.dart';
 import '../sprite.dart';
+import '../extensions/vector2.dart';
 
 /// This represents an isometric tileset to be used in a tilemap.
 ///
@@ -91,16 +91,19 @@ class IsometricTileMapComponent extends PositionComponent {
 
   @override
   void render(Canvas c) {
-    prepareCanvas(c);
+    super.render(c);
 
-    final size = Position.fromInts(effectiveTileSize, effectiveTileSize);
+    final size = Vector2(
+      effectiveTileSize.toDouble(),
+      effectiveTileSize.toDouble(),
+    );
     for (int i = 0; i < matrix.length; i++) {
       for (int j = 0; j < matrix[i].length; j++) {
         final element = matrix[i][j];
         if (element != -1) {
           final sprite = tileset.getTile(element);
           final p = getBlockPositionInts(j, i);
-          sprite.renderRect(c, Position.rectFrom(p, size));
+          sprite.renderRect(c, p.toRect(size));
         }
       }
     }
@@ -109,35 +112,35 @@ class IsometricTileMapComponent extends PositionComponent {
   /// Get the position in witch a block must be in the isometric space.
   ///
   /// This does not include the (x,y) PositionComponent offset!
-  Position getBlockPosition(Block block) {
+  Vector2 getBlockPosition(Block block) {
     return getBlockPositionInts(block.x, block.y);
   }
 
-  Position getBlockPositionInts(int i, int j) {
+  Vector2 getBlockPositionInts(int i, int j) {
     final s = effectiveTileSize.toDouble() / 2;
-    return cartToIso(Position(i * s, j * s)).minus(Position(s, 0));
+    return cartToIso(Vector2(i * s, j * s)) - Vector2(s, 0);
   }
 
   /// Converts a coordinate from the isometric space to the cartesian space.
-  Position isoToCart(Position p) {
+  Vector2 isoToCart(Vector2 p) {
     final x = (2 * p.y + p.x) / 2;
     final y = (2 * p.y - p.x) / 2;
-    return Position(x, y);
+    return Vector2(x, y);
   }
 
   /// Converts a coordinate from the cartesian space to the isometric space.
-  Position cartToIso(Position p) {
+  Vector2 cartToIso(Vector2 p) {
     final x = p.x - p.y;
     final y = (p.x + p.y) / 2;
-    return Position(x, y);
+    return Vector2(x, y);
   }
 
   /// Get what block is at isometric position p.
   ///
   /// This can be used to handle clicks or hovers.
-  Block getBlock(Position p) {
+  Block getBlock(Vector2 p) {
     final s = effectiveTileSize.toDouble() / 2;
-    final cart = isoToCart(p.clone().minus(toPosition()));
+    final cart = isoToCart(p - position);
     final px = cart.x ~/ s;
     final py = cart.y ~/ s;
     return Block(px, py);
