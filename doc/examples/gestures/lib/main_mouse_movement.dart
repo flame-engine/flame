@@ -47,7 +47,7 @@ class MyGame extends Game with MouseMovementDetector {
 
       if (!_onTarget) {
         final dir = (target - position).normalized();
-        position += (SPEED * dt) * dir;
+        position += dir * (SPEED * dt);
       }
     }
   }
