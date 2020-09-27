@@ -18,7 +18,7 @@ class MyGame extends Game with ScrollDetector {
 
   @override
   void onScroll(event) {
-    target = position.minus(event.scrollDelta.toVector2());
+    target = position - event.scrollDelta.toVector2();
   }
 
   @override
@@ -38,7 +38,7 @@ class MyGame extends Game with ScrollDetector {
   void update(double dt) {
     if (target != null) {
       final dir = (target - position).normalize();
-      position += dir.times(SPEED * dt);
+      position += dir * (SPEED * dt);
     }
   }
 }

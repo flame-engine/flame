@@ -15,10 +15,10 @@ extension Vector2Extension on Vector2 {
   /// Creates a [Point] from the [Vector2]
   Point toPoint() => Point(x, y);
 
-  /// Creates a [Rect] starting from [x, y] and going the [Vector2]
+  /// Creates a [Rect] starting from [x, y] and having size [to].
   Rect toRect(Vector2 to) => Rect.fromLTWH(x, y, to.x, to.y);
 
-  /// Creates a [Rect] starting in origo and going the [Vector2]
+  /// Creates a [Rect] starting in origin and having size [to].
   Rect toOriginRect() => Rect.fromLTWH(0, 0, x, y);
 
   /// Linearly interpolate towards another Vector2
