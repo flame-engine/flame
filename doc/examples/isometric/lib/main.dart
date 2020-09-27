@@ -43,6 +43,7 @@ class MyGame extends BaseGame with MouseMovementDetector {
   MyGame(Size size) {
     init();
   }
+
   void init() async {
     final tileset = await IsometricTileset.load('tiles.png', 32);
     final matrix = [
