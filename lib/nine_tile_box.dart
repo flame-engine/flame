@@ -41,10 +41,6 @@ class NineTileBox {
 
   /// Renders this nine box as a rectangle of coordinates ([x], [y]) and size ([width], [height]).
   void draw(Canvas c, double x, double y, double width, double height) {
-    if (!sprite.loaded()) {
-      return;
-    }
-
     // corners
     _drawTile(c, _getDest(x, y), 0, 0);
     _drawTile(c, _getDest(x, y + height - destTileSize), 0, 2);
