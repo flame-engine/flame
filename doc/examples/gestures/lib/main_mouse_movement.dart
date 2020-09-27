@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/position.dart';
+import 'package:flame/extensions/vector2.dart';
+import 'package:flame/extensions/offset.dart';
 
 void main() {
   final game = MyGame();
@@ -12,8 +13,8 @@ void main() {
 class MyGame extends Game with MouseMovementDetector {
   static const SPEED = 200;
 
-  Position position = Position(0, 0);
-  Position target;
+  Vector2 position = Vector2(0, 0);
+  Vector2 target;
 
   final Paint _blue = Paint()..color = const Color(0xFF0000FF);
 
@@ -21,7 +22,7 @@ class MyGame extends Game with MouseMovementDetector {
 
   @override
   void onMouseMove(event) {
-    target = Position.fromOffset(event.localPosition);
+    target = event.localPosition.toVector2();
   }
 
   Rect _toRect() => Rect.fromLTWH(
@@ -45,9 +46,8 @@ class MyGame extends Game with MouseMovementDetector {
       _onTarget = _toRect().contains(target.toOffset());
 
       if (!_onTarget) {
-        final dir = target.clone().minus(position).normalize();
-
-        position.add(dir.times(SPEED * dt));
+        final dir = (target - position).normalize();
+        position += dir.times(SPEED * dt);
       }
     }
   }

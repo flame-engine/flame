@@ -15,6 +15,6 @@ extension OffsetExtension on Offset {
   /// Creates a [Point] from the [Offset]
   Point toPoint() => Point(dx, dy);
 
-  /// Creates a [Rect] starting in origo and going the [Offset]
+  /// Creates a [Rect] starting in origin and going the [Offset]
   Rect toRect() => Rect.fromLTWH(0, 0, dx, dy);
 }
