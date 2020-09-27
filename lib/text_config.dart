@@ -1,8 +1,9 @@
 import 'dart:ui';
-import 'package:flame/components/text_component.dart';
+
 import 'package:flutter/material.dart' as material;
 
 import 'anchor.dart';
+import 'components/text_component.dart';
 import 'memory_cache.dart';
 import 'extensions/size.dart';
 import 'extensions/vector2.dart';

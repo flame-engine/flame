@@ -50,7 +50,7 @@ abstract class Component {
   /// If two components share the same priority, they will probably be drawn in the order they were added.
   int priority() => 0;
 
-  /// Called when the component has been added and preperad by the game instance.
+  /// Called when the component has been added and prepared by the game instance.
   ///
   /// This can be used to make initializations on your component as, when this method is called,
   /// things like resize (and other mixins) are already set and usable.

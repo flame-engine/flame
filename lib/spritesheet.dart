@@ -1,8 +1,8 @@
+import 'dart:ui';
+
 import 'package:meta/meta.dart';
 import 'sprite.dart';
 import 'sprite_animation.dart';
-
-import 'dart:ui';
 
 /// Utility class to help extract animations and sprites from a spritesheet image
 class SpriteSheet {
