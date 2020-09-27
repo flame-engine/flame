@@ -37,8 +37,8 @@ class MyGame extends Game with ScrollDetector {
   @override
   void update(double dt) {
     if (target != null) {
-      final dir = (target - position).normalize();
-      position += dir * (SPEED * dt);
+      final dir = (target - position).normalized();
+      position += (SPEED * dt) * dir;
     }
   }
 }
