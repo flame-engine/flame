@@ -18,8 +18,12 @@ class RotateEffect extends PositionComponentEffect {
     isAlternating = false,
     isRelative = false,
     Function onComplete,
-  }) : super(isInfinite, isAlternating,
-            isRelative: isRelative, onComplete: onComplete);
+  }) : super(
+          isInfinite,
+          isAlternating,
+          isRelative: isRelative,
+          onComplete: onComplete,
+        );
 
   @override
   void initialize(_comp) {
