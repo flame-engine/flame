@@ -1,13 +1,13 @@
 import 'dart:ui';
 
+import '../../extensions/vector2.dart';
+import '../../game/base_game.dart';
+import '../../gestures.dart';
+import '../component.dart';
+import '../mixins/has_game_ref.dart';
 import 'joystick_action.dart';
 import 'joystick_directional.dart';
 import 'joystick_events.dart';
-import '../component.dart';
-import '../mixins/has_game_ref.dart';
-import '../../game/base_game.dart';
-import '../../gestures.dart';
-import '../../extensions/vector2.dart';
 
 mixin JoystickListener {
   void joystickChangeDirectional(JoystickDirectionalEvent event);

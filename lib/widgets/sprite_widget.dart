@@ -1,10 +1,11 @@
-import 'package:flame/widgets/animation_widget.dart';
-import 'package:flutter/widgets.dart';
-import 'package:meta/meta.dart';
 import 'dart:math';
 
-import '../sprite.dart';
+import 'package:flutter/widgets.dart';
+import 'package:meta/meta.dart';
+
 import '../anchor.dart';
+import '../sprite.dart';
+import 'animation_widget.dart';
 
 /// A [StatefulWidget] that renders a still [Sprite].
 ///

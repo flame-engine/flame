@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flame/extensions/vector2.dart';
-import 'package:flame/extensions/rect.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 
+import '../extensions/vector2.dart';
+import '../extensions/rect.dart';
 import '../flame.dart';
 import 'position_component.dart';
 

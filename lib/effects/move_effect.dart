@@ -1,10 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
 
-import 'dart:math';
-
 import '../extensions/vector2.dart';
-import './effects.dart';
+import 'effects.dart';
 
 double _direction(double p, double d) => (p - d).sign;
 double _distance(double a, double b) => (a - b).abs();

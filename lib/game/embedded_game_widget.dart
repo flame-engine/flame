@@ -2,8 +2,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
 import '../extensions/vector2.dart';
-import 'game_render_box.dart';
 import 'game.dart';
+import 'game_render_box.dart';
 
 /// This a widget to embed a game inside the Widget tree. You can use it in pair with [BaseGame] or any other more complex [Game], as desired.
 ///

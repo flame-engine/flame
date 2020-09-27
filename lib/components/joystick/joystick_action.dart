@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/components/joystick/joystick_component.dart';
-import 'package:flame/components/joystick/joystick_events.dart';
-import 'package:flame/gestures.dart';
-import 'package:flame/sprite.dart';
+import 'joystick_component.dart';
+import 'joystick_events.dart';
+import '../../gestures.dart';
+import '../../sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
