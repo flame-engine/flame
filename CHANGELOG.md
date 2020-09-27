@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [next]
+## 0.27.0
  - Improved the accuracy of the `FPSCounter` by using Flutter's internal frame timings.
  - Adding MouseMovementDetector
  - Adding ScrollDetector
