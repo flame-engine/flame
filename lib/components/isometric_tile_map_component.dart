@@ -27,8 +27,12 @@ class IsometricTileset {
   IsometricTileset(this.tileset, this.size);
 
   /// Compute the number of columns the image has
-  /// by using the image width and tile width.
-  int get cols => tileset.width ~/ size;
+  /// by using the image width and tile size.
+  int get columns => tileset.width ~/ size;
+
+  /// Compute the number of rows the image has
+  /// by using the image height and tile size.
+  int get rows => tileset.height ~/ size;
 
   /// Get a sprite to render one specific tile given its id.
   ///
@@ -39,8 +43,8 @@ class IsometricTileset {
   }
 
   Sprite _computeTile(int tileId) {
-    final i = tileId % cols;
-    final j = tileId ~/ cols;
+    final i = tileId % columns;
+    final j = tileId ~/ columns;
     final s = size.toDouble();
     return Sprite.fromImage(tileset, x: s * i, y: s * j, width: s, height: s);
   }
