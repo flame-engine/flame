@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
-import './effects.dart';
 import '../components/position_component.dart';
+import 'effects.dart';
 
 class SequenceEffect extends PositionComponentEffect {
   final List<PositionComponentEffect> effects;

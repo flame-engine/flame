@@ -2,7 +2,7 @@ import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
 
 import '../extensions/vector2.dart';
-import './effects.dart';
+import 'effects.dart';
 
 double _direction(double p, double d) => (p - d).sign;
 double _length(double a, double b) => (a - b).abs();
