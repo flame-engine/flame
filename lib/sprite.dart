@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'dart:async';
+import 'dart:ui';
 
 import 'flame.dart';
 import 'palette.dart';
