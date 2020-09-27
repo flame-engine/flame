@@ -235,6 +235,26 @@ Currently we have a very basic implementation of a Tiled component. This API use
 
 An example of how to use the API can be found [here](/doc/examples/tiled).
 
+# Isometric Tile Map Component
+
+This component allows you to render an isometric map based on a cartesian matrix of blocks and an isometric tileset.
+
+A simple example on how to use it:
+
+```dart
+  // creates a tileset, the block ids are automatically assigned sequentially starting at 0, from left to right and then top to bottom.
+  final tileset = await IsometricTileset.load('tileset.png', 32);
+  // each element is a block id, -1 means nothing
+  final matrix = [[0, 1, 0], [1, 0, 0], [1, 1, 1]];
+  add(IsometricTileMapComponent(tileset, matrix));
+```
+
+It also provides methods for converting coordinates so you can handle clicks, hovers, render entities on top of tiles, add a selector, etc.
+
+A more in-depth example can be found [here](/doc/examples/isometric).
+
+![An example of a isometric map with selector](images/isometric.png)
+
 # Nine Tile Box Component
 
 A Nine Tile Box is a rectangle drawn using a grid sprite.
