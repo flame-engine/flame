@@ -19,7 +19,7 @@ class SpriteWidget extends StatelessWidget {
   SpriteWidget({
     @required this.sprite,
     this.anchor = Anchor.topLeft,
-  }) : assert(sprite.loaded(), 'Sprite must be loaded');
+  });
 
   @override
   Widget build(_) {

@@ -16,7 +16,7 @@ class _Painter extends widgets.CustomPainter {
   });
 
   Sprite _getSpriteTile(double x, double y) =>
-      Sprite.fromImage(image, x: x, y: y, width: tileSize, height: tileSize);
+      Sprite(image, x: x, y: y, width: tileSize, height: tileSize);
 
   @override
   void paint(Canvas canvas, Size size) {
