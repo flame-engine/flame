@@ -9,7 +9,6 @@ import 'dart:ui';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Flame.images.loadAll(['creature.png', 'chopper.png']);
 
   final Size size = await Flame.util.initialDimensions();
   final game = MyGame(size);
@@ -23,8 +22,8 @@ class MyGame extends BaseGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    chopper = await Flame.images.load('chopper.png');
-    creature = await Flame.images.load('creature.png');
+    chopper = await images.load('chopper.png');
+    creature = await images.load('creature.png');
 
     animation = SpriteAnimation.sequenced(
       chopper,
@@ -57,20 +56,11 @@ class MyGame extends BaseGame with TapDetector {
     animationComponent.y = y - textureHeight / 2;
 
     add(animationComponent);
-  }
-
-  @override
-  void onTapDown(TapDownDetails evt) {
-    addAnimation(evt.globalPosition.dx, evt.globalPosition.dy);
-  }
-
-  MyGame(Size screenSize) {
-    size = screenSize;
 
     const s = 100.0;
-    final animationComponent = SpriteAnimationComponent(s, s, animation);
-    animationComponent.x = size.width / 2 - s;
-    animationComponent.y = s;
+    final animationComponent2 = SpriteAnimationComponent(s, s, animation);
+    animationComponent2.x = size.width / 2 - s;
+    animationComponent2.y = s;
 
     final reversedAnimationComponent = SpriteAnimationComponent(
       s,
@@ -80,7 +70,16 @@ class MyGame extends BaseGame with TapDetector {
     reversedAnimationComponent.x = size.width / 2;
     reversedAnimationComponent.y = s;
 
-    add(animationComponent);
+    add(animationComponent2);
     add(reversedAnimationComponent);
+  }
+
+  @override
+  void onTapDown(TapDownDetails evt) {
+    addAnimation(evt.globalPosition.dx, evt.globalPosition.dy);
+  }
+
+  MyGame(Size screenSize) {
+    size = screenSize;
   }
 }

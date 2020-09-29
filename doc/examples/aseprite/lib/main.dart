@@ -17,7 +17,7 @@ class MyGame extends BaseGame {
 
   @override
   Future<void> onLoad() async {
-    final image = await Flame.images.load('chopper.png');
+    final image = await images.load('chopper.png');
     final animation = await SpriteAnimation.fromAsepriteData(
       image,
       'chopper.json',

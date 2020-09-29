@@ -18,8 +18,10 @@ class Images {
 
   Image fromCache(String fileName) {
     final image = _loadedFiles[fileName];
-    assert(image?.loadedImage != null,
-        'Tried to access an inexistent entry on cache "$fileName"');
+    assert(
+      image?.loadedImage != null,
+      'Tried to access an inexistent entry on cache "$fileName", make sure to use the load method before accessing a file on the cache',
+    );
     return image.loadedImage;
   }
 
