@@ -3,6 +3,16 @@
 ## 1.0.0
  - Move all box2d related code and examples to the flame_box2d repo
  - Rename Animation to SpriteAnimation
+ - Create extension of Vector2 and unify all tuples to use that class
+ - Remove Position class in favor of new Vector2 extension
+ - Remove Box2D as a dependency
+
+## 0.27.0
+ - Improved the accuracy of the `FPSCounter` by using Flutter's internal frame timings.
+ - Adding MouseMovementDetector
+ - Adding ScrollDetector
+ - Fixes BGM error
+ - Adding Isometric Tile Maps
 
 ## 0.26.0
  - Improving Flame image auto cache

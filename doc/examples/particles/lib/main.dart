@@ -21,7 +21,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/time.dart' as flame_time;
 import 'package:flame/particle.dart';
-import 'package:flame/position.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
 import 'package:flame/text_config.dart';
@@ -33,7 +33,7 @@ class MyGame extends BaseGame {
   /// Defines dimensions of the sample
   /// grid to be displayed on the screen,
   /// 5x5 in this particular case
-  static const gridSize = 5;
+  static const gridSize = 5.0;
   static const steps = 5;
 
   /// Miscellaneous values used
@@ -48,17 +48,15 @@ class MyGame extends BaseGame {
   /// Defines the lifespan of all the particles in these examples
   final sceneDuration = const Duration(seconds: 1);
 
-  Offset cellSize;
-  Offset halfCellSize;
+  Vector2 cellSize;
+  Vector2 halfCellSize;
 
   @override
   bool recordFps() => true;
 
-  MyGame({
-    Size screenSize,
-  }) {
+  MyGame({Vector2 screenSize}) {
     size = screenSize;
-    cellSize = Offset(size.width / gridSize, size.height / gridSize);
+    cellSize = size / gridSize;
     halfCellSize = cellSize * .5;
 
     // Spawn new particles every second
@@ -104,17 +102,17 @@ class MyGame extends BaseGame {
     // as per defined grid parameters
     do {
       final particle = particles.removeLast();
-      final col = particles.length % gridSize;
-      final row = particles.length ~/ gridSize;
+      final double col = particles.length % gridSize;
+      final double row = (particles.length ~/ gridSize).toDouble();
       final cellCenter =
-          cellSize.scale(col.toDouble(), row.toDouble()) + (cellSize * .5);
+          (cellSize.clone()..multiply(Vector2(col, row))) + (cellSize * .5);
 
       add(
         // Bind all the particles to a [Component] update
         // lifecycle from the [BaseGame].
         TranslatedParticle(
           lifespan: 1,
-          offset: cellCenter,
+          offset: cellCenter.toOffset(),
           child: particle,
         ).asComponent(),
       );
@@ -168,10 +166,10 @@ class MyGame extends BaseGame {
     return Particle.generate(
       count: 5,
       generator: (i) {
-        final currentColumn = (cellSize.dx / 5) * i - halfCellSize.dx;
+        final currentColumn = (cellSize.x / 5) * i - halfCellSize.x;
         return MovingParticle(
-          from: Offset(currentColumn, -halfCellSize.dy),
-          to: Offset(currentColumn, halfCellSize.dy),
+          from: Offset(currentColumn, -halfCellSize.y),
+          to: Offset(currentColumn, halfCellSize.y),
           child: CircleParticle(
             radius: 2.0,
             paint: Paint()..color = Colors.blue,
@@ -240,7 +238,7 @@ class MyGame extends BaseGame {
     return ComputedParticle(
       renderer: (canvas, particle) => canvas.drawCircle(
         Offset.zero,
-        particle.progress * halfCellSize.dx,
+        particle.progress * halfCellSize.x,
         Paint()
           ..color = Color.lerp(
             Colors.red,
@@ -264,7 +262,7 @@ class MyGame extends BaseGame {
 
         canvas.drawCircle(
           Offset.zero,
-          (1 - steppedProgress) * halfCellSize.dx,
+          (1 - steppedProgress) * halfCellSize.x,
           Paint()
             ..color = Color.lerp(
               Colors.red,
@@ -300,7 +298,7 @@ class MyGame extends BaseGame {
   /// be reused across particles. See example below for more details.
   Particle imageParticle() {
     return ImageParticle(
-      size: const Size.square(24),
+      size: Vector2.all(24),
       image: images.fromCache('zap.png'),
     );
   }
@@ -315,8 +313,8 @@ class MyGame extends BaseGame {
     const count = 9;
     const perLine = 3;
     const imageSize = 24.0;
-    final colWidth = cellSize.dx / perLine;
-    final rowHeight = cellSize.dy / perLine;
+    final colWidth = cellSize.x / perLine;
+    final rowHeight = cellSize.y / perLine;
 
     reusableImageParticle ??= imageParticle();
 
@@ -324,8 +322,8 @@ class MyGame extends BaseGame {
       count: count,
       generator: (i) => TranslatedParticle(
           offset: Offset(
-            (i % perLine) * colWidth - halfCellSize.dx + imageSize,
-            (i ~/ perLine) * rowHeight - halfCellSize.dy + imageSize,
+            (i % perLine) * colWidth - halfCellSize.x + imageSize,
+            (i ~/ perLine) * rowHeight - halfCellSize.y + imageSize,
           ),
           child: reusableImageParticle),
     );
@@ -392,7 +390,7 @@ class MyGame extends BaseGame {
   Particle spriteParticle() {
     return SpriteParticle(
       sprite: Sprite(images.fromCache('zap.png')),
-      size: Position.fromOffset(cellSize * .5),
+      size: cellSize * .5,
     );
   }
 
@@ -401,7 +399,7 @@ class MyGame extends BaseGame {
   Particle animationParticle() {
     return SpriteAnimationParticle(
       animation: getBoomAnimation(),
-      size: Position(128, 128),
+      size: Vector2(128, 128),
     );
   }
 
@@ -411,8 +409,8 @@ class MyGame extends BaseGame {
   /// which is independent from the parent [Particle].
   Particle componentParticle() {
     return MovingParticle(
-      from: -halfCellSize * .2,
-      to: halfCellSize * .2,
+      from: (-halfCellSize * .2).toOffset(),
+      to: (halfCellSize * .2).toOffset(),
       curve: SineCurve(),
       child: ComponentParticle(component: trafficLight),
     );
@@ -479,19 +477,22 @@ class MyGame extends BaseGame {
       ),
     );
 
+    final cellSizeOffset = cellSize.toOffset();
+    final halfCellSizeOffset = halfCellSize.toOffset();
+
     return ComposedParticle(children: <Particle>[
       rect
           .rotating(to: pi / 2)
-          .moving(to: -cellSize)
+          .moving(to: -cellSizeOffset)
           .scaled(2)
-          .accelerated(acceleration: halfCellSize * 5)
-          .translated(halfCellSize),
+          .accelerated(acceleration: halfCellSizeOffset * 5)
+          .translated(halfCellSizeOffset),
       rect
           .rotating(to: -pi)
-          .moving(to: cellSize.scale(1, -1))
+          .moving(to: cellSizeOffset.scale(1, -1))
           .scaled(2)
-          .translated(halfCellSize.scale(-1, 1))
-          .accelerated(acceleration: halfCellSize.scale(-5, 5))
+          .translated(halfCellSizeOffset.scale(-1, 1))
+          .accelerated(acceleration: halfCellSizeOffset.scale(-5, 5))
     ]);
   }
 
@@ -503,15 +504,18 @@ class MyGame extends BaseGame {
     super.render(canvas);
 
     if (debugMode()) {
-      fpsTextConfig.render(canvas, '${fps(120).toStringAsFixed(2)}fps',
-          Position(0, size.height - 24));
+      fpsTextConfig.render(
+          canvas, '${fps(120).toStringAsFixed(2)}fps', Vector2(0, size.y - 24));
     }
   }
 
   /// Returns random [Offset] within a virtual
   /// grid cell
   Offset randomCellOffset() {
-    return cellSize.scale(rnd.nextDouble(), rnd.nextDouble()) - halfCellSize;
+    return Offset(
+      cellSize.x * rnd.nextDouble() - halfCellSize.x,
+      cellSize.y * rnd.nextDouble() - halfCellSize.y,
+    );
   }
 
   /// Returns random [Color] from primary swatches
@@ -550,6 +554,7 @@ class MyGame extends BaseGame {
 Future<BaseGame> loadGame() async {
   Flame.initializeWidget();
   final gameSize = await Flame.util.initialDimensions();
+  WidgetsFlutterBinding.ensureInitialized();
 
   return MyGame(screenSize: gameSize);
 }

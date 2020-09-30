@@ -1,10 +1,9 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
-import '../position.dart';
-
-import 'game_render_box.dart';
+import '../extensions/vector2.dart';
 import 'game.dart';
+import 'game_render_box.dart';
 
 /// This a widget to embed a game inside the Widget tree. You can use it in pair with [BaseGame] or any other more complex [Game], as desired.
 ///
@@ -14,7 +13,7 @@ import 'game.dart';
 /// You can bind Gesture Recognizers immediately around this to add controls to your widgets, with easy coordinate conversions.
 class EmbeddedGameWidget extends LeafRenderObjectWidget {
   final Game game;
-  final Position size;
+  final Vector2 size;
 
   EmbeddedGameWidget(this.game, {this.size});
 

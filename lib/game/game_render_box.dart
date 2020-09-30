@@ -5,8 +5,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
-import 'game_loop.dart';
+import '../extensions/size.dart';
 import 'game.dart';
+import 'game_loop.dart';
 
 class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   BuildContext context;
@@ -15,6 +16,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
 
   GameRenderBox(this.context, this.game) {
     gameLoop = GameLoop(gameLoopCallback);
+    WidgetsBinding.instance.addTimingsCallback(game.onTimingsCallback);
   }
 
   @override
@@ -23,7 +25,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void performResize() {
     super.performResize();
-    game.resize(constraints.biggest);
+    game.resize(constraints.biggest.toVector2());
   }
 
   @override
@@ -53,6 +55,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     if (!attached) {
       return;
     }
+    // ignore: deprecated_member_use_from_same_package
     game.recordDt(dt);
     game.update(dt);
     markNeedsPaint();
@@ -61,8 +64,8 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void paint(PaintingContext context, Offset offset) {
     context.canvas.save();
-    context.canvas.translate(
-        game.builder.offset.dx + offset.dx, game.builder.offset.dy + offset.dy);
+    final delta = game.builder.offset + offset;
+    context.canvas.translate(delta.dx, delta.dy);
     game.render(context.canvas);
     context.canvas.restore();
   }

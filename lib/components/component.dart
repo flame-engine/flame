@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/painting.dart';
 
+import '../extensions/vector2.dart';
+
 /// This represents a Component for your game.
 ///
 /// Components can be bullets flying on the screen, a spaceship or your player's fighter.
@@ -22,7 +24,7 @@ abstract class Component {
   ///
   /// It receives the new size.
   /// You can use the [Resizable] mixin if you want an implementation of this hook that keeps track of the current size.
-  void resize(Size size) {}
+  void resize(Vector2 size) {}
 
   /// Whether this component has been loaded yet. If not loaded, [BaseGame] will not try to render it.
   ///
@@ -48,7 +50,7 @@ abstract class Component {
   /// If two components share the same priority, they will probably be drawn in the order they were added.
   int priority() => 0;
 
-  /// Called when the component has been added and preperad by the game instance.
+  /// Called when the component has been added and prepared by the game instance.
   ///
   /// This can be used to make initializations on your component as, when this method is called,
   /// things like resize (and other mixins) are already set and usable.

@@ -4,6 +4,8 @@
 
 Inside `package:flame/gestures.dart` you can find a whole set of `mixin`s which can be included on your game class instance to be able to receive touch input events. Below you can see the full list of these `mixin`s and its methods:
 
+
+## Touch and mouse detectors
 ```
 - TapDetector
   - onTap
@@ -68,11 +70,19 @@ Inside `package:flame/gestures.dart` you can find a whole set of `mixin`s which 
   - onReceiveDrag
 ```
 
+Mouse only events
+```
+ - MouseMovementDetector
+  - onMouseMove
+ - ScrollDetector
+  - onScroll
+```
+
 Many of these detectors can conflict with each other. For example, you can't register both Vertical and Horizontal drags, so not all of them can be used together.
 
 It is also not possible to mix advanced detectors (`MultiTouch*`) with basic detectors as they will *always win the gesture arena* and the basic detectors will never be triggered. So for example, you can use both `MultiTouchDragDetector` and `MultiTouchDragDetector` together, but if you try to use `MultiTouchTapDetector` and `PanDetector`, no events will be triggered for the later.
 
-Flame's GestureApi is provided byt Flutter's Gestures Widgets, including [GestureDetector widget](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html) and [RawGestureDetector widget](https://api.flutter.dev/flutter/widgets/RawGestureDetector-class.html), you can also read more about Flutter's gestures [here](https://api.flutter.dev/flutter/gestures/gestures-library.html).
+Flame's GestureApi is provided byt Flutter's Gestures Widgets, including [GestureDetector widget](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html), [RawGestureDetector widget](https://api.flutter.dev/flutter/widgets/RawGestureDetector-class.html) and [MouseRegion widget](https://api.flutter.dev/flutter/widgets/MouseRegion-class.html), you can also read more about Flutter's gestures [here](https://api.flutter.dev/flutter/gestures/gestures-library.html).
 
 ## Example
 

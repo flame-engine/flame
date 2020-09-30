@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
-import '../sprite.dart';
 import 'package:meta/meta.dart';
+
+import '../sprite.dart';
 
 class SpriteButton extends StatefulWidget {
   final VoidCallback onPressed;

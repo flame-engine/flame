@@ -1,23 +1,20 @@
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
 
-import 'dart:ui';
-import 'dart:math';
-
-import './effects.dart';
-import '../position.dart';
+import '../extensions/vector2.dart';
+import 'effects.dart';
 
 double _direction(double p, double d) => (p - d).sign;
-double _size(double a, double b) => (a - b).abs();
+double _length(double a, double b) => (a - b).abs();
 
 class ScaleEffect extends PositionComponentEffect {
-  Size size;
+  Vector2 size;
   double speed;
   Curve curve;
 
-  Size _original;
-  Size _diff;
-  final Position _dir = Position.empty();
+  Vector2 _original;
+  Vector2 _diff;
+  final Vector2 _dir = Vector2.zero();
 
   ScaleEffect({
     @required this.size,
@@ -32,19 +29,19 @@ class ScaleEffect extends PositionComponentEffect {
   void initialize(_comp) {
     super.initialize(_comp);
     if (!isAlternating) {
-      endSize = Position.fromSize(size);
+      endSize = size.clone();
     }
 
-    _original = Size(component.width, component.height);
-    _diff = Size(
-      _size(_original.width, size.width),
-      _size(_original.height, size.height),
+    _original = component.toSize();
+    _diff = Vector2(
+      _length(_original.x, size.x),
+      _length(_original.y, size.y),
     );
 
-    _dir.x = _direction(size.width, _original.width);
-    _dir.y = _direction(size.height, _original.height);
+    _dir.x = _direction(size.x, _original.x);
+    _dir.y = _direction(size.y, _original.y);
 
-    final scaleDistance = sqrt(pow(_diff.width, 2) + pow(_diff.height, 2));
+    final scaleDistance = _diff.length;
     travelTime = scaleDistance / speed;
   }
 
@@ -52,8 +49,6 @@ class ScaleEffect extends PositionComponentEffect {
   void update(double dt) {
     super.update(dt);
     final double c = curve?.transform(percentage) ?? 1.0;
-
-    component.width = _original.width + _diff.width * c * _dir.x;
-    component.height = _original.height + _diff.height * c * _dir.y;
+    component.setBySize(_original + (_diff.clone()..multiply(_dir)) * c);
   }
 }

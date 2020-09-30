@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
-import './effects.dart';
 import '../components/position_component.dart';
+import 'effects.dart';
 
 class SequenceEffect extends PositionComponentEffect {
   final List<PositionComponentEffect> effects;
@@ -27,12 +27,12 @@ class SequenceEffect extends PositionComponentEffect {
     super.initialize(_comp);
     _currentIndex = 0;
     final originalSize = _comp.toSize();
-    final originalPosition = _comp.toPosition();
+    final originalPosition = _comp.position;
     final originalAngle = _comp.angle;
     effects.forEach((effect) {
       effect.reset();
       _comp.setBySize(endSize);
-      _comp.setByPosition(endPosition);
+      _comp.setPosition(endPosition);
       _comp.angle = endAngle;
       effect.initialize(_comp);
       endSize = effect.endSize;
@@ -44,7 +44,7 @@ class SequenceEffect extends PositionComponentEffect {
       (time, effect) => time + effect.totalTravelTime,
     );
     component.setBySize(originalSize);
-    component.setByPosition(originalPosition);
+    component.setPosition(originalPosition);
     component.angle = originalAngle;
     currentEffect = effects.first;
     _currentWasAlternating = currentEffect.isAlternating;

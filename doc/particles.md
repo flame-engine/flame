@@ -226,7 +226,7 @@ game.add(
     ParticleComponent(
         particle: SpriteParticle(
           sprite: Sprite('sprite.png'),
-          size: Position(64, 64),
+          size: Vector2(64, 64),
         )
     )
 );
