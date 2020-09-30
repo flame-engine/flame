@@ -24,7 +24,7 @@ class MyGame extends BaseGame {
     );
     final spriteSize = Vector2.all(200);
     final animationComponent = SpriteAnimationComponent(spriteSize, animation)
-      ..position = size / 2 - Vector2(100, 100);
+      ..position = size / 2 - Vector2.all(100);
 
     add(animationComponent);
   }

@@ -52,6 +52,6 @@ class MyGame extends BaseGame {
 
     add(Ball(size)
       ..y = (size.y / 2) - 50
-      ..size = Vector2(100, 100));
+      ..size = Vector2.all(100));
   }
 }

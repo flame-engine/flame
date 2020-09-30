@@ -19,9 +19,9 @@ extension Vector2Extension on Vector2 {
   /// argument [Vector2]
   Rect toPositionedRect(Vector2 size) => Rect.fromLTWH(x, y, size.x, size.y);
 
-  /// Creates a [Rect] starting in origo and going the [Vector2]
+  /// Creates a [Rect] starting in origin and going the [Vector2]
   Rect toRect() => Rect.fromLTWH(0, 0, x, y);
-
+  
   /// Linearly interpolate towards another Vector2
   void lerp(Vector2 to, double t) {
     setFrom(this + (to - this) * t);

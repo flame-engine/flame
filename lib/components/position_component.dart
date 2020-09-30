@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:ui' hide Offset;
 
 import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
@@ -8,6 +8,7 @@ import '../anchor.dart';
 import '../effects/effects.dart';
 import '../game.dart';
 import '../text_config.dart';
+import '../extensions/offset.dart';
 import '../extensions/vector2.dart';
 import 'component.dart';
 
@@ -41,9 +42,21 @@ abstract class PositionComponent extends Component {
 
   /// Width (size) that this component is rendered with.
   double get width => size.x;
+  set width(double width) => size.x = width;
 
   /// Height (size) that this component is rendered with.
   double get height => size.y;
+  set height(double height) => size.y = height;
+
+  /// Get the top left position regardless of the anchor
+  Vector2 get anchorPosition {
+    return position - anchor.relativePosition.clone()..multiply(size);
+  }
+
+  /// Set the top left position regardless of the anchor
+  set anchorPosition(Vector2 position) {
+    this.position = position + anchor.relativePosition.clone()..multiply(size);
+  }
 
   /// Angle (with respect to the x-axis) this component should be rendered with.
   /// It is rotated around its anchor.
@@ -80,23 +93,13 @@ abstract class PositionComponent extends Component {
 
   /// Returns the relative position/size of this component.
   /// Relative because it might be translated by their parents (which is not considered here).
-  Rect toRect() {
-    return Rect.fromLTWH(
-      x - anchor.relativePosition.x * width,
-      y - anchor.relativePosition.y * height,
-      width,
-      height,
-    );
-  }
+  Rect toRect() => anchorPosition.toPositionedRect(size);
 
-  /// Mutates x, y, width and height using the provided [rect] as basis.
+  /// Mutates position and size using the provided [rect] as basis.
   /// This is a relative rect, same definition that [toRect] use (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
   void setByRect(Rect rect) {
-    position.setValues(
-      rect.left + anchor.relativePosition.x * rect.width,
-      rect.top + anchor.relativePosition.y * rect.height,
-    );
     size.setValues(rect.width, rect.height);
+    anchorPosition = rect.topLeft.toVector2();
   }
 
   double angleTo(PositionComponent c) => position.angleTo(c.position);
@@ -125,9 +128,8 @@ abstract class PositionComponent extends Component {
     canvas.translate(x, y);
 
     canvas.rotate(angle);
-    final double dx = -anchor.relativePosition.x * width;
-    final double dy = -anchor.relativePosition.y * height;
-    canvas.translate(dx, dy);
+    final Vector2 delta = -anchor.relativePosition.clone()..multiply(size);
+    canvas.translate(delta.x, delta.y);
 
     // Handle inverted rendering by moving center and flipping.
     if (renderFlipX || renderFlipY) {
