@@ -19,12 +19,12 @@ void main() {
       expect(c.y, 0.0);
     });
 
-    test('test get/set widt/height or size', () {
+    test('test get/set width/height or size', () {
       final PositionComponent c = SpriteComponent();
       c.width = 2.2;
       c.height = 3.4;
-      expect(c.toSize().x, 2.2);
-      expect(c.toSize().y, 3.4);
+      expect(c.size.x, 2.2);
+      expect(c.size.y, 3.4);
 
       c.setBySize(Vector2(1.0, 0.0));
       expect(c.width, 1.0);

@@ -26,7 +26,7 @@ class SequenceEffect extends PositionComponentEffect {
   void initialize(PositionComponent _comp) {
     super.initialize(_comp);
     _currentIndex = 0;
-    final originalSize = _comp.toSize();
+    final originalSize = _comp.size;
     final originalPosition = _comp.position;
     final originalAngle = _comp.angle;
     effects.forEach((effect) {
