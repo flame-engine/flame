@@ -60,7 +60,7 @@ class MyGame extends BaseGame with TapDetector {
 
     const s = 100.0;
     final animationComponent2 = SpriteAnimationComponent(s, s, animation);
-    animationComponent2.x = size.width / 2 - s;
+    animationComponent2.x = size.x / 2 - s;
     animationComponent2.y = s;
 
     final reversedAnimationComponent = SpriteAnimationComponent(
