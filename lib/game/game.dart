@@ -12,7 +12,6 @@ import '../extensions/vector2.dart';
 import '../keyboard.dart';
 import 'widget_builder.dart';
 
-
 /// Represents a generic game.
 ///
 /// Subclass this to implement the [update] and [render] methods.
