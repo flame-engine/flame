@@ -16,17 +16,6 @@ extension RectExtension on Rect {
 // Until [extension] will allow static methods we need to keep these functions
 // in a utility class
 class RectFactory {
-  /// Creates a [Rect] with the size of [Size]
-  static Rect fromSize(Size size) {
-    return Rect.fromLTWH(0, 0, size.width, size.height);
-  }
-
-  /// Creates a [Rect] having its left upper corner in start and its right
-  /// bottom corner in end
-  static Rect fromVectors(Vector2 start, Vector2 end) {
-    return Rect.fromLTWH(start.x, start.y, end.x, end.y);
-  }
-
   /// Creates bounds in from of a [Rect] from a list of [Vector2]
   static Rect fromBounds(List<Vector2> pts) {
     final double minx = pts.map((e) => e.x).reduce(min);

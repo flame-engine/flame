@@ -23,10 +23,7 @@ class SpriteComponent extends PositionComponent {
 
   SpriteComponent();
 
-  SpriteComponent.square(double size, String imagePath)
-      : this.rectangle(Vector2(size, size), imagePath);
-
-  SpriteComponent.rectangle(Vector2 size, String imagePath)
+  SpriteComponent.fromImagePath(Vector2 size, String imagePath)
       : this.fromSprite(size, Sprite(imagePath));
 
   SpriteComponent.fromSprite(Vector2 size, this.sprite) {

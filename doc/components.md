@@ -14,13 +14,13 @@ The most commonly used implementation, `SpriteComponent`, can be created with a 
     Sprite sprite = Sprite('player.png');
 
     final size = Vector2.all(128.0);
-    var player = SpriteComponent.fromSprite(size, sprite); // width, height, sprite
+    var player = SpriteComponent.fromSprite(size, sprite);
 
     // screen coordinates
-    player.position = ... // Vector2(0.0, 0,0) by default
+    player.position = ... // Vector2(0.0, 0.0) by default
     player.angle = ... // 0 by default
 
-    player.render(canvas); // it will render only if the image is loaded and the x, y, width and height parameters are not null
+    player.render(canvas); // it will render only if the image is loaded and the position and size parameters are not null
 ```
 
 In the event that you want to easily change the direction of your components rendering, you can also use
@@ -54,19 +54,30 @@ This component uses an instance of the [Animation](/doc/images.md#Animation) cla
 This will create a simple three frame animation
 
 ```dart
-    List<Sprite> sprites = [0, 1, 2].map((i) => new Sprite('player_${i}.png')).toList();
-    final size = Vector2(64.0, 64.0);
+    List<Sprite> sprites = [0, 1, 2].map((i) => Sprite('player_${i}.png')).toList();
+    final size = Vector2.all(64.0);
     this.player = AnimationComponent(size, new Animation.spriteList(sprites, stepTime: 0.01));
 ```
 
 If you have a sprite sheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](/doc/images.md#Animation)):
 
 ```dart
-    final size = Vector2(64.0, 64.0);
+    final size = Vector2.all(64.0);
     this.player = AnimationComponent.sequenced(size, 'player.png', 2);
 ```
 
 If you are not using `BaseGame`, don't forget this component needs to be update'd even if static, because the animation object needs to be ticked to move the frames.
+
+## SvgComponent
+
+This component uses an instance of `Svg` class to represent a Component that has a svg that is rendered on the game:
+
+```dart
+    Svg svg = Svg('android.svg');
+    SvgComponent android = SvgComponent.fromSvg(100, 100, svg);
+    android.x = 100;
+    android.y = 100;
+```
 
 ## FlareActor Component
 

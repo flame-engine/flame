@@ -8,10 +8,9 @@ import 'package:flame/extensions/vector2.dart';
 class Square extends PositionComponent {
   final Paint _paint;
 
-  Square(this._paint, double x, double y, {double angle = 0.0}) {
-    size = Vector2(width, height);
-    this.x = x;
-    this.y = y;
+  Square(this._paint, Vector2 position, {double angle = 0.0}) {
+    size = Vector2.all(100.0);
+    this.position = position;
     this.angle = angle;
     anchor = Anchor.center;
   }

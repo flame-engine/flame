@@ -22,10 +22,9 @@ class TapableSquare extends PositionComponent with Tapable {
 
   bool _beenPressed = false;
 
-  TapableSquare({double y = 100, double x = 100}) {
+  TapableSquare({Vector2 position}) {
     size = Vector2.all(100);
-    this.x = x;
-    this.y = y;
+    this.position = position ?? Vector2.all(100);
   }
 
   @override
@@ -52,7 +51,7 @@ class TapableSquare extends PositionComponent with Tapable {
 
 class MyGame extends BaseGame with HasTapableComponents {
   MyGame() {
-    add(TapableSquare(y: 100));
-    add(TapableSquare(y: 250));
+    add(TapableSquare());
+    add(TapableSquare()..y = 250);
   }
 }

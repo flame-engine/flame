@@ -85,7 +85,7 @@ class SpriteAnimation {
     amountPerRow ??= amount;
     texturePosition ??= Vector2.zero();
     frames = List<SpriteAnimationFrame>(amount);
-    for (var i = 0; i < amount; i++) {
+    for (int i = 0; i < amount; i++) {
       final position = Vector2(
         texturePosition.x + (i % amountPerRow) * textureSize.x,
         texturePosition.y + (i ~/ amountPerRow) * textureSize.y,
@@ -111,7 +111,7 @@ class SpriteAnimation {
   }) : assert(amountPerRow == null || amount >= amountPerRow) {
     amountPerRow ??= amount;
     frames = List<SpriteAnimationFrame>(amount);
-    for (var i = 0; i < amount; i++) {
+    for (int i = 0; i < amount; i++) {
       final position = Vector2(
         texturePosition.x + (i % amountPerRow) * textureSize.x,
         texturePosition.y + (i ~/ amountPerRow) * textureSize.y,

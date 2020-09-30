@@ -30,7 +30,8 @@ class FlareComponent extends PositionComponent {
     }
   }
 
-  void updateSize(Vector2 newSize) {
+  @override
+  set size(Vector2 newSize) {
     super.size = newSize;
     if (loaded()) {
       _flareAnimation.size = size;
