@@ -1,6 +1,6 @@
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/position.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/components/sprite_component.dart';
 import 'package:flame/components/mixins/resizable.dart';
 import 'package:flame/text_config.dart';
@@ -36,14 +36,14 @@ class AndroidComponent extends SpriteComponent with Resizable {
     final rect = toRect();
 
     if ((x <= 0 && xDirection == -1) ||
-        (rect.right >= size.width && xDirection == 1)) {
+        (rect.right >= size.x && xDirection == 1)) {
       xDirection = xDirection * -1;
     }
 
     y += yDirection * SPEED * dt;
 
     if ((y <= 0 && yDirection == -1) ||
-        (rect.bottom >= size.height && yDirection == 1)) {
+        (rect.bottom >= size.y && yDirection == 1)) {
       yDirection = yDirection * -1;
     }
   }
@@ -86,7 +86,7 @@ class MyGame extends BaseGame {
     super.render(canvas);
 
     if (debugMode()) {
-      fpsTextConfig.render(canvas, fps(120).toString(), Position(0, 50));
+      fpsTextConfig.render(canvas, fps(120).toString(), Vector2(0, 50));
     }
   }
 }

@@ -2,6 +2,7 @@ import 'package:flame/gestures.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/sprite_animation.dart';
 import 'package:flame/components/sprite_animation_component.dart';
 import 'package:flutter/material.dart' hide Image;
@@ -10,7 +11,7 @@ import 'dart:ui';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final Size size = await Flame.util.initialDimensions();
+  final Vector2 size = await Flame.util.initialDimensions();
   final game = MyGame(size);
   runApp(game.widget);
 }
@@ -67,7 +68,7 @@ class MyGame extends BaseGame with TapDetector {
       s,
       animation.reversed(),
     );
-    reversedAnimationComponent.x = size.width / 2;
+    reversedAnimationComponent.x = size.x / 2;
     reversedAnimationComponent.y = s;
 
     add(animationComponent2);
@@ -79,7 +80,7 @@ class MyGame extends BaseGame with TapDetector {
     addAnimation(evt.globalPosition.dx, evt.globalPosition.dy);
   }
 
-  MyGame(Size screenSize) {
+  MyGame(Vector2 screenSize) {
     size = screenSize;
   }
 }
