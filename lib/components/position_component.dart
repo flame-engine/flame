@@ -49,15 +49,12 @@ abstract class PositionComponent extends Component {
   set height(double height) => size.y = height;
 
   /// Get the top left position regardless of the anchor
-  Vector2 get anchorPosition {
-    return position - anchor.relativePosition.clone()
-      ..multiply(size);
-  }
+  Vector2 get anchorPosition => anchor.translate(position, size);
 
   /// Set the top left position regardless of the anchor
   set anchorPosition(Vector2 position) {
-    this.position = position + anchor.relativePosition.clone()
-      ..multiply(size);
+    this.position =
+        position + (anchor.relativePosition.clone()..multiply(size));
   }
 
   /// Angle (with respect to the x-axis) this component should be rendered with.
@@ -65,7 +62,7 @@ abstract class PositionComponent extends Component {
   double angle = 0.0;
 
   /// Anchor point for this component. This is where flame "grabs it".
-  /// The [x], [y] coordinates are relative to this point inside the component.
+  /// The [position] is relative to this point inside the component.
   /// The [angle] is rotated around this point.
   Anchor anchor = Anchor.topLeft;
 
