@@ -247,7 +247,8 @@ A simple example on how to use it:
 
 ```dart
   // creates a tileset, the block ids are automatically assigned sequentially starting at 0, from left to right and then top to bottom.
-  final tileset = await IsometricTileset.load('tileset.png', 32);
+  final tilesetImage = await images.load('tileset.png');
+  final tileset = IsometricTileset(tilesetImage, 32);
   // each element is a block id, -1 means nothing
   final matrix = [[0, 1, 0], [1, 0, 0], [1, 1, 1]];
   add(IsometricTileMapComponent(tileset, matrix));

@@ -43,7 +43,7 @@ class MyGame extends BaseGame {
 
   SpriteAnimationComponent buildAnimation() {
     final ac = SpriteAnimationComponent(100, 100, animation);
-    ac.x = size.width / 2 - ac.width / 2;
+    ac.x = size.x / 2 - ac.x / 2;
     return ac;
   }
 

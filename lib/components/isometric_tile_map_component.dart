@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flame/components/position_component.dart';
 
-import '../flame.dart';
 import '../sprite.dart';
 import '../extensions/vector2.dart';
 
@@ -46,13 +45,7 @@ class IsometricTileset {
     final i = tileId % columns;
     final j = tileId ~/ columns;
     final s = size.toDouble();
-    return Sprite.fromImage(tileset, x: s * i, y: s * j, width: s, height: s);
-  }
-
-  /// Load a tileset based on a file name.
-  static Future<IsometricTileset> load(String fileName, int size) async {
-    final image = await Flame.images.load(fileName);
-    return IsometricTileset(image, size);
+    return Sprite(tileset, x: s * i, y: s * j, width: s, height: s);
   }
 }
 
