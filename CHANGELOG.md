@@ -6,6 +6,7 @@
  - Create extension of Vector2 and unify all tuples to use that class
  - Remove Position class in favor of new Vector2 extension
  - Remove Box2D as a dependency
+ - Rebuild of Images, Sprite and SpriteAnimation initialization
 
 ## 0.27.0
  - Improved the accuracy of the `FPSCounter` by using Flutter's internal frame timings.
