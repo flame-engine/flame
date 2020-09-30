@@ -3,7 +3,7 @@ import 'dart:convert' show base64;
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'flame.dart';
+import '../flame.dart';
 
 class Images {
   final Map<String, _ImageAssetLoader> _loadedFiles = {};
