@@ -50,12 +50,14 @@ abstract class PositionComponent extends Component {
 
   /// Get the top left position regardless of the anchor
   Vector2 get anchorPosition {
-    return position - anchor.relativePosition.clone()..multiply(size);
+    return position - anchor.relativePosition.clone()
+      ..multiply(size);
   }
 
   /// Set the top left position regardless of the anchor
   set anchorPosition(Vector2 position) {
-    this.position = position + anchor.relativePosition.clone()..multiply(size);
+    this.position = position + anchor.relativePosition.clone()
+      ..multiply(size);
   }
 
   /// Angle (with respect to the x-axis) this component should be rendered with.
@@ -128,7 +130,8 @@ abstract class PositionComponent extends Component {
     canvas.translate(x, y);
 
     canvas.rotate(angle);
-    final Vector2 delta = -anchor.relativePosition.clone()..multiply(size);
+    final Vector2 delta = -anchor.relativePosition.clone()
+      ..multiply(size);
     canvas.translate(delta.x, delta.y);
 
     // Handle inverted rendering by moving center and flipping.
