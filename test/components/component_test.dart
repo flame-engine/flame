@@ -70,7 +70,7 @@ void main() {
       c.position = Vector2(0.0, 1.0);
       c.size = Vector2(2.0, 2.0);
       c.anchor = Anchor.center;
-      final anchorPosition = c.anchorPosition;
+      final anchorPosition = c.topLeftPosition;
       expect(anchorPosition.x, -1.0);
       expect(anchorPosition.y, 0.0);
     });

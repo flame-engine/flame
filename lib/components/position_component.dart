@@ -25,14 +25,14 @@ import 'component.dart';
 /// They are translated by this component's (x,y). They do not need to fit
 /// within this component's (width, height).
 abstract class PositionComponent extends Component {
-  /// The position of this component on the screen (measured from the top left corner).
+  /// The position of this component on the screen (relative to the anchor).
   Vector2 position = Vector2.zero();
 
-  /// X position of this component on the screen (measured from the top left corner).
+  /// X position of this component on the screen (relative to the anchor).
   double get x => position.x;
   set x(double x) => position.x = x;
 
-  /// Y position of this component on the screen (measured from the top left corner).
+  /// Y position of this component on the screen (relative to the anchor).
   double get y => position.y;
   set y(double y) => position.y = y;
 
@@ -49,10 +49,10 @@ abstract class PositionComponent extends Component {
   set height(double height) => size.y = height;
 
   /// Get the top left position regardless of the anchor
-  Vector2 get anchorPosition => anchor.translate(position, size);
+  Vector2 get topLeftPosition => anchor.translate(position, size);
 
   /// Set the top left position regardless of the anchor
-  set anchorPosition(Vector2 position) {
+  set topLeftPosition(Vector2 position) {
     this.position =
         position + (anchor.relativePosition.clone()..multiply(size));
   }
@@ -92,13 +92,13 @@ abstract class PositionComponent extends Component {
 
   /// Returns the relative position/size of this component.
   /// Relative because it might be translated by their parents (which is not considered here).
-  Rect toRect() => anchorPosition.toPositionedRect(size);
+  Rect toRect() => topLeftPosition.toPositionedRect(size);
 
   /// Mutates position and size using the provided [rect] as basis.
   /// This is a relative rect, same definition that [toRect] use (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
   void setByRect(Rect rect) {
     size.setValues(rect.width, rect.height);
-    anchorPosition = rect.topLeft.toVector2();
+    topLeftPosition = rect.topLeft.toVector2();
   }
 
   double angleTo(PositionComponent c) => position.angleTo(c.position);
