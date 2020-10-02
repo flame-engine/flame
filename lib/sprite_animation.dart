@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import 'package:flame/extensions/vector2.dart';
-
+import 'extensions/vector2.dart';
 import 'flame.dart';
 import 'sprite.dart';
 
@@ -139,17 +138,17 @@ class SpriteAnimation {
 
     final frames = jsonFrames.values.map((value) {
       final frameData = value['frame'];
-      final double x = frameData['x'];
-      final double y = frameData['y'];
-      final double width = frameData['w'];
-      final double height = frameData['h'];
+      final int x = frameData['x'];
+      final int y = frameData['y'];
+      final int width = frameData['w'];
+      final int height = frameData['h'];
 
       final stepTime = value['duration'] / 1000;
 
       final Sprite sprite = Sprite(
         imagePath,
-        position: Vector2(x, y),
-        size: Vector2(width, height),
+        position: Vector2Extension.fromInts(x, y),
+        size: Vector2Extension.fromInts(width, height),
       );
 
       return SpriteAnimationFrame(sprite, stepTime);
