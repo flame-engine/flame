@@ -44,4 +44,7 @@ extension Vector2Extension on Vector2 {
       scale(newLength.abs() / l);
     }
   }
+
+  /// Create a Vector2 with ints as input
+  static Vector2 fromInts(int x, int y) => Vector2(x.toDouble(), y.toDouble());
 }
