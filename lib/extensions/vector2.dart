@@ -15,11 +15,12 @@ extension Vector2Extension on Vector2 {
   /// Creates a [Point] from the [Vector2]
   Point toPoint() => Point(x, y);
 
-  /// Creates a [Rect] starting from [x, y] and having size [to].
-  Rect toRect(Vector2 to) => Rect.fromLTWH(x, y, to.x, to.y);
+  /// Creates a [Rect] starting from [x, y] and having the size of the
+  /// argument [Vector2]
+  Rect toPositionedRect(Vector2 size) => Rect.fromLTWH(x, y, size.x, size.y);
 
-  /// Creates a [Rect] starting in origin and having size [to].
-  Rect toOriginRect() => Rect.fromLTWH(0, 0, x, y);
+  /// Creates a [Rect] starting in origin and going the [Vector2]
+  Rect toRect() => Rect.fromLTWH(0, 0, x, y);
 
   /// Linearly interpolate towards another Vector2
   void lerp(Vector2 to, double t) {
@@ -43,4 +44,7 @@ extension Vector2Extension on Vector2 {
       scale(newLength.abs() / l);
     }
   }
+
+  /// Create a Vector2 with ints as input
+  static Vector2 fromInts(int x, int y) => Vector2(x.toDouble(), y.toDouble());
 }

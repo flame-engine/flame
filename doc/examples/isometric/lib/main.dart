@@ -25,7 +25,8 @@ class Selector extends SpriteComponent {
   bool show = false;
 
   Selector(double s)
-      : super.fromSprite(s, s, Sprite('selector.png', width: 32, height: 32));
+      : super.fromSprite(
+            Vector2.all(s), Sprite('selector.png', size: Vector2.all(32.0)));
 
   @override
   void render(Canvas canvas) {
@@ -81,6 +82,6 @@ class MyGame extends BaseGame with MouseMovementDetector {
     final screenPosition = event.position.toVector2();
     final block = base.getBlock(screenPosition);
     selector.show = base.containsBlock(block);
-    selector.setPosition(base.getBlockPosition(block) + topLeft);
+    selector.position = base.getBlockPosition(block) + topLeft;
   }
 }

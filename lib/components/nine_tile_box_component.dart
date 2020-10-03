@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
+import '../extensions/vector2.dart';
 import '../nine_tile_box.dart';
 import 'position_component.dart';
 
@@ -18,6 +19,6 @@ class NineTileBoxComponent extends PositionComponent {
   @override
   void render(Canvas c) {
     super.render(c);
-    nineTileBox.drawRect(c, toOriginRect());
+    nineTileBox.drawRect(c, size.toRect());
   }
 }
