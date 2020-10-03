@@ -16,6 +16,10 @@ class CombinedEffect extends PositionComponentEffect {
     bool isAlternating = false,
     Function onComplete,
   }) : super(isInfinite, isAlternating, onComplete: onComplete) {
+    assert(
+      effects.every((effect) => effect.component == null),
+      "No effects can be added to components from the start",
+    );
     final types = effects.map((e) => e.runtimeType);
     assert(
       types.toSet().length == types.length,
@@ -47,7 +51,9 @@ class CombinedEffect extends PositionComponentEffect {
     super.update(dt);
     effects.forEach((effect) => _updateEffect(effect, dt));
     if (effects.every((effect) => effect.hasFinished())) {
-      if (isInfinite) {
+      if (isAlternating && curveDirection.isNegative) {
+        effects.forEach((effect) => effect.isAlternating = true);
+      } else if (isInfinite) {
         reset();
       } else if (isAlternating && isMin()) {
         dispose();
@@ -59,7 +65,9 @@ class CombinedEffect extends PositionComponentEffect {
   void reset() {
     super.reset();
     effects.forEach((effect) => effect.reset());
-    initialize(component);
+    if (component != null) {
+      initialize(component);
+    }
   }
 
   @override
