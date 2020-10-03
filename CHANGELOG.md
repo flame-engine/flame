@@ -11,6 +11,8 @@
  - Use Vector2 for position and size on PositionComponent
  - Rename `resize` method on components to `onGameResize`
  - Make `Resizable` have a `gameSize` property instead of `size`
+ - Fix bug with CombinedEffect inside SequenceEffect
+ - Fix wrong end angle for relative rotational effects
 
 ## [next]
  - Fix spriteAsWidget deprecation message
