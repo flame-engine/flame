@@ -32,7 +32,7 @@ class RotateEffect extends PositionComponentEffect {
       endAngle = _comp.angle + radians;
     }
     _startAngle = component.angle;
-    _delta = isRelative ? radians : _startAngle + radians;
+    _delta = isRelative ? radians : radians - _startAngle;
     travelTime = (_delta / speed).abs();
   }
 
