@@ -27,8 +27,10 @@ class MyGame extends BaseGame {
 
   void initSprites() async {
     final r = Random();
-    List.generate(500, (i) => SpriteComponent.square(32, 'test.png'))
-        .forEach((sprite) {
+    List.generate(
+      500,
+      (i) => SpriteComponent.fromImagePath(Vector2.all(32), 'test.png'),
+    ).forEach((sprite) {
       sprite.x = r.nextInt(size.x.toInt()).toDouble();
       sprite.y = r.nextInt(size.y.toInt()).toDouble();
       add(sprite);

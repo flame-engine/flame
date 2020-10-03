@@ -16,13 +16,12 @@ class MyGame extends BaseGame {
   final animation = SpriteAnimation.sequenced(
     'chopper.png',
     4,
-    textureWidth: 48,
-    textureHeight: 48,
+    textureSize: Vector2.all(48),
     stepTime: 0.15,
   );
 
   SpriteAnimationComponent buildAnimation() {
-    final ac = SpriteAnimationComponent(100, 100, animation);
+    final ac = SpriteAnimationComponent(Vector2.all(100), animation);
     ac.x = size.x / 2 - ac.width / 2;
     return ac;
   }

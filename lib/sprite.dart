@@ -12,16 +12,14 @@ class Sprite {
 
   Sprite(
     String fileName, {
-    double x = 0.0,
-    double y = 0.0,
-    double width,
-    double height,
+    Vector2 position,
+    Vector2 size,
   }) {
+    position ??= Vector2.zero();
     Flame.images.load(fileName).then((img) {
-      width ??= img.width.toDouble();
-      height ??= img.height.toDouble();
+      size ??= Vector2(img.width.toDouble(), img.height.toDouble());
       image = img;
-      src = Rect.fromLTWH(x, y, width, height);
+      src = position.toPositionedRect(size);
     });
   }
 
@@ -100,7 +98,7 @@ class Sprite {
       return;
     }
     size ??= this.size;
-    renderRect(canvas, p.toRect(size), overridePaint: overridePaint);
+    renderRect(canvas, p.toPositionedRect(size), overridePaint: overridePaint);
   }
 
   void render(

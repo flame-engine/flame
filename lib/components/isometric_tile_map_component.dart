@@ -93,17 +93,14 @@ class IsometricTileMapComponent extends PositionComponent {
   void render(Canvas c) {
     super.render(c);
 
-    final size = Vector2(
-      effectiveTileSize.toDouble(),
-      effectiveTileSize.toDouble(),
-    );
+    final size = Vector2.all(effectiveTileSize.toDouble());
     for (int i = 0; i < matrix.length; i++) {
       for (int j = 0; j < matrix[i].length; j++) {
         final element = matrix[i][j];
         if (element != -1) {
           final sprite = tileset.getTile(element);
           final p = getBlockPositionInts(j, i);
-          sprite.renderRect(c, p.toRect(size));
+          sprite.renderRect(c, p.toPositionedRect(size));
         }
       }
     }

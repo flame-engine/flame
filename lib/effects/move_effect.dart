@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
 
@@ -43,6 +41,6 @@ class MoveEffect extends PositionComponentEffect {
   void update(double dt) {
     super.update(dt);
     final double progress = curve?.transform(percentage) ?? 1.0;
-    component.setPosition(_startPosition + _delta * progress);
+    component.position = _startPosition + _delta * progress;
   }
 }
