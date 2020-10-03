@@ -77,7 +77,6 @@ class SequenceEffect extends PositionComponentEffect {
           curveDirection.isNegative) {
         // Make the effect go in reverse
         currentEffect.isAlternating = true;
-        currentEffect.percentage = 1.0;
       }
     }
   }

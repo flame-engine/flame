@@ -1,3 +1,4 @@
+import 'package:flame/effects/combined_effect.dart';
 import 'package:flame/effects/move_effect.dart';
 import 'package:flame/effects/scale_effect.dart';
 import 'package:flame/effects/rotate_effect.dart';
@@ -46,7 +47,7 @@ class MyGame extends BaseGame with TapDetector {
       speed: 150.0,
       curve: Curves.easeIn,
       isInfinite: false,
-      isAlternating: true,
+      isAlternating: false,
     );
 
     final scale = ScaleEffect(
@@ -65,9 +66,14 @@ class MyGame extends BaseGame with TapDetector {
       isAlternating: false,
     );
 
+    final combination = CombinedEffect(
+      effects: [move2, rotate],
+      isAlternating: true,
+    );
+
     final sequence = SequenceEffect(
-      effects: [move1, scale, move2, rotate],
-      isInfinite: true,
+      effects: [move1, scale, combination],
+      isInfinite: false,
       isAlternating: true,
     );
     greenSquare.addEffect(sequence);
