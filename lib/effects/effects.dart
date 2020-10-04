@@ -60,7 +60,7 @@ abstract class PositionComponentEffect {
     if (isAlternating) {
       curveDirection = isMax() ? -1 : (isMin() ? 1 : curveDirection);
     } else if (isInfinite && isMax()) {
-      reset();
+      currentTime = 0.0;
     }
     final driftMultiplier = (isAlternating && isMax() ? 2 : 1) * curveDirection;
     if (!hasFinished()) {
