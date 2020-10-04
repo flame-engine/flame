@@ -64,7 +64,7 @@ class MyGame extends BaseGame with TapDetector {
 
     final rotate = RotateEffect(
       radians: (dx + dy) % pi,
-      speed: 2.0,
+      speed: 0.8,
       curve: Curves.decelerate,
       isInfinite: false,
       isAlternating: false,
