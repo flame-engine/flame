@@ -14,6 +14,7 @@
  - Make `Resizable` have a `gameSize` property instead of `size`
  - Fix bug with CombinedEffect inside SequenceEffect
  - Fix wrong end angle for relative rotational effects
+ - Use a list of Vector2 for Move effect to open up for more capabilities
 
 ## [next]
  - Fix spriteAsWidget deprecation message

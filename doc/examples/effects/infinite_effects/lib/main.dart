@@ -44,7 +44,7 @@ class MyGame extends BaseGame with TapDetector {
     orangeSquare.clearEffects();
 
     greenSquare.addEffect(MoveEffect(
-      destination: Vector2(dx, dy),
+      path: [Vector2(dx, dy)],
       speed: 250.0,
       curve: Curves.bounceInOut,
       isInfinite: true,
