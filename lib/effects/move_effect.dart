@@ -52,7 +52,7 @@ class MoveEffect extends PositionComponentEffect {
     if (isRelative) {
       Vector2 lastPosition = _startPosition;
       _movePath = [];
-      for(Vector2 v in path) {
+      for (Vector2 v in path) {
         final nextPosition = v + lastPosition;
         _movePath.add(nextPosition);
         lastPosition = nextPosition;
@@ -92,11 +92,11 @@ class MoveEffect extends PositionComponentEffect {
     }
     travelTime = pathLength / speed;
   }
-  
+
   @override
   void reset() {
     super.reset();
-    if(_percentagePath?.isNotEmpty ?? false) {
+    if (_percentagePath?.isNotEmpty ?? false) {
       _currentSubPath = _percentagePath.first;
     }
   }
@@ -117,7 +117,6 @@ class MoveEffect extends PositionComponentEffect {
     final double localPercentage =
         (progress - lastEndAt) / (_currentSubPath.endAt - lastEndAt);
     component.position = _currentSubPath.previous +
-        ((_currentSubPath.v - _currentSubPath.previous) *
-            localPercentage);
+        ((_currentSubPath.v - _currentSubPath.previous) * localPercentage);
   }
 }
