@@ -72,14 +72,15 @@ class MyGame extends BaseGame with TapDetector {
 
     final combination = CombinedEffect(
       effects: [move2, rotate],
-      isAlternating: true,
+      isAlternating: false,
+      isInfinite: true,
     );
 
     final sequence = SequenceEffect(
       effects: [move1, scale, combination],
-      isInfinite: false,
-      isAlternating: true,
+      isInfinite: true,
+      isAlternating: false,
     );
-    greenSquare.addEffect(sequence);
+    greenSquare.addEffect(combination);
   }
 }
