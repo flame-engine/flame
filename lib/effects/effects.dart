@@ -31,6 +31,11 @@ abstract class PositionComponentEffect {
   double driftTime = 0.0;
   int curveDirection = 1;
 
+  /// Used to be able to determine the start state of the component
+  Vector2 originalPosition;
+  double originalAngle;
+  Vector2 originalSize;
+  
   /// Used to be able to determine the end state of a sequence of effects
   Vector2 endPosition;
   double endAngle;
@@ -70,6 +75,9 @@ abstract class PositionComponentEffect {
   @mustCallSuper
   void initialize(PositionComponent _comp) {
     component = _comp;
+    originalPosition = component.position;
+    originalAngle = component.angle;
+    originalSize = component.size;
 
     /// You need to set the travelTime during the initialization of the
     /// extending effect
