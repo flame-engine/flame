@@ -44,9 +44,9 @@ class MyGame extends BaseGame with TapDetector {
 
     final move2 = MoveEffect(
       path: [
-        Vector2(dx, dy + 20),
-        Vector2(dx - 20, dy - 20),
-        Vector2(dx + 20, dy),
+        Vector2(dx, dy + 50),
+        Vector2(dx - 50, dy - 50),
+        Vector2(dx + 50, dy),
       ],
       speed: 150.0,
       curve: Curves.easeIn,
@@ -72,14 +72,15 @@ class MyGame extends BaseGame with TapDetector {
 
     final combination = CombinedEffect(
       effects: [move2, rotate],
-      isAlternating: true,
+      isAlternating: false,
+      isInfinite: true,
     );
 
     final sequence = SequenceEffect(
       effects: [move1, scale, combination],
-      isInfinite: false,
-      isAlternating: true,
+      isInfinite: true,
+      isAlternating: false,
     );
-    greenSquare.addEffect(sequence);
+    greenSquare.addEffect(combination);
   }
 }
