@@ -25,6 +25,7 @@ class MoveEffect extends PositionComponentEffect {
   double speed;
   Curve curve;
   Vector2 _startPosition;
+  Vector2 _peakPosition;
 
   MoveEffect({
     @required this.path,
@@ -52,7 +53,7 @@ class MoveEffect extends PositionComponentEffect {
     if (isRelative) {
       Vector2 lastPosition = _startPosition;
       _movePath = [];
-      for (Vector2 v in path) {
+      for(Vector2 v in path) {
         final nextPosition = v + lastPosition;
         _movePath.add(nextPosition);
         lastPosition = nextPosition;
@@ -60,10 +61,10 @@ class MoveEffect extends PositionComponentEffect {
     } else {
       _movePath = path;
     }
+    print(_movePath);
+    _peakPosition = isRelative ? path.last : path.last - _startPosition;
     if (!isAlternating) {
-      endPosition = _movePath.last;
-    } else {
-      endPosition = _startPosition;
+      endPosition = _peakPosition;
     }
 
     double pathLength = 0;
@@ -90,15 +91,8 @@ class MoveEffect extends PositionComponentEffect {
       );
       lastPosition = v;
     }
+    print(_percentagePath);
     travelTime = pathLength / speed;
-  }
-
-  @override
-  void reset() {
-    super.reset();
-    if (_percentagePath?.isNotEmpty ?? false) {
-      _currentSubPath = _percentagePath.first;
-    }
   }
 
   @override
@@ -117,6 +111,7 @@ class MoveEffect extends PositionComponentEffect {
     final double localPercentage =
         (progress - lastEndAt) / (_currentSubPath.endAt - lastEndAt);
     component.position = _currentSubPath.previous +
-        ((_currentSubPath.v - _currentSubPath.previous) * localPercentage);
+        ((_currentSubPath.v - _currentSubPath.previous) *
+            localPercentage);
   }
 }
