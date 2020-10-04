@@ -35,7 +35,7 @@ abstract class PositionComponentEffect {
   Vector2 originalPosition;
   double originalAngle;
   Vector2 originalSize;
-  
+
   /// Used to be able to determine the end state of a sequence of effects
   Vector2 endPosition;
   double endAngle;

@@ -63,9 +63,9 @@ class SequenceEffect extends PositionComponentEffect {
       _driftModifier = currentEffect.driftTime;
       _currentIndex++;
       final iterationSize = isAlternating ? effects.length * 2 : effects.length;
-      if (_currentIndex != 0
-          && _currentIndex == iterationSize
-          && (currentEffect.isAlternating ||
+      if (_currentIndex != 0 &&
+          _currentIndex == iterationSize &&
+          (currentEffect.isAlternating ||
               currentEffect.isAlternating == isAlternating)) {
         isInfinite ? reset() : dispose();
         return;
@@ -93,7 +93,7 @@ class SequenceEffect extends PositionComponentEffect {
   void reset() {
     super.reset();
     effects.forEach((e) => e.reset());
-    if(component != null) {
+    if (component != null) {
       component.position = originalPosition;
       component.angle = originalAngle;
       component.size = originalSize;
