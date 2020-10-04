@@ -17,7 +17,7 @@ class MyGame extends BaseGame with TapDetector {
   @override
   void onTapUp(details) {
     square.addEffect(MoveEffect(
-      destination: details.localPosition.toVector2(),
+      path: [details.localPosition.toVector2()],
       speed: 250.0,
       curve: Curves.bounceInOut,
     ));
