@@ -64,10 +64,13 @@ class CombinedEffect extends PositionComponentEffect {
   @override
   void reset() {
     super.reset();
-    effects.forEach((effect) => effect.reset());
     if (component != null) {
+      component.position = originalPosition;
+      component.angle = originalAngle;
+      component.size = originalSize;
       initialize(component);
     }
+    effects.forEach((effect) => effect.reset());
   }
 
   @override

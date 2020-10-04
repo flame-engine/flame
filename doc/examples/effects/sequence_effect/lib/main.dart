@@ -56,7 +56,7 @@ class MyGame extends BaseGame with TapDetector {
 
     final scale = ScaleEffect(
       size: Vector2(dx, dy),
-      speed: 250.0,
+      speed: 100.0,
       curve: Curves.easeInCubic,
       isInfinite: false,
       isAlternating: false,
@@ -72,15 +72,14 @@ class MyGame extends BaseGame with TapDetector {
 
     final combination = CombinedEffect(
       effects: [move2, rotate],
-      isAlternating: false,
-      isInfinite: true,
+      isAlternating: true,
     );
 
     final sequence = SequenceEffect(
       effects: [move1, scale, combination],
-      isInfinite: true,
-      isAlternating: false,
+      isInfinite: false,
+      isAlternating: true,
     );
-    greenSquare.addEffect(combination);
+    greenSquare.addEffect(sequence);
   }
 }
