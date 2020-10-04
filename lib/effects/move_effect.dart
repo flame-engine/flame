@@ -25,7 +25,6 @@ class MoveEffect extends PositionComponentEffect {
   double speed;
   Curve curve;
   Vector2 _startPosition;
-  Vector2 _peakPosition;
 
   MoveEffect({
     @required this.path,
@@ -61,10 +60,10 @@ class MoveEffect extends PositionComponentEffect {
     } else {
       _movePath = path;
     }
-    print(_movePath);
-    _peakPosition = isRelative ? path.last : path.last - _startPosition;
     if (!isAlternating) {
-      endPosition = _peakPosition;
+      endPosition = _movePath.last;
+    } else {
+      endPosition = _startPosition;
     }
 
     double pathLength = 0;
@@ -91,8 +90,15 @@ class MoveEffect extends PositionComponentEffect {
       );
       lastPosition = v;
     }
-    print(_percentagePath);
     travelTime = pathLength / speed;
+  }
+  
+  @override
+  void reset() {
+    super.reset();
+    if(_percentagePath?.isNotEmpty ?? false) {
+      _currentSubPath = _percentagePath.first;
+    }
   }
 
   @override
