@@ -92,10 +92,12 @@ class SequenceEffect extends PositionComponentEffect {
   @override
   void reset() {
     super.reset();
-    component.position = originalPosition;
-    component.angle = originalAngle;
-    component.size = originalSize;
-    initialize(component);
-    //effects.forEach((e) => e.reset());
+    effects.forEach((e) => e.reset());
+    if(component != null) {
+      component.position = originalPosition;
+      component.angle = originalAngle;
+      component.size = originalSize;
+      initialize(component);
+    }
   }
 }
