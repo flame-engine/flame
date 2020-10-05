@@ -21,7 +21,7 @@ class Ball extends PositionComponent {
   @override
   void render(Canvas c) {
     super.render(c);
-    c.drawOval(toOriginRect(), paint);
+    c.drawOval(size.toRect(), paint);
   }
 
   @override
@@ -50,11 +50,8 @@ class MyGame extends BaseGame {
     Flame.audio.load('boin.mp3');
     Flame.audio.loop('music.mp3', volume: 0.4);
 
-    add(
-      Ball(size)
-        ..y = (size.y / 2) - 50
-        ..width = 100
-        ..height = 100,
-    );
+    add(Ball(size)
+      ..y = (size.y / 2) - 50
+      ..size = Vector2.all(100));
   }
 }

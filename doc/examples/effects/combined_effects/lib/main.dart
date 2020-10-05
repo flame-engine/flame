@@ -24,8 +24,8 @@ class MyGame extends BaseGame with TapDetector {
   MyGame() {
     final green = Paint()..color = const Color(0xAA338833);
     final red = Paint()..color = const Color(0xAA883333);
-    greenSquare = Square(green, 100, 100);
-    final redSquare = Square(red, 100, 100);
+    greenSquare = Square(green, Vector2.all(100));
+    final redSquare = Square(red, Vector2.all(100));
     add(greenSquare);
     add(redSquare);
   }

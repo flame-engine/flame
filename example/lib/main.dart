@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flame/anchor.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/components/position_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
@@ -31,7 +32,7 @@ class Square extends PositionComponent with HasGameRef<MyGame> {
   void render(Canvas c) {
     super.render(c);
 
-    c.drawRect(toOriginRect(), white);
+    c.drawRect(size.toRect(), white);
     c.drawRect(const Rect.fromLTWH(0, 0, 3, 3), red);
     c.drawRect(Rect.fromLTWH(width / 2, height / 2, 3, 3), blue);
   }
@@ -45,7 +46,7 @@ class Square extends PositionComponent with HasGameRef<MyGame> {
 
   @override
   void onMount() {
-    width = height = gameRef.squareSize;
+    size = Vector2.all(gameRef.squareSize);
     anchor = Anchor.center;
   }
 }

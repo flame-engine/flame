@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart' as widgets;
 import 'package:meta/meta.dart';
 
+import '../extensions/vector2.dart';
 import '../sprite.dart';
 
 class _Painter extends widgets.CustomPainter {
@@ -18,7 +19,7 @@ class _Painter extends widgets.CustomPainter {
   });
 
   Sprite _getSpriteTile(double x, double y) =>
-      Sprite(image, x: x, y: y, width: tileSize, height: tileSize);
+      Sprite(image, position: Vector2(x, y), size: Vector2.all(tileSize));
 
   @override
   void paint(Canvas canvas, Size size) {

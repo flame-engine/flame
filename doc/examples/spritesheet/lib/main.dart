@@ -1,3 +1,4 @@
+import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/components/sprite_animation_component.dart';
 import 'package:flame/components/sprite_component.dart';
@@ -24,12 +25,14 @@ class MyGame extends BaseGame {
     final vampireAnimation =
         spriteSheet.createAnimation(0, stepTime: 0.1, to: 7);
     final ghostAnimation = spriteSheet.createAnimation(1, stepTime: 0.1, to: 7);
+    final spriteSize = Vector2(80, 90);
 
-    final vampireComponent = SpriteAnimationComponent(80, 90, vampireAnimation)
-      ..x = 150
-      ..y = 100;
+    final vampireComponent =
+        SpriteAnimationComponent(spriteSize, vampireAnimation)
+          ..x = 150
+          ..y = 100;
 
-    final ghostComponent = SpriteAnimationComponent(80, 90, ghostAnimation)
+    final ghostComponent = SpriteAnimationComponent(spriteSize, ghostAnimation)
       ..x = 150
       ..y = 220;
 
@@ -38,12 +41,12 @@ class MyGame extends BaseGame {
 
     // Some plain sprites
     final vampireSpriteComponent =
-        SpriteComponent.fromSprite(80, 90, spriteSheet.getSprite(0, 0))
+        SpriteComponent.fromSprite(spriteSize, spriteSheet.getSprite(0, 0))
           ..x = 50
           ..y = 100;
 
     final ghostSpriteComponent =
-        SpriteComponent.fromSprite(80, 90, spriteSheet.getSprite(1, 0))
+        SpriteComponent.fromSprite(spriteSize, spriteSheet.getSprite(1, 0))
           ..x = 50
           ..y = 220;
 

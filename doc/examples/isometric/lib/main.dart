@@ -1,6 +1,5 @@
 import 'package:flame/components/sprite_component.dart';
 import 'package:flame/extensions/vector2.dart';
-import 'package:flame/extensions/offset.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components/isometric_tile_map_component.dart';
 import 'package:flame/gestures.dart';
@@ -25,7 +24,8 @@ class Selector extends SpriteComponent {
   bool show = false;
 
   Selector(double s, Image image)
-      : super.fromSprite(s, s, Sprite(image, width: 32, height: 32));
+      : super.fromSprite(
+            Vector2.all(s), Sprite(image, size: Vector2.all(32.0)));
 
   @override
   void render(Canvas canvas) {
@@ -80,9 +80,10 @@ class MyGame extends BaseGame with MouseMovementDetector {
     if (base == null || selector == null) {
       return; // loading
     }
-    final screenPosition = event.position.toVector2();
+    final offset = event.position;
+    final screenPosition = Vector2(offset.dx, offset.dy);
     final block = base.getBlock(screenPosition);
     selector.show = base.containsBlock(block);
-    selector.setPosition(base.getBlockPosition(block) + topLeft);
+    selector.position = base.getBlockPosition(block) + topLeft;
   }
 }

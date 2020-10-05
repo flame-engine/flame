@@ -35,8 +35,7 @@ class TextComponent extends PositionComponent {
 
   void _updateBox() {
     _tp = config.toTextPainter(_text);
-    width = _tp.width;
-    height = _tp.height;
+    size.setValues(_tp.width, _tp.height);
   }
 
   @mustCallSuper
