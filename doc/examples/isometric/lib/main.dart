@@ -1,13 +1,13 @@
 import 'package:flame/components/sprite_component.dart';
 import 'package:flame/extensions/vector2.dart';
-import 'package:flame/extensions/offset.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components/isometric_tile_map_component.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Image;
+
+import 'dart:ui';
 
 const x = 500.0;
 const y = 500.0;
@@ -16,17 +16,16 @@ final topLeft = Vector2(x, y);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final size = await Flame.util.initialDimensions();
-  final game = MyGame(size);
+  final game = MyGame();
   runApp(game.widget);
 }
 
 class Selector extends SpriteComponent {
   bool show = false;
 
-  Selector(double s)
+  Selector(double s, Image image)
       : super.fromSprite(
-            Vector2.all(s), Sprite('selector.png', size: Vector2.all(32.0)));
+            Vector2.all(s), Sprite(image, size: Vector2.all(32.0)));
 
   @override
   void render(Canvas canvas) {
@@ -42,12 +41,14 @@ class MyGame extends BaseGame with MouseMovementDetector {
   IsometricTileMapComponent base;
   Selector selector;
 
-  MyGame(Vector2 size) {
-    init();
-  }
+  MyGame();
 
-  void init() async {
-    final tileset = await IsometricTileset.load('tiles.png', 32);
+  @override
+  Future<void> onLoad() async {
+    final selectorImage = await images.load('selector.png');
+
+    final tilesetImage = await images.load('tiles.png');
+    final tileset = IsometricTileset(tilesetImage, 32);
     final matrix = [
       [3, 1, 1, 1, 0, 0],
       [-1, 1, 2, 1, 0, 0],
@@ -61,7 +62,7 @@ class MyGame extends BaseGame with MouseMovementDetector {
         ..x = x
         ..y = y,
     );
-    add(selector = Selector(s.toDouble()));
+    add(selector = Selector(s.toDouble(), selectorImage));
   }
 
   @override
@@ -79,7 +80,8 @@ class MyGame extends BaseGame with MouseMovementDetector {
     if (base == null || selector == null) {
       return; // loading
     }
-    final screenPosition = event.position.toVector2();
+    final offset = event.position;
+    final screenPosition = Vector2(offset.dx, offset.dy);
     final block = base.getBlock(screenPosition);
     selector.show = base.containsBlock(block);
     selector.position = base.getBlockPosition(block) + topLeft;

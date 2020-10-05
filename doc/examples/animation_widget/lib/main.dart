@@ -14,11 +14,11 @@ SpriteAnimation _animation;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  _sprite = await Sprite.loadSprite('minotaur.png', width: 96, height: 96);
+  final image = await Flame.images.load('minotaur.png');
+  _sprite = Sprite(image, size: Vector2.all(96));
 
-  await Flame.images.load('minotaur.png');
   final _animationSpriteSheet = SpriteSheet(
-    imageName: 'minotaur.png',
+    image: image,
     columns: 19,
     rows: 1,
     textureWidth: 96,

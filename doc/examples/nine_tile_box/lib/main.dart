@@ -18,8 +18,11 @@ class MyGame extends Game {
   Vector2 size;
   NineTileBox nineTileBox;
 
-  MyGame(this.size) {
-    final sprite = Sprite('nine-box.png');
+  MyGame(this.size);
+
+  @override
+  Future<void> onLoad() async {
+    final sprite = Sprite(await images.load('nine-box.png'));
     nineTileBox = NineTileBox(sprite, tileSize: 8, destTileSize: 24);
   }
 

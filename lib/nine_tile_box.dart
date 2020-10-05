@@ -44,10 +44,6 @@ class NineTileBox {
 
   /// Renders this nine box as a rectangle at [position] with size [size].
   void draw(Canvas c, Vector2 position, Vector2 size) {
-    if (!sprite.loaded()) {
-      return;
-    }
-
     // corners
     _drawTile(c, _getDest(position), 0, 0);
     final bottomLeft = position + Vector2(0, size.y - destTileSize);

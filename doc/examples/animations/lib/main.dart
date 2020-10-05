@@ -5,11 +5,11 @@ import 'package:flame/game.dart';
 import 'package:flame/extensions/vector2.dart';
 import 'package:flame/sprite_animation.dart';
 import 'package:flame/components/sprite_animation_component.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Image;
+import 'dart:ui';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Flame.images.loadAll(['creature.png', 'chopper.png']);
 
   final Vector2 size = await Flame.util.initialDimensions();
   final game = MyGame(size);
@@ -17,20 +17,30 @@ void main() async {
 }
 
 class MyGame extends BaseGame with TapDetector {
-  final animation = SpriteAnimation.sequenced(
-    'chopper.png',
-    4,
-    textureSize: Vector2.all(48),
-    stepTime: 0.15,
-    loop: true,
-  );
+  Image chopper;
+  Image creature;
+  SpriteAnimation animation;
+
+  @override
+  Future<void> onLoad() async {
+    chopper = await images.load('chopper.png');
+    creature = await images.load('creature.png');
+
+    animation = SpriteAnimation.sequenced(
+      chopper,
+      4,
+      textureSize: Vector2.all(48),
+      stepTime: 0.15,
+      loop: true,
+    );
+  }
 
   void addAnimation(double x, double y) {
     final size = Vector2(291, 178);
 
     final animationComponent = SpriteAnimationComponent.sequenced(
       size,
-      'creature.png',
+      creature,
       18,
       amountPerRow: 10,
       textureSize: size,
@@ -41,6 +51,21 @@ class MyGame extends BaseGame with TapDetector {
 
     animationComponent.position = animationComponent.position - size / 2;
     add(animationComponent);
+
+    final spriteSize = Vector2.all(100.0);
+    final animationComponent2 = SpriteAnimationComponent(spriteSize, animation);
+    animationComponent2.x = size.x / 2 - spriteSize.x;
+    animationComponent2.y = spriteSize.y;
+
+    final reversedAnimationComponent = SpriteAnimationComponent(
+      spriteSize,
+      animation.reversed(),
+    );
+    reversedAnimationComponent.x = size.x / 2;
+    reversedAnimationComponent.y = spriteSize.y;
+
+    add(animationComponent2);
+    add(reversedAnimationComponent);
   }
 
   @override
@@ -50,20 +75,5 @@ class MyGame extends BaseGame with TapDetector {
 
   MyGame(Vector2 screenSize) {
     size = screenSize;
-
-    final spriteSize = Vector2.all(100.0);
-    final animationComponent = SpriteAnimationComponent(spriteSize, animation);
-    animationComponent.x = size.x / 2 - spriteSize.x;
-    animationComponent.y = spriteSize.y;
-
-    final reversedAnimationComponent = SpriteAnimationComponent(
-      spriteSize,
-      animation.reversed(),
-    );
-    reversedAnimationComponent.x = size.x / 2;
-    reversedAnimationComponent.y = spriteSize.y;
-
-    add(animationComponent);
-    add(reversedAnimationComponent);
   }
 }

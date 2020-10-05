@@ -61,9 +61,9 @@ void main() async {
             ),
           ));
 
-  await Flame.images.load('buttons.png');
+  final buttonsImage = await Flame.images.load('buttons.png');
   final _buttons = SpriteSheet(
-    imageName: 'buttons.png',
+    image: buttonsImage,
     textureHeight: 20,
     textureWidth: 60,
     columns: 1,
@@ -100,7 +100,8 @@ void main() async {
     'Anchor.bottomCenter',
     'Anchor.bottomRight',
   ];
-  final shieldSprite = await Sprite.loadSprite('shield.png');
+  final shieldImage = await Flame.images.load('shield.png');
+  final shieldSprite = Sprite(shieldImage);
   dashbook.storiesOf('SpriteWidget').decorator(CenterDecorator()).add(
         'default',
         (ctx) => Container(
@@ -115,9 +116,9 @@ void main() async {
         ),
       );
 
-  await Flame.images.load('bomb_ptero.png');
+  final pteroImage = await Flame.images.load('bomb_ptero.png');
   final _animationSpriteSheet = SpriteSheet(
-    imageName: 'bomb_ptero.png',
+    image: pteroImage,
     textureHeight: 32,
     textureWidth: 48,
     columns: 4,

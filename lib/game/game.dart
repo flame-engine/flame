@@ -7,6 +7,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
+import '../assets/images.dart';
+import '../assets/assets_cache.dart';
 import '../extensions/vector2.dart';
 import '../keyboard.dart';
 import 'widget_builder.dart';
@@ -18,6 +20,9 @@ import 'widget_builder.dart';
 abstract class Game {
   // Widget Builder for this Game
   final builder = WidgetBuilder();
+
+  final images = Images();
+  final assets = AssetsCache();
 
   /// Returns the game background color.
   /// By default it will return a black color.
@@ -82,6 +87,8 @@ abstract class Game {
     if (this is KeyboardEvents) {
       RawKeyboard.instance.removeListener(_handleKeyEvent);
     }
+
+    images.clearCache();
   }
 
   /// Flag to tell the game loop if it should start running upon creation
@@ -95,6 +102,12 @@ abstract class Game {
 
   VoidCallback pauseEngineFn;
   VoidCallback resumeEngineFn;
+
+  /// Use this method to load the assets need for the game instance to run
+  Future<void> onLoad() async {}
+
+  /// Returns the widget which will be show while the instance is loading
+  Widget loadingWidget() => Container();
 }
 
 class OverlayWidget {
