@@ -70,10 +70,10 @@ class JoystickComponent extends JoystickController {
   }
 
   @override
-  void resize(Vector2 size) {
+  void onGameResize(Vector2 size) {
     directional?.initialize(size, this);
     actions?.forEach((action) => action.initialize(size, this));
-    super.resize(size);
+    super.onGameResize(size);
   }
 
   @override

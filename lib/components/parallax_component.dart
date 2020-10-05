@@ -179,8 +179,8 @@ class ParallaxComponent extends PositionComponent {
 
   @mustCallSuper
   @override
-  void resize(Vector2 size) {
-    super.resize(size);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
     _layers.forEach((layer) => layer.resize(size));
   }
 
