@@ -15,19 +15,19 @@ It has to be a PNG file and it can have transparency.
 
 ## Loading images
 
-Flame bundles an utility class called `Images` that allows you to easily load and cache images from the assets into the memory.
+Flame bundles an utility class called `Images` that allows you to easily load and cache images from the assets directory into the memory.
 
-Flutter has a collection of types related to images, and converting everything properly from a local asset to the Image that can be drawn on Canvas is a bit of a pain. This class allows you to obtain an Image that can be drawn on a Canvas using the `drawImageRect` method.
+Flutter has a handful of types related to images, and converting everything properly from a local asset to an Image that can be drawn on Canvas is a bit convoluted. This class allows you to obtain an Image that can be drawn on a Canvas using the `drawImageRect` method.
 
 It automatically caches any image loaded by filename, so you can safely call it many times.
 
-The methods for loading and clearing the cache are: `load`, `loadAll`, `clear` and `clearAll`. They return a `Future` for the Image loaded.
+The methods for loading and clearing the cache are: `load`, `loadAll`, `clear` and `clearAll`. They return a `Future` for the loaded Image.
 
-To retrieve a previously cached image, the `fromCache` method can be used.
+To synchronously retrieve a previously cached image, the `fromCache` method can be used. If an image with that key was not loaded prior, it will throw an exception.
 
-### Manual use
+### Standalone usage
 
-It can be manually used by instantiating it, like:
+It can be manually used by instantiating it:
 
 ```dart
     import 'package:flame/images.dart';
@@ -35,11 +35,11 @@ It can be manually used by instantiating it, like:
     Image image = await imagesLoader.load('asd');
 ```
 
-But flame also offers to ways of using this class wihtout instantiating it yourself.
+But Flame also offers two ways of using this class without instantiating it yourself.
 
 ### Flame.images
 
-Simply singleton, provided byt the `Flame` class, is can be used as a global image caching.
+There is a singleton, provided by the `Flame` class, that can be used as a global image cache.
 
 Example:
 
@@ -54,7 +54,7 @@ Example:
 
 # Game.images
 
-The `Game` class offers some utility for handling images loading too, it bundles an instance of the `Images` class, that can be used to load images assets that will be used during the game. The game will automatically free the cache when the game widget is removed from the widget tree.
+The `Game` class offers some utility methods for handling images loading too. It bundles an instance of the `Images` class, that can be used to load image assets to be used during the game. The game will automatically free the cache when the game widget is removed from the widget tree.
 
 The method `onLoad` from the `Game` class is a great place for the initial assets to be loaded.
 
@@ -73,7 +73,7 @@ class MyGame extends Game {
 }
 ```
 
-Loaded assets can also be retrieved during the gampley by `images.fromCache`, for example:
+Loaded assets can also be retrieved while the game is running by `images.fromCache`, for example:
 
 ```dart
 class MyGame extends Game {
@@ -89,14 +89,12 @@ class MyGame extends Game {
   void shoot() {
     _shoots.add(Sprite(images.fromCache('bullet.png'));
   }
-
-  // other methods omitted
 }
 ```
 
 ## Sprite
 
-Flame offers a `Sprite` class that represents a piece of an image (or the whole).
+Flame offers a `Sprite` class that represents a region of an image (or the whole).
 
 You can create a `Sprite` by providing it an `Image` and coordinates that defines the piece of the image that that sprite represents.
 

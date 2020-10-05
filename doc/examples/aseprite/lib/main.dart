@@ -19,9 +19,10 @@ class MyGame extends BaseGame {
   @override
   Future<void> onLoad() async {
     final image = await images.load('chopper.png');
-    final animation = await SpriteAnimation.fromAsepriteData(
+    final jsonData = await assets.readJson('chopper.json');
+    final animation = SpriteAnimation.fromAsepriteData(
       image,
-      'chopper.json',
+      jsonData,
     );
     final spriteSize = Vector2.all(200);
     final animationComponent = SpriteAnimationComponent(spriteSize, animation)

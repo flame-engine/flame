@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
 import '../assets/images.dart';
+import '../assets/assets_cache.dart';
 import '../extensions/vector2.dart';
 import '../keyboard.dart';
 import 'widget_builder.dart';
@@ -21,6 +22,7 @@ abstract class Game {
   final builder = WidgetBuilder();
 
   final images = Images();
+  final assets = AssetsCache();
 
   /// Returns the game background color.
   /// By default it will return a black color.
