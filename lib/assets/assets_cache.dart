@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart' show rootBundle;
@@ -44,6 +45,11 @@ class AssetsCache {
     );
 
     return _files[fileName].value;
+  }
+
+  Future<Map<String, dynamic>> readJson(String fileName) async {
+    final String content = await readFile(fileName);
+    return jsonDecode(content);
   }
 
   Future<_StringAsset> _readFile(String fileName) async {

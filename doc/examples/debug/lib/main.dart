@@ -5,14 +5,16 @@ import 'package:flame/components/sprite_component.dart';
 import 'package:flame/components/mixins/resizable.dart';
 import 'package:flame/text_config.dart';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Image;
+
+import 'dart:ui';
 
 void main() async {
+  Flame.initializeWidget();
   await Flame.util.initialDimensions();
 
   final myGame = MyGame();
   runApp(myGame.widget);
-  myGame.start();
 }
 
 class AndroidComponent extends SpriteComponent with Resizable {
@@ -20,7 +22,7 @@ class AndroidComponent extends SpriteComponent with Resizable {
   int xDirection = 1;
   int yDirection = 1;
 
-  AndroidComponent() : super.fromImagePath(Vector2.all(100), 'android.png');
+  AndroidComponent(Image image) : super.fromImage(Vector2.all(100), image);
 
   @override
   void update(double dt) {
@@ -56,17 +58,20 @@ class MyGame extends BaseGame {
   @override
   bool recordFps() => true;
 
-  void start() {
-    final android = AndroidComponent();
+  @override
+  Future<void> onLoad() async {
+    final androidImage = await images.load('android.png');
+
+    final android = AndroidComponent(androidImage);
     android.x = 100;
     android.y = 400;
 
-    final android2 = AndroidComponent();
+    final android2 = AndroidComponent(androidImage);
     android2.x = 100;
     android2.y = 400;
     android2.yDirection = -1;
 
-    final android3 = AndroidComponent();
+    final android3 = AndroidComponent(androidImage);
     android3.x = 100;
     android3.y = 400;
     android3.xDirection = -1;

@@ -23,8 +23,8 @@ class SpriteComponent extends PositionComponent {
 
   SpriteComponent();
 
-  SpriteComponent.fromImagePath(Vector2 size, String imagePath)
-      : this.fromSprite(size, Sprite(imagePath));
+  SpriteComponent.fromImage(Vector2 size, Image image)
+      : this.fromSprite(size, Sprite(image));
 
   SpriteComponent.fromSprite(Vector2 size, this.sprite) {
     super.size.setFrom(size);
@@ -40,10 +40,5 @@ class SpriteComponent extends PositionComponent {
       height: height,
       overridePaint: overridePaint,
     );
-  }
-
-  @override
-  bool loaded() {
-    return sprite?.loaded() == true && x != null && y != null;
   }
 }

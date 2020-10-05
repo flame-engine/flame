@@ -23,7 +23,7 @@ class SpriteAnimationWidget extends StatefulWidget {
     this.animation,
     this.playing = true,
     this.anchor = Anchor.topLeft,
-  }) : assert(animation.loaded(), 'Animation must be loaded');
+  });
 
   @override
   State createState() => _AnimationWidget();

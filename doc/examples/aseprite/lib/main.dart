@@ -14,13 +14,15 @@ void main() async {
 class MyGame extends BaseGame {
   MyGame(Vector2 screenSize) {
     size = screenSize;
-    _start();
   }
 
-  void _start() async {
-    final animation = await SpriteAnimation.fromAsepriteData(
-      'chopper.png',
-      'chopper.json',
+  @override
+  Future<void> onLoad() async {
+    final image = await images.load('chopper.png');
+    final jsonData = await assets.readJson('chopper.json');
+    final animation = SpriteAnimation.fromAsepriteData(
+      image,
+      jsonData,
     );
     final spriteSize = Vector2.all(200);
     final animationComponent = SpriteAnimationComponent(spriteSize, animation)

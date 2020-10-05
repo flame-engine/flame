@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  dashbook: 0.0.6
   flame:
       path: ../../../
 

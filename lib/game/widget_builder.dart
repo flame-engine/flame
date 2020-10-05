@@ -244,7 +244,14 @@ class WidgetBuilder {
       widget = _applyMouseDetectors(game, widget);
     }
 
-    return widget;
+    return FutureBuilder(
+        future: game.onLoad(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return widget;
+          }
+          return game.loadingWidget();
+        });
   }
 }
 
