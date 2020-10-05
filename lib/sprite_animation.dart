@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'dart:ui';
 
 import 'extensions/vector2.dart';
-import 'flame.dart';
 import 'sprite.dart';
 
 /// Represents a single sprite animation frame.
