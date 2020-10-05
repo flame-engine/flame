@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flame/effects/effects.dart';
 import 'package:flutter/painting.dart';
-import 'package:meta/meta.dart';
 
 import '../extensions/vector2.dart';
 
@@ -20,7 +19,6 @@ abstract class Component {
   /// The time [t] in seconds (with microseconds precision provided by Flutter) since the last update cycle.
   /// This time can vary according to hardware capacity, so make sure to update your state considering this.
   /// All components on [BaseGame] are always updated by the same amount. The time each one takes to update adds up to the next update cycle.
-  @mustCallSuper
   void update(double dt) {
     _effects.forEach((e) => e.update(dt));
     _effects.removeWhere((e) => e.hasFinished());
