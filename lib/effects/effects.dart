@@ -130,9 +130,9 @@ abstract class PositionComponentEffect
 
   @mustCallSuper
   @override
-  void initialize(PositionComponent _comp) {
-    super.initialize(_comp);
-    component = _comp;
+  void initialize(PositionComponent component) {
+    super.initialize(component);
+    this.component = component;
     originalPosition = component.position;
     originalAngle = component.angle;
     originalSize = component.size;
@@ -140,8 +140,8 @@ abstract class PositionComponentEffect
     /// If these aren't modified by the extending effect it is assumed that the
     /// effect didn't bring the component to another state than the one it
     /// started in
-    endPosition = _comp.position;
-    endAngle = _comp.angle;
-    endSize = _comp.size;
+    endPosition = component.position;
+    endAngle = component.angle;
+    endSize = component.size;
   }
 }

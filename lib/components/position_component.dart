@@ -5,7 +5,6 @@ import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
 import '../anchor.dart';
-import '../effects/effects.dart';
 import '../game.dart';
 import '../text_config.dart';
 import '../extensions/offset.dart';
@@ -182,6 +181,10 @@ abstract class PositionComponent extends Component {
     _children.forEach((comp) => _renderChild(canvas, comp));
     canvas.restore();
   }
+
+  @mustCallSuper
+  @override
+  void update(double dt) => super.update(dt);
 
   void _renderChild(Canvas canvas, Component c) {
     if (!c.loaded()) {
