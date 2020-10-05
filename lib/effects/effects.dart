@@ -37,11 +37,11 @@ abstract class ComponentEffect<T extends Component> {
   double get totalTravelTime => travelTime * (isAlternating ? 2 : 1);
 
   ComponentEffect(
-      this._initialIsInfinite,
-      this._initialIsAlternating, {
-        this.isRelative = false,
-        this.onComplete,
-      }) {
+    this._initialIsInfinite,
+    this._initialIsAlternating, {
+    this.isRelative = false,
+    this.onComplete,
+  }) {
     isInfinite = _initialIsInfinite;
     isAlternating = _initialIsAlternating;
   }
@@ -104,7 +104,8 @@ abstract class ComponentEffect<T extends Component> {
   }
 }
 
-abstract class PositionComponentEffect extends ComponentEffect<PositionComponent> {
+abstract class PositionComponentEffect
+    extends ComponentEffect<PositionComponent> {
   /// Used to be able to determine the start state of the component
   Vector2 originalPosition;
   double originalAngle;
@@ -121,11 +122,11 @@ abstract class PositionComponentEffect extends ComponentEffect<PositionComponent
     isRelative = false,
     onComplete,
   }) : super(
-      initialIsInfinite,
-      initialIsAlternating,
-      isRelative: isRelative,
-      onComplete: onComplete,
-  );
+          initialIsInfinite,
+          initialIsAlternating,
+          isRelative: isRelative,
+          onComplete: onComplete,
+        );
 
   @mustCallSuper
   @override
