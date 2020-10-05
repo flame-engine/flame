@@ -84,7 +84,7 @@ class SpriteAnimation {
   }) : this.variableSequenced(
           image,
           amount,
-          List.generate(amount, (_) => stepTime),
+          List.filled(amount, stepTime),
           amountPerRow: amountPerRow,
           texturePosition: texturePosition,
           textureSize: textureSize,
@@ -122,14 +122,11 @@ class SpriteAnimation {
   ///
   /// [imagePath]: Source of the sprite sheet animation
   /// [dataPath]: Animation's exported data in json format
-  static Future<SpriteAnimation> fromAsepriteData(
+  SpriteAnimation.fromAsepriteData(
     Image image,
-    String dataPath,
-  ) async {
-    final String content = await Flame.assets.readFile(dataPath);
-    final Map<String, dynamic> json = jsonDecode(content);
-
-    final Map<String, dynamic> jsonFrames = json['frames'];
+    Map<String, dynamic> jsonData,
+  ) {
+    final Map<String, dynamic> jsonFrames = jsonData['frames'];
 
     final frames = jsonFrames.values.map((value) {
       final frameData = value['frame'];
@@ -149,7 +146,8 @@ class SpriteAnimation {
       return SpriteAnimationFrame(sprite, stepTime);
     });
 
-    return SpriteAnimation(frames.toList(), loop: true);
+    this.frames = frames.toList();
+    loop = true;
   }
 
   /// The current frame that should be displayed.
