@@ -20,7 +20,7 @@ When an effect is completed the callback `onComplete` will be called, it can be 
 
 ## MoveEffect
 
-Applied to `PositionComponent`s, this effect can be used to move the component to a new positions, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
+Applied to `PositionComponent`s, this effect can be used to move the component to new positions, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
 
 Usage example:
 ```dart
