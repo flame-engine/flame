@@ -26,13 +26,13 @@ class SequenceEffect extends PositionComponentEffect {
   void initialize(PositionComponent _comp) {
     super.initialize(_comp);
     _currentIndex = 0;
-    final originalSize = _comp.toSize();
+    final originalSize = _comp.size;
     final originalPosition = _comp.position;
     final originalAngle = _comp.angle;
     effects.forEach((effect) {
       effect.reset();
-      _comp.setBySize(endSize);
-      _comp.setPosition(endPosition);
+      _comp.size = endSize;
+      _comp.position = endPosition;
       _comp.angle = endAngle;
       effect.initialize(_comp);
       endSize = effect.endSize;
@@ -43,8 +43,8 @@ class SequenceEffect extends PositionComponentEffect {
       0,
       (time, effect) => time + effect.totalTravelTime,
     );
-    component.setBySize(originalSize);
-    component.setPosition(originalPosition);
+    component.size = originalSize;
+    component.position = originalPosition;
     component.angle = originalAngle;
     currentEffect = effects.first;
     _currentWasAlternating = currentEffect.isAlternating;

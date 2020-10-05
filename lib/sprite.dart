@@ -10,14 +10,11 @@ class Sprite {
 
   Sprite(
     this.image, {
-    double x = 0.0,
-    double y = 0.0,
-    double width,
-    double height,
+    Vector2 position,
+    Vector2 size,
   }) : assert(image != null, "image can't be null") {
-    width ??= image.width.toDouble();
-    height ??= image.height.toDouble();
-    src = Rect.fromLTWH(x, y, width, height);
+    size ??= Vector2(image.width.toDouble(), image.height.toDouble());
+    src = position.toPositionedRect(size);
   }
 
   double get _imageWidth => image.width.toDouble();
@@ -49,7 +46,7 @@ class Sprite {
     Paint overridePaint,
   }) {
     size ??= this.size;
-    renderRect(canvas, p.toRect(size), overridePaint: overridePaint);
+    renderRect(canvas, p.toPositionedRect(size), overridePaint: overridePaint);
   }
 
   void render(

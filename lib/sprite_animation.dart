@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'extensions/vector2.dart';
 import 'flame.dart';
 import 'sprite.dart';
 
@@ -76,10 +77,8 @@ class SpriteAnimation {
     Image image,
     int amount, {
     int amountPerRow,
-    double textureX = 0.0,
-    double textureY = 0.0,
-    double textureWidth,
-    double textureHeight,
+    Vector2 texturePosition,
+    Vector2 textureSize,
     double stepTime = 0.1,
     bool loop = true,
   }) : this.variableSequenced(
@@ -87,10 +86,8 @@ class SpriteAnimation {
           amount,
           List.generate(amount, (_) => stepTime),
           amountPerRow: amountPerRow,
-          textureX: textureX,
-          textureY: textureX,
-          textureWidth: textureWidth,
-          textureHeight: textureHeight,
+          texturePosition: texturePosition,
+          textureSize: textureSize,
           loop: loop,
         );
 
@@ -100,21 +97,21 @@ class SpriteAnimation {
     int amount,
     List<double> stepTimes, {
     int amountPerRow,
-    double textureX = 0.0,
-    double textureY = 0.0,
-    double textureWidth,
-    double textureHeight,
+    Vector2 texturePosition,
+    Vector2 textureSize,
     this.loop = true,
   }) : assert(amountPerRow == null || amount >= amountPerRow) {
     amountPerRow ??= amount;
     frames = List<SpriteAnimationFrame>(amount);
-    for (var i = 0; i < amount; i++) {
+    for (int i = 0; i < amount; i++) {
+      final position = Vector2(
+        texturePosition.x + (i % amountPerRow) * textureSize.x,
+        texturePosition.y + (i ~/ amountPerRow) * textureSize.y,
+      );
       final Sprite sprite = Sprite(
         image,
-        x: textureX + (i % amountPerRow) * textureWidth,
-        y: textureY + (i ~/ amountPerRow) * textureHeight,
-        width: textureWidth,
-        height: textureHeight,
+        position: position,
+        size: textureSize,
       );
       frames[i] = SpriteAnimationFrame(sprite, stepTimes[i]);
     }
@@ -145,10 +142,8 @@ class SpriteAnimation {
 
       final Sprite sprite = Sprite(
         image,
-        x: x.toDouble(),
-        y: y.toDouble(),
-        width: width.toDouble(),
-        height: height.toDouble(),
+        position: Vector2Extension.fromInts(x, y),
+        size: Vector2Extension.fromInts(width, height),
       );
 
       return SpriteAnimationFrame(sprite, stepTime);

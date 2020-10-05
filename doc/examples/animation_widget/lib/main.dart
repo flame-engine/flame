@@ -15,9 +15,8 @@ SpriteAnimation _animation;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final image = await Flame.images.load('minotaur.png');
-  _sprite = Sprite(image, width: 96, height: 96);
+  _sprite = Sprite(image, size: Vector2.all(96));
 
-  await Flame.images.load('minotaur.png');
   final _animationSpriteSheet = SpriteSheet(
     image: image,
     columns: 19,

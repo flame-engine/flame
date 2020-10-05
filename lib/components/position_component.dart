@@ -1,5 +1,4 @@
-import 'dart:ui';
-import 'dart:math';
+import 'dart:ui' hide Offset;
 
 import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
@@ -9,14 +8,15 @@ import '../anchor.dart';
 import '../effects/effects.dart';
 import '../game.dart';
 import '../text_config.dart';
+import '../extensions/offset.dart';
 import '../extensions/vector2.dart';
 import 'component.dart';
 
 /// A [Component] implementation that represents a component that has a
 /// specific, possibly dynamic position on the screen.
 ///
-/// It represents a rectangle of dimension ([width], [height]), on the position
-/// ([x], [y]), rotate around its center with angle [angle].
+/// It represents a rectangle of dimension [size], on the [position],
+/// rotated around its [anchor] with angle [angle].
 ///
 /// It also uses the [anchor] property to properly position itself.
 ///
@@ -25,26 +25,43 @@ import 'component.dart';
 /// They are translated by this component's (x,y). They do not need to fit
 /// within this component's (width, height).
 abstract class PositionComponent extends Component {
-  /// X position of this component on the screen (measured from the top left corner).
-  double x = 0.0;
+  /// The position of this component on the screen (relative to the anchor).
+  Vector2 position = Vector2.zero();
 
-  /// Y position of this component on the screen (measured from the top left corner).
-  double y = 0.0;
+  /// X position of this component on the screen (relative to the anchor).
+  double get x => position.x;
+  set x(double x) => position.x = x;
+
+  /// Y position of this component on the screen (relative to the anchor).
+  double get y => position.y;
+  set y(double y) => position.y = y;
+
+  /// The size that this component is rendered with.
+  /// This is not necessarily the source size of the asset.
+  Vector2 size = Vector2.zero();
+
+  /// Width (size) that this component is rendered with.
+  double get width => size.x;
+  set width(double width) => size.x = width;
+
+  /// Height (size) that this component is rendered with.
+  double get height => size.y;
+  set height(double height) => size.y = height;
+
+  /// Get the top left position regardless of the anchor
+  Vector2 get topLeftPosition => anchor.translate(position, size);
+
+  /// Set the top left position regardless of the anchor
+  set topLeftPosition(Vector2 position) {
+    this.position = position + (anchor.relativePosition..multiply(size));
+  }
 
   /// Angle (with respect to the x-axis) this component should be rendered with.
   /// It is rotated around its anchor.
   double angle = 0.0;
 
-  /// Width (size) that this component is rendered with.
-  /// This is not necessarily the source width of the asset.
-  double width = 0.0;
-
-  /// Height (size) that this component is rendered with.
-  /// This is not necessarily the source height of the asset.
-  double height = 0.0;
-
   /// Anchor point for this component. This is where flame "grabs it".
-  /// The [x], [y] coordinates are relative to this point inside the component.
+  /// The [position] is relative to this point inside the component.
   /// The [angle] is rotated around this point.
   Anchor anchor = Anchor.topLeft;
 
@@ -72,51 +89,23 @@ abstract class PositionComponent extends Component {
 
   TextConfig get debugTextConfig => TextConfig(color: debugColor, fontSize: 12);
 
-  Vector2 get position => Vector2(x, y);
-  void setPosition(Vector2 position) {
-    x = position.x;
-    y = position.y;
-  }
-
-  Vector2 toSize() => Vector2(width, height);
-  void setBySize(Vector2 size) {
-    width = size.x;
-    height = size.y;
-  }
-
-  /// Returns the size of this component starting at (0, 0).
-  /// Effectively this is it's position with respect to itself.
-  /// Use this if the canvas is already translated by (x, y).
-  Rect toOriginRect() => Rect.fromLTWH(0, 0, width, height);
-
   /// Returns the relative position/size of this component.
   /// Relative because it might be translated by their parents (which is not considered here).
-  Rect toRect() => Rect.fromLTWH(
-        x - anchor.relativePosition.x * width,
-        y - anchor.relativePosition.y * height,
-        width,
-        height,
-      );
+  Rect toRect() => topLeftPosition.toPositionedRect(size);
 
-  /// Mutates x, y, width and height using the provided [rect] as basis.
+  /// Mutates position and size using the provided [rect] as basis.
   /// This is a relative rect, same definition that [toRect] use (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
   void setByRect(Rect rect) {
-    x = rect.left + anchor.relativePosition.x * rect.width;
-    y = rect.top + anchor.relativePosition.y * rect.height;
-    width = rect.width;
-    height = rect.height;
+    size.setValues(rect.width, rect.height);
+    topLeftPosition = rect.topLeft.toVector2();
   }
 
-  double angleBetween(PositionComponent c) {
-    return (atan2(c.x - x, y - c.y) - pi / 2) % (2 * pi);
-  }
+  double angleTo(PositionComponent c) => position.angleTo(c.position);
 
-  double distance(PositionComponent c) {
-    return c.position.distanceTo(position);
-  }
+  double distance(PositionComponent c) => position.distanceTo(c.position);
 
   void renderDebugMode(Canvas canvas) {
-    canvas.drawRect(toOriginRect(), _debugPaint);
+    canvas.drawRect(size.toRect(), _debugPaint);
     debugTextConfig.render(
       canvas,
       'x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}',
@@ -137,9 +126,9 @@ abstract class PositionComponent extends Component {
     canvas.translate(x, y);
 
     canvas.rotate(angle);
-    final double dx = -anchor.relativePosition.x * width;
-    final double dy = -anchor.relativePosition.y * height;
-    canvas.translate(dx, dy);
+    final Vector2 delta = -anchor.relativePosition
+      ..multiply(size);
+    canvas.translate(delta.x, delta.y);
 
     // Handle inverted rendering by moving center and flipping.
     if (renderFlipX || renderFlipY) {

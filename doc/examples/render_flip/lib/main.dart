@@ -21,8 +21,7 @@ class MyGame extends BaseGame {
     animation = SpriteAnimation.sequenced(
       image,
       4,
-      textureWidth: 48,
-      textureHeight: 48,
+      textureSize: Vector2.all(48),
       stepTime: 0.15,
     );
 
@@ -42,7 +41,7 @@ class MyGame extends BaseGame {
   }
 
   SpriteAnimationComponent buildAnimation() {
-    final ac = SpriteAnimationComponent(100, 100, animation);
+    final ac = SpriteAnimationComponent(Vector2.all(100), animation);
     ac.x = size.x / 2 - ac.x / 2;
     return ac;
   }

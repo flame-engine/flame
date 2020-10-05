@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/foundation.dart';
 
 import '../sprite_animation.dart';
@@ -11,71 +12,58 @@ class SpriteAnimationComponent extends PositionComponent {
   bool destroyOnFinish = false;
 
   SpriteAnimationComponent(
-    double width,
-    double height,
+    Vector2 size,
     this.animation, {
     this.destroyOnFinish = false,
   }) {
-    this.width = width;
-    this.height = height;
+    super.size.setFrom(size);
   }
 
   SpriteAnimationComponent.empty();
 
   SpriteAnimationComponent.sequenced(
-    double width,
-    double height,
+    Vector2 size,
     Image image,
     int amount, {
     int amountPerRow,
-    double textureX = 0.0,
-    double textureY = 0.0,
-    double textureWidth,
-    double textureHeight,
+    Vector2 texturePosition,
+    Vector2 textureSize,
     double stepTime,
     bool loop = true,
     this.destroyOnFinish = false,
   }) {
-    this.width = width;
-    this.height = height;
+    super.size.setFrom(size);
+    texturePosition ??= Vector2.zero();
     animation = SpriteAnimation.sequenced(
       image,
       amount,
       amountPerRow: amountPerRow,
-      textureX: textureX,
-      textureY: textureY,
-      textureWidth: textureWidth,
-      textureHeight: textureHeight,
+      texturePosition: texturePosition,
+      textureSize: textureSize,
       stepTime: stepTime ?? 0.1,
       loop: loop,
     );
   }
 
   SpriteAnimationComponent.variableSequenced(
-    double width,
-    double height,
+    Vector2 size,
     Image image,
     int amount,
     List<double> stepTimes, {
     int amountPerRow,
-    double textureX = 0.0,
-    double textureY = 0.0,
-    double textureWidth,
-    double textureHeight,
+    Vector2 texturePosition,
+    Vector2 textureSize,
     bool loop = true,
   }) {
-    this.width = width;
-    this.height = height;
+    super.size.setFrom(size);
 
     animation = SpriteAnimation.variableSequenced(
       image,
       amount,
       stepTimes,
       amountPerRow: amountPerRow,
-      textureX: textureX,
-      textureY: textureY,
-      textureWidth: textureWidth,
-      textureHeight: textureHeight,
+      texturePosition: texturePosition,
+      textureSize: textureSize,
       loop: loop,
     );
   }

@@ -22,7 +22,7 @@ class AndroidComponent extends SpriteComponent with Resizable {
   int xDirection = 1;
   int yDirection = 1;
 
-  AndroidComponent(Image image) : super.square(100, image);
+  AndroidComponent(Image image) : super.fromImage(Vector2.all(100), image);
 
   @override
   void update(double dt) {

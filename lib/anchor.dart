@@ -19,7 +19,6 @@ class Anchor {
   const Anchor(this.x, this.y);
 
   Vector2 translate(Vector2 p, Vector2 size) {
-    return p - relativePosition
-      ..multiply(size);
+    return p - (relativePosition..multiply(size));
   }
 }

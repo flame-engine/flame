@@ -1,3 +1,4 @@
+import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components/position_component.dart';
@@ -21,16 +22,15 @@ class TapableSquare extends PositionComponent with Tapable {
 
   bool _beenPressed = false;
 
-  TapableSquare({double y = 100, double x = 100}) {
-    width = height = 100;
-    this.x = x;
-    this.y = y;
+  TapableSquare({Vector2 position}) {
+    size = Vector2.all(100);
+    this.position = position ?? Vector2.all(100);
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    canvas.drawRect(toOriginRect(), _beenPressed ? _grey : _white);
+    canvas.drawRect(size.toRect(), _beenPressed ? _grey : _white);
   }
 
   @override
@@ -51,7 +51,7 @@ class TapableSquare extends PositionComponent with Tapable {
 
 class MyGame extends BaseGame with HasTapableComponents {
   MyGame() {
-    add(TapableSquare(y: 100));
-    add(TapableSquare(y: 250));
+    add(TapableSquare());
+    add(TapableSquare()..y = 250);
   }
 }
