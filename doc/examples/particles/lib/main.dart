@@ -51,9 +51,6 @@ class MyGame extends BaseGame {
   Vector2 cellSize;
   Vector2 halfCellSize;
 
-  @override
-  bool recordFps() => true;
-
   MyGame({Vector2 screenSize}) {
     size = screenSize;
     cellSize = size / gridSize;
