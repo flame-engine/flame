@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../components/component.dart';
 import '../components/position_component.dart';
 import '../extensions/vector2.dart';
 
@@ -11,8 +12,8 @@ export './rotate_effect.dart';
 export './scale_effect.dart';
 export './sequence_effect.dart';
 
-abstract class PositionComponentEffect {
-  PositionComponent component;
+abstract class ComponentEffect<T extends Component> {
+  T component;
   Function() onComplete;
 
   bool _isDisposed = false;
@@ -31,21 +32,11 @@ abstract class PositionComponentEffect {
   double driftTime = 0.0;
   int curveDirection = 1;
 
-  /// Used to be able to determine the start state of the component
-  Vector2 originalPosition;
-  double originalAngle;
-  Vector2 originalSize;
-
-  /// Used to be able to determine the end state of a sequence of effects
-  Vector2 endPosition;
-  double endAngle;
-  Vector2 endSize;
-
   /// If the effect is alternating the travel time is double the normal
   /// travel time
   double get totalTravelTime => travelTime * (isAlternating ? 2 : 1);
 
-  PositionComponentEffect(
+  ComponentEffect(
     this._initialIsInfinite,
     this._initialIsAlternating, {
     this.isRelative = false,
@@ -73,22 +64,12 @@ abstract class PositionComponentEffect {
   }
 
   @mustCallSuper
-  void initialize(PositionComponent _comp) {
-    component = _comp;
-    originalPosition = component.position;
-    originalAngle = component.angle;
-    originalSize = component.size;
+  void initialize(T component) {
+    this.component = component;
 
     /// You need to set the travelTime during the initialization of the
     /// extending effect
     travelTime = null;
-
-    /// If these aren't modified by the extending effect it is assumed that the
-    /// effect didn't bring the component to another state than the one it
-    /// started in
-    endPosition = _comp.position;
-    endAngle = _comp.angle;
-    endSize = _comp.size;
   }
 
   void dispose() => _isDisposed = true;
@@ -120,5 +101,47 @@ abstract class PositionComponentEffect {
     } else {
       driftTime = 0;
     }
+  }
+}
+
+abstract class PositionComponentEffect
+    extends ComponentEffect<PositionComponent> {
+  /// Used to be able to determine the start state of the component
+  Vector2 originalPosition;
+  double originalAngle;
+  Vector2 originalSize;
+
+  /// Used to be able to determine the end state of a sequence of effects
+  Vector2 endPosition;
+  double endAngle;
+  Vector2 endSize;
+
+  PositionComponentEffect(
+    initialIsInfinite,
+    initialIsAlternating, {
+    isRelative = false,
+    onComplete,
+  }) : super(
+          initialIsInfinite,
+          initialIsAlternating,
+          isRelative: isRelative,
+          onComplete: onComplete,
+        );
+
+  @mustCallSuper
+  @override
+  void initialize(PositionComponent component) {
+    super.initialize(component);
+    this.component = component;
+    originalPosition = component.position;
+    originalAngle = component.angle;
+    originalSize = component.size;
+
+    /// If these aren't modified by the extending effect it is assumed that the
+    /// effect didn't bring the component to another state than the one it
+    /// started in
+    endPosition = component.position;
+    endAngle = component.angle;
+    endSize = component.size;
   }
 }

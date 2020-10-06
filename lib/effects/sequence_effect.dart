@@ -20,6 +20,10 @@ class SequenceEffect extends PositionComponentEffect {
       effects.every((effect) => effect.component == null),
       "No effects can be added to components from the start",
     );
+    assert(
+      effects.every((effect) => !effect.isInfinite),
+      "No effects added to the sequence can be infinite",
+    );
   }
 
   @override
