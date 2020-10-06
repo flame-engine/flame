@@ -48,10 +48,6 @@ abstract class Game {
   /// Check [AppLifecycleState] for details about the events received.
   void lifecycleStateChange(AppLifecycleState state) {}
 
-  /// Used for debugging
-  @Deprecated('Gets called for backward compatibility, will be removed in v1')
-  void recordDt(double dt) {}
-
   /// Use for caluclating the FPS.
   void onTimingsCallback(List<FrameTiming> timings) {}
 
