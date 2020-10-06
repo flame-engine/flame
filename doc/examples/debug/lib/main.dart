@@ -56,9 +56,6 @@ class MyGame extends BaseGame {
   bool debugMode() => true;
 
   @override
-  bool recordFps() => true;
-
-  @override
   Future<void> onLoad() async {
     final androidImage = await images.load('android.png');
 
