@@ -51,7 +51,7 @@ abstract class ComponentEffect<T extends Component> {
     if (isAlternating) {
       curveDirection = isMax() ? -1 : (isMin() ? 1 : curveDirection);
     } else if (isInfinite && isMax()) {
-      currentTime = 0.0;
+      reset();
     }
     final driftMultiplier = (isAlternating && isMax() ? 2 : 1) * curveDirection;
     if (!hasFinished()) {
