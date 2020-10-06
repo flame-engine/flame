@@ -64,10 +64,13 @@ class CombinedEffect extends PositionComponentEffect {
   @override
   void reset() {
     super.reset();
-    effects.forEach((effect) => effect.reset());
     if (component != null) {
+      component.position = originalPosition;
+      component.angle = originalAngle;
+      component.size = originalSize;
       initialize(component);
     }
+    effects.forEach((effect) => effect.reset());
   }
 
   @override
@@ -91,6 +94,11 @@ class CombinedEffect extends PositionComponentEffect {
     if (isMax()) {
       _maybeReverse(effect);
     }
+  }
+
+  @override
+  bool hasFinished() {
+    return super.hasFinished() && effects.every((e) => e.hasFinished());
   }
 
   void _maybeReverse(PositionComponentEffect effect) {
