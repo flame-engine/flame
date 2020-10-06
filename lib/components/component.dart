@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import 'package:flame/effects/effects.dart';
 import 'package:flutter/painting.dart';
 
+import '../effects/effects.dart';
 import '../extensions/vector2.dart';
 
 /// This represents a Component for your game.
