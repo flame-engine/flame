@@ -10,6 +10,8 @@
  - Use isRelative on effects
  - Use Vector2 for position and size on PositionComponent
  - Removing all deprecated methods
+ - Rename `resize` method on components to `onGameResize`
+ - Make `Resizable` have a `gameSize` property instead of `size`
 
 ## [next]
  - Fix spriteAsWidget deprecation message
