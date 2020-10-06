@@ -13,14 +13,6 @@ mixin FPSCounter on Game {
   void onTimingsCallback(List<FrameTiming> timings) =>
       _previousTimings = timings;
 
-  /// Returns whether this [Game] is should record fps or not.
-  ///
-  /// Returns `false` by default. Override to use the `fps` counter method.
-  /// In recording fps, the [recordDt] method actually records every `dt` for statistics.
-  /// Then, you can use the [fps] method to check the game FPS.
-  @Deprecated('Flame is now using Flutter frame times, will be removed in v1')
-  bool recordFps();
-
   /// Returns the FPS based on the frame times from [onTimingsCallback].
   double fps([int average = 1]) {
     return _previousTimings.length *

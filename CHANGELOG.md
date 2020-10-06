@@ -9,6 +9,7 @@
  - Rebuild of Images, Sprite and SpriteAnimation initialization
  - Use isRelative on effects
  - Use Vector2 for position and size on PositionComponent
+ - Removing all deprecated methods
 
 ## [next]
  - Fix spriteAsWidget deprecation message

@@ -117,28 +117,6 @@ class Util {
     });
   }
 
-  /// This properly binds a gesture recognizer to your game.
-  ///
-  /// Use this in order to get it to work in case your app also contains other widgets.
-  ///
-  /// Read more at: https://flame-engine.org/docs/input.md
-  ///
-  @Deprecated(
-    'This method can lead to confuse behaviour, use the gestures methods provided by the Game class',
-  )
-  void addGestureRecognizer(GestureRecognizer recognizer) {
-    if (GestureBinding.instance == null) {
-      throw Exception(
-          'GestureBinding is not initialized yet, this probably happened because addGestureRecognizer was called before the runApp method');
-    }
-
-    GestureBinding.instance.pointerRouter.addGlobalRoute((PointerEvent e) {
-      if (e is PointerDownEvent) {
-        recognizer.addPointer(e);
-      }
-    });
-  }
-
   /// This properly removes the bind of a gesture recognizer to your game.
   ///
   /// Use this in order to clear any added recognizers that you have added before

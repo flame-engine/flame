@@ -149,9 +149,6 @@ class BaseGame extends Game with FPSCounter {
   /// You can use this value to enable debug behaviors for your game, many components show extra information on screen when on debug mode
   bool debugMode() => false;
 
-  @override
-  bool recordFps() => false;
-
   /// Returns the current time in seconds with microseconds precision.
   ///
   /// This is compatible with the `dt` value used in the [update] method.
