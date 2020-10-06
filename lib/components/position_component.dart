@@ -184,9 +184,9 @@ abstract class PositionComponent extends Component {
 
   @mustCallSuper
   @override
-  void resize(Vector2 size) {
-    super.resize(size);
-    _children.forEach((child) => child.resize(size));
+  void onGameResize(Vector2 gameSize) {
+    super.onGameResize(gameSize);
+    _children.forEach((child) => child.onGameResize(gameSize));
   }
 
   @mustCallSuper

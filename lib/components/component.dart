@@ -20,11 +20,11 @@ abstract class Component {
   /// Renders this component on the provided Canvas [c].
   void render(Canvas c);
 
-  /// This is a hook called by [BaseGame] to let this component know that the screen (or flame draw area) has been update.
+  /// It receives the new game size.
+  /// Executed right after the component is attached to a game and right before [onMount] is called
   ///
-  /// It receives the new size.
-  /// You can use the [Resizable] mixin if you want an implementation of this hook that keeps track of the current size.
-  void resize(Vector2 size) {}
+  /// Use [Resizable] to save the gameSize in a component.
+  void onGameResize(Vector2 gameSize) {}
 
   /// Whether this component has been loaded yet. If not loaded, [BaseGame] will not try to render it.
   ///
@@ -53,7 +53,7 @@ abstract class Component {
   /// Called when the component has been added and prepared by the game instance.
   ///
   /// This can be used to make initializations on your component as, when this method is called,
-  /// things like resize (and other mixins) are already set and usable.
+  /// things like [onGameResize] are already set and usable.
   void onMount() {}
 
   /// Called right before the component is destroyed and removed from the game

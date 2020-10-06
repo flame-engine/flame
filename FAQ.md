@@ -44,7 +44,7 @@ If you want a more full-fledged game, please check [BGUG](https://github.com/fir
 
 `Game` is the most barebones interface that Flame exposes. If you crete a Game, you will need to implement a lot of stuff. Flame will hook you up on the game loop, so you will get to implement `render` and `update` yourself. From scratch. If you wanna use the component system, you can, but you don't need to. You do everything yourself.
 
-`BaseGame` extends `Game` and adds lots of functionality on top of that. Just drop your components, it works! They are rendered, updated, resized, automatically. You might still want to override some of `BaseGame`'s methods to add custom functionality, but you will probably be calling the super method to let `BaseGame` do its work.
+`BaseGame` extends `Game` and adds lots of functionality on top of that. Just drop your components, it works! They are rendered and updated, automatically. You might still want to override some of `BaseGame`'s methods to add custom functionality, but you will probably be calling the super method to let `BaseGame` do its work.
 
 ## How does the Camera work?
 
