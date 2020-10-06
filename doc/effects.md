@@ -1,7 +1,9 @@
 # Effects
-An effect can be applied to any `PositionComponent`, there are currently two effects that you can use and that is the MoveEffect and the ScaleEffect.
+An effect can be applied to any `Component` that the effect supports.
 
-If you want to create an effect that only runs once only specify the required parameters of your wanted Effect class.
+At the moment there are only `PositionComponentEffect`s, which are applied to PositionComponent`'s, which are presented below.
+
+If you want to create an effect for another component just extend the `ComponentEffect` class and add your created effect to the component by calling `component.addEffect(yourEffect)`.
 
 ## More advanced effects
 Then there are two optional boolean parameters called `isInfinite` and `isAlternating`, by combining them you can get different effects.

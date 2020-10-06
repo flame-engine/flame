@@ -96,6 +96,11 @@ class CombinedEffect extends PositionComponentEffect {
     }
   }
 
+  @override
+  bool hasFinished() {
+    return super.hasFinished() && effects.every((e) => e.hasFinished());
+  }
+
   void _maybeReverse(PositionComponentEffect effect) {
     if (isAlternating && !effect.isAlternating && effect.isMax()) {
       // Make the effect go in reverse
