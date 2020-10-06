@@ -10,6 +10,9 @@
  - Use isRelative on effects
  - Use Vector2 for position and size on PositionComponent
 
+## [next]
+ - Fix spriteAsWidget deprecation message
+
 ## 0.27.0
  - Improved the accuracy of the `FPSCounter` by using Flutter's internal frame timings.
  - Adding MouseMovementDetector
