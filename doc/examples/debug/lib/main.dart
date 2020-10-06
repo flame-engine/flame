@@ -27,7 +27,7 @@ class AndroidComponent extends SpriteComponent with Resizable {
   @override
   void update(double dt) {
     super.update(dt);
-    if (size == null) {
+    if (gameSize == null) {
       return;
     }
 
@@ -36,14 +36,14 @@ class AndroidComponent extends SpriteComponent with Resizable {
     final rect = toRect();
 
     if ((x <= 0 && xDirection == -1) ||
-        (rect.right >= size.x && xDirection == 1)) {
+        (rect.right >= gameSize.x && xDirection == 1)) {
       xDirection = xDirection * -1;
     }
 
     y += yDirection * SPEED * dt;
 
     if ((y <= 0 && yDirection == -1) ||
-        (rect.bottom >= size.y && yDirection == 1)) {
+        (rect.bottom >= gameSize.y && yDirection == 1)) {
       yDirection = yDirection * -1;
     }
   }

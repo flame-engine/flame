@@ -43,14 +43,14 @@ class Player extends Component implements JoystickListener {
   }
 
   @override
-  void resize(Vector2 size) {
+  void onGameResize(Vector2 size) {
     _rect = Rect.fromLTWH(
       (size.x / 2) - 25,
       (size.y / 2) - 25,
       50,
       50,
     );
-    super.resize(size);
+    super.onGameResize(size);
   }
 
   @override
