@@ -43,7 +43,7 @@ void main() {
       game.add(wrapper);
       game.onTapDown(1, TapDownDetails(globalPosition: const Offset(0.0, 0.0)));
 
-      expect(child.size, size);
+      expect(child.gameSize, size);
       expect(child.tapped, true);
     });
   });
