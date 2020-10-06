@@ -55,6 +55,9 @@ You can also show on your repository that your game is made with Flame by using 
 
 ## Contributing
 
+
+__Warning__: We are working on bringing Flame to its first stable version, updates on `0.x` versions are frozen, except for bugs. If you want to contribute on that version, by sure that it is a bugfix. For contributions for the stable version, your PR must point to the `v1.0.0` branch and by sure to talk about your contribution to the team, which is accessible on [Discord](https://discord.gg/pxrBmy4).
+
 Any help is appreciated! Comments, suggestions, issues, PRs.
 
 Have you found a bug or have a suggestion of how to enhance Flame, open an issue and we will take a look at it as soon as possible.
