@@ -20,6 +20,10 @@ class SequenceEffect extends PositionComponentEffect {
       effects.every((effect) => effect.component == null),
       "No effects can be added to components from the start",
     );
+    assert(
+      effects.every((effect) => !effect.isInfinite),
+      "No effects added to the sequence can be infinite",
+    );
   }
 
   @override
@@ -63,9 +67,9 @@ class SequenceEffect extends PositionComponentEffect {
       _driftModifier = currentEffect.driftTime;
       _currentIndex++;
       final iterationSize = isAlternating ? effects.length * 2 : effects.length;
-      if (_currentIndex != 0
-          && _currentIndex == iterationSize
-          && (currentEffect.isAlternating ||
+      if (_currentIndex != 0 &&
+          _currentIndex == iterationSize &&
+          (currentEffect.isAlternating ||
               currentEffect.isAlternating == isAlternating)) {
         isInfinite ? reset() : dispose();
         return;
@@ -92,10 +96,12 @@ class SequenceEffect extends PositionComponentEffect {
   @override
   void reset() {
     super.reset();
-    component.position = originalPosition;
-    component.angle = originalAngle;
-    component.size = originalSize;
-    initialize(component);
-    //effects.forEach((e) => e.reset());
+    effects.forEach((e) => e.reset());
+    if (component != null) {
+      component.position = originalPosition;
+      component.angle = originalAngle;
+      component.size = originalSize;
+      initialize(component);
+    }
   }
 }
