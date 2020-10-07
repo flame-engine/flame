@@ -37,6 +37,7 @@ class Player extends Component implements JoystickListener {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (_move) {
       moveFromAngle(dt);
     }
