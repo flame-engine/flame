@@ -35,6 +35,7 @@ class ParticleComponent extends Component {
   /// Passes update chain to child [Particle].
   @override
   void update(double dt) {
+    super.update(dt);
     particle.update(dt);
   }
 }
