@@ -65,6 +65,7 @@ class JoystickComponent extends JoystickController {
 
   @override
   void update(double t) {
+    super.update(t);
     directional?.update(t);
     actions?.forEach((action) => action.update(t));
   }

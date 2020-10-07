@@ -182,10 +182,6 @@ abstract class PositionComponent extends Component {
     canvas.restore();
   }
 
-  @mustCallSuper
-  @override
-  void update(double dt) => super.update(dt);
-
   void _renderChild(Canvas canvas, Component c) {
     if (!c.loaded()) {
       return;

@@ -25,7 +25,4 @@ class SpriteBatchComponent extends Component {
       paint: paint,
     );
   }
-
-  @override
-  void update(double t) {}
 }
