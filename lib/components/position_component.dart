@@ -5,7 +5,6 @@ import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
 import '../anchor.dart';
-import '../effects/effects.dart';
 import '../game.dart';
 import '../text_config.dart';
 import '../extensions/offset.dart';
@@ -77,7 +76,6 @@ abstract class PositionComponent extends Component {
   /// You can also manually override this for certain components in order to identify issues.
   bool debugMode = false;
 
-  final List<PositionComponentEffect> _effects = [];
   final OrderedSet<Component> _children =
       OrderedSet(Comparing.on((c) => c.priority()));
 
@@ -136,25 +134,6 @@ abstract class PositionComponent extends Component {
       canvas.scale(renderFlipX ? -1.0 : 1.0, renderFlipY ? -1.0 : 1.0);
       canvas.translate(-width / 2, -height / 2);
     }
-  }
-
-  void addEffect(PositionComponentEffect effect) {
-    _effects.add(effect..initialize(this));
-  }
-
-  void removeEffect(PositionComponentEffect effect) {
-    effect.dispose();
-  }
-
-  void clearEffects() {
-    _effects.forEach(removeEffect);
-  }
-
-  @mustCallSuper
-  @override
-  void update(double dt) {
-    _effects.forEach((e) => e.update(dt));
-    _effects.removeWhere((e) => e.hasFinished());
   }
 
   /// This function recursively propagates an action to every children and grandchildren (and so on) of this component,

@@ -1,7 +1,9 @@
 # Effects
-An effect can be applied to any `PositionComponent`, there are currently two effects that you can use and that is the MoveEffect and the ScaleEffect.
+An effect can be applied to any `Component` that the effect supports.
 
-If you want to create an effect that only runs once only specify the required parameters of your wanted Effect class.
+At the moment there are only `PositionComponentEffect`s, which are applied to PositionComponent`'s, which are presented below.
+
+If you want to create an effect for another component just extend the `ComponentEffect` class and add your created effect to the component by calling `component.addEffect(yourEffect)`.
 
 ## More advanced effects
 Then there are two optional boolean parameters called `isInfinite` and `isAlternating`, by combining them you can get different effects.
@@ -20,7 +22,7 @@ When an effect is completed the callback `onComplete` will be called, it can be 
 
 ## MoveEffect
 
-Applied to `PositionComponent`s, this effect can be used to move the component to a new position, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
+Applied to `PositionComponent`s, this effect can be used to move the component to new positions, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
 
 Usage example:
 ```dart
@@ -28,11 +30,17 @@ import 'package:flame/effects/effects.dart';
 
 // Square is a PositionComponent
 square.addEffect(MoveEffect(
-  destination: Position(200, 200),
+  path: [Vector2(200, 200), Vector2(200, 100), Vector(0, 50)],
   speed: 250.0,
   curve: Curves.bounceInOut,
+  isRelative: false,
 ));
 ```
+
+If you want the positions in the path list to be relative to the components last position, and not absolute values on the screen, then you can set `isRelative = true`.
+When you use that, the next position in the list will be relative to the previous position in the list, or if it is the first element of the list it is relative to the components position.
+So if you have a component which is positioned at `Vector2(100, 100)` and you use `isRelative = true` with the following path list `path: [Vector(20, 0), Vector(0, 50)]`, then the component will
+first move to `(120, 0)` and then to `(120, 100)`.
 
 ## ScaleEffect
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/effects/effects.dart';
@@ -15,11 +16,21 @@ class MyGame extends BaseGame with TapDetector {
   }
 
   @override
-  void onTapUp(details) {
+  void onTapUp(TapUpDetails details) {
     square.addEffect(MoveEffect(
-      destination: details.localPosition.toVector2(),
+      path: [
+        details.localPosition.toVector2(),
+        Vector2(100, 100),
+        Vector2(50, 120),
+        Vector2(200, 400),
+        Vector2(150, 0),
+        Vector2(100, 300),
+      ],
       speed: 250.0,
       curve: Curves.bounceInOut,
+      isRelative: false,
+      isInfinite: true,
+      isAlternating: true,
     ));
   }
 }
