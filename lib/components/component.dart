@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/painting.dart';
+import 'package:meta/meta.dart';
 
+import '../effects/effects.dart';
 import '../extensions/vector2.dart';
 
 /// This represents a Component for your game.
@@ -10,12 +12,19 @@ import '../extensions/vector2.dart';
 /// Anything that either renders or updates can be added to the list on [BaseGame]. It will deal with calling those methods for you.
 /// Components also have other methods that can help you out if you want to overwrite them.
 abstract class Component {
+  /// The effects that should run on the component
+  final List<ComponentEffect> _effects = [];
+
   /// This method is called periodically by the game engine to request that your component updates itself.
   ///
   /// The time [t] in seconds (with microseconds precision provided by Flutter) since the last update cycle.
   /// This time can vary according to hardware capacity, so make sure to update your state considering this.
   /// All components on [BaseGame] are always updated by the same amount. The time each one takes to update adds up to the next update cycle.
-  void update(double t);
+  @mustCallSuper
+  void update(double dt) {
+    _effects.forEach((e) => e.update(dt));
+    _effects.removeWhere((e) => e.hasFinished());
+  }
 
   /// Renders this component on the provided Canvas [c].
   void render(Canvas c);
@@ -58,4 +67,19 @@ abstract class Component {
 
   /// Called right before the component is destroyed and removed from the game
   void onDestroy() {}
+
+  /// Add an effect to the component
+  void addEffect(ComponentEffect effect) {
+    _effects.add(effect..initialize(this));
+  }
+
+  /// Mark an effect for removal on the component
+  void removeEffect(ComponentEffect effect) {
+    effect.dispose();
+  }
+
+  /// Remove all effects
+  void clearEffects() {
+    _effects.forEach(removeEffect);
+  }
 }
