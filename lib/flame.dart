@@ -1,13 +1,10 @@
 library flame;
 
-import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'assets/assets_cache.dart';
 import 'assets/images.dart';
-import 'bgm.dart';
-import 'flame_audio.dart';
 import 'util.dart';
 
 /// This class holds static references to some useful objects to use in your game.
