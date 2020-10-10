@@ -18,7 +18,7 @@ class CombinedEffect extends PositionComponentEffect {
   }) : super(isInfinite, isAlternating, onComplete: onComplete) {
     assert(
       effects.every((effect) => effect.component == null),
-      "No effects can be added to components from the start",
+      'Each effect can only be added once',
     );
     final types = effects.map((e) => e.runtimeType);
     assert(
