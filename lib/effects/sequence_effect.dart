@@ -18,11 +18,11 @@ class SequenceEffect extends PositionComponentEffect {
   }) : super(isInfinite, isAlternating, onComplete: onComplete) {
     assert(
       effects.every((effect) => effect.component == null),
-      "No effects can be added to components from the start",
+      'Each effect can only be added once',
     );
     assert(
       effects.every((effect) => !effect.isInfinite),
-      "No effects added to the sequence can be infinite",
+      'No effects added to the sequence can be infinite',
     );
   }
 
