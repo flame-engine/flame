@@ -23,6 +23,9 @@ The file structure would have to be:
         └── player.png
 ```
 
+Optionally you can split your `audio` folder into two subfolders, one for `music` and one for `sfx`.
+Be mindful of configuring the `prefix` property correctly if you are changing this structure.
+
 Don't forget to add these files to your `pubspec.yaml` file:
 
 ```
