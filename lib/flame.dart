@@ -16,7 +16,7 @@ class Flame {
   static AssetBundle _bundle;
   static AssetBundle get bundle => _bundle == null ? rootBundle : _bundle;
 
-  /// Access a shard instance of [AssetsCache] class.
+  /// Access a shared instance of [AssetsCache] class.
   static AssetsCache assets = AssetsCache();
 
   /// Access a shared instance of the [Images] class.
