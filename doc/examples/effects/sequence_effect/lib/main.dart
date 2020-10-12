@@ -75,12 +75,14 @@ class MyGame extends BaseGame with TapDetector {
       isAlternating: false,
       isInfinite: false,
     );
+    combination.onComplete = () => print("combination complete");
 
     final sequence = SequenceEffect(
       effects: [move1, scale, combination],
       isInfinite: false,
       isAlternating: true,
     );
+    sequence.onComplete = () => print("sequence complete");
     greenSquare.addEffect(sequence);
   }
 }
