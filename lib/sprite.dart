@@ -7,15 +7,15 @@ import 'palette.dart';
 class Sprite {
   Paint paint = BasicPalette.white.paint;
   Image image;
-  Rect bounds;
+  Rect src;
 
   Sprite(
     this.image, {
-    Vector2 position,
+    Vector2 srcPosition,
     Vector2 size,
   }) : assert(image != null, "image can't be null") {
     size ??= Vector2(image.width.toDouble(), image.height.toDouble());
-    this.position = position;
+    this.srcPosition = srcPosition;
   }
 
   double get _imageWidth => image.width.toDouble();
@@ -24,12 +24,12 @@ class Sprite {
 
   Vector2 get originalSize => Vector2(_imageWidth, _imageHeight);
 
-  Vector2 get size => Vector2(bounds.width, bounds.height);
+  Vector2 get size => Vector2(src.width, src.height);
 
-  Vector2 get position => bounds.topLeft.toVector2();
+  Vector2 get srcPosition => src.topLeft.toVector2();
 
-  set position(Vector2 position) {
-    bounds = (position ?? Vector2.zero()).toPositionedRect(size);
+  set srcPosition(Vector2 position) {
+    src = (position ?? Vector2.zero()).toPositionedRect(size);
   }
 
   /// Renders this Sprite on the position [p], scaled by the [scale] factor provided.
@@ -88,6 +88,6 @@ class Sprite {
     Rect dst, {
     Paint overridePaint,
   }) {
-    canvas.drawImageRect(image, bounds, dst, overridePaint ?? paint);
+    canvas.drawImageRect(image, src, dst, overridePaint ?? paint);
   }
 }
