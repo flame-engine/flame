@@ -16,6 +16,7 @@
  - Fix wrong end angle for relative rotational effects
  - Use a list of Vector2 for Move effect to open up for more advanced move effects
  - Generalize effects api to include all components
+ - Extract all the audio related capabilities to a new package, flame_audio
 
 ## [next]
  - Fix spriteAsWidget deprecation message
