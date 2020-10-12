@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flame/extensions/vector2.dart';
 import 'package:flame/extensions/size.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
