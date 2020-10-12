@@ -108,7 +108,7 @@ class SpriteAnimation {
       );
       final Sprite sprite = Sprite(
         image,
-        position: position,
+        srcPosition: position,
         size: textureSize,
       );
       frames[i] = SpriteAnimationFrame(sprite, stepTimes[i]);
@@ -137,7 +137,7 @@ class SpriteAnimation {
 
       final Sprite sprite = Sprite(
         image,
-        position: Vector2Extension.fromInts(x, y),
+        srcPosition: Vector2Extension.fromInts(x, y),
         size: Vector2Extension.fromInts(width, height),
       );
 
