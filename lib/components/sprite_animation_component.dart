@@ -77,8 +77,7 @@ class SpriteAnimationComponent extends PositionComponent {
     super.render(canvas);
     animation.getSprite().render(
           canvas,
-          width: width,
-          height: height,
+          size: size,
           overridePaint: overridePaint,
         );
   }
