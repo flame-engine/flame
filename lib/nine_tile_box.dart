@@ -31,7 +31,7 @@ class NineTileBox {
   /// If [destTileSize] is not provided, the evaluated [tileSize] is used instead
   /// (so no scaling happens).
   NineTileBox(this.sprite, {int tileSize, int destTileSize}) {
-    this.tileSize = tileSize ?? sprite.src.width.toInt();
+    this.tileSize = tileSize ?? sprite.bounds.width.toInt();
     this.destTileSize = destTileSize ?? tileSize;
   }
 
@@ -83,8 +83,8 @@ class NineTileBox {
   double get _destTileSizeDouble => destTileSize.toDouble();
 
   void _drawTile(Canvas c, Rect dest, int i, int j) {
-    final xSrc = sprite.src.left + _tileSizeDouble * i;
-    final ySrc = sprite.src.top + _tileSizeDouble * j;
+    final xSrc = sprite.bounds.left + _tileSizeDouble * i;
+    final ySrc = sprite.bounds.top + _tileSizeDouble * j;
     final src = Rect.fromLTWH(xSrc, ySrc, _tileSizeDouble, _tileSizeDouble);
     c.drawImageRect(sprite.image, src, dest, BasicPalette.white.paint);
   }

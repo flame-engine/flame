@@ -1,12 +1,13 @@
 import 'dart:ui';
 
+import 'extensions/offset.dart';
 import 'extensions/vector2.dart';
 import 'palette.dart';
 
 class Sprite {
   Paint paint = BasicPalette.white.paint;
   Image image;
-  Rect src;
+  Rect bounds;
 
   Sprite(
     this.image, {
@@ -14,7 +15,7 @@ class Sprite {
     Vector2 size,
   }) : assert(image != null, "image can't be null") {
     size ??= Vector2(image.width.toDouble(), image.height.toDouble());
-    src = position.toPositionedRect(size);
+    this.position = position;
   }
 
   double get _imageWidth => image.width.toDouble();
@@ -23,7 +24,13 @@ class Sprite {
 
   Vector2 get originalSize => Vector2(_imageWidth, _imageHeight);
 
-  Vector2 get size => Vector2(src.width, src.height);
+  Vector2 get size => Vector2(bounds.width, bounds.height);
+
+  Vector2 get position => bounds.topLeft.toVector2();
+
+  set position(Vector2 position) {
+    bounds = (position ?? Vector2.zero()).toPositionedRect(size);
+  }
 
   /// Renders this Sprite on the position [p], scaled by the [scale] factor provided.
   ///
@@ -51,14 +58,11 @@ class Sprite {
 
   void render(
     Canvas canvas, {
-    double width,
-    double height,
+    Vector2 size,
     Paint overridePaint,
   }) {
-    width ??= size.x;
-    height ??= size.y;
-    renderRect(canvas, Rect.fromLTWH(0.0, 0.0, width, height),
-        overridePaint: overridePaint);
+    size ??= this.size;
+    renderRect(canvas, size.toRect(), overridePaint: overridePaint);
   }
 
   /// Renders this sprite centered in the position [p], i.e., on [p] - [size] / 2.
@@ -72,9 +76,11 @@ class Sprite {
     Paint overridePaint,
   }) {
     size ??= this.size;
-    renderRect(canvas,
-        Rect.fromLTWH(p.x - size.x / 2, p.y - size.y / 2, size.x, size.y),
-        overridePaint: overridePaint);
+    renderRect(
+      canvas,
+      (p - size / 2).toPositionedRect(size),
+      overridePaint: overridePaint,
+    );
   }
 
   void renderRect(
@@ -82,6 +88,6 @@ class Sprite {
     Rect dst, {
     Paint overridePaint,
   }) {
-    canvas.drawImageRect(image, src, dst, overridePaint ?? paint);
+    canvas.drawImageRect(image, bounds, dst, overridePaint ?? paint);
   }
 }
