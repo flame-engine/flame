@@ -53,10 +53,6 @@ class CombinedEffect extends PositionComponentEffect {
     if (effects.every((effect) => effect.hasFinished())) {
       if (isAlternating && curveDirection.isNegative) {
         effects.forEach((effect) => effect.isAlternating = true);
-      } else if (isInfinite) {
-        reset();
-      } else if (isAlternating && isMin()) {
-        dispose();
       }
     }
   }
@@ -94,11 +90,6 @@ class CombinedEffect extends PositionComponentEffect {
     if (isMax()) {
       _maybeReverse(effect);
     }
-  }
-
-  @override
-  bool hasFinished() {
-    return super.hasFinished() && effects.every((e) => e.hasFinished());
   }
 
   void _maybeReverse(PositionComponentEffect effect) {
