@@ -7,8 +7,6 @@ dependencies:
   flutter:
     sdk: flutter
   ordered_set: ^2.0.0
-  convert: ^2.0.1
-  flare_flutter: ^2.0.1
   meta: ^1.1.8
   vector_math: '>=2.0.0 <3.0.0'
 
