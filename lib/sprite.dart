@@ -12,9 +12,9 @@ class Sprite {
   Sprite(
     this.image, {
     Vector2 srcPosition,
-    Vector2 size,
+    Vector2 srcSize,
   }) : assert(image != null, "image can't be null") {
-    size ??= Vector2(image.width.toDouble(), image.height.toDouble());
+    this.srcSize = srcSize;
     this.srcPosition = srcPosition;
   }
 
@@ -26,7 +26,12 @@ class Sprite {
 
   Vector2 get srcSize => Vector2(src.width, src.height);
 
-  Vector2 get srcPosition => src.topLeft.toVector2();
+  set srcSize(Vector2 size) {
+    size ??= Vector2(image.width.toDouble(), image.height.toDouble());
+    src = (srcPosition ?? Vector2.zero()).toPositionedRect(size);
+  }
+
+  Vector2 get srcPosition => (src?.topLeft ?? Offset.zero).toVector2();
 
   set srcPosition(Vector2 position) {
     src = (position ?? Vector2.zero()).toPositionedRect(srcSize);
@@ -43,8 +48,12 @@ class Sprite {
     double scale = 1.0,
     Paint overridePaint,
   }) {
-    renderPosition(canvas, p,
-        size: srcSize * scale, overridePaint: overridePaint);
+    renderPosition(
+      canvas,
+      p,
+      size: srcSize * scale,
+      overridePaint: overridePaint,
+    );
   }
 
   void renderPosition(
@@ -53,7 +62,7 @@ class Sprite {
     Vector2 size,
     Paint overridePaint,
   }) {
-    size ??= this.srcSize;
+    size ??= srcSize;
     renderRect(canvas, p.toPositionedRect(size), overridePaint: overridePaint);
   }
 
@@ -62,7 +71,7 @@ class Sprite {
     Vector2 size,
     Paint overridePaint,
   }) {
-    size ??= this.srcSize;
+    size ??= srcSize;
     renderRect(canvas, size.toRect(), overridePaint: overridePaint);
   }
 
@@ -76,7 +85,7 @@ class Sprite {
     Vector2 size,
     Paint overridePaint,
   }) {
-    size ??= this.srcSize;
+    size ??= srcSize;
     renderRect(
       canvas,
       (p - size / 2).toPositionedRect(size),
