@@ -1,9 +1,3 @@
-## About 1.0.0
-
-⚠️__Warning__⚠️: this is a release candidate for version 1.0.0 of Flame. This is not ready for production use and the documentation found here is not completely updated according to the code, also everything here can be changed before the full release.
-
-Use this version to get a preview of how the new Flame version will be and also to give the team feedback about the new structure and/or features.
-
 # Getting Started!
 
 ## About Flame
