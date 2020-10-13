@@ -14,6 +14,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'beta'
+      - run: git clean -xffd # https://github.com/dart-lang/sdk/issues/39792
       - run: flutter --version
       - run: flutter pub get
       - run: ./scripts/lint.sh
