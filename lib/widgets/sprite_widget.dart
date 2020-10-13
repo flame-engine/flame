@@ -44,11 +44,11 @@ class _SpritePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final widthRate = size.width / _sprite.size.x;
-    final heightRate = size.height / _sprite.size.y;
+    final widthRate = size.width / _sprite.srcSize.x;
+    final heightRate = size.height / _sprite.srcSize.y;
     final rate = min(widthRate, heightRate);
 
-    final paintSize = _sprite.size * rate;
+    final paintSize = _sprite.srcSize * rate;
     final anchorPosition = _anchor.relativePosition;
     final anchoredPosition = size.toVector2()..multiply(anchorPosition);
     final delta = (anchoredPosition - paintSize)..multiply(anchorPosition);
