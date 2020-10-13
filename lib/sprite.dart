@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'extensions/offset.dart';
 import 'extensions/vector2.dart';
 import 'palette.dart';
 
@@ -10,11 +11,11 @@ class Sprite {
 
   Sprite(
     this.image, {
-    Vector2 position,
-    Vector2 size,
+    Vector2 srcPosition,
+    Vector2 srcSize,
   }) : assert(image != null, "image can't be null") {
-    size ??= Vector2(image.width.toDouble(), image.height.toDouble());
-    src = position.toPositionedRect(size);
+    this.srcSize = srcSize;
+    this.srcPosition = srcPosition;
   }
 
   double get _imageWidth => image.width.toDouble();
@@ -23,7 +24,18 @@ class Sprite {
 
   Vector2 get originalSize => Vector2(_imageWidth, _imageHeight);
 
-  Vector2 get size => Vector2(src.width, src.height);
+  Vector2 get srcSize => Vector2(src.width, src.height);
+
+  set srcSize(Vector2 size) {
+    size ??= Vector2(image.width.toDouble(), image.height.toDouble());
+    src = (srcPosition ?? Vector2.zero()).toPositionedRect(size);
+  }
+
+  Vector2 get srcPosition => (src?.topLeft ?? Offset.zero).toVector2();
+
+  set srcPosition(Vector2 position) {
+    src = (position ?? Vector2.zero()).toPositionedRect(srcSize);
+  }
 
   /// Renders this Sprite on the position [p], scaled by the [scale] factor provided.
   ///
@@ -36,7 +48,12 @@ class Sprite {
     double scale = 1.0,
     Paint overridePaint,
   }) {
-    renderPosition(canvas, p, size: size * scale, overridePaint: overridePaint);
+    renderPosition(
+      canvas,
+      p,
+      size: srcSize * scale,
+      overridePaint: overridePaint,
+    );
   }
 
   void renderPosition(
@@ -45,20 +62,17 @@ class Sprite {
     Vector2 size,
     Paint overridePaint,
   }) {
-    size ??= this.size;
+    size ??= srcSize;
     renderRect(canvas, p.toPositionedRect(size), overridePaint: overridePaint);
   }
 
   void render(
     Canvas canvas, {
-    double width,
-    double height,
+    Vector2 size,
     Paint overridePaint,
   }) {
-    width ??= size.x;
-    height ??= size.y;
-    renderRect(canvas, Rect.fromLTWH(0.0, 0.0, width, height),
-        overridePaint: overridePaint);
+    size ??= srcSize;
+    renderRect(canvas, size.toRect(), overridePaint: overridePaint);
   }
 
   /// Renders this sprite centered in the position [p], i.e., on [p] - [size] / 2.
@@ -71,10 +85,12 @@ class Sprite {
     Vector2 size,
     Paint overridePaint,
   }) {
-    size ??= this.size;
-    renderRect(canvas,
-        Rect.fromLTWH(p.x - size.x / 2, p.y - size.y / 2, size.x, size.y),
-        overridePaint: overridePaint);
+    size ??= srcSize;
+    renderRect(
+      canvas,
+      (p - size / 2).toPositionedRect(size),
+      overridePaint: overridePaint,
+    );
   }
 
   void renderRect(

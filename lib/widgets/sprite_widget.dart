@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flame/extensions/size.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
@@ -43,22 +44,16 @@ class _SpritePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final widthRate = size.width / _sprite.size.x;
-    final heightRate = size.height / _sprite.size.y;
-
+    final widthRate = size.width / _sprite.srcSize.x;
+    final heightRate = size.height / _sprite.srcSize.y;
     final rate = min(widthRate, heightRate);
 
-    final w = _sprite.size.x * rate;
-    final h = _sprite.size.y * rate;
+    final paintSize = _sprite.srcSize * rate;
+    final anchorPosition = _anchor.relativePosition;
+    final anchoredPosition = size.toVector2()..multiply(anchorPosition);
+    final delta = (anchoredPosition - paintSize)..multiply(anchorPosition);
 
-    final double dx = _anchor.relativePosition.x * size.width;
-    final double dy = _anchor.relativePosition.y * size.height;
-
-    canvas.translate(
-      dx - w * _anchor.relativePosition.x,
-      dy - h * _anchor.relativePosition.y,
-    );
-
-    _sprite.render(canvas, width: w, height: h);
+    canvas.translate(delta.x, delta.y);
+    _sprite.render(canvas, size: paintSize);
   }
 }
