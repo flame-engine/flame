@@ -8,6 +8,8 @@
 
 Use this version to get a preview of how the new Flame version will be and also to give the team feedback about the new structure and/or features.
 
+---
+
 [English](https://github.com/flame-engine/flame) | [简体中文](README-ZH.md) | [Polski](https://github.com/mbiesiad/flame/blob/pl_PL/README-PL.md)
 
 A minimalistic Flutter game engine.
