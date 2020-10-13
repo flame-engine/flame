@@ -42,7 +42,7 @@ class SpriteSheet {
     return Sprite(
       image,
       srcPosition: Vector2(x.toDouble(), y.toDouble())..multiply(size),
-      size: size,
+      srcSize: size,
     );
   }
 

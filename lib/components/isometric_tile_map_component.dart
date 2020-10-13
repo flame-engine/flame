@@ -46,7 +46,7 @@ class IsometricTileset {
     final j = tileId ~/ columns;
     final s = size.toDouble();
     return Sprite(tileset,
-        srcPosition: Vector2(s * i, s * j), size: Vector2.all(s));
+        srcPosition: Vector2(s * i, s * j), srcSize: Vector2.all(s));
   }
 }
 
