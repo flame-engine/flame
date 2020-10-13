@@ -25,7 +25,7 @@ class Selector extends SpriteComponent {
 
   Selector(double s, Image image)
       : super.fromSprite(
-            Vector2.all(s), Sprite(image, size: Vector2.all(32.0)));
+            Vector2.all(s), Sprite(image, srcSize: Vector2.all(32.0)));
 
   @override
   void render(Canvas canvas) {

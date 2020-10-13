@@ -19,7 +19,7 @@ class _Painter extends widgets.CustomPainter {
   });
 
   Sprite _getSpriteTile(double x, double y) =>
-      Sprite(image, position: Vector2(x, y), size: Vector2.all(tileSize));
+      Sprite(image, srcPosition: Vector2(x, y), srcSize: Vector2.all(tileSize));
 
   @override
   void paint(Canvas canvas, Size size) {
