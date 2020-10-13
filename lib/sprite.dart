@@ -24,12 +24,12 @@ class Sprite {
 
   Vector2 get originalSize => Vector2(_imageWidth, _imageHeight);
 
-  Vector2 get size => Vector2(src.width, src.height);
+  Vector2 get srcSize => Vector2(src.width, src.height);
 
   Vector2 get srcPosition => src.topLeft.toVector2();
 
   set srcPosition(Vector2 position) {
-    src = (position ?? Vector2.zero()).toPositionedRect(size);
+    src = (position ?? Vector2.zero()).toPositionedRect(srcSize);
   }
 
   /// Renders this Sprite on the position [p], scaled by the [scale] factor provided.
@@ -43,7 +43,8 @@ class Sprite {
     double scale = 1.0,
     Paint overridePaint,
   }) {
-    renderPosition(canvas, p, size: size * scale, overridePaint: overridePaint);
+    renderPosition(canvas, p,
+        size: srcSize * scale, overridePaint: overridePaint);
   }
 
   void renderPosition(
@@ -52,7 +53,7 @@ class Sprite {
     Vector2 size,
     Paint overridePaint,
   }) {
-    size ??= this.size;
+    size ??= this.srcSize;
     renderRect(canvas, p.toPositionedRect(size), overridePaint: overridePaint);
   }
 
@@ -61,7 +62,7 @@ class Sprite {
     Vector2 size,
     Paint overridePaint,
   }) {
-    size ??= this.size;
+    size ??= this.srcSize;
     renderRect(canvas, size.toRect(), overridePaint: overridePaint);
   }
 
@@ -75,7 +76,7 @@ class Sprite {
     Vector2 size,
     Paint overridePaint,
   }) {
-    size ??= this.size;
+    size ??= this.srcSize;
     renderRect(
       canvas,
       (p - size / 2).toPositionedRect(size),
