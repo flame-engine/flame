@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.0.0
+## 1.0.0-rc1
  - Move all box2d related code and examples to the flame_box2d repo
  - Rename Animation to SpriteAnimation
  - Create extension of Vector2 and unify all tuples to use that class
@@ -18,9 +18,6 @@
  - Generalize effects api to include all components
  - Extract all the audio related capabilities to a new package, flame_audio
  - Fix bug that sprite crashes without a position
-
-## [next]
- - Fix spriteAsWidget deprecation message
 
 ## 0.27.0
  - Improved the accuracy of the `FPSCounter` by using Flutter's internal frame timings.
