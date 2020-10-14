@@ -532,16 +532,14 @@ class MyGame extends BaseGame {
     const rows = 8;
     const frames = columns * rows;
     final spriteImage = images.fromCache('boom3.png');
-    final spritesheet = SpriteSheet(
-      rows: rows,
-      columns: columns,
+    final spritesheet = SpriteSheet.fromColsAndRows(
       image: spriteImage,
-      textureWidth: spriteImage.width ~/ columns,
-      textureHeight: spriteImage.height ~/ rows,
+      columns: columns,
+      rows: rows,
     );
     final sprites = List<Sprite>.generate(
       frames,
-      (i) => spritesheet.getSprite(i ~/ rows, i % columns),
+      (i) => spritesheet.getSpriteById(i),
     );
 
     return SpriteAnimation.spriteList(sprites);

@@ -19,13 +19,10 @@ void main() async {
 
   final _animationSpriteSheet = SpriteSheet(
     image: image,
-    columns: 19,
-    rows: 1,
-    textureWidth: 96,
-    textureHeight: 96,
+    srcSize: Vector2.all(96),
   );
   _animation = _animationSpriteSheet.createAnimation(
-    0,
+    row: 0,
     stepTime: 0.2,
     to: 19,
   );
@@ -50,7 +47,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Vector2 _position = Vector2(256.0, 256.0);
+  Vector2 _position = Vector2.all(256);
 
   @override
   void initState() {
@@ -60,9 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void changePosition() async {
     await Future.delayed(const Duration(seconds: 1));
-    setState(() {
-      _position = Vector2(10 + _position.x, 10 + _position.y);
-    });
+    setState(() => _position += Vector2.all(10));
   }
 
   void _clickFab(GlobalKey<ScaffoldState> key) {
