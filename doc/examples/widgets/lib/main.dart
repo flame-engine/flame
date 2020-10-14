@@ -1,3 +1,4 @@
+import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/material.dart' hide Animation;
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
@@ -64,10 +65,7 @@ void main() async {
   final buttonsImage = await Flame.images.load('buttons.png');
   final _buttons = SpriteSheet(
     image: buttonsImage,
-    textureHeight: 20,
-    textureWidth: 60,
-    columns: 1,
-    rows: 2,
+    srcSize: Vector2(60, 20),
   );
   dashbook.storiesOf('SpriteButton').decorator(CenterDecorator()).add(
         'default',
@@ -119,13 +117,10 @@ void main() async {
   final pteroImage = await Flame.images.load('bomb_ptero.png');
   final _animationSpriteSheet = SpriteSheet(
     image: pteroImage,
-    textureHeight: 32,
-    textureWidth: 48,
-    columns: 4,
-    rows: 1,
+    srcSize: Vector2(48, 32),
   );
   final _animation = _animationSpriteSheet.createAnimation(
-    0,
+    row: 0,
     stepTime: 0.2,
     to: 3,
     loop: true,
