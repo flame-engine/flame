@@ -35,7 +35,7 @@ class SpriteSheet {
     @required this.srcSize,
   });
 
-  SpriteSheet.fromColsAndRows({
+  SpriteSheet.fromColumnsAndRows({
     @required this.image,
     @required int columns,
     @required int rows,
