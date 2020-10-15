@@ -1,11 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart' hide Animation;
-import 'package:flame/sprite_animation.dart';
 
 import '../anchor.dart';
 import '../sprite_animation.dart';
-
 import 'sprite_widget.dart';
 
 /// A [StatefulWidget] that render a [SpriteAnimation].

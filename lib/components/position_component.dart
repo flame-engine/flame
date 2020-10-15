@@ -5,10 +5,10 @@ import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
 import '../anchor.dart';
-import '../game.dart';
-import '../text_config.dart';
 import '../extensions/offset.dart';
 import '../extensions/vector2.dart';
+import '../game.dart';
+import '../text_config.dart';
 import 'component.dart';
 
 /// A [Component] implementation that represents a component that has a

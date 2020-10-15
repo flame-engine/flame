@@ -1,7 +1,7 @@
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
 
-import './effects.dart';
+import 'effects.dart';
 
 class RotateEffect extends PositionComponentEffect {
   double radians;
