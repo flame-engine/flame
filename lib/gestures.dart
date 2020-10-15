@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 
-import './game/game.dart';
+import 'game/game.dart';
 
 // Multi touch detector
 mixin MultiTouchTapDetector on Game {

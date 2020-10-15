@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import './component.dart';
 import '../time.dart';
+import 'component.dart';
 
 /// Simple component which wraps a [Timer] instance allowing it to be easily used inside a [BaseGame] game.
 class TimerComponent extends Component {
