@@ -48,8 +48,11 @@ class SpriteAnimation {
   /// Creates an animation based on the parameters.
   ///
   /// All frames have the same [stepTime].
-  SpriteAnimation.spriteList(List<Sprite> sprites,
-      {double stepTime, this.loop = true}) {
+  SpriteAnimation.spriteList(
+    List<Sprite> sprites, {
+    double stepTime,
+    this.loop = true,
+  }) {
     if (sprites.isEmpty) {
       throw Exception('You must have at least one frame!');
     }

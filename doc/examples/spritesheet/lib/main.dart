@@ -1,9 +1,9 @@
-import 'package:flame/extensions/vector2.dart';
-import 'package:flutter/material.dart';
 import 'package:flame/components/sprite_animation_component.dart';
 import 'package:flame/components/sprite_component.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/game.dart';
 import 'package:flame/spritesheet.dart';
+import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,16 +16,14 @@ class MyGame extends BaseGame {
   Future<void> onLoad() async {
     final spriteSheet = SpriteSheet(
       image: await images.load('spritesheet.png'),
-      textureWidth: 16,
-      textureHeight: 18,
-      columns: 11,
-      rows: 2,
+      srcSize: Vector2(16.0, 18.0),
     );
 
     final vampireAnimation =
-        spriteSheet.createAnimation(0, stepTime: 0.1, to: 7);
-    final ghostAnimation = spriteSheet.createAnimation(1, stepTime: 0.1, to: 7);
-    final spriteSize = Vector2(80, 90);
+        spriteSheet.createAnimation(row: 0, stepTime: 0.1, to: 7);
+    final ghostAnimation =
+        spriteSheet.createAnimation(row: 1, stepTime: 0.1, to: 7);
+    final spriteSize = Vector2(80.0, 90.0);
 
     final vampireComponent =
         SpriteAnimationComponent(spriteSize, vampireAnimation)
