@@ -1,56 +1,11 @@
 import 'dart:ui';
 
-import 'package:flame/components/position_component.dart';
+import 'position_component.dart';
 
-import '../sprite.dart';
 import '../extensions/vector2.dart';
+import '../spritesheet.dart';
 
-/// This represents an isometric tileset to be used in a tilemap.
-///
-/// It's basically a grid of squares, each square has a tile, in order.
-/// The block ids are calculated going row per row, left to right, top to
-/// bottom.
-///
-/// This class will cache the usage of sprites to improve performance.
-class IsometricTileset {
-  /// The image for this tileset.
-  final Image tileset;
-
-  /// The size of each square block within the image.
-  ///
-  /// The image width and height must be multiples of this number.
-  final int size;
-
-  final Map<int, Sprite> _spriteCache = {};
-
-  IsometricTileset(this.tileset, this.size);
-
-  /// Compute the number of columns the image has
-  /// by using the image width and tile size.
-  int get columns => tileset.width ~/ size;
-
-  /// Compute the number of rows the image has
-  /// by using the image height and tile size.
-  int get rows => tileset.height ~/ size;
-
-  /// Get a sprite to render one specific tile given its id.
-  ///
-  /// The ids are assigned left to right, top to bottom, row per row.
-  /// The returned sprite will be cached, so don't modify it!
-  Sprite getTile(int tileId) {
-    return _spriteCache[tileId] ??= _computeTile(tileId);
-  }
-
-  Sprite _computeTile(int tileId) {
-    final i = tileId % columns;
-    final j = tileId ~/ columns;
-    final s = size.toDouble();
-    return Sprite(tileset,
-        srcPosition: Vector2(s * i, s * j), srcSize: Vector2.all(s));
-  }
-}
-
-/// This is just a pair of int, int.
+/// This is just a pair of <int, int>.
 ///
 /// Represents a position in a matrix, or in this case, on the tilemap.
 class Block {
@@ -70,29 +25,29 @@ class Block {
 /// property.
 class IsometricTileMapComponent extends PositionComponent {
   /// This is the tileset that will be used to render this map.
-  IsometricTileset tileset;
+  SpriteSheet tileset;
 
   /// The positions of each block will be placed respecting this matrix.
   List<List<int>> matrix;
 
   /// Optionally provide a new tile size to render it scaled.
-  int destTileSize;
+  Vector2 destTileSize;
 
   IsometricTileMapComponent(this.tileset, this.matrix, {this.destTileSize});
 
   /// This is the size the tiles will be drawn (either original or overwritten).
-  int get effectiveTileSize => destTileSize ?? tileset.size;
+  Vector2 get effectiveTileSize => destTileSize ?? tileset.srcSize;
 
   @override
   void render(Canvas c) {
     super.render(c);
 
-    final size = Vector2.all(effectiveTileSize.toDouble());
+    final size = effectiveTileSize;
     for (int i = 0; i < matrix.length; i++) {
       for (int j = 0; j < matrix[i].length; j++) {
         final element = matrix[i][j];
         if (element != -1) {
-          final sprite = tileset.getTile(element);
+          final sprite = tileset.getSpriteById(element);
           final p = getBlockPositionInts(j, i);
           sprite.renderRect(c, p.toPositionedRect(size));
         }
@@ -108,8 +63,9 @@ class IsometricTileMapComponent extends PositionComponent {
   }
 
   Vector2 getBlockPositionInts(int i, int j) {
-    final s = effectiveTileSize.toDouble() / 2;
-    return cartToIso(Vector2(i * s, j * s)) - Vector2(s, 0);
+    final pos = Vector2(i.toDouble(), j.toDouble())
+      ..multiply(effectiveTileSize / 2);
+    return cartToIso(pos) - Vector2(effectiveTileSize.x / 2, 0);
   }
 
   /// Converts a coordinate from the isometric space to the cartesian space.
@@ -130,10 +86,9 @@ class IsometricTileMapComponent extends PositionComponent {
   ///
   /// This can be used to handle clicks or hovers.
   Block getBlock(Vector2 p) {
-    final s = effectiveTileSize.toDouble() / 2;
     final cart = isoToCart(p - position);
-    final px = cart.x ~/ s;
-    final py = cart.y ~/ s;
+    final px = cart.x ~/ (effectiveTileSize.x / 2);
+    final py = cart.y ~/ (effectiveTileSize.y / 2);
     return Block(px, py);
   }
 

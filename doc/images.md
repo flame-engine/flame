@@ -281,10 +281,7 @@ import 'package:flame/spritesheet.dart';
 
 final spritesheet = SpriteSheet(
   image: imageInstance,
-  textureWidth: 16,
-  textureHeight: 16,
-  columns: 10,
-  rows: 2,
+  srcSize: Vector2.all(16.0),
 );
 
 final animation = spritesheet.createAnimation(0, stepTime: 0.1);

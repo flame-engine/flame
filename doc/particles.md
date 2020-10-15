@@ -259,10 +259,7 @@ A `Particle` which embeds a Flame `Animation`. By default, aligns `Animation`s `
 ```dart
 final spritesheet = SpriteSheet(
   imageName: 'spritesheet.png',
-  textureWidth: 16,
-  textureHeight: 16,
-  columns: 10,
-  rows: 2
+  srcSize: Vector2.all(16.0),
 );
 
 game.add(

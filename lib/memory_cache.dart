@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-/// Simple class to cache values on the cache
+/// Simple class to cache values with size based eviction.
 ///
 class MemoryCache<K, V> {
   final LinkedHashMap<K, V> _cache = LinkedHashMap();

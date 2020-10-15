@@ -4,6 +4,7 @@ import 'package:flame/game.dart';
 import 'package:flame/components/isometric_tile_map_component.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame/spritesheet.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Image;
 
@@ -25,7 +26,9 @@ class Selector extends SpriteComponent {
 
   Selector(double s, Image image)
       : super.fromSprite(
-            Vector2.all(s), Sprite(image, srcSize: Vector2.all(32.0)));
+          Vector2.all(s),
+          Sprite(image, srcSize: Vector2.all(32.0)),
+        );
 
   @override
   void render(Canvas canvas) {
@@ -48,7 +51,7 @@ class MyGame extends BaseGame with MouseMovementDetector {
     final selectorImage = await images.load('selector.png');
 
     final tilesetImage = await images.load('tiles.png');
-    final tileset = IsometricTileset(tilesetImage, 32);
+    final tileset = SpriteSheet(image: tilesetImage, srcSize: Vector2.all(32));
     final matrix = [
       [3, 1, 1, 1, 0, 0],
       [-1, 1, 2, 1, 0, 0],
@@ -58,7 +61,11 @@ class MyGame extends BaseGame with MouseMovementDetector {
       [1, 3, 3, 3, 0, 2],
     ];
     add(
-      base = IsometricTileMapComponent(tileset, matrix, destTileSize: s)
+      base = IsometricTileMapComponent(
+        tileset,
+        matrix,
+        destTileSize: Vector2.all(s.toDouble()),
+      )
         ..x = x
         ..y = y,
     );
