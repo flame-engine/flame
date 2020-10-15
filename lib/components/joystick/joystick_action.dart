@@ -1,15 +1,15 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'joystick_component.dart';
-import 'joystick_events.dart';
-import '../../gestures.dart';
-import '../../sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../extensions/offset.dart';
 import '../../extensions/vector2.dart';
+import '../../gestures.dart';
+import '../../sprite.dart';
+import 'joystick_component.dart';
+import 'joystick_events.dart';
 
 enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
 

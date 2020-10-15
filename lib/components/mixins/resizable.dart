@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+
 import '../../extensions/vector2.dart';
 import '../component.dart';
 

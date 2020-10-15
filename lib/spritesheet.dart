@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 
+import 'extensions/vector2.dart';
 import 'sprite.dart';
 import 'sprite_animation.dart';
-import 'extensions/vector2.dart';
 
 /// Utility class to help extract animations and sprites from a sprite sheet image.
 ///

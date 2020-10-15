@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/foundation.dart';
 
+import '../extensions/vector2.dart';
 import '../sprite.dart';
 import 'component.dart';
 import 'position_component.dart';

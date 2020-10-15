@@ -4,8 +4,8 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 
-import '../extensions/vector2.dart';
 import '../extensions/rect.dart';
+import '../extensions/vector2.dart';
 import '../flame.dart';
 import 'position_component.dart';
 

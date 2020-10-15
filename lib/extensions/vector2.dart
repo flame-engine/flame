@@ -1,9 +1,9 @@
-export 'package:vector_math/vector_math_64.dart' show Vector2;
-
 import 'dart:math';
 import 'dart:ui';
 
 import 'package:vector_math/vector_math_64.dart';
+
+export 'package:vector_math/vector_math_64.dart' show Vector2;
 
 extension Vector2Extension on Vector2 {
   /// Creates an [Offset] from the [Vector2]

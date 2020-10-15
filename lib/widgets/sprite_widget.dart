@@ -1,10 +1,10 @@
 import 'dart:math';
 
-import 'package:flame/extensions/size.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
 import '../anchor.dart';
+import '../extensions/size.dart';
 import '../sprite.dart';
 import 'animation_widget.dart';
 

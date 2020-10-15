@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
-import '../sprite_animation.dart';
-import '../particle.dart';
 import '../extensions/vector2.dart';
+import '../particle.dart';
+import '../sprite_animation.dart';
 
 class SpriteAnimationParticle extends Particle {
   final SpriteAnimation animation;
