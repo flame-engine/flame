@@ -14,7 +14,7 @@ class CombinedEffect extends PositionComponentEffect {
     this.offset = 0.0,
     bool isInfinite = false,
     bool isAlternating = false,
-    Function onComplete,
+    void Function() onComplete,
   }) : super(isInfinite, isAlternating, onComplete: onComplete) {
     assert(
       effects.every((effect) => effect.component == null),
@@ -75,7 +75,7 @@ class CombinedEffect extends PositionComponentEffect {
     effects.forEach((effect) => effect.dispose());
   }
 
-  void _updateEffect(final effect, double dt) {
+  void _updateEffect(PositionComponentEffect effect, double dt) {
     final isReverse = curveDirection.isNegative;
     final initialOffset = effects.indexOf(effect) * offset;
     final effectOffset = isReverse

@@ -69,11 +69,11 @@ class SpriteSheet {
   }
 
   Sprite _computeSprite(int spriteId) {
-    final i = (spriteId % columns).toDouble();
-    final j = (spriteId ~/ columns).toDouble();
+    final i = spriteId % columns;
+    final j = spriteId ~/ columns;
     return Sprite(
       image,
-      srcPosition: Vector2(i, j)..multiply(srcSize),
+      srcPosition: Vector2Extension.fromInts(i, j)..multiply(srcSize),
       srcSize: srcSize,
     );
   }

@@ -14,10 +14,10 @@ class RotateEffect extends PositionComponentEffect {
     @required this.radians, // As many radians as you want to rotate
     @required this.speed, // In radians per second
     this.curve,
-    isInfinite = false,
-    isAlternating = false,
-    isRelative = false,
-    Function onComplete,
+    bool isInfinite = false,
+    bool isAlternating = false,
+    bool isRelative = false,
+    void Function() onComplete,
   }) : super(
           isInfinite,
           isAlternating,

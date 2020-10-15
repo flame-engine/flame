@@ -74,7 +74,7 @@ class ParallaxLayer {
 
     // The image size so that it fulfills the LayerFill parameter
     _imageSize =
-        Vector2(_image.width.toDouble(), _image.height.toDouble()) / _scale;
+        Vector2Extension.fromInts(_image.width, _image.height) / _scale;
 
     // Number of images that can fit on the canvas plus one
     // to have something to scroll to without leaving canvas empty
@@ -138,7 +138,7 @@ class ParallaxLayer {
     );
   }
 
-  Future<Image> _load(filename) {
+  Future<Image> _load(String filename) {
     return Flame.images.load(filename).then((image) {
       _image = image;
       if (_screenSize != null) {

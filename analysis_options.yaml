@@ -1,6 +1,11 @@
 # Source of linter options:
 # http://dart-lang.github.io/linter/lints/options/options.html
 
+analyzer:
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+
 linter:
   rules:
     - always_declare_return_types

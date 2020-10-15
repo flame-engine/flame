@@ -202,8 +202,8 @@ abstract class PositionComponent extends Component {
     return _children.remove(c);
   }
 
-  Iterable<PositionComponent> removeChildren(
-    bool Function(PositionComponent) test,
+  Iterable<Component> removeChildren(
+    bool Function(Component) test,
   ) {
     return _children.removeWhere(test);
   }

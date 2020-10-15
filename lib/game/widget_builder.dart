@@ -33,8 +33,7 @@ class _GenericTapEventHandler {
 }
 
 Widget _applyAdvancedGesturesDetectors(Game game, Widget child) {
-  final Map<Type, GestureRecognizerFactory> gestures =
-      <Type, GestureRecognizerFactory>{};
+  final Map<Type, GestureRecognizerFactory> gestures = {};
 
   final List<_GenericTapEventHandler> _tapHandlers = [];
 
@@ -207,7 +206,7 @@ Widget _applyBasicGesturesDetectors(Game game, Widget child) {
   );
 }
 
-Widget _applyMouseDetectors(game, Widget child) {
+Widget _applyMouseDetectors(Game game, Widget child) {
   return MouseRegion(
     child: Listener(
       child: child,
@@ -300,7 +299,7 @@ class OverlayWidgetBuilder extends WidgetBuilder {
 
     return OverlayGameWidget(
       gameChild: container,
-      game: game,
+      game: game as HasWidgetsOverlay,
       key: UniqueKey(),
     );
   }
