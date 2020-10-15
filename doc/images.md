@@ -214,10 +214,9 @@ This constructor makes creating an Animation very easy using sprite sheets.
 If you use Aseprite for your animations, Flame does provide some support for Aseprite animation's JSON data. To use this feature you will need to export the Sprite Sheet's JSON data, and use something like the following snippet:
 
 ```dart
-    SpriteAnimation animation = await Animation.fromAsepriteData(
-      imageInstance, // Sprite Sheet image path
-      "./assets/chopper.json" // Sprite Sheet animation JSON data
-    );
+  final image = await images.load('chopper.png');
+  final jsonData = await assets.readJson('chopper.json');
+  final animation = SpriteAnimation.fromAsepriteData(image, jsonData);
 ```
 
 _Note: trimmed sprite sheets are not supported by flame, so if you export your sprite sheet this way, it will have the trimmed size, not the sprite original size._

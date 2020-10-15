@@ -13,10 +13,9 @@ class SpriteBatch {
   List<Color> colors = [];
 
   static const defaultBlendMode = BlendMode.srcOver;
-  static const defaultCullRect = null;
+  static const defaultColor = const Color(0x00000000); // transparent
   static final defaultPaint = Paint();
   static final defaultTransform = RSTransform(1, 0, 0, 0);
-  static const defaultColor = const Color(0x00000000); // transparent
 
   SpriteBatch(this.atlas);
 
@@ -28,7 +27,7 @@ class SpriteBatch {
 
   int get height => atlas.height;
 
-  Vector2 get size => Vector2(width.toDouble(), height.toDouble());
+  Vector2 get size => Vector2Extension.fromInts(width, height);
 
   void addTransform({
     @required Rect rect,
@@ -77,7 +76,7 @@ class SpriteBatch {
       rects,
       colors,
       blendMode ?? defaultBlendMode,
-      cullRect ?? defaultCullRect,
+      cullRect,
       paint ?? defaultPaint,
     );
   }

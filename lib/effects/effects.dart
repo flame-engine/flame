@@ -117,10 +117,10 @@ abstract class PositionComponentEffect
   Vector2 endSize;
 
   PositionComponentEffect(
-    initialIsInfinite,
-    initialIsAlternating, {
-    isRelative = false,
-    onComplete,
+    bool initialIsInfinite,
+    bool initialIsAlternating, {
+    bool isRelative = false,
+    void Function() onComplete,
   }) : super(
           initialIsInfinite,
           initialIsAlternating,

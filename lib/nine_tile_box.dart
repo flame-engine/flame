@@ -55,14 +55,14 @@ class NineTileBox {
 
     // horizontal sides
     final mx = size.x - 2 * destTileSize;
-    final middleLeft = position + Vector2(destTileSize.toDouble(), 0);
+    final middleLeft = position + Vector2Extension.fromInts(destTileSize, 0);
     _drawTile(c, _getDest(middleLeft, width: mx), 1, 0);
     final middleRight = middleLeft + Vector2(0, size.y - destTileSize);
     _drawTile(c, _getDest(middleRight, width: mx), 1, 2);
 
     // vertical sides
     final my = size.y - 2 * destTileSize;
-    final topCenter = position + Vector2(0, destTileSize.toDouble());
+    final topCenter = position + Vector2Extension.fromInts(0, destTileSize);
     _drawTile(c, _getDest(topCenter, height: my), 0, 1);
     final bottomCenter = topCenter + Vector2(size.x - destTileSize, 0);
     _drawTile(c, _getDest(bottomCenter, height: my), 2, 1);
