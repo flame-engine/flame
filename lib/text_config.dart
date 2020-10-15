@@ -55,8 +55,8 @@ class TextConfig {
   /// For proper fonts of languages like Hebrew or Arabic, replace this with [TextDirection.rtl].
   final TextDirection textDirection;
 
-  final MemoryCache _textPainterCache =
-      MemoryCache<String, material.TextPainter>();
+  final MemoryCache<String, material.TextPainter> _textPainterCache =
+      MemoryCache();
 
   /// Creates a constant [TextConfig] with sensible defaults.
   ///

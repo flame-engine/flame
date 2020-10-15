@@ -12,9 +12,9 @@ class SequenceEffect extends PositionComponentEffect {
 
   SequenceEffect({
     @required this.effects,
-    isInfinite = false,
-    isAlternating = false,
-    Function onComplete,
+    bool isInfinite = false,
+    bool isAlternating = false,
+    void Function() onComplete,
   }) : super(isInfinite, isAlternating, onComplete: onComplete) {
     assert(
       effects.every((effect) => effect.component == null),

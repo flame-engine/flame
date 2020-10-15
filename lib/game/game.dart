@@ -55,7 +55,7 @@ abstract class Game {
   /// You can add it directly to the runApp method or inside your widget structure (if you use vanilla screens and widgets).
   Widget get widget => builder.build(this);
 
-  void _handleKeyEvent(e) {
+  void _handleKeyEvent(RawKeyEvent e) {
     (this as KeyboardEvents).onKeyEvent(e);
   }
 
