@@ -12,7 +12,7 @@ import 'dart:ui';
 
 const x = 500.0;
 const y = 500.0;
-const s = 64;
+const s = 64.0;
 final topLeft = Vector2(x, y);
 
 void main() async {
@@ -64,12 +64,12 @@ class MyGame extends BaseGame with MouseMovementDetector {
       base = IsometricTileMapComponent(
         tileset,
         matrix,
-        destTileSize: Vector2.all(s.toDouble()),
+        destTileSize: Vector2.all(s),
       )
         ..x = x
         ..y = y,
     );
-    add(selector = Selector(s.toDouble(), selectorImage));
+    add(selector = Selector(s, selectorImage));
   }
 
   @override

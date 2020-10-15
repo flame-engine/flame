@@ -27,7 +27,7 @@ class Sprite {
   Vector2 get srcSize => Vector2(src.width, src.height);
 
   set srcSize(Vector2 size) {
-    size ??= Vector2(image.width.toDouble(), image.height.toDouble());
+    size ??= Vector2Extension.fromInts(image.width, image.height);
     src = (srcPosition ?? Vector2.zero()).toPositionedRect(size);
   }
 

@@ -30,7 +30,7 @@ class AssetsCache {
       '"$fileName" is not a String Asset',
     );
 
-    return _files[fileName].value;
+    return _files[fileName].value as String;
   }
 
   /// Reads a binary file from assets folder
@@ -44,12 +44,12 @@ class AssetsCache {
       '"$fileName" is not a Binary Asset',
     );
 
-    return _files[fileName].value;
+    return _files[fileName].value as List<int>;
   }
 
   Future<Map<String, dynamic>> readJson(String fileName) async {
     final String content = await readFile(fileName);
-    return jsonDecode(content);
+    return jsonDecode(content) as Map<String, dynamic>;
   }
 
   Future<_StringAsset> _readFile(String fileName) async {
@@ -61,7 +61,7 @@ class AssetsCache {
     final data = await rootBundle.load('assets/$fileName');
     final Uint8List list = Uint8List.view(data.buffer);
 
-    final bytes = List.from(list).cast<int>();
+    final bytes = List<int>.from(list);
     return _BinaryAsset()..value = bytes;
   }
 }
