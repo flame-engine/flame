@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 
 import 'processors.dart';
 
-export './processors.dart';
+export 'processors.dart';
 
 abstract class Layer {
   List<LayerProcessor> preProcessors = [];
