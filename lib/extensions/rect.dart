@@ -1,9 +1,9 @@
-export 'dart:ui' show Rect;
-
 import 'dart:math';
 import 'dart:ui';
 
 import './vector2.dart';
+
+export 'dart:ui' show Rect;
 
 extension RectExtension on Rect {
   /// Creates an [Offset] from the [Vector2]

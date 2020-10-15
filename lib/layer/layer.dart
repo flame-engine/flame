@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 
-import './processors.dart';
+import 'processors.dart';
 
 export './processors.dart';
 

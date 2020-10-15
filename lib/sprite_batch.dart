@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
-import 'flame.dart';
 import 'extensions/vector2.dart';
+import 'flame.dart';
 
 /// sprite atlas with an image and a set of rects and transforms
 class SpriteBatch {

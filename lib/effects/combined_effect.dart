@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:meta/meta.dart';
 
-import './effects.dart';
 import '../components/position_component.dart';
+import 'effects.dart';
 
 class CombinedEffect extends PositionComponentEffect {
   final List<PositionComponentEffect> effects;
