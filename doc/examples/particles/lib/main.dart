@@ -532,7 +532,7 @@ class MyGame extends BaseGame {
     const rows = 8;
     const frames = columns * rows;
     final spriteImage = images.fromCache('boom3.png');
-    final spritesheet = SpriteSheet.fromColsAndRows(
+    final spritesheet = SpriteSheet.fromColumnsAndRows(
       image: spriteImage,
       columns: columns,
       rows: rows,
