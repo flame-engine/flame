@@ -51,9 +51,9 @@ class MyGame extends BaseGame {
   Vector2 cellSize;
   Vector2 halfCellSize;
 
-  MyGame({Vector2 screenSize}) {
-    size = screenSize;
-    cellSize = size / gridSize;
+  MyGame({Vector2 gameSize}) {
+    this.gameSize = gameSize;
+    cellSize = gameSize / gridSize;
     halfCellSize = cellSize * .5;
 
     // Spawn new particles every second
@@ -502,7 +502,10 @@ class MyGame extends BaseGame {
 
     if (debugMode()) {
       fpsTextConfig.render(
-          canvas, '${fps(120).toStringAsFixed(2)}fps', Vector2(0, size.y - 24));
+        canvas,
+        '${fps(120).toStringAsFixed(2)}fps',
+        Vector2(0, gameSize.y - 24),
+      );
     }
   }
 
@@ -551,7 +554,7 @@ Future<BaseGame> loadGame() async {
   final gameSize = await Flame.util.initialDimensions();
   WidgetsFlutterBinding.ensureInitialized();
 
-  return MyGame(screenSize: gameSize);
+  return MyGame(gameSize: gameSize);
 }
 
 /// A curve which maps sinus output (-1..1,0..pi)

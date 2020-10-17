@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Vector2 size = await Flame.util.initialDimensions();
+  final size = await Flame.util.initialDimensions();
   runApp(MyGame(size).widget);
 }
 
 class MyGame extends BaseGame {
-  MyGame(Vector2 screenSize) {
-    size = screenSize;
+  MyGame(Vector2 gameSize) {
+    this.gameSize = gameSize;
   }
 
   @override
@@ -26,7 +26,7 @@ class MyGame extends BaseGame {
     );
     final spriteSize = Vector2.all(200);
     final animationComponent = SpriteAnimationComponent(spriteSize, animation)
-      ..position = size / 2 - Vector2.all(100);
+      ..position = gameSize / 2 - Vector2.all(100);
 
     add(animationComponent);
   }

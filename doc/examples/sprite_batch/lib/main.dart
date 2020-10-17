@@ -9,7 +9,7 @@ import 'package:flame/components/sprite_batch_component.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Vector2 size = await Flame.util.initialDimensions();
+  final size = await Flame.util.initialDimensions();
   final game = MyGame(size);
   runApp(game.widget);
 }
@@ -17,9 +17,8 @@ void main() async {
 class MyGame extends BaseGame {
   SpriteBatch spriteBatch;
 
-  MyGame(Vector2 screenSize) {
-    size = screenSize;
-
+  MyGame(Vector2 gameSize) {
+    this.gameSize = gameSize;
     initData();
   }
 
@@ -45,8 +44,8 @@ class MyGame extends BaseGame {
     for (int i = 0; i < NUM; ++i) {
       final sx = r.nextInt(8) * 128.0;
       final sy = r.nextInt(8) * 128.0;
-      final x = r.nextInt(size.x.toInt()).toDouble();
-      final y = r.nextInt(size.y ~/ 2).toDouble() + size.y / 2.0;
+      final x = r.nextInt(gameSize.x.toInt()).toDouble();
+      final y = r.nextInt(gameSize.y ~/ 2).toDouble() + gameSize.y / 2.0;
       spriteBatch.add(
         rect: Rect.fromLTWH(sx, sy, 128, 128),
         offset: Offset(x - 64, y - 64),

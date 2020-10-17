@@ -47,8 +47,8 @@ class JoystickComponent extends JoystickController {
   });
 
   void addAction(JoystickAction action) {
-    if (gameRef?.size != null) {
-      action.initialize(gameRef.size, this);
+    if (gameRef?.gameSize != null) {
+      action.initialize(gameRef.gameSize, this);
       actions?.add(action);
     }
   }

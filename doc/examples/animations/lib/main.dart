@@ -11,7 +11,7 @@ import 'dart:ui';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final Vector2 size = await Flame.util.initialDimensions();
+  final size = await Flame.util.initialDimensions();
   final game = MyGame(size);
   runApp(game.widget);
 }
@@ -73,7 +73,7 @@ class MyGame extends BaseGame with TapDetector {
     addAnimation(evt.globalPosition.dx, evt.globalPosition.dy);
   }
 
-  MyGame(Vector2 screenSize) {
-    size = screenSize;
+  MyGame(Vector2 gameSize) {
+    this.gameSize = gameSize;
   }
 }
