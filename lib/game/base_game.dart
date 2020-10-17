@@ -31,7 +31,7 @@ class BaseGame extends Game with FPSCounter {
   final List<Component> _removeLater = [];
 
   /// Current game viewport size, updated every resize via the [resize] method hook
-  Vector2 size;
+  Vector2 gameSize;
 
   /// Camera position; every non-HUD component is translated so that the camera position is the top-left corner of the screen.
   Vector2 camera = Vector2.zero();
@@ -58,8 +58,8 @@ class BaseGame extends Game with FPSCounter {
     }
 
     // first time resize
-    if (size != null) {
-      c.onGameResize(size);
+    if (gameSize != null) {
+      c.onGameResize(gameSize);
     }
 
     c.onMount();
@@ -118,7 +118,7 @@ class BaseGame extends Game with FPSCounter {
   /// This implementation of update updates every component in the list.
   ///
   /// It also actually adds the components that were added by the [addLater] method, and remove those that are marked for destruction via the [Component.destroy] method.
-  /// You can override it further to add more custom behaviour.
+  /// You can override it further to add more custom behavior.
   @override
   @mustCallSuper
   void update(double t) {
@@ -135,12 +135,12 @@ class BaseGame extends Game with FPSCounter {
   /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.
   ///
   /// It also updates the [size] field of the class to be used by later added components and other methods.
-  /// You can override it further to add more custom behaviour, but you should seriously consider calling the super implementation as well.
+  /// You can override it further to add more custom behavior, but you should seriously consider calling the super implementation as well.
   @override
   @mustCallSuper
-  void resize(Vector2 size) {
-    this.size = size;
-    components.forEach((c) => c.onGameResize(size));
+  void onGameResize(Vector2 gameSize) {
+    this.gameSize = gameSize;
+    components.forEach((c) => c.onGameResize(gameSize));
   }
 
   /// Returns whether this [Game] is in debug mode or not.
