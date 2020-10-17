@@ -40,7 +40,7 @@ abstract class Game {
   /// This is the resize hook; every time the game widget is resized, this hook is called.
   ///
   /// The default implementation does nothing; override to use the hook.
-  void resize(Vector2 size) {}
+  void onGameResize(Vector2 gameSize) {}
 
   /// This is the lifecycle state change hook; every time the game is resumed, paused or suspended, this is called.
   ///
