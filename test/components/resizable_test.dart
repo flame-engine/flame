@@ -19,25 +19,25 @@ Vector2 size = Vector2(1.0, 1.0);
 
 void main() {
   group('resizable test', () {
-    test('game calls resize on add', () {
+    test('game calls onGameResize on add', () {
       final MyComponent a = MyComponent('a');
       final MyGame game = MyGame();
-      game.resize(size);
+      game.onGameResize(size);
       game.add(a);
       expect(a.gameSize, size);
     });
-    test('game calls resize after added', () {
+    test('game calls onGameResize after added', () {
       final MyComponent a = MyComponent('a');
       final MyGame game = MyGame();
       game.add(a);
-      game.resize(size);
+      game.onGameResize(size);
       expect(a.gameSize, size);
     });
-    test('game calls doesnt change component size', () {
+    test('game calls does not change component size', () {
       final MyComponent a = MyComponent('a');
       final MyGame game = MyGame();
       game.add(a);
-      game.resize(size);
+      game.onGameResize(size);
       expect(a.size, isNot(size));
     });
   });

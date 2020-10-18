@@ -39,7 +39,7 @@ void main() {
       final MyTap child = MyTap();
       final MyComposed wrapper = MyComposed()..addChild(game, child);
 
-      game.size = size;
+      game.gameSize = size;
       game.add(wrapper);
       game.onTapDown(1, TapDownDetails(globalPosition: const Offset(0.0, 0.0)));
 
