@@ -54,6 +54,9 @@ class TextConfig {
   /// For proper fonts of languages like Hebrew or Arabic, replace this with [TextDirection.rtl].
   final TextDirection textDirection;
 
+  /// The height of line, as a multiple of font size.
+  final double lineHeight;
+
   final MemoryCache _textPainterCache =
       MemoryCache<String, material.TextPainter>();
 
@@ -66,6 +69,7 @@ class TextConfig {
     this.fontFamily = 'Arial',
     this.textAlign = TextAlign.left,
     this.textDirection = TextDirection.ltr,
+    this.lineHeight,
   });
 
   /// Renders a given [text] in a given position [p] using the provided [canvas] and [anchor].
@@ -103,6 +107,7 @@ class TextConfig {
         color: color,
         fontSize: fontSize,
         fontFamily: fontFamily,
+        height: lineHeight,
       );
       final material.TextSpan span = material.TextSpan(
         style: style,
