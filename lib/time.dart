@@ -48,6 +48,14 @@ class Timer {
     _running = false;
   }
 
+  void pause() {
+    _running = false;
+  }
+
+  void resume() {
+    _running = true;
+  }
+
   /// A value between 0 and 1 indicating the timer progress
   double get progress => _current / _limit;
 }
