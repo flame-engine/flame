@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import '../time.dart';
+import '../timer.dart';
 import 'component.dart';
 
 /// Simple component which wraps a [Timer] instance allowing it to be easily used inside a [BaseGame] game.
@@ -19,5 +19,5 @@ class TimerComponent extends Component {
   void render(Canvas canvas) {}
 
   @override
-  bool destroy() => timer.isFinished();
+  bool destroy() => timer.finished;
 }
