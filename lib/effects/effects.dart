@@ -145,3 +145,26 @@ abstract class PositionComponentEffect
     endSize = component.size;
   }
 }
+
+abstract class SimplePositionComponentEffect
+    extends PositionComponentEffect {
+  double duration;
+  double speed;
+  Curve curve;
+
+  SimplePositionComponentEffect(
+      bool initialIsInfinite,
+      bool initialIsAlternating, {
+        this.duration,
+        this.speed,
+        this.curve,
+        bool isRelative = false,
+        void Function() onComplete,
+      }) : assert(duration != null || speed != null),
+        super(
+    initialIsInfinite,
+    initialIsAlternating,
+    isRelative: isRelative,
+    onComplete: onComplete,
+  );
+}

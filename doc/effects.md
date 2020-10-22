@@ -20,9 +20,22 @@ If `isInfinite` is false and `isAlternating` is true the effect will go from the
 
 When an effect is completed the callback `onComplete` will be called, it can be set as an optional argument to your effect.
 
+## Common for MoveEffect, ScaleEffect and RotateEffect (SimplePositionComponentEffects)
+A common thing for `MoveEffect`, `ScaleEffect` and `RotateEffect` is that it takes `duration` and `speed` as arguments.
+
+- Duration means the time it takes for one iteration from beginning to end without alternation
+- Speed is the speed of the effect
+    - pixels/s for `MoveEffect`
+    - pixels/s for `ScaleEffect`
+    - radians/s for `RotateEffect`
+
+One of these two needs to be defined, if both are defined `duration` takes precedence.
+
 ## MoveEffect
 
 Applied to `PositionComponent`s, this effect can be used to move the component to new positions, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
+
+The speed is measured in pixels/s, and remember that you can give `duration` as an argument instead of `speed`.
 
 Usage example:
 ```dart
@@ -46,6 +59,8 @@ first move to `(120, 0)` and then to `(120, 100)`.
 
 Applied to `PositionComponent`s, this effect can be used to change the width and height of the component, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
 
+The speed is measured in pixels/s, and remember that you can give `duration` as an argument instead of `speed`.
+
 Usage example:
 ```dart
 import 'package:flame/effects/effects.dart';
@@ -63,6 +78,8 @@ square.addEffect(ScaleEffect(
 Applied to `PositionComponent`s, this effect can be used to rotate the component, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
 
 The angle (`radians`) is in radians and the speed is in radians per second, so if you for example want to turn 180° in 2 seconds you set `radians: pi` and `speed: 0.25`.
+
+Remember that you can give `duration` as an argument instead of `speed` to say how long the effect should last for instead of its speed.
 
 Usage example:
 ```dart
