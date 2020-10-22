@@ -34,7 +34,7 @@ class Timer {
         // This is used to cover the rare case of _current being more than
         // two times the value of limit, so that the callback is called the
         // correct number of times
-        while(_current >= limit)  {
+        while (_current >= limit) {
           _current -= limit;
           callback?.call();
         }
