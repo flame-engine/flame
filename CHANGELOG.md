@@ -3,6 +3,7 @@
 ## [next]
 - Fix spriteAsWidget deprecation message
 - Add `lineHeight` property to `TextConfig`
+- Adding pause and resume methods to time class
 
 ## 0.27.0
  - Improved the accuracy of the `FPSCounter` by using Flutter's internal frame timings.
