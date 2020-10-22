@@ -4,24 +4,27 @@ import 'package:meta/meta.dart';
 import '../extensions/vector2.dart';
 import 'effects.dart';
 
-class ScaleEffect extends PositionComponentEffect {
+class ScaleEffect extends SimplePositionComponentEffect {
   Vector2 size;
-  double speed;
-  Curve curve;
   Vector2 _startSize;
   Vector2 _delta;
 
   ScaleEffect({
     @required this.size,
-    @required this.speed,
-    this.curve,
+    double duration, // How long it should take for completion
+    double speed, // The speed of the scaling in pixels/s
+    Curve curve,
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
     void Function() onComplete,
-  }) : super(
+  })  : assert(duration != null || speed != null),
+        super(
           isInfinite,
           isAlternating,
+          duration: duration,
+          speed: speed,
+          curve: curve,
           isRelative: isRelative,
           onComplete: onComplete,
         );
@@ -34,7 +37,9 @@ class ScaleEffect extends PositionComponentEffect {
     }
     _startSize = component.size;
     _delta = isRelative ? size : size - _startSize;
-    travelTime = _delta.length / speed;
+    speed ??= _delta.length / duration;
+    duration ??= _delta.length / speed;
+    travelTime = duration;
   }
 
   @override
