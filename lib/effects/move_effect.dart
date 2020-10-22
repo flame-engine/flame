@@ -18,26 +18,29 @@ class Vector2Percentage {
   );
 }
 
-class MoveEffect extends PositionComponentEffect {
+class MoveEffect extends SimplePositionComponentEffect {
   List<Vector2> path;
   Vector2Percentage _currentSubPath;
   List<Vector2Percentage> _percentagePath;
-  double speed;
-  Curve curve;
   Vector2 _startPosition;
 
   MoveEffect({
     @required this.path,
-    @required this.speed,
-    this.curve,
+    double duration,
+    double speed,
+    Curve curve,
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
     void Function() onComplete,
-  }) : super(
+  })  : assert(duration != null || speed != null),
+        super(
           isInfinite,
           isAlternating,
-          isRelative: isRelative,
+          duration: duration,
+        speed: speed,
+        curve: curve,
+        isRelative: isRelative,
           onComplete: onComplete,
         );
 
@@ -90,7 +93,9 @@ class MoveEffect extends PositionComponentEffect {
       );
       lastPosition = v;
     }
-    travelTime = pathLength / speed;
+    speed ??= pathLength / duration;
+    duration ??= pathLength / speed;
+    travelTime = duration;
   }
 
   @override

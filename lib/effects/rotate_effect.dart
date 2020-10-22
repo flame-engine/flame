@@ -3,24 +3,27 @@ import 'package:meta/meta.dart';
 
 import 'effects.dart';
 
-class RotateEffect extends PositionComponentEffect {
+class RotateEffect extends SimplePositionComponentEffect {
   double radians;
-  double speed;
-  Curve curve;
   double _startAngle;
   double _delta;
 
   RotateEffect({
     @required this.radians, // As many radians as you want to rotate
-    @required this.speed, // In radians per second
-    this.curve,
+    double duration, // How long it should take for completion
+    double speed, // The speed of rotation in radians/s
+    Curve curve,
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
     void Function() onComplete,
-  }) : super(
+  })  : assert(duration != null || speed != null),
+        super(
           isInfinite,
           isAlternating,
+          duration: duration,
+          speed: speed,
+          curve: curve,
           isRelative: isRelative,
           onComplete: onComplete,
         );
@@ -33,7 +36,9 @@ class RotateEffect extends PositionComponentEffect {
     }
     _startAngle = component.angle;
     _delta = isRelative ? radians : radians - _startAngle;
-    travelTime = (_delta / speed).abs();
+    speed ??= _delta / duration;
+    duration ??= _delta / speed;
+    travelTime = duration;
   }
 
   @override
