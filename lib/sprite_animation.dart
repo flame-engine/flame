@@ -79,7 +79,7 @@ class SpriteAnimation {
     Image image,
     int amount, {
     int amountPerRow,
-    @required Vector2 texturePosition,
+    Vector2 texturePosition,
     Vector2 textureSize,
     double stepTime = 0.1,
     bool loop = true,
@@ -99,13 +99,14 @@ class SpriteAnimation {
     int amount,
     List<double> stepTimes, {
     int amountPerRow,
-    @required Vector2 texturePosition,
+    Vector2 texturePosition,
     Vector2 textureSize,
     this.loop = true,
   })  : assert(amountPerRow == null || amount >= amountPerRow),
         assert(stepTimes != null),
         assert(image != null) {
     amountPerRow ??= amount;
+    texturePosition ??= Vector2.zero();
     frames = List<SpriteAnimationFrame>(amount);
     for (int i = 0; i < amount; i++) {
       final position = Vector2(
