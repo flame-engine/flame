@@ -15,7 +15,7 @@ class SpriteAnimationComponent extends PositionComponent {
     Vector2 size,
     this.animation, {
     this.destroyOnFinish = false,
-  }) {
+  }) : assert(animation != null) {
     super.size.setFrom(size);
   }
 
@@ -26,9 +26,9 @@ class SpriteAnimationComponent extends PositionComponent {
     Image image,
     int amount, {
     int amountPerRow,
-    Vector2 texturePosition,
+    @required Vector2 texturePosition,
+    @required double stepTime,
     Vector2 textureSize,
-    double stepTime,
     bool loop = true,
     this.destroyOnFinish = false,
   }) {
@@ -51,7 +51,7 @@ class SpriteAnimationComponent extends PositionComponent {
     int amount,
     List<double> stepTimes, {
     int amountPerRow,
-    Vector2 texturePosition,
+    @required Vector2 texturePosition,
     Vector2 textureSize,
     bool loop = true,
   }) {
