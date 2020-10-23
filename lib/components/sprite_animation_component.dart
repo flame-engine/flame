@@ -26,14 +26,13 @@ class SpriteAnimationComponent extends PositionComponent {
     Image image,
     int amount, {
     int amountPerRow,
-    @required Vector2 texturePosition,
+    Vector2 texturePosition,
     @required double stepTime,
     Vector2 textureSize,
     bool loop = true,
     this.destroyOnFinish = false,
   }) {
     super.size.setFrom(size);
-    texturePosition ??= Vector2.zero();
     animation = SpriteAnimation.sequenced(
       image,
       amount,
@@ -51,7 +50,7 @@ class SpriteAnimationComponent extends PositionComponent {
     int amount,
     List<double> stepTimes, {
     int amountPerRow,
-    @required Vector2 texturePosition,
+    Vector2 texturePosition,
     Vector2 textureSize,
     bool loop = true,
   }) {
