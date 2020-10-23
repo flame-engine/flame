@@ -3,6 +3,7 @@
 ## [next]
  - Improve IsometricTileMap and Spritesheet classes
  - Export full vector_math library from extension
+ - Added warning about basic and advanced detectors
 
 ## 1.0.0-rc1
  - Move all box2d related code and examples to the flame_box2d repo
