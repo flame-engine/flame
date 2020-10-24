@@ -51,4 +51,12 @@ class Timer {
     _current = 0;
     _running = false;
   }
+
+  void pause() {
+    _running = false;
+  }
+
+  void resume() {
+    _running = true;
+  }
 }
