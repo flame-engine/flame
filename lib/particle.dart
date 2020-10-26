@@ -12,7 +12,7 @@ import 'particles/moving_particle.dart';
 import 'particles/rotating_particle.dart';
 import 'particles/scaled_particle.dart';
 import 'particles/translated_particle.dart';
-import 'time.dart';
+import 'timer.dart';
 
 /// A function which returns [Particle] when called
 typedef ParticleGenerator = Particle Function(int);
@@ -84,10 +84,6 @@ abstract class Particle {
   /// Marks [Particle] for destroy when it is over.
   void update(double dt) {
     _timer.update(dt);
-
-    if (_timer.progress >= 1) {
-      _shouldBeDestroyed = true;
-    }
   }
 
   /// A control method allowing a parent of this [Particle]
@@ -98,7 +94,8 @@ abstract class Particle {
   void setLifespan(double lifespan) {
     _lifespan = lifespan;
     _timer?.stop();
-    _timer = Timer(lifespan);
+    final void Function() destroyCallback = () => _shouldBeDestroyed = true;
+    _timer = Timer(lifespan, callback: destroyCallback);
     _timer.start();
   }
 
