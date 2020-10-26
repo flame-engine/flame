@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
-import 'package:flame/time.dart';
+import 'package:flame/timer.dart';
 import 'package:flame/text_config.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/extensions/vector2.dart';
@@ -68,9 +68,11 @@ class MyGame extends Game with TapDetector {
 
   MyGame() {
     countdown = Timer(2);
-    interval = Timer(1, repeat: true, callback: () {
-      elapsedSecs += 1;
-    });
+    interval = Timer(
+      1,
+      callback: () => elapsedSecs += 1,
+      repeat: true,
+    );
     interval.start();
   }
 

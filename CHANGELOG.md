@@ -4,6 +4,7 @@
  - Improve IsometricTileMap and Spritesheet classes
  - Export full vector_math library from extension
  - Ensuring sprite animation and sprite animation components don't get NPEs on initialization
+ - Refactor timer class
 
 ## 1.0.0-rc1
  - Move all box2d related code and examples to the flame_box2d repo
