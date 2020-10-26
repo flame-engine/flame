@@ -542,7 +542,7 @@ class MyGame extends BaseGame {
       (i) => spritesheet.getSpriteById(i),
     );
 
-    return SpriteAnimation.spriteList(sprites);
+    return SpriteAnimation.spriteList(sprites, stepTime: 0.1);
   }
 }
 
