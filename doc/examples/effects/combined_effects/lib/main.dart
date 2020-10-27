@@ -35,10 +35,15 @@ class MyGame extends BaseGame with TapDetector {
     final dx = details.localPosition.dx;
     final dy = details.localPosition.dy;
     greenSquare.clearEffects();
+    final Vector2 currentTap = Vector2(dx, dy);
 
     final move = MoveEffect(
-      path: [Vector2(dx, dy)],
-      speed: 250.0,
+      path: [
+        currentTap,
+        currentTap - Vector2(50, 20),
+        currentTap + Vector2.all(30),
+      ],
+      duration: 1.0,
       curve: Curves.linear,
       isInfinite: false,
       isAlternating: false,
@@ -54,7 +59,7 @@ class MyGame extends BaseGame with TapDetector {
 
     final rotate = RotateEffect(
       radians: (dx + dy) % pi,
-      speed: 1.5,
+      duration: 3,
       curve: Curves.decelerate,
       isInfinite: false,
       isAlternating: false,
@@ -67,6 +72,6 @@ class MyGame extends BaseGame with TapDetector {
       offset: 0.5,
       onComplete: () => print("onComplete callback"),
     );
-    greenSquare.addEffect(combination);
+    greenSquare.addEffect(move);
   }
 }

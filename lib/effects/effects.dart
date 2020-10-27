@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -27,10 +25,12 @@ abstract class ComponentEffect<T extends Component> {
   final bool _initialIsInfinite;
   final bool _initialIsAlternating;
   double percentage;
+  double curveProgress;
   double travelTime;
   double currentTime = 0.0;
   double driftTime = 0.0;
   int curveDirection = 1;
+  Curve curve;
 
   /// If the effect is alternating the travel time is double the normal
   /// travel time
@@ -40,27 +40,34 @@ abstract class ComponentEffect<T extends Component> {
     this._initialIsInfinite,
     this._initialIsAlternating, {
     this.isRelative = false,
+    this.curve = Curves.linear,
     this.onComplete,
   }) {
     isInfinite = _initialIsInfinite;
     isAlternating = _initialIsAlternating;
+    curve ??= Curves.linear;
   }
 
+  @mustCallSuper
   void update(double dt) {
-    _updateDriftTime();
     if (isAlternating) {
       curveDirection = isMax() ? -1 : (isMin() ? 1 : curveDirection);
-    } else if (isInfinite && isMax()) {
-      reset();
     }
-    final driftMultiplier = (isAlternating && isMax() ? 2 : 1) * curveDirection;
+    if (isInfinite) {
+      if ((!isAlternating && isMax()) || (isAlternating && isMin())) {
+        reset();
+      }
+    }
     if (!hasFinished()) {
-      currentTime += dt * curveDirection + driftTime * driftMultiplier;
-      percentage = min(1.0, max(0.0, currentTime / travelTime));
+      currentTime += (dt + driftTime) * curveDirection;
+      currentTime = currentTime.clamp(0.0, travelTime).toDouble();
+      percentage = (currentTime / travelTime).clamp(0.0, 1.0).toDouble();
+      curveProgress = curve.transform(percentage);
       if (hasFinished()) {
         onComplete?.call();
       }
     }
+    _updateDriftTime();
   }
 
   @mustCallSuper
@@ -93,6 +100,9 @@ abstract class ComponentEffect<T extends Component> {
     isAlternating = _initialIsAlternating;
   }
 
+  // When the time overshoots the max and min it needs to add that time to
+  // whatever is going to happen next, for example an alternation or
+  // following effect in a SequenceEffect.
   void _updateDriftTime() {
     if (isMax()) {
       driftTime = currentTime - travelTime;
@@ -120,11 +130,13 @@ abstract class PositionComponentEffect
     bool initialIsInfinite,
     bool initialIsAlternating, {
     bool isRelative = false,
+    Curve curve,
     void Function() onComplete,
   }) : super(
           initialIsInfinite,
           initialIsAlternating,
           isRelative: isRelative,
+          curve: curve,
           onComplete: onComplete,
         );
 
@@ -146,25 +158,24 @@ abstract class PositionComponentEffect
   }
 }
 
-abstract class SimplePositionComponentEffect
-    extends PositionComponentEffect {
+abstract class SimplePositionComponentEffect extends PositionComponentEffect {
   double duration;
   double speed;
-  Curve curve;
 
   SimplePositionComponentEffect(
-      bool initialIsInfinite,
-      bool initialIsAlternating, {
-        this.duration,
-        this.speed,
-        this.curve,
-        bool isRelative = false,
-        void Function() onComplete,
-      }) : assert(duration != null || speed != null),
+    bool initialIsInfinite,
+    bool initialIsAlternating, {
+    this.duration,
+    this.speed,
+    Curve curve,
+    bool isRelative = false,
+    void Function() onComplete,
+  })  : assert(duration != null || speed != null),
         super(
-    initialIsInfinite,
-    initialIsAlternating,
-    isRelative: isRelative,
-    onComplete: onComplete,
-  );
+          initialIsInfinite,
+          initialIsAlternating,
+          isRelative: isRelative,
+          curve: curve,
+          onComplete: onComplete,
+        );
 }
