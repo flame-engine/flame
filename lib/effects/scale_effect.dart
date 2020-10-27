@@ -45,7 +45,6 @@ class ScaleEffect extends SimplePositionComponentEffect {
   @override
   void update(double dt) {
     super.update(dt);
-    final double progress = curve?.transform(percentage) ?? 1.0;
-    component.size = _startSize + _delta * progress;
+    component.size = _startSize + _delta * curveProgress;
   }
 }

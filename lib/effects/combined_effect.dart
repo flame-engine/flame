@@ -45,9 +45,6 @@ class CombinedEffect extends PositionComponentEffect {
 
   @override
   void update(double dt) {
-    if (hasFinished()) {
-      return;
-    }
     super.update(dt);
     effects.forEach((effect) => _updateEffect(effect, dt));
     if (effects.every((effect) => effect.hasFinished())) {
