@@ -38,9 +38,9 @@ class MoveEffect extends SimplePositionComponentEffect {
           isInfinite,
           isAlternating,
           duration: duration,
-        speed: speed,
-        curve: curve,
-        isRelative: isRelative,
+          speed: speed,
+          curve: curve,
+          isRelative: isRelative,
           onComplete: onComplete,
         );
 
@@ -108,19 +108,19 @@ class MoveEffect extends SimplePositionComponentEffect {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (hasFinished()) {
       return;
     }
-    super.update(dt);
-    final double progress = curve?.transform(percentage) ?? 1.0;
     _currentSubPath ??= _percentagePath.first;
-    if (!curveDirection.isNegative && _currentSubPath.endAt < progress ||
-        curveDirection.isNegative && _currentSubPath.startAt > progress) {
-      _currentSubPath = _percentagePath.firstWhere((v) => v.endAt >= progress);
+    if (!curveDirection.isNegative && _currentSubPath.endAt < curveProgress ||
+        curveDirection.isNegative && _currentSubPath.startAt > curveProgress) {
+      _currentSubPath =
+          _percentagePath.firstWhere((v) => v.endAt >= curveProgress);
     }
     final double lastEndAt = _currentSubPath.startAt;
     final double localPercentage =
-        (progress - lastEndAt) / (_currentSubPath.endAt - lastEndAt);
+        (curveProgress - lastEndAt) / (_currentSubPath.endAt - lastEndAt);
     component.position = _currentSubPath.previous +
         ((_currentSubPath.v - _currentSubPath.previous) * localPercentage);
   }

@@ -44,7 +44,6 @@ class RotateEffect extends SimplePositionComponentEffect {
   @override
   void update(double dt) {
     super.update(dt);
-    final double progress = curve?.transform(percentage) ?? 1.0;
-    component.angle = _startAngle + _delta * progress;
+    component.angle = _startAngle + _delta * curveProgress;
   }
 }
