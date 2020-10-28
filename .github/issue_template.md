@@ -10,7 +10,7 @@
 
 Describe your issue here
 
-## Development enviroment
+## Development environment
 
 Flame version:
 
