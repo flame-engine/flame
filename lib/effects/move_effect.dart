@@ -93,9 +93,10 @@ class MoveEffect extends SimplePositionComponentEffect {
       );
       lastPosition = v;
     }
-    speed ??= pathLength / duration;
-    duration ??= pathLength / speed;
-    travelTime = duration;
+    final double totalPathLength = isAlternating ? pathLength * 2 : pathLength;
+    speed ??= totalPathLength / duration;
+    duration ??= totalPathLength / speed;
+    travelTime = isAlternating ? duration / 2 : duration;
   }
 
   @override
@@ -108,10 +109,10 @@ class MoveEffect extends SimplePositionComponentEffect {
 
   @override
   void update(double dt) {
-    super.update(dt);
     if (hasFinished()) {
       return;
     }
+    super.update(dt);
     _currentSubPath ??= _percentagePath.first;
     if (!curveDirection.isNegative && _currentSubPath.endAt < curveProgress ||
         curveDirection.isNegative && _currentSubPath.startAt > curveProgress) {

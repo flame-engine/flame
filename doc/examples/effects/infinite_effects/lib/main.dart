@@ -60,7 +60,7 @@ class MyGame extends BaseGame with TapDetector {
     ));
 
     orangeSquare.addEffect(RotateEffect(
-      radians: (dx + dy) % (2 * pi),
+      angle: (dx + dy) % (2 * pi),
       speed: 1.0, // Radians per second
       curve: Curves.easeInOut,
       isInfinite: true,
