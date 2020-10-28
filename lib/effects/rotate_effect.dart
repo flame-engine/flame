@@ -4,12 +4,12 @@ import 'package:meta/meta.dart';
 import 'effects.dart';
 
 class RotateEffect extends SimplePositionComponentEffect {
-  double radians;
+  double angle;
   double _startAngle;
   double _delta;
 
   RotateEffect({
-    @required this.radians, // As many radians as you want to rotate
+    @required this.angle, // As many radians as you want to rotate
     double duration, // How long it should take for completion
     double speed, // The speed of rotation in radians/s
     Curve curve,
@@ -32,10 +32,10 @@ class RotateEffect extends SimplePositionComponentEffect {
   void initialize(_comp) {
     super.initialize(_comp);
     if (!isAlternating) {
-      endAngle = _comp.angle + radians;
+      endAngle = _comp.angle + angle;
     }
     _startAngle = component.angle;
-    _delta = isRelative ? radians : radians - _startAngle;
+    _delta = isRelative ? angle : angle - _startAngle;
     speed ??= _delta / duration;
     duration ??= _delta / speed;
     travelTime = duration;

@@ -73,10 +73,6 @@ abstract class ComponentEffect<T extends Component> {
   @mustCallSuper
   void initialize(T component) {
     this.component = component;
-
-    /// You need to set the travelTime during the initialization of the
-    /// extending effect
-    travelTime = null;
   }
 
   void dispose() => _isDisposed = true;
