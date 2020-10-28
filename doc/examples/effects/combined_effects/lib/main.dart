@@ -43,10 +43,11 @@ class MyGame extends BaseGame with TapDetector {
         currentTap - Vector2(50, 20),
         currentTap + Vector2.all(30),
       ],
-      duration: 1.0,
+      duration: 5.0,
       curve: Curves.linear,
-      isInfinite: false,
+      isInfinite: true,
       isAlternating: false,
+      onComplete: () => print(DateTime.now()),
     );
 
     final scale = ScaleEffect(
@@ -58,20 +59,21 @@ class MyGame extends BaseGame with TapDetector {
     );
 
     final rotate = RotateEffect(
-      radians: (dx + dy) % pi,
+      angle: (dx + dy) % pi,
       duration: 3,
       curve: Curves.decelerate,
       isInfinite: false,
       isAlternating: false,
     );
 
-    final combination = CombinedEffect(
-      effects: [move, rotate, scale],
-      isInfinite: false,
-      isAlternating: true,
-      offset: 0.5,
-      onComplete: () => print("onComplete callback"),
-    );
+    //final combination = CombinedEffect(
+    //  effects: [move, rotate, scale],
+    //  isInfinite: false,
+    //  isAlternating: true,
+    //  offset: 0.5,
+    //  onComplete: () => print("onComplete callback"),
+    //);
     greenSquare.addEffect(move);
+    print(DateTime.now());
   }
 }

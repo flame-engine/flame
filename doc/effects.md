@@ -23,7 +23,7 @@ When an effect is completed the callback `onComplete` will be called, it can be 
 ## Common for MoveEffect, ScaleEffect and RotateEffect (SimplePositionComponentEffects)
 A common thing for `MoveEffect`, `ScaleEffect` and `RotateEffect` is that it takes `duration` and `speed` as arguments.
 
-- Duration means the time it takes for one iteration from beginning to end without alternation
+- Duration means the time it takes for one iteration from beginning to end, with alternation taken into account (but not `isInfinite`).
 - Speed is the speed of the effect
     - pixels/s for `MoveEffect`
     - pixels/s for `ScaleEffect`
