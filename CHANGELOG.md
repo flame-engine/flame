@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## [next]
+
 ## 0.28.0
 - Fix spriteAsWidget deprecation message
 - Add `lineHeight` property to `TextConfig`
