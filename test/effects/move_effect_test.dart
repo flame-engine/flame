@@ -57,6 +57,22 @@ void main() {
     );
   });
 
+  testWidgets(
+    'MoveEffect can alternate and be infinite',
+        (WidgetTester tester) async {
+      final MoveEffect moveEffect = effect(true, true);
+      final PositionComponent positionComponent = component();
+      effectTest(
+          tester,
+          positionComponent,
+          moveEffect,
+          expectedPosition: positionComponent.position.clone(),
+          iterations: 1.0,
+          hasFinished: false,
+      );
+    },
+  );
+
   testWidgets('MoveEffect alternation can peak', (WidgetTester tester) async {
     final MoveEffect moveEffect = effect(false, true);
     final PositionComponent positionComponent = component();
@@ -82,4 +98,6 @@ void main() {
       hasFinished: false,
     );
   });
+
+  // TODO: test that tests speed, and not only duration
 }
