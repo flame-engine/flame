@@ -60,14 +60,14 @@ abstract class ComponentEffect<T extends Component> {
     }
     if (!hasFinished()) {
       currentTime += (dt + driftTime) * curveDirection;
-      currentTime = currentTime.clamp(0.0, travelTime).toDouble();
       percentage = (currentTime / travelTime).clamp(0.0, 1.0).toDouble();
       curveProgress = curve.transform(percentage);
+      _updateDriftTime();
+      currentTime = currentTime.clamp(0.0, travelTime).toDouble();
       if (hasFinished()) {
         onComplete?.call();
       }
     }
-    _updateDriftTime();
   }
 
   @mustCallSuper
