@@ -25,7 +25,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void performResize() {
     super.performResize();
-    game.resize(constraints.biggest.toVector2());
+    game.onResize(constraints.biggest.toVector2());
   }
 
   @override
