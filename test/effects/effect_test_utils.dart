@@ -19,7 +19,6 @@ void effectTest(
     PositionComponent component,
     PositionComponentEffect effect, {
       bool hasFinished = true,
-      bool hitEdges = false,
       double iterations = 1.0,
       double expectedAngle = 0.0,
       Vector2 expectedPosition,
@@ -30,21 +29,22 @@ void effectTest(
   final Callback callback = Callback();
   effect.onComplete = callback.call;
   final BaseGame game = BaseGame();
-  final double duration = (random.nextDouble() * 100).roundToDouble();
   game.add(component);
   component.addEffect(effect);
+  final double duration = effect.totalTravelTime;
   await tester.pumpWidget(game.widget);
   double timeLeft = iterations * duration;
   while(timeLeft > 0) {
-    final double stepDelta = hitEdges ? 0.01 : random.nextDouble() / 10;
+    final double stepDelta = random.nextInt(100) / 1000;
     game.update(stepDelta);
     timeLeft -= stepDelta;
   }
+  expect(component.position, expectedPosition);
+  expect(component.angle, expectedAngle);
+  expect(component.size, expectedSize);
   expect(effect.hasFinished(), hasFinished);
   expect(callback.isCalled, hasFinished);
-  expect(component.angle, expectedAngle);
-  expect(component.position, expectedPosition);
-  expect(component.size, expectedSize);
+  game.update(0.0); // Since effects are removed before they are updated
   expect(component.effects.isEmpty, hasFinished);
 }
 
