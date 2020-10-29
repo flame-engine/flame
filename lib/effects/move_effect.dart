@@ -109,9 +109,6 @@ class MoveEffect extends SimplePositionComponentEffect {
 
   @override
   void update(double dt) {
-    if (hasFinished()) {
-      return;
-    }
     super.update(dt);
     _currentSubPath ??= _percentagePath.first;
     if (!curveDirection.isNegative && _currentSubPath.endAt < curveProgress ||

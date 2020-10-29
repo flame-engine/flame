@@ -16,7 +16,7 @@ void main() {
   MoveEffect effect(bool isInfinite, bool isAlternating) {
     return MoveEffect(
       path: path,
-      duration: random.nextDouble() * 10,
+      duration: random.nextDouble() * 100,
       isInfinite: isInfinite,
       isAlternating: isAlternating,
     );
@@ -60,23 +60,19 @@ void main() {
   testWidgets('MoveEffect alternation can peak', (WidgetTester tester) async {
     final MoveEffect moveEffect = effect(false, true);
     final PositionComponent positionComponent = component();
-    print(path);
-    print(positionComponent.position);
     effectTest(
       tester,
       positionComponent,
       moveEffect,
       expectedPosition: path.last,
-      hitEdges: true,
-      iterations: 1.4,
+      hasFinished: false,
+      iterations: 0.5,
     );
   });
 
   testWidgets('MoveEffect can be infinite', (WidgetTester tester) async {
     final MoveEffect moveEffect = effect(true, false);
     final PositionComponent positionComponent = component();
-    print(path);
-    print(positionComponent.position);
     effectTest(
       tester,
       positionComponent,

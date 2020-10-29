@@ -22,8 +22,8 @@ abstract class Component {
   /// All components on [BaseGame] are always updated by the same amount. The time each one takes to update adds up to the next update cycle.
   @mustCallSuper
   void update(double dt) {
-    _effects.forEach((e) => e.update(dt));
     _effects.removeWhere((e) => e.hasFinished());
+    _effects.forEach((e) => e.update(dt));
   }
 
   /// Renders this component on the provided Canvas [c].
