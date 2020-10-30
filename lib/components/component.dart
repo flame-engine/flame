@@ -23,7 +23,7 @@ abstract class Component {
   @mustCallSuper
   void update(double dt) {
     _effects.removeWhere((e) => e.hasFinished());
-    _effects.forEach((e) => e.update(dt));
+    _effects.where((e) => !e.isPaused).forEach((e) => e.update(dt));
   }
 
   /// Renders this component on the provided Canvas [c].
