@@ -15,15 +15,15 @@ class Callback {
 }
 
 void effectTest(
-    WidgetTester tester,
-    PositionComponent component,
-    PositionComponentEffect effect, {
-      bool hasFinished = true,
-      double iterations = 1.0,
-      double expectedAngle = 0.0,
-      Vector2 expectedPosition,
-      Vector2 expectedSize,
-    }) async {
+  WidgetTester tester,
+  PositionComponent component,
+  PositionComponentEffect effect, {
+  bool hasFinished = true,
+  double iterations = 1.0,
+  double expectedAngle = 0.0,
+  Vector2 expectedPosition,
+  Vector2 expectedSize,
+}) async {
   expectedPosition ??= Vector2.zero();
   expectedSize ??= Vector2.all(100.0);
   final Callback callback = Callback();
@@ -34,7 +34,7 @@ void effectTest(
   final double duration = effect.totalTravelTime;
   await tester.pumpWidget(game.widget);
   double timeLeft = iterations * duration;
-  while(timeLeft > 0) {
+  while (timeLeft > 0) {
     final double stepDelta = random.nextInt(100) / 1000;
     game.update(stepDelta);
     timeLeft -= stepDelta;

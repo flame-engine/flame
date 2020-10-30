@@ -34,7 +34,7 @@ void main() {
 
   testWidgets(
     'ScaleEffect will stop scaling after it is done',
-        (WidgetTester tester) async {
+    (WidgetTester tester) async {
       final ScaleEffect scaleEffect = effect(false, false);
       effectTest(
         tester,
@@ -59,16 +59,16 @@ void main() {
 
   testWidgets(
     'ScaleEffect can alternate and be infinite',
-        (WidgetTester tester) async {
+    (WidgetTester tester) async {
       final ScaleEffect scaleEffect = effect(true, true);
       final PositionComponent positionComponent = component();
       effectTest(
-          tester,
-          positionComponent,
-          scaleEffect,
-          expectedSize: positionComponent.size.clone(),
-          iterations: 1.0,
-          hasFinished: false,
+        tester,
+        positionComponent,
+        scaleEffect,
+        expectedSize: positionComponent.size.clone(),
+        iterations: 1.0,
+        hasFinished: false,
       );
     },
   );

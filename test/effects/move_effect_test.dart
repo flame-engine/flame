@@ -34,7 +34,7 @@ void main() {
 
   testWidgets(
     'MoveEffect will stop moving after it is done',
-        (WidgetTester tester) async {
+    (WidgetTester tester) async {
       final MoveEffect moveEffect = effect(false, false);
       effectTest(
         tester,
@@ -59,16 +59,16 @@ void main() {
 
   testWidgets(
     'MoveEffect can alternate and be infinite',
-        (WidgetTester tester) async {
+    (WidgetTester tester) async {
       final MoveEffect moveEffect = effect(true, true);
       final PositionComponent positionComponent = component();
       effectTest(
-          tester,
-          positionComponent,
-          moveEffect,
-          expectedPosition: positionComponent.position.clone(),
-          iterations: 1.0,
-          hasFinished: false,
+        tester,
+        positionComponent,
+        moveEffect,
+        expectedPosition: positionComponent.position.clone(),
+        iterations: 1.0,
+        hasFinished: false,
       );
     },
   );
