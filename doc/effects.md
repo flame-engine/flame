@@ -25,9 +25,9 @@ A common thing for `MoveEffect`, `ScaleEffect` and `RotateEffect` is that it tak
 
 - Duration means the time it takes for one iteration from beginning to end, with alternation taken into account (but not `isInfinite`).
 - Speed is the speed of the effect
-    - pixels/s for `MoveEffect`
-    - pixels/s for `ScaleEffect`
-    - radians/s for `RotateEffect`
+    - pixels per second for `MoveEffect`
+    - pixels per second for `ScaleEffect`
+    - radians per second for `RotateEffect`
 
 One of these two needs to be defined, if both are defined `duration` takes precedence.
 
@@ -35,7 +35,7 @@ One of these two needs to be defined, if both are defined `duration` takes prece
 
 Applied to `PositionComponent`s, this effect can be used to move the component to new positions, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
 
-The speed is measured in pixels/s, and remember that you can give `duration` as an argument instead of `speed`.
+The speed is measured in pixels per second, and remember that you can give `duration` as an argument instead of `speed`.
 
 Usage example:
 ```dart
@@ -59,7 +59,7 @@ first move to `(120, 0)` and then to `(120, 100)`.
 
 Applied to `PositionComponent`s, this effect can be used to change the width and height of the component, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
 
-The speed is measured in pixels/s, and remember that you can give `duration` as an argument instead of `speed`.
+The speed is measured in pixels per second, and remember that you can give `duration` as an argument instead of `speed`.
 
 Usage example:
 ```dart
