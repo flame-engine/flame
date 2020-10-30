@@ -71,12 +71,6 @@ class MyGame extends BaseGame with TapDetector {
       onComplete: () => print("rotation complete"),
     );
 
-    // isInfinite, isAlternating, working
-    // true,  false, false
-    // false, true,  true
-    // true,  true,  true
-    // false, false, true
-
     final combination = CombinedEffect(
       effects: [move2, rotate],
       isInfinite: false,
@@ -84,18 +78,12 @@ class MyGame extends BaseGame with TapDetector {
       onComplete: () => print("combination complete"),
     );
 
-    // isInfinite, isAlternating, working
-    // true,  false, true
-    // false, true,  true
-    // true,  true,  false
-    // false, false, false (callback not called)
-
-    //final sequence = SequenceEffect(
-    //  effects: [move1, scale, combination],
-    //  isInfinite: false,
-    //  isAlternating: true,
-    //);
-    //sequence.onComplete = () => print("sequence complete");
-    greenSquare.addEffect(rotate);
+    final sequence = SequenceEffect(
+      effects: [move1, scale, combination],
+      isInfinite: false,
+      isAlternating: true,
+    );
+    sequence.onComplete = () => print("sequence complete");
+    greenSquare.addEffect(sequence);
   }
 }
