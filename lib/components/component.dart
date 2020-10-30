@@ -82,7 +82,7 @@ abstract class Component {
   void clearEffects() {
     _effects.forEach(removeEffect);
   }
-  
+
   /// Get a copy of the list of non removed effects
   List<ComponentEffect> get effects => List<ComponentEffect>.from(_effects);
 }
