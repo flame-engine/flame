@@ -81,14 +81,11 @@ void main() {
   testWidgets('RotateEffect alternation can peak', (WidgetTester tester) async {
     final RotateEffect rotateEffect = effect(false, true);
     final PositionComponent positionComponent = component();
-    effectTest(
-      tester,
-      positionComponent,
-      rotateEffect,
-      expectedAngle: angleArgument,
-      hasFinished: false,
-      iterations: 0.5,
-    );
+    effectTest(tester, positionComponent, rotateEffect,
+        expectedAngle: angleArgument,
+        hasFinished: false,
+        iterations: 0.5,
+        floatRange: 0.000001);
   });
 
   testWidgets('RotateEffect can be infinite', (WidgetTester tester) async {
@@ -99,7 +96,7 @@ void main() {
       positionComponent,
       rotateEffect,
       expectedAngle: angleArgument,
-      iterations: 1.0,
+      iterations: 3.0,
       hasFinished: false,
     );
   });
