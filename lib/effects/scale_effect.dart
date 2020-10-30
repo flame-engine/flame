@@ -12,7 +12,7 @@ class ScaleEffect extends SimplePositionComponentEffect {
   ScaleEffect({
     @required this.size,
     double duration, // How long it should take for completion
-    double speed, // The speed of the scaling in pixels/s
+    double speed, // The speed of the scaling in pixels per second
     Curve curve,
     bool isInfinite = false,
     bool isAlternating = false,
