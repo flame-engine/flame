@@ -16,6 +16,11 @@ abstract class ComponentEffect<T extends Component> {
 
   bool _isDisposed = false;
   bool get isDisposed => _isDisposed;
+  
+  bool _isPaused = false;
+  bool get isPaused => _isPaused;
+  void resume() => _isPaused = false;
+  void pause() => _isPaused = true;
 
   /// If the animation should first follow the initial curve and then follow the
   /// curve backwards
