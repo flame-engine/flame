@@ -83,7 +83,6 @@ void main() {
       expectedSize: argumentSize,
       hasFinished: false,
       iterations: 0.5,
-      floatRange: 0.0001,
     );
   });
 
@@ -99,6 +98,4 @@ void main() {
       hasFinished: false,
     );
   });
-
-  // TODO: test that tests speed, and not only duration
 }
