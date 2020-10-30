@@ -94,10 +94,8 @@ void main() {
       positionComponent,
       moveEffect,
       expectedPosition: path.last,
-      iterations: 1.0,
+      iterations: 3.0,
       hasFinished: false,
     );
   });
-
-  // TODO: test that tests speed, and not only duration
 }

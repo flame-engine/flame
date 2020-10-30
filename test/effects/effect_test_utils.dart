@@ -23,6 +23,9 @@ void effectTest(
   double expectedAngle = 0.0,
   Vector2 expectedPosition,
   Vector2 expectedSize,
+  // Only use when checking a value that is not in
+  // the start, end or peak of an iteration
+  double floatRange = 0.0,
 }) async {
   expectedPosition ??= Vector2.zero();
   expectedSize ??= Vector2.all(100.0);
@@ -39,9 +42,28 @@ void effectTest(
     game.update(stepDelta);
     timeLeft -= stepDelta;
   }
-  expect(component.position, expectedPosition);
-  expect(component.angle, expectedAngle);
-  expect(component.size, expectedSize);
+  if (floatRange != 0) {
+    bool acceptableVector(Vector2 vector, Vector2 expectedVector) {
+      return (expectedVector - vector).length < floatRange;
+    }
+
+    final bool acceptablePosition =
+        acceptableVector(component.position, expectedPosition);
+    final bool acceptableSize = acceptableVector(component.size, expectedSize);
+    final bool acceptableAngle =
+        (expectedAngle - component.angle).abs() < floatRange;
+    assert(acceptablePosition, "Position is not correct");
+    assert(acceptableAngle, "Angle is not correct");
+    assert(acceptableSize, "Size is not correct");
+  } else {
+    expect(
+      component.position,
+      expectedPosition,
+      reason: "Position is not correct",
+    );
+    expect(component.angle, expectedAngle, reason: "Angle is not correct");
+    expect(component.size, expectedSize, reason: "Size is not correct");
+  }
   expect(effect.hasFinished(), hasFinished);
   expect(callback.isCalled, hasFinished);
   game.update(0.0); // Since effects are removed before they are updated
