@@ -83,6 +83,7 @@ void main() {
       expectedPosition: path.last,
       hasFinished: false,
       iterations: 0.5,
+      floatRange: 0.0001,
     );
   });
 
