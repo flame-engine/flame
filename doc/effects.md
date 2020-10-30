@@ -5,6 +5,9 @@ At the moment there are only `PositionComponentEffect`s, which are applied to Po
 
 If you want to create an effect for another component just extend the `ComponentEffect` class and add your created effect to the component by calling `component.addEffect(yourEffect)`.
 
+## Common for all effects
+All effects can be paused and resumed with `effect.pause()` and `effect.resume()`, and you can check whether it is paused with `effect.isPaused`.
+
 ## More advanced effects
 Then there are two optional boolean parameters called `isInfinite` and `isAlternating`, by combining them you can get different effects.
 
