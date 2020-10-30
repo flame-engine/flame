@@ -45,7 +45,7 @@ class MyGame extends BaseGame with TapDetector {
       ],
       duration: 5.0,
       curve: Curves.linear,
-      isInfinite: true,
+      isInfinite: false,
       isAlternating: false,
       onComplete: () => print(DateTime.now()),
     );
