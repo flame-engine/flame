@@ -9,10 +9,11 @@ import 'effect_test_utils.dart';
 
 void main() {
   final Random random = Random();
-  double roundDouble(double value, int places){
+  double roundDouble(double value, int places) {
     final double mod = pow(10.0, places).toDouble();
     return (value * mod).round().toDouble() / mod;
   }
+
   // Max three rotations
   double randomAngle() => roundDouble(random.nextDouble() * 6 * pi, 2);
   final double angleArgument = randomAngle();
@@ -39,7 +40,7 @@ void main() {
 
   testWidgets(
     'RotateEffect will stop rotating after it is done',
-        (WidgetTester tester) async {
+    (WidgetTester tester) async {
       final RotateEffect rotateEffect = effect(false, false);
       effectTest(
         tester,
@@ -64,7 +65,7 @@ void main() {
 
   testWidgets(
     'RotateEffect can alternate and be infinite',
-        (WidgetTester tester) async {
+    (WidgetTester tester) async {
       final RotateEffect rotateEffect = effect(true, true);
       final PositionComponent positionComponent = component();
       effectTest(
