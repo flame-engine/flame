@@ -66,14 +66,13 @@ class MyGame extends BaseGame with TapDetector {
       isAlternating: false,
     );
 
-    //final combination = CombinedEffect(
-    //  effects: [move, rotate, scale],
-    //  isInfinite: false,
-    //  isAlternating: true,
-    //  offset: 0.5,
-    //  onComplete: () => print("onComplete callback"),
-    //);
-    greenSquare.addEffect(move);
-    print(DateTime.now());
+    final combination = CombinedEffect(
+      effects: [move, rotate, scale],
+      isInfinite: false,
+      isAlternating: true,
+      offset: 0.5,
+      onComplete: () => print("onComplete callback"),
+    );
+    greenSquare.addEffect(combination);
   }
 }
