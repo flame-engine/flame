@@ -25,7 +25,7 @@ void effectTest(
   Vector2 expectedSize,
   // Only use when checking a value that is not in
   // the start, end or peak of an iteration
-  double floatRange = 0.0,
+  double floatRange = 0.000001,
 }) async {
   expectedPosition ??= Vector2.zero();
   expectedSize ??= Vector2.all(100.0);
