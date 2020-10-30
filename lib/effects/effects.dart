@@ -55,7 +55,7 @@ abstract class ComponentEffect<T extends Component> {
     }
     if (isInfinite) {
       if ((!isAlternating && isMax()) || (isAlternating && isMin())) {
-        reset(resetDriftTime = false);
+        reset();
       }
     }
     if (!hasFinished()) {
@@ -86,12 +86,11 @@ abstract class ComponentEffect<T extends Component> {
   bool isMax() => percentage == null ? false : percentage == 1.0;
   bool isMin() => percentage == null ? false : percentage == 0.0;
 
-  void reset({bool resetDriftTime = true}) {
+  void reset() {
     _isDisposed = false;
     percentage = null;
     currentTime = 0.0;
     curveDirection = 1;
-    driftTime = resetDriftTime ? 0.0 : driftTime;
     isInfinite = _initialIsInfinite;
     isAlternating = _initialIsAlternating;
   }
