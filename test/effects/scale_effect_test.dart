@@ -94,7 +94,7 @@ void main() {
       positionComponent,
       scaleEffect,
       expectedSize: argumentSize,
-      iterations: 1.0,
+      iterations: 3.0,
       hasFinished: false,
     );
   });
