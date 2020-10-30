@@ -18,7 +18,10 @@ class ScaleEffect extends SimplePositionComponentEffect {
     bool isAlternating = false,
     bool isRelative = false,
     void Function() onComplete,
-  })  : assert(duration != null || speed != null),
+  })  : assert(
+          duration != null || speed != null,
+          "Either speed or duration necessary",
+        ),
         super(
           isInfinite,
           isAlternating,

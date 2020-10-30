@@ -166,7 +166,10 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
     Curve curve,
     bool isRelative = false,
     void Function() onComplete,
-  })  : assert(duration != null || speed != null),
+  })  : assert(
+          duration != null || speed != null,
+          "Either speed or duration necessary",
+        ),
         super(
           initialIsInfinite,
           initialIsAlternating,
