@@ -42,7 +42,7 @@ class ScaleEffect extends SimplePositionComponentEffect {
     _delta = isRelative ? size : size - _startSize;
     speed ??= _delta.length / duration;
     duration ??= _delta.length / speed;
-    travelTime = duration;
+    peakTime = duration;
   }
 
   @override

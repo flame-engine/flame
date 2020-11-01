@@ -41,9 +41,9 @@ class SequenceEffect extends PositionComponentEffect {
       endPosition = effect.endPosition;
       endAngle = effect.endAngle;
     });
-    travelTime = effects.fold(
+    peakTime = effects.fold(
       0,
-      (time, effect) => time + effect.totalTravelTime,
+      (time, effect) => time + effect.iterationTime,
     );
     component.position = originalPosition;
     component.angle = originalAngle;
