@@ -63,7 +63,7 @@ abstract class ComponentEffect<T extends Component> {
       percentage = (currentTime / travelTime).clamp(0.0, 1.0).toDouble();
       curveProgress = curve.transform(percentage);
       _updateDriftTime();
-      currentTime = currentTime.clamp(0.0, travelTime).toDouble();
+      //currentTime = currentTime.clamp(0.0, travelTime).toDouble();
       if (hasFinished()) {
         onComplete?.call();
       }

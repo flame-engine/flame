@@ -25,7 +25,7 @@ void effectTest(
   Vector2 expectedSize,
   // Only use when checking a value that is not in
   // the start, end or peak of an iteration
-  double floatRange = 0.000001,
+  double floatRange = 0.0,
 }) async {
   expectedPosition ??= Vector2.zero();
   expectedSize ??= Vector2.all(100.0);
@@ -38,10 +38,24 @@ void effectTest(
   await tester.pumpWidget(game.widget);
   double timeLeft = iterations * duration;
   while (timeLeft > 0) {
-    final double stepDelta = random.nextInt(100) / 1000;
+    double stepDelta = (50+random.nextInt(50)) / 1000;
+    stepDelta = stepDelta < timeLeft ? stepDelta : timeLeft;
     game.update(stepDelta);
     timeLeft -= stepDelta;
   }
+  if(effect.driftTime > 0) {
+    print("DRIIIIFT ${effect.driftTime} ${effect.travelTime}");
+  }
+  expect(
+    effect.hasFinished(),
+    hasFinished,
+    reason: "Effect.hasFinished() didn't have the expected value",
+  );
+  expect(
+    callback.isCalled,
+    hasFinished,
+    reason: 'Callback was not treated properly',
+  );
   if (floatRange != 0) {
     bool acceptableVector(Vector2 vector, Vector2 expectedVector) {
       return (expectedVector - vector).length < floatRange;
@@ -64,8 +78,6 @@ void effectTest(
     expect(component.angle, expectedAngle, reason: "Angle is not correct");
     expect(component.size, expectedSize, reason: "Size is not correct");
   }
-  expect(effect.hasFinished(), hasFinished);
-  expect(callback.isCalled, hasFinished);
   game.update(0.0); // Since effects are removed before they are updated
   expect(component.effects.isEmpty, hasFinished);
 }

@@ -16,7 +16,7 @@ void main() {
   MoveEffect effect(bool isInfinite, bool isAlternating) {
     return MoveEffect(
       path: path,
-      duration: random.nextDouble() * 100,
+      duration: random.nextInt(100).toDouble(),
       isInfinite: isInfinite,
       isAlternating: isAlternating,
     );
