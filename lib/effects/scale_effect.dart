@@ -35,19 +35,21 @@ class ScaleEffect extends SimplePositionComponentEffect {
   @override
   void initialize(_comp) {
     super.initialize(_comp);
-    if (!isAlternating) {
-      endSize = size.clone();
-    }
     _startSize = component.size;
     _delta = isRelative ? size : size - _startSize;
+    if (!isAlternating) {
+      endSize = _startSize + _delta;
+    }
     speed ??= _delta.length / duration;
     duration ??= _delta.length / speed;
-    peakTime = duration;
+    peakTime = isAlternating ? duration / 2 : duration;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    component.size = _startSize + _delta * curveProgress;
+    if (!hasFinished()) {
+      component.size = _startSize + _delta * curveProgress;
+    }
   }
 }
