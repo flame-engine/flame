@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -26,15 +28,13 @@ abstract class ComponentEffect<T extends Component> {
   final bool _initialIsAlternating;
   double percentage;
   double curveProgress;
-  double travelTime;
+  double peakTime;
   double currentTime = 0.0;
   double driftTime = 0.0;
   int curveDirection = 1;
   Curve curve;
 
-  /// If the effect is alternating the travel time is double the normal
-  /// travel time
-  double get totalTravelTime => travelTime * (isAlternating ? 2 : 1);
+  double get iterationTime => peakTime * (isAlternating ? 2 : 1);
 
   ComponentEffect(
     this._initialIsInfinite,
@@ -60,10 +60,11 @@ abstract class ComponentEffect<T extends Component> {
     }
     if (!hasFinished()) {
       currentTime += (dt + driftTime) * curveDirection;
-      percentage = (currentTime / travelTime).clamp(0.0, 1.0).toDouble();
+      currentTime = (currentTime * 10000000).round() / 10000000;
+      percentage = (currentTime / peakTime).clamp(0.0, 1.0).toDouble();
       curveProgress = curve.transform(percentage);
       _updateDriftTime();
-      //currentTime = currentTime.clamp(0.0, travelTime).toDouble();
+      currentTime = currentTime.clamp(0.0, peakTime).toDouble();
       if (hasFinished()) {
         onComplete?.call();
       }
@@ -100,7 +101,7 @@ abstract class ComponentEffect<T extends Component> {
   // following effect in a SequenceEffect.
   void _updateDriftTime() {
     if (isMax()) {
-      driftTime = currentTime - travelTime;
+      driftTime = currentTime - peakTime;
     } else if (isMin()) {
       driftTime = currentTime.abs();
     } else {

@@ -41,7 +41,7 @@ class RotateEffect extends SimplePositionComponentEffect {
     _delta = isRelative ? angle : angle - _startAngle;
     speed ??= _delta / duration;
     duration ??= _delta / speed;
-    travelTime = duration;
+    peakTime = duration;
   }
 
   @override

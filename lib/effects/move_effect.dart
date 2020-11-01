@@ -99,7 +99,7 @@ class MoveEffect extends SimplePositionComponentEffect {
     final double totalPathLength = isAlternating ? pathLength * 2 : pathLength;
     speed ??= totalPathLength / duration;
     duration ??= totalPathLength / speed;
-    travelTime = isAlternating ? duration / 2 : duration;
+    peakTime = isAlternating ? duration / 2 : duration;
   }
 
   @override

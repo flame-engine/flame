@@ -38,8 +38,8 @@ class CombinedEffect extends PositionComponentEffect {
       endSize = isSameSize ? endSize : effect.endSize;
       endPosition = isSamePosition ? endPosition : effect.endPosition;
       endAngle = isSameAngle ? endAngle : effect.endAngle;
-      travelTime = max(travelTime ?? 0,
-          effect.totalTravelTime + offset * effects.indexOf(effect));
+      peakTime = max(peakTime ?? 0,
+          effect.iterationTime + offset * effects.indexOf(effect));
     });
   }
 
@@ -76,9 +76,9 @@ class CombinedEffect extends PositionComponentEffect {
     final isReverse = curveDirection.isNegative;
     final initialOffset = effects.indexOf(effect) * offset;
     final effectOffset = isReverse
-        ? travelTime - effect.travelTime - initialOffset
+        ? peakTime - effect.peakTime - initialOffset
         : initialOffset;
-    final passedOffset = isReverse ? travelTime - currentTime : currentTime;
+    final passedOffset = isReverse ? peakTime - currentTime : currentTime;
     if (!effect.hasFinished() && effectOffset < passedOffset) {
       final time =
           effectOffset < passedOffset - dt ? dt : passedOffset - effectOffset;
