@@ -75,9 +75,8 @@ class CombinedEffect extends PositionComponentEffect {
   void _updateEffect(PositionComponentEffect effect, double dt) {
     final isReverse = curveDirection.isNegative;
     final initialOffset = effects.indexOf(effect) * offset;
-    final effectOffset = isReverse
-        ? peakTime - effect.peakTime - initialOffset
-        : initialOffset;
+    final effectOffset =
+        isReverse ? peakTime - effect.peakTime - initialOffset : initialOffset;
     final passedOffset = isReverse ? peakTime - currentTime : currentTime;
     if (!effect.hasFinished() && effectOffset < passedOffset) {
       final time =
