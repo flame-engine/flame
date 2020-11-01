@@ -21,7 +21,7 @@ void main() {
   RotateEffect effect(bool isInfinite, bool isAlternating) {
     return RotateEffect(
       angle: angleArgument,
-      duration: random.nextDouble() * 100,
+      duration: random.nextInt(100).toDouble(),
       isInfinite: isInfinite,
       isAlternating: isAlternating,
     );
