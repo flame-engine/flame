@@ -68,7 +68,7 @@ void main() {
         scaleEffect,
         expectedSize: positionComponent.size.clone(),
         iterations: 1.0,
-        hasFinished: false,
+        shouldFinish: false,
       );
     },
   );
@@ -81,7 +81,7 @@ void main() {
       positionComponent,
       scaleEffect,
       expectedSize: argumentSize,
-      hasFinished: false,
+      shouldFinish: false,
       iterations: 0.5,
     );
   });
@@ -95,7 +95,7 @@ void main() {
       scaleEffect,
       expectedSize: argumentSize,
       iterations: 3.0,
-      hasFinished: false,
+      shouldFinish: false,
     );
   });
 }

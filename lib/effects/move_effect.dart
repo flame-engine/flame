@@ -66,11 +66,7 @@ class MoveEffect extends SimplePositionComponentEffect {
     } else {
       _movePath = path;
     }
-    if (!isAlternating) {
-      endPosition = _movePath.last;
-    } else {
-      endPosition = _startPosition;
-    }
+    endPosition = isAlternating ? _startPosition : _movePath.last;
 
     double pathLength = 0;
     Vector2 lastPosition = _startPosition;
@@ -113,16 +109,19 @@ class MoveEffect extends SimplePositionComponentEffect {
   @override
   void update(double dt) {
     super.update(dt);
-    _currentSubPath ??= _percentagePath.first;
-    if (!curveDirection.isNegative && _currentSubPath.endAt < curveProgress ||
-        curveDirection.isNegative && _currentSubPath.startAt > curveProgress) {
-      _currentSubPath =
-          _percentagePath.firstWhere((v) => v.endAt >= curveProgress);
+    if (!hasFinished()) {
+      _currentSubPath ??= _percentagePath.first;
+      if (!curveDirection.isNegative && _currentSubPath.endAt < curveProgress ||
+          curveDirection.isNegative &&
+              _currentSubPath.startAt > curveProgress) {
+        _currentSubPath =
+            _percentagePath.firstWhere((v) => v.endAt >= curveProgress);
+      }
+      final double lastEndAt = _currentSubPath.startAt;
+      final double localPercentage =
+          (curveProgress - lastEndAt) / (_currentSubPath.endAt - lastEndAt);
+      component.position = _currentSubPath.previous +
+          ((_currentSubPath.v - _currentSubPath.previous) * localPercentage);
     }
-    final double lastEndAt = _currentSubPath.startAt;
-    final double localPercentage =
-        (curveProgress - lastEndAt) / (_currentSubPath.endAt - lastEndAt);
-    component.position = _currentSubPath.previous +
-        ((_currentSubPath.v - _currentSubPath.previous) * localPercentage);
   }
 }

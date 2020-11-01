@@ -18,7 +18,7 @@ void effectTest(
   WidgetTester tester,
   PositionComponent component,
   PositionComponentEffect effect, {
-  bool hasFinished = true,
+  bool shouldFinish = true,
   double iterations = 1.0,
   double expectedAngle = 0.0,
   Vector2 expectedPosition,
@@ -41,25 +41,51 @@ void effectTest(
     game.update(stepDelta);
     timeLeft -= stepDelta;
   }
-  expect(
-    effect.hasFinished(),
-    hasFinished,
-    reason: "Effect.hasFinished() didn't have the expected value",
-  );
-  expect(
-    callback.isCalled,
-    hasFinished,
-    reason: 'Callback was not treated properly',
-  );
-  expect(
-    component.position,
-    expectedPosition,
-    reason: "Position is not correct",
-  );
-  expect(component.angle, expectedAngle, reason: "Angle is not correct");
-  expect(component.size, expectedSize, reason: "Size is not correct");
+  expect(effect.hasFinished(), shouldFinish, reason: "Effect shouldFinish");
+  expect(callback.isCalled, shouldFinish, reason: "Callback was treated wrong");
+  if (!shouldFinish) {
+    const double floatRange = 0.001;
+    bool acceptableVector(Vector2 vector, Vector2 expectedVector) {
+      return (expectedVector - vector).length < floatRange;
+    }
+
+    final bool acceptablePosition =
+        acceptableVector(component.position, expectedPosition);
+    final bool acceptableSize = acceptableVector(component.size, expectedSize);
+    final bool acceptableAngle =
+        (expectedAngle - component.angle).abs() < floatRange;
+    assert(
+      acceptablePosition,
+      "Position is not correct (${component.position} vs $expectedPosition)",
+    );
+    assert(
+      acceptableAngle,
+      "Angle is not correct (${component.angle} vs $expectedAngle)",
+    );
+    assert(
+      acceptableSize,
+      "Size is not correct (${component.size} vs $expectedSize)",
+    );
+  } else {
+    //game.update(0.1);
+    expect(
+      component.position,
+      expectedPosition,
+      reason: "Position is not exactly correct",
+    );
+    expect(
+      component.angle,
+      expectedAngle,
+      reason: "Angle is not exactly correct",
+    );
+    expect(
+      component.size,
+      expectedSize,
+      reason: "Size is not exactly correct",
+    );
+  }
   game.update(0.0); // Since effects are removed before they are updated
-  expect(component.effects.isEmpty, hasFinished);
+  expect(component.effects.isEmpty, shouldFinish);
 }
 
 class Square extends PositionComponent {
