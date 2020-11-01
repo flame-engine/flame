@@ -7,32 +7,23 @@ import 'package:flutter_test/flutter_test.dart';
 import 'effect_test_utils.dart';
 
 void main() {
-  final Random random = Random();
-  double roundDouble(double value, int places) {
-    final double mod = pow(10.0, places).toDouble();
-    return (value * mod).round().toDouble() / mod;
-  }
-
-  // Max three rotations
-  double randomAngle() => roundDouble(random.nextDouble() * 6 * pi, 2);
-  final double angleArgument = randomAngle();
-  Square component() => Square(angle: randomAngle());
+  const double angleArgument = 6.0;
+  TestComponent component() => TestComponent(angle: 0.5);
 
   RotateEffect effect(bool isInfinite, bool isAlternating) {
     return RotateEffect(
       angle: angleArgument,
-      duration: random.nextInt(100).toDouble(),
+      duration: 1 + random.nextInt(100).toDouble(),
       isInfinite: isInfinite,
       isAlternating: isAlternating,
     );
   }
 
   testWidgets('RotateEffect can rotate', (WidgetTester tester) async {
-    final RotateEffect rotateEffect = effect(false, false);
     effectTest(
       tester,
       component(),
-      rotateEffect,
+      effect(false, false),
       expectedAngle: angleArgument,
     );
   });
@@ -40,11 +31,10 @@ void main() {
   testWidgets(
     'RotateEffect will stop rotating after it is done',
     (WidgetTester tester) async {
-      final RotateEffect rotateEffect = effect(false, false);
       effectTest(
         tester,
         component(),
-        rotateEffect,
+        effect(false, false),
         expectedAngle: angleArgument,
         iterations: 1.5,
       );
@@ -52,12 +42,11 @@ void main() {
   );
 
   testWidgets('RotateEffect can alternate', (WidgetTester tester) async {
-    final RotateEffect rotateEffect = effect(false, true);
     final PositionComponent positionComponent = component();
     effectTest(
       tester,
       positionComponent,
-      rotateEffect,
+      effect(false, true),
       expectedAngle: positionComponent.angle,
     );
   });
@@ -65,12 +54,11 @@ void main() {
   testWidgets(
     'RotateEffect can alternate and be infinite',
     (WidgetTester tester) async {
-      final RotateEffect rotateEffect = effect(true, true);
       final PositionComponent positionComponent = component();
       effectTest(
         tester,
         positionComponent,
-        rotateEffect,
+        effect(true, true),
         expectedAngle: positionComponent.angle,
         iterations: 1.0,
         shouldFinish: false,
@@ -79,12 +67,11 @@ void main() {
   );
 
   testWidgets('RotateEffect alternation can peak', (WidgetTester tester) async {
-    final RotateEffect rotateEffect = effect(false, true);
     final PositionComponent positionComponent = component();
     effectTest(
       tester,
       positionComponent,
-      rotateEffect,
+      effect(false, true),
       expectedAngle: angleArgument,
       shouldFinish: false,
       iterations: 0.5,
@@ -92,12 +79,11 @@ void main() {
   });
 
   testWidgets('RotateEffect can be infinite', (WidgetTester tester) async {
-    final RotateEffect rotateEffect = effect(true, false);
     final PositionComponent positionComponent = component();
     effectTest(
       tester,
       positionComponent,
-      rotateEffect,
+      effect(true, false),
       expectedAngle: angleArgument,
       iterations: 3.0,
       shouldFinish: false,
