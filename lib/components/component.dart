@@ -84,5 +84,7 @@ abstract class Component {
   }
 
   /// Get a copy of the list of non removed effects
-  List<ComponentEffect> get effects => List<ComponentEffect>.from(_effects);
+  List<ComponentEffect> get effects {
+    return List<ComponentEffect>.from(_effects)..where((e) => !e.hasFinished());
+  }
 }
