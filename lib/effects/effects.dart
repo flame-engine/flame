@@ -67,6 +67,7 @@ abstract class ComponentEffect<T extends Component> {
       currentTime = currentTime.clamp(0.0, peakTime).toDouble();
       if (hasFinished()) {
         onComplete?.call();
+        _setComponentToEndState();
       }
     }
   }
@@ -108,6 +109,8 @@ abstract class ComponentEffect<T extends Component> {
       driftTime = 0;
     }
   }
+
+  void _setComponentToEndState();
 }
 
 abstract class PositionComponentEffect
@@ -141,16 +144,23 @@ abstract class PositionComponentEffect
   void initialize(PositionComponent component) {
     super.initialize(component);
     this.component = component;
-    originalPosition = component.position;
+    originalPosition = component.position.clone();
     originalAngle = component.angle;
-    originalSize = component.size;
+    originalSize = component.size.clone();
 
     /// If these aren't modified by the extending effect it is assumed that the
     /// effect didn't bring the component to another state than the one it
     /// started in
-    endPosition = component.position;
+    endPosition = component.position.clone();
     endAngle = component.angle;
-    endSize = component.size;
+    endSize = component.size.clone();
+  }
+
+  @override
+  void _setComponentToEndState() {
+    component.position.setFrom(endPosition);
+    component.angle = endAngle;
+    component.size.setFrom(endSize);
   }
 }
 

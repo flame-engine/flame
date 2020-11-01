@@ -68,7 +68,7 @@ void main() {
         moveEffect,
         expectedPosition: positionComponent.position.clone(),
         iterations: 1.0,
-        hasFinished: false,
+        shouldFinish: false,
       );
     },
   );
@@ -81,7 +81,7 @@ void main() {
       positionComponent,
       moveEffect,
       expectedPosition: path.last,
-      hasFinished: false,
+      shouldFinish: false,
       iterations: 0.5,
     );
   });
@@ -95,7 +95,7 @@ void main() {
       moveEffect,
       expectedPosition: path.last,
       iterations: 3.0,
-      hasFinished: false,
+      shouldFinish: false,
     );
   });
 }

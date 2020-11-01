@@ -73,7 +73,7 @@ void main() {
         rotateEffect,
         expectedAngle: positionComponent.angle,
         iterations: 1.0,
-        hasFinished: false,
+        shouldFinish: false,
       );
     },
   );
@@ -86,7 +86,7 @@ void main() {
       positionComponent,
       rotateEffect,
       expectedAngle: angleArgument,
-      hasFinished: false,
+      shouldFinish: false,
       iterations: 0.5,
     );
   });
@@ -100,7 +100,7 @@ void main() {
       rotateEffect,
       expectedAngle: angleArgument,
       iterations: 3.0,
-      hasFinished: false,
+      shouldFinish: false,
     );
   });
 }
