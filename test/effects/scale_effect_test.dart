@@ -16,7 +16,7 @@ void main() {
   ScaleEffect effect(bool isInfinite, bool isAlternating) {
     return ScaleEffect(
       size: argumentSize,
-      duration: random.nextDouble() * 100,
+      duration: random.nextInt(100).toDouble(),
       isInfinite: isInfinite,
       isAlternating: isAlternating,
     );
