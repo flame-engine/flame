@@ -11,23 +11,22 @@ void main() {
   final Random random = Random();
   Vector2 randomVector2() => (Vector2.random(random) * 100)..round();
   final List<Vector2> path = List.generate(3, (i) => randomVector2());
-  Square component() => Square(position: randomVector2());
+  TestComponent component() => TestComponent(position: randomVector2());
 
   MoveEffect effect(bool isInfinite, bool isAlternating) {
     return MoveEffect(
       path: path,
-      duration: random.nextInt(100).toDouble(),
+      duration: 1 + random.nextInt(100).toDouble(),
       isInfinite: isInfinite,
       isAlternating: isAlternating,
     );
   }
 
   testWidgets('MoveEffect can move', (WidgetTester tester) async {
-    final MoveEffect moveEffect = effect(false, false);
     effectTest(
       tester,
       component(),
-      moveEffect,
+      effect(false, false),
       expectedPosition: path.last,
     );
   });
@@ -35,11 +34,10 @@ void main() {
   testWidgets(
     'MoveEffect will stop moving after it is done',
     (WidgetTester tester) async {
-      final MoveEffect moveEffect = effect(false, false);
       effectTest(
         tester,
         component(),
-        moveEffect,
+        effect(false, false),
         expectedPosition: path.last,
         iterations: 1.5,
       );
@@ -47,12 +45,11 @@ void main() {
   );
 
   testWidgets('MoveEffect can alternate', (WidgetTester tester) async {
-    final MoveEffect moveEffect = effect(false, true);
     final PositionComponent positionComponent = component();
     effectTest(
       tester,
       positionComponent,
-      moveEffect,
+      effect(false, true),
       expectedPosition: positionComponent.position.clone(),
     );
   });
@@ -60,12 +57,11 @@ void main() {
   testWidgets(
     'MoveEffect can alternate and be infinite',
     (WidgetTester tester) async {
-      final MoveEffect moveEffect = effect(true, true);
       final PositionComponent positionComponent = component();
       effectTest(
         tester,
         positionComponent,
-        moveEffect,
+        effect(true, true),
         expectedPosition: positionComponent.position.clone(),
         iterations: 1.0,
         shouldFinish: false,
@@ -74,12 +70,11 @@ void main() {
   );
 
   testWidgets('MoveEffect alternation can peak', (WidgetTester tester) async {
-    final MoveEffect moveEffect = effect(false, true);
     final PositionComponent positionComponent = component();
     effectTest(
       tester,
       positionComponent,
-      moveEffect,
+      effect(false, true),
       expectedPosition: path.last,
       shouldFinish: false,
       iterations: 0.5,
@@ -87,12 +82,11 @@ void main() {
   });
 
   testWidgets('MoveEffect can be infinite', (WidgetTester tester) async {
-    final MoveEffect moveEffect = effect(true, false);
     final PositionComponent positionComponent = component();
     effectTest(
       tester,
       positionComponent,
-      moveEffect,
+      effect(true, false),
       expectedPosition: path.last,
       iterations: 3.0,
       shouldFinish: false,

@@ -41,8 +41,6 @@ void effectTest(
     game.update(stepDelta);
     timeLeft -= stepDelta;
   }
-  expect(effect.hasFinished(), shouldFinish, reason: "Effect shouldFinish");
-  expect(callback.isCalled, shouldFinish, reason: "Callback was treated wrong");
   if (!shouldFinish) {
     const double floatRange = 0.001;
     bool acceptableVector(Vector2 vector, Vector2 expectedVector) {
@@ -56,18 +54,18 @@ void effectTest(
         (expectedAngle - component.angle).abs() < floatRange;
     assert(
       acceptablePosition,
-      "Position is not correct (${component.position} vs $expectedPosition)",
+      "Position is not correct (had: ${component.position} should be $expectedPosition)",
     );
     assert(
       acceptableAngle,
-      "Angle is not correct (${component.angle} vs $expectedAngle)",
+      "Angle is not correct (had: ${component.angle} should be: $expectedAngle)",
     );
     assert(
       acceptableSize,
-      "Size is not correct (${component.size} vs $expectedSize)",
+      "Size is not correct (had: ${component.size} should be: $expectedSize)",
     );
   } else {
-    //game.update(0.1);
+    game.update(0.1);
     expect(
       component.position,
       expectedPosition,
@@ -84,12 +82,14 @@ void effectTest(
       reason: "Size is not exactly correct",
     );
   }
+  expect(effect.hasFinished(), shouldFinish, reason: "Effect shouldFinish");
+  expect(callback.isCalled, shouldFinish, reason: "Callback was treated wrong");
   game.update(0.0); // Since effects are removed before they are updated
   expect(component.effects.isEmpty, shouldFinish);
 }
 
-class Square extends PositionComponent {
-  Square({
+class TestComponent extends PositionComponent {
+  TestComponent({
     Vector2 position,
     Vector2 size,
     double angle,

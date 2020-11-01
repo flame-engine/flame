@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -60,7 +58,7 @@ abstract class ComponentEffect<T extends Component> {
     }
     if (!hasFinished()) {
       currentTime += (dt + driftTime) * curveDirection;
-      currentTime = (currentTime * 10000000).round() / 10000000;
+      currentTime = (currentTime * 10000000).floor() / 10000000;
       percentage = (currentTime / peakTime).clamp(0.0, 1.0).toDouble();
       curveProgress = curve.transform(percentage);
       _updateDriftTime();

@@ -29,7 +29,7 @@ class MyGame extends BaseGame with TapDetector {
       speed: 250.0,
       curve: Curves.bounceInOut,
       isRelative: false,
-      isInfinite: true,
+      isInfinite: false,
       isAlternating: true,
     ));
   }
