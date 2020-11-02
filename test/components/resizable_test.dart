@@ -22,7 +22,7 @@ void main() {
     test('game calls resize on add', () {
       final MyComponent a = MyComponent('a');
       final MyGame game = MyGame();
-      game.resize(size);
+      game.onResize(size);
       game.add(a);
       expect(a.gameSize, size);
     });
@@ -30,14 +30,14 @@ void main() {
       final MyComponent a = MyComponent('a');
       final MyGame game = MyGame();
       game.add(a);
-      game.resize(size);
+      game.onResize(size);
       expect(a.gameSize, size);
     });
     test('game calls doesnt change component size', () {
       final MyComponent a = MyComponent('a');
       final MyGame game = MyGame();
       game.add(a);
-      game.resize(size);
+      game.onResize(size);
       expect(a.size, isNot(size));
     });
   });
