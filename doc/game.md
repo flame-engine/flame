@@ -31,7 +31,7 @@ A very simple `BaseGame` implementation example can be seen below:
         MyCrate() : super.fromSprite(16.0, 16.0, new Sprite('crate.png'));
 
         @override
-        void resize(Size size) {
+        void onGameResize(Size size) {
             // we don't need to set the x and y in the constructor, we can set then here
             this.x = (size.width - this.width)/ 2;
             this.y = (size.height - this.height) / 2;

@@ -14,6 +14,7 @@ const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font')
 
 * fontFamily : a commonly available font, like Arial (default), or a custom font added in your pubspec (see [here](https://flutter.io/custom-fonts/) how to do it)
 * fontSize : font size, in pts (default `24.0`)
+* lineHeight: height of text line, as a multiple of font size (default `null`)
 * color : the color, as a `ui.Color` (default black)
 
 For more information regarding colors and how to create then, see the [Colors and the Palette](/doc/palette.md) guide.
