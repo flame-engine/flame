@@ -234,10 +234,10 @@ class WidgetBuilder {
     final hasBasicDetectors = _hasBasicGestureDetectors(game);
     final hasAdvancedDetectors = _hasAdvancedGesturesDetectors(game);
 
-    if (hasBasicDetectors && hasAdvancedDetectors) {
-      print(
-          'WARNING: Both Basic and Advanced detectors detected. Advanced detectors will override basic detectors and the later will not receive events');
-    }
+    assert(
+        !(hasBasicDetectors && hasAdvancedDetectors),
+        'WARNING: Both Basic and Advanced detectors detected. Advanced detectors will override basic detectors and the later will not receive events',
+    );
 
     if (hasBasicDetectors) {
       widget = _applyBasicGesturesDetectors(game, widget);
