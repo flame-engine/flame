@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'dart:ui';
 
 import 'extensions/vector2.dart';
@@ -50,9 +51,9 @@ class SpriteAnimation {
   /// All frames have the same [stepTime].
   SpriteAnimation.spriteList(
     List<Sprite> sprites, {
-    double stepTime,
+    @required double stepTime,
     this.loop = true,
-  }) {
+  }) : assert(stepTime != null) {
     if (sprites.isEmpty) {
       throw Exception('You must have at least one frame!');
     }
@@ -101,8 +102,11 @@ class SpriteAnimation {
     Vector2 texturePosition,
     Vector2 textureSize,
     this.loop = true,
-  }) : assert(amountPerRow == null || amount >= amountPerRow) {
+  })  : assert(amountPerRow == null || amount >= amountPerRow),
+        assert(stepTimes != null),
+        assert(image != null) {
     amountPerRow ??= amount;
+    texturePosition ??= Vector2.zero();
     frames = List<SpriteAnimationFrame>(amount);
     for (int i = 0; i < amount; i++) {
       final position = Vector2(

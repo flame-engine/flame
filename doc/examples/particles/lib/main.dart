@@ -19,7 +19,7 @@ import 'package:flame/particles/animation_particle.dart';
 import 'package:flame/particles/component_particle.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/time.dart' as flame_time;
+import 'package:flame/timer.dart' as flame_time;
 import 'package:flame/particle.dart';
 import 'package:flame/extensions/vector2.dart';
 import 'package:flame/sprite.dart';
@@ -542,7 +542,7 @@ class MyGame extends BaseGame {
       (i) => spritesheet.getSpriteById(i),
     );
 
-    return SpriteAnimation.spriteList(sprites);
+    return SpriteAnimation.spriteList(sprites, stepTime: 0.1);
   }
 }
 

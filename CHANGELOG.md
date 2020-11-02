@@ -4,6 +4,10 @@
  - Improve IsometricTileMap and Spritesheet classes
  - Export full vector_math library from extension
  - Added warning about basic and advanced detectors
+ - Ensuring sprite animation and sprite animation components don't get NPEs on initialization
+ - Refactor timer class
+ - include all changed that are included on 0.28.0
+ - Rename game#resize to game#onResize
 
 ## 1.0.0-rc1
  - Move all box2d related code and examples to the flame_box2d repo
@@ -23,6 +27,11 @@
  - Generalize effects api to include all components
  - Extract all the audio related capabilities to a new package, flame_audio
  - Fix bug that sprite crashes without a position
+
+## 0.28.0
+- Fix spriteAsWidget deprecation message
+- Add `lineHeight` property to `TextConfig`
+- Adding pause and resume methods to time class
 
 ## 0.27.0
  - Improved the accuracy of the `FPSCounter` by using Flutter's internal frame timings.

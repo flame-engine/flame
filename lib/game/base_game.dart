@@ -138,7 +138,7 @@ class BaseGame extends Game with FPSCounter {
   /// You can override it further to add more custom behaviour, but you should seriously consider calling the super implementation as well.
   @override
   @mustCallSuper
-  void resize(Vector2 size) {
+  void onResize(Vector2 size) {
     this.size = size;
     components.forEach((c) => c.onGameResize(size));
   }
