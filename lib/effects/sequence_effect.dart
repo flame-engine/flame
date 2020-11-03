@@ -69,14 +69,6 @@ class SequenceEffect extends PositionComponentEffect {
     if (currentEffect.hasFinished()) {
       _driftModifier = currentEffect.driftTime;
       _currentIndex++;
-      final iterationSize = isAlternating ? effects.length * 2 : effects.length;
-      if (_currentIndex != 0 &&
-          _currentIndex == iterationSize &&
-          (currentEffect.isAlternating ||
-              currentEffect.isAlternating == isAlternating)) {
-        isInfinite ? reset() : dispose();
-        return;
-      }
       final orderedEffects =
           curveDirection.isNegative ? effects.reversed.toList() : effects;
       // Make sure the current effect has the `isAlternating` value it
