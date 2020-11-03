@@ -28,19 +28,21 @@ class CombinedEffect extends PositionComponentEffect {
   }
 
   @override
-  void initialize(PositionComponent _comp) {
-    super.initialize(_comp);
+  void initialize(PositionComponent component) {
+    super.initialize(component);
     effects.forEach((effect) {
-      effect.initialize(_comp);
-      final isSameSize = effect.endSize == _comp.size;
-      final isSamePosition = effect.endPosition == _comp.position;
-      final isSameAngle = effect.endAngle == _comp.angle;
-      endSize = isSameSize ? endSize : effect.endSize;
-      endPosition = isSamePosition ? endPosition : effect.endPosition;
-      endAngle = isSameAngle ? endAngle : effect.endAngle;
+      effect.initialize(component);
+      endPosition = effect.endPosition;
+      endAngle = effect.endAngle;
+      endSize = effect.endSize;
       peakTime = max(peakTime ?? 0,
           effect.iterationTime + offset * effects.indexOf(effect));
     });
+    if (isAlternating) {
+      endPosition = originalPosition;
+      endAngle = originalAngle;
+      endSize = originalSize;
+    }
   }
 
   @override
@@ -57,13 +59,11 @@ class CombinedEffect extends PositionComponentEffect {
   @override
   void reset() {
     super.reset();
-    if (component != null) {
-      component.position = originalPosition;
-      component.angle = originalAngle;
-      component.size = originalSize;
-      initialize(component);
-    }
+    component?.position = originalPosition;
+    component?.angle = originalAngle;
+    component?.size = originalSize;
     effects.forEach((effect) => effect.reset());
+    initialize(component);
   }
 
   @override

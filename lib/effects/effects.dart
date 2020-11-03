@@ -63,14 +63,17 @@ abstract class ComponentEffect<T extends Component> {
     }
     if (!hasFinished()) {
       currentTime += (dt + driftTime) * curveDirection;
-      currentTime = (currentTime * 10000000).floor() / 10000000;
       percentage = (currentTime / peakTime).clamp(0.0, 1.0).toDouble();
       curveProgress = curve.transform(percentage);
       _updateDriftTime();
       currentTime = currentTime.clamp(0.0, peakTime).toDouble();
       if (hasFinished()) {
         onComplete?.call();
-        _setComponentToEndState();
+        // Set the component to the exact end state if this component is the
+        // root component (not inside another component).
+        if (component.effects.contains(this)) {
+          _setComponentToEndState();
+        }
       }
     }
   }
@@ -180,7 +183,7 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
     bool isRelative = false,
     void Function() onComplete,
   })  : assert(
-          duration != null || speed != null,
+          (duration != null) ^ (speed != null),
           "Either speed or duration necessary",
         ),
         super(

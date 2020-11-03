@@ -4,12 +4,11 @@ import 'package:flame/effects/scale_effect.dart';
 import 'package:flame/effects/rotate_effect.dart';
 import 'package:flame/effects/sequence_effect.dart';
 import 'package:flame/gestures.dart';
+import 'package:flame/extensions/offset.dart';
 import 'package:flame/extensions/vector2.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-
-import 'dart:math';
 
 import './square.dart';
 
@@ -30,23 +29,22 @@ class MyGame extends BaseGame with TapDetector {
 
   @override
   void onTapUp(TapUpDetails details) {
-    final dx = details.localPosition.dx;
-    final dy = details.localPosition.dy;
+    final Vector2 currentTap = details.localPosition.toVector2();
     greenSquare.clearEffects();
 
     final move1 = MoveEffect(
-      path: [Vector2(dx, dy)],
+      path: [currentTap],
       speed: 250.0,
       curve: Curves.bounceInOut,
       isInfinite: false,
-      isAlternating: false,
+      isAlternating: true,
     );
 
     final move2 = MoveEffect(
       path: [
-        Vector2(dx, dy + 50),
-        Vector2(dx - 50, dy - 50),
-        Vector2(dx + 50, dy),
+        currentTap + Vector2(0, 50),
+        currentTap + Vector2(-50, -50),
+        currentTap + Vector2(50, 0),
       ],
       speed: 150.0,
       curve: Curves.easeIn,
@@ -55,7 +53,7 @@ class MyGame extends BaseGame with TapDetector {
     );
 
     final scale = ScaleEffect(
-      size: Vector2(dx, dy),
+      size: currentTap,
       speed: 100.0,
       curve: Curves.easeInCubic,
       isInfinite: false,
@@ -63,12 +61,11 @@ class MyGame extends BaseGame with TapDetector {
     );
 
     final rotate = RotateEffect(
-      angle: (dx + dy) % pi,
+      angle: currentTap.angleTo(Vector2.all(100)),
       duration: 0.8,
       curve: Curves.decelerate,
       isInfinite: false,
       isAlternating: false,
-      onComplete: () => print("rotation complete"),
     );
 
     final combination = CombinedEffect(
@@ -79,11 +76,11 @@ class MyGame extends BaseGame with TapDetector {
     );
 
     final sequence = SequenceEffect(
-      effects: [move1, scale, combination],
+      effects: [move1, scale, move2],
       isInfinite: false,
       isAlternating: true,
     );
     sequence.onComplete = () => print("sequence complete");
-    greenSquare.addEffect(sequence);
+    greenSquare.addEffect(combination);
   }
 }

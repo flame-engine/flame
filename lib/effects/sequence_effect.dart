@@ -27,24 +27,30 @@ class SequenceEffect extends PositionComponentEffect {
   }
 
   @override
-  void initialize(PositionComponent _comp) {
-    super.initialize(_comp);
+  void initialize(PositionComponent component) {
+    super.initialize(component);
     _currentIndex = 0;
     _driftModifier = 0.0;
+
     effects.forEach((effect) {
       effect.reset();
-      _comp.size = endSize;
-      _comp.position = endPosition;
-      _comp.angle = endAngle;
-      effect.initialize(_comp);
-      endSize = effect.endSize;
+      component.position = endPosition;
+      component.angle = endAngle;
+      component.size = endSize;
+      effect.initialize(component);
       endPosition = effect.endPosition;
       endAngle = effect.endAngle;
+      endSize = effect.endSize;
     });
     peakTime = effects.fold(
       0,
-      (time, effect) => time + effect.iterationTime,
+      (time, effect) => time + effect.peakTime,
     );
+    if (isAlternating) {
+      endPosition = originalPosition;
+      endAngle = originalAngle;
+      endSize = originalSize;
+    }
     component.position = originalPosition;
     component.angle = originalAngle;
     component.size = originalSize;
@@ -54,9 +60,6 @@ class SequenceEffect extends PositionComponentEffect {
 
   @override
   void update(double dt) {
-    if (hasFinished()) {
-      return;
-    }
     super.update(dt);
 
     // If the last effect's time to completion overshot its total time, add that
@@ -96,12 +99,10 @@ class SequenceEffect extends PositionComponentEffect {
   @override
   void reset() {
     super.reset();
+    component?.position = originalPosition;
+    component?.angle = originalAngle;
+    component?.size = originalSize;
     effects.forEach((e) => e.reset());
-    if (component != null) {
-      component.position = originalPosition;
-      component.angle = originalAngle;
-      component.size = originalSize;
-      initialize(component);
-    }
+    initialize(component);
   }
 }

@@ -8,6 +8,7 @@ class RotateEffect extends SimplePositionComponentEffect {
   double _startAngle;
   double _delta;
 
+  /// Duration or speed needs to be defined
   RotateEffect({
     @required this.angle, // As many radians as you want to rotate
     double duration, // How long it should take for completion
@@ -18,7 +19,7 @@ class RotateEffect extends SimplePositionComponentEffect {
     bool isRelative = false,
     void Function() onComplete,
   })  : assert(
-          duration != null || speed != null,
+          (duration != null) ^ (speed != null),
           "Either speed or duration necessary",
         ),
         super(
@@ -47,8 +48,6 @@ class RotateEffect extends SimplePositionComponentEffect {
   @override
   void update(double dt) {
     super.update(dt);
-    if (!hasFinished()) {
-      component.angle = _startAngle + _delta * curveProgress;
-    }
+    component.angle = _startAngle + _delta * curveProgress;
   }
 }

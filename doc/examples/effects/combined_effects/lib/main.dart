@@ -3,12 +3,11 @@ import 'package:flame/effects/move_effect.dart';
 import 'package:flame/effects/scale_effect.dart';
 import 'package:flame/effects/rotate_effect.dart';
 import 'package:flame/gestures.dart';
+import 'package:flame/extensions/offset.dart';
 import 'package:flame/extensions/vector2.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-
-import 'dart:math';
 
 import './square.dart';
 
@@ -32,10 +31,8 @@ class MyGame extends BaseGame with TapDetector {
 
   @override
   void onTapUp(TapUpDetails details) {
-    final dx = details.localPosition.dx;
-    final dy = details.localPosition.dy;
     greenSquare.clearEffects();
-    final Vector2 currentTap = Vector2(dx, dy);
+    final Vector2 currentTap = details.localPosition.toVector2();
 
     final move = MoveEffect(
       path: [
@@ -43,23 +40,22 @@ class MyGame extends BaseGame with TapDetector {
         currentTap - Vector2(50, 20),
         currentTap + Vector2.all(30),
       ],
-      duration: 5.0,
-      curve: Curves.linear,
+      duration: 4.0,
+      curve: Curves.bounceInOut,
       isInfinite: false,
       isAlternating: false,
-      onComplete: () => print(DateTime.now()),
     );
 
     final scale = ScaleEffect(
-      size: Vector2(dx, dy),
-      speed: 250.0,
+      size: currentTap,
+      speed: 200.0,
       curve: Curves.linear,
       isInfinite: false,
       isAlternating: false,
     );
 
     final rotate = RotateEffect(
-      angle: (dx + dy) % pi,
+      angle: currentTap.angleTo(Vector2.all(100)),
       duration: 3,
       curve: Curves.decelerate,
       isInfinite: false,

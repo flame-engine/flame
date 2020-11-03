@@ -13,7 +13,7 @@ void main() {
   final Vector2 argumentSize = randomVector2();
   TestComponent component() => TestComponent(size: randomVector2());
 
-  ScaleEffect effect(bool isInfinite, bool isAlternating) {
+  ScaleEffect effect({bool isInfinite = false, bool isAlternating = false}) {
     return ScaleEffect(
       size: argumentSize,
       duration: 1 + random.nextInt(100).toDouble(),
@@ -26,7 +26,7 @@ void main() {
     effectTest(
       tester,
       component(),
-      effect(false, false),
+      effect(),
       expectedSize: argumentSize,
     );
   });
@@ -37,7 +37,7 @@ void main() {
       effectTest(
         tester,
         component(),
-        effect(false, false),
+        effect(),
         expectedSize: argumentSize,
         iterations: 1.5,
       );
@@ -49,7 +49,7 @@ void main() {
     effectTest(
       tester,
       positionComponent,
-      effect(false, true),
+      effect(isAlternating: true),
       expectedSize: positionComponent.size.clone(),
     );
   });
@@ -61,7 +61,7 @@ void main() {
       effectTest(
         tester,
         positionComponent,
-        effect(true, true),
+        effect(isInfinite: true, isAlternating: true),
         expectedSize: positionComponent.size.clone(),
         iterations: 1.0,
         shouldFinish: false,
@@ -74,7 +74,7 @@ void main() {
     effectTest(
       tester,
       positionComponent,
-      effect(false, true),
+      effect(isAlternating: true),
       expectedSize: argumentSize,
       shouldFinish: false,
       iterations: 0.5,
@@ -86,7 +86,7 @@ void main() {
     effectTest(
       tester,
       positionComponent,
-      effect(true, false),
+      effect(isInfinite: true),
       expectedSize: argumentSize,
       iterations: 3.0,
       shouldFinish: false,
