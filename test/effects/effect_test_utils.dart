@@ -41,6 +41,16 @@ void effectTest(
     game.update(stepDelta);
     timeLeft -= stepDelta;
   }
+
+  // To account for float number operations making effects not finish
+  const double epsilon = 0.000001;
+  if (effect.percentage < epsilon || 1.0 - effect.percentage < epsilon) {
+    game.update(epsilon);
+  }
+
+  expect(effect.hasFinished(), shouldFinish, reason: "Effect shouldFinish");
+  expect(callback.isCalled, shouldFinish, reason: "Callback was treated wrong");
+
   if (!shouldFinish) {
     const double floatRange = 0.001;
     bool acceptableVector(Vector2 vector, Vector2 expectedVector) {
@@ -65,7 +75,6 @@ void effectTest(
       "Size is not correct (had: ${component.size} should be: $expectedSize)",
     );
   } else {
-    game.update(0.1);
     expect(
       component.position,
       expectedPosition,
@@ -82,8 +91,6 @@ void effectTest(
       reason: "Size is not exactly correct",
     );
   }
-  expect(effect.hasFinished(), shouldFinish, reason: "Effect shouldFinish");
-  expect(callback.isCalled, shouldFinish, reason: "Callback was treated wrong");
   game.update(0.0); // Since effects are removed before they are updated
   expect(component.effects.isEmpty, shouldFinish);
 }

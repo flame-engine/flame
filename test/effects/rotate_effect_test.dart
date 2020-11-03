@@ -8,7 +8,7 @@ void main() {
   const double angleArgument = 6.0;
   TestComponent component() => TestComponent(angle: 0.5);
 
-  RotateEffect effect(bool isInfinite, bool isAlternating) {
+  RotateEffect effect({bool isInfinite = false, bool isAlternating = false}) {
     return RotateEffect(
       angle: angleArgument,
       duration: 1 + random.nextInt(100).toDouble(),
@@ -21,7 +21,7 @@ void main() {
     effectTest(
       tester,
       component(),
-      effect(false, false),
+      effect(),
       expectedAngle: angleArgument,
     );
   });
@@ -32,7 +32,7 @@ void main() {
       effectTest(
         tester,
         component(),
-        effect(false, false),
+        effect(),
         expectedAngle: angleArgument,
         iterations: 1.5,
       );
@@ -44,7 +44,7 @@ void main() {
     effectTest(
       tester,
       positionComponent,
-      effect(false, true),
+      effect(isAlternating: true),
       expectedAngle: positionComponent.angle,
     );
   });
@@ -56,7 +56,7 @@ void main() {
       effectTest(
         tester,
         positionComponent,
-        effect(true, true),
+        effect(isInfinite: true, isAlternating: true),
         expectedAngle: positionComponent.angle,
         iterations: 1.0,
         shouldFinish: false,
@@ -69,7 +69,7 @@ void main() {
     effectTest(
       tester,
       positionComponent,
-      effect(false, true),
+      effect(isAlternating: true),
       expectedAngle: angleArgument,
       shouldFinish: false,
       iterations: 0.5,
@@ -81,7 +81,7 @@ void main() {
     effectTest(
       tester,
       positionComponent,
-      effect(true, false),
+      effect(isInfinite: true),
       expectedAngle: angleArgument,
       iterations: 3.0,
       shouldFinish: false,
