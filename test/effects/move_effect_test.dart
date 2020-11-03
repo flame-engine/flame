@@ -13,7 +13,7 @@ void main() {
   final List<Vector2> path = List.generate(3, (i) => randomVector2());
   TestComponent component() => TestComponent(position: randomVector2());
 
-  MoveEffect effect(bool isInfinite, bool isAlternating) {
+  MoveEffect effect({bool isInfinite = false, bool isAlternating = false}) {
     return MoveEffect(
       path: path,
       duration: 1 + random.nextInt(100).toDouble(),
@@ -26,7 +26,7 @@ void main() {
     effectTest(
       tester,
       component(),
-      effect(false, false),
+      effect(),
       expectedPosition: path.last,
     );
   });
@@ -37,7 +37,7 @@ void main() {
       effectTest(
         tester,
         component(),
-        effect(false, false),
+        effect(),
         expectedPosition: path.last,
         iterations: 1.5,
       );
@@ -49,7 +49,7 @@ void main() {
     effectTest(
       tester,
       positionComponent,
-      effect(false, true),
+      effect(isAlternating: true),
       expectedPosition: positionComponent.position.clone(),
     );
   });
@@ -61,7 +61,7 @@ void main() {
       effectTest(
         tester,
         positionComponent,
-        effect(true, true),
+        effect(isInfinite: true, isAlternating: true),
         expectedPosition: positionComponent.position.clone(),
         iterations: 1.0,
         shouldFinish: false,
@@ -74,7 +74,7 @@ void main() {
     effectTest(
       tester,
       positionComponent,
-      effect(false, true),
+      effect(isAlternating: true),
       expectedPosition: path.last,
       shouldFinish: false,
       iterations: 0.5,
@@ -86,7 +86,7 @@ void main() {
     effectTest(
       tester,
       positionComponent,
-      effect(true, false),
+      effect(isInfinite: true),
       expectedPosition: path.last,
       iterations: 3.0,
       shouldFinish: false,

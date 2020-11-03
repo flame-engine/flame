@@ -9,6 +9,7 @@ class ScaleEffect extends SimplePositionComponentEffect {
   Vector2 _startSize;
   Vector2 _delta;
 
+  /// Duration or speed needs to be defined
   ScaleEffect({
     @required this.size,
     double duration, // How long it should take for completion
@@ -48,8 +49,6 @@ class ScaleEffect extends SimplePositionComponentEffect {
   @override
   void update(double dt) {
     super.update(dt);
-    if (!hasFinished()) {
-      component.size = _startSize + _delta * curveProgress;
-    }
+    component.size = _startSize + _delta * curveProgress;
   }
 }
