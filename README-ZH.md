@@ -4,9 +4,9 @@
 
 <img src="https://i.imgur.com/vFDilXT.png" width="400">
 
-[English](README.md) | 简体中文
+[English](README.md) | 简体中文 | [Polski](README-PL.md)
 
-> 本篇为社区版翻译, 目前针对版本: 0.21.0
+> 本篇为社区版翻译, 目前针对版本: 0.28.0
 
 一款简约的Flutter游戏引擎.
 
@@ -61,6 +61,8 @@
 
 ## 贡献
 
+__注意__: 我们目前在着手于发布Flame的第一个稳定版本, 所以, 除Bug修复外, `0.x`的版本更新将全部冻结. 如果你想贡献该版本, 请确保你的提交是修复Bug. 若想贡献稳定版本, 请务必将你的PR指向`v1.0.0`分支, 并且一定要将你的贡献讲出来, 并且可在 [Discord](https://discord.gg/pxrBmy4) 上访问该分支.
+
 我们感激你以任何形式帮助我们! 评论, 建议, 提issues, 以及PR(Pull Request).
 
 如果你找到了bug或者有使Flame更好的建议, 创建一个issue. 我们将会尽快处理.
@@ -77,7 +79,7 @@
 - [分数, 存档和音效(4/5)](https://www.bugcatt.com/archives/564)
 - [收尾和打包(5/5)](https://www.bugcatt.com/archives/731)
 
-我们还在[awesome-flame](https://github.com/flame-engine/awesome-flame)项目上提供了一些精选的游戏, 库和文章.
+我们还在[awesome-flame](https://github.com/flame-engine/awesome-flame) 项目上提供了一些精选的游戏, 库和文章.
 
 ## 文档&说明
 
@@ -86,6 +88,13 @@
 你也可以在[这里](doc/examples)看到许多不同功能的示例(文档/demo), [点击此处](./example)来查看一个入门demo.
 
 Flame的官方网站(其中包含文档), 请[点击此处](https://flame-engine.org/)
+
+
+## 其他中文社区资源
+
+Flame中文网(社区版), 包含官方的中文翻译, 请 [点击此处](https://flame-cn.com/)
+
+Flame中文论坛(社区版), 请 [点击此处](https://bbs.flame-cn.com/)
 
 ## 感谢
 
