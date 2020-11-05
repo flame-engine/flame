@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/effects/effect_handler.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
@@ -12,9 +13,7 @@ import '../extensions/vector2.dart';
 /// Anything that either renders or updates can be added to the list on [BaseGame]. It will deal with calling those methods for you.
 /// Components also have other methods that can help you out if you want to overwrite them.
 abstract class Component {
-  /// The effects that should run on the component
-  final List<ComponentEffect> _effects = [];
-
+  final EffectHandler _effectHandler = EffectHandler();
   /// This method is called periodically by the game engine to request that your component updates itself.
   ///
   /// The time [t] in seconds (with microseconds precision provided by Flutter) since the last update cycle.
@@ -22,8 +21,7 @@ abstract class Component {
   /// All components on [BaseGame] are always updated by the same amount. The time each one takes to update adds up to the next update cycle.
   @mustCallSuper
   void update(double dt) {
-    _effects.removeWhere((e) => e.hasFinished());
-    _effects.where((e) => !e.isPaused).forEach((e) => e.update(dt));
+    _effectHandler.update(dt);
   }
 
   /// Renders this component on the provided Canvas [c].
@@ -70,21 +68,19 @@ abstract class Component {
 
   /// Add an effect to the component
   void addEffect(ComponentEffect effect) {
-    _effects.add(effect..initialize(this));
+    _effectHandler.add(effect, this);
   }
 
   /// Mark an effect for removal on the component
   void removeEffect(ComponentEffect effect) {
-    effect.dispose();
+    _effectHandler.removeEffect(effect);
   }
 
   /// Remove all effects
   void clearEffects() {
-    _effects.forEach(removeEffect);
+    _effectHandler.clearEffects();
   }
 
-  /// Get a copy of the list of non removed effects
-  List<ComponentEffect> get effects {
-    return List<ComponentEffect>.from(_effects)..where((e) => !e.hasFinished());
-  }
+  /// Get a list of non removed effects
+  List<ComponentEffect> get effects => _effectHandler.effects;
 }
