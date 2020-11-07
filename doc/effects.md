@@ -24,7 +24,7 @@ If `isInfinite` is false and `isAlternating` is true the effect will go from the
 When an effect is completed the callback `onComplete` will be called, it can be set as an optional argument to your effect.
 
 ## Common for MoveEffect, ScaleEffect and RotateEffect (SimplePositionComponentEffects)
-A common thing for `MoveEffect`, `ScaleEffect` and `RotateEffect` is that it takes `duration` and `speed` as arguments.
+A common thing for `MoveEffect`, `ScaleEffect` and `RotateEffect` is that it takes `duration` and `speed` as arguments, but only use one of them at a time.
 
 - Duration means the time it takes for one iteration from beginning to end, with alternation taken into account (but not `isInfinite`).
 - Speed is the speed of the effect
@@ -33,6 +33,17 @@ A common thing for `MoveEffect`, `ScaleEffect` and `RotateEffect` is that it tak
     - radians per second for `RotateEffect`
 
 One of these two needs to be defined, if both are defined `duration` takes precedence.
+
+If we have a MoveEffect that should move between `Vector2(200, 300)` and its start position in infinity and the time it should take from the start position to get back to the start position again is 5 seconds, the effect would look like this:
+
+```dart
+MoveEffect(
+  path: [Vector2(200, 300)],
+  duration: 5,
+  isInfinite: true,
+  isAlternating: true,
+)
+```
 
 ## MoveEffect
 
@@ -49,7 +60,6 @@ square.addEffect(MoveEffect(
   path: [Vector2(200, 200), Vector2(200, 100), Vector(0, 50)],
   speed: 250.0,
   curve: Curves.bounceInOut,
-  isRelative: false,
 ));
 ```
 
