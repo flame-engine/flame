@@ -82,8 +82,6 @@ void main() {
 
   testWidgets('MoveEffect can be infinite', (WidgetTester tester) async {
     final PositionComponent positionComponent = component();
-    print(path);
-    print(positionComponent.position);
     effectTest(
       tester,
       positionComponent,

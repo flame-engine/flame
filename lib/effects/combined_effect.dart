@@ -48,9 +48,6 @@ class CombinedEffect extends PositionComponentEffect {
       endAngle = originalAngle;
       endSize = originalSize;
     }
-    print("endPosition: $endPosition");
-    print("endAngle: $endAngle");
-    print("endSize: $endSize");
   }
 
   @override
