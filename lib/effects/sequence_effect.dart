@@ -95,7 +95,7 @@ class SequenceEffect extends PositionComponentEffect {
   void reset() {
     super.reset();
     effects.forEach((e) => e.reset());
-    if(component != null) {
+    if (component != null) {
       initialize(component);
     }
   }

@@ -68,8 +68,6 @@ void main() {
 
   testWidgets('SequenceEffect can alternate', (WidgetTester tester) async {
     final PositionComponent positionComponent = component();
-    print(positionComponent.position);
-    print(path);
     effectTest(
       tester,
       positionComponent,

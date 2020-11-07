@@ -29,7 +29,6 @@ void main() {
     final ScaleEffect scale = ScaleEffect(
       size: argumentSize,
       duration: randomDuration(),
-      isAlternating: true,
     );
     final RotateEffect rotate = RotateEffect(
       angle: argumentAngle,
@@ -43,9 +42,10 @@ void main() {
   }
 
   testWidgets('CombinedEffect can combine', (WidgetTester tester) async {
+    final PositionComponent positionComponent = component();
     effectTest(
       tester,
-      component(),
+      positionComponent,
       effect(),
       expectedPosition: path.last,
       expectedAngle: argumentAngle,
