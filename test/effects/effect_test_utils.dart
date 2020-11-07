@@ -41,9 +41,6 @@ void effectTest(
     game.update(stepDelta);
     timeLeft -= stepDelta;
   }
-  print("Current time: ${effect.currentTime}");
-  print("Current peak: ${effect.peakTime}");
-  print("Current perc: ${effect.percentage}");
 
   if (!shouldComplete) {
     const double floatRange = 0.01;
@@ -70,16 +67,12 @@ void effectTest(
     );
   } else {
     // To account for float number operations making effects not finish
-    const double epsilon = 0.000001;
+    const double epsilon = 0.001;
     if (effect.percentage < epsilon) {
-      print("Last update min");
       game.update(effect.currentTime);
     } else if (1.0 - effect.percentage < epsilon) {
-      print("Last update max");
       game.update(effect.peakTime - effect.currentTime);
     }
-    print("Current perc after: ${effect.percentage}");
-    print("hasCompleted: ${effect.hasCompleted()}");
 
     expect(
       component.position,

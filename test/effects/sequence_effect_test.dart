@@ -23,7 +23,7 @@ void main() {
     );
   }
 
-  SequenceEffect effect(bool isInfinite, bool isAlternating) {
+  SequenceEffect effect({bool isInfinite = false, bool isAlternating = false}) {
     final MoveEffect move = MoveEffect(path: path, duration: randomDuration());
     final ScaleEffect scale = ScaleEffect(
       size: argumentSize,
@@ -44,7 +44,7 @@ void main() {
     effectTest(
       tester,
       component(),
-      effect(false, false),
+      effect(),
       expectedPosition: path.last,
       expectedAngle: argumentAngle,
       expectedSize: argumentSize,
@@ -57,7 +57,7 @@ void main() {
       effectTest(
         tester,
         component(),
-        effect(false, false),
+        effect(),
         expectedPosition: path.last,
         expectedAngle: argumentAngle,
         expectedSize: argumentSize,
@@ -73,7 +73,7 @@ void main() {
     effectTest(
       tester,
       positionComponent,
-      effect(false, true),
+      effect(isAlternating: true),
       expectedPosition: positionComponent.position.clone(),
       expectedAngle: positionComponent.angle,
       expectedSize: positionComponent.size.clone(),
@@ -88,7 +88,7 @@ void main() {
       effectTest(
         tester,
         positionComponent,
-        effect(true, true),
+        effect(isInfinite: true, isAlternating: true),
         expectedPosition: positionComponent.position.clone(),
         expectedAngle: positionComponent.angle,
         expectedSize: positionComponent.size.clone(),
@@ -103,7 +103,7 @@ void main() {
     effectTest(
       tester,
       positionComponent,
-      effect(false, true),
+      effect(isAlternating: true),
       expectedPosition: path.last,
       expectedAngle: argumentAngle,
       expectedSize: argumentSize,
@@ -117,7 +117,7 @@ void main() {
     effectTest(
       tester,
       positionComponent,
-      effect(true, false),
+      effect(isInfinite: true),
       expectedPosition: path.last,
       expectedAngle: argumentAngle,
       expectedSize: argumentSize,

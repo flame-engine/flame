@@ -85,6 +85,7 @@ abstract class ComponentEffect<T extends Component> {
 
   bool isMax() => percentage == null ? false : percentage == 1.0;
   bool isMin() => percentage == null ? false : percentage == 0.0;
+  bool isRootEffect() => component?.effects?.contains(this) ?? false;
 
   void reset() {
     _isDisposed = false;
@@ -155,28 +156,22 @@ abstract class PositionComponentEffect
     endAngle = component.angle;
     endSize = component.size.clone();
   }
-
+  
   @override
   void setComponentToOriginalState() {
-    component?.position?.setFrom(originalPosition);
-    component?.angle = originalAngle;
-    component?.size?.setFrom(endSize);
+    if(isRootEffect()) {
+      component?.position?.setFrom(originalPosition);
+      component?.angle = originalAngle;
+      component?.size?.setFrom(endSize);
+    }
   }
 
   @override
   void setComponentToEndState() {
-    // TODO: Remove ifs
-    if (originalPosition != endPosition) {
-      component.position.setFrom(endPosition);
-      print("Set position end state");
-    }
-    if (originalAngle != endAngle) {
-      component.angle = endAngle;
-      print("Set angle end state");
-    }
-    if (originalSize != endSize) {
-      print("Set size end state $originalSize $endSize ${component.size}");
-      component.size.setFrom(endSize);
+    if(isRootEffect()) {
+      component?.position?.setFrom(endPosition);
+      component?.angle = endAngle;
+      component?.size?.setFrom(endSize);
     }
   }
 }

@@ -42,9 +42,11 @@ class SequenceEffect extends PositionComponentEffect {
       endAngle = effect.endAngle;
       endSize = effect.endSize;
     });
+    // Add all the effects iteration time since they can alternate within the
+    // sequence effect
     peakTime = effects.fold(
       0,
-      (time, effect) => time + effect.peakTime,
+      (time, effect) => time + effect.iterationTime,
     );
     if (isAlternating) {
       endPosition = originalPosition;
