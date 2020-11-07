@@ -18,7 +18,7 @@ void effectTest(
   WidgetTester tester,
   PositionComponent component,
   PositionComponentEffect effect, {
-  bool shouldFinish = true,
+  bool shouldComplete = true,
   double iterations = 1.0,
   double expectedAngle = 0.0,
   Vector2 expectedPosition,
@@ -41,18 +41,12 @@ void effectTest(
     game.update(stepDelta);
     timeLeft -= stepDelta;
   }
+  print("Current time: ${effect.currentTime}");
+  print("Current peak: ${effect.peakTime}");
+  print("Current perc: ${effect.percentage}");
 
-  // To account for float number operations making effects not finish
-  const double epsilon = 0.000001;
-  if (effect.percentage < epsilon || 1.0 - effect.percentage < epsilon) {
-    game.update(epsilon);
-  }
-
-  expect(effect.hasFinished(), shouldFinish, reason: "Effect shouldFinish");
-  expect(callback.isCalled, shouldFinish, reason: "Callback was treated wrong");
-
-  if (!shouldFinish) {
-    const double floatRange = 0.001;
+  if (!shouldComplete) {
+    const double floatRange = 0.01;
     bool acceptableVector(Vector2 vector, Vector2 expectedVector) {
       return (expectedVector - vector).length < floatRange;
     }
@@ -75,6 +69,18 @@ void effectTest(
       "Size is not correct (had: ${component.size} should be: $expectedSize)",
     );
   } else {
+    // To account for float number operations making effects not finish
+    const double epsilon = 0.000001;
+    if (effect.percentage < epsilon) {
+      print("Last update min");
+      game.update(effect.currentTime);
+    } else if (1.0 - effect.percentage < epsilon) {
+      print("Last update max");
+      game.update(effect.peakTime - effect.currentTime);
+    }
+    print("Current perc after: ${effect.percentage}");
+    print("hasCompleted: ${effect.hasCompleted()}");
+
     expect(
       component.position,
       expectedPosition,
@@ -91,8 +97,11 @@ void effectTest(
       reason: "Size is not exactly correct",
     );
   }
+  expect(effect.hasCompleted(), shouldComplete, reason: "Effect shouldFinish");
+  expect(callback.isCalled, shouldComplete,
+      reason: "Callback was treated wrong");
   game.update(0.0); // Since effects are removed before they are updated
-  expect(component.effects.isEmpty, shouldFinish);
+  expect(component.effects.isEmpty, shouldComplete);
 }
 
 class TestComponent extends PositionComponent {

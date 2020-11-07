@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame/components/position_component.dart';
+import 'package:flame/effects/combined_effect.dart';
 import 'package:flame/effects/effects.dart';
 import 'package:flame/extensions/vector2.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -23,7 +24,7 @@ void main() {
     );
   }
 
-  SequenceEffect effect(bool isInfinite, bool isAlternating) {
+  CombinedEffect effect({bool isInfinite = false, bool isAlternating = false}) {
     final MoveEffect move = MoveEffect(path: path, duration: randomDuration());
     final ScaleEffect scale = ScaleEffect(
       size: argumentSize,
@@ -33,18 +34,18 @@ void main() {
       angle: argumentAngle,
       duration: randomDuration(),
     );
-    return SequenceEffect(
+    return CombinedEffect(
       effects: [move, scale, rotate],
       isInfinite: isInfinite,
       isAlternating: isAlternating,
     );
   }
 
-  testWidgets('SequenceEffect can sequence', (WidgetTester tester) async {
+  testWidgets('CombinedEffect can combine', (WidgetTester tester) async {
     effectTest(
       tester,
       component(),
-      effect(false, false),
+      effect(),
       expectedPosition: path.last,
       expectedAngle: argumentAngle,
       expectedSize: argumentSize,
@@ -52,12 +53,12 @@ void main() {
   });
 
   testWidgets(
-    'SequenceEffect will stop sequence after it is done',
+    'CombinedEffect will stop sequence after it is done',
     (WidgetTester tester) async {
       effectTest(
         tester,
         component(),
-        effect(false, false),
+        effect(),
         expectedPosition: path.last,
         expectedAngle: argumentAngle,
         expectedSize: argumentSize,
@@ -66,58 +67,61 @@ void main() {
     },
   );
 
-  testWidgets('SequenceEffect can alternate', (WidgetTester tester) async {
+  testWidgets('CombinedEffect can alternate', (WidgetTester tester) async {
     final PositionComponent positionComponent = component();
-    effectTest(tester, positionComponent, effect(false, true),
-        expectedPosition: positionComponent.position.clone(),
-        expectedAngle: positionComponent.angle,
-        expectedSize: positionComponent.size.clone(),
-        iterations: 2.0);
+    effectTest(
+      tester,
+      positionComponent,
+      effect(isAlternating: true),
+      expectedPosition: positionComponent.position.clone(),
+      expectedAngle: positionComponent.angle,
+      expectedSize: positionComponent.size.clone(),
+      iterations: 2.0,
+    );
   });
 
   testWidgets(
-    'SequenceEffect can alternate and be infinite',
+    'CombinedEffect can alternate and be infinite',
     (WidgetTester tester) async {
       final PositionComponent positionComponent = component();
       effectTest(
         tester,
         positionComponent,
-        effect(true, true),
+        effect(isInfinite: true, isAlternating: true),
         expectedPosition: positionComponent.position.clone(),
         expectedAngle: positionComponent.angle,
         expectedSize: positionComponent.size.clone(),
-        iterations: 1.0,
-        shouldFinish: false,
+        shouldComplete: false,
       );
     },
   );
 
-  testWidgets('SequenceEffect alternation can peak',
+  testWidgets('CombinedEffect alternation can peak',
       (WidgetTester tester) async {
     final PositionComponent positionComponent = component();
     effectTest(
       tester,
       positionComponent,
-      effect(false, true),
+      effect(isAlternating: true),
       expectedPosition: path.last,
       expectedAngle: argumentAngle,
       expectedSize: argumentSize,
-      shouldFinish: false,
+      shouldComplete: false,
       iterations: 0.5,
     );
   });
 
-  testWidgets('SequenceEffect can be infinite', (WidgetTester tester) async {
+  testWidgets('CombinedEffect can be infinite', (WidgetTester tester) async {
     final PositionComponent positionComponent = component();
     effectTest(
       tester,
       positionComponent,
-      effect(true, false),
+      effect(isInfinite: true),
       expectedPosition: path.last,
       expectedAngle: argumentAngle,
       expectedSize: argumentSize,
       iterations: 3.0,
-      shouldFinish: false,
+      shouldComplete: false,
     );
   });
 }

@@ -68,11 +68,17 @@ void main() {
 
   testWidgets('SequenceEffect can alternate', (WidgetTester tester) async {
     final PositionComponent positionComponent = component();
-    effectTest(tester, positionComponent, effect(false, true),
-        expectedPosition: positionComponent.position.clone(),
-        expectedAngle: positionComponent.angle,
-        expectedSize: positionComponent.size.clone(),
-        iterations: 2.0);
+    print(positionComponent.position);
+    print(path);
+    effectTest(
+      tester,
+      positionComponent,
+      effect(false, true),
+      expectedPosition: positionComponent.position.clone(),
+      expectedAngle: positionComponent.angle,
+      expectedSize: positionComponent.size.clone(),
+      iterations: 2.0,
+    );
   });
 
   testWidgets(
@@ -86,8 +92,7 @@ void main() {
         expectedPosition: positionComponent.position.clone(),
         expectedAngle: positionComponent.angle,
         expectedSize: positionComponent.size.clone(),
-        iterations: 1.0,
-        shouldFinish: false,
+        shouldComplete: false,
       );
     },
   );
@@ -102,7 +107,7 @@ void main() {
       expectedPosition: path.last,
       expectedAngle: argumentAngle,
       expectedSize: argumentSize,
-      shouldFinish: false,
+      shouldComplete: false,
       iterations: 0.5,
     );
   });
@@ -117,7 +122,7 @@ void main() {
       expectedAngle: argumentAngle,
       expectedSize: argumentSize,
       iterations: 3.0,
-      shouldFinish: false,
+      shouldComplete: false,
     );
   });
 }

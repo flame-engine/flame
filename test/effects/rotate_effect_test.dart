@@ -46,6 +46,7 @@ void main() {
       positionComponent,
       effect(isAlternating: true),
       expectedAngle: positionComponent.angle,
+      iterations: 2.0,
     );
   });
 
@@ -59,7 +60,7 @@ void main() {
         effect(isInfinite: true, isAlternating: true),
         expectedAngle: positionComponent.angle,
         iterations: 1.0,
-        shouldFinish: false,
+        shouldComplete: false,
       );
     },
   );
@@ -71,7 +72,7 @@ void main() {
       positionComponent,
       effect(isAlternating: true),
       expectedAngle: angleArgument,
-      shouldFinish: false,
+      shouldComplete: false,
       iterations: 0.5,
     );
   });
@@ -84,7 +85,7 @@ void main() {
       effect(isInfinite: true),
       expectedAngle: angleArgument,
       iterations: 3.0,
-      shouldFinish: false,
+      shouldComplete: false,
     );
   });
 }

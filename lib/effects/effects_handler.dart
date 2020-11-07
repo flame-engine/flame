@@ -11,12 +11,12 @@ export './rotate_effect.dart';
 export './scale_effect.dart';
 export './sequence_effect.dart';
 
-class EffectHandler {
+class EffectsHandler {
   /// The effects that should run on the component
   final List<ComponentEffect> _effects = [];
 
-  EffectHandler();
-  
+  EffectsHandler();
+
   void update(double dt) {
     _effects.removeWhere((e) => e.hasCompleted());
     _effects.where((e) => !e.isPaused).forEach((e) {
@@ -24,6 +24,7 @@ class EffectHandler {
         e.update(dt);
       }
       if (e.hasCompleted()) {
+        e.setComponentToEndState();
         e.onComplete?.call();
       }
     });

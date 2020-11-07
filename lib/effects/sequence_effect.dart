@@ -34,9 +34,9 @@ class SequenceEffect extends PositionComponentEffect {
 
     effects.forEach((effect) {
       effect.reset();
-      component.position = endPosition;
+      component.position.setFrom(endPosition);
       component.angle = endAngle;
-      component.size = endSize;
+      component.size.setFrom(endSize);
       effect.initialize(component);
       endPosition = effect.endPosition;
       endAngle = effect.endAngle;
@@ -51,9 +51,9 @@ class SequenceEffect extends PositionComponentEffect {
       endAngle = originalAngle;
       endSize = originalSize;
     }
-    component.position = originalPosition;
+    component.position.setFrom(originalPosition);
     component.angle = originalAngle;
-    component.size = originalSize;
+    component.size.setFrom(originalSize);
     currentEffect = effects.first;
     _currentWasAlternating = currentEffect.isAlternating;
   }
@@ -66,7 +66,8 @@ class SequenceEffect extends PositionComponentEffect {
     // time to the first time step of the next effect.
     currentEffect.update(dt + _driftModifier);
     _driftModifier = 0.0;
-    if (currentEffect.hasFinished()) {
+    if (currentEffect.hasCompleted()) {
+      currentEffect.setComponentToEndState();
       _driftModifier = currentEffect.driftTime;
       _currentIndex++;
       final orderedEffects =
@@ -91,10 +92,9 @@ class SequenceEffect extends PositionComponentEffect {
   @override
   void reset() {
     super.reset();
-    component?.position = originalPosition;
-    component?.angle = originalAngle;
-    component?.size = originalSize;
     effects.forEach((e) => e.reset());
-    initialize(component);
+    if(component != null) {
+      initialize(component);
+    }
   }
 }

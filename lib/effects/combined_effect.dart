@@ -49,7 +49,7 @@ class CombinedEffect extends PositionComponentEffect {
   void update(double dt) {
     super.update(dt);
     effects.forEach((effect) => _updateEffect(effect, dt));
-    if (effects.every((effect) => effect.hasFinished())) {
+    if (effects.every((effect) => effect.hasCompleted())) {
       if (isAlternating && curveDirection.isNegative) {
         effects.forEach((effect) => effect.isAlternating = true);
       }
@@ -59,11 +59,10 @@ class CombinedEffect extends PositionComponentEffect {
   @override
   void reset() {
     super.reset();
-    component?.position = originalPosition;
-    component?.angle = originalAngle;
-    component?.size = originalSize;
     effects.forEach((effect) => effect.reset());
-    initialize(component);
+    if(component != null) {
+      initialize(component);
+    }
   }
 
   @override
@@ -78,7 +77,7 @@ class CombinedEffect extends PositionComponentEffect {
     final effectOffset =
         isReverse ? peakTime - effect.peakTime - initialOffset : initialOffset;
     final passedOffset = isReverse ? peakTime - currentTime : currentTime;
-    if (!effect.hasFinished() && effectOffset < passedOffset) {
+    if (!effect.hasCompleted() && effectOffset < passedOffset) {
       final time =
           effectOffset < passedOffset - dt ? dt : passedOffset - effectOffset;
       effect.update(time);
@@ -89,8 +88,8 @@ class CombinedEffect extends PositionComponentEffect {
   }
 
   @override
-  bool hasFinished() {
-    return super.hasFinished() && effects.every((e) => e.hasFinished());
+  bool hasComleted() {
+    return super.hasCompleted() && effects.every((e) => e.hasCompleted());
   }
 
   void _maybeReverse(PositionComponentEffect effect) {
