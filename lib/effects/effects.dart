@@ -61,20 +61,12 @@ abstract class ComponentEffect<T extends Component> {
         reset();
       }
     }
-    if (!hasFinished()) {
+    if (!hasCompleted()) {
       currentTime += (dt + driftTime) * curveDirection;
       percentage = (currentTime / peakTime).clamp(0.0, 1.0).toDouble();
       curveProgress = curve.transform(percentage);
       _updateDriftTime();
       currentTime = currentTime.clamp(0.0, peakTime).toDouble();
-      if (hasFinished()) {
-        onComplete?.call();
-        // Set the component to the exact end state if this component is the
-        // root component (not inside another component).
-        if (component.effects.contains(this)) {
-          _setComponentToEndState();
-        }
-      }
     }
   }
 
@@ -85,7 +77,7 @@ abstract class ComponentEffect<T extends Component> {
 
   void dispose() => _isDisposed = true;
 
-  bool hasFinished() {
+  bool hasCompleted() {
     return (!isInfinite && !isAlternating && isMax()) ||
         (!isInfinite && isAlternating && isMin()) ||
         isDisposed;
@@ -101,6 +93,7 @@ abstract class ComponentEffect<T extends Component> {
     curveDirection = 1;
     isInfinite = _initialIsInfinite;
     isAlternating = _initialIsAlternating;
+    setComponentToOriginalState();
   }
 
   // When the time overshoots the max and min it needs to add that time to
@@ -116,7 +109,8 @@ abstract class ComponentEffect<T extends Component> {
     }
   }
 
-  void _setComponentToEndState();
+  void setComponentToOriginalState();
+  void setComponentToEndState();
 }
 
 abstract class PositionComponentEffect
@@ -163,10 +157,27 @@ abstract class PositionComponentEffect
   }
 
   @override
-  void _setComponentToEndState() {
-    component.position.setFrom(endPosition);
-    component.angle = endAngle;
-    component.size.setFrom(endSize);
+  void setComponentToOriginalState() {
+    component?.position?.setFrom(originalPosition);
+    component?.angle = originalAngle;
+    component?.size?.setFrom(endSize);
+  }
+
+  @override
+  void setComponentToEndState() {
+    // TODO: Remove ifs
+    if (originalPosition != endPosition) {
+      component.position.setFrom(endPosition);
+      print("Set position end state");
+    }
+    if (originalAngle != endAngle) {
+      component.angle = endAngle;
+      print("Set angle end state");
+    }
+    if (originalSize != endSize) {
+      print("Set size end state $originalSize $endSize ${component.size}");
+      component.size.setFrom(endSize);
+    }
   }
 }
 

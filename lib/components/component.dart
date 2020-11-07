@@ -14,6 +14,7 @@ import '../extensions/vector2.dart';
 /// Components also have other methods that can help you out if you want to overwrite them.
 abstract class Component {
   final EffectsHandler _effectsHandler = EffectsHandler();
+
   /// This method is called periodically by the game engine to request that your component updates itself.
   ///
   /// The time [t] in seconds (with microseconds precision provided by Flutter) since the last update cycle.

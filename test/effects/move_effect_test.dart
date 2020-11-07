@@ -63,8 +63,7 @@ void main() {
         positionComponent,
         effect(isInfinite: true, isAlternating: true),
         expectedPosition: positionComponent.position.clone(),
-        iterations: 1.0,
-        shouldFinish: false,
+        shouldComplete: false,
       );
     },
   );
@@ -76,20 +75,22 @@ void main() {
       positionComponent,
       effect(isAlternating: true),
       expectedPosition: path.last,
-      shouldFinish: false,
+      shouldComplete: false,
       iterations: 0.5,
     );
   });
 
   testWidgets('MoveEffect can be infinite', (WidgetTester tester) async {
     final PositionComponent positionComponent = component();
+    print(path);
+    print(positionComponent.position);
     effectTest(
       tester,
       positionComponent,
       effect(isInfinite: true),
       expectedPosition: path.last,
       iterations: 3.0,
-      shouldFinish: false,
+      shouldComplete: false,
     );
   });
 }

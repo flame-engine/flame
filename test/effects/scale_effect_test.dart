@@ -63,8 +63,7 @@ void main() {
         positionComponent,
         effect(isInfinite: true, isAlternating: true),
         expectedSize: positionComponent.size.clone(),
-        iterations: 1.0,
-        shouldFinish: false,
+        shouldComplete: false,
       );
     },
   );
@@ -76,7 +75,7 @@ void main() {
       positionComponent,
       effect(isAlternating: true),
       expectedSize: argumentSize,
-      shouldFinish: false,
+      shouldComplete: false,
       iterations: 0.5,
     );
   });
@@ -89,7 +88,7 @@ void main() {
       effect(isInfinite: true),
       expectedSize: argumentSize,
       iterations: 3.0,
-      shouldFinish: false,
+      shouldComplete: false,
     );
   });
 }
