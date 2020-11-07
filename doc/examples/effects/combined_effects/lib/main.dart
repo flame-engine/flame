@@ -51,7 +51,7 @@ class MyGame extends BaseGame with TapDetector {
       speed: 200.0,
       curve: Curves.linear,
       isInfinite: false,
-      isAlternating: false,
+      isAlternating: true,
     );
 
     final rotate = RotateEffect(
