@@ -23,15 +23,27 @@ void main() {
     );
   }
 
-  SequenceEffect effect({bool isInfinite = false, bool isAlternating = false}) {
-    final MoveEffect move = MoveEffect(path: path, duration: randomDuration());
-    final ScaleEffect scale = ScaleEffect(
-      size: argumentSize,
+  SequenceEffect effect({
+    bool isInfinite = false,
+    bool isAlternating = false,
+    bool hasAlternatingMoveEffect = false,
+    bool hasAlternatingRotateEffect = false,
+    bool hasAlternatingScaleEffect = false,
+  }) {
+    final MoveEffect move = MoveEffect(
+      path: path,
       duration: randomDuration(),
+      isAlternating: hasAlternatingMoveEffect,
     );
     final RotateEffect rotate = RotateEffect(
       angle: argumentAngle,
       duration: randomDuration(),
+      isAlternating: hasAlternatingRotateEffect,
+    );
+    final ScaleEffect scale = ScaleEffect(
+      size: argumentSize,
+      duration: randomDuration(),
+      isAlternating: hasAlternatingScaleEffect,
     );
     return SequenceEffect(
       effects: [move, scale, rotate],
@@ -121,6 +133,48 @@ void main() {
       expectedSize: argumentSize,
       iterations: 3.0,
       shouldComplete: false,
+    );
+  });
+
+  testWidgets('SequenceEffect can contain alternating MoveEffect',
+      (WidgetTester tester) async {
+    final PositionComponent positionComponent = component();
+    effectTest(
+      tester,
+      positionComponent,
+      effect(hasAlternatingMoveEffect: true),
+      expectedPosition: positionComponent.position.clone(),
+      expectedAngle: argumentAngle,
+      expectedSize: argumentSize,
+      shouldComplete: true,
+    );
+  });
+
+  testWidgets('SequenceEffect can contain alternating RotateEffect',
+      (WidgetTester tester) async {
+    final PositionComponent positionComponent = component();
+    effectTest(
+      tester,
+      positionComponent,
+      effect(hasAlternatingRotateEffect: true),
+      expectedPosition: path.last,
+      expectedAngle: positionComponent.angle,
+      expectedSize: argumentSize,
+      shouldComplete: true,
+    );
+  });
+
+  testWidgets('SequenceEffect can contain alternating ScaleEffect',
+      (WidgetTester tester) async {
+    final PositionComponent positionComponent = component();
+    effectTest(
+      tester,
+      positionComponent,
+      effect(hasAlternatingScaleEffect: true),
+      expectedPosition: path.last,
+      expectedAngle: argumentAngle,
+      expectedSize: positionComponent.size.clone(),
+      shouldComplete: true,
     );
   });
 }
