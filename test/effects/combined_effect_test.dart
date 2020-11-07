@@ -29,6 +29,7 @@ void main() {
     final ScaleEffect scale = ScaleEffect(
       size: argumentSize,
       duration: randomDuration(),
+      isAlternating: true,
     );
     final RotateEffect rotate = RotateEffect(
       angle: argumentAngle,
