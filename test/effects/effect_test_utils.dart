@@ -44,26 +44,20 @@ void effectTest(
 
   if (!shouldComplete) {
     const double floatRange = 0.01;
-    bool acceptableVector(Vector2 vector, Vector2 expectedVector) {
-      return (expectedVector - vector).length < floatRange;
-    }
-
-    final bool acceptablePosition =
-        acceptableVector(component.position, expectedPosition);
-    final bool acceptableSize = acceptableVector(component.size, expectedSize);
-    final bool acceptableAngle =
-        (expectedAngle - component.angle).abs() < floatRange;
-    assert(
-      acceptablePosition,
-      "Position is not correct (had: ${component.position} should be $expectedPosition)",
+    expect(
+      component.position.absoluteError(expectedPosition),
+      closeTo(0.0, floatRange),
+      reason: "Position is not correct",
     );
-    assert(
-      acceptableAngle,
-      "Angle is not correct (had: ${component.angle} should be: $expectedAngle)",
+    expect(
+      component.angle,
+      closeTo(expectedAngle, floatRange),
+      reason: "Angle is not correct",
     );
-    assert(
-      acceptableSize,
-      "Size is not correct (had: ${component.size} should be: $expectedSize)",
+    expect(
+      component.size.absoluteError(expectedSize),
+      closeTo(0.0, floatRange),
+      reason: "Size is not correct",
     );
   } else {
     // To account for float number operations making effects not finish
