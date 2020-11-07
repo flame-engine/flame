@@ -156,10 +156,10 @@ abstract class PositionComponentEffect
     endAngle = component.angle;
     endSize = component.size.clone();
   }
-  
+
   @override
   void setComponentToOriginalState() {
-    if(isRootEffect()) {
+    if (isRootEffect()) {
       component?.position?.setFrom(originalPosition);
       component?.angle = originalAngle;
       component?.size?.setFrom(endSize);
@@ -168,7 +168,7 @@ abstract class PositionComponentEffect
 
   @override
   void setComponentToEndState() {
-    if(isRootEffect()) {
+    if (isRootEffect()) {
       component?.position?.setFrom(endPosition);
       component?.angle = endAngle;
       component?.size?.setFrom(endSize);

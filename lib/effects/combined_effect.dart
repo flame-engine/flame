@@ -32,9 +32,14 @@ class CombinedEffect extends PositionComponentEffect {
     super.initialize(component);
     effects.forEach((effect) {
       effect.initialize(component);
-      endPosition = effect.endPosition;
-      endAngle = effect.endAngle;
-      endSize = effect.endSize;
+      // Only change these if the effect modifies these
+      endPosition = effect.originalPosition != effect.endPosition
+          ? effect.endPosition
+          : endPosition;
+      endAngle =
+          effect.originalAngle != effect.endAngle ? effect.endAngle : endAngle;
+      endSize =
+          effect.originalSize != effect.endSize ? effect.endSize : endSize;
       peakTime = max(peakTime ?? 0,
           effect.iterationTime + offset * effects.indexOf(effect));
     });
@@ -43,6 +48,9 @@ class CombinedEffect extends PositionComponentEffect {
       endAngle = originalAngle;
       endSize = originalSize;
     }
+    print("endPosition: $endPosition");
+    print("endAngle: $endAngle");
+    print("endSize: $endSize");
   }
 
   @override
@@ -60,7 +68,7 @@ class CombinedEffect extends PositionComponentEffect {
   void reset() {
     super.reset();
     effects.forEach((effect) => effect.reset());
-    if(component != null) {
+    if (component != null) {
       initialize(component);
     }
   }

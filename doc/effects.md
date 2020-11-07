@@ -138,6 +138,6 @@ myComponent.addEffect(combination);
 ```
 An example of how to use the CombinedEffect can be found [here](/doc/examples/effects/combined_effect).
  
-# Examples
+## Examples
 
 Full examples can be found [here](/doc/examples/effects/simple), [here](/doc/examples/effects/infinite_effects) and [here](/doc/examples/effects/combined_effects).
