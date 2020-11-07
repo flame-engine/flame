@@ -1,9 +1,4 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-
 import '../components/component.dart';
-import '../components/position_component.dart';
-import '../extensions/vector2.dart';
 import 'effects.dart';
 
 export './move_effect.dart';
