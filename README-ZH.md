@@ -90,12 +90,6 @@ __注意__: 我们目前在着手于发布Flame的第一个稳定版本, 所以,
 Flame的官方网站(其中包含文档), 请[点击此处](https://flame-engine.org/)
 
 
-## 其他中文社区资源
-
-Flame中文网(社区版), 包含官方的中文翻译, 请 [点击此处](https://flame-cn.com/)
-
-Flame中文论坛(社区版), 请 [点击此处](https://bbs.flame-cn.com/)
-
 ## 感谢
 
  * [Fireslime](https://fireslime.xyz), 负责维护Flame的团队.
