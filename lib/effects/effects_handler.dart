@@ -10,8 +10,6 @@ class EffectsHandler {
   /// The effects that should run on the component
   final List<ComponentEffect> _effects = [];
 
-  EffectsHandler();
-
   void update(double dt) {
     _effects.removeWhere((e) => e.hasCompleted());
     _effects.where((e) => !e.isPaused).forEach((e) {
