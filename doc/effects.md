@@ -5,6 +5,9 @@ At the moment there are only `PositionComponentEffect`s, which are applied to Po
 
 If you want to create an effect for another component just extend the `ComponentEffect` class and add your created effect to the component by calling `component.addEffect(yourEffect)`.
 
+## Common for all effects
+All effects can be paused and resumed with `effect.pause()` and `effect.resume()`, and you can check whether it is paused with `effect.isPaused`.
+
 ## More advanced effects
 Then there are two optional boolean parameters called `isInfinite` and `isAlternating`, by combining them you can get different effects.
 
@@ -20,9 +23,33 @@ If `isInfinite` is false and `isAlternating` is true the effect will go from the
 
 When an effect is completed the callback `onComplete` will be called, it can be set as an optional argument to your effect.
 
+## Common for MoveEffect, ScaleEffect and RotateEffect (SimplePositionComponentEffects)
+A common thing for `MoveEffect`, `ScaleEffect` and `RotateEffect` is that it takes `duration` and `speed` as arguments, but only use one of them at a time.
+
+- Duration means the time it takes for one iteration from beginning to end, with alternation taken into account (but not `isInfinite`).
+- Speed is the speed of the effect
+    - pixels per second for `MoveEffect`
+    - pixels per second for `ScaleEffect`
+    - radians per second for `RotateEffect`
+
+One of these two needs to be defined, if both are defined `duration` takes precedence.
+
+If we have a MoveEffect that should move between `Vector2(200, 300)` and its start position in infinity and the time it should take from the start position to get back to the start position again is 5 seconds, the effect would look like this:
+
+```dart
+MoveEffect(
+  path: [Vector2(200, 300)],
+  duration: 5,
+  isInfinite: true,
+  isAlternating: true,
+)
+```
+
 ## MoveEffect
 
 Applied to `PositionComponent`s, this effect can be used to move the component to new positions, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
+
+The speed is measured in pixels per second, and remember that you can give `duration` as an argument instead of `speed`.
 
 Usage example:
 ```dart
@@ -33,7 +60,6 @@ square.addEffect(MoveEffect(
   path: [Vector2(200, 200), Vector2(200, 100), Vector(0, 50)],
   speed: 250.0,
   curve: Curves.bounceInOut,
-  isRelative: false,
 ));
 ```
 
@@ -45,6 +71,8 @@ first move to `(120, 0)` and then to `(120, 100)`.
 ## ScaleEffect
 
 Applied to `PositionComponent`s, this effect can be used to change the width and height of the component, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
+
+The speed is measured in pixels per second, and remember that you can give `duration` as an argument instead of `speed`.
 
 Usage example:
 ```dart
@@ -63,6 +91,8 @@ square.addEffect(ScaleEffect(
 Applied to `PositionComponent`s, this effect can be used to rotate the component, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
 
 The angle (`radians`) is in radians and the speed is in radians per second, so if you for example want to turn 180° in 2 seconds you set `radians: pi` and `speed: 0.25`.
+
+Remember that you can give `duration` as an argument instead of `speed` to say how long the effect should last for instead of its speed.
 
 Usage example:
 ```dart
@@ -118,6 +148,6 @@ myComponent.addEffect(combination);
 ```
 An example of how to use the CombinedEffect can be found [here](/doc/examples/effects/combined_effect).
  
-# Examples
+## Examples
 
 Full examples can be found [here](/doc/examples/effects/simple), [here](/doc/examples/effects/infinite_effects) and [here](/doc/examples/effects/combined_effects).
