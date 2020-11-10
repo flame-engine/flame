@@ -4,24 +4,31 @@ import 'package:meta/meta.dart';
 import '../extensions/vector2.dart';
 import 'effects.dart';
 
-class ScaleEffect extends PositionComponentEffect {
+class ScaleEffect extends SimplePositionComponentEffect {
   Vector2 size;
-  double speed;
-  Curve curve;
   Vector2 _startSize;
   Vector2 _delta;
 
+  /// Duration or speed needs to be defined
   ScaleEffect({
     @required this.size,
-    @required this.speed,
-    this.curve,
+    double duration, // How long it should take for completion
+    double speed, // The speed of the scaling in pixels per second
+    Curve curve,
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
     void Function() onComplete,
-  }) : super(
+  })  : assert(
+          duration != null || speed != null,
+          "Either speed or duration necessary",
+        ),
+        super(
           isInfinite,
           isAlternating,
+          duration: duration,
+          speed: speed,
+          curve: curve,
           isRelative: isRelative,
           onComplete: onComplete,
         );
@@ -29,18 +36,19 @@ class ScaleEffect extends PositionComponentEffect {
   @override
   void initialize(_comp) {
     super.initialize(_comp);
-    if (!isAlternating) {
-      endSize = size.clone();
-    }
     _startSize = component.size;
     _delta = isRelative ? size : size - _startSize;
-    travelTime = _delta.length / speed;
+    if (!isAlternating) {
+      endSize = _startSize + _delta;
+    }
+    speed ??= _delta.length / duration;
+    duration ??= _delta.length / speed;
+    peakTime = isAlternating ? duration / 2 : duration;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    final double progress = curve?.transform(percentage) ?? 1.0;
-    component.size = _startSize + _delta * progress;
+    component.size = _startSize + _delta * curveProgress;
   }
 }

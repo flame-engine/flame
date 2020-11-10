@@ -18,25 +18,32 @@ class Vector2Percentage {
   );
 }
 
-class MoveEffect extends PositionComponentEffect {
+class MoveEffect extends SimplePositionComponentEffect {
   List<Vector2> path;
   Vector2Percentage _currentSubPath;
   List<Vector2Percentage> _percentagePath;
-  double speed;
-  Curve curve;
   Vector2 _startPosition;
 
+  /// Duration or speed needs to be defined
   MoveEffect({
     @required this.path,
-    @required this.speed,
-    this.curve,
+    double duration,
+    double speed,
+    Curve curve,
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
     void Function() onComplete,
-  }) : super(
+  })  : assert(
+          (duration != null) ^ (speed != null),
+          "Either speed or duration necessary",
+        ),
+        super(
           isInfinite,
           isAlternating,
+          duration: duration,
+          speed: speed,
+          curve: curve,
           isRelative: isRelative,
           onComplete: onComplete,
         );
@@ -60,11 +67,7 @@ class MoveEffect extends PositionComponentEffect {
     } else {
       _movePath = path;
     }
-    if (!isAlternating) {
-      endPosition = _movePath.last;
-    } else {
-      endPosition = _startPosition;
-    }
+    endPosition = isAlternating ? _startPosition : _movePath.last;
 
     double pathLength = 0;
     Vector2 lastPosition = _startPosition;
@@ -90,7 +93,10 @@ class MoveEffect extends PositionComponentEffect {
       );
       lastPosition = v;
     }
-    travelTime = pathLength / speed;
+    final double totalPathLength = isAlternating ? pathLength * 2 : pathLength;
+    speed ??= totalPathLength / duration;
+    duration ??= totalPathLength / speed;
+    peakTime = isAlternating ? duration / 2 : duration;
   }
 
   @override
@@ -103,19 +109,16 @@ class MoveEffect extends PositionComponentEffect {
 
   @override
   void update(double dt) {
-    if (hasFinished()) {
-      return;
-    }
     super.update(dt);
-    final double progress = curve?.transform(percentage) ?? 1.0;
     _currentSubPath ??= _percentagePath.first;
-    if (!curveDirection.isNegative && _currentSubPath.endAt < progress ||
-        curveDirection.isNegative && _currentSubPath.startAt > progress) {
-      _currentSubPath = _percentagePath.firstWhere((v) => v.endAt >= progress);
+    if (!curveDirection.isNegative && _currentSubPath.endAt < curveProgress ||
+        curveDirection.isNegative && _currentSubPath.startAt > curveProgress) {
+      _currentSubPath =
+          _percentagePath.firstWhere((v) => v.endAt >= curveProgress);
     }
     final double lastEndAt = _currentSubPath.startAt;
     final double localPercentage =
-        (progress - lastEndAt) / (_currentSubPath.endAt - lastEndAt);
+        (curveProgress - lastEndAt) / (_currentSubPath.endAt - lastEndAt);
     component.position = _currentSubPath.previous +
         ((_currentSubPath.v - _currentSubPath.previous) * localPercentage);
   }

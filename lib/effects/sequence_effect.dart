@@ -27,53 +27,51 @@ class SequenceEffect extends PositionComponentEffect {
   }
 
   @override
-  void initialize(PositionComponent _comp) {
-    super.initialize(_comp);
+  void initialize(PositionComponent component) {
+    super.initialize(component);
     _currentIndex = 0;
     _driftModifier = 0.0;
+
     effects.forEach((effect) {
       effect.reset();
-      _comp.size = endSize;
-      _comp.position = endPosition;
-      _comp.angle = endAngle;
-      effect.initialize(_comp);
-      endSize = effect.endSize;
+      component.position.setFrom(endPosition);
+      component.angle = endAngle;
+      component.size.setFrom(endSize);
+      effect.initialize(component);
       endPosition = effect.endPosition;
       endAngle = effect.endAngle;
+      endSize = effect.endSize;
     });
-    travelTime = effects.fold(
+    // Add all the effects iteration time since they can alternate within the
+    // sequence effect
+    peakTime = effects.fold(
       0,
-      (time, effect) => time + effect.totalTravelTime,
+      (time, effect) => time + effect.iterationTime,
     );
-    component.position = originalPosition;
+    if (isAlternating) {
+      endPosition = originalPosition;
+      endAngle = originalAngle;
+      endSize = originalSize;
+    }
+    component.position.setFrom(originalPosition);
     component.angle = originalAngle;
-    component.size = originalSize;
+    component.size.setFrom(originalSize);
     currentEffect = effects.first;
     _currentWasAlternating = currentEffect.isAlternating;
   }
 
   @override
   void update(double dt) {
-    if (hasFinished()) {
-      return;
-    }
     super.update(dt);
 
     // If the last effect's time to completion overshot its total time, add that
     // time to the first time step of the next effect.
     currentEffect.update(dt + _driftModifier);
     _driftModifier = 0.0;
-    if (currentEffect.hasFinished()) {
+    if (currentEffect.hasCompleted()) {
+      currentEffect.setComponentToEndState();
       _driftModifier = currentEffect.driftTime;
       _currentIndex++;
-      final iterationSize = isAlternating ? effects.length * 2 : effects.length;
-      if (_currentIndex != 0 &&
-          _currentIndex == iterationSize &&
-          (currentEffect.isAlternating ||
-              currentEffect.isAlternating == isAlternating)) {
-        isInfinite ? reset() : dispose();
-        return;
-      }
       final orderedEffects =
           curveDirection.isNegative ? effects.reversed.toList() : effects;
       // Make sure the current effect has the `isAlternating` value it
@@ -98,9 +96,6 @@ class SequenceEffect extends PositionComponentEffect {
     super.reset();
     effects.forEach((e) => e.reset());
     if (component != null) {
-      component.position = originalPosition;
-      component.angle = originalAngle;
-      component.size = originalSize;
       initialize(component);
     }
   }
