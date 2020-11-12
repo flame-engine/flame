@@ -85,9 +85,9 @@ class ParallaxLayer {
       ..divide(_imageSize);
 
     // Align image to correct side of the screen
-    final Alignment alignment = parallaxImage.alignment;
-    final double marginX = alignment.x == 0 ? overflow.x / 2 : alignment.x;
-    final double marginY = alignment.y == 0 ? overflow.y / 2 : alignment.y;
+    final alignment = parallaxImage.alignment;
+    final marginX = alignment.x == 0 ? overflow.x / 2 : alignment.x;
+    final marginY = alignment.y == 0 ? overflow.y / 2 : alignment.y;
     _scroll ??= Vector2(marginX, marginY);
 
     // Size of the area to paint the images on
@@ -116,7 +116,7 @@ class ParallaxLayer {
         break;
     }
 
-    final Vector2 scrollPosition = Vector2.copy(_scroll)..multiply(_imageSize);
+    final Vector2 scrollPosition = _scroll.clone()..multiply(_imageSize);
     _paintArea = Rect.fromLTWH(
       -scrollPosition.x,
       -scrollPosition.y,
@@ -204,7 +204,9 @@ class ParallaxComponent extends PositionComponent {
       return;
     }
     super.render(canvas);
+    canvas.save();
     _layers.forEach((layer) => layer.render(canvas));
+    canvas.restore();
   }
 
   void _load(List<ParallaxImage> images) {
