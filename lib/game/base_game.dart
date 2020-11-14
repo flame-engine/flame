@@ -78,12 +78,12 @@ class BaseGame extends Game with FPSCounter {
     _addLater.addAll(components);
   }
 
-  /// Marks a component to be removed from the components list on the next game loop cycle
+  /// Marks a component to be removed from the components list on the next game tick
   void remove(Component c) {
     _removeLater.add(c);
   }
 
-  /// Marks a list of components to be removed from the components list on the next game loop cycle
+  /// Marks a list of components to be removed from the components list on the next game tick
   void removeAll(Iterable<Component> components) {
     _removeLater.addAll(components);
   }
