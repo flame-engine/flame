@@ -146,6 +146,8 @@ class MyGame extends BaseGame with HasTapableComponents {
 }
 ```
 
+Warning: `HasTapableComponents` under the hood is an advanced gesture detector and as explained up on this page, shouldn't be used alongside basic detectors.
+
 ## Keyboard
 
 Flame provides a simple way to access Flutter's features regarding accessing Keyboard input events.
