@@ -3,6 +3,7 @@
 ## [next]
  - Improve IsometricTileMap and Spritesheet classes
  - Export full vector_math library from extension
+ - Added warning about basic and advanced detectors
  - Ensuring sprite animation and sprite animation components don't get NPEs on initialization
  - Refactor timer class
  - include all changed that are included on 0.28.0
