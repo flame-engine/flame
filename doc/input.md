@@ -146,7 +146,7 @@ class MyGame extends BaseGame with HasTapableComponents {
 }
 ```
 
-Warning: `HasTapableComponents` under the hood is an advanced gesture detectors and as explained up on this page, shouldn't be used alongside basic detectors.
+Warning: `HasTapableComponents` under the hood is an advanced gesture detector and as explained up on this page, shouldn't be used alongside basic detectors.
 
 ## Keyboard
 

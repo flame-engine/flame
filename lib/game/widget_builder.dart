@@ -236,7 +236,7 @@ class WidgetBuilder {
 
     assert(
       !(hasBasicDetectors && hasAdvancedDetectors),
-      'WARNING: Both Basic and Advanced detectors detected. Advanced detectors will override basic detectors and the later will not receive events',
+      'WARNING: Both Advanced and Basic detectors detected. Advanced detectors will override basic detectors and the later will not receive events',
     );
 
     if (hasBasicDetectors) {
