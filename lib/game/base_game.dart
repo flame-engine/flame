@@ -38,7 +38,11 @@ class BaseGame extends Game with FPSCounter {
   /// Camera position; every non-HUD component is translated so that the camera position is the top-left corner of the screen.
   Vector2 camera = Vector2.zero();
 
-  /// Does preparation on a component before any update or render method is called on it
+  /// This method is called for every component added.
+  /// It does preparation on a component before any update or render method is called on it.
+  ///
+  /// You can use this to setup your mixins, pre-calculate stuff on every component, or anything you desire.
+  /// By default, this calls the first time resize for every component, so don't forget to call super.preAdd when overriding.
   @mustCallSuper
   void prepare(Component c) {
     if (c is Tapable) {
