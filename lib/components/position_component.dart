@@ -193,7 +193,7 @@ abstract class PositionComponent extends Component {
 
   void addChild(Game gameRef, Component c) {
     if (gameRef is BaseGame) {
-      gameRef.preAdd(c);
+      gameRef.prepare(c);
     }
     _children.add(c);
   }

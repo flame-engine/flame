@@ -16,12 +16,13 @@ import 'game.dart';
 
 /// This is a more complete and opinionated implementation of Game.
 ///
-/// It still needs to be subclasses to add your game logic, but the [update], [render] and [resize] methods have default implementations.
+/// BaseGame should be extended to add your game logic.
+/// [update], [render] and [onResize] methods have default implementations.
 /// This is the recommended structure to use for most games.
 /// It is based on the Component system.
 class BaseGame extends Game with FPSCounter {
   /// The list of components to be updated and rendered by the base game.
-  OrderedSet<Component> components =
+  final OrderedSet<Component> components =
       OrderedSet(Comparing.on((c) => c.priority()));
 
   /// Components added by the [addLater] method
@@ -31,17 +32,19 @@ class BaseGame extends Game with FPSCounter {
   final List<Component> _removeLater = [];
 
   /// Current game viewport size, updated every resize via the [resize] method hook
-  Vector2 size;
+  final Vector2 size = Vector2.zero();
+  set size(Vector2 size) => this.size.setFrom(size);
 
   /// Camera position; every non-HUD component is translated so that the camera position is the top-left corner of the screen.
   Vector2 camera = Vector2.zero();
 
-  /// This method is called for every component added, both via [add] and [addLater] methods.
+  /// This method is called for every component added.
+  /// It does preparation on a component before any update or render method is called on it.
   ///
   /// You can use this to setup your mixins, pre-calculate stuff on every component, or anything you desire.
   /// By default, this calls the first time resize for every component, so don't forget to call super.preAdd when overriding.
   @mustCallSuper
-  void preAdd(Component c) {
+  void prepare(Component c) {
     if (c is Tapable) {
       assert(
         this is HasTapableComponents,
@@ -61,30 +64,28 @@ class BaseGame extends Game with FPSCounter {
     if (size != null) {
       c.onGameResize(size);
     }
-
-    c.onMount();
   }
 
-  /// Adds a new component to the components list.
-  ///
-  /// Also calls [preAdd], witch in turn sets the current size on the component (because the resize hook won't be called until a new resize happens).
+  /// Prepares and registers a component to be added on the next game tick
   void add(Component c) {
-    preAdd(c);
-    components.add(c);
-  }
-
-  /// Registers a component to be added on the components on the next tick.
-  ///
-  /// Use this to add components in places where a concurrent issue with the update method might happen.
-  /// Also calls [preAdd] for the component added, immediately.
-  void addLater(Component c) {
-    preAdd(c);
+    prepare(c);
     _addLater.add(c);
   }
 
-  /// Marks a component to be removed from the components list on the next game loop cycle
-  void markToRemove(Component c) {
+  /// Prepares and registers a list of components to be added on the next game tick
+  void addAll(Iterable<Component> components) {
+    components.forEach(prepare);
+    _addLater.addAll(components);
+  }
+
+  /// Marks a component to be removed from the components list on the next game tick
+  void remove(Component c) {
     _removeLater.add(c);
+  }
+
+  /// Marks a list of components to be removed from the components list on the next game tick
+  void removeAll(Iterable<Component> components) {
+    _removeLater.addAll(components);
   }
 
   /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.
@@ -126,6 +127,7 @@ class BaseGame extends Game with FPSCounter {
     _removeLater.clear();
 
     components.addAll(_addLater);
+    _addLater.forEach((component) => component.onMount());
     _addLater.clear();
 
     components.forEach((c) => c.update(t));
@@ -139,7 +141,7 @@ class BaseGame extends Game with FPSCounter {
   @override
   @mustCallSuper
   void onResize(Vector2 size) {
-    this.size = size;
+    this.size.setFrom(size);
     components.forEach((c) => c.onGameResize(size));
   }
 
