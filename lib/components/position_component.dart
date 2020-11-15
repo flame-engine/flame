@@ -77,7 +77,7 @@ abstract class PositionComponent extends Component {
   bool debugMode = false;
 
   final OrderedSet<Component> _children =
-      OrderedSet(Comparing.on((c) => c.priority()));
+      OrderedSet(Comparing.on((c) => c.priority));
 
   Color get debugColor => const Color(0xFFFF00FF);
 
@@ -183,7 +183,7 @@ abstract class PositionComponent extends Component {
   }
 
   void _renderChild(Canvas canvas, Component c) {
-    if (!c.loaded()) {
+    if (!c.loaded) {
       return;
     }
     c.render(canvas);

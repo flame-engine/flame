@@ -32,18 +32,19 @@ abstract class JoystickController extends Component with HasGameRef<BaseGame> {
   void onReceiveDrag(DragEvent drag) {}
 
   @override
-  bool isHud() => true;
+  bool isHud = true;
 }
 
 class JoystickComponent extends JoystickController {
   final List<JoystickAction> actions;
   final JoystickDirectional directional;
-  final int componentPriority;
+  @override
+  int priority;
 
   JoystickComponent({
     this.actions,
     this.directional,
-    this.componentPriority = 0,
+    this.priority = 0,
   });
 
   void addAction(JoystickAction action) {
@@ -81,10 +82,5 @@ class JoystickComponent extends JoystickController {
   void onReceiveDrag(DragEvent event) {
     directional?.onReceiveDrag(event);
     actions?.forEach((action) => action.onReceiveDrag(event));
-  }
-
-  @override
-  int priority() {
-    return componentPriority;
   }
 }

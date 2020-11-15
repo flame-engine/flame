@@ -23,7 +23,7 @@ import 'game.dart';
 class BaseGame extends Game with FPSCounter {
   /// The list of components to be updated and rendered by the base game.
   final OrderedSet<Component> components =
-      OrderedSet(Comparing.on((c) => c.priority()));
+      OrderedSet(Comparing.on((c) => c.priority));
 
   /// Components added by the [addLater] method
   final List<Component> _addLater = [];
@@ -105,10 +105,10 @@ class BaseGame extends Game with FPSCounter {
   /// It translates the camera unless hud, call the render method and restore the canvas.
   /// This makes sure the canvas is not messed up by one component and all components render independently.
   void renderComponent(Canvas canvas, Component c) {
-    if (!c.loaded()) {
+    if (!c.loaded) {
       return;
     }
-    if (!c.isHud()) {
+    if (!c.isHud) {
       canvas.translate(-camera.x, -camera.y);
     }
     c.render(canvas);
@@ -123,7 +123,7 @@ class BaseGame extends Game with FPSCounter {
   @override
   @mustCallSuper
   void update(double t) {
-    _removeLater.addAll(components.where((c) => c.shouldRemove()));
+    _removeLater.addAll(components.where((c) => c.shouldRemove));
     _removeLater.forEach((c) {
       c.onRemove();
       components.remove(c);
