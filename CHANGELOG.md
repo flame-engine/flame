@@ -11,6 +11,7 @@
  - Test suite for basic effects
  - Effects duration and test suite for basic effects
  - Pause and resume for effects
+ - Fix position bug in parallax effect
 
 ## 1.0.0-rc1
  - Move all box2d related code and examples to the flame_box2d repo
