@@ -20,6 +20,7 @@ class MyComponent extends PositionComponent
   bool tapped = false;
   bool isUpdateCalled = false;
   bool isRenderCalled = false;
+  int onRemoveCallCounter = 0;
 
   @override
   void onTapDown(TapDownDetails details) {
@@ -40,6 +41,9 @@ class MyComponent extends PositionComponent
 
   @override
   bool checkTapOverlap(Rect c, Offset o) => true;
+
+  @override
+  void onRemove() => ++onRemoveCallCounter;
 }
 
 class PositionComponentNoNeedForRect extends PositionComponent with Tapable {}
@@ -107,6 +111,25 @@ void main() {
           PaintingContext(ContainerLayer(), Rect.zero), Offset.zero);
       expect(component.isRenderCalled, true);
       renderBox.detach();
+    });
+
+    test('onRemove is only called once on component', () {
+      final MyGame game = MyGame();
+      final MyComponent component = MyComponent();
+
+      game.size = size;
+      game.add(component);
+      // The component is not added to the component list until an update has been performed
+      game.update(0.0);
+      // The component is removed both by removing it on the game instance and
+      // by the function on the component, but the onRemove callback should
+      // only be called once.
+      component.remove();
+      game.remove(component);
+      // The component is not removed from the component list until an update has been performed
+      game.update(0.0);
+
+      expect(component.onRemoveCallCounter, 1);
     });
   });
 }

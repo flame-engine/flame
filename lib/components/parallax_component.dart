@@ -160,7 +160,6 @@ class ParallaxComponent extends PositionComponent {
   Vector2 baseSpeed;
   Vector2 layerDelta;
   List<ParallaxLayer> _layers;
-  bool _loaded = false;
 
   ParallaxComponent(
     List<ParallaxImage> images, {
@@ -176,9 +175,6 @@ class ParallaxComponent extends PositionComponent {
   /// if you want to transition the parallax to a certain position.
   Vector2 currentOffset() => _layers[0].currentOffset();
 
-  @override
-  bool loaded() => _loaded;
-
   @mustCallSuper
   @override
   void onGameResize(Vector2 size) {
@@ -189,7 +185,7 @@ class ParallaxComponent extends PositionComponent {
   @override
   void update(double t) {
     super.update(t);
-    if (!loaded()) {
+    if (!loaded) {
       return;
     }
     _layers.forEach((layer) {
@@ -200,7 +196,7 @@ class ParallaxComponent extends PositionComponent {
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    if (!loaded()) {
+    if (!loaded) {
       return;
     }
     super.render(canvas);
@@ -212,6 +208,6 @@ class ParallaxComponent extends PositionComponent {
   void _load(List<ParallaxImage> images) {
     _layers = images.map((image) => ParallaxLayer(image)).toList();
     Future.wait(_layers.map((layer) => layer.future))
-        .then((_) => _loaded = true);
+        .then((_) => loaded = true);
   }
 }

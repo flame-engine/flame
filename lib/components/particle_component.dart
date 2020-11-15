@@ -18,7 +18,7 @@ class ParticleComponent extends Component {
 
   /// This [ParticleComponent] will be removed by [BaseGame]
   @override
-  bool shouldRemove() => particle.shouldRemove();
+  bool get shouldRemove => particle.shouldRemove();
 
   /// Returns progress of the child [Particle]
   /// so could be used by external code for something
