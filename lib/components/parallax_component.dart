@@ -78,11 +78,10 @@ class ParallaxLayer {
 
     // Number of images that can fit on the canvas plus one
     // to have something to scroll to without leaving canvas empty
-    final count = Vector2.all(1) + size.clone()
-      ..divide(_imageSize);
+    final Vector2 count = Vector2.all(1) + (size.clone()..divide(_imageSize));
 
     // Percentage of the image size that will overflow
-    final overflow = ((_imageSize.clone()..multiply(count)) - size)
+    final Vector2 overflow = ((_imageSize.clone()..multiply(count)) - size)
       ..divide(_imageSize);
 
     // Align image to correct side of the screen
@@ -92,7 +91,7 @@ class ParallaxLayer {
     _scroll ??= Vector2(marginX, marginY);
 
     // Size of the area to paint the images on
-    final paintSize = count..multiply(_imageSize);
+    final Vector2 paintSize = count..multiply(_imageSize);
     _paintArea = paintSize.toRect();
   }
 
@@ -102,7 +101,7 @@ class ParallaxLayer {
     }
 
     // Scale the delta so that images that are larger don't scroll faster
-    _scroll += delta..divide(_imageSize);
+    _scroll += delta.clone()..divide(_imageSize);
     switch (parallaxImage.repeat) {
       case ImageRepeat.repeat:
         _scroll = Vector2(_scroll.x % 1, _scroll.y % 1);
@@ -117,10 +116,13 @@ class ParallaxLayer {
         break;
     }
 
-    final dx = _scroll.x * _imageSize.x;
-    final dy = _scroll.y * _imageSize.y;
-
-    _paintArea = Rect.fromLTWH(-dx, -dy, _paintArea.width, _paintArea.height);
+    final Vector2 scrollPosition = _scroll.clone()..multiply(_imageSize);
+    _paintArea = Rect.fromLTWH(
+      -scrollPosition.x,
+      -scrollPosition.y,
+      _paintArea.width,
+      _paintArea.height,
+    );
   }
 
   void render(Canvas canvas) {
@@ -201,9 +203,7 @@ class ParallaxComponent extends PositionComponent {
     if (!loaded()) {
       return;
     }
-
     super.render(canvas);
-
     canvas.save();
     _layers.forEach((layer) => layer.render(canvas));
     canvas.restore();
