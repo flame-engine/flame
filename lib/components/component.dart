@@ -40,10 +40,10 @@ abstract class Component {
   /// Note that for a more consistent experience, you can pre-load all your assets beforehand with Flame.images.loadAll.
   bool loaded() => true;
 
-  /// Whether this should be destroyed or not.
+  /// Whether this should be removed or not.
   ///
-  /// It will be called once per component per loop, and if it returns true, [BaseGame] will mark your component for deletion and remove it before the next loop.
-  bool destroy() => false;
+  /// It will be called once per component per tick, and if it returns true, [BaseGame] will remove it.
+  bool shouldRemove() => false;
 
   /// Whether this component is HUD object or not.
   ///
@@ -64,8 +64,8 @@ abstract class Component {
   /// things like [onGameResize] are already set and usable.
   void onMount() {}
 
-  /// Called right before the component is destroyed and removed from the game
-  void onDestroy() {}
+  /// Called right before the component is removed from the game
+  void onRemove() {}
 
   /// Add an effect to the component
   void addEffect(ComponentEffect effect) {
