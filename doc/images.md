@@ -205,7 +205,7 @@ In which you pass the file name, the number of frames and the sprite sheet is au
 * textureY : y position on the original image to start (defaults to 0)
 * textureWidth : width of each frame (defaults to null, that is, full width of the sprite sheet)
 * textureHeight : height of each frame (defaults to null, that is, full height of the sprite sheet)
-* destroyOnFinish : a bool indicating if this AnimationComponent should be destroyed when the animation has reached its end
+* removeOnFinish : a bool indicating if this AnimationComponent should be removed when the animation has reached its end
 
 So, in our example, we are saying that we have 8 frames for our player animation, and they are displayed in a row. So if the player height is also 16 pixels, the sprite sheet is 128x16, containing 8 16x16 frames.
 

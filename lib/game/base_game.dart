@@ -29,7 +29,7 @@ class BaseGame extends Game with FPSCounter {
   final List<Component> _addLater = [];
 
   /// Components to be removed on the next update
-  final List<Component> _removeLater = [];
+  final Set<Component> _removeLater = {};
 
   /// Current game viewport size, updated every resize via the [resize] method hook
   final Vector2 size = Vector2.zero();
@@ -118,20 +118,22 @@ class BaseGame extends Game with FPSCounter {
 
   /// This implementation of update updates every component in the list.
   ///
-  /// It also actually adds the components that were added by the [addLater] method, and remove those that are marked for destruction via the [Component.destroy] method.
+  /// It also actually adds the components that were added by the [addLater] method, and remove those that are marked for destruction via the [Component.shouldRemove] method.
   /// You can override it further to add more custom behaviour.
   @override
   @mustCallSuper
   void update(double t) {
-    _removeLater.forEach((c) => components.remove(c));
+    _removeLater.addAll(components.where((c) => c.shouldRemove()));
+    _removeLater.forEach((c) {
+      c.onRemove();
+      components.remove(c);
+    });
     _removeLater.clear();
 
     components.addAll(_addLater);
     _addLater.forEach((component) => component.onMount());
     _addLater.clear();
-
     components.forEach((c) => c.update(t));
-    components.removeWhere((c) => c.destroy()).forEach((c) => c.onDestroy());
   }
 
   /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.

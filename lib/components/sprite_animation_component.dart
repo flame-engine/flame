@@ -9,12 +9,12 @@ import 'position_component.dart';
 class SpriteAnimationComponent extends PositionComponent {
   SpriteAnimation animation;
   Paint overridePaint;
-  bool destroyOnFinish = false;
+  bool removeOnFinish = false;
 
   SpriteAnimationComponent(
     Vector2 size,
     this.animation, {
-    this.destroyOnFinish = false,
+    this.removeOnFinish = false,
   }) : assert(animation != null) {
     super.size.setFrom(size);
   }
@@ -30,7 +30,7 @@ class SpriteAnimationComponent extends PositionComponent {
     @required double stepTime,
     Vector2 textureSize,
     bool loop = true,
-    this.destroyOnFinish = false,
+    this.removeOnFinish = false,
   }) {
     super.size.setFrom(size);
     animation = SpriteAnimation.sequenced(
@@ -68,7 +68,7 @@ class SpriteAnimationComponent extends PositionComponent {
   }
 
   @override
-  bool destroy() => destroyOnFinish && animation.isLastFrame;
+  bool shouldRemove() => removeOnFinish && animation.isLastFrame;
 
   @mustCallSuper
   @override
