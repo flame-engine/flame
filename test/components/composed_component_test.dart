@@ -41,6 +41,7 @@ void main() {
 
       game.size = size;
       game.add(wrapper);
+      game.update(0.0);
       game.onTapDown(1, TapDownDetails(globalPosition: const Offset(0.0, 0.0)));
 
       expect(child.gameSize, size);
