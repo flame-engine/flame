@@ -74,8 +74,7 @@ class BaseGame extends Game with FPSCounter {
 
   /// Prepares and registers a list of components to be added on the next game tick
   void addAll(Iterable<Component> components) {
-    components.forEach(prepare);
-    _addLater.addAll(components);
+    components.forEach(add);
   }
 
   /// Marks a component to be removed from the components list on the next game tick
