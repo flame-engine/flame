@@ -46,7 +46,7 @@ class MyGame extends BaseGame with TapDetector {
       textureSize: size,
       stepTime: 0.15,
       loop: false,
-      destroyOnFinish: true,
+      removeOnFinish: true,
     );
 
     animationComponent.position = animationComponent.position - size / 2;

@@ -23,13 +23,13 @@ import 'game.dart';
 class BaseGame extends Game with FPSCounter {
   /// The list of components to be updated and rendered by the base game.
   final OrderedSet<Component> components =
-      OrderedSet(Comparing.on((c) => c.priority()));
+      OrderedSet(Comparing.on((c) => c.priority));
 
   /// Components added by the [addLater] method
   final List<Component> _addLater = [];
 
   /// Components to be removed on the next update
-  final List<Component> _removeLater = [];
+  final Set<Component> _removeLater = {};
 
   /// Current game viewport size, updated every resize via the [resize] method hook
   final Vector2 size = Vector2.zero();
@@ -74,8 +74,7 @@ class BaseGame extends Game with FPSCounter {
 
   /// Prepares and registers a list of components to be added on the next game tick
   void addAll(Iterable<Component> components) {
-    components.forEach(prepare);
-    _addLater.addAll(components);
+    components.forEach(add);
   }
 
   /// Marks a component to be removed from the components list on the next game tick
@@ -105,10 +104,10 @@ class BaseGame extends Game with FPSCounter {
   /// It translates the camera unless hud, call the render method and restore the canvas.
   /// This makes sure the canvas is not messed up by one component and all components render independently.
   void renderComponent(Canvas canvas, Component c) {
-    if (!c.loaded()) {
+    if (!c.loaded) {
       return;
     }
-    if (!c.isHud()) {
+    if (!c.isHud) {
       canvas.translate(-camera.x, -camera.y);
     }
     c.render(canvas);
@@ -118,20 +117,22 @@ class BaseGame extends Game with FPSCounter {
 
   /// This implementation of update updates every component in the list.
   ///
-  /// It also actually adds the components that were added by the [addLater] method, and remove those that are marked for destruction via the [Component.destroy] method.
+  /// It also actually adds the components that were added by the [addLater] method, and remove those that are marked for destruction via the [Component.shouldRemove] method.
   /// You can override it further to add more custom behaviour.
   @override
   @mustCallSuper
   void update(double t) {
-    _removeLater.forEach((c) => components.remove(c));
+    _removeLater.addAll(components.where((c) => c.shouldRemove));
+    _removeLater.forEach((c) {
+      c.onRemove();
+      components.remove(c);
+    });
     _removeLater.clear();
 
     components.addAll(_addLater);
     _addLater.forEach((component) => component.onMount());
     _addLater.clear();
-
     components.forEach((c) => c.update(t));
-    components.removeWhere((c) => c.destroy()).forEach((c) => c.onDestroy());
   }
 
   /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.

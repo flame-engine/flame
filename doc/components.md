@@ -32,13 +32,13 @@ Every `Component` has a few other methods that you can optionally implement, tha
 
 The `resize` method is called whenever the screen is resized, and in the beginning once when the component is added via the `add` method. You need to apply here any changes to the x, y, width and height of your component, or any other changes, due to the screen resizing. You can start these variables here, as the sprite won't be rendered until everything is set.
 
-The `destroy` method can be implemented to return true and warn the `BaseGame` that your object is marked for destruction, and it will be remove after the current update loop. It will then no longer be rendered or updated.
+The `shouldRemove` method can be implemented to return true and `BaseGame` will remove it before the next update loop. It will then no longer be rendered or updated. Note that `game.remove(Component c)` can also be used to remove components.
 
 The `isHUD` method can be implemented to return true (default false) to make the `BaseGame` ignore the `camera` for this element.
 
 The `onMount` method can be overridden to run initialization code for the component. When this method is called, BaseGame ensures that all the mixins which would change this component behaviour are already resolved.
 
-The `onDestroy` method can be overridden to run code before the component is removed from the game.
+The `onRemove` method can be overridden to run code before the component is removed from the game, it is only run once even if the component is removed both by using the `BaseGame` remove method and the ´Component´ remove method.
 
 There are also other implementations:
 
