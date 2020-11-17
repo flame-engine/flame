@@ -32,12 +32,14 @@ abstract class Component {
   /// The smaller the priority, the sooner your component will be updated/rendered.
   /// It can be any integer (negative, zero, or positive).
   /// If two components share the same priority, they will probably be drawn in the order they were added.
-  final int priority = 0;
+  final int priority;
 
   /// Whether this component should be removed or not.
   ///
   /// It will be checked once per component per tick, and if it is true, [BaseGame] will remove it.
   bool shouldRemove = false;
+
+  Component({this.priority = 0});
 
   /// This method is called periodically by the game engine to request that your component updates itself.
   ///
