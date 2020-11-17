@@ -13,6 +13,7 @@
  - Pause and resume for effects
  - Fix position bug in parallax effect
  - Simplification of BaseGame. Removal of addLater (add is now addLater) and rename markForRemoval.
+ - Unify naming for removal of components from BaseGame
 
 ## 1.0.0-rc1
  - Move all box2d related code and examples to the flame_box2d repo

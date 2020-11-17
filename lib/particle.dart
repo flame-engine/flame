@@ -40,7 +40,7 @@ abstract class Particle {
 
   /// Internal timer defining how long
   /// this [Particle] will live. [Particle] will
-  /// be marked for destroy when this timer is over.
+  /// be marked for removal when this timer is over.
   Timer _timer;
 
   /// Stores desired lifespan of the
@@ -49,7 +49,7 @@ abstract class Particle {
 
   /// Will be set to true by update hook
   /// when this [Particle] reaches end of its lifespan
-  bool _shouldBeDestroyed = false;
+  bool _shouldBeRemoved = false;
 
   Particle({
     /// Particle lifespan in [Timer] format,
@@ -62,9 +62,9 @@ abstract class Particle {
   /// This method will return true as
   /// soon as particle reaches an end of its
   /// lifespan, which means it's ready to be
-  /// destroyed by a wrapping container.
+  /// removed by a wrapping container.
   /// Follows same style as [Component].
-  bool destroy() => _shouldBeDestroyed;
+  bool shouldRemove() => _shouldBeRemoved;
 
   /// Getter which should be used by subclasses
   /// to get overall progress. Also allows to substitute
@@ -81,7 +81,7 @@ abstract class Particle {
 
   /// Updates internal [Timer] of this [Particle]
   /// which defines its position on the lifespan.
-  /// Marks [Particle] for destroy when it is over.
+  /// Marks [Particle] for removal when it is over.
   void update(double dt) {
     _timer.update(dt);
   }
@@ -94,12 +94,12 @@ abstract class Particle {
   void setLifespan(double lifespan) {
     _lifespan = lifespan;
     _timer?.stop();
-    final void Function() destroyCallback = () => _shouldBeDestroyed = true;
-    _timer = Timer(lifespan, callback: destroyCallback);
+    final void Function() removeCallback = () => _shouldBeRemoved = true;
+    _timer = Timer(lifespan, callback: removeCallback);
     _timer.start();
   }
 
-  /// Wtaps this particle with [TranslatedParticle]
+  /// Wraps this particle with [TranslatedParticle]
   /// statically repositioning it for the time
   /// of the lifespan.
   Particle translated(Offset offset) {
