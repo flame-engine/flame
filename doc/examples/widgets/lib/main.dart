@@ -1,3 +1,4 @@
+import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/material.dart' hide Animation;
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
@@ -61,13 +62,10 @@ void main() async {
             ),
           ));
 
-  await Flame.images.load('buttons.png');
+  final buttonsImage = await Flame.images.load('buttons.png');
   final _buttons = SpriteSheet(
-    imageName: 'buttons.png',
-    textureHeight: 20,
-    textureWidth: 60,
-    columns: 1,
-    rows: 2,
+    image: buttonsImage,
+    srcSize: Vector2(60, 20),
   );
   dashbook.storiesOf('SpriteButton').decorator(CenterDecorator()).add(
         'default',
@@ -100,7 +98,8 @@ void main() async {
     'Anchor.bottomCenter',
     'Anchor.bottomRight',
   ];
-  final shieldSprite = await Sprite.loadSprite('shield.png');
+  final shieldImage = await Flame.images.load('shield.png');
+  final shieldSprite = Sprite(shieldImage);
   dashbook.storiesOf('SpriteWidget').decorator(CenterDecorator()).add(
         'default',
         (ctx) => Container(
@@ -109,31 +108,34 @@ void main() async {
           child: SpriteWidget(
             sprite: shieldSprite,
             anchor: parseAnchor(
-                ctx.listProperty('anchor', 'Anchor.center', anchorOptions)),
+              ctx.listProperty('anchor', 'Anchor.center', anchorOptions),
+            ),
           ),
         ),
       );
 
-  await Flame.images.load('bomb_ptero.png');
+  final pteroImage = await Flame.images.load('bomb_ptero.png');
   final _animationSpriteSheet = SpriteSheet(
-    imageName: 'bomb_ptero.png',
-    textureHeight: 32,
-    textureWidth: 48,
-    columns: 4,
-    rows: 1,
+    image: pteroImage,
+    srcSize: Vector2(48, 32),
   );
-  final _animation = _animationSpriteSheet.createAnimation(0,
-      stepTime: 0.2, to: 3, loop: true);
+  final _animation = _animationSpriteSheet.createAnimation(
+    row: 0,
+    stepTime: 0.2,
+    to: 3,
+    loop: true,
+  );
   dashbook.storiesOf('AnimationWidget').decorator(CenterDecorator()).add(
         'default',
         (ctx) => Container(
           width: ctx.numberProperty('container width', 400),
           height: ctx.numberProperty('container height', 200),
-          child: AnimationWidget(
+          child: SpriteAnimationWidget(
             animation: _animation,
             playing: ctx.boolProperty('playing', true),
             anchor: parseAnchor(
-                ctx.listProperty('anchor', 'Anchor.center', anchorOptions)),
+              ctx.listProperty('anchor', 'Anchor.center', anchorOptions),
+            ),
           ),
         ),
       );

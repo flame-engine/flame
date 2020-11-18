@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 
+import '../extensions/rect.dart';
+import '../extensions/vector2.dart';
 import '../flame.dart';
-import 'component.dart';
+import 'position_component.dart';
 
 /// Specifications with a path to an image and how it should be drawn in
 /// relation to the device screen
@@ -21,10 +24,12 @@ class ParallaxImage {
   /// How to fill the screen with the image, always proportionally scaled.
   final LayerFill fill;
 
-  ParallaxImage(this.filename,
-      {this.repeat = ImageRepeat.repeatX,
-      this.alignment = Alignment.bottomLeft,
-      this.fill = LayerFill.height});
+  ParallaxImage(
+    this.filename, {
+    this.repeat = ImageRepeat.repeatX,
+    this.alignment = Alignment.bottomLeft,
+    this.fill = LayerFill.height,
+  });
 }
 
 /// Represents one layer in the parallax, draws out an image on a canvas in the
@@ -34,10 +39,10 @@ class ParallaxLayer {
   Future<Image> future;
 
   Image _image;
-  Size _screenSize;
   Rect _paintArea;
-  Offset _scroll;
-  Offset _imageSize;
+  Vector2 _screenSize;
+  Vector2 _scroll;
+  Vector2 _imageSize;
   double _scale = 1.0;
 
   ParallaxLayer(this.parallaxImage) {
@@ -46,9 +51,9 @@ class ParallaxLayer {
 
   bool loaded() => _image != null;
 
-  Offset currentOffset() => _scroll;
+  Vector2 currentOffset() => _scroll;
 
-  void resize(Size size) {
+  void resize(Vector2 size) {
     if (!loaded()) {
       _screenSize = size;
       return;
@@ -57,9 +62,9 @@ class ParallaxLayer {
     double scale(LayerFill fill) {
       switch (fill) {
         case LayerFill.height:
-          return _image.height / size.height;
+          return _image.height / size.y;
         case LayerFill.width:
-          return _image.width / size.width;
+          return _image.width / size.x;
         default:
           return _scale;
       }
@@ -68,54 +73,56 @@ class ParallaxLayer {
     _scale = scale(parallaxImage.fill);
 
     // The image size so that it fulfills the LayerFill parameter
-    _imageSize = Offset(_image.width / _scale, _image.height / _scale);
+    _imageSize =
+        Vector2Extension.fromInts(_image.width, _image.height) / _scale;
 
     // Number of images that can fit on the canvas plus one
     // to have something to scroll to without leaving canvas empty
-    final countX = 1 + size.width / _imageSize.dx;
-    final countY = 1 + size.height / _imageSize.dy;
+    final Vector2 count = Vector2.all(1) + (size.clone()..divide(_imageSize));
 
     // Percentage of the image size that will overflow
-    final overflowX = (_imageSize.dx * countX - size.width) / _imageSize.dx;
-    final overflowY = (_imageSize.dy * countY - size.height) / _imageSize.dy;
+    final Vector2 overflow = ((_imageSize.clone()..multiply(count)) - size)
+      ..divide(_imageSize);
 
     // Align image to correct side of the screen
     final alignment = parallaxImage.alignment;
-    final marginX = alignment.x == 0 ? overflowX / 2 : alignment.x;
-    final marginY = alignment.y == 0 ? overflowY / 2 : alignment.y;
-    _scroll ??= Offset(marginX, marginY);
+    final marginX = alignment.x == 0 ? overflow.x / 2 : alignment.x;
+    final marginY = alignment.y == 0 ? overflow.y / 2 : alignment.y;
+    _scroll ??= Vector2(marginX, marginY);
 
-    // Size of the area to paint the images in
-    final rectWidth = countX * _imageSize.dx;
-    final rectHeight = countY * _imageSize.dy;
-    _paintArea = Rect.fromLTWH(0, 0, rectWidth, rectHeight);
+    // Size of the area to paint the images on
+    final Vector2 paintSize = count..multiply(_imageSize);
+    _paintArea = paintSize.toRect();
   }
 
-  void update(Offset delta) {
+  void update(Vector2 delta) {
     if (!loaded()) {
       return;
     }
 
     // Scale the delta so that images that are larger don't scroll faster
-    _scroll += delta.scale(1 / _imageSize.dx, 1 / _imageSize.dy);
+    _scroll += delta.clone()..divide(_imageSize);
     switch (parallaxImage.repeat) {
       case ImageRepeat.repeat:
-        _scroll = _scroll % 1;
+        _scroll = Vector2(_scroll.x % 1, _scroll.y % 1);
         break;
       case ImageRepeat.repeatX:
-        _scroll = Offset(_scroll.dx % 1, _scroll.dy);
+        _scroll = Vector2(_scroll.x % 1, _scroll.y);
         break;
       case ImageRepeat.repeatY:
-        _scroll = Offset(_scroll.dx, _scroll.dy % 1);
+        _scroll = Vector2(_scroll.x, _scroll.y % 1);
         break;
       case ImageRepeat.noRepeat:
         break;
     }
 
-    final dx = _scroll.dx * _imageSize.dx;
-    final dy = _scroll.dy * _imageSize.dy;
-
-    _paintArea = Rect.fromLTWH(-dx, -dy, _paintArea.width, _paintArea.height);
+    final Vector2 scrollPosition = _scroll.clone()..multiply(_imageSize);
+    _paintArea = Rect.fromLTWH(
+      -scrollPosition.x,
+      -scrollPosition.y,
+      _paintArea.width,
+      _paintArea.height,
+    );
   }
 
   void render(Canvas canvas) {
@@ -133,7 +140,7 @@ class ParallaxLayer {
     );
   }
 
-  Future<Image> _load(filename) {
+  Future<Image> _load(String filename) {
     return Flame.images.load(filename).then((image) {
       _image = image;
       if (_screenSize != null) {
@@ -150,46 +157,50 @@ enum LayerFill { height, width, none }
 /// A full parallax, several layers of images drawn out on the screen and each
 /// layer moves with different speeds to give an effect of depth.
 class ParallaxComponent extends PositionComponent {
-  Offset baseSpeed;
-  Offset layerDelta;
+  Vector2 baseSpeed;
+  Vector2 layerDelta;
   List<ParallaxLayer> _layers;
-  bool _loaded = false;
 
-  ParallaxComponent(List<ParallaxImage> images,
-      {this.baseSpeed = Offset.zero, this.layerDelta = Offset.zero}) {
+  ParallaxComponent(
+    List<ParallaxImage> images, {
+    this.baseSpeed,
+    this.layerDelta,
+  }) {
+    baseSpeed ??= Vector2.zero();
+    layerDelta ??= Vector2.zero();
     _load(images);
   }
 
   /// The base offset of the parallax, can be used in an outer update loop
   /// if you want to transition the parallax to a certain position.
-  Offset currentOffset() => _layers[0].currentOffset();
+  Vector2 currentOffset() => _layers[0].currentOffset();
 
+  @mustCallSuper
   @override
-  bool loaded() => _loaded;
-
-  @override
-  void resize(Size size) {
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
     _layers.forEach((layer) => layer.resize(size));
   }
 
   @override
   void update(double t) {
     super.update(t);
-    if (!loaded()) {
+    if (!loaded) {
       return;
     }
-    _layers.forEach((layer) => layer
-        .update(baseSpeed * t + layerDelta * (_layers.indexOf(layer) * t)));
+    _layers.forEach((layer) {
+      layer.update(baseSpeed * t + layerDelta * (_layers.indexOf(layer) * t));
+    });
   }
 
+  @mustCallSuper
   @override
   void render(Canvas canvas) {
-    if (!loaded()) {
+    if (!loaded) {
       return;
     }
-
+    super.render(canvas);
     canvas.save();
-    prepareCanvas(canvas);
     _layers.forEach((layer) => layer.render(canvas));
     canvas.restore();
   }
@@ -197,6 +208,6 @@ class ParallaxComponent extends PositionComponent {
   void _load(List<ParallaxImage> images) {
     _layers = images.map((image) => ParallaxLayer(image)).toList();
     Future.wait(_layers.map((layer) => layer.future))
-        .then((_) => _loaded = true);
+        .then((_) => loaded = true);
   }
 }

@@ -2,48 +2,70 @@ import 'package:flame/gestures.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/animation.dart' as flame_animation;
-import 'package:flame/components/animation_component.dart';
-import 'package:flutter/material.dart';
+import 'package:flame/extensions/vector2.dart';
+import 'package:flame/sprite_animation.dart';
+import 'package:flame/components/sprite_animation_component.dart';
+import 'package:flutter/material.dart' hide Image;
+import 'dart:ui';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Flame.images.loadAll(['creature.png', 'chopper.png']);
 
-  final Size size = await Flame.util.initialDimensions();
+  final Vector2 size = await Flame.util.initialDimensions();
   final game = MyGame(size);
   runApp(game.widget);
 }
 
 class MyGame extends BaseGame with TapDetector {
-  final animation = flame_animation.Animation.sequenced(
-    'chopper.png',
-    4,
-    textureWidth: 48,
-    textureHeight: 48,
-    stepTime: 0.15,
-    loop: true,
-  );
+  Image chopper;
+  Image creature;
+  SpriteAnimation animation;
+
+  @override
+  Future<void> onLoad() async {
+    chopper = await images.load('chopper.png');
+    creature = await images.load('creature.png');
+
+    animation = SpriteAnimation.sequenced(
+      chopper,
+      4,
+      textureSize: Vector2.all(48),
+      stepTime: 0.15,
+      loop: true,
+    );
+  }
 
   void addAnimation(double x, double y) {
-    const textureWidth = 291.0;
-    const textureHeight = 178.0;
-    final animationComponent = AnimationComponent.sequenced(
-      291,
-      178,
-      'creature.png',
+    final size = Vector2(291, 178);
+
+    final animationComponent = SpriteAnimationComponent.sequenced(
+      size,
+      creature,
       18,
       amountPerRow: 10,
-      textureWidth: textureWidth,
-      textureHeight: textureHeight,
+      textureSize: size,
       stepTime: 0.15,
       loop: false,
-      destroyOnFinish: true,
+      removeOnFinish: true,
     );
-    animationComponent.x = x - textureWidth / 2;
-    animationComponent.y = y - textureHeight / 2;
 
+    animationComponent.position = animationComponent.position - size / 2;
     add(animationComponent);
+
+    final spriteSize = Vector2.all(100.0);
+    final animationComponent2 = SpriteAnimationComponent(spriteSize, animation);
+    animationComponent2.x = size.x / 2 - spriteSize.x;
+    animationComponent2.y = spriteSize.y;
+
+    final reversedAnimationComponent = SpriteAnimationComponent(
+      spriteSize,
+      animation.reversed(),
+    );
+    reversedAnimationComponent.x = size.x / 2;
+    reversedAnimationComponent.y = spriteSize.y;
+
+    add(animationComponent2);
+    add(reversedAnimationComponent);
   }
 
   @override
@@ -51,20 +73,7 @@ class MyGame extends BaseGame with TapDetector {
     addAnimation(evt.globalPosition.dx, evt.globalPosition.dy);
   }
 
-  MyGame(Size screenSize) {
+  MyGame(Vector2 screenSize) {
     size = screenSize;
-
-    const s = 100.0;
-    final animationComponent = AnimationComponent(s, s, animation);
-    animationComponent.x = size.width / 2 - s;
-    animationComponent.y = s;
-
-    final reversedAnimationComponent =
-        AnimationComponent(s, s, animation.reversed());
-    reversedAnimationComponent.x = size.width / 2;
-    reversedAnimationComponent.y = s;
-
-    add(animationComponent);
-    add(reversedAnimationComponent);
   }
 }

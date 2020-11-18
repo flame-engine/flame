@@ -1,66 +1,36 @@
-import 'package:flutter/material.dart';
-import 'package:flame/components/animation_component.dart';
-import 'package:flame/components/component.dart';
-import 'package:flame/flame.dart';
+import 'package:flame/components/sprite_animation_component.dart';
+import 'package:flame/components/sprite_component.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/game.dart';
 import 'package:flame/spritesheet.dart';
-import 'package:dashbook/dashbook.dart';
+import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final spriteSheet = SpriteSheet(
-    imageName: 'spritesheet.png',
-    textureWidth: 16,
-    textureHeight: 18,
-    columns: 11,
-    rows: 2,
-  );
-
-  final spriteSheetFromImage = SpriteSheet.fromImage(
-    image: await Flame.images.load('spritesheet.png'),
-    textureWidth: 16,
-    textureHeight: 18,
-    columns: 11,
-    rows: 2,
-  );
-
-  final dashbook = Dashbook();
-
-  dashbook
-      .storiesOf('SpriteSheet')
-      .add('defaut', (_) => GameWrapper(MyGame(spriteSheet)))
-      .add('fromImage', (_) => GameWrapper(MyGame(spriteSheetFromImage)));
-
-  runApp(dashbook);
-}
-
-class GameWrapper extends StatelessWidget {
-  final Game game;
-
-  GameWrapper(this.game);
-
-  @override
-  Widget build(_) {
-    return Container(
-      width: 400,
-      height: 400,
-      child: game.widget,
-    );
-  }
+  runApp(MyGame().widget);
 }
 
 class MyGame extends BaseGame {
-  MyGame(SpriteSheet spriteSheet) {
+  @override
+  Future<void> onLoad() async {
+    final spriteSheet = SpriteSheet(
+      image: await images.load('spritesheet.png'),
+      srcSize: Vector2(16.0, 18.0),
+    );
+
     final vampireAnimation =
-        spriteSheet.createAnimation(0, stepTime: 0.1, to: 7);
-    final ghostAnimation = spriteSheet.createAnimation(1, stepTime: 0.1, to: 7);
+        spriteSheet.createAnimation(row: 0, stepTime: 0.1, to: 7);
+    final ghostAnimation =
+        spriteSheet.createAnimation(row: 1, stepTime: 0.1, to: 7);
+    final spriteSize = Vector2(80.0, 90.0);
 
-    final vampireComponent = AnimationComponent(80, 90, vampireAnimation)
-      ..x = 150
-      ..y = 100;
+    final vampireComponent =
+        SpriteAnimationComponent(spriteSize, vampireAnimation)
+          ..x = 150
+          ..y = 100;
 
-    final ghostComponent = AnimationComponent(80, 90, ghostAnimation)
+    final ghostComponent = SpriteAnimationComponent(spriteSize, ghostAnimation)
       ..x = 150
       ..y = 220;
 
@@ -69,12 +39,12 @@ class MyGame extends BaseGame {
 
     // Some plain sprites
     final vampireSpriteComponent =
-        SpriteComponent.fromSprite(80, 90, spriteSheet.getSprite(0, 0))
+        SpriteComponent.fromSprite(spriteSize, spriteSheet.getSprite(0, 0))
           ..x = 50
           ..y = 100;
 
     final ghostSpriteComponent =
-        SpriteComponent.fromSprite(80, 90, spriteSheet.getSprite(1, 0))
+        SpriteComponent.fromSprite(spriteSize, spriteSheet.getSprite(1, 0))
           ..x = 50
           ..y = 220;
 

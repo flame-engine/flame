@@ -2,8 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../../extensions/offset.dart';
+import '../../extensions/vector2.dart';
 import '../../gestures.dart';
-import '../../position.dart';
 import '../../sprite.dart';
 import 'joystick_component.dart';
 import 'joystick_events.dart';
@@ -33,7 +34,7 @@ class JoystickDirectional {
 
   JoystickController _joystickController;
 
-  Size _screenSize;
+  Vector2 _screenSize;
 
   DragEvent _currentDragEvent;
 
@@ -65,11 +66,11 @@ class JoystickDirectional {
     _tileSize = size / 2;
   }
 
-  void initialize(Size _screenSize, JoystickController joystickController) {
+  void initialize(Vector2 _screenSize, JoystickController joystickController) {
     this._screenSize = _screenSize;
     _joystickController = joystickController;
     final Offset osBackground =
-        Offset(margin.left, _screenSize.height - margin.bottom);
+        Offset(margin.left, _screenSize.y - margin.bottom);
     _backgroundRect = Rect.fromCircle(center: osBackground, radius: size / 2);
 
     final Offset osKnob =
@@ -117,9 +118,9 @@ class JoystickDirectional {
       final double degrees = _radAngle * 180 / pi;
 
       // Distance between the center of joystick background & drag position
-      final centerPosition = Position.fromOffset(_backgroundRect.center);
-      final dragPosition = Position.fromOffset(_dragPosition);
-      double dist = centerPosition.distance(dragPosition);
+      final centerPosition = _backgroundRect.center.toVector2();
+      final dragPosition = _dragPosition.toVector2();
+      double dist = centerPosition.distanceTo(dragPosition);
 
       // The maximum distance for the knob position the edge of
       // the background + half of its own size. The knob can wander in the
@@ -186,8 +187,8 @@ class JoystickDirectional {
 
   void _updateDirectionalRect(Offset position) {
     if (_screenSize != null &&
-        (position.dx > _screenSize.width / 2 ||
-            position.dy < _screenSize.height / 2 ||
+        (position.dx > _screenSize.x / 2 ||
+            position.dy < _screenSize.y / 2 ||
             isFixed)) {
       return;
     }

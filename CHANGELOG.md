@@ -1,6 +1,38 @@
 # CHANGELOG
 
 ## [next]
+ - Improve IsometricTileMap and Spritesheet classes
+ - Export full vector_math library from extension
+ - Added warning about basic and advanced detectors
+ - Ensuring sprite animation and sprite animation components don't get NPEs on initialization
+ - Refactor timer class
+ - include all changed that are included on 0.28.0
+ - Rename game#resize to game#onResize
+ - Test suite for basic effects
+ - Effects duration and test suite for basic effects
+ - Pause and resume for effects
+ - Fix position bug in parallax effect
+ - Simplification of BaseGame. Removal of addLater (add is now addLater) and rename markForRemoval.
+ - Unify naming for removal of components from BaseGame
+
+## 1.0.0-rc1
+ - Move all box2d related code and examples to the flame_box2d repo
+ - Rename Animation to SpriteAnimation
+ - Create extension of Vector2 and unify all tuples to use that class
+ - Remove Position class in favor of new Vector2 extension
+ - Remove Box2D as a dependency
+ - Rebuild of Images, Sprite and SpriteAnimation initialization
+ - Use isRelative on effects
+ - Use Vector2 for position and size on PositionComponent
+ - Removing all deprecated methods
+ - Rename `resize` method on components to `onGameResize`
+ - Make `Resizable` have a `gameSize` property instead of `size`
+ - Fix bug with CombinedEffect inside SequenceEffect
+ - Fix wrong end angle for relative rotational effects
+ - Use a list of Vector2 for Move effect to open up for more advanced move effects
+ - Generalize effects api to include all components
+ - Extract all the audio related capabilities to a new package, flame_audio
+ - Fix bug that sprite crashes without a position
 
 ## 0.28.0
 - Fix spriteAsWidget deprecation message

@@ -1,42 +1,53 @@
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
 
-import './effects.dart';
+import 'effects.dart';
 
-class RotateEffect extends PositionComponentEffect {
-  double radians;
-  double speed;
-  Curve curve;
+class RotateEffect extends SimplePositionComponentEffect {
+  double angle;
+  double _startAngle;
+  double _delta;
 
-  double _originalAngle;
-  double _peakAngle;
-  double _direction;
-
+  /// Duration or speed needs to be defined
   RotateEffect({
-    @required this.radians, // As many radians as you want to rotate
-    @required this.speed, // In radians per second
-    this.curve,
-    isInfinite = false,
-    isAlternating = false,
-    Function onComplete,
-  }) : super(isInfinite, isAlternating, onComplete: onComplete);
+    @required this.angle, // As many radians as you want to rotate
+    double duration, // How long it should take for completion
+    double speed, // The speed of rotation in radians/s
+    Curve curve,
+    bool isInfinite = false,
+    bool isAlternating = false,
+    bool isRelative = false,
+    void Function() onComplete,
+  })  : assert(
+          (duration != null) ^ (speed != null),
+          "Either speed or duration necessary",
+        ),
+        super(
+          isInfinite,
+          isAlternating,
+          duration: duration,
+          speed: speed,
+          curve: curve,
+          isRelative: isRelative,
+          onComplete: onComplete,
+        );
 
   @override
   void initialize(_comp) {
     super.initialize(_comp);
+    _startAngle = component.angle;
+    _delta = isRelative ? angle : angle - _startAngle;
     if (!isAlternating) {
-      endAngle = _comp.angle + radians;
+      endAngle = _startAngle + _delta;
     }
-    _originalAngle = component.angle;
-    _peakAngle = _originalAngle + radians;
-    _direction = _peakAngle.sign;
-    travelTime = (radians / speed).abs();
+    speed ??= _delta / duration;
+    duration ??= _delta / speed;
+    peakTime = isAlternating ? duration / 2 : duration;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    final double c = curve?.transform(percentage) ?? 1.0;
-    component.angle = _originalAngle + _peakAngle * c * _direction;
+    component.angle = _startAngle + _delta * curveProgress;
   }
 }

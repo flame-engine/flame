@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/position.dart';
+import 'package:flame/extensions/vector2.dart';
+import 'package:flame/extensions/offset.dart';
 
 void main() {
   final game = MyGame();
@@ -12,12 +13,12 @@ void main() {
 class MyGame extends Game with ScrollDetector {
   static const SPEED = 200;
 
-  Position position = Position(0, 0);
-  Position target;
+  Vector2 position = Vector2(0, 0);
+  Vector2 target;
 
   @override
   void onScroll(event) {
-    target = position.minus(Position.fromOffset(event.scrollDelta));
+    target = position - event.scrollDelta.toVector2();
   }
 
   @override
@@ -36,9 +37,8 @@ class MyGame extends Game with ScrollDetector {
   @override
   void update(double dt) {
     if (target != null) {
-      final dir = target.clone().minus(position).normalize();
-
-      position.add(dir.times(SPEED * dt));
+      final dir = (target - position).normalized();
+      position += dir * (SPEED * dt);
     }
   }
 }

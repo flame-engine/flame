@@ -13,29 +13,111 @@ flutter:
 
 It has to be a PNG file and it can have transparency.
 
+## Loading images
+
+Flame bundles an utility class called `Images` that allows you to easily load and cache images from the assets directory into the memory.
+
+Flutter has a handful of types related to images, and converting everything properly from a local asset to an Image that can be drawn on Canvas is a bit convoluted. This class allows you to obtain an Image that can be drawn on a Canvas using the `drawImageRect` method.
+
+It automatically caches any image loaded by filename, so you can safely call it many times.
+
+The methods for loading and clearing the cache are: `load`, `loadAll`, `clear` and `clearAll`. They return a `Future` for the loaded Image.
+
+To synchronously retrieve a previously cached image, the `fromCache` method can be used. If an image with that key was not loaded prior, it will throw an exception.
+
+### Standalone usage
+
+It can be manually used by instantiating it:
+
+```dart
+    import 'package:flame/images.dart';
+    final imagesLoader = Images();
+    Image image = await imagesLoader.load('asd');
+```
+
+But Flame also offers two ways of using this class without instantiating it yourself.
+
+### Flame.images
+
+There is a singleton, provided by the `Flame` class, that can be used as a global image cache.
+
+Example:
+
+```dart
+    import 'package:flame/flame.dart';
+
+    // inside an async context
+    Image image = await Flame.images.load('player.png');
+
+    final playerSprite = Sprite(image);
+```
+
+# Game.images
+
+The `Game` class offers some utility methods for handling images loading too. It bundles an instance of the `Images` class, that can be used to load image assets to be used during the game. The game will automatically free the cache when the game widget is removed from the widget tree.
+
+The method `onLoad` from the `Game` class is a great place for the initial assets to be loaded.
+
+Example:
+
+```dart
+class MyGame extends Game {
+
+  Sprite player;
+
+  @override
+  Future<void> onLoad() async {
+    final playerImage = await images.load('player.png');
+    player = Sprite(playerImage);
+  }
+}
+```
+
+Loaded assets can also be retrieved while the game is running by `images.fromCache`, for example:
+
+```dart
+class MyGame extends Game {
+
+  // attributes omitted
+
+  @override
+  Future<void> onLoad() async {
+    // other loads omitted
+    await images.load('bullet.png');
+  }
+
+  void shoot() {
+    _shoots.add(Sprite(images.fromCache('bullet.png'));
+  }
+}
+```
+
 ## Sprite
 
-Flame offers a `Sprite` class that represents a piece of an image (or the whole).
+Flame offers a `Sprite` class that represents a region of an image (or the whole).
 
-You can create a `Sprite` giving it a pre-loaded `Image` via the `fromImage` constructor, or you can use the nameless constructor to pass a file name and have the image loaded asynchronously.
+You can create a `Sprite` by providing it an `Image` and coordinates that defines the piece of the image that that sprite represents.
 
 For example, this will create a sprite representing the whole image of the file passed, automatically triggering its loading:
 
 ```dart
-    Sprite player = Sprite('player.png');
+    final image = await loadImage();
+    Sprite player = Sprite(image);
 ```
 
 You could also specify the coordinates in the original image where the sprite is located. This allows you to use sprite sheets and reduce the number of images in memory, for example:
 
 ```dart
-    Sprite playerFrame = Sprite('player.png', x = 32.0, width = 16.0);
+    final image = await loadImage();
+    Sprite playerFrame = Sprite(image, x: 32.0, width: 16.0);
 ```
 
 The default values are `0.0` for `x` and `y` and `null` for `width` and `height` (meaning it will use the full width/height of the source image).
 
-The `Sprite` class has a `loaded` method that returns whether the image has been loaded, and a render method, that allows you to render the image onto a `Canvas`:
+The `Sprite` class has a render method, that allows you to render the sprite onto a `Canvas`:
 
 ```dart
+    final image = await loadImage();
     Sprite block = Sprite('block.png');
 
     // in your render method
@@ -44,11 +126,9 @@ The `Sprite` class has a `loaded` method that returns whether the image has been
 
 You must pass the size to the render method, and the image will be resized accordingly.
 
-The render method will do nothing while the sprite has not been loaded, so you don't need to worry. The image is cached in the `Images` class, so you can safely create many sprites with the same filename.
-
 All render methods from the Sprite class can receive a `Paint` instance as the optional named parameter `overridePaint` that parameter will override the current `Sprite` paint instance for that render call.
 
-Sprites can also be used as widgets, to do so just use `Flame.util.spriteAsWidget`
+Sprites can also be used as widgets, to do so just use `SpriteWidget` class.
 
 A complete example using sprite as widgets can be found [here](/doc/examples/animation_widget).
 
@@ -82,38 +162,6 @@ To use it just import the `Svg` class from `'package:flame_svg/flame_svg.dart'`,
     svgInstance.renderPosition(canvas, position, width, height);
 ```
 
-## Flame.images
-
-The `Flame.images` is a lower level utility for loading images, very similar to the `Flame.audio` instance.
-
-Flutter has a collection of types related to images, and converting everything properly from a local asset to the Image that can be drawn on Canvas is a bit of a pain. This class allows you to obtain an Image that can be drawn on a Canvas using the `drawImageRect` method.
-
-It automatically caches any image loaded by filename, so you can safely call it many times.
-
-To load and draw an image, you can use the `load` method, like this:
-
-```dart
-    import 'package:flame/flame.dart';
-
-    // inside an async context
-    Image image = await Flame.images.load('player.png');
-
-    // or
-    Flame.images.load('player.png').then((Image image) {
-      var paint = Paint()..color = Color(0xffffffff);
-      var rect = Rect.fromLTWH(0.0, 0.0, image.width.toDouble(), image.height.toDouble());
-      canvas.drawImageRect(image, rect, rect, paint);
-    });
-```
-
-The methods for loading and clearing the cache are identical to the Audio ones: `load`, `loadAll`, `clear` and `clearAll`. They return a `Future` for the Image loaded.
-
-Also similarly to Audio, you can instantiate your own copy of `Images` (each instance shares a different cache):
-
-```dart
-    Image image = await new Images().load('asd');
-```
-
 ## Animation
 
 The Animation class helps you create a cyclic animation of sprites.
@@ -128,7 +176,7 @@ After the animation is created, you need to call its `update` method and render 
 
 ```dart
 class MyGame extends Game {
-  Animation a;
+  SpriteAnimation a;
 
   MyGame() {
     a = Animation(...);
@@ -148,7 +196,7 @@ A better alternative to generate a list of sprites is to use the `sequenced` con
 
 ```dart
   const amountOfFrames = 8;
-  Animation a = Animation.sequenced('player.png', amountOfFrames, textureWidth: 16.0);
+  SpriteAnimation a = SpriteAnimation.sequenced(imageInstance, amountOfFrames, textureWidth: 16.0);
 ```
 
 In which you pass the file name, the number of frames and the sprite sheet is automatically split for you according to the 4 optional parameters:
@@ -157,7 +205,7 @@ In which you pass the file name, the number of frames and the sprite sheet is au
 * textureY : y position on the original image to start (defaults to 0)
 * textureWidth : width of each frame (defaults to null, that is, full width of the sprite sheet)
 * textureHeight : height of each frame (defaults to null, that is, full height of the sprite sheet)
-* destroyOnFinish : a bool indicating if this AnimationComponent should be destroyed when the animation has reached its end
+* removeOnFinish : a bool indicating if this AnimationComponent should be removed when the animation has reached its end
 
 So, in our example, we are saying that we have 8 frames for our player animation, and they are displayed in a row. So if the player height is also 16 pixels, the sprite sheet is 128x16, containing 8 16x16 frames.
 
@@ -166,10 +214,9 @@ This constructor makes creating an Animation very easy using sprite sheets.
 If you use Aseprite for your animations, Flame does provide some support for Aseprite animation's JSON data. To use this feature you will need to export the Sprite Sheet's JSON data, and use something like the following snippet:
 
 ```dart
-    Animation animation = await Animation.fromAsepriteData(
-      "chopper.png", // Sprite Sheet image path
-      "./assets/chopper.json" // Sprite Sheet animation JSON data
-    );
+  final image = await images.load('chopper.png');
+  final jsonData = await assets.readJson('chopper.json');
+  final animation = SpriteAnimation.fromAsepriteData(image, jsonData);
 ```
 
 _Note: trimmed sprite sheets are not supported by flame, so if you export your sprite sheet this way, it will have the trimmed size, not the sprite original size._
@@ -177,9 +224,6 @@ _Note: trimmed sprite sheets are not supported by flame, so if you export your s
 Animations, after created, have an update and render method; the latter renders the current frame, and the former ticks the internal clock to update the frames.
 
 Animations are normally used inside `AnimationComponent`s, but custom components with several Animations can be created as well.
-
-
-Animations can also be used as widgets, to do so, just use `Flame.util.animationAsWidget`
 
 A complete example of using animations as widgets can be found [here](/doc/examples/animation_widget).
 
@@ -235,11 +279,8 @@ Sprite sheets are big images with several frames of the same sprite on it and is
 import 'package:flame/spritesheet.dart';
 
 final spritesheet = SpriteSheet(
-  imageName: 'spritesheet.png',
-  textureWidth: 16,
-  textureHeight: 16,
-  columns: 10,
-  rows: 2,
+  image: imageInstance,
+  srcSize: Vector2.all(16.0),
 );
 
 final animation = spritesheet.createAnimation(0, stepTime: 0.1);

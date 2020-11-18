@@ -1,13 +1,15 @@
 import 'dart:math';
+import 'dart:ui';
 
-import 'joystick_component.dart';
-import 'joystick_events.dart';
-import '../../gestures.dart';
-import '../../sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../position.dart';
+import '../../extensions/offset.dart';
+import '../../extensions/vector2.dart';
+import '../../gestures.dart';
+import '../../sprite.dart';
+import 'joystick_component.dart';
+import 'joystick_events.dart';
 
 enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
 
@@ -58,7 +60,7 @@ class JoystickAction {
     _tileSize = _sizeBackgroundDirection / 2;
   }
 
-  void initialize(Size _screenSize, JoystickController joystickController) {
+  void initialize(Vector2 _screenSize, JoystickController joystickController) {
     _joystickController = joystickController;
     final double radius = size / 2;
     double dx = 0, dy = 0;
@@ -69,15 +71,15 @@ class JoystickAction {
         break;
       case JoystickActionAlign.BOTTOM_LEFT:
         dx = margin.left + radius;
-        dy = _screenSize.height - (margin.bottom + radius);
+        dy = _screenSize.y - (margin.bottom + radius);
         break;
       case JoystickActionAlign.TOP_RIGHT:
-        dx = _screenSize.width - (margin.right + radius);
+        dx = _screenSize.x - (margin.right + radius);
         dy = margin.top + radius;
         break;
       case JoystickActionAlign.BOTTOM_RIGHT:
-        dx = _screenSize.width - (margin.right + radius);
-        dy = _screenSize.height - (margin.bottom + radius);
+        dx = _screenSize.x - (margin.right + radius);
+        dy = _screenSize.y - (margin.bottom + radius);
         break;
     }
     _rectAction = Rect.fromCircle(
@@ -152,17 +154,16 @@ class JoystickAction {
       );
 
       // Distance between the center of joystick background & drag position
-      final centerPosition =
-          Position.fromOffset(_rectBackgroundDirection.center);
-      final dragPosition = Position.fromOffset(_dragPosition);
-      double dist = centerPosition.distance(dragPosition);
+      final centerPosition = _rectBackgroundDirection.center.toVector2();
+      final dragPosition = _dragPosition.toVector2();
+      double dist = centerPosition.distanceTo(dragPosition);
 
-      // The maximum distance for the knob position the edge of
+      // The maximum distance for the knob position to the edge of
       // the background + half of its own size. The knob can wander in the
       // background image, but not outside.
       dist = min(dist, _tileSize);
 
-      // Calculation the knob position
+      // Calculate the knob position
       final double nextX = dist * cos(_radAngle);
       final double nextY = dist * sin(_radAngle);
       final Offset nextPoint = Offset(nextX, nextY);

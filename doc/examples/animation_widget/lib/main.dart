@@ -1,31 +1,28 @@
 import 'dart:async';
 
 import 'package:flame/flame.dart';
-import 'package:flame/animation.dart' as animation;
+import 'package:flame/sprite_animation.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
-import 'package:flame/position.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/widgets/animation_widget.dart';
 import 'package:flame/widgets/sprite_widget.dart';
 import 'package:flutter/material.dart';
 
 Sprite _sprite;
-animation.Animation _animation;
+SpriteAnimation _animation;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  _sprite = await Sprite.loadSprite('minotaur.png', width: 96, height: 96);
+  final image = await Flame.images.load('minotaur.png');
+  _sprite = Sprite(image, srcSize: Vector2.all(96));
 
-  await Flame.images.load('minotaur.png');
   final _animationSpriteSheet = SpriteSheet(
-    imageName: 'minotaur.png',
-    columns: 19,
-    rows: 1,
-    textureWidth: 96,
-    textureHeight: 96,
+    image: image,
+    srcSize: Vector2.all(96),
   );
   _animation = _animationSpriteSheet.createAnimation(
-    0,
+    row: 0,
     stepTime: 0.2,
     to: 19,
   );
@@ -50,7 +47,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Position _position = Position(256.0, 256.0);
+  Vector2 _position = Vector2.all(256);
 
   @override
   void initState() {
@@ -59,10 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void changePosition() async {
-    await Future.delayed(const Duration(seconds: 1));
-    setState(() {
-      _position = Position(10 + _position.x, 10 + _position.y);
-    });
+    await Future<void>.delayed(const Duration(seconds: 1));
+    setState(() => _position += Vector2.all(10));
   }
 
   void _clickFab(GlobalKey<ScaffoldState> key) {
@@ -91,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Container(
               width: 200,
               height: 200,
-              child: AnimationWidget(animation: _animation),
+              child: SpriteAnimationWidget(animation: _animation),
             ),
             const Text('Neat, hum?'),
             const Text(

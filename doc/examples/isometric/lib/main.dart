@@ -1,30 +1,34 @@
-import 'package:flame/components/component.dart';
-import 'package:flame/flame.dart';
+import 'package:flame/components/sprite_component.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components/isometric_tile_map_component.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame/spritesheet.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Image;
+
+import 'dart:ui';
 
 const x = 500.0;
 const y = 500.0;
-const s = 64;
-final topLeft = Position(x, y);
+const s = 64.0;
+final topLeft = Vector2(x, y);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Size size = await Flame.util.initialDimensions();
-  final game = MyGame(size);
+  final game = MyGame();
   runApp(game.widget);
 }
 
 class Selector extends SpriteComponent {
   bool show = false;
 
-  Selector(double s)
-      : super.fromSprite(s, s, Sprite('selector.png', width: 32, height: 32));
+  Selector(double s, Image image)
+      : super.fromSprite(
+          Vector2.all(s),
+          Sprite(image, srcSize: Vector2.all(32.0)),
+        );
 
   @override
   void render(Canvas canvas) {
@@ -40,12 +44,14 @@ class MyGame extends BaseGame with MouseMovementDetector {
   IsometricTileMapComponent base;
   Selector selector;
 
-  MyGame(Size size) {
-    init();
-  }
+  MyGame();
 
-  void init() async {
-    final tileset = await IsometricTileset.load('tiles.png', 32);
+  @override
+  Future<void> onLoad() async {
+    final selectorImage = await images.load('selector.png');
+
+    final tilesetImage = await images.load('tiles.png');
+    final tileset = SpriteSheet(image: tilesetImage, srcSize: Vector2.all(32));
     final matrix = [
       [3, 1, 1, 1, 0, 0],
       [-1, 1, 2, 1, 0, 0],
@@ -55,11 +61,15 @@ class MyGame extends BaseGame with MouseMovementDetector {
       [1, 3, 3, 3, 0, 2],
     ];
     add(
-      base = IsometricTileMapComponent(tileset, matrix, destTileSize: s)
+      base = IsometricTileMapComponent(
+        tileset,
+        matrix,
+        destTileSize: Vector2.all(s),
+      )
         ..x = x
         ..y = y,
     );
-    add(selector = Selector(s.toDouble()));
+    add(selector = Selector(s, selectorImage));
   }
 
   @override
@@ -77,9 +87,10 @@ class MyGame extends BaseGame with MouseMovementDetector {
     if (base == null || selector == null) {
       return; // loading
     }
-    final screenPosition = Position.fromOffset(event.position);
+    final offset = event.position;
+    final screenPosition = Vector2(offset.dx, offset.dy);
     final block = base.getBlock(screenPosition);
     selector.show = base.containsBlock(block);
-    selector.setByPosition(base.getBlockPosition(block).add(topLeft));
+    selector.position = base.getBlockPosition(block) + topLeft;
   }
 }

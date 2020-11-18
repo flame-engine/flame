@@ -3,12 +3,12 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 
 import '../components/component.dart';
+import '../extensions/vector2.dart';
 import '../particle.dart';
-import '../position.dart';
 
 class ComponentParticle extends Particle {
   final Component component;
-  final Position size;
+  final Vector2 size;
   final Paint overridePaint;
 
   ComponentParticle({

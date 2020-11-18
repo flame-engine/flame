@@ -12,7 +12,7 @@ import 'package:flame/components/particle_component.dart';
 game.add(
     // Wrapping a [Particle] with [ParticleComponent]
     // which maps [Component] lifecycle hooks to [Particle] ones
-    // and embeds a trigger for destroying the component.
+    // and embeds a trigger for removing the component.
     ParticleComponent(
         particle: CircleParticle()
     )
@@ -100,7 +100,7 @@ You can find more examples of using different built-int particles in various com
 
 ## Lifecycle
 
-Behavior common to all `Particle`s is that all of them accept `lifespan` parameter. This value is used to make `ParticleComponent` self-destroy, once its internal `Particle` has reached the end of its life. Time within the `Particle` itself is tracked using the Flame `Timer`. It could be configured with `double`, representing seconds (with microsecond precision) by passing it into the corresponding `Particle` constructor. 
+Behavior common to all `Particle`s is that all of them accept a `lifespan` parameter. This value is used to make the `ParticleComponent` self-remove, once its internal `Particle` has reached the end of its life. Time within the `Particle` itself is tracked using the Flame `Timer`. It could be configured with a `double`, representing seconds (with microsecond precision) by passing it into the corresponding `Particle` constructor.
 
 ```dart
 Particle(lifespan: .2); // will live for 200ms
@@ -226,7 +226,7 @@ game.add(
     ParticleComponent(
         particle: SpriteParticle(
           sprite: Sprite('sprite.png'),
-          size: Position(64, 64),
+          size: Vector2(64, 64),
         )
     )
 );
@@ -259,10 +259,7 @@ A `Particle` which embeds a Flame `Animation`. By default, aligns `Animation`s `
 ```dart
 final spritesheet = SpriteSheet(
   imageName: 'spritesheet.png',
-  textureWidth: 16,
-  textureHeight: 16,
-  columns: 10,
-  rows: 2
+  srcSize: Vector2.all(16.0),
 );
 
 game.add(

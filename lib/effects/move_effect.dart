@@ -1,62 +1,125 @@
-import 'dart:math';
-
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
 
-import './effects.dart';
-import '../position.dart';
+import '../extensions/vector2.dart';
+import 'effects.dart';
 
-double _direction(double p, double d) => (p - d).sign;
-double _distance(double a, double b) => (a - b).abs();
+class Vector2Percentage {
+  final Vector2 v;
+  final Vector2 previous;
+  final double startAt;
+  final double endAt;
 
-class MoveEffect extends PositionComponentEffect {
-  Position destination;
-  double speed;
-  Curve curve;
+  Vector2Percentage(
+    this.v,
+    this.previous,
+    this.startAt,
+    this.endAt,
+  );
+}
 
-  double _xOriginal;
-  double _xDistance;
-  double _xDirection;
+class MoveEffect extends SimplePositionComponentEffect {
+  List<Vector2> path;
+  Vector2Percentage _currentSubPath;
+  List<Vector2Percentage> _percentagePath;
+  Vector2 _startPosition;
 
-  double _yOriginal;
-  double _yDistance;
-  double _yDirection;
-
+  /// Duration or speed needs to be defined
   MoveEffect({
-    @required this.destination,
-    @required this.speed,
-    this.curve,
-    isInfinite = false,
-    isAlternating = false,
-    Function onComplete,
-  }) : super(isInfinite, isAlternating, onComplete: onComplete);
+    @required this.path,
+    double duration,
+    double speed,
+    Curve curve,
+    bool isInfinite = false,
+    bool isAlternating = false,
+    bool isRelative = false,
+    void Function() onComplete,
+  })  : assert(
+          (duration != null) ^ (speed != null),
+          "Either speed or duration necessary",
+        ),
+        super(
+          isInfinite,
+          isAlternating,
+          duration: duration,
+          speed: speed,
+          curve: curve,
+          isRelative: isRelative,
+          onComplete: onComplete,
+        );
 
   @override
   void initialize(_comp) {
     super.initialize(_comp);
-    if (!isAlternating) {
-      endPosition = destination;
+    List<Vector2> _movePath;
+    _startPosition = component.position.clone();
+    // With relative here we mean that any vector in the list is relative
+    // to the previous vector in the list, except the first one which is
+    // relative to the start position of the component.
+    if (isRelative) {
+      Vector2 lastPosition = _startPosition;
+      _movePath = [];
+      for (Vector2 v in path) {
+        final nextPosition = v + lastPosition;
+        _movePath.add(nextPosition);
+        lastPosition = nextPosition;
+      }
+    } else {
+      _movePath = path;
+    }
+    endPosition = isAlternating ? _startPosition : _movePath.last;
+
+    double pathLength = 0;
+    Vector2 lastPosition = _startPosition;
+    for (Vector2 v in _movePath) {
+      pathLength += v.distanceTo(lastPosition);
+      lastPosition = v;
     }
 
-    _xOriginal = component.x;
-    _yOriginal = component.y;
+    _percentagePath = <Vector2Percentage>[];
+    lastPosition = _startPosition;
+    for (Vector2 v in _movePath) {
+      final lengthToPrevious = lastPosition.distanceTo(v);
+      final lastEndAt =
+          _percentagePath.isNotEmpty ? _percentagePath.last.endAt : 0.0;
+      final endPercentage = lastEndAt + lengthToPrevious / pathLength;
+      _percentagePath.add(
+        Vector2Percentage(
+          v,
+          lastPosition,
+          lastEndAt,
+          _movePath.last == v ? 1.0 : endPercentage,
+        ),
+      );
+      lastPosition = v;
+    }
+    final double totalPathLength = isAlternating ? pathLength * 2 : pathLength;
+    speed ??= totalPathLength / duration;
+    duration ??= totalPathLength / speed;
+    peakTime = isAlternating ? duration / 2 : duration;
+  }
 
-    _xDistance = _distance(destination.x, component.x);
-    _yDistance = _distance(destination.y, component.y);
-
-    _xDirection = _direction(destination.x, component.x);
-    _yDirection = _direction(destination.y, component.y);
-
-    final totalDistance = sqrt(pow(_xDistance, 2) + pow(_yDistance, 2));
-    travelTime = totalDistance / speed;
+  @override
+  void reset() {
+    super.reset();
+    if (_percentagePath?.isNotEmpty ?? false) {
+      _currentSubPath = _percentagePath.first;
+    }
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    final double c = curve?.transform(percentage) ?? 1.0;
-
-    component.x = _xOriginal + _xDistance * c * _xDirection;
-    component.y = _yOriginal + _yDistance * c * _yDirection;
+    _currentSubPath ??= _percentagePath.first;
+    if (!curveDirection.isNegative && _currentSubPath.endAt < curveProgress ||
+        curveDirection.isNegative && _currentSubPath.startAt > curveProgress) {
+      _currentSubPath =
+          _percentagePath.firstWhere((v) => v.endAt >= curveProgress);
+    }
+    final double lastEndAt = _currentSubPath.startAt;
+    final double localPercentage =
+        (curveProgress - lastEndAt) / (_currentSubPath.endAt - lastEndAt);
+    component.position = _currentSubPath.previous +
+        ((_currentSubPath.v - _currentSubPath.previous) * localPercentage);
   }
 }

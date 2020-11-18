@@ -65,11 +65,11 @@ class MyGame extends Game with MultiTouchTapDetector, MultiTouchDragDetector {
     _start = position;
   }
 
-  void onPanUpdate(details) {
+  void onPanUpdate(DragUpdateDetails details) {
     _end = details.localPosition;
   }
 
-  void onPanEnd(details) {
+  void onPanEnd(DragEndDetails details) {
     _panRect = Rect.fromLTRB(
       _start.dx,
       _start.dy,

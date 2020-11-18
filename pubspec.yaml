@@ -1,19 +1,14 @@
 name: flame
 description: A minimalist Flutter game engine, provides a nice set of somewhat independent modules you can choose from.
-version: 0.28.0
+version: 1.0.0-rc1
 homepage: https://github.com/flame-engine/flame
 
 dependencies:
   flutter:
     sdk: flutter
-  audioplayers: ^0.15.1
   ordered_set: ^2.0.0
-  path_provider: ^1.6.0
-  box2d_flame: ^0.4.6
-  synchronized: ^2.1.0
-  convert: ^2.0.1
-  flare_flutter: ^2.0.1
   meta: ^1.1.8
+  vector_math: '>=2.0.0 <3.0.0'
 
 dev_dependencies:
   flutter_test:
@@ -21,7 +16,7 @@ dev_dependencies:
   test: ^1.9.4
 
 environment:
-  sdk: ">=2.3.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
   flutter: ">=1.6.0"
 
 flutter:

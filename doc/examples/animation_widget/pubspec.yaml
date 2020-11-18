@@ -1,10 +1,10 @@
 name: animation_widget
-description: A sample Flame project to showcase the animationAsWidget method.
+description: A sample Flame project to showcase the SpriteAnimationWidget widget.
 
 version: 0.1.0
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:

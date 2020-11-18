@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
+import '../extensions/vector2.dart';
 import '../particle.dart';
 
 /// A [Particle] which renders given [Image] on a [Canvas]
@@ -16,13 +17,13 @@ class ImageParticle extends Particle {
 
   ImageParticle({
     @required this.image,
-    Size size,
+    Vector2 size,
     double lifespan,
   }) : super(lifespan: lifespan) {
     final srcWidth = image.width.toDouble();
     final srcHeight = image.height.toDouble();
-    final destWidth = size?.width ?? srcWidth;
-    final destHeight = size?.height ?? srcHeight;
+    final destWidth = size?.x ?? srcWidth;
+    final destHeight = size?.y ?? srcHeight;
 
     src = Rect.fromLTWH(0, 0, srcWidth, srcHeight);
     dest =

@@ -2,104 +2,101 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 
-import 'animation.dart';
+import 'extensions/vector2.dart';
 import 'sprite.dart';
+import 'sprite_animation.dart';
 
-/// Utility class to help extract animations and sprites from a spritesheet image
+/// Utility class to help extract animations and sprites from a sprite sheet image.
+///
+/// A sprite sheet is a single image in which several regions can be defined as individual sprites.
+/// For the purposes of this class, all of these regions must be identically sized rectangles.
+/// You can use the [Sprite] class directly if you want to have varying shapes.
+///
+/// Each sprite in this sheet can be identified either by it's (row, col) pair or
+/// by it's "id", which is basically it's sequenced index if the image is put in a
+/// single line. The sprites can be used to compose an animation easily if they
+/// all the frames happen to be sequentially on the same row.
+/// Sprites are lazily generated but cached.
 class SpriteSheet {
-  int textureWidth;
-  int textureHeight;
-  int columns;
-  int rows;
+  /// The src image from which each sprite will be generated.
+  final Image image;
 
-  List<List<Sprite>> _sprites;
-
-  SpriteSheet({
-    @required String imageName,
-    @required this.textureWidth,
-    @required this.textureHeight,
-    @required this.columns,
-    @required this.rows,
-  }) {
-    _sprites = List.generate(
-      rows,
-      (y) => List.generate(
-        columns,
-        (x) => _mapImagePath(imageName, textureWidth, textureHeight, x, y),
-      ),
-    );
-  }
-
-  Sprite _mapImagePath(
-    String imageName,
-    int textureWidth,
-    int textureHeight,
-    int x,
-    int y,
-  ) {
-    return Sprite(
-      imageName,
-      x: (x * textureWidth).toDouble(),
-      y: (y * textureHeight).toDouble(),
-      width: textureWidth.toDouble(),
-      height: textureHeight.toDouble(),
-    );
-  }
-
-  SpriteSheet.fromImage({
-    @required Image image,
-    @required this.textureWidth,
-    @required this.textureHeight,
-    @required this.columns,
-    @required this.rows,
-  }) {
-    _sprites = List.generate(
-      rows,
-      (y) => List.generate(
-        columns,
-        (x) => _mapImage(image, textureWidth, textureHeight, x, y),
-      ),
-    );
-  }
-
-  Sprite _mapImage(
-    Image image,
-    int textureWidth,
-    int textureHeight,
-    int x,
-    int y,
-  ) {
-    return Sprite.fromImage(
-      image,
-      x: (x * textureWidth).toDouble(),
-      y: (y * textureHeight).toDouble(),
-      width: textureWidth.toDouble(),
-      height: textureHeight.toDouble(),
-    );
-  }
-
-  Sprite getSprite(int row, int column) {
-    final Sprite s = _sprites[row][column];
-
-    assert(s != null, 'No sprite found for row $row and column $column');
-
-    return s;
-  }
-
-  /// Creates an animation from this SpriteSheet
+  /// The size of each rectangle within the image that define each sprite.
   ///
-  /// An [from] and a [to]  parameter can be specified to create an animation from a subset of the columns on the row
-  Animation createAnimation(int row,
-      {double stepTime, bool loop = true, int from = 0, int to}) {
-    final spriteRow = _sprites[row];
+  /// For example, if this sprite sheet is a tile map, this would be the tile size.
+  /// If it's an animation sheet, this would be the frame size.
+  final Vector2 srcSize;
 
-    assert(spriteRow != null, 'There is no row for $row index');
+  final Map<int, Sprite> _spriteCache = {};
 
-    to ??= spriteRow.length;
+  /// Creates a sprite sheet given the image and the tile size.
+  SpriteSheet({
+    @required this.image,
+    @required this.srcSize,
+  });
 
-    final spriteList = spriteRow.sublist(from, to);
+  SpriteSheet.fromColumnsAndRows({
+    @required this.image,
+    @required int columns,
+    @required int rows,
+  }) : srcSize = Vector2(
+          image.width / columns,
+          image.height / rows,
+        );
 
-    return Animation.spriteList(
+  /// Compute the number of columns the image has
+  /// by using the image width and tile size.
+  int get columns => image.width ~/ srcSize.x;
+
+  /// Compute the number of rows the image has
+  /// by using the image height and tile size.
+  int get rows => image.height ~/ srcSize.y;
+
+  /// Gets the sprite in the position (row, column) on the sprite sheet grid.
+  ///
+  /// This is lazily computed and cached for your convenience.
+  Sprite getSprite(int row, int column) {
+    return getSpriteById(row * columns + column);
+  }
+
+  /// Gets teh sprite with id [spriteId] from the grid.
+  ///
+  /// The ids are defined as starting at 0 on the top left and going
+  /// sequentially on each row.
+  /// This is lazily computed and cached for your convenience.
+  Sprite getSpriteById(int spriteId) {
+    return _spriteCache[spriteId] ??= _computeSprite(spriteId);
+  }
+
+  Sprite _computeSprite(int spriteId) {
+    final i = spriteId % columns;
+    final j = spriteId ~/ columns;
+    return Sprite(
+      image,
+      srcPosition: Vector2Extension.fromInts(i, j)..multiply(srcSize),
+      srcSize: srcSize,
+    );
+  }
+
+  /// Creates a [SpriteAnimation] from this SpriteSheet, using the sequence
+  /// of sprites on a given row.
+  ///
+  /// [from] and [to] can be specified to create an animation
+  /// from a subset of the columns on the row
+  SpriteAnimation createAnimation({
+    @required int row,
+    @required double stepTime,
+    bool loop = true,
+    int from = 0,
+    int to,
+  }) {
+    to ??= columns;
+
+    final spriteList = List<int>.generate(to - from, (i) => from + i)
+        .map((e) => getSprite(row, e))
+        .toList();
+
+    return SpriteAnimation.spriteList(
       spriteList,
       stepTime: stepTime,
       loop: loop,
