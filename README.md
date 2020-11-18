@@ -4,9 +4,11 @@
 
 ## About 1.0.0
 
-⚠️ **Warning**⚠️: this is a release candidate for version 1.0.0 of Flame. This is not ready for production use and the documentation found here is not completely updated according to the code, also everything here can be changed before the full release.
+This is a release candidate for version 1.0.0 of Flame. This is not ready for production use and the documentation found here is not completely updated according to the code, also everything here can be changed before the full release.
 
 Use this version to get a preview of how the new Flame version will be and also to give the team feedback about the new structure and/or features.
+
+Checkout the branches `develop-v0.x` and `master-v0.x` for the current last 0.x version. However no new updates will be added to v0 except for bugfixes.
 
 ---
 
@@ -62,7 +64,6 @@ You can also show on your repository that your game is made with Flame by using 
 ```
 
 ## Contributing
-
 
 __Warning__: We are working on bringing Flame to its first stable version, updates on `0.x` versions are frozen, except for bugs. If you want to contribute on that version, by sure that it is a bugfix. For contributions for the stable version, your PR must point to the `v1.0.0` branch and by sure to talk about your contribution to the team, which is accessible on [Discord](https://discord.gg/pxrBmy4).
 
