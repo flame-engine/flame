@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [next]
+
+## 1.0.0-rc2
  - Improve IsometricTileMap and Spritesheet classes
  - Export full vector_math library from extension
  - Added warning about basic and advanced detectors
