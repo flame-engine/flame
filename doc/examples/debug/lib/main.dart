@@ -1,18 +1,20 @@
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/position.dart';
-import 'package:flame/components/component.dart';
+import 'package:flame/extensions/vector2.dart';
+import 'package:flame/components/sprite_component.dart';
 import 'package:flame/components/mixins/resizable.dart';
 import 'package:flame/text_config.dart';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Image;
+
+import 'dart:ui';
 
 void main() async {
+  Flame.initializeWidget();
   await Flame.util.initialDimensions();
 
   final myGame = MyGame();
   runApp(myGame.widget);
-  myGame.start();
 }
 
 class AndroidComponent extends SpriteComponent with Resizable {
@@ -20,12 +22,12 @@ class AndroidComponent extends SpriteComponent with Resizable {
   int xDirection = 1;
   int yDirection = 1;
 
-  AndroidComponent() : super.square(100, 'android.png');
+  AndroidComponent(Image image) : super.fromImage(Vector2.all(100), image);
 
   @override
   void update(double dt) {
     super.update(dt);
-    if (size == null) {
+    if (gameSize == null) {
       return;
     }
 
@@ -34,14 +36,14 @@ class AndroidComponent extends SpriteComponent with Resizable {
     final rect = toRect();
 
     if ((x <= 0 && xDirection == -1) ||
-        (rect.right >= size.width && xDirection == 1)) {
+        (rect.right >= gameSize.x && xDirection == 1)) {
       xDirection = xDirection * -1;
     }
 
     y += yDirection * SPEED * dt;
 
     if ((y <= 0 && yDirection == -1) ||
-        (rect.bottom >= size.height && yDirection == 1)) {
+        (rect.bottom >= gameSize.y && yDirection == 1)) {
       yDirection = yDirection * -1;
     }
   }
@@ -54,19 +56,19 @@ class MyGame extends BaseGame {
   bool debugMode() => true;
 
   @override
-  bool recordFps() => true;
+  Future<void> onLoad() async {
+    final androidImage = await images.load('android.png');
 
-  void start() {
-    final android = AndroidComponent();
+    final android = AndroidComponent(androidImage);
     android.x = 100;
     android.y = 400;
 
-    final android2 = AndroidComponent();
+    final android2 = AndroidComponent(androidImage);
     android2.x = 100;
     android2.y = 400;
     android2.yDirection = -1;
 
-    final android3 = AndroidComponent();
+    final android3 = AndroidComponent(androidImage);
     android3.x = 100;
     android3.y = 400;
     android3.xDirection = -1;
@@ -81,7 +83,7 @@ class MyGame extends BaseGame {
     super.render(canvas);
 
     if (debugMode()) {
-      fpsTextConfig.render(canvas, fps(120).toString(), Position(0, 50));
+      fpsTextConfig.render(canvas, fps(120).toString(), Vector2(0, 50));
     }
   }
 }

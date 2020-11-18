@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/animation.dart';
+import 'package:flame/sprite_animation.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/particles/circle_particle.dart';
 import 'package:flame/particles/composed_particle.dart';
@@ -19,9 +19,9 @@ import 'package:flame/particles/animation_particle.dart';
 import 'package:flame/particles/component_particle.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/time.dart' as flame_time;
+import 'package:flame/timer.dart' as flame_time;
 import 'package:flame/particle.dart';
-import 'package:flame/position.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
 import 'package:flame/text_config.dart';
@@ -33,7 +33,7 @@ class MyGame extends BaseGame {
   /// Defines dimensions of the sample
   /// grid to be displayed on the screen,
   /// 5x5 in this particular case
-  static const gridSize = 5;
+  static const gridSize = 5.0;
   static const steps = 5;
 
   /// Miscellaneous values used
@@ -48,21 +48,22 @@ class MyGame extends BaseGame {
   /// Defines the lifespan of all the particles in these examples
   final sceneDuration = const Duration(seconds: 1);
 
-  Offset cellSize;
-  Offset halfCellSize;
+  Vector2 cellSize;
+  Vector2 halfCellSize;
 
-  @override
-  bool recordFps() => true;
-
-  MyGame({
-    Size screenSize,
-  }) {
+  MyGame({Vector2 screenSize}) {
     size = screenSize;
-    cellSize = Offset(size.width / gridSize, size.height / gridSize);
+    cellSize = size / gridSize;
     halfCellSize = cellSize * .5;
 
     // Spawn new particles every second
     Timer.periodic(sceneDuration, (_) => spawnParticles());
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await images.load('zap.png');
+    await images.load('boom3.png');
   }
 
   /// Showcases various different uses of [Particle]
@@ -98,17 +99,17 @@ class MyGame extends BaseGame {
     // as per defined grid parameters
     do {
       final particle = particles.removeLast();
-      final col = particles.length % gridSize;
-      final row = particles.length ~/ gridSize;
+      final double col = particles.length % gridSize;
+      final double row = (particles.length ~/ gridSize).toDouble();
       final cellCenter =
-          cellSize.scale(col.toDouble(), row.toDouble()) + (cellSize * .5);
+          (cellSize.clone()..multiply(Vector2(col, row))) + (cellSize * .5);
 
       add(
         // Bind all the particles to a [Component] update
         // lifecycle from the [BaseGame].
         TranslatedParticle(
           lifespan: 1,
-          offset: cellCenter,
+          offset: cellCenter.toOffset(),
           child: particle,
         ).asComponent(),
       );
@@ -162,10 +163,10 @@ class MyGame extends BaseGame {
     return Particle.generate(
       count: 5,
       generator: (i) {
-        final currentColumn = (cellSize.dx / 5) * i - halfCellSize.dx;
+        final currentColumn = (cellSize.x / 5) * i - halfCellSize.x;
         return MovingParticle(
-          from: Offset(currentColumn, -halfCellSize.dy),
-          to: Offset(currentColumn, halfCellSize.dy),
+          from: Offset(currentColumn, -halfCellSize.y),
+          to: Offset(currentColumn, halfCellSize.y),
           child: CircleParticle(
             radius: 2.0,
             paint: Paint()..color = Colors.blue,
@@ -234,7 +235,7 @@ class MyGame extends BaseGame {
     return ComputedParticle(
       renderer: (canvas, particle) => canvas.drawCircle(
         Offset.zero,
-        particle.progress * halfCellSize.dx,
+        particle.progress * halfCellSize.x,
         Paint()
           ..color = Color.lerp(
             Colors.red,
@@ -258,7 +259,7 @@ class MyGame extends BaseGame {
 
         canvas.drawCircle(
           Offset.zero,
-          (1 - steppedProgress) * halfCellSize.dx,
+          (1 - steppedProgress) * halfCellSize.x,
           Paint()
             ..color = Color.lerp(
               Colors.red,
@@ -294,8 +295,8 @@ class MyGame extends BaseGame {
   /// be reused across particles. See example below for more details.
   Particle imageParticle() {
     return ImageParticle(
-      size: const Size.square(24),
-      image: Flame.images.loadedFiles['zap.png'].loadedImage,
+      size: Vector2.all(24),
+      image: images.fromCache('zap.png'),
     );
   }
 
@@ -309,8 +310,8 @@ class MyGame extends BaseGame {
     const count = 9;
     const perLine = 3;
     const imageSize = 24.0;
-    final colWidth = cellSize.dx / perLine;
-    final rowHeight = cellSize.dy / perLine;
+    final colWidth = cellSize.x / perLine;
+    final rowHeight = cellSize.y / perLine;
 
     reusableImageParticle ??= imageParticle();
 
@@ -318,8 +319,8 @@ class MyGame extends BaseGame {
       count: count,
       generator: (i) => TranslatedParticle(
           offset: Offset(
-            (i % perLine) * colWidth - halfCellSize.dx + imageSize,
-            (i ~/ perLine) * rowHeight - halfCellSize.dy + imageSize,
+            (i % perLine) * colWidth - halfCellSize.x + imageSize,
+            (i ~/ perLine) * rowHeight - halfCellSize.y + imageSize,
           ),
           child: reusableImageParticle),
     );
@@ -385,17 +386,17 @@ class MyGame extends BaseGame {
   /// Flame's [Sprite] into the effect.
   Particle spriteParticle() {
     return SpriteParticle(
-      sprite: Sprite('zap.png'),
-      size: Position.fromOffset(cellSize * .5),
+      sprite: Sprite(images.fromCache('zap.png')),
+      size: cellSize * .5,
     );
   }
 
-  /// An [AnimationParticle] takes a Flame [Animation]
+  /// An [SpriteAnimationParticle] takes a Flame [SpriteAnimation]
   /// and plays it during the particle lifespan.
   Particle animationParticle() {
-    return AnimationParticle(
+    return SpriteAnimationParticle(
       animation: getBoomAnimation(),
-      size: Position(128, 128),
+      size: Vector2(128, 128),
     );
   }
 
@@ -405,8 +406,8 @@ class MyGame extends BaseGame {
   /// which is independent from the parent [Particle].
   Particle componentParticle() {
     return MovingParticle(
-      from: -halfCellSize * .2,
-      to: halfCellSize * .2,
+      from: (-halfCellSize * .2).toOffset(),
+      to: (halfCellSize * .2).toOffset(),
       curve: SineCurve(),
       child: ComponentParticle(component: trafficLight),
     );
@@ -473,19 +474,22 @@ class MyGame extends BaseGame {
       ),
     );
 
+    final cellSizeOffset = cellSize.toOffset();
+    final halfCellSizeOffset = halfCellSize.toOffset();
+
     return ComposedParticle(children: <Particle>[
       rect
           .rotating(to: pi / 2)
-          .moving(to: -cellSize)
+          .moving(to: -cellSizeOffset)
           .scaled(2)
-          .accelerated(acceleration: halfCellSize * 5)
-          .translated(halfCellSize),
+          .accelerated(acceleration: halfCellSizeOffset * 5)
+          .translated(halfCellSizeOffset),
       rect
           .rotating(to: -pi)
-          .moving(to: cellSize.scale(1, -1))
+          .moving(to: cellSizeOffset.scale(1, -1))
           .scaled(2)
-          .translated(halfCellSize.scale(-1, 1))
-          .accelerated(acceleration: halfCellSize.scale(-5, 5))
+          .translated(halfCellSizeOffset.scale(-1, 1))
+          .accelerated(acceleration: halfCellSizeOffset.scale(-5, 5))
     ]);
   }
 
@@ -497,15 +501,18 @@ class MyGame extends BaseGame {
     super.render(canvas);
 
     if (debugMode()) {
-      fpsTextConfig.render(canvas, '${fps(120).toStringAsFixed(2)}fps',
-          Position(0, size.height - 24));
+      fpsTextConfig.render(
+          canvas, '${fps(120).toStringAsFixed(2)}fps', Vector2(0, size.y - 24));
     }
   }
 
   /// Returns random [Offset] within a virtual
   /// grid cell
   Offset randomCellOffset() {
-    return cellSize.scale(rnd.nextDouble(), rnd.nextDouble()) - halfCellSize;
+    return Offset(
+      cellSize.x * rnd.nextDouble() - halfCellSize.x,
+      cellSize.y * rnd.nextDouble() - halfCellSize.y,
+    );
   }
 
   /// Returns random [Color] from primary swatches
@@ -519,43 +526,30 @@ class MyGame extends BaseGame {
     return list[rnd.nextInt(list.length)];
   }
 
-  /// Sample "explosion" animation for [AnimationParticle] example
-  Animation getBoomAnimation() {
+  /// Sample "explosion" animation for [SpriteAnimationParticle] example
+  SpriteAnimation getBoomAnimation() {
     const columns = 8;
     const rows = 8;
     const frames = columns * rows;
-    const imagePath = 'boom3.png';
-    final spriteImage = Flame.images.loadedFiles[imagePath].loadedImage;
-    final spritesheet = SpriteSheet(
-      rows: rows,
+    final spriteImage = images.fromCache('boom3.png');
+    final spritesheet = SpriteSheet.fromColumnsAndRows(
+      image: spriteImage,
       columns: columns,
-      imageName: imagePath,
-      textureWidth: spriteImage.width ~/ columns,
-      textureHeight: spriteImage.height ~/ rows,
+      rows: rows,
     );
     final sprites = List<Sprite>.generate(
       frames,
-      (i) => spritesheet.getSprite(i ~/ rows, i % columns),
+      (i) => spritesheet.getSpriteById(i),
     );
 
-    return Animation.spriteList(sprites);
+    return SpriteAnimation.spriteList(sprites, stepTime: 0.1);
   }
 }
 
 Future<BaseGame> loadGame() async {
-  Size gameSize;
+  Flame.initializeWidget();
+  final gameSize = await Flame.util.initialDimensions();
   WidgetsFlutterBinding.ensureInitialized();
-
-  await Future.wait([
-    Flame.util.initialDimensions().then((size) => gameSize = size),
-    Flame.images.loadAll(const [
-      'zap.png',
-
-      /// Credits to Stumpy Strust from
-      /// https://opengameart.org/content/explosion-sheet
-      'boom3.png',
-    ]),
-  ]);
 
   return MyGame(screenSize: gameSize);
 }
@@ -591,6 +585,7 @@ class TrafficLightComponent extends Component {
 
   @override
   void update(double dt) {
+    super.update(dt);
     colorChangeTimer.update(dt);
   }
 

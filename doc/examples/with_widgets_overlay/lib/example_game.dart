@@ -23,15 +23,16 @@ class ExampleGame extends Game with HasWidgetsOverlay, TapDetector {
       isPaused = false;
     } else {
       addWidgetOverlay(
-          'PauseMenu',
-          Center(
-            child: Container(
-              width: 100,
-              height: 100,
-              color: const Color(0xFFFF0000),
-              child: const Center(child: const Text('Paused')),
-            ),
-          ));
+        'PauseMenu',
+        Center(
+          child: Container(
+            width: 100,
+            height: 100,
+            color: const Color(0xFFFF0000),
+            child: const Center(child: const Text('Paused')),
+          ),
+        ),
+      );
       isPaused = true;
     }
   }

@@ -7,6 +7,9 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
+import '../assets/assets_cache.dart';
+import '../assets/images.dart';
+import '../extensions/vector2.dart';
 import '../keyboard.dart';
 import 'widget_builder.dart';
 
@@ -17,6 +20,9 @@ import 'widget_builder.dart';
 abstract class Game {
   // Widget Builder for this Game
   final builder = WidgetBuilder();
+
+  final images = Images();
+  final assets = AssetsCache();
 
   /// Returns the game background color.
   /// By default it will return a black color.
@@ -34,17 +40,13 @@ abstract class Game {
   /// This is the resize hook; every time the game widget is resized, this hook is called.
   ///
   /// The default implementation does nothing; override to use the hook.
-  void resize(Size size) {}
+  void onResize(Vector2 size) {}
 
   /// This is the lifecycle state change hook; every time the game is resumed, paused or suspended, this is called.
   ///
   /// The default implementation does nothing; override to use the hook.
   /// Check [AppLifecycleState] for details about the events received.
   void lifecycleStateChange(AppLifecycleState state) {}
-
-  /// Used for debugging
-  @Deprecated('Gets called for backward compatibility, will be removed in v1')
-  void recordDt(double dt) {}
 
   /// Use for caluclating the FPS.
   void onTimingsCallback(List<FrameTiming> timings) {}
@@ -53,7 +55,7 @@ abstract class Game {
   /// You can add it directly to the runApp method or inside your widget structure (if you use vanilla screens and widgets).
   Widget get widget => builder.build(this);
 
-  void _handleKeyEvent(e) {
+  void _handleKeyEvent(RawKeyEvent e) {
     (this as KeyboardEvents).onKeyEvent(e);
   }
 
@@ -81,6 +83,8 @@ abstract class Game {
     if (this is KeyboardEvents) {
       RawKeyboard.instance.removeListener(_handleKeyEvent);
     }
+
+    images.clearCache();
   }
 
   /// Flag to tell the game loop if it should start running upon creation
@@ -94,6 +98,12 @@ abstract class Game {
 
   VoidCallback pauseEngineFn;
   VoidCallback resumeEngineFn;
+
+  /// Use this method to load the assets need for the game instance to run
+  Future<void> onLoad() async {}
+
+  /// Returns the widget which will be show while the instance is loading
+  Widget loadingWidget() => Container();
 }
 
 class OverlayWidget {

@@ -1,9 +1,10 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 
 import '../text_config.dart';
-import 'component.dart';
+import 'position_component.dart';
 
 class TextComponent extends PositionComponent {
   String _text;
@@ -34,13 +35,13 @@ class TextComponent extends PositionComponent {
 
   void _updateBox() {
     _tp = config.toTextPainter(_text);
-    width = _tp.width;
-    height = _tp.height;
+    size.setValues(_tp.width, _tp.height);
   }
 
+  @mustCallSuper
   @override
   void render(Canvas c) {
-    prepareCanvas(c);
+    super.render(c);
     _tp.paint(c, Offset.zero);
   }
 }

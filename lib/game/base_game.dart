@@ -7,41 +7,44 @@ import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
 import '../components/component.dart';
-import '../components/composed_component.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
+import '../components/position_component.dart';
+import '../extensions/vector2.dart';
 import '../fps_counter.dart';
-import '../position.dart';
 import 'game.dart';
 
 /// This is a more complete and opinionated implementation of Game.
 ///
-/// It still needs to be subclasses to add your game logic, but the [update], [render] and [resize] methods have default implementations.
+/// BaseGame should be extended to add your game logic.
+/// [update], [render] and [onResize] methods have default implementations.
 /// This is the recommended structure to use for most games.
 /// It is based on the Component system.
 class BaseGame extends Game with FPSCounter {
   /// The list of components to be updated and rendered by the base game.
-  OrderedSet<Component> components =
-      OrderedSet(Comparing.on((c) => c.priority()));
+  final OrderedSet<Component> components =
+      OrderedSet(Comparing.on((c) => c.priority));
 
   /// Components added by the [addLater] method
   final List<Component> _addLater = [];
 
   /// Components to be removed on the next update
-  final List<Component> _removeLater = [];
+  final Set<Component> _removeLater = {};
 
-  /// Current screen size, updated every resize via the [resize] method hook
-  Size size;
+  /// Current game viewport size, updated every resize via the [resize] method hook
+  final Vector2 size = Vector2.zero();
+  set size(Vector2 size) => this.size.setFrom(size);
 
   /// Camera position; every non-HUD component is translated so that the camera position is the top-left corner of the screen.
-  Position camera = Position.empty();
+  Vector2 camera = Vector2.zero();
 
-  /// This method is called for every component added, both via [add] and [addLater] methods.
+  /// This method is called for every component added.
+  /// It does preparation on a component before any update or render method is called on it.
   ///
   /// You can use this to setup your mixins, pre-calculate stuff on every component, or anything you desire.
   /// By default, this calls the first time resize for every component, so don't forget to call super.preAdd when overriding.
   @mustCallSuper
-  void preAdd(Component c) {
+  void prepare(Component c) {
     if (c is Tapable) {
       assert(
         this is HasTapableComponents,
@@ -59,36 +62,29 @@ class BaseGame extends Game with FPSCounter {
 
     // first time resize
     if (size != null) {
-      c.resize(size);
+      c.onGameResize(size);
     }
-
-    if (c is ComposedComponent) {
-      c.components.forEach(preAdd);
-    }
-
-    c.onMount();
   }
 
-  /// Adds a new component to the components list.
-  ///
-  /// Also calls [preAdd], witch in turn sets the current size on the component (because the resize hook won't be called until a new resize happens).
+  /// Prepares and registers a component to be added on the next game tick
   void add(Component c) {
-    preAdd(c);
-    components.add(c);
-  }
-
-  /// Registers a component to be added on the components on the next tick.
-  ///
-  /// Use this to add components in places where a concurrent issue with the update method might happen.
-  /// Also calls [preAdd] for the component added, immediately.
-  void addLater(Component c) {
-    preAdd(c);
+    prepare(c);
     _addLater.add(c);
   }
 
-  /// Marks a component to be removed from the components list on the next game loop cycle
-  void markToRemove(Component c) {
+  /// Prepares and registers a list of components to be added on the next game tick
+  void addAll(Iterable<Component> components) {
+    components.forEach(add);
+  }
+
+  /// Marks a component to be removed from the components list on the next game tick
+  void remove(Component c) {
     _removeLater.add(c);
+  }
+
+  /// Marks a list of components to be removed from the components list on the next game tick
+  void removeAll(Iterable<Component> components) {
+    _removeLater.addAll(components);
   }
 
   /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.
@@ -108,10 +104,10 @@ class BaseGame extends Game with FPSCounter {
   /// It translates the camera unless hud, call the render method and restore the canvas.
   /// This makes sure the canvas is not messed up by one component and all components render independently.
   void renderComponent(Canvas canvas, Component c) {
-    if (!c.loaded()) {
+    if (!c.loaded) {
       return;
     }
-    if (!c.isHud()) {
+    if (!c.isHud) {
       canvas.translate(-camera.x, -camera.y);
     }
     c.render(canvas);
@@ -121,19 +117,22 @@ class BaseGame extends Game with FPSCounter {
 
   /// This implementation of update updates every component in the list.
   ///
-  /// It also actually adds the components that were added by the [addLater] method, and remove those that are marked for destruction via the [Component.destroy] method.
+  /// It also actually adds the components that were added by the [addLater] method, and remove those that are marked for destruction via the [Component.shouldRemove] method.
   /// You can override it further to add more custom behaviour.
   @override
   @mustCallSuper
   void update(double t) {
-    _removeLater.forEach((c) => components.remove(c));
+    _removeLater.addAll(components.where((c) => c.shouldRemove));
+    _removeLater.forEach((c) {
+      c.onRemove();
+      components.remove(c);
+    });
     _removeLater.clear();
 
     components.addAll(_addLater);
+    _addLater.forEach((component) => component.onMount());
     _addLater.clear();
-
     components.forEach((c) => c.update(t));
-    components.removeWhere((c) => c.destroy()).forEach((c) => c.onDestroy());
   }
 
   /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.
@@ -142,9 +141,9 @@ class BaseGame extends Game with FPSCounter {
   /// You can override it further to add more custom behaviour, but you should seriously consider calling the super implementation as well.
   @override
   @mustCallSuper
-  void resize(Size size) {
-    this.size = size;
-    components.forEach((c) => c.resize(size));
+  void onResize(Vector2 size) {
+    this.size.setFrom(size);
+    components.forEach((c) => c.onGameResize(size));
   }
 
   /// Returns whether this [Game] is in debug mode or not.
@@ -152,9 +151,6 @@ class BaseGame extends Game with FPSCounter {
   /// Returns `false` by default. Override to use the debug mode.
   /// You can use this value to enable debug behaviors for your game, many components show extra information on screen when on debug mode
   bool debugMode() => false;
-
-  @override
-  bool recordFps() => false;
 
   /// Returns the current time in seconds with microseconds precision.
   ///

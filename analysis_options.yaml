@@ -1,6 +1,11 @@
 # Source of linter options:
 # http://dart-lang.github.io/linter/lints/options/options.html
 
+analyzer:
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+
 linter:
   rules:
     - always_declare_return_types
@@ -48,6 +53,7 @@ linter:
     - prefer_initializing_formals
     - prefer_is_empty
     - prefer_is_not_empty
+    - prefer_relative_imports
     - prefer_typing_uninitialized_variables
     - recursive_getters
     - slash_for_doc_comments

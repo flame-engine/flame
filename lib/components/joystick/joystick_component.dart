@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import '../../extensions/vector2.dart';
 import '../../game/base_game.dart';
 import '../../gestures.dart';
 import '../component.dart';
@@ -31,18 +32,19 @@ abstract class JoystickController extends Component with HasGameRef<BaseGame> {
   void onReceiveDrag(DragEvent drag) {}
 
   @override
-  bool isHud() => true;
+  bool isHud = true;
 }
 
 class JoystickComponent extends JoystickController {
   final List<JoystickAction> actions;
   final JoystickDirectional directional;
-  final int componentPriority;
+  @override
+  int priority;
 
   JoystickComponent({
     this.actions,
     this.directional,
-    this.componentPriority = 0,
+    this.priority = 0,
   });
 
   void addAction(JoystickAction action) {
@@ -64,25 +66,21 @@ class JoystickComponent extends JoystickController {
 
   @override
   void update(double t) {
+    super.update(t);
     directional?.update(t);
     actions?.forEach((action) => action.update(t));
   }
 
   @override
-  void resize(Size size) {
+  void onGameResize(Vector2 size) {
     directional?.initialize(size, this);
     actions?.forEach((action) => action.initialize(size, this));
-    super.resize(size);
+    super.onGameResize(size);
   }
 
   @override
   void onReceiveDrag(DragEvent event) {
     directional?.onReceiveDrag(event);
     actions?.forEach((action) => action.onReceiveDrag(event));
-  }
-
-  @override
-  int priority() {
-    return componentPriority;
   }
 }

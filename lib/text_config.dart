@@ -4,8 +4,9 @@ import 'package:flutter/material.dart' as material;
 
 import 'anchor.dart';
 import 'components/text_component.dart';
+import 'extensions/size.dart';
+import 'extensions/vector2.dart';
 import 'memory_cache.dart';
-import 'position.dart';
 
 /// A Text Config contains all typographical information required to render texts; i.e., font size and color, family, etc.
 ///
@@ -57,8 +58,8 @@ class TextConfig {
   /// The height of line, as a multiple of font size.
   final double lineHeight;
 
-  final MemoryCache _textPainterCache =
-      MemoryCache<String, material.TextPainter>();
+  final MemoryCache<String, material.TextPainter> _textPainterCache =
+      MemoryCache();
 
   /// Creates a constant [TextConfig] with sensible defaults.
   ///
@@ -81,11 +82,14 @@ class TextConfig {
   ///
   ///     const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font');
   ///     config.render(c, Offset(size.width - 10, size.height - 10, anchor: Anchor.bottomRight);
-  void render(Canvas canvas, String text, Position p,
-      {Anchor anchor = Anchor.topLeft}) {
+  void render(
+    Canvas canvas,
+    String text,
+    Vector2 p, {
+    Anchor anchor = Anchor.topLeft,
+  }) {
     final material.TextPainter tp = toTextPainter(text);
-    final Position translatedPosition =
-        anchor.translate(p, Position.fromSize(tp.size));
+    final Vector2 translatedPosition = anchor.translate(p, tp.size.toVector2());
     tp.paint(canvas, translatedPosition.toOffset());
   }
 

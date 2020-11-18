@@ -33,8 +33,7 @@ class _GenericTapEventHandler {
 }
 
 Widget _applyAdvancedGesturesDetectors(Game game, Widget child) {
-  final Map<Type, GestureRecognizerFactory> gestures =
-      <Type, GestureRecognizerFactory>{};
+  final Map<Type, GestureRecognizerFactory> gestures = {};
 
   final List<_GenericTapEventHandler> _tapHandlers = [];
 
@@ -207,14 +206,15 @@ Widget _applyBasicGesturesDetectors(Game game, Widget child) {
   );
 }
 
-Widget _applyMouseDetectors(game, Widget child) {
+Widget _applyMouseDetectors(Game game, Widget child) {
   return MouseRegion(
     child: Listener(
-        child: child,
-        onPointerSignal: (event) =>
-            game is ScrollDetector && event is PointerScrollEvent
-                ? game.onScroll(event)
-                : null),
+      child: child,
+      onPointerSignal: (event) =>
+          game is ScrollDetector && event is PointerScrollEvent
+              ? game.onScroll(event)
+              : null,
+    ),
     onHover: game is MouseMovementDetector ? game.onMouseMove : null,
   );
 }
@@ -231,11 +231,19 @@ class WidgetBuilder {
       ),
     );
 
-    if (_hasBasicGestureDetectors(game)) {
+    final hasBasicDetectors = _hasBasicGestureDetectors(game);
+    final hasAdvancedDetectors = _hasAdvancedGesturesDetectors(game);
+
+    assert(
+      !(hasBasicDetectors && hasAdvancedDetectors),
+      'WARNING: Both Advanced and Basic detectors detected. Advanced detectors will override basic detectors and the later will not receive events',
+    );
+
+    if (hasBasicDetectors) {
       widget = _applyBasicGesturesDetectors(game, widget);
     }
 
-    if (_hasAdvancedGesturesDetectors(game)) {
+    if (hasAdvancedDetectors) {
       widget = _applyAdvancedGesturesDetectors(game, widget);
     }
 
@@ -243,7 +251,14 @@ class WidgetBuilder {
       widget = _applyMouseDetectors(game, widget);
     }
 
-    return widget;
+    return FutureBuilder(
+        future: game.onLoad(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return widget;
+          }
+          return game.loadingWidget();
+        });
   }
 }
 
@@ -277,9 +292,9 @@ class _OverlayGameWidgetState extends State<OverlayGameWidget> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-        textDirection: TextDirection.ltr,
-        child:
-            Stack(children: [widget.gameChild, ..._overlays.values.toList()]));
+      textDirection: TextDirection.ltr,
+      child: Stack(children: [widget.gameChild, ..._overlays.values.toList()]),
+    );
   }
 }
 
@@ -291,6 +306,9 @@ class OverlayWidgetBuilder extends WidgetBuilder {
     final container = super.build(game);
 
     return OverlayGameWidget(
-        gameChild: container, game: game, key: UniqueKey());
+      gameChild: container,
+      game: game as HasWidgetsOverlay,
+      key: UniqueKey(),
+    );
   }
 }

@@ -1,59 +1,54 @@
-import 'dart:math';
-import 'dart:ui';
-
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
 
-import './effects.dart';
-import '../position.dart';
+import '../extensions/vector2.dart';
+import 'effects.dart';
 
-double _direction(double p, double d) => (p - d).sign;
-double _size(double a, double b) => (a - b).abs();
+class ScaleEffect extends SimplePositionComponentEffect {
+  Vector2 size;
+  Vector2 _startSize;
+  Vector2 _delta;
 
-class ScaleEffect extends PositionComponentEffect {
-  Size size;
-  double speed;
-  Curve curve;
-
-  Size _original;
-  Size _diff;
-  final Position _dir = Position.empty();
-
+  /// Duration or speed needs to be defined
   ScaleEffect({
     @required this.size,
-    @required this.speed,
-    this.curve,
-    isInfinite = false,
-    isAlternating = false,
-    Function onComplete,
-  }) : super(isInfinite, isAlternating, onComplete: onComplete);
+    double duration, // How long it should take for completion
+    double speed, // The speed of the scaling in pixels per second
+    Curve curve,
+    bool isInfinite = false,
+    bool isAlternating = false,
+    bool isRelative = false,
+    void Function() onComplete,
+  })  : assert(
+          duration != null || speed != null,
+          "Either speed or duration necessary",
+        ),
+        super(
+          isInfinite,
+          isAlternating,
+          duration: duration,
+          speed: speed,
+          curve: curve,
+          isRelative: isRelative,
+          onComplete: onComplete,
+        );
 
   @override
   void initialize(_comp) {
     super.initialize(_comp);
+    _startSize = component.size;
+    _delta = isRelative ? size : size - _startSize;
     if (!isAlternating) {
-      endSize = Position.fromSize(size);
+      endSize = _startSize + _delta;
     }
-
-    _original = Size(component.width, component.height);
-    _diff = Size(
-      _size(_original.width, size.width),
-      _size(_original.height, size.height),
-    );
-
-    _dir.x = _direction(size.width, _original.width);
-    _dir.y = _direction(size.height, _original.height);
-
-    final scaleDistance = sqrt(pow(_diff.width, 2) + pow(_diff.height, 2));
-    travelTime = scaleDistance / speed;
+    speed ??= _delta.length / duration;
+    duration ??= _delta.length / speed;
+    peakTime = isAlternating ? duration / 2 : duration;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    final double c = curve?.transform(percentage) ?? 1.0;
-
-    component.width = _original.width + _diff.width * c * _dir.x;
-    component.height = _original.height + _diff.height * c * _dir.y;
+    component.size = _startSize + _delta * curveProgress;
   }
 }

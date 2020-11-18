@@ -5,6 +5,7 @@ import 'package:flame/components/component.dart';
 import 'package:flame/components/joystick/joystick_component.dart';
 import 'package:flame/components/joystick/joystick_events.dart';
 import 'package:flame/palette.dart';
+import 'package:flame/extensions/vector2.dart';
 
 class Player extends Component implements JoystickListener {
   final _whitePaint = BasicPalette.white.paint;
@@ -36,20 +37,21 @@ class Player extends Component implements JoystickListener {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (_move) {
       moveFromAngle(dt);
     }
   }
 
   @override
-  void resize(Size size) {
+  void onGameResize(Vector2 size) {
     _rect = Rect.fromLTWH(
-      (size.width / 2) - 25,
-      (size.height / 2) - 25,
+      (size.x / 2) - 25,
+      (size.y / 2) - 25,
       50,
       50,
     );
-    super.resize(size);
+    super.onGameResize(size);
   }
 
   @override
@@ -76,16 +78,13 @@ class Player extends Component implements JoystickListener {
   void moveFromAngle(double dtUpdate) {
     final double nextX = (currentSpeed * dtUpdate) * cos(radAngle);
     final double nextY = (currentSpeed * dtUpdate) * sin(radAngle);
-    final Offset nextPoint = Offset(nextX, nextY);
 
     final Offset diffBase = Offset(
-          _rect.center.dx + nextPoint.dx,
-          _rect.center.dy + nextPoint.dy,
+          _rect.center.dx + nextX,
+          _rect.center.dy + nextY,
         ) -
         _rect.center;
 
-    final Rect newPosition = _rect.shift(diffBase);
-
-    _rect = newPosition;
+    _rect = _rect.shift(diffBase);
   }
 }

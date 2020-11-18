@@ -3,12 +3,11 @@ import 'package:flame/effects/move_effect.dart';
 import 'package:flame/effects/scale_effect.dart';
 import 'package:flame/effects/rotate_effect.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/position.dart';
+import 'package:flame/extensions/offset.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-
-import 'dart:math';
 
 import './square.dart';
 
@@ -24,37 +23,40 @@ class MyGame extends BaseGame with TapDetector {
   MyGame() {
     final green = Paint()..color = const Color(0xAA338833);
     final red = Paint()..color = const Color(0xAA883333);
-    greenSquare = Square(green, 100, 100);
-    final redSquare = Square(red, 100, 100);
+    greenSquare = Square(green, Vector2.all(100));
+    final redSquare = Square(red, Vector2.all(100));
     add(greenSquare);
     add(redSquare);
   }
 
   @override
   void onTapUp(TapUpDetails details) {
-    final dx = details.localPosition.dx;
-    final dy = details.localPosition.dy;
     greenSquare.clearEffects();
+    final Vector2 currentTap = details.localPosition.toVector2();
 
     final move = MoveEffect(
-      destination: Position(dx, dy),
-      speed: 250.0,
-      curve: Curves.linear,
+      path: [
+        currentTap,
+        currentTap - Vector2(50, 20),
+        currentTap + Vector2.all(30),
+      ],
+      duration: 4.0,
+      curve: Curves.bounceInOut,
       isInfinite: false,
       isAlternating: false,
     );
 
     final scale = ScaleEffect(
-      size: Size(dx, dy),
-      speed: 250.0,
+      size: currentTap,
+      speed: 200.0,
       curve: Curves.linear,
       isInfinite: false,
-      isAlternating: false,
+      isAlternating: true,
     );
 
     final rotate = RotateEffect(
-      radians: (dx + dy) % pi,
-      speed: 1.5,
+      angle: currentTap.angleTo(Vector2.all(100)),
+      duration: 3,
       curve: Curves.decelerate,
       isInfinite: false,
       isAlternating: false,

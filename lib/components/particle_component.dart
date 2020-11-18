@@ -16,10 +16,9 @@ class ParticleComponent extends Component {
     @required this.particle,
   });
 
-  /// This [Component] will be automatically destroyed
-  /// as soon as
+  /// This [ParticleComponent] will be removed by [BaseGame]
   @override
-  bool destroy() => particle.destroy();
+  bool get shouldRemove => particle.shouldRemove();
 
   /// Returns progress of the child [Particle]
   /// so could be used by external code for something
@@ -35,6 +34,7 @@ class ParticleComponent extends Component {
   /// Passes update chain to child [Particle].
   @override
   void update(double dt) {
+    super.update(dt);
     particle.update(dt);
   }
 }

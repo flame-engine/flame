@@ -4,7 +4,7 @@ This class represent a single object on the screen, being a floating rectangle o
 
 The base abstract class has the common expected methods update and render to be implemented.
 
-The intermediate inheritance `PositionComponent` adds `x`, `y`, `width`, `height` and `angle` to your Components, as well as some useful methods like distance and angleBetween.
+The intermediate inheritance `PositionComponent` adds `position`, `size` and `angle` to your Components, as well as some useful methods like distance and angleBetween.
 
 The most commonly used implementation, `SpriteComponent`, can be created with a `Sprite`:
 
@@ -13,15 +13,14 @@ The most commonly used implementation, `SpriteComponent`, can be created with a 
 
     Sprite sprite = Sprite('player.png');
 
-    const size = 128.0;
-    var player = SpriteComponent.fromSprite(size, size, sprite); // width, height, sprite
+    final size = Vector2.all(128.0);
+    var player = SpriteComponent.fromSprite(size, sprite);
 
     // screen coordinates
-    player.x = ... // 0 by default
-    player.y = ... // 0 by default
+    player.position = ... // Vector2(0.0, 0.0) by default
     player.angle = ... // 0 by default
 
-    player.render(canvas); // it will render only if the image is loaded and the x, y, width and height parameters are not null
+    player.render(canvas); // it will render only if the image is loaded and the position and size parameters are not null
 ```
 
 In the event that you want to easily change the direction of your components rendering, you can also use
@@ -33,13 +32,13 @@ Every `Component` has a few other methods that you can optionally implement, tha
 
 The `resize` method is called whenever the screen is resized, and in the beginning once when the component is added via the `add` method. You need to apply here any changes to the x, y, width and height of your component, or any other changes, due to the screen resizing. You can start these variables here, as the sprite won't be rendered until everything is set.
 
-The `destroy` method can be implemented to return true and warn the `BaseGame` that your object is marked for destruction, and it will be remove after the current update loop. It will then no longer be rendered or updated.
+The `shouldRemove` method can be implemented to return true and `BaseGame` will remove it before the next update loop. It will then no longer be rendered or updated. Note that `game.remove(Component c)` can also be used to remove components.
 
 The `isHUD` method can be implemented to return true (default false) to make the `BaseGame` ignore the `camera` for this element.
 
 The `onMount` method can be overridden to run initialization code for the component. When this method is called, BaseGame ensures that all the mixins which would change this component behaviour are already resolved.
 
-The `onDestroy` method can be overridden to run code before the component is removed from the game.
+The `onRemove` method can be overridden to run code before the component is removed from the game, it is only run once even if the component is removed both by using the `BaseGame` remove method and the ´Component´ remove method.
 
 There are also other implementations:
 
@@ -55,14 +54,16 @@ This component uses an instance of the [Animation](/doc/images.md#Animation) cla
 This will create a simple three frame animation
 
 ```dart
-    List<Sprite> sprites = [0, 1, 2].map((i) => new Sprite('player_${i}.png')).toList();
-    this.player = AnimationComponent(64.0, 64.0, new Animation.spriteList(sprites, stepTime: 0.01));
+    List<Sprite> sprites = [0, 1, 2].map((i) => Sprite('player_${i}.png')).toList();
+    final size = Vector2.all(64.0);
+    this.player = AnimationComponent(size, new Animation.spriteList(sprites, stepTime: 0.01));
 ```
 
 If you have a sprite sheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](/doc/images.md#Animation)):
 
 ```dart
-    this.player = AnimationComponent.sequenced(64.0, 64.0, 'player.png', 2);
+    final size = Vector2.all(64.0);
+    this.player = AnimationComponent.sequenced(size, 'player.png', 2);
 ```
 
 If you are not using `BaseGame`, don't forget this component needs to be update'd even if static, because the animation object needs to be ticked to move the frames.
@@ -105,8 +106,7 @@ it also can receive a FlareController that can play multiple animations and cont
     }
 
     final fileName = 'assets/george_washington.flr';
-    final width = 1776;
-    final height = 1804;
+    final size = Vector2(1776, 1804);
     final controller = WashingtonController(); //instantiate controller
     
     FlareActorComponent flareAnimation = FlareActorComponent(
@@ -190,8 +190,8 @@ This creates a static background, if you want it to move you have to set the nam
 You can set the baseSpeed and layerDelta at any time, for example if your character jumps or your game speeds up.
 
 ```dart
-  this.bg.baseSpeed = Offset(100, 0);
-  this.bg.layerDelta = Offset(40, 0);
+  this.bg.baseSpeed = Vector2(100, 0);
+  this.bg.layerDelta = Vector2(40, 0);
 ```
 
 By default the images are aligned to the bottom left, repeated along the X-axis and scaled proportionally so that the image covers the height of the screen. If you want to change this behaviour, for example if you are not making a side scrolling game, you can set the `repeat`, `alignment` and `fill` parameters for each ParallaxImage.
@@ -203,7 +203,7 @@ Advanced example:
     ParallaxImage('planets.jpg', repeat: ImageRepeat.repeatY, alignment: Alignment.bottomLeft, fill: LayerFill.none),
     ParallaxImage('dust.jpg', repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
   ];
-  this.bg = ParallaxComponent(images, baseSpeed: Offset(50, 0), layerDelta: Offset(20, 0));
+  this.bg = ParallaxComponent(images, baseSpeed: Vector2(50, 0), layerDelta: Vector2(20, 0));
 ```
 
 * The stars image in this example will be repeatedly drawn in both axis, align in the center and be scaled to fill the screen width.
@@ -217,17 +217,21 @@ Also, don't forget to add you images to the `pubspec.yaml` file as assets or the
 
 An example implementation can be found in the [examples directory](/doc/examples/parallax).
 
-## Box2D Component
+## Box2D (Formerly Box2DComponent)
+
+The preferred way to use box2d in flame is to use the BaseGame extension [Box2DGame](/doc/box2d.md).
 
 Flame comes with a basic integration with the Flutter implementation of [Box2D](https://github.com/google/box2d.dart).
 
-The whole concept of a box2d's World is mapped to the `Box2DComponent` component; every Body should be a `BodyComponent`, and added directly to the `Box2DComponent`, and not to the game list.
+The whole concept of a box2d's world is mapped to `world` in the `Box2DGame` component; every Body should be a `BodyComponent`, and added to the `Box2DGame`.
 
-So you can have HUD and other non-physics-related components in your game list, and also as many `Box2DComponents` as you'd like (normally one, I guess), and then add your physical entities to your Components instance. When the Component is updated, it will use box2d physics engine to properly update every child.
+So you can have HUD and other non-physics-related components in your game's component list along with your physical entities. When the update is called, it will use box2d physics engine to properly update every child.
 
-You can see a more complete example of box2d usage on [this WIP game](https://github.com/feroult/haunt) made by @feroult (beware, though, it uses 0.6.x version of flame, but the Box2D related apis are unchanged).
+More information about Box2D can be found [here](/doc/box2d.md) and a few simple examples can be found [here](/doc/examples/box2d).
 
-More information about Box2D can be found [here](/doc/box2d.md).
+## SpriteBodyComponent
+
+See [SpriteBodyComponent](/doc/box2d.md#spritebodycomponent) in the box2d documentation.
 
 ## Tiled Component
 
@@ -243,7 +247,8 @@ A simple example on how to use it:
 
 ```dart
   // creates a tileset, the block ids are automatically assigned sequentially starting at 0, from left to right and then top to bottom.
-  final tileset = await IsometricTileset.load('tileset.png', 32);
+  final tilesetImage = await images.load('tileset.png');
+  final tileset = IsometricTileset(tilesetImage, 32);
   // each element is a block id, -1 means nothing
   final matrix = [[0, 1, 0], [1, 0, 0], [1, 1, 1]];
   add(IsometricTileMapComponent(tileset, matrix));

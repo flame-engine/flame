@@ -2,26 +2,32 @@ import 'dart:math';
 
 import 'package:flutter/material.dart' hide Animation;
 
-import './sprite_widget.dart';
 import '../anchor.dart';
-import '../animation.dart';
+import '../sprite_animation.dart';
+import 'sprite_widget.dart';
 
-class AnimationWidget extends StatefulWidget {
-  final Animation animation;
+/// A [StatefulWidget] that render a [SpriteAnimation].
+class SpriteAnimationWidget extends StatefulWidget {
+  /// The [SpriteAnimation] to be rendered
+  final SpriteAnimation animation;
+
+  /// The positioning [Anchor]
   final Anchor anchor;
+
+  /// Should the [animation] be playing or not
   final bool playing;
 
-  AnimationWidget({
+  SpriteAnimationWidget({
     this.animation,
     this.playing = true,
     this.anchor = Anchor.topLeft,
-  }) : assert(animation.loaded(), 'Animation must be loaded');
+  });
 
   @override
   State createState() => _AnimationWidget();
 }
 
-class _AnimationWidget extends State<AnimationWidget>
+class _AnimationWidget extends State<SpriteAnimationWidget>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
   double _lastUpdated;
@@ -52,7 +58,7 @@ class _AnimationWidget extends State<AnimationWidget>
         });
       });
 
-    widget.animation.onCompleteAnimation = _pauseAnimation;
+    widget.animation.onComplete = _pauseAnimation;
 
     if (widget.playing) {
       _initAnimation();
@@ -64,8 +70,9 @@ class _AnimationWidget extends State<AnimationWidget>
       widget.animation.reset();
       _lastUpdated = DateTime.now().millisecond.toDouble();
       _controller.repeat(
-          // Approximately 60 fps
-          period: const Duration(milliseconds: 16));
+        // Approximately 60 fps
+        period: const Duration(milliseconds: 16),
+      );
     });
   }
 

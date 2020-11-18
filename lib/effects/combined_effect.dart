@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:meta/meta.dart';
 
-import './effects.dart';
-import '../components/component.dart';
+import '../components/position_component.dart';
+import 'effects.dart';
 
 class CombinedEffect extends PositionComponentEffect {
   final List<PositionComponentEffect> effects;
@@ -14,8 +14,12 @@ class CombinedEffect extends PositionComponentEffect {
     this.offset = 0.0,
     bool isInfinite = false,
     bool isAlternating = false,
-    Function onComplete,
+    void Function() onComplete,
   }) : super(isInfinite, isAlternating, onComplete: onComplete) {
+    assert(
+      effects.every((effect) => effect.component == null),
+      'Each effect can only be added once',
+    );
     final types = effects.map((e) => e.runtimeType);
     assert(
       types.toSet().length == types.length,
@@ -24,33 +28,35 @@ class CombinedEffect extends PositionComponentEffect {
   }
 
   @override
-  void initialize(PositionComponent _comp) {
-    super.initialize(_comp);
+  void initialize(PositionComponent component) {
+    super.initialize(component);
     effects.forEach((effect) {
-      effect.initialize(_comp);
-      final isSameSize = effect.endSize == _comp.toSize();
-      final isSamePosition = effect.endPosition == _comp.toPosition();
-      final isSameAngle = effect.endAngle == _comp.angle;
-      endSize = isSameSize ? endSize : effect.endSize;
-      endPosition = isSamePosition ? endPosition : effect.endPosition;
-      endAngle = isSameAngle ? endAngle : effect.endAngle;
-      travelTime = max(travelTime ?? 0,
-          effect.totalTravelTime + offset * effects.indexOf(effect));
+      effect.initialize(component);
+      // Only change these if the effect modifies these
+      endPosition = effect.originalPosition != effect.endPosition
+          ? effect.endPosition
+          : endPosition;
+      endAngle =
+          effect.originalAngle != effect.endAngle ? effect.endAngle : endAngle;
+      endSize =
+          effect.originalSize != effect.endSize ? effect.endSize : endSize;
+      peakTime = max(peakTime ?? 0,
+          effect.iterationTime + offset * effects.indexOf(effect));
     });
+    if (isAlternating) {
+      endPosition = originalPosition;
+      endAngle = originalAngle;
+      endSize = originalSize;
+    }
   }
 
   @override
   void update(double dt) {
-    if (hasFinished()) {
-      return;
-    }
     super.update(dt);
     effects.forEach((effect) => _updateEffect(effect, dt));
-    if (effects.every((effect) => effect.hasFinished())) {
-      if (isInfinite) {
-        reset();
-      } else if (isAlternating && isMin()) {
-        dispose();
+    if (effects.every((effect) => effect.hasCompleted())) {
+      if (isAlternating && curveDirection.isNegative) {
+        effects.forEach((effect) => effect.isAlternating = true);
       }
     }
   }
@@ -59,7 +65,9 @@ class CombinedEffect extends PositionComponentEffect {
   void reset() {
     super.reset();
     effects.forEach((effect) => effect.reset());
-    initialize(component);
+    if (component != null) {
+      initialize(component);
+    }
   }
 
   @override
@@ -68,14 +76,13 @@ class CombinedEffect extends PositionComponentEffect {
     effects.forEach((effect) => effect.dispose());
   }
 
-  void _updateEffect(final effect, double dt) {
+  void _updateEffect(PositionComponentEffect effect, double dt) {
     final isReverse = curveDirection.isNegative;
     final initialOffset = effects.indexOf(effect) * offset;
-    final effectOffset = isReverse
-        ? travelTime - effect.travelTime - initialOffset
-        : initialOffset;
-    final passedOffset = isReverse ? travelTime - currentTime : currentTime;
-    if (!effect.hasFinished() && effectOffset < passedOffset) {
+    final effectOffset =
+        isReverse ? peakTime - effect.peakTime - initialOffset : initialOffset;
+    final passedOffset = isReverse ? peakTime - currentTime : currentTime;
+    if (!effect.hasCompleted() && effectOffset < passedOffset) {
       final time =
           effectOffset < passedOffset - dt ? dt : passedOffset - effectOffset;
       effect.update(time);

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart' as widgets;
 import 'package:meta/meta.dart';
 
+import '../extensions/vector2.dart';
 import '../sprite.dart';
 
 class _Painter extends widgets.CustomPainter {
@@ -18,7 +19,7 @@ class _Painter extends widgets.CustomPainter {
   });
 
   Sprite _getSpriteTile(double x, double y) =>
-      Sprite.fromImage(image, x: x, y: y, width: tileSize, height: tileSize);
+      Sprite(image, srcPosition: Vector2(x, y), srcSize: Vector2.all(tileSize));
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -39,49 +40,80 @@ class _Painter extends widgets.CustomPainter {
     final horizontalWidget = size.width - destTileSize * 2;
     final verticalHeight = size.height - destTileSize * 2;
 
+    void render(Sprite sprite, double x, double y, double w, double h) {
+      sprite.renderRect(canvas, Rect.fromLTWH(x, y, w, h));
+    }
+
     // Middle
-    middle.renderRect(
-        canvas,
-        Rect.fromLTWH(
-          destTileSize,
-          destTileSize,
-          horizontalWidget,
-          verticalHeight,
-        ));
+    render(
+      middle,
+      destTileSize,
+      destTileSize,
+      horizontalWidget,
+      verticalHeight,
+    );
 
     // Top and bottom side
-    topSide.renderRect(
-        canvas, Rect.fromLTWH(destTileSize, 0, horizontalWidget, destTileSize));
-
-    bottomSide.renderRect(
-        canvas,
-        Rect.fromLTWH(destTileSize, size.height - destTileSize,
-            horizontalWidget, destTileSize));
+    render(
+      topSide,
+      destTileSize,
+      0,
+      horizontalWidget,
+      destTileSize,
+    );
+    render(
+      bottomSide,
+      destTileSize,
+      size.height - destTileSize,
+      horizontalWidget,
+      destTileSize,
+    );
 
     // Left and right side
-    leftSide.renderRect(
-        canvas, Rect.fromLTWH(0, destTileSize, destTileSize, verticalHeight));
-    rightSide.renderRect(
-        canvas,
-        Rect.fromLTWH(size.width - destTileSize, destTileSize, destTileSize,
-            verticalHeight));
+    render(
+      leftSide,
+      0,
+      destTileSize,
+      destTileSize,
+      verticalHeight,
+    );
+    render(
+      rightSide,
+      size.width - destTileSize,
+      destTileSize,
+      destTileSize,
+      verticalHeight,
+    );
 
     // Corners
-    topLeftCorner.renderRect(
-        canvas, Rect.fromLTWH(0, 0, destTileSize, destTileSize));
-    topRightCorner.renderRect(
-        canvas,
-        Rect.fromLTWH(
-            size.width - destTileSize, 0, destTileSize, destTileSize));
-
-    bottomLeftCorner.renderRect(
-        canvas,
-        Rect.fromLTWH(
-            0, size.height - destTileSize, destTileSize, destTileSize));
-    bottomRightCorner.renderRect(
-        canvas,
-        Rect.fromLTWH(size.width - destTileSize, size.height - destTileSize,
-            destTileSize, destTileSize));
+    render(
+      topLeftCorner,
+      0,
+      0,
+      destTileSize,
+      destTileSize,
+    );
+    render(
+      topRightCorner,
+      size.width - destTileSize,
+      0,
+      destTileSize,
+      destTileSize,
+    );
+    render(
+      bottomLeftCorner,
+      0,
+      size.height - destTileSize,
+      destTileSize,
+      destTileSize,
+    );
+    render(
+      bottomRightCorner,
+      size.width - destTileSize,
+      size.height - destTileSize,
+      destTileSize,
+      destTileSize,
+    );
   }
 
   @override

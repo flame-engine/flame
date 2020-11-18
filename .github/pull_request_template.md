@@ -17,8 +17,8 @@ Please delete options that are not relevant.
 
 If something is unclear, please submit the PR anyways and ask about what you thought was unclear.
 
-- [ ] This branch is based on `develop`
-- [ ] This PR is targeted to merge into `develop` (not `master`)
+- [ ] This branch is based on `v1.0.0`
+- [ ] This PR is targeted to merge into `v1.0.0` (not `master` or `develop`)
 - [ ] I have added an entry under `[next]` in `CHANGELOG.md`
 - [ ] I have formatted my code with `flutter format`
 - [ ] I have made corresponding changes to the documentation

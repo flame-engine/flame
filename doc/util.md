@@ -58,9 +58,9 @@ __Countdown example:__
 import 'dart:ui';
 
 import 'package:flame/game.dart';
-import 'package:flame/position.dart';
 import 'package:flame/text_config.dart';
-import 'package:flame/time.dart';
+import 'package:flame/timer.dart';
+import 'package:flame/vector2.dart';
 
 class MyGame extends Game {
   final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
@@ -73,15 +73,18 @@ class MyGame extends Game {
   @override
   void update(double dt) {
     countdown.update(dt);
-    if (countdown.isFinished()) {
-      // do something ...
+    if (countdown.finished) {
+      // Prefer the timer callback, but this is better in some cases
     }
   }
 
   @override
   void render(Canvas canvas) {
-    textConfig.render(canvas, "Countdown: ${countdown.current.toString()}",
-        Position(10, 100));
+    textConfig.render(
+      canvas,
+      "Countdown: ${countdown.current.toString()}",
+      Vector2(10, 100),
+    );
   }
 }
 
@@ -93,9 +96,9 @@ __Interval example:__
 import 'dart:ui';
 
 import 'package:flame/game.dart';
-import 'package:flame/position.dart';
 import 'package:flame/text_config.dart';
-import 'package:flame/time.dart';
+import 'package:flame/timer.dart';
+import 'package:flame/vector2.dart';
 
 class MyGame extends Game {
   final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
@@ -104,9 +107,11 @@ class MyGame extends Game {
   int elapsedSecs = 0;
 
   MyGame() {
-    interval = Timer(1, repeat: true, callback: () {
-      elapsedSecs += 1;
-    });
+    interval = Timer(
+      1,
+      callback: () => elapsedSecs += 1,
+      repeat: true,
+    );
     interval.start();
   }
 
@@ -117,7 +122,7 @@ class MyGame extends Game {
 
   @override
   void render(Canvas canvas) {
-    textConfig.render(canvas, "Elapsed time: $elapsedSecs", Position(10, 150));
+    textConfig.render(canvas, "Elapsed time: $elapsedSecs", Vector2(10, 150));
   }
 }
 
@@ -128,7 +133,7 @@ Timer instances can also be used inside a `BaseGame` game by using the `TimerCom
 __Timer Component__
 
 ```dart
-import 'package:flame/time.dart';
+import 'package:flame/timer.dart';
 import 'package:flame/components/timer_component.dart';
 import 'package:flame/game.dart';
 
@@ -136,9 +141,11 @@ class MyBaseGame extends BaseGame {
   MyBaseGame() {
     add(
       TimerComponent(
-        Timer(10, repeat: true, callback: () {
-          print("10 seconds elapsed");
-        })
+        Timer(
+          10,
+          callback: () => print("10 seconds elapsed"),
+          repeat: true,
+        )
         ..start()
       )
     );

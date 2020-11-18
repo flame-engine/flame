@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
+import 'extensions/vector2.dart';
 import 'flame.dart';
 
 /// sprite atlas with an image and a set of rects and transforms
@@ -12,10 +13,9 @@ class SpriteBatch {
   List<Color> colors = [];
 
   static const defaultBlendMode = BlendMode.srcOver;
-  static const defaultCullRect = null;
+  static const defaultColor = const Color(0x00000000); // transparent
   static final defaultPaint = Paint();
   static final defaultTransform = RSTransform(1, 0, 0, 0);
-  static const defaultColor = const Color(0x00000000); // transparent
 
   SpriteBatch(this.atlas);
 
@@ -27,7 +27,7 @@ class SpriteBatch {
 
   int get height => atlas.height;
 
-  Size get size => Size(width.toDouble(), height.toDouble());
+  Vector2 get size => Vector2Extension.fromInts(width, height);
 
   void addTransform({
     @required Rect rect,
@@ -76,7 +76,7 @@ class SpriteBatch {
       rects,
       colors,
       blendMode ?? defaultBlendMode,
-      cullRect ?? defaultCullRect,
+      cullRect,
       paint ?? defaultPaint,
     );
   }

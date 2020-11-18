@@ -4,14 +4,9 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart' as widgets;
 
-import 'animation.dart';
-import 'components/animation_component.dart';
-import 'game/base_game.dart';
-import 'game/embedded_game_widget.dart';
-import 'position.dart';
-import 'sprite.dart';
+import 'extensions/size.dart';
+import 'extensions/vector2.dart';
 
 /// Some utilities that did not fit anywhere else.
 ///
@@ -104,42 +99,21 @@ class Util {
   ///
   /// A best practice would be to implement there resize hooks on your game and components and don't use this at all.
   /// Make sure your components are able to render and update themselves for any possible screen size.
-  Future<Size> initialDimensions() async {
+  Future<Vector2> initialDimensions() async {
     // https://github.com/flutter/flutter/issues/5259
     // "In release mode we start off at 0x0 but we don't in debug mode"
-    return await Future<Size>(() {
+    return await Future<Vector2>(() {
       if (window.physicalSize.isEmpty) {
-        final completer = Completer<Size>();
+        final completer = Completer<Vector2>();
         window.onMetricsChanged = () {
           if (!window.physicalSize.isEmpty && !completer.isCompleted) {
-            completer.complete(window.physicalSize / window.devicePixelRatio);
+            completer.complete(
+                (window.physicalSize / window.devicePixelRatio).toVector2());
           }
         };
         return completer.future;
       }
-      return window.physicalSize / window.devicePixelRatio;
-    });
-  }
-
-  /// This properly binds a gesture recognizer to your game.
-  ///
-  /// Use this in order to get it to work in case your app also contains other widgets.
-  ///
-  /// Read more at: https://flame-engine.org/docs/input.md
-  ///
-  @Deprecated(
-    'This method can lead to confuse behaviour, use the gestures methods provided by the Game class',
-  )
-  void addGestureRecognizer(GestureRecognizer recognizer) {
-    if (GestureBinding.instance == null) {
-      throw Exception(
-          'GestureBinding is not initialized yet, this probably happened because addGestureRecognizer was called before the runApp method');
-    }
-
-    GestureBinding.instance.pointerRouter.addGlobalRoute((PointerEvent e) {
-      if (e is PointerDownEvent) {
-        recognizer.addPointer(e);
-      }
+      return (window.physicalSize / window.devicePixelRatio).toVector2();
     });
   }
 
@@ -154,48 +128,9 @@ class Util {
   ///
   /// Some render methods don't allow to pass a offset.
   /// This method translate the canvas, draw what you want, and then translate back.
-  void drawWhere(Canvas c, Position p, void Function(Canvas) fn) {
+  void drawWhere(Canvas c, Vector2 p, void Function(Canvas) fn) {
     c.translate(p.x, p.y);
     fn(c);
     c.translate(-p.x, -p.y);
   }
-
-  /// Returns a regular Flutter widget representing this animation, rendered with the specified size.
-  ///
-  /// This actually creates an [EmbeddedGameWidget] with a [SimpleGame] whose only content is an [AnimationComponent] created from the provided [animation].
-  /// You can use this implementation as base to easily create your own widgets based on more complex games.
-  /// This is intended to be used by non-game apps that want to add a sprite sheet animation.
-  ///
-  @Deprecated('Use AnimationWidget instead')
-  widgets.Widget animationAsWidget(Position size, Animation animation) {
-    return EmbeddedGameWidget(
-      BaseGame()..add(AnimationComponent(size.x, size.y, animation)),
-      size: size,
-    );
-  }
-
-  /// Returns a regular Flutter widget representing this sprite, rendered with the specified size.
-  ///
-  /// This will create a [CustomPaint] widget using a [CustomPainter] for rendering the [Sprite]
-  /// Be aware that the Sprite must have been loaded, otherwise it can't be rendered
-  ///
-  @Deprecated('Use SpriteWidget instead')
-  widgets.CustomPaint spriteAsWidget(Size size, Sprite sprite) =>
-      widgets.CustomPaint(size: size, painter: _SpriteCustomPainter(sprite));
-}
-
-class _SpriteCustomPainter extends widgets.CustomPainter {
-  final Sprite _sprite;
-
-  _SpriteCustomPainter(this._sprite);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (_sprite.loaded()) {
-      _sprite.render(canvas, width: size.width, height: size.height);
-    }
-  }
-
-  @override
-  bool shouldRepaint(widgets.CustomPainter old) => false;
 }
