@@ -1,6 +1,8 @@
 name: infinite_effects
 description: Flame sample game showcasing infinite effects
 
+publish_to: 'none'
+
 version: 1.0.0+1
 
 environment:

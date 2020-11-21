@@ -1,6 +1,8 @@
 name: animation_widget
 description: A sample Flame project to showcase the SpriteAnimationWidget widget.
 
+publish_to: 'none'
+
 version: 0.1.0
 
 environment:
