@@ -2,33 +2,33 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui';
 
-import 'package:flutter/widgets.dart' as widgets;
+import 'package:flutter/widgets.dart' hide Image;
 
-import '../extensions/vector2.dart';
 import '../palette.dart';
 import '../text_config.dart';
+import '../extensions/vector2.dart';
 import 'mixins/resizable.dart';
 import 'position_component.dart';
 
 class TextBoxConfig {
   final double maxWidth;
-  final double margin;
+  final EdgeInsets margins;
   final double timePerChar;
   final double dismissDelay;
+  final bool growingBox;
 
   TextBoxConfig({
     this.maxWidth = 200.0,
-    this.margin = 8.0,
+    this.margins = const EdgeInsets.all(8.0),
     this.timePerChar = 0.0,
     this.dismissDelay = 0.0,
+    this.growingBox = false,
   });
 }
 
 class TextBoxComponent extends PositionComponent with Resizable {
   static final Paint _imagePaint = BasicPalette.white.paint
     ..filterQuality = FilterQuality.high;
-
-  Vector2 p = Vector2.zero();
 
   String _text;
   TextConfig _config;
@@ -37,9 +37,11 @@ class TextBoxComponent extends PositionComponent with Resizable {
   List<String> _lines;
   double _maxLineWidth = 0.0;
   double _lineHeight;
+  int _totalLines;
 
   double _lifeTime = 0.0;
   Image _cache;
+  int _previousChar;
 
   String get text => _text;
 
@@ -59,22 +61,22 @@ class TextBoxComponent extends PositionComponent with Resizable {
     text.split(' ').forEach((word) {
       final String possibleLine =
           _lines.isEmpty ? word : _lines.last + ' ' + word;
-      final widgets.TextPainter p = config.toTextPainter(possibleLine);
-      _lineHeight ??= p.height;
-      if (p.width <= _boxConfig.maxWidth - 2 * _boxConfig.margin) {
+      final TextPainter painter = config.toTextPainter(possibleLine);
+      _lineHeight ??= painter.height;
+      if (painter.width <=
+          _boxConfig.maxWidth - _boxConfig.margins.horizontal) {
         if (_lines.isNotEmpty) {
           _lines.last = possibleLine;
         } else {
           _lines.add(possibleLine);
         }
-        _updateMaxWidth(p.width);
+        _updateMaxWidth(painter.width);
       } else {
         _lines.add(word);
         _updateMaxWidth(config.toTextPainter(word).width);
       }
     });
-
-    redrawLater();
+    _totalLines = _lines.length;
   }
 
   void _updateMaxWidth(double w) {
@@ -103,39 +105,43 @@ class TextBoxComponent extends PositionComponent with Resizable {
     return _lines.length - 1;
   }
 
-  double _withMargins(double size) => size + 2 * _boxConfig.margin;
-
   @override
-  double get width => currentWidth;
-
-  @override
-  double get height => currentHeight;
-
-  double get totalWidth => _withMargins(_maxLineWidth);
-
-  double get totalHeight => _withMargins(_lineHeight * _lines.length);
+  Vector2 get size => Vector2(width, height);
 
   double getLineWidth(String line, int charCount) {
-    return _withMargins(_config
+    return _config
         .toTextPainter(line.substring(0, math.min(charCount, line.length)))
-        .width);
+        .width;
   }
 
-  double get currentWidth {
-    int i = 0;
-    int totalCharCount = 0;
-    final int _currentChar = currentChar;
-    final int _currentLine = currentLine;
-    return _lines.sublist(0, _currentLine + 1).map((line) {
-      final int charCount =
-          (i < _currentLine) ? line.length : (_currentChar - totalCharCount);
-      totalCharCount += line.length;
-      i++;
-      return getLineWidth(line, charCount);
-    }).reduce(math.max);
+  @override
+  double get width {
+    if (_boxConfig.growingBox) {
+      int i = 0;
+      int totalCharCount = 0;
+      final int _currentChar = currentChar;
+      final int _currentLine = currentLine;
+      final double textWidth = _lines.sublist(0, _currentLine + 1).map((line) {
+        final int charCount =
+            (i < _currentLine) ? line.length : (_currentChar - totalCharCount);
+        totalCharCount += line.length;
+        i++;
+        return getLineWidth(line, charCount);
+      }).reduce(math.max);
+      return textWidth + _boxConfig.margins.horizontal;
+    } else {
+      return _boxConfig.maxWidth + _boxConfig.margins.horizontal;
+    }
   }
 
-  double get currentHeight => _withMargins((currentLine + 1) * _lineHeight);
+  @override
+  double get height {
+    if (_boxConfig.growingBox) {
+      return _lineHeight * _lines.length + _boxConfig.margins.vertical;
+    } else {
+      return _lineHeight * _totalLines + _boxConfig.margins.vertical;
+    }
+  }
 
   @override
   void render(Canvas c) {
@@ -160,19 +166,19 @@ class TextBoxComponent extends PositionComponent with Resizable {
 
     final int _currentLine = currentLine;
     int charCount = 0;
-    double dy = _boxConfig.margin;
+    double dy = _boxConfig.margins.top;
     for (int line = 0; line < _currentLine; line++) {
       charCount += _lines[line].length;
-      _config
-          .toTextPainter(_lines[line])
-          .paint(c, Offset(_boxConfig.margin, dy));
+      _drawLine(c, _lines[line], dy);
       dy += _lineHeight;
     }
     final int max =
         math.min(currentChar - charCount, _lines[_currentLine].length);
-    _config
-        .toTextPainter(_lines[_currentLine].substring(0, max))
-        .paint(c, Offset(_boxConfig.margin, dy));
+    _drawLine(c, _lines[_currentLine].substring(0, max), dy);
+  }
+
+  void _drawLine(Canvas c, String line, double dy) {
+    _config.toTextPainter(line).paint(c, Offset(_boxConfig.margins.left, dy));
   }
 
   void redrawLater() async {
@@ -182,10 +188,10 @@ class TextBoxComponent extends PositionComponent with Resizable {
   @override
   void update(double dt) {
     super.update(dt);
-    final int prevCurrentChar = currentChar;
     _lifeTime += dt;
-    if (prevCurrentChar != currentChar) {
+    if (_previousChar != currentChar) {
       redrawLater();
     }
+    _previousChar = currentChar;
   }
 }
