@@ -2,11 +2,11 @@
 
 We (the Flame organization) maintains a ported version of the Box2D physics engine and our version is called Forge2D.
 
-The Forge2D project can use can be found [here](https://github.com/flame-engine/forge2d), and it can be used in any Dart project.
-
 If you want to use Forge2D specifically for Flame you should use our bridge library [flame_forge2d](https://github.com/flame-engine/flame_forge2d).
 
 To use it in your game you just need to add flame_forge2d to your pubspec.yaml, which can be seen in the [Forge2D example](https://github.com/flame-engine/flame_forge2d/tree/master/example).
+
+The Forge2D project itself can be found [here](https://github.com/flame-engine/forge2d), and it can be used in any Dart project.
 
 ## Forge2DGame (BaseGame extension)
 
