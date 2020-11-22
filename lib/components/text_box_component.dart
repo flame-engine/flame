@@ -114,8 +114,13 @@ class TextBoxComponent extends PositionComponent with Resizable {
         .width;
   }
 
+  double _cachedWidth;
+
   @override
   double get width {
+    if (_cachedWidth != null) {
+      return _cachedWidth;
+    }
     if (_boxConfig.growingBox) {
       int i = 0;
       int totalCharCount = 0;
@@ -128,10 +133,11 @@ class TextBoxComponent extends PositionComponent with Resizable {
         i++;
         return getLineWidth(line, charCount);
       }).reduce(math.max);
-      return textWidth + _boxConfig.margins.horizontal;
+      _cachedWidth = textWidth + _boxConfig.margins.horizontal;
     } else {
-      return _boxConfig.maxWidth + _boxConfig.margins.horizontal;
+      _cachedWidth = _boxConfig.maxWidth + _boxConfig.margins.horizontal;
     }
+    return _cachedWidth;
   }
 
   @override
@@ -190,6 +196,7 @@ class TextBoxComponent extends PositionComponent with Resizable {
     super.update(dt);
     _lifeTime += dt;
     if (_previousChar != currentChar) {
+      _cachedWidth = null;
       redrawLater();
     }
     _previousChar = currentChar;
