@@ -1,6 +1,8 @@
 name: nine_tile_box
 description: Flame sample for using the nine_tile_box feature
 
+publish_to: 'none'
+
 version: 1.0.0+1
 
 environment:

@@ -1,6 +1,8 @@
 name: keyboard
 description: Simple Flame project showcasing how to use the Keyboard events
 
+publish_to: 'none'
+
 version: 1.0.0+1
 
 environment:

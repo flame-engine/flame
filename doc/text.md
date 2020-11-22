@@ -64,6 +64,10 @@ class MyGame extends BaseGame {
 
 `TextBoxComponent` is very similar to `TextComponent`, but as its name suggest it is used to render text inside a bounding box, creating line breaks according to the provided box size.
 
+You can decide if the box should grow as the text is written or if it should be static by the `growingBox` variable in the `TextBoxConfig`.
+
+If you want to change the margins of the box use the `margins` variable in the `TextBoxConfig`.
+
 Example usage:
 
 ```dart
@@ -83,4 +87,4 @@ class MyTextBox extends TextBoxComponent {
 }
 ```
 
-Both components are showcased in a working example [here](https://github.com/luanpotter/flame/tree/master/doc/examples/text)
+Both components are showcased in an example [here](https://github.com/luanpotter/flame/tree/master/doc/examples/text)
