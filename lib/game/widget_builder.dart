@@ -89,10 +89,7 @@ Widget _applyAdvancedGesturesDetectors(Game game, Widget child) {
 
   return RawGestureDetector(
     gestures: gestures,
-    child: Container(
-        color: game.backgroundColor(),
-        child: Directionality(
-            textDirection: TextDirection.ltr, child: EmbeddedGameWidget(game))),
+    child: child,
   );
 }
 
@@ -241,9 +238,7 @@ class WidgetBuilder {
 
     if (hasBasicDetectors) {
       widget = _applyBasicGesturesDetectors(game, widget);
-    }
-
-    if (hasAdvancedDetectors) {
+    } else if (hasAdvancedDetectors) {
       widget = _applyAdvancedGesturesDetectors(game, widget);
     }
 
@@ -252,13 +247,14 @@ class WidgetBuilder {
     }
 
     return FutureBuilder(
-        future: game.onLoad(),
-        builder: (_, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return widget;
-          }
-          return game.loadingWidget();
-        });
+      future: game.onLoad(),
+      builder: (_, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return widget;
+        }
+        return game.loadingWidget();
+      },
+    );
   }
 }
 
