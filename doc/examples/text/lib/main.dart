@@ -35,8 +35,12 @@ class MyTextBox extends TextBoxComponent {
     final Rect rect = Rect.fromLTWH(0, 0, width, height);
     c.drawRect(rect, Paint()..color = const Color(0xFFFF00FF));
     final margin = boxConfig.margins;
-    final Rect innerRect = Rect.fromLTWH(margin.left, margin.top,
-        width - margin.horizontal, height - margin.vertical);
+    final Rect innerRect = Rect.fromLTWH(
+      margin.left,
+      margin.top,
+      width - margin.horizontal,
+      height - margin.vertical,
+    );
     c.drawRect(
         innerRect,
         Paint()
