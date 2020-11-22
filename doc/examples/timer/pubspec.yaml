@@ -1,6 +1,8 @@
 name: timer
 description: Example app using Timer class
 
+publish_to: 'none'
+
 version: 1.0.0+1
 
 environment:

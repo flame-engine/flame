@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [next]
+ - Fix TextBoxComponent rendering
+ - Add TextBoxConfig options; margins and growingBox
 
 ## 1.0.0-rc2
  - Improve IsometricTileMap and Spritesheet classes
