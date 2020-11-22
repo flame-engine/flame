@@ -59,9 +59,9 @@ class TextBoxComponent extends PositionComponent with Resizable {
     _text = text;
     _lines = [];
     text.split(' ').forEach((word) {
-      final String possibleLine =
+      final possibleLine =
           _lines.isEmpty ? word : _lines.last + ' ' + word;
-      final TextPainter painter = config.toTextPainter(possibleLine);
+      final painter = config.toTextPainter(possibleLine);
       _lineHeight ??= painter.height;
       if (painter.width <=
           _boxConfig.maxWidth - _boxConfig.margins.horizontal) {
