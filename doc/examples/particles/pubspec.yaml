@@ -1,6 +1,8 @@
 name: particles
 description: Flame sample game showcasing particle effects
 
+publish_to: 'none'
+
 version: 1.0.0
 
 environment:

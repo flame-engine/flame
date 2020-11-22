@@ -1,6 +1,8 @@
 name: go_desktop
 description: Flame sample game on using the go flutter desktop framework
 
+publish_to: 'none'
+
 version: 1.0.0+1
 
 environment:
