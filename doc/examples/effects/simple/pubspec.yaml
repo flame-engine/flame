@@ -1,6 +1,6 @@
 name: effects
 description: A Flame game showcasing the use of the effects api
-
+publish_to: none
 version: 1.0.0+1
 
 environment:

@@ -1,6 +1,6 @@
 name: isometric
 description: Example of isometric tilemap using Flame
-
+publish_to: none
 version: 0.1.0
 
 environment:

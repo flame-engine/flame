@@ -1,6 +1,6 @@
 name: text
 description: A sample Flame project that renders texts.
-
+publish_to: none
 version: 0.1.0
 
 environment:

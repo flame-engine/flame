@@ -1,6 +1,6 @@
 name: sequence_effect
 description: Flame sample game showcasing the sequence effect
-
+publish_to: none
 version: 1.0.0+1
 
 environment:

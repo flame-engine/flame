@@ -1,6 +1,6 @@
 name: gestures
 description: A flame game showcasing the use of gestures callbacks
-
+publish_to: none
 version: 1.0.0+1
 
 environment:

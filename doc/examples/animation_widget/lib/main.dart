@@ -60,8 +60,8 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() => _position += Vector2.all(10));
   }
 
-  void _clickFab(GlobalKey<ScaffoldState> key) {
-    key.currentState.showSnackBar(
+  void _clickFab() {
+    ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: const Text('You clicked the FAB!'),
       ),
@@ -70,9 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final key = GlobalKey<ScaffoldState>();
     return Scaffold(
-      key: key,
       appBar: AppBar(
         title: const Text('Animation as a Widget Demo'),
       ),
@@ -102,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _clickFab(key),
+        onPressed: () => _clickFab(),
         child: const Icon(Icons.add),
       ),
     );

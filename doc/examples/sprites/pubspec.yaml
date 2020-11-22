@@ -1,6 +1,6 @@
 name: sprites
 description: Flame sample game showcasing rendering 500 sprites
-
+publish_to: none
 version: 1.0.0+1
 
 environment:
