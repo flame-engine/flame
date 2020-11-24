@@ -83,6 +83,7 @@ abstract class PositionComponent extends Component {
 
   Paint get _debugPaint => Paint()
     ..color = debugColor
+    ..strokeWidth = 1
     ..style = PaintingStyle.stroke;
 
   TextConfig get debugTextConfig => TextConfig(color: debugColor, fontSize: 12);
