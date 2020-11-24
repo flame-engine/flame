@@ -4,6 +4,40 @@ import 'dart:ui';
 import 'extensions/vector2.dart';
 import 'sprite.dart';
 
+class SpriteAnimationOpts {
+  int amount;
+  int amountPerRow;
+  Vector2 texturePosition;
+  Vector2 textureSize;
+  List<double> stepTimes;
+  bool loop;
+
+  SpriteAnimationOpts({
+    @required this.amount,
+    @required this.stepTimes,
+    this.amountPerRow,
+    this.texturePosition,
+    this.textureSize,
+    this.loop = true,
+  });
+
+  SpriteAnimationOpts.sequenced({
+    @required int amount,
+    int amountPerRow,
+    Vector2 texturePosition,
+    Vector2 textureSize,
+    bool loop = true,
+    double stepTime = 0.1,
+  }) : this(
+          amount: amount,
+          amountPerRow: amountPerRow,
+          texturePosition: texturePosition,
+          textureSize: textureSize,
+          loop: loop,
+          stepTimes: List.filled(amount, stepTime),
+        );
+}
+
 /// Represents a single sprite animation frame.
 class SpriteAnimationFrame {
   /// The [Sprite] to be displayed.
@@ -60,65 +94,30 @@ class SpriteAnimation {
     frames = sprites.map((s) => SpriteAnimationFrame(s, stepTime)).toList();
   }
 
-  /// Automatically creates a sequenced animation, that is, an animation based on a sprite sheet.
-  ///
-  /// From a single image source, it creates multiple sprites based on the parameters:
-  /// [amount]: how many sprites this animation is composed of
-  /// [amountPerRow]: If the sprites used to create an animation are not on the same row,
-  ///     you can use this parameter to specify how many sprites per row.
-  ///     For detailed, please refer to example at "/doc/examples/animations".
-  /// [textureX]: x position on the original image to start (defaults to 0)
-  /// [textureY]: y position on the original image to start (defaults to 0)
-  /// [textureWidth]: width of each frame (defaults to null, that is, full width of the sprite sheet)
-  /// [textureHeight]: height of each frame (defaults to null, that is, full height of the sprite sheet)
-  ///
-  /// For example, if you have a sprite sheet where each row is an animation, and each frame is 32x32
-  ///     Animation.sequenced('sheet.png', 8, textureY: 32.0 * i, textureWidth: 32.0, textureHeight: 32.0);
-  /// This will create the i-th animation on the 'sheet.png', given it has 8 frames.
-  SpriteAnimation.sequenced(
+  /// Creates an SpriteAnimation based on its [opts]
+  SpriteAnimation.fromImage(
     Image image,
-    int amount, {
-    int amountPerRow,
-    Vector2 texturePosition,
-    Vector2 textureSize,
-    double stepTime = 0.1,
-    bool loop = true,
-  }) : this.variableSequenced(
-          image,
-          amount,
-          List.filled(amount, stepTime),
-          amountPerRow: amountPerRow,
-          texturePosition: texturePosition,
-          textureSize: textureSize,
-          loop: loop,
-        );
-
-  /// Works just like [SpriteAnimation.sequenced], but it takes a list of variable [stepTimes], associating each one with one frame in the sequence.
-  SpriteAnimation.variableSequenced(
-    Image image,
-    int amount,
-    List<double> stepTimes, {
-    int amountPerRow,
-    Vector2 texturePosition,
-    Vector2 textureSize,
-    this.loop = true,
-  })  : assert(amountPerRow == null || amount >= amountPerRow),
-        assert(stepTimes != null),
+    SpriteAnimationOpts opts,
+  )   : assert(opts != null),
+        assert(opts.amountPerRow == null || opts.amount >= opts.amountPerRow),
+        assert(opts.stepTimes != null),
         assert(image != null) {
-    amountPerRow ??= amount;
-    texturePosition ??= Vector2.zero();
-    frames = List<SpriteAnimationFrame>(amount);
-    for (int i = 0; i < amount; i++) {
+    opts.amountPerRow ??= opts.amount;
+    opts.texturePosition ??= Vector2.zero();
+    frames = List<SpriteAnimationFrame>(opts.amount);
+    for (int i = 0; i < opts.amount; i++) {
       final position = Vector2(
-        texturePosition.x + (i % amountPerRow) * textureSize.x,
-        texturePosition.y + (i ~/ amountPerRow) * textureSize.y,
+        opts.texturePosition.x + (i % opts.amountPerRow) * opts.textureSize.x,
+        opts.texturePosition.y + (i ~/ opts.amountPerRow) * opts.textureSize.y,
       );
       final Sprite sprite = Sprite(
         image,
-        srcPosition: position,
-        srcSize: textureSize,
+        SpriteOpts(
+          srcPosition: position,
+          srcSize: opts.textureSize,
+        ),
       );
-      frames[i] = SpriteAnimationFrame(sprite, stepTimes[i]);
+      frames[i] = SpriteAnimationFrame(sprite, opts.stepTimes[i]);
     }
   }
 
@@ -144,8 +143,10 @@ class SpriteAnimation {
 
       final Sprite sprite = Sprite(
         image,
-        srcPosition: Vector2Extension.fromInts(x, y),
-        srcSize: Vector2Extension.fromInts(width, height),
+        SpriteOpts(
+          srcPosition: Vector2Extension.fromInts(x, y),
+          srcSize: Vector2Extension.fromInts(width, height),
+        ),
       );
 
       return SpriteAnimationFrame(sprite, stepTime);
