@@ -11,6 +11,9 @@ import '../assets/assets_cache.dart';
 import '../assets/images.dart';
 import '../extensions/vector2.dart';
 import '../keyboard.dart';
+import '../sprite.dart';
+import '../sprite_animation.dart';
+import 'widget_builder.dart';
 
 /// Represents a generic game.
 ///
@@ -94,6 +97,19 @@ abstract class Game {
       RawKeyboard.instance.removeListener(_handleKeyEvent);
     }
     images.clearCache();
+  }
+
+  /// Utility method to load and cache the image for a sprite based on its options
+  Future<Sprite> loadSprite(String path, SpriteOpts opts) async {
+    final image = await images.load(path);
+    return Sprite(image, opts);
+  }
+
+  /// Utility method to load and cache the image for a sprite animation based on its options
+  Future<SpriteAnimation> loadSpriteAnimation(
+      String path, SpriteAnimationOpts opts) async {
+    final image = await images.load(path);
+    return SpriteAnimation.fromImage(image, opts);
   }
 
   /// Flag to tell the game loop if it should start running upon creation
