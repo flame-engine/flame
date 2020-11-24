@@ -1,7 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
-import '../extensions/vector2.dart';
 import 'game.dart';
 import 'game_render_box.dart';
 
@@ -13,16 +12,14 @@ import 'game_render_box.dart';
 /// You can bind Gesture Recognizers immediately around this to add controls to your widgets, with easy coordinate conversions.
 class EmbeddedGameWidget extends LeafRenderObjectWidget {
   final Game game;
-  final Vector2 size;
 
-  EmbeddedGameWidget(this.game, {this.size});
+  EmbeddedGameWidget(this.game);
 
   @override
   RenderBox createRenderObject(BuildContext context) {
     return RenderConstrainedBox(
       child: GameRenderBox(context, game),
-      additionalConstraints:
-          BoxConstraints.expand(width: size?.x, height: size?.y),
+      additionalConstraints: const BoxConstraints.expand(),
     );
   }
 
@@ -33,7 +30,6 @@ class EmbeddedGameWidget extends LeafRenderObjectWidget {
   ) {
     renderBox
       ..child = GameRenderBox(context, game)
-      ..additionalConstraints =
-          BoxConstraints.expand(width: size?.x, height: size?.y);
+      ..additionalConstraints = const BoxConstraints.expand();
   }
 }
