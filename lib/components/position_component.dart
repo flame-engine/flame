@@ -212,4 +212,6 @@ abstract class PositionComponent extends Component {
   void clearChildren() {
     _children.clear();
   }
+
+  OrderedSet<Component> get getChildren => _children;
 }
