@@ -4,7 +4,8 @@
  - Fix TextBoxComponent rendering
  - Add TextBoxConfig options; margins and growingBox
  - Fix debugConfig strokeWidth for web
- - Add getChildren to PositionComponent
+ - Update Forge2D docs
+  - Add getChildren to PositionComponent
 
 ## 1.0.0-rc2
  - Improve IsometricTileMap and Spritesheet classes

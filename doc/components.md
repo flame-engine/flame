@@ -45,7 +45,7 @@ There are also other implementations:
 * The `AnimationComponent` takes an `Animation` object and renders a cyclic animated sprite (more details about Animations [here](/doc/images.md#Animation))
 * The `SvgComponent` takes an `Svg` object and renders the SVG on the game
 * The `ParallaxComponent` can render a parallax background with several frames
-* The `Box2DComponent`, that has a physics engine built-in (using the [Box2D](https://github.com/google/box2d.dart) port for Dart)
+* The `Forge2DComponent`, that has a physics engine built-in (using the [Forge2D](https://github.com/google/box2d.dart) port for Dart)
 
 ## Animation Component
 
@@ -216,18 +216,6 @@ Like the AnimationComponent, even if your parallax is static, you must call upda
 Also, don't forget to add you images to the `pubspec.yaml` file as assets or they wont be found.
 
 An example implementation can be found in the [examples directory](/doc/examples/parallax).
-
-## Box2D (Formerly Box2DComponent)
-
-The preferred way to use box2d in flame is to use the BaseGame extension [Box2DGame](/doc/box2d.md).
-
-Flame comes with a basic integration with the Flutter implementation of [Box2D](https://github.com/google/box2d.dart).
-
-The whole concept of a box2d's world is mapped to `world` in the `Box2DGame` component; every Body should be a `BodyComponent`, and added to the `Box2DGame`.
-
-So you can have HUD and other non-physics-related components in your game's component list along with your physical entities. When the update is called, it will use box2d physics engine to properly update every child.
-
-More information about Box2D can be found [here](/doc/box2d.md) and a few simple examples can be found [here](/doc/examples/box2d).
 
 ## SpriteBodyComponent
 
