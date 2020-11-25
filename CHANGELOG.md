@@ -5,6 +5,7 @@
  - Add TextBoxConfig options; margins and growingBox
  - Fix debugConfig strokeWidth for web
  - Update Forge2D docs
+ - Update PR template with removal of develop branch
 
 ## 1.0.0-rc2
  - Improve IsometricTileMap and Spritesheet classes
