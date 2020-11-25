@@ -13,12 +13,11 @@ Please delete options that are not relevant.
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] This change requires a documentation update
 
-# Checklist:
+## Checklist:
 
 If something is unclear, please submit the PR anyways and ask about what you thought was unclear.
 
-- [ ] This branch is based on `v1.0.0`
-- [ ] This PR is targeted to merge into `v1.0.0` (not `master` or `develop`)
+- [ ] This branch is based on the latest `master`
 - [ ] I have added an entry under `[next]` in `CHANGELOG.md`
 - [ ] I have formatted my code with `flutter format`
 - [ ] I have made corresponding changes to the documentation
