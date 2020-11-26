@@ -2,10 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
+import 'package:ordered_set/comparing.dart';
+import 'package:ordered_set/ordered_set.dart';
 
 import '../effects/effects.dart';
 import '../effects/effects_handler.dart';
 import '../extensions/vector2.dart';
+import '../game.dart';
 
 /// This represents a Component for your game.
 ///
@@ -14,6 +17,9 @@ import '../extensions/vector2.dart';
 /// Components also have other methods that can help you out if you want to overwrite them.
 abstract class Component {
   final EffectsHandler _effectsHandler = EffectsHandler();
+
+  final OrderedSet<Component> children =
+      OrderedSet(Comparing.on((c) => c.priority));
 
   /// Whether this component has been loaded yet. If not loaded, [BaseGame] will not try to render it.
   ///
@@ -72,6 +78,9 @@ abstract class Component {
   /// Called right before the component is removed from the game
   void onRemove() {}
 
+  /// Called to check whether the point should be counted as a tap on the component
+  bool checkOverlap(Vector2 point) => false;
+
   /// Add an effect to the component
   void addEffect(ComponentEffect effect) {
     _effectsHandler.add(effect, this);
@@ -89,4 +98,43 @@ abstract class Component {
 
   /// Get a list of non removed effects
   List<ComponentEffect> get effects => _effectsHandler.effects;
+
+  /// Uses the game passed in to prepare the child component before it is added
+  /// to the list of children
+  void addChild(Game gameRef, Component c) {
+    if (gameRef is BaseGame) {
+      gameRef.prepare(c);
+    }
+    children.add(c);
+  }
+
+  /// This method first calls the passed function on itself and then recursively propagates it to every children
+  /// and grandchildren (and so on) of this component, either until it has propagated through the whole tree or
+  /// if the handler at any point returns false.
+  ///
+  /// This method is important to be used by the engine to propagate actions like rendering, taps, etc,
+  /// but you can call it yourself if you need to apply an action to the whole component chain.
+  /// It will only consider components of type T in the hierarchy, so use T = Component to target everything.
+  bool propagateToChildren<T extends Component>(
+    bool Function(T) handler,
+  ) {
+    bool shouldContinue = true;
+    if (this is T) {
+      shouldContinue = handler(this as T);
+      if (!shouldContinue) {
+        return false;
+      }
+    }
+    for (Component child in children) {
+      if (child is T) {
+        shouldContinue = handler(child);
+        if (shouldContinue) {
+          shouldContinue = child.propagateToChildren(handler);
+        } else {
+          break;
+        }
+      }
+    }
+    return shouldContinue;
+  }
 }
