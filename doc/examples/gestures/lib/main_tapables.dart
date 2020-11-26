@@ -1,3 +1,4 @@
+import 'package:flame/anchor.dart';
 import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
@@ -34,24 +35,28 @@ class TapableSquare extends PositionComponent with Tapable {
   }
 
   @override
-  void onTapUp(TapUpDetails details) {
+  bool onTapUp(TapUpDetails details) {
     _beenPressed = false;
+    return true;
   }
 
   @override
-  void onTapDown(TapDownDetails details) {
+  bool onTapDown(TapDownDetails details) {
     _beenPressed = true;
+    angle += 1.0;
+    return true;
   }
 
   @override
-  void onTapCancel() {
+  bool onTapCancel() {
     _beenPressed = false;
+    return true;
   }
 }
 
 class MyGame extends BaseGame with HasTapableComponents {
   MyGame() {
-    add(TapableSquare());
-    add(TapableSquare()..y = 250);
+    add(TapableSquare()..anchor = Anchor.center);
+    add(TapableSquare()..y = 350);
   }
 }

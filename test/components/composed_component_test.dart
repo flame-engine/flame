@@ -15,12 +15,13 @@ class MyTap extends PositionComponent with Tapable, Resizable {
   bool tapped = false;
 
   @override
-  void onTapDown(TapDownDetails details) {
+  bool onTapDown(TapDownDetails details) {
     tapped = true;
+    return true;
   }
 
   @override
-  bool checkTapOverlap(Rect c, Offset o) => true;
+  bool checkOverlap(Vector2 v) => true;
 }
 
 class MyComposed extends PositionComponent with HasGameRef, Tapable {

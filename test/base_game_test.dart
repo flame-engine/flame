@@ -23,8 +23,9 @@ class MyComponent extends PositionComponent
   int onRemoveCallCounter = 0;
 
   @override
-  void onTapDown(TapDownDetails details) {
+  bool onTapDown(TapDownDetails details) {
     tapped = true;
+    return true;
   }
 
   @override
@@ -40,7 +41,7 @@ class MyComponent extends PositionComponent
   }
 
   @override
-  bool checkTapOverlap(Rect c, Offset o) => true;
+  bool checkOverlap(Vector2 v) => true;
 
   @override
   void onRemove() => ++onRemoveCallCounter;
