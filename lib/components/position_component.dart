@@ -8,6 +8,7 @@ import '../anchor.dart';
 import '../extensions/offset.dart';
 import '../extensions/vector2.dart';
 import '../text_config.dart';
+import 'base_component.dart';
 import 'component.dart';
 
 /// A [Component] implementation that represents a component that has a
@@ -22,7 +23,7 @@ import 'component.dart';
 /// rendered automatically when this is updated and rendered.
 /// They are translated by this component's (x,y). They do not need to fit
 /// within this component's (width, height).
-abstract class PositionComponent extends Component {
+abstract class PositionComponent extends BaseComponent {
   /// The position of this component on the screen (relative to the anchor).
   Vector2 position = Vector2.zero();
 
