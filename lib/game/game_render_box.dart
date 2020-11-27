@@ -10,11 +10,11 @@ import 'game.dart';
 import 'game_loop.dart';
 
 class GameRenderBox extends RenderBox with WidgetsBindingObserver {
-  BuildContext context;
+  BuildContext buildContext;
   Game game;
   GameLoop gameLoop;
 
-  GameRenderBox(this.context, this.game) {
+  GameRenderBox(this.buildContext, this.game) {
     gameLoop = GameLoop(gameLoopCallback);
     WidgetsBinding.instance.addTimingsCallback(game.onTimingsCallback);
   }
@@ -31,7 +31,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void attach(PipelineOwner owner) {
     super.attach(owner);
-    game.onAttach();
+    game.attach(owner, buildContext);
 
     game.pauseEngineFn = gameLoop.pause;
     game.resumeEngineFn = gameLoop.resume;
@@ -46,7 +46,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void detach() {
     super.detach();
-    game.onDetach();
+    game.detach();
     gameLoop.stop();
     _unbindLifecycleListener();
   }

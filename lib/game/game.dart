@@ -5,24 +5,23 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart' hide WidgetBuilder;
+import 'package:flutter/widgets.dart';
 
 import '../assets/assets_cache.dart';
 import '../assets/images.dart';
 import '../extensions/vector2.dart';
 import '../keyboard.dart';
-import 'widget_builder.dart';
 
 /// Represents a generic game.
 ///
 /// Subclass this to implement the [update] and [render] methods.
 /// Flame will deal with calling these methods properly when the game's widget is rendered.
 abstract class Game {
-  // Widget Builder for this Game
-  final builder = WidgetBuilder();
-
   final images = Images();
   final assets = AssetsCache();
+  BuildContext buildContext;
+
+  bool get isAttached => buildContext != null;
 
   /// Returns the game background color.
   /// By default it will return a black color.
@@ -48,15 +47,25 @@ abstract class Game {
   /// Check [AppLifecycleState] for details about the events received.
   void lifecycleStateChange(AppLifecycleState state) {}
 
-  /// Use for caluclating the FPS.
+  /// Use for calculating the FPS.
   void onTimingsCallback(List<FrameTiming> timings) {}
-
-  /// Returns the game widget. Put this in your structure to start rendering and updating the game.
-  /// You can add it directly to the runApp method or inside your widget structure (if you use vanilla screens and widgets).
-  Widget get widget => builder.build(this);
 
   void _handleKeyEvent(RawKeyEvent e) {
     (this as KeyboardEvents).onKeyEvent(e);
+  }
+
+  /// Marks game as not attached tto any widget tree.
+  ///
+  /// Should be called manually.
+  void attach(PipelineOwner owner, BuildContext context) {
+    if (isAttached) {
+      throw UnsupportedError("""
+      Game attachment error:
+      A game instance can only be attached to one widget at a time.
+      """);
+    }
+    buildContext = context;
+    onAttach();
   }
 
   // Called when the Game widget is attached
@@ -67,23 +76,23 @@ abstract class Game {
     }
   }
 
+  /// Marks game as not attached tto any widget tree.
+  ///
+  /// Should not be called manually.
+  void detach() {
+    buildContext = null;
+    onDetach();
+  }
+
   // Called when the Game widget is detached
   @mustCallSuper
   void onDetach() {
     // Keeping this here, because if we leave this on HasWidgetsOverlay
     // and somebody overrides this and forgets to call the stream close
     // we can face some leaks.
-
-    // Also we only do this in release mode, otherwise when using hot reload
-    // the controller would be closed and errors would happen
-    if (this is HasWidgetsOverlay && kReleaseMode) {
-      (this as HasWidgetsOverlay).widgetOverlayController.close();
-    }
-
     if (this is KeyboardEvents) {
       RawKeyboard.instance.removeListener(_handleKeyEvent);
     }
-
     images.clearCache();
   }
 
@@ -102,29 +111,57 @@ abstract class Game {
   /// Use this method to load the assets need for the game instance to run
   Future<void> onLoad() async {}
 
-  /// Returns the widget which will be show while the instance is loading
-  Widget loadingWidget() => Container();
+  /// A property that stores an [ActiveOverlaysNotifier]
+  ///
+  /// This is useful to render widgets above a game, like a pause menu for example.
+  /// Overlays visible or hidden via [overlays.add] or [overlays.remove], respectively.
+  ///
+  /// Ex:
+  /// ```
+  /// final pauseOverlayIdentifier = "PauseMenu";
+  /// overlays.add(pauseOverlayIdentifier); // marks "PauseMenu" to be rendered.
+  /// overlays.remove(pauseOverlayIdentifier); // marks "PauseMenu" to not be rendered.
+  /// ```
+  ///
+  /// See also:
+  /// - [new GameWidget]
+  /// - [Game.overlays]
+  final overlays = ActiveOverlaysNotifier();
 }
 
-class OverlayWidget {
-  final String name;
-  final Widget widget;
+/// A [ChangeNotifier] used to control the visibility of overlays on a [Game] instance.
+///
+/// To learn more, see:
+/// - [Game.overlays]
+class ActiveOverlaysNotifier extends ChangeNotifier {
+  final Set<String> _activeOverlays = {};
 
-  OverlayWidget(this.name, this.widget);
-}
-
-mixin HasWidgetsOverlay on Game {
-  @override
-  final builder = OverlayWidgetBuilder();
-
-  final StreamController<OverlayWidget> widgetOverlayController =
-      StreamController();
-
-  void addWidgetOverlay(String overlayName, Widget widget) {
-    widgetOverlayController.sink.add(OverlayWidget(overlayName, widget));
+  /// Mark a, overlay to be rendered.
+  ///
+  /// See also:
+  /// - [new GameWidget]
+  /// - [Game.overlays]
+  bool add(String overlayName) {
+    final setChanged = _activeOverlays.add(overlayName);
+    if (setChanged) {
+      notifyListeners();
+    }
+    return setChanged;
   }
 
-  void removeWidgetOverlay(String overlayName) {
-    widgetOverlayController.sink.add(OverlayWidget(overlayName, null));
+  /// Mark a, overlay to not be rendered.
+  ///
+  /// See also:
+  /// - [new GameWidget]
+  /// - [Game.overlays]
+  bool remove(String overlayName) {
+    final hasRemoved = _activeOverlays.remove(overlayName);
+    if (hasRemoved) {
+      notifyListeners();
+    }
+    return hasRemoved;
   }
+
+  /// A [Set] of the active overlay names.
+  Set<String> get value => _activeOverlays;
 }

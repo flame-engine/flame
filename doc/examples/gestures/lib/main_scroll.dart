@@ -7,7 +7,11 @@ import 'package:flame/extensions/offset.dart';
 
 void main() {
   final game = MyGame();
-  runApp(game.widget);
+  runApp(
+    GameWidget(
+      game: game,
+    ),
+  );
 }
 
 class MyGame extends Game with ScrollDetector {

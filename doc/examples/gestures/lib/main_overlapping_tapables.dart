@@ -13,7 +13,9 @@ void main() {
   final widget = Container(
     padding: const EdgeInsets.all(50),
     color: const Color(0xFFA9A9A9),
-    child: game.widget,
+    child: GameWidget(
+      game: game,
+    ),
   );
 
   runApp(widget);

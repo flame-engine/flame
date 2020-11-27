@@ -17,8 +17,11 @@ final topLeft = Vector2(x, y);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final game = MyGame();
-  runApp(game.widget);
+  runApp(
+    GameWidget(
+      game: MyGame(),
+    ),
+  );
 }
 
 class Selector extends SpriteComponent {

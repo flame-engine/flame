@@ -4,13 +4,14 @@ import 'package:flame/anchor.dart';
 import 'package:flame/components/position_component.dart';
 import 'package:flame/effects/effects.dart';
 import 'package:flame/extensions/vector2.dart';
-import 'package:flame/game/base_game.dart';
+import 'package:flame/game.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final Random random = Random();
 
 class Callback {
   bool isCalled = false;
+
   void call() => isCalled = true;
 }
 
@@ -32,7 +33,9 @@ void effectTest(
   game.add(component);
   component.addEffect(effect);
   final double duration = effect.iterationTime;
-  await tester.pumpWidget(game.widget);
+  await tester.pumpWidget(GameWidget(
+    game: game,
+  ));
   double timeLeft = iterations * duration;
   while (timeLeft > 0) {
     double stepDelta = 50.0 + random.nextInt(50);

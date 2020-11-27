@@ -8,8 +8,11 @@ import 'package:flutter/material.dart';
 import 'player.dart';
 
 void main() {
-  final game = MyGame();
-  runApp(game.widget);
+  runApp(
+    GameWidget(
+      game: MyGame(),
+    ),
+  );
 }
 
 class MyGame extends BaseGame with MultiTouchDragDetector {
