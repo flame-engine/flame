@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 
-import '../component.dart';
+import '../base_component.dart';
 import '../../extensions/offset.dart';
 import '../../game/base_game.dart';
 
-mixin Tapable on Component {
+mixin Tapable on BaseComponent {
   bool onTapCancel() {
     return true;
   }
@@ -52,27 +52,33 @@ mixin HasTapableComponents on BaseGame {
   @mustCallSuper
   void onTapCancel(int pointerId) {
     components.forEach((c) {
-      c.propagateToChildren<Tapable>(
-        (child) => child.handleTapCancel(pointerId),
-      );
+      if (c is BaseComponent) {
+        c.propagateToChildren<Tapable>(
+          (child) => child.handleTapCancel(pointerId),
+        );
+      }
     });
   }
 
   @mustCallSuper
   void onTapDown(int pointerId, TapDownDetails details) {
     components.forEach((c) {
-      c.propagateToChildren<Tapable>(
-        (child) => child.handleTapDown(pointerId, details),
-      );
+      if (c is BaseComponent) {
+        c.propagateToChildren<Tapable>(
+          (child) => child.handleTapDown(pointerId, details),
+        );
+      }
     });
   }
 
   @mustCallSuper
   void onTapUp(int pointerId, TapUpDetails details) {
     components.forEach((c) {
-      c.propagateToChildren<Tapable>(
-        (child) => child.handleTapUp(pointerId, details),
-      );
+      if (c is BaseComponent) {
+        c.propagateToChildren<Tapable>(
+          (child) => child.handleTapUp(pointerId, details),
+        );
+      }
     });
   }
 }
