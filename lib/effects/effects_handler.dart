@@ -1,4 +1,4 @@
-import '../components/component.dart';
+import '../components/base_component.dart';
 import 'effects.dart';
 
 export './move_effect.dart';
@@ -24,7 +24,7 @@ class EffectsHandler {
   }
 
   /// Add an effect to the handler
-  void add(ComponentEffect effect, Component component) {
+  void add(ComponentEffect effect, BaseComponent component) {
     _effects.add(effect..initialize(component));
   }
 

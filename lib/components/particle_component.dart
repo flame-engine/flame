@@ -3,13 +3,14 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 
 import '../particle.dart';
+import 'base_component.dart';
 import 'component.dart';
 
 /// Base container for [Particle] instances to be attach
 /// to a [Component] tree. Could be added either to [BaseGame]
 /// or [ComposedComponent] as needed.
 /// Proxies [Component] lifecycle hooks to nested [Particle].
-class ParticleComponent extends Component {
+class ParticleComponent extends BaseComponent {
   Particle particle;
 
   ParticleComponent({
