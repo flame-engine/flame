@@ -217,8 +217,6 @@ Widget _applyMouseDetectors(Game game, Widget child) {
 }
 
 class WidgetBuilder {
-  Offset offset = Offset.zero;
-
   Widget build(Game game) {
     Widget widget = Container(
       color: game.backgroundColor(),
