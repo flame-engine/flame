@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
@@ -6,6 +8,7 @@ import '../effects/effects.dart';
 import '../effects/effects_handler.dart';
 import '../extensions/vector2.dart';
 import '../game.dart';
+import '../text_config.dart';
 import 'component.dart';
 
 /// This can be extended to represent a basic Component for your game.
@@ -19,6 +22,21 @@ abstract class BaseComponent extends Component {
   final OrderedSet<Component> children =
       OrderedSet(Comparing.on((c) => c.priority));
 
+  /// This is set by the BaseGame to tell this component to render additional debug information,
+  /// like borders, coordinates, etc.
+  /// This is very helpful while debugging. Set your BaseGame debugMode to true.
+  /// You can also manually override this for certain components in order to identify issues.
+  bool debugMode = false;
+
+  Color get debugColor => const Color(0xFFFF00FF);
+
+  Paint get debugPaint => Paint()
+    ..color = debugColor
+    ..strokeWidth = 1
+    ..style = PaintingStyle.stroke;
+
+  TextConfig get debugTextConfig => TextConfig(color: debugColor, fontSize: 12);
+
   /// This method is called periodically by the game engine to request that your component updates itself.
   ///
   /// The time [dt] in seconds (with microseconds precision provided by Flutter) since the last update cycle.
@@ -30,7 +48,44 @@ abstract class BaseComponent extends Component {
     _effectsHandler.update(dt);
   }
 
-  /// Called to check whether the point should be counted as a tap on the component
+  @mustCallSuper
+  @override
+  void render(Canvas canvas) {
+    prepareCanvas(canvas);
+
+    if (debugMode) {
+      renderDebugMode(canvas);
+    }
+
+    canvas.save();
+    children.forEach((c) => _renderChild(canvas, c));
+    canvas.restore();
+  }
+
+  void renderDebugMode(Canvas canvas) {}
+
+  void _renderChild(Canvas canvas, Component c) {
+    if (!c.loaded) {
+      return;
+    }
+    c.render(canvas);
+    canvas.restore();
+    canvas.save();
+  }
+
+  @protected
+  void prepareCanvas(Canvas canvas) {}
+
+  @mustCallSuper
+  @override
+  void onGameResize(Vector2 gameSize) {
+    super.onGameResize(gameSize);
+    children.forEach((child) => child.onGameResize(gameSize));
+  }
+
+  /// Called to check whether the point is to be counted as within the component
+  /// It needs to be overridden to have any effect, like it is in the
+  /// [PositionComponent]
   bool checkOverlap(Vector2 point) => false;
 
   /// Add an effect to the component
