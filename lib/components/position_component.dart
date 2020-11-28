@@ -2,12 +2,10 @@ import 'dart:ui' hide Offset;
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
 import '../anchor.dart';
 import '../extensions/offset.dart';
 import '../extensions/vector2.dart';
-import '../text_config.dart';
 import 'base_component.dart';
 import 'component.dart';
 
@@ -70,21 +68,6 @@ abstract class PositionComponent extends BaseComponent {
   /// Whether this component should be flipped ofn the Y axis before being rendered.
   bool renderFlipY = false;
 
-  /// This is set by the BaseGame to tell this component to render additional debug information,
-  /// like borders, coordinates, etc.
-  /// This is very helpful while debugging. Set your BaseGame debugMode to true.
-  /// You can also manually override this for certain components in order to identify issues.
-  bool debugMode = false;
-
-  Color get debugColor => const Color(0xFFFF00FF);
-
-  Paint get _debugPaint => Paint()
-    ..color = debugColor
-    ..strokeWidth = 1
-    ..style = PaintingStyle.stroke;
-
-  TextConfig get debugTextConfig => TextConfig(color: debugColor, fontSize: 12);
-
   /// Returns the relative position/size of this component.
   /// Relative because it might be translated by their parents (which is not considered here).
   Rect toRect() => topLeftPosition.toPositionedRect(size);
@@ -101,11 +84,12 @@ abstract class PositionComponent extends BaseComponent {
     final corners = _rotatedCorners();
     corners.add(corners.first);
     for (int i = 1; i < corners.length; i++) {
-      final lastCorner = corners[i - 1];
+      final previousCorner = corners[i - 1];
       final corner = corners[i];
-      final isOutside = (corner.x - lastCorner.x) * (point.y - lastCorner.y) -
-              (point.x - lastCorner.x) * (corner.y - lastCorner.y) >
-          0;
+      final isOutside =
+          (corner.x - previousCorner.x) * (point.y - previousCorner.y) -
+                  (point.x - previousCorner.x) * (corner.y - previousCorner.y) >
+              0;
       if (isOutside) {
         // Point is outside of convex polygon (only used for rectangles so far)
         return false;
@@ -139,8 +123,9 @@ abstract class PositionComponent extends BaseComponent {
 
   double distance(PositionComponent c) => position.distanceTo(c.position);
 
+  @override
   void renderDebugMode(Canvas canvas) {
-    canvas.drawRect(size.toRect(), _debugPaint);
+    canvas.drawRect(size.toRect(), debugPaint);
     debugTextConfig.render(
       canvas,
       'x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}',
@@ -157,7 +142,8 @@ abstract class PositionComponent extends BaseComponent {
     );
   }
 
-  void _prepareCanvas(Canvas canvas) {
+  @override
+  void prepareCanvas(Canvas canvas) {
     canvas.translate(x, y);
 
     canvas.rotate(angle);
@@ -171,35 +157,5 @@ abstract class PositionComponent extends BaseComponent {
       canvas.scale(renderFlipX ? -1.0 : 1.0, renderFlipY ? -1.0 : 1.0);
       canvas.translate(-width / 2, -height / 2);
     }
-  }
-
-  @mustCallSuper
-  @override
-  void onGameResize(Vector2 gameSize) {
-    super.onGameResize(gameSize);
-    children.forEach((child) => child.onGameResize(gameSize));
-  }
-
-  @mustCallSuper
-  @override
-  void render(Canvas canvas) {
-    _prepareCanvas(canvas);
-
-    if (debugMode) {
-      renderDebugMode(canvas);
-    }
-
-    canvas.save();
-    children.forEach((c) => _renderChild(canvas, c));
-    canvas.restore();
-  }
-
-  void _renderChild(Canvas canvas, Component c) {
-    if (!c.loaded) {
-      return;
-    }
-    c.render(canvas);
-    canvas.restore();
-    canvas.save();
   }
 }
