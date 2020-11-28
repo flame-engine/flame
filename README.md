@@ -18,6 +18,21 @@ The current v1 release is `1.0.0-rc2` on pub. The last stable version so far is 
 
 A minimalistic Flutter game engine.
 
+## Documentation
+
+Note that the documentation in the master branch of this repo is newer than the latest released version.
+
+Here you can find the documentation for different versions:
+- Latest stable version (0.28.x): [Flame-engine website](https://flame-engine.org/)
+- Latest [0.28.x release](https://github.com/flame-engine/flame/tree/master-v0.x/doc) GitHub docs
+- Latest [v1.0.0 release](https://github.com/flame-engine/flame/tree/1.0.0-rc2/doc) GitHub docs
+
+The complete documentation can be found [here](doc/README.md).
+
+Many examples of different features can be found [here](doc/examples) and a good starting example can be found [here](/example).
+
+The official site for Flame, which also contains the documentation can be found [here](https://flame-engine.org/).
+
 ## Help
 
 We have a Flame help channel on Fireslime's Discord, join it [here](https://discord.gg/pxrBmy4).
@@ -89,14 +104,6 @@ Check out this great series of articles/tutorials written by [Alekhin](https://g
 We also offer a curated list of Games, Libraries and Articles over at [awesome-flame](https://github.com/flame-engine/awesome-flame).
 
 Note that some of the articles might be slightly outdated, but they are still useful.
-
-## Documentation
-
-The complete documentation can be found [here](doc/README.md).
-
-Many examples of different features can be found [here](doc/examples) and a good starting example can be found [here](/example).
-
-The official site for Flame, which also contains the documentation can be found [here](https://flame-engine.org/).
 
 ## Credits
 
