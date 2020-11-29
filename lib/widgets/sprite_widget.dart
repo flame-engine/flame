@@ -49,7 +49,7 @@ class _SpritePainter extends CustomPainter {
     final rate = min(widthRate, heightRate);
 
     final paintSize = _sprite.srcSize * rate;
-    final anchorPosition = _anchor.relativePosition;
+    final anchorPosition = _anchor.toVector2;
     final anchoredPosition = size.toVector2()..multiply(anchorPosition);
     final delta = (anchoredPosition - paintSize)..multiply(anchorPosition);
 

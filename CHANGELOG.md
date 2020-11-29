@@ -12,6 +12,7 @@
  - Refactored how games are inserted into a flutter tree
  - Refactored the widgets overlay API
  - Creating new way of loading animations and sprites
+ - Dragable mixin for components
 
 ## 1.0.0-rc2
  - Improve IsometricTileMap and Spritesheet classes

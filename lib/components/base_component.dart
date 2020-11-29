@@ -32,7 +32,7 @@ abstract class BaseComponent extends Component {
   /// You can also manually override this for certain components in order to identify issues.
   bool debugMode = false;
 
-  Color get debugColor => const Color(0xFFFF00FF);
+  Color debugColor = const Color(0xFFFF00FF);
 
   Paint get debugPaint => Paint()
     ..color = debugColor
