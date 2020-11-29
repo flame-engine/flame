@@ -2,12 +2,12 @@ import 'package:flutter/gestures.dart';
 
 import 'game/game.dart';
 
-// Multi touch detector
 mixin MultiTouchTapDetector on Game {
   void onTap(int pointerId) {}
   void onTapCancel(int pointerId) {}
   void onTapDown(int pointerId, TapDownDetails details) {}
   void onTapUp(int pointerId, TapUpDetails details) {}
+  void onLongTapDown(int pointerId, TapDownDetails details) {}
 }
 
 class DragEvent extends Drag {

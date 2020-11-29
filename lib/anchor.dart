@@ -14,11 +14,11 @@ class Anchor {
   final double x;
   final double y;
 
-  Vector2 get relativePosition => Vector2(x, y);
+  Vector2 get toVector2 => Vector2(x, y);
 
   const Anchor(this.x, this.y);
 
   Vector2 translate(Vector2 p, Vector2 size) {
-    return p - (relativePosition..multiply(size));
+    return p - (toVector2..multiply(size));
   }
 }
