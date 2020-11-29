@@ -4,37 +4,68 @@ import 'dart:ui';
 import 'extensions/vector2.dart';
 import 'sprite.dart';
 
-class SpriteAnimationOpts {
-  int amount;
-  int amountPerRow;
-  Vector2 texturePosition;
-  Vector2 textureSize;
-  List<double> stepTimes;
-  bool loop;
+class SpriteAnimationFrameData {
+  /// Coordinates of the sprite of this Frame
+  final Vector2 srcPosition;
 
-  SpriteAnimationOpts({
-    @required this.amount,
-    @required this.stepTimes,
-    this.amountPerRow,
-    this.texturePosition,
-    this.textureSize,
-    this.loop = true,
+  /// Size of the sprite of this Frame
+  final Vector2 srcSize;
+
+  /// The duration to display it, in seconds.
+  double stepTime;
+
+  SpriteAnimationFrameData({
+    @required this.srcPosition,
+    @required this.srcSize,
+    @required this.stepTime,
   });
+}
 
-  SpriteAnimationOpts.sequenced({
+class SpriteAnimationData {
+  List<SpriteAnimationFrameData> frames;
+  final bool loop;
+
+  SpriteAnimationData(this.frames, {this.loop = true});
+
+  SpriteAnimationData.variable({
     @required int amount,
+    @required List<double> stepTimes,
+    int amountPerRow,
+    Vector2 texturePosition,
+    Vector2 textureSize,
+    this.loop = true,
+  })  : assert(amountPerRow == null || amount >= amountPerRow),
+        assert(stepTimes != null) {
+    amountPerRow ??= amount;
+    texturePosition ??= Vector2.zero();
+    frames = List<SpriteAnimationFrameData>(amount);
+    for (int i = 0; i < amount; i++) {
+      final position = Vector2(
+        texturePosition.x + (i % amountPerRow) * textureSize.x,
+        texturePosition.y + (i ~/ amountPerRow) * textureSize.y,
+      );
+      frames[i] = SpriteAnimationFrameData(
+        stepTime: stepTimes[i],
+        srcPosition: position,
+        srcSize: textureSize,
+      );
+    }
+  }
+
+  SpriteAnimationData.sequenced({
+    @required int amount,
+    @required double stepTime,
     int amountPerRow,
     Vector2 texturePosition,
     Vector2 textureSize,
     bool loop = true,
-    double stepTime = 0.1,
-  }) : this(
+  }) : this.variable(
           amount: amount,
           amountPerRow: amountPerRow,
           texturePosition: texturePosition,
           textureSize: textureSize,
           loop: loop,
-          stepTimes: List.filled(amount, stepTime),
+          stepTimes: stepTime != null ? List.filled(amount, stepTime) : null,
         );
 }
 
@@ -95,30 +126,21 @@ class SpriteAnimation {
   }
 
   /// Creates an SpriteAnimation based on its [opts]
-  SpriteAnimation.fromImage(
+  SpriteAnimation.fromFrameData(
     Image image,
-    SpriteAnimationOpts opts,
-  )   : assert(opts != null),
-        assert(opts.amountPerRow == null || opts.amount >= opts.amountPerRow),
-        assert(opts.stepTimes != null),
-        assert(image != null) {
-    opts.amountPerRow ??= opts.amount;
-    opts.texturePosition ??= Vector2.zero();
-    frames = List<SpriteAnimationFrame>(opts.amount);
-    for (int i = 0; i < opts.amount; i++) {
-      final position = Vector2(
-        opts.texturePosition.x + (i % opts.amountPerRow) * opts.textureSize.x,
-        opts.texturePosition.y + (i ~/ opts.amountPerRow) * opts.textureSize.y,
-      );
-      final Sprite sprite = Sprite(
-        image,
-        SpriteOpts(
-          srcPosition: position,
-          srcSize: opts.textureSize,
+    SpriteAnimationData data,
+  )   : assert(image != null),
+        assert(data != null) {
+    frames = data.frames.map((frameData) {
+      return SpriteAnimationFrame(
+        Sprite(
+          image,
+          srcSize: frameData.srcSize,
+          srcPosition: frameData.srcPosition,
         ),
+        frameData.stepTime,
       );
-      frames[i] = SpriteAnimationFrame(sprite, opts.stepTimes[i]);
-    }
+    }).toList();
   }
 
   /// Automatically creates an Animation Object using animation data provided by the json file
@@ -143,10 +165,8 @@ class SpriteAnimation {
 
       final Sprite sprite = Sprite(
         image,
-        SpriteOpts(
-          srcPosition: Vector2Extension.fromInts(x, y),
-          srcSize: Vector2Extension.fromInts(width, height),
-        ),
+        srcPosition: Vector2Extension.fromInts(x, y),
+        srcSize: Vector2Extension.fromInts(width, height),
       );
 
       return SpriteAnimationFrame(sprite, stepTime);
