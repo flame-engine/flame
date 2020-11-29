@@ -13,9 +13,9 @@ import 'component.dart';
 
 /// This can be extended to represent a basic Component for your game.
 ///
-/// The difference between this and [Component] is that this can have children,
-/// handles effects on your component and can be used to see whether a point is
-/// on your component, which is useful for handling the effect of gestures.
+/// The difference between this and [Component] is that the [BaseComponent] can
+/// have children, handle effects and can be used to see whether a position on
+/// the screen is on your component, which is useful for handling gestures.
 abstract class BaseComponent extends Component {
   final EffectsHandler _effectsHandler = EffectsHandler();
 
