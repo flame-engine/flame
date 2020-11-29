@@ -52,7 +52,7 @@ mixin Tapable on BaseComponent {
 mixin HasTapableComponents on BaseGame {
   @mustCallSuper
   void onTapCancel(int pointerId) {
-    for (Component c in components) {
+    for (Component c in components.toList().reversed) {
       bool shouldContinue = true;
       if (c is BaseComponent) {
         shouldContinue = c.propagateToChildren<Tapable>(
@@ -70,7 +70,7 @@ mixin HasTapableComponents on BaseGame {
 
   @mustCallSuper
   void onTapDown(int pointerId, TapDownDetails details) {
-    for (Component c in components) {
+    for (Component c in components.toList().reversed) {
       bool shouldContinue = true;
       if (c is BaseComponent) {
         shouldContinue = c.propagateToChildren<Tapable>(
@@ -88,7 +88,7 @@ mixin HasTapableComponents on BaseGame {
 
   @mustCallSuper
   void onTapUp(int pointerId, TapUpDetails details) {
-    for (Component c in components) {
+    for (Component c in components.toList().reversed) {
       bool shouldContinue = true;
       if (c is BaseComponent) {
         shouldContinue = c.propagateToChildren<Tapable>(
