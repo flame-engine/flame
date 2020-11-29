@@ -50,7 +50,7 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Set the top left position regardless of the anchor
   set topLeftPosition(Vector2 position) {
-    this.position = position + (anchor.relativePosition..multiply(size));
+    this.position = position + (anchor.toVector2..multiply(size));
   }
 
   /// Angle (with respect to the x-axis) this component should be rendered with.
@@ -99,6 +99,7 @@ abstract class PositionComponent extends BaseComponent {
   }
 
   List<Vector2> _rotatedCorners() {
+    // Rotates the corner around [position]
     Vector2 rotateCorner(Vector2 corner) {
       return Vector2(
         math.cos(angle) * (corner.x - position.x) -
@@ -145,9 +146,8 @@ abstract class PositionComponent extends BaseComponent {
   @override
   void prepareCanvas(Canvas canvas) {
     canvas.translate(x, y);
-
     canvas.rotate(angle);
-    final Vector2 delta = -anchor.relativePosition
+    final Vector2 delta = -anchor.toVector2
       ..multiply(size);
     canvas.translate(delta.x, delta.y);
 
