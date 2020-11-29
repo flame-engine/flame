@@ -23,9 +23,9 @@ A minimalistic Flutter game engine.
 Note that the documentation in the master branch of this repo is newer than the latest released version.
 
 Here you can find the documentation for different versions:
-- Latest stable version (0.28.x): [Flame-engine website](https://flame-engine.org/)
-- Latest [0.28.x release](https://github.com/flame-engine/flame/tree/master-v0.x/doc) GitHub docs
-- Latest [v1.0.0 release](https://github.com/flame-engine/flame/tree/1.0.0-rc2/doc) GitHub docs
+- Latest stable version: [Flame-engine website](https://flame-engine.org/)
+- Latest stable version: [GitHub docs](https://github.com/flame-engine/flame/tree/master-v0.x/doc)
+- Latest v1.0.0 version: [GitHub docs](https://github.com/flame-engine/flame/tree/1.0.0-rc2/doc)
 
 The complete documentation can be found [here](doc/README.md).
 
