@@ -19,8 +19,11 @@ import 'component.dart';
 abstract class BaseComponent extends Component {
   final EffectsHandler _effectsHandler = EffectsHandler();
 
-  final OrderedSet<Component> children =
+  final OrderedSet<Component> _children =
       OrderedSet(Comparing.on((c) => c.priority));
+
+  OrderedSet<Component> get children =>
+      OrderedSet<Component>()..addAll(_children);
 
   /// This is set by the BaseGame to tell this component to render additional debug information,
   /// like borders, coordinates, etc.
@@ -58,7 +61,7 @@ abstract class BaseComponent extends Component {
     }
 
     canvas.save();
-    children.forEach((c) => _renderChild(canvas, c));
+    _children.forEach((c) => _renderChild(canvas, c));
     canvas.restore();
   }
 
@@ -80,7 +83,7 @@ abstract class BaseComponent extends Component {
   @override
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
-    children.forEach((child) => child.onGameResize(gameSize));
+    _children.forEach((child) => child.onGameResize(gameSize));
   }
 
   /// Called to check whether the point is to be counted as within the component
@@ -112,12 +115,20 @@ abstract class BaseComponent extends Component {
     if (gameRef is BaseGame) {
       gameRef.prepare(c);
     }
-    children.add(c);
+    _children.add(c);
   }
 
-  /// This method first calls the passed function on itself and then recursively propagates it to every children
-  /// and grandchildren (and so on) of this component, either until it has propagated through the whole tree or
-  /// if the handler at any point returns false.
+  bool removeChild(Component c) {
+    return _children.remove(c);
+  }
+
+  void clearChildren() {
+    _children.clear();
+  }
+
+  /// This method first calls the passed handler on the leaves in the tree, the children without any children of their own.
+  /// Then it down the tree to all other children and then finally it passes itself to the handler.
+  /// The propagation continues until a handler returns false, which means "do not continue", or when the handler has been called on the full tree.
   ///
   /// This method is important to be used by the engine to propagate actions like rendering, taps, etc,
   /// but you can call it yourself if you need to apply an action to the whole component chain.
@@ -126,21 +137,18 @@ abstract class BaseComponent extends Component {
     bool Function(T) handler,
   ) {
     bool shouldContinue = true;
-    if (this is T) {
-      shouldContinue = handler(this as T);
-      if (!shouldContinue) {
-        return false;
-      }
-    }
-    for (Component child in children) {
-      if (child is T) {
-        shouldContinue = handler(child);
-        if (shouldContinue && child is BaseComponent) {
-          shouldContinue = child.propagateToChildren(handler);
+    for (Component child in _children) {
+      if (child is T && child is BaseComponent) {
+        shouldContinue = child.propagateToChildren(handler);
+        if (shouldContinue) {
+          shouldContinue = handler(child);
         } else {
           break;
         }
       }
+    }
+    if (this is T && shouldContinue) {
+      shouldContinue = handler(this as T);
     }
     return shouldContinue;
   }
