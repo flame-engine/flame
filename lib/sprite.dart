@@ -5,22 +5,18 @@ import 'extensions/offset.dart';
 import 'extensions/vector2.dart';
 import 'palette.dart';
 
-class SpriteOpts {
-  final Vector2 srcPosition;
-  final Vector2 srcSize;
-
-  SpriteOpts({this.srcPosition, this.srcSize});
-}
-
 class Sprite {
   Paint paint = BasicPalette.white.paint;
   Image image;
   Rect src;
 
-  Sprite(this.image, [SpriteOpts opts])
-      : assert(image != null, "image can't be null") {
-    srcSize = opts?.srcSize;
-    srcPosition = opts?.srcPosition;
+  Sprite(
+    this.image, {
+    Vector2 srcPosition,
+    Vector2 srcSize,
+  }) : assert(image != null, "image can't be null") {
+    this.srcSize = srcSize;
+    this.srcPosition = srcPosition;
   }
 
   double get _imageWidth => image.width.toDouble();

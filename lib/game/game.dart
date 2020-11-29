@@ -100,16 +100,20 @@ abstract class Game {
   }
 
   /// Utility method to load and cache the image for a sprite based on its options
-  Future<Sprite> loadSprite(String path, SpriteOpts opts) async {
+  Future<Sprite> loadSprite(
+    String path, {
+    Vector2 srcSize,
+    Vector2 srcPosition,
+  }) async {
     final image = await images.load(path);
-    return Sprite(image, opts);
+    return Sprite(image, srcSize: srcSize, srcPosition: srcPosition);
   }
 
   /// Utility method to load and cache the image for a sprite animation based on its options
   Future<SpriteAnimation> loadSpriteAnimation(
-      String path, SpriteAnimationOpts opts) async {
+      String path, SpriteAnimationData data) async {
     final image = await images.load(path);
-    return SpriteAnimation.fromImage(image, opts);
+    return SpriteAnimation.fromFrameData(image, data);
   }
 
   /// Flag to tell the game loop if it should start running upon creation
