@@ -1,3 +1,4 @@
+import 'package:flame/components/component.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 
@@ -51,34 +52,55 @@ mixin Tapable on BaseComponent {
 mixin HasTapableComponents on BaseGame {
   @mustCallSuper
   void onTapCancel(int pointerId) {
-    components.forEach((c) {
+    for (Component c in components) {
+      bool shouldContinue = true;
       if (c is BaseComponent) {
-        c.propagateToChildren<Tapable>(
+        shouldContinue = c.propagateToChildren<Tapable>(
           (child) => child.handleTapCancel(pointerId),
         );
       }
-    });
+      if (c is Tapable && shouldContinue) {
+        shouldContinue = c.handleTapCancel(pointerId);
+      }
+      if (!shouldContinue) {
+        break;
+      }
+    }
   }
 
   @mustCallSuper
   void onTapDown(int pointerId, TapDownDetails details) {
-    components.forEach((c) {
+    for (Component c in components) {
+      bool shouldContinue = true;
       if (c is BaseComponent) {
-        c.propagateToChildren<Tapable>(
+        shouldContinue = c.propagateToChildren<Tapable>(
           (child) => child.handleTapDown(pointerId, details),
         );
       }
-    });
+      if (c is Tapable && shouldContinue) {
+        shouldContinue = c.handleTapDown(pointerId, details);
+      }
+      if (!shouldContinue) {
+        break;
+      }
+    }
   }
 
   @mustCallSuper
   void onTapUp(int pointerId, TapUpDetails details) {
-    components.forEach((c) {
+    for (Component c in components) {
+      bool shouldContinue = true;
       if (c is BaseComponent) {
-        c.propagateToChildren<Tapable>(
+        shouldContinue = c.propagateToChildren<Tapable>(
           (child) => child.handleTapUp(pointerId, details),
         );
       }
-    });
+      if (c is Tapable && shouldContinue) {
+        shouldContinue = c.handleTapUp(pointerId, details);
+      }
+      if (!shouldContinue) {
+        break;
+      }
+    }
   }
 }

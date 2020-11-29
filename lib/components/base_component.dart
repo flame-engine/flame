@@ -127,8 +127,8 @@ abstract class BaseComponent extends Component {
   }
 
   /// This method first calls the passed handler on the leaves in the tree, the children without any children of their own.
-  /// Then it down the tree to all other children and then finally it passes itself to the handler.
-  /// The propagation continues until a handler returns false, which means "do not continue", or when the handler has been called on the full tree.
+  /// Then it continues through all other children.
+  /// The propagation continues until the handler returns false, which means "do not continue", or when the handler has been called with all children
   ///
   /// This method is important to be used by the engine to propagate actions like rendering, taps, etc,
   /// but you can call it yourself if you need to apply an action to the whole component chain.
@@ -142,13 +142,11 @@ abstract class BaseComponent extends Component {
         shouldContinue = child.propagateToChildren(handler);
         if (shouldContinue) {
           shouldContinue = handler(child);
-        } else {
+        }
+        if (!shouldContinue) {
           break;
         }
       }
-    }
-    if (this is T && shouldContinue) {
-      shouldContinue = handler(this as T);
     }
     return shouldContinue;
   }
