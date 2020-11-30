@@ -15,7 +15,7 @@ A minimalistic Flutter game engine.
 
 ---
 
-[English](https://github.com/flame-engine/flame) | [简体中文](README-ZH.md) | [Polski](README-PL.md)
+[English](https://github.com/flame-engine/flame) | [简体中文](README-ZH.md) | [Polski](README-PL.md) | [Русский](README-RU.md)
 
 ---
 

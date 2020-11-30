@@ -25,7 +25,7 @@ A minimalistic Flutter game engine.
 
 通过使用该版本, 可以抢先预览Flame的新版本情况, 你可以为团队提供新功能、新结构的反馈.
 
-[English](README.md) | 简体中文 | [Polski](README-PL.md)
+[English](README.md) | 简体中文 | [Polski](README-PL.md) | [Русский](README-RU.md)
 
 > 本篇为社区版翻译, 目前针对版本: 0.28.0
 
