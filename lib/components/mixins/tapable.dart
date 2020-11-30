@@ -1,8 +1,8 @@
-import 'package:flame/components/component.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 
 import '../base_component.dart';
+import '../component.dart';
 import '../../extensions/offset.dart';
 import '../../game/base_game.dart';
 
