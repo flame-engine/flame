@@ -14,7 +14,7 @@ The current v1 release is `1.0.0-rc2` on pub. The last stable version so far is 
 
 ---
 
-[English](https://github.com/flame-engine/flame) | [简体中文](README-ZH.md) | [Polski](https://github.com/mbiesiad/flame/blob/pl_PL/README-PL.md) | [Русский](README-RU.md)
+[English](https://github.com/flame-engine/flame) | [简体中文](README-ZH.md) | [Polski](README-PL.md) | [Русский](README-RU.md)
 
 A minimalistic Flutter game engine.
 
