@@ -15,7 +15,7 @@ A minimalistic Flutter game engine.
 
 ---
 
-[English](https://github.com/flame-engine/flame) | [简体中文](README-ZH.md) | [Polski](README-PL.md)
+[English](README.md) | [简体中文](README-ZH.md) | [Polski](README-PL.md) | [Русский](README-RU.md)
 
 ---
 
@@ -30,7 +30,6 @@ Checkout the branches `develop-v0.x` and `master-v0.x` for the current last 0.x 
 The current v1 release is `1.0.0-rc2` on pub. The last stable version so far is `0.28.0`. Feel free to choose the one that better suits your need.
 
 ---
-
 
 
 ## Documentation

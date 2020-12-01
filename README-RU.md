@@ -14,7 +14,7 @@
 
 ---
 
-[English](https://github.com/flame-engine/flame) | [简体中文](README-ZH.md) | [Polski](README-PL.md) | [Русский](README-RU.md)
+[English](README.md) | [简体中文](README-ZH.md) | [Polski](README-PL.md) | [Русский](README-RU.md)
 
 Минималистичный игровой движок на Flutter.
 
