@@ -2,7 +2,7 @@
 
 Flame has some dedicated classes to help you render text.
 
-# TextConfig
+## TextConfig
 
 A Text Config contains all typographical information required to render text; i.e., font size and color, family, etc.
 

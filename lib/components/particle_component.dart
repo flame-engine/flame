@@ -7,7 +7,7 @@ import 'component.dart';
 
 /// Base container for [Particle] instances to be attach
 /// to a [Component] tree. Could be added either to [BaseGame]
-/// or [ComposedComponent] as needed.
+/// or an implementation of the [BaseComponent].
 /// Proxies [Component] lifecycle hooks to nested [Particle].
 class ParticleComponent extends Component {
   Particle particle;
