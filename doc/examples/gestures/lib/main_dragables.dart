@@ -22,7 +22,7 @@ void main() {
 class DragableSquare extends PositionComponent with Dragable {
   @override
   bool debugMode = true;
-  bool _isDragged = false;
+  bool _isDragging = false;
 
   DragableSquare({Vector2 position}) {
     size = Vector2.all(100);
@@ -32,22 +32,22 @@ class DragableSquare extends PositionComponent with Dragable {
   @override
   void update(double dt) {
     super.update(dt);
-    debugColor = _isDragged ? Colors.greenAccent : Colors.purple;
+    debugColor = _isDragging ? Colors.greenAccent : Colors.purple;
   }
 
   Vector2 dragDeltaPosition;
   @override
   bool onReceiveDrag(DragEvent event) {
     event.onUpdate = (DragUpdateDetails details) {
-      if (!_isDragged) {
-        _isDragged = true;
+      if (!_isDragging) {
+        _isDragging = true;
         dragDeltaPosition =
             event.initialPosition.toVector2() - position.clone();
       }
       position = details.localPosition.toVector2() - dragDeltaPosition;
     };
     event.onEnd = (DragEndDetails details) {
-      _isDragged = false;
+      _isDragging = false;
     };
     return true;
   }
@@ -56,6 +56,6 @@ class DragableSquare extends PositionComponent with Dragable {
 class MyGame extends BaseGame with HasDragableComponents {
   MyGame() {
     add(DragableSquare()..anchor = Anchor.topLeft);
-    //add(DragableSquare()..y = 350);
+    add(DragableSquare()..y = 350);
   }
 }
