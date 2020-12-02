@@ -1,5 +1,27 @@
 # Components
 
+## Component
+All components inherit from the abstract class `Component`.
+
+If you want to skip reading about abstract classes you can jump directly to [PositionComponent](./components.md#PositionComponent).
+
+Every `Component` has a few methods that you can optionally implement, that are used by the `BaseGame` class. If you are not using the base game, you can alternatively use these methods on your own game loop.
+
+The `resize` method is called whenever the screen is resized, and in the beginning once when the component is added via the `add` method. You need to apply here any changes to the x, y, width and height of your component, or any other changes, due to the screen resizing. You can start these variables here, as the sprite won't be rendered until everything is set.
+
+The `shouldRemove` variable can be overridden or set to true and `BaseGame` will remove the component before the next update loop. It will then no longer be rendered or updated. Note that `game.remove(Component c)` can also be used to remove components.
+
+The `isHUD` variable can be overridden or set to true (default false) to make the `BaseGame` ignore the `camera` for this element, make it static in relation to the screen that is.
+
+The `onMount` method can be overridden to run initialization code for the component. When this method is called, BaseGame ensures that all the mixins which would change this component's behaviour are already resolved.
+
+The `onRemove` method can be overridden to run code before the component is removed from the game, it is only run once even if the component is removed both by using the `BaseGame` remove method and the ´Component´ remove method.
+
+## BaseComponent
+Usually if you are going to make your own component you want to extend `PositionComponent`, but if you want to be able to handle effects and child components but handle the positioning differently you can extend the BaseComponent.
+
+It is used by `SpriteBodyComponent` and `BodyComponent` in Forge2D since those components doesn't have their position in relation to the screen, but in relation to the Forge2D world.
+
 ## PositionComponent
 
 This class represent a single object on the screen, being a floating rectangle or a rotating sprite.
@@ -28,26 +50,6 @@ The most commonly used implementation of `PositionComponent` is `SpriteComponent
 
     player.render(canvas); // it will render only if the image is loaded and the position and size parameters are not null
 ```
-
-## Component
-All components inherit from the abstract class `Component`.
-
-Every `Component` has a few methods that you can optionally implement, that are used by the `BaseGame` class. If you are not using the base game, you can alternatively use these methods on your own game loop.
-
-The `resize` method is called whenever the screen is resized, and in the beginning once when the component is added via the `add` method. You need to apply here any changes to the x, y, width and height of your component, or any other changes, due to the screen resizing. You can start these variables here, as the sprite won't be rendered until everything is set.
-
-The `shouldRemove` variable can be overridden or set to true and `BaseGame` will remove the component before the next update loop. It will then no longer be rendered or updated. Note that `game.remove(Component c)` can also be used to remove components.
-
-The `isHUD` variable can be overridden or set to true (default false) to make the `BaseGame` ignore the `camera` for this element, make it static in relation to the screen that is.
-
-The `onMount` method can be overridden to run initialization code for the component. When this method is called, BaseGame ensures that all the mixins which would change this component's behaviour are already resolved.
-
-The `onRemove` method can be overridden to run code before the component is removed from the game, it is only run once even if the component is removed both by using the `BaseGame` remove method and the ´Component´ remove method.
-
-## BaseComponent
-Usually if you are going to make your own component you want to extend `PositionComponent`, but if you want to be able to handle effects and child components but handle the positioning differently you can extend the BaseComponent.
-
-It is used by `SpriteBodyComponent` and `BodyComponent` in Forge2D since those components doesn't have their position in relation to the screen, but in relation to the Forge2D world.
 
 ## SpriteAnimationComponent
 
