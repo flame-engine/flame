@@ -49,23 +49,23 @@ Usually if you are going to make your own component you want to extend `Position
 
 It is used by `SpriteBodyComponent` and `BodyComponent` in Forge2D since those components doesn't have their position in relation to the screen, but in relation to the Forge2D world.
 
-## AnimationComponent
+## SpriteAnimation
 
-This component uses an instance of the [Animation](/doc/images.md#Animation) class to represent a Component that has a sprite that runs a single cyclic animation.
+This class is used to represent a Component that has a sprite that runs a single cyclic animation.
 
 This will create a simple three frame animation
 
 ```dart
     List<Sprite> sprites = [0, 1, 2].map((i) => Sprite('player_${i}.png')).toList();
     final size = Vector2.all(64.0);
-    this.player = AnimationComponent(size, new Animation.spriteList(sprites, stepTime: 0.01));
+    this.player = SpriteAnimation(size, new Animation.spriteList(sprites, stepTime: 0.01));
 ```
 
 If you have a sprite sheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](/doc/images.md#Animation)):
 
 ```dart
     final size = Vector2.all(64.0);
-    this.player = AnimationComponent.sequenced(size, 'player.png', 2);
+    this.player = SpriteAnimation.sequenced(size, 'player.png', 2);
 ```
 
 If you are not using `BaseGame`, don't forget this component needs to be update'd even if static, because the animation object needs to be ticked to move the frames.
@@ -263,3 +263,9 @@ The corners are drawn at the same size, the sides are stretched on the side dire
 Using this, you can get a box/rectangle that expands well to any sizes. This is useful for making panels, dialogs, borders.
 
 Check the example app `nine_tile_box` details on how to use it.
+
+## Effects
+
+Flame provides a set of effects that can be applied to a certain type of components, these effects can be used to animate some properties of your components, like position or dimensions. You can check the list of those effects [here](/doc/effects.md).
+
+Examples of the running effects can be found [here](/doc/examples/effects);
