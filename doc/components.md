@@ -138,7 +138,8 @@ For a working example, check this [source file](/doc/examples/flare/lib/main_com
 
 ## Composability of components
 
-Sometimes it is useful to make your `Component` wrap other components. For example by grouping visual components through a hierarchy.
+Sometimes it is useful to make your component wrap other components. For example by grouping visual components through a hierarchy.
+You can do this by having child components on any component that extends `BaseComponent`, for example `PositionComponent` or `BodyComponent`.
 When you have child components on a component every time the parent is updated and rendered, all the children are rendered and updated with the same conditions.
 
 Example of usage, where visibility of two components are handled by a wrapper:
