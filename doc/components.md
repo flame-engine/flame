@@ -9,7 +9,7 @@ A `PositionComponent` has a `position`, `size` and `angle`, as well as some usef
 In the event that you want to change the direction of your components rendering, you can also use
 `renderFlipX` and `renderFlipY` to flip anything drawn to canvas during `render(Canvas canvas)`.
 This is available on all `PositionComponent` objects, and is especially useful on `SpriteComponent` and
-`AnimationComponent`. For example set `component.renderFlipX = true` to reverse the horizontal rendering.
+`SpriteAnimationComponent`. For example set `component.renderFlipX = true` to reverse the horizontal rendering.
 
 ## SpriteComponent
 The most commonly used implementation of `PositionComponent` is `SpriteComponent`, and it can be created with a `Sprite`:
@@ -49,7 +49,7 @@ Usually if you are going to make your own component you want to extend `Position
 
 It is used by `SpriteBodyComponent` and `BodyComponent` in Forge2D since those components doesn't have their position in relation to the screen, but in relation to the Forge2D world.
 
-## SpriteAnimation
+## SpriteAnimationComponent
 
 This class is used to represent a Component that has a sprite that runs a single cyclic animation.
 
@@ -58,14 +58,14 @@ This will create a simple three frame animation
 ```dart
     List<Sprite> sprites = [0, 1, 2].map((i) => Sprite('player_${i}.png')).toList();
     final size = Vector2.all(64.0);
-    this.player = SpriteAnimation(size, new Animation.spriteList(sprites, stepTime: 0.01));
+    this.player = SpriteAnimationComponent(size, new Animation.spriteList(sprites, stepTime: 0.01));
 ```
 
 If you have a sprite sheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](/doc/images.md#Animation)):
 
 ```dart
     final size = Vector2.all(64.0);
-    this.player = SpriteAnimation.sequenced(size, 'player.png', 2);
+    this.player = SpriteAnimationComponent.sequenced(size, 'player.png', 2);
 ```
 
 If you are not using `BaseGame`, don't forget this component needs to be update'd even if static, because the animation object needs to be ticked to move the frames.
@@ -216,7 +216,7 @@ Advanced example:
 
 Once you are done with setting the parameters to your needs, render the ParallaxComponent as any other component.
 
-Like the AnimationComponent, even if your parallax is static, you must call update on this component, so it runs its animation.
+Like the SpriteAnimationComponent, even if your parallax is static, you must call update on this component, so it runs its animation.
 Also, don't forget to add you images to the `pubspec.yaml` file as assets or they wont be found.
 
 An example implementation can be found in the [examples directory](/doc/examples/parallax).
