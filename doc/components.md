@@ -1,5 +1,8 @@
 # Components
 
+![Component Diagram](https://i.imgur.com/1mTqcqI.png)
+This diagram might look intimidating, but don't worry, it is not as complex as it looks.
+
 ## Component
 All components inherit from the abstract class `Component`.
 
