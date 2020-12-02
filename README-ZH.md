@@ -4,7 +4,7 @@
 
 <img src="https://i.imgur.com/vFDilXT.png" width="400">
 
-[English](README.md) | 简体中文 | [Polski](README-PL.md)
+[English](README.md) | 简体中文 | [Polski](README-PL.md) | [Русский](README-RU.md)
 
 > 本篇为社区版翻译, 目前针对版本: 0.28.0
 
