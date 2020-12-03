@@ -10,7 +10,7 @@ If you want to skip reading about abstract classes you can jump directly to [Pos
 
 Every `Component` has a few methods that you can optionally implement, that are used by the `BaseGame` class. If you are not using the base game, you can alternatively use these methods on your own game loop.
 
-The `resize` method is called whenever the screen is resized, and in the beginning once when the component is added via the `add` method. You need to apply here any changes to the x, y, width and height of your component, or any other changes, due to the screen resizing. You can start these variables here, as the sprite won't be rendered until everything is set.
+The `resize` method is called whenever the screen is resized, and in the beginning once when the component is added via the `add` method.
 
 The `shouldRemove` variable can be overridden or set to true and `BaseGame` will remove the component before the next update loop. It will then no longer be rendered or updated. Note that `game.remove(Component c)` can also be used to remove components.
 
