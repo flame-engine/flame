@@ -1,5 +1,7 @@
-import 'package:flame/anchor.dart';
+import 'dart:math' as math;
+
 import 'package:flame/extensions/vector2.dart';
+import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components/position_component.dart';
@@ -18,12 +20,17 @@ void main() {
 }
 
 class TapableSquare extends PositionComponent with Tapable {
-  static final Paint _white = Paint()..color = const Color(0xFFFFFFFF);
-  static final Paint _grey = Paint()..color = const Color(0xFFA5A5A5);
+  Paint _randomPaint() {
+    final rng = math.Random();
+    final color = Color.fromRGBO(
+        rng.nextInt(256), rng.nextInt(256), rng.nextInt(256), 0.9);
+    return PaletteEntry(color).paint;
+  }
 
-  bool _beenPressed = false;
+  Paint currentPaint;
 
   TapableSquare({Vector2 position}) {
+    currentPaint = _randomPaint();
     size = Vector2.all(100);
     this.position = position ?? Vector2.all(100);
   }
@@ -31,32 +38,30 @@ class TapableSquare extends PositionComponent with Tapable {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    canvas.drawRect(size.toRect(), _beenPressed ? _grey : _white);
+    canvas.drawRect(size.toRect(), currentPaint);
   }
 
   @override
   bool onTapUp(TapUpDetails details) {
-    _beenPressed = false;
-    return true;
+    return false;
   }
 
   @override
   bool onTapDown(TapDownDetails details) {
-    _beenPressed = true;
     angle += 1.0;
-    return true;
+    return false;
   }
 
   @override
   bool onTapCancel() {
-    _beenPressed = false;
-    return true;
+    return false;
   }
 }
 
 class MyGame extends BaseGame with HasTapableComponents {
   MyGame() {
-    add(TapableSquare()..anchor = Anchor.center);
-    add(TapableSquare()..y = 350);
+    add(TapableSquare(position: Vector2(100, 100)));
+    add(TapableSquare(position: Vector2(150, 150)));
+    add(TapableSquare(position: Vector2(100, 200)));
   }
 }

@@ -52,7 +52,7 @@ Example:
     final playerSprite = Sprite(image);
 ```
 
-# Game.images
+### Game.images
 
 The `Game` class offers some utility methods for handling images loading too. It bundles an instance of the `Images` class, that can be used to load image assets to be used during the game. The game will automatically free the cache when the game widget is removed from the widget tree.
 

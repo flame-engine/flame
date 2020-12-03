@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../components/component.dart';
+import '../components/base_component.dart';
 import '../components/position_component.dart';
 import '../extensions/vector2.dart';
 
@@ -10,7 +10,7 @@ export './rotate_effect.dart';
 export './scale_effect.dart';
 export './sequence_effect.dart';
 
-abstract class ComponentEffect<T extends Component> {
+abstract class ComponentEffect<T extends BaseComponent> {
   T component;
   Function() onComplete;
 
