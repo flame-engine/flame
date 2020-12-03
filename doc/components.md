@@ -21,9 +21,41 @@ The `onMount` method can be overridden to run initialization code for the compon
 The `onRemove` method can be overridden to run code before the component is removed from the game, it is only run once even if the component is removed both by using the `BaseGame` remove method and the ´Component´ remove method.
 
 ## BaseComponent
-Usually if you are going to make your own component you want to extend `PositionComponent`, but if you want to be able to handle effects and child components but handle the positioning differently you can extend the BaseComponent.
+Usually if you are going to make your own component you want to extend `PositionComponent`, but if you want to be able to handle effects and child components but handle the positioning differently you can extend the `BaseComponent`.
 
 It is used by `SpriteBodyComponent` and `BodyComponent` in Forge2D since those components doesn't have their position in relation to the screen, but in relation to the Forge2D world.
+
+### Composability of components
+
+Sometimes it is useful to make your component wrap other components. For example by grouping visual components through a hierarchy.
+You can do this by having child components on any component that extends `BaseComponent`, for example `PositionComponent` or `BodyComponent`.
+When you have child components on a component every time the parent is updated and rendered, all the children are rendered and updated with the same conditions.
+
+Example of usage, where visibility of two components are handled by a wrapper:
+
+```dart
+class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
+  bool visible = false;
+
+  GameOverText gameOverText;
+  GameOverButton gameOverButton;
+
+  GameOverPanel(Image spriteImage) : super() {
+    gameOverText = GameOverText(spriteImage); // GameOverText is a Component
+    gameOverButton = GameOverButton(spriteImage); // GameOverRestart is a SpriteComponent
+
+    addChild(gameRef, gameOverText);
+    addChild(gameRef, gameOverButton);
+  }
+
+  @override
+  void render(Canvas canvas) {
+    if (visible) {
+      super.render(canvas);
+    } // If not visible none of the children will be rendered
+  }
+}
+```
 
 ## PositionComponent
 
@@ -140,38 +172,6 @@ it also can receive a FlareController that can play multiple animations and cont
 You can also change the current playing animation using the `updateAnimation` method.
 
 For a working example, check this [source file](/doc/examples/flare/lib/main_component.dart).
-
-## Composability of components
-
-Sometimes it is useful to make your component wrap other components. For example by grouping visual components through a hierarchy.
-You can do this by having child components on any component that extends `BaseComponent`, for example `PositionComponent` or `BodyComponent`.
-When you have child components on a component every time the parent is updated and rendered, all the children are rendered and updated with the same conditions.
-
-Example of usage, where visibility of two components are handled by a wrapper:
-
-```dart
-class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
-  bool visible = false;
-
-  GameOverText gameOverText;
-  GameOverButton gameOverButton;
-
-  GameOverPanel(Image spriteImage) : super() {
-    gameOverText = GameOverText(spriteImage); // GameOverText is a Component
-    gameOverButton = GameOverButton(spriteImage); // GameOverRestart is a SpriteComponent
-
-    addChild(gameRef, gameOverText);
-    addChild(gameRef, gameOverButton);
-  }
-
-  @override
-  void render(Canvas canvas) {
-    if (visible) {
-      super.render(canvas);
-    } // If not visible none of the children will be rendered
-  }
-}
-```
 
 ## ParallaxComponent
 
