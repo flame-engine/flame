@@ -113,7 +113,10 @@ abstract class BaseComponent extends Component {
   /// Uses the game passed in, or uses the game from [HasGameRef] otherwise,
   /// to prepare the child component before it is added to the list of children
   void addChild(Component c, {Game gameRef}) {
-    assert(gameRef != null || this is HasGameRef);
+    assert(
+      gameRef != null || this is HasGameRef,
+      "Need gameRef either as an argument or from the HasGameRef mixin",
+    );
     gameRef ??= (this as HasGameRef).gameRef;
     if (gameRef is BaseGame) {
       gameRef.prepare(c);
