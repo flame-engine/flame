@@ -50,57 +50,33 @@ mixin Tapable on BaseComponent {
 }
 
 mixin HasTapableComponents on BaseGame {
-  @mustCallSuper
-  void onTapCancel(int pointerId) {
+  void _handleTapEvent(bool Function(Tapable child) tapEventHandler) {
     for (Component c in components.toList().reversed) {
       bool shouldContinue = true;
       if (c is BaseComponent) {
-        shouldContinue = c.propagateToChildren<Tapable>(
-          (child) => child.handleTapCancel(pointerId),
-        );
+        shouldContinue = c.propagateToChildren<Tapable>(tapEventHandler);
       }
       if (c is Tapable && shouldContinue) {
-        shouldContinue = c.handleTapCancel(pointerId);
+        shouldContinue = tapEventHandler(c);
       }
       if (!shouldContinue) {
         break;
       }
     }
+  }
+
+  @mustCallSuper
+  void onTapCancel(int pointerId) {
+    _handleTapEvent((Tapable child) => child.handleTapCancel(pointerId));
   }
 
   @mustCallSuper
   void onTapDown(int pointerId, TapDownDetails details) {
-    for (Component c in components.toList().reversed) {
-      bool shouldContinue = true;
-      if (c is BaseComponent) {
-        shouldContinue = c.propagateToChildren<Tapable>(
-          (child) => child.handleTapDown(pointerId, details),
-        );
-      }
-      if (c is Tapable && shouldContinue) {
-        shouldContinue = c.handleTapDown(pointerId, details);
-      }
-      if (!shouldContinue) {
-        break;
-      }
-    }
+    _handleTapEvent((Tapable child) => child.handleTapDown(pointerId, details));
   }
 
   @mustCallSuper
   void onTapUp(int pointerId, TapUpDetails details) {
-    for (Component c in components.toList().reversed) {
-      bool shouldContinue = true;
-      if (c is BaseComponent) {
-        shouldContinue = c.propagateToChildren<Tapable>(
-          (child) => child.handleTapUp(pointerId, details),
-        );
-      }
-      if (c is Tapable && shouldContinue) {
-        shouldContinue = c.handleTapUp(pointerId, details);
-      }
-      if (!shouldContinue) {
-        break;
-      }
-    }
+    _handleTapEvent((Tapable child) => child.handleTapUp(pointerId, details));
   }
 }
