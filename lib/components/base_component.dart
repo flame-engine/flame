@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
@@ -109,9 +110,11 @@ abstract class BaseComponent extends Component {
   /// Get a list of non removed effects
   List<ComponentEffect> get effects => _effectsHandler.effects;
 
-  /// Uses the game passed in to prepare the child component before it is added
-  /// to the list of children
-  void addChild(Game gameRef, Component c) {
+  /// Uses the game passed in, or uses the game from [HasGameRef] otherwise,
+  /// to prepare the child component before it is added to the list of children
+  void addChild(Component c, {Game gameRef}) {
+    assert(gameRef != null || this is HasGameRef);
+    gameRef ??= (this as HasGameRef).gameRef;
     if (gameRef is BaseGame) {
       gameRef.prepare(c);
     }
