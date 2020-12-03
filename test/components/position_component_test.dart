@@ -64,6 +64,17 @@ void main() {
       expect(component.checkOverlap(point), true);
     });
 
+    test('not overlapping with angle', () {
+      final PositionComponent component = MyComponent();
+      component.position = Vector2(2.0, 2.0);
+      component.size = Vector2(2.0, 2.0);
+      component.angle = math.pi / 4;
+      component.anchor = Anchor.center;
+
+      final point = Vector2(1.0, 0.1);
+      expect(component.checkOverlap(point), false);
+    });
+
     test('overlapping with angle and topLeft anchor', () {
       final PositionComponent component = MyComponent();
       component.position = Vector2(1.0, 1.0);
