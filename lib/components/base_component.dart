@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
@@ -11,6 +10,7 @@ import '../extensions/vector2.dart';
 import '../game.dart';
 import '../text_config.dart';
 import 'component.dart';
+import 'mixins/has_game_ref.dart';
 
 /// This can be extended to represent a basic Component for your game.
 ///

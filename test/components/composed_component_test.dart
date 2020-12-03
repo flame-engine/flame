@@ -38,7 +38,7 @@ void main() {
     test('taps and resizes children', () {
       final MyGame game = MyGame();
       final MyTap child = MyTap();
-      final MyComposed wrapper = MyComposed()..addChild(game, child);
+      final MyComposed wrapper = MyComposed()..addChild(child);
 
       game.size = size;
       game.add(wrapper);
