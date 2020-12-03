@@ -6,6 +6,7 @@
  - Fix debugConfig strokeWidth for web
  - Update Forge2D docs
  - Update PR template with removal of develop branch
+ - Translate README to Russian
 
 ## 1.0.0-rc2
  - Improve IsometricTileMap and Spritesheet classes
