@@ -8,12 +8,12 @@ import 'package:flame/components/position_component.dart';
 import 'package:flame/components/mixins/dragable.dart';
 
 void main() {
-  final game = MyGame();
-
   final widget = Container(
     padding: const EdgeInsets.all(0),
     color: const Color(0xFFA9A9A9),
-    child: game.widget,
+    child: GameWidget(
+      game: MyGame(),
+    ),
   );
 
   runApp(widget);

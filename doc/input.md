@@ -163,6 +163,8 @@ Just like with `Tapable` Flame offers a mixin for `Dragable`.
 
 By adding the `HasDragableComponents` mixin to your game, and by using the mixin `Dragable` on your components can override the following methods, enabling an easy to use drag event on your components.
 
+Note that the `DragEvent.initialPosition` doesn't take any padding or margin outside the game widget into account, so if you are not running the game in full screen you'll have to take that into account.
+
 ```dart
   void onReceiveDrag(DragEvent details) {}
 ```
