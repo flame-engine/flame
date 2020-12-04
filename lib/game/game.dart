@@ -111,7 +111,9 @@ abstract class Game {
 
   /// Utility method to load and cache the image for a sprite animation based on its options
   Future<SpriteAnimation> loadSpriteAnimation(
-      String path, SpriteAnimationData data) async {
+    String path,
+    SpriteAnimationData data,
+  ) async {
     final image = await images.load(path);
     return SpriteAnimation.fromFrameData(image, data);
   }

@@ -25,14 +25,23 @@ class SpriteAnimationData {
   List<SpriteAnimationFrameData> frames;
   final bool loop;
 
+  /// Creates a SpriteAnimationData from the given [frames] and [loop] parameters
   SpriteAnimationData(this.frames, {this.loop = true});
 
+  /// Takes some parameters and automatically calculate and create the frames for the sprite animation data
+  ///
+  /// [amount] The total amount of frames present on the image
+  /// [stepTimes] A list of times (in seconds) of each frame, should have a length equals to the amount parameter
+  /// [textureSize] The size of each frame
+  /// [amountPerRow] An optional parameter to inform how many frames there are on which row, useful for sprite sheets where the frames as disposed on multiple lines
+  /// [texturePosition] An optional parameter with the initial coordinate where the frames begin on the image, default to (top: 0, left: 0)
+  /// [loop] An optional parameter to inform if this animation loops or has a single iteration, defaults to true
   SpriteAnimationData.variable({
     @required int amount,
     @required List<double> stepTimes,
+    @required Vector2 textureSize,
     int amountPerRow,
     Vector2 texturePosition,
-    Vector2 textureSize,
     this.loop = true,
   })  : assert(amountPerRow == null || amount >= amountPerRow),
         assert(stepTimes != null) {
@@ -52,12 +61,13 @@ class SpriteAnimationData {
     }
   }
 
+  /// Works just like [SpriteAnimationData.variable] but uses the same [stepTime] for all frames
   SpriteAnimationData.sequenced({
     @required int amount,
     @required double stepTime,
+    @required Vector2 textureSize,
     int amountPerRow,
     Vector2 texturePosition,
-    Vector2 textureSize,
     bool loop = true,
   }) : this.variable(
           amount: amount,
@@ -125,7 +135,9 @@ class SpriteAnimation {
     frames = sprites.map((s) => SpriteAnimationFrame(s, stepTime)).toList();
   }
 
-  /// Creates an SpriteAnimation based on its [opts]
+  /// Creates an SpriteAnimation based on its [data].
+  ///
+  /// Check [SpriteAnimationData] constructors for more info.
   SpriteAnimation.fromFrameData(
     Image image,
     SpriteAnimationData data,
