@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/components/mixins/has_async_load.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
@@ -69,7 +70,13 @@ class BaseGame extends Game with FPSCounter {
   /// Prepares and registers a component to be added on the next game tick
   void add(Component c) {
     prepare(c);
-    _addLater.add(c);
+    if (c is HasAsyncLoading) {
+      c.onLoad().then((_) {
+        _addLater.add(c);
+      });
+    } else {
+      _addLater.add(c);
+    }
   }
 
   /// Prepares and registers a list of components to be added on the next game tick
