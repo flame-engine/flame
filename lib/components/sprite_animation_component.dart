@@ -11,6 +11,9 @@ class SpriteAnimationComponent extends PositionComponent {
   Paint overridePaint;
   bool removeOnFinish = false;
 
+  /// Creates an [SpriteAnimationComponent] from an [animation] and a [size]
+  ///
+  /// Optionally [removeOnFinish] can be set to true to have this component be auto removed from the [BaseGame] when the animation is finished.
   SpriteAnimationComponent(
     Vector2 size,
     this.animation, {
@@ -19,62 +22,33 @@ class SpriteAnimationComponent extends PositionComponent {
     super.size.setFrom(size);
   }
 
+  /// Creates a component with an empty animation which can be set later
   SpriteAnimationComponent.empty();
 
-  SpriteAnimationComponent.sequenced(
+  /// Creates a SpriteAnimationComponent from a [size], an [image] and [data], check [SpriteAnimationData] for more info on the available options.
+  ///
+  /// Optionally [removeOnFinish] can be set to true to have this component be auto removed from the [BaseGame] when the animation is finished.
+  SpriteAnimationComponent.fromFrameData(
     Vector2 size,
     Image image,
-    int amount, {
-    int amountPerRow,
-    Vector2 texturePosition,
-    @required double stepTime,
-    Vector2 textureSize,
-    bool loop = true,
+    SpriteAnimationData data, {
     this.removeOnFinish = false,
   }) {
     super.size.setFrom(size);
-    animation = SpriteAnimation.sequenced(
+    animation = SpriteAnimation.fromFrameData(
       image,
-      amount,
-      amountPerRow: amountPerRow,
-      texturePosition: texturePosition,
-      textureSize: textureSize,
-      stepTime: stepTime ?? 0.1,
-      loop: loop,
-    );
-  }
-
-  SpriteAnimationComponent.variableSequenced(
-    Vector2 size,
-    Image image,
-    int amount,
-    List<double> stepTimes, {
-    int amountPerRow,
-    Vector2 texturePosition,
-    Vector2 textureSize,
-    bool loop = true,
-  }) {
-    super.size.setFrom(size);
-
-    animation = SpriteAnimation.variableSequenced(
-      image,
-      amount,
-      stepTimes,
-      amountPerRow: amountPerRow,
-      texturePosition: texturePosition,
-      textureSize: textureSize,
-      loop: loop,
+      data,
     );
   }
 
   @override
-  bool get shouldRemove => removeOnFinish && animation.isLastFrame;
+  bool get shouldRemove => removeOnFinish && (animation?.isLastFrame ?? false);
 
   @mustCallSuper
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    animation.getSprite().render(
+    animation?.getSprite()?.render(
           canvas,
           size: size,
           overridePaint: overridePaint,
@@ -84,6 +58,6 @@ class SpriteAnimationComponent extends PositionComponent {
   @override
   void update(double t) {
     super.update(t);
-    animation.update(t);
+    animation?.update(t);
   }
 }
