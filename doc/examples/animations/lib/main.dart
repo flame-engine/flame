@@ -30,27 +30,31 @@ class MyGame extends BaseGame with TapDetector {
     chopper = await images.load('chopper.png');
     creature = await images.load('creature.png');
 
-    animation = SpriteAnimation.sequenced(
+    animation = SpriteAnimation.fromFrameData(
       chopper,
-      4,
-      textureSize: Vector2.all(48),
-      stepTime: 0.15,
-      loop: true,
+      SpriteAnimationData.sequenced(
+        amount: 4,
+        textureSize: Vector2.all(48),
+        stepTime: 0.15,
+        loop: true,
+      ),
     );
   }
 
   void addAnimation(double x, double y) {
     final size = Vector2(291, 178);
 
-    final animationComponent = SpriteAnimationComponent.sequenced(
-      size,
-      creature,
-      18,
-      amountPerRow: 10,
-      textureSize: size,
-      stepTime: 0.15,
-      loop: false,
-      removeOnFinish: true,
+    final animationComponent = SpriteAnimationComponent.fromFrameData(
+        size,
+        creature,
+        SpriteAnimationData.sequenced(
+            amount: 18,
+            amountPerRow: 10,
+            textureSize: size,
+            stepTime: 0.15,
+            loop: false,
+        ),
+        removeOnFinish: true,
     );
 
     animationComponent.position = animationComponent.position - size / 2;
@@ -78,6 +82,6 @@ class MyGame extends BaseGame with TapDetector {
   }
 
   MyGame(Vector2 screenSize) {
-    size = screenSize;
+    size.setFrom(screenSize);
   }
 }
