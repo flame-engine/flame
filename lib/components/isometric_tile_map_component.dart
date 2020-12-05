@@ -49,7 +49,7 @@ class IsometricTileMapComponent extends PositionComponent {
         if (element != -1) {
           final sprite = tileset.getSpriteById(element);
           final p = getBlockPositionInts(j, i);
-          sprite.renderRect(c, p.toPositionedRect(size));
+          sprite.render(c, position: p, size: size);
         }
       }
     }

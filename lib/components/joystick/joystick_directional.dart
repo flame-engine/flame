@@ -8,6 +8,7 @@ import '../../gestures.dart';
 import '../../sprite.dart';
 import 'joystick_component.dart';
 import 'joystick_events.dart';
+import 'joystick_utils.dart';
 
 class JoystickDirectional {
   final double size;
@@ -19,13 +20,12 @@ class JoystickDirectional {
   final double opacityBackground;
   final double opacityKnob;
 
-  Paint _paintBackground;
-  Paint _paintKnob;
-
   Sprite _backgroundSprite;
-  Sprite _knobSprite;
-
+  Paint _paintBackground;
   Rect _backgroundRect;
+
+  Sprite _knobSprite;
+  Paint _paintKnob;
   Rect _knobRect;
 
   bool _dragging = false;
@@ -66,77 +66,59 @@ class JoystickDirectional {
     _tileSize = size / 2;
   }
 
-  void initialize(Vector2 _screenSize, JoystickController joystickController) {
-    this._screenSize = _screenSize;
+  void initialize(Vector2 screenSize, JoystickController joystickController) {
+    _screenSize = _screenSize;
     _joystickController = joystickController;
-    final Offset osBackground =
-        Offset(margin.left, _screenSize.y - margin.bottom);
+
+    final osBackground = Offset(margin.left, _screenSize.y - margin.bottom);
     _backgroundRect = Rect.fromCircle(center: osBackground, radius: size / 2);
 
-    final Offset osKnob =
-        Offset(_backgroundRect.center.dx, _backgroundRect.center.dy);
+    final osKnob = _backgroundRect.center;
     _knobRect = Rect.fromCircle(center: osKnob, radius: size / 4);
 
     _dragPosition = _knobRect.center;
   }
 
   void render(Canvas canvas) {
-    if (_backgroundRect != null) {
-      if (_backgroundSprite != null) {
-        _backgroundSprite.renderRect(canvas, _backgroundRect);
-      } else {
-        final double radiusBackground = _backgroundRect.width / 2;
-        canvas.drawCircle(
-          Offset(_backgroundRect.left + radiusBackground,
-              _backgroundRect.top + radiusBackground),
-          radiusBackground,
-          _paintBackground,
-        );
-      }
-    }
+    JoystickUtils.renderControl(
+      canvas,
+      _backgroundSprite,
+      _backgroundRect,
+      _paintBackground,
+    );
 
-    if (_knobRect != null) {
-      if (_knobSprite != null) {
-        _knobSprite.renderRect(canvas, _knobRect);
-      } else {
-        final double radiusKnob = _knobRect.width / 2;
-        canvas.drawCircle(
-          Offset(_knobRect.left + radiusKnob, _knobRect.top + radiusKnob),
-          radiusKnob,
-          _paintKnob,
-        );
-      }
-    }
+    JoystickUtils.renderControl(
+      canvas,
+      _knobSprite,
+      _knobRect,
+      _paintKnob,
+    );
   }
 
   void update(double t) {
     if (_dragging) {
       final double _radAngle = atan2(
-          _dragPosition.dy - _backgroundRect.center.dy,
-          _dragPosition.dx - _backgroundRect.center.dx);
+        _dragPosition.dy - _backgroundRect.center.dy,
+        _dragPosition.dx - _backgroundRect.center.dx,
+      );
 
-      final double degrees = _radAngle * 180 / pi;
+      final degrees = _radAngle * 180 / pi;
 
       // Distance between the center of joystick background & drag position
       final centerPosition = _backgroundRect.center.toVector2();
       final dragPosition = _dragPosition.toVector2();
-      double dist = centerPosition.distanceTo(dragPosition);
 
       // The maximum distance for the knob position the edge of
       // the background + half of its own size. The knob can wander in the
       // background image, but not outside.
-      dist = min(dist, _tileSize);
+      final dist = min(centerPosition.distanceTo(dragPosition), _tileSize);
 
       // Calculation the knob position
-      final double nextX = dist * cos(_radAngle);
-      final double nextY = dist * sin(_radAngle);
-      final Offset nextPoint = Offset(nextX, nextY);
+      final nextX = dist * cos(_radAngle);
+      final nextY = dist * sin(_radAngle);
+      final nextPoint = Offset(nextX, nextY);
 
-      final Offset diff = Offset(
-            _backgroundRect.center.dx + nextPoint.dx,
-            _backgroundRect.center.dy + nextPoint.dy,
-          ) -
-          _knobRect.center;
+      final diff = _backgroundRect.center + nextPoint - _knobRect.center;
       _knobRect = _knobRect.shift(diff);
 
       final double _intensity = dist / _tileSize;
@@ -167,18 +149,11 @@ class JoystickDirectional {
   void onReceiveDrag(DragEvent event) {
     _updateDirectionalRect(event.initialPosition);
 
-    final Rect directional = Rect.fromLTWH(
-      _backgroundRect.left - 50,
-      _backgroundRect.top - 50,
-      _backgroundRect.width + 100,
-      _backgroundRect.height + 100,
-    );
-
+    final directional = _backgroundRect.inflate(50.0);
     if (!_dragging && directional.contains(event.initialPosition)) {
       _dragging = true;
       _dragPosition = event.initialPosition;
-      _currentDragEvent = event;
-      _currentDragEvent
+      _currentDragEvent = event
         ..onUpdate = onPanUpdate
         ..onEnd = onPanEnd
         ..onCancel = onPanCancel;
@@ -195,10 +170,7 @@ class JoystickDirectional {
 
     _backgroundRect = Rect.fromCircle(center: position, radius: size / 2);
 
-    final Offset osKnob = Offset(
-      _backgroundRect.center.dx,
-      _backgroundRect.center.dy,
-    );
+    final osKnob = _backgroundRect.center;
     _knobRect = Rect.fromCircle(center: osKnob, radius: size / 4);
   }
 

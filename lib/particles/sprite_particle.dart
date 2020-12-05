@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
+import '../anchor.dart';
 import '../particle.dart';
 import '../sprite.dart';
 import '../extensions/vector2.dart';
@@ -22,11 +23,11 @@ class SpriteParticle extends Particle {
 
   @override
   void render(Canvas canvas) {
-    sprite.renderCentered(
+    sprite.render(
       canvas,
-      Vector2.zero(),
-      overridePaint: overridePaint,
       size: size,
+      anchor: Anchor.center,
+      overridePaint: overridePaint,
     );
   }
 }
