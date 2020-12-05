@@ -21,11 +21,11 @@ class JoystickDirectional {
   final double opacityKnob;
 
   Sprite _backgroundSprite;
-  Paint _paintBackground;
+  Paint _backgroundPaint;
   Rect _backgroundRect;
 
   Sprite _knobSprite;
-  Paint _paintKnob;
+  Paint _knobPaint;
   Rect _knobRect;
 
   bool _dragging = false;
@@ -51,14 +51,14 @@ class JoystickDirectional {
     if (spriteBackgroundDirectional != null) {
       _backgroundSprite = spriteBackgroundDirectional;
     } else {
-      _paintBackground = Paint()
+      _backgroundPaint = Paint()
         ..color = color.withOpacity(opacityBackground)
         ..style = PaintingStyle.fill;
     }
     if (spriteKnobDirectional != null) {
       _knobSprite = spriteKnobDirectional;
     } else {
-      _paintKnob = Paint()
+      _knobPaint = Paint()
         ..color = color.withOpacity(opacityKnob)
         ..style = PaintingStyle.fill;
     }
@@ -67,7 +67,7 @@ class JoystickDirectional {
   }
 
   void initialize(Vector2 screenSize, JoystickController joystickController) {
-    _screenSize = _screenSize;
+    _screenSize = screenSize;
     _joystickController = joystickController;
 
     final osBackground = Offset(margin.left, _screenSize.y - margin.bottom);
@@ -84,14 +84,14 @@ class JoystickDirectional {
       canvas,
       _backgroundSprite,
       _backgroundRect,
-      _paintBackground,
+      _backgroundPaint,
     );
 
     JoystickUtils.renderControl(
       canvas,
       _knobSprite,
       _knobRect,
-      _paintKnob,
+      _knobPaint,
     );
   }
 
