@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame/components/mixins/has_async_load.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
@@ -70,13 +69,9 @@ class BaseGame extends Game with FPSCounter {
   /// Prepares and registers a component to be added on the next game tick
   void add(Component c) {
     prepare(c);
-    if (c is HasAsyncLoading) {
-      c.onLoad().then((_) {
-        _addLater.add(c);
-      });
-    } else {
+    c.onLoad().then((_) {
       _addLater.add(c);
-    }
+    });
   }
 
   /// Prepares and registers a list of components to be added on the next game tick
@@ -111,9 +106,6 @@ class BaseGame extends Game with FPSCounter {
   /// It translates the camera unless hud, call the render method and restore the canvas.
   /// This makes sure the canvas is not messed up by one component and all components render independently.
   void renderComponent(Canvas canvas, Component c) {
-    if (!c.loaded) {
-      return;
-    }
     if (!c.isHud) {
       canvas.translate(-camera.x, -camera.y);
     }
