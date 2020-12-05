@@ -67,9 +67,11 @@ class BaseGame extends Game with FPSCounter {
   }
 
   /// Prepares and registers a component to be added on the next game tick
-  void add(Component c) {
+  ///
+  /// This methods is an async operation since it await the `onLoad` method of the component. Nevertheless, this method only need to be waited to finish if by some reason, your logic needs to be sure that the component has finished loading, otherwise, this method can be called without waiting for it to finish as the BaseGame already handle the loading of the component.
+  Future<void> add(Component c) async {
     prepare(c);
-    c.onLoad().then((_) {
+    await c.onLoad().then((_) {
       _addLater.add(c);
     });
   }

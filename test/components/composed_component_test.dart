@@ -51,14 +51,14 @@ Vector2 size = Vector2(1.0, 1.0);
 
 void main() {
   group('composable component test', () {
-    test('taps and resizes children', () {
+    test('taps and resizes children', () async {
       final MyGame game = MyGame();
       final MyTap child = MyTap();
       final MyComposed wrapper = MyComposed();
 
-      game.size = size;
-      wrapper.addChild(child);
-      game.add(wrapper);
+
+      game.size.setFrom(size);
+      await game.add(wrapper);
       game.update(0.0);
       game.onTapDown(1, TapDownDetails(globalPosition: const Offset(0.0, 0.0)));
 
