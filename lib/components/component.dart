@@ -11,12 +11,6 @@ import '../game.dart';
 /// Anything that either renders or updates can be added to the list on [BaseGame]. It will deal with calling those methods for you.
 /// Components also have other methods that can help you out if you want to override them.
 abstract class Component {
-  /// Whether this component has been loaded yet. If not loaded, [BaseGame] will not try to render it.
-  ///
-  /// Sprite based components can use this to let [BaseGame] know not to try to render when the [Sprite] has not been loaded yet.
-  /// Note that for a more consistent experience, you can pre-load all your assets beforehand with Flame.images.loadAll.
-  bool loaded = true;
-
   /// Whether this component is HUD object or not.
   ///
   /// HUD objects ignore the [BaseGame.camera] when rendered (so their position coordinates are considered relative to the device screen).
@@ -64,4 +58,17 @@ abstract class Component {
 
   /// Called right before the component is removed from the game
   void onRemove() {}
+
+  /// Called before the component is added to the [BaseGame] list of components.
+  /// Has a default implementation which just return a resolved [Future]
+  ///
+  /// This can be overriden this to add custom logic to the component loading
+  ///
+  /// Example:
+  /// ```dart
+  /// @override
+  /// Future<void> onLoad() async {
+  ///   myImage = alwait gameRef.load('my_image.png');
+  /// }
+  Future<void> onLoad() => Future.value();
 }
