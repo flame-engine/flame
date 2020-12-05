@@ -73,8 +73,10 @@ class JoystickDirectional {
     final osBackground = Offset(margin.left, _screenSize.y - margin.bottom);
     _backgroundRect = Rect.fromCircle(center: osBackground, radius: size / 2);
 
-    final osKnob = _backgroundRect.center;
-    _knobRect = Rect.fromCircle(center: osKnob, radius: size / 4);
+    _knobRect = Rect.fromCircle(
+      center: _backgroundRect.center,
+      radius: size / 4,
+    );
 
     _dragPosition = _knobRect.center;
   }
@@ -171,8 +173,10 @@ class JoystickDirectional {
 
     _backgroundRect = Rect.fromCircle(center: position, radius: size / 2);
 
-    final osKnob = _backgroundRect.center;
-    _knobRect = Rect.fromCircle(center: osKnob, radius: size / 4);
+    _knobRect = Rect.fromCircle(
+      center: _backgroundRect.center,
+      radius: size / 4,
+    );
   }
 
   void onPanUpdate(DragUpdateDetails details) {
