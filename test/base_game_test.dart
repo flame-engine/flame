@@ -54,23 +54,23 @@ Vector2 size = Vector2(1.0, 1.0);
 
 void main() {
   group('BaseGame test', () {
-    test('prepare adds gameRef and calls onGameResize', () {
+    test('prepare adds gameRef and calls onGameResize', () async {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
-      game.add(component);
+      game.size.setFrom(size);
+      await game.add(component);
 
       expect(component.gameSize, size);
       expect(component.gameRef, game);
     });
 
-    test('component can be tapped', () {
+    test('component can be tapped', () async {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
-      game.add(component);
+      game.size.setFrom(size);
+      await game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
       game.onTapDown(1, TapDownDetails(globalPosition: const Offset(0.0, 0.0)));
@@ -78,12 +78,12 @@ void main() {
       expect(component.tapped, true);
     });
 
-    test('component is added to component list', () {
+    test('component is added to component list', () async {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
-      game.add(component);
+      game.size.setFrom(size);
+      await game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
 
@@ -95,8 +95,8 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
-      game.add(component);
+      game.size.setFrom(size);
+      await game.add(component);
       GameRenderBox renderBox;
       await tester.pumpWidget(
         Builder(
@@ -117,12 +117,12 @@ void main() {
       renderBox.detach();
     });
 
-    test('onRemove is only called once on component', () {
+    test('onRemove is only called once on component', () async {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
-      game.add(component);
+      game.size.setFrom(size);
+      await game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
       // The component is removed both by removing it on the game instance and
