@@ -153,7 +153,8 @@ class JoystickDirectional {
     if (!_dragging && directional.contains(event.initialPosition)) {
       _dragging = true;
       _dragPosition = event.initialPosition;
-      _currentDragEvent = event
+      _currentDragEvent = event;
+      _currentDragEvent
         ..onUpdate = onPanUpdate
         ..onEnd = onPanEnd
         ..onCancel = onPanCancel;
