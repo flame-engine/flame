@@ -20,6 +20,8 @@ The `onMount` method can be overridden to run initialization code for the compon
 
 The `onRemove` method can be overridden to run code before the component is removed from the game, it is only run once even if the component is removed both by using the `BaseGame` remove method and the ´Component´ remove method.
 
+The `onLoad` method can be overridden to run asynchronous initialization code for the component, like loading an image for example. This method is executed after the initial "preparation" of the component is run, meaning that this method is executed after `onMount` and just before the inlcusion of the component on the `BaseGame` list of components.
+
 ## BaseComponent
 Usually if you are going to make your own component you want to extend `PositionComponent`, but if you want to be able to handle effects and child components but handle the positioning differently you can extend the `BaseComponent`.
 
