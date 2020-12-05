@@ -54,8 +54,7 @@ class Sprite {
     final drawPosition = position ?? Vector2.zero();
     final drawSize = size ?? srcSize;
 
-    final delta = -anchor.relativePosition
-      ..multiply(drawSize);
+    final delta = anchor.relativePosition..multiply(drawSize);
     final drawRect = (drawPosition + delta).toPositionedRect(drawSize);
 
     final drawPaint = overridePaint ?? paint;
