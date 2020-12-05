@@ -127,30 +127,30 @@ class Util {
   /// Utility method to render stuff on a specific place.
   ///
   /// Some render methods don't allow to pass a offset.
-  /// This method translate the canvas before rendering your block.
-  /// The changes are reset after the block is run.
-  void renderAt(Canvas c, Vector2 p, void Function(Canvas) block) {
+  /// This method translate the canvas before rendering your fn.
+  /// The changes are reset after the fn is run.
+  void renderAt(Canvas c, Vector2 p, void Function(Canvas) fn) {
     c.save();
     c.translate(p.x, p.y);
-    block(c);
+    fn(c);
     c.restore();
   }
 
   /// Utility method to render stuff rotated at specific angle.
   ///
   /// It rotates the canvas around the center of rotation.
-  /// The changes are reset after the block is run.
+  /// The changes are reset after the fn is run.
   void renderRotated(
     Canvas c,
     double angle,
     Vector2 rotationCenter,
-    void Function(Canvas) block,
+    void Function(Canvas) fn,
   ) {
     c.save();
     c.translate(-rotationCenter.x, -rotationCenter.y);
     c.rotate(angle);
     c.translate(rotationCenter.x, rotationCenter.y);
-    block(c);
+    fn(c);
     c.restore();
   }
 }
