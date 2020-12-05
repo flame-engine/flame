@@ -1,3 +1,4 @@
+import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flame/sprite.dart';
@@ -25,6 +26,6 @@ class MyGame extends Game {
 
   @override
   void render(Canvas canvas) {
-    _sprite.renderRect(canvas, const Rect.fromLTWH(100, 100, 100, 100));
+    _sprite.render(canvas, position: Vector2.all(100), size: Vector2.all(100));
   }
 }

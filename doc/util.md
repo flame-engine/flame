@@ -46,7 +46,7 @@ These two functions help with registering (and de-registering) gesture recognize
 ### Other functions
 
 * `text`: discussed [here](/doc/text.md)
-* `drawWhere`: a very simple function that manually applies an offset to the `Canvas`, render stuff given via a function and then reset the `Canvas`, without using the `Canvas`' built-in `save`/`restore` functionality. This might be useful because `BaseGame` uses the state of the canvas, and you should not mess with it.
+* `renderWhere`: a very simple function that manually applies an offset to the `Canvas`, render stuff given via a function and then reset the `Canvas`, without using the `Canvas`' built-in `save`/`restore` functionality. This might be useful because `BaseGame` uses the state of the canvas, and you should not mess with it.
  
 ## Timer
 
