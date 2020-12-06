@@ -56,7 +56,7 @@ class MyGame extends BaseGame with TapDetector {
     add(reversedAnimationComponent);
   }
 
-  void addAnimation(double x, double y) {
+  void addAnimation(Vector2 position) {
     final size = Vector2(291, 178);
 
     final animationComponent = SpriteAnimationComponent.fromFrameData(
@@ -72,14 +72,14 @@ class MyGame extends BaseGame with TapDetector {
       removeOnFinish: true,
     );
 
-    animationComponent.position = Vector2(x, y);
+    animationComponent.position = position;
     animationComponent.position = animationComponent.position - size / 2;
     add(animationComponent);
   }
 
   @override
   void onTapDown(TapDownDetails evt) {
-    addAnimation(evt.globalPosition.dx, evt.globalPosition.dy);
+    addAnimation(Vector2(evt.globalPosition.dx, evt.globalPosition.dy));
   }
 
   MyGame(Vector2 screenSize) {

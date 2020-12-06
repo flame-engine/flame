@@ -12,7 +12,7 @@ class SpriteAnimationFrameData {
   final Vector2 srcSize;
 
   /// The duration to display it, in seconds.
-  double stepTime;
+  final double stepTime;
 
   SpriteAnimationFrameData({
     @required this.srcPosition,
