@@ -5,7 +5,6 @@
  - Add TextBoxConfig options; margins and growingBox
  - Fix debugConfig strokeWidth for web
  - Update Forge2D docs
-<<<<<<< HEAD
  - Update PR template with removal of develop branch
  - Translate README to Russian
  - Split up Component and PositionComponent to BaseComponent
