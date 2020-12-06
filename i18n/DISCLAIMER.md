@@ -2,7 +2,7 @@
 
 These are some community-created translations of our README.md file.
 
-They were made by the community and might not be up-to-date with the latest versions. Also we have no way of accuretly verifying their contents.
+They were made by the community and might not be up-to-date with the latest versions. Also we have no way of accurately verifying their contents.
 
 We do not provide any kind of support or communications in any language other than English (Internet's well established lingua franca).
 
