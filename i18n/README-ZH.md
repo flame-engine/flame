@@ -15,7 +15,7 @@ A minimalistic Flutter game engine.
 
 ---
 
-[English](https://github.com/flame-engine/flame) | [简体中文](README-ZH.md) | [Polski](README-PL.md)
+[English](/README.md) | [简体中文](README-ZH.md) | [Polski](README-PL.md) | [Русский](README-RU.md)
 
 ---
 
@@ -24,8 +24,6 @@ A minimalistic Flutter game engine.
 ⚠**警告**⚠ : 当前为 Flame `1.0.0` 的候选版本. 尚未预备好投入生产(正式版), 并且此处的代码尚未根据代码进行完整更新. 此处全部的内容都可能在正式版发布前发生变更.
 
 通过使用该版本, 可以抢先预览Flame的新版本情况, 你可以为团队提供新功能、新结构的反馈.
-
-[English](README.md) | 简体中文 | [Polski](README-PL.md) | [Русский](README-RU.md)
 
 > 本篇为社区版翻译, 目前针对版本: 0.28.0
 
