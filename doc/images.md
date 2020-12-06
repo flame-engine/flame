@@ -109,7 +109,7 @@ You could also specify the coordinates in the original image where the sprite is
 
 ```dart
     final image = await loadImage();
-    Sprite playerFrame = Sprite(
+    final playerFrame = Sprite(
       image,
       srcPosition: Vector2(32.0, 0),
       srcSize: Vector2(16.0, 16.0),
@@ -200,7 +200,7 @@ A better alternative to generate a list of sprites is to use the `fromFrameData`
 
 ```dart
   const amountOfFrames = 8;
-  SpriteAnimation a = SpriteAnimation.fromFrameData(
+  final a = SpriteAnimation.fromFrameData(
     imageInstance,
     SpriteAnimationFrame.sequenced(
       amount: amountOfFrames,
@@ -212,7 +212,7 @@ A better alternative to generate a list of sprites is to use the `fromFrameData`
 
 This constructor makes creating an Animation very easy using sprite sheets.
 
-In which you pass the image instance, and the frame data, which contains some parameters which can be used to describe the animation. Check the documentation on the constructors available on `SpriteAnimationFrameData` class to see all the parameters.
+In the constructor you pass an image instance and the frame data, which contains some parameters that can be used to describe the animation. Check the documentation on the constructors available on `SpriteAnimationFrameData` class to see all the parameters.
 
 If you use Aseprite for your animations, Flame does provide some support for Aseprite animation's JSON data. To use this feature you will need to export the Sprite Sheet's JSON data, and use something like the following snippet:
 
