@@ -13,7 +13,6 @@ import '../extensions/vector2.dart';
 import '../keyboard.dart';
 import '../sprite.dart';
 import '../sprite_animation.dart';
-import 'widget_builder.dart';
 
 /// Represents a generic game.
 ///
