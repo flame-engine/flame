@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-A minimalistic Flutter game engine.
+一款简约的Flutter游戏引擎.
 </p>
 
 <p align="center">
@@ -15,7 +15,7 @@ A minimalistic Flutter game engine.
 
 ---
 
-[English](/README.md) | [简体中文](README-ZH.md) | [Polski](README-PL.md) | [Русский](README-RU.md)
+[English](/README.md) | [简体中文](/i18n/README-ZH.md) | [Polski](/i18n/README-PL.md) | [Русский](/i18n/README-RU.md)
 
 ---
 
@@ -26,8 +26,6 @@ A minimalistic Flutter game engine.
 通过使用该版本, 可以抢先预览Flame的新版本情况, 你可以为团队提供新功能、新结构的反馈.
 
 > 本篇为社区版翻译, 目前针对版本: 0.28.0
-
-一款简约的Flutter游戏引擎.
 
 ## 问题互助
 
