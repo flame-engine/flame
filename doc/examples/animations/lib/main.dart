@@ -1,7 +1,7 @@
+import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/game.dart';
 import 'package:flame/extensions/vector2.dart';
 import 'package:flame/sprite_animation.dart';
 import 'package:flame/components/sprite_animation_component.dart';
@@ -13,7 +13,11 @@ void main() async {
 
   final Vector2 size = await Flame.util.initialDimensions();
   final game = MyGame(size);
-  runApp(game.widget);
+  runApp(
+    GameWidget(
+      game: game,
+    ),
+  );
 }
 
 class MyGame extends BaseGame with TapDetector {

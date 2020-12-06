@@ -12,7 +12,11 @@ import 'package:flutter/material.dart';
 
 void main() async {
   final Vector2 size = await Flame.util.initialDimensions();
-  runApp(MyGame(size).widget);
+  runApp(
+    GameWidget(
+      game: MyGame(size),
+    ),
+  );
 }
 
 TextConfig regular = TextConfig(color: BasicPalette.white.color);

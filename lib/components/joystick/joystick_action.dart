@@ -10,6 +10,7 @@ import '../../gestures.dart';
 import '../../sprite.dart';
 import 'joystick_component.dart';
 import 'joystick_events.dart';
+import 'joystick_utils.dart';
 
 enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
 
@@ -113,37 +114,17 @@ class JoystickAction {
   }
 
   void render(Canvas c) {
-    if (_rectBackgroundDirection != null && _dragging && enableDirection) {
-      if (spriteBackgroundDirection == null) {
-        final double radiusBackground = _rectBackgroundDirection.width / 2;
-        c.drawCircle(
-          Offset(
-            _rectBackgroundDirection.left + radiusBackground,
-            _rectBackgroundDirection.top + radiusBackground,
-          ),
-          radiusBackground,
-          _paintBackground,
-        );
-      } else {
-        spriteBackgroundDirection.renderRect(c, _rectBackgroundDirection);
-      }
-    }
-
-    if (_spriteAction != null) {
-      if (_rectAction != null) {
-        _spriteAction.renderRect(c, _rectAction);
-      }
-    } else {
-      final double radiusAction = _rectAction.width / 2;
-      c.drawCircle(
-        Offset(
-          _rectAction.left + radiusAction,
-          _rectAction.top + radiusAction,
-        ),
-        radiusAction,
-        isPressed ? _paintActionPressed : _paintAction,
+    if (_dragging && enableDirection) {
+      JoystickUtils.renderControl(
+        c,
+        spriteBackgroundDirection,
+        _rectBackgroundDirection,
+        _paintBackground,
       );
     }
+
+    final actionPaint = isPressed ? _paintActionPressed : _paintAction;
+    JoystickUtils.renderControl(c, _spriteAction, _rectAction, actionPaint);
   }
 
   void update(double dt) {

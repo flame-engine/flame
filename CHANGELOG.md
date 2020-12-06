@@ -8,6 +8,9 @@
  - Update PR template with removal of develop branch
  - Translate README to Russian
  - Split up Component and PositionComponent to BaseComponent
+ - Unify multiple render methods on Sprite
+ - Refactored how games are inserted into a flutter tree
+ - Refactored the widgets overlay API
 
 ## 1.0.0-rc2
  - Improve IsometricTileMap and Spritesheet classes
