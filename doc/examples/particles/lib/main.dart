@@ -25,9 +25,16 @@ import 'package:flame/extensions/vector2.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
 import 'package:flame/text_config.dart';
-import 'package:flutter/material.dart' hide Animation, Image;
+import 'package:flutter/material.dart' hide Image;
 
-void main() async => runApp((await loadGame()).widget);
+void main() async {
+  final game = await loadGame();
+  runApp(
+    GameWidget(
+      game: game,
+    ),
+  );
+}
 
 class MyGame extends BaseGame {
   /// Defines dimensions of the sample

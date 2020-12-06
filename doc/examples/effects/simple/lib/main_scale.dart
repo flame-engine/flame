@@ -32,5 +32,9 @@ class MyGame extends BaseGame with TapDetector {
 }
 
 void main() {
-  runApp(MyGame().widget);
+  runApp(
+    GameWidget(
+      game: MyGame(),
+    ),
+  );
 }

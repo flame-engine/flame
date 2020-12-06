@@ -13,8 +13,11 @@ void main() async {
   Flame.initializeWidget();
   await Flame.util.initialDimensions();
 
-  final myGame = MyGame();
-  runApp(myGame.widget);
+  runApp(
+    GameWidget(
+      game: MyGame(),
+    ),
+  );
 }
 
 class AndroidComponent extends SpriteComponent with Resizable {

@@ -14,6 +14,7 @@ import 'util.dart';
 class Flame {
   // Flame asset bundle, defaults to root
   static AssetBundle _bundle;
+
   static AssetBundle get bundle => _bundle == null ? rootBundle : _bundle;
 
   /// Access a shared instance of [AssetsCache] class.
@@ -25,10 +26,11 @@ class Flame {
   /// Access a shared instance of the [Util] class.
   static Util util = Util();
 
-  static Future<void> init(
-      {AssetBundle bundle,
-      bool fullScreen = true,
-      DeviceOrientation orientation}) async {
+  static Future<void> init({
+    AssetBundle bundle,
+    bool fullScreen = true,
+    DeviceOrientation orientation,
+  }) async {
     initializeWidget();
 
     if (fullScreen) {

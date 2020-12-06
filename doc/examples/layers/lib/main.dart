@@ -1,6 +1,6 @@
 import 'package:flame/extensions/vector2.dart';
-import 'package:flutter/material.dart' hide Animation;
 import 'package:flame/game.dart';
+import 'package:flutter/material.dart' hide Animation;
 import 'package:flame/sprite.dart';
 import 'package:flame/layer/layer.dart';
 import 'package:flame/flame.dart';
@@ -12,7 +12,11 @@ void main() async {
 
   await Flame.util.fullScreen();
 
-  runApp(LayerGame().widget);
+  runApp(
+    GameWidget(
+      game: LayerGame(),
+    ),
+  );
 }
 
 class GameLayer extends DynamicLayer {
