@@ -14,7 +14,7 @@ The current v1 release is `1.0.0-rc2` on pub. The last stable version so far is 
 
 ---
 
-[English](README.md) | [简体中文](README-ZH.md) | [Polski](README-PL.md) | [Русский](README-RU.md)
+[English](README.md) | [简体中文](i81n/README-ZH.md) | [Polski](i81n/README-PL.md) | [Русский](i81n/README-RU.md)
 
 A minimalistic Flutter game engine.
 

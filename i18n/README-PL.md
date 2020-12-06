@@ -4,7 +4,7 @@ _Jest to nieoficjalne tłumaczenie. W chwili tłumaczenia wersja v0.22.0._
 
 <img src="https://i.imgur.com/vFDilXT.png" width="400">
 
-[English](README.md) | [简体中文](README-ZH.md) | [Polski](README-PL.md) | [Русский](README-RU.md)
+[English](README.md) | [简体中文](i18n/README-ZH.md) | [Polski](i18n/README-PL.md) | [Русский](i18n/README-RU.md)
 
 Minimalistyczny silnik gry Flutter.
 
