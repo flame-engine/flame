@@ -4,6 +4,7 @@ import 'package:flame/components/position_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/components/mixins/resizable.dart';
 import 'package:flame/components/mixins/tapable.dart';
+import 'package:flame/game.dart';
 import 'package:flame/game/base_game.dart';
 import 'package:flame/extensions/vector2.dart';
 import 'package:flame/game/game_render_box.dart';
@@ -101,7 +102,7 @@ void main() {
         Builder(
           builder: (BuildContext context) {
             renderBox = GameRenderBox(context, game);
-            return game.widget;
+            return GameWidget(game: game);
           },
         ),
       );
@@ -109,7 +110,9 @@ void main() {
       renderBox.gameLoopCallback(1.0);
       expect(component.isUpdateCalled, true);
       renderBox.paint(
-          PaintingContext(ContainerLayer(), Rect.zero), Offset.zero);
+        PaintingContext(ContainerLayer(), Rect.zero),
+        Offset.zero,
+      );
       expect(component.isRenderCalled, true);
       renderBox.detach();
     });

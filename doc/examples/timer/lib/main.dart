@@ -7,10 +7,10 @@ import 'package:flame/extensions/vector2.dart';
 import 'package:flame/components/timer_component.dart';
 
 void main() {
-  runApp(GameWidget());
+  runApp(MyGameApp());
 }
 
-class GameWidget extends StatelessWidget {
+class MyGameApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(routes: {
@@ -26,8 +26,8 @@ class GameWidget extends StatelessWidget {
                   Navigator.of(context).pushNamed('/base_game');
                 })
           ]),
-      '/game': (BuildContext context) => MyGame().widget,
-      '/base_game': (BuildContext context) => MyBaseGame().widget
+      '/game': (BuildContext context) => GameWidget(game: MyGame()),
+      '/base_game': (BuildContext context) => GameWidget(game: MyBaseGame())
     });
   }
 }

@@ -1,11 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/palette.dart';
 
 void main() {
-  final game = MyGame();
-  runApp(game.widget);
+  runApp(
+    GameWidget(
+      game: MyGame(),
+    ),
+  );
 }
 
 /// Includes an example including basic detectors
@@ -15,6 +18,9 @@ class MyGame extends Game
   final _bluePaint = Paint()..color = const Color(0xFF0000FF);
   final _greenPaint = Paint()..color = const Color(0xFF00FF00);
   final _redPaint = Paint()..color = const Color(0xFFFF0000);
+
+  @override
+  Color backgroundColor() => const Color(0xFFF1F1F1);
 
   Paint _paint;
 
