@@ -1,13 +1,17 @@
 import 'package:flame/flame.dart';
-import 'package:flame/game.dart';
 import 'package:flame/components/parallax_component.dart';
 import 'package:flame/extensions/vector2.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.util.fullScreen();
-  runApp(MyGame().widget);
+  runApp(
+    GameWidget(
+      game: MyGame(),
+    ),
+  );
 }
 
 class MyGame extends BaseGame {

@@ -8,7 +8,11 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final Vector2 size = await Flame.util.initialDimensions();
-  runApp(MyGame(size).widget);
+  runApp(
+    GameWidget(
+      game: MyGame(size),
+    ),
+  );
 }
 
 class MyGame extends BaseGame {

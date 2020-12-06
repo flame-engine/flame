@@ -11,9 +11,11 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  final game = MyGame();
-
-  runApp(game.widget);
+  runApp(
+    GameWidget(
+      game: MyGame(),
+    ),
+  );
 }
 
 class Palette {

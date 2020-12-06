@@ -10,7 +10,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final Vector2 size = await Flame.util.initialDimensions();
   final game = MyGame(size);
-  runApp(game.widget);
+  runApp(
+    GameWidget(
+      game: game,
+    ),
+  );
 }
 
 class MyGame extends BaseGame {
