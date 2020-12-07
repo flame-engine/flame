@@ -105,16 +105,16 @@ You can also check a more complete example [here](/doc/examples/gestures).
 
 ## Tapable and Dragable components
 
-A component can extend the `Tapable` and/or the `Dragable` mixins to handle taps and drags on the component.
+Any component derived from `BaseComponent` (most components) can add the `Tapable` and/or the `Dragable` mixins to handle taps and drags on the component.
 
 All overridden methods return a boolean to control if the event should be passed down further along to components underneath it.
-So say that you only want your top visible component to receive a tap and not the ones underneath it, then your `onTapDown`,  `onTapUp` and `onTapCancel` implementations should return `false`, if you want the event to go through more of the components underneath then you should return `true`.
+So say that you only want your top visible component to receive a tap and not the ones underneath it, then your `onTapDown`,  `onTapUp` and `onTapCancel` implementations should return `false` and if you want the event to go through more of the components underneath then you should return `true`.
 
 The same applies if your component has children, then the event is first sent to the leaves in the children tree and then passed further down until a method returns `false`.
 
 ### Tapable components
 
-Flame also offers a simple helper to make it easier to handle tap events on `PositionComponent` (and `BaseComponent`). By adding the `HasTapableComponents` mixin to your game, and using the mixin `Tapable` on your components can override the following methods, enabling easy to use tap events on your components.
+By adding the `HasTapableComponents` mixin to your game, and using the mixin `Tapable` on your components, you can override the following methods on your components:
 
 ```dart
   void onTapCancel() {}
@@ -155,11 +155,11 @@ class MyGame extends BaseGame with HasTapableComponents {
 }
 ```
 
-Warning: `HasTapableComponents`uses an advanced gesture detector under the hood and as explained further up on this page, shouldn't be used alongside basic detectors.
+Warning: `HasTapableComponents` uses an advanced gesture detector under the hood and as explained further up on this page it shouldn't be used alongside basic detectors.
 
 ### Dragable components
 
-Just like with `Tapable` Flame offers a mixin for `Dragable`.
+Just like with `Tapable`, Flame offers a mixin for `Dragable`.
 
 By adding the `HasDragableComponents` mixin to your game, and by using the mixin `Dragable` on your components can override the following methods, enabling an easy to use drag event on your components.
 
