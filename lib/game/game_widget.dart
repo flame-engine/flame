@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/gestures.dart';
@@ -137,7 +138,6 @@ class _GameWidgetState extends State<GameWidget> {
     });
   }
 
-  // loading future
   Future<void> loadingFuture;
 
   @override
@@ -174,15 +174,14 @@ class _GameWidgetState extends State<GameWidget> {
       );
     }
 
-    List<Widget> stackedWidgets = [internalGameWidget];
-    stackedWidgets = _addBackground(context, stackedWidgets);
-    stackedWidgets = _addOverlays(context, stackedWidgets);
+    final List<Widget> stackedWidgets = [internalGameWidget];
+    _addBackground(context, stackedWidgets);
+    _addOverlays(context, stackedWidgets);
     return Directionality(
       textDirection: widget.textDirection ??
           Directionality.maybeOf(context) ??
           TextDirection.ltr,
       child: Container(
-        color: widget.game.backgroundColor(),
         child: FutureBuilder(
           future: loadingFuture,
           builder: (_, snapshot) {
