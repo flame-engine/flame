@@ -414,6 +414,7 @@ Widget _applyAdvancedGesturesDetectors(Game game, Widget child) {
 
   return RawGestureDetector(
     gestures: gestures,
+    behavior: HitTestBehavior.opaque,
     child: child,
   );
 }
