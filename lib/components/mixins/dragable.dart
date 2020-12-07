@@ -4,6 +4,7 @@ import '../../gestures.dart';
 import '../base_component.dart';
 import '../../extensions/offset.dart';
 import '../../game/base_game.dart';
+import '../component.dart';
 
 mixin Dragable on BaseComponent {
   bool onReceiveDrag(DragEvent details) {
@@ -21,12 +22,19 @@ mixin Dragable on BaseComponent {
 mixin HasDragableComponents on BaseGame {
   @mustCallSuper
   void onReceiveDrag(DragEvent details) {
-    components.forEach((c) {
+    final dragEventHandler = (Dragable c) => c.handleReceiveDrag(details);
+
+    for (Component c in components.toList().reversed) {
+      bool shouldContinue = true;
       if (c is BaseComponent) {
-        c.propagateToChildren<Dragable>(
-          (child) => child.handleReceiveDrag(details),
-        );
+        shouldContinue = c.propagateToChildren<Dragable>(dragEventHandler);
       }
-    });
+      if (c is Dragable && shouldContinue) {
+        shouldContinue = dragEventHandler(c);
+      }
+      if (!shouldContinue) {
+        break;
+      }
+    }
   }
 }
