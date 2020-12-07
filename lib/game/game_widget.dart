@@ -174,9 +174,9 @@ class _GameWidgetState extends State<GameWidget> {
       );
     }
 
-    List<Widget> stackedWidgets = [internalGameWidget];
-    stackedWidgets = _addBackground(context, stackedWidgets);
-    stackedWidgets = _addOverlays(context, stackedWidgets);
+    final stackedWidgets = [internalGameWidget];
+    _addBackground(context, stackedWidgets);
+    _addOverlays(context, stackedWidgets);
     return Directionality(
       textDirection: widget.textDirection ??
           Directionality.maybeOf(context) ??
