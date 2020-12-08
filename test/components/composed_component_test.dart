@@ -64,7 +64,9 @@ void main() {
       expect(true, wrapper.containsChild(child));
     });
 
-    test('when child is async loading, adds the child to the component after loading', () async {
+    test(
+        'when child is async loading, adds the child to the component after loading',
+        () async {
       final MyAsyncChild child = MyAsyncChild();
       final MyComposed wrapper = MyComposed();
       await wrapper.addChild(child);
