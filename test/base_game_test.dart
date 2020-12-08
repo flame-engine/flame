@@ -71,7 +71,8 @@ void main() {
       expect(true, game.components.contains(component));
     });
 
-    test('when the component has onLoad function, adds after load completion', () async {
+    test('when the component has onLoad function, adds after load completion',
+        () async {
       final MyGame game = MyGame();
       final MyAsyncComponent component = MyAsyncComponent();
 
