@@ -48,29 +48,61 @@ class MyComponent extends PositionComponent
   void onRemove() => ++onRemoveCallCounter;
 }
 
+class MyAsyncComponent extends MyComponent {
+  @override
+  Future<void> onLoad() => Future.value();
+}
+
 class PositionComponentNoNeedForRect extends PositionComponent with Tapable {}
 
 Vector2 size = Vector2(1.0, 1.0);
 
 void main() {
   group('BaseGame test', () {
-    test('prepare adds gameRef and calls onGameResize', () async {
+    test('adds the component to the component list', () {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
       game.size.setFrom(size);
+      game.add(component);
+      // runs a cycle to add the component
+      game.update(0.1);
+
+      expect(true, game.components.contains(component));
+    });
+
+    test('when the component has onLoad function, adds after load completion', () async {
+      final MyGame game = MyGame();
+      final MyAsyncComponent component = MyAsyncComponent();
+
+      game.size.setFrom(size);
       await game.add(component);
+      // runs a cycle to add the component
+      game.update(0.1);
+
+      expect(true, game.components.contains(component));
 
       expect(component.gameSize, size);
       expect(component.gameRef, game);
     });
 
-    test('component can be tapped', () async {
+    test('prepare adds gameRef and calls onGameResize', () {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
       game.size.setFrom(size);
-      await game.add(component);
+      game.add(component);
+
+      expect(component.gameSize, size);
+      expect(component.gameRef, game);
+    });
+
+    test('component can be tapped', () {
+      final MyGame game = MyGame();
+      final MyComponent component = MyComponent();
+
+      game.size.setFrom(size);
+      game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
       game.onTapDown(1, TapDownDetails(globalPosition: const Offset(0.0, 0.0)));
@@ -78,12 +110,12 @@ void main() {
       expect(component.tapped, true);
     });
 
-    test('component is added to component list', () async {
+    test('component is added to component list', () {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
       game.size.setFrom(size);
-      await game.add(component);
+      game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
 
@@ -96,9 +128,9 @@ void main() {
       final MyComponent component = MyComponent();
 
       game.size.setFrom(size);
-      await game.add(component);
+      game.add(component);
       GameRenderBox renderBox;
-      await tester.pumpWidget(
+      tester.pumpWidget(
         Builder(
           builder: (BuildContext context) {
             renderBox = GameRenderBox(context, game);
@@ -117,12 +149,12 @@ void main() {
       renderBox.detach();
     });
 
-    test('onRemove is only called once on component', () async {
+    test('onRemove is only called once on component', () {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
       game.size.setFrom(size);
-      await game.add(component);
+      game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
       // The component is removed both by removing it on the game instance and

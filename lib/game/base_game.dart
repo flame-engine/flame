@@ -74,12 +74,9 @@ class BaseGame extends Game with FPSCounter {
     final loadFuture = c.onLoad();
 
     if (loadFuture != null) {
-      await loadFuture.then((_) {
-        _addLater.add(c);
-      });
-    } else {
-      _addLater.add(c);
+      await loadFuture;
     }
+    _addLater.add(c);
   }
 
   /// Prepares and registers a list of components to be added on the next game tick
