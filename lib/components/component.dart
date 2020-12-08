@@ -71,7 +71,8 @@ abstract class Component {
   /// ```dart
   /// @override
   /// Future<void> onLoad() async {
-  ///   myImage = alwait gameRef.load('my_image.png');
+  ///   myImage = await gameRef.load('my_image.png');
   /// }
+  /// ```
   Future<void> onLoad() => null;
 }
