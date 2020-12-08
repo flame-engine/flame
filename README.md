@@ -1,6 +1,23 @@
-[![Pub](https://img.shields.io/pub/v/flame.svg?style=popout)](https://pub.dartlang.org/packages/flame) ![Test](https://github.com/flame-engine/flame/workflows/Test/badge.svg?branch=master&event=push) [![Discord](https://img.shields.io/discord/509714518008528896.svg)](https://discord.gg/pxrBmy4)
 
-<img src="https://i.imgur.com/vFDilXT.png" width="400">
+<p align="center">
+  <a href="https://flame-engine.org">
+    <img alt="flame" width="200px" src="https://user-images.githubusercontent.com/6718144/101553774-3bc7b000-39ad-11eb-8a6a-de2daa31bd64.png">
+  </a>
+</p>
+
+<p align="center">
+A minimalistic Flutter game engine.
+</p>
+
+<p align="center">
+  <a title="Pub" href="https://pub.dartlang.org/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a> <img src="https://github.com/flame-engine/flame/workflows/Test/badge.svg?branch=master&event=push" alt="Test" /> <a title="Discord" href="https://discord.gg/pxrBmy4" ><img src="https://img.shields.io/discord/509714518008528896.svg" /></a>
+</p>
+
+---
+
+[English](https://github.com/flame-engine/flame) | [简体中文](README-ZH.md) | [Polski](README-PL.md)
+
+---
 
 ## About 1.0.0
 
@@ -12,9 +29,7 @@ Checkout the branches `develop-v0.x` and `master-v0.x` for the current last 0.x 
 
 ---
 
-[English](https://github.com/flame-engine/flame) | [简体中文](README-ZH.md) | [Polski](https://github.com/mbiesiad/flame/blob/pl_PL/README-PL.md)
 
-A minimalistic Flutter game engine.
 
 ## Help
 
