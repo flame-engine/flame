@@ -59,8 +59,11 @@ abstract class Component {
   /// Called right before the component is removed from the game
   void onRemove() {}
 
-  /// Called before the component is added to the [BaseGame] list of components.
-  /// Has a default implementation which just return a resolved [Future]
+  /// Called before the component is added to the [BaseGame] by the [add] method.
+  /// Whenever this returns something, [BaseGame] will wait for the [Future] to be resolved before adding the component on the list.
+  /// If `null` is returned, the component is added right away.
+  ///
+  /// Has a default implementation which just returns null.
   ///
   /// This can be overriden this to add custom logic to the component loading
   ///
@@ -70,5 +73,5 @@ abstract class Component {
   /// Future<void> onLoad() async {
   ///   myImage = alwait gameRef.load('my_image.png');
   /// }
-  Future<void> onLoad() => Future.value();
+  Future<void> onLoad() => null;
 }
