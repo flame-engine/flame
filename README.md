@@ -1,7 +1,7 @@
 
 <p align="center">
   <a href="https://flame-engine.org">
-    <img alt="flame" src="https://user-images.githubusercontent.com/6718144/101552406-ba6f1e00-39aa-11eb-8fb2-46ea3303e9ae.png">
+    <img alt="flame" width="200px" src="https://user-images.githubusercontent.com/6718144/101553774-3bc7b000-39ad-11eb-8a6a-de2daa31bd64.png">
   </a>
 </p>
 
@@ -10,13 +10,12 @@ A minimalistic Flutter game engine.
 </p>
 
 <p align="center">
-
-[![Pub](https://img.shields.io/pub/v/flame.svg?style=popout)](https://pub.dartlang.org/packages/flame) ![Test](https://github.com/flame-engine/flame/workflows/Test/badge.svg?branch=master&event=push) [![Discord](https://img.shields.io/discord/509714518008528896.svg)](https://discord.gg/pxrBmy4)
-
+  <a title="Pub" href="https://pub.dartlang.org/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a><img src="https://github.com/flame-engine/flame/workflows/Test/badge.svg?branch=master&event=push" alt="Test" /><a title="Discord" href="https://discord.gg/pxrBmy4" ><img src="https://img.shields.io/discord/509714518008528896.svg" /></a>
 </p>
-<p align="center">
+
+---
+
 [English](https://github.com/flame-engine/flame) | [简体中文](README-ZH.md) | [Polski](README-PL.md)
-</p>
 
 ---
 
