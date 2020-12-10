@@ -26,8 +26,8 @@ class MyTap extends PositionComponent with Tapable, Resizable {
   void render(Canvas canvas) {
     super.render(canvas);
     rendered = true;
-  } 
-  
+  }
+
   @override
   bool onTapDown(TapDownDetails details) {
     tapped = true;
