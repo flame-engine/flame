@@ -103,12 +103,12 @@ abstract class BaseComponent extends Component {
   List<ComponentEffect> get effects => _effectsHandler.effects;
 
   /// Uses the game passed in, or uses the game from [HasGameRef] otherwise,
-  /// to prepare the child component before it is added to the list of children
+  /// to prepare the child component before it is added to the list of children.
+  /// Note that this component needs to be added to the game first if
+  /// [this.gameRef] should be used to prepare the child.
+  /// For children that don't need preparation from the game instance can
+  /// disregard both the options given above.
   void addChild(Component c, {Game gameRef}) {
-    assert(
-      gameRef != null || this is HasGameRef,
-      "Need gameRef either as an argument or from the HasGameRef mixin",
-    );
     gameRef ??= (this as HasGameRef).gameRef;
     if (gameRef is BaseGame) {
       gameRef.prepare(c);
