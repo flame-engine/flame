@@ -50,6 +50,7 @@ abstract class BaseComponent extends Component {
   @override
   void update(double dt) {
     _effectsHandler.update(dt);
+    _children.forEach((c) => c.update(dt));
   }
 
   @mustCallSuper
@@ -62,20 +63,11 @@ abstract class BaseComponent extends Component {
     }
 
     canvas.save();
-    _children.forEach((c) => _renderChild(canvas, c));
+    _children.forEach((c) => c.render(canvas));
     canvas.restore();
   }
 
   void renderDebugMode(Canvas canvas) {}
-
-  void _renderChild(Canvas canvas, Component c) {
-    if (!c.loaded) {
-      return;
-    }
-    c.render(canvas);
-    canvas.restore();
-    canvas.save();
-  }
 
   @protected
   void prepareCanvas(Canvas canvas) {}
