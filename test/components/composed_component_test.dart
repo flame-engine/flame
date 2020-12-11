@@ -9,6 +9,8 @@ import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/gestures.dart';
 import 'package:test/test.dart';
 
+import '../util/mock_canvas.dart';
+
 class MyGame extends BaseGame with HasTapableComponents {}
 
 class MyTap extends PositionComponent with Tapable, Resizable {
@@ -72,6 +74,7 @@ void main() {
       wrapper.addChild(child);
       game.add(wrapper);
       game.update(0.0);
+      game.render(MockCanvas());
 
       expect(child.rendered, true);
       expect(child.updated, true);
