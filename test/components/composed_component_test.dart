@@ -73,7 +73,7 @@ void main() {
       game.add(wrapper);
       game.update(0.0);
 
-      //expect(child.rendered, true);
+      expect(child.rendered, true);
       expect(child.updated, true);
     });
   });
