@@ -13,6 +13,7 @@
  - Refactored the widgets overlay API
  - Creating new way of loading animations and sprites
  - Dragable mixin for components
+ - Fix update+render of component children
 
 ## 1.0.0-rc2
  - Improve IsometricTileMap and Spritesheet classes
