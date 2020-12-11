@@ -6,6 +6,7 @@ import 'game.dart';
 import '../gestures.dart';
 import '../components/mixins/dragable.dart';
 import '../components/mixins/tapable.dart';
+import '../extensions/size.dart';
 import 'game_render_box.dart';
 
 typedef GameLoadingWidgetBuilder = Widget Function(
@@ -94,11 +95,14 @@ class GameWidget<T extends Game> extends StatefulWidget {
 class _GameWidgetState extends State<GameWidget> {
   Set<String> activeOverlays = {};
 
+  Future<void> _gameLoaderFuture;
+  Future<void> get _memoizedGameLoaderFuture =>
+      _gameLoaderFuture ?? (_gameLoaderFuture = widget.game.onLoad());
+
   @override
   void initState() {
     super.initState();
     addOverlaysListener(widget.game);
-    loadingFuture = widget.game.onLoad();
   }
 
   @override
@@ -107,8 +111,10 @@ class _GameWidgetState extends State<GameWidget> {
     if (oldWidget.game != widget.game) {
       removeOverlaysListener(oldWidget.game);
       addOverlaysListener(widget.game);
+
+      // Reset the loader future
+      _gameLoaderFuture = null;
     }
-    loadingFuture = widget.game.onLoad();
   }
 
   @override
@@ -136,9 +142,6 @@ class _GameWidgetState extends State<GameWidget> {
       activeOverlays = widget.game.overlays.value;
     });
   }
-
-  // loading future
-  Future<void> loadingFuture;
 
   @override
   Widget build(BuildContext context) {
@@ -177,21 +180,29 @@ class _GameWidgetState extends State<GameWidget> {
     final stackedWidgets = [internalGameWidget];
     _addBackground(context, stackedWidgets);
     _addOverlays(context, stackedWidgets);
+
+    final textDir = widget.textDirection ??
+        Directionality.maybeOf(context) ??
+        TextDirection.ltr;
+
     return Directionality(
-      textDirection: widget.textDirection ??
-          Directionality.maybeOf(context) ??
-          TextDirection.ltr,
+      textDirection: textDir,
       child: Container(
         color: widget.game.backgroundColor(),
-        child: FutureBuilder(
-          future: loadingFuture,
-          builder: (_, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return Stack(children: stackedWidgets);
-            }
-            return widget.loadingBuilder != null
-                ? widget.loadingBuilder(context, snapshot.hasError)
-                : Container();
+        child: LayoutBuilder(
+          builder: (_, BoxConstraints constraints) {
+            widget.game.onResize(constraints.biggest.toVector2());
+            return FutureBuilder(
+              future: _memoizedGameLoaderFuture,
+              builder: (_, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return Stack(children: stackedWidgets);
+                }
+                return widget.loadingBuilder != null
+                    ? widget.loadingBuilder(context, snapshot.hasError)
+                    : Container();
+              },
+            );
           },
         ),
       ),

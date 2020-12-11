@@ -14,6 +14,7 @@
  - Creating new way of loading animations and sprites
  - Dragable mixin for components
  - Fix update+render of component children
+ - Moving size to Game instead of BaseGame
 
 ## 1.0.0-rc2
  - Improve IsometricTileMap and Spritesheet classes
