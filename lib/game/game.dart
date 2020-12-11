@@ -23,6 +23,9 @@ abstract class Game {
   final assets = AssetsCache();
   BuildContext buildContext;
 
+  /// Current game viewport size, updated every resize via the [resize] method hook
+  final Vector2 size = Vector2.zero();
+
   bool get isAttached => buildContext != null;
 
   /// Returns the game background color.
@@ -40,8 +43,11 @@ abstract class Game {
 
   /// This is the resize hook; every time the game widget is resized, this hook is called.
   ///
-  /// The default implementation does nothing; override to use the hook.
-  void onResize(Vector2 size) {}
+  /// The default implementation just sets the new size on the size field
+  @mustCallSuper
+  void onResize(Vector2 size) {
+    this.size.setFrom(size);
+  }
 
   /// This is the lifecycle state change hook; every time the game is resumed, paused or suspended, this is called.
   ///

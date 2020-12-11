@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite_batch.dart';
@@ -9,8 +8,7 @@ import 'package:flame/components/sprite_batch_component.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final Vector2 size = await Flame.util.initialDimensions();
-  final game = MyGame(size);
+  final game = MyGame();
   runApp(
     GameWidget(
       game: game,
@@ -21,13 +19,8 @@ void main() async {
 class MyGame extends BaseGame {
   SpriteBatch spriteBatch;
 
-  MyGame(Vector2 screenSize) {
-    size = screenSize;
-
-    initData();
-  }
-
-  void initData() async {
+  @override
+  Future<void> onLoad() async {
     spriteBatch = await SpriteBatch.withAsset('boom3.png');
 
     spriteBatch.add(

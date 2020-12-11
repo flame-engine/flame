@@ -31,10 +31,6 @@ class BaseGame extends Game with FPSCounter {
   /// Components to be removed on the next update
   final Set<Component> _removeLater = {};
 
-  /// Current game viewport size, updated every resize via the [resize] method hook
-  final Vector2 size = Vector2.zero();
-  set size(Vector2 size) => this.size.setFrom(size);
-
   /// Camera position; every non-HUD component is translated so that the camera position is the top-left corner of the screen.
   Vector2 camera = Vector2.zero();
 
@@ -142,7 +138,7 @@ class BaseGame extends Game with FPSCounter {
   @override
   @mustCallSuper
   void onResize(Vector2 size) {
-    this.size.setFrom(size);
+    super.onResize(size);
     components.forEach((c) => c.onGameResize(size));
   }
 
