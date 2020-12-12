@@ -58,7 +58,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
+      game.size.setFrom(size);
       game.add(component);
 
       expect(component.gameSize, size);
@@ -69,7 +69,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
+      game.size.setFrom(size);
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
@@ -82,7 +82,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
+      game.size.setFrom(size);
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
@@ -95,7 +95,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
+      game.size.setFrom(size);
       game.add(component);
       GameRenderBox renderBox;
       await tester.pumpWidget(
@@ -121,7 +121,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
+      game.size.setFrom(size);
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
