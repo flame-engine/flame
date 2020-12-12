@@ -79,7 +79,6 @@ void main() {
       final MyTap child = MyTap();
       final MyComposed wrapper = MyComposed();
 
-
       game.size.setFrom(size);
       game.add(wrapper);
       game.update(0.0);
