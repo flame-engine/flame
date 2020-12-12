@@ -81,6 +81,7 @@ void main() {
 
       game.size.setFrom(size);
       game.add(wrapper);
+      wrapper.addChild(child);
       game.update(0.0);
       game.onTapDown(1, TapDownDetails(globalPosition: const Offset(0.0, 0.0)));
 
