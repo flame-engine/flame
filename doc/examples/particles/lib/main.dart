@@ -552,10 +552,9 @@ class MyGame extends BaseGame {
 
 Future<BaseGame> loadGame() async {
   Flame.initializeWidget();
-  final gameSize = await Flame.util.initialDimensions();
   WidgetsFlutterBinding.ensureInitialized();
 
-  return MyGame(screenSize: gameSize);
+  return MyGame();
 }
 
 /// A curve which maps sinus output (-1..1,0..pi)
