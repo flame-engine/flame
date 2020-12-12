@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite_batch.dart';
-import 'package:flame/extensions/vector2.dart';
 import 'package:flame/components/sprite_batch_component.dart';
 
 void main() async {

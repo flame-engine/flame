@@ -58,19 +58,16 @@ class MyGame extends BaseGame {
   Vector2 cellSize;
   Vector2 halfCellSize;
 
-  MyGame({Vector2 screenSize}) {
-    size = screenSize;
+  @override
+  Future<void> onLoad() async {
+    await images.load('zap.png');
+    await images.load('boom3.png');
+
     cellSize = size / gridSize;
     halfCellSize = cellSize * .5;
 
     // Spawn new particles every second
     Timer.periodic(sceneDuration, (_) => spawnParticles());
-  }
-
-  @override
-  Future<void> onLoad() async {
-    await images.load('zap.png');
-    await images.load('boom3.png');
   }
 
   /// Showcases various different uses of [Particle]
