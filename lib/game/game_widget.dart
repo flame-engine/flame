@@ -96,7 +96,7 @@ class _GameWidgetState extends State<GameWidget> {
   Set<String> activeOverlays = {};
 
   Future<void> _gameLoaderFuture;
-  Future<void> get _memoizedGameLoaderFuture =>
+  Future<void> get _gameLoaderFutureCache =>
       _gameLoaderFuture ?? (_gameLoaderFuture = widget.game.onLoad());
 
   @override
@@ -193,7 +193,7 @@ class _GameWidgetState extends State<GameWidget> {
           builder: (_, BoxConstraints constraints) {
             widget.game.onResize(constraints.biggest.toVector2());
             return FutureBuilder(
-              future: _memoizedGameLoaderFuture,
+              future: _gameLoaderFutureCache,
               builder: (_, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   return Stack(children: stackedWidgets);
