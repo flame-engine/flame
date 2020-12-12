@@ -181,9 +181,8 @@ class _GameWidgetState extends State<GameWidget> {
     _addBackground(context, stackedWidgets);
     _addOverlays(context, stackedWidgets);
 
-    final textDir = widget.textDirection ??
-        Directionality.maybeOf(context) ??
-        TextDirection.ltr;
+    // We can use Directionality.maybeOf when that method lands on stable
+    final textDir = widget.textDirection ?? TextDirection.ltr;
 
     return Directionality(
       textDirection: textDir,
