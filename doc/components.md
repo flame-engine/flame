@@ -67,6 +67,8 @@ When implementing the `render` method for your component that extends `PositionC
 Your render method should not handle where on the screen your component should be rendered. To handle where and how your component should be rendered
 use the `position`. `angle` and `anchor` properties and flame will automatically handle the rest for you.
 
+If you want to know where on the screen the bounding box of the component is you can use the `toRect` method.
+
 In the event that you want to change the direction of your components rendering, you can also use
 `renderFlipX` and `renderFlipY` to flip anything drawn to canvas during `render(Canvas canvas)`.
 This is available on all `PositionComponent` objects, and is especially useful on `SpriteComponent` and
