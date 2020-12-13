@@ -13,9 +13,7 @@ class EffectsHandler {
   void update(double dt) {
     _effects.removeWhere((e) => e.hasCompleted());
     _effects.where((e) => !e.isPaused).forEach((e) {
-      if (!e.isPaused) {
-        e.update(dt);
-      }
+      e.update(dt);
       if (e.hasCompleted()) {
         e.setComponentToEndState();
         e.onComplete?.call();
