@@ -11,6 +11,11 @@ class ExampleGame extends Game with TapDetector {
   void update(double dt) {}
 
   @override
+  Future<void> onLoad() async {
+    print('game loaded');
+  }
+
+  @override
   void render(Canvas canvas) {
     canvas.drawRect(
       const Rect.fromLTWH(100, 100, 100, 100),

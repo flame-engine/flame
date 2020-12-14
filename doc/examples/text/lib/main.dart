@@ -3,18 +3,15 @@ import 'dart:ui';
 import 'package:flame/anchor.dart';
 import 'package:flame/components/text_box_component.dart';
 import 'package:flame/components/text_component.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/text_config.dart';
-import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/material.dart';
 
-void main() async {
-  final Vector2 size = await Flame.util.initialDimensions();
+void main() {
   runApp(
     GameWidget(
-      game: MyGame(size),
+      game: MyGame(),
     ),
   );
 }
@@ -54,8 +51,8 @@ class MyTextBox extends TextBoxComponent {
 }
 
 class MyGame extends BaseGame {
-  MyGame(Vector2 screenSize) {
-    size = screenSize;
+  @override
+  Future<void> onLoad() async {
     add(TextComponent('Hello, Flame', config: regular)
       ..anchor = Anchor.topCenter
       ..x = size.x / 2
