@@ -1,7 +1,6 @@
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/extensions/vector2.dart';
 import 'package:flame/sprite_animation.dart';
 import 'package:flame/components/sprite_animation_component.dart';
@@ -11,8 +10,7 @@ import 'dart:ui';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final Vector2 size = await Flame.util.initialDimensions();
-  final game = MyGame(size);
+  final game = MyGame();
   runApp(
     GameWidget(
       game: game,
@@ -80,9 +78,5 @@ class MyGame extends BaseGame with TapDetector {
   @override
   void onTapDown(TapDownDetails evt) {
     addAnimation(Vector2(evt.globalPosition.dx, evt.globalPosition.dy));
-  }
-
-  MyGame(Vector2 screenSize) {
-    size.setFrom(screenSize);
   }
 }

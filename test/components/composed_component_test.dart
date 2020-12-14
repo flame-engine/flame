@@ -40,6 +40,11 @@ class MyTap extends PositionComponent with Tapable, Resizable {
   bool checkOverlap(Vector2 v) => true;
 }
 
+class MyAsyncChild extends MyTap {
+  @override
+  Future<void> onLoad() => Future.value();
+}
+
 class MyComposed extends PositionComponent with HasGameRef, Tapable {
   @override
   Rect toRect() => Rect.zero;
@@ -51,14 +56,32 @@ Vector2 size = Vector2(1.0, 1.0);
 
 void main() {
   group('composable component test', () {
+    test('adds the child to the component', () {
+      final MyTap child = MyTap();
+      final MyComposed wrapper = MyComposed();
+      wrapper.addChild(child);
+
+      expect(true, wrapper.containsChild(child));
+    });
+
+    test(
+        'when child is async loading, adds the child to the component after loading',
+        () async {
+      final MyAsyncChild child = MyAsyncChild();
+      final MyComposed wrapper = MyComposed();
+      await wrapper.addChild(child);
+
+      expect(true, wrapper.containsChild(child));
+    });
+
     test('taps and resizes children', () {
       final MyGame game = MyGame();
       final MyTap child = MyTap();
       final MyComposed wrapper = MyComposed();
 
-      game.size = size;
-      wrapper.addChild(child);
+      game.size.setFrom(size);
       game.add(wrapper);
+      wrapper.addChild(child);
       game.update(0.0);
       game.onTapDown(1, TapDownDetails(globalPosition: const Offset(0.0, 0.0)));
 

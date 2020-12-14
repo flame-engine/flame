@@ -48,17 +48,50 @@ class MyComponent extends PositionComponent
   void onRemove() => ++onRemoveCallCounter;
 }
 
+class MyAsyncComponent extends MyComponent {
+  @override
+  Future<void> onLoad() => Future.value();
+}
+
 class PositionComponentNoNeedForRect extends PositionComponent with Tapable {}
 
 Vector2 size = Vector2(1.0, 1.0);
 
 void main() {
   group('BaseGame test', () {
+    test('adds the component to the component list', () {
+      final MyGame game = MyGame();
+      final MyComponent component = MyComponent();
+
+      game.size.setFrom(size);
+      game.add(component);
+      // runs a cycle to add the component
+      game.update(0.1);
+
+      expect(true, game.components.contains(component));
+    });
+
+    test('when the component has onLoad function, adds after load completion',
+        () async {
+      final MyGame game = MyGame();
+      final MyAsyncComponent component = MyAsyncComponent();
+
+      game.size.setFrom(size);
+      await game.add(component);
+      // runs a cycle to add the component
+      game.update(0.1);
+
+      expect(true, game.components.contains(component));
+
+      expect(component.gameSize, size);
+      expect(component.gameRef, game);
+    });
+
     test('prepare adds gameRef and calls onGameResize', () {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
+      game.size.setFrom(size);
       game.add(component);
 
       expect(component.gameSize, size);
@@ -69,7 +102,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
+      game.size.setFrom(size);
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
@@ -82,7 +115,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
+      game.size.setFrom(size);
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
@@ -95,10 +128,10 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
+      game.size.setFrom(size);
       game.add(component);
       GameRenderBox renderBox;
-      await tester.pumpWidget(
+      tester.pumpWidget(
         Builder(
           builder: (BuildContext context) {
             renderBox = GameRenderBox(context, game);
@@ -121,7 +154,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
+      game.size.setFrom(size);
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
