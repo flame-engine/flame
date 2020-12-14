@@ -14,7 +14,7 @@ class EffectsHandler {
   final List<ComponentEffect> _addLater = [];
 
   void update(double dt) {
-    _addLater.forEach(_effects.add);
+    _effects.addAll(_addLater);
     _effects.removeWhere((e) => e.hasCompleted());
     _effects.where((e) => !e.isPaused).forEach((e) {
       e.update(dt);
