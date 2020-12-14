@@ -160,15 +160,21 @@ class ParallaxComponent extends PositionComponent {
   Vector2 baseSpeed;
   Vector2 layerDelta;
   List<ParallaxLayer> _layers;
+  final List<ParallaxImage> _images;
 
   ParallaxComponent(
-    List<ParallaxImage> images, {
+    this._images, {
     this.baseSpeed,
     this.layerDelta,
   }) {
     baseSpeed ??= Vector2.zero();
     layerDelta ??= Vector2.zero();
-    _load(images);
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await _load(_images);
+    _layers?.forEach((layer) => layer.resize(size));
   }
 
   /// The base offset of the parallax, can be used in an outer update loop
@@ -178,16 +184,14 @@ class ParallaxComponent extends PositionComponent {
   @mustCallSuper
   @override
   void onGameResize(Vector2 size) {
+    this.size = size;
     super.onGameResize(size);
-    _layers.forEach((layer) => layer.resize(size));
+    _layers?.forEach((layer) => layer.resize(size));
   }
 
   @override
   void update(double t) {
     super.update(t);
-    if (!loaded) {
-      return;
-    }
     _layers.forEach((layer) {
       layer.update(baseSpeed * t + layerDelta * (_layers.indexOf(layer) * t));
     });
@@ -196,18 +200,14 @@ class ParallaxComponent extends PositionComponent {
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    if (!loaded) {
-      return;
-    }
     super.render(canvas);
     canvas.save();
     _layers.forEach((layer) => layer.render(canvas));
     canvas.restore();
   }
 
-  void _load(List<ParallaxImage> images) {
+  Future<void> _load(List<ParallaxImage> images) async {
     _layers = images.map((image) => ParallaxLayer(image)).toList();
-    Future.wait(_layers.map((layer) => layer.future))
-        .then((_) => loaded = true);
+    await Future.wait(_layers.map((layer) => layer.future));
   }
 }
