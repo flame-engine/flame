@@ -14,6 +14,7 @@
  - Creating new way of loading animations and sprites
  - Dragable mixin for components
  - Fix update+render of component children
+ - Update documentation for SVG component
  - Adding Component#onLoad
 
 ## 1.0.0-rc2
