@@ -129,9 +129,10 @@ class BaseGame extends Game with FPSCounter {
     });
     _removeLater.clear();
 
-    components.addAll(_addLater);
-    _addLater.forEach((component) => component.onMount());
+    final addNow = _addLater.toList(growable: false);
     _addLater.clear();
+    components.addAll(addNow);
+    addNow.forEach((component) => component.onMount());
     components.forEach((c) => c.update(t));
   }
 
