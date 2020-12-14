@@ -15,6 +15,7 @@
  - Dragable mixin for components
  - Fix update+render of component children
  - Update documentation for SVG component
+ - Update documentation for PositionComponent
  - Adding Component#onLoad
  - Moving size to Game instead of BaseGame
 
