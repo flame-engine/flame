@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart' hide Animation;
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/material.dart' hide Animation;
 import 'package:flame/sprite.dart';
 import 'package:flame/layer/layer.dart';
 import 'package:flame/flame.dart';
@@ -11,7 +12,11 @@ void main() async {
 
   await Flame.util.fullScreen();
 
-  runApp(LayerGame().widget);
+  runApp(
+    GameWidget(
+      game: LayerGame(),
+    ),
+  );
 }
 
 class GameLayer extends DynamicLayer {
@@ -24,13 +29,15 @@ class GameLayer extends DynamicLayer {
 
   @override
   void drawLayer() {
-    playerSprite.renderRect(
+    playerSprite.render(
       canvas,
-      const Rect.fromLTWH(50, 50, 150, 150),
+      position: Vector2.all(50),
+      size: Vector2.all(150),
     );
-    enemySprite.renderRect(
+    enemySprite.render(
       canvas,
-      const Rect.fromLTWH(250, 150, 100, 50),
+      position: Vector2(250, 150),
+      size: Vector2(100, 50),
     );
   }
 }
@@ -44,9 +51,10 @@ class BackgroundLayer extends PreRenderedLayer {
 
   @override
   void drawLayer() {
-    sprite.renderRect(
+    sprite.render(
       canvas,
-      const Rect.fromLTWH(50, 200, 300, 150),
+      position: Vector2(50, 200),
+      size: Vector2(300, 150),
     );
   }
 }

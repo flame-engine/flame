@@ -25,9 +25,16 @@ import 'package:flame/extensions/vector2.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
 import 'package:flame/text_config.dart';
-import 'package:flutter/material.dart' hide Animation, Image;
+import 'package:flutter/material.dart' hide Image;
 
-void main() async => runApp((await loadGame()).widget);
+void main() async {
+  final game = await loadGame();
+  runApp(
+    GameWidget(
+      game: game,
+    ),
+  );
+}
 
 class MyGame extends BaseGame {
   /// Defines dimensions of the sample
@@ -51,19 +58,16 @@ class MyGame extends BaseGame {
   Vector2 cellSize;
   Vector2 halfCellSize;
 
-  MyGame({Vector2 screenSize}) {
-    size = screenSize;
+  @override
+  Future<void> onLoad() async {
+    await images.load('zap.png');
+    await images.load('boom3.png');
+
     cellSize = size / gridSize;
     halfCellSize = cellSize * .5;
 
     // Spawn new particles every second
     Timer.periodic(sceneDuration, (_) => spawnParticles());
-  }
-
-  @override
-  Future<void> onLoad() async {
-    await images.load('zap.png');
-    await images.load('boom3.png');
   }
 
   /// Showcases various different uses of [Particle]
@@ -548,10 +552,9 @@ class MyGame extends BaseGame {
 
 Future<BaseGame> loadGame() async {
   Flame.initializeWidget();
-  final gameSize = await Flame.util.initialDimensions();
   WidgetsFlutterBinding.ensureInitialized();
 
-  return MyGame(screenSize: gameSize);
+  return MyGame();
 }
 
 /// A curve which maps sinus output (-1..1,0..pi)

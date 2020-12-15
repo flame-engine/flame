@@ -1,3 +1,4 @@
+import 'package:flame/anchor.dart';
 import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
@@ -5,15 +6,15 @@ import 'package:flame/components/position_component.dart';
 import 'package:flame/components/mixins/tapable.dart';
 
 void main() {
-  final game = MyGame();
-
-  final widget = Container(
-    padding: const EdgeInsets.all(50),
-    color: const Color(0xFFA9A9A9),
-    child: game.widget,
+  runApp(
+    Container(
+      padding: const EdgeInsets.all(50),
+      color: const Color(0xFFA9A9A9),
+      child: GameWidget(
+        game: MyGame(),
+      ),
+    ),
   );
-
-  runApp(widget);
 }
 
 class TapableSquare extends PositionComponent with Tapable {
@@ -34,24 +35,28 @@ class TapableSquare extends PositionComponent with Tapable {
   }
 
   @override
-  void onTapUp(TapUpDetails details) {
+  bool onTapUp(TapUpDetails details) {
     _beenPressed = false;
+    return true;
   }
 
   @override
-  void onTapDown(TapDownDetails details) {
+  bool onTapDown(TapDownDetails details) {
     _beenPressed = true;
+    angle += 1.0;
+    return true;
   }
 
   @override
-  void onTapCancel() {
+  bool onTapCancel() {
     _beenPressed = false;
+    return true;
   }
 }
 
 class MyGame extends BaseGame with HasTapableComponents {
   MyGame() {
-    add(TapableSquare());
-    add(TapableSquare()..y = 250);
+    add(TapableSquare()..anchor = Anchor.center);
+    add(TapableSquare()..y = 350);
   }
 }

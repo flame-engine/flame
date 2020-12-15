@@ -1,6 +1,8 @@
 name: debug
 description: Flame sample for using debug features
 
+publish_to: 'none'
+
 version: 1.0.0+1
 
 environment:

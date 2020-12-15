@@ -1,6 +1,6 @@
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/extensions/vector2.dart';
-import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/effects/effects.dart';
 import 'package:flame/extensions/offset.dart';
@@ -9,6 +9,7 @@ import './square.dart';
 
 class MyGame extends BaseGame with TapDetector {
   Square square;
+
   MyGame() {
     add(square = Square()
       ..x = 100
@@ -36,5 +37,9 @@ class MyGame extends BaseGame with TapDetector {
 }
 
 void main() {
-  runApp(MyGame().widget);
+  runApp(
+    GameWidget(
+      game: MyGame(),
+    ),
+  );
 }

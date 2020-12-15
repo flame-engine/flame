@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
+import '../anchor.dart';
 import '../extensions/vector2.dart';
 import '../particle.dart';
 import '../sprite_animation.dart';
@@ -34,11 +35,11 @@ class SpriteAnimationParticle extends Particle {
 
   @override
   void render(Canvas canvas) {
-    animation.getSprite().renderCentered(
+    animation.getSprite().render(
           canvas,
-          Vector2.zero(),
-          overridePaint: overridePaint,
           size: size,
+          anchor: Anchor.center,
+          overridePaint: overridePaint,
         );
   }
 

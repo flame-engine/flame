@@ -1,26 +1,16 @@
 import 'dart:ui';
 
 import 'package:flutter/painting.dart';
-import 'package:meta/meta.dart';
 
-import '../effects/effects.dart';
-import '../effects/effects_handler.dart';
 import '../extensions/vector2.dart';
+import '../game.dart';
 
 /// This represents a Component for your game.
 ///
 /// Components can be bullets flying on the screen, a spaceship or your player's fighter.
 /// Anything that either renders or updates can be added to the list on [BaseGame]. It will deal with calling those methods for you.
-/// Components also have other methods that can help you out if you want to overwrite them.
+/// Components also have other methods that can help you out if you want to override them.
 abstract class Component {
-  final EffectsHandler _effectsHandler = EffectsHandler();
-
-  /// Whether this component has been loaded yet. If not loaded, [BaseGame] will not try to render it.
-  ///
-  /// Sprite based components can use this to let [BaseGame] know not to try to render when the [Sprite] has not been loaded yet.
-  /// Note that for a more consistent experience, you can pre-load all your assets beforehand with Flame.images.loadAll.
-  bool loaded = true;
-
   /// Whether this component is HUD object or not.
   ///
   /// HUD objects ignore the [BaseGame.camera] when rendered (so their position coordinates are considered relative to the device screen).
@@ -46,13 +36,10 @@ abstract class Component {
   /// The time [t] in seconds (with microseconds precision provided by Flutter) since the last update cycle.
   /// This time can vary according to hardware capacity, so make sure to update your state considering this.
   /// All components on [BaseGame] are always updated by the same amount. The time each one takes to update adds up to the next update cycle.
-  @mustCallSuper
-  void update(double dt) {
-    _effectsHandler.update(dt);
-  }
+  void update(double dt) {}
 
   /// Renders this component on the provided Canvas [c].
-  void render(Canvas c);
+  void render(Canvas c) {}
 
   /// It receives the new game size.
   /// Executed right after the component is attached to a game and right before [onMount] is called
@@ -72,21 +59,20 @@ abstract class Component {
   /// Called right before the component is removed from the game
   void onRemove() {}
 
-  /// Add an effect to the component
-  void addEffect(ComponentEffect effect) {
-    _effectsHandler.add(effect, this);
-  }
-
-  /// Mark an effect for removal on the component
-  void removeEffect(ComponentEffect effect) {
-    _effectsHandler.removeEffect(effect);
-  }
-
-  /// Remove all effects
-  void clearEffects() {
-    _effectsHandler.clearEffects();
-  }
-
-  /// Get a list of non removed effects
-  List<ComponentEffect> get effects => _effectsHandler.effects;
+  /// Called before the component is added to the [BaseGame] by the [add] method.
+  /// Whenever this returns something, [BaseGame] will wait for the [Future] to be resolved before adding the component on the list.
+  /// If `null` is returned, the component is added right away.
+  ///
+  /// Has a default implementation which just returns null.
+  ///
+  /// This can be overriden this to add custom logic to the component loading
+  ///
+  /// Example:
+  /// ```dart
+  /// @override
+  /// Future<void> onLoad() async {
+  ///   myImage = await gameRef.load('my_image.png');
+  /// }
+  /// ```
+  Future<void> onLoad() => null;
 }

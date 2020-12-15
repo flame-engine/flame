@@ -31,10 +31,6 @@ class BaseGame extends Game with FPSCounter {
   /// Components to be removed on the next update
   final Set<Component> _removeLater = {};
 
-  /// Current game viewport size, updated every resize via the [resize] method hook
-  final Vector2 size = Vector2.zero();
-  set size(Vector2 size) => this.size.setFrom(size);
-
   /// Camera position; every non-HUD component is translated so that the camera position is the top-left corner of the screen.
   Vector2 camera = Vector2.zero();
 
@@ -67,8 +63,15 @@ class BaseGame extends Game with FPSCounter {
   }
 
   /// Prepares and registers a component to be added on the next game tick
-  void add(Component c) {
+  ///
+  /// This methods is an async operation since it await the `onLoad` method of the component. Nevertheless, this method only need to be waited to finish if by some reason, your logic needs to be sure that the component has finished loading, otherwise, this method can be called without waiting for it to finish as the BaseGame already handle the loading of the component.
+  Future<void> add(Component c) async {
     prepare(c);
+    final loadFuture = c.onLoad();
+
+    if (loadFuture != null) {
+      await loadFuture;
+    }
     _addLater.add(c);
   }
 
@@ -104,9 +107,6 @@ class BaseGame extends Game with FPSCounter {
   /// It translates the camera unless hud, call the render method and restore the canvas.
   /// This makes sure the canvas is not messed up by one component and all components render independently.
   void renderComponent(Canvas canvas, Component c) {
-    if (!c.loaded) {
-      return;
-    }
     if (!c.isHud) {
       canvas.translate(-camera.x, -camera.y);
     }
@@ -129,9 +129,12 @@ class BaseGame extends Game with FPSCounter {
     });
     _removeLater.clear();
 
-    components.addAll(_addLater);
-    _addLater.forEach((component) => component.onMount());
-    _addLater.clear();
+    if (_addLater.isNotEmpty) {
+      final addNow = _addLater.toList(growable: false);
+      _addLater.clear();
+      components.addAll(addNow);
+      addNow.forEach((component) => component.onMount());
+    }
     components.forEach((c) => c.update(t));
   }
 
@@ -142,7 +145,7 @@ class BaseGame extends Game with FPSCounter {
   @override
   @mustCallSuper
   void onResize(Vector2 size) {
-    this.size.setFrom(size);
+    super.onResize(size);
     components.forEach((c) => c.onGameResize(size));
   }
 

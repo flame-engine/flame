@@ -41,7 +41,7 @@ class _Painter extends widgets.CustomPainter {
     final verticalHeight = size.height - destTileSize * 2;
 
     void render(Sprite sprite, double x, double y, double w, double h) {
-      sprite.renderRect(canvas, Rect.fromLTWH(x, y, w, h));
+      sprite.render(canvas, position: Vector2(x, y), size: Vector2(w, h));
     }
 
     // Middle

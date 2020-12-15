@@ -1,6 +1,24 @@
 # CHANGELOG
 
-## [next]
+## 1.0.0-rc3
+ - Fix TextBoxComponent rendering
+ - Add TextBoxConfig options; margins and growingBox
+ - Fix debugConfig strokeWidth for web
+ - Update Forge2D docs
+ - Update PR template with removal of develop branch
+ - Translate README to Russian
+ - Split up Component and PositionComponent to BaseComponent
+ - Unify multiple render methods on Sprite
+ - Refactored how games are inserted into a flutter tree
+ - Refactored the widgets overlay API
+ - Creating new way of loading animations and sprites
+ - Dragable mixin for components
+ - Fix update+render of component children
+ - Update documentation for SVG component
+ - Update documentation for PositionComponent
+ - Adding Component#onLoad
+ - Moving size to Game instead of BaseGame
+ - Fix bug with ConcurrentModificationError on add in onMount
 
 ## 1.0.0-rc2
  - Improve IsometricTileMap and Spritesheet classes

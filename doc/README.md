@@ -8,7 +8,7 @@ It empowers you with a simple yet effective game loop implementation, and all th
 
 You can pick and choose whichever parts you want, as they are all somewhat independent and modular.
 
-We also support easy-to-use integrations with famous third parties and tools, like Riveapp, box2d, tiled, Google Play Games, gamepad support and more.
+We also support easy-to-use integrations with famous third parties and tools, like Riveapp, tiled, Google Play Games, gamepad support and more.
 
 The engine and ecosystem is being constantly improved by the community, so please feel free to reach out, open issues, PRs and make suggestions. Give us a star if you want to help give the engine exposure and grow the community.
 
@@ -18,7 +18,7 @@ Put the pub package as your dependency by dropping the following in your `pubspe
 
 ```yaml
 dependencies:
-  flame: ^1.0.0-rc2
+  flame: ^1.0.0-rc3
 ```
 
 And start using it!
@@ -48,7 +48,7 @@ Check out the [awesome flame repository](https://github.com/flame-engine/awesome
    - [Util](util.md)
    - [Gamepad](gamepad.md)
    - [Widgets](widgets.md)
-   - [Box2D](box2d.md)
+   - [Forge2D](forge2d.md)
    - [Tiled](tiled.md)
    - [Debugging](debug.md)
    - [Splash screen](splash_screen.md)
