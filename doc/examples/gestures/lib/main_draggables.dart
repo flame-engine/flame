@@ -1,11 +1,11 @@
 import 'package:flame/anchor.dart';
+import 'package:flame/components/mixins/draggable.dart';
 import 'package:flame/extensions/offset.dart';
 import 'package:flame/extensions/vector2.dart';
 import 'package:flame/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components/position_component.dart';
-import 'package:flame/components/mixins/dragable.dart';
 
 void main() {
   final widget = Container(
@@ -19,12 +19,12 @@ void main() {
   runApp(widget);
 }
 
-class DragableSquare extends PositionComponent with Dragable {
+class DraggableSquare extends PositionComponent with Draggable {
   @override
   bool debugMode = true;
   bool _isDragging = false;
 
-  DragableSquare({Vector2 position}) {
+  DraggableSquare({Vector2 position}) {
     size = Vector2.all(100);
     this.position = position ?? Vector2.all(100);
   }
@@ -53,9 +53,9 @@ class DragableSquare extends PositionComponent with Dragable {
   }
 }
 
-class MyGame extends BaseGame with HasDragableComponents {
+class MyGame extends BaseGame with HasDraggableComponents {
   MyGame() {
-    add(DragableSquare()..anchor = Anchor.topLeft);
-    add(DragableSquare()..y = 350);
+    add(DraggableSquare()..anchor = Anchor.topLeft);
+    add(DraggableSquare()..y = 350);
   }
 }

@@ -6,30 +6,30 @@ import '../../extensions/offset.dart';
 import '../../game/base_game.dart';
 import '../component.dart';
 
-mixin Dragable on BaseComponent {
-  bool onReceiveDrag(DragEvent details) {
+mixin Draggable on BaseComponent {
+  bool onReceiveDrag(DragEvent event) {
     return true;
   }
 
-  bool handleReceiveDrag(DragEvent details) {
-    if (checkOverlap(details.initialPosition.toVector2())) {
-      return onReceiveDrag(details);
+  bool handleReceiveDrag(DragEvent event) {
+    if (checkOverlap(event.initialPosition.toVector2())) {
+      return onReceiveDrag(event);
     }
     return true;
   }
 }
 
-mixin HasDragableComponents on BaseGame {
+mixin HasDraggableComponents on BaseGame {
   @mustCallSuper
-  void onReceiveDrag(DragEvent details) {
-    final dragEventHandler = (Dragable c) => c.handleReceiveDrag(details);
+  void onReceiveDrag(DragEvent event) {
+    final dragEventHandler = (Draggable c) => c.handleReceiveDrag(event);
 
     for (Component c in components.toList().reversed) {
       bool shouldContinue = true;
       if (c is BaseComponent) {
-        shouldContinue = c.propagateToChildren<Dragable>(dragEventHandler);
+        shouldContinue = c.propagateToChildren<Draggable>(dragEventHandler);
       }
-      if (c is Dragable && shouldContinue) {
+      if (c is Draggable && shouldContinue) {
         shouldContinue = dragEventHandler(c);
       }
       if (!shouldContinue) {
