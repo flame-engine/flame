@@ -52,7 +52,7 @@ Example:
     final playerSprite = Sprite(image);
 ```
 
-# Game.images
+### Game.images
 
 The `Game` class offers some utility methods for handling images loading too. It bundles an instance of the `Images` class, that can be used to load image assets to be used during the game. The game will automatically free the cache when the game widget is removed from the widget tree.
 
@@ -109,10 +109,14 @@ You could also specify the coordinates in the original image where the sprite is
 
 ```dart
     final image = await loadImage();
-    Sprite playerFrame = Sprite(image, x: 32.0, width: 16.0);
+    final playerFrame = Sprite(
+      image,
+      srcPosition: Vector2(32.0, 0),
+      srcSize: Vector2(16.0, 16.0),
+    );
 ```
 
-The default values are `0.0` for `x` and `y` and `null` for `width` and `height` (meaning it will use the full width/height of the source image).
+The default values are `(0.0, 0.0)` for `srcPosition` and `null` for `srcSize` (meaning it will use the full width/height of the source image).
 
 The `Sprite` class has a render method, that allows you to render the sprite onto a `Canvas`:
 
@@ -148,18 +152,33 @@ See example [here](/doc/examples/sprite_batch).
 
 Flame provides a simple API to render SVG images in your game.
 
-Svg support is provided by the `flame_svg` external package, be sure to put it on your pubspec to use it
+Svg support is provided by the `flame_svg` external package, be sure to put it in your pubspec file to use it.
 
 To use it just import the `Svg` class from `'package:flame_svg/flame_svg.dart'`, and use the following snippet to render it on the canvas:
 
 ```dart
     Svg svgInstance = Svg('android.svg');
 
-    final position = Position(100, 100);
-    final width = 300;
-    final height = 300;
+    final position = Vector2(100, 100);
+    final size = Vector2(300, 300);
 
-    svgInstance.renderPosition(canvas, position, width, height);
+    svgInstance.renderPosition(canvas, position, size);
+```
+
+or use the [SvgComponent]:
+
+```dart
+  class MyGame extends BaseGame {
+    MyGame() {
+      final svgInstance = Svg('android.svg');
+      final size = Vector2.all(100);
+      final svgComponent = SvgComponent.fromSvg(size, svgInstance);
+      svgComponent.x = 100;
+      svgComponent.y = 100;
+
+      add(svgComponent);
+    }
+  }
 ```
 
 ## Animation
@@ -169,7 +188,7 @@ The Animation class helps you create a cyclic animation of sprites.
 You can create it by passing a list of equally sized sprites and the stepTime (that is, how many seconds it takes to move to the next frame):
 
 ```dart
-  Animation a = Animation.spriteList(sprites, stepTime: 0.02);
+  final a = SpriteAnimation.spriteList(sprites, stepTime: 0.02);
 ```
 
 After the animation is created, you need to call its `update` method and render the current frame's sprite on your game instance, for example:
@@ -179,7 +198,7 @@ class MyGame extends Game {
   SpriteAnimation a;
 
   MyGame() {
-    a = Animation(...);
+    a = SpriteAnimation(...);
   }
 
   void update(double dt) {
@@ -192,24 +211,23 @@ class MyGame extends Game {
 }
 ```
 
-A better alternative to generate a list of sprites is to use the `sequenced` constructor:
+A better alternative to generate a list of sprites is to use the `fromFrameData` constructor:
 
 ```dart
   const amountOfFrames = 8;
-  SpriteAnimation a = SpriteAnimation.sequenced(imageInstance, amountOfFrames, textureWidth: 16.0);
+  final a = SpriteAnimation.fromFrameData(
+    imageInstance,
+    SpriteAnimationFrame.sequenced(
+      amount: amountOfFrames,
+      textureSize: Vector2(16.0, 16.0),
+      stepTime: 0.1,
+    ),
+  );
 ```
 
-In which you pass the file name, the number of frames and the sprite sheet is automatically split for you according to the 4 optional parameters:
-
-* textureX : x position on the original image to start (defaults to 0)
-* textureY : y position on the original image to start (defaults to 0)
-* textureWidth : width of each frame (defaults to null, that is, full width of the sprite sheet)
-* textureHeight : height of each frame (defaults to null, that is, full height of the sprite sheet)
-* removeOnFinish : a bool indicating if this AnimationComponent should be removed when the animation has reached its end
-
-So, in our example, we are saying that we have 8 frames for our player animation, and they are displayed in a row. So if the player height is also 16 pixels, the sprite sheet is 128x16, containing 8 16x16 frames.
-
 This constructor makes creating an Animation very easy using sprite sheets.
+
+In the constructor you pass an image instance and the frame data, which contains some parameters that can be used to describe the animation. Check the documentation on the constructors available on `SpriteAnimationFrameData` class to see all the parameters.
 
 If you use Aseprite for your animations, Flame does provide some support for Aseprite animation's JSON data. To use this feature you will need to export the Sprite Sheet's JSON data, and use something like the following snippet:
 
@@ -223,7 +241,7 @@ _Note: trimmed sprite sheets are not supported by flame, so if you export your s
 
 Animations, after created, have an update and render method; the latter renders the current frame, and the former ticks the internal clock to update the frames.
 
-Animations are normally used inside `AnimationComponent`s, but custom components with several Animations can be created as well.
+Animations are normally used inside `SpriteAnimationComponent`s, but custom components with several Animations can be created as well.
 
 A complete example of using animations as widgets can be found [here](/doc/examples/animation_widget).
 

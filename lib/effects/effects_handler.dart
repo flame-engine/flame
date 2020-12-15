@@ -1,4 +1,4 @@
-import '../components/component.dart';
+import '../components/base_component.dart';
 import 'effects.dart';
 
 export './move_effect.dart';
@@ -10,12 +10,15 @@ class EffectsHandler {
   /// The effects that should run on the component
   final List<ComponentEffect> _effects = [];
 
+  /// The effects that should be added on the next update iteration
+  final List<ComponentEffect> _addLater = [];
+
   void update(double dt) {
+    _effects.addAll(_addLater);
+    _addLater.clear();
     _effects.removeWhere((e) => e.hasCompleted());
     _effects.where((e) => !e.isPaused).forEach((e) {
-      if (!e.isPaused) {
-        e.update(dt);
-      }
+      e.update(dt);
       if (e.hasCompleted()) {
         e.setComponentToEndState();
         e.onComplete?.call();
@@ -24,8 +27,8 @@ class EffectsHandler {
   }
 
   /// Add an effect to the handler
-  void add(ComponentEffect effect, Component component) {
-    _effects.add(effect..initialize(component));
+  void add(ComponentEffect effect, BaseComponent component) {
+    _addLater.add(effect..initialize(component));
   }
 
   /// Mark an effect for removal
@@ -35,12 +38,14 @@ class EffectsHandler {
 
   /// Remove all effects
   void clearEffects() {
+    _addLater.forEach(removeEffect);
     _effects.forEach(removeEffect);
   }
 
   /// Get a list of non removed effects
   List<ComponentEffect> get effects {
     return List<ComponentEffect>.from(_effects)
+      ..addAll(_addLater)
       ..where((e) => !e.hasCompleted());
   }
 }

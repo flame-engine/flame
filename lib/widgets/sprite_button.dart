@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
+import '../extensions/size.dart';
 import '../sprite.dart';
 
 class SpriteButton extends StatefulWidget {
@@ -69,6 +70,6 @@ class _ButtonPainer extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    _sprite.renderRect(canvas, Rect.fromLTWH(0, 0, size.width, size.height));
+    _sprite.render(canvas, size: size.toVector2());
   }
 }

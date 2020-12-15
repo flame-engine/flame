@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import './vector2.dart';
+import 'vector2.dart';
 
 export 'dart:ui' show Offset;
 

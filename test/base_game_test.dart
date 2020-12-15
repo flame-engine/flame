@@ -4,6 +4,7 @@ import 'package:flame/components/position_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/components/mixins/resizable.dart';
 import 'package:flame/components/mixins/tapable.dart';
+import 'package:flame/game.dart';
 import 'package:flame/game/base_game.dart';
 import 'package:flame/extensions/vector2.dart';
 import 'package:flame/game/game_render_box.dart';
@@ -23,8 +24,9 @@ class MyComponent extends PositionComponent
   int onRemoveCallCounter = 0;
 
   @override
-  void onTapDown(TapDownDetails details) {
+  bool onTapDown(TapDownDetails details) {
     tapped = true;
+    return true;
   }
 
   @override
@@ -40,10 +42,15 @@ class MyComponent extends PositionComponent
   }
 
   @override
-  bool checkTapOverlap(Rect c, Offset o) => true;
+  bool checkOverlap(Vector2 v) => true;
 
   @override
   void onRemove() => ++onRemoveCallCounter;
+}
+
+class MyAsyncComponent extends MyComponent {
+  @override
+  Future<void> onLoad() => Future.value();
 }
 
 class PositionComponentNoNeedForRect extends PositionComponent with Tapable {}
@@ -52,11 +59,39 @@ Vector2 size = Vector2(1.0, 1.0);
 
 void main() {
   group('BaseGame test', () {
+    test('adds the component to the component list', () {
+      final MyGame game = MyGame();
+      final MyComponent component = MyComponent();
+
+      game.size.setFrom(size);
+      game.add(component);
+      // runs a cycle to add the component
+      game.update(0.1);
+
+      expect(true, game.components.contains(component));
+    });
+
+    test('when the component has onLoad function, adds after load completion',
+        () async {
+      final MyGame game = MyGame();
+      final MyAsyncComponent component = MyAsyncComponent();
+
+      game.size.setFrom(size);
+      await game.add(component);
+      // runs a cycle to add the component
+      game.update(0.1);
+
+      expect(true, game.components.contains(component));
+
+      expect(component.gameSize, size);
+      expect(component.gameRef, game);
+    });
+
     test('prepare adds gameRef and calls onGameResize', () {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
+      game.size.setFrom(size);
       game.add(component);
 
       expect(component.gameSize, size);
@@ -67,7 +102,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
+      game.size.setFrom(size);
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
@@ -80,7 +115,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
+      game.size.setFrom(size);
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
@@ -93,14 +128,14 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
+      game.size.setFrom(size);
       game.add(component);
       GameRenderBox renderBox;
-      await tester.pumpWidget(
+      tester.pumpWidget(
         Builder(
           builder: (BuildContext context) {
             renderBox = GameRenderBox(context, game);
-            return game.widget;
+            return GameWidget(game: game);
           },
         ),
       );
@@ -108,7 +143,9 @@ void main() {
       renderBox.gameLoopCallback(1.0);
       expect(component.isUpdateCalled, true);
       renderBox.paint(
-          PaintingContext(ContainerLayer(), Rect.zero), Offset.zero);
+        PaintingContext(ContainerLayer(), Rect.zero),
+        Offset.zero,
+      );
       expect(component.isRenderCalled, true);
       renderBox.detach();
     });
@@ -117,7 +154,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size = size;
+      game.size.setFrom(size);
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);

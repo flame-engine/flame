@@ -5,24 +5,43 @@ The Game Loop module is a simple abstraction over the game loop concept. Basical
 * The render method takes the canvas ready for drawing the current state of the game.
 * The update method receives the delta time in seconds since last update and allows you to move to the next state.
 
-The class `Game` can be subclassed and will provide both these methods for you to implement. In return it will provide you with a `widget` property that returns the game widget, that can be rendered in your app.
+The `Game` class can be extended and will provide these gameloop methods and then its instance Flutter widget tree via the `GameWidget`.
 
-You can either render it directly in your `runApp`, or you can have a bigger structure, with routing, other screens and menus for your game.
+You can add it into the top of you tree (directly as an argument to `runApp`) or inside the usual app-like widget structure (with scaffold, routes, etc.).
 
-To start, just add your game widget directly to your runApp, like this:
+Example of usage directly with `runApp`:
 
 ```dart
-    main() {
-        Game game = MyGameImpl();
-        runApp(game.widget);
-    }
+
+class MyGameSubClass extends Game {
+  @override
+  void render(Canvas canvas) {
+    // TODO: implement render
+  }
+
+  @override
+  void update(double t) {
+    // TODO: implement update
+  }
+}
+    
+  
+main() {
+  runApp(
+    GameWidget(
+      game: MyGameSubClass(),
+    )
+  );
+}
 ```
 
-Instead of implementing the low level `Game` class, you should probably use the more full-featured `BaseGame` class, or the `Box2DGame` class if you want to use a physics engine.
+It is important to notice that `Game` is an abstract class with just the very basic implementations of the gameloop.
+
+As an option and more suitable for most cases, there is the full-featured `BaseGame` class. For example, Forge2D games uses `Forge2DGame` class;
 
 The `BaseGame` implements a `Component` based `Game` for you; basically it has a list of `Component`s and passes the `update` and `render` calls appropriately. You can still extend those methods to add custom behavior, and you will get a few other features for free, like the passing of `resize` methods (every time the screen is resized the information will be passed to the resize methods of all your components) and also a basic camera feature. The `BaseGame.camera` controls which point in coordinate space should be the top-left of the screen (defaults to [0,0] like a regular `Canvas`).
 
-A very simple `BaseGame` implementation example can be seen below:
+A `BaseGame` implementation example can be seen below:
 
 ```dart
     class MyCrate extends SpriteComponent {
@@ -33,7 +52,7 @@ A very simple `BaseGame` implementation example can be seen below:
         @override
         void onGameResize(Size size) {
             // we don't need to set the x and y in the constructor, we can set then here
-            this.x = (size.width - this.width)/ 2;
+            this.x = (size.width - this.width) / 2;
             this.y = (size.height - this.height) / 2;
         }
     }
@@ -49,27 +68,39 @@ To remove components from the list on a `BaseGame` the `markToRemove` method can
 
 ## Flutter Widgets and Game instances
 
-Since a Flame game is a widget itself, it is quite easy to use Flutter widgets and Flame game together. But to make it even easier, Flame provides a `mixin` called `HasWidgetsOverlay` which will enable any Flutter widget to be show on top of your game instance, this makes it very easy to create things like a pause menu, or an inventory screen for example.
+Since a Flame game can be wrapped in a widget, it is quite easy to use it alongside other Flutter widgets. But still, there is a the Widgets overlay API that makes things even easier.
 
-To use it, simple add the `HasWidgetsOverlay` `mixin` on your game class, by doing so, you will have two new methods available `addWidgetOverlay` and `removeWidgetOverlay`, like the name suggests, they can be used to add or remove widgets overlay above your game. They can be used as shown below:
+`Game.overlays` enables to any Flutter widget to be shown on top of a game instance, this makes it very easy to create things like a pause menu, or an inventory screen for example.
+This property that will be used to manage the active overlays.
+
+This management happens via the `.overlays.add` and `.overlays.remove` methods that marks an overlay to be shown and hidden, respectively, via a `String` argument that identifies an overlay.  
+After that it can be specified which widgets represent each overlay in the `GameWidget` declaration by setting a `overlayBuilderMap`.
 
 ```dart
-addWidgetOverlay(
-  "PauseMenu", // Your overlay identifier
-  Center(child:
-      Container(
-          width: 100,
-          height: 100,
-          color: const Color(0xFFFF0000),
-          child: const Center(child: const Text("Paused")),
-      ),
-  ) // Your widget, this can be any Flutter widget
-);
+// inside game methods:
+final pauseOverlayIdentifier = "PauseMenu";
 
-removeWidgetOverlay("PauseMenu"); // Use the overlay identifier to remove the overlay
+overlays.add(pauseOverlayIdentifier); // marks "PauseMenu" to be rendered.
+overlays.remove(pauseOverlayIdentifier); // marks "PauseMenu" to not be rendered.
 ```
 
-Under the hood, Flame uses a [Stack widget](https://api.flutter.dev/flutter/widgets/Stack-class.html) to display the overlay, so it is important to __note that the order which the overlays are added matters__, where the last added overlay, will be in the front of those added before.
+```dart
+// on the widget declaration
+final game = MyGame();
+
+Widget build(BuildContext  context) {
+  return GameWidget(
+  game: game,
+  overlayBuilderMap: {
+    "PauseMenu": (ctx) {
+       return Text("A pause menu");
+     },
+   },
+ );
+}
+```
+
+The order in which the overlays are declared on the `overlayBuilderMap` defines which overlay will be rendered first.
 
 Here you can see a [working example](/doc/examples/with_widgets_overlay) of this feature.
 

@@ -1,12 +1,85 @@
 # Components
 
+![Component Diagram](https://i.imgur.com/1mTqcqI.png)
+This diagram might look intimidating, but don't worry, it is not as complex as it looks.
+
+## Component
+All components inherit from the abstract class `Component`.
+
+If you want to skip reading about abstract classes you can jump directly to [PositionComponent](./components.md#PositionComponent).
+
+Every `Component` has a few methods that you can optionally implement, that are used by the `BaseGame` class. If you are not using the base game, you can alternatively use these methods on your own game loop.
+
+The `resize` method is called whenever the screen is resized, and in the beginning once when the component is added via the `add` method.
+
+The `shouldRemove` variable can be overridden or set to true and `BaseGame` will remove the component before the next update loop. It will then no longer be rendered or updated. Note that `game.remove(Component c)` can also be used to remove components.
+
+The `isHUD` variable can be overridden or set to true (default false) to make the `BaseGame` ignore the `camera` for this element, make it static in relation to the screen that is.
+
+The `onMount` method can be overridden to run initialization code for the component. When this method is called, BaseGame ensures that all the mixins which would change this component's behaviour are already resolved.
+
+The `onRemove` method can be overridden to run code before the component is removed from the game, it is only run once even if the component is removed both by using the `BaseGame` remove method and the ´Component´ remove method.
+
+The `onLoad` method can be overridden to run asynchronous initialization code for the component, like loading an image for example. This method is executed after the initial "preparation" of the component is run, meaning that this method is executed after `onMount` and just before the inclusion of the component on the `BaseGame` list of components.
+
+## BaseComponent
+Usually if you are going to make your own component you want to extend `PositionComponent`, but if you want to be able to handle effects and child components but handle the positioning differently you can extend the `BaseComponent`.
+
+It is used by `SpriteBodyComponent` and `BodyComponent` in Forge2D since those components doesn't have their position in relation to the screen, but in relation to the Forge2D world.
+
+### Composability of components
+
+Sometimes it is useful to make your component wrap other components. For example by grouping visual components through a hierarchy.
+You can do this by having child components on any component that extends `BaseComponent`, for example `PositionComponent` or `BodyComponent`.
+When you have child components on a component every time the parent is updated and rendered, all the children are rendered and updated with the same conditions.
+
+Example of usage, where visibility of two components are handled by a wrapper:
+
+```dart
+class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
+  bool visible = false;
+
+  GameOverText gameOverText;
+  GameOverButton gameOverButton;
+
+  GameOverPanel(Image spriteImage) : super() {
+    gameOverText = GameOverText(spriteImage); // GameOverText is a Component
+    gameOverButton = GameOverButton(spriteImage); // GameOverRestart is a SpriteComponent
+
+    addChild(gameRef, gameOverText);
+    addChild(gameRef, gameOverButton);
+  }
+
+  @override
+  void render(Canvas canvas) {
+    if (visible) {
+      super.render(canvas);
+    } // If not visible none of the children will be rendered
+  }
+}
+```
+
+## PositionComponent
+
 This class represent a single object on the screen, being a floating rectangle or a rotating sprite.
 
-The base abstract class has the common expected methods update and render to be implemented.
+A `PositionComponent` has a `position`, `size` and `angle`, as well as some useful methods like `distance` and `angleBetween`.
 
-The intermediate inheritance `PositionComponent` adds `position`, `size` and `angle` to your Components, as well as some useful methods like distance and angleBetween.
+When implementing the `render` method for your component that extends `PositionComponent` remember to render from the top left corner (0.0).
+Your render method should not handle where on the screen your component should be rendered. To handle where and how your component should be rendered
+use the `position`. `angle` and `anchor` properties and flame will automatically handle the rest for you.
 
-The most commonly used implementation, `SpriteComponent`, can be created with a `Sprite`:
+If you really want to handle the canvas translations yourself you can just omit the `super.render(canvas)` line and surpress the warning, but for most usecases this is not recommended.
+
+If you want to know where on the screen the bounding box of the component is you can use the `toRect` method.
+
+In the event that you want to change the direction of your components rendering, you can also use
+`renderFlipX` and `renderFlipY` to flip anything drawn to canvas during `render(Canvas canvas)`.
+This is available on all `PositionComponent` objects, and is especially useful on `SpriteComponent` and
+`SpriteAnimationComponent`. For example set `component.renderFlipX = true` to reverse the horizontal rendering.
+
+## SpriteComponent
+The most commonly used implementation of `PositionComponent` is `SpriteComponent`, and it can be created with a `Sprite`:
 
 ```dart
     import 'package:flame/components/component.dart';
@@ -23,47 +96,23 @@ The most commonly used implementation, `SpriteComponent`, can be created with a 
     player.render(canvas); // it will render only if the image is loaded and the position and size parameters are not null
 ```
 
-In the event that you want to easily change the direction of your components rendering, you can also use
-`renderFlipX` and `renderFlipY` to flip anything drawn to canvas during `render(Canvas canvas)`.
-This is available on all `PositionComponent` objects, and is especially useful on `SpriteComponent` and
-`AnimationComponent`. Simply set `component.renderFlipX = true` for example reverse the horizontal rendering.
+## SpriteAnimationComponent
 
-Every `Component` has a few other methods that you can optionally implement, that are used by the `BaseGame` class. If you are not using the base game, you can alternatively use these methods on your own game loop.
-
-The `resize` method is called whenever the screen is resized, and in the beginning once when the component is added via the `add` method. You need to apply here any changes to the x, y, width and height of your component, or any other changes, due to the screen resizing. You can start these variables here, as the sprite won't be rendered until everything is set.
-
-The `shouldRemove` method can be implemented to return true and `BaseGame` will remove it before the next update loop. It will then no longer be rendered or updated. Note that `game.remove(Component c)` can also be used to remove components.
-
-The `isHUD` method can be implemented to return true (default false) to make the `BaseGame` ignore the `camera` for this element.
-
-The `onMount` method can be overridden to run initialization code for the component. When this method is called, BaseGame ensures that all the mixins which would change this component behaviour are already resolved.
-
-The `onRemove` method can be overridden to run code before the component is removed from the game, it is only run once even if the component is removed both by using the `BaseGame` remove method and the ´Component´ remove method.
-
-There are also other implementations:
-
-* The `AnimationComponent` takes an `Animation` object and renders a cyclic animated sprite (more details about Animations [here](/doc/images.md#Animation))
-* The `SvgComponent` takes an `Svg` object and renders the SVG on the game
-* The `ParallaxComponent` can render a parallax background with several frames
-* The `Box2DComponent`, that has a physics engine built-in (using the [Box2D](https://github.com/google/box2d.dart) port for Dart)
-
-## Animation Component
-
-This component uses an instance of the [Animation](/doc/images.md#Animation) class to represent a Component that has a sprite that runs a single cyclic animation.
+This class is used to represent a Component that has a sprite that runs a single cyclic animation.
 
 This will create a simple three frame animation
 
 ```dart
     List<Sprite> sprites = [0, 1, 2].map((i) => Sprite('player_${i}.png')).toList();
     final size = Vector2.all(64.0);
-    this.player = AnimationComponent(size, new Animation.spriteList(sprites, stepTime: 0.01));
+    this.player = SpriteAnimationComponent(size, new Animation.spriteList(sprites, stepTime: 0.01));
 ```
 
 If you have a sprite sheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](/doc/images.md#Animation)):
 
 ```dart
     final size = Vector2.all(64.0);
-    this.player = AnimationComponent.sequenced(size, 'player.png', 2);
+    this.player = SpriteAnimationComponent.sequenced(size, 'player.png', 2);
 ```
 
 If you are not using `BaseGame`, don't forget this component needs to be update'd even if static, because the animation object needs to be ticked to move the frames.
@@ -79,7 +128,7 @@ This component uses an instance of `Svg` class to represent a Component that has
     android.y = 100;
 ```
 
-## FlareActor Component
+## FlareActorComponent
 
 *Note*: The previous implementation of a Flare integration API using `FlareAnimation` and `FlareComponent` has been deprecated.
 
@@ -134,36 +183,7 @@ You can also change the current playing animation using the `updateAnimation` me
 
 For a working example, check this [source file](/doc/examples/flare/lib/main_component.dart).
 
-## Composed component
-
-A mixin that helps you to make a `Component` wraps other components. It is useful to group visual components through a hierarchy. When implemented, makes every item in its `components` collection field be updated and rendered with the same conditions.
-
-Example of usage, where visibility of two components are handled by a wrapper:
-
-```dart
-class GameOverPanel extends PositionComponent with Resizable, ComposedComponent {
-  bool visible = false;
-
-  GameOverText gameOverText;
-  GameOverButton gameOverButton;
-
-  GameOverPanel(Image spriteImage) : super() {
-    gameOverText = GameOverText(spriteImage); // GameOverText is a Component
-    gameOverButton = GameOverButton(spriteImage); // GameOverRestart is a SpriteComponent
-
-    components..add(gameOverText)..add(gameOverButton);
-  }
-
-  @override
-  void render(Canvas canvas) {
-    if (visible) {
-      super.render(canvas);
-    } // If not, neither of its `components` will be rendered
-  }
-}
-```
-
-## Parallax Component
+## ParallaxComponent
 
 This Component can be used to render pretty backgrounds by drawing several transparent images on top of each other, each dislocated by a tiny amount.
 
@@ -212,34 +232,22 @@ Advanced example:
 
 Once you are done with setting the parameters to your needs, render the ParallaxComponent as any other component.
 
-Like the AnimationComponent, even if your parallax is static, you must call update on this component, so it runs its animation.
+Like the SpriteAnimationComponent, even if your parallax is static, you must call update on this component, so it runs its animation.
 Also, don't forget to add you images to the `pubspec.yaml` file as assets or they wont be found.
 
 An example implementation can be found in the [examples directory](/doc/examples/parallax).
 
-## Box2D (Formerly Box2DComponent)
-
-The preferred way to use box2d in flame is to use the BaseGame extension [Box2DGame](/doc/box2d.md).
-
-Flame comes with a basic integration with the Flutter implementation of [Box2D](https://github.com/google/box2d.dart).
-
-The whole concept of a box2d's world is mapped to `world` in the `Box2DGame` component; every Body should be a `BodyComponent`, and added to the `Box2DGame`.
-
-So you can have HUD and other non-physics-related components in your game's component list along with your physical entities. When the update is called, it will use box2d physics engine to properly update every child.
-
-More information about Box2D can be found [here](/doc/box2d.md) and a few simple examples can be found [here](/doc/examples/box2d).
-
 ## SpriteBodyComponent
 
-See [SpriteBodyComponent](/doc/box2d.md#spritebodycomponent) in the box2d documentation.
+See [SpriteBodyComponent](/doc/forge2d.md#spritebodycomponent) in the box2d documentation.
 
-## Tiled Component
+## TiledComponent
 
 Currently we have a very basic implementation of a Tiled component. This API uses the lib [Tiled](https://github.com/feroult/tiled.dart) to parse map files and render visible layers.
 
 An example of how to use the API can be found [here](/doc/examples/tiled).
 
-# Isometric Tile Map Component
+## IsometricTileMapComponent
 
 This component allows you to render an isometric map based on a cartesian matrix of blocks and an isometric tileset.
 
@@ -260,7 +268,7 @@ A more in-depth example can be found [here](/doc/examples/isometric).
 
 ![An example of a isometric map with selector](images/isometric.png)
 
-# Nine Tile Box Component
+## NineTileBoxComponent
 
 A Nine Tile Box is a rectangle drawn using a grid sprite.
 

@@ -14,7 +14,11 @@ import './square.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.util.fullScreen();
-  runApp(MyGame().widget);
+  runApp(
+    GameWidget(
+      game: MyGame(),
+    ),
+  );
 }
 
 class MyGame extends BaseGame with TapDetector {

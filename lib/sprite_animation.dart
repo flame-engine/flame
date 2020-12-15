@@ -4,6 +4,81 @@ import 'dart:ui';
 import 'extensions/vector2.dart';
 import 'sprite.dart';
 
+class SpriteAnimationFrameData {
+  /// Coordinates of the sprite of this Frame
+  final Vector2 srcPosition;
+
+  /// Size of the sprite of this Frame
+  final Vector2 srcSize;
+
+  /// The duration to display it, in seconds.
+  final double stepTime;
+
+  SpriteAnimationFrameData({
+    @required this.srcPosition,
+    @required this.srcSize,
+    @required this.stepTime,
+  });
+}
+
+class SpriteAnimationData {
+  List<SpriteAnimationFrameData> frames;
+  final bool loop;
+
+  /// Creates a SpriteAnimationData from the given [frames] and [loop] parameters
+  SpriteAnimationData(this.frames, {this.loop = true});
+
+  /// Takes some parameters and automatically calculate and create the frames for the sprite animation data
+  ///
+  /// [amount] The total amount of frames present on the image
+  /// [stepTimes] A list of times (in seconds) of each frame, should have a length equals to the amount parameter
+  /// [textureSize] The size of each frame
+  /// [amountPerRow] An optional parameter to inform how many frames there are on which row, useful for sprite sheets where the frames as disposed on multiple lines
+  /// [texturePosition] An optional parameter with the initial coordinate where the frames begin on the image, default to (top: 0, left: 0)
+  /// [loop] An optional parameter to inform if this animation loops or has a single iteration, defaults to true
+  SpriteAnimationData.variable({
+    @required int amount,
+    @required List<double> stepTimes,
+    @required Vector2 textureSize,
+    int amountPerRow,
+    Vector2 texturePosition,
+    this.loop = true,
+  })  : assert(amountPerRow == null || amount >= amountPerRow),
+        assert(stepTimes != null) {
+    amountPerRow ??= amount;
+    texturePosition ??= Vector2.zero();
+    frames = List<SpriteAnimationFrameData>(amount);
+    for (int i = 0; i < amount; i++) {
+      final position = Vector2(
+        texturePosition.x + (i % amountPerRow) * textureSize.x,
+        texturePosition.y + (i ~/ amountPerRow) * textureSize.y,
+      );
+      frames[i] = SpriteAnimationFrameData(
+        stepTime: stepTimes[i],
+        srcPosition: position,
+        srcSize: textureSize,
+      );
+    }
+  }
+
+  /// Works just like [SpriteAnimationData.variable] but uses the same [stepTime] for all frames
+  SpriteAnimationData.sequenced({
+    @required int amount,
+    @required double stepTime,
+    @required Vector2 textureSize,
+    int amountPerRow,
+    Vector2 texturePosition,
+    bool loop = true,
+  }) : this.variable(
+          amount: amount,
+          amountPerRow: amountPerRow,
+          texturePosition: texturePosition,
+          textureSize: textureSize,
+          loop: loop,
+          stepTimes: stepTime != null ? List.filled(amount, stepTime) : null,
+        );
+}
+
 /// Represents a single sprite animation frame.
 class SpriteAnimationFrame {
   /// The [Sprite] to be displayed.
@@ -60,66 +135,24 @@ class SpriteAnimation {
     frames = sprites.map((s) => SpriteAnimationFrame(s, stepTime)).toList();
   }
 
-  /// Automatically creates a sequenced animation, that is, an animation based on a sprite sheet.
+  /// Creates an SpriteAnimation based on its [data].
   ///
-  /// From a single image source, it creates multiple sprites based on the parameters:
-  /// [amount]: how many sprites this animation is composed of
-  /// [amountPerRow]: If the sprites used to create an animation are not on the same row,
-  ///     you can use this parameter to specify how many sprites per row.
-  ///     For detailed, please refer to example at "/doc/examples/animations".
-  /// [textureX]: x position on the original image to start (defaults to 0)
-  /// [textureY]: y position on the original image to start (defaults to 0)
-  /// [textureWidth]: width of each frame (defaults to null, that is, full width of the sprite sheet)
-  /// [textureHeight]: height of each frame (defaults to null, that is, full height of the sprite sheet)
-  ///
-  /// For example, if you have a sprite sheet where each row is an animation, and each frame is 32x32
-  ///     Animation.sequenced('sheet.png', 8, textureY: 32.0 * i, textureWidth: 32.0, textureHeight: 32.0);
-  /// This will create the i-th animation on the 'sheet.png', given it has 8 frames.
-  SpriteAnimation.sequenced(
+  /// Check [SpriteAnimationData] constructors for more info.
+  SpriteAnimation.fromFrameData(
     Image image,
-    int amount, {
-    int amountPerRow,
-    Vector2 texturePosition,
-    Vector2 textureSize,
-    double stepTime = 0.1,
-    bool loop = true,
-  }) : this.variableSequenced(
+    SpriteAnimationData data,
+  )   : assert(image != null),
+        assert(data != null) {
+    frames = data.frames.map((frameData) {
+      return SpriteAnimationFrame(
+        Sprite(
           image,
-          amount,
-          List.filled(amount, stepTime),
-          amountPerRow: amountPerRow,
-          texturePosition: texturePosition,
-          textureSize: textureSize,
-          loop: loop,
-        );
-
-  /// Works just like [SpriteAnimation.sequenced], but it takes a list of variable [stepTimes], associating each one with one frame in the sequence.
-  SpriteAnimation.variableSequenced(
-    Image image,
-    int amount,
-    List<double> stepTimes, {
-    int amountPerRow,
-    Vector2 texturePosition,
-    Vector2 textureSize,
-    this.loop = true,
-  })  : assert(amountPerRow == null || amount >= amountPerRow),
-        assert(stepTimes != null),
-        assert(image != null) {
-    amountPerRow ??= amount;
-    texturePosition ??= Vector2.zero();
-    frames = List<SpriteAnimationFrame>(amount);
-    for (int i = 0; i < amount; i++) {
-      final position = Vector2(
-        texturePosition.x + (i % amountPerRow) * textureSize.x,
-        texturePosition.y + (i ~/ amountPerRow) * textureSize.y,
+          srcSize: frameData.srcSize,
+          srcPosition: frameData.srcPosition,
+        ),
+        frameData.stepTime,
       );
-      final Sprite sprite = Sprite(
-        image,
-        srcPosition: position,
-        srcSize: textureSize,
-      );
-      frames[i] = SpriteAnimationFrame(sprite, stepTimes[i]);
-    }
+    }).toList();
   }
 
   /// Automatically creates an Animation Object using animation data provided by the json file

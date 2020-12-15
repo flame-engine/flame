@@ -15,7 +15,7 @@ A minimalistic Flutter game engine.
 
 ---
 
-[English](https://github.com/flame-engine/flame) | [简体中文](README-ZH.md) | [Polski](README-PL.md)
+[English](/README.md) | [简体中文](/i18n/README-ZH.md) | [Polski](/i18n/README-PL.md) | [Русский](/i18n/README-RU.md)
 
 ---
 
@@ -27,9 +27,24 @@ Use this version to get a preview of how the new Flame version will be and also 
 
 Checkout the branches `develop-v0.x` and `master-v0.x` for the current last 0.x version. However no new updates will be added to v0 except for bugfixes.
 
+The current v1 release is `1.0.0-rc3` on pub. The last stable version so far is `0.28.0`. Feel free to choose the one that better suits your need.
+
 ---
 
+## Documentation
 
+Note that the documentation in the master branch of this repo is newer than the latest released version.
+
+Here you can find the documentation for different versions:
+- Latest stable version: [Flame-engine website](https://flame-engine.org/)
+- Latest stable version: [GitHub docs](https://github.com/flame-engine/flame/tree/master-v0.x/doc)
+- Latest v1.0.0 version: [GitHub docs](https://github.com/flame-engine/flame/tree/1.0.0-rc3/doc)
+
+The complete documentation can be found [here](doc/README.md).
+
+Many examples of different features can be found [here](doc/examples) and a good starting example can be found [here](/example).
+
+The official site for Flame, which also contains the documentation can be found [here](https://flame-engine.org/).
 
 ## Help
 
@@ -44,7 +59,7 @@ The goal of this project is to provide a complete set of out-of-the-way solution
 Currently it provides you with:
  - a game loop
  - a component/object system
- - a physics engine (box2d, available through [flame_box2d](https://github.com/flame-engine/flame_box2d))
+ - a physics engine (Forge2D, available through [flame_Forge2D](https://github.com/flame-engine/flame_Forge2D))
  - audio support
  - effects and particles
  - gesture and input support
@@ -102,14 +117,6 @@ Check out this great series of articles/tutorials written by [Alekhin](https://g
 We also offer a curated list of Games, Libraries and Articles over at [awesome-flame](https://github.com/flame-engine/awesome-flame).
 
 Note that some of the articles might be slightly outdated, but they are still useful.
-
-## Documentation
-
-The complete documentation can be found [here](doc/README.md).
-
-Many examples of different features can be found [here](doc/examples) and a good starting example can be found [here](/example).
-
-The official site for Flame, which also contains the documentation can be found [here](https://flame-engine.org/).
 
 ## Credits
 
