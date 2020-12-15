@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## [next]
+
 ## 1.0.0-rc3
  - Fix TextBoxComponent rendering
  - Add TextBoxConfig options; margins and growingBox
