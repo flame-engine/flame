@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Rename Dragable -> Draggable
 
 ## 1.0.0-rc3
  - Fix TextBoxComponent rendering
