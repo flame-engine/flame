@@ -153,6 +153,7 @@ class SpriteAnimation {
         frameData.stepTime,
       );
     }).toList();
+    loop = data.loop;
   }
 
   /// Automatically creates an Animation Object using animation data provided by the json file
