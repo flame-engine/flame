@@ -80,11 +80,13 @@ abstract class BaseComponent extends Component {
     _children.forEach((child) => child.onGameResize(gameSize));
   }
 
+  @mustCallSuper
   @override
   void onMount() {
     children.forEach((child) => child.onMount());
   }
 
+  @mustCallSuper
   @override
   void onRemove() {
     children.forEach((child) => child.onRemove());
