@@ -130,7 +130,7 @@ abstract class BaseComponent extends Component {
       await childOnLoadFuture;
     }
     _children.add(child);
-    if (gameRef.components.contains(this)) {
+    if (gameRef?.components?.contains(this) ?? false) {
       child.onMount();
     }
   }
