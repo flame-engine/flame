@@ -13,7 +13,7 @@ void main() {
   );
 }
 
-class MyGame extends Game with MouseMovementDetector {
+class MyGame extends BaseGame with MouseMovementDetector {
   static const SPEED = 200;
 
   Vector2 position = Vector2(0, 0);

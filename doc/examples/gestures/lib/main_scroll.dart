@@ -14,7 +14,7 @@ void main() {
   );
 }
 
-class MyGame extends Game with ScrollDetector {
+class MyGame extends BaseGame with ScrollDetector {
   static const SPEED = 200;
 
   Vector2 position = Vector2(0, 0);

@@ -25,7 +25,7 @@ abstract class Game {
   BuildContext buildContext;
 
   /// The list of component that is related to the game
-  Iterable<Component> get components;
+  final Iterable<Component> components = const Iterable.empty();
 
   /// Current game viewport size, updated every resize via the [resize] method hook
   final Vector2 size = Vector2.zero();
