@@ -47,18 +47,17 @@ class SpriteAnimationData {
         assert(stepTimes != null) {
     amountPerRow ??= amount;
     texturePosition ??= Vector2.zero();
-    frames = List<SpriteAnimationFrameData>(amount);
-    for (int i = 0; i < amount; i++) {
+    frames = List<SpriteAnimationFrameData>.generate(amount, (i) {
       final position = Vector2(
         texturePosition.x + (i % amountPerRow) * textureSize.x,
         texturePosition.y + (i ~/ amountPerRow) * textureSize.y,
       );
-      frames[i] = SpriteAnimationFrameData(
+      return SpriteAnimationFrameData(
         stepTime: stepTimes[i],
         srcPosition: position,
         srcSize: textureSize,
       );
-    }
+    });
   }
 
   /// Works just like [SpriteAnimationData.variable] but uses the same [stepTime] for all frames
