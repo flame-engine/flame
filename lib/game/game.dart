@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 
 import '../assets/assets_cache.dart';
 import '../assets/images.dart';
+import '../components/component.dart';
 import '../extensions/vector2.dart';
 import '../keyboard.dart';
 import '../sprite.dart';
@@ -22,6 +23,9 @@ abstract class Game {
   final images = Images();
   final assets = AssetsCache();
   BuildContext buildContext;
+
+  /// The list of component that is related to the game
+  Iterable<Component> get components;
 
   /// Current game viewport size, updated every resize via the [resize] method hook
   final Vector2 size = Vector2.zero();

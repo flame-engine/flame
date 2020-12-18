@@ -80,6 +80,16 @@ abstract class BaseComponent extends Component {
     _children.forEach((child) => child.onGameResize(gameSize));
   }
 
+  @override
+  void onMount() {
+    children.forEach((child) => child.onMount());
+  }
+
+  @override
+  void onRemove() {
+    children.forEach((child) => child.onRemove());
+  }
+
   /// Called to check whether the point is to be counted as within the component
   /// It needs to be overridden to have any effect, like it is in the
   /// [PositionComponent]
@@ -110,21 +120,24 @@ abstract class BaseComponent extends Component {
   /// [this.gameRef] should be used to prepare the child.
   /// For children that don't need preparation from the game instance can
   /// disregard both the options given above.
-  Future<void> addChild(Component c, {Game gameRef}) async {
+  Future<void> addChild(Component child, {Game gameRef}) async {
     assert(
       gameRef != null || this is HasGameRef,
       "Need gameRef either as an argument or from the HasGameRef mixin",
     );
     gameRef ??= (this as HasGameRef).gameRef;
     if (gameRef is BaseGame) {
-      gameRef.prepare(c);
+      gameRef.prepare(child);
     }
 
-    final childOnLoadFuture = c.onLoad();
+    final childOnLoadFuture = child.onLoad();
     if (childOnLoadFuture != null) {
       await childOnLoadFuture;
     }
-    _children.add(c);
+    _children.add(child);
+    if (gameRef.components.contains(this)) {
+      child.onMount();
+    }
   }
 
   bool removeChild(Component c) {
