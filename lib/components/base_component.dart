@@ -56,14 +56,16 @@ abstract class BaseComponent extends Component {
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    canvas.save();
     prepareCanvas(canvas);
 
     if (debugMode) {
       renderDebugMode(canvas);
     }
-    _children.forEach((c) => c.render(canvas));
-    canvas.restore();
+    _children.forEach((c) {
+      canvas.save();
+      c.render(canvas);
+      canvas.restore();
+    });
   }
 
   void renderDebugMode(Canvas canvas) {}
