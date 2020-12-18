@@ -122,7 +122,7 @@ abstract class BaseComponent extends Component {
   /// disregard both the options given above.
   Future<void> addChild(Component child, {Game gameRef}) async {
     assert(
-      gameRef != null || this is HasGameRef,
+      gameRef != null || (this as HasGameRef).gameRef != null,
       "Need gameRef either as an argument or from the HasGameRef mixin",
     );
     gameRef ??= (this as HasGameRef).gameRef;

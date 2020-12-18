@@ -51,10 +51,8 @@ class MyGame extends BaseGame
   }
 
   @override
-  void update(double dt) {}
-
-  @override
   void render(Canvas canvas) {
+    super.render(canvas);
     canvas.drawRect(_rect, _paint);
   }
 }

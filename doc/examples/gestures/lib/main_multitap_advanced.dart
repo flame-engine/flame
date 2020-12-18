@@ -83,10 +83,8 @@ class MyGame extends BaseGame
   }
 
   @override
-  void update(double dt) {}
-
-  @override
   void render(Canvas canvas) {
+    super.render(canvas);
     _taps.values.forEach((rect) {
       canvas.drawRect(rect, _paint);
     });

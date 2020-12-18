@@ -37,6 +37,7 @@ class MyGame extends BaseGame with MouseMovementDetector {
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     canvas.drawRect(
       _toRect(),
       _onTarget ? _blue : BasicPalette.white.paint,
@@ -45,6 +46,7 @@ class MyGame extends BaseGame with MouseMovementDetector {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (target != null) {
       _onTarget = _toRect().contains(target.toOffset());
 
