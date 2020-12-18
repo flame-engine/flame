@@ -27,6 +27,7 @@ class ParentSquare extends Square {
 
   @override
   void onMount() {
+    super.onMount();
     createChildren();
   }
 

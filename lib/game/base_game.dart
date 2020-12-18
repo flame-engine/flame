@@ -22,7 +22,6 @@ import 'game.dart';
 /// It is based on the Component system.
 class BaseGame extends Game with FPSCounter {
   /// The list of components to be updated and rendered by the base game.
-  @override
   final OrderedSet<Component> components =
       OrderedSet(Comparing.on((c) => c.priority));
 

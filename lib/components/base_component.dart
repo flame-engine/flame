@@ -83,12 +83,14 @@ abstract class BaseComponent extends Component {
   @mustCallSuper
   @override
   void onMount() {
+    super.onMount();
     children.forEach((child) => child.onMount());
   }
 
   @mustCallSuper
   @override
   void onRemove() {
+    super.onRemove();
     children.forEach((child) => child.onRemove());
   }
 
@@ -132,7 +134,7 @@ abstract class BaseComponent extends Component {
       await childOnLoadFuture;
     }
     _children.add(child);
-    if (gameRef?.components?.contains(this) ?? false) {
+    if (isMounted) {
       child.onMount();
     }
   }
