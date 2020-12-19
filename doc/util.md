@@ -151,3 +151,15 @@ class MyBaseGame extends BaseGame {
   }
 }
 ```
+
+## Extensions
+
+Flame bundles a collection of utility extensions, these extensions are meant to help the developer with shortcuts and converion methods, here you can find the summary of those extensions
+
+They can all be imported on `package:flame/extensions/...`
+
+### Canvas
+
+Methods:
+ - `scaleVector`: Just like `canvas scale` method, but takes a `Vector2` as an argument.
+ - `translateVector`: Just like `canvas translate` method, but takes a `Vector2` as an argument.
