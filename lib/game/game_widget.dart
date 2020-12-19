@@ -4,7 +4,7 @@ import 'package:flutter/gestures.dart';
 
 import 'game.dart';
 import '../gestures.dart';
-import '../components/mixins/dragable.dart';
+import '../components/mixins/draggable.dart';
 import '../components/mixins/tapable.dart';
 import '../extensions/size.dart';
 import 'game_render_box.dart';
@@ -251,7 +251,7 @@ bool _hasAdvancedGesturesDetectors(Game game) =>
     game is MultiTouchTapDetector ||
     game is MultiTouchDragDetector ||
     game is HasTapableComponents ||
-    game is HasDragableComponents;
+    game is HasDraggableComponents;
 
 bool _hasMouseDetectors(Game game) =>
     game is MouseMovementDetector || game is ScrollDetector;
@@ -388,7 +388,7 @@ Widget _applyAdvancedGesturesDetectors(Game game, Widget child) {
       ..onTapCancel = game.onTapCancel);
   }
 
-  if (game is HasDragableComponents) {
+  if (game is HasDraggableComponents) {
     dragHandlers
         .add(_GenericDragEventHandler()..onReceiveDrag = game.onReceiveDrag);
   }
