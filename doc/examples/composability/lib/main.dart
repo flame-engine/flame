@@ -1,6 +1,5 @@
 import 'package:flame/anchor.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
-import 'package:flame/components/mixins/tapable.dart';
 import 'package:flame/components/position_component.dart';
 import 'package:flame/game.dart';
 import 'package:flame/extensions/vector2.dart';
@@ -40,11 +39,11 @@ class ParentSquare extends Square {
       Square(Vector2(70, 200), Vector2(50, 50), angle: 5),
     ];
 
-    children.forEach((child) => addChild(child, gameRef: gameRef));
+    children.forEach(addChild);
   }
 }
 
-class MyGame extends BaseGame with HasTapableComponents {
+class MyGame extends BaseGame {
   ParentSquare _parent;
 
   @override
