@@ -103,9 +103,9 @@ class MyGame extends Game with TapDetector {
 ```
 You can also check a more complete example [here](/doc/examples/gestures).
 
-## Tapable and Dragable components
+## Tapable and Draggable components
 
-Any component derived from `BaseComponent` (most components) can add the `Tapable` and/or the `Dragable` mixins to handle taps and drags on the component.
+Any component derived from `BaseComponent` (most components) can add the `Tapable` and/or the `Draggable` mixins to handle taps and drags on the component.
 
 All overridden methods return a boolean to control if the event should be passed down further along to components underneath it.
 So say that you only want your top visible component to receive a tap and not the ones underneath it, then your `onTapDown`,  `onTapUp` and `onTapCancel` implementations should return `false` and if you want the event to go through more of the components underneath then you should return `true`.
@@ -157,11 +157,11 @@ class MyGame extends BaseGame with HasTapableComponents {
 
 Warning: `HasTapableComponents` uses an advanced gesture detector under the hood and as explained further up on this page it shouldn't be used alongside basic detectors.
 
-### Dragable components
+### Draggable components
 
-Just like with `Tapable`, Flame offers a mixin for `Dragable`.
+Just like with `Tapable`, Flame offers a mixin for `Draggable`.
 
-By adding the `HasDragableComponents` mixin to your game, and by using the mixin `Dragable` on your components can override the following methods, enabling an easy to use drag event on your components.
+By adding the `HasDraggableComponents` mixin to your game, and by using the mixin `Draggable` on your components can override the following methods, enabling an easy to use drag event on your components.
 
 Note that the `DragEvent.initialPosition` doesn't take any padding or margin outside the game widget into account, so if you are not running the game in full screen you'll have to take that into account.
 
@@ -173,9 +173,9 @@ Minimal component example:
 
 ```dart
 import 'package:flame/components/component.dart';
-import 'package:flame/components/mixins/dragable.dart';
+import 'package:flame/components/mixins/draggable.dart';
 
-class DragableComponent extends PositionComponent with Dragable {
+class DraggableComponent extends PositionComponent with Draggable {
 
   // update and render omitted
 
@@ -198,14 +198,14 @@ class DragableComponent extends PositionComponent with Dragable {
   }
 }
 
-class MyGame extends BaseGame with HasDragableComponents {
+class MyGame extends BaseGame with HasDraggableComponents {
   MyGame() {
-    add(DragableComponent());
+    add(DraggableComponent());
   }
 }
 ```
 
-Warning: `HasDragableComponents` uses an advanced gesture detector under the hood and as explained further up on this page, shouldn't be used alongside basic detectors.
+Warning: `HasDraggableComponents` uses an advanced gesture detector under the hood and as explained further up on this page, shouldn't be used alongside basic detectors.
 
 ## Keyboard
 
