@@ -61,10 +61,11 @@ abstract class BaseComponent extends Component {
     if (debugMode) {
       renderDebugMode(canvas);
     }
-
-    canvas.save();
-    _children.forEach((c) => c.render(canvas));
-    canvas.restore();
+    _children.forEach((c) {
+      canvas.save();
+      c.render(canvas);
+      canvas.restore();
+    });
   }
 
   void renderDebugMode(Canvas canvas) {}

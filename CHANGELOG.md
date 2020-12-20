@@ -3,6 +3,7 @@
 ## [next]
  - Rename Dragable -> Draggable
  - Set loop member variable when constructing SpriteAnimationComponent from SpriteAnimationData
+ - Fix rendering of children
 
 ## 1.0.0-rc3
  - Fix TextBoxComponent rendering
