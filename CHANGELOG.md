@@ -3,6 +3,7 @@
 ## [next]
  - Rename Dragable -> Draggable
  - Set loop member variable when constructing SpriteAnimationComponent from SpriteAnimationData
+ - Effect shouldn't affect unrelated properties on component
  - Fix rendering of children
  - Properly propagate onMount and onRemove to children
 
