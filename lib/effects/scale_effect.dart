@@ -30,6 +30,7 @@ class ScaleEffect extends SimplePositionComponentEffect {
           speed: speed,
           curve: curve,
           isRelative: isRelative,
+          modifiesSize: true,
           onComplete: onComplete,
         );
 
