@@ -168,7 +168,7 @@ abstract class PositionComponentEffect
       if (originalAngle != endAngle) {
         component?.angle = angle;
       }
-      if (originalSize != originalSize) {
+      if (originalSize != endSize) {
         component?.size?.setFrom(size);
       }
     }
