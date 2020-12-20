@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Rename Dragable -> Draggable
  - Set loop member variable when constructing SpriteAnimationComponent from SpriteAnimationData
  - Fix rendering of children
 

@@ -2,14 +2,6 @@
 
 Some stuff just doesn't fit anywhere else.
 
-## Position
-
-Throughout the variety of modules needed to build a game, Dart and Flutter have a few different classes to handle the concept of a 2D double point; specially common in the APIs are math.Point and ui.Offset.
-
-The Position class is an utility class that helps by allowing easy conversions to and from these type.
-
-It also differs from the default implementations provided (math.Point and ui.Offset) as it's mutable and offers some useful methods for manipulation.
-
 ## Util Class
 
 This class, accessible via `Flame.util`, has some sparse functions that are independent and good to have.
