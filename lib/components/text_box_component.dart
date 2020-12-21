@@ -7,7 +7,6 @@ import 'package:flutter/widgets.dart' hide Image;
 import '../palette.dart';
 import '../text_config.dart';
 import '../extensions/vector2.dart';
-import 'mixins/resizable.dart';
 import 'position_component.dart';
 
 class TextBoxConfig {
@@ -26,9 +25,10 @@ class TextBoxConfig {
   });
 }
 
-class TextBoxComponent extends PositionComponent with Resizable {
+class TextBoxComponent extends PositionComponent {
   static final Paint _imagePaint = BasicPalette.white.paint
     ..filterQuality = FilterQuality.high;
+  Vector2 _gameSize;
 
   String _text;
   TextConfig _config;
@@ -157,9 +157,15 @@ class TextBoxComponent extends PositionComponent with Resizable {
     c.drawImage(_cache, Offset.zero, _imagePaint);
   }
 
+  @override
+  void onGameResize(Vector2 gameSize) {
+    super.onGameResize(gameSize);
+    _gameSize = gameSize;
+  }
+
   Future<Image> _redrawCache() {
     final PictureRecorder recorder = PictureRecorder();
-    final Canvas c = Canvas(recorder, gameSize.toRect());
+    final Canvas c = Canvas(recorder, _gameSize.toRect());
     _fullRender(c);
     return recorder.endRecording().toImage(width.toInt(), height.toInt());
   }

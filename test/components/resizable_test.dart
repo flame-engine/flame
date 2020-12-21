@@ -3,14 +3,20 @@ import 'package:flame/extensions/vector2.dart';
 import 'package:test/test.dart';
 
 import 'package:flame/components/position_component.dart';
-import 'package:flame/components/mixins/resizable.dart';
 
-class MyComponent extends PositionComponent with Resizable {
+class MyComponent extends PositionComponent {
   String name;
   @override
   Vector2 size = Vector2(2.0, 2.0);
+  Vector2 gameSize;
 
   MyComponent(this.name);
+  
+  @override
+  void onGameResize(Vector2 gameSize) {
+    super.onGameResize(gameSize);
+    this.gameSize = gameSize;
+  }
 }
 
 class MyGame extends BaseGame {}
@@ -33,7 +39,7 @@ void main() {
       game.onResize(size);
       expect(a.gameSize, size);
     });
-    test('game calls doesnt change component size', () {
+    test("game calls doesn't change component size", () {
       final MyComponent a = MyComponent('a');
       final MyGame game = MyGame();
       game.add(a);

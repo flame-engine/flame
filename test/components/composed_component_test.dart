@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flame/components/position_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
-import 'package:flame/components/mixins/resizable.dart';
 import 'package:flame/components/mixins/tapable.dart';
 import 'package:flame/game/base_game.dart';
 import 'package:flame/extensions/vector2.dart';
@@ -13,7 +12,9 @@ import '../util/mock_canvas.dart';
 
 class MyGame extends BaseGame with HasTapableComponents {}
 
-class MyTap extends PositionComponent with Tapable, Resizable {
+class MyTap extends PositionComponent with Tapable {
+  Vector2 gameSize;
+
   bool tapped = false;
   bool updated = false;
   bool rendered = false;
@@ -28,6 +29,12 @@ class MyTap extends PositionComponent with Tapable, Resizable {
   void render(Canvas canvas) {
     super.render(canvas);
     rendered = true;
+  }
+
+  @override
+  void onGameResize(Vector2 gameSize) {
+    super.onGameResize(gameSize);
+    this.gameSize = gameSize;
   }
 
   @override
