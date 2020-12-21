@@ -11,7 +11,7 @@ class MyComponent extends PositionComponent {
   Vector2 gameSize;
 
   MyComponent(this.name);
-  
+
   @override
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
