@@ -1,6 +1,8 @@
 import 'vector2.dart';
 
-import 'dart:ui' show Canvas;
+import 'dart:ui';
+
+export 'dart:ui' show Canvas;
 
 extension CanvasExtension on Canvas {
   void scaleVector(Vector2 vector) {
