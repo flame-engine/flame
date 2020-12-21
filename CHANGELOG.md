@@ -8,6 +8,7 @@
  - Explicitly define what fields an effect on PositionComponent modifies
  - Properly propagate onMount and onRemove to children
  - Adding Canvas extensions
+ - Remove Resizable mixin
 
 ## 1.0.0-rc3
  - Fix TextBoxComponent rendering
