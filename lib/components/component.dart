@@ -17,8 +17,8 @@ abstract class Component {
   /// HUD objects ignore the [BaseGame.camera] when rendered (so their position coordinates are considered relative to the device screen).
   bool isHud = false;
 
-  /// Whether this component is currently mounted on a game or not
   bool _isMounted = false;
+  /// Whether this component is currently mounted on a game or not
   bool get isMounted => _isMounted;
 
   /// Render priority of this component. This allows you to control the order in which your components are rendered.
