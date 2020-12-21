@@ -12,7 +12,7 @@ void main() {
 }
 
 /// Includes an example including advanced detectors
-class MyGame extends Game with MultiTouchTapDetector {
+class MyGame extends BaseGame with MultiTouchTapDetector {
   final _whitePaint = BasicPalette.white.paint;
 
   Paint _paint;
@@ -44,10 +44,8 @@ class MyGame extends Game with MultiTouchTapDetector {
   }
 
   @override
-  void update(double dt) {}
-
-  @override
   void render(Canvas canvas) {
+    super.render(canvas);
     _taps.values.forEach((rect) {
       canvas.drawRect(rect, _paint);
     });

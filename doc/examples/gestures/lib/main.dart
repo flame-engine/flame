@@ -12,7 +12,7 @@ void main() {
 }
 
 /// Includes an example including basic detectors
-class MyGame extends Game
+class MyGame extends BaseGame
     with TapDetector, DoubleTapDetector, PanDetector, LongPressDetector {
   final _whitePaint = BasicPalette.white.paint;
   final _bluePaint = Paint()..color = const Color(0xFF0000FF);
@@ -51,10 +51,8 @@ class MyGame extends Game
   }
 
   @override
-  void update(double dt) {}
-
-  @override
   void render(Canvas canvas) {
+    super.render(canvas);
     canvas.drawRect(_rect, _paint);
   }
 }
