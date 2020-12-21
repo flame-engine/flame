@@ -15,7 +15,14 @@ class CombinedEffect extends PositionComponentEffect {
     bool isInfinite = false,
     bool isAlternating = false,
     void Function() onComplete,
-  }) : super(isInfinite, isAlternating, onComplete: onComplete) {
+  }) : super(
+          isInfinite,
+          isAlternating,
+          modifiesPosition: effects.any((e) => e.modifiesPosition),
+          modifiesAngle: effects.any((e) => e.modifiesAngle),
+          modifiesSize: effects.any((e) => e.modifiesSize),
+          onComplete: onComplete,
+        ) {
     assert(
       effects.every((effect) => effect.component == null),
       'Each effect can only be added once',

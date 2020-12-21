@@ -126,11 +126,19 @@ abstract class PositionComponentEffect
   double endAngle;
   Vector2 endSize;
 
+  /// Whether the state of a certain field was modified by the effect
+  final bool modifiesPosition;
+  final bool modifiesAngle;
+  final bool modifiesSize;
+
   PositionComponentEffect(
     bool initialIsInfinite,
     bool initialIsAlternating, {
     bool isRelative = false,
     Curve curve,
+    this.modifiesPosition = false,
+    this.modifiesAngle = false,
+    this.modifiesSize = false,
     void Function() onComplete,
   }) : super(
           initialIsInfinite,
@@ -157,22 +165,31 @@ abstract class PositionComponentEffect
     endSize = component.size.clone();
   }
 
-  @override
-  void setComponentToOriginalState() {
+  /// Only change the parts of the component that is affected by the
+  /// effect, and only set the state if it is the root effect (not part of
+  /// another effect, like children of a CombinedEffect or SequenceEffect).
+  void _setComponentState(Vector2 position, double angle, Vector2 size) {
     if (isRootEffect()) {
-      component?.position?.setFrom(originalPosition);
-      component?.angle = originalAngle;
-      component?.size?.setFrom(endSize);
+      if (modifiesPosition) {
+        component?.position?.setFrom(position);
+      }
+      if (modifiesAngle) {
+        component?.angle = angle;
+      }
+      if (modifiesSize) {
+        component?.size?.setFrom(size);
+      }
     }
   }
 
   @override
+  void setComponentToOriginalState() {
+    _setComponentState(originalPosition, originalAngle, originalSize);
+  }
+
+  @override
   void setComponentToEndState() {
-    if (isRootEffect()) {
-      component?.position?.setFrom(endPosition);
-      component?.angle = endAngle;
-      component?.size?.setFrom(endSize);
-    }
+    _setComponentState(endPosition, endAngle, endSize);
   }
 }
 
@@ -187,6 +204,9 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
     this.speed,
     Curve curve,
     bool isRelative = false,
+    bool modifiesPosition = false,
+    bool modifiesAngle = false,
+    bool modifiesSize = false,
     void Function() onComplete,
   })  : assert(
           (duration != null) ^ (speed != null),
@@ -197,6 +217,9 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
           initialIsAlternating,
           isRelative: isRelative,
           curve: curve,
+          modifiesPosition: modifiesPosition,
+          modifiesAngle: modifiesAngle,
+          modifiesSize: modifiesSize,
           onComplete: onComplete,
         );
 }
