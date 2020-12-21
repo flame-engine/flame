@@ -12,7 +12,8 @@ void main() {
 }
 
 /// Includes an example mixing two advanced detectors
-class MyGame extends Game with MultiTouchTapDetector, MultiTouchDragDetector {
+class MyGame extends BaseGame
+    with MultiTouchTapDetector, MultiTouchDragDetector {
   final _whitePaint = BasicPalette.white.paint;
 
   Paint _paint;
@@ -82,10 +83,8 @@ class MyGame extends Game with MultiTouchTapDetector, MultiTouchDragDetector {
   }
 
   @override
-  void update(double dt) {}
-
-  @override
   void render(Canvas canvas) {
+    super.render(canvas);
     _taps.values.forEach((rect) {
       canvas.drawRect(rect, _paint);
     });
