@@ -18,7 +18,8 @@ abstract class Component {
   bool isHud = false;
 
   /// Whether this component is currently mounted on a game or not
-  bool isMounted = false;
+  bool _isMounted = false;
+  bool get isMounted => _isMounted;
 
   /// Render priority of this component. This allows you to control the order in which your components are rendered.
   ///
@@ -60,13 +61,13 @@ abstract class Component {
   /// things like [onGameResize] are already set and usable.
   @mustCallSuper
   void onMount() {
-    isMounted = true;
+    _isMounted = true;
   }
 
   /// Called right before the component is removed from the game
   @mustCallSuper
   void onRemove() {
-    isMounted = false;
+    _isMounted = false;
   }
 
   /// Called before the component is added to the [BaseGame] by the [add] method.
