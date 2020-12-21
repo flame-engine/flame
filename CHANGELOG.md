@@ -5,6 +5,7 @@
  - Set loop member variable when constructing SpriteAnimationComponent from SpriteAnimationData
  - Effect shouldn't affect unrelated properties on component
  - Fix rendering of children
+ - Explicitly define what fields an effect on PositionComponent modifies
  - Properly propagate onMount and onRemove to children
 
 ## 1.0.0-rc3

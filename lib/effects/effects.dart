@@ -126,11 +126,19 @@ abstract class PositionComponentEffect
   double endAngle;
   Vector2 endSize;
 
+  /// Whether the state of a certain field was modified by the effect
+  final bool modifiesPosition;
+  final bool modifiesAngle;
+  final bool modifiesSize;
+
   PositionComponentEffect(
     bool initialIsInfinite,
     bool initialIsAlternating, {
     bool isRelative = false,
     Curve curve,
+    this.modifiesPosition = false,
+    this.modifiesAngle = false,
+    this.modifiesSize = false,
     void Function() onComplete,
   }) : super(
           initialIsInfinite,
@@ -162,13 +170,13 @@ abstract class PositionComponentEffect
   /// another effect, like children of a CombinedEffect or SequenceEffect).
   void _setComponentState(Vector2 position, double angle, Vector2 size) {
     if (isRootEffect()) {
-      if (originalPosition != endPosition) {
+      if (modifiesPosition) {
         component?.position?.setFrom(position);
       }
-      if (originalAngle != endAngle) {
+      if (modifiesAngle) {
         component?.angle = angle;
       }
-      if (originalSize != endSize) {
+      if (modifiesSize) {
         component?.size?.setFrom(size);
       }
     }
@@ -196,6 +204,9 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
     this.speed,
     Curve curve,
     bool isRelative = false,
+    bool modifiesPosition = false,
+    bool modifiesAngle = false,
+    bool modifiesSize = false,
     void Function() onComplete,
   })  : assert(
           (duration != null) ^ (speed != null),
@@ -206,6 +217,9 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
           initialIsAlternating,
           isRelative: isRelative,
           curve: curve,
+          modifiesPosition: modifiesPosition,
+          modifiesAngle: modifiesAngle,
+          modifiesSize: modifiesSize,
           onComplete: onComplete,
         );
 }
