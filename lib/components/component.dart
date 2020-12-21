@@ -18,6 +18,7 @@ abstract class Component {
   bool isHud = false;
 
   bool _isMounted = false;
+
   /// Whether this component is currently mounted on a game or not
   bool get isMounted => _isMounted;
 
