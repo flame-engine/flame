@@ -45,7 +45,10 @@ class MyComponent extends PositionComponent
   bool checkOverlap(Vector2 v) => true;
 
   @override
-  void onRemove() => ++onRemoveCallCounter;
+  void onRemove() {
+    super.onRemove();
+    ++onRemoveCallCounter;
+  }
 }
 
 class MyAsyncComponent extends MyComponent {

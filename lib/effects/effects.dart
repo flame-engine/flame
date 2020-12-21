@@ -157,22 +157,31 @@ abstract class PositionComponentEffect
     endSize = component.size.clone();
   }
 
-  @override
-  void setComponentToOriginalState() {
+  /// Only change the parts of the component that is affected by the
+  /// effect, and only set the state if it is the root effect (not part of
+  /// another effect, like children of a CombinedEffect or SequenceEffect).
+  void _setComponentState(Vector2 position, double angle, Vector2 size) {
     if (isRootEffect()) {
-      component?.position?.setFrom(originalPosition);
-      component?.angle = originalAngle;
-      component?.size?.setFrom(endSize);
+      if (originalPosition != endPosition) {
+        component?.position?.setFrom(position);
+      }
+      if (originalAngle != endAngle) {
+        component?.angle = angle;
+      }
+      if (originalSize != endSize) {
+        component?.size?.setFrom(size);
+      }
     }
   }
 
   @override
+  void setComponentToOriginalState() {
+    _setComponentState(originalPosition, originalAngle, originalSize);
+  }
+
+  @override
   void setComponentToEndState() {
-    if (isRootEffect()) {
-      component?.position?.setFrom(endPosition);
-      component?.angle = endAngle;
-      component?.size?.setFrom(endSize);
-    }
+    _setComponentState(endPosition, endAngle, endSize);
   }
 }
 

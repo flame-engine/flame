@@ -1,6 +1,13 @@
 # CHANGELOG
 
 ## [next]
+ - Rename Dragable -> Draggable
+ - Set loop member variable when constructing SpriteAnimationComponent from SpriteAnimationData
+ - Effect shouldn't affect unrelated properties on component
+ - Fix rendering of children
+ - Properly propagate onMount and onRemove to children
+
+## 1.0.0-rc3
  - Fix TextBoxComponent rendering
  - Add TextBoxConfig options; margins and growingBox
  - Fix debugConfig strokeWidth for web
@@ -18,6 +25,7 @@
  - Update documentation for PositionComponent
  - Adding Component#onLoad
  - Moving size to Game instead of BaseGame
+ - Fix bug with ConcurrentModificationError on add in onMount
 
 ## 1.0.0-rc2
  - Improve IsometricTileMap and Spritesheet classes

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/painting.dart';
 
 import '../extensions/vector2.dart';
@@ -15,6 +16,11 @@ abstract class Component {
   ///
   /// HUD objects ignore the [BaseGame.camera] when rendered (so their position coordinates are considered relative to the device screen).
   bool isHud = false;
+
+  bool _isMounted = false;
+
+  /// Whether this component is currently mounted on a game or not
+  bool get isMounted => _isMounted;
 
   /// Render priority of this component. This allows you to control the order in which your components are rendered.
   ///
@@ -54,10 +60,16 @@ abstract class Component {
   ///
   /// This can be used to make initializations on your component as, when this method is called,
   /// things like [onGameResize] are already set and usable.
-  void onMount() {}
+  @mustCallSuper
+  void onMount() {
+    _isMounted = true;
+  }
 
   /// Called right before the component is removed from the game
-  void onRemove() {}
+  @mustCallSuper
+  void onRemove() {
+    _isMounted = false;
+  }
 
   /// Called before the component is added to the [BaseGame] by the [add] method.
   /// Whenever this returns something, [BaseGame] will wait for the [Future] to be resolved before adding the component on the list.

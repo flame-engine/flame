@@ -61,10 +61,11 @@ abstract class BaseComponent extends Component {
     if (debugMode) {
       renderDebugMode(canvas);
     }
-
-    canvas.save();
-    _children.forEach((c) => c.render(canvas));
-    canvas.restore();
+    _children.forEach((c) {
+      canvas.save();
+      c.render(canvas);
+      canvas.restore();
+    });
   }
 
   void renderDebugMode(Canvas canvas) {}
@@ -77,6 +78,20 @@ abstract class BaseComponent extends Component {
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
     _children.forEach((child) => child.onGameResize(gameSize));
+  }
+
+  @mustCallSuper
+  @override
+  void onMount() {
+    super.onMount();
+    children.forEach((child) => child.onMount());
+  }
+
+  @mustCallSuper
+  @override
+  void onRemove() {
+    super.onRemove();
+    children.forEach((child) => child.onRemove());
   }
 
   /// Called to check whether the point is to be counted as within the component
@@ -103,27 +118,25 @@ abstract class BaseComponent extends Component {
   List<ComponentEffect> get effects => _effectsHandler.effects;
 
   /// Uses the game passed in, or uses the game from [HasGameRef] otherwise,
-
   /// to prepare the child component before it is added to the list of children.
   /// Note that this component needs to be added to the game first if
   /// [this.gameRef] should be used to prepare the child.
   /// For children that don't need preparation from the game instance can
   /// disregard both the options given above.
-  Future<void> addChild(Component c, {Game gameRef}) async {
-    assert(
-      gameRef != null || this is HasGameRef,
-      "Need gameRef either as an argument or from the HasGameRef mixin",
-    );
+  Future<void> addChild(Component child, {Game gameRef}) async {
     gameRef ??= (this as HasGameRef).gameRef;
     if (gameRef is BaseGame) {
-      gameRef.prepare(c);
+      gameRef.prepare(child);
     }
 
-    final childOnLoadFuture = c.onLoad();
+    final childOnLoadFuture = child.onLoad();
     if (childOnLoadFuture != null) {
       await childOnLoadFuture;
     }
-    _children.add(c);
+    _children.add(child);
+    if (isMounted) {
+      child.onMount();
+    }
   }
 
   bool removeChild(Component c) {
