@@ -45,6 +45,7 @@ class MoveEffect extends SimplePositionComponentEffect {
           speed: speed,
           curve: curve,
           isRelative: isRelative,
+          modifiesPosition: true,
           onComplete: onComplete,
         );
 

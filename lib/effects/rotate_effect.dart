@@ -29,6 +29,7 @@ class RotateEffect extends SimplePositionComponentEffect {
           speed: speed,
           curve: curve,
           isRelative: isRelative,
+          modifiesAngle: true,
           onComplete: onComplete,
         );
 
