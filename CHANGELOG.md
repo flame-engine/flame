@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## [next]
+
 ## 1.0.0-rc4
  - Rename Dragable -> Draggable
  - Set loop member variable when constructing SpriteAnimationComponent from SpriteAnimationData
