@@ -2,7 +2,6 @@ import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/extensions/vector2.dart';
 import 'package:flame/components/sprite_component.dart';
-import 'package:flame/components/mixins/resizable.dart';
 import 'package:flame/text_config.dart';
 
 import 'package:flutter/material.dart' hide Image;
@@ -20,8 +19,9 @@ void main() async {
   );
 }
 
-class AndroidComponent extends SpriteComponent with Resizable {
+class AndroidComponent extends SpriteComponent {
   static const int SPEED = 150;
+  Vector2 _gameSize;
   int xDirection = 1;
   int yDirection = 1;
 
@@ -30,7 +30,7 @@ class AndroidComponent extends SpriteComponent with Resizable {
   @override
   void update(double dt) {
     super.update(dt);
-    if (gameSize == null) {
+    if (_gameSize == null) {
       return;
     }
 
@@ -39,16 +39,22 @@ class AndroidComponent extends SpriteComponent with Resizable {
     final rect = toRect();
 
     if ((x <= 0 && xDirection == -1) ||
-        (rect.right >= gameSize.x && xDirection == 1)) {
+        (rect.right >= _gameSize.x && xDirection == 1)) {
       xDirection = xDirection * -1;
     }
 
     y += yDirection * SPEED * dt;
 
     if ((y <= 0 && yDirection == -1) ||
-        (rect.bottom >= gameSize.y && yDirection == 1)) {
+        (rect.bottom >= _gameSize.y && yDirection == 1)) {
       yDirection = yDirection * -1;
     }
+  }
+
+  @override
+  void onGameResize(Vector2 gameSize) {
+    super.onGameResize(gameSize);
+    _gameSize = gameSize;
   }
 }
 
