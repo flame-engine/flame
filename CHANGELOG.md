@@ -9,6 +9,7 @@
  - Properly propagate onMount and onRemove to children
  - Adding Canvas extensions
  - Use config defaults for TextBoxComponent
+ - Fixing Game Render Box for flutter >= 1.25
 
 ## 1.0.0-rc3
  - Fix TextBoxComponent rendering
