@@ -8,6 +8,7 @@
  - Explicitly define what fields an effect on PositionComponent modifies
  - Properly propagate onMount and onRemove to children
  - Adding Canvas extensions
+ - Remove Resizable mixin
  - Use config defaults for TextBoxComponent
  - Fixing Game Render Box for flutter >= 1.25
 

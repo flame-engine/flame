@@ -49,8 +49,6 @@ abstract class Component {
 
   /// It receives the new game size.
   /// Executed right after the component is attached to a game and right before [onMount] is called
-  ///
-  /// Use [Resizable] to save the gameSize in a component.
   void onGameResize(Vector2 gameSize) {}
 
   /// Remove the component from the game it is added to in the next tick

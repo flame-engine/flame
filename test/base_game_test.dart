@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flame/components/position_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
-import 'package:flame/components/mixins/resizable.dart';
 import 'package:flame/components/mixins/tapable.dart';
 import 'package:flame/game.dart';
 import 'package:flame/game/base_game.dart';
@@ -16,12 +15,12 @@ import 'package:flutter_test/flutter_test.dart' as flutter;
 
 class MyGame extends BaseGame with HasTapableComponents {}
 
-class MyComponent extends PositionComponent
-    with Tapable, Resizable, HasGameRef {
+class MyComponent extends PositionComponent with Tapable, HasGameRef {
   bool tapped = false;
   bool isUpdateCalled = false;
   bool isRenderCalled = false;
   int onRemoveCallCounter = 0;
+  Vector2 gameSize;
 
   @override
   bool onTapDown(TapDownDetails details) {
@@ -39,6 +38,12 @@ class MyComponent extends PositionComponent
   void render(Canvas canvas) {
     super.render(canvas);
     isRenderCalled = true;
+  }
+
+  @override
+  void onGameResize(Vector2 gameSize) {
+    super.onGameResize(gameSize);
+    this.gameSize = gameSize;
   }
 
   @override
