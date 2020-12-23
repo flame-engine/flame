@@ -45,7 +45,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// See also:
   /// - [new GameWidget]
   /// - [Game.overlays]
-  final Set<String> visibleOverlays;
+  final List<String> visibleOverlays;
 
   /// Renders a [game] in a flutter widget tree.
   ///
@@ -99,7 +99,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// To use overlays, the game subclass has to be mixed with [HasWidgetsOverlay],
 
   @override
-  _GameWidgetState createState() => _GameWidgetState();
+  _GameWidgetState<T> createState() => _GameWidgetState<T>();
 }
 
 class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
@@ -112,7 +112,10 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   @override
   void initState() {
     super.initState();
-    activeOverlays = widget.visibleOverlays ?? {};
+    // Add the initial overlays
+    widget.visibleOverlays?.forEach((key) {
+      widget.game.overlays.add(key);
+    });
     addOverlaysListener(widget.game);
   }
 

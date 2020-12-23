@@ -52,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
               overlayBuilderMap: {
                 "PauseMenu": pauseMenuBuilder,
               },
+              visibleOverlays: const ['PauseMenu'],
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => newGame(),

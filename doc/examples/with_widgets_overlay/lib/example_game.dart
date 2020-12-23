@@ -5,7 +5,7 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 class ExampleGame extends Game with TapDetector {
-  bool isPaused = false;
+  bool isPaused = true;
 
   @override
   void update(double dt) {}
