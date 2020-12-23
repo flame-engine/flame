@@ -14,6 +14,8 @@ typedef GameLoadingWidgetBuilder = Widget Function(
   bool error,
 );
 
+typedef OverlayWidgetBuilder<T extends Game> = Widget Function(BuildContext context, T game);
+
 /// A [StatefulWidget] that is in charge of attaching a [Game] instance into the flutter tree
 ///
 class GameWidget<T extends Game> extends StatefulWidget {
@@ -36,7 +38,14 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// See also:
   /// - [new GameWidget]
   /// - [Game.overlays]
-  final Map<String, WidgetBuilder> overlayBuilderMap;
+  final Map<String, OverlayWidgetBuilder<T>> overlayBuilderMap;
+
+  /// A List of the initially visible overlays
+  ///
+  /// See also:
+  /// - [new GameWidget]
+  /// - [Game.overlays]
+  final Set<String> visibleOverlays;
 
   /// Renders a [game] in a flutter widget tree.
   ///
@@ -82,6 +91,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.loadingBuilder,
     this.backgroundBuilder,
     this.overlayBuilderMap,
+    this.visibleOverlays,
   }) : super(key: key);
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
@@ -92,8 +102,8 @@ class GameWidget<T extends Game> extends StatefulWidget {
   _GameWidgetState createState() => _GameWidgetState();
 }
 
-class _GameWidgetState extends State<GameWidget> {
-  Set<String> activeOverlays = {};
+class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
+  Set<String> activeOverlays;
 
   Future<void> _gameLoaderFuture;
   Future<void> get _gameLoaderFutureCache =>
@@ -102,11 +112,12 @@ class _GameWidgetState extends State<GameWidget> {
   @override
   void initState() {
     super.initState();
+    activeOverlays = widget.visibleOverlays ?? {};
     addOverlaysListener(widget.game);
   }
 
   @override
-  void didUpdateWidget(covariant GameWidget<Game> oldWidget) {
+  void didUpdateWidget(covariant GameWidget<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.game != widget.game) {
       removeOverlaysListener(oldWidget.game);
@@ -124,12 +135,12 @@ class _GameWidgetState extends State<GameWidget> {
   }
 
   // widget overlay stuff
-  void addOverlaysListener(Game game) {
+  void addOverlaysListener(T game) {
     widget.game.overlays.addListener(onChangeActiveOverlays);
     activeOverlays = widget.game.overlays.value;
   }
 
-  void removeOverlaysListener(Game game) {
+  void removeOverlaysListener(T game) {
     game.overlays.removeListener(onChangeActiveOverlays);
   }
 
@@ -228,7 +239,7 @@ class _GameWidgetState extends State<GameWidget> {
       final builder = widget.overlayBuilderMap[overlayKey];
       return KeyedSubtree(
         key: ValueKey(overlayKey),
-        child: builder(context),
+        child: builder(context, widget.game),
       );
     });
     stackWidgets.addAll(widgets);

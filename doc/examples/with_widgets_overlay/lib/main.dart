@@ -26,7 +26,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   ExampleGame _myGame;
 
-  Widget pauseMenuBuilder(BuildContext buildContext) {
+  Widget pauseMenuBuilder(BuildContext buildContext, ExampleGame game) {
     return Center(
       child: Container(
         width: 100,

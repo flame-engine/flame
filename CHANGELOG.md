@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [next]
+ - Option for overlays to be alread visible on the GameWidget
+ - Adding game to the overlay builder
 
 ## 1.0.0-rc4
  - Rename Dragable -> Draggable
