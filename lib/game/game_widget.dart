@@ -14,7 +14,8 @@ typedef GameLoadingWidgetBuilder = Widget Function(
   bool error,
 );
 
-typedef OverlayWidgetBuilder<T extends Game> = Widget Function(BuildContext context, T game);
+typedef OverlayWidgetBuilder<T extends Game> = Widget Function(
+    BuildContext context, T game);
 
 /// A [StatefulWidget] that is in charge of attaching a [Game] instance into the flutter tree
 ///
