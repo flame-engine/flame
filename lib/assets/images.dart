@@ -33,14 +33,14 @@ class Images {
     if (!_loadedFiles.containsKey(fileName)) {
       _loadedFiles[fileName] = _ImageAssetLoader(_fetchToMemory(fileName));
     }
-    return await _loadedFiles[fileName].retreive();
+    return await _loadedFiles[fileName].retrieve();
   }
 
   Future<Image> fromBase64(String fileName, String base64) async {
     if (!_loadedFiles.containsKey(fileName)) {
       _loadedFiles[fileName] = _ImageAssetLoader(_fetchFromBase64(base64));
     }
-    return await _loadedFiles[fileName].retreive();
+    return await _loadedFiles[fileName].retrieve();
   }
 
   Future<Image> _fetchFromBase64(String base64Data) async {
@@ -68,7 +68,7 @@ class _ImageAssetLoader {
   Image loadedImage;
   Future<Image> future;
 
-  Future<Image> retreive() async {
+  Future<Image> retrieve() async {
     loadedImage ??= await future;
 
     return loadedImage;
