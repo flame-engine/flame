@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Rename retreive -> Retrieve
 
 ## 1.0.0-rc4
  - Rename Dragable -> Draggable
