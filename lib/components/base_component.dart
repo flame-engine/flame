@@ -29,7 +29,7 @@ abstract class BaseComponent extends Component {
   /// addChild method, and if you want to propagate something to the children
   /// use the propagateToChildren method.
   UnmodifiableListView<Component> get children {
-    return UnmodifiableListView(_children);
+    return UnmodifiableListView<Component>(_children);
   }
 
   /// This is set by the BaseGame to tell this component to render additional debug information,
