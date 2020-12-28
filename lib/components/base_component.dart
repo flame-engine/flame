@@ -24,7 +24,7 @@ abstract class BaseComponent extends Component {
       OrderedSet(Comparing.on((c) => c.priority));
 
   OrderedSet<Component> get children =>
-      OrderedSet<Component>()..addAll(_children);
+      OrderedSet<Component>(Comparing.on((c) => c.priority))..addAll(_children);
 
   /// This is set by the BaseGame to tell this component to render additional debug information,
   /// like borders, coordinates, etc.
