@@ -4,6 +4,7 @@
  - Rename retreive -> Retrieve
  - Use internal children set in BaseComponent (fixes issue adding multiple children)
  - Remove develop branches from github workflow definition
+ - BaseComponent should use internal children set
 
 ## 1.0.0-rc4
  - Rename Dragable -> Draggable
