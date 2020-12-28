@@ -23,8 +23,7 @@ abstract class BaseComponent extends Component {
   final OrderedSet<Component> _children =
       OrderedSet(Comparing.on((c) => c.priority));
 
-  OrderedSet<Component> get children =>
-      OrderedSet<Component>(Comparing.on((c) => c.priority))..addAll(_children);
+  List<Component> get children => _children.toList(growable: false);
 
   /// This is set by the BaseGame to tell this component to render additional debug information,
   /// like borders, coordinates, etc.
@@ -84,14 +83,14 @@ abstract class BaseComponent extends Component {
   @override
   void onMount() {
     super.onMount();
-    children.forEach((child) => child.onMount());
+    _children.forEach((child) => child.onMount());
   }
 
   @mustCallSuper
   @override
   void onRemove() {
     super.onRemove();
-    children.forEach((child) => child.onRemove());
+    _children.forEach((child) => child.onRemove());
   }
 
   /// Called to check whether the point is to be counted as within the component
