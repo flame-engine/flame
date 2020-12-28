@@ -2,6 +2,7 @@
 
 ## [next]
  - Rename retreive -> Retrieve
+ - Use internal children set in BaseComponent (fixes issue adding multiple children)
 
 ## 1.0.0-rc4
  - Rename Dragable -> Draggable
