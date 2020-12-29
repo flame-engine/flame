@@ -41,12 +41,12 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// - [Game.overlays]
   final Map<String, OverlayWidgetBuilder<T>> overlayBuilderMap;
 
-  /// A List of the initially visible overlays
+  /// A List of the initially active overlays
   ///
   /// See also:
   /// - [new GameWidget]
   /// - [Game.overlays]
-  final List<String> visibleOverlays;
+  final List<String> activeOverlays;
 
   /// Renders a [game] in a flutter widget tree.
   ///
@@ -92,7 +92,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.loadingBuilder,
     this.backgroundBuilder,
     this.overlayBuilderMap,
-    this.visibleOverlays,
+    this.activeOverlays,
   }) : super(key: key);
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
@@ -113,11 +113,18 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   @override
   void initState() {
     super.initState();
+
     // Add the initial overlays
-    widget.visibleOverlays?.forEach((key) {
+    _initActiveOverlays();
+
+    addOverlaysListener(widget.game);
+  }
+
+  void _initActiveOverlays() {
+    _checkOverlays(widget.activeOverlays.toSet());
+    widget.activeOverlays?.forEach((key) {
       widget.game.overlays.add(key);
     });
-    addOverlaysListener(widget.game);
   }
 
   @override
@@ -125,6 +132,9 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.game != widget.game) {
       removeOverlaysListener(oldWidget.game);
+
+      // Reset the overlays
+      _initActiveOverlays();
       addOverlaysListener(widget.game);
 
       // Reset the loader future
@@ -148,11 +158,15 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     game.overlays.removeListener(onChangeActiveOverlays);
   }
 
-  void onChangeActiveOverlays() {
-    widget.game.overlays.value.forEach((overlayKey) {
+  void _checkOverlays(Set<String> overlays) {
+    overlays.forEach((overlayKey) {
       assert(widget.overlayBuilderMap.containsKey(overlayKey),
           "A non mapped overlay has been added: $overlayKey");
     });
+  }
+
+  void onChangeActiveOverlays() {
+    _checkOverlays(widget.game.overlays.value);
     setState(() {
       activeOverlays = widget.game.overlays.value;
     });
