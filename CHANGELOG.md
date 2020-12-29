@@ -3,6 +3,9 @@
 ## [next]
  - Option for overlays to be alread visible on the GameWidget
  - Adding game to the overlay builder
+ - Rename retreive -> Retrieve
+ - Use internal children set in BaseComponent (fixes issue adding multiple children)
+ - Remove develop branches from github workflow definition
 
 ## 1.0.0-rc4
  - Rename Dragable -> Draggable
