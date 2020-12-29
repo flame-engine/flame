@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
@@ -23,7 +24,13 @@ abstract class BaseComponent extends Component {
   final OrderedSet<Component> _children =
       OrderedSet(Comparing.on((c) => c.priority));
 
-  List<Component> get children => _children.toList(growable: false);
+  /// The children list shouldn't be modified directly, that is why an
+  /// [UnmodifiableListView] is used. If you want to add children use the
+  /// [addChild] method, and if you want to propagate something to the children
+  /// use the [propagateToChildren] method.
+  UnmodifiableListView<Component> get children {
+    return UnmodifiableListView<Component>(_children);
+  }
 
   /// This is set by the BaseGame to tell this component to render additional debug information,
   /// like borders, coordinates, etc.
