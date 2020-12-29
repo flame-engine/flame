@@ -26,8 +26,8 @@ abstract class BaseComponent extends Component {
 
   /// The children list shouldn't be modified directly, that is why an
   /// [UnmodifiableListView] is used. If you want to add children use the
-  /// addChild method, and if you want to propagate something to the children
-  /// use the propagateToChildren method.
+  /// [addChild] method, and if you want to propagate something to the children
+  /// use the [propagateToChildren] method.
   UnmodifiableListView<Component> get children {
     return UnmodifiableListView<Component>(_children);
   }
