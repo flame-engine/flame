@@ -15,7 +15,9 @@ typedef GameLoadingWidgetBuilder = Widget Function(
 );
 
 typedef OverlayWidgetBuilder<T extends Game> = Widget Function(
-    BuildContext context, T game);
+  BuildContext context,
+  T game,
+);
 
 /// A [StatefulWidget] that is in charge of attaching a [Game] instance into the flutter tree
 ///
@@ -41,12 +43,13 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// - [Game.overlays]
   final Map<String, OverlayWidgetBuilder<T>> overlayBuilderMap;
 
-  /// A List of the initially active overlays
+  /// A List of the initially active overlays, this is used only on the first build of the widget.
+  /// To control the overlays that are active use [Game.overlays]
   ///
   /// See also:
   /// - [new GameWidget]
   /// - [Game.overlays]
-  final List<String> activeOverlays;
+  final List<String> initialActiveOverlays;
 
   /// Renders a [game] in a flutter widget tree.
   ///
@@ -92,7 +95,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.loadingBuilder,
     this.backgroundBuilder,
     this.overlayBuilderMap,
-    this.activeOverlays,
+    this.initialActiveOverlays,
   }) : super(key: key);
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
@@ -104,7 +107,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
 }
 
 class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
-  Set<String> activeOverlays;
+  Set<String> initialActiveOverlays;
 
   Future<void> _gameLoaderFuture;
   Future<void> get _gameLoaderFutureCache =>
@@ -121,16 +124,16 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   }
 
   void _initActiveOverlays() {
-    if (widget.activeOverlays != null) {
-      _checkOverlays(widget.activeOverlays.toSet());
-      widget.activeOverlays?.forEach((key) {
+    if (widget.initialActiveOverlays != null) {
+      _checkOverlays(widget.initialActiveOverlays.toSet());
+      widget.initialActiveOverlays?.forEach((key) {
         widget.game.overlays.add(key);
       });
     }
   }
 
   @override
-  void didUpdateWidget(covariant GameWidget<T> oldWidget) {
+  void didUpdateWidget(GameWidget<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.game != widget.game) {
       removeOverlaysListener(oldWidget.game);
@@ -153,7 +156,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   // widget overlay stuff
   void addOverlaysListener(T game) {
     widget.game.overlays.addListener(onChangeActiveOverlays);
-    activeOverlays = widget.game.overlays.value;
+    initialActiveOverlays = widget.game.overlays.value;
   }
 
   void removeOverlaysListener(T game) {
@@ -170,7 +173,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   void onChangeActiveOverlays() {
     _checkOverlays(widget.game.overlays.value);
     setState(() {
-      activeOverlays = widget.game.overlays.value;
+      initialActiveOverlays = widget.game.overlays.value;
     });
   }
 
@@ -255,7 +258,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     if (widget.overlayBuilderMap == null) {
       return stackWidgets;
     }
-    final widgets = activeOverlays.map((String overlayKey) {
+    final widgets = initialActiveOverlays.map((String overlayKey) {
       final builder = widget.overlayBuilderMap[overlayKey];
       return KeyedSubtree(
         key: ValueKey(overlayKey),
