@@ -126,7 +126,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   void _initActiveOverlays() {
     if (widget.initialActiveOverlays != null) {
       _checkOverlays(widget.initialActiveOverlays.toSet());
-      widget.initialActiveOverlays?.forEach((key) {
+      widget.initialActiveOverlays.forEach((key) {
         widget.game.overlays.add(key);
       });
     }
