@@ -6,6 +6,7 @@
  - Rename retreive -> Retrieve
  - Use internal children set in BaseComponent (fixes issue adding multiple children)
  - Remove develop branches from github workflow definition
+ - BaseComponent to return UnmodifiableListView for children
 
 ## 1.0.0-rc4
  - Rename Dragable -> Draggable
