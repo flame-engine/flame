@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [next]
+ - Option for overlays to be already visible on the GameWidget
+ - Adding game to the overlay builder
  - Rename retreive -> Retrieve
  - Use internal children set in BaseComponent (fixes issue adding multiple children)
  - Remove develop branches from github workflow definition

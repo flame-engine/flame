@@ -5,8 +5,6 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 class ExampleGame extends Game with TapDetector {
-  bool isPaused = false;
-
   @override
   void update(double dt) {}
 
@@ -25,14 +23,10 @@ class ExampleGame extends Game with TapDetector {
 
   @override
   void onTap() {
-    if (isPaused) {
+    if (overlays.isActive('PauseMenu')) {
       overlays.remove('PauseMenu');
-      isPaused = false;
     } else {
-      overlays.add(
-        'PauseMenu',
-      );
-      isPaused = true;
+      overlays.add('PauseMenu');
     }
   }
 }
