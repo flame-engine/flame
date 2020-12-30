@@ -191,4 +191,7 @@ class ActiveOverlaysNotifier extends ChangeNotifier {
 
   /// A [Set] of the active overlay names.
   Set<String> get value => _activeOverlays;
+
+  /// Returns if the given [overlayName] is active
+  bool isActive(String overlayName) => _activeOverlays.contains(overlayName);
 }

@@ -14,6 +14,11 @@ typedef GameLoadingWidgetBuilder = Widget Function(
   bool error,
 );
 
+typedef OverlayWidgetBuilder<T extends Game> = Widget Function(
+  BuildContext context,
+  T game,
+);
+
 /// A [StatefulWidget] that is in charge of attaching a [Game] instance into the flutter tree
 ///
 class GameWidget<T extends Game> extends StatefulWidget {
@@ -36,7 +41,15 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// See also:
   /// - [new GameWidget]
   /// - [Game.overlays]
-  final Map<String, WidgetBuilder> overlayBuilderMap;
+  final Map<String, OverlayWidgetBuilder<T>> overlayBuilderMap;
+
+  /// A List of the initially active overlays, this is used only on the first build of the widget.
+  /// To control the overlays that are active use [Game.overlays]
+  ///
+  /// See also:
+  /// - [new GameWidget]
+  /// - [Game.overlays]
+  final List<String> initialActiveOverlays;
 
   /// Renders a [game] in a flutter widget tree.
   ///
@@ -82,6 +95,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.loadingBuilder,
     this.backgroundBuilder,
     this.overlayBuilderMap,
+    this.initialActiveOverlays,
   }) : super(key: key);
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
@@ -89,11 +103,11 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// To use overlays, the game subclass has to be mixed with [HasWidgetsOverlay],
 
   @override
-  _GameWidgetState createState() => _GameWidgetState();
+  _GameWidgetState<T> createState() => _GameWidgetState<T>();
 }
 
-class _GameWidgetState extends State<GameWidget> {
-  Set<String> activeOverlays = {};
+class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
+  Set<String> initialActiveOverlays;
 
   Future<void> _gameLoaderFuture;
   Future<void> get _gameLoaderFutureCache =>
@@ -102,14 +116,30 @@ class _GameWidgetState extends State<GameWidget> {
   @override
   void initState() {
     super.initState();
+
+    // Add the initial overlays
+    _initActiveOverlays();
+
     addOverlaysListener(widget.game);
   }
 
+  void _initActiveOverlays() {
+    if (widget.initialActiveOverlays != null) {
+      _checkOverlays(widget.initialActiveOverlays.toSet());
+      widget.initialActiveOverlays.forEach((key) {
+        widget.game.overlays.add(key);
+      });
+    }
+  }
+
   @override
-  void didUpdateWidget(covariant GameWidget<Game> oldWidget) {
+  void didUpdateWidget(GameWidget<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.game != widget.game) {
       removeOverlaysListener(oldWidget.game);
+
+      // Reset the overlays
+      _initActiveOverlays();
       addOverlaysListener(widget.game);
 
       // Reset the loader future
@@ -124,22 +154,26 @@ class _GameWidgetState extends State<GameWidget> {
   }
 
   // widget overlay stuff
-  void addOverlaysListener(Game game) {
+  void addOverlaysListener(T game) {
     widget.game.overlays.addListener(onChangeActiveOverlays);
-    activeOverlays = widget.game.overlays.value;
+    initialActiveOverlays = widget.game.overlays.value;
   }
 
-  void removeOverlaysListener(Game game) {
+  void removeOverlaysListener(T game) {
     game.overlays.removeListener(onChangeActiveOverlays);
   }
 
-  void onChangeActiveOverlays() {
-    widget.game.overlays.value.forEach((overlayKey) {
+  void _checkOverlays(Set<String> overlays) {
+    overlays.forEach((overlayKey) {
       assert(widget.overlayBuilderMap.containsKey(overlayKey),
           "A non mapped overlay has been added: $overlayKey");
     });
+  }
+
+  void onChangeActiveOverlays() {
+    _checkOverlays(widget.game.overlays.value);
     setState(() {
-      activeOverlays = widget.game.overlays.value;
+      initialActiveOverlays = widget.game.overlays.value;
     });
   }
 
@@ -224,11 +258,11 @@ class _GameWidgetState extends State<GameWidget> {
     if (widget.overlayBuilderMap == null) {
       return stackWidgets;
     }
-    final widgets = activeOverlays.map((String overlayKey) {
+    final widgets = initialActiveOverlays.map((String overlayKey) {
       final builder = widget.overlayBuilderMap[overlayKey];
       return KeyedSubtree(
         key: ValueKey(overlayKey),
-        child: builder(context),
+        child: builder(context, widget.game),
       );
     });
     stackWidgets.addAll(widgets);
