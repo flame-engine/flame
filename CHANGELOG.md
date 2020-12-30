@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [next]
+
+## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget
  - Adding game to the overlay builder
  - Rename retreive -> Retrieve
