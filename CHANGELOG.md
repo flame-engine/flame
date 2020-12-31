@@ -2,6 +2,10 @@
 
 ## [next]
 
+## 0.29.0
+- Update audioplayers to latest version (now `assets` will not be added to prefixes automatically)
+- Fix lint issues with 0.28.0
+
 ## 0.28.0
 - Fix spriteAsWidget deprecation message
 - Add `lineHeight` property to `TextConfig`
