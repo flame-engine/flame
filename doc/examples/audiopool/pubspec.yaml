@@ -1,6 +1,8 @@
 name:  audiopool
 description: Flame example application showcasing the audiopool class
+
 version: 0.1.0
+publish_to: none
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"

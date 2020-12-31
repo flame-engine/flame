@@ -1,7 +1,8 @@
 name: parallax
 description: Flame sample game showcasing the parallax features
 
-version: 1.0.0+1
+version: 0.1.0
+publish_to: none
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

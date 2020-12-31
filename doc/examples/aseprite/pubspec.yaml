@@ -2,6 +2,7 @@ name: aseprite
 description: Flame sample for using Aseprite animations
 
 version: 1.0.0+1
+publish_to: none
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
