@@ -83,7 +83,7 @@ class Animation {
     this.loop = true,
   }) : assert(amountPerRow == null || amount >= amountPerRow) {
     amountPerRow ??= amount;
-    frames = List<Frame>(amount);
+    frames = List<Frame>.filled(amount, null);
     for (var i = 0; i < amount; i++) {
       final Sprite sprite = Sprite(
         imagePath,
@@ -109,7 +109,7 @@ class Animation {
     this.loop = true,
   }) : assert(amountPerRow == null || amount >= amountPerRow) {
     amountPerRow ??= amount;
-    frames = List<Frame>(amount);
+    frames = List<Frame>.filled(amount, null);
     for (var i = 0; i < amount; i++) {
       final Sprite sprite = Sprite(
         imagePath,

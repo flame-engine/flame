@@ -1,7 +1,8 @@
 name: keyboard
 description: Simple Flame project showcasing how to use the Keyboard events
 
-version: 1.0.0+1
+version: 0.1.0
+publish_to: none
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
