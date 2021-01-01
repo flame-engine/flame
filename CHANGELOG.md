@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+  - BaseComponent removes children marked as shouldRemove during update
 
 ## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget
