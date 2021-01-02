@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Improve error handling for the onLoad function
 
 ## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget
