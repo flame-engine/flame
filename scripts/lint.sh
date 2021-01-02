@@ -9,7 +9,7 @@ fi
 flutter pub get
 
 # We need to run pubget on all the examples
-for f in doc/examples/**/pubspec.yaml; do
+for f in $(find doc/examples -name 'pubspec.yaml'); do
   d=$(dirname $f)
   cd $d
   flutter pub get
