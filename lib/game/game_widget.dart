@@ -11,7 +11,11 @@ import 'game_render_box.dart';
 
 typedef GameLoadingWidgetBuilder = Widget Function(
   BuildContext,
-  bool error,
+);
+
+typedef GameErrorWidgetBuilder = Widget Function(
+  BuildContext,
+  Object error,
 );
 
 typedef OverlayWidgetBuilder<T extends Game> = Widget Function(
@@ -29,8 +33,13 @@ class GameWidget<T extends Game> extends StatefulWidget {
   final TextDirection textDirection;
 
   /// Builder to provide a widget tree to be built whilst the [Future] provided
-  /// via [Game.onLoad] is not resolved.
+  /// via [Game.onLoad] is not resolved. By default this is an empty Container().
   final GameLoadingWidgetBuilder loadingBuilder;
+
+  /// If set, errors during the onLoad method will not be thrown
+  /// but instead this widget will be shown. If not provided, errors are
+  /// propagated up.
+  final GameErrorWidgetBuilder errorBuilder;
 
   /// Builder to provide a widget tree to be built between the game elements and
   /// the background color provided via [Game.backgroundColor]
@@ -93,6 +102,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.game,
     this.textDirection,
     this.loadingBuilder,
+    this.errorBuilder,
     this.backgroundBuilder,
     this.overlayBuilderMap,
     this.initialActiveOverlays,
@@ -228,12 +238,17 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
             return FutureBuilder(
               future: _gameLoaderFutureCache,
               builder: (_, snapshot) {
+                if (snapshot.hasError) {
+                  if (widget.errorBuilder == null) {
+                    throw snapshot.error;
+                  } else {
+                    return widget.errorBuilder(context, snapshot.error);
+                  }
+                }
                 if (snapshot.connectionState == ConnectionState.done) {
                   return Stack(children: stackedWidgets);
                 }
-                return widget.loadingBuilder != null
-                    ? widget.loadingBuilder(context, snapshot.hasError)
-                    : Container();
+                return widget.loadingBuilder?.call(context) ?? Container();
               },
             );
           },
