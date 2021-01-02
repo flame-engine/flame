@@ -121,10 +121,8 @@ class ParallaxLayer {
   /// multiplying the [baseVelocity] with the [velocityMultiplier].
   ParallaxLayer(
     this.parallaxImage, {
-    this.velocityMultiplier,
-  }) {
-    velocityMultiplier ??= Vector2.all(1.0);
-  }
+    Vector2 velocityMultiplier,
+  }) : velocityMultiplier = velocityMultiplier ?? Vector2.all(1.0);
 
   Vector2 currentOffset() => _scroll;
 
@@ -241,10 +239,8 @@ class Parallax {
 
   Parallax(
     this.layers, {
-    this.baseVelocity,
-  }) {
-    baseVelocity ??= Vector2.zero();
-  }
+    Vector2 baseVelocity,
+  }) : baseVelocity = baseVelocity ?? Vector2.zero();
 
   /// The base offset of the parallax, can be used in an outer update loop
   /// if you want to transition the parallax to a certain position.

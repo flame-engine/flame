@@ -10,7 +10,7 @@ import 'assets/images.dart';
 class Sprite {
   Paint paint = BasicPalette.white.paint;
   Image image;
-  Rect src;
+  Rect src = Rect.zero;
 
   Sprite(
     this.image, {
@@ -44,10 +44,10 @@ class Sprite {
 
   set srcSize(Vector2 size) {
     size ??= Vector2Extension.fromInts(image.width, image.height);
-    src = (srcPosition ?? Vector2.zero()).toPositionedRect(size);
+    src = srcPosition.toPositionedRect(size);
   }
 
-  Vector2 get srcPosition => (src?.topLeft ?? Offset.zero).toVector2();
+  Vector2 get srcPosition => src.topLeft.toVector2();
 
   set srcPosition(Vector2 position) {
     src = (position ?? Vector2.zero()).toPositionedRect(srcSize);

@@ -21,18 +21,19 @@ void main() async {
   );
 }
 
+const green = Color(0xAA338833);
+const red = Color(0xAA883333);
+const orange = Color(0xAABB6633);
+
 class MyGame extends BaseGame with TapDetector {
   Square greenSquare;
   Square redSquare;
   Square orangeSquare;
 
-  MyGame() {
-    final green = Paint()..color = const Color(0xAA338833);
-    final red = Paint()..color = const Color(0xAA883333);
-    final orange = Paint()..color = const Color(0xAABB6633);
-    greenSquare = Square(green, Vector2.all(100));
-    redSquare = Square(red, Vector2.all(200));
-    orangeSquare = Square(orange, Vector2(200, 400));
+  MyGame()
+      : greenSquare = Square(Paint()..color = green, Vector2.all(100)),
+        redSquare = Square(Paint()..color = red, Vector2.all(200)),
+        orangeSquare = Square(Paint()..color = orange, Vector2(200, 400)) {
     add(greenSquare);
     add(redSquare);
     add(orangeSquare);

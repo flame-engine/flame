@@ -35,8 +35,8 @@ class ScaleEffect extends SimplePositionComponentEffect {
         );
 
   @override
-  void initialize(_comp) {
-    super.initialize(_comp);
+  void initialize(component) {
+    super.initialize(component);
     _startSize = component.size;
     _delta = isRelative ? size : size - _startSize;
     if (!isAlternating) {

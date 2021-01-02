@@ -108,8 +108,9 @@ void main() async {
           child: SpriteWidget(
             sprite: shieldSprite,
             anchor: parseAnchor(
-              ctx.listProperty('anchor', 'Anchor.center', anchorOptions),
-            ),
+                  ctx.listProperty('anchor', 'Anchor.center', anchorOptions),
+                ) ??
+                Anchor.topLeft,
           ),
         ),
       );
@@ -134,8 +135,9 @@ void main() async {
             animation: _animation,
             playing: ctx.boolProperty('playing', true),
             anchor: parseAnchor(
-              ctx.listProperty('anchor', 'Anchor.center', anchorOptions),
-            ),
+                  ctx.listProperty('anchor', 'Anchor.center', anchorOptions),
+                ) ??
+                Anchor.topLeft,
           ),
         ),
       );
