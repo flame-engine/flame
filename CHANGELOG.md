@@ -4,6 +4,7 @@
  - BaseComponent removes children marked as shouldRemove during update
  - Use `find` instead of `globstar` pattern in `scripts/lint.sh` as the later isn't enabled by default in bash
  - Improve error handling for the onLoad function
+ - Add test for child removal
 
 ## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget
