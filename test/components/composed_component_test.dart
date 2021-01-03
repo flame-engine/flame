@@ -71,15 +71,26 @@ void main() {
       expect(true, wrapper.containsChild(child));
     });
 
-    test(
-        'when child is async loading, adds the child to the component after loading',
-        () async {
-      final MyAsyncChild child = MyAsyncChild();
+    test('removes the child from the component', () {
+      final MyTap child = MyTap();
       final MyComposed wrapper = MyComposed();
-      await wrapper.addChild(child);
-
+      wrapper.addChild(child);
       expect(true, wrapper.containsChild(child));
+      
+      wrapper.removeChild(child);
+      expect(false, wrapper.containsChild(child));
     });
+
+    test(
+      'when child is async loading, adds the child to the component after loading',
+      () async {
+        final MyAsyncChild child = MyAsyncChild();
+        final MyComposed wrapper = MyComposed();
+        await wrapper.addChild(child);
+
+        expect(true, wrapper.containsChild(child));
+      },
+    );
 
     test('taps and resizes children', () {
       final MyGame game = MyGame();
