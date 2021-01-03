@@ -76,7 +76,7 @@ void main() {
       final MyComposed wrapper = MyComposed();
       wrapper.addChild(child);
       expect(true, wrapper.containsChild(child));
-      
+
       wrapper.removeChild(child);
       expect(false, wrapper.containsChild(child));
     });
