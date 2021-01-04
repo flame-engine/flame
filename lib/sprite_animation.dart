@@ -164,9 +164,9 @@ class SpriteAnimation {
     Image image,
     Map<String, dynamic> jsonData,
   ) {
-    final jsonFrames = jsonData['frames'] as Map<String, Map<String, dynamic>>;
+    final jsonFrames = jsonData['frames'] as Map<String, dynamic>;
 
-    final frames = jsonFrames.values.map((value) {
+    final frames = jsonFrames.values.map((dynamic value) {
       final frameData = value['frame'] as Map<String, dynamic>;
       final int x = frameData['x'] as int;
       final int y = frameData['y'] as int;
