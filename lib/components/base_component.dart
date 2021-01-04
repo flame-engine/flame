@@ -56,6 +56,7 @@ abstract class BaseComponent extends Component {
   @override
   void update(double dt) {
     _effectsHandler.update(dt);
+    _children.removeWhere((c) => c.shouldRemove).forEach((c) => c.onRemove());
     _children.forEach((c) => c.update(dt));
   }
 
