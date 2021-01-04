@@ -109,19 +109,13 @@ abstract class Game {
     String path, {
     Vector2 srcSize,
     Vector2 srcPosition,
-  }) async {
-    final image = await images.load(path);
-    return Sprite(image, srcSize: srcSize, srcPosition: srcPosition);
-  }
+  }) => Sprite.load(path, srcPosition: srcPosition, srcSize: srcSize, images: images);
 
   /// Utility method to load and cache the image for a sprite animation based on its options
   Future<SpriteAnimation> loadSpriteAnimation(
     String path,
     SpriteAnimationData data,
-  ) async {
-    final image = await images.load(path);
-    return SpriteAnimation.fromFrameData(image, data);
-  }
+  ) => SpriteAnimation.load(path, data, images: images);
 
   /// Flag to tell the game loop if it should start running upon creation
   bool runOnCreation = true;
