@@ -62,7 +62,7 @@ class MyGame extends BaseGame {
   final fpsTextConfig = TextConfig(color: const Color(0xFFFFFFFF));
 
   @override
-  bool debugMode() => true;
+  bool debugMode = true;
 
   @override
   Future<void> onLoad() async {
@@ -91,7 +91,7 @@ class MyGame extends BaseGame {
   void render(Canvas canvas) {
     super.render(canvas);
 
-    if (debugMode()) {
+    if (debugMode) {
       fpsTextConfig.render(canvas, fps(120).toString(), Vector2(0, 50));
     }
   }

@@ -47,7 +47,7 @@ class MyGame extends BaseGame {
   ParentSquare _parent;
 
   @override
-  bool debugMode() => true;
+  bool debugMode = true;
 
   MyGame() {
     _parent = ParentSquare(Vector2.all(200), Vector2.all(300));
