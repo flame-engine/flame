@@ -193,9 +193,9 @@ class SpriteAnimation {
   /// Takes a path of an image, a [SpriteAnimationData] and loads the sprite animation
   /// When the [images] is omitted, the global [Flame.images] is used
   static Future<SpriteAnimation> load(
-      String src,
-      SpriteAnimationData data, {
-      Images images,
+    String src,
+    SpriteAnimationData data, {
+    Images images,
   }) async {
     final _images = images ?? Flame.images;
     final image = await _images.load(src);
