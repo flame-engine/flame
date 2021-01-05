@@ -498,13 +498,13 @@ class MyGame extends BaseGame {
   }
 
   @override
-  bool debugMode() => true;
+  bool debugMode = true;
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
 
-    if (debugMode()) {
+    if (debugMode) {
       fpsTextConfig.render(
           canvas, '${fps(120).toStringAsFixed(2)}fps', Vector2(0, size.y - 24));
     }

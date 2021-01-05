@@ -28,6 +28,7 @@
  - Remove Resizable mixin
  - Use config defaults for TextBoxComponent
  - Fixing Game Render Box for flutter >= 1.25
+ - DebugMode to be variable instead of function on BaseGame
 
 ## 1.0.0-rc3
  - Fix TextBoxComponent rendering
