@@ -109,16 +109,26 @@ abstract class Game {
     String path, {
     Vector2 srcSize,
     Vector2 srcPosition,
-  }) =>
-      Sprite.load(path,
-          srcPosition: srcPosition, srcSize: srcSize, images: images);
+  }) {
+    return Sprite.load(
+      path,
+      srcPosition: srcPosition,
+      srcSize: srcSize,
+      images: images,
+    );
+  }
 
   /// Utility method to load and cache the image for a sprite animation based on its options
   Future<SpriteAnimation> loadSpriteAnimation(
     String path,
     SpriteAnimationData data,
-  ) =>
-      SpriteAnimation.load(path, data, images: images);
+  ) {
+    return SpriteAnimation.load(
+      path,
+      data,
+      images: images,
+    );
+  }
 
   /// Flag to tell the game loop if it should start running upon creation
   bool runOnCreation = true;
