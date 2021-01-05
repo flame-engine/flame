@@ -29,6 +29,7 @@ class Timer {
       if (_current >= limit) {
         if (!repeat) {
           _running = false;
+          callback?.call();
           return;
         }
         // This is used to cover the rare case of _current being more than
