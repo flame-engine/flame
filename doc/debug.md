@@ -17,4 +17,4 @@ Flame provides some features for debugging, these features are enabled when the 
 
 In addition to the debugMode, you can also ask `BaseGame` to record the fps(the `BaseGame` used the [FPSCounter](fps-counter) mixin). To enable it you have to override the `recordFps` method to return `true`, by doing so, you can access the current fps by using the method `fps`.
 
-To see a working example of the debugging features of the `BaseGame`, [check this example](/doc/examples/debug).
+To see a working example of the debugging features of the `BaseGame`, [check this example](https://github.com/flame-engine/flame/tree/master/doc/examples/debug).

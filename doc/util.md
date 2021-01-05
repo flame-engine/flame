@@ -33,7 +33,7 @@ Returns a `Future` with the dimension (`Size`) of the screen. This has to be don
 
 ### `Flame.util.addGestureRecognizer()` and `Flame.util.removeGestureRecognizer()`
 
-These two functions help with registering (and de-registering) gesture recognizers so that the game can accept input. More about these two functions [here](/doc/input.md#Input).
+These two functions help with registering (and de-registering) gesture recognizers so that the game can accept input. More about these two functions [here](input.md#Input).
 
 ### Other functions
 
