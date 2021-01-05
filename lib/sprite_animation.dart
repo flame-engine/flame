@@ -1,7 +1,9 @@
 import 'package:meta/meta.dart';
 import 'dart:ui';
 
+import 'assets/images.dart';
 import 'extensions/vector2.dart';
+import 'flame.dart';
 import 'sprite.dart';
 
 class SpriteAnimationFrameData {
@@ -186,6 +188,18 @@ class SpriteAnimation {
 
     this.frames = frames.toList();
     loop = true;
+  }
+
+  /// Takes a path of an image, a [SpriteAnimationData] and loads the sprite animation
+  /// When the [images] is omitted, the global [Flame.images] is used
+  static Future<SpriteAnimation> load(
+    String src,
+    SpriteAnimationData data, {
+    Images images,
+  }) async {
+    final _images = images ?? Flame.images;
+    final image = await _images.load(src);
+    return SpriteAnimation.fromFrameData(image, data);
   }
 
   /// The current frame that should be displayed.

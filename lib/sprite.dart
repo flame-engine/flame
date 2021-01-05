@@ -3,7 +3,9 @@ import 'dart:ui';
 import 'anchor.dart';
 import 'extensions/offset.dart';
 import 'extensions/vector2.dart';
+import 'flame.dart';
 import 'palette.dart';
+import 'assets/images.dart';
 
 class Sprite {
   Paint paint = BasicPalette.white.paint;
@@ -17,6 +19,19 @@ class Sprite {
   }) : assert(image != null, "image can't be null") {
     this.srcSize = srcSize;
     this.srcPosition = srcPosition;
+  }
+
+  /// Takes a path of an image, a [srcPosition] and [srcSize] and loads the sprite animation
+  /// When the [images] is omitted, the global [Flame.images] is used
+  static Future<Sprite> load(
+    String src, {
+    Vector2 srcPosition,
+    Vector2 srcSize,
+    Images images,
+  }) async {
+    final _images = images ?? Flame.images;
+    final image = await _images.load(src);
+    return Sprite(image, srcPosition: srcPosition, srcSize: srcSize);
   }
 
   double get _imageWidth => image.width.toDouble();
