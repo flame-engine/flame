@@ -6,6 +6,7 @@
  - Fixes aseprite constructor bug
  - Improve error handling for the onLoad function
  - Add test for child removal
+ - Fix bug where `Timer` callback doesn't fire for non-repeating timers, also fixing bug with `Particle` lifespan
  - Adding shortcut for loading Sprites and SpriteAnimation from the global cache
 
 ## 1.0.0-rc5
