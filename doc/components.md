@@ -213,11 +213,11 @@ in the `load` helper function.
 For example if you want to move your background images along the X-axis with a faster speed the "closer" the image is:
 
 ```dart
-  final parallaxComponent = await ParallaxComponent.load(
-    _paths,
-    baseVelocity: Vector2(20, 0),
-    velocityMultiplierDelta: Vector2(1.8, 1.0),
-  );
+final parallaxComponent = await ParallaxComponent.load(
+  _paths,
+  baseVelocity: Vector2(20, 0),
+  velocityMultiplierDelta: Vector2(1.8, 1.0),
+);
 ```
 You can set the baseSpeed and layerDelta at any time, for example if your character jumps or your game speeds up.
 
@@ -234,18 +234,18 @@ them to `ParallaxLayer`s that you then pass in to the `ParallaxComponent`'s cons
 
 Advanced example:
 ```dart
-  final images = [
-    ParallaxImage.load('stars.jpg', repeat: ImageRepeat.repeat, alignment: Alignment.center, fill: LayerFill.width),
-    ParallaxImage.load('planets.jpg', repeat: ImageRepeat.repeatY, alignment: Alignment.bottomLeft, fill: LayerFill.none),
-    ParallaxImage.load('dust.jpg', repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
-  ];
-  final layers = images.map((image) => ParallaxLayer(await image, velocityMulitplier: images.indexOf(image) * 2.0));
-  final parallaxComponent = ParallaxComponent(
-    Parallax(
-      await Future.wait(layers),
-      baseVelocity: Vector2(50, 0),
-    ),
-  );
+final images = [
+  ParallaxImage.load('stars.jpg', repeat: ImageRepeat.repeat, alignment: Alignment.center, fill: LayerFill.width),
+  ParallaxImage.load('planets.jpg', repeat: ImageRepeat.repeatY, alignment: Alignment.bottomLeft, fill: LayerFill.none),
+  ParallaxImage.load('dust.jpg', repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
+];
+final layers = images.map((image) => ParallaxLayer(await image, velocityMulitplier: images.indexOf(image) * 2.0));
+final parallaxComponent = ParallaxComponent(
+  Parallax(
+    await Future.wait(layers),
+    baseVelocity: Vector2(50, 0),
+  ),
+);
 ```
 
 * The stars image in this example will be repeatedly drawn in both axis, align in the center and be scaled to fill the screen width.
