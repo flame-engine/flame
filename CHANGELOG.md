@@ -8,6 +8,7 @@
  - Add test for child removal
  - Fix bug where `Timer` callback doesn't fire for non-repeating timers, also fixing bug with `Particle` lifespan
  - Adding shortcut for loading Sprites and SpriteAnimation from the global cache
+ - Refactored the `SpriteBatch` class to be more elegant.
  - Added fallback support for the web on the `SpriteBatch` class
  - Added missing documentation on the `SpriteBatch` class
 

@@ -20,10 +20,10 @@ class MyGame extends BaseGame {
 
   @override
   Future<void> onLoad() async {
-    spriteBatch = await SpriteBatch.withAsset('boom3.png');
+    spriteBatch = await SpriteBatch.load('boom3.png');
 
     spriteBatch.add(
-      rect: const Rect.fromLTWH(128 * 4.0, 128 * 4.0, 64, 128),
+      source: const Rect.fromLTWH(128 * 4.0, 128 * 4.0, 64, 128),
       offset: const Offset(200, 200),
       color: Colors.greenAccent,
       scale: 2,
@@ -32,7 +32,7 @@ class MyGame extends BaseGame {
     );
 
     spriteBatch.addTransform(
-      rect: const Rect.fromLTWH(128 * 4.0, 128 * 4.0, 64, 128),
+      source: const Rect.fromLTWH(128 * 4.0, 128 * 4.0, 64, 128),
       color: Colors.redAccent,
     );
 
@@ -44,7 +44,7 @@ class MyGame extends BaseGame {
       final x = r.nextInt(size.x.toInt()).toDouble();
       final y = r.nextInt(size.y ~/ 2).toDouble() + size.y / 2.0;
       spriteBatch.add(
-        rect: Rect.fromLTWH(sx, sy, 128, 128),
+        source: Rect.fromLTWH(sx, sy, 128, 128),
         offset: Offset(x - 64, y - 64),
       );
     }
