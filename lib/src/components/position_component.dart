@@ -1,4 +1,5 @@
 import 'dart:ui' hide Offset;
+import 'dart:math' as math;
 
 import '../collision_detection.dart' as collision_detection;
 import '../anchor.dart';
@@ -110,15 +111,41 @@ abstract class PositionComponent extends BaseComponent {
 
   @override
   bool containsPoint(Vector2 point) {
-    final corners = [
-      rotatePoint(absoluteTopLeftPosition), // Top-left
-      rotatePoint(
-          absoluteTopLeftPosition + Vector2(0.0, size.y)), // Bottom-left
-      rotatePoint(absoluteTopLeftPosition + size), // Bottom-right
-      rotatePoint(absoluteTopLeftPosition + Vector2(size.x, 0.0)), // Top-right
-    ];
+    return collision_detection.containsPoint(point, boundingBox());
+  }
 
-    return collision_detection.containsPoint(point, corners);
+  /// Gives back the bounding box represented as a list of points which are the
+  /// corners of the box rotated with [angle], if overridden it can return
+  /// more than four "corners" for more accurate collision detection and overlap
+  /// detection, but the points has to form a convex polygon.
+  List<Vector2> boundingBox() {
+    // Rotates the corner around [position]
+    Vector2 rotateCorner(Vector2 corner) {
+      return Vector2(
+        math.cos(angle) * (corner.x - position.x) -
+            math.sin(angle) * (corner.y - position.y) +
+            position.x,
+        math.sin(angle) * (corner.x - position.x) +
+            math.cos(angle) * (corner.y - position.y) +
+            position.y,
+      );
+    }
+
+    // Counter-clockwise direction
+    return [
+      rotateCorner(absoluteTopLeftPosition), // Top-left
+      rotateCorner(absoluteTopLeftPosition + Vector2(0.0, size.y)), // Bottom-left
+      rotateCorner(absoluteTopLeftPosition + size), // Bottom-right
+      rotateCorner(absoluteTopLeftPosition + Vector2(size.x, 0.0)), // Top-right
+    ];
+  }
+
+
+  
+  List<Vector2> collisionPoints(PositionComponent other) {
+
+
+    return [];
   }
 
   double angleTo(PositionComponent c) => position.angleTo(c.position);
