@@ -48,7 +48,7 @@ class BaseGame extends Game with FPSCounter {
       );
     }
 
-    if (debugMode() && c is PositionComponent) {
+    if (debugMode && c is PositionComponent) {
       c.debugMode = true;
     }
 
@@ -151,9 +151,10 @@ class BaseGame extends Game with FPSCounter {
 
   /// Returns whether this [Game] is in debug mode or not.
   ///
-  /// Returns `false` by default. Override to use the debug mode.
-  /// You can use this value to enable debug behaviors for your game, many components show extra information on screen when on debug mode
-  bool debugMode() => false;
+  /// Returns `false` by default. Override it, or set it to true, to use debug mode.
+  /// You can use this value to enable debug behaviors for your game and many components will
+  /// show extra information on the screen when debug mode is activated
+  bool debugMode = false;
 
   /// Returns the current time in seconds with microseconds precision.
   ///

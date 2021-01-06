@@ -6,6 +6,8 @@
  - Fixes aseprite constructor bug
  - Improve error handling for the onLoad function
  - Add test for child removal
+ - Fix bug where `Timer` callback doesn't fire for non-repeating timers, also fixing bug with `Particle` lifespan
+ - Adding shortcut for loading Sprites and SpriteAnimation from the global cache
 
 ## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget
@@ -26,6 +28,7 @@
  - Remove Resizable mixin
  - Use config defaults for TextBoxComponent
  - Fixing Game Render Box for flutter >= 1.25
+ - DebugMode to be variable instead of function on BaseGame
 
 ## 1.0.0-rc3
  - Fix TextBoxComponent rendering
