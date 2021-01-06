@@ -47,10 +47,10 @@ class SpriteBatch {
   }) {
     transform ??= defaultTransform;
     rects.add(rect);
-    transforms.add(transform ?? defaultTransform);
+    transforms.add(transform);
     colors.add(color ?? defaultColor);
 
-    /// Because `drawAtlas` is not supported on the web we also 
+    /// Because `drawAtlas` is not supported on the web we also
     /// build a `Matrix4` based on the given `RSTransform`.
     matrices.add(Matrix4(
       transform.scos,
@@ -99,11 +99,7 @@ class SpriteBatch {
       translateY: offset.dy,
     );
 
-    addTransform(
-      rect: rect,
-      transform: transform,
-      color: color,
-    );
+    addTransform(rect: rect, transform: transform, color: color);
   }
 
   /// Clear the SpriteBatch so it can be reused.
