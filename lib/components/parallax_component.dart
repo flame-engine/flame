@@ -211,7 +211,8 @@ class ParallaxComponent extends PositionComponent {
     super.update(t);
     _layers.forEach((layer) {
       layer.update(
-          (baseVelocity.clone()..multiply(layer.velocityMultiplier)) * t,);
+        (baseVelocity.clone()..multiply(layer.velocityMultiplier)) * t,
+      );
     });
   }
 
