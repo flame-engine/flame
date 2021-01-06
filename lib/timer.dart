@@ -21,7 +21,7 @@ class Timer {
   bool isRunning() => _running;
 
   /// A value between 0.0 and 1.0 indicating the timer progress
-  double get progress => max(_current / limit, 1.0);
+  double get progress => min(_current / limit, 1.0);
 
   void update(double dt) {
     if (_running) {
