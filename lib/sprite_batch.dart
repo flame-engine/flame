@@ -50,6 +50,8 @@ class SpriteBatch {
     transforms.add(transform ?? defaultTransform);
     colors.add(color ?? defaultColor);
 
+    /// Because `drawAtlas` is not supported on the web we also 
+    /// build a `Matrix4` based on the given `RSTransform`.
     matrices.add(Matrix4(
       transform.scos,
       transform.ssin,
