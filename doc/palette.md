@@ -9,9 +9,9 @@ You can use Dart's hexadecimal notation to make it really easy; for instance: `0
 In the material flutter package there is a color enum to make it easy to use common colors:
 
 ```dart
-    import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart' as material;
 
-    Color color = material.Colors.black;
+Color color = material.Colors.black;
 ```
 
 Some more complex methods might also take a Paint, which is a more complete option that allows you to define more options related to stroke, colors, filters, blends. However, normally when using even the more complex APIs, you want just an instance of a Paint representing just a single simple plain solid color.
@@ -19,7 +19,7 @@ Some more complex methods might also take a Paint, which is a more complete opti
 You can create such a Paint like this:
 
 ```dart
-  Paint green = Paint()..color = const Color(0xFF00FF00);
+Paint green = Paint()..color = const Color(0xFF00FF00);
 ```
 
 To help that and also keep your game's color palette consistent, Flame adds the Palette class. You can use it to both easily access Colors and Paints where needed and also to define the colors your game use as constants, so you don't get those mixed up.
@@ -27,13 +27,13 @@ To help that and also keep your game's color palette consistent, Flame adds the 
 The `BasicPalette` class is an example of what a palette can look like, and adds black and white as colors. So to use black or white you can access those directly from the BasicPalette; for example, using `color`:
 
 ```dart
-  TextConfig regular = TextConfig(color: BasicPalette.white.color);
+TextConfig regular = TextConfig(color: BasicPalette.white.color);
 ```
 
 Or using `paint`:
 
 ```dart
-  canvas.drawRect(rect, BasicPalette.black.paint);
+canvas.drawRect(rect, BasicPalette.black.paint);
 ```
 
 However, the idea is that you can create your own palette, following the `BasicPalette` example, and add the color palette/scheme of your game. Then you will be able to statically access any color in your components and classes, never mix up the RGBs anymore. Below is an example of a Palette implementation, from the example game [BGUG](https://github.com/luanpotter/bgug/blob/master/lib/palette.dart):

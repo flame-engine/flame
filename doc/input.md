@@ -101,7 +101,7 @@ class MyGame extends Game with TapDetector {
   }
 }
 ```
-You can also check a more complete example [here](/doc/examples/gestures).
+You can also check a more complete example [here](https://github.com/flame-engine/flame/tree/master/doc/examples/gestures).
 
 ## Tapable and Draggable components
 
@@ -117,9 +117,9 @@ The same applies if your component has children, then the event is first sent to
 By adding the `HasTapableComponents` mixin to your game, and using the mixin `Tapable` on your components, you can override the following methods on your components:
 
 ```dart
-  void onTapCancel() {}
-  void onTapDown(TapDownDetails details) {}
-  void onTapUp(TapUpDetails details) {}
+void onTapCancel() {}
+void onTapDown(TapDownDetails details) {}
+void onTapUp(TapUpDetails details) {}
 ```
 
 Minimal component example:
@@ -233,7 +233,7 @@ class MyGame extends Game with KeyboardEvents {
 }
 ```
 
-You can also check a more complete example [here](/doc/examples/keyboard).
+You can also check a more complete example [here](https://github.com/flame-engine/flame/tree/master/doc/examples/keyboard).
 
 ## Joystick
 
@@ -326,13 +326,13 @@ class Player extends Component implements JoystickListener {
 
 ```dart
 
-  JoystickDirectionalEvent({
+JoystickDirectionalEvent({
     JoystickMoveDirectional directional,
     double intensity = 0.0,
     double radAngle = 0.0,
-  });
+});
 
-  enum JoystickMoveDirectional {
+enum JoystickMoveDirectional {
     MOVE_UP,
     MOVE_UP_LEFT,
     MOVE_UP_RIGHT,
@@ -342,7 +342,7 @@ class Player extends Component implements JoystickListener {
     MOVE_DOWN_LEFT,
     MOVE_LEFT,
     IDLE
-  }
+}
 
 ```
 
@@ -350,16 +350,16 @@ class Player extends Component implements JoystickListener {
 
 ```dart
 
-  JoystickActionEvent({
-      int id,
-      double intensity = 0.0,
-      double radAngle = 0.0,
-      ActionEvent event,
-   });
+JoystickActionEvent({
+  int id,
+  double intensity = 0.0,
+  double radAngle = 0.0,
+  ActionEvent event,
+});
 
-  enum ActionEvent { DOWN, UP, MOVE, CANCEL }
+enum ActionEvent { DOWN, UP, MOVE, CANCEL }
 
 ```
 
-You can also check a more complete example [here](/doc/examples/joystick).
+You can also check a more complete example [here](https://github.com/flame-engine/flame/tree/master/doc/examples/joystick).
 
