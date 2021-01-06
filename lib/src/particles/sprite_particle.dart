@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-
 import '../anchor.dart';
 import 'particle.dart';
 import '../sprite.dart';
@@ -11,14 +9,14 @@ export '../sprite.dart';
 
 class SpriteParticle extends Particle {
   final Sprite sprite;
-  final Vector2 size;
-  final Paint overridePaint;
+  final Vector2? size;
+  final Paint? overridePaint;
 
   SpriteParticle({
-    @required this.sprite,
+    required this.sprite,
     this.size,
     this.overridePaint,
-    double lifespan,
+    double? lifespan,
   }) : super(
           lifespan: lifespan,
         );

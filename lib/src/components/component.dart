@@ -83,5 +83,5 @@ abstract class Component {
   ///   myImage = await gameRef.load('my_image.png');
   /// }
   /// ```
-  Future<void> onLoad() => null;
+  Future<void>? onLoad() => null;
 }

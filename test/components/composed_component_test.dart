@@ -10,7 +10,7 @@ import '../util/mock_canvas.dart';
 class MyGame extends BaseGame with HasTapableComponents {}
 
 class MyTap extends PositionComponent with Tapable {
-  Vector2 gameSize;
+  late Vector2 gameSize;
 
   int tapTimes = 0;
   bool get tapped => tapTimes > 0;

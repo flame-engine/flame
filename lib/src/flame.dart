@@ -12,7 +12,7 @@ import 'device.dart';
 /// Most games should need only one instance of each, and should use this class to manage that reference.
 class Flame {
   // Flame asset bundle, defaults to root
-  static AssetBundle _bundle;
+  static AssetBundle? _bundle;
   static AssetBundle get bundle => _bundle ?? rootBundle;
 
   /// Access a shared instance of [AssetsCache] class.

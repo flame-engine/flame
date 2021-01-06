@@ -18,18 +18,18 @@ void main() async {
 }
 
 class MyGame extends BaseGame with TapDetector {
-  Square greenSquare;
+  Square? greenSquare;
 
   MyGame() {
     final green = Paint()..color = const Color(0xAA338833);
     greenSquare = Square(green, Vector2.all(100));
-    add(greenSquare);
+    add(greenSquare!);
   }
 
   @override
   void onTapUp(TapUpDetails details) {
     final Vector2 currentTap = details.localPosition.toVector2();
-    greenSquare.clearEffects();
+    greenSquare!.clearEffects();
 
     final move1 = MoveEffect(
       path: [currentTap],
@@ -80,6 +80,6 @@ class MyGame extends BaseGame with TapDetector {
       isAlternating: true,
     );
     sequence.onComplete = () => print("sequence complete");
-    greenSquare.addEffect(sequence);
+    greenSquare!.addEffect(sequence);
   }
 }

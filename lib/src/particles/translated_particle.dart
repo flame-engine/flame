@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-
 import '../components/mixins/single_child_particle.dart';
 import 'particle.dart';
 
@@ -13,9 +11,9 @@ class TranslatedParticle extends Particle with SingleChildParticle {
   Offset offset;
 
   TranslatedParticle({
-    @required this.child,
-    @required this.offset,
-    double lifespan,
+    required this.child,
+    required this.offset,
+    double? lifespan,
   }) : super(
           lifespan: lifespan,
         );

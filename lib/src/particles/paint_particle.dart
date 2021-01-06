@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-
 import '../components/mixins/single_child_particle.dart';
 import 'particle.dart';
 import 'curved_particle.dart';
@@ -22,12 +20,12 @@ class PaintParticle extends CurvedParticle with SingleChildParticle {
   final Rect bounds;
 
   PaintParticle({
-    @required this.child,
-    @required this.paint,
+    required this.child,
+    required this.paint,
 
     // Reasonably large rect for most particles
     this.bounds = const Rect.fromLTRB(-50, -50, 50, 50),
-    double lifespan,
+    double? lifespan,
   }) : super(
           lifespan: lifespan,
         );

@@ -18,7 +18,7 @@ void main() async {
 }
 
 class MyGame extends BaseGame with TapDetector {
-  Square greenSquare;
+  late Square greenSquare;
 
   MyGame() {
     final green = Paint()..color = const Color(0xAA338833);

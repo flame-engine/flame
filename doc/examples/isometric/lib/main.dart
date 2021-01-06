@@ -41,8 +41,8 @@ class Selector extends SpriteComponent {
 }
 
 class MyGame extends BaseGame with MouseMovementDetector {
-  IsometricTileMapComponent base;
-  Selector selector;
+  IsometricTileMapComponent? base;
+  Selector? selector;
 
   MyGame();
 
@@ -89,8 +89,8 @@ class MyGame extends BaseGame with MouseMovementDetector {
     }
     final offset = event.position;
     final screenPosition = Vector2(offset.dx, offset.dy);
-    final block = base.getBlock(screenPosition);
-    selector.show = base.containsBlock(block);
-    selector.position = base.getBlockPosition(block) + topLeft;
+    final block = base!.getBlock(screenPosition);
+    selector!.show = base!.containsBlock(block);
+    selector!.position = base!.getBlockPosition(block) + topLeft;
   }
 }

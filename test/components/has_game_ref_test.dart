@@ -11,7 +11,7 @@ class MyGame extends BaseGame {
 
 class MyComponent extends PositionComponent with HasGameRef<MyGame> {
   void foo() {
-    gameRef.foo();
+    gameRef!.foo();
   }
 }
 

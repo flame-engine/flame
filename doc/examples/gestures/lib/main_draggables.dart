@@ -21,7 +21,7 @@ class DraggableSquare extends PositionComponent with Draggable {
   bool debugMode = true;
   bool _isDragging = false;
 
-  DraggableSquare({Vector2 position}) {
+  DraggableSquare({Vector2? position}) {
     size = Vector2.all(100);
     this.position = position ?? Vector2.all(100);
   }
@@ -32,7 +32,7 @@ class DraggableSquare extends PositionComponent with Draggable {
     debugColor = _isDragging ? Colors.greenAccent : Colors.purple;
   }
 
-  Vector2 dragDeltaPosition;
+  Vector2 dragDeltaPosition = Vector2.zero();
   @override
   bool onReceiveDrag(DragEvent event) {
     event.onUpdate = (DragUpdateDetails details) {

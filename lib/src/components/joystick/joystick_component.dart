@@ -36,8 +36,8 @@ abstract class JoystickController extends Component with HasGameRef<BaseGame> {
 }
 
 class JoystickComponent extends JoystickController {
-  final List<JoystickAction> actions;
-  final JoystickDirectional directional;
+  final List<JoystickAction>? actions;
+  final JoystickDirectional? directional;
   @override
   int priority;
 
@@ -49,7 +49,7 @@ class JoystickComponent extends JoystickController {
 
   void addAction(JoystickAction action) {
     if (gameRef?.size != null) {
-      action.initialize(gameRef.size, this);
+      action.initialize(gameRef!.size, this);
       actions?.add(action);
     }
   }

@@ -12,31 +12,31 @@ import 'joystick_utils.dart';
 
 class JoystickDirectional {
   final double size;
-  final Sprite spriteBackgroundDirectional;
-  final Sprite spriteKnobDirectional;
+  final Sprite? spriteBackgroundDirectional;
+  final Sprite? spriteKnobDirectional;
   final bool isFixed;
   final EdgeInsets margin;
   final Color color;
   final double opacityBackground;
   final double opacityKnob;
 
-  Sprite _backgroundSprite;
-  Paint _backgroundPaint;
-  Rect _backgroundRect;
+  Sprite? _backgroundSprite;
+  Paint? _backgroundPaint;
+  late Rect _backgroundRect;
 
-  Sprite _knobSprite;
-  Paint _knobPaint;
-  Rect _knobRect;
+  Sprite? _knobSprite;
+  Paint? _knobPaint;
+  late Rect _knobRect;
 
   bool _dragging = false;
-  Offset _dragPosition;
-  double _tileSize;
+  late Offset _dragPosition;
+  late double _tileSize;
 
-  JoystickController _joystickController;
+  late JoystickController _joystickController;
 
-  Vector2 _screenSize;
+  late Vector2 _screenSize;
 
-  DragEvent _currentDragEvent;
+  DragEvent? _currentDragEvent;
 
   JoystickDirectional({
     this.spriteBackgroundDirectional,
@@ -141,10 +141,8 @@ class JoystickDirectional {
         radAngle: _radAngle,
       ));
     } else {
-      if (_knobRect != null) {
-        final Offset diff = _dragPosition - _knobRect.center;
-        _knobRect = _knobRect.shift(diff);
-      }
+      final Offset diff = _dragPosition - _knobRect.center;
+      _knobRect = _knobRect.shift(diff);
     }
   }
 
@@ -156,7 +154,7 @@ class JoystickDirectional {
       _dragging = true;
       _dragPosition = event.initialPosition;
       _currentDragEvent = event;
-      _currentDragEvent
+      _currentDragEvent!
         ..onUpdate = onPanUpdate
         ..onEnd = onPanEnd
         ..onCancel = onPanCancel;
@@ -164,10 +162,9 @@ class JoystickDirectional {
   }
 
   void _updateDirectionalRect(Offset position) {
-    if (_screenSize != null &&
-        (position.dx > _screenSize.x / 2 ||
-            position.dy < _screenSize.y / 2 ||
-            isFixed)) {
+    if (position.dx > _screenSize.x / 2 ||
+        position.dy < _screenSize.y / 2 ||
+        isFixed) {
       return;
     }
 

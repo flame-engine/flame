@@ -17,7 +17,7 @@ class MyGame extends BaseGame with ScrollDetector {
   static const SPEED = 200;
 
   Vector2 position = Vector2(0, 0);
-  Vector2 target;
+  Vector2? target;
 
   @override
   void onScroll(event) {
@@ -42,7 +42,7 @@ class MyGame extends BaseGame with ScrollDetector {
   void update(double dt) {
     super.update(dt);
     if (target != null) {
-      final dir = (target - position).normalized();
+      final dir = (target! - position).normalized();
       position += dir * (SPEED * dt);
     }
   }

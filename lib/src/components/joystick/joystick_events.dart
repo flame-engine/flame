@@ -13,7 +13,7 @@ enum JoystickMoveDirectional {
 enum ActionEvent { DOWN, UP, MOVE, CANCEL }
 
 class JoystickDirectionalEvent {
-  final JoystickMoveDirectional directional;
+  final JoystickMoveDirectional? directional;
   final double intensity;
   final double radAngle;
 
@@ -53,10 +53,10 @@ class JoystickDirectionalEvent {
 }
 
 class JoystickActionEvent {
-  final int id;
+  final int? id;
   final double intensity;
   final double radAngle;
-  final ActionEvent event;
+  final ActionEvent? event;
 
   JoystickActionEvent({
     this.id,

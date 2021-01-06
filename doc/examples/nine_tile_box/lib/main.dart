@@ -14,7 +14,7 @@ void main() async {
 }
 
 class MyGame extends Game {
-  NineTileBox nineTileBox;
+  late NineTileBox nineTileBox;
 
   @override
   Future<void> onLoad() async {

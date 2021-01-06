@@ -17,14 +17,14 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+  MyHomePage({Key? key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  ExampleGame _myGame;
+  ExampleGame? _myGame;
 
   Widget pauseMenuBuilder(BuildContext buildContext, ExampleGame game) {
     return Center(
@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: _myGame == null
           ? const Text('Wait')
           : GameWidget<ExampleGame>(
-              game: _myGame,
+              game: _myGame!,
               overlayBuilderMap: {
                 "PauseMenu": pauseMenuBuilder,
               },

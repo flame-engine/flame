@@ -10,7 +10,7 @@ class MockCanvas extends Fake implements Canvas {
   void translate(double dx, double dy) {}
 
   @override
-  void scale(double sx, [double sy]) {}
+  void scale(double sx, [double? sy]) {}
 
   @override
   void rotate(double radians) {}

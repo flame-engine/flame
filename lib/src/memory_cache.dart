@@ -19,7 +19,7 @@ class MemoryCache<K, V> {
     }
   }
 
-  V getValue(K key) => _cache[key];
+  V? getValue(K key) => _cache[key];
 
   bool containsKey(K key) => _cache.containsKey(key);
 

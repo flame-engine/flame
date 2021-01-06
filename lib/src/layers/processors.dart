@@ -7,7 +7,7 @@ abstract class LayerProcessor {
 class ShadowProcessor extends LayerProcessor {
   final Paint _shadowPaint;
 
-  final Offset offset;
+  final Offset? offset;
 
   ShadowProcessor({
     this.offset = const Offset(10, 10),
@@ -20,7 +20,7 @@ class ShadowProcessor extends LayerProcessor {
   @override
   void process(Picture pic, Canvas canvas) {
     canvas.saveLayer(Rect.largest, _shadowPaint);
-    canvas.translate(offset.dx, offset.dy);
+    canvas.translate(offset!.dx, offset!.dy);
     canvas.drawPicture(pic);
     canvas.restore();
   }

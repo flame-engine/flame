@@ -19,9 +19,9 @@ class MySpriteBatchComponent extends SpriteBatchComponent
     with HasGameRef<MyGame> {
   @override
   Future<void> onLoad() async {
-    spriteBatch = await gameRef.loadSpriteBatch('boom3.png');
+    spriteBatch = await gameRef!.loadSpriteBatch('boom3.png');
 
-    spriteBatch.add(
+    spriteBatch!.add(
       source: const Rect.fromLTWH(128 * 4.0, 128 * 4.0, 64, 128),
       offset: Vector2.all(200),
       color: Colors.greenAccent,
@@ -30,7 +30,7 @@ class MySpriteBatchComponent extends SpriteBatchComponent
       anchor: Vector2.all(64),
     );
 
-    spriteBatch.addTransform(
+    spriteBatch!.addTransform(
       source: const Rect.fromLTWH(128 * 4.0, 128 * 4.0, 64, 128),
       color: Colors.redAccent,
     );
@@ -40,10 +40,10 @@ class MySpriteBatchComponent extends SpriteBatchComponent
     for (int i = 0; i < NUM; ++i) {
       final sx = r.nextInt(8) * 128.0;
       final sy = r.nextInt(8) * 128.0;
-      final x = r.nextInt(gameRef.size.x.toInt()).toDouble();
+      final x = r.nextInt(gameRef!.size.x.toInt()).toDouble();
       final y =
-          r.nextInt(gameRef.size.y ~/ 2).toDouble() + gameRef.size.y / 2.0;
-      spriteBatch.add(
+          r.nextInt(gameRef!.size.y ~/ 2).toDouble() + gameRef!.size.y / 2.0;
+      spriteBatch!.add(
         source: Rect.fromLTWH(sx, sy, 128, 128),
         offset: Vector2(x - 64, y - 64),
       );
@@ -52,7 +52,7 @@ class MySpriteBatchComponent extends SpriteBatchComponent
 }
 
 class MyGame extends BaseGame {
-  SpriteBatch spriteBatch;
+  late SpriteBatch spriteBatch;
 
   @override
   Future<void> onLoad() async {

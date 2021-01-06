@@ -23,27 +23,21 @@ import '../../particles/particle.dart';
 /// }
 /// ```
 mixin SingleChildParticle on Particle {
-  Particle child;
+  late Particle child;
 
   @override
   void setLifespan(double lifespan) {
-    assert(child != null);
-
     super.setLifespan(lifespan);
     child.setLifespan(lifespan);
   }
 
   @override
   void render(Canvas c) {
-    assert(child != null);
-
     child.render(c);
   }
 
   @override
   void update(double t) {
-    assert(child != null);
-
     super.update(t);
     child.update(t);
   }

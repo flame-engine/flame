@@ -1,8 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-
 import '../components/mixins/single_child_particle.dart';
 import 'particle.dart';
 import 'curved_particle.dart';
@@ -17,10 +15,10 @@ class RotatingParticle extends CurvedParticle with SingleChildParticle {
   final double to;
 
   RotatingParticle({
-    @required this.child,
+    required this.child,
     this.from = 0,
     this.to = 2 * pi,
-    double lifespan,
+    double? lifespan,
   }) : super(
           lifespan: lifespan,
         );

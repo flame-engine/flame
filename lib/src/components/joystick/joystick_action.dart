@@ -16,9 +16,9 @@ enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
 
 class JoystickAction {
   final int actionId;
-  final Sprite sprite;
-  final Sprite spritePressed;
-  final Sprite spriteBackgroundDirection;
+  final Sprite? sprite;
+  final Sprite? spritePressed;
+  final Sprite? spriteBackgroundDirection;
   final double size;
   final double sizeFactorBackgroundDirection;
   final EdgeInsets margin;
@@ -29,21 +29,21 @@ class JoystickAction {
   final double opacityKnob;
 
   bool isPressed = false;
-  Rect _rectAction;
-  Rect _rectBackgroundDirection;
+  Rect? _rectAction;
+  Rect? _rectBackgroundDirection;
   bool _dragging = false;
-  Sprite _spriteAction;
-  Offset _dragPosition;
+  Sprite? _spriteAction;
+  late Offset _dragPosition;
   final Paint _paintBackground;
   final Paint _paintAction;
   final Paint _paintActionPressed;
-  JoystickController _joystickController;
+  late JoystickController _joystickController;
   final double _sizeBackgroundDirection;
-  DragEvent _currentDragEvent;
-  double _tileSize;
+  DragEvent? _currentDragEvent;
+  late double _tileSize;
 
   JoystickAction({
-    @required this.actionId,
+    required this.actionId,
     this.sprite,
     this.spritePressed,
     this.spriteBackgroundDirection,
@@ -99,7 +99,7 @@ class JoystickAction {
       center: Offset(dx, dy),
       radius: _sizeBackgroundDirection / 2,
     );
-    _dragPosition = _rectAction.center;
+    _dragPosition = _rectAction!.center;
   }
 
   void render(Canvas c) {
@@ -119,12 +119,12 @@ class JoystickAction {
   void update(double dt) {
     if (_rectBackgroundDirection != null && _dragging) {
       final double _radAngle = atan2(
-        _dragPosition.dy - _rectBackgroundDirection.center.dy,
-        _dragPosition.dx - _rectBackgroundDirection.center.dx,
+        _dragPosition.dy - _rectBackgroundDirection!.center.dy,
+        _dragPosition.dx - _rectBackgroundDirection!.center.dx,
       );
 
       // Distance between the center of joystick background & drag position
-      final centerPosition = _rectBackgroundDirection.center.toVector2();
+      final centerPosition = _rectBackgroundDirection!.center.toVector2();
       final dragPosition = _dragPosition.toVector2();
       double dist = centerPosition.distanceTo(dragPosition);
 
@@ -136,12 +136,12 @@ class JoystickAction {
       // Calculate the knob position
       final double nextX = dist * cos(_radAngle);
       final double nextY = dist * sin(_radAngle);
-      final nextPoint = Offset(nextX, nextY);
+      final Offset nextPoint = Offset(nextX, nextY);
 
       if (_rectAction != null) {
         final diff =
-            _rectBackgroundDirection.center + nextPoint - _rectAction.center;
-        _rectAction = _rectAction.shift(diff);
+            _rectBackgroundDirection!.center + nextPoint - _rectAction!.center;
+        _rectAction = _rectAction!.shift(diff);
       }
 
       final double _intensity = dist / _tileSize;
@@ -156,8 +156,8 @@ class JoystickAction {
       );
     } else {
       if (_rectAction != null) {
-        final Offset diff = _dragPosition - _rectAction.center;
-        _rectAction = _rectAction.shift(diff);
+        final Offset diff = _dragPosition - _rectAction!.center;
+        _rectAction = _rectAction!.shift(diff);
       }
     }
   }
@@ -179,7 +179,7 @@ class JoystickAction {
     );
     tapDown();
     _currentDragEvent = event;
-    _currentDragEvent
+    _currentDragEvent!
       ..onUpdate = onPanUpdate
       ..onEnd = onPanEnd
       ..onCancel = onPanCancel;
@@ -206,7 +206,7 @@ class JoystickAction {
   void onPanEnd(DragEndDetails p1) {
     _currentDragEvent = null;
     _dragging = false;
-    _dragPosition = _rectBackgroundDirection.center;
+    _dragPosition = _rectBackgroundDirection!.center;
     _joystickController.joystickAction(
       JoystickActionEvent(
         id: actionId,
@@ -219,7 +219,7 @@ class JoystickAction {
   void onPanCancel() {
     _currentDragEvent = null;
     _dragging = false;
-    _dragPosition = _rectBackgroundDirection.center;
+    _dragPosition = _rectBackgroundDirection!.center;
     _joystickController.joystickAction(
       JoystickActionEvent(
         id: actionId,

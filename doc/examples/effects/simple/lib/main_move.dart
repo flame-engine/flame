@@ -8,7 +8,7 @@ import 'package:flutter/widgets.dart';
 import './square.dart';
 
 class MyGame extends BaseGame with TapDetector {
-  Square square;
+  late Square square;
 
   MyGame() {
     add(square = Square()

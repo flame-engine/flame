@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-
 import 'particle.dart';
 
 /// A function which should render desired contents
@@ -17,8 +15,8 @@ class ComputedParticle extends Particle {
   ParticleRenderDelegate renderer;
 
   ComputedParticle({
-    @required this.renderer,
-    double lifespan,
+    required this.renderer,
+    double? lifespan,
   }) : super(
           lifespan: lifespan,
         );

@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-
 import 'particle.dart';
 
 /// A single [Particle] which manages multiple children
@@ -10,8 +8,8 @@ class ComposedParticle extends Particle {
   final List<Particle> children;
 
   ComposedParticle({
-    @required this.children,
-    double lifespan,
+    required this.children,
+    double? lifespan,
   }) : super(
           lifespan: lifespan,
         );

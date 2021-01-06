@@ -6,16 +6,18 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0-29.10.beta <3.0.0"
+  flutter: ">=1.24.0-10.2.pre"
 
 dependencies:
   flutter:
     sdk: flutter
   flame:
       path: ../../../
-  dashbook: ^0.0.6
+  dashbook: ^0.1.0-nullsafety
 
-  cupertino_icons: ^0.1.2
+  cupertino_icons: ^1.0.1+1
+
 flutter:
   uses-material-design: true
   assets:

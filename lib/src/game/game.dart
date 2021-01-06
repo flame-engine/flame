@@ -21,7 +21,7 @@ import '../sprite_animation.dart';
 abstract class Game {
   final images = Images();
   final assets = AssetsCache();
-  BuildContext buildContext;
+  BuildContext? buildContext;
 
   /// Current game viewport size, updated every resize via the [resize] method hook
   final Vector2 size = Vector2.zero();
@@ -107,8 +107,8 @@ abstract class Game {
   /// Utility method to load and cache the image for a sprite based on its options
   Future<Sprite> loadSprite(
     String path, {
-    Vector2 srcSize,
-    Vector2 srcPosition,
+    Vector2? srcSize,
+    Vector2? srcPosition,
   }) {
     return Sprite.load(
       path,
@@ -139,8 +139,8 @@ abstract class Game {
   /// Resumes the engine game loop execution
   void resumeEngine() => resumeEngineFn?.call();
 
-  VoidCallback pauseEngineFn;
-  VoidCallback resumeEngineFn;
+  VoidCallback? pauseEngineFn;
+  VoidCallback? resumeEngineFn;
 
   /// Use this method to load the assets need for the game instance to run
   Future<void> onLoad() async {}

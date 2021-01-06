@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/animation.dart';
-import 'package:flutter/foundation.dart';
 
 import '../components/mixins/single_child_particle.dart';
 import 'particle.dart';
@@ -17,10 +16,10 @@ class MovingParticle extends CurvedParticle with SingleChildParticle {
   final Offset to;
 
   MovingParticle({
-    @required this.child,
-    @required this.to,
+    required this.child,
+    required this.to,
     this.from = Offset.zero,
-    double lifespan,
+    double? lifespan,
     Curve curve = Curves.linear,
   }) : super(
           lifespan: lifespan,
@@ -30,7 +29,7 @@ class MovingParticle extends CurvedParticle with SingleChildParticle {
   @override
   void render(Canvas c) {
     c.save();
-    final Offset current = Offset.lerp(from, to, progress);
+    final Offset current = Offset.lerp(from, to, progress)!;
     c.translate(current.dx, current.dy);
     super.render(c);
     c.restore();

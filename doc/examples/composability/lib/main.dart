@@ -41,7 +41,7 @@ class ParentSquare extends Square {
 }
 
 class MyGame extends BaseGame {
-  ParentSquare _parent;
+  late ParentSquare _parent;
 
   @override
   bool debugMode = true;

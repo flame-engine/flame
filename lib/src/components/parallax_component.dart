@@ -13,8 +13,8 @@ import 'position_component.dart';
 extension ParallaxComponentExtension on Game {
   Future<ParallaxComponent> loadParallaxComponent(
     List<String> paths, {
-    Vector2 baseVelocity,
-    Vector2 velocityMultiplierDelta,
+    Vector2? baseVelocity,
+    Vector2? velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
@@ -34,12 +34,12 @@ extension ParallaxComponentExtension on Game {
 /// A full parallax, several layers of images drawn out on the screen and each
 /// layer moves with different velocities to give an effect of depth.
 class ParallaxComponent extends PositionComponent {
-  Parallax _parallax;
+  Parallax? _parallax;
 
-  Parallax get parallax => _parallax;
-  set parallax(Parallax p) {
+  Parallax? get parallax => _parallax;
+  set parallax(Parallax? p) {
     _parallax = p;
-    _parallax.resize(size);
+    _parallax!.resize(size);
   }
 
   /// Creates a component with an empty parallax which can be set later
@@ -67,7 +67,7 @@ class ParallaxComponent extends PositionComponent {
   void render(Canvas canvas) {
     super.render(canvas);
     canvas.save();
-    parallax?.layers?.forEach((layer) {
+    parallax?.layers.forEach((layer) {
       canvas.save();
       layer.render(canvas);
       canvas.restore();
@@ -94,12 +94,12 @@ class ParallaxComponent extends PositionComponent {
   /// If no image cache is set, the global flame cache is used.
   static Future<ParallaxComponent> load(
     List<String> paths, {
-    Vector2 baseVelocity,
-    Vector2 velocityMultiplierDelta,
+    Vector2? baseVelocity,
+    Vector2? velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
-    Images images,
+    Images? images,
   }) async {
     return ParallaxComponent.fromParallax(
       await Parallax.load(

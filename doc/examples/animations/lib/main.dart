@@ -17,9 +17,9 @@ void main() async {
 }
 
 class MyGame extends BaseGame with TapDetector {
-  Image chopper;
-  Image creature;
-  SpriteAnimation animation;
+  late Image chopper;
+  late Image creature;
+  late SpriteAnimation animation;
 
   @override
   Future<void> onLoad() async {

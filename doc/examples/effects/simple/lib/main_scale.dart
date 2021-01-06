@@ -7,7 +7,7 @@ import 'package:flame/gestures.dart';
 import './square.dart';
 
 class MyGame extends BaseGame with TapDetector {
-  Square square;
+  late Square square;
   bool grow = true;
 
   MyGame() {

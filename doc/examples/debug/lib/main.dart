@@ -17,7 +17,7 @@ void main() async {
 
 class AndroidComponent extends SpriteComponent {
   static const int SPEED = 150;
-  Vector2 _gameSize;
+  Vector2? _gameSize;
   int xDirection = 1;
   int yDirection = 1;
 
@@ -35,14 +35,14 @@ class AndroidComponent extends SpriteComponent {
     final rect = toRect();
 
     if ((x <= 0 && xDirection == -1) ||
-        (rect.right >= _gameSize.x && xDirection == 1)) {
+        (rect.right >= _gameSize!.x && xDirection == 1)) {
       xDirection = xDirection * -1;
     }
 
     y += yDirection * SPEED * dt;
 
     if ((y <= 0 && yDirection == -1) ||
-        (rect.bottom >= _gameSize.y && yDirection == 1)) {
+        (rect.bottom >= _gameSize!.y && yDirection == 1)) {
       yDirection = yDirection * -1;
     }
   }

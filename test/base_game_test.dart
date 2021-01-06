@@ -16,7 +16,7 @@ class MyComponent extends PositionComponent with Tapable, HasGameRef {
   bool isUpdateCalled = false;
   bool isRenderCalled = false;
   int onRemoveCallCounter = 0;
-  Vector2 gameSize;
+  late Vector2 gameSize;
 
   @override
   bool onTapDown(TapDownDetails details) {
@@ -134,7 +134,7 @@ void main() {
 
       game.size.setFrom(size);
       game.add(component);
-      GameRenderBox renderBox;
+      GameRenderBox? renderBox;
       tester.pumpWidget(
         Builder(
           builder: (BuildContext context) {
@@ -143,15 +143,15 @@ void main() {
           },
         ),
       );
-      renderBox.attach(PipelineOwner());
-      renderBox.gameLoopCallback(1.0);
+      renderBox!.attach(PipelineOwner());
+      renderBox!.gameLoopCallback(1.0);
       expect(component.isUpdateCalled, true);
-      renderBox.paint(
+      renderBox!.paint(
         PaintingContext(ContainerLayer(), Rect.zero),
         Offset.zero,
       );
       expect(component.isRenderCalled, true);
-      renderBox.detach();
+      renderBox!.detach();
     });
 
     test('onRemove is only called once on component', () {

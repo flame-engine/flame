@@ -30,7 +30,7 @@ class AssetsCache {
       '"$fileName" is not a String Asset',
     );
 
-    return _files[fileName].value as String;
+    return _files[fileName]!.value as String;
   }
 
   /// Reads a binary file from assets folder
@@ -44,7 +44,7 @@ class AssetsCache {
       '"$fileName" is not a Binary Asset',
     );
 
-    return _files[fileName].value as List<int>;
+    return _files[fileName]!.value as List<int>;
   }
 
   Future<Map<String, dynamic>> readJson(String fileName) async {

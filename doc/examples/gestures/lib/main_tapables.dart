@@ -21,7 +21,7 @@ class TapableSquare extends PositionComponent with Tapable {
 
   bool _beenPressed = false;
 
-  TapableSquare({Vector2 position}) {
+  TapableSquare({Vector2? position}) {
     size = Vector2.all(100);
     this.position = position ?? Vector2.all(100);
   }

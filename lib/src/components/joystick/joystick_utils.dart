@@ -5,7 +5,8 @@ import '../../extensions/offset.dart';
 import '../../extensions/size.dart';
 
 class JoystickUtils {
-  static void renderControl(Canvas c, Sprite sprite, Rect rect, Paint paint) {
+  static void renderControl(
+      Canvas c, Sprite? sprite, Rect? rect, Paint? paint) {
     if (rect == null) {
       return;
     }
@@ -17,7 +18,7 @@ class JoystickUtils {
       c.drawCircle(
         Offset(rect.left + radius, rect.top + radius),
         radius,
-        paint,
+        paint!,
       );
     } else {
       sprite.render(

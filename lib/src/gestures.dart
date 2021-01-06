@@ -15,9 +15,9 @@ class DragEvent extends Drag {
 
   DragEvent(this.initialPosition);
 
-  void Function(DragUpdateDetails) onUpdate;
-  void Function() onCancel;
-  void Function(DragEndDetails) onEnd;
+  void Function(DragUpdateDetails)? onUpdate;
+  void Function()? onCancel;
+  void Function(DragEndDetails)? onEnd;
 
   @override
   void update(details) {

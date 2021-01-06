@@ -46,7 +46,7 @@ class Square extends PositionComponent with HasGameRef<MyGame> {
   @override
   void onMount() {
     super.onMount();
-    size = Vector2.all(gameRef.squareSize);
+    size = Vector2.all(gameRef!.squareSize);
     anchor = Anchor.center;
   }
 }

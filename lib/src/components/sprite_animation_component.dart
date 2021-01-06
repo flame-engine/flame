@@ -9,8 +9,8 @@ import 'position_component.dart';
 export '../sprite_animation.dart';
 
 class SpriteAnimationComponent extends PositionComponent {
-  SpriteAnimation animation;
-  Paint overridePaint;
+  SpriteAnimation? animation;
+  Paint? overridePaint;
   bool removeOnFinish = false;
 
   /// Creates a component with an empty animation which can be set later
@@ -21,9 +21,9 @@ class SpriteAnimationComponent extends PositionComponent {
   /// Optionally [removeOnFinish] can be set to true to have this component be auto removed from the [BaseGame] when the animation is finished.
   SpriteAnimationComponent.fromSpriteAnimation(
     Vector2 size,
-    this.animation, {
+    SpriteAnimation this.animation, {
     this.removeOnFinish = false,
-  }) : assert(animation != null) {
+  }) {
     super.size.setFrom(size);
   }
 
@@ -50,7 +50,7 @@ class SpriteAnimationComponent extends PositionComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    animation?.getSprite()?.render(
+    animation?.getSprite().render(
           canvas,
           size: size,
           overridePaint: overridePaint,

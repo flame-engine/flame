@@ -34,14 +34,14 @@ class TextBoxComponent extends PositionComponent {
   final TextConfig _config;
   final TextBoxConfig _boxConfig;
 
-  List<String> _lines;
+  late List<String> _lines;
   double _maxLineWidth = 0.0;
-  double _lineHeight;
-  int _totalLines;
+  late double _lineHeight;
+  late int _totalLines;
 
   double _lifeTime = 0.0;
-  Image _cache;
-  int _previousChar;
+  Image? _cache;
+  int? _previousChar;
 
   String get text => _text;
 
@@ -51,13 +51,13 @@ class TextBoxComponent extends PositionComponent {
 
   TextBoxComponent(
     String text, {
-    TextConfig config,
-    TextBoxConfig boxConfig,
+    TextConfig? config,
+    TextBoxConfig? boxConfig,
   })  : _text = text,
         _boxConfig = boxConfig ?? TextBoxConfig(),
         _config = config ?? TextConfig() {
     _lines = [];
-    double lineHeight;
+    double? lineHeight;
     text.split(' ').forEach((word) {
       final possibleLine = _lines.isEmpty ? word : _lines.last + ' ' + word;
       final painter = _config.toTextPainter(possibleLine);
@@ -114,12 +114,12 @@ class TextBoxComponent extends PositionComponent {
         .width;
   }
 
-  double _cachedWidth;
+  double? _cachedWidth;
 
   @override
   double get width {
     if (_cachedWidth != null) {
-      return _cachedWidth;
+      return _cachedWidth!;
     }
     if (_boxConfig.growingBox) {
       int i = 0;
@@ -137,7 +137,7 @@ class TextBoxComponent extends PositionComponent {
     } else {
       _cachedWidth = _boxConfig.maxWidth + _boxConfig.margins.horizontal;
     }
-    return _cachedWidth;
+    return _cachedWidth!;
   }
 
   @override
@@ -155,7 +155,7 @@ class TextBoxComponent extends PositionComponent {
       return;
     }
     super.render(c);
-    c.drawImage(_cache, Offset.zero, _imagePaint);
+    c.drawImage(_cache!, Offset.zero, _imagePaint);
   }
 
   @override

@@ -37,8 +37,8 @@ class MyGame extends BaseGame {
   /// Defines the lifespan of all the particles in these examples
   final sceneDuration = const Duration(seconds: 1);
 
-  Vector2 cellSize;
-  Vector2 halfCellSize;
+  late Vector2 cellSize;
+  late Vector2 halfCellSize;
 
   @override
   Future<void> onLoad() async {
@@ -227,7 +227,7 @@ class MyGame extends BaseGame {
             Colors.red,
             Colors.blue,
             particle.progress,
-          ),
+          )!,
       ),
     );
   }
@@ -251,14 +251,14 @@ class MyGame extends BaseGame {
               Colors.red,
               Colors.blue,
               steppedProgress,
-            ),
+            )!,
         );
       },
     );
   }
 
   /// Particle which is used in example below
-  Particle reusablePatricle;
+  Particle? reusablePatricle;
 
   /// A burst of white circles which actually using a single circle
   /// as a form of optimization. Look for reusing parts of particle effects
@@ -271,7 +271,7 @@ class MyGame extends BaseGame {
       generator: (i) => MovingParticle(
         curve: Interval(rnd.nextDouble() * .1, rnd.nextDouble() * .8 + .1),
         to: randomCellOffset() * .5,
-        child: reusablePatricle,
+        child: reusablePatricle!,
       ),
     );
   }
@@ -287,7 +287,7 @@ class MyGame extends BaseGame {
   }
 
   /// Particle which is used in example below
-  Particle reusableImageParticle;
+  Particle? reusableImageParticle;
 
   /// A single [imageParticle] is drawn 9 times
   /// in a grid within grid cell. Looks as 9 particles
@@ -308,7 +308,7 @@ class MyGame extends BaseGame {
             (i % perLine) * colWidth - halfCellSize.x + imageSize,
             (i ~/ perLine) * rowHeight - halfCellSize.y + imageSize,
           ),
-          child: reusableImageParticle),
+          child: reusableImageParticle!),
     );
   }
 

@@ -31,7 +31,7 @@ class IsometricTileMapComponent extends PositionComponent {
   List<List<int>> matrix;
 
   /// Optionally provide a new tile size to render it scaled.
-  Vector2 destTileSize;
+  Vector2? destTileSize;
 
   IsometricTileMapComponent(this.tileset, this.matrix, {this.destTileSize});
 

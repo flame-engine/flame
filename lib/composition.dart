@@ -37,11 +37,9 @@ class Composition {
   void add(
     Image image,
     Vector2 position, {
-    Rect source,
+    Rect? source,
     BlendMode blendMode = BlendMode.srcOver,
   }) {
-    assert(image != null, 'Image is required to add to the Atlas');
-    assert(position != null, 'Position is required');
     assert(
       position.x >= 0 && position.y >= 0,
       'Position values have to be equal or greater than zero',
@@ -56,7 +54,6 @@ class Composition {
               source.left >= 0,
       'Source rect should fit within in the image constraints',
     );
-    assert(blendMode != null, 'blendMode should not be null');
     source ??= Rect.fromLTWH(
       0,
       0,

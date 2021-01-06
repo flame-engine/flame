@@ -13,9 +13,9 @@ class Player extends Component implements JoystickListener {
   double currentSpeed = 0;
   double radAngle = 0;
   bool _move = false;
-  Paint _paint;
+  Paint? _paint;
 
-  Rect _rect;
+  Rect? _rect;
 
   Player() {
     _paint = _whitePaint;
@@ -27,10 +27,10 @@ class Player extends Component implements JoystickListener {
       return;
     }
     canvas.save();
-    canvas.translate(_rect.center.dx, _rect.center.dy);
+    canvas.translate(_rect!.center.dx, _rect!.center.dy);
     canvas.rotate(radAngle == 0.0 ? 0.0 : radAngle + (pi / 2));
-    canvas.translate(-_rect.center.dx, -_rect.center.dy);
-    canvas.drawRect(_rect, _paint);
+    canvas.translate(-_rect!.center.dx, -_rect!.center.dy);
+    canvas.drawRect(_rect!, _paint!);
     canvas.restore();
   }
 
@@ -83,10 +83,10 @@ class Player extends Component implements JoystickListener {
     }
 
     final Offset diffBase = Offset(
-          _rect.center.dx + nextX,
-          _rect.center.dy + nextY,
+          _rect!.center.dx + nextX,
+          _rect!.center.dy + nextY,
         ) -
-        _rect.center;
-    _rect = _rect.shift(diffBase);
+        _rect!.center;
+    _rect = _rect!.shift(diffBase);
   }
 }

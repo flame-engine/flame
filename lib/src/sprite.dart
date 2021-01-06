@@ -14,9 +14,9 @@ class Sprite {
 
   Sprite(
     this.image, {
-    Vector2 srcPosition,
-    Vector2 srcSize,
-  }) : assert(image != null, "image can't be null") {
+    Vector2? srcPosition,
+    Vector2? srcSize,
+  }) {
     this.srcSize = srcSize;
     this.srcPosition = srcPosition;
   }
@@ -25,9 +25,9 @@ class Sprite {
   /// When the [images] is omitted, the global [Flame.images] is used
   static Future<Sprite> load(
     String src, {
-    Vector2 srcPosition,
-    Vector2 srcSize,
-    Images images,
+    Vector2? srcPosition,
+    Vector2? srcSize,
+    Images? images,
   }) async {
     final _images = images ?? Flame.images;
     final image = await _images.load(src);
@@ -42,14 +42,14 @@ class Sprite {
 
   Vector2 get srcSize => Vector2(src.width, src.height);
 
-  set srcSize(Vector2 size) {
+  set srcSize(Vector2? size) {
     size ??= Vector2Extension.fromInts(image.width, image.height);
     src = srcPosition.toPositionedRect(size);
   }
 
   Vector2 get srcPosition => src.topLeft.toVector2();
 
-  set srcPosition(Vector2 position) {
+  set srcPosition(Vector2? position) {
     src = (position ?? Vector2.zero()).toPositionedRect(srcSize);
   }
 
@@ -61,10 +61,10 @@ class Sprite {
   /// * anchor: where in the sprite the x/y coordinates refer to; defaults to topLeft.
   void render(
     Canvas canvas, {
-    Vector2 position,
-    Vector2 size,
+    Vector2? position,
+    Vector2? size,
     Anchor anchor = Anchor.topLeft,
-    Paint overridePaint,
+    Paint? overridePaint,
   }) {
     final drawPosition = position ?? Vector2.zero();
     final drawSize = size ?? srcSize;

@@ -14,7 +14,7 @@ void main() {
 }
 
 class MyGame extends Game {
-  Sprite _sprite;
+  late Sprite _sprite;
 
   @override
   Future<void> onLoad() async {
