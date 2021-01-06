@@ -85,8 +85,10 @@ class BackgroundLayer extends PreRenderedLayer {
 
   @override
   void drawLayer() { /* ommited */ }
+
+  // ...
 ```
 
 Custom processors can be creted by extending the `LayerProcessor` class.
 
-You can check an working example of layers [here](/doc/examples/layers).
+You can check an working example of layers [here](https://github.com/flame-engine/flame/tree/master/doc/examples/layers).
