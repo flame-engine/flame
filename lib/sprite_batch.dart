@@ -15,7 +15,6 @@ class SpriteBatch {
 
   static const defaultBlendMode = BlendMode.srcOver;
   static const defaultColor = const Color(0x00000000); // transparent
-  static final defaultPaint = Paint();
   static final defaultTransform = RSTransform(1, 0, 0, 0);
 
   SpriteBatch(this.atlas);
