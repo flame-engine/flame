@@ -10,6 +10,27 @@ import '../game.dart';
 import '../parallax.dart';
 import 'position_component.dart';
 
+extension ParallaxComponentExtension on Game {
+  Future<ParallaxComponent> loadParallaxComponent(
+      List<String> paths, {
+        Vector2 baseVelocity,
+        Vector2 velocityMultiplierDelta,
+        ImageRepeat repeat = ImageRepeat.repeatX,
+        Alignment alignment = Alignment.bottomLeft,
+        LayerFill fill = LayerFill.height,
+      }) {
+    return ParallaxComponent.load(
+      paths,
+      baseVelocity: baseVelocity,
+      velocityMultiplierDelta: velocityMultiplierDelta,
+      repeat: repeat,
+      alignment: alignment,
+      fill: fill,
+      images: images,
+    );
+  }
+}
+
 /// A full parallax, several layers of images drawn out on the screen and each
 /// layer moves with different velocities to give an effect of depth.
 class ParallaxComponent extends PositionComponent {

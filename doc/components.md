@@ -199,10 +199,7 @@ The simplest `ParallaxComponent` is created like this:
 ```dart
 @override
 Future<void> onLoad() async {
-  final parallaxComponent = await ParallaxComponent.load(
-    [bg.png, trees.png],
-    images: images, // The games image cache
-  );
+  final parallaxComponent = await loadParallaxComponent([bg.png, trees.png]);
   add(parallax);
 }
 ```
@@ -217,11 +214,10 @@ For example if you want to move your background images along the X-axis with a f
 "closer" the image is:
 
 ```dart
-final parallaxComponent = await ParallaxComponent.load(
+final parallaxComponent = await loadParalladComponent(
   _paths,
   baseVelocity: Vector2(20, 0),
   velocityMultiplierDelta: Vector2(1.8, 1.0),
-  images: images, // The games image cache
 );
 ```
 You can set the baseSpeed and layerDelta at any time, for example if your character jumps or your
@@ -265,7 +261,7 @@ Also, don't forget to add you images to the `pubspec.yaml` file as assets or the
 
 The `Parallax` file contains an extension of the game which adds `loadParallax`, `loadParallaxLayer`
 and `loadParallaxImage` so that it automatically uses your game's image cache instead of the global
-one.
+one. The same for the `ParallaxComponent` file, but that provides `loadParallaxComponent`.
 
 Two examples implementation can be found in the
 [examples directory](https://github.com/flame-engine/flame/tree/master/doc/examples/parallax).
