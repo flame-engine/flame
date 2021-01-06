@@ -24,7 +24,7 @@ mixin Tapable on BaseComponent {
   bool _checkPointerId(int pointerId) => _currentPointerId == pointerId;
 
   bool handleTapDown(int pointerId, TapDownDetails details) {
-    if (checkOverlap(details.localPosition.toVector2())) {
+    if (containsPoint(details.localPosition.toVector2())) {
       _currentPointerId = pointerId;
       return onTapDown(details);
     }
@@ -33,7 +33,7 @@ mixin Tapable on BaseComponent {
 
   bool handleTapUp(int pointerId, TapUpDetails details) {
     if (_checkPointerId(pointerId) &&
-        checkOverlap(details.localPosition.toVector2())) {
+        containsPoint(details.localPosition.toVector2())) {
       _currentPointerId = null;
       return onTapUp(details);
     }
