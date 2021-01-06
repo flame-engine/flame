@@ -12,13 +12,13 @@ import 'position_component.dart';
 
 extension ParallaxComponentExtension on Game {
   Future<ParallaxComponent> loadParallaxComponent(
-      List<String> paths, {
-        Vector2 baseVelocity,
-        Vector2 velocityMultiplierDelta,
-        ImageRepeat repeat = ImageRepeat.repeatX,
-        Alignment alignment = Alignment.bottomLeft,
-        LayerFill fill = LayerFill.height,
-      }) {
+    List<String> paths, {
+    Vector2 baseVelocity,
+    Vector2 velocityMultiplierDelta,
+    ImageRepeat repeat = ImageRepeat.repeatX,
+    Alignment alignment = Alignment.bottomLeft,
+    LayerFill fill = LayerFill.height,
+  }) {
     return ParallaxComponent.load(
       paths,
       baseVelocity: baseVelocity,
