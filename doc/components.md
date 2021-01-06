@@ -186,10 +186,11 @@ For a working example, check this [source file](https://github.com/flame-engine/
 
 ## ParallaxComponent
 
-This Component can be used to render pretty backgrounds by drawing several transparent images on top of each other,
-where each image is moving with a different velocity.
+This Component can be used to render pretty backgrounds by drawing several transparent images on top
+of each other, where each image is moving with a different velocity.
 
-The rationale is that when you look at the horizon and moving, closer objects seem to move faster than distant ones.
+The rationale is that when you look at the horizon and moving, closer objects seem to move faster
+than distant ones.
 
 This component simulates this effect, making a more realistic background with a feeling of depth.
 
@@ -200,26 +201,31 @@ The simplest `ParallaxComponent` is created like this:
 Future<void> onLoad() async {
   final parallaxComponent = await ParallaxComponent.load(
     [bg.png, trees.png],
+    images: images, // The games image cache
   );
   add(parallax);
 }
 ```
 
-This creates a static background, if you want a moving parallax (which is the whole point of a parallax),
-you can do it in a few different ways depending on how fine grained you want to set the settings for each layer.
-They simplest way set is to set the named optional parameters `baseVelocity` and `velocityMultiplierDelta`
-in the `load` helper function.
+This creates a static background, if you want a moving parallax (which is the whole point of a
+parallax), you can do it in a few different ways depending on how fine grained you want to set the
+settings for each layer.
+They simplest way set is to set the named optional parameters `baseVelocity` and
+`velocityMultiplierDelta` in the `load` helper function.
 
-For example if you want to move your background images along the X-axis with a faster speed the "closer" the image is:
+For example if you want to move your background images along the X-axis with a faster speed the
+"closer" the image is:
 
 ```dart
 final parallaxComponent = await ParallaxComponent.load(
   _paths,
   baseVelocity: Vector2(20, 0),
   velocityMultiplierDelta: Vector2(1.8, 1.0),
+  images: images, // The games image cache
 );
 ```
-You can set the baseSpeed and layerDelta at any time, for example if your character jumps or your game speeds up.
+You can set the baseSpeed and layerDelta at any time, for example if your character jumps or your
+game speeds up.
 
 ```dart
 final parallax = parallaxComponen.parallax;
@@ -227,17 +233,18 @@ parallax.baseSpeed = Vector2(100, 0);
 parallax.velocityMultiplierDelta = Vector2(2.0, 1.0);
 ```
 
-By default the images are aligned to the bottom left, repeated along the X-axis and scaled proportionally so that
-the image covers the height of the screen. If you want to change this behaviour, for example if you are not making
-a side scrolling game, you can set the `repeat`, `alignment` and `fill` parameters for each `ParallaxImage` and add
-them to `ParallaxLayer`s that you then pass in to the `ParallaxComponent`'s constructor.
+By default the images are aligned to the bottom left, repeated along the X-axis and scaled
+proportionally so that the image covers the height of the screen. If you want to change this
+behaviour, for example if you are not making a side scrolling game, you can set the `repeat`,
+`alignment` and `fill` parameters for each `ParallaxImage` and add them to `ParallaxLayer`s that you
+then pass in to the `ParallaxComponent`'s constructor.
 
 Advanced example:
 ```dart
 final images = [
-  ParallaxImage.load('stars.jpg', repeat: ImageRepeat.repeat, alignment: Alignment.center, fill: LayerFill.width),
-  ParallaxImage.load('planets.jpg', repeat: ImageRepeat.repeatY, alignment: Alignment.bottomLeft, fill: LayerFill.none),
-  ParallaxImage.load('dust.jpg', repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
+  loadParallaxImage('stars.jpg', repeat: ImageRepeat.repeat, alignment: Alignment.center, fill: LayerFill.width),
+  loadParallaxImage('planets.jpg', repeat: ImageRepeat.repeatY, alignment: Alignment.bottomLeft, fill: LayerFill.none),
+  loadParallaxImage('dust.jpg', repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
 ];
 final layers = images.map((image) => ParallaxLayer(await image, velocityMulitplier: images.indexOf(image) * 2.0));
 final parallaxComponent = ParallaxComponent(
@@ -252,10 +259,16 @@ final parallaxComponent = ParallaxComponent(
 * The planets image will be repeated in Y-axis, aligned to the bottom left of the screen and not be scaled.
 * The dust image will be repeated in X-axis, aligned to the top right and scaled to fill the screen height.
 
-Once you are done setting up your `ParallaxComponent`, add it to the game like with any other component (`game.add(parallaxComponent`).
+Once you are done setting up your `ParallaxComponent`, add it to the game like with any other
+component (`game.add(parallaxComponent`).
 Also, don't forget to add you images to the `pubspec.yaml` file as assets or they wont be found.
 
-Two examples implementation can be found in the [examples directory](https://github.com/flame-engine/flame/tree/master/doc/examples/parallax).
+The `Parallax` file contains an extension of the game which adds `loadParallax`, `loadParallaxLayer`
+and `loadParallaxImage` so that it automatically uses your game's image cache instead of the global
+one.
+
+Two examples implementation can be found in the
+[examples directory](https://github.com/flame-engine/flame/tree/master/doc/examples/parallax).
 
 ## SpriteBodyComponent
 

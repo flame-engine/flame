@@ -27,7 +27,7 @@ class MyGame extends BaseGame {
   @override
   Future<void> onLoad() async {
     final layers = _layersMeta.entries.map(
-      (e) => ParallaxLayer.load(
+      (e) => loadParallaxLayer(
         e.key,
         velocityMultiplier: Vector2(e.value, 1.0),
       ),

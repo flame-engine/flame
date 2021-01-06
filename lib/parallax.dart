@@ -7,6 +7,60 @@ import 'assets/images.dart';
 import 'extensions/rect.dart';
 import 'extensions/vector2.dart';
 import 'flame.dart';
+import 'game/game.dart';
+
+extension ParallaxExtension on Game {
+  Future<Parallax> loadParallax(
+      List<String> paths, {
+        Vector2 baseVelocity,
+        Vector2 velocityMultiplierDelta,
+        ImageRepeat repeat = ImageRepeat.repeatX,
+        Alignment alignment = Alignment.bottomLeft,
+        LayerFill fill = LayerFill.height,
+      }) {
+    return Parallax.load(
+      paths,
+      baseVelocity: baseVelocity,
+      velocityMultiplierDelta: velocityMultiplierDelta,
+      repeat: repeat,
+      alignment: alignment,
+      fill: fill,
+      images: images,
+    );
+  }
+
+  Future<ParallaxImage> loadParallaxImage(
+      String path, {
+        ImageRepeat repeat = ImageRepeat.repeatX,
+        Alignment alignment = Alignment.bottomLeft,
+        LayerFill fill = LayerFill.height,
+      }) {
+    return ParallaxImage.load(
+      path,
+      repeat: repeat,
+      alignment: alignment,
+      fill: fill,
+      images: images,
+    );
+  }
+
+  Future<ParallaxLayer> loadParallaxLayer(
+      String path, {
+        ImageRepeat repeat = ImageRepeat.repeatX,
+        Alignment alignment = Alignment.bottomLeft,
+        LayerFill fill = LayerFill.height,
+        Vector2 velocityMultiplier,
+      }) {
+    return ParallaxLayer.load(
+      path,
+      velocityMultiplier: velocityMultiplier,
+      repeat: repeat,
+      alignment: alignment,
+      fill: fill,
+      images: images,
+    );
+  }
+}
 
 /// Specifications with a path to an image and how it should be drawn in
 /// relation to the device screen

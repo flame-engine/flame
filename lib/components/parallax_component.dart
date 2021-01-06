@@ -6,8 +6,10 @@ import 'package:flutter/painting.dart';
 
 import '../assets/images.dart';
 import '../extensions/vector2.dart';
+import '../game.dart';
 import '../parallax.dart';
 import 'position_component.dart';
+
 
 /// A full parallax, several layers of images drawn out on the screen and each
 /// layer moves with different velocities to give an effect of depth.
