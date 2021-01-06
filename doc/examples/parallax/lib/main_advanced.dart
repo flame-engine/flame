@@ -15,20 +15,25 @@ void main() async {
 }
 
 class MyGame extends BaseGame {
-  final _paths = [
-    'bg.png',
-    'mountain-far.png',
-    'mountains.png',
-    'trees.png',
-    'foreground-trees.png',
-  ];
+  final _layersMeta = {
+    'bg.png': 1.0,
+    'mountain-far.png': 1.5,
+    'mountains.png': 2.3,
+    'trees.png': 3.8,
+    'foreground-trees.png': 6.6,
+  };
 
   @override
   Future<void> onLoad() async {
-    final parallax = await ParallaxComponent.load(
-      _paths,
+    final layers = _layersMeta.entries.map(
+      (e) => ParallaxLayer.load(
+        e.key,
+        velocityMultiplier: Vector2(e.value, 1.0),
+      ),
+    );
+    final parallax = ParallaxComponent(
+      await Future.wait(layers),
       baseVelocity: Vector2(20, 0),
-      velocityMultiplierDelta: Vector2(1.8, 1.0),
     );
     add(parallax);
   }
