@@ -16,21 +16,21 @@ flutter:
 Then simply run:
 
 ```dart
-    import 'package:flame/flame.dart';
+import 'package:flame/flame.dart';
 
-    Flame.audio.play('explosion.mp3');
-    Flame.audio.playLongAudio('music.mp3');
+Flame.audio.play('explosion.mp3');
+Flame.audio.playLongAudio('music.mp3');
 ```
 
 Or, if you prefer:
 
 ```dart
-    import 'package:flame/flame_audio.dart';
+import 'package:flame/flame_audio.dart';
 
-    FlameAudio audio = FlameAudio();
+FlameAudio audio = FlameAudio();
 
-    audio.play('explosion.mp3'); // Or
-    audio.playLongAudio('music.mp3');
+audio.play('explosion.mp3'); // Or
+audio.playLongAudio('music.mp3');
 ```
 
 The difference is that each instance shares a different cache. Normally you would want to use the `Flame.audio` instance and totally share the cache.
@@ -44,8 +44,8 @@ This uses the [audioplayers](https://github.com/luanpotter/audioplayer) lib, in 
 If you want to play indefinitely, just use `loop` function:
 
 ```dart
-    Flame.audio.loop('music.mp3'); // Or
-    Flame.audio.loopLongAudio('music.mp3');
+Flame.audio.loop('music.mp3'); // Or
+Flame.audio.loopLongAudio('music.mp3');
 ```
 
 Alternatively, you can use [the `Bgm` class (via `Flame.bgm`)](bgm.md) to play looping background music tracks. The `Bgm` class lets Flame manage the auto pausing and resuming of background music tracks when pausing/resuming the game/app.
@@ -55,19 +55,19 @@ The difference between the `play/loop` and `playLongAudio/loopLongAudio` is that
 Finally, you can pre-load your audios. Audios need to be stored in the memory the first time they are requested; therefore, the first time you play each mp3 you might get a delay. In order to pre-load your audios, just use:
 
 ```dart
-    Flame.audio.load('explosion.mp3');
+Flame.audio.load('explosion.mp3');
 ```
 
 You can load all your audios in beginning so that they always play smoothly; to load multiple audios, use the `loadAll` method:
 
 ```dart
-    Flame.audio.loadAll(['explosion.mp3', 'music.mp3'])
+Flame.audio.loadAll(['explosion.mp3', 'music.mp3'])
 ```
 
 Finally, you can use the `clear` method to remove something from the cache:
 
 ```dart
-    Flame.audio.clear('explosion.mp3');
+Flame.audio.clear('explosion.mp3');
 ```
 
 There is also a `clearAll` method, that clears the whole cache.
@@ -83,5 +83,5 @@ Both the `play` and `loop` methods return an instance of a `AudioPlayer` from th
 There's lots of logs; that's reminiscent of the original AudioPlayer plugin. Useful while debug, but afterwards you can disable them with:
 
 ```dart
-    Flame.audio.disableLog();
+Flame.audio.disableLog();
 ```

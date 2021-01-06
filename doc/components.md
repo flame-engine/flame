@@ -1,6 +1,7 @@
 # Components
 
-![Component Diagram](https://i.imgur.com/1mTqcqI.png)
+![Component Diagram](images/diagram.png)
+
 This diagram might look intimidating, but don't worry, it is not as complex as it looks.
 
 ## Component
@@ -82,18 +83,18 @@ This is available on all `PositionComponent` objects, and is especially useful o
 The most commonly used implementation of `PositionComponent` is `SpriteComponent`, and it can be created with a `Sprite`:
 
 ```dart
-    import 'package:flame/components/component.dart';
+import 'package:flame/components/component.dart';
 
-    Sprite sprite = Sprite('player.png');
+Sprite sprite = Sprite('player.png');
 
-    final size = Vector2.all(128.0);
-    var player = SpriteComponent.fromSprite(size, sprite);
+final size = Vector2.all(128.0);
+var player = SpriteComponent.fromSprite(size, sprite);
 
-    // screen coordinates
-    player.position = ... // Vector2(0.0, 0.0) by default
-    player.angle = ... // 0 by default
+// screen coordinates
+player.position = ... // Vector2(0.0, 0.0) by default
+player.angle = ... // 0 by default
 
-    player.render(canvas); // it will render only if the image is loaded and the position and size parameters are not null
+player.render(canvas); // it will render only if the image is loaded and the position and size parameters are not null
 ```
 
 ## SpriteAnimationComponent
@@ -103,16 +104,16 @@ This class is used to represent a Component that has a sprite that runs a single
 This will create a simple three frame animation
 
 ```dart
-    List<Sprite> sprites = [0, 1, 2].map((i) => Sprite('player_${i}.png')).toList();
-    final size = Vector2.all(64.0);
-    this.player = SpriteAnimationComponent(size, new Animation.spriteList(sprites, stepTime: 0.01));
+List<Sprite> sprites = [0, 1, 2].map((i) => Sprite('player_${i}.png')).toList();
+final size = Vector2.all(64.0);
+this.player = SpriteAnimationComponent(size, new Animation.spriteList(sprites, stepTime: 0.01));
 ```
 
-If you have a sprite sheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](/doc/images.md#Animation)):
+If you have a sprite sheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](images.md#Animation)):
 
 ```dart
-    final size = Vector2.all(64.0);
-    this.player = SpriteAnimationComponent.sequenced(size, 'player.png', 2);
+final size = Vector2.all(64.0);
+this.player = SpriteAnimationComponent.sequenced(size, 'player.png', 2);
 ```
 
 If you are not using `BaseGame`, don't forget this component needs to be update'd even if static, because the animation object needs to be ticked to move the frames.
@@ -122,10 +123,10 @@ If you are not using `BaseGame`, don't forget this component needs to be update'
 This component uses an instance of `Svg` class to represent a Component that has a svg that is rendered on the game:
 
 ```dart
-    Svg svg = Svg('android.svg');
-    SvgComponent android = SvgComponent.fromSvg(100, 100, svg);
-    android.x = 100;
-    android.y = 100;
+Svg svg = Svg('android.svg');
+SvgComponent android = SvgComponent.fromSvg(100, 100, svg);
+android.x = 100;
+android.y = 100;
 ```
 
 ## FlareActorComponent
@@ -139,49 +140,49 @@ This is the interface to use a [flare animation](https://pub.dev/packages/flare_
 it also can receive a FlareController that can play multiple animations and control nodes.
 
 ```dart
-    import 'package:flame_flare/flame_flare.dart';
+import 'package:flame_flare/flame_flare.dart';
 
-    // your implementation of FlareController
-    class WashingtonController extends FlareControls {
+// your implementation of FlareController
+class WashingtonController extends FlareControls {
+    
+    ActorNode rightHandNode;
+    
+    void initialize(FlutterActorArtboard artboard) {
+        super.initialize(artboard);
         
-        ActorNode rightHandNode;
-        
-        void initialize(FlutterActorArtboard artboard) {
-            super.initialize(artboard);
-            
-            // get flare node
-            rightHand = artboard.getNode('right_hand');
-        }
+        // get flare node
+        rightHand = artboard.getNode('right_hand');
     }
+}
 
-    final fileName = 'assets/george_washington.flr';
-    final size = Vector2(1776, 1804);
-    final controller = WashingtonController(); //instantiate controller
-    
-    FlareActorComponent flareAnimation = FlareActorComponent(
-      fileName,
-      controller: controller,
-      width: 306,
-      height: 228,
-    );
- 
-    flareAnimation.x = 50;
-    flareAnimation.y = 240;
-    add(flareAnimation);
+final fileName = 'assets/george_washington.flr';
+final size = Vector2(1776, 1804);
+final controller = WashingtonController(); //instantiate controller
 
-    // to play an animation
-    controller.play('rise_up');
+FlareActorComponent flareAnimation = FlareActorComponent(
+  fileName,
+  controller: controller,
+  width: 306,
+  height: 228,
+);
 
-    // you can add another animation to play at the same time
-    controller.play('close_door_way_out');
-    
-    // also, get a flare node and modify it
-    controller.rightHandNode.rotation = math.pi;
+flareAnimation.x = 50;
+flareAnimation.y = 240;
+add(flareAnimation);
+
+// to play an animation
+controller.play('rise_up');
+
+// you can add another animation to play at the same time
+controller.play('close_door_way_out');
+
+// also, get a flare node and modify it
+controller.rightHandNode.rotation = math.pi;
 ```
 
 You can also change the current playing animation using the `updateAnimation` method.
 
-For a working example, check this [source file](/doc/examples/flare/lib/main_component.dart).
+For a working example, check this [source file](https://github.com/flame-engine/flame/tree/master/doc/examples/flare/lib/main_component.dart).
 
 ## ParallaxComponent
 
@@ -194,36 +195,36 @@ This component simulates this effect, making a more realistic background with a 
 Create it like this:
 
 ```dart
-  final images = [
+final images = [
     ParallaxImage('mountains.jpg'),
     ParallaxImage('forest.jpg'),
     ParallaxImage('city.jpg'),
-  ];
-  this.bg = ParallaxComponent(images);
+];
+this.bg = ParallaxComponent(images);
 ```
 
 This creates a static background, if you want it to move you have to set the named optional parameters `baseSpeed` and `layerDelta`. For example if you want to move your background images along the X-axis and have the images further away you would do the following:
 
 ```dart
-  this.bg = ParallaxComponent(images, baseSpeed: Offset(50, 0), layerDelta: Offset(20, 0));
+this.bg = ParallaxComponent(images, baseSpeed: Offset(50, 0), layerDelta: Offset(20, 0));
 ```
 You can set the baseSpeed and layerDelta at any time, for example if your character jumps or your game speeds up.
 
 ```dart
-  this.bg.baseSpeed = Vector2(100, 0);
-  this.bg.layerDelta = Vector2(40, 0);
+this.bg.baseSpeed = Vector2(100, 0);
+this.bg.layerDelta = Vector2(40, 0);
 ```
 
 By default the images are aligned to the bottom left, repeated along the X-axis and scaled proportionally so that the image covers the height of the screen. If you want to change this behaviour, for example if you are not making a side scrolling game, you can set the `repeat`, `alignment` and `fill` parameters for each ParallaxImage.
 
 Advanced example:
 ```dart
-  final images = [
+final images = [
     ParallaxImage('stars.jpg', repeat: ImageRepeat.repeat, alignment: Alignment.center, fill: LayerFill.width),
     ParallaxImage('planets.jpg', repeat: ImageRepeat.repeatY, alignment: Alignment.bottomLeft, fill: LayerFill.none),
     ParallaxImage('dust.jpg', repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
-  ];
-  this.bg = ParallaxComponent(images, baseSpeed: Vector2(50, 0), layerDelta: Vector2(20, 0));
+];
+this.bg = ParallaxComponent(images, baseSpeed: Vector2(50, 0), layerDelta: Vector2(20, 0));
 ```
 
 * The stars image in this example will be repeatedly drawn in both axis, align in the center and be scaled to fill the screen width.
@@ -235,17 +236,17 @@ Once you are done with setting the parameters to your needs, render the Parallax
 Like the SpriteAnimationComponent, even if your parallax is static, you must call update on this component, so it runs its animation.
 Also, don't forget to add you images to the `pubspec.yaml` file as assets or they wont be found.
 
-An example implementation can be found in the [examples directory](/doc/examples/parallax).
+An example implementation can be found in the [examples directory](https://github.com/flame-engine/flame/tree/master/doc/examples/parallax).
 
 ## SpriteBodyComponent
 
-See [SpriteBodyComponent](/doc/forge2d.md#spritebodycomponent) in the box2d documentation.
+See [SpriteBodyComponent](forge2d.md#spritebodycomponent) in the box2d documentation.
 
 ## TiledComponent
 
 Currently we have a very basic implementation of a Tiled component. This API uses the lib [Tiled](https://github.com/feroult/tiled.dart) to parse map files and render visible layers.
 
-An example of how to use the API can be found [here](/doc/examples/tiled).
+An example of how to use the API can be found [here](https://github.com/flame-engine/flame_tiled/tree/master/example).
 
 ## IsometricTileMapComponent
 
@@ -254,17 +255,17 @@ This component allows you to render an isometric map based on a cartesian matrix
 A simple example on how to use it:
 
 ```dart
-  // creates a tileset, the block ids are automatically assigned sequentially starting at 0, from left to right and then top to bottom.
-  final tilesetImage = await images.load('tileset.png');
-  final tileset = IsometricTileset(tilesetImage, 32);
-  // each element is a block id, -1 means nothing
-  final matrix = [[0, 1, 0], [1, 0, 0], [1, 1, 1]];
-  add(IsometricTileMapComponent(tileset, matrix));
+// creates a tileset, the block ids are automatically assigned sequentially starting at 0, from left to right and then top to bottom.
+final tilesetImage = await images.load('tileset.png');
+final tileset = IsometricTileset(tilesetImage, 32);
+// each element is a block id, -1 means nothing
+final matrix = [[0, 1, 0], [1, 0, 0], [1, 1, 1]];
+add(IsometricTileMapComponent(tileset, matrix));
 ```
 
 It also provides methods for converting coordinates so you can handle clicks, hovers, render entities on top of tiles, add a selector, etc.
 
-A more in-depth example can be found [here](/doc/examples/isometric).
+A more in-depth example can be found [here](https://github.com/flame-engine/flame/tree/master/doc/examples/isometric).
 
 ![An example of a isometric map with selector](images/isometric.png)
 
@@ -282,6 +283,6 @@ Check the example app `nine_tile_box` details on how to use it.
 
 ## Effects
 
-Flame provides a set of effects that can be applied to a certain type of components, these effects can be used to animate some properties of your components, like position or dimensions. You can check the list of those effects [here](/doc/effects.md).
+Flame provides a set of effects that can be applied to a certain type of components, these effects can be used to animate some properties of your components, like position or dimensions. You can check the list of those effects [here](effects.md).
 
-Examples of the running effects can be found [here](/doc/examples/effects);
+Examples of the running effects can be found [here](https://github.com/flame-engine/flame/tree/master/doc/examples/effects);

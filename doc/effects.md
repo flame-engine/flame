@@ -126,7 +126,7 @@ final sequence = SequenceEffect(
     isAlternating: true);
 myComponent.addEffect(sequence);
 ```
-An example of how to use the SequenceEffect can be found [here](/doc/examples/effects/sequence_effect).
+An example of how to use the SequenceEffect can be found [here](https://github.com/flame-engine/flame/tree/master/doc/examples/effects/sequence_effect).
  
 ## CombinedEffect
 
@@ -146,8 +146,8 @@ final combination = CombinedEffect(
     isAlternating: true);
 myComponent.addEffect(combination);
 ```
-An example of how to use the CombinedEffect can be found [here](/doc/examples/effects/combined_effect).
+An example of how to use the CombinedEffect can be found [here](https://github.com/flame-engine/flame/tree/master/doc/examples/effects/combined_effect).
  
 ## Examples
 
-Full examples can be found [here](/doc/examples/effects/simple), [here](/doc/examples/effects/infinite_effects) and [here](/doc/examples/effects/combined_effects).
+Full examples can be found [here](https://github.com/flame-engine/flame/tree/master/doc/examples/effects/simple), [here](https://github.com/flame-engine/flame/tree/master/doc/examples/effects/infinite_effects) and [here](https://github.com/flame-engine/flame/tree/master/doc/examples/effects/combined_effects).
