@@ -43,10 +43,9 @@ class ParallaxImage {
     LayerFill fill = LayerFill.height,
     Images images,
   }) async {
-    final _images = images ?? Flame.images;
-    final image = await _images.load(path);
+    images ??= Flame.images;
     return ParallaxImage(
-      image,
+      await images.load(path),
       repeat: repeat,
       alignment: alignment,
       fill: fill,
@@ -212,7 +211,7 @@ class ParallaxComponent extends PositionComponent {
     super.update(t);
     _layers.forEach((layer) {
       layer.update(
-          (baseVelocity.clone()..multiply(layer.velocityMultiplier)) * t);
+          (baseVelocity.clone()..multiply(layer.velocityMultiplier)) * t,);
     });
   }
 
@@ -251,6 +250,7 @@ class ParallaxComponent extends PositionComponent {
     LayerFill fill = LayerFill.height,
     Images images,
   }) async {
+    velocityMultiplierDelta ??= Vector2.all(1.0);
     int depth = 0;
     final layers = await Future.wait<ParallaxLayer>(
       paths.map((path) async {
@@ -267,7 +267,6 @@ class ParallaxComponent extends PositionComponent {
           (previousValue, delta) => previousValue.clone()..multiply(delta),
         );
         ++depth;
-        print(velocityMultiplier);
         return ParallaxLayer(
           await image,
           velocityMultiplier: velocityMultiplier,
