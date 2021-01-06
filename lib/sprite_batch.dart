@@ -35,7 +35,7 @@ class SpriteBatch {
   /// on the canvas using the [offset] parameter.
   ///
   /// The [color] paramater allows you to render a color behind the sprite, as a background color.
-  /// 
+  ///
   /// The [add] method may be a simpler way to add a sprite to the batch. However,
   /// if there is a way to factor out the computations of the sine and cosine of the
   /// rotation so that they can be reused over multiple calls to this constructor,
@@ -82,10 +82,10 @@ class SpriteBatch {
   /// You can transform the sprite from its [offset] using [scale], [rotation] and [anchor].
   ///
   /// The [color] paramater allows you to render a color behind the sprite, as a background color.
-  /// 
-  /// This method creates a new [RSTransform] based on the given arguments. If many [RSTransform] objects are being 
+  ///
+  /// This method creates a new [RSTransform] based on the given arguments. If many [RSTransform] objects are being
   /// created and there is a way to factor out the computations of the sine and cosine of the rotation
-  /// (which are computed each time this method is called) and reuse them over multiple [RSTransform] objects, 
+  /// (which are computed each time this method is called) and reuse them over multiple [RSTransform] objects,
   /// it may be more efficient to directly use the more direct [addTransform] method instead.
   void add({
     @required Rect rect,
