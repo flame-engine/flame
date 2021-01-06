@@ -10,7 +10,6 @@ import '../game.dart';
 import '../parallax.dart';
 import 'position_component.dart';
 
-
 /// A full parallax, several layers of images drawn out on the screen and each
 /// layer moves with different velocities to give an effect of depth.
 class ParallaxComponent extends PositionComponent {
