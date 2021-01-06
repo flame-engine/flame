@@ -32,15 +32,15 @@ class SpriteBatch {
   Vector2 get size => Vector2Extension.fromInts(width, height);
 
   /// Add a new sprite using a RSTransform.
-  /// 
-  /// The [add] method may be a simpler way to add a sprite to the batch. However, 
-  /// if there is a way to factor out the computations of the sine and cosine of the 
-  /// rotation so that they can be reused over multiple calls to this constructor, 
+  ///
+  /// The [add] method may be a simpler way to add a sprite to the batch. However,
+  /// if there is a way to factor out the computations of the sine and cosine of the
+  /// rotation so that they can be reused over multiple calls to this constructor,
   /// it may be more efficient to directly use this method instead.
-  /// 
+  ///
   /// The [rect] parameter is the source location on the [atlas]. You can position it
   /// on the canvas using the [offset] parameter.
-  /// 
+  ///
   /// The [color] paramater allows you to render a color behind the sprite, as a background color.
   void addTransform({
     @required Rect rect,
@@ -75,12 +75,12 @@ class SpriteBatch {
   }
 
   /// Add a new sprite.
-  /// 
+  ///
   /// The [rect] parameter is the source location on the [atlas]. You can position it
   /// on the canvas using the [offset] parameter.
-  /// 
+  ///
   /// You can transform the sprite from its [offset] using [scale], [rotation] and [anchor].
-  /// 
+  ///
   /// The [color] paramater allows you to render a color behind the sprite, as a background color.
   void add({
     @required Rect rect,
@@ -121,7 +121,7 @@ class SpriteBatch {
     Paint paint,
   }) {
     paint ??= Paint();
-    
+
     if (kIsWeb) {
       for (var i = 0; i < matrices.length; i++) {
         final matrix = matrices[i];
