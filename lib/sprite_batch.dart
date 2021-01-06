@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -11,6 +12,7 @@ class SpriteBatch {
   List<Rect> rects = [];
   List<RSTransform> transforms = [];
   List<Color> colors = [];
+  List<Matrix4> matrices = [];
 
   static const defaultBlendMode = BlendMode.srcOver;
   static const defaultColor = const Color(0x00000000); // transparent
@@ -29,16 +31,57 @@ class SpriteBatch {
 
   Vector2 get size => Vector2Extension.fromInts(width, height);
 
+  /// Add a new sprite using a RSTransform.
+  /// 
+  /// The [add] method may be a simpler way to add a sprite to the batch. However, 
+  /// if there is a way to factor out the computations of the sine and cosine of the 
+  /// rotation so that they can be reused over multiple calls to this constructor, 
+  /// it may be more efficient to directly use this method instead.
+  /// 
+  /// The [rect] parameter is the source location on the [atlas]. You can position it
+  /// on the canvas using the [offset] parameter.
+  /// 
+  /// The [color] paramater allows you to render a color behind the sprite, as a background color.
   void addTransform({
     @required Rect rect,
     RSTransform transform,
     Color color,
   }) {
+    transform ??= defaultTransform;
     rects.add(rect);
     transforms.add(transform ?? defaultTransform);
     colors.add(color ?? defaultColor);
+
+    matrices.add(Matrix4(
+      transform.scos,
+      transform.ssin,
+      0,
+      0,
+      -transform.ssin,
+      transform.scos,
+      0,
+      0,
+      0,
+      0,
+      // This is the scale, we can't determine this from a RSTransform,
+      //but we also don't need to because it is already calculated inside the transform values.
+      1,
+      0,
+      transform.tx,
+      transform.ty,
+      0,
+      1,
+    ));
   }
 
+  /// Add a new sprite.
+  /// 
+  /// The [rect] parameter is the source location on the [atlas]. You can position it
+  /// on the canvas using the [offset] parameter.
+  /// 
+  /// You can transform the sprite from its [offset] using [scale], [rotation] and [anchor].
+  /// 
+  /// The [color] paramater allows you to render a color behind the sprite, as a background color.
   void add({
     @required Rect rect,
     double scale = 1.0,
@@ -55,13 +98,20 @@ class SpriteBatch {
       translateX: offset.dx,
       translateY: offset.dy,
     );
-    addTransform(rect: rect, transform: transform, color: color);
+
+    addTransform(
+      rect: rect,
+      transform: transform,
+      color: color,
+    );
   }
 
+  /// Clear the SpriteBatch so it can be reused.
   void clear() {
     rects.clear();
     transforms.clear();
     colors.clear();
+    matrices.clear();
   }
 
   void render(
@@ -70,14 +120,37 @@ class SpriteBatch {
     Rect cullRect,
     Paint paint,
   }) {
-    canvas.drawAtlas(
-      atlas,
-      transforms,
-      rects,
-      colors,
-      blendMode ?? defaultBlendMode,
-      cullRect,
-      paint ?? defaultPaint,
-    );
+    paint ??= Paint();
+    
+    if (kIsWeb) {
+      for (var i = 0; i < matrices.length; i++) {
+        final matrix = matrices[i];
+        final rect = rects[i];
+        final color = colors[i];
+        paint..blendMode = blendMode ?? paint.blendMode ?? defaultBlendMode;
+
+        canvas
+          ..save()
+          ..transform(matrix.storage)
+          ..drawRect(Offset.zero & rect.size, Paint()..color = color)
+          ..drawImageRect(
+            atlas,
+            rect,
+            Offset.zero & rect.size,
+            paint,
+          )
+          ..restore();
+      }
+    } else {
+      canvas.drawAtlas(
+        atlas,
+        transforms,
+        rects,
+        colors,
+        blendMode ?? defaultBlendMode,
+        cullRect,
+        paint,
+      );
+    }
   }
 }

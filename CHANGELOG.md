@@ -8,6 +8,8 @@
  - Add test for child removal
  - Fix bug where `Timer` callback doesn't fire for non-repeating timers, also fixing bug with `Particle` lifespan
  - Adding shortcut for loading Sprites and SpriteAnimation from the global cache
+ - Added fallback support for the web on the `SpriteBatch` class
+ - Added missing documentation on the `SpriteBatch` class
 
 ## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget
