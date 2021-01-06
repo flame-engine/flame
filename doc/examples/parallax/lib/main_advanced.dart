@@ -1,4 +1,5 @@
 import 'package:flame/flame.dart';
+import 'package:flame/parallax.dart';
 import 'package:flame/components/parallax_component.dart';
 import 'package:flame/extensions/vector2.dart';
 import 'package:flame/game.dart';
@@ -32,8 +33,10 @@ class MyGame extends BaseGame {
       ),
     );
     final parallax = ParallaxComponent(
-      await Future.wait(layers),
-      baseVelocity: Vector2(20, 0),
+      Parallax(
+        await Future.wait(layers),
+        baseVelocity: Vector2(20, 0),
+      ),
     );
     add(parallax);
   }

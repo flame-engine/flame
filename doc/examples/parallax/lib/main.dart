@@ -15,7 +15,7 @@ void main() async {
 }
 
 class MyGame extends BaseGame {
-  final _paths = [
+  final _imageNames = [
     'bg.png',
     'mountain-far.png',
     'mountains.png',
@@ -26,7 +26,7 @@ class MyGame extends BaseGame {
   @override
   Future<void> onLoad() async {
     final parallax = await ParallaxComponent.load(
-      _paths,
+      _imageNames,
       baseVelocity: Vector2(20, 0),
       velocityMultiplierDelta: Vector2(1.8, 1.0),
     );
