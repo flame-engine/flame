@@ -5,6 +5,25 @@ import 'package:flutter/foundation.dart';
 import 'assets/images.dart';
 import 'extensions/vector2.dart';
 import 'flame.dart';
+import 'game/game.dart';
+
+extension SpriteBatchExtension on Game {
+  /// Utility method to load and cache the image for a [SpriteBatch] based on its options
+  Future<SpriteBatch> loadSpriteBatch(
+    String path, {
+    Color defaultColor = const Color(0x00000000),
+    BlendMode defaultBlendMode = BlendMode.srcOver,
+    RSTransform defaultTransform,
+  }) {
+    return SpriteBatch.load(
+      path,
+      defaultColor: defaultColor,
+      defaultBlendMode: defaultBlendMode,
+      defaultTransform: defaultTransform,
+      images: images,
+    );
+  }
+}
 
 /// A single item in a SpriteBatch.
 ///

@@ -131,22 +131,6 @@ abstract class Game {
     );
   }
 
-  /// Utility method to load and cache the image for a [SpriteBatch] based on its options
-  Future<SpriteBatch> loadSpriteBatch(
-    String path, {
-    Color defaultColor = const Color(0x00000000),
-    BlendMode defaultBlendMode = BlendMode.srcOver,
-    RSTransform defaultTransform,
-  }) {
-    return SpriteBatch.load(
-      path,
-      defaultColor: defaultColor,
-      defaultBlendMode: defaultBlendMode,
-      defaultTransform: defaultTransform,
-      images: images,
-    );
-  }
-
   /// Flag to tell the game loop if it should start running upon creation
   bool runOnCreation = true;
 
