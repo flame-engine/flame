@@ -15,21 +15,22 @@ void main() async {
 }
 
 class MyGame extends BaseGame {
-  MyGame() {
-    final images = [
-      ParallaxImage('bg.png'),
-      ParallaxImage('mountain-far.png'),
-      ParallaxImage('mountains.png'),
-      ParallaxImage('trees.png'),
-      ParallaxImage('foreground-trees.png'),
-    ];
+  final _imageNames = [
+    'bg.png',
+    'mountain-far.png',
+    'mountains.png',
+    'trees.png',
+    'foreground-trees.png',
+  ];
 
-    final parallaxComponent = ParallaxComponent(
-      images,
-      baseSpeed: Vector2(20, 0),
-      layerDelta: Vector2(30, 0),
+  @override
+  Future<void> onLoad() async {
+    final parallax = await ParallaxComponent.load(
+      _imageNames,
+      baseVelocity: Vector2(20, 0),
+      velocityMultiplierDelta: Vector2(1.8, 1.0),
+      images: images,
     );
-
-    add(parallaxComponent);
+    add(parallax);
   }
 }
