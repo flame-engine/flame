@@ -143,6 +143,7 @@ abstract class Game {
       defaultColor: defaultColor,
       defaultBlendMode: defaultBlendMode,
       defaultTransform: defaultTransform,
+      images: images,
     );
   }
 
