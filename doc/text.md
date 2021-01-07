@@ -17,7 +17,7 @@ const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font')
 * lineHeight: height of text line, as a multiple of font size (default `null`)
 * color : the color, as a `ui.Color` (default black)
 
-For more information regarding colors and how to create then, see the [Colors and the Palette](/doc/palette.md) guide.
+For more information regarding colors and how to create then, see the [Colors and the Palette](palette.md) guide.
 
 After the creation of the config you can use its `render` method to draw some string on a canvas:
 

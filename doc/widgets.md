@@ -4,7 +4,7 @@ One cool feature when developing games with Flutter is the ability to use Flutte
 
 Here you can find all the available widgets provided by Flame.
 
-You can also see all the widgets showcased inside a [Dashbook](https://github.com/erickzanardo/dashbook) sandbox [here](/doc/examples/widgets)
+You can also see all the widgets showcased inside a [Dashbook](https://github.com/erickzanardo/dashbook) sandbox [here](https://github.com/flame-engine/flame/tree/master/doc/examples/widgets)
 
 ## Nine Tile Box
 
@@ -14,7 +14,7 @@ The grid sprite is a 3x3 grid and with 9 blocks, representing the 4 corners, the
 
 The corners are drawn at the same size, the sides are stretched on the side direction and the middle is expanded both ways.
 
-The `NineTileBox` widget implements a Container using that standard. This pattern is also implemented in game by the `NineTileBoxComponent` where you can use this same feature, but directly into the game Canvas, to know more about this, check the component docs [here](/doc/components.md#nine-tile-box-component).
+The `NineTileBox` widget implements a Container using that standard. This pattern is also implemented in game by the `NineTileBoxComponent` where you can use this same feature, but directly into the game Canvas, to know more about this, check the component docs [here](components.md#nine-tile-box-component).
 
 Here you can find an example of its usage:
 
@@ -22,10 +22,10 @@ Here you can find an example of its usage:
 import 'package:flame/widgets/nine_tile_box.dart';
 
 NineTileBox(
-        image: image, // dart:ui image instance
-        tileSize: 16, // The width/height of the tile on your grid image
-        destTileSize: 50, // The dimensions to be used when drawing the tile on the canvas
-        child: SomeWidget(), // Any Flutter widget
+    image: image, // dart:ui image instance
+    tileSize: 16, // The width/height of the tile on your grid image
+    destTileSize: 50, // The dimensions to be used when drawing the tile on the canvas
+    child: SomeWidget(), // Any Flutter widget
 )
 ```
 
@@ -39,12 +39,12 @@ How to use it:
 
 ```dart
 SpriteButton(
-          onPressed: () {
-            print('Pressed');
-          },
-          label: const Text('Sprite Button', style: const TextStyle(color: const Color(0xFF5D275D))),
-          sprite: _spriteButton,
-          pressedSprite: _pressedSpriteButton,
+    onPressed: () {
+      print('Pressed');
+    },
+    label: const Text('Sprite Button', style: const TextStyle(color: const Color(0xFF5D275D))),
+    sprite: _spriteButton,
+    pressedSprite: _pressedSpriteButton,
 )
 ```
 
@@ -56,8 +56,8 @@ How to use it:
 
 ```dart
 SpriteWidget(
-        sprite: shieldSprite,
-        center: true,
+    sprite: shieldSprite,
+    center: true,
 ),
 
 ```
@@ -70,8 +70,8 @@ How to use it:
 
 ```dart
 AnimationWidget(
-        animation: _animation,
-        playing: true,
-        center: true,
+    animation: _animation,
+    playing: true,
+    center: true,
 ),
 ```
