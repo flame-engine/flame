@@ -11,6 +11,7 @@
  - Refactored the `SpriteBatch` class to be more elegant.
  - Added fallback support for the web on the `SpriteBatch` class
  - Added missing documentation on the `SpriteBatch` class
+ - Added an utility method to load a `SpriteBatch` on the `Game` class
 
 ## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget

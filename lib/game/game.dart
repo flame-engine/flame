@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flame/sprite_batch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
@@ -127,6 +128,21 @@ abstract class Game {
       path,
       data,
       images: images,
+    );
+  }
+
+  /// Utility method to load and cache the image for a [SpriteBatch] based on its options
+  Future<SpriteBatch> loadSpriteBatch(
+    String path, {
+    Color defaultColor = const Color(0x00000000),
+    BlendMode defaultBlendMode = BlendMode.srcOver,
+    RSTransform defaultTransform,
+  }) {
+    return SpriteBatch.load(
+      path,
+      defaultColor: defaultColor,
+      defaultBlendMode: defaultBlendMode,
+      defaultTransform: defaultTransform,
     );
   }
 
