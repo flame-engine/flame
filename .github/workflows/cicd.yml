@@ -7,8 +7,6 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
 
-.flutter_selector: &flutter_selector
-
 jobs:
   # BEGIN LINTING STAGE
   dartdoc: 
