@@ -24,6 +24,7 @@
  - Move files to comply with the dart package layout convention
  - Fix gesture detection bug of children of `PositionComponent`
  - The `game` argument on `GameWidget` is now required
+ - Add hull capabilities for PositionComponent to make more accurate gestures
 
 ## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget
