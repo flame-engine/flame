@@ -4,7 +4,7 @@ import 'components.dart';
 
 
 /// Checks whether the [polygon] represented by the list of [Vector2] contains
-/// the point. Note that the polygon list is mutated.
+/// the [point].
 bool containsPoint(Vector2 point, List<Vector2> polygon) {
   for (int i = 0; i < polygon.length; i++) {
     final previousPoint = polygon[i];
@@ -14,7 +14,7 @@ bool containsPoint(Vector2 point, List<Vector2> polygon) {
                 (point.x - previousPoint.x) * (point.y - previousPoint.y) >
             0;
     if (isOutside) {
-      // Point is outside of convex polygon (only used for rectangles so far)
+      // Point is outside of convex polygon
       return false;
     }
   }
