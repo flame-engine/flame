@@ -7,11 +7,11 @@ import 'components.dart';
 /// the [point].
 bool containsPoint(Vector2 point, List<Vector2> polygon) {
   for (int i = 0; i < polygon.length; i++) {
-    final previousPoint = polygon[i];
-    final point = polygon[(i + 1) % polygon.length];
+    final previousNode = polygon[i];
+    final node = polygon[(i + 1) % polygon.length];
     final isOutside =
-        (point.x - previousPoint.x) * (point.y - previousPoint.y) -
-                (point.x - previousPoint.x) * (point.y - previousPoint.y) >
+        (node.x - previousNode.x) * (point.y - previousNode.y) -
+                (point.x - previousNode.x) * (node.y - previousNode.y) >
             0;
     if (isOutside) {
       // Point is outside of convex polygon
