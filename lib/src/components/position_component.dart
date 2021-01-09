@@ -136,11 +136,11 @@ abstract class PositionComponent extends BaseComponent {
     }
 
     // Uses a hull if defined, otherwise just the size rectangle
-    //return hull
-    //        ?.map((point) => position + point)
-    //        ?.map(rotateCorner)
-    //        ?.toList(growable: false) ??
-    return    [
+    return hull
+            ?.map((point) => center + point)
+            ?.map(rotateCorner)
+            ?.toList(growable: false) ??
+        [
           rotateCorner(topLeftPosition), // Top-left
           rotateCorner(topLeftPosition + Vector2(0.0, size.y)), // Bottom-left
           rotateCorner(topLeftPosition + size), // Bottom-right

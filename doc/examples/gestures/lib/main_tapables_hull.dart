@@ -18,7 +18,6 @@ void main() {
 }
 
 class TapablePolygon extends PositionComponent with Tapable {
-
   TapablePolygon({Vector2 position}) {
     size = Vector2.all(100);
     hull = [
