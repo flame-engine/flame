@@ -11,6 +11,8 @@ class JoystickUtils {
     }
 
     if (sprite == null) {
+      assert(paint != null, '`paint` must not be `null` if `sprite` is `null`');
+
       final double radius = rect.width / 2;
       c.drawCircle(
         Offset(rect.left + radius, rect.top + radius),

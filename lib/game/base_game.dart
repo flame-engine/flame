@@ -57,9 +57,7 @@ class BaseGame extends Game with FPSCounter {
     }
 
     // first time resize
-    if (size != null) {
-      c.onGameResize(size);
-    }
+    c.onGameResize(size);
   }
 
   /// Prepares and registers a component to be added on the next game tick

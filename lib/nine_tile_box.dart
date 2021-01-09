@@ -30,9 +30,9 @@ class NineTileBox {
   ///
   /// If [destTileSize] is not provided, the evaluated [tileSize] is used instead
   /// (so no scaling happens).
-  NineTileBox(this.sprite, {int tileSize, int destTileSize}) {
-    this.tileSize = tileSize ?? sprite.src.width.toInt();
-    this.destTileSize = destTileSize ?? tileSize;
+  NineTileBox(this.sprite, {int tileSize, int destTileSize})
+      : tileSize = tileSize ?? sprite.src.width.toInt() {
+    this.destTileSize = destTileSize ?? this.tileSize;
   }
 
   /// Renders this nine box with the dimensions provided by [rect].

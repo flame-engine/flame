@@ -34,8 +34,8 @@ class RotateEffect extends SimplePositionComponentEffect {
         );
 
   @override
-  void initialize(_comp) {
-    super.initialize(_comp);
+  void initialize(component) {
+    super.initialize(component);
     _startAngle = component.angle;
     _delta = isRelative ? angle : angle - _startAngle;
     if (!isAlternating) {
@@ -49,6 +49,6 @@ class RotateEffect extends SimplePositionComponentEffect {
   @override
   void update(double dt) {
     super.update(dt);
-    component.angle = _startAngle + _delta * curveProgress;
+    component?.angle = _startAngle + _delta * curveProgress;
   }
 }

@@ -5,10 +5,14 @@ import 'effects.dart';
 
 class SequenceEffect extends PositionComponentEffect {
   final List<PositionComponentEffect> effects;
-  int _currentIndex;
   PositionComponentEffect currentEffect;
   bool _currentWasAlternating;
-  double _driftModifier;
+
+  static const int _initialIndex = 0;
+  static const double _initialDriftModifier = 0.0;
+
+  int _currentIndex = _initialIndex;
+  double _driftModifier = _initialDriftModifier;
 
   SequenceEffect({
     @required this.effects,
@@ -36,8 +40,8 @@ class SequenceEffect extends PositionComponentEffect {
   @override
   void initialize(PositionComponent component) {
     super.initialize(component);
-    _currentIndex = 0;
-    _driftModifier = 0.0;
+    _currentIndex = _initialIndex;
+    _driftModifier = _initialDriftModifier;
 
     effects.forEach((effect) {
       effect.reset();

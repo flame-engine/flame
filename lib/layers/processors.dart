@@ -5,7 +5,7 @@ abstract class LayerProcessor {
 }
 
 class ShadowProcessor extends LayerProcessor {
-  Paint _shadowPaint;
+  final Paint _shadowPaint;
 
   final Offset offset;
 
@@ -13,11 +13,9 @@ class ShadowProcessor extends LayerProcessor {
     this.offset = const Offset(10, 10),
     double opacity = 0.9,
     Color color = const Color(0xFF000000),
-  }) {
-    _shadowPaint = Paint()
-      ..colorFilter =
-          ColorFilter.mode(color.withOpacity(opacity), BlendMode.srcATop);
-  }
+  }) : _shadowPaint = Paint()
+          ..colorFilter =
+              ColorFilter.mode(color.withOpacity(opacity), BlendMode.srcATop);
 
   @override
   void process(Picture pic, Canvas canvas) {
