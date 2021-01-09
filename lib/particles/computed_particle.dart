@@ -19,7 +19,6 @@ class ComputedParticle extends Particle {
   ComputedParticle({
     @required this.renderer,
     double lifespan,
-    Duration duration,
   }) : super(
           lifespan: lifespan,
         );
