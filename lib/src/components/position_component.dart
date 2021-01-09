@@ -136,11 +136,11 @@ abstract class PositionComponent extends BaseComponent {
     }
 
     // Uses a hull if defined, otherwise just the size rectangle
-    return hull
-            ?.map((point) => position + point)
-            ?.map(rotateCorner)
-            ?.toList(growable: false) ??
-        [
+    //return hull
+    //        ?.map((point) => position + point)
+    //        ?.map(rotateCorner)
+    //        ?.toList(growable: false) ??
+    return    [
           rotateCorner(topLeftPosition), // Top-left
           rotateCorner(topLeftPosition + Vector2(0.0, size.y)), // Bottom-left
           rotateCorner(topLeftPosition + size), // Bottom-right
@@ -154,6 +154,14 @@ abstract class PositionComponent extends BaseComponent {
 
   @override
   void renderDebugMode(Canvas canvas) {
+    if (hull != null) {
+      final hullPath = Path()
+        ..addPolygon(
+          hull.map((point) => (point + size / 2).toOffset()).toList(),
+          true,
+        );
+      canvas.drawPath(hullPath, debugPaint);
+    }
     canvas.drawRect(size.toRect(), debugPaint);
     debugTextConfig.render(
       canvas,
