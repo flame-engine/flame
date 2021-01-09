@@ -25,6 +25,12 @@ abstract class PositionComponent extends BaseComponent {
   /// The position of this component on the screen (relative to the anchor).
   Vector2 position = Vector2.zero();
 
+  /// The list of vertices used for collision detection and to define whether
+  /// a point is inside of the component or not, so that the tap detection etc
+  /// can be more accurately performed.
+  /// The hull is defined from the center of the component.
+  List<Vector2> hull;
+
   /// X position of this component on the screen (relative to the anchor).
   double get x => position.x;
   set x(double x) => position.x = x;
@@ -70,6 +76,11 @@ abstract class PositionComponent extends BaseComponent {
   /// Set the top left position regardless of the anchor
   set topLeftPosition(Vector2 position) {
     this.position = position + (anchor.toVector2..multiply(size));
+  }
+
+  /// Get the position of the center of the component
+  Vector2 get center {
+    return anchor == Anchor.center ? position : topLeftPosition + (size / 2);
   }
 
   /// Angle (with respect to the x-axis) this component should be rendered with.
@@ -124,21 +135,17 @@ abstract class PositionComponent extends BaseComponent {
       );
     }
 
-    // Counter-clockwise direction
-    return [
-      rotateCorner(topLeftPosition), // Top-left
-      rotateCorner(topLeftPosition + Vector2(0.0, size.y)), // Bottom-left
-      rotateCorner(topLeftPosition + size), // Bottom-right
-      rotateCorner(topLeftPosition + Vector2(size.x, 0.0)), // Top-right
-    ];
-  }
-
-
-  
-  List<Vector2> collisionPoints(PositionComponent other) {
-
-
-    return [];
+    // Uses a hull if defined, otherwise just the size rectangle
+    return hull
+            ?.map((point) => position + point)
+            ?.map(rotateCorner)
+            ?.toList(growable: false) ??
+        [
+          rotateCorner(topLeftPosition), // Top-left
+          rotateCorner(topLeftPosition + Vector2(0.0, size.y)), // Bottom-left
+          rotateCorner(topLeftPosition + size), // Bottom-right
+          rotateCorner(topLeftPosition + Vector2(size.x, 0.0)), // Top-right
+        ];
   }
 
   double angleTo(PositionComponent c) => position.angleTo(c.position);
