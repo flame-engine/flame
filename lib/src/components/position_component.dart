@@ -117,14 +117,13 @@ abstract class PositionComponent extends BaseComponent {
 
   @override
   bool containsPoint(Vector2 point) {
-    return collision_detection.containsPoint(point, boundingBox());
+    return collision_detection.containsPoint(point, boundingVertices());
   }
 
-  /// Gives back the bounding box represented as a list of points which are the
-  /// corners of the box rotated with [angle], if overridden it can return
-  /// more than four "corners" for more accurate collision detection and overlap
-  /// detection, but the points has to form a convex polygon.
-  List<Vector2> boundingBox() {
+  /// Gives back the bounding vertices (bounding box if no hull is specified)
+  /// represented as a list of points which are the "corners" of the hull/box
+  /// rotated with [angle].
+  List<Vector2> boundingVertices() {
     // Rotates the corner around [position]
     Vector2 rotateCorner(Vector2 corner) {
       return Vector2(
