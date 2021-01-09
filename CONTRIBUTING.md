@@ -1,21 +1,21 @@
 # Contributing Guidelines
 If you're interested in contributing to this project, here are a few ways to do so:
 
-### Bug fixes
+## Bug fixes
 * If you find a bug, please first report it using [Github issues](https://github.com/flame-engine/flame/issues/new).
 * Issues that have already been identified as a bug will be labelled "bug".
 * If you'd like to submit a fix for a bug, send a [Pull Request](https://guides.github.com/activities/forking/#making-a-pull-request) from your own fork, also read the [How To](#how-to) and [Development Guidelines](#development-guidelines).
 * Include a test that isolates the bug and verifies that it was fixed.
 * Also update the example and documentation if necessary.
 
-### New Features
+## New Features
 * If you'd like to add a feature to the library that doesn't already exist, feel free to describe the feature in a new [Github issues](https://github.com/flame-engine/flame/issues/new).
 * Issues that have been identified as a feature request will be labelled "feature".
 * If you'd like to implement the new feature, please wait for feedback from the project maintainers before spending too much time writing the code. In some cases, enhancements may not align well with the project objectives at the time.
 * Implement your code and please read the [How To](#how-to) and [Development Guidelines](#development-guidelines).
 * Also update the example and documentation where needed.
 
-### Documentation & Miscellaneous
+## Documentation & Miscellaneous
 * If you think the documentation could be clearer, or you have an alternative implementation of something that may have more advantages, we would love to hear it.
 * As always first file a report in a [Github issues](https://github.com/flame-engine/flame/issues/new).
 * Issues that have been identified as a documentation change will be labelled "documentation".
