@@ -21,14 +21,14 @@ class TapablePolygon extends PositionComponent with Tapable {
   TapablePolygon({Vector2 position}) {
     size = Vector2.all(100);
     hull = [
-      Vector2(-50, 0),
-      Vector2(-40, 30),
-      Vector2(0, 50),
-      Vector2(30, 45),
-      Vector2(50, 0),
-      Vector2(30, -40),
-      Vector2(0, -50),
-      Vector2(-40, -40),
+      Vector2(-0.5, 0),
+      Vector2(-0.4, 0.3),
+      Vector2(0, 0.5),
+      Vector2(0.3, 0.45),
+      Vector2(0.5, 0),
+      Vector2(0.3, -0.4),
+      Vector2(0, -0.5),
+      Vector2(-0.4, -0.4),
     ];
     this.position = position ?? Vector2.all(100);
   }
