@@ -91,10 +91,10 @@ void main() {
       component.anchor = Anchor.topLeft;
       component.size = size;
       component.hull = [
-        Vector2(size.x/2, 0),
-        Vector2(0, -size.y/2),
-        Vector2(-size.x/2, 0),
-        Vector2(0, size.y/2),
+        Vector2(0.5, 0),
+        Vector2(0, -0.5),
+        Vector2(-0.5, 0),
+        Vector2(0, 0.5),
       ];
 
       final point = component.position + component.size / 4;
@@ -108,10 +108,10 @@ void main() {
       component.anchor = Anchor.topLeft;
       component.size = size;
       component.hull = [
-        Vector2(size.x/2, 0),
-        Vector2(0, -size.y/2),
-        Vector2(-size.x/2, 0),
-        Vector2(0, size.y/2),
+        Vector2(0.5, 0),
+        Vector2(0, -0.5),
+        Vector2(-0.5, 0),
+        Vector2(0, 0.5),
       ];
 
       final point = Vector2(1.1, 1.1);
