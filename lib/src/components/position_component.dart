@@ -1,8 +1,11 @@
 import 'dart:ui' hide Offset;
-import 'dart:math' as math;
 
-import '../collision_detection.dart' as collision_detection;
+import 'package:meta/meta.dart';
+
+import '../../collision_detection.dart';
 import '../anchor.dart';
+import '../collision_detection.dart' as collision_detection;
+import '../collision_detection.dart';
 import '../extensions/offset.dart';
 import '../extensions/vector2.dart';
 import 'base_component.dart';
@@ -92,31 +95,17 @@ abstract class PositionComponent extends BaseComponent {
   /// Whether this component should be flipped ofn the Y axis before being rendered.
   bool renderFlipY = false;
 
-  /// The list of vertices used for collision detection and to define whether
-  /// a point is inside of the component or not, so that the tap detection etc
-  /// can be more accurately performed.
-  /// The hull is defined from the center of the component and with percentages
-  /// of the size of the component.
-  /// Example: [[0.5, 0.0], [0.0, 0.5], [-0.5, 0.0], [0.0, -0.5]]
-  /// This will form a square with a 45 degree angle (pi/4 rad) within the
-  /// bounding size box.
-  List<Vector2> hull;
-
-  Iterable<Vector2> _scaledHull;
-  Vector2 _lastScaledSize;
-  /// Gives back the hull vectors multiplied by the size of the component and
-  /// positioned from the current component center.
-  Iterable<Vector2> get scaledHull {
-    if(_lastScaledSize != size || _scaledHull == null) {
-      _lastScaledSize = size;
-      _scaledHull = hull?.map((p) => p.clone()..multiply(size)) ?? [];
-    }
-    return _scaledHull;
-  }
-
   /// Returns the relative position/size of this component.
   /// Relative because it might be translated by their parents (which is not considered here).
   Rect toRect() => topLeftPosition.toPositionedRect(size);
+  
+  Hull _hull;
+  set hull(List<Vector2> vertices) => _hull.vertices = vertices;
+
+  @mustCallSuper
+  PositionComponent() {
+    _hull = Hull(this);
+  }
 
   /// Mutates position and size using the provided [rect] as basis.
   /// This is a relative rect, same definition that [toRect] use
@@ -133,35 +122,7 @@ abstract class PositionComponent extends BaseComponent {
 
   @override
   bool containsPoint(Vector2 point) {
-    return collision_detection.containsPoint(point, boundingVertices());
-  }
-
-  /// Gives back the bounding vertices (bounding box if no hull is specified)
-  /// represented as a list of points which are the "corners" of the hull/box
-  /// rotated with [angle].
-  List<Vector2> boundingVertices() {
-    // Rotates the corner around [position]
-    Vector2 rotateCorner(Vector2 corner) {
-      return Vector2(
-        math.cos(angle) * (corner.x - position.x) -
-            math.sin(angle) * (corner.y - position.y) +
-            position.x,
-        math.sin(angle) * (corner.x - position.x) +
-            math.cos(angle) * (corner.y - position.y) +
-            position.y,
-      );
-    }
-
-    // Uses a hull if defined, otherwise just the size rectangle
-    return scaledHull
-            ?.map((point) => rotateCorner(center + point))
-            ?.toList(growable: false) ??
-        [
-          rotateCorner(absoluteTopLeftPosition), // Top-left
-          rotateCorner(absoluteTopLeftPosition + Vector2(0.0, size.y)), // Bottom-left
-          rotateCorner(absoluteTopLeftPosition + size), // Bottom-right
-          rotateCorner(absoluteTopLeftPosition + Vector2(size.x, 0.0)), // Top-right
-        ];
+    return collision_detection.containsPoint(point, _hull.boundingVertices());
   }
 
   List<Vector2> collisionPoints(PositionComponent other) {
