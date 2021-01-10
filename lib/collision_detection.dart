@@ -11,48 +11,48 @@ class Hull {
   /// Example: [[0.5, 0.0], [0.0, 0.5], [-0.5, 0.0], [0.0, -0.5]]
   /// This will form a square with a 45 degree angle (pi/4 rad) within the
   /// bounding size box.
-  List<Vector2> vertices;
-  
+  List<Vector2> vertexScales;
+
   /// The [PositionComponent] that the hull belongs to
   final PositionComponent component;
-  
-  Hull(this.component, {this.vertices});
+
+  Hull(this.component, {this.vertexScales});
 
   Iterable<Vector2> _scaledHull;
   Vector2 _lastScaledSize;
 
   /// Whether the hull has defined vertices or not
   /// An empty list of vertices is also accepted as valid hull
-  bool hasVertices() => vertices != null;
+  bool hasVertices() => vertexScales != null;
 
   /// Gives back the hull vectors multiplied by the size of the component and
   /// positioned from the component's current center position.
   Iterable<Vector2> get scaledHull {
     if (_lastScaledSize != component.size || _scaledHull == null) {
       _lastScaledSize = component.size;
-      _scaledHull = vertices?.map((p) => p.clone()..multiply(component.size));
+      _scaledHull =
+          vertexScales?.map((p) => p.clone()..multiply(component.size));
     }
     return _scaledHull;
   }
 
-
   // These variables are used to see whether the bounding vertices cache is
   // valid or not
-  Vector2 _lastBoundingVerticesPosition;
-  Vector2 _lastBoundingVerticesSize;
-  double _lastBoundingVerticesAngle;
+  Vector2 _lastCachePosition;
+  Vector2 _lastCacheSize;
+  double _lastCacheAngle;
   bool _hadVertices = false;
-  List<Vector2> _cachedBoundingVertices;
-  
+  List<Vector2> _cachedVertices;
+
   bool _isBoundingVerticesCacheValid(PositionComponent component) {
     final position = component.position;
     final angle = component.angle;
     final size = component.size;
-    return _lastBoundingVerticesAngle == angle &&
-        _lastBoundingVerticesSize == size &&
-        _lastBoundingVerticesPosition == position &&
+    return _lastCacheAngle == angle &&
+        _lastCacheSize == size &&
+        _lastCachePosition == position &&
         _hadVertices == hasVertices();
-}
+  }
 
   /// Gives back the bounding vertices (bounding box if no hull is specified)
   /// represented as a list of points which are the "corners" of the hull/box
@@ -62,37 +62,29 @@ class Hull {
     final angle = component.angle;
     final size = component.size;
     final topLeftPosition = component.topLeftPosition;
-    // Rotates the [point] with [angle] around [position]
-    Vector2 rotatePoint(Vector2 point) {
-      return Vector2(
-        math.cos(angle) * (point.x - position.x) -
-            math.sin(angle) * (point.y - position.y) +
-            position.x,
-        math.sin(angle) * (point.x - position.x) +
-            math.cos(angle) * (point.y - position.y) +
-            position.y,
-      );
-    }
 
     // Use cached bounding vertices if state of the component hasn't changed
     if (!_isBoundingVerticesCacheValid(component)) {
+      // Rotate [point] around component angle and position (anchor)
+      Vector2 rotate(Vector2 point) => rotatePoint(point, angle, position);
+
       // Uses a the vertices as a hull if defined, otherwise just using the size rectangle
-      _cachedBoundingVertices = scaledHull
-          ?.map((point) => rotatePoint(component.center + point))
-          ?.toList(growable: false) ??
+      _cachedVertices = scaledHull
+              ?.map((point) => rotate(component.center + point))
+              ?.toList(growable: false) ??
           [
-            rotatePoint(topLeftPosition), // Top-left
-            rotatePoint(topLeftPosition + Vector2(0.0, size.y)), // Bottom-left
-            rotatePoint(topLeftPosition + size), // Bottom-right
-            rotatePoint(topLeftPosition + Vector2(size.x, 0.0)), // Top-right
+            rotate(topLeftPosition), // Top-left
+            rotate(topLeftPosition + Vector2(0.0, size.y)), // Bottom-left
+            rotate(topLeftPosition + size), // Bottom-right
+            rotate(topLeftPosition + Vector2(size.x, 0.0)), // Top-right
           ];
-      _lastBoundingVerticesPosition = position;
-      _lastBoundingVerticesSize = size;
-      _lastBoundingVerticesAngle = angle;
+      _lastCachePosition = position;
+      _lastCacheSize = size;
+      _lastCacheAngle = angle;
       _hadVertices = hasVertices();
     }
 
-    return _cachedBoundingVertices;
+    return _cachedVertices;
   }
 }
 
@@ -111,4 +103,16 @@ bool containsPoint(Vector2 point, List<Vector2> polygon) {
     }
   }
   return true;
+}
+
+// Rotates the [point] with [angle] around [position]
+Vector2 rotatePoint(Vector2 point, double angle, Vector2 position) {
+  return Vector2(
+    math.cos(angle) * (point.x - position.x) -
+        math.sin(angle) * (point.y - position.y) +
+        position.x,
+    math.sin(angle) * (point.x - position.x) +
+        math.cos(angle) * (point.y - position.y) +
+        position.y,
+  );
 }

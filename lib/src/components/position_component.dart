@@ -98,9 +98,17 @@ abstract class PositionComponent extends BaseComponent {
   /// Returns the relative position/size of this component.
   /// Relative because it might be translated by their parents (which is not considered here).
   Rect toRect() => topLeftPosition.toPositionedRect(size);
-  
+
   Hull _hull;
-  set hull(List<Vector2> vertices) => _hull.vertices = vertices;
+  /// The list of vertices used for collision detection and to define whether
+  /// a point is inside of the component or not, so that the tap detection etc
+  /// can be more accurately performed.
+  /// The hull is defined from the center of the component and with percentages
+  /// of the size of the component.
+  /// Example: [[0.5, 0.0], [0.0, 0.5], [-0.5, 0.0], [0.0, -0.5]]
+  /// This will form a square with a 45 degree angle (pi/4 rad) within the
+  /// bounding size box.
+  set hull(List<Vector2> vertices) => _hull.vertexScales = vertices;
 
   @mustCallSuper
   PositionComponent() {
