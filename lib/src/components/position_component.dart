@@ -100,6 +100,7 @@ abstract class PositionComponent extends BaseComponent {
   Rect toRect() => topLeftPosition.toPositionedRect(size);
 
   Hull _hull;
+
   /// The list of vertices used for collision detection and to define whether
   /// a point is inside of the component or not, so that the tap detection etc
   /// can be more accurately performed.
