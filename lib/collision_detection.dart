@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'components.dart';
+import 'extensions.dart';
 
 class Hull {
   /// The list of vertices used for collision detection and to define whether
