@@ -11,7 +11,9 @@ mixin MultiTouchTapDetector on Game {
 }
 
 class DragEvent extends Drag {
-  Offset initialPosition;
+  final Offset initialPosition;
+
+  DragEvent(this.initialPosition);
 
   void Function(DragUpdateDetails) onUpdate;
   void Function() onCancel;

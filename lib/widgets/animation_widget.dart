@@ -50,7 +50,7 @@ class _AnimationWidget extends State<SpriteAnimationWidget>
       ..addListener(() {
         final now = DateTime.now().millisecond.toDouble();
 
-        final dt = max(0, (now - _lastUpdated) / 1000).toDouble();
+        final dt = max(0, (now - (_lastUpdated ?? 0)) / 1000).toDouble();
         widget.animation.update(dt);
 
         setState(() {

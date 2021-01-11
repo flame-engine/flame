@@ -16,8 +16,6 @@ void main() async {
 }
 
 class MyGame extends BaseGame {
-  SpriteAnimation animation;
-
   @override
   Future<void> onLoad() async {
     final image = await images.load('chopper.png');
