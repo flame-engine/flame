@@ -1,32 +1,34 @@
-import '../../../collision_detection.dart' as collision_detection;
-import '../../../components.dart';
 
-mixin HasHitbox on PositionComponent {
-  List<Vector2> vertexScales;
+import '../../../components.dart';
+import '../../../collision_detection.dart' as collision_detection;
+
+mixin Hitbox on PositionComponent {
+  List<Vector2> _hitbox;
 
   /// The list of vertices used for collision detection and to define whether
   /// a point is inside of the component or not, so that the tap detection etc
   /// can be more accurately performed.
-  /// The hull is defined from the center of the component and with percentages
-  /// of the size of the component.
+  /// The hitbox is defined from the center of the component and with
+  /// percentages of the size of the component.
   /// Example: [[0.5, 0.0], [0.0, 0.5], [-0.5, 0.0], [0.0, -0.5]]
   /// This will form a square with a 45 degree angle (pi/4 rad) within the
   /// bounding size box.
-  set hitbox(List<Vector2> vertices) => vertexScales = vertices;
+  set hitbox(List<Vector2> vertices) => _hitbox = vertices;
+  List<Vector2> get hitbox => _hitbox ?? [];
+
+  /// Whether the hitbox has defined vertices or not
+  /// An empty list of vertices is also accepted as valid hitbox
+  bool hasVertices() => _hitbox?.isNotEmpty ?? false;
 
   Iterable<Vector2> _scaledHitbox;
   Vector2 _lastScaledSize;
 
-  /// Whether the hull has defined vertices or not
-  /// An empty list of vertices is also accepted as valid hull
-  bool hasVertices() => vertexScales != null;
-
-  /// Gives back the hull vectors multiplied by the size of the component and
+  /// Gives back the hitbox vectors multiplied by the size of the component and
   /// positioned from the component's current center position.
   Iterable<Vector2> get scaledHitbox {
     if (_lastScaledSize != size || _scaledHitbox == null) {
       _lastScaledSize = size;
-      _scaledHitbox = vertexScales?.map(
+      _scaledHitbox = _hitbox?.map(
         (p) => p.clone()..multiply(size),
       );
     }
@@ -48,13 +50,11 @@ mixin HasHitbox on PositionComponent {
         _hadVertices == hasVertices();
   }
 
-  /// Gives back the bounding vertices (bounding box if no hull is specified)
-  /// represented as a list of points which are the "corners" of the hull/box
-  /// rotated with [angle].
+  /// Gives back the bounding vertices represented as a list of points which
+  /// are the "corners" of the hitbox rotated with [angle].
   List<Vector2> boundingVertices() {
     // Use cached bounding vertices if state of the component hasn't changed
     if (!_isBoundingVerticesCacheValid()) {
-      // Uses a the vertices as a hull if defined, otherwise just using the size rectangle
       _cachedVertices = scaledHitbox
               .map((point) => rotatePoint(center + point))
               .toList(growable: false) ??
@@ -67,7 +67,7 @@ mixin HasHitbox on PositionComponent {
     return _cachedVertices;
   }
 
-  /// Checks whether the [polygon] represented by the list of [Vector2] contains
+  /// Checks whether the hitbox represented by the list of [Vector2] contains
   /// the [point].
   @override
   bool containsPoint(Vector2 point) {

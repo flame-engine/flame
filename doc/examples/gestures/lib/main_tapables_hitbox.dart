@@ -14,10 +14,10 @@ void main() {
   );
 }
 
-class TapablePolygon extends PositionComponent with Tapable, HasHitbox {
+class TapablePolygon extends PositionComponent with Tapable, Hitbox {
   TapablePolygon({Vector2 position}) {
     size = Vector2.all(100);
-    // The hull is defined as percentages of the full size of the component
+    // The hitbox is defined as percentages of the full size of the component
     hitbox = [
       Vector2(-0.5, 0),
       Vector2(-0.4, 0.3),

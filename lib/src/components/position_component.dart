@@ -9,7 +9,7 @@ import '../extensions/offset.dart';
 import '../extensions/vector2.dart';
 import 'base_component.dart';
 import 'component.dart';
-import 'mixins/has_hitbox.dart';
+import 'mixins/hitbox.dart';
 
 /// A [Component] implementation that represents a component that has a
 /// specific, possibly dynamic position on the screen.
@@ -142,16 +142,16 @@ abstract class PositionComponent extends BaseComponent {
 
   @override
   void renderDebugMode(Canvas canvas) {
-    if (this is HasHitbox) {
-      final hullPath = Path()
+    if (this is Hitbox) {
+      final hitboxPath = Path()
         ..addPolygon(
-          (this as HasHitbox)
+          (this as Hitbox)
               .scaledHitbox
               .map((point) => (point + size / 2).toOffset())
               .toList(),
           true,
         );
-      canvas.drawPath(hullPath, debugPaint);
+      canvas.drawPath(hitboxPath, debugPaint);
     }
     canvas.drawRect(size.toRect(), debugPaint);
     debugTextConfig.render(
