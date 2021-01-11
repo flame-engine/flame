@@ -92,7 +92,7 @@ void main() {
       component.position = Vector2(1.0, 1.0);
       component.anchor = Anchor.topLeft;
       component.size = size;
-      component.hitbox = [
+      component.shape = [
         Vector2(0.5, 0),
         Vector2(0, -0.5),
         Vector2(-0.5, 0),
@@ -109,7 +109,7 @@ void main() {
       component.position = Vector2(1.0, 1.0);
       component.anchor = Anchor.topLeft;
       component.size = size;
-      component.hitbox = [
+      component.shape = [
         Vector2(0.5, 0),
         Vector2(0, -0.5),
         Vector2(-0.5, 0),

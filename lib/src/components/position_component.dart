@@ -146,7 +146,7 @@ abstract class PositionComponent extends BaseComponent {
       final hitboxPath = Path()
         ..addPolygon(
           (this as Hitbox)
-              .scaledHitbox
+              .scaledShape
               .map((point) => (point + size / 2).toOffset())
               .toList(),
           true,

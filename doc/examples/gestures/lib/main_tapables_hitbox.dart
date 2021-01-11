@@ -18,7 +18,7 @@ class TapablePolygon extends PositionComponent with Tapable, Hitbox {
   TapablePolygon({Vector2 position}) {
     size = Vector2.all(100);
     // The hitbox is defined as percentages of the full size of the component
-    hitbox = [
+    shape = [
       Vector2(-0.5, 0),
       Vector2(-0.4, 0.3),
       Vector2(0, 0.5),
