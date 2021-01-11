@@ -1,6 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
+<<<<<<< HEAD:doc/examples/gestures/lib/main_tapables_hitbox.dart
+=======
+import 'package:flame/components/position_component.dart';
+import 'package:flame/components/mixins/has_hitbox.dart';
+import 'package:flame/components/mixins/tapable.dart';
+>>>>>>> 400d9e14 (Use mixin for hitbox):doc/examples/gestures/lib/main_tapables_hull.dart
 
 void main() {
   runApp(
@@ -14,6 +20,7 @@ void main() {
   );
 }
 
+<<<<<<< HEAD:doc/examples/gestures/lib/main_tapables_hitbox.dart
 class TapablePolygon extends PositionComponent with Tapable, Hitbox {
   TapablePolygon({Vector2 position}) {
     size = Vector2.all(100);
@@ -27,6 +34,21 @@ class TapablePolygon extends PositionComponent with Tapable, Hitbox {
       Vector2(0.6, -0.8),
       Vector2(0, -1.0),
       Vector2(-0.8, -0.8),
+=======
+class TapablePolygon extends PositionComponent with Tapable, HasHitbox {
+  TapablePolygon({Vector2 position}) {
+    size = Vector2.all(100);
+    // The hull is defined as percentages of the full size of the component
+    hitbox = [
+      Vector2(-0.5, 0),
+      Vector2(-0.4, 0.3),
+      Vector2(0, 0.5),
+      Vector2(0.3, 0.45),
+      Vector2(0.5, 0),
+      Vector2(0.3, -0.4),
+      Vector2(0, -0.5),
+      Vector2(-0.4, -0.4),
+>>>>>>> 400d9e14 (Use mixin for hitbox):doc/examples/gestures/lib/main_tapables_hull.dart
     ];
     this.position = position ?? Vector2.all(150);
   }
