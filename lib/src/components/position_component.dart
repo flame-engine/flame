@@ -7,9 +7,9 @@ import '../../collision_detection.dart';
 import '../anchor.dart';
 import '../extensions/offset.dart';
 import '../extensions/vector2.dart';
-import '../../game.dart';
 import 'base_component.dart';
 import 'component.dart';
+import 'mixins/has_hitbox.dart';
 
 /// A [Component] implementation that represents a component that has a
 /// specific, possibly dynamic position on the screen.
@@ -123,6 +123,11 @@ abstract class PositionComponent extends BaseComponent {
     topLeftPosition = rect.topLeft.toVector2();
   }
 
+  /// Rotate [point] around component's angle and position (anchor)
+  Vector2 rotatePoint(Vector2 point) {
+    return collision_detection.rotatePoint(point, angle, position);
+  }
+
   @override
   bool containsPoint(Vector2 point) {
     return collision_detection.containsPoint(
@@ -137,10 +142,11 @@ abstract class PositionComponent extends BaseComponent {
 
   @override
   void renderDebugMode(Canvas canvas) {
-    if (_hull != null) {
+    if (this is HasHitbox) {
       final hullPath = Path()
         ..addPolygon(
-          _hull.scaledHull
+          (this as HasHitbox)
+              .scaledHitbox
               .map((point) => (point + size / 2).toOffset())
               .toList(),
           true,

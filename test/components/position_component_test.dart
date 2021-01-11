@@ -1,9 +1,12 @@
 import 'dart:math' as math;
 
 import 'package:flame/components.dart';
+import 'package:flame/src/components/mixins/has_hitbox.dart';
 import 'package:test/test.dart';
 
 class MyComponent extends PositionComponent {}
+
+class MyHitboxComponent extends PositionComponent with HasHitbox {}
 
 void main() {
   group('PositionComponent overlap test', () {
@@ -86,11 +89,11 @@ void main() {
 
     test('component with hull contains point', () {
       final size = Vector2(2.0, 2.0);
-      final PositionComponent component = MyComponent();
+      final HasHitbox component = MyHitboxComponent();
       component.position = Vector2(1.0, 1.0);
       component.anchor = Anchor.topLeft;
       component.size = size;
-      component.hull = [
+      component.hitbox = [
         Vector2(0.5, 0),
         Vector2(0, -0.5),
         Vector2(-0.5, 0),
@@ -103,11 +106,11 @@ void main() {
 
     test('component with hull does not contains point', () {
       final size = Vector2(2.0, 2.0);
-      final PositionComponent component = MyComponent();
+      final HasHitbox component = MyHitboxComponent();
       component.position = Vector2(1.0, 1.0);
       component.anchor = Anchor.topLeft;
       component.size = size;
-      component.hull = [
+      component.hitbox = [
         Vector2(0.5, 0),
         Vector2(0, -0.5),
         Vector2(-0.5, 0),
