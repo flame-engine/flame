@@ -134,12 +134,13 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   }
 
   void _initActiveOverlays() {
-    if (widget.initialActiveOverlays != null) {
-      _checkOverlays(widget.initialActiveOverlays.toSet());
-      widget.initialActiveOverlays.forEach((key) {
-        widget.game.overlays.add(key);
-      });
+    if (widget.initialActiveOverlays == null) {
+      return;
     }
+    _checkOverlays(widget.initialActiveOverlays.toSet());
+    widget.initialActiveOverlays.forEach((key) {
+      widget.game.overlays.add(key);
+    });
   }
 
   @override
@@ -175,8 +176,10 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   void _checkOverlays(Set<String> overlays) {
     overlays.forEach((overlayKey) {
-      assert(widget.overlayBuilderMap.containsKey(overlayKey),
-          "A non mapped overlay has been added: $overlayKey");
+      assert(
+        widget.overlayBuilderMap?.containsKey(overlayKey) ?? false,
+        "A non mapped overlay has been added: $overlayKey",
+      );
     });
   }
 
@@ -472,10 +475,9 @@ Widget _applyAdvancedGesturesDetectors(Game game, Widget child) {
       (MultiDragGestureRecognizer instance) {
         instance
           ..onStart = (Offset o) {
-            final drag = DragEvent();
             // Note that padding or margin isn't taken into account here
-            drag.initialPosition = o;
-            dragHandlers.forEach((h) => h.onReceiveDrag(drag));
+            final drag = DragEvent(o);
+            dragHandlers.forEach((h) => h.onReceiveDrag?.call(drag));
             return drag;
           };
       },

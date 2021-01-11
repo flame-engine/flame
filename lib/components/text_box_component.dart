@@ -28,11 +28,11 @@ class TextBoxConfig {
 class TextBoxComponent extends PositionComponent {
   static final Paint _imagePaint = BasicPalette.white.paint
     ..filterQuality = FilterQuality.high;
-  Vector2 _gameSize;
+  Vector2 _gameSize = Vector2.zero();
 
-  String _text;
-  TextConfig _config;
-  TextBoxConfig _boxConfig;
+  final String _text;
+  final TextConfig _config;
+  final TextBoxConfig _boxConfig;
 
   List<String> _lines;
   double _maxLineWidth = 0.0;
@@ -53,15 +53,15 @@ class TextBoxComponent extends PositionComponent {
     String text, {
     TextConfig config,
     TextBoxConfig boxConfig,
-  }) {
-    _boxConfig = boxConfig ?? TextBoxConfig();
-    _config = config ?? TextConfig();
-    _text = text;
+  })  : _text = text,
+        _boxConfig = boxConfig ?? TextBoxConfig(),
+        _config = config ?? TextConfig() {
     _lines = [];
+    double lineHeight;
     text.split(' ').forEach((word) {
       final possibleLine = _lines.isEmpty ? word : _lines.last + ' ' + word;
       final painter = _config.toTextPainter(possibleLine);
-      _lineHeight ??= painter.height;
+      lineHeight ??= painter.height;
       if (painter.width <=
           _boxConfig.maxWidth - _boxConfig.margins.horizontal) {
         if (_lines.isNotEmpty) {
@@ -76,6 +76,7 @@ class TextBoxComponent extends PositionComponent {
       }
     });
     _totalLines = _lines.length;
+    _lineHeight = lineHeight ?? 0.0;
   }
 
   void _updateMaxWidth(double w) {

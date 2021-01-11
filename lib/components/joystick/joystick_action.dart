@@ -34,11 +34,11 @@ class JoystickAction {
   bool _dragging = false;
   Sprite _spriteAction;
   Offset _dragPosition;
-  Paint _paintBackground;
-  Paint _paintAction;
-  Paint _paintActionPressed;
+  final Paint _paintBackground;
+  final Paint _paintAction;
+  final Paint _paintActionPressed;
   JoystickController _joystickController;
-  double _sizeBackgroundDirection;
+  final double _sizeBackgroundDirection;
   DragEvent _currentDragEvent;
   double _tileSize;
 
@@ -55,9 +55,17 @@ class JoystickAction {
     this.align = JoystickActionAlign.BOTTOM_RIGHT,
     this.opacityBackground = 0.5,
     this.opacityKnob = 0.8,
-  }) {
-    _spriteAction = sprite;
-    _sizeBackgroundDirection = sizeFactorBackgroundDirection * size;
+  })  : _spriteAction = sprite,
+        _sizeBackgroundDirection = sizeFactorBackgroundDirection * size,
+        _paintBackground = Paint()
+          ..color = color.withOpacity(opacityBackground)
+          ..style = PaintingStyle.fill,
+        _paintAction = Paint()
+          ..color = color.withOpacity(opacityKnob)
+          ..style = PaintingStyle.fill,
+        _paintActionPressed = Paint()
+          ..color = color.withOpacity(opacityBackground)
+          ..style = PaintingStyle.fill {
     _tileSize = _sizeBackgroundDirection / 2;
   }
 
@@ -91,25 +99,6 @@ class JoystickAction {
       center: Offset(dx, dy),
       radius: _sizeBackgroundDirection / 2,
     );
-
-    if (spriteBackgroundDirection == null) {
-      _paintBackground = Paint()
-        ..color = color.withOpacity(opacityBackground)
-        ..style = PaintingStyle.fill;
-    }
-
-    if (sprite == null) {
-      _paintAction = Paint()
-        ..color = color.withOpacity(opacityKnob)
-        ..style = PaintingStyle.fill;
-    }
-
-    if (spritePressed == null) {
-      _paintActionPressed = Paint()
-        ..color = color.withOpacity(opacityBackground)
-        ..style = PaintingStyle.fill;
-    }
-
     _dragPosition = _rectAction.center;
   }
 
@@ -128,7 +117,7 @@ class JoystickAction {
   }
 
   void update(double dt) {
-    if (_dragging) {
+    if (_rectBackgroundDirection != null && _dragging) {
       final double _radAngle = atan2(
         _dragPosition.dy - _rectBackgroundDirection.center.dy,
         _dragPosition.dx - _rectBackgroundDirection.center.dx,
@@ -149,13 +138,15 @@ class JoystickAction {
       final double nextY = dist * sin(_radAngle);
       final Offset nextPoint = Offset(nextX, nextY);
 
-      final Offset diff = Offset(
-            _rectBackgroundDirection.center.dx + nextPoint.dx,
-            _rectBackgroundDirection.center.dy + nextPoint.dy,
-          ) -
-          _rectAction.center;
+      if (_rectAction != null) {
+        final Offset diff = Offset(
+              _rectBackgroundDirection.center.dx + nextPoint.dx,
+              _rectBackgroundDirection.center.dy + nextPoint.dy,
+            ) -
+            _rectAction.center;
 
-      _rectAction = _rectAction.shift(diff);
+        _rectAction = _rectAction.shift(diff);
+      }
 
       final double _intensity = dist / _tileSize;
 
@@ -176,24 +167,26 @@ class JoystickAction {
   }
 
   void onReceiveDrag(DragEvent event) {
-    if (!_dragging && (_rectAction?.contains(event.initialPosition) ?? false)) {
-      if (enableDirection) {
-        _dragPosition = event.initialPosition;
-        _dragging = true;
-      }
-      _joystickController.joystickAction(
-        JoystickActionEvent(
-          id: actionId,
-          event: ActionEvent.DOWN,
-        ),
-      );
-      tapDown();
-      _currentDragEvent = event;
-      _currentDragEvent
-        ..onUpdate = onPanUpdate
-        ..onEnd = onPanEnd
-        ..onCancel = onPanCancel;
+    if (_dragging || !(_rectAction?.contains(event.initialPosition) ?? false)) {
+      return;
     }
+
+    if (enableDirection) {
+      _dragPosition = event.initialPosition;
+      _dragging = true;
+    }
+    _joystickController.joystickAction(
+      JoystickActionEvent(
+        id: actionId,
+        event: ActionEvent.DOWN,
+      ),
+    );
+    tapDown();
+    _currentDragEvent = event;
+    _currentDragEvent
+      ..onUpdate = onPanUpdate
+      ..onEnd = onPanEnd
+      ..onCancel = onPanCancel;
   }
 
   void tapDown() {

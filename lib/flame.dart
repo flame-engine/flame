@@ -14,8 +14,7 @@ import 'util.dart';
 class Flame {
   // Flame asset bundle, defaults to root
   static AssetBundle _bundle;
-
-  static AssetBundle get bundle => _bundle == null ? rootBundle : _bundle;
+  static AssetBundle get bundle => _bundle ?? rootBundle;
 
   /// Access a shared instance of [AssetsCache] class.
   static AssetsCache assets = AssetsCache();

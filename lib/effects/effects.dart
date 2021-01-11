@@ -30,8 +30,8 @@ abstract class ComponentEffect<T extends BaseComponent> {
   final bool _initialIsInfinite;
   final bool _initialIsAlternating;
   double percentage;
-  double curveProgress;
-  double peakTime;
+  double curveProgress = 0.0;
+  double peakTime = 0.0;
   double currentTime = 0.0;
   double driftTime = 0.0;
   int curveDirection = 1;
@@ -43,13 +43,12 @@ abstract class ComponentEffect<T extends BaseComponent> {
     this._initialIsInfinite,
     this._initialIsAlternating, {
     this.isRelative = false,
-    this.curve = Curves.linear,
+    Curve curve,
     this.onComplete,
-  }) {
-    isInfinite = _initialIsInfinite;
-    isAlternating = _initialIsAlternating;
-    curve ??= Curves.linear;
-  }
+  })  : assert(isRelative != null),
+        isInfinite = _initialIsInfinite,
+        isAlternating = _initialIsAlternating,
+        curve = curve ?? Curves.linear;
 
   @mustCallSuper
   void update(double dt) {
@@ -171,12 +170,24 @@ abstract class PositionComponentEffect
   void _setComponentState(Vector2 position, double angle, Vector2 size) {
     if (isRootEffect()) {
       if (modifiesPosition) {
+        assert(
+          position != null,
+          '`position` must not be `null` for an effect which modifies `position`',
+        );
         component?.position?.setFrom(position);
       }
       if (modifiesAngle) {
+        assert(
+          angle != null,
+          '`angle` must not be `null` for an effect which modifies `angle`',
+        );
         component?.angle = angle;
       }
       if (modifiesSize) {
+        assert(
+          size != null,
+          '`size` must not be `null` for an effect which modifies `size`',
+        );
         component?.size?.setFrom(size);
       }
     }

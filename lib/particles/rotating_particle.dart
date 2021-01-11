@@ -25,7 +25,7 @@ class RotatingParticle extends CurvedParticle with SingleChildParticle {
           lifespan: lifespan,
         );
 
-  double get angle => lerpDouble(from, to, progress);
+  double get angle => lerpDouble(from, to, progress) ?? 0;
 
   @override
   void render(Canvas canvas) {

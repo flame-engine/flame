@@ -50,8 +50,8 @@ class MoveEffect extends SimplePositionComponentEffect {
         );
 
   @override
-  void initialize(_comp) {
-    super.initialize(_comp);
+  void initialize(component) {
+    super.initialize(component);
     List<Vector2> _movePath;
     _startPosition = component.position.clone();
     // With relative here we mean that any vector in the list is relative
@@ -96,7 +96,11 @@ class MoveEffect extends SimplePositionComponentEffect {
     }
     final double totalPathLength = isAlternating ? pathLength * 2 : pathLength;
     speed ??= totalPathLength / duration;
+
+    // `duration` is not null when speed is null
     duration ??= totalPathLength / speed;
+
+    // `speed` is always not null here already
     peakTime = isAlternating ? duration / 2 : duration;
   }
 

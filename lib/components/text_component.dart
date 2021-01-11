@@ -28,8 +28,8 @@ class TextComponent extends PositionComponent {
     _updateBox();
   }
 
-  TextComponent(this._text, {TextConfig config}) {
-    _config = config ?? TextConfig();
+  TextComponent(this._text, {TextConfig config})
+      : _config = config ?? TextConfig() {
     _updateBox();
   }
 

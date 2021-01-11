@@ -74,12 +74,14 @@ class MyGame extends BaseGame
   }
 
   void onPanEnd(DragEndDetails details) {
-    _panRect = Rect.fromLTRB(
-      _start.dx,
-      _start.dy,
-      _end.dx,
-      _end.dy,
-    );
+    if (_start != null && _end != null) {
+      _panRect = Rect.fromLTRB(
+        _start.dx,
+        _start.dy,
+        _end.dx,
+        _end.dy,
+      );
+    }
   }
 
   @override

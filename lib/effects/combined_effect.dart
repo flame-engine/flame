@@ -47,8 +47,10 @@ class CombinedEffect extends PositionComponentEffect {
           effect.originalAngle != effect.endAngle ? effect.endAngle : endAngle;
       endSize =
           effect.originalSize != effect.endSize ? effect.endSize : endSize;
-      peakTime = max(peakTime ?? 0,
-          effect.iterationTime + offset * effects.indexOf(effect));
+      peakTime = max(
+        peakTime,
+        effect.iterationTime + offset * effects.indexOf(effect),
+      );
     });
     if (isAlternating) {
       endPosition = originalPosition;

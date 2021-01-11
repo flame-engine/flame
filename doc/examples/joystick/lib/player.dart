@@ -25,14 +25,15 @@ class Player extends Component implements JoystickListener {
 
   @override
   void render(Canvas canvas) {
-    if (_rect != null) {
-      canvas.save();
-      canvas.translate(_rect.center.dx, _rect.center.dy);
-      canvas.rotate(radAngle == 0.0 ? 0.0 : radAngle + (pi / 2));
-      canvas.translate(-_rect.center.dx, -_rect.center.dy);
-      canvas.drawRect(_rect, _paint);
-      canvas.restore();
+    if (_rect == null) {
+      return;
     }
+    canvas.save();
+    canvas.translate(_rect.center.dx, _rect.center.dy);
+    canvas.rotate(radAngle == 0.0 ? 0.0 : radAngle + (pi / 2));
+    canvas.translate(-_rect.center.dx, -_rect.center.dy);
+    canvas.drawRect(_rect, _paint);
+    canvas.restore();
   }
 
   @override
@@ -79,12 +80,15 @@ class Player extends Component implements JoystickListener {
     final double nextX = (currentSpeed * dtUpdate) * cos(radAngle);
     final double nextY = (currentSpeed * dtUpdate) * sin(radAngle);
 
+    if (_rect == null) {
+      return;
+    }
+
     final Offset diffBase = Offset(
           _rect.center.dx + nextX,
           _rect.center.dy + nextY,
         ) -
         _rect.center;
-
     _rect = _rect.shift(diffBase);
   }
 }
