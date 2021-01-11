@@ -10,7 +10,7 @@ mixin Hitbox on PositionComponent {
   /// can be more accurately performed.
   /// The hitbox is defined from the center of the component and with
   /// percentages of the size of the component.
-  /// Example: [[0.5, 0.0], [0.0, 0.5], [-0.5, 0.0], [0.0, -0.5]]
+  /// Example: [[1.0, 0.0], [0.0, 1.0], [-1.0, 0.0], [0.0, -1.0]]
   /// This will form a square with a 45 degree angle (pi/4 rad) within the
   /// bounding size box.
   set shape(List<Vector2> vertices) => _shape = vertices;
@@ -27,7 +27,7 @@ mixin Hitbox on PositionComponent {
     if (_lastScaledSize != size || _scaledShape == null) {
       _lastScaledSize = size;
       _scaledShape = _shape?.map(
-        (p) => p.clone()..multiply(size),
+        (p) => p.clone()..multiply(size / 2),
       );
     }
     return _scaledShape;
