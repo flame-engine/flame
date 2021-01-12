@@ -11,11 +11,11 @@ import 'game/game.dart';
 extension SpriteBatchExtension on Game {
   /// Utility method to load and cache the image for a [SpriteBatch] based on its options
   Future<SpriteBatch> loadSpriteBatch(
-      String path, {
-        Color defaultColor = const Color(0x00000000),
-        BlendMode defaultBlendMode = BlendMode.srcOver,
-        RSTransform defaultTransform,
-      }) {
+    String path, {
+    Color defaultColor = const Color(0x00000000),
+    BlendMode defaultBlendMode = BlendMode.srcOver,
+    RSTransform defaultTransform,
+  }) {
     return SpriteBatch.load(
       path,
       defaultColor: defaultColor,
@@ -148,23 +148,23 @@ class SpriteBatch {
   Vector2 get size => Vector2Extension.fromInts(width, height);
 
   SpriteBatch(
-      this.atlas, {
-        this.defaultColor = const Color(0x00000000),
-        this.defaultBlendMode = BlendMode.srcOver,
-        this.defaultTransform,
-      })  : assert(atlas != null),
+    this.atlas, {
+    this.defaultColor = const Color(0x00000000),
+    this.defaultBlendMode = BlendMode.srcOver,
+    this.defaultTransform,
+  })  : assert(atlas != null),
         assert(defaultColor != null);
 
   /// Takes a path of an image, and optional arguments for the SpriteBatch.
   ///
   /// When the [images] is omitted, the global [Flame.images] is used.
   static Future<SpriteBatch> load(
-      String path, {
-        Color defaultColor = const Color(0x00000000),
-        BlendMode defaultBlendMode = BlendMode.srcOver,
-        RSTransform defaultTransform,
-        Images images,
-      }) async {
+    String path, {
+    Color defaultColor = const Color(0x00000000),
+    BlendMode defaultBlendMode = BlendMode.srcOver,
+    RSTransform defaultTransform,
+    Images images,
+  }) async {
     final _images = images ?? Flame.images;
     return SpriteBatch(
       await _images.load(path),
@@ -257,11 +257,11 @@ class SpriteBatch {
   }
 
   void render(
-      Canvas canvas, {
-        BlendMode blendMode,
-        Rect cullRect,
-        Paint paint,
-      }) {
+    Canvas canvas, {
+    BlendMode blendMode,
+    Rect cullRect,
+    Paint paint,
+  }) {
     paint ??= Paint();
 
     if (kIsWeb) {

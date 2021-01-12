@@ -20,7 +20,7 @@
  - Updated the `widgets.md` documentation
  - Removing methods `initialDimensions` and `removeGestureRecognizer` to avoid confusion
  - Adding standard for `SpriteComponent` and `SpriteAnimationComponent` constructors
- - move files to comply with the dart package layout convention
+ - Move files to comply with the dart package layout convention
 
 ## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget

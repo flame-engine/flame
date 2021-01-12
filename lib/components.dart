@@ -11,6 +11,9 @@ export 'src/components/sprite_component.dart';
 export 'src/components/text_box_component.dart';
 export 'src/components/text_component.dart';
 
+export 'src/timer.dart';
+export 'joystick.dart';
+
 export 'src/components/mixins/draggable.dart';
 export 'src/components/mixins/has_game_ref.dart';
 export 'src/components/mixins/single_child_particle.dart';
