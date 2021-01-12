@@ -16,7 +16,7 @@ void main() {
 }
 
 class TapablePolygon extends PositionComponent with Tapable, Hitbox {
-  TapablePolygon({ Vector2 position }) {
+  TapablePolygon({Vector2 position}) {
     size = Vector2.all(100);
     // The hitbox is defined as percentages of the full size of the component
     shape = [
