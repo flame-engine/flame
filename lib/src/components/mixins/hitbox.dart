@@ -15,6 +15,7 @@ mixin Hitbox on PositionComponent {
   /// Example: [[1.0, 0.0], [0.0, 1.0], [-1.0, 0.0], [0.0, -1.0]]
   /// This will form a square with a 45 degree angle (pi/4 rad) within the
   /// bounding size box.
+  /// NOTE: Always define the shape clockwise
   set shape(List<Vector2> vertices) => _shape = vertices;
   List<Vector2> get shape => _shape ?? [];
 

@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flame/collision_detection.dart';
+import 'package:flame/components/mixins/collidable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
@@ -131,14 +133,17 @@ class BaseGame extends Game with FPSCounter {
       c.onRemove();
       components.remove(c);
     });
+    
+    collisionDetection(components.where((e) => e is Collidable).map((e) => e as Collidable).toList(), screenSize: size,);
+    
     _removeLater.clear();
-
     if (_addLater.isNotEmpty) {
       final addNow = _addLater.toList(growable: false);
       _addLater.clear();
       components.addAll(addNow);
       addNow.forEach((component) => component.onMount());
     }
+    
     components.forEach((c) => c.update(t));
   }
 
