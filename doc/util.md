@@ -25,16 +25,6 @@ This method sets the orientation of the whole application (effectively, also the
 
 If a finer control of the allowed orientations is required (without having to deal with `SystemChrome` directly), `setOrientation` (accepts a single `DeviceOrientation` as a parameter) and `setOrientations` (accepts a `List<DeviceOrientation>` for possible orientations) can be used.
 
-### `Flame.util.initialDimensions()`
-
-Returns a `Future` with the dimension (`Size`) of the screen. This has to be done in a hacky way because of the reasons described in the code. If you are using `BaseGame`, you probably won't need to use these, as every `Component` will receive this information.
-
-**Note**: Call this function first thing in an `async`hronous `main` and `await` its value to avoid the "size bug" that affects certain devices when building for production.
-
-### `Flame.util.addGestureRecognizer()` and `Flame.util.removeGestureRecognizer()`
-
-These two functions help with registering (and de-registering) gesture recognizers so that the game can accept input. More about these two functions [here](input.md#Input).
-
 ### Other functions
 
 * `renderWhereAt` and `renderRotated`: if you are directly rendering to the `Canvas`, you can use these functions to easily manipulate coordinates to render things on the correct places. They change the `Canvas` transformation matrix but reset afterwards.

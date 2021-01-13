@@ -2,10 +2,8 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 
-import 'extensions/size.dart';
 import 'extensions/vector2.dart';
 
 /// Some utilities that did not fit anywhere else.
@@ -90,38 +88,6 @@ class Util {
   /// When it opens, it will automatically change orientation to the preferred one (if possible).
   Future<void> setPortraitDownOnly() {
     return setOrientation(DeviceOrientation.portraitDown);
-  }
-
-  /// Waits for the initial screen dimensions to be available.
-  ///
-  /// Because of flutter's issue [#5259](https://github.com/flutter/flutter/issues/5259), when the app starts the size might be 0x0.
-  /// This waits for the information to be properly updated.
-  ///
-  /// A best practice would be to implement there resize hooks on your game and components and don't use this at all.
-  /// Make sure your components are able to render and update themselves for any possible screen size.
-  Future<Vector2> initialDimensions() async {
-    // https://github.com/flutter/flutter/issues/5259
-    // "In release mode we start off at 0x0 but we don't in debug mode"
-    return await Future<Vector2>(() {
-      if (window.physicalSize.isEmpty) {
-        final completer = Completer<Vector2>();
-        window.onMetricsChanged = () {
-          if (!window.physicalSize.isEmpty && !completer.isCompleted) {
-            completer.complete(
-                (window.physicalSize / window.devicePixelRatio).toVector2());
-          }
-        };
-        return completer.future;
-      }
-      return (window.physicalSize / window.devicePixelRatio).toVector2();
-    });
-  }
-
-  /// This properly removes the bind of a gesture recognizer to your game.
-  ///
-  /// Use this in order to clear any added recognizers that you have added before
-  void removeGestureRecognizer(GestureRecognizer recognizer) {
-    recognizer.dispose();
   }
 
   /// Utility method to render stuff on a specific place.
