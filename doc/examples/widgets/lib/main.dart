@@ -126,7 +126,7 @@ void main() async {
     to: 3,
     loop: true,
   );
-  dashbook.storiesOf('AnimationWidget').decorator(CenterDecorator()).add(
+  dashbook.storiesOf('SpriteAnimationWidget').decorator(CenterDecorator()).add(
         'default',
         (ctx) => Container(
           width: ctx.numberProperty('container width', 400),
