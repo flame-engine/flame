@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite_batch.dart';
@@ -24,11 +25,11 @@ class MyGame extends BaseGame {
 
     spriteBatch.add(
       source: const Rect.fromLTWH(128 * 4.0, 128 * 4.0, 64, 128),
-      offset: const Offset(200, 200),
+      offset: Vector2(200, 200),
       color: Colors.greenAccent,
       scale: 2,
       rotation: pi / 9.0,
-      anchor: const Offset(64, 64),
+      anchor: Vector2(64, 64),
     );
 
     spriteBatch.addTransform(
@@ -45,7 +46,7 @@ class MyGame extends BaseGame {
       final y = r.nextInt(size.y ~/ 2).toDouble() + size.y / 2.0;
       spriteBatch.add(
         source: Rect.fromLTWH(sx, sy, 128, 128),
-        offset: Offset(x - 64, y - 64),
+        offset: Vector2(x - 64, y - 64),
       );
     }
 
