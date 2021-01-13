@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -108,11 +109,32 @@ class SpriteBatch {
   /// The sources to use on the [atlas].
   final _sources = <Rect>[];
 
+  /// The sources list shouldn't be modified directly, that is why an
+  /// [UnmodifiableListView] is used. If you want to add sources use the
+  /// [add] or [addTransform] method.
+  UnmodifiableListView<Rect> get sources {
+    return UnmodifiableListView<Rect>(_sources);
+  }
+
   /// The transforms that should be applied on the [_sources].
   final _transforms = <RSTransform>[];
 
+  /// The transforms list shouldn't be modified directly, that is why an
+  /// [UnmodifiableListView] is used. If you want to add transforms use the
+  /// [add] or [addTransform] method.
+  UnmodifiableListView<RSTransform> get transforms {
+    return UnmodifiableListView<RSTransform>(_transforms);
+  }
+
   /// The background color for the [_sources].
   final _colors = <Color>[];
+
+  /// The colors list shouldn't be modified directly, that is why an
+  /// [UnmodifiableListView] is used. If you want to add colors use the
+  /// [add] or [addTransform] method.
+  UnmodifiableListView<Color> get colors {
+    return UnmodifiableListView<Color>(_colors);
+  }
 
   /// The atlas used by the [SpriteBatch].
   final Image atlas;
