@@ -229,27 +229,29 @@ class SpriteBatch {
   void add({
     @required Rect source,
     double scale = 1.0,
-    Offset anchor = Offset.zero,
+    Vector2 anchor,
     double rotation = 0,
-    Offset offset = Offset.zero,
+    Vector2 offset,
     Color color,
   }) {
+    anchor ??= Vector2.zero();
+    offset ??= Vector2.zero();
     RSTransform transform;
 
     // If any of the transform arguments is different from the defaults,
     // then we create one. This is to prevent unnecessary computations
     // of the sine and cosine of the rotation.
     if (scale != 1.0 ||
-        anchor != Offset.zero ||
+        anchor != Vector2.zero() ||
         rotation != 0 ||
-        offset != Offset.zero) {
+        offset != Vector2.zero()) {
       transform = RSTransform.fromComponents(
         scale: scale,
-        anchorX: anchor.dx,
-        anchorY: anchor.dy,
+        anchorX: anchor.x,
+        anchorY: anchor.y,
         rotation: rotation,
-        translateX: offset.dx,
-        translateY: offset.dy,
+        translateX: offset.x,
+        translateY: offset.y,
       );
     }
 
