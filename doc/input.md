@@ -215,7 +215,7 @@ can use the `Hitbox` mixin to define a more accurate polygon for which the input
 for the event to be counted on your component.
 
 An example of you to use it can be seen
-[here](https://github.com/flame-engine/flame/tree/master/doc/examples/main_tapables_hitbox.dart).
+[here](https://github.com/flame-engine/flame/blob/master/doc/examples/gestures/lib/main_tapables_hitbox.dart).
 
 ## Keyboard
 
