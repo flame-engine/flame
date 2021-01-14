@@ -25,11 +25,11 @@ class MyGame extends BaseGame {
 
     spriteBatch.add(
       source: const Rect.fromLTWH(128 * 4.0, 128 * 4.0, 64, 128),
-      offset: Vector2(200, 200),
+      offset: Vector2.all(200),
       color: Colors.greenAccent,
       scale: 2,
       rotation: pi / 9.0,
-      anchor: Vector2(64, 64),
+      anchor: Vector2.all(64),
     );
 
     spriteBatch.addTransform(
