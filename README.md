@@ -1,5 +1,5 @@
 
-<p align="center">
+<p align="center">This is not in Flutter stable yet unfortunatelyThis is not in Flutter stable yet unfortunately
   <a href="https://flame-engine.org">
     <img alt="flame" width="200px" src="https://user-images.githubusercontent.com/6718144/101553774-3bc7b000-39ad-11eb-8a6a-de2daa31bd64.png">
   </a>
@@ -30,7 +30,7 @@ Use this version to get a preview of how the new Flame version will be and also 
 
 Checkout the branches `develop-v0.x` and `master-v0.x` for the current last 0.x version. However no new updates will be added to v0 except for bugfixes.
 
-The current v1 release is `1.0.0-rc4` on pub. The last stable version so far is `0.28.0`. Feel free to choose the one that better suits your need.
+The current v1 release is `1.0.0-rc5` on pub. The last stable version so far is `0.28.0`. Feel free to choose the one that better suits your need.
 
 ---
 
@@ -41,7 +41,7 @@ Note that the documentation in the master branch of this repo is newer than the 
 Here you can find the documentation for different versions:
 - Latest stable version: [Flame-engine website](https://flame-engine.org/)
 - Latest stable version: [GitHub docs](https://github.com/flame-engine/flame/tree/master-v0.x/doc)
-- Latest v1.0.0 version: [GitHub docs](https://github.com/flame-engine/flame/tree/1.0.0-rc4/doc)
+- Latest v1.0.0 version: [GitHub docs](https://github.com/flame-engine/flame/tree/1.0.0-rc5/doc)
 
 The complete documentation can be found [here](doc/README.md).
 
