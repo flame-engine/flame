@@ -265,8 +265,7 @@ class SpriteBatch {
     paint ??= Paint();
 
     if (kIsWeb) {
-      for (var i = 0; i < _batchItems.length; i++) {
-        final batchItem = _batchItems[i];
+      for (final batchItem in _batchItems) {
         paint..blendMode = blendMode ?? paint.blendMode ?? defaultBlendMode;
 
         canvas
