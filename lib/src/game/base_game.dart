@@ -1,14 +1,15 @@
 import 'dart:ui';
 
-import 'package:flame/collision_detection.dart';
-import 'package:flame/components/mixins/collidable.dart';
+import 'package:flame/game/mixins/has_collidables.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
+import '../collision_detection.dart' as collision_detection;
 import '../components/component.dart';
+import '../components/mixins/collidable.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
 import '../components/position_component.dart';
@@ -133,17 +134,24 @@ class BaseGame extends Game with FPSCounter {
       c.onRemove();
       components.remove(c);
     });
-    
-    collisionDetection(components.where((e) => e is Collidable).map((e) => e as Collidable).toList(), screenSize: size,);
-    
+
+    if (this is HasCollidables) {
+      final collidables = (this as HasCollidables).collidables;
+      _removeLater.whereType<Collidable>().forEach((c) {
+        collidables.remove(c);
+      });
+      collidables.addAll(_addLater.whereType<Collidable>());
+      collision_detection.collisionDetection(collidables, screenSize: size);
+    }
     _removeLater.clear();
+
     if (_addLater.isNotEmpty) {
       final addNow = _addLater.toList(growable: false);
       _addLater.clear();
       components.addAll(addNow);
       addNow.forEach((component) => component.onMount());
     }
-    
+
     components.forEach((c) => c.update(t));
   }
 
