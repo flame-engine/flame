@@ -45,16 +45,11 @@ Example usage:
 TextConfig regular = TextConfig(color: BasicPalette.white.color);
 
 class MyGame extends BaseGame {
-  MyGame() {
-    _start();
-  }
-
-  _start() async {
-    Size size = await Flame.util.initialDimensions();
-
+  @override
+  Future<void> onLoad() async {
     add(TextComponent('Hello, Flame', config: regular)
       ..anchor = Anchor.topCenter
-      ..x = size.width / 2
+      ..x = size.width / 2 // size is a property from game
       ..y = 32.0);
   }
 }
