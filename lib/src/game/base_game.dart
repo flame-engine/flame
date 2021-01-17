@@ -1,15 +1,15 @@
 import 'dart:ui';
 
-import 'package:flame/game/mixins/has_collidables.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
-import '../collision_detection.dart' as collision_detection;
+import '../collision_detection/collision_detection.dart' as collision_detection;
 import '../components/component.dart';
 import '../components/mixins/collidable.dart';
+import '../components/mixins/has_collidables.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
 import '../components/position_component.dart';

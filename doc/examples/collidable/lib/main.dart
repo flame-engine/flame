@@ -66,7 +66,7 @@ class CollidableRock extends SpriteComponent with Hitbox, Collidable {
   }
 
   @override
-  void collisionCallback(List<Vector2> points, Collidable other) {
+  void collisionCallback(Set<Vector2> points, Collidable other) {
     print("Collision at $points");
   }
 }

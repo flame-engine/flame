@@ -1,4 +1,4 @@
-import '../base_game.dart';
+import '../../../game.dart';
 import '../../components/mixins/collidable.dart';
 
 mixin HasCollidables on BaseGame {
