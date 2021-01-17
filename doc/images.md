@@ -148,6 +148,22 @@ A `SpriteBatchComponent` is also available for your convenience.
 
 See example [here](https://github.com/flame-engine/flame/tree/master/doc/examples/sprite_batch).
 
+## Merging multiple images into one
+
+In some cases you want to merge multiple images into a single image, for instance when using the [SpriteBatch](#spritebatch) API to optimize your drawing calls. For that Flame comes with the `ImageMerger` class. This allows you to add multiple images, each at their own position, onto a new image:
+
+```dart
+final merger = ImageMerger()
+  ..add(image1, Vector2(0, 0))
+  ..add(image2, Vector2(64, 0));
+  ..add(image3, 
+    Vector2(128, 0), 
+    source: Rect.fromLTWH(32, 32, 64, 64),
+  );
+
+final output = await merger.merge();
+```
+
 ## Svg
 
 Flame provides a simple API to render SVG images in your game.

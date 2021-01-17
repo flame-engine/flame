@@ -25,6 +25,18 @@ This method sets the orientation of the whole application (effectively, also the
 
 If a finer control of the allowed orientations is required (without having to deal with `SystemChrome` directly), `setOrientation` (accepts a single `DeviceOrientation` as a parameter) and `setOrientations` (accepts a `List<DeviceOrientation>` for possible orientations) can be used.
 
+### `Flame.util.decodeImageFromPixels()`
+
+The [dart-ui decodeImageFromPixels](https://api.flutter.dev/flutter/dart-ui/decodeImageFromPixels.html) currently does not support the web platform. So if you are looking for a way to manipulate pixel data on the web this method can be used as a replacement for `dart-ui decodeImageFromPixels`:
+
+```dart
+final image = await Flame.util.decodeImageFromPixels(
+  data, // A Uint8List containing pixel data in the RGBA format.
+  200, 
+  200,
+);
+```
+
 ### Other functions
 
 * `renderWhereAt` and `renderRotated`: if you are directly rendering to the `Canvas`, you can use these functions to easily manipulate coordinates to render things on the correct places. They change the `Canvas` transformation matrix but reset afterwards.
