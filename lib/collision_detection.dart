@@ -19,15 +19,3 @@ bool containsPoint(Vector2 point, List<Vector2> polygon) {
   }
   return true;
 }
-
-// Rotates the [point] with [angle] around [position]
-Vector2 rotatePoint(Vector2 point, double angle, Vector2 position) {
-  return Vector2(
-    math.cos(angle) * (point.x - position.x) -
-        math.sin(angle) * (point.y - position.y) +
-        position.x,
-    math.sin(angle) * (point.x - position.x) +
-        math.cos(angle) * (point.y - position.y) +
-        position.y,
-  );
-}
