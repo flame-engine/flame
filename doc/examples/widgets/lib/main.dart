@@ -33,7 +33,7 @@ Anchor parseAnchor(String name) {
       return Anchor.bottomRight;
   }
 
-  return null;
+  throw Exception("Cannot parse anchor name `$name`");
 }
 
 void main() async {
@@ -108,9 +108,8 @@ void main() async {
           child: SpriteWidget(
             sprite: shieldSprite,
             anchor: parseAnchor(
-                  ctx.listProperty('anchor', 'Anchor.center', anchorOptions),
-                ) ??
-                Anchor.topLeft,
+              ctx.listProperty('anchor', 'Anchor.center', anchorOptions),
+            ),
           ),
         ),
       );
@@ -135,9 +134,8 @@ void main() async {
             animation: _animation,
             playing: ctx.boolProperty('playing', true),
             anchor: parseAnchor(
-                  ctx.listProperty('anchor', 'Anchor.center', anchorOptions),
-                ) ??
-                Anchor.topLeft,
+              ctx.listProperty('anchor', 'Anchor.center', anchorOptions),
+            ),
           ),
         ),
       );
