@@ -125,7 +125,7 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Rotate [point] around component's angle and position (anchor)
   Vector2 rotatePoint(Vector2 point) {
-    return collision_detection.rotatePoint(point, angle, position);
+    return point.clone()..rotate(angle, center: position);
   }
 
   @override
