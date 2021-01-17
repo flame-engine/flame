@@ -14,6 +14,7 @@ class LinearFunction {
     final c = p2.y * p1.x - p1.y * p2.x;
     return LinearFunction(a, b, c);
   }
+
   /// Returns an empty list if there is no intersection
   List<Vector2> intersections(LinearFunction otherLine) {
     final determinant = a * otherLine.b - otherLine.a * b;
@@ -28,7 +29,7 @@ class LinearFunction {
       )
     ];
   }
-  
+
   @override
   String toString() {
     final a0 = "${a}x";
