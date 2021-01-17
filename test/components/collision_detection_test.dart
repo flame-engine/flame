@@ -1,8 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame/src/collision_detection/collision_detection.dart';
-import 'package:flame/src/collision_detection/line_segment.dart';
-import 'package:flame/src/collision_detection/linear_function.dart';
 import 'package:flame/src/components/mixins/collidable.dart';
+import 'package:flame/src/geometry/line_segment.dart';
+import 'package:flame/src/geometry/linear_function.dart';
 import 'package:test/test.dart';
 
 class MyCollidableComponent extends PositionComponent with Hitbox, Collidable {

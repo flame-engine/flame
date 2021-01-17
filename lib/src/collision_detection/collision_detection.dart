@@ -2,7 +2,8 @@ import 'dart:math' as math;
 
 import '../components/mixins/collidable.dart';
 import '../../extensions.dart';
-import 'line_segment.dart';
+import '../extensions/vector2.dart';
+import '../geometry/line_segment.dart';
 
 /// Check whether any [Collidable] in [collidables] collide with each other
 /// or [screenSize] (if defined), and call callbacks accordingly
