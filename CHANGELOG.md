@@ -13,6 +13,7 @@
  - Adding loading methods for the different `ParallaxComponent` parts and refactor how the delta velocity works
  - Add tests for `Timer` and fix a bug where `progress` was not reported correctly
  - Updated the `widgets.md` documentation
+ - Removing methods `initialDimensions` and `removeGestureRecognizer` to avoid confusion
 
 ## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget
