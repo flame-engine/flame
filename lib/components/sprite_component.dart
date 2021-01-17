@@ -21,6 +21,7 @@ class SpriteComponent extends PositionComponent {
   /// If not provided the default is full white (no tint).
   Paint overridePaint;
 
+  /// Creates a component with an empty sprite which can be set later
   SpriteComponent();
 
   SpriteComponent.fromImage(Vector2 size, Image image)
