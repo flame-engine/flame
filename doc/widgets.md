@@ -1,6 +1,6 @@
 # Widgets
 
-One cool feature when developing games with Flutter is the ability to use Flutter's extensive toolset for building UIs, Flame tries to expand that introducing widgets which are specially made with games in mind.
+One cool feature when developing games with Flutter is the ability to use Flutter's extensive toolset for building UIs, Flame tries to expand on that by introducing widgets that are made with games in mind.
 
 Here you can find all the available widgets provided by Flame.
 
@@ -57,21 +57,20 @@ How to use it:
 ```dart
 SpriteWidget(
     sprite: shieldSprite,
-    center: true,
-),
-
+    anchor: Anchor.center,
+)
 ```
 
-## AnimationWidget
+## SpriteAnimationWidget
 
-`AnimationWidget` is a widget used to display [Animations](https://github.com/flame-engine/flame/blob/master/lib/animation.dart) inside a widget tree.
+`SpriteAnimationWidget` is a widget used to display [SpriteAnimations](https://github.com/flame-engine/flame/blob/master/lib/sprite_animation.dart) inside a widget tree.
 
 How to use it:
 
 ```dart
-AnimationWidget(
+SpriteAnimationWidget(
     animation: _animation,
     playing: true,
-    center: true,
-),
+    anchor: Anchor.center,
+)
 ```
