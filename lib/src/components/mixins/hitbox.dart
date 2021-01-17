@@ -1,3 +1,4 @@
+import 'dart:ui';
 
 import '../../../components.dart';
 import '../../../collision_detection.dart' as collision_detection;
@@ -31,6 +32,15 @@ mixin Hitbox on PositionComponent {
       );
     }
     return _scaledShape;
+  }
+
+  void renderContour(Canvas canvas) {
+    final hitboxPath = Path()
+      ..addPolygon(
+        scaledShape.map((point) => (point + size / 2).toOffset()).toList(),
+        true,
+      );
+    canvas.drawPath(hitboxPath, debugPaint);
   }
 
   // These variables are used to see whether the bounding vertices cache is

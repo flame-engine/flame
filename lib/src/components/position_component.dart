@@ -143,15 +143,7 @@ abstract class PositionComponent extends BaseComponent {
   @override
   void renderDebugMode(Canvas canvas) {
     if (this is Hitbox) {
-      final hitboxPath = Path()
-        ..addPolygon(
-          (this as Hitbox)
-              .scaledShape
-              .map((point) => (point + size / 2).toOffset())
-              .toList(),
-          true,
-        );
-      canvas.drawPath(hitboxPath, debugPaint);
+      (this as Hitbox).renderContour(canvas);
     }
     canvas.drawRect(size.toRect(), debugPaint);
     debugTextConfig.render(
