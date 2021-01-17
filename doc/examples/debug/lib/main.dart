@@ -10,7 +10,6 @@ import 'dart:ui';
 
 void main() async {
   Flame.initializeWidget();
-  await Flame.util.initialDimensions();
 
   runApp(
     GameWidget(

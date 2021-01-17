@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Changed `parseAnchor` in `examples/widgets` to throw an exception instead of returning null when it cannot parse an anchor name
  - Code improvements and preparing APIs to null-safety
  - BaseComponent removes children marked as shouldRemove during update
  - Use `find` instead of `globstar` pattern in `scripts/lint.sh` as the later isn't enabled by default in bash
@@ -15,6 +16,9 @@
  - Added fallback support for the web on the `SpriteBatch` class
  - Added missing documentation on the `SpriteBatch` class
  - Added an utility method to load a `SpriteBatch` on the `Game` class
+ - Updated the `widgets.md` documentation
+ - Removing methods `initialDimensions` and `removeGestureRecognizer` to avoid confusion
+ - Adding standard for `SpriteComponent` and `SpriteAnimationComponent` constructors
 
 ## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget
