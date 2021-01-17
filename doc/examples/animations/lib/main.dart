@@ -39,11 +39,13 @@ class MyGame extends BaseGame with TapDetector {
     );
 
     final spriteSize = Vector2.all(100.0);
-    final animationComponent2 = SpriteAnimationComponent(spriteSize, animation);
+    final animationComponent2 =
+        SpriteAnimationComponent.fromSpriteAnimation(spriteSize, animation);
     animationComponent2.x = size.x / 2 - spriteSize.x;
     animationComponent2.y = spriteSize.y;
 
-    final reversedAnimationComponent = SpriteAnimationComponent(
+    final reversedAnimationComponent =
+        SpriteAnimationComponent.fromSpriteAnimation(
       spriteSize,
       animation.reversed(),
     );

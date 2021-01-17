@@ -36,8 +36,10 @@ class MyGame extends BaseGame {
   }
 
   SpriteAnimationComponent buildAnimationComponent(Image image) {
-    final ac =
-        SpriteAnimationComponent(Vector2.all(100), buildAnimation(image));
+    final ac = SpriteAnimationComponent.fromSpriteAnimation(
+      Vector2.all(100),
+      buildAnimation(image),
+    );
     ac.x = size.x / 2 - ac.x / 2;
     return ac;
   }
