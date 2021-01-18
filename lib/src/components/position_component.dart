@@ -1,11 +1,10 @@
 import 'dart:ui' hide Offset;
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
-
 import '../anchor.dart';
 import '../extensions/offset.dart';
 import '../extensions/vector2.dart';
+import '../../game.dart';
 import 'base_component.dart';
 import 'component.dart';
 
@@ -24,6 +23,10 @@ import 'component.dart';
 abstract class PositionComponent extends BaseComponent {
   /// The position of this component on the screen (relative to the anchor).
   Vector2 position = Vector2.zero();
+
+  /// If the component has a [PositionComponent] as a parent it will be
+  /// added here
+  PositionComponent positionParent;
 
   /// X position of this component on the screen (relative to the anchor).
   double get x => position.x;
@@ -45,8 +48,14 @@ abstract class PositionComponent extends BaseComponent {
   double get height => size.y;
   set height(double height) => size.y = height;
 
-  /// Get the top left position regardless of the anchor and angle
+  /// Get the relative top left position regardless of the anchor and angle
   Vector2 get topLeftPosition => anchor.translate(position, size);
+
+  /// Get the absolute top left position regardless of whether it is a child or not
+  Vector2 get absoluteTopLeftPosition {
+    return (positionParent?.absoluteTopLeftPosition ?? Vector2.zero()) +
+        topLeftPosition;
+  }
 
   /// Set the top left position regardless of the anchor
   set topLeftPosition(Vector2 position) {
@@ -80,12 +89,13 @@ abstract class PositionComponent extends BaseComponent {
   }
 
   @override
-  bool checkOverlap(Vector2 point) {
+  bool checkOverlap(Vector2 absolutePoint) {
+    final point = absolutePoint -
+        (positionParent?.absoluteTopLeftPosition ?? Vector2.zero());
     final corners = _rotatedCorners();
-    corners.add(corners.first);
-    for (int i = 1; i < corners.length; i++) {
-      final previousCorner = corners[i - 1];
-      final corner = corners[i];
+    for (int i = 0; i < corners.length; i++) {
+      final previousCorner = corners[i];
+      final corner = corners[(i + 1) % corners.length];
       final isOutside =
           (corner.x - previousCorner.x) * (point.y - previousCorner.y) -
                   (point.x - previousCorner.x) * (corner.y - previousCorner.y) >
@@ -156,6 +166,14 @@ abstract class PositionComponent extends BaseComponent {
       canvas.translate(width / 2, height / 2);
       canvas.scale(renderFlipX ? -1.0 : 1.0, renderFlipY ? -1.0 : 1.0);
       canvas.translate(-width / 2, -height / 2);
+    }
+  }
+
+  @override
+  Future<void> addChild(Component child, {Game gameRef}) async {
+    super.addChild(child, gameRef: gameRef);
+    if (child is PositionComponent) {
+      child.positionParent = this;
     }
   }
 }

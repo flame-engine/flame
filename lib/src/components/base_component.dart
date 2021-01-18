@@ -156,13 +156,17 @@ abstract class BaseComponent extends Component {
 
   bool containsChild(Component c) => _children.contains(c);
 
-  /// This method first calls the passed handler on the leaves in the tree, the children without any children of their own.
-  /// Then it continues through all other children.
-  /// The propagation continues until the handler returns false, which means "do not continue", or when the handler has been called with all children
+  /// This method first calls the passed handler on the leaves in the tree,
+  /// the children without any children of their own.
+  /// Then it continues through all other children. The propagation continues
+  /// until the handler returns false, which means "do not continue", or when
+  /// the handler has been called with all children
   ///
-  /// This method is important to be used by the engine to propagate actions like rendering, taps, etc,
-  /// but you can call it yourself if you need to apply an action to the whole component chain.
-  /// It will only consider components of type T in the hierarchy, so use T = Component to target everything.
+  /// This method is important to be used by the engine to propagate actions
+  /// like rendering, taps, etc, but you can call it yourself if you need to
+  /// apply an action to the whole component chain.
+  /// It will only consider components of type T in the hierarchy,
+  /// so use T = Component to target everything.
   bool propagateToChildren<T extends Component>(
     bool Function(T) handler,
   ) {
