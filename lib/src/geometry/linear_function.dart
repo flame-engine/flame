@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../../extensions.dart';
 
 /// This represents a linear function on the ax + by = c form
@@ -29,6 +31,9 @@ class LinearFunction {
       )
     ];
   }
+
+  /// The angle of this line
+  double get angle => atan2(-a, b);
 
   @override
   String toString() {

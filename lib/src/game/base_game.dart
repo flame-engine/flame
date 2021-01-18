@@ -15,7 +15,6 @@ import '../components/mixins/tapable.dart';
 import '../components/position_component.dart';
 import '../extensions/vector2.dart';
 import '../fps_counter.dart';
-import 'mixins/has_collidables.dart';
 import 'game.dart';
 
 /// This is a more complete and opinionated implementation of Game.

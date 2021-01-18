@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flame/components.dart';
+import 'package:flame/src/geometry/polygon.dart';
 import 'package:test/test.dart';
 
 class MyComponent extends PositionComponent {}
@@ -92,12 +93,12 @@ void main() {
       component.position = Vector2(1.0, 1.0);
       component.anchor = Anchor.topLeft;
       component.size = size;
-      component.shape = [
+      component.addShape(HitboxPolygon([
         Vector2(1, 0),
         Vector2(0, -1),
         Vector2(-1, 0),
         Vector2(0, 1),
-      ];
+      ]));
 
       final point = component.position + component.size / 4;
       expect(component.containsPoint(point), true);
@@ -109,12 +110,12 @@ void main() {
       component.position = Vector2(1.0, 1.0);
       component.anchor = Anchor.topLeft;
       component.size = size;
-      component.shape = [
+      component.addShape(HitboxPolygon([
         Vector2(1, 0),
         Vector2(0, -1),
         Vector2(-1, 0),
         Vector2(0, 1),
-      ];
+      ]));
 
       final point = Vector2(1.1, 1.1);
       expect(component.containsPoint(point), false);

@@ -222,7 +222,7 @@ void main() {
         Vector2(1, 0),
         Vector2(0, 1),
       ];
-      final intersections = hitboxIntersections(hitboxA, hitboxB);
+      final intersections = polygonIntersections(hitboxA, hitboxB);
       assert(
         intersections.contains(Vector2(1.5, 0.5)),
         "Missed one intersection",
@@ -247,7 +247,7 @@ void main() {
         Vector2(3, 2),
         Vector2(3, 1),
       ];
-      final intersections = hitboxIntersections(hitboxA, hitboxB);
+      final intersections = polygonIntersections(hitboxA, hitboxB);
       assert(
           intersections.containsAll(
             [
@@ -273,7 +273,7 @@ void main() {
         Vector2(3, 3),
         Vector2(3, 2),
       ];
-      final intersections = hitboxIntersections(hitboxA, hitboxB);
+      final intersections = polygonIntersections(hitboxA, hitboxB);
       assert(
         intersections.contains(Vector2(2.0, 2.0)),
         "Does not have all the correct intersection points",
@@ -296,7 +296,7 @@ void main() {
         Vector2(1, 2),
         Vector2(2, 1),
       ];
-      final intersections = hitboxIntersections(hitboxA, hitboxB);
+      final intersections = polygonIntersections(hitboxA, hitboxB);
       print(intersections);
       //assert(intersections.contains(Vector2(2.0, 2.0)), "Does not have all the correct intersection points",);
       //assert(intersections.length == 1, "Wrong number of intersections");

@@ -1,20 +1,25 @@
+import 'dart:collection';
 import 'dart:math' as math;
+
+
+import 'package:flame/src/geometry/polygon.dart';
 
 import '../components/mixins/collidable.dart';
 import '../../extensions.dart';
 import '../extensions/vector2.dart';
 import '../geometry/line_segment.dart';
+import '../geometry/shape.dart';
 
 /// Check whether any [Collidable] in [collidables] collide with each other
 /// or [screenSize] (if defined), and call callbacks accordingly
 void collisionDetection(List<Collidable> collidables, {Vector2 screenSize}) {
+  // TODO: split screen in to pieces that collidables are divided by
   print("=================================");
   for (int x = 0; x < collidables.length - 1; x++) {
     final collidableX = collidables[x];
     for (int y = x + 1; y < collidables.length; y++) {
       final collidableY = collidables[y];
-      final points =
-          hitboxIntersections(collidableX.hitbox, collidableY.hitbox);
+      final points = intersections(collidableX.shapes, collidableY.shapes);
       if (points.isNotEmpty) {
         print("booom");
         collidableX.collisionCallback(points, collidableY);
@@ -22,22 +27,53 @@ void collisionDetection(List<Collidable> collidables, {Vector2 screenSize}) {
       }
     }
 
-    if (screenSize != null && collidableX.hasScreenCollision) {
-      final intersectionPoints =
-          hitboxSizeIntersections(collidableX.hitbox, screenSize);
-      if (intersectionPoints.isNotEmpty) {
-        print("kabooom $intersectionPoints");
-        collidableX.screenCollisionCallback(intersectionPoints);
+    // TODO: Add screen as a rectangle and compare intersection
+    //if (screenSize != null && collidableX.hasScreenCollision) {
+    //  final intersectionPoints = intersections(collidableX.shapes, [screenSize])
+    //      hitboxSizeIntersections(collidableX.shapes, screenSize);
+    //  if (intersectionPoints.isNotEmpty) {
+    //    print("kabooom $intersectionPoints");
+    //    collidableX.screenCollisionCallback(intersectionPoints);
+    //  }
+    //}
+  }
+}
+
+Set<Vector2> intersections(
+  List<HitboxShape> shapesA,
+  List<HitboxShape> shapesB,
+) {
+  final result = <Vector2>{};
+  for (Shape shapeA in shapesA) {
+    for (Shape shapeB in shapesB) {
+      final currentResult = <Vector2>{};
+      if (shapeA is Polygon && shapeB is Polygon) {
+        result.addAll(polygonIntersections(shapeA.hitbox, shapeB.hitbox));
+      } else {
+        throw UnimplementedError;
+      }
+
+      if (currentResult.isNotEmpty) {
+        // Do callbacks to the involved shapes
+        final hitboxShapeA = shapeA as HitboxShape;
+        final hitboxShapeB = shapeB as HitboxShape;
+        hitboxShapeA.collisionCallback(currentResult, hitboxShapeB);
+        hitboxShapeB.collisionCallback(currentResult, hitboxShapeA);
+        currentResult.clear();
       }
     }
   }
+  return result;
 }
 
 /// Returns the intersection points of the [hitboxA] and [hitboxB]
 /// The two hitboxes are required to be convex
 /// If they share a segment of a line, both end points and the center point of
 /// that line segment will be counted as collision points
-Set<Vector2> hitboxIntersections(List<Vector2> hitboxA, List<Vector2> hitboxB) {
+Set<Vector2> polygonIntersections(
+  List<Vector2> hitboxA,
+  List<Vector2> hitboxB,
+) {
   assert(
     hitboxA.isNotEmpty && hitboxB.isNotEmpty,
     "Both hitboxes need to have elements",
@@ -150,7 +186,10 @@ Vector2 rotatePoint(Vector2 point, double radians, Vector2 position) {
 
 /// Returns where the hitbox edges of the [hitbox] intersects the box
 /// defined by [size] (usually the screen size).
-Set<Vector2> hitboxSizeIntersections(List<Vector2> hitbox, Vector2 size) {
+Set<Vector2> hitboxSizeIntersections(
+  UnmodifiableListView<Vector2> hitbox,
+  Vector2 size,
+) {
   final screenBounds = [
     Vector2(0, 0),
     Vector2(size.x, 0),
