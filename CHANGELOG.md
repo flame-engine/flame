@@ -13,6 +13,10 @@
  - Adding shortcut for loading Sprites and SpriteAnimation from the global cache
  - Adding loading methods for the different `ParallaxComponent` parts and refactor how the delta velocity works
  - Add tests for `Timer` and fix a bug where `progress` was not reported correctly
+ - Refactored the `SpriteBatch` class to be more elegant and to support `Vector2`.
+ - Added fallback support for the web on the `SpriteBatch` class
+ - Added missing documentation on the `SpriteBatch` class
+ - Added an utility method to load a `SpriteBatch` on the `Game` class
  - Updated the `widgets.md` documentation
  - Removing methods `initialDimensions` and `removeGestureRecognizer` to avoid confusion
  - Adding standard for `SpriteComponent` and `SpriteAnimationComponent` constructors
