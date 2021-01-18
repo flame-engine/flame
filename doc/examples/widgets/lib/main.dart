@@ -1,15 +1,9 @@
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/components.dart';
+import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart' hide Animation;
 import 'package:flame/flame.dart';
-import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
 import 'package:dashbook/dashbook.dart';
-
-import 'package:flame/widgets/nine_tile_box.dart';
-import 'package:flame/widgets/sprite_button.dart';
-import 'package:flame/widgets/sprite_widget.dart';
-import 'package:flame/widgets/animation_widget.dart';
-import 'package:flame/anchor.dart';
 
 Anchor parseAnchor(String name) {
   switch (name) {

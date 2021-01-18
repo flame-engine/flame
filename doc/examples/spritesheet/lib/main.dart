@@ -1,6 +1,4 @@
-import 'package:flame/components/sprite_animation_component.dart';
-import 'package:flame/components/sprite_component.dart';
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/spritesheet.dart';
 import 'package:flutter/material.dart';

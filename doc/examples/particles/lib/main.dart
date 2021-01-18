@@ -2,29 +2,12 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/sprite_animation.dart';
-import 'package:flame/components/component.dart';
-import 'package:flame/particles/circle_particle.dart';
-import 'package:flame/particles/composed_particle.dart';
-import 'package:flame/particles/curved_particle.dart';
-import 'package:flame/particles/moving_particle.dart';
-import 'package:flame/particles/sprite_particle.dart';
-import 'package:flame/particles/translated_particle.dart';
-import 'package:flame/particles/computed_particle.dart';
-import 'package:flame/particles/image_particle.dart';
-import 'package:flame/particles/rotating_particle.dart';
-import 'package:flame/particles/accelerated_particle.dart';
-import 'package:flame/particles/paint_particle.dart';
-import 'package:flame/particles/animation_particle.dart';
-import 'package:flame/particles/component_particle.dart';
+import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/timer.dart' as flame_time;
-import 'package:flame/particle.dart';
-import 'package:flame/extensions/vector2.dart';
-import 'package:flame/sprite.dart';
+import 'package:flame/particles.dart';
 import 'package:flame/spritesheet.dart';
-import 'package:flame/text_config.dart';
+import 'package:flame/timer.dart' as flame_timer;
 import 'package:flutter/material.dart' hide Image;
 
 void main() async {
@@ -570,7 +553,7 @@ class SineCurve extends Curve {
 /// each 2s of registered lifetime.
 class TrafficLightComponent extends Component {
   final Rect rect = Rect.fromCenter(center: Offset.zero, height: 32, width: 32);
-  final flame_time.Timer colorChangeTimer = flame_time.Timer(2, repeat: true);
+  final flame_timer.Timer colorChangeTimer = flame_timer.Timer(2, repeat: true);
   final colors = <Color>[
     Colors.green,
     Colors.orange,

@@ -1,9 +1,8 @@
 import 'dart:math';
 
-import 'package:flame/components/sprite_component.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/extensions/vector2.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

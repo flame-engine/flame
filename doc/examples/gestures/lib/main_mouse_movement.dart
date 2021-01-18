@@ -2,8 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/extensions/vector2.dart';
-import 'package:flame/extensions/offset.dart';
+import 'package:flame/extensions.dart';
 
 void main() {
   runApp(
