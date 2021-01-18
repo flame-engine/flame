@@ -136,15 +136,11 @@ class JoystickAction {
       // Calculate the knob position
       final double nextX = dist * cos(_radAngle);
       final double nextY = dist * sin(_radAngle);
-      final Offset nextPoint = Offset(nextX, nextY);
+      final nextPoint = Offset(nextX, nextY);
 
       if (_rectAction != null) {
-        final Offset diff = Offset(
-              _rectBackgroundDirection.center.dx + nextPoint.dx,
-              _rectBackgroundDirection.center.dy + nextPoint.dy,
-            ) -
-            _rectAction.center;
-
+        final diff =
+            _rectBackgroundDirection.center + nextPoint - _rectAction.center;
         _rectAction = _rectAction.shift(diff);
       }
 
