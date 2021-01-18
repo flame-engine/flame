@@ -24,8 +24,7 @@ abstract class PositionComponent extends BaseComponent {
   /// The position of this component on the screen (relative to the anchor).
   Vector2 position = Vector2.zero();
 
-  /// If the component has a [PositionComponent] as a parent it will be
-  /// added here
+  /// If the component has a [PositionComponent] as a parent it will be set here
   PositionComponent _positionParent;
 
   /// X position of this component on the screen (relative to the anchor).
