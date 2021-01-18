@@ -26,7 +26,7 @@ abstract class PositionComponent extends BaseComponent {
 
   /// If the component has a [PositionComponent] as a parent it will be
   /// added here
-  PositionComponent positionParent;
+  PositionComponent _positionParent;
 
   /// X position of this component on the screen (relative to the anchor).
   double get x => position.x;
@@ -53,7 +53,7 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Get the absolute top left position regardless of whether it is a child or not
   Vector2 get absoluteTopLeftPosition {
-    return (positionParent?.absoluteTopLeftPosition ?? Vector2.zero()) +
+    return (_positionParent?.absoluteTopLeftPosition ?? Vector2.zero()) +
         topLeftPosition;
   }
 
@@ -91,7 +91,7 @@ abstract class PositionComponent extends BaseComponent {
   @override
   bool checkOverlap(Vector2 absolutePoint) {
     final point = absolutePoint -
-        (positionParent?.absoluteTopLeftPosition ?? Vector2.zero());
+        (_positionParent?.absoluteTopLeftPosition ?? Vector2.zero());
     final corners = _rotatedCorners();
     for (int i = 0; i < corners.length; i++) {
       final previousCorner = corners[i];
@@ -173,7 +173,7 @@ abstract class PositionComponent extends BaseComponent {
   Future<void> addChild(Component child, {Game gameRef}) async {
     super.addChild(child, gameRef: gameRef);
     if (child is PositionComponent) {
-      child.positionParent = this;
+      child._positionParent = this;
     }
   }
 }
