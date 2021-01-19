@@ -20,7 +20,7 @@
  - Updated the `widgets.md` documentation
  - Removing methods `initialDimensions` and `removeGestureRecognizer` to avoid confusion
  - Adding standard for `SpriteComponent` and `SpriteAnimationComponent` constructors
- - Added `ImageMerger`, allows for merging multiple images into a single image.
+ - Added `Composition`, allows for composing multiple images into a single image.
 
 ## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget
