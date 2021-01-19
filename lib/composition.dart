@@ -87,7 +87,7 @@ class Composition {
         Paint()..blendMode = blendMode,
       );
 
-      // If the rect is not fully contained inside the current outputRect,
+      // If the destination is not fully contained inside the current output,
       // we have to resize the data list.
       if (!(output.contains(destination.topLeft) &&
           output.contains(destination.topRight) &&
