@@ -1,11 +1,8 @@
 import 'dart:ui';
 
-import 'package:flame/anchor.dart';
-import 'package:flame/components/text_box_component.dart';
-import 'package:flame/components/text_component.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 
 void main() {

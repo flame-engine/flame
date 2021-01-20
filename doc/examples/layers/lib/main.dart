@@ -1,11 +1,11 @@
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart' hide Animation;
-import 'package:flame/sprite.dart';
-import 'package:flame/layers/layer.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/layers.dart';
 
 import 'dart:ui';
+
+import 'package:flutter/widgets.dart';
 
 void main() async {
   Flame.initializeWidget();

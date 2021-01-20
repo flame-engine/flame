@@ -1,9 +1,9 @@
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
-import 'package:flame/sprite.dart';
 
 import 'dart:ui';
+
+import 'package:flutter/widgets.dart';
 
 void main() {
   runApp(

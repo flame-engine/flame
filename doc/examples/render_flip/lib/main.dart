@@ -1,7 +1,5 @@
-import 'package:flame/sprite_animation.dart';
-import 'package:flame/components/sprite_animation_component.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'dart:ui';
 
