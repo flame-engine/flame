@@ -109,7 +109,7 @@ abstract class BaseComponent extends Component {
   /// Called to check whether the point is to be counted as within the component
   /// It needs to be overridden to have any effect, like it is in the
   /// [PositionComponent]
-  bool checkOverlap(Vector2 point) => false;
+  bool containsPoint(Vector2 point) => false;
 
   /// Add an effect to the component
   void addEffect(ComponentEffect effect) {
