@@ -23,7 +23,6 @@
  - Move files to comply with the dart package layout convention
  - Fix gesture detection bug of children of `PositionComponent`
  - The `game` argument on `GameWidget` is now required
- - Added a note to the `GameWidget` docs mentioning to not instantiate inside a build method
 
 ## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget
