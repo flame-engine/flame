@@ -12,7 +12,8 @@ class MyGame extends BaseGame with HasTapableComponents {}
 class MyTap extends PositionComponent with Tapable {
   Vector2 gameSize;
 
-  bool tapped = false;
+  int tapTimes = 0;
+  bool get tapped => tapTimes > 0;
   bool updated = false;
   bool rendered = false;
 
@@ -36,12 +37,9 @@ class MyTap extends PositionComponent with Tapable {
 
   @override
   bool onTapDown(TapDownDetails details) {
-    tapped = true;
+    ++tapTimes;
     return true;
   }
-
-  @override
-  bool checkOverlap(Vector2 v) => true;
 }
 
 class MyAsyncChild extends MyTap {
@@ -49,14 +47,9 @@ class MyAsyncChild extends MyTap {
   Future<void> onLoad() => Future.value();
 }
 
-class MyComposed extends PositionComponent with HasGameRef, Tapable {
-  @override
-  Rect toRect() => Rect.zero;
-}
+class MyComposed extends PositionComponent with HasGameRef, Tapable {}
 
-class PositionComponentNoNeedForRect extends PositionComponent with Tapable {}
-
-Vector2 size = Vector2(1.0, 1.0);
+Vector2 size = Vector2.all(300);
 
 void main() {
   group('composable component test', () {
@@ -102,6 +95,26 @@ void main() {
 
       expect(child.gameSize, size);
       expect(child.tapped, true);
+    });
+
+    test('tap on offset children', () {
+      final MyGame game = MyGame();
+      final MyTap child = MyTap()
+        ..position = Vector2.all(100)
+        ..size = Vector2.all(100);
+      final MyComposed wrapper = MyComposed()
+        ..position = Vector2.all(100)
+        ..size = Vector2.all(300);
+
+      game.size.setFrom(size);
+      game.add(wrapper);
+      wrapper.addChild(child);
+      game.update(0.0);
+      game.onTapDown(1, TapDownDetails(globalPosition: const Offset(250, 250)));
+
+      expect(child.gameSize, size);
+      expect(child.tapped, true);
+      expect(child.tapTimes, 1);
     });
 
     test('updates and renders children', () {

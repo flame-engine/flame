@@ -24,6 +24,11 @@ abstract class BaseComponent extends Component {
   final OrderedSet<Component> _children =
       OrderedSet(Comparing.on((c) => c.priority));
 
+  /// If the component has a parent it will be set here
+  BaseComponent _parent;
+
+  BaseComponent get parent => _parent;
+
   /// The children list shouldn't be modified directly, that is why an
   /// [UnmodifiableListView] is used. If you want to add children use the
   /// [addChild] method, and if you want to propagate something to the children
@@ -136,6 +141,10 @@ abstract class BaseComponent extends Component {
       gameRef.prepare(child);
     }
 
+    if (child is BaseComponent) {
+      child._parent = this;
+    }
+
     final childOnLoadFuture = child.onLoad();
     if (childOnLoadFuture != null) {
       await childOnLoadFuture;
@@ -156,13 +165,17 @@ abstract class BaseComponent extends Component {
 
   bool containsChild(Component c) => _children.contains(c);
 
-  /// This method first calls the passed handler on the leaves in the tree, the children without any children of their own.
-  /// Then it continues through all other children.
-  /// The propagation continues until the handler returns false, which means "do not continue", or when the handler has been called with all children
+  /// This method first calls the passed handler on the leaves in the tree,
+  /// the children without any children of their own.
+  /// Then it continues through all other children. The propagation continues
+  /// until the handler returns false, which means "do not continue", or when
+  /// the handler has been called with all children
   ///
-  /// This method is important to be used by the engine to propagate actions like rendering, taps, etc,
-  /// but you can call it yourself if you need to apply an action to the whole component chain.
-  /// It will only consider components of type T in the hierarchy, so use T = Component to target everything.
+  /// This method is important to be used by the engine to propagate actions
+  /// like rendering, taps, etc, but you can call it yourself if you need to
+  /// apply an action to the whole component chain.
+  /// It will only consider components of type T in the hierarchy,
+  /// so use T = Component to target everything.
   bool propagateToChildren<T extends Component>(
     bool Function(T) handler,
   ) {
