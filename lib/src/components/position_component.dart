@@ -24,9 +24,6 @@ abstract class PositionComponent extends BaseComponent {
   /// The position of this component on the screen (relative to the anchor).
   Vector2 position = Vector2.zero();
 
-  /// If the component has a [PositionComponent] as a parent it will be set here
-  PositionComponent _positionParent;
-
   /// X position of this component on the screen (relative to the anchor).
   double get x => position.x;
   set x(double x) => position.x = x;
@@ -52,8 +49,20 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Get the absolute top left position regardless of whether it is a child or not
   Vector2 get absoluteTopLeftPosition {
-    return (_positionParent?.absoluteTopLeftPosition ?? Vector2.zero()) +
-        topLeftPosition;
+    if(parent is PositionComponent) {
+      return (parent as PositionComponent).absoluteTopLeftPosition + topLeftPosition;
+    } else {
+      return topLeftPosition;
+    }
+  }
+
+  /// Get the position that everything in this component is positioned in relation to
+  Vector2 get absoluteCanvasPosition {
+    if(parent is PositionComponent) {
+      return (parent as PositionComponent).absoluteTopLeftPosition;
+    } else {
+      return Vector2.zero();
+    }
   }
 
   /// Set the top left position regardless of the anchor
@@ -81,7 +90,8 @@ abstract class PositionComponent extends BaseComponent {
   Rect toRect() => topLeftPosition.toPositionedRect(size);
 
   /// Mutates position and size using the provided [rect] as basis.
-  /// This is a relative rect, same definition that [toRect] use (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
+  /// This is a relative rect, same definition that [toRect] use
+  /// (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
   void setByRect(Rect rect) {
     size.setValues(rect.width, rect.height);
     topLeftPosition = rect.topLeft.toVector2();
@@ -89,8 +99,7 @@ abstract class PositionComponent extends BaseComponent {
 
   @override
   bool checkOverlap(Vector2 absolutePoint) {
-    final point = absolutePoint -
-        (_positionParent?.absoluteTopLeftPosition ?? Vector2.zero());
+    final point = absolutePoint - absoluteCanvasPosition;
     final corners = _rotatedCorners();
     for (int i = 0; i < corners.length; i++) {
       final previousCorner = corners[i];
@@ -165,14 +174,6 @@ abstract class PositionComponent extends BaseComponent {
       canvas.translate(width / 2, height / 2);
       canvas.scale(renderFlipX ? -1.0 : 1.0, renderFlipY ? -1.0 : 1.0);
       canvas.translate(-width / 2, -height / 2);
-    }
-  }
-
-  @override
-  Future<void> addChild(Component child, {Game gameRef}) async {
-    super.addChild(child, gameRef: gameRef);
-    if (child is PositionComponent) {
-      child._positionParent = this;
     }
   }
 }

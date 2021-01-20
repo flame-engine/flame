@@ -24,6 +24,11 @@ abstract class BaseComponent extends Component {
   final OrderedSet<Component> _children =
       OrderedSet(Comparing.on((c) => c.priority));
 
+  /// If the component has a parent it will be set here
+  BaseComponent _parent;
+
+  BaseComponent get parent => _parent;
+
   /// The children list shouldn't be modified directly, that is why an
   /// [UnmodifiableListView] is used. If you want to add children use the
   /// [addChild] method, and if you want to propagate something to the children
@@ -134,6 +139,10 @@ abstract class BaseComponent extends Component {
     gameRef ??= (this as HasGameRef).gameRef;
     if (gameRef is BaseGame) {
       gameRef.prepare(child);
+    }
+
+    if (child is BaseComponent) {
+      child._parent = this;
     }
 
     final childOnLoadFuture = child.onLoad();
