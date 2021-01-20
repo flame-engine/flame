@@ -49,8 +49,9 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Get the absolute top left position regardless of whether it is a child or not
   Vector2 get absoluteTopLeftPosition {
-    if(parent is PositionComponent) {
-      return (parent as PositionComponent).absoluteTopLeftPosition + topLeftPosition;
+    if (parent is PositionComponent) {
+      return (parent as PositionComponent).absoluteTopLeftPosition +
+          topLeftPosition;
     } else {
       return topLeftPosition;
     }
@@ -58,7 +59,7 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Get the position that everything in this component is positioned in relation to
   Vector2 get absoluteCanvasPosition {
-    if(parent is PositionComponent) {
+    if (parent is PositionComponent) {
       return (parent as PositionComponent).absoluteTopLeftPosition;
     } else {
       return Vector2.zero();
