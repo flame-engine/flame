@@ -1,9 +1,6 @@
-import 'package:flame/components/sprite_component.dart';
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/components/isometric_tile_map_component.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Image;

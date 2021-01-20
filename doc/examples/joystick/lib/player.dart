@@ -1,11 +1,9 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/components/component.dart';
-import 'package:flame/components/joystick/joystick_component.dart';
-import 'package:flame/components/joystick/joystick_events.dart';
+import 'package:flame/components.dart';
+import 'package:flame/joystick.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/extensions/vector2.dart';
 
 class Player extends Component implements JoystickListener {
   final _whitePaint = BasicPalette.white.paint;

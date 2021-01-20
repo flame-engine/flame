@@ -1,8 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:flame/anchor.dart';
-import 'package:flame/components/position_component.dart';
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/components.dart';
 import 'package:test/test.dart';
 
 class MyComponent extends PositionComponent {}

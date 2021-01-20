@@ -1,11 +1,8 @@
-import 'package:flame/anchor.dart';
-import 'package:flame/components/mixins/draggable.dart';
-import 'package:flame/extensions/offset.dart';
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/gestures.dart';
 import 'package:flutter/material.dart' hide Draggable;
 import 'package:flame/game.dart';
-import 'package:flame/components/position_component.dart';
 
 void main() {
   final widget = Container(
