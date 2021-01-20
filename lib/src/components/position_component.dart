@@ -1,11 +1,10 @@
 import 'dart:ui' hide Offset;
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
-
 import '../anchor.dart';
 import '../extensions/offset.dart';
 import '../extensions/vector2.dart';
+import '../../game.dart';
 import 'base_component.dart';
 import 'component.dart';
 
@@ -45,8 +44,27 @@ abstract class PositionComponent extends BaseComponent {
   double get height => size.y;
   set height(double height) => size.y = height;
 
-  /// Get the top left position regardless of the anchor and angle
+  /// Get the relative top left position regardless of the anchor and angle
   Vector2 get topLeftPosition => anchor.translate(position, size);
+
+  /// Get the absolute top left position regardless of whether it is a child or not
+  Vector2 get absoluteTopLeftPosition {
+    if (parent is PositionComponent) {
+      return (parent as PositionComponent).absoluteTopLeftPosition +
+          topLeftPosition;
+    } else {
+      return topLeftPosition;
+    }
+  }
+
+  /// Get the position that everything in this component is positioned in relation to
+  Vector2 get absoluteCanvasPosition {
+    if (parent is PositionComponent) {
+      return (parent as PositionComponent).absoluteTopLeftPosition;
+    } else {
+      return Vector2.zero();
+    }
+  }
 
   /// Set the top left position regardless of the anchor
   set topLeftPosition(Vector2 position) {
@@ -73,19 +91,20 @@ abstract class PositionComponent extends BaseComponent {
   Rect toRect() => topLeftPosition.toPositionedRect(size);
 
   /// Mutates position and size using the provided [rect] as basis.
-  /// This is a relative rect, same definition that [toRect] use (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
+  /// This is a relative rect, same definition that [toRect] use
+  /// (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
   void setByRect(Rect rect) {
     size.setValues(rect.width, rect.height);
     topLeftPosition = rect.topLeft.toVector2();
   }
 
   @override
-  bool checkOverlap(Vector2 point) {
+  bool checkOverlap(Vector2 absolutePoint) {
+    final point = absolutePoint - absoluteCanvasPosition;
     final corners = _rotatedCorners();
-    corners.add(corners.first);
-    for (int i = 1; i < corners.length; i++) {
-      final previousCorner = corners[i - 1];
-      final corner = corners[i];
+    for (int i = 0; i < corners.length; i++) {
+      final previousCorner = corners[i];
+      final corner = corners[(i + 1) % corners.length];
       final isOutside =
           (corner.x - previousCorner.x) * (point.y - previousCorner.y) -
                   (point.x - previousCorner.x) * (corner.y - previousCorner.y) >
