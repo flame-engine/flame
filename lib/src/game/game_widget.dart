@@ -99,7 +99,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// ```
   const GameWidget({
     Key key,
-    this.game,
+    @required this.game,
     this.textDirection,
     this.loadingBuilder,
     this.errorBuilder,

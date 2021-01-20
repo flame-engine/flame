@@ -23,6 +23,7 @@
  - Added `Composition`, allows for composing multiple images into a single image.
  - Move files to comply with the dart package layout convention
  - Fix gesture detection bug of children of `PositionComponent`
+ - The `game` argument on `GameWidget` is now required
 
 ## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget
