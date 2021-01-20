@@ -1,12 +1,12 @@
 import 'dart:ui' hide Offset;
-import 'dart:math' as math;
 
+import '../collision_detection.dart' as collision_detection;
 import '../anchor.dart';
 import '../extensions/offset.dart';
 import '../extensions/vector2.dart';
-import '../../game.dart';
 import 'base_component.dart';
 import 'component.dart';
+import 'mixins/hitbox.dart';
 
 /// A [Component] implementation that represents a component that has a
 /// specific, possibly dynamic position on the screen.
@@ -71,6 +71,11 @@ abstract class PositionComponent extends BaseComponent {
     this.position = position + (anchor.toVector2..multiply(size));
   }
 
+  /// Get the position of the center of the component
+  Vector2 get center {
+    return anchor == Anchor.center ? position : topLeftPosition + (size / 2);
+  }
+
   /// Angle (with respect to the x-axis) this component should be rendered with.
   /// It is rotated around its anchor.
   double angle = 0.0;
@@ -98,45 +103,22 @@ abstract class PositionComponent extends BaseComponent {
     topLeftPosition = rect.topLeft.toVector2();
   }
 
-  @override
-  bool checkOverlap(Vector2 absolutePoint) {
-    final point = absolutePoint - absoluteCanvasPosition;
-    final corners = _rotatedCorners();
-    for (int i = 0; i < corners.length; i++) {
-      final previousCorner = corners[i];
-      final corner = corners[(i + 1) % corners.length];
-      final isOutside =
-          (corner.x - previousCorner.x) * (point.y - previousCorner.y) -
-                  (point.x - previousCorner.x) * (corner.y - previousCorner.y) >
-              0;
-      if (isOutside) {
-        // Point is outside of convex polygon (only used for rectangles so far)
-        return false;
-      }
-    }
-    return true;
+  /// Rotate [point] around component's angle and position (anchor)
+  Vector2 rotatePoint(Vector2 point) {
+    return point.clone()..rotate(angle, center: position);
   }
 
-  List<Vector2> _rotatedCorners() {
-    // Rotates the corner around [position]
-    Vector2 rotateCorner(Vector2 corner) {
-      return Vector2(
-        math.cos(angle) * (corner.x - position.x) -
-            math.sin(angle) * (corner.y - position.y) +
-            position.x,
-        math.sin(angle) * (corner.x - position.x) +
-            math.cos(angle) * (corner.y - position.y) +
-            position.y,
-      );
-    }
-
-    // Counter-clockwise direction
-    return [
-      rotateCorner(topLeftPosition), // Top-left
-      rotateCorner(topLeftPosition + Vector2(0.0, size.y)), // Bottom-left
-      rotateCorner(topLeftPosition + size), // Bottom-right
-      rotateCorner(topLeftPosition + Vector2(size.x, 0.0)), // Top-right
+  @override
+  bool containsPoint(Vector2 point) {
+    final corners = [
+      rotatePoint(absoluteTopLeftPosition), // Top-left
+      rotatePoint(
+          absoluteTopLeftPosition + Vector2(0.0, size.y)), // Bottom-left
+      rotatePoint(absoluteTopLeftPosition + size), // Bottom-right
+      rotatePoint(absoluteTopLeftPosition + Vector2(size.x, 0.0)), // Top-right
     ];
+
+    return collision_detection.containsPoint(point, corners);
   }
 
   double angleTo(PositionComponent c) => position.angleTo(c.position);
@@ -145,6 +127,9 @@ abstract class PositionComponent extends BaseComponent {
 
   @override
   void renderDebugMode(Canvas canvas) {
+    if (this is Hitbox) {
+      (this as Hitbox).renderContour(canvas);
+    }
     canvas.drawRect(size.toRect(), debugPaint);
     debugTextConfig.render(
       canvas,

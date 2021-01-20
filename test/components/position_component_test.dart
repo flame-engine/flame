@@ -5,6 +5,8 @@ import 'package:test/test.dart';
 
 class MyComponent extends PositionComponent {}
 
+class MyHitboxComponent extends PositionComponent with Hitbox {}
+
 void main() {
   group('PositionComponent overlap test', () {
     test('overlap', () {
@@ -15,7 +17,7 @@ void main() {
       component.anchor = Anchor.center;
 
       final point = Vector2(2.0, 2.0);
-      expect(component.checkOverlap(point), true);
+      expect(component.containsPoint(point), true);
     });
 
     test('overlap on edge', () {
@@ -26,7 +28,7 @@ void main() {
       component.anchor = Anchor.center;
 
       final point = Vector2(1.0, 1.0);
-      expect(component.checkOverlap(point), true);
+      expect(component.containsPoint(point), true);
     });
 
     test('not overlapping with x', () {
@@ -37,7 +39,7 @@ void main() {
       component.anchor = Anchor.center;
 
       final point = Vector2(4.0, 1.0);
-      expect(component.checkOverlap(point), false);
+      expect(component.containsPoint(point), false);
     });
 
     test('not overlapping with y', () {
@@ -48,7 +50,7 @@ void main() {
       component.anchor = Anchor.center;
 
       final point = Vector2(1.0, 4.0);
-      expect(component.checkOverlap(point), false);
+      expect(component.containsPoint(point), false);
     });
 
     test('overlapping with angle', () {
@@ -59,7 +61,7 @@ void main() {
       component.anchor = Anchor.center;
 
       final point = Vector2(3.1, 2.0);
-      expect(component.checkOverlap(point), true);
+      expect(component.containsPoint(point), true);
     });
 
     test('not overlapping with angle', () {
@@ -70,7 +72,7 @@ void main() {
       component.anchor = Anchor.center;
 
       final point = Vector2(1.0, 0.1);
-      expect(component.checkOverlap(point), false);
+      expect(component.containsPoint(point), false);
     });
 
     test('overlapping with angle and topLeft anchor', () {
@@ -81,7 +83,41 @@ void main() {
       component.anchor = Anchor.topLeft;
 
       final point = Vector2(1.0, 3.1);
-      expect(component.checkOverlap(point), true);
+      expect(component.containsPoint(point), true);
+    });
+
+    test('component with hitbox contains point', () {
+      final size = Vector2(2.0, 2.0);
+      final Hitbox component = MyHitboxComponent();
+      component.position = Vector2(1.0, 1.0);
+      component.anchor = Anchor.topLeft;
+      component.size = size;
+      component.shape = [
+        Vector2(1, 0),
+        Vector2(0, -1),
+        Vector2(-1, 0),
+        Vector2(0, 1),
+      ];
+
+      final point = component.position + component.size / 4;
+      expect(component.containsPoint(point), true);
+    });
+
+    test('component with hitbox does not contains point', () {
+      final size = Vector2(2.0, 2.0);
+      final Hitbox component = MyHitboxComponent();
+      component.position = Vector2(1.0, 1.0);
+      component.anchor = Anchor.topLeft;
+      component.size = size;
+      component.shape = [
+        Vector2(1, 0),
+        Vector2(0, -1),
+        Vector2(-1, 0),
+        Vector2(0, 1),
+      ];
+
+      final point = Vector2(1.1, 1.1);
+      expect(component.containsPoint(point), false);
     });
   });
 }

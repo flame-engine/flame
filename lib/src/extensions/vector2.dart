@@ -28,11 +28,19 @@ extension Vector2Extension on Vector2 {
   }
 
   /// Rotates the [Vector2] with [angle] in radians
-  void rotate(double angle) {
-    setValues(
-      x * cos(angle) - y * sin(angle),
-      x * sin(angle) + y * cos(angle),
-    );
+  /// rotates around [center] if it is defined
+  void rotate(double angle, {Vector2 center}) {
+    if (center == null) {
+      setValues(
+        x * cos(angle) - y * sin(angle),
+        x * sin(angle) + y * cos(angle),
+      );
+    } else {
+      setValues(
+        cos(angle) * (x - center.x) - sin(angle) * (y - center.y) + center.x,
+        sin(angle) * (x - center.x) + cos(angle) * (y - center.y) + center.y,
+      );
+    }
   }
 
   /// Changes the [length] of the vector to the length provided, without changing direction.
@@ -44,6 +52,9 @@ extension Vector2Extension on Vector2 {
       scale(newLength.abs() / l);
     }
   }
+
+  /// Modulo/Remainder
+  Vector2 operator %(Vector2 mod) => Vector2(x % mod.x, y % mod.y);
 
   /// Create a Vector2 with ints as input
   static Vector2 fromInts(int x, int y) => Vector2(x.toDouble(), y.toDouble());
