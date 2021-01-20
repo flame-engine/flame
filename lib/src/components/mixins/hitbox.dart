@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import '../../../components.dart';
-import '../../../collision_detection.dart' as collision_detection;
+import '../../collision_detection.dart' as collision_detection;
 
 mixin Hitbox on PositionComponent {
   List<Vector2> _shape;

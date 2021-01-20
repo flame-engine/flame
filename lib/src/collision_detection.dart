@@ -1,6 +1,4 @@
-import 'dart:math' as math;
-
-import 'src/extensions/vector2.dart';
+import '../extensions.dart';
 
 /// Checks whether the [polygon] represented by the list of [Vector2] contains
 /// the [point].
