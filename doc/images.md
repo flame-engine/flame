@@ -166,6 +166,8 @@ final composition = Composition()
 Image image = await composition.compose();
 ```
 
+**Note:** Composing images is expensive, we do not recommend you run this every tick as it affect the performance badly. Instead we recommend to have your compositions pre-rendered so you can just reuse the output image.
+
 ## Svg
 
 Flame provides a simple API to render SVG images in your game.

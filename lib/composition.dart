@@ -1,20 +1,29 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'extensions/vector2.dart';
+import 'extensions.dart';
+
+export 'extensions.dart';
+
+class _Composed {
+  /// The image that will be composed.
+  final Image image;
+
+  /// The position where the [image] will be composed.
+  final Vector2 position;
+
+  /// The source on the [image] that will be composed.
+  final Rect source;
+
+  /// The [BlendMode] that will be used when composing the [image].
+  final BlendMode blendMode;
+
+  _Composed(this.image, this.position, this.source, this.blendMode);
+}
 
 class Composition {
-  /// The images that are going to be composited together.
-  final List<Image> _images = [];
-
-  /// The positions where each [_images] will be added.
-  final List<Vector2> _positions = [];
-
-  /// The sources that should be used on each [_images].
-  final List<Rect> _sources = [];
-
-  /// The [BlendMode] to be used for each [_images].
-  final List<BlendMode> _blendModes = [];
+  /// The values that will be used to compose the image
+  final List<_Composed> _composes = [];
 
   /// Add an image to the [Composition].
   ///
@@ -55,11 +64,10 @@ class Composition {
       image.height.toDouble(),
     );
 
-    _images.add(image);
-    _positions.add(position);
-    _sources.add(source);
-    _blendModes.add(blendMode);
+    _composes.add(_Composed(image, position, source, blendMode));
   }
+
+  void clear() => _composes.clear();
 
   /// Compose all the images into a single composition.
   Future<Image> compose() async {
@@ -68,11 +76,11 @@ class Composition {
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
 
-    for (var i = 0; i < _images.length; i++) {
-      final image = _images[i];
-      final position = _positions[i];
-      final source = _sources[i];
-      final blendMode = _blendModes[i];
+    for (var i = 0; i < _composes.length; i++) {
+      final image = _composes[i].image;
+      final position = _composes[i].position;
+      final source = _composes[i].source;
+      final blendMode = _composes[i].blendMode;
       final destination = Rect.fromLTWH(
         position.x,
         position.y,
