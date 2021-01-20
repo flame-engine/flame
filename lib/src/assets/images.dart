@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:convert' show base64;
 import 'dart:typed_data';
 import 'dart:ui';
+import 'dart:ui' as ui show decodeImageFromPixels;
+
+import 'package:flutter/foundation.dart';
 
 import '../flame.dart';
 
@@ -36,6 +39,36 @@ class Images {
     return await _loadedFiles[fileName].retrieve();
   }
 
+  /// Convert an array of pixel values into an [Image] object.
+  ///
+  /// The [pixels] parameter is the pixel data in the encoding described by
+  /// [PixelFormat.rgba8888], the encoding can't be changed to allow for web support.
+  ///
+  /// If you want the image to be decoded as it would be on the web you can set
+  /// [runAsWeb] to `true`. Keep in mind that it is slightly slower than the native
+  /// [ui.decodeImageFromPixels]. By default it is set to [kIsWeb].
+  Future<Image> decodeImageFromPixels(
+    Uint8List pixels,
+    int width,
+    int height, {
+    bool runAsWeb = kIsWeb,
+  }) {
+    final completer = Completer<Image>();
+    if (runAsWeb) {
+      completer.complete(_createBmp(pixels, width, height));
+    } else {
+      ui.decodeImageFromPixels(
+        pixels,
+        width,
+        height,
+        PixelFormat.rgba8888,
+        completer.complete,
+      );
+    }
+
+    return completer.future;
+  }
+
   Future<Image> fromBase64(String fileName, String base64) async {
     if (!_loadedFiles.containsKey(fileName)) {
       _loadedFiles[fileName] = _ImageAssetLoader(_fetchFromBase64(base64));
@@ -59,6 +92,34 @@ class Images {
     final Completer<Image> completer = Completer();
     decodeImageFromList(bytes, (image) => completer.complete(image));
     return completer.future;
+  }
+
+  Future<Image> _createBmp(Uint8List pixels, int width, int height) async {
+    final size = (width * height * 4) + 122;
+    final bmp = Uint8List(size);
+    bmp.buffer.asByteData()
+      ..setUint8(0x0, 0x42)
+      ..setUint8(0x1, 0x4d)
+      ..setInt32(0x2, size, Endian.little)
+      ..setInt32(0xa, 122, Endian.little)
+      ..setUint32(0xe, 108, Endian.little)
+      ..setUint32(0x12, width, Endian.little)
+      ..setUint32(0x16, -height, Endian.little)
+      ..setUint16(0x1a, 1, Endian.little)
+      ..setUint32(0x1c, 32, Endian.little)
+      ..setUint32(0x1e, 3, Endian.little)
+      ..setUint32(0x22, width * height * 4, Endian.little)
+      ..setUint32(0x36, 0x000000ff, Endian.little)
+      ..setUint32(0x3a, 0x0000ff00, Endian.little)
+      ..setUint32(0x3e, 0x00ff0000, Endian.little)
+      ..setUint32(0x42, 0xff000000, Endian.little);
+
+    bmp.setRange(122, size, pixels);
+
+    final codec = await instantiateImageCodec(bmp);
+    final frame = await codec.getNextFrame();
+
+    return frame.image;
   }
 }
 
