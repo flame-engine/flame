@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [next]
+## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
  - Changed `parseAnchor` in `examples/widgets` to throw an exception instead of returning null when it cannot parse an anchor name
  - Code improvements and preparing APIs to null-safety
