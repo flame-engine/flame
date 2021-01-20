@@ -20,6 +20,7 @@
  - Updated the `widgets.md` documentation
  - Removing methods `initialDimensions` and `removeGestureRecognizer` to avoid confusion
  - Adding standard for `SpriteComponent` and `SpriteAnimationComponent` constructors
+ - Added `Composition`, allows for composing multiple images into a single image.
  - Move files to comply with the dart package layout convention
  - Fix gesture detection bug of children of `PositionComponent`
 

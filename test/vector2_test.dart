@@ -7,7 +7,7 @@ void expectDouble(double d1, double d2) {
 }
 
 void main() {
-  group('position test', () {
+  group('Vector2 test', () {
     test('test add', () {
       final Vector2 p = Vector2(0.0, 5.0) + Vector2(5.0, 5.0);
       expectDouble(p.x, 5.0);
