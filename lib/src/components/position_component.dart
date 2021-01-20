@@ -98,23 +98,6 @@ abstract class PositionComponent extends BaseComponent {
   /// Relative because it might be translated by their parents (which is not considered here).
   Rect toRect() => topLeftPosition.toPositionedRect(size);
 
-  Hull _hull;
-
-  /// The list of vertices used for collision detection and to define whether
-  /// a point is inside of the component or not, so that the tap detection etc
-  /// can be more accurately performed.
-  /// The hull is defined from the center of the component and with percentages
-  /// of the size of the component.
-  /// Example: [[0.5, 0.0], [0.0, 0.5], [-0.5, 0.0], [0.0, -0.5]]
-  /// This will form a square with a 45 degree angle (pi/4 rad) within the
-  /// bounding size box.
-  set hull(List<Vector2> vertices) => _hull.vertexScales = vertices;
-
-  @mustCallSuper
-  PositionComponent() {
-    _hull = Hull(this);
-  }
-
   /// Mutates position and size using the provided [rect] as basis.
   /// This is a relative rect, same definition that [toRect] use
   /// (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
@@ -130,10 +113,14 @@ abstract class PositionComponent extends BaseComponent {
 
   @override
   bool containsPoint(Vector2 point) {
-    return collision_detection.containsPoint(
-      point - absoluteCanvasPosition,
-      _hull.boundingVertices(),
-    );
+    final corners = [
+      rotatePoint(absoluteTopLeftPosition), // Top-left
+      rotatePoint(absoluteTopLeftPosition + Vector2(0.0, size.y)), // Bottom-left
+      rotatePoint(absoluteTopLeftPosition + size), // Bottom-right
+      rotatePoint(absoluteTopLeftPosition + Vector2(size.x, 0.0)), // Top-right
+    ];
+
+    return collision_detection.containsPoint(point, corners);
   }
 
   double angleTo(PositionComponent c) => position.angleTo(c.position);
