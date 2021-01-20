@@ -1,9 +1,8 @@
+import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/anchor.dart';
-import 'package:flame/extensions/vector2.dart';
-import 'package:flame/effects/effects.dart';
 
 import './square.dart';
 

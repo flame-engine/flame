@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/timer.dart';
-import 'package:flame/text_config.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/extensions/vector2.dart';
-import 'package:flame/components/timer_component.dart';
 
 void main() {
   runApp(MyGameApp());
