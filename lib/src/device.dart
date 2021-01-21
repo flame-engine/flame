@@ -7,8 +7,6 @@ import 'package:flutter/services.dart';
 /// To use, access it via [Flame.device]
 class Device {
   /// Sets the app to be fullscreen (no buttons bar os notifications on top).
-  ///
-  /// Most games should probably be this way.
   Future<void> fullScreen() {
     if (kIsWeb) {
       // TODO: We probably could use dart:html and implement this for web as well

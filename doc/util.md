@@ -147,4 +147,4 @@ They can all be imported on `package:flame/extensions/...`
 Methods:
  - `scaleVector`: Just like `canvas scale` method, but takes a `Vector2` as an argument.
  - `translateVector`: Just like `canvas translate` method, but takes a `Vector2` as an argument.
- - `rendereAt` and `renderRotated`: if you are directly rendering to the `Canvas`, you can use these functions to easily manipulate coordinates to render things on the correct places. They change the `Canvas` transformation matrix but reset afterwards.
+ - `renderAt` and `renderRotated`: if you are directly rendering to the `Canvas`, you can use these functions to easily manipulate coordinates to render things on the correct places. They change the `Canvas` transformation matrix but reset afterwards.
