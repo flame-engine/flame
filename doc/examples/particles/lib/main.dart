@@ -534,7 +534,6 @@ class MyGame extends BaseGame {
 }
 
 Future<BaseGame> loadGame() async {
-  Flame.initializeWidget();
   WidgetsFlutterBinding.ensureInitialized();
 
   return MyGame();

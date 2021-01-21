@@ -12,4 +12,33 @@ extension CanvasExtension on Canvas {
   void translateVector(Vector2 vector) {
     translate(vector.x, vector.y);
   }
+
+  /// Utility method to render stuff on a specific place in an isolated way.
+  ///
+  /// Some render methods don't allow to pass a vector.
+  /// This method translate the canvas before rendering your fn.
+  /// The changes are reset after the fn is run.
+  void renderAt(Vector2 p, void Function(Canvas) fn) {
+    save();
+    translate(p.x, p.y);
+    fn(this);
+    restore();
+  }
+
+  /// Utility method to render stuff rotated at specific angle.
+  ///
+  /// It rotates the canvas around the center of rotation.
+  /// The changes are reset after the fn is run.
+  void renderRotated(
+    double angle,
+    Vector2 rotationCenter,
+    void Function(Canvas) fn,
+  ) {
+    save();
+    translate(-rotationCenter.x, -rotationCenter.y);
+    rotate(angle);
+    translate(rotationCenter.x, rotationCenter.y);
+    fn(this);
+    restore();
+  }
 }
