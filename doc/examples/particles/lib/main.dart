@@ -3,7 +3,6 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart' hide Timer;
-import 'package:flame/flame.dart';
 import 'package:flame/timer.dart' as flame_timer;
 import 'package:flame/game.dart';
 import 'package:flame/particles.dart';
