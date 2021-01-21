@@ -1,6 +1,6 @@
 # Util
 
-On this page you can find documentation for some deviceities classes and methods.
+On this page you can find documentation for some utilities classes and methods.
 
 ## Device Class
 
@@ -11,29 +11,29 @@ This class, accessible via `Flame.device`, has some functions that can be used t
 When called, this disables all `SystemUiOverlay` making the app full screen.
 When called in the main method, makes your app full screen (no top nor bottom bars)
 
-_Has no effect when called on web._
+**Note:** Has no effect when called on the web.
 
 ### `Flame.device.setLandscape()`
 
 This method sets the orientation of the whole application (effectively, also the game) to landscape and depending on operating system and device setting, should allow both left and right landscape orientations. To set the app orientation to landscape on a specific direction, use either `Flame.device.setLandscapeLeftOnly` or `Flame.device.setLandscapeRightOnly`.
 
-_Has no effect when called on web._
+**Note:** Has no effect when called on the web.
 
 ### `Flame.device.setPortrait()`
 
 This method sets the orientation of the whole application (effectively, also the game) to portrait and depending on operating system and device setting, should allow both up and down landscape orientations. To set the app orientation to portrait on a specific direction, use either `Flame.device.setPortraitUpOnly` or `Flame.device.setPortraitDownOnly`.
 
-_Has no effect when called on web._
+**Note:** Has no effect when called on the web.
 
 ### `Flame.device.setOrientation()` and `Flame.device.setOrientations()`
 
 If a finer control of the allowed orientations is required (without having to deal with `SystemChrome` directly), `setOrientation` (accepts a single `DeviceOrientation` as a parameter) and `setOrientations` (accepts a `List<DeviceOrientation>` for possible orientations) can be used.
 
-_Has no effect when called on web._
- 
+**Note:** Has no effect when called on the web.
+
 ## Timer
 
-Flame provides a simple deviceity class to help you handle countdowns and event like events.
+Flame provides a simple utility class to help you handle countdowns and event like events.
 
 __Countdown example:__
 
@@ -138,7 +138,7 @@ class MyBaseGame extends BaseGame {
 
 ## Extensions
 
-Flame bundles a collection of deviceity extensions, these extensions are meant to help the developer with shortcuts and converion methods, here you can find the summary of those extensions
+Flame bundles a collection of utility extensions, these extensions are meant to help the developer with shortcuts and converion methods, here you can find the summary of those extensions
 
 They can all be imported on `package:flame/extensions/...`
 

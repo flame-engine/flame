@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-/// Class with utilities methods for controlling the device somehow (e.g. setting the screen as fullscreen)
+/// Provides methods for controlling the device (e.g. setting the screen to fullscreen).
 ///
 /// To use, access it via [Flame.device]
 class Device {
