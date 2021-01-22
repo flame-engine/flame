@@ -1,7 +1,6 @@
 import 'dart:collection';
 import 'dart:math' as math;
 
-
 import 'package:flame/src/geometry/polygon.dart';
 
 import '../components/mixins/collidable.dart';

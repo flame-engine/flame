@@ -1,6 +1,4 @@
-import 'package:flame/components/mixins/collidable.dart';
 import 'package:flame/game.dart';
-import 'package:flame/game/mixins/has_collidables.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/components.dart';
@@ -27,12 +25,12 @@ class CollidableRock extends SpriteComponent with Hitbox, Collidable {
 
   CollidableRock(Image image) : super.fromImage(Vector2.all(100), image) {
     hasScreenCollision = true;
-    shape = [
+    addShape(HitboxPolygon([
       Vector2(0, 1),
       Vector2(1, 0),
       Vector2(0, -1),
       Vector2(-1, 0),
-    ];
+    ]));
   }
 
   @override
