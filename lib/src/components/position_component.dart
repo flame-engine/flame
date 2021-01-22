@@ -112,10 +112,10 @@ abstract class PositionComponent extends BaseComponent {
   @override
   bool containsPoint(Vector2 point) {
     final corners = [
-      rotatePoint(topLeftPosition), // Top-left
-      rotatePoint(topLeftPosition + Vector2(0.0, size.y)), // Bottom-left
-      rotatePoint(topLeftPosition + size), // Bottom-right
-      rotatePoint(topLeftPosition + Vector2(size.x, 0.0)), // Top-right
+      rotatePoint(absoluteTopLeftPosition), // Top-left
+      rotatePoint(absoluteTopLeftPosition + Vector2(0.0, size.y)), // Bottom-left
+      rotatePoint(absoluteTopLeftPosition + size), // Bottom-right
+      rotatePoint(absoluteTopLeftPosition + Vector2(size.x, 0.0)), // Top-right
     ];
 
     return collision_detection.containsPoint(point, corners);
