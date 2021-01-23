@@ -1,6 +1,6 @@
+import 'dart:math';
 import 'dart:ui';
 
-import '../collision_detection/collision_detection.dart' as collision_detection;
 import '../extensions/vector2.dart';
 import 'shape.dart';
 
@@ -15,18 +15,42 @@ import 'shape.dart';
 /// bounding size box.
 /// NOTE: Always define your shape is a clockwise fashion
 class Polygon extends Shape {
-  final List<Vector2> shape;
+  final List<Vector2> definition;
 
-  Polygon(this.shape);
+  Polygon(this.definition, {Vector2 center, Vector2 size, double angle})
+      : super(center: center, size: size, angle: angle = 0);
+
+  /// With this helper method you can create your [Polygon] from absolute 
+  /// positions instead of percentages. This helper will also calculate the size
+  /// and center of the Polygon.
+  factory Polygon.fromPositions(List<Vector2> positions, {double angle = 0}) {
+    final center = positions.fold<Vector2>(
+          Vector2.zero(),
+          (sum, v) => sum + v,
+        ) /
+        positions.length.toDouble();
+    final bottomRight = positions.fold<Vector2>(
+      Vector2.zero(),
+      (bottomRight, v) {
+        return Vector2(
+          max(bottomRight.x, v.x),
+          max(bottomRight.y, v.y),
+        );
+      },
+    );
+    final halfSize = bottomRight - center;
+    final definition = positions.map<Vector2>((v) => (v - center)..divide(halfSize)).toList();
+    return Polygon(definition, center: center, size: halfSize * 2, angle: angle);
+  }
 
   Iterable<Vector2> _scaledShape;
   Vector2 _lastScaledSize;
 
   /// Gives back the shape vectors multiplied by the size of the component
-  Iterable<Vector2> get scaledShape {
+  Iterable<Vector2> get scaled {
     if (_lastScaledSize != size || _scaledShape == null) {
       _lastScaledSize = size;
-      _scaledShape = shape?.map(
+      _scaledShape = definition?.map(
         (p) => p.clone()..multiply(size / 2),
       );
     }
@@ -37,7 +61,7 @@ class Polygon extends Shape {
   void render(Canvas canvas, Paint paint) {
     final hitboxPath = Path()
       ..addPolygon(
-        scaledShape.map((point) => (point + size / 2).toOffset()).toList(),
+        scaled.map((point) => (point + size / 2).toOffset()).toList(),
         true,
       );
     canvas.drawPath(hitboxPath, paint);
@@ -45,27 +69,27 @@ class Polygon extends Shape {
 
   // These variables are used to see whether the bounding vertices cache is
   // valid or not
-  Vector2 _lastCachePosition;
+  Vector2 _lastCacheCenter;
   Vector2 _lastCacheSize;
   double _lastCacheAngle;
   List<Vector2> _cachedHitbox;
 
   bool _isHitboxCacheValid() {
-    return _lastCachePosition == position &&
+    return _lastCacheCenter == center &&
         _lastCacheSize == size &&
         _lastCacheAngle == angle;
   }
 
-  /// Gives back the bounding vertices represented as a list of points which
+  /// Gives back the vertices represented as a list of points which
   /// are the "corners" of the hitbox rotated with [angle].
   List<Vector2> get hitbox {
     // Use cached bounding vertices if state of the component hasn't changed
     if (!_isHitboxCacheValid()) {
-      _cachedHitbox = scaledShape
+      _cachedHitbox = scaled
               .map((point) => (point + center)..rotate(angle))
               .toList(growable: false) ??
           [];
-      _lastCachePosition = position.clone();
+      _lastCacheCenter = center.clone();
       _lastCacheSize = size.clone();
       _lastCacheAngle = angle;
     }
@@ -76,7 +100,18 @@ class Polygon extends Shape {
   /// the [point].
   @override
   bool containsPoint(Vector2 point) {
-    return collision_detection.containsPoint(point, hitbox);
+    for (int i = 0; i < hitbox.length; i++) {
+      final previousNode = hitbox[i];
+      final node = hitbox[(i + 1) % hitbox.length];
+      final isOutside = (node.x - previousNode.x) * (point.y - previousNode.y) -
+              (point.x - previousNode.x) * (node.y - previousNode.y) >
+          0;
+      if (isOutside) {
+        // Point is outside of convex polygon
+        return false;
+      }
+    }
+    return true;
   }
 }
 

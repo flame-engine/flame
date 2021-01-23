@@ -2,24 +2,27 @@ import 'dart:ui';
 
 import '../components/position_component.dart';
 import '../extensions/vector2.dart';
+import 'shape_intersections.dart' as intersection_system;
 
 abstract class Shape {
-  // TODO: Is position needed?
-  Vector2 position;
+  Vector2 center;
   Vector2 size;
   double angle;
-  Vector2 center;
+
+  Shape({this.center, this.size, this.angle});
 
   bool containsPoint(Vector2 p);
 
   void render(Canvas c, Paint paint);
+
+  /// Where this Shape has intersection points with another shape
+  Set<Vector2> intersections(Shape other) {
+    return intersection_system.intersections(this, other);
+  }
 }
 
 mixin HitboxShape on Shape {
   PositionComponent component;
-
-  @override
-  Vector2 get position => component.position;
 
   @override
   Vector2 get size => component.size;

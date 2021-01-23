@@ -1,8 +1,9 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/collision_detection/collision_detection.dart';
+import 'package:flame/geometry.dart' as geometry;
 import 'package:flame/src/components/mixins/collidable.dart';
 import 'package:flame/src/geometry/line_segment.dart';
 import 'package:flame/src/geometry/linear_function.dart';
+import 'package:flame/src/geometry/shape_intersections.dart';
 import 'package:test/test.dart';
 
 class MyCollidableComponent extends PositionComponent with Hitbox, Collidable {
@@ -208,21 +209,21 @@ void main() {
     });
   });
 
-  group('hitboxIntersections tests', () {
-    test('Simple hitbox collision', () {
-      final hitboxA = [
+  group('shapeIntersections tests', () {
+    test('Simple polygon collision', () {
+      final polygonA = Polygon.fromPositions([
         Vector2(2, 2),
         Vector2(3, 1),
         Vector2(2, 0),
         Vector2(1, 1),
-      ];
-      final hitboxB = [
+      ]);
+      final polygonB = Polygon.fromPositions([
         Vector2(1, 2),
         Vector2(2, 1),
         Vector2(1, 0),
         Vector2(0, 1),
-      ];
-      final intersections = polygonIntersections(hitboxA, hitboxB);
+      ]);
+      final intersections = geometry.intersections(polygonA, polygonB);
       assert(
         intersections.contains(Vector2(1.5, 0.5)),
         "Missed one intersection",
@@ -235,19 +236,19 @@ void main() {
     });
 
     test('Collision on shared line segment', () {
-      final hitboxA = [
+      final polygonA = Polygon.fromPositions([
         Vector2(1, 1),
         Vector2(1, 2),
         Vector2(2, 2),
         Vector2(2, 1),
-      ];
-      final hitboxB = [
+      ]);
+      final polygonB = Polygon.fromPositions([
         Vector2(2, 1),
         Vector2(2, 2),
         Vector2(3, 2),
         Vector2(3, 1),
-      ];
-      final intersections = polygonIntersections(hitboxA, hitboxB);
+      ]);
+      final intersections = geometry.intersections(polygonA, polygonB);
       assert(
           intersections.containsAll(
             [
@@ -261,19 +262,19 @@ void main() {
     });
 
     test('One point collision', () {
-      final hitboxA = [
+      final polygonA = Polygon.fromPositions([
         Vector2(1, 1),
         Vector2(1, 2),
         Vector2(2, 2),
         Vector2(2, 1),
-      ];
-      final hitboxB = [
+      ]);
+      final polygonB = Polygon.fromPositions([
         Vector2(2, 2),
         Vector2(2, 3),
         Vector2(3, 3),
         Vector2(3, 2),
-      ];
-      final intersections = polygonIntersections(hitboxA, hitboxB);
+      ]);
+      final intersections = geometry.intersections(polygonA, polygonB);
       assert(
         intersections.contains(Vector2(2.0, 2.0)),
         "Does not have all the correct intersection points",
@@ -282,21 +283,21 @@ void main() {
     });
 
     test('Collision with advanced hitboxes in different quadrants', () {
-      final hitboxA = [
+      final polygonA = Polygon.fromPositions([
         Vector2(0, 0),
         Vector2(-1, 1),
         Vector2(0, 3),
         Vector2(2, 2),
         Vector2(1.5, 0.5),
-      ];
-      final hitboxB = [
+      ]);
+      final polygonB = Polygon.fromPositions([
         Vector2(-2, -2),
         Vector2(-3, 0),
         Vector2(-2, 3),
         Vector2(1, 2),
         Vector2(2, 1),
-      ];
-      final intersections = polygonIntersections(hitboxA, hitboxB);
+      ]);
+      final intersections = geometry.intersections(polygonA, polygonB);
       print(intersections);
       //assert(intersections.contains(Vector2(2.0, 2.0)), "Does not have all the correct intersection points",);
       //assert(intersections.length == 1, "Wrong number of intersections");

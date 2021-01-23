@@ -3,8 +3,7 @@ import 'dart:ui' hide Offset;
 import '../anchor.dart';
 import '../extensions/offset.dart';
 import '../extensions/vector2.dart';
-import '../collision_detection.dart' as collision_detection;
-import '../collision_detection.dart';
+import '../../geometry.dart';
 import 'base_component.dart';
 import 'component.dart';
 import 'mixins/hitbox.dart';
@@ -96,6 +95,10 @@ abstract class PositionComponent extends BaseComponent {
   /// Relative because it might be translated by their parents (which is not considered here).
   Rect toRect() => topLeftPosition.toPositionedRect(size);
 
+  /// Returns the absolute position/size of this component.
+  /// Absolute because it takes any possible parent position into consideration.
+  Rect toAbsoluteRect() => absoluteTopLeftPosition.toPositionedRect(size);
+
   /// Mutates position and size using the provided [rect] as basis.
   /// This is a relative rect, same definition that [toRect] use
   /// (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
@@ -104,25 +107,16 @@ abstract class PositionComponent extends BaseComponent {
     topLeftPosition = rect.topLeft.toVector2();
   }
 
-  /// Rotate [point] around component's angle and position (anchor)
-  Vector2 rotatePoint(Vector2 point) {
-    return point.clone()..rotate(angle, center: position);
-  }
-
   @override
   bool containsPoint(Vector2 point) {
-    final corners = [
-      rotatePoint(absoluteTopLeftPosition), // Top-left
-      rotatePoint(absoluteTopLeftPosition + Vector2(0.0, size.y)), // Bottom-left
-      rotatePoint(absoluteTopLeftPosition + size), // Bottom-right
-      rotatePoint(absoluteTopLeftPosition + Vector2(size.x, 0.0)), // Top-right
-    ];
-
-    return collision_detection.containsPoint(point, corners);
-  }
-
-  List<Vector2> collisionPoints(PositionComponent other) {
-    return [];
+    // TODO: Change to rectangle
+    final polygon = Polygon.fromPositions([
+      absoluteTopLeftPosition, // Top-left
+      absoluteTopLeftPosition + Vector2(0.0, size.y), // Bottom-left
+      absoluteTopLeftPosition + size, // Bottom-right
+      absoluteTopLeftPosition + Vector2(size.x, 0.0), // Top-right
+    ].map((v) => v..rotate(angle, center: position)).toList());
+    return polygon.containsPoint(point);
   }
 
   double angleTo(PositionComponent c) => position.angleTo(c.position);
