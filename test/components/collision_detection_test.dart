@@ -1,27 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart' as geometry;
-import 'package:flame/src/components/mixins/collidable.dart';
 import 'package:flame/src/geometry/line_segment.dart';
 import 'package:flame/src/geometry/linear_function.dart';
-import 'package:flame/src/geometry/shape_intersections.dart';
-import 'package:flutter/services.dart';
 import 'package:test/test.dart';
-
-class MyCollidableComponent extends PositionComponent with Hitbox, Collidable {
-  @override
-  List<Vector2> shape = [
-    Vector2(0, 1),
-    Vector2(1, 0),
-    Vector2(0, -1),
-    Vector2(-1, 0),
-  ];
-  bool didCollide = false;
-
-  @override
-  void collisionCallback(Set<Vector2> points, Collidable other) {
-    didCollide = true;
-  }
-}
 
 void main() {
   group('LineSegment.isPointOnSegment tests', () {

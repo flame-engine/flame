@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:math' as math;
 
 import '../components/mixins/collidable.dart';
 import '../geometry/line_segment.dart';

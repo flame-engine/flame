@@ -2,8 +2,6 @@ import 'dart:collection';
 
 import '../position_component.dart';
 import '../../../extensions.dart';
-import '../../collision_detection/collision_detection.dart'
-    as collision_detection;
 import '../../geometry/shape.dart';
 
 mixin Hitbox on PositionComponent {
