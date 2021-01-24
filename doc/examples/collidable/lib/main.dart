@@ -9,10 +9,10 @@ import 'dart:ui';
 
 void main() async {
   Flame.initializeWidget();
-
+  final game = MyGame();
   runApp(
     GameWidget(
-      game: MyGame(),
+      game: game,
     ),
   );
 }
@@ -23,6 +23,27 @@ class CollidableRock extends SpriteComponent with Hitbox, Collidable {
   int xDirection = 1;
   int yDirection = 1;
 
+  final polygonA = Polygon(
+    [
+      Vector2(1, 1),
+      Vector2(1, -1),
+      Vector2(-1, -1),
+      Vector2(-1, 1),
+    ],
+    position: Vector2.all(50),
+    size: Vector2(20, 40),
+  );
+  final polygonB = Polygon(
+    [
+      Vector2(1, 1),
+      Vector2(1, -1),
+      Vector2(-1, -1),
+      Vector2(-1, 1),
+    ],
+    position: Vector2.all(50),
+    size: Vector2(40, 20),
+  );
+
   CollidableRock(Image image) : super.fromImage(Vector2.all(100), image) {
     hasScreenCollision = true;
     addShape(HitboxPolygon([
@@ -31,6 +52,7 @@ class CollidableRock extends SpriteComponent with Hitbox, Collidable {
       Vector2(0, -1),
       Vector2(-1, 0),
     ]));
+    print(polygonA.hitbox);
   }
 
   @override
@@ -58,6 +80,13 @@ class CollidableRock extends SpriteComponent with Hitbox, Collidable {
   }
 
   @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    polygonA.render(canvas, debugPaint);
+    polygonB.render(canvas, debugPaint);
+  }
+
+  @override
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
     _gameSize = gameSize;
@@ -69,7 +98,7 @@ class CollidableRock extends SpriteComponent with Hitbox, Collidable {
   }
 }
 
-class MyGame extends BaseGame with HasCollidables {
+class MyGame extends BaseGame {
   final fpsTextConfig = TextConfig(color: const Color(0xFFFFFFFF));
 
   @override
@@ -94,7 +123,7 @@ class MyGame extends BaseGame with HasCollidables {
     android3.xDirection = -1;
 
     add(android);
-    add(android2);
+    //add(android2);
     //add(android3);
   }
 

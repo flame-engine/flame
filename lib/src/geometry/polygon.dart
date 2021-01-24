@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import '../../components.dart';
 import '../extensions/vector2.dart';
 import 'shape.dart';
 
@@ -17,13 +18,20 @@ import 'shape.dart';
 class Polygon extends Shape {
   final List<Vector2> definition;
 
-  Polygon(this.definition, {Vector2 center, Vector2 size, double angle})
-      : super(center: center, size: size, angle: angle = 0);
+  Polygon(
+    this.definition, {
+    Vector2 position,
+    Vector2 size,
+    double angle,
+  }) : super(position: position, size: size, angle: angle = 0);
 
-  /// With this helper method you can create your [Polygon] from absolute 
+  /// With this helper method you can create your [Polygon] from absolute
   /// positions instead of percentages. This helper will also calculate the size
   /// and center of the Polygon.
-  factory Polygon.fromPositions(List<Vector2> positions, {double angle = 0}) {
+  factory Polygon.fromPositions(
+    List<Vector2> positions, {
+    double angle = 0,
+  }) {
     final center = positions.fold<Vector2>(
           Vector2.zero(),
           (sum, v) => sum + v,
@@ -39,8 +47,14 @@ class Polygon extends Shape {
       },
     );
     final halfSize = bottomRight - center;
-    final definition = positions.map<Vector2>((v) => (v - center)..divide(halfSize)).toList();
-    return Polygon(definition, center: center, size: halfSize * 2, angle: angle);
+    final definition =
+        positions.map<Vector2>((v) => (v - center)..divide(halfSize)).toList();
+    return Polygon(
+      definition,
+      position: center,
+      size: halfSize * 2,
+      angle: angle,
+    );
   }
 
   Iterable<Vector2> _scaledShape;
@@ -50,32 +64,33 @@ class Polygon extends Shape {
   Iterable<Vector2> get scaled {
     if (_lastScaledSize != size || _scaledShape == null) {
       _lastScaledSize = size;
-      _scaledShape = definition?.map(
-        (p) => p.clone()..multiply(size / 2),
-      );
+      _scaledShape = definition?.map((p) => p.clone()..multiply(size / 2));
     }
     return _scaledShape;
   }
 
   @override
   void render(Canvas canvas, Paint paint) {
-    final hitboxPath = Path()
+    // TODO: Add render cache
+    final path = Path()
       ..addPolygon(
-        scaled.map((point) => (point + size / 2).toOffset()).toList(),
+        scaled
+            .map((point) => (point + position + parentSize / 2).toOffset())
+            .toList(),
         true,
       );
-    canvas.drawPath(hitboxPath, paint);
+    canvas.drawPath(path, paint);
   }
 
   // These variables are used to see whether the bounding vertices cache is
   // valid or not
-  Vector2 _lastCacheCenter;
+  Vector2 _lastCachePosition;
   Vector2 _lastCacheSize;
   double _lastCacheAngle;
   List<Vector2> _cachedHitbox;
 
   bool _isHitboxCacheValid() {
-    return _lastCacheCenter == center &&
+    return _lastCachePosition == position &&
         _lastCacheSize == size &&
         _lastCacheAngle == angle;
   }
@@ -86,10 +101,10 @@ class Polygon extends Shape {
     // Use cached bounding vertices if state of the component hasn't changed
     if (!_isHitboxCacheValid()) {
       _cachedHitbox = scaled
-              .map((point) => (point + center)..rotate(angle))
+              .map((point) => (point + position + origin)..rotate(angle))
               .toList(growable: false) ??
           [];
-      _lastCacheCenter = center.clone();
+      _lastCachePosition = origin;
       _lastCacheSize = size.clone();
       _lastCacheAngle = angle;
     }
@@ -116,5 +131,5 @@ class Polygon extends Shape {
 }
 
 class HitboxPolygon extends Polygon with HitboxShape {
-  HitboxPolygon(List<Vector2> shape) : super(shape);
+  HitboxPolygon(List<Vector2> definition) : super(definition);
 }

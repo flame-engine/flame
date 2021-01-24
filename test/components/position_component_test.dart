@@ -93,12 +93,13 @@ void main() {
       component.position = Vector2(1.0, 1.0);
       component.anchor = Anchor.topLeft;
       component.size = size;
-      component.addShape(HitboxPolygon([
+      final hitbox = HitboxPolygon([
         Vector2(1, 0),
         Vector2(0, -1),
         Vector2(-1, 0),
         Vector2(0, 1),
-      ]));
+      ]);
+      component.addShape(hitbox);
 
       final point = component.position + component.size / 4;
       expect(component.containsPoint(point), true);

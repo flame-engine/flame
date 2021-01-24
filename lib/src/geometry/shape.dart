@@ -1,15 +1,28 @@
 import 'dart:ui';
 
-import '../components/position_component.dart';
+import '../../components.dart';
 import '../extensions/vector2.dart';
 import 'shape_intersections.dart' as intersection_system;
 
 abstract class Shape {
-  Vector2 center;
+  Vector2 position = Vector2.zero();
   Vector2 size;
   double angle;
 
-  Shape({this.center, this.size, this.angle});
+  Vector2 origin = Vector2.zero();
+  Vector2 parentSize = Vector2.zero();
+
+  /// Get the relative top left position regardless of the anchor and angle
+  Vector2 get topLeftPosition => Anchor.center.translate(position, size);
+  Vector2 get center => topLeftPosition + size / 2;
+
+  Shape({
+    this.position,
+    this.size,
+    this.angle = 0,
+  }) {
+    position ??= Vector2.zero();
+  }
 
   bool containsPoint(Vector2 p);
 
@@ -25,13 +38,16 @@ mixin HitboxShape on Shape {
   PositionComponent component;
 
   @override
+  Vector2 get origin => component.absoluteTopLeftPosition + component.size / 2;
+
+  @override
+  Vector2 get parentSize => component.size;
+
+  @override
   Vector2 get size => component.size;
 
   @override
   double get angle => component.angle;
-
-  @override
-  Vector2 get center => component.center;
 
   /// Assign your own [CollisionCallback] if you want a callback when this
   /// shape collides with another [HitboxShape]

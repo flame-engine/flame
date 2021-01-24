@@ -18,7 +18,14 @@ class Anchor {
 
   const Anchor(this.x, this.y);
 
-  Vector2 translate(Vector2 p, Vector2 size) {
-    return p - (toVector2..multiply(size));
+  /// If the [position] sent in is representing the top left corner, the
+  /// position that you will get back is the anchor's position.
+  /// For example if you send in Vector2(200, 200) as [position] and
+  /// Vector2(100, 100) as [size] and the [Anchor] you are calling this method
+  /// on is an Anchor.center, then the result will be Vector2(150, 150), which
+  /// is the topLeftPosition that your thing will have to have in order for
+  /// [position] to be in the center (or whichever anchor that you are using).
+  Vector2 translate(Vector2 position, Vector2 size) {
+    return position - (toVector2..multiply(size));
   }
 }

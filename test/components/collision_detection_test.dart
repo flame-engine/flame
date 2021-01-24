@@ -4,6 +4,7 @@ import 'package:flame/src/components/mixins/collidable.dart';
 import 'package:flame/src/geometry/line_segment.dart';
 import 'package:flame/src/geometry/linear_function.dart';
 import 'package:flame/src/geometry/shape_intersections.dart';
+import 'package:flutter/services.dart';
 import 'package:test/test.dart';
 
 class MyCollidableComponent extends PositionComponent with Hitbox, Collidable {
@@ -250,13 +251,11 @@ void main() {
       ]);
       final intersections = geometry.intersections(polygonA, polygonB);
       assert(
-          intersections.containsAll(
-            [
-              Vector2(2.0, 2.0),
-              Vector2(2.0, 1.5),
-              Vector2(2.0, 1.0),
-            ],
-          ),
+          intersections.containsAll([
+            Vector2(2.0, 2.0),
+            Vector2(2.0, 1.5),
+            Vector2(2.0, 1.0),
+          ]),
           "Does not have all the correct intersection points");
       assert(intersections.length == 3, "Wrong number of intersections");
     });
@@ -282,6 +281,40 @@ void main() {
       assert(intersections.length == 1, "Wrong number of intersections");
     });
 
+    test('Collision while no corners are inside the other body', () {
+      final polygonA = Polygon(
+        [
+          Vector2(1, 1),
+          Vector2(1, -1),
+          Vector2(-1, -1),
+          Vector2(-1, 1),
+        ],
+        position: Vector2.zero(),
+        size: Vector2(2, 4),
+      );
+      final polygonB = Polygon(
+        [
+          Vector2(1, 1),
+          Vector2(1, -1),
+          Vector2(-1, -1),
+          Vector2(-1, 1),
+        ],
+        position: Vector2.zero(),
+        size: Vector2(4, 2),
+      );
+      final intersections = geometry.intersections(polygonA, polygonB);
+      assert(
+        intersections.containsAll([
+          Vector2(1, 1),
+          Vector2(1, -1),
+          Vector2(-1, 1),
+          Vector2(-1, -1),
+        ]),
+        "Does not have all the correct intersection points",
+      );
+      assert(intersections.length == 4, "Wrong number of intersections");
+    });
+
     test('Collision with advanced hitboxes in different quadrants', () {
       final polygonA = Polygon.fromPositions([
         Vector2(0, 0),
@@ -298,9 +331,13 @@ void main() {
         Vector2(2, 1),
       ]);
       final intersections = geometry.intersections(polygonA, polygonB);
-      print(intersections);
-      //assert(intersections.contains(Vector2(2.0, 2.0)), "Does not have all the correct intersection points",);
-      //assert(intersections.length == 1, "Wrong number of intersections");
+      intersections.containsAll([
+        Vector2(-0.2857142857142857, 2.4285714285714284),
+        Vector2(1.7500000000000002, 1.2500000000000002),
+        Vector2(1.5555555555555556, 0.6666666666666667),
+        Vector2(1.1999999999999997, 0.39999999999999997),
+      ]);
+      assert(intersections.length == 4, "Wrong number of intersections");
     });
 
     // TODO: Test clockwise vs ccw
