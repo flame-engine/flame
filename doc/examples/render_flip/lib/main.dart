@@ -1,7 +1,5 @@
-import 'package:flame/sprite_animation.dart';
-import 'package:flame/components/sprite_animation_component.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/extensions/vector2.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'dart:ui';
 
@@ -36,8 +34,10 @@ class MyGame extends BaseGame {
   }
 
   SpriteAnimationComponent buildAnimationComponent(Image image) {
-    final ac =
-        SpriteAnimationComponent(Vector2.all(100), buildAnimation(image));
+    final ac = SpriteAnimationComponent.fromSpriteAnimation(
+      Vector2.all(100),
+      buildAnimation(image),
+    );
     ac.x = size.x / 2 - ac.x / 2;
     return ac;
   }

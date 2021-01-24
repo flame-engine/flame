@@ -207,6 +207,16 @@ class MyGame extends BaseGame with HasDraggableComponents {
 
 Warning: `HasDraggableComponents` uses an advanced gesture detector under the hood and as explained further up on this page, shouldn't be used alongside basic detectors.
 
+## Hitbox
+The `Hitbox` mixin is used to make detection of gestures on top of your `PositionComponent`s more
+accurate. Say that you have a fairly round rock as a `SpriteComponent` for example, then you don't
+want to register input that is in the corner of the image where the rock is not displayed. Then you
+can use the `Hitbox` mixin to define a more accurate polygon for which the input should be within
+for the event to be counted on your component.
+
+An example of you to use it can be seen
+[here](https://github.com/flame-engine/flame/blob/master/doc/examples/gestures/lib/main_tapables_hitbox.dart).
+
 ## Keyboard
 
 Flame provides a simple way to access Flutter's features regarding accessing Keyboard input events.

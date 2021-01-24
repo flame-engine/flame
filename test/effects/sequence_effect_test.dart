@@ -1,8 +1,7 @@
 import 'dart:math';
 
-import 'package:flame/components/position_component.dart';
-import 'package:flame/effects/effects.dart';
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'effect_test_utils.dart';

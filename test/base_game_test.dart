@@ -1,12 +1,8 @@
 import 'dart:ui';
 
-import 'package:flame/components/position_component.dart';
-import 'package:flame/components/mixins/has_game_ref.dart';
-import 'package:flame/components/mixins/tapable.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/game/base_game.dart';
-import 'package:flame/extensions/vector2.dart';
-import 'package:flame/game/game_render_box.dart';
+import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -47,7 +43,7 @@ class MyComponent extends PositionComponent with Tapable, HasGameRef {
   }
 
   @override
-  bool checkOverlap(Vector2 v) => true;
+  bool containsPoint(Vector2 v) => true;
 
   @override
   void onRemove() {

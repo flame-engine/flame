@@ -1,8 +1,6 @@
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/extensions/vector2.dart';
-import 'package:flame/components/sprite_component.dart';
-import 'package:flame/text_config.dart';
 
 import 'package:flutter/material.dart' hide Image;
 
@@ -10,7 +8,6 @@ import 'dart:ui';
 
 void main() async {
   Flame.initializeWidget();
-  await Flame.util.initialDimensions();
 
   runApp(
     GameWidget(
