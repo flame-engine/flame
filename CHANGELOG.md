@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [next]
+ - Moving device related methods (like `fullScreen`) from `util.dart` to `device.dart`
+ - Moving render functions from `util.dart` to `extensions/canvas.dart`
+
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
  - Changed `parseAnchor` in `examples/widgets` to throw an exception instead of returning null when it cannot parse an anchor name

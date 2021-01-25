@@ -9,7 +9,7 @@ import './square.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Flame.util.fullScreen();
+  await Flame.device.fullScreen();
   runApp(
     GameWidget(
       game: MyGame(),
