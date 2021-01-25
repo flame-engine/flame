@@ -8,9 +8,7 @@ import 'dart:ui';
 import 'package:flutter/widgets.dart';
 
 void main() async {
-  Flame.initializeWidget();
-
-  await Flame.util.fullScreen();
+  await Flame.device.fullScreen();
 
   runApp(
     GameWidget(

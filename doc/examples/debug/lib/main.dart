@@ -1,13 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/flame.dart';
 
 import 'package:flutter/material.dart' hide Image;
 
 import 'dart:ui';
 
 void main() async {
-  Flame.initializeWidget();
+  WidgetsFlutterBinding.ensureInitialized();
 
   runApp(
     GameWidget(

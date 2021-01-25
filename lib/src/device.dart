@@ -1,20 +1,15 @@
 import 'dart:async';
-import 'dart:ui';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-import 'extensions/vector2.dart';
-
-/// Some utilities that did not fit anywhere else.
+/// Provides methods for controlling the device (e.g. setting the screen to fullscreen).
 ///
-/// To use this class, access it via [Flame.util].
-class Util {
-  /// Sets the app to be fullscreen (no buttons bar os notifications on top).
-  ///
-  /// Most games should probably be this way.
+/// To use this class, access it via [Flame.device]
+class Device {
+  /// Sets the app to be fullscreen (no buttons, bar or notifications on top).
   Future<void> fullScreen() {
     if (kIsWeb) {
+      // TODO: We probably could use dart:html and implement this for web as well
       return Future.value();
     }
     return SystemChrome.setEnabledSystemUIOverlays([]);
@@ -88,35 +83,5 @@ class Util {
   /// When it opens, it will automatically change orientation to the preferred one (if possible).
   Future<void> setPortraitDownOnly() {
     return setOrientation(DeviceOrientation.portraitDown);
-  }
-
-  /// Utility method to render stuff on a specific place.
-  ///
-  /// Some render methods don't allow to pass a offset.
-  /// This method translate the canvas before rendering your fn.
-  /// The changes are reset after the fn is run.
-  void renderAt(Canvas c, Vector2 p, void Function(Canvas) fn) {
-    c.save();
-    c.translate(p.x, p.y);
-    fn(c);
-    c.restore();
-  }
-
-  /// Utility method to render stuff rotated at specific angle.
-  ///
-  /// It rotates the canvas around the center of rotation.
-  /// The changes are reset after the fn is run.
-  void renderRotated(
-    Canvas c,
-    double angle,
-    Vector2 rotationCenter,
-    void Function(Canvas) fn,
-  ) {
-    c.save();
-    c.translate(-rotationCenter.x, -rotationCenter.y);
-    c.rotate(angle);
-    c.translate(rotationCenter.x, rotationCenter.y);
-    fn(c);
-    c.restore();
   }
 }
