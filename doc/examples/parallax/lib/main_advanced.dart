@@ -31,7 +31,7 @@ class MyGame extends BaseGame {
         velocityMultiplier: Vector2(e.value, 1.0),
       ),
     );
-    final parallax = ParallaxComponent(
+    final parallax = ParallaxComponent.fromParallax(
       Parallax(
         await Future.wait(layers),
         baseVelocity: Vector2(20, 0),
