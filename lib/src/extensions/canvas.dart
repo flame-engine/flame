@@ -20,7 +20,7 @@ extension CanvasExtension on Canvas {
   /// The changes are reset after the fn is run.
   void renderAt(Vector2 p, void Function(Canvas) fn) {
     save();
-    translate(p.x, p.y);
+    translateVector(p);
     fn(this);
     restore();
   }
@@ -35,9 +35,9 @@ extension CanvasExtension on Canvas {
     void Function(Canvas) fn,
   ) {
     save();
-    translate(-rotationCenter.x, -rotationCenter.y);
+    translateVector(-rotationCenter);
     rotate(angle);
-    translate(rotationCenter.x, rotationCenter.y);
+    translateVector(rotationCenter);
     fn(this);
     restore();
   }

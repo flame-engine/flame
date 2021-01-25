@@ -1,6 +1,6 @@
 # Util
 
-On this page you can find documentation for some utilities classes and methods.
+On this page you can find documentation for some utility classes and methods.
 
 ## Device Class
 
