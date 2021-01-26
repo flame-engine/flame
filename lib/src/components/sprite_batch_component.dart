@@ -4,10 +4,13 @@ import '../sprite_batch.dart';
 import 'component.dart';
 
 class SpriteBatchComponent extends Component {
-  final SpriteBatch spriteBatch;
+  SpriteBatch spriteBatch;
   BlendMode blendMode;
   Rect cullRect;
   Paint paint;
+
+  /// Creates a component with an empty sprite batch which can be set later
+  SpriteBatchComponent();
 
   SpriteBatchComponent.fromSpriteBatch(
     this.spriteBatch, {
@@ -18,7 +21,7 @@ class SpriteBatchComponent extends Component {
 
   @override
   void render(Canvas canvas) {
-    spriteBatch.render(
+    spriteBatch?.render(
       canvas,
       blendMode: blendMode,
       cullRect: cullRect,

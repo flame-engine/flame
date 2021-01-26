@@ -146,7 +146,7 @@ You render it with a `Canvas` and an optional `Paint`, `BlendMode` and `CullRect
 
 A `SpriteBatchComponent` is also available for your convenience.
 
-See example [here](https://github.com/flame-engine/flame/tree/master/doc/examples/sprite_batch).
+See examples [here](https://github.com/flame-engine/flame/tree/master/doc/examples/sprite_batch).
 
 ## Composition
 
