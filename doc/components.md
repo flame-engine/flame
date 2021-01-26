@@ -281,7 +281,7 @@ The `Parallax` file contains an extension of the game which adds `loadParallax`,
 and `loadParallaxImage` so that it automatically uses your game's image cache instead of the global
 one. The same for the `ParallaxComponent` file, but that provides `loadParallaxComponent`.
 
-Three examples implementation can be found in the
+Three example implementations can be found in the
 [examples directory](https://github.com/flame-engine/flame/tree/master/doc/examples/parallax).
 
 ## SpriteBodyComponent
