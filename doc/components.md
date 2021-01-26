@@ -204,7 +204,7 @@ Future<void> onLoad() async {
 }
 ```
 
-A ParallaxComponent can also "load itself" by implmenting the its own load method:
+A ParallaxComponent can also "load itself" by implementing the `onLoad` method:
 
 ```dart
 class MyParallaxComponent extends ParallaxComponent with HasGameRef<MyGame> {
