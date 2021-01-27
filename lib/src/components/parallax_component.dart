@@ -34,22 +34,32 @@ extension ParallaxComponentExtension on Game {
 /// A full parallax, several layers of images drawn out on the screen and each
 /// layer moves with different velocities to give an effect of depth.
 class ParallaxComponent extends PositionComponent {
-  final Parallax parallax;
+  Parallax _parallax;
 
-  ParallaxComponent(this.parallax);
+  Parallax get parallax => _parallax;
+  set parallax(Parallax p) {
+    _parallax = p;
+    _parallax.resize(size);
+  }
+
+  /// Creates a component with an empty parallax which can be set later
+  ParallaxComponent();
+
+  /// Creates a component from a [Parallax] object
+  ParallaxComponent.fromParallax(this._parallax);
 
   @mustCallSuper
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
     this.size = size;
-    parallax.resize(size);
+    parallax?.resize(size);
   }
 
   @override
   void update(double t) {
     super.update(t);
-    parallax.update(t);
+    parallax?.update(t);
   }
 
   @mustCallSuper
@@ -57,7 +67,7 @@ class ParallaxComponent extends PositionComponent {
   void render(Canvas canvas) {
     super.render(canvas);
     canvas.save();
-    parallax.layers.forEach((layer) {
+    parallax?.layers?.forEach((layer) {
       canvas.save();
       layer.render(canvas);
       canvas.restore();
@@ -91,7 +101,7 @@ class ParallaxComponent extends PositionComponent {
     LayerFill fill = LayerFill.height,
     Images images,
   }) async {
-    return ParallaxComponent(
+    return ParallaxComponent.fromParallax(
       await Parallax.load(
         paths,
         baseVelocity: baseVelocity,
