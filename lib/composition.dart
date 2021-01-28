@@ -82,10 +82,6 @@ class Composition {
   }) {
     assert(image != null, 'Image is required to add to the Atlas');
     assert(position != null, 'Position is required');
-    // assert(
-    //   position.x >= 0 && position.y >= 0,
-    //   'Position values have to be equal or greater than zero',
-    // );
     assert(
       source == null ||
           source.width <= image.width &&
@@ -136,6 +132,7 @@ class Composition {
       final isAntiAlias = _composes[i].isAntiAlias;
       final blendMode = _composes[i].blendMode;
       final destination = Rect.fromLTWH(0, 0, source.width, source.height);
+      final realDest = destination.translate(position.x, position.y);
 
       canvas
         ..save()
@@ -155,16 +152,13 @@ class Composition {
 
       // If the destination is not fully contained inside the current output,
       // we have to resize the data list.
-      if (!(output.contains(destination.topLeft) &&
-          output.contains(destination.topRight) &&
-          output.contains(destination.bottomLeft) &&
-          output.contains(destination.bottomRight))) {
-        output = output.expandToInclude(
-          Rect.fromLTWH(-position.x, -position.y, source.width, source.height),
-        );
+      if (!(output.contains(realDest.topLeft) &&
+          output.contains(realDest.topRight) &&
+          output.contains(realDest.bottomLeft) &&
+          output.contains(realDest.bottomRight))) {
+        output = output.expandToInclude(realDest);
       }
     }
-    print(output);
 
     final picture = recorder.endRecording();
     return picture.toImage(output.width.toInt(), output.height.toInt());
