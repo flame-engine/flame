@@ -35,7 +35,7 @@ class _Composed {
   );
 }
 
-class Composition {
+class ImageComposition {
   /// The values that will be used to compose the image
   final List<_Composed> _composes = [];
 
@@ -46,13 +46,13 @@ class Composition {
   /// The [defaultAntiAlias] can be used to if each image will be anti aliased.
   final bool defaultAntiAlias;
 
-  Composition({
+  ImageComposition({
     this.defaultBlendMode = BlendMode.srcOver,
     this.defaultAntiAlias = false,
   })  : assert(defaultBlendMode != null, 'defaultBlendMode can not be null'),
         assert(defaultAntiAlias != null, 'defaultAntiAlias can not be null');
 
-  /// Add an image to the [Composition].
+  /// Add an image to the [ImageComposition].
   ///
   /// The [image] will be added at the given [position] on the composition.
   ///
@@ -160,7 +160,8 @@ class Composition {
       }
     }
 
-    final picture = recorder.endRecording();
-    return picture.toImage(output.width.toInt(), output.height.toInt());
+    return recorder
+        .endRecording()
+        .toImage(output.width.toInt(), output.height.toInt());
   }
 }
