@@ -1,16 +1,15 @@
+import 'dart:ui';
+
 import 'polygon.dart';
 import 'shape.dart';
 import '../../extensions.dart';
 import '../../geometry.dart';
 
 abstract class Intersections<T1 extends Shape, T2 extends Shape> {
-  Type typeA = T1;
-  Type typeB = T2;
-
   Set<Vector2> intersect(T1 shapeA, T2 shapeB);
 
   bool supportsShapes(Shape shapeA, Shape shapeB) {
-    return shapeA.runtimeType == typeA && shapeB.runtimeType == typeB;
+    return shapeA is T1 && shapeB is T2;
   }
 }
 
@@ -70,7 +69,11 @@ Set<Vector2> intersections(Shape shapeA, Shape shapeB) {
   shapeB = isShapeAFirst ? shapeB : shapeA;
   final intersectionSystem = _intersectionSystems.firstWhere(
     (system) => system.supportsShapes(shapeA, shapeB),
-    orElse: () => throw 'Non-supported shape detected',
+    orElse: () {
+      print(shapeA);
+      print(shapeB);
+      throw 'Non-supported shape detected';
+    },
   );
   return intersectionSystem.intersect(shapeA, shapeB);
 }

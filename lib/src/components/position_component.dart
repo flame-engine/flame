@@ -1,7 +1,9 @@
+import 'dart:math';
 import 'dart:ui' hide Offset;
 
 import '../anchor.dart';
 import '../extensions/offset.dart';
+import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
 import '../../geometry.dart';
 import 'base_component.dart';
@@ -58,13 +60,15 @@ abstract class PositionComponent extends BaseComponent {
   }
 
   /// Get the position that everything in this component is positioned in relation to
-  Vector2 get absoluteCanvasPosition {
+  Vector2 get absoluteParentPosition {
     if (parent is PositionComponent) {
       return (parent as PositionComponent).absoluteTopLeftPosition;
     } else {
       return Vector2.zero();
     }
   }
+
+  Vector2 get absoluteAnchorPosition => absoluteParentPosition + position;
 
   /// Set the top left position regardless of the anchor
   set topLeftPosition(Vector2 position) {
@@ -98,6 +102,7 @@ abstract class PositionComponent extends BaseComponent {
   /// Returns the absolute position/size of this component.
   /// Absolute because it takes any possible parent position into consideration.
   Rect toAbsoluteRect() => absoluteTopLeftPosition.toPositionedRect(size);
+
 
   /// Mutates position and size using the provided [rect] as basis.
   /// This is a relative rect, same definition that [toRect] use

@@ -43,16 +43,22 @@ class CollidableRock extends SpriteComponent with Hitbox, Collidable {
     position: Vector2.all(50),
     size: Vector2(40, 20),
   );
+  final rectangleA = Rectangle(
+    Vector2(0.5, 0.75),
+    position: Vector2.all(150),
+    size: Vector2(40, 20),
+  );
 
   CollidableRock(Image image) : super.fromImage(Vector2.all(100), image) {
     hasScreenCollision = true;
+    angle = 1;
+    addShape(HitboxRectangle(Vector2(1.5, 0.75)));
     addShape(HitboxPolygon([
       Vector2(0, 1),
       Vector2(1, 0),
       Vector2(0, -1),
       Vector2(-1, 0),
     ]));
-    print(polygonA.hitbox);
   }
 
   @override
@@ -62,28 +68,29 @@ class CollidableRock extends SpriteComponent with Hitbox, Collidable {
       return;
     }
 
-    //x += xDirection * SPEED * dt;
+    x += xDirection * SPEED * dt;
 
-    //final rect = toRect();
+    final rect = toRect();
 
-    //if ((x <= 0 && xDirection == -1) ||
-    //    (rect.right >= _gameSize.x && xDirection == 1)) {
-    //  xDirection = xDirection * -1;
-    //}
+    if ((x <= 0 && xDirection == -1) ||
+        (rect.right >= _gameSize.x && xDirection == 1)) {
+      xDirection = xDirection * -1;
+    }
 
-    //y += yDirection * SPEED * dt;
+    y += yDirection * SPEED * dt;
 
-    //if ((y <= 0 && yDirection == -1) ||
-    //    (rect.bottom >= _gameSize.y && yDirection == 1)) {
-    //  yDirection = yDirection * -1;
-    //}
+    if ((y <= 0 && yDirection == -1) ||
+        (rect.bottom >= _gameSize.y && yDirection == 1)) {
+      yDirection = yDirection * -1;
+    }
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    polygonA.render(canvas, debugPaint);
-    polygonB.render(canvas, debugPaint);
+    //polygonA.render(canvas, debugPaint);
+    //polygonB.render(canvas, debugPaint);
+    //rectangleA.render(canvas, debugPaint);
   }
 
   @override
@@ -98,7 +105,7 @@ class CollidableRock extends SpriteComponent with Hitbox, Collidable {
   }
 }
 
-class MyGame extends BaseGame {
+class MyGame extends BaseGame with HasCollidables {
   final fpsTextConfig = TextConfig(color: const Color(0xFFFFFFFF));
 
   @override
@@ -123,7 +130,7 @@ class MyGame extends BaseGame {
     android3.xDirection = -1;
 
     add(android);
-    //add(android2);
+    add(android2);
     //add(android3);
   }
 

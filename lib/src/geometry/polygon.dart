@@ -28,6 +28,7 @@ class Polygon extends Shape {
   /// With this helper method you can create your [Polygon] from absolute
   /// positions instead of percentages. This helper will also calculate the size
   /// and center of the Polygon.
+  //TODO: Is factory really helping with anything here?
   factory Polygon.fromPositions(
     List<Vector2> positions, {
     double angle = 0,
@@ -60,7 +61,7 @@ class Polygon extends Shape {
   Iterable<Vector2> _scaledShape;
   Vector2 _lastScaledSize;
 
-  /// Gives back the shape vectors multiplied by the size of the component
+  /// Gives back the shape vectors multiplied by the size
   Iterable<Vector2> get scaled {
     if (_lastScaledSize != size || _scaledShape == null) {
       _lastScaledSize = size;
