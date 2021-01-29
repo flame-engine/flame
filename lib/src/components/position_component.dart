@@ -103,7 +103,6 @@ abstract class PositionComponent extends BaseComponent {
   /// Absolute because it takes any possible parent position into consideration.
   Rect toAbsoluteRect() => absoluteTopLeftPosition.toPositionedRect(size);
 
-
   /// Mutates position and size using the provided [rect] as basis.
   /// This is a relative rect, same definition that [toRect] use
   /// (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).

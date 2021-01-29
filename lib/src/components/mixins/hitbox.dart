@@ -37,13 +37,13 @@ mixin Hitbox on PositionComponent {
   Rect toBoundingRect() {
     final rotatedPoints = toAbsoluteRect().toVectors()
       ..forEach((v) => v.rotate(
-        angle,
-        center: absoluteAnchorPosition,
-      ));
+            angle,
+            center: absoluteAnchorPosition,
+          ));
     final minX =
-    rotatedPoints.map<double>((v) => v.x).fold(double.infinity, min);
+        rotatedPoints.map<double>((v) => v.x).fold(double.infinity, min);
     final minY =
-    rotatedPoints.map<double>((v) => v.y).fold(double.infinity, min);
+        rotatedPoints.map<double>((v) => v.y).fold(double.infinity, min);
     final maxX = rotatedPoints
         .map<double>((v) => v.x)
         .fold(double.negativeInfinity, max);
