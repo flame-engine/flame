@@ -150,8 +150,8 @@ class ImageComposition {
         )
         ..restore();
 
-      // If the destination is not fully contained inside the current output,
-      // we have to resize the data list.
+      // If the realDest is not fully contained inside the current output,
+      // we have to expande the output so it includes the realDest.
       if (!(output.contains(realDest.topLeft) &&
           output.contains(realDest.topRight) &&
           output.contains(realDest.bottomLeft) &&
