@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui' hide Offset;
 
 import '../anchor.dart';

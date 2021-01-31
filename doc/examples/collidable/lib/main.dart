@@ -1,5 +1,4 @@
 import 'package:flame/game.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/components.dart';
 
@@ -8,7 +7,6 @@ import 'package:flutter/material.dart' hide Image;
 import 'dart:ui';
 
 void main() async {
-  Flame.initializeWidget();
   final game = MyGame();
   runApp(
     GameWidget(
@@ -85,13 +83,13 @@ class CollidableRock extends SpriteComponent with Hitbox, Collidable {
     }
   }
 
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    //polygonA.render(canvas, debugPaint);
-    //polygonB.render(canvas, debugPaint);
-    //rectangleA.render(canvas, debugPaint);
-  }
+  //@override
+  //void render(Canvas canvas) {
+  //  super.render(canvas);
+  //polygonA.render(canvas, debugPaint);
+  //polygonB.render(canvas, debugPaint);
+  //rectangleA.render(canvas, debugPaint);
+  //}
 
   @override
   void onGameResize(Vector2 gameSize) {

@@ -5,16 +5,13 @@ import '../extensions/vector2.dart';
 import 'shape_intersections.dart' as intersection_system;
 
 abstract class Shape {
+  // TODO: should be named localPosition or something maybe?
   Vector2 position = Vector2.zero();
   Vector2 size;
   double angle;
 
-  Vector2 origin = Vector2.zero();
   Vector2 parentSize = Vector2.zero();
-
-  /// Get the relative top left position regardless of the anchor and angle
-  Vector2 get topLeftPosition => Anchor.center.translate(position, size);
-  Vector2 get center => topLeftPosition + size / 2;
+  Vector2 get absolutePosition => position;
 
   Shape({
     this.position,
@@ -38,7 +35,9 @@ mixin HitboxShape on Shape {
   PositionComponent component;
 
   @override
-  Vector2 get origin => component.absoluteTopLeftPosition + component.size / 2;
+  Vector2 get absolutePosition {
+    return component.absoluteTopLeftPosition + component.size / 2 + position;
+  }
 
   @override
   Vector2 get parentSize => component.size;

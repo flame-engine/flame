@@ -102,10 +102,10 @@ class Polygon extends Shape {
     // Use cached bounding vertices if state of the component hasn't changed
     if (!_isHitboxCacheValid()) {
       _cachedHitbox = scaled
-              .map((point) => (point + position + origin)..rotate(angle))
+              .map((point) => (point + absolutePosition)..rotate(angle))
               .toList(growable: false) ??
           [];
-      _lastCachePosition = origin;
+      _lastCachePosition = absolutePosition;
       _lastCacheSize = size.clone();
       _lastCacheAngle = angle;
     }

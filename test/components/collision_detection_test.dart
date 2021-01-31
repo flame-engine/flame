@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart' as geometry;
+import 'package:flame/src/geometry/circle.dart';
 import 'package:flame/src/geometry/line_segment.dart';
 import 'package:flame/src/geometry/linear_function.dart';
 import 'package:test/test.dart';
@@ -191,7 +192,7 @@ void main() {
     });
   });
 
-  group('shapeIntersections tests', () {
+  group('Polygon intersections tests', () {
     test('Simple polygon collision', () {
       final polygonA = Polygon.fromPositions([
         Vector2(2, 2),
@@ -322,5 +323,83 @@ void main() {
     });
 
     // TODO: Test clockwise vs ccw
+  });
+
+  group('Circle intersections tests', () {
+    test('Simple collision', () {
+      final circleA = Circle(position: Vector2(4, 0), size: Vector2.all(4));
+      final circleB = Circle(position: Vector2.zero(), size: Vector2.all(4));
+      final intersections = geometry.intersections(circleA, circleB);
+      assert(
+        intersections.contains(Vector2(2, 0)),
+        "Missed one intersection",
+      );
+      assert(intersections.length == 1, "Wrong number of intersections");
+    });
+
+    test('Two point collision', () {
+      final circleA = Circle(position: Vector2(3, 0), size: Vector2.all(4));
+      final circleB = Circle(position: Vector2.zero(), size: Vector2.all(4));
+      final intersections = geometry.intersections(circleA, circleB);
+      assert(
+        intersections.contains(Vector2(1.5, -1.3228756555322954)),
+        "Missed one intersection",
+      );
+      assert(
+        intersections.contains(Vector2(1.5, 1.3228756555322954)),
+        "Missed one intersection",
+      );
+      assert(intersections.length == 2, "Wrong number of intersections");
+    });
+
+    test('Same size and position', () {
+      final circleA = Circle(position: Vector2.all(3), size: Vector2.all(4));
+      final circleB = Circle(position: Vector2.all(3), size: Vector2.all(4));
+      final intersections = geometry.intersections(circleA, circleB);
+      assert(
+        intersections.containsAll([
+          Vector2(5, 3),
+          Vector2(3, 5),
+          Vector2(3, 1),
+          Vector2(1, 3),
+        ]),
+        "Missed intersections",
+      );
+      assert(intersections.length == 4, "Wrong number of intersections");
+    });
+
+    test('Not overlapping', () {
+      final circleA = Circle(position: Vector2.all(-1), size: Vector2.all(4));
+      final circleB = Circle(position: Vector2.all(3), size: Vector2.all(4));
+      final intersections = geometry.intersections(circleA, circleB);
+      assert(intersections.isEmpty, "Should not have any intersections");
+    });
+
+    test('In third quadrant', () {
+      final circleA = Circle(position: Vector2.all(-1), size: Vector2.all(2));
+      final circleB = Circle(position: Vector2.all(-2), size: Vector2.all(2));
+      final intersections = geometry.intersections(circleA, circleB).toList();
+      assert(
+        intersections.any((v) => v.distanceTo(Vector2(-1, -2)) < 0.000001),
+      );
+      assert(
+        intersections.any((v) => v.distanceTo(Vector2(-2, -1)) < 0.000001),
+      );
+      assert(intersections.length == 2, "Wrong number of intersections");
+    });
+
+    test('In different quadrants', () {
+      final circleA = Circle(position: Vector2.all(-1), size: Vector2.all(4));
+      final circleB = Circle(position: Vector2.all(1), size: Vector2.all(4));
+      final intersections = geometry.intersections(circleA, circleB).toList();
+      print(intersections);
+      assert(
+        intersections.any((v) => v.distanceTo(Vector2(1, -1)) < 0.000001),
+      );
+      assert(
+        intersections.any((v) => v.distanceTo(Vector2(-1, 1)) < 0.000001),
+      );
+      assert(intersections.length == 2, "Wrong number of intersections");
+    });
   });
 }

@@ -1,5 +1,9 @@
+import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
+import 'circle.dart';
 import 'polygon.dart';
 import 'shape.dart';
 import '../../extensions.dart';
@@ -57,9 +61,75 @@ class PolygonPolygonIntersections extends Intersections<Polygon, Polygon> {
   }
 }
 
-final List<Type> _shapeOrder = [Polygon];
+class CirclePolygonIntersections extends Intersections<Circle, Polygon> {
+  @override
+  Set<Vector2> intersect(Circle shapeA, Polygon shapeB) {
+    // TODO: implement intersect
+    throw UnimplementedError();
+  }
+}
+
+class CircleCircleIntersections extends Intersections<Circle, Circle> {
+  @override
+  Set<Vector2> intersect(Circle shapeA, Circle shapeB) {
+    final distance =
+        shapeA.absolutePosition.distanceTo(shapeB.absolutePosition);
+    final radiusA = shapeA.radius;
+    final radiusB = shapeB.radius;
+    if (distance > radiusA + radiusB) {
+      // Since the circles are too far away from each other to intersect we
+      // return the empty set.
+      return {};
+    } else if (distance < (radiusA - radiusB).abs()) {
+      // Since one circle is contained within the other there can't be any
+      // intersections.
+      return {};
+    } else if (distance == 0 && radiusA == radiusB) {
+      // The circles are identical and on top of each other, so there are an
+      // infinite number of solutions. Since it is problematic to return a
+      // set of infinite size, we'll return 4 distinct points here.
+      return {
+        shapeA.absolutePosition + Vector2(radiusA, 0),
+        shapeA.absolutePosition + Vector2(0, -radiusA),
+        shapeA.absolutePosition + Vector2(-radiusA, 0),
+        shapeA.absolutePosition + Vector2(0, radiusA),
+      };
+    } else {
+      final cathetusA = (pow(radiusA, 2) - pow(radiusB, 2) + pow(distance, 2)) /
+          (2 * distance);
+      // Length of h
+      final cathetusB = sqrt((pow(radiusA, 2) - pow(cathetusA, 2)).abs());
+      // P2 = P0 + a ( P1 - P0 ) / d
+      final centerPoint = shapeA.absolutePosition +
+          (shapeB.absolutePosition - shapeA.absolutePosition) *
+              cathetusA /
+              distance;
+      print(radiusA);
+      print(centerPoint);
+      print(cathetusA);
+      print(cathetusB);
+      print(distance);
+      // x3 = x2 +- h ( y1 - y0 ) / d
+      // y3 = y2 -+ h ( x1 - x0 ) / d
+      final deltaX = cathetusB *
+          (shapeB.absolutePosition.y - shapeA.absolutePosition.y).abs() /
+          distance;
+      final deltaY = cathetusB *
+          (shapeB.absolutePosition.x - shapeA.absolutePosition.x).abs() /
+          distance;
+      return {
+        Vector2(centerPoint.x + deltaX, centerPoint.y - deltaY),
+        Vector2(centerPoint.x - deltaX, centerPoint.y + deltaY),
+      };
+    }
+  }
+}
+
+final List<Type> _shapeOrder = [Circle, Polygon];
 final List<Intersections> _intersectionSystems = [
-  PolygonPolygonIntersections()
+  CircleCircleIntersections(),
+  CirclePolygonIntersections(),
+  PolygonPolygonIntersections(),
 ];
 
 Set<Vector2> intersections(Shape shapeA, Shape shapeB) {

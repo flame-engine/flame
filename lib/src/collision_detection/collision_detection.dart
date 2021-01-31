@@ -3,7 +3,6 @@ import 'dart:collection';
 import '../components/mixins/collidable.dart';
 import '../geometry/line_segment.dart';
 import '../geometry/shape.dart';
-import '../geometry/shape_intersections.dart' as shape_intersections;
 import '../../extensions.dart';
 
 /// Check whether any [Collidable] in [collidables] collide with each other
