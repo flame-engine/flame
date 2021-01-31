@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import '../../components.dart';
+import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
 import 'shape.dart';
 
@@ -128,6 +129,21 @@ class Polygon extends Shape {
       }
     }
     return true;
+  }
+
+  /// Return all [vertices] as [LineSegment]s that intersect [rect], if [rect]
+  /// is null return all [vertices] as [LineSegment]s.
+  List<LineSegment> possibleIntersectionVertices(Rect rect) {
+    final List<LineSegment> rectIntersections = [];
+    final vertices = hitbox;
+    for (int i = 0; i < vertices.length; i++) {
+      final from = vertices[i];
+      final to = vertices[(i + 1) % vertices.length];
+      if (rect?.containsVertex(from, to) ?? true) {
+        rectIntersections.add(LineSegment(from, to));
+      }
+    }
+    return rectIntersections;
   }
 }
 

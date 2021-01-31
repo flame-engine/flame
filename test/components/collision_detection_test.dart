@@ -402,4 +402,71 @@ void main() {
       assert(intersections.length == 2, "Wrong number of intersections");
     });
   });
+
+  group('Circle-Polygon intersections tests', () {
+    test('Simple circle-polygon intersection', () {
+      final circle = Circle(position: Vector2.zero(), size: Vector2.all(2));
+      final polygon = Polygon.fromPositions([
+        Vector2(1, 2),
+        Vector2(2, 1),
+        Vector2(1, 0),
+        Vector2(0, 1),
+      ]);
+      final intersections = geometry.intersections(circle, polygon);
+      assert(
+        intersections.containsAll([Vector2(0, 1), Vector2(1, 0)]),
+        "Missed intersections",
+      );
+      assert(intersections.length == 2, "Wrong number of intersections");
+    });
+
+    test('Single point circle-polygon intersection', () {
+      final circle = Circle(position: Vector2(-1, 1), size: Vector2.all(2));
+      final polygon = Polygon.fromPositions([
+        Vector2(1, 2),
+        Vector2(2, 1),
+        Vector2(1, 0),
+        Vector2(0, 1),
+      ]);
+      final intersections = geometry.intersections(circle, polygon);
+      assert(
+        intersections.contains(Vector2(0, 1)),
+        "Missed intersections",
+      );
+      assert(intersections.length == 1, "Wrong number of intersections");
+    });
+
+    test('Four point circle-polygon intersection', () {
+      final circle = Circle(position: Vector2.all(1), size: Vector2.all(2));
+      final polygon = Polygon.fromPositions([
+        Vector2(1, 2),
+        Vector2(2, 1),
+        Vector2(1, 0),
+        Vector2(0, 1),
+      ]);
+      final intersections = geometry.intersections(circle, polygon);
+      assert(
+        intersections.containsAll([
+          Vector2(1, 2),
+          Vector2(2, 1),
+          Vector2(1, 0),
+          Vector2(0, 1),
+        ]),
+        "Missed intersections",
+      );
+      assert(intersections.length == 4, "Wrong number of intersections");
+    });
+
+    test('Polygon within circle, no intersections', () {
+      final circle = Circle(position: Vector2.all(1), size: Vector2.all(2.1));
+      final polygon = Polygon.fromPositions([
+        Vector2(1, 2),
+        Vector2(2, 1),
+        Vector2(1, 0),
+        Vector2(0, 1),
+      ]);
+      final intersections = geometry.intersections(circle, polygon);
+      assert(intersections.isEmpty, "Should not be any intersections");
+    });
+  });
 }

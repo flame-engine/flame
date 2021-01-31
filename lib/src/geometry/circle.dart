@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import '../../components.dart';
@@ -53,6 +54,50 @@ class Circle extends Shape {
   @override
   bool containsPoint(Vector2 point) {
     return position.distanceToSquared(point) < radius * radius;
+  }
+
+  /// Returns the locus of points in which the provided line segment intersect
+  /// the circle.
+  ///
+  /// This can be an empty list (if they don't intersect)
+  /// one point (if the line is tangent) or two points (if the line is secant).
+  List<Vector2> lineSegmentIntersections(LineSegment line,
+      {double epsilon = double.minPositive}) {
+    double sq(double x) => pow(x, 2).toDouble();
+
+    final double cx = absolutePosition.x;
+    final double cy = absolutePosition.y;
+
+    final Vector2 point1 = line.from;
+    final Vector2 point2 = line.to;
+
+    final Vector2 delta = point2 - point1;
+
+    final double A = sq(delta.x) + sq(delta.y);
+    final double B =
+        2 * (delta.x * (point1.x - cx) + delta.y * (point1.y - cy));
+    final double C = sq(point1.x - cx) + sq(point1.y - cy) - sq(radius);
+
+    final double det = B * B - 4 * A * C;
+    final result = <Vector2>[];
+    if (A <= epsilon || det < 0) {
+      return [];
+    } else if (det == 0) {
+      final double t = -B / (2 * A);
+      result.add(Vector2(point1.x + t * delta.x, point1.y + t * delta.y));
+    } else {
+      final double t1 = (-B + sqrt(det)) / (2 * A);
+      final Vector2 i1 =
+          Vector2(point1.x + t1 * delta.x, point1.y + t1 * delta.y);
+
+      final double t2 = (-B - sqrt(det)) / (2 * A);
+      final Vector2 i2 =
+          Vector2(point1.x + t2 * delta.x, point1.y + t2 * delta.y);
+
+      result.addAll([i1, i2]);
+    }
+    result.removeWhere((v) => !line.containsPoint(v));
+    return result;
   }
 }
 

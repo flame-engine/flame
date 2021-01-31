@@ -27,12 +27,10 @@ class PolygonPolygonIntersections extends Intersections<Polygon, Polygon> {
   Set<Vector2> intersect(Polygon polygonA, Polygon polygonB,
       {Rect overlappingRect}) {
     final intersectionPoints = <Vector2>{};
-    final intersectionsA = _possibleIntersectionVertices(
-      polygonA.hitbox,
+    final intersectionsA = polygonA.possibleIntersectionVertices(
       overlappingRect,
     );
-    final intersectionsB = _possibleIntersectionVertices(
-      polygonB.hitbox,
+    final intersectionsB = polygonB.possibleIntersectionVertices(
       overlappingRect,
     );
     for (LineSegment lineA in intersectionsA) {
@@ -42,30 +40,20 @@ class PolygonPolygonIntersections extends Intersections<Polygon, Polygon> {
     }
     return intersectionPoints;
   }
-
-  /// Return all [vertices] as [LineSegment]s that intersect [rect], if [rect]
-  /// is null return all [vertices] as [LineSegment]s.
-  List<LineSegment> _possibleIntersectionVertices(
-    List<Vector2> vertices,
-    Rect rect,
-  ) {
-    final List<LineSegment> rectIntersections = [];
-    for (int i = 0; i < vertices.length; i++) {
-      final from = vertices[i];
-      final to = vertices[(i + 1) % vertices.length];
-      if (rect?.containsVertex(from, to) ?? true) {
-        rectIntersections.add(LineSegment(from, to));
-      }
-    }
-    return rectIntersections;
-  }
 }
 
 class CirclePolygonIntersections extends Intersections<Circle, Polygon> {
   @override
-  Set<Vector2> intersect(Circle shapeA, Polygon shapeB) {
-    // TODO: implement intersect
-    throw UnimplementedError();
+  Set<Vector2> intersect(Circle circle, Polygon polygon,
+      {Rect overlappingRect}) {
+    final intersectionPoints = <Vector2>{};
+    final possibleVertices = polygon.possibleIntersectionVertices(
+      overlappingRect,
+    );
+    for (LineSegment line in possibleVertices) {
+      intersectionPoints.addAll(circle.lineSegmentIntersections(line));
+    }
+    return intersectionPoints;
   }
 }
 
