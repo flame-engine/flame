@@ -1,8 +1,10 @@
 import 'dart:collection';
 
+import 'package:flame/components.dart';
+
 import '../components/mixins/collidable.dart';
-import '../geometry/line_segment.dart';
-import '../geometry/shape.dart';
+import 'line_segment.dart';
+import 'shape.dart';
 import '../../extensions.dart';
 
 /// Check whether any [Collidable] in [collidables] collide with each other
@@ -19,15 +21,17 @@ void collisionDetection(List<Collidable> collidables, {Vector2 screenSize}) {
       }
     }
 
-    // TODO: Add screen as a rectangle and compare intersection
-    //if (screenSize != null && collidableX.hasScreenCollision) {
-    //  final intersectionPoints = intersections(collidableX.shapes, [screenSize])
-    //      hitboxSizeIntersections(collidableX.shapes, screenSize);
-    //  if (intersectionPoints.isNotEmpty) {
-    //    print("kabooom $intersectionPoints");
-    //    collidableX.screenCollisionCallback(intersectionPoints);
-    //  }
-    //}
+    if (screenSize != null && collidableX.hasScreenCollision) {
+      final intersections = <Vector2>{};
+      final screenRectangle = Rectangle.fromRect(screenSize.toRect());
+      for (Shape shape in collidableX.shapes) {
+        final shapeIntersections = shape.intersections(screenRectangle);
+        intersections.addAll(shapeIntersections);
+      }
+      if (intersections.isNotEmpty) {
+        collidableX.screenCollisionCallback(intersections);
+      }
+    }
   }
 }
 

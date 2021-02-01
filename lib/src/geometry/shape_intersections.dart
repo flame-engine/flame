@@ -83,31 +83,39 @@ class CircleCircleIntersections extends Intersections<Circle, Circle> {
         shapeA.absolutePosition + Vector2(0, radiusA),
       };
     } else {
-      final cathetusA = (pow(radiusA, 2) - pow(radiusB, 2) + pow(distance, 2)) /
+      /// There are definitely collision points if we end up in here.
+      /// To calculate these we use the fact that we can form two triangles going
+      /// between the center of shapeA, the point in between the shapes which the
+      /// intersecting line goes through, and then two different triangles are
+      /// formed with the two intersection points as the last corners.
+      /// The length to the point in between the circles is first calculated,
+      /// this is [lengthA], then we calculate the length of the other cathetus
+      /// [lengthB]. Then the [centerPoint] is calculated, which is the point
+      /// which the intersecting line goes through in between the shapes.
+      /// At this point we know the two first points of the triangles, the center
+      /// of [shapeA] and the [centerPoint], the two third points of the
+      /// different triangles are the intersection points that we are looking for
+      /// and we get those points by calculating the [delta] from the
+      /// [centerPoint] to the intersection points.
+      /// The result is then [centerPoint] +- [delta].
+      final lengthA = (pow(radiusA, 2) - pow(radiusB, 2) + pow(distance, 2)) /
           (2 * distance);
-      // Length of h
-      final cathetusB = sqrt((pow(radiusA, 2) - pow(cathetusA, 2)).abs());
-      // P2 = P0 + a ( P1 - P0 ) / d
+      final lengthB = sqrt((pow(radiusA, 2) - pow(lengthA, 2)).abs());
       final centerPoint = shapeA.absolutePosition +
           (shapeB.absolutePosition - shapeA.absolutePosition) *
-              cathetusA /
+              lengthA /
               distance;
-      print(radiusA);
-      print(centerPoint);
-      print(cathetusA);
-      print(cathetusB);
-      print(distance);
-      // x3 = x2 +- h ( y1 - y0 ) / d
-      // y3 = y2 -+ h ( x1 - x0 ) / d
-      final deltaX = cathetusB *
-          (shapeB.absolutePosition.y - shapeA.absolutePosition.y).abs() /
-          distance;
-      final deltaY = cathetusB *
-          (shapeB.absolutePosition.x - shapeA.absolutePosition.x).abs() /
-          distance;
+      final delta = Vector2(
+        lengthB *
+            (shapeB.absolutePosition.y - shapeA.absolutePosition.y).abs() /
+            distance,
+        -lengthB *
+            (shapeB.absolutePosition.x - shapeA.absolutePosition.x).abs() /
+            distance,
+      );
       return {
-        Vector2(centerPoint.x + deltaX, centerPoint.y - deltaY),
-        Vector2(centerPoint.x - deltaX, centerPoint.y + deltaY),
+        centerPoint + delta,
+        centerPoint - delta,
       };
     }
   }
@@ -128,9 +136,7 @@ Set<Vector2> intersections(Shape shapeA, Shape shapeB) {
   final intersectionSystem = _intersectionSystems.firstWhere(
     (system) => system.supportsShapes(shapeA, shapeB),
     orElse: () {
-      print(shapeA);
-      print(shapeB);
-      throw 'Non-supported shape detected';
+      throw 'Unsupported shape detected';
     },
   );
   return intersectionSystem.intersect(shapeA, shapeB);

@@ -7,7 +7,7 @@ import 'package:flutter/widgets.dart' hide WidgetBuilder;
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
-import '../collision_detection/collision_detection.dart' as collision_detection;
+import '../geometry/collision_detection.dart' as collision_detection;
 import '../components/component.dart';
 import '../components/mixins/collidable.dart';
 import '../components/mixins/has_collidables.dart';
