@@ -15,8 +15,11 @@ class _Composed {
   /// The source on the [image] that will be composed.
   final Rect source;
 
-  final double rotation;
+  /// The angle (in radians) used to rotate the [image] around it's [anchor].
+  final double angle;
 
+  /// The point around which the [image] will be rotated
+  /// (defaults to the centre of the [source]).
   final Vector2 anchor;
 
   final bool isAntiAlias;
@@ -28,7 +31,7 @@ class _Composed {
     this.image,
     this.position,
     this.source,
-    this.rotation,
+    this.angle,
     this.anchor,
     this.isAntiAlias,
     this.blendMode,
@@ -59,9 +62,9 @@ class ImageComposition {
   /// An optional [source] can be used to only add the data that is within the
   /// [source] of the [image].
   ///
-  /// An optional [rotation] (in radians) can be used to rotate the image when it
-  /// gets added to the composition. You can use [anchor] to set the point on
-  /// which it will rotate.
+  /// An optional [angle] (in radians) can be used to rotate the image when it
+  /// gets added to the composition. It will be rotated in a clock-wise direction
+  /// around the [anchor].
   ///
   /// By default the [anchor] will be the [source.width] and [source.height]
   /// divided by `2`.
@@ -75,7 +78,7 @@ class ImageComposition {
     Image image,
     Vector2 position, {
     Rect source,
-    double rotation = 0,
+    double angle = 0,
     Vector2 anchor,
     bool isAntiAlias,
     BlendMode blendMode,
@@ -92,7 +95,7 @@ class ImageComposition {
               source.left >= 0,
       'Source rect should fit within in the image constraints',
     );
-    assert(rotation != null, 'rotation can not be null');
+    assert(angle != null, 'rotation can not be null');
     blendMode ??= defaultBlendMode;
     isAntiAlias ??= defaultAntiAlias;
     source ??= Rect.fromLTWH(
@@ -101,17 +104,10 @@ class ImageComposition {
       image.width.toDouble(),
       image.height.toDouble(),
     );
-    anchor ??= Vector2(source.width / 2, source.height / 2);
+    anchor ??= source.toVector2() / 2;
 
     _composes.add(_Composed(
-      image,
-      position,
-      source,
-      rotation,
-      anchor,
-      isAntiAlias,
-      blendMode,
-    ));
+        image, position, source, angle, anchor, isAntiAlias, blendMode));
   }
 
   void clear() => _composes.clear();
@@ -123,14 +119,14 @@ class ImageComposition {
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
 
-    for (var i = 0; i < _composes.length; i++) {
-      final image = _composes[i].image;
-      final position = _composes[i].position;
-      final source = _composes[i].source;
-      final rotation = _composes[i].rotation;
-      final anchor = _composes[i].anchor;
-      final isAntiAlias = _composes[i].isAntiAlias;
-      final blendMode = _composes[i].blendMode;
+    for (final compose in _composes) {
+      final image = compose.image;
+      final position = compose.position;
+      final source = compose.source;
+      final rotation = compose.angle;
+      final anchor = compose.anchor;
+      final isAntiAlias = compose.isAntiAlias;
+      final blendMode = compose.blendMode;
       final destination = Rect.fromLTWH(0, 0, source.width, source.height);
       final realDest = destination.translate(position.x, position.y);
 
@@ -150,14 +146,9 @@ class ImageComposition {
         )
         ..restore();
 
-      // If the destination is not fully contained inside the current output,
-      // we have to resize the data list.
-      if (!(output.contains(realDest.topLeft) &&
-          output.contains(realDest.topRight) &&
-          output.contains(realDest.bottomLeft) &&
-          output.contains(realDest.bottomRight))) {
-        output = output.expandToInclude(realDest);
-      }
+      // Expand the output so it can be used later on when the output image gets
+      // created.
+      output = output.expandToInclude(realDest);
     }
 
     return recorder
