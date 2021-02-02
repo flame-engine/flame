@@ -199,7 +199,7 @@ The simplest `ParallaxComponent` is created like this:
 ```dart
 @override
 Future<void> onLoad() async {
-  final parallaxComponent = await loadParallaxComponent(['bg.png', 'trees.png']);
+  final parallaxComponent = await loadParallaxComponent(['bg.png', 'trees.png'], Vector2.all(100));
   add(parallax);
 }
 ```
@@ -210,7 +210,7 @@ A ParallaxComponent can also "load itself" by implementing the `onLoad` method:
 class MyParallaxComponent extends ParallaxComponent with HasGameRef<MyGame> {
   @override
   Future<void> onLoad() async {
-    parallax = gameRef.loadParallax(['bg.png', 'trees.png']);
+    parallax = gameRef.loadParallax(['bg.png', 'trees.png'], Vector2.all(100)); // To make the parallax fill the entire screen, gameRef.size could be used instead
   }
 }
 
@@ -234,6 +234,7 @@ For example if you want to move your background images along the X-axis with a f
 ```dart
 final parallaxComponent = await loadParalladComponent(
   _paths,
+  Vector2.all(100,),
   baseVelocity: Vector2(20, 0),
   velocityMultiplierDelta: Vector2(1.8, 1.0),
 );
@@ -264,6 +265,7 @@ final layers = images.map((image) => ParallaxLayer(await image, velocityMulitpli
 final parallaxComponent = ParallaxComponent.fromParallax(
   Parallax(
     await Future.wait(layers),
+    Vector2.all(100),
     baseVelocity: Vector2(50, 0),
   ),
 );

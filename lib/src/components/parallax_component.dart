@@ -12,15 +12,17 @@ import 'position_component.dart';
 
 extension ParallaxComponentExtension on Game {
   Future<ParallaxComponent> loadParallaxComponent(
-    List<String> paths, {
+    List<String> paths,
+    Vector2 size, {
     Vector2 baseVelocity,
     Vector2 velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
-  }) {
-    return ParallaxComponent.load(
+  }) async {
+    final comp = await ParallaxComponent.load(
       paths,
+      size,
       baseVelocity: baseVelocity,
       velocityMultiplierDelta: velocityMultiplierDelta,
       repeat: repeat,
@@ -28,6 +30,8 @@ extension ParallaxComponentExtension on Game {
       fill: fill,
       images: images,
     );
+
+    return comp..size.setFrom(size);
   }
 }
 
@@ -66,13 +70,7 @@ class ParallaxComponent extends PositionComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    canvas.save();
-    parallax?.layers?.forEach((layer) {
-      canvas.save();
-      layer.render(canvas);
-      canvas.restore();
-    });
-    canvas.restore();
+    parallax?.render(canvas);
   }
 
   /// Note that this method only should be used if all of your layers should
@@ -80,7 +78,7 @@ class ParallaxComponent extends PositionComponent {
   /// and filled), otherwise load the [ParallaxLayer]s individually and use the
   /// normal constructor.
   ///
-  /// [load] takes a list of paths to all the images that you want to use in the
+  /// [load] takes a list of paths to all the images and a size that you want to use in the
   /// parallax.
   /// Optionally arguments for the [baseVelocity] and [layerDelta] can be passed
   /// in, [baseVelocity] defines what the base velocity of the layers should be
@@ -93,7 +91,8 @@ class ParallaxComponent extends PositionComponent {
   /// used can also be passed in.
   /// If no image cache is set, the global flame cache is used.
   static Future<ParallaxComponent> load(
-    List<String> paths, {
+    List<String> paths,
+    Vector2 size, {
     Vector2 baseVelocity,
     Vector2 velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
@@ -104,6 +103,7 @@ class ParallaxComponent extends PositionComponent {
     return ParallaxComponent.fromParallax(
       await Parallax.load(
         paths,
+        size,
         baseVelocity: baseVelocity,
         velocityMultiplierDelta: velocityMultiplierDelta,
         repeat: repeat,
@@ -111,6 +111,6 @@ class ParallaxComponent extends PositionComponent {
         fill: fill,
         images: images,
       ),
-    );
+    )..size.setFrom(size);
   }
 }
