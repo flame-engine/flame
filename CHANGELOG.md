@@ -109,6 +109,13 @@
  - Extract all the audio related capabilities to a new package, flame_audio
  - Fix bug that sprite crashes without a position
 
+## 0.29.1-beta
+ - Fixing Game Render Box for flutter >= 1.25
+
+## 0.29.0
+- Update audioplayers to latest version (now `assets` will not be added to prefixes automatically)
+- Fix lint issues with 0.28.0
+
 ## 0.28.0
 - Fix spriteAsWidget deprecation message
 - Add `lineHeight` property to `TextConfig`

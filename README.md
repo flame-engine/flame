@@ -30,7 +30,7 @@ Use this version to get a preview of how the new Flame version will be and also 
 
 Checkout the branches `develop-v0.x` and `master-v0.x` for the current last 0.x version. However no new updates will be added to v0 except for bugfixes.
 
-The current v1 release is `1.0.0-rc6` on pub. The last stable version so far is `0.28.0`. Feel free to choose the one that better suits your need.
+The current v1 release is `1.0.0-rc6` on pub. The last stable version so far is `0.29.0`. Feel free to choose the one that better suits your need.
 
 ---
 
