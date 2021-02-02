@@ -261,7 +261,7 @@ class Parallax {
   void resize(Vector2 newSize) {
     if (newSize.x != _size.x || newSize.y != _size.y) {
       _size = newSize;
-      _clipRect = Rect.fromLTWH(0, 0, newSize.x, newSize.y);
+      _clipRect = newSize.toRect();
       layers.forEach((layer) => layer.resize(newSize));
     }
   }
