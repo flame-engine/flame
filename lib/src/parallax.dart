@@ -335,7 +335,9 @@ class Parallax {
 
   void render(Canvas canvas, {Vector2 position}) {
     canvas.save();
-    if (position != null) canvas.translateVector(position);
+    if (position != null) {
+      canvas.translateVector(position);
+    }
     canvas.clipRect(_clipRect);
     layers.forEach((layer) {
       canvas.save();
