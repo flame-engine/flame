@@ -196,8 +196,6 @@ class ParallaxLayer {
   }
 
   void render(Canvas canvas) {
-    assert(_paintArea != null,
-        'Render called without proper dimensions set, did you forgot to call Parallax.resize?');
     paintImage(
       canvas: canvas,
       image: parallaxImage.image,
