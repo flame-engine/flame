@@ -12,17 +12,18 @@ import 'position_component.dart';
 
 extension ParallaxComponentExtension on Game {
   Future<ParallaxComponent> loadParallaxComponent(
-    List<String> paths,
-    Vector2 size, {
+    List<String> paths, {
+    Vector2 size,
     Vector2 baseVelocity,
     Vector2 velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
   }) async {
+    final compSize = size ?? this.size;
     final comp = await ParallaxComponent.load(
       paths,
-      size,
+      compSize,
       baseVelocity: baseVelocity,
       velocityMultiplierDelta: velocityMultiplierDelta,
       repeat: repeat,
@@ -31,7 +32,7 @@ extension ParallaxComponentExtension on Game {
       images: images,
     );
 
-    return comp..size.setFrom(size);
+    return comp..size.setFrom(compSize);
   }
 }
 

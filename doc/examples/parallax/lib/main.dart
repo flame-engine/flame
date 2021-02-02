@@ -24,12 +24,10 @@ class MyGame extends BaseGame {
 
   @override
   Future<void> onLoad() async {
-    final parallax = await ParallaxComponent.load(
+    final parallax = await loadParallaxComponent(
       _imageNames,
-      size,
       baseVelocity: Vector2(20, 0),
       velocityMultiplierDelta: Vector2(1.8, 1.0),
-      images: images,
     );
     add(parallax);
   }
