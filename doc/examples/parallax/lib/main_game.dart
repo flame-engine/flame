@@ -5,9 +5,11 @@ import 'package:flame/parallax.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 
-/// This examples serves to test the Parallax feature outside
+/// This examples serves to test the Parallax feature outside of the
 /// Flame Component System (FCS), use the other files in this folder
 /// for examples on how to use parallax with FCS
+/// FCS is only used when you extend BaseGame, not Game,
+/// like we do in this example.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.device.fullScreen();
