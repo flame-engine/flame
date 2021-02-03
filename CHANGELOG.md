@@ -7,6 +7,8 @@
  - Adapting SpriteBatchComponent constructors to match the pattern used on other components
  - Renamed `Composition` to `ImageComposition` to prevent confusion with the composition component
  - Added `rotation` and `anchor` arguments to `ImageComposition.add`
+ - Added `Image` extensions
+ - Added `Color` extensions
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
