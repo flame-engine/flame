@@ -5,6 +5,7 @@
  - Moving render functions from `util.dart` to `extensions/canvas.dart`
  - Adapting ParallaxComponent contructors to match the pattern followed on other components
  - Adapting SpriteBatchComponent constructors to match the pattern used on other components
+ - Enabling direct import of Sprite and SpriteAnimation
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
