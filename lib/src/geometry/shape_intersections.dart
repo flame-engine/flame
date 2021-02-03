@@ -17,9 +17,9 @@ abstract class Intersections<T1 extends Shape, T2 extends Shape> {
   }
 
   Set<Vector2> unorderedIntersect(Shape shapeA, Shape shapeB) {
-    if(shapeA is T1 && shapeB is T2) {
+    if (shapeA is T1 && shapeB is T2) {
       return intersect(shapeA, shapeB);
-    } else if(shapeA is T2 && shapeB is T1) {
+    } else if (shapeA is T2 && shapeB is T1) {
       return intersect(shapeB, shapeA);
     } else {
       throw "Unsupported shapes";

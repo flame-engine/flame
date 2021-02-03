@@ -36,9 +36,13 @@ abstract class MyCollidable extends PositionComponent with Hitbox, Collidable {
 
   @override
   void collisionCallback(Set<Vector2> points, Collidable other) {
-    final averageIntersection = points.fold<Vector2>(Vector2.zero(), (sum, v) => sum+v)/points.length.toDouble();
-    final collisionDirection = (averageIntersection - absoluteCenter)..normalize()..round();
-    if(collisionDirection.angleToSigned(direction).abs() > 3.14) {
+    final averageIntersection =
+        points.fold<Vector2>(Vector2.zero(), (sum, v) => sum + v) /
+            points.length.toDouble();
+    final collisionDirection = (averageIntersection - absoluteCenter)
+      ..normalize()
+      ..round();
+    if (collisionDirection.angleToSigned(direction).abs() > 3.14) {
       // This entity got hit by something else
       return;
     }
@@ -48,14 +52,13 @@ abstract class MyCollidable extends PositionComponent with Hitbox, Collidable {
     );
     direction.multiply(correction);
     position.sub(delta);
-    if (other is CollidableScreen) {
-
-    }
+    if (other is CollidableScreen) {}
   }
 }
 
 class CollidablePolygon extends MyCollidable {
-  CollidablePolygon(Vector2 position, Vector2 size, double speed) : super(position, size, speed) {
+  CollidablePolygon(Vector2 position, Vector2 size, double speed)
+      : super(position, size, speed) {
     final shape = HitboxPolygon([
       Vector2(0, 1),
       Vector2(1, 0),
@@ -67,7 +70,8 @@ class CollidablePolygon extends MyCollidable {
 }
 
 class CollidableCircle extends MyCollidable {
-  CollidableCircle(Vector2 position, Vector2 size, double speed) : super(position, size, speed) {
+  CollidableCircle(Vector2 position, Vector2 size, double speed)
+      : super(position, size, speed) {
     final shape = HitboxCircle();
     addShape(shape);
   }
