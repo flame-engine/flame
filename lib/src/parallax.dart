@@ -259,7 +259,7 @@ class Parallax {
   /// If the `ParallaxComponent` isn't used your own wrapper needs to call this
   /// on creation.
   void resize(Vector2 newSize) {
-    if (newSize.x != _size.x || newSize.y != _size.y) {
+    if (newSize != _size) {
       _size = newSize;
       _clipRect = newSize.toRect();
       layers.forEach((layer) => layer.resize(newSize));
