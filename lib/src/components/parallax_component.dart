@@ -20,10 +20,10 @@ extension ParallaxComponentExtension on Game {
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
   }) async {
-    final compSize = size ?? this.size;
-    final comp = await ParallaxComponent.load(
+    final componentSize = size ?? this.size;
+    final component = await ParallaxComponent.load(
       paths,
-      compSize,
+      size: componentSize,
       baseVelocity: baseVelocity,
       velocityMultiplierDelta: velocityMultiplierDelta,
       repeat: repeat,
@@ -32,7 +32,7 @@ extension ParallaxComponentExtension on Game {
       images: images,
     );
 
-    return comp..size.setFrom(compSize);
+    return component..size.setFrom(componentSize);
   }
 }
 
@@ -92,8 +92,8 @@ class ParallaxComponent extends PositionComponent {
   /// used can also be passed in.
   /// If no image cache is set, the global flame cache is used.
   static Future<ParallaxComponent> load(
-    List<String> paths,
-    Vector2 size, {
+    List<String> paths, {
+    Vector2 size,
     Vector2 baseVelocity,
     Vector2 velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
@@ -101,7 +101,7 @@ class ParallaxComponent extends PositionComponent {
     LayerFill fill = LayerFill.height,
     Images images,
   }) async {
-    return ParallaxComponent.fromParallax(
+    final component = ParallaxComponent.fromParallax(
       await Parallax.load(
         paths,
         size,
@@ -112,6 +112,12 @@ class ParallaxComponent extends PositionComponent {
         fill: fill,
         images: images,
       ),
-    )..size.setFrom(size);
+    );
+
+    if (size != null) {
+      component.size.setFrom(size);
+    }
+
+    return component;
   }
 }

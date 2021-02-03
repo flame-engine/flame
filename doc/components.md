@@ -264,7 +264,7 @@ final layers = images.map((image) => ParallaxLayer(await image, velocityMulitpli
 final parallaxComponent = ParallaxComponent.fromParallax(
   Parallax(
     await Future.wait(layers),
-    Vector2.all(100),
+    size, // size is a property on the Game class
     baseVelocity: Vector2(50, 0),
   ),
 );
