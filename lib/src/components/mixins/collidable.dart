@@ -1,12 +1,18 @@
 import 'hitbox.dart';
+import '../../components/position_component.dart';
 import '../../extensions/vector2.dart';
+import '../../geometry/rectangle.dart';
 
 mixin Collidable on Hitbox {
   bool hasScreenCollision = false;
 
   void collisionCallback(Set<Vector2> points, Collidable other) {}
+}
 
-  /// Override this and set [hasScreenCollision] to true if you want to know
-  /// when your component hits one of the edges of the screen
-  void screenCollisionCallback(Set<Vector2> points) {}
+class CollidableScreen extends PositionComponent with Hitbox, Collidable {
+  CollidableScreen(Vector2 screenSize) {
+    position = Vector2.zero();
+    size = screenSize;
+    addShape(HitboxRectangle(Vector2.all(1.0)));
+  }
 }

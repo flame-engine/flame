@@ -79,6 +79,9 @@ abstract class PositionComponent extends BaseComponent {
     return anchor == Anchor.center ? position : topLeftPosition + (size / 2);
   }
 
+  /// Get the absolute center of the component
+  Vector2 get absoluteCenter => absoluteParentPosition + center;
+
   /// Angle (with respect to the x-axis) this component should be rendered with.
   /// It is rotated around its anchor.
   double angle = 0.0;

@@ -5,22 +5,40 @@ import '../../extensions.dart';
 import 'shape.dart';
 
 class Rectangle extends Polygon {
-  /// The [relation] describes the relationship between x any y in the
-  /// rectangle, not the size of the rectangle, both x and y in the [Vector2]
-  /// should therefore be less or equal to 1.0.
+  static final _defaultDefinition = [
+    Vector2(1, 1),
+    Vector2(1, -1),
+    Vector2(-1, -1),
+    Vector2(-1, 1),
+  ];
+
+  /// The [relation] describes the relationship between x and y and the size of
+  /// the rectangle, both x and y in [relation] should be less or equal to 1.0
+  /// if this should be used for collision detection.
+  /// For example if the [size] is (100, 100) and the [relation] is (0.5, 1.0)
+  /// the it will represent a rectangle with the points (25, 50), (25, -50),
+  /// (-25, -50) and (-25, 50) because the rectangle is defined from the center
+  /// of itself. The [position] will therefore be the center of the Rectangle.
+  ///
   /// If you want to create the [Rectangle] from a positioned [Rect] instead,
   /// have a look at [Rectangle.toRect].
-  Rectangle(
-    Vector2 relation, {
+  Rectangle({
+    Vector2 relation,
     Vector2 position,
     Vector2 size,
     double angle,
-  }) : super([
-          relation.clone(),
-          Vector2(relation.x, -relation.y),
-          -relation,
-          Vector2(-relation.x, relation.y),
-        ], position: position, size: size, angle: angle = 0);
+  }) : super(
+            relation != null
+                ? [
+                    relation.clone(),
+                    Vector2(relation.x, -relation.y),
+                    -relation,
+                    Vector2(-relation.x, relation.y),
+                  ]
+                : _defaultDefinition,
+            position: position,
+            size: size,
+            angle: angle = 0);
 
   /// With this helper method you can create your [Rectangle] from a positioned
   /// [Rect] instead of percentages. This helper will also calculate the size
@@ -30,8 +48,8 @@ class Rectangle extends Polygon {
     double angle = 0,
   }) {
     return Rectangle(
-      rect.size.toVector2() / 2,
       position: rect.center.toVector2(),
+      size: rect.size.toVector2(),
       angle: angle,
     );
   }
@@ -43,5 +61,5 @@ class Rectangle extends Polygon {
 }
 
 class HitboxRectangle extends Rectangle with HitboxShape {
-  HitboxRectangle(Vector2 relation) : super(relation);
+  HitboxRectangle(Vector2 relation) : super(relation: relation);
 }

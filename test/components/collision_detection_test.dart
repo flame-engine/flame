@@ -325,6 +325,29 @@ void main() {
     // TODO: Test clockwise vs ccw
   });
 
+  group('Rectangle intersections tests', () {
+    test('Simple intersection', () {
+      final rectangleA = Rectangle(
+        position: Vector2(4, 0),
+        size: Vector2.all(4),
+      );
+      final rectangleB = Rectangle(
+        position: Vector2.zero(),
+        size: Vector2.all(4),
+      );
+      final intersections = geometry.intersections(rectangleA, rectangleB);
+      assert(
+        intersections.containsAll([
+          Vector2(2, -2),
+          Vector2(2, 0),
+          Vector2(2, 2),
+        ]),
+        "Missed intersections",
+      );
+      assert(intersections.length == 3, "Wrong number of intersections");
+    });
+  });
+
   group('Circle intersections tests', () {
     test('Simple collision', () {
       final circleA = Circle(position: Vector2(4, 0), size: Vector2.all(4));
@@ -392,7 +415,6 @@ void main() {
       final circleA = Circle(position: Vector2.all(-1), size: Vector2.all(4));
       final circleB = Circle(position: Vector2.all(1), size: Vector2.all(4));
       final intersections = geometry.intersections(circleA, circleB).toList();
-      print(intersections);
       assert(
         intersections.any((v) => v.distanceTo(Vector2(1, -1)) < 0.000001),
       );

@@ -13,7 +13,17 @@ abstract class Intersections<T1 extends Shape, T2 extends Shape> {
   Set<Vector2> intersect(T1 shapeA, T2 shapeB);
 
   bool supportsShapes(Shape shapeA, Shape shapeB) {
-    return shapeA is T1 && shapeB is T2;
+    return shapeA is T1 && shapeB is T2 || shapeA is T2 && shapeB is T1;
+  }
+
+  Set<Vector2> unorderedIntersect(Shape shapeA, Shape shapeB) {
+    if(shapeA is T1 && shapeB is T2) {
+      return intersect(shapeA, shapeB);
+    } else if(shapeA is T2 && shapeB is T1) {
+      return intersect(shapeB, shapeA);
+    } else {
+      throw "Unsupported shapes";
+    }
   }
 }
 
@@ -121,7 +131,6 @@ class CircleCircleIntersections extends Intersections<Circle, Circle> {
   }
 }
 
-final List<Type> _shapeOrder = [Circle, Polygon];
 final List<Intersections> _intersectionSystems = [
   CircleCircleIntersections(),
   CirclePolygonIntersections(),
@@ -129,15 +138,11 @@ final List<Intersections> _intersectionSystems = [
 ];
 
 Set<Vector2> intersections(Shape shapeA, Shape shapeB) {
-  final isShapeAFirst = _shapeOrder.indexOf(shapeA.runtimeType) <=
-      _shapeOrder.indexOf(shapeB.runtimeType);
-  shapeA = isShapeAFirst ? shapeA : shapeB;
-  shapeB = isShapeAFirst ? shapeB : shapeA;
   final intersectionSystem = _intersectionSystems.firstWhere(
     (system) => system.supportsShapes(shapeA, shapeB),
     orElse: () {
-      throw 'Unsupported shape detected';
+      throw 'Unsupported shape detected + ${shapeA.runtimeType} ${shapeB.runtimeType}';
     },
   );
-  return intersectionSystem.intersect(shapeA, shapeB);
+  return intersectionSystem.unorderedIntersect(shapeA, shapeB);
 }

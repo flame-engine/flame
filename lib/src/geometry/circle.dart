@@ -47,7 +47,7 @@ class Circle extends Shape {
 
   @override
   void render(Canvas canvas, Paint paint) {
-    canvas.drawCircle(position.toOffset(), radius, paint);
+    canvas.drawCircle((size / 2 + position).toOffset(), radius, paint);
   }
 
   /// Checks whether the represented circle contains the [point].
