@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flame/sprite_batch.dart';
+import 'package:flame/sprite.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
