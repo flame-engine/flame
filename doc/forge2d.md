@@ -77,6 +77,6 @@ An implementation example can be seen in the [Flame Forge2D example](https://git
 
 ## Viewport
 
-If you see you screen as a window and the outside as the Forge2D world, then the `Viewport` is the part of the world outside that you can see through the window, so the parts that you can see on your screen.
+If you see your screen as a window and the outside as the Forge2D world, then the `Viewport` is the part of the world outside that you can see through the window, so the parts that you can see on your screen.
 
 The viewport might move around the world if your game is larger than your screen and it can be very useful if you want to follow a body in the world, for example a player, then you can use the `viewport.cameraFollow(body)` method, but remember that it has to be called every update.
