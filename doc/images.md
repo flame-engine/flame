@@ -149,14 +149,14 @@ A `SpriteBatchComponent` is also available for your convenience.
 
 See the examples [here](https://github.com/flame-engine/flame/tree/master/doc/examples/sprite_batch).
 
-## Composition
+## ImageComposition
 
 In some cases you may want to merge multiple images into a single image; this is called [Compositing](https://en.wikipedia.org/wiki/Compositing). This can be useful for example when working with the [SpriteBatch](#spritebatch) API to optimize your drawing calls. 
 
-For such usecases Flame comes with the `Composition` class. This allows you to add multiple images, each at their own position, onto a new image:
+For such usecases Flame comes with the `ImageComposition` class. This allows you to add multiple images, each at their own position, onto a new image:
 
 ```dart
-final composition = Composition()
+final composition = ImageComposition()
   ..add(image1, Vector2(0, 0))
   ..add(image2, Vector2(64, 0));
   ..add(image3, 
