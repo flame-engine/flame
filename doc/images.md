@@ -45,6 +45,7 @@ Example:
 
 ```dart
 import 'package:flame/flame.dart';
+import 'package:flame/sprite.dart';
 
 // inside an async context
 Image image = await Flame.images.load('player.png');
@@ -314,7 +315,7 @@ You can see a full example of the SpriteSheet class [here](https://github.com/fl
 Sprite sheets are big images with several frames of the same sprite on it and is a very good way to organize and keep your animations stored. Flame provides a very simple utility class to deal with SpriteSheets, with it you can load your sprite sheet image and extract animations from it. Below is a very simple example of how to use it:
 
 ```dart
-import 'package:flame/spritesheet.dart';
+import 'package:flame/sprite.dart';
 
 final spritesheet = SpriteSheet(
   image: imageInstance,
