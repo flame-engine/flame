@@ -5,6 +5,7 @@
  - Moving render functions from `util.dart` to `extensions/canvas.dart`
  - Adapting ParallaxComponent contructors to match the pattern followed on other components
  - Adapting SpriteBatchComponent constructors to match the pattern used on other components
+ - Enabling direct import of Sprite and SpriteAnimation
  - Renamed `Composition` to `ImageComposition` to prevent confusion with the composition component
  - Added `rotation` and `anchor` arguments to `ImageComposition.add`
 
