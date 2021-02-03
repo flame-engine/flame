@@ -6,6 +6,9 @@
  - Adapting ParallaxComponent contructors to match the pattern followed on other components
  - Adapting SpriteBatchComponent constructors to match the pattern used on other components
  - Improving Parallax APIs regarding handling its size and the use outside FCS
+ - Enabling direct import of Sprite and SpriteAnimation
+ - Renamed `Composition` to `ImageComposition` to prevent confusion with the composition component
+ - Added `rotation` and `anchor` arguments to `ImageComposition.add`
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations

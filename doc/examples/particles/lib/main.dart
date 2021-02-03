@@ -6,7 +6,7 @@ import 'package:flame/components.dart' hide Timer;
 import 'package:flame/timer.dart' as flame_timer;
 import 'package:flame/game.dart';
 import 'package:flame/particles.dart';
-import 'package:flame/spritesheet.dart';
+import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart' hide Image;
 
 void main() async {

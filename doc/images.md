@@ -45,6 +45,7 @@ Example:
 
 ```dart
 import 'package:flame/flame.dart';
+import 'package:flame/sprite.dart';
 
 // inside an async context
 Image image = await Flame.images.load('player.png');
@@ -148,14 +149,14 @@ A `SpriteBatchComponent` is also available for your convenience.
 
 See the examples [here](https://github.com/flame-engine/flame/tree/master/doc/examples/sprite_batch).
 
-## Composition
+## ImageComposition
 
 In some cases you may want to merge multiple images into a single image; this is called [Compositing](https://en.wikipedia.org/wiki/Compositing). This can be useful for example when working with the [SpriteBatch](#spritebatch) API to optimize your drawing calls. 
 
-For such usecases Flame comes with the `Composition` class. This allows you to add multiple images, each at their own position, onto a new image:
+For such usecases Flame comes with the `ImageComposition` class. This allows you to add multiple images, each at their own position, onto a new image:
 
 ```dart
-final composition = Composition()
+final composition = ImageComposition()
   ..add(image1, Vector2(0, 0))
   ..add(image2, Vector2(64, 0));
   ..add(image3, 
@@ -314,7 +315,7 @@ You can see a full example of the SpriteSheet class [here](https://github.com/fl
 Sprite sheets are big images with several frames of the same sprite on it and is a very good way to organize and keep your animations stored. Flame provides a very simple utility class to deal with SpriteSheets, with it you can load your sprite sheet image and extract animations from it. Below is a very simple example of how to use it:
 
 ```dart
-import 'package:flame/spritesheet.dart';
+import 'package:flame/sprite.dart';
 
 final spritesheet = SpriteSheet(
   image: imageInstance,
