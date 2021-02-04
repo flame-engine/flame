@@ -34,6 +34,7 @@ class MyGame extends BaseGame {
     final parallax = ParallaxComponent.fromParallax(
       Parallax(
         await Future.wait(layers),
+        size,
         baseVelocity: Vector2(20, 0),
       ),
     );
