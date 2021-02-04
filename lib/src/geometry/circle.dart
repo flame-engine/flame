@@ -53,7 +53,7 @@ class Circle extends Shape {
   /// Checks whether the represented circle contains the [point].
   @override
   bool containsPoint(Vector2 point) {
-    return position.distanceToSquared(point) < radius * radius;
+    return absoluteShapeCenter.distanceToSquared(point) < radius * radius;
   }
 
   /// Returns the locus of points in which the provided line segment intersect
@@ -65,8 +65,8 @@ class Circle extends Shape {
       {double epsilon = double.minPositive}) {
     double sq(double x) => pow(x, 2).toDouble();
 
-    final double cx = absolutePosition.x;
-    final double cy = absolutePosition.y;
+    final double cx = absoluteShapeCenter.x;
+    final double cy = absoluteShapeCenter.y;
 
     final Vector2 point1 = line.from;
     final Vector2 point2 = line.to;

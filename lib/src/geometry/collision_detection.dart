@@ -1,7 +1,5 @@
 import 'dart:collection';
 
-import 'package:flame/components.dart';
-
 import '../components/mixins/collidable.dart';
 import 'line_segment.dart';
 import 'shape.dart';

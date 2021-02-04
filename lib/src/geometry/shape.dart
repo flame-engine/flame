@@ -11,7 +11,7 @@ abstract class Shape {
   double angle;
 
   Vector2 parentSize = Vector2.zero();
-  Vector2 get absolutePosition => position;
+  Vector2 get absoluteShapeCenter => position;
 
   Shape({
     this.position,
@@ -35,7 +35,7 @@ mixin HitboxShape on Shape {
   PositionComponent component;
 
   @override
-  Vector2 get absolutePosition {
+  Vector2 get absoluteShapeCenter {
     return component.absoluteTopLeftPosition + component.size / 2 + position;
   }
 
