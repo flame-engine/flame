@@ -23,7 +23,7 @@ class Circle extends Shape {
     Vector2 position,
     Vector2 size,
     double angle,
-  }) : super(position: position, size: size, angle: angle = 0);
+  }) : super(localPosition: position, size: size, angle: angle = 0);
 
   /// With this helper method you can create your [Circle] from a radius and
   /// a position. This helper will also calculate the bounding rectangle [size]
@@ -47,7 +47,7 @@ class Circle extends Shape {
 
   @override
   void render(Canvas canvas, Paint paint) {
-    canvas.drawCircle((size / 2 + position).toOffset(), radius, paint);
+    canvas.drawCircle((size / 2 + localPosition).toOffset(), radius, paint);
   }
 
   /// Checks whether the represented circle contains the [point].

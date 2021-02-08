@@ -10,7 +10,6 @@ mixin Hitbox on PositionComponent {
 
   UnmodifiableListView<HitboxShape> get shapes => UnmodifiableListView(_shapes);
 
-  // TODO: Maybe change these names
   void addShape(HitboxShape shape) {
     shape.component = this;
     _shapes.add(shape);

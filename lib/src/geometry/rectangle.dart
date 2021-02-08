@@ -53,11 +53,6 @@ class Rectangle extends Polygon {
       angle: angle,
     );
   }
-
-  //@override
-  //void render(Canvas canvas, Paint paint) {
-  //  canvas.drawRect(definition[3].toPositionedRect(topLeftPosition), paint);
-  //}
 }
 
 class HitboxRectangle extends Rectangle with HitboxShape {

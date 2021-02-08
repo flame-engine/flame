@@ -142,7 +142,7 @@ class BaseGame extends Game with FPSCounter {
         collidables.remove(c);
       });
       collidables.addAll(_addLater.whereType<Collidable>());
-      collision_detection.collisionDetection(collidables, screenSize: size);
+      collision_detection.collisionDetection(collidables);
     }
     _removeLater.clear();
 

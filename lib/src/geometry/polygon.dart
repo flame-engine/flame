@@ -24,7 +24,7 @@ class Polygon extends Shape {
     Vector2 position,
     Vector2 size,
     double angle,
-  }) : super(position: position, size: size, angle: angle = 0);
+  }) : super(localPosition: position, size: size, angle: angle = 0);
 
   /// With this helper method you can create your [Polygon] from absolute
   /// positions instead of percentages. This helper will also calculate the size
@@ -77,7 +77,7 @@ class Polygon extends Shape {
     final path = Path()
       ..addPolygon(
         scaled
-            .map((point) => (point + position + parentSize / 2).toOffset())
+            .map((point) => (point + localPosition + parentSize / 2).toOffset())
             .toList(),
         true,
       );
@@ -92,7 +92,7 @@ class Polygon extends Shape {
   List<Vector2> _cachedHitbox;
 
   bool _isHitboxCacheValid() {
-    return _lastCachePosition == position &&
+    return _lastCachePosition == localPosition &&
         _lastCacheSize == size &&
         _lastCacheAngle == angle;
   }

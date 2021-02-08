@@ -7,8 +7,7 @@ import '../../extensions.dart';
 
 /// Check whether any [Collidable] in [collidables] collide with each other
 /// or [screenSize] (if defined), and call callbacks accordingly
-void collisionDetection(List<Collidable> collidables, {Vector2 screenSize}) {
-  final collidableScreen = CollidableScreen(screenSize ?? Vector2.zero());
+void collisionDetection(List<Collidable> collidables) {
   for (int x = 0; x < collidables.length; x++) {
     final collidableX = collidables[x];
     for (int y = x + 1; y < collidables.length; y++) {
@@ -17,13 +16,6 @@ void collisionDetection(List<Collidable> collidables, {Vector2 screenSize}) {
       if (points.isNotEmpty) {
         collidableX.collisionCallback(points, collidableY);
         collidableY.collisionCallback(points, collidableX);
-      }
-    }
-
-    if (screenSize != null && collidableX.hasScreenCollision) {
-      final intersectionPoints = intersections(collidableX, collidableScreen);
-      if (intersectionPoints.isNotEmpty) {
-        collidableX.collisionCallback(intersectionPoints, collidableScreen);
       }
     }
   }

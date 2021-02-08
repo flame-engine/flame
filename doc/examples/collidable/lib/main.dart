@@ -27,6 +27,7 @@ abstract class MyCollidable extends PositionComponent
   double angleDelta = 0;
   bool _isDragged = false;
   final _activePaint = Paint()..color = Colors.amber;
+  double _wallHitTime = double.infinity;
 
   MyCollidable(Vector2 position, Vector2 size, this.velocity) {
     this.position = position;
@@ -41,6 +42,7 @@ abstract class MyCollidable extends PositionComponent
     if (_isDragged) {
       return;
     }
+    _wallHitTime += dt;
     delta.setFrom(velocity * dt);
     position.add(delta);
     angleDelta = dt * rotationSpeed;
@@ -51,9 +53,13 @@ abstract class MyCollidable extends PositionComponent
   void render(Canvas canvas) {
     super.render(canvas);
     renderShapes(canvas);
+    final localCenter = (size / 2).toOffset();
     if (_isDragged) {
-      final localCenter = (size / 2).toOffset();
       canvas.drawCircle(localCenter, 5, _activePaint);
+    }
+    if (_wallHitTime < 1.0) {
+      // Show a rectangle in the center for a second if we hit the wall
+      canvas.drawRect(Rect.fromCenter(center: localCenter ,width: 10, height: 10),  debugPaint);
     }
   }
 
@@ -65,7 +71,7 @@ abstract class MyCollidable extends PositionComponent
     final collisionDirection = (averageIntersection - absoluteCenter)
       ..normalize()
       ..round();
-    if (velocity.angleToSigned(collisionDirection).abs() > 3.14) {
+    if (velocity.angleToSigned(collisionDirection).abs() > 3) {
       // This entity got hit by something else
       return;
     }
@@ -77,7 +83,9 @@ abstract class MyCollidable extends PositionComponent
     }
     position.sub(delta * 2);
     angle = (angle - angleDelta) % (2 * pi);
-    if (other is CollidableScreen) {}
+    if (other is ScreenCollidable) {
+      _wallHitTime = 0;
+    }
   }
 
   @override
@@ -123,6 +131,7 @@ class MyGame extends BaseGame with HasCollidables, HasDraggableComponents {
   @override
   Future<void> onLoad() async {
     //add(CollidablePolygon(Vector2.all(100), Vector2.all(100), 200));
+    add(ScreenCollidable());
     add(CollidablePolygon(
         Vector2.all(140), Vector2.all(140), Vector2.all(100)));
     add(CollidableCircle(Vector2.all(340), Vector2.all(180), Vector2.all(180)));
