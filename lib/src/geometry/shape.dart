@@ -35,7 +35,9 @@ mixin HitboxShape on Shape {
 
   @override
   Vector2 get absoluteShapeCenter {
-    return component.absoluteTopLeftPosition + component.size / 2 + localPosition;
+    return component.absoluteTopLeftPosition +
+        component.size / 2 +
+        localPosition;
   }
 
   @override

@@ -59,7 +59,9 @@ abstract class MyCollidable extends PositionComponent
     }
     if (_wallHitTime < 1.0) {
       // Show a rectangle in the center for a second if we hit the wall
-      canvas.drawRect(Rect.fromCenter(center: localCenter ,width: 10, height: 10),  debugPaint);
+      canvas.drawRect(
+          Rect.fromCenter(center: localCenter, width: 10, height: 10),
+          debugPaint);
     }
   }
 

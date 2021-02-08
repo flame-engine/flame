@@ -13,7 +13,7 @@ class ScreenCollidable extends PositionComponent with Hitbox, Collidable {
   ScreenCollidable() {
     addShape(HitboxRectangle(Vector2.all(1.0)));
   }
-  
+
   @override
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);

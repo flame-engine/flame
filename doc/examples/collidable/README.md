@@ -1,3 +1,3 @@
-# debug 
+# collidable
 
-A sample Flame game showcasing how to use Flame's debug features and components.
+A sample Flame game showcasing how to use Flame's collision detection feature.
