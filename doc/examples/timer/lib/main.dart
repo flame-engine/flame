@@ -12,12 +12,12 @@ class MyGameApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(routes: {
       '/': (BuildContext context) => Column(children: [
-            RaisedButton(
+            ElevatedButton(
                 child: const Text('Game'),
                 onPressed: () {
                   Navigator.of(context).pushNamed('/game');
                 }),
-            RaisedButton(
+            ElevatedButton(
                 child: const Text('BaseGame'),
                 onPressed: () {
                   Navigator.of(context).pushNamed('/base_game');

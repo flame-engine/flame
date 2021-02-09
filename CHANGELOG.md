@@ -11,6 +11,7 @@
  - Added `rotation` and `anchor` arguments to `ImageComposition.add`
  - Added `Image` extensions
  - Added `Color` extensions
+ - Change RaisedButton to ElevatedButton in timer example
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
