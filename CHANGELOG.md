@@ -9,6 +9,7 @@
  - Enabling direct import of Sprite and SpriteAnimation
  - Renamed `Composition` to `ImageComposition` to prevent confusion with the composition component
  - Added `rotation` and `anchor` arguments to `ImageComposition.add`
+ - Change RaisedButton to ElevatedButton in timer example
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
