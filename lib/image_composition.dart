@@ -86,26 +86,19 @@ class ImageComposition {
   }) {
     assert(image != null, 'Image is required to add to the Atlas');
     assert(position != null, 'Position is required');
-    assert(
-      source == null ||
-          source.width <= image.width &&
-              source.height <= image.height &&
-              source.top + source.height <= image.height &&
-              source.top >= 0 &&
-              source.left + source.width <= image.width &&
-              source.left >= 0,
-      'Source rect should fit within in the image constraints',
-    );
-    assert(angle != null, 'rotation can not be null');
+    assert(angle != null, 'angle can not be null');
+
+    final imageRect = image.getBoundingRect();
+    source ??= imageRect;
+    anchor ??= source.toVector2() / 2;
     blendMode ??= defaultBlendMode;
     isAntiAlias ??= defaultAntiAlias;
-    source ??= Rect.fromLTWH(
-      0,
-      0,
-      image.width.toDouble(),
-      image.height.toDouble(),
+
+    assert(
+      imageRect.contains(source.topLeft) &&
+          imageRect.contains(source.bottomRight),
+      'Source rect should fit within in the image constraints',
     );
-    anchor ??= source.toVector2() / 2;
 
     _composes.add(_Composed(
         image, position, source, angle, anchor, isAntiAlias, blendMode));
