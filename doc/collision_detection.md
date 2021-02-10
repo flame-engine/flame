@@ -91,8 +91,11 @@ with it, then you need to extend it and implement the `collisionCallback` for it
 
 ## Shapes
 ### Shape
-A Shape is the base class for representing a scalable geometrical shape. There are currently three
-shapes:
+A Shape is the base class for representing a scalable geometrical shape. The shapes have different
+ways of defining how they look, but they all have a size and angle that can be modified and the
+shape definition will scale or rotate the shape accordingly.
+
+There are currently three shapes:
 
 #### Polygon
 It should be noted that if you want to use collision detection or `containsPoint` on the `Polygon`,
@@ -124,7 +127,21 @@ the center of the polygon.
 In the image you can see how the polygon shape formed by the purple arrows is defined by the red
 arrows.
 
-#### Rectangle (which is just a simplified Polygon)
+You can also create you `Polygon` by using the `fromPositions(List<Vector2> positions)` factory.
+With this one you can simple add a list of points on the canvas and it will transform it into
+a polygon with a size, which can still be scaled and rotated.
+
+#### Rectangle
+A `Rectangle` is really just a simplified Polygon, but it can be defined more easily. By default a
+`Rectangle` is a square, but if you want it to be a rectangle you add a definition in the
+constructor. The definition is a vector which explains the relationship between the length of the
+horizontal and vertical sides. To create a `Rectangle` that has double the width to the height you
+do like this: `Rectangle(Vector2(0.5, 1.0));`.
+
+Dart already has an excellent way to create rectangles and that class is called `Rect`, you can
+create a Flame `Rectangle` from a `Rect` by using the `Rectangle.fromRect` factory, and just like
+with the `Polygon` factory, your rectangle will be sized according to the `Rect` if you use this
+factory.
 
 #### Circle
 

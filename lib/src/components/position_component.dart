@@ -123,7 +123,9 @@ abstract class PositionComponent extends BaseComponent {
       absoluteTopLeftPosition + Vector2(0.0, size.y), // Bottom-left
       absoluteTopLeftPosition + size, // Bottom-right
       absoluteTopLeftPosition + Vector2(size.x, 0.0), // Top-right
-    ].map((v) => v..rotate(angle, center: position)).toList()); // TODO: Should be absoluteAnchorPosition
+    ]
+        .map((v) => v..rotate(angle, center: position))
+        .toList()); // TODO: Should be absoluteAnchorPosition
     return polygon.containsPoint(point);
   }
 

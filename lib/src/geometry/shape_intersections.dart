@@ -70,8 +70,7 @@ class CirclePolygonIntersections extends Intersections<Circle, Polygon> {
 class CircleCircleIntersections extends Intersections<Circle, Circle> {
   @override
   Set<Vector2> intersect(Circle shapeA, Circle shapeB) {
-    final distance =
-        shapeA.shapeCenter.distanceTo(shapeB.shapeCenter);
+    final distance = shapeA.shapeCenter.distanceTo(shapeB.shapeCenter);
     final radiusA = shapeA.radius;
     final radiusB = shapeB.radius;
     if (distance > radiusA + radiusB) {
@@ -112,17 +111,13 @@ class CircleCircleIntersections extends Intersections<Circle, Circle> {
           (2 * distance);
       final lengthB = sqrt((pow(radiusA, 2) - pow(lengthA, 2)).abs());
       final centerPoint = shapeA.shapeCenter +
-          (shapeB.shapeCenter - shapeA.shapeCenter) *
-              lengthA /
-              distance;
+          (shapeB.shapeCenter - shapeA.shapeCenter) * lengthA / distance;
       final delta = Vector2(
         lengthB *
-            (shapeB.shapeCenter.y - shapeA.shapeCenter.y)
-                .abs() /
+            (shapeB.shapeCenter.y - shapeA.shapeCenter.y).abs() /
             distance,
         -lengthB *
-            (shapeB.shapeCenter.x - shapeA.shapeCenter.x)
-                .abs() /
+            (shapeB.shapeCenter.x - shapeA.shapeCenter.x).abs() /
             distance,
       );
       return {

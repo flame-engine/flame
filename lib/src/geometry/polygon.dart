@@ -102,7 +102,8 @@ class Polygon extends Shape {
     // Use cached bounding vertices if state of the component hasn't changed
     if (!_isHitboxCacheValid()) {
       _cachedHitbox = scaled
-              .map((point) => (point + shapeCenter) // TODO: Should add the center before rotation, not after
+              .map((point) => (point +
+                  shapeCenter) // TODO: Should add the center before rotation, not after
                 ..rotate(angle, center: anchorPosition))
               .toList(growable: false) ??
           [];
