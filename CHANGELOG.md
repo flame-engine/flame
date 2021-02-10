@@ -14,7 +14,9 @@
  - Change RaisedButton to ElevatedButton in timer example
  - Overhaul the draggables api to fix issues relating to local vs global positions
  - Preventing errors caused by the premature use of size property on game
- - Added a collision detection system and geometrical shapes
+ - Added a hitbox mixin for PositionComponent to make more accurate gestures
+ - Added a collision detection system
+ - Added geometrical shapes
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
@@ -40,7 +42,6 @@
  - Move files to comply with the dart package layout convention
  - Fix gesture detection bug of children of `PositionComponent`
  - The `game` argument on `GameWidget` is now required
- - Add hitbox mixin for PositionComponent to make more accurate gestures
 
 ## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget
