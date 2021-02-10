@@ -14,6 +14,7 @@
  - Change RaisedButton to ElevatedButton in timer example
  - Overhaul the draggables api to fix issues relating to local vs global positions
  - Preventing errors caused by the premature use of size property on game
+ - Added a collision detection system and geometrical shapes
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations

@@ -10,7 +10,8 @@ abstract class Shape {
   double angle;
 
   Vector2 parentSize = Vector2.zero();
-  Vector2 get absoluteShapeCenter => localPosition;
+  Vector2 get shapeCenter => localPosition;
+  Vector2 get anchorPosition => localPosition;
 
   Shape({
     this.localPosition,
@@ -34,11 +35,7 @@ mixin HitboxShape on Shape {
   PositionComponent component;
 
   @override
-  Vector2 get absoluteShapeCenter {
-    return component.absoluteTopLeftPosition +
-        component.size / 2 +
-        localPosition;
-  }
+  Vector2 get anchorPosition => component.absoluteAnchorPosition;
 
   @override
   Vector2 get parentSize => component.size;
@@ -48,6 +45,12 @@ mixin HitboxShape on Shape {
 
   @override
   double get angle => component.angle;
+
+  @override
+  /// The shapes center, before rotation
+  Vector2 get shapeCenter {
+    return component.absoluteCenter + localPosition;
+  }
 
   /// Assign your own [CollisionCallback] if you want a callback when this
   /// shape collides with another [HitboxShape]

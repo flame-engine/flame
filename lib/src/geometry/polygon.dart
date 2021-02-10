@@ -13,8 +13,7 @@ import 'shape.dart';
 /// The hitbox is defined from the center of the component and with
 /// percentages of the size of the component.
 /// Example: [[1.0, 0.0], [0.0, 1.0], [-1.0, 0.0], [0.0, -1.0]]
-/// This will form a rectangle with a 45 degree angle (pi/4 rad) within the
-/// bounding size box.
+/// This will form a diamond shape within the bounding size box.
 /// NOTE: Always define your shape is a clockwise fashion
 class Polygon extends Shape {
   final List<Vector2> definition;
@@ -86,15 +85,15 @@ class Polygon extends Shape {
 
   // These variables are used to see whether the bounding vertices cache is
   // valid or not
-  Vector2 _lastCachePosition;
-  Vector2 _lastCacheSize;
-  double _lastCacheAngle;
+  Vector2 _lastCachedCenter;
+  Vector2 _lastCachedSize;
+  double _lastCachedAngle;
   List<Vector2> _cachedHitbox;
 
   bool _isHitboxCacheValid() {
-    return _lastCachePosition == localPosition &&
-        _lastCacheSize == size &&
-        _lastCacheAngle == angle;
+    return _lastCachedCenter == localPosition &&
+        _lastCachedSize == size &&
+        _lastCachedAngle == angle;
   }
 
   /// Gives back the vertices represented as a list of points which
@@ -103,13 +102,13 @@ class Polygon extends Shape {
     // Use cached bounding vertices if state of the component hasn't changed
     if (!_isHitboxCacheValid()) {
       _cachedHitbox = scaled
-              .map((point) => (point + absoluteShapeCenter)
-                ..rotate(angle, center: absoluteShapeCenter))
+              .map((point) => (point + shapeCenter) // TODO: Should add the center before rotation, not after
+                ..rotate(angle, center: anchorPosition))
               .toList(growable: false) ??
           [];
-      _lastCachePosition = absoluteShapeCenter;
-      _lastCacheSize = size.clone();
-      _lastCacheAngle = angle;
+      _lastCachedCenter = shapeCenter;
+      _lastCachedSize = size.clone();
+      _lastCachedAngle = angle;
     }
     return _cachedHitbox;
   }

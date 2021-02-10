@@ -4,16 +4,16 @@ from, these shapes are Polygon, Rectangle and Circle. A hitbox can be represente
 form the area which can be used to either detect collisions or whether it contains a point or not,
 the latter is very useful for accurate gesture detection. The collision detection does not handle
 what should happen when two hitboxes collide, so it is up to the user to implement what will happen
-when two position components have intersecting hitboxes.
+when for example two position components have intersecting hitboxes.
 
 ## Mixins
 ### Hitbox
 The `Hitbox` mixin is mainly used for two things; to make detection of collisions with other
 hitboxes and gestures on top of your `PositionComponent`s more accurate. Say that you have a fairly
 round rock as a `SpriteComponent` for example, then you don't want to register input that is in the
-corner of the image where the rock is not displayed. Then you can use the `Hitbox` mixin to define
-a more accurate polygon for which the input should be within for the event to be counted on your
-component.
+corner of the image where the rock is not displayed, since an image is always rectangular. Then you
+can use the `Hitbox` mixin to define a more accurate polygon (or another shape) for which the input
+should be within for the event to be registered on your component.
 
 You can add new shapes to the `Hitbox` just like they are added in the below `Collidable` example.
 
@@ -38,12 +38,11 @@ class MyCollidable extends PositionComponent with Hitbox, Collidable {
 ```
 
 The `HitboxPolygon` added to the `Collidable` here is a diamond shape(◇).
-More about how the different shapes are defined in the [Shapes](#/collision_detection?id=shapes)
-section.
+More about how the different shapes are defined in the [Shapes](#Shapes) section.
 
 Remember that you can add as many `HitboxShape`s as you want to your `Collidable` to make up more
-complex shapes. For example a snowman with a hat could be represented by three `HitboxCircle`s and
-a polygon as its hat.
+complex hitboxes. For example a snowman with a hat could be represented by three `HitboxCircle`s and
+a `HitboxPolygon` as its hat.
 
 To react to a collision you should override the `collisionCallback` in your component.
 Example:
@@ -66,7 +65,7 @@ class MyCollidable extends PositionComponent with Hitbox, Collidable {
 In this example it can be seen how the Dart `is` keyword is used to check which other `Collidable`
 that your component collided with. The set of points is where the hitboxes of the collidables
 intersected. If you want to check collisions with the screen edges you can use the predefined
-[ScreenCollidable](#/collision_detection?id=screencollidable) class.
+[ScreenCollidable](#ScreenCollidable) class.
 
 ### HasCollidables
 If you want to use this collision detection in your game you have to add the `HasCollidables` mixin
@@ -79,13 +78,14 @@ class MyGame extends BaseGame with HasCollidables {
 }
 ```
 
-Now when you add your `Collidable`'s to your game they will automatically be checked for collisions.
+Now when you add your `Collidable` components to your game they will automatically be checked for
+collisions.
 
 ### ScreenCollidable
 `ScreenCollidable` is not a mixin, but a pre-made collidable component which represents the edges of
 your game/screen. If you add a `ScreenCollidable` to your game your other collidables will be
 notified when they collide with the edges. It doesn't take any arguments, it only depends on the
-`size` of the game that it is added to, so to add it you can just do `add(ScreenCollidable())` in
+`size` of the game that it is added to. To add it you can just do `add(ScreenCollidable())` in
 your game if you don't want the `ScreenCollidable` itself to be notified when something collides
 with it, then you need to extend it and implement the `collisionCallback` for it.
 
@@ -94,13 +94,39 @@ with it, then you need to extend it and implement the `collisionCallback` for it
 A Shape is the base class for representing a scalable geometrical shape. There are currently three
 shapes:
 
-- Polygon
-- Rectangle (which is just a simplified Polygon)
-- Circle
-
+#### Polygon
 It should be noted that if you want to use collision detection or `containsPoint` on the `Polygon`,
 the polygon needs to be convex. So always use convex polygons or you will most likely run into
-problems if you don't really know what you are doing.
+problems if you don't really know what you are doing. It should also be noted that you should always
+define the vertices in your polygon in a clockwise order.
+
+There are two ways to create a `Polygon`, either use the normal constructor where the only mandatory
+argument is a list of `Vector2` which defines how your polygon should look, but now the size or
+position of it. For example you could create a diamond like in the [Collidable](#Collidable) example
+like this:
+
+```dart
+Polygon([
+  Vector2(0, 1),  // Middle of top wall
+  Vector2(1, 0),  // Middle of right wall
+  Vector2(0, -1), // Middle of bottom wall
+  Vector2(-1, 0), // Middle of left wall
+]);
+```
+
+The vectors in the example defines percentages of the length from the center to the edge of the
+screen in both x and y axis, so for our first item in our list (`Vector2(0, 1)`) we are pointing on
+on the middle of the top wall of the bounding box, since the cordinate system here is defined from
+the center of the polygon.
+
+![An example of how to define a polygon shape](images/polygon_shape.png)
+
+In the image you can see how the polygon shape formed by the purple arrows is defined by the red
+arrows.
+
+#### Rectangle (which is just a simplified Polygon)
+
+#### Circle
 
 ### HitboxShape
 A HitboxShape is a Shape defined from the center position of the component that it is attached to

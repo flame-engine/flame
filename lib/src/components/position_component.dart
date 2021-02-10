@@ -48,6 +48,11 @@ abstract class PositionComponent extends BaseComponent {
   /// Get the relative top left position regardless of the anchor and angle
   Vector2 get topLeftPosition => anchor.translate(position, size);
 
+  /// Set the top left position regardless of the anchor
+  set topLeftPosition(Vector2 position) {
+    this.position = position + (anchor.toVector2..multiply(size));
+  }
+
   /// Get the absolute top left position regardless of whether it is a child or not
   Vector2 get absoluteTopLeftPosition {
     if (parent is PositionComponent) {
@@ -67,12 +72,9 @@ abstract class PositionComponent extends BaseComponent {
     }
   }
 
+  /// Get the absolute position which is used as the anchor
+  // TODO: Should this be renamed just absolutePosition
   Vector2 get absoluteAnchorPosition => absoluteParentPosition + position;
-
-  /// Set the top left position regardless of the anchor
-  set topLeftPosition(Vector2 position) {
-    this.position = position + (anchor.toVector2..multiply(size));
-  }
 
   /// Get the position of the center of the component
   Vector2 get center {
@@ -121,7 +123,7 @@ abstract class PositionComponent extends BaseComponent {
       absoluteTopLeftPosition + Vector2(0.0, size.y), // Bottom-left
       absoluteTopLeftPosition + size, // Bottom-right
       absoluteTopLeftPosition + Vector2(size.x, 0.0), // Top-right
-    ].map((v) => v..rotate(angle, center: position)).toList());
+    ].map((v) => v..rotate(angle, center: position)).toList()); // TODO: Should be absoluteAnchorPosition
     return polygon.containsPoint(point);
   }
 
