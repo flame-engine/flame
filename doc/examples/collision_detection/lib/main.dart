@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
@@ -11,6 +12,8 @@ import 'package:flutter/material.dart' hide Image, Draggable;
 import 'dart:ui';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Flame.device.fullScreen();
   final game = MyGame();
   runApp(
     GameWidget(
@@ -21,7 +24,7 @@ void main() async {
 
 abstract class MyCollidable extends PositionComponent
     with Draggable, Hitbox, Collidable {
-  double rotationSpeed = 0.4;
+  double rotationSpeed = 0.0;
   final Vector2 velocity;
   final delta = Vector2.zero();
   double angleDelta = 0;
@@ -125,27 +128,21 @@ class CollidableCircle extends MyCollidable {
 }
 
 class MyGame extends BaseGame with HasCollidables, HasDraggableComponents {
-  final fpsTextConfig = TextConfig(color: const Color(0xFFFFFFFF));
-
-  @override
-  bool debugMode = false;
-
   @override
   Future<void> onLoad() async {
     //add(CollidablePolygon(Vector2.all(100), Vector2.all(100), 200));
     add(ScreenCollidable());
-    add(CollidablePolygon(
-        Vector2.all(140), Vector2.all(140), Vector2.all(100)));
-    add(CollidableCircle(Vector2.all(340), Vector2.all(180), Vector2.all(180)));
-    add(CollidableCircle(Vector2.all(540), Vector2.all(180), Vector2.all(138)));
+    add(CollidablePolygon(Vector2.all(140), Vector2.all(140), Vector2.all(50))
+      ..rotationSpeed = 0.4);
+    add(CollidableCircle(Vector2.all(240), Vector2.all(80), Vector2.all(180)));
+    add(CollidableCircle(Vector2.all(340), Vector2.all(80), Vector2.all(138)));
   }
 
   @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-
-    if (debugMode) {
-      fpsTextConfig.render(canvas, fps(120).toString(), Vector2(0, 50));
+  void update(double dt) {
+    if (dt > 0.2) {
+      return;
     }
+    super.update(dt);
   }
 }
