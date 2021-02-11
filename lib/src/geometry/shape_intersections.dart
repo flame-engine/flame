@@ -32,7 +32,6 @@ class PolygonPolygonIntersections extends Intersections<Polygon, Polygon> {
   /// The two polygons are required to be convex
   /// If they share a segment of a line, both end points and the center point of
   /// that line segment will be counted as collision points
-  // TODO: Do we really have to return the center point too?
   @override
   Set<Vector2> intersect(Polygon polygonA, Polygon polygonB,
       {Rect overlappingRect}) {

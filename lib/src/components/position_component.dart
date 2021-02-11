@@ -1,5 +1,7 @@
 import 'dart:ui' hide Offset;
 
+import 'package:flame/src/geometry/rectangle.dart';
+
 import '../anchor.dart';
 import '../extensions/offset.dart';
 import '../extensions/rect.dart';
@@ -45,6 +47,9 @@ abstract class PositionComponent extends BaseComponent {
   double get height => size.y;
   set height(double height) => size.y = height;
 
+  /// Get the absolute position, with the anchor taken into consideration
+  Vector2 get absolutePosition => absoluteParentPosition + position;
+
   /// Get the relative top left position regardless of the anchor and angle
   Vector2 get topLeftPosition => anchor.translate(position, size);
 
@@ -72,16 +77,12 @@ abstract class PositionComponent extends BaseComponent {
     }
   }
 
-  /// Get the absolute position which is used as the anchor
-  // TODO: Should this be renamed just absolutePosition
-  Vector2 get absoluteAnchorPosition => absoluteParentPosition + position;
-
-  /// Get the position of the center of the component
+  /// Get the position of the center of the component without rotation
   Vector2 get center {
     return anchor == Anchor.center ? position : topLeftPosition + (size / 2);
   }
 
-  /// Get the absolute center of the component
+  /// Get the absolute center of the component without rotation
   Vector2 get absoluteCenter => absoluteParentPosition + center;
 
   /// Angle (with respect to the x-axis) this component should be rendered with.
@@ -117,16 +118,8 @@ abstract class PositionComponent extends BaseComponent {
 
   @override
   bool containsPoint(Vector2 point) {
-    // TODO: Change to rectangle
-    final polygon = Polygon.fromPositions([
-      absoluteTopLeftPosition, // Top-left
-      absoluteTopLeftPosition + Vector2(0.0, size.y), // Bottom-left
-      absoluteTopLeftPosition + size, // Bottom-right
-      absoluteTopLeftPosition + Vector2(size.x, 0.0), // Top-right
-    ]
-        .map((v) => v..rotate(angle, center: position))
-        .toList()); // TODO: Should be absoluteAnchorPosition
-    return polygon.containsPoint(point);
+    final rectangle = Rectangle.fromRect(toAbsoluteRect())..angle = angle;
+    return rectangle.containsPoint(point);
   }
 
   double angleTo(PositionComponent c) => position.angleTo(c.position);

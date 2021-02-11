@@ -321,8 +321,6 @@ void main() {
       ]);
       assert(intersections.length == 4, "Wrong number of intersections");
     });
-
-    // TODO: Test clockwise vs ccw
   });
 
   group('Rectangle intersections tests', () {

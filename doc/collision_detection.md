@@ -95,7 +95,15 @@ A Shape is the base class for representing a scalable geometrical shape. The sha
 ways of defining how they look, but they all have a size and angle that can be modified and the
 shape definition will scale or rotate the shape accordingly.
 
-There are currently three shapes:
+There are currently three shapes: [Polygon}(#Polygon), [Rectangle](#Rectangle) and
+[Cirlce](#Circle).
+
+### HitboxShape
+A HitboxShape is a Shape defined from the center position of the component that it is attached to
+and it has the same bounding size and angle as the component. You can set `localPosition` to have
+the position of the shape deviate from the center of the component. A HitboxShape is the type of
+shape that you add to your Hitbox, or Collidable. Usually these types of shapes are the only ones
+that you need to use.
 
 #### Polygon
 It should be noted that if you want to use collision detection or `containsPoint` on the `Polygon`,
@@ -144,11 +152,10 @@ with the `Polygon` factory, your rectangle will be sized according to the `Rect`
 factory.
 
 #### Circle
-
-### HitboxShape
-A HitboxShape is a Shape defined from the center position of the component that it is attached to
-and it has the same bounding size and angle as the component. A HitboxShape is also the type of
-shape that you add to your Hitbox, or Collidable.
+When creating a `Circle` you can optionally define how long the radius is in comparison to the size,
+this is the `definition` argument and it is the percentage of the `size` of the circle.
+If you know how long your circle's radius is going to be from the start you can use the `fromRadius`
+factory and it will set both the `definition` and the `size` of the circle for you.
 
 ## Example
 https://github.com/flame-engine/flame/tree/master/doc/examples/collidables

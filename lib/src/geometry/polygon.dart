@@ -6,11 +6,7 @@ import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
 import 'shape.dart';
 
-// TODO: Split this up and move some down
-/// The list of vertices used for collision detection and to define whether
-/// a point is inside of the component or not, so that the tap detection etc
-/// can be more accurately performed.
-/// The hitbox is defined from the center of the component and with
+/// The Polygon is defined from the center of the component and with
 /// percentages of the size of the component.
 /// Example: [[1.0, 0.0], [0.0, 1.0], [-1.0, 0.0], [0.0, -1.0]]
 /// This will form a diamond shape within the bounding size box.
@@ -28,7 +24,6 @@ class Polygon extends Shape {
   /// With this helper method you can create your [Polygon] from absolute
   /// positions instead of percentages. This helper will also calculate the size
   /// and center of the Polygon.
-  //TODO: Is factory really helping with anything here?
   factory Polygon.fromPositions(
     List<Vector2> positions, {
     double angle = 0,
@@ -58,60 +53,50 @@ class Polygon extends Shape {
     );
   }
 
-  Iterable<Vector2> _scaledShape;
-  Vector2 _lastScaledSize;
+  final _cachedScaledShape = ShapeCache<Iterable<Vector2>>();
 
   /// Gives back the shape vectors multiplied by the size
   Iterable<Vector2> get scaled {
-    if (_lastScaledSize != size || _scaledShape == null) {
-      _lastScaledSize = size;
-      _scaledShape = definition?.map((p) => p.clone()..multiply(size / 2));
+    if (!_cachedScaledShape.isCacheValid(<dynamic>[size])) {
+      _cachedScaledShape.updateCache(
+          () => definition?.map((p) => p.clone()..multiply(size / 2)),
+          <dynamic>[size.clone()]);
     }
-    return _scaledShape;
+    return _cachedScaledShape.value;
   }
+
+  final _cachedRenderPath = ShapeCache<Path>();
 
   @override
   void render(Canvas canvas, Paint paint) {
-    // TODO: Add render cache
-    final path = Path()
-      ..addPolygon(
-        scaled
-            .map((point) => (point + localPosition + parentSize / 2).toOffset())
-            .toList(),
-        true,
-      );
-    canvas.drawPath(path, paint);
+    if(!_cachedRenderPath.isCacheValid(<dynamic>[localPosition, size])) {
+      _cachedRenderPath.updateCache(() => Path()
+        ..addPolygon(
+          scaled
+              .map((point) => (point + localPosition + size / 2).toOffset())
+              .toList(),
+          true,
+        ), <dynamic>[localPosition.clone(), size.clone()]);
+    }
+    canvas.drawPath(_cachedRenderPath.value, paint);
   }
 
-  // These variables are used to see whether the bounding vertices cache is
-  // valid or not
-  Vector2 _lastCachedCenter;
-  Vector2 _lastCachedSize;
-  double _lastCachedAngle;
-  List<Vector2> _cachedHitbox;
-
-  bool _isHitboxCacheValid() {
-    return _lastCachedCenter == localPosition &&
-        _lastCachedSize == size &&
-        _lastCachedAngle == angle;
-  }
+  final _cachedHitbox = ShapeCache<List<Vector2>>();
 
   /// Gives back the vertices represented as a list of points which
   /// are the "corners" of the hitbox rotated with [angle].
   List<Vector2> get hitbox {
     // Use cached bounding vertices if state of the component hasn't changed
-    if (!_isHitboxCacheValid()) {
-      _cachedHitbox = scaled
-              .map((point) => (point +
-                  shapeCenter) // TODO: Should add the center before rotation, not after
-                ..rotate(angle, center: anchorPosition))
-              .toList(growable: false) ??
-          [];
-      _lastCachedCenter = shapeCenter;
-      _lastCachedSize = size.clone();
-      _lastCachedAngle = angle;
+    if (!_cachedHitbox.isCacheValid(<dynamic>[localPosition, size, angle])) {
+      _cachedHitbox.updateCache(() {
+        return scaled
+                .map((point) => (point + shapeCenter)
+                  ..rotate(angle, center: anchorPosition))
+                .toList(growable: false) ??
+            [];
+      }, <dynamic>[shapeCenter, size.clone(), angle]);
     }
-    return _cachedHitbox;
+    return _cachedHitbox.value;
   }
 
   /// Checks whether the polygon represented by the list of [Vector2] contains
@@ -151,3 +136,4 @@ class Polygon extends Shape {
 class HitboxPolygon extends Polygon with HitboxShape {
   HitboxPolygon(List<Vector2> definition) : super(definition);
 }
+

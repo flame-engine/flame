@@ -5,19 +5,11 @@ import '../../components.dart';
 import '../extensions/vector2.dart';
 import 'shape.dart';
 
-// TODO: Split this up and move some down
-/// The list of vertices used for collision detection and to define whether
-/// a point is inside of the component or not, so that the tap detection etc
-/// can be more accurately performed.
-/// The hitbox is defined from the center of the component and with
-/// percentages of the size of the component.
-/// Example: [[1.0, 0.0], [0.0, 1.0], [-1.0, 0.0], [0.0, -1.0]]
-/// This will form a rectangle with a 45 degree angle (pi/4 rad) within the
-/// bounding size box.
-/// NOTE: Always define your shape is a clockwise fashion
 class Circle extends Shape {
   double definition;
 
+  /// The [definition] is how many percentages of [size] that the circle should
+  /// cover.
   Circle({
     this.definition = 1.0,
     Vector2 position,
@@ -28,7 +20,6 @@ class Circle extends Shape {
   /// With this helper method you can create your [Circle] from a radius and
   /// a position. This helper will also calculate the bounding rectangle [size]
   /// for the [Circle].
-  //TODO: Is "factory" really helping with anything here?
   factory Circle.fromRadius(
     double radius,
     Vector2 position, {
