@@ -30,7 +30,6 @@ abstract class Shape {
   }
 }
 
-
 mixin HitboxShape on Shape {
   PositionComponent component;
 

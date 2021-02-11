@@ -69,14 +69,16 @@ class Polygon extends Shape {
 
   @override
   void render(Canvas canvas, Paint paint) {
-    if(!_cachedRenderPath.isCacheValid(<dynamic>[localPosition, size])) {
-      _cachedRenderPath.updateCache(() => Path()
-        ..addPolygon(
-          scaled
-              .map((point) => (point + localPosition + size / 2).toOffset())
-              .toList(),
-          true,
-        ), <dynamic>[localPosition.clone(), size.clone()]);
+    if (!_cachedRenderPath.isCacheValid(<dynamic>[localPosition, size])) {
+      _cachedRenderPath.updateCache(
+          () => Path()
+            ..addPolygon(
+              scaled
+                  .map((point) => (point + localPosition + size / 2).toOffset())
+                  .toList(),
+              true,
+            ),
+          <dynamic>[localPosition.clone(), size.clone()]);
     }
     canvas.drawPath(_cachedRenderPath.value, paint);
   }
@@ -136,4 +138,3 @@ class Polygon extends Shape {
 class HitboxPolygon extends Polygon with HitboxShape {
   HitboxPolygon(List<Vector2> definition) : super(definition);
 }
-
