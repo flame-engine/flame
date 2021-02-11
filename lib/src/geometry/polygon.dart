@@ -19,7 +19,7 @@ class Polygon extends Shape {
     Vector2 position,
     Vector2 size,
     double angle,
-  }) : super(localPosition: position, size: size, angle: angle = 0);
+  }) : super(position: position, size: size, angle: angle = 0);
 
   /// With this helper method you can create your [Polygon] from absolute
   /// positions instead of percentages. This helper will also calculate the size
@@ -69,16 +69,16 @@ class Polygon extends Shape {
 
   @override
   void render(Canvas canvas, Paint paint) {
-    if (!_cachedRenderPath.isCacheValid(<dynamic>[localPosition, size])) {
+    if (!_cachedRenderPath.isCacheValid(<dynamic>[position, size])) {
       _cachedRenderPath.updateCache(
           () => Path()
             ..addPolygon(
               scaled
-                  .map((point) => (point + localPosition + size / 2).toOffset())
+                  .map((point) => (point + position + size / 2).toOffset())
                   .toList(),
               true,
             ),
-          <dynamic>[localPosition.clone(), size.clone()]);
+          <dynamic>[position.clone(), size.clone()]);
     }
     canvas.drawPath(_cachedRenderPath.value, paint);
   }
@@ -89,7 +89,7 @@ class Polygon extends Shape {
   /// are the "corners" of the hitbox rotated with [angle].
   List<Vector2> get hitbox {
     // Use cached bounding vertices if state of the component hasn't changed
-    if (!_cachedHitbox.isCacheValid(<dynamic>[localPosition, size, angle])) {
+    if (!_cachedHitbox.isCacheValid(<dynamic>[position, size, angle])) {
       _cachedHitbox.updateCache(() {
         return scaled
                 .map((point) => (point + shapeCenter)

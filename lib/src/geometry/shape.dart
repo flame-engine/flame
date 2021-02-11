@@ -5,19 +5,19 @@ import '../extensions/vector2.dart';
 import 'shape_intersections.dart' as intersection_system;
 
 abstract class Shape {
-  Vector2 localPosition = Vector2.zero();
+  Vector2 position = Vector2.zero();
   Vector2 size;
   double angle;
 
-  Vector2 get shapeCenter => localPosition;
-  Vector2 get anchorPosition => localPosition;
+  Vector2 get shapeCenter => position;
+  Vector2 get anchorPosition => position;
 
   Shape({
-    this.localPosition,
+    this.position,
     this.size,
     this.angle = 0,
   }) {
-    localPosition ??= Vector2.zero();
+    position ??= Vector2.zero();
   }
 
   bool containsPoint(Vector2 p);
@@ -46,7 +46,7 @@ mixin HitboxShape on Shape {
 
   /// The shapes center, before rotation
   Vector2 get shapeCenter {
-    return component.absoluteCenter + localPosition;
+    return component.absoluteCenter + position;
   }
 
   /// Assign your own [CollisionCallback] if you want a callback when this
