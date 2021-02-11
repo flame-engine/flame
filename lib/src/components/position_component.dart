@@ -1,12 +1,10 @@
 import 'dart:ui' hide Offset;
 
-import 'package:flame/src/geometry/rectangle.dart';
-
 import '../anchor.dart';
 import '../extensions/offset.dart';
 import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
-import '../../geometry.dart';
+import '../geometry/rectangle.dart';
 import 'base_component.dart';
 import 'component.dart';
 import 'mixins/hitbox.dart';
