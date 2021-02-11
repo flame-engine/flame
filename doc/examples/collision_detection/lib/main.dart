@@ -12,7 +12,6 @@ import 'package:flutter/material.dart' hide Image, Draggable;
 import 'dart:ui';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   Flame.device.fullScreen();
   final game = MyGame();
   runApp(
@@ -110,12 +109,23 @@ class CollidablePolygon extends MyCollidable {
   CollidablePolygon(Vector2 position, Vector2 size, Vector2 velocity)
       : super(position, size, velocity) {
     final shape = HitboxPolygon([
-      Vector2(0, 1),
-      Vector2(1, 0),
-      Vector2(0, -1),
-      Vector2(-1, 0),
+      Vector2(-1.0, 0.0),
+      Vector2(-0.8, 0.6),
+      Vector2(0.0, 1.0),
+      Vector2(0.6, 0.9),
+      Vector2(1.0, 0.0),
+      Vector2(0.6, -0.8),
+      Vector2(0, -1.0),
+      Vector2(-0.8, -0.8),
     ]);
     addShape(shape);
+  }
+}
+
+class CollidableRectangle extends MyCollidable {
+  CollidableRectangle(Vector2 position, Vector2 size, Vector2 velocity)
+      : super(position, size, velocity) {
+    addShape(HitboxRectangle(Vector2.all(1.0)));
   }
 }
 
@@ -130,11 +140,12 @@ class CollidableCircle extends MyCollidable {
 class MyGame extends BaseGame with HasCollidables, HasDraggableComponents {
   @override
   Future<void> onLoad() async {
-    //add(CollidablePolygon(Vector2.all(100), Vector2.all(100), 200));
     add(ScreenCollidable());
-    add(CollidablePolygon(Vector2.all(140), Vector2.all(140), Vector2.all(50))
+    add(CollidableRectangle(Vector2.all(140), Vector2.all(140), Vector2.all(50))
       ..rotationSpeed = 0.4);
-    add(CollidableCircle(Vector2.all(240), Vector2.all(80), Vector2.all(180)));
+    add(CollidablePolygon(Vector2(450, 200), Vector2.all(140), Vector2.all(50))
+      ..rotationSpeed = -0.4);
+    add(CollidableCircle(Vector2.all(240), Vector2.all(140), Vector2.all(180)));
     add(CollidableCircle(Vector2.all(340), Vector2.all(80), Vector2.all(138)));
   }
 
