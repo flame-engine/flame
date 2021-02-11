@@ -19,7 +19,7 @@ class Polygon extends Shape {
     Vector2 position,
     Vector2 size,
     double angle,
-  }) : super(position: position, size: size, angle: angle = 0);
+  }) : super(position: position, size: size, angle: angle ?? 0);
 
   /// With this helper method you can create your [Polygon] from absolute
   /// positions instead of percentages. This helper will also calculate the size

@@ -38,14 +38,14 @@ class Rectangle extends Polygon {
                 : _defaultDefinition,
             position: position,
             size: size,
-            angle: angle = 0);
+            angle: angle);
 
   /// With this helper method you can create your [Rectangle] from a positioned
   /// [Rect] instead of percentages. This helper will also calculate the size
   /// and center of the [Rectangle].
   factory Rectangle.fromRect(
     Rect rect, {
-    double angle = 0,
+    double angle,
   }) {
     return Rectangle(
       position: rect.center.toVector2(),

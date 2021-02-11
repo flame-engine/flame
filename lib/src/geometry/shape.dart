@@ -7,15 +7,18 @@ import 'shape_intersections.dart' as intersection_system;
 abstract class Shape {
   Vector2 position = Vector2.zero();
   Vector2 size;
-  double angle;
+  double angle = 0;
 
   Vector2 get shapeCenter => position;
-  Vector2 get anchorPosition => position;
+
+  Vector2 _anchorPosition;
+  Vector2 get anchorPosition => _anchorPosition ?? position;
+  set anchorPosition(Vector2 position) => _anchorPosition = position;
 
   Shape({
     this.position,
     this.size,
-    this.angle = 0,
+    this.angle,
   }) {
     position ??= Vector2.zero();
   }
