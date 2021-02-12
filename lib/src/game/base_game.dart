@@ -63,7 +63,11 @@ class BaseGame extends Game with FPSCounter {
   /// Prepares and registers a component to be added on the next game tick
   ///
   /// This methods is an async operation since it await the `onLoad` method of the component. Nevertheless, this method only need to be waited to finish if by some reason, your logic needs to be sure that the component has finished loading, otherwise, this method can be called without waiting for it to finish as the BaseGame already handle the loading of the component.
+  ///
+  /// *Note:* Do not add components on the game constructor. This method can only be called after the game already has its layout set, this can be verified by the [hasLayout] property, to add components upon a game initialization, the [onLoad] method can be used instead.
   Future<void> add(Component c) async {
+    assert(hasLayout,
+        '"add" called before the game is ready, did you tried to access it on the Game constructor? Try using the "onLoad" instead');
     prepare(c);
     final loadFuture = c.onLoad();
 
