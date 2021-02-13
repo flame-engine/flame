@@ -68,7 +68,7 @@ abstract class MyCollidable extends PositionComponent
   }
 
   @override
-  void collisionCallback(Set<Vector2> points, Collidable other) {
+  void onCollision(Set<Vector2> points, Collidable other) {
     final averageIntersection =
         points.fold<Vector2>(Vector2.zero(), (sum, v) => sum + v) /
             points.length.toDouble();
@@ -138,6 +138,10 @@ class CollidableCircle extends MyCollidable {
 }
 
 class MyGame extends BaseGame with HasCollidables, HasDraggableComponents {
+  final TextConfig fpsTextConfig = TextConfig(
+    color: const Color(0xFFFFFFFF),
+  );
+
   @override
   Future<void> onLoad() async {
     add(ScreenCollidable());
@@ -145,8 +149,19 @@ class MyGame extends BaseGame with HasCollidables, HasDraggableComponents {
       ..rotationSpeed = 0.4);
     add(CollidablePolygon(Vector2(450, 200), Vector2.all(140), Vector2.all(50))
       ..rotationSpeed = -0.4);
-    add(CollidableCircle(Vector2.all(240), Vector2.all(140), Vector2.all(180)));
+    add(CollidableCircle(Vector2(540, 90), Vector2.all(140), Vector2.all(180)));
     add(CollidableCircle(Vector2.all(340), Vector2.all(80), Vector2.all(138)));
+    add(CollidableCircle(Vector2.all(440), Vector2.all(80), Vector2.all(138)));
+    add(CollidableCircle(Vector2(340, 200), Vector2.all(80), Vector2.all(138)));
+    add(CollidableCircle(Vector2(640, 180), Vector2.all(80), Vector2.all(138)));
+    //for(int i = 0; i < 20; i++) {
+    //  add(CollidablePolygon(Vector2(50+50.0*i, 1000 + 2.0*i), Vector2.all(20), Vector2.all(50))
+    //    ..rotationSpeed = -0.4);
+    //}
+    for(int i = 0; i < 10; i++) {
+      add(CollidablePolygon(Vector2(150+50.0*i, 800 + 2.0*i), Vector2.all(30), Vector2.all(100))
+        ..rotationSpeed = 0.4);
+    }
   }
 
   @override
@@ -155,5 +170,12 @@ class MyGame extends BaseGame with HasCollidables, HasDraggableComponents {
       return;
     }
     super.update(dt);
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    fpsTextConfig.render(
+        canvas, '${fps(120).toStringAsFixed(2)}fps', Vector2(0, size.y - 24));
   }
 }

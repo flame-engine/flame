@@ -14,8 +14,8 @@ void collisionDetection(List<Collidable> collidables) {
       final collidableY = collidables[y];
       final points = intersections(collidableX, collidableY);
       if (points.isNotEmpty) {
-        collidableX.collisionCallback(points, collidableY);
-        collidableY.collisionCallback(points, collidableX);
+        collidableX.onCollision(points, collidableY);
+        collidableY.onCollision(points, collidableX);
       }
     }
   }
@@ -39,8 +39,8 @@ Set<Vector2> intersections(
         // Do callbacks to the involved shapes
         final hitboxShapeA = shapeA as HitboxShape;
         final hitboxShapeB = shapeB as HitboxShape;
-        hitboxShapeA.collisionCallback(currentResult, hitboxShapeB);
-        hitboxShapeB.collisionCallback(currentResult, hitboxShapeA);
+        hitboxShapeA.onCollision(currentResult, hitboxShapeB);
+        hitboxShapeB.onCollision(currentResult, hitboxShapeA);
         currentResult.clear();
       }
     }

@@ -54,7 +54,7 @@ mixin HitboxShape on Shape {
 
   /// Assign your own [CollisionCallback] if you want a callback when this
   /// shape collides with another [HitboxShape]
-  CollisionCallback collisionCallback = emptyCollisionCallback;
+  CollisionCallback onCollision = emptyCollisionCallback;
 }
 
 typedef CollisionCallback = Function(Set<Vector2> points, HitboxShape other);
