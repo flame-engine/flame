@@ -33,8 +33,11 @@ class PolygonPolygonIntersections extends Intersections<Polygon, Polygon> {
   /// If they share a segment of a line, both end points and the center point of
   /// that line segment will be counted as collision points
   @override
-  Set<Vector2> intersect(Polygon polygonA, Polygon polygonB,
-      {Rect overlappingRect}) {
+  Set<Vector2> intersect(
+    Polygon polygonA,
+    Polygon polygonB, {
+    Rect overlappingRect,
+  }) {
     final intersectionPoints = <Vector2>{};
     final intersectionsA = polygonA.possibleIntersectionVertices(
       overlappingRect,

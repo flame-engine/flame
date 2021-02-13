@@ -15,6 +15,7 @@ class Rectangle extends Polygon {
   /// The [relation] describes the relationship between x and y and the size of
   /// the rectangle, both x and y in [relation] should be less or equal to 1.0
   /// if this should be used for collision detection.
+  ///
   /// For example if the [size] is (100, 100) and the [relation] is (0.5, 1.0)
   /// the it will represent a rectangle with the points (25, 50), (25, -50),
   /// (-25, -50) and (-25, 50) because the rectangle is defined from the center

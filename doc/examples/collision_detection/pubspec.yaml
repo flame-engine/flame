@@ -1,5 +1,5 @@
-name: debug
-description: Flame sample for using debug features
+name: collision_detection
+description: Flame sample for using the collision detection system
 
 publish_to: 'none'
 

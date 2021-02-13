@@ -22,11 +22,7 @@ export 'src/components/mixins/hitbox.dart';
 export 'src/components/mixins/single_child_particle.dart';
 export 'src/components/mixins/tapable.dart';
 
-export 'src/geometry/line_segment.dart';
-export 'src/geometry/linear_function.dart';
-export 'src/geometry/polygon.dart';
-export 'src/geometry/rectangle.dart';
-export 'src/geometry/shape.dart';
+export 'geometry.dart';
 
 export 'src/extensions/vector2.dart';
 export 'src/anchor.dart';

@@ -92,6 +92,4 @@ class Circle extends Shape {
   }
 }
 
-class HitboxCircle extends Circle with HitboxShape {
-  HitboxCircle() : super();
-}
+class HitboxCircle extends Circle with HitboxShape {}

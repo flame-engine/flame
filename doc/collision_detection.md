@@ -86,8 +86,9 @@ collisions.
 your game/screen. If you add a `ScreenCollidable` to your game your other collidables will be
 notified when they collide with the edges. It doesn't take any arguments, it only depends on the
 `size` of the game that it is added to. To add it you can just do `add(ScreenCollidable())` in
-your game if you don't want the `ScreenCollidable` itself to be notified when something collides
-with it, then you need to extend it and implement the `collisionCallback` for it.
+your game, if you don't want the `ScreenCollidable` itself to be notified when something collides
+with it. If you so want it to be notified, then you need to extend it and implement the
+`collisionCallback` method for it.
 
 ## Shapes
 ### Shape

@@ -12,7 +12,7 @@ import 'package:flutter/material.dart' hide Image, Draggable;
 import 'dart:ui';
 
 void main() async {
-  Flame.device.fullScreen();
+  await Flame.device.fullScreen();
   final game = MyGame();
   runApp(
     GameWidget(
@@ -158,8 +158,9 @@ class MyGame extends BaseGame with HasCollidables, HasDraggableComponents {
     //  add(CollidablePolygon(Vector2(50+50.0*i, 1000 + 2.0*i), Vector2.all(20), Vector2.all(50))
     //    ..rotationSpeed = -0.4);
     //}
-    for(int i = 0; i < 10; i++) {
-      add(CollidablePolygon(Vector2(150+50.0*i, 800 + 2.0*i), Vector2.all(30), Vector2.all(100))
+    for (int i = 0; i < 10; i++) {
+      add(CollidablePolygon(Vector2(150 + 50.0 * i, 800 + 2.0 * i),
+          Vector2.all(30), Vector2.all(100))
         ..rotationSpeed = 0.4);
     }
   }
