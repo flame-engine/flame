@@ -13,7 +13,7 @@ void main() {
         Vector2.all(1),
       );
       final point = Vector2.all(0.5);
-      assert(segment.containsPoint(point), "Point should be on segment");
+      expect(segment.containsPoint(point), "Point should be on segment");
     });
 
     test('Should not catch point outside of segment', () {
