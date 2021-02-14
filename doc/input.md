@@ -161,15 +161,24 @@ Warning: `HasTapableComponents` uses an advanced gesture detector under the hood
 
 Just like with `Tapable`, Flame offers a mixin for `Draggable`.
 
-By adding the `HasDraggableComponents` mixin to your game, and by using the mixin `Draggable` on your components can override the following methods, enabling an easy to use drag event on your components.
-
-Note that the `DragEvent.initialPosition` doesn't take any padding or margin outside the game widget into account, so if you are not running the game in full screen you'll have to take that into account.
+By adding the `HasDraggableComponents` mixin to your game, and by using the mixin `Draggable` on your components, they can override the simple methods that enable an easy to use drag api on your components.
 
 ```dart
-  void onReceiveDrag(DragEvent details) {}
+  void onDragStarted(int pointerId, Vector2 startPosition) {}
+  void onDragUpdated(int pointerId, DragUpdateDetails details) {}
+  void onDragEnded(int pointerId, DragEndDetails details) {}
+  void onDragCanceled(int pointerId) {}
 ```
 
-Minimal component example:
+Note that all events that a uniquely generated pointer id so you can, if desired, distinguish between different simultaneous drags.
+
+The default implementation provided by `Draggable` will already check:
+
+* upon drag start only accept if the position is within the bounds of the Component; keep track of pointerId.
+* when handling updates/end/cancel only accept if the pointerId was tracked (regardless of position).
+* on end/cancel, un-track pointerId
+
+Minimal component example (this example ignores pointerId so it wont work well if you try to multi-drag):
 
 ```dart
 import 'package:flame/components/component.dart';
@@ -179,22 +188,33 @@ class DraggableComponent extends PositionComponent with Draggable {
 
   // update and render omitted
 
-  bool _isDragged = false;
+  bool isDragging = false;
+  Vector2 dragStartPosition;
+  Vector2 dragDeltaPosition;
 
   @override
-  void onReceiveDrag(DragEvent details) {
-      event.onUpdate = (DragUpdateDetails details) {
-        if (!_isDragged) {
-          _isDragged = true;
-          print("Drag starting")
-        }
-        print("Drag updated");
-      };
-      event.onEnd = (DragEndDetails details) {
-        _isDragged = false;
-        print("Drag stopped");
-      };
-      return true;
+  bool onDragStarted(int pointerId, Vector2 startPosition) {
+    dragStartPosition = startPosition;
+    return false;
+  }
+
+  @override
+  bool onDragUpdated(int pointerId, DragUpdateDetails details) {
+    final localCoords = gameRef.convertGlobalToLocalCoordinate(details.globalPosition.toVector2());
+    position = localCoords - dragDeltaPosition;
+    return false;
+  }
+
+  @override
+  bool onDragEnded(int pointerId, DragEndDetails details) {
+    _isDragging = false;
+    return false;
+  }
+
+  @override
+  bool onDragCanceled(int pointerId) {
+    _isDragging = false;
+    return false;
   }
 }
 

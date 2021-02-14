@@ -31,28 +31,27 @@ abstract class JoystickController extends BaseComponent
 }
 
 class JoystickComponent extends JoystickController {
-  final List<JoystickAction> actions;
-  final JoystickDirectional directional;
   @override
   int priority;
 
   JoystickComponent({
-    this.actions,
-    this.directional,
+    List<JoystickAction> actions,
+    JoystickDirectional directional,
     this.priority = 0,
   }) {
     addChild(directional);
-    actions.forEach((action) => addChild(action));
+    actions.forEach((action) => addAction(action));
   }
 
   void addAction(JoystickAction action) {
-    if (gameRef?.size != null) {
-      action.initialize(gameRef.size, this);
-      actions?.add(action);
-    }
+    addChild(action);
   }
 
   void removeAction(int actionId) {
-    actions?.removeWhere((action) => action.actionId == actionId);
+    final action = children
+        .firstWhere((e) => e is JoystickAction && e.actionId == actionId);
+    if (action != null) {
+      removeChild(action);
+    }
   }
 }

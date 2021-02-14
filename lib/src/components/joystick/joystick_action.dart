@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart'
 import 'package:meta/meta.dart';
 
 import '../../../components.dart';
+import '../../../game.dart';
 import '../../extensions/offset.dart';
 import '../../extensions/rect.dart';
 import '../../extensions/vector2.dart';
@@ -17,7 +18,7 @@ import 'joystick_utils.dart';
 
 enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
 
-class JoystickAction extends BaseComponent with Draggable {
+class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   final int actionId;
   final Sprite sprite;
   final Sprite spritePressed;
@@ -40,9 +41,10 @@ class JoystickAction extends BaseComponent with Draggable {
   final Paint _paintBackground;
   final Paint _paintAction;
   final Paint _paintActionPressed;
-  JoystickController _joystickController;
   final double _sizeBackgroundDirection;
   double _tileSize;
+
+  JoystickController get joystickController => parent as JoystickController;
 
   JoystickAction({
     @required this.actionId,
@@ -71,8 +73,18 @@ class JoystickAction extends BaseComponent with Draggable {
     _tileSize = _sizeBackgroundDirection / 2;
   }
 
-  void initialize(Vector2 _screenSize, JoystickController joystickController) {
-    _joystickController = joystickController;
+  @override
+  Future<void> onLoad() async {
+    initialize(gameRef.size);
+  }
+
+  @override
+  void onGameResize(Vector2 gameSize) {
+    super.onGameResize(gameSize);
+    initialize(gameSize);
+  }
+
+  void initialize(Vector2 _screenSize) {
     final double radius = size / 2;
     double dx = 0, dy = 0;
     switch (align) {
