@@ -50,25 +50,25 @@ class MyGame extends BaseGame
   }
 
   @override
-  void onDragCanceled(int pointerId) {
+  void onDragCancel(int pointerId) {
     _end = null;
     _start = null;
     _panRect = null;
   }
 
   @override
-  void onDragStarted(int pointerId, Vector2 initialPosition) {
+  void onDragStart(int pointerId, Vector2 initialPosition) {
     _end = null;
     _start = initialPosition;
   }
 
   @override
-  void onDragUpdated(int pointerId, DragUpdateDetails details) {
+  void onDragUpdate(int pointerId, DragUpdateDetails details) {
     _end = details.localPosition.toVector2();
   }
 
   @override
-  void onDragEnded(int pointerId, DragEndDetails details) {
+  void onDragEnd(int pointerId, DragEndDetails details) {
     if (_start != null && _end != null) {
       _panRect = Rect.fromLTRB(
         _start.x,

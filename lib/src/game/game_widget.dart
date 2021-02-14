@@ -425,7 +425,7 @@ Widget _applyBasicGesturesDetectors(Game game, Widget child) {
 
 Widget _applyAdvancedGesturesDetectors(Game game, Widget child) {
   final Map<Type, GestureRecognizerFactory> gestures = {};
-  int lastGenDragId = 0;
+  int lastGeneratedDragId = 0;
 
   void addAndConfigureRecognizer<T extends GestureRecognizer>(
     T Function() ts,
@@ -449,7 +449,7 @@ Widget _applyAdvancedGesturesDetectors(Game game, Widget child) {
       () => ImmediateMultiDragGestureRecognizer(),
       (ImmediateMultiDragGestureRecognizer instance) {
         instance.onStart = (Offset o) {
-          final pointerId = lastGenDragId++;
+          final pointerId = lastGeneratedDragId++;
           final position = game.convertGlobalToLocalCoordinate(o.toVector2());
           return config(pointerId, position);
         };
@@ -477,19 +477,19 @@ Widget _applyAdvancedGesturesDetectors(Game game, Widget child) {
 
   if (game is MultiTouchDragDetector) {
     addDragRecognizer((int pointerId, Vector2 position) {
-      game.onDragStarted(pointerId, position);
+      game.onDragStart(pointerId, position);
       return _DragEvent()
-        ..onUpdate = ((details) => game.onDragUpdated(pointerId, details))
-        ..onEnd = ((details) => game.onDragEnded(pointerId, details))
-        ..onCancel = (() => game.onDragCanceled(pointerId));
+        ..onUpdate = ((details) => game.onDragUpdate(pointerId, details))
+        ..onEnd = ((details) => game.onDragEnd(pointerId, details))
+        ..onCancel = (() => game.onDragCancel(pointerId));
     });
   } else if (game is HasDraggableComponents) {
     addDragRecognizer((int pointerId, Vector2 position) {
-      game.onDragStarted(pointerId, position);
+      game.onDragStart(pointerId, position);
       return _DragEvent()
-        ..onUpdate = ((details) => game.onDragUpdated(pointerId, details))
-        ..onEnd = ((details) => game.onDragEnded(pointerId, details))
-        ..onCancel = (() => game.onDragCanceled(pointerId));
+        ..onUpdate = ((details) => game.onDragUpdate(pointerId, details))
+        ..onEnd = ((details) => game.onDragEnd(pointerId, details))
+        ..onCancel = (() => game.onDragCancel(pointerId));
     });
   }
 

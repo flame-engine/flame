@@ -12,10 +12,10 @@ mixin MultiTouchTapDetector on Game {
 }
 
 mixin MultiTouchDragDetector on Game {
-  void onDragStarted(int pointerId, Vector2 startPosition) {}
-  void onDragUpdated(int pointerId, DragUpdateDetails details) {}
-  void onDragEnded(int pointerId, DragEndDetails details) {}
-  void onDragCanceled(int pointerId) {}
+  void onDragStart(int pointerId, Vector2 startPosition) {}
+  void onDragUpdate(int pointerId, DragUpdateDetails details) {}
+  void onDragEnd(int pointerId, DragEndDetails details) {}
+  void onDragCancel(int pointerId) {}
 }
 
 // Basic touch detectors

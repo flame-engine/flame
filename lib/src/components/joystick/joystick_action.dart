@@ -179,11 +179,11 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
 
   @override
   bool containsPoint(Vector2 point) {
-    return _rectAction?.containsVector2(point) == true;
+    return _rectAction?.containsPoint(point) == true;
   }
 
   @override
-  bool onDragStarted(int pointerId, Vector2 startPosition) {
+  bool onDragStart(int pointerId, Vector2 startPosition) {
     if (_dragging) {
       return true;
     }
@@ -215,7 +215,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   }
 
   @override
-  bool onDragUpdated(int pointerId, DragUpdateDetails details) {
+  bool onDragUpdate(int pointerId, DragUpdateDetails details) {
     if (_dragging) {
       _dragPosition = gameRef.convertGlobalToLocalCoordinate(
         details.globalPosition.toVector2(),
@@ -226,7 +226,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   }
 
   @override
-  bool onDragEnded(int pointerId, DragEndDetails p1) {
+  bool onDragEnd(int pointerId, DragEndDetails p1) {
     _dragging = false;
     _dragPosition = _rectBackgroundDirection.center.toVector2();
     joystickController.joystickAction(
@@ -240,7 +240,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   }
 
   @override
-  bool onDragCanceled(int pointerId) {
+  bool onDragCancel(int pointerId) {
     _dragging = false;
     _dragPosition = _rectBackgroundDirection.center.toVector2();
     joystickController.joystickAction(

@@ -12,7 +12,7 @@ extension RectExtension on Rect {
   /// Creates a [Vector2] starting in top left and going to [width, height].
   Vector2 toVector2() => Vector2(width, height);
 
-  bool containsVector2(Vector2 vector) {
+  bool containsPoint(Vector2 vector) {
     return contains(vector.toOffset());
   }
 }

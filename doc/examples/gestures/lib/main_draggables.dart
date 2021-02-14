@@ -35,13 +35,13 @@ class DraggableSquare extends PositionComponent with Draggable {
   Vector2 dragDeltaPosition;
 
   @override
-  bool onDragStarted(int pointerId, Vector2 startPosition) {
+  bool onDragStart(int pointerId, Vector2 startPosition) {
     initialPosition = startPosition;
     return true;
   }
 
   @override
-  bool onDragUpdated(int pointerId, DragUpdateDetails details) {
+  bool onDragUpdate(int pointerId, DragUpdateDetails details) {
     if (!_isDragging) {
       _isDragging = true;
       dragDeltaPosition = initialPosition - position;
@@ -51,7 +51,7 @@ class DraggableSquare extends PositionComponent with Draggable {
   }
 
   @override
-  bool onDragEnded(int pointerId, DragEndDetails details) {
+  bool onDragEnd(int pointerId, DragEndDetails details) {
     _isDragging = false;
     return true;
   }

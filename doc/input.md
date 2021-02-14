@@ -164,19 +164,19 @@ Just like with `Tapable`, Flame offers a mixin for `Draggable`.
 By adding the `HasDraggableComponents` mixin to your game, and by using the mixin `Draggable` on your components, they can override the simple methods that enable an easy to use drag api on your components.
 
 ```dart
-  void onDragStarted(int pointerId, Vector2 startPosition) {}
-  void onDragUpdated(int pointerId, DragUpdateDetails details) {}
-  void onDragEnded(int pointerId, DragEndDetails details) {}
-  void onDragCanceled(int pointerId) {}
+  void onDragStart(int pointerId, Vector2 startPosition) {}
+  void onDragUpdate(int pointerId, DragUpdateDetails details) {}
+  void onDragEnd(int pointerId, DragEndDetails details) {}
+  void onDragCancel(int pointerId) {}
 ```
 
-Note that all events that a uniquely generated pointer id so you can, if desired, distinguish between different simultaneous drags.
+Note that all events take a uniquely generated pointer id so you can, if desired, distinguish between different simultaneous drags.
 
 The default implementation provided by `Draggable` will already check:
 
-* upon drag start only accept if the position is within the bounds of the Component; keep track of pointerId.
-* when handling updates/end/cancel only accept if the pointerId was tracked (regardless of position).
-* on end/cancel, un-track pointerId
+* upon drag start, the component only receives the event if the position is within its bounds; keep track of pointerId.
+* when handling updates/end/cancel, the component only receives the event if the pointerId was tracked (regardless of position).
+* on end/cancel, untrack pointerId
 
 Minimal component example (this example ignores pointerId so it wont work well if you try to multi-drag):
 
@@ -192,13 +192,13 @@ class DraggableComponent extends PositionComponent with Draggable {
   bool get isDragging => dragDeltaPosition != null;
 
   @override
-  bool onDragStarted(int pointerId, Vector2 startPosition) {
+  bool onDragStart(int pointerId, Vector2 startPosition) {
     dragDeltaPosition = startPosition - position;
     return false;
   }
 
   @override
-  bool onDragUpdated(int pointerId, DragUpdateDetails details) {
+  bool onDragUpdate(int pointerId, DragUpdateDetails details) {
     final localCoords = gameRef.convertGlobalToLocalCoordinate(
       details.globalPosition.toVector2(),
     );
@@ -207,13 +207,13 @@ class DraggableComponent extends PositionComponent with Draggable {
   }
 
   @override
-  bool onDragEnded(int pointerId, DragEndDetails details) {
+  bool onDragEnd(int pointerId, DragEndDetails details) {
     dragDeltaPosition = null;
     return false;
   }
 
   @override
-  bool onDragCanceled(int pointerId) {
+  bool onDragCancel(int pointerId) {
     dragDeltaPosition = null;
     return false;
   }

@@ -8,19 +8,19 @@ import '../base_component.dart';
 import '../component.dart';
 
 mixin Draggable on BaseComponent {
-  bool onDragStarted(int pointerId, Vector2 startPosition) {
+  bool onDragStart(int pointerId, Vector2 startPosition) {
     return true;
   }
 
-  bool onDragUpdated(int pointerId, DragUpdateDetails details) {
+  bool onDragUpdate(int pointerId, DragUpdateDetails details) {
     return true;
   }
 
-  bool onDragEnded(int pointerId, DragEndDetails details) {
+  bool onDragEnd(int pointerId, DragEndDetails details) {
     return true;
   }
 
-  bool onDragCanceled(int pointerId) {
+  bool onDragCancel(int pointerId) {
     return true;
   }
 
@@ -30,14 +30,14 @@ mixin Draggable on BaseComponent {
   bool handleDragStart(int pointerId, Vector2 startPosition) {
     if (containsPoint(startPosition)) {
       _currentPointerIds.add(pointerId);
-      return onDragStarted(pointerId, startPosition);
+      return onDragStart(pointerId, startPosition);
     }
     return true;
   }
 
   bool handleDragUpdated(int pointerId, DragUpdateDetails details) {
     if (_checkPointerId(pointerId)) {
-      return onDragUpdated(pointerId, details);
+      return onDragUpdate(pointerId, details);
     }
     return true;
   }
@@ -45,7 +45,7 @@ mixin Draggable on BaseComponent {
   bool handleDragEnded(int pointerId, DragEndDetails details) {
     if (_checkPointerId(pointerId)) {
       _currentPointerIds.remove(pointerId);
-      return onDragEnded(pointerId, details);
+      return onDragEnd(pointerId, details);
     }
     return true;
   }
@@ -61,22 +61,22 @@ mixin Draggable on BaseComponent {
 
 mixin HasDraggableComponents on BaseGame {
   @mustCallSuper
-  void onDragStarted(int pointerId, Vector2 startPosition) {
+  void onDragStart(int pointerId, Vector2 startPosition) {
     _onGenericEventReceived((c) => c.handleDragStart(pointerId, startPosition));
   }
 
   @mustCallSuper
-  void onDragUpdated(int pointerId, DragUpdateDetails details) {
+  void onDragUpdate(int pointerId, DragUpdateDetails details) {
     _onGenericEventReceived((c) => c.handleDragUpdated(pointerId, details));
   }
 
   @mustCallSuper
-  void onDragEnded(int pointerId, DragEndDetails details) {
+  void onDragEnd(int pointerId, DragEndDetails details) {
     _onGenericEventReceived((c) => c.handleDragEnded(pointerId, details));
   }
 
   @mustCallSuper
-  void onDragCanceled(int pointerId) {
+  void onDragCancel(int pointerId) {
     _onGenericEventReceived((c) => c.handleDragCanceled(pointerId));
   }
 
