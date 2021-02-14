@@ -188,32 +188,33 @@ class DraggableComponent extends PositionComponent with Draggable {
 
   // update and render omitted
 
-  bool isDragging = false;
-  Vector2 dragStartPosition;
   Vector2 dragDeltaPosition;
+  bool get isDragging => dragDeltaPosition != null;
 
   @override
   bool onDragStarted(int pointerId, Vector2 startPosition) {
-    dragStartPosition = startPosition;
+    dragDeltaPosition = startPosition - position;
     return false;
   }
 
   @override
   bool onDragUpdated(int pointerId, DragUpdateDetails details) {
-    final localCoords = gameRef.convertGlobalToLocalCoordinate(details.globalPosition.toVector2());
+    final localCoords = gameRef.convertGlobalToLocalCoordinate(
+      details.globalPosition.toVector2(),
+    );
     position = localCoords - dragDeltaPosition;
     return false;
   }
 
   @override
   bool onDragEnded(int pointerId, DragEndDetails details) {
-    _isDragging = false;
+    dragDeltaPosition = null;
     return false;
   }
 
   @override
   bool onDragCanceled(int pointerId) {
-    _isDragging = false;
+    dragDeltaPosition = null;
     return false;
   }
 }
