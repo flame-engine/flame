@@ -1,9 +1,5 @@
-import 'dart:ui';
-
-import '../../extensions/vector2.dart';
+import '../../../components.dart';
 import '../../game/base_game.dart';
-import '../../gestures.dart';
-import '../component.dart';
 import '../mixins/has_game_ref.dart';
 import 'joystick_action.dart';
 import 'joystick_directional.dart';
@@ -14,7 +10,8 @@ mixin JoystickListener {
   void joystickAction(JoystickActionEvent event);
 }
 
-abstract class JoystickController extends Component with HasGameRef<BaseGame> {
+abstract class JoystickController extends BaseComponent
+    with HasGameRef<BaseGame>, Draggable {
   final List<JoystickListener> _observers = [];
 
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
@@ -28,8 +25,6 @@ abstract class JoystickController extends Component with HasGameRef<BaseGame> {
   void addObserver(JoystickListener listener) {
     _observers.add(listener);
   }
-
-  void onReceiveDrag(DragEvent drag) {}
 
   @override
   bool isHud = true;
@@ -45,7 +40,10 @@ class JoystickComponent extends JoystickController {
     this.actions,
     this.directional,
     this.priority = 0,
-  });
+  }) {
+    addChild(directional);
+    actions.forEach((action) => addChild(action));
+  }
 
   void addAction(JoystickAction action) {
     if (gameRef?.size != null) {
@@ -56,31 +54,5 @@ class JoystickComponent extends JoystickController {
 
   void removeAction(int actionId) {
     actions?.removeWhere((action) => action.actionId == actionId);
-  }
-
-  @override
-  void render(Canvas canvas) {
-    directional?.render(canvas);
-    actions?.forEach((action) => action.render(canvas));
-  }
-
-  @override
-  void update(double t) {
-    super.update(t);
-    directional?.update(t);
-    actions?.forEach((action) => action.update(t));
-  }
-
-  @override
-  void onGameResize(Vector2 size) {
-    directional?.initialize(size, this);
-    actions?.forEach((action) => action.initialize(size, this));
-    super.onGameResize(size);
-  }
-
-  @override
-  void onReceiveDrag(DragEvent event) {
-    directional?.onReceiveDrag(event);
-    actions?.forEach((action) => action.onReceiveDrag(event));
   }
 }

@@ -47,10 +47,4 @@ class MyGame extends BaseGame with MultiTouchDragDetector {
     add(player);
     add(joystick);
   }
-
-  @override
-  void onReceiveDrag(DragEvent drag) {
-    joystick.onReceiveDrag(drag);
-    super.onReceiveDrag(drag);
-  }
 }

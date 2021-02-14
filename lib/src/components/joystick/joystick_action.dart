@@ -1,13 +1,15 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart' show Colors;
+import 'package:flutter/widgets.dart'
+    show EdgeInsets, DragUpdateDetails, DragEndDetails;
+import 'package:meta/meta.dart';
 
+import '../../../components.dart';
 import '../../extensions/offset.dart';
-import '../../extensions/vector2.dart';
 import '../../extensions/rect.dart';
-import '../../gestures.dart';
+import '../../extensions/vector2.dart';
 import '../../sprite.dart';
 import 'joystick_component.dart';
 import 'joystick_events.dart';
@@ -15,7 +17,7 @@ import 'joystick_utils.dart';
 
 enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
 
-class JoystickAction {
+class JoystickAction extends BaseComponent with Draggable {
   final int actionId;
   final Sprite sprite;
   final Sprite spritePressed;
@@ -40,7 +42,6 @@ class JoystickAction {
   final Paint _paintActionPressed;
   JoystickController _joystickController;
   final double _sizeBackgroundDirection;
-  DragEvent _currentDragEvent;
   double _tileSize;
 
   JoystickAction({
@@ -103,7 +104,9 @@ class JoystickAction {
     _dragPosition = _rectAction.center.toVector2();
   }
 
+  @override
   void render(Canvas c) {
+    super.render(c);
     if (_dragging && enableDirection) {
       JoystickUtils.renderControl(
         c,
@@ -117,7 +120,9 @@ class JoystickAction {
     JoystickUtils.renderControl(c, _spriteAction, _rectAction, actionPaint);
   }
 
+  @override
   void update(double dt) {
+    super.update(dt);
     if (_rectBackgroundDirection != null && _dragging) {
       final diff = _dragPosition - _rectBackgroundDirection.center.toVector2();
       final double _radAngle = atan2(diff.y, diff.x);
@@ -160,14 +165,14 @@ class JoystickAction {
     }
   }
 
-  void onReceiveDrag(DragEvent event) {
-    if (_dragging ||
-        !(_rectAction?.containsVector2(event.initialPosition) ?? false)) {
-      return;
+  @override
+  bool onDragStarted(int pointerId, Vector2 startPosition) {
+    if (_dragging || !(_rectAction?.containsVector2(startPosition) ?? false)) {
+      return false;
     }
 
     if (enableDirection) {
-      _dragPosition = event.initialPosition;
+      _dragPosition = startPosition;
       _dragging = true;
     }
     _joystickController.joystickAction(
@@ -177,11 +182,7 @@ class JoystickAction {
       ),
     );
     tapDown();
-    _currentDragEvent = event;
-    _currentDragEvent
-      ..onUpdate = onPanUpdate
-      ..onEnd = onPanEnd
-      ..onCancel = onPanCancel;
+    return true;
   }
 
   void tapDown() {
@@ -196,14 +197,17 @@ class JoystickAction {
     _spriteAction = sprite;
   }
 
-  void onPanUpdate(DragUpdateDetails details) {
+  @override
+  bool onDragUpdated(int pointerId, DragUpdateDetails details) {
     if (_dragging) {
       _dragPosition = details.localPosition.toVector2();
+      return true;
     }
+    return false;
   }
 
-  void onPanEnd(DragEndDetails p1) {
-    _currentDragEvent = null;
+  @override
+  bool onDragEnded(int pointerId, DragEndDetails p1) {
     _dragging = false;
     _dragPosition = _rectBackgroundDirection.center.toVector2();
     _joystickController.joystickAction(
@@ -213,10 +217,11 @@ class JoystickAction {
       ),
     );
     tapUp();
+    return true;
   }
 
-  void onPanCancel() {
-    _currentDragEvent = null;
+  @override
+  bool onDragCanceled(int pointerId) {
     _dragging = false;
     _dragPosition = _rectBackgroundDirection.center.toVector2();
     _joystickController.joystickAction(
@@ -226,5 +231,6 @@ class JoystickAction {
       ),
     );
     tapUp();
+    return true;
   }
 }
