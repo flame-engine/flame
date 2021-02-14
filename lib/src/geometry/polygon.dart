@@ -105,6 +105,11 @@ class Polygon extends Shape {
   /// the [point].
   @override
   bool containsPoint(Vector2 point) {
+    // If the size is 0 then it can't contain any points
+    if(size.length2 == 0) {
+      return false;
+    }
+
     for (int i = 0; i < hitbox.length; i++) {
       final previousNode = hitbox[i];
       final node = hitbox[(i + 1) % hitbox.length];

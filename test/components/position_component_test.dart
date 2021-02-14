@@ -121,5 +121,16 @@ void main() {
       final point = Vector2(1.1, 1.1);
       expect(component.containsPoint(point), false);
     });
+
+    test('component with zero size does not contain point', () {
+      final PositionComponent component = MyComponent();
+      component.position = Vector2(2.0, 2.0);
+      component.size = Vector2(0.0, 0.0);
+      component.angle = 0.0;
+      component.anchor = Anchor.center;
+
+      final point = Vector2(2.0, 2.0);
+      expect(component.containsPoint(point), false);
+    });
   });
 }
