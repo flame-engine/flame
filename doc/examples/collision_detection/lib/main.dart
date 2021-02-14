@@ -187,7 +187,10 @@ class MyGame extends BaseGame with HasCollidables, HasDraggableComponents {
   Future<void> onLoad() async {
     final screen = ScreenCollidable();
     final snowman = CollidableSnowman(
-        Vector2.all(150), Vector2(100, 200), Vector2(-100, 100));
+      Vector2.all(150),
+      Vector2(100, 200),
+      Vector2(-100, 100),
+    );
     MyCollidable lastToAdd = snowman;
     add(screen);
     add(snowman);
@@ -203,24 +206,6 @@ class MyGame extends BaseGame with HasCollidables, HasDraggableComponents {
         break;
       }
     }
-    //add(CollidableRectangle(Vector2.all(140), Vector2.all(140), Vector2.all(50))
-    //  ..rotationSpeed = 0.4);
-    //add(CollidablePolygon(Vector2(450, 200), Vector2.all(140), Vector2.all(50))
-    //  ..rotationSpeed = -0.4);
-    //add(CollidableCircle(Vector2(540, 90), Vector2.all(140), Vector2.all(180)));
-    //add(CollidableCircle(Vector2.all(340), Vector2.all(80), Vector2.all(140)));
-    //add(CollidableCircle(Vector2.all(440), Vector2.all(80), Vector2.all(110)));
-    //add(CollidableCircle(Vector2(340, 200), Vector2.all(80), Vector2.all(170)));
-    //add(CollidableCircle(Vector2(640, 180), Vector2.all(80), Vector2.all(150)));
-    //for(int i = 0; i < 20; i++) {
-    //  add(CollidablePolygon(Vector2(50+50.0*i, 1000 + 2.0*i), Vector2.all(20), Vector2.all(50))
-    //    ..rotationSpeed = -0.4);
-    //}
-    //for (int i = 0; i < 10; i++) {
-    //  add(CollidablePolygon(Vector2(150 + 50.0 * i, 800 + 2.0 * i),
-    //      Vector2.all(30), Vector2.all(100))
-    //    ..rotationSpeed = 0.4);
-    //}
   }
 
   final _rng = Random();
