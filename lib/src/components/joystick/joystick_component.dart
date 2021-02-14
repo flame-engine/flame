@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 import '../../../components.dart';
 import '../../game/base_game.dart';
 import '../mixins/has_game_ref.dart';
@@ -35,16 +37,19 @@ class JoystickComponent extends JoystickController {
   int priority;
 
   JoystickComponent({
-    List<JoystickAction> actions,
+    @required BaseGame gameRef,
+    List<JoystickAction> actions = const [],
     JoystickDirectional directional,
     this.priority = 0,
   }) {
-    addChild(directional);
-    actions.forEach((action) => addAction(action));
+    if (directional != null) {
+      addChild(directional, gameRef: gameRef);
+    }
+    actions.forEach((action) => addChild(action, gameRef: gameRef));
   }
 
   void addAction(JoystickAction action) {
-    addChild(action);
+    addChild(action, gameRef: gameRef);
   }
 
   void removeAction(int actionId) {

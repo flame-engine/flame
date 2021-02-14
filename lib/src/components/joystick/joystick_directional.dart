@@ -12,7 +12,7 @@ import 'joystick_component.dart';
 import 'joystick_events.dart';
 import 'joystick_utils.dart';
 
-class JoystickDirectional extends BaseComponent with Draggable {
+class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
   final double size;
   final Sprite spriteBackgroundDirectional;
   final Sprite spriteKnobDirectional;
@@ -34,7 +34,7 @@ class JoystickDirectional extends BaseComponent with Draggable {
   Vector2 _dragPosition;
   double _tileSize;
 
-  JoystickController _joystickController;
+  JoystickController get joystickController => parent as JoystickController;
 
   Vector2 _screenSize;
 
@@ -66,9 +66,19 @@ class JoystickDirectional extends BaseComponent with Draggable {
     _tileSize = size / 2;
   }
 
-  void initialize(Vector2 screenSize, JoystickController joystickController) {
+  @override
+  Future<void> onLoad() async {
+    initialize(gameRef.size);
+  }
+
+  @override
+  void onGameResize(Vector2 gameSize) {
+    super.onGameResize(gameSize);
+    initialize(gameSize);
+  }
+
+  void initialize(Vector2 screenSize) {
     _screenSize = screenSize;
-    _joystickController = joystickController;
 
     final osBackground = Offset(margin.left, _screenSize.y - margin.bottom);
     _backgroundRect = Rect.fromCircle(center: osBackground, radius: size / 2);
@@ -136,7 +146,7 @@ class JoystickDirectional extends BaseComponent with Draggable {
         );
       }
 
-      _joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
+      joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
         directional: directional,
         intensity: _intensity,
         radAngle: _radAngle,
@@ -150,11 +160,15 @@ class JoystickDirectional extends BaseComponent with Draggable {
   }
 
   @override
+  bool containsPoint(Vector2 point) {
+    final directional = _backgroundRect?.inflate(50.0);
+    return directional?.containsVector2(point) == true;
+  }
+
+  @override
   bool onDragStarted(int pointerId, Vector2 startPosition) {
     _updateDirectionalRect(startPosition);
-
-    final directional = _backgroundRect.inflate(50.0);
-    if (!_dragging && directional.containsVector2(startPosition)) {
+    if (!_dragging) {
       _dragging = true;
       _dragPosition = startPosition;
       return true;
@@ -184,17 +198,19 @@ class JoystickDirectional extends BaseComponent with Draggable {
   @override
   bool onDragUpdated(int pointerId, DragUpdateDetails details) {
     if (_dragging) {
-      _dragPosition = details.localPosition.toVector2();
-      return true;
+      _dragPosition = gameRef.convertGlobalToLocalCoordinate(
+        details.globalPosition.toVector2(),
+      );
+      return false;
     }
-    return false;
+    return true;
   }
 
   @override
-  bool onDragEnded(int pointerId, DragEndDetails p1) {
+  bool onDragEnded(int pointerId, DragEndDetails details) {
     _dragging = false;
     _dragPosition = _backgroundRect.center.toVector2();
-    _joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
+    joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
       directional: JoystickMoveDirectional.IDLE,
       intensity: 0.0,
       radAngle: 0.0,
@@ -206,7 +222,7 @@ class JoystickDirectional extends BaseComponent with Draggable {
   bool onDragCanceled(int pointerId) {
     _dragging = false;
     _dragPosition = _backgroundRect.center.toVector2();
-    _joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
+    joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
       directional: JoystickMoveDirectional.IDLE,
       intensity: 0.0,
       radAngle: 0.0,
