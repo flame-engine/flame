@@ -86,8 +86,9 @@ void main() {
       final MyGame game = MyGame();
       final MyTap child = MyTap();
       final MyComposed wrapper = MyComposed();
-
       game.onResize(size);
+      child.size = Vector2.all(1);
+      game.size.setFrom(size);
       game.add(wrapper);
       wrapper.addChild(child);
       game.update(0.0);
