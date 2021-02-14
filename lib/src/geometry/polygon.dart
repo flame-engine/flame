@@ -106,7 +106,7 @@ class Polygon extends Shape {
   @override
   bool containsPoint(Vector2 point) {
     // If the size is 0 then it can't contain any points
-    if(size.length2 == 0) {
+    if (size.length2 == 0) {
       return false;
     }
 
