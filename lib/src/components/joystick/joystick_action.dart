@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../extensions/offset.dart';
 import '../../extensions/vector2.dart';
+import '../../extensions/rect.dart';
 import '../../gestures.dart';
 import '../../sprite.dart';
 import 'joystick_component.dart';
@@ -33,7 +34,7 @@ class JoystickAction {
   Rect _rectBackgroundDirection;
   bool _dragging = false;
   Sprite _spriteAction;
-  Offset _dragPosition;
+  Vector2 _dragPosition;
   final Paint _paintBackground;
   final Paint _paintAction;
   final Paint _paintActionPressed;
@@ -99,7 +100,7 @@ class JoystickAction {
       center: Offset(dx, dy),
       radius: _sizeBackgroundDirection / 2,
     );
-    _dragPosition = _rectAction.center;
+    _dragPosition = _rectAction.center.toVector2();
   }
 
   void render(Canvas c) {
@@ -118,15 +119,12 @@ class JoystickAction {
 
   void update(double dt) {
     if (_rectBackgroundDirection != null && _dragging) {
-      final double _radAngle = atan2(
-        _dragPosition.dy - _rectBackgroundDirection.center.dy,
-        _dragPosition.dx - _rectBackgroundDirection.center.dx,
-      );
+      final diff = _dragPosition - _rectBackgroundDirection.center.toVector2();
+      final double _radAngle = atan2(diff.y, diff.x);
 
       // Distance between the center of joystick background & drag position
       final centerPosition = _rectBackgroundDirection.center.toVector2();
-      final dragPosition = _dragPosition.toVector2();
-      double dist = centerPosition.distanceTo(dragPosition);
+      double dist = centerPosition.distanceTo(_dragPosition);
 
       // The maximum distance for the knob position to the edge of
       // the background + half of its own size. The knob can wander in the
@@ -156,14 +154,15 @@ class JoystickAction {
       );
     } else {
       if (_rectAction != null) {
-        final Offset diff = _dragPosition - _rectAction.center;
-        _rectAction = _rectAction.shift(diff);
+        final diff = _dragPosition - _rectAction.center.toVector2();
+        _rectAction = _rectAction.shift(diff.toOffset());
       }
     }
   }
 
   void onReceiveDrag(DragEvent event) {
-    if (_dragging || !(_rectAction?.contains(event.initialPosition) ?? false)) {
+    if (_dragging ||
+        !(_rectAction?.containsVector2(event.initialPosition) ?? false)) {
       return;
     }
 
@@ -199,14 +198,14 @@ class JoystickAction {
 
   void onPanUpdate(DragUpdateDetails details) {
     if (_dragging) {
-      _dragPosition = details.localPosition;
+      _dragPosition = details.localPosition.toVector2();
     }
   }
 
   void onPanEnd(DragEndDetails p1) {
     _currentDragEvent = null;
     _dragging = false;
-    _dragPosition = _rectBackgroundDirection.center;
+    _dragPosition = _rectBackgroundDirection.center.toVector2();
     _joystickController.joystickAction(
       JoystickActionEvent(
         id: actionId,
@@ -219,7 +218,7 @@ class JoystickAction {
   void onPanCancel() {
     _currentDragEvent = null;
     _dragging = false;
-    _dragPosition = _rectBackgroundDirection.center;
+    _dragPosition = _rectBackgroundDirection.center.toVector2();
     _joystickController.joystickAction(
       JoystickActionEvent(
         id: actionId,

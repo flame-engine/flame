@@ -2,8 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../extensions/offset.dart';
-import '../../extensions/vector2.dart';
+import '../../../extensions.dart';
 import '../../gestures.dart';
 import '../../sprite.dart';
 import 'joystick_component.dart';
@@ -29,7 +28,7 @@ class JoystickDirectional {
   Rect _knobRect;
 
   bool _dragging = false;
-  Offset _dragPosition;
+  Vector2 _dragPosition;
   double _tileSize;
 
   JoystickController _joystickController;
@@ -78,7 +77,7 @@ class JoystickDirectional {
       radius: size / 4,
     );
 
-    _dragPosition = _knobRect.center;
+    _dragPosition = _knobRect.center.toVector2();
   }
 
   void render(Canvas canvas) {
@@ -99,21 +98,18 @@ class JoystickDirectional {
 
   void update(double t) {
     if (_dragging) {
-      final double _radAngle = atan2(
-        _dragPosition.dy - _backgroundRect.center.dy,
-        _dragPosition.dx - _backgroundRect.center.dx,
-      );
+      final delta = _dragPosition - _backgroundRect.center.toVector2();
+      final double _radAngle = atan2(delta.y, delta.x);
 
       final degrees = _radAngle * 180 / pi;
 
       // Distance between the center of joystick background & drag position
       final centerPosition = _backgroundRect.center.toVector2();
-      final dragPosition = _dragPosition.toVector2();
 
       // The maximum distance for the knob position the edge of
       // the background + half of its own size. The knob can wander in the
       // background image, but not outside.
-      final dist = min(centerPosition.distanceTo(dragPosition), _tileSize);
+      final dist = min(centerPosition.distanceTo(_dragPosition), _tileSize);
 
       // Calculation the knob position
       final nextX = dist * cos(_radAngle);
@@ -142,8 +138,8 @@ class JoystickDirectional {
       ));
     } else {
       if (_knobRect != null) {
-        final Offset diff = _dragPosition - _knobRect.center;
-        _knobRect = _knobRect.shift(diff);
+        final diff = _dragPosition - _knobRect.center.toVector2();
+        _knobRect = _knobRect.shift(diff.toOffset());
       }
     }
   }
@@ -152,7 +148,7 @@ class JoystickDirectional {
     _updateDirectionalRect(event.initialPosition);
 
     final directional = _backgroundRect.inflate(50.0);
-    if (!_dragging && directional.contains(event.initialPosition)) {
+    if (!_dragging && directional.containsVector2(event.initialPosition)) {
       _dragging = true;
       _dragPosition = event.initialPosition;
       _currentDragEvent = event;
@@ -163,15 +159,18 @@ class JoystickDirectional {
     }
   }
 
-  void _updateDirectionalRect(Offset position) {
+  void _updateDirectionalRect(Vector2 position) {
     if (_screenSize != null &&
-        (position.dx > _screenSize.x / 2 ||
-            position.dy < _screenSize.y / 2 ||
+        (position.x > _screenSize.x / 2 ||
+            position.y < _screenSize.y / 2 ||
             isFixed)) {
       return;
     }
 
-    _backgroundRect = Rect.fromCircle(center: position, radius: size / 2);
+    _backgroundRect = Rect.fromCircle(
+      center: position.toOffset(),
+      radius: size / 2,
+    );
 
     _knobRect = Rect.fromCircle(
       center: _backgroundRect.center,
@@ -181,13 +180,13 @@ class JoystickDirectional {
 
   void onPanUpdate(DragUpdateDetails details) {
     if (_dragging) {
-      _dragPosition = details.localPosition;
+      _dragPosition = details.localPosition.toVector2();
     }
   }
 
   void onPanEnd(DragEndDetails p1) {
     _dragging = false;
-    _dragPosition = _backgroundRect.center;
+    _dragPosition = _backgroundRect.center.toVector2();
     _joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
       directional: JoystickMoveDirectional.IDLE,
       intensity: 0.0,
@@ -198,7 +197,7 @@ class JoystickDirectional {
 
   void onPanCancel() {
     _dragging = false;
-    _dragPosition = _backgroundRect.center;
+    _dragPosition = _backgroundRect.center.toVector2();
     _joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
       directional: JoystickMoveDirectional.IDLE,
       intensity: 0.0,

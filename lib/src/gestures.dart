@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 
+import '../extensions.dart';
 import 'game/game.dart';
 
 mixin MultiTouchTapDetector on Game {
@@ -11,7 +12,7 @@ mixin MultiTouchTapDetector on Game {
 }
 
 class DragEvent extends Drag {
-  final Offset initialPosition;
+  final Vector2 initialPosition;
 
   DragEvent(this.initialPosition);
 

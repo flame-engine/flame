@@ -7,6 +7,7 @@ import '../gestures.dart';
 import '../components/mixins/draggable.dart';
 import '../components/mixins/tapable.dart';
 import '../extensions/size.dart';
+import '../extensions/offset.dart';
 import 'game_render_box.dart';
 
 typedef GameLoadingWidgetBuilder = Widget Function(
@@ -475,8 +476,9 @@ Widget _applyAdvancedGesturesDetectors(Game game, Widget child) {
       (MultiDragGestureRecognizer instance) {
         instance
           ..onStart = (Offset o) {
+            final position = game.convertGlobalToLocalCoordinate(o.toVector2());
             // Note that padding or margin isn't taken into account here
-            final drag = DragEvent(o);
+            final drag = DragEvent(position);
             dragHandlers.forEach((h) => h.onReceiveDrag?.call(drag));
             return drag;
           };

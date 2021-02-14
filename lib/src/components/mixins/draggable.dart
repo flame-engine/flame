@@ -12,7 +12,7 @@ mixin Draggable on BaseComponent {
   }
 
   bool handleReceiveDrag(DragEvent event) {
-    if (containsPoint(event.initialPosition.toVector2())) {
+    if (containsPoint(event.initialPosition)) {
       return onReceiveDrag(event);
     }
     return true;

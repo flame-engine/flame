@@ -10,9 +10,11 @@ import 'package:flutter/widgets.dart';
 import '../assets/assets_cache.dart';
 import '../assets/images.dart';
 import '../extensions/vector2.dart';
+import '../extensions/offset.dart';
 import '../keyboard.dart';
 import '../sprite.dart';
 import '../sprite_animation.dart';
+import 'game_render_box.dart';
 
 /// Represents a generic game.
 ///
@@ -21,7 +23,12 @@ import '../sprite_animation.dart';
 abstract class Game {
   final images = Images();
   final assets = AssetsCache();
-  BuildContext buildContext;
+
+  /// Just a reference back to the render box that is kept up to date by the engine.
+  GameRenderBox _gameRenderBox;
+
+  /// Currently attached build context. Can be null if not attached.
+  BuildContext get buildContext => _gameRenderBox?.buildContext;
 
   /// Current game viewport size, updated every resize via the [resize] method hook
   final Vector2 size = Vector2.zero();
@@ -65,14 +72,14 @@ abstract class Game {
   /// Marks game as not attached tto any widget tree.
   ///
   /// Should be called manually.
-  void attach(PipelineOwner owner, BuildContext context) {
+  void attach(PipelineOwner owner, GameRenderBox gameRenderBox) {
     if (isAttached) {
       throw UnsupportedError("""
       Game attachment error:
       A game instance can only be attached to one widget at a time.
       """);
     }
-    buildContext = context;
+    _gameRenderBox = gameRenderBox;
     onAttach();
   }
 
@@ -88,7 +95,7 @@ abstract class Game {
   ///
   /// Should not be called manually.
   void detach() {
-    buildContext = null;
+    _gameRenderBox = null;
     onDetach();
   }
 
@@ -102,6 +109,32 @@ abstract class Game {
       RawKeyboard.instance.removeListener(_handleKeyEvent);
     }
     images.clearCache();
+  }
+
+  /// Converts a global coordinate (i.e. wrt to the app itself) to a local
+  /// coordinate (i.e. wrt to the game widget).
+  /// If the widget occupies the whole app ("full screen" games), this operation
+  /// is the identity.
+  Vector2 convertGlobalToLocalCoordinate(Vector2 point) {
+    if (!isAttached) {
+      throw UnsupportedError(
+        'This method can only be called if the game is attached',
+      );
+    }
+    return _gameRenderBox.globalToLocal(point.toOffset()).toVector2();
+  }
+
+  /// Converts a local coordinate (i.e. wrt to the game widget) to a global
+  /// coordinate (i.e. wrt to the app itself).
+  /// If the widget occupies the whole app ("full screen" games), this operation
+  /// is the identity.
+  Vector2 convertLocalToGlobalCoordinate(Vector2 point) {
+    if (!isAttached) {
+      throw UnsupportedError(
+        'This method can only be called if the game is attached',
+      );
+    }
+    return _gameRenderBox.localToGlobal(point.toOffset()).toVector2();
   }
 
   /// Utility method to load and cache the image for a sprite based on its options
