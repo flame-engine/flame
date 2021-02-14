@@ -15,6 +15,13 @@ extension Vector2Extension on Vector2 {
   /// Creates a [Point] from the [Vector2]
   Point toPoint() => Point(x, y);
 
+  /// A rectangle constructor operator.
+  ///
+  /// Combines two [Vector2]s to form a Rect whose top-left coordinate is the
+  /// point given by adding this vector, the left-hand-side operand,
+  /// to the origin, and whose size is the right-hand-side operand.
+  Rect operator &(Vector2 size) => toPositionedRect(size);
+
   /// Creates a [Rect] starting from [x, y] and having the size of the
   /// argument [Vector2]
   Rect toPositionedRect(Vector2 size) => Rect.fromLTWH(x, y, size.x, size.y);

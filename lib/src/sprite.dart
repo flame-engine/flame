@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flame/image_composition.dart';
+
 import 'anchor.dart';
 import 'extensions/offset.dart';
 import 'extensions/vector2.dart';
@@ -75,5 +77,12 @@ class Sprite {
     final drawPaint = overridePaint ?? paint;
 
     canvas.drawImageRect(image, src, drawRect, drawPaint);
+  }
+
+  /// Return a new Image based on the [src] of the Sprite.
+  Future<Image> toImage() async {
+    final composition = ImageComposition()
+      ..add(image, Vector2.zero(), source: src);
+    return composition.compose();
   }
 }
