@@ -21,6 +21,8 @@ void main() async {
   );
 }
 
+enum Shapes { circle, rectangle, polygon }
+
 abstract class MyCollidable extends PositionComponent
     with Draggable, Hitbox, Collidable {
   double rotationSpeed = 0.0;
@@ -137,6 +139,45 @@ class CollidableCircle extends MyCollidable {
   }
 }
 
+class SnowmanPart extends HitboxCircle {
+  static const startColor = Colors.white;
+  Color currentColor = startColor;
+
+  SnowmanPart(double definition, double yPosition, Color hitColor) {
+    this.definition = definition;
+    position.y = yPosition;
+    onCollision = (Set<Vector2> points, HitboxShape other) {
+      if (other.component is ScreenCollidable) {
+        currentColor = startColor;
+      } else {
+        currentColor = hitColor;
+      }
+    };
+  }
+
+  @override
+  void render(Canvas canvas, Paint paint) {
+    final hitPaint = Paint()
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke
+      ..color = currentColor;
+    canvas.drawCircle((size / 2 + position).toOffset(), radius, hitPaint);
+  }
+}
+
+class CollidableSnowman extends MyCollidable {
+  CollidableSnowman(Vector2 position, Vector2 size, Vector2 velocity)
+      : super(position, size, velocity) {
+    rotationSpeed = 0.2;
+    final top = SnowmanPart(0.4, -size.y / 2.5, Colors.red);
+    final middle = SnowmanPart(0.6, -size.y / 7, Colors.yellow);
+    final bottom = SnowmanPart(1.0, size.y / 4, Colors.green);
+    addShape(top);
+    addShape(middle);
+    addShape(bottom);
+  }
+}
+
 class MyGame extends BaseGame with HasCollidables, HasDraggableComponents {
   final TextConfig fpsTextConfig = TextConfig(
     color: const Color(0xFFFFFFFF),
@@ -144,25 +185,77 @@ class MyGame extends BaseGame with HasCollidables, HasDraggableComponents {
 
   @override
   Future<void> onLoad() async {
-    add(ScreenCollidable());
-    add(CollidableRectangle(Vector2.all(140), Vector2.all(140), Vector2.all(50))
-      ..rotationSpeed = 0.4);
-    add(CollidablePolygon(Vector2(450, 200), Vector2.all(140), Vector2.all(50))
-      ..rotationSpeed = -0.4);
-    add(CollidableCircle(Vector2(540, 90), Vector2.all(140), Vector2.all(180)));
-    add(CollidableCircle(Vector2.all(340), Vector2.all(80), Vector2.all(138)));
-    add(CollidableCircle(Vector2.all(440), Vector2.all(80), Vector2.all(138)));
-    add(CollidableCircle(Vector2(340, 200), Vector2.all(80), Vector2.all(138)));
-    add(CollidableCircle(Vector2(640, 180), Vector2.all(80), Vector2.all(138)));
+    final screen = ScreenCollidable();
+    final snowman = CollidableSnowman(
+        Vector2.all(150), Vector2(100, 200), Vector2(-100, 100));
+    MyCollidable lastToAdd = snowman;
+    add(screen);
+    add(snowman);
+    int totalAdded = 1;
+    while (totalAdded < 20) {
+      lastToAdd = createRandomCollidable(lastToAdd);
+      final lastBottomRight =
+          lastToAdd.toAbsoluteRect().bottomRight.toVector2();
+      if (screen.containsPoint(lastBottomRight)) {
+        add(lastToAdd);
+        totalAdded++;
+      } else {
+        break;
+      }
+    }
+    //add(CollidableRectangle(Vector2.all(140), Vector2.all(140), Vector2.all(50))
+    //  ..rotationSpeed = 0.4);
+    //add(CollidablePolygon(Vector2(450, 200), Vector2.all(140), Vector2.all(50))
+    //  ..rotationSpeed = -0.4);
+    //add(CollidableCircle(Vector2(540, 90), Vector2.all(140), Vector2.all(180)));
+    //add(CollidableCircle(Vector2.all(340), Vector2.all(80), Vector2.all(140)));
+    //add(CollidableCircle(Vector2.all(440), Vector2.all(80), Vector2.all(110)));
+    //add(CollidableCircle(Vector2(340, 200), Vector2.all(80), Vector2.all(170)));
+    //add(CollidableCircle(Vector2(640, 180), Vector2.all(80), Vector2.all(150)));
     //for(int i = 0; i < 20; i++) {
     //  add(CollidablePolygon(Vector2(50+50.0*i, 1000 + 2.0*i), Vector2.all(20), Vector2.all(50))
     //    ..rotationSpeed = -0.4);
     //}
-    for (int i = 0; i < 10; i++) {
-      add(CollidablePolygon(Vector2(150 + 50.0 * i, 800 + 2.0 * i),
-          Vector2.all(30), Vector2.all(100))
-        ..rotationSpeed = 0.4);
+    //for (int i = 0; i < 10; i++) {
+    //  add(CollidablePolygon(Vector2(150 + 50.0 * i, 800 + 2.0 * i),
+    //      Vector2.all(30), Vector2.all(100))
+    //    ..rotationSpeed = 0.4);
+    //}
+  }
+
+  final _rng = Random();
+  final _distance = Vector2(100, 0);
+
+  MyCollidable createRandomCollidable(MyCollidable lastCollidable) {
+    MyCollidable collidable;
+    final collidableSize = Vector2.all(50) + Vector2.random(_rng) * 100;
+    final isXOverflow = lastCollidable.position.x +
+            lastCollidable.size.x / 2 +
+            _distance.x +
+            collidableSize.x >
+        size.x;
+    Vector2 position = _distance + Vector2(0, lastCollidable.position.y + 200);
+    if (!isXOverflow) {
+      position = (lastCollidable.position + _distance)
+        ..x += collidableSize.x / 2;
     }
+    final velocity = Vector2.random(_rng) * 200;
+    final rotationSpeed = 0.5 - _rng.nextDouble();
+    final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
+    switch (shapeType) {
+      case Shapes.circle:
+        collidable = CollidableCircle(position, collidableSize, velocity);
+        break;
+      case Shapes.rectangle:
+        collidable = CollidableRectangle(position, collidableSize, velocity)
+          ..rotationSpeed = rotationSpeed;
+        break;
+      case Shapes.polygon:
+        collidable = CollidablePolygon(position, collidableSize, velocity)
+          ..rotationSpeed = rotationSpeed;
+        break;
+    }
+    return collidable;
   }
 
   @override

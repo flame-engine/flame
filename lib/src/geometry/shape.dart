@@ -49,7 +49,8 @@ mixin HitboxShape on Shape {
 
   /// The shapes center, before rotation
   Vector2 get shapeCenter {
-    return component.absoluteCenter + position;
+    return (component.absoluteCenter + position)
+      ..rotate(angle, center: anchorPosition);
   }
 
   /// Assign your own [CollisionCallback] if you want a callback when this

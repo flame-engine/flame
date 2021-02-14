@@ -6,10 +6,10 @@ import '../extensions/vector2.dart';
 import 'shape.dart';
 
 class Circle extends Shape {
-  double definition;
-
   /// The [definition] is how many percentages of [size] that the circle should
   /// cover.
+  double definition;
+
   Circle({
     this.definition = 1.0,
     Vector2 position,
@@ -33,7 +33,7 @@ class Circle extends Shape {
   }
 
   double get radius {
-    return (size.x / 2) * definition;
+    return (min(size.x, size.y) / 2) * definition;
   }
 
   @override
