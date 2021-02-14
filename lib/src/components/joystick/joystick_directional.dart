@@ -114,9 +114,8 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
     super.update(t);
     if (_dragging) {
       final delta = _dragPosition - _backgroundRect.center.toVector2();
-      final _radAngle = atan2(delta.y, delta.x);
-
-      final degrees = _radAngle * 180 / pi;
+      final radAngle = atan2(delta.y, delta.x);
+      final degrees = radAngle * 180 / pi;
 
       // Distance between the center of joystick background & drag position
       final centerPosition = _backgroundRect.center.toVector2();
