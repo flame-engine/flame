@@ -161,7 +161,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
 
       final double _intensity = dist / _tileSize;
 
-      _joystickController.joystickAction(
+      joystickController.joystickAction(
         JoystickActionEvent(
           id: actionId,
           event: ActionEvent.MOVE,
@@ -187,7 +187,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
       _dragPosition = startPosition;
       _dragging = true;
     }
-    _joystickController.joystickAction(
+    joystickController.joystickAction(
       JoystickActionEvent(
         id: actionId,
         event: ActionEvent.DOWN,
@@ -222,7 +222,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   bool onDragEnded(int pointerId, DragEndDetails p1) {
     _dragging = false;
     _dragPosition = _rectBackgroundDirection.center.toVector2();
-    _joystickController.joystickAction(
+    joystickController.joystickAction(
       JoystickActionEvent(
         id: actionId,
         event: ActionEvent.UP,
@@ -236,7 +236,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   bool onDragCanceled(int pointerId) {
     _dragging = false;
     _dragPosition = _rectBackgroundDirection.center.toVector2();
-    _joystickController.joystickAction(
+    joystickController.joystickAction(
       JoystickActionEvent(
         id: actionId,
         event: ActionEvent.CANCEL,
