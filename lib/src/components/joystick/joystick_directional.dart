@@ -126,8 +126,8 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
       final dist = min(centerPosition.distanceTo(_dragPosition), _tileSize);
 
       // Calculation the knob position
-      final nextX = dist * cos(_radAngle);
-      final nextY = dist * sin(_radAngle);
+      final nextX = dist * cos(radAngle);
+      final nextY = dist * sin(radAngle);
       final nextPoint = Offset(nextX, nextY);
 
       final diff = _backgroundRect.center + nextPoint - _knobRect.center;
@@ -148,7 +148,7 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
       joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
         directional: directional,
         intensity: _intensity,
-        radAngle: _radAngle,
+        radAngle: radAngle,
       ));
     } else {
       if (_knobRect != null) {
