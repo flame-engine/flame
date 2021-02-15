@@ -63,7 +63,13 @@ class BaseGame extends Game with FPSCounter {
   /// Prepares and registers a component to be added on the next game tick
   ///
   /// This methods is an async operation since it await the `onLoad` method of the component. Nevertheless, this method only need to be waited to finish if by some reason, your logic needs to be sure that the component has finished loading, otherwise, this method can be called without waiting for it to finish as the BaseGame already handle the loading of the component.
+  ///
+  /// *Note:* Do not add components on the game constructor. This method can only be called after the game already has its layout set, this can be verified by the [hasLayout] property, to add components upon a game initialization, the [onLoad] method can be used instead.
   Future<void> add(Component c) async {
+    assert(
+      hasLayout,
+      '"add" called before the game is ready. Did you try to access it on the Game constructor? Use the "onLoad" method instead.',
+    );
     prepare(c);
     final loadFuture = c.onLoad();
 
@@ -90,7 +96,7 @@ class BaseGame extends Game with FPSCounter {
 
   /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.
   ///
-  /// You can override it further to add more custom behaviour.
+  /// You can override it further to add more custom behavior.
   /// Beware of however you are rendering components if not using this; you must be careful to save and restore the canvas to avoid components messing up with each other.
   @override
   @mustCallSuper
@@ -116,7 +122,7 @@ class BaseGame extends Game with FPSCounter {
   /// This implementation of update updates every component in the list.
   ///
   /// It also actually adds the components that were added by the [addLater] method, and remove those that are marked for destruction via the [Component.shouldRemove] method.
-  /// You can override it further to add more custom behaviour.
+  /// You can override it further to add more custom behavior.
   @override
   @mustCallSuper
   void update(double t) {
@@ -139,7 +145,7 @@ class BaseGame extends Game with FPSCounter {
   /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.
   ///
   /// It also updates the [size] field of the class to be used by later added components and other methods.
-  /// You can override it further to add more custom behaviour, but you should seriously consider calling the super implementation as well.
+  /// You can override it further to add more custom behavior, but you should seriously consider calling the super implementation as well.
   @override
   @mustCallSuper
   void onResize(Vector2 size) {

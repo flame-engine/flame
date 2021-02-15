@@ -33,6 +33,7 @@ void main() {
     test('game calls resize after added', () {
       final MyComponent a = MyComponent('a');
       final MyGame game = MyGame();
+      game.onResize(Vector2.all(10));
       game.add(a);
       game.onResize(size);
       expect(a.gameSize, size);
@@ -40,6 +41,7 @@ void main() {
     test("game calls doesn't change component size", () {
       final MyComponent a = MyComponent('a');
       final MyGame game = MyGame();
+      game.onResize(Vector2.all(10));
       game.add(a);
       game.onResize(size);
       expect(a.size, isNot(size));
