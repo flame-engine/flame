@@ -30,15 +30,13 @@ abstract class Game {
   /// Currently attached build context. Can be null if not attached.
   BuildContext get buildContext => _gameRenderBox?.buildContext;
 
-  /// Current size of the game as provided by the framework; it will be null if not attached.
+  /// Whether the game widget was attached to the Flutter tree.
+  bool get isAttached => buildContext != null;
+
+  /// Current size of the game as provided by the framework; it will be null if layout has not been computed yet.
   ///
   /// Use [size] and [hasLayout] for safe access.
   Vector2 _size;
-
-  /// Indicates if the this game instance had its layout layed into the GameWidget
-  /// Only this is true, the game is ready to have its size used or in the case
-  /// of a BaseGame, to receive components.
-  bool get hasLayout => size != null;
 
   /// Current game viewport size, updated every resize via the [resize] method hook
   Vector2 get size {
@@ -49,7 +47,10 @@ abstract class Game {
     return _size;
   }
 
-  bool get isAttached => buildContext != null;
+  /// Indicates if the this game instance had its layout layed into the GameWidget
+  /// Only this is true, the game is ready to have its size used or in the case
+  /// of a BaseGame, to receive components.
+  bool get hasLayout => _size != null;
 
   /// Returns the game background color.
   /// By default it will return a black color.
