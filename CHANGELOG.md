@@ -12,6 +12,7 @@
  - Added `Image` extensions
  - Added `Color` extensions
  - Change RaisedButton to ElevatedButton in timer example
+ - Overhaul the draggables api to fix issues relating to local vs global positions
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
