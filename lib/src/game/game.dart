@@ -30,10 +30,27 @@ abstract class Game {
   /// Currently attached build context. Can be null if not attached.
   BuildContext get buildContext => _gameRenderBox?.buildContext;
 
-  /// Current game viewport size, updated every resize via the [resize] method hook
-  final Vector2 size = Vector2.zero();
-
+  /// Whether the game widget was attached to the Flutter tree.
   bool get isAttached => buildContext != null;
+
+  /// Current size of the game as provided by the framework; it will be null if layout has not been computed yet.
+  ///
+  /// Use [size] and [hasLayout] for safe access.
+  Vector2 _size;
+
+  /// Current game viewport size, updated every resize via the [resize] method hook
+  Vector2 get size {
+    assert(
+      hasLayout,
+      '"size" is not ready yet. Did you try to access it on the Game constructor? Use the "onLoad" method instead.',
+    );
+    return _size;
+  }
+
+  /// Indicates if the this game instance had its layout layed into the GameWidget
+  /// Only this is true, the game is ready to have its size used or in the case
+  /// of a BaseGame, to receive components.
+  bool get hasLayout => _size != null;
 
   /// Returns the game background color.
   /// By default it will return a black color.
@@ -53,7 +70,7 @@ abstract class Game {
   /// The default implementation just sets the new size on the size field
   @mustCallSuper
   void onResize(Vector2 size) {
-    this.size.setFrom(size);
+    _size = (_size ?? Vector2.zero())..setFrom(size);
   }
 
   /// This is the lifecycle state change hook; every time the game is resumed, paused or suspended, this is called.
@@ -96,6 +113,7 @@ abstract class Game {
   /// Should not be called manually.
   void detach() {
     _gameRenderBox = null;
+    _size = null;
     onDetach();
   }
 
