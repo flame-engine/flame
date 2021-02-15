@@ -5,7 +5,6 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/gestures.dart';
 
 import 'package:flutter/material.dart' hide Image, Draggable;
 
@@ -95,14 +94,15 @@ abstract class MyCollidable extends PositionComponent
   }
 
   @override
-  bool onReceiveDrag(DragEvent event) {
-    event.onUpdate = (DragUpdateDetails details) {
-      _isDragged = true;
-    };
-    event.onEnd = (DragEndDetails details) {
-      velocity.setFrom(details.velocity.pixelsPerSecond.toVector2() / 10);
-      _isDragged = false;
-    };
+  bool onDragUpdate(int pointerId, DragUpdateDetails details) {
+    _isDragged = true;
+    return true;
+  }
+
+  @override
+  bool onDragEnd(int pointerId, DragEndDetails details) {
+    velocity.setFrom(details.velocity.pixelsPerSecond.toVector2() / 10);
+    _isDragged = false;
     return true;
   }
 }

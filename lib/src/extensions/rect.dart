@@ -13,15 +13,11 @@ extension RectExtension on Rect {
   /// Creates a [Vector2] starting in top left and going to [width, height].
   Vector2 toVector2() => Vector2(width, height);
 
-  bool containsPoint(Vector2 vector) {
-    return contains(vector.toOffset());
-  }
-
   /// Whether this [Rect] contains a [Vector2] point or not
-  bool containsVector2(Vector2 point) => contains(point.toOffset());
+  bool containsPoint(Vector2 point) => contains(point.toOffset());
 
-  /// Whether the vertex formed by [pointA] and [pointB] intersects this [Rect]
-  bool containsVertex(Vector2 pointA, Vector2 pointB) {
+  /// Whether the segment formed by [pointA] and [pointB] intersects this [Rect]
+  bool intersectsSegment(Vector2 pointA, Vector2 pointB) {
     return min(pointA.x, pointB.x) <= right &&
         min(pointA.y, pointB.y) <= bottom &&
         max(pointA.x, pointB.x) >= left &&

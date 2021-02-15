@@ -132,7 +132,7 @@ class Polygon extends Shape {
     for (int i = 0; i < vertices.length; i++) {
       final from = vertices[i];
       final to = vertices[(i + 1) % vertices.length];
-      if (rect?.containsVertex(from, to) ?? true) {
+      if (rect?.intersectsSegment(from, to) ?? true) {
         rectIntersections.add(LineSegment(from, to));
       }
     }
