@@ -28,6 +28,7 @@ void effectTest(
   final Callback callback = Callback();
   effect.onComplete = callback.call;
   final BaseGame game = BaseGame();
+  game.onResize(Vector2.all(200));
   game.add(component);
   component.addEffect(effect);
   final double duration = effect.iterationTime;
