@@ -30,21 +30,24 @@ abstract class Game {
   /// Currently attached build context. Can be null if not attached.
   BuildContext get buildContext => _gameRenderBox?.buildContext;
 
-  bool _hasLayout = false;
+  /// Current size of the game as provided by the framework; it will be null if not attached.
+  ///
+  /// Use [size] and [hasLayout] for safe access.
+  Vector2 _size;
 
   /// Indicates if the this game instance had its layout layed into the GameWidget
   /// Only this is true, the game is ready to have its size used or in the case
   /// of a BaseGame, to receive components.
-  bool get hasLayout => _hasLayout;
+  bool get hasLayout => size != null;
 
   /// Current game viewport size, updated every resize via the [resize] method hook
   Vector2 get size {
-    assert(hasLayout,
-        '"size" is not ready yet, did you tried to access it on the Game constructor?');
+    assert(
+      hasLayout,
+      '"size" is not ready yet. Did you try to access it on the Game constructor? Use the "onLoad" method instead.',
+    );
     return _size;
   }
-
-  final Vector2 _size = Vector2.zero();
 
   bool get isAttached => buildContext != null;
 
@@ -66,10 +69,7 @@ abstract class Game {
   /// The default implementation just sets the new size on the size field
   @mustCallSuper
   void onResize(Vector2 size) {
-    if (!_hasLayout) {
-      _hasLayout = true;
-    }
-    _size.setFrom(size);
+    _size = (_size ?? Vector2.zero())..setFrom(size);
   }
 
   /// This is the lifecycle state change hook; every time the game is resumed, paused or suspended, this is called.
@@ -111,8 +111,8 @@ abstract class Game {
   ///
   /// Should not be called manually.
   void detach() {
-    _hasLayout = false;
     _gameRenderBox = null;
+    _size = null;
     onDetach();
   }
 
