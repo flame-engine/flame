@@ -181,14 +181,14 @@ abstract class BaseComponent extends Component {
   ) {
     bool shouldContinue = true;
     for (Component child in _children) {
-      if (child is T && child is BaseComponent) {
+      if (child is BaseComponent) {
         shouldContinue = child.propagateToChildren(handler);
-        if (shouldContinue) {
-          shouldContinue = handler(child);
-        }
-        if (!shouldContinue) {
-          break;
-        }
+      }
+      if (shouldContinue && child is T) {
+        shouldContinue = handler(child);
+      }
+      if (!shouldContinue) {
+        break;
       }
     }
     return shouldContinue;

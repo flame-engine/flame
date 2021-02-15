@@ -2,11 +2,13 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/gestures.dart';
 
+import '../../extensions.dart';
 import 'game.dart';
 import '../gestures.dart';
 import '../components/mixins/draggable.dart';
 import '../components/mixins/tapable.dart';
 import '../extensions/size.dart';
+import '../extensions/offset.dart';
 import 'game_render_box.dart';
 
 typedef GameLoadingWidgetBuilder = Widget Function(
@@ -423,65 +425,72 @@ Widget _applyBasicGesturesDetectors(Game game, Widget child) {
 
 Widget _applyAdvancedGesturesDetectors(Game game, Widget child) {
   final Map<Type, GestureRecognizerFactory> gestures = {};
-  final List<_GenericTapEventHandler> tapHandlers = [];
-  final List<_GenericDragEventHandler> dragHandlers = [];
+  int lastGeneratedDragId = 0;
 
-  if (game is HasTapableComponents) {
-    tapHandlers.add(_GenericTapEventHandler()
-      ..onTapDown = game.onTapDown
-      ..onTapUp = game.onTapUp
-      ..onTapCancel = game.onTapCancel);
+  void addAndConfigureRecognizer<T extends GestureRecognizer>(
+    T Function() ts,
+    void Function(T) bindHandlers,
+  ) {
+    gestures[T] = GestureRecognizerFactoryWithHandlers<T>(
+      ts,
+      bindHandlers,
+    );
+  }
+
+  void addTapRecognizer(void Function(MultiTapGestureRecognizer) config) {
+    addAndConfigureRecognizer(
+      () => MultiTapGestureRecognizer(),
+      config,
+    );
+  }
+
+  void addDragRecognizer(Drag Function(int, Vector2) config) {
+    addAndConfigureRecognizer(
+      () => ImmediateMultiDragGestureRecognizer(),
+      (ImmediateMultiDragGestureRecognizer instance) {
+        instance.onStart = (Offset o) {
+          final pointerId = lastGeneratedDragId++;
+          final position = game.convertGlobalToLocalCoordinate(o.toVector2());
+          return config(pointerId, position);
+        };
+      },
+    );
   }
 
   if (game is MultiTouchTapDetector) {
-    tapHandlers.add(_GenericTapEventHandler()
-      ..onTapDown = game.onTapDown
-      ..onTapUp = game.onTapUp
-      ..onTapCancel = game.onTapCancel);
-  }
-
-  if (game is HasDraggableComponents) {
-    dragHandlers
-        .add(_GenericDragEventHandler()..onReceiveDrag = game.onReceiveDrag);
+    addTapRecognizer((MultiTapGestureRecognizer instance) {
+      instance.onTapDown = game.onTapDown;
+      instance.onTapUp = game.onTapUp;
+      instance.onTapCancel = game.onTapCancel;
+      instance.onTap = game.onTap;
+    });
+  } else if (game is HasTapableComponents) {
+    addAndConfigureRecognizer(
+      () => MultiTapGestureRecognizer(),
+      (MultiTapGestureRecognizer instance) {
+        instance.onTapDown = game.onTapDown;
+        instance.onTapUp = game.onTapUp;
+        instance.onTapCancel = game.onTapCancel;
+      },
+    );
   }
 
   if (game is MultiTouchDragDetector) {
-    dragHandlers
-        .add(_GenericDragEventHandler()..onReceiveDrag = game.onReceiveDrag);
-  }
-
-  if (tapHandlers.isNotEmpty) {
-    gestures[MultiTapGestureRecognizer] =
-        GestureRecognizerFactoryWithHandlers<MultiTapGestureRecognizer>(
-      () => MultiTapGestureRecognizer(),
-      (MultiTapGestureRecognizer instance) {
-        instance.onTapDown = (pointerId, d) =>
-            tapHandlers.forEach((h) => h.onTapDown?.call(pointerId, d));
-        instance.onTapUp = (pointerId, d) =>
-            tapHandlers.forEach((h) => h.onTapUp?.call(pointerId, d));
-        instance.onTapCancel = (pointerId) =>
-            tapHandlers.forEach((h) => h.onTapCancel?.call(pointerId));
-        instance.onTap =
-            (pointerId) => tapHandlers.forEach((h) => h.onTap?.call(pointerId));
-      },
-    );
-  }
-
-  if (dragHandlers.isNotEmpty) {
-    gestures[ImmediateMultiDragGestureRecognizer] =
-        GestureRecognizerFactoryWithHandlers<
-            ImmediateMultiDragGestureRecognizer>(
-      () => ImmediateMultiDragGestureRecognizer(),
-      (MultiDragGestureRecognizer instance) {
-        instance
-          ..onStart = (Offset o) {
-            // Note that padding or margin isn't taken into account here
-            final drag = DragEvent(o);
-            dragHandlers.forEach((h) => h.onReceiveDrag?.call(drag));
-            return drag;
-          };
-      },
-    );
+    addDragRecognizer((int pointerId, Vector2 position) {
+      game.onDragStart(pointerId, position);
+      return _DragEvent()
+        ..onUpdate = ((details) => game.onDragUpdate(pointerId, details))
+        ..onEnd = ((details) => game.onDragEnd(pointerId, details))
+        ..onCancel = (() => game.onDragCancel(pointerId));
+    });
+  } else if (game is HasDraggableComponents) {
+    addDragRecognizer((int pointerId, Vector2 position) {
+      game.onDragStart(pointerId, position);
+      return _DragEvent()
+        ..onUpdate = ((details) => game.onDragUpdate(pointerId, details))
+        ..onEnd = ((details) => game.onDragEnd(pointerId, details))
+        ..onCancel = (() => game.onDragCancel(pointerId));
+    });
   }
 
   return RawGestureDetector(
@@ -504,17 +513,6 @@ Widget _applyMouseDetectors(Game game, Widget child) {
   );
 }
 
-class _GenericTapEventHandler {
-  void Function(int pointerId) onTap;
-  void Function(int pointerId) onTapCancel;
-  void Function(int pointerId, TapDownDetails details) onTapDown;
-  void Function(int pointerId, TapUpDetails details) onTapUp;
-}
-
-class _GenericDragEventHandler {
-  void Function(DragEvent details) onReceiveDrag;
-}
-
 class _GameRenderObjectWidget extends LeafRenderObjectWidget {
   final Game game;
 
@@ -526,5 +524,26 @@ class _GameRenderObjectWidget extends LeafRenderObjectWidget {
       child: GameRenderBox(context, game),
       additionalConstraints: const BoxConstraints.expand(),
     );
+  }
+}
+
+class _DragEvent extends Drag {
+  void Function(DragUpdateDetails) onUpdate;
+  void Function() onCancel;
+  void Function(DragEndDetails) onEnd;
+
+  @override
+  void update(details) {
+    onUpdate?.call(details);
+  }
+
+  @override
+  void cancel() {
+    onCancel?.call();
+  }
+
+  @override
+  void end(details) {
+    onEnd?.call(details);
   }
 }
