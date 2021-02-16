@@ -2,6 +2,11 @@
 
 ## [next]
 
+## 0.29.2
+- Fix audioplayers upgrade issue with the removal of default prefix
+- Remove path_provider as a dep that was not used
+- Temporary fix for the Flutter computeDryLayout issue
+
 ## 0.29.1-beta
  - Fixing Game Render Box for flutter >= 1.25
 
