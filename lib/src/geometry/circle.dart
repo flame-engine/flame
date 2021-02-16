@@ -6,31 +6,28 @@ import '../extensions/vector2.dart';
 import 'shape.dart';
 
 class Circle extends Shape {
-  /// The [definition] is how many percentages of [size] that the circle should
-  /// cover.
+  /// The [definition] is how many percentages of the shortest edge of [size]
+  /// that the circle should cover.
   double definition;
 
-  Circle({
+  /// With this constructor you can create your [Circle] from a radius and
+  /// a position. Ir will also calculate the bounding rectangle [size] for the
+  /// [Circle].
+  Circle(
+    double radius,
+    Vector2 position, {
+    double angle = 0,
+  }) : super(position: position, size: Vector2.all(radius * 2), angle: angle);
+
+  /// This constructor is used by [HitboxCircle]
+  /// definition is the percentages of the shortest edge of [size] that the
+  /// circle should fill.
+  Circle.fromDefinition({
     this.definition = 1.0,
     Vector2 position,
     Vector2 size,
     double angle,
   }) : super(position: position, size: size, angle: angle = 0);
-
-  /// With this helper method you can create your [Circle] from a radius and
-  /// a position. This helper will also calculate the bounding rectangle [size]
-  /// for the [Circle].
-  factory Circle.fromRadius(
-    double radius,
-    Vector2 position, {
-    double angle = 0,
-  }) {
-    return Circle(
-      position: position,
-      size: Vector2.all(radius * 2),
-      angle: angle,
-    );
-  }
 
   double get radius {
     return (min(size.x, size.y) / 2) * definition;
@@ -94,4 +91,7 @@ class Circle extends Shape {
   }
 }
 
-class HitboxCircle extends Circle with HitboxShape {}
+class HitboxCircle extends Circle with HitboxShape {
+  @override
+  HitboxCircle() : super.fromDefinition();
+}

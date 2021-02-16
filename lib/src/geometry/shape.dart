@@ -6,6 +6,7 @@ import 'shape_intersections.dart' as intersection_system;
 
 abstract class Shape {
   Vector2 position = Vector2.zero();
+  /// The size is the bounding box of the [Shape]
   Vector2 size;
   double angle = 0;
 
