@@ -109,8 +109,8 @@ class PositionComponent extends BaseComponent {
   }
 
   PositionComponent({Vector2 position, Vector2 size})
-      : position = Vector2.zero() ?? position,
-        size = Vector2.zero() ?? size;
+      : position = position ?? Vector2.zero(),
+        size = size ?? Vector2.zero();
 
   factory PositionComponent.position({double x = 0.0, double y = 0.0}) =>
       PositionComponent(position: Vector2(x, y));
