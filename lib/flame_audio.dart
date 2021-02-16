@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 
 /// Handles flame audio functions
 class FlameAudio {
-  AudioCache audioCache = AudioCache(prefix: 'audio/');
+  AudioCache audioCache = AudioCache(prefix: 'assets/audio/');
 
   /// Plays a single run of the given [file]
   Future<AudioPlayer> play(String file, {volume = 1.0}) {
