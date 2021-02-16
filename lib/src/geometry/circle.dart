@@ -52,8 +52,10 @@ class Circle extends Shape {
   ///
   /// This can be an empty list (if they don't intersect)
   /// one point (if the line is tangent) or two points (if the line is secant).
-  List<Vector2> lineSegmentIntersections(LineSegment line,
-      {double epsilon = double.minPositive}) {
+  List<Vector2> lineSegmentIntersections(
+    LineSegment line, {
+    double epsilon = double.minPositive,
+  }) {
     double sq(double x) => pow(x, 2).toDouble();
 
     final double cx = shapeCenter.x;

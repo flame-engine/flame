@@ -5,8 +5,8 @@ import 'line_segment.dart';
 import 'shape.dart';
 import '../../extensions.dart';
 
-/// Check whether any [Collidable] in [collidables] collide with each other
-/// or [screenSize] (if defined), and call callbacks accordingly
+/// Check whether any [Collidable] in [collidables] collide with each other and
+/// call their onCollision methods accordingly.
 void collisionDetection(List<Collidable> collidables) {
   for (int x = 0; x < collidables.length; x++) {
     final collidableX = collidables[x];

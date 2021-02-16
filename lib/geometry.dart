@@ -1,6 +1,6 @@
 export 'src/geometry/circle.dart';
 export 'src/geometry/line_segment.dart';
-export 'src/geometry/linear_function.dart';
+export 'src/geometry/line.dart';
 export 'src/geometry/polygon.dart';
 export 'src/geometry/rectangle.dart';
 export 'src/geometry/shape.dart';

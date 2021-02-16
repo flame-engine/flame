@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/geometry.dart' as geometry;
 import 'package:flame/src/geometry/circle.dart';
 import 'package:flame/src/geometry/line_segment.dart';
-import 'package:flame/src/geometry/linear_function.dart';
+import 'package:flame/src/geometry/line.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -95,31 +95,31 @@ void main() {
 
   group('LinearFunction.intersections tests', () {
     test('Simple line intersection', () {
-      const line1 = const LinearFunction(1, -1, 0);
-      const line2 = const LinearFunction(1, 1, 0);
+      const line1 = const Line(1, -1, 0);
+      const line2 = const Line(1, 1, 0);
       final intersection = line1.intersections(line2);
       assert(intersection.isNotEmpty, 'Should have intersection');
       assert(intersection.first == Vector2.all(0));
     });
 
     test('Lines with c value', () {
-      const line1 = const LinearFunction(1, 1, 1);
-      const line2 = const LinearFunction(1, -1, 1);
+      const line1 = const Line(1, 1, 1);
+      const line2 = const Line(1, -1, 1);
       final intersection = line1.intersections(line2);
       assert(intersection.isNotEmpty, 'Should have intersection');
       assert(intersection.first == Vector2(1, 0));
     });
 
     test('Does not catch parallel lines', () {
-      const line1 = const LinearFunction(1, 1, -3);
-      const line2 = const LinearFunction(1, 1, 6);
+      const line1 = const Line(1, 1, -3);
+      const line2 = const Line(1, 1, 6);
       final intersection = line1.intersections(line2);
       assert(intersection.isEmpty, 'Should not have intersection');
     });
 
     test('Does not catch same line', () {
-      const line1 = const LinearFunction(1, 1, 1);
-      const line2 = const LinearFunction(1, 1, 1);
+      const line1 = const Line(1, 1, 1);
+      const line2 = const Line(1, 1, 1);
       final intersection = line1.intersections(line2);
       assert(intersection.isEmpty, 'Should not have intersection');
     });
@@ -127,28 +127,28 @@ void main() {
 
   group('LinearEquation.fromPoints tests', () {
     test('Simple line from points', () {
-      final line = LinearFunction.fromPoints(Vector2.zero(), Vector2.all(1));
+      final line = Line.fromPoints(Vector2.zero(), Vector2.all(1));
       assert(line.a == 1.0, "a value is not correct");
       assert(line.b == -1.0, "b value is not correct");
       assert(line.c == 0.0, "c value is not correct");
     });
 
     test('Line not going through origo', () {
-      final line = LinearFunction.fromPoints(Vector2(-2, 0), Vector2(0, 2));
+      final line = Line.fromPoints(Vector2(-2, 0), Vector2(0, 2));
       assert(line.a == 2.0, "a value is not correct");
       assert(line.b == -2.0, "b value is not correct");
       assert(line.c == -4.0, "c value is not correct");
     });
 
     test('Straight vertical line', () {
-      final line = LinearFunction.fromPoints(Vector2.all(1), Vector2(1, -1));
+      final line = Line.fromPoints(Vector2.all(1), Vector2(1, -1));
       assert(line.a == -2.0, "a value is not correct");
       assert(line.b == 0.0, "b value is not correct");
       assert(line.c == -2.0, "c value is not correct");
     });
 
     test('Straight horizontal line', () {
-      final line = LinearFunction.fromPoints(Vector2.all(1), Vector2(2, 1));
+      final line = Line.fromPoints(Vector2.all(1), Vector2(2, 1));
       assert(line.a == 0.0, "a value is not correct");
       assert(line.b == -1.0, "b value is not correct");
       assert(line.c == -1.0, "c value is not correct");
@@ -158,35 +158,35 @@ void main() {
   group('LineSegment.pointsAt tests', () {
     test('Simple pointing', () {
       final segment = LineSegment(Vector2.zero(), Vector2.all(1));
-      const line = const LinearFunction(1, 1, 3);
+      const line = const Line(1, 1, 3);
       final isPointingAt = segment.pointsAt(line);
       assert(isPointingAt, 'Line should be pointed at');
     });
 
     test('Is not pointed at when crossed', () {
       final segment = LineSegment(Vector2.zero(), Vector2.all(3));
-      const line = const LinearFunction(1, 1, 3);
+      const line = const Line(1, 1, 3);
       final isPointingAt = segment.pointsAt(line);
       assert(!isPointingAt, 'Line should not be pointed at');
     });
 
     test('Is not pointed at when parallel', () {
       final segment = LineSegment(Vector2.zero(), Vector2(1, -1));
-      const line = const LinearFunction(1, 1, 3);
+      const line = const Line(1, 1, 3);
       final isPointingAt = segment.pointsAt(line);
       assert(!isPointingAt, 'Line should not be pointed at');
     });
 
     test('Horizonal line can be pointed at', () {
       final segment = LineSegment(Vector2.zero(), Vector2.all(1));
-      const line = const LinearFunction(0, 1, 2);
+      const line = const Line(0, 1, 2);
       final isPointingAt = segment.pointsAt(line);
       assert(isPointingAt, 'Line should be pointed at');
     });
 
     test('Vertical line can be pointed at', () {
       final segment = LineSegment(Vector2.zero(), Vector2.all(1));
-      const line = const LinearFunction(1, 0, 2);
+      const line = const Line(1, 0, 2);
       final isPointingAt = segment.pointsAt(line);
       assert(isPointingAt, 'Line should be pointed at');
     });

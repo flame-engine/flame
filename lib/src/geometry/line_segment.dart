@@ -1,4 +1,4 @@
-import 'linear_function.dart';
+import 'line.dart';
 import '../../extensions.dart';
 
 class LineSegment {
@@ -76,7 +76,7 @@ class LineSegment {
     return true;
   }
 
-  bool pointsAt(LinearFunction line) {
+  bool pointsAt(Line line) {
     final result = toLine().intersections(line);
     if (result.isNotEmpty) {
       final delta = to - from;
@@ -92,7 +92,7 @@ class LineSegment {
     return false;
   }
 
-  LinearFunction toLine() => LinearFunction.fromPoints(from, to);
+  Line toLine() => Line.fromPoints(from, to);
 
   @override
   String toString() {
