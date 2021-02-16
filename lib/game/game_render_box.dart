@@ -77,10 +77,13 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
   }
 
-  // TODO(luan): this was added to flutter beta but pub is still using an old version to lint
-  // in this state it will work for all flutter channels until stable catches up
-  // ignore: annotate_overrides
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     game.lifecycleStateChange(state);
   }
+
+  // TODO(luan): this was added to flutter beta but pub is still using an old version to lint
+  // in this state it will work for all flutter channels until stable catches up
+  // ignore: annotate_overrides
+  Size computeDryLayout(BoxConstraints constraints) => constraints.biggest;
 }
