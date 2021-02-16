@@ -20,9 +20,9 @@ import 'mixins/hitbox.dart';
 /// rendered automatically when this is updated and rendered.
 /// They are translated by this component's (x,y). They do not need to fit
 /// within this component's (width, height).
-abstract class PositionComponent extends BaseComponent {
+class PositionComponent extends BaseComponent {
   /// The position of this component on the screen (relative to the anchor).
-  Vector2 position = Vector2.zero();
+  Vector2 position;
 
   /// X position of this component on the screen (relative to the anchor).
   double get x => position.x;
@@ -34,7 +34,7 @@ abstract class PositionComponent extends BaseComponent {
 
   /// The size that this component is rendered with.
   /// This is not necessarily the source size of the asset.
-  Vector2 size = Vector2.zero();
+  Vector2 size;
 
   /// Width (size) that this component is rendered with.
   double get width => size.x;
@@ -107,6 +107,13 @@ abstract class PositionComponent extends BaseComponent {
   Vector2 rotatePoint(Vector2 point) {
     return point.clone()..rotate(angle, center: position);
   }
+
+  PositionComponent({Vector2 position, Vector2 size})
+      : position = Vector2.zero() ?? position,
+        size = Vector2.zero() ?? size;
+
+  factory PositionComponent.position({double x = 0.0, double y = 0.0}) =>
+      PositionComponent(position: Vector2(x, y));
 
   @override
   bool containsPoint(Vector2 point) {

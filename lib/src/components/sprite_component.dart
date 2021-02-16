@@ -24,14 +24,35 @@ class SpriteComponent extends PositionComponent {
   Paint overridePaint;
 
   /// Creates a component with an empty sprite which can be set later
-  SpriteComponent();
+  SpriteComponent({
+    Vector2 position,
+    Vector2 size,
+    this.sprite,
+    this.overridePaint,
+  }) : super(position: position, size: size);
 
-  SpriteComponent.fromImage(Vector2 size, Image image)
-      : this.fromSprite(size, Sprite(image));
+  @Deprecated('Use SpriteComponent instead')
+  factory SpriteComponent.fromImage(Vector2 size, Image image) =>
+      SpriteComponent(size: size, sprite: Sprite(image));
 
+  @Deprecated('Use SpriteComponent instead')
   SpriteComponent.fromSprite(Vector2 size, this.sprite) {
     super.size.setFrom(size);
   }
+
+  factory SpriteComponent.position(
+    double x,
+    double y, {
+    Vector2 size,
+    Sprite sprite,
+    Paint overridePaint,
+  }) =>
+      SpriteComponent(
+        position: Vector2(x, y),
+        size: size,
+        sprite: sprite,
+        overridePaint: overridePaint,
+      );
 
   @mustCallSuper
   @override
