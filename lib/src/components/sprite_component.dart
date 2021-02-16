@@ -40,20 +40,6 @@ class SpriteComponent extends PositionComponent {
     super.size.setFrom(size);
   }
 
-  factory SpriteComponent.position(
-    double x,
-    double y, {
-    Vector2 size,
-    Sprite sprite,
-    Paint overridePaint,
-  }) =>
-      SpriteComponent(
-        position: Vector2(x, y),
-        size: size,
-        sprite: sprite,
-        overridePaint: overridePaint,
-      );
-
   @mustCallSuper
   @override
   void render(Canvas canvas) {

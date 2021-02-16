@@ -27,11 +27,15 @@ class MyGame extends BaseGame {
         spriteSheet.createAnimation(row: 1, stepTime: 0.1, to: 7);
     final spriteSize = Vector2(80.0, 90.0);
 
-    final vampireComponent = SpriteAnimationComponent.position(150, 100,
-        size: spriteSize, animation: vampireAnimation);
+    final vampireComponent = SpriteAnimationComponent(
+        position: Vector2(150, 100),
+        size: spriteSize,
+        animation: vampireAnimation);
 
-    final ghostComponent = SpriteAnimationComponent.position(150, 220,
-        size: spriteSize, animation: ghostAnimation);
+    final ghostComponent = SpriteAnimationComponent(
+        position: Vector2(150, 220),
+        size: spriteSize,
+        animation: ghostAnimation);
 
     add(vampireComponent);
     add(ghostComponent);

@@ -33,22 +33,6 @@ class SpriteAnimationComponent extends PositionComponent {
   })  : assert(animation != null),
         super(size: size);
 
-  factory SpriteAnimationComponent.position(
-    double x,
-    double y, {
-    Vector2 size,
-    SpriteAnimation animation,
-    Paint overridePaint,
-    bool removeOnFinish = false,
-  }) =>
-      SpriteAnimationComponent(
-        position: Vector2(x, y),
-        size: size,
-        animation: animation,
-        overridePaint: overridePaint,
-        removeOnFinish: removeOnFinish,
-      );
-
   /// Creates a SpriteAnimationComponent from a [size], an [image] and [data]. Check [SpriteAnimationData] for more info on the available options.
   ///
   /// Optionally [removeOnFinish] can be set to true to have this component be auto removed from the [BaseGame] when the animation is finished.

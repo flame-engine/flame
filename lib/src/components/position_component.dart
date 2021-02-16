@@ -112,9 +112,6 @@ class PositionComponent extends BaseComponent {
       : position = position ?? Vector2.zero(),
         size = size ?? Vector2.zero();
 
-  factory PositionComponent.position({double x = 0.0, double y = 0.0}) =>
-      PositionComponent(position: Vector2(x, y));
-
   @override
   bool containsPoint(Vector2 point) {
     final corners = [
