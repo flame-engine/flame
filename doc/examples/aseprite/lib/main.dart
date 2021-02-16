@@ -20,9 +20,11 @@ class MyGame extends BaseGame {
       jsonData,
     );
     final spriteSize = Vector2.all(200);
-    final animationComponent =
-        SpriteAnimationComponent.fromSpriteAnimation(spriteSize, animation)
-          ..position = size / 2 - Vector2.all(100);
+    final animationComponent = SpriteAnimationComponent(
+      position: size / 2 - Vector2.all(100),
+      size: spriteSize,
+      animation: animation,
+    );
 
     add(animationComponent);
   }
