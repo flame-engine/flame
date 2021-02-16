@@ -25,7 +25,7 @@ class AudioPool {
       {this.repeating = false,
       this.maxPlayers = 1,
       this.minPlayers = 1,
-      String prefix = 'audio/sfx/'}) {
+      String prefix = 'assets/audio/sfx/'}) {
     cache = AudioCache(prefix: prefix);
   }
 
