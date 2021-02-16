@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 
-import '../base_component.dart';
-import '../component.dart';
+import '../../../game.dart';
 import '../../extensions/offset.dart';
 import '../../game/base_game.dart';
+import '../base_component.dart';
+import '../component.dart';
 
 mixin Tapable on BaseComponent {
   bool onTapCancel() {
@@ -20,7 +21,6 @@ mixin Tapable on BaseComponent {
   }
 
   int _currentPointerId;
-
   bool _checkPointerId(int pointerId) => _currentPointerId == pointerId;
 
   bool handleTapDown(int pointerId, TapDownDetails details) {

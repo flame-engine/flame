@@ -67,7 +67,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size.setFrom(size);
+      game.onResize(size);
       game.add(component);
       // runs a cycle to add the component
       game.update(0.1);
@@ -80,7 +80,7 @@ void main() {
       final MyGame game = MyGame();
       final MyAsyncComponent component = MyAsyncComponent();
 
-      game.size.setFrom(size);
+      game.onResize(size);
       await game.add(component);
       // runs a cycle to add the component
       game.update(0.1);
@@ -95,7 +95,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size.setFrom(size);
+      game.onResize(size);
       game.add(component);
 
       expect(component.gameSize, size);
@@ -106,7 +106,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size.setFrom(size);
+      game.onResize(size);
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
@@ -119,7 +119,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size.setFrom(size);
+      game.onResize(size);
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
@@ -132,7 +132,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size.setFrom(size);
+      game.onResize(size);
       game.add(component);
       GameRenderBox renderBox;
       tester.pumpWidget(
@@ -158,7 +158,7 @@ void main() {
       final MyGame game = MyGame();
       final MyComponent component = MyComponent();
 
-      game.size.setFrom(size);
+      game.onResize(size);
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);

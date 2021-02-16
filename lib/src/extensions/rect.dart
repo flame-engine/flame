@@ -11,6 +11,10 @@ extension RectExtension on Rect {
 
   /// Creates a [Vector2] starting in top left and going to [width, height].
   Vector2 toVector2() => Vector2(width, height);
+
+  bool containsPoint(Vector2 vector) {
+    return contains(vector.toOffset());
+  }
 }
 
 // Until [extension] will allow static methods we need to keep these functions
@@ -18,10 +22,10 @@ extension RectExtension on Rect {
 class RectFactory {
   /// Creates bounds in from of a [Rect] from a list of [Vector2]
   static Rect fromBounds(List<Vector2> pts) {
-    final double minx = pts.map((e) => e.x).reduce(min);
-    final double maxx = pts.map((e) => e.x).reduce(max);
-    final double miny = pts.map((e) => e.y).reduce(min);
-    final double maxy = pts.map((e) => e.y).reduce(max);
-    return Rect.fromPoints(Offset(minx, miny), Offset(maxx, maxy));
+    final double minX = pts.map((e) => e.x).reduce(min);
+    final double maxX = pts.map((e) => e.x).reduce(max);
+    final double minY = pts.map((e) => e.y).reduce(min);
+    final double maxY = pts.map((e) => e.y).reduce(max);
+    return Rect.fromPoints(Offset(minX, minY), Offset(maxX, maxY));
   }
 }
