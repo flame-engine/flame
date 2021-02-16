@@ -5,9 +5,13 @@ import '../extensions/vector2.dart';
 import 'shape_intersections.dart' as intersection_system;
 
 abstract class Shape {
+  /// The position of your shape, it is up to you how you treat this
   Vector2 position = Vector2.zero();
+
   /// The size is the bounding box of the [Shape]
   Vector2 size;
+
+  /// The angle of the shape from its initial definition
   double angle = 0;
 
   Vector2 get shapeCenter => position;
