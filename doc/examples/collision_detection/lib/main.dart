@@ -11,6 +11,7 @@ import 'package:flutter/material.dart' hide Image, Draggable;
 import 'dart:ui';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Flame.device.fullScreen();
   final game = MyGame();
   runApp(
