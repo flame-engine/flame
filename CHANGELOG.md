@@ -16,7 +16,7 @@
  - Preventing errors caused by the premature use of size property on game
  - Fix `SpriteAnimationComponent.shouldRemove` use `Component.shouldRemove`
  - Change `PositionComponent` type
- - Added more optional arguments for unified constructors of components
+ - Add more optional arguments for unified constructors of components
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
