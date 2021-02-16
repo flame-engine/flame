@@ -1,4 +1,23 @@
 # Collision detection
+If you want to have a full blown physics engine in your game we recommend that you use
+Forge2D by adding [flame_forge2d](https://github.com/flame-engine/flame_forge2d) as a dependency.
+But if you have a simpler usecase and just want to check for collisions of components and improve
+the accuraccy of gestures, Flame's built-in collision detection will serve you very well.
+
+If you have the following needs you should at least consider to use
+[Forge2D](https://github.com/flame-engine/forge2d):
+ - Interacting realistic forces
+ - Particle systems that can interact with other bodies
+ - Joints between bodies
+ - Very many bodies at the same time
+
+It is a good idea to just use the Flame collision detection system if you on the other hand only
+need some of the following things (since it is slightly simpler to not involve Forge2D):
+ - The ability to act on when some of your components collide
+ - The ability to act on when your components collide with the screen boundaries
+ - Complex shapes to act as a hitbox for your component so that gestures will be more accurate
+ - Hitboxes that can tell what part of a component that collided with something
+
 The collision detection system supports three different types of shapes that you can build hitboxes
 from, these shapes are Polygon, Rectangle and Circle. A hitbox can be represented by many shapes to
 form the area which can be used to either detect collisions or whether it contains a point or not,
@@ -52,7 +71,7 @@ class MyCollidable extends PositionComponent with Hitbox, Collidable {
   ...
 
   @override
-  void collisionCallback(Set<Vector2> points, Collidable other) {
+  void onCollision(Set<Vector2> points, Collidable other) {
     if (other is CollidableScreen) {
       ...
     } else if (other is YourOtherCollidable) {
@@ -64,8 +83,12 @@ class MyCollidable extends PositionComponent with Hitbox, Collidable {
 
 In this example it can be seen how the Dart `is` keyword is used to check which other `Collidable`
 that your component collided with. The set of points is where the hitboxes of the collidables
-intersected. If you want to check collisions with the screen edges you can use the predefined
-[ScreenCollidable](#ScreenCollidable) class.
+intersected. Note that the `onCollision` method will be called on both collidable components if they
+have both implemented the `onCollision` method.
+
+If you want to check collisions with the screen edges, as we do in the example above, you can use
+the predefined [ScreenCollidable](#ScreenCollidable) class and since that one aldo is a `Collidable`
+you can implement your own `onCollision` method for that class if needed.
 
 ### HasCollidables
 If you want to use this collision detection in your game you have to add the `HasCollidables` mixin
