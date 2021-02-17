@@ -37,7 +37,11 @@ class Circle extends Shape {
   void render(Canvas canvas, Paint paint) {
     final localPosition = size / 2 + position;
     final localRelativePosition = (size / 2)..multiply(relativePosition);
-    canvas.drawCircle((localPosition + localRelativePosition).toOffset(), radius, paint,);
+    canvas.drawCircle(
+      (localPosition + localRelativePosition).toOffset(),
+      radius,
+      paint,
+    );
   }
 
   /// Checks whether the represented circle contains the [point].
