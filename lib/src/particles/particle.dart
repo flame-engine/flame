@@ -148,7 +148,11 @@ abstract class Particle {
   /// in radians with [RotatingParticle]
   Particle rotated([double angle = 0]) {
     return RotatingParticle(
-        child: this, lifespan: _lifespan, from: angle, to: angle);
+      child: this,
+      lifespan: _lifespan,
+      from: angle,
+      to: angle,
+    );
   }
 
   /// Rotates this particle from given angle
