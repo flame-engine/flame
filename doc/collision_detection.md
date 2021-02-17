@@ -149,6 +149,11 @@ HitboxPolygon([
 ]);
 ```
 
+The other hitbox shapes don't have any mandatory constructor, but that is because they can have a
+sane default calculated from the size of the collidable that they are attached to, but since a
+polygon can be made in an infinite number of ways inside of a bounding box you have to add the
+definition in the constructor for this shape.
+
 The vectors in the example defines percentages of the length from the center to the edge of the
 screen in both x and y axis, so for our first item in our list (`Vector2(0, 1)`) we are pointing on
 on the middle of the top wall of the bounding box, since the cordinate system here is defined from

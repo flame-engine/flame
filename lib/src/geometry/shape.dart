@@ -8,6 +8,9 @@ abstract class Shape {
   /// The position of your shape, it is up to you how you treat this
   Vector2 position = Vector2.zero();
 
+  /// The position of your shape in relation to its size
+  Vector2 relativePosition = Vector2.zero();
+
   /// The size is the bounding box of the [Shape]
   Vector2 size;
 
@@ -54,7 +57,9 @@ mixin HitboxShape on Shape {
 
   /// The shapes center, before rotation
   Vector2 get shapeCenter {
-    return (component.absoluteCenter + position)
+    return component.absoluteCenter +
+        position +
+        ((size / 2)..multiply(relativePosition))
       ..rotate(angle, center: anchorPosition);
   }
 

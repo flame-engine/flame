@@ -129,14 +129,14 @@ class CollidablePolygon extends MyCollidable {
 class CollidableRectangle extends MyCollidable {
   CollidableRectangle(Vector2 position, Vector2 size, Vector2 velocity)
       : super(position, size, velocity) {
-    addShape(HitboxRectangle(Vector2.all(1.0)));
+    addShape(HitboxRectangle());
   }
 }
 
 class CollidableCircle extends MyCollidable {
   CollidableCircle(Vector2 position, Vector2 size, Vector2 velocity)
       : super(position, size, velocity) {
-    final shape = HitboxCircle(1.0);
+    final shape = HitboxCircle();
     addShape(shape);
   }
 }
@@ -145,9 +145,9 @@ class SnowmanPart extends HitboxCircle {
   static const startColor = Colors.white;
   Color currentColor = startColor;
 
-  SnowmanPart(double definition, double yPosition, Color hitColor)
-      : super(definition) {
-    position.y = yPosition;
+  SnowmanPart(double definition, Vector2 relativePosition, Color hitColor)
+      : super(definition: definition) {
+    this.relativePosition.setFrom(relativePosition);
     onCollision = (Set<Vector2> points, HitboxShape other) {
       if (other.component is ScreenCollidable) {
         currentColor = startColor;
@@ -163,7 +163,7 @@ class SnowmanPart extends HitboxCircle {
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke
       ..color = currentColor;
-    canvas.drawCircle((size / 2 + position).toOffset(), radius, hitPaint);
+    super.render(canvas, hitPaint);
   }
 }
 
@@ -171,9 +171,9 @@ class CollidableSnowman extends MyCollidable {
   CollidableSnowman(Vector2 position, Vector2 size, Vector2 velocity)
       : super(position, size, velocity) {
     rotationSpeed = 0.2;
-    final top = SnowmanPart(0.4, -size.y / 2.5, Colors.red);
-    final middle = SnowmanPart(0.6, -size.y / 7, Colors.yellow);
-    final bottom = SnowmanPart(1.0, size.y / 4, Colors.green);
+    final top = SnowmanPart(0.4, Vector2(0, -0.8), Colors.red);
+    final middle = SnowmanPart(0.6, Vector2(0, -0.3), Colors.yellow);
+    final bottom = SnowmanPart(1.0, Vector2(0, 0.5), Colors.green);
     addShape(top);
     addShape(middle);
     addShape(bottom);

@@ -74,7 +74,9 @@ class Polygon extends Shape {
           () => Path()
             ..addPolygon(
               scaled
-                  .map((point) => (point + position + size / 2).toOffset())
+                  .map((point) => (point + (position + size / 2) +
+                  ((size / 2)..multiply(relativePosition)))
+                      .toOffset())
                   .toList(),
               true,
             ),

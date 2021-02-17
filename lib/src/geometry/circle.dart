@@ -22,8 +22,8 @@ class Circle extends Shape {
   /// This constructor is used by [HitboxCircle]
   /// definition is the percentages of the shortest edge of [size] that the
   /// circle should fill.
-  Circle.fromDefinition(
-    this.definition, {
+  Circle.fromDefinition({
+    this.definition = 1.0,
     Vector2 position,
     Vector2 size,
     double angle,
@@ -35,7 +35,9 @@ class Circle extends Shape {
 
   @override
   void render(Canvas canvas, Paint paint) {
-    canvas.drawCircle((size / 2 + position).toOffset(), radius, paint);
+    final localPosition = size / 2 + position;
+    final localRelativePosition = (size / 2)..multiply(relativePosition);
+    canvas.drawCircle((localPosition + localRelativePosition).toOffset(), radius, paint,);
   }
 
   /// Checks whether the represented circle contains the [point].
@@ -77,12 +79,16 @@ class Circle extends Shape {
       result.add(Vector2(point1.x + t * delta.x, point1.y + t * delta.y));
     } else {
       final double t1 = (-B + sqrt(det)) / (2 * A);
-      final Vector2 i1 =
-          Vector2(point1.x + t1 * delta.x, point1.y + t1 * delta.y);
+      final Vector2 i1 = Vector2(
+        point1.x + t1 * delta.x,
+        point1.y + t1 * delta.y,
+      );
 
       final double t2 = (-B - sqrt(det)) / (2 * A);
-      final Vector2 i2 =
-          Vector2(point1.x + t2 * delta.x, point1.y + t2 * delta.y);
+      final Vector2 i2 = Vector2(
+        point1.x + t2 * delta.x,
+        point1.y + t2 * delta.y,
+      );
 
       result.addAll([i1, i2]);
     }
@@ -93,5 +99,8 @@ class Circle extends Shape {
 
 class HitboxCircle extends Circle with HitboxShape {
   @override
-  HitboxCircle(double definition) : super.fromDefinition(definition);
+  HitboxCircle({double definition = 1})
+      : super.fromDefinition(
+          definition: definition ?? 1,
+        );
 }

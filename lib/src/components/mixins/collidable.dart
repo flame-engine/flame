@@ -11,7 +11,7 @@ mixin Collidable on Hitbox {
 
 class ScreenCollidable extends PositionComponent with Hitbox, Collidable {
   ScreenCollidable() {
-    addShape(HitboxRectangle(Vector2.all(1.0)));
+    addShape(HitboxRectangle());
   }
 
   @override

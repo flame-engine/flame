@@ -70,5 +70,8 @@ class Rectangle extends Polygon {
 }
 
 class HitboxRectangle extends Rectangle with HitboxShape {
-  HitboxRectangle(Vector2 relation) : super.fromDefinition(relation: relation);
+  HitboxRectangle({Vector2 relation})
+      : super.fromDefinition(
+          relation: relation ?? Vector2.all(1),
+        );
 }
