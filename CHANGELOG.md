@@ -14,9 +14,14 @@
  - Change RaisedButton to ElevatedButton in timer example
  - Overhaul the draggables api to fix issues relating to local vs global positions
  - Preventing errors caused by the premature use of size property on game
+<<<<<<< HEAD
  - Fix `SpriteAnimationComponent.shouldRemove` use `Component.shouldRemove`
  - Change `PositionComponent` type
  - Add more optional arguments for unified constructors of components
+=======
+ - Change `PositionComponent` type
+ - Added more optional arguments for unified constructors of components
+>>>>>>> fix typo
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
