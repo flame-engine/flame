@@ -136,7 +136,7 @@ class CollidableRectangle extends MyCollidable {
 class CollidableCircle extends MyCollidable {
   CollidableCircle(Vector2 position, Vector2 size, Vector2 velocity)
       : super(position, size, velocity) {
-    final shape = HitboxCircle();
+    final shape = HitboxCircle(1.0);
     addShape(shape);
   }
 }
@@ -145,8 +145,8 @@ class SnowmanPart extends HitboxCircle {
   static const startColor = Colors.white;
   Color currentColor = startColor;
 
-  SnowmanPart(double definition, double yPosition, Color hitColor) {
-    this.definition = definition;
+  SnowmanPart(double definition, double yPosition, Color hitColor)
+      : super(definition) {
     position.y = yPosition;
     onCollision = (Set<Vector2> points, HitboxShape other) {
       if (other.component is ScreenCollidable) {

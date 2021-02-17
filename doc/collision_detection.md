@@ -129,19 +129,19 @@ the position of the shape deviate from the center of the component. A HitboxShap
 shape that you add to your Hitbox, or Collidable. Usually these types of shapes are the only ones
 that you need to use.
 
-#### Polygon
+#### HitboxPolygon
 It should be noted that if you want to use collision detection or `containsPoint` on the `Polygon`,
 the polygon needs to be convex. So always use convex polygons or you will most likely run into
 problems if you don't really know what you are doing. It should also be noted that you should always
 define the vertices in your polygon in a clockwise order.
 
-There are two ways to create a `Polygon`, either use the normal constructor where the only mandatory
-argument is a list of `Vector2` which defines how your polygon should look, but now the size or
-position of it. For example you could create a diamond like in the [Collidable](#Collidable) example
-like this:
+In comparision to the normal `Polygon`, there is only one way to create a `HitboxPolygon`, the only
+mandatory argument is a list of `Vector2` which defines how your polygon should look, but not the
+size or position for it (since that sill be defined by the component that you attach it to).
+For example you could create a diamond like in the [Collidable](#Collidable) example like this:
 
 ```dart
-Polygon([
+HitboxPolygon([
   Vector2(0, 1),  // Middle of top wall
   Vector2(1, 0),  // Middle of right wall
   Vector2(0, -1), // Middle of bottom wall
@@ -159,25 +159,47 @@ the center of the polygon.
 In the image you can see how the polygon shape formed by the purple arrows is defined by the red
 arrows.
 
+
+#### HitboxRectangle
+A `HitboxRectangle` is really just a simplified Polygon, but it can be defined more easily.
+To create rectangle you add a `relation` in the constructor which defines the relationship between
+the length of the horizontal and vertical side and the size of the bounding box. To create a
+`HitboxRectangle` that has half of the width and the full height of the bounding box (`size`)) you
+do this: `Rectangle(Vector2(0.5, 1.0));`.
+
+Once you have added the `HitboxRectangle` to a collidable component it will be sized and positioned
+in relation to that component. So if the size of your component is `Vector2(400, 200)` and the
+relation argument is the same as above your rectangle would be placed in the middle of the component
+and be 200 pixels wide and 200 pixels tall.
+
+#### HitboxCircle
+When creating a `Circle` you can define how long the radius is in comparison to the shortest edge
+of the bounding box, this is the `definition` argument.
+
+So if you want to create a circle that is positioned as for example a head for your component that
+has the size `Vector2(100, 400)` and you want the head to be half of the width and positioned on the
+top third of the component you would write something like this:
+
+`HitboxCircle(0.5)`
+
+### Normal Shapes
+These shapes are meant as a tool for using geometrical shapes in a more general way that together
+with the collision detection system.
+
+#### Polygon
 You can also create you `Polygon` by using the `fromPositions(List<Vector2> positions)` factory.
 With this one you can simple add a list of points on the canvas and it will transform it into
 a polygon with a size, which can still be scaled and rotated.
 
 #### Rectangle
-A `Rectangle` is really just a simplified Polygon, but it can be defined more easily. By default a
-`Rectangle` is a square, but if you want it to be a rectangle you add a definition in the
-constructor. The definition is a vector which explains the relationship between the length of the
-horizontal and vertical sides. To create a `Rectangle` that has double the width to the height you
-do like this: `Rectangle(Vector2(0.5, 1.0));`.
 
 Dart already has an excellent way to create rectangles and that class is called `Rect`, you can
 create a Flame `Rectangle` from a `Rect` by using the `Rectangle.fromRect` factory, and just like
 with the `Polygon` factory, your rectangle will be sized according to the `Rect` if you use this
 factory.
 
-#### Circle
-When creating a `Circle` you can optionally define how long the radius is in comparison to the size,
-this is the `definition` argument and it is the percentage of the `size` of the circle.
+#### Cirlce
+
 If you know how long your circle's radius is going to be from the start you can use the `fromRadius`
 factory and it will set both the `definition` and the `size` of the circle for you.
 

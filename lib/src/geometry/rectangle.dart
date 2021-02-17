@@ -12,6 +12,19 @@ class Rectangle extends Polygon {
     Vector2(-1, 1),
   ];
 
+  Rectangle({
+    Vector2 position,
+    Vector2 size,
+    double angle,
+  }) : super.fromDefinition(
+          _defaultDefinition,
+          position: position,
+          size: size,
+          angle: angle,
+        );
+
+  /// This constructor is used by [HitboxRectangle] and is most often not useful
+  /// for any other cases.
   /// The [relation] describes the relationship between x and y and the size of
   /// the rectangle, both x and y in [relation] should be less or equal to 1.0
   /// if this should be used for collision detection.
@@ -23,12 +36,12 @@ class Rectangle extends Polygon {
   ///
   /// If you want to create the [Rectangle] from a positioned [Rect] instead,
   /// have a look at [Rectangle.toRect].
-  Rectangle({
+  Rectangle.fromDefinition({
     Vector2 relation,
     Vector2 position,
     Vector2 size,
     double angle,
-  }) : super(
+  }) : super.fromDefinition(
             relation != null
                 ? [
                     relation.clone(),
@@ -48,7 +61,7 @@ class Rectangle extends Polygon {
     Rect rect, {
     double angle,
   }) {
-    return Rectangle(
+    return Rectangle.fromDefinition(
       position: rect.center.toVector2(),
       size: rect.size.toVector2(),
       angle: angle,
@@ -57,5 +70,5 @@ class Rectangle extends Polygon {
 }
 
 class HitboxRectangle extends Rectangle with HitboxShape {
-  HitboxRectangle(Vector2 relation) : super(relation: relation);
+  HitboxRectangle(Vector2 relation) : super.fromDefinition(relation: relation);
 }

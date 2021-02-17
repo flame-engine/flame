@@ -22,8 +22,8 @@ class Circle extends Shape {
   /// This constructor is used by [HitboxCircle]
   /// definition is the percentages of the shortest edge of [size] that the
   /// circle should fill.
-  Circle.fromDefinition({
-    this.definition = 1.0,
+  Circle.fromDefinition(
+    this.definition, {
     Vector2 position,
     Vector2 size,
     double angle,
@@ -93,5 +93,5 @@ class Circle extends Shape {
 
 class HitboxCircle extends Circle with HitboxShape {
   @override
-  HitboxCircle() : super.fromDefinition();
+  HitboxCircle(double definition) : super.fromDefinition(definition);
 }

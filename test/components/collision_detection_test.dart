@@ -194,13 +194,13 @@ void main() {
 
   group('Polygon intersections tests', () {
     test('Simple polygon collision', () {
-      final polygonA = Polygon.fromPositions([
+      final polygonA = Polygon([
         Vector2(2, 2),
         Vector2(3, 1),
         Vector2(2, 0),
         Vector2(1, 1),
       ]);
-      final polygonB = Polygon.fromPositions([
+      final polygonB = Polygon([
         Vector2(1, 2),
         Vector2(2, 1),
         Vector2(1, 0),
@@ -219,13 +219,13 @@ void main() {
     });
 
     test('Collision on shared line segment', () {
-      final polygonA = Polygon.fromPositions([
+      final polygonA = Polygon([
         Vector2(1, 1),
         Vector2(1, 2),
         Vector2(2, 2),
         Vector2(2, 1),
       ]);
-      final polygonB = Polygon.fromPositions([
+      final polygonB = Polygon([
         Vector2(2, 1),
         Vector2(2, 2),
         Vector2(3, 2),
@@ -243,13 +243,13 @@ void main() {
     });
 
     test('One point collision', () {
-      final polygonA = Polygon.fromPositions([
+      final polygonA = Polygon([
         Vector2(1, 1),
         Vector2(1, 2),
         Vector2(2, 2),
         Vector2(2, 1),
       ]);
-      final polygonB = Polygon.fromPositions([
+      final polygonB = Polygon([
         Vector2(2, 2),
         Vector2(2, 3),
         Vector2(3, 3),
@@ -264,7 +264,7 @@ void main() {
     });
 
     test('Collision while no corners are inside the other body', () {
-      final polygonA = Polygon(
+      final polygonA = Polygon.fromDefinition(
         [
           Vector2(1, 1),
           Vector2(1, -1),
@@ -274,7 +274,7 @@ void main() {
         position: Vector2.zero(),
         size: Vector2(2, 4),
       );
-      final polygonB = Polygon(
+      final polygonB = Polygon.fromDefinition(
         [
           Vector2(1, 1),
           Vector2(1, -1),
@@ -298,14 +298,14 @@ void main() {
     });
 
     test('Collision with advanced hitboxes in different quadrants', () {
-      final polygonA = Polygon.fromPositions([
+      final polygonA = Polygon([
         Vector2(0, 0),
         Vector2(-1, 1),
         Vector2(0, 3),
         Vector2(2, 2),
         Vector2(1.5, 0.5),
       ]);
-      final polygonB = Polygon.fromPositions([
+      final polygonB = Polygon([
         Vector2(-2, -2),
         Vector2(-3, 0),
         Vector2(-2, 3),
@@ -465,7 +465,7 @@ void main() {
         position: Vector2.zero(),
         size: Vector2.all(2),
       );
-      final polygon = Polygon.fromPositions([
+      final polygon = Polygon([
         Vector2(1, 2),
         Vector2(2, 1),
         Vector2(1, 0),
@@ -484,7 +484,7 @@ void main() {
         position: Vector2(-1, 1),
         size: Vector2.all(2),
       );
-      final polygon = Polygon.fromPositions([
+      final polygon = Polygon([
         Vector2(1, 2),
         Vector2(2, 1),
         Vector2(1, 0),
@@ -503,7 +503,7 @@ void main() {
         position: Vector2.all(1),
         size: Vector2.all(2),
       );
-      final polygon = Polygon.fromPositions([
+      final polygon = Polygon([
         Vector2(1, 2),
         Vector2(2, 1),
         Vector2(1, 0),
@@ -527,7 +527,7 @@ void main() {
         position: Vector2.all(1),
         size: Vector2.all(2.1),
       );
-      final polygon = Polygon.fromPositions([
+      final polygon = Polygon([
         Vector2(1, 2),
         Vector2(2, 1),
         Vector2(1, 0),

@@ -6,25 +6,13 @@ import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
 import 'shape.dart';
 
-/// The Polygon is defined from the center of the component and with
-/// percentages of the size of the component.
-/// Example: [[1.0, 0.0], [0.0, 1.0], [-1.0, 0.0], [0.0, -1.0]]
-/// This will form a diamond shape within the bounding size box.
-/// NOTE: Always define your shape is a clockwise fashion
 class Polygon extends Shape {
   final List<Vector2> definition;
 
-  Polygon(
-    this.definition, {
-    Vector2 position,
-    Vector2 size,
-    double angle,
-  }) : super(position: position, size: size, angle: angle ?? 0);
-
-  /// With this helper method you can create your [Polygon] from absolute
-  /// positions instead of percentages. This helper will also calculate the size
-  /// and center of the Polygon.
-  factory Polygon.fromPositions(
+  /// With this constructor you create your [Polygon] from positions in your
+  /// intended space. It will automatically calculate the [size] and center
+  /// ([position]) of the Polygon.
+  factory Polygon(
     List<Vector2> positions, {
     double angle = 0,
   }) {
@@ -45,13 +33,25 @@ class Polygon extends Shape {
     final halfSize = bottomRight - center;
     final definition =
         positions.map<Vector2>((v) => (v - center)..divide(halfSize)).toList();
-    return Polygon(
+    return Polygon.fromDefinition(
       definition,
       position: center,
       size: halfSize * 2,
       angle: angle,
     );
   }
+
+  /// With this constructor you define the [Polygon] from the center of and with
+  /// percentages of the size of the shape.
+  /// Example: [[1.0, 0.0], [0.0, 1.0], [-1.0, 0.0], [0.0, -1.0]]
+  /// This will form a diamond shape within the bounding size box.
+  /// NOTE: Always define your shape is a clockwise fashion
+  Polygon.fromDefinition(
+    this.definition, {
+    Vector2 position,
+    Vector2 size,
+    double angle,
+  }) : super(position: position, size: size, angle: angle ?? 0);
 
   final _cachedScaledShape = ShapeCache<Iterable<Vector2>>();
 
@@ -141,5 +141,5 @@ class Polygon extends Shape {
 }
 
 class HitboxPolygon extends Polygon with HitboxShape {
-  HitboxPolygon(List<Vector2> definition) : super(definition);
+  HitboxPolygon(List<Vector2> definition) : super.fromDefinition(definition);
 }
