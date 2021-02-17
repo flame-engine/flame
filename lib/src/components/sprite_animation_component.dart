@@ -47,8 +47,8 @@ class SpriteAnimationComponent extends PositionComponent {
   /// [Component.shouldRemove] worked here.
   @override
   bool get shouldRemove =>
-      (removeOnFinish && (animation?.isLastFrame ?? false)) ||
-      super.shouldRemove;
+      super.shouldRemove ||
+      (removeOnFinish && (animation?.isLastFrame ?? false));
 
   @mustCallSuper
   @override
