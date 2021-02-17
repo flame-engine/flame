@@ -17,6 +17,7 @@
  - Added a hitbox mixin for PositionComponent to make more accurate gestures
  - Added a collision detection system
  - Added geometrical shapes
+ - Fix `SpriteAnimationComponent.shouldRemove` use `Component.shouldRemove`
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
