@@ -21,4 +21,27 @@ class Anchor {
   Vector2 translate(Vector2 p, Vector2 size) {
     return p - (toVector2..multiply(size));
   }
+
+  static final Map<Anchor, String> _valueNames = {
+    topLeft: 'topLeft',
+    topCenter: 'topCenter',
+    topRight: 'topRight',
+    centerLeft: 'centerLeft',
+    center: 'center',
+    centerRight: 'centerRight',
+    bottomLeft: 'bottomLeft',
+    bottomCenter: 'bottomCenter',
+    bottomRight: 'bottomRight',
+  };
+
+  static final List<Anchor> values = _valueNames.keys.toList();
+
+  @override
+  String toString() {
+    return _valueNames[this];
+  }
+
+  static Anchor parse(String name) {
+    return _valueNames.entries.singleWhere((e) => e.value == name).key;
+  }
 }
