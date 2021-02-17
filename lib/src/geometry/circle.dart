@@ -17,7 +17,11 @@ class Circle extends Shape {
     double radius,
     Vector2 position,
     double angle = 0,
-  }) : super(position: position, size: Vector2.all((radius ?? 0) * 2), angle: angle);
+  }) : super(
+          position: position,
+          size: Vector2.all((radius ?? 0) * 2),
+          angle: angle,
+        );
 
   /// This constructor is used by [HitboxCircle]
   /// definition is the percentages of the shortest edge of [size] that the
