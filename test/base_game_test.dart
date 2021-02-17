@@ -173,4 +173,27 @@ void main() {
       expect(component.onRemoveCallCounter, 1);
     });
   });
+
+  test('remove depend SpriteComponent.shouldRemove', () {
+    final game = MyGame()..onResize(size);
+
+    // addLater here
+    game.add(SpriteComponent()..shouldRemove = true);
+    game.update(0);
+    expect(game.components.length, equals(1));
+
+    // remove effected here
+    game.update(0);
+    expect(game.components.isEmpty, equals(true));
+  });
+
+  test('remove depend SpriteAnimationComponent.shouldRemove', () {
+    final game = MyGame()..onResize(size);
+    game.add(SpriteAnimationComponent()..shouldRemove = true);
+    game.update(0);
+    expect(game.components.length, equals(1));
+
+    game.update(0);
+    expect(game.components.isEmpty, equals(true));
+  });
 }

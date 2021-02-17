@@ -14,6 +14,7 @@
  - Change RaisedButton to ElevatedButton in timer example
  - Overhaul the draggables api to fix issues relating to local vs global positions
  - Preventing errors caused by the premature use of size property on game
+ - Fix `SpriteAnimationComponent.shouldRemove` use `Component.shouldRemove`
  - `PositionComponent` remove abstract
  - Component constrctor unified
 
