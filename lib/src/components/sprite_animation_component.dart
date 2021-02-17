@@ -43,8 +43,12 @@ class SpriteAnimationComponent extends PositionComponent {
     );
   }
 
+  /// Component will be removed after loop end and [removeOnFinish] is set.
+  /// [Component.shouldRemove] worked here.
   @override
-  bool get shouldRemove => removeOnFinish && (animation?.isLastFrame ?? false);
+  bool get shouldRemove =>
+      super.shouldRemove ||
+      (removeOnFinish && (animation?.isLastFrame ?? false));
 
   @mustCallSuper
   @override
