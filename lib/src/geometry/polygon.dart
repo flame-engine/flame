@@ -13,15 +13,15 @@ class Polygon extends Shape {
   /// intended space. It will automatically calculate the [size] and center
   /// ([position]) of the Polygon.
   factory Polygon(
-    List<Vector2> positions, {
+    List<Vector2> points, {
     double angle = 0,
   }) {
-    final center = positions.fold<Vector2>(
+    final center = points.fold<Vector2>(
           Vector2.zero(),
           (sum, v) => sum + v,
         ) /
-        positions.length.toDouble();
-    final bottomRight = positions.fold<Vector2>(
+        points.length.toDouble();
+    final bottomRight = points.fold<Vector2>(
       Vector2.zero(),
       (bottomRight, v) {
         return Vector2(
@@ -32,7 +32,7 @@ class Polygon extends Shape {
     );
     final halfSize = bottomRight - center;
     final definition =
-        positions.map<Vector2>((v) => (v - center)..divide(halfSize)).toList();
+        points.map<Vector2>((v) => (v - center)..divide(halfSize)).toList();
     return Polygon.fromDefinition(
       definition,
       position: center,

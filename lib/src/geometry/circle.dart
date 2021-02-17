@@ -13,11 +13,11 @@ class Circle extends Shape {
   /// With this constructor you can create your [Circle] from a radius and
   /// a position. Ir will also calculate the bounding rectangle [size] for the
   /// [Circle].
-  Circle(
+  Circle({
     double radius,
-    Vector2 position, {
+    Vector2 position,
     double angle = 0,
-  }) : super(position: position, size: Vector2.all(radius * 2), angle: angle);
+  }) : super(position: position, size: Vector2.all((radius ?? 0) * 2), angle: angle);
 
   /// This constructor is used by [HitboxCircle]
   /// definition is the percentages of the shortest edge of [size] that the

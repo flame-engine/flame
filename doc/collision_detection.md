@@ -170,7 +170,7 @@ A `HitboxRectangle` is really just a simplified Polygon, but it can be defined m
 To create rectangle you add a `relation` in the constructor which defines the relationship between
 the length of the horizontal and vertical side and the size of the bounding box. To create a
 `HitboxRectangle` that has half of the width and the full height of the bounding box (`size`)) you
-do this: `Rectangle(Vector2(0.5, 1.0));`.
+do this: `HitboxRectangle(definition: Vector2(0.5, 1.0));`.
 
 Once you have added the `HitboxRectangle` to a collidable component it will be sized and positioned
 in relation to that component. So if the size of your component is `Vector2(400, 200)` and the
@@ -182,31 +182,31 @@ When creating a `Circle` you can define how long the radius is in comparison to 
 of the bounding box, this is the `definition` argument.
 
 So if you want to create a circle that is positioned as for example a head for your component that
-has the size `Vector2(100, 400)` and you want the head to be half of the width and positioned on the
-top third of the component you would write something like this:
+has the size `Vector2(100, 400)` and you want the head to be half of the width and have its center
+on the top fourth of the component you would write something like this:
 
-`HitboxCircle(0.5)`
+`HitboxCircle(definition: 0.5)..relativePosition = Vector2(0, 0.5)`
 
 ### Normal Shapes
-These shapes are meant as a tool for using geometrical shapes in a more general way that together
+These shapes are meant as a tool for using geometrical shapes in a more general way than together
 with the collision detection system.
 
 #### Polygon
-You can also create you `Polygon` by using the `fromPositions(List<Vector2> positions)` factory.
-With this one you can simple add a list of points on the canvas and it will transform it into
-a polygon with a size, which can still be scaled and rotated.
+You can also create you `Polygon` by giving it a list of points in the constructor.
+This list will be transformed into a polygon with a size, which can still be scaled and rotated.
 
 #### Rectangle
-
 Dart already has an excellent way to create rectangles and that class is called `Rect`, you can
 create a Flame `Rectangle` from a `Rect` by using the `Rectangle.fromRect` factory, and just like
 with the `Polygon` factory, your rectangle will be sized according to the `Rect` if you use this
 factory.
 
-#### Cirlce
+You can also use the default constructor to build your rectangle from a position, size and angle.
 
-If you know how long your circle's radius is going to be from the start you can use the `fromRadius`
-factory and it will set both the `definition` and the `size` of the circle for you.
+#### Circle
+If you know how long your circle's position and/or how long the radius is going to be from the start
+you can use the optional arguments `radius` and `position` to set those, if the `radius` is set the
+`size` of the `Circle` will be automatically set too.
 
 ## Example
 https://github.com/flame-engine/flame/tree/master/doc/examples/collidables
