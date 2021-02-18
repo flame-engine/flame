@@ -23,7 +23,11 @@ class TapableSquare extends PositionComponent with Tapable {
   Paint _randomPaint() {
     final rng = math.Random();
     final color = Color.fromRGBO(
-        rng.nextInt(256), rng.nextInt(256), rng.nextInt(256), 0.9);
+      rng.nextInt(256),
+      rng.nextInt(256),
+      rng.nextInt(256),
+      0.9,
+    );
     return PaletteEntry(color).paint;
   }
 

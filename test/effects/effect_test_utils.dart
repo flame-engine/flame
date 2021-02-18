@@ -87,8 +87,11 @@ void effectTest(
     );
   }
   expect(effect.hasCompleted(), shouldComplete, reason: "Effect shouldFinish");
-  expect(callback.isCalled, shouldComplete,
-      reason: "Callback was treated wrong");
+  expect(
+    callback.isCalled,
+    shouldComplete,
+    reason: "Callback was treated wrong",
+  );
   game.update(0.0); // Since effects are removed before they are updated
   expect(component.effects.isEmpty, shouldComplete);
 }
