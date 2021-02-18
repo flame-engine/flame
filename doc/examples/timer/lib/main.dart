@@ -13,18 +13,20 @@ class MyGameApp extends StatelessWidget {
     return MaterialApp(routes: {
       '/': (BuildContext context) => Column(children: [
             ElevatedButton(
-                child: const Text('Game'),
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/game');
-                }),
+              child: const Text('Game'),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/game');
+              },
+            ),
             ElevatedButton(
-                child: const Text('BaseGame'),
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/base_game');
-                })
+              child: const Text('BaseGame'),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/base_game');
+              },
+            ),
           ]),
       '/game': (BuildContext context) => GameWidget(game: MyGame()),
-      '/base_game': (BuildContext context) => GameWidget(game: MyBaseGame())
+      '/base_game': (BuildContext context) => GameWidget(game: MyBaseGame()),
     });
   }
 }
