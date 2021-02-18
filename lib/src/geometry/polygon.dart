@@ -59,8 +59,9 @@ class Polygon extends Shape {
   Iterable<Vector2> get scaled {
     if (!_cachedScaledShape.isCacheValid(<dynamic>[size])) {
       _cachedScaledShape.updateCache(
-          () => definition?.map((p) => p.clone()..multiply(size / 2)),
-          <dynamic>[size.clone()]);
+        () => definition?.map((p) => p.clone()..multiply(size / 2)),
+        <dynamic>[size.clone()],
+      );
     }
     return _cachedScaledShape.value;
   }
@@ -71,17 +72,21 @@ class Polygon extends Shape {
   void render(Canvas canvas, Paint paint) {
     if (!_cachedRenderPath.isCacheValid(<dynamic>[position, size])) {
       _cachedRenderPath.updateCache(
-          () => Path()
-            ..addPolygon(
-              scaled
-                  .map((point) => (point +
-                          (position + size / 2) +
-                          ((size / 2)..multiply(relativePosition)))
-                      .toOffset())
-                  .toList(),
-              true,
-            ),
-          <dynamic>[position.clone(), size.clone()]);
+        () => Path()
+          ..addPolygon(
+            scaled
+                .map((point) => (point +
+                        (position + size / 2) +
+                        ((size / 2)..multiply(relativePosition)))
+                    .toOffset())
+                .toList(),
+            true,
+          ),
+        <dynamic>[
+          position.clone(),
+          size.clone(),
+        ],
+      );
     }
     canvas.drawPath(_cachedRenderPath.value, paint);
   }
@@ -93,13 +98,16 @@ class Polygon extends Shape {
   List<Vector2> get hitbox {
     // Use cached bounding vertices if state of the component hasn't changed
     if (!_cachedHitbox.isCacheValid(<dynamic>[position, size, angle])) {
-      _cachedHitbox.updateCache(() {
-        return scaled
-                .map((point) => (point + shapeCenter)
-                  ..rotate(angle, center: anchorPosition))
-                .toList(growable: false) ??
-            [];
-      }, <dynamic>[shapeCenter, size.clone(), angle]);
+      _cachedHitbox.updateCache(
+        () {
+          return scaled
+                  .map((point) => (point + shapeCenter)
+                    ..rotate(angle, center: anchorPosition))
+                  .toList(growable: false) ??
+              [];
+        },
+        <dynamic>[shapeCenter, size.clone(), angle],
+      );
     }
     return _cachedHitbox.value;
   }

@@ -42,17 +42,18 @@ class Rectangle extends Polygon {
     Vector2 size,
     double angle,
   }) : super.fromDefinition(
-            relation != null
-                ? [
-                    relation.clone(),
-                    Vector2(relation.x, -relation.y),
-                    -relation,
-                    Vector2(-relation.x, relation.y),
-                  ]
-                : _defaultDefinition,
-            position: position,
-            size: size,
-            angle: angle);
+          relation != null
+              ? [
+                  relation.clone(),
+                  Vector2(relation.x, -relation.y),
+                  -relation,
+                  Vector2(-relation.x, relation.y),
+                ]
+              : _defaultDefinition,
+          position: position,
+          size: size,
+          angle: angle,
+        );
 
   /// With this helper method you can create your [Rectangle] from a positioned
   /// [Rect] instead of percentages. This helper will also calculate the size

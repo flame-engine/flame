@@ -43,8 +43,11 @@ class LineSegment {
           .toSet();
       if (overlaps.isNotEmpty) {
         return [
-          overlaps.fold<Vector2>(Vector2.zero(), (sum, point) => sum + point) /
-              overlaps.length.toDouble()
+          overlaps.fold<Vector2>(
+                Vector2.zero(),
+                (sum, point) => sum + point,
+              ) /
+              overlaps.length.toDouble(),
         ];
       }
     }

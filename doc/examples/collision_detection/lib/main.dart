@@ -257,6 +257,9 @@ class MyGame extends BaseGame with HasCollidables, HasDraggableComponents {
   void render(Canvas canvas) {
     super.render(canvas);
     fpsTextConfig.render(
-        canvas, '${fps(120).toStringAsFixed(2)}fps', Vector2(0, size.y - 24));
+      canvas,
+      '${fps(120).toStringAsFixed(2)}fps',
+      Vector2(0, size.y - 24),
+    );
   }
 }

@@ -28,7 +28,7 @@ class Line {
       Vector2(
         (otherLine.b * c - b * otherLine.c) / determinant,
         (a * otherLine.c - otherLine.a * c) / determinant,
-      )
+      ),
     ];
   }
 
