@@ -75,21 +75,23 @@ void main() {
       expect(true, game.components.contains(component));
     });
 
-    test('when the component has onLoad function, adds after load completion',
-        () async {
-      final MyGame game = MyGame();
-      final MyAsyncComponent component = MyAsyncComponent();
+    test(
+      'when the component has onLoad function, adds after load completion',
+      () async {
+        final MyGame game = MyGame();
+        final MyAsyncComponent component = MyAsyncComponent();
 
-      game.onResize(size);
-      await game.add(component);
-      // runs a cycle to add the component
-      game.update(0.1);
+        game.onResize(size);
+        await game.add(component);
+        // runs a cycle to add the component
+        game.update(0.1);
 
-      expect(true, game.components.contains(component));
+        expect(true, game.components.contains(component));
 
-      expect(component.gameSize, size);
-      expect(component.gameRef, game);
-    });
+        expect(component.gameSize, size);
+        expect(component.gameRef, game);
+      },
+    );
 
     test('prepare adds gameRef and calls onGameResize', () {
       final MyGame game = MyGame();
@@ -127,32 +129,34 @@ void main() {
       expect(game.components.contains(component), true);
     });
 
-    flutter.testWidgets('component render and update is called',
-        (flutter.WidgetTester tester) async {
-      final MyGame game = MyGame();
-      final MyComponent component = MyComponent();
+    flutter.testWidgets(
+      'component render and update is called',
+      (flutter.WidgetTester tester) async {
+        final MyGame game = MyGame();
+        final MyComponent component = MyComponent();
 
-      game.onResize(size);
-      game.add(component);
-      GameRenderBox renderBox;
-      tester.pumpWidget(
-        Builder(
-          builder: (BuildContext context) {
-            renderBox = GameRenderBox(context, game);
-            return GameWidget(game: game);
-          },
-        ),
-      );
-      renderBox.attach(PipelineOwner());
-      renderBox.gameLoopCallback(1.0);
-      expect(component.isUpdateCalled, true);
-      renderBox.paint(
-        PaintingContext(ContainerLayer(), Rect.zero),
-        Offset.zero,
-      );
-      expect(component.isRenderCalled, true);
-      renderBox.detach();
-    });
+        game.onResize(size);
+        game.add(component);
+        GameRenderBox renderBox;
+        tester.pumpWidget(
+          Builder(
+            builder: (BuildContext context) {
+              renderBox = GameRenderBox(context, game);
+              return GameWidget(game: game);
+            },
+          ),
+        );
+        renderBox.attach(PipelineOwner());
+        renderBox.gameLoopCallback(1.0);
+        expect(component.isUpdateCalled, true);
+        renderBox.paint(
+          PaintingContext(ContainerLayer(), Rect.zero),
+          Offset.zero,
+        );
+        expect(component.isRenderCalled, true);
+        renderBox.detach();
+      },
+    );
 
     test('onRemove is only called once on component', () {
       final MyGame game = MyGame();

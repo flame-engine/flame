@@ -107,20 +107,22 @@ void main() {
     },
   );
 
-  testWidgets('CombinedEffect alternation can peak',
-      (WidgetTester tester) async {
-    final PositionComponent positionComponent = component();
-    effectTest(
-      tester,
-      positionComponent,
-      effect(isAlternating: true),
-      expectedPosition: path.last,
-      expectedAngle: argumentAngle,
-      expectedSize: argumentSize,
-      shouldComplete: false,
-      iterations: 0.5,
-    );
-  });
+  testWidgets(
+    'CombinedEffect alternation can peak',
+    (WidgetTester tester) async {
+      final PositionComponent positionComponent = component();
+      effectTest(
+        tester,
+        positionComponent,
+        effect(isAlternating: true),
+        expectedPosition: path.last,
+        expectedAngle: argumentAngle,
+        expectedSize: argumentSize,
+        shouldComplete: false,
+        iterations: 0.5,
+      );
+    },
+  );
 
   testWidgets('CombinedEffect can be infinite', (WidgetTester tester) async {
     final PositionComponent positionComponent = component();
@@ -136,45 +138,51 @@ void main() {
     );
   });
 
-  testWidgets('CombinedEffect can contain alternating MoveEffect',
-      (WidgetTester tester) async {
-    final PositionComponent positionComponent = component();
-    effectTest(
-      tester,
-      positionComponent,
-      effect(hasAlternatingMoveEffect: true),
-      expectedPosition: positionComponent.position.clone(),
-      expectedAngle: argumentAngle,
-      expectedSize: argumentSize,
-      shouldComplete: true,
-    );
-  });
+  testWidgets(
+    'CombinedEffect can contain alternating MoveEffect',
+    (WidgetTester tester) async {
+      final PositionComponent positionComponent = component();
+      effectTest(
+        tester,
+        positionComponent,
+        effect(hasAlternatingMoveEffect: true),
+        expectedPosition: positionComponent.position.clone(),
+        expectedAngle: argumentAngle,
+        expectedSize: argumentSize,
+        shouldComplete: true,
+      );
+    },
+  );
 
-  testWidgets('CombinedEffect can contain alternating RotateEffect',
-      (WidgetTester tester) async {
-    final PositionComponent positionComponent = component();
-    effectTest(
-      tester,
-      positionComponent,
-      effect(hasAlternatingRotateEffect: true),
-      expectedPosition: path.last,
-      expectedAngle: positionComponent.angle,
-      expectedSize: argumentSize,
-      shouldComplete: true,
-    );
-  });
+  testWidgets(
+    'CombinedEffect can contain alternating RotateEffect',
+    (WidgetTester tester) async {
+      final PositionComponent positionComponent = component();
+      effectTest(
+        tester,
+        positionComponent,
+        effect(hasAlternatingRotateEffect: true),
+        expectedPosition: path.last,
+        expectedAngle: positionComponent.angle,
+        expectedSize: argumentSize,
+        shouldComplete: true,
+      );
+    },
+  );
 
-  testWidgets('CombinedEffect can contain alternating ScaleEffect',
-      (WidgetTester tester) async {
-    final PositionComponent positionComponent = component();
-    effectTest(
-      tester,
-      positionComponent,
-      effect(hasAlternatingScaleEffect: true),
-      expectedPosition: path.last,
-      expectedAngle: argumentAngle,
-      expectedSize: positionComponent.size.clone(),
-      shouldComplete: true,
-    );
-  });
+  testWidgets(
+    'CombinedEffect can contain alternating ScaleEffect',
+    (WidgetTester tester) async {
+      final PositionComponent positionComponent = component();
+      effectTest(
+        tester,
+        positionComponent,
+        effect(hasAlternatingScaleEffect: true),
+        expectedPosition: path.last,
+        expectedAngle: argumentAngle,
+        expectedSize: positionComponent.size.clone(),
+        shouldComplete: true,
+      );
+    },
+  );
 }
