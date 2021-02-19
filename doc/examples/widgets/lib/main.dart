@@ -37,24 +37,25 @@ void main() async {
 
   final nineTileBoxImage = await Flame.images.load('nine_tile_box.png');
   dashbook.storiesOf('NineTileBox').decorator(CenterDecorator()).add(
-      'default',
-      (ctx) => Container(
-            width: ctx.numberProperty('width', 200),
-            height: ctx.numberProperty('height', 200),
-            child: NineTileBox(
-              image: nineTileBoxImage,
-              tileSize: 16,
-              destTileSize: 50,
-              child: const Center(
-                child: const Text(
-                  'Cool label',
-                  style: const TextStyle(
-                    color: const Color(0xFFFFFFFF),
-                  ),
+        'default',
+        (ctx) => Container(
+          width: ctx.numberProperty('width', 200),
+          height: ctx.numberProperty('height', 200),
+          child: NineTileBox(
+            image: nineTileBoxImage,
+            tileSize: 16,
+            destTileSize: 50,
+            child: const Center(
+              child: const Text(
+                'Cool label',
+                style: const TextStyle(
+                  color: const Color(0xFFFFFFFF),
                 ),
               ),
             ),
-          ));
+          ),
+        ),
+      );
 
   final buttonsImage = await Flame.images.load('buttons.png');
   final _buttons = SpriteSheet(

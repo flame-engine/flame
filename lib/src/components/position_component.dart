@@ -117,7 +117,8 @@ class PositionComponent extends BaseComponent {
     final corners = [
       rotatePoint(absoluteTopLeftPosition), // Top-left
       rotatePoint(
-          absoluteTopLeftPosition + Vector2(0.0, size.y)), // Bottom-left
+        absoluteTopLeftPosition + Vector2(0.0, size.y),
+      ), // Bottom-left
       rotatePoint(absoluteTopLeftPosition + size), // Bottom-right
       rotatePoint(absoluteTopLeftPosition + Vector2(size.x, 0.0)), // Top-right
     ];
