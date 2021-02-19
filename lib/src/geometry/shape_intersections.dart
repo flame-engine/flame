@@ -22,7 +22,7 @@ abstract class Intersections<T1 extends Shape, T2 extends Shape> {
     } else if (shapeA is T2 && shapeB is T1) {
       return intersect(shapeB, shapeA);
     } else {
-      throw "Unsupported shapes";
+      throw 'Unsupported shapes';
     }
   }
 }

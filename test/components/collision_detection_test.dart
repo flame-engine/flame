@@ -93,7 +93,7 @@ void main() {
     });
   });
 
-  group('LinearFunction.intersections tests', () {
+  group('Line.intersections tests', () {
     test('Simple line intersection', () {
       const line1 = const Line(1, -1, 0);
       const line2 = const Line(1, 1, 0);

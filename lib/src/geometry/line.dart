@@ -18,10 +18,12 @@ class Line {
   }
 
   /// Returns an empty list if there is no intersection
+  /// If the lines are concurrent it returns one point in the list.
+  /// If they coincide it returns an empty list as well
   List<Vector2> intersections(Line otherLine) {
     final determinant = a * otherLine.b - otherLine.a * b;
     if (determinant == 0) {
-      //The lines are parallel and have no intersection
+      //The lines are parallel (potentially coincides) and have no intersection
       return [];
     }
     return [
@@ -32,13 +34,13 @@ class Line {
     ];
   }
 
-  /// The angle of this line
+  /// The angle of this line in relation to the x-axis
   double get angle => atan2(-a, b);
 
   @override
   String toString() {
-    final a0 = "${a}x";
-    final b0 = b.isNegative ? "${b}y" : "+${b}y";
-    return "$a0$b0=$c";
+    final ax = "${a}x";
+    final by = b.isNegative ? "${b}y" : "+${b}y";
+    return "$ax$by=$c";
   }
 }

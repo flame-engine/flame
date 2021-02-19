@@ -18,9 +18,9 @@ class LineSegment {
     return true;
   }
 
-  /// Returns an empty list if there are no intersections
-  /// If the segment overlap (not cross) the middle of the intersecting part is
-  /// the result
+  /// Returns an empty list if there are no intersections between the segments
+  /// If the segments are concurrent, the intersecting point is returned as a
+  /// list with a single point
   List<Vector2> intersections(LineSegment otherSegment) {
     final result = toLine().intersections(otherSegment.toLine());
     if (result.isNotEmpty) {
@@ -54,8 +54,7 @@ class LineSegment {
     return [];
   }
 
-  bool containsPoint(Vector2 point) {
-    const epsilon = 0.00001;
+  bool containsPoint(Vector2 point, {double epsilon = 0.000001}) {
     final delta = to - from;
     final crossProduct =
         (point.y - from.y) * delta.x - (point.x - from.x) * delta.y;

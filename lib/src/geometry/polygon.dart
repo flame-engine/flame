@@ -57,10 +57,10 @@ class Polygon extends Shape {
 
   /// Gives back the shape vectors multiplied by the size
   Iterable<Vector2> get scaled {
-    if (!_cachedScaledShape.isCacheValid(<dynamic>[size])) {
+    if (!_cachedScaledShape.isCacheValid([size])) {
       _cachedScaledShape.updateCache(
-        () => definition?.map((p) => p.clone()..multiply(size / 2)),
-        <dynamic>[size.clone()],
+        definition?.map((p) => p.clone()..multiply(size / 2)),
+        [size.clone()],
       );
     }
     return _cachedScaledShape.value;
@@ -70,9 +70,9 @@ class Polygon extends Shape {
 
   @override
   void render(Canvas canvas, Paint paint) {
-    if (!_cachedRenderPath.isCacheValid(<dynamic>[position, size])) {
+    if (!_cachedRenderPath.isCacheValid([position, size])) {
       _cachedRenderPath.updateCache(
-        () => Path()
+        Path()
           ..addPolygon(
             scaled
                 .map((point) => (point +
@@ -82,7 +82,7 @@ class Polygon extends Shape {
                 .toList(),
             true,
           ),
-        <dynamic>[
+        [
           position.clone(),
           size.clone(),
         ],
@@ -97,16 +97,14 @@ class Polygon extends Shape {
   /// are the "corners" of the hitbox rotated with [angle].
   List<Vector2> get hitbox {
     // Use cached bounding vertices if state of the component hasn't changed
-    if (!_cachedHitbox.isCacheValid(<dynamic>[position, size, angle])) {
+    if (!_cachedHitbox.isCacheValid([position, size, angle])) {
       _cachedHitbox.updateCache(
-        () {
-          return scaled
-                  .map((point) => (point + shapeCenter)
-                    ..rotate(angle, center: anchorPosition))
-                  .toList(growable: false) ??
-              [];
-        },
-        <dynamic>[shapeCenter, size.clone(), angle],
+        scaled
+                .map((point) => (point + shapeCenter)
+                  ..rotate(angle, center: anchorPosition))
+                .toList(growable: false) ??
+            [],
+        [shapeCenter, size.clone(), angle],
       );
     }
     return _cachedHitbox.value;

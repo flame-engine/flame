@@ -81,17 +81,20 @@ class ShapeCache<T> {
 
   ShapeCache();
 
-  bool isCacheValid(List<dynamic> validCacheValues) {
+  bool isCacheValid<T>(List<T> validCacheValues) {
+    if (value == null) {
+      return false;
+    }
     for (int i = 0; i < _lastValidCacheValues.length; ++i) {
       if (_lastValidCacheValues[i] != validCacheValues[i]) {
         return false;
       }
     }
-    return value != null;
+    return true;
   }
 
-  T updateCache(T update(), List<dynamic> validCacheValues) {
-    value = update();
+  T updateCache<F>(T value, List<F> validCacheValues) {
+    this.value = value;
     _lastValidCacheValues = validCacheValues;
     return value;
   }

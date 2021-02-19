@@ -57,8 +57,8 @@ class Circle extends Shape {
   /// Returns the locus of points in which the provided line segment intersect
   /// the circle.
   ///
-  /// This can be an empty list (if they don't intersect)
-  /// one point (if the line is tangent) or two points (if the line is secant).
+  /// This can be an empty list (if they don't intersect), one point (if the
+  /// line is tangent) or two points (if the line is secant).
   List<Vector2> lineSegmentIntersections(
     LineSegment line, {
     double epsilon = double.minPositive,
