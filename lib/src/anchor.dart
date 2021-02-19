@@ -22,6 +22,9 @@ class Anchor {
     return p - (toVector2..multiply(size));
   }
 
+  @override
+  String toString() => _valueNames[this];
+
   static final Map<Anchor, String> _valueNames = {
     topLeft: 'topLeft',
     topCenter: 'topCenter',
@@ -36,12 +39,7 @@ class Anchor {
 
   static final List<Anchor> values = _valueNames.keys.toList();
 
-  @override
-  String toString() {
-    return _valueNames[this];
-  }
-
-  static Anchor parse(String name) {
+  static Anchor valueOf(String name) {
     return _valueNames.entries.singleWhere((e) => e.value == name).key;
   }
 }
