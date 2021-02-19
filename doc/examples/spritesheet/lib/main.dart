@@ -28,28 +28,32 @@ class MyGame extends BaseGame {
     final spriteSize = Vector2(80.0, 90.0);
 
     final vampireComponent = SpriteAnimationComponent(
-        position: Vector2(150, 100),
-        size: spriteSize,
-        animation: vampireAnimation);
+      position: Vector2(150, 100),
+      size: spriteSize,
+      animation: vampireAnimation,
+    );
 
     final ghostComponent = SpriteAnimationComponent(
-        position: Vector2(150, 220),
-        size: spriteSize,
-        animation: ghostAnimation);
+      position: Vector2(150, 220),
+      size: spriteSize,
+      animation: ghostAnimation,
+    );
 
     add(vampireComponent);
     add(ghostComponent);
 
     // Some plain sprites
     final vampireSpriteComponent = SpriteComponent(
-        position: Vector2(50, 100),
-        size: spriteSize,
-        sprite: spriteSheet.getSprite(0, 0));
+      position: Vector2(50, 100),
+      size: spriteSize,
+      sprite: spriteSheet.getSprite(0, 0),
+    );
 
     final ghostSpriteComponent = SpriteComponent(
-        position: Vector2(50, 220),
-        size: spriteSize,
-        sprite: spriteSheet.getSprite(1, 0));
+      position: Vector2(50, 220),
+      size: spriteSize,
+      sprite: spriteSheet.getSprite(1, 0),
+    );
 
     add(vampireSpriteComponent);
     add(ghostSpriteComponent);
