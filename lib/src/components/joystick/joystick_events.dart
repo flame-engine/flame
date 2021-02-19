@@ -7,7 +7,7 @@ enum JoystickMoveDirectional {
   MOVE_DOWN_RIGHT,
   MOVE_DOWN_LEFT,
   MOVE_LEFT,
-  IDLE
+  IDLE,
 }
 
 enum ActionEvent { DOWN, UP, MOVE, CANCEL }

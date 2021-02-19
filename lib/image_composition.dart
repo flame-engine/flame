@@ -101,7 +101,14 @@ class ImageComposition {
     );
 
     _composes.add(_Composed(
-        image, position, source, angle, anchor, isAntiAlias, blendMode));
+      image,
+      position,
+      source,
+      angle,
+      anchor,
+      isAntiAlias,
+      blendMode,
+    ));
   }
 
   void clear() => _composes.clear();
