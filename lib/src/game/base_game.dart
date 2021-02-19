@@ -10,7 +10,6 @@ import '../components/mixins/draggable.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
 import '../components/position_component.dart';
-import '../extensions/canvas.dart';
 import '../extensions/vector2.dart';
 import '../fps_counter.dart';
 import 'game.dart';
