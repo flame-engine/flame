@@ -40,10 +40,11 @@ class MyTextBox extends TextBoxComponent {
       height - margin.vertical,
     );
     c.drawRect(
-        innerRect,
-        Paint()
-          ..color = BasicPalette.white.color
-          ..style = PaintingStyle.stroke);
+      innerRect,
+      Paint()
+        ..color = BasicPalette.white.color
+        ..style = PaintingStyle.stroke,
+    );
   }
 }
 

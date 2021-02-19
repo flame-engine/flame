@@ -12,7 +12,10 @@
  - Added `Image` extensions
  - Added `Color` extensions
  - Change RaisedButton to ElevatedButton in timer example
- - Added `toImage` method for the `Sprite` class
+ - Overhaul the draggables api to fix issues relating to local vs global positions
+ - Preventing errors caused by the premature use of size property on game
+ - Fix `SpriteAnimationComponent.shouldRemove` use `Component.shouldRemove`
+  - Added `toImage` method for the `Sprite` class
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
