@@ -16,12 +16,21 @@ void main() {
       assert(segment.containsPoint(point), "Point should be on segment");
     });
 
-    test('Should not catch point outside of segment', () {
+    test('Should not catch point outside of segment, but on line', () {
       final segment = LineSegment(
         Vector2.all(0),
         Vector2.all(1),
       );
       final point = Vector2.all(3);
+      assert(!segment.containsPoint(point), "Point should not be on segment");
+    });
+
+    test('Should not catch point outside of segment', () {
+      final segment = LineSegment(
+        Vector2.all(0),
+        Vector2.all(1),
+      );
+      final point = Vector2(3, 2);
       assert(!segment.containsPoint(point), "Point should not be on segment");
     });
 

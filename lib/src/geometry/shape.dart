@@ -4,6 +4,10 @@ import '../../components.dart';
 import '../extensions/vector2.dart';
 import 'shape_intersections.dart' as intersection_system;
 
+/// A shape can represent any geometrical shape with optionally a size, position
+/// and angle. It can also have an anchor if it shouldn't be rotated around its
+/// center.
+/// A point can be determined to be within of outside of a shape.
 abstract class Shape {
   /// The position of your shape, it is up to you how you treat this
   Vector2 position = Vector2.zero();
@@ -31,6 +35,7 @@ abstract class Shape {
     position ??= Vector2.zero();
   }
 
+  /// Whether the point [p] is within the shapes boundaries or not
   bool containsPoint(Vector2 p);
 
   void render(Canvas c, Paint paint);
