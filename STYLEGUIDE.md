@@ -1,6 +1,41 @@
-# Styleguide
+# Style Guide
 
 This is WIP! It is definitely not complete. We just starting putting this together.
+
+## Trailing Commas and Wrapping
+
+List of elements must always be all in one line or one element per line. This includes parameters, arguments, collection literals, etc. Furthermore, if multiline, the last element must have a trailing comma.
+
+For the sake of example, let's use a function invocation (the same apply for all cases):
+
+```
+// good
+foo(p1, p2, p3)
+
+// good
+foo(
+    p1,
+    p2,
+    p3,
+)
+
+// bad: missing trailing comma
+foo(
+    p1,
+    p2,
+    p3
+)
+
+// bad: mixed argument lines
+foo(
+    p1, p2,
+    p3,
+)
+
+// bad: mixed argument lines
+foo(f1,
+    f2)
+```
 
 ## Imports
 
