@@ -10,16 +10,28 @@ import '../../palette.dart';
 abstract class Viewport {
   void resize(Vector2 newRawSize);
   void render(Canvas c, void Function(Canvas c) renderGame);
+  Vector2 getEffectiveSize();
+  Vector2 getRawSize();
 }
 
 class DefaultViewport extends Viewport {
+  Vector2 _size;
+
   @override
   void render(Canvas c, void Function(Canvas c) renderGame) {
     renderGame(c);
   }
 
   @override
-  void resize(Vector2 newRawSize) {}
+  void resize(Vector2 newRawSize) {
+    _size = newRawSize;
+  }
+
+  @override
+  Vector2 getEffectiveSize() => _size;
+
+  @override
+  Vector2 getRawSize() => _size;
 }
 
 class FixedRatioViewport extends Viewport {
@@ -37,6 +49,12 @@ class FixedRatioViewport extends Viewport {
   }) {
     this.borderColor = borderColor ?? BasicPalette.black.paint;
   }
+
+  @override
+  Vector2 getEffectiveSize() => fixedSize;
+
+  @override
+  Vector2 getRawSize() => rawSize;
 
   @override
   void resize(Vector2 newRawSize) {
@@ -64,7 +82,11 @@ class FixedRatioViewport extends Viewport {
     );
     c.drawRect(
       Rect.fromLTWH(
-          0.0, resizeOffset.y + scaledSize.y, rawSize.x, resizeOffset.y),
+        0.0,
+        resizeOffset.y + scaledSize.y,
+        rawSize.x,
+        resizeOffset.y,
+      ),
       borderColor,
     );
     c.drawRect(
