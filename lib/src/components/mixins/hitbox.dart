@@ -34,21 +34,15 @@ mixin Hitbox on PositionComponent {
   /// Returns the absolute [Rect] that contains all the corners of the rotated
   /// [toAbsoluteRect] rect.
   Rect toBoundingRect() {
-    final rotatedPoints = toAbsoluteRect().toVectors()
+    final rotatedPoints = toAbsoluteRect().toVertices()
       ..forEach((v) => v.rotate(
             angle,
             center: absolutePosition,
           ));
-    final minX =
-        rotatedPoints.map<double>((v) => v.x).fold(double.infinity, min);
-    final minY =
-        rotatedPoints.map<double>((v) => v.y).fold(double.infinity, min);
-    final maxX = rotatedPoints
-        .map<double>((v) => v.x)
-        .fold(double.negativeInfinity, max);
-    final maxY = rotatedPoints
-        .map<double>((v) => v.y)
-        .fold(double.negativeInfinity, max);
+    final minX = rotatedPoints.map<double>((v) => v.x).reduce(min);
+    final minY = rotatedPoints.map<double>((v) => v.y).reduce(min);
+    final maxX = rotatedPoints.map<double>((v) => v.x).reduce(max);
+    final maxY = rotatedPoints.map<double>((v) => v.y).reduce(max);
 
     return Rect.fromPoints(Offset(minX, minY), Offset(maxX, maxY));
   }

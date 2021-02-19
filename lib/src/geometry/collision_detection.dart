@@ -54,7 +54,7 @@ Set<Vector2> hitboxSizeIntersections(
   UnmodifiableListView<Vector2> hitbox,
   Vector2 size,
 ) {
-  final screenBounds = [
+  final sizeBounds = [
     Vector2(0, 0),
     Vector2(size.x, 0),
     size,
@@ -66,10 +66,10 @@ Set<Vector2> hitboxSizeIntersections(
       hitbox[i],
       hitbox[(i + 1) % hitbox.length],
     );
-    for (int j = 0; j < screenBounds.length; ++j) {
+    for (int j = 0; j < sizeBounds.length; ++j) {
       final screenSegment = LineSegment(
-        screenBounds[j],
-        screenBounds[(j + 1) % screenBounds.length],
+        sizeBounds[j],
+        sizeBounds[(j + 1) % sizeBounds.length],
       );
       intersectionPoints.addAll(hitboxSegment.intersections(screenSegment));
     }

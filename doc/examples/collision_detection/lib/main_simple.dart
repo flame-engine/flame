@@ -30,7 +30,6 @@ class MyCollidable extends PositionComponent
   MyCollidable(Vector2 position) {
     this.position = position;
     size = Vector2.all(100);
-    hasScreenCollision = true;
     anchor = Anchor.center;
     addShape(HitboxCircle());
   }

@@ -9,7 +9,7 @@ If you have the following needs you should at least consider to use
  - Interacting realistic forces
  - Particle systems that can interact with other bodies
  - Joints between bodies
- - Very many bodies at the same time
+ - Many bodies at the same time (~50+ depends a bit on platform)
 
 It is a good idea to just use the Flame collision detection system if you on the other hand only
 need some of the following things (since it is slightly simpler to not involve Forge2D):
@@ -28,18 +28,21 @@ when for example two position components have intersecting hitboxes.
 ## Mixins
 ### Hitbox
 The `Hitbox` mixin is mainly used for two things; to make detection of collisions with other
-hitboxes and gestures on top of your `PositionComponent`s more accurate. Say that you have a fairly
-round rock as a `SpriteComponent` for example, then you don't want to register input that is in the
-corner of the image where the rock is not displayed, since an image is always rectangular. Then you
-can use the `Hitbox` mixin to define a more accurate polygon (or another shape) for which the input
-should be within for the event to be registered on your component.
+hitboxes and to more accurately recognize gestures on top of your `PositionComponent`s. Say that you
+have a fairly round rock as a `SpriteComponent` for example, then you don't want to register input
+that is in the corner of the image where the rock is not displayed, since an image is always
+rectangular. Then you can use the `Hitbox` mixin to define a more accurate polygon (or another
+shape) for which the input should be within for the event to be registered on your component.
 
 You can add new shapes to the `Hitbox` just like they are added in the below `Collidable` example.
 
 ### Collidable
 The `Collidable` mixin is added to a `PositionComponent` that has a `HitBox` and it is used for
-detecting collisions with other `Collidable`s. To make your component collidable you would start off
-like this:
+detecting collisions with other `Collidable`s. If you do not add a shape to your `Hitbox` component
+it will never collide with anything. If you want the component to have a default rectangular shape
+that fills the size of your component you can simply do `addShape(HitboxRectangle())`.
+
+To make your component collidable you would start off something like this:
 
 ```dart
 class MyCollidable extends PositionComponent with Hitbox, Collidable {
@@ -82,9 +85,10 @@ class MyCollidable extends PositionComponent with Hitbox, Collidable {
 ```
 
 In this example it can be seen how the Dart `is` keyword is used to check which other `Collidable`
-that your component collided with. The set of points is where the hitboxes of the collidables
-intersected. Note that the `onCollision` method will be called on both collidable components if they
-have both implemented the `onCollision` method.
+that your component collided with. The set of points is where the edges of the hitboxes collided.
+Note that the `onCollision` method will be called on both collidable components if they
+have both implemented the `onCollision` method, and also on both shapes if they have that method
+implemented.
 
 If you want to check collisions with the screen edges, as we do in the example above, you can use
 the predefined [ScreenCollidable](#ScreenCollidable) class and since that one aldo is a `Collidable`
@@ -119,7 +123,7 @@ A Shape is the base class for representing a scalable geometrical shape. The sha
 ways of defining how they look, but they all have a size and angle that can be modified and the
 shape definition will scale or rotate the shape accordingly.
 
-There are currently three shapes: [Polygon}(#Polygon), [Rectangle](#Rectangle) and
+There are currently three shapes: [Polygon](#Polygon), [Rectangle](#Rectangle) and
 [Cirlce](#Circle).
 
 ### HitboxShape

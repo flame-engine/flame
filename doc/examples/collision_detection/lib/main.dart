@@ -36,7 +36,6 @@ abstract class MyCollidable extends PositionComponent
   MyCollidable(Vector2 position, Vector2 size, this.velocity) {
     this.position = position;
     this.size = size;
-    hasScreenCollision = true;
     anchor = Anchor.center;
   }
 

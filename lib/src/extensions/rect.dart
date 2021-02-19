@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'dart:ui' hide Offset;
+import 'dart:ui';
 
 import 'vector2.dart';
 import 'offset.dart';
@@ -24,7 +24,7 @@ extension RectExtension on Rect {
         max(pointA.y, pointB.y) >= top;
   }
 
-  List<Vector2> toVectors() {
+  List<Vector2> toVertices() {
     return [
       topLeft.toVector2(),
       topRight.toVector2(),

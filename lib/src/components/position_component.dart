@@ -75,7 +75,7 @@ abstract class PositionComponent extends BaseComponent {
     }
   }
 
-  /// Get the position of the center of the component without rotation
+  /// Get the position of the center of the component's bounding rectangle without rotation
   Vector2 get center {
     return anchor == Anchor.center ? position : topLeftPosition + (size / 2);
   }
