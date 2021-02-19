@@ -2,6 +2,9 @@
 
 ## [next]
 
+## 0.29.3
+- Upgrade audioplayers to fix a few bugs
+
 ## 0.29.2
 - Fix audioplayers upgrade issue with the removal of default prefix
 - Remove path_provider as a dep that was not used
