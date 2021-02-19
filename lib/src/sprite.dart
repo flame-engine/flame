@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flame/image_composition.dart';
+import '../image_composition.dart';
 
 import 'anchor.dart';
 import 'extensions/offset.dart';
@@ -80,6 +80,8 @@ class Sprite {
   }
 
   /// Return a new Image based on the [src] of the Sprite.
+  /// 
+  /// **Note:** This is a heavy async operation and should not be called on each [Game.render].
   Future<Image> toImage() async {
     final composition = ImageComposition()
       ..add(image, Vector2.zero(), source: src);
