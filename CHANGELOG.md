@@ -15,6 +15,7 @@
  - Overhaul the draggables api to fix issues relating to local vs global positions
  - Preventing errors caused by the premature use of size property on game
  - Fix `SpriteAnimationComponent.shouldRemove` use `Component.shouldRemove`
+ - Add assertion to make sure Draggables are safe to add
  - Add utility methods to the Anchor class to make it more "enum like"
 
 ## 1.0.0-rc6
