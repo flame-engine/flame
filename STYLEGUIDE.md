@@ -7,6 +7,7 @@ This is WIP! It is definitely not complete. We just starting putting this togeth
 * Never include unused or duplicated imports.
 * You must always use relative imports for imports within the Flame library.
 * Omit `./` for relative imports from the same directory.
+* TODO Do/Do not use the imports grouping internally (like component.dart, extensions.dart, etc).
 * Order your imports by:
 * * Three main blocks, each separated by exactly one empty line:
 * * * Dart SDK dependencies,
