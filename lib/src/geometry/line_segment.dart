@@ -7,17 +7,6 @@ class LineSegment {
 
   LineSegment(this.from, this.to);
 
-  /// If the line segment is outside of the hitbox
-  bool isOutside(List<Vector2> hitbox) {
-    for (int i = 0; i < hitbox.length; ++i) {
-      if (intersections(LineSegment(hitbox[i], hitbox[(i + 1) % hitbox.length]))
-          .isNotEmpty) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   /// Returns an empty list if there are no intersections between the segments
   /// If the segments are concurrent, the intersecting point is returned as a
   /// list with a single point

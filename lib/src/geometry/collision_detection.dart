@@ -1,9 +1,7 @@
-import 'dart:collection';
-
-import '../components/mixins/collidable.dart';
-import 'line_segment.dart';
 import 'shape.dart';
+import '../components/mixins/collidable.dart';
 import '../../extensions.dart';
+import '../../geometry.dart';
 
 /// Check whether any [Collidable] in [collidables] collide with each other and
 /// call their onCollision methods accordingly.
@@ -46,33 +44,4 @@ Set<Vector2> intersections(
     }
   }
   return result;
-}
-
-/// Returns where the hitbox edges of the [hitbox] intersects the box
-/// defined by [size] (usually the screen size).
-Set<Vector2> hitboxSizeIntersections(
-  UnmodifiableListView<Vector2> hitbox,
-  Vector2 size,
-) {
-  final sizeBounds = [
-    Vector2(0, 0),
-    Vector2(size.x, 0),
-    size,
-    Vector2(0, size.y),
-  ];
-  final intersectionPoints = <Vector2>{};
-  for (int i = 0; i < hitbox.length; ++i) {
-    final hitboxSegment = LineSegment(
-      hitbox[i],
-      hitbox[(i + 1) % hitbox.length],
-    );
-    for (int j = 0; j < sizeBounds.length; ++j) {
-      final screenSegment = LineSegment(
-        sizeBounds[j],
-        sizeBounds[(j + 1) % sizeBounds.length],
-      );
-      intersectionPoints.addAll(hitboxSegment.intersections(screenSegment));
-    }
-  }
-  return intersectionPoints;
 }

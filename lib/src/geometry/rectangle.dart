@@ -5,7 +5,7 @@ import '../../extensions.dart';
 import 'shape.dart';
 
 class Rectangle extends Polygon {
-  static final _defaultDefinition = [
+  static final _defaultNormalizedVertices = [
     Vector2(1, 1),
     Vector2(1, -1),
     Vector2(-1, -1),
@@ -17,7 +17,7 @@ class Rectangle extends Polygon {
     Vector2 size,
     double angle,
   }) : super.fromDefinition(
-          _defaultDefinition,
+          _defaultNormalizedVertices,
           position: position,
           size: size,
           angle: angle,
@@ -49,7 +49,7 @@ class Rectangle extends Polygon {
                   -relation,
                   Vector2(-relation.x, relation.y),
                 ]
-              : _defaultDefinition,
+              : _defaultNormalizedVertices,
           position: position,
           size: size,
           angle: angle,

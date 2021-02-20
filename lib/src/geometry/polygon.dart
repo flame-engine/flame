@@ -7,7 +7,7 @@ import '../extensions/vector2.dart';
 import 'shape.dart';
 
 class Polygon extends Shape {
-  final List<Vector2> definition;
+  final List<Vector2> normalizedVertices;
 
   /// With this constructor you create your [Polygon] from positions in your
   /// intended space. It will automatically calculate the [size] and center
@@ -47,7 +47,7 @@ class Polygon extends Shape {
   /// This will form a diamond shape within the bounding size box.
   /// NOTE: Always define your shape is a clockwise fashion
   Polygon.fromDefinition(
-    this.definition, {
+    this.normalizedVertices, {
     Vector2 position,
     Vector2 size,
     double angle,
@@ -56,10 +56,10 @@ class Polygon extends Shape {
   final _cachedScaledShape = ShapeCache<Iterable<Vector2>>();
 
   /// Gives back the shape vectors multiplied by the size
-  Iterable<Vector2> get scaled {
+  Iterable<Vector2> scaled() {
     if (!_cachedScaledShape.isCacheValid([size])) {
       _cachedScaledShape.updateCache(
-        definition?.map((p) => p.clone()..multiply(size / 2)),
+        normalizedVertices?.map((p) => p.clone()..multiply(size / 2)),
         [size.clone()],
       );
     }
@@ -74,7 +74,7 @@ class Polygon extends Shape {
       _cachedRenderPath.updateCache(
         Path()
           ..addPolygon(
-            scaled
+            scaled()
                 .map((point) => (point +
                         (position + size / 2) +
                         ((size / 2)..multiply(relativePosition)))
@@ -95,11 +95,11 @@ class Polygon extends Shape {
 
   /// Gives back the vertices represented as a list of points which
   /// are the "corners" of the hitbox rotated with [angle].
-  List<Vector2> get hitbox {
+  List<Vector2> hitbox() {
     // Use cached bounding vertices if state of the component hasn't changed
     if (!_cachedHitbox.isCacheValid([position, size, angle])) {
       _cachedHitbox.updateCache(
-        scaled
+        scaled()
                 .map((point) => (point + shapeCenter)
                   ..rotate(angle, center: anchorPosition))
                 .toList(growable: false) ??
@@ -119,11 +119,11 @@ class Polygon extends Shape {
       return false;
     }
 
-    for (int i = 0; i < hitbox.length; i++) {
-      final previousNode = hitbox[i];
-      final node = hitbox[(i + 1) % hitbox.length];
-      final isOutside = (node.x - previousNode.x) * (point.y - previousNode.y) -
-              (point.x - previousNode.x) * (node.y - previousNode.y) >
+    final vertices = hitbox();
+    for (int i = 0; i < vertices.length; i++) {
+      final edge = getEdge(i, vertices: vertices);
+      final isOutside = (edge.to.x - edge.from.x) * (point.y - edge.from.y) -
+              (point.x - edge.from.x) * (edge.to.y - edge.from.y) >
           0;
       if (isOutside) {
         // Point is outside of convex polygon
@@ -133,19 +133,33 @@ class Polygon extends Shape {
     return true;
   }
 
-  /// Return all [vertices] as [LineSegment]s that intersect [rect], if [rect]
-  /// is null return all [vertices] as [LineSegment]s.
+  /// Return all vertices as [LineSegment]s that intersect [rect], if [rect]
+  /// is null return all vertices as [LineSegment]s.
   List<LineSegment> possibleIntersectionVertices(Rect rect) {
     final List<LineSegment> rectIntersections = [];
-    final vertices = hitbox;
+    final vertices = hitbox();
     for (int i = 0; i < vertices.length; i++) {
-      final from = vertices[i];
-      final to = vertices[(i + 1) % vertices.length];
-      if (rect?.intersectsSegment(from, to) ?? true) {
-        rectIntersections.add(LineSegment(from, to));
+      final edge = getEdge(i, vertices: vertices);
+      if (rect?.intersectsSegment(edge.from, edge.to) ?? true) {
+        rectIntersections.add(edge);
       }
     }
     return rectIntersections;
+  }
+
+  LineSegment getEdge(int x, {List<Vector2> vertices}) {
+    return LineSegment(
+      getVertex(x, vertices: vertices),
+      getVertex(
+        x + 1,
+        vertices: vertices,
+      ),
+    );
+  }
+
+  Vector2 getVertex(int x, {List<Vector2> vertices}) {
+    vertices ??= hitbox();
+    return vertices[x % vertices.length];
   }
 }
 

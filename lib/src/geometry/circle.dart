@@ -6,9 +6,9 @@ import '../extensions/vector2.dart';
 import 'shape.dart';
 
 class Circle extends Shape {
-  /// The [definition] is how many percentages of the shortest edge of [size]
-  /// that the circle should cover.
-  double definition;
+  /// The [normalizedRadius] is how many percentages of the shortest edge of
+  /// [size] that the circle should cover.
+  double normalizedRadius;
 
   /// With this constructor you can create your [Circle] from a radius and
   /// a position. Ir will also calculate the bounding rectangle [size] for the
@@ -27,14 +27,14 @@ class Circle extends Shape {
   /// definition is the percentages of the shortest edge of [size] that the
   /// circle should fill.
   Circle.fromDefinition({
-    this.definition = 1.0,
+    this.normalizedRadius = 1.0,
     Vector2 position,
     Vector2 size,
     double angle,
   }) : super(position: position, size: size, angle: angle = 0);
 
   double get radius {
-    return (min(size.x, size.y) / 2) * definition;
+    return (min(size.x, size.y) / 2) * normalizedRadius;
   }
 
   @override
@@ -109,6 +109,6 @@ class HitboxCircle extends Circle with HitboxShape {
   @override
   HitboxCircle({double definition = 1})
       : super.fromDefinition(
-          definition: definition ?? 1,
+          normalizedRadius: definition ?? 1,
         );
 }

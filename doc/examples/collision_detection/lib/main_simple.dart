@@ -75,8 +75,7 @@ class MyGame extends BaseGame with HasCollidables, TapDetector {
 
   @override
   Future<void> onLoad() async {
-    final screen = ScreenCollidable();
-    add(screen);
+    add(ScreenCollidable());
   }
 
   @override

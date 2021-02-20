@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/components.dart';
+
 import 'vector2.dart';
 import 'offset.dart';
 
@@ -22,6 +24,10 @@ extension RectExtension on Rect {
         min(pointA.y, pointB.y) <= bottom &&
         max(pointA.x, pointB.x) >= left &&
         max(pointA.y, pointB.y) >= top;
+  }
+
+  bool intersectsLineSegment(LineSegment segment) {
+    return intersectsSegment(segment.from, segment.to);
   }
 
   List<Vector2> toVertices() {
