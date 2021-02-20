@@ -50,9 +50,9 @@ class BaseGame extends Game with FPSCounter {
   /// screen ratio for example.
   Viewport viewport = DefaultViewport();
 
-  /// On the base game, this is overwritten to consider the viewport.
+  /// This is overwritten to consider the viewport transformation.
   ///
-  /// This means that this is the logical size of the game screen area as
+  /// Which means that this is the logical size of the game screen area as
   /// exposed to the canvas after viewport transformations.
   /// This does not match the Flutter widget size; for that see [rawSize].
   @override
