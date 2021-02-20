@@ -60,10 +60,10 @@ class FixedRatioViewport extends Viewport {
   void resize(Vector2 newRawSize) {
     rawSize = newRawSize;
 
-    final scaleVector = rawSize..divide(fixedSize);
+    final scaleVector = rawSize.clone()..divide(fixedSize);
     scale = math.min(scaleVector.x, scaleVector.y);
 
-    scaledSize = fixedSize..scale(scale);
+    scaledSize = fixedSize.clone()..scale(scale);
     resizeOffset = (rawSize - scaledSize) / 2;
   }
 
