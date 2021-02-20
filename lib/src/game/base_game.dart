@@ -41,8 +41,13 @@ class BaseGame extends Game with FPSCounter {
   /// concurrency issues.
   final Set<Component> _removeLater = {};
 
-  /// Camera position; every non-HUD component is translated so that the camera position is the top-left corner of the screen.
+  /// The camera translates the coordinate space after the viewport is applied.
   final Camera camera = Camera();
+
+  /// The viewport transforms the coordinate space depending on your chosen
+  /// implementation.
+  /// The default implementation no-ops, but you can use this to have a fixed
+  /// screen ratio for example.
   Viewport viewport = DefaultViewport();
 
   /// On the base game, this is overwritten to consider the viewport.
@@ -195,6 +200,7 @@ class BaseGame extends Game with FPSCounter {
   ///
   /// It also updates the [size] field of the class to be used by later added components and other methods.
   /// You can override it further to add more custom behavior, but you should seriously consider calling the super implementation as well.
+  /// This implementation also uses the current [viewport] in order to transform the coordinate system appropriately.
   @override
   @mustCallSuper
   void onResize(Vector2 rawSize) {
