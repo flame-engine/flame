@@ -305,4 +305,40 @@ void main() {
       expect(game.camera.position, Vector2(50, 50));
     });
   });
+  group('viewport & camera', () {
+    test('default ratio viewport + camera with world boundaries', () {
+      final game = BaseGame()..viewport = FixedRatioViewport(Vector2.all(100));
+      game.onResize(Vector2.all(200.0));
+      expect(game.rawSize, Vector2.all(200.00));
+      expect(game.size, Vector2.all(100.00));
+
+      final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
+      game.add(p);
+      game.camera.followObject(
+        p,
+        // this could be a typical mario-like platformer, where the player is more on the bottom left to allow the scenario to be seem
+        relativeOffset: Vector2(0.25, 0.25),
+        worldBounds: const Rect.fromLTWH(0, 0, 1000, 1000),
+      );
+
+      game.update(0);
+      expect(game.camera.position, Vector2(0, 0));
+
+      p.position = Vector2(30.0, 0.0);
+      game.update(0);
+      expect(game.camera.position, Vector2(5, 0));
+
+      p.position = Vector2(30.0, 100.0);
+      game.update(0);
+      expect(game.camera.position, Vector2(5, 75));
+
+      p.position = Vector2(30.0, 1000.0);
+      game.update(0);
+      expect(game.camera.position, Vector2(5, 900));
+
+      p.position = Vector2(950.0, 20.0);
+      game.update(0);
+      expect(game.camera.position, Vector2(900, 0));
+    });
+  });
 }
