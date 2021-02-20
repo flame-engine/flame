@@ -8,12 +8,25 @@ class MockCanvas extends Fake implements Canvas {
 
   @override
   void translate(double dx, double dy) {
-    methodCalls.add('translate($dx, $dy)');
+    final ddx = _normalize(dx);
+    final ddy = _normalize(dy);
+    methodCalls.add('translate($ddx, $ddy)');
   }
 
   @override
   void scale(double sx, [double sy]) {
-    methodCalls.add('scale($sx, $sy)');
+    final ssx = _normalize(sx);
+    final ssy = _normalize(sy);
+    methodCalls.add('scale($ssx, $ssy)');
+  }
+
+  double _normalize(double d) {
+    // this prevents it from printing -0 which would be harder to assert in tests
+    return _isNegativeZero(d) ? 0.0 : d;
+  }
+
+  bool _isNegativeZero(double d) {
+    return d.abs() == 0.0 && d.isNegative;
   }
 
   @override
@@ -23,7 +36,9 @@ class MockCanvas extends Fake implements Canvas {
 
   @override
   void drawRect(Rect rect, Paint paint) {
-    methodCalls.add('drawRect(${rect.topLeft}, ${rect.width}, ${rect.height})');
+    methodCalls.add(
+      'drawRect(${rect.left}, ${rect.top}, ${rect.width}, ${rect.height})',
+    );
   }
 
   @override

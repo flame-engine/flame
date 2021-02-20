@@ -193,6 +193,7 @@ class BaseGame extends Game with FPSCounter {
     }
 
     components.forEach((c) => c.update(dt));
+    camera.handle(dt);
   }
 
   /// This implementation of resize passes the resize call along to every

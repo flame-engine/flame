@@ -143,10 +143,10 @@ class Camera {
 
     if (_targetCameraDelta != null) {
       _moveToTarget(_currentCameraDelta, _targetCameraDelta, ds);
-      position.setFrom(_currentCameraDelta + shake);
+      _position.setFrom(_currentCameraDelta + shake);
     } else {
       _moveToTarget(_currentRelativeOffset, _targetRelativeOffset, ds);
-      position.setFrom(_getTarget() + shake);
+      _position.setFrom(_getTarget() + shake);
     }
 
     if (shaking) {
@@ -162,9 +162,9 @@ class Camera {
   /// but can be used to setup after a new world transition for example.
   void snap() {
     if (_targetCameraDelta != null) {
-      _targetCameraDelta.setFrom(_currentCameraDelta);
+      _currentCameraDelta.setFrom(_targetCameraDelta);
     }
-    _targetRelativeOffset.setFrom(_currentRelativeOffset);
+    _currentRelativeOffset.setFrom(_targetRelativeOffset);
   }
 
   /// Converts a vector in the screen space to the world space.
@@ -187,6 +187,9 @@ class Camera {
   /// [relativeOffset] (default to the center).
   /// [worldBounds] can be optionally set to add boundaries to how far the
   /// camera is allowed to move.
+  /// The object is "grabbed" by its anchor (default top left). So for example
+  /// if you want the center of the object to be at the fixed position, set
+  /// its anchor to center.
   void followObject(
     PositionComponent follow, {
     Vector2 relativeOffset,
@@ -213,7 +216,7 @@ class Camera {
       return Vector2.zero();
     }
     final screenDelta = gameRef.size.clone()..multiply(_currentRelativeOffset);
-    final attemptedTarget = follow.position + follow.size / 2 + screenDelta;
+    final attemptedTarget = follow.position - screenDelta;
 
     if (worldBounds != null) {
       if (worldBounds.width > gameRef.size.x) {
@@ -253,7 +256,7 @@ class Camera {
   /// The camera will be smoothly transitioned to this position.
   /// This will replace any previous targets.
   void moveTo(Vector2 p) {
-    _currentCameraDelta = position;
+    _currentCameraDelta = _position;
     _targetCameraDelta = p.clone();
   }
 
