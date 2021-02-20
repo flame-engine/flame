@@ -29,9 +29,10 @@ class SpriteAnimationComponent extends PositionComponent {
   SpriteAnimationComponent.fromSpriteAnimation(
     Vector2 size,
     this.animation, {
+    Vector2 position,
     this.removeOnFinish = false,
   })  : assert(animation != null),
-        super(size: size);
+        super(size: size, position: position);
 
   /// Creates a SpriteAnimationComponent from a [size], an [image] and [data]. Check [SpriteAnimationData] for more info on the available options.
   ///

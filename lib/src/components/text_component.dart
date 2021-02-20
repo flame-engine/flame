@@ -36,7 +36,7 @@ class TextComponent extends PositionComponent {
     Vector2 size,
   })  : assert(_text != null),
         _config = config ?? TextConfig(),
-        super(position: position) {
+        super(position: position, size: size) {
     _updateBox();
   }
 

@@ -58,7 +58,7 @@ class TextBoxComponent extends PositionComponent {
   })  : _text = text,
         _boxConfig = boxConfig ?? TextBoxConfig(),
         _config = config ?? TextConfig(),
-        super(position: position) {
+        super(position: position, size: size) {
     _lines = [];
     double lineHeight;
     text.split(' ').forEach((word) {

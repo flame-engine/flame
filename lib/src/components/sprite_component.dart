@@ -31,14 +31,12 @@ class SpriteComponent extends PositionComponent {
     this.overridePaint,
   }) : super(position: position, size: size);
 
-  @Deprecated('Use SpriteComponent instead')
-  factory SpriteComponent.fromImage(Vector2 size, Image image) =>
-      SpriteComponent(size: size, sprite: Sprite(image));
-
-  @Deprecated('Use SpriteComponent instead')
-  SpriteComponent.fromSprite(Vector2 size, this.sprite) {
-    super.size.setFrom(size);
-  }
+  factory SpriteComponent.fromImage(
+    Vector2 size,
+    Image image, {
+    Vector2 position,
+  }) =>
+      SpriteComponent(size: size, sprite: Sprite(image), position: position);
 
   @mustCallSuper
   @override
