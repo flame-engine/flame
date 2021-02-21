@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import '../../components.dart';
+import '../../geometry.dart';
 import '../extensions/vector2.dart';
 import 'shape.dart';
 

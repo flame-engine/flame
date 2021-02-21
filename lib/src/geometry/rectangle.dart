@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import '../../components.dart';
+import '../../geometry.dart';
 import '../../extensions.dart';
 import 'shape.dart';
 

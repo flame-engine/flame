@@ -22,8 +22,6 @@ export 'src/components/mixins/hitbox.dart';
 export 'src/components/mixins/single_child_particle.dart';
 export 'src/components/mixins/tapable.dart';
 
-export 'geometry.dart';
-
 export 'src/extensions/vector2.dart';
 export 'src/anchor.dart';
 export 'src/text_config.dart';
