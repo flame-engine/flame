@@ -77,8 +77,10 @@ class BaseGame extends Game with FPSCounter {
       hasLayout,
       '"add" called before the game is ready. Did you try to access it on the Game constructor? Use the "onLoad" method instead.',
     );
-    assert(c is Collidable ? this is HasCollidables : true,
-        "You can only use the Hitbox/Collidable feature with games that has the HasCollidables mixin");
+    assert(
+      c is Collidable ? this is HasCollidables : true,
+      "You can only use the Hitbox/Collidable feature with games that has the HasCollidables mixin",
+    );
     prepare(c);
     final loadFuture = c.onLoad();
 

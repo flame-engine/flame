@@ -72,8 +72,7 @@ abstract class MyCollidable extends PositionComponent
   @override
   void onCollision(Set<Vector2> points, Collidable other) {
     final averageIntersection =
-        points.fold<Vector2>(Vector2.zero(), (sum, v) => sum + v) /
-            points.length.toDouble();
+        points.reduce((sum, v) => sum + v) / points.length.toDouble();
     final collisionDirection = (averageIntersection - absoluteCenter)
       ..normalize()
       ..round();

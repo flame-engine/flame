@@ -29,9 +29,10 @@ Set<Vector2> intersections(
   }
 
   final result = <Vector2>{};
+  final currentResult = <Vector2>{};
   for (Shape shapeA in collidableA.shapes) {
     for (Shape shapeB in collidableB.shapes) {
-      final currentResult = shapeA.intersections(shapeB);
+      currentResult.addAll(shapeA.intersections(shapeB));
       if (currentResult.isNotEmpty) {
         result.addAll(currentResult);
         // Do callbacks to the involved shapes

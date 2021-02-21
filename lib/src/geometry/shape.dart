@@ -58,9 +58,8 @@ mixin HitboxShape on Shape {
   @override
   double get angle => component.angle;
 
-  @override
-
   /// The shapes center, before rotation
+  @override
   Vector2 get shapeCenter {
     return component.absoluteCenter +
         position +
