@@ -60,9 +60,9 @@ void _moveToTarget(
 /// done on event handling (for gestures). You have to transform it yourself
 /// using [screenToWorld].
 class Camera {
-  static const DEFAULT_CAMERA_SPEED = 50.0; // in pixels/s
-  static const DEFAULT_SHAKE_INTENSITY = 75.0; // in pixels
-  static const DEFAULT_SHAKE_DURATION = 0.3; // in seconds
+  static const defaultCameraSpeed = 50.0; // in pixels/s
+  static const defaultShakeIntensity = 75.0; // in pixels
+  static const defaultShakeDuration = 0.3; // in seconds
 
   /// This must be set by the Game as soon as the Camera is created.
   ///
@@ -83,8 +83,8 @@ class Camera {
 
   // Configurable parameters
 
-  double cameraSpeed = DEFAULT_CAMERA_SPEED;
-  double shakeIntensity = DEFAULT_SHAKE_INTENSITY;
+  double cameraSpeed = defaultCameraSpeed;
+  double shakeIntensity = defaultShakeIntensity;
 
   /// This is the current position of the camera, ie the world coordinate that is
   /// rendered on the top left of the screen (origin of the screen space).
@@ -250,7 +250,7 @@ class Camera {
   // Movement
 
   /// Applies an ad-hoc movement to the camera towards the target, bypassing
-  /// follow. Once it arrives the camera will not move until resetMovement
+  /// follow. Once it arrives the camera will not move until [resetMovement]
   /// is called.
   ///
   /// The camera will be smoothly transitioned to this position.
@@ -271,11 +271,11 @@ class Camera {
   /// Applies a shaking effect to the camera for [amount] seconds.
   ///
   /// The intensity can be controlled via the [shakeIntensity] property.
-  void shake({double amount = DEFAULT_SHAKE_DURATION}) {
+  void shake({double amount = defaultShakeDuration}) {
     _shakeTimer += amount;
   }
 
-  /// Wether the camera is currently shaking or not.
+  /// Whether the camera is currently shaking or not.
   bool get shaking => _shakeTimer > 0.0;
 
   /// Generates a random amount of displacement applied to the camera.
