@@ -171,13 +171,14 @@ class SpriteAnimation {
     final jsonFrames = jsonData['frames'] as Map<String, dynamic>;
 
     final frames = jsonFrames.values.map((dynamic value) {
-      final frameData = value['frame'] as Map<String, dynamic>;
+      final map = value as Map;
+      final frameData = map['frame'] as Map<String, dynamic>;
       final int x = frameData['x'] as int;
       final int y = frameData['y'] as int;
       final int width = frameData['w'] as int;
       final int height = frameData['h'] as int;
 
-      final stepTime = (value['duration'] as int) / 1000;
+      final stepTime = (map['duration'] as int) / 1000;
 
       final Sprite sprite = Sprite(
         image,

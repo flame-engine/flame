@@ -1,9 +1,9 @@
+import 'package:dashbook/dashbook.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/widgets.dart';
-import 'package:flutter/material.dart' hide Animation;
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
-import 'package:dashbook/dashbook.dart';
+import 'package:flame/widgets.dart';
+import 'package:flutter/material.dart' hide Animation;
 
 Anchor parseAnchor(String name) {
   switch (name) {
@@ -118,7 +118,6 @@ void main() async {
     row: 0,
     stepTime: 0.2,
     to: 3,
-    loop: true,
   );
   dashbook.storiesOf('SpriteAnimationWidget').decorator(CenterDecorator()).add(
         'default',

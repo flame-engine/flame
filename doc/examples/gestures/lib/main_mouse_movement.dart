@@ -13,7 +13,7 @@ void main() {
 }
 
 class MyGame extends BaseGame with MouseMovementDetector {
-  static const SPEED = 200;
+  static const speed = 200.0;
 
   Vector2 position = Vector2(0, 0);
   Vector2 target;
@@ -51,7 +51,7 @@ class MyGame extends BaseGame with MouseMovementDetector {
 
       if (!_onTarget) {
         final dir = (target - position).normalized();
-        position += dir * (SPEED * dt);
+        position += dir * speed * dt;
       }
     }
   }

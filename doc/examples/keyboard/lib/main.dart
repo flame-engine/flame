@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+import 'dart:ui';
+
 import 'package:flame/game.dart';
 import 'package:flame/keyboard.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'dart:ui';
 
 void main() => runApp(
       GameWidget(
@@ -32,7 +32,7 @@ class MyGame extends Game with KeyboardEvents {
 
   @override
   void onKeyEvent(e) {
-    final bool isKeyDown = e is RawKeyDownEvent;
+    final isKeyDown = e is RawKeyDownEvent;
     if (e.data.keyLabel == 'a') {
       _dir = isKeyDown ? -1 : 0;
     } else if (e.data.keyLabel == 'd') {

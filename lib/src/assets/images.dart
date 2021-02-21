@@ -130,8 +130,6 @@ class _ImageAssetLoader {
   Future<Image> future;
 
   Future<Image> retrieve() async {
-    loadedImage ??= await future;
-
-    return loadedImage;
+    return loadedImage ??= await future;
   }
 }

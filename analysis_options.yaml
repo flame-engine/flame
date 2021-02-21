@@ -15,29 +15,55 @@ linter:
     - always_put_control_body_on_new_line
     - always_require_non_null_named_parameters
     - annotate_overrides
+    - avoid_double_and_int_checks
+    - avoid_dynamic_calls
     - avoid_empty_else
+    - avoid_equals_and_hash_code_on_mutable_classes
+    - avoid_escaping_inner_quotes
     - avoid_field_initializers_in_const_classes
     - avoid_init_to_null
+    - avoid_js_rounded_ints
     - avoid_null_checks_in_equality_operators
+    - avoid_private_typedef_functions
+    - avoid_redundant_argument_values
     - avoid_relative_lib_imports
     - avoid_return_types_on_setters
+    - avoid_shadowing_type_parameters
     - avoid_slow_async_io
+    - avoid_type_to_string
+    - avoid_types_as_parameter_names
+    - avoid_unused_constructor_parameters
     - await_only_futures
+    - camel_case_extensions
     - camel_case_types
     - cancel_subscriptions
+    - cast_nullable_to_non_nullable
+    - close_sinks
+    - comment_references
+    - constant_identifier_names
     - control_flow_in_finally
+    - curly_braces_in_flow_control_structures
+    - directives_ordering
+    - do_not_use_environment
     - empty_catches
     - empty_constructor_bodies
     - empty_statements
+    - exhaustive_cases
+    - file_names
     - hash_and_equals
     - implementation_imports
+    - invariant_booleans
     - iterable_contains_unrelated_type
+    - join_return_with_assignment
     - library_names
     - library_prefixes
     - list_remove_unrelated_type
+    - literal_only_boolean_expressions
+    - missing_whitespace_between_adjacent_strings
     - no_adjacent_strings_in_list
     - no_duplicate_case_values
-    - non_constant_identifier_names
+    - no_runtimeType_toString
+    - omit_local_variable_types
     - package_api_docs
     - package_names
     - package_prefixed_library_names
@@ -78,6 +104,10 @@ linter:
 dart_code_metrics:
   rules:
     - prefer-trailing-comma
+    - prefer-trailing-comma-for-collection
+    - no-equal-then-else
+    - no-object-declaration
+    - potential-null-dereference
   metrics-exclude:
     - test/**
   metrics:

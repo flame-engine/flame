@@ -1,9 +1,8 @@
 import 'dart:ui';
 
-import 'position_component.dart';
-
 import '../extensions/vector2.dart';
 import '../spritesheet.dart';
+import 'position_component.dart';
 
 /// This is just a pair of <int, int>.
 ///

@@ -29,17 +29,17 @@ void main() {
     bool hasAlternatingRotateEffect = false,
     bool hasAlternatingScaleEffect = false,
   }) {
-    final MoveEffect move = MoveEffect(
+    final move = MoveEffect(
       path: path,
       duration: randomDuration(),
       isAlternating: hasAlternatingMoveEffect,
     );
-    final RotateEffect rotate = RotateEffect(
+    final rotate = RotateEffect(
       angle: argumentAngle,
       duration: randomDuration(),
       isAlternating: hasAlternatingRotateEffect,
     );
-    final ScaleEffect scale = ScaleEffect(
+    final scale = ScaleEffect(
       size: argumentSize,
       duration: randomDuration(),
       isAlternating: hasAlternatingScaleEffect,
@@ -149,7 +149,6 @@ void main() {
         expectedPosition: positionComponent.position.clone(),
         expectedAngle: argumentAngle,
         expectedSize: argumentSize,
-        shouldComplete: true,
       );
     },
   );
@@ -165,7 +164,6 @@ void main() {
         expectedPosition: path.last,
         expectedAngle: positionComponent.angle,
         expectedSize: argumentSize,
-        shouldComplete: true,
       );
     },
   );
@@ -181,7 +179,6 @@ void main() {
         expectedPosition: path.last,
         expectedAngle: argumentAngle,
         expectedSize: positionComponent.size.clone(),
-        shouldComplete: true,
       );
     },
   );

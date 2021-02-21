@@ -16,7 +16,7 @@ import 'joystick_component.dart';
 import 'joystick_events.dart';
 import 'joystick_utils.dart';
 
-enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
+enum JoystickActionAlign { topLeft, bottomLeft, topRight, bottomRight }
 
 class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   final int actionId;
@@ -56,7 +56,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
     this.sizeFactorBackgroundDirection = 1.5,
     this.margin = EdgeInsets.zero,
     this.color = Colors.blueGrey,
-    this.align = JoystickActionAlign.BOTTOM_RIGHT,
+    this.align = JoystickActionAlign.bottomRight,
     this.opacityBackground = 0.5,
     this.opacityKnob = 0.8,
   })  : _spriteAction = sprite,
@@ -88,19 +88,19 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
     final double radius = size / 2;
     double dx = 0, dy = 0;
     switch (align) {
-      case JoystickActionAlign.TOP_LEFT:
+      case JoystickActionAlign.topLeft:
         dx = margin.left + radius;
         dy = margin.top + radius;
         break;
-      case JoystickActionAlign.BOTTOM_LEFT:
+      case JoystickActionAlign.bottomLeft:
         dx = margin.left + radius;
         dy = _screenSize.y - (margin.bottom + radius);
         break;
-      case JoystickActionAlign.TOP_RIGHT:
+      case JoystickActionAlign.topRight:
         dx = _screenSize.x - (margin.right + radius);
         dy = margin.top + radius;
         break;
-      case JoystickActionAlign.BOTTOM_RIGHT:
+      case JoystickActionAlign.bottomRight:
         dx = _screenSize.x - (margin.right + radius);
         dy = _screenSize.y - (margin.bottom + radius);
         break;
@@ -164,7 +164,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
       joystickController.joystickAction(
         JoystickActionEvent(
           id: actionId,
-          event: ActionEvent.MOVE,
+          event: ActionEvent.move,
           intensity: _intensity,
           radAngle: radAngle,
         ),
@@ -195,7 +195,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
     joystickController.joystickAction(
       JoystickActionEvent(
         id: actionId,
-        event: ActionEvent.DOWN,
+        event: ActionEvent.down,
       ),
     );
     tapDown();
@@ -232,7 +232,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
     joystickController.joystickAction(
       JoystickActionEvent(
         id: actionId,
-        event: ActionEvent.UP,
+        event: ActionEvent.up,
       ),
     );
     tapUp();
@@ -246,7 +246,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
     joystickController.joystickAction(
       JoystickActionEvent(
         id: actionId,
-        event: ActionEvent.CANCEL,
+        event: ActionEvent.cancel,
       ),
     );
     tapUp();
