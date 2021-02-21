@@ -4,11 +4,10 @@ import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
-import '../geometry/collision_detection.dart' as collision_detection;
 import '../components/component.dart';
 import '../components/mixins/collidable.dart';
-import '../components/mixins/has_collidables.dart';
 import '../components/mixins/draggable.dart';
+import '../components/mixins/has_collidables.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
 import '../components/position_component.dart';
