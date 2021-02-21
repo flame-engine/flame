@@ -67,6 +67,8 @@ abstract class PositionComponent extends BaseComponent {
   }
 
   /// Get the position that everything in this component is positioned in relation to
+  /// If this component has no parent the absolute parent position is the origin,
+  /// otherwise it's the parents absolute top left position
   Vector2 get absoluteParentPosition {
     if (parent is PositionComponent) {
       return (parent as PositionComponent).absoluteTopLeftPosition;
