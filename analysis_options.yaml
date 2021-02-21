@@ -78,9 +78,12 @@ linter:
 dart_code_metrics:
   rules:
     - prefer-trailing-comma
+  metrics-exclude:
+    - test/**
   metrics:
     number-of-arguments: 8
     number-of-methods: 28
     lines-of-executable-code: 200
     cyclomatic-complexity: 36
+
 
