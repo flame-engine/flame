@@ -12,7 +12,7 @@ mixin Hitbox on PositionComponent {
 
   void addShape(HitboxShape shape) {
     assert(
-      shape.component != null,
+      shape.component == null,
       'You can only use a HitboxShape with one component',
     );
     shape.component = this;
