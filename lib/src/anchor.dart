@@ -12,17 +12,18 @@ import 'extensions/vector2.dart';
 /// The "default" anchor in most cases is topLeft.
 ///
 /// The Anchor is represented by a fraction of the size (in each axis),
-///  where 0 means top/left and 1 means right/bottom.
+/// where 0 in x-axis means left, 0 in y-axis means top, 1 in x-axis means right
+/// and 1 in y-axis means bottom.
 class Anchor {
-  static const Anchor topLeft = Anchor._(0.0, 0.0);
-  static const Anchor topCenter = Anchor._(0.5, 0.0);
-  static const Anchor topRight = Anchor._(1.0, 0.0);
-  static const Anchor centerLeft = Anchor._(0.0, 0.5);
-  static const Anchor center = Anchor._(0.5, 0.5);
-  static const Anchor centerRight = Anchor._(1.0, 0.5);
-  static const Anchor bottomLeft = Anchor._(0.0, 1.0);
-  static const Anchor bottomCenter = Anchor._(0.5, 1.0);
-  static const Anchor bottomRight = Anchor._(1.0, 1.0);
+  static const Anchor topLeft = Anchor(0.0, 0.0);
+  static const Anchor topCenter = Anchor(0.5, 0.0);
+  static const Anchor topRight = Anchor(1.0, 0.0);
+  static const Anchor centerLeft = Anchor(0.0, 0.5);
+  static const Anchor center = Anchor(0.5, 0.5);
+  static const Anchor centerRight = Anchor(1.0, 0.5);
+  static const Anchor bottomLeft = Anchor(0.0, 1.0);
+  static const Anchor bottomCenter = Anchor(0.5, 1.0);
+  static const Anchor bottomRight = Anchor(1.0, 1.0);
 
   /// The relative x position with respect to the object's width;
   /// 0 means totally to the left (beginning) and 1 means totally to the
@@ -38,8 +39,7 @@ class Anchor {
   /// fractional representation.
   Vector2 get toVector2 => Vector2(x, y);
 
-  /// Consider Anchor a sealed class (or more specifically an enum).
-  const Anchor._(this.x, this.y);
+  const Anchor(this.x, this.y);
 
   /// If the position sent in is position for the anchor and the size is the
   /// size of the component (or whatever you are using the Anchor on), the
@@ -51,7 +51,9 @@ class Anchor {
   /// Returns a string representation of this Anchor.
   ///
   /// This should only be used for serialization purposes.
-  String get name => _valueNames[this];
+  String get name {
+    return _valueNames.containsKey(this) ? _valueNames[this] : 'Anchor($x, $y)'; 
+  }
 
   /// Returns a string representation of this Anchor.
   ///
@@ -72,7 +74,7 @@ class Anchor {
     bottomRight: 'bottomRight',
   };
 
-  /// List of all possible anchor values.
+  /// List of all predefined anchor values.
   static final List<Anchor> values = _valueNames.keys.toList();
 
   /// This should only be used for de-serialization purposes.
@@ -80,6 +82,21 @@ class Anchor {
   /// If you need to convert anchors to serializable data (like JSON),
   /// use the `toString()` and `valueOf` methods.
   static Anchor valueOf(String name) {
-    return _valueNames.entries.singleWhere((e) => e.value == name).key;
+    if(_valueNames.containsValue(name)) {
+      return _valueNames.entries.singleWhere((e) => e.value == name).key;
+    } else {
+      final regexp = RegExp(r"^\Anchor\(([^,]+), ([^\)]+)\)");
+      final matches = regexp.allMatches(name).first.group;
+      assert(matches != null, "Bad Anchor format");
+      return Anchor(double.parse(matches(1)), double.parse(matches(2)));
+    }
   }
+  
+  @override
+  bool operator ==(Object other) {
+    return other is Anchor && hashCode == other.hashCode;
+  }
+
+  @override
+  int get hashCode => x.hashCode * 31 + y.hashCode;
 }
