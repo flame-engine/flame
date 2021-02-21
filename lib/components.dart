@@ -14,7 +14,9 @@ export 'src/components/text_component.dart';
 export 'src/timer.dart';
 export 'joystick.dart';
 
+export 'src/components/mixins/collidable.dart';
 export 'src/components/mixins/draggable.dart';
+export 'src/components/mixins/has_collidables.dart';
 export 'src/components/mixins/has_game_ref.dart';
 export 'src/components/mixins/hitbox.dart';
 export 'src/components/mixins/single_child_particle.dart';
