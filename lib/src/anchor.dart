@@ -37,15 +37,12 @@ class Anchor {
 
   /// Returns [x] and [y] as a Vector2. Note that this is still a relative
   /// fractional representation.
-  Vector2 get toVector2 => Vector2(x, y);
+  Vector2 toVector2() => Vector2(x, y);
 
   const Anchor(this.x, this.y);
 
-  /// If the position sent in is position for the anchor and the size is the
-  /// size of the component (or whatever you are using the Anchor on), the
-  /// result of [translate] will be the top left position
-  Vector2 translate(Vector2 position, Vector2 size) {
-    return position - (toVector2..multiply(size));
+  Vector2 translate(Vector2 p, Vector2 size) {
+    return p - (toVector2()..multiply(size));
   }
 
   /// Returns a string representation of this Anchor.
