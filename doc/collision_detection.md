@@ -91,7 +91,7 @@ have both implemented the `onCollision` method, and also on both shapes if they 
 implemented.
 
 If you want to check collisions with the screen edges, as we do in the example above, you can use
-the predefined [ScreenCollidable](#ScreenCollidable) class and since that one aldo is a `Collidable`
+the predefined [ScreenCollidable](#ScreenCollidable) class and since that one also is a `Collidable`
 you can implement your own `onCollision` method for that class if needed.
 
 ### HasCollidables

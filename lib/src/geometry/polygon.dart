@@ -147,19 +147,19 @@ class Polygon extends Shape {
     return rectIntersections;
   }
 
-  LineSegment getEdge(int x, {List<Vector2> vertices}) {
+  LineSegment getEdge(int i, {List<Vector2> vertices}) {
     return LineSegment(
-      getVertex(x, vertices: vertices),
+      getVertex(i, vertices: vertices),
       getVertex(
-        x + 1,
+        i + 1,
         vertices: vertices,
       ),
     );
   }
 
-  Vector2 getVertex(int x, {List<Vector2> vertices}) {
+  Vector2 getVertex(int i, {List<Vector2> vertices}) {
     vertices ??= hitbox();
-    return vertices[x % vertices.length];
+    return vertices[i % vertices.length];
   }
 }
 

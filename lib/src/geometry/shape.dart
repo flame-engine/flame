@@ -86,7 +86,7 @@ class ShapeCache<T> {
 
   ShapeCache();
 
-  bool isCacheValid<T>(List<T> validCacheValues) {
+  bool isCacheValid<F>(List<F> validCacheValues) {
     if (value == null) {
       return false;
     }

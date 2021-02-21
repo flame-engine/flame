@@ -2,7 +2,8 @@ import 'dart:math';
 
 import '../../extensions.dart';
 
-/// This represents a linear function on the ax + by = c form
+/// This represents a line on the ax + by = c form
+/// If you just want to represent a part of a line, look into [LineSegment].
 class Line {
   final double a;
   final double b;

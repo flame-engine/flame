@@ -1,6 +1,8 @@
 import 'line.dart';
 import '../../extensions.dart';
 
+/// A [LineSegment] represent a segment of an infinitely long line, it is the
+/// segment between the [from] and [to] vectors (inclusive).
 class LineSegment {
   final Vector2 from;
   final Vector2 to;
