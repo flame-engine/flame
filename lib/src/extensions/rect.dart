@@ -44,10 +44,10 @@ extension RectExtension on Rect {
 class RectFactory {
   /// Creates bounds in from of a [Rect] from a list of [Vector2]
   static Rect fromBounds(List<Vector2> pts) {
-    final double minX = pts.map((e) => e.x).reduce(min);
-    final double maxX = pts.map((e) => e.x).reduce(max);
-    final double minY = pts.map((e) => e.y).reduce(min);
-    final double maxY = pts.map((e) => e.y).reduce(max);
+    final minX = pts.map((e) => e.x).reduce(min);
+    final maxX = pts.map((e) => e.x).reduce(max);
+    final minY = pts.map((e) => e.y).reduce(min);
+    final maxY = pts.map((e) => e.y).reduce(max);
     return Rect.fromPoints(Offset(minX, minY), Offset(maxX, maxY));
   }
 }

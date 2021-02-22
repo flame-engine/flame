@@ -4,9 +4,9 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart' hide Image;
 
+import '../extensions/vector2.dart';
 import '../palette.dart';
 import '../text_config.dart';
-import '../extensions/vector2.dart';
 import 'position_component.dart';
 
 class TextBoxConfig {

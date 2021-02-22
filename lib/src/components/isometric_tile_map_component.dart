@@ -42,8 +42,8 @@ class IsometricTileMapComponent extends PositionComponent {
     super.render(c);
 
     final size = effectiveTileSize;
-    for (int i = 0; i < matrix.length; i++) {
-      for (int j = 0; j < matrix[i].length; j++) {
+    for (var i = 0; i < matrix.length; i++) {
+      for (var j = 0; j < matrix[i].length; j++) {
         final element = matrix[i][j];
         if (element != -1) {
           final sprite = tileset.getSpriteById(element);

@@ -7,13 +7,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'effect_test_utils.dart';
 
 void main() {
-  final Random random = Random();
+  final random = Random();
   Vector2 randomVector2() => (Vector2.random(random) * 100)..round();
   double randomAngle() => 1.0 + random.nextInt(5);
   double randomDuration() => 1.0 + random.nextInt(100);
-  final Vector2 argumentSize = randomVector2();
-  final double argumentAngle = randomAngle();
-  final List<Vector2> path = List.generate(3, (i) => randomVector2());
+  final argumentSize = randomVector2();
+  final argumentAngle = randomAngle();
+  final path = List.generate(3, (i) => randomVector2());
   TestComponent component() {
     return TestComponent(
       position: randomVector2(),
@@ -29,17 +29,17 @@ void main() {
     bool hasAlternatingRotateEffect = false,
     bool hasAlternatingScaleEffect = false,
   }) {
-    final MoveEffect move = MoveEffect(
+    final move = MoveEffect(
       path: path,
       duration: randomDuration(),
       isAlternating: hasAlternatingMoveEffect,
     );
-    final RotateEffect rotate = RotateEffect(
+    final rotate = RotateEffect(
       angle: argumentAngle,
       duration: randomDuration(),
       isAlternating: hasAlternatingRotateEffect,
     );
-    final ScaleEffect scale = ScaleEffect(
+    final scale = ScaleEffect(
       size: argumentSize,
       duration: randomDuration(),
       isAlternating: hasAlternatingScaleEffect,
@@ -148,7 +148,6 @@ void main() {
         expectedPosition: positionComponent.position.clone(),
         expectedAngle: argumentAngle,
         expectedSize: argumentSize,
-        shouldComplete: true,
       );
     },
   );
@@ -164,7 +163,6 @@ void main() {
         expectedPosition: path.last,
         expectedAngle: positionComponent.angle,
         expectedSize: argumentSize,
-        shouldComplete: true,
       );
     },
   );
@@ -180,7 +178,6 @@ void main() {
         expectedPosition: path.last,
         expectedAngle: argumentAngle,
         expectedSize: positionComponent.size.clone(),
-        shouldComplete: true,
       );
     },
   );

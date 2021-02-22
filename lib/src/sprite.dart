@@ -2,11 +2,11 @@ import 'dart:ui';
 
 import '../image_composition.dart';
 import 'anchor.dart';
+import 'assets/images.dart';
 import 'extensions/offset.dart';
 import 'extensions/vector2.dart';
 import 'flame.dart';
 import 'palette.dart';
-import 'assets/images.dart';
 
 class Sprite {
   Paint paint = BasicPalette.white.paint;

@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
+import 'package:meta/meta.dart';
 
 import '../extensions/vector2.dart';
 
@@ -74,7 +74,7 @@ abstract class Component {
   ///
   /// Has a default implementation which just returns null.
   ///
-  /// This can be overriden this to add custom logic to the component loading.
+  /// This can be overwritten this to add custom logic to the component loading.
   ///
   /// Example:
   /// ```dart

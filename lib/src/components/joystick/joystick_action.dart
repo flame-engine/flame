@@ -85,8 +85,8 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   }
 
   void initialize(Vector2 _screenSize) {
-    final double radius = size / 2;
-    double dx = 0, dy = 0;
+    final radius = size / 2;
+    var dx = 0.0, dy = 0.0;
     switch (align) {
       case JoystickActionAlign.topLeft:
         dx = margin.left + radius;
@@ -141,12 +141,12 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
 
       // Distance between the center of joystick background & drag position
       final centerPosition = _rectBackgroundDirection.center.toVector2();
-      double dist = centerPosition.distanceTo(_dragPosition);
+      final unboundDist = centerPosition.distanceTo(_dragPosition);
 
       // The maximum distance for the knob position to the edge of
       // the background + half of its own size. The knob can wander in the
       // background image, but not outside.
-      dist = min(dist, _tileSize);
+      final dist = min(unboundDist, _tileSize);
 
       // Calculate the knob position
       final nextX = dist * cos(radAngle);

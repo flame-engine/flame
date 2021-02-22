@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 import '../particles/particle.dart';
 import 'component.dart';

@@ -1,5 +1,6 @@
-import 'package:meta/meta.dart';
 import 'dart:ui';
+
+import 'package:meta/meta.dart';
 
 import 'assets/images.dart';
 import 'extensions/vector2.dart';
@@ -173,14 +174,14 @@ class SpriteAnimation {
     final frames = jsonFrames.values.map((dynamic value) {
       final map = value as Map;
       final frameData = map['frame'] as Map<String, dynamic>;
-      final int x = frameData['x'] as int;
-      final int y = frameData['y'] as int;
-      final int width = frameData['w'] as int;
-      final int height = frameData['h'] as int;
+      final x = frameData['x'] as int;
+      final y = frameData['y'] as int;
+      final width = frameData['w'] as int;
+      final height = frameData['h'] as int;
 
       final stepTime = (map['duration'] as int) / 1000;
 
-      final Sprite sprite = Sprite(
+      final sprite = Sprite(
         image,
         srcPosition: Vector2Extension.fromInts(x, y),
         srcSize: Vector2Extension.fromInts(width, height),
@@ -217,7 +218,7 @@ class SpriteAnimation {
   /// Sets a different step time to each frame. The sizes of the arrays must match.
   set variableStepTimes(List<double> stepTimes) {
     assert(stepTimes.length == frames.length);
-    for (int i = 0; i < frames.length; i++) {
+    for (var i = 0; i < frames.length; i++) {
       frames[i].stepTime = stepTimes[i];
     }
   }

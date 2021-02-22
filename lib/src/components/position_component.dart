@@ -1,6 +1,7 @@
 import 'dart:ui' hide Offset;
 
 import '../anchor.dart';
+import '../collision_detection.dart' as collision_detection;
 import '../extensions/offset.dart';
 import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
@@ -149,7 +150,7 @@ abstract class PositionComponent extends BaseComponent {
       Vector2(-50, -15),
     );
 
-    final Rect rect = toRect();
+    final rect = toRect();
     final dx = rect.right;
     final dy = rect.bottom;
     debugTextConfig.render(
@@ -163,7 +164,7 @@ abstract class PositionComponent extends BaseComponent {
   void prepareCanvas(Canvas canvas) {
     canvas.translate(x, y);
     canvas.rotate(angle);
-    final Vector2 delta = -anchor.toVector2()
+    final delta = -anchor.toVector2()
       ..multiply(size);
     canvas.translate(delta.x, delta.y);
 

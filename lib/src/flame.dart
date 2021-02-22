@@ -8,7 +8,7 @@ import 'device.dart';
 
 /// This class holds static references to some useful objects to use in your game.
 ///
-/// You can access shared instances of [AssetsCache], [Images] and [Util].
+/// You can access shared instances of [AssetsCache], [Images] and [Device].
 /// Most games should need only one instance of each, and should use this class to manage that reference.
 class Flame {
   // Flame asset bundle, defaults to root

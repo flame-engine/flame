@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
+import 'package:meta/meta.dart';
 
 import '../assets/images.dart';
 import '../extensions/vector2.dart';
@@ -81,7 +81,7 @@ class ParallaxComponent extends PositionComponent {
   ///
   /// [load] takes a list of paths to all the images and a size that you want to use in the
   /// parallax.
-  /// Optionally arguments for the [baseVelocity] and [layerDelta] can be passed
+  /// Optionally arguments for the [baseVelocity] and [velocityMultiplierDelta] can be passed
   /// in, [baseVelocity] defines what the base velocity of the layers should be
   /// and [velocityMultiplierDelta] defines how the velocity should change the
   /// closer the layer is ([velocityMultiplierDelta ^ n], where n is the

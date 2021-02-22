@@ -78,18 +78,18 @@ class Images {
 
   Future<Image> _fetchFromBase64(String base64Data) async {
     final data = base64Data.substring(base64Data.indexOf(',') + 1);
-    final Uint8List bytes = base64.decode(data);
+    final bytes = base64.decode(data);
     return _loadBytes(bytes);
   }
 
   Future<Image> _fetchToMemory(String name) async {
-    final ByteData data = await Flame.bundle.load('assets/images/' + name);
-    final Uint8List bytes = Uint8List.view(data.buffer);
+    final data = await Flame.bundle.load('assets/images/' + name);
+    final bytes = Uint8List.view(data.buffer);
     return _loadBytes(bytes);
   }
 
   Future<Image> _loadBytes(Uint8List bytes) {
-    final Completer<Image> completer = Completer();
+    final completer = Completer<Image>();
     decodeImageFromList(bytes, (image) => completer.complete(image));
     return completer.future;
   }

@@ -4,9 +4,9 @@ import 'dart:ui';
 import 'package:flutter/painting.dart';
 
 import 'assets/images.dart';
+import 'extensions/canvas.dart';
 import 'extensions/rect.dart';
 import 'extensions/vector2.dart';
-import 'extensions/canvas.dart';
 import 'flame.dart';
 import 'game/game.dart';
 
@@ -121,7 +121,7 @@ class ParallaxLayer {
   /// [parallaxImage] is the representation of the image with data of how the
   /// image should behave.
   /// [velocityMultiplier] will be used to determine the velocity of the layer by
-  /// multiplying the [baseVelocity] with the [velocityMultiplier].
+  /// multiplying the [Parallax.baseVelocity] with the [velocityMultiplier].
   ParallaxLayer(
     this.parallaxImage, {
     Vector2 velocityMultiplier,
@@ -152,10 +152,10 @@ class ParallaxLayer {
 
     // Number of images that can fit on the canvas plus one
     // to have something to scroll to without leaving canvas empty
-    final Vector2 count = Vector2.all(1) + (size.clone()..divide(_imageSize));
+    final count = Vector2.all(1) + (size.clone()..divide(_imageSize));
 
     // Percentage of the image size that will overflow
-    final Vector2 overflow = ((_imageSize.clone()..multiply(count)) - size)
+    final overflow = ((_imageSize.clone()..multiply(count)) - size)
       ..divide(_imageSize);
 
     // Align image to correct side of the screen
@@ -165,7 +165,7 @@ class ParallaxLayer {
     _scroll ??= Vector2(marginX, marginY);
 
     // Size of the area to paint the images on
-    final Vector2 paintSize = count..multiply(_imageSize);
+    final paintSize = count..multiply(_imageSize);
     _paintArea = paintSize.toRect();
   }
 
@@ -186,7 +186,7 @@ class ParallaxLayer {
         break;
     }
 
-    final Vector2 scrollPosition = _scroll.clone()..multiply(_imageSize);
+    final scrollPosition = _scroll.clone()..multiply(_imageSize);
     _paintArea = Rect.fromLTWH(
       -scrollPosition.x,
       -scrollPosition.y,
@@ -281,7 +281,7 @@ class Parallax {
   ///
   /// [load] takes a list of paths to all the images that you want to use in the
   /// parallax.
-  /// Optionally arguments for the [baseVelocity] and [layerDelta] can be passed
+  /// Optionally arguments for the [baseVelocity] and [velocityMultiplierDelta] can be passed
   /// in, [baseVelocity] defines what the base velocity of the layers should be
   /// and [velocityMultiplierDelta] defines how the velocity should change the
   /// closer the layer is ([velocityMultiplierDelta ^ n], where n is the
@@ -302,7 +302,7 @@ class Parallax {
     Images images,
   }) async {
     velocityMultiplierDelta ??= Vector2.all(1.0);
-    int depth = 0;
+    var depth = 0;
     final layers = await Future.wait<ParallaxLayer>(
       paths.map((path) async {
         final image = ParallaxImage.load(

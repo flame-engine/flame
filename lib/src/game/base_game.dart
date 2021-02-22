@@ -26,10 +26,16 @@ class BaseGame extends Game with FPSCounter {
   final OrderedSet<Component> components =
       OrderedSet(Comparing.on((c) => c.priority));
 
-  /// Components added by the [addLater] method
+  /// Components to be added on the next update.
+  ///
+  /// The component list is only changed at the start of each [update] to avoid
+  /// concurrency issues.
   final List<Component> _addLater = [];
 
-  /// Components to be removed on the next update
+  /// Components to be removed on the next update.
+  ///
+  /// The component list is only changed at the start of each [update] to avoid
+  /// concurrency issues.
   final Set<Component> _removeLater = {};
 
   /// Camera position; every non-HUD component is translated so that the camera position is the top-left corner of the screen.
@@ -132,7 +138,8 @@ class BaseGame extends Game with FPSCounter {
 
   /// This implementation of update updates every component in the list.
   ///
-  /// It also actually adds the components that were added by the [addLater] method, and remove those that are marked for destruction via the [Component.shouldRemove] method.
+  /// It also actually adds the components added via [add] since the previous tick,
+  /// and remove those that are marked for destruction via the [Component.shouldRemove] method.
   /// You can override it further to add more custom behavior.
   @override
   @mustCallSuper
@@ -158,7 +165,8 @@ class BaseGame extends Game with FPSCounter {
     components.forEach((c) => c.update(dt));
   }
 
-  /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.
+  /// This implementation of resize passes the resize call along to every
+  /// component in the list, enabling each one to make their decisions as how to handle the resize.
   ///
   /// It also updates the [size] field of the class to be used by later added components and other methods.
   /// You can override it further to add more custom behavior, but you should seriously consider calling the super implementation as well.
