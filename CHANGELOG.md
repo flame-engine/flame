@@ -21,6 +21,7 @@
  - Add assertion to make sure Draggables are safe to add
  - Add utility methods to the Anchor class to make it more "enum like"
  - Enable user-defined anchors
+ - Added `toImage` method for the `Sprite` class
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
