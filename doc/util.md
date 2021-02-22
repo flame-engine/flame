@@ -1,34 +1,36 @@
 # Util
 
-Some stuff just doesn't fit anywhere else.
+On this page you can find documentation for some utility classes and methods.
 
-## Util Class
+## Device Class
 
-This class, accessible via `Flame.util`, has some sparse functions that are independent and good to have.
+This class, accessible via `Flame.device`, has some functions that can be used to control the state of the device, like changing the screen orientation for example.
 
-It is recommended that the functions in this class be called via the `Flame.util` getter to utilize a single instance prepared by the Flame engine.
-
-### `Flame.util.fullScreen()`
+### `Flame.device.fullScreen()`
 
 When called, this disables all `SystemUiOverlay` making the app full screen.
 When called in the main method, makes your app full screen (no top nor bottom bars)
 
-### `Flame.util.setLandscape()`
+**Note:** Has no effect when called on the web.
 
-This method sets the orientation of the whole application (effectively, also the game) to landscape and depending on operating system and device setting, should allow both left and right landscape orientations. To set the app orientation to landscape on a specific direction, use either `Flame.util.setLandscapeLeftOnly` or `Flame.util.setLandscapeRightOnly`.
+### `Flame.device.setLandscape()`
 
-### `Flame.util.setPortrait()`
+This method sets the orientation of the whole application (effectively, also the game) to landscape and depending on operating system and device setting, should allow both left and right landscape orientations. To set the app orientation to landscape on a specific direction, use either `Flame.device.setLandscapeLeftOnly` or `Flame.device.setLandscapeRightOnly`.
 
-This method sets the orientation of the whole application (effectively, also the game) to portrait and depending on operating system and device setting, should allow both up and down landscape orientations. To set the app orientation to portrait on a specific direction, use either `Flame.util.setPortraitUpOnly` or `Flame.util.setPortraitDownOnly`.
+**Note:** Has no effect when called on the web.
 
-### `Flame.util.setOrientation()` and `Flame.util.setOrientations()`
+### `Flame.device.setPortrait()`
+
+This method sets the orientation of the whole application (effectively, also the game) to portrait and depending on operating system and device setting, should allow both up and down landscape orientations. To set the app orientation to portrait on a specific direction, use either `Flame.device.setPortraitUpOnly` or `Flame.device.setPortraitDownOnly`.
+
+**Note:** Has no effect when called on the web.
+
+### `Flame.device.setOrientation()` and `Flame.device.setOrientations()`
 
 If a finer control of the allowed orientations is required (without having to deal with `SystemChrome` directly), `setOrientation` (accepts a single `DeviceOrientation` as a parameter) and `setOrientations` (accepts a `List<DeviceOrientation>` for possible orientations) can be used.
 
-### Other functions
+**Note:** Has no effect when called on the web.
 
-* `renderWhereAt` and `renderRotated`: if you are directly rendering to the `Canvas`, you can use these functions to easily manipulate coordinates to render things on the correct places. They change the `Canvas` transformation matrix but reset afterwards.
- 
 ## Timer
 
 Flame provides a simple utility class to help you handle countdowns and event like events.
@@ -145,3 +147,4 @@ They can all be imported on `package:flame/extensions/...`
 Methods:
  - `scaleVector`: Just like `canvas scale` method, but takes a `Vector2` as an argument.
  - `translateVector`: Just like `canvas translate` method, but takes a `Vector2` as an argument.
+ - `renderAt` and `renderRotated`: if you are directly rendering to the `Canvas`, you can use these functions to easily manipulate coordinates to render things on the correct places. They change the `Canvas` transformation matrix but reset afterwards.

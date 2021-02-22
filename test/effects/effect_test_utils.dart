@@ -28,6 +28,7 @@ void effectTest(
   final Callback callback = Callback();
   effect.onComplete = callback.call;
   final BaseGame game = BaseGame();
+  game.onResize(Vector2.all(200));
   game.add(component);
   component.addEffect(effect);
   final double duration = effect.iterationTime;
@@ -86,8 +87,11 @@ void effectTest(
     );
   }
   expect(effect.hasCompleted(), shouldComplete, reason: "Effect shouldFinish");
-  expect(callback.isCalled, shouldComplete,
-      reason: "Callback was treated wrong");
+  expect(
+    callback.isCalled,
+    shouldComplete,
+    reason: "Callback was treated wrong",
+  );
   game.update(0.0); // Since effects are removed before they are updated
   expect(component.effects.isEmpty, shouldComplete);
 }

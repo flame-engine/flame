@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/spritesheet.dart';
+import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -28,7 +28,9 @@ class MyGame extends BaseGame {
     final spriteSize = Vector2(80.0, 90.0);
 
     final vampireComponent = SpriteAnimationComponent.fromSpriteAnimation(
-        spriteSize, vampireAnimation)
+      spriteSize,
+      vampireAnimation,
+    )
       ..x = 150
       ..y = 100;
 

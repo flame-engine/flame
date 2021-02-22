@@ -6,12 +6,14 @@ import 'package:flutter/painting.dart';
 import 'assets/images.dart';
 import 'extensions/rect.dart';
 import 'extensions/vector2.dart';
+import 'extensions/canvas.dart';
 import 'flame.dart';
 import 'game/game.dart';
 
 extension ParallaxExtension on Game {
   Future<Parallax> loadParallax(
-    List<String> paths, {
+    List<String> paths,
+    Vector2 size, {
     Vector2 baseVelocity,
     Vector2 velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
@@ -20,6 +22,7 @@ extension ParallaxExtension on Game {
   }) {
     return Parallax.load(
       paths,
+      size,
       baseVelocity: baseVelocity,
       velocityMultiplierDelta: velocityMultiplierDelta,
       repeat: repeat,
@@ -235,12 +238,19 @@ enum LayerFill { height, width, none }
 /// layer moves with different velocities to give an effect of depth.
 class Parallax {
   Vector2 baseVelocity;
+  Vector2 _size = Vector2.zero();
+  Rect _clipRect;
   final List<ParallaxLayer> layers;
 
   Parallax(
-    this.layers, {
+    this.layers,
+    Vector2 size, {
     Vector2 baseVelocity,
-  }) : baseVelocity = baseVelocity ?? Vector2.zero();
+  })  : assert(layers != null),
+        assert(size != null) {
+    this.baseVelocity = baseVelocity ?? Vector2.zero();
+    resize(size);
+  }
 
   /// The base offset of the parallax, can be used in an outer update loop
   /// if you want to transition the parallax to a certain position.
@@ -248,7 +258,13 @@ class Parallax {
 
   /// If the `ParallaxComponent` isn't used your own wrapper needs to call this
   /// on creation.
-  void resize(Vector2 size) => layers.forEach((layer) => layer.resize(size));
+  void resize(Vector2 newSize) {
+    if (newSize != _size) {
+      _size = newSize;
+      _clipRect = newSize.toRect();
+      layers.forEach((layer) => layer.resize(newSize));
+    }
+  }
 
   void update(double t) {
     layers.forEach((layer) {
@@ -276,7 +292,8 @@ class Parallax {
   /// used can also be passed in.
   /// If no image cache is set, the global flame cache is used.
   static Future<Parallax> load(
-    List<String> paths, {
+    List<String> paths,
+    Vector2 size, {
     Vector2 baseVelocity,
     Vector2 velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
@@ -309,7 +326,22 @@ class Parallax {
     );
     return Parallax(
       layers,
+      size,
       baseVelocity: baseVelocity,
     );
+  }
+
+  void render(Canvas canvas, {Vector2 position}) {
+    canvas.save();
+    if (position != null) {
+      canvas.translateVector(position);
+    }
+    canvas.clipRect(_clipRect);
+    layers.forEach((layer) {
+      canvas.save();
+      layer.render(canvas);
+      canvas.restore();
+    });
+    canvas.restore();
   }
 }

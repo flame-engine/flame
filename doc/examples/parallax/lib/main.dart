@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Flame.util.fullScreen();
+  await Flame.device.fullScreen();
   runApp(
     GameWidget(
       game: MyGame(),
@@ -24,11 +24,10 @@ class MyGame extends BaseGame {
 
   @override
   Future<void> onLoad() async {
-    final parallax = await ParallaxComponent.load(
+    final parallax = await loadParallaxComponent(
       _imageNames,
       baseVelocity: Vector2(20, 0),
       velocityMultiplierDelta: Vector2(1.8, 1.0),
-      images: images,
     );
     add(parallax);
   }

@@ -86,8 +86,8 @@ void main() {
       final MyGame game = MyGame();
       final MyTap child = MyTap();
       final MyComposed wrapper = MyComposed();
-
-      game.size.setFrom(size);
+      game.onResize(size);
+      child.size = Vector2.all(1);
       game.add(wrapper);
       wrapper.addChild(child);
       game.update(0.0);
@@ -106,7 +106,7 @@ void main() {
         ..position = Vector2.all(100)
         ..size = Vector2.all(300);
 
-      game.size.setFrom(size);
+      game.onResize(size);
       game.add(wrapper);
       wrapper.addChild(child);
       game.update(0.0);
@@ -119,6 +119,7 @@ void main() {
 
     test('updates and renders children', () {
       final MyGame game = MyGame();
+      game.onResize(Vector2.all(100));
       final MyTap child = MyTap();
       final MyComposed wrapper = MyComposed();
 

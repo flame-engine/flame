@@ -1,9 +1,10 @@
 import 'dart:ui' hide Offset;
 
-import '../collision_detection.dart' as collision_detection;
 import '../anchor.dart';
 import '../extensions/offset.dart';
+import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
+import '../geometry/rectangle.dart';
 import 'base_component.dart';
 import 'component.dart';
 import 'mixins/hitbox.dart';
@@ -44,8 +45,16 @@ abstract class PositionComponent extends BaseComponent {
   double get height => size.y;
   set height(double height) => size.y = height;
 
+  /// Get the absolute position, with the anchor taken into consideration
+  Vector2 get absolutePosition => absoluteParentPosition + position;
+
   /// Get the relative top left position regardless of the anchor and angle
   Vector2 get topLeftPosition => anchor.translate(position, size);
+
+  /// Set the top left position regardless of the anchor
+  set topLeftPosition(Vector2 position) {
+    this.position = position + (anchor.toVector2..multiply(size));
+  }
 
   /// Get the absolute top left position regardless of whether it is a child or not
   Vector2 get absoluteTopLeftPosition {
@@ -58,7 +67,9 @@ abstract class PositionComponent extends BaseComponent {
   }
 
   /// Get the position that everything in this component is positioned in relation to
-  Vector2 get absoluteCanvasPosition {
+  /// If this component has no parent the absolute parent position is the origin,
+  /// otherwise it's the parents absolute top left position
+  Vector2 get absoluteParentPosition {
     if (parent is PositionComponent) {
       return (parent as PositionComponent).absoluteTopLeftPosition;
     } else {
@@ -66,15 +77,13 @@ abstract class PositionComponent extends BaseComponent {
     }
   }
 
-  /// Set the top left position regardless of the anchor
-  set topLeftPosition(Vector2 position) {
-    this.position = position + (anchor.toVector2..multiply(size));
-  }
-
-  /// Get the position of the center of the component
+  /// Get the position of the center of the component's bounding rectangle without rotation
   Vector2 get center {
     return anchor == Anchor.center ? position : topLeftPosition + (size / 2);
   }
+
+  /// Get the absolute center of the component without rotation
+  Vector2 get absoluteCenter => absoluteParentPosition + center;
 
   /// Angle (with respect to the x-axis) this component should be rendered with.
   /// It is rotated around its anchor.
@@ -95,6 +104,10 @@ abstract class PositionComponent extends BaseComponent {
   /// Relative because it might be translated by their parents (which is not considered here).
   Rect toRect() => topLeftPosition.toPositionedRect(size);
 
+  /// Returns the absolute position/size of this component.
+  /// Absolute because it takes any possible parent position into consideration.
+  Rect toAbsoluteRect() => absoluteTopLeftPosition.toPositionedRect(size);
+
   /// Mutates position and size using the provided [rect] as basis.
   /// This is a relative rect, same definition that [toRect] use
   /// (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
@@ -103,22 +116,11 @@ abstract class PositionComponent extends BaseComponent {
     topLeftPosition = rect.topLeft.toVector2();
   }
 
-  /// Rotate [point] around component's angle and position (anchor)
-  Vector2 rotatePoint(Vector2 point) {
-    return point.clone()..rotate(angle, center: position);
-  }
-
   @override
   bool containsPoint(Vector2 point) {
-    final corners = [
-      rotatePoint(absoluteTopLeftPosition), // Top-left
-      rotatePoint(
-          absoluteTopLeftPosition + Vector2(0.0, size.y)), // Bottom-left
-      rotatePoint(absoluteTopLeftPosition + size), // Bottom-right
-      rotatePoint(absoluteTopLeftPosition + Vector2(size.x, 0.0)), // Top-right
-    ];
-
-    return collision_detection.containsPoint(point, corners);
+    final rectangle = Rectangle.fromRect(toAbsoluteRect(), angle: angle)
+      ..anchorPosition = absolutePosition;
+    return rectangle.containsPoint(point);
   }
 
   double angleTo(PositionComponent c) => position.angleTo(c.position);
@@ -128,7 +130,7 @@ abstract class PositionComponent extends BaseComponent {
   @override
   void renderDebugMode(Canvas canvas) {
     if (this is Hitbox) {
-      (this as Hitbox).renderContour(canvas);
+      (this as Hitbox).renderShapes(canvas);
     }
     canvas.drawRect(size.toRect(), debugPaint);
     debugTextConfig.render(

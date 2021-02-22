@@ -3,11 +3,10 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart' hide Timer;
-import 'package:flame/flame.dart';
 import 'package:flame/timer.dart' as flame_timer;
 import 'package:flame/game.dart';
 import 'package:flame/particles.dart';
-import 'package:flame/spritesheet.dart';
+import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart' hide Image;
 
 void main() async {
@@ -305,11 +304,12 @@ class MyGame extends BaseGame {
     return Particle.generate(
       count: count,
       generator: (i) => TranslatedParticle(
-          offset: Offset(
-            (i % perLine) * colWidth - halfCellSize.x + imageSize,
-            (i ~/ perLine) * rowHeight - halfCellSize.y + imageSize,
-          ),
-          child: reusableImageParticle),
+        offset: Offset(
+          (i % perLine) * colWidth - halfCellSize.x + imageSize,
+          (i ~/ perLine) * rowHeight - halfCellSize.y + imageSize,
+        ),
+        child: reusableImageParticle,
+      ),
     );
   }
 
@@ -476,7 +476,7 @@ class MyGame extends BaseGame {
           .moving(to: cellSizeOffset.scale(1, -1))
           .scaled(2)
           .translated(halfCellSizeOffset.scale(-1, 1))
-          .accelerated(acceleration: halfCellSizeOffset.scale(-5, 5))
+          .accelerated(acceleration: halfCellSizeOffset.scale(-5, 5)),
     ]);
   }
 
@@ -489,7 +489,10 @@ class MyGame extends BaseGame {
 
     if (debugMode) {
       fpsTextConfig.render(
-          canvas, '${fps(120).toStringAsFixed(2)}fps', Vector2(0, size.y - 24));
+        canvas,
+        '${fps(120).toStringAsFixed(2)}fps',
+        Vector2(0, size.y - 24),
+      );
     }
   }
 
@@ -534,7 +537,6 @@ class MyGame extends BaseGame {
 }
 
 Future<BaseGame> loadGame() async {
-  Flame.initializeWidget();
   WidgetsFlutterBinding.ensureInitialized();
 
   return MyGame();

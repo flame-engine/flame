@@ -1,11 +1,10 @@
 library flame;
 
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 import 'assets/assets_cache.dart';
 import 'assets/images.dart';
-import 'util.dart';
+import 'device.dart';
 
 /// This class holds static references to some useful objects to use in your game.
 ///
@@ -22,28 +21,6 @@ class Flame {
   /// Access a shared instance of the [Images] class.
   static Images images = Images();
 
-  /// Access a shared instance of the [Util] class.
-  static Util util = Util();
-
-  static Future<void> init({
-    AssetBundle bundle,
-    bool fullScreen = true,
-    DeviceOrientation orientation,
-  }) async {
-    initializeWidget();
-
-    if (fullScreen) {
-      await util.fullScreen();
-    }
-
-    if (orientation != null) {
-      await util.setOrientation(orientation);
-    }
-
-    _bundle = bundle;
-  }
-
-  static void initializeWidget() {
-    WidgetsFlutterBinding.ensureInitialized();
-  }
+  /// Access a shared instance of the [Device] class.
+  static Device device = Device();
 }

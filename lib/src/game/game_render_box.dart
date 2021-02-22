@@ -31,7 +31,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void attach(PipelineOwner owner) {
     super.attach(owner);
-    game.attach(owner, buildContext);
+    game.attach(owner, this);
 
     game.pauseEngineFn = gameLoop.pause;
     game.resumeEngineFn = gameLoop.resume;

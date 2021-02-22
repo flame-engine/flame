@@ -71,5 +71,20 @@ void main() {
       expect(anchorPosition.x, -1.0);
       expect(anchorPosition.y, 0.0);
     });
+
+    test('test remove and shouldRemove', () {
+      final c1 = SpriteComponent();
+      expect(c1.shouldRemove, equals(false));
+      c1.remove();
+      expect(c1.shouldRemove, equals(true));
+
+      final c2 = SpriteAnimationComponent();
+      expect(c2.shouldRemove, equals(false));
+      c2.remove();
+      expect(c2.shouldRemove, equals(true));
+
+      c2.shouldRemove = false;
+      expect(c2.shouldRemove, equals(false));
+    });
   });
 }

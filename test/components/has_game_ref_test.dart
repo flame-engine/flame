@@ -20,6 +20,7 @@ void main() {
     test('simple test', () {
       final MyComponent c = MyComponent();
       final MyGame game = MyGame();
+      game.onResize(Vector2.all(200));
       game.add(c);
       c.foo();
       expect(game.calledFoo, true);
