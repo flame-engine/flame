@@ -15,6 +15,7 @@ dev_dependencies:
     sdk: flutter
   test: ^1.9.4
   dart_code_metrics: ^2.4.0
+  dartdoc: ^0.39.0
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
