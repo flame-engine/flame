@@ -36,7 +36,7 @@ class Images {
     if (!_loadedFiles.containsKey(fileName)) {
       _loadedFiles[fileName] = _ImageAssetLoader(_fetchToMemory(fileName));
     }
-    return await _loadedFiles[fileName].retrieve();
+    return _loadedFiles[fileName].retrieve();
   }
 
   /// Convert an array of pixel values into an [Image] object.
@@ -73,7 +73,7 @@ class Images {
     if (!_loadedFiles.containsKey(fileName)) {
       _loadedFiles[fileName] = _ImageAssetLoader(_fetchFromBase64(base64));
     }
-    return await _loadedFiles[fileName].retrieve();
+    return _loadedFiles[fileName].retrieve();
   }
 
   Future<Image> _fetchFromBase64(String base64Data) async {
@@ -83,14 +83,14 @@ class Images {
   }
 
   Future<Image> _fetchToMemory(String name) async {
-    final data = await Flame.bundle.load('assets/images/' + name);
+    final data = await Flame.bundle.load('assets/images/$name');
     final bytes = Uint8List.view(data.buffer);
     return _loadBytes(bytes);
   }
 
   Future<Image> _loadBytes(Uint8List bytes) {
     final completer = Completer<Image>();
-    decodeImageFromList(bytes, (image) => completer.complete(image));
+    decodeImageFromList(bytes, completer.complete);
     return completer.future;
   }
 

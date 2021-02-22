@@ -27,7 +27,7 @@ Anchor parseAnchor(String name) {
       return Anchor.bottomRight;
   }
 
-  throw Exception("Cannot parse anchor name `$name`");
+  throw Exception('Cannot parse anchor name `$name`');
 }
 
 void main() async {
@@ -46,10 +46,10 @@ void main() async {
             tileSize: 16,
             destTileSize: 50,
             child: const Center(
-              child: const Text(
+              child: Text(
                 'Cool label',
-                style: const TextStyle(
-                  color: const Color(0xFFFFFFFF),
+                style: TextStyle(
+                  color: Color(0xFFFFFFFF),
                 ),
               ),
             ),
@@ -72,7 +72,7 @@ void main() async {
             },
             label: const Text(
               'Sprite Button',
-              style: const TextStyle(color: const Color(0xFF5D275D)),
+              style: TextStyle(color: Color(0xFF5D275D)),
             ),
             sprite: _buttons.getSprite(0, 0),
             pressedSprite: _buttons.getSprite(1, 0),

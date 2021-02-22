@@ -133,7 +133,7 @@ class NineTileBox extends StatelessWidget {
 
   final EdgeInsetsGeometry padding;
 
-  NineTileBox({
+  const NineTileBox({
     @required this.image,
     @required this.tileSize,
     @required this.destTileSize,

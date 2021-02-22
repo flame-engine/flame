@@ -90,10 +90,10 @@ abstract class Game {
   /// Should be called manually.
   void attach(PipelineOwner owner, GameRenderBox gameRenderBox) {
     if (isAttached) {
-      throw UnsupportedError("""
+      throw UnsupportedError('''
       Game attachment error:
       A game instance can only be attached to one widget at a time.
-      """);
+      ''');
     }
     _gameRenderBox = gameRenderBox;
     onAttach();

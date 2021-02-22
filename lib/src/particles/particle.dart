@@ -94,7 +94,7 @@ abstract class Particle {
   void setLifespan(double lifespan) {
     _lifespan = lifespan;
     _timer?.stop();
-    final void Function() removeCallback = () => _shouldBeRemoved = true;
+    void removeCallback() => _shouldBeRemoved = true;
     _timer = Timer(lifespan, callback: removeCallback);
     _timer.start();
   }

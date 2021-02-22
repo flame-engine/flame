@@ -24,7 +24,7 @@ class MyGame extends Game {
   }
 
   @override
-  void update(dt) {}
+  void update(double dt) {}
 
   @override
   void render(Canvas canvas) {

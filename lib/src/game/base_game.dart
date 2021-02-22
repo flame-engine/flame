@@ -85,7 +85,7 @@ class BaseGame extends Game with FPSCounter {
     );
     assert(
       c is Collidable ? this is HasCollidables : true,
-      "You can only use the Hitbox/Collidable feature with games that has the HasCollidables mixin",
+      'You can only use the Hitbox/Collidable feature with games that has the HasCollidables mixin',
     );
     prepare(c);
     final loadFuture = c.onLoad();

@@ -19,7 +19,7 @@ class SpriteAnimationWidget extends StatefulWidget {
   /// Should the [animation] be playing or not
   final bool playing;
 
-  SpriteAnimationWidget({
+  const SpriteAnimationWidget({
     this.animation,
     this.playing = true,
     this.anchor = Anchor.topLeft,
@@ -35,7 +35,7 @@ class _AnimationWidget extends State<SpriteAnimationWidget>
   double _lastUpdated;
 
   @override
-  void didUpdateWidget(oldWidget) {
+  void didUpdateWidget(SpriteAnimationWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.playing) {
       _initAnimation();
@@ -89,7 +89,7 @@ class _AnimationWidget extends State<SpriteAnimationWidget>
   }
 
   @override
-  Widget build(ctx) {
+  Widget build(BuildContext ctx) {
     return SpriteWidget(
       sprite: widget.animation.getSprite(),
       anchor: widget.anchor,

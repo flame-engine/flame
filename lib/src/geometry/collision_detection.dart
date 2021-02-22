@@ -1,14 +1,12 @@
-import 'shape.dart';
-import '../components/mixins/collidable.dart';
 import '../../extensions.dart';
-import '../../geometry.dart';
+import '../components/mixins/collidable.dart';
 
 /// Check whether any [Collidable] in [collidables] collide with each other and
 /// call their onCollision methods accordingly.
 void collisionDetection(List<Collidable> collidables) {
-  for (int x = 0; x < collidables.length; x++) {
+  for (var x = 0; x < collidables.length; x++) {
     final collidableX = collidables[x];
-    for (int y = x + 1; y < collidables.length; y++) {
+    for (var y = x + 1; y < collidables.length; y++) {
       final collidableY = collidables[y];
       final points = intersections(collidableX, collidableY);
       if (points.isNotEmpty) {
@@ -30,16 +28,14 @@ Set<Vector2> intersections(
 
   final result = <Vector2>{};
   final currentResult = <Vector2>{};
-  for (Shape shapeA in collidableA.shapes) {
-    for (Shape shapeB in collidableB.shapes) {
+  for (final shapeA in collidableA.shapes) {
+    for (final shapeB in collidableB.shapes) {
       currentResult.addAll(shapeA.intersections(shapeB));
       if (currentResult.isNotEmpty) {
         result.addAll(currentResult);
         // Do callbacks to the involved shapes
-        final hitboxShapeA = shapeA as HitboxShape;
-        final hitboxShapeB = shapeB as HitboxShape;
-        hitboxShapeA.onCollision(currentResult, hitboxShapeB);
-        hitboxShapeB.onCollision(currentResult, hitboxShapeA);
+        shapeA.onCollision(currentResult, shapeB);
+        shapeB.onCollision(currentResult, shapeA);
         currentResult.clear();
       }
     }

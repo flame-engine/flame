@@ -200,10 +200,10 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
     assert(
       !(hasBasicDetectors && hasAdvancedDetectors),
-      """
+      '''
         WARNING: Both Advanced and Basic detectors detected.
         Advanced detectors will override basic detectors and the later will not receive events
-      """,
+      ''',
     );
 
     if (hasBasicDetectors) {
@@ -311,7 +311,7 @@ bool _hasMouseDetectors(Game game) =>
 
 Widget _applyBasicGesturesDetectors(Game game, Widget child) {
   return GestureDetector(
-    key: const ObjectKey("BasicGesturesDetector"),
+    key: const ObjectKey('BasicGesturesDetector'),
     behavior: HitTestBehavior.opaque,
 
     // Taps
@@ -515,7 +515,7 @@ Widget _applyMouseDetectors(Game game, Widget child) {
 class _GameRenderObjectWidget extends LeafRenderObjectWidget {
   final Game game;
 
-  _GameRenderObjectWidget(this.game);
+  const _GameRenderObjectWidget(this.game);
 
   @override
   RenderBox createRenderObject(BuildContext context) {
@@ -532,7 +532,7 @@ class _DragEvent extends Drag {
   void Function(DragEndDetails) onEnd;
 
   @override
-  void update(details) {
+  void update(DragUpdateDetails details) {
     onUpdate?.call(details);
   }
 
@@ -542,7 +542,7 @@ class _DragEvent extends Drag {
   }
 
   @override
-  void end(details) {
+  void end(DragEndDetails details) {
     onEnd?.call(details);
   }
 }

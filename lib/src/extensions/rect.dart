@@ -2,8 +2,8 @@ import 'dart:math';
 import 'dart:ui';
 
 import '../../geometry.dart';
-import 'vector2.dart';
 import 'offset.dart';
+import 'vector2.dart';
 
 export 'dart:ui' show Rect;
 

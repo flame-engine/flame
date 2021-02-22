@@ -14,7 +14,7 @@ class SpriteButton extends StatefulWidget {
   final double width;
   final double height;
 
-  SpriteButton({
+  const SpriteButton({
     @required this.onPressed,
     @required this.label,
     @required this.sprite,

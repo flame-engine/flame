@@ -63,35 +63,34 @@ class Circle extends Shape {
   }) {
     double sq(double x) => pow(x, 2).toDouble();
 
-    final double cx = shapeCenter.x;
-    final double cy = shapeCenter.y;
+    final cx = shapeCenter.x;
+    final cy = shapeCenter.y;
 
-    final Vector2 point1 = line.from;
-    final Vector2 point2 = line.to;
+    final point1 = line.from;
+    final point2 = line.to;
 
-    final Vector2 delta = point2 - point1;
+    final delta = point2 - point1;
 
-    final double A = sq(delta.x) + sq(delta.y);
-    final double B =
-        2 * (delta.x * (point1.x - cx) + delta.y * (point1.y - cy));
-    final double C = sq(point1.x - cx) + sq(point1.y - cy) - sq(radius);
+    final A = sq(delta.x) + sq(delta.y);
+    final B = 2 * (delta.x * (point1.x - cx) + delta.y * (point1.y - cy));
+    final C = sq(point1.x - cx) + sq(point1.y - cy) - sq(radius);
 
-    final double det = B * B - 4 * A * C;
+    final det = B * B - 4 * A * C;
     final result = <Vector2>[];
     if (A <= epsilon || det < 0) {
       return [];
     } else if (det == 0) {
-      final double t = -B / (2 * A);
+      final t = -B / (2 * A);
       result.add(Vector2(point1.x + t * delta.x, point1.y + t * delta.y));
     } else {
-      final double t1 = (-B + sqrt(det)) / (2 * A);
-      final Vector2 i1 = Vector2(
+      final t1 = (-B + sqrt(det)) / (2 * A);
+      final i1 = Vector2(
         point1.x + t1 * delta.x,
         point1.y + t1 * delta.y,
       );
 
-      final double t2 = (-B - sqrt(det)) / (2 * A);
-      final Vector2 i2 = Vector2(
+      final t2 = (-B - sqrt(det)) / (2 * A);
+      final i2 = Vector2(
         point1.x + t2 * delta.x,
         point1.y + t2 * delta.y,
       );

@@ -1,9 +1,9 @@
 import 'dart:collection';
 import 'dart:math';
 
-import '../position_component.dart';
 import '../../../extensions.dart';
 import '../../geometry/shape.dart';
+import '../position_component.dart';
 
 mixin Hitbox on PositionComponent {
   final List<HitboxShape> _shapes = <HitboxShape>[];

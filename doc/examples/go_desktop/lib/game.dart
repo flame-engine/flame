@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 class MyGame extends Game {
   static final Paint paint = Paint()..color = const Color(0xFFFFFFFF);
 
-  var movingLeft = false;
-  var movingRight = false;
-  var movingUp = false;
-  var movingDown = false;
+  bool movingLeft = false;
+  bool movingRight = false;
+  bool movingUp = false;
+  bool movingDown = false;
 
   double x = 0;
   double y = 0;

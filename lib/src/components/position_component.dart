@@ -1,7 +1,6 @@
 import 'dart:ui' hide Offset;
 
 import '../anchor.dart';
-import '../collision_detection.dart' as collision_detection;
 import '../extensions/offset.dart';
 import '../extensions/rect.dart';
 import '../extensions/vector2.dart';

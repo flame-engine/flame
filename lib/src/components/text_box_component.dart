@@ -62,7 +62,7 @@ class TextBoxComponent extends PositionComponent {
     _lines = [];
     double lineHeight;
     text.split(' ').forEach((word) {
-      final possibleLine = _lines.isEmpty ? word : _lines.last + ' ' + word;
+      final possibleLine = _lines.isEmpty ? word : '${_lines.last} $word';
       final painter = _config.toTextPainter(possibleLine);
       lineHeight ??= painter.height;
       if (painter.width <=

@@ -1,6 +1,7 @@
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
 
+import '../../components.dart';
 import '../extensions/vector2.dart';
 import 'effects.dart';
 
@@ -36,7 +37,7 @@ class MoveEffect extends SimplePositionComponentEffect {
     void Function() onComplete,
   })  : assert(
           (duration != null) ^ (speed != null),
-          "Either speed or duration necessary",
+          'Either speed or duration necessary',
         ),
         super(
           isInfinite,
@@ -50,7 +51,7 @@ class MoveEffect extends SimplePositionComponentEffect {
         );
 
   @override
-  void initialize(component) {
+  void initialize(PositionComponent component) {
     super.initialize(component);
     List<Vector2> _movePath;
     _startPosition = component.position.clone();

@@ -178,7 +178,7 @@ class MyGame extends BaseGame {
   }
 
   /// Same example as above, but
-  /// with easing, utilising [CurvedParticle] extension
+  /// with easing, utilizing [CurvedParticle] extension
   Particle easedMovingParticle() {
     return Particle.generate(
       count: 5,
@@ -232,7 +232,7 @@ class MyGame extends BaseGame {
     );
   }
 
-  /// Using [ComputedParticle] to use custom tweening
+  /// Using [ComputedParticle] to provide a custom tween.
   /// In reality, you would like to keep as much of renderer state
   /// defined outside and reused between each call
   Particle steppedComputedParticle() {
@@ -419,7 +419,7 @@ class MyGame extends BaseGame {
       generator: (i) {
         final initialSpeed = randomCellOffset();
         final deceleration = initialSpeed * -1;
-        const gravity = const Offset(0, 40);
+        const gravity = Offset(0, 40);
 
         return AcceleratedParticle(
           speed: initialSpeed,
@@ -524,10 +524,7 @@ class MyGame extends BaseGame {
       columns: columns,
       rows: rows,
     );
-    final sprites = List<Sprite>.generate(
-      frames,
-      (i) => spritesheet.getSpriteById(i),
-    );
+    final sprites = List<Sprite>.generate(frames, spritesheet.getSpriteById);
 
     return SpriteAnimation.spriteList(sprites, stepTime: 0.1);
   }

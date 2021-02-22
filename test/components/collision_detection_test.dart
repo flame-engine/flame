@@ -149,24 +149,24 @@ void main() {
 
   group('Line.intersections tests', () {
     test('Simple line intersection', () {
-      const line1 = const Line(1, -1, 0);
-      const line2 = const Line(1, 1, 0);
+      const line1 = Line(1, -1, 0);
+      const line2 = Line(1, 1, 0);
       final intersection = line1.intersections(line2);
       expect(intersection.isNotEmpty, true, reason: 'Should have intersection');
       expect(intersection.first == Vector2.all(0), true);
     });
 
     test('Lines with c value', () {
-      const line1 = const Line(1, 1, 1);
-      const line2 = const Line(1, -1, 1);
+      const line1 = Line(1, 1, 1);
+      const line2 = Line(1, -1, 1);
       final intersection = line1.intersections(line2);
       expect(intersection.isNotEmpty, true, reason: 'Should have intersection');
       expect(intersection.first == Vector2(1, 0), true);
     });
 
     test('Does not catch parallel lines', () {
-      const line1 = const Line(1, 1, -3);
-      const line2 = const Line(1, 1, 6);
+      const line1 = Line(1, 1, -3);
+      const line2 = Line(1, 1, 6);
       final intersection = line1.intersections(line2);
       expect(
         intersection.isEmpty,
@@ -176,8 +176,8 @@ void main() {
     });
 
     test('Does not catch same line', () {
-      const line1 = const Line(1, 1, 1);
-      const line2 = const Line(1, 1, 1);
+      const line1 = Line(1, 1, 1);
+      const line2 = Line(1, 1, 1);
       final intersection = line1.intersections(line2);
       expect(
         intersection.isEmpty,
@@ -195,7 +195,7 @@ void main() {
       expect(line.c == 0.0, true, reason: 'c value is not correct');
     });
 
-    test('Line not going through origo', () {
+    test('Line not going through origin', () {
       final line = Line.fromPoints(Vector2(-2, 0), Vector2(0, 2));
       expect(line.a == 2.0, true, reason: 'a value is not correct');
       expect(line.b == -2.0, true, reason: 'b value is not correct');
@@ -220,35 +220,35 @@ void main() {
   group('LineSegment.pointsAt tests', () {
     test('Simple pointing', () {
       final segment = LineSegment(Vector2.zero(), Vector2.all(1));
-      const line = const Line(1, 1, 3);
+      const line = Line(1, 1, 3);
       final isPointingAt = segment.pointsAt(line);
       expect(isPointingAt, true, reason: 'Line should be pointed at');
     });
 
     test('Is not pointed at when crossed', () {
       final segment = LineSegment(Vector2.zero(), Vector2.all(3));
-      const line = const Line(1, 1, 3);
+      const line = Line(1, 1, 3);
       final isPointingAt = segment.pointsAt(line);
       expect(isPointingAt, false, reason: 'Line should not be pointed at');
     });
 
     test('Is not pointed at when parallel', () {
       final segment = LineSegment(Vector2.zero(), Vector2(1, -1));
-      const line = const Line(1, 1, 3);
+      const line = Line(1, 1, 3);
       final isPointingAt = segment.pointsAt(line);
       expect(isPointingAt, false, reason: 'Line should not be pointed at');
     });
 
-    test('Horizonal line can be pointed at', () {
+    test('Horizontal line can be pointed at', () {
       final segment = LineSegment(Vector2.zero(), Vector2.all(1));
-      const line = const Line(0, 1, 2);
+      const line = Line(0, 1, 2);
       final isPointingAt = segment.pointsAt(line);
       expect(isPointingAt, true, reason: 'Line should be pointed at');
     });
 
     test('Vertical line can be pointed at', () {
       final segment = LineSegment(Vector2.zero(), Vector2.all(1));
-      const line = const Line(1, 0, 2);
+      const line = Line(1, 0, 2);
       final isPointingAt = segment.pointsAt(line);
       expect(isPointingAt, true, reason: 'Line should be pointed at');
     });
