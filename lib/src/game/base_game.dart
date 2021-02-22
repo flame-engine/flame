@@ -1,12 +1,13 @@
 import 'dart:ui';
 
-import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
 import '../components/component.dart';
+import '../components/mixins/collidable.dart';
 import '../components/mixins/draggable.dart';
+import '../components/mixins/has_collidables.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
 import '../components/position_component.dart';
@@ -76,6 +77,10 @@ class BaseGame extends Game with FPSCounter {
       hasLayout,
       '"add" called before the game is ready. Did you try to access it on the Game constructor? Use the "onLoad" method instead.',
     );
+    assert(
+      c is Collidable ? this is HasCollidables : true,
+      "You can only use the Hitbox/Collidable feature with games that has the HasCollidables mixin",
+    );
     prepare(c);
     final loadFuture = c.onLoad();
 
@@ -137,6 +142,10 @@ class BaseGame extends Game with FPSCounter {
       c.onRemove();
       components.remove(c);
     });
+
+    if (this is HasCollidables) {
+      (this as HasCollidables).handleCollidables(_removeLater, _addLater);
+    }
     _removeLater.clear();
 
     if (_addLater.isNotEmpty) {
@@ -145,6 +154,7 @@ class BaseGame extends Game with FPSCounter {
       components.addAll(addNow);
       addNow.forEach((component) => component.onMount());
     }
+
     components.forEach((c) => c.update(t));
   }
 

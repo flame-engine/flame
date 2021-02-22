@@ -41,8 +41,11 @@ class Anchor {
   /// Consider Anchor a sealed class (or more specifically an enum).
   const Anchor._(this.x, this.y);
 
-  Vector2 translate(Vector2 p, Vector2 size) {
-    return p - (toVector2..multiply(size));
+  /// If the position sent in is position for the anchor and the size is the
+  /// size of the component (or whatever you are using the Anchor on), the
+  /// result of [translate] will be the top left position
+  Vector2 translate(Vector2 position, Vector2 size) {
+    return position - (toVector2..multiply(size));
   }
 
   /// Returns a string representation of this Anchor.

@@ -1,7 +1,9 @@
 import 'dart:math';
 import 'dart:ui';
 
+import '../../geometry.dart';
 import 'vector2.dart';
+import 'offset.dart';
 
 export 'dart:ui' show Rect;
 
@@ -12,8 +14,28 @@ extension RectExtension on Rect {
   /// Creates a [Vector2] starting in top left and going to [width, height].
   Vector2 toVector2() => Vector2(width, height);
 
-  bool containsPoint(Vector2 vector) {
-    return contains(vector.toOffset());
+  /// Whether this [Rect] contains a [Vector2] point or not
+  bool containsPoint(Vector2 point) => contains(point.toOffset());
+
+  /// Whether the segment formed by [pointA] and [pointB] intersects this [Rect]
+  bool intersectsSegment(Vector2 pointA, Vector2 pointB) {
+    return min(pointA.x, pointB.x) <= right &&
+        min(pointA.y, pointB.y) <= bottom &&
+        max(pointA.x, pointB.x) >= left &&
+        max(pointA.y, pointB.y) >= top;
+  }
+
+  bool intersectsLineSegment(LineSegment segment) {
+    return intersectsSegment(segment.from, segment.to);
+  }
+
+  List<Vector2> toVertices() {
+    return [
+      topLeft.toVector2(),
+      topRight.toVector2(),
+      bottomRight.toVector2(),
+      bottomLeft.toVector2(),
+    ];
   }
 }
 
