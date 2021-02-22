@@ -5,6 +5,9 @@ import '../../components.dart';
 import '../../game.dart';
 
 /// Utility method to smoothly transition vectors.
+///
+/// It will move [current] in the direction [target] by a displacement
+/// given by [ds] pixels in that direction.
 void _moveToTarget(
   Vector2 current,
   Vector2 target,
@@ -197,7 +200,7 @@ class Camera {
   }) {
     this.follow = follow;
     this.worldBounds = worldBounds;
-    _targetRelativeOffset.setFrom(relativeOffset ?? Anchor.center.toVector2);
+    _targetRelativeOffset.setFrom(relativeOffset ?? Anchor.center.toVector2());
     _currentRelativeOffset.setFrom(_targetRelativeOffset);
   }
 
