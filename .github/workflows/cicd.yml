@@ -19,8 +19,8 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'beta'
+      - run: export FLUTTER_ROOT=$(dirname $(which flutter))
       - run: flutter pub get
-      - run: which flutter
       - run: dartdoc --no-auto-include-dependencies --quiet
       
   format: 
