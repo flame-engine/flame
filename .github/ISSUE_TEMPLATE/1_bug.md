@@ -1,6 +1,6 @@
 ---
 name: Bug report.
-about: You are creating a Game with Flame but you are noticing strange behaviour, throws an exception, or it is buggy.
+about: You are creating a Game with Flame but you are noticing some strange behaviour, that it throws an unexpected exception, or that it is not working according to the specifications.
 title: ''
 labels: 'bug'
 assignees: ''
@@ -43,3 +43,4 @@ Enter log information in this code block
 # More information
 <!-- Do you have any other useful information about this bug report? Please write it down here -->
 <!-- Possible helpful information: references to other sites/repositories -->
+<!-- Are you interested in working on a PR for this? >

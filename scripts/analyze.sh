@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 flutter pub get
 
 # We need to run pubget on all the examples

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 ./scripts/format.sh
 if [ $? -eq 1 ]; then
   echo "Formatting failed!"

@@ -3,6 +3,7 @@ If you're interested in contributing to this project, here are a few ways to do 
 
 ## Bug fixes
 * If you find a bug, please first report it using [Github issues](https://github.com/flame-engine/flame/issues/new).
+  * First check if there is not already an issue for it; duplicated issues will be closed.
 * Issues that have already been identified as a bug will be labelled "bug".
 * If you'd like to submit a fix for a bug, send a [Pull Request](https://guides.github.com/activities/forking/#making-a-pull-request) from your own fork, also read the [How To](#how-to) and [Development Guidelines](#development-guidelines).
 * Include a test that isolates the bug and verifies that it was fixed.
@@ -10,10 +11,11 @@ If you're interested in contributing to this project, here are a few ways to do 
 
 ## New Features
 * If you'd like to add a feature to the library that doesn't already exist, feel free to describe the feature in a new [Github issues](https://github.com/flame-engine/flame/issues/new).
+  * You can also join us on [Discord](https://discord.gg/pxrBmy4) to discuss some initials thoughts.
 * Issues that have been identified as a feature request will be labelled "feature".
 * If you'd like to implement the new feature, please wait for feedback from the project maintainers before spending too much time writing the code. In some cases, enhancements may not align well with the project objectives at the time.
 * Implement your code and please read the [How To](#how-to) and [Development Guidelines](#development-guidelines).
-* Also update the example and documentation where needed.
+* Also update the examples and documentation where needed.
 
 ## Documentation & Miscellaneous
 * If you think the documentation could be clearer, or you have an alternative implementation of something that may have more advantages, we would love to hear it.
@@ -39,7 +41,7 @@ If the contribution doesn't meet these criteria, a maintainer will discuss it wi
 * Make your changes
 * When committing your changes, make sure to start the commit message with `#<issue-number>` (e.g. `git commit -m '#12 - New Feature added'`)
 * Push your new branch to your own fork into the same remote branch (e.g. `git push origin 12-new-feature`)
-* On Gitlab goto the [pull request page](https://guides.github.com/activities/forking/#making-a-pull-request) on your own fork and create a merge request to this reposistory
+* On Github goto the [pull request page](https://guides.github.com/activities/forking/#making-a-pull-request) on your own fork and create a merge request to this reposistory
 
 # Development Guidelines
 * Documentation should be updated.
