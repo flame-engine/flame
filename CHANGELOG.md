@@ -20,6 +20,7 @@
  - Fix `SpriteAnimationComponent.shouldRemove` use `Component.shouldRemove`
  - Add assertion to make sure Draggables are safe to add
  - Add utility methods to the Anchor class to make it more "enum like"
+ - Enable user-defined anchors
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations

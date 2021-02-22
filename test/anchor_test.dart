@@ -14,5 +14,10 @@ void main() {
         expect(thereAndBack, value);
       }
     });
+
+    test('can parse custom anchor', () async {
+      expect(const Anchor(0.2, 0.2).toString(), 'Anchor(0.2, 0.2)');
+      expect(Anchor.valueOf('Anchor(0.2, 0.2)'), const Anchor(0.2, 0.2));
+    });
   });
 }
