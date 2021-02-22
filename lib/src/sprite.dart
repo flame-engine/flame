@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import '../image_composition.dart';
-
 import 'anchor.dart';
 import 'extensions/offset.dart';
 import 'extensions/vector2.dart';
@@ -80,7 +79,7 @@ class Sprite {
   }
 
   /// Return a new Image based on the [src] of the Sprite.
-  /// 
+  ///
   /// **Note:** This is a heavy async operation and should not be called on each [Game.render].
   Future<Image> toImage() async {
     final composition = ImageComposition()
