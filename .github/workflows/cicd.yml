@@ -20,7 +20,7 @@ jobs:
         with:
           channel: 'beta'
       - run: flutter pub get
-      - run: flutter pub run dartdoc --no-auto-include-dependencies --quiet
+      - run: ./scripts/dartdoc.sh
       
   format: 
     runs-on: ubuntu-latest
