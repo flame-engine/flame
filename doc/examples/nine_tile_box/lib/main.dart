@@ -31,5 +31,5 @@ class MyGame extends Game {
   }
 
   @override
-  void update(double t) {}
+  void update(double dt) {}
 }

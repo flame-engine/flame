@@ -62,9 +62,9 @@ class ParallaxComponent extends PositionComponent {
   }
 
   @override
-  void update(double t) {
-    super.update(t);
-    parallax?.update(t);
+  void update(double dt) {
+    super.update(dt);
+    parallax?.update(dt);
   }
 
   @mustCallSuper

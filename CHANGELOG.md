@@ -22,6 +22,7 @@
  - Add utility methods to the Anchor class to make it more "enum like"
  - Enable user-defined anchors
  - Added `toImage` method for the `Sprite` class
+ - Uniform use of `dt` instead of `t` in all update methods
  - Add more optional arguments for unified constructors of components
 
 ## 1.0.0-rc6
