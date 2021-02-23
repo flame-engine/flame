@@ -136,7 +136,7 @@ class BaseGame extends Game with FPSCounter {
   /// You can override it further to add more custom behavior.
   @override
   @mustCallSuper
-  void update(double t) {
+  void update(double dt) {
     _removeLater.addAll(components.where((c) => c.shouldRemove));
     _removeLater.forEach((c) {
       c.onRemove();
@@ -155,7 +155,7 @@ class BaseGame extends Game with FPSCounter {
       addNow.forEach((component) => component.onMount());
     }
 
-    components.forEach((c) => c.update(t));
+    components.forEach((c) => c.update(dt));
   }
 
   /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.

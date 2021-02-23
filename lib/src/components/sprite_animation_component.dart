@@ -57,8 +57,8 @@ class SpriteAnimationComponent extends PositionComponent {
   }
 
   @override
-  void update(double t) {
-    super.update(t);
-    animation?.update(t);
+  void update(double dt) {
+    super.update(dt);
+    animation?.update(dt);
   }
 }

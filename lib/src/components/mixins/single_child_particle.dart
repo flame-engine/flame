@@ -41,10 +41,10 @@ mixin SingleChildParticle on Particle {
   }
 
   @override
-  void update(double t) {
+  void update(double dt) {
     assert(child != null);
 
-    super.update(t);
-    child.update(t);
+    super.update(dt);
+    child.update(dt);
   }
 }
