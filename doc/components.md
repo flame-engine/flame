@@ -246,7 +246,7 @@ For example if you want to move your background images along the X-axis with a f
 "closer" the image is:
 
 ```dart
-final parallaxComponent = await loadParalladComponent(
+final parallaxComponent = await loadParallaxComponent(
   _paths,
   baseVelocity: Vector2(20, 0),
   velocityMultiplierDelta: Vector2(1.8, 1.0),
@@ -256,14 +256,14 @@ You can set the baseSpeed and layerDelta at any time, for example if your charac
 game speeds up.
 
 ```dart
-final parallax = parallaxComponen.parallax;
+final parallax = parallaxComponent.parallax;
 parallax.baseSpeed = Vector2(100, 0);
 parallax.velocityMultiplierDelta = Vector2(2.0, 1.0);
 ```
 
 By default the images are aligned to the bottom left, repeated along the X-axis and scaled
 proportionally so that the image covers the height of the screen. If you want to change this
-behaviour, for example if you are not making a side scrolling game, you can set the `repeat`,
+behavior, for example if you are not making a side scrolling game, you can set the `repeat`,
 `alignment` and `fill` parameters for each `ParallaxImage` and add them to `ParallaxLayer`s that you
 then pass in to the `ParallaxComponent`'s constructor.
 
@@ -274,7 +274,7 @@ final images = [
   loadParallaxImage('planets.jpg', repeat: ImageRepeat.repeatY, alignment: Alignment.bottomLeft, fill: LayerFill.none),
   loadParallaxImage('dust.jpg', repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
 ];
-final layers = images.map((image) => ParallaxLayer(await image, velocityMulitplier: images.indexOf(image) * 2.0));
+final layers = images.map((image) => ParallaxLayer(await image, velocityMultiplier: images.indexOf(image) * 2.0));
 final parallaxComponent = ParallaxComponent.fromParallax(
   Parallax(
     await Future.wait(layers),
@@ -301,7 +301,7 @@ Three example implementations can be found in the
 
 ## SpriteBodyComponent
 
-See [SpriteBodyComponent](forge2d.md#spritebodycomponent) in the box2d documentation.
+See [SpriteBodyComponent](forge2d.md#SpriteBodyComponent) in the box2d documentation.
 
 ## TiledComponent
 

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 
 import '../extensions/vector2.dart';
+import '../extensions/image.dart';
 import '../sprite.dart';
 import 'component.dart';
 import 'position_component.dart';
@@ -38,7 +39,7 @@ class SpriteComponent extends PositionComponent {
   }) =>
       SpriteComponent(
         position: position,
-        size: size ?? Vector2Extension.fromInts(image.width, image.height),
+        size: size ?? image.size,
         sprite: Sprite(image),
       );
 

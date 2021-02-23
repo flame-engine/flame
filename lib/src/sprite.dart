@@ -44,8 +44,7 @@ class Sprite {
   Vector2 get srcSize => Vector2(src.width, src.height);
 
   set srcSize(Vector2 size) {
-    final actualSize =
-        size ?? Vector2Extension.fromInts(image.width, image.height);
+    final actualSize = size ?? image.size;
     src = srcPosition.toPositionedRect(actualSize);
   }
 
