@@ -24,6 +24,7 @@
  - Added `toImage` method for the `Sprite` class
  - Uniform use of `dt` instead of `t` in all update methods
  - Add more optional arguments for unified constructors of components
+ - Fix rendering order when a sprite component has children
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
