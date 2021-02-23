@@ -66,21 +66,24 @@ class SpriteAnimationData {
   }
 
   /// Works just like [SpriteAnimationData.variable] but uses the same [stepTime] for all frames
-  SpriteAnimationData.sequenced({
+  factory SpriteAnimationData.sequenced({
     @required int amount,
     @required double stepTime,
     @required Vector2 textureSize,
     int amountPerRow,
     Vector2 texturePosition,
     bool loop = true,
-  }) : this.variable(
-          amount: amount,
-          amountPerRow: amountPerRow,
-          texturePosition: texturePosition,
-          textureSize: textureSize,
-          loop: loop,
-          stepTimes: List.filled(amount, stepTime),
-        );
+  }) {
+    assert(stepTime != null);
+    return SpriteAnimationData.variable(
+      amount: amount,
+      amountPerRow: amountPerRow,
+      texturePosition: texturePosition,
+      textureSize: textureSize,
+      loop: loop,
+      stepTimes: List.filled(amount, stepTime),
+    );
+  }
 }
 
 /// Represents a single sprite animation frame.
