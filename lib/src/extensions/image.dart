@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
-import '../../image_composition.dart';
 import '../flame.dart';
 import 'color.dart';
+import 'vector2.dart';
 
 export 'dart:ui' show Image;
 
