@@ -1,6 +1,5 @@
 import 'dart:ui' as ui;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
@@ -134,7 +133,7 @@ class NineTileBox extends StatelessWidget {
 
   final EdgeInsetsGeometry padding;
 
-  NineTileBox({
+  const NineTileBox({
     @required this.image,
     @required this.tileSize,
     @required this.destTileSize,

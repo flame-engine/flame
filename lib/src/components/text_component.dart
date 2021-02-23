@@ -1,8 +1,9 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
+import 'package:meta/meta.dart';
 
+import '../extensions/vector2.dart';
 import '../text_config.dart';
 import 'position_component.dart';
 
@@ -28,8 +29,14 @@ class TextComponent extends PositionComponent {
     _updateBox();
   }
 
-  TextComponent(this._text, {TextConfig config})
-      : _config = config ?? TextConfig() {
+  TextComponent(
+    this._text, {
+    TextConfig config,
+    Vector2 position,
+    Vector2 size,
+  })  : assert(_text != null),
+        _config = config ?? TextConfig(),
+        super(position: position, size: size) {
     _updateBox();
   }
 

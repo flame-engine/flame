@@ -1,6 +1,7 @@
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
 
+import '../../components.dart';
 import '../extensions/vector2.dart';
 import 'effects.dart';
 
@@ -21,7 +22,7 @@ class ScaleEffect extends SimplePositionComponentEffect {
     void Function() onComplete,
   })  : assert(
           duration != null || speed != null,
-          "Either speed or duration necessary",
+          'Either speed or duration necessary',
         ),
         super(
           isInfinite,
@@ -35,7 +36,7 @@ class ScaleEffect extends SimplePositionComponentEffect {
         );
 
   @override
-  void initialize(component) {
+  void initialize(PositionComponent component) {
     super.initialize(component);
     _startSize = component.size;
     _delta = isRelative ? size : size - _startSize;

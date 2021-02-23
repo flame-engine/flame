@@ -107,8 +107,8 @@ abstract class BaseComponent extends Component {
   }
 
   /// Called to check whether the point is to be counted as within the component
-  /// It needs to be overridden to have any effect, like it is in the
-  /// [PositionComponent]
+  /// It needs to be overridden to have any effect, like it is in
+  /// PositionComponent.
   bool containsPoint(Vector2 point) => false;
 
   /// Add an effect to the component
@@ -179,8 +179,8 @@ abstract class BaseComponent extends Component {
   bool propagateToChildren<T extends Component>(
     bool Function(T) handler,
   ) {
-    bool shouldContinue = true;
-    for (Component child in _children) {
+    var shouldContinue = true;
+    for (final child in _children) {
       if (child is BaseComponent) {
         shouldContinue = child.propagateToChildren(handler);
       }

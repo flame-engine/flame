@@ -26,7 +26,7 @@ extension SpriteBatchExtension on Game {
   }
 }
 
-/// This is the scale value used in [BatchItem.matrix], we can't determine this from the [Batchitem.transform],
+/// This is the scale value used in [BatchItem.matrix], we can't determine this from the [BatchItem.transform],
 /// but we also don't need to do so because it is already calculated inside the transform values.
 const _defaultScale = 0.0;
 
@@ -82,7 +82,7 @@ class BatchItem {
 /// The SpriteBatch API allows for rendering multiple items at once.
 ///
 /// This class allows for optimization when you want to draw many parts of an
-/// image onto the canvas. It is more efficient than using multiple calls to [drawImageRect]
+/// image onto the canvas. It is more efficient than using multiple calls to [Canvas.drawImageRect]
 /// and provides more functionality by allowing each [BatchItem] to have their own transform
 /// rotation and color.
 ///
@@ -176,10 +176,11 @@ class SpriteBatch {
 
   /// Add a new batch item using a RSTransform.
   ///
-  /// The [source] parameter is the source location on the [atlas]. You can position it
-  /// on the canvas using the [offset] parameter.
+  /// The [source] parameter is the source location on the [atlas].
   ///
-  /// The [color] paramater allows you to render a color behind the batch item, as a background color.
+  /// You can position, rotate and scale it on the canvas using the [transform] parameter.
+  ///
+  /// The [color] parameter allows you to render a color behind the batch item, as a background color.
   ///
   /// The [add] method may be a simpler way to add a batch item to the batch. However,
   /// if there is a way to factor out the computations of the sine and cosine of the
@@ -210,7 +211,7 @@ class SpriteBatch {
   ///
   /// You can transform the sprite from its [offset] using [scale], [rotation] and [anchor].
   ///
-  /// The [color] paramater allows you to render a color behind the batch item, as a background color.
+  /// The [color] parameter allows you to render a color behind the batch item, as a background color.
   ///
   /// This method creates a new [RSTransform] based on the given transform arguments. If many [RSTransform] objects are being
   /// created and there is a way to factor out the computations of the sine and cosine of the rotation

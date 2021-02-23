@@ -1,8 +1,9 @@
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/extensions.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(
@@ -13,7 +14,7 @@ void main() {
 }
 
 class MyGame extends BaseGame with MouseMovementDetector {
-  static const SPEED = 200;
+  static const speed = 200.0;
 
   Vector2 position = Vector2(0, 0);
   Vector2 target;
@@ -23,7 +24,7 @@ class MyGame extends BaseGame with MouseMovementDetector {
   bool _onTarget = false;
 
   @override
-  void onMouseMove(event) {
+  void onMouseMove(PointerHoverEvent event) {
     target = event.localPosition.toVector2();
   }
 
@@ -51,7 +52,7 @@ class MyGame extends BaseGame with MouseMovementDetector {
 
       if (!_onTarget) {
         final dir = (target - position).normalized();
-        position += dir * (SPEED * dt);
+        position += dir * speed * dt;
       }
     }
   }

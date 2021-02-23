@@ -23,7 +23,7 @@ import 'mixins/hitbox.dart';
 /// within this component's (width, height).
 abstract class PositionComponent extends BaseComponent {
   /// The position of this component on the screen (relative to the anchor).
-  Vector2 position = Vector2.zero();
+  Vector2 position;
 
   /// X position of this component on the screen (relative to the anchor).
   double get x => position.x;
@@ -35,7 +35,7 @@ abstract class PositionComponent extends BaseComponent {
 
   /// The size that this component is rendered with.
   /// This is not necessarily the source size of the asset.
-  Vector2 size = Vector2.zero();
+  Vector2 size;
 
   /// Width (size) that this component is rendered with.
   double get width => size.x;
@@ -87,12 +87,12 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Angle (with respect to the x-axis) this component should be rendered with.
   /// It is rotated around its anchor.
-  double angle = 0.0;
+  double angle;
 
   /// Anchor point for this component. This is where flame "grabs it".
   /// The [position] is relative to this point inside the component.
   /// The [angle] is rotated around this point.
-  Anchor anchor = Anchor.topLeft;
+  Anchor anchor;
 
   /// Whether this component should be flipped on the X axis before being rendered.
   bool renderFlipX = false;
@@ -115,6 +115,16 @@ abstract class PositionComponent extends BaseComponent {
     size.setValues(rect.width, rect.height);
     topLeftPosition = rect.topLeft.toVector2();
   }
+
+  PositionComponent({
+    Vector2 position,
+    Vector2 size,
+    this.angle = 0.0,
+    this.anchor = Anchor.topLeft,
+    this.renderFlipX = false,
+    this.renderFlipY = false,
+  })  : position = position ?? Vector2.zero(),
+        size = size ?? Vector2.zero();
 
   @override
   bool containsPoint(Vector2 point) {
@@ -139,7 +149,7 @@ abstract class PositionComponent extends BaseComponent {
       Vector2(-50, -15),
     );
 
-    final Rect rect = toRect();
+    final rect = toRect();
     final dx = rect.right;
     final dy = rect.bottom;
     debugTextConfig.render(
@@ -153,7 +163,7 @@ abstract class PositionComponent extends BaseComponent {
   void prepareCanvas(Canvas canvas) {
     canvas.translate(x, y);
     canvas.rotate(angle);
-    final Vector2 delta = -anchor.toVector2()
+    final delta = -anchor.toVector2()
       ..multiply(size);
     canvas.translate(delta.x, delta.y);
 

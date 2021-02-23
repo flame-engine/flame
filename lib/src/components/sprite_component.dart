@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 import '../extensions/vector2.dart';
 import '../sprite.dart';
@@ -24,14 +24,19 @@ class SpriteComponent extends PositionComponent {
   Paint overridePaint;
 
   /// Creates a component with an empty sprite which can be set later
-  SpriteComponent();
+  SpriteComponent({
+    Vector2 position,
+    Vector2 size,
+    this.sprite,
+    this.overridePaint,
+  }) : super(position: position, size: size);
 
-  SpriteComponent.fromImage(Vector2 size, Image image)
-      : this.fromSprite(size, Sprite(image));
-
-  SpriteComponent.fromSprite(Vector2 size, this.sprite) {
-    super.size.setFrom(size);
-  }
+  factory SpriteComponent.fromImage(
+    Vector2 size,
+    Image image, {
+    Vector2 position,
+  }) =>
+      SpriteComponent(size: size, sprite: Sprite(image), position: position);
 
   @mustCallSuper
   @override

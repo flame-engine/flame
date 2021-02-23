@@ -4,9 +4,9 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart' hide Image;
 
+import '../extensions/vector2.dart';
 import '../palette.dart';
 import '../text_config.dart';
-import '../extensions/vector2.dart';
 import 'position_component.dart';
 
 class TextBoxConfig {
@@ -53,13 +53,16 @@ class TextBoxComponent extends PositionComponent {
     String text, {
     TextConfig config,
     TextBoxConfig boxConfig,
+    Vector2 position,
+    Vector2 size,
   })  : _text = text,
         _boxConfig = boxConfig ?? TextBoxConfig(),
-        _config = config ?? TextConfig() {
+        _config = config ?? TextConfig(),
+        super(position: position, size: size) {
     _lines = [];
     double lineHeight;
     text.split(' ').forEach((word) {
-      final possibleLine = _lines.isEmpty ? word : _lines.last + ' ' + word;
+      final possibleLine = _lines.isEmpty ? word : '${_lines.last} $word';
       final painter = _config.toTextPainter(possibleLine);
       lineHeight ??= painter.height;
       if (painter.width <=
@@ -94,9 +97,9 @@ class TextBoxComponent extends PositionComponent {
       : math.min(_lifeTime ~/ _boxConfig.timePerChar, _text.length);
 
   int get currentLine {
-    int totalCharCount = 0;
-    final int _currentChar = currentChar;
-    for (int i = 0; i < _lines.length; i++) {
+    var totalCharCount = 0;
+    final _currentChar = currentChar;
+    for (var i = 0; i < _lines.length; i++) {
       totalCharCount += _lines[i].length;
       if (totalCharCount > _currentChar) {
         return i;
@@ -122,12 +125,12 @@ class TextBoxComponent extends PositionComponent {
       return _cachedWidth;
     }
     if (_boxConfig.growingBox) {
-      int i = 0;
-      int totalCharCount = 0;
-      final int _currentChar = currentChar;
-      final int _currentLine = currentLine;
-      final double textWidth = _lines.sublist(0, _currentLine + 1).map((line) {
-        final int charCount =
+      var i = 0;
+      var totalCharCount = 0;
+      final _currentChar = currentChar;
+      final _currentLine = currentLine;
+      final textWidth = _lines.sublist(0, _currentLine + 1).map((line) {
+        final charCount =
             (i < _currentLine) ? line.length : (_currentChar - totalCharCount);
         totalCharCount += line.length;
         i++;
@@ -165,8 +168,8 @@ class TextBoxComponent extends PositionComponent {
   }
 
   Future<Image> _redrawCache() {
-    final PictureRecorder recorder = PictureRecorder();
-    final Canvas c = Canvas(recorder, _gameSize.toRect());
+    final recorder = PictureRecorder();
+    final c = Canvas(recorder, _gameSize.toRect());
     _fullRender(c);
     return recorder.endRecording().toImage(width.toInt(), height.toInt());
   }
@@ -176,16 +179,15 @@ class TextBoxComponent extends PositionComponent {
   void _fullRender(Canvas c) {
     drawBackground(c);
 
-    final int _currentLine = currentLine;
-    int charCount = 0;
-    double dy = _boxConfig.margins.top;
-    for (int line = 0; line < _currentLine; line++) {
+    final _currentLine = currentLine;
+    var charCount = 0;
+    var dy = _boxConfig.margins.top;
+    for (var line = 0; line < _currentLine; line++) {
       charCount += _lines[line].length;
       _drawLine(c, _lines[line], dy);
       dy += _lineHeight;
     }
-    final int max =
-        math.min(currentChar - charCount, _lines[_currentLine].length);
+    final max = math.min(currentChar - charCount, _lines[_currentLine].length);
     _drawLine(c, _lines[_currentLine].substring(0, max), dy);
   }
 

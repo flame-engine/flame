@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 import '../extensions/vector2.dart';
 import '../nine_tile_box.dart';
@@ -15,7 +15,11 @@ class NineTileBoxComponent extends PositionComponent {
   /// Takes the [NineTileBox] instance used to render this box.
   ///
   /// It uses the x, y, width and height coordinates from the [PositionComponent] to render.
-  NineTileBoxComponent(this.nineTileBox);
+  NineTileBoxComponent(
+    this.nineTileBox, {
+    Vector2 position,
+    Vector2 size,
+  }) : super(position: position, size: size);
 
   @mustCallSuper
   @override

@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 import '../extensions/vector2.dart';
 import '../sprite_animation.dart';
@@ -14,29 +14,24 @@ class SpriteAnimationComponent extends PositionComponent {
   bool removeOnFinish = false;
 
   /// Creates a component with an empty animation which can be set later
-  SpriteAnimationComponent();
-
-  /// Creates an [SpriteAnimationComponent] from an [animation] and a [size]
-  ///
-  /// Optionally [removeOnFinish] can be set to true to have this component be auto removed from the [BaseGame] when the animation is finished.
-  SpriteAnimationComponent.fromSpriteAnimation(
+  SpriteAnimationComponent({
+    Vector2 position,
     Vector2 size,
-    this.animation, {
+    this.animation,
+    this.overridePaint,
     this.removeOnFinish = false,
-  }) : assert(animation != null) {
-    super.size.setFrom(size);
-  }
+  }) : super(position: position, size: size);
 
   /// Creates a SpriteAnimationComponent from a [size], an [image] and [data]. Check [SpriteAnimationData] for more info on the available options.
   ///
-  /// Optionally [removeOnFinish] can be set to true to have this component be auto removed from the [BaseGame] when the animation is finished.
+  /// Optionally [removeOnFinish] can be set to true to have this component be auto removed from the BaseGame when the animation is finished.
   SpriteAnimationComponent.fromFrameData(
-    Vector2 size,
     Image image,
     SpriteAnimationData data, {
+    Vector2 position,
+    Vector2 size,
     this.removeOnFinish = false,
-  }) {
-    super.size.setFrom(size);
+  }) : super(position: position, size: size) {
     animation = SpriteAnimation.fromFrameData(
       image,
       data,
@@ -44,7 +39,6 @@ class SpriteAnimationComponent extends PositionComponent {
   }
 
   /// Component will be removed after loop end and [removeOnFinish] is set.
-  /// [Component.shouldRemove] worked here.
   @override
   bool get shouldRemove =>
       super.shouldRemove ||
@@ -62,8 +56,8 @@ class SpriteAnimationComponent extends PositionComponent {
   }
 
   @override
-  void update(double t) {
-    super.update(t);
-    animation?.update(t);
+  void update(double dt) {
+    super.update(dt);
+    animation?.update(dt);
   }
 }

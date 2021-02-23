@@ -1,11 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../../extensions.dart';
 import '../../game/base_game.dart';
 import '../base_component.dart';
-import '../component.dart';
 
 mixin Draggable on BaseComponent {
   bool onDragStart(int pointerId, Vector2 startPosition) {
@@ -81,8 +79,8 @@ mixin HasDraggableComponents on BaseGame {
   }
 
   void _onGenericEventReceived(bool Function(Draggable) handler) {
-    for (Component c in components.toList().reversed) {
-      bool shouldContinue = true;
+    for (final c in components.toList().reversed) {
+      var shouldContinue = true;
       if (c is BaseComponent) {
         shouldContinue = c.propagateToChildren<Draggable>(handler);
       }

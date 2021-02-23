@@ -1,14 +1,12 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
-
 import 'package:flutter/material.dart' hide Image, Draggable;
-
-import 'dart:ui';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -194,7 +192,7 @@ class MyGame extends BaseGame with HasCollidables, HasDraggableComponents {
     MyCollidable lastToAdd = snowman;
     add(screen);
     add(snowman);
-    int totalAdded = 1;
+    var totalAdded = 1;
     while (totalAdded < 20) {
       lastToAdd = createRandomCollidable(lastToAdd);
       final lastBottomRight =
@@ -219,7 +217,7 @@ class MyGame extends BaseGame with HasCollidables, HasDraggableComponents {
             _distance.x +
             collidableSize.x >
         size.x;
-    Vector2 position = _distance + Vector2(0, lastCollidable.position.y + 200);
+    var position = _distance + Vector2(0, lastCollidable.position.y + 200);
     if (!isXOverflow) {
       position = (lastCollidable.position + _distance)
         ..x += collidableSize.x / 2;

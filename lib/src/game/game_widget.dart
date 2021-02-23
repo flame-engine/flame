@@ -1,14 +1,14 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/gestures.dart';
 
 import '../../extensions.dart';
-import 'game.dart';
-import '../gestures.dart';
 import '../components/mixins/draggable.dart';
 import '../components/mixins/tapable.dart';
-import '../extensions/size.dart';
 import '../extensions/offset.dart';
+import '../extensions/size.dart';
+import '../gestures.dart';
+import 'game.dart';
 import 'game_render_box.dart';
 
 typedef GameLoadingWidgetBuilder = Widget Function(
@@ -90,14 +90,14 @@ class GameWidget<T extends Game> extends StatefulWidget {
   ///   return GameWidget(
   ///     game: game,
   ///     overlayBuilderMap: {
-  ///       "PauseMenu": (ctx) {
-  ///         return Text("A pause menu");
+  ///       'PauseMenu': (ctx) {
+  ///         return Text('A pause menu');
   ///       },
   ///     },
   ///   )
   /// }
   /// ...
-  /// game.overlays.add("PauseMenu");
+  /// game.overlays.add('PauseMenu');
   /// ```
   const GameWidget({
     Key key,
@@ -112,8 +112,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
   ///
-  /// To use overlays, the game subclass has to be mixed with [HasWidgetsOverlay],
-
+  /// To use overlays, the game subclass has to be mixed with HasWidgetsOverlay.
   @override
   _GameWidgetState<T> createState() => _GameWidgetState<T>();
 }
@@ -180,7 +179,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     overlays.forEach((overlayKey) {
       assert(
         widget.overlayBuilderMap?.containsKey(overlayKey) ?? false,
-        "A non mapped overlay has been added: $overlayKey",
+        'A non mapped overlay has been added: $overlayKey',
       );
     });
   }
@@ -201,10 +200,10 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
     assert(
       !(hasBasicDetectors && hasAdvancedDetectors),
-      """
+      '''
         WARNING: Both Advanced and Basic detectors detected.
         Advanced detectors will override basic detectors and the later will not receive events
-      """,
+      ''',
     );
 
     if (hasBasicDetectors) {
@@ -312,7 +311,7 @@ bool _hasMouseDetectors(Game game) =>
 
 Widget _applyBasicGesturesDetectors(Game game, Widget child) {
   return GestureDetector(
-    key: const ObjectKey("BasicGesturesDetector"),
+    key: const ObjectKey('BasicGesturesDetector'),
     behavior: HitTestBehavior.opaque,
 
     // Taps
@@ -424,8 +423,8 @@ Widget _applyBasicGesturesDetectors(Game game, Widget child) {
 }
 
 Widget _applyAdvancedGesturesDetectors(Game game, Widget child) {
-  final Map<Type, GestureRecognizerFactory> gestures = {};
-  int lastGeneratedDragId = 0;
+  final gestures = <Type, GestureRecognizerFactory>{};
+  var lastGeneratedDragId = 0;
 
   void addAndConfigureRecognizer<T extends GestureRecognizer>(
     T Function() ts,
@@ -516,7 +515,7 @@ Widget _applyMouseDetectors(Game game, Widget child) {
 class _GameRenderObjectWidget extends LeafRenderObjectWidget {
   final Game game;
 
-  _GameRenderObjectWidget(this.game);
+  const _GameRenderObjectWidget(this.game);
 
   @override
   RenderBox createRenderObject(BuildContext context) {
@@ -533,7 +532,7 @@ class _DragEvent extends Drag {
   void Function(DragEndDetails) onEnd;
 
   @override
-  void update(details) {
+  void update(DragUpdateDetails details) {
     onUpdate?.call(details);
   }
 
@@ -543,7 +542,7 @@ class _DragEvent extends Drag {
   }
 
   @override
-  void end(details) {
+  void end(DragEndDetails details) {
     onEnd?.call(details);
   }
 }

@@ -3,11 +3,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import '../../extensions.dart';
+import '../../geometry.dart';
 import 'circle.dart';
 import 'polygon.dart';
 import 'shape.dart';
-import '../../extensions.dart';
-import '../../geometry.dart';
 
 abstract class Intersections<T1 extends Shape, T2 extends Shape> {
   Set<Vector2> intersect(T1 shapeA, T2 shapeB);
@@ -45,8 +45,8 @@ class PolygonPolygonIntersections extends Intersections<Polygon, Polygon> {
     final intersectionsB = polygonB.possibleIntersectionVertices(
       overlappingRect,
     );
-    for (LineSegment lineA in intersectionsA) {
-      for (LineSegment lineB in intersectionsB) {
+    for (final lineA in intersectionsA) {
+      for (final lineB in intersectionsB) {
         intersectionPoints.addAll(lineA.intersections(lineB));
       }
     }
@@ -65,7 +65,7 @@ class CirclePolygonIntersections extends Intersections<Circle, Polygon> {
     final possibleVertices = polygon.possibleIntersectionVertices(
       overlappingRect,
     );
-    for (LineSegment line in possibleVertices) {
+    for (final line in possibleVertices) {
       intersectionPoints.addAll(circle.lineSegmentIntersections(line));
     }
     return intersectionPoints;

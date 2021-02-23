@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/extensions.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   final game = MyGame();
@@ -14,13 +15,13 @@ void main() {
 }
 
 class MyGame extends BaseGame with ScrollDetector {
-  static const SPEED = 200;
+  static const speed = 200.0;
 
   Vector2 position = Vector2(0, 0);
   Vector2 target;
 
   @override
-  void onScroll(event) {
+  void onScroll(PointerScrollEvent event) {
     target = position - event.scrollDelta.toVector2();
   }
 
@@ -43,7 +44,7 @@ class MyGame extends BaseGame with ScrollDetector {
     super.update(dt);
     if (target != null) {
       final dir = (target - position).normalized();
-      position += dir * (SPEED * dt);
+      position += dir * speed * dt;
     }
   }
 }
