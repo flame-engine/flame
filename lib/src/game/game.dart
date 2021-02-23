@@ -57,10 +57,10 @@ abstract class Game {
   /// It cannot be changed at runtime, because the game widget does not get rebuild when this value changes.
   Color backgroundColor() => const Color(0xFF000000);
 
-  /// Implement this method to update the game state, given that a time [t] has passed.
+  /// Implement this method to update the game state, given the time [dt] that has passed since the last update.
   ///
-  /// Keep the updates as short as possible. [t] is in seconds, with microseconds precision.
-  void update(double t);
+  /// Keep the updates as short as possible. [dt] is in seconds, with microseconds precision.
+  void update(double dt);
 
   /// Implement this method to render the current game state in the [canvas].
   void render(Canvas canvas);

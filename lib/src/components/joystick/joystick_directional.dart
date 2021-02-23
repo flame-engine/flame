@@ -110,8 +110,8 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
   }
 
   @override
-  void update(double t) {
-    super.update(t);
+  void update(double dt) {
+    super.update(dt);
     if (_dragging) {
       final delta = _dragPosition - _backgroundRect.center.toVector2();
       final radAngle = atan2(delta.y, delta.x);
