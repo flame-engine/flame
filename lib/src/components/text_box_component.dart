@@ -53,9 +53,12 @@ class TextBoxComponent extends PositionComponent {
     String text, {
     TextConfig config,
     TextBoxConfig boxConfig,
+    Vector2 position,
+    Vector2 size,
   })  : _text = text,
         _boxConfig = boxConfig ?? TextBoxConfig(),
-        _config = config ?? TextConfig() {
+        _config = config ?? TextConfig(),
+        super(position: position, size: size) {
     _lines = [];
     double lineHeight;
     text.split(' ').forEach((word) {
