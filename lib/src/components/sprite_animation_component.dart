@@ -22,28 +22,16 @@ class SpriteAnimationComponent extends PositionComponent {
     this.removeOnFinish = false,
   }) : super(position: position, size: size);
 
-  /// Creates an [SpriteAnimationComponent] from an [animation] and a [size]
-  ///
-  /// Optionally [removeOnFinish] can be set to true to have this component be auto removed from the [BaseGame] when the animation is finished.
-  @Deprecated('Use SpriteAnimationComponent instead')
-  SpriteAnimationComponent.fromSpriteAnimation(
-    Vector2 size,
-    this.animation, {
-    Vector2 position,
-    this.removeOnFinish = false,
-  })  : assert(animation != null),
-        super(size: size, position: position);
-
   /// Creates a SpriteAnimationComponent from a [size], an [image] and [data]. Check [SpriteAnimationData] for more info on the available options.
   ///
   /// Optionally [removeOnFinish] can be set to true to have this component be auto removed from the [BaseGame] when the animation is finished.
   SpriteAnimationComponent.fromFrameData(
-    Vector2 size,
     Image image,
     SpriteAnimationData data, {
+    Vector2 position,
+    Vector2 size,
     this.removeOnFinish = false,
-  }) {
-    super.size.setFrom(size);
+  }) : super(position: position, size: size) {
     animation = SpriteAnimation.fromFrameData(
       image,
       data,
