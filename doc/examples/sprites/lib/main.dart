@@ -29,8 +29,6 @@ class MyGame extends BaseGame {
         size: Vector2.all(32),
         sprite: Sprite(image),
       ),
-    ).forEach((sprite) {
-      add(sprite);
-    });
+    ).forEach(add);
   }
 }

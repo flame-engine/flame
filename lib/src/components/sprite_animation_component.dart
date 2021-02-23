@@ -15,7 +15,6 @@ class SpriteAnimationComponent extends PositionComponent {
 
   /// Creates a component with an empty animation which can be set later
   SpriteAnimationComponent({
-    SpriteAnimation spriteAnimation,
     Vector2 position,
     Vector2 size,
     this.animation,

@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 
-import '../extensions/vector2.dart';
 import '../extensions/image.dart';
+import '../extensions/vector2.dart';
 import '../sprite.dart';
 import 'component.dart';
 import 'position_component.dart';
