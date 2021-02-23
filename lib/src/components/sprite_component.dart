@@ -32,11 +32,15 @@ class SpriteComponent extends PositionComponent {
   }) : super(position: position, size: size);
 
   factory SpriteComponent.fromImage(
-    Vector2 size,
     Image image, {
     Vector2 position,
+    Vector2 size,
   }) =>
-      SpriteComponent(size: size, sprite: Sprite(image), position: position);
+      SpriteComponent(
+        position: position,
+        size: size ?? Vector2Extension.fromInts(image.width, image.height),
+        sprite: Sprite(image),
+      );
 
   @mustCallSuper
   @override

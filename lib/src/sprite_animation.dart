@@ -79,7 +79,7 @@ class SpriteAnimationData {
           texturePosition: texturePosition,
           textureSize: textureSize,
           loop: loop,
-          stepTimes: stepTime != null ? List.filled(amount, stepTime) : null,
+          stepTimes: List.filled(amount, stepTime),
         );
 }
 

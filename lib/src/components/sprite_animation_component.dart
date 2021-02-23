@@ -14,7 +14,8 @@ class SpriteAnimationComponent extends PositionComponent {
   bool removeOnFinish = false;
 
   /// Creates a component with an empty animation which can be set later
-  SpriteAnimationComponent({
+  SpriteAnimationComponent(
+    SpriteAnimation spriteAnimation, {
     Vector2 position,
     Vector2 size,
     this.animation,
@@ -32,10 +33,7 @@ class SpriteAnimationComponent extends PositionComponent {
     Vector2 size,
     this.removeOnFinish = false,
   }) : super(position: position, size: size) {
-    animation = SpriteAnimation.fromFrameData(
-      image,
-      data,
-    );
+    animation = SpriteAnimation.fromFrameData(image, data);
   }
 
   /// Component will be removed after loop end and [removeOnFinish] is set.

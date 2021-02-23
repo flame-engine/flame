@@ -17,6 +17,17 @@ void main() async {
 class MyGame extends BaseGame {
   @override
   Future<void> onLoad() async {
+    final size = Vector2.all(64.0);
+    final data = SpriteAnimationData.sequenced(
+      textureSize: size,
+      amount: 2,
+      stepTime: 0.1,
+    );
+    this.player = SpriteAnimationComponent.fromFrameData(
+      await images.load('player.png'),
+      data,
+    );
+
     final r = Random();
     final image = await images.load('test.png');
     List.generate(
