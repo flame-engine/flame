@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import '../image_composition.dart';
 import 'anchor.dart';
 import 'extensions/offset.dart';
 import 'extensions/vector2.dart';
@@ -69,11 +70,20 @@ class Sprite {
     final drawPosition = position ?? Vector2.zero();
     final drawSize = size ?? srcSize;
 
-    final delta = anchor.toVector2..multiply(drawSize);
+    final delta = anchor.toVector2()..multiply(drawSize);
     final drawRect = (drawPosition + delta).toPositionedRect(drawSize);
 
     final drawPaint = overridePaint ?? paint;
 
     canvas.drawImageRect(image, src, drawRect, drawPaint);
+  }
+
+  /// Return a new Image based on the [src] of the Sprite.
+  ///
+  /// **Note:** This is a heavy async operation and should not be called on each [Game.render].
+  Future<Image> toImage() async {
+    final composition = ImageComposition()
+      ..add(image, Vector2.zero(), source: src);
+    return composition.compose();
   }
 }

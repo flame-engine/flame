@@ -53,7 +53,7 @@ class PositionComponent extends BaseComponent {
 
   /// Set the top left position regardless of the anchor
   set topLeftPosition(Vector2 position) {
-    this.position = position + (anchor.toVector2..multiply(size));
+    this.position = position + (anchor.toVector2()..multiply(size));
   }
 
   /// Get the absolute top left position regardless of whether it is a child or not
@@ -157,7 +157,7 @@ class PositionComponent extends BaseComponent {
   void prepareCanvas(Canvas canvas) {
     canvas.translate(x, y);
     canvas.rotate(angle);
-    final Vector2 delta = -anchor.toVector2
+    final Vector2 delta = -anchor.toVector2()
       ..multiply(size);
     canvas.translate(delta.x, delta.y);
 
