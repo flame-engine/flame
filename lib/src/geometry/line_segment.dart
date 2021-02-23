@@ -1,5 +1,5 @@
-import 'line.dart';
 import '../../extensions.dart';
+import 'line.dart';
 
 /// A [LineSegment] represent a segment of an infinitely long line, it is the
 /// segment between the [from] and [to] vectors (inclusive).
@@ -89,6 +89,6 @@ class LineSegment {
 
   @override
   String toString() {
-    return "[$from, $to]";
+    return '[$from, $to]';
   }
 }

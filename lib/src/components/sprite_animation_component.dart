@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 import '../extensions/vector2.dart';
 import '../sprite_animation.dart';
@@ -24,7 +24,7 @@ class SpriteAnimationComponent extends PositionComponent {
 
   /// Creates a SpriteAnimationComponent from a [size], an [image] and [data]. Check [SpriteAnimationData] for more info on the available options.
   ///
-  /// Optionally [removeOnFinish] can be set to true to have this component be auto removed from the [BaseGame] when the animation is finished.
+  /// Optionally [removeOnFinish] can be set to true to have this component be auto removed from the BaseGame when the animation is finished.
   SpriteAnimationComponent.fromFrameData(
     Image image,
     SpriteAnimationData data, {
@@ -39,7 +39,6 @@ class SpriteAnimationComponent extends PositionComponent {
   }
 
   /// Component will be removed after loop end and [removeOnFinish] is set.
-  /// [Component.shouldRemove] worked here.
   @override
   bool get shouldRemove =>
       super.shouldRemove ||

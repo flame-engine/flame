@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -9,8 +8,8 @@ import 'package:flutter/widgets.dart';
 
 import '../assets/assets_cache.dart';
 import '../assets/images.dart';
-import '../extensions/vector2.dart';
 import '../extensions/offset.dart';
+import '../extensions/vector2.dart';
 import '../keyboard.dart';
 import '../sprite.dart';
 import '../sprite_animation.dart';
@@ -38,7 +37,7 @@ abstract class Game {
   /// Use [size] and [hasLayout] for safe access.
   Vector2 _size;
 
-  /// Current game viewport size, updated every resize via the [resize] method hook
+  /// Current game viewport size, updated every resize via the [onResize] method hook
   Vector2 get size {
     assert(
       hasLayout,
@@ -91,10 +90,10 @@ abstract class Game {
   /// Should be called manually.
   void attach(PipelineOwner owner, GameRenderBox gameRenderBox) {
     if (isAttached) {
-      throw UnsupportedError("""
+      throw UnsupportedError('''
       Game attachment error:
       A game instance can only be attached to one widget at a time.
-      """);
+      ''');
     }
     _gameRenderBox = gameRenderBox;
     onAttach();
@@ -199,17 +198,17 @@ abstract class Game {
   /// A property that stores an [ActiveOverlaysNotifier]
   ///
   /// This is useful to render widgets above a game, like a pause menu for example.
-  /// Overlays visible or hidden via [overlays.add] or [overlays.remove], respectively.
+  /// Overlays visible or hidden via [overlays].add or [overlays].remove, respectively.
   ///
   /// Ex:
   /// ```
-  /// final pauseOverlayIdentifier = "PauseMenu";
-  /// overlays.add(pauseOverlayIdentifier); // marks "PauseMenu" to be rendered.
-  /// overlays.remove(pauseOverlayIdentifier); // marks "PauseMenu" to not be rendered.
+  /// final pauseOverlayIdentifier = 'PauseMenu';
+  /// overlays.add(pauseOverlayIdentifier); // marks 'PauseMenu' to be rendered.
+  /// overlays.remove(pauseOverlayIdentifier); // marks 'PauseMenu' to not be rendered.
   /// ```
   ///
   /// See also:
-  /// - [new GameWidget]
+  /// - GameWidget
   /// - [Game.overlays]
   final overlays = ActiveOverlaysNotifier();
 }
@@ -224,7 +223,7 @@ class ActiveOverlaysNotifier extends ChangeNotifier {
   /// Mark a, overlay to be rendered.
   ///
   /// See also:
-  /// - [new GameWidget]
+  /// - GameWidget
   /// - [Game.overlays]
   bool add(String overlayName) {
     final setChanged = _activeOverlays.add(overlayName);
@@ -237,7 +236,7 @@ class ActiveOverlaysNotifier extends ChangeNotifier {
   /// Mark a, overlay to not be rendered.
   ///
   /// See also:
-  /// - [new GameWidget]
+  /// - GameWidget
   /// - [Game.overlays]
   bool remove(String overlayName) {
     final hasRemoved = _activeOverlays.remove(overlayName);

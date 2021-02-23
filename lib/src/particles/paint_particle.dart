@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 import '../components/mixins/single_child_particle.dart';
-import 'particle.dart';
 import 'curved_particle.dart';
+import 'particle.dart';
 
 /// A particle which renders its child with certain [Paint]
 /// Could be used for applying composite effects.

@@ -1,13 +1,12 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 import '../extensions/vector2.dart';
 import 'particle.dart';
 
-/// A [Particle] which renders given [Image] on a [Canvas]
-/// image is centered. If any other behavior is needed, consider
-/// using [ComputedParticle].
+/// A [Particle] which renders given [Image] on a [Canvas] image is centered.
+/// If any other behavior is needed, consider using ComputedParticle.
 class ImageParticle extends Particle {
   /// dart.ui [Image] to draw
   Image image;

@@ -1,11 +1,11 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 import '../anchor.dart';
 import '../extensions/vector2.dart';
-import 'particle.dart';
 import '../sprite_animation.dart';
+import 'particle.dart';
 
 export '../sprite_animation.dart';
 

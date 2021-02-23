@@ -133,12 +133,12 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
       final diff = _backgroundRect.center + nextPoint - _knobRect.center;
       _knobRect = _knobRect.shift(diff);
 
-      final double _intensity = dist / _tileSize;
+      final _intensity = dist / _tileSize;
 
       JoystickMoveDirectional directional;
 
       if (_intensity == 0) {
-        directional = JoystickMoveDirectional.IDLE;
+        directional = JoystickMoveDirectional.idle;
       } else {
         directional = JoystickDirectionalEvent.calculateDirectionalByDegrees(
           degrees,
@@ -210,9 +210,7 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
     _dragging = false;
     _dragPosition = _backgroundRect.center.toVector2();
     joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
-      directional: JoystickMoveDirectional.IDLE,
-      intensity: 0.0,
-      radAngle: 0.0,
+      directional: JoystickMoveDirectional.idle,
     ));
     return true;
   }
@@ -222,9 +220,7 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
     _dragging = false;
     _dragPosition = _backgroundRect.center.toVector2();
     joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
-      directional: JoystickMoveDirectional.IDLE,
-      intensity: 0.0,
-      radAngle: 0.0,
+      directional: JoystickMoveDirectional.idle,
     ));
     return true;
   }

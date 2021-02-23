@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 import '../components/mixins/single_child_particle.dart';
-import 'particle.dart';
 import 'curved_particle.dart';
+import 'particle.dart';
 
 /// A particle serves as a container for basic
 /// acceleration physics.

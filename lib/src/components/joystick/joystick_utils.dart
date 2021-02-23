@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import '../../sprite.dart';
 import '../../extensions/offset.dart';
 import '../../extensions/size.dart';
+import '../../sprite.dart';
 
 class JoystickUtils {
   static void renderControl(Canvas c, Sprite sprite, Rect rect, Paint paint) {
@@ -13,7 +13,7 @@ class JoystickUtils {
     if (sprite == null) {
       assert(paint != null, '`paint` must not be `null` if `sprite` is `null`');
 
-      final double radius = rect.width / 2;
+      final radius = rect.width / 2;
       c.drawCircle(
         Offset(rect.left + radius, rect.top + radius),
         radius,

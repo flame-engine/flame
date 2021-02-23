@@ -24,23 +24,23 @@ Vector2 size = Vector2(1.0, 1.0);
 void main() {
   group('resizable test', () {
     test('game calls resize on add', () {
-      final MyComponent a = MyComponent('a');
-      final MyGame game = MyGame();
+      final a = MyComponent('a');
+      final game = MyGame();
       game.onResize(size);
       game.add(a);
       expect(a.gameSize, size);
     });
     test('game calls resize after added', () {
-      final MyComponent a = MyComponent('a');
-      final MyGame game = MyGame();
+      final a = MyComponent('a');
+      final game = MyGame();
       game.onResize(Vector2.all(10));
       game.add(a);
       game.onResize(size);
       expect(a.gameSize, size);
     });
     test("game calls doesn't change component size", () {
-      final MyComponent a = MyComponent('a');
-      final MyGame game = MyGame();
+      final a = MyComponent('a');
+      final game = MyGame();
       game.onResize(Vector2.all(10));
       game.add(a);
       game.onResize(size);

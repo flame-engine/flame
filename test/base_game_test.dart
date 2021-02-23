@@ -64,8 +64,8 @@ Vector2 size = Vector2(1.0, 1.0);
 void main() {
   group('BaseGame test', () {
     test('adds the component to the component list', () {
-      final MyGame game = MyGame();
-      final MyComponent component = MyComponent();
+      final game = MyGame();
+      final component = MyComponent();
 
       game.onResize(size);
       game.add(component);
@@ -78,8 +78,8 @@ void main() {
     test(
       'when the component has onLoad function, adds after load completion',
       () async {
-        final MyGame game = MyGame();
-        final MyAsyncComponent component = MyAsyncComponent();
+        final game = MyGame();
+        final component = MyAsyncComponent();
 
         game.onResize(size);
         await game.add(component);
@@ -94,8 +94,8 @@ void main() {
     );
 
     test('prepare adds gameRef and calls onGameResize', () {
-      final MyGame game = MyGame();
-      final MyComponent component = MyComponent();
+      final game = MyGame();
+      final component = MyComponent();
 
       game.onResize(size);
       game.add(component);
@@ -105,21 +105,21 @@ void main() {
     });
 
     test('component can be tapped', () {
-      final MyGame game = MyGame();
-      final MyComponent component = MyComponent();
+      final game = MyGame();
+      final component = MyComponent();
 
       game.onResize(size);
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
-      game.onTapDown(1, TapDownDetails(globalPosition: const Offset(0.0, 0.0)));
+      game.onTapDown(1, TapDownDetails());
 
       expect(component.tapped, true);
     });
 
     test('component is added to component list', () {
-      final MyGame game = MyGame();
-      final MyComponent component = MyComponent();
+      final game = MyGame();
+      final component = MyComponent();
 
       game.onResize(size);
       game.add(component);
@@ -132,8 +132,8 @@ void main() {
     flutter.testWidgets(
       'component render and update is called',
       (flutter.WidgetTester tester) async {
-        final MyGame game = MyGame();
-        final MyComponent component = MyComponent();
+        final game = MyGame();
+        final component = MyComponent();
 
         game.onResize(size);
         game.add(component);
@@ -159,8 +159,8 @@ void main() {
     );
 
     test('onRemove is only called once on component', () {
-      final MyGame game = MyGame();
-      final MyComponent component = MyComponent();
+      final game = MyGame();
+      final component = MyComponent();
 
       game.onResize(size);
       game.add(component);

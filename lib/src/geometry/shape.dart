@@ -72,8 +72,12 @@ mixin HitboxShape on Shape {
   CollisionCallback onCollision = emptyCollisionCallback;
 }
 
-typedef CollisionCallback = Function(Set<Vector2> points, HitboxShape other);
-final CollisionCallback emptyCollisionCallback = (_a, _b) {};
+typedef CollisionCallback = void Function(
+  Set<Vector2> points,
+  HitboxShape other,
+);
+
+void emptyCollisionCallback(Set<Vector2> _, HitboxShape __) {}
 
 /// Used for caching calculated shapes, the cache is determined to be valid by
 /// comparing a list of values that can be of any type and is compared to the
@@ -89,7 +93,7 @@ class ShapeCache<T> {
     if (value == null) {
       return false;
     }
-    for (int i = 0; i < _lastValidCacheValues.length; ++i) {
+    for (var i = 0; i < _lastValidCacheValues.length; ++i) {
       if (_lastValidCacheValues[i] != validCacheValues[i]) {
         return false;
       }

@@ -7,9 +7,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'effect_test_utils.dart';
 
 void main() {
-  final Random random = Random();
+  final random = Random();
   Vector2 randomVector2() => (Vector2.random(random) * 100)..round();
-  final Vector2 argumentSize = randomVector2();
+  final argumentSize = randomVector2();
   TestComponent component() => TestComponent(size: randomVector2());
 
   ScaleEffect effect({bool isInfinite = false, bool isAlternating = false}) {

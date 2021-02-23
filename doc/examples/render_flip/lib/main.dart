@@ -1,7 +1,8 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart' hide Image;
-import 'dart:ui';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
