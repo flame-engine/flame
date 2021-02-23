@@ -17,7 +17,7 @@ The `shouldRemove` variable can be overridden or set to true and `BaseGame` will
 
 The `isHUD` variable can be overridden or set to true (default false) to make the `BaseGame` ignore the `camera` for this element, make it static in relation to the screen that is.
 
-The `onMount` method can be overridden to run initialization code for the component. When this method is called, BaseGame ensures that all the mixins which would change this component's behaviour are already resolved.
+The `onMount` method can be overridden to run initialization code for the component. When this method is called, BaseGame ensures that all the mixins which would change this component's behavior are already resolved.
 
 The `onRemove` method can be overridden to run code before the component is removed from the game, it is only run once even if the component is removed both by using the `BaseGame` remove method and the ´Component´ remove method.
 
@@ -70,7 +70,7 @@ When implementing the `render` method for your component that extends `PositionC
 Your render method should not handle where on the screen your component should be rendered. To handle where and how your component should be rendered
 use the `position`. `angle` and `anchor` properties and flame will automatically handle the rest for you.
 
-If you really want to handle the canvas translations yourself you can just omit the `super.render(canvas)` line and surpress the warning, but for most usecases this is not recommended.
+If you really want to handle the canvas translations yourself you can just omit the `super.render(canvas)` line and suppress the warning, but for most use cases this is not recommended.
 
 If you want to know where on the screen the bounding box of the component is you can use the `toRect` method.
 
@@ -101,32 +101,46 @@ player.render(canvas); // it will render only if the image is loaded and the pos
 
 This class is used to represent a Component that has a sprite that runs a single cyclic animation.
 
-This will create a simple three frame animation
+This will create a simple three frame animation using 3 different images:
 
 ```dart
-List<Sprite> sprites = [0, 1, 2].map((i) => Sprite('player_${i}.png')).toList();
+final sprites = [0, 1, 2]
+    .map((i) => Sprite(images.fromCache('player_$i.png')))
+    .toList();
 final size = Vector2.all(64.0);
-this.player = SpriteAnimationComponent(size, new Animation.spriteList(sprites, stepTime: 0.01));
+this.player = SpriteAnimationComponent(
+  SpriteAnimation.spriteList(sprites, stepTime: 0.01),
+  size: size,
+);
 ```
 
-If you have a sprite sheet, you can use the `sequenced` constructor, identical to the one provided by the `Animation` class (check more details in [the appropriate section](images.md#Animation)):
+If you have a sprite sheet, you can use the `sequenced` constructor from the `SpriteAnimationData` class (check more details on [Images &gt; Animation](images.md#Animation)):
 
 ```dart
 final size = Vector2.all(64.0);
-this.player = SpriteAnimationComponent.sequenced(size, 'player.png', 2);
+final data = SpriteAnimationData.sequenced(
+  textureSize: size,
+  amount: 2,
+  stepTime: 0.1,
+);
+this.player = SpriteAnimationComponent.fromFrameData(
+  await images.load('player.png'),
+  data,
+);
 ```
 
-If you are not using `BaseGame`, don't forget this component needs to be update'd even if static, because the animation object needs to be ticked to move the frames.
+If you are not using `BaseGame`, don't forget this component needs to be updated, because the animation object needs to be ticked to move the frames.
 
 ## SvgComponent
+
+*Note*: To use SVG with Flame, use the [`flame_svg`](https://github.com/flame-engine/flame_svg) package.
 
 This component uses an instance of `Svg` class to represent a Component that has a svg that is rendered on the game:
 
 ```dart
 Svg svg = Svg('android.svg');
-SvgComponent android = SvgComponent.fromSvg(100, 100, svg);
-android.x = 100;
-android.y = 100;
+SvgComponent android = SvgComponent.fromSvg(Vector2.all(100.0), svg);
+android.position = Vector2.all(100.0);
 ```
 
 ## FlareActorComponent
@@ -232,7 +246,7 @@ For example if you want to move your background images along the X-axis with a f
 "closer" the image is:
 
 ```dart
-final parallaxComponent = await loadParalladComponent(
+final parallaxComponent = await loadParallaxComponent(
   _paths,
   baseVelocity: Vector2(20, 0),
   velocityMultiplierDelta: Vector2(1.8, 1.0),
@@ -242,14 +256,14 @@ You can set the baseSpeed and layerDelta at any time, for example if your charac
 game speeds up.
 
 ```dart
-final parallax = parallaxComponen.parallax;
+final parallax = parallaxComponent.parallax;
 parallax.baseSpeed = Vector2(100, 0);
 parallax.velocityMultiplierDelta = Vector2(2.0, 1.0);
 ```
 
 By default the images are aligned to the bottom left, repeated along the X-axis and scaled
 proportionally so that the image covers the height of the screen. If you want to change this
-behaviour, for example if you are not making a side scrolling game, you can set the `repeat`,
+behavior, for example if you are not making a side scrolling game, you can set the `repeat`,
 `alignment` and `fill` parameters for each `ParallaxImage` and add them to `ParallaxLayer`s that you
 then pass in to the `ParallaxComponent`'s constructor.
 
@@ -260,7 +274,7 @@ final images = [
   loadParallaxImage('planets.jpg', repeat: ImageRepeat.repeatY, alignment: Alignment.bottomLeft, fill: LayerFill.none),
   loadParallaxImage('dust.jpg', repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
 ];
-final layers = images.map((image) => ParallaxLayer(await image, velocityMulitplier: images.indexOf(image) * 2.0));
+final layers = images.map((image) => ParallaxLayer(await image, velocityMultiplier: images.indexOf(image) * 2.0));
 final parallaxComponent = ParallaxComponent.fromParallax(
   Parallax(
     await Future.wait(layers),
@@ -287,7 +301,7 @@ Three example implementations can be found in the
 
 ## SpriteBodyComponent
 
-See [SpriteBodyComponent](forge2d.md#spritebodycomponent) in the box2d documentation.
+See [SpriteBodyComponent](forge2d.md#SpriteBodyComponent) in the box2d documentation.
 
 ## TiledComponent
 

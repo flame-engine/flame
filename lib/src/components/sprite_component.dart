@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 
+import '../extensions/image.dart';
 import '../extensions/vector2.dart';
 import '../sprite.dart';
 import 'component.dart';
@@ -32,11 +33,15 @@ class SpriteComponent extends PositionComponent {
   }) : super(position: position, size: size);
 
   factory SpriteComponent.fromImage(
-    Vector2 size,
     Image image, {
     Vector2 position,
+    Vector2 size,
   }) =>
-      SpriteComponent(size: size, sprite: Sprite(image), position: position);
+      SpriteComponent(
+        position: position,
+        size: size ?? image.size,
+        sprite: Sprite(image),
+      );
 
   @mustCallSuper
   @override

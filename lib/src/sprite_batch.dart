@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 
 import 'assets/images.dart';
+import 'extensions/image.dart';
 import 'extensions/vector2.dart';
 import 'flame.dart';
 import 'game/game.dart';
@@ -145,7 +146,7 @@ class SpriteBatch {
   int get height => atlas.height;
 
   /// The size of the [atlas].
-  Vector2 get size => Vector2Extension.fromInts(width, height);
+  Vector2 get size => atlas.size;
 
   SpriteBatch(
     this.atlas, {

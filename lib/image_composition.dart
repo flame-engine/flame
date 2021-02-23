@@ -40,7 +40,7 @@ class _Composed {
 
 /// The [ImageComposition] allows for composing multiple images onto a single image.
 ///
-/// **Note:** Composing images is a heavy async operation and should not be called on each [Game.render].
+/// **Note:** Composing images is a heavy async operation and should not be called inside the game loop.
 class ImageComposition {
   /// The values that will be used to compose the image
   final List<_Composed> _composes = [];
