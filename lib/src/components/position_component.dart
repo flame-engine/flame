@@ -21,7 +21,7 @@ import 'mixins/hitbox.dart';
 /// rendered automatically when this is updated and rendered.
 /// They are translated by this component's (x,y). They do not need to fit
 /// within this component's (width, height).
-class PositionComponent extends BaseComponent {
+abstract class PositionComponent extends BaseComponent {
   /// The position of this component on the screen (relative to the anchor).
   Vector2 position;
 
@@ -87,12 +87,12 @@ class PositionComponent extends BaseComponent {
 
   /// Angle (with respect to the x-axis) this component should be rendered with.
   /// It is rotated around its anchor.
-  double angle = 0.0;
+  double angle;
 
   /// Anchor point for this component. This is where flame "grabs it".
   /// The [position] is relative to this point inside the component.
   /// The [angle] is rotated around this point.
-  Anchor anchor = Anchor.topLeft;
+  Anchor anchor;
 
   /// Whether this component should be flipped on the X axis before being rendered.
   bool renderFlipX = false;
@@ -116,8 +116,14 @@ class PositionComponent extends BaseComponent {
     topLeftPosition = rect.topLeft.toVector2();
   }
 
-  PositionComponent({Vector2 position, Vector2 size})
-      : position = position ?? Vector2.zero(),
+  PositionComponent({
+    Vector2 position,
+    Vector2 size,
+    this.angle = 0.0,
+    this.anchor = Anchor.topLeft,
+    this.renderFlipX = false,
+    this.renderFlipY = false,
+  })  : position = position ?? Vector2.zero(),
         size = size ?? Vector2.zero();
 
   @override
