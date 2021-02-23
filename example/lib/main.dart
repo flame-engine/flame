@@ -38,9 +38,10 @@ class Square extends PositionComponent {
     c.drawRect(Rect.fromLTWH(width / 2, height / 2, 3, 3), blue);
   }
 
+  @override
   void update(double dt) {
     super.update(dt);
-    angle += speed * t;
+    angle += speed * dt;
     angle %= 2 * math.pi;
   }
 

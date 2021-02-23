@@ -47,11 +47,18 @@ class ParallaxComponent extends PositionComponent {
     _parallax.resize(size);
   }
 
-  /// Creates a component with an empty parallax which can be set later
-  ParallaxComponent();
+  /// Creates a component with an empty parallax which can be set later.
+  ParallaxComponent({
+    Vector2 position,
+    Vector2 size,
+  }) : super(position: position, size: size);
 
-  /// Creates a component from a [Parallax] object
-  ParallaxComponent.fromParallax(this._parallax);
+  /// Creates a component from a [Parallax] object.
+  ParallaxComponent.fromParallax(
+    this._parallax, {
+    Vector2 position,
+    Vector2 size,
+  }) : super(position: position, size: size);
 
   @mustCallSuper
   @override
