@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 import 'extensions/vector2.dart';
 
 /// Represents a relative position inside some 2D object with a rectangular
@@ -14,6 +16,7 @@ import 'extensions/vector2.dart';
 /// The Anchor is represented by a fraction of the size (in each axis),
 /// where 0 in x-axis means left, 0 in y-axis means top, 1 in x-axis means right
 /// and 1 in y-axis means bottom.
+@immutable
 class Anchor {
   static const Anchor topLeft = Anchor(0.0, 0.0);
   static const Anchor topCenter = Anchor(0.5, 0.0);
@@ -82,9 +85,9 @@ class Anchor {
     if (_valueNames.containsValue(name)) {
       return _valueNames.entries.singleWhere((e) => e.value == name).key;
     } else {
-      final regexp = RegExp(r"^\Anchor\(([^,]+), ([^\)]+)\)");
+      final regexp = RegExp(r'^\Anchor\(([^,]+), ([^\)]+)\)');
       final matches = regexp.allMatches(name).first.group;
-      assert(matches != null, "Bad Anchor format");
+      assert(matches != null, 'Bad Anchor format');
       return Anchor(double.parse(matches(1)), double.parse(matches(2)));
     }
   }
