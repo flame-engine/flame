@@ -20,7 +20,7 @@ class SpriteWidget extends StatelessWidget {
   /// The positioning [Anchor] for the [sprite]
   final Anchor anchor;
 
-  SpriteWidget({
+  const SpriteWidget({
     @required this.sprite,
     this.anchor = Anchor.topLeft,
   });

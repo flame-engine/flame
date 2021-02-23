@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../components/base_component.dart';
@@ -221,7 +220,7 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
     void Function() onComplete,
   })  : assert(
           (duration != null) ^ (speed != null),
-          "Either speed or duration necessary",
+          'Either speed or duration necessary',
         ),
         super(
           initialIsInfinite,

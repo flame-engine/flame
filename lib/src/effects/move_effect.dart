@@ -1,6 +1,7 @@
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
 
+import '../../components.dart';
 import '../extensions/vector2.dart';
 import 'effects.dart';
 
@@ -36,7 +37,7 @@ class MoveEffect extends SimplePositionComponentEffect {
     void Function() onComplete,
   })  : assert(
           (duration != null) ^ (speed != null),
-          "Either speed or duration necessary",
+          'Either speed or duration necessary',
         ),
         super(
           isInfinite,
@@ -50,7 +51,7 @@ class MoveEffect extends SimplePositionComponentEffect {
         );
 
   @override
-  void initialize(component) {
+  void initialize(PositionComponent component) {
     super.initialize(component);
     List<Vector2> _movePath;
     _startPosition = component.position.clone();
@@ -58,9 +59,9 @@ class MoveEffect extends SimplePositionComponentEffect {
     // to the previous vector in the list, except the first one which is
     // relative to the start position of the component.
     if (isRelative) {
-      Vector2 lastPosition = _startPosition;
+      var lastPosition = _startPosition;
       _movePath = [];
-      for (Vector2 v in path) {
+      for (final v in path) {
         final nextPosition = v + lastPosition;
         _movePath.add(nextPosition);
         lastPosition = nextPosition;
@@ -70,16 +71,16 @@ class MoveEffect extends SimplePositionComponentEffect {
     }
     endPosition = isAlternating ? _startPosition : _movePath.last;
 
-    double pathLength = 0;
-    Vector2 lastPosition = _startPosition;
-    for (Vector2 v in _movePath) {
+    var pathLength = 0.0;
+    var lastPosition = _startPosition;
+    for (final v in _movePath) {
       pathLength += v.distanceTo(lastPosition);
       lastPosition = v;
     }
 
     _percentagePath = <Vector2Percentage>[];
     lastPosition = _startPosition;
-    for (Vector2 v in _movePath) {
+    for (final v in _movePath) {
       final lengthToPrevious = lastPosition.distanceTo(v);
       final lastEndAt =
           _percentagePath.isNotEmpty ? _percentagePath.last.endAt : 0.0;
@@ -94,7 +95,7 @@ class MoveEffect extends SimplePositionComponentEffect {
       );
       lastPosition = v;
     }
-    final double totalPathLength = isAlternating ? pathLength * 2 : pathLength;
+    final totalPathLength = isAlternating ? pathLength * 2 : pathLength;
     speed ??= totalPathLength / duration;
 
     // `duration` is not null when speed is null
@@ -121,8 +122,8 @@ class MoveEffect extends SimplePositionComponentEffect {
       _currentSubPath =
           _percentagePath.firstWhere((v) => v.endAt >= curveProgress);
     }
-    final double lastEndAt = _currentSubPath.startAt;
-    final double localPercentage =
+    final lastEndAt = _currentSubPath.startAt;
+    final localPercentage =
         (curveProgress - lastEndAt) / (_currentSubPath.endAt - lastEndAt);
     component.position = _currentSubPath.previous +
         ((_currentSubPath.v - _currentSubPath.previous) * localPercentage);

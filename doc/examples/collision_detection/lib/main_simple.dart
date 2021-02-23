@@ -1,13 +1,12 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/gestures.dart';
-
 import 'package:flutter/material.dart' hide Image, Draggable;
-
-import 'dart:ui';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

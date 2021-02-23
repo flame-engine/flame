@@ -120,7 +120,7 @@ class Polygon extends Shape {
     }
 
     final vertices = hitbox();
-    for (int i = 0; i < vertices.length; i++) {
+    for (var i = 0; i < vertices.length; i++) {
       final edge = getEdge(i, vertices: vertices);
       final isOutside = (edge.to.x - edge.from.x) * (point.y - edge.from.y) -
               (point.x - edge.from.x) * (edge.to.y - edge.from.y) >
@@ -136,9 +136,9 @@ class Polygon extends Shape {
   /// Return all vertices as [LineSegment]s that intersect [rect], if [rect]
   /// is null return all vertices as [LineSegment]s.
   List<LineSegment> possibleIntersectionVertices(Rect rect) {
-    final List<LineSegment> rectIntersections = [];
+    final rectIntersections = <LineSegment>[];
     final vertices = hitbox();
-    for (int i = 0; i < vertices.length; i++) {
+    for (var i = 0; i < vertices.length; i++) {
       final edge = getEdge(i, vertices: vertices);
       if (rect?.intersectsSegment(edge.from, edge.to) ?? true) {
         rectIntersections.add(edge);

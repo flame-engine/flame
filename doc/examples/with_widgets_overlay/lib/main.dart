@@ -10,14 +10,14 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+  const MyHomePage({Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
         height: 100,
         color: const Color(0xFFFF0000),
         child: const Center(
-          child: const Text('Paused'),
+          child: Text('Paused'),
         ),
       ),
     );
@@ -50,12 +50,12 @@ class _MyHomePageState extends State<MyHomePage> {
           : GameWidget<ExampleGame>(
               game: _myGame,
               overlayBuilderMap: {
-                "PauseMenu": pauseMenuBuilder,
+                'PauseMenu': pauseMenuBuilder,
               },
               initialActiveOverlays: const ['PauseMenu'],
             ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => newGame(),
+        onPressed: newGame,
         child: const Icon(Icons.add),
       ),
     );

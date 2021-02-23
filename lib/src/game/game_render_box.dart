@@ -9,6 +9,7 @@ import '../extensions/size.dart';
 import 'game.dart';
 import 'game_loop.dart';
 
+// ignore: prefer_mixin
 class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   BuildContext buildContext;
   Game game;

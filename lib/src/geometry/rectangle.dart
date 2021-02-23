@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import '../../geometry.dart';
 import '../../extensions.dart';
+import '../../geometry.dart';
 import 'shape.dart';
 
 class Rectangle extends Polygon {
@@ -35,7 +35,7 @@ class Rectangle extends Polygon {
   /// of itself. The [position] will therefore be the center of the Rectangle.
   ///
   /// If you want to create the [Rectangle] from a positioned [Rect] instead,
-  /// have a look at [Rectangle.toRect].
+  /// have a look at [Rectangle.fromRect].
   Rectangle.fromDefinition({
     Vector2 relation,
     Vector2 position,

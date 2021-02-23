@@ -2,11 +2,11 @@ import 'dart:ui';
 
 import '../image_composition.dart';
 import 'anchor.dart';
+import 'assets/images.dart';
 import 'extensions/offset.dart';
 import 'extensions/vector2.dart';
 import 'flame.dart';
 import 'palette.dart';
-import 'assets/images.dart';
 
 class Sprite {
   Paint paint = BasicPalette.white.paint;
@@ -44,8 +44,9 @@ class Sprite {
   Vector2 get srcSize => Vector2(src.width, src.height);
 
   set srcSize(Vector2 size) {
-    size ??= Vector2Extension.fromInts(image.width, image.height);
-    src = srcPosition.toPositionedRect(size);
+    final actualSize =
+        size ?? Vector2Extension.fromInts(image.width, image.height);
+    src = srcPosition.toPositionedRect(actualSize);
   }
 
   Vector2 get srcPosition => src.topLeft.toVector2();

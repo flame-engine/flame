@@ -69,7 +69,7 @@ class ImageComposition {
   /// gets added to the composition. It will be rotated in a clock-wise direction
   /// around the [anchor].
   ///
-  /// By default the [anchor] will be the [source.width] and [source.height]
+  /// By default the [anchor] will be the [source].width and [source].height
   /// divided by `2`.
   ///
   /// [isAntiAlias] can be used to if the [image] will be anti aliased. Defaults

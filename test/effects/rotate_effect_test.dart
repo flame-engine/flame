@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'effect_test_utils.dart';
 
 void main() {
-  const double angleArgument = 6.0;
+  const angleArgument = 6.0;
   TestComponent component() => TestComponent(angle: 0.5);
 
   RotateEffect effect({bool isInfinite = false, bool isAlternating = false}) {
@@ -59,7 +59,6 @@ void main() {
         positionComponent,
         effect(isInfinite: true, isAlternating: true),
         expectedAngle: positionComponent.angle,
-        iterations: 1.0,
         shouldComplete: false,
       );
     },

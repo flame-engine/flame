@@ -48,7 +48,7 @@ class AssetsCache {
   }
 
   Future<Map<String, dynamic>> readJson(String fileName) async {
-    final String content = await readFile(fileName);
+    final content = await readFile(fileName);
     return jsonDecode(content) as Map<String, dynamic>;
   }
 
@@ -59,7 +59,7 @@ class AssetsCache {
 
   Future<_BinaryAsset> _readBinary(String fileName) async {
     final data = await rootBundle.load('assets/$fileName');
-    final Uint8List list = Uint8List.view(data.buffer);
+    final list = Uint8List.view(data.buffer);
 
     final bytes = List<int>.from(list);
     return _BinaryAsset(bytes);

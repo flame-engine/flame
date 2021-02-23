@@ -1,9 +1,9 @@
+import 'package:dashbook/dashbook.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/widgets.dart';
-import 'package:flutter/material.dart' hide Animation;
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
-import 'package:dashbook/dashbook.dart';
+import 'package:flame/widgets.dart';
+import 'package:flutter/material.dart' hide Animation;
 
 Anchor parseAnchor(String name) {
   switch (name) {
@@ -27,7 +27,7 @@ Anchor parseAnchor(String name) {
       return Anchor.bottomRight;
   }
 
-  throw Exception("Cannot parse anchor name `$name`");
+  throw Exception('Cannot parse anchor name `$name`');
 }
 
 void main() async {
@@ -46,10 +46,10 @@ void main() async {
             tileSize: 16,
             destTileSize: 50,
             child: const Center(
-              child: const Text(
+              child: Text(
                 'Cool label',
-                style: const TextStyle(
-                  color: const Color(0xFFFFFFFF),
+                style: TextStyle(
+                  color: Color(0xFFFFFFFF),
                 ),
               ),
             ),
@@ -72,7 +72,7 @@ void main() async {
             },
             label: const Text(
               'Sprite Button',
-              style: const TextStyle(color: const Color(0xFF5D275D)),
+              style: TextStyle(color: Color(0xFF5D275D)),
             ),
             sprite: _buttons.getSprite(0, 0),
             pressedSprite: _buttons.getSprite(1, 0),
@@ -118,7 +118,6 @@ void main() async {
     row: 0,
     stepTime: 0.2,
     to: 3,
-    loop: true,
   );
   dashbook.storiesOf('SpriteAnimationWidget').decorator(CenterDecorator()).add(
         'default',

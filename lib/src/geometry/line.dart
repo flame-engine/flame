@@ -3,7 +3,7 @@ import 'dart:math';
 import '../../extensions.dart';
 
 /// This represents a line on the ax + by = c form
-/// If you just want to represent a part of a line, look into [LineSegment].
+/// If you just want to represent a part of a line, look into LineSegment.
 class Line {
   final double a;
   final double b;
@@ -40,8 +40,8 @@ class Line {
 
   @override
   String toString() {
-    final ax = "${a}x";
-    final by = b.isNegative ? "${b}y" : "+${b}y";
-    return "$ax$by=$c";
+    final ax = '${a}x';
+    final by = b.isNegative ? '${b}y' : '+${b}y';
+    return '$ax$by=$c';
   }
 }

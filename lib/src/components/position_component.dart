@@ -149,7 +149,7 @@ abstract class PositionComponent extends BaseComponent {
       Vector2(-50, -15),
     );
 
-    final Rect rect = toRect();
+    final rect = toRect();
     final dx = rect.right;
     final dy = rect.bottom;
     debugTextConfig.render(
@@ -163,7 +163,7 @@ abstract class PositionComponent extends BaseComponent {
   void prepareCanvas(Canvas canvas) {
     canvas.translate(x, y);
     canvas.rotate(angle);
-    final Vector2 delta = -anchor.toVector2()
+    final delta = -anchor.toVector2()
       ..multiply(size);
     canvas.translate(delta.x, delta.y);
 

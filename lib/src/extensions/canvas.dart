@@ -1,6 +1,6 @@
-import 'vector2.dart';
-
 import 'dart:ui';
+
+import 'vector2.dart';
 
 export 'dart:ui' show Canvas;
 
