@@ -5,6 +5,7 @@ import 'package:flutter/painting.dart';
 
 import 'assets/images.dart';
 import 'extensions/canvas.dart';
+import 'extensions/image.dart';
 import 'extensions/rect.dart';
 import 'extensions/vector2.dart';
 import 'flame.dart';
@@ -144,11 +145,7 @@ class ParallaxLayer {
     _scale = scale(parallaxImage.fill);
 
     // The image size so that it fulfills the LayerFill parameter
-    _imageSize = Vector2Extension.fromInts(
-          parallaxImage.image.width,
-          parallaxImage.image.height,
-        ) /
-        _scale;
+    _imageSize = parallaxImage.image.size / _scale;
 
     // Number of images that can fit on the canvas plus one
     // to have something to scroll to without leaving canvas empty

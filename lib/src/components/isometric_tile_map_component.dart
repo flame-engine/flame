@@ -32,7 +32,14 @@ class IsometricTileMapComponent extends PositionComponent {
   /// Optionally provide a new tile size to render it scaled.
   Vector2 destTileSize;
 
-  IsometricTileMapComponent(this.tileset, this.matrix, {this.destTileSize});
+  IsometricTileMapComponent(
+    this.tileset,
+    this.matrix, {
+    this.destTileSize,
+    Vector2 position,
+  }) {
+    this.position = position ?? Vector2.zero();
+  }
 
   /// This is the size the tiles will be drawn (either original or overwritten).
   Vector2 get effectiveTileSize => destTileSize ?? tileset.srcSize;

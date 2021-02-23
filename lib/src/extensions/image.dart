@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import '../flame.dart';
 import 'color.dart';
+import 'vector2.dart';
 
 export 'dart:ui' show Image;
 
@@ -15,9 +16,10 @@ extension ImageExtension on Image {
   }
 
   /// Returns the bounding [Rect] of the image.
-  Rect getBoundingRect() {
-    return Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble());
-  }
+  Rect getBoundingRect() => Vector2.zero() & size;
+
+  /// Returns a [Vector2] representing the dimensions of this image.
+  Vector2 get size => Vector2Extension.fromInts(width, height);
 
   /// Change each pixel's color to be darker and return a new [Image].
   ///

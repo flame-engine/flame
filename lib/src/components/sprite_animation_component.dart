@@ -32,10 +32,7 @@ class SpriteAnimationComponent extends PositionComponent {
     Vector2 size,
     this.removeOnFinish = false,
   }) : super(position: position, size: size) {
-    animation = SpriteAnimation.fromFrameData(
-      image,
-      data,
-    );
+    animation = SpriteAnimation.fromFrameData(image, data);
   }
 
   /// Component will be removed after loop end and [removeOnFinish] is set.
