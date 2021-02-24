@@ -46,12 +46,11 @@ class SpriteComponent extends PositionComponent {
   @mustCallSuper
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     sprite?.render(
       canvas,
       size: size,
       overridePaint: overridePaint,
     );
-
-    super.render(canvas);
   }
 }
