@@ -81,6 +81,6 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     game.lifecycleStateChange(state);
   }
 
-  @override
+  // ignore: annotate_overrides
   Size computeDryLayout(BoxConstraints constraints) => constraints.biggest;
 }

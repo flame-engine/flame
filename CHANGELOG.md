@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [next]
+
+## 1.0.0-rc7
  - Moving device related methods (like `fullScreen`) from `util.dart` to `device.dart`
  - Moving render functions from `util.dart` to `extensions/canvas.dart`
  - Adapting ParallaxComponent contructors to match the pattern followed on other components
