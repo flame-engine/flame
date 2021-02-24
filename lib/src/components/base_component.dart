@@ -76,7 +76,11 @@ abstract class BaseComponent extends Component {
     render(canvas);
     _children.forEach((c) {
       canvas.save();
-      c.render(canvas);
+      if (c is BaseComponent) {
+        c.renderTree(canvas);
+      } else {
+        c.render(canvas);
+      }
       canvas.restore();
     });
 
