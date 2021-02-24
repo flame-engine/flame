@@ -215,9 +215,9 @@ class BaseGame extends Game with FPSCounter {
   /// This implementation also uses the current [viewport] in order to transform the coordinate system appropriately.
   @override
   @mustCallSuper
-  void onResize(Vector2 rawSize) {
-    super.onResize(rawSize);
-    viewport.resize(rawSize.clone());
+  void onResize(Vector2 canvasSize) {
+    super.onResize(canvasSize);
+    viewport.resize(canvasSize.clone());
     components.forEach((c) => c.onGameResize(size));
   }
 

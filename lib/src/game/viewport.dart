@@ -21,11 +21,12 @@ import '../../game.dart';
 /// platforms and players, you should use a viewport.
 ///
 /// When using a viewport, [resize] should be called by the engine with
-/// the raw size (on startup and subsequent resizes) and that will configure
-/// [getEffectiveSize()] and [getRawSize()]. The Viewport can also apply
-/// an offset to render and clip the canvas adding borders when
-/// necessary. When rendering, call [render] and put all your rendering inside
-/// the lambda so that the correct transformations are applied.
+/// the raw canvas size (on startup and subsequent resizes) and that will
+/// configure [getEffectiveSize()] and [getCanvasSize()].
+/// The Viewport can also apply an offset to render and clip the canvas adding
+/// borders (clipping) when necessary.
+/// When rendering, call [render] and put all your rendering inside the lambda
+/// so that the correct transformations are applied.
 ///
 /// You can think of a Viewport as mechanism to watch a wide-screen movie on a
 /// square monitor. You can stretch the movie to fill the square, but the width
@@ -44,11 +45,11 @@ import '../../game.dart';
 /// screen resolutions. If you want to "play director" and know exactly what
 /// every player is seeing at every time, you should use a Viewport.
 abstract class Viewport {
-  /// This configures the viewport with a new raw size.
+  /// This configures the viewport with a new raw canvas size.
   /// It should immediately affect [getEffectiveSize] and [getCanvasSize].
   /// This must be called by the engine at startup and also whenever the
   /// size changes.
-  void resize(Vector2 newRawSize);
+  void resize(Vector2 newCanvasSize);
 
   /// This transforms the canvas so that the coordinate system is viewport-
   /// -aware. All your rendering logic should be put inside the lambda.
@@ -60,15 +61,15 @@ abstract class Viewport {
   Vector2 getEffectiveSize();
 
   /// This returns the real widget size (well actually the logical Flutter
-  /// size of your widget). This is the raw size as it would be without any
-  /// viewport.
+  /// size of your widget). This is the raw canvas size as it would be without
+  /// any viewport.
   ///
   /// You probably don't need to care about this if you are using a viewport.
   Vector2 getCanvasSize();
 }
 
 /// This is the default viewport if you want no transformation.
-/// The rawSize is just propagated to the effective size and no
+/// The raw canvasSize is just propagated to the effective size and no
 /// translation is applied.
 /// This basically no-ops the viewport.
 class DefaultViewport extends Viewport {
@@ -80,8 +81,8 @@ class DefaultViewport extends Viewport {
   }
 
   @override
-  void resize(Vector2 newRawSize) {
-    _size = newRawSize;
+  void resize(Vector2 newCanvasSize) {
+    _size = newCanvasSize;
   }
 
   @override
@@ -128,8 +129,8 @@ class FixedResolutionViewport extends Viewport {
   Vector2 getCanvasSize() => canvasSize;
 
   @override
-  void resize(Vector2 newRawSize) {
-    canvasSize = newRawSize;
+  void resize(Vector2 newCanvasSize) {
+    canvasSize = newCanvasSize;
 
     final scaleVector = canvasSize.clone()..divide(fixedSize);
     scale = math.min(scaleVector.x, scaleVector.y);
