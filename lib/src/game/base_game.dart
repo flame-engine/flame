@@ -48,7 +48,14 @@ class BaseGame extends Game with FPSCounter {
   /// implementation.
   /// The default implementation no-ops, but you can use this to have a fixed
   /// screen ratio for example.
-  Viewport viewport = DefaultViewport();
+  Viewport get viewport => _viewport;
+
+  Viewport _viewport = DefaultViewport();
+  set viewport(Viewport value) {
+    final previousSize = canvasSize;
+    _viewport = value;
+    this.onResize(previousSize);
+  }
 
   /// This is overwritten to consider the viewport transformation.
   ///
@@ -149,7 +156,7 @@ class BaseGame extends Game with FPSCounter {
   @mustCallSuper
   void render(Canvas canvas) {
     viewport.render(canvas, (c) {
-      components.forEach((comp) => renderComponent(canvas, comp));
+      components.forEach((comp) => renderComponent(c, comp));
     });
   }
 
@@ -158,12 +165,12 @@ class BaseGame extends Game with FPSCounter {
   /// It translates the camera unless hud, call the render method and restore the canvas.
   /// This makes sure the canvas is not messed up by one component and all components render independently.
   void renderComponent(Canvas canvas, Component c) {
+    canvas.save();
     if (!c.isHud) {
       canvas.translateVector(-camera.position);
     }
     c.renderTree(canvas);
     canvas.restore();
-    canvas.save();
   }
 
   /// This implementation of update updates every component in the list.
