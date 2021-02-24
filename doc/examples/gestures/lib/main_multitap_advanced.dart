@@ -16,13 +16,13 @@ class MyGame extends BaseGame
     with MultiTouchTapDetector, MultiTouchDragDetector {
   final _whitePaint = BasicPalette.white.paint;
 
-  Paint _paint;
+  Paint? _paint;
 
   final Map<int, Rect> _taps = {};
 
-  Offset _start;
-  Offset _end;
-  Rect _panRect;
+  Offset? _start;
+  Offset? _end;
+  Rect? _panRect;
 
   MyGame() {
     _paint = _whitePaint;
@@ -76,10 +76,10 @@ class MyGame extends BaseGame
   void onPanEnd(DragEndDetails details) {
     if (_start != null && _end != null) {
       _panRect = Rect.fromLTRB(
-        _start.dx,
-        _start.dy,
-        _end.dx,
-        _end.dy,
+        _start!.dx,
+        _start!.dy,
+        _end!.dx,
+        _end!.dy,
       );
     }
   }
@@ -88,11 +88,11 @@ class MyGame extends BaseGame
   void render(Canvas canvas) {
     super.render(canvas);
     _taps.values.forEach((rect) {
-      canvas.drawRect(rect, _paint);
+      canvas.drawRect(rect, _paint!);
     });
 
     if (_panRect != null) {
-      canvas.drawRect(_panRect, _paint);
+      canvas.drawRect(_panRect!, _paint!);
     }
   }
 }

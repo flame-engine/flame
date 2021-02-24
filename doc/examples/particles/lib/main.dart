@@ -2,29 +2,11 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/sprite_animation.dart';
-import 'package:flame/components/component.dart';
-import 'package:flame/particles/circle_particle.dart';
-import 'package:flame/particles/composed_particle.dart';
-import 'package:flame/particles/curved_particle.dart';
-import 'package:flame/particles/moving_particle.dart';
-import 'package:flame/particles/sprite_particle.dart';
-import 'package:flame/particles/translated_particle.dart';
-import 'package:flame/particles/computed_particle.dart';
-import 'package:flame/particles/image_particle.dart';
-import 'package:flame/particles/rotating_particle.dart';
-import 'package:flame/particles/accelerated_particle.dart';
-import 'package:flame/particles/paint_particle.dart';
-import 'package:flame/particles/animation_particle.dart';
-import 'package:flame/particles/component_particle.dart';
-import 'package:flame/flame.dart';
+import 'package:flame/components.dart' hide Timer;
+import 'package:flame/timer.dart' as flame_timer;
 import 'package:flame/game.dart';
-import 'package:flame/timer.dart' as flame_time;
-import 'package:flame/particle.dart';
-import 'package:flame/extensions/vector2.dart';
-import 'package:flame/sprite.dart';
+import 'package:flame/particles.dart';
 import 'package:flame/spritesheet.dart';
-import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart' hide Image;
 
 void main() async {
@@ -55,8 +37,8 @@ class MyGame extends BaseGame {
   /// Defines the lifespan of all the particles in these examples
   final sceneDuration = const Duration(seconds: 1);
 
-  Vector2 cellSize;
-  Vector2 halfCellSize;
+  late Vector2 cellSize;
+  late Vector2 halfCellSize;
 
   @override
   Future<void> onLoad() async {
@@ -245,7 +227,7 @@ class MyGame extends BaseGame {
             Colors.red,
             Colors.blue,
             particle.progress,
-          ),
+          )!,
       ),
     );
   }
@@ -269,14 +251,14 @@ class MyGame extends BaseGame {
               Colors.red,
               Colors.blue,
               steppedProgress,
-            ),
+            )!,
         );
       },
     );
   }
 
   /// Particle which is used in example below
-  Particle reusablePatricle;
+  Particle? reusablePatricle;
 
   /// A burst of white circles which actually using a single circle
   /// as a form of optimization. Look for reusing parts of particle effects
@@ -289,7 +271,7 @@ class MyGame extends BaseGame {
       generator: (i) => MovingParticle(
         curve: Interval(rnd.nextDouble() * .1, rnd.nextDouble() * .8 + .1),
         to: randomCellOffset() * .5,
-        child: reusablePatricle,
+        child: reusablePatricle!,
       ),
     );
   }
@@ -305,7 +287,7 @@ class MyGame extends BaseGame {
   }
 
   /// Particle which is used in example below
-  Particle reusableImageParticle;
+  Particle? reusableImageParticle;
 
   /// A single [imageParticle] is drawn 9 times
   /// in a grid within grid cell. Looks as 9 particles
@@ -326,7 +308,7 @@ class MyGame extends BaseGame {
             (i % perLine) * colWidth - halfCellSize.x + imageSize,
             (i ~/ perLine) * rowHeight - halfCellSize.y + imageSize,
           ),
-          child: reusableImageParticle),
+          child: reusableImageParticle!),
     );
   }
 
@@ -551,7 +533,6 @@ class MyGame extends BaseGame {
 }
 
 Future<BaseGame> loadGame() async {
-  Flame.initializeWidget();
   WidgetsFlutterBinding.ensureInitialized();
 
   return MyGame();
@@ -570,7 +551,7 @@ class SineCurve extends Curve {
 /// each 2s of registered lifetime.
 class TrafficLightComponent extends Component {
   final Rect rect = Rect.fromCenter(center: Offset.zero, height: 32, width: 32);
-  final flame_time.Timer colorChangeTimer = flame_time.Timer(2, repeat: true);
+  final flame_timer.Timer colorChangeTimer = flame_timer.Timer(2, repeat: true);
   final colors = <Color>[
     Colors.green,
     Colors.orange,

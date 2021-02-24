@@ -1,9 +1,7 @@
 import 'dart:math';
 
-import 'package:flame/anchor.dart';
-import 'package:flame/components/position_component.dart';
-import 'package:flame/effects/effects.dart';
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -22,8 +20,8 @@ void effectTest(
   bool shouldComplete = true,
   double iterations = 1.0,
   double expectedAngle = 0.0,
-  Vector2 expectedPosition,
-  Vector2 expectedSize,
+  Vector2? expectedPosition,
+  Vector2? expectedSize,
 }) async {
   expectedPosition ??= Vector2.zero();
   expectedSize ??= Vector2.all(100.0);
@@ -65,9 +63,9 @@ void effectTest(
   } else {
     // To account for float number operations making effects not finish
     const double epsilon = 0.001;
-    if (effect.percentage < epsilon) {
+    if (effect.percentage! < epsilon) {
       game.update(effect.currentTime);
-    } else if (1.0 - effect.percentage < epsilon) {
+    } else if (1.0 - effect.percentage! < epsilon) {
       game.update(effect.peakTime - effect.currentTime);
     }
 
@@ -96,10 +94,10 @@ void effectTest(
 
 class TestComponent extends PositionComponent {
   TestComponent({
-    Vector2 position,
-    Vector2 size,
-    double angle,
-    Anchor anchor,
+    Vector2? position,
+    Vector2? size,
+    double? angle,
+    Anchor? anchor,
   }) {
     this.position = position ?? Vector2.zero();
     this.size = size ?? Vector2.all(100.0);

@@ -1,16 +1,12 @@
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/flame.dart';
-import 'package:flame/extensions/vector2.dart';
-import 'package:flame/components/sprite_component.dart';
-import 'package:flame/text_config.dart';
 
 import 'package:flutter/material.dart' hide Image;
 
 import 'dart:ui';
 
 void main() async {
-  Flame.initializeWidget();
-  await Flame.util.initialDimensions();
+  WidgetsFlutterBinding.ensureInitialized();
 
   runApp(
     GameWidget(
@@ -21,7 +17,7 @@ void main() async {
 
 class AndroidComponent extends SpriteComponent {
   static const int SPEED = 150;
-  Vector2 _gameSize;
+  Vector2? _gameSize;
   int xDirection = 1;
   int yDirection = 1;
 
@@ -39,14 +35,14 @@ class AndroidComponent extends SpriteComponent {
     final rect = toRect();
 
     if ((x <= 0 && xDirection == -1) ||
-        (rect.right >= _gameSize.x && xDirection == 1)) {
+        (rect.right >= _gameSize!.x && xDirection == 1)) {
       xDirection = xDirection * -1;
     }
 
     y += yDirection * SPEED * dt;
 
     if ((y <= 0 && yDirection == -1) ||
-        (rect.bottom >= _gameSize.y && yDirection == 1)) {
+        (rect.bottom >= _gameSize!.y && yDirection == 1)) {
       yDirection = yDirection * -1;
     }
   }

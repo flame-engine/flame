@@ -146,7 +146,27 @@ You render it with a `Canvas` and an optional `Paint`, `BlendMode` and `CullRect
 
 A `SpriteBatchComponent` is also available for your convenience.
 
-See example [here](https://github.com/flame-engine/flame/tree/master/doc/examples/sprite_batch).
+See the examples [here](https://github.com/flame-engine/flame/tree/master/doc/examples/sprite_batch).
+
+## Composition
+
+In some cases you may want to merge multiple images into a single image; this is called [Compositing](https://en.wikipedia.org/wiki/Compositing). This can be useful for example when working with the [SpriteBatch](#spritebatch) API to optimize your drawing calls. 
+
+For such usecases Flame comes with the `Composition` class. This allows you to add multiple images, each at their own position, onto a new image:
+
+```dart
+final composition = Composition()
+  ..add(image1, Vector2(0, 0))
+  ..add(image2, Vector2(64, 0));
+  ..add(image3, 
+    Vector2(128, 0), 
+    source: Rect.fromLTWH(32, 32, 64, 64),
+  );
+
+Image image = await composition.compose();
+```
+
+**Note:** Composing images is expensive, we do not recommend you run this every tick as it affect the performance badly. Instead we recommend to have your compositions pre-rendered so you can just reuse the output image.
 
 ## Svg
 
@@ -313,3 +333,15 @@ spritesheet.getSprite(0, 0) // row, column;
 ```
 
 You can see a full example of the SpriteSheet class [here](https://github.com/flame-engine/flame/tree/master/doc/examples/spritesheet).
+
+## `Flame.images.decodeImageFromPixels()`
+
+The [dart-ui decodeImageFromPixels](https://api.flutter.dev/flutter/dart-ui/decodeImageFromPixels.html) currently does not support the web platform. So if you are looking for a way to manipulate pixel data on the web this method can be used as a replacement for `dart-ui decodeImageFromPixels`:
+
+```dart
+Image image = await Flame.images.decodeImageFromPixels(
+  data, // A Uint8List containing pixel data in the RGBA format.
+  200, 
+  200,
+);
+```

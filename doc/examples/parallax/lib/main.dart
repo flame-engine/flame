@@ -1,12 +1,11 @@
+import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/components/parallax_component.dart';
-import 'package:flame/extensions/vector2.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Flame.util.fullScreen();
+  await Flame.device.fullScreen();
   runApp(
     GameWidget(
       game: MyGame(),

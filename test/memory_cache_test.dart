@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-import 'package:flame/memory_cache.dart';
+import 'package:flame/src/memory_cache.dart';
 
 void main() {
   group('MemoryCache', () {

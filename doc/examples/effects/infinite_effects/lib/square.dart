@@ -1,9 +1,6 @@
-import 'package:flame/anchor.dart';
-import 'package:flame/components/position_component.dart';
-
 import 'dart:ui';
 
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/components.dart';
 
 class Square extends PositionComponent {
   final Paint _paint;

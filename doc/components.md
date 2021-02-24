@@ -199,8 +199,26 @@ The simplest `ParallaxComponent` is created like this:
 ```dart
 @override
 Future<void> onLoad() async {
-  final parallaxComponent = await loadParallaxComponent([bg.png, trees.png]);
+  final parallaxComponent = await loadParallaxComponent(['bg.png', 'trees.png']);
   add(parallax);
+}
+```
+
+A ParallaxComponent can also "load itself" by implementing the `onLoad` method:
+
+```dart
+class MyParallaxComponent extends ParallaxComponent with HasGameRef<MyGame> {
+  @override
+  Future<void> onLoad() async {
+    parallax = gameRef.loadParallax(['bg.png', 'trees.png']);
+  }
+}
+
+class MyGame extends BaseGame {
+  @override
+  Future<void> onLoad() async {
+    add(MyParallaxComponent());
+  }
 }
 ```
 
@@ -243,7 +261,7 @@ final images = [
   loadParallaxImage('dust.jpg', repeat: ImageRepeat.repeatX, alignment: Alignment.topRight, fill: LayerFill.height),
 ];
 final layers = images.map((image) => ParallaxLayer(await image, velocityMulitplier: images.indexOf(image) * 2.0));
-final parallaxComponent = ParallaxComponent(
+final parallaxComponent = ParallaxComponent.fromParallax(
   Parallax(
     await Future.wait(layers),
     baseVelocity: Vector2(50, 0),
@@ -263,7 +281,7 @@ The `Parallax` file contains an extension of the game which adds `loadParallax`,
 and `loadParallaxImage` so that it automatically uses your game's image cache instead of the global
 one. The same for the `ParallaxComponent` file, but that provides `loadParallaxComponent`.
 
-Two examples implementation can be found in the
+Three example implementations can be found in the
 [examples directory](https://github.com/flame-engine/flame/tree/master/doc/examples/parallax).
 
 ## SpriteBodyComponent

@@ -1,15 +1,15 @@
 import 'dart:math';
 
+import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/anchor.dart';
-import 'package:flame/effects/effects.dart';
 
 import './square.dart';
 
 class MyGame extends BaseGame with TapDetector {
-  Square square;
+  late Square square;
 
   MyGame() {
     add(square = Square()

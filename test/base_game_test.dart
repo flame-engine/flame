@@ -1,12 +1,8 @@
 import 'dart:ui';
 
-import 'package:flame/components/position_component.dart';
-import 'package:flame/components/mixins/has_game_ref.dart';
-import 'package:flame/components/mixins/tapable.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/game/base_game.dart';
-import 'package:flame/extensions/vector2.dart';
-import 'package:flame/game/game_render_box.dart';
+import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -20,7 +16,7 @@ class MyComponent extends PositionComponent with Tapable, HasGameRef {
   bool isUpdateCalled = false;
   bool isRenderCalled = false;
   int onRemoveCallCounter = 0;
-  Vector2 gameSize;
+  late Vector2 gameSize;
 
   @override
   bool onTapDown(TapDownDetails details) {
@@ -47,7 +43,7 @@ class MyComponent extends PositionComponent with Tapable, HasGameRef {
   }
 
   @override
-  bool checkOverlap(Vector2 v) => true;
+  bool containsPoint(Vector2 v) => true;
 
   @override
   void onRemove() {
@@ -138,7 +134,7 @@ void main() {
 
       game.size.setFrom(size);
       game.add(component);
-      GameRenderBox renderBox;
+      GameRenderBox? renderBox;
       tester.pumpWidget(
         Builder(
           builder: (BuildContext context) {
@@ -147,15 +143,15 @@ void main() {
           },
         ),
       );
-      renderBox.attach(PipelineOwner());
-      renderBox.gameLoopCallback(1.0);
+      renderBox!.attach(PipelineOwner());
+      renderBox!.gameLoopCallback(1.0);
       expect(component.isUpdateCalled, true);
-      renderBox.paint(
+      renderBox!.paint(
         PaintingContext(ContainerLayer(), Rect.zero),
         Offset.zero,
       );
       expect(component.isRenderCalled, true);
-      renderBox.detach();
+      renderBox!.detach();
     });
 
     test('onRemove is only called once on component', () {

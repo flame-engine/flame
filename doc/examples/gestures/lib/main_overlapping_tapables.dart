@@ -1,11 +1,9 @@
 import 'dart:math' as math;
 
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
-import 'package:flame/components/position_component.dart';
-import 'package:flame/components/mixins/tapable.dart';
 
 void main() {
   final game = MyGame();
@@ -29,9 +27,9 @@ class TapableSquare extends PositionComponent with Tapable {
     return PaletteEntry(color).paint;
   }
 
-  Paint currentPaint;
+  late Paint currentPaint;
 
-  TapableSquare({Vector2 position}) {
+  TapableSquare({Vector2? position}) {
     currentPaint = _randomPaint();
     size = Vector2.all(100);
     this.position = position ?? Vector2.all(100);

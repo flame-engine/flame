@@ -1,9 +1,6 @@
-import 'package:flame/components/sprite_component.dart';
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/components/isometric_tile_map_component.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/sprite.dart';
 import 'package:flame/spritesheet.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Image;
@@ -44,8 +41,8 @@ class Selector extends SpriteComponent {
 }
 
 class MyGame extends BaseGame with MouseMovementDetector {
-  IsometricTileMapComponent base;
-  Selector selector;
+  IsometricTileMapComponent? base;
+  Selector? selector;
 
   MyGame();
 
@@ -92,8 +89,8 @@ class MyGame extends BaseGame with MouseMovementDetector {
     }
     final offset = event.position;
     final screenPosition = Vector2(offset.dx, offset.dy);
-    final block = base.getBlock(screenPosition);
-    selector.show = base.containsBlock(block);
-    selector.position = base.getBlockPosition(block) + topLeft;
+    final block = base!.getBlock(screenPosition);
+    selector!.show = base!.containsBlock(block);
+    selector!.position = base!.getBlockPosition(block) + topLeft;
   }
 }

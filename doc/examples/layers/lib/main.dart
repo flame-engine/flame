@@ -1,16 +1,14 @@
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart' hide Animation;
-import 'package:flame/sprite.dart';
-import 'package:flame/layers/layer.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/layers.dart';
 
 import 'dart:ui';
 
-void main() async {
-  Flame.initializeWidget();
+import 'package:flutter/widgets.dart';
 
-  await Flame.util.fullScreen();
+void main() async {
+  await Flame.device.fullScreen();
 
   runApp(
     GameWidget(
@@ -60,8 +58,8 @@ class BackgroundLayer extends PreRenderedLayer {
 }
 
 class LayerGame extends Game {
-  Layer gameLayer;
-  Layer backgroundLayer;
+  late Layer gameLayer;
+  late Layer backgroundLayer;
 
   @override
   Future<void> onLoad() async {

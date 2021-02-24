@@ -2,8 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/extensions/vector2.dart';
-import 'package:flame/extensions/offset.dart';
+import 'package:flame/extensions.dart';
 
 void main() {
   runApp(
@@ -17,7 +16,7 @@ class MyGame extends BaseGame with MouseMovementDetector {
   static const SPEED = 200;
 
   Vector2 position = Vector2(0, 0);
-  Vector2 target;
+  Vector2? target;
 
   final Paint _blue = Paint()..color = const Color(0xFF0000FF);
 
@@ -48,10 +47,10 @@ class MyGame extends BaseGame with MouseMovementDetector {
   void update(double dt) {
     super.update(dt);
     if (target != null) {
-      _onTarget = _toRect().contains(target.toOffset());
+      _onTarget = _toRect().contains(target!.toOffset());
 
       if (!_onTarget) {
-        final dir = (target - position).normalized();
+        final dir = (target! - position).normalized();
         position += dir * (SPEED * dt);
       }
     }

@@ -22,7 +22,7 @@ class MyGame extends BaseGame
   @override
   Color backgroundColor() => const Color(0xFFF1F1F1);
 
-  Paint _paint;
+  late Paint _paint;
 
   Rect _rect = const Rect.fromLTWH(50, 50, 50, 50);
 

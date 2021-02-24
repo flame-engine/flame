@@ -1,14 +1,12 @@
-import 'package:flame/game/base_game.dart';
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:test/test.dart';
-
-import 'package:flame/components/position_component.dart';
 
 class MyComponent extends PositionComponent {
   String name;
   @override
   Vector2 size = Vector2(2.0, 2.0);
-  Vector2 gameSize;
+  late Vector2 gameSize;
 
   MyComponent(this.name);
 

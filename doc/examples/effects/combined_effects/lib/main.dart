@@ -1,19 +1,15 @@
-import 'package:flame/effects/combined_effect.dart';
-import 'package:flame/effects/move_effect.dart';
-import 'package:flame/effects/scale_effect.dart';
-import 'package:flame/effects/rotate_effect.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/extensions/offset.dart';
-import 'package:flame/extensions/vector2.dart';
 import 'package:flame/flame.dart';
-import 'package:flutter/material.dart';
+import 'package:flame/extensions.dart';
+import 'package:flutter/widgets.dart';
 
 import './square.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Flame.util.fullScreen();
+  await Flame.device.fullScreen();
   runApp(
     GameWidget(
       game: MyGame(),
@@ -22,7 +18,7 @@ void main() async {
 }
 
 class MyGame extends BaseGame with TapDetector {
-  Square greenSquare;
+  late Square greenSquare;
 
   MyGame() {
     final green = Paint()..color = const Color(0xAA338833);

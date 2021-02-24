@@ -27,13 +27,16 @@ class MyGameSubClass extends Game {
     
   
 main() {
+  final myGame = MyGameSubClass();
   runApp(
     GameWidget(
-      game: MyGameSubClass(),
+      game: myGame,
     )
   );
 }
 ```
+
+**Note:** Do not instantiate your game in a build method. Instead create an instance of your game and reference it within your widget structure. Otherwise your game will be rebuild every time the Flutter tree gets rebuild.
 
 It is important to notice that `Game` is an abstract class with just the very basic implementations of the gameloop.
 
