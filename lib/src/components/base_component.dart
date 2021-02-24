@@ -69,9 +69,6 @@ abstract class BaseComponent extends Component {
   @override
   void render(Canvas canvas) {
     prepareCanvas(canvas);
-    if (debugMode) {
-      renderDebugMode(canvas);
-    }
   }
 
   @mustCallSuper
@@ -82,6 +79,11 @@ abstract class BaseComponent extends Component {
       c.render(canvas);
       canvas.restore();
     });
+
+    // Any debug rendering should be rendered on top of everything
+    if (debugMode) {
+      renderDebugMode(canvas);
+    }
   }
 
   void renderDebugMode(Canvas canvas) {}
