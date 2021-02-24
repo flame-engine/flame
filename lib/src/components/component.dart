@@ -46,6 +46,10 @@ abstract class Component {
   /// Renders this component on the provided Canvas [c].
   void render(Canvas c) {}
 
+  /// This is used to render this component and potential children on subclasses
+  /// of [Component] on the provided Canvas [c].
+  void renderTree(Canvas c) => render(c);
+
   /// It receives the new game size.
   /// Executed right after the component is attached to a game and right before [onMount] is called
   void onGameResize(Vector2 gameSize) {}

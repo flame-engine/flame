@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
+import '../../components.dart';
 import '../components/component.dart';
 import '../components/mixins/collidable.dart';
 import '../components/mixins/draggable.dart';
@@ -131,7 +132,7 @@ class BaseGame extends Game with FPSCounter {
     if (!c.isHud) {
       canvas.translate(-camera.x, -camera.y);
     }
-    c.render(canvas);
+    c.renderTree(canvas);
     canvas.restore();
     canvas.save();
   }
