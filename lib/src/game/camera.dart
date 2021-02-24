@@ -130,7 +130,7 @@ class Camera {
   /// is shown, meaning it will stop following when the object gets close to the
   /// edges.
   ///
-  /// Changing this value can immediately snap the camera if it is an wrong
+  /// Changing this value can immediately snap the camera if it is a wrong
   /// position, but other than that it's just prevent movement so should not
   /// add any non-smooth movement.
   Rect worldBounds;
@@ -140,7 +140,7 @@ class Camera {
   /// This smoothly updates the camera for an amount of time [dt].
   ///
   /// This should be called by the Game class during the update cycle.
-  void handle(double dt) {
+  void update(double dt) {
     final ds = cameraSpeed * dt;
     final shake = Vector2(_shakeDelta(), _shakeDelta());
 

@@ -33,7 +33,7 @@ import '../../palette.dart';
 /// and height will be stretched by different amounts, causing distortion. You
 /// can fill in the smallest dimension and crop the biggest (that causes
 /// cropping). Or you can fill in the biggest and add black bars to cover the
-/// unused space on the smallest (this is the [FixedRatioViewport]).
+/// unused space on the smallest (this is the [FixedResolutionViewport]).
 ///
 /// The other option is to not use a viewport ([DefaultViewport]) and have
 /// your game dynamically render itself to fill in the existing space (basically
@@ -46,7 +46,7 @@ import '../../palette.dart';
 /// every player is seeing at every time, you should use a Viewport.
 abstract class Viewport {
   /// This configures the viewport with a new raw size.
-  /// It should immediately affect [getEffectiveSize] and [getRawSize].
+  /// It should immediately affect [getEffectiveSize] and [getCanvasSize].
   /// This must be called by the engine at startup and also whenever the
   /// size changes.
   void resize(Vector2 newRawSize);
@@ -65,7 +65,7 @@ abstract class Viewport {
   /// viewport.
   ///
   /// You probably don't need to care about this if you are using a viewport.
-  Vector2 getRawSize();
+  Vector2 getCanvasSize();
 }
 
 /// This is the default viewport if you want no transformation.
@@ -89,7 +89,7 @@ class DefaultViewport extends Viewport {
   Vector2 getEffectiveSize() => _size;
 
   @override
-  Vector2 getRawSize() => _size;
+  Vector2 getCanvasSize() => _size;
 }
 
 /// This is the most common viewport if you want to have full control of what
@@ -113,16 +113,16 @@ class DefaultViewport extends Viewport {
 /// are doing a mobile game) and then in most cases this will apply no
 /// transformation whatsoever, and if the a device with a different ratio is
 /// used it will try to adapt the best as possible.
-class FixedRatioViewport extends Viewport {
+class FixedResolutionViewport extends Viewport {
   Paint borderColor;
 
-  Vector2 rawSize;
+  Vector2 canvasSize;
   Vector2 scaledSize;
   Vector2 resizeOffset;
   Vector2 fixedSize;
   double scale;
 
-  FixedRatioViewport(
+  FixedResolutionViewport(
     this.fixedSize, {
     Paint borderColor,
   }) {
@@ -133,17 +133,17 @@ class FixedRatioViewport extends Viewport {
   Vector2 getEffectiveSize() => fixedSize;
 
   @override
-  Vector2 getRawSize() => rawSize;
+  Vector2 getCanvasSize() => canvasSize;
 
   @override
   void resize(Vector2 newRawSize) {
-    rawSize = newRawSize;
+    canvasSize = newRawSize;
 
-    final scaleVector = rawSize.clone()..divide(fixedSize);
+    final scaleVector = canvasSize.clone()..divide(fixedSize);
     scale = math.min(scaleVector.x, scaleVector.y);
 
     scaledSize = fixedSize.clone()..scale(scale);
-    resizeOffset = (rawSize - scaledSize) / 2;
+    resizeOffset = (canvasSize - scaledSize) / 2;
   }
 
   @override
@@ -156,20 +156,20 @@ class FixedRatioViewport extends Viewport {
 
     c.restore();
     c.drawRect(
-      Rect.fromLTWH(0.0, 0.0, rawSize.x, resizeOffset.y),
+      Rect.fromLTWH(0.0, 0.0, canvasSize.x, resizeOffset.y),
       borderColor,
     );
     c.drawRect(
       Rect.fromLTWH(
         0.0,
         resizeOffset.y + scaledSize.y,
-        rawSize.x,
+        canvasSize.x,
         resizeOffset.y,
       ),
       borderColor,
     );
     c.drawRect(
-      Rect.fromLTWH(0.0, 0.0, resizeOffset.x, rawSize.y),
+      Rect.fromLTWH(0.0, 0.0, resizeOffset.x, canvasSize.y),
       borderColor,
     );
     c.drawRect(
@@ -177,7 +177,7 @@ class FixedRatioViewport extends Viewport {
         resizeOffset.x + scaledSize.x,
         0.0,
         resizeOffset.x,
-        rawSize.y,
+        canvasSize.y,
       ),
       borderColor,
     );

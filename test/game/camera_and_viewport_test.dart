@@ -27,16 +27,17 @@ void main() {
     test('default viewport does not change size', () {
       final game = BaseGame(); // default viewport
       game.onResize(Vector2(100.0, 200.0));
-      expect(game.rawSize, Vector2(100.0, 200.00));
+      expect(game.canvasSize, Vector2(100.0, 200.00));
       expect(game.size, Vector2(100.0, 200.00));
     });
     test('fixed ratio viewport has perfect ratio', () {
-      final game = BaseGame()..viewport = FixedRatioViewport(Vector2.all(50));
+      final game = BaseGame()
+        ..viewport = FixedResolutionViewport(Vector2.all(50));
       game.onResize(Vector2.all(200.0));
-      expect(game.rawSize, Vector2.all(200.00));
+      expect(game.canvasSize, Vector2.all(200.00));
       expect(game.size, Vector2.all(50.00));
 
-      final viewport = game.viewport as FixedRatioViewport;
+      final viewport = game.viewport as FixedResolutionViewport;
       expect(viewport.resizeOffset, Vector2(0, 0));
       expect(viewport.scaledSize, Vector2(200.0, 200.0));
       expect(viewport.scale, 4.0);
@@ -63,12 +64,13 @@ void main() {
       );
     });
     test('fixed ratio viewport maxes width', () {
-      final game = BaseGame()..viewport = FixedRatioViewport(Vector2.all(50));
+      final game = BaseGame()
+        ..viewport = FixedResolutionViewport(Vector2.all(50));
       game.onResize(Vector2(100.0, 200.0));
-      expect(game.rawSize, Vector2(100.0, 200.00));
+      expect(game.canvasSize, Vector2(100.0, 200.00));
       expect(game.size, Vector2.all(50.00));
 
-      final viewport = game.viewport as FixedRatioViewport;
+      final viewport = game.viewport as FixedResolutionViewport;
       expect(viewport.resizeOffset, Vector2(0, 50.0));
       expect(viewport.scaledSize, Vector2(100.0, 100.0));
       expect(viewport.scale, 2.0);
@@ -96,12 +98,12 @@ void main() {
     });
     test('fixed ratio viewport maxes height', () {
       final game = BaseGame()
-        ..viewport = FixedRatioViewport(Vector2(100.0, 400.0));
+        ..viewport = FixedResolutionViewport(Vector2(100.0, 400.0));
       game.onResize(Vector2(100.0, 200.0));
-      expect(game.rawSize, Vector2(100.0, 200.00));
+      expect(game.canvasSize, Vector2(100.0, 200.00));
       expect(game.size, Vector2(100.00, 400.0));
 
-      final viewport = game.viewport as FixedRatioViewport;
+      final viewport = game.viewport as FixedResolutionViewport;
       expect(viewport.resizeOffset, Vector2(25.0, 0));
       expect(viewport.scaledSize, Vector2(50.0, 200.0));
       expect(viewport.scale, 0.5);
@@ -307,9 +309,10 @@ void main() {
   });
   group('viewport & camera', () {
     test('default ratio viewport + camera with world boundaries', () {
-      final game = BaseGame()..viewport = FixedRatioViewport(Vector2.all(100));
+      final game = BaseGame()
+        ..viewport = FixedResolutionViewport(Vector2.all(100));
       game.onResize(Vector2.all(200.0));
-      expect(game.rawSize, Vector2.all(200.00));
+      expect(game.canvasSize, Vector2.all(200.00));
       expect(game.size, Vector2.all(100.00));
 
       final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
