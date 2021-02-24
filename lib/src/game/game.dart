@@ -39,10 +39,7 @@ abstract class Game {
 
   /// Current game viewport size, updated every resize via the [onResize] method hook
   Vector2 get size {
-    assert(
-      hasLayout,
-      '"size" is not ready yet. Did you try to access it on the Game constructor? Use the "onLoad" method instead.',
-    );
+    assertHasLayout();
     return _size;
   }
 
@@ -70,6 +67,14 @@ abstract class Game {
   @mustCallSuper
   void onResize(Vector2 size) {
     _size = (_size ?? Vector2.zero())..setFrom(size);
+  }
+
+  @protected
+  void assertHasLayout() {
+    assert(
+      hasLayout,
+      '"size" is not ready yet. Did you try to access it on the Game constructor? Use the "onLoad" method instead.',
+    );
   }
 
   /// This is the lifecycle state change hook; every time the game is resumed, paused or suspended, this is called.
