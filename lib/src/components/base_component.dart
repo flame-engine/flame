@@ -81,7 +81,7 @@ abstract class BaseComponent extends Component {
       canvas.save();
       c.render(canvas);
       canvas.restore();
-    });   
+    });
   }
 
   void renderDebugMode(Canvas canvas) {}
