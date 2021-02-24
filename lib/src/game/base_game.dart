@@ -132,11 +132,7 @@ class BaseGame extends Game with FPSCounter {
     if (!c.isHud) {
       canvas.translate(-camera.x, -camera.y);
     }
-    if (c is BaseComponent) {
-      c.renderTree(canvas);
-    } else {
-      c.render(canvas);
-    }
+    c.renderTree(canvas);
     canvas.restore();
     canvas.save();
   }

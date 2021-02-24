@@ -72,15 +72,12 @@ abstract class BaseComponent extends Component {
   }
 
   @mustCallSuper
+  @override
   void renderTree(Canvas canvas) {
     render(canvas);
     _children.forEach((c) {
       canvas.save();
-      if (c is BaseComponent) {
-        c.renderTree(canvas);
-      } else {
-        c.render(canvas);
-      }
+      c.renderTree(canvas);
       canvas.restore();
     });
 
