@@ -43,16 +43,10 @@ void main() {
       expect(viewport.scale, 4.0);
 
       final canvas = MockCanvas();
-      final expected = [
-        'drawRect(0.0, 0.0, 200.0, 0.0)',
-        'drawRect(0.0, 200.0, 200.0, 0.0)',
-        'drawRect(200.0, 0.0, 0.0, 200.0)',
-        'drawRect(0.0, 0.0, 0.0, 200.0)',
-      ];
       game.render(canvas);
       expect(
-        canvas.methodCalls.where((e) => e.startsWith('drawRect')),
-        unorderedEquals(expected),
+        canvas.methodCalls.singleWhere((e) => e.startsWith('clipRect')),
+        'clipRect(0.0, 0.0, 200.0, 200.0)',
       );
       expect(
         canvas.methodCalls,
@@ -76,16 +70,10 @@ void main() {
       expect(viewport.scale, 2.0);
 
       final canvas = MockCanvas();
-      final expected = [
-        'drawRect(0.0, 0.0, 100.0, 50.0)',
-        'drawRect(0.0, 150.0, 100.0, 50.0)',
-        'drawRect(0.0, 0.0, 0.0, 200.0)',
-        'drawRect(100.0, 0.0, 0.0, 200.0)',
-      ];
       game.render(canvas);
       expect(
-        canvas.methodCalls.where((e) => e.startsWith('drawRect')),
-        unorderedEquals(expected),
+        canvas.methodCalls.singleWhere((e) => e.startsWith('clipRect')),
+        'clipRect(0.0, 50.0, 100.0, 100.0)',
       );
       expect(
         canvas.methodCalls,
@@ -109,16 +97,10 @@ void main() {
       expect(viewport.scale, 0.5);
 
       final canvas = MockCanvas();
-      final expected = [
-        'drawRect(0.0, 0.0, 100.0, 0.0)',
-        'drawRect(0.0, 200.0, 100.0, 0.0)',
-        'drawRect(0.0, 0.0, 25.0, 200.0)',
-        'drawRect(75.0, 0.0, 25.0, 200.0)',
-      ];
       game.render(canvas);
       expect(
-        canvas.methodCalls.where((e) => e.startsWith('drawRect')),
-        unorderedEquals(expected),
+        canvas.methodCalls.singleWhere((e) => e.startsWith('clipRect')),
+        'clipRect(25.0, 0.0, 50.0, 200.0)',
       );
       expect(
         canvas.methodCalls,

@@ -3,9 +3,8 @@ import 'dart:ui';
 
 import 'package:flutter/painting.dart';
 
-import '../../game.dart';
 import '../../extensions.dart';
-import '../../palette.dart';
+import '../../game.dart';
 
 /// A viewport is a class that potentially translates and resizes the screen.
 /// The reason you might want to have a viewport is to make sure you handle any
@@ -24,7 +23,7 @@ import '../../palette.dart';
 /// When using a viewport, [resize] should be called by the engine with
 /// the raw size (on startup and subsequent resizes) and that will configure
 /// [getEffectiveSize()] and [getRawSize()]. The Viewport can also apply
-/// an offset to render and add black (or other color) borders when
+/// an offset to render and clip the canvas adding borders when
 /// necessary. When rendering, call [render] and put all your rendering inside
 /// the lambda so that the correct transformations are applied.
 ///
@@ -114,20 +113,13 @@ class DefaultViewport extends Viewport {
 /// transformation whatsoever, and if the a device with a different ratio is
 /// used it will try to adapt the best as possible.
 class FixedResolutionViewport extends Viewport {
-  Paint borderColor;
-
   Vector2 canvasSize;
   Vector2 scaledSize;
   Vector2 resizeOffset;
   Vector2 fixedSize;
   double scale;
 
-  FixedResolutionViewport(
-    this.fixedSize, {
-    Paint borderColor,
-  }) {
-    this.borderColor = borderColor ?? BasicPalette.black.paint;
-  }
+  FixedResolutionViewport(this.fixedSize);
 
   @override
   Vector2 getEffectiveSize() => fixedSize;
@@ -155,31 +147,9 @@ class FixedResolutionViewport extends Viewport {
     renderGame(c);
 
     c.restore();
-    c.drawRect(
-      Rect.fromLTWH(0.0, 0.0, canvasSize.x, resizeOffset.y),
-      borderColor,
-    );
-    c.drawRect(
-      Rect.fromLTWH(
-        0.0,
-        resizeOffset.y + scaledSize.y,
-        canvasSize.x,
-        resizeOffset.y,
-      ),
-      borderColor,
-    );
-    c.drawRect(
-      Rect.fromLTWH(0.0, 0.0, resizeOffset.x, canvasSize.y),
-      borderColor,
-    );
-    c.drawRect(
-      Rect.fromLTWH(
-        resizeOffset.x + scaledSize.x,
-        0.0,
-        resizeOffset.x,
-        canvasSize.y,
-      ),
-      borderColor,
+    c.clipRect(
+      resizeOffset & scaledSize,
+      clipOp: ClipOp.intersect,
     );
   }
 }

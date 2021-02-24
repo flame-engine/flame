@@ -42,6 +42,17 @@ class MockCanvas extends Fake implements Canvas {
   }
 
   @override
+  void clipRect(
+    Rect rect, {
+    ClipOp clipOp = ClipOp.intersect,
+    bool doAntiAlias = true,
+  }) {
+    methodCalls.add(
+      'clipRect(${rect.left}, ${rect.top}, ${rect.width}, ${rect.height})',
+    );
+  }
+
+  @override
   int getSaveCount() {
     return saveCount;
   }
