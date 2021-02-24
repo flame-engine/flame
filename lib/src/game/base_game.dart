@@ -52,9 +52,13 @@ class BaseGame extends Game with FPSCounter {
 
   Viewport _viewport = DefaultViewport();
   set viewport(Viewport value) {
-    final previousSize = canvasSize;
-    _viewport = value;
-    this.onResize(previousSize);
+    if (hasLayout) {
+      final previousSize = canvasSize;
+      _viewport = value;
+      onResize(previousSize);
+    } else {
+      _viewport = value;
+    }
   }
 
   /// This is overwritten to consider the viewport transformation.
