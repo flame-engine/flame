@@ -46,7 +46,7 @@ import '../../game.dart';
 /// every player is seeing at every time, you should use a Viewport.
 abstract class Viewport {
   /// This configures the viewport with a new raw canvas size.
-  /// It should immediately affect [getEffectiveSize] and [getCanvasSize].
+  /// It should immediately affect [effectiveSize] and [canvasSize].
   /// This must be called by the engine at startup and also whenever the
   /// size changes.
   void resize(Vector2 newCanvasSize);
@@ -58,14 +58,14 @@ abstract class Viewport {
   /// This returns the effective size, after viewport transformation.
   /// This is not the game widget size but for all intents and purposes,
   /// inside your game, this size should be used as the real one.
-  Vector2 getEffectiveSize();
+  Vector2 get effectiveSize;
 
   /// This returns the real widget size (well actually the logical Flutter
   /// size of your widget). This is the raw canvas size as it would be without
   /// any viewport.
   ///
   /// You probably don't need to care about this if you are using a viewport.
-  Vector2 getCanvasSize();
+  Vector2 get canvasSize;
 }
 
 /// This is the default viewport if you want no transformation.
@@ -73,7 +73,8 @@ abstract class Viewport {
 /// translation is applied.
 /// This basically no-ops the viewport.
 class DefaultViewport extends Viewport {
-  Vector2 _size;
+  @override
+  Vector2 canvasSize;
 
   @override
   void render(Canvas c, void Function(Canvas c) renderGame) {
@@ -82,14 +83,11 @@ class DefaultViewport extends Viewport {
 
   @override
   void resize(Vector2 newCanvasSize) {
-    _size = newCanvasSize;
+    canvasSize = newCanvasSize;
   }
 
   @override
-  Vector2 getEffectiveSize() => _size;
-
-  @override
-  Vector2 getCanvasSize() => _size;
+  Vector2 get effectiveSize => canvasSize;
 }
 
 /// This is the most common viewport if you want to have full control of what
@@ -114,28 +112,26 @@ class DefaultViewport extends Viewport {
 /// transformation whatsoever, and if the a device with a different ratio is
 /// used it will try to adapt the best as possible.
 class FixedResolutionViewport extends Viewport {
+  @override
   Vector2 canvasSize;
+
+  @override
+  Vector2 effectiveSize;
+
   Vector2 scaledSize;
   Vector2 resizeOffset;
-  Vector2 fixedSize;
   double scale;
 
-  FixedResolutionViewport(this.fixedSize);
-
-  @override
-  Vector2 getEffectiveSize() => fixedSize;
-
-  @override
-  Vector2 getCanvasSize() => canvasSize;
+  FixedResolutionViewport(this.effectiveSize);
 
   @override
   void resize(Vector2 newCanvasSize) {
     canvasSize = newCanvasSize;
 
-    final scaleVector = canvasSize.clone()..divide(fixedSize);
+    final scaleVector = canvasSize.clone()..divide(effectiveSize);
     scale = math.min(scaleVector.x, scaleVector.y);
 
-    scaledSize = fixedSize.clone()..scale(scale);
+    scaledSize = effectiveSize.clone()..scale(scale);
     resizeOffset = (canvasSize - scaledSize) / 2;
   }
 
