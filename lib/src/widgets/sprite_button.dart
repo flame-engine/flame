@@ -42,7 +42,7 @@ class _ButtonState extends State<SpriteButton> {
       onTapUp: (_) {
         setState(() => _pressed = false);
 
-        widget.onPressed?.call();
+        widget.onPressed.call();
       },
       child: Container(
         width: width,
