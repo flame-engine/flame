@@ -99,13 +99,13 @@ You can also show on your repository that your game is made with Flame by using 
 
 ## Contributing
 
-__Warning__: We are working on bringing Flame to its first stable version, updates on `0.x` versions are frozen, except for bugs. If you want to contribute on that version, by sure that it is a bugfix. For contributions for the stable version, your PR must point to the `v1.0.0` branch and by sure to talk about your contribution to the team, which is accessible on [Discord](https://discord.gg/pxrBmy4).
+__Warning__: We are working on bringing Flame to its first stable version, updates on `0.x` versions are frozen, except for crucial bug fixes. If you want to contribute on that version, please be mindful of that, and use the `master-v0.x` branch. For contributions for v1, your PR must point to the `master` branch. If in doubt, make sure to talk about your contribution to the team, either via an issue or [Discord](https://discord.gg/pxrBmy4).
 
 Any help is appreciated! Comments, suggestions, issues, PRs.
 
 Have you found a bug or have a suggestion of how to enhance Flame, open an issue and we will take a look at it as soon as possible.
 
-Do you want to contribute with a PR? PRs are always welcome, just be sure to create it from the `develop` branch and follow the [checklist](.github/pull_request_template.md) which will appear when you open it.
+Do you want to contribute with a PR? PRs are always welcome, just be sure to create it from the correct branch (see above) and follow the [checklist](.github/pull_request_template.md) which will appear when you open it.
 
 ## Getting started
 
