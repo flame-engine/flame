@@ -527,9 +527,9 @@ class _GameRenderObjectWidget extends LeafRenderObjectWidget {
 }
 
 class _DragEvent extends Drag {
-  void Function(DragUpdateDetails) onUpdate;
-  void Function() onCancel;
-  void Function(DragEndDetails) onEnd;
+  void Function(DragUpdateDetails)? onUpdate;
+  void Function()? onCancel;
+  void Function(DragEndDetails)? onEnd;
 
   @override
   void update(DragUpdateDetails details) {

@@ -36,7 +36,7 @@ class PolygonPolygonIntersections extends Intersections<Polygon, Polygon> {
   Set<Vector2> intersect(
     Polygon polygonA,
     Polygon polygonB, {
-    Rect overlappingRect,
+    Rect? overlappingRect,
   }) {
     final intersectionPoints = <Vector2>{};
     final intersectionsA = polygonA.possibleIntersectionVertices(
@@ -59,7 +59,7 @@ class CirclePolygonIntersections extends Intersections<Circle, Polygon> {
   Set<Vector2> intersect(
     Circle circle,
     Polygon polygon, {
-    Rect overlappingRect,
+    Rect? overlappingRect,
   }) {
     final intersectionPoints = <Vector2>{};
     final possibleVertices = polygon.possibleIntersectionVertices(

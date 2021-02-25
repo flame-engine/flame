@@ -43,14 +43,14 @@ class Sprite {
 
   Vector2 get srcSize => Vector2(src.width, src.height);
 
-  set srcSize(Vector2 size) {
+  set srcSize(Vector2? size) {
     final actualSize = size ?? image.size;
     src = srcPosition.toPositionedRect(actualSize);
   }
 
   Vector2 get srcPosition => src.topLeft.toVector2();
 
-  set srcPosition(Vector2 position) {
+  set srcPosition(Vector2? position) {
     src = (position ?? Vector2.zero()).toPositionedRect(srcSize);
   }
 

@@ -52,7 +52,7 @@ class MyGame extends BaseGame with MouseMovementDetector {
 
       if (!_onTarget) {
         final dir = (target! - position).normalized();
-        position += dir * (speed * dt);
+        position += dir * speed * dt;
       }
     }
   }
