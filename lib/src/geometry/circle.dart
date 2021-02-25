@@ -33,12 +33,12 @@ class Circle extends Shape {
     double? angle,
   }) : super(position: position, size: size, angle: angle ?? 0);
 
-  double get radius => (min(size.x, size.y) / 2) * normalizedRadius;
+  double get radius => (min(size!.x, size!.y) / 2) * normalizedRadius;
 
   @override
   void render(Canvas canvas, Paint paint) {
-    final localPosition = size / 2 + position;
-    final localRelativePosition = (size / 2)..multiply(relativePosition);
+    final localPosition = size! / 2 + position;
+    final localRelativePosition = (size! / 2)..multiply(relativePosition);
     canvas.drawCircle(
       (localPosition + localRelativePosition).toOffset(),
       radius,
