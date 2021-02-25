@@ -37,16 +37,13 @@ class MyGame extends BaseGame {
   /// Defines the lifespan of all the particles in these examples
   final sceneDuration = const Duration(seconds: 1);
 
-  Vector2 cellSize;
-  Vector2 halfCellSize;
+  Vector2 get cellSize => size / gridSize;
+  Vector2 get halfCellSize => cellSize / 2;
 
   @override
   Future<void> onLoad() async {
     await images.load('zap.png');
     await images.load('boom3.png');
-
-    cellSize = size / gridSize;
-    halfCellSize = cellSize * .5;
 
     // Spawn new particles every second
     Timer.periodic(sceneDuration, (_) => spawnParticles());
