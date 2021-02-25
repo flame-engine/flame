@@ -19,9 +19,10 @@ class MySpriteBatchComponent extends SpriteBatchComponent
     with HasGameRef<MyGame> {
   @override
   Future<void> onLoad() async {
-    spriteBatch = await gameRef!.loadSpriteBatch('boom3.png');
+    final spriteBatch = await gameRef!.loadSpriteBatch('boom3.png');
+    this.spriteBatch = spriteBatch;
 
-    spriteBatch!.add(
+    spriteBatch.add(
       source: const Rect.fromLTWH(128 * 4.0, 128 * 4.0, 64, 128),
       offset: Vector2.all(200),
       color: Colors.greenAccent,
@@ -30,7 +31,7 @@ class MySpriteBatchComponent extends SpriteBatchComponent
       anchor: Vector2.all(64),
     );
 
-    spriteBatch!.addTransform(
+    spriteBatch.addTransform(
       source: const Rect.fromLTWH(128 * 4.0, 128 * 4.0, 64, 128),
       color: Colors.redAccent,
     );
@@ -43,7 +44,7 @@ class MySpriteBatchComponent extends SpriteBatchComponent
       final sy = r.nextInt(8) * 128.0;
       final x = r.nextInt(size.x.toInt()).toDouble();
       final y = r.nextInt(size.y ~/ 2).toDouble() + size.y / 2.0;
-      spriteBatch!.add(
+      spriteBatch.add(
         source: Rect.fromLTWH(sx, sy, 128, 128),
         offset: Vector2(x - 64, y - 64),
       );
