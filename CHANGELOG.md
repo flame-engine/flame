@@ -4,7 +4,6 @@
  - Migrate to null safety
 
 ## 1.0.0-rc7
->>>>>>> master
  - Moving device related methods (like `fullScreen`) from `util.dart` to `device.dart`
  - Moving render functions from `util.dart` to `extensions/canvas.dart`
  - Adapting ParallaxComponent contructors to match the pattern followed on other components
@@ -29,7 +28,6 @@
  - Uniform use of `dt` instead of `t` in all update methods
  - Add more optional arguments for unified constructors of components
  - Fix order that parent -> children render in
->>>>>>> master
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
@@ -55,10 +53,7 @@
  - Move files to comply with the dart package layout convention
  - Fix gesture detection bug of children of `PositionComponent`
  - The `game` argument on `GameWidget` is now required
-<<<<<<< HEAD
  - Add hitbox mixin for PositionComponent to make more accurate gestures
-=======
->>>>>>> master
 
 ## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget
