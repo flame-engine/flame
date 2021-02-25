@@ -19,20 +19,20 @@ abstract class Shape {
   Vector2 size;
 
   /// The angle of the shape from its initial definition
-  double angle = 0;
+  double angle;
 
   Vector2 get shapeCenter => position;
 
-  Vector2 _anchorPosition;
+  Vector2? _anchorPosition;
   Vector2 get anchorPosition => _anchorPosition ?? position;
   set anchorPosition(Vector2 position) => _anchorPosition = position;
 
   Shape({
-    this.position,
-    this.size,
-    this.angle,
+    Vector2? position,
+    required this.size,
+    this.angle = 0,
   }) {
-    position ??= Vector2.zero();
+    this.position = position ?? Vector2.zero();
   }
 
   /// Whether the point [p] is within the shapes boundaries or not
@@ -47,7 +47,7 @@ abstract class Shape {
 }
 
 mixin HitboxShape on Shape {
-  PositionComponent component;
+  late PositionComponent component;
 
   @override
   Vector2 get anchorPosition => component.absolutePosition;
@@ -83,7 +83,7 @@ void emptyCollisionCallback(Set<Vector2> _, HitboxShape __) {}
 /// comparing a list of values that can be of any type and is compared to the
 /// values that was last used when the cache was updated.
 class ShapeCache<T> {
-  T value;
+  T? value;
 
   List<dynamic> _lastValidCacheValues = <dynamic>[];
 

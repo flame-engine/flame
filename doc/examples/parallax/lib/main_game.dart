@@ -21,7 +21,7 @@ void main() async {
 }
 
 class MyGame extends Game {
-  Parallax parallax;
+  late Parallax parallax;
 
   @override
   Future<void> onLoad() async {

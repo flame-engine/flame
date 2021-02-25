@@ -1,7 +1,6 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/widgets.dart';
-import 'package:meta/meta.dart';
 
 import '../extensions/vector2.dart';
 import '../sprite.dart';

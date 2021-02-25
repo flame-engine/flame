@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flame/components.dart';
+import 'package:flame/geometry.dart';
 import 'package:test/test.dart';
 
 class MyComponent extends PositionComponent {}

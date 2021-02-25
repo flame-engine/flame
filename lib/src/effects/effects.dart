@@ -10,7 +10,7 @@ export './scale_effect.dart';
 export './sequence_effect.dart';
 
 abstract class ComponentEffect<T extends BaseComponent> {
-  T? component;
+  late T component;
   Function()? onComplete;
 
   bool _isDisposed = false;
@@ -82,7 +82,7 @@ abstract class ComponentEffect<T extends BaseComponent> {
 
   bool isMax() => percentage == null ? false : percentage == 1.0;
   bool isMin() => percentage == null ? false : percentage == 0.0;
-  bool isRootEffect() => component?.effects.contains(this) ?? false;
+  bool isRootEffect() => component.effects.contains(this);
 
   void reset() {
     _isDisposed = false;
@@ -172,21 +172,21 @@ abstract class PositionComponentEffect
           position != null,
           '`position` must not be `null` for an effect which modifies `position`',
         );
-        component?.position.setFrom(position!);
+        component.position.setFrom(position!);
       }
       if (modifiesAngle) {
         assert(
           angle != null,
           '`angle` must not be `null` for an effect which modifies `angle`',
         );
-        component?.angle = angle!;
+        component.angle = angle!;
       }
       if (modifiesSize) {
         assert(
           size != null,
           '`size` must not be `null` for an effect which modifies `size`',
         );
-        component?.size.setFrom(size!);
+        component.size.setFrom(size!);
       }
     }
   }

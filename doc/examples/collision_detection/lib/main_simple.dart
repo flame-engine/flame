@@ -21,7 +21,7 @@ void main() async {
 
 class MyCollidable extends PositionComponent
     with HasGameRef<MyGame>, Hitbox, Collidable {
-  Vector2 velocity;
+  late Vector2 velocity;
   final _collisionColor = Colors.amber;
   bool _isWallHit = false;
   bool _isCollision = false;

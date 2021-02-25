@@ -13,7 +13,7 @@ import 'position_component.dart';
 extension ParallaxComponentExtension on Game {
   Future<ParallaxComponent> loadParallaxComponent(
     List<String> paths, {
-    Vector2 size,
+    Vector2? size,
     Vector2? baseVelocity,
     Vector2? velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
@@ -100,7 +100,7 @@ class ParallaxComponent extends PositionComponent {
   /// If no image cache is set, the global flame cache is used.
   static Future<ParallaxComponent> load(
     List<String> paths, {
-    Vector2 size,
+    Vector2? size,
     Vector2? baseVelocity,
     Vector2? velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,

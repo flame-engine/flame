@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/gestures.dart';
 import 'package:flutter/material.dart' hide Draggable;
 import 'package:flame/game.dart';
 
@@ -43,11 +42,11 @@ class DraggableSquare extends PositionComponent with Draggable {
 
   @override
   bool onDragUpdate(int pointerId, DragUpdateDetails details) {
-    if (!_isDragging) {
+    if (initialPosition != null && !_isDragging) {
       _isDragging = true;
-      dragDeltaPosition = initialPosition - position;
+      dragDeltaPosition = initialPosition! - position;
     }
-    position = details.localPosition.toVector2() - dragDeltaPosition;
+    position = details.localPosition.toVector2() - dragDeltaPosition!;
     return true;
   }
 

@@ -6,7 +6,11 @@ import '../../sprite.dart';
 
 class JoystickUtils {
   static void renderControl(
-      Canvas c, Sprite? sprite, Rect? rect, Paint? paint) {
+    Canvas c,
+    Sprite? sprite,
+    Rect? rect,
+    Paint? paint,
+  ) {
     if (rect == null) {
       return;
     }

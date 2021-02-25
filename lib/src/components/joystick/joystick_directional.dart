@@ -151,17 +151,15 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
         radAngle: radAngle,
       ));
     } else {
-      if (_knobRect != null) {
-        final diff = _dragPosition - _knobRect.center.toVector2();
-        _knobRect = _knobRect.shift(diff.toOffset());
-      }
+      final diff = _dragPosition - _knobRect.center.toVector2();
+      _knobRect = _knobRect.shift(diff.toOffset());
     }
   }
 
   @override
   bool containsPoint(Vector2 point) {
-    final directional = _backgroundRect?.inflate(50.0);
-    return directional?.containsPoint(point) == true;
+    final directional = _backgroundRect.inflate(50.0);
+    return directional.containsPoint(point) == true;
   }
 
   @override
@@ -176,8 +174,8 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
   }
 
   void _updateDirectionalRect(Vector2 position) {
-    if (position.dx > _screenSize.x / 2 ||
-        position.dy < _screenSize.y / 2 ||
+    if (position.x > _screenSize.x / 2 ||
+        position.y < _screenSize.y / 2 ||
         isFixed) {
       return;
     }

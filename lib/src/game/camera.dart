@@ -70,7 +70,7 @@ class Camera {
   /// This must be set by the Game as soon as the Camera is created.
   ///
   /// Do not change this reference.
-  BaseGame gameRef;
+  late BaseGame gameRef;
 
   /// If set, this bypasses follow and moves the camera to a specific point
   /// in the world.
@@ -78,8 +78,8 @@ class Camera {
   /// You can use this if you are not using follow but have a few different
   /// camera positions or if you are using follow but you want to highlight a
   /// spot in the world during an animation.
-  Vector2 _currentCameraDelta;
-  Vector2 _targetCameraDelta;
+  Vector2? _currentCameraDelta;
+  Vector2? _targetCameraDelta;
 
   /// Remaining time in seconds for the camera shake.
   double _shakeTimer = 0.0;
@@ -111,7 +111,7 @@ class Camera {
   /// You probably want to set it to the player component.
   /// Note that this is not smooth because the movement of the follow object
   /// is assumed to be smooth.
-  PositionComponent follow;
+  PositionComponent? follow;
 
   /// Where in the screen the follow object should be.
   ///
@@ -133,7 +133,7 @@ class Camera {
   /// Changing this value can immediately snap the camera if it is a wrong
   /// position, but other than that it's just prevent movement so should not
   /// add any non-smooth movement.
-  Rect worldBounds;
+  Rect? worldBounds;
 
   Camera();
 
@@ -144,9 +144,9 @@ class Camera {
     final ds = cameraSpeed * dt;
     final shake = Vector2(_shakeDelta(), _shakeDelta());
 
-    if (_targetCameraDelta != null) {
-      _moveToTarget(_currentCameraDelta, _targetCameraDelta, ds);
-      _position.setFrom(_currentCameraDelta + shake);
+    if (_targetCameraDelta != null && _currentCameraDelta != null) {
+      _moveToTarget(_currentCameraDelta!, _targetCameraDelta!, ds);
+      _position.setFrom(_currentCameraDelta! + shake);
     } else {
       _moveToTarget(_currentRelativeOffset, _targetRelativeOffset, ds);
       _position.setFrom(_getTarget() + shake);
@@ -164,8 +164,8 @@ class Camera {
   /// now. This bypasses any currently smooth transitions and might be janky,
   /// but can be used to setup after a new world transition for example.
   void snap() {
-    if (_targetCameraDelta != null) {
-      _currentCameraDelta.setFrom(_targetCameraDelta);
+    if (_targetCameraDelta != null && _currentCameraDelta != null) {
+      _currentCameraDelta!.setFrom(_targetCameraDelta!);
     }
     _currentRelativeOffset.setFrom(_targetRelativeOffset);
   }
@@ -195,8 +195,8 @@ class Camera {
   /// its anchor to center.
   void followObject(
     PositionComponent follow, {
-    Vector2 relativeOffset,
-    Rect worldBounds,
+    Vector2? relativeOffset,
+    Rect? worldBounds,
   }) {
     this.follow = follow;
     this.worldBounds = worldBounds;
@@ -219,31 +219,32 @@ class Camera {
       return Vector2.zero();
     }
     final screenDelta = gameRef.size.clone()..multiply(_currentRelativeOffset);
-    final attemptedTarget = follow.position - screenDelta;
+    final attemptedTarget = follow!.position - screenDelta;
 
-    if (worldBounds != null) {
-      if (worldBounds.width > gameRef.size.x) {
+    final bounds = worldBounds;
+    if (bounds != null) {
+      if (bounds.width > gameRef.size.x) {
         final cameraLeftEdge = attemptedTarget.x;
         final cameraRightEdge = attemptedTarget.x + gameRef.size.x;
-        if (cameraLeftEdge < worldBounds.left) {
-          attemptedTarget.x = worldBounds.left;
-        } else if (cameraRightEdge > worldBounds.right) {
-          attemptedTarget.x = worldBounds.right - gameRef.size.x;
+        if (cameraLeftEdge < bounds.left) {
+          attemptedTarget.x = bounds.left;
+        } else if (cameraRightEdge > bounds.right) {
+          attemptedTarget.x = bounds.right - gameRef.size.x;
         }
       } else {
-        attemptedTarget.x = (gameRef.size.x - worldBounds.width) / 2;
+        attemptedTarget.x = (gameRef.size.x - bounds.width) / 2;
       }
 
-      if (worldBounds.height > gameRef.size.y) {
+      if (bounds.height > gameRef.size.y) {
         final cameraTopEdge = attemptedTarget.y;
         final cameraBottomEdge = attemptedTarget.y + gameRef.size.y;
-        if (cameraTopEdge < worldBounds.top) {
-          attemptedTarget.y = worldBounds.top;
-        } else if (cameraBottomEdge > worldBounds.bottom) {
-          attemptedTarget.y = worldBounds.bottom - gameRef.size.y;
+        if (cameraTopEdge < bounds.top) {
+          attemptedTarget.y = bounds.top;
+        } else if (cameraBottomEdge > bounds.bottom) {
+          attemptedTarget.y = bounds.bottom - gameRef.size.y;
         }
       } else {
-        attemptedTarget.y = (gameRef.size.y - worldBounds.height) / 2;
+        attemptedTarget.y = (gameRef.size.y - bounds.height) / 2;
       }
     }
 

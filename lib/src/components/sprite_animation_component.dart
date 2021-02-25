@@ -28,8 +28,8 @@ class SpriteAnimationComponent extends PositionComponent {
   SpriteAnimationComponent.fromFrameData(
     Image image,
     SpriteAnimationData data, {
-    Vector2 position,
-    Vector2 size,
+    Vector2? position,
+    Vector2? size,
     this.removeOnFinish = false,
   }) : super(position: position, size: size) {
     animation = SpriteAnimation.fromFrameData(image, data);

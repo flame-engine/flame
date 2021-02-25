@@ -1,6 +1,5 @@
 import 'dart:ui' hide Offset;
 
-import '../collision_detection.dart' as collision_detection;
 import '../anchor.dart';
 import '../extensions/offset.dart';
 import '../extensions/rect.dart';
@@ -54,9 +53,9 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Get the absolute top left position regardless of whether it is a child or not
   Vector2 get absoluteTopLeftPosition {
-    if (parent is PositionComponent) {
-      return (parent as PositionComponent).absoluteTopLeftPosition +
-          topLeftPosition;
+    final p = parent;
+    if (p is PositionComponent) {
+      return p.absoluteTopLeftPosition + topLeftPosition;
     } else {
       return topLeftPosition;
     }
@@ -64,8 +63,9 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Get the position that everything in this component is positioned in relation to
   Vector2 get absoluteCanvasPosition {
-    if (parent is PositionComponent) {
-      return (parent as PositionComponent).absoluteTopLeftPosition;
+    final p = parent;
+    if (p is PositionComponent) {
+      return p.absoluteTopLeftPosition;
     } else {
       return Vector2.zero();
     }
@@ -76,22 +76,13 @@ abstract class PositionComponent extends BaseComponent {
     this.position = position + (anchor.toVector2()..multiply(size));
   }
 
-  /// Get the absolute top left position regardless of whether it is a child or not
-  Vector2 get absoluteTopLeftPosition {
-    if (parent is PositionComponent) {
-      return (parent as PositionComponent).absoluteTopLeftPosition +
-          topLeftPosition;
-    } else {
-      return topLeftPosition;
-    }
-  }
-
   /// Get the position that everything in this component is positioned in relation to
   /// If this component has no parent the absolute parent position is the origin,
   /// otherwise it's the parents absolute top left position
   Vector2 get absoluteParentPosition {
-    if (parent is PositionComponent) {
-      return (parent as PositionComponent).absoluteTopLeftPosition;
+    final p = parent;
+    if (p is PositionComponent) {
+      return p.absoluteTopLeftPosition;
     } else {
       return Vector2.zero();
     }

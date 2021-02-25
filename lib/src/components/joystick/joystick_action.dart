@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart' show Colors;
 import 'package:flutter/widgets.dart'
     show EdgeInsets, DragUpdateDetails, DragEndDetails;
-import 'package:meta/meta.dart';
 
 import '../../../components.dart';
 import '../../../game.dart';
@@ -44,7 +43,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   final double _sizeBackgroundDirection;
   late double _tileSize;
 
-  JoystickController get joystickController => parent as JoystickController;
+  JoystickController get joystickController => parent! as JoystickController;
 
   JoystickAction({
     required this.actionId,
