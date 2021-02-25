@@ -1,10 +1,9 @@
-import 'package:flame/components.dart';
-import 'package:flame/game.dart';
-import 'package:flame/flame.dart';
-import 'package:flame/layers.dart';
-
 import 'dart:ui';
 
+import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/game.dart';
+import 'package:flame/layers.dart';
 import 'package:flutter/widgets.dart';
 
 void main() async {

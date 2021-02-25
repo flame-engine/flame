@@ -1,9 +1,8 @@
 import 'dart:ui';
 
-import 'position_component.dart';
-
 import '../extensions/vector2.dart';
 import '../spritesheet.dart';
+import 'position_component.dart';
 
 /// This is just a pair of <int, int>.
 ///
@@ -33,7 +32,14 @@ class IsometricTileMapComponent extends PositionComponent {
   /// Optionally provide a new tile size to render it scaled.
   Vector2? destTileSize;
 
-  IsometricTileMapComponent(this.tileset, this.matrix, {this.destTileSize});
+  IsometricTileMapComponent(
+    this.tileset,
+    this.matrix, {
+    this.destTileSize,
+    Vector2 position,
+  }) {
+    this.position = position ?? Vector2.zero();
+  }
 
   /// This is the size the tiles will be drawn (either original or overwritten).
   Vector2 get effectiveTileSize => destTileSize ?? tileset.srcSize;
@@ -43,8 +49,8 @@ class IsometricTileMapComponent extends PositionComponent {
     super.render(c);
 
     final size = effectiveTileSize;
-    for (int i = 0; i < matrix.length; i++) {
-      for (int j = 0; j < matrix[i].length; j++) {
+    for (var i = 0; i < matrix.length; i++) {
+      for (var j = 0; j < matrix[i].length; j++) {
         final element = matrix[i][j];
         if (element != -1) {
           final sprite = tileset.getSpriteById(element);

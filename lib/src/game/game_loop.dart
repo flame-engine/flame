@@ -1,7 +1,7 @@
 import 'package:flutter/scheduler.dart';
 
 class GameLoop {
-  Function callback;
+  void Function(double dt) callback;
   Duration previous = Duration.zero;
   late Ticker _ticker;
 
@@ -10,15 +10,12 @@ class GameLoop {
   }
 
   void _tick(Duration timestamp) {
-    final double dt = _computeDeltaT(timestamp);
+    final dt = _computeDeltaT(timestamp);
     callback(dt);
   }
 
   double _computeDeltaT(Duration now) {
-    Duration delta = now - previous;
-    if (previous == Duration.zero) {
-      delta = Duration.zero;
-    }
+    final delta = previous == Duration.zero ? Duration.zero : now - previous;
     previous = now;
     return delta.inMicroseconds / Duration.microsecondsPerSecond;
   }

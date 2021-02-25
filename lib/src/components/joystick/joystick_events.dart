@@ -1,16 +1,16 @@
 enum JoystickMoveDirectional {
-  MOVE_UP,
-  MOVE_UP_LEFT,
-  MOVE_UP_RIGHT,
-  MOVE_RIGHT,
-  MOVE_DOWN,
-  MOVE_DOWN_RIGHT,
-  MOVE_DOWN_LEFT,
-  MOVE_LEFT,
-  IDLE
+  moveUp,
+  moveUpLeft,
+  moveUpRight,
+  moveRight,
+  moveDown,
+  moveDownRight,
+  moveDownLeft,
+  moveLeft,
+  idle,
 }
 
-enum ActionEvent { DOWN, UP, MOVE, CANCEL }
+enum ActionEvent { down, up, move, cancel }
 
 class JoystickDirectionalEvent {
   final JoystickMoveDirectional? directional;
@@ -25,24 +25,24 @@ class JoystickDirectionalEvent {
 
   static JoystickMoveDirectional calculateDirectionalByDegrees(double degrees) {
     if (degrees > -22.5 && degrees <= 22.5) {
-      return JoystickMoveDirectional.MOVE_RIGHT;
+      return JoystickMoveDirectional.moveRight;
     } else if (degrees > 22.5 && degrees <= 67.5) {
-      return JoystickMoveDirectional.MOVE_DOWN_RIGHT;
+      return JoystickMoveDirectional.moveDownRight;
     } else if (degrees > 67.5 && degrees <= 112.5) {
-      return JoystickMoveDirectional.MOVE_DOWN;
+      return JoystickMoveDirectional.moveDown;
     } else if (degrees > 112.5 && degrees <= 157.5) {
-      return JoystickMoveDirectional.MOVE_DOWN_LEFT;
+      return JoystickMoveDirectional.moveDownLeft;
     } else if ((degrees > 157.5 && degrees <= 180) ||
         (degrees >= -180 && degrees <= -157.5)) {
-      return JoystickMoveDirectional.MOVE_LEFT;
+      return JoystickMoveDirectional.moveLeft;
     } else if (degrees > -157.5 && degrees <= -112.5) {
-      return JoystickMoveDirectional.MOVE_UP_LEFT;
+      return JoystickMoveDirectional.moveUpLeft;
     } else if (degrees > -112.5 && degrees <= -67.5) {
-      return JoystickMoveDirectional.MOVE_UP;
+      return JoystickMoveDirectional.moveUp;
     } else if (degrees > -67.5 && degrees <= -22.5) {
-      return JoystickMoveDirectional.MOVE_UP_RIGHT;
+      return JoystickMoveDirectional.moveUpRight;
     } else {
-      return JoystickMoveDirectional.IDLE;
+      return JoystickMoveDirectional.idle;
     }
   }
 

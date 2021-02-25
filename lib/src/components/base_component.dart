@@ -69,15 +69,22 @@ abstract class BaseComponent extends Component {
   @override
   void render(Canvas canvas) {
     prepareCanvas(canvas);
+  }
 
+  @mustCallSuper
+  @override
+  void renderTree(Canvas canvas) {
+    render(canvas);
+    _children.forEach((c) {
+      canvas.save();
+      c.renderTree(canvas);
+      canvas.restore();
+    });
+
+    // Any debug rendering should be rendered on top of everything
     if (debugMode) {
       renderDebugMode(canvas);
     }
-    _children.forEach((c) {
-      canvas.save();
-      c.render(canvas);
-      canvas.restore();
-    });
   }
 
   void renderDebugMode(Canvas canvas) {}
@@ -107,8 +114,8 @@ abstract class BaseComponent extends Component {
   }
 
   /// Called to check whether the point is to be counted as within the component
-  /// It needs to be overridden to have any effect, like it is in the
-  /// [PositionComponent]
+  /// It needs to be overridden to have any effect, like it is in
+  /// PositionComponent.
   bool containsPoint(Vector2 point) => false;
 
   /// Add an effect to the component
@@ -179,16 +186,16 @@ abstract class BaseComponent extends Component {
   bool propagateToChildren<T extends Component>(
     bool Function(T) handler,
   ) {
-    bool shouldContinue = true;
-    for (Component child in _children) {
-      if (child is T && child is BaseComponent) {
+    var shouldContinue = true;
+    for (final child in _children) {
+      if (child is BaseComponent) {
         shouldContinue = child.propagateToChildren(handler);
-        if (shouldContinue) {
-          shouldContinue = handler(child);
-        }
-        if (!shouldContinue) {
-          break;
-        }
+      }
+      if (shouldContinue && child is T) {
+        shouldContinue = handler(child);
+      }
+      if (!shouldContinue) {
+        break;
       }
     }
     return shouldContinue;

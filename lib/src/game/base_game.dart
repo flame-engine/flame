@@ -1,18 +1,22 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart' hide WidgetBuilder;
+import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
+import '../../components.dart';
+import '../../extensions.dart';
 import '../components/component.dart';
+import '../components/mixins/collidable.dart';
+import '../components/mixins/draggable.dart';
+import '../components/mixins/has_collidables.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
 import '../components/position_component.dart';
-import '../extensions/vector2.dart';
 import '../fps_counter.dart';
+import 'camera.dart';
 import 'game.dart';
+import 'viewport.dart';
 
 /// This is a more complete and opinionated implementation of Game.
 ///
@@ -25,14 +29,58 @@ class BaseGame extends Game with FPSCounter {
   final OrderedSet<Component> components =
       OrderedSet(Comparing.on((c) => c.priority));
 
-  /// Components added by the [addLater] method
+  /// Components to be added on the next update.
+  ///
+  /// The component list is only changed at the start of each [update] to avoid
+  /// concurrency issues.
   final List<Component> _addLater = [];
 
-  /// Components to be removed on the next update
+  /// Components to be removed on the next update.
+  ///
+  /// The component list is only changed at the start of each [update] to avoid
+  /// concurrency issues.
   final Set<Component> _removeLater = {};
 
-  /// Camera position; every non-HUD component is translated so that the camera position is the top-left corner of the screen.
-  Vector2 camera = Vector2.zero();
+  /// The camera translates the coordinate space after the viewport is applied.
+  final Camera camera = Camera();
+
+  /// The viewport transforms the coordinate space depending on your chosen
+  /// implementation.
+  /// The default implementation no-ops, but you can use this to have a fixed
+  /// screen ratio for example.
+  Viewport get viewport => _viewport;
+
+  Viewport _viewport = DefaultViewport();
+  set viewport(Viewport value) {
+    if (hasLayout) {
+      final previousSize = canvasSize;
+      _viewport = value;
+      onResize(previousSize);
+    } else {
+      _viewport = value;
+    }
+  }
+
+  /// This is overwritten to consider the viewport transformation.
+  ///
+  /// Which means that this is the logical size of the game screen area as
+  /// exposed to the canvas after viewport transformations.
+  /// This does not match the Flutter widget size; for that see [canvasSize].
+  @override
+  Vector2 get size {
+    assertHasLayout();
+    return viewport.effectiveSize;
+  }
+
+  /// This is the original Flutter widget size, without any transformation.
+  Vector2 get canvasSize {
+    assertHasLayout();
+    return viewport.canvasSize;
+  }
+
+  BaseGame() {
+    camera.gameRef = this;
+  }
 
   /// This method is called for every component added.
   /// It does preparation on a component before any update or render method is called on it.
@@ -45,6 +93,12 @@ class BaseGame extends Game with FPSCounter {
       assert(
         this is HasTapableComponents,
         'Tapable Components can only be added to a BaseGame with HasTapableComponents',
+      );
+    }
+    if (c is Draggable) {
+      assert(
+        this is HasDraggableComponents,
+        'Draggable Components can only be added to a BaseGame with HasDraggableComponents',
       );
     }
 
@@ -63,7 +117,17 @@ class BaseGame extends Game with FPSCounter {
   /// Prepares and registers a component to be added on the next game tick
   ///
   /// This methods is an async operation since it await the `onLoad` method of the component. Nevertheless, this method only need to be waited to finish if by some reason, your logic needs to be sure that the component has finished loading, otherwise, this method can be called without waiting for it to finish as the BaseGame already handle the loading of the component.
+  ///
+  /// *Note:* Do not add components on the game constructor. This method can only be called after the game already has its layout set, this can be verified by the [hasLayout] property, to add components upon a game initialization, the [onLoad] method can be used instead.
   Future<void> add(Component c) async {
+    assert(
+      hasLayout,
+      '"add" called before the game is ready. Did you try to access it on the Game constructor? Use the "onLoad" method instead.',
+    );
+    assert(
+      c is Collidable ? this is HasCollidables : true,
+      'You can only use the Hitbox/Collidable feature with games that has the HasCollidables mixin',
+    );
     prepare(c);
     final loadFuture = c.onLoad();
 
@@ -90,14 +154,14 @@ class BaseGame extends Game with FPSCounter {
 
   /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.
   ///
-  /// You can override it further to add more custom behaviour.
+  /// You can override it further to add more custom behavior.
   /// Beware of however you are rendering components if not using this; you must be careful to save and restore the canvas to avoid components messing up with each other.
   @override
   @mustCallSuper
   void render(Canvas canvas) {
-    canvas.save();
-    components.forEach((comp) => renderComponent(canvas, comp));
-    canvas.restore();
+    viewport.render(canvas, (c) {
+      components.forEach((comp) => renderComponent(c, comp));
+    });
   }
 
   /// This renders a single component obeying BaseGame rules.
@@ -105,26 +169,31 @@ class BaseGame extends Game with FPSCounter {
   /// It translates the camera unless hud, call the render method and restore the canvas.
   /// This makes sure the canvas is not messed up by one component and all components render independently.
   void renderComponent(Canvas canvas, Component c) {
-    if (!c.isHud) {
-      canvas.translate(-camera.x, -camera.y);
-    }
-    c.render(canvas);
-    canvas.restore();
     canvas.save();
+    if (!c.isHud) {
+      canvas.translateVector(-camera.position);
+    }
+    c.renderTree(canvas);
+    canvas.restore();
   }
 
   /// This implementation of update updates every component in the list.
   ///
-  /// It also actually adds the components that were added by the [addLater] method, and remove those that are marked for destruction via the [Component.shouldRemove] method.
-  /// You can override it further to add more custom behaviour.
+  /// It also actually adds the components added via [add] since the previous tick,
+  /// and remove those that are marked for destruction via the [Component.shouldRemove] method.
+  /// You can override it further to add more custom behavior.
   @override
   @mustCallSuper
-  void update(double t) {
+  void update(double dt) {
     _removeLater.addAll(components.where((c) => c.shouldRemove));
     _removeLater.forEach((c) {
       c.onRemove();
       components.remove(c);
     });
+
+    if (this is HasCollidables) {
+      (this as HasCollidables).handleCollidables(_removeLater, _addLater);
+    }
     _removeLater.clear();
 
     if (_addLater.isNotEmpty) {
@@ -133,17 +202,22 @@ class BaseGame extends Game with FPSCounter {
       components.addAll(addNow);
       addNow.forEach((component) => component.onMount());
     }
-    components.forEach((c) => c.update(t));
+
+    components.forEach((c) => c.update(dt));
+    camera.update(dt);
   }
 
-  /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.
+  /// This implementation of resize passes the resize call along to every
+  /// component in the list, enabling each one to make their decisions as how to handle the resize.
   ///
   /// It also updates the [size] field of the class to be used by later added components and other methods.
-  /// You can override it further to add more custom behaviour, but you should seriously consider calling the super implementation as well.
+  /// You can override it further to add more custom behavior, but you should seriously consider calling the super implementation as well.
+  /// This implementation also uses the current [viewport] in order to transform the coordinate system appropriately.
   @override
   @mustCallSuper
-  void onResize(Vector2 size) {
-    super.onResize(size);
+  void onResize(Vector2 canvasSize) {
+    super.onResize(canvasSize);
+    viewport.resize(canvasSize.clone());
     components.forEach((c) => c.onGameResize(size));
   }
 

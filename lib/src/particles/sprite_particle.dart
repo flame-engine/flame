@@ -1,9 +1,13 @@
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
+
 import '../anchor.dart';
-import 'particle.dart';
-import '../sprite.dart';
 import '../extensions/vector2.dart';
+import '../sprite.dart';
+import 'particle.dart';
+
+export '../sprite.dart';
 
 export '../sprite.dart';
 

@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:flutter/painting.dart';
 
 import 'assets/images.dart';
+import 'extensions/canvas.dart';
+import 'extensions/image.dart';
 import 'extensions/rect.dart';
 import 'extensions/vector2.dart';
 import 'flame.dart';
@@ -11,15 +13,17 @@ import 'game/game.dart';
 
 extension ParallaxExtension on Game {
   Future<Parallax> loadParallax(
-    List<String> paths, {
-    Vector2? baseVelocity,
-    Vector2? velocityMultiplierDelta,
+    List<String> paths,
+    Vector2 size, {
+    Vector2 baseVelocity,
+    Vector2 velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
   }) {
     return Parallax.load(
       paths,
+      size,
       baseVelocity: baseVelocity,
       velocityMultiplierDelta: velocityMultiplierDelta,
       repeat: repeat,
@@ -49,7 +53,7 @@ extension ParallaxExtension on Game {
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
-    Vector2? velocityMultiplier,
+    Vector2 velocityMultiplier,
   }) {
     return ParallaxLayer.load(
       path,
@@ -93,7 +97,7 @@ class ParallaxImage {
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
-    Images? images,
+    Images images,
   }) async {
     images ??= Flame.images;
     return ParallaxImage(
@@ -110,21 +114,21 @@ class ParallaxImage {
 class ParallaxLayer {
   final ParallaxImage parallaxImage;
   Vector2 velocityMultiplier;
-  late Rect _paintArea;
-  Vector2? _scroll;
-  late Vector2 _imageSize;
+  Rect _paintArea;
+  Vector2 _scroll;
+  Vector2 _imageSize;
   double _scale = 1.0;
 
   /// [parallaxImage] is the representation of the image with data of how the
   /// image should behave.
   /// [velocityMultiplier] will be used to determine the velocity of the layer by
-  /// multiplying the [baseVelocity] with the [velocityMultiplier].
+  /// multiplying the [Parallax.baseVelocity] with the [velocityMultiplier].
   ParallaxLayer(
     this.parallaxImage, {
-    Vector2? velocityMultiplier,
+    Vector2 velocityMultiplier,
   }) : velocityMultiplier = velocityMultiplier ?? Vector2.all(1.0);
 
-  Vector2 currentOffset() => _scroll!;
+  Vector2 currentOffset() => _scroll;
 
   void resize(Vector2 size) {
     double scale(LayerFill fill) {
@@ -141,18 +145,14 @@ class ParallaxLayer {
     _scale = scale(parallaxImage.fill);
 
     // The image size so that it fulfills the LayerFill parameter
-    _imageSize = Vector2Extension.fromInts(
-          parallaxImage.image.width,
-          parallaxImage.image.height,
-        ) /
-        _scale;
+    _imageSize = parallaxImage.image.size / _scale;
 
     // Number of images that can fit on the canvas plus one
     // to have something to scroll to without leaving canvas empty
-    final Vector2 count = Vector2.all(1) + (size.clone()..divide(_imageSize));
+    final count = Vector2.all(1) + (size.clone()..divide(_imageSize));
 
     // Percentage of the image size that will overflow
-    final Vector2 overflow = ((_imageSize.clone()..multiply(count)) - size)
+    final overflow = ((_imageSize.clone()..multiply(count)) - size)
       ..divide(_imageSize);
 
     // Align image to correct side of the screen
@@ -162,29 +162,28 @@ class ParallaxLayer {
     _scroll ??= Vector2(marginX, marginY);
 
     // Size of the area to paint the images on
-    final Vector2 paintSize = count..multiply(_imageSize);
+    final paintSize = count..multiply(_imageSize);
     _paintArea = paintSize.toRect();
   }
 
   void update(Vector2 delta) {
     // Scale the delta so that images that are larger don't scroll faster
-    _scroll = _scroll! + delta.clone()
-      ..divide(_imageSize);
+    _scroll += delta.clone()..divide(_imageSize);
     switch (parallaxImage.repeat) {
       case ImageRepeat.repeat:
-        _scroll = Vector2(_scroll!.x % 1, _scroll!.y % 1);
+        _scroll = Vector2(_scroll.x % 1, _scroll.y % 1);
         break;
       case ImageRepeat.repeatX:
-        _scroll = Vector2(_scroll!.x % 1, _scroll!.y);
+        _scroll = Vector2(_scroll.x % 1, _scroll.y);
         break;
       case ImageRepeat.repeatY:
-        _scroll = Vector2(_scroll!.x, _scroll!.y % 1);
+        _scroll = Vector2(_scroll.x, _scroll.y % 1);
         break;
       case ImageRepeat.noRepeat:
         break;
     }
 
-    final Vector2 scrollPosition = _scroll!.clone()..multiply(_imageSize);
+    final scrollPosition = _scroll.clone()..multiply(_imageSize);
     _paintArea = Rect.fromLTWH(
       -scrollPosition.x,
       -scrollPosition.y,
@@ -210,11 +209,11 @@ class ParallaxLayer {
   /// that should be used. If no image cache is set, the global flame cache is used.
   static Future<ParallaxLayer> load(
     String path, {
-    Vector2? velocityMultiplier,
+    Vector2 velocityMultiplier,
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
-    Images? images,
+    Images images,
   }) async {
     return ParallaxLayer(
       await ParallaxImage.load(
@@ -236,12 +235,19 @@ enum LayerFill { height, width, none }
 /// layer moves with different velocities to give an effect of depth.
 class Parallax {
   Vector2 baseVelocity;
+  Vector2 _size = Vector2.zero();
+  Rect _clipRect;
   final List<ParallaxLayer> layers;
 
   Parallax(
-    this.layers, {
-    Vector2? baseVelocity,
-  }) : baseVelocity = baseVelocity ?? Vector2.zero();
+    this.layers,
+    Vector2 size, {
+    Vector2 baseVelocity,
+  })  : assert(layers != null),
+        assert(size != null) {
+    this.baseVelocity = baseVelocity ?? Vector2.zero();
+    resize(size);
+  }
 
   /// The base offset of the parallax, can be used in an outer update loop
   /// if you want to transition the parallax to a certain position.
@@ -249,12 +255,18 @@ class Parallax {
 
   /// If the `ParallaxComponent` isn't used your own wrapper needs to call this
   /// on creation.
-  void resize(Vector2 size) => layers.forEach((layer) => layer.resize(size));
+  void resize(Vector2 newSize) {
+    if (newSize != _size) {
+      _size = newSize;
+      _clipRect = newSize.toRect();
+      layers.forEach((layer) => layer.resize(newSize));
+    }
+  }
 
-  void update(double t) {
+  void update(double dt) {
     layers.forEach((layer) {
       layer.update(
-        (baseVelocity.clone()..multiply(layer.velocityMultiplier)) * t,
+        (baseVelocity.clone()..multiply(layer.velocityMultiplier)) * dt,
       );
     });
   }
@@ -266,7 +278,7 @@ class Parallax {
   ///
   /// [load] takes a list of paths to all the images that you want to use in the
   /// parallax.
-  /// Optionally arguments for the [baseVelocity] and [layerDelta] can be passed
+  /// Optionally arguments for the [baseVelocity] and [velocityMultiplierDelta] can be passed
   /// in, [baseVelocity] defines what the base velocity of the layers should be
   /// and [velocityMultiplierDelta] defines how the velocity should change the
   /// closer the layer is ([velocityMultiplierDelta ^ n], where n is the
@@ -277,16 +289,17 @@ class Parallax {
   /// used can also be passed in.
   /// If no image cache is set, the global flame cache is used.
   static Future<Parallax> load(
-    List<String> paths, {
-    Vector2? baseVelocity,
-    Vector2? velocityMultiplierDelta,
+    List<String> paths,
+    Vector2 size, {
+    Vector2 baseVelocity,
+    Vector2 velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
-    Images? images,
+    Images images,
   }) async {
     velocityMultiplierDelta ??= Vector2.all(1.0);
-    int depth = 0;
+    var depth = 0;
     final layers = await Future.wait<ParallaxLayer>(
       paths.map((path) async {
         final image = ParallaxImage.load(
@@ -297,7 +310,7 @@ class Parallax {
           images: images,
         );
         final velocityMultiplier =
-            List.filled(depth, velocityMultiplierDelta!).fold<Vector2>(
+            List.filled(depth, velocityMultiplierDelta).fold<Vector2>(
           velocityMultiplierDelta,
           (previousValue, delta) => previousValue.clone()..multiply(delta),
         );
@@ -310,7 +323,22 @@ class Parallax {
     );
     return Parallax(
       layers,
+      size,
       baseVelocity: baseVelocity,
     );
+  }
+
+  void render(Canvas canvas, {Vector2 position}) {
+    canvas.save();
+    if (position != null) {
+      canvas.translateVector(position);
+    }
+    canvas.clipRect(_clipRect);
+    layers.forEach((layer) {
+      canvas.save();
+      layer.render(canvas);
+      canvas.restore();
+    });
+    canvas.restore();
   }
 }

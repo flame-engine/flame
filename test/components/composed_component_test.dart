@@ -54,16 +54,16 @@ Vector2 size = Vector2.all(300);
 void main() {
   group('composable component test', () {
     test('adds the child to the component', () {
-      final MyTap child = MyTap();
-      final MyComposed wrapper = MyComposed();
+      final child = MyTap();
+      final wrapper = MyComposed();
       wrapper.addChild(child);
 
       expect(true, wrapper.containsChild(child));
     });
 
     test('removes the child from the component', () {
-      final MyTap child = MyTap();
-      final MyComposed wrapper = MyComposed();
+      final child = MyTap();
+      final wrapper = MyComposed();
       wrapper.addChild(child);
       expect(true, wrapper.containsChild(child));
 
@@ -74,8 +74,8 @@ void main() {
     test(
       'when child is async loading, adds the child to the component after loading',
       () async {
-        final MyAsyncChild child = MyAsyncChild();
-        final MyComposed wrapper = MyComposed();
+        final child = MyAsyncChild();
+        final wrapper = MyComposed();
         await wrapper.addChild(child);
 
         expect(true, wrapper.containsChild(child));
@@ -83,18 +83,39 @@ void main() {
     );
 
     test('taps and resizes children', () {
-      final MyGame game = MyGame();
-      final MyTap child = MyTap();
-      final MyComposed wrapper = MyComposed();
+      final game = MyGame();
+      final child = MyTap();
+      final wrapper = MyComposed();
 
-      game.size.setFrom(size);
+      game.onResize(size);
+      child.size = Vector2.all(1);
       game.add(wrapper);
       wrapper.addChild(child);
       game.update(0.0);
-      game.onTapDown(1, TapDownDetails(globalPosition: const Offset(0.0, 0.0)));
+      game.onTapDown(1, TapDownDetails());
 
       expect(child.gameSize, size);
       expect(child.tapped, true);
+    });
+
+    test('tap on offset children', () {
+      final game = MyGame();
+      final child = MyTap()
+        ..position = Vector2.all(100)
+        ..size = Vector2.all(100);
+      final wrapper = MyComposed()
+        ..position = Vector2.all(100)
+        ..size = Vector2.all(300);
+
+      game.onResize(size);
+      game.add(wrapper);
+      wrapper.addChild(child);
+      game.update(0.0);
+      game.onTapDown(1, TapDownDetails(globalPosition: const Offset(250, 250)));
+
+      expect(child.gameSize, size);
+      expect(child.tapped, true);
+      expect(child.tapTimes, 1);
     });
 
     test('tap on offset children', () {
@@ -118,9 +139,10 @@ void main() {
     });
 
     test('updates and renders children', () {
-      final MyGame game = MyGame();
-      final MyTap child = MyTap();
-      final MyComposed wrapper = MyComposed();
+      final game = MyGame();
+      game.onResize(Vector2.all(100));
+      final child = MyTap();
+      final wrapper = MyComposed();
 
       wrapper.addChild(child);
       game.add(wrapper);

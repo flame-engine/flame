@@ -20,7 +20,7 @@ class TextConfig {
 
   /// The font color to be used.
   ///
-  /// Dart's [Color] class is just a plain wrapper on top of ARGB color (0xFFrrggbb).
+  /// Dart's [Color] class is just a plain wrapper on top of ARGB color (0xAARRGGBB).
   /// For example,
   ///
   ///     const TextConfig config = TextConfig(color: const Color(0xFF00FF00)); // green
@@ -30,13 +30,14 @@ class TextConfig {
 
   /// The font family to be used. You can use available by default fonts for your platform (like Arial), or you can add custom fonts.
   ///
-  /// To add custom fonts, add the following code to your pubspec.yml file:
+  /// To add custom fonts, add the following code to your pubspec.yaml file:
   ///
   ///     flutter:
   ///       fonts:
   ///         - family: 5x5
   ///           fonts:
   ///             - asset: assets/fonts/5x5_pixel.ttf
+  ///
   /// In this example we are adding a font family that's being named '5x5' provided in the specified ttf file.
   /// You must provide the full path of the ttf file (from root); you should put it into your assets folder, and preferably inside a fonts folder.
   /// You don't need to add this together with the other assets on the flutter/assets bit.
@@ -88,8 +89,8 @@ class TextConfig {
     Vector2 p, {
     Anchor anchor = Anchor.topLeft,
   }) {
-    final material.TextPainter tp = toTextPainter(text);
-    final Vector2 translatedPosition = anchor.translate(p, tp.size.toVector2());
+    final tp = toTextPainter(text);
+    final translatedPosition = anchor.translate(p, tp.size.toVector2());
     tp.paint(canvas, translatedPosition.toOffset());
   }
 
@@ -107,17 +108,17 @@ class TextConfig {
   /// That way, you don't need to perform the math for yourself.
   material.TextPainter toTextPainter(String text) {
     if (!_textPainterCache.containsKey(text)) {
-      final material.TextStyle style = material.TextStyle(
+      final style = material.TextStyle(
         color: color,
         fontSize: fontSize,
         fontFamily: fontFamily,
         height: lineHeight,
       );
-      final material.TextSpan span = material.TextSpan(
+      final span = material.TextSpan(
         style: style,
         text: text,
       );
-      final material.TextPainter tp = material.TextPainter(
+      final tp = material.TextPainter(
         text: span,
         textAlign: textAlign,
         textDirection: textDirection,

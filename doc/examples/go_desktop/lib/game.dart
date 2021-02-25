@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 class MyGame extends Game {
   static final Paint paint = Paint()..color = const Color(0xFFFFFFFF);
 
-  var movingLeft = false;
-  var movingRight = false;
-  var movingUp = false;
-  var movingDown = false;
+  bool movingLeft = false;
+  bool movingRight = false;
+  bool movingUp = false;
+  bool movingDown = false;
 
   double x = 0;
   double y = 0;
@@ -20,23 +20,16 @@ class MyGame extends Game {
 
   void _start() {
     RawKeyboard.instance.addListener((RawKeyEvent e) {
-      final bool isKeyDown = e is RawKeyDownEvent;
-
+      final isKeyDown = e is RawKeyDownEvent;
       final keyLabel = e.data.logicalKey.keyLabel;
 
       if (keyLabel == 'a') {
         movingLeft = isKeyDown;
-      }
-
-      if (keyLabel == 'd') {
+      } else if (keyLabel == 'd') {
         movingRight = isKeyDown;
-      }
-
-      if (keyLabel == 'w') {
+      } else if (keyLabel == 'w') {
         movingUp = isKeyDown;
-      }
-
-      if (keyLabel == 's') {
+      } else if (keyLabel == 's') {
         movingDown = isKeyDown;
       }
     });

@@ -1,8 +1,7 @@
-import 'package:flame/components.dart';
-import 'package:flame/game.dart';
-
 import 'dart:ui';
 
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
 
 void main() {
@@ -25,7 +24,7 @@ class MyGame extends Game {
   }
 
   @override
-  void update(dt) {}
+  void update(double dt) {}
 
   @override
   void render(Canvas canvas) {

@@ -9,6 +9,7 @@ import '../extensions/size.dart';
 import 'game.dart';
 import 'game_loop.dart';
 
+// ignore: prefer_mixin
 class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   BuildContext buildContext;
   Game game;
@@ -31,7 +32,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void attach(PipelineOwner owner) {
     super.attach(owner);
-    game.attach(owner, buildContext);
+    game.attach(owner, this);
 
     game.pauseEngineFn = gameLoop.pause;
     game.resumeEngineFn = gameLoop.resume;
@@ -80,6 +81,6 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     game.lifecycleStateChange(state);
   }
 
-  @override
+  // ignore: annotate_overrides
   Size computeDryLayout(BoxConstraints constraints) => constraints.biggest;
 }

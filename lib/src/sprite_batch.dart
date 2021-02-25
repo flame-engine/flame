@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 
 import 'assets/images.dart';
+import 'extensions/image.dart';
 import 'extensions/vector2.dart';
 import 'flame.dart';
 import 'game/game.dart';
@@ -66,7 +67,10 @@ class BatchItem {
     required this.source,
     required this.transform,
     required this.color,
-  })   : matrix = Matrix4(
+  })  : assert(source != null),
+        assert(transform != null),
+        assert(color != null),
+        matrix = Matrix4(
           transform.scos, transform.ssin, 0, 0, //
           -transform.ssin, transform.scos, 0, 0, //
           0, 0, _defaultScale, 0, //
@@ -79,7 +83,7 @@ class BatchItem {
 /// The SpriteBatch API allows for rendering multiple items at once.
 ///
 /// This class allows for optimization when you want to draw many parts of an
-/// image onto the canvas. It is more efficient than using multiple calls to [drawImageRect]
+/// image onto the canvas. It is more efficient than using multiple calls to [Canvas.drawImageRect]
 /// and provides more functionality by allowing each [BatchItem] to have their own transform
 /// rotation and color.
 ///
@@ -142,14 +146,15 @@ class SpriteBatch {
   int get height => atlas.height;
 
   /// The size of the [atlas].
-  Vector2 get size => Vector2Extension.fromInts(width, height);
+  Vector2 get size => atlas.size;
 
   SpriteBatch(
     this.atlas, {
     this.defaultColor = const Color(0x00000000),
     this.defaultBlendMode = BlendMode.srcOver,
     this.defaultTransform,
-  });
+  })  : assert(atlas != null),
+        assert(defaultColor != null);
 
   /// Takes a path of an image, and optional arguments for the SpriteBatch.
   ///
@@ -172,10 +177,11 @@ class SpriteBatch {
 
   /// Add a new batch item using a RSTransform.
   ///
-  /// The [source] parameter is the source location on the [atlas]. You can position it
-  /// on the canvas using the [offset] parameter.
+  /// The [source] parameter is the source location on the [atlas].
   ///
-  /// The [color] paramater allows you to render a color behind the batch item, as a background color.
+  /// You can position, rotate and scale it on the canvas using the [transform] parameter.
+  ///
+  /// The [color] parameter allows you to render a color behind the batch item, as a background color.
   ///
   /// The [add] method may be a simpler way to add a batch item to the batch. However,
   /// if there is a way to factor out the computations of the sine and cosine of the
@@ -262,7 +268,7 @@ class SpriteBatch {
 
     if (kIsWeb) {
       for (final batchItem in _batchItems) {
-        paint..blendMode = blendMode ?? paint.blendMode;
+        paint..blendMode = blendMode ?? paint.blendMode ?? defaultBlendMode;
 
         canvas
           ..save()
@@ -282,7 +288,7 @@ class SpriteBatch {
         _transforms,
         _sources,
         _colors,
-        blendMode,
+        blendMode ?? defaultBlendMode,
         cullRect,
         paint,
       );

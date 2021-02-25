@@ -32,6 +32,7 @@ class MyParallaxComponent extends ParallaxComponent with HasGameRef<MyGame> {
         'trees.png',
         'foreground-trees.png',
       ],
+      size,
       baseVelocity: Vector2(20, 0),
       velocityMultiplierDelta: Vector2(1.8, 1.0),
     );

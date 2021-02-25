@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
+
 import 'assets/images.dart';
 import 'extensions/vector2.dart';
 import 'flame.dart';
@@ -63,21 +65,24 @@ class SpriteAnimationData {
   }
 
   /// Works just like [SpriteAnimationData.variable] but uses the same [stepTime] for all frames
-  SpriteAnimationData.sequenced({
+  factory SpriteAnimationData.sequenced({
     required int amount,
     required double stepTime,
     required Vector2 textureSize,
     int? amountPerRow,
     Vector2? texturePosition,
     bool loop = true,
-  }) : this.variable(
-          amount: amount,
-          amountPerRow: amountPerRow,
-          texturePosition: texturePosition,
-          textureSize: textureSize,
-          loop: loop,
-          stepTimes: List.filled(amount, stepTime),
-        );
+  }) {
+    assert(stepTime != null);
+    return SpriteAnimationData.variable(
+      amount: amount,
+      amountPerRow: amountPerRow,
+      texturePosition: texturePosition,
+      textureSize: textureSize,
+      loop: loop,
+      stepTimes: List.filled(amount, stepTime),
+    );
+  }
 }
 
 /// Represents a single sprite animation frame.
@@ -168,15 +173,16 @@ class SpriteAnimation {
     final jsonFrames = jsonData['frames'] as Map<String, dynamic>;
 
     final frames = jsonFrames.values.map((dynamic value) {
-      final frameData = value['frame'] as Map<String, dynamic>;
-      final int x = frameData['x'] as int;
-      final int y = frameData['y'] as int;
-      final int width = frameData['w'] as int;
-      final int height = frameData['h'] as int;
+      final map = value as Map;
+      final frameData = map['frame'] as Map<String, dynamic>;
+      final x = frameData['x'] as int;
+      final y = frameData['y'] as int;
+      final width = frameData['w'] as int;
+      final height = frameData['h'] as int;
 
-      final stepTime = (value['duration'] as int) / 1000;
+      final stepTime = (map['duration'] as int) / 1000;
 
-      final Sprite sprite = Sprite(
+      final sprite = Sprite(
         image,
         srcPosition: Vector2Extension.fromInts(x, y),
         srcSize: Vector2Extension.fromInts(width, height),
@@ -213,7 +219,7 @@ class SpriteAnimation {
   /// Sets a different step time to each frame. The sizes of the arrays must match.
   set variableStepTimes(List<double> stepTimes) {
     assert(stepTimes.length == frames.length);
-    for (int i = 0; i < frames.length; i++) {
+    for (var i = 0; i < frames.length; i++) {
       frames[i].stepTime = stepTimes[i];
     }
   }

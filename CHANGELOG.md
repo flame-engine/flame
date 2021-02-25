@@ -1,11 +1,35 @@
 # CHANGELOG
 
 ## [next]
+ - Migrate to null safety
+
+## 1.0.0-rc7
+>>>>>>> master
  - Moving device related methods (like `fullScreen`) from `util.dart` to `device.dart`
  - Moving render functions from `util.dart` to `extensions/canvas.dart`
  - Adapting ParallaxComponent contructors to match the pattern followed on other components
  - Adapting SpriteBatchComponent constructors to match the pattern used on other components
- - Migrate to null safety
+ - Improving Parallax APIs regarding handling its size and the use outside FCS
+ - Enabling direct import of Sprite and SpriteAnimation
+ - Renamed `Composition` to `ImageComposition` to prevent confusion with the composition component
+ - Added `rotation` and `anchor` arguments to `ImageComposition.add`
+ - Added `Image` extensions
+ - Added `Color` extensions
+ - Change RaisedButton to ElevatedButton in timer example
+ - Overhaul the draggables api to fix issues relating to local vs global positions
+ - Preventing errors caused by the premature use of size property on game
+ - Added a hitbox mixin for PositionComponent to make more accurate gestures
+ - Added a collision detection system
+ - Added geometrical shapes
+ - Fix `SpriteAnimationComponent.shouldRemove` use `Component.shouldRemove`
+ - Add assertion to make sure Draggables are safe to add
+ - Add utility methods to the Anchor class to make it more "enum like"
+ - Enable user-defined anchors
+ - Added `toImage` method for the `Sprite` class
+ - Uniform use of `dt` instead of `t` in all update methods
+ - Add more optional arguments for unified constructors of components
+ - Fix order that parent -> children render in
+>>>>>>> master
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
@@ -31,7 +55,10 @@
  - Move files to comply with the dart package layout convention
  - Fix gesture detection bug of children of `PositionComponent`
  - The `game` argument on `GameWidget` is now required
+<<<<<<< HEAD
  - Add hitbox mixin for PositionComponent to make more accurate gestures
+=======
+>>>>>>> master
 
 ## 1.0.0-rc5
  - Option for overlays to be already visible on the GameWidget
@@ -107,6 +134,13 @@
  - Generalize effects api to include all components
  - Extract all the audio related capabilities to a new package, flame_audio
  - Fix bug that sprite crashes without a position
+
+## 0.29.1-beta
+ - Fixing Game Render Box for flutter >= 1.25
+
+## 0.29.0
+- Update audioplayers to latest version (now `assets` will not be added to prefixes automatically)
+- Fix lint issues with 0.28.0
 
 ## 0.28.0
 - Fix spriteAsWidget deprecation message

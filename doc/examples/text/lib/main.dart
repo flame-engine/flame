@@ -30,20 +30,21 @@ class MyTextBox extends TextBoxComponent {
 
   @override
   void drawBackground(Canvas c) {
-    final Rect rect = Rect.fromLTWH(0, 0, width, height);
+    final rect = Rect.fromLTWH(0, 0, width, height);
     c.drawRect(rect, Paint()..color = const Color(0xFFFF00FF));
     final margin = boxConfig.margins;
-    final Rect innerRect = Rect.fromLTWH(
+    final innerRect = Rect.fromLTWH(
       margin.left,
       margin.top,
       width - margin.horizontal,
       height - margin.vertical,
     );
     c.drawRect(
-        innerRect,
-        Paint()
-          ..color = BasicPalette.white.color
-          ..style = PaintingStyle.stroke);
+      innerRect,
+      Paint()
+        ..color = BasicPalette.white.color
+        ..style = PaintingStyle.stroke,
+    );
   }
 }
 

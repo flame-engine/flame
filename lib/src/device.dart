@@ -2,11 +2,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-/// Provides methods for controlling the device (e.g. setting the screen to fullscreen).
+/// Provides methods for controlling the device (e.g. setting the screen to full-screen).
 ///
-/// To use this class, access it via [Flame.device]
+/// To use this class, access it via Flame.device.
 class Device {
-  /// Sets the app to be fullscreen (no buttons, bar or notifications on top).
+  /// Sets the app to be full-screen (no buttons, bar or notifications on top).
   Future<void> fullScreen() {
     if (kIsWeb) {
       // TODO: We probably could use dart:html and implement this for web as well

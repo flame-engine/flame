@@ -1,5 +1,6 @@
 import 'package:flutter/animation.dart';
 
+import '../../components.dart';
 import 'effects.dart';
 
 class RotateEffect extends SimplePositionComponentEffect {
@@ -19,7 +20,7 @@ class RotateEffect extends SimplePositionComponentEffect {
     void Function()? onComplete,
   })  : assert(
           (duration != null) ^ (speed != null),
-          "Either speed or duration necessary",
+          'Either speed or duration necessary',
         ),
         super(
           isInfinite,
@@ -33,7 +34,7 @@ class RotateEffect extends SimplePositionComponentEffect {
         );
 
   @override
-  void initialize(component) {
+  void initialize(PositionComponent component) {
     super.initialize(component);
     _startAngle = component.angle;
     _delta = isRelative ? angle : angle - _startAngle;

@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flame/sprite_batch.dart';
+import 'package:flame/sprite.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
@@ -35,14 +35,14 @@ class MySpriteBatchComponent extends SpriteBatchComponent
       color: Colors.redAccent,
     );
 
-    const NUM = 100;
+    const num = 100;
     final r = Random();
-    for (int i = 0; i < NUM; ++i) {
+    for (var i = 0; i < num; ++i) {
       final sx = r.nextInt(8) * 128.0;
       final sy = r.nextInt(8) * 128.0;
       final x = r.nextInt(gameRef!.size.x.toInt()).toDouble();
       final y =
-          r.nextInt(gameRef!.size.y ~/ 2).toDouble() + gameRef!.size.y / 2.0;
+          r.nextInt(gameRef!.size.y ~/ 2).toDouble() + gameRef.size.y / 2.0;
       spriteBatch!.add(
         source: Rect.fromLTWH(sx, sy, 128, 128),
         offset: Vector2(x - 64, y - 64),

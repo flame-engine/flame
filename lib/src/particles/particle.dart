@@ -2,16 +2,17 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/animation.dart';
+import 'package:meta/meta.dart';
 
 import '../components/component.dart';
 import '../components/particle_component.dart';
+import '../timer.dart';
 import 'accelerated_particle.dart';
 import 'composed_particle.dart';
 import 'moving_particle.dart';
 import 'rotating_particle.dart';
 import 'scaled_particle.dart';
 import 'translated_particle.dart';
-import '../timer.dart';
 
 /// A function which returns [Particle] when called
 typedef ParticleGenerator = Particle Function(int);
@@ -67,7 +68,7 @@ abstract class Particle {
 
   /// Getter which should be used by subclasses
   /// to get overall progress. Also allows to substitute
-  /// progres with other values, for example adding easing as in [CurvedParticle].
+  /// progress with other values, for example adding easing as in CurvedParticle.
   double get progress => _timer?.progress ?? 0.0;
 
   /// Should render this [Particle] to given [Canvas].
@@ -89,11 +90,11 @@ abstract class Particle {
   /// to pass down it's lifespan. Allows to only specify desired lifespan
   /// once, at the very top of the [Particle] tree which
   /// then will be propagated down using this method.
-  /// See [SingleChildParticle] or [ComposedParticle] for details.
+  /// See SingleChildParticle or [ComposedParticle] for details.
   void setLifespan(double lifespan) {
     _lifespan = lifespan;
     _timer?.stop();
-    final void Function() removeCallback = () => _shouldBeRemoved = true;
+    void removeCallback() => _shouldBeRemoved = true;
     _timer = Timer(lifespan, callback: removeCallback);
     _timer!.start();
   }
@@ -147,7 +148,11 @@ abstract class Particle {
   /// in radians with [RotatingParticle]
   Particle rotated([double angle = 0]) {
     return RotatingParticle(
-        child: this, lifespan: _lifespan, from: angle, to: angle);
+      child: this,
+      lifespan: _lifespan,
+      from: angle,
+      to: angle,
+    );
   }
 
   /// Rotates this particle from given angle
@@ -171,7 +176,7 @@ abstract class Particle {
   }
 
   /// Wraps this particle with [ParticleComponent]
-  /// to be used within the [BaseGame] component system.
+  /// to be used within the BaseGame component system.
   Component asComponent() {
     return ParticleComponent(particle: this);
   }

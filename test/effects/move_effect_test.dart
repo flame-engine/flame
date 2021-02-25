@@ -7,9 +7,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'effect_test_utils.dart';
 
 void main() {
-  final Random random = Random();
+  final random = Random();
   Vector2 randomVector2() => (Vector2.random(random) * 100)..round();
-  final List<Vector2> path = List.generate(3, (i) => randomVector2());
+  final path = List.generate(3, (i) => randomVector2());
   TestComponent component() => TestComponent(position: randomVector2());
 
   MoveEffect effect({bool isInfinite = false, bool isAlternating = false}) {

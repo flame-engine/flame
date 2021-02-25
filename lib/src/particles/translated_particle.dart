@@ -1,10 +1,12 @@
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
+
 import '../components/mixins/single_child_particle.dart';
 import 'particle.dart';
 
 /// Statically offset given child [Particle] by given [Offset]
-/// If you're loking to move the child, consider [MovingParticle]
+/// If you're looking to move the child, consider MovingParticle.
 class TranslatedParticle extends Particle with SingleChildParticle {
   @override
   Particle child;

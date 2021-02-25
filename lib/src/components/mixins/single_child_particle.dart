@@ -37,8 +37,8 @@ mixin SingleChildParticle on Particle {
   }
 
   @override
-  void update(double t) {
-    super.update(t);
-    child.update(t);
+  void update(double dt) {
+    super.update(dt);
+    child.update(dt);
   }
 }

@@ -1,8 +1,10 @@
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
+
 import '../components/mixins/single_child_particle.dart';
-import 'particle.dart';
 import 'curved_particle.dart';
+import 'particle.dart';
 
 /// A particle which rotates its child over the lifespan
 /// between two given bounds in radians

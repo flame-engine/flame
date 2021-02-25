@@ -32,20 +32,28 @@ class DraggableSquare extends PositionComponent with Draggable {
     debugColor = _isDragging ? Colors.greenAccent : Colors.purple;
   }
 
-  Vector2 dragDeltaPosition = Vector2.zero();
+  Vector2? initialPosition;
+  Vector2? dragDeltaPosition;
+
   @override
-  bool onReceiveDrag(DragEvent event) {
-    event.onUpdate = (DragUpdateDetails details) {
-      if (!_isDragging) {
-        _isDragging = true;
-        dragDeltaPosition =
-            event.initialPosition.toVector2() - position.clone();
-      }
-      position = details.localPosition.toVector2() - dragDeltaPosition;
-    };
-    event.onEnd = (DragEndDetails details) {
-      _isDragging = false;
-    };
+  bool onDragStart(int pointerId, Vector2 startPosition) {
+    initialPosition = startPosition;
+    return true;
+  }
+
+  @override
+  bool onDragUpdate(int pointerId, DragUpdateDetails details) {
+    if (!_isDragging) {
+      _isDragging = true;
+      dragDeltaPosition = initialPosition - position;
+    }
+    position = details.localPosition.toVector2() - dragDeltaPosition;
+    return true;
+  }
+
+  @override
+  bool onDragEnd(int pointerId, DragEndDetails details) {
+    _isDragging = false;
     return true;
   }
 }

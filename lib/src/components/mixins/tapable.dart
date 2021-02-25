@@ -1,10 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:meta/meta.dart';
 
-import '../base_component.dart';
-import '../component.dart';
+import '../../../game.dart';
 import '../../extensions/offset.dart';
 import '../../game/base_game.dart';
+import '../base_component.dart';
 
 mixin Tapable on BaseComponent {
   bool onTapCancel() {
@@ -51,8 +51,8 @@ mixin Tapable on BaseComponent {
 
 mixin HasTapableComponents on BaseGame {
   void _handleTapEvent(bool Function(Tapable child) tapEventHandler) {
-    for (Component c in components.toList().reversed) {
-      bool shouldContinue = true;
+    for (final c in components.toList().reversed) {
+      var shouldContinue = true;
       if (c is BaseComponent) {
         shouldContinue = c.propagateToChildren<Tapable>(tapEventHandler);
       }

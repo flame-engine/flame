@@ -10,33 +10,11 @@ mixin MultiTouchTapDetector on Game {
   void onLongTapDown(int pointerId, TapDownDetails details) {}
 }
 
-class DragEvent extends Drag {
-  final Offset initialPosition;
-
-  DragEvent(this.initialPosition);
-
-  void Function(DragUpdateDetails)? onUpdate;
-  void Function()? onCancel;
-  void Function(DragEndDetails)? onEnd;
-
-  @override
-  void update(details) {
-    onUpdate?.call(details);
-  }
-
-  @override
-  void cancel() {
-    onCancel?.call();
-  }
-
-  @override
-  void end(details) {
-    onEnd?.call(details);
-  }
-}
-
 mixin MultiTouchDragDetector on Game {
-  void onReceiveDrag(DragEvent drag) {}
+  void onDragStart(int pointerId, Vector2 startPosition) {}
+  void onDragUpdate(int pointerId, DragUpdateDetails details) {}
+  void onDragEnd(int pointerId, DragEndDetails details) {}
+  void onDragCancel(int pointerId) {}
 }
 
 // Basic touch detectors

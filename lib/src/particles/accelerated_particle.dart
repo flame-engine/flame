@@ -1,8 +1,10 @@
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
+
 import '../components/mixins/single_child_particle.dart';
-import 'particle.dart';
 import 'curved_particle.dart';
+import 'particle.dart';
 
 /// A particle serves as a container for basic
 /// acceleration physics.
@@ -36,10 +38,10 @@ class AcceleratedParticle extends CurvedParticle with SingleChildParticle {
   }
 
   @override
-  void update(double t) {
-    speed += acceleration * t;
-    position += speed * t - (acceleration * t * t) / 2;
+  void update(double dt) {
+    speed += acceleration * dt;
+    position += speed * dt - (acceleration * dt * dt) / 2;
 
-    super.update(t);
+    super.update(dt);
   }
 }

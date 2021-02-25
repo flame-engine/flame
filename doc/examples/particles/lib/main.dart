@@ -6,7 +6,7 @@ import 'package:flame/components.dart' hide Timer;
 import 'package:flame/timer.dart' as flame_timer;
 import 'package:flame/game.dart';
 import 'package:flame/particles.dart';
-import 'package:flame/spritesheet.dart';
+import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart' hide Image;
 
 void main() async {
@@ -85,8 +85,8 @@ class MyGame extends BaseGame {
     // as per defined grid parameters
     do {
       final particle = particles.removeLast();
-      final double col = particles.length % gridSize;
-      final double row = (particles.length ~/ gridSize).toDouble();
+      final col = particles.length % gridSize;
+      final row = (particles.length ~/ gridSize).toDouble();
       final cellCenter =
           (cellSize.clone()..multiply(Vector2(col, row))) + (cellSize * .5);
 
@@ -178,7 +178,7 @@ class MyGame extends BaseGame {
   }
 
   /// Same example as above, but
-  /// with easing, utilising [CurvedParticle] extension
+  /// with easing, utilizing [CurvedParticle] extension
   Particle easedMovingParticle() {
     return Particle.generate(
       count: 5,
@@ -193,7 +193,7 @@ class MyGame extends BaseGame {
     );
   }
 
-  /// Same example as above, but using awesome [Inverval]
+  /// Same example as above, but using awesome [Interval]
   /// curve, which "schedules" transition to happen between
   /// certain values of progress. In this example, circles will
   /// move from their initial to their final position
@@ -232,7 +232,7 @@ class MyGame extends BaseGame {
     );
   }
 
-  /// Using [ComputedParticle] to use custom tweening
+  /// Using [ComputedParticle] to provide a custom tween.
   /// In reality, you would like to keep as much of renderer state
   /// defined outside and reused between each call
   Particle steppedComputedParticle() {
@@ -258,20 +258,19 @@ class MyGame extends BaseGame {
   }
 
   /// Particle which is used in example below
-  Particle? reusablePatricle;
+  Particle? reusableParticle;
 
   /// A burst of white circles which actually using a single circle
   /// as a form of optimization. Look for reusing parts of particle effects
   /// whenever possible, as there are limits which are relatively easy to reach.
   Particle reuseParticles() {
-    reusablePatricle ??= circle();
+    reusableParticle ??= circle();
 
     return Particle.generate(
-      count: 10,
       generator: (i) => MovingParticle(
         curve: Interval(rnd.nextDouble() * .1, rnd.nextDouble() * .8 + .1),
         to: randomCellOffset() * .5,
-        child: reusablePatricle!,
+        child: reusableParticle!,
       ),
     );
   }
@@ -304,11 +303,12 @@ class MyGame extends BaseGame {
     return Particle.generate(
       count: count,
       generator: (i) => TranslatedParticle(
-          offset: Offset(
-            (i % perLine) * colWidth - halfCellSize.x + imageSize,
-            (i ~/ perLine) * rowHeight - halfCellSize.y + imageSize,
-          ),
-          child: reusableImageParticle!),
+        offset: Offset(
+          (i % perLine) * colWidth - halfCellSize.x + imageSize,
+          (i ~/ perLine) * rowHeight - halfCellSize.y + imageSize,
+        ),
+        child: reusableImageParticle!,
+      ),
     );
   }
 
@@ -325,7 +325,6 @@ class MyGame extends BaseGame {
   /// some non-linearity to something like [MovingParticle]
   Particle acceleratedParticles() {
     return Particle.generate(
-      count: 10,
       generator: (i) => AcceleratedParticle(
         speed:
             Offset(rnd.nextDouble() * 600 - 300, -rnd.nextDouble() * 600) * .2,
@@ -340,12 +339,12 @@ class MyGame extends BaseGame {
   /// Be aware that it's very easy to get *really* bad performance
   /// misusing composites.
   Particle paintParticle() {
-    final List<Color> colors = [
+    final colors = [
       const Color(0xffff0000),
       const Color(0xff00ff00),
       const Color(0xff0000ff),
     ];
-    final List<Offset> positions = [
+    final positions = [
       const Offset(-10, 10),
       const Offset(10, 10),
       const Offset(0, -14),
@@ -403,8 +402,8 @@ class MyGame extends BaseGame {
   /// use of [ComputedParticle] within other particles,
   /// mixing predefined and fully custom behavior.
   Particle fireworkParticle() {
-    // A pallete to paint over the "sky"
-    final List<Paint> paints = [
+    // A palette to paint over the "sky"
+    final paints = [
       Colors.amber,
       Colors.amberAccent,
       Colors.red,
@@ -417,11 +416,10 @@ class MyGame extends BaseGame {
     ].map<Paint>((color) => Paint()..color = color).toList();
 
     return Particle.generate(
-      count: 10,
       generator: (i) {
         final initialSpeed = randomCellOffset();
         final deceleration = initialSpeed * -1;
-        const gravity = const Offset(0, 40);
+        const gravity = Offset(0, 40);
 
         return AcceleratedParticle(
           speed: initialSpeed,
@@ -475,7 +473,7 @@ class MyGame extends BaseGame {
           .moving(to: cellSizeOffset.scale(1, -1))
           .scaled(2)
           .translated(halfCellSizeOffset.scale(-1, 1))
-          .accelerated(acceleration: halfCellSizeOffset.scale(-5, 5))
+          .accelerated(acceleration: halfCellSizeOffset.scale(-5, 5)),
     ]);
   }
 
@@ -488,7 +486,10 @@ class MyGame extends BaseGame {
 
     if (debugMode) {
       fpsTextConfig.render(
-          canvas, '${fps(120).toStringAsFixed(2)}fps', Vector2(0, size.y - 24));
+        canvas,
+        '${fps(120).toStringAsFixed(2)}fps',
+        Vector2(0, size.y - 24),
+      );
     }
   }
 
@@ -523,10 +524,7 @@ class MyGame extends BaseGame {
       columns: columns,
       rows: rows,
     );
-    final sprites = List<Sprite>.generate(
-      frames,
-      (i) => spritesheet.getSpriteById(i),
-    );
+    final sprites = List<Sprite>.generate(frames, spritesheet.getSpriteById);
 
     return SpriteAnimation.spriteList(sprites, stepTime: 0.1);
   }

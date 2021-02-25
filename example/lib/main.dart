@@ -21,8 +21,10 @@ class Palette {
   static const PaletteEntry blue = PaletteEntry(Color(0xFF0000FF));
 }
 
-class Square extends PositionComponent with HasGameRef<MyGame> {
-  static const SPEED = 0.25;
+class Square extends PositionComponent {
+  static const speed = 0.25;
+  static const squareSize = 128.0;
+
   static Paint white = Palette.white.paint;
   static Paint red = Palette.red.paint;
   static Paint blue = Palette.blue.paint;
@@ -37,22 +39,21 @@ class Square extends PositionComponent with HasGameRef<MyGame> {
   }
 
   @override
-  void update(double t) {
-    super.update(t);
-    angle += SPEED * t;
+  void update(double dt) {
+    super.update(dt);
+    angle += speed * dt;
     angle %= 2 * math.pi;
   }
 
   @override
   void onMount() {
     super.onMount();
-    size = Vector2.all(gameRef!.squareSize);
+    size = Vector2.all(squareSize);
     anchor = Anchor.center;
   }
 }
 
 class MyGame extends BaseGame with DoubleTapDetector, TapDetector {
-  final double squareSize = 128;
   bool running = true;
 
   MyGame() {
@@ -62,19 +63,19 @@ class MyGame extends BaseGame with DoubleTapDetector, TapDetector {
   }
 
   @override
-  void onTapUp(details) {
+  void onTapUp(TapUpDetails details) {
     final touchArea = Rect.fromCenter(
       center: details.localPosition,
       width: 20,
       height: 20,
     );
 
-    bool handled = false;
-    components.forEach((c) {
+    final handled = components.any((c) {
       if (c is PositionComponent && c.toRect().overlaps(touchArea)) {
-        handled = true;
         remove(c);
+        return true;
       }
+      return false;
     });
 
     if (!handled) {

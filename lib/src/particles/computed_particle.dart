@@ -7,7 +7,7 @@ import 'particle.dart';
 /// rendering should be stored elsewhere, so that this delegate could use it
 typedef ParticleRenderDelegate = void Function(Canvas c, Particle particle);
 
-/// An abstract [Particle] container which delegates renderign outside
+/// An abstract [Particle] container which delegates rendering outside
 /// Allows to implement very interesting scenarios from scratch.
 class ComputedParticle extends Particle {
   // A delegate function which will be called
