@@ -52,7 +52,7 @@ class Anchor {
   ///
   /// This should only be used for serialization purposes.
   String get name {
-    return _valueNames.containsKey(this) ? _valueNames[this] : 'Anchor($x, $y)';
+    return _valueNames[this] ?? 'Anchor($x, $y)';
   }
 
   /// Returns a string representation of this Anchor.
@@ -86,9 +86,11 @@ class Anchor {
       return _valueNames.entries.singleWhere((e) => e.value == name).key;
     } else {
       final regexp = RegExp(r'^\Anchor\(([^,]+), ([^\)]+)\)');
-      final matches = regexp.allMatches(name).first.group;
-      assert(matches != null, 'Bad Anchor format');
-      return Anchor(double.parse(matches(1)), double.parse(matches(2)));
+      final matches = regexp.allMatches(name).first.groups([1, 2]);
+      final x = matches[0];
+      final y = matches[1];
+      assert(x != null && y != null, 'bad anchor format');
+      return Anchor(double.parse(x), double.parse(y));
     }
   }
 
