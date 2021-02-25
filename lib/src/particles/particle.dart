@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/animation.dart';
-import 'package:meta/meta.dart';
 
 import '../components/component.dart';
 import '../components/particle_component.dart';

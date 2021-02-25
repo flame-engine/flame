@@ -1,8 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:meta/meta.dart';
-
 import '../components/mixins/single_child_particle.dart';
 import 'curved_particle.dart';
 import 'particle.dart';

@@ -24,7 +24,7 @@ class MyGame extends BaseGame {
 class MyParallaxComponent extends ParallaxComponent with HasGameRef<MyGame> {
   @override
   Future<void> onLoad() async {
-    parallax = await gameRef.loadParallax(
+    parallax = await gameRef!.loadParallax(
       [
         'bg.png',
         'mountain-far.png',

@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/animation.dart';
-import 'package:meta/meta.dart';
 
 import '../components/mixins/single_child_particle.dart';
 import '../particles/curved_particle.dart';

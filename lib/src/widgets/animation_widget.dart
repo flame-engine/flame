@@ -20,7 +20,7 @@ class SpriteAnimationWidget extends StatefulWidget {
   final bool playing;
 
   const SpriteAnimationWidget({
-    this.animation,
+    required this.animation,
     this.playing = true,
     this.anchor = Anchor.topLeft,
   });
