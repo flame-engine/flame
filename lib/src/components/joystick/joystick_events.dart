@@ -53,13 +53,13 @@ class JoystickDirectionalEvent {
 }
 
 class JoystickActionEvent {
-  final int? id;
+  final int id;
   final double intensity;
   final double radAngle;
   final ActionEvent? event;
 
   JoystickActionEvent({
-    this.id,
+    required this.id,
     this.intensity = 0.0,
     this.radAngle = 0.0,
     this.event,
