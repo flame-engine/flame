@@ -20,7 +20,7 @@ void main() {
 }
 
 class TapableSquare extends PositionComponent with Tapable {
-  Paint _randomPaint() {
+  static Paint _randomPaint() {
     final rng = math.Random();
     final color = Color.fromRGBO(
       rng.nextInt(256),
@@ -31,10 +31,9 @@ class TapableSquare extends PositionComponent with Tapable {
     return PaletteEntry(color).paint;
   }
 
-  late Paint currentPaint;
+  final Paint _paint = _randomPaint();
 
   TapableSquare({Vector2? position}) {
-    currentPaint = _randomPaint();
     size = Vector2.all(100);
     this.position = position ?? Vector2.all(100);
   }
@@ -42,7 +41,7 @@ class TapableSquare extends PositionComponent with Tapable {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    canvas.drawRect(size.toRect(), currentPaint);
+    canvas.drawRect(size.toRect(), _paint);
   }
 
   @override
