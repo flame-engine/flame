@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:meta/meta.dart';
-
 import '../anchor.dart';
 import '../extensions/vector2.dart';
 import '../sprite.dart';

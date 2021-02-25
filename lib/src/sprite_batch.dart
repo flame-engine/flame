@@ -27,7 +27,7 @@ extension SpriteBatchExtension on Game {
   }
 }
 
-/// This is the scale value used in [BatchItem.matrix], we can't determine this from the [Batchitem.transform],
+/// This is the scale value used in [BatchItem.matrix], we can't determine this from the [BatchItem.transform],
 /// but we also don't need to do so because it is already calculated inside the transform values.
 const _defaultScale = 0.0;
 
@@ -67,10 +67,7 @@ class BatchItem {
     required this.source,
     required this.transform,
     required this.color,
-  })  : assert(source != null),
-        assert(transform != null),
-        assert(color != null),
-        matrix = Matrix4(
+  })   : matrix = Matrix4(
           transform.scos, transform.ssin, 0, 0, //
           -transform.ssin, transform.scos, 0, 0, //
           0, 0, _defaultScale, 0, //
@@ -153,8 +150,7 @@ class SpriteBatch {
     this.defaultColor = const Color(0x00000000),
     this.defaultBlendMode = BlendMode.srcOver,
     this.defaultTransform,
-  })  : assert(atlas != null),
-        assert(defaultColor != null);
+  });
 
   /// Takes a path of an image, and optional arguments for the SpriteBatch.
   ///
@@ -268,7 +264,7 @@ class SpriteBatch {
 
     if (kIsWeb) {
       for (final batchItem in _batchItems) {
-        paint..blendMode = blendMode ?? paint.blendMode ?? defaultBlendMode;
+        paint..blendMode = blendMode ?? paint.blendMode;
 
         canvas
           ..save()

@@ -119,11 +119,11 @@ void main() {
     });
 
     test('tap on offset children', () {
-      final MyGame game = MyGame();
-      final MyTap child = MyTap()
+      final game = MyGame();
+      final child = MyTap()
         ..position = Vector2.all(100)
         ..size = Vector2.all(100);
-      final MyComposed wrapper = MyComposed()
+      final wrapper = MyComposed()
         ..position = Vector2.all(100)
         ..size = Vector2.all(300);
 

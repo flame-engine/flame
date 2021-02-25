@@ -8,14 +8,14 @@ import 'shape.dart';
 class Circle extends Shape {
   /// The [normalizedRadius] is how many percentages of the shortest edge of
   /// [size] that the circle should cover.
-  double normalizedRadius;
+  double normalizedRadius = 1;
 
   /// With this constructor you can create your [Circle] from a radius and
-  /// a position. Ir will also calculate the bounding rectangle [size] for the
+  /// a position. It will also calculate the bounding rectangle [size] for the
   /// [Circle].
   Circle({
-    double radius,
-    Vector2 position,
+    double? radius,
+    Vector2? position,
     double angle = 0,
   }) : super(
           position: position,
@@ -28,10 +28,10 @@ class Circle extends Shape {
   /// circle should fill.
   Circle.fromDefinition({
     this.normalizedRadius = 1.0,
-    Vector2 position,
-    Vector2 size,
-    double angle,
-  }) : super(position: position, size: size, angle: angle = 0);
+    Vector2? position,
+    Vector2? size,
+    double? angle,
+  }) : super(position: position, size: size, angle: angle ?? 0);
 
   double get radius => (min(size.x, size.y) / 2) * normalizedRadius;
 
@@ -106,6 +106,6 @@ class HitboxCircle extends Circle with HitboxShape {
   @override
   HitboxCircle({double definition = 1})
       : super.fromDefinition(
-          normalizedRadius: definition ?? 1,
+          normalizedRadius: definition,
         );
 }

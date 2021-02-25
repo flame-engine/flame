@@ -16,7 +16,7 @@ abstract class Shape {
   Vector2 relativePosition = Vector2.zero();
 
   /// The size is the bounding box of the [Shape]
-  Vector2 size;
+  Vector2? size;
 
   /// The angle of the shape from its initial definition
   double angle;
@@ -29,7 +29,7 @@ abstract class Shape {
 
   Shape({
     Vector2? position,
-    required this.size,
+    this.size,
     this.angle = 0,
   }) {
     this.position = position ?? Vector2.zero();

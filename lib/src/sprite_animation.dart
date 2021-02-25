@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:meta/meta.dart';
-
 import 'assets/images.dart';
 import 'extensions/vector2.dart';
 import 'flame.dart';
@@ -73,7 +71,6 @@ class SpriteAnimationData {
     Vector2? texturePosition,
     bool loop = true,
   }) {
-    assert(stepTime != null);
     return SpriteAnimationData.variable(
       amount: amount,
       amountPerRow: amountPerRow,
