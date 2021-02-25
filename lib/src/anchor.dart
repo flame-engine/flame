@@ -89,7 +89,7 @@ class Anchor {
       final matches = regexp.allMatches(name).first.groups([1, 2]);
       final x = matches[0];
       final y = matches[1];
-      assert(x == null || y == null, 'bad anchor format');
+      assert(x != null && y != null, 'bad anchor format');
       return Anchor(double.parse(x!), double.parse(y!));
     }
   }

@@ -124,7 +124,7 @@ class MoveEffect extends SimplePositionComponentEffect {
     final lastEndAt = _currentSubPath!.startAt;
     final localPercentage =
         (curveProgress - lastEndAt) / (_currentSubPath!.endAt - lastEndAt);
-    component.position = _currentSubPath!.previous +
+    component?.position = _currentSubPath!.previous +
         ((_currentSubPath!.v - _currentSubPath!.previous) * localPercentage);
   }
 }

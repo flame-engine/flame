@@ -74,7 +74,7 @@ abstract class Viewport {
 /// This basically no-ops the viewport.
 class DefaultViewport extends Viewport {
   @override
-  Vector2 canvasSize;
+  late Vector2 canvasSize;
 
   @override
   void render(Canvas c, void Function(Canvas c) renderGame) {
@@ -113,14 +113,14 @@ class DefaultViewport extends Viewport {
 /// used it will try to adapt the best as possible.
 class FixedResolutionViewport extends Viewport {
   @override
-  Vector2 canvasSize;
+  late Vector2 canvasSize;
 
   @override
-  Vector2 effectiveSize;
+  late Vector2 effectiveSize;
 
-  Vector2 scaledSize;
-  Vector2 resizeOffset;
-  double scale;
+  late Vector2 scaledSize;
+  late Vector2 resizeOffset;
+  late double scale;
 
   FixedResolutionViewport(this.effectiveSize);
 
@@ -138,10 +138,7 @@ class FixedResolutionViewport extends Viewport {
   @override
   void render(Canvas c, void Function(Canvas) renderGame) {
     c.save();
-    c.clipRect(
-      resizeOffset & scaledSize,
-      clipOp: ClipOp.intersect,
-    );
+    c.clipRect(resizeOffset & scaledSize);
     c.translateVector(resizeOffset);
     c.scale(scale, scale);
 

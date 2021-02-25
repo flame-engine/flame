@@ -12,7 +12,7 @@ extension ImageExtension on Image {
   ///
   /// Pixel order used the [ImageByteFormat.rawRgba] meaning it is: R G B A.
   Future<Uint8List> pixelsInUint8() async {
-    return (await toByteData()).buffer.asUint8List();
+    return (await toByteData())!.buffer.asUint8List();
   }
 
   /// Returns the bounding [Rect] of the image.

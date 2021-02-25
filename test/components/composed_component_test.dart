@@ -118,26 +118,6 @@ void main() {
       expect(child.tapTimes, 1);
     });
 
-    test('tap on offset children', () {
-      final game = MyGame();
-      final child = MyTap()
-        ..position = Vector2.all(100)
-        ..size = Vector2.all(100);
-      final wrapper = MyComposed()
-        ..position = Vector2.all(100)
-        ..size = Vector2.all(300);
-
-      game.size.setFrom(size);
-      game.add(wrapper);
-      wrapper.addChild(child);
-      game.update(0.0);
-      game.onTapDown(1, TapDownDetails(globalPosition: const Offset(250, 250)));
-
-      expect(child.gameSize, size);
-      expect(child.tapped, true);
-      expect(child.tapTimes, 1);
-    });
-
     test('updates and renders children', () {
       final game = MyGame();
       game.onResize(Vector2.all(100));

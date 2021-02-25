@@ -16,8 +16,12 @@ class MockCanvas extends Fake implements Canvas {
   @override
   void scale(double sx, [double? sy]) {
     final ssx = _normalize(sx);
-    final ssy = _normalize(sy);
-    methodCalls.add('scale($ssx, $ssy)');
+    if (sy == null) {
+      methodCalls.add('scale($ssx)');
+    } else {
+      final ssy = _normalize(sy);
+      methodCalls.add('scale($ssx, $ssy)');
+    }
   }
 
   double _normalize(double d) {
