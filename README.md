@@ -25,13 +25,13 @@ A minimalistic Flutter game engine.
 
 ## About 1.0.0
 
-This is a release candidate for version 1.0.0 of Flame. This is not ready for production use and the documentation found here is not completely updated according to the code, also everything here can be changed before the full release.
+Our goal is to release v1 soon. We are periodically launching RCs (release candidates) as we evolve the code, and we are already quite happy with where we are (but there might be still further changes). Our documentation is still not completely updated to v1, and things are still open to change.
 
-Use this version to get a preview of how the new Flame version will be and also to give the team feedback about the new structure and/or features.
+Please use this version to get a preview of how the new Flame version will be and also to give the team feedback about the new structure and/or features.
 
-Checkout the branches `develop-v0.x` and `master-v0.x` for the current last 0.x version. However no new updates will be added to v0 except for bugfixes.
+The `master` branch is the bleeding edge of the v1 migration. The `master-v0.x` branch is the latest v0 release (where we are still merging some patches and crucial fixes).
 
-The current v1 release is `1.0.0-rc6` on pub. The last stable version so far is `0.29.0`. Feel free to choose the one that better suits your need.
+The current v1 release is `1.0.0-rc7` on pub. The last stable version so far is `0.29.3`. Feel free to choose the one that better suits your need.
 
 ---
 
