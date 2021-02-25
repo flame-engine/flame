@@ -14,8 +14,8 @@ dependencies:
   flame:
       path: ../../../
   dashbook: ^0.0.6
+  cupertino_icons: ^1.0.2
 
-  cupertino_icons: ^0.1.2
 flutter:
   uses-material-design: true
   assets:
