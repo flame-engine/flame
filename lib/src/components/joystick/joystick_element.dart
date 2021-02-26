@@ -5,7 +5,7 @@ import '../../../extensions.dart';
 
 /// This is an element drawn on the canvas on the position [rect];
 ///
-/// It can be either a sprite or a paint (solid color rectangle). Not both.
+/// It can be either a sprite or a paint (solid color circle). Not both.
 class JoystickElement {
   final Sprite sprite;
   final Paint paint;
@@ -31,11 +31,7 @@ class JoystickElement {
       assert(paint != null, '`paint` must not be `null` if `sprite` is `null`');
 
       final radius = rect.width / 2;
-      c.drawCircle(
-        Offset(rect.left + radius, rect.top + radius),
-        radius,
-        paint,
-      );
+      c.drawCircle(rect.center, radius, paint);
     } else {
       sprite.render(
         c,

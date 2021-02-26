@@ -14,13 +14,17 @@ enum ActionEvent { down, up, move, cancel }
 
 class JoystickDirectionalEvent {
   final JoystickMoveDirectional directional;
+
+  /// How much the knob was moved, from 0 (center) to 1 (edge).
   final double intensity;
-  final double radAngle;
+
+  /// The direction the knob was moved towards.
+  final double angle;
 
   JoystickDirectionalEvent({
     this.directional,
     this.intensity = 0.0,
-    this.radAngle = 0.0,
+    this.angle = 0.0,
   });
 
   static JoystickMoveDirectional calculateDirectionalByDegrees(double degrees) {
@@ -48,25 +52,29 @@ class JoystickDirectionalEvent {
 
   @override
   String toString() {
-    return 'JoystickDirectionalEvent{directional: $directional, intensity: $intensity, radAngle: $radAngle}';
+    return 'JoystickDirectionalEvent{directional: $directional, intensity: $intensity, angle: $angle}';
   }
 }
 
 class JoystickActionEvent {
   final int id;
+
+  /// How much the knob was moved, from 0 (center) to 1 (edge).
   final double intensity;
-  final double radAngle;
+
+  /// The direction the knob was moved towards.
+  final double angle;
   final ActionEvent event;
 
   JoystickActionEvent({
     this.id,
     this.intensity = 0.0,
-    this.radAngle = 0.0,
+    this.angle = 0.0,
     this.event,
   });
 
   @override
   String toString() {
-    return 'JoystickActionEvent{id: $id, intensity: $intensity, radAngle: $radAngle, event: $event}';
+    return 'JoystickActionEvent{id: $id, intensity: $intensity, angle: $angle, event: $event}';
   }
 }

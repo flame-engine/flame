@@ -56,7 +56,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
         );
     this.actionPressed = actionPressed ??
         JoystickElement.paint(
-          Paint()..color = color.withOpacity(opacityBackground),
+          Paint()..color = color.withOpacity(opacityKnob),
         );
     this.backgroundDirection = backgroundDirection ??
         JoystickElement.paint(
@@ -131,7 +131,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
       final centerPosition = backgroundDirection.center;
 
       final atanDiff = _dragPosition - centerPosition;
-      final radAngle = atan2(atanDiff.y, atanDiff.x);
+      final angle = atan2(atanDiff.y, atanDiff.x);
 
       final unboundDist = centerPosition.distanceTo(_dragPosition);
 
@@ -141,22 +141,15 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
       final dist = min(unboundDist, _tileSize);
 
       // Calculate the knob position
-      final nextX = dist * cos(radAngle);
-      final nextY = dist * sin(radAngle);
-      final nextPoint = Vector2(nextX, nextY);
+      final nextX = cos(angle);
+      final nextY = sin(angle);
+      final nextPoint = Vector2(nextX, nextY) * dist;
 
       diff = backgroundDirection.center + nextPoint - action.center;
 
       final _intensity = dist / _tileSize;
 
-      joystickController.joystickAction(
-        JoystickActionEvent(
-          id: actionId,
-          event: ActionEvent.move,
-          intensity: _intensity,
-          radAngle: radAngle,
-        ),
-      );
+      sendEvent(ActionEvent.move, intensity: _intensity, angle: angle);
     } else {
       diff = _dragPosition - action.center;
     }
@@ -180,12 +173,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
       _dragPosition = startPosition;
       _dragging = true;
     }
-    joystickController.joystickAction(
-      JoystickActionEvent(
-        id: actionId,
-        event: ActionEvent.down,
-      ),
-    );
+    sendEvent(ActionEvent.down);
     tapDown();
     return false;
   }
@@ -222,13 +210,19 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   bool _finishDrag(ActionEvent event) {
     _dragging = false;
     _dragPosition = backgroundDirection.center;
+    sendEvent(event);
+    tapUp();
+    return true;
+  }
+
+  void sendEvent(ActionEvent event, {double intensity, double angle}) {
     joystickController.joystickAction(
       JoystickActionEvent(
         id: actionId,
         event: event,
+        intensity: intensity,
+        angle: angle,
       ),
     );
-    tapUp();
-    return true;
   }
 }
