@@ -7,28 +7,17 @@ import 'package:flutter/widgets.dart'
 
 import '../../../components.dart';
 import '../../../extensions.dart';
-import '../../sprite.dart';
 import 'joystick_component.dart';
+import 'joystick_element.dart';
 import 'joystick_events.dart';
-import 'joystick_utils.dart';
 
 class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
   final double size;
-  final Sprite spriteBackgroundDirectional;
-  final Sprite spriteKnobDirectional;
   final bool isFixed;
   final EdgeInsets margin;
-  final Color color;
-  final double opacityBackground;
-  final double opacityKnob;
 
-  Sprite _backgroundSprite;
-  Paint _backgroundPaint;
-  Rect _backgroundRect;
-
-  Sprite _knobSprite;
-  Paint _knobPaint;
-  Rect _knobRect;
+  JoystickElement background;
+  JoystickElement knob;
 
   bool _dragging = false;
   Vector2 _dragPosition;
@@ -39,29 +28,23 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
   Vector2 _screenSize;
 
   JoystickDirectional({
-    this.spriteBackgroundDirectional,
-    this.spriteKnobDirectional,
+    JoystickElement background,
+    JoystickElement knob,
     this.isFixed = true,
     this.margin = const EdgeInsets.only(left: 100, bottom: 100),
     this.size = 80,
-    this.color = Colors.blueGrey,
-    this.opacityBackground = 0.5,
-    this.opacityKnob = 0.8,
+    Color color = Colors.blueGrey,
+    double opacityBackground = 0.5,
+    double opacityKnob = 0.8,
   }) {
-    if (spriteBackgroundDirectional != null) {
-      _backgroundSprite = spriteBackgroundDirectional;
-    } else {
-      _backgroundPaint = Paint()
-        ..color = color.withOpacity(opacityBackground)
-        ..style = PaintingStyle.fill;
-    }
-    if (spriteKnobDirectional != null) {
-      _knobSprite = spriteKnobDirectional;
-    } else {
-      _knobPaint = Paint()
-        ..color = color.withOpacity(opacityKnob)
-        ..style = PaintingStyle.fill;
-    }
+    this.background = background ??
+        JoystickElement.paint(
+          Paint()..color = color.withOpacity(opacityBackground),
+        );
+    this.knob = knob ??
+        JoystickElement.paint(
+          Paint()..color = color.withOpacity(opacityKnob),
+        );
 
     _tileSize = size / 2;
   }
@@ -81,44 +64,29 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
     _screenSize = screenSize;
 
     final osBackground = Offset(margin.left, _screenSize.y - margin.bottom);
-    _backgroundRect = Rect.fromCircle(center: osBackground, radius: size / 2);
+    background.rect = Rect.fromCircle(center: osBackground, radius: size / 2);
+    knob.rect = Rect.fromCircle(center: osBackground, radius: size / 4);
 
-    _knobRect = Rect.fromCircle(
-      center: _backgroundRect.center,
-      radius: size / 4,
-    );
-
-    _dragPosition = _knobRect.center.toVector2();
+    _dragPosition = osBackground.toVector2();
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    JoystickUtils.renderControl(
-      canvas,
-      _backgroundSprite,
-      _backgroundRect,
-      _backgroundPaint,
-    );
-
-    JoystickUtils.renderControl(
-      canvas,
-      _knobSprite,
-      _knobRect,
-      _knobPaint,
-    );
+    background.render(canvas);
+    knob.render(canvas);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
     if (_dragging) {
-      final delta = _dragPosition - _backgroundRect.center.toVector2();
+      // Distance between the center of joystick background & drag position
+      final centerPosition = background.center;
+
+      final delta = _dragPosition - centerPosition;
       final radAngle = atan2(delta.y, delta.x);
       final degrees = radAngle * 180 / pi;
-
-      // Distance between the center of joystick background & drag position
-      final centerPosition = _backgroundRect.center.toVector2();
 
       // The maximum distance for the knob position the edge of
       // the background + half of its own size. The knob can wander in the
@@ -128,10 +96,10 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
       // Calculation the knob position
       final nextX = dist * cos(radAngle);
       final nextY = dist * sin(radAngle);
-      final nextPoint = Offset(nextX, nextY);
+      final nextPoint = Vector2(nextX, nextY);
 
-      final diff = _backgroundRect.center + nextPoint - _knobRect.center;
-      _knobRect = _knobRect.shift(diff);
+      final diff = centerPosition + nextPoint - knob.center;
+      knob.shift(diff);
 
       final _intensity = dist / _tileSize;
 
@@ -151,16 +119,14 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
         radAngle: radAngle,
       ));
     } else {
-      if (_knobRect != null) {
-        final diff = _dragPosition - _knobRect.center.toVector2();
-        _knobRect = _knobRect.shift(diff.toOffset());
-      }
+      final diff = _dragPosition - knob.center;
+      knob.shift(diff);
     }
   }
 
   @override
   bool containsPoint(Vector2 point) {
-    final directional = _backgroundRect?.inflate(50.0);
+    final directional = background.rect?.inflate(50.0);
     return directional?.containsPoint(point) == true;
   }
 
@@ -183,13 +149,13 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
       return;
     }
 
-    _backgroundRect = Rect.fromCircle(
+    background.rect = Rect.fromCircle(
       center: position.toOffset(),
       radius: size / 2,
     );
 
-    _knobRect = Rect.fromCircle(
-      center: _backgroundRect.center,
+    knob.rect = Rect.fromCircle(
+      center: position.toOffset(),
       radius: size / 4,
     );
   }
@@ -208,7 +174,7 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
   @override
   bool onDragEnd(int pointerId, DragEndDetails details) {
     _dragging = false;
-    _dragPosition = _backgroundRect.center.toVector2();
+    _dragPosition = background.center;
     joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
       directional: JoystickMoveDirectional.idle,
     ));
@@ -218,7 +184,7 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
   @override
   bool onDragCancel(int pointerId) {
     _dragging = false;
-    _dragPosition = _backgroundRect.center.toVector2();
+    _dragPosition = background.center;
     joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
       directional: JoystickMoveDirectional.idle,
     ));
