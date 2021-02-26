@@ -17,17 +17,11 @@ class MyGame extends BaseGame
     with MultiTouchTapDetector, MultiTouchDragDetector {
   final _whitePaint = BasicPalette.white.paint;
 
-  Paint _paint;
-
   final Map<int, Rect> _taps = {};
 
   Vector2 _start;
   Vector2 _end;
   Rect _panRect;
-
-  MyGame() {
-    _paint = _whitePaint;
-  }
 
   @override
   void onTapDown(int pointerId, TapDownDetails details) {
@@ -83,11 +77,11 @@ class MyGame extends BaseGame
   void render(Canvas canvas) {
     super.render(canvas);
     _taps.values.forEach((rect) {
-      canvas.drawRect(rect, _paint);
+      canvas.drawRect(rect, _whitePaint);
     });
 
     if (_panRect != null) {
-      canvas.drawRect(_panRect, _paint);
+      canvas.drawRect(_panRect, _whitePaint);
     }
   }
 }

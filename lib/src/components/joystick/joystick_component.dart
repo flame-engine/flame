@@ -55,8 +55,6 @@ class JoystickComponent extends JoystickController {
   void removeAction(int actionId) {
     final action = children
         .firstWhere((e) => e is JoystickAction && e.actionId == actionId);
-    if (action != null) {
-      removeChild(action);
-    }
+    removeChild(action);
   }
 }

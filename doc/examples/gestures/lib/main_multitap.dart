@@ -15,13 +15,7 @@ void main() {
 class MyGame extends BaseGame with MultiTouchTapDetector {
   final _whitePaint = BasicPalette.white.paint;
 
-  Paint _paint;
-
   final Map<int, Rect> _taps = {};
-
-  MyGame() {
-    _paint = _whitePaint;
-  }
 
   @override
   void onTapDown(int pointerId, TapDownDetails details) {
@@ -47,7 +41,7 @@ class MyGame extends BaseGame with MultiTouchTapDetector {
   void render(Canvas canvas) {
     super.render(canvas);
     _taps.values.forEach((rect) {
-      canvas.drawRect(rect, _paint);
+      canvas.drawRect(rect, _whitePaint);
     });
   }
 }

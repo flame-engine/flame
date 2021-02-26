@@ -37,16 +37,13 @@ class MyGame extends BaseGame {
   /// Defines the lifespan of all the particles in these examples
   final sceneDuration = const Duration(seconds: 1);
 
-  Vector2 cellSize;
-  Vector2 halfCellSize;
+  Vector2 get cellSize => size / gridSize;
+  Vector2 get halfCellSize => cellSize / 2;
 
   @override
   Future<void> onLoad() async {
     await images.load('zap.png');
     await images.load('boom3.png');
-
-    cellSize = size / gridSize;
-    halfCellSize = cellSize * .5;
 
     // Spawn new particles every second
     Timer.periodic(sceneDuration, (_) => spawnParticles());
@@ -87,8 +84,7 @@ class MyGame extends BaseGame {
       final particle = particles.removeLast();
       final col = particles.length % gridSize;
       final row = (particles.length ~/ gridSize).toDouble();
-      final cellCenter =
-          (cellSize.clone()..multiply(Vector2(col, row))) + (cellSize * .5);
+      final cellCenter = (cellSize..multiply(Vector2(col, row))) + halfCellSize;
 
       add(
         // Bind all the particles to a [Component] update
