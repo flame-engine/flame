@@ -19,5 +19,12 @@ void main() {
       expect(const Anchor(0.2, 0.2).toString(), 'Anchor(0.2, 0.2)');
       expect(Anchor.valueOf('Anchor(0.2, 0.2)'), const Anchor(0.2, 0.2));
     });
+
+    test('fail to parse invalid anchor', () async {
+      expect(
+        () => Anchor.valueOf('foobar'),
+        throwsA(const TypeMatcher<AssertionError>()),
+      );
+    });
   });
 }

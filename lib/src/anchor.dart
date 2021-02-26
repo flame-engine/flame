@@ -86,11 +86,9 @@ class Anchor {
       return _valueNames.entries.singleWhere((e) => e.value == name).key;
     } else {
       final regexp = RegExp(r'^\Anchor\(([^,]+), ([^\)]+)\)');
-      final matches = regexp.allMatches(name).first.groups([1, 2]);
-      final x = matches[0];
-      final y = matches[1];
-      assert(x != null && y != null, 'bad anchor format');
-      return Anchor(double.parse(x), double.parse(y));
+      final matches = regexp.firstMatch(name)?.groups([1, 2]);
+      assert(matches != null && matches.length == 2, 'Bad anchor format');
+      return Anchor(double.parse(matches[0]), double.parse(matches[1]));
     }
   }
 
