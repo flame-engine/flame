@@ -81,11 +81,7 @@ class MyGame extends BaseGame
     });
 
     if (_panRect != null) {
-<<<<<<< HEAD
       canvas.drawRect(_panRect!, _whitePaint);
-=======
-      canvas.drawRect(_panRect, _whitePaint);
->>>>>>> master
     }
   }
 }
