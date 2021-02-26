@@ -25,13 +25,13 @@ A minimalistic Flutter game engine.
 
 ## About 1.0.0
 
-This is a release candidate for version 1.0.0 of Flame. This is not ready for production use and the documentation found here is not completely updated according to the code, also everything here can be changed before the full release.
+Our goal is to release v1 soon. We are periodically launching RCs (release candidates) as we evolve the code, and we are already quite happy with where we are (but there might still be further changes). Our documentation is still not completely updated to v1, and things are still open to change.
 
-Use this version to get a preview of how the new Flame version will be and also to give the team feedback about the new structure and/or features.
+Please use this version to get a preview of the new Flame version and also to give the team feedback about the new structure and/or features.
 
-Checkout the branches `develop-v0.x` and `master-v0.x` for the current last 0.x version. However no new updates will be added to v0 except for bugfixes.
+The `master` branch is the bleeding edge of the v1 migration. The `master-v0.x` branch is the latest v0 release (where we are still merging some patches and crucial fixes).
 
-The current v1 release is `1.0.0-rc6` on pub. The last stable version so far is `0.29.0`. Feel free to choose the one that better suits your need.
+The current v1 release is <a title="Pub" href="https://pub.dartlang.org/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout&include_prereleases" /></a> on pub. The latest stable version so far is <a title="Pub" href="https://pub.dartlang.org/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a>. Feel free to choose the one that better suits your need.
 
 ---
 
@@ -99,13 +99,13 @@ You can also show on your repository that your game is made with Flame by using 
 
 ## Contributing
 
-__Warning__: We are working on bringing Flame to its first stable version, updates on `0.x` versions are frozen, except for bugs. If you want to contribute on that version, by sure that it is a bugfix. For contributions for the stable version, your PR must point to the `v1.0.0` branch and by sure to talk about your contribution to the team, which is accessible on [Discord](https://discord.gg/pxrBmy4).
+__Warning__: We are working on bringing Flame to its first stable version, updates on `0.x` versions are frozen, except for crucial bug fixes. If you want to contribute to that version, please be mindful of that, and use the `master-v0.x` branch. For contributions for v1, your PR must point to the `master` branch. If in doubt, make sure to talk about your contribution to the team, either via an issue or [Discord](https://discord.gg/pxrBmy4).
 
 Any help is appreciated! Comments, suggestions, issues, PRs.
 
 Have you found a bug or have a suggestion of how to enhance Flame, open an issue and we will take a look at it as soon as possible.
 
-Do you want to contribute with a PR? PRs are always welcome, just be sure to create it from the `develop` branch and follow the [checklist](.github/pull_request_template.md) which will appear when you open it.
+Do you want to contribute with a PR? PRs are always welcome, just be sure to create it from the correct branch (see above) and follow the [checklist](.github/pull_request_template.md) which will appear when you open it.
 
 ## Getting started
 

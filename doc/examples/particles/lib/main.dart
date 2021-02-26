@@ -84,8 +84,7 @@ class MyGame extends BaseGame {
       final particle = particles.removeLast();
       final col = particles.length % gridSize;
       final row = (particles.length ~/ gridSize).toDouble();
-      final cellCenter =
-          (cellSize..multiply(Vector2(col, row))) + (cellSize * .5);
+      final cellCenter = (cellSize..multiply(Vector2(col, row))) + halfCellSize;
 
       add(
         // Bind all the particles to a [Component] update
