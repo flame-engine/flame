@@ -20,7 +20,7 @@ class JoystickDirectionalEvent {
   /// How much the knob was moved, from 0 (center) to 1 (edge).
   final double intensity;
 
-  /// The direction the knob was moved towards.
+  /// The direction the knob was moved towards (in radians).
   ///
   /// It uses the trigonometric circle convention (i.e. start on the
   /// positive x-axis and rotates counter-clockwise).
@@ -63,7 +63,10 @@ class JoystickActionEvent {
   /// How much the knob was moved, from 0 (center) to 1 (edge).
   final double intensity;
 
-  /// The direction the knob was moved towards.
+  /// The direction the knob was moved towards (in radians).
+  ///
+  /// It uses the trigonometric circle convention (i.e. start on the
+  /// positive x-axis and rotates counter-clockwise).
   final double angle;
 
   /// What action was performed in this button.
