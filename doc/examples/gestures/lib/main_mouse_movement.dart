@@ -16,7 +16,7 @@ void main() {
 class MyGame extends BaseGame with MouseMovementDetector {
   static const speed = 200.0;
 
-  Vector2 position = Vector2(0, 0);
+  Vector2 position = Vector2.zero();
   Vector2 target;
 
   final Paint _blue = Paint()..color = const Color(0xFF0000FF);
