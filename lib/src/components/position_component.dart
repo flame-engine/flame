@@ -51,6 +51,11 @@ abstract class PositionComponent extends BaseComponent {
   /// Get the relative top left position regardless of the anchor and angle
   Vector2 get topLeftPosition => anchor.translate(position, size);
 
+  /// Set the top left position regardless of the anchor
+  set topLeftPosition(Vector2 position) {
+    this.position = position + (anchor.toVector2()..multiply(size));
+  }
+
   /// Get the absolute top left position regardless of whether it is a child or not
   Vector2 get absoluteTopLeftPosition {
     final p = parent;
@@ -59,21 +64,6 @@ abstract class PositionComponent extends BaseComponent {
     } else {
       return topLeftPosition;
     }
-  }
-
-  /// Get the position that everything in this component is positioned in relation to
-  Vector2 get absoluteCanvasPosition {
-    final p = parent;
-    if (p is PositionComponent) {
-      return p.absoluteTopLeftPosition;
-    } else {
-      return Vector2.zero();
-    }
-  }
-
-  /// Set the top left position regardless of the anchor
-  set topLeftPosition(Vector2 position) {
-    this.position = position + (anchor.toVector2()..multiply(size));
   }
 
   /// Get the position that everything in this component is positioned in relation to
