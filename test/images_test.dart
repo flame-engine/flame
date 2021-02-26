@@ -15,7 +15,6 @@ void main() {
         data[i + 2] = 255;
         data[i + 3] = 255;
       }
-
       final image = await Flame.images.decodeImageFromPixels(
         data,
         8,
@@ -23,6 +22,7 @@ void main() {
         // ignore: avoid_redundant_argument_values
         runAsWeb: false, // default value is kIsWeb
       );
+
       expect((await image.toByteData())!.buffer.asUint8List(), equals(output));
     });
 
@@ -34,7 +34,6 @@ void main() {
         data[i + 2] = 255;
         data[i + 3] = 255;
       }
-
       final image = await Flame.images.decodeImageFromPixels(
         data,
         8,
@@ -42,6 +41,7 @@ void main() {
         // ignore: avoid_redundant_argument_values
         runAsWeb: true, // default value is kIsWeb
       );
+
       expect((await image.toByteData())!.buffer.asUint8List(), equals(output));
     });
   });
