@@ -19,7 +19,7 @@ class JoystickElement {
   Vector2 get center => rect.center.toVector2();
 
   void shift(Vector2 diff) {
-    rect?.shift(diff.toOffset());
+    rect = rect?.shift(diff.toOffset());
   }
 
   void render(Canvas c) {
