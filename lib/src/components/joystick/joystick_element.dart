@@ -5,7 +5,7 @@ import '../../../extensions.dart';
 
 /// This is an element drawn on the canvas on the position [rect];
 ///
-/// It can be either a sprite or a paint (solid color circle). Not both.
+/// It can be either a [sprite] or a [paint] (solid color circle). Not both.
 class JoystickElement {
   final Sprite sprite;
   final Paint paint;

@@ -13,12 +13,17 @@ enum JoystickMoveDirectional {
 enum ActionEvent { down, up, move, cancel }
 
 class JoystickDirectionalEvent {
+  /// The direction the knob was moved towards, converted to a set of 8
+  /// cardinal directions.
   final JoystickMoveDirectional directional;
 
   /// How much the knob was moved, from 0 (center) to 1 (edge).
   final double intensity;
 
   /// The direction the knob was moved towards.
+  ///
+  /// It uses the trigonometric circle convention (i.e. start on the
+  /// positive x-axis and rotates counter-clockwise).
   final double angle;
 
   JoystickDirectionalEvent({
@@ -49,14 +54,10 @@ class JoystickDirectionalEvent {
       return JoystickMoveDirectional.idle;
     }
   }
-
-  @override
-  String toString() {
-    return 'JoystickDirectionalEvent{directional: $directional, intensity: $intensity, angle: $angle}';
-  }
 }
 
 class JoystickActionEvent {
+  /// The id of this action as defined in the setup code.
   final int id;
 
   /// How much the knob was moved, from 0 (center) to 1 (edge).
@@ -64,6 +65,8 @@ class JoystickActionEvent {
 
   /// The direction the knob was moved towards.
   final double angle;
+
+  /// What action was performed in this button.
   final ActionEvent event;
 
   JoystickActionEvent({
@@ -72,9 +75,4 @@ class JoystickActionEvent {
     this.angle = 0.0,
     this.event,
   });
-
-  @override
-  String toString() {
-    return 'JoystickActionEvent{id: $id, intensity: $intensity, angle: $angle, event: $event}';
-  }
 }
