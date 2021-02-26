@@ -31,7 +31,7 @@ Please use this version to get a preview of the new Flame version and also to gi
 
 The `master` branch is the bleeding edge of the v1 migration. The `master-v0.x` branch is the latest v0 release (where we are still merging some patches and crucial fixes).
 
-The current v1 release is `1.0.0-rc7` on pub. The latest stable version so far is `0.29.3`. Feel free to choose the one that better suits your need.
+The current v1 release is <a title="Pub" href="https://pub.dartlang.org/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout&include_prereleases" /></a> on pub. The latest stable version so far is <a title="Pub" href="https://pub.dartlang.org/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a>. Feel free to choose the one that better suits your need.
 
 ---
 
