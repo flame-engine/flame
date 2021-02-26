@@ -25,13 +25,13 @@ A minimalistic Flutter game engine.
 
 ## About 1.0.0
 
-Our goal is to release v1 soon. We are periodically launching RCs (release candidates) as we evolve the code, and we are already quite happy with where we are (but there might be still further changes). Our documentation is still not completely updated to v1, and things are still open to change.
+Our goal is to release v1 soon. We are periodically launching RCs (release candidates) as we evolve the code, and we are already quite happy with where we are (but there might still be further changes). Our documentation is still not completely updated to v1, and things are still open to change.
 
-Please use this version to get a preview of how the new Flame version will be and also to give the team feedback about the new structure and/or features.
+Please use this version to get a preview of the new Flame version and also to give the team feedback about the new structure and/or features.
 
 The `master` branch is the bleeding edge of the v1 migration. The `master-v0.x` branch is the latest v0 release (where we are still merging some patches and crucial fixes).
 
-The current v1 release is `1.0.0-rc7` on pub. The last stable version so far is `0.29.3`. Feel free to choose the one that better suits your need.
+The current v1 release is `1.0.0-rc7` on pub. The latest stable version so far is `0.29.3`. Feel free to choose the one that better suits your need.
 
 ---
 
@@ -99,7 +99,7 @@ You can also show on your repository that your game is made with Flame by using 
 
 ## Contributing
 
-__Warning__: We are working on bringing Flame to its first stable version, updates on `0.x` versions are frozen, except for crucial bug fixes. If you want to contribute on that version, please be mindful of that, and use the `master-v0.x` branch. For contributions for v1, your PR must point to the `master` branch. If in doubt, make sure to talk about your contribution to the team, either via an issue or [Discord](https://discord.gg/pxrBmy4).
+__Warning__: We are working on bringing Flame to its first stable version, updates on `0.x` versions are frozen, except for crucial bug fixes. If you want to contribute to that version, please be mindful of that, and use the `master-v0.x` branch. For contributions for v1, your PR must point to the `master` branch. If in doubt, make sure to talk about your contribution to the team, either via an issue or [Discord](https://discord.gg/pxrBmy4).
 
 Any help is appreciated! Comments, suggestions, issues, PRs.
 
