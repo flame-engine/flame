@@ -8,14 +8,14 @@ import 'package:flame/src/geometry/collision_detection.dart'
 import 'package:test/test.dart';
 
 class _TestBlock extends PositionComponent with Hitbox, Collidable {
-  Set<Collidable> collisionList = {};
-  Set<Collidable> cacheCollisionList = {};
+  Set<Collidable> onCollisions = {};
+  Set<Collidable> cacheCollisions = {};
   _TestBlock() {
     addShape(HitboxCircle());
   }
   @override
   void onCollision(Set<Vector2> points, Collidable other) {
-    collisionList.add(other);
+    onCollisions.add(other);
     super.onCollision(points, other);
   }
 }
@@ -69,6 +69,21 @@ void _testCollisionDetection(List<Collidable> collidables) {
 
 void main() {
   group('collision_detection_make_activity', () {
+    test('Activity Marker is no empty tests', () {
+      final tba = _TestBlockA(Vector2(0, 0), Vector2(10, 10));
+      final tbb = _TestBlockA(Vector2(0, 0), Vector2(10, 10));
+      final tbc = _TestBlockA(Vector2(0, 0), Vector2(10, 10));
+      final tbs = [tba, tbb, tbc];
+      _testCollisionDetection(tbs);
+      tbs.forEach((element) {
+        element.cacheCollisions = element.onCollisions;
+      });
+      CollisionDetectionFunction.collisionDetection(tbs);
+      tbs.forEach((element) {
+        expect(element.cacheCollisions.isNotEmpty, true);
+        expect(element.onCollisions.isNotEmpty, true);
+      });
+    });
     test('Activity Marker tests', () {
       final size = Vector2(5, 5);
       final vList = <Vector2>[];
@@ -93,23 +108,23 @@ void main() {
       cList.shuffle();
       _testCollisionDetection(cList);
       cList.forEach((element) {
-        element.cacheCollisionList = element.collisionList;
+        element.cacheCollisions = element.onCollisions;
       });
       CollisionDetectionFunction.collisionDetection(cList);
       cList.where((element) {
         return element.activeCollision;
       }).forEach((element) {
         expect(
-          element.cacheCollisionList.length == element.collisionList.length,
+          element.cacheCollisions.length == element.onCollisions.length,
           true,
         );
 
         expect(
           (<Collidable>{}
-                    ..addAll(element.cacheCollisionList)
-                    ..addAll(element.collisionList))
+                    ..addAll(element.cacheCollisions)
+                    ..addAll(element.onCollisions))
                   .length ==
-              element.collisionList.length,
+              element.onCollisions.length,
           true,
         );
       });
@@ -139,23 +154,23 @@ void main() {
       cList.shuffle();
       _testCollisionDetection(cList);
       cList.forEach((element) {
-        element.cacheCollisionList = element.collisionList;
+        element.cacheCollisions = element.onCollisions;
       });
       CollisionDetectionFunction.collisionDetection(cList);
       cList.where((element) {
         return element.activeCollision;
       }).forEach((element) {
         expect(
-          element.cacheCollisionList.length == element.collisionList.length,
+          element.cacheCollisions.length == element.onCollisions.length,
           true,
         );
 
         expect(
           (<Collidable>{}
-                    ..addAll(element.cacheCollisionList)
-                    ..addAll(element.collisionList))
+                    ..addAll(element.cacheCollisions)
+                    ..addAll(element.onCollisions))
                   .length ==
-              element.collisionList.length,
+              element.onCollisions.length,
           true,
         );
       });
@@ -187,22 +202,22 @@ void main() {
       cList.shuffle();
       _testCollisionDetection(cList);
       cList.forEach((element) {
-        element.cacheCollisionList = element.collisionList;
+        element.cacheCollisions = element.onCollisions;
       });
       CollisionDetectionFunction.collisionDetection(cList);
       cList.where((element) {
         return element.activeCollision;
       }).forEach((element) {
         expect(
-          element.cacheCollisionList.length == element.collisionList.length,
+          element.cacheCollisions.length == element.onCollisions.length,
           true,
         );
         expect(
           (<Collidable>{}
-                    ..addAll(element.cacheCollisionList)
-                    ..addAll(element.collisionList))
+                    ..addAll(element.cacheCollisions)
+                    ..addAll(element.onCollisions))
                   .length ==
-              element.collisionList.length,
+              element.onCollisions.length,
           true,
         );
       });

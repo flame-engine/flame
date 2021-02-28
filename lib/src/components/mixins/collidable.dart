@@ -4,10 +4,10 @@ import '../../geometry/rectangle.dart';
 import 'hitbox.dart';
 
 mixin Collidable on Hitbox {
-  /// Set whether [collidable] is active
-  /// If [active collision] is set to true, collision with other [collisionable] will be actively checked in [collisiondetection]
-  /// [collisable] whose [active collisional] is set to false will not actively check collisions with other [collisable],
-  /// so as to prevent collision detection between stationary [collisable] and other stationary [collisable], so as to improve the performance of [collisiondetection]
+  /// Set whether [Collidable] is active
+  /// If [activeCollision] is set to true, collision with other [Collidable] will be actively checked in [collisionDetection]
+  /// [Collidable] whose [activeCollision] is set to false will not actively check collisions with other [Collidable],
+  /// so as to prevent collision detection between stationary [Collidable] and other stationary [Collidable], so as to improve the performance of [collisionDetection]
   bool activeCollision = true;
 
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {}
