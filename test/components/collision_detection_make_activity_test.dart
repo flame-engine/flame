@@ -8,14 +8,14 @@ import 'package:flame/src/geometry/collision_detection.dart'
 import 'package:test/test.dart';
 
 class _TestBlock extends PositionComponent with Hitbox, Collidable {
-  Set<Collidable> onCollisions = {};
-  Set<Collidable> cacheCollisions = {};
+  Set<Collidable> oncollidables = {};
+  Set<Collidable> cachecollidables = {};
   _TestBlock() {
     addShape(HitboxCircle());
   }
   @override
   void onCollision(Set<Vector2> points, Collidable other) {
-    onCollisions.add(other);
+    oncollidables.add(other);
     super.onCollision(points, other);
   }
 }
@@ -76,12 +76,12 @@ void main() {
       final tbs = [tba, tbb, tbc];
       _testCollisionDetection(tbs);
       tbs.forEach((element) {
-        element.cacheCollisions = element.onCollisions;
+        element.cachecollidables = element.oncollidables;
       });
       CollisionDetectionFunction.collisionDetection(tbs);
       tbs.forEach((element) {
-        expect(element.cacheCollisions.isNotEmpty, true);
-        expect(element.onCollisions.isNotEmpty, true);
+        expect(element.cachecollidables.isNotEmpty, true);
+        expect(element.oncollidables.isNotEmpty, true);
       });
     });
     test('Activity Marker tests', () {
@@ -108,23 +108,23 @@ void main() {
       cList.shuffle();
       _testCollisionDetection(cList);
       cList.forEach((element) {
-        element.cacheCollisions = element.onCollisions;
+        element.cachecollidables = element.oncollidables;
       });
       CollisionDetectionFunction.collisionDetection(cList);
       cList.where((element) {
         return element.activeCollision;
       }).forEach((element) {
         expect(
-          element.cacheCollisions.length == element.onCollisions.length,
+          element.cachecollidables.length == element.oncollidables.length,
           true,
         );
 
         expect(
           (<Collidable>{}
-                    ..addAll(element.cacheCollisions)
-                    ..addAll(element.onCollisions))
+                    ..addAll(element.cachecollidables)
+                    ..addAll(element.oncollidables))
                   .length ==
-              element.onCollisions.length,
+              element.oncollidables.length,
           true,
         );
       });
@@ -154,23 +154,23 @@ void main() {
       cList.shuffle();
       _testCollisionDetection(cList);
       cList.forEach((element) {
-        element.cacheCollisions = element.onCollisions;
+        element.cachecollidables = element.oncollidables;
       });
       CollisionDetectionFunction.collisionDetection(cList);
       cList.where((element) {
         return element.activeCollision;
       }).forEach((element) {
         expect(
-          element.cacheCollisions.length == element.onCollisions.length,
+          element.cachecollidables.length == element.oncollidables.length,
           true,
         );
 
         expect(
           (<Collidable>{}
-                    ..addAll(element.cacheCollisions)
-                    ..addAll(element.onCollisions))
+                    ..addAll(element.cachecollidables)
+                    ..addAll(element.oncollidables))
                   .length ==
-              element.onCollisions.length,
+              element.oncollidables.length,
           true,
         );
       });
@@ -202,22 +202,22 @@ void main() {
       cList.shuffle();
       _testCollisionDetection(cList);
       cList.forEach((element) {
-        element.cacheCollisions = element.onCollisions;
+        element.cachecollidables = element.oncollidables;
       });
       CollisionDetectionFunction.collisionDetection(cList);
       cList.where((element) {
         return element.activeCollision;
       }).forEach((element) {
         expect(
-          element.cacheCollisions.length == element.onCollisions.length,
+          element.cachecollidables.length == element.oncollidables.length,
           true,
         );
         expect(
           (<Collidable>{}
-                    ..addAll(element.cacheCollisions)
-                    ..addAll(element.onCollisions))
+                    ..addAll(element.cachecollidables)
+                    ..addAll(element.oncollidables))
                   .length ==
-              element.onCollisions.length,
+              element.oncollidables.length,
           true,
         );
       });
