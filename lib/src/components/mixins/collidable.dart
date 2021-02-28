@@ -4,6 +4,8 @@ import '../../geometry/rectangle.dart';
 import 'hitbox.dart';
 
 mixin Collidable on Hitbox {
+  bool activeCollision = true;
+
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {}
 }
 
