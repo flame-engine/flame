@@ -67,7 +67,7 @@ mixin HasCollidables on BaseGame {
     _noActiveCollidables.addAll(_waitAssignConllidables);
   }
 
-  /// update a [_activeCollidable] of [Collidable]
+  /// Update a [_activeCollidable] of [Collidable]
   void setActiveCollidable(Collidable updateCollidable, bool newActiveState) {
     if (newActiveState != updateCollidable.activeCollidable) {
       updateCollidable.manualSetActiveCollidable(newActiveState);
