@@ -5,8 +5,8 @@ import 'hitbox.dart';
 
 mixin Collidable on Hitbox {
   /// Set whether [Collidable] is active
-  /// If [activeCollision] is set to true, collision with other [Collidable] will be actively checked in [collisionDetection]
-  /// [Collidable] whose [activeCollision] is set to false will not actively check collisions with other [Collidable],
+  /// If [activeCollidable] is set to true, collision with other [Collidable] will be actively checked in [collisionDetection]
+  /// [Collidable] whose [activeCollidable] is set to false will not actively check collisions with other [Collidable],
   /// so as to prevent collision detection between stationary [Collidable] and other stationary [Collidable], so as to improve the performance of [collisionDetection]
   bool activeCollision = true;
 

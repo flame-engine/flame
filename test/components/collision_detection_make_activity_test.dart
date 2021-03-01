@@ -7,14 +7,16 @@ import 'package:flame/src/geometry/collision_detection.dart'
 import 'package:test/test.dart';
 
 class _TestBlock extends PositionComponent with Hitbox, Collidable {
-  Set<Collidable> oncollidables = {};
-  Set<Collidable> cachecollidables = {};
+  Set<Collidable> onCollidables = {};
+  Set<Collidable> cacheCollidables = {};
   _TestBlock() {
-    addShape(HitboxCircle());
+    addShape(
+      HitboxCircle(),
+    );
   }
   @override
   void onCollision(Set<Vector2> points, Collidable other) {
-    oncollidables.add(other);
+    onCollidables.add(other);
     super.onCollision(points, other);
   }
 }
@@ -29,22 +31,6 @@ class _TestBlockA extends _TestBlock {
 
 class _TestBlockB extends _TestBlock {
   _TestBlockB(Vector2 pos, Vector2 size) {
-    activeCollidable = false;
-    position = pos;
-    this.size = size;
-  }
-}
-
-class _TestBlockC extends _TestBlock {
-  _TestBlockC(Vector2 pos, Vector2 size) {
-    activeCollidable = true;
-    position = pos;
-    this.size = size;
-  }
-}
-
-class _TestBlockD extends _TestBlock {
-  _TestBlockD(Vector2 pos, Vector2 size) {
     activeCollidable = true;
     position = pos;
     this.size = size;
@@ -69,18 +55,18 @@ void _testCollisionDetection(List<Collidable> collidables) {
 void main() {
   group('collision_detection_make_activity', () {
     test('Activity Marker is no empty tests', () {
-      final tba = _TestBlockC(Vector2(0, 0), Vector2(10, 10));
-      final tbb = _TestBlockC(Vector2(0, 0), Vector2(10, 10));
-      final tbc = _TestBlockC(Vector2(0, 0), Vector2(10, 10));
+      final tba = _TestBlockB(Vector2(0, 0), Vector2(10, 10));
+      final tbb = _TestBlockB(Vector2(0, 0), Vector2(10, 10));
+      final tbc = _TestBlockB(Vector2(0, 0), Vector2(10, 10));
       final tbs = [tba, tbb, tbc];
       _testCollisionDetection(tbs);
       tbs.forEach((element) {
-        element.cachecollidables = element.oncollidables;
+        element.cacheCollidables = element.onCollidables;
       });
       CollisionDetectionFunction.collisionDetection(tbs);
       tbs.forEach((element) {
-        expect(element.cachecollidables.isNotEmpty, true);
-        expect(element.oncollidables.isNotEmpty, true);
+        expect(element.cacheCollidables.isNotEmpty, true);
+        expect(element.onCollidables.isNotEmpty, true);
       });
     });
     test('Activity Marker tests', () {
@@ -95,35 +81,34 @@ void main() {
       final cList = vList.map((e) {
         switch (e.x.toInt() % 4) {
           case 0:
-            return _TestBlockA(e, size);
           case 1:
-            return _TestBlockB(e, size);
+            return _TestBlockA(e, size);
+
           case 2:
-            return _TestBlockC(e, size);
           case 3:
-            return _TestBlockD(e, size);
+            return _TestBlockB(e, size);
         }
       }).toList();
       cList.shuffle();
       _testCollisionDetection(cList);
       cList.forEach((element) {
-        element.cachecollidables = element.oncollidables;
+        element.cacheCollidables = element.onCollidables;
       });
       CollisionDetectionFunction.collisionDetection(cList);
       cList.where((element) {
         return element.activeCollidable;
       }).forEach((element) {
         expect(
-          element.cachecollidables.length == element.oncollidables.length,
+          element.cacheCollidables.length == element.onCollidables.length,
           true,
         );
 
         expect(
           (<Collidable>{}
-                    ..addAll(element.cachecollidables)
-                    ..addAll(element.oncollidables))
+                    ..addAll(element.cacheCollidables)
+                    ..addAll(element.onCollidables))
                   .length ==
-              element.oncollidables.length,
+              element.onCollidables.length,
           true,
         );
       });
@@ -141,35 +126,32 @@ void main() {
       final cList = vList.map((e) {
         switch (e.x.toInt() % 4) {
           case 0:
-            return _TestBlockC(e, size);
           case 1:
-            return _TestBlockD(e, size);
           case 2:
-            return _TestBlockC(e, size);
           case 3:
-            return _TestBlockD(e, size);
+            return _TestBlockB(e, size);
         }
       }).toList();
       cList.shuffle();
       _testCollisionDetection(cList);
       cList.forEach((element) {
-        element.cachecollidables = element.oncollidables;
+        element.cacheCollidables = element.onCollidables;
       });
       CollisionDetectionFunction.collisionDetection(cList);
       cList.where((element) {
         return element.activeCollidable;
       }).forEach((element) {
         expect(
-          element.cachecollidables.length == element.oncollidables.length,
+          element.cacheCollidables.length == element.onCollidables.length,
           true,
         );
 
         expect(
           (<Collidable>{}
-                    ..addAll(element.cachecollidables)
-                    ..addAll(element.oncollidables))
+                    ..addAll(element.cacheCollidables)
+                    ..addAll(element.onCollidables))
                   .length ==
-              element.oncollidables.length,
+              element.onCollidables.length,
           true,
         );
       });
@@ -189,34 +171,32 @@ void main() {
       final cList = vList.map((e) {
         switch (e.x.toInt() % 4) {
           case 0:
-            return _TestBlockA(e, size);
           case 1:
-            return _TestBlockB(e, size);
+            return _TestBlockA(e, size);
           case 2:
-            return _TestBlockC(e, size);
           case 3:
-            return _TestBlockD(e, size);
+            return _TestBlockB(e, size);
         }
       }).toList();
       cList.shuffle();
       _testCollisionDetection(cList);
       cList.forEach((element) {
-        element.cachecollidables = element.oncollidables;
+        element.cacheCollidables = element.onCollidables;
       });
       CollisionDetectionFunction.collisionDetection(cList);
       cList.where((element) {
         return element.activeCollidable;
       }).forEach((element) {
         expect(
-          element.cachecollidables.length == element.oncollidables.length,
+          element.cacheCollidables.length == element.onCollidables.length,
           true,
         );
         expect(
           (<Collidable>{}
-                    ..addAll(element.cachecollidables)
-                    ..addAll(element.oncollidables))
+                    ..addAll(element.cacheCollidables)
+                    ..addAll(element.onCollidables))
                   .length ==
-              element.oncollidables.length,
+              element.onCollidables.length,
           true,
         );
       });
