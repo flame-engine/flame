@@ -9,8 +9,18 @@ mixin HasCollidables on BaseGame {
   // final List<Collidable> _collidables = [];
   final List<Collidable> _activeCollidables = [];
   final List<Collidable> _noActiveCollidables = [];
+
+  List<Collidable> showActiveCollidables() => [
+        ..._activeCollidables,
+      ];
+
+  List<Collidable> showNoActiveCollidables() => [
+        ..._noActiveCollidables,
+      ];
+
   //Dirty Mark
   bool needReAssignConllidablesActive = false;
+
   void handleCollidables(Set<Component> removeLater, List<Component> addLater) {
     removeLater.whereType<Collidable>().forEach((element) {
       if (element.activeCollidable) {
@@ -48,7 +58,7 @@ mixin HasCollidables on BaseGame {
     });
 
     /// update [_noActiveCollidables]
-    _noActiveCollidables.where((element) {
+    _noActiveCollidables.removeWhere((element) {
       if (element.activeCollidable) {
         _activeCollidables.add(element);
       }

@@ -1,10 +1,13 @@
 import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/geometry/collision_detection.dart'
     as CollisionDetectionFunction;
 import 'package:test/test.dart';
+
+class CollidablesTestBox extends BaseGame with HasCollidables {}
 
 class _TestBlock extends PositionComponent with Hitbox, Collidable {
   Set<Collidable> onCollidables = {};
@@ -54,7 +57,76 @@ void _standardCollisionDetection(List<Collidable> collidables) {
 
 void main() {
   group('collision_detection_make_activity', () {
+    test('HasCollidables Add Delete Detection', () {
+      final testBox = CollidablesTestBox();
+      final tba = _TestBlockA(Vector2(0, 0), Vector2(10, 10));
+      final tbb = _TestBlockA(Vector2(0, 0), Vector2(10, 10));
+      final tbc = _TestBlockB(Vector2(0, 0), Vector2(10, 10));
+      final tbd = _TestBlockB(Vector2(0, 0), Vector2(10, 10));
+
+      final tbs = [
+        tba,
+        tbb,
+        tbc,
+        tbd,
+      ];
+      //test block init
+      testBox.handleCollidables({}, tbs);
+
+      [tba, tbb].forEach((element) {
+        expect(testBox.showNoActiveCollidables().contains(element), true);
+        expect(testBox.showActiveCollidables().contains(element), false);
+      });
+
+      [tbc, tbd].forEach((element) {
+        expect(testBox.showActiveCollidables().contains(element), true);
+        expect(testBox.showNoActiveCollidables().contains(element), false);
+      });
+
+      // test block A (true => false)
+      testBox.setActiveCollidable(tbc, false);
+      testBox.setActiveCollidable(tbd, false);
+
+      /// mock game [handleCollidables]
+      testBox.handleCollidables({}, []);
+
+      expect(testBox.showNoActiveCollidables().length, 4);
+      expect(testBox.showActiveCollidables().length, 0);
+
+      // test block B  (true,false,switch)
+      testBox.setActiveCollidable(tba, false);
+      testBox.setActiveCollidable(tbb, false);
+      testBox.setActiveCollidable(tbc, true);
+      testBox.setActiveCollidable(tbd, true);
+
+      testBox.handleCollidables({}, []);
+
+      [tba, tbb].forEach((element) {
+        expect(testBox.showNoActiveCollidables().contains(element), true);
+        expect(testBox.showActiveCollidables().contains(element), false);
+      });
+      [tbc, tbd].forEach((element) {
+        expect(testBox.showActiveCollidables().contains(element), true);
+        expect(testBox.showNoActiveCollidables().contains(element), false);
+      });
+
+      // test block C  (false => true)
+      testBox.setActiveCollidable(tba, true);
+      testBox.setActiveCollidable(tbb, true);
+      testBox.setActiveCollidable(tbc, true);
+      testBox.setActiveCollidable(tbd, true);
+
+      testBox.handleCollidables({}, []);
+
+      tbs.forEach((element) {
+        expect(testBox.showActiveCollidables().contains(element), true);
+        expect(testBox.showNoActiveCollidables().contains(element), false);
+      });
+    });
+
     test('Activity Marker is no empty tests', () {
+      final testBox = CollidablesTestBox();
+
       final tba = _TestBlockB(Vector2(0, 0), Vector2(10, 10));
       final tbb = _TestBlockB(Vector2(0, 0), Vector2(10, 10));
       final tbc = _TestBlockB(Vector2(0, 0), Vector2(10, 10));
@@ -63,13 +135,15 @@ void main() {
       tbs.forEach((element) {
         element.cacheCollidables = element.onCollidables;
       });
-      CollisionDetectionFunction.collisionDetection(tbs);
+      testBox.handleCollidables({}, []);
       tbs.forEach((element) {
         expect(element.cacheCollidables.isNotEmpty, true);
         expect(element.onCollidables.isNotEmpty, true);
       });
     });
+
     test('Activity Marker tests', () {
+      final testBox = CollidablesTestBox();
       final size = Vector2(5, 5);
       final vList = <Vector2>[];
       for (var y = 0; y < 4; y++) {
@@ -94,7 +168,7 @@ void main() {
       cList.forEach((element) {
         element.cacheCollidables = element.onCollidables;
       });
-      CollisionDetectionFunction.collisionDetection(cList);
+      testBox.handleCollidables({}, cList);
       cList.where((element) {
         return element.activeCollidable;
       }).forEach((element) {
@@ -115,6 +189,7 @@ void main() {
     });
 
     test('No Activity Marker tests', () {
+      final testBox = CollidablesTestBox();
       final size = Vector2(5, 5);
       final vList = <Vector2>[];
       for (var y = 0; y < 4; y++) {
@@ -137,7 +212,7 @@ void main() {
       cList.forEach((element) {
         element.cacheCollidables = element.onCollidables;
       });
-      CollisionDetectionFunction.collisionDetection(cList);
+      testBox.handleCollidables({}, cList);
       cList.where((element) {
         return element.activeCollidable;
       }).forEach((element) {
@@ -158,6 +233,7 @@ void main() {
     });
 
     test('Random Activity Marker tests', () {
+      final testBox = CollidablesTestBox();
       final size = Vector2(5, 5);
       final vList = <Vector2>[];
       for (var y = 0; y < 4; y++) {
@@ -183,7 +259,7 @@ void main() {
       cList.forEach((element) {
         element.cacheCollidables = element.onCollidables;
       });
-      CollisionDetectionFunction.collisionDetection(cList);
+      testBox.handleCollidables({}, cList);
       cList.where((element) {
         return element.activeCollidable;
       }).forEach((element) {
