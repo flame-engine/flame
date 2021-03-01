@@ -37,7 +37,7 @@ class _TestBlockB extends _TestBlock {
   }
 }
 
-void _testCollisionDetection(List<Collidable> collidables) {
+void _standardCollisionDetection(List<Collidable> collidables) {
   for (var x = 0; x < collidables.length; x++) {
     final collidableX = collidables[x];
     for (var y = x + 1; y < collidables.length; y++) {
@@ -59,7 +59,7 @@ void main() {
       final tbb = _TestBlockB(Vector2(0, 0), Vector2(10, 10));
       final tbc = _TestBlockB(Vector2(0, 0), Vector2(10, 10));
       final tbs = [tba, tbb, tbc];
-      _testCollisionDetection(tbs);
+      _standardCollisionDetection(tbs);
       tbs.forEach((element) {
         element.cacheCollidables = element.onCollidables;
       });
@@ -90,7 +90,7 @@ void main() {
         }
       }).toList();
       cList.shuffle();
-      _testCollisionDetection(cList);
+      _standardCollisionDetection(cList);
       cList.forEach((element) {
         element.cacheCollidables = element.onCollidables;
       });
@@ -133,7 +133,7 @@ void main() {
         }
       }).toList();
       cList.shuffle();
-      _testCollisionDetection(cList);
+      _standardCollisionDetection(cList);
       cList.forEach((element) {
         element.cacheCollidables = element.onCollidables;
       });
@@ -179,7 +179,7 @@ void main() {
         }
       }).toList();
       cList.shuffle();
-      _testCollisionDetection(cList);
+      _standardCollisionDetection(cList);
       cList.forEach((element) {
         element.cacheCollidables = element.onCollidables;
       });
