@@ -11,12 +11,15 @@ class CollidablesTestBox extends BaseGame with HasCollidables {}
 
 class _TestBlock extends PositionComponent with Hitbox, Collidable {
   Set<Collidable> onCollidables = {};
+
   Set<Collidable> cacheCollidables = {};
+
   _TestBlock() {
     addShape(
       HitboxCircle(),
     );
   }
+
   @override
   void onCollision(Set<Vector2> points, Collidable other) {
     onCollidables.add(other);
