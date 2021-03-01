@@ -19,7 +19,7 @@ mixin HasCollidables on BaseGame {
       ];
 
   //Dirty Mark
-  bool needReAssignConllidablesActive = false;
+  bool needReassignConllidablesActive = false;
 
   void handleCollidables(Set<Component> removeLater, List<Component> addLater) {
     removeLater.whereType<Collidable>().forEach((element) {
@@ -38,15 +38,15 @@ mixin HasCollidables on BaseGame {
     });
 
     /// auto [reAssignConllidablesActive]
-    if (needReAssignConllidablesActive) {
-      reAssignConllidablesActive();
-      needReAssignConllidablesActive = false;
+    if (needReassignConllidablesActive) {
+      reassignConllidablesActive();
+      needReassignConllidablesActive = false;
     }
 
     collisionsDetection(_activeCollidables, _noActiveCollidables);
   }
 
-  void reAssignConllidablesActive() {
+  void reassignConllidablesActive() {
     final _waitAssignConllidables = <Collidable>[];
 
     /// update [_activeCollidables]
@@ -71,7 +71,7 @@ mixin HasCollidables on BaseGame {
   void setActiveCollidable(Collidable updateCollidable, bool newActiveState) {
     if (newActiveState != updateCollidable.activeCollidable) {
       updateCollidable.manualSetActiveCollidable(newActiveState);
-      needReAssignConllidablesActive = true;
+      needReassignConllidablesActive = true;
     }
   }
 }
