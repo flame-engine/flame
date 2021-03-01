@@ -1,6 +1,14 @@
 import '../../extensions.dart';
 import '../components/mixins/collidable.dart';
 
+void aloneCollisionDetection(Collidable collidableX, Collidable collidableY) {
+  final points = intersections(collidableX, collidableY);
+  if (points.isNotEmpty) {
+    collidableX.onCollision(points, collidableY);
+    collidableY.onCollision(points, collidableX);
+  }
+}
+
 /// Check whether any [Collidable] in [collidables] collide with each other and
 /// call their onCollision methods accordingly.
 void collisionDetection(List<Collidable> collidables) {
