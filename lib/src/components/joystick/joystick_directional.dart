@@ -159,7 +159,7 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
   @override
   bool containsPoint(Vector2 point) {
     final directional = _backgroundRect.inflate(50.0);
-    return directional.containsPoint(point) == true;
+    return directional.containsPoint(point);
   }
 
   @override
