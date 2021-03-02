@@ -28,16 +28,19 @@ class _TestBlock extends PositionComponent with Hitbox, Collidable {
 }
 
 class _TestBlockA extends _TestBlock {
+  @override
+  bool activeCollidable = false;
   _TestBlockA(Vector2 pos, Vector2 size) {
-    activeCollidable = false;
     position = pos;
     this.size = size;
   }
 }
 
 class _TestBlockB extends _TestBlock {
+  @override
+  bool activeCollidable = true;
+
   _TestBlockB(Vector2 pos, Vector2 size) {
-    activeCollidable = true;
     position = pos;
     this.size = size;
   }

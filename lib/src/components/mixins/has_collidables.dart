@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/cupertino.dart';
 
 import '../../../game.dart';
@@ -6,17 +8,14 @@ import '../../geometry/collision_detection.dart';
 import '../component.dart';
 
 mixin HasCollidables on BaseGame {
-  // final List<Collidable> _collidables = [];
   final List<Collidable> _activeCollidables = [];
   final List<Collidable> _noActiveCollidables = [];
 
-  List<Collidable> showActiveCollidables() => [
-        ..._activeCollidables,
-      ];
+  UnmodifiableListView<Collidable> showActiveCollidables() =>
+      UnmodifiableListView(_activeCollidables);
 
-  List<Collidable> showNoActiveCollidables() => [
-        ..._noActiveCollidables,
-      ];
+  List<Collidable> showNoActiveCollidables() =>
+      UnmodifiableListView(_noActiveCollidables);
 
   //Dirty Mark
   bool needReassignConllidablesActive = false;
