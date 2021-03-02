@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
 
@@ -34,7 +36,7 @@ class MoveEffect extends SimplePositionComponentEffect {
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
-    void Function() onComplete,
+    VoidCallback onComplete,
   })  : assert(
           (duration != null) ^ (speed != null),
           'Either speed or duration necessary',
