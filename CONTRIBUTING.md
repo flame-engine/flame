@@ -21,7 +21,7 @@ If you're interested in contributing to this project, here are a few ways to do 
 
 ## Documentation & Miscellaneous
 * If you think the documentation could be clearer or an example should be added, or you have an alternative implementation of something that may have more advantages, we would love to hear it.
-* As always first file a report in a [Github issues](https://github.com/flame-engine/flame/issues/new).
+* As always first file a report in [Github issues](https://github.com/flame-engine/flame/issues/new).
 * Issues that have been identified as a documentation change will be labelled "documentation".
 * Implement the changes to the documentation, please read the [How To](#how-to) and [Development Guidelines](#development-guidelines).
 
