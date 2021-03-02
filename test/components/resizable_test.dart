@@ -27,14 +27,22 @@ void main() {
       final a = MyComponent('a');
       final game = MyGame();
       game.onResize(size);
+
       game.add(a);
+      // component is just added on the next iteration
+      game.update(0);
+
       expect(a.gameSize, size);
     });
     test('game calls resize after added', () {
       final a = MyComponent('a');
       final game = MyGame();
       game.onResize(Vector2.all(10));
+
       game.add(a);
+      // component is just added on the next iteration
+      game.update(0);
+
       game.onResize(size);
       expect(a.gameSize, size);
     });
@@ -42,7 +50,11 @@ void main() {
       final a = MyComponent('a');
       final game = MyGame();
       game.onResize(Vector2.all(10));
+
       game.add(a);
+      // component is just added on the next iteration
+      game.update(0);
+
       game.onResize(size);
       expect(a.size, isNot(size));
     });

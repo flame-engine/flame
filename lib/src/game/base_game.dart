@@ -4,6 +4,8 @@ import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
+import '../../components.dart';
+import '../../extensions.dart';
 import '../components/component.dart';
 import '../components/mixins/collidable.dart';
 import '../components/mixins/draggable.dart';
@@ -11,9 +13,10 @@ import '../components/mixins/has_collidables.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/tapable.dart';
 import '../components/position_component.dart';
-import '../extensions/vector2.dart';
 import '../fps_counter.dart';
+import 'camera.dart';
 import 'game.dart';
+import 'viewport.dart';
 
 /// This is a more complete and opinionated implementation of Game.
 ///
@@ -38,8 +41,46 @@ class BaseGame extends Game with FPSCounter {
   /// concurrency issues.
   final Set<Component> _removeLater = {};
 
-  /// Camera position; every non-HUD component is translated so that the camera position is the top-left corner of the screen.
-  Vector2 camera = Vector2.zero();
+  /// The camera translates the coordinate space after the viewport is applied.
+  final Camera camera = Camera();
+
+  /// The viewport transforms the coordinate space depending on your chosen
+  /// implementation.
+  /// The default implementation no-ops, but you can use this to have a fixed
+  /// screen ratio for example.
+  Viewport get viewport => _viewport;
+
+  Viewport _viewport = DefaultViewport();
+  set viewport(Viewport value) {
+    if (hasLayout) {
+      final previousSize = canvasSize;
+      _viewport = value;
+      onResize(previousSize);
+    } else {
+      _viewport = value;
+    }
+  }
+
+  /// This is overwritten to consider the viewport transformation.
+  ///
+  /// Which means that this is the logical size of the game screen area as
+  /// exposed to the canvas after viewport transformations.
+  /// This does not match the Flutter widget size; for that see [canvasSize].
+  @override
+  Vector2 get size {
+    assertHasLayout();
+    return viewport.effectiveSize;
+  }
+
+  /// This is the original Flutter widget size, without any transformation.
+  Vector2 get canvasSize {
+    assertHasLayout();
+    return viewport.canvasSize;
+  }
+
+  BaseGame() {
+    camera.gameRef = this;
+  }
 
   /// This method is called for every component added.
   /// It does preparation on a component before any update or render method is called on it.
@@ -118,9 +159,9 @@ class BaseGame extends Game with FPSCounter {
   @override
   @mustCallSuper
   void render(Canvas canvas) {
-    canvas.save();
-    components.forEach((comp) => renderComponent(canvas, comp));
-    canvas.restore();
+    viewport.render(canvas, (c) {
+      components.forEach((comp) => renderComponent(c, comp));
+    });
   }
 
   /// This renders a single component obeying BaseGame rules.
@@ -128,12 +169,12 @@ class BaseGame extends Game with FPSCounter {
   /// It translates the camera unless hud, call the render method and restore the canvas.
   /// This makes sure the canvas is not messed up by one component and all components render independently.
   void renderComponent(Canvas canvas, Component c) {
-    if (!c.isHud) {
-      canvas.translate(-camera.x, -camera.y);
-    }
-    c.render(canvas);
-    canvas.restore();
     canvas.save();
+    if (!c.isHud) {
+      canvas.translateVector(-camera.position);
+    }
+    c.renderTree(canvas);
+    canvas.restore();
   }
 
   /// This implementation of update updates every component in the list.
@@ -163,6 +204,7 @@ class BaseGame extends Game with FPSCounter {
     }
 
     components.forEach((c) => c.update(dt));
+    camera.update(dt);
   }
 
   /// This implementation of resize passes the resize call along to every
@@ -170,10 +212,12 @@ class BaseGame extends Game with FPSCounter {
   ///
   /// It also updates the [size] field of the class to be used by later added components and other methods.
   /// You can override it further to add more custom behavior, but you should seriously consider calling the super implementation as well.
+  /// This implementation also uses the current [viewport] in order to transform the coordinate system appropriately.
   @override
   @mustCallSuper
-  void onResize(Vector2 size) {
-    super.onResize(size);
+  void onResize(Vector2 canvasSize) {
+    super.onResize(canvasSize);
+    viewport.resize(canvasSize.clone());
     components.forEach((c) => c.onGameResize(size));
   }
 

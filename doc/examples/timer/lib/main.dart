@@ -65,7 +65,8 @@ class MyGame extends Game with TapDetector {
 
   int elapsedSecs = 0;
 
-  MyGame() {
+  @override
+  Future<void> onLoad() async {
     countdown = Timer(2);
     interval = Timer(
       1,

@@ -1,6 +1,9 @@
 # CHANGELOG
 
 ## [next]
+- Refactor the joystick code
+
+## 1.0.0-rc7
  - Moving device related methods (like `fullScreen`) from `util.dart` to `device.dart`
  - Moving render functions from `util.dart` to `extensions/canvas.dart`
  - Adapting ParallaxComponent contructors to match the pattern followed on other components
@@ -24,6 +27,7 @@
  - Added `toImage` method for the `Sprite` class
  - Uniform use of `dt` instead of `t` in all update methods
  - Add more optional arguments for unified constructors of components
+ - Fix order that parent -> children render in
 
 ## 1.0.0-rc6
  - Use `Offset` type directly in `JoystickAction.update` calculations
