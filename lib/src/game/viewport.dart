@@ -138,10 +138,7 @@ class FixedResolutionViewport extends Viewport {
   @override
   void render(Canvas c, void Function(Canvas) renderGame) {
     c.save();
-    c.clipRect(
-      resizeOffset & scaledSize,
-      clipOp: ClipOp.intersect,
-    );
+    c.clipRect(resizeOffset & scaledSize);
     c.translateVector(resizeOffset);
     c.scale(scale, scale);
 

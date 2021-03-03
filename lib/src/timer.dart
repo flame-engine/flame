@@ -7,7 +7,7 @@ import 'components/component.dart';
 /// interval like events.
 class Timer {
   final double limit;
-  void Function() callback;
+  VoidCallback callback;
   bool repeat;
   double _current = 0;
   bool _running = false;
