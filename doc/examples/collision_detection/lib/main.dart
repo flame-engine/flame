@@ -68,9 +68,9 @@ abstract class MyCollidable extends PositionComponent
   }
 
   @override
-  void onCollision(Set<Vector2> points, Collidable other) {
-    final averageIntersection =
-        points.reduce((sum, v) => sum + v) / points.length.toDouble();
+  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
+    final averageIntersection = intersectionPoints.reduce((sum, v) => sum + v) /
+        intersectionPoints.length.toDouble();
     final collisionDirection = (averageIntersection - absoluteCenter)
       ..normalize()
       ..round();
@@ -144,7 +144,7 @@ class SnowmanPart extends HitboxCircle {
   SnowmanPart(double definition, Vector2 relativePosition, Color hitColor)
       : super(definition: definition) {
     this.relativePosition.setFrom(relativePosition);
-    onCollision = (Set<Vector2> points, HitboxShape other) {
+    onCollision = (Set<Vector2> intersectionPoints, HitboxShape other) {
       if (other.component is ScreenCollidable) {
         currentColor = startColor;
       } else {
