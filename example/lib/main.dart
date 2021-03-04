@@ -56,10 +56,13 @@ class Square extends PositionComponent {
 class MyGame extends BaseGame with DoubleTapDetector, TapDetector {
   bool running = true;
 
-  MyGame() {
-    add(Square()
-      ..x = 100
-      ..y = 100);
+  @override
+  Future<void> onLoad() async {
+    add(
+      Square()
+        ..x = 100
+        ..y = 100,
+    );
   }
 
   @override
