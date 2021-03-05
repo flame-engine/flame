@@ -8,10 +8,10 @@ void collisionDetection(List<Collidable> collidables) {
     final collidableX = collidables[x];
     for (var y = x + 1; y < collidables.length; y++) {
       final collidableY = collidables[y];
-      final points = intersections(collidableX, collidableY);
-      if (points.isNotEmpty) {
-        collidableX.onCollision(points, collidableY);
-        collidableY.onCollision(points, collidableX);
+      final intersectionPoints = intersections(collidableX, collidableY);
+      if (intersectionPoints.isNotEmpty) {
+        collidableX.onCollision(intersectionPoints, collidableY);
+        collidableY.onCollision(intersectionPoints, collidableX);
       }
     }
   }
