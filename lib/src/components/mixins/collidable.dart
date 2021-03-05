@@ -4,7 +4,7 @@ import '../../geometry/rectangle.dart';
 import 'hitbox.dart';
 
 mixin Collidable on Hitbox {
-  void onCollision(Set<Vector2> points, Collidable other) {}
+  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {}
 }
 
 class ScreenCollidable extends PositionComponent with Hitbox, Collidable {
