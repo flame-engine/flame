@@ -40,7 +40,7 @@ class TestBlock extends PositionComponent with Hitbox, Collidable {
   }
 
   @override
-  void onCollision(Set<Vector2> points, Collidable other) {
+  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
     collisions.add(other);
   }
 }
