@@ -13,14 +13,14 @@ enum CollidableType {
 }
 
 mixin Collidable on Hitbox {
-  CollidableType collisionType = CollidableType.active;
+  CollidableType collidableType = CollidableType.active;
 
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {}
 }
 
 class ScreenCollidable extends PositionComponent with Hitbox, Collidable {
   @override
-  CollidableType collisionType = CollidableType.static;
+  CollidableType collidableType = CollidableType.static;
 
   ScreenCollidable() {
     addShape(HitboxRectangle());
