@@ -1,21 +1,24 @@
 import '../../extensions.dart';
 import '../components/mixins/collidable.dart';
 
-void aloneCollisionDetection(Collidable collidableX, Collidable collidableY) {
-  final points = intersections(collidableX, collidableY);
-  if (points.isNotEmpty) {
-    collidableX.onCollision(points, collidableY);
-    collidableY.onCollision(points, collidableX);
-  }
-}
-
 /// Check whether any [Collidable] in [collidables] collide with each other and
 /// call their onCollision methods accordingly.
 void collisionDetection(List<Collidable> collidables) {
   for (var x = 0; x < collidables.length; x++) {
     final collidableX = collidables[x];
-    for (var y = x + 1; y < collidables.length; y++) {
+    if (collidableX.collisionType != CollisionType.active) {
+      continue;
+    }
+
+    for (var y = 0; y < collidables.length; y++) {
       final collidableY = collidables[y];
+      if ((y <= x && collidableY.collisionType == CollisionType.active) ||
+          collidableY.collisionType == CollisionType.inactive) {
+        // These collidables will already have been checked towards each other
+        // or [collidableY] is inactive
+        continue;
+      }
+
       final intersectionPoints = intersections(collidableX, collidableY);
       if (intersectionPoints.isNotEmpty) {
         collidableX.onCollision(intersectionPoints, collidableY);
@@ -25,6 +28,8 @@ void collisionDetection(List<Collidable> collidables) {
   }
 }
 
+/// Check what the intersection points of two collidables are
+/// returns an empty list if there are no intersections
 Set<Vector2> intersections(
   Collidable collidableA,
   Collidable collidableB,
