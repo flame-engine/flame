@@ -14,7 +14,7 @@ class TestGame extends BaseGame with HasCollidables {
 class TestBlock extends PositionComponent with Hitbox, Collidable {
   final List<Collidable> collisions = List.empty(growable: true);
 
-  TestBlock(Vector2 position, Vector2 size, CollisionType type)
+  TestBlock(Vector2 position, Vector2 size, CollidableType type)
       : super(
           position: position,
           size: size,
@@ -61,12 +61,12 @@ void main() {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
-          CollisionType.active,
+          CollidableType.active,
         );
         final blockB = TestBlock(
           Vector2.all(1),
           Vector2.all(10),
-          CollisionType.active,
+          CollidableType.active,
         );
         gameWithCollidables([blockA, blockB]);
         expect(blockA.collidedWith(blockB), true);
@@ -79,12 +79,12 @@ void main() {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
-          CollisionType.static,
+          CollidableType.static,
         );
         final blockB = TestBlock(
           Vector2.all(1),
           Vector2.all(10),
-          CollisionType.static,
+          CollidableType.static,
         );
         gameWithCollidables([blockA, blockB]);
         expect(blockA.collisions.isEmpty, true);
@@ -95,12 +95,12 @@ void main() {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
-          CollisionType.inactive,
+          CollidableType.inactive,
         );
         final blockB = TestBlock(
           Vector2.all(1),
           Vector2.all(10),
-          CollisionType.inactive,
+          CollidableType.inactive,
         );
         gameWithCollidables([blockA, blockB]);
         expect(blockA.collisions.isEmpty, true);
@@ -111,12 +111,12 @@ void main() {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
-          CollisionType.active,
+          CollidableType.active,
         );
         final blockB = TestBlock(
           Vector2.all(1),
           Vector2.all(10),
-          CollisionType.static,
+          CollidableType.static,
         );
         gameWithCollidables([blockA, blockB]);
         expect(blockA.collidedWith(blockB), true);
@@ -129,12 +129,12 @@ void main() {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
-          CollisionType.static,
+          CollidableType.static,
         );
         final blockB = TestBlock(
           Vector2.all(1),
           Vector2.all(10),
-          CollisionType.active,
+          CollidableType.active,
         );
         gameWithCollidables([blockA, blockB]);
         expect(blockA.collidedWith(blockB), true);
@@ -147,12 +147,12 @@ void main() {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
-          CollisionType.static,
+          CollidableType.static,
         );
         final blockB = TestBlock(
           Vector2.all(1),
           Vector2.all(10),
-          CollisionType.inactive,
+          CollidableType.inactive,
         );
         gameWithCollidables([blockA, blockB]);
         expect(blockA.collisions.length, 0);
@@ -163,12 +163,12 @@ void main() {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
-          CollisionType.inactive,
+          CollidableType.inactive,
         );
         final blockB = TestBlock(
           Vector2.all(1),
           Vector2.all(10),
-          CollisionType.static,
+          CollidableType.static,
         );
         gameWithCollidables([blockA, blockB]);
         expect(blockA.collisions.length, 0);
@@ -179,12 +179,12 @@ void main() {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
-          CollisionType.active,
+          CollidableType.active,
         );
         final blockB = TestBlock(
           Vector2.all(1),
           Vector2.all(10),
-          CollisionType.inactive,
+          CollidableType.inactive,
         );
         gameWithCollidables([blockA, blockB]);
         expect(blockA.collisions.length, 0);
@@ -195,12 +195,12 @@ void main() {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
-          CollisionType.inactive,
+          CollidableType.inactive,
         );
         final blockB = TestBlock(
           Vector2.all(1),
           Vector2.all(10),
-          CollisionType.active,
+          CollidableType.active,
         );
         gameWithCollidables([blockA, blockB]);
         expect(blockA.collisions.length, 0);
@@ -213,7 +213,7 @@ void main() {
           (_) => TestBlock(
             Vector2.random() - Vector2.random(),
             Vector2.all(10),
-            CollisionType.active,
+            CollidableType.active,
           ),
         );
         final statics = List.generate(
@@ -221,7 +221,7 @@ void main() {
           (_) => TestBlock(
             Vector2.random() - Vector2.random(),
             Vector2.all(10),
-            CollisionType.static,
+            CollidableType.static,
           ),
         );
         final inactives = List.generate(
@@ -229,7 +229,7 @@ void main() {
           (_) => TestBlock(
             Vector2.random() - Vector2.random(),
             Vector2.all(10),
-            CollisionType.inactive,
+            CollidableType.inactive,
           ),
         );
         gameWithCollidables((actives + statics + inactives)..shuffle());

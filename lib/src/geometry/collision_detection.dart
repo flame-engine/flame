@@ -6,14 +6,14 @@ import '../components/mixins/collidable.dart';
 void collisionDetection(List<Collidable> collidables) {
   for (var x = 0; x < collidables.length; x++) {
     final collidableX = collidables[x];
-    if (collidableX.collisionType != CollisionType.active) {
+    if (collidableX.collisionType != CollidableType.active) {
       continue;
     }
 
     for (var y = 0; y < collidables.length; y++) {
       final collidableY = collidables[y];
-      if ((y <= x && collidableY.collisionType == CollisionType.active) ||
-          collidableY.collisionType == CollisionType.inactive) {
+      if ((y <= x && collidableY.collisionType == CollidableType.active) ||
+          collidableY.collisionType == CollidableType.inactive) {
         // These collidables will already have been checked towards each other
         // or [collidableY] is inactive
         continue;
