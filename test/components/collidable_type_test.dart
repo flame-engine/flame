@@ -255,7 +255,6 @@ void main() {
           ),
           true,
         );
-        //expect(blockB.collisions.length, 0);
       });
     },
   );

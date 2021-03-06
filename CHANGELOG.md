@@ -4,6 +4,7 @@
  - Refactor the joystick code
  - Fix example app
  - Rename points to intersectionPoints for collision detection
+ - Added CollidableType to make collision detection more efficient
 
 ## 1.0.0-rc7
  - Moving device related methods (like `fullScreen`) from `util.dart` to `device.dart`
