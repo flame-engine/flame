@@ -136,7 +136,7 @@ abstract class PositionComponentEffect
     this.modifiesPosition = false,
     this.modifiesAngle = false,
     this.modifiesSize = false,
-    void Function()? onComplete,
+    VoidCallback? onComplete,
   }) : super(
           initialIsInfinite,
           initialIsAlternating,
@@ -216,7 +216,7 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
     bool modifiesPosition = false,
     bool modifiesAngle = false,
     bool modifiesSize = false,
-    void Function()? onComplete,
+    VoidCallback? onComplete,
   })  : assert(
           (duration != null) ^ (speed != null),
           'Either speed or duration necessary',

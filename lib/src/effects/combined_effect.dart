@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import '../components/position_component.dart';
 import 'effects.dart';
@@ -12,7 +13,7 @@ class CombinedEffect extends PositionComponentEffect {
     this.offset = 0.0,
     bool isInfinite = false,
     bool isAlternating = false,
-    void Function()? onComplete,
+    VoidCallback? onComplete,
   }) : super(
           isInfinite,
           isAlternating,

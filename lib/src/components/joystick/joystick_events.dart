@@ -13,14 +13,23 @@ enum JoystickMoveDirectional {
 enum ActionEvent { down, up, move, cancel }
 
 class JoystickDirectionalEvent {
-  final JoystickMoveDirectional? directional;
+  /// The direction the knob was moved towards, converted to a set of 8
+  /// cardinal directions.
+  final JoystickMoveDirectional directional;
+
+  /// How much the knob was moved, from 0 (center) to 1 (edge).
   final double intensity;
-  final double radAngle;
+
+  /// The direction the knob was moved towards (in radians).
+  ///
+  /// It uses the trigonometric circle convention (i.e. start on the
+  /// positive x-axis and rotates counter-clockwise).
+  final double angle;
 
   JoystickDirectionalEvent({
-    this.directional,
+    required this.directional,
     this.intensity = 0.0,
-    this.radAngle = 0.0,
+    this.angle = 0.0,
   });
 
   static JoystickMoveDirectional calculateDirectionalByDegrees(double degrees) {
@@ -45,28 +54,28 @@ class JoystickDirectionalEvent {
       return JoystickMoveDirectional.idle;
     }
   }
-
-  @override
-  String toString() {
-    return 'JoystickDirectionalEvent{directional: $directional, intensity: $intensity, radAngle: $radAngle}';
-  }
 }
 
 class JoystickActionEvent {
+  /// The id of this action as defined in the setup code.
   final int id;
+
+  /// What action was performed in this button.
+  final ActionEvent event;
+
+  /// How much the knob was moved, from 0 (center) to 1 (edge).
   final double intensity;
-  final double radAngle;
-  final ActionEvent? event;
+
+  /// The direction the knob was moved towards (in radians).
+  ///
+  /// It uses the trigonometric circle convention (i.e. start on the
+  /// positive x-axis and rotates counter-clockwise).
+  final double angle;
 
   JoystickActionEvent({
     required this.id,
+    required this.event,
     this.intensity = 0.0,
-    this.radAngle = 0.0,
-    this.event,
+    this.angle = 0.0,
   });
-
-  @override
-  String toString() {
-    return 'JoystickActionEvent{id: $id, intensity: $intensity, radAngle: $radAngle, event: $event}';
-  }
 }

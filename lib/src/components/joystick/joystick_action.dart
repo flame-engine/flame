@@ -4,71 +4,65 @@ import 'dart:ui';
 import 'package:flutter/material.dart' show Colors;
 import 'package:flutter/widgets.dart'
     show EdgeInsets, DragUpdateDetails, DragEndDetails;
+import 'package:meta/meta.dart';
 
 import '../../../components.dart';
 import '../../../game.dart';
 import '../../extensions/offset.dart';
 import '../../extensions/rect.dart';
 import '../../extensions/vector2.dart';
-import '../../sprite.dart';
 import 'joystick_component.dart';
+import 'joystick_element.dart';
 import 'joystick_events.dart';
-import 'joystick_utils.dart';
 
 enum JoystickActionAlign { topLeft, bottomLeft, topRight, bottomRight }
 
 class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   final int actionId;
-  final Sprite? sprite;
-  final Sprite? spritePressed;
-  final Sprite? spriteBackgroundDirection;
   final double size;
-  final double sizeFactorBackgroundDirection;
+  final double _sizeBackgroundDirection;
   final EdgeInsets margin;
   final JoystickActionAlign align;
   final bool enableDirection;
-  final Color color;
-  final double opacityBackground;
-  final double opacityKnob;
 
   bool isPressed = false;
-  Rect? _rectAction;
-  Rect? _rectBackgroundDirection;
   bool _dragging = false;
-  Sprite? _spriteAction;
   late Vector2 _dragPosition;
-  final Paint _paintBackground;
-  final Paint _paintAction;
-  final Paint _paintActionPressed;
-  final double _sizeBackgroundDirection;
   late double _tileSize;
+
+  late JoystickElement backgroundDirection;
+  late JoystickElement action;
+  late JoystickElement actionPressed;
 
   JoystickController get joystickController => parent! as JoystickController;
 
   JoystickAction({
     required this.actionId,
-    this.sprite,
-    this.spritePressed,
-    this.spriteBackgroundDirection,
+    JoystickElement? backgroundDirection,
+    JoystickElement? action,
+    JoystickElement? actionPressed,
     this.enableDirection = false,
     this.size = 50,
-    this.sizeFactorBackgroundDirection = 1.5,
     this.margin = EdgeInsets.zero,
-    this.color = Colors.blueGrey,
     this.align = JoystickActionAlign.bottomRight,
-    this.opacityBackground = 0.5,
-    this.opacityKnob = 0.8,
-  })  : _spriteAction = sprite,
-        _sizeBackgroundDirection = sizeFactorBackgroundDirection * size,
-        _paintBackground = Paint()
-          ..color = color.withOpacity(opacityBackground)
-          ..style = PaintingStyle.fill,
-        _paintAction = Paint()
-          ..color = color.withOpacity(opacityKnob)
-          ..style = PaintingStyle.fill,
-        _paintActionPressed = Paint()
-          ..color = color.withOpacity(opacityBackground)
-          ..style = PaintingStyle.fill {
+    double sizeFactorBackgroundDirection = 1.5,
+    Color color = Colors.blueGrey,
+    double opacityBackground = 0.5,
+    double opacityKnob = 0.8,
+  }) : _sizeBackgroundDirection = sizeFactorBackgroundDirection * size {
+    this.action = action ??
+        JoystickElement.paint(
+          Paint()..color = color.withOpacity(opacityKnob),
+        );
+    this.actionPressed = actionPressed ??
+        JoystickElement.paint(
+          Paint()..color = color.withOpacity(opacityKnob),
+        );
+    this.backgroundDirection = backgroundDirection ??
+        JoystickElement.paint(
+          Paint()..color = color.withOpacity(opacityBackground),
+        );
+
     _tileSize = _sizeBackgroundDirection / 2;
   }
 
@@ -104,42 +98,41 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
         dy = _screenSize.y - (margin.bottom + radius);
         break;
     }
-    _rectAction = Rect.fromCircle(
-      center: Offset(dx, dy),
+    final center = Offset(dx, dy);
+    action.rect = Rect.fromCircle(
+      center: center,
       radius: radius,
     );
-    _rectBackgroundDirection = Rect.fromCircle(
-      center: Offset(dx, dy),
+    actionPressed.rect = action.rect;
+    backgroundDirection.rect = Rect.fromCircle(
+      center: center,
       radius: _sizeBackgroundDirection / 2,
     );
-    _dragPosition = _rectAction!.center.toVector2();
+    _dragPosition = action.center;
   }
 
   @override
   void render(Canvas c) {
     super.render(c);
     if (_dragging && enableDirection) {
-      JoystickUtils.renderControl(
-        c,
-        spriteBackgroundDirection,
-        _rectBackgroundDirection,
-        _paintBackground,
-      );
+      backgroundDirection.render(c);
     }
 
-    final actionPaint = isPressed ? _paintActionPressed : _paintAction;
-    JoystickUtils.renderControl(c, _spriteAction, _rectAction, actionPaint);
+    (isPressed ? actionPressed : action).render(c);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    if (_rectBackgroundDirection != null && _dragging) {
-      final diff = _dragPosition - _rectBackgroundDirection!.center.toVector2();
-      final radAngle = atan2(diff.y, diff.x);
 
+    Vector2 diff;
+    if (_dragging) {
       // Distance between the center of joystick background & drag position
-      final centerPosition = _rectBackgroundDirection!.center.toVector2();
+      final centerPosition = backgroundDirection.center;
+
+      final atanDiff = _dragPosition - centerPosition;
+      final angle = atan2(atanDiff.y, atanDiff.x);
+
       final unboundDist = centerPosition.distanceTo(_dragPosition);
 
       // The maximum distance for the knob position to the edge of
@@ -148,37 +141,26 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
       final dist = min(unboundDist, _tileSize);
 
       // Calculate the knob position
-      final nextX = dist * cos(radAngle);
-      final nextY = dist * sin(radAngle);
-      final nextPoint = Offset(nextX, nextY);
+      final nextX = cos(angle);
+      final nextY = sin(angle);
+      final nextPoint = Vector2(nextX, nextY) * dist;
 
-      if (_rectAction != null) {
-        final diff =
-            _rectBackgroundDirection!.center + nextPoint - _rectAction!.center;
-        _rectAction = _rectAction!.shift(diff);
-      }
+      diff = backgroundDirection.center + nextPoint - action.center;
 
       final _intensity = dist / _tileSize;
 
-      joystickController.joystickAction(
-        JoystickActionEvent(
-          id: actionId,
-          event: ActionEvent.move,
-          intensity: _intensity,
-          radAngle: radAngle,
-        ),
-      );
+      _sendEvent(ActionEvent.move, intensity: _intensity, angle: angle);
     } else {
-      if (_rectAction != null) {
-        final diff = _dragPosition - _rectAction!.center.toVector2();
-        _rectAction = _rectAction!.shift(diff.toOffset());
-      }
+      diff = _dragPosition - action.center;
     }
+
+    action.shift(diff);
+    actionPressed.rect = action.rect;
   }
 
   @override
   bool containsPoint(Vector2 point) {
-    return _rectAction?.containsPoint(point) == true;
+    return action.rect.containsPoint(point);
   }
 
   @override
@@ -191,26 +173,17 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
       _dragPosition = startPosition;
       _dragging = true;
     }
-    joystickController.joystickAction(
-      JoystickActionEvent(
-        id: actionId,
-        event: ActionEvent.down,
-      ),
-    );
+    _sendEvent(ActionEvent.down);
     tapDown();
     return false;
   }
 
   void tapDown() {
     isPressed = true;
-    if (spritePressed != null) {
-      _spriteAction = spritePressed;
-    }
   }
 
   void tapUp() {
     isPressed = false;
-    _spriteAction = sprite;
   }
 
   @override
@@ -226,29 +199,30 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
 
   @override
   bool onDragEnd(int pointerId, DragEndDetails p1) {
-    _dragging = false;
-    _dragPosition = _rectBackgroundDirection!.center.toVector2();
-    joystickController.joystickAction(
-      JoystickActionEvent(
-        id: actionId,
-        event: ActionEvent.up,
-      ),
-    );
-    tapUp();
-    return true;
+    return _finishDrag(ActionEvent.up);
   }
 
   @override
   bool onDragCancel(int pointerId) {
+    return _finishDrag(ActionEvent.cancel);
+  }
+
+  bool _finishDrag(ActionEvent event) {
     _dragging = false;
-    _dragPosition = _rectBackgroundDirection!.center.toVector2();
+    _dragPosition = backgroundDirection.center;
+    _sendEvent(event);
+    tapUp();
+    return true;
+  }
+
+  void _sendEvent(ActionEvent event, {double? intensity, double? angle}) {
     joystickController.joystickAction(
       JoystickActionEvent(
         id: actionId,
-        event: ActionEvent.cancel,
+        event: event,
+        intensity: intensity ?? 0.0,
+        angle: angle ?? 0.0,
       ),
     );
-    tapUp();
-    return true;
   }
 }

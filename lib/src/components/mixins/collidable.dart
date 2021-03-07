@@ -3,11 +3,25 @@ import '../../extensions/vector2.dart';
 import '../../geometry/rectangle.dart';
 import 'hitbox.dart';
 
+/// [CollidableType.active] collides with other [Collidable]s of type active or static
+/// [CollidableType.static] collides with other [Collidable]s of type active
+/// [CollidableType.inactive] will not collide with any other [Collidable]s
+enum CollidableType {
+  active,
+  static,
+  inactive,
+}
+
 mixin Collidable on Hitbox {
-  void onCollision(Set<Vector2> points, Collidable other) {}
+  CollidableType collidableType = CollidableType.active;
+
+  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {}
 }
 
 class ScreenCollidable extends PositionComponent with Hitbox, Collidable {
+  @override
+  CollidableType collidableType = CollidableType.static;
+
   ScreenCollidable() {
     addShape(HitboxRectangle());
   }

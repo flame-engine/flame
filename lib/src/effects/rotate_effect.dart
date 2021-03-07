@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/animation.dart';
 
 import '../../components.dart';
@@ -17,7 +19,7 @@ class RotateEffect extends SimplePositionComponentEffect {
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
-    void Function()? onComplete,
+    VoidCallback? onComplete,
   })  : assert(
           (duration != null) ^ (speed != null),
           'Either speed or duration necessary',

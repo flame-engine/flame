@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import '../components/position_component.dart';
 import 'effects.dart';
 
@@ -16,7 +18,7 @@ class SequenceEffect extends PositionComponentEffect {
     required this.effects,
     bool isInfinite = false,
     bool isAlternating = false,
-    void Function()? onComplete,
+    VoidCallback? onComplete,
   }) : super(
           isInfinite,
           isAlternating,

@@ -73,7 +73,7 @@ mixin HitboxShape on Shape {
 }
 
 typedef CollisionCallback = void Function(
-  Set<Vector2> points,
+  Set<Vector2> intersectionPoints,
   HitboxShape other,
 );
 
