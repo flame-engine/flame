@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:meta/meta.dart';
-
 import '../components/mixins/single_child_particle.dart';
 import 'curved_particle.dart';
 import 'particle.dart';
@@ -15,9 +13,9 @@ class ScaledParticle extends CurvedParticle with SingleChildParticle {
   final double scale;
 
   ScaledParticle({
-    @required this.child,
+    required this.child,
     this.scale = 1.0,
-    double lifespan,
+    double? lifespan,
   }) : super(
           lifespan: lifespan,
         );

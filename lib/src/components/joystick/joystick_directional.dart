@@ -16,20 +16,19 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
   final bool isFixed;
   final EdgeInsets margin;
 
-  JoystickElement background;
-  JoystickElement knob;
+  late JoystickElement background;
+  late JoystickElement knob;
+  late double _tileSize;
 
   bool _dragging = false;
-  Vector2 _dragPosition;
-  double _tileSize;
+  late Vector2 _dragPosition;
+  Vector2? _screenSize;
 
-  JoystickController get joystickController => parent as JoystickController;
-
-  Vector2 _screenSize;
+  JoystickController get joystickController => parent! as JoystickController;
 
   JoystickDirectional({
-    JoystickElement background,
-    JoystickElement knob,
+    JoystickElement? background,
+    JoystickElement? knob,
     this.isFixed = true,
     this.margin = const EdgeInsets.only(left: 100, bottom: 100),
     this.size = 80,
@@ -51,7 +50,7 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
 
   @override
   Future<void> onLoad() async {
-    initialize(gameRef.size);
+    initialize(gameRef!.size);
   }
 
   @override
@@ -63,7 +62,7 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
   void initialize(Vector2 screenSize) {
     _screenSize = screenSize;
 
-    final osBackground = Offset(margin.left, _screenSize.y - margin.bottom);
+    final osBackground = Offset(margin.left, screenSize.y - margin.bottom);
     background.rect = Rect.fromCircle(center: osBackground, radius: size / 2);
     knob.rect = Rect.fromCircle(center: osBackground, radius: size / 4);
 
@@ -126,8 +125,8 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
 
   @override
   bool containsPoint(Vector2 point) {
-    final directional = background.rect?.inflate(50.0);
-    return directional?.containsPoint(point) == true;
+    final directional = background.rect.inflate(50.0);
+    return directional.containsPoint(point);
   }
 
   @override
@@ -142,9 +141,10 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
   }
 
   void _updateDirectionalRect(Vector2 position) {
-    if (_screenSize != null &&
-        (position.x > _screenSize.x / 2 ||
-            position.y < _screenSize.y / 2 ||
+    final screenSize = _screenSize;
+    if (screenSize != null &&
+        (position.x > screenSize.x / 2 ||
+            position.y < screenSize.y / 2 ||
             isFixed)) {
       return;
     }
@@ -163,7 +163,7 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
   @override
   bool onDragUpdate(int pointerId, DragUpdateDetails details) {
     if (_dragging) {
-      _dragPosition = gameRef.convertGlobalToLocalCoordinate(
+      _dragPosition = gameRef!.convertGlobalToLocalCoordinate(
         details.globalPosition.toVector2(),
       );
       return false;

@@ -11,7 +11,7 @@ class TextComponent extends PositionComponent {
   String _text;
   TextConfig _config;
 
-  TextPainter _tp;
+  late TextPainter _tp;
 
   String get text => _text;
 
@@ -31,11 +31,10 @@ class TextComponent extends PositionComponent {
 
   TextComponent(
     this._text, {
-    TextConfig config,
-    Vector2 position,
-    Vector2 size,
-  })  : assert(_text != null),
-        _config = config ?? TextConfig(),
+    TextConfig? config,
+    Vector2? position,
+    Vector2? size,
+  })  : _config = config ?? TextConfig(),
         super(position: position, size: size) {
     _updateBox();
   }

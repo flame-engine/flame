@@ -23,7 +23,7 @@ void main() {
         runAsWeb: false, // default value is kIsWeb
       );
 
-      expect((await image.toByteData()).buffer.asUint8List(), equals(output));
+      expect((await image.toByteData())!.buffer.asUint8List(), equals(output));
     });
 
     test('decodeImageFromPixels as web', () async {
@@ -42,7 +42,7 @@ void main() {
         runAsWeb: true, // default value is kIsWeb
       );
 
-      expect((await image.toByteData()).buffer.asUint8List(), equals(output));
+      expect((await image.toByteData())!.buffer.asUint8List(), equals(output));
     });
   });
 }

@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/animation.dart';
-import 'package:meta/meta.dart';
 
 import '../components/component.dart';
 import '../components/particle_component.dart';
@@ -29,8 +28,8 @@ abstract class Particle {
   /// Useful for procedural particle generation.
   static Particle generate({
     int count = 10,
-    @required ParticleGenerator generator,
-    double lifespan,
+    required ParticleGenerator generator,
+    double? lifespan,
   }) {
     return ComposedParticle(
       lifespan: lifespan,
@@ -41,11 +40,11 @@ abstract class Particle {
   /// Internal timer defining how long
   /// this [Particle] will live. [Particle] will
   /// be marked for removal when this timer is over.
-  Timer _timer;
+  Timer? _timer;
 
   /// Stores desired lifespan of the
   /// particle in seconds.
-  double _lifespan;
+  late double _lifespan;
 
   /// Will be set to true by update hook
   /// when this [Particle] reaches end of its lifespan
@@ -54,7 +53,7 @@ abstract class Particle {
   Particle({
     /// Particle lifespan in [Timer] format,
     /// double in seconds with microsecond precision
-    double lifespan,
+    double? lifespan,
   }) {
     setLifespan(lifespan ?? .5);
   }
@@ -69,7 +68,7 @@ abstract class Particle {
   /// Getter which should be used by subclasses
   /// to get overall progress. Also allows to substitute
   /// progress with other values, for example adding easing as in CurvedParticle.
-  double get progress => _timer.progress;
+  double get progress => _timer?.progress ?? 0.0;
 
   /// Should render this [Particle] to given [Canvas].
   /// Default behavior is empty, so that it's not
@@ -83,7 +82,7 @@ abstract class Particle {
   /// which defines its position on the lifespan.
   /// Marks [Particle] for removal when it is over.
   void update(double dt) {
-    _timer.update(dt);
+    _timer?.update(dt);
   }
 
   /// A control method allowing a parent of this [Particle]
@@ -96,7 +95,7 @@ abstract class Particle {
     _timer?.stop();
     void removeCallback() => _shouldBeRemoved = true;
     _timer = Timer(lifespan, callback: removeCallback);
-    _timer.start();
+    _timer!.start();
   }
 
   /// Wraps this particle with [TranslatedParticle]
@@ -115,7 +114,7 @@ abstract class Particle {
   /// on the canvas to another one.
   Particle moving({
     Offset from = Offset.zero,
-    @required Offset to,
+    required Offset to,
     Curve curve = Curves.linear,
   }) {
     return MovingParticle(

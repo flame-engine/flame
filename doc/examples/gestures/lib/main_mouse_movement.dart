@@ -17,7 +17,7 @@ class MyGame extends BaseGame with MouseMovementDetector {
   static const speed = 200.0;
 
   Vector2 position = Vector2.zero();
-  Vector2 target;
+  Vector2? target;
 
   final Paint _blue = Paint()..color = const Color(0xFF0000FF);
 
@@ -48,10 +48,10 @@ class MyGame extends BaseGame with MouseMovementDetector {
   void update(double dt) {
     super.update(dt);
     if (target != null) {
-      _onTarget = _toRect().contains(target.toOffset());
+      _onTarget = _toRect().contains(target!.toOffset());
 
       if (!_onTarget) {
-        final dir = (target - position).normalized();
+        final dir = (target! - position).normalized();
         position += dir * speed * dt;
       }
     }

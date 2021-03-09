@@ -1,8 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:meta/meta.dart';
-
 import '../components/position_component.dart';
 import 'effects.dart';
 
@@ -11,11 +9,11 @@ class CombinedEffect extends PositionComponentEffect {
   final double offset;
 
   CombinedEffect({
-    @required this.effects,
+    required this.effects,
     this.offset = 0.0,
     bool isInfinite = false,
     bool isAlternating = false,
-    VoidCallback onComplete,
+    VoidCallback? onComplete,
   }) : super(
           isInfinite,
           isAlternating,
@@ -76,7 +74,7 @@ class CombinedEffect extends PositionComponentEffect {
     super.reset();
     effects.forEach((effect) => effect.reset());
     if (component != null) {
-      initialize(component);
+      initialize(component!);
     }
   }
 

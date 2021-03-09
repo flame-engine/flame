@@ -16,7 +16,7 @@ void main() async {
 }
 
 class MyGame extends BaseGame {
-  SpriteBatch spriteBatch;
+  late SpriteBatch spriteBatch;
 
   @override
   Future<void> onLoad() async {

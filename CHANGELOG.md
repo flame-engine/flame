@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Migrate to null safety
  - Refactor the joystick code
  - Fix example app
  - Rename points to intersectionPoints for collision detection

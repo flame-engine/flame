@@ -60,8 +60,8 @@ class MyBaseGame extends BaseGame with TapDetector, DoubleTapDetector {
 
 class MyGame extends Game with TapDetector {
   final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
-  Timer countdown;
-  Timer interval;
+  late Timer countdown;
+  late Timer interval;
 
   int elapsedSecs = 0;
 

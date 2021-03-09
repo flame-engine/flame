@@ -11,10 +11,6 @@ mixin Hitbox on PositionComponent {
   UnmodifiableListView<HitboxShape> get shapes => UnmodifiableListView(_shapes);
 
   void addShape(HitboxShape shape) {
-    assert(
-      shape.component == null,
-      'You can only use a HitboxShape with one component',
-    );
     shape.component = this;
     _shapes.add(shape);
   }
