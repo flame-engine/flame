@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:meta/meta.dart';
-
 import '../particles/particle.dart';
 import 'component.dart';
 
@@ -13,7 +11,7 @@ class ParticleComponent extends Component {
   Particle particle;
 
   ParticleComponent({
-    @required this.particle,
+    required this.particle,
   });
 
   /// This [ParticleComponent] will be removed by the BaseGame.

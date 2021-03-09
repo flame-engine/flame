@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:meta/meta.dart';
-
 import 'extensions/vector2.dart';
 import 'sprite.dart';
 import 'sprite_animation.dart';
@@ -31,14 +29,14 @@ class SpriteSheet {
 
   /// Creates a sprite sheet given the image and the tile size.
   SpriteSheet({
-    @required this.image,
-    @required this.srcSize,
+    required this.image,
+    required this.srcSize,
   });
 
   SpriteSheet.fromColumnsAndRows({
-    @required this.image,
-    @required int columns,
-    @required int rows,
+    required this.image,
+    required int columns,
+    required int rows,
   }) : srcSize = Vector2(
           image.width / columns,
           image.height / rows,
@@ -84,11 +82,11 @@ class SpriteSheet {
   /// [from] and [to] can be specified to create an animation
   /// from a subset of the columns on the row
   SpriteAnimation createAnimation({
-    @required int row,
-    @required double stepTime,
+    required int row,
+    required double stepTime,
     bool loop = true,
     int from = 0,
-    int to,
+    int? to,
   }) {
     to ??= columns;
 

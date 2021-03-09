@@ -17,8 +17,8 @@ class NineTileBoxComponent extends PositionComponent {
   /// It uses the x, y, width and height coordinates from the [PositionComponent] to render.
   NineTileBoxComponent(
     this.nineTileBox, {
-    Vector2 position,
-    Vector2 size,
+    Vector2? position,
+    Vector2? size,
   }) : super(position: position, size: size);
 
   @mustCallSuper

@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:meta/meta.dart';
-
 import '../components/mixins/single_child_particle.dart';
 import 'curved_particle.dart';
 import 'particle.dart';
@@ -20,11 +18,11 @@ class AcceleratedParticle extends CurvedParticle with SingleChildParticle {
   Offset position;
 
   AcceleratedParticle({
-    @required this.child,
+    required this.child,
     this.acceleration = Offset.zero,
     this.speed = Offset.zero,
     this.position = Offset.zero,
-    double lifespan,
+    double? lifespan,
   }) : super(
           lifespan: lifespan,
         );

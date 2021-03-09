@@ -16,7 +16,7 @@ class MyComponent extends PositionComponent with Tapable, HasGameRef {
   bool isUpdateCalled = false;
   bool isRenderCalled = false;
   int onRemoveCallCounter = 0;
-  Vector2 gameSize;
+  late Vector2 gameSize;
 
   @override
   bool onTapDown(TapDownDetails details) {
@@ -137,7 +137,7 @@ void main() {
 
         game.onResize(size);
         game.add(component);
-        GameRenderBox renderBox;
+        late GameRenderBox renderBox;
         tester.pumpWidget(
           Builder(
             builder: (BuildContext context) {

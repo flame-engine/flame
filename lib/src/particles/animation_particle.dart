@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:meta/meta.dart';
-
 import '../anchor.dart';
 import '../extensions/vector2.dart';
 import '../sprite_animation.dart';
@@ -9,17 +7,19 @@ import 'particle.dart';
 
 export '../sprite_animation.dart';
 
+export '../sprite_animation.dart';
+
 class SpriteAnimationParticle extends Particle {
   final SpriteAnimation animation;
-  final Vector2 size;
-  final Paint overridePaint;
+  final Vector2? size;
+  final Paint? overridePaint;
   final bool alignAnimationTime;
 
   SpriteAnimationParticle({
-    @required this.animation,
+    required this.animation,
     this.size,
     this.overridePaint,
-    double lifespan,
+    double? lifespan,
     this.alignAnimationTime = true,
   }) : super(
           lifespan: lifespan,
@@ -29,7 +29,7 @@ class SpriteAnimationParticle extends Particle {
   void setLifespan(double lifespan) {
     super.setLifespan(lifespan);
 
-    if (alignAnimationTime && lifespan != null) {
+    if (alignAnimationTime) {
       animation.stepTime = lifespan / animation.frames.length;
       animation.reset();
     }

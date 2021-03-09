@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:meta/meta.dart';
-
 import 'assets/images.dart';
 import 'extensions/vector2.dart';
 import 'flame.dart';
@@ -20,14 +18,14 @@ class SpriteAnimationFrameData {
   final double stepTime;
 
   SpriteAnimationFrameData({
-    @required this.srcPosition,
-    @required this.srcSize,
-    @required this.stepTime,
+    required this.srcPosition,
+    required this.srcSize,
+    required this.stepTime,
   });
 }
 
 class SpriteAnimationData {
-  List<SpriteAnimationFrameData> frames;
+  late List<SpriteAnimationFrameData> frames;
   final bool loop;
 
   /// Creates a SpriteAnimationData from the given [frames] and [loop] parameters
@@ -42,19 +40,18 @@ class SpriteAnimationData {
   /// [texturePosition] An optional parameter with the initial coordinate where the frames begin on the image, default to (top: 0, left: 0)
   /// [loop] An optional parameter to inform if this animation loops or has a single iteration, defaults to true
   SpriteAnimationData.variable({
-    @required int amount,
-    @required List<double> stepTimes,
-    @required Vector2 textureSize,
-    int amountPerRow,
-    Vector2 texturePosition,
+    required int amount,
+    required List<double> stepTimes,
+    required Vector2 textureSize,
+    int? amountPerRow,
+    Vector2? texturePosition,
     this.loop = true,
-  })  : assert(amountPerRow == null || amount >= amountPerRow),
-        assert(stepTimes != null) {
+  }) : assert(amountPerRow == null || amount >= amountPerRow) {
     amountPerRow ??= amount;
     texturePosition ??= Vector2.zero();
     frames = List<SpriteAnimationFrameData>.generate(amount, (i) {
       final position = Vector2(
-        texturePosition.x + (i % amountPerRow) * textureSize.x,
+        texturePosition!.x + (i % amountPerRow!) * textureSize.x,
         texturePosition.y + (i ~/ amountPerRow) * textureSize.y,
       );
       return SpriteAnimationFrameData(
@@ -67,14 +64,13 @@ class SpriteAnimationData {
 
   /// Works just like [SpriteAnimationData.variable] but uses the same [stepTime] for all frames
   factory SpriteAnimationData.sequenced({
-    @required int amount,
-    @required double stepTime,
-    @required Vector2 textureSize,
-    int amountPerRow,
-    Vector2 texturePosition,
+    required int amount,
+    required double stepTime,
+    required Vector2 textureSize,
+    int? amountPerRow,
+    Vector2? texturePosition,
     bool loop = true,
   }) {
-    assert(stepTime != null);
     return SpriteAnimationData.variable(
       amount: amount,
       amountPerRow: amountPerRow,
@@ -120,7 +116,7 @@ class SpriteAnimation {
   bool loop = true;
 
   /// Registered method to be triggered when the animation complete.
-  OnCompleteSpriteAnimation onComplete;
+  OnCompleteSpriteAnimation? onComplete;
 
   /// Creates an animation given a list of frames.
   SpriteAnimation(this.frames, {this.loop = true});
@@ -133,9 +129,9 @@ class SpriteAnimation {
   /// All frames have the same [stepTime].
   SpriteAnimation.spriteList(
     List<Sprite> sprites, {
-    @required double stepTime,
+    required double stepTime,
     this.loop = true,
-  }) : assert(stepTime != null) {
+  }) {
     if (sprites.isEmpty) {
       throw Exception('You must have at least one frame!');
     }
@@ -148,8 +144,7 @@ class SpriteAnimation {
   SpriteAnimation.fromFrameData(
     Image image,
     SpriteAnimationData data,
-  )   : assert(image != null),
-        assert(data != null) {
+  ) {
     frames = data.frames.map((frameData) {
       return SpriteAnimationFrame(
         Sprite(
@@ -202,7 +197,7 @@ class SpriteAnimation {
   static Future<SpriteAnimation> load(
     String src,
     SpriteAnimationData data, {
-    Images images,
+    Images? images,
   }) async {
     final _images = images ?? Flame.images;
     final image = await _images.load(src);

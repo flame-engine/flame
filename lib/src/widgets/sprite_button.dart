@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:meta/meta.dart';
 
 import '../extensions/size.dart';
 import '../sprite.dart';
@@ -15,10 +14,10 @@ class SpriteButton extends StatefulWidget {
   final double height;
 
   const SpriteButton({
-    @required this.onPressed,
-    @required this.label,
-    @required this.sprite,
-    @required this.pressedSprite,
+    required this.onPressed,
+    required this.label,
+    required this.sprite,
+    required this.pressedSprite,
     this.width = 200,
     this.height = 50,
   });

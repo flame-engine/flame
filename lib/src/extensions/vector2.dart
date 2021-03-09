@@ -36,7 +36,7 @@ extension Vector2Extension on Vector2 {
 
   /// Rotates the [Vector2] with [angle] in radians
   /// rotates around [center] if it is defined
-  void rotate(double angle, {Vector2 center}) {
+  void rotate(double angle, {Vector2? center}) {
     if (center == null) {
       setValues(
         x * cos(angle) - y * sin(angle),
