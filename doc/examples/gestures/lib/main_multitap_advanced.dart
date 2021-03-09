@@ -19,9 +19,9 @@ class MyGame extends BaseGame
 
   final Map<int, Rect> _taps = {};
 
-  Vector2 _start;
-  Vector2 _end;
-  Rect _panRect;
+  Vector2? _start;
+  Vector2? _end;
+  Rect? _panRect;
 
   @override
   void onTapDown(int pointerId, TapDownDetails details) {
@@ -65,10 +65,10 @@ class MyGame extends BaseGame
   void onDragEnd(int pointerId, DragEndDetails details) {
     if (_start != null && _end != null) {
       _panRect = Rect.fromLTRB(
-        _start.x,
-        _start.y,
-        _end.x,
-        _end.y,
+        _start!.x,
+        _start!.y,
+        _end!.x,
+        _end!.y,
       );
     }
   }
@@ -81,7 +81,7 @@ class MyGame extends BaseGame
     });
 
     if (_panRect != null) {
-      canvas.drawRect(_panRect, _whitePaint);
+      canvas.drawRect(_panRect!, _whitePaint);
     }
   }
 }

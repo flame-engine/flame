@@ -18,7 +18,7 @@ class NineTileBox {
   int tileSize;
 
   /// The size each tile becomes when rendered (optionally used to scale the src image).
-  int destTileSize;
+  late int destTileSize;
 
   /// Creates a nine-box instance.
   ///
@@ -30,7 +30,7 @@ class NineTileBox {
   ///
   /// If [destTileSize] is not provided, the evaluated [tileSize] is used instead
   /// (so no scaling happens).
-  NineTileBox(this.sprite, {int tileSize, int destTileSize})
+  NineTileBox(this.sprite, {int? tileSize, int? destTileSize})
       : tileSize = tileSize ?? sprite.src.width.toInt() {
     this.destTileSize = destTileSize ?? this.tileSize;
   }
@@ -72,7 +72,7 @@ class NineTileBox {
     _drawTile(c, _getDest(center, width: mx, height: my), 1, 1);
   }
 
-  Rect _getDest(Vector2 position, {double width, double height}) {
+  Rect _getDest(Vector2 position, {double? width, double? height}) {
     final w = width ?? _destTileSizeDouble;
     final h = height ?? _destTileSizeDouble;
     return Rect.fromLTWH(position.x, position.y, w, h);

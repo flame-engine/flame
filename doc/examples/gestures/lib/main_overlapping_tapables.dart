@@ -33,7 +33,7 @@ class TapableSquare extends PositionComponent with Tapable {
 
   final Paint _paint = _randomPaint();
 
-  TapableSquare({Vector2 position}) {
+  TapableSquare({Vector2? position}) {
     size = Vector2.all(100);
     this.position = position ?? Vector2.all(100);
   }

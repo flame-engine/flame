@@ -7,10 +7,10 @@ import '../../../extensions.dart';
 ///
 /// It can be either a [sprite] or a [paint] (solid color circle). Not both.
 class JoystickElement {
-  final Sprite sprite;
-  final Paint paint;
+  final Sprite? sprite;
+  final Paint? paint;
 
-  Rect rect;
+  late Rect rect;
 
   JoystickElement.sprite(this.sprite) : paint = null;
 
@@ -19,19 +19,19 @@ class JoystickElement {
   Vector2 get center => rect.center.toVector2();
 
   void shift(Vector2 diff) {
-    rect = rect?.shift(diff.toOffset());
+    rect = rect.shift(diff.toOffset());
   }
 
   void render(Canvas c) {
-    if (rect == null) {
-      return;
-    }
+    final rect = this.rect;
+    final sprite = this.sprite;
+    final paint = this.paint;
 
     if (sprite == null) {
       assert(paint != null, '`paint` must not be `null` if `sprite` is `null`');
 
       final radius = rect.width / 2;
-      c.drawCircle(rect.center, radius, paint);
+      c.drawCircle(rect.center, radius, paint!);
     } else {
       sprite.render(
         c,

@@ -24,10 +24,10 @@ abstract class Game {
   final assets = AssetsCache();
 
   /// Just a reference back to the render box that is kept up to date by the engine.
-  GameRenderBox _gameRenderBox;
+  GameRenderBox? _gameRenderBox;
 
   /// Currently attached build context. Can be null if not attached.
-  BuildContext get buildContext => _gameRenderBox?.buildContext;
+  BuildContext? get buildContext => _gameRenderBox?.buildContext;
 
   /// Whether the game widget was attached to the Flutter tree.
   bool get isAttached => buildContext != null;
@@ -35,12 +35,12 @@ abstract class Game {
   /// Current size of the game as provided by the framework; it will be null if layout has not been computed yet.
   ///
   /// Use [size] and [hasLayout] for safe access.
-  Vector2 _size;
+  Vector2? _size;
 
   /// Current game viewport size, updated every resize via the [onResize] method hook
   Vector2 get size {
     assertHasLayout();
-    return _size;
+    return _size!;
   }
 
   /// Indicates if the this game instance had its layout layed into the GameWidget
@@ -143,7 +143,7 @@ abstract class Game {
         'This method can only be called if the game is attached',
       );
     }
-    return _gameRenderBox.globalToLocal(point.toOffset()).toVector2();
+    return _gameRenderBox!.globalToLocal(point.toOffset()).toVector2();
   }
 
   /// Converts a local coordinate (i.e. wrt to the game widget) to a global
@@ -156,14 +156,14 @@ abstract class Game {
         'This method can only be called if the game is attached',
       );
     }
-    return _gameRenderBox.localToGlobal(point.toOffset()).toVector2();
+    return _gameRenderBox!.localToGlobal(point.toOffset()).toVector2();
   }
 
   /// Utility method to load and cache the image for a sprite based on its options
   Future<Sprite> loadSprite(
     String path, {
-    Vector2 srcSize,
-    Vector2 srcPosition,
+    Vector2? srcSize,
+    Vector2? srcPosition,
   }) {
     return Sprite.load(
       path,
@@ -194,8 +194,8 @@ abstract class Game {
   /// Resumes the engine game loop execution
   void resumeEngine() => resumeEngineFn?.call();
 
-  VoidCallback pauseEngineFn;
-  VoidCallback resumeEngineFn;
+  VoidCallback? pauseEngineFn;
+  VoidCallback? resumeEngineFn;
 
   /// Use this method to load the assets need for the game instance to run
   Future<void> onLoad() async {}

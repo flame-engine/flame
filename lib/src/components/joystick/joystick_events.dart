@@ -27,7 +27,7 @@ class JoystickDirectionalEvent {
   final double angle;
 
   JoystickDirectionalEvent({
-    this.directional,
+    required this.directional,
     this.intensity = 0.0,
     this.angle = 0.0,
   });
@@ -60,6 +60,9 @@ class JoystickActionEvent {
   /// The id of this action as defined in the setup code.
   final int id;
 
+  /// What action was performed in this button.
+  final ActionEvent event;
+
   /// How much the knob was moved, from 0 (center) to 1 (edge).
   final double intensity;
 
@@ -69,13 +72,10 @@ class JoystickActionEvent {
   /// positive x-axis and rotates counter-clockwise).
   final double angle;
 
-  /// What action was performed in this button.
-  final ActionEvent event;
-
   JoystickActionEvent({
-    this.id,
+    required this.id,
+    required this.event,
     this.intensity = 0.0,
     this.angle = 0.0,
-    this.event,
   });
 }
