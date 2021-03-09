@@ -9,14 +9,14 @@ import 'position_component.dart';
 export '../sprite_animation.dart';
 
 class SpriteAnimationComponent extends PositionComponent {
-  SpriteAnimation animation;
-  Paint overridePaint;
+  SpriteAnimation? animation;
+  Paint? overridePaint;
   bool removeOnFinish = false;
 
   /// Creates a component with an empty animation which can be set later
   SpriteAnimationComponent({
-    Vector2 position,
-    Vector2 size,
+    Vector2? position,
+    Vector2? size,
     this.animation,
     this.overridePaint,
     this.removeOnFinish = false,
@@ -28,8 +28,8 @@ class SpriteAnimationComponent extends PositionComponent {
   SpriteAnimationComponent.fromFrameData(
     Image image,
     SpriteAnimationData data, {
-    Vector2 position,
-    Vector2 size,
+    Vector2? position,
+    Vector2? size,
     this.removeOnFinish = false,
   }) : super(position: position, size: size) {
     animation = SpriteAnimation.fromFrameData(image, data);
@@ -45,7 +45,7 @@ class SpriteAnimationComponent extends PositionComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    animation?.getSprite()?.render(
+    animation?.getSprite().render(
           canvas,
           size: size,
           overridePaint: overridePaint,

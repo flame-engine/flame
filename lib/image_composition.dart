@@ -55,8 +55,7 @@ class ImageComposition {
   ImageComposition({
     this.defaultBlendMode = BlendMode.srcOver,
     this.defaultAntiAlias = false,
-  })  : assert(defaultBlendMode != null, 'defaultBlendMode can not be null'),
-        assert(defaultAntiAlias != null, 'defaultAntiAlias can not be null');
+  });
 
   /// Add an image to the [ImageComposition].
   ///
@@ -80,16 +79,12 @@ class ImageComposition {
   void add(
     Image image,
     Vector2 position, {
-    Rect source,
+    Rect? source,
     double angle = 0,
-    Vector2 anchor,
-    bool isAntiAlias,
-    BlendMode blendMode,
+    Vector2? anchor,
+    bool? isAntiAlias,
+    BlendMode? blendMode,
   }) {
-    assert(image != null, 'Image is required to add to the Atlas');
-    assert(position != null, 'Position is required');
-    assert(angle != null, 'angle can not be null');
-
     final imageRect = image.getBoundingRect();
     source ??= imageRect;
     anchor ??= source.toVector2() / 2;

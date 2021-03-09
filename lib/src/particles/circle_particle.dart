@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:meta/meta.dart';
-
 import 'particle.dart';
 
 /// Plain circle with no other behaviors
@@ -12,9 +10,9 @@ class CircleParticle extends Particle {
   final double radius;
 
   CircleParticle({
-    @required this.paint,
+    required this.paint,
     this.radius = 10.0,
-    double lifespan,
+    double? lifespan,
   }) : super(
           lifespan: lifespan,
         );

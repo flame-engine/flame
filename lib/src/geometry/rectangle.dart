@@ -13,9 +13,9 @@ class Rectangle extends Polygon {
   ];
 
   Rectangle({
-    Vector2 position,
-    Vector2 size,
-    double angle,
+    Vector2? position,
+    Vector2? size,
+    double angle = 0,
   }) : super.fromDefinition(
           _defaultNormalizedVertices,
           position: position,
@@ -37,10 +37,10 @@ class Rectangle extends Polygon {
   /// If you want to create the [Rectangle] from a positioned [Rect] instead,
   /// have a look at [Rectangle.fromRect].
   Rectangle.fromDefinition({
-    Vector2 relation,
-    Vector2 position,
-    Vector2 size,
-    double angle,
+    Vector2? relation,
+    Vector2? position,
+    Vector2? size,
+    double angle = 0,
   }) : super.fromDefinition(
           relation != null
               ? [
@@ -60,7 +60,7 @@ class Rectangle extends Polygon {
   /// and center of the [Rectangle].
   factory Rectangle.fromRect(
     Rect rect, {
-    double angle,
+    double angle = 0,
   }) {
     return Rectangle.fromDefinition(
       position: rect.center.toVector2(),
@@ -71,7 +71,7 @@ class Rectangle extends Polygon {
 }
 
 class HitboxRectangle extends Rectangle with HitboxShape {
-  HitboxRectangle({Vector2 relation})
+  HitboxRectangle({Vector2? relation})
       : super.fromDefinition(
           relation: relation ?? Vector2.all(1),
         );

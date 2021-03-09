@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 import '../../../components.dart';
 import '../../game/base_game.dart';
 import '../mixins/has_game_ref.dart';
@@ -37,9 +35,9 @@ class JoystickComponent extends JoystickController {
   int priority;
 
   JoystickComponent({
-    @required BaseGame gameRef,
+    required BaseGame gameRef,
     List<JoystickAction> actions = const [],
-    JoystickDirectional directional,
+    JoystickDirectional? directional,
     this.priority = 0,
   }) {
     if (directional != null) {

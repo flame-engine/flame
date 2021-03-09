@@ -10,8 +10,8 @@ export './scale_effect.dart';
 export './sequence_effect.dart';
 
 abstract class ComponentEffect<T extends BaseComponent> {
-  T component;
-  Function() onComplete;
+  T? component;
+  Function()? onComplete;
 
   bool _isDisposed = false;
   bool get isDisposed => _isDisposed;
@@ -28,7 +28,7 @@ abstract class ComponentEffect<T extends BaseComponent> {
   final bool isRelative;
   final bool _initialIsInfinite;
   final bool _initialIsAlternating;
-  double percentage;
+  double? percentage;
   double curveProgress = 0.0;
   double peakTime = 0.0;
   double currentTime = 0.0;
@@ -42,10 +42,9 @@ abstract class ComponentEffect<T extends BaseComponent> {
     this._initialIsInfinite,
     this._initialIsAlternating, {
     this.isRelative = false,
-    Curve curve,
+    Curve? curve,
     this.onComplete,
-  })  : assert(isRelative != null),
-        isInfinite = _initialIsInfinite,
+  })  : isInfinite = _initialIsInfinite,
         isAlternating = _initialIsAlternating,
         curve = curve ?? Curves.linear;
 
@@ -62,7 +61,7 @@ abstract class ComponentEffect<T extends BaseComponent> {
     if (!hasCompleted()) {
       currentTime += (dt + driftTime) * curveDirection;
       percentage = (currentTime / peakTime).clamp(0.0, 1.0).toDouble();
-      curveProgress = curve.transform(percentage);
+      curveProgress = curve.transform(percentage!);
       _updateDriftTime();
       currentTime = currentTime.clamp(0.0, peakTime).toDouble();
     }
@@ -83,7 +82,7 @@ abstract class ComponentEffect<T extends BaseComponent> {
 
   bool isMax() => percentage == null ? false : percentage == 1.0;
   bool isMin() => percentage == null ? false : percentage == 0.0;
-  bool isRootEffect() => component?.effects?.contains(this) ?? false;
+  bool isRootEffect() => component?.effects.contains(this) == true;
 
   void reset() {
     _isDisposed = false;
@@ -115,14 +114,14 @@ abstract class ComponentEffect<T extends BaseComponent> {
 abstract class PositionComponentEffect
     extends ComponentEffect<PositionComponent> {
   /// Used to be able to determine the start state of the component
-  Vector2 originalPosition;
-  double originalAngle;
-  Vector2 originalSize;
+  Vector2? originalPosition;
+  double? originalAngle;
+  Vector2? originalSize;
 
   /// Used to be able to determine the end state of a sequence of effects
-  Vector2 endPosition;
-  double endAngle;
-  Vector2 endSize;
+  Vector2? endPosition;
+  double? endAngle;
+  Vector2? endSize;
 
   /// Whether the state of a certain field was modified by the effect
   final bool modifiesPosition;
@@ -133,11 +132,11 @@ abstract class PositionComponentEffect
     bool initialIsInfinite,
     bool initialIsAlternating, {
     bool isRelative = false,
-    Curve curve,
+    Curve? curve,
     this.modifiesPosition = false,
     this.modifiesAngle = false,
     this.modifiesSize = false,
-    void Function() onComplete,
+    VoidCallback? onComplete,
   }) : super(
           initialIsInfinite,
           initialIsAlternating,
@@ -166,28 +165,28 @@ abstract class PositionComponentEffect
   /// Only change the parts of the component that is affected by the
   /// effect, and only set the state if it is the root effect (not part of
   /// another effect, like children of a CombinedEffect or SequenceEffect).
-  void _setComponentState(Vector2 position, double angle, Vector2 size) {
+  void _setComponentState(Vector2? position, double? angle, Vector2? size) {
     if (isRootEffect()) {
       if (modifiesPosition) {
         assert(
           position != null,
           '`position` must not be `null` for an effect which modifies `position`',
         );
-        component?.position?.setFrom(position);
+        component?.position.setFrom(position!);
       }
       if (modifiesAngle) {
         assert(
           angle != null,
           '`angle` must not be `null` for an effect which modifies `angle`',
         );
-        component?.angle = angle;
+        component?.angle = angle!;
       }
       if (modifiesSize) {
         assert(
           size != null,
           '`size` must not be `null` for an effect which modifies `size`',
         );
-        component?.size?.setFrom(size);
+        component?.size.setFrom(size!);
       }
     }
   }
@@ -204,20 +203,20 @@ abstract class PositionComponentEffect
 }
 
 abstract class SimplePositionComponentEffect extends PositionComponentEffect {
-  double duration;
-  double speed;
+  double? duration;
+  double? speed;
 
   SimplePositionComponentEffect(
     bool initialIsInfinite,
     bool initialIsAlternating, {
     this.duration,
     this.speed,
-    Curve curve,
+    Curve? curve,
     bool isRelative = false,
     bool modifiesPosition = false,
     bool modifiesAngle = false,
     bool modifiesSize = false,
-    void Function() onComplete,
+    VoidCallback? onComplete,
   })  : assert(
           (duration != null) ^ (speed != null),
           'Either speed or duration necessary',

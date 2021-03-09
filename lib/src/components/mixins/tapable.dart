@@ -19,7 +19,8 @@ mixin Tapable on BaseComponent {
     return true;
   }
 
-  int _currentPointerId;
+  int? _currentPointerId;
+
   bool _checkPointerId(int pointerId) => _currentPointerId == pointerId;
 
   bool handleTapDown(int pointerId, TapDownDetails details) {

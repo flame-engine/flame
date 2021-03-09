@@ -27,20 +27,20 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
 
   bool isPressed = false;
   bool _dragging = false;
-  Vector2 _dragPosition;
-  double _tileSize;
+  late Vector2 _dragPosition;
+  late double _tileSize;
 
-  JoystickElement backgroundDirection;
-  JoystickElement action;
-  JoystickElement actionPressed;
+  late JoystickElement backgroundDirection;
+  late JoystickElement action;
+  late JoystickElement actionPressed;
 
-  JoystickController get joystickController => parent as JoystickController;
+  JoystickController get joystickController => parent! as JoystickController;
 
   JoystickAction({
-    @required this.actionId,
-    JoystickElement backgroundDirection,
-    JoystickElement action,
-    JoystickElement actionPressed,
+    required this.actionId,
+    JoystickElement? backgroundDirection,
+    JoystickElement? action,
+    JoystickElement? actionPressed,
     this.enableDirection = false,
     this.size = 50,
     this.margin = EdgeInsets.zero,
@@ -68,7 +68,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
 
   @override
   Future<void> onLoad() async {
-    initialize(gameRef.size);
+    initialize(gameRef!.size);
   }
 
   @override
@@ -126,7 +126,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
     super.update(dt);
 
     Vector2 diff;
-    if (backgroundDirection.rect != null && _dragging) {
+    if (_dragging) {
       // Distance between the center of joystick background & drag position
       final centerPosition = backgroundDirection.center;
 
@@ -160,7 +160,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
 
   @override
   bool containsPoint(Vector2 point) {
-    return action.rect?.containsPoint(point) == true;
+    return action.rect.containsPoint(point);
   }
 
   @override
@@ -189,7 +189,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   @override
   bool onDragUpdate(int pointerId, DragUpdateDetails details) {
     if (_dragging) {
-      _dragPosition = gameRef.convertGlobalToLocalCoordinate(
+      _dragPosition = gameRef!.convertGlobalToLocalCoordinate(
         details.globalPosition.toVector2(),
       );
       return true;
@@ -215,13 +215,13 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
     return true;
   }
 
-  void _sendEvent(ActionEvent event, {double intensity, double angle}) {
+  void _sendEvent(ActionEvent event, {double? intensity, double? angle}) {
     joystickController.joystickAction(
       JoystickActionEvent(
         id: actionId,
         event: event,
-        intensity: intensity,
-        angle: angle,
+        intensity: intensity ?? 0.0,
+        angle: angle ?? 0.0,
       ),
     );
   }

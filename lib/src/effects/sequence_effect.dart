@@ -1,12 +1,12 @@
-import 'package:meta/meta.dart';
+import 'dart:ui';
 
 import '../components/position_component.dart';
 import 'effects.dart';
 
 class SequenceEffect extends PositionComponentEffect {
   final List<PositionComponentEffect> effects;
-  PositionComponentEffect currentEffect;
-  bool _currentWasAlternating;
+  late PositionComponentEffect currentEffect;
+  late bool _currentWasAlternating;
 
   static const int _initialIndex = 0;
   static const double _initialDriftModifier = 0.0;
@@ -15,10 +15,10 @@ class SequenceEffect extends PositionComponentEffect {
   double _driftModifier = _initialDriftModifier;
 
   SequenceEffect({
-    @required this.effects,
+    required this.effects,
     bool isInfinite = false,
     bool isAlternating = false,
-    void Function() onComplete,
+    VoidCallback? onComplete,
   }) : super(
           isInfinite,
           isAlternating,
@@ -45,9 +45,9 @@ class SequenceEffect extends PositionComponentEffect {
 
     effects.forEach((effect) {
       effect.reset();
-      component.position.setFrom(endPosition);
-      component.angle = endAngle;
-      component.size.setFrom(endSize);
+      component.position.setFrom(endPosition!);
+      component.angle = endAngle!;
+      component.size.setFrom(endSize!);
       effect.initialize(component);
       endPosition = effect.endPosition;
       endAngle = effect.endAngle;
@@ -64,9 +64,9 @@ class SequenceEffect extends PositionComponentEffect {
       endAngle = originalAngle;
       endSize = originalSize;
     }
-    component.position.setFrom(originalPosition);
-    component.angle = originalAngle;
-    component.size.setFrom(originalSize);
+    component.position.setFrom(originalPosition!);
+    component.angle = originalAngle!;
+    component.size.setFrom(originalSize!);
     currentEffect = effects.first;
     _currentWasAlternating = currentEffect.isAlternating;
   }
@@ -107,7 +107,7 @@ class SequenceEffect extends PositionComponentEffect {
     super.reset();
     effects.forEach((e) => e.reset());
     if (component != null) {
-      initialize(component);
+      initialize(component!);
     }
   }
 }

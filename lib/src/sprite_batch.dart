@@ -15,7 +15,7 @@ extension SpriteBatchExtension on Game {
     String path, {
     Color defaultColor = const Color(0x00000000),
     BlendMode defaultBlendMode = BlendMode.srcOver,
-    RSTransform defaultTransform,
+    RSTransform? defaultTransform,
   }) {
     return SpriteBatch.load(
       path,
@@ -64,13 +64,10 @@ class BatchItem {
   final Paint paint;
 
   BatchItem({
-    @required this.source,
-    @required this.transform,
-    @required this.color,
-  })  : assert(source != null),
-        assert(transform != null),
-        assert(color != null),
-        matrix = Matrix4(
+    required this.source,
+    required this.transform,
+    required this.color,
+  })   : matrix = Matrix4(
           transform.scos, transform.ssin, 0, 0, //
           -transform.ssin, transform.scos, 0, 0, //
           0, 0, _defaultScale, 0, //
@@ -134,7 +131,7 @@ class SpriteBatch {
   final Color defaultColor;
 
   /// The default transform, used when a transform was not supplied for a [BatchItem].
-  final RSTransform defaultTransform;
+  final RSTransform? defaultTransform;
 
   /// The default blend mode, used for blending a batch item.
   final BlendMode defaultBlendMode;
@@ -153,8 +150,7 @@ class SpriteBatch {
     this.defaultColor = const Color(0x00000000),
     this.defaultBlendMode = BlendMode.srcOver,
     this.defaultTransform,
-  })  : assert(atlas != null),
-        assert(defaultColor != null);
+  });
 
   /// Takes a path of an image, and optional arguments for the SpriteBatch.
   ///
@@ -163,8 +159,8 @@ class SpriteBatch {
     String path, {
     Color defaultColor = const Color(0x00000000),
     BlendMode defaultBlendMode = BlendMode.srcOver,
-    RSTransform defaultTransform,
-    Images images,
+    RSTransform? defaultTransform,
+    Images? images,
   }) async {
     final _images = images ?? Flame.images;
     return SpriteBatch(
@@ -188,9 +184,9 @@ class SpriteBatch {
   /// rotation so that they can be reused over multiple calls to this constructor,
   /// it may be more efficient to directly use this method instead.
   void addTransform({
-    @required Rect source,
-    RSTransform transform,
-    Color color,
+    required Rect source,
+    RSTransform? transform,
+    Color? color,
   }) {
     final batchItem = BatchItem(
       source: source,
@@ -212,23 +208,23 @@ class SpriteBatch {
   ///
   /// You can transform the sprite from its [offset] using [scale], [rotation] and [anchor].
   ///
-  /// The [color] parameter allows you to render a color behind the batch item, as a background color.
+  /// The [color] paramater allows you to render a color behind the batch item, as a background color.
   ///
   /// This method creates a new [RSTransform] based on the given transform arguments. If many [RSTransform] objects are being
   /// created and there is a way to factor out the computations of the sine and cosine of the rotation
   /// (which are computed each time this method is called) and reuse them over multiple [RSTransform] objects,
   /// it may be more efficient to directly use the more direct [addTransform] method instead.
   void add({
-    @required Rect source,
+    required Rect source,
     double scale = 1.0,
-    Vector2 anchor,
+    Vector2? anchor,
     double rotation = 0,
-    Vector2 offset,
-    Color color,
+    Vector2? offset,
+    Color? color,
   }) {
     anchor ??= Vector2.zero();
     offset ??= Vector2.zero();
-    RSTransform transform;
+    RSTransform? transform;
 
     // If any of the transform arguments is different from the defaults,
     // then we create one. This is to prevent unnecessary computations
@@ -260,15 +256,15 @@ class SpriteBatch {
 
   void render(
     Canvas canvas, {
-    BlendMode blendMode,
-    Rect cullRect,
-    Paint paint,
+    BlendMode? blendMode,
+    Rect? cullRect,
+    Paint? paint,
   }) {
     paint ??= Paint();
 
     if (kIsWeb) {
       for (final batchItem in _batchItems) {
-        paint..blendMode = blendMode ?? paint.blendMode ?? defaultBlendMode;
+        paint..blendMode = blendMode ?? paint.blendMode;
 
         canvas
           ..save()

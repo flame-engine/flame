@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:meta/meta.dart';
-
 import '../extensions/vector2.dart';
 import 'particle.dart';
 
@@ -11,13 +9,13 @@ class ImageParticle extends Particle {
   /// dart.ui [Image] to draw
   Image image;
 
-  Rect src;
-  Rect dest;
+  late Rect src;
+  late Rect dest;
 
   ImageParticle({
-    @required this.image,
-    Vector2 size,
-    double lifespan,
+    required this.image,
+    Vector2? size,
+    double? lifespan,
   }) : super(lifespan: lifespan) {
     final srcWidth = image.width.toDouble();
     final srcHeight = image.height.toDouble();

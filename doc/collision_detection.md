@@ -94,6 +94,29 @@ If you want to check collisions with the screen edges, as we do in the example a
 the predefined [ScreenCollidable](#ScreenCollidable) class and since that one also is a `Collidable`
 you can implement your own `onCollision` method for that class if needed.
 
+#### CollidableType
+By default the `CollidableType` is `active` on your `Collidable`, but there are two other types that
+you can set your collidable to too if you need to optimize the collision detection.
+
+The `CollidableType` enum contains the following values:
+
+ - `active` collides with other `Collidable`s of type active or static
+ - `static` collides with other `Collidable`s of type active
+ - `inactive` will not collide with any other `Collidable`s
+
+So if you have collidables that you don't need to check collisions against each other you can mark
+them as static by setting `collidableType = CollidableType.static`, this could for example be ground
+components or maybe your enemies don't need to check collisions between each other, then they could
+be marked as static too.
+
+Then we have the `inactive` type which simply doesn't get checked at all in the collision detection.
+This could be used for example if you have components outside of the screen that you don't care
+about at the moment but that might later come back in to view so they are not completely removed
+from the game.
+
+These are just examples of how you could use these types, there will be a lot more usecases for them
+so don't doubt to use them even if your use-case isn't listed here.
+
 ### HasCollidables
 If you want to use this collision detection in your game you have to add the `HasCollidables` mixin
 to your game so that the game knows that it should keep track of which components that can collide.

@@ -32,27 +32,27 @@ class GameWidget<T extends Game> extends StatefulWidget {
   final T game;
 
   /// The text direction to be used in text elements in a game.
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// Builder to provide a widget tree to be built whilst the [Future] provided
   /// via [Game.onLoad] is not resolved. By default this is an empty Container().
-  final GameLoadingWidgetBuilder loadingBuilder;
+  final GameLoadingWidgetBuilder? loadingBuilder;
 
   /// If set, errors during the onLoad method will not be thrown
   /// but instead this widget will be shown. If not provided, errors are
   /// propagated up.
-  final GameErrorWidgetBuilder errorBuilder;
+  final GameErrorWidgetBuilder? errorBuilder;
 
   /// Builder to provide a widget tree to be built between the game elements and
   /// the background color provided via [Game.backgroundColor]
-  final WidgetBuilder backgroundBuilder;
+  final WidgetBuilder? backgroundBuilder;
 
   /// A map to show widgets overlay.
   ///
   /// See also:
   /// - [new GameWidget]
   /// - [Game.overlays]
-  final Map<String, OverlayWidgetBuilder<T>> overlayBuilderMap;
+  final Map<String, OverlayWidgetBuilder<T>>? overlayBuilderMap;
 
   /// A List of the initially active overlays, this is used only on the first build of the widget.
   /// To control the overlays that are active use [Game.overlays]
@@ -60,7 +60,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// See also:
   /// - [new GameWidget]
   /// - [Game.overlays]
-  final List<String> initialActiveOverlays;
+  final List<String>? initialActiveOverlays;
 
   /// Renders a [game] in a flutter widget tree.
   ///
@@ -100,8 +100,8 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// game.overlays.add('PauseMenu');
   /// ```
   const GameWidget({
-    Key key,
-    @required this.game,
+    Key? key,
+    required this.game,
     this.textDirection,
     this.loadingBuilder,
     this.errorBuilder,
@@ -118,9 +118,9 @@ class GameWidget<T extends Game> extends StatefulWidget {
 }
 
 class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
-  Set<String> initialActiveOverlays;
+  Set<String> initialActiveOverlays = {};
 
-  Future<void> _gameLoaderFuture;
+  Future<void>? _gameLoaderFuture;
   Future<void> get _gameLoaderFutureCache =>
       _gameLoaderFuture ?? (_gameLoaderFuture = widget.game.onLoad());
 
@@ -138,8 +138,8 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     if (widget.initialActiveOverlays == null) {
       return;
     }
-    _checkOverlays(widget.initialActiveOverlays.toSet());
-    widget.initialActiveOverlays.forEach((key) {
+    _checkOverlays(widget.initialActiveOverlays!.toSet());
+    widget.initialActiveOverlays!.forEach((key) {
       widget.game.overlays.add(key);
     });
   }
@@ -244,9 +244,9 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
               builder: (_, snapshot) {
                 if (snapshot.hasError) {
                   if (widget.errorBuilder == null) {
-                    throw snapshot.error;
+                    throw snapshot.error!;
                   } else {
-                    return widget.errorBuilder(context, snapshot.error);
+                    return widget.errorBuilder!(context, snapshot.error!);
                   }
                 }
                 if (snapshot.connectionState == ConnectionState.done) {
@@ -267,7 +267,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     }
     final backgroundContent = KeyedSubtree(
       key: ValueKey(widget.game),
-      child: widget.backgroundBuilder(context),
+      child: widget.backgroundBuilder!(context),
     );
     stackWidgets.insert(0, backgroundContent);
     return stackWidgets;
@@ -278,7 +278,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       return stackWidgets;
     }
     final widgets = initialActiveOverlays.map((String overlayKey) {
-      final builder = widget.overlayBuilderMap[overlayKey];
+      final builder = widget.overlayBuilderMap![overlayKey]!;
       return KeyedSubtree(
         key: ValueKey(overlayKey),
         child: builder(context, widget.game),
@@ -527,9 +527,9 @@ class _GameRenderObjectWidget extends LeafRenderObjectWidget {
 }
 
 class _DragEvent extends Drag {
-  void Function(DragUpdateDetails) onUpdate;
-  void Function() onCancel;
-  void Function(DragEndDetails) onEnd;
+  void Function(DragUpdateDetails)? onUpdate;
+  VoidCallback? onCancel;
+  void Function(DragEndDetails)? onEnd;
 
   @override
   void update(DragUpdateDetails details) {

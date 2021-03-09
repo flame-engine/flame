@@ -48,9 +48,9 @@ class Polygon extends Shape {
   /// NOTE: Always define your shape is a clockwise fashion
   Polygon.fromDefinition(
     this.normalizedVertices, {
-    Vector2 position,
-    Vector2 size,
-    double angle,
+    Vector2? position,
+    Vector2? size,
+    double? angle,
   }) : super(position: position, size: size, angle: angle ?? 0);
 
   final _cachedScaledShape = ShapeCache<Iterable<Vector2>>();
@@ -59,11 +59,11 @@ class Polygon extends Shape {
   Iterable<Vector2> scaled() {
     if (!_cachedScaledShape.isCacheValid([size])) {
       _cachedScaledShape.updateCache(
-        normalizedVertices?.map((p) => p.clone()..multiply(size / 2)),
-        [size.clone()],
+        normalizedVertices.map((p) => p.clone()..multiply(size! / 2)),
+        [size!.clone()],
       );
     }
-    return _cachedScaledShape.value;
+    return _cachedScaledShape.value!;
   }
 
   final _cachedRenderPath = ShapeCache<Path>();
@@ -76,19 +76,19 @@ class Polygon extends Shape {
           ..addPolygon(
             scaled()
                 .map((point) => (point +
-                        (position + size / 2) +
-                        ((size / 2)..multiply(relativePosition)))
+                        (position + size! / 2) +
+                        ((size! / 2)..multiply(relativePosition)))
                     .toOffset())
                 .toList(),
             true,
           ),
         [
           position.clone(),
-          size.clone(),
+          size!.clone(),
         ],
       );
     }
-    canvas.drawPath(_cachedRenderPath.value, paint);
+    canvas.drawPath(_cachedRenderPath.value!, paint);
   }
 
   final _cachedHitbox = ShapeCache<List<Vector2>>();
@@ -100,14 +100,13 @@ class Polygon extends Shape {
     if (!_cachedHitbox.isCacheValid([position, size, angle])) {
       _cachedHitbox.updateCache(
         scaled()
-                .map((point) => (point + shapeCenter)
-                  ..rotate(angle, center: anchorPosition))
-                .toList(growable: false) ??
-            [],
-        [shapeCenter, size.clone(), angle],
+            .map((point) =>
+                (point + shapeCenter)..rotate(angle, center: anchorPosition))
+            .toList(growable: false),
+        [shapeCenter, size!.clone(), angle],
       );
     }
-    return _cachedHitbox.value;
+    return _cachedHitbox.value!;
   }
 
   /// Checks whether the polygon represented by the list of [Vector2] contains
@@ -115,7 +114,7 @@ class Polygon extends Shape {
   @override
   bool containsPoint(Vector2 point) {
     // If the size is 0 then it can't contain any points
-    if (size.x == 0 || size.y == 0) {
+    if (size!.x == 0 || size!.y == 0) {
       return false;
     }
 
@@ -135,7 +134,7 @@ class Polygon extends Shape {
 
   /// Return all vertices as [LineSegment]s that intersect [rect], if [rect]
   /// is null return all vertices as [LineSegment]s.
-  List<LineSegment> possibleIntersectionVertices(Rect rect) {
+  List<LineSegment> possibleIntersectionVertices(Rect? rect) {
     final rectIntersections = <LineSegment>[];
     final vertices = hitbox();
     for (var i = 0; i < vertices.length; i++) {
@@ -147,7 +146,7 @@ class Polygon extends Shape {
     return rectIntersections;
   }
 
-  LineSegment getEdge(int i, {List<Vector2> vertices}) {
+  LineSegment getEdge(int i, {required List<Vector2> vertices}) {
     return LineSegment(
       getVertex(i, vertices: vertices),
       getVertex(
@@ -157,7 +156,7 @@ class Polygon extends Shape {
     );
   }
 
-  Vector2 getVertex(int i, {List<Vector2> vertices}) {
+  Vector2 getVertex(int i, {List<Vector2>? vertices}) {
     vertices ??= hitbox();
     return vertices[i % vertices.length];
   }

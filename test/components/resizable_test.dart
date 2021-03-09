@@ -6,7 +6,7 @@ class MyComponent extends PositionComponent {
   String name;
   @override
   Vector2 size = Vector2(2.0, 2.0);
-  Vector2 gameSize;
+  late Vector2 gameSize;
 
   MyComponent(this.name);
 

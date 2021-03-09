@@ -57,7 +57,7 @@ class TextConfig {
   final TextDirection textDirection;
 
   /// The height of line, as a multiple of font size.
-  final double lineHeight;
+  final double? lineHeight;
 
   final MemoryCache<String, material.TextPainter> _textPainterCache =
       MemoryCache();
@@ -127,7 +127,7 @@ class TextConfig {
 
       _textPainterCache.setValue(text, tp);
     }
-    return _textPainterCache.getValue(text);
+    return _textPainterCache.getValue(text)!;
   }
 
   /// Creates a new [TextConfig] changing only the [fontSize].

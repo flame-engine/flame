@@ -21,7 +21,7 @@ void main() async {
 
 class MyCollidable extends PositionComponent
     with HasGameRef<MyGame>, Hitbox, Collidable {
-  Vector2 velocity;
+  late Vector2 velocity;
   final _collisionColor = Colors.amber;
   bool _isWallHit = false;
   bool _isCollision = false;
@@ -35,7 +35,7 @@ class MyCollidable extends PositionComponent
 
   @override
   Future<void> onLoad() async {
-    final center = gameRef.size / 2;
+    final center = gameRef!.size / 2;
     velocity = (center - position).normalized() * 150;
   }
 
@@ -58,7 +58,7 @@ class MyCollidable extends PositionComponent
   }
 
   @override
-  void onCollision(Set<Vector2> points, Collidable other) {
+  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
     if (other is ScreenCollidable) {
       _isWallHit = true;
       return;
