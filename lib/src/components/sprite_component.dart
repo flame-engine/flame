@@ -36,11 +36,17 @@ class SpriteComponent extends PositionComponent {
     Image image, {
     Vector2? position,
     Vector2? size,
+    Vector2? srcPosition,
+    Vector2? srcSize,
   }) =>
       SpriteComponent(
         position: position,
         size: size ?? image.size,
-        sprite: Sprite(image),
+        sprite: Sprite(
+          image,
+          srcPosition: srcPosition,
+          srcSize: srcSize,
+        ),
       );
 
   @mustCallSuper
