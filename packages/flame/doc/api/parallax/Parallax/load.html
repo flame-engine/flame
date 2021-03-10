@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the load method from the Parallax class, for the Dart programming language.">
+  <title>load method - Parallax class - parallax library - Dart API</title>
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="../../static-assets/github.css">
+  <link rel="stylesheet" href="../../static-assets/styles.css">
+  <link rel="icon" href="../../static-assets/favicon.png">
+
+</head>
+
+<body data-base-href="../../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">flame</a></li>
+    <li><a href="../../parallax/parallax-library.html">parallax</a></li>
+    <li><a href="../../parallax/Parallax-class.html">Parallax</a></li>
+    <li class="self-crumb">load method</li>
+  </ol>
+  <div class="self-name">load</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div id="dartdoc-sidebar-left" class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+      <form class="search-sidebar" role="search">
+        <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+      </form>
+    </header>
+    
+    <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+      <li><a href="../../index.html">flame</a></li>
+      <li><a href="../../parallax/parallax-library.html">parallax</a></li>
+      <li><a href="../../parallax/Parallax-class.html">Parallax</a></li>
+      <li class="self-crumb">load method</li>
+    </ol>
+    
+    <h5>Parallax class</h5>
+    <ol>
+    
+        <li class="section-title"><a href="../../parallax/Parallax-class.html#constructors">Constructors</a></li>
+        <li><a href="../../parallax/Parallax/Parallax.html">Parallax</a></li>
+    
+        <li class="section-title">
+            <a href="../../parallax/Parallax-class.html#instance-properties">Properties</a>
+        </li>
+        <li><a href="../../parallax/Parallax/baseVelocity.html">baseVelocity</a></li>
+        <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+        <li><a href="../../parallax/Parallax/layers.html">layers</a></li>
+        <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+    
+        <li class="section-title"><a href="../../parallax/Parallax-class.html#instance-methods">Methods</a></li>
+        <li><a href="../../parallax/Parallax/currentOffset.html">currentOffset</a></li>
+        <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+        <li><a href="../../parallax/Parallax/render.html">render</a></li>
+        <li><a href="../../parallax/Parallax/resize.html">resize</a></li>
+        <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></li>
+        <li><a href="../../parallax/Parallax/update.html">update</a></li>
+    
+        <li class="section-title inherited"><a href="../../parallax/Parallax-class.html#operators">Operators</a></li>
+        <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+        <li class="section-title"><a href="../../parallax/Parallax-class.html#static-methods">Static methods</a></li>
+        <li><a href="../../parallax/Parallax/load.html">load</a></li>
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-main-content" class="col-xs-12 col-sm-9 col-md-8 main-content">
+      <div><h1><span class="kind-method">load</span> method </h1></div>
+
+    <section class="multi-line-signature">
+      <span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../parallax/Parallax-class.html">Parallax</a></span>&gt;</span></span>
+            <span class="name ">load</span>
+(<wbr><ol class="parameter-list"><li><span class="parameter" id="load-param-paths"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">paths</span>, </span></li>
+<li><span class="parameter" id="load-param-size"><span class="type-annotation"><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span> <span class="parameter-name">size</span>, </span></li>
+<li><span class="parameter" id="load-param-baseVelocity">{<span class="type-annotation"><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span> <span class="parameter-name">baseVelocity</span>, </span></li>
+<li><span class="parameter" id="load-param-velocityMultiplierDelta"><span class="type-annotation"><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span> <span class="parameter-name">velocityMultiplierDelta</span>, </span></li>
+<li><span class="parameter" id="load-param-repeat"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/painting/ImageRepeat-class.html">ImageRepeat</a></span> <span class="parameter-name">repeat</span>: <span class="default-value">ImageRepeat.repeatX</span>, </span></li>
+<li><span class="parameter" id="load-param-alignment"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/painting/Alignment-class.html">Alignment</a></span> <span class="parameter-name">alignment</span>: <span class="default-value">Alignment.bottomLeft</span>, </span></li>
+<li><span class="parameter" id="load-param-fill"><span class="type-annotation"><a href="../../parallax/LayerFill-class.html">LayerFill</a></span> <span class="parameter-name">fill</span>: <span class="default-value">LayerFill.height</span>, </span></li>
+<li><span class="parameter" id="load-param-images"><span class="type-annotation">Images</span> <span class="parameter-name">images</span>}</span></li>
+</ol>)
+      
+    </section>
+    <section class="desc markdown">
+      <p>Note that this method only should be used if all of your layers should
+have the same layer arguments (how the images should be repeated, aligned
+and filled), otherwise load the <a href="../../parallax/ParallaxLayer-class.html">ParallaxLayer</a>s individually and use the
+normal constructor.</p>
+<p><a href="../../parallax/Parallax/load.html">load</a> takes a list of paths to all the images that you want to use in the
+parallax.
+Optionally arguments for the <code>baseVelocity</code> and <code>velocityMultiplierDelta</code> can be passed
+in, <code>baseVelocity</code> defines what the base velocity of the layers should be
+and <code>velocityMultiplierDelta</code> defines how the velocity should change the
+closer the layer is (<code>velocityMultiplierDelta ^ n</code>, where n is the
+layer index).
+Arguments for how all the images should repeat (<code>repeat</code>),
+which edge it should align with (<code>alignment</code>), which axis it should fill
+the image on (<code>fill</code>) and <code>images</code> which is the image cache that should be
+used can also be passed in.
+If no image cache is set, the global flame cache is used.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span></h2>
+      <pre class="language-dart"><code class="language-dart">static Future&lt;Parallax&gt; load(
+  List&lt;String&gt; paths,
+  Vector2 size, {
+  Vector2 baseVelocity,
+  Vector2 velocityMultiplierDelta,
+  ImageRepeat repeat = ImageRepeat.repeatX,
+  Alignment alignment = Alignment.bottomLeft,
+  LayerFill fill = LayerFill.height,
+  Images images,
+}) async {
+  velocityMultiplierDelta ??= Vector2.all(1.0);
+  var depth = 0;
+  final layers = await Future.wait&lt;ParallaxLayer&gt;(
+    paths.map((path) async {
+      final image = ParallaxImage.load(
+        path,
+        repeat: repeat,
+        alignment: alignment,
+        fill: fill,
+        images: images,
+      );
+      final velocityMultiplier =
+          List.filled(depth, velocityMultiplierDelta).fold&lt;Vector2&gt;(
+        velocityMultiplierDelta,
+        (previousValue, delta) =&gt; previousValue.clone()..multiply(delta),
+      );
+      ++depth;
+      return ParallaxLayer(
+        await image,
+        velocityMultiplier: velocityMultiplier,
+      );
+    }),
+  );
+  return Parallax(
+    layers,
+    size,
+    baseVelocity: baseVelocity,
+  );
+}</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-right" class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame
+      1.0.0-rc6
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="../../static-assets/typeahead.bundle.min.js"></script>
+<script src="../../static-assets/highlight.pack.js"></script>
+<script src="../../static-assets/URI.js"></script>
+<script src="../../static-assets/script.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the SpriteAnimation class from the sprite library, for the Dart programming language.">
+  <title>SpriteAnimation class - sprite library - Dart API</title>
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="../static-assets/github.css">
+  <link rel="stylesheet" href="../static-assets/styles.css">
+  <link rel="icon" href="../static-assets/favicon.png">
+
+</head>
+
+<body data-base-href="../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">flame</a></li>
+    <li><a href="../sprite/sprite-library.html">sprite</a></li>
+    <li class="self-crumb">SpriteAnimation class</li>
+  </ol>
+  <div class="self-name">SpriteAnimation</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div id="dartdoc-sidebar-left" class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+      <form class="search-sidebar" role="search">
+        <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+      </form>
+    </header>
+    
+    <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+      <li><a href="../index.html">flame</a></li>
+      <li><a href="../sprite/sprite-library.html">sprite</a></li>
+      <li class="self-crumb">SpriteAnimation class</li>
+    </ol>
+    
+    <h5>sprite library</h5>
+    <ol>
+      <li class="section-title"><a href="../sprite/sprite-library.html#classes">Classes</a></li>
+      <li><a href="../sprite/BatchItem-class.html">BatchItem</a></li>
+      <li><a href="../sprite/Sprite-class.html">Sprite</a></li>
+      <li><a href="../sprite/SpriteAnimation-class.html">SpriteAnimation</a></li>
+      <li><a href="../sprite/SpriteAnimationData-class.html">SpriteAnimationData</a></li>
+      <li><a href="../sprite/SpriteAnimationFrame-class.html">SpriteAnimationFrame</a></li>
+      <li><a href="../sprite/SpriteAnimationFrameData-class.html">SpriteAnimationFrameData</a></li>
+      <li><a href="../sprite/SpriteBatch-class.html">SpriteBatch</a></li>
+      <li><a href="../sprite/SpriteSheet-class.html">SpriteSheet</a></li>
+    
+      <li class="section-title"><a href="../sprite/sprite-library.html#extension">Extensions</a></li>
+      <li><a href="../sprite/SpriteBatchExtension.html">SpriteBatchExtension</a></li>
+    
+    
+    
+    
+    
+    
+      <li class="section-title"><a href="../sprite/sprite-library.html#typedefs">Typedefs</a></li>
+      <li><a href="../sprite/OnCompleteSpriteAnimation.html">OnCompleteSpriteAnimation</a></li>
+    
+    </ol>
+  </div>
+
+  <div id="dartdoc-main-content" class="col-xs-12 col-sm-9 col-md-8 main-content">
+      <div><h1><span class="kind-class">SpriteAnimation</span> class  </h1></div>
+
+    <section class="desc markdown">
+      <p>Represents a sprite animation, that is, a list of sprites that change with time.</p>
+    </section>
+    
+
+    <section class="summary offset-anchor" id="constructors">
+      <h2>Constructors</h2>
+
+      <dl class="constructor-summary-list">
+        <dt id="SpriteAnimation" class="callable">
+          <span class="name"><a href="../sprite/SpriteAnimation/SpriteAnimation.html">SpriteAnimation</a></span><span class="signature">(<span class="parameter" id="-param-frames"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../sprite/SpriteAnimationFrame-class.html">SpriteAnimationFrame</a></span>&gt;</span></span> <span class="parameter-name">frames</span>, </span><span class="parameter" id="-param-loop">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">loop</span>: <span class="default-value">true</span>}</span>)</span>
+        </dt>
+        <dd>
+          Creates an animation given a list of frames. 
+        </dd>
+        <dt id="SpriteAnimation.empty" class="callable">
+          <span class="name"><a href="../sprite/SpriteAnimation/SpriteAnimation.empty.html">SpriteAnimation.empty</a></span><span class="signature">()</span>
+        </dt>
+        <dd>
+          Creates an empty animation 
+        </dd>
+        <dt id="SpriteAnimation.fromAsepriteData" class="callable">
+          <span class="name"><a href="../sprite/SpriteAnimation/SpriteAnimation.fromAsepriteData.html">SpriteAnimation.fromAsepriteData</a></span><span class="signature">(<span class="parameter" id="fromAsepriteData-param-image"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Image-class.html">Image</a></span> <span class="parameter-name">image</span>, </span><span class="parameter" id="fromAsepriteData-param-jsonData"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">jsonData</span></span>)</span>
+        </dt>
+        <dd>
+          Automatically creates an Animation Object using animation data provided by the json file
+provided by Aseprite <a href="../sprite/SpriteAnimation/SpriteAnimation.fromAsepriteData.html">[...]</a>
+        </dd>
+        <dt id="SpriteAnimation.fromFrameData" class="callable">
+          <span class="name"><a href="../sprite/SpriteAnimation/SpriteAnimation.fromFrameData.html">SpriteAnimation.fromFrameData</a></span><span class="signature">(<span class="parameter" id="fromFrameData-param-image"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Image-class.html">Image</a></span> <span class="parameter-name">image</span>, </span><span class="parameter" id="fromFrameData-param-data"><span class="type-annotation"><a href="../sprite/SpriteAnimationData-class.html">SpriteAnimationData</a></span> <span class="parameter-name">data</span></span>)</span>
+        </dt>
+        <dd>
+          Creates an SpriteAnimation based on its <code>data</code>. <a href="../sprite/SpriteAnimation/SpriteAnimation.fromFrameData.html">[...]</a>
+        </dd>
+        <dt id="SpriteAnimation.spriteList" class="callable">
+          <span class="name"><a href="../sprite/SpriteAnimation/SpriteAnimation.spriteList.html">SpriteAnimation.spriteList</a></span><span class="signature">(<span class="parameter" id="spriteList-param-sprites"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../sprite/Sprite-class.html">Sprite</a></span>&gt;</span></span> <span class="parameter-name">sprites</span>, </span><span class="parameter" id="spriteList-param-stepTime">{<span>@<a href="https://pub.dev/documentation/meta/1.3.0/meta/required-constant.html">required</a></span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">stepTime</span>, </span><span class="parameter" id="spriteList-param-loop"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">loop</span>: <span class="default-value">true</span>}</span>)</span>
+        </dt>
+        <dd>
+          Creates an animation based on the parameters. <a href="../sprite/SpriteAnimation/SpriteAnimation.spriteList.html">[...]</a>
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="clock" class="property">
+          <span class="name"><a href="../sprite/SpriteAnimation/clock.html">clock</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>         
+        </dt>
+        <dd>
+          Current clock time (total time) of this animation, in seconds, since last frame. <a href="../sprite/SpriteAnimation/clock.html">[...]</a>
+                  <div class="features">read / write</div>
+</dd>
+        <dt id="currentFrame" class="property">
+          <span class="name"><a href="../sprite/SpriteAnimation/currentFrame.html">currentFrame</a></span>
+          <span class="signature">&#8594; <a href="../sprite/SpriteAnimationFrame-class.html">SpriteAnimationFrame</a></span>         
+        </dt>
+        <dd>
+          The current frame that should be displayed. 
+                  <div class="features">read-only</div>
+</dd>
+        <dt id="currentIndex" class="property">
+          <span class="name"><a href="../sprite/SpriteAnimation/currentIndex.html">currentIndex</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>         
+        </dt>
+        <dd>
+          Index of the current frame that should be displayed. 
+                  <div class="features">read / write</div>
+</dd>
+        <dt id="elapsed" class="property">
+          <span class="name"><a href="../sprite/SpriteAnimation/elapsed.html">elapsed</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>         
+        </dt>
+        <dd>
+          Total elapsed time of this animation, in seconds, since start or a reset. 
+                  <div class="features">read / write</div>
+</dd>
+        <dt id="frames" class="property">
+          <span class="name"><a href="../sprite/SpriteAnimation/frames.html">frames</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../sprite/SpriteAnimationFrame-class.html">SpriteAnimationFrame</a></span>&gt;</span></span>         
+        </dt>
+        <dd>
+          The frames that compose this animation. 
+                  <div class="features">read / write</div>
+</dd>
+        <dt id="hashCode" class="property inherited">
+          <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>         
+        </dt>
+        <dd class="inherited">
+          The hash code for this object. <a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">[...]</a>
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="isLastFrame" class="property">
+          <span class="name"><a href="../sprite/SpriteAnimation/isLastFrame.html">isLastFrame</a></span>
+          <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>         
+        </dt>
+        <dd>
+          Returns whether the animation is on the last frame. 
+                  <div class="features">read-only</div>
+</dd>
+        <dt id="isSingleFrame" class="property">
+          <span class="name"><a href="../sprite/SpriteAnimation/isSingleFrame.html">isSingleFrame</a></span>
+          <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>         
+        </dt>
+        <dd>
+          Returns whether the animation has only a single frame (and is, thus, a still image). 
+                  <div class="features">read-only</div>
+</dd>
+        <dt id="loop" class="property">
+          <span class="name"><a href="../sprite/SpriteAnimation/loop.html">loop</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>         
+        </dt>
+        <dd>
+          Whether the animation loops after the last sprite of the list, going back to the first, or keeps returning the last when done. 
+                  <div class="features">read / write</div>
+</dd>
+        <dt id="onComplete" class="property">
+          <span class="name"><a href="../sprite/SpriteAnimation/onComplete.html">onComplete</a></span>
+          <span class="signature">&#8596; <a href="../sprite/OnCompleteSpriteAnimation.html">OnCompleteSpriteAnimation</a></span>         
+        </dt>
+        <dd>
+          Registered method to be triggered when the animation complete. 
+                  <div class="features">read / write</div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Type-class.html">Type</a></span>         
+        </dt>
+        <dd class="inherited">
+          A representation of the runtime type of the object. 
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="stepTime" class="property">
+          <span class="name"><a href="../sprite/SpriteAnimation/stepTime.html">stepTime</a></span>
+          <span class="signature">&#8592; <span class="parameter" id="stepTime=-param-stepTime"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span></span></span>         
+        </dt>
+        <dd>
+          Sets a fixed step time to all frames. 
+                  <div class="features">write-only</div>
+</dd>
+        <dt id="variableStepTimes" class="property">
+          <span class="name"><a href="../sprite/SpriteAnimation/variableStepTimes.html">variableStepTimes</a></span>
+          <span class="signature">&#8592; <span class="parameter" id="variableStepTimes=-param-stepTimes"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>&gt;</span></span></span></span>         
+        </dt>
+        <dd>
+          Sets a different step time to each frame. The sizes of the arrays must match. 
+                  <div class="features">write-only</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="done" class="callable">
+          <span class="name"><a href="../sprite/SpriteAnimation/done.html">done</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+          </span>
+                  </dt>
+        <dd>
+          If <a href="../sprite/SpriteAnimation/loop.html">loop</a> is false, returns whether the animation is done (fixed in the last Sprite). <a href="../sprite/SpriteAnimation/done.html">[...]</a>
+                  
+</dd>
+        <dt id="getSprite" class="callable">
+          <span class="name"><a href="../sprite/SpriteAnimation/getSprite.html">getSprite</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="../sprite/Sprite-class.html">Sprite</a></span>
+          </span>
+                  </dt>
+        <dd>
+          Gets the current <a href="../sprite/Sprite-class.html">Sprite</a> that should be shown. <a href="../sprite/SpriteAnimation/getSprite.html">[...]</a>
+                  
+</dd>
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          Invoked when a non-existent method or property is accessed. <a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">[...]</a>
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="reset" class="callable">
+          <span class="name"><a href="../sprite/SpriteAnimation/reset.html">reset</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd>
+          Resets the animation, like it would just have been created. 
+                  
+</dd>
+        <dt id="reversed" class="callable">
+          <span class="name"><a href="../sprite/SpriteAnimation/reversed.html">reversed</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="../sprite/SpriteAnimation-class.html">SpriteAnimation</a></span>
+          </span>
+                  </dt>
+        <dd>
+          Returns a new Animation based on this animation, but with its frames in reversed order 
+                  
+</dd>
+        <dt id="toString" class="callable inherited">
+          <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          A string representation of this object. <a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">[...]</a>
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="totalDuration" class="callable">
+          <span class="name"><a href="../sprite/SpriteAnimation/totalDuration.html">totalDuration</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>
+          </span>
+                  </dt>
+        <dd>
+          Computes the total duration of this animation (before it's done or repeats). 
+                  
+</dd>
+        <dt id="update" class="callable">
+          <span class="name"><a href="../sprite/SpriteAnimation/update.html">update</a></span><span class="signature">(<wbr><span class="parameter" id="update-param-dt"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">dt</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd>
+          Updates this animation, ticking the lifeTime by an amount <code>dt</code> (in seconds). 
+                  
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor inherited" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+          <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          The equality operator. <a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">[...]</a>
+                  <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+
+    <section class="summary offset-anchor" id="static-methods">
+      <h2>Static Methods</h2>
+      <dl class="callables">
+        <dt id="load" class="callable">
+          <span class="name"><a href="../sprite/SpriteAnimation/load.html">load</a></span><span class="signature">(<wbr><span class="parameter" id="load-param-src"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">src</span>, </span><span class="parameter" id="load-param-data"><span class="type-annotation"><a href="../sprite/SpriteAnimationData-class.html">SpriteAnimationData</a></span> <span class="parameter-name">data</span>, </span><span class="parameter" id="load-param-images">{<span class="type-annotation">Images</span> <span class="parameter-name">images</span>}</span>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../sprite/SpriteAnimation-class.html">SpriteAnimation</a></span>&gt;</span></span>
+          </span>
+                  </dt>
+        <dd>
+          Takes a path of an image, a <a href="../sprite/SpriteAnimationData-class.html">SpriteAnimationData</a> and loads the sprite animation
+When the <code>images</code> is omitted, the global <a href="../flame/Flame/images.html">Flame.images</a> is used 
+                  
+</dd>
+      </dl>
+    </section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-right" class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <ol>
+    
+      <li class="section-title"><a href="../sprite/SpriteAnimation-class.html#constructors">Constructors</a></li>
+      <li><a href="../sprite/SpriteAnimation/SpriteAnimation.html">SpriteAnimation</a></li>
+      <li><a href="../sprite/SpriteAnimation/SpriteAnimation.empty.html">empty</a></li>
+      <li><a href="../sprite/SpriteAnimation/SpriteAnimation.fromAsepriteData.html">fromAsepriteData</a></li>
+      <li><a href="../sprite/SpriteAnimation/SpriteAnimation.fromFrameData.html">fromFrameData</a></li>
+      <li><a href="../sprite/SpriteAnimation/SpriteAnimation.spriteList.html">spriteList</a></li>
+    
+      <li class="section-title">
+        <a href="../sprite/SpriteAnimation-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="../sprite/SpriteAnimation/clock.html">clock</a></li>
+      <li><a href="../sprite/SpriteAnimation/currentFrame.html">currentFrame</a></li>
+      <li><a href="../sprite/SpriteAnimation/currentIndex.html">currentIndex</a></li>
+      <li><a href="../sprite/SpriteAnimation/elapsed.html">elapsed</a></li>
+      <li><a href="../sprite/SpriteAnimation/frames.html">frames</a></li>
+      <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+      <li><a href="../sprite/SpriteAnimation/isLastFrame.html">isLastFrame</a></li>
+      <li><a href="../sprite/SpriteAnimation/isSingleFrame.html">isSingleFrame</a></li>
+      <li><a href="../sprite/SpriteAnimation/loop.html">loop</a></li>
+      <li><a href="../sprite/SpriteAnimation/onComplete.html">onComplete</a></li>
+      <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+      <li><a href="../sprite/SpriteAnimation/stepTime.html">stepTime</a></li>
+      <li><a href="../sprite/SpriteAnimation/variableStepTimes.html">variableStepTimes</a></li>
+    
+      <li class="section-title"><a href="../sprite/SpriteAnimation-class.html#instance-methods">Methods</a></li>
+      <li><a href="../sprite/SpriteAnimation/done.html">done</a></li>
+      <li><a href="../sprite/SpriteAnimation/getSprite.html">getSprite</a></li>
+      <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li><a href="../sprite/SpriteAnimation/reset.html">reset</a></li>
+      <li><a href="../sprite/SpriteAnimation/reversed.html">reversed</a></li>
+      <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></li>
+      <li><a href="../sprite/SpriteAnimation/totalDuration.html">totalDuration</a></li>
+      <li><a href="../sprite/SpriteAnimation/update.html">update</a></li>
+    
+      <li class="section-title inherited"><a href="../sprite/SpriteAnimation-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+      <li class="section-title"><a href="../sprite/SpriteAnimation-class.html#static-methods">Static methods</a></li>
+      <li><a href="../sprite/SpriteAnimation/load.html">load</a></li>
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame
+      1.0.0-rc6
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="../static-assets/typeahead.bundle.min.js"></script>
+<script src="../static-assets/highlight.pack.js"></script>
+<script src="../static-assets/URI.js"></script>
+<script src="../static-assets/script.js"></script>
+
+
+</body>
+
+</html>

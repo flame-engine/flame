@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the Game class from the game library, for the Dart programming language.">
+  <title>Game class - game library - Dart API</title>
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="../static-assets/github.css">
+  <link rel="stylesheet" href="../static-assets/styles.css">
+  <link rel="icon" href="../static-assets/favicon.png">
+
+</head>
+
+<body data-base-href="../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">flame</a></li>
+    <li><a href="../game/game-library.html">game</a></li>
+    <li class="self-crumb">Game abstract class</li>
+  </ol>
+  <div class="self-name">Game</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div id="dartdoc-sidebar-left" class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+      <form class="search-sidebar" role="search">
+        <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+      </form>
+    </header>
+    
+    <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+      <li><a href="../index.html">flame</a></li>
+      <li><a href="../game/game-library.html">game</a></li>
+      <li class="self-crumb">Game abstract class</li>
+    </ol>
+    
+    <h5>game library</h5>
+    <ol>
+      <li class="section-title"><a href="../game/game-library.html#classes">Classes</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Aabb2-class.html">Aabb2</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Aabb3-class.html">Aabb3</a></li>
+      <li><a href="../game/ActiveOverlaysNotifier-class.html">ActiveOverlaysNotifier</a></li>
+      <li><a href="../game/BaseGame-class.html">BaseGame</a></li>
+      <li><a href="../game/Camera-class.html">Camera</a></li>
+      <li><a href="../game/DefaultViewport-class.html">DefaultViewport</a></li>
+      <li><a href="../game/FixedResolutionViewport-class.html">FixedResolutionViewport</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Frustum-class.html">Frustum</a></li>
+      <li><a href="../game/Game-class.html">Game</a></li>
+      <li><a href="../game/GameWidget-class.html">GameWidget</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/IntersectionResult-class.html">IntersectionResult</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Matrix2-class.html">Matrix2</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Matrix3-class.html">Matrix3</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Matrix4-class.html">Matrix4</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Obb3-class.html">Obb3</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Plane-class.html">Plane</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Quad-class.html">Quad</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Quaternion-class.html">Quaternion</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Ray-class.html">Ray</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/SimplexNoise-class.html">SimplexNoise</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Sphere-class.html">Sphere</a></li>
+      <li><a href="../game/TextConfig-class.html">TextConfig</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Triangle-class.html">Triangle</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector-class.html">Vector</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector3-class.html">Vector3</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector4-class.html">Vector4</a></li>
+      <li><a href="../game/Viewport-class.html">Viewport</a></li>
+    
+      <li class="section-title"><a href="../game/game-library.html#extension">Extensions</a></li>
+      <li><a href="../extensions/Vector2Extension.html">Vector2Extension</a></li>
+    
+      <li class="section-title"><a href="../game/game-library.html#mixins">Mixins</a></li>
+      <li><a href="../game/FPSCounter-mixin.html">FPSCounter</a></li>
+    
+      <li class="section-title"><a href="../game/game-library.html#constants">Constants</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/degrees2Radians-constant.html">degrees2Radians</a></li>
+      <li><a href="../game/frameInterval-constant.html">frameInterval</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/radians2Degrees-constant.html">radians2Degrees</a></li>
+    
+    
+      <li class="section-title"><a href="../game/game-library.html#functions">Functions</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/absoluteError.html">absoluteError</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/buildPlaneVectors.html">buildPlaneVectors</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/catmullRom.html">catmullRom</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/cross2.html">cross2</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/cross2A.html">cross2A</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/cross2B.html">cross2B</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/cross3.html">cross3</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/degrees.html">degrees</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/dot2.html">dot2</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/dot3.html">dot3</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/makeFrustumMatrix.html">makeFrustumMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/makeInfiniteMatrix.html">makeInfiniteMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/makeOrthographicMatrix.html">makeOrthographicMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/makePerspectiveMatrix.html">makePerspectiveMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/makePlaneProjection.html">makePlaneProjection</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/makePlaneReflection.html">makePlaneReflection</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/makeViewMatrix.html">makeViewMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/mix.html">mix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/pickRay.html">pickRay</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/radians.html">radians</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/relativeError.html">relativeError</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/setFrustumMatrix.html">setFrustumMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/setInfiniteMatrix.html">setInfiniteMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/setModelMatrix.html">setModelMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/setOrthographicMatrix.html">setOrthographicMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/setPerspectiveMatrix.html">setPerspectiveMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/setRotationMatrix.html">setRotationMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/setViewMatrix.html">setViewMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/smoothStep.html">smoothStep</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/unproject.html">unproject</a></li>
+    
+    
+      <li class="section-title"><a href="../game/game-library.html#typedefs">Typedefs</a></li>
+      <li><a href="../game/GameErrorWidgetBuilder.html">GameErrorWidgetBuilder</a></li>
+      <li><a href="../game/GameLoadingWidgetBuilder.html">GameLoadingWidgetBuilder</a></li>
+      <li><a href="../game/OverlayWidgetBuilder.html">OverlayWidgetBuilder</a></li>
+    
+    </ol>
+  </div>
+
+  <div id="dartdoc-main-content" class="col-xs-12 col-sm-9 col-md-8 main-content">
+      <div><h1><span class="kind-class">Game</span> class  </h1></div>
+
+    <section class="desc markdown">
+      <p>Represents a generic game.</p>
+<p>Subclass this to implement the <a href="../game/Game/update.html">update</a> and <a href="../game/Game/render.html">render</a> methods.
+Flame will deal with calling these methods properly when the game's widget is rendered.</p>
+    </section>
+    
+    <section>
+      <dl class="dl-horizontal">
+
+
+
+        <dt>Implementers</dt>
+        <dd><ul class="comma-separated clazz-relationships">
+          <li><a href="../game/BaseGame-class.html">BaseGame</a></li>
+        </ul></dd>
+
+        <dt>Available Extensions</dt>
+        <dd><ul class="comma-separated clazz-relationships">
+          <li><a href="../components/ParallaxComponentExtension.html">ParallaxComponentExtension</a></li>
+          <li><a href="../parallax/ParallaxExtension.html">ParallaxExtension</a></li>
+          <li><a href="../sprite/SpriteBatchExtension.html">SpriteBatchExtension</a></li>
+        </ul></dd>
+
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="constructors">
+      <h2>Constructors</h2>
+
+      <dl class="constructor-summary-list">
+        <dt id="Game" class="callable">
+          <span class="name"><a href="../game/Game/Game.html">Game</a></span><span class="signature">()</span>
+        </dt>
+        <dd>
+           
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="assets" class="property">
+          <span class="name"><a href="../game/Game/assets.html">assets</a></span>
+          <span class="signature">&#8594; AssetsCache</span>         
+        </dt>
+        <dd>
+           
+                  <div class="features">final</div>
+</dd>
+        <dt id="buildContext" class="property">
+          <span class="name"><a href="../game/Game/buildContext.html">buildContext</a></span>
+          <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span>         
+        </dt>
+        <dd>
+          Currently attached build context. Can be null if not attached. 
+                  <div class="features">read-only</div>
+</dd>
+        <dt id="hashCode" class="property inherited">
+          <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>         
+        </dt>
+        <dd class="inherited">
+          The hash code for this object. <a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">[...]</a>
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="hasLayout" class="property">
+          <span class="name"><a href="../game/Game/hasLayout.html">hasLayout</a></span>
+          <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>         
+        </dt>
+        <dd>
+          Indicates if the this game instance had its layout layed into the GameWidget
+Only this is true, the game is ready to have its size used or in the case
+of a BaseGame, to receive components. 
+                  <div class="features">read-only</div>
+</dd>
+        <dt id="images" class="property">
+          <span class="name"><a href="../game/Game/images.html">images</a></span>
+          <span class="signature">&#8594; Images</span>         
+        </dt>
+        <dd>
+           
+                  <div class="features">final</div>
+</dd>
+        <dt id="isAttached" class="property">
+          <span class="name"><a href="../game/Game/isAttached.html">isAttached</a></span>
+          <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>         
+        </dt>
+        <dd>
+          Whether the game widget was attached to the Flutter tree. 
+                  <div class="features">read-only</div>
+</dd>
+        <dt id="overlays" class="property">
+          <span class="name"><a href="../game/Game/overlays.html">overlays</a></span>
+          <span class="signature">&#8594; <a href="../game/ActiveOverlaysNotifier-class.html">ActiveOverlaysNotifier</a></span>         
+        </dt>
+        <dd>
+          A property that stores an <a href="../game/ActiveOverlaysNotifier-class.html">ActiveOverlaysNotifier</a> <a href="../game/Game/overlays.html">[...]</a>
+                  <div class="features">final</div>
+</dd>
+        <dt id="pauseEngineFn" class="property">
+          <span class="name"><a href="../game/Game/pauseEngineFn.html">pauseEngineFn</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-ui/VoidCallback.html">VoidCallback</a></span>         
+        </dt>
+        <dd>
+           
+                  <div class="features">read / write</div>
+</dd>
+        <dt id="resumeEngineFn" class="property">
+          <span class="name"><a href="../game/Game/resumeEngineFn.html">resumeEngineFn</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-ui/VoidCallback.html">VoidCallback</a></span>         
+        </dt>
+        <dd>
+           
+                  <div class="features">read / write</div>
+</dd>
+        <dt id="runOnCreation" class="property">
+          <span class="name"><a href="../game/Game/runOnCreation.html">runOnCreation</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>         
+        </dt>
+        <dd>
+          Flag to tell the game loop if it should start running upon creation 
+                  <div class="features">read / write</div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Type-class.html">Type</a></span>         
+        </dt>
+        <dd class="inherited">
+          A representation of the runtime type of the object. 
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="size" class="property">
+          <span class="name"><a href="../game/Game/size.html">size</a></span>
+          <span class="signature">&#8594; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>         
+        </dt>
+        <dd>
+          Current game viewport size, updated every resize via the <a href="../game/Game/onResize.html">onResize</a> method hook 
+                  <div class="features">read-only</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="assertHasLayout" class="callable">
+          <span class="name"><a href="../game/Game/assertHasLayout.html">assertHasLayout</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd>
+           
+                  <div class="features">@<a href="https://pub.dev/documentation/meta/1.3.0/meta/protected-constant.html">protected</a></div>
+</dd>
+        <dt id="attach" class="callable">
+          <span class="name"><a href="../game/Game/attach.html">attach</a></span><span class="signature">(<wbr><span class="parameter" id="attach-param-owner"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/rendering/PipelineOwner-class.html">PipelineOwner</a></span> <span class="parameter-name">owner</span>, </span><span class="parameter" id="attach-param-gameRenderBox"><span class="type-annotation">GameRenderBox</span> <span class="parameter-name">gameRenderBox</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd>
+          Marks game as not attached tto any widget tree. <a href="../game/Game/attach.html">[...]</a>
+                  
+</dd>
+        <dt id="backgroundColor" class="callable">
+          <span class="name"><a href="../game/Game/backgroundColor.html">backgroundColor</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-ui/Color-class.html">Color</a></span>
+          </span>
+                  </dt>
+        <dd>
+          Returns the game background color.
+By default it will return a black color.
+It cannot be changed at runtime, because the game widget does not get rebuild when this value changes. 
+                  
+</dd>
+        <dt id="convertGlobalToLocalCoordinate" class="callable">
+          <span class="name"><a href="../game/Game/convertGlobalToLocalCoordinate.html">convertGlobalToLocalCoordinate</a></span><span class="signature">(<wbr><span class="parameter" id="convertGlobalToLocalCoordinate-param-point"><span class="type-annotation"><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span> <span class="parameter-name">point</span></span>)
+            <span class="returntype parameter">&#8594; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>
+          </span>
+                  </dt>
+        <dd>
+          Converts a global coordinate (i.e. wrt to the app itself) to a local
+coordinate (i.e. wrt to the game widget).
+If the widget occupies the whole app ("full screen" games), this operation
+is the identity. 
+                  
+</dd>
+        <dt id="convertLocalToGlobalCoordinate" class="callable">
+          <span class="name"><a href="../game/Game/convertLocalToGlobalCoordinate.html">convertLocalToGlobalCoordinate</a></span><span class="signature">(<wbr><span class="parameter" id="convertLocalToGlobalCoordinate-param-point"><span class="type-annotation"><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span> <span class="parameter-name">point</span></span>)
+            <span class="returntype parameter">&#8594; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>
+          </span>
+                  </dt>
+        <dd>
+          Converts a local coordinate (i.e. wrt to the game widget) to a global
+coordinate (i.e. wrt to the app itself).
+If the widget occupies the whole app ("full screen" games), this operation
+is the identity. 
+                  
+</dd>
+        <dt id="detach" class="callable">
+          <span class="name"><a href="../game/Game/detach.html">detach</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd>
+          Marks game as not attached tto any widget tree. <a href="../game/Game/detach.html">[...]</a>
+                  
+</dd>
+        <dt id="lifecycleStateChange" class="callable">
+          <span class="name"><a href="../game/Game/lifecycleStateChange.html">lifecycleStateChange</a></span><span class="signature">(<wbr><span class="parameter" id="lifecycleStateChange-param-state"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/AppLifecycleState-class.html">AppLifecycleState</a></span> <span class="parameter-name">state</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd>
+          This is the lifecycle state change hook; every time the game is resumed, paused or suspended, this is called. <a href="../game/Game/lifecycleStateChange.html">[...]</a>
+                  
+</dd>
+        <dt id="loadSprite" class="callable">
+          <span class="name"><a href="../game/Game/loadSprite.html">loadSprite</a></span><span class="signature">(<wbr><span class="parameter" id="loadSprite-param-path"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span>, </span><span class="parameter" id="loadSprite-param-srcSize">{<span class="type-annotation"><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span> <span class="parameter-name">srcSize</span>, </span><span class="parameter" id="loadSprite-param-srcPosition"><span class="type-annotation"><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span> <span class="parameter-name">srcPosition</span>}</span>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../sprite/Sprite-class.html">Sprite</a></span>&gt;</span></span>
+          </span>
+                  </dt>
+        <dd>
+          Utility method to load and cache the image for a sprite based on its options 
+                  
+</dd>
+        <dt id="loadSpriteAnimation" class="callable">
+          <span class="name"><a href="../game/Game/loadSpriteAnimation.html">loadSpriteAnimation</a></span><span class="signature">(<wbr><span class="parameter" id="loadSpriteAnimation-param-path"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span>, </span><span class="parameter" id="loadSpriteAnimation-param-data"><span class="type-annotation"><a href="../sprite/SpriteAnimationData-class.html">SpriteAnimationData</a></span> <span class="parameter-name">data</span></span>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../sprite/SpriteAnimation-class.html">SpriteAnimation</a></span>&gt;</span></span>
+          </span>
+                  </dt>
+        <dd>
+          Utility method to load and cache the image for a sprite animation based on its options 
+                  
+</dd>
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          Invoked when a non-existent method or property is accessed. <a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">[...]</a>
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="onAttach" class="callable">
+          <span class="name"><a href="../game/Game/onAttach.html">onAttach</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd>
+           
+                  <div class="features">@<a href="https://pub.dev/documentation/meta/1.3.0/meta/mustCallSuper-constant.html">mustCallSuper</a></div>
+</dd>
+        <dt id="onDetach" class="callable">
+          <span class="name"><a href="../game/Game/onDetach.html">onDetach</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd>
+           
+                  <div class="features">@<a href="https://pub.dev/documentation/meta/1.3.0/meta/mustCallSuper-constant.html">mustCallSuper</a></div>
+</dd>
+        <dt id="onLoad" class="callable">
+          <span class="name"><a href="../game/Game/onLoad.html">onLoad</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+          </span>
+                  </dt>
+        <dd>
+          Use this method to load the assets need for the game instance to run 
+                  
+</dd>
+        <dt id="onResize" class="callable">
+          <span class="name"><a href="../game/Game/onResize.html">onResize</a></span><span class="signature">(<wbr><span class="parameter" id="onResize-param-size"><span class="type-annotation"><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span> <span class="parameter-name">size</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd>
+          This is the resize hook; every time the game widget is resized, this hook is called. <a href="../game/Game/onResize.html">[...]</a>
+                  <div class="features">@<a href="https://pub.dev/documentation/meta/1.3.0/meta/mustCallSuper-constant.html">mustCallSuper</a></div>
+</dd>
+        <dt id="onTimingsCallback" class="callable">
+          <span class="name"><a href="../game/Game/onTimingsCallback.html">onTimingsCallback</a></span><span class="signature">(<wbr><span class="parameter" id="onTimingsCallback-param-timings"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-ui/FrameTiming-class.html">FrameTiming</a></span>&gt;</span></span> <span class="parameter-name">timings</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd>
+          Use for calculating the FPS. 
+                  
+</dd>
+        <dt id="pauseEngine" class="callable">
+          <span class="name"><a href="../game/Game/pauseEngine.html">pauseEngine</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd>
+          Pauses the engine game loop execution 
+                  
+</dd>
+        <dt id="render" class="callable">
+          <span class="name"><a href="../game/Game/render.html">render</a></span><span class="signature">(<wbr><span class="parameter" id="render-param-canvas"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Canvas-class.html">Canvas</a></span> <span class="parameter-name">canvas</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd>
+          Implement this method to render the current game state in the <code>canvas</code>. 
+                  
+</dd>
+        <dt id="resumeEngine" class="callable">
+          <span class="name"><a href="../game/Game/resumeEngine.html">resumeEngine</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd>
+          Resumes the engine game loop execution 
+                  
+</dd>
+        <dt id="toString" class="callable inherited">
+          <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          A string representation of this object. <a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">[...]</a>
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="update" class="callable">
+          <span class="name"><a href="../game/Game/update.html">update</a></span><span class="signature">(<wbr><span class="parameter" id="update-param-dt"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">dt</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd>
+          Implement this method to update the game state, given the time <code>dt</code> that has passed since the last update. <a href="../game/Game/update.html">[...]</a>
+                  
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor inherited" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+          <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          The equality operator. <a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">[...]</a>
+                  <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-right" class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <ol>
+    
+      <li class="section-title"><a href="../game/Game-class.html#constructors">Constructors</a></li>
+      <li><a href="../game/Game/Game.html">Game</a></li>
+    
+      <li class="section-title">
+        <a href="../game/Game-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="../game/Game/assets.html">assets</a></li>
+      <li><a href="../game/Game/buildContext.html">buildContext</a></li>
+      <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+      <li><a href="../game/Game/hasLayout.html">hasLayout</a></li>
+      <li><a href="../game/Game/images.html">images</a></li>
+      <li><a href="../game/Game/isAttached.html">isAttached</a></li>
+      <li><a href="../game/Game/overlays.html">overlays</a></li>
+      <li><a href="../game/Game/pauseEngineFn.html">pauseEngineFn</a></li>
+      <li><a href="../game/Game/resumeEngineFn.html">resumeEngineFn</a></li>
+      <li><a href="../game/Game/runOnCreation.html">runOnCreation</a></li>
+      <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+      <li><a href="../game/Game/size.html">size</a></li>
+    
+      <li class="section-title"><a href="../game/Game-class.html#instance-methods">Methods</a></li>
+      <li><a href="../game/Game/assertHasLayout.html">assertHasLayout</a></li>
+      <li><a href="../game/Game/attach.html">attach</a></li>
+      <li><a href="../game/Game/backgroundColor.html">backgroundColor</a></li>
+      <li><a href="../game/Game/convertGlobalToLocalCoordinate.html">convertGlobalToLocalCoordinate</a></li>
+      <li><a href="../game/Game/convertLocalToGlobalCoordinate.html">convertLocalToGlobalCoordinate</a></li>
+      <li><a href="../game/Game/detach.html">detach</a></li>
+      <li><a href="../game/Game/lifecycleStateChange.html">lifecycleStateChange</a></li>
+      <li><a href="../game/Game/loadSprite.html">loadSprite</a></li>
+      <li><a href="../game/Game/loadSpriteAnimation.html">loadSpriteAnimation</a></li>
+      <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li><a href="../game/Game/onAttach.html">onAttach</a></li>
+      <li><a href="../game/Game/onDetach.html">onDetach</a></li>
+      <li><a href="../game/Game/onLoad.html">onLoad</a></li>
+      <li><a href="../game/Game/onResize.html">onResize</a></li>
+      <li><a href="../game/Game/onTimingsCallback.html">onTimingsCallback</a></li>
+      <li><a href="../game/Game/pauseEngine.html">pauseEngine</a></li>
+      <li><a href="../game/Game/render.html">render</a></li>
+      <li><a href="../game/Game/resumeEngine.html">resumeEngine</a></li>
+      <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></li>
+      <li><a href="../game/Game/update.html">update</a></li>
+    
+      <li class="section-title inherited"><a href="../game/Game-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame
+      1.0.0-rc6
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="../static-assets/typeahead.bundle.min.js"></script>
+<script src="../static-assets/highlight.pack.js"></script>
+<script src="../static-assets/URI.js"></script>
+<script src="../static-assets/script.js"></script>
+
+
+</body>
+
+</html>

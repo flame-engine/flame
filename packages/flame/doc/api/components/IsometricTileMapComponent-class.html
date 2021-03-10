@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the IsometricTileMapComponent class from the components library, for the Dart programming language.">
+  <title>IsometricTileMapComponent class - components library - Dart API</title>
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="../static-assets/github.css">
+  <link rel="stylesheet" href="../static-assets/styles.css">
+  <link rel="icon" href="../static-assets/favicon.png">
+
+</head>
+
+<body data-base-href="../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">flame</a></li>
+    <li><a href="../components/components-library.html">components</a></li>
+    <li class="self-crumb">IsometricTileMapComponent class</li>
+  </ol>
+  <div class="self-name">IsometricTileMapComponent</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div id="dartdoc-sidebar-left" class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+      <form class="search-sidebar" role="search">
+        <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+      </form>
+    </header>
+    
+    <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+      <li><a href="../index.html">flame</a></li>
+      <li><a href="../components/components-library.html">components</a></li>
+      <li class="self-crumb">IsometricTileMapComponent class</li>
+    </ol>
+    
+    <h5>components library</h5>
+    <ol>
+      <li class="section-title"><a href="../components/components-library.html#classes">Classes</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Aabb2-class.html">Aabb2</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Aabb3-class.html">Aabb3</a></li>
+      <li><a href="../widgets/Anchor-class.html">Anchor</a></li>
+      <li><a href="../components/BaseComponent-class.html">BaseComponent</a></li>
+      <li><a href="../components/Block-class.html">Block</a></li>
+      <li><a href="../components/Component-class.html">Component</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Frustum-class.html">Frustum</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/IntersectionResult-class.html">IntersectionResult</a></li>
+      <li><a href="../components/IsometricTileMapComponent-class.html">IsometricTileMapComponent</a></li>
+      <li><a href="../joystick/JoystickAction-class.html">JoystickAction</a></li>
+      <li><a href="../joystick/JoystickActionEvent-class.html">JoystickActionEvent</a></li>
+      <li><a href="../joystick/JoystickComponent-class.html">JoystickComponent</a></li>
+      <li><a href="../joystick/JoystickController-class.html">JoystickController</a></li>
+      <li><a href="../joystick/JoystickDirectional-class.html">JoystickDirectional</a></li>
+      <li><a href="../joystick/JoystickDirectionalEvent-class.html">JoystickDirectionalEvent</a></li>
+      <li><a href="../joystick/JoystickUtils-class.html">JoystickUtils</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Matrix2-class.html">Matrix2</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Matrix3-class.html">Matrix3</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Matrix4-class.html">Matrix4</a></li>
+      <li><a href="../components/NineTileBox-class.html">NineTileBox</a></li>
+      <li><a href="../components/NineTileBoxComponent-class.html">NineTileBoxComponent</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Obb3-class.html">Obb3</a></li>
+      <li><a href="../components/ParallaxComponent-class.html">ParallaxComponent</a></li>
+      <li><a href="../components/ParticleComponent-class.html">ParticleComponent</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Plane-class.html">Plane</a></li>
+      <li><a href="../components/PositionComponent-class.html">PositionComponent</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Quad-class.html">Quad</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Quaternion-class.html">Quaternion</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Ray-class.html">Ray</a></li>
+      <li><a href="../components/ScreenCollidable-class.html">ScreenCollidable</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/SimplexNoise-class.html">SimplexNoise</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Sphere-class.html">Sphere</a></li>
+      <li><a href="../sprite/Sprite-class.html">Sprite</a></li>
+      <li><a href="../sprite/SpriteAnimation-class.html">SpriteAnimation</a></li>
+      <li><a href="../components/SpriteAnimationComponent-class.html">SpriteAnimationComponent</a></li>
+      <li><a href="../sprite/SpriteAnimationData-class.html">SpriteAnimationData</a></li>
+      <li><a href="../sprite/SpriteAnimationFrame-class.html">SpriteAnimationFrame</a></li>
+      <li><a href="../sprite/SpriteAnimationFrameData-class.html">SpriteAnimationFrameData</a></li>
+      <li><a href="../components/SpriteBatchComponent-class.html">SpriteBatchComponent</a></li>
+      <li><a href="../components/SpriteComponent-class.html">SpriteComponent</a></li>
+      <li><a href="../components/TextBoxComponent-class.html">TextBoxComponent</a></li>
+      <li><a href="../components/TextBoxConfig-class.html">TextBoxConfig</a></li>
+      <li><a href="../components/TextComponent-class.html">TextComponent</a></li>
+      <li><a href="../game/TextConfig-class.html">TextConfig</a></li>
+      <li><a href="../timer/Timer-class.html">Timer</a></li>
+      <li><a href="../timer/TimerComponent-class.html">TimerComponent</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Triangle-class.html">Triangle</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector-class.html">Vector</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector3-class.html">Vector3</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector4-class.html">Vector4</a></li>
+    
+      <li class="section-title"><a href="../components/components-library.html#extension">Extensions</a></li>
+      <li><a href="../components/ParallaxComponentExtension.html">ParallaxComponentExtension</a></li>
+      <li><a href="../extensions/Vector2Extension.html">Vector2Extension</a></li>
+    
+      <li class="section-title"><a href="../components/components-library.html#mixins">Mixins</a></li>
+      <li><a href="../components/Collidable-mixin.html">Collidable</a></li>
+      <li><a href="../components/Draggable-mixin.html">Draggable</a></li>
+      <li><a href="../components/HasCollidables-mixin.html">HasCollidables</a></li>
+      <li><a href="../components/HasDraggableComponents-mixin.html">HasDraggableComponents</a></li>
+      <li><a href="../components/HasGameRef-mixin.html">HasGameRef</a></li>
+      <li><a href="../components/HasTapableComponents-mixin.html">HasTapableComponents</a></li>
+      <li><a href="../components/Hitbox-mixin.html">Hitbox</a></li>
+      <li><a href="../joystick/JoystickListener-mixin.html">JoystickListener</a></li>
+      <li><a href="../components/SingleChildParticle-mixin.html">SingleChildParticle</a></li>
+      <li><a href="../components/Tapable-mixin.html">Tapable</a></li>
+    
+      <li class="section-title"><a href="../components/components-library.html#constants">Constants</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/degrees2Radians-constant.html">degrees2Radians</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/radians2Degrees-constant.html">radians2Degrees</a></li>
+    
+    
+      <li class="section-title"><a href="../components/components-library.html#functions">Functions</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/absoluteError.html">absoluteError</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/buildPlaneVectors.html">buildPlaneVectors</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/catmullRom.html">catmullRom</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/cross2.html">cross2</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/cross2A.html">cross2A</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/cross2B.html">cross2B</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/cross3.html">cross3</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/degrees.html">degrees</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/dot2.html">dot2</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/dot3.html">dot3</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/makeFrustumMatrix.html">makeFrustumMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/makeInfiniteMatrix.html">makeInfiniteMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/makeOrthographicMatrix.html">makeOrthographicMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/makePerspectiveMatrix.html">makePerspectiveMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/makePlaneProjection.html">makePlaneProjection</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/makePlaneReflection.html">makePlaneReflection</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/makeViewMatrix.html">makeViewMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/mix.html">mix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/pickRay.html">pickRay</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/radians.html">radians</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/relativeError.html">relativeError</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/setFrustumMatrix.html">setFrustumMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/setInfiniteMatrix.html">setInfiniteMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/setModelMatrix.html">setModelMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/setOrthographicMatrix.html">setOrthographicMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/setPerspectiveMatrix.html">setPerspectiveMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/setRotationMatrix.html">setRotationMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/setViewMatrix.html">setViewMatrix</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/smoothStep.html">smoothStep</a></li>
+      <li><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/unproject.html">unproject</a></li>
+    
+      <li class="section-title"><a href="../components/components-library.html#enums">Enums</a></li>
+      <li><a href="../joystick/ActionEvent-class.html">ActionEvent</a></li>
+      <li><a href="../joystick/JoystickActionAlign-class.html">JoystickActionAlign</a></li>
+      <li><a href="../joystick/JoystickMoveDirectional-class.html">JoystickMoveDirectional</a></li>
+    
+      <li class="section-title"><a href="../components/components-library.html#typedefs">Typedefs</a></li>
+      <li><a href="../sprite/OnCompleteSpriteAnimation.html">OnCompleteSpriteAnimation</a></li>
+    
+    </ol>
+  </div>
+
+  <div id="dartdoc-main-content" class="col-xs-12 col-sm-9 col-md-8 main-content">
+      <div><h1><span class="kind-class">IsometricTileMapComponent</span> class  </h1></div>
+
+    <section class="desc markdown">
+      <p>This component renders a tilemap, represented by an int matrix, given a
+tileset, in witch the integers are the block ids.</p>
+<p>It can change the scale of each block by using the optional destTileSize
+property.</p>
+    </section>
+    
+    <section>
+      <dl class="dl-horizontal">
+        <dt>Inheritance</dt>
+        <dd><ul class="gt-separated dark clazz-relationships">
+          <li><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></li>
+          <li><a href="../components/Component-class.html">Component</a></li>
+          <li><a href="../components/BaseComponent-class.html">BaseComponent</a></li>
+          <li><a href="../components/PositionComponent-class.html">PositionComponent</a></li>
+          <li>IsometricTileMapComponent</li>
+        </ul></dd>
+
+
+
+
+
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="constructors">
+      <h2>Constructors</h2>
+
+      <dl class="constructor-summary-list">
+        <dt id="IsometricTileMapComponent" class="callable">
+          <span class="name"><a href="../components/IsometricTileMapComponent/IsometricTileMapComponent.html">IsometricTileMapComponent</a></span><span class="signature">(<span class="parameter" id="-param-tileset"><span class="type-annotation"><a href="../sprite/SpriteSheet-class.html">SpriteSheet</a></span> <span class="parameter-name">tileset</span>, </span><span class="parameter" id="-param-matrix"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span></span>&gt;</span></span> <span class="parameter-name">matrix</span>, </span><span class="parameter" id="-param-destTileSize">{<span class="type-annotation"><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span> <span class="parameter-name">destTileSize</span>, </span><span class="parameter" id="-param-position"><span class="type-annotation"><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span> <span class="parameter-name">position</span>}</span>)</span>
+        </dt>
+        <dd>
+           
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="absoluteCenter" class="property inherited">
+          <span class="name"><a href="../components/PositionComponent/absoluteCenter.html">absoluteCenter</a></span>
+          <span class="signature">&#8594; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>         
+        </dt>
+        <dd class="inherited">
+          Get the absolute center of the component without rotation 
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="absoluteParentPosition" class="property inherited">
+          <span class="name"><a href="../components/PositionComponent/absoluteParentPosition.html">absoluteParentPosition</a></span>
+          <span class="signature">&#8594; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>         
+        </dt>
+        <dd class="inherited">
+          Get the position that everything in this component is positioned in relation to
+If this component has no parent the absolute parent position is the origin,
+otherwise it's the parents absolute top left position 
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="absolutePosition" class="property inherited">
+          <span class="name"><a href="../components/PositionComponent/absolutePosition.html">absolutePosition</a></span>
+          <span class="signature">&#8594; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>         
+        </dt>
+        <dd class="inherited">
+          Get the absolute position, with the anchor taken into consideration 
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="absoluteTopLeftPosition" class="property inherited">
+          <span class="name"><a href="../components/PositionComponent/absoluteTopLeftPosition.html">absoluteTopLeftPosition</a></span>
+          <span class="signature">&#8594; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>         
+        </dt>
+        <dd class="inherited">
+          Get the absolute top left position regardless of whether it is a child or not 
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="anchor" class="property inherited">
+          <span class="name"><a href="../components/PositionComponent/anchor.html">anchor</a></span>
+          <span class="signature">&#8596; <a href="../widgets/Anchor-class.html">Anchor</a></span>         
+        </dt>
+        <dd class="inherited">
+          Anchor point for this component. This is where flame "grabs it".
+The <a href="../components/PositionComponent/position.html">position</a> is relative to this point inside the component.
+The <a href="../components/PositionComponent/angle.html">angle</a> is rotated around this point. 
+                  <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="angle" class="property inherited">
+          <span class="name"><a href="../components/PositionComponent/angle.html">angle</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>         
+        </dt>
+        <dd class="inherited">
+          Angle (with respect to the x-axis) this component should be rendered with.
+It is rotated around its anchor. 
+                  <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="center" class="property inherited">
+          <span class="name"><a href="../components/PositionComponent/center.html">center</a></span>
+          <span class="signature">&#8594; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>         
+        </dt>
+        <dd class="inherited">
+          Get the position of the center of the component's bounding rectangle without rotation 
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="children" class="property inherited">
+          <span class="name"><a href="../components/BaseComponent/children.html">children</a></span>
+          <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-collection/UnmodifiableListView-class.html">UnmodifiableListView</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../components/Component-class.html">Component</a></span>&gt;</span></span>         
+        </dt>
+        <dd class="inherited">
+          The children list shouldn't be modified directly, that is why an
+<a href="https://api.flutter.dev/flutter/dart-collection/UnmodifiableListView-class.html">UnmodifiableListView</a> is used. If you want to add children use the
+<a href="../components/BaseComponent/addChild.html">addChild</a> method, and if you want to propagate something to the children
+use the <a href="../components/BaseComponent/propagateToChildren.html">propagateToChildren</a> method. 
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="debugColor" class="property inherited">
+          <span class="name"><a href="../components/BaseComponent/debugColor.html">debugColor</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-ui/Color-class.html">Color</a></span>         
+        </dt>
+        <dd class="inherited">
+           
+                  <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="debugMode" class="property inherited">
+          <span class="name"><a href="../components/BaseComponent/debugMode.html">debugMode</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>         
+        </dt>
+        <dd class="inherited">
+          This is set by the BaseGame to tell this component to render additional debug information,
+like borders, coordinates, etc.
+This is very helpful while debugging. Set your BaseGame debugMode to true.
+You can also manually override this for certain components in order to identify issues. 
+                  <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="debugPaint" class="property inherited">
+          <span class="name"><a href="../components/BaseComponent/debugPaint.html">debugPaint</a></span>
+          <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-ui/Paint-class.html">Paint</a></span>         
+        </dt>
+        <dd class="inherited">
+           
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="debugTextConfig" class="property inherited">
+          <span class="name"><a href="../components/BaseComponent/debugTextConfig.html">debugTextConfig</a></span>
+          <span class="signature">&#8594; <a href="../game/TextConfig-class.html">TextConfig</a></span>         
+        </dt>
+        <dd class="inherited">
+           
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="destTileSize" class="property">
+          <span class="name"><a href="../components/IsometricTileMapComponent/destTileSize.html">destTileSize</a></span>
+          <span class="signature">&#8596; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>         
+        </dt>
+        <dd>
+          Optionally provide a new tile size to render it scaled. 
+                  <div class="features">read / write</div>
+</dd>
+        <dt id="effectiveTileSize" class="property">
+          <span class="name"><a href="../components/IsometricTileMapComponent/effectiveTileSize.html">effectiveTileSize</a></span>
+          <span class="signature">&#8594; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>         
+        </dt>
+        <dd>
+          This is the size the tiles will be drawn (either original or overwritten). 
+                  <div class="features">read-only</div>
+</dd>
+        <dt id="effects" class="property inherited">
+          <span class="name"><a href="../components/BaseComponent/effects.html">effects</a></span>
+          <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../effects/ComponentEffect-class.html">ComponentEffect</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../components/BaseComponent-class.html">BaseComponent</a></span>&gt;</span></span>&gt;</span></span>         
+        </dt>
+        <dd class="inherited">
+          Get a list of non removed effects 
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="hashCode" class="property inherited">
+          <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>         
+        </dt>
+        <dd class="inherited">
+          The hash code for this object. <a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">[...]</a>
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="height" class="property inherited">
+          <span class="name"><a href="../components/PositionComponent/height.html">height</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>         
+        </dt>
+        <dd class="inherited">
+          Height (size) that this component is rendered with. 
+                  <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="isHud" class="property inherited">
+          <span class="name"><a href="../components/Component/isHud.html">isHud</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>         
+        </dt>
+        <dd class="inherited">
+          Whether this component is HUD object or not. <a href="../components/Component/isHud.html">[...]</a>
+                  <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="isMounted" class="property inherited">
+          <span class="name"><a href="../components/Component/isMounted.html">isMounted</a></span>
+          <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>         
+        </dt>
+        <dd class="inherited">
+          Whether this component is currently mounted on a game or not 
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="matrix" class="property">
+          <span class="name"><a href="../components/IsometricTileMapComponent/matrix.html">matrix</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span></span>&gt;</span></span>         
+        </dt>
+        <dd>
+          The positions of each block will be placed respecting this matrix. 
+                  <div class="features">read / write</div>
+</dd>
+        <dt id="parent" class="property inherited">
+          <span class="name"><a href="../components/BaseComponent/parent.html">parent</a></span>
+          <span class="signature">&#8594; <a href="../components/BaseComponent-class.html">BaseComponent</a></span>         
+        </dt>
+        <dd class="inherited">
+           
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="position" class="property inherited">
+          <span class="name"><a href="../components/PositionComponent/position.html">position</a></span>
+          <span class="signature">&#8596; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>         
+        </dt>
+        <dd class="inherited">
+          The position of this component on the screen (relative to the anchor). 
+                  <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="priority" class="property inherited">
+          <span class="name"><a href="../components/Component/priority.html">priority</a></span>
+          <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>         
+        </dt>
+        <dd class="inherited">
+          Render priority of this component. This allows you to control the order in which your components are rendered. <a href="../components/Component/priority.html">[...]</a>
+                  <div class="features">final, inherited</div>
+</dd>
+        <dt id="renderFlipX" class="property inherited">
+          <span class="name"><a href="../components/PositionComponent/renderFlipX.html">renderFlipX</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>         
+        </dt>
+        <dd class="inherited">
+          Whether this component should be flipped on the X axis before being rendered. 
+                  <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="renderFlipY" class="property inherited">
+          <span class="name"><a href="../components/PositionComponent/renderFlipY.html">renderFlipY</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>         
+        </dt>
+        <dd class="inherited">
+          Whether this component should be flipped ofn the Y axis before being rendered. 
+                  <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Type-class.html">Type</a></span>         
+        </dt>
+        <dd class="inherited">
+          A representation of the runtime type of the object. 
+                  <div class="features">read-only, inherited</div>
+</dd>
+        <dt id="shouldRemove" class="property inherited">
+          <span class="name"><a href="../components/Component/shouldRemove.html">shouldRemove</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>         
+        </dt>
+        <dd class="inherited">
+          Whether this component should be removed or not. <a href="../components/Component/shouldRemove.html">[...]</a>
+                  <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="size" class="property inherited">
+          <span class="name"><a href="../components/PositionComponent/size.html">size</a></span>
+          <span class="signature">&#8596; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>         
+        </dt>
+        <dd class="inherited">
+          The size that this component is rendered with.
+This is not necessarily the source size of the asset. 
+                  <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="tileset" class="property">
+          <span class="name"><a href="../components/IsometricTileMapComponent/tileset.html">tileset</a></span>
+          <span class="signature">&#8596; <a href="../sprite/SpriteSheet-class.html">SpriteSheet</a></span>         
+        </dt>
+        <dd>
+          This is the tileset that will be used to render this map. 
+                  <div class="features">read / write</div>
+</dd>
+        <dt id="topLeftPosition" class="property inherited">
+          <span class="name"><a href="../components/PositionComponent/topLeftPosition.html">topLeftPosition</a></span>
+          <span class="signature">&#8596; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>         
+        </dt>
+        <dd class="inherited">
+          Get the relative top left position regardless of the anchor and angle 
+                  <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="width" class="property inherited">
+          <span class="name"><a href="../components/PositionComponent/width.html">width</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>         
+        </dt>
+        <dd class="inherited">
+          Width (size) that this component is rendered with. 
+                  <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="x" class="property inherited">
+          <span class="name"><a href="../components/PositionComponent/x.html">x</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>         
+        </dt>
+        <dd class="inherited">
+          X position of this component on the screen (relative to the anchor). 
+                  <div class="features">read / write, inherited</div>
+</dd>
+        <dt id="y" class="property inherited">
+          <span class="name"><a href="../components/PositionComponent/y.html">y</a></span>
+          <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>         
+        </dt>
+        <dd class="inherited">
+          Y position of this component on the screen (relative to the anchor). 
+                  <div class="features">read / write, inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="addChild" class="callable inherited">
+          <span class="name"><a href="../components/BaseComponent/addChild.html">addChild</a></span><span class="signature">(<wbr><span class="parameter" id="addChild-param-child"><span class="type-annotation"><a href="../components/Component-class.html">Component</a></span> <span class="parameter-name">child</span>, </span><span class="parameter" id="addChild-param-gameRef">{<span class="type-annotation"><a href="../game/Game-class.html">Game</a></span> <span class="parameter-name">gameRef</span>}</span>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          Uses the game passed in, or uses the game from <a href="../components/HasGameRef-mixin.html">HasGameRef</a> otherwise,
+to prepare the child component before it is added to the list of children.
+Note that this component needs to be added to the game first if
+<code>this.gameRef</code> should be used to prepare the child.
+For children that don't need preparation from the game instance can
+disregard both the options given above. 
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="addEffect" class="callable inherited">
+          <span class="name"><a href="../components/BaseComponent/addEffect.html">addEffect</a></span><span class="signature">(<wbr><span class="parameter" id="addEffect-param-effect"><span class="type-annotation"><a href="../effects/ComponentEffect-class.html">ComponentEffect</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../components/BaseComponent-class.html">BaseComponent</a></span>&gt;</span></span> <span class="parameter-name">effect</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          Add an effect to the component 
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="angleTo" class="callable inherited">
+          <span class="name"><a href="../components/PositionComponent/angleTo.html">angleTo</a></span><span class="signature">(<wbr><span class="parameter" id="angleTo-param-c"><span class="type-annotation"><a href="../components/PositionComponent-class.html">PositionComponent</a></span> <span class="parameter-name">c</span></span>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+           
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="cartToIso" class="callable">
+          <span class="name"><a href="../components/IsometricTileMapComponent/cartToIso.html">cartToIso</a></span><span class="signature">(<wbr><span class="parameter" id="cartToIso-param-p"><span class="type-annotation"><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span> <span class="parameter-name">p</span></span>)
+            <span class="returntype parameter">&#8594; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>
+          </span>
+                  </dt>
+        <dd>
+          Converts a coordinate from the cartesian space to the isometric space. 
+                  
+</dd>
+        <dt id="clearChildren" class="callable inherited">
+          <span class="name"><a href="../components/BaseComponent/clearChildren.html">clearChildren</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+           
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="clearEffects" class="callable inherited">
+          <span class="name"><a href="../components/BaseComponent/clearEffects.html">clearEffects</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          Remove all effects 
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="containsBlock" class="callable">
+          <span class="name"><a href="../components/IsometricTileMapComponent/containsBlock.html">containsBlock</a></span><span class="signature">(<wbr><span class="parameter" id="containsBlock-param-block"><span class="type-annotation"><a href="../components/Block-class.html">Block</a></span> <span class="parameter-name">block</span></span>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+          </span>
+                  </dt>
+        <dd>
+          Return whether the matrix contains a block in its bounds. 
+                  
+</dd>
+        <dt id="containsChild" class="callable inherited">
+          <span class="name"><a href="../components/BaseComponent/containsChild.html">containsChild</a></span><span class="signature">(<wbr><span class="parameter" id="containsChild-param-c"><span class="type-annotation"><a href="../components/Component-class.html">Component</a></span> <span class="parameter-name">c</span></span>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+           
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="containsPoint" class="callable inherited">
+          <span class="name"><a href="../components/PositionComponent/containsPoint.html">containsPoint</a></span><span class="signature">(<wbr><span class="parameter" id="containsPoint-param-point"><span class="type-annotation"><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span> <span class="parameter-name">point</span></span>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          Called to check whether the point is to be counted as within the component
+It needs to be overridden to have any effect, like it is in
+PositionComponent. 
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="distance" class="callable inherited">
+          <span class="name"><a href="../components/PositionComponent/distance.html">distance</a></span><span class="signature">(<wbr><span class="parameter" id="distance-param-c"><span class="type-annotation"><a href="../components/PositionComponent-class.html">PositionComponent</a></span> <span class="parameter-name">c</span></span>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+           
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="getBlock" class="callable">
+          <span class="name"><a href="../components/IsometricTileMapComponent/getBlock.html">getBlock</a></span><span class="signature">(<wbr><span class="parameter" id="getBlock-param-p"><span class="type-annotation"><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span> <span class="parameter-name">p</span></span>)
+            <span class="returntype parameter">&#8594; <a href="../components/Block-class.html">Block</a></span>
+          </span>
+                  </dt>
+        <dd>
+          Get what block is at isometric position p. <a href="../components/IsometricTileMapComponent/getBlock.html">[...]</a>
+                  
+</dd>
+        <dt id="getBlockPosition" class="callable">
+          <span class="name"><a href="../components/IsometricTileMapComponent/getBlockPosition.html">getBlockPosition</a></span><span class="signature">(<wbr><span class="parameter" id="getBlockPosition-param-block"><span class="type-annotation"><a href="../components/Block-class.html">Block</a></span> <span class="parameter-name">block</span></span>)
+            <span class="returntype parameter">&#8594; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>
+          </span>
+                  </dt>
+        <dd>
+          Get the position in witch a block must be in the isometric space. <a href="../components/IsometricTileMapComponent/getBlockPosition.html">[...]</a>
+                  
+</dd>
+        <dt id="getBlockPositionInts" class="callable">
+          <span class="name"><a href="../components/IsometricTileMapComponent/getBlockPositionInts.html">getBlockPositionInts</a></span><span class="signature">(<wbr><span class="parameter" id="getBlockPositionInts-param-i"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">i</span>, </span><span class="parameter" id="getBlockPositionInts-param-j"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">j</span></span>)
+            <span class="returntype parameter">&#8594; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>
+          </span>
+                  </dt>
+        <dd>
+           
+                  
+</dd>
+        <dt id="isoToCart" class="callable">
+          <span class="name"><a href="../components/IsometricTileMapComponent/isoToCart.html">isoToCart</a></span><span class="signature">(<wbr><span class="parameter" id="isoToCart-param-p"><span class="type-annotation"><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span> <span class="parameter-name">p</span></span>)
+            <span class="returntype parameter">&#8594; <a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span>
+          </span>
+                  </dt>
+        <dd>
+          Converts a coordinate from the isometric space to the cartesian space. 
+                  
+</dd>
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          Invoked when a non-existent method or property is accessed. <a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">[...]</a>
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="onGameResize" class="callable inherited">
+          <span class="name"><a href="../components/BaseComponent/onGameResize.html">onGameResize</a></span><span class="signature">(<wbr><span class="parameter" id="onGameResize-param-gameSize"><span class="type-annotation"><a href="https://pub.dev/documentation/vector_math/2.1.0/vector_math_64/Vector2-class.html">Vector2</a></span> <span class="parameter-name">gameSize</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          It receives the new game size.
+Executed right after the component is attached to a game and right before <a href="../components/BaseComponent/onMount.html">onMount</a> is called 
+                  <div class="features">@<a href="https://pub.dev/documentation/meta/1.3.0/meta/mustCallSuper-constant.html">mustCallSuper</a>, inherited</div>
+</dd>
+        <dt id="onLoad" class="callable inherited">
+          <span class="name"><a href="../components/Component/onLoad.html">onLoad</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          Called before the component is added to the BaseGame by the add method.
+Whenever this returns something, BaseGame will wait for the <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a> to be resolved before adding the component on the list.
+If <code>null</code> is returned, the component is added right away. <a href="../components/Component/onLoad.html">[...]</a>
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="onMount" class="callable inherited">
+          <span class="name"><a href="../components/BaseComponent/onMount.html">onMount</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          Called when the component has been added and prepared by the game instance. <a href="../components/BaseComponent/onMount.html">[...]</a>
+                  <div class="features">@<a href="https://pub.dev/documentation/meta/1.3.0/meta/mustCallSuper-constant.html">mustCallSuper</a>, inherited</div>
+</dd>
+        <dt id="onRemove" class="callable inherited">
+          <span class="name"><a href="../components/BaseComponent/onRemove.html">onRemove</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          Called right before the component is removed from the game 
+                  <div class="features">@<a href="https://pub.dev/documentation/meta/1.3.0/meta/mustCallSuper-constant.html">mustCallSuper</a>, inherited</div>
+</dd>
+        <dt id="prepareCanvas" class="callable inherited">
+          <span class="name"><a href="../components/PositionComponent/prepareCanvas.html">prepareCanvas</a></span><span class="signature">(<wbr><span class="parameter" id="prepareCanvas-param-canvas"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Canvas-class.html">Canvas</a></span> <span class="parameter-name">canvas</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+           
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="propagateToChildren" class="callable inherited">
+          <span class="name"><a href="../components/BaseComponent/propagateToChildren.html">propagateToChildren</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T extends <a href="../components/Component-class.html">Component</a></span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="propagateToChildren-param-handler"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">handler</span>(<span class="parameter" id="param-"><span class="type-annotation">T</span></span>)</span>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          This method first calls the passed handler on the leaves in the tree,
+the children without any children of their own.
+Then it continues through all other children. The propagation continues
+until the handler returns false, which means "do not continue", or when
+the handler has been called with all children <a href="../components/BaseComponent/propagateToChildren.html">[...]</a>
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="remove" class="callable inherited">
+          <span class="name"><a href="../components/Component/remove.html">remove</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          Remove the component from the game it is added to in the next tick 
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="removeChild" class="callable inherited">
+          <span class="name"><a href="../components/BaseComponent/removeChild.html">removeChild</a></span><span class="signature">(<wbr><span class="parameter" id="removeChild-param-c"><span class="type-annotation"><a href="../components/Component-class.html">Component</a></span> <span class="parameter-name">c</span></span>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+           
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="removeEffect" class="callable inherited">
+          <span class="name"><a href="../components/BaseComponent/removeEffect.html">removeEffect</a></span><span class="signature">(<wbr><span class="parameter" id="removeEffect-param-effect"><span class="type-annotation"><a href="../effects/ComponentEffect-class.html">ComponentEffect</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../components/BaseComponent-class.html">BaseComponent</a></span>&gt;</span></span> <span class="parameter-name">effect</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          Mark an effect for removal on the component 
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="render" class="callable">
+          <span class="name"><a href="../components/IsometricTileMapComponent/render.html">render</a></span><span class="signature">(<wbr><span class="parameter" id="render-param-c"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Canvas-class.html">Canvas</a></span> <span class="parameter-name">c</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd>
+          Renders this component on the provided Canvas <code>c</code>. 
+                  <div class="features">override</div>
+</dd>
+        <dt id="renderDebugMode" class="callable inherited">
+          <span class="name"><a href="../components/PositionComponent/renderDebugMode.html">renderDebugMode</a></span><span class="signature">(<wbr><span class="parameter" id="renderDebugMode-param-canvas"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Canvas-class.html">Canvas</a></span> <span class="parameter-name">canvas</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+           
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="renderTree" class="callable inherited">
+          <span class="name"><a href="../components/BaseComponent/renderTree.html">renderTree</a></span><span class="signature">(<wbr><span class="parameter" id="renderTree-param-canvas"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Canvas-class.html">Canvas</a></span> <span class="parameter-name">canvas</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          This is used to render this component and potential children on subclasses
+of <a href="../components/Component-class.html">Component</a> on the provided Canvas <code>c</code>. 
+                  <div class="features">@<a href="https://pub.dev/documentation/meta/1.3.0/meta/mustCallSuper-constant.html">mustCallSuper</a>, inherited</div>
+</dd>
+        <dt id="setByRect" class="callable inherited">
+          <span class="name"><a href="../components/PositionComponent/setByRect.html">setByRect</a></span><span class="signature">(<wbr><span class="parameter" id="setByRect-param-rect"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Rect-class.html">Rect</a></span> <span class="parameter-name">rect</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          Mutates position and size using the provided <code>rect</code> as basis.
+This is a relative rect, same definition that <a href="../components/PositionComponent/toRect.html">toRect</a> use
+(therefore both methods are compatible, i.e. setByRect ∘ toRect = identity). 
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="toAbsoluteRect" class="callable inherited">
+          <span class="name"><a href="../components/PositionComponent/toAbsoluteRect.html">toAbsoluteRect</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-ui/Rect-class.html">Rect</a></span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          Returns the absolute position/size of this component.
+Absolute because it takes any possible parent position into consideration. 
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="toRect" class="callable inherited">
+          <span class="name"><a href="../components/PositionComponent/toRect.html">toRect</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-ui/Rect-class.html">Rect</a></span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          Returns the relative position/size of this component.
+Relative because it might be translated by their parents (which is not considered here). 
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="toString" class="callable inherited">
+          <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          A string representation of this object. <a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">[...]</a>
+                  <div class="features">inherited</div>
+</dd>
+        <dt id="update" class="callable inherited">
+          <span class="name"><a href="../components/BaseComponent/update.html">update</a></span><span class="signature">(<wbr><span class="parameter" id="update-param-dt"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">dt</span></span>)
+            <span class="returntype parameter">&#8594; void</span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          This method is called periodically by the game engine to request that your component updates itself. <a href="../components/BaseComponent/update.html">[...]</a>
+                  <div class="features">@<a href="https://pub.dev/documentation/meta/1.3.0/meta/mustCallSuper-constant.html">mustCallSuper</a>, inherited</div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor inherited" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+          <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+          </span>
+                  </dt>
+        <dd class="inherited">
+          The equality operator. <a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">[...]</a>
+                  <div class="features">inherited</div>
+</dd>
+      </dl>
+    </section>
+
+
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-right" class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <ol>
+    
+      <li class="section-title"><a href="../components/IsometricTileMapComponent-class.html#constructors">Constructors</a></li>
+      <li><a href="../components/IsometricTileMapComponent/IsometricTileMapComponent.html">IsometricTileMapComponent</a></li>
+    
+      <li class="section-title">
+        <a href="../components/IsometricTileMapComponent-class.html#instance-properties">Properties</a>
+      </li>
+      <li class="inherited"><a href="../components/PositionComponent/absoluteCenter.html">absoluteCenter</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/absoluteParentPosition.html">absoluteParentPosition</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/absolutePosition.html">absolutePosition</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/absoluteTopLeftPosition.html">absoluteTopLeftPosition</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/anchor.html">anchor</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/angle.html">angle</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/center.html">center</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/children.html">children</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/debugColor.html">debugColor</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/debugMode.html">debugMode</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/debugPaint.html">debugPaint</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/debugTextConfig.html">debugTextConfig</a></li>
+      <li><a href="../components/IsometricTileMapComponent/destTileSize.html">destTileSize</a></li>
+      <li><a href="../components/IsometricTileMapComponent/effectiveTileSize.html">effectiveTileSize</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/effects.html">effects</a></li>
+      <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/height.html">height</a></li>
+      <li class="inherited"><a href="../components/Component/isHud.html">isHud</a></li>
+      <li class="inherited"><a href="../components/Component/isMounted.html">isMounted</a></li>
+      <li><a href="../components/IsometricTileMapComponent/matrix.html">matrix</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/parent.html">parent</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/position.html">position</a></li>
+      <li class="inherited"><a href="../components/Component/priority.html">priority</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/renderFlipX.html">renderFlipX</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/renderFlipY.html">renderFlipY</a></li>
+      <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+      <li class="inherited"><a href="../components/Component/shouldRemove.html">shouldRemove</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/size.html">size</a></li>
+      <li><a href="../components/IsometricTileMapComponent/tileset.html">tileset</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/topLeftPosition.html">topLeftPosition</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/width.html">width</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/x.html">x</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/y.html">y</a></li>
+    
+      <li class="section-title"><a href="../components/IsometricTileMapComponent-class.html#instance-methods">Methods</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/addChild.html">addChild</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/addEffect.html">addEffect</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/angleTo.html">angleTo</a></li>
+      <li><a href="../components/IsometricTileMapComponent/cartToIso.html">cartToIso</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/clearChildren.html">clearChildren</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/clearEffects.html">clearEffects</a></li>
+      <li><a href="../components/IsometricTileMapComponent/containsBlock.html">containsBlock</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/containsChild.html">containsChild</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/containsPoint.html">containsPoint</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/distance.html">distance</a></li>
+      <li><a href="../components/IsometricTileMapComponent/getBlock.html">getBlock</a></li>
+      <li><a href="../components/IsometricTileMapComponent/getBlockPosition.html">getBlockPosition</a></li>
+      <li><a href="../components/IsometricTileMapComponent/getBlockPositionInts.html">getBlockPositionInts</a></li>
+      <li><a href="../components/IsometricTileMapComponent/isoToCart.html">isoToCart</a></li>
+      <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/onGameResize.html">onGameResize</a></li>
+      <li class="inherited"><a href="../components/Component/onLoad.html">onLoad</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/onMount.html">onMount</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/onRemove.html">onRemove</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/prepareCanvas.html">prepareCanvas</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/propagateToChildren.html">propagateToChildren</a></li>
+      <li class="inherited"><a href="../components/Component/remove.html">remove</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/removeChild.html">removeChild</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/removeEffect.html">removeEffect</a></li>
+      <li><a href="../components/IsometricTileMapComponent/render.html">render</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/renderDebugMode.html">renderDebugMode</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/renderTree.html">renderTree</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/setByRect.html">setByRect</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/toAbsoluteRect.html">toAbsoluteRect</a></li>
+      <li class="inherited"><a href="../components/PositionComponent/toRect.html">toRect</a></li>
+      <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></li>
+      <li class="inherited"><a href="../components/BaseComponent/update.html">update</a></li>
+    
+      <li class="section-title inherited"><a href="../components/IsometricTileMapComponent-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+    
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flame
+      1.0.0-rc6
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="../static-assets/typeahead.bundle.min.js"></script>
+<script src="../static-assets/highlight.pack.js"></script>
+<script src="../static-assets/URI.js"></script>
+<script src="../static-assets/script.js"></script>
+
+
+</body>
+
+</html>

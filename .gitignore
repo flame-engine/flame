@@ -5,7 +5,6 @@
 .packages
 .dart_tool/
 .pub/
-packages
 pubspec.lock
 doc/api/
 .flutter-plugins
