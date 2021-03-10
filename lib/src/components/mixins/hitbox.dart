@@ -32,13 +32,18 @@ mixin Hitbox on PositionComponent {
   }
 
   final _cachedBoundingRect = ShapeCache<Rect>();
+
   /// Returns the absolute [Rect] that contains all the corners of the rotated
   /// [toAbsoluteRect] rect.
   Rect toBoundingRect() {
     if (!_cachedBoundingRect.isCacheValid([position, size])) {
-      final maxRadius = size.length/2;
+      final maxRadius = size.length / 2;
       _cachedBoundingRect.updateCache(
-        Rect.fromCenter(center: position.toOffset(), width: maxRadius, height: maxRadius,),
+        Rect.fromCenter(
+          center: position.toOffset(),
+          width: maxRadius,
+          height: maxRadius,
+        ),
         [position.clone(), size.clone()],
       );
     }
