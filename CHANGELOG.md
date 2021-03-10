@@ -6,6 +6,7 @@
  - Fix example app
  - Rename points to intersectionPoints for collision detection
  - Added CollidableType to make collision detection more efficient
+ - Rename CollidableType.static to passive
  - Add srcPosition and srcSize for SpriteComponent
 
 ## 1.0.0-rc7

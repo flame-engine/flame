@@ -79,12 +79,12 @@ void main() {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
-          CollidableType.static,
+          CollidableType.passive,
         );
         final blockB = TestBlock(
           Vector2.all(1),
           Vector2.all(10),
-          CollidableType.static,
+          CollidableType.passive,
         );
         gameWithCollidables([blockA, blockB]);
         expect(blockA.collisions.isEmpty, true);
@@ -116,7 +116,7 @@ void main() {
         final blockB = TestBlock(
           Vector2.all(1),
           Vector2.all(10),
-          CollidableType.static,
+          CollidableType.passive,
         );
         gameWithCollidables([blockA, blockB]);
         expect(blockA.collidedWith(blockB), true);
@@ -129,7 +129,7 @@ void main() {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
-          CollidableType.static,
+          CollidableType.passive,
         );
         final blockB = TestBlock(
           Vector2.all(1),
@@ -147,7 +147,7 @@ void main() {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
-          CollidableType.static,
+          CollidableType.passive,
         );
         final blockB = TestBlock(
           Vector2.all(1),
@@ -168,7 +168,7 @@ void main() {
         final blockB = TestBlock(
           Vector2.all(1),
           Vector2.all(10),
-          CollidableType.static,
+          CollidableType.passive,
         );
         gameWithCollidables([blockA, blockB]);
         expect(blockA.collisions.length, 0);
@@ -221,7 +221,7 @@ void main() {
           (_) => TestBlock(
             Vector2.random() - Vector2.random(),
             Vector2.all(10),
-            CollidableType.static,
+            CollidableType.passive,
           ),
         );
         final inactives = List.generate(
