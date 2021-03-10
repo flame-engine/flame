@@ -18,4 +18,4 @@ assignees: ''
 # More information
 <!-- Do you have any other useful information about this feature report? Please write it down here -->
 <!-- Possible helpful information: references to other sites/repositories -->
-<!-- Are you interested in working on a PR for this? >
+<!-- Are you interested in working on a PR for this? -->
