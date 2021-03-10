@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-cd examples
-run_format
-
-cd ../packages/flame
-run_format
-
 function run_format() {
   FORMAT_ISSUES=$(flutter format --set-exit-if-changed -n .)
   if [ $? -eq 1 ]; then
@@ -14,3 +8,10 @@ function run_format() {
     exit 1
   fi
 }
+
+cd examples
+run_format
+
+cd ../packages/flame
+run_format
+
