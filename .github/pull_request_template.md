@@ -1,6 +1,6 @@
 # Description
 
-*Replace this paragraph with a description of what this PR is doing. If you're modifying existing behavior, describe the existing behavior, how this MR is changing it, and what motivated the change. If this is a breaking change, specify explicitly which APIs have been changed*
+*Replace this paragraph with a description of what this PR is doing. If you're modifying existing behavior, describe the existing behavior, how this PR is changing it, and what motivated the change. If this is a breaking change, specify explicitly which APIs have been changed*
 
 ## Checklist
 
