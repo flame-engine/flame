@@ -4,11 +4,11 @@ import '../../geometry/rectangle.dart';
 import 'hitbox.dart';
 
 /// [CollidableType.active] collides with other [Collidable]s of type active or static
-/// [CollidableType.static] collides with other [Collidable]s of type active
+/// [CollidableType.passive] collides with other [Collidable]s of type active
 /// [CollidableType.inactive] will not collide with any other [Collidable]s
 enum CollidableType {
   active,
-  static,
+  passive,
   inactive,
 }
 
@@ -20,7 +20,7 @@ mixin Collidable on Hitbox {
 
 class ScreenCollidable extends PositionComponent with Hitbox, Collidable {
   @override
-  CollidableType collidableType = CollidableType.static;
+  CollidableType collidableType = CollidableType.passive;
 
   ScreenCollidable() {
     addShape(HitboxRectangle());
