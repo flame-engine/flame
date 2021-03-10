@@ -100,14 +100,14 @@ you can set your collidable to too if you need to optimize the collision detecti
 
 The `CollidableType` enum contains the following values:
 
- - `active` collides with other `Collidable`s of type active or static
- - `static` collides with other `Collidable`s of type active
+ - `active` collides with other `Collidable`s of type active or passive
+ - `passive` collides with other `Collidable`s of type active
  - `inactive` will not collide with any other `Collidable`s
 
 So if you have collidables that you don't need to check collisions against each other you can mark
-them as static by setting `collidableType = CollidableType.static`, this could for example be ground
+them as passive by setting `collidableType = CollidableType.passive`, this could for example be ground
 components or maybe your enemies don't need to check collisions between each other, then they could
-be marked as static too.
+be marked as passive too.
 
 Then we have the `inactive` type which simply doesn't get checked at all in the collision detection.
 This could be used for example if you have components outside of the screen that you don't care
