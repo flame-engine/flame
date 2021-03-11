@@ -1,0 +1,49 @@
+name: flame_example
+description: A set of small game examples showcasing each feature provided by the Flame Engine.
+publish_to: 'none'
+
+version: 0.1.0-rc2
+
+environment:
+  sdk: ">=2.10.0 <3.0.0"
+
+dependencies:
+  flame:
+    git:
+      url: https://github.com/flame-engine/flame.git
+      ref: master
+  dashbook: 0.0.12
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  dart_code_metrics: ^2.4.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/animations/chopper.png
+    - assets/images/animations/chopper.json
+    - assets/images/animations/creature.png
+    - assets/images/joystick.png
+    - assets/images/flame.png
+    - assets/images/spritesheet.png
+    - assets/images/boom.png
+    - assets/images/zap.png
+    - assets/images/buttons.png
+    - assets/images/nine-box.png
+    - assets/images/shield.png
+    - assets/images/bomb_ptero.png
+    - assets/images/tile_maps/selector.png
+    - assets/images/tile_maps/tiles.png
+    - assets/images/layers/background.png
+    - assets/images/layers/enemy.png
+    - assets/images/layers/player.png
+    - assets/images/parallax/bg.png
+    - assets/images/parallax/foreground-trees.png
+    - assets/images/parallax/mountain-far.png
+    - assets/images/parallax/mountains.png
+    - assets/images/parallax/trees.png

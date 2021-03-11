@@ -1,0 +1,18 @@
+name: Gh-Pages
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'beta'
+      - uses: erickzanardo/flutter-gh-pages@v2
+        with:
+          useCanvasKit: true
