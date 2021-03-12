@@ -1,22 +1,24 @@
 import '../../extensions.dart';
 import '../components/mixins/collidable.dart';
 
+int _collidableTypeCompare(Collidable a, Collidable b) {
+  return a.collidableType.index - b.collidableType.index;
+}
+
 /// Check whether any [Collidable] in [collidables] collide with each other and
 /// call their onCollision methods accordingly.
 void collisionDetection(List<Collidable> collidables) {
+  collidables.sort(_collidableTypeCompare);
   for (var x = 0; x < collidables.length; x++) {
     final collidableX = collidables[x];
     if (collidableX.collidableType != CollidableType.active) {
-      continue;
+      break;
     }
 
-    for (var y = 0; y < collidables.length; y++) {
+    for (var y = x + 1; y < collidables.length; y++) {
       final collidableY = collidables[y];
-      if ((y <= x && collidableY.collidableType == CollidableType.active) ||
-          collidableY.collidableType == CollidableType.inactive) {
-        // These collidables will already have been checked towards each other
-        // or [collidableY] is inactive
-        continue;
+      if (collidableY.collidableType == CollidableType.inactive) {
+        break;
       }
 
       final intersectionPoints = intersections(collidableX, collidableY);
