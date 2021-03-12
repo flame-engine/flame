@@ -31,20 +31,23 @@ mixin Hitbox on PositionComponent {
     _shapes.forEach((shape) => shape.render(canvas, debugPaint));
   }
 
+  final _cachedBoundingRect = ShapeCache<Rect>();
+
   /// Returns the absolute [Rect] that contains all the corners of the rotated
   /// [toAbsoluteRect] rect.
   Rect toBoundingRect() {
-    final rotatedPoints = toAbsoluteRect().toVertices()
-      ..forEach((v) => v.rotate(
-            angle,
-            center: absolutePosition,
-          ));
-    final minX = rotatedPoints.map<double>((v) => v.x).reduce(min);
-    final minY = rotatedPoints.map<double>((v) => v.y).reduce(min);
-    final maxX = rotatedPoints.map<double>((v) => v.x).reduce(max);
-    final maxY = rotatedPoints.map<double>((v) => v.y).reduce(max);
-
-    return Rect.fromPoints(Offset(minX, minY), Offset(maxX, maxY));
+    if (!_cachedBoundingRect.isCacheValid([position, size])) {
+      final maxRadius = size.length / 2;
+      _cachedBoundingRect.updateCache(
+        Rect.fromCenter(
+          center: position.toOffset(),
+          width: maxRadius,
+          height: maxRadius,
+        ),
+        [position.clone(), size.clone()],
+      );
+    }
+    return _cachedBoundingRect.value!;
   }
 
   /// Since this is a cheaper calculation than checking towards all shapes, this
