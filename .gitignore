@@ -5,9 +5,8 @@
 .packages
 .dart_tool/
 .pub/
-packages
 pubspec.lock
-doc/api/
+packages/flame/doc/api/
 .flutter-plugins
 .vscode/
 **/.flutter-plugins

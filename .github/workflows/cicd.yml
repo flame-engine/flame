@@ -9,7 +9,7 @@ on:
 
 jobs:
   # BEGIN LINTING STAGE
-  dartdoc: 
+  dartdoc:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -19,10 +19,9 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'beta'
-      - run: flutter pub get
       - run: ./scripts/dartdoc.sh
-      
-  format: 
+
+  format:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -34,7 +33,7 @@ jobs:
           channel: 'beta'
       - run: ./scripts/format.sh
 
-  analyze: 
+  analyze:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -59,6 +58,5 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'beta'
-      - run: flutter pub get
-      - run: flutter test
+      - run: ./scripts/test.sh
   # END TESTING STAGE
