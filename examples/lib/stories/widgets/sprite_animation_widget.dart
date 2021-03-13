@@ -24,7 +24,7 @@ Widget spriteAnimationWidgetBuilder(DashbookContext ctx) {
       animation: _animation,
       playing: ctx.boolProperty('playing', true),
       anchor: Anchor.valueOf(
-        ctx.listProperty('anchor', 'Anchor.center', anchorOptions),
+        ctx.listProperty('anchor', 'center', anchorOptions),
       ),
     ),
   );

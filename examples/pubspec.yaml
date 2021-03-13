@@ -21,7 +21,7 @@ dev_dependencies:
   dart_code_metrics: ^2.4.0
 
 flutter:
-  uses-material-design: false 
+  uses-material-design: true
 
   assets:
     - assets/images/animations/chopper.png
