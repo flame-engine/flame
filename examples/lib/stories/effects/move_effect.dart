@@ -9,7 +9,8 @@ import '../../commons/square_component.dart';
 class MoveEffectGame extends BaseGame with TapDetector {
   SquareComponent square;
 
-  MoveEffectGame() {
+  @override
+  Future<void> onLoad() async {
     add(
       square = SquareComponent()..position = Vector2.all(100),
     );

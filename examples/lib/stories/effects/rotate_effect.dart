@@ -12,7 +12,8 @@ import '../../commons/square_component.dart';
 class RotateEffectGame extends BaseGame with TapDetector {
   SquareComponent square;
 
-  RotateEffectGame() {
+  @override
+  Future<void> onLoad() async {
     add(
       square = SquareComponent()
         ..position = Vector2.all(200)
