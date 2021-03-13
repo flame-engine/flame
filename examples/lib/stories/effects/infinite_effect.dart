@@ -23,13 +23,11 @@ class InfiniteEffectGame extends BaseGame with TapDetector {
   SquareComponent redSquare;
   SquareComponent orangeSquare;
 
-  InfiniteEffectGame()
-      : greenSquare = makeSquare(green),
-        redSquare = makeSquare(red),
-        orangeSquare = makeSquare(orange) {
-    add(greenSquare);
-    add(redSquare);
-    add(orangeSquare);
+  @override
+  Future<void> onLoad() async {
+    add(greenSquare = makeSquare(green));
+    add(redSquare = makeSquare(red));
+    add(orangeSquare = makeSquare(orange));
   }
 
   @override

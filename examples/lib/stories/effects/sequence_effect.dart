@@ -11,7 +11,8 @@ final green = Paint()..color = const Color(0xAA338833);
 class SequenceEffectGame extends BaseGame with TapDetector {
   SquareComponent greenSquare;
 
-  SequenceEffectGame() {
+  @override
+  Future<void> onLoad() async {
     add(
       greenSquare = SquareComponent()
         ..paint = green

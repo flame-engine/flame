@@ -11,7 +11,8 @@ class ScaleEffectGame extends BaseGame with TapDetector {
   SquareComponent square;
   bool grow = true;
 
-  ScaleEffectGame() {
+  @override
+  Future<void> onLoad() async {
     add(
       square = SquareComponent()
         ..position = Vector2.all(200)
