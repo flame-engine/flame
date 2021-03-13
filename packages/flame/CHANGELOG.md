@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [next]
+
+## 1.0.0-rc8
  - Migrate to null safety
  - Refactor the joystick code
  - Fix example app
