@@ -6,21 +6,21 @@ import 'package:flame/palette.dart';
 import 'package:flutter/services.dart' show RawKeyDownEvent, RawKeyEvent;
 
 class KeyboardGame extends Game with KeyboardEvents {
-  static final Paint _white = BasicPalette.white.paint;
+  static final Paint white = BasicPalette.white.paint;
   static const int speed = 200;
 
-  Rect _rect = const Rect.fromLTWH(0, 100, 100, 100);
+  Rect rect = const Rect.fromLTWH(0, 100, 100, 100);
   final Vector2 velocity = Vector2(0, 0);
 
   @override
   void update(double dt) {
     final displacement = velocity * (speed * dt);
-    _rect = _rect.translate(displacement.x, displacement.y);
+    rect = rect.translate(displacement.x, displacement.y);
   }
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(_rect, _white);
+    canvas.drawRect(rect, white);
   }
 
   @override

@@ -5,12 +5,13 @@ publish_to: 'none'
 version: 0.1.0
 
 environment:
-  sdk: ">=2.10.0 <3.0.0"
+  sdk: ">=2.12.0-29.10.beta <3.0.0"
+  flutter: ">=1.24.0-10.2.pre"
 
 dependencies:
   flame:
     path: ../packages/flame
-  dashbook: 0.0.12
+  dashbook: 0.1.0-nullsafety.0
   flutter:
     sdk: flutter
 
@@ -20,7 +21,7 @@ dev_dependencies:
   dart_code_metrics: ^2.4.0
 
 flutter:
-  uses-material-design: true
+  uses-material-design: false 
 
   assets:
     - assets/images/animations/chopper.png

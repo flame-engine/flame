@@ -10,7 +10,7 @@ final green = Paint()..color = const Color(0xAA338833);
 final red = Paint()..color = const Color(0xAA883333);
 
 class CombinedEffectGame extends BaseGame with TapDetector {
-  SquareComponent greenSquare, redSquare;
+  late SquareComponent greenSquare, redSquare;
 
   @override
   Future<void> onLoad() async {

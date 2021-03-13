@@ -15,7 +15,7 @@ import 'stories/widgets/widgets.dart';
 
 void main() async {
   final dashbook = Dashbook(
-    title: 'Flame Example',
+    // title: 'Flame Example',
     theme: ThemeData.dark(),
   );
 
