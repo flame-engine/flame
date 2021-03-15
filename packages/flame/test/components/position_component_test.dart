@@ -16,6 +16,7 @@ void main() {
       component.size = Vector2(4.0, 4.0);
       component.angle = 0.0;
       component.anchor = Anchor.center;
+      print(component.topLeftPosition);
 
       final point = Vector2(2.0, 2.0);
       expect(component.containsPoint(point), true);
@@ -103,6 +104,36 @@ void main() {
 
       final point = component.position + component.size / 4;
       expect(component.containsPoint(point), true);
+    });
+
+    test('component with anchor topLeft contains point on edge', () {
+      final size = Vector2(2.0, 2.0);
+      final Hitbox component = MyHitboxComponent();
+      component.position = Vector2(-1, -1);
+      component.anchor = Anchor.topLeft;
+      component.size = size;
+      final hitbox = HitboxRectangle();
+      component.addShape(hitbox);
+
+      expect(component.containsPoint(Vector2(1, 1)), true);
+      expect(component.containsPoint(Vector2(1, -1)), true);
+      expect(component.containsPoint(Vector2(-1, -1)), true);
+      expect(component.containsPoint(Vector2(-1, 1)), true);
+    });
+
+    test('component with anchor bottomRight contains point on edge', () {
+      final size = Vector2(2.0, 2.0);
+      final Hitbox component = MyHitboxComponent();
+      component.position = Vector2(1, -1);
+      component.anchor = Anchor.bottomRight;
+      component.size = size;
+      final hitbox = HitboxRectangle();
+      component.addShape(hitbox);
+
+      expect(component.containsPoint(Vector2(1, 1)), true);
+      expect(component.containsPoint(Vector2(1, -1)), true);
+      expect(component.containsPoint(Vector2(-1, -1)), true);
+      expect(component.containsPoint(Vector2(-1, 1)), true);
     });
 
     test('component with hitbox does not contains point', () {
