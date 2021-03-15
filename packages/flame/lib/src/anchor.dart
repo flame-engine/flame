@@ -55,9 +55,7 @@ class Anchor {
     Anchor otherAnchor,
     Vector2 size,
   ) {
-    return position +
-        ((otherAnchor.toVector2() - toVector2())
-          ..multiply(size));
+    return position + ((otherAnchor.toVector2() - toVector2())..multiply(size));
   }
 
   /// Returns a string representation of this Anchor.

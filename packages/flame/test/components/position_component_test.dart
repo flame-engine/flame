@@ -16,7 +16,6 @@ void main() {
       component.size = Vector2(4.0, 4.0);
       component.angle = 0.0;
       component.anchor = Anchor.center;
-      print(component.topLeftPosition);
 
       final point = Vector2(2.0, 2.0);
       expect(component.containsPoint(point), true);
