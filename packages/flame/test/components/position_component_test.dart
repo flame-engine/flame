@@ -123,7 +123,7 @@ void main() {
     test('component with anchor bottomRight contains point on edge', () {
       final size = Vector2(2.0, 2.0);
       final Hitbox component = MyHitboxComponent();
-      component.position = Vector2(1, -1);
+      component.position = Vector2(1, 1);
       component.anchor = Anchor.bottomRight;
       component.size = size;
       final hitbox = HitboxRectangle();
