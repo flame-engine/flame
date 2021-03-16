@@ -48,6 +48,16 @@ class Anchor {
     return p - (toVector2()..multiply(size));
   }
 
+  /// Take your position [position] that is on this anchor and give back what that
+  /// position it would be on in anchor [otherAnchor] with a size of [size].
+  Vector2 toOtherAnchorPosition(
+    Vector2 position,
+    Anchor otherAnchor,
+    Vector2 size,
+  ) {
+    return position + ((otherAnchor.toVector2() - toVector2())..multiply(size));
+  }
+
   /// Returns a string representation of this Anchor.
   ///
   /// This should only be used for serialization purposes.

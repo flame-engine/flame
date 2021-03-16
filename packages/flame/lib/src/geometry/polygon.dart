@@ -103,7 +103,7 @@ class Polygon extends Shape {
             .map((point) =>
                 (point + shapeCenter)..rotate(angle, center: anchorPosition))
             .toList(growable: false),
-        [shapeCenter, size!.clone(), angle],
+        [position.clone(), size!.clone(), angle],
       );
     }
     return _cachedHitbox.value!;

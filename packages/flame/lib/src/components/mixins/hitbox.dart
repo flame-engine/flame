@@ -37,10 +37,10 @@ mixin Hitbox on PositionComponent {
   /// [toAbsoluteRect] rect.
   Rect toBoundingRect() {
     if (!_cachedBoundingRect.isCacheValid([position, size])) {
-      final maxRadius = size.length / 2;
+      final maxRadius = size.length;
       _cachedBoundingRect.updateCache(
         Rect.fromCenter(
-          center: position.toOffset(),
+          center: absoluteCenter.toOffset(),
           width: maxRadius,
           height: maxRadius,
         ),

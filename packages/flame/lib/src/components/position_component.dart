@@ -49,7 +49,13 @@ abstract class PositionComponent extends BaseComponent {
   Vector2 get absolutePosition => absoluteParentPosition + position;
 
   /// Get the relative top left position regardless of the anchor and angle
-  Vector2 get topLeftPosition => anchor.translate(position, size);
+  Vector2 get topLeftPosition {
+    return anchor.toOtherAnchorPosition(
+      position,
+      Anchor.topLeft,
+      size,
+    );
+  }
 
   /// Set the top left position regardless of the anchor
   set topLeftPosition(Vector2 position) {
@@ -80,7 +86,9 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Get the position of the center of the component's bounding rectangle without rotation
   Vector2 get center {
-    return anchor == Anchor.center ? position : topLeftPosition + (size / 2);
+    return anchor == Anchor.center
+        ? position
+        : anchor.toOtherAnchorPosition(position, Anchor.center, size);
   }
 
   /// Get the absolute center of the component without rotation

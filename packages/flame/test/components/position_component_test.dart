@@ -105,6 +105,51 @@ void main() {
       expect(component.containsPoint(point), true);
     });
 
+    test('component with anchor topLeft contains point on edge', () {
+      final size = Vector2(2.0, 2.0);
+      final Hitbox component = MyHitboxComponent();
+      component.position = Vector2(-1, -1);
+      component.anchor = Anchor.topLeft;
+      component.size = size;
+      final hitbox = HitboxRectangle();
+      component.addShape(hitbox);
+
+      expect(component.containsPoint(Vector2(1, 1)), true);
+      expect(component.containsPoint(Vector2(1, -1)), true);
+      expect(component.containsPoint(Vector2(-1, -1)), true);
+      expect(component.containsPoint(Vector2(-1, 1)), true);
+    });
+
+    test('component with anchor bottomRight contains point on edge', () {
+      final size = Vector2(2.0, 2.0);
+      final Hitbox component = MyHitboxComponent();
+      component.position = Vector2(1, 1);
+      component.anchor = Anchor.bottomRight;
+      component.size = size;
+      final hitbox = HitboxRectangle();
+      component.addShape(hitbox);
+
+      expect(component.containsPoint(Vector2(1, 1)), true);
+      expect(component.containsPoint(Vector2(1, -1)), true);
+      expect(component.containsPoint(Vector2(-1, -1)), true);
+      expect(component.containsPoint(Vector2(-1, 1)), true);
+    });
+
+    test('component with anchor topRight does not contain close points', () {
+      final size = Vector2(2.0, 2.0);
+      final Hitbox component = MyHitboxComponent();
+      component.position = Vector2(1, 1);
+      component.anchor = Anchor.topLeft;
+      component.size = size;
+      final hitbox = HitboxRectangle();
+      component.addShape(hitbox);
+
+      expect(component.containsPoint(Vector2(0.0, 0.0)), false);
+      expect(component.containsPoint(Vector2(0.9, 0.9)), false);
+      expect(component.containsPoint(Vector2(3.1, 3.1)), false);
+      expect(component.containsPoint(Vector2(1.1, 3.1)), false);
+    });
+
     test('component with hitbox does not contains point', () {
       final size = Vector2(2.0, 2.0);
       final Hitbox component = MyHitboxComponent();
