@@ -124,5 +124,5 @@ Note that some of the articles might be slightly outdated, but they are still us
 
 ## Credits
 
- * The [Flame engine team](https://github.com/orgs/flame-engine/people) who is continuously working on maintaining and improving Flame.
+ * The [Flame Engine team](https://github.com/orgs/flame-engine/people), who is continuously working on maintaining and improving Flame.
  * All the friendly contributors and people who are helping in the community.
