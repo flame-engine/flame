@@ -124,7 +124,5 @@ Note that some of the articles might be slightly outdated, but they are still us
 
 ## Credits
 
- * [Fireslime](https://fireslime.xyz), the team responsible for maintaining Flame.
+ * The [Flame Engine team](https://github.com/orgs/flame-engine/people), who is continuously working on maintaining and improving Flame.
  * All the friendly contributors and people who are helping in the community.
- * [Luanpotter](https://github.com/luanpotter)'s (the Flame founder) [audioplayers](https://github.com/luanpotter/audioplayer) lib, which in turn is forked from [rxlabz's](https://github.com/rxlabz/audioplayer).
- * The Dart port of [Box2D](https://github.com/google/box2d.dart).
