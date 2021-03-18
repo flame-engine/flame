@@ -2,6 +2,7 @@
 
 ## [next]
  - Fix input bug with other anchors than center
+ - Memoizing the paint creation on BasicPalette to enable direct use
 
 ## 1.0.0-rc8
  - Migrate to null safety

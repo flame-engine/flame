@@ -1,11 +1,26 @@
 import 'dart:ui';
 
+class _MemoizedPaint {
+  final Color color;
+  Paint? _paint;
+
+  _MemoizedPaint(this.color);
+
+  Paint get value {
+    _paint ??= Paint()..color;
+    return _paint!;
+  }
+}
+
 class PaletteEntry {
   final Color color;
+  late _MemoizedPaint _paint;
 
-  Paint get paint => Paint()..color = color;
+  Paint get paint => _paint.value;
 
-  const PaletteEntry(this.color);
+  PaletteEntry(this.color) {
+    _paint = _MemoizedPaint(color);
+  }
 
   PaletteEntry withAlpha(int alpha) {
     return PaletteEntry(color.withAlpha(alpha));
@@ -25,6 +40,6 @@ class PaletteEntry {
 }
 
 class BasicPalette {
-  static const PaletteEntry white = PaletteEntry(Color(0xFFFFFFFF));
-  static const PaletteEntry black = PaletteEntry(Color(0xFF000000));
+  static PaletteEntry white = PaletteEntry(Color(0xFFFFFFFF));
+  static PaletteEntry black = PaletteEntry(Color(0xFF000000));
 }
