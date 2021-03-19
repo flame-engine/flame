@@ -108,7 +108,7 @@ class Camera {
   set _position(Vector2 position) {
     __position.setFrom(position);
     onPositionUpdate(__position);
-  } 
+  }
 
   /// If set, the camera will "follow" this vector, making sure that this
   /// vector is always rendered in a fixed position in the screen, by
