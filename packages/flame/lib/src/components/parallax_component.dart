@@ -64,7 +64,7 @@ class ParallaxComponent extends PositionComponent {
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
-    this.size = size;
+    this.size.setFrom(size);
     parallax?.resize(size);
   }
 

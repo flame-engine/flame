@@ -48,7 +48,7 @@ class Square extends PositionComponent {
   @override
   void onMount() {
     super.onMount();
-    size = Vector2.all(squareSize);
+    size.setValues(squareSize, squareSize);
     anchor = Anchor.center;
   }
 }

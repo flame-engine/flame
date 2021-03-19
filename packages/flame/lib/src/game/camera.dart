@@ -35,7 +35,7 @@ void _moveToTarget(
 /// There are three major factors that determine the camera position:
 ///
 /// * Follow
-/// If you want, you can call [followObject] at the beginning of your
+/// If you want, you can call [followComponent] at the beginning of your
 /// stage/world/level, and provided a [PositionComponent].
 /// The camera will follow this component making sure its position is fixed
 /// on the screen.
@@ -149,7 +149,7 @@ class Camera {
       _position.setFrom(_currentCameraDelta! + shake);
     } else {
       _moveToTarget(_currentRelativeOffset, _targetRelativeOffset, ds);
-      _position.setFrom(_getTarget() + shake);
+      _position.setFrom(_target() + shake);
     }
 
     if (shaking) {
@@ -193,7 +193,7 @@ class Camera {
   /// The object is "grabbed" by its anchor (default top left). So for example
   /// if you want the center of the object to be at the fixed position, set
   /// its anchor to center.
-  void followObject(
+  void followComponent(
     PositionComponent follow, {
     Vector2? relativeOffset,
     Rect? worldBounds,
@@ -214,7 +214,7 @@ class Camera {
     _targetRelativeOffset.setFrom(newRelativeOffset);
   }
 
-  Vector2 _getTarget() {
+  Vector2 _target() {
     if (follow == null) {
       return Vector2.zero();
     }
