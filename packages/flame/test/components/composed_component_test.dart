@@ -88,7 +88,7 @@ void main() {
       final wrapper = MyComposed();
 
       game.onResize(size);
-      child.size = Vector2.all(1);
+      child.size.setValues(1.0, 1.0);
       game.add(wrapper);
       wrapper.addChild(child);
       game.update(0.0);
@@ -101,11 +101,11 @@ void main() {
     test('tap on offset children', () {
       final game = MyGame();
       final child = MyTap()
-        ..position = Vector2.all(100)
-        ..size = Vector2.all(100);
+        ..position.setFrom(Vector2.all(100))
+        ..size.setFrom(Vector2.all(100));
       final wrapper = MyComposed()
-        ..position = Vector2.all(100)
-        ..size = Vector2.all(300);
+        ..position.setFrom(Vector2.all(100))
+        ..size.setFrom(Vector2.all(300));
 
       game.onResize(size);
       game.add(wrapper);

@@ -16,11 +16,11 @@ class CombinedEffectGame extends BaseGame with TapDetector {
   Future<void> onLoad() async {
     greenSquare = SquareComponent()
       ..paint = green
-      ..position = Vector2.all(100);
+      ..position.setValues(100, 100);
 
     redSquare = SquareComponent()
       ..paint = red
-      ..position = Vector2.all(100);
+      ..position.setValues(100, 100);
 
     add(greenSquare);
     add(redSquare);
