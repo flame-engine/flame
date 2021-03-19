@@ -104,7 +104,7 @@ class TestComponent extends PositionComponent {
     Anchor? anchor,
   }) : super(
           position: position,
-          size: size,
+          size: size ?? Vector2.all(100.0),
           angle: angle ?? 0.0,
           anchor: anchor ?? Anchor.center,
         );
