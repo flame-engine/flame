@@ -42,7 +42,7 @@ class DraggableSquare extends PositionComponent
     final localCoords = gameRef!.convertGlobalToLocalCoordinate(
       details.globalPosition.toVector2(),
     );
-    position.setFrom(localCoords - dragDeltaPosition);
+    position = localCoords - dragDeltaPosition;
     return false;
   }
 

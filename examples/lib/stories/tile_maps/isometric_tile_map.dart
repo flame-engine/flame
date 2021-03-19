@@ -76,6 +76,6 @@ class IsometricTileMapGame extends BaseGame with MouseMovementDetector {
     final screenPosition = event.localPosition.toVector2();
     final block = base.getBlock(screenPosition);
     selector.show = base.containsBlock(block);
-    selector.position.setFrom(base.getBlockPosition(block) + topLeft);
+    selector.position = base.getBlockPosition(block) + topLeft;
   }
 }

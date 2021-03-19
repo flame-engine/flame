@@ -23,19 +23,23 @@ import 'mixins/hitbox.dart';
 /// within this component's (width, height).
 abstract class PositionComponent extends BaseComponent {
   /// The position of this component on the screen (relative to the anchor).
-  final Vector2 position;
+  final Vector2 _position;
+  Vector2 get position => _position;
+  set position(Vector2 position) => _position.setFrom(position);
 
   /// X position of this component on the screen (relative to the anchor).
-  double get x => position.x;
-  set x(double x) => position.x = x;
+  double get x => _position.x;
+  set x(double x) => _position.x = x;
 
   /// Y position of this component on the screen (relative to the anchor).
-  double get y => position.y;
-  set y(double y) => position.y = y;
+  double get y => _position.y;
+  set y(double y) => _position.y = y;
 
   /// The size that this component is rendered with.
   /// This is not necessarily the source size of the asset.
-  final Vector2 size;
+  final Vector2 _size;
+  Vector2 get size => _size;
+  set size(Vector2 size) => _size.setFrom(size);
 
   /// Width (size) that this component is rendered with.
   double get width => size.x;
@@ -59,7 +63,7 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Set the top left position regardless of the anchor
   set topLeftPosition(Vector2 position) {
-    this.position.setFrom(position + (anchor.toVector2()..multiply(size)));
+    this.position = position + (anchor.toVector2()..multiply(size));
   }
 
   /// Get the absolute top left position regardless of whether it is a child or not
@@ -132,8 +136,8 @@ abstract class PositionComponent extends BaseComponent {
     this.anchor = Anchor.topLeft,
     this.renderFlipX = false,
     this.renderFlipY = false,
-  })  : position = position ?? Vector2.zero(),
-        size = size ?? Vector2.zero();
+  })  : _position = position ?? Vector2.zero(),
+        _size = size ?? Vector2.zero();
 
   @override
   bool containsPoint(Vector2 point) {

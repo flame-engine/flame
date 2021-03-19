@@ -52,13 +52,13 @@ class TextGame extends BaseGame {
     add(
       TextComponent('center', config: _tiny)
         ..anchor = Anchor.center
-        ..position.setFrom(size / 2),
+        ..position = size / 2,
     );
 
     add(
       TextComponent('bottomRight', config: _tiny)
         ..anchor = Anchor.bottomRight
-        ..position.setFrom(size),
+        ..position = size,
     );
 
     add(

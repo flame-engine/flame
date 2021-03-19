@@ -13,10 +13,11 @@ class RotateEffectGame extends BaseGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    square = SquareComponent()
-      ..position.setValues(200, 200)
-      ..anchor = Anchor.center;
-    add(square);
+    add(
+      square = SquareComponent()
+        ..position = Vector2.all(200)
+        ..anchor = Anchor.center,
+    );
   }
 
   @override

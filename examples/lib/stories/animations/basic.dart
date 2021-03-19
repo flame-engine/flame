@@ -59,7 +59,7 @@ class BasicAnimations extends BaseGame with TapDetector {
       removeOnFinish: true,
     );
 
-    animationComponent.position.setFrom(position - size / 2);
+    animationComponent.position = position - size / 2;
     add(animationComponent);
   }
 
