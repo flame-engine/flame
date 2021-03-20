@@ -1,6 +1,6 @@
 # Audio
 
-To play a audio is really simple!
+To play audio is really simple!
 
 First you have to add [flame_audio](https://github.com/flame-engine/flame_audio) to your dependency
 list in your `pubspec.yaml` file:
@@ -10,8 +10,8 @@ dependencies:
   flame_audio: 0.1.0-rc4
 ```
 
-The you should add entries in the `assets` section for each file that you want to use (and make sure
-that the files exist in the paths that you provide).
+Then you should add entries in the `assets` section for each file that you want to use (and make
+sure that the files exist in the paths that you provide).
 
 For the examples below, your `pubspec.yaml` file needs to contain something like this:
 
@@ -42,9 +42,10 @@ FlameAudio.loopLongAudio('music.mp3');
 // For background music that should be paused/played when the pausing/resuming the game
 FlameAudio.bgm.play('music.mp3');
 ```
+
 The difference between the `play/loop` and `playLongAudio/loopLongAudio` is that `play/loop` makes
 use of optimized features that allow sounds to be looped without gaps between their iterations, and
-almost no drop on the game frame rate will happen. You should whenever possible, prefer these
+almost no drop on the game frame rate will happen. You should whenever possible, prefer the former
 methods.
 
 `playLongAudio/loopLongAudio` allows for audios of any length to be played, but they do create frame
