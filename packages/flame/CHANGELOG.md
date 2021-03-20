@@ -9,6 +9,7 @@
  - Fixing Flutter and Dart version constraints
  - Exporting Images and AssetsCache
  - Make Size and Position in PositionComponent final
+ - Make `size` and `position` in `PositionComponent` final
  - Add snapTo and onPositionUpdate to Camera
 
 ## 1.0.0-rc8
