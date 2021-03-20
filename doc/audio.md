@@ -89,8 +89,8 @@ FlameAudio.audioCache.clear('explosion.mp3');
 
 There is also a `clearCache` method, that clears the whole cache.
 
-This might be useful if, for instance, your game has multiple levels and each has a different set of
-sounds and music.
+This might be useful if, for instance, your game has multiple levels and each has a different
+set of sounds and music.
 
 Both load methods return a `Future` for the `File`s loaded.
 
