@@ -7,32 +7,52 @@ This diagram might look intimidating, but don't worry, it is not as complex as i
 ## Component
 All components inherit from the abstract class `Component`.
 
-If you want to skip reading about abstract classes you can jump directly to [PositionComponent](./components.md#PositionComponent).
+If you want to skip reading about abstract classes you can jump directly to
+[PositionComponent](./components.md#PositionComponent).
 
-Every `Component` has a few methods that you can optionally implement, that are used by the `BaseGame` class. If you are not using the base game, you can alternatively use these methods on your own game loop.
+Every `Component` has a few methods that you can optionally implement, that are used by the
+`BaseGame` class. If you are not using `BaseGame`, you can alternatively use these methods on your
+own game loop.
 
-The `resize` method is called whenever the screen is resized, and in the beginning once when the component is added via the `add` method.
+The `resize` method is called whenever the screen is resized, and in the beginning once when the
+component is added to the game via the `add` method.
 
-The `shouldRemove` variable can be overridden or set to true and `BaseGame` will remove the component before the next update loop. It will then no longer be rendered or updated. Note that `game.remove(Component c)` can also be used to remove components.
+The `shouldRemove` variable can be overridden or set to true and `BaseGame` will remove the
+component before the next update loop. It will then no longer be rendered or updated. Note that
+`game.remove(Component c)` can also be used to remove components from the game.
 
-The `isHUD` variable can be overridden or set to true (default false) to make the `BaseGame` ignore the `camera` for this element, make it static in relation to the screen that is.
+The `isHUD` variable can be overridden or set to true (default false) to make the `BaseGame` ignore
+the `camera` for this element, make it static in relation to the screen that is.
 
-The `onMount` method can be overridden to run initialization code for the component. When this method is called, BaseGame ensures that all the mixins which would change this component's behavior are already resolved.
+The `onMount` method can be overridden to run initialization code for the component. When this
+method is called, BaseGame ensures that all the mixins which would change this component's behavior
+are already resolved.
 
-The `onRemove` method can be overridden to run code before the component is removed from the game, it is only run once even if the component is removed both by using the `BaseGame` remove method and the ´Component´ remove method.
+The `onRemove` method can be overridden to run code before the component is removed from the game,
+it is only run once even if the component is removed both by using the `BaseGame` remove method and
+the ´Component´ remove method.
 
-The `onLoad` method can be overridden to run asynchronous initialization code for the component, like loading an image for example. This method is executed after the initial "preparation" of the component is run, meaning that this method is executed after `onMount` and just before the inclusion of the component on the `BaseGame` list of components.
+The `onLoad` method can be overridden to run asynchronous initialization code for the component,
+like loading an image for example. This method is executed after the initial "preparation" of the
+component is run, meaning that this method is executed after `onMount` and just before the inclusion
+of the component in the `BaseGame`'s list of components.
 
 ## BaseComponent
-Usually if you are going to make your own component you want to extend `PositionComponent`, but if you want to be able to handle effects and child components but handle the positioning differently you can extend the `BaseComponent`.
+Usually if you are going to make your own component you want to extend `PositionComponent`, but if
+you want to be able to handle effects and child components but handle the positioning differently
+you can extend the `BaseComponent`.
 
-It is used by `SpriteBodyComponent` and `BodyComponent` in Forge2D since those components doesn't have their position in relation to the screen, but in relation to the Forge2D world.
+It is used by `SpriteBodyComponent`, `PositionBodyComponent`, and `BodyComponent` in Forge2D since
+those components doesn't have their position in relation to the screen, but in relation to the
+Forge2D world.
 
 ### Composability of components
 
-Sometimes it is useful to make your component wrap other components. For example by grouping visual components through a hierarchy.
-You can do this by having child components on any component that extends `BaseComponent`, for example `PositionComponent` or `BodyComponent`.
-When you have child components on a component every time the parent is updated and rendered, all the children are rendered and updated with the same conditions.
+Sometimes it is useful to wrap other components inside of your component. For example by grouping
+visual components through a hierarchy. You can do this by having child components on any component
+that extends `BaseComponent`, for example `PositionComponent` or `BodyComponent`.
+When you have child components on a component every time the parent is updated and rendered, all the
+children are rendered and updated with the same conditions.
 
 Example of usage, where visibility of two components are handled by a wrapper:
 
@@ -40,12 +60,9 @@ Example of usage, where visibility of two components are handled by a wrapper:
 class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
   bool visible = false;
 
-  GameOverText gameOverText;
-  GameOverButton gameOverButton;
-
   GameOverPanel(Image spriteImage) : super() {
-    gameOverText = GameOverText(spriteImage); // GameOverText is a Component
-    gameOverButton = GameOverButton(spriteImage); // GameOverRestart is a SpriteComponent
+    final gameOverText = GameOverText(spriteImage); // GameOverText is a Component
+    final gameOverButton = GameOverButton(spriteImage); // GameOverRestart is a SpriteComponent
 
     addChild(gameRef, gameOverText);
     addChild(gameRef, gameOverButton);
@@ -64,37 +81,49 @@ class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
 
 This class represent a single object on the screen, being a floating rectangle or a rotating sprite.
 
-A `PositionComponent` has a `position`, `size` and `angle`, as well as some useful methods like `distance` and `angleBetween`.
+A `PositionComponent` has a `position`, `size` and `angle`, as well as some useful methods like
+`distance` and `angleBetween`.
 
-When implementing the `render` method for your component that extends `PositionComponent` remember to render from the top left corner (0.0).
-Your render method should not handle where on the screen your component should be rendered. To handle where and how your component should be rendered
-use the `position`. `angle` and `anchor` properties and flame will automatically handle the rest for you.
+When implementing the `render` method for a component that extends `PositionComponent` remember to
+render from the top left corner (0.0). Your render method should not handle where on the screen your
+component should be rendered. To handle where and how your component should be rendered use the
+`position`, `angle` and `anchor` properties and flame will automatically handle the rest for you.
 
-If you really want to handle the canvas translations yourself you can just omit the `super.render(canvas)` line and suppress the warning, but for most use cases this is not recommended.
+If you really want to handle the canvas translations yourself you can just omit the
+`super.render(canvas)` line and suppress the warning, but for most use cases this is not
+recommended.
 
-If you want to know where on the screen the bounding box of the component is you can use the `toRect` method.
+If you want to know where on the screen the bounding box of the component is you can use the
+`toRect` method.
 
 In the event that you want to change the direction of your components rendering, you can also use
 `renderFlipX` and `renderFlipY` to flip anything drawn to canvas during `render(Canvas canvas)`.
-This is available on all `PositionComponent` objects, and is especially useful on `SpriteComponent` and
-`SpriteAnimationComponent`. For example set `component.renderFlipX = true` to reverse the horizontal rendering.
+This is available on all `PositionComponent` objects, and is especially useful on `SpriteComponent`
+and `SpriteAnimationComponent`. For example set `component.renderFlipX = true` to mirror the
+horizontal rendering.
 
 ## SpriteComponent
-The most commonly used implementation of `PositionComponent` is `SpriteComponent`, and it can be created with a `Sprite`:
+The most commonly used implementation of `PositionComponent` is `SpriteComponent`, and it can be
+created with a `Sprite`:
 
 ```dart
 import 'package:flame/components/component.dart';
 
-Sprite sprite = Sprite('player.png');
+class MyGame extends BaseGame {
+  late final SpriteComponent player;
 
-final size = Vector2.all(128.0);
-var player = SpriteComponent.fromSprite(size, sprite);
+  @override
+  Future<void> onLoad() async {
+    final sprite = await Sprite.load('player.png');
+    final size = Vector2.all(128.0);
+    final player = SpriteComponent(size: size, sprite: sprite);
 
-// screen coordinates
-player.position = ... // Vector2(0.0, 0.0) by default
-player.angle = ... // 0 by default
-
-player.render(canvas); // it will render only if the image is loaded and the position and size parameters are not null
+    // screen coordinates
+    player.position = ... // Vector2(0.0, 0.0) by default, can also be set in the constructor
+    player.angle = ... // 0 by default, can also be set in the constructor
+    add(player); // Adds the component
+  }
+}
 ```
 
 ## SpriteAnimationComponent
@@ -105,7 +134,7 @@ This will create a simple three frame animation using 3 different images:
 
 ```dart
 final sprites = [0, 1, 2]
-    .map((i) => Sprite(images.fromCache('player_$i.png')))
+    .map((i) => await Sprite.load('player_$i.png'))
     .toList();
 final size = Vector2.all(64.0);
 this.player = SpriteAnimationComponent(
@@ -114,7 +143,8 @@ this.player = SpriteAnimationComponent(
 );
 ```
 
-If you have a sprite sheet, you can use the `sequenced` constructor from the `SpriteAnimationData` class (check more details on [Images &gt; Animation](images.md#Animation)):
+If you have a sprite sheet, you can use the `sequenced` constructor from the `SpriteAnimationData`
+class (check more details on [Images &gt; Animation](images.md#Animation)):
 
 ```dart
 final size = Vector2.all(64.0);
@@ -129,35 +159,43 @@ this.player = SpriteAnimationComponent.fromFrameData(
 );
 ```
 
-If you are not using `BaseGame`, don't forget this component needs to be updated, because the animation object needs to be ticked to move the frames.
+If you are not using `BaseGame`, don't forget this component needs to be updated, because the
+animation object needs to be ticked to move the frames.
 
 ## SvgComponent
 
-*Note*: To use SVG with Flame, use the [`flame_svg`](https://github.com/flame-engine/flame_svg) package.
+*Note*: To use SVG with Flame, use the [`flame_svg`](https://github.com/flame-engine/flame_svg)
+package.
 
-This component uses an instance of `Svg` class to represent a Component that has a svg that is rendered on the game:
+This component uses an instance of `Svg` class to represent a Component that has a svg that is
+rendered in the game:
 
 ```dart
-Svg svg = Svg('android.svg');
-SvgComponent android = SvgComponent.fromSvg(Vector2.all(100.0), svg);
-android.position = Vector2.all(100.0);
+final svg = await Svg.load('android.svg');
+final android = SvgComponent.fromSvg(
+  svg,
+  position: Vector2.all(100),
+  size: Vector2.all(100),
+);
 ```
 
 ## FlareActorComponent
 
-*Note*: The previous implementation of a Flare integration API using `FlareAnimation` and `FlareComponent` has been deprecated.
+*Note*: The previous implementation of a Flare integration API using `FlareAnimation` and
+`FlareComponent` has been deprecated.
 
-To use Flare within Flame, use the [`flame_flare`](https://github.com/flame-engine/flame_flare) package.
+To use Flare within Flame, use the [`flame_flare`](https://github.com/flame-engine/flame_flare)
+package.
 
-This is the interface to use a [flare animation](https://pub.dev/packages/flare_flutter) within flame.
-`FlareActorComponent` has almost the same API as of flare's FlareActor widget. It receives the animation filename (that are loaded by default with `Flame.bundle`),
-it also can receive a FlareController that can play multiple animations and control nodes.
+This is the interface for using a [flare animation](https://pub.dev/packages/flare_flutter) within
+flame. `FlareActorComponent` has almost the same API as of flare's `FlareActor` widget. It receives
+the animation filename (that is loaded by default with `Flame.bundle`), it can also receive a
+FlareController that can play multiple animations and control nodes.
 
 ```dart
 import 'package:flame_flare/flame_flare.dart';
 
-// your implementation of FlareController
-class WashingtonController extends FlareControls {
+class YourFlareController extends FlareControls {
     
     ActorNode rightHandNode;
     
@@ -171,7 +209,7 @@ class WashingtonController extends FlareControls {
 
 final fileName = 'assets/george_washington.flr';
 final size = Vector2(1776, 1804);
-final controller = WashingtonController(); //instantiate controller
+final controller = YourFlareController();
 
 FlareActorComponent flareAnimation = FlareActorComponent(
   fileName,
@@ -190,23 +228,24 @@ controller.play('rise_up');
 // you can add another animation to play at the same time
 controller.play('close_door_way_out');
 
-// also, get a flare node and modify it
+// also, you can get a flare node and modify it
 controller.rightHandNode.rotation = math.pi;
 ```
 
-You can also change the current playing animation using the `updateAnimation` method.
+You can also change the current playing animation by using the `updateAnimation` method.
 
-For a working example, check this [source file](https://github.com/flame-engine/flame/tree/master/doc/examples/flare/lib/main_component.dart).
+For a working example, check the example in the
+[flame_flare repository](https://github.com/flame-engine/flame_flare/tree/master/example).
 
 ## ParallaxComponent
 
-This Component can be used to render pretty backgrounds by drawing several transparent images on top
-of each other, where each image is moving with a different velocity.
+This Component can be used to render backgrounds with a depth feeling by drawing several transparent
+images on top of each other, where each image is moving with a different velocity.
 
 The rationale is that when you look at the horizon and moving, closer objects seem to move faster
 than distant ones.
 
-This component simulates this effect, making a more realistic background with a feeling of depth.
+This component simulates this effect, making a more realistic background effect.
 
 The simplest `ParallaxComponent` is created like this:
 
@@ -224,7 +263,7 @@ A ParallaxComponent can also "load itself" by implementing the `onLoad` method:
 class MyParallaxComponent extends ParallaxComponent with HasGameRef<MyGame> {
   @override
   Future<void> onLoad() async {
-    parallax = gameRef.loadParallax(['bg.png', 'trees.png']);
+    parallax = await gameRef.loadParallax(['bg.png', 'trees.png']);
   }
 }
 
@@ -239,7 +278,7 @@ class MyGame extends BaseGame {
 This creates a static background, if you want a moving parallax (which is the whole point of a
 parallax), you can do it in a few different ways depending on how fine grained you want to set the
 settings for each layer.
-They simplest way set is to set the named optional parameters `baseVelocity` and
+They simplest way is to set the named optional parameters `baseVelocity` and
 `velocityMultiplierDelta` in the `load` helper function.
 
 For example if you want to move your background images along the X-axis with a faster speed the
@@ -252,6 +291,7 @@ final parallaxComponent = await loadParallaxComponent(
   velocityMultiplierDelta: Vector2(1.8, 1.0),
 );
 ```
+
 You can set the baseSpeed and layerDelta at any time, for example if your character jumps or your
 game speeds up.
 
@@ -294,39 +334,45 @@ Also, don't forget to add you images to the `pubspec.yaml` file as assets or the
 
 The `Parallax` file contains an extension of the game which adds `loadParallax`, `loadParallaxLayer`
 and `loadParallaxImage` so that it automatically uses your game's image cache instead of the global
-one. The same for the `ParallaxComponent` file, but that provides `loadParallaxComponent`.
+one. The same goes for the `ParallaxComponent` file, but that provides `loadParallaxComponent`.
 
 Three example implementations can be found in the
-[examples directory](https://github.com/flame-engine/flame/tree/master/doc/examples/parallax).
+[examples directory](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/parallax).
 
 ## SpriteBodyComponent
 
-See [SpriteBodyComponent](forge2d.md#SpriteBodyComponent) in the box2d documentation.
+See [SpriteBodyComponent](forge2d.md#SpriteBodyComponent) in the Forge2D documentation.
 
 ## TiledComponent
 
-Currently we have a very basic implementation of a Tiled component. This API uses the lib [Tiled](https://github.com/feroult/tiled.dart) to parse map files and render visible layers.
+Currently we have a very basic implementation of a Tiled component. This API uses the lib
+[Tiled](https://github.com/feroult/tiled.dart) to parse map files and render visible layers.
 
-An example of how to use the API can be found [here](https://github.com/flame-engine/flame_tiled/tree/master/example).
+An example of how to use the API can be found
+[here](https://github.com/flame-engine/flame_tiled/tree/master/example).
 
 ## IsometricTileMapComponent
 
-This component allows you to render an isometric map based on a cartesian matrix of blocks and an isometric tileset.
+This component allows you to render an isometric map based on a cartesian matrix of blocks and an
+isometric tileset.
 
 A simple example on how to use it:
 
 ```dart
-// creates a tileset, the block ids are automatically assigned sequentially starting at 0, from left to right and then top to bottom.
+// Creates a tileset, the block ids are automatically assigned sequentially starting at 0,
+// from left to right and then top to bottom.
 final tilesetImage = await images.load('tileset.png');
 final tileset = IsometricTileset(tilesetImage, 32);
-// each element is a block id, -1 means nothing
+// Each element is a block id, -1 means nothing
 final matrix = [[0, 1, 0], [1, 0, 0], [1, 1, 1]];
 add(IsometricTileMapComponent(tileset, matrix));
 ```
 
-It also provides methods for converting coordinates so you can handle clicks, hovers, render entities on top of tiles, add a selector, etc.
+It also provides methods for converting coordinates so you can handle clicks, hovers, render
+entities on top of tiles, add a selector, etc.
 
-A more in-depth example can be found [here](https://github.com/flame-engine/flame/tree/master/doc/examples/isometric).
+A more in-depth example can be found
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/tile_maps/isometric_tile_map.dart).
 
 ![An example of a isometric map with selector](images/isometric.png)
 
@@ -334,16 +380,23 @@ A more in-depth example can be found [here](https://github.com/flame-engine/flam
 
 A Nine Tile Box is a rectangle drawn using a grid sprite.
 
-The grid sprite is a 3x3 grid and with 9 blocks, representing the 4 corners, the 4 sides and the middle.
+The grid sprite is a 3x3 grid and with 9 blocks, representing the 4 corners, the 4 sides and the
+middle.
 
-The corners are drawn at the same size, the sides are stretched on the side direction and the middle is expanded both ways.
+The corners are drawn at the same size, the sides are stretched on the side direction and the middle
+is expanded both ways.
 
-Using this, you can get a box/rectangle that expands well to any sizes. This is useful for making panels, dialogs, borders.
+Using this, you can get a box/rectangle that expands well to any sizes. This is useful for making
+panels, dialogs, borders.
 
-Check the example app `nine_tile_box` details on how to use it.
+Check the example app
+[nine_tile_box](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/utils/nine_tile_box.dart)
+for details on how to use it.
 
 ## Effects
 
-Flame provides a set of effects that can be applied to a certain type of components, these effects can be used to animate some properties of your components, like position or dimensions. You can check the list of those effects [here](effects.md).
+Flame provides a set of effects that can be applied to a certain type of components, these effects
+can be used to animate some properties of your components, like position or dimensions.
+You can check the list of those effects [here](effects.md).
 
-Examples of the running effects can be found [here](https://github.com/flame-engine/flame/tree/master/doc/examples/effects);
+Examples of the running effects can be found [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/effects);
