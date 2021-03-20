@@ -35,6 +35,8 @@ dependencies:
   flame: <VERSION>
 ```
 
+The latest version can be found on [pub.dev](https://pub.dev/packages/flame/install).
+
 then run `pub get` and you are ready to start using it!
 
 The latest version can be found on [pub.dev](https://pub.dev/packages/flame/install).
