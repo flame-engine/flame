@@ -9,10 +9,10 @@ you need to build your projects.
 It provides you with a simple yet effective game loop implementation, and the necessary
 functionalities that you might need in a game. For instance; input, images, sprites, sprite sheets,
 animations, collision detection and a component system that we call Flame Component System (FCS for
-short). 
+short).
 
 We also provide stand-alone packages that extend the Flame functionality:
-- [flame_audio](https://pub.dev/packages/flame_audio) Which provides audio capabilities using the 
+- [flame_audio](https://pub.dev/packages/flame_audio) Which provides audio capabilities using the
  `audioplayers` package.
 - [flame_forge2d](https://pub.dev/packages/flame_forge2d) Which provides physics capabilities using
   our own `Box2D` port called `Forge2D`.
@@ -34,6 +34,7 @@ Put the pub package as your dependency by putting the following in your `pubspec
 dependencies:
   flame: <VERSION>
 ```
+
 then run `pub get` and you are ready to start using it!
 
 The latest version can be found on [pub.dev](https://pub.dev/packages/flame/install).
@@ -44,6 +45,7 @@ There is a set of tutorials that you can follow to get started in the
 [flame_tutorials](https://github.com/flame-engine/flame_tutorials) repository.
 
 Simple examples for all features can be found in the
+[examples folder](https://github.com/flame-engine/flame/tree/main/examples).
 
 You can also check out the
 [awesome flame repository](https://github.com/flame-engine/awesome-flame#articles--tutorials),
