@@ -12,8 +12,10 @@ so you first have to add that to your dependency list in your `pubspec.yaml` fil
 
 ```yaml
 dependencies:
-  flame_audio: 0.1.0-rc4
+  flame_audio: <VERSION>
 ```
+
+The latest version can be found on [pub.dev](https://pub.dev/packages/flame_audio/install).
 
 For this class to function properly, the observer must be registered by calling the following:
 

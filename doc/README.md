@@ -21,12 +21,14 @@ Give us a star if you want to help give the engine exposure and grow the communi
 
 ## Installation
 
-Put the pub package as your dependency by dropping the following in your `pubspec.yaml`:
+Put the pub package as your dependency by putting the following in your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flame: ^1.0.0-rc8
+  flame: <VERSION>
 ```
+
+The latest version can be found on [pub.dev](https://pub.dev/packages/flame/install).
 
 then run `pub get` and you are ready to start using it!
 

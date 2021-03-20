@@ -1,17 +1,22 @@
 # Audio
 
-To play audio is really simple!
+Playing audio is essential for any game, so we made it simple!
 
 First you have to add [flame_audio](https://github.com/flame-engine/flame_audio) to your dependency
 list in your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flame_audio: 0.1.0-rc4
+  flame_audio: <VERSION>
 ```
 
-Then you should add entries in the `assets` section for each file that you want to use (and make
-sure that the files exist in the paths that you provide).
+The latest version can be found on [pub.dev](https://pub.dev/packages/flame_audio/install).
+
+After installing the flame_audio package you can add audio files in the assets section of your
+`pubspec.yaml` file. Make sure that the audio files exists in the paths that you provide.
+
+The default directory for `FlameAudio` is `assets/audio` (which can be changed) and for `AudioPool`
+the default directory is `assets/audio/sfx`.
 
 For the examples below, your `pubspec.yaml` file needs to contain something like this:
 
@@ -21,9 +26,6 @@ flutter:
     - assets/audio/explosion.mp3
     - assets/audio/music.mp3
 ```
-
-(The default directory for `FlameAudio` is `assets/audio` (which can be changed) and for `AudioPool`
-the default directory is `assets/audio/sfx`.)
 
 Then you have the following methods at your disposal:
 
