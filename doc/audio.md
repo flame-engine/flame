@@ -55,10 +55,10 @@ methods.
 rate drop, and the looped audio will have a small gap between iterations.
 
 You can use [the `Bgm` class](bgm.md) (via `FlameAudio.bgm`) to play looping background music
-tracks. The `Bgm` class lets Flame manage the auto pausing and resuming of background music tracks
-when pausing/resuming the game.
+tracks. The `Bgm` class lets Flame automatically manage the pausing and resuming of background music
+tracks when the game is backgrounded or comes back to the foreground.
 
-The file formats that have been tested and works are MP3, OGG and WAV.
+Some file formats that work across devices and that we recommend are: MP3, OGG and WAV.
 
 This bridge library (flame_audio) uses [audioplayers](https://github.com/luanpotter/audioplayer) in
 order to allow for playing multiple sounds simultaneously (crucial in a game). You can check the
@@ -69,14 +69,14 @@ are requested; therefore, the first time you play each mp3 you might get a delay
 pre-load your audios, just use:
 
 ```dart
-FlameAudio.audioCache.load('explosion.mp3');
+await FlameAudio.audioCache.load('explosion.mp3');
 ```
 
 You can load all your audios in the beginning in your game's `onLoad` method so that they always
 play smoothly. To load multiple audio files, use the `loadAll` method:
 
 ```dart
-FlameAudio.audioCache.loadAll(['explosion.mp3', 'music.mp3'])
+await FlameAudio.audioCache.loadAll(['explosion.mp3', 'music.mp3'])
 ```
 
 Finally, you can use the `clear` method to remove a file that has been loaded into the cache:
@@ -85,10 +85,10 @@ Finally, you can use the `clear` method to remove a file that has been loaded in
 FlameAudio.audioCache.clear('explosion.mp3');
 ```
 
-There is also a `clearAll` method, that clears the whole cache.
+There is also a `clearCache` method, that clears the whole cache.
 
-This might be useful if, for instance, your game has multiple levels and each has a different
-soundtrack.
+This might be useful if, for instance, your game has multiple levels and each has a different set of
+sounds and music.
 
 Both load methods return a `Future` for the `File`s loaded.
 

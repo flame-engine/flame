@@ -3,7 +3,7 @@
 With the `Bgm` class you can manage looping of background music tracks with regards to application
 (or game) lifecycle state changes.
 
-When the application is paused, terminated, or sent to background, `Bgm` will automatically pause
+When the application is terminated, or sent to background, `Bgm` will automatically pause
 the currently playing music track. Similarly, when the application is resumed, `Bgm` will resume the
 background music. Manually pausing and resuming your tracks is also supported.
 
@@ -22,8 +22,8 @@ FlameAudio.bgm.initialize();
 ```
 
 **IMPORTANT Note:** The `initialize` function must be called at a point in time where an instance of
-the `WidgetsBinding` class already exists. It's safe to assume that this case is true at any point
-after `runApp` has been called at least once.
+the `WidgetsBinding` class already exists. Best practice is to put this call inside of your game's
+`onLoad` method`.
 
 In cases where you're done with background music but still want to keep the application/game
 running, use the `dispose` function to remove the observer.
