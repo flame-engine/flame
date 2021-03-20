@@ -22,6 +22,9 @@ flutter:
     - assets/audio/music.mp3
 ```
 
+(The default directory for `FlameAudio` is `assets/audio` (which can be changed) and for `AudioPool`
+the default directory is `assets/audio/sfx`.)
+
 Then you have the following methods at your disposal:
 
 ```dart
