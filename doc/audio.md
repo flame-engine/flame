@@ -12,7 +12,7 @@ dependencies:
 
 The latest version can be found on [pub.dev](https://pub.dev/packages/flame_audio/install).
 
-After installing the flame_audio package you can add audio files in the assets section of your
+After installing the `flame_audio` package you can add audio files in the assets section of your
 `pubspec.yaml` file. Make sure that the audio files exists in the paths that you provide.
 
 The default directory for `FlameAudio` is `assets/audio` (which can be changed) and for `AudioPool`
