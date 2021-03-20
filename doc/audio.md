@@ -2,7 +2,8 @@
 
 To play a audio is really simple!
 
-First you have to add `flame_audio` to your dependency list in your `pubspec.yaml` file:
+First you have to add [flame_audio](https://github.com/flame-engine/flame_audio) to your dependency
+list in your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
@@ -49,15 +50,15 @@ methods.
 `playLongAudio/loopLongAudio` allows for audios of any length to be played, but they do create frame
 rate drop, and the looped audio will have a small gap between iterations.
 
-You can use [the `Bgm` class (via `FlameAudio.bgm`)](bgm.md) to play looping background music
+You can use [the `Bgm` class](bgm.md) (via `FlameAudio.bgm`) to play looping background music
 tracks. The `Bgm` class lets Flame manage the auto pausing and resuming of background music tracks
 when pausing/resuming the game.
 
 The file formats that have been tested and works are MP3, OGG and WAV.
 
-This bridge library uses [audioplayers](https://github.com/luanpotter/audioplayer) in order to allow
-for playing multiple sounds simultaneously (crucial in a game). You can check the link for a more
-in-depth explanation.
+This bridge library (flame_audio) uses [audioplayers](https://github.com/luanpotter/audioplayer) in
+order to allow for playing multiple sounds simultaneously (crucial in a game). You can check the
+link for a more in-depth explanation.
 
 Finally, you can pre-load your audios. Audios need to be stored in the memory the first time they
 are requested; therefore, the first time you play each mp3 you might get a delay. In order to
