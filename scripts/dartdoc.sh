@@ -9,12 +9,6 @@ function run_dartdoc() {
   fi
 
   flutter pub run dartdoc --no-auto-include-dependencies --quiet
-#   result=$(flutter analyze .)
-#   if ! echo "$result" | grep -q "No issues found!"; then
-#     echo "$result"
-#     echo "flutter analyze issue:"
-#     exit 1
-#   fi
 }
 
 echo "Starting Flame Dartdoc"
