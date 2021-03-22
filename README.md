@@ -109,7 +109,7 @@ Do you want to contribute with a PR? PRs are always welcome, just be sure to cre
 
 ## Getting started
 
-A collection of guides can be found [here](./tutorials). Note that these tutorials are bound the flame on this repository. To be sure you are seeing the tutorials compatible with your current version, select the correct version tag.
+A collection of guides can be found [here](./tutorials). Note that these tutorials are based on the master branch. To make sure you are looking at the tutorials that work with your current version, select the correct version tag.
 
 We also offer a curated list of Games, Libraries and Articles over at [awesome-flame](https://github.com/flame-engine/awesome-flame).
 
