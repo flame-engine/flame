@@ -8,7 +8,7 @@ import 'vector2.dart';
 export 'dart:ui' show Rect;
 
 extension RectExtension on Rect {
-  /// Creates an [Offset] from the [Vector2]
+  /// Creates an [Offset] from the [Rect]
   Offset toOffset() => Offset(width, height);
 
   /// Creates a [Vector2] starting in top left and going to [width, height].
