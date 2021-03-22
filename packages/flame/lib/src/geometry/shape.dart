@@ -10,7 +10,7 @@ import 'shape_intersections.dart' as intersection_system;
 /// A point can be determined to be within of outside of a shape.
 abstract class Shape {
   /// The position of your shape, it is up to you how you treat this
-  late Vector2 position;
+ Vector2 position;
 
   /// The position of your shape in relation to its size
   Vector2 relativePosition = Vector2.zero();
