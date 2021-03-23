@@ -152,6 +152,11 @@ class BaseGame extends Game with FPSCounter {
     _removeLater.addAll(components);
   }
 
+  /// Marks all existing components to be removed from the components list on the next game tick
+  void clear() {
+    _removeLater.addAll(components);
+  }
+
   /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.
   ///
   /// You can override it further to add more custom behavior.
