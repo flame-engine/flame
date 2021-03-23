@@ -111,6 +111,8 @@ Do you want to contribute with a PR? PRs are always welcome, just be sure to cre
 
 A collection of guides can be found [here](./tutorials). Note that these tutorials are based on the master branch. To make sure you are looking at the tutorials that work with your current version, select the correct version tag.
 
+This collection of guide is a working in progress, more guides will be added soon.
+
 We also offer a curated list of Games, Libraries and Articles over at [awesome-flame](https://github.com/flame-engine/awesome-flame).
 
 Note that some of the articles might be slightly outdated, but they are still useful.
