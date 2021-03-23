@@ -213,6 +213,9 @@ void main() {
     expect(game.components.length, equals(3));
 
     game.clear();
+
+    // Ensure clear does not remove components directly
+    expect(game.components.length, equals(3));
     game.update(0.0);
     expect(game.components.isEmpty, equals(true));
   });
