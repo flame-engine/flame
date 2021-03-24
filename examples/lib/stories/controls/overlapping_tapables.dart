@@ -14,7 +14,7 @@ class TapableSquare extends PositionComponent with Tapable {
       rng.nextInt(256),
       0.9,
     );
-    return PaletteEntry(color).paint;
+    return PaletteEntry(color).paint();
   }
 
   Paint currentPaint;

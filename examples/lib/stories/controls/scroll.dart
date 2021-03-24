@@ -9,7 +9,7 @@ import 'package:flame/extensions.dart';
 class ScrollGame extends BaseGame with ScrollDetector {
   static const speed = 2000.0;
   final _size = Vector2.all(50);
-  final _paint = BasicPalette.white.paint;
+  final _paint = BasicPalette.white.paint();
 
   Vector2 position = Vector2.all(100);
   Vector2 target;

@@ -7,9 +7,9 @@ import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
-final _whitePaint = BasicPalette.white.paint;
-final _bluePaint = Paint()..color = const Color(0xFF0000FF);
-final _greenPaint = Paint()..color = const Color(0xFF00FF00);
+final _whitePaint = BasicPalette.white.paint();
+final _bluePaint = BasicPalette.blue.paint();
+final _greenPaint = BasicPalette.green.paint();
 
 class JoystickPlayer extends Component implements JoystickListener {
   static const speed = 32.0;

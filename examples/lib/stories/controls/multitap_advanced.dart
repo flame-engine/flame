@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 /// Showcases how to mix two advanced detectors
 class MultitapAdvancedGame extends BaseGame
     with MultiTouchTapDetector, MultiTouchDragDetector {
-  static final _whitePaint = BasicPalette.white.paint;
+  static final _whitePaint = BasicPalette.white.paint();
   static final _size = Vector2.all(50);
 
   final Map<int, Rect> _taps = {};

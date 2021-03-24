@@ -9,7 +9,7 @@ import 'flame.dart';
 import 'palette.dart';
 
 class Sprite {
-  Paint paint = BasicPalette.white.paint;
+  Paint paint = BasicPalette.white.paint();
   Image image;
   Rect src = Rect.zero;
 

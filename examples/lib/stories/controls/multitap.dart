@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 /// Includes an example including advanced detectors
 class MultitapGame extends BaseGame with MultiTouchTapDetector {
-  static final _whitePaint = BasicPalette.white.paint;
+  static final _whitePaint = BasicPalette.white.paint();
   static final _size = Vector2.all(50);
 
   final Map<int, Rect> _taps = {};
