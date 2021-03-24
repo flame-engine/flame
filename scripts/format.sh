@@ -9,9 +9,18 @@ function run_format() {
   fi
 }
 
-cd examples
-run_format
+echo "Starting Flame Formatter"
+echo "------------------------"
+for file in $(find . -type f -name "pubspec.yaml"); do
+  dir=$(dirname $file)
+  cd $dir
+  echo "Formatting $dir"
+  run_format
+  format_result=$?
+  if [ $format_result -ne 0 ]; then
+    exit $format_result
+  fi
+  cd $(cd -)
+done
 
-cd ../packages/flame
-run_format
-
+exit 0

@@ -3,6 +3,7 @@
 ## [next]
  - Fix input bug with other anchors than center
  - Add clear function to BaseGame to allow the removal of all components
+ - Moving tutorials to the Flame main repository
 
 ## 1.0.0-rc8
  - Migrate to null safety
