@@ -86,7 +86,7 @@ class ParticlesGame extends BaseGame {
         // lifecycle from the [BaseGame].
         TranslatedParticle(
           lifespan: 1,
-          offset: cellCenter.toOffset(),
+          offset: cellCenter,
           child: particle,
         ).asComponent(),
       );
@@ -114,10 +114,9 @@ class ParticlesGame extends BaseGame {
   /// one predefined position to another one
   Particle movingParticle() {
     return MovingParticle(
-      // This parameter is optional, will
-      // default to [Offset.zero]
-      from: const Offset(-20, -20),
-      to: const Offset(20, 20),
+      /// This parameter is optional, will default to [Vector2.zero]
+      from: Vector2(-20, -20),
+      to: Vector2(20, 20),
       child: CircleParticle(paint: Paint()..color = Colors.amber),
     );
   }
@@ -126,7 +125,7 @@ class ParticlesGame extends BaseGame {
   /// within each cell each time created
   Particle randomMovingParticle() {
     return MovingParticle(
-      to: randomCellOffset(),
+      to: randomCellVector2(),
       child: CircleParticle(
         radius: 5 + rnd.nextDouble() * 5,
         paint: Paint()..color = Colors.red,
@@ -142,8 +141,8 @@ class ParticlesGame extends BaseGame {
       generator: (i) {
         final currentColumn = (cellSize.x / 5) * i - halfCellSize.x;
         return MovingParticle(
-          from: Offset(currentColumn, -halfCellSize.y),
-          to: Offset(currentColumn, halfCellSize.y),
+          from: Vector2(currentColumn, -halfCellSize.y),
+          to: Vector2(currentColumn, halfCellSize.y),
           child: CircleParticle(
             radius: 2.0,
             paint: Paint()..color = Colors.blue,
@@ -159,7 +158,7 @@ class ParticlesGame extends BaseGame {
     return Particle.generate(
       count: 5,
       generator: (i) => MovingParticle(
-        to: randomCellOffset() * .5,
+        to: randomCellVector2() * .5,
         child: CircleParticle(
           radius: 5 + rnd.nextDouble() * 5,
           paint: Paint()..color = Colors.deepOrange,
@@ -175,7 +174,7 @@ class ParticlesGame extends BaseGame {
       count: 5,
       generator: (i) => MovingParticle(
         curve: Curves.easeOutQuad,
-        to: randomCellOffset() * .5,
+        to: randomCellVector2() * .5,
         child: CircleParticle(
           radius: 5 + rnd.nextDouble() * 5,
           paint: Paint()..color = Colors.deepPurple,
@@ -194,7 +193,7 @@ class ParticlesGame extends BaseGame {
       count: 5,
       generator: (i) => MovingParticle(
         curve: const Interval(.2, .6, curve: Curves.easeInOutCubic),
-        to: randomCellOffset() * .5,
+        to: randomCellVector2() * .5,
         child: CircleParticle(
           radius: 5 + rnd.nextDouble() * 5,
           paint: Paint()..color = Colors.greenAccent,
@@ -260,7 +259,7 @@ class ParticlesGame extends BaseGame {
     return Particle.generate(
       generator: (i) => MovingParticle(
         curve: Interval(rnd.nextDouble() * .1, rnd.nextDouble() * .8 + .1),
-        to: randomCellOffset() * .5,
+        to: randomCellVector2() * .5,
         child: reusablePatricle,
       ),
     );
@@ -294,7 +293,7 @@ class ParticlesGame extends BaseGame {
     return Particle.generate(
       count: count,
       generator: (i) => TranslatedParticle(
-        offset: Offset(
+        offset: Vector2(
           (i % perLine) * colWidth - halfCellSize.x + imageSize,
           (i ~/ perLine) * rowHeight - halfCellSize.y + imageSize,
         ),
@@ -318,8 +317,8 @@ class ParticlesGame extends BaseGame {
     return Particle.generate(
       generator: (i) => AcceleratedParticle(
         speed:
-            Offset(rnd.nextDouble() * 600 - 300, -rnd.nextDouble() * 600) * .2,
-        acceleration: const Offset(0, 200),
+            Vector2(rnd.nextDouble() * 600 - 300, -rnd.nextDouble() * 600) * .2,
+        acceleration: Vector2(0, 200),
         child: rotatingImage(initialAngle: rnd.nextDouble() * pi),
       ),
     );
@@ -336,9 +335,9 @@ class ParticlesGame extends BaseGame {
       const Color(0xff0000ff),
     ];
     final positions = [
-      const Offset(-10, 10),
-      const Offset(10, 10),
-      const Offset(0, -14),
+      Vector2(-10, 10),
+      Vector2(10, 10),
+      Vector2(0, -14),
     ];
 
     return Particle.generate(
@@ -382,8 +381,8 @@ class ParticlesGame extends BaseGame {
   /// which is independent from the parent [Particle].
   Particle componentParticle() {
     return MovingParticle(
-      from: (-halfCellSize * .2).toOffset(),
-      to: (halfCellSize * .2).toOffset(),
+      from: -halfCellSize * .2,
+      to: halfCellSize * .2,
       curve: SineCurve(),
       child: ComponentParticle(component: trafficLight),
     );
@@ -408,9 +407,9 @@ class ParticlesGame extends BaseGame {
 
     return Particle.generate(
       generator: (i) {
-        final initialSpeed = randomCellOffset();
+        final initialSpeed = randomCellVector2();
         final deceleration = initialSpeed * -1;
-        const gravity = Offset(0, 40);
+        final gravity = Vector2(0, 40);
 
         return AcceleratedParticle(
           speed: initialSpeed,
@@ -449,23 +448,20 @@ class ParticlesGame extends BaseGame {
       ),
     );
 
-    final cellSizeOffset = cellSize.toOffset();
-    final halfCellSizeOffset = halfCellSize.toOffset();
-
     return ComposedParticle(
       children: [
         rect
             .rotating(to: pi / 2)
-            .moving(to: -cellSizeOffset)
+            .moving(to: -cellSize)
             .scaled(2)
-            .accelerated(acceleration: halfCellSizeOffset * 5)
-            .translated(halfCellSizeOffset),
+            .accelerated(acceleration: halfCellSize * 5)
+            .translated(halfCellSize),
         rect
             .rotating(to: -pi)
-            .moving(to: cellSizeOffset.scale(1, -1))
+            .moving(to: cellSize..scaleBy(Vector2(1, -1)))
             .scaled(2)
-            .translated(halfCellSizeOffset.scale(-1, 1))
-            .accelerated(acceleration: halfCellSizeOffset.scale(-5, 5)),
+            .translated(halfCellSize..scaleBy(Vector2(-1, 1)))
+            .accelerated(acceleration: halfCellSize..scaleBy(Vector2(-5, 5))),
       ],
     );
   }
@@ -486,10 +482,9 @@ class ParticlesGame extends BaseGame {
     }
   }
 
-  /// Returns random [Offset] within a virtual
-  /// grid cell
-  Offset randomCellOffset() {
-    return Offset(
+  /// Returns random [Vector2] within a virtual grid cell
+  Vector2 randomCellVector2() {
+    return Vector2(
       cellSize.x * rnd.nextDouble() - halfCellSize.x,
       cellSize.y * rnd.nextDouble() - halfCellSize.y,
     );

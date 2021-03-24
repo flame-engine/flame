@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/animation.dart';
 
+import '../../extensions.dart';
 import '../components/component.dart';
 import '../components/particle_component.dart';
 import '../timer.dart';
@@ -13,18 +14,19 @@ import 'rotating_particle.dart';
 import 'scaled_particle.dart';
 import 'translated_particle.dart';
 
-/// A function which returns [Particle] when called
+/// A function which returns a [Particle] when called.
 typedef ParticleGenerator = Particle Function(int);
 
 /// Base class implementing common behavior for all the particles.
 ///
-/// Intention is to follow same "Extreme Composability" style
-/// as across the whole Flutter framework, so each type of particle implements
-/// some particular behavior which then could be nested and combined together
-/// to create specifically required experience.
+/// Intention is to follow the same "Extreme Composability" style as seen across
+/// the whole Flutter framework. Each type of particle implements some
+/// particular behavior which then could be nested and combined to create
+/// specifically required experience.
 abstract class Particle {
-  /// Generates given amount of particles,
-  /// combining them into one [ComposedParticle]
+  /// Generates a given amount of particles and then combining them into one a
+  /// single[ComposedParticle].
+  ///
   /// Useful for procedural particle generation.
   static Particle generate({
     int count = 10,
@@ -37,71 +39,69 @@ abstract class Particle {
     );
   }
 
-  /// Internal timer defining how long
-  /// this [Particle] will live. [Particle] will
-  /// be marked for removal when this timer is over.
+  /// Internal timer defining how long this [Particle] will live.
+  ///
+  /// [Particle] will be marked for removal when this timer is over.
   Timer? _timer;
 
-  /// Stores desired lifespan of the
-  /// particle in seconds.
+  /// Stores desired lifespan of the particle in seconds.
   late double _lifespan;
 
-  /// Will be set to true by update hook
-  /// when this [Particle] reaches end of its lifespan
+  /// Will be set to true by [update] when this [Particle] reaches the end of
+  /// its lifespan.
   bool _shouldBeRemoved = false;
 
+  /// Construct a new [Particle].
+  ///
+  /// The [lifespan] is how long this [Particle] will live in seconds, with
+  /// microsceond precision.
   Particle({
-    /// Particle lifespan in [Timer] format,
-    /// double in seconds with microsecond precision
     double? lifespan,
   }) {
     setLifespan(lifespan ?? .5);
   }
 
-  /// This method will return true as
-  /// soon as particle reaches an end of its
-  /// lifespan, which means it's ready to be
-  /// removed by a wrapping container.
-  /// Follows same style as [Component].
-  bool shouldRemove() => _shouldBeRemoved;
+  /// This method will return true as soon as the particle reaches the end of
+  /// its lifespan.
+  ///
+  /// It will then be ready to be removed by a wrapping container.
+  bool shouldRemove() => _shouldBeRemoved; // TODO: getter?
 
-  /// Getter which should be used by subclasses
-  /// to get overall progress. Also allows to substitute
-  /// progress with other values, for example adding easing as in CurvedParticle.
+  /// Getter which should be used by subclasses to get overall progress.
+  ///
+  /// Also allows to substitute progress with other values, for example adding
+  /// easing as in CurvedParticle.
   double get progress => _timer?.progress ?? 0.0;
 
   /// Should render this [Particle] to given [Canvas].
-  /// Default behavior is empty, so that it's not
-  /// required to override this in [Particle] which
-  /// render nothing and serve as behavior containers.
-  void render(Canvas canvas) {
-    // Do nothing by default
-  }
+  ///
+  /// Default behavior is empty, so that it's not required to override this in
+  /// a [Particle] that renders nothing and serve as a behavior container.
+  void render(Canvas canvas) {}
 
-  /// Updates internal [Timer] of this [Particle]
-  /// which defines its position on the lifespan.
-  /// Marks [Particle] for removal when it is over.
+  /// Updates the [_timer] of this [Particle].
   void update(double dt) {
     _timer?.update(dt);
   }
 
-  /// A control method allowing a parent of this [Particle]
-  /// to pass down it's lifespan. Allows to only specify desired lifespan
-  /// once, at the very top of the [Particle] tree which
-  /// then will be propagated down using this method.
-  /// See SingleChildParticle or [ComposedParticle] for details.
+  /// A control method allowing a parent of this [Particle] to pass down it's
+  /// lifespan.
+  ///
+  /// Allows to only specify desired lifespan once, at the very top of the
+  /// [Particle] tree which then will be propagated down using this method.
+  ///
+  /// See `SingleChildParticle` or [ComposedParticle] for details.
   void setLifespan(double lifespan) {
+    // TODO: Maybe make it into a setter/getter?
     _lifespan = lifespan;
     _timer?.stop();
-    void removeCallback() => _shouldBeRemoved = true;
-    _timer = Timer(lifespan, callback: removeCallback);
-    _timer!.start();
+    _timer = Timer(lifespan, callback: () => _shouldBeRemoved = true)..start();
   }
 
-  /// Wraps this particle with [TranslatedParticle]
-  /// statically repositioning it for the time
-  /// of the lifespan.
-  Particle translated(Offset offset) {
+  /// Wraps this particle with a [TranslatedParticle].
+  ///
+  /// Statically repositioning it for the time of the lifespan.
+  Particle translated(Vector2 offset) {
     return TranslatedParticle(
       offset: offset,
       child: this,
@@ -109,16 +109,16 @@ abstract class Particle {
     );
   }
 
-  /// Wraps this particle with [MovingParticle]
-  /// allowing it to move from one [Offset]
-  /// on the canvas to another one.
+  /// Wraps this particle with a [MovingParticle].
+  ///
+  /// Allowing it to move from one [Vector2] to another one.
   Particle moving({
-    Offset from = Offset.zero,
-    required Offset to,
+    Vector2? from,
+    required Vector2 to,
     Curve curve = Curves.linear,
   }) {
     return MovingParticle(
-      from: from,
+      from: from ?? Vector2.zero(),
       to: to,
       curve: curve,
       child: this,
@@ -126,26 +126,27 @@ abstract class Particle {
     );
   }
 
-  /// Wraps this particle with [AcceleratedParticle]
-  /// allowing to specify desired position speed and acceleration
-  /// and leave the basic physics do the rest.
+  /// Wraps this particle with a [AcceleratedParticle].
+  ///
+  /// Allowing to specify desired position speed and acceleration and leave
+  /// the basic physics do the rest.
   Particle accelerated({
-    Offset acceleration = Offset.zero,
-    Offset position = Offset.zero,
-    Offset speed = Offset.zero,
+    Vector2?
+        acceleration, // TODO: Any of these should maybe be required? What else is the use
+    Vector2? position,
+    Vector2? speed,
   }) {
     return AcceleratedParticle(
-      position: position,
-      speed: speed,
-      acceleration: acceleration,
+      position: position ?? Vector2.zero(),
+      speed: speed ?? Vector2.zero(),
+      acceleration: acceleration ?? Vector2.zero(),
       child: this,
       lifespan: _lifespan,
     );
   }
 
-  /// Rotates this particle to a fixed angle
-  /// in radians with [RotatingParticle]
-  Particle rotated([double angle = 0]) {
+  /// Rotates this particle to a fixed angle in radians using [RotatingParticle].
+  Particle rotated(double angle) {
     return RotatingParticle(
       child: this,
       lifespan: _lifespan,
@@ -154,8 +155,8 @@ abstract class Particle {
     );
   }
 
-  /// Rotates this particle from given angle
-  /// to another one in radians with [RotatingParticle]
+  /// Rotates this particle from a given angle to another one in radians
+  /// using [RotatingParticle].
   Particle rotating({
     double from = 0,
     double to = pi,
@@ -168,15 +169,15 @@ abstract class Particle {
     );
   }
 
-  /// Wraps this particle with [ScaledParticle]
-  /// allowing to change size of it and/or its children
+  /// Wraps this particle with a [ScaledParticle].
+  ///
+  /// Allows for chainging the size of this particle and/or its children.
   Particle scaled(double scale) {
     return ScaledParticle(scale: scale, child: this, lifespan: _lifespan);
   }
 
-  /// Wraps this particle with [ParticleComponent]
-  /// to be used within the BaseGame component system.
-  Component asComponent() {
-    return ParticleComponent(particle: this);
-  }
+  /// Wraps this particle with a [ParticleComponent].
+  ///
+  /// Should be used with the FCS.
+  Component asComponent() => ParticleComponent(particle: this);
 }

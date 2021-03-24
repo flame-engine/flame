@@ -50,6 +50,12 @@ extension Vector2Extension on Vector2 {
     }
   }
 
+  /// Scale this vector by the given [scale].
+  void scaleBy(Vector2 scale) {
+    x = x * scale.x;
+    y = y * scale.y;
+  }
+
   /// Changes the [length] of the vector to the length provided, without changing direction.
   ///
   /// If you try to scale the zero (empty) vector, it will remain unchanged, and no error will be thrown.

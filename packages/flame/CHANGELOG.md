@@ -7,6 +7,7 @@
  - Add clear function to BaseGame to allow the removal of all components
  - Moving tutorials to the Flame main repository
  - Exporting Images and AssetsCache
+ - Migrated the `Particle` API to `Vector2`
 
 ## 1.0.0-rc8
  - Migrate to null safety

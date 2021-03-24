@@ -5,85 +5,88 @@ Flame offers a basic, yet robust and extendable particle system. The core concep
 The most basic usage of `Particle` with `BaseGame` would look as following:
 
 ```dart
-import 'package:flame/components/particle_component.dart';
+import 'package:flame/components.dart';
 
 // ... 
 
 game.add(
-    // Wrapping a [Particle] with [ParticleComponent]
-    // which maps [Component] lifecycle hooks to [Particle] ones
-    // and embeds a trigger for removing the component.
+    /// Wrapping a [Particle] with [ParticleComponent]
+    /// which maps [Component] lifecycle hooks to [Particle] ones
+    /// and embeds a trigger for removing the component.
     ParticleComponent(
         particle: CircleParticle()
     )
 );
 ```
 
-When using `Particle` with custom `Game` implementation, please ensure that `Particle` `update` and `render` lifecycle hooks are called during each game loop frame.
+When using `Particle` with a custom `Game` implementation, please ensure that both the `update` and `render` methods are called during each game loop frame.
 
 Main approaches to implement desired particle effects:
-* Composition of existing behaviors
-* Use behavior chaining (just a syntactic sugar of the first one)
-* Using `ComputedParticle`
+* Composition of existing behaviors.
+* Use behavior chaining (just a syntactic sugar of the first one).
+* Using `ComputedParticle`.
 
-Composition works in a similar fashion to those of Flutter widgets by defining the effect from top to bottom. Chaining allows to express same composition trees more fluently by defining behaviors from bottom to top. Computed particles in their turn fully delegate implementation of the behavior to your code. Any of the approaches could be used in conjunction with existing behaviors where needed.
+Composition works in a similar fashion to those of Flutter widgets by defining the effect from top to bottom. Chaining allows to express the same composition trees more fluently by defining behaviors from bottom to top. Computed particles in their turn fully delegate implementation of the behavior to your code. Any of the approaches could be used in conjunction with existing behaviors where needed.
 
 Below you can find an example of a effect showing a burst of circles, accelerating from `(0, 0)` to a random directions using all three approaches defined above.
 ```dart
 Random rnd = Random();
-Function randomOffset = () => Offset(
+
+Vector2 randomVector2() => Vector2(
     rnd.nextDouble() * 200 - 100, 
     rnd.nextDouble() * 200 - 100,
 );
 
-// Composition
-// Defining particle effect as set of nested
-// behaviors from top to bottom, one within another: 
-// ParticleComponent 
-//   > ComposedParticle 
-//     > AcceleratedParticle 
-//       > CircleParticle
+/// Composition.
+/// 
+/// Defining particle effect as set of nested behaviors from top to bottom, one within another: 
+/// ParticleComponent 
+///   > ComposedParticle 
+///     > AcceleratedParticle 
+///       > CircleParticle
 game.add(
     ParticleComponent(
         particle: Particle.generate(
             count: 10,
             generator: (i) => AcceleratedParticle(
-                acceleration: randomOffset(),
+                acceleration: randomVector2(),
                 child: CircleParticle(
-                    paint: Paint()..color = Colors.red
-                )
-            )
-        )
-    )    
+                    paint: Paint()..color = Colors.red,
+                ),
+            ),
+        ),
+    ),
 );
 
-// Chaining
-// Expresses same behavior as above, but with more fluent API.
-// Only [Particles] with [SingleChildParticle] mixin can be used as chainable behaviors.
+/// Chaining.
+/// 
+/// Expresses same behavior as above, but with more fluent API.
+/// Only [Particles] with [SingleChildParticle] mixin can be used as chainable behaviors.
 game.add(
     Particle
         .generate(
             count: 10,
             generator: (i) => CircleParticle(paint: Paint()..color = Colors.red)
-                .accelerating(randomOffset())
+                    .accelerating(randomVector2())
         )
-        .asComponent()
+        .asComponent(),
 );
 
-// Computed Particle
-// All the behavior is defined explicitly. Offers greater flexibility
-// compared to built-in behaviors.
+/// Computed Particle.
+/// 
+/// All the behavior is defined explicitly. Offers greater flexibility
+/// compared to built-in behaviors.
 game.add(
     Particle
         .generate(
             count: 10,
             generator: (i) {
-                final position = Offset.zero;
-                final speed = Offset.zero;
-                final acceleration = randomOffset();
+                final position = Vector2.zero();
+                final speed = Vector2.zero();
+                final acceleration = randomVector2();
                 final paint = Paint()..color = Colors.red;
 
-                return  ComputedParticle(
+                return ComputedParticle(
                     renderer: (canvas, _) {
                         speed += acceleration;
                         position += speed;
@@ -96,27 +99,28 @@ game.add(
 )
 ```
 
-You can find more examples of using different built-int particles in various combinations [here](https://github.com/flame-engine/flame/tree/master/doc/examples/particles/lib/main.dart).
+You can find more examples of using different built-in particles in various combinations [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/utils/particles.dart).
+
 
 ## Lifecycle
 
-Behavior common to all `Particle`s is that all of them accept a `lifespan` parameter. This value is used to make the `ParticleComponent` self-remove, once its internal `Particle` has reached the end of its life. Time within the `Particle` itself is tracked using the Flame `Timer`. It could be configured with a `double`, representing seconds (with microsecond precision) by passing it into the corresponding `Particle` constructor.
+Behavior common to all `Particle`s is that all of them accept a `lifespan` parameter. This value is used to make the `ParticleComponent` self-remove, once its internal `Particle` has reached the end of its life. Time within the `Particle` itself is tracked using the Flame `Timer` class. It can be configured with a `double`, represented in seconds (with microsecond precision) by passing it into the corresponding `Particle` constructor.
 
 ```dart
-Particle(lifespan: .2); // will live for 200ms
-Particle(lifespan: 4); // will live for 4s
+Particle(lifespan: .2); // will live for 200ms.
+Particle(lifespan: 4); // will live for 4s.
 ```
 
-It is also possible to reset `Particle` lifespan by using `setLifespan` method, which accepts a `double` of seconds. 
+It is also possible to reset a `Particle`'s lifespan by using the `setLifespan` method, which also accepts a `double` of seconds. 
 
 ```dart
 final particle = Particle(lifespan: 2);
 
-// ... at some point of time later
-particle.setLifespan(2) // will live for another 2s from this moment
+// ... after some time.
+particle.setLifespan(2) // will live for another 2s.
 ```
 
-During its lifetime, `Particle` tracks the time it was alive and exposes it with a `progress` getter, which is spanning between 0.0 to 1.0. Its value could be used in a similar fashion as `value` of `AnimationController` in Flutter.
+During its lifetime, a `Particle` tracks the time it was alive and exposes it with through the `progress` getter, which is returns a value between `0.0` and `1.0`. This value can be used in a similar fashion as the `value` property of the `AnimationController` class in Flutter.
 
 ```dart
 final duration = const Duration(seconds: 2);
@@ -124,16 +128,17 @@ final particle = Particle(lifespan: duration.inMicroseconds / Durations.microsec
 
 game.add(ParticleComponent(particle: particle));
 
-// Will print values from 0 to 1 with step of .1: 0, 0.1, 0.2 ... 0.9, 1.0
+// Will print values from 0 to 1 with step of .1: 0, 0.1, 0.2 ... 0.9, 1.0.
 Timer.periodic(duration * .1, () => print(particle.progress));
 ```
-The lifespan is passed down to all the descendants of a given `Particle`, if it supports any of the nesting behaviors.
+
+The `lifespan` is passed down to all the descendants of a given `Particle`, if it supports any of the nesting behaviors.
 
 ## Built-in particles
 
 Flame ships with a few built-in `Particle` behaviors:
-* The `TranslatedParticle`, translates its `child` by given `Offset`
-* The `MovingParticle`, moves its `child` between two predefined `Offset`, supports `Curve`
+* The `TranslatedParticle`, translates its `child` by given `Vector2`
+* The `MovingParticle`, moves its `child` between two predefined `Vector2`, supports `Curve`
 * The `AcceleratedParticle`, allows basic physics based effects, like gravitation or speed dampening
 * The `CircleParticle`, renders circles of all shapes and sizes
 * The `SpriteParticle`, renders Flame `Sprite` within a `Particle` effect
@@ -141,11 +146,11 @@ Flame ships with a few built-in `Particle` behaviors:
 * The `ComponentParticle`, renders Flame `Component` within a `Particle` effect
 * The `FlareParticle`, renders Flare animation within a `Particle` effect
 
-More examples of using these behaviors together are available [here](https://github.com/flame-engine/flame/tree/master/doc/examples/particles/lib/main.dart). All the implementations are available in [particles](https://github.com/flame-engine/flame/tree/master/lib/particles) folder in the Flame source.
+More examples of using these behaviors together are available [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/utils/particles.dart). All the implementations are available in the [particles](https://github.com/flame-engine/flame/tree/main/packages/flame/lib/src/particles) folder on the Flame repository.
 
 ## Translated Particle
 
-Simply translates underlying `Particle` to a specified `Offset` within the rendering `Canvas`.
+Simply translates underlying `Particle` to a specified `Vector2` within the rendering `Canvas`.
 Does not change or alter its position, consider using `MovingParticle` or `AcceleratedParticle` where change of position is required.
 Same effect could be achieved by translating the `Canvas` layer.
 
@@ -153,38 +158,36 @@ Same effect could be achieved by translating the `Canvas` layer.
 game.add(
     ParticleComponent(
         particle: TranslatedParticle(
-            // Will translate child Particle effect to
-            // the center of game canvas
-            offset: game.size.center(Offset.zero),
+            // Will translate child Particle effect to the center of game canvas.
+            offset: game.size / 2,
             child: Particle(),
-        )
-    )
+        ),
+    ),
 );
 ```
 
 ## Moving Particle
 
-Moves child `Particle` between `from` and `to` `Offset`s during its lifespan. Supports `Curve` via `CurvedParticle`.
+Moves child `Particle` between `from` and `to` `Vector2`s during its lifespan. Supports `Curve` via `CurvedParticle`.
 
 ```dart
 game.add(
     ParticleComponent(
         particle: MovingParticle(
-            // Will move from corner to corner of the
-            // game canvas
-            from: game.size.topLeft(Offset.zero),
-            to: game.size.bottomRight(Offset.zero),
+            // Will move from corner to corner of the game canvas.
+            from: Vector2.zero(),
+            to: game.size,
             child: Particle(),
-        )
-    )
+        ),
+    ),
 );
 ```
 
 ## Accelerated Particle
 
-A basic physics particle which allows you to specify its initial `position`, `speed` and `acceleration` and let the `update` cycle do the rest. All three are specified as `Offset`s, 
+A basic physics particle which allows you to specify its initial `position`, `speed` and `acceleration` and let the `update` cycle do the rest. All three are specified as `Vector2`s, 
 which you can think of as vectors. It works especially well for physics-based "bursts", but it is not limited to that.
-Unit of the `Offset` value is _logical px/s_. So a speed of `Offset(0, 100)` will move a child `Particle` by 100 logical pixels of the device every second of game time.
+Unit of the `Vector2` value is _logical px/s_. So a speed of `Vector2(0, 100)` will move a child `Particle` by 100 logical pixels of the device every second of game time.
 
 ```dart
 final rnd = Random();
@@ -192,14 +195,14 @@ game.add(
     ParticleComponent(
         particle: AcceleratedParticle(
             // Will fire off in the center of game canvas
-            position: game.size.center(Offset.zero),
-            // With random initial speed of Offset(-100..100, 0..-100)
-            speed: Offset(rnd.nextDouble() * 200 - 100, -rnd.nextDouble() * 100),
+            position: game.size.center(Vector2.zero()),
+            // With random initial speed of Vector2(-100..100, 0..-100)
+            speed: Vector2(rnd.nextDouble() * 200 - 100, -rnd.nextDouble() * 100),
             // Accelerating downwards, simulating "gravity"
-            speed: Offset(0, 100),
+            speed: Vector2(0, 100),
             child: Particle(),
-        )
-    )
+        ),
+    ),
 );
 ```
 
@@ -214,30 +217,34 @@ game.add(
         particle: CircleParticle(
             radius: game.size.width / 2,
             paint: Paint()..color = Colors.red.withOpacity(.5),
-        )
-    )
+        ),
+    ),
 );
 ```
 
 ## Sprite Particle
+
 Allows you to embed Flame's `Sprite` into your particle effects. Useful when consuming graphics for the effect from `SpriteSheet`.
+
 ```dart
 game.add(
     ParticleComponent(
         particle: SpriteParticle(
           sprite: Sprite('sprite.png'),
           size: Vector2(64, 64),
-        )
-    )
+        ),
+    ),
 );
 ```
 
 ## Image Particle
+
 Renders given `dart:ui` image within the particle tree. 
+
 ```dart
 // During game initialisation
 await Flame.images.loadAll(const [
-    'image.png'
+    'image.png',
 ]);
 
 // ...
@@ -246,14 +253,15 @@ await Flame.images.loadAll(const [
 game.add(
     ParticleComponent(
         particle: ImageParticle(
-          size: const Size.square(24),
+          size: Vector2.all(24),
           image: Flame.images.loadedFiles['image.png'],
         );
-    )
+    ),
 );
 ```
 
 ## Animation Particle
+
 A `Particle` which embeds a Flame `Animation`. By default, aligns `Animation`s `stepTime` so that it's fully played during the `Particle` lifespan. It's possible to override this behavior with `alignAnimationTime` parameter.
 
 ```dart
@@ -267,24 +275,25 @@ game.add(
         particle: AnimationParticle(
           animation: spritesheet.createAnimation(0, stepTime: 0.1),
         );
-    )
+    ),
 );
 ```
 
 ## Component Particle
+
 This `Particle` allows you to embed a Flame `Component` within the particle effects. The `Component` could have its own `update` lifecycle and
 could be reused across different effect trees. If the only thing you need is to add some dynamics to an instance of a certain `Component`, 
 please consider adding it to the `game` directly, without the `Particle` in the middle.
 
 ```dart
-var longLivingRect = RectComponent();
+final longLivingRect = RectComponent();
 
 game.add(
     ParticleComponent(
         particle: ComponentParticle(
           component: longLivingRect
         );
-    )
+    ),
 );
 
 class RectComponent extends Component {
@@ -305,7 +314,7 @@ class RectComponent extends Component {
 
 To use Flare within Flame, use the [`flame_flare`](https://github.com/flame-engine/flame_flare) package.
 
-It will provide a class `FlareParticle` that is a container for `FlareActorAnimation`, it propagates `update` and `render` hooks to its child.
+It will provide a class called  `FlareParticle` that is a container for `FlareActorAnimation`, it propagates `update` and `render` methods to its child.
 
 ```dart
 import 'package:flame_flare/flame_flare.dart';
@@ -319,12 +328,13 @@ flareAnimation.height = flareSize;
 // Somewhere in game
 game.add(
     ParticleComponent(
-        particle: FlareParticle(flare: flareAnimation);
-    )
+        particle: FlareParticle(flare: flareAnimation),
+    ),
 );
 ```
 
 ## Computed Particle
+
 A `Particle` which could help you when:
 * Default behavior is not enough
 * Complex effects optimization
@@ -336,8 +346,7 @@ to perform necessary computations and render something to the `Canvas`
 ```dart
 game.add(
     ParticleComponent(
-        // Renders a circle which gradually
-        // changes its color and size during the particle lifespan
+        // Renders a circle which gradually changes its color and size during the particle lifespan.
         particle: ComputedParticle(
             renderer: (canvas, particle) => canvas.drawCircle(
                 Offset.zero,
@@ -349,8 +358,8 @@ game.add(
                     particle.progress,
                   ),
             ),
-        )
-    )
+        ),
+    ),
 )
 ```
 
@@ -362,7 +371,9 @@ is achieved by encapsulating small pieces of behavior in every of particles and 
 Two entities allowing `Particle` to nest each other are: `SingleChildParticle` mixin and `ComposedParticle` class.
 
 `SingleChildParticle` may help you with creating `Particles` with a custom behavior.
+
 For example, randomly positioning it's child during each frame:
+
 ```dart
 var rnd = Random();
 class GlitchParticle extends Particle with SingleChildParticle {
