@@ -2,8 +2,11 @@
 
 ## [next]
  - Fix input bug with other anchors than center
+ - Fixed `Shape` so that the `position` is now a `late`
+ - Updated the documentation for the supported platforms
  - Add clear function to BaseGame to allow the removal of all components
  - Moving tutorials to the Flame main repository
+ - Exporting Images and AssetsCache
 
 ## 1.0.0-rc8
  - Migrate to null safety

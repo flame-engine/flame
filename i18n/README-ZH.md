@@ -15,7 +15,7 @@
 
 ---
 
-[English](/README.md) | [简体中文](/i18n/README-ZH.md) | [Polski](/i18n/README-PL.md) | [Русский](/i18n/README-RU.md)
+[English](/README.md) | 简体中文 | [Polski](/i18n/README-PL.md) | [Русский](/i18n/README-RU.md)
 
 ---
 
@@ -27,13 +27,36 @@
 
 > 本篇为社区版翻译, 目前针对版本: 0.29.0
 
+---
+
+## 文档
+请注意, 最新的代码不在最后的release版本中, 而是在`master`分支.
+
+你可以在此处找到各版本的文档:
+- 最新稳定版: 
+    - [Flame引擎官网](https://flame-engine.org/)
+    - [Github docs](https://github.com/flame-engine/flame/tree/master-v0.x/doc)
+    
+- v1.0.0 版本:
+    - [GitHub docs](https://github.com/flame-engine/flame/tree/1.0.0-rc6/doc)
+    
+- 中文社区版文档(非官方, 针对中文环境):
+    - [Flame中文网](https://www.flame-cn.com/)
+    - [Flame中文文档](https://docs.flame-cn.com/)
+
+你可以在这里看到完整的[开发文档](doc/README.md)
+
+你也可以在[这里](doc/examples)看到许多不同功能的示例(文档/demo), [点击此处](./example)来查看一个入门demo.
+
+Flame的官方网站(其中包含文档), 请[点击此处](https://flame-engine.org/)
+
 ## 问题互助
 
 我们在Fireslime的Discord上有一个互助频道, [点击加入](https://discord.gg/pxrBmy4).
 
 我们也有[FAQ](FAQ.md), 所以提问前请先在这里看看你有没有需要的答案.
 
-国内用户欢迎加入[Flame QQ交流群](https://jq.qq.com/?_wv=1027&k=5ETLFm3)(非官方, 针对国内用户的讨论群, 较新)
+国内用户欢迎加入[Flame QQ交流群](https://jq.qq.com/?_wv=1027&k=5ETLFm3)(非官方, 针对国内用户的讨论群)
 
 ## 项目目标
 
@@ -98,19 +121,8 @@ __注意__: 我们目前在着手于发布Flame的第一个稳定版本, 所以,
 
 我们还在[awesome-flame](https://github.com/flame-engine/awesome-flame) 项目上提供了一些精选的游戏, 库和文章.
 
-## 文档&说明
-
-你可以在在这里看到完整的[开发文档](doc/README.md)
-
-你也可以在[这里](doc/examples)看到许多不同功能的示例(文档/demo), [点击此处](./example)来查看一个入门demo.
-
-Flame的官方网站(其中包含文档), 请[点击此处](https://flame-engine.org/)
-
-
 ## 感谢
 
- * [Fireslime](https://fireslime.xyz), 负责维护Flame的团队.
+ * 一直在尽力维护和改善Flame框架的[Flame引擎团队](https://github.com/orgs/flame-engine/people).
  * 翻译: [HarrisonQI](https://github.com/HarrisonQi)
  * 所有友善的贡献者和在社区中提供帮助的人.
- * [Luanpotter](https://github.com/luanpotter)'s (the Flame founder)的 [audioplayers](https://github.com/luanpotter/audioplayer) 库, 来源于[rxlabz](https://github.com/rxlabz/audioplayer)的fork.
- * Dart的 [Box2D](https://github.com/google/box2d.dart).
