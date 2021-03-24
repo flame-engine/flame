@@ -159,8 +159,8 @@ Methods:
  - `scaleVector`: Just like `canvas scale` method, but takes a `Vector2` as an argument.
  - `translateVector`: Just like `canvas translate` method, but takes a `Vector2` as an argument.
  - `renderAt` and `renderRotated`: if you are directly rendering to the `Canvas`, you can use these
-functions to easily manipulate coordinates to render things on the correct places. They change the
-`Canvas` transformation matrix but reset afterwards.
+  functions to easily manipulate coordinates to render things on the correct places. They change the
+  `Canvas` transformation matrix but reset afterwards.
 
 ### Color
 
@@ -210,15 +210,15 @@ Methods:
  - `toPoint`: Creates a `Point` from the `Vector2`.
  - `toRect`: Creates a `Rect` starting in (0,0) with the size of `Vector2`.
  - `toPositionedRect`: Creates a `Rect` starting from [x, y] in the `Vector2` and has the size of
-the `Vector2` argument.
+  the `Vector2` argument.
  - `lerp`: Linearly interpolates the `Vector2` towards another Vector2.
  - `rotate`: Rotates the `Vector2` with an angle specified in radians, it rotates around the
-optionally defined `Vector2`, otherwise around the center.
+  optionally defined `Vector2`, otherwise around the center.
  - `scaleTo`: Changes the length of the `Vector2` to the length provided, without changing
-direction.
+  direction.
  - `fromInts`: Create a `Vector2` with ints as input
 
 Operators:
  - `&`: Combines two `Vector2`s to form a Rect, the origin should be on the left and the size on the
-right
+  right
  - `%`: Modulo/Remainder of x and y separately of two `Vector2`s
