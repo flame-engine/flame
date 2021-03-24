@@ -3,6 +3,7 @@
 ## [next]
  - Fix input bug with other anchors than center
  - Moving tutorials to the Flame main repository
+ - Fixing Flutter and Dart version constraints
 
 ## 1.0.0-rc8
  - Migrate to null safety
