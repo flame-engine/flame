@@ -6,8 +6,8 @@ import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:test/test.dart';
 import 'package:flutter_test/flutter_test.dart' as flutter;
+import 'package:test/test.dart';
 
 class MyGame extends BaseGame with HasTapableComponents {}
 
@@ -198,6 +198,25 @@ void main() {
     expect(game.components.length, equals(1));
 
     game.update(0);
+    expect(game.components.isEmpty, equals(true));
+  });
+
+  test('clear removes all components', () {
+    final game = MyGame();
+    final components = List.generate(3, (index) => MyComponent());
+
+    game.onResize(size);
+    game.addAll(components);
+
+    // The components are not added to the component list until an update has been performed
+    game.update(0.0);
+    expect(game.components.length, equals(3));
+
+    game.clear();
+
+    // Ensure clear does not remove components directly
+    expect(game.components.length, equals(3));
+    game.update(0.0);
     expect(game.components.isEmpty, equals(true));
   });
 }
