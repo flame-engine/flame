@@ -3,7 +3,7 @@
 ## [next]
  - Fix input bug with other anchors than center
  - Moving tutorials to the Flame main repository
- - Transforming PaletteEntry.paint to be a method instead of a getter
+ - Transforming `PaletteEntry.paint` to be a method instead of a getter
  - Adding some more basic colors entries to the BasicPalette
 
 ## 1.0.0-rc8
