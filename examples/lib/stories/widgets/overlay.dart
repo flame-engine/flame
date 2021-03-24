@@ -9,14 +9,14 @@ Widget overlayBuilder(DashbookContext ctx) {
 }
 
 class OverlayExampleWidget extends StatefulWidget {
-  const OverlayExampleWidget({Key key}) : super(key: key);
+  const OverlayExampleWidget({Key? key}) : super(key: key);
 
   @override
   _OverlayExampleWidgetState createState() => _OverlayExampleWidgetState();
 }
 
 class _OverlayExampleWidgetState extends State<OverlayExampleWidget> {
-  ExampleGame _myGame;
+  ExampleGame? _myGame;
 
   Widget pauseMenuBuilder(BuildContext buildContext, ExampleGame game) {
     return Center(
@@ -33,14 +33,15 @@ class _OverlayExampleWidgetState extends State<OverlayExampleWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final myGame = _myGame;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Testing addingOverlay'),
       ),
-      body: _myGame == null
+      body: myGame == null
           ? const Text('Wait')
           : GameWidget<ExampleGame>(
-              game: _myGame,
+              game: myGame,
               overlayBuilderMap: {
                 'PauseMenu': pauseMenuBuilder,
               },

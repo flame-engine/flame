@@ -32,14 +32,15 @@ class ParentSquare extends Square {
 }
 
 class Composability extends BaseGame {
-  ParentSquare _parent;
+  late ParentSquare _parent;
 
   @override
   bool debugMode = true;
 
-  Composability() {
-    _parent = ParentSquare(Vector2.all(200), Vector2.all(300));
-    _parent.anchor = Anchor.center;
+  @override
+  Future<void> onLoad() async {
+    _parent = ParentSquare(Vector2.all(200), Vector2.all(300))
+      ..anchor = Anchor.center;
     add(_parent);
   }
 

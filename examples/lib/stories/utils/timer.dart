@@ -5,12 +5,13 @@ import 'package:flame/gestures.dart';
 
 class TimerGame extends Game with TapDetector {
   final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
-  Timer countdown;
-  Timer interval;
+  late Timer countdown;
+  late Timer interval;
 
   int elapsedSecs = 0;
 
-  TimerGame() {
+  @override
+  Future<void> onLoad() async {
     countdown = Timer(2);
     interval = Timer(
       1,

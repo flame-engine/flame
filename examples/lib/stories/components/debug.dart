@@ -20,14 +20,14 @@ class LogoCompomnent extends SpriteComponent with HasGameRef<DebugGame> {
     final rect = toRect();
 
     if ((x <= 0 && xDirection == -1) ||
-        (rect.right >= gameRef.size.x && xDirection == 1)) {
+        (rect.right >= gameRef!.size.x && xDirection == 1)) {
       xDirection = xDirection * -1;
     }
 
     y += yDirection * speed * dt;
 
     if ((y <= 0 && yDirection == -1) ||
-        (rect.bottom >= gameRef.size.y && yDirection == 1)) {
+        (rect.bottom >= gameRef!.size.y && yDirection == 1)) {
       yDirection = yDirection * -1;
     }
   }
