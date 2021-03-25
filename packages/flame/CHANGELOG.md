@@ -7,7 +7,7 @@
  - Add clear function to BaseGame to allow the removal of all components
  - Moving tutorials to the Flame main repository
  - Exporting Images and AssetsCache
- - Remove the SpriteAnimationComponent when the animation is really done, not when it is on the last frame
+ - Remove the SpriteAnimationComponent when the animation is really done, not when it is on the last frame (this is a breaking change)
 
 ## 1.0.0-rc8
  - Migrate to null safety
