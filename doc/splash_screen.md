@@ -13,4 +13,5 @@ FlameSplashScreen(
 )
 ```
 
-Check the [package's repo](https://github.com/flame-engine/flame_splash_screen) and the [pub page](https://pub.dev/packages/flame_splash_screen) for more details.
+Check the [package's repo](https://github.com/flame-engine/flame_splash_screen) and the
+[pub page](https://pub.dev/packages/flame_splash_screen) for more details.
