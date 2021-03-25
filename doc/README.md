@@ -6,17 +6,18 @@ Flame is a modular Flutter game engine that provides a complete set of out-of-th
 games. It takes advantage of the powerful infrastructure provided by Flutter but simplifies the code
 you need to build your projects.
 
-It provides you with a simple yet effective game loop implementation, and all the surrounding
-utilities that you might need to use in a game: input, images, sprites, sprite sheets, animations,
-audio, components/object systems, collision detection, physics and so on.
+It provides you with a simple yet effective game loop implementation, and the necessary functionalities that you might need in a game. For instance; input, images, sprites, sprite sheets, animations, collision detection and a component system that we call Flame Component System (FCS for short). 
 
-You can pick and choose whichever parts you want, as they are all somewhat independent and modular.
+We also provide stand-alone packages that extend the Flame functionality:
+- [flame_audio](https://pub.dev/packages/flame_audio) Which provides audio capabilities using the `audioplayers` package.
+- [flame_forge2d](https://pub.dev/packages/flame_forge2d) Which provides physics capabilities using our own `Box2D` port called `Forge2D`.
+- [flame_tiled](https://pub.dev/packages/flame_tiled) Which provides integration with the [tiled](https://pub.dev/packages/tiled) package.
 
-We also support easy-to-use integrations with famous third party libraries and tools, like Riveapp,
-tiled, Google Play Games, Forge2D (Box2D for Dart), physical gamepads and more.
+You can pick and choose whichever parts you want, as they are all independent and modular.
 
 The engine and its ecosystem is constantly being improved by the community, so please feel free to
 reach out, open issues, PRs and make suggestions.
+
 Give us a star if you want to help give the engine exposure and grow the community :)
 
 ## Installation
