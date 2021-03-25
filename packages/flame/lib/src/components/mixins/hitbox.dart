@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:math';
 
 import '../../../extensions.dart';
 import '../../geometry/shape.dart';

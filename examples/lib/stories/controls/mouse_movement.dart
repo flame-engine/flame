@@ -7,37 +7,39 @@ import 'package:flutter/material.dart';
 
 class MouseMovementGame extends BaseGame with MouseMovementDetector {
   static const speed = 200;
-  static final Paint _blue = Paint()..color = const Color(0xFF0000FF);
-  static final Vector2 _size = Vector2.all(50);
+  static final Paint blue = Paint()..color = const Color(0xFF0000FF);
+  static final Paint white = BasicPalette.white.paint;
+  static final Vector2 objSize = Vector2.all(50);
 
   Vector2 position = Vector2(0, 0);
-  Vector2 target;
+  Vector2? target;
 
-  bool _onTarget = false;
+  bool onTarget = false;
 
   @override
   void onMouseMove(PointerHoverEvent event) {
     target = event.localPosition.toVector2();
   }
 
-  Rect _toRect() => position.toPositionedRect(_size);
+  Rect _toRect() => position.toPositionedRect(objSize);
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
     canvas.drawRect(
       _toRect(),
-      _onTarget ? _blue : BasicPalette.white.paint,
+      onTarget ? blue : white,
     );
   }
 
   @override
   void update(double dt) {
+    final target = this.target;
     super.update(dt);
     if (target != null) {
-      _onTarget = _toRect().contains(target.toOffset());
+      onTarget = _toRect().contains(target.toOffset());
 
-      if (!_onTarget) {
+      if (!onTarget) {
         final dir = (target - position).normalized();
         position += dir * (speed * dt);
       }

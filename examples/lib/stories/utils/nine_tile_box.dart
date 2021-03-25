@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class NineTileBoxGame extends Game {
-  NineTileBox nineTileBox;
+  late NineTileBox nineTileBox;
 
   @override
   Future<void> onLoad() async {

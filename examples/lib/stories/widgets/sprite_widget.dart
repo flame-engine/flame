@@ -12,7 +12,7 @@ Widget spriteWidgetBuilder(DashbookContext ctx) {
     child: SpriteWidget(
       sprite: Sprite(Flame.images.fromCache('shield.png')),
       anchor: Anchor.valueOf(
-        ctx.listProperty('anchor', 'Anchor.center', anchorOptions),
+        ctx.listProperty('anchor', 'center', anchorOptions),
       ),
     ),
   );
