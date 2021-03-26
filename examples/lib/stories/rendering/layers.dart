@@ -45,8 +45,8 @@ class BackgroundLayer extends PreRenderedLayer {
 }
 
 class LayerGame extends Game {
-  Layer gameLayer;
-  Layer backgroundLayer;
+  late Layer gameLayer;
+  late Layer backgroundLayer;
 
   @override
   Future<void> onLoad() async {

@@ -134,7 +134,7 @@ linter:
 
 dart_code_metrics:
   rules:
-    - prefer-trailing-comma
+    #- prefer-trailing-comma TODO(luan) this is broken on NS
     - prefer-trailing-comma-for-collection
     - no-equal-then-else
     - no-object-declaration
@@ -143,7 +143,7 @@ dart_code_metrics:
     - test/**
   metrics:
     number-of-arguments: 8
-    number-of-methods: 28
+    number-of-methods: 32
     lines-of-executable-code: 200
     cyclomatic-complexity: 36
 

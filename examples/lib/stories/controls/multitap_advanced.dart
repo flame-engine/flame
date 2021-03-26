@@ -7,65 +7,67 @@ import 'package:flutter/material.dart';
 /// Showcases how to mix two advanced detectors
 class MultitapAdvancedGame extends BaseGame
     with MultiTouchTapDetector, MultiTouchDragDetector {
-  static final _whitePaint = BasicPalette.white.paint;
-  static final _size = Vector2.all(50);
+  static final whitePaint = BasicPalette.white.paint;
+  static final tapSize = Vector2.all(50);
 
-  final Map<int, Rect> _taps = {};
+  final Map<int, Rect> taps = {};
 
-  Vector2 _start;
-  Vector2 _end;
-  Rect _panRect;
+  Vector2? start;
+  Vector2? end;
+  Rect? panRect;
 
   @override
   void onTapDown(int pointerId, TapDownDetails details) {
-    _taps[pointerId] =
-        details.globalPosition.toVector2().toPositionedRect(_size);
+    taps[pointerId] =
+        details.globalPosition.toVector2().toPositionedRect(tapSize);
   }
 
   @override
   void onTapUp(int pointerId, _) {
-    _taps.remove(pointerId);
+    taps.remove(pointerId);
   }
 
   @override
   void onTapCancel(int pointerId) {
-    _taps.remove(pointerId);
+    taps.remove(pointerId);
   }
 
   @override
   void onDragCancel(int pointerId) {
-    _end = null;
-    _start = null;
-    _panRect = null;
+    end = null;
+    start = null;
+    panRect = null;
   }
 
   @override
   void onDragStart(int pointerId, Vector2 position) {
-    _end = null;
-    _start = position;
+    end = null;
+    start = position;
   }
 
   @override
   void onDragUpdate(int pointerId, DragUpdateDetails details) {
-    _end = details.localPosition.toVector2();
+    end = details.localPosition.toVector2();
   }
 
   @override
   void onDragEnd(int pointerId, DragEndDetails details) {
-    if (_start != null && _end != null) {
-      _panRect = _start.toPositionedRect(_end - _start);
+    final start = this.start, end = this.end;
+    if (start != null && end != null) {
+      panRect = start.toPositionedRect(end - start);
     }
   }
 
   @override
   void render(Canvas canvas) {
+    final panRect = this.panRect;
     super.render(canvas);
-    _taps.values.forEach((rect) {
-      canvas.drawRect(rect, _whitePaint);
+    taps.values.forEach((rect) {
+      canvas.drawRect(rect, whitePaint);
     });
 
-    if (_panRect != null) {
-      canvas.drawRect(_panRect, _whitePaint);
+    if (panRect != null) {
+      canvas.drawRect(panRect, whitePaint);
     }
   }
 }

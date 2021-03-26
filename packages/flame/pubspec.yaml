@@ -18,7 +18,7 @@ dev_dependencies:
   dartdoc: ^0.39.0
 
 environment:
-  sdk: ">=2.12.0-29.10.beta <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
   flutter: ">=1.24.0-10.2.pre"
 
 flutter:

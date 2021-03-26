@@ -1,6 +1,6 @@
 # Layers
 
-Layers are an useful feature that lets you group renderization by context, as well as allow you yo pre-render things. That enables, for example, the renderization in memory of parts of your game that don't change much, like a background, and by doing that, freeing resources for more dynamic content that needs to be rendered every loop cycle.
+Layers are an useful feature that lets you group renderization by context, as well as allow you to pre-render things. That enables, for example, the renderization in memory of parts of your game that don't change much, like a background, and by doing that, freeing resources for more dynamic content that needs to be rendered every loop cycle.
 
 There are two types of layers on Flame: `DynamicLayer` (for things that are moving or changing) and `PreRenderedLayer` (for things that are static).
 
