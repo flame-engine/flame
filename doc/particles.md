@@ -19,7 +19,7 @@ game.add(
 );
 ```
 
-When using `Particle` with a custom `Game` implementation, please ensure that both the `update` and `render` methods are called during each game loop frame.
+When using `Particle` with a custom `Game` implementation, please ensure that both the `update` and `render` methods are called during each game loop tick.
 
 Main approaches to implement desired particle effects:
 * Composition of existing behaviors.
