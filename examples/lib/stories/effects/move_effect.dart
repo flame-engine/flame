@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import '../../commons/square_component.dart';
 
 class MoveEffectGame extends BaseGame with TapDetector {
-  SquareComponent square;
+  late SquareComponent square;
 
   @override
   Future<void> onLoad() async {

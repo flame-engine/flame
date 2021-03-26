@@ -12,7 +12,7 @@ class ScrollGame extends BaseGame with ScrollDetector {
   final _paint = BasicPalette.white.paint;
 
   Vector2 position = Vector2.all(100);
-  Vector2 target;
+  Vector2? target;
 
   @override
   void onScroll(PointerScrollEvent event) {
@@ -29,6 +29,7 @@ class ScrollGame extends BaseGame with ScrollDetector {
   @override
   void update(double dt) {
     super.update(dt);
+    final target = this.target;
     if (target != null) {
       final dir = (target - position).normalized();
       position += dir * (speed * dt);

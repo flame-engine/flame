@@ -97,7 +97,10 @@ class Anchor {
     } else {
       final regexp = RegExp(r'^\Anchor\(([^,]+), ([^\)]+)\)');
       final matches = regexp.firstMatch(name)?.groups([1, 2]);
-      assert(matches != null && matches.length == 2, 'Bad anchor format');
+      assert(
+        matches != null && matches.length == 2,
+        'Bad anchor format: $name',
+      );
       return Anchor(double.parse(matches![0]!), double.parse(matches[1]!));
     }
   }
