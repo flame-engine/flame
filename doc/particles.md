@@ -250,11 +250,13 @@ await Flame.images.loadAll(const [
 // ...
 
 // Somewhere during the game loop
+final image = await Flame.images.load('image.png');
+
 game.add(
     ParticleComponent(
         particle: ImageParticle(
           size: Vector2.all(24),
-          image: Flame.images.loadedFiles['image.png'],
+          image: image,
         );
     ),
 );

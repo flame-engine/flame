@@ -100,5 +100,13 @@ void main() {
       expectDouble(p2.length, math.sqrt(2));
       expect(p2.x, p2.y);
     });
+
+    test('scaleBy', () {
+      final p1 = Vector2(5.0, 5.0);
+      p1.scaleBy(Vector2(2.0, 0.5));
+
+      expect(p1.x, 10.0);
+      expect(p1.y, 2.5);
+    });
   });
 }

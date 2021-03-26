@@ -65,7 +65,7 @@ abstract class Particle {
   /// its lifespan.
   ///
   /// It will then be ready to be removed by a wrapping container.
-  bool shouldRemove() => _shouldBeRemoved; // TODO: getter?
+  bool get shouldRemove => _shouldBeRemoved;
 
   /// Getter which should be used by subclasses to get overall progress.
   ///
