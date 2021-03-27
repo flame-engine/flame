@@ -3,7 +3,7 @@
 Throughout your game you are going to need to use colors in lots of places. There are two classes on
 `dart:ui` that can be used, `Color` and `Paint`.
 
-The `Color` class is nothing but a wrapper over a single simple ARGB color in hexadecimal integer
+The `Color` class represents a ARGB color in a hexadecimal integer
 format. So to create a `Color` object you just need to pass in the color as an integer in the ARGB
 format.
 
