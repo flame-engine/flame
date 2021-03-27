@@ -82,5 +82,5 @@ members:
 
  - `color`: returns the `Color` specified
  - `paint`: creates a new `Paint` with the color specified. `Paint` is a non-const class, so this
-  attribute actually creates a brand new instance every time it's called. It's safe to cascade
+  method actually creates a brand new instance every time it's called. It's safe to cascade
   mutations to this.
