@@ -17,7 +17,7 @@ pub.dev [installation instructions](https://pub.dev/packages/flame_forge2d).
 If you are going to use Forge2D in your project it can be a good idea to use the Forge2D specific
 extension of the `BaseGame` class.
 
-It is called `Forge2DGame` and it will control the adding and removal of Forge2D's BodyComponents
+It is called `Forge2DGame` and it will control the adding and removal of Forge2D's `BodyComponents`
 as well as your normal components.
 
 If you are previously familiar with Box2D it can be good to know that the whole concept of the
