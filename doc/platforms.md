@@ -7,8 +7,8 @@ At the moment, Flame supports both mobile and web.
 
 ## Flutter channels
 
-Flame keeps it support on the stable channel. The dev, beta and master channel should work, but we don't
-support them. This means that issues happening outside the stable channel are not a priority.
+Flame keeps it support on the stable channel. The dev, beta and master channel should work, but we
+don't support them. This means that issues happening outside the stable channel are not a priority.
 
 ## Flame web
 
@@ -34,4 +34,9 @@ not supporting it on web. This can be worked around by using the `http` package,
 get to the audio file, that will make the browser cache the file producing the same effect as on
 mobile.
 
-If you want to create instances of `ui.Image` on the web you can use our `Flame.images.decodeImageFromPixels` method. This wraps the `decodeImageFromPixels` from the `ui` library, but with support for the web platform. If the `runAsWeb` argument is set to `true` (by default it is set to `kIsWeb`) it will decode the image using a internal image method. When the `runAsWeb` is `false` it will use the `decodeImageFromPixels`, which is currently not supported on the web.  
+If you want to create instances of `ui.Image` on the web you can use our
+`Flame.images.decodeImageFromPixels` method. This wraps the `decodeImageFromPixels` from the `ui`
+library, but with support for the web platform. If the `runAsWeb` argument is set to `true` (by
+default it is set to `kIsWeb`) it will decode the image using a internal image method. When the
+`runAsWeb` is `false` it will use the `decodeImageFromPixels`, which is currently not supported on
+the web.
