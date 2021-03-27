@@ -70,7 +70,7 @@ To read more about the `debugMode` on Flame, please refer to the [Debug Docs](de
 
 # Game
 
-The `Game` class is a low-level API that can be used if you want to implement the functionality of
+The `Game` class is a low-level API that can be used when you want to implement the functionality of
 how the game engine should handle most things yourself. `Game` does not implement any `update` or
 `render` function for example and is therefore marked as abstract.
 
