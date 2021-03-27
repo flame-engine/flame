@@ -6,7 +6,7 @@ import 'package:flame/palette.dart';
 import 'package:flutter/services.dart' show RawKeyDownEvent, RawKeyEvent;
 
 class KeyboardGame extends Game with KeyboardEvents {
-  static final Paint _white = BasicPalette.white.paint();
+  static final Paint white = BasicPalette.white.paint();
   static const int speed = 200;
 
   Rect rect = const Rect.fromLTWH(0, 100, 100, 100);
