@@ -11,8 +11,8 @@ feature.
 
 We refer to this component based system as the Flame Component System, FCS for short.
 
-The `BaseGame.camera` controls which point in the coordinate space that should be the top-left of
-the screen (it defaults to [0,0] like a regular `Canvas`).
+The `BaseGame.camera` controls which point in the coordinate space should be the top-left of the
+screen (it defaults to [0,0] like a regular `Canvas`).
 
 A `BaseGame` implementation example can be seen below:
 
