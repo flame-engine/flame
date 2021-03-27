@@ -59,7 +59,7 @@ The first can be used if you just want to remove one component, and the second c
 components.
 
 Any component on which the `remove()` method has been called will also be removed. You can do this
-simply called like this `yourComponent.remove();`.
+simply by doing `yourComponent.remove();`.
 
 ## Debug mode
 
