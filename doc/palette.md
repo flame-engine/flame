@@ -43,7 +43,7 @@ class. You can use it to easily access both `Color`s and `Paint`s where needed a
 the colors your game use as constants, so you don't get those mixed up.
 
 The `BasicPalette` class is an example of what a palette can look like, and adds black and white as
-colors. So to use black or white you can access those directly from the BasicPalette; for example,
+colors. So to use black or white you can access those directly from the `BasicPalette`; for example,
 using `color`:
 
 ```dart
