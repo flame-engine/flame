@@ -14,7 +14,7 @@ opaque green (the 'mask' would be `0xAARRGGBB`).
 the alpha channel (transparency), unlike on regular (non-A) RGB. The max(FF = 255) for the two first
 digits means fully opaque, and the min (00 = 0) means fully transparent.
 
-In the material flutter package there is a color enum to make it easy to use common colors:
+In the material flutter package there is a `Colors` class that provides common colors as constants:
 
 ```dart
 import 'package:flutter/material.dart';
