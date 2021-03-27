@@ -150,7 +150,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-The order in which the overlays are declared on the `overlayBuilderMap` defines which overlay that
+The order in which the overlays are declared in the `overlayBuilderMap` defines which overlay
 will be rendered first.
 
 Here you can see a
