@@ -9,6 +9,8 @@ features for free, like the passing of `resize` methods (every time the screen i
 information will be passed to the resize methods of all your components) and also a basic camera
 feature.
 
+We refer to this component based system as the Flame Component System, FCS for short.
+
 The `BaseGame.camera` controls which point in the coordinate space that should be the top-left of
 the screen (it defaults to [0,0] like a regular `Canvas`).
 
