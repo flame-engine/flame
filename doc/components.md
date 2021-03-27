@@ -10,7 +10,7 @@ All components inherit from the abstract class `Component`.
 If you want to skip reading about abstract classes you can jump directly to
 [PositionComponent](./components.md#PositionComponent).
 
-Every `Component` has a few methods that you can optionally implement, that are used by the
+Every `Component` has a few methods that you can optionally implement, which are used by the
 `BaseGame` class. If you are not using `BaseGame`, you can alternatively use these methods on your
 own game loop.
 
@@ -346,10 +346,11 @@ See [SpriteBodyComponent](forge2d.md#SpriteBodyComponent) in the Forge2D documen
 ## TiledComponent
 
 Currently we have a very basic implementation of a Tiled component. This API uses the lib
-[Tiled](https://github.com/feroult/tiled.dart) to parse map files and render visible layers.
+[tiled.dart](https://github.com/flame-engine/tiled.dart) to parse map files and render visible
+layers.
 
 An example of how to use the API can be found
-[here](https://github.com/flame-engine/flame_tiled/tree/master/example).
+[here](https://github.com/flame-engine/flame_tiled/tree/main/example).
 
 ## IsometricTileMapComponent
 
