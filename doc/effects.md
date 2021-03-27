@@ -166,7 +166,7 @@ An example of how to use the `SequenceEffect` can be found
 This effect runs several different type of effects simultaneously. You provide it with a list of
 your predefined effects and an offset in time which should pass in between starting each effect.
  
-The effects in the list should only be passed to the CombinedEffect, never added to a
+The effects in the list should only be passed to the `CombinedEffect`, never added to a
 `PositionComponent` with `addEffect`.
 
 **Note**: No effects should be of the same type since they will clash when trying to modify the
