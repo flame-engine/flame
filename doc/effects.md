@@ -141,7 +141,7 @@ square.addEffect(RotateEffect(
 This effect is a combination of other effects. You provide it with a list of your predefined
 effects.
  
-The effects in the list should only be passed to the SequenceEffect, never added to a
+The effects in the list should only be passed to the `SequenceEffect`, never added to a
 `PositionComponent` with `addEffect`.
 
 **Note**:  No effect (except the last) added to the sequence should have their `isInfinite` property
