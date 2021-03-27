@@ -181,7 +181,7 @@ final android = SvgComponent.fromSvg(
 
 ## FlareActorComponent
 
-*Note*: The previous implementation of a Flare integration API using `FlareAnimation` and
+**Note**: The previous implementation of a Flare integration API using `FlareAnimation` and
 `FlareComponent` has been deprecated.
 
 To use Flare within Flame, use the [`flame_flare`](https://github.com/flame-engine/flame_flare)
