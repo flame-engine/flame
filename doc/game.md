@@ -55,7 +55,7 @@ main() {
  Otherwise your game will be rebuilt every time the Flutter tree gets rebuilt.
 
 To remove components from the list on a `BaseGame` the `remove` or `removeAll` methods can be used.
-The first if you just want to remove one component, and the second if you want to remove a list of
+The first can be used if you just want to remove one component, and the second can be used when you want to remove a list of
 components.
 
 Any component that which the `remove()` method has been called on will also be removed, that is
