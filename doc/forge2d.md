@@ -39,7 +39,7 @@ example if you want a circle, rectangle or polygon but only painted with a Flutt
 ## SpriteBodyComponent
 
 Often you want to render a sprite on top of the `BodyComponent` that you are going to use in your
-Forge2DGame. This component will handle the scaling and positioning of your sprite on top of the
+`Forge2DGame`. This component will handle the scaling and positioning of your sprite on top of the
 body.
 
 ## PositionBodyComponent
