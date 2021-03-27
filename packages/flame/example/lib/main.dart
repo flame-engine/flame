@@ -15,19 +15,13 @@ void main() {
   );
 }
 
-class Palette {
-  static const PaletteEntry white = BasicPalette.white;
-  static const PaletteEntry red = PaletteEntry(Color(0xFFFF0000));
-  static const PaletteEntry blue = PaletteEntry(Color(0xFF0000FF));
-}
-
 class Square extends PositionComponent {
   static const speed = 0.25;
   static const squareSize = 128.0;
 
-  static Paint white = Palette.white.paint;
-  static Paint red = Palette.red.paint;
-  static Paint blue = Palette.blue.paint;
+  static Paint white = BasicPalette.white.paint();
+  static Paint red = BasicPalette.red.paint();
+  static Paint blue = BasicPalette.blue.paint();
 
   @override
   void render(Canvas c) {
