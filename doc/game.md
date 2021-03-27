@@ -120,7 +120,7 @@ The `GameLoop` is used by all of Flame's `Game` implementations.
 # Flutter Widgets and Game instances
 
 Since a Flame game can be wrapped in a widget, it is quite easy to use it alongside other Flutter
-widgets. But still, there is a the Widgets overlay API that makes things even easier.
+widgets. But still, there is the Widgets Overlay API that makes things even easier.
 
 `Game.overlays` enables to any Flutter widget to be shown on top of a game instance, this makes it
 very easy to create things like a pause menu, or an inventory screen for example.
