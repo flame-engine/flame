@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 
 class MouseMovementGame extends BaseGame with MouseMovementDetector {
   static const speed = 200;
-  static final Paint blue = Paint()..color = const Color(0xFF0000FF);
-  static final Paint white = BasicPalette.white.paint;
+  static final Paint _blue = BasicPalette.blue.paint();
+  static final Paint _white = BasicPalette.white.paint();
   static final Vector2 objSize = Vector2.all(50);
 
   Vector2 position = Vector2(0, 0);
@@ -28,7 +28,7 @@ class MouseMovementGame extends BaseGame with MouseMovementDetector {
     super.render(canvas);
     canvas.drawRect(
       _toRect(),
-      onTarget ? blue : white,
+      onTarget ? _blue : _white,
     );
   }
 

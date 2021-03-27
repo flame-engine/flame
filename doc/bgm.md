@@ -98,8 +98,8 @@ FlameAudio.bgm.stop();
 
 To manually pause and resume background music you can use the `pause` and `resume` functions.
 
-`FlameAudio.bgm` automatically handles pausing and resuming the currently playing background music track.
-Manually `pausing` prevents the app/game from auto-resuming when focus is given back to the
+`FlameAudio.bgm` automatically handles pausing and resuming the currently playing background music
+track. Manually `pausing` prevents the app/game from auto-resuming when focus is given back to the
 app/game.
 
 ```dart

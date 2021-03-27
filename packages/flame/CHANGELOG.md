@@ -6,6 +6,9 @@
  - Updated the documentation for the supported platforms
  - Add clear function to BaseGame to allow the removal of all components
  - Moving tutorials to the Flame main repository
+ - Transforming `PaletteEntry.paint` to be a method instead of a getter
+ - Adding some more basic colors entries to the `BasicPalette`
+ - Fixing Flutter and Dart version constraints
  - Exporting Images and AssetsCache
  - Remove the SpriteAnimationComponent when the animation is really done, not when it is on the last frame
 
