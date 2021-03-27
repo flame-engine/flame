@@ -19,7 +19,7 @@ In the material flutter package there is a `Colors` class that provides common c
 ```dart
 import 'package:flutter/material.dart';
 
-Color black = Colors.black;
+const black = Colors.black;
 ```
 
 Some more complex methods might also take a `Paint` object, which is a more complete option that
