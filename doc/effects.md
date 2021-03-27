@@ -142,7 +142,7 @@ This effect is a combination of other effects. You provide it with a list of you
 effects.
  
 The effects in the list should only be passed to the SequenceEffect, never added to a
-PositionComponent with `addEffect`.
+`PositionComponent` with `addEffect`.
 
 **Note**:  No effect (except the last) added to the sequence should have their `isInfinite` property
 set to `true`, because then naturally the sequence will get stuck once it gets to that effect.
