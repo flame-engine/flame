@@ -1,6 +1,6 @@
 # Forge2D
 
-We (the Flame organization) maintains a ported version of the Box2D physics engine and our version
+We (the Flame organization) maintain a ported version of the Box2D physics engine and our version
 is called Forge2D.
 
 If you want to use Forge2D specifically for Flame you should use our bridge library
