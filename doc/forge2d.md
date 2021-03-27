@@ -33,7 +33,7 @@ A simple `Forge2DGame` implementation examples can be seen in the
 
 ## BodyComponent
 
-If you don't need to have a sprite on top of your body you should use the plain BodyComponent, for
+If you don't need to have a sprite on top of your body you should use the plain `BodyComponent`, for
 example if you want a circle, rectangle or polygon but only painted with a Flutter `Paint`.
 
 ## SpriteBodyComponent
