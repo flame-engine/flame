@@ -8,7 +8,7 @@ If you want to use Forge2D specifically for Flame you should use our bridge libr
 in a Dart project you can use the [forge2d](https://github.com/flame-engine/forge2d) library
 directly.
 
-To use it in your game you just need to add flame_forge2d to your pubspec.yaml, as can be seen
+To use it in your game you just need to add `flame_forge2d` to your pubspec.yaml, as can be seen
 in the [Forge2D example](https://github.com/flame-engine/flame_forge2d/tree/main/example) and in the
 pub.dev [installation instructions](https://pub.dev/packages/flame_forge2d).
 
