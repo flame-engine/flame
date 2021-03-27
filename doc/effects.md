@@ -18,7 +18,7 @@ whether it is paused with `effect.isPaused`.
 Then there are two optional boolean parameters called `isInfinite` and `isAlternating`, by combining
 them you can get different effects.
 
- - If both of them are true the effect will be infinite and when it is done with going through the
+ - If both of them are `true` the effect will be infinite and when it is done with going through the
  `curve` it will go back in reverse through the `curve`.
  - If `isInfinite` is true and `isAlternating` is false the effect will be applied from start to end
  of the curve and then restart from the start, for an infinite amount of time.
