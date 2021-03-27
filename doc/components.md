@@ -164,7 +164,7 @@ animation object needs to be ticked to move the frames.
 
 ## SvgComponent
 
-*Note*: To use SVG with Flame, use the [`flame_svg`](https://github.com/flame-engine/flame_svg)
+**Note**: To use SVG with Flame, use the [`flame_svg`](https://github.com/flame-engine/flame_svg)
 package.
 
 This component uses an instance of `Svg` class to represent a Component that has a svg that is
