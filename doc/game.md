@@ -58,7 +58,7 @@ To remove components from the list on a `BaseGame` the `remove` or `removeAll` m
 The first can be used if you just want to remove one component, and the second can be used when you want to remove a list of
 components.
 
-Any component that which the `remove()` method has been called on will also be removed, that is
+Any component on which the `remove()` method has been called will also be removed. You can do this
 simply called like this `yourComponent.remove();`.
 
 ## Debug mode
