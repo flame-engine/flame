@@ -55,8 +55,8 @@ main() {
  Otherwise your game will be rebuilt every time the Flutter tree gets rebuilt.
 
 To remove components from the list on a `BaseGame` the `remove` or `removeAll` methods can be used.
-The first can be used if you just want to remove one component, and the second can be used when you want to remove a list of
-components.
+The first can be used if you just want to remove one component, and the second can be used when you
+want to remove a list of components.
 
 Any component on which the `remove()` method has been called will also be removed. You can do this
 simply by doing `yourComponent.remove();`.
@@ -65,8 +65,8 @@ simply by doing `yourComponent.remove();`.
 
 Flame's `BaseGame` class provides a variable called `debugMode`, which by default is `false`. It can
 however, be set to `true` to enable debug features for the components of the game. **Be aware** that
-the value of this variable is passed through to its components when they are added to the game, so if
-you change the `debugMode` at runtime, it will not affect already added components by default.
+the value of this variable is passed through to its components when they are added to the game, so
+if you change the `debugMode` at runtime, it will not affect already added components by default.
 
 To read more about the `debugMode` on Flame, please refer to the [Debug Docs](debug.md)
 
@@ -76,7 +76,10 @@ The `Game` class is a low-level API that can be used when you want to implement 
 how the game engine should be structured. `Game` does not implement any `update` or
 `render` function for example and is therefore marked as abstract.
 
-**Note**: While the `Game` class allows for more freedom, we do not recommend working with it unless you know what you are doing. The `BaseGame` class provides most functionality that you would need already out of the box and has different optimization things in place for a smooth gaming experience.
+**Note**: While the `Game` class allows for more freedom, we do not recommend working with it unless
+ you know what you are doing. The `BaseGame` class provides most functionality that you would need
+ already out of the box and has different optimization things in place for a smooth gaming
+ experience.
 
 An example of how a `Game` implementation could look like:
 
