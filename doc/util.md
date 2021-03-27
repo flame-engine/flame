@@ -121,7 +121,7 @@ class MyGame extends Game {
 
 ```
 
-Timer instances can also be used inside a `BaseGame` game by using the `TimerComponent` class.
+`Timer` instances can also be used inside a `BaseGame` game by using the `TimerComponent` class.
 
 `TimerComponent` example:
 
