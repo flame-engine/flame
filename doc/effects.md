@@ -24,7 +24,7 @@ them you can get different effects.
  of the curve and then restart from the start, for an infinite amount of time.
  - If `isInfinite` is `false` and `isAlternating` is `true` the effect will go from the beginning of the
  curve and then back again but after that stop.
- - `isInfinite` and `isAlternating` are false by default and then the effect is just applied once,
+ - `isInfinite` and `isAlternating` are `false` by default and then the effect is just applied once,
  from the beginning of the curve until the end.
 
 `isRelative` is another parameter used on some effects, it is false by default. If it is set to true
