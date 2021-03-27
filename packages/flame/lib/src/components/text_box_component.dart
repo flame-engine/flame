@@ -26,7 +26,7 @@ class TextBoxConfig {
 }
 
 class TextBoxComponent extends PositionComponent {
-  static final Paint _imagePaint = BasicPalette.white.paint
+  static final Paint _imagePaint = BasicPalette.white.paint()
     ..filterQuality = FilterQuality.high;
   Vector2 _gameSize = Vector2.zero();
 
