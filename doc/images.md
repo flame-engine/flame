@@ -68,7 +68,7 @@ class MyGame extends Game {
 
   @override
   Future<void> onLoad() async {
-    final playerImage = await images.load('player.png');
+    final playerImage = await images.load('player.png'); // Note that you could also use Sprite.load for this
     player = Sprite(playerImage);
   }
 }
@@ -190,8 +190,8 @@ or use the [SvgComponent]:
 
 ```dart
 class MyGame extends BaseGame {
-    MyGame() {
-      final svgInstance = Svg('android.svg');
+    Future<void> onLoad() async {
+      final svgInstance = await Svg.load('android.svg');
       final size = Vector2.all(100);
       final svgComponent = SvgComponent.fromSvg(size, svgInstance);
       svgComponent.x = 100;
