@@ -169,7 +169,7 @@ your predefined effects and an offset in time which should pass in between start
 The effects in the list should only be passed to the CombinedEffect, never added to a
 `PositionComponent` with `addEffect`.
 
-Note that no effects should be of the same type since they will clash when trying to modify the
+**Note**: No effects should be of the same type since they will clash when trying to modify the
 PositionComponent.
 
 You can make the combined effect go in a loop by setting both `isInfinite: true` and
