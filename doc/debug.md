@@ -8,7 +8,7 @@ like shown in the example below.
 
 ```dart
 class MyGame extends Game with FPSCounter {
-  static final fpsTextConfig = TextConfig(color: const Color(0xFFFFFFFF));
+  static final fpsTextConfig = TextConfig(color: BasicPalette.white.color);
 
   @override
   void render(Canvas canvas) {
