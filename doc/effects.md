@@ -20,7 +20,7 @@ them you can get different effects.
 
  - If both of them are `true` the effect will be infinite and when it is done with going through the
  `curve` it will go back in reverse through the `curve`.
- - If `isInfinite` is true and `isAlternating` is false the effect will be applied from start to end
+ - If `isInfinite` is `true` and `isAlternating` is `false` the effect will be applied from start to end
  of the curve and then restart from the start, for an infinite amount of time.
  - If `isInfinite` is false and `isAlternating` is true the effect will go from the beginning of the
  curve and then back again but after that stop.
