@@ -30,7 +30,7 @@ are already resolved.
 
 The `onRemove` method can be overridden to run code before the component is removed from the game,
 it is only run once even if the component is removed both by using the `BaseGame` remove method and
-the ´Component´ remove method.
+the `Component` remove method.
 
 The `onLoad` method can be overridden to run asynchronous initialization code for the component,
 like loading an image for example. This method is executed after the initial "preparation" of the
