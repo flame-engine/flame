@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
 
 class SquareComponent extends PositionComponent {
-  Paint paint = BasicPalette.white.paint;
+  Paint paint = BasicPalette.white.paint();
 
   SquareComponent() : super(size: Vector2.all(100.0));
 
