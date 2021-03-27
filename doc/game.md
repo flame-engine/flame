@@ -74,6 +74,8 @@ The `Game` class is a low-level API that can be used when you want to implement 
 how the game engine should be structured. `Game` does not implement any `update` or
 `render` function for example and is therefore marked as abstract.
 
+**Note**: While the `Game` class allows for more freedom, we do not recommend working with it unless you know what you are doing. The `BaseGame` class provides most functionality that you would need already out of the box and has different optimization things in place for a smooth gaming experience.
+
 An example of how a `Game` implementation could look like:
 
 ```dart
