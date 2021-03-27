@@ -24,7 +24,7 @@ On `BaseGame` you don't have to apply the `FPSCounter` mixin to get access to th
 because it is already applied by default on the `BaseGame` class, so you can use the `fps` method directly.
 
 Flame provides some debugging features for the `BaseGame` class, these features are enabled when
-the `debugMode` from the is set to `true` (or overridden to be true).
+the `debugMode` property is set to `true` (or overridden to be `true`).
 When `debugMode` is enabled all `PositionComponent`s will be wrapped into a rectangle, and have
 their positions rendered on the screen, so you can visually verify the components boundaries and
 positions.
