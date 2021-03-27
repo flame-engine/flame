@@ -27,6 +27,11 @@ allows you to define more options related to stroke, colors, filters and blends.
 However, normally when using even the more complex APIs, you just want an instance of a `Paint`
 object representing just a single simple plain solid color.
 
+**Note:** we don't recommend that you create a new `Paint` object every time you need a specific
+`Paint`, since it could potentially lead to a lot of unnecessary objects being created. A better way
+is to either define the `Paint` object somewhere and re-use it, or to use the `Palette` class to
+define all the colors that you want to use in your game.
+
 You can create such an object like this:
 
 ```dart

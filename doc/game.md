@@ -113,8 +113,8 @@ The `GameLoop` module is a simple abstraction over the game loop concept. Basica
 built upon two methods:
 
  - The render method takes the canvas for drawing the current state of the game.
- - The update method receives the delta time in seconds since last update and allows you to move to
-   the next state.
+ - The update method receives the delta time in seconds since the last update and allows you to move
+  to the next state.
 
 The `GameLoop` is used by all of Flame's `Game` implementations.
 
