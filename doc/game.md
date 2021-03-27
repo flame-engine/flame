@@ -64,7 +64,7 @@ simply by doing `yourComponent.remove();`.
 ## Debug mode
 
 Flame's `BaseGame` class provides a variable called `debugMode`, which by default is `false`. It can
-however, be set to `true` to enable debug features for the components of the game. __Be aware__ that
+however, be set to `true` to enable debug features for the components of the game. **Be aware** that
 the value of this variable is passed through to its components when they are added to the game, so if
 you change the `debugMode` at runtime, it will not affect already added components by default.
 
