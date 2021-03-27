@@ -171,7 +171,8 @@ Methods:
 ### Image
 
 Methods:
- - `pixelsInUint8`: Retrieves the pixel data as a `Uint8List`, in the `ImageByteFormat.rawRgba` pixel format, for the image.
+ - `pixelsInUint8`: Retrieves the pixel data as a `Uint8List`, in the `ImageByteFormat.rawRgba`
+ pixel format, for the image.
  - `getBoundingRect`: Get the bounding rectangle of the `Image` as a `Rect`.
  - `size`: The size of an `Image` as `Vector2`.
  - `darken`: Darken each pixel of the `Image` by an amount between 0 to 1.
