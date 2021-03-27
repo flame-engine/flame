@@ -166,7 +166,7 @@ Methods:
 
 Methods:
  - `darken`: Darken the shade of the color by an amount between 0 to 1.
- - `brighten`: Brighten the shade of the color by the an amount between 0 to 1.
+ - `brighten`: Brighten the shade of the color by an amount between 0 to 1.
 
 ### Image
 
