@@ -173,7 +173,7 @@ The effects in the list should only be passed to the CombinedEffect, never added
 `PositionComponent`.
 
 You can make the combined effect go in a loop by setting both `isInfinite: true` and
-isAlternating: true`.
+`isAlternating: true`.
 
 Usage example:
 ```dart
