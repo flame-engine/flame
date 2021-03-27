@@ -108,7 +108,7 @@ Right, now we have all the data and variables we need to start implementing our 
 class MyGame extends Game {
   // BasicPalette is a help class from Flame, which provides default, pre built instances
   // of Paint that can be used by your game
-  static final squarePaint = BasicPalette.white.paint;
+  static final squarePaint = BasicPalette.white.paint();
 
   // Update mehod ommited
 

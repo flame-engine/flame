@@ -11,6 +11,8 @@ import 'sprite.dart';
 /// in the direction in which they are located and expanding the center in both directions.
 /// That allows you to have non distorted borders.
 class NineTileBox {
+  static final _whitePaint = BasicPalette.white.paint();
+
   /// The sprite used to render the box, must be a 3x3 grid of square tiles.
   Sprite sprite;
 
@@ -86,6 +88,6 @@ class NineTileBox {
     final xSrc = sprite.src.left + _tileSizeDouble * i;
     final ySrc = sprite.src.top + _tileSizeDouble * j;
     final src = Rect.fromLTWH(xSrc, ySrc, _tileSizeDouble, _tileSizeDouble);
-    c.drawImageRect(sprite.image, src, dest, BasicPalette.white.paint);
+    c.drawImageRect(sprite.image, src, dest, _whitePaint);
   }
 }
