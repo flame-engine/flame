@@ -174,7 +174,7 @@ Methods:
  - `pixelsInUint8`: Retrieves the pixel data in a Uint8List format for the image.
  - `getBoundingRect`: Get the bounding rectangle of the `Image` as a `Rect`.
  - `size`: The size of an `Image` as `Vector2`.
- - `darken`: Darken each pixel of the `Image` by the an amount between 0 to 1.
+ - `darken`: Darken each pixel of the `Image` by an amount between 0 to 1.
  - `brighten`: Brighten each pixel of the `Image` by an amount between 0 to 1.
 
 ### Offset
