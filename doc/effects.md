@@ -158,7 +158,7 @@ final sequence = SequenceEffect(
 myComponent.addEffect(sequence);
 ```
 
-An example of how to use the SequenceEffect can be found
+An example of how to use the `SequenceEffect` can be found
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects/sequence_effect.dart).
  
 ## CombinedEffect
