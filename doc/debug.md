@@ -21,7 +21,7 @@ class MyGame extends Game with FPSCounter {
 ## BaseGame features
 
 On `BaseGame` you don't have to apply the `FPSCounter` mixin to get access to the current fps,
-because it is already applied by default in `BaseGame`, so you can use the `fps` method directly.
+because it is already applied by default on the `BaseGame` class, so you can use the `fps` method directly.
 
 Flame provides some features other for debugging your `BaseGame`, these features are enabled when
 the `debugMode` from the is set to `true` (or overridden to be true).
