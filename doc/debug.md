@@ -3,7 +3,7 @@
 ## FPS counter
 
 Flame provides the `FPSCounter` mixin for recording the fps, this mixin can be applied on any class
-that extends from `Game`. Once applied you can access the current fps by using the `fps` method`,
+that extends from `Game`. Once applied you can access the current fps by using the `fps` method,
 like shown in the example below.
 
 ```dart
