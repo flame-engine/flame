@@ -45,7 +45,7 @@ class Polygon extends Shape {
   /// percentages of the size of the shape.
   /// Example: [[1.0, 0.0], [0.0, 1.0], [-1.0, 0.0], [0.0, -1.0]]
   /// This will form a diamond shape within the bounding size box.
-  /// NOTE: Always define your shape is a clockwise fashion
+  /// NOTE: Always define your shape in a clockwise fashion
   Polygon.fromDefinition(
     this.normalizedVertices, {
     Vector2? position,

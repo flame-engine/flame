@@ -17,29 +17,24 @@ class JoystickPlayer extends Component implements JoystickListener {
 
   double currentSpeed = 0;
   double angle = 0;
-  bool _move = false;
-  Paint _paint;
-  Rect _rect;
+  bool move = false;
+  Paint paint;
+  late Rect rect;
 
-  JoystickPlayer() {
-    _paint = _whitePaint;
-  }
+  JoystickPlayer() : paint = _whitePaint;
 
   @override
   void render(Canvas canvas) {
-    if (_rect == null) {
-      return;
-    }
-    canvas.translate(_rect.center.dx, _rect.center.dy);
+    canvas.translate(rect.center.dx, rect.center.dy);
     canvas.rotate(angle == 0.0 ? 0.0 : angle + (pi / 2));
-    canvas.translate(-_rect.center.dx, -_rect.center.dy);
-    canvas.drawRect(_rect, _paint);
+    canvas.translate(-rect.center.dx, -rect.center.dy);
+    canvas.drawRect(rect, paint);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    if (_move) {
+    if (move) {
       moveFromAngle(dt);
     }
   }
@@ -47,7 +42,7 @@ class JoystickPlayer extends Component implements JoystickListener {
   @override
   void onGameResize(Vector2 gameSize) {
     final offset = (gameSize - size) / 2;
-    _rect = offset & size;
+    rect = offset & size;
     super.onGameResize(gameSize);
   }
 
@@ -55,33 +50,29 @@ class JoystickPlayer extends Component implements JoystickListener {
   void joystickAction(JoystickActionEvent event) {
     if (event.event == ActionEvent.down) {
       if (event.id == 1) {
-        _paint = _paint == _whitePaint ? _bluePaint : _whitePaint;
+        paint = paint == _whitePaint ? _bluePaint : _whitePaint;
       }
       if (event.id == 2) {
-        _paint = _paint == _whitePaint ? _greenPaint : _whitePaint;
+        paint = paint == _whitePaint ? _greenPaint : _whitePaint;
       }
     } else if (event.event == ActionEvent.move) {
       if (event.id == 3) {
-        angle = event.angle ?? angle;
+        angle = event.angle;
       }
     }
   }
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    _move = event.directional != JoystickMoveDirectional.idle;
-    if (_move) {
+    move = event.directional != JoystickMoveDirectional.idle;
+    if (move) {
       angle = event.angle;
       currentSpeed = speed * event.intensity;
     }
   }
 
   void moveFromAngle(double dtUpdate) {
-    if (_rect == null) {
-      return;
-    }
-
     final next = Vector2(cos(angle), sin(angle)) * (currentSpeed * dtUpdate);
-    _rect = _rect.shift(next.toOffset());
+    rect = rect.shift(next.toOffset());
   }
 }

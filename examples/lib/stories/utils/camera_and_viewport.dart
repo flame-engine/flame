@@ -17,14 +17,14 @@ class MovableSquare extends SquareComponent
   static final TextConfig config = TextConfig(fontSize: 12);
 
   final Vector2 velocity = Vector2.zero();
-  Timer timer;
+  late Timer timer;
 
   MovableSquare() {
     addShape(HitboxRectangle());
     timer = Timer(3.0)
       ..stop()
       ..callback = () {
-        gameRef.camera.setRelativeOffset(Anchor.center.toVector2());
+        gameRef!.camera.setRelativeOffset(Anchor.center.toVector2());
       };
   }
 
@@ -50,7 +50,7 @@ class MovableSquare extends SquareComponent
   @override
   void onCollision(Set<Vector2> points, Collidable other) {
     if (other is Rock) {
-      gameRef.camera.setRelativeOffset(Anchor.topCenter.toVector2());
+      gameRef!.camera.setRelativeOffset(Anchor.topCenter.toVector2());
       timer.start();
     }
   }
@@ -95,7 +95,7 @@ class Rock extends SquareComponent with Hitbox, Collidable {
 
 class CameraAndViewportGame extends BaseGame
     with KeyboardEvents, HasCollidables {
-  MovableSquare square;
+  late MovableSquare square;
 
   @override
   Future<void> onLoad() async {

@@ -9,7 +9,7 @@ class TapableSquare extends PositionComponent with Tapable {
 
   bool _beenPressed = false;
 
-  TapableSquare({Vector2 position})
+  TapableSquare({Vector2? position})
       : super(
           position: position ?? Vector2.all(100),
           size: Vector2.all(100),

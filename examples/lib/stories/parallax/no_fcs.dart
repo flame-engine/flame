@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 /// FCS is only used when you extend BaseGame, not Game,
 /// like we do in this example.
 class NoFCSParallaxGame extends Game {
-  Parallax parallax;
+  late Parallax parallax;
 
   @override
   Future<void> onLoad() async {
