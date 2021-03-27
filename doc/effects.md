@@ -49,7 +49,7 @@ A common thing for `MoveEffect`, `ScaleEffect` and `RotateEffect` is that it tak
 
 One of these two needs to be defined, if both are defined `duration` takes precedence.
 
-If we have a MoveEffect that should move between its start position and `Vector2(200, 300)` for
+If we have a `MoveEffect` that should move between its start position and `Vector2(200, 300)` for
 infinity and the time it should take from the start position to get back to the start position again
 is 5 seconds, the effect would look like this:
 
