@@ -25,7 +25,7 @@ because it is already applied by default on the `BaseGame` class, so you can use
 
 Flame provides some debugging features for the `BaseGame` class, these features are enabled when
 the `debugMode` property is set to `true` (or overridden to be `true`).
-When `debugMode` is enabled all `PositionComponent`s will be wrapped into a rectangle, and have
+When `debugMode` is enabled each `PositionComponent` will be rendered with their bounding size, and have
 their positions rendered on the screen, so you can visually verify the components boundaries and
 positions.
 
