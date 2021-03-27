@@ -170,7 +170,7 @@ The effects in the list should only be passed to the CombinedEffect, never added
 `PositionComponent` with `addEffect`.
 
 **Note**: No effects should be of the same type since they will clash when trying to modify the
-PositionComponent.
+`PositionComponent`.
 
 You can make the combined effect go in a loop by setting both `isInfinite: true` and
 isAlternating: true`.
