@@ -99,15 +99,15 @@ class Camera {
   /// ```
   ///   camera.snapTo(newPosition);
   /// ```
-  Vector2 get position => __position.clone();
+  Vector2 get position => _internalPosition.clone();
 
   /// Do not change this directly since it bypasses [onPositionUpdate]
-  final Vector2 __position = Vector2.zero();
+  final Vector2 _internalPosition = Vector2.zero();
 
-  Vector2 get _position => __position;
+  Vector2 get _position => _internalPosition;
   set _position(Vector2 position) {
-    __position.setFrom(position);
-    onPositionUpdate(__position);
+    _internalPosition.setFrom(position);
+    onPositionUpdate(_internalPosition);
   }
 
   /// If set, the camera will "follow" this vector, making sure that this
