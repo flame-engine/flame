@@ -184,7 +184,7 @@ final combination = CombinedEffect(
 myComponent.addEffect(combination);
 ```
 
-An example of how to use the CombinedEffect can be found
+An example of how to use the `CombinedEffect` can be found
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects/combined_effect.dart).
 
 ## Examples
