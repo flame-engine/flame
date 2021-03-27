@@ -116,7 +116,7 @@ square.addEffect(ScaleEffect(
 Applied to `PositionComponent`s, this effect can be used to rotate the component, using an
 [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
 
-The angle (`radians`) is in radians and the speed is in radians per second, so if you for example
+The `radians` argument defines the angle in radians and the `speed` argument is how fast it will rotate in radians per second, so if you for example
 want to turn 180° in 2 seconds you set `radians: pi` and `speed: 0.25`.
 
 Remember that you can give `duration` as an argument instead of `speed` to say how long the effect
