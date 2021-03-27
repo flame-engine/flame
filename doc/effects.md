@@ -22,7 +22,7 @@ them you can get different effects.
  `curve` it will go back in reverse through the `curve`.
  - If `isInfinite` is `true` and `isAlternating` is `false` the effect will be applied from start to end
  of the curve and then restart from the start, for an infinite amount of time.
- - If `isInfinite` is false and `isAlternating` is true the effect will go from the beginning of the
+ - If `isInfinite` is `false` and `isAlternating` is `true` the effect will go from the beginning of the
  curve and then back again but after that stop.
  - `isInfinite` and `isAlternating` are false by default and then the effect is just applied once,
  from the beginning of the curve until the end.
