@@ -1,7 +1,7 @@
 # Widgets
 
 One cool feature when developing games with Flutter is the ability to use Flutter's extensive
-toolset for building UIs, Flame tries to expand on that by introducing widgets that are made wit
+toolset for building UIs, Flame tries to expand on that by introducing widgets that are made with
 games in mind.
 
 Here you can find all the available widgets provided by Flame.
