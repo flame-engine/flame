@@ -33,3 +33,5 @@ Another example: pre caching audio using `flame_audio` package also doesn't work
 not supporting it on web. This can be worked around by using the `http` package, and requesting a
 get to the audio file, that will make the browser cache the file producing the same effect as on
 mobile.
+
+If you want to create instances of `ui.Image` on the web you can use our `Flame.images.decodeImageFromPixels` method. This wraps the `decodeImageFromPixels` from the `ui` library, but with support for the web platform. If the `runAsWeb` argument is set to `true` (by default it is set to `kIsWeb`) it will decode the image using a internal image method. When the `runAsWeb` is `false` it will use the `decodeImageFromPixels`, which is currently not supported on the web.  
