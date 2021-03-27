@@ -1,8 +1,8 @@
 # Collision detection
 If you want to have a full blown physics engine in your game we recommend that you use
 Forge2D by adding [flame_forge2d](https://github.com/flame-engine/flame_forge2d) as a dependency.
-But if you have a simpler usecase and just want to check for collisions of components and improve
-the accuraccy of gestures, Flame's built-in collision detection will serve you very well.
+But if you have a simpler use-case and just want to check for collisions of components and improve
+the accuracy of gestures, Flame's built-in collision detection will serve you very well.
 
 If you have the following needs you should at least consider to use
 [Forge2D](https://github.com/flame-engine/forge2d):
