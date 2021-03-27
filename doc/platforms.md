@@ -8,7 +8,7 @@ At the moment, Flame supports both mobile and web.
 ## Flutter channels
 
 Flame keeps it support on the stable channel. The dev, beta and master channel should work, but we don't
-support them. This meaning that issues happening outside the stable channel are not a priority.
+support them. This means that issues happening outside the stable channel are not a priority.
 
 ## Flame web
 
