@@ -24,7 +24,7 @@ If you are previously familiar with Box2D it can be good to know that the whole 
 Box2d world is mapped to `world` in the `Forge2DGame` component and every `Body` should be a
 `BodyComponent`, and added to your `Forge2DGame`.
 
-You can have for example a HUD and other non-physics-related components in your `Forge2DGame's
+You can have for example a HUD and other non-physics-related components in your `Forge2DGame`'s
 component list along with your physical entities. When the update is called, it will use the Forge2D
 physics engine to properly update every child.
 
