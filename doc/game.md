@@ -51,7 +51,7 @@ main() {
 ```
 
 **Note:** Do not instantiate your game in a build method. Instead you should create an instance of
- your game and reference it within your widget structure, like it is done it in the example above.
+ your game and reference it within your widget structure, like it is done in the example above.
  Otherwise your game will be rebuilt every time the Flutter tree gets rebuilt.
 
 To remove components from the list on a `BaseGame` the `remove` or `removeAll` methods can be used.
