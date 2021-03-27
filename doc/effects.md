@@ -2,7 +2,7 @@
 
 An effect can be applied to any `Component` that the effect supports.
 
-At the moment there are only `PositionComponentEffect`s, which are applied to `PositionComponent``s,
+At the moment there are only `PositionComponentEffect`s, which are applied to `PositionComponent`s,
 which are presented below.
 
 If you want to create an effect for another component just extend the `ComponentEffect` class and
