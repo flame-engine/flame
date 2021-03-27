@@ -81,6 +81,6 @@ A `PaletteEntry` is a `const` class that holds information of a color and it has
 members:
 
  - `color`: returns the `Color` specified
- - `paint`: creates a new `Paint` with the color specified. `Paint` is a non-const class, so this
+ - `paint`: creates a new `Paint` with the color specified. `Paint` is a non-`const` class, so this
   method actually creates a brand new instance every time it's called. It's safe to cascade
   mutations to this.
