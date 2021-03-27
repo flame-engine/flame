@@ -4,7 +4,7 @@ Throughout your game you are going to need to use colors in lots of places. Ther
 `dart:ui` that can be used, `Color` and `Paint`.
 
 The `Color` class represents a ARGB color in a hexadecimal integer
-format. So to create a `Color` object you just need to pass in the color as an integer in the ARGB
+format. So to create a `Color` instance you just need to pass the color as an integer in the ARGB
 format.
 
 You can use Dart's hexadecimal notation to make it really easy; for instance: `0xFF00FF00` is fully
