@@ -21,7 +21,7 @@ It is called `Forge2DGame` and it will control the adding and removal of Forge2D
 as well as your normal components.
 
 If you are previously familiar with Box2D it can be good to know that the whole concept of the
-box2d world is mapped to `world` in the `Forge2DGame` component and every Body should be a
+Box2d world is mapped to `world` in the `Forge2DGame` component and every `Body` should be a
 `BodyComponent`, and added to your `Forge2DGame`.
 
 You can have for example a HUD and other non-physics-related components in your `Forge2DGame's
