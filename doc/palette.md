@@ -77,7 +77,7 @@ class Palette {
 }
 ```
 
-A `PaletteEntry` is a const class that holds information of a color and it has the following
+A `PaletteEntry` is a `const` class that holds information of a color and it has the following
 members:
 
  - `color`: returns the `Color` specified
