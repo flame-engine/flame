@@ -26,7 +26,7 @@ To build the game for production, using skia, use the following:
 
 ### Web support
 
-When using Flame on the web some methods may not work. For example `Flame.util.setOrientation` and
+When using Flame on the web some methods may not work. For example `Flame.device.setOrientation` and
 `Flame.util.fullScreen` won't work on web, they can be called, but nothing will happen.
 
 Another example: pre caching audio using `flame_audio` package also doesn't work due to Audioplayers
