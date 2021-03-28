@@ -66,8 +66,8 @@ final bodyDef = BodyDef()
 
 Now you have to make an implementation of `ContactCallback` where you set which two types that it
 should react when they come in contact.
-If you have two `BodyComponent`s named `Ball` and `Wall` and you want to do something when they come in
-contact, you could do something like this:
+If you have two `BodyComponent`s named `Ball` and `Wall` and you want to do something when they come
+in contact, you could do something like this:
 
 ```dart
 class BallWallCallback implements ContactCallback<Ball, Wall> {

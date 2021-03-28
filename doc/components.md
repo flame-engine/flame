@@ -324,9 +324,12 @@ final parallaxComponent = ParallaxComponent.fromParallax(
 );
 ```
 
-* The stars image in this example will be repeatedly drawn in both axis, align in the center and be scaled to fill the screen width.
-* The planets image will be repeated in Y-axis, aligned to the bottom left of the screen and not be scaled.
-* The dust image will be repeated in X-axis, aligned to the top right and scaled to fill the screen height.
+ - The stars image in this example will be repeatedly drawn in both axis, align in the center and be
+ scaled to fill the screen width.
+ - The planets image will be repeated in Y-axis, aligned to the bottom left of the screen and not be
+ scaled.
+ - The dust image will be repeated in X-axis, aligned to the top right and scaled to fill the screen
+ height.
 
 Once you are done setting up your `ParallaxComponent`, add it to the game like with any other
 component (`game.add(parallaxComponent`).

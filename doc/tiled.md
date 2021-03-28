@@ -9,9 +9,9 @@ the tiles, objects and everything in there.
 Flame also provides a simple `Tiled` class and its component wrapper `TiledComponent`, for the map
 rendering, which renders the tiles on the screen and supports rotations and flips.
 
-Other advanced features are not yet supported, but you can easily read the objects and other features
-of the tmx and add custom behaviour (eg regions for triggers and walking areas, custom animated
-objects).
+Other advanced features are not yet supported, but you can easily read the objects and other
+features of the tmx and add custom behaviour (eg regions for triggers and walking areas, custom
+animated objects).
 
 You can check a working example
 [here](https://github.com/flame-engine/flame_tiled/tree/main/example).
