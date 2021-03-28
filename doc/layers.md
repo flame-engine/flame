@@ -12,8 +12,8 @@ There are two types of layers on Flame:
 ## DynamicLayer
 
 Dynamic layers are layers that are rendered every time that they are drawn on the canvas. As the
-name suggests, it is meant for dynamic content and is most useful for grouping rendering that are of
-the same context.
+name suggests, it is meant for dynamic content and is most useful for grouping rendering of objects
+that have the same context.
 
 Usage example:
 ```dart
