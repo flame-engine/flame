@@ -90,4 +90,4 @@ class MyTextBox extends TextBoxComponent {
 ```
 
 Both components are showcased in an example
-[here](https://github.com/luanpotter/flame/tree/master/doc/examples/text)
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/rendering/text.dart)
