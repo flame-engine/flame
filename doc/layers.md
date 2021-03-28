@@ -47,7 +47,7 @@ class MyGame extends Game {
 
 ## PreRenderedLayer
 
-Pre-rendered layers are layers that are rendered only once, cached in memory and then just
+Pre-rendered layers are rendered only once, cached in memory and then just
 replicated on the game canvas afterwards. They are useful for caching content that doesn't change
 during the game, like a background for example.
 
