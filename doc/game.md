@@ -124,7 +124,7 @@ Since a Flame game can be wrapped in a widget, it is quite easy to use it alongs
 widgets. But still, there is the Widgets Overlay API that makes things even easier.
 
 `Game.overlays` enables to any Flutter widget to be shown on top of a game instance, this makes it
-very easy to create things like a pause menu, or an inventory screen for example.
+very easy to create things like a pause menu or an inventory screen.
 This property that will be used to manage the active overlays.
 
 This management happens via the `game.overlays.add` and `game.overlays.remove` methods that marks an
