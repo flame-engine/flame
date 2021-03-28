@@ -37,6 +37,6 @@ mobile.
 If you want to create instances of `ui.Image` on the web you can use our
 `Flame.images.decodeImageFromPixels` method. This wraps the `decodeImageFromPixels` from the `ui`
 library, but with support for the web platform. If the `runAsWeb` argument is set to `true` (by
-default it is set to `kIsWeb`) it will decode the image using a internal image method. When the
+default it is set to `kIsWeb`) it will decode the image using an internal image method. When the
 `runAsWeb` is `false` it will use the `decodeImageFromPixels`, which is currently not supported on
 the web.
