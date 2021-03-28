@@ -135,7 +135,8 @@ All render methods from the Sprite class can receive a `Paint` instance as the o
 
 Sprites can also be used as widgets, to do so just use `SpriteWidget` class.
 
-A complete example using sprite as widgets can be found [here](https://github.com/flame-engine/flame/tree/master/doc/examples/animation_widget).
+A complete example using sprite as widgets can be found
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widget/sprite_widget.dart).
 
 ## SpriteBatch
 
@@ -147,7 +148,8 @@ You render it with a `Canvas` and an optional `Paint`, `BlendMode` and `CullRect
 
 A `SpriteBatchComponent` is also available for your convenience.
 
-See the examples [here](https://github.com/flame-engine/flame/tree/master/doc/examples/sprite_batch).
+See the examples
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/sprites/spritebatch.dart).
 
 ## ImageComposition
 
@@ -264,7 +266,8 @@ Animations, after created, have an update and render method; the latter renders 
 
 Animations are normally used inside `SpriteAnimationComponent`s, but custom components with several Animations can be created as well.
 
-A complete example of using animations as widgets can be found [here](https://github.com/flame-engine/flame/tree/master/doc/examples/animation_widget).
+A complete example of using animations as widgets can be found
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widgets/sprite_animation_widget.dart).
 
 ## FlareAnimation
 
@@ -307,8 +310,11 @@ class MyGame extends Game {
 }
 ```
 
-FlareAnimations are normally used inside `FlareComponent`s, that way `BaseGame` will handle calling `render` and `update` automatically.
-You can see a full example of the SpriteSheet class [here](https://github.com/flame-engine/flame/tree/master/doc/examples/flare).
+FlareAnimations are normally used inside `FlareComponent`s, that way `BaseGame` will handle calling
+`render` and `update` automatically.
+
+You can see a full example of how to use Flare together with Flame in the example
+[here](https://github.com/flame-engine/flame_flare/tree/main/example).
 
 ## SpriteSheet
 
@@ -333,7 +339,8 @@ You can also get a single frame of the sprite sheet using the `getSprite` method
 spritesheet.getSprite(0, 0) // row, column;
 ```
 
-You can see a full example of the SpriteSheet class [here](https://github.com/flame-engine/flame/tree/master/doc/examples/spritesheet).
+You can see a full example of the SpriteSheet class
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/sprites/spritebatch.dart).
 
 ## `Flame.images.decodeImageFromPixels()`
 

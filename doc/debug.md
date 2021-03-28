@@ -30,5 +30,5 @@ When `debugMode` is enabled, each `PositionComponent` will be rendered with thei
 have their positions written on the screen. This way, you can visually verify the components
 boundaries and positions.
 
-To see a working example of the debugging features of the `BaseGame`,
-check this [example](https://github.com/flame-engine/flame/tree/master/doc/examples/debug).
+To see a working example of the debugging features of the `BaseGame`, check this
+[example](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/components/debug.dart).

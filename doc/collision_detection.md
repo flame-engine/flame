@@ -236,4 +236,4 @@ you can use the optional arguments `radius` and `position` to set those, if the 
 `size` of the `Circle` will be automatically set too.
 
 ## Example
-https://github.com/flame-engine/flame/tree/master/doc/examples/collidables
+https://github.com/flame-engine/flame/tree/main/examples/lib/stories/collidables

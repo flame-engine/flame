@@ -102,7 +102,7 @@ parameters of your `ContactCallback` like this:
 `class BallAnythingCallback implements ContactCallback<Ball, BodyComponent> ...`
 
 An implementation example can be seen in the
-[Flame Forge2D example](https://github.com/flame-engine/flame_forge2d/blob/master/example).
+[Flame Forge2D example](https://github.com/flame-engine/flame_forge2d/blob/main/example).
 
 ## Viewport and Camera
 

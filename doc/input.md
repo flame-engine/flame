@@ -428,7 +428,7 @@ enum ActionEvent { DOWN, UP, MOVE, CANCEL }
 ```
 
 You can also check a more complete example
-[here](https://github.com/flame-engine/flame/tree/master/doc/examples/joystick).
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/controls/joystick.dart).
 
 ## Gamepad
 
