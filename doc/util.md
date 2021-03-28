@@ -4,8 +4,9 @@ On this page you can find documentation for some utility classes and methods.
 
 ## Device Class
 
-This class, accessible via `Flame.device`, has some functions that can be used to control the state
-of the device, like changing the screen orientation for example.
+This class can be accessed from `Flame.device` and it has some methods that can be used to control
+the state of the device, for instance you can change the screen orientation and set whether the
+application should be fullscreen or not.
 
 ### `Flame.device.fullScreen()`
 
