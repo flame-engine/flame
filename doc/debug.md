@@ -23,7 +23,7 @@ class MyGame extends Game with FPSCounter {
 If you are using `BaseGame`, you don't have to apply the `FPSCounter` mixin to get access to the current FPS,
 because it is already applied by default (so you can use the `fps` method directly).
 
-Flame provides some debugging features for the `BaseGame` class, these features are enabled when
+Flame provides some debugging features for the `BaseGame` class. These features are enabled when
 the `debugMode` property is set to `true` (or overridden to be `true`).
 When `debugMode` is enabled each `PositionComponent` will be rendered with their bounding size, and have
 their positions rendered on the screen, so you can visually verify the components boundaries and
