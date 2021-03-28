@@ -63,9 +63,9 @@ Flame's `Game` class is an implementation of a Game Loop, which the basic struct
 games are built on. It is called a Game Loop because it really works as an infinite loop that will
 continue to iterate as long as the game is running. The loop goes through the following steps:
 
- - 1: Take input from the player
- - 2: Process the logic for the next frame
- - 3: Render the frame.
+ 1. Take input from the player
+ 2. Process the logic for the next frame
+ 3. Render the frame.
 
 In this tutorial we will focus on both step two and three.
 
@@ -104,7 +104,7 @@ class MyGame extends Game {
   // example, Rect will do fine for us.
   late Rect squarePos;
 
-  // To reprent our direction, we will be using an int value, where 1 means
+  // To represent our direction, we will be using an int value, where 1 means
   // going to the right, and -1 going to the left, this may seems like a too much
   // simple way of representing a direction, and indeed it is, but this will
   // will work fine for our small example and will make more sense when we implement
@@ -120,7 +120,7 @@ class MyGame extends Game {
     squarePos = Rect.fromLTWH(0, 0, 100, 100);
   }
 
-  // Update and render ommited
+  // Update and render omitted
 }
 ```
 
@@ -162,7 +162,7 @@ implement our update method:
     //
     // To illustrate this, if our square moves at 200 logical pixels per second, and half a second
     // has passed, our square should have moved 100 logical pixels on this iteration
-    squarePos = squarePos.translate(square_speed * squareDirection * dt, 0);
+    squarePos = squarePos.translate(squareSpeed * squareDirection * dt, 0);
 
     // This simple condition verifies if the square is going right, and has reached the end of the
     // screen and if so, we invert the direction.
