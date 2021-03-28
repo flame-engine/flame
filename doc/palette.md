@@ -17,7 +17,7 @@ digits means fully opaque, and the min (00 = 0) means fully transparent.
 In the material flutter package there is a `Colors` class that provides common colors as constants:
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show Colors;
 
 const black = Colors.black;
 ```

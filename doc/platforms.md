@@ -1,7 +1,7 @@
 # Supported Platforms
 
-Flame runs on top of Flutter, so its supported platforms depend on how mature/stable support for
-each platform is by Flutter.
+Since Flame runs on top of Flutter, so its supported platforms depend on which platforms that are
+supported by Flutter.
 
 At the moment, Flame supports both mobile and web.
 
@@ -14,7 +14,7 @@ don't support them. This means that issues happening outside the stable channel 
 
 To use Flame on web you need to make sure your game is using the CanvasKit/[Skia](https://skia.org/)
 renderer, this will increase performance on the web as it will use the `canvas` element instead of
-seperate HTML elements. 
+separate HTML elements.
 
 To run your game using skia, use the following command: 
 

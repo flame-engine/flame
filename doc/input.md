@@ -392,5 +392,10 @@ enum ActionEvent { DOWN, UP, MOVE, CANCEL }
 
 ```
 
-You can also check a more complete example [here](https://github.com/flame-engine/flame/tree/master/doc/examples/joystick).
+You can also check a more complete example
+[here](https://github.com/flame-engine/flame/tree/master/doc/examples/joystick).
 
+## Gamepad
+
+Flame has a separate plugin for gamepad support, you can checkout the plugin
+[here](https://github.com/fireslime/flame_gamepad) for more information.

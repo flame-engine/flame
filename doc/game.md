@@ -2,14 +2,14 @@
 
 `BaseGame` is the most basic and most commonly used `Game` class in Flame.
 
-The `BaseGame` class implements a `Component` based `Game` for you; basically it has a list of
-`Component`s and passes the `update` and `render` calls to all `Component`s that have been added to
-the game. You can still extend those methods to add custom behavior, and you will get a few other
-features for free, like the passing of `resize` methods (every time the screen is resized the
-information will be passed to the resize methods of all your components) and also a basic camera
-feature.
+The `BaseGame` class implements a `Component` based `Game`. Basically it has a list of `Component`s
+and passes the `update` and `render` calls to all `Component`s that have been added to the game.
 
 We refer to this component based system as the Flame Component System, FCS for short.
+
+Every time the game needs to be resized, for example when the orientation is changed,
+`BaseGame` will call all of the `Component`s `resize` methods and it will also pass this information
+to the camera and viewport.
 
 The `BaseGame.camera` controls which point in the coordinate space should be the top-left of the
 screen (it defaults to [0,0] like a regular `Canvas`).
@@ -45,7 +45,7 @@ main() {
   runApp(
     GameWidget(
       game: myGame,
-    )
+    ),
   );
 }
 ```
@@ -77,10 +77,8 @@ The `Game` class is a low-level API that can be used when you want to implement 
 how the game engine should be structured. `Game` does not implement any `update` or
 `render` function for example and is therefore marked as abstract.
 
-**Note**: While the `Game` class allows for more freedom, we do not recommend working with it unless
- you know what you are doing. The `BaseGame` class provides most functionality that you would need
- already out of the box and has different optimization things in place for a smooth gaming
- experience.
+**Note**: The `Game` class allows for more freedom of how to implement things, but you are also
+missing out on a lot of the built-in features in Flame if you use it.
 
 An example of how a `Game` implementation could look like:
 
@@ -123,21 +121,20 @@ The `GameLoop` is used by all of Flame's `Game` implementations.
 Since a Flame game can be wrapped in a widget, it is quite easy to use it alongside other Flutter
 widgets. But still, there is the Widgets Overlay API that makes things even easier.
 
-`Game.overlays` enables to any Flutter widget to be shown on top of a game instance, this makes it
-very easy to create things like a pause menu or an inventory screen.
-This property that will be used to manage the active overlays.
+`Game.overlays` enables any Flutter widget to be shown on top of a game instance, this makes it very
+easy to create things like a pause menu or an inventory screen for example.
 
-This management happens via the `game.overlays.add` and `game.overlays.remove` methods that marks an
+This management is done via the `game.overlays.add` and `game.overlays.remove` methods that marks an
 overlay to be shown or hidden, respectively, via a `String` argument that identifies the overlay.
 After that it can be specified which widgets represent each overlay in the `GameWidget` declaration
 by setting a `overlayBuilderMap`.
 
 ```dart
-// Inside game methods:
-final pauseOverlayIdentifier = "PauseMenu";
+// Inside the game methods:
+final pauseOverlayIdentifier = 'PauseMenu';
 
-overlays.add(pauseOverlayIdentifier); // Marks "PauseMenu" to be rendered.
-overlays.remove(pauseOverlayIdentifier); // Marks "PauseMenu" to not be rendered.
+overlays.add(pauseOverlayIdentifier); // Marks 'PauseMenu' to be rendered.
+overlays.remove(pauseOverlayIdentifier); // Marks 'PauseMenu' to not be rendered.
 ```
 
 ```dart
@@ -148,16 +145,16 @@ Widget build(BuildContext context) {
   return GameWidget(
     game: game,
     overlayBuilderMap: {
-      "PauseMenu": (ctx) {
-        return Text("A pause menu");
+      'PauseMenu': (ctx) {
+        return Text('A pause menu');
       },
     },
   );
 }
 ```
 
-The order in which the overlays are declared in the `overlayBuilderMap` defines which overlay
-will be rendered first.
+The order in which the overlays are declared in the `overlayBuilderMap` defines which order the
+overlays will be rendered.
 
 Here you can see a
 [working example](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widgets/overlay.dart)

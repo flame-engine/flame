@@ -1,18 +1,19 @@
 # Layers
 
-Layers are an useful feature that lets you group rendering by context, as well as allow you to
-pre-render things. This enables, for example, rendering parts of your game that don't change much in
-memory, like a background. By doing this, you'll free resources for more dynamic content that needs
-to be rendered every loop cycle.
+Layers allow you to group rendering by context, as well as allow you to pre-render things. This
+enables, for example, rendering parts of your game that don't change much in memory, like a
+background. By doing this, you'll free processing power for more dynamic content that needs to be
+rendered every game tick.
 
-There are two types of layers on Flame: `DynamicLayer` (for things that are moving or changing) and
-`PreRenderedLayer` (for things that are static).
+There are two types of layers on Flame:
+ - `DynamicLayer`: For things that are moving or changing.
+ - `PreRenderedLayer`: For things that are static.
 
 ## DynamicLayer
 
-Dynamic layers are layers that are rendered every time that they are draw on the canvas. As the name
-suggests, it is meant for dynamic content and is most useful to group rendering that are of the
-same context.
+Dynamic layers are layers that are rendered every time that they are drawn on the canvas. As the
+name suggests, it is meant for dynamic content and is most useful for grouping rendering that are of
+the same context.
 
 Usage example:
 ```dart
