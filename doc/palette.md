@@ -22,8 +22,8 @@ import 'package:flutter/material.dart' show Colors;
 const black = Colors.black;
 ```
 
-Some more complex methods might also take a `Paint` object, which is a more complete option that
-allows you to define more options related to stroke, colors, filters and blends.
+Some more complex methods might also take a `Paint` object, which is a more complete structure that
+allows you to configure aspects related to stroke, colors, filters and blends.
 However, normally when using even the more complex APIs, you just want an instance of a `Paint`
 object representing just a single simple plain solid color.
 
