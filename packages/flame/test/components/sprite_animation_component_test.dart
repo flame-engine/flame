@@ -13,11 +13,7 @@ void main() async {
     data[i + 2] = 255;
     data[i + 3] = 255;
   }
-  final image = await Flame.images.decodeImageFromPixels(
-    data,
-    1,
-    1,
-  );
+  final image = await Flame.images.decodeImageFromPixels(data, 1, 1);
 
   final size = Vector2(1.0, 1.0);
 
