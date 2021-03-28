@@ -206,6 +206,9 @@ Methods:
 
 ### Vector2
 
+This class comes from the `vector_math` package and we have some useful extension methods on top of
+what is offered by that package.
+
 Methods:
  - `toOffset`: Creates a `Offset` from the `Vector2`.
  - `toPoint`: Creates a `Point` from the `Vector2`.
@@ -217,9 +220,11 @@ Methods:
   optionally defined `Vector2`, otherwise around the center.
  - `scaleTo`: Changes the length of the `Vector2` to the length provided, without changing
   direction.
- - `fromInts`: Create a `Vector2` with ints as input
+
+Factories:
+ - `fromInts`: Create a `Vector2` with ints as input,
 
 Operators:
  - `&`: Combines two `Vector2`s to form a Rect, the origin should be on the left and the size on the
-  right
- - `%`: Modulo/Remainder of x and y separately of two `Vector2`s
+  right.
+ - `%`: Modulo/Remainder of x and y separately of two `Vector2`s.

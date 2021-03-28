@@ -1,8 +1,8 @@
 # Widgets
 
-One cool feature when developing games with Flutter is the ability to use Flutter's extensive
-toolset for building UIs, Flame tries to expand on that by introducing widgets that are made with
-games in mind.
+One advantage when developing games with Flutter is the ability to use Flutter's extensive toolset
+for building UIs, Flame tries to expand on that by introducing widgets that are made with games in
+mind.
 
 Here you can find all the available widgets provided by Flame.
 
@@ -25,7 +25,7 @@ implemented as a component in the `NineTileBoxComponent` so that you can add thi
 to your `BaseGame`. To get to know more about this, check the component docs
 [here](components.md#nine-tile-box-component).
 
-Here you can find an example of how to use it (without using the `NineTileBoxComponent`:
+Here you can find an example of how to use it (without using the `NineTileBoxComponent`):
 
 ```dart
 import 'package:flame/widgets/nine_tile_box.dart';
@@ -45,8 +45,6 @@ useful when trying to create non-default looking buttons. For example when it is
 achieve your wanted look by drawing the button in a graphics editor, instead of making it directly
 in Flutter.
 
-Remember that the Sprites must already be loaded when passing them to the widget.
-
 How to use it:
 
 ```dart
@@ -62,7 +60,7 @@ SpriteButton(
 
 ## SpriteWidget
 
-`SpriteWidget` is a widget used to display [SpriteAnimations](images.md#animation) inside a widget
+`SpriteWidget` is a widget used to display a [Sprite](images.md#sprite) inside a widget
 tree.
 
 This is how to use it:

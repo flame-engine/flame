@@ -13,7 +13,8 @@ class MyGame extends Game with FPSCounter {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    fpsTextConfig.render(canvas, fps(120).toString(), Vector2(0, 50));
+    final fpsCount = fps(120); // The average FPS for the last 120 microseconds.
+    fpsTextConfig.render(canvas, fpsCount.toString(), Vector2(0, 50));
   }
 }
 ```
