@@ -21,8 +21,8 @@ The `shouldRemove` variable can be overridden or set to true and `BaseGame` will
 component before the next update loop. It will then no longer be rendered or updated. Note that
 `game.remove(Component c)` can also be used to remove components from the game.
 
-The `isHUD` variable can be overridden or set to true (defaults to `false`) to make the `BaseGame` ignore
-the `camera` for this element, make it static in relation to the screen that is.
+The `isHUD` variable can be overridden or set to true (defaults to `false`) to make the `BaseGame`
+ignore the `camera` for this element, make it static in relation to the screen that is.
 
 The `onMount` method can be overridden to run initialization code for the component. When this
 method is called, BaseGame ensures that all the mixins which would change this component's behavior

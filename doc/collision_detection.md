@@ -105,9 +105,9 @@ The `CollidableType` enum contains the following values:
  - `inactive` will not collide with any other `Collidable`s
 
 So if you have collidables that you don't need to check collisions against each other you can mark
-them as passive by setting `collidableType = CollidableType.passive`, this could for example be ground
-components or maybe your enemies don't need to check collisions between each other, then they could
-be marked as passive too.
+them as passive by setting `collidableType = CollidableType.passive`, this could for example be
+ground components or maybe your enemies don't need to check collisions between each other, then they
+could be marked as passive too.
 
 Then we have the `inactive` type which simply doesn't get checked at all in the collision detection.
 This could be used for example if you have components outside of the screen that you don't care
