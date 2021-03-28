@@ -29,8 +29,9 @@ object representing just a single simple plain solid color.
 
 **Note:** we don't recommend that you create a new `Paint` object every time you need a specific
 `Paint`, since it could potentially lead to a lot of unnecessary objects being created. A better way
-is to either define the `Paint` object somewhere and re-use it, or to use the `Palette` class to
-define all the colors that you want to use in your game.
+is to either define the `Paint` object somewhere and re-use it (however, do note that the `Paint`
+class is mutable, unlike `Color`), or to use the `Palette` class to define all the colors that you
+want to use in your game.
 
 You can create such an object like this:
 
