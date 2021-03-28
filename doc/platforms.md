@@ -13,8 +13,8 @@ don't support them. This means that issues happening outside the stable channel 
 ## Flame web
 
 To use Flame on web you need to make sure your game is using the CanvasKit/[Skia](https://skia.org/)
-renderer, this will increase performance on the web as it will use the `canvas` element instead of
-separate HTML elements.
+renderer. This will increase performance on the web, as it will use the `canvas` element instead of
+separate DOM elements. 
 
 To run your game using skia, use the following command: 
 
