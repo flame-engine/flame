@@ -1,11 +1,12 @@
 # Structure
 
-The only structure you are required to comply is having an assets folder with two sub folders: audio and images.
+The only structure you are required to comply to when making a Flame game is having an assets folder
+with two sub folders: audio and images.
 
-An example:
+If using the following example code:
 
 ```dart
-  Flame.audio.play('explosion.mp3');
+  FlameAudio.play('explosion.mp3');
 
   Flame.images.load('player.png');
   Flame.images.load('enemy.png');

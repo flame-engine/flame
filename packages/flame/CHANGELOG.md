@@ -11,6 +11,7 @@
  - Fixing Flutter and Dart version constraints
  - Exporting Images and AssetsCache
  - Remove the SpriteAnimationComponent when the animation is really done, not when it is on the last frame
+ - Revamp all the docs to be up to date with v1.0.0
 
 ## 1.0.0-rc8
  - Migrate to null safety
