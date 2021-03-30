@@ -21,8 +21,8 @@ The `shouldRemove` variable can be overridden or set to true and `BaseGame` will
 component before the next update loop. It will then no longer be rendered or updated. Note that
 `game.remove(Component c)` can also be used to remove components from the game.
 
-The `isHUD` variable can be overridden or set to true (defaults to `false`) to make the `BaseGame` ignore
-the `camera` for this element, make it static in relation to the screen that is.
+The `isHUD` variable can be overridden or set to true (defaults to `false`) to make the `BaseGame`
+ignore the `camera` for this element, make it static in relation to the screen that is.
 
 The `onMount` method can be overridden to run initialization code for the component. When this
 method is called, BaseGame ensures that all the mixins which would change this component's behavior
@@ -235,7 +235,7 @@ controller.rightHandNode.rotation = math.pi;
 You can also change the current playing animation by using the `updateAnimation` method.
 
 For a working example, check the example in the
-[flame_flare repository](https://github.com/flame-engine/flame_flare/tree/master/example).
+[flame_flare repository](https://github.com/flame-engine/flame_flare/tree/main/example).
 
 ## ParallaxComponent
 
@@ -324,9 +324,12 @@ final parallaxComponent = ParallaxComponent.fromParallax(
 );
 ```
 
-* The stars image in this example will be repeatedly drawn in both axis, align in the center and be scaled to fill the screen width.
-* The planets image will be repeated in Y-axis, aligned to the bottom left of the screen and not be scaled.
-* The dust image will be repeated in X-axis, aligned to the top right and scaled to fill the screen height.
+ - The stars image in this example will be repeatedly drawn in both axis, align in the center and be
+ scaled to fill the screen width.
+ - The planets image will be repeated in Y-axis, aligned to the bottom left of the screen and not be
+ scaled.
+ - The dust image will be repeated in X-axis, aligned to the top right and scaled to fill the screen
+ height.
 
 Once you are done setting up your `ParallaxComponent`, add it to the game like with any other
 component (`game.add(parallaxComponent`).
