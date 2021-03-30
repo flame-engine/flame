@@ -2,6 +2,9 @@
 
 ## [next]
 
+## 0.29.4
+- Update audioplayers to 0.18.3
+
 ## 0.29.3
 - Upgrade audioplayers to fix a few bugs
 
