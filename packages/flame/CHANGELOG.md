@@ -10,6 +10,7 @@
  - Adding some more basic colors entries to the `BasicPalette`
  - Fixing Flutter and Dart version constraints
  - Exporting Images and AssetsCache
+ - Revamp all the docs to be up to date with v1.0.0
 
 ## 1.0.0-rc8
  - Migrate to null safety

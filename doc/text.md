@@ -4,7 +4,8 @@ Flame has some dedicated classes to help you render text.
 
 ## TextConfig
 
-A Text Config contains all typographical information required to render text; i.e., font size and color, family, etc.
+A Text Config contains all typographical information required to render text; i.e., font size and
+color, family, etc.
 
 Example usage:
 
@@ -12,12 +13,14 @@ Example usage:
 const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font');
 ```
 
-* fontFamily : a commonly available font, like Arial (default), or a custom font added in your pubspec (see [here](https://flutter.io/custom-fonts/) how to do it)
-* fontSize : font size, in pts (default `24.0`)
-* lineHeight: height of text line, as a multiple of font size (default `null`)
-* color : the color, as a `ui.Color` (default black)
+ - `fontFamily`: a commonly available font, like Arial (default), or a custom font added in your
+ pubspec (see [here](https://flutter.io/custom-fonts/) how to do it).
+ - `fontSize`: font size, in pts (default `24.0`).
+ - `lineHeight`: height of text line, as a multiple of font size (default `null`).
+ - `color`: the color, as a `ui.Color` (default black).
 
-For more information regarding colors and how to create then, see the [Colors and the Palette](palette.md) guide.
+For more information regarding colors and how to create then, see the
+[Colors and the Palette](palette.md) guide.
 
 After the creation of the config you can use its `render` method to draw some string on a canvas:
 
@@ -25,15 +28,17 @@ After the creation of the config you can use its `render` method to draw some st
 config.render(canvas, "Flame is awesome", Position(10, 10));
 ```
 
-If you want to set the anchor of the text you can also do that in the render call, with the optional parameter `anchor`:
+If you want to set the anchor of the text you can also do that in the render call, with the optional
+`anchor` parameter:
 
 ```dart
-config.render(canvas, "Flame is awesome", Position(10, 10), anchor: Anchor.topCenter);
+config.render(canvas, 'Flame is awesome', Vector2(10, 10), anchor: Anchor.topCenter);
 ```
 
 ## Text Components
 
-Flame provides two text components that make it even easier to render text in your game: `TextComponent` and `TextBoxComponent`.
+Flame provides two text components that make it even easier to render text in your game:
+`TextComponent` and `TextBoxComponent`.
 
 ### TextComponent
 
@@ -57,9 +62,11 @@ class MyGame extends BaseGame {
 
 ### TextBoxComponent
 
-`TextBoxComponent` is very similar to `TextComponent`, but as its name suggest it is used to render text inside a bounding box, creating line breaks according to the provided box size.
+`TextBoxComponent` is very similar to `TextComponent`, but as its name suggest it is used to render
+text inside a bounding box, creating line breaks according to the provided box size.
 
-You can decide if the box should grow as the text is written or if it should be static by the `growingBox` variable in the `TextBoxConfig`.
+You can decide if the box should grow as the text is written or if it should be static by the
+`growingBox` variable in the `TextBoxConfig`.
 
 If you want to change the margins of the box use the `margins` variable in the `TextBoxConfig`.
 
@@ -82,4 +89,5 @@ class MyTextBox extends TextBoxComponent {
 }
 ```
 
-Both components are showcased in an example [here](https://github.com/luanpotter/flame/tree/master/doc/examples/text)
+Both components are showcased in an example
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/rendering/text.dart)
