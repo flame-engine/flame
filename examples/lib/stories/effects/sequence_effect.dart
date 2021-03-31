@@ -13,11 +13,10 @@ class SequenceEffectGame extends BaseGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    add(
-      greenSquare = SquareComponent()
-        ..paint = green
-        ..position = Vector2.all(100),
-    );
+    greenSquare = SquareComponent()
+      ..paint = green
+      ..position.setValues(100, 100);
+    add(greenSquare);
   }
 
   @override

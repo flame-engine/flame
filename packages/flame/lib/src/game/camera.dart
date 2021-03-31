@@ -35,7 +35,7 @@ void _moveToTarget(
 /// There are three major factors that determine the camera position:
 ///
 /// * Follow
-/// If you want, you can call [followObject] at the beginning of your
+/// If you want, you can call [followComponent] at the beginning of your
 /// stage/world/level, and provided a [PositionComponent].
 /// The camera will follow this component making sure its position is fixed
 /// on the screen.
@@ -89,29 +89,36 @@ class Camera {
   double cameraSpeed = defaultCameraSpeed;
   double shakeIntensity = defaultShakeIntensity;
 
-  /// This is the current position of the camera, ie the world coordinate that is
-  /// rendered on the top left of the screen (origin of the screen space).
+  /// This is the current position of the camera, ie the world coordinate that
+  /// is rendered on the top left of the screen (origin of the screen space).
   ///
   /// Zero means no translation is applied.
   /// You can't change this directly; the camera will handle all ongoing
   /// movements so they smoothly transition.
   /// If you want to immediately snap the camera to a new place, you can do:
   /// ```
-  ///   camera.moveTo(newPosition);
-  ///   camera.snap();
+  ///   camera.snapTo(newPosition);
   /// ```
-  Vector2 get position => _position.clone();
+  Vector2 get position => _internalPosition.clone();
 
-  final Vector2 _position = Vector2.zero();
+  /// Do not change this directly since it bypasses [onPositionUpdate]
+  final Vector2 _internalPosition = Vector2.zero();
 
-  /// If set, the camera will "follow" this component, making sure that this
-  /// component is always rendered in a fixed position in the screen, by
-  /// immediately moving the camera to "focus" on the object.
+  Vector2 get _position => _internalPosition;
+  set _position(Vector2 position) {
+    _internalPosition.setFrom(position);
+    onPositionUpdate(_internalPosition);
+  }
+
+  /// If set, the camera will "follow" this vector, making sure that this
+  /// vector is always rendered in a fixed position in the screen, by
+  /// immediately moving the camera to "focus" on the where the vector is.
   ///
-  /// You probably want to set it to the player component.
-  /// Note that this is not smooth because the movement of the follow object
+  /// You might want to set it to the player component by using the
+  /// [followComponent] method.
+  /// Note that this is not smooth because the movement of the followed vector
   /// is assumed to be smooth.
-  PositionComponent? follow;
+  Vector2? follow;
 
   /// Where in the screen the follow object should be.
   ///
@@ -146,10 +153,10 @@ class Camera {
 
     if (_targetCameraDelta != null && _currentCameraDelta != null) {
       _moveToTarget(_currentCameraDelta!, _targetCameraDelta!, ds);
-      _position.setFrom(_currentCameraDelta! + shake);
+      _position = _currentCameraDelta! + shake;
     } else {
       _moveToTarget(_currentRelativeOffset, _targetRelativeOffset, ds);
-      _position.setFrom(_getTarget() + shake);
+      _position = _target() + shake;
     }
 
     if (shaking) {
@@ -182,23 +189,23 @@ class Camera {
 
   // Follow
 
-  /// Immediately snaps the camera to start following the object [follow].
+  /// Immediately snaps the camera to start following the [component].
   ///
-  /// This means that the camera will move so that the [follow] object is
-  /// in a fixed position on the screen.
+  /// This means that the camera will move so that the position vector of the
+  /// component is in a fixed position on the screen.
   /// That position is determined by a fraction of screen size defined by
   /// [relativeOffset] (default to the center).
   /// [worldBounds] can be optionally set to add boundaries to how far the
   /// camera is allowed to move.
-  /// The object is "grabbed" by its anchor (default top left). So for example
-  /// if you want the center of the object to be at the fixed position, set
-  /// its anchor to center.
-  void followObject(
-    PositionComponent follow, {
+  /// The component is "grabbed" by its anchor (default top left).
+  /// So for example if you want the center of the object to be at the fixed
+  /// position, set the components anchor to center.
+  void followComponent(
+    PositionComponent component, {
     Vector2? relativeOffset,
     Rect? worldBounds,
   }) {
-    this.follow = follow;
+    follow = component.position;
     this.worldBounds = worldBounds;
     _targetRelativeOffset.setFrom(relativeOffset ?? Anchor.center.toVector2());
     _currentRelativeOffset.setFrom(_targetRelativeOffset);
@@ -214,12 +221,12 @@ class Camera {
     _targetRelativeOffset.setFrom(newRelativeOffset);
   }
 
-  Vector2 _getTarget() {
+  Vector2 _target() {
     if (follow == null) {
       return Vector2.zero();
     }
     final screenDelta = gameRef.size.clone()..multiply(_currentRelativeOffset);
-    final attemptedTarget = follow!.position - screenDelta;
+    final attemptedTarget = follow! - screenDelta;
 
     final bounds = worldBounds;
     if (bounds != null) {
@@ -259,9 +266,16 @@ class Camera {
   ///
   /// The camera will be smoothly transitioned to this position.
   /// This will replace any previous targets.
-  void moveTo(Vector2 p) {
+  void moveTo(Vector2 position) {
     _currentCameraDelta = _position;
-    _targetCameraDelta = p.clone();
+    _targetCameraDelta = position.clone();
+  }
+
+  /// Instantly moves the camera to the target, bypassing follow.
+  /// This will replace any previous targets.
+  void snapTo(Vector2 position) {
+    moveTo(position);
+    snap();
   }
 
   /// Smoothly resets any moveTo targets.
@@ -290,4 +304,8 @@ class Camera {
     }
     return 0.0;
   }
+
+  /// If you need updated on when the position of the camera is updated you
+  /// can override this.
+  void onPositionUpdate(Vector2 position) {}
 }
