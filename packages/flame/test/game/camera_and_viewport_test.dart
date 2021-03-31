@@ -11,10 +11,13 @@ import '../util/mock_canvas.dart';
 
 class TestComponent extends PositionComponent {
   static final Paint _paint = Paint();
-  TestComponent(Vector2 position) {
-    this.position = position;
-    size = Vector2.all(1.0);
-  }
+
+  TestComponent(Vector2 position)
+      : super(
+          position: position,
+          size: Vector2.all(1.0),
+        );
+
   @override
   void render(Canvas c) {
     super.render(c);
@@ -181,10 +184,10 @@ void main() {
       final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
       game.add(p);
       game.update(0);
-      game.camera.followObject(p);
+      game.camera.followComponent(p);
 
       expect(game.camera.position, Vector2.all(0.0));
-      p.position = Vector2(10.0, 20.0);
+      p.position.setValues(10.0, 20.0);
       // follow happens immediately because the object's movement is assumed to be smooth
       game.update(0);
       // (10,20) - half screen (50,50)
@@ -210,10 +213,10 @@ void main() {
       game.add(p);
       game.update(0);
       // this would be a typical vertical shoot-em-up
-      game.camera.followObject(p, relativeOffset: Vector2(0.5, 0.8));
+      game.camera.followComponent(p, relativeOffset: Vector2(0.5, 0.8));
 
       expect(game.camera.position, Vector2.all(0.0));
-      p.position = Vector2(600.0, 2000.0);
+      p.position.setValues(600.0, 2000.0);
       // follow happens immediately because the object's movement is assumed to be smooth
       game.update(0);
       // (600,2000) - fractional screen (50,80)
@@ -238,29 +241,29 @@ void main() {
       final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
       game.add(p);
       game.update(0);
-      game.camera.followObject(
+      game.camera.followComponent(
         p,
         worldBounds: const Rect.fromLTWH(-1000, -1000, 2000, 2000),
       );
 
-      p.position = Vector2(600.0, 700.0); // well within bounds
+      p.position.setValues(600.0, 700.0); // well within bounds
       game.update(0);
       expect(game.camera.position, Vector2(550, 650));
 
       // x ok, y starts to get to bounds
-      p.position = Vector2(600.0, 950.0); // right on the edge
+      p.position.setValues(600.0, 950.0); // right on the edge
       game.update(0);
       expect(game.camera.position, Vector2(550, 900));
 
-      p.position = Vector2(600.0, 950.0); // stop advancing
+      p.position.setValues(600.0, 950.0); // stop advancing
       game.update(0);
       expect(game.camera.position, Vector2(550, 900));
 
-      p.position = Vector2(-1100.0, 950.0);
+      p.position.setValues(-1100.0, 950.0);
       game.update(0);
       expect(game.camera.position, Vector2(-1000, 900));
 
-      p.position = Vector2(1000.0, 1000.0);
+      p.position.setValues(1000.0, 1000.0);
       game.update(0);
       expect(game.camera.position, Vector2(900, 900));
     });
@@ -271,7 +274,7 @@ void main() {
       final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
       game.add(p);
       game.update(0);
-      game.camera.followObject(
+      game.camera.followComponent(
         p,
         worldBounds: const Rect.fromLTWH(0, 0, 100, 100),
       );
@@ -280,11 +283,11 @@ void main() {
       game.update(0);
       expect(game.camera.position, Vector2(50, 50));
 
-      p.position = Vector2(60.0, 50.0);
+      p.position.setValues(60.0, 50.0);
       game.update(0);
       expect(game.camera.position, Vector2(50, 50));
 
-      p.position = Vector2(-10.0, -20.0);
+      p.position.setValues(-10.0, -20.0);
       game.update(0);
       expect(game.camera.position, Vector2(50, 50));
     });
@@ -299,7 +302,7 @@ void main() {
 
       final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
       game.add(p);
-      game.camera.followObject(
+      game.camera.followComponent(
         p,
         // this could be a typical mario-like platformer, where the player is more on the bottom left to allow the scenario to be seem
         relativeOffset: Vector2(0.25, 0.25),
@@ -309,19 +312,19 @@ void main() {
       game.update(0);
       expect(game.camera.position, Vector2(0, 0));
 
-      p.position = Vector2(30.0, 0.0);
+      p.position.setValues(30.0, 0.0);
       game.update(0);
       expect(game.camera.position, Vector2(5, 0));
 
-      p.position = Vector2(30.0, 100.0);
+      p.position.setValues(30.0, 100.0);
       game.update(0);
       expect(game.camera.position, Vector2(5, 75));
 
-      p.position = Vector2(30.0, 1000.0);
+      p.position.setValues(30.0, 1000.0);
       game.update(0);
       expect(game.camera.position, Vector2(5, 900));
 
-      p.position = Vector2(950.0, 20.0);
+      p.position.setValues(950.0, 20.0);
       game.update(0);
       expect(game.camera.position, Vector2(900, 0));
     });

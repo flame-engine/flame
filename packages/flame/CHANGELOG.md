@@ -10,6 +10,8 @@
  - Adding some more basic colors entries to the `BasicPalette`
  - Fixing Flutter and Dart version constraints
  - Exporting Images and AssetsCache
+ - Make `size` and `position` in `PositionComponent` final
+ - Add a `snapTo` and `onPositionUpdate` method to the `Camera`
  - Remove the SpriteAnimationComponent when the animation is really done, not when it is on the last frame
  - Revamp all the docs to be up to date with v1.0.0
 
