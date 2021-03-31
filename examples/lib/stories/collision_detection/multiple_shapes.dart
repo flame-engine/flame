@@ -127,26 +127,25 @@ class CollidableCircle extends MyCollidable {
 
 class SnowmanPart extends HitboxCircle {
   static const startColor = Colors.white;
-  Color currentColor = startColor;
+  final hitPaint = Paint()
+    ..color = startColor
+    ..strokeWidth = 1
+    ..style = PaintingStyle.stroke;
 
   SnowmanPart(double definition, Vector2 relativePosition, Color hitColor)
       : super(definition: definition) {
     this.relativePosition.setFrom(relativePosition);
     onCollision = (Set<Vector2> intersectionPoints, HitboxShape other) {
       if (other.component is ScreenCollidable) {
-        currentColor = startColor;
+        hitPaint..color = startColor;
       } else {
-        currentColor = hitColor;
+        hitPaint..color = hitColor;
       }
     };
   }
 
   @override
   void render(Canvas canvas, Paint paint) {
-    final hitPaint = Paint()
-      ..strokeWidth = 1
-      ..style = PaintingStyle.stroke
-      ..color = currentColor;
     super.render(canvas, hitPaint);
   }
 }
@@ -154,7 +153,6 @@ class SnowmanPart extends HitboxCircle {
 class CollidableSnowman extends MyCollidable {
   CollidableSnowman(Vector2 position, Vector2 size, Vector2 velocity)
       : super(position, size, velocity) {
-    debugMode = true;
     rotationSpeed = 0.2;
     final top = SnowmanPart(0.4, Vector2(0, -0.8), Colors.red);
     final middle = SnowmanPart(0.6, Vector2(0, -0.3), Colors.yellow);
