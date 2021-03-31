@@ -3,6 +3,7 @@ import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 
 import 'stories/animations/animations.dart';
+import 'stories/collision_detection/collision_detection.dart';
 import 'stories/components/components.dart';
 import 'stories/controls/controls.dart';
 import 'stories/effects/effects.dart';
@@ -21,6 +22,7 @@ void main() async {
 
   addAnimationStories(dashbook);
   addComponentsStories(dashbook);
+  addCollisionDetectionStories(dashbook);
   addEffectsStories(dashbook);
   addTileMapStories(dashbook);
   addControlsStories(dashbook);
