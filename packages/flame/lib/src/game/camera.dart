@@ -222,10 +222,10 @@ class Camera {
   }
 
   Vector2 _target() {
-    if (follow == null) {
-      return Vector2.zero();
-    }
     final screenDelta = gameRef.size.clone()..multiply(_currentRelativeOffset);
+    if (follow == null) {
+      return -screenDelta;
+    }
     final attemptedTarget = follow! - screenDelta;
 
     final bounds = worldBounds;
