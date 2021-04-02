@@ -15,7 +15,12 @@ class MyCollidable extends PositionComponent
   bool _isWallHit = false;
   bool _isCollision = false;
 
-  MyCollidable(Vector2 position) : super(position: position, size: Vector2.all(100), anchor: Anchor.center,) {
+  MyCollidable(Vector2 position)
+      : super(
+          position: position,
+          size: Vector2.all(100),
+          anchor: Anchor.center,
+        ) {
     addShape(HitboxCircle());
   }
 
