@@ -149,6 +149,7 @@ void main() {
       game.camera.moveTo(Vector2.all(4.0));
       game.camera.snap();
       // the component will now be at 10 - 4 = (6, 6)
+      expect(game.camera.position, Vector2.all(4.0));
 
       final canvas = MockCanvas();
       game.render(canvas);
