@@ -204,7 +204,11 @@ class Camera {
     Vector2? relativeOffset,
     Rect? worldBounds,
   }) {
-    followVector2(component.position);
+    followVector2(
+      component.position,
+      relativeOffset: relativeOffset,
+      worldBounds: worldBounds,
+    );
   }
 
   /// Immediately snaps the camera to start following [vector2].
