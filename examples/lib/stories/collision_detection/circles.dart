@@ -55,7 +55,7 @@ class MyCollidable extends PositionComponent
 
 class Circles extends BaseGame with HasCollidables, TapDetector {
   final TextConfig fpsTextConfig = TextConfig(
-    color: const Color(0xFFFFFFFF),
+    color: BasicPalette.white.color,
   );
 
   @override
