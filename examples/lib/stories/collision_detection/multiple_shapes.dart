@@ -231,11 +231,6 @@ class MultipleShapes extends BaseGame
   }
 
   @override
-  void update(double dt) {
-    super.update(dt);
-  }
-
-  @override
   void render(Canvas canvas) {
     super.render(canvas);
     fpsTextConfig.render(
