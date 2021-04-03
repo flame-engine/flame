@@ -232,9 +232,6 @@ class MultipleShapes extends BaseGame
 
   @override
   void update(double dt) {
-    if (dt > 0.2) {
-      return;
-    }
     super.update(dt);
   }
 

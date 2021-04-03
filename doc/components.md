@@ -61,7 +61,7 @@ class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
   bool visible = false;
   final Image spriteImage;
 
-  GameOverPanel(this.spriteImage) : super();
+  GameOverPanel(this.spriteImage);
 
   @override
   Future<void> onLoad() async {
@@ -200,15 +200,15 @@ FlareController that can play multiple animations and control nodes.
 import 'package:flame_flare/flame_flare.dart';
 
 class YourFlareController extends FlareControls {
-    
-    ActorNode rightHandNode;
-    
-    void initialize(FlutterActorArtboard artboard) {
-        super.initialize(artboard);
-        
-        // get flare node
-        rightHand = artboard.getNode('right_hand');
-    }
+
+  ActorNode rightHandNode;
+
+  void initialize(FlutterActorArtboard artboard) {
+    super.initialize(artboard);
+
+    // get flare node
+    rightHand = artboard.getNode('right_hand');
+  }
 }
 
 final fileName = 'assets/george_washington.flr';
