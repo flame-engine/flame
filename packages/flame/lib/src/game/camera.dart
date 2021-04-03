@@ -4,26 +4,6 @@ import 'dart:ui' show Rect;
 import '../../components.dart';
 import '../../game.dart';
 
-/// Utility method to smoothly transition vectors.
-///
-/// It will move [current] in the direction [target] by a displacement
-/// given by [ds] pixels in that direction.
-void _moveToTarget(
-  Vector2 current,
-  Vector2 target,
-  double ds,
-) {
-  if (current != target) {
-    final diff = target - current;
-    if (diff.length < ds) {
-      current.setFrom(target);
-    } else {
-      diff.scaleTo(ds);
-      current.setFrom(current + diff);
-    }
-  }
-}
-
 /// A camera translates your game coordinate system; this is useful when your
 /// world is not 1:1 with your screen size.
 ///
@@ -151,9 +131,9 @@ class Camera {
     final ds = cameraSpeed * dt;
     final shake = Vector2(_shakeDelta(), _shakeDelta());
 
-    _moveToTarget(_currentRelativeOffset, _targetRelativeOffset, ds);
+    _currentRelativeOffset.moveToTarget(_targetRelativeOffset, ds);
     if (_targetCameraDelta != null && _currentCameraDelta != null) {
-      _moveToTarget(_currentCameraDelta!, _targetCameraDelta!, ds);
+      _currentCameraDelta?.moveToTarget(_targetCameraDelta!, ds);
     }
     _position = _target() + shake;
 
