@@ -143,8 +143,8 @@ class Camera {
   /// add any non-smooth movement.
   Rect? worldBounds;
 
-  /// If set, the camera will zoom by this ratio. This be greater than 1 (in)
-  /// or smaller (out) but should be always greater than zero.
+  /// If set, the camera will zoom by this ratio. This can be greater than 1 (zoom in)
+  /// or smaller (zoom out), but should always be greater than zero.
   ///
   /// Note: do not confuse this with the zoom applied by the viewport. The
   /// viewport applies a (normally) fixed zoom to adapt multiple screens into
