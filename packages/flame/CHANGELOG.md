@@ -15,7 +15,8 @@
  - Remove the SpriteAnimationComponent when the animation is really done, not when it is on the last frame
  - Revamp all the docs to be up to date with v1.0.0
  - Make Assets and Images caches have a configurable prefix
- - Add a renderPoint method to Canvas
+ - Add `followVector2` method to the `Camera`
+ - Add a `renderPoint` method to `Canvas`
 
 ## 1.0.0-rc8
  - Migrate to null safety
