@@ -500,15 +500,15 @@ Widget _applyAdvancedGesturesDetectors(Game game, Widget child) {
 }
 
 Widget _applyMouseDetectors(Game game, Widget child) {
-  return MouseRegion(
-    child: Listener(
+  return Listener(
+    child: MouseRegion(
       child: child,
-      onPointerSignal: (event) =>
-          game is ScrollDetector && event is PointerScrollEvent
-              ? game.onScroll(event)
-              : null,
+      onHover: game is MouseMovementDetector ? game.onMouseMove : null,
     ),
-    onHover: game is MouseMovementDetector ? game.onMouseMove : null,
+    onPointerSignal: (event) =>
+        game is ScrollDetector && event is PointerScrollEvent
+            ? game.onScroll(event)
+            : null,
   );
 }
 
