@@ -41,7 +41,7 @@ void main() {
       expect(game.size, Vector2.all(50.00));
 
       final viewport = game.viewport as FixedResolutionViewport;
-      expect(viewport.resizeOffset, Vector2(0, 0));
+      expect(viewport.resizeOffset, Vector2.zero());
       expect(viewport.scaledSize, Vector2(200.0, 200.0));
       expect(viewport.scale, 4.0);
 
@@ -149,6 +149,7 @@ void main() {
       game.camera.moveTo(Vector2.all(4.0));
       game.camera.snap();
       // the component will now be at 10 - 4 = (6, 6)
+      expect(game.camera.position, Vector2.all(4.0));
 
       final canvas = MockCanvas();
       game.render(canvas);
@@ -290,6 +291,18 @@ void main() {
       p.position.setValues(-10.0, -20.0);
       game.update(0);
       expect(game.camera.position, Vector2(50, 50));
+    });
+    test('camera relative offset without follow', () {
+      final game = BaseGame();
+      game.onResize(Vector2.all(200.0));
+
+      game.camera.setRelativeOffset(Anchor.center.toVector2());
+
+      game.update(0);
+      expect(game.camera.position, Vector2.zero());
+
+      game.update(10000);
+      expect(game.camera.position, Vector2.all(-100.0));
     });
   });
   group('viewport & camera', () {

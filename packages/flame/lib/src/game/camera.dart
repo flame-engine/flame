@@ -151,13 +151,11 @@ class Camera {
     final ds = cameraSpeed * dt;
     final shake = Vector2(_shakeDelta(), _shakeDelta());
 
+    _moveToTarget(_currentRelativeOffset, _targetRelativeOffset, ds);
     if (_targetCameraDelta != null && _currentCameraDelta != null) {
       _moveToTarget(_currentCameraDelta!, _targetCameraDelta!, ds);
-      _position = _currentCameraDelta! + shake;
-    } else {
-      _moveToTarget(_currentRelativeOffset, _targetRelativeOffset, ds);
-      _position = _target() + shake;
     }
+    _position = _target() + shake;
 
     if (shaking) {
       _shakeTimer -= dt;
@@ -175,6 +173,7 @@ class Camera {
       _currentCameraDelta!.setFrom(_targetCameraDelta!);
     }
     _currentRelativeOffset.setFrom(_targetRelativeOffset);
+    update(0);
   }
 
   /// Converts a vector in the screen space to the world space.
@@ -221,12 +220,13 @@ class Camera {
     _targetRelativeOffset.setFrom(newRelativeOffset);
   }
 
+  Vector2 _screenDelta() {
+    return gameRef.size.clone()..multiply(_currentRelativeOffset);
+  }
+
   Vector2 _target() {
-    if (follow == null) {
-      return Vector2.zero();
-    }
-    final screenDelta = gameRef.size.clone()..multiply(_currentRelativeOffset);
-    final attemptedTarget = follow! - screenDelta;
+    final target = _currentCameraDelta ?? follow ?? Vector2.zero();
+    final attemptedTarget = target - _screenDelta();
 
     final bounds = worldBounds;
     if (bounds != null) {
@@ -267,7 +267,7 @@ class Camera {
   /// The camera will be smoothly transitioned to this position.
   /// This will replace any previous targets.
   void moveTo(Vector2 position) {
-    _currentCameraDelta = _position;
+    _currentCameraDelta = _position + _screenDelta();
     _targetCameraDelta = position.clone();
   }
 
