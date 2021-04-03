@@ -184,7 +184,27 @@ class Camera {
     Vector2? relativeOffset,
     Rect? worldBounds,
   }) {
-    follow = component.position;
+    followVector2(
+      component.position,
+      relativeOffset: relativeOffset,
+      worldBounds: worldBounds,
+    );
+  }
+
+  /// Immediately snaps the camera to start following [vector2].
+  ///
+  /// This means that the camera will move so that the position vector is in a
+  /// fixed position on the screen.
+  /// That position is determined by a fraction of screen size defined by
+  /// [relativeOffset] (default to the center).
+  /// [worldBounds] can be optionally set to add boundaries to how far the
+  /// camera is allowed to move.
+  void followVector2(
+    Vector2 vector2, {
+    Vector2? relativeOffset,
+    Rect? worldBounds,
+  }) {
+    follow = vector2;
     this.worldBounds = worldBounds;
     _targetRelativeOffset.setFrom(relativeOffset ?? Anchor.center.toVector2());
     _currentRelativeOffset.setFrom(_targetRelativeOffset);
