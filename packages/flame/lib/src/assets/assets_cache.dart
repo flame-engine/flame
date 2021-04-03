@@ -7,7 +7,10 @@ import 'package:flutter/services.dart' show rootBundle;
 ///
 /// it automatically looks for files on the assets folder
 class AssetsCache {
+  final String prefix;
   final Map<String, _Asset> _files = {};
+
+  AssetsCache({this.prefix = 'assets/'});
 
   /// Removes the file from the cache
   void clear(String file) {
@@ -53,12 +56,12 @@ class AssetsCache {
   }
 
   Future<_StringAsset> _readFile(String fileName) async {
-    final string = await rootBundle.loadString('assets/$fileName');
+    final string = await rootBundle.loadString('$prefix$fileName');
     return _StringAsset(string);
   }
 
   Future<_BinaryAsset> _readBinary(String fileName) async {
-    final data = await rootBundle.load('assets/$fileName');
+    final data = await rootBundle.load('$prefix$fileName');
     final list = Uint8List.view(data.buffer);
 
     final bytes = List<int>.from(list);
