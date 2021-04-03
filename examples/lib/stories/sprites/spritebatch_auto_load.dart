@@ -9,7 +9,7 @@ class MySpriteBatchComponent extends SpriteBatchComponent
     with HasGameRef<SpritebatchAutoLoadGame> {
   @override
   Future<void> onLoad() async {
-    final spriteBatch = await gameRef!.loadSpriteBatch('boom.png');
+    final spriteBatch = await gameRef.loadSpriteBatch('boom.png');
     this.spriteBatch = spriteBatch;
 
     spriteBatch.add(
@@ -26,7 +26,7 @@ class MySpriteBatchComponent extends SpriteBatchComponent
       color: Colors.redAccent,
     );
 
-    final size = gameRef!.size;
+    final size = gameRef.size;
     const num = 100;
     final r = Random();
     for (var i = 0; i < num; ++i) {
