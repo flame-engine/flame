@@ -10,7 +10,7 @@ class AssetsCache {
   final String prefix;
   final Map<String, _Asset> _files = {};
 
-  AssetsCache({ this.prefix = 'assets/' });
+  AssetsCache({this.prefix = 'assets/'});
 
   /// Removes the file from the cache
   void clear(String file) {
