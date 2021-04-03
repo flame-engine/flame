@@ -14,6 +14,7 @@
  - Add a `snapTo` and `onPositionUpdate` method to the `Camera`
  - Remove the SpriteAnimationComponent when the animation is really done, not when it is on the last frame
  - Revamp all the docs to be up to date with v1.0.0
+ - Make Assets and Images caches have a configurable prefix
 
 ## 1.0.0-rc8
  - Migrate to null safety
