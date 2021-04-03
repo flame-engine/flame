@@ -1,6 +1,6 @@
 # Structure
 
-Flame has a proposed structure for your project that includes the standard Flutter `assets` directory in addition to two children: audio and images.
+Flame has a proposed structure for your project that includes the standard Flutter `assets` directory in addition to two children: `audio` and `images`.
 
 If using the following example code:
 
