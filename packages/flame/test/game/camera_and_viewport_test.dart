@@ -304,6 +304,28 @@ void main() {
       game.update(10000);
       expect(game.camera.position, Vector2.all(-100.0));
     });
+    test('camera zoom', () {
+      final game = BaseGame();
+      game.onResize(Vector2.all(200.0));
+      game.camera.zoom = 2;
+
+      final p = TestComponent(Vector2.all(100.0))..anchor = Anchor.center;
+      game.add(p);
+      game.update(0);
+
+      final canvas = MockCanvas();
+      game.render(canvas);
+      expect(
+        canvas.methodCalls
+            .where((e) => e.startsWith('translate') || e.startsWith('scale')),
+        [
+          'translate(0.0, 0.0)', // camera translation
+          'scale(2.0)', // camera zoom
+          'translate(100.0, 100.0)', // position component
+          'translate(-0.5, -0.5)', // anchor
+        ],
+      );
+    });
   });
   group('viewport & camera', () {
     test('default ratio viewport + camera with world boundaries', () {

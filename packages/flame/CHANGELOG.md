@@ -19,6 +19,7 @@
  - Make `gameRef` late
  - Fix Scroll example
  - Add a `renderPoint` method to `Canvas`
+ - Add zoom to the camera
 
 ## 1.0.0-rc8
  - Migrate to null safety
