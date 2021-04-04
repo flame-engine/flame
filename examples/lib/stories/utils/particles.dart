@@ -484,10 +484,7 @@ class ParticlesGame extends BaseGame {
 
   /// Returns random [Vector2] within a virtual grid cell
   Vector2 randomCellVector2() {
-    return Vector2(
-      cellSize.x * rnd.nextDouble() - halfCellSize.x,
-      cellSize.y * rnd.nextDouble() - halfCellSize.y,
-    );
+    return cellSize * (Vector2.random() - Vector2.random());
   }
 
   /// Returns random [Color] from primary swatches
