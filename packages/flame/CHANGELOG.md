@@ -18,6 +18,7 @@
  - Add `followVector2` method to the `Camera`
  - Make `gameRef` late
  - Fix Scroll example
+ - Add a `renderPoint` method to `Canvas`
  - Add `moveToTarget` as an extension method to `Vector2`
 
 ## 1.0.0-rc8
