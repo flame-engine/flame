@@ -8,6 +8,7 @@
     - [Platforms](platforms.md)
     - [Collision detection](collision_detection.md)
     - [Effects](effects.md)
+    - [Camera & Viewport](camera_and_viewport.md)
 
 - Audio
     - [General Audio](audio.md)

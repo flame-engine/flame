@@ -1,7 +1,8 @@
 import 'dart:math' as math;
-import 'dart:ui' show Rect;
+import 'dart:ui' show Rect, Canvas;
 
 import '../../components.dart';
+import '../../extensions.dart';
 import '../../game.dart';
 
 /// Utility method to smoothly transition vectors.
@@ -142,7 +143,32 @@ class Camera {
   /// add any non-smooth movement.
   Rect? worldBounds;
 
+  /// If set, the camera will zoom by this ratio. This can be greater than 1 (zoom in)
+  /// or smaller (zoom out), but should always be greater than zero.
+  ///
+  /// Note: do not confuse this with the zoom applied by the viewport. The
+  /// viewport applies a (normally) fixed zoom to adapt multiple screens into
+  /// one aspect ratio. The zoom might be different per dimension depending
+  /// on the Viewport implementation. Also, if used with the default
+  /// BaseGame implementation, it will apply to all components.
+  /// The zoom from the camera is only for components that respect camera,
+  /// and is applied after the viewport is set. It exists to be used if there
+  /// is any kind of user configurable camera on your game.
+  double zoom = 1.0;
+
   Camera();
+
+  /// Use this method to transform the canvas using the current rules provided
+  /// by this camera object.
+  ///
+  /// If you are using BaseGame, this will be done for you for all non-HUD
+  /// components.
+  /// When using this method you are responsible for saving/restoring canvas
+  /// state to avoid leakage.
+  void apply(Canvas canvas) {
+    canvas.translateVector(-position);
+    canvas.scale(zoom);
+  }
 
   /// This smoothly updates the camera for an amount of time [dt].
   ///
@@ -178,12 +204,12 @@ class Camera {
 
   /// Converts a vector in the screen space to the world space.
   Vector2 screenToWorld(Vector2 screenCoordinates) {
-    return screenCoordinates + _position;
+    return (screenCoordinates + _position) / zoom;
   }
 
   /// Converts a vector in the world space to the screen space.
   Vector2 worldToScreen(Vector2 worldCoordinates) {
-    return worldCoordinates - _position;
+    return worldCoordinates * zoom - _position;
   }
 
   // Follow
