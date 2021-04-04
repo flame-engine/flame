@@ -14,7 +14,6 @@ These are the viewports available to pick from (or you can implement the interfa
 
  * `DefaultViewport`: this is the no-op viewport that is associated by default with any `BaseGame`.
  * `FixedResolutionViewport`: this viewport transforms your Canvas so that, from the game perspective, the dimensions are always set to a fixed pre-defined value. This means it will scale the game as much as possible and add black bars if needed.
- * More viewports are planned!
 
 When using `BaseGame`, the operations performed by the viewport are done automatically to every render operation, and the `size` property in the game, instead of the logical widget size, becomes the size as seen through the viewport. If for some reason you need to access the original real logical pixel size, you can use `canvasSize`. For a more in depth description on what each Viewport does and how it operates, check the documentation on its class.
 
@@ -42,4 +41,4 @@ There are two types of transformations that the Camera can apply to the Canvas. 
 
 Finally the second transformation that the camera applies is scaling. That allows for dynamic zooming, and it's controlled by the `zoom` field. There is no zoom speed, that must be controlled by you when changing. The `zoom` variable is immediately applied.
 
-When dealing with events, it is imperative to convert screen coordinates to world coordinates (or, for some reasons, you might want to do the reverse). The Camera provides two functions, `screenToWorld` and `worldToScreen` to easily convert between these coordinate spaces.
+When dealing with input events, it is imperative to convert screen coordinates to world coordinates (or, for some reasons, you might want to do the reverse). The Camera provides two functions, `screenToWorld` and `worldToScreen` to easily convert between these coordinate spaces.
