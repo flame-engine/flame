@@ -131,15 +131,14 @@ abstract class Particle {
   /// Allowing to specify desired position speed and acceleration and leave
   /// the basic physics do the rest.
   Particle accelerated({
-    Vector2?
-        acceleration, // TODO: Any of these should maybe be required? What else is the use
+    required Vector2 acceleration,
     Vector2? position,
     Vector2? speed,
   }) {
     return AcceleratedParticle(
       position: position ?? Vector2.zero(),
       speed: speed ?? Vector2.zero(),
-      acceleration: acceleration ?? Vector2.zero(),
+      acceleration: acceleration,
       child: this,
       lifespan: _lifespan,
     );

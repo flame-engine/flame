@@ -15,7 +15,6 @@ class MovingParticle extends CurvedParticle with SingleChildParticle {
   Particle child;
 
   final Vector2 from;
-
   final Vector2 to;
 
   MovingParticle({

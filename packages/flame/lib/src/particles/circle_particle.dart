@@ -7,7 +7,6 @@ import 'particle.dart';
 /// Consider composing with other [Particle] to achieve needed effects.
 class CircleParticle extends Particle {
   final Paint paint;
-
   final double radius;
 
   CircleParticle({

@@ -11,8 +11,8 @@ import 'particle.dart';
 ///
 /// ```dart
 /// AcceleratedParticle(
-///   speed: Vector2(0, 100), // is 100 logical pixels per second down.
-///   acceleration: Vector2(-40, 0) will accelerate to the left at rate of 40 px/s
+///   speed: Vector2(0, 100), // is 100 logical px/s down.
+///   acceleration: Vector2(-40, 0) // will accelerate to the left at rate of 40 px/s
 /// )
 /// ```
 class AcceleratedParticle extends CurvedParticle with SingleChildParticle {
@@ -20,9 +20,7 @@ class AcceleratedParticle extends CurvedParticle with SingleChildParticle {
   Particle child;
 
   final Vector2 acceleration;
-
   Vector2 speed;
-
   Vector2 position;
 
   AcceleratedParticle({

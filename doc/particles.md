@@ -10,12 +10,12 @@ import 'package:flame/components.dart';
 // ... 
 
 game.add(
-    /// Wrapping a [Particle] with [ParticleComponent]
-    /// which maps [Component] lifecycle hooks to [Particle] ones
-    /// and embeds a trigger for removing the component.
-    ParticleComponent(
-        particle: CircleParticle()
-    )
+  /// Wrapping a [Particle] with [ParticleComponent]
+  /// which maps [Component] lifecycle hooks to [Particle] ones
+  /// and embeds a trigger for removing the component.
+  ParticleComponent(
+    particle: CircleParticle(),
+  ),
 );
 ```
 
@@ -33,8 +33,8 @@ Below you can find an example of a effect showing a burst of circles, accelerati
 Random rnd = Random();
 
 Vector2 randomVector2() => Vector2(
-    rnd.nextDouble() * 200 - 100, 
-    rnd.nextDouble() * 200 - 100,
+  rnd.nextDouble() * 200 - 100, 
+  rnd.nextDouble() * 200 - 100,
 );
 
 /// Composition.
@@ -45,17 +45,17 @@ Vector2 randomVector2() => Vector2(
 ///     > AcceleratedParticle 
 ///       > CircleParticle
 game.add(
-    ParticleComponent(
-        particle: Particle.generate(
-            count: 10,
-            generator: (i) => AcceleratedParticle(
-                acceleration: randomVector2(),
-                child: CircleParticle(
-                    paint: Paint()..color = Colors.red,
-                ),
-            ),
+  ParticleComponent(
+    particle: Particle.generate(
+      count: 10,
+      generator: (i) => AcceleratedParticle(
+        acceleration: randomVector2(),
+        child: CircleParticle(
+          paint: Paint()..color = Colors.red,
         ),
+      ),
     ),
+  ),
 );
 
 /// Chaining.
@@ -63,13 +63,13 @@ game.add(
 /// Expresses same behavior as above, but with more fluent API.
 /// Only [Particles] with [SingleChildParticle] mixin can be used as chainable behaviors.
 game.add(
-    Particle
-        .generate(
-            count: 10,
-            generator: (i) => CircleParticle(paint: Paint()..color = Colors.red)
+  Particle
+    .generate(
+      count: 10,
+      generator: (i) => CircleParticle(paint: Paint()..color = Colors.red)
                     .accelerating(randomVector2())
-        )
-        .asComponent(),
+      )
+      .asComponent(),
 );
 
 /// Computed Particle.
@@ -77,25 +77,25 @@ game.add(
 /// All the behavior is defined explicitly. Offers greater flexibility
 /// compared to built-in behaviors.
 game.add(
-    Particle
-        .generate(
-            count: 10,
-            generator: (i) {
-                final position = Vector2.zero();
-                final speed = Vector2.zero();
-                final acceleration = randomVector2();
-                final paint = Paint()..color = Colors.red;
+  Particle
+    .generate(
+      count: 10,
+      generator: (i) {
+        final position = Vector2.zero();
+        final speed = Vector2.zero();
+        final acceleration = randomVector2();
+        final paint = Paint()..color = Colors.red;
 
-                return ComputedParticle(
-                    renderer: (canvas, _) {
-                        speed += acceleration;
-                        position += speed;
-                        canvas.drawCircle(position, 10, paint);
-                    }
-                );
-            }
-        )
-        .asComponent()
+        return ComputedParticle(
+          renderer: (canvas, _) {
+            speed += acceleration;
+            position += speed;
+            canvas.drawCircle(position, 10, paint);
+          }
+        );
+      }
+    )
+    .asComponent()
 )
 ```
 
@@ -137,14 +137,14 @@ The `lifespan` is passed down to all the descendants of a given `Particle`, if i
 ## Built-in particles
 
 Flame ships with a few built-in `Particle` behaviors:
-* The `TranslatedParticle`, translates its `child` by given `Vector2`
-* The `MovingParticle`, moves its `child` between two predefined `Vector2`, supports `Curve`
-* The `AcceleratedParticle`, allows basic physics based effects, like gravitation or speed dampening
-* The `CircleParticle`, renders circles of all shapes and sizes
-* The `SpriteParticle`, renders Flame `Sprite` within a `Particle` effect
-* The `ImageParticle`, renders *dart:ui* `Image` within a `Particle` effect
-* The `ComponentParticle`, renders Flame `Component` within a `Particle` effect
-* The `FlareParticle`, renders Flare animation within a `Particle` effect
+* The `TranslatedParticle` translates its `child` by given `Vector2`
+* The `MovingParticle` moves its `child` between two predefined `Vector2`, supports `Curve`
+* The `AcceleratedParticle` allows basic physics based effects, like gravitation or speed dampening
+* The `CircleParticle` renders circles of all shapes and sizes
+* The `SpriteParticle` renders Flame `Sprite` within a `Particle` effect
+* The `ImageParticle` renders *dart:ui* `Image` within a `Particle` effect
+* The `ComponentParticle` renders Flame `Component` within a `Particle` effect
+* The `FlareParticle` renders Flare animation within a `Particle` effect
 
 More examples of using these behaviors together are available [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/utils/particles.dart). All the implementations are available in the [particles](https://github.com/flame-engine/flame/tree/main/packages/flame/lib/src/particles) folder on the Flame repository.
 
@@ -156,13 +156,13 @@ Same effect could be achieved by translating the `Canvas` layer.
 
 ```dart
 game.add(
-    ParticleComponent(
-        particle: TranslatedParticle(
-            // Will translate child Particle effect to the center of game canvas.
-            offset: game.size / 2,
-            child: Particle(),
-        ),
+  ParticleComponent(
+    particle: TranslatedParticle(
+      // Will translate child Particle effect to the center of game canvas.
+      offset: game.size / 2,
+      child: Particle(),
     ),
+  ),
 );
 ```
 
@@ -172,14 +172,14 @@ Moves child `Particle` between `from` and `to` `Vector2`s during its lifespan. S
 
 ```dart
 game.add(
-    ParticleComponent(
-        particle: MovingParticle(
-            // Will move from corner to corner of the game canvas.
-            from: Vector2.zero(),
-            to: game.size,
-            child: Particle(),
-        ),
+  ParticleComponent(
+    particle: MovingParticle(
+      // Will move from corner to corner of the game canvas.
+      from: Vector2.zero(),
+      to: game.size,
+      child: Particle(),
     ),
+  ),
 );
 ```
 
@@ -192,17 +192,17 @@ Unit of the `Vector2` value is _logical px/s_. So a speed of `Vector2(0, 100)` w
 ```dart
 final rnd = Random();
 game.add(
-    ParticleComponent(
-        particle: AcceleratedParticle(
-            // Will fire off in the center of game canvas
-            position: game.size.center(Vector2.zero()),
-            // With random initial speed of Vector2(-100..100, 0..-100)
-            speed: Vector2(rnd.nextDouble() * 200 - 100, -rnd.nextDouble() * 100),
-            // Accelerating downwards, simulating "gravity"
-            speed: Vector2(0, 100),
-            child: Particle(),
-        ),
+  ParticleComponent(
+    particle: AcceleratedParticle(
+      // Will fire off in the center of game canvas
+      position: game.size.center(Vector2.zero()),
+      // With random initial speed of Vector2(-100..100, 0..-100)
+      speed: Vector2(rnd.nextDouble() * 200 - 100, -rnd.nextDouble() * 100),
+      // Accelerating downwards, simulating "gravity"
+      speed: Vector2(0, 100),
+      child: Particle(),
     ),
+  ),
 );
 ```
 
@@ -213,12 +213,12 @@ in order to achieve desired positioning.
 
 ```dart
 game.add(
-    ParticleComponent(
-        particle: CircleParticle(
-            radius: game.size.width / 2,
-            paint: Paint()..color = Colors.red.withOpacity(.5),
-        ),
+  ParticleComponent(
+    particle: CircleParticle(
+      radius: game.size.width / 2,
+      paint: Paint()..color = Colors.red.withOpacity(.5),
     ),
+  ),
 );
 ```
 
@@ -228,12 +228,12 @@ Allows you to embed Flame's `Sprite` into your particle effects. Useful when con
 
 ```dart
 game.add(
-    ParticleComponent(
-        particle: SpriteParticle(
-          sprite: Sprite('sprite.png'),
-          size: Vector2(64, 64),
-        ),
+  ParticleComponent(
+  particle: SpriteParticle(
+      sprite: Sprite('sprite.png'),
+      size: Vector2(64, 64),
     ),
+  ),
 );
 ```
 
@@ -244,7 +244,7 @@ Renders given `dart:ui` image within the particle tree.
 ```dart
 // During game initialisation
 await Flame.images.loadAll(const [
-    'image.png',
+  'image.png',
 ]);
 
 // ...
@@ -253,12 +253,12 @@ await Flame.images.loadAll(const [
 final image = await Flame.images.load('image.png');
 
 game.add(
-    ParticleComponent(
-        particle: ImageParticle(
-          size: Vector2.all(24),
-          image: image,
-        );
-    ),
+  ParticleComponent(
+    particle: ImageParticle(
+      size: Vector2.all(24),
+      image: image,
+    );
+  ),
 );
 ```
 
@@ -273,11 +273,11 @@ final spritesheet = SpriteSheet(
 );
 
 game.add(
-    ParticleComponent(
-        particle: AnimationParticle(
-          animation: spritesheet.createAnimation(0, stepTime: 0.1),
-        );
-    ),
+  ParticleComponent(
+    particle: AnimationParticle(
+      animation: spritesheet.createAnimation(0, stepTime: 0.1),
+    );
+  ),
 );
 ```
 
@@ -291,24 +291,24 @@ please consider adding it to the `game` directly, without the `Particle` in the 
 final longLivingRect = RectComponent();
 
 game.add(
-    ParticleComponent(
-        particle: ComponentParticle(
-          component: longLivingRect
-        );
-    ),
+  ParticleComponent(
+    particle: ComponentParticle(
+      component: longLivingRect
+    );
+  ),
 );
 
 class RectComponent extends Component {
-    void render(Canvas c) {
-        c.drawRect(
-            Rect.fromCenter(center: Offset.zero, width: 100, height: 100), 
-            Paint()..color = Colors.red
-        );
-    }
+  void render(Canvas c) {
+    c.drawRect(
+      Rect.fromCenter(center: Offset.zero, width: 100, height: 100), 
+      Paint()..color = Colors.red
+    );
+  }
 
-    void update(double dt) {
-        /// Will be called by parent [Particle]
-    }
+  void update(double dt) {
+    /// Will be called by parent [Particle]
+  }
 }
 ```
 
@@ -329,9 +329,9 @@ flareAnimation.height = flareSize;
 
 // Somewhere in game
 game.add(
-    ParticleComponent(
-        particle: FlareParticle(flare: flareAnimation),
-    ),
+  ParticleComponent(
+    particle: FlareParticle(flare: flareAnimation),
+  ),
 );
 ```
 
@@ -347,21 +347,21 @@ to perform necessary computations and render something to the `Canvas`
 
 ```dart
 game.add(
-    ParticleComponent(
-        // Renders a circle which gradually changes its color and size during the particle lifespan.
-        particle: ComputedParticle(
-            renderer: (canvas, particle) => canvas.drawCircle(
-                Offset.zero,
-                particle.progress * 10,
-                Paint()
-                  ..color = Color.lerp(
-                    Colors.red,
-                    Colors.blue,
-                    particle.progress,
-                  ),
-            ),
-        ),
+  ParticleComponent(
+    // Renders a circle which gradually changes its color and size during the particle lifespan.
+    particle: ComputedParticle(
+      renderer: (canvas, particle) => canvas.drawCircle(
+        Offset.zero,
+        particle.progress * 10,
+        Paint()
+          ..color = Color.lerp(
+            Colors.red,
+            Colors.blue,
+            particle.progress,
+          ),
+      ),
     ),
+  ),
 )
 ```
 
@@ -379,24 +379,24 @@ For example, randomly positioning it's child during each frame:
 ```dart
 var rnd = Random();
 class GlitchParticle extends Particle with SingleChildParticle {
-    @override
-    Particle child;
+  @override
+  Particle child;
 
-    GlitchParticle({
-        @required this.child,
-        double lifespan,
-    }) : super(lifespan: lifespan);
+  GlitchParticle({
+    @required this.child,
+    double lifespan,
+  }) : super(lifespan: lifespan);
 
-    @override
-    render(Canvas canvas)  {
-        canvas.save();
-        canvas.translate(rnd.nextDouble() * 100, rnd.nextDouble() * 100);
+  @override
+  render(Canvas canvas)  {
+    canvas.save();
+    canvas.translate(rnd.nextDouble() * 100, rnd.nextDouble() * 100);
 
-        // Will also render the child
-        super.render();
+    // Will also render the child
+    super.render();
 
-        canvas.restore();
-    }
+    canvas.restore();
+  }
 }
 ```
 

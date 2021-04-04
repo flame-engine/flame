@@ -71,4 +71,10 @@ extension Vector2Extension on Vector2 {
 
   /// Create a Vector2 with ints as input
   static Vector2 fromInts(int x, int y) => Vector2(x.toDouble(), y.toDouble());
+
+  /// Creates a heading [Vector2] with the given angle in radians.
+  static Vector2 fromRadians(double r) => Vector2(cos(r), sin(r));
+
+  /// Creates a heading [Vector2] with the given angle in degrees.
+  static Vector2 fromDegrees(double d) => fromRadians(d * degrees2Radians);
 }
