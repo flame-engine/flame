@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-class Square extends PositionComponent with HasGameRef<Composability> {
+class Square extends PositionComponent {
   Square(Vector2 position, Vector2 size, {double angle = 0}) {
     this.position.setFrom(position);
     this.size.setFrom(size);

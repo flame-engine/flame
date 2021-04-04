@@ -24,7 +24,7 @@ class MovableSquare extends SquareComponent
     timer = Timer(3.0)
       ..stop()
       ..callback = () {
-        gameRef!.camera.setRelativeOffset(Anchor.center.toVector2());
+        gameRef.camera.setRelativeOffset(Anchor.center.toVector2());
       };
   }
 
@@ -50,7 +50,7 @@ class MovableSquare extends SquareComponent
   @override
   void onCollision(Set<Vector2> points, Collidable other) {
     if (other is Rock) {
-      gameRef!.camera.setRelativeOffset(Anchor.topCenter.toVector2());
+      gameRef.camera.setRelativeOffset(Anchor.topCenter.toVector2());
       timer.start();
     }
   }
