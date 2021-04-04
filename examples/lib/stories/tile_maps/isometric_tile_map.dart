@@ -34,8 +34,8 @@ class Selector extends SpriteComponent {
 }
 
 class IsometricTileMapGame extends BaseGame with MouseMovementDetector {
-  IsometricTileMapComponent base;
-  Selector selector;
+  late IsometricTileMapComponent base;
+  late Selector selector;
 
   IsometricTileMapGame();
 
@@ -73,12 +73,9 @@ class IsometricTileMapGame extends BaseGame with MouseMovementDetector {
 
   @override
   void onMouseMove(PointerHoverEvent event) {
-    if (base == null || selector == null) {
-      return; // loading
-    }
     final screenPosition = event.localPosition.toVector2();
     final block = base.getBlock(screenPosition);
     selector.show = base.containsBlock(block);
-    selector.position = base.getBlockPosition(block) + topLeft;
+    selector.position.setFrom(base.getBlockPosition(block) + topLeft);
   }
 }

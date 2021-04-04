@@ -9,15 +9,14 @@ import '../../commons/square_component.dart';
 final green = Paint()..color = const Color(0xAA338833);
 
 class SequenceEffectGame extends BaseGame with TapDetector {
-  SquareComponent greenSquare;
+  late SquareComponent greenSquare;
 
   @override
   Future<void> onLoad() async {
-    add(
-      greenSquare = SquareComponent()
-        ..paint = green
-        ..position = Vector2.all(100),
-    );
+    greenSquare = SquareComponent()
+      ..paint = green
+      ..position.setValues(100, 100);
+    add(greenSquare);
   }
 
   @override

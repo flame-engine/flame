@@ -6,7 +6,20 @@
  - Updated the documentation for the supported platforms
  - Add clear function to BaseGame to allow the removal of all components
  - Moving tutorials to the Flame main repository
+ - Transforming `PaletteEntry.paint` to be a method instead of a getter
+ - Adding some more basic colors entries to the `BasicPalette`
+ - Fixing Flutter and Dart version constraints
  - Exporting Images and AssetsCache
+ - Make `size` and `position` in `PositionComponent` final
+ - Add a `snapTo` and `onPositionUpdate` method to the `Camera`
+ - Remove the SpriteAnimationComponent when the animation is really done, not when it is on the last frame
+ - Revamp all the docs to be up to date with v1.0.0
+ - Make Assets and Images caches have a configurable prefix
+ - Add `followVector2` method to the `Camera`
+ - Make `gameRef` late
+ - Fix Scroll example
+ - Add a `renderPoint` method to `Canvas`
+ - Add zoom to the camera
  - Migrated the `Particle` API to `Vector2`
 
 ## 1.0.0-rc8

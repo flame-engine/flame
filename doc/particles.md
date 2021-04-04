@@ -1,8 +1,9 @@
 # Particles
 
-Flame offers a basic, yet robust and extendable particle system. The core concept of this system is the `Particle` class, which is very similar in its behavior to the `ParticleComponent`.
+Flame offers a basic, yet robust and extendable particle system. The core concept of this system is
+the `Particle` class, which is very similar in its behavior to the `ParticleComponent`.
 
-The most basic usage of `Particle` with `BaseGame` would look as following:
+The most basic usage of a `Particle` with `BaseGame` would look as following:
 
 ```dart
 import 'package:flame/components.dart';
@@ -28,7 +29,6 @@ Main approaches to implement desired particle effects:
 
 Composition works in a similar fashion to those of Flutter widgets by defining the effect from top to bottom. Chaining allows to express the same composition trees more fluently by defining behaviors from bottom to top. Computed particles in their turn fully delegate implementation of the behavior to your code. Any of the approaches could be used in conjunction with existing behaviors where needed.
 
-Below you can find an example of a effect showing a burst of circles, accelerating from `(0, 0)` to a random directions using all three approaches defined above.
 ```dart
 Random rnd = Random();
 
@@ -120,8 +120,7 @@ particle.setLifespan(2) // will live for another 2s.
 During its lifetime, a `Particle` tracks the time it was alive and exposes it through the `progress` getter, which returns a value between `0.0` and `1.0`. This value can be used in a similar fashion as the `value` property of the `AnimationController` class in Flutter.
 
 ```dart
-final duration = const Duration(seconds: 2);
-final particle = Particle(lifespan: duration.inMicroseconds / Durations.microsecondsPerSecond);
+final particle = Particle(lifespan: 2.0);
 
 game.add(ParticleComponent(particle: particle));
 
@@ -145,7 +144,9 @@ Flame ships with a few built-in `Particle` behaviors:
 
 More examples of how to use these behaviors together are available [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/utils/particles.dart). All the implementations are available in the [particles](https://github.com/flame-engine/flame/tree/main/packages/flame/lib/src/particles) folder on the Flame repository.
 
-## Translated Particle
+Simply translates the underlying `Particle` to a specified `Vector2` within the rendering `Canvas`.
+Does not change or alter its position, consider using `MovingParticle` or `AcceleratedParticle`
+where change of position is required.
 
 Simply translates the underlying `Particle` to a specified `Vector2` within the rendering `Canvas`.
 Does not change or alter its position, consider using `MovingParticle` or `AcceleratedParticle` where change of position is required.
@@ -163,7 +164,7 @@ game.add(
 );
 ```
 
-## Moving Particle
+## MovingParticle
 
 Moves the child `Particle` between the `from` and `to` `Vector2`s during its lifespan. Supports `Curve` via `CurvedParticle`.
 
@@ -180,14 +181,16 @@ game.add(
 );
 ```
 
-## Accelerated Particle
+## AcceleratedParticle
 
 A basic physics particle which allows you to specify its initial `position`, `speed` and `acceleration` and lets the `update` cycle do the rest. All three are specified as `Vector2`s, 
 which you can think of as vectors. It works especially well for physics-based "bursts", but it is not limited to that.
 Unit of the `Vector2` value is _logical px/s_. So a speed of `Vector2(0, 100)` will move a child `Particle` by 100 logical pixels of the device every second of game time.
 
 ```dart
-final rnd = Random();
+final rng = Random();
+Vector2 randomVector2() => (Vector2.random(random) - Vector2.random(rng)) * 100;
+
 game.add(
   ParticleComponent(
     particle: AcceleratedParticle(
@@ -203,10 +206,11 @@ game.add(
 );
 ```
 
-## Circle Particle
+## CircleParticle
 
-A `Particle` which renders circle with given `Paint` at the zero offset of passed `Canvas`. Use in conjunction with `TranslatedParticle`, `MovingParticle` or `AcceleratedParticle` 
-in order to achieve desired positioning.
+A `Particle` which renders a circle with given `Paint` at the zero offset of passed `Canvas`. Use in
+conjunction with `TranslatedParticle`, `MovingParticle` or `AcceleratedParticle` in order to achieve
+desired positioning.
 
 ```dart
 game.add(
@@ -265,7 +269,7 @@ A `Particle` which embeds an `Animation`. By default, aligns the `Animation`'s `
 
 ```dart
 final spritesheet = SpriteSheet(
-  imageName: 'spritesheet.png',
+  image: yourSpriteSheetImage,
   srcSize: Vector2.all(16.0),
 );
 
@@ -309,16 +313,17 @@ class RectComponent extends Component {
 }
 ```
 
-## Flare Particle
+## FlareParticle
 
-To use Flare within Flame, use the [`flame_flare`](https://github.com/flame-engine/flame_flare) package.
+To use Flare within Flame, use the [`flame_flare`](https://github.com/flame-engine/flame_flare)
+package.
 
 It will provide a class called `FlareParticle` that is a container for `FlareActorAnimation`, it propagates the `update` and `render` methods to its child.
 
 ```dart
 import 'package:flame_flare/flame_flare.dart';
 
-// During game initialisation
+// Within your game or component's `onLoad` method
 const flareSize = 32.0;
 final flareAnimation = FlareActorAnimation('assets/sparkle.flr');
 flareAnimation.width = flareSize; 
@@ -339,8 +344,8 @@ A `Particle` which could help you when:
 * Complex effects optimization
 * Custom easings
 
-When created, delegates all the rendering to a supplied `ParticleRenderDelegate` which is called on each frame
-to perform necessary computations and render something to the `Canvas`
+When created, it delegates all the rendering to a supplied `ParticleRenderDelegate` which is called
+on each frame to perform necessary computations and render something to the `Canvas`.
 
 ```dart
 game.add(
@@ -364,10 +369,15 @@ game.add(
 
 ## Nesting behavior
 
-Flame's implementation of particles follows same pattern of extreme composition as Flutter widgets. That
-is achieved by encapsulating small pieces of behavior in every of particles and then nesting these behaviors together to achieve desired visual effect.
+Flame's implementation of particles follows the same pattern of extreme composition as Flutter
+widgets. That is achieved by encapsulating small pieces of behavior in every particle and then
+nesting these behaviors together to achieve the desired visual effect.
 
-Two entities allowing `Particle` to nest each other are: `SingleChildParticle` mixin and `ComposedParticle` class.
+Two entities that allow `Particle`s to nest each other are: `SingleChildParticle` mixin and
+`ComposedParticle` class.
+
+A `SingleChildParticle` may help you with creating `Particles` with a custom behavior.
+For example, randomly positioning its child during each frame:
 
 The `SingleChildParticle` may help you with creating `Particles` with a custom behavior.
 
@@ -375,6 +385,7 @@ For example, randomly positioning it's child during each frame:
 
 ```dart
 var rnd = Random();
+
 class GlitchParticle extends Particle with SingleChildParticle {
   @override
   Particle child;
@@ -397,4 +408,4 @@ class GlitchParticle extends Particle with SingleChildParticle {
 }
 ```
 
-`ComposedParticle` could be used either as standalone or within existing `Particle` tree. 
+The `ComposedParticle` could be used either as a standalone or within an existing `Particle` tree.

@@ -2,18 +2,33 @@
 
 ## FPS counter
 
-Flame provides the `FPSCounter` mixin for recording the fps, this mixin can be applied on any class that extends from `Game`. When applied you have to implemented the `recordFps` method and it should return `true` if you want to access the current fps by using the `fps` method`.
+Flame provides the `FPSCounter` mixin for recording the fps; this mixin can be applied on any class
+that extends from `Game`. Once applied you can access the current fps by using the `fps` method,
+like shown in the example below.
 
 ```dart
-class MyGame extends Game with FPS {
+class MyGame extends Game with FPSCounter {
+  static final fpsTextConfig = TextConfig(color: BasicPalette.white.color);
+
   @override
-  bool recordFps() => true;
+  void render(Canvas canvas) {
+    super.render(canvas);
+    final fpsCount = fps(120); // The average FPS for the last 120 microseconds.
+    fpsTextConfig.render(canvas, fpsCount.toString(), Vector2(0, 50));
+  }
 }
 ```
 
 ## BaseGame features
 
-Flame provides some features for debugging, these features are enabled when the `debugMode` from the `BaseGame` class is set to `true` (or overridden to be true).
-When it's enabled all `PositionComponent`s will be wrapped into a rectangle, and have its position rendered on the screen, so you can visually verify the component boundaries and position.
+If you are using `BaseGame`, you don't have to apply the `FPSCounter` mixin to get access to the
+current FPS, because it is already applied by default (so you can use the `fps` method directly).
 
-To see a working example of the debugging features of the `BaseGame`, [check this example](https://github.com/flame-engine/flame/tree/master/doc/examples/debug).
+Flame provides some debugging features for the `BaseGame` class. These features are enabled when
+the `debugMode` property is set to `true` (or overridden to be `true`).
+When `debugMode` is enabled, each `PositionComponent` will be rendered with their bounding size, and
+have their positions written on the screen. This way, you can visually verify the components
+boundaries and positions.
+
+To see a working example of the debugging features of the `BaseGame`, check this
+[example](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/components/debug.dart).

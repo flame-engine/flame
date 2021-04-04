@@ -13,7 +13,7 @@ void main() {
 
 class MyGame extends Game {
   static const int squareSpeed = 400;
-  static final squarePaint = BasicPalette.white.paint;
+  static final squarePaint = BasicPalette.white.paint();
   late Rect squarePos;
   int squareDirection = 1;
 

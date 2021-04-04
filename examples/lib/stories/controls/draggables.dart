@@ -11,13 +11,13 @@ class DraggableSquare extends PositionComponent
   @override
   bool debugMode = true;
 
-  DraggableSquare({Vector2 position})
+  DraggableSquare({Vector2? position})
       : super(
           position: position ?? Vector2.all(100),
           size: Vector2.all(100),
         );
 
-  Vector2 dragDeltaPosition;
+  Vector2? dragDeltaPosition;
   bool get isDragging => dragDeltaPosition != null;
 
   @override
@@ -34,10 +34,15 @@ class DraggableSquare extends PositionComponent
 
   @override
   bool onDragUpdate(int pointerId, DragUpdateDetails details) {
+    final dragDeltaPosition = this.dragDeltaPosition;
+    if (dragDeltaPosition == null) {
+      return false;
+    }
+
     final localCoords = gameRef.convertGlobalToLocalCoordinate(
       details.globalPosition.toVector2(),
     );
-    position = localCoords - dragDeltaPosition;
+    position.setFrom(localCoords - dragDeltaPosition);
     return false;
   }
 

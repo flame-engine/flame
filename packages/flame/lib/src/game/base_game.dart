@@ -176,7 +176,7 @@ class BaseGame extends Game with FPSCounter {
   void renderComponent(Canvas canvas, Component c) {
     canvas.save();
     if (!c.isHud) {
-      canvas.translateVector(-camera.position);
+      camera.apply(canvas);
     }
     c.renderTree(canvas);
     canvas.restore();

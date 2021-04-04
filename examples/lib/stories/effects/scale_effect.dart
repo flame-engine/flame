@@ -8,16 +8,15 @@ import 'package:flutter/material.dart';
 import '../../commons/square_component.dart';
 
 class ScaleEffectGame extends BaseGame with TapDetector {
-  SquareComponent square;
+  late SquareComponent square;
   bool grow = true;
 
   @override
   Future<void> onLoad() async {
-    add(
-      square = SquareComponent()
-        ..position = Vector2.all(200)
-        ..anchor = Anchor.center,
-    );
+    square = SquareComponent()
+      ..position.setValues(200, 200)
+      ..anchor = Anchor.center;
+    add(square);
   }
 
   @override

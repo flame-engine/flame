@@ -17,7 +17,7 @@ class MovableSquare extends SquareComponent
   static final TextConfig config = TextConfig(fontSize: 12);
 
   final Vector2 velocity = Vector2.zero();
-  Timer timer;
+  late Timer timer;
 
   MovableSquare() {
     addShape(HitboxRectangle());
@@ -34,7 +34,7 @@ class MovableSquare extends SquareComponent
     timer.update(dt);
 
     final ds = velocity * (speed * dt);
-    position += ds;
+    position.add(ds);
   }
 
   @override
@@ -83,8 +83,8 @@ class Map extends Component {
 
 class Rock extends SquareComponent with Hitbox, Collidable {
   Rock(Vector2 position) {
-    this.position = position;
-    size = Vector2.all(50);
+    this.position.setFrom(position);
+    size.setValues(50, 50);
     paint = Paint()..color = const Color(0xFF2222FF);
     addShape(HitboxRectangle());
   }
@@ -95,7 +95,7 @@ class Rock extends SquareComponent with Hitbox, Collidable {
 
 class CameraAndViewportGame extends BaseGame
     with KeyboardEvents, HasCollidables {
-  MovableSquare square;
+  late MovableSquare square;
 
   @override
   Future<void> onLoad() async {
@@ -104,7 +104,7 @@ class CameraAndViewportGame extends BaseGame
 
     add(square = MovableSquare());
     camera.cameraSpeed = 1;
-    camera.followObject(square, worldBounds: Map.bounds);
+    camera.followComponent(square, worldBounds: Map.bounds);
 
     for (var i = 0; i < 30; i++) {
       add(Rock(Vector2(Map.genCoord(), Map.genCoord())));

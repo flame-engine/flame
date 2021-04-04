@@ -1,8 +1,8 @@
 # Collision detection
 If you want to have a full blown physics engine in your game we recommend that you use
 Forge2D by adding [flame_forge2d](https://github.com/flame-engine/flame_forge2d) as a dependency.
-But if you have a simpler usecase and just want to check for collisions of components and improve
-the accuraccy of gestures, Flame's built-in collision detection will serve you very well.
+But if you have a simpler use-case and just want to check for collisions of components and improve
+the accuracy of gestures, Flame's built-in collision detection will serve you very well.
 
 If you have the following needs you should at least consider to use
 [Forge2D](https://github.com/flame-engine/forge2d):
@@ -105,9 +105,9 @@ The `CollidableType` enum contains the following values:
  - `inactive` will not collide with any other `Collidable`s
 
 So if you have collidables that you don't need to check collisions against each other you can mark
-them as passive by setting `collidableType = CollidableType.passive`, this could for example be ground
-components or maybe your enemies don't need to check collisions between each other, then they could
-be marked as passive too.
+them as passive by setting `collidableType = CollidableType.passive`, this could for example be
+ground components or maybe your enemies don't need to check collisions between each other, then they
+could be marked as passive too.
 
 Then we have the `inactive` type which simply doesn't get checked at all in the collision detection.
 This could be used for example if you have components outside of the screen that you don't care
@@ -236,4 +236,4 @@ you can use the optional arguments `radius` and `position` to set those, if the 
 `size` of the `Circle` will be automatically set too.
 
 ## Example
-https://github.com/flame-engine/flame/tree/master/doc/examples/collidables
+https://github.com/flame-engine/flame/tree/main/examples/lib/stories/collidables
