@@ -59,8 +59,12 @@ Example of usage, where visibility of two components are handled by a wrapper:
 ```dart
 class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
   bool visible = false;
+  final Image spriteImage;
 
-  GameOverPanel(Image spriteImage) : super() {
+  GameOverPanel(this.spriteImage);
+
+  @override
+  Future<void> onLoad() async {
     final gameOverText = GameOverText(spriteImage); // GameOverText is a Component
     final gameOverButton = GameOverButton(spriteImage); // GameOverRestart is a SpriteComponent
 
@@ -196,15 +200,15 @@ FlareController that can play multiple animations and control nodes.
 import 'package:flame_flare/flame_flare.dart';
 
 class YourFlareController extends FlareControls {
-    
-    ActorNode rightHandNode;
-    
-    void initialize(FlutterActorArtboard artboard) {
-        super.initialize(artboard);
-        
-        // get flare node
-        rightHand = artboard.getNode('right_hand');
-    }
+
+  late ActorNode rightHandNode;
+
+  void initialize(FlutterActorArtboard artboard) {
+    super.initialize(artboard);
+
+    // get flare node
+    rightHand = artboard.getNode('right_hand');
+  }
 }
 
 final fileName = 'assets/george_washington.flr';
