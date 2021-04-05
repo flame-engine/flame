@@ -21,6 +21,8 @@
  - Add a `renderPoint` method to `Canvas`
  - Add zoom to the camera
  - Add `moveToTarget` as an extension method to `Vector2`
+ - Bring back collision detection examples
+ - Fix collision detection in Collidable with multiple offset shapes
 
 ## 1.0.0-rc8
  - Migrate to null safety

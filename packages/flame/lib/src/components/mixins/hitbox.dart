@@ -38,8 +38,8 @@ mixin Hitbox on PositionComponent {
     if (!_cachedBoundingRect.isCacheValid([position, size])) {
       final maxRadius = size.length;
       _cachedBoundingRect.updateCache(
-        Rect.fromCenter(
-          center: absoluteCenter.toOffset(),
+        RectExtension.fromVector2Center(
+          center: absoluteCenter,
           width: maxRadius,
           height: maxRadius,
         ),
