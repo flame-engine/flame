@@ -26,7 +26,7 @@ class MyCollidable extends PositionComponent
 
   @override
   Future<void> onLoad() async {
-    final center = gameRef!.size / 2;
+    final center = gameRef.size / 2;
     velocity = (center - position).normalized() * 150;
   }
 
