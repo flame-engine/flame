@@ -20,6 +20,7 @@
  - Fix Scroll example
  - Add a `renderPoint` method to `Canvas`
  - Add zoom to the camera
+ - Add `moveToTarget` as an extension method to `Vector2`
 
 ## 1.0.0-rc8
  - Migrate to null safety
