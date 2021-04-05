@@ -53,7 +53,7 @@ Here you can find the documentation for different versions:
 - Latest stable version: [GitHub docs](https://github.com/flame-engine/flame/tree/master-v0.x/doc)
 - Latest v1.0.0 version: [GitHub docs](https://github.com/flame-engine/flame/tree/1.0.0-rc8/doc)
 
-The complete documentation can be found [here](https://github.com/flame-engine/flame/doc).
+The complete documentation can be found [here](https://github.com/flame-engine/flame/tree/main/doc).
 
 We provide many examples of different features which can be tried out from your browser
 [here](https://flame-engine.github.io/flame/).
