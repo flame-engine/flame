@@ -201,7 +201,7 @@ import 'package:flame_flare/flame_flare.dart';
 
 class YourFlareController extends FlareControls {
 
-  ActorNode rightHandNode;
+  late ActorNode rightHandNode;
 
   void initialize(FlutterActorArtboard artboard) {
     super.initialize(artboard);

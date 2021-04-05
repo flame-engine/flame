@@ -26,8 +26,9 @@ what should happen when two hitboxes collide, so it is up to the user to impleme
 when for example two position components have intersecting hitboxes.
 
 Do note that the built-in collision detection system does not take collisions between two hitboxes
-that overshoot each other into account, this could happen when they either move too fast or `update
-being called with a large delta time (for example if your app is not in the foreground).
+that overshoot each other into account, this could happen when they either move too fast or `update`
+being called with a large delta time (for example if your app is not in the foreground). This
+behaviour is called tunneling, if you want to read more about it.
 
 ## Mixins
 ### Hitbox
