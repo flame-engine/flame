@@ -5,7 +5,6 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/palette.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
 class MyCollidable extends PositionComponent
