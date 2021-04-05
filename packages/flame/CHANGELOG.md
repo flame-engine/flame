@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [next]
+## [1.0.0-rc9]
  - Fix input bug with other anchors than center
  - Fixed `Shape` so that the `position` is now a `late`
  - Updated the documentation for the supported platforms
