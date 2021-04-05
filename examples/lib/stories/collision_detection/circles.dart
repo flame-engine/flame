@@ -12,6 +12,7 @@ class MyCollidable extends PositionComponent
     with HasGameRef<Circles>, Hitbox, Collidable {
   late Vector2 velocity;
   final _collisionColor = Colors.amber;
+  final _defaultColor = Colors.cyan;
   bool _isWallHit = false;
   bool _isCollision = false;
 
@@ -27,7 +28,7 @@ class MyCollidable extends PositionComponent
   @override
   Future<void> onLoad() async {
     final center = gameRef.size / 2;
-    velocity = (center - position).normalized() * 150;
+    velocity = (center - position)..scaleTo(150);
   }
 
   @override
@@ -37,7 +38,7 @@ class MyCollidable extends PositionComponent
       remove();
       return;
     }
-    debugColor = _isCollision ? _collisionColor : const Color(0xFFFF00FF);
+    debugColor = _isCollision ? _collisionColor : _defaultColor;
     position.add(velocity * dt);
     _isCollision = false;
   }
@@ -59,10 +60,6 @@ class MyCollidable extends PositionComponent
 }
 
 class Circles extends BaseGame with HasCollidables, TapDetector {
-  final TextConfig fpsTextConfig = TextConfig(
-    color: BasicPalette.white.color,
-  );
-
   @override
   Future<void> onLoad() async {
     add(ScreenCollidable());

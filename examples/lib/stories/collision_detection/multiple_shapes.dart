@@ -199,7 +199,6 @@ class MultipleShapes extends BaseGame
   final _distance = Vector2(100, 0);
 
   MyCollidable createRandomCollidable(MyCollidable lastCollidable) {
-    MyCollidable collidable;
     final collidableSize = Vector2.all(50) + Vector2.random(_rng) * 100;
     final isXOverflow = lastCollidable.position.x +
             lastCollidable.size.x / 2 +
@@ -216,18 +215,14 @@ class MultipleShapes extends BaseGame
     final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
     switch (shapeType) {
       case Shapes.circle:
-        collidable = CollidableCircle(position, collidableSize, velocity);
-        break;
+        return CollidableCircle(position, collidableSize, velocity);
       case Shapes.rectangle:
-        collidable = CollidableRectangle(position, collidableSize, velocity)
+        return CollidableRectangle(position, collidableSize, velocity)
           ..rotationSpeed = rotationSpeed;
-        break;
       case Shapes.polygon:
-        collidable = CollidablePolygon(position, collidableSize, velocity)
+        return CollidablePolygon(position, collidableSize, velocity)
           ..rotationSpeed = rotationSpeed;
-        break;
     }
-    return collidable;
   }
 
   @override
