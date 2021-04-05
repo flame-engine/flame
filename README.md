@@ -56,7 +56,7 @@ Here you can find the documentation for different versions:
 The complete documentation can be found [here](https://github.com/flame-engine/flame/tree/main/doc).
 
 We provide many examples of different features which can be tried out from your browser
-[here](https://flame-engine.github.io/flame/).
+[here](https://flame-engine.github.io/flame/). You can also check the examples source code [here](https://github.com/flame-engine/flame/tree/main/examples).
 
 The official site for Flame, which also contains the documentation can be found
 [here](https://flame-engine.org/).
