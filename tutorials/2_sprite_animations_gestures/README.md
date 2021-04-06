@@ -182,15 +182,15 @@ You now should see the button on the screen, but right now, it is pretty much us
 
 So, to change that, we will now add some interactivity to our game and make the button tapable/clickable.
 
-Flame provides several input handlers, which you can check with more in depth on the [input documentation of Flame](https://github.com/flame-engine/flame/blob/main/doc/input.md). For this example we will be using the `TapDetector` which enables us to detect taps on the screen, as well as mouse click when running on web or desktop.
+Flame provides several input handlers, which you can check with more in depth on [our docs](https://github.com/flame-engine/flame/blob/main/doc/input.md). For this tutorial, we will be using the `TapDetector` which enables us to detect taps on the screen, as well as mouse click when running on web or desktop.
 
-All of Flame input detectors are mixins which can be added to your game, which when applied, enables you to override listener methods related to that detector. In our example, we will need to override three methods:
+All Flame input detectors are mixins which can be added to your game, enabling you to override listener methods related to that detector. For the `TapDetector`, we will need to override three methods:
 
- - `onTapDown`: Called when touch/click has started. i.e. the user just touced the screen or clicked the mouse button.
- - `onTapUp`: Called when the touch/click has stop ocurring because the event was release. i.e. the user lifted the finger from the screen or released the mouse button.
- - `onTapCancel`: Called when the event was cancelled, this can happen for several reasons, one of the most common reason is when the event has changed into another type, like for example the user started to move the finger/mouse and the touch event now turned into a pan/drag type. Usually we can just threat this event as the same as `onTapUp`.
+ - `onTapDown`: Called when touch/click has started, i.e., the user just touced the screen or clicked the mouse button.
+ - `onTapUp`: Called when the touch/click has stop occurring because the event was released, i.e., the user lifted the finger from the screen or released the mouse button.
+ - `onTapCancel`: Called when the event was cancelled. This can happen for several reasons; one of the most common is when the event has changed into another type, for example the user started to move the finger/mouse and the touch event now turned into a pan/drag. Usually, we can just treat this event as being the same as `onTapUp`.
 
-Now that we have a better understanding of `TapDetector` and the events that we will need to handle, lets implement it on the game:
+Now that we have a better understanding of `TapDetector` and the events that we will need to handle, let's implement it on the game:
 
 ```dart
 // We need to add our `TapDetector` mixin here
@@ -237,4 +237,4 @@ class MyGame extends Game with TapDetector {
 
 If we run our game again, we should have the full example running, with our on/off button for our little vampire robot.
 
-And we are finished on this tutorial, now with an understanding of sprites, animations and gestures we can start on building more interactive and beautiful games.
+And with that, we finished this tutorial. Now, with an understanding of sprites, animations and gestures, we can start on building more interactive and beautiful games.
