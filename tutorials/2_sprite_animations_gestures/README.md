@@ -117,7 +117,7 @@ When running the game now, you should see our vampire robot running endless in t
 
 For the next step, let's implement our on/off button and render it on the screen.
 
-First thing we need to do, is to add a couple of variables need for out button:
+The first thing we need to do is to add a couple of variables need to reference our button:
 
 ```dart
   // One sprite for each button state
