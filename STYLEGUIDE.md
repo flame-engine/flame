@@ -111,7 +111,7 @@ const thisThing = 13;
 ### Asserts
 
 * Use asserts to detect contract violation.
-* Use asserts to run debug only code
+* Use asserts to run debug only code.
 
 Example:
 ````dart
