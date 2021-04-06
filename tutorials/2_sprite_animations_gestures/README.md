@@ -83,8 +83,8 @@ class MyGame extends Game {
       'running.png',
       // `SpriteAnimationData` is a class used to tell Flame how the animation spritesheet
       // is organized, here we are basically telling that our sprites is organized in a horizontal
-      // sequence on the image, that there are 8 frames, each frame has time frame of `0.1` seconds
-      // and finally, that each frame, is a sprite of 16x18 pixels
+      // sequence on the image, that there are 8 frames, each frame is a sprite of 16x18 pixels,
+      // and, finally, that each frame should appear for 0.1 seconds when the animation is running.
       SpriteAnimationData.sequenced(
         amount: 8,
         stepTime: 0.1,
