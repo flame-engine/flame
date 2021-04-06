@@ -63,7 +63,7 @@ class MyGame extends Game with TapDetector {
 }
 ```
 
-Great, this will just gets us a plain, almost black screen, now with the game instance running lets first add our running robot on the screen:
+Great! This will just gets us a plain, almost black screen. Now lets add our running robot on the screen:
 
 ```dart
 class MyGame extends Game {
