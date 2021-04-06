@@ -20,7 +20,7 @@ Sprites are images, or a portion of an image, loaded into the memory, and can th
 
 Sprites can be (and usually are) bundled into single images, that is a very useful technique as it lowers the amount of I/O operations needed to load the game assets because it is faster to load 1 image of 10k than to load 10 images of 1kb each.
 
-For example, on this tutorial, we will have a button that makes our robot run, this button needs two sprites, one for the unpressed button and another one for the pressed state, so we can have the following image:
+For example, on this tutorial, we will have a button that makes our robot run. This button needs two sprites, for the unpressed and pressed states. We can have the following image containing both:
 
 ![Sprite example](code/assets/images/buttons.png)
 
