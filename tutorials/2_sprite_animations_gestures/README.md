@@ -36,7 +36,7 @@ Flame provides a way for easily turning that sprite sheet into an animation, whi
 
 ## Hands on
 
-To get started lets just get a Flame `Game` instance running and just paste some bolierplate code on the editor, if you haven't yet checked our [first tutorial](https://github.com/flame-engine/flame/tree/main/tutorials/1_basic_square#building-your-first-game) to understand better this initial code.
+To get started, lets get a Flame `Game` instance running with a structure similar to our [first tutorial](https://github.com/flame-engine/flame/tree/main/tutorials/1_basic_square#building-your-first-game) (if you haven't yet you can follow it to better understand this initial setup).
 
 ```dart
 void main() {
