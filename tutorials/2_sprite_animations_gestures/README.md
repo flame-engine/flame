@@ -139,7 +139,7 @@ Next, we can load our two sprites:
     // runningRobot loading omitted
 
     // Just like we have a `loadSpriteAnimation` function, here we can use
-    // the `loadSprite`. To use it we just need to inform the assets path
+    // `loadSprite`. To use it, we just need to inform the asset's path
     // and the position and size which will define the section of the image
     // that we want. If we wanted to have a sprite with the full image, `srcPosition`
     // and `srcSize` could just be omited
