@@ -140,7 +140,7 @@ Next, we can load our two sprites:
 
     // Just like we have a `loadSpriteAnimation` function, here we can use
     // `loadSprite`. To use it, we just need to inform the asset's path
-    // and the position and size which will define the section of the image
+    // and the position and size defining the section of the whole image
     // that we want. If we wanted to have a sprite with the full image, `srcPosition`
     // and `srcSize` could just be omited
     unpressedButton = await loadSprite(
