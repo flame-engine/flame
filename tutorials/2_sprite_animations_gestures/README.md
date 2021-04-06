@@ -32,7 +32,7 @@ Animation is what gives 2D games life. Flame provides a handy class called `Spri
 
 ![Animation example](code/assets/images/running.png)
 
-Flame provides way for easily turning that sprite sheet into an animation, which we will see how in a few moments.
+Flame provides a way for easily turning that sprite sheet into an animation, which we will see how in a few moments.
 
 ## Hands on
 
