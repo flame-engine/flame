@@ -16,7 +16,7 @@ By the end of this tutorial, you will have built a simple game which renders a b
 
 Before starting coding our game, it is important to understand what sprites are and what they are used for.
 
-Sprites are images, or a portion of an image loaded into the memory, which can then be used to render graphics on your game canvas.
+Sprites are images, or a portion of an image, loaded into the memory, and can then be used to render graphics on your game canvas.
 
 Sprites can be (and usually are) bundled into single images, that is a very useful technique as it lowers the amount of I/O operations needed to load the game assets because it is faster to load 1 image of 10k than to load 10 images of 1kb each.
 
