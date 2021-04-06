@@ -81,7 +81,7 @@ class MyGame extends Game {
   Future<void> onLoad() async {
     runningRobot = await loadSpriteAnimation(
       'running.png',
-      // `SpriteAnimationData` is a class used to tell Flame, how the animation spritesheet
+      // `SpriteAnimationData` is a class used to tell Flame how the animation spritesheet
       // is organized, here we are basically telling that our sprites is organized in a horizontal
       // sequence on the image, that there are 8 frames, each frame has time frame of `0.1` seconds
       // and finally, that each frame, is a sprite of 16x18 pixels
