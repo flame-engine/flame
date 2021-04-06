@@ -8,7 +8,7 @@ This tutorial will introduce you to:
 
 All the code of this tutorial code can be found [here](./code) and is based on the Flame `1.0.0-rc8` version.
 
-By the end of this tutorial you will have built a simple game which renders a button which when pressed, makes a small vampire robot run, that will look like this:
+By the end of this tutorial, you will have built a simple game which renders a button that, when pressed, makes a small vampire robot run. It will look like this:
 
 ![Preview](./media/preview.gif)
 
