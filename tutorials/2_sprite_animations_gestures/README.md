@@ -87,8 +87,8 @@ class MyGame extends Game {
       // and, finally, that each frame should appear for 0.1 seconds when the animation is running.
       SpriteAnimationData.sequenced(
         amount: 8,
-        stepTime: 0.1,
         textureSize: Vector2(16, 18),
+        stepTime: 0.1,
       ),
     );
   }
