@@ -115,7 +115,7 @@ class MyGame extends Game {
 
 When running the game now, you should see our vampire robot running endless in the screen.
 
-For the next step, lets implement our on/off button and render it on the screen:
+For the next step, let's implement our on/off button and render it on the screen.
 
 First thing we need to do, is to add a couple of variables need for out button:
 
