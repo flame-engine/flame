@@ -136,7 +136,7 @@ Next, we can load our two sprites:
 ```dart
   @override
   Future<void> onLoad() async {
-    // runningRobot loading omited
+    // runningRobot loading omitted
 
     // Just like we have a `loadSpriteAnimation` function, here we can use
     // the `loadSprite`. To use it we just need to inform the assets path
