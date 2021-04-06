@@ -51,12 +51,7 @@ class MyGame extends Game with TapDetector {
 
   @override
   void onTapDown(TapDownDetails details) {
-    final buttonArea = Rect.fromLTWH(
-      buttonPosition.x,
-      buttonPosition.y,
-      buttonSize.x,
-      buttonSize.y,
-    );
+    final buttonArea = buttonPosition & buttonSize;
 
     if (buttonArea.contains(details.localPosition)) {
       isPressed = true;

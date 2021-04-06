@@ -113,3 +113,129 @@ class MyGame extends Game {
   Color backgroundColor() => const Color(0xFF222222);
 }
 ```
+
+When running the game now, you should see our vampire robot running endless in the screen.
+
+For the next step, lets implement our on/off button and render it on the screen:
+
+First thing we need to do, is to add a couple of variables need for out button:
+
+```dart
+  // One sprite for each button state
+  late Sprite pressedButton;
+  late Sprite unpressedButton;
+  // Just like our robot needs its position and size, here we create two
+  // variables for the button as well
+  final buttonPosition = Vector2(200, 120);
+  final buttonSize = Vector2(120, 30);
+  // Simple boolean variable to tell if the button is pressed or not
+  bool isPressed = false;
+```
+
+Next we load our two sprites:
+
+```dart
+  @override
+  Future<void> onLoad() async {
+    // runningRobot loading omited
+
+    // Just like we have a `loadSpriteAnimation` function, here we can use
+    // the `loadSprite`. To use it we just need to inform the assets path
+    // and the position and size which will define the section of the image
+    // that we want. If we wanted to have a sprite with the full image, `srcPosition`
+    // and `srcSize` could just be omited
+    unpressedButton = await loadSprite(
+      'buttons.png',
+      // `srcPosition` and `srcSize` here tells `loadSprite` that we want
+      // just a rect (starting at (0, 0) with the dimensions (60, 20)) of the image
+      // which gives us only the first button
+      srcPosition: Vector2.zero(),
+      srcSize: Vector2(60, 20),
+    );
+
+    pressedButton = await loadSprite(
+      'buttons.png',
+      // Same thing here, but now a rect starting at (0, 20)
+      // which gives us only the second button
+      srcPosition: Vector2(0, 20),
+      srcSize: Vector2(60, 20),
+    );
+  }
+```
+
+Finally, we just render it on the game `render` function:
+
+```dart
+  @override
+  void render(Canvas canvas) {
+    // Running robot render omited
+
+    if (isPressed) {
+      pressedButton.render(canvas, position: buttonPosition, size: buttonSize);
+    } else {
+      unpressedButton.render(canvas,
+          position: buttonPosition, size: buttonSize);
+    }
+  }
+```
+
+You now should see the button on the screen, but right now, it is pretty much useless as it has no action at all.
+
+So, to change that, we will now add some interactivity to our game and make the button tapable/clickable.
+
+Flame provides several input handlers, which you can check with more in depth on the [input documentation of Flame](https://github.com/flame-engine/flame/blob/main/doc/input.md). For this example we will be using the `TapDetector` which enables us to detect taps on the screen, as well as mouse click when running on web or desktop.
+
+All of Flame input detectors are mixins which can be added to your game, which when applied, enables you to override listener methods related to that detector. In our example, we will need to override three methods:
+
+ - `onTapDown`: Called when touch/click has started. i.e. the user just touced the screen or clicked the mouse button.
+ - `onTapUp`: Called when the touch/click has stop ocurring because the event was release. i.e. the user lifted the finger from the screen or released the mouse button.
+ - `onTapCancel`: Called when the event was cancelled, this can happen for several reasons, one of the most common reason is when the event has changed into another type, like for example the user started to move the finger/mouse and the touch event now turned into a pan/drag type. Usually we can just threat this event as the same as `onTapUp`.
+
+Now that we have a better understanding of `TapDetector` and the events that we will need to handle, lets implement it on the game:
+
+```dart
+// We need to add our `TapDetector` mixin here
+class MyGame extends Game with TapDetector {
+  // Variables declaration, onLoad and render methods omited...
+
+  @override
+  void onTapDown(TapDownDetails details) {
+    // On tap down we need to check if the event ocurred on the
+    // button area. There are several ways of doing it, for this
+    // tutorial we do that by transforming ours position and size
+    // vectors into a dart:ui Rect by using the `&` operator, and
+    // with that rect we can use its `contains` method which checks
+    // if a point (Offset) is inside that rect
+    final buttonArea = buttonPosition & buttonSize;
+
+    if (buttonArea.contains(details.localPosition)) {
+      isPressed = true;
+    }
+  }
+
+  // On both tap up and tap cancel we just set the isPressed
+  // variable to false
+  @override
+  void onTapUp(TapUpDetails details) {
+    isPressed = false;
+  }
+
+  @override
+  void onTapCancel() {
+    isPressed = false;
+  }
+
+  // Finally, we just modify our update method so the animation is
+  // updated only if the button is pressed
+  @override
+  void update(double dt) {
+    if (isPressed) {
+      runningRobot.update(dt);
+    }
+  }
+}
+```
+
+If we run our game again, we should have the full example running, with our on/off button for our little vampire robot.
+
+And we are finished on this tutorial, now with an understanding of sprites, animations and gestures we can start on building more interactive and beautiful games.
