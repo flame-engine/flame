@@ -102,7 +102,7 @@ class MyGame extends Game {
   @override
   void render(Canvas canvas) {
     // Since an animation is basically a list of sprites, to render it, we just need to get its
-    // sprite and render it on our canvas
+    // current sprite and render it on our canvas. Which frame is the current sprite is updated on the `update` method.
     runningRobot
         .getSprite()
         .render(canvas, position: runningPosition, size: runningSize);
