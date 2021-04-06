@@ -134,7 +134,7 @@ linter:
 
 dart_code_metrics:
   rules:
-    # - prefer-trailing-comma
+    - prefer-trailing-comma
     - prefer-trailing-comma-for-collection
     - no-equal-then-else
     - no-object-declaration
@@ -142,7 +142,7 @@ dart_code_metrics:
   metrics-exclude:
     - test/**
   metrics:
-    number-of-arguments: 8
+    number-of-parameters: 8
     number-of-methods: 32
     lines-of-executable-code: 200
     cyclomatic-complexity: 36
