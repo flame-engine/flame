@@ -148,7 +148,7 @@ Next, we can load our two sprites:
       // `srcPosition` and `srcSize` here tells `loadSprite` that we want
       // just a rect (starting at (0, 0) with the dimensions (60, 20)) of the image
       // which gives us only the first button
-      srcPosition: Vector2.zero(),
+      srcPosition: Vector2.zero(), // this is zero by default
       srcSize: Vector2(60, 20),
     );
 
