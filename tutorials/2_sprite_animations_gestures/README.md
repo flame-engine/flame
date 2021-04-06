@@ -131,7 +131,7 @@ The first thing we need to do is to add a couple of variables need to reference 
   bool isPressed = false;
 ```
 
-Next we load our two sprites:
+Next, we can load our two sprites:
 
 ```dart
   @override
