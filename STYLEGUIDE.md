@@ -5,7 +5,6 @@ This includes high level guidance to help with simple decisions in the day-to-da
 
 This extends rules on the official [Flutter Style Guide](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo).
 
-
 ## Code formatting
 
 ### Trailing Commas and Wrapping
