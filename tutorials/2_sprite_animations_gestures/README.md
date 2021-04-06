@@ -95,8 +95,7 @@ class MyGame extends Game {
 
   @override
   void update(double dt) {
-    // Here we just need to "hook" our animation into the game loop update method so it move
-    // in its frame list
+    // Here we just need to "hook" our animation into the game loop update method so the current frame is updated with the specified frequency
     runningRobot.update(dt);
   }
 
