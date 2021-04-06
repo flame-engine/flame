@@ -1,8 +1,14 @@
 # Style Guide
 
-This is WIP! It is definitely not complete. We just starting putting this together.
+This is a general style guide that shall govern over the Flame Engine repository. The aim is to keep a common stable general environment.
+This includes high level guidance to help on simple decisions in the day-to-day development life.
 
-## Trailing Commas and Wrapping
+This extends rules on the official [Flutter Style Guide](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo).
+
+
+## Code formatting
+
+### Trailing Commas and Wrapping
 
 List of elements must always be all in one line or one element per line. This includes parameters, arguments, collection literals, etc. Furthermore, if multiline, the last element must have a trailing comma.
 
@@ -37,7 +43,7 @@ foo(f1,
     f2)
 ```
 
-## Imports
+### Imports
 
 * Never include unused or duplicated imports.
 * You must always use relative imports for imports within the Flame library.
@@ -72,3 +78,74 @@ import 'camera.dart';
 import 'game.dart';
 import 'viewport.dart';
 ```
+
+### Identifiers
+
+Use all [effective dart patterns](https://dart.dev/guides/language/effective-dart)
+
+* Avoid using global constants, but if you do use, name it prefixing with a `k`.
+
+```dart
+// Do not:
+const someConstant = 42;
+
+// Do instead:
+const kSomeConstant = 42;
+```
+
+### Comments
+
+* Add an identifier for TODO comments
+* Use full capitalized TODO
+
+```dart
+
+// Do not:
+// Todo: This thing should be that thing
+final thisThing = 13;
+
+// Do instead:
+// TODO(wofstein): This thing should be that thing
+const thisThing = 13;
+```
+
+### Asserts
+
+* Use asserts to detect contract violation.
+* Use asserts to run debug only code
+
+Example:
+````dart
+void something(int smaller, int bigger) {
+  assert(small < bigger, "smaller is not smaller than bigger");
+  assert((){
+    // debug only code
+  });
+  
+  //...
+}
+
+````
+
+
+
+## Code documentation 
+
+Specific guides for dartdoc documentation.
+
+#### Use impersonal tone
+
+Avoid using words such as "you", "ours" and "yours" on code documentation
+
+#### Consider adding examples
+
+Some elements may benefit from a simple usage example.
+
+#### Avoid useless code documentation
+
+Avoid documentation that just repeats the obvious. 
+For example, `void doStuff()` be documented as "Method that does stuff".
+
+#### Consider adding linkage between docs
+
+Consider adding a "See also" section to element documentation

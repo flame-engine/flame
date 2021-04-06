@@ -10,7 +10,7 @@ Before you create this PR confirm that it meets all requirements listed below by
 - [ ] My PR includes unit or integration tests for *all* changed/updated/fixed behaviors and are passing (See [Contributor Guide]).
 - [ ] I updated/added relevant documentation (doc comments with `///`) and updated/added examples in `doc/examples`.
 - [ ] I have formatted my code with `./scripts/format.sh` and the Flame analyzer (`./scripts/analyze.sh`) does not report any problems.
-- [ ] I read and followed the [Flutter Style Guide].
+- [ ] I read and followed the [Flame Style Guide].
 - [ ] I have added a description of the change under `[next]` in `CHANGELOG.md`.
 - [ ] I removed the `Draft` status, by clicking on the `Ready for review` button in this PR.
 - [ ] I am willing to follow-up on review comments in a timely manner.
@@ -29,4 +29,4 @@ Does your PR require Flame users to manually update their apps to accommodate yo
 <!-- Links -->
 [issue database]: https://github.com/flame-engine/flame/issues
 [Contributor Guide]: https://github.com/flame-engine/flame/blob/main/CONTRIBUTING.md
-[Flutter Style Guide]: https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo
+[Flame Style Guide]: https://github.com/flame-engine/flame/blob/main/STYLEGUIDE.md
