@@ -95,7 +95,7 @@ const kSomeConstant = 42;
 ### Comments
 
 * Add an identifier for TODO comments
-* Use full capitalized TODO
+* Use fully capitalized TODO notation
 
 ```dart
 
