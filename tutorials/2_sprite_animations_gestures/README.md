@@ -28,7 +28,7 @@ This technique is often called sprite sheet.
 
 ## Animations
 
-Animations is what gives 2D games life, Flame provides a handy class called `SpriteAnimation` which lets you create an animation out of an list of sprites. Animations usually have all its frame's sprite into a single image
+Animation is what gives 2D games life. Flame provides a handy class called `SpriteAnimation` which lets you create an animation out of a list of sprites representing each frame, in sequence. Animations are usually bundled in a single Sprite Sheet, like this one:
 
 ![Animation example](code/assets/images/running.png)
 
