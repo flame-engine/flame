@@ -75,8 +75,8 @@ class MyGame extends Game {
   final runningPosition = Vector2(240, 50);
   final runningSize = Vector2(48, 60);
 
-  // Now, on the `onLoad` method, we need to load our animation, to do that we can use the
-  // `loadSpriteAnimation` method, which is present on our game class
+  // Now, on the `onLoad` method, we need to load our animation. To do that we can use the
+  // `loadSpriteAnimation` method, which is present on our game class.
   @override
   Future<void> onLoad() async {
     runningRobot = await loadSpriteAnimation(
