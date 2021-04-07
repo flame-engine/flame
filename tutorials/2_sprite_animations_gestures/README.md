@@ -20,17 +20,16 @@ Sprites are images, or a portion of an image, loaded into the memory, and can th
 
 Sprites can be (and usually are) bundled into single images, called Sprite Sheets. That is a very useful technique as it lowers the amount of I/O operations needed to load the game assets because it is faster to load 1 image of 10 KB than to load 10 images of 1 KB each (among other advantages).
 
-For example, on this tutorial, we will have a button that makes our robot run. This button needs two sprites, for the unpressed and pressed states. We can have the following image containing both:
+For example, on this tutorial, we will have a button that makes our robot run. This button needs two sprites, for the unpressed and pressed states. We can have the following image containing both, this technique is often called sprite sheet.
 
 ![Sprite example](code/assets/images/buttons.png)
 
-This technique is often called sprite sheet.
 
 ## Animations
 
 Animation is what gives 2D games life. Flame provides a handy class called `SpriteAnimation` which lets you create an animation out of a list of sprites representing each frame, in sequence. Animations are usually bundled in a single Sprite Sheet, like this one:
 
-![Animation example](code/assets/images/running.png)
+![Animation example](code/assets/images/robot.png)
 
 Flame provides a way for easily turning that sprite sheet into an animation, which we will see how in a few moments.
 
@@ -41,11 +40,7 @@ To get started, lets get a Flame `Game` instance running with a structure simila
 ```dart
 void main() {
   final myGame = MyGame();
-  runApp(
-    GameWidget(
-      game: myGame,
-    ),
-  );
+  runApp(GameWidget(game: myGame));
 }
 
 class MyGame extends Game with TapDetector {
@@ -72,17 +67,17 @@ class MyGame extends Game {
   // Vector2 is a class from `package:vector_math/vector_math_64.dart` and is widely used
   // in Flame to represent vectors. Here we need two vectors, one to define where we are
   // going to draw our robot and another one to define its size
-  final runningPosition = Vector2(240, 50);
-  final runningSize = Vector2(48, 60);
+  final robotPosition = Vector2(240, 50);
+  final robotSize = Vector2(48, 60);
 
   // Now, on the `onLoad` method, we need to load our animation. To do that we can use the
   // `loadSpriteAnimation` method, which is present on our game class.
   @override
   Future<void> onLoad() async {
     runningRobot = await loadSpriteAnimation(
-      'running.png',
+      'robot.png',
       // `SpriteAnimationData` is a class used to tell Flame how the animation spritesheet
-      // is organized, here we are basically telling that our sprites is organized in a horizontal
+      // is organized. In this case we are describing that our frames are laid out a horizontal
       // sequence on the image, that there are 8 frames, each frame is a sprite of 16x18 pixels,
       // and, finally, that each frame should appear for 0.1 seconds when the animation is running.
       SpriteAnimationData.sequenced(
@@ -105,7 +100,7 @@ class MyGame extends Game {
     // current sprite and render it on our canvas. Which frame is the current sprite is updated on the `update` method.
     runningRobot
         .getSprite()
-        .render(canvas, position: runningPosition, size: runningSize);
+        .render(canvas, position: robotPosition, size: robotSize);
   }
 
   @override
@@ -113,7 +108,7 @@ class MyGame extends Game {
 }
 ```
 
-When running the game now, you should see our vampire robot running endless in the screen.
+When running the game now, you should see our vampire robot running endless on the screen.
 
 For the next step, let's implement our on/off button and render it on the screen.
 
@@ -207,9 +202,7 @@ class MyGame extends Game with TapDetector {
     // if a point (Offset) is inside that rect
     final buttonArea = buttonPosition & buttonSize;
 
-    if (buttonArea.contains(details.localPosition)) {
-      isPressed = true;
-    }
+    isPressed = buttonArea.contains(details.localPosition);
   }
 
   // On both tap up and tap cancel we just set the isPressed

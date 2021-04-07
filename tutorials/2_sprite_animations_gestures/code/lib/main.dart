@@ -5,11 +5,7 @@ import 'package:flame/game.dart';
 
 void main() {
   final myGame = MyGame();
-  runApp(
-    GameWidget(
-      game: myGame,
-    ),
-  );
+  runApp(GameWidget(game: myGame));
 }
 
 class MyGame extends Game with TapDetector {
@@ -22,13 +18,13 @@ class MyGame extends Game with TapDetector {
   final buttonPosition = Vector2(200, 120);
   final buttonSize = Vector2(120, 30);
 
-  final runningPosition = Vector2(240, 50);
-  final runningSize = Vector2(48, 60);
+  final robotPosition = Vector2(240, 50);
+  final robotSize = Vector2(48, 60);
 
   @override
   Future<void> onLoad() async {
     runningRobot = await loadSpriteAnimation(
-      'running.png',
+      'robot.png',
       SpriteAnimationData.sequenced(
         amount: 8,
         stepTime: 0.1,
@@ -53,9 +49,7 @@ class MyGame extends Game with TapDetector {
   void onTapDown(TapDownDetails details) {
     final buttonArea = buttonPosition & buttonSize;
 
-    if (buttonArea.contains(details.localPosition)) {
-      isPressed = true;
-    }
+    isPressed = buttonArea.contains(details.localPosition);
   }
 
   @override
@@ -79,7 +73,7 @@ class MyGame extends Game with TapDetector {
   void render(Canvas canvas) {
     runningRobot
         .getSprite()
-        .render(canvas, position: runningPosition, size: runningSize);
+        .render(canvas, position: robotPosition, size: robotSize);
 
     if (isPressed) {
       pressedButton.render(canvas, position: buttonPosition, size: buttonSize);

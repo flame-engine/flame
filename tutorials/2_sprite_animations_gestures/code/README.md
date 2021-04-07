@@ -1,3 +1,3 @@
-# basic_square
+# basic_sprites_animations
 
-Code for the Basic Square tutorial
+Code for the Basic Sprites, Animations and Gestures
