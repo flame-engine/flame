@@ -164,7 +164,7 @@ Finally, we just render it on the game `render` function:
   void render(Canvas canvas) {
     // Running robot render omited
 
-    Sprite button = isPressed ? pressedButton : unpressedButton;
+    final button = isPressed ? pressedButton : unpressedButton;
     button.render(canvas, position: buttonPosition, size: buttonSize);
   }
 ```
