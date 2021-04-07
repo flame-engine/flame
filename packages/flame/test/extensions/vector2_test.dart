@@ -100,5 +100,50 @@ void main() {
       expectDouble(p2.length, math.sqrt(2));
       expect(p2.x, p2.y);
     });
+    test('moveToTarget - fully horizontal', () {
+      final current = Vector2(10.0, 0.0);
+      final target = Vector2(20.0, 0.0);
+
+      current.moveToTarget(target, 0);
+      expect(current, Vector2(10.0, 0.0));
+
+      current.moveToTarget(target, 1);
+      expect(current, Vector2(11.0, 0.0));
+
+      current.moveToTarget(target, 6);
+      expect(current, Vector2(17.0, 0.0));
+
+      current.moveToTarget(target, 5);
+      expect(current, Vector2(20.0, 0.0));
+    });
+    test('moveToTarget - fully vertical', () {
+      final current = Vector2(10.0, 0.0);
+      final target = Vector2(10.0, 100.0);
+
+      current.moveToTarget(target, 0);
+      expect(current, Vector2(10.0, 0.0));
+
+      current.moveToTarget(target, 1);
+      expect(current, Vector2(10.0, 1.0));
+
+      current.moveToTarget(target, 80);
+      expect(current, Vector2(10.0, 81.0));
+
+      current.moveToTarget(target, 19);
+      expect(current, Vector2(10.0, 100.0));
+    });
+    test('moveToTarget - arbitrary direction', () {
+      final current = Vector2(2.0, 2.0);
+      final target = Vector2(4.0, 6.0); // direction is 1,2
+
+      current.moveToTarget(target, 0);
+      expect(current, Vector2(2.0, 2.0));
+
+      current.moveToTarget(target, math.sqrt(5));
+      expect(current, Vector2(3.0, 4.0));
+
+      current.moveToTarget(target, math.sqrt(5));
+      expect(current, Vector2(4.0, 6.0));
+    });
   });
 }

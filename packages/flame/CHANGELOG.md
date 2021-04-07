@@ -1,6 +1,9 @@
 # CHANGELOG
 
 ## [next]
+ - Updated tutorial documentation to indicate use of new version
+
+## [1.0.0-rc9]
  - Fix input bug with other anchors than center
  - Fixed `Shape` so that the `position` is now a `late`
  - Updated the documentation for the supported platforms
@@ -10,6 +13,20 @@
  - Adding some more basic colors entries to the `BasicPalette`
  - Fixing Flutter and Dart version constraints
  - Exporting Images and AssetsCache
+ - Make `size` and `position` in `PositionComponent` final
+ - Add a `snapTo` and `onPositionUpdate` method to the `Camera`
+ - Remove the SpriteAnimationComponent when the animation is really done, not when it is on the last frame
+ - Revamp all the docs to be up to date with v1.0.0
+ - Make Assets and Images caches have a configurable prefix
+ - Add `followVector2` method to the `Camera`
+ - Make `gameRef` late
+ - Fix Scroll example
+ - Add a `renderPoint` method to `Canvas`
+ - Add zoom to the camera
+ - Add `moveToTarget` as an extension method to `Vector2`
+ - Bring back collision detection examples
+ - Fix collision detection in Collidable with multiple offset shapes
+ - Publishing Flame examples on github pages
 
 ## 1.0.0-rc8
  - Migrate to null safety

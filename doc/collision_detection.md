@@ -25,6 +25,11 @@ the latter is very useful for accurate gesture detection. The collision detectio
 what should happen when two hitboxes collide, so it is up to the user to implement what will happen
 when for example two position components have intersecting hitboxes.
 
+Do note that the built-in collision detection system does not take collisions between two hitboxes
+that overshoot each other into account, this could happen when they either move too fast or `update`
+being called with a large delta time (for example if your app is not in the foreground). This
+behaviour is called tunneling, if you want to read more about it.
+
 ## Mixins
 ### Hitbox
 The `Hitbox` mixin is mainly used for two things; to make detection of collisions with other
@@ -105,9 +110,9 @@ The `CollidableType` enum contains the following values:
  - `inactive` will not collide with any other `Collidable`s
 
 So if you have collidables that you don't need to check collisions against each other you can mark
-them as passive by setting `collidableType = CollidableType.passive`, this could for example be ground
-components or maybe your enemies don't need to check collisions between each other, then they could
-be marked as passive too.
+them as passive by setting `collidableType = CollidableType.passive`, this could for example be
+ground components or maybe your enemies don't need to check collisions between each other, then they
+could be marked as passive too.
 
 Then we have the `inactive` type which simply doesn't get checked at all in the collision detection.
 This could be used for example if you have components outside of the screen that you don't care
@@ -236,4 +241,4 @@ you can use the optional arguments `radius` and `position` to set those, if the 
 `size` of the `Circle` will be automatically set too.
 
 ## Example
-https://github.com/flame-engine/flame/tree/master/doc/examples/collidables
+https://github.com/flame-engine/flame/tree/main/examples/lib/stories/collidables

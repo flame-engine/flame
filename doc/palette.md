@@ -1,30 +1,51 @@
 # Palette
 
-Throughout your game you are going to need to use colors in lots of places. There are two classes on `dart:ui` that can be used, `Color` and `Paint`.
+Throughout your game you are going to need to use colors in lots of places. There are two classes on
+`dart:ui` that can be used, `Color` and `Paint`.
 
-The `Color` class is nothing but a wrapper over a single simple ARGB color in hexadecimal integer format. So to create a Color object you just need to pass in the color as an integer in the ARGB format.
+The `Color` class represents a ARGB color in a hexadecimal integer
+format. So to create a `Color` instance, you just need to pass the color as an integer in the ARGB
+format.
 
-You can use Dart's hexadecimal notation to make it really easy; for instance: `0xFF00FF00` is fully opaque green (the 'mask' would be `0xAARRGGBB`). Do note the first two hexadecimal digits are for the alpha channel (transparency), unlike on regular (non-A) RGB. The max(FF = 255) means fully opaque.
+You can use Dart's hexadecimal notation to make it really easy; for instance: `0xFF00FF00` is fully
+opaque green (the "mask" would be `0xAARRGGBB`). 
 
-In the material flutter package there is a color enum to make it easy to use common colors:
+**Note**: The first two hexadecimal digits are for
+the alpha channel (transparency), unlike on regular (non-A) RGB. The max(FF = 255) for the two first
+digits means fully opaque, and the min (00 = 0) means fully transparent.
+
+In the Material Flutter package there is a `Colors` class that provides common colors as constants:
 
 ```dart
-import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart' show Colors;
 
-Color color = material.Colors.black;
+const black = Colors.black;
 ```
 
-Some more complex methods might also take a Paint, which is a more complete option that allows you to define more options related to stroke, colors, filters, blends. However, normally when using even the more complex APIs, you want just an instance of a Paint representing just a single simple plain solid color.
+Some more complex methods might also take a `Paint` object, which is a more complete structure that
+allows you to configure aspects related to stroke, colors, filters and blends.
+However, normally when using even the more complex APIs, you just want an instance of a `Paint`
+object representing just a single simple plain solid color.
 
-You can create such a Paint like this:
+**Note:** we don't recommend that you create a new `Paint` object every time you need a specific
+`Paint`, since it could potentially lead to a lot of unnecessary objects being created. A better way
+is to either define the `Paint` object somewhere and re-use it (however, do note that the `Paint`
+class is mutable, unlike `Color`), or to use the `Palette` class to define all the colors that you
+want to use in your game.
+
+You can create such an object like this:
 
 ```dart
 Paint green = Paint()..color = const Color(0xFF00FF00);
 ```
 
-To help that and also keep your game's color palette consistent, Flame adds the Palette class. You can use it to both easily access Colors and Paints where needed and also to define the colors your game use as constants, so you don't get those mixed up.
+To help you with this and to also keep your game's color palette consistent, Flame adds the `Palette`
+class. You can use it to easily access both `Color`s and `Paint`s where needed and also to define
+the colors your game use as constants, so you don't get those mixed up.
 
-The `BasicPalette` class is an example of what a palette can look like, and adds black and white as colors. So to use black or white you can access those directly from the BasicPalette; for example, using `color`:
+The `BasicPalette` class is an example of what a palette can look like, and adds black and white as
+colors. So to use black or white you can access those directly from the `BasicPalette`; for example,
+using `color`:
 
 ```dart
 TextConfig regular = TextConfig(color: BasicPalette.white.color);
@@ -36,7 +57,10 @@ Or using `paint`:
 canvas.drawRect(rect, BasicPalette.black.paint);
 ```
 
-However, the idea is that you can create your own palette, following the `BasicPalette` example, and add the color palette/scheme of your game. Then you will be able to statically access any color in your components and classes, never mix up the RGBs anymore. Below is an example of a Palette implementation, from the example game [BGUG](https://github.com/luanpotter/bgug/blob/master/lib/palette.dart):
+However, the idea is that you can create your own palette, following the `BasicPalette` example, and
+add the color palette/scheme of your game. Then you will be able to statically access any color in
+your components and classes. Below is an example of a `Palette` implementation, from the example
+game [BGUG](https://github.com/fireslime/bgug/blob/master/lib/palette.dart):
 
 ```dart
 import 'dart:ui';
@@ -54,7 +78,10 @@ class Palette {
 }
 ```
 
-A `PaletteEntry` is a const class that can hold information of a color, and has two attributes:
+A `PaletteEntry` is a `const` class that holds information of a color and it has the following
+members:
 
- * `color`: returns the `Color` specified
- * `paint`: creates a new `Paint` with the color specified. `Paint` is a non-const class, so this attribute actually creates a brand new instance every time it's called. It's safe to cascade mutations to this.
+ - `color`: returns the `Color` specified
+ - `paint`: creates a new `Paint` with the color specified. `Paint` is a non-`const` class, so this
+  method actually creates a brand new instance every time it's called. It's safe to cascade
+  mutations to this.

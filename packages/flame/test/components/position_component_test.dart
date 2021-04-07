@@ -12,8 +12,8 @@ void main() {
   group('PositionComponent overlap test', () {
     test('overlap', () {
       final PositionComponent component = MyComponent();
-      component.position = Vector2(2.0, 2.0);
-      component.size = Vector2(4.0, 4.0);
+      component.position.setValues(2.0, 2.0);
+      component.size.setValues(4.0, 4.0);
       component.angle = 0.0;
       component.anchor = Anchor.center;
 
@@ -23,8 +23,8 @@ void main() {
 
     test('overlap on edge', () {
       final PositionComponent component = MyComponent();
-      component.position = Vector2(2.0, 2.0);
-      component.size = Vector2(2.0, 2.0);
+      component.position.setValues(2.0, 2.0);
+      component.size.setValues(2.0, 2.0);
       component.angle = 0.0;
       component.anchor = Anchor.center;
 
@@ -34,8 +34,8 @@ void main() {
 
     test('not overlapping with x', () {
       final PositionComponent component = MyComponent();
-      component.position = Vector2(2.0, 2.0);
-      component.size = Vector2(2.0, 2.0);
+      component.position.setValues(2.0, 2.0);
+      component.size.setValues(2.0, 2.0);
       component.angle = 0.0;
       component.anchor = Anchor.center;
 
@@ -45,8 +45,8 @@ void main() {
 
     test('not overlapping with y', () {
       final PositionComponent component = MyComponent();
-      component.position = Vector2(2.0, 2.0);
-      component.size = Vector2(2.0, 2.0);
+      component.position.setValues(2.0, 2.0);
+      component.size.setValues(2.0, 2.0);
       component.angle = 0.0;
       component.anchor = Anchor.center;
 
@@ -56,8 +56,8 @@ void main() {
 
     test('overlapping with angle', () {
       final PositionComponent component = MyComponent();
-      component.position = Vector2(2.0, 2.0);
-      component.size = Vector2(2.0, 2.0);
+      component.position.setValues(2.0, 2.0);
+      component.size.setValues(2.0, 2.0);
       component.angle = math.pi / 4;
       component.anchor = Anchor.center;
 
@@ -67,8 +67,8 @@ void main() {
 
     test('not overlapping with angle', () {
       final PositionComponent component = MyComponent();
-      component.position = Vector2(2.0, 2.0);
-      component.size = Vector2(2.0, 2.0);
+      component.position.setValues(2.0, 2.0);
+      component.size.setValues(2.0, 2.0);
       component.angle = math.pi / 4;
       component.anchor = Anchor.center;
 
@@ -78,8 +78,8 @@ void main() {
 
     test('overlapping with angle and topLeft anchor', () {
       final PositionComponent component = MyComponent();
-      component.position = Vector2(1.0, 1.0);
-      component.size = Vector2(2.0, 2.0);
+      component.position.setValues(1.0, 1.0);
+      component.size.setValues(2.0, 2.0);
       component.angle = math.pi / 4;
       component.anchor = Anchor.topLeft;
 
@@ -88,11 +88,10 @@ void main() {
     });
 
     test('component with hitbox contains point', () {
-      final size = Vector2(2.0, 2.0);
       final Hitbox component = MyHitboxComponent();
-      component.position = Vector2(1.0, 1.0);
+      component.position.setValues(1.0, 1.0);
       component.anchor = Anchor.topLeft;
-      component.size = size;
+      component.size.setValues(2.0, 2.0);
       final hitbox = HitboxPolygon([
         Vector2(1, 0),
         Vector2(0, -1),
@@ -106,11 +105,10 @@ void main() {
     });
 
     test('component with anchor topLeft contains point on edge', () {
-      final size = Vector2(2.0, 2.0);
       final Hitbox component = MyHitboxComponent();
-      component.position = Vector2(-1, -1);
+      component.position.setValues(-1, -1);
       component.anchor = Anchor.topLeft;
-      component.size = size;
+      component.size.setValues(2.0, 2.0);
       final hitbox = HitboxRectangle();
       component.addShape(hitbox);
 
@@ -121,11 +119,10 @@ void main() {
     });
 
     test('component with anchor bottomRight contains point on edge', () {
-      final size = Vector2(2.0, 2.0);
       final Hitbox component = MyHitboxComponent();
-      component.position = Vector2(1, 1);
+      component.position.setValues(1, 1);
       component.anchor = Anchor.bottomRight;
-      component.size = size;
+      component.size.setValues(2.0, 2.0);
       final hitbox = HitboxRectangle();
       component.addShape(hitbox);
 
@@ -136,11 +133,10 @@ void main() {
     });
 
     test('component with anchor topRight does not contain close points', () {
-      final size = Vector2(2.0, 2.0);
       final Hitbox component = MyHitboxComponent();
-      component.position = Vector2(1, 1);
+      component.position.setValues(1, 1);
       component.anchor = Anchor.topLeft;
-      component.size = size;
+      component.size.setValues(2.0, 2.0);
       final hitbox = HitboxRectangle();
       component.addShape(hitbox);
 
@@ -151,11 +147,10 @@ void main() {
     });
 
     test('component with hitbox does not contains point', () {
-      final size = Vector2(2.0, 2.0);
       final Hitbox component = MyHitboxComponent();
-      component.position = Vector2(1.0, 1.0);
+      component.position.setValues(1.0, 1.0);
       component.anchor = Anchor.topLeft;
-      component.size = size;
+      component.size.setValues(2.0, 2.0);
       component.addShape(HitboxPolygon([
         Vector2(1, 0),
         Vector2(0, -1),
@@ -169,8 +164,8 @@ void main() {
 
     test('component with zero size does not contain point', () {
       final PositionComponent component = MyComponent();
-      component.position = Vector2(2.0, 2.0);
-      component.size = Vector2(0.0, 0.0);
+      component.position.setValues(2.0, 2.0);
+      component.size.setValues(0.0, 0.0);
       component.angle = 0.0;
       component.anchor = Anchor.center;
 

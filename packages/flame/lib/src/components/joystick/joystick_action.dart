@@ -67,7 +67,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
 
   @override
   Future<void> onLoad() async {
-    initialize(gameRef!.size);
+    initialize(gameRef.size);
   }
 
   @override
@@ -188,7 +188,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   @override
   bool onDragUpdate(int pointerId, DragUpdateDetails details) {
     if (_dragging) {
-      _dragPosition = gameRef!.convertGlobalToLocalCoordinate(
+      _dragPosition = gameRef.convertGlobalToLocalCoordinate(
         details.globalPosition.toVector2(),
       );
       return true;

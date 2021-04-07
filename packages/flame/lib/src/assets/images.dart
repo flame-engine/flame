@@ -9,7 +9,10 @@ import 'package:flutter/foundation.dart';
 import '../flame.dart';
 
 class Images {
+  final String prefix;
   final Map<String, _ImageAssetLoader> _loadedFiles = {};
+
+  Images({this.prefix = 'assets/images/'});
 
   void clear(String fileName) {
     _loadedFiles.remove(fileName);
@@ -83,7 +86,7 @@ class Images {
   }
 
   Future<Image> _fetchToMemory(String name) async {
-    final data = await Flame.bundle.load('assets/images/$name');
+    final data = await Flame.bundle.load('$prefix$name');
     final bytes = Uint8List.view(data.buffer);
     return _loadBytes(bytes);
   }

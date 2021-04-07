@@ -143,7 +143,10 @@ abstract class BaseComponent extends Component {
   /// For children that don't need preparation from the game instance can
   /// disregard both the options given above.
   Future<void> addChild(Component child, {Game? gameRef}) async {
-    gameRef ??= (this as HasGameRef).gameRef;
+    if (this is HasGameRef) {
+      final c = this as HasGameRef;
+      gameRef ??= c.hasGameRef ? c.gameRef : null;
+    }
     if (gameRef is BaseGame) {
       gameRef.prepare(child);
     }

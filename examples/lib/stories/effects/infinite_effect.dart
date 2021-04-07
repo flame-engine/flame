@@ -15,7 +15,7 @@ final orange = Paint()..color = const Color(0xAABB6633);
 SquareComponent makeSquare(Paint paint) {
   return SquareComponent()
     ..paint = paint
-    ..position = Vector2.all(100);
+    ..position.setValues(100, 100);
 }
 
 class InfiniteEffectGame extends BaseGame with TapDetector {

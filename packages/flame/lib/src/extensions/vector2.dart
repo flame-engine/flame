@@ -60,6 +60,29 @@ extension Vector2Extension on Vector2 {
     }
   }
 
+  /// Smoothly moves this [Vector2] in the direction [target] by a displacement
+  /// given by a distance [ds] in that direction.
+  ///
+  /// It does not goes beyond target, regardless of [ds], so the final value
+  /// is always [target].
+  ///
+  /// Note: [ds] is the displacement vector in units of the vector space. It is
+  /// **not** a percentage (relative value).
+  void moveToTarget(
+    Vector2 target,
+    double ds,
+  ) {
+    if (this != target) {
+      final diff = target - this;
+      if (diff.length < ds) {
+        setFrom(target);
+      } else {
+        diff.scaleTo(ds);
+        setFrom(this + diff);
+      }
+    }
+  }
+
   /// Modulo/Remainder
   Vector2 operator %(Vector2 mod) => Vector2(x % mod.x, y % mod.y);
 

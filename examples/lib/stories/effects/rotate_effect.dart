@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +13,10 @@ class RotateEffectGame extends BaseGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    add(
-      square = SquareComponent()
-        ..position = Vector2.all(200)
-        ..anchor = Anchor.center,
-    );
+    square = SquareComponent()
+      ..position.setValues(200, 200)
+      ..anchor = Anchor.center;
+    add(square);
   }
 
   @override

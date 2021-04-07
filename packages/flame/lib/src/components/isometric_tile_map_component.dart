@@ -98,9 +98,9 @@ class IsometricTileMapComponent extends PositionComponent {
 
   /// Return whether the matrix contains a block in its bounds.
   bool containsBlock(Block block) {
-    return block.x >= 0 &&
-        block.x < matrix.length &&
-        block.y >= 0 &&
-        block.y < matrix[block.x].length;
+    return block.y >= 0 &&
+        block.y < matrix.length &&
+        block.x >= 0 &&
+        block.x < matrix[block.y].length;
   }
 }

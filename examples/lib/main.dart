@@ -3,6 +3,7 @@ import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 
 import 'stories/animations/animations.dart';
+import 'stories/collision_detection/collision_detection.dart';
 import 'stories/components/components.dart';
 import 'stories/controls/controls.dart';
 import 'stories/effects/effects.dart';
@@ -15,12 +16,13 @@ import 'stories/widgets/widgets.dart';
 
 void main() async {
   final dashbook = Dashbook(
-    title: 'Flame Example',
+    title: 'Flame Examples',
     theme: ThemeData.dark(),
   );
 
   addAnimationStories(dashbook);
   addComponentsStories(dashbook);
+  addCollisionDetectionStories(dashbook);
   addEffectsStories(dashbook);
   addTileMapStories(dashbook);
   addControlsStories(dashbook);

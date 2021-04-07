@@ -14,6 +14,7 @@ void main() {
   final argumentSize = randomVector2();
   final argumentAngle = randomAngle();
   final path = List.generate(3, (i) => randomVector2());
+
   TestComponent component() {
     return TestComponent(
       position: randomVector2(),

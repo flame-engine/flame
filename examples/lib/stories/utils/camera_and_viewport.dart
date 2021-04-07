@@ -24,7 +24,7 @@ class MovableSquare extends SquareComponent
     timer = Timer(3.0)
       ..stop()
       ..callback = () {
-        gameRef!.camera.setRelativeOffset(Anchor.center.toVector2());
+        gameRef.camera.setRelativeOffset(Anchor.center.toVector2());
       };
   }
 
@@ -34,7 +34,7 @@ class MovableSquare extends SquareComponent
     timer.update(dt);
 
     final ds = velocity * (speed * dt);
-    position += ds;
+    position.add(ds);
   }
 
   @override
@@ -50,7 +50,7 @@ class MovableSquare extends SquareComponent
   @override
   void onCollision(Set<Vector2> points, Collidable other) {
     if (other is Rock) {
-      gameRef!.camera.setRelativeOffset(Anchor.topCenter.toVector2());
+      gameRef.camera.setRelativeOffset(Anchor.topCenter.toVector2());
       timer.start();
     }
   }
@@ -83,8 +83,8 @@ class Map extends Component {
 
 class Rock extends SquareComponent with Hitbox, Collidable {
   Rock(Vector2 position) {
-    this.position = position;
-    size = Vector2.all(50);
+    this.position.setFrom(position);
+    size.setValues(50, 50);
     paint = Paint()..color = const Color(0xFF2222FF);
     addShape(HitboxRectangle());
   }
@@ -104,7 +104,7 @@ class CameraAndViewportGame extends BaseGame
 
     add(square = MovableSquare());
     camera.cameraSpeed = 1;
-    camera.followObject(square, worldBounds: Map.bounds);
+    camera.followComponent(square, worldBounds: Map.bounds);
 
     for (var i = 0; i < 30; i++) {
       add(Rock(Vector2(Map.genCoord(), Map.genCoord())));

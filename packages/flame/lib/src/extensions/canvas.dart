@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import '../../palette.dart';
 import 'vector2.dart';
 
 export 'dart:ui' show Canvas;
@@ -11,6 +12,19 @@ extension CanvasExtension on Canvas {
 
   void translateVector(Vector2 vector) {
     translate(vector.x, vector.y);
+  }
+
+  /// Renders a point as a square of size [size] (default 1 logical pixel) using
+  /// the provided [paint] (default solid magenta).
+  ///
+  /// This is mostly useful for debugging.
+  void renderPoint(
+    Vector2 point, {
+    double size = 1.0,
+    Paint? paint,
+  }) {
+    final rect = (point - Vector2.all(size / 2)) & Vector2.all(size);
+    drawRect(rect, paint ?? BasicPalette.magenta.paint());
   }
 
   /// Utility method to render stuff on a specific place in an isolated way.

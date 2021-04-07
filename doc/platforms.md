@@ -1,16 +1,20 @@
 # Supported Platforms
 
-Flame runs on top of Flutter, so its supported platforms depend on how mature/stable support for each platform is by Flutter.
+Since Flame runs on top of Flutter, so its supported platforms depend on which platforms that are
+supported by Flutter.
 
 At the moment, Flame supports both mobile and web.
 
 ## Flutter channels
 
-Flame keeps it support on the stable and beta channel, dev and master channel should work, but we don't support them. This mean that issues happening outside stable or beta channel, are not a priority.
+Flame keeps it support on the stable channel. The dev, beta and master channel should work, but we
+don't support them. This means that issues happening outside the stable channel are not a priority.
 
 ## Flame web
 
-To use Flame on web you need to make sure your game is using the CanvasKit/[Skia](https://skia.org/) renderer, this will increase performance on the web as it will use the `canvas` element instead of seperate HTML elements. 
+To use Flame on web you need to make sure your game is using the CanvasKit/[Skia](https://skia.org/)
+renderer. This will increase performance on the web, as it will use the `canvas` element instead of
+separate DOM elements. 
 
 To run your game using skia, use the following command: 
 
@@ -20,8 +24,19 @@ To build the game for production, using skia, use the following:
 
 `$ flutter build web --release --web-renderer canvaskit`
 
-### Experimental support
+### Web support
 
-Not all Flame APIs might fully support web or are still experimental for the web platform. For example `Flame.device.setOrientation` and `Flame.device.fullScreen` do not work for the web, they can be called, but nothing will happen.
+When using Flame on the web some methods may not work. For example `Flame.device.setOrientation` and
+`Flame.device.fullScreen` won't work on web, they can be called, but nothing will happen.
 
-If you are using the `flame_audio` package, then precaching audio will not work on the web. This is due to the fact that the [audioplayers](https://pub.dev/packages/audioplayers) package does not support web. You can work around this problem by using the `http` package. By doing a `GET` request to your audio file. The browser will then cache that request for you.
+Another example: pre caching audio using `flame_audio` package also doesn't work due to Audioplayers
+not supporting it on web. This can be worked around by using the `http` package, and requesting a
+get to the audio file, that will make the browser cache the file producing the same effect as on
+mobile.
+
+If you want to create instances of `ui.Image` on the web you can use our
+`Flame.images.decodeImageFromPixels` method. This wraps the `decodeImageFromPixels` from the `ui`
+library, but with support for the web platform. If the `runAsWeb` argument is set to `true` (by
+default it is set to `kIsWeb`) it will decode the image using an internal image method. When the
+`runAsWeb` is `false` it will use the `decodeImageFromPixels`, which is currently not supported on
+the web.

@@ -6,6 +6,9 @@
     - [Components](components.md)
     - [Input](input.md)
     - [Platforms](platforms.md)
+    - [Collision detection](collision_detection.md)
+    - [Effects](effects.md)
+    - [Camera & Viewport](camera_and_viewport.md)
 
 - Audio
     - [General Audio](audio.md)
@@ -20,7 +23,6 @@
 
 - Other Modules
     - [Util](util.md)
-    - [Gamepad](gamepad.md)
     - [Widgets](widgets.md)
     - [Forge2D](forge2d.md)
     - [Tiled](tiled.md)

@@ -1,17 +1,17 @@
 # Structure
 
-The only structure you are required to comply is having an assets folder with two sub folders: audio and images.
+Flame has a proposed structure for your project that includes the standard Flutter `assets` directory in addition to two children: `audio` and `images`.
 
-An example:
+If using the following example code:
 
 ```dart
-  Flame.audio.play('explosion.mp3');
+  FlameAudio.play('explosion.mp3');
 
   Flame.images.load('player.png');
   Flame.images.load('enemy.png');
 ```
 
-The file structure would have to be:
+The file structure Flame would expect to find the files in would be:
 
 ```
 .
@@ -24,7 +24,6 @@ The file structure would have to be:
 ```
 
 Optionally you can split your `audio` folder into two subfolders, one for `music` and one for `sfx`.
-Be mindful of configuring the `prefix` property correctly if you are changing this structure.
 
 Don't forget to add these files to your `pubspec.yaml` file:
 
@@ -35,3 +34,5 @@ flutter:
     - assets/images/player.png
     - assets/images/enemy.png
 ```
+
+If you want to change this structure, this is possible by using the `prefix` parameter and creating your own instances of `AssetsCache`, `ImagesCache`, `AudioCache` and `SoundPool`s, instead of using the global ones provided by Flame.

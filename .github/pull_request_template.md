@@ -28,5 +28,5 @@ Does your PR require Flame users to manually update their apps to accommodate yo
 
 <!-- Links -->
 [issue database]: https://github.com/flame-engine/flame/issues
-[Contributor Guide]: https://github.com/flame-engine/flame/blob/master/CONTRIBUTING.md
+[Contributor Guide]: https://github.com/flame-engine/flame/blob/main/CONTRIBUTING.md
 [Flutter Style Guide]: https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo
