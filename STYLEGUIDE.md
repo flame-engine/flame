@@ -103,7 +103,7 @@ const kSomeConstant = 42;
 final thisThing = 13;
 
 // Do instead:
-// TODO(wofstein): This thing should be that thing
+// TODO(wolfenrain): This thing should be that thing
 const thisThing = 13;
 ```
 
