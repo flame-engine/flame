@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Updated tutorial documentation to indicate use of new version
 
 ## [1.0.0-rc9]
  - Fix input bug with other anchors than center
