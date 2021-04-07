@@ -18,7 +18,7 @@ Before starting coding our game, it is important to understand what sprites are 
 
 Sprites are images, or a portion of an image, loaded into the memory, and can then be used to render graphics on your game canvas.
 
-Sprites can be (and usually are) bundled into single images, that is a very useful technique as it lowers the amount of I/O operations needed to load the game assets because it is faster to load 1 image of 10k than to load 10 images of 1kb each.
+Sprites can be (and usually are) bundled into single images, called Sprite Sheets. That is a very useful technique as it lowers the amount of I/O operations needed to load the game assets because it is faster to load 1 image of 10 KB than to load 10 images of 1 KB each (among other advantages).
 
 For example, on this tutorial, we will have a button that makes our robot run. This button needs two sprites, for the unpressed and pressed states. We can have the following image containing both:
 
