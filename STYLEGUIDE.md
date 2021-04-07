@@ -4,7 +4,6 @@ This is a general style guide that shall govern over the Flame Engine repository
 This includes high level guidance to help with simple decisions in the day-to-day development life.
 
 This extends rules on the official [Flutter Style Guide](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo).
-
 ## Code formatting
 
 ### Trailing Commas and Wrapping
