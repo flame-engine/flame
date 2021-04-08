@@ -146,6 +146,7 @@ PointerScrollInfo _parsePointerScrollEvent(
     Game game, PointerScrollEvent event) {
   return PointerScrollInfo(
     game.projectCoordinate(event.localPosition),
+    event.scrollDelta.toVector2(),
     event,
   );
 }
@@ -332,9 +333,11 @@ Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
     addAndConfigureRecognizer(
       () => MultiTapGestureRecognizer(),
       (MultiTapGestureRecognizer instance) {
-        instance.onTapDown = game.onTapDown;
-        instance.onTapUp = game.onTapUp;
-        instance.onTapCancel = game.onTapCancel;
+        instance.onTapDown =
+            (i, d) => game.onTapDown(i, _parseTapDownDetails(game, d));
+        instance.onTapUp =
+            (i, d) => game.onTapUp(i, _parseTapUpDetails(game, d));
+        instance.onTapCancel = (i) => game.onTapCancel(i);
       },
     );
   }

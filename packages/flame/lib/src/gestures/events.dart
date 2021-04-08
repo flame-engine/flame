@@ -54,7 +54,9 @@ class ForcePressInfo extends BaseInfo<ForcePressDetails> {
 // TODO(erick) This class, and the next one has a bunch of info, we need to check the ones
 // that could wrapped directly by the info class
 class PointerScrollInfo extends BaseInfo<PointerScrollEvent> {
-  PointerScrollInfo(Vector2 position, PointerScrollEvent raw)
+  final Vector2 scrollDelta;
+
+  PointerScrollInfo(Vector2 position, this.scrollDelta, PointerScrollEvent raw)
       : super(position, raw);
 }
 

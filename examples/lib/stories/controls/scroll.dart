@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
@@ -14,8 +13,8 @@ class ScrollGame extends BaseGame with ScrollDetector {
   Vector2? target;
 
   @override
-  void onScroll(PointerScrollEvent event) {
-    target = position + event.scrollDelta.toVector2() * 5;
+  void onScroll(PointerScrollInfo event) {
+    target = position + event.scrollDelta * 5;
   }
 
   @override

@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
-import 'package:flutter/gestures.dart' show TapDownDetails;
 
 class BasicAnimations extends BaseGame with TapDetector {
   late Image chopper;
@@ -64,7 +63,7 @@ class BasicAnimations extends BaseGame with TapDetector {
   }
 
   @override
-  void onTapDown(TapDownDetails evt) {
-    addAnimation(Vector2(evt.globalPosition.dx, evt.globalPosition.dy));
+  void onTapDown(TapDownInfo evt) {
+    addAnimation(evt.position);
   }
 }

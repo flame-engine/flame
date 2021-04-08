@@ -240,4 +240,10 @@ class BaseGame extends Game with FPSCounter {
     return DateTime.now().microsecondsSinceEpoch.toDouble() /
         Duration.microsecondsPerSecond;
   }
+
+  @override
+  Vector2 projectCoordinate(Offset value) {
+    final vector = value.toVector2();
+    return camera.screenToWorld(vector);
+  }
 }

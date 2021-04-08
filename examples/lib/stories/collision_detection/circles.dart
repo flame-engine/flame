@@ -65,7 +65,7 @@ class Circles extends BaseGame with HasCollidables, TapDetector {
   }
 
   @override
-  void onTapDown(TapDownDetails details) {
-    add(MyCollidable(details.localPosition.toVector2()));
+  void onTapDown(TapDownInfo event) {
+    add(MyCollidable(event.position));
   }
 }
