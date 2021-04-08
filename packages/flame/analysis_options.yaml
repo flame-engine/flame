@@ -6,8 +6,8 @@ analyzer:
     implicit-casts: false
     implicit-dynamic: false
 
-  plugins:
-    - dart_code_metrics
+    #plugins:
+    #  - dart_code_metrics
 
 linter:
   rules:
