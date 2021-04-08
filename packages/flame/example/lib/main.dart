@@ -60,9 +60,9 @@ class MyGame extends BaseGame with DoubleTapDetector, TapDetector {
   }
 
   @override
-  void onTapUp(TapUpDetails details) {
+  void onTapUp(TapUpInfo event) {
     final touchArea = Rect.fromCenter(
-      center: details.localPosition,
+      center: event.position.toOffset(),
       width: 20,
       height: 20,
     );

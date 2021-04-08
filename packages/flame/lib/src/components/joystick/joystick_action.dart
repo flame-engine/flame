@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/gestures.dart';
 import 'package:flutter/material.dart' show Colors;
 import 'package:flutter/widgets.dart'
     show EdgeInsets, DragUpdateDetails, DragEndDetails;
@@ -186,10 +187,10 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   }
 
   @override
-  bool onDragUpdate(int pointerId, DragUpdateDetails details) {
+  bool onDragUpdate(int pointerId, DragUpdateInfo event) {
     if (_dragging) {
       _dragPosition = gameRef.convertGlobalToLocalCoordinate(
-        details.globalPosition.toVector2(),
+        event.raw.globalPosition.toVector2(),
       );
       return true;
     }
@@ -197,7 +198,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   }
 
   @override
-  bool onDragEnd(int pointerId, DragEndDetails p1) {
+  bool onDragEnd(_, __) {
     return _finishDrag(ActionEvent.up);
   }
 
