@@ -24,8 +24,8 @@ typedef ParticleGenerator = Particle Function(int);
 /// particular behavior which then could be nested and combined to create
 /// specifically required experience.
 abstract class Particle {
-  /// Generates a given amount of particles and then combining them into one a
-  /// single[ComposedParticle].
+  /// Generates a given amount of particles and then combining them into one
+  /// single [ComposedParticle].
   ///
   /// Useful for procedural particle generation.
   static Particle generate({
