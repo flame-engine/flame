@@ -31,11 +31,11 @@ Animation is what gives 2D games life. Flame provides a handy class called `Spri
 
 ![Animation example](code/assets/images/robot.png)
 
-Flame provides a way for easily turning that sprite sheet into an animation, which we will see how in a few moments.
+Flame provides a way for easily turning that Sprite Sheet into an animation (we will see how in a few moments).
 
 ## Hands on
 
-To get started, lets get a Flame `Game` instance running with a structure similar to our [first tutorial](https://github.com/flame-engine/flame/tree/main/tutorials/1_basic_square#building-your-first-game) (if you haven't yet you can follow it to better understand this initial setup).
+To get started, let's get a Flame `Game` instance running with a structure similar to our [first tutorial](https://github.com/flame-engine/flame/tree/main/tutorials/1_basic_square#building-your-first-game) (if you haven't yet, you can follow it to better understand this initial setup).
 
 ```dart
 void main() {
@@ -58,7 +58,7 @@ class MyGame extends Game with TapDetector {
 }
 ```
 
-Great! This will just gets us a plain, almost black screen. Now lets add our running robot on the screen:
+Great! This will just gets us a plain, almost black screen. Now lets add our running robot:
 
 ```dart
 class MyGame extends Game {
@@ -76,9 +76,9 @@ class MyGame extends Game {
   Future<void> onLoad() async {
     runningRobot = await loadSpriteAnimation(
       'robot.png',
-      // `SpriteAnimationData` is a class used to tell Flame how the animation spritesheet
-      // is organized. In this case we are describing that our frames are laid out a horizontal
-      // sequence on the image, that there are 8 frames, each frame is a sprite of 16x18 pixels,
+      // `SpriteAnimationData` is a class used to tell Flame how the animation Sprite Sheet
+      // is organized. In this case we are describing that our frames are laid out in a horizontal
+      // sequence on the image, that there are 8 frames, that each frame is a sprite of 16x18 pixels,
       // and, finally, that each frame should appear for 0.1 seconds when the animation is running.
       SpriteAnimationData.sequenced(
         amount: 8,
@@ -108,11 +108,11 @@ class MyGame extends Game {
 }
 ```
 
-When running the game now, you should see our vampire robot running endless on the screen.
+When running the game now, you should see our vampire robot running endlessly on the screen.
 
 For the next step, let's implement our on/off button and render it on the screen.
 
-The first thing we need to do is to add a couple of variables need to reference our button:
+The first thing we need to do is to add a couple of variables needed to reference our button:
 
 ```dart
   // One sprite for each button state
@@ -224,6 +224,6 @@ class MyGame extends Game with TapDetector {
 }
 ```
 
-If we run our game again, we should have the full example running, with our on/off button for our little vampire robot.
+If we run our game again, we should be able to see the complete example, with our on/off button for our little vampire robot.
 
 And with that, we finished this tutorial. Now, with an understanding of sprites, animations and gestures, we can start on building more interactive and beautiful games.
