@@ -48,7 +48,9 @@ TapUpInfo _parseTapUpDetails(Game game, TapUpDetails details) {
 }
 
 LongPressStartInfo _parseLongPressStartDetaills(
-    Game game, LongPressStartDetails details) {
+  Game game,
+  LongPressStartDetails details,
+) {
   return LongPressStartInfo(
     game.projectCoordinates(details.localPosition),
     details.localPosition.toVector2(),
@@ -58,7 +60,9 @@ LongPressStartInfo _parseLongPressStartDetaills(
 }
 
 LongPressEndInfo _parseLongPressEndDetaills(
-    Game game, LongPressEndDetails details) {
+  Game game,
+  LongPressEndDetails details,
+) {
   return LongPressEndInfo(
     game.projectCoordinates(details.localPosition),
     details.localPosition.toVector2(),
@@ -69,7 +73,9 @@ LongPressEndInfo _parseLongPressEndDetaills(
 }
 
 LongPressMoveUpdateInfo _parseLongPressMoveUpdateDetaills(
-    Game game, LongPressMoveUpdateDetails details) {
+  Game game,
+  LongPressMoveUpdateDetails details,
+) {
   return LongPressMoveUpdateInfo(
     game.projectCoordinates(details.localPosition),
     details.localPosition.toVector2(),
@@ -142,7 +148,9 @@ ScaleEndInfo _parseScaleEndDetails(ScaleEndDetails details) {
 }
 
 ScaleUpdateInfo _parseScaleUpdateDetails(
-    Game game, ScaleUpdateDetails details) {
+  Game game,
+  ScaleUpdateDetails details,
+) {
   return ScaleUpdateInfo(
     game.projectCoordinates(details.localFocalPoint),
     details.pointerCount,
@@ -162,7 +170,9 @@ PointerHoverInfo _parsePointerHoverEvent(Game game, PointerHoverEvent event) {
 }
 
 PointerScrollInfo _parsePointerScrollEvent(
-    Game game, PointerScrollEvent event) {
+  Game game,
+  PointerScrollEvent event,
+) {
   return PointerScrollInfo(
     game.projectCoordinates(event.localPosition),
     event.localPosition.toVector2(),

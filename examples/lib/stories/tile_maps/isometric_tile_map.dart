@@ -5,7 +5,6 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Image;
 
 const x = 500.0;

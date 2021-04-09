@@ -9,6 +9,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart' as flutter;
 import 'package:test/test.dart';
 
+import '../util/mock_gesture_events.dart';
+
 class MyGame extends BaseGame with HasTapableComponents {}
 
 class MyComponent extends PositionComponent with Tapable, HasGameRef {
@@ -19,7 +21,7 @@ class MyComponent extends PositionComponent with Tapable, HasGameRef {
   late Vector2 gameSize;
 
   @override
-  bool onTapDown(TapDownDetails details) {
+  bool onTapDown(_) {
     tapped = true;
     return true;
   }
@@ -112,7 +114,7 @@ void main() {
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
-      game.onTapDown(1, TapDownDetails());
+      game.onTapDown(1, createTapDownEvent());
 
       expect(component.tapped, true);
     });
