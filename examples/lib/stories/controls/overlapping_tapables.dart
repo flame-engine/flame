@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flame/components.dart';
-import 'package:flame/gestures.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
@@ -39,7 +38,7 @@ class TapableSquare extends PositionComponent with Tapable {
   }
 
   @override
-  bool onTapDown(TapDownInfo event) {
+  bool onTapDown(_) {
     angle += 1.0;
     return false;
   }

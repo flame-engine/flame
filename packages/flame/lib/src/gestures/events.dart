@@ -3,84 +3,141 @@ import 'package:flutter/gestures.dart';
 import '../../extensions.dart';
 
 abstract class BaseInfo<T> {
-  final Vector2 position;
   final T raw;
 
-  BaseInfo(this.position, this.raw);
+  BaseInfo(this.raw);
 }
 
-class TapDownInfo extends BaseInfo<TapDownDetails> {
-  TapDownInfo(Vector2 position, TapDownDetails raw) : super(position, raw);
+abstract class PositionInfo<T> extends BaseInfo<T> {
+  final Vector2 position;
+  final Vector2 gameWidgetPosition;
+  final Vector2 globalPosition;
+
+  PositionInfo(
+    this.position,
+    this.gameWidgetPosition,
+    this.globalPosition,
+    T raw,
+  ) : super(raw);
 }
 
-class TapUpInfo extends BaseInfo<TapUpDetails> {
-  TapUpInfo(Vector2 position, TapUpDetails raw) : super(position, raw);
+class TapDownInfo extends PositionInfo<TapDownDetails> {
+  TapDownInfo(
+    Vector2 position,
+    Vector2 gameWidgetPosition,
+    Vector2 globalPosition,
+    TapDownDetails raw,
+  ) : super(position, gameWidgetPosition, globalPosition, raw);
 }
 
-class LongPressStartInfo extends BaseInfo<LongPressStartDetails> {
+class TapUpInfo extends PositionInfo<TapUpDetails> {
+  TapUpInfo(
+    Vector2 position,
+    Vector2 gameWidgetPosition,
+    Vector2 globalPosition,
+    TapUpDetails raw,
+  ) : super(position, gameWidgetPosition, globalPosition, raw);
+}
+
+class LongPressStartInfo extends PositionInfo<LongPressStartDetails> {
   LongPressStartInfo(
     Vector2 position,
+    Vector2 gameWidgetPosition,
+    Vector2 globalPosition,
     LongPressStartDetails raw,
-  ) : super(position, raw);
+  ) : super(position, gameWidgetPosition, globalPosition, raw);
 }
 
-class LongPressEndInfo extends BaseInfo<LongPressEndDetails> {
-  final Velocity velocity;
+class LongPressEndInfo extends PositionInfo<LongPressEndDetails> {
+  final Vector2 velocity;
 
   LongPressEndInfo(
     Vector2 position,
+    Vector2 gameWidgetPosition,
+    Vector2 globalPosition,
     this.velocity,
     LongPressEndDetails raw,
-  ) : super(position, raw);
+  ) : super(position, gameWidgetPosition, globalPosition, raw);
 }
 
-class LongPressMoveUpdateInfo extends BaseInfo<LongPressMoveUpdateDetails> {
+class LongPressMoveUpdateInfo extends PositionInfo<LongPressMoveUpdateDetails> {
   LongPressMoveUpdateInfo(
     Vector2 position,
+    Vector2 gameWidgetPosition,
+    Vector2 globalPosition,
     LongPressMoveUpdateDetails raw,
-  ) : super(position, raw);
+  ) : super(position, gameWidgetPosition, globalPosition, raw);
 }
 
-class ForcePressInfo extends BaseInfo<ForcePressDetails> {
+class ForcePressInfo extends PositionInfo<ForcePressDetails> {
   final double pressure;
 
   ForcePressInfo(
     Vector2 position,
+    Vector2 gameWidgetPosition,
+    Vector2 globalPosition,
     this.pressure,
     ForcePressDetails raw,
-  ) : super(position, raw);
+  ) : super(position, gameWidgetPosition, globalPosition, raw);
 }
 
 // TODO(erick) This class, and the next one has a bunch of info, we need to check the ones
 // that could wrapped directly by the info class
 class PointerScrollInfo extends BaseInfo<PointerScrollEvent> {
+  final Vector2 position;
+  final Vector2 gameWidgetPosition;
   final Vector2 scrollDelta;
 
-  PointerScrollInfo(Vector2 position, this.scrollDelta, PointerScrollEvent raw)
-      : super(position, raw);
+  PointerScrollInfo(
+    this.position,
+    this.gameWidgetPosition,
+    this.scrollDelta,
+    PointerScrollEvent raw,
+  ) : super(raw);
 }
 
 class PointerHoverInfo extends BaseInfo<PointerHoverEvent> {
-  PointerHoverInfo(Vector2 position, PointerHoverEvent raw)
-      : super(position, raw);
+  final Vector2 position;
+  final Vector2 gameWidgetPosition;
+
+  PointerHoverInfo(
+    this.position,
+    this.gameWidgetPosition,
+    PointerHoverEvent raw,
+  ) : super(raw);
 }
 
-class DragDownInfo extends BaseInfo<DragDownDetails> {
-  DragDownInfo(Vector2 position, DragDownDetails raw) : super(position, raw);
+class DragDownInfo extends PositionInfo<DragDownDetails> {
+  DragDownInfo(
+    Vector2 position,
+    Vector2 gameWidgetPosition,
+    Vector2 globalPosition,
+    DragDownDetails raw,
+  ) : super(position, gameWidgetPosition, globalPosition, raw);
 }
 
-class DragStartInfo extends BaseInfo<DragStartDetails> {
-  DragStartInfo(Vector2 position, DragStartDetails raw) : super(position, raw);
+class DragStartInfo extends PositionInfo<DragStartDetails> {
+  DragStartInfo(
+    Vector2 position,
+    Vector2 gameWidgetPosition,
+    Vector2 globalPosition,
+    DragStartDetails raw,
+  ) : super(position, gameWidgetPosition, globalPosition, raw);
 }
 
-class DragUpdateInfo extends BaseInfo<DragUpdateDetails> {
+class DragUpdateInfo extends PositionInfo<DragUpdateDetails> {
   final Vector2 delta;
-  DragUpdateInfo(Vector2 position, this.delta, DragUpdateDetails raw)
-      : super(position, raw);
+  DragUpdateInfo(
+    Vector2 position,
+    Vector2 gameWidgetPosition,
+    Vector2 globalPosition,
+    this.delta,
+    DragUpdateDetails raw,
+  ) : super(position, gameWidgetPosition, globalPosition, raw);
 }
 
 class DragEndInfo {
-  final Velocity velocity;
+  final Vector2 velocity;
   final double? primaryVelocity;
   final DragEndDetails raw;
 
@@ -96,7 +153,7 @@ class ScaleStartInfo {
 }
 
 class ScaleEndInfo {
-  final Velocity velocity;
+  final Vector2 velocity;
   final int pointerCount;
   final ScaleEndDetails raw;
 

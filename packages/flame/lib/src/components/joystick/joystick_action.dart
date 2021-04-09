@@ -1,16 +1,15 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/gestures.dart';
 import 'package:flutter/material.dart' show Colors;
-import 'package:flutter/widgets.dart'
-    show EdgeInsets, DragUpdateDetails, DragEndDetails;
+import 'package:flutter/widgets.dart' show EdgeInsets;
 
 import '../../../components.dart';
 import '../../../game.dart';
 import '../../extensions/offset.dart';
 import '../../extensions/rect.dart';
 import '../../extensions/vector2.dart';
+import '../../gestures/events.dart';
 import 'joystick_component.dart';
 import 'joystick_element.dart';
 import 'joystick_events.dart';
@@ -189,9 +188,7 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   @override
   bool onDragUpdate(int pointerId, DragUpdateInfo event) {
     if (_dragging) {
-      _dragPosition = gameRef.convertGlobalToLocalCoordinate(
-        event.raw.globalPosition.toVector2(),
-      );
+      _dragPosition = event.position;
       return true;
     }
     return false;

@@ -31,14 +31,18 @@ bool hasMouseDetectors(Game game) =>
 
 TapDownInfo _parseTapDownDetails(Game game, TapDownDetails details) {
   return TapDownInfo(
-    game.projectCoordinate(details.localPosition),
+    game.projectCoordinates(details.localPosition),
+    details.localPosition.toVector2(),
+    details.globalPosition.toVector2(),
     details,
   );
 }
 
 TapUpInfo _parseTapUpDetails(Game game, TapUpDetails details) {
   return TapUpInfo(
-    game.projectCoordinate(details.localPosition),
+    game.projectCoordinates(details.localPosition),
+    details.localPosition.toVector2(),
+    details.globalPosition.toVector2(),
     details,
   );
 }
@@ -46,7 +50,9 @@ TapUpInfo _parseTapUpDetails(Game game, TapUpDetails details) {
 LongPressStartInfo _parseLongPressStartDetaills(
     Game game, LongPressStartDetails details) {
   return LongPressStartInfo(
-    game.projectCoordinate(details.localPosition),
+    game.projectCoordinates(details.localPosition),
+    details.localPosition.toVector2(),
+    details.globalPosition.toVector2(),
     details,
   );
 }
@@ -54,8 +60,10 @@ LongPressStartInfo _parseLongPressStartDetaills(
 LongPressEndInfo _parseLongPressEndDetaills(
     Game game, LongPressEndDetails details) {
   return LongPressEndInfo(
-    game.projectCoordinate(details.localPosition),
-    details.velocity,
+    game.projectCoordinates(details.localPosition),
+    details.localPosition.toVector2(),
+    details.globalPosition.toVector2(),
+    details.velocity.pixelsPerSecond.toVector2(),
     details,
   );
 }
@@ -63,28 +71,36 @@ LongPressEndInfo _parseLongPressEndDetaills(
 LongPressMoveUpdateInfo _parseLongPressMoveUpdateDetaills(
     Game game, LongPressMoveUpdateDetails details) {
   return LongPressMoveUpdateInfo(
-    game.projectCoordinate(details.localPosition),
+    game.projectCoordinates(details.localPosition),
+    details.localPosition.toVector2(),
+    details.globalPosition.toVector2(),
     details,
   );
 }
 
 DragDownInfo _parseDragDownInfo(Game game, DragDownDetails details) {
   return DragDownInfo(
-    game.projectCoordinate(details.localPosition),
+    game.projectCoordinates(details.localPosition),
+    details.localPosition.toVector2(),
+    details.globalPosition.toVector2(),
     details,
   );
 }
 
 DragStartInfo _parseDragStartInfo(Game game, DragStartDetails details) {
   return DragStartInfo(
-    game.projectCoordinate(details.localPosition),
+    game.projectCoordinates(details.localPosition),
+    details.localPosition.toVector2(),
+    details.globalPosition.toVector2(),
     details,
   );
 }
 
 DragUpdateInfo _parseDragUpdateInfo(Game game, DragUpdateDetails details) {
   return DragUpdateInfo(
-    game.projectCoordinate(details.localPosition),
+    game.projectCoordinates(details.localPosition),
+    details.localPosition.toVector2(),
+    details.globalPosition.toVector2(),
     // Should this be projected as well?
     details.delta.toVector2(),
     details,
@@ -93,7 +109,7 @@ DragUpdateInfo _parseDragUpdateInfo(Game game, DragUpdateDetails details) {
 
 DragEndInfo _parseDragEndInfo(DragEndDetails details) {
   return DragEndInfo(
-    details.velocity,
+    details.velocity.pixelsPerSecond.toVector2(),
     details.primaryVelocity,
     details,
   );
@@ -101,7 +117,9 @@ DragEndInfo _parseDragEndInfo(DragEndDetails details) {
 
 ForcePressInfo _parseForcePressDetails(Game game, ForcePressDetails details) {
   return ForcePressInfo(
-    game.projectCoordinate(details.localPosition),
+    game.projectCoordinates(details.localPosition),
+    details.localPosition.toVector2(),
+    details.globalPosition.toVector2(),
     details.pressure,
     details,
   );
@@ -109,7 +127,7 @@ ForcePressInfo _parseForcePressDetails(Game game, ForcePressDetails details) {
 
 ScaleStartInfo _parseScaleStartDetails(Game game, ScaleStartDetails details) {
   return ScaleStartInfo(
-    game.projectCoordinate(details.localFocalPoint),
+    game.projectCoordinates(details.localFocalPoint),
     details.pointerCount,
     details,
   );
@@ -117,7 +135,7 @@ ScaleStartInfo _parseScaleStartDetails(Game game, ScaleStartDetails details) {
 
 ScaleEndInfo _parseScaleEndDetails(ScaleEndDetails details) {
   return ScaleEndInfo(
-    details.velocity,
+    details.velocity.pixelsPerSecond.toVector2(),
     details.pointerCount,
     details,
   );
@@ -126,7 +144,7 @@ ScaleEndInfo _parseScaleEndDetails(ScaleEndDetails details) {
 ScaleUpdateInfo _parseScaleUpdateDetails(
     Game game, ScaleUpdateDetails details) {
   return ScaleUpdateInfo(
-    game.projectCoordinate(details.localFocalPoint),
+    game.projectCoordinates(details.localFocalPoint),
     details.pointerCount,
     details.rotation,
     details.horizontalScale,
@@ -137,7 +155,8 @@ ScaleUpdateInfo _parseScaleUpdateDetails(
 
 PointerHoverInfo _parsePointerHoverEvent(Game game, PointerHoverEvent event) {
   return PointerHoverInfo(
-    game.projectCoordinate(event.localPosition),
+    game.projectCoordinates(event.localPosition),
+    event.localPosition.toVector2(),
     event,
   );
 }
@@ -145,7 +164,8 @@ PointerHoverInfo _parsePointerHoverEvent(Game game, PointerHoverEvent event) {
 PointerScrollInfo _parsePointerScrollEvent(
     Game game, PointerScrollEvent event) {
   return PointerScrollInfo(
-    game.projectCoordinate(event.localPosition),
+    game.projectCoordinates(event.localPosition),
+    event.localPosition.toVector2(),
     event.scrollDelta.toVector2(),
     event,
   );

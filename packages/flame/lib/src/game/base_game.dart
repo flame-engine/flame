@@ -242,7 +242,7 @@ class BaseGame extends Game with FPSCounter {
   }
 
   @override
-  Vector2 projectCoordinate(Offset value) {
+  Vector2 projectCoordinates(Offset value) {
     final vector = value.toVector2();
     return camera.screenToWorld(vector);
   }
