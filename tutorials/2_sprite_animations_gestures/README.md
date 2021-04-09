@@ -189,7 +189,7 @@ class MyGame extends Game with TapDetector {
   // Variables declaration, onLoad and render methods omited...
 
   @override
-  void onTapDown(TapDownDetails details) {
+  void onTapDown(TapDownInfo event) {
     // On tap down we need to check if the event ocurred on the
     // button area. There are several ways of doing it, for this
     // tutorial we do that by transforming ours position and size
@@ -198,13 +198,13 @@ class MyGame extends Game with TapDetector {
     // if a point (Offset) is inside that rect
     final buttonArea = buttonPosition & buttonSize;
 
-    isPressed = buttonArea.contains(details.localPosition);
+    isPressed = buttonArea.contains(event.position.toOffset());
   }
 
   // On both tap up and tap cancel we just set the isPressed
   // variable to false
   @override
-  void onTapUp(TapUpDetails details) {
+  void onTapUp(TapUpInfo event) {
     isPressed = false;
   }
 
