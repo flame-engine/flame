@@ -102,13 +102,13 @@ class MyGame extends Game with TapDetector {
   // Other methods omitted
 
   @override
-  void onTapDown(TapDownDetails details) {
-    print("Player tap down on ${details.globalPosition.dx} - ${details.globalPosition.dy}");
+  void onTapDown(TapDownInfo event) {
+    print("Player tap down on ${event.position.x} - ${event.position.y}");
   }
 
   @override
-  void onTapUp(TapUpDetails details) {
-    print("Player tap up on ${details.globalPosition.dx} - ${details.globalPosition.dy}");
+  void onTapUp(TapUpInfo event) {
+    print("Player tap up on ${event.position.x} - ${event.position.y}");
   }
 }
 ```
@@ -137,8 +137,8 @@ components, you can override the following methods on your components:
 
 ```dart
 void onTapCancel() {}
-void onTapDown(TapDownDetails details) {}
-void onTapUp(TapUpDetails details) {}
+void onTapDown(TapDownInfo event) {}
+void onTapUp(TapUpInfo event) {}
 ```
 
 Minimal component example:
@@ -152,12 +152,12 @@ class TapableComponent extends PositionComponent with Tapable {
   // update and render omitted
 
   @override
-  void onTapUp(TapUpDetails details) {
+  void onTapUp(TapUpInfo event) {
     print("tap up");
   }
 
   @override
-  void onTapDown(TapDownDetails details) {
+  void onTapDown(TapDownInfo event) {
     print("tap down");
   }
 
@@ -187,8 +187,8 @@ components.
 
 ```dart
   void onDragStart(int pointerId, Vector2 startPosition) {}
-  void onDragUpdate(int pointerId, DragUpdateDetails details) {}
-  void onDragEnd(int pointerId, DragEndDetails details) {}
+  void onDragUpdate(int pointerId, DragUpdateInfo event) {}
+  void onDragEnd(int pointerId, DragEndInfo event) {}
   void onDragCancel(int pointerId) {}
 ```
 
@@ -224,16 +224,14 @@ class DraggableComponent extends PositionComponent with Draggable {
   }
 
   @override
-  bool onDragUpdate(int pointerId, DragUpdateDetails details) {
-    final localCoords = gameRef.convertGlobalToLocalCoordinate(
-      details.globalPosition.toVector2(),
-    );
+  bool onDragUpdate(int pointerId, DragUpdateInfo event) {
+    final localCoords = gameRef.position;
     position = localCoords - dragDeltaPosition;
     return false;
   }
 
   @override
-  bool onDragEnd(int pointerId, DragEndDetails details) {
+  bool onDragEnd(int pointerId, DragEndInfo event) {
     dragDeltaPosition = null;
     return false;
   }
