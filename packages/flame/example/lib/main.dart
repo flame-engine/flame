@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/palette.dart';
@@ -61,8 +62,8 @@ class MyGame extends BaseGame with DoubleTapDetector, TapDetector {
 
   @override
   void onTapUp(TapUpInfo event) {
-    final touchArea = Rect.fromCenter(
-      center: event.position.toOffset(),
+    final touchArea = RectExtension.fromVector2Center(
+      center: event.position,
       width: 20,
       height: 20,
     );

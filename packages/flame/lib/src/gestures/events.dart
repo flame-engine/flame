@@ -2,18 +2,18 @@ import 'package:flutter/gestures.dart';
 
 import '../../extensions.dart';
 
-abstract class BaseInfo<T> {
+abstract class _BaseInfo<T> {
   final T raw;
 
-  BaseInfo(this.raw);
+  _BaseInfo(this.raw);
 }
 
-abstract class PositionInfo<T> extends BaseInfo<T> {
+abstract class _PositionInfo<T> extends _BaseInfo<T> {
   final Vector2 position;
   final Vector2 gameWidgetPosition;
   final Vector2 globalPosition;
 
-  PositionInfo(
+  _PositionInfo(
     this.position,
     this.gameWidgetPosition,
     this.globalPosition,
@@ -21,7 +21,18 @@ abstract class PositionInfo<T> extends BaseInfo<T> {
   ) : super(raw);
 }
 
-class TapDownInfo extends PositionInfo<TapDownDetails> {
+abstract class _LocalPositionOnlyInfo<T> extends _BaseInfo<T> {
+  final Vector2 position;
+  final Vector2 gameWidgetPosition;
+
+  _LocalPositionOnlyInfo(
+    this.position,
+    this.gameWidgetPosition,
+    T raw,
+  ) : super(raw);
+}
+
+class TapDownInfo extends _PositionInfo<TapDownDetails> {
   TapDownInfo(
     Vector2 position,
     Vector2 gameWidgetPosition,
@@ -30,7 +41,7 @@ class TapDownInfo extends PositionInfo<TapDownDetails> {
   ) : super(position, gameWidgetPosition, globalPosition, raw);
 }
 
-class TapUpInfo extends PositionInfo<TapUpDetails> {
+class TapUpInfo extends _PositionInfo<TapUpDetails> {
   TapUpInfo(
     Vector2 position,
     Vector2 gameWidgetPosition,
@@ -39,7 +50,7 @@ class TapUpInfo extends PositionInfo<TapUpDetails> {
   ) : super(position, gameWidgetPosition, globalPosition, raw);
 }
 
-class LongPressStartInfo extends PositionInfo<LongPressStartDetails> {
+class LongPressStartInfo extends _PositionInfo<LongPressStartDetails> {
   LongPressStartInfo(
     Vector2 position,
     Vector2 gameWidgetPosition,
@@ -48,7 +59,7 @@ class LongPressStartInfo extends PositionInfo<LongPressStartDetails> {
   ) : super(position, gameWidgetPosition, globalPosition, raw);
 }
 
-class LongPressEndInfo extends PositionInfo<LongPressEndDetails> {
+class LongPressEndInfo extends _PositionInfo<LongPressEndDetails> {
   final Vector2 velocity;
 
   LongPressEndInfo(
@@ -60,7 +71,8 @@ class LongPressEndInfo extends PositionInfo<LongPressEndDetails> {
   ) : super(position, gameWidgetPosition, globalPosition, raw);
 }
 
-class LongPressMoveUpdateInfo extends PositionInfo<LongPressMoveUpdateDetails> {
+class LongPressMoveUpdateInfo
+    extends _PositionInfo<LongPressMoveUpdateDetails> {
   LongPressMoveUpdateInfo(
     Vector2 position,
     Vector2 gameWidgetPosition,
@@ -69,7 +81,7 @@ class LongPressMoveUpdateInfo extends PositionInfo<LongPressMoveUpdateDetails> {
   ) : super(position, gameWidgetPosition, globalPosition, raw);
 }
 
-class ForcePressInfo extends PositionInfo<ForcePressDetails> {
+class ForcePressInfo extends _PositionInfo<ForcePressDetails> {
   final double pressure;
 
   ForcePressInfo(
@@ -83,31 +95,26 @@ class ForcePressInfo extends PositionInfo<ForcePressDetails> {
 
 // TODO(erick) This class, and the next one has a bunch of info, we need to check the ones
 // that could wrapped directly by the info class
-class PointerScrollInfo extends BaseInfo<PointerScrollEvent> {
-  final Vector2 position;
-  final Vector2 gameWidgetPosition;
+class PointerScrollInfo extends _LocalPositionOnlyInfo<PointerScrollEvent> {
   final Vector2 scrollDelta;
 
   PointerScrollInfo(
-    this.position,
-    this.gameWidgetPosition,
+    Vector2 position,
+    Vector2 gameWidgetPosition,
     this.scrollDelta,
     PointerScrollEvent raw,
-  ) : super(raw);
+  ) : super(position, gameWidgetPosition, raw);
 }
 
-class PointerHoverInfo extends BaseInfo<PointerHoverEvent> {
-  final Vector2 position;
-  final Vector2 gameWidgetPosition;
-
+class PointerHoverInfo extends _LocalPositionOnlyInfo<PointerHoverEvent> {
   PointerHoverInfo(
-    this.position,
-    this.gameWidgetPosition,
+    Vector2 position,
+    Vector2 gameWidgetPosition,
     PointerHoverEvent raw,
-  ) : super(raw);
+  ) : super(position, gameWidgetPosition, raw);
 }
 
-class DragDownInfo extends PositionInfo<DragDownDetails> {
+class DragDownInfo extends _PositionInfo<DragDownDetails> {
   DragDownInfo(
     Vector2 position,
     Vector2 gameWidgetPosition,
@@ -116,7 +123,7 @@ class DragDownInfo extends PositionInfo<DragDownDetails> {
   ) : super(position, gameWidgetPosition, globalPosition, raw);
 }
 
-class DragStartInfo extends PositionInfo<DragStartDetails> {
+class DragStartInfo extends _PositionInfo<DragStartDetails> {
   DragStartInfo(
     Vector2 position,
     Vector2 gameWidgetPosition,
@@ -125,7 +132,7 @@ class DragStartInfo extends PositionInfo<DragStartDetails> {
   ) : super(position, gameWidgetPosition, globalPosition, raw);
 }
 
-class DragUpdateInfo extends PositionInfo<DragUpdateDetails> {
+class DragUpdateInfo extends _PositionInfo<DragUpdateDetails> {
   final Vector2 delta;
   DragUpdateInfo(
     Vector2 position,
@@ -136,44 +143,41 @@ class DragUpdateInfo extends PositionInfo<DragUpdateDetails> {
   ) : super(position, gameWidgetPosition, globalPosition, raw);
 }
 
-class DragEndInfo {
+class DragEndInfo extends _BaseInfo<DragEndDetails> {
   final Vector2 velocity;
   final double? primaryVelocity;
-  final DragEndDetails raw;
 
-  DragEndInfo(this.velocity, this.primaryVelocity, this.raw);
+  DragEndInfo(this.velocity, this.primaryVelocity, DragEndDetails raw)
+      : super(raw);
 }
 
-class ScaleStartInfo {
+class ScaleStartInfo extends _BaseInfo<ScaleStartDetails> {
   final Vector2 focalPoint;
   final int pointerCount;
-  final ScaleStartDetails raw;
 
-  ScaleStartInfo(this.focalPoint, this.pointerCount, this.raw);
+  ScaleStartInfo(this.focalPoint, this.pointerCount, ScaleStartDetails raw)
+      : super(raw);
 }
 
-class ScaleEndInfo {
+class ScaleEndInfo extends _BaseInfo<ScaleEndDetails> {
   final Vector2 velocity;
   final int pointerCount;
-  final ScaleEndDetails raw;
 
-  ScaleEndInfo(this.velocity, this.pointerCount, this.raw);
+  ScaleEndInfo(this.velocity, this.pointerCount, ScaleEndDetails raw)
+      : super(raw);
 }
 
-class ScaleUpdateInfo {
+class ScaleUpdateInfo extends _BaseInfo<ScaleUpdateDetails> {
   final Vector2 focalPoint;
   final int pointerCount;
   final double rotation;
-  final double horizontalScale;
-  final double verticalScale;
-  final ScaleUpdateDetails raw;
+  final Vector2 scale;
 
   ScaleUpdateInfo(
     this.focalPoint,
     this.pointerCount,
     this.rotation,
-    this.horizontalScale,
-    this.verticalScale,
-    this.raw,
-  );
+    this.scale,
+    ScaleUpdateDetails raw,
+  ) : super(raw);
 }

@@ -155,8 +155,7 @@ ScaleUpdateInfo _parseScaleUpdateDetails(
     game.projectCoordinates(details.localFocalPoint),
     details.pointerCount,
     details.rotation,
-    details.horizontalScale,
-    details.verticalScale,
+    Vector2(details.horizontalScale, details.verticalScale),
     details,
   );
 }
