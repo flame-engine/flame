@@ -1,14 +1,22 @@
 # Style Guide
 
-This is a general style guide that shall govern over the Flame Engine repository. The aim is to keep a common stable general environment.
+This is a general style guide that shall govern over the Flame Engine repository. 
+The aim is to keep a common stable general environment.
 This includes high level guidance to help with simple decisions in the day-to-day development life.
 
 This extends rules on the official [Flutter Style Guide](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo).
+
 ## Code formatting
+
+### Max line length
+
+For all files, include a markdown, keep each line with a hundred or less characters.
 
 ### Trailing Commas and Wrapping
 
-List of elements must always be all in one line or one element per line. This includes parameters, arguments, collection literals, etc. Furthermore, if multiline, the last element must have a trailing comma.
+List of elements must always be all in one line or one element per line. This includes parameters, 
+arguments, collection literals, etc. Furthermore, if multiline, the last element must have a trailing
+comma.
 
 For the sake of example, let's use a function invocation (the same apply for all cases):
 
@@ -47,13 +55,14 @@ foo(f1,
 * You must always use relative imports for imports within the Flame library.
 * Omit `./` for relative imports from the same directory.
 * TODO Do/Do not use the imports grouping internally (like component.dart, extensions.dart, etc).
+* Avoid importing groups of APIs internally, for example, importing `lib/effects.dart` just to use `ScaleEffect`.
 * Order your imports by:
-* * Three main blocks, each separated by exactly one empty line:
-* * * Dart SDK dependencies,
-* * * External libraries/Flutter imports,
-* * * Internal (same library) imports.
-* * Then, for each block, order alphabetically.
-* * * For relative imports, that means further away (more `../`) imports will be first.
+  * Three main blocks, each separated by exactly one empty line:
+    * Dart SDK dependencies,
+    * External libraries/Flutter imports,
+    * Internal (same library) imports.
+  * Then, for each block, order alphabetically.
+    * For relative imports, that means further away (more `../`) imports will be first.
 
 For example:
 
@@ -96,6 +105,8 @@ const kSomeConstant = 42;
 * Add an identifier for TODO comments
 * Use fully capitalized TODO notation
 
+TODO comments should follow this template: `// TODO(username): Comment`
+
 ```dart
 
 // Do not:
@@ -110,22 +121,14 @@ const thisThing = 13;
 ### Asserts
 
 * Use asserts to detect contract violation.
-* Use asserts to run debug only code.
 
 Example:
 ````dart
 void something(int smaller, int bigger) {
   assert(small < bigger, "smaller is not smaller than bigger");
-  assert((){
-    // debug only code
-  });
-  
   //...
 }
-
 ````
-
-
 
 ## Code documentation 
 
