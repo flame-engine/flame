@@ -379,7 +379,10 @@ add(IsometricTileMapComponent(tileset, matrix));
 It also provides methods for converting coordinates so you can handle clicks, hovers, render
 entities on top of tiles, add a selector, etc.
 
-You can also specify the tileHeight, which is the vertical distance between the bottom and top planes of each cuboid in your tile. Basically, it's the height of the front-most edge of your cuboid; normally it's half (default) or a quarter of the tile size. On the image below you can see the height colored in the darker tone:
+You can also specify the tileHeight, which is the vertical distance between the bottom and top
+planes of each cuboid in your tile. Basically, it's the height of the front-most edge of your
+cuboid; normally it's half (default) or a quarter of the tile size. On the image below you can see
+the height colored in the darker tone:
 
 ![An example of how to determine the tileHeight](images/tile-height-example.png)
 
