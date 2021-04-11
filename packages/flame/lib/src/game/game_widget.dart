@@ -11,61 +11,78 @@ import '../gestures.dart';
 import 'game.dart';
 import 'game_render_box.dart';
 
-typedef GameLoadingWidgetBuilder = Widget Function(
-  BuildContext,
-);
+/// A signature for callbacks that build widgets to be displayed while a
+/// [GameWidget.game] has not fully loaded.
+typedef GameLoadingWidgetBuilder = Widget Function(BuildContext context);
 
+/// A signature for callbacks that build widgets to be displayed when a
+/// [GameWidget.game] fails to load.
 typedef GameErrorWidgetBuilder = Widget Function(
-  BuildContext,
+  BuildContext context,
   Object error,
 );
 
+/// A signature for callbacks that build widgets to be displayed over the main game element.
+///
+/// Overlays are controlled inside the game by [Game.overlays].
+/// [T] must match the [Game] subclass passed to [GameWidget.game].
 typedef OverlayWidgetBuilder<T extends Game> = Widget Function(
   BuildContext context,
   T game,
 );
 
-/// A [StatefulWidget] that is in charge of attaching a [Game] instance into the flutter tree
-///
+/// A [StatefulWidget] that is in charge of attaching a [Game] instance into the
+/// flutter widget tree.
 class GameWidget<T extends Game> extends StatefulWidget {
   /// The game instance in which this widget will render
   final T game;
 
   /// The text direction to be used in text elements in a game.
+  ///
+  /// Defaults to the value of defined by ancestor [Directionality] or
+  /// [TextDirection.ltr].
   final TextDirection? textDirection;
 
-  /// Builder to provide a widget tree to be built whilst the [Future] provided
-  /// via [Game.onLoad] is not resolved. By default this is an empty Container().
+  /// Builder to provide a widget tree to be displayed whilst the [Future] provided
+  /// via [Game.onLoad] is not resolved.
+  ///
+  /// Defaults to an empty [Container].
   final GameLoadingWidgetBuilder? loadingBuilder;
 
-  /// If set, errors during the onLoad method will not be thrown
-  /// but instead this widget will be shown. If not provided, errors are
-  /// propagated up.
+
+  /// Builder to provide a widget tree to be displayed when [Game.onLoad]
+  /// rejects.
+  ///
+  /// If not set, errors will be propagated up.
   final GameErrorWidgetBuilder? errorBuilder;
 
   /// Builder to provide a widget tree to be built between the game elements and
   /// the background color provided via [Game.backgroundColor]
   final WidgetBuilder? backgroundBuilder;
 
-  /// A map to show widgets overlay.
+  /// A map to identify widgets overlay.
+  ///
+  /// Each key serve as a identifier for the overlay.
+  ///
+  /// By default, overlays start as inactive, it means they wont be built.
+  /// to define which overlays are active from the start, use [initialActiveOverlays].
   ///
   /// See also:
-  /// - [new GameWidget]
-  /// - [Game.overlays]
+  /// * [Game.overlays] that controls the active overlays inside the game by their names.
+  /// * [OverlayWidgetBuilder] the signature for each overlay builder.
   final Map<String, OverlayWidgetBuilder<T>>? overlayBuilderMap;
 
-  /// A List of the initially active overlays, this is used only on the first build of the widget.
-  /// To control the overlays that are active use [Game.overlays]
+  /// A List of the overlays, this is used only on the first build of the widget.
+  /// To control the overlays active use [Game.overlays]
   ///
   /// See also:
-  /// - [new GameWidget]
-  /// - [Game.overlays]
+  /// * [Game.overlays] that controls the active overlays inside the game by their names.
   final List<String>? initialActiveOverlays;
 
-  /// Renders a [game] in a flutter widget tree.
+  /// A [Widget] that renders a [game] in a Flutter widget tree.
   ///
   /// Ex:
-  /// ```
+  /// ```dart
   /// ...
   /// Widget build(BuildContext  context) {
   ///   return GameWidget(
@@ -73,12 +90,13 @@ class GameWidget<T extends Game> extends StatefulWidget {
   ///   )
   /// }
   /// ...
-  /// ```
+  /// ```dart
   ///
-  /// It is also possible to render layers of widgets over the game surface with widget subtrees.
+  /// It is also possible to render layers of widgets over the game surface with
+  /// widget subtrees via [overlayBuilderMap].
   ///
-  /// To do that a [overlayBuilderMap] should be provided. The visibility of
-  /// these overlays are controlled by [Game.overlays] property
+  /// To control which overlay is active or not, use [Game.overlays]. , use [initialActiveOverlays].
+  ///
   ///
   /// Ex:
   /// ```
@@ -99,6 +117,10 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// ...
   /// game.overlays.add('PauseMenu');
   /// ```
+  ///
+  /// See also:
+  /// * [Game.overlays] that controls the active overlays inside the game by their names.
+  /// * [initialActiveOverlays] to define which overlays are active from the start.
   const GameWidget({
     Key? key,
     required this.game,
@@ -120,21 +142,19 @@ class GameWidget<T extends Game> extends StatefulWidget {
 class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   Set<String> initialActiveOverlays = {};
 
-  Future<void>? _gameLoaderFuture;
-  Future<void> get _gameLoaderFutureCache =>
-      _gameLoaderFuture ?? (_gameLoaderFuture = widget.game.onLoad());
+  late Future<void>? gameLoaderFuture = widget.game.onLoad();
 
   @override
   void initState() {
     super.initState();
 
     // Add the initial overlays
-    _initActiveOverlays();
+    initActiveOverlays();
 
     addOverlaysListener(widget.game);
   }
 
-  void _initActiveOverlays() {
+  void initActiveOverlays() {
     if (widget.initialActiveOverlays == null) {
       return;
     }
@@ -151,11 +171,11 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       removeOverlaysListener(oldWidget.game);
 
       // Reset the overlays
-      _initActiveOverlays();
+      initActiveOverlays();
       addOverlaysListener(widget.game);
 
       // Reset the loader future
-      _gameLoaderFuture = null;
+      gameLoaderFuture = widget.game.onLoad();
     }
   }
 
@@ -226,11 +246,12 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     }
 
     final stackedWidgets = [internalGameWidget];
-    _addBackground(context, stackedWidgets);
-    _addOverlays(context, stackedWidgets);
+    addBackground(context, stackedWidgets);
+    addOverlays(context, stackedWidgets);
 
-    // We can use Directionality.maybeOf when that method lands on stable
-    final textDir = widget.textDirection ?? TextDirection.ltr;
+    final textDir = widget.textDirection ??
+        Directionality.maybeOf(context) ??
+        TextDirection.ltr;
 
     return Directionality(
       textDirection: textDir,
@@ -240,7 +261,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
           builder: (_, BoxConstraints constraints) {
             widget.game.onResize(constraints.biggest.toVector2());
             return FutureBuilder(
-              future: _gameLoaderFutureCache,
+              future: gameLoaderFuture,
               builder: (_, snapshot) {
                 if (snapshot.hasError) {
                   if (widget.errorBuilder == null) {
@@ -261,7 +282,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     );
   }
 
-  List<Widget> _addBackground(BuildContext context, List<Widget> stackWidgets) {
+  List<Widget> addBackground(BuildContext context, List<Widget> stackWidgets) {
     if (widget.backgroundBuilder == null) {
       return stackWidgets;
     }
@@ -273,7 +294,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     return stackWidgets;
   }
 
-  List<Widget> _addOverlays(BuildContext context, List<Widget> stackWidgets) {
+  List<Widget> addOverlays(BuildContext context, List<Widget> stackWidgets) {
     if (widget.overlayBuilderMap == null) {
       return stackWidgets;
     }

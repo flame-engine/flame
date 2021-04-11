@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 
 import '../extensions/vector2.dart';
 
-/// This represents a Component for your game.
+/// This represents a Component of a game.
 ///
 /// Components can be bullets flying on the screen, a spaceship or your player's fighter.
 /// Anything that either renders or updates can be added to the list on BaseGame. It will deal with calling those methods for you.

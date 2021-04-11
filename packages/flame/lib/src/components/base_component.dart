@@ -13,11 +13,11 @@ import '../text_config.dart';
 import 'component.dart';
 import 'mixins/has_game_ref.dart';
 
-/// This can be extended to represent a basic Component for your game.
+/// This can be extended to represent a basic Component.
 ///
 /// The difference between this and [Component] is that the [BaseComponent] can
-/// have children, handle effects and can be used to see whether a position on
-/// the screen is on your component, which is useful for handling gestures.
+/// have children, handle effects and can be used to define whether a position on
+/// the screen is occupied by a component, which is useful for handling gestures.
 abstract class BaseComponent extends Component {
   final EffectsHandler _effectsHandler = EffectsHandler();
 
@@ -30,17 +30,22 @@ abstract class BaseComponent extends Component {
   BaseComponent? get parent => _parent;
 
   /// The children list shouldn't be modified directly, that is why an
-  /// [UnmodifiableListView] is used. If you want to add children use the
-  /// [addChild] method, and if you want to propagate something to the children
-  /// use the [propagateToChildren] method.
+  /// [UnmodifiableListView] is used.
+  ///
+  /// See also:
+  /// * [addChild] to add new child to the collection
+  /// * [removeChild] to remove added child to the collection
+  /// * [propagateToChildren] to propagate a callback execution to descendants
   UnmodifiableListView<Component> get children {
     return UnmodifiableListView<Component>(_children);
   }
 
   /// This is set by the BaseGame to tell this component to render additional debug information,
   /// like borders, coordinates, etc.
-  /// This is very helpful while debugging. Set your BaseGame debugMode to true.
-  /// You can also manually override this for certain components in order to identify issues.
+  /// This is very helpful while debugging. Set [BaseGame.debugMode] to true.
+  ///
+  /// This may be manually overridden in certain components in order to identify
+  /// particular issues.
   bool debugMode = false;
 
   Color debugColor = const Color(0xFFFF00FF);
@@ -52,7 +57,7 @@ abstract class BaseComponent extends Component {
 
   TextConfig get debugTextConfig => TextConfig(color: debugColor, fontSize: 12);
 
-  /// This method is called periodically by the game engine to request that your component updates itself.
+  /// This method is called periodically by the game engine to request a component update.
   ///
   /// The time [dt] in seconds (with microseconds precision provided by Flutter) since the last update cycle.
   /// This time can vary according to hardware capacity, so make sure to update your state considering this.

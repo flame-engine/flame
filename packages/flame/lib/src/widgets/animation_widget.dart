@@ -8,15 +8,22 @@ import 'sprite_widget.dart';
 
 export '../sprite_animation.dart';
 
-/// A [StatefulWidget] that render a [SpriteAnimation].
+/// A [StatefulWidget] that renders a [SpriteAnimation].
+///
+/// []
 class SpriteAnimationWidget extends StatefulWidget {
   /// The [SpriteAnimation] to be rendered
   final SpriteAnimation animation;
 
-  /// The positioning [Anchor]
+  /// The positioning [Anchor] odf the animation. in relation to the current layout
+  /// constraints.
+  ///
+  /// Defaults to [Anchor.topLeft].
   final Anchor anchor;
 
-  /// Should the [animation] be playing or not
+  /// Controls whether the animation is playing or not.
+  ///
+  /// Defaults to `true`
   final bool playing;
 
   const SpriteAnimationWidget({
@@ -26,21 +33,21 @@ class SpriteAnimationWidget extends StatefulWidget {
   });
 
   @override
-  State createState() => _AnimationWidget();
+  State createState() => SpriteAnimationWidgetState();
 }
 
-class _AnimationWidget extends State<SpriteAnimationWidget>
+class SpriteAnimationWidgetState extends State<SpriteAnimationWidget>
     with SingleTickerProviderStateMixin {
-  AnimationController? _controller;
-  double? _lastUpdated;
+  AnimationController? controller;
+  double? lastUpdated;
 
   @override
   void didUpdateWidget(SpriteAnimationWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.playing) {
-      _initAnimation();
+      initAnimation();
     } else {
-      _pauseAnimation();
+      pauseAnimation();
     }
   }
 
@@ -48,43 +55,43 @@ class _AnimationWidget extends State<SpriteAnimationWidget>
   void initState() {
     super.initState();
 
-    _controller = AnimationController(vsync: this)
+    controller = AnimationController(vsync: this)
       ..addListener(() {
         final now = DateTime.now().millisecond.toDouble();
 
-        final dt = max(0, (now - (_lastUpdated ?? 0)) / 1000).toDouble();
+        final dt = max(0, (now - (lastUpdated ?? 0)) / 1000).toDouble();
         widget.animation.update(dt);
 
         setState(() {
-          _lastUpdated = now;
+          lastUpdated = now;
         });
       });
 
-    widget.animation.onComplete = _pauseAnimation;
+    widget.animation.onComplete = pauseAnimation;
 
     if (widget.playing) {
-      _initAnimation();
+      initAnimation();
     }
   }
 
-  void _initAnimation() {
+  void initAnimation() {
     setState(() {
       widget.animation.reset();
-      _lastUpdated = DateTime.now().millisecond.toDouble();
-      _controller?.repeat(
+      lastUpdated = DateTime.now().millisecond.toDouble();
+      controller?.repeat(
         // Approximately 60 fps
         period: const Duration(milliseconds: 16),
       );
     });
   }
 
-  void _pauseAnimation() {
-    setState(() => _controller?.stop());
+  void pauseAnimation() {
+    setState(() => controller?.stop());
   }
 
   @override
   void dispose() {
-    _controller?.dispose();
+    controller?.dispose();
     super.dispose();
   }
 

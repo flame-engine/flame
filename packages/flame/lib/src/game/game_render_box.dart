@@ -9,8 +9,13 @@ import '../extensions/size.dart';
 import 'game.dart';
 import 'game_loop.dart';
 
+/// A [RenderBox] that attaches a [game] into a render tree and
+/// delegates an active [Canvas] into it.
 // ignore: prefer_mixin
 class GameRenderBox extends RenderBox with WidgetsBindingObserver {
+
+  // Todo(renan): we should not store build context here, rather than that,
+  // store a reference for the element
   BuildContext buildContext;
   Game game;
   late GameLoop gameLoop;
@@ -81,6 +86,6 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     game.lifecycleStateChange(state);
   }
 
-  // ignore: annotate_overrides
+  @override
   Size computeDryLayout(BoxConstraints constraints) => constraints.biggest;
 }

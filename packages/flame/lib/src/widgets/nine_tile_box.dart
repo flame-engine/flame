@@ -2,11 +2,60 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/widgets.dart';
 
+import '../../components.dart';
 import '../extensions/vector2.dart';
 import '../sprite.dart';
 
 export '../nine_tile_box.dart';
 export '../sprite.dart';
+
+
+/// A [StatelessWidget] that renders a 3x3 grid with 9 blocks, representing the
+/// 4 corners, the 4 sides and the middle.
+///
+/// See also:
+/// * [NineTileBoxComponent]
+class NineTileBox extends StatelessWidget {
+  final ui.Image image;
+  final double tileSize;
+  final double destTileSize;
+  final double? width;
+  final double? height;
+
+  final Widget? child;
+
+  final EdgeInsetsGeometry? padding;
+
+  const NineTileBox({
+    Key? key,
+    required this.image,
+    required this.tileSize,
+    required this.destTileSize,
+    this.child,
+    this.width,
+    this.height,
+    this.padding,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      child: CustomPaint(
+        painter: _Painter(
+          image: image,
+          tileSize: tileSize,
+          destTileSize: destTileSize,
+        ),
+        child: Container(
+          child: child,
+          padding: padding,
+        ),
+      ),
+    );
+  }
+}
 
 class _Painter extends CustomPainter {
   final ui.Image image;
@@ -19,24 +68,27 @@ class _Painter extends CustomPainter {
     required this.destTileSize,
   });
 
-  Sprite _getSpriteTile(double x, double y) =>
-      Sprite(image, srcPosition: Vector2(x, y), srcSize: Vector2.all(tileSize));
+  Sprite getSpriteTile(double x, double y) => Sprite(
+        image,
+        srcPosition: Vector2(x, y),
+        srcSize: Vector2.all(tileSize),
+      );
 
   @override
   void paint(Canvas canvas, Size size) {
-    final topLeftCorner = _getSpriteTile(0, 0);
-    final topRightCorner = _getSpriteTile(tileSize * 2, 0);
+    final topLeftCorner = getSpriteTile(0, 0);
+    final topRightCorner = getSpriteTile(tileSize * 2, 0);
 
-    final bottomLeftCorner = _getSpriteTile(0, 2 * tileSize);
-    final bottomRightCorner = _getSpriteTile(tileSize * 2, 2 * tileSize);
+    final bottomLeftCorner = getSpriteTile(0, 2 * tileSize);
+    final bottomRightCorner = getSpriteTile(tileSize * 2, 2 * tileSize);
 
-    final topSide = _getSpriteTile(tileSize, 0);
-    final bottomSide = _getSpriteTile(tileSize, tileSize * 2);
+    final topSide = getSpriteTile(tileSize, 0);
+    final bottomSide = getSpriteTile(tileSize, tileSize * 2);
 
-    final leftSide = _getSpriteTile(0, tileSize);
-    final rightSide = _getSpriteTile(tileSize * 2, tileSize);
+    final leftSide = getSpriteTile(0, tileSize);
+    final rightSide = getSpriteTile(tileSize * 2, tileSize);
 
-    final middle = _getSpriteTile(tileSize, tileSize);
+    final middle = getSpriteTile(tileSize, tileSize);
 
     final horizontalWidget = size.width - destTileSize * 2;
     final verticalHeight = size.height - destTileSize * 2;
@@ -119,46 +171,4 @@ class _Painter extends CustomPainter {
 
   @override
   bool shouldRepaint(_) => false;
-}
-
-class NineTileBox extends StatelessWidget {
-  final ui.Image image;
-  final double tileSize;
-  final double destTileSize;
-  final double? width;
-  final double? height;
-
-  final Widget? child;
-
-  final EdgeInsetsGeometry? padding;
-
-  const NineTileBox({
-    required this.image,
-    required this.tileSize,
-    required this.destTileSize,
-    Key? key,
-    this.child,
-    this.width,
-    this.height,
-    this.padding,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      child: CustomPaint(
-        painter: _Painter(
-          image: image,
-          tileSize: tileSize,
-          destTileSize: destTileSize,
-        ),
-        child: Container(
-          child: child,
-          padding: padding,
-        ),
-      ),
-    );
-  }
 }
