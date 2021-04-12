@@ -393,7 +393,7 @@ This is an example of how a quarter-length map looks like:
 Flame's Example app contains a more in-depth example, featuring how to parse coordinates to make a
 selector. The code can be found
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/tile_maps/isometric_tile_map.dart),
-and a live version can be seen [here](https://flame-engine.github.io/flame_example/#/).
+and a live version can be seen [here](https://flame-engine.github.io/flame/#/Tile%20Maps_Isometric%20Tile%20Map).
 ## NineTileBoxComponent
 
 A Nine Tile Box is a rectangle drawn using a grid sprite.
