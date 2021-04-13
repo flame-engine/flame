@@ -225,7 +225,7 @@ class DraggableComponent extends PositionComponent with Draggable {
 
   @override
   bool onDragUpdate(int pointerId, DragUpdateInfo event) {
-    final localCoords = gameRef.position.game;
+    final localCoords = event.position.game;
     position = localCoords - dragDeltaPosition;
     return false;
   }
