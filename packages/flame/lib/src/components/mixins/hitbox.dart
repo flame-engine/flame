@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math';
 
 import '../../../extensions.dart';
 import '../../geometry/shape.dart';
@@ -36,13 +37,17 @@ mixin Hitbox on PositionComponent {
   /// [toAbsoluteRect] rect.
   Rect toBoundingRect() {
     if (!_cachedBoundingRect.isCacheValid([position, size])) {
-      final maxRadius = size.length;
+      final rotatedPoints = toAbsoluteRect().toVertices()
+        ..forEach((v) => v.rotate(
+              angle,
+              center: absolutePosition,
+            ));
+      final minX = rotatedPoints.map<double>((v) => v.x).reduce(min);
+      final minY = rotatedPoints.map<double>((v) => v.y).reduce(min);
+      final maxX = rotatedPoints.map<double>((v) => v.x).reduce(max);
+      final maxY = rotatedPoints.map<double>((v) => v.y).reduce(max);
       _cachedBoundingRect.updateCache(
-        RectExtension.fromVector2Center(
-          center: absoluteCenter,
-          width: maxRadius,
-          height: maxRadius,
-        ),
+        Rect.fromLTRB(minX, minY, maxX, maxY),
         [position.clone(), size.clone()],
       );
     }
