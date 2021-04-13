@@ -114,7 +114,7 @@ void main() {
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
-      game.onTapDown(1, createTapDownEvent());
+      game.onTapDown(1, createTapDownEvent(game));
 
       expect(component.tapped, true);
     });

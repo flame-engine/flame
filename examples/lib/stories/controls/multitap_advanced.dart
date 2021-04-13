@@ -18,7 +18,7 @@ class MultitapAdvancedGame extends BaseGame
 
   @override
   void onTapDown(int pointerId, TapDownInfo event) {
-    taps[pointerId] = event.position.toPositionedRect(tapSize);
+    taps[pointerId] = event.position.game.toPositionedRect(tapSize);
   }
 
   @override
@@ -46,7 +46,7 @@ class MultitapAdvancedGame extends BaseGame
 
   @override
   void onDragUpdate(int pointerId, DragUpdateInfo event) {
-    end = event.position;
+    end = event.position.game;
   }
 
   @override

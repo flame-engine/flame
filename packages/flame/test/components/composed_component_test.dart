@@ -92,7 +92,7 @@ void main() {
       game.add(wrapper);
       wrapper.addChild(child);
       game.update(0.0);
-      game.onTapDown(1, createTapDownEvent());
+      game.onTapDown(1, createTapDownEvent(game));
 
       expect(child.gameSize, size);
       expect(child.tapped, true);
@@ -111,7 +111,8 @@ void main() {
       game.add(wrapper);
       wrapper.addChild(child);
       game.update(0.0);
-      game.onTapDown(1, createTapDownEvent(position: Vector2.all(250)));
+      game.onTapDown(
+          1, createTapDownEvent(game, position: const Offset(250, 250)));
 
       expect(child.gameSize, size);
       expect(child.tapped, true);

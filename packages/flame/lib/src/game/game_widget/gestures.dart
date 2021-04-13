@@ -29,157 +29,6 @@ bool hasAdvancedGesturesDetectors(Game game) =>
 bool hasMouseDetectors(Game game) =>
     game is MouseMovementDetector || game is ScrollDetector;
 
-TapDownInfo _parseTapDownDetails(Game game, TapDownDetails details) {
-  return TapDownInfo(
-    game.projectCoordinates(details.localPosition),
-    details.localPosition.toVector2(),
-    details.globalPosition.toVector2(),
-    details,
-  );
-}
-
-TapUpInfo _parseTapUpDetails(Game game, TapUpDetails details) {
-  return TapUpInfo(
-    game.projectCoordinates(details.localPosition),
-    details.localPosition.toVector2(),
-    details.globalPosition.toVector2(),
-    details,
-  );
-}
-
-LongPressStartInfo _parseLongPressStartDetaills(
-  Game game,
-  LongPressStartDetails details,
-) {
-  return LongPressStartInfo(
-    game.projectCoordinates(details.localPosition),
-    details.localPosition.toVector2(),
-    details.globalPosition.toVector2(),
-    details,
-  );
-}
-
-LongPressEndInfo _parseLongPressEndDetaills(
-  Game game,
-  LongPressEndDetails details,
-) {
-  return LongPressEndInfo(
-    game.projectCoordinates(details.localPosition),
-    details.localPosition.toVector2(),
-    details.globalPosition.toVector2(),
-    details.velocity.pixelsPerSecond.toVector2(),
-    details,
-  );
-}
-
-LongPressMoveUpdateInfo _parseLongPressMoveUpdateDetaills(
-  Game game,
-  LongPressMoveUpdateDetails details,
-) {
-  return LongPressMoveUpdateInfo(
-    game.projectCoordinates(details.localPosition),
-    details.localPosition.toVector2(),
-    details.globalPosition.toVector2(),
-    details,
-  );
-}
-
-DragDownInfo _parseDragDownInfo(Game game, DragDownDetails details) {
-  return DragDownInfo(
-    game.projectCoordinates(details.localPosition),
-    details.localPosition.toVector2(),
-    details.globalPosition.toVector2(),
-    details,
-  );
-}
-
-DragStartInfo _parseDragStartInfo(Game game, DragStartDetails details) {
-  return DragStartInfo(
-    game.projectCoordinates(details.localPosition),
-    details.localPosition.toVector2(),
-    details.globalPosition.toVector2(),
-    details,
-  );
-}
-
-DragUpdateInfo _parseDragUpdateInfo(Game game, DragUpdateDetails details) {
-  return DragUpdateInfo(
-    game.projectCoordinates(details.localPosition),
-    details.localPosition.toVector2(),
-    details.globalPosition.toVector2(),
-    // Should this be projected as well?
-    details.delta.toVector2(),
-    details,
-  );
-}
-
-DragEndInfo _parseDragEndInfo(DragEndDetails details) {
-  return DragEndInfo(
-    details.velocity.pixelsPerSecond.toVector2(),
-    details.primaryVelocity,
-    details,
-  );
-}
-
-ForcePressInfo _parseForcePressDetails(Game game, ForcePressDetails details) {
-  return ForcePressInfo(
-    game.projectCoordinates(details.localPosition),
-    details.localPosition.toVector2(),
-    details.globalPosition.toVector2(),
-    details.pressure,
-    details,
-  );
-}
-
-ScaleStartInfo _parseScaleStartDetails(Game game, ScaleStartDetails details) {
-  return ScaleStartInfo(
-    game.projectCoordinates(details.localFocalPoint),
-    details.pointerCount,
-    details,
-  );
-}
-
-ScaleEndInfo _parseScaleEndDetails(ScaleEndDetails details) {
-  return ScaleEndInfo(
-    details.velocity.pixelsPerSecond.toVector2(),
-    details.pointerCount,
-    details,
-  );
-}
-
-ScaleUpdateInfo _parseScaleUpdateDetails(
-  Game game,
-  ScaleUpdateDetails details,
-) {
-  return ScaleUpdateInfo(
-    game.projectCoordinates(details.localFocalPoint),
-    details.pointerCount,
-    details.rotation,
-    Vector2(details.horizontalScale, details.verticalScale),
-    details,
-  );
-}
-
-PointerHoverInfo _parsePointerHoverEvent(Game game, PointerHoverEvent event) {
-  return PointerHoverInfo(
-    game.projectCoordinates(event.localPosition),
-    event.localPosition.toVector2(),
-    event,
-  );
-}
-
-PointerScrollInfo _parsePointerScrollEvent(
-  Game game,
-  PointerScrollEvent event,
-) {
-  return PointerScrollInfo(
-    game.projectCoordinates(event.localPosition),
-    event.localPosition.toVector2(),
-    event.scrollDelta.toVector2(),
-    event,
-  );
-}
-
 Widget applyBasicGesturesDetectors(Game game, Widget child) {
   return GestureDetector(
     key: const ObjectKey('BasicGesturesDetector'),
@@ -189,19 +38,20 @@ Widget applyBasicGesturesDetectors(Game game, Widget child) {
     onTap: game is TapDetector ? () => game.onTap() : null,
     onTapCancel: game is TapDetector ? () => game.onTapCancel() : null,
     onTapDown: game is TapDetector
-        ? (TapDownDetails d) => game.onTapDown(_parseTapDownDetails(game, d))
+        ? (TapDownDetails d) => game.onTapDown(TapDownInfo.fromDetails(game, d))
         : null,
     onTapUp: game is TapDetector
-        ? (TapUpDetails d) => game.onTapUp(_parseTapUpDetails(game, d))
+        ? (TapUpDetails d) => game.onTapUp(TapUpInfo.fromDetails(game, d))
         : null,
 
     // Secondary taps
     onSecondaryTapDown: game is SecondaryTapDetector
         ? (TapDownDetails d) =>
-            game.onSecondaryTapDown(_parseTapDownDetails(game, d))
+            game.onSecondaryTapDown(TapDownInfo.fromDetails(game, d))
         : null,
     onSecondaryTapUp: game is SecondaryTapDetector
-        ? (TapUpDetails d) => game.onSecondaryTapUp(_parseTapUpDetails(game, d))
+        ? (TapUpDetails d) =>
+            game.onSecondaryTapUp(TapUpInfo.fromDetails(game, d))
         : null,
     onSecondaryTapCancel:
         game is SecondaryTapDetector ? () => game.onSecondaryTapCancel() : null,
@@ -213,34 +63,35 @@ Widget applyBasicGesturesDetectors(Game game, Widget child) {
     onLongPress: game is LongPressDetector ? () => game.onLongPress() : null,
     onLongPressStart: game is LongPressDetector
         ? (LongPressStartDetails d) =>
-            game.onLongPressStart(_parseLongPressStartDetaills(game, d))
+            game.onLongPressStart(LongPressStartInfo.fromDetails(game, d))
         : null,
     onLongPressMoveUpdate: game is LongPressDetector
         ? (LongPressMoveUpdateDetails d) => game
-            .onLongPressMoveUpdate(_parseLongPressMoveUpdateDetaills(game, d))
+            .onLongPressMoveUpdate(LongPressMoveUpdateInfo.fromDetails(game, d))
         : null,
     onLongPressUp:
         game is LongPressDetector ? () => game.onLongPressUp() : null,
     onLongPressEnd: game is LongPressDetector
         ? (LongPressEndDetails d) =>
-            game.onLongPressEnd(_parseLongPressEndDetaills(game, d))
+            game.onLongPressEnd(LongPressEndInfo.fromDetails(game, d))
         : null,
 
     // Vertical drag
     onVerticalDragDown: game is VerticalDragDetector
         ? (DragDownDetails d) =>
-            game.onVerticalDragDown(_parseDragDownInfo(game, d))
+            game.onVerticalDragDown(DragDownInfo.fromDetails(game, d))
         : null,
     onVerticalDragStart: game is VerticalDragDetector
         ? (DragStartDetails d) =>
-            game.onVerticalDragStart(_parseDragStartInfo(game, d))
+            game.onVerticalDragStart(DragStartInfo.fromDetails(game, d))
         : null,
     onVerticalDragUpdate: game is VerticalDragDetector
         ? (DragUpdateDetails d) =>
-            game.onVerticalDragUpdate(_parseDragUpdateInfo(game, d))
+            game.onVerticalDragUpdate(DragUpdateInfo.fromDetails(game, d))
         : null,
     onVerticalDragEnd: game is VerticalDragDetector
-        ? (DragEndDetails d) => game.onVerticalDragEnd(_parseDragEndInfo(d))
+        ? (DragEndDetails d) =>
+            game.onVerticalDragEnd(DragEndInfo.fromDetails(game, d))
         : null,
     onVerticalDragCancel:
         game is VerticalDragDetector ? () => game.onVerticalDragCancel() : null,
@@ -248,18 +99,19 @@ Widget applyBasicGesturesDetectors(Game game, Widget child) {
     // Horizontal drag
     onHorizontalDragDown: game is HorizontalDragDetector
         ? (DragDownDetails d) =>
-            game.onHorizontalDragDown(_parseDragDownInfo(game, d))
+            game.onHorizontalDragDown(DragDownInfo.fromDetails(game, d))
         : null,
     onHorizontalDragStart: game is HorizontalDragDetector
         ? (DragStartDetails d) =>
-            game.onHorizontalDragStart(_parseDragStartInfo(game, d))
+            game.onHorizontalDragStart(DragStartInfo.fromDetails(game, d))
         : null,
     onHorizontalDragUpdate: game is HorizontalDragDetector
         ? (DragUpdateDetails d) =>
-            game.onHorizontalDragUpdate(_parseDragUpdateInfo(game, d))
+            game.onHorizontalDragUpdate(DragUpdateInfo.fromDetails(game, d))
         : null,
     onHorizontalDragEnd: game is HorizontalDragDetector
-        ? (DragEndDetails d) => game.onHorizontalDragEnd(_parseDragEndInfo(d))
+        ? (DragEndDetails d) =>
+            game.onHorizontalDragEnd(DragEndInfo.fromDetails(game, d))
         : null,
     onHorizontalDragCancel: game is HorizontalDragDetector
         ? () => game.onHorizontalDragCancel()
@@ -268,48 +120,51 @@ Widget applyBasicGesturesDetectors(Game game, Widget child) {
     // Force presses
     onForcePressStart: game is ForcePressDetector
         ? (ForcePressDetails d) =>
-            game.onForcePressStart(_parseForcePressDetails(game, d))
+            game.onForcePressStart(ForcePressInfo.fromDetails(game, d))
         : null,
     onForcePressPeak: game is ForcePressDetector
         ? (ForcePressDetails d) =>
-            game.onForcePressPeak(_parseForcePressDetails(game, d))
+            game.onForcePressPeak(ForcePressInfo.fromDetails(game, d))
         : null,
     onForcePressUpdate: game is ForcePressDetector
         ? (ForcePressDetails d) =>
-            game.onForcePressUpdate(_parseForcePressDetails(game, d))
+            game.onForcePressUpdate(ForcePressInfo.fromDetails(game, d))
         : null,
     onForcePressEnd: game is ForcePressDetector
         ? (ForcePressDetails d) =>
-            game.onForcePressEnd(_parseForcePressDetails(game, d))
+            game.onForcePressEnd(ForcePressInfo.fromDetails(game, d))
         : null,
 
     // Pan
     onPanDown: game is PanDetector
-        ? (DragDownDetails d) => game.onPanDown(_parseDragDownInfo(game, d))
+        ? (DragDownDetails d) =>
+            game.onPanDown(DragDownInfo.fromDetails(game, d))
         : null,
     onPanStart: game is PanDetector
-        ? (DragStartDetails d) => game.onPanStart(_parseDragStartInfo(game, d))
+        ? (DragStartDetails d) =>
+            game.onPanStart(DragStartInfo.fromDetails(game, d))
         : null,
     onPanUpdate: game is PanDetector
         ? (DragUpdateDetails d) =>
-            game.onPanUpdate(_parseDragUpdateInfo(game, d))
+            game.onPanUpdate(DragUpdateInfo.fromDetails(game, d))
         : null,
     onPanEnd: game is PanDetector
-        ? (DragEndDetails d) => game.onPanEnd(_parseDragEndInfo(d))
+        ? (DragEndDetails d) => game.onPanEnd(DragEndInfo.fromDetails(game, d))
         : null,
     onPanCancel: game is PanDetector ? () => game.onPanCancel() : null,
 
     // Scales
     onScaleStart: game is ScaleDetector
         ? (ScaleStartDetails d) =>
-            game.onScaleStart(_parseScaleStartDetails(game, d))
+            game.onScaleStart(ScaleStartInfo.fromDetails(game, d))
         : null,
     onScaleUpdate: game is ScaleDetector
         ? (ScaleUpdateDetails d) =>
-            game.onScaleUpdate(_parseScaleUpdateDetails(game, d))
+            game.onScaleUpdate(ScaleUpdateInfo.fromDetails(game, d))
         : null,
     onScaleEnd: game is ScaleDetector
-        ? (ScaleEndDetails d) => game.onScaleEnd(_parseScaleEndDetails(d))
+        ? (ScaleEndDetails d) =>
+            game.onScaleEnd(ScaleEndInfo.fromDetails(game, d))
         : null,
 
     child: child,
@@ -353,8 +208,9 @@ Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
   if (game is MultiTouchTapDetector) {
     addTapRecognizer((MultiTapGestureRecognizer instance) {
       instance.onTapDown =
-          (i, d) => game.onTapDown(i, _parseTapDownDetails(game, d));
-      instance.onTapUp = (i, d) => game.onTapUp(i, _parseTapUpDetails(game, d));
+          (i, d) => game.onTapDown(i, TapDownInfo.fromDetails(game, d));
+      instance.onTapUp =
+          (i, d) => game.onTapUp(i, TapUpInfo.fromDetails(game, d));
       instance.onTapCancel = game.onTapCancel;
       instance.onTap = game.onTap;
     });
@@ -363,9 +219,9 @@ Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
       () => MultiTapGestureRecognizer(),
       (MultiTapGestureRecognizer instance) {
         instance.onTapDown =
-            (i, d) => game.onTapDown(i, _parseTapDownDetails(game, d));
+            (i, d) => game.onTapDown(i, TapDownInfo.fromDetails(game, d));
         instance.onTapUp =
-            (i, d) => game.onTapUp(i, _parseTapUpDetails(game, d));
+            (i, d) => game.onTapUp(i, TapUpInfo.fromDetails(game, d));
         instance.onTapCancel = (i) => game.onTapCancel(i);
       },
     );
@@ -401,12 +257,12 @@ Widget applyMouseDetectors(Game game, Widget child) {
     child: MouseRegion(
       child: child,
       onHover: game is MouseMovementDetector
-          ? (e) => game.onMouseMove(_parsePointerHoverEvent(game, e))
+          ? (e) => game.onMouseMove(PointerHoverInfo.fromDetails(game, e))
           : null,
     ),
     onPointerSignal: (event) =>
         game is ScrollDetector && event is PointerScrollEvent
-            ? game.onScroll(_parsePointerScrollEvent(game, event))
+            ? game.onScroll(PointerScrollInfo.fromDetails(game, event))
             : null,
   );
 }
@@ -421,7 +277,7 @@ class _DragEvent extends Drag {
 
   @override
   void update(DragUpdateDetails details) {
-    final event = _parseDragUpdateInfo(gameRef, details);
+    final event = DragUpdateInfo.fromDetails(gameRef, details);
     onUpdate?.call(event);
   }
 
@@ -432,7 +288,7 @@ class _DragEvent extends Drag {
 
   @override
   void end(DragEndDetails details) {
-    final event = _parseDragEndInfo(details);
+    final event = DragEndInfo.fromDetails(gameRef, details);
     onEnd?.call(event);
   }
 }

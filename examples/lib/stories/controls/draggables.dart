@@ -39,7 +39,7 @@ class DraggableSquare extends PositionComponent
       return false;
     }
 
-    position.setFrom(event.position - dragDeltaPosition);
+    position.setFrom(event.position.game - dragDeltaPosition);
     return false;
   }
 

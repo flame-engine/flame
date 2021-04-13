@@ -103,12 +103,12 @@ class MyGame extends Game with TapDetector {
 
   @override
   void onTapDown(TapDownInfo event) {
-    print("Player tap down on ${event.position.x} - ${event.position.y}");
+    print("Player tap down on ${event.position.game}");
   }
 
   @override
   void onTapUp(TapUpInfo event) {
-    print("Player tap up on ${event.position.x} - ${event.position.y}");
+    print("Player tap up on ${event.position.game}");
   }
 }
 ```
@@ -225,7 +225,7 @@ class DraggableComponent extends PositionComponent with Draggable {
 
   @override
   bool onDragUpdate(int pointerId, DragUpdateInfo event) {
-    final localCoords = gameRef.position;
+    final localCoords = gameRef.position.game;
     position = localCoords - dragDeltaPosition;
     return false;
   }

@@ -223,6 +223,9 @@ abstract class Game {
   /// By default this just returns the same received coordinate transformed to
   /// a Vector2, override this to add addtional logic to that projection
   Vector2 projectCoordinates(Offset value) => value.toVector2();
+
+  // TODO(erickzanardo) Luan, help me here on BaseGame logic
+  Vector2 scaleCoordinate(Offset value) => value.toVector2();
 }
 
 /// A [ChangeNotifier] used to control the visibility of overlays on a [Game] instance.

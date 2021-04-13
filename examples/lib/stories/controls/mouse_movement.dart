@@ -17,7 +17,7 @@ class MouseMovementGame extends BaseGame with MouseMovementDetector {
 
   @override
   void onMouseMove(PointerHoverInfo event) {
-    target = event.position;
+    target = event.position.game;
   }
 
   Rect _toRect() => position.toPositionedRect(objSize);

@@ -1,16 +1,18 @@
+import 'package:flame/game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/extensions.dart';
 
-TapDownInfo createTapDownEvent({
-  Vector2? position,
-  Vector2? gameWidgetPosition,
-  Vector2? globalPosition,
+TapDownInfo createTapDownEvent(
+  Game game, {
+  Offset? position,
+  Offset? globalPosition,
 }) {
-  return TapDownInfo(
-    position ?? Vector2.zero(),
-    gameWidgetPosition ?? Vector2.zero(),
-    globalPosition ?? Vector2.zero(),
-    TapDownDetails(),
+  return TapDownInfo.fromDetails(
+    game,
+    TapDownDetails(
+      localPosition: position ?? Offset.zero,
+      globalPosition: globalPosition ?? Offset.zero,
+    ),
   );
 }
