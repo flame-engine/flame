@@ -49,7 +49,7 @@ class MyGame extends Game with TapDetector {
   void onTapDown(TapDownInfo event) {
     final buttonArea = buttonPosition & buttonSize;
 
-    isPressed = buttonArea.contains(event.position.toOffset());
+    isPressed = buttonArea.contains(event.position.game.toOffset());
   }
 
   @override

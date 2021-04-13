@@ -2,6 +2,7 @@
 
 ## [next]
  - Updated tutorial documentation to indicate use of new version
+ - Refactor on flame input system to correctly take camera into account
 
 ## [1.0.0-rc9]
  - Fix input bug with other anchors than center
