@@ -112,7 +112,12 @@ void main() {
       wrapper.addChild(child);
       game.update(0.0);
       game.onTapDown(
-          1, createTapDownEvent(game, position: const Offset(250, 250)));
+        1,
+        createTapDownEvent(
+          game,
+          position: const Offset(250, 250),
+        ),
+      );
 
       expect(child.gameSize, size);
       expect(child.tapped, true);
