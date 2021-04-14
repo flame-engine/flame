@@ -11,8 +11,10 @@ class EventPosition {
 
   /// Coordinates of the event relative to the game position/size and transformations
   late final Vector2 game = _game.projectOffset(_localPosition);
+
   /// Coordinates of the event relative to the game widget position/size
   late final Vector2 widget = _localPosition.toVector2();
+
   /// Coordinates of the event relative to the whole screen
   late final Vector2 global = _globalPosition?.toVector2() ??
       _game.convertLocalToGlobalCoordinate(_localPosition.toVector2());
@@ -72,8 +74,7 @@ class LongPressStartInfo extends PositionInfo<LongPressStartDetails> {
 }
 
 class LongPressEndInfo extends PositionInfo<LongPressEndDetails> {
-  late final Vector2 velocity =
-      _game.scaleOffset(raw.velocity.pixelsPerSecond);
+  late final Vector2 velocity = _game.scaleOffset(raw.velocity.pixelsPerSecond);
 
   LongPressEndInfo.fromDetails(
     Game game,
@@ -81,8 +82,7 @@ class LongPressEndInfo extends PositionInfo<LongPressEndDetails> {
   ) : super(game, raw.localPosition, raw.globalPosition, raw);
 }
 
-class LongPressMoveUpdateInfo
-    extends PositionInfo<LongPressMoveUpdateDetails> {
+class LongPressMoveUpdateInfo extends PositionInfo<LongPressMoveUpdateDetails> {
   LongPressMoveUpdateInfo.fromDetails(
     Game game,
     LongPressMoveUpdateDetails raw,
@@ -139,8 +139,7 @@ class DragUpdateInfo extends PositionInfo<DragUpdateDetails> {
 
 class DragEndInfo extends BaseInfo<DragEndDetails> {
   final Game _game;
-  late final Vector2 velocity =
-      _game.scaleOffset(raw.velocity.pixelsPerSecond);
+  late final Vector2 velocity = _game.scaleOffset(raw.velocity.pixelsPerSecond);
   double? get primaryVelocity => raw.primaryVelocity;
 
   DragEndInfo.fromDetails(
@@ -160,8 +159,7 @@ class ScaleStartInfo extends PositionInfo<ScaleStartDetails> {
 
 class ScaleEndInfo extends BaseInfo<ScaleEndDetails> {
   final Game _game;
-  late final Vector2 velocity =
-      _game.scaleOffset(raw.velocity.pixelsPerSecond);
+  late final Vector2 velocity = _game.scaleOffset(raw.velocity.pixelsPerSecond);
   int get pointerCount => raw.pointerCount;
 
   ScaleEndInfo.fromDetails(
