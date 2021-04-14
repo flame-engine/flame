@@ -31,34 +31,12 @@ mixin Hitbox on PositionComponent {
     _shapes.forEach((shape) => shape.render(canvas, debugPaint));
   }
 
-  final _cachedBoundingRect = ShapeCache<Rect>();
-
-  /// Returns the absolute [Rect] that contains all the corners of the rotated
-  /// [toAbsoluteRect] rect.
-  Rect toBoundingRect() {
-    if (!_cachedBoundingRect.isCacheValid([position, size])) {
-      final rotatedPoints = toAbsoluteRect().toVertices()
-        ..forEach((v) => v.rotate(
-              angle,
-              center: absolutePosition,
-            ));
-      final minX = rotatedPoints.map<double>((v) => v.x).reduce(min);
-      final minY = rotatedPoints.map<double>((v) => v.y).reduce(min);
-      final maxX = rotatedPoints.map<double>((v) => v.x).reduce(max);
-      final maxY = rotatedPoints.map<double>((v) => v.y).reduce(max);
-      _cachedBoundingRect.updateCache(
-        Rect.fromLTRB(minX, minY, maxX, maxY),
-        [position.clone(), size.clone()],
-      );
-    }
-    return _cachedBoundingRect.value!;
-  }
-
   /// Since this is a cheaper calculation than checking towards all shapes, this
   /// check can be done first to see if it even is possible that the shapes can
   /// overlap, since the shapes have to be within the size of the component.
   bool possiblyOverlapping(Hitbox other) {
-    return toBoundingRect().overlaps(other.toBoundingRect());
+    return other.center.distanceToSquared(center) <=
+        other.size.length2 + size.length2;
   }
 
   /// Since this is a cheaper calculation than checking towards all shapes this
@@ -66,6 +44,6 @@ mixin Hitbox on PositionComponent {
   /// contain the point, since the shapes have to be within the size of the
   /// component.
   bool possiblyContainsPoint(Vector2 point) {
-    return toBoundingRect().containsPoint(point);
+    return center.distanceToSquared(point) <= size.length2;
   }
 }
