@@ -20,7 +20,7 @@ class MoveEffectGame extends BaseGame with TapDetector {
     square.addEffect(
       MoveEffect(
         path: [
-          event.position.game,
+          event.eventPosition.game,
           Vector2(100, 100),
           Vector2(50, 120),
           Vector2(200, 400),

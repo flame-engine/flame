@@ -13,7 +13,7 @@ class MultitapGame extends BaseGame with MultiTouchTapDetector {
 
   @override
   void onTapDown(int pointerId, TapDownInfo event) {
-    taps[pointerId] = event.position.game.toPositionedRect(tapSize);
+    taps[pointerId] = event.eventPosition.game.toPositionedRect(tapSize);
   }
 
   @override

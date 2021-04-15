@@ -31,14 +31,14 @@ abstract class BaseInfo<T> {
 }
 
 /// A more specialized wrapper of Flame's base class for input events.
-/// It adds the [position] field and is used by all position based
+/// It adds the [eventPosition] field and is used by all position based
 /// events on Flame.
 abstract class PositionInfo<T> extends BaseInfo<T> {
   final Game _game;
   final Offset _position;
   final Offset? _globalPosition;
 
-  late final position = EventPosition(
+  late final eventPosition = EventPosition(
     _game,
     _position,
     _globalPosition,

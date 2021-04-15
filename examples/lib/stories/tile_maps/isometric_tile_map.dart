@@ -72,7 +72,7 @@ class IsometricTileMapGame extends BaseGame with MouseMovementDetector {
 
   @override
   void onMouseMove(PointerHoverInfo event) {
-    final screenPosition = event.position.game;
+    final screenPosition = event.eventPosition.game;
     final block = base.getBlock(screenPosition);
     selector.show = base.containsBlock(block);
     selector.position.setFrom(base.getBlockPosition(block) + topLeft);

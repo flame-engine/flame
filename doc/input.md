@@ -97,7 +97,7 @@ also read more about Flutter's gestures
 
 ## Event coordinate system
 
-On events that have positions, like for example `Tap*` or `Drag`, you will notice that the `position`
+On events that have positions, like for example `Tap*` or `Drag`, you will notice that the `eventPosition`
 attribute includes 3 fields: `game`, `widget` and `global`. Below you will find a brief explanation
 about each one of them.
 
@@ -125,12 +125,12 @@ class MyGame extends Game with TapDetector {
 
   @override
   void onTapDown(TapDownInfo event) {
-    print("Player tap down on ${event.position.game}");
+    print("Player tap down on ${event.eventPosition.game}");
   }
 
   @override
   void onTapUp(TapUpInfo event) {
-    print("Player tap up on ${event.position.game}");
+    print("Player tap up on ${event.eventPosition.game}");
   }
 }
 ```
@@ -247,7 +247,7 @@ class DraggableComponent extends PositionComponent with Draggable {
 
   @override
   bool onDragUpdate(int pointerId, DragUpdateInfo event) {
-    final localCoords = event.position.game;
+    final localCoords = event.eventPosition.game;
     position = localCoords - dragDeltaPosition;
     return false;
   }
