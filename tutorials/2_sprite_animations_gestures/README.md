@@ -198,7 +198,7 @@ class MyGame extends Game with TapDetector {
     // if a point (Offset) is inside that rect
     final buttonArea = buttonPosition & buttonSize;
 
-    isPressed = buttonArea.contains(event.position.game.toOffset());
+    isPressed = buttonArea.contains(event.eventPosition.game.toOffset());
   }
 
   // On both tap up and tap cancel we just set the isPressed
