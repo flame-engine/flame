@@ -1,1 +1,2 @@
-export 'src/gestures.dart';
+export 'src/gestures/detectors.dart';
+export 'src/gestures/events.dart';

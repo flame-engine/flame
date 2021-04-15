@@ -5,7 +5,6 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Image;
 
 const x = 500.0;
@@ -72,8 +71,8 @@ class IsometricTileMapGame extends BaseGame with MouseMovementDetector {
   }
 
   @override
-  void onMouseMove(PointerHoverEvent event) {
-    final screenPosition = event.localPosition.toVector2();
+  void onMouseMove(PointerHoverInfo event) {
+    final screenPosition = event.eventPosition.game;
     final block = base.getBlock(screenPosition);
     selector.show = base.containsBlock(block);
     selector.position.setFrom(base.getBlockPosition(block) + topLeft);
