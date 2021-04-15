@@ -81,12 +81,33 @@ class Map extends Component {
   }
 }
 
-class Rock extends SquareComponent with Hitbox, Collidable {
+class Rock extends SquareComponent with Hitbox, Collidable, Tapable {
+  static final unpressedPaint = Paint()..color = const Color(0xFF2222FF);
+  static final pressedPaint = Paint()..color = const Color(0xFF414175);
+
   Rock(Vector2 position) {
     this.position.setFrom(position);
     size.setValues(50, 50);
-    paint = Paint()..color = const Color(0xFF2222FF);
+    paint = unpressedPaint;
     addShape(HitboxRectangle());
+  }
+
+  @override
+  bool onTapDown(_) {
+    paint = pressedPaint;
+    return true;
+  }
+
+  @override
+  bool onTapUp(_) {
+    paint = unpressedPaint;
+    return true;
+  }
+
+  @override
+  bool onTapCancel() {
+    paint = unpressedPaint;
+    return true;
   }
 
   @override
@@ -94,12 +115,15 @@ class Rock extends SquareComponent with Hitbox, Collidable {
 }
 
 class CameraAndViewportGame extends BaseGame
-    with KeyboardEvents, HasCollidables {
+    with KeyboardEvents, HasCollidables, HasTapableComponents {
   late MovableSquare square;
 
   @override
   Future<void> onLoad() async {
-    viewport = FixedResolutionViewport(Vector2(500, 500));
+    // TODO(erick) viewport is not considered by the camera when projecting
+    // coordinates, so this makes the clicks not work. commenting this while
+    // we don't fix that
+    //viewport = FixedResolutionViewport(Vector2(500, 500));
     add(Map());
 
     add(square = MovableSquare());

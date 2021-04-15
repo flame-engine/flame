@@ -1,9 +1,8 @@
-import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
 import '../../../game.dart';
-import '../../extensions/offset.dart';
 import '../../game/base_game.dart';
+import '../../gestures/events.dart';
 import '../base_component.dart';
 
 mixin Tapable on BaseComponent {
@@ -11,11 +10,11 @@ mixin Tapable on BaseComponent {
     return true;
   }
 
-  bool onTapDown(TapDownDetails details) {
+  bool onTapDown(TapDownInfo event) {
     return true;
   }
 
-  bool onTapUp(TapUpDetails details) {
+  bool onTapUp(TapUpInfo event) {
     return true;
   }
 
@@ -23,19 +22,18 @@ mixin Tapable on BaseComponent {
 
   bool _checkPointerId(int pointerId) => _currentPointerId == pointerId;
 
-  bool handleTapDown(int pointerId, TapDownDetails details) {
-    if (containsPoint(details.localPosition.toVector2())) {
+  bool handleTapDown(int pointerId, TapDownInfo event) {
+    if (containsPoint(event.eventPosition.game)) {
       _currentPointerId = pointerId;
-      return onTapDown(details);
+      return onTapDown(event);
     }
     return true;
   }
 
-  bool handleTapUp(int pointerId, TapUpDetails details) {
-    if (_checkPointerId(pointerId) &&
-        containsPoint(details.localPosition.toVector2())) {
+  bool handleTapUp(int pointerId, TapUpInfo event) {
+    if (_checkPointerId(pointerId) && containsPoint(event.eventPosition.game)) {
       _currentPointerId = null;
-      return onTapUp(details);
+      return onTapUp(event);
     }
     return true;
   }
@@ -71,12 +69,12 @@ mixin HasTapableComponents on BaseGame {
   }
 
   @mustCallSuper
-  void onTapDown(int pointerId, TapDownDetails details) {
-    _handleTapEvent((Tapable child) => child.handleTapDown(pointerId, details));
+  void onTapDown(int pointerId, TapDownInfo event) {
+    _handleTapEvent((Tapable child) => child.handleTapDown(pointerId, event));
   }
 
   @mustCallSuper
-  void onTapUp(int pointerId, TapUpDetails details) {
-    _handleTapEvent((Tapable child) => child.handleTapUp(pointerId, details));
+  void onTapUp(int pointerId, TapUpInfo event) {
+    _handleTapEvent((Tapable child) => child.handleTapUp(pointerId, event));
   }
 }

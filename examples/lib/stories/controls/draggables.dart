@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/gestures.dart';
+import 'package:flame/gestures.dart';
 import 'package:flutter/material.dart' show Colors;
 
 // Note: this component does not consider the possibility of multiple
@@ -33,21 +33,18 @@ class DraggableSquare extends PositionComponent
   }
 
   @override
-  bool onDragUpdate(int pointerId, DragUpdateDetails details) {
+  bool onDragUpdate(int pointerId, DragUpdateInfo event) {
     final dragDeltaPosition = this.dragDeltaPosition;
     if (dragDeltaPosition == null) {
       return false;
     }
 
-    final localCoords = gameRef.convertGlobalToLocalCoordinate(
-      details.globalPosition.toVector2(),
-    );
-    position.setFrom(localCoords - dragDeltaPosition);
+    position.setFrom(event.eventPosition.game - dragDeltaPosition);
     return false;
   }
 
   @override
-  bool onDragEnd(int pointerId, DragEndDetails details) {
+  bool onDragEnd(int pointerId, _) {
     dragDeltaPosition = null;
     return false;
   }
