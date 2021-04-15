@@ -6,7 +6,7 @@ import '../game/game.dart';
 /// [EventPosition] converts position based events to three different coordinate systems (global, local and game).
 ///
 /// global: coordinate system relative to the entire app; same as `globalPosition` in Flutter
-/// widget: coordinate system relative to the [GameWidget] widget; same as `localPosition` in Flutter
+/// widget: coordinate system relative to the GameWidget widget; same as `localPosition` in Flutter
 /// game: same as `widget` but also applies any transformations from the camera or viewport to the coordinate system
 class EventPosition {
   final Game _game;
