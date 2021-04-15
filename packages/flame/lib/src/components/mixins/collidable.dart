@@ -29,6 +29,6 @@ class ScreenCollidable extends PositionComponent with Hitbox, Collidable {
   @override
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
-    size.setFrom(gameSize);
+    size = gameSize;
   }
 }
