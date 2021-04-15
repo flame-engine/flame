@@ -97,13 +97,13 @@ class Polygon extends Shape {
   /// are the "corners" of the hitbox rotated with [angle].
   List<Vector2> hitbox() {
     // Use cached bounding vertices if state of the component hasn't changed
-    if (!_cachedHitbox.isCacheValid([position, size, angle])) {
+    if (!_cachedHitbox.isCacheValid([shapeCenter, size, angle])) {
       _cachedHitbox.updateCache(
         scaled()
             .map((point) =>
                 (point + shapeCenter)..rotate(angle, center: anchorPosition))
             .toList(growable: false),
-        [position.clone(), size!.clone(), angle],
+        [shapeCenter, size!.clone(), angle],
       );
     }
     return _cachedHitbox.value!;
