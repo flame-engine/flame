@@ -103,17 +103,17 @@ about each one of them.
 
 ### global
 
-Coordinates with the position where the event occurred considering the entire screen, same as
+The position where the event occurred considering the entire screen, same as
 `globalPosition` in Flutter's native events.
 
 ### widget
 
-Coordinates with the position where the event occurred relative to the `GameWidget` position and size
+The position where the event occurred relative to the `GameWidget` position and size
 , same as `localPosition` in Flutter's native events.
 
 ### game
 
-Coordinates with the position where the event ocurred relative to the `GameWidget` and with any
+The position where the event ocurred relative to the `GameWidget` and with any
 transformations that the game applied to the game (e.g. camera). If the game doesn't have any
 transformations, this will be equal to the `widget` attribute.
 
