@@ -60,7 +60,7 @@ class BaseGame extends Game with FPSCounter {
     } else {
       _viewport = value;
     }
-    _combinedProjector = Projector.combine([camera, value]);
+    _combinedProjector = Projector.compose([camera, value]);
   }
 
   late Projector _combinedProjector;
@@ -84,7 +84,7 @@ class BaseGame extends Game with FPSCounter {
 
   BaseGame() {
     camera.gameRef = this;
-    _combinedProjector = Projector.combine([camera, viewport]);
+    _combinedProjector = Projector.compose([camera, viewport]);
   }
 
   /// This method is called for every component added.
