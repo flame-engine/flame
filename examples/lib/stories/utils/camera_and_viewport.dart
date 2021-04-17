@@ -120,10 +120,7 @@ class CameraAndViewportGame extends BaseGame
 
   @override
   Future<void> onLoad() async {
-    // TODO(erick) viewport is not considered by the camera when projecting
-    // coordinates, so this makes the clicks not work. commenting this while
-    // we don't fix that
-    //viewport = FixedResolutionViewport(Vector2(500, 500));
+    viewport = FixedResolutionViewport(Vector2(500, 500));
     add(Map());
 
     add(square = MovableSquare());
