@@ -1,14 +1,5 @@
 #!/usr/bin/env bash
 
-
-
-cd package/flame
-flutter pub get
-flutter format .
-
-git diff
-
-
 function run_format() {
   FORMAT_ISSUES=$(flutter format --set-exit-if-changed -n .)
   if [ $? -eq 1 ]; then
