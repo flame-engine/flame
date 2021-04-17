@@ -68,22 +68,10 @@ class BatchItem {
     required this.transform,
     required this.color,
   })   : matrix = Matrix4(
-          transform.scos,
-          transform.ssin,
-          0,
-          0,
-          -transform.ssin,
-          transform.scos,
-          0,
-          0,
-          0,
-          0,
-          _defaultScale,
-          0,
-          transform.tx,
-          transform.ty,
-          0,
-          1,
+          transform.scos, transform.ssin, 0, 0, //
+          -transform.ssin, transform.scos, 0, 0, //
+          0, 0, _defaultScale, 0, //
+          transform.tx, transform.ty, 0, 1, //
         ),
         paint = Paint()..color = color,
         destination = Offset.zero & source.size;
