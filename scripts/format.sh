@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 function run_format() {
-  flutter pub get
   FORMAT_ISSUES=$(flutter format --set-exit-if-changed -n .)
   if [ $? -eq 1 ]; then
     echo "flutter format issues on"
