@@ -34,14 +34,25 @@ abstract class Projector {
   /// vectors), a velocity (displacement over time), etc.
   Vector2 projectDelta(Vector2 worldCoordinates);
 
-  static Projector combine(List<Projector> projectors) {
-    return CombinationProjector(projectors);
+  /// Creates a [ComposedProjector] that will apply the provided projectors
+  /// in order.
+  ///
+  /// Use when dealing with multiple coordinate transformations in succession.
+  static Projector compose(List<Projector> projectors) {
+    return ComposedProjector(projectors);
   }
 }
 
-class CombinationProjector extends Projector {
+/// This is a [Projector] implementation that composes a list of projectors,
+/// in the order provided.
+///
+/// It will call the `project*` functions in the order in the array and the
+/// `unproject*` in the reversed order.
+/// For a list of projectors p1, p2, ..., pn, this is equivalent of the
+/// projector p = pn ∘ ... ∘ p2 ∘ p1.
+class ComposedProjector extends Projector {
   final List<Projector> _components;
-  CombinationProjector(this._components);
+  ComposedProjector(this._components);
 
   @override
   Vector2 projectDelta(Vector2 worldCoordinates) {
