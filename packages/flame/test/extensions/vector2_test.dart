@@ -7,6 +7,10 @@ void expectDouble(double d1, double d2) {
   expect((d1 - d2).abs() <= 0.0001, true);
 }
 
+void expectVector2(Vector2 v1, Vector2 v2) {
+  expect(v1.distanceTo(v2) <= 0.0001, true);
+}
+
 void main() {
   group('Vector2 test', () {
     test('test add', () {
@@ -147,6 +151,54 @@ void main() {
 
       current.moveToTarget(target, math.sqrt(5));
       expect(current, Vector2(4.0, 6.0));
+    });
+
+    test('rotate - no center defined', () {
+      final position = Vector2(0.0, 1.0);
+      position.rotate(-math.pi/2);
+      expectVector2(position, Vector2(1.0, 0.0));
+    });
+
+    test('rotate - no center defined, negative position', () {
+      final position = Vector2(0.0, -1.0);
+      position.rotate(-math.pi/2);
+      expectVector2(position, Vector2(-1.0, 0.0));
+    });
+
+    test('rotate - with center defined', () {
+      final position = Vector2(0.0, 1.0);
+      final center = Vector2(1.0, 1.0);
+      position.rotate(-math.pi/2, center: center);
+      expectVector2(position, Vector2(1.0, 2.0));
+    });
+
+    test('rotate - with positive direction', () {
+      final position = Vector2(0.0, 1.0);
+      final center = Vector2(1.0, 1.0);
+      position.rotate(math.pi/2, center: center);
+      expectVector2(position, Vector2(1.0, 0.0));
+    });
+
+    test('rotate - with a negative y position', () {
+      final position = Vector2(2.0, -3.0);
+      final center = Vector2(1.0, 1.0);
+      position.rotate(math.pi/2, center: center);
+      expectVector2(position, Vector2(5.0, 2.0));
+    });
+
+    test('rotate - with a negative x position', () {
+      final position = Vector2(-2.0, 3.0);
+      final center = Vector2(1.0, 1.0);
+      position.rotate(math.pi/2, center: center);
+      expectVector2(position, Vector2(-1.0, -2.0));
+    });
+
+    test('rotate - with a negative position', () {
+      final position = Vector2(-2.0, -3.0);
+      final center = Vector2(1.0, 0.0);
+      position.rotate(math.pi/2, center: center);
+      print(position);
+      expectVector2(position, Vector2(4.0, -3.0));
     });
   });
 }

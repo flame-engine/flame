@@ -183,5 +183,60 @@ void main() {
       final point = Vector2(2.0, 2.0);
       expect(component.containsPoint(point), false);
     });
+
+    test('component with anchor center has the same center and position', () {
+      final PositionComponent component = MyComponent();
+      component.position.setValues(2.0, 1.0);
+      component.size.setValues(3.0, 1.0);
+      component.angle = 2.0;
+      component.anchor = Anchor.center;
+
+      expect(component.center == component.position, true);
+      expect(component.absoluteCenter == component.position, true);
+      expect(
+        component.topLeftPosition == component.position - component.size / 2,
+        true,
+      );
+    });
+
+    test('component with anchor topLeft has the correct center', () {
+      final PositionComponent component = MyComponent();
+      component.position.setValues(2.0, 1.0);
+      component.size.setValues(3.0, 1.0);
+      component.angle = 0.0;
+      component.anchor = Anchor.topLeft;
+
+      expect(component.center == component.position + component.size / 2, true);
+      expect(
+        component.absoluteCenter == component.position + component.size / 2,
+        true,
+      );
+    });
+
+    test('component with parent has the correct center', () {
+      final PositionComponent parent = MyComponent();
+      parent.position.setValues(2.0, 1.0);
+      parent.anchor = Anchor.topLeft;
+      final PositionComponent child = MyComponent();
+      child.position.setValues(2.0, 1.0);
+      child.size.setValues(3.0, 1.0);
+      child.angle = 0.0;
+      child.anchor = Anchor.topLeft;
+      parent.addChild(child);
+
+      expect(
+        child.absoluteTopLeftPosition == child.position + parent.position,
+        true,
+      );
+      expect(
+        child.absoluteTopLeftPosition ==
+            child.topLeftPosition + parent.topLeftPosition,
+        true,
+      );
+      expect(
+        child.absoluteCenter == parent.position + child.center,
+        true,
+      );
+    });
   });
 }
