@@ -34,9 +34,16 @@ extension Vector2Extension on Vector2 {
     setFrom(this + (to - this) * t);
   }
 
+  /// Whether the [Vector2] is the zero vector or not
+  bool isZero() => x == 0 && y == 0;
+
   /// Rotates the [Vector2] with [angle] in radians
   /// rotates around [center] if it is defined
   void rotate(double angle, {Vector2? center}) {
+    if (x == 0 && y == 0) {
+      // No point in rotating the zero vector
+      return;
+    }
     if (center == null) {
       setValues(
         x * cos(angle) - y * sin(angle),

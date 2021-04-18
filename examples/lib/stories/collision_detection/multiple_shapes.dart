@@ -12,14 +12,15 @@ import 'package:flutter/material.dart' hide Image, Draggable;
 enum Shapes { circle, rectangle, polygon }
 
 abstract class MyCollidable extends PositionComponent
-    with Draggable, Hitbox, Collidable {
+    with Draggable, Hitbox, Collidable, HasGameRef<MultipleShapes> {
   double rotationSpeed = 0.0;
   final Vector2 velocity;
   final delta = Vector2.zero();
   double angleDelta = 0;
   bool _isDragged = false;
   final _activePaint = Paint()..color = Colors.amber;
-  double _wallHitTime = double.infinity;
+  late final Color _defaultDebugColor = debugColor;
+  bool _isHit = false;
 
   MyCollidable(Vector2 position, Vector2 size, this.velocity) {
     this.position = position;
@@ -33,7 +34,11 @@ abstract class MyCollidable extends PositionComponent
     if (_isDragged) {
       return;
     }
-    _wallHitTime += dt;
+    if (!_isHit) {
+      debugColor = _defaultDebugColor;
+    } else {
+      _isHit = false;
+    }
     delta.setFrom(velocity * dt);
     position.add(delta);
     angleDelta = dt * rotationSpeed;
@@ -43,42 +48,53 @@ abstract class MyCollidable extends PositionComponent
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    renderShapes(canvas);
     final localCenter = (size / 2).toOffset();
     if (_isDragged) {
       canvas.drawCircle(localCenter, 5, _activePaint);
-    }
-    if (_wallHitTime < 1.0) {
-      // Show a rectangle in the center for a second if we hit the wall
-      canvas.drawRect(
-        Rect.fromCenter(center: localCenter, width: 10, height: 10),
-        debugPaint,
-      );
     }
   }
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
+    _isHit = true;
+    switch (other.runtimeType) {
+      case ScreenCollidable:
+        _handleScreenCollision(intersectionPoints);
+        break;
+      case CollidablePolygon:
+        debugColor = Colors.blue;
+        break;
+      case CollidableCircle:
+        debugColor = Colors.green;
+        break;
+      case CollidableRectangle:
+        debugColor = Colors.cyan;
+        break;
+      default:
+        debugColor = Colors.pink;
+    }
+  }
+
+  void _handleScreenCollision(Set<Vector2> intersectionPoints) {
     final averageIntersection = intersectionPoints.reduce((sum, v) => sum + v) /
         intersectionPoints.length.toDouble();
     final collisionDirection = (averageIntersection - absoluteCenter)
       ..normalize()
       ..round();
-    if (velocity.angleToSigned(collisionDirection).abs() > 3) {
-      // This entity got hit by something else
-      return;
-    }
     final angleToCollision = velocity.angleToSigned(collisionDirection);
-    if (angleToCollision.abs() < pi / 8) {
-      velocity.rotate(pi);
-    } else {
-      velocity.rotate(-pi / 2 * angleToCollision.sign);
+    const fuzzyBorder = 10;
+    if (averageIntersection.x > gameRef.size.x - fuzzyBorder) {
+
+    } else if (averageIntersection.y > gameRef.size.y - fuzzyBorder) {
+
+    } else if (averageIntersection.x < fuzzyBorder) {
+
+    } else if (averageIntersection.y < fuzzyBorder) {
+
     }
-    position.sub(delta * 2);
+    velocity.rotate(pi- 2 * angleToCollision);
+    position.add(velocity.normalized() * delta.length * 1.1);
     angle = (angle - angleDelta) % (2 * pi);
-    if (other is ScreenCollidable) {
-      _wallHitTime = 0;
-    }
   }
 
   @override
@@ -147,7 +163,7 @@ class SnowmanPart extends HitboxCircle {
   }
 
   @override
-  void render(Canvas canvas, Paint paint) {
+  void render(Canvas canvas, _) {
     super.render(canvas, hitPaint);
   }
 }
@@ -167,6 +183,9 @@ class CollidableSnowman extends MyCollidable {
 
 class MultipleShapes extends BaseGame
     with HasCollidables, HasDraggableComponents {
+  @override
+  bool debugMode = true;
+
   final TextPaint fpsTextPaint = TextPaint(
     config: TextPaintConfig(
       color: BasicPalette.white.color,
@@ -218,7 +237,8 @@ class MultipleShapes extends BaseGame
     final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
     switch (shapeType) {
       case Shapes.circle:
-        return CollidableCircle(position, collidableSize, velocity);
+        return CollidableCircle(position, collidableSize, velocity)
+          ..rotationSpeed = rotationSpeed;
       case Shapes.rectangle:
         return CollidableRectangle(position, collidableSize, velocity)
           ..rotationSpeed = rotationSpeed;

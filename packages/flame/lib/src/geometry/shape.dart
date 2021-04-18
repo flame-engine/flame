@@ -21,6 +21,10 @@ abstract class Shape {
   /// The angle of the shape from its initial definition
   double angle;
 
+  /// The angle of the parent that has to be taken into consideration for some
+  /// applications of [Shape], for example [HitboxShape]
+  double parentAngle;
+
   Vector2 get shapeCenter => position;
 
   Vector2? _anchorPosition;
@@ -31,6 +35,7 @@ abstract class Shape {
     Vector2? position,
     this.size,
     this.angle = 0,
+    this.parentAngle = 0,
   }) : position = position ?? Vector2.zero();
 
   /// Whether the point [p] is within the shapes boundaries or not
@@ -54,15 +59,19 @@ mixin HitboxShape on Shape {
   Vector2 get size => component.size;
 
   @override
-  double get angle => component.angle;
+  double get parentAngle => component.angle;
 
   /// The shape's absolute center
   @override
   Vector2 get shapeCenter {
-    return component.absoluteCenter +
-        position +
-        ((size / 2)..multiply(relativePosition))
-      ..rotate(angle, center: anchorPosition);
+    if (position.isZero() && relativePosition.isZero()) {
+      return component.absoluteCenter;
+    } else {
+      final rotatedCenter = (position +
+          ((size / 2)..multiply(relativePosition)))
+        ..rotate(parentAngle, center: component.absolutePosition);
+      return component.absoluteCenter + rotatedCenter;
+    }
   }
 
   /// Assign your own [CollisionCallback] if you want a callback when this

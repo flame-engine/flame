@@ -88,14 +88,17 @@ abstract class PositionComponent extends BaseComponent {
     }
   }
 
-  /// Get the position of the center of the component's bounding rectangle without rotation
+  /// Get the position of the center of the component's bounding rectangle
   Vector2 get center {
-    return anchor == Anchor.center
-        ? position
-        : anchor.toOtherAnchorPosition(position, Anchor.center, size);
+    if (anchor == Anchor.center) {
+      return position;
+    } else {
+      return anchor.toOtherAnchorPosition(position, Anchor.center, size)
+        ..rotate(angle, center: absolutePosition);
+    }
   }
 
-  /// Get the absolute center of the component without rotation
+  /// Get the absolute center of the component
   Vector2 get absoluteCenter => absoluteParentPosition + center;
 
   /// Angle (with respect to the x-axis) this component should be rendered with.

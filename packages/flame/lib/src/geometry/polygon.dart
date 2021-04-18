@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/palette.dart';
+
 import '../../geometry.dart';
 import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
@@ -8,6 +10,7 @@ import 'shape.dart';
 
 class Polygon extends Shape {
   final List<Vector2> normalizedVertices;
+  late final List<Vector2> _sizedVertices;
 
   /// With this constructor you create your [Polygon] from positions in your
   /// intended space. It will automatically calculate the [size] and center
@@ -51,17 +54,25 @@ class Polygon extends Shape {
     Vector2? position,
     Vector2? size,
     double? angle,
-  }) : super(position: position, size: size, angle: angle ?? 0);
+  }) : super(position: position, size: size, angle: angle ?? 0) {
+    _sizedVertices = List.generate(
+      normalizedVertices.length,
+      (_) => Vector2.zero(),
+      growable: false,
+    );
+  }
 
   final _cachedScaledShape = ShapeCache<Iterable<Vector2>>();
 
   /// Gives back the shape vectors multiplied by the size
   Iterable<Vector2> scaled() {
     if (!_cachedScaledShape.isCacheValid([size])) {
-      _cachedScaledShape.updateCache(
-        normalizedVertices.map((p) => p.clone()..multiply(size! / 2)),
-        [size!.clone()],
-      );
+      final halfSize = size! / 2;
+      for (var i = 0; i < _sizedVertices.length; i++) {
+        final point = normalizedVertices[i];
+        (_sizedVertices[i]..setFrom(point)).multiply(halfSize);
+      }
+      _cachedScaledShape.updateCache(_sizedVertices, [size!.clone()]);
     }
     return _cachedScaledShape.value!;
   }
@@ -70,25 +81,31 @@ class Polygon extends Shape {
 
   @override
   void render(Canvas canvas, Paint paint) {
-    if (!_cachedRenderPath.isCacheValid([position, size])) {
+    canvas.save();
+    canvas.rotate(-angle);
+    if (!_cachedRenderPath.isCacheValid([position, relativePosition, size])) {
+      final halfSize = size! / 2;
+      final localPosition = halfSize + position;
+      final localRelativePosition = halfSize..multiply(relativePosition);
       _cachedRenderPath.updateCache(
+        // TODO(spydon): Add rotation by local angle
         Path()
           ..addPolygon(
             scaled()
-                .map((point) => (point +
-                        (position + size! / 2) +
-                        ((size! / 2)..multiply(relativePosition)))
-                    .toOffset())
+                .map((point) =>
+                    (point + localPosition + localRelativePosition).toOffset())
                 .toList(),
             true,
           ),
         [
           position.clone(),
+          relativePosition.clone(),
           size!.clone(),
         ],
       );
     }
     canvas.drawPath(_cachedRenderPath.value!, paint);
+    canvas.restore();
   }
 
   final _cachedHitbox = ShapeCache<List<Vector2>>();
@@ -97,13 +114,13 @@ class Polygon extends Shape {
   /// are the "corners" of the hitbox rotated with [angle].
   List<Vector2> hitbox() {
     // Use cached bounding vertices if state of the component hasn't changed
-    if (!_cachedHitbox.isCacheValid([shapeCenter, size, angle])) {
+    if (!_cachedHitbox.isCacheValid([shapeCenter, size, parentAngle, angle])) {
+      // TODO(spydon): Move out to own list to make more efficient
       _cachedHitbox.updateCache(
         scaled()
-            .map((point) =>
-                (point + shapeCenter)..rotate(angle, center: anchorPosition))
+            .map((point) => shapeCenter + (point..rotate(parentAngle + angle)))
             .toList(growable: false),
-        [shapeCenter, size!.clone(), angle],
+        [shapeCenter, size!.clone(), parentAngle, angle],
       );
     }
     return _cachedHitbox.value!;
