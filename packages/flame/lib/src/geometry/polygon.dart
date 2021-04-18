@@ -1,8 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/palette.dart';
-
 import '../../geometry.dart';
 import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
@@ -118,7 +116,8 @@ class Polygon extends Shape {
       // TODO(spydon): Move out to own list to make more efficient
       _cachedHitbox.updateCache(
         scaled()
-            .map((point) => shapeCenter + (point..rotate(parentAngle + angle)))
+            .map((point) => (shapeCenter + point)
+              ..rotate(parentAngle + angle, center: anchorPosition))
             .toList(growable: false),
         [shapeCenter, size!.clone(), parentAngle, angle],
       );

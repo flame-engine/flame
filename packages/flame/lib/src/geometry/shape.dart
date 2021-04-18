@@ -28,7 +28,7 @@ abstract class Shape {
   Vector2 get shapeCenter => position;
 
   Vector2? _anchorPosition;
-  Vector2 get anchorPosition => _anchorPosition ?? position;
+  Vector2 get anchorPosition => _anchorPosition ?? shapeCenter;
   set anchorPosition(Vector2 position) => _anchorPosition = position;
 
   Shape({
