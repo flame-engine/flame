@@ -100,6 +100,7 @@ void main() {
       expectDouble(p2.length, math.sqrt(2));
       expect(p2.x, p2.y);
     });
+
     test('moveToTarget - fully horizontal', () {
       final current = Vector2(10.0, 0.0);
       final target = Vector2(20.0, 0.0);
@@ -116,6 +117,7 @@ void main() {
       current.moveToTarget(target, 5);
       expect(current, Vector2(20.0, 0.0));
     });
+
     test('moveToTarget - fully vertical', () {
       final current = Vector2(10.0, 0.0);
       final target = Vector2(10.0, 100.0);
@@ -132,6 +134,7 @@ void main() {
       current.moveToTarget(target, 19);
       expect(current, Vector2(10.0, 100.0));
     });
+
     test('moveToTarget - arbitrary direction', () {
       final current = Vector2(2.0, 2.0);
       final target = Vector2(4.0, 6.0); // direction is 1,2

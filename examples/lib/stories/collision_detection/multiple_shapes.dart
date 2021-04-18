@@ -43,6 +43,16 @@ abstract class MyCollidable extends PositionComponent
     position.add(delta);
     angleDelta = dt * rotationSpeed;
     angle = (angle + angleDelta) % (2 * pi);
+    final topLeft = topLeftPosition;
+    if (topLeft.x + size.x < 0 || topLeft.y + size.y < 0) {
+      topLeftPosition = topLeft % (gameRef.size + size);
+    }
+    if (topLeft.x > gameRef.size.x) {
+      topLeftPosition = Vector2(-size.x, topLeft.y);
+    }
+    if (topLeft.y > gameRef.size.y) {
+      topLeftPosition = Vector2(topLeft.x, -size.y);
+    }
   }
 
   @override
@@ -59,7 +69,7 @@ abstract class MyCollidable extends PositionComponent
     _isHit = true;
     switch (other.runtimeType) {
       case ScreenCollidable:
-        _handleScreenCollision(intersectionPoints);
+        debugColor = Colors.teal;
         break;
       case CollidablePolygon:
         debugColor = Colors.blue;
@@ -73,28 +83,6 @@ abstract class MyCollidable extends PositionComponent
       default:
         debugColor = Colors.pink;
     }
-  }
-
-  void _handleScreenCollision(Set<Vector2> intersectionPoints) {
-    final averageIntersection = intersectionPoints.reduce((sum, v) => sum + v) /
-        intersectionPoints.length.toDouble();
-    final collisionDirection = (averageIntersection - absoluteCenter)
-      ..normalize()
-      ..round();
-    final angleToCollision = velocity.angleToSigned(collisionDirection);
-    const fuzzyBorder = 10;
-    if (averageIntersection.x > gameRef.size.x - fuzzyBorder) {
-
-    } else if (averageIntersection.y > gameRef.size.y - fuzzyBorder) {
-
-    } else if (averageIntersection.x < fuzzyBorder) {
-
-    } else if (averageIntersection.y < fuzzyBorder) {
-
-    }
-    velocity.rotate(pi- 2 * angleToCollision);
-    position.add(velocity.normalized() * delta.length * 1.1);
-    angle = (angle - angleDelta) % (2 * pi);
   }
 
   @override
