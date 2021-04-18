@@ -2,6 +2,8 @@
 
 ## [next]
  - Updated tutorial documentation to indicate use of new version
+ - Fix bounding box check in collision detection
+ - Refactor on flame input system to correctly take camera into account
  - Allow isometric tile maps with custom heights
 
 ## [1.0.0-rc9]

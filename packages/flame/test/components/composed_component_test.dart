@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/gestures.dart';
 import 'package:test/test.dart';
 
 import '../util/mock_canvas.dart';
+import '../util/mock_gesture_events.dart';
 
 class MyGame extends BaseGame with HasTapableComponents {}
 
@@ -36,7 +36,7 @@ class MyTap extends PositionComponent with Tapable {
   }
 
   @override
-  bool onTapDown(TapDownDetails details) {
+  bool onTapDown(_) {
     ++tapTimes;
     return true;
   }
@@ -92,7 +92,7 @@ void main() {
       game.add(wrapper);
       wrapper.addChild(child);
       game.update(0.0);
-      game.onTapDown(1, TapDownDetails());
+      game.onTapDown(1, createTapDownEvent(game));
 
       expect(child.gameSize, size);
       expect(child.tapped, true);
@@ -111,7 +111,13 @@ void main() {
       game.add(wrapper);
       wrapper.addChild(child);
       game.update(0.0);
-      game.onTapDown(1, TapDownDetails(globalPosition: const Offset(250, 250)));
+      game.onTapDown(
+        1,
+        createTapDownEvent(
+          game,
+          position: const Offset(250, 250),
+        ),
+      );
 
       expect(child.gameSize, size);
       expect(child.tapped, true);
