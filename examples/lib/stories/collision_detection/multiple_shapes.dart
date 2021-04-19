@@ -43,23 +43,21 @@ abstract class MyCollidable extends PositionComponent
     position.add(delta);
     angleDelta = dt * rotationSpeed;
     angle = (angle + angleDelta) % (2 * pi);
-    final topLeft = topLeftPosition;
-    if (topLeft.x + size.x < 0 || topLeft.y + size.y < 0) {
-      topLeftPosition = topLeft % (gameRef.size + size);
-    }
-    if (topLeft.x > gameRef.size.x) {
-      topLeftPosition = Vector2(-size.x, topLeft.y);
-    }
-    if (topLeft.y > gameRef.size.y) {
-      topLeftPosition = Vector2(topLeft.x, -size.y);
+    // Takes rotation into consideration (which topLeftPosition doesn't)
+    final topLeft = absoluteCenter - (size / 2);
+    if (topLeft.x + size.x < 0 ||
+        topLeft.y + size.y < 0 ||
+        topLeft.x > gameRef.size.x ||
+        topLeft.y > gameRef.size.y) {
+      topLeftPosition = topLeftPosition % (gameRef.size + size);
     }
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    final localCenter = (size / 2).toOffset();
     if (_isDragged) {
+      final localCenter = (size / 2).toOffset();
       canvas.drawCircle(localCenter, 5, _activePaint);
     }
   }
@@ -131,7 +129,7 @@ class CollidableCircle extends MyCollidable {
   }
 }
 
-class SnowmanPart extends HitboxCircle {
+class SnowmanPart extends HitboxRectangle {
   static const startColor = Colors.white;
   final hitPaint = Paint()
     ..color = startColor
@@ -139,7 +137,8 @@ class SnowmanPart extends HitboxCircle {
     ..style = PaintingStyle.stroke;
 
   SnowmanPart(double definition, Vector2 relativePosition, Color hitColor)
-      : super(definition: definition) {
+      : super(relation: Vector2.all(definition)) {
+    //: super(definition: definition) {
     this.relativePosition.setFrom(relativePosition);
     onCollision = (Set<Vector2> intersectionPoints, HitboxShape other) {
       if (other.component is ScreenCollidable) {
@@ -159,13 +158,16 @@ class SnowmanPart extends HitboxCircle {
 class CollidableSnowman extends MyCollidable {
   CollidableSnowman(Vector2 position, Vector2 size, Vector2 velocity)
       : super(position, size, velocity) {
-    rotationSpeed = 0.2;
-    final top = SnowmanPart(0.4, Vector2(0, -0.8), Colors.red);
-    final middle = SnowmanPart(0.6, Vector2(0, -0.3), Colors.yellow);
-    final bottom = SnowmanPart(1.0, Vector2(0, 0.5), Colors.green);
-    addShape(top);
-    addShape(middle);
-    addShape(bottom);
+    rotationSpeed = 0.3;
+    anchor = Anchor.topLeft;
+    //final top = SnowmanPart(0.4, Vector2(0, -0.8), Colors.red);
+    //final middle = SnowmanPart(0.6, Vector2(0, -0.3), Colors.yellow);
+    //final bottom = SnowmanPart(1.0, Vector2(0, 0.5), Colors.green);
+    final full = SnowmanPart(1.0, Vector2(0, 0.0), Colors.green);
+    //addShape(top);
+    //addShape(middle);
+    //addShape(bottom);
+    addShape(full);
   }
 }
 
@@ -190,9 +192,9 @@ class MultipleShapes extends BaseGame
     );
     MyCollidable lastToAdd = snowman;
     add(screen);
-    add(snowman);
+    //add(snowman);
     var totalAdded = 1;
-    while (totalAdded < 20) {
+    while (totalAdded < 3) {
       lastToAdd = createRandomCollidable(lastToAdd);
       final lastBottomRight =
           lastToAdd.toAbsoluteRect().bottomRight.toVector2();
@@ -222,6 +224,7 @@ class MultipleShapes extends BaseGame
     }
     final velocity = Vector2.random(_rng) * 200;
     final rotationSpeed = 0.5 - _rng.nextDouble();
+    //final rotationSpeed = 0.0;
     final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
     switch (shapeType) {
       case Shapes.circle:

@@ -1,7 +1,8 @@
 import 'dart:math';
-import 'dart:ui';
+import 'dart:ui' hide Canvas;
 
 import '../../geometry.dart';
+import '../extensions/canvas.dart';
 import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
 import 'shape.dart';
@@ -79,14 +80,12 @@ class Polygon extends Shape {
 
   @override
   void render(Canvas canvas, Paint paint) {
-    canvas.save();
-    canvas.rotate(-angle);
+    // TODO(spydon): Take local rotation into consideration
     if (!_cachedRenderPath.isCacheValid([position, relativePosition, size])) {
       final halfSize = size! / 2;
       final localPosition = halfSize + position;
       final localRelativePosition = halfSize..multiply(relativePosition);
       _cachedRenderPath.updateCache(
-        // TODO(spydon): Add rotation by local angle
         Path()
           ..addPolygon(
             scaled()
@@ -103,7 +102,6 @@ class Polygon extends Shape {
       );
     }
     canvas.drawPath(_cachedRenderPath.value!, paint);
-    canvas.restore();
   }
 
   final _cachedHitbox = ShapeCache<List<Vector2>>();

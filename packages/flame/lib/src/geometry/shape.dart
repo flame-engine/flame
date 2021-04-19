@@ -25,10 +25,21 @@ abstract class Shape {
   /// applications of [Shape], for example [HitboxShape]
   double parentAngle;
 
-  Vector2 get shapeCenter => position;
+  /// The shape's absolute center with rotation taken into account
+  Vector2 get shapeCenter {
+    if (angle == 0 && relativePosition.isZero() && _anchorPosition == null) {
+      return position;
+    } else {
+      final center = position + ((size! / 2)..multiply(relativePosition));
+      return center..rotate(parentAngle + angle, center: anchorPosition);
+    }
+  }
 
+  /// The position that the shape rotates around
   Vector2? _anchorPosition;
-  Vector2 get anchorPosition => _anchorPosition ?? shapeCenter;
+  Vector2 _unrotatedCenter() => position + (size! / 2)
+    ..multiply(relativePosition);
+  Vector2 get anchorPosition => _anchorPosition ?? _unrotatedCenter();
   set anchorPosition(Vector2 position) => _anchorPosition = position;
 
   Shape({
@@ -69,7 +80,7 @@ mixin HitboxShape on Shape {
     } else {
       final rotatedCenter = (position +
           ((size / 2)..multiply(relativePosition)))
-        ..rotate(parentAngle, center: component.absolutePosition);
+        ..rotate(parentAngle, center: anchorPosition);
       return component.absoluteCenter + rotatedCenter;
     }
   }

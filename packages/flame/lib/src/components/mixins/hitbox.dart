@@ -34,6 +34,7 @@ mixin Hitbox on PositionComponent {
   /// check can be done first to see if it even is possible that the shapes can
   /// overlap, since the shapes have to be within the size of the component.
   bool possiblyOverlapping(Hitbox other) {
+    //return true;
     final maxDistance = other.size.length + size.length;
     return other.absoluteCenter.distanceToSquared(absoluteCenter) <=
         maxDistance * maxDistance;

@@ -39,8 +39,11 @@ extension Vector2Extension on Vector2 {
 
   /// Rotates the [Vector2] with [angle] in radians
   /// rotates around [center] if it is defined
+  /// In a screen coordinate system (where the y-axis is flipped) it rotates in
+  /// a clockwise fashion
+  /// In a normal coordinate system it rotates in a counter-clockwise fashion
   void rotate(double angle, {Vector2? center}) {
-    if (x == 0 && y == 0) {
+    if (isZero()) {
       // No point in rotating the zero vector
       return;
     }

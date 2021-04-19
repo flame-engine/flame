@@ -155,48 +155,48 @@ void main() {
 
     test('rotate - no center defined', () {
       final position = Vector2(0.0, 1.0);
-      position.rotate(-math.pi/2);
+      position.rotate(-math.pi / 2);
       expectVector2(position, Vector2(1.0, 0.0));
     });
 
     test('rotate - no center defined, negative position', () {
       final position = Vector2(0.0, -1.0);
-      position.rotate(-math.pi/2);
+      position.rotate(-math.pi / 2);
       expectVector2(position, Vector2(-1.0, 0.0));
     });
 
     test('rotate - with center defined', () {
       final position = Vector2(0.0, 1.0);
       final center = Vector2(1.0, 1.0);
-      position.rotate(-math.pi/2, center: center);
+      position.rotate(-math.pi / 2, center: center);
       expectVector2(position, Vector2(1.0, 2.0));
     });
 
     test('rotate - with positive direction', () {
       final position = Vector2(0.0, 1.0);
       final center = Vector2(1.0, 1.0);
-      position.rotate(math.pi/2, center: center);
+      position.rotate(math.pi / 2, center: center);
       expectVector2(position, Vector2(1.0, 0.0));
     });
 
     test('rotate - with a negative y position', () {
       final position = Vector2(2.0, -3.0);
       final center = Vector2(1.0, 1.0);
-      position.rotate(math.pi/2, center: center);
+      position.rotate(math.pi / 2, center: center);
       expectVector2(position, Vector2(5.0, 2.0));
     });
 
     test('rotate - with a negative x position', () {
       final position = Vector2(-2.0, 3.0);
       final center = Vector2(1.0, 1.0);
-      position.rotate(math.pi/2, center: center);
+      position.rotate(math.pi / 2, center: center);
       expectVector2(position, Vector2(-1.0, -2.0));
     });
 
     test('rotate - with a negative position', () {
       final position = Vector2(-2.0, -3.0);
       final center = Vector2(1.0, 0.0);
-      position.rotate(math.pi/2, center: center);
+      position.rotate(math.pi / 2, center: center);
       print(position);
       expectVector2(position, Vector2(4.0, -3.0));
     });
