@@ -34,10 +34,9 @@ mixin Hitbox on PositionComponent {
   /// check can be done first to see if it even is possible that the shapes can
   /// overlap, since the shapes have to be within the size of the component.
   bool possiblyOverlapping(Hitbox other) {
-    return true;
-    //final maxDistance = other.size.length + size.length;
-    //return other.absoluteCenter.distanceToSquared(absoluteCenter) <=
-    //    maxDistance * maxDistance;
+    final maxDistance = other.size.length + size.length;
+    return other.absoluteCenter.distanceToSquared(absoluteCenter) <=
+        maxDistance * maxDistance;
   }
 
   /// Since this is a cheaper calculation than checking towards all shapes this
@@ -45,7 +44,6 @@ mixin Hitbox on PositionComponent {
   /// contain the point, since the shapes have to be within the size of the
   /// component.
   bool possiblyContainsPoint(Vector2 point) {
-    return true;
-    //return absoluteCenter.distanceToSquared(point) <= size.length2;
+    return absoluteCenter.distanceToSquared(point) <= size.length2;
   }
 }
