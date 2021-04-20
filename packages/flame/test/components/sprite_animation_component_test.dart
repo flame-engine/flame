@@ -1,19 +1,12 @@
-import 'dart:typed_data';
 import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:test/test.dart';
 
+import '../util/mock_image.dart';
+
 void main() async {
   // Generate a image
-  final data = Uint8List(4);
-  for (var i = 0; i < data.length; i += 4) {
-    data[i] = 255;
-    data[i + 1] = 255;
-    data[i + 2] = 255;
-    data[i + 3] = 255;
-  }
-  final image = await Flame.images.decodeImageFromPixels(data, 1, 1);
+  final image = await generateImage();
 
   final size = Vector2(1.0, 1.0);
 
