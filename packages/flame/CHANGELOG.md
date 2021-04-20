@@ -4,6 +4,7 @@
  - Updated tutorial documentation to indicate use of new version
  - Fix bounding box check in collision detection
  - Refactor on flame input system to correctly take camera into account
+ - Adding `SpriteAnimationGroupComponent`
 
 ## [1.0.0-rc9]
  - Fix input bug with other anchors than center
