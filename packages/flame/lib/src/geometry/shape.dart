@@ -30,6 +30,15 @@ abstract class Shape {
   /// (Should be the rotated center of the parent)
   Vector2 parentPosition = Vector2.zero();
 
+  /// The center of the shape, before any rotation
+  Vector2 unrotatedCenter() => parentPosition + position + ((size / 2)
+    ..multiply(relativePosition));
+
+  /// The position that the shape rotates around
+  Vector2? _anchorPosition;
+  Vector2 get anchorPosition => _anchorPosition ?? unrotatedCenter();
+  set anchorPosition(Vector2 position) => _anchorPosition = position;
+
   /// The shape's absolute center with rotation taken into account
   Vector2 get shapeCenter {
     if (angle == 0 && relativePosition.isZero() && _anchorPosition == null) {
@@ -39,13 +48,6 @@ abstract class Shape {
       return parentPosition + center..rotate(parentAngle + angle, center: anchorPosition);
     }
   }
-
-  /// The position that the shape rotates around
-  Vector2? _anchorPosition;
-  Vector2 unrotatedCenter() => position + ((size / 2)
-    ..multiply(relativePosition));
-  Vector2 get anchorPosition => _anchorPosition ?? unrotatedCenter();
-  set anchorPosition(Vector2 position) => _anchorPosition = position;
 
   Shape({
     Vector2? position,

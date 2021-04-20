@@ -247,5 +247,12 @@ class MultipleShapes extends BaseGame
       '${fps(120).toStringAsFixed(2)}fps',
       Vector2(0, size.y - 24),
     );
+    for (final c in components) {
+      if (c is Collidable) {
+        for (final shape in c.shapes) {
+          canvas.renderPoint(shape.shapeCenter, size: 10);
+        }
+      }
+    }
   }
 }

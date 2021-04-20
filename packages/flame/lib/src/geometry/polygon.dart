@@ -82,13 +82,15 @@ class Polygon extends Shape {
   void render(Canvas canvas, Paint paint) {
     // TODO(spydon): Take local angle into consideration
     if (!_cachedRenderPath.isCacheValid([position, relativePosition, size])) {
-      final unrotatedCenter = this.unrotatedCenter();
+      final halfSize = size / 2;
+      final localPosition = halfSize + position;
+      final localRelativePosition = halfSize..multiply(relativePosition);
       _cachedRenderPath.updateCache(
         Path()
           ..addPolygon(
             scaled()
                 .map((point) =>
-                    (point + (size/2) + unrotatedCenter).toOffset())
+                    (point + localPosition + localRelativePosition).toOffset())
                 .toList(),
             true,
           ),
@@ -112,7 +114,7 @@ class Polygon extends Shape {
       // TODO(spydon): Move out to own list to make more efficient
       _cachedHitbox.updateCache(
         scaled()
-            .map((point) => (shapeCenter + point)
+            .map((point) => (unrotatedCenter() + point)
               ..rotate(parentAngle + angle, center: anchorPosition))
             .toList(growable: false),
         [shapeCenter, size.clone(), parentAngle, angle],
