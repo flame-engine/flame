@@ -23,7 +23,7 @@ void main() {
       final game = BaseGame()..viewport = viewport; // default camera
       game.onResize(Vector2(200, 200));
       expect(viewport.scale, 2);
-      expect(viewport.resizeOffset, Vector2.zero()); // no trasnslation
+      expect(viewport.resizeOffset, Vector2.zero()); // no translation
       _assertIdentityOfProjector(game);
 
       expect(game.projectVector(Vector2(1, 2)), Vector2(2, 4));
