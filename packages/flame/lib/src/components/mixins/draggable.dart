@@ -1,8 +1,8 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../../extensions.dart';
 import '../../game/base_game.dart';
+import '../../gestures/events.dart';
 import '../base_component.dart';
 
 mixin Draggable on BaseComponent {
@@ -10,11 +10,11 @@ mixin Draggable on BaseComponent {
     return true;
   }
 
-  bool onDragUpdate(int pointerId, DragUpdateDetails details) {
+  bool onDragUpdate(int pointerId, DragUpdateInfo details) {
     return true;
   }
 
-  bool onDragEnd(int pointerId, DragEndDetails details) {
+  bool onDragEnd(int pointerId, DragEndInfo details) {
     return true;
   }
 
@@ -33,14 +33,14 @@ mixin Draggable on BaseComponent {
     return true;
   }
 
-  bool handleDragUpdated(int pointerId, DragUpdateDetails details) {
+  bool handleDragUpdated(int pointerId, DragUpdateInfo details) {
     if (_checkPointerId(pointerId)) {
       return onDragUpdate(pointerId, details);
     }
     return true;
   }
 
-  bool handleDragEnded(int pointerId, DragEndDetails details) {
+  bool handleDragEnded(int pointerId, DragEndInfo details) {
     if (_checkPointerId(pointerId)) {
       _currentPointerIds.remove(pointerId);
       return onDragEnd(pointerId, details);
@@ -64,12 +64,12 @@ mixin HasDraggableComponents on BaseGame {
   }
 
   @mustCallSuper
-  void onDragUpdate(int pointerId, DragUpdateDetails details) {
+  void onDragUpdate(int pointerId, DragUpdateInfo details) {
     _onGenericEventReceived((c) => c.handleDragUpdated(pointerId, details));
   }
 
   @mustCallSuper
-  void onDragEnd(int pointerId, DragEndDetails details) {
+  void onDragEnd(int pointerId, DragEndInfo details) {
     _onGenericEventReceived((c) => c.handleDragEnded(pointerId, details));
   }
 
