@@ -122,7 +122,7 @@ void main() {
       game.camera.snap();
 
       // that means that the center would be -100, -100 if the zoom was 1
-      // meaing the topLeft will be -105, -105 (regardless of zoom)
+      // meaning the topLeft will be -105, -105 (regardless of zoom)
       expect(game.unprojectVector(Vector2.zero()), Vector2.all(-105));
       // and with 2x zoom the center will actually be -95, -95
       expect(game.unprojectVector(Vector2.all(5)), Vector2.all(-95));
@@ -146,10 +146,10 @@ void main() {
       expect(game.unprojectVector(Vector2(50, 0)), Vector2(10, 100));
       // top right of viewport is top left of camera + effective screen width
       expect(game.unprojectVector(Vector2(150, 0)), Vector2(110, 100));
-      // veritcally, only the camera translation is applied
+      // vertically, only the camera translation is applied
       expect(game.unprojectVector(Vector2(40, 123)), Vector2(0, 223));
 
-      // deltas should not be affect by translations at all
+      // deltas should not be affected by translations at all
       expect(game.unprojectDelta(Vector2.zero()), Vector2.zero());
       expect(game.unprojectDelta(Vector2(1, 2)), Vector2(1, 2));
     });
