@@ -66,12 +66,12 @@ class Polygon extends Shape {
   /// Gives back the shape vectors multiplied by the size
   Iterable<Vector2> scaled() {
     if (!_cachedScaledShape.isCacheValid([size])) {
-      final halfSize = size! / 2;
+      final halfSize = size / 2;
       for (var i = 0; i < _sizedVertices.length; i++) {
         final point = normalizedVertices[i];
         (_sizedVertices[i]..setFrom(point)).multiply(halfSize);
       }
-      _cachedScaledShape.updateCache(_sizedVertices, [size!.clone()]);
+      _cachedScaledShape.updateCache(_sizedVertices, [size.clone()]);
     }
     return _cachedScaledShape.value!;
   }
@@ -80,24 +80,22 @@ class Polygon extends Shape {
 
   @override
   void render(Canvas canvas, Paint paint) {
-    // TODO(spydon): Take local rotation into consideration
+    // TODO(spydon): Take local angle into consideration
     if (!_cachedRenderPath.isCacheValid([position, relativePosition, size])) {
-      final halfSize = size! / 2;
-      final localPosition = halfSize + position;
-      final localRelativePosition = halfSize..multiply(relativePosition);
+      final unrotatedCenter = this.unrotatedCenter();
       _cachedRenderPath.updateCache(
         Path()
           ..addPolygon(
             scaled()
                 .map((point) =>
-                    (point + localPosition + localRelativePosition).toOffset())
+                    (point + (size/2) + unrotatedCenter).toOffset())
                 .toList(),
             true,
           ),
         [
           position.clone(),
           relativePosition.clone(),
-          size!.clone(),
+          size.clone(),
         ],
       );
     }
@@ -117,7 +115,7 @@ class Polygon extends Shape {
             .map((point) => (shapeCenter + point)
               ..rotate(parentAngle + angle, center: anchorPosition))
             .toList(growable: false),
-        [shapeCenter, size!.clone(), parentAngle, angle],
+        [shapeCenter, size.clone(), parentAngle, angle],
       );
     }
     return _cachedHitbox.value!;
@@ -128,7 +126,7 @@ class Polygon extends Shape {
   @override
   bool containsPoint(Vector2 point) {
     // If the size is 0 then it can't contain any points
-    if (size!.x == 0 || size!.y == 0) {
+    if (size.x == 0 || size.y == 0) {
       return false;
     }
 

@@ -16,7 +16,7 @@ abstract class Shape {
   Vector2 relativePosition = Vector2.zero();
 
   /// The size is the bounding box of the [Shape]
-  Vector2? size;
+  Vector2 size;
 
   /// The angle of the shape from its initial definition
   double angle;
@@ -25,29 +25,34 @@ abstract class Shape {
   /// applications of [Shape], for example [HitboxShape]
   double parentAngle;
 
+  /// The position of the parent that has to be taken into consideration for some
+  /// applications of [Shape], for example [HitboxShape]
+  /// (Should be the rotated center of the parent)
+  Vector2 parentPosition = Vector2.zero();
+
   /// The shape's absolute center with rotation taken into account
   Vector2 get shapeCenter {
     if (angle == 0 && relativePosition.isZero() && _anchorPosition == null) {
-      return position;
+      return parentPosition + position;
     } else {
-      final center = position + ((size! / 2)..multiply(relativePosition));
-      return center..rotate(parentAngle + angle, center: anchorPosition);
+      final center = unrotatedCenter();
+      return parentPosition + center..rotate(parentAngle + angle, center: anchorPosition);
     }
   }
 
   /// The position that the shape rotates around
   Vector2? _anchorPosition;
-  Vector2 _unrotatedCenter() => position + (size! / 2)
-    ..multiply(relativePosition);
-  Vector2 get anchorPosition => _anchorPosition ?? _unrotatedCenter();
+  Vector2 unrotatedCenter() => position + ((size / 2)
+    ..multiply(relativePosition));
+  Vector2 get anchorPosition => _anchorPosition ?? unrotatedCenter();
   set anchorPosition(Vector2 position) => _anchorPosition = position;
 
   Shape({
     Vector2? position,
-    this.size,
+    Vector2? size,
     this.angle = 0,
     this.parentAngle = 0,
-  }) : position = position ?? Vector2.zero();
+  }) : position = position ?? Vector2.zero(), size = size ?? Vector2.zero();
 
   /// Whether the point [p] is within the shapes boundaries or not
   bool containsPoint(Vector2 p);
@@ -72,18 +77,8 @@ mixin HitboxShape on Shape {
   @override
   double get parentAngle => component.angle;
 
-  /// The shape's absolute center
   @override
-  Vector2 get shapeCenter {
-    if (position.isZero() && relativePosition.isZero()) {
-      return component.absoluteCenter;
-    } else {
-      final rotatedCenter = (position +
-          ((size / 2)..multiply(relativePosition)))
-        ..rotate(parentAngle, center: anchorPosition);
-      return component.absoluteCenter + rotatedCenter;
-    }
-  }
+  Vector2 get parentPosition => component.absoluteCenter;
 
   /// Assign your own [CollisionCallback] if you want a callback when this
   /// shape collides with another [HitboxShape]

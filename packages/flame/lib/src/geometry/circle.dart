@@ -33,14 +33,14 @@ class Circle extends Shape {
     double? angle,
   }) : super(position: position, size: size, angle: angle ?? 0);
 
-  double get radius => (min(size!.x, size!.y) / 2) * normalizedRadius;
+  double get radius => (min(size.x, size.y) / 2) * normalizedRadius;
 
   /// This render method doesn't rotate the canvas according to angle since a
   /// circle will look the same rotated as not rotated.
   @override
   void render(Canvas canvas, Paint paint) {
-    final localPosition = size! / 2 + position;
-    final localRelativePosition = (size! / 2)..multiply(relativePosition);
+    final localPosition = size / 2 + position;
+    final localRelativePosition = (size / 2)..multiply(relativePosition);
     canvas.drawCircle(
       (localPosition + localRelativePosition).toOffset(),
       radius,
