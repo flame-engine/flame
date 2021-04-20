@@ -115,7 +115,7 @@ class Polygon extends Shape {
       _cachedHitbox.updateCache(
         scaled()
             .map((point) => (unrotatedCenter() + point)
-              ..rotate(parentAngle + angle, center: anchorPosition))
+              ..rotate((parentAngle + angle), center: anchorPosition))
             .toList(growable: false),
         [shapeCenter, size.clone(), parentAngle, angle],
       );

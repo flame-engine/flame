@@ -26,6 +26,7 @@ abstract class MyCollidable extends PositionComponent
     this.position = position;
     this.size = size;
     anchor = Anchor.topLeft;
+    velocity.setZero();
   }
 
   @override
@@ -239,6 +240,7 @@ class MultipleShapes extends BaseGame
     }
   }
 
+  Paint pathPaint = Paint()..color = Colors.amber..style = PaintingStyle.stroke;
   @override
   void render(Canvas canvas) {
     super.render(canvas);
@@ -251,6 +253,18 @@ class MultipleShapes extends BaseGame
       if (c is Collidable) {
         for (final shape in c.shapes) {
           canvas.renderPoint(shape.shapeCenter, size: 10);
+          canvas.renderPoint(c.absolutePosition, size: 10);
+          canvas.renderPoint(shape.anchorPosition, size: 5, paint: pathPaint);
+          if (shape is Polygon) {
+            final path = Path()
+              ..addPolygon(
+                (shape as Polygon).hitbox()
+                    .map((point) => point.toOffset())
+                    .toList(),
+                true,
+              );
+            canvas.drawPath(path, pathPaint);
+          }
         }
       }
     }
