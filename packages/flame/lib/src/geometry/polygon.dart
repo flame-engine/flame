@@ -114,8 +114,8 @@ class Polygon extends Shape {
       // TODO(spydon): Move out to own list to make more efficient
       _cachedHitbox.updateCache(
         scaled()
-            .map((point) => (unrotatedCenter() + point)
-              ..rotate((parentAngle + angle), center: anchorPosition))
+            .map((point) => (shapeCenter + point)
+              ..rotate((parentAngle + angle), center: shapeCenter))
             .toList(growable: false),
         [shapeCenter, size.clone(), parentAngle, angle],
       );
