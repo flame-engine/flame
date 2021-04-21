@@ -7,7 +7,7 @@ in the day-to-day development life.
 This extends rules on the official [Flutter Style
 Guide](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo).
 
-Note that this is not yet an exhaustive guide, and consider it a work in progress.
+Note that this is not yet an exhaustive guide, and consider it a work in progress. PRs are welcome!
 
 ## Code formatting
 
