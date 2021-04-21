@@ -7,11 +7,13 @@ in the day-to-day development life.
 This extends rules on the official [Flutter Style
 Guide](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo).
 
+Note that this is not yet an exhaustive guide, and consider it a work in progress.
+
 ## Code formatting
 
 ### Max line length
 
-For all files, include a markdown, keep each line with a hundred or less characters.
+For all files, including markdown, keep each line within a hundred or less characters.
 
 ### Trailing Commas and Wrapping
 
@@ -53,7 +55,7 @@ foo(f1,
 ### Imports
 
 * Never include unused or duplicated imports.
-* You must always use relative imports for imports within the Flame library.
+* You must always use relative imports for imports within the Flame library (internal imports must be relative).
 * Omit `./` for relative imports from the same directory.
 * Avoid importing groups of APIs internally, for example, importing `lib/effects.dart` just to use
   `ScaleEffect`.
@@ -127,10 +129,6 @@ void something(int smaller, int bigger) {
 ## Code documentation 
 
 Specific guides for dartdoc documentation.
-
-#### Use impersonal tone
-
-Avoid using words such as "you", "ours" and "yours" on code documentation
 
 #### Consider adding examples
 
