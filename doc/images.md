@@ -221,7 +221,7 @@ class MyGame extends BaseGame {
       final svgComponent = SvgComponent.fromSvg(size, svgInstance);
       svgComponent.x = 100;
       svgComponent.y = 100;
-    
+
       add(svgComponent);
     }
 }

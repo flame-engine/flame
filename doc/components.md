@@ -166,6 +166,39 @@ this.player = SpriteAnimationComponent.fromFrameData(
 If you are not using `BaseGame`, don't forget this component needs to be updated, because the
 animation object needs to be ticked to move the frames.
 
+## SpriteAnimationGroup
+
+`SpriteAnimationGroupComponent` is a simple wrapper around `SpriteAnimationComponent` which enables
+your component to hold several animations and change the current playing animation in runtime.
+
+Its use is very similar to the `SpriteAnimationComponent` but instead of being initialized with a
+single animation, this component receives a Map of a generic type `T` as key and a
+`SpriteAnimation` as value, and the current animation.
+
+Example:
+
+```dart
+enum RobotState {
+  idle,
+  running,
+}
+
+final running = await loadSpriteAnimation(/* omited */);
+final idle = await loadSpriteAnimation(/* omited */);
+
+final robot = SpriteAnimationGroupComponent<RobotState>(
+  animations: {
+    RobotState.running: running,
+    RobotState.idle: idle,
+  },
+  current: RobotState.idle,
+);
+
+// Changes current animation to "running"
+robot.current = RobotState.running;
+```
+
+
 ## SvgComponent
 
 **Note**: To use SVG with Flame, use the [`flame_svg`](https://github.com/flame-engine/flame_svg)
