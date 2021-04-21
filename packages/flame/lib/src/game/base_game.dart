@@ -16,6 +16,7 @@ import '../components/position_component.dart';
 import '../fps_counter.dart';
 import 'camera.dart';
 import 'game.dart';
+import 'projector.dart';
 import 'viewport.dart';
 
 /// This is a more complete and opinionated implementation of Game.
@@ -59,7 +60,10 @@ class BaseGame extends Game with FPSCounter {
     } else {
       _viewport = value;
     }
+    _combinedProjector = Projector.compose([camera, value]);
   }
+
+  late Projector _combinedProjector;
 
   /// This is overwritten to consider the viewport transformation.
   ///
@@ -80,6 +84,7 @@ class BaseGame extends Game with FPSCounter {
 
   BaseGame() {
     camera.gameRef = this;
+    _combinedProjector = Projector.compose([camera, viewport]);
   }
 
   /// This method is called for every component added.
@@ -242,14 +247,22 @@ class BaseGame extends Game with FPSCounter {
   }
 
   @override
-  Vector2 projectOffset(Offset value) {
-    final vector = value.toVector2();
-    return camera.screenToWorld(vector);
+  Vector2 projectVector(Vector2 vector) {
+    return _combinedProjector.projectVector(vector);
   }
 
   @override
-  Vector2 scaleOffset(Offset value) {
-    final vector = value.toVector2();
-    return vector / camera.zoom;
+  Vector2 unprojectVector(Vector2 vector) {
+    return _combinedProjector.unprojectVector(vector);
+  }
+
+  @override
+  Vector2 scaleVector(Vector2 vector) {
+    return _combinedProjector.scaleVector(vector);
+  }
+
+  @override
+  Vector2 unscaleVector(Vector2 vector) {
+    return _combinedProjector.unscaleVector(vector);
   }
 }
