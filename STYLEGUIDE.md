@@ -105,25 +105,30 @@ Use all [effective dart patterns](https://dart.dev/guides/language/effective-dar
 TODO comments should follow this template: `// TODO(username): Comment`
 
 ```dart
+// bad: missing identifier
 
-// Do not:
 // Todo: This thing should be that thing
 final thisThing = 13;
 
-// Do instead:
+// good:
+
 // TODO(wolfenrain): This thing should be that thing
 const thisThing = 13;
 ```
+
+* For any `//` comments, always add a space after the second slash and before the next character.
+* Use `//` (or block comments) for comments about the code; use `///` for dartdocs about APIs.
 
 ### Asserts
 
 * Use asserts to detect contract violation.
 
 Example:
+
 ````dart
 void something(int smaller, int bigger) {
   assert(small < bigger, "smaller is not smaller than bigger");
-  //...
+  // ...
 }
 ````
 
