@@ -55,7 +55,8 @@ foo(f1,
 ### Imports
 
 * Never include unused or duplicated imports.
-* You must always use relative imports for imports within the Flame library (internal imports must be relative).
+* You must always use relative imports for imports within the Flame library (internal imports must
+  be relative).
 * Omit `./` for relative imports from the same directory.
 * Avoid importing groups of APIs internally, for example, importing `lib/effects.dart` just to use
   `ScaleEffect`.
