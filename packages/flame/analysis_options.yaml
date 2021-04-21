@@ -7,7 +7,7 @@ analyzer:
     implicit-dynamic: false
 
   plugins:
-  #  - dart_code_metrics
+    - dart_code_metrics
 
 linter:
   rules:
