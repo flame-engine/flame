@@ -23,7 +23,7 @@ abstract class Projector {
   /// cancelled in a delta transformation.
   /// A delta can be a displacement (difference between two position
   /// vectors), a velocity (displacement over time), etc.
-  Vector2 unprojectDelta(Vector2 screenCoordinates);
+  Vector2 unscaleVector(Vector2 screenCoordinates);
 
   /// Converts a vector representing a delta in the world space to the screen
   /// space.
@@ -32,7 +32,7 @@ abstract class Projector {
   /// cancelled in a delta transformation.
   /// A delta can be a displacement (difference between two position
   /// vectors), a velocity (displacement over time), etc.
-  Vector2 projectDelta(Vector2 worldCoordinates);
+  Vector2 scaleVector(Vector2 worldCoordinates);
 
   /// Creates a [ComposedProjector] that will apply the provided projectors
   /// in order.
@@ -55,10 +55,10 @@ class ComposedProjector extends Projector {
   ComposedProjector(this._components);
 
   @override
-  Vector2 projectDelta(Vector2 worldCoordinates) {
+  Vector2 scaleVector(Vector2 worldCoordinates) {
     return _components.fold(
       worldCoordinates,
-      (previousValue, element) => element.projectDelta(previousValue),
+      (previousValue, element) => element.scaleVector(previousValue),
     );
   }
 
@@ -71,10 +71,10 @@ class ComposedProjector extends Projector {
   }
 
   @override
-  Vector2 unprojectDelta(Vector2 screenCoordinates) {
+  Vector2 unscaleVector(Vector2 screenCoordinates) {
     return _components.reversed.fold(
       screenCoordinates,
-      (previousValue, element) => element.unprojectDelta(previousValue),
+      (previousValue, element) => element.unscaleVector(previousValue),
     );
   }
 

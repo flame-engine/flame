@@ -134,8 +134,8 @@ abstract class Game extends Projector {
     images.clearCache();
   }
 
-  /// Converts a global coordinate (i.e. wrt to the app itself) to a local
-  /// coordinate (i.e. wrt to the game widget).
+  /// Converts a global coordinate (i.e. w.r.t. the app itself) to a local
+  /// coordinate (i.e. w.r.t. he game widget).
   /// If the widget occupies the whole app ("full screen" games), this operation
   /// is the identity.
   Vector2 convertGlobalToLocalCoordinate(Vector2 point) {
@@ -147,8 +147,8 @@ abstract class Game extends Projector {
     return _gameRenderBox!.globalToLocal(point.toOffset()).toVector2();
   }
 
-  /// Converts a local coordinate (i.e. wrt to the game widget) to a global
-  /// coordinate (i.e. wrt to the app itself).
+  /// Converts a local coordinate (i.e. w.r.t. the game widget) to a global
+  /// coordinate (i.e. w.r.t. the app itself).
   /// If the widget occupies the whole app ("full screen" games), this operation
   /// is the identity.
   Vector2 convertLocalToGlobalCoordinate(Vector2 point) {
@@ -167,10 +167,10 @@ abstract class Game extends Projector {
   Vector2 projectVector(Vector2 vector) => vector;
 
   @override
-  Vector2 unprojectDelta(Vector2 vector) => vector;
+  Vector2 unscaleVector(Vector2 vector) => vector;
 
   @override
-  Vector2 projectDelta(Vector2 vector) => vector;
+  Vector2 scaleVector(Vector2 vector) => vector;
 
   /// Utility method to load and cache the image for a sprite based on its options
   Future<Sprite> loadSprite(

@@ -257,12 +257,12 @@ class BaseGame extends Game with FPSCounter {
   }
 
   @override
-  Vector2 projectDelta(Vector2 vector) {
-    return _combinedProjector.projectDelta(vector);
+  Vector2 scaleVector(Vector2 vector) {
+    return _combinedProjector.scaleVector(vector);
   }
 
   @override
-  Vector2 unprojectDelta(Vector2 vector) {
-    return _combinedProjector.unprojectDelta(vector);
+  Vector2 unscaleVector(Vector2 vector) {
+    return _combinedProjector.unscaleVector(vector);
   }
 }

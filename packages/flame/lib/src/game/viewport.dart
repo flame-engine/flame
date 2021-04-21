@@ -97,10 +97,10 @@ class DefaultViewport extends Viewport {
   Vector2 unprojectVector(Vector2 vector) => vector;
 
   @override
-  Vector2 projectDelta(Vector2 vector) => vector;
+  Vector2 scaleVector(Vector2 vector) => vector;
 
   @override
-  Vector2 unprojectDelta(Vector2 vector) => vector;
+  Vector2 unscaleVector(Vector2 vector) => vector;
 }
 
 /// This is the most common viewport if you want to have full control of what
@@ -171,12 +171,12 @@ class FixedResolutionViewport extends Viewport {
   }
 
   @override
-  Vector2 projectDelta(Vector2 viewportCoordinates) {
+  Vector2 scaleVector(Vector2 viewportCoordinates) {
     return viewportCoordinates * scale;
   }
 
   @override
-  Vector2 unprojectDelta(Vector2 screenCoordinates) {
+  Vector2 unscaleVector(Vector2 screenCoordinates) {
     return screenCoordinates / scale;
   }
 }

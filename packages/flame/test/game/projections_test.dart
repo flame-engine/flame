@@ -15,8 +15,8 @@ void main() {
 
       expect(game.projectVector(Vector2(1, 2)), Vector2(1, 2));
       expect(game.unprojectVector(Vector2(1, 2)), Vector2(1, 2));
-      expect(game.projectDelta(Vector2(1, 2)), Vector2(1, 2));
-      expect(game.unprojectDelta(Vector2(1, 2)), Vector2(1, 2));
+      expect(game.scaleVector(Vector2(1, 2)), Vector2(1, 2));
+      expect(game.unscaleVector(Vector2(1, 2)), Vector2(1, 2));
     });
     test('viewport only with scale projection (no camera)', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
@@ -28,8 +28,8 @@ void main() {
 
       expect(game.projectVector(Vector2(1, 2)), Vector2(2, 4));
       expect(game.unprojectVector(Vector2(2, 4)), Vector2(1, 2));
-      expect(game.projectDelta(Vector2(1, 2)), Vector2(2, 4));
-      expect(game.unprojectDelta(Vector2(2, 4)), Vector2(1, 2));
+      expect(game.scaleVector(Vector2(1, 2)), Vector2(2, 4));
+      expect(game.unscaleVector(Vector2(2, 4)), Vector2(1, 2));
     });
     test('viewport only with translation projection (no camera)', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
@@ -49,10 +49,10 @@ void main() {
       expect(game.unprojectVector(Vector2(200, 0)), Vector2(150, 0));
 
       // translations should not affect projecting deltas
-      expect(game.unprojectDelta(Vector2.zero()), Vector2.zero());
-      expect(game.unprojectDelta(Vector2.all(50)), Vector2.all(50));
-      expect(game.unprojectDelta(Vector2.all(150)), Vector2.all(150));
-      expect(game.unprojectDelta(Vector2(200, 0)), Vector2(200, 0));
+      expect(game.unscaleVector(Vector2.zero()), Vector2.zero());
+      expect(game.unscaleVector(Vector2.all(50)), Vector2.all(50));
+      expect(game.unscaleVector(Vector2.all(150)), Vector2.all(150));
+      expect(game.unscaleVector(Vector2(200, 0)), Vector2(200, 0));
     });
     test('viewport only with both scale and translation (no camera)', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
@@ -79,8 +79,8 @@ void main() {
       expect(game.unprojectVector(Vector2(1, 2)), Vector2(3, 6));
 
       // delta considers the zoom
-      expect(game.unprojectDelta(Vector2.zero()), Vector2.zero());
-      expect(game.unprojectDelta(Vector2(1, 2)), Vector2(3, 6));
+      expect(game.unscaleVector(Vector2.zero()), Vector2.zero());
+      expect(game.unscaleVector(Vector2(1, 2)), Vector2(3, 6));
     });
     test('camera only with translation (default viewport)', () {
       final game = BaseGame(); // default viewport
@@ -94,8 +94,8 @@ void main() {
       expect(game.unprojectVector(Vector2(-50, 50)), Vector2(0, 150));
 
       // delta ignores translations
-      expect(game.projectDelta(Vector2.zero()), Vector2.zero());
-      expect(game.projectDelta(Vector2(-50, 50)), Vector2(-50, 50));
+      expect(game.scaleVector(Vector2.zero()), Vector2.zero());
+      expect(game.scaleVector(Vector2(-50, 50)), Vector2(-50, 50));
     });
     test('camera only with both zoom and translation (default viewport)', () {
       final game = BaseGame(); // default viewport
@@ -117,7 +117,7 @@ void main() {
       expect(game.unprojectVector(Vector2.all(50)), Vector2.zero());
 
       // note: in the current implementation, if we change the relative position
-      // the zoom is still applied wrt to the top left of the screen
+      // the zoom is still applied w.r.t. the top left of the screen
       game.camera.setRelativeOffset(Anchor.center.toVector2());
       game.camera.snap();
 
@@ -127,11 +127,11 @@ void main() {
       // and with 2x zoom the center will actually be -95, -95
       expect(game.unprojectVector(Vector2.all(5)), Vector2.all(-95));
       // TODO(luan) we might want to change the behaviour so that the zoom
-      // is applied wrt to the relativeOffset and not topLeft
+      // is applied w.r.t. the relativeOffset and not topLeft
 
       // for deltas, we consider only the zoom
-      expect(game.unprojectDelta(Vector2.zero()), Vector2.zero());
-      expect(game.unprojectDelta(Vector2(1, 2)), Vector2(2, 4));
+      expect(game.unscaleVector(Vector2.zero()), Vector2.zero());
+      expect(game.unscaleVector(Vector2(1, 2)), Vector2(2, 4));
     });
     test('camera & viewport - two translations', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
@@ -150,8 +150,8 @@ void main() {
       expect(game.unprojectVector(Vector2(40, 123)), Vector2(0, 223));
 
       // deltas should not be affected by translations at all
-      expect(game.unprojectDelta(Vector2.zero()), Vector2.zero());
-      expect(game.unprojectDelta(Vector2(1, 2)), Vector2(1, 2));
+      expect(game.unscaleVector(Vector2.zero()), Vector2.zero());
+      expect(game.unscaleVector(Vector2(1, 2)), Vector2(1, 2));
     });
     test('camera zoom & viewport translation', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
@@ -178,8 +178,8 @@ void main() {
       expect(game.unprojectVector(Vector2(150, 100)), Vector2.all(200));
 
       // for deltas, we consider only the 2x zoom of the camera
-      expect(game.unprojectDelta(Vector2.zero()), Vector2.zero());
-      expect(game.unprojectDelta(Vector2(1, 2)), Vector2(2, 4));
+      expect(game.unscaleVector(Vector2.zero()), Vector2.zero());
+      expect(game.unscaleVector(Vector2(1, 2)), Vector2(2, 4));
     });
     test('camera translation & viewport scale+translation', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
@@ -202,8 +202,8 @@ void main() {
       expect(game.unprojectVector(Vector2(0, 100)), Vector2(10, 10));
 
       // for deltas, we consider only 2x scale of the viewport
-      expect(game.unprojectDelta(Vector2.zero()), Vector2.zero());
-      expect(game.unprojectDelta(Vector2(2, 4)), Vector2(1, 2));
+      expect(game.unscaleVector(Vector2.zero()), Vector2.zero());
+      expect(game.unscaleVector(Vector2(2, 4)), Vector2(1, 2));
     });
     test('camera & viewport scale/zoom + translation (cancel out scaling)', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
@@ -238,8 +238,8 @@ void main() {
       expect(game.unprojectVector(Vector2(200, 300)), Vector2.all(210));
 
       // for deltas, since the scale and the zoom cancel out, this should no-op
-      expect(game.unprojectDelta(Vector2.zero()), Vector2.zero());
-      expect(game.unprojectDelta(Vector2(1, 2)), Vector2(1, 2));
+      expect(game.unscaleVector(Vector2.zero()), Vector2.zero());
+      expect(game.unscaleVector(Vector2(1, 2)), Vector2(1, 2));
     });
     test('camera & viewport scale/zoom + translation', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
@@ -274,8 +274,8 @@ void main() {
       expect(game.unprojectVector(Vector2(10, 112)), Vector2(70, 24));
 
       // deltas only care about the effective scaling factor, witch is 2x
-      expect(game.unprojectDelta(Vector2.zero()), Vector2.zero());
-      expect(game.unprojectDelta(Vector2(1, 2)), Vector2(2, 4));
+      expect(game.unscaleVector(Vector2.zero()), Vector2.zero());
+      expect(game.unscaleVector(Vector2(1, 2)), Vector2(2, 4));
     });
   });
 }
@@ -294,11 +294,11 @@ void _assertIdentityOfProjector(Projector projector) {
   }
 
   Vector2 identity3(Vector2 v) {
-    return projector.projectDelta(projector.unprojectDelta(v));
+    return projector.scaleVector(projector.unscaleVector(v));
   }
 
   Vector2 identity4(Vector2 v) {
-    return projector.unprojectDelta(projector.projectDelta(v));
+    return projector.unscaleVector(projector.scaleVector(v));
   }
 
   final someValues = <double>[-1, 0, 1, 2, 10, 100];

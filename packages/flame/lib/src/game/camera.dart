@@ -190,12 +190,12 @@ class Camera extends Projector {
   }
 
   @override
-  Vector2 unprojectDelta(Vector2 screenCoordinates) {
+  Vector2 unscaleVector(Vector2 screenCoordinates) {
     return screenCoordinates * zoom;
   }
 
   @override
-  Vector2 projectDelta(Vector2 worldCoordinates) {
+  Vector2 scaleVector(Vector2 worldCoordinates) {
     return worldCoordinates / zoom;
   }
 

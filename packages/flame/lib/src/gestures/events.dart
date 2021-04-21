@@ -79,7 +79,7 @@ class LongPressStartInfo extends PositionInfo<LongPressStartDetails> {
 
 class LongPressEndInfo extends PositionInfo<LongPressEndDetails> {
   late final Vector2 velocity =
-      _game.unprojectDelta(raw.velocity.pixelsPerSecond.toVector2());
+      _game.unscaleVector(raw.velocity.pixelsPerSecond.toVector2());
 
   LongPressEndInfo.fromDetails(
     Game game,
@@ -105,7 +105,7 @@ class ForcePressInfo extends PositionInfo<ForcePressDetails> {
 
 class PointerScrollInfo extends PositionInfo<PointerScrollEvent> {
   late final Vector2 scrollDelta =
-      _game.unprojectDelta(raw.scrollDelta.toVector2());
+      _game.unscaleVector(raw.scrollDelta.toVector2());
 
   PointerScrollInfo.fromDetails(
     Game game,
@@ -135,7 +135,7 @@ class DragStartInfo extends PositionInfo<DragStartDetails> {
 }
 
 class DragUpdateInfo extends PositionInfo<DragUpdateDetails> {
-  late final Vector2 delta = _game.unprojectDelta(raw.delta.toVector2());
+  late final Vector2 delta = _game.unscaleVector(raw.delta.toVector2());
 
   DragUpdateInfo.fromDetails(
     Game game,
@@ -146,7 +146,7 @@ class DragUpdateInfo extends PositionInfo<DragUpdateDetails> {
 class DragEndInfo extends BaseInfo<DragEndDetails> {
   final Game _game;
   late final Vector2 velocity =
-      _game.unprojectDelta(raw.velocity.pixelsPerSecond.toVector2());
+      _game.unscaleVector(raw.velocity.pixelsPerSecond.toVector2());
   double? get primaryVelocity => raw.primaryVelocity;
 
   DragEndInfo.fromDetails(
@@ -167,7 +167,7 @@ class ScaleStartInfo extends PositionInfo<ScaleStartDetails> {
 class ScaleEndInfo extends BaseInfo<ScaleEndDetails> {
   final Game _game;
   late final Vector2 velocity =
-      _game.unprojectDelta(raw.velocity.pixelsPerSecond.toVector2());
+      _game.unscaleVector(raw.velocity.pixelsPerSecond.toVector2());
   int get pointerCount => raw.pointerCount;
 
   ScaleEndInfo.fromDetails(
@@ -180,7 +180,7 @@ class ScaleUpdateInfo extends PositionInfo<ScaleUpdateDetails> {
   int get pointerCount => raw.pointerCount;
   double get rotation => raw.rotation;
   late final Vector2 scale =
-      _game.unprojectDelta(Vector2(raw.horizontalScale, raw.verticalScale));
+      _game.unscaleVector(Vector2(raw.horizontalScale, raw.verticalScale));
 
   ScaleUpdateInfo.fromDetails(
     Game game,
