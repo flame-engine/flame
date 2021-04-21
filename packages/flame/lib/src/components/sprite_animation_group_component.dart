@@ -1,14 +1,21 @@
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
+
 import '../extensions/vector2.dart';
 import '../sprite_animation.dart';
-import 'sprite_animation_component.dart';
+import 'position_component.dart';
 
 export '../sprite_animation.dart';
 
-class SpriteAnimationGroupComponent<T> extends SpriteAnimationComponent {
+class SpriteAnimationGroupComponent<T> extends PositionComponent {
   /// Key with the current playing animation
   T? current;
+
+  Paint? overridePaint;
+
+  /// Map with the mapping each state to the flag removeOnFinish
+  final Map<T, bool> removeOnFinish;
 
   /// Map with the available states for this animation group
   late Map<T, SpriteAnimation> animations;
@@ -19,31 +26,29 @@ class SpriteAnimationGroupComponent<T> extends SpriteAnimationComponent {
     Vector2? position,
     Vector2? size,
     this.current,
-    Paint? overridePaint,
-    bool removeOnFinish = false,
+    this.overridePaint,
+    this.removeOnFinish = const {},
   }) : super(
           position: position,
           size: size,
-          overridePaint: overridePaint,
-          removeOnFinish: removeOnFinish,
         );
 
-  /// Creates a SpriteAnimationGroupComponent from a [size], an [image] and [data]. Check [SpriteAnimationData] for more info on the available options.
+  /// Creates a SpriteAnimationGroupComponent from a [size], an [image] and [data].
+  /// Check [SpriteAnimationData] for more info on the available options.
   ///
-  /// Optionally [removeOnFinish] can be set to true to have this component be auto removed from the BaseGame when the animation is finished.
+  /// Optionally [removeOnFinish] can be mapped to true to have this component be auto
+  /// removed from the BaseGame when the animation is finished.
   SpriteAnimationGroupComponent.fromFrameData(
     Image image,
     Map<T, SpriteAnimationData> data, {
     this.current,
     Vector2? position,
     Vector2? size,
-    Paint? overridePaint,
-    bool removeOnFinish = false,
+    this.overridePaint,
+    this.removeOnFinish = const {},
   }) : super(
           position: position,
           size: size,
-          overridePaint: overridePaint,
-          removeOnFinish: removeOnFinish,
         ) {
     animations = data.map((key, value) {
       return MapEntry(
@@ -56,12 +61,34 @@ class SpriteAnimationGroupComponent<T> extends SpriteAnimationComponent {
     });
   }
 
-  @override
-  SpriteAnimation? get animation {
-    if (current != null) {
-      return animations[current];
-    }
+  SpriteAnimation? get animation => animations[current];
 
-    return null;
+  /// Component will be removed after animation is done and the current state
+  /// is true on [removeOnFinish].
+  ///
+  /// Note: [SpriteAnimationGroupComponent] will not be removed automatically if loop
+  /// property of [SpriteAnimation] of the current state is true.
+  @override
+  bool get shouldRemove {
+    final stateRemoveOnFinish = removeOnFinish[current] ?? false;
+    return super.shouldRemove ||
+        (stateRemoveOnFinish && (animation?.done() ?? false));
+  }
+
+  @mustCallSuper
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    animation?.getSprite().render(
+          canvas,
+          size: size,
+          overridePaint: overridePaint,
+        );
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    animation?.update(dt);
   }
 }
