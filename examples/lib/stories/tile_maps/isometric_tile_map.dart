@@ -9,9 +9,18 @@ import 'package:flutter/material.dart' hide Image;
 
 const x = 500.0;
 const y = 500.0;
-const s = 64.0;
 final topLeft = Vector2(x, y);
+
+const scale = 2.0;
+const srcTileSize = 32.0;
+const destTileSize = scale * srcTileSize;
+
 final originColor = Paint()..color = const Color(0xFFFF00FF);
+final originColor2 = Paint()..color = const Color(0xFFAA55FF);
+
+const halfSize = true;
+const tileHeight = scale * (halfSize ? 8.0 : 16.0);
+const suffix = halfSize ? '-short' : '';
 
 class Selector extends SpriteComponent {
   bool show = false;
@@ -40,10 +49,11 @@ class IsometricTileMapGame extends BaseGame with MouseMovementDetector {
 
   @override
   Future<void> onLoad() async {
-    final selectorImage = await images.load('tile_maps/selector.png');
-
-    final tilesetImage = await images.load('tile_maps/tiles.png');
-    final tileset = SpriteSheet(image: tilesetImage, srcSize: Vector2.all(32));
+    final tilesetImage = await images.load('tile_maps/tiles$suffix.png');
+    final tileset = SpriteSheet(
+      image: tilesetImage,
+      srcSize: Vector2.all(srcTileSize),
+    );
     final matrix = [
       [3, 1, 1, 1, 0, 0],
       [-1, 1, 2, 1, 0, 0],
@@ -56,18 +66,26 @@ class IsometricTileMapGame extends BaseGame with MouseMovementDetector {
       base = IsometricTileMapComponent(
         tileset,
         matrix,
-        destTileSize: Vector2.all(s),
+        destTileSize: Vector2.all(destTileSize),
+        tileHeight: tileHeight,
       )
         ..x = x
         ..y = y,
     );
-    add(selector = Selector(s, selectorImage));
+
+    final selectorImage = await images.load('tile_maps/selector$suffix.png');
+    add(selector = Selector(destTileSize, selectorImage));
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    canvas.drawRect(const Rect.fromLTWH(x - 1, y - 1, 3, 3), originColor);
+    canvas.renderPoint(topLeft, size: 5, paint: originColor);
+    canvas.renderPoint(
+      Vector2(x, y - tileHeight),
+      size: 5,
+      paint: originColor2,
+    );
   }
 
   @override
@@ -75,6 +93,6 @@ class IsometricTileMapGame extends BaseGame with MouseMovementDetector {
     final screenPosition = event.eventPosition.game;
     final block = base.getBlock(screenPosition);
     selector.show = base.containsBlock(block);
-    selector.position.setFrom(base.getBlockPosition(block) + topLeft);
+    selector.position.setFrom(topLeft + base.getBlockPosition(block));
   }
 }
