@@ -86,12 +86,12 @@ An example of how a `Game` implementation could look like:
 class MyGameSubClass extends Game {
   @override
   void render(Canvas canvas) {
-    // ...render code
+    // ...
   }
 
   @override
   void update(double t) {
-    // ...update code
+    // ...
   }
 }
 
