@@ -1,10 +1,11 @@
 # Style Guide
 
-This is a general style guide that shall govern over the Flame Engine repository. 
-The aim is to keep a common stable general environment.
-This includes high level guidance to help with simple decisions in the day-to-day development life.
+This is a general style guide that shall govern over the Flame Engine repository. The aim is to keep
+a common stable general environment. This includes high level guidance to help with simple decisions
+in the day-to-day development life.
 
-This extends rules on the official [Flutter Style Guide](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo).
+This extends rules on the official [Flutter Style
+Guide](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo).
 
 ## Code formatting
 
@@ -14,9 +15,9 @@ For all files, include a markdown, keep each line with a hundred or less charact
 
 ### Trailing Commas and Wrapping
 
-List of elements must always be all in one line or one element per line. This includes parameters, 
-arguments, collection literals, etc. Furthermore, if multiline, the last element must have a trailing
-comma.
+List of elements must always be all in one line or one element per line. This includes parameters,
+arguments, collection literals, etc. Furthermore, if multiline, the last element must have a
+trailing comma.
 
 For the sake of example, let's use a function invocation (the same apply for all cases):
 
@@ -54,8 +55,8 @@ foo(f1,
 * Never include unused or duplicated imports.
 * You must always use relative imports for imports within the Flame library.
 * Omit `./` for relative imports from the same directory.
-* TODO Do/Do not use the imports grouping internally (like component.dart, extensions.dart, etc).
-* Avoid importing groups of APIs internally, for example, importing `lib/effects.dart` just to use `ScaleEffect`.
+* Avoid importing groups of APIs internally, for example, importing `lib/effects.dart` just to use
+  `ScaleEffect`.
 * Order your imports by:
   * Three main blocks, each separated by exactly one empty line:
     * Dart SDK dependencies,
@@ -90,15 +91,8 @@ import 'viewport.dart';
 
 Use all [effective dart patterns](https://dart.dev/guides/language/effective-dart)
 
-* Avoid using global constants, but if you do use, name it prefixing with a `k`.
-
-```dart
-// Do not:
-const someConstant = 42;
-
-// Do instead:
-const kSomeConstant = 42;
-```
+* Do not use global constants that are public in our exposed APIs; namespace any variables in
+  appropriate classes.
 
 ### Comments
 
@@ -144,9 +138,10 @@ Some elements may benefit from a simple usage example.
 
 #### Avoid useless code documentation
 
-Avoid documentation that just repeats the obvious. 
-For example, `void doStuff()` be documented as "Method that does stuff".
+Avoid documentation that just repeats the obvious. For example, `void doStuff()` be documented as
+"Method that does stuff".
 
 #### Consider adding linkage between docs
 
-Consider adding a "See also" section to element documentation
+You should use `[]` (brackets) to link dartdoc elements that can be referenced on the same file.
+Also, consider adding a "See also" section to element documentation.
