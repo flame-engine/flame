@@ -5,6 +5,7 @@
  - Fix bounding box check in collision detection
  - Refactor on flame input system to correctly take camera into account
  - Adding `SpriteAnimationGroupComponent`
+ - Allow isometric tile maps with custom heights
 
 ## [1.0.0-rc9]
  - Fix input bug with other anchors than center

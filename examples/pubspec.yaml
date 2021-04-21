@@ -24,8 +24,8 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/
     - assets/images/animations/
+    - assets/images/
     - assets/images/tile_maps/
     - assets/images/layers/
     - assets/images/parallax/
