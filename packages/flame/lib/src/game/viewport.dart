@@ -5,6 +5,7 @@ import 'package:flutter/painting.dart';
 
 import '../../extensions.dart';
 import '../../game.dart';
+import 'projector.dart';
 
 /// A viewport is a class that potentially translates and resizes the screen.
 /// The reason you might want to have a viewport is to make sure you handle any
@@ -44,7 +45,7 @@ import '../../game.dart';
 /// online/competitive game, it can give unfair advantages to users with certain
 /// screen resolutions. If you want to "play director" and know exactly what
 /// every player is seeing at every time, you should use a Viewport.
-abstract class Viewport {
+abstract class Viewport extends Projector {
   /// This configures the viewport with a new raw canvas size.
   /// It should immediately affect [effectiveSize] and [canvasSize].
   /// This must be called by the engine at startup and also whenever the
@@ -88,6 +89,18 @@ class DefaultViewport extends Viewport {
 
   @override
   Vector2 get effectiveSize => canvasSize;
+
+  @override
+  Vector2 projectVector(Vector2 vector) => vector;
+
+  @override
+  Vector2 unprojectVector(Vector2 vector) => vector;
+
+  @override
+  Vector2 scaleVector(Vector2 vector) => vector;
+
+  @override
+  Vector2 unscaleVector(Vector2 vector) => vector;
 }
 
 /// This is the most common viewport if you want to have full control of what
@@ -145,5 +158,25 @@ class FixedResolutionViewport extends Viewport {
     renderGame(c);
 
     c.restore();
+  }
+
+  @override
+  Vector2 projectVector(Vector2 viewportCoordinates) {
+    return viewportCoordinates * scale + resizeOffset;
+  }
+
+  @override
+  Vector2 unprojectVector(Vector2 screenCoordinates) {
+    return (screenCoordinates - resizeOffset) / scale;
+  }
+
+  @override
+  Vector2 scaleVector(Vector2 viewportCoordinates) {
+    return viewportCoordinates * scale;
+  }
+
+  @override
+  Vector2 unscaleVector(Vector2 screenCoordinates) {
+    return screenCoordinates / scale;
   }
 }
