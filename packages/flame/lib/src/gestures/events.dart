@@ -26,6 +26,23 @@ class EventPosition {
   EventPosition(this._game, this._localPosition, this._globalPosition);
 }
 
+/// [EventDelta] converts deltas based events to two different values (game and global).
+///
+/// global: this is the raw value received by the event without any scale applied to it
+/// game: the scalled value applied all the game transformations
+class EventDelta {
+  final Game _game;
+  final Offset _delta;
+
+  /// Scaled value relative to the game transformations
+  late final Vector2 game = _game.scaleVector(_delta.toVector2());
+
+  /// Raw value relative to the game transformations
+  late final Vector2 global = _delta.toVector2();
+
+  EventDelta(this._game, this._delta);
+}
+
 /// BaseInfo is the base class for Flame's input events.
 /// This base class just wraps Flutter's [raw] attribute.
 abstract class BaseInfo<T> {
@@ -104,8 +121,7 @@ class ForcePressInfo extends PositionInfo<ForcePressDetails> {
 }
 
 class PointerScrollInfo extends PositionInfo<PointerScrollEvent> {
-  late final Vector2 scrollDelta =
-      _game.unscaleVector(raw.scrollDelta.toVector2());
+  late final EventDelta scrollDelta = EventDelta(_game, raw.scrollDelta);
 
   PointerScrollInfo.fromDetails(
     Game game,
@@ -135,7 +151,7 @@ class DragStartInfo extends PositionInfo<DragStartDetails> {
 }
 
 class DragUpdateInfo extends PositionInfo<DragUpdateDetails> {
-  late final Vector2 delta = _game.unscaleVector(raw.delta.toVector2());
+  late final EventDelta delta = EventDelta(_game, raw.delta);
 
   DragUpdateInfo.fromDetails(
     Game game,
@@ -166,8 +182,9 @@ class ScaleStartInfo extends PositionInfo<ScaleStartDetails> {
 
 class ScaleEndInfo extends BaseInfo<ScaleEndDetails> {
   final Game _game;
-  late final Vector2 velocity =
-      _game.unscaleVector(raw.velocity.pixelsPerSecond.toVector2());
+  late final EventDelta velocity =
+      EventDelta(_game, raw.velocity.pixelsPerSecond);
+
   int get pointerCount => raw.pointerCount;
 
   ScaleEndInfo.fromDetails(
@@ -179,8 +196,10 @@ class ScaleEndInfo extends BaseInfo<ScaleEndDetails> {
 class ScaleUpdateInfo extends PositionInfo<ScaleUpdateDetails> {
   int get pointerCount => raw.pointerCount;
   double get rotation => raw.rotation;
-  late final Vector2 scale =
-      _game.unscaleVector(Vector2(raw.horizontalScale, raw.verticalScale));
+  late final EventDelta scale = EventDelta(
+    _game,
+    Offset(raw.horizontalScale, raw.verticalScale),
+  );
 
   ScaleUpdateInfo.fromDetails(
     Game game,

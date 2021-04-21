@@ -14,7 +14,7 @@ class ScrollGame extends BaseGame with ScrollDetector {
 
   @override
   void onScroll(PointerScrollInfo event) {
-    target = position + event.scrollDelta * 5;
+    target = position + event.scrollDelta.game * 5;
   }
 
   @override
