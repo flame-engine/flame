@@ -80,14 +80,14 @@ class Sprite {
     );
   }
 
-  /// Renders this sprite onto the canvas.
+  /// Renders this sprite onto the [canvas].
   ///
-  /// * position: x,y coordinates where it will be drawn; default to origin.
-  /// * size: width/height dimensions; it can be bigger or smaller than the original size -- but it
+  /// * [position]: x,y coordinates where it will be drawn; default to origin.
+  /// * [size]: width/height dimensions; it can be bigger or smaller than the original size -- but it
   ///   defaults to the original texture size.
-  /// * overridePaint: paint to use. You can also change the paint on your Sprite instance. Default
+  /// * [anchor]: where in the sprite the x/y coordinates refer to; defaults to topLeft.
+  /// * [overridePaint]: paint to use. You can also change the paint on your Sprite instance. Default
   ///   is white.
-  /// * anchor: where in the sprite the x/y coordinates refer to; defaults to topLeft.
   void render(
     Canvas canvas, {
     Vector2? position,
