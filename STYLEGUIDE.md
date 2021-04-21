@@ -136,16 +136,16 @@ void something(int smaller, int bigger) {
 
 Specific guides for dartdoc documentation.
 
-#### Consider adding examples
+### Consider adding examples
 
 Some elements may benefit from a simple usage example.
 
-#### Avoid useless code documentation
+### Avoid useless code documentation
 
 Avoid documentation that just repeats the obvious. For example, `void doStuff()` be documented as
 "Method that does stuff".
 
-#### Consider adding linkage between docs
+### Consider adding linkage between docs
 
 You should use `[]` (brackets) to link dartdoc elements that can be referenced on the same file.
 Also, consider adding a "See also" section to element documentation.
