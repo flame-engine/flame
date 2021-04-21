@@ -82,38 +82,40 @@ void main() async {
       expect(game.components.length, 1);
     });
 
-    test('removeOnFinish is true and current state animation#loop is false',
-        () {
-      final game = BaseGame();
-      final animation = SpriteAnimation.spriteList(
-        [
-          Sprite(image),
-          Sprite(image),
-        ],
-        stepTime: 1,
-        loop: false,
-      );
-      final component = SpriteAnimationGroupComponent<AnimationState>(
-        animations: {AnimationState.idle: animation},
-        removeOnFinish: {AnimationState.idle: true},
-        current: AnimationState.idle,
-      );
+    test(
+      'removeOnFinish is true and current state animation#loop is false',
+      () {
+        final game = BaseGame();
+        final animation = SpriteAnimation.spriteList(
+          [
+            Sprite(image),
+            Sprite(image),
+          ],
+          stepTime: 1,
+          loop: false,
+        );
+        final component = SpriteAnimationGroupComponent<AnimationState>(
+          animations: {AnimationState.idle: animation},
+          removeOnFinish: {AnimationState.idle: true},
+          current: AnimationState.idle,
+        );
 
-      game.onResize(size);
-      game.add(component);
+        game.onResize(size);
+        game.add(component);
 
-      // runs a cycle to add the component
-      game.update(0.1);
-      expect(component.shouldRemove, false);
-      expect(game.components.length, 1);
+        // runs a cycle to add the component
+        game.update(0.1);
+        expect(component.shouldRemove, false);
+        expect(game.components.length, 1);
 
-      game.update(2);
-      expect(component.shouldRemove, true);
+        game.update(2);
+        expect(component.shouldRemove, true);
 
-      // runs a cycle to remove the component
-      game.update(0.1);
-      expect(game.components.length, 0);
-    });
+        // runs a cycle to remove the component
+        game.update(0.1);
+        expect(game.components.length, 0);
+      },
+    );
 
     test('removeOnFinish is true and current animation#loop is true', () {
       final game = BaseGame();
