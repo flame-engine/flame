@@ -4,6 +4,7 @@ import 'dart:ui' show Rect, Canvas;
 import '../../components.dart';
 import '../../extensions.dart';
 import '../../game.dart';
+import 'projector.dart';
 
 /// A camera translates your game coordinate system; this is useful when your
 /// world is not 1:1 with your screen size.
@@ -39,11 +40,7 @@ import '../../game.dart';
 /// the position where components are rendered with relation to the Viewport.
 /// Components marked as `isHud = true` are always rendered in screen
 /// coordinates, bypassing the camera altogether.
-///
-/// Note: right now this only applies to rendering. No transformation is
-/// done on event handling (for gestures). You have to transform it yourself
-/// using [screenToWorld].
-class Camera {
+class Camera extends Projector {
   static const defaultCameraSpeed = 50.0; // in pixels/s
   static const defaultShakeIntensity = 75.0; // in pixels
   static const defaultShakeDuration = 0.3; // in seconds
@@ -182,14 +179,24 @@ class Camera {
     update(0);
   }
 
-  /// Converts a vector in the screen space to the world space.
-  Vector2 screenToWorld(Vector2 screenCoordinates) {
-    return (screenCoordinates + _position) / zoom;
+  @override
+  Vector2 unprojectVector(Vector2 screenCoordinates) {
+    return screenCoordinates * zoom + _position;
   }
 
-  /// Converts a vector in the world space to the screen space.
-  Vector2 worldToScreen(Vector2 worldCoordinates) {
-    return worldCoordinates * zoom - _position;
+  @override
+  Vector2 projectVector(Vector2 worldCoordinates) {
+    return (worldCoordinates - _position) / zoom;
+  }
+
+  @override
+  Vector2 unscaleVector(Vector2 screenCoordinates) {
+    return screenCoordinates * zoom;
+  }
+
+  @override
+  Vector2 scaleVector(Vector2 worldCoordinates) {
+    return worldCoordinates / zoom;
   }
 
   // Follow
@@ -242,6 +249,7 @@ class Camera {
   /// you have two different options for the player to choose or your have a
   /// "dialog" camera that puts the player in a better place to show the
   /// dialog UI.
+  /// TODO(luan) this should be an anchor
   void setRelativeOffset(Vector2 newRelativeOffset) {
     _targetRelativeOffset.setFrom(newRelativeOffset);
   }
