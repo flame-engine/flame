@@ -28,8 +28,8 @@ class EventPosition {
 
 /// [EventDelta] converts deltas based events to two different values (game and global).
 ///
-/// global: this is the raw value received by the event without any scale applied to it
-/// game: the scalled value applied all the game transformations
+/// [global]: this is the raw value received by the event without any scale applied to it; this is always the same as local because Flutter doesn't apply any scaling.
+/// [game]: the scalled value applied all the game transformations.
 class EventDelta {
   final Game _game;
   final Offset _delta;
