@@ -6,7 +6,7 @@ class ZoomGame extends BaseGame with ScrollDetector, ScaleDetector {
   final Vector2 viewportResolution;
   late SpriteComponent flame;
 
-  Vector2? lastDelta;
+  Vector2? lastScale;
 
   ZoomGame({
     required this.viewportResolution,
@@ -39,12 +39,12 @@ class ZoomGame extends BaseGame with ScrollDetector, ScaleDetector {
 
   @override
   void onScaleUpdate(ScaleUpdateInfo info) {
-    final scale = lastDelta;
+    final scale = lastScale;
     if (scale != null) {
       final delta = info.scale.game - scale;
       camera.zoom += delta.y;
     }
 
-    lastDelta = info.scale.game;
+    lastScale = info.scale.game;
   }
 }
