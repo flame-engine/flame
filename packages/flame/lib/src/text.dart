@@ -8,13 +8,45 @@ import 'extensions/size.dart';
 import 'extensions/vector2.dart';
 import 'memory_cache.dart';
 
+abstract class TextRenderer {
+  /// Renders a given [text] in a given position [position] using the provided [canvas] and [anchor].
+  ///
+  /// Renders it in the given position, considering the [anchor] specified.
+  /// For example, if [Anchor.center] is specified, it's going to be drawn centered around [position].
+  ///
+  /// Example usage (Using TextPaint implementation):
+  ///
+  ///     const TextPaint config = TextPaint(fontSize: 48.0, fontFamily: 'Awesome Font');
+  ///     config.render(canvas, Vector2(size.x - 10, size.y - 10, anchor: Anchor.bottomRight);
+  void render(
+    Canvas canvas,
+    String text,
+    Vector2 position, {
+    Anchor anchor = Anchor.topLeft,
+  });
+
+  /// Given a [text] String, returns the width of that [text].
+  double measureTextWidth(String text);
+
+  /// Given a [text] String, returns the height of that [text].
+  double measureTextHeight(String text);
+
+  /// Given a [text] String, returns a Vector2 with the size of that [text] has.
+  Vector2 measureText(String text) {
+    return Vector2(
+      measureTextWidth(text),
+      measureTextHeight(text),
+    );
+  }
+}
+
 /// A Text Config contains all typographical information required to render texts; i.e., font size and color, family, etc.
 ///
 /// It does not hold information regarding the position of the text to be render neither the text itself (the string).
 /// To hold all those information, use the Text component.
 ///
 /// It is used by [TextComponent].
-class TextConfig {
+class TextPaint extends TextRenderer {
   /// The font size to be used, in points.
   final double fontSize;
 
@@ -23,7 +55,7 @@ class TextConfig {
   /// Dart's [Color] class is just a plain wrapper on top of ARGB color (0xAARRGGBB).
   /// For example,
   ///
-  ///     const TextConfig config = TextConfig(color: const Color(0xFF00FF00)); // green
+  ///     const TextPaint config = TextPaint(color: const Color(0xFF00FF00)); // green
   ///
   /// You can also use your Palette class to access colors used in your game.
   final Color color;
@@ -62,10 +94,10 @@ class TextConfig {
   final MemoryCache<String, material.TextPainter> _textPainterCache =
       MemoryCache();
 
-  /// Creates a constant [TextConfig] with sensible defaults.
+  /// Creates a constant [TextPaint] with sensible defaults.
   ///
   /// Every parameter can be specified.
-  TextConfig({
+  TextPaint({
     this.fontSize = 24.0,
     this.color = const Color(0xFF000000),
     this.fontFamily = 'Arial',
@@ -74,15 +106,7 @@ class TextConfig {
     this.lineHeight,
   });
 
-  /// Renders a given [text] in a given position [p] using the provided [canvas] and [anchor].
-  ///
-  /// It creates a [material.TextPainter] instance using the [toTextPainter] method, and renders it in the given position, considering the [anchor] specified.
-  /// For example, if [Anchor.center] is specified, it's going to be drawn centered around [p].
-  ///
-  /// Example usage:
-  ///
-  ///     const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font');
-  ///     config.render(c, Offset(size.width - 10, size.height - 10, anchor: Anchor.bottomRight);
+  @override
   void render(
     Canvas canvas,
     String text,
@@ -94,13 +118,23 @@ class TextConfig {
     tp.paint(canvas, translatedPosition.toOffset());
   }
 
+  @override
+  double measureTextWidth(String text) {
+    return toTextPainter(text).width;
+  }
+
+  @override
+  double measureTextHeight(String text) {
+    return toTextPainter(text).height;
+  }
+
   /// Returns a [material.TextPainter] that allows for text rendering and size measuring.
   ///
   /// A [material.TextPainter] has three important properties: paint, width and height (or size).
   ///
   /// Example usage:
   ///
-  ///     const TextConfig config = TextConfig(fontSize: 48.0, fontFamily: 'Awesome Font');
+  ///     const TextPaint config = TextPaint(fontSize: 48.0, fontFamily: 'Awesome Font');
   ///     final tp = config.toTextPainter('Score: $score');
   ///     tp.paint(c, Offset(size.width - p.width - 10, size.height - p.height - 10));
   ///
@@ -130,11 +164,11 @@ class TextConfig {
     return _textPainterCache.getValue(text)!;
   }
 
-  /// Creates a new [TextConfig] changing only the [fontSize].
+  /// Creates a new [TextPaint] changing only the [fontSize].
   ///
   /// This does not change the original (as it's immutable).
-  TextConfig withFontSize(double fontSize) {
-    return TextConfig(
+  TextPaint withFontSize(double fontSize) {
+    return TextPaint(
       fontSize: fontSize,
       color: color,
       fontFamily: fontFamily,
@@ -143,11 +177,11 @@ class TextConfig {
     );
   }
 
-  /// Creates a new [TextConfig] changing only the [color].
+  /// Creates a new [TextPaint] changing only the [color].
   ///
   /// This does not change the original (as it's immutable).
-  TextConfig withColor(Color color) {
-    return TextConfig(
+  TextPaint withColor(Color color) {
+    return TextPaint(
       fontSize: fontSize,
       color: color,
       fontFamily: fontFamily,
@@ -156,11 +190,11 @@ class TextConfig {
     );
   }
 
-  /// Creates a new [TextConfig] changing only the [fontFamily].
+  /// Creates a new [TextPaint] changing only the [fontFamily].
   ///
   /// This does not change the original (as it's immutable).
-  TextConfig withFontFamily(String fontFamily) {
-    return TextConfig(
+  TextPaint withFontFamily(String fontFamily) {
+    return TextPaint(
       fontSize: fontSize,
       color: color,
       fontFamily: fontFamily,
@@ -169,11 +203,11 @@ class TextConfig {
     );
   }
 
-  /// Creates a new [TextConfig] changing only the [textAlign].
+  /// Creates a new [TextPaint] changing only the [textAlign].
   ///
   /// This does not change the original (as it's immutable).
-  TextConfig withTextAlign(TextAlign textAlign) {
-    return TextConfig(
+  TextPaint withTextAlign(TextAlign textAlign) {
+    return TextPaint(
       fontSize: fontSize,
       color: color,
       fontFamily: fontFamily,
@@ -182,11 +216,11 @@ class TextConfig {
     );
   }
 
-  /// Creates a new [TextConfig] changing only the [textDirection].
+  /// Creates a new [TextPaint] changing only the [textDirection].
   ///
   /// This does not change the original (as it's immutable).
-  TextConfig withTextDirection(TextDirection textDirection) {
-    return TextConfig(
+  TextPaint withTextDirection(TextDirection textDirection) {
+    return TextPaint(
       fontSize: fontSize,
       color: color,
       fontFamily: fontFamily,

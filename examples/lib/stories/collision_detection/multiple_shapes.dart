@@ -167,7 +167,7 @@ class CollidableSnowman extends MyCollidable {
 
 class MultipleShapes extends BaseGame
     with HasCollidables, HasDraggableComponents {
-  final TextConfig fpsTextConfig = TextConfig(
+  final TextPaint fpsTextPaint = TextPaint(
     color: BasicPalette.white.color,
   );
 
@@ -229,7 +229,7 @@ class MultipleShapes extends BaseGame
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    fpsTextConfig.render(
+    fpsTextPaint.render(
       canvas,
       '${fps(120).toStringAsFixed(2)}fps',
       Vector2(0, size.y - 24),

@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart' hide Image;
 
 import '../extensions/vector2.dart';
 import '../palette.dart';
-import '../text_config.dart';
+import '../text.dart';
 import 'position_component.dart';
 
 class TextBoxConfig {
@@ -31,7 +31,7 @@ class TextBoxComponent extends PositionComponent {
   Vector2 _gameSize = Vector2.zero();
 
   final String _text;
-  final TextConfig _config;
+  final TextRenderer _textRenderer;
   final TextBoxConfig _boxConfig;
 
   late List<String> _lines;
@@ -45,37 +45,37 @@ class TextBoxComponent extends PositionComponent {
 
   String get text => _text;
 
-  TextConfig get config => _config;
+  TextRenderer get renderer => _textRenderer;
 
   TextBoxConfig get boxConfig => _boxConfig;
 
   TextBoxComponent(
     String text, {
-    TextConfig? config,
+    TextRenderer? textRenderer,
     TextBoxConfig? boxConfig,
     Vector2? position,
     Vector2? size,
   })  : _text = text,
         _boxConfig = boxConfig ?? TextBoxConfig(),
-        _config = config ?? TextConfig(),
+        _textRenderer = textRenderer ?? TextPaint(),
         super(position: position, size: size) {
     _lines = [];
     double? lineHeight;
     text.split(' ').forEach((word) {
       final possibleLine = _lines.isEmpty ? word : '${_lines.last} $word';
-      final painter = _config.toTextPainter(possibleLine);
-      lineHeight ??= painter.height;
-      if (painter.width <=
-          _boxConfig.maxWidth - _boxConfig.margins.horizontal) {
+      lineHeight ??= _textRenderer.measureTextHeight(possibleLine);
+
+      final textWidth = _textRenderer.measureTextWidth(possibleLine);
+      if (textWidth <= _boxConfig.maxWidth - _boxConfig.margins.horizontal) {
         if (_lines.isNotEmpty) {
           _lines.last = possibleLine;
         } else {
           _lines.add(possibleLine);
         }
-        _updateMaxWidth(painter.width);
+        _updateMaxWidth(textWidth);
       } else {
         _lines.add(word);
-        _updateMaxWidth(_config.toTextPainter(word).width);
+        _updateMaxWidth(textWidth);
       }
     });
     _totalLines = _lines.length;
@@ -112,9 +112,12 @@ class TextBoxComponent extends PositionComponent {
   Vector2 get size => Vector2(width, height);
 
   double getLineWidth(String line, int charCount) {
-    return _config
-        .toTextPainter(line.substring(0, math.min(charCount, line.length)))
-        .width;
+    return _textRenderer.measureTextWidth(
+      line.substring(
+        0,
+        math.min(charCount, line.length),
+      ),
+    );
   }
 
   double? _cachedWidth;
@@ -192,7 +195,7 @@ class TextBoxComponent extends PositionComponent {
   }
 
   void _drawLine(Canvas c, String line, double dy) {
-    _config.toTextPainter(line).paint(c, Offset(_boxConfig.margins.left, dy));
+    _textRenderer.render(c, line, Vector2(_boxConfig.margins.left, dy));
   }
 
   void redrawLater() async {

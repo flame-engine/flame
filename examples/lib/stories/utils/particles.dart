@@ -21,7 +21,7 @@ class ParticlesGame extends BaseGame {
   final Random rnd = Random();
   final StepTween steppedTween = StepTween(begin: 0, end: 5);
   final trafficLight = TrafficLightComponent();
-  final TextConfig fpsTextConfig = TextConfig(
+  final TextPaint fpsTextPaint = TextPaint(
     color: const Color(0xFFFFFFFF),
   );
 
@@ -474,7 +474,7 @@ class ParticlesGame extends BaseGame {
     super.render(canvas);
 
     if (debugMode) {
-      fpsTextConfig.render(
+      fpsTextPaint.render(
         canvas,
         '${fps(120).toStringAsFixed(2)}fps',
         Vector2(0, size.y - 24),

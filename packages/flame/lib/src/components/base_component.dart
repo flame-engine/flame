@@ -9,7 +9,7 @@ import '../../game.dart';
 import '../effects/effects.dart';
 import '../effects/effects_handler.dart';
 import '../extensions/vector2.dart';
-import '../text_config.dart';
+import '../text.dart';
 import 'component.dart';
 import 'mixins/has_game_ref.dart';
 
@@ -50,7 +50,7 @@ abstract class BaseComponent extends Component {
     ..strokeWidth = 1
     ..style = PaintingStyle.stroke;
 
-  TextConfig get debugTextConfig => TextConfig(color: debugColor, fontSize: 12);
+  TextPaint get debugTextPaint => TextPaint(color: debugColor, fontSize: 12);
 
   /// This method is called periodically by the game engine to request that your component updates itself.
   ///
