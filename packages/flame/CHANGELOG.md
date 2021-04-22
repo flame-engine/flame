@@ -7,6 +7,7 @@
  - Adding `SpriteAnimationGroupComponent`
  - Allow isometric tile maps with custom heights
  - Add a new renderRect method to Sprite
+ - Improve camera code
 
 ## [1.0.0-rc9]
  - Fix input bug with other anchors than center
