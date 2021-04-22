@@ -214,7 +214,7 @@ void main() {
       game.add(p);
       game.update(0);
       // this would be a typical vertical shoot-em-up
-      game.camera.followComponent(p, relativeOffset: Vector2(0.5, 0.8));
+      game.camera.followComponent(p, relativeOffset: const Anchor(0.5, 0.8));
 
       expect(game.camera.position, Vector2.all(0.0));
       p.position.setValues(600.0, 2000.0);
@@ -296,7 +296,7 @@ void main() {
       final game = BaseGame();
       game.onResize(Vector2.all(200.0));
 
-      game.camera.setRelativeOffset(Anchor.center.toVector2());
+      game.camera.setRelativeOffset(Anchor.center);
 
       game.update(0);
       expect(game.camera.position, Vector2.zero());
@@ -339,8 +339,9 @@ void main() {
       game.add(p);
       game.camera.followComponent(
         p,
-        // this could be a typical mario-like platformer, where the player is more on the bottom left to allow the scenario to be seem
-        relativeOffset: Vector2(0.25, 0.25),
+        // this could be a typical mario-like platformer, where the player is
+        // more on the bottom left to allow the scenario to be seem
+        relativeOffset: const Anchor(0.25, 0.25),
         worldBounds: const Rect.fromLTWH(0, 0, 1000, 1000),
       );
 

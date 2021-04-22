@@ -179,6 +179,8 @@ class Camera extends Projector {
     update(0);
   }
 
+  // Coordinates
+
   @override
   Vector2 unprojectVector(Vector2 screenCoordinates) {
     return screenCoordinates * zoom + _position;
@@ -199,6 +201,13 @@ class Camera extends Projector {
     return worldCoordinates / zoom;
   }
 
+  /// This is the (current) absolute target of the camera, i.e., the
+  /// coordinate that should be on the top left, regardless of relative
+  /// offset, world boundaries or shake.
+  Vector2 absoluteTarget() {
+    return _currentCameraDelta ?? follow ?? Vector2.zero();
+  }
+
   // Follow
 
   /// Immediately snaps the camera to start following the [component].
@@ -214,7 +223,7 @@ class Camera extends Projector {
   /// position, set the components anchor to center.
   void followComponent(
     PositionComponent component, {
-    Vector2? relativeOffset,
+    Anchor relativeOffset = Anchor.center,
     Rect? worldBounds,
   }) {
     followVector2(
@@ -234,12 +243,12 @@ class Camera extends Projector {
   /// camera is allowed to move.
   void followVector2(
     Vector2 vector2, {
-    Vector2? relativeOffset,
+    Anchor relativeOffset = Anchor.center,
     Rect? worldBounds,
   }) {
     follow = vector2;
     this.worldBounds = worldBounds;
-    _targetRelativeOffset.setFrom(relativeOffset ?? Anchor.center.toVector2());
+    _targetRelativeOffset.setFrom(relativeOffset.toVector2());
     _currentRelativeOffset.setFrom(_targetRelativeOffset);
   }
 
@@ -249,9 +258,8 @@ class Camera extends Projector {
   /// you have two different options for the player to choose or your have a
   /// "dialog" camera that puts the player in a better place to show the
   /// dialog UI.
-  /// TODO(luan) this should be an anchor
-  void setRelativeOffset(Vector2 newRelativeOffset) {
-    _targetRelativeOffset.setFrom(newRelativeOffset);
+  void setRelativeOffset(Anchor newRelativeOffset) {
+    _targetRelativeOffset.setFrom(newRelativeOffset.toVector2());
   }
 
   Vector2 _screenDelta() {
@@ -259,7 +267,7 @@ class Camera extends Projector {
   }
 
   Vector2 _target() {
-    final target = _currentCameraDelta ?? follow ?? Vector2.zero();
+    final target = absoluteTarget();
     final attemptedTarget = target - _screenDelta();
 
     final bounds = worldBounds;
@@ -293,6 +301,13 @@ class Camera extends Projector {
   }
 
   // Movement
+
+  /// Moves the camera by a given [displacement] (delta). This is the same as
+  /// [moveTo] but instead of providing an absolute end position, you can
+  /// provide a desired translation vector.
+  void translateBy(Vector2 displacement) {
+    moveTo(absoluteTarget() + displacement);
+  }
 
   /// Applies an ad-hoc movement to the camera towards the target, bypassing
   /// follow. Once it arrives the camera will not move until [resetMovement]
