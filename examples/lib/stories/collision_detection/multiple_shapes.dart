@@ -137,7 +137,7 @@ class SnowmanPart extends HitboxCircle {
     ..style = PaintingStyle.stroke;
 
   SnowmanPart(double definition, Vector2 relativePosition, Color hitColor)
-    : super(definition: definition) {
+      : super(definition: definition) {
     this.relativePosition.setFrom(relativePosition);
     onCollision = (Set<Vector2> intersectionPoints, HitboxShape other) {
       if (other.component is ScreenCollidable) {
@@ -235,7 +235,9 @@ class MultipleShapes extends BaseGame
     }
   }
 
-  Paint pathPaint = Paint()..color = Colors.amber..style = PaintingStyle.stroke;
+  Paint pathPaint = Paint()
+    ..color = Colors.amber
+    ..style = PaintingStyle.stroke;
   @override
   void render(Canvas canvas) {
     super.render(canvas);
@@ -245,7 +247,7 @@ class MultipleShapes extends BaseGame
       Vector2(0, size.y - 24),
     );
     const superDebug = false;
-    if(superDebug) {
+    if (superDebug) {
       for (final c in components) {
         if (c is Collidable) {
           for (final shape in c.shapes) {
@@ -255,7 +257,8 @@ class MultipleShapes extends BaseGame
             if (shape is Polygon) {
               final path = Path()
                 ..addPolygon(
-                  (shape as Polygon).hitbox()
+                  (shape as Polygon)
+                      .hitbox()
                       .map((point) => point.toOffset())
                       .toList(),
                   true,
