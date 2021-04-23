@@ -25,8 +25,7 @@ abstract class MyCollidable extends PositionComponent
   MyCollidable(Vector2 position, Vector2 size, this.velocity) {
     this.position = position;
     this.size = size;
-    anchor = Anchor.topLeft;
-    velocity.setZero();
+    anchor = Anchor.center;
   }
 
   @override
@@ -130,7 +129,7 @@ class CollidableCircle extends MyCollidable {
   }
 }
 
-class SnowmanPart extends HitboxRectangle {
+class SnowmanPart extends HitboxCircle {
   static const startColor = Colors.white;
   final hitPaint = Paint()
     ..color = startColor
@@ -138,8 +137,7 @@ class SnowmanPart extends HitboxRectangle {
     ..style = PaintingStyle.stroke;
 
   SnowmanPart(double definition, Vector2 relativePosition, Color hitColor)
-      : super(relation: Vector2.all(definition)) {
-    //: super(definition: definition) {
+    : super(definition: definition) {
     this.relativePosition.setFrom(relativePosition);
     onCollision = (Set<Vector2> intersectionPoints, HitboxShape other) {
       if (other.component is ScreenCollidable) {
@@ -161,14 +159,12 @@ class CollidableSnowman extends MyCollidable {
       : super(position, size, velocity) {
     rotationSpeed = 0.3;
     anchor = Anchor.topLeft;
-    //final top = SnowmanPart(0.4, Vector2(0, -0.8), Colors.red);
-    //final middle = SnowmanPart(0.6, Vector2(0, -0.3), Colors.yellow);
-    //final bottom = SnowmanPart(1.0, Vector2(0, 0.5), Colors.green);
-    final full = SnowmanPart(1.0, Vector2(0, 0.0), Colors.green);
-    //addShape(top);
-    //addShape(middle);
-    //addShape(bottom);
-    addShape(full);
+    final top = SnowmanPart(0.4, Vector2(0, -0.8), Colors.red);
+    final middle = SnowmanPart(0.6, Vector2(0, -0.3), Colors.yellow);
+    final bottom = SnowmanPart(1.0, Vector2(0, 0.5), Colors.green);
+    addShape(top);
+    addShape(middle);
+    addShape(bottom);
   }
 }
 
@@ -193,9 +189,9 @@ class MultipleShapes extends BaseGame
     );
     MyCollidable lastToAdd = snowman;
     add(screen);
-    //add(snowman);
+    add(snowman);
     var totalAdded = 1;
-    while (totalAdded < 3) {
+    while (totalAdded < 20) {
       lastToAdd = createRandomCollidable(lastToAdd);
       final lastBottomRight =
           lastToAdd.toAbsoluteRect().bottomRight.toVector2();
@@ -225,7 +221,6 @@ class MultipleShapes extends BaseGame
     }
     final velocity = Vector2.random(_rng) * 200;
     final rotationSpeed = 0.5 - _rng.nextDouble();
-    //final rotationSpeed = 0.0;
     final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
     switch (shapeType) {
       case Shapes.circle:
@@ -249,21 +244,24 @@ class MultipleShapes extends BaseGame
       '${fps(120).toStringAsFixed(2)}fps',
       Vector2(0, size.y - 24),
     );
-    for (final c in components) {
-      if (c is Collidable) {
-        for (final shape in c.shapes) {
-          canvas.renderPoint(shape.shapeCenter, size: 10);
-          canvas.renderPoint(c.absolutePosition, size: 10);
-          canvas.renderPoint(shape.anchorPosition, size: 5, paint: pathPaint);
-          if (shape is Polygon) {
-            final path = Path()
-              ..addPolygon(
-                (shape as Polygon).hitbox()
-                    .map((point) => point.toOffset())
-                    .toList(),
-                true,
-              );
-            canvas.drawPath(path, pathPaint);
+    const superDebug = false;
+    if(superDebug) {
+      for (final c in components) {
+        if (c is Collidable) {
+          for (final shape in c.shapes) {
+            canvas.renderPoint(shape.shapeCenter, size: 10);
+            canvas.renderPoint(c.absolutePosition, size: 10);
+            canvas.renderPoint(shape.anchorPosition, size: 5, paint: pathPaint);
+            if (shape is Polygon) {
+              final path = Path()
+                ..addPolygon(
+                  (shape as Polygon).hitbox()
+                      .map((point) => point.toOffset())
+                      .toList(),
+                  true,
+                );
+              canvas.drawPath(path, pathPaint);
+            }
           }
         }
       }

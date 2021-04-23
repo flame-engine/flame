@@ -31,8 +31,8 @@ abstract class Shape {
   Vector2 parentPosition = Vector2.zero();
 
   /// The center of the shape, before any rotation
-  Vector2 unrotatedCenter() => parentPosition + position + ((size / 2)
-    ..multiply(relativePosition));
+  Vector2 unrotatedCenter() =>
+      parentPosition + position + ((size / 2)..multiply(relativePosition));
 
   /// The position that the shape rotates around
   Vector2? _anchorPosition;
@@ -44,8 +44,8 @@ abstract class Shape {
     if (angle == 0 && relativePosition.isZero() && _anchorPosition == null) {
       return parentPosition + position;
     } else {
-      final center = unrotatedCenter();
-      return parentPosition + center..rotate(parentAngle + angle, center: anchorPosition);
+      return unrotatedCenter()
+        ..rotate(parentAngle + angle, center: parentPosition);
     }
   }
 
@@ -54,7 +54,8 @@ abstract class Shape {
     Vector2? size,
     this.angle = 0,
     this.parentAngle = 0,
-  }) : position = position ?? Vector2.zero(), size = size ?? Vector2.zero();
+  })  : position = position ?? Vector2.zero(),
+        size = size ?? Vector2.zero();
 
   /// Whether the point [p] is within the shapes boundaries or not
   bool containsPoint(Vector2 p);
