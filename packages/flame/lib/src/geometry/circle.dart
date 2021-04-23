@@ -39,10 +39,8 @@ class Circle extends Shape {
   /// circle will look the same rotated as not rotated.
   @override
   void render(Canvas canvas, Paint paint) {
-    final localPosition = size / 2 + position;
-    final localRelativePosition = (size / 2)..multiply(relativePosition);
     canvas.drawCircle(
-      (localPosition + localRelativePosition).toOffset(),
+      (isTranslated ? localCenter : absoluteCenter).toOffset(),
       radius,
       paint,
     );
@@ -51,7 +49,7 @@ class Circle extends Shape {
   /// Checks whether the represented circle contains the [point].
   @override
   bool containsPoint(Vector2 point) {
-    return shapeCenter.distanceToSquared(point) < radius * radius;
+    return absoluteCenter.distanceToSquared(point) < radius * radius;
   }
 
   /// Returns the locus of points in which the provided line segment intersect
@@ -65,8 +63,8 @@ class Circle extends Shape {
   }) {
     double sq(double x) => pow(x, 2).toDouble();
 
-    final cx = shapeCenter.x;
-    final cy = shapeCenter.y;
+    final cx = absoluteCenter.x;
+    final cy = absoluteCenter.y;
 
     final point1 = line.from;
     final point2 = line.to;

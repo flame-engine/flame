@@ -13,7 +13,7 @@ class Polygon extends Shape {
 
   /// With this constructor you create your [Polygon] from positions in your
   /// intended space. It will automatically calculate the [size] and center
-  /// ([position]) of the Polygon.
+  /// ([offsetPosition]) of the Polygon.
   factory Polygon(
     List<Vector2> points, {
     double angle = 0,
@@ -81,10 +81,11 @@ class Polygon extends Shape {
   @override
   void render(Canvas canvas, Paint paint) {
     // TODO(spydon): Take local angle into consideration
-    if (!_cachedRenderPath.isCacheValid([position, relativePosition, size])) {
+    if (!_cachedRenderPath
+        .isCacheValid([offsetPosition, relativeOffset, size])) {
       final halfSize = size / 2;
-      final localPosition = halfSize + position;
-      final localRelativePosition = halfSize..multiply(relativePosition);
+      final localPosition = halfSize + offsetPosition;
+      final localRelativePosition = halfSize..multiply(relativeOffset);
       _cachedRenderPath.updateCache(
         Path()
           ..addPolygon(
@@ -95,8 +96,8 @@ class Polygon extends Shape {
             true,
           ),
         [
-          position.clone(),
-          relativePosition.clone(),
+          offsetPosition.clone(),
+          relativeOffset.clone(),
           size.clone(),
         ],
       );
@@ -110,14 +111,15 @@ class Polygon extends Shape {
   /// are the "corners" of the hitbox rotated with [angle].
   List<Vector2> hitbox() {
     // Use cached bounding vertices if state of the component hasn't changed
-    if (!_cachedHitbox.isCacheValid([shapeCenter, size, parentAngle, angle])) {
+    if (!_cachedHitbox
+        .isCacheValid([absoluteCenter, size, parentAngle, angle])) {
       // TODO(spydon): Move out to own list to make more efficient
       _cachedHitbox.updateCache(
         scaled()
-            .map((point) => (shapeCenter + point)
-              ..rotate((parentAngle + angle), center: shapeCenter))
+            .map((point) => (absoluteCenter + point)
+              ..rotate((parentAngle + angle), center: absoluteCenter))
             .toList(growable: false),
-        [shapeCenter, size.clone(), parentAngle, angle],
+        [absoluteCenter, size.clone(), parentAngle, angle],
       );
     }
     return _cachedHitbox.value!;

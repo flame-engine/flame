@@ -1,5 +1,6 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
+import 'package:flame_example/stories/collision_detection/only_shapes.dart';
 
 import '../../commons/commons.dart';
 import 'circles.dart';
@@ -16,5 +17,10 @@ void addCollisionDetectionStories(Dashbook dashbook) {
       'Multiple shapes',
       (_) => GameWidget(game: MultipleShapes()),
       codeLink: baseLink('collision_detection/multiple_shapes.dart'),
+    )
+    ..add(
+      'Shapes without components',
+      (_) => GameWidget(game: OnlyShapes()),
+      codeLink: baseLink('collision_detection/only_shapes.dart'),
     );
 }

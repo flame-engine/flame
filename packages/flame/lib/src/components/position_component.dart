@@ -145,7 +145,7 @@ abstract class PositionComponent extends BaseComponent {
   @override
   bool containsPoint(Vector2 point) {
     final rectangle = Rectangle.fromRect(toAbsoluteRect(), angle: angle)
-      ..anchorPosition = absolutePosition;
+      ..position = absoluteCenter;
     return rectangle.containsPoint(point);
   }
 

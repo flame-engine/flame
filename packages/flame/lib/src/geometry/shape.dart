@@ -9,11 +9,10 @@ import 'shape_intersections.dart' as intersection_system;
 /// center.
 /// A point can be determined to be within of outside of a shape.
 abstract class Shape {
-  /// The position of your shape, it is up to you how you treat this
-  Vector2 position;
-
-  /// The position of your shape in relation to its size
-  Vector2 relativePosition = Vector2.zero();
+  /// Should be the center of that [offsetPosition] and [relativeOffset]
+  /// should be calculated from, if they are not set this is the center of the
+  /// shape
+  Vector2 position = Vector2.zero();
 
   /// The size is the bounding box of the [Shape]
   Vector2 size;
@@ -21,33 +20,40 @@ abstract class Shape {
   /// The angle of the shape from its initial definition
   double angle;
 
+  /// The local position of your shape, so the diff from the [position] of the
+  /// shape
+  Vector2 offsetPosition = Vector2.zero();
+
+  /// The position of your shape in relation to its size
+  Vector2 relativeOffset = Vector2.zero();
+
+  /// The [relativeOffset] converted to a vector
+  Vector2 get relativePosition => (size / 2)..multiply(relativeOffset);
+
   /// The angle of the parent that has to be taken into consideration for some
   /// applications of [Shape], for example [HitboxShape]
   double parentAngle;
 
-  /// The position of the parent that has to be taken into consideration for some
-  /// applications of [Shape], for example [HitboxShape]
-  /// (Should be the rotated center of the parent)
-  Vector2 parentCenter = Vector2.zero();
-
   /// The center of the shape, before any rotation
   Vector2 unrotatedCenter() =>
-      parentCenter + position + ((size / 2)..multiply(relativePosition));
+      position.clone()..add(offsetPosition)..add(relativePosition);
 
-  /// The position that the shape rotates around
-  Vector2? _anchorPosition;
-  Vector2 get anchorPosition => _anchorPosition ?? unrotatedCenter();
-  set anchorPosition(Vector2 position) => _anchorPosition = position;
+  /// The center position of the shape within itself, without rotation
+  Vector2 get localCenter =>
+      (size / 2)..add(relativePosition)..add(offsetPosition);
 
   /// The shape's absolute center with rotation taken into account
-  Vector2 get shapeCenter {
-    if (angle == 0 && relativePosition.isZero() && _anchorPosition == null) {
-      return parentCenter + position;
+  Vector2 get absoluteCenter {
+    if (angle == 0 && relativeOffset.isZero()) {
+      return position + offsetPosition;
     } else {
-      return unrotatedCenter()
-        ..rotate(parentAngle + angle, center: parentCenter);
+      return unrotatedCenter()..rotate(parentAngle + angle, center: position);
     }
   }
+
+  /// Whether the canvas has been translated or not when it comes to rendering
+  /// the shape
+  final bool isTranslated = false;
 
   Shape({
     Vector2? position,
@@ -72,7 +78,7 @@ mixin HitboxShape on Shape {
   late PositionComponent component;
 
   @override
-  Vector2 get anchorPosition => component.absolutePosition;
+  final bool isTranslated = true;
 
   @override
   Vector2 get size => component.size;
@@ -81,7 +87,7 @@ mixin HitboxShape on Shape {
   double get parentAngle => component.angle;
 
   @override
-  Vector2 get parentCenter => component.absoluteCenter;
+  Vector2 get position => component.absoluteCenter;
 
   /// Assign your own [CollisionCallback] if you want a callback when this
   /// shape collides with another [HitboxShape]
