@@ -88,14 +88,14 @@ class Polygon extends Shape {
   @override
   void render(Canvas canvas, Paint paint) {
     if (!_cachedRenderPath
-        .isCacheValid([offsetPosition, relativeOffset, size])) {
+        .isCacheValid([offsetPosition, relativeOffset, size, angle])) {
       final center = isTranslated ? localCenter : absoluteCenter;
       _cachedRenderPath.updateCache(
         Path()
           ..addPolygon(
             scaled()
                 .map(
-                  (point) => ((center + point)..rotate(angle)).toOffset(),
+                  (point) => ((center + point)..rotate(angle, center: center)).toOffset(),
                 )
                 .toList(),
             true,
@@ -104,6 +104,7 @@ class Polygon extends Shape {
           offsetPosition.clone(),
           relativeOffset.clone(),
           size.clone(),
+          angle,
         ],
       );
     }
