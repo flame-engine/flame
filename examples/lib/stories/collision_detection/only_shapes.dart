@@ -54,13 +54,11 @@ class OnlyShapes extends BaseGame with TapDetector {
   @override
   void onTapDown(TapDownInfo event) {
     final tapDownPoint = event.eventPosition.game;
-    final shape = shapes.firstWhere(
-        (shape) => shape.containsPoint(tapDownPoint),
-        orElse: () => randomShape(tapDownPoint));
-    if (shapes.contains(shape)) {
-      shapes.remove(shape);
+    final shapesToRemove = shapes.where((e) => e.containsPoint(tapDownPoint));
+    if (shapesToRemove.isNotEmpty) {
+      shapes.removeWhere(shapesToRemove.contains);
     } else {
-      shapes.add(shape);
+      shapes.add(randomShape(tapDownPoint));
     }
   }
 }
