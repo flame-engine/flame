@@ -102,7 +102,7 @@ void main() {
       game.onResize(Vector2.all(10));
 
       // no-op because the default is already top left
-      game.camera.setRelativeOffset(Anchor.topLeft.toVector2());
+      game.camera.setRelativeOffset(Anchor.topLeft);
       // top left corner of the screen is (-100, -100)
       game.camera.snapTo(Vector2.all(-100));
       // zoom is 2x, meaning every 1 unit you walk away of (-100, -100)
@@ -118,7 +118,7 @@ void main() {
 
       // note: in the current implementation, if we change the relative position
       // the zoom is still applied w.r.t. the top left of the screen
-      game.camera.setRelativeOffset(Anchor.center.toVector2());
+      game.camera.setRelativeOffset(Anchor.center);
       game.camera.snap();
 
       // that means that the center would be -100, -100 if the zoom was 1

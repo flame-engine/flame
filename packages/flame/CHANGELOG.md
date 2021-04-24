@@ -7,6 +7,8 @@
  - Adding `SpriteAnimationGroupComponent`
  - Allow isometric tile maps with custom heights
  - Add a new renderRect method to Sprite
+ - Addresses the TODO to change the camera public APIs to take Anchors for relativePositions
+ - Adds methods to support moving the camera relative to its current position
 
 ## [1.0.0-rc9]
  - Fix input bug with other anchors than center
