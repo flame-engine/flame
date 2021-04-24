@@ -95,7 +95,8 @@ class Polygon extends Shape {
           ..addPolygon(
             scaled()
                 .map(
-                  (point) => ((center + point)..rotate(angle, center: center)).toOffset(),
+                  (point) => ((center + point)..rotate(angle, center: center))
+                      .toOffset(),
                 )
                 .toList(),
             true,

@@ -139,9 +139,9 @@ class SnowmanPart extends HitboxCircle {
     ..strokeWidth = 1
     ..style = PaintingStyle.stroke;
 
-  SnowmanPart(double definition, Vector2 relativePosition, Color hitColor)
+  SnowmanPart(double definition, Vector2 relativeOffset, Color hitColor)
       : super(definition: definition) {
-    this.relativeOffset.setFrom(relativePosition);
+    this.relativeOffset.setFrom(relativeOffset);
     onCollision = (Set<Vector2> intersectionPoints, HitboxShape other) {
       if (other.component is ScreenCollidable) {
         hitPaint..color = startColor;
