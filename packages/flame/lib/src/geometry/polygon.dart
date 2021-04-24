@@ -9,11 +9,14 @@ import 'shape.dart';
 
 class Polygon extends Shape {
   final List<Vector2> normalizedVertices;
+  // These lists are used to minimize the amount of [Vector2] objects that are
+  // created, only change them if the cache is deemed invalid
   late final List<Vector2> _sizedVertices;
+  late final List<Vector2> _hitboxVertices;
 
   /// With this constructor you create your [Polygon] from positions in your
   /// intended space. It will automatically calculate the [size] and center
-  /// ([offsetPosition]) of the Polygon.
+  /// ([position]) of the Polygon.
   factory Polygon(
     List<Vector2> points, {
     double angle = 0,
@@ -59,6 +62,11 @@ class Polygon extends Shape {
       (_) => Vector2.zero(),
       growable: false,
     );
+    _hitboxVertices = List.generate(
+      normalizedVertices.length,
+      (_) => Vector2.zero(),
+      growable: false,
+    );
   }
 
   final _cachedScaledShape = ShapeCache<Iterable<Vector2>>();
@@ -66,7 +74,6 @@ class Polygon extends Shape {
   /// Gives back the shape vectors multiplied by the size
   Iterable<Vector2> scaled() {
     if (!_cachedScaledShape.isCacheValid([size])) {
-      final halfSize = size / 2;
       for (var i = 0; i < _sizedVertices.length; i++) {
         final point = normalizedVertices[i];
         (_sizedVertices[i]..setFrom(point)).multiply(halfSize);
@@ -80,18 +87,16 @@ class Polygon extends Shape {
 
   @override
   void render(Canvas canvas, Paint paint) {
-    // TODO(spydon): Take local angle into consideration
     if (!_cachedRenderPath
         .isCacheValid([offsetPosition, relativeOffset, size])) {
-      final halfSize = size / 2;
-      final localPosition = halfSize + offsetPosition;
-      final localRelativePosition = halfSize..multiply(relativeOffset);
+      final center = isTranslated ? localCenter : absoluteCenter;
       _cachedRenderPath.updateCache(
         Path()
           ..addPolygon(
             scaled()
-                .map((point) =>
-                    (point + localPosition + localRelativePosition).toOffset())
+                .map(
+                  (point) => ((center + point)..rotate(angle)).toOffset(),
+                )
                 .toList(),
             true,
           ),
@@ -113,12 +118,16 @@ class Polygon extends Shape {
     // Use cached bounding vertices if state of the component hasn't changed
     if (!_cachedHitbox
         .isCacheValid([absoluteCenter, size, parentAngle, angle])) {
-      // TODO(spydon): Move out to own list to make more efficient
+      final scaledVertices = scaled().toList(growable: false);
+      final center = absoluteCenter;
+      for (var i = 0; i < _hitboxVertices.length; i++) {
+        _hitboxVertices[i]
+          ..setFrom(center)
+          ..add(scaledVertices[i])
+          ..rotate(parentAngle + angle, center: center);
+      }
       _cachedHitbox.updateCache(
-        scaled()
-            .map((point) => (absoluteCenter + point)
-              ..rotate((parentAngle + angle), center: absoluteCenter))
-            .toList(growable: false),
+        _hitboxVertices,
         [absoluteCenter, size.clone(), parentAngle, angle],
       );
     }

@@ -9,6 +9,10 @@ import 'shape_intersections.dart' as intersection_system;
 /// center.
 /// A point can be determined to be within of outside of a shape.
 abstract class Shape {
+  final ShapeCache<Vector2> _halfSizeCache = ShapeCache();
+  final ShapeCache<Vector2> _localCenterCache = ShapeCache();
+  final ShapeCache<Vector2> _absoluteCenterCache = ShapeCache();
+
   /// Should be the center of that [offsetPosition] and [relativeOffset]
   /// should be calculated from, if they are not set this is the center of the
   /// shape
@@ -17,6 +21,13 @@ abstract class Shape {
   /// The size is the bounding box of the [Shape]
   Vector2 size;
 
+  Vector2 get halfSize {
+    if (!_halfSizeCache.isCacheValid([size])) {
+      _halfSizeCache.updateCache(size / 2, [size.clone()]);
+    }
+    return _halfSizeCache.value!;
+  }
+
   /// The angle of the shape from its initial definition
   double angle;
 
@@ -24,31 +35,60 @@ abstract class Shape {
   /// shape
   Vector2 offsetPosition = Vector2.zero();
 
-  /// The position of your shape in relation to its size
+  /// The position of your shape in relation to its size from (-1,-1) to (1,1)
   Vector2 relativeOffset = Vector2.zero();
 
-  /// The [relativeOffset] converted to a vector
+  /// The [relativeOffset] converted to a length vector
   Vector2 get relativePosition => (size / 2)..multiply(relativeOffset);
 
   /// The angle of the parent that has to be taken into consideration for some
   /// applications of [Shape], for example [HitboxShape]
   double parentAngle;
 
-  /// The center of the shape, before any rotation
-  Vector2 unrotatedCenter() =>
-      position.clone()..add(offsetPosition)..add(relativePosition);
-
   /// The center position of the shape within itself, without rotation
-  Vector2 get localCenter =>
-      (size / 2)..add(relativePosition)..add(offsetPosition);
+  Vector2 get localCenter {
+    final stateValues = [
+      size,
+      relativeOffset,
+      offsetPosition,
+    ];
+    if (!_localCenterCache.isCacheValid(stateValues)) {
+      final center = (size / 2)..add(relativePosition)..add(offsetPosition);
+      _localCenterCache.updateCache(
+        center,
+        stateValues.map((e) => e.clone()).toList(growable: false),
+      );
+    }
+    return _localCenterCache.value!;
+  }
 
   /// The shape's absolute center with rotation taken into account
   Vector2 get absoluteCenter {
-    if (angle == 0 && relativeOffset.isZero()) {
-      return position + offsetPosition;
-    } else {
-      return unrotatedCenter()..rotate(parentAngle + angle, center: position);
+    final stateValues = [
+      position,
+      offsetPosition,
+      relativeOffset,
+      angle,
+      parentAngle,
+    ];
+    if (!_absoluteCenterCache.isCacheValid(stateValues)) {
+      /// The center of the shape, before any rotation
+      final center = position + offsetPosition;
+      if (!relativeOffset.isZero()) {
+        center.add(relativePosition);
+      }
+      if (angle != 0 || parentAngle != 0) {
+        center.rotate(parentAngle + angle, center: position);
+      }
+      _absoluteCenterCache.updateCache(center, [
+        position.clone(),
+        offsetPosition.clone(),
+        relativeOffset.clone(),
+        angle,
+        parentAngle,
+      ]);
     }
+    return _absoluteCenterCache.value!;
   }
 
   /// Whether the canvas has been translated or not when it comes to rendering

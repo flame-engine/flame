@@ -25,7 +25,7 @@ abstract class MyCollidable extends PositionComponent
   MyCollidable(Vector2 position, Vector2 size, this.velocity) {
     this.position = position;
     this.size = size;
-    anchor = Anchor.center;
+    anchor = Anchor.topLeft;
   }
 
   @override
@@ -77,6 +77,9 @@ abstract class MyCollidable extends PositionComponent
         break;
       case CollidableRectangle:
         debugColor = Colors.cyan;
+        break;
+      case CollidableSnowman:
+        debugColor = Colors.amber;
         break;
       default:
         debugColor = Colors.pink;
@@ -191,7 +194,7 @@ class MultipleShapes extends BaseGame
     add(screen);
     add(snowman);
     var totalAdded = 1;
-    while (totalAdded < 20) {
+    while (totalAdded < 10) {
       lastToAdd = createRandomCollidable(lastToAdd);
       final lastBottomRight =
           lastToAdd.toAbsoluteRect().bottomRight.toVector2();
@@ -219,7 +222,7 @@ class MultipleShapes extends BaseGame
       position = (lastCollidable.position + _distance)
         ..x += collidableSize.x / 2;
     }
-    final velocity = Vector2.random(_rng) * 200;
+    final velocity = (Vector2.random(_rng) - Vector2.random(_rng)) * 400;
     final rotationSpeed = 0.5 - _rng.nextDouble();
     final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
     switch (shapeType) {
@@ -235,7 +238,7 @@ class MultipleShapes extends BaseGame
     }
   }
 
-  Paint pathPaint = Paint()
+  final Paint _pathPaint = Paint()
     ..color = Colors.amber
     ..style = PaintingStyle.stroke;
   @override
@@ -262,7 +265,7 @@ class MultipleShapes extends BaseGame
                       .toList(),
                   true,
                 );
-              canvas.drawPath(path, pathPaint);
+              canvas.drawPath(path, _pathPaint);
             }
           }
         }

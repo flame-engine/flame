@@ -43,8 +43,8 @@ extension Vector2Extension on Vector2 {
   /// a clockwise fashion
   /// In a normal coordinate system it rotates in a counter-clockwise fashion
   void rotate(double angle, {Vector2? center}) {
-    if (isZero()) {
-      // No point in rotating the zero vector
+    if (isZero() || angle == 0) {
+      // No point in rotating the zero vector or to rotate with 0 as angle
       return;
     }
     if (center == null) {
