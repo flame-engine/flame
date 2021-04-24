@@ -197,7 +197,6 @@ void main() {
       final position = Vector2(-2.0, -3.0);
       final center = Vector2(1.0, 0.0);
       position.rotate(math.pi / 2, center: center);
-      print(position);
       expectVector2(position, Vector2(4.0, -3.0));
     });
   });
