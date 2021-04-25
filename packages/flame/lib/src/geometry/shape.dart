@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
-
 import '../../components.dart';
 import '../../game.dart';
 import '../extensions/vector2.dart';
