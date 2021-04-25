@@ -118,9 +118,15 @@ class CameraAndViewportGame extends BaseGame
     with KeyboardEvents, HasCollidables, HasTapableComponents {
   late MovableSquare square;
 
+  final Vector2 viewportResolution;
+
+  CameraAndViewportGame({
+    required this.viewportResolution,
+  });
+
   @override
   Future<void> onLoad() async {
-    viewport = FixedResolutionViewport(Vector2(500, 500));
+    viewport = FixedResolutionViewport(viewportResolution);
     add(Map());
 
     add(square = MovableSquare());
