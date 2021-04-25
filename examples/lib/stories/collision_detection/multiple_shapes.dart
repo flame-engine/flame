@@ -21,11 +21,17 @@ abstract class MyCollidable extends PositionComponent
   final _activePaint = Paint()..color = Colors.amber;
   late final Color _defaultDebugColor = debugColor;
   bool _isHit = false;
+  final ScreenCollidable screenCollidable;
 
-  MyCollidable(Vector2 position, Vector2 size, this.velocity) {
+  MyCollidable(
+    Vector2 position,
+    Vector2 size,
+    this.velocity,
+    this.screenCollidable,
+  ) {
     this.position = position;
     this.size = size;
-    anchor = Anchor.topLeft;
+    anchor = Anchor.center;
   }
 
   @override
@@ -47,9 +53,10 @@ abstract class MyCollidable extends PositionComponent
     final topLeft = absoluteCenter - (size / 2);
     if (topLeft.x + size.x < 0 ||
         topLeft.y + size.y < 0 ||
-        topLeft.x > gameRef.size.x ||
-        topLeft.y > gameRef.size.y) {
-      topLeftPosition = topLeftPosition % (gameRef.size + size);
+        topLeft.x > screenCollidable.size.x ||
+        topLeft.y > screenCollidable.size.y) {
+      final moduloSize = screenCollidable.size + (size * gameRef.camera.zoom);
+      topLeftPosition = topLeftPosition % moduloSize;
     }
   }
 
@@ -101,8 +108,12 @@ abstract class MyCollidable extends PositionComponent
 }
 
 class CollidablePolygon extends MyCollidable {
-  CollidablePolygon(Vector2 position, Vector2 size, Vector2 velocity)
-      : super(position, size, velocity) {
+  CollidablePolygon(
+    Vector2 position,
+    Vector2 size,
+    Vector2 velocity,
+    ScreenCollidable screenCollidable,
+  ) : super(position, size, velocity, screenCollidable) {
     final shape = HitboxPolygon([
       Vector2(-1.0, 0.0),
       Vector2(-0.8, 0.6),
@@ -118,15 +129,23 @@ class CollidablePolygon extends MyCollidable {
 }
 
 class CollidableRectangle extends MyCollidable {
-  CollidableRectangle(Vector2 position, Vector2 size, Vector2 velocity)
-      : super(position, size, velocity) {
+  CollidableRectangle(
+    Vector2 position,
+    Vector2 size,
+    Vector2 velocity,
+    ScreenCollidable screenCollidable,
+  ) : super(position, size, velocity, screenCollidable) {
     addShape(HitboxRectangle());
   }
 }
 
 class CollidableCircle extends MyCollidable {
-  CollidableCircle(Vector2 position, Vector2 size, Vector2 velocity)
-      : super(position, size, velocity) {
+  CollidableCircle(
+    Vector2 position,
+    Vector2 size,
+    Vector2 velocity,
+    ScreenCollidable screenCollidable,
+  ) : super(position, size, velocity, screenCollidable) {
     final shape = HitboxCircle();
     addShape(shape);
   }
@@ -158,8 +177,12 @@ class SnowmanPart extends HitboxCircle {
 }
 
 class CollidableSnowman extends MyCollidable {
-  CollidableSnowman(Vector2 position, Vector2 size, Vector2 velocity)
-      : super(position, size, velocity) {
+  CollidableSnowman(
+    Vector2 position,
+    Vector2 size,
+    Vector2 velocity,
+    ScreenCollidable screenCollidable,
+  ) : super(position, size, velocity, screenCollidable) {
     rotationSpeed = 0.3;
     anchor = Anchor.topLeft;
     final top = SnowmanPart(0.4, Vector2(0, -0.8), Colors.red);
@@ -184,21 +207,26 @@ class MultipleShapes extends BaseGame
 
   @override
   Future<void> onLoad() async {
-    final screen = ScreenCollidable();
+    await super.onLoad();
+    camera.zoom = 2.0;
+    final screenCollidable = ScreenCollidable();
     final snowman = CollidableSnowman(
       Vector2.all(150),
       Vector2(100, 200),
       Vector2(-100, 100),
+      screenCollidable,
     );
     MyCollidable lastToAdd = snowman;
-    add(screen);
+    add(screenCollidable);
     add(snowman);
     var totalAdded = 1;
     while (totalAdded < 10) {
-      lastToAdd = createRandomCollidable(lastToAdd);
+      lastToAdd = createRandomCollidable(lastToAdd, screenCollidable);
       final lastBottomRight =
           lastToAdd.toAbsoluteRect().bottomRight.toVector2();
-      if (screen.containsPoint(lastBottomRight)) {
+      final screenSize = size / camera.zoom;
+      if (lastBottomRight.x < screenSize.x &&
+          lastBottomRight.y < screenSize.y) {
         add(lastToAdd);
         totalAdded++;
       } else {
@@ -210,7 +238,10 @@ class MultipleShapes extends BaseGame
   final _rng = Random();
   final _distance = Vector2(100, 0);
 
-  MyCollidable createRandomCollidable(MyCollidable lastCollidable) {
+  MyCollidable createRandomCollidable(
+    MyCollidable lastCollidable,
+    ScreenCollidable screen,
+  ) {
     final collidableSize = Vector2.all(50) + Vector2.random(_rng) * 100;
     final isXOverflow = lastCollidable.position.x +
             lastCollidable.size.x / 2 +
@@ -227,13 +258,13 @@ class MultipleShapes extends BaseGame
     final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
     switch (shapeType) {
       case Shapes.circle:
-        return CollidableCircle(position, collidableSize, velocity)
+        return CollidableCircle(position, collidableSize, velocity, screen)
           ..rotationSpeed = rotationSpeed;
       case Shapes.rectangle:
-        return CollidableRectangle(position, collidableSize, velocity)
+        return CollidableRectangle(position, collidableSize, velocity, screen)
           ..rotationSpeed = rotationSpeed;
       case Shapes.polygon:
-        return CollidablePolygon(position, collidableSize, velocity)
+        return CollidablePolygon(position, collidableSize, velocity, screen)
           ..rotationSpeed = rotationSpeed;
     }
   }

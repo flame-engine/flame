@@ -15,17 +15,22 @@ class OnlyShapes extends BaseGame with TapDetector {
   final myPaint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
   final _rng = Random();
 
+  OnlyShapes() {
+    camera.zoom = 2.0;
+  }
+
   Shape randomShape(Vector2 position) {
     final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
     const size = 50.0;
     switch (shapeType) {
       case Shapes.circle:
-        return Circle(radius: size / 2, position: position);
+        return Circle(radius: size / 2, position: position, camera: camera);
       case Shapes.rectangle:
         return Rectangle(
           position: position,
           size: Vector2.all(size),
-          angle: 0.5,
+          angle: _rng.nextDouble() * 6,
+          camera: camera,
         );
       case Shapes.polygon:
         final points = [
@@ -40,7 +45,8 @@ class OnlyShapes extends BaseGame with TapDetector {
           points,
           position: position,
           size: Vector2.all(size),
-          //angle: _rng.nextDouble() * 6,
+          angle: _rng.nextDouble() * 6,
+          camera: camera,
         );
     }
   }
@@ -48,7 +54,7 @@ class OnlyShapes extends BaseGame with TapDetector {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    shapes.forEach((shape) => shape.render(canvas, myPaint));
+    shapes.forEach((shape) => shape.renderShape(canvas, myPaint));
   }
 
   @override

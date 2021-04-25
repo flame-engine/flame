@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui' hide Canvas;
 
+import '../../game.dart';
 import '../../geometry.dart';
 import '../extensions/canvas.dart';
 import '../extensions/rect.dart';
@@ -20,6 +21,7 @@ class Polygon extends Shape {
   factory Polygon(
     List<Vector2> points, {
     double angle = 0,
+    Camera? camera,
   }) {
     final center = points.fold<Vector2>(
           Vector2.zero(),
@@ -43,6 +45,7 @@ class Polygon extends Shape {
       position: center,
       size: halfSize * 2,
       angle: angle,
+      camera: camera,
     );
   }
 
@@ -56,7 +59,13 @@ class Polygon extends Shape {
     Vector2? position,
     Vector2? size,
     double? angle,
-  }) : super(position: position, size: size, angle: angle ?? 0) {
+    Camera? camera,
+  }) : super(
+          position: position,
+          size: size,
+          angle: angle ?? 0,
+          camera: camera,
+        ) {
     _sizedVertices = List.generate(
       normalizedVertices.length,
       (_) => Vector2.zero(),
@@ -86,10 +95,10 @@ class Polygon extends Shape {
   final _cachedRenderPath = ShapeCache<Path>();
 
   @override
-  void render(Canvas canvas, Paint paint) {
+  void renderShape(Canvas canvas, Paint paint) {
     if (!_cachedRenderPath
         .isCacheValid([offsetPosition, relativeOffset, size, angle])) {
-      final center = isTranslated ? localCenter : absoluteCenter;
+      final center = renderCenter;
       _cachedRenderPath.updateCache(
         Path()
           ..addPolygon(
