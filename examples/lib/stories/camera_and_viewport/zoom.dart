@@ -27,7 +27,7 @@ class ZoomGame extends BaseGame with ScrollDetector, ScaleDetector {
     );
     camera.followComponent(
       flame,
-      relativeOffset: Anchor.center.toVector2(),
+      relativeOffset: Anchor.center,
     );
   }
 
