@@ -104,9 +104,10 @@ class TextPaintConfig extends BaseTextConfig {
     TextDirection textDirection = TextDirection.rtl,
     double? lineHeight,
   }) : super(
-            fontSize: fontSize,
-            textDirection: textDirection,
-            lineHeight: lineHeight);
+          fontSize: fontSize,
+          textDirection: textDirection,
+          lineHeight: lineHeight,
+        );
 
   /// Creates a new [TextPaintConfig] changing only the [fontSize].
   ///
