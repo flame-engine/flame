@@ -34,7 +34,11 @@ class LogoCompomnent extends SpriteComponent with HasGameRef<DebugGame> {
 }
 
 class DebugGame extends BaseGame {
-  static final fpsTextPaint = TextPaint(color: const Color(0xFFFFFFFF));
+  static final fpsTextPaint = TextPaint(
+    config: const TextPaintConfig(
+      color: Color(0xFFFFFFFF),
+    ),
+  );
 
   @override
   bool debugMode = true;

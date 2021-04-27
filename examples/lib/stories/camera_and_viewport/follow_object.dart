@@ -14,7 +14,11 @@ final R = Random();
 class MovableSquare extends SquareComponent
     with Hitbox, Collidable, HasGameRef<CameraAndViewportGame> {
   static const double speed = 300;
-  static final TextPaint textRenderer = TextPaint(fontSize: 12);
+  static final TextPaint textRenderer = TextPaint(
+    config: const TextPaintConfig(
+      fontSize: 12,
+    ),
+  );
 
   final Vector2 velocity = Vector2.zero();
   late Timer timer;

@@ -8,7 +8,11 @@ import 'extensions/size.dart';
 import 'extensions/vector2.dart';
 import 'memory_cache.dart';
 
-abstract class TextRenderer {
+abstract class TextRenderer<T extends BaseTextConfig> {
+  final T config;
+
+  TextRenderer({required this.config});
+
   /// Renders a given [text] in a given position [position] using the provided [canvas] and [anchor].
   ///
   /// Renders it in the given position, considering the [anchor] specified.
@@ -40,16 +44,30 @@ abstract class TextRenderer {
   }
 }
 
-/// A Text Config contains all typographical information required to render texts; i.e., font size and color, family, etc.
-///
-/// It does not hold information regarding the position of the text to be render neither the text itself (the string).
-/// To hold all those information, use the Text component.
-///
-/// It is used by [TextComponent].
-class TextPaint extends TextRenderer {
+/// A Text Config contains all typographical information required to render texts; i.e., font size, text direction, etc.
+abstract class BaseTextConfig {
   /// The font size to be used, in points.
   final double fontSize;
 
+  /// The direction to render this text (left to right or right to left).
+  ///
+  /// Normally, leave this as is for most languages.
+  /// For proper fonts of languages like Hebrew or Arabic, replace this with [TextDirection.rtl].
+  final TextDirection textDirection;
+
+  /// The height of line, as a multiple of font size.
+  final double? lineHeight;
+
+  const BaseTextConfig({
+    this.fontSize = 24.0,
+    this.textDirection = TextDirection.ltr,
+    this.lineHeight,
+  });
+}
+
+/// An extension of the BaseTextConfig which includes more configs supported by
+/// TextPaint
+class TextPaintConfig extends BaseTextConfig {
   /// The font color to be used.
   ///
   /// Dart's [Color] class is just a plain wrapper on top of ARGB color (0xAARRGGBB).
@@ -76,35 +94,94 @@ class TextPaint extends TextRenderer {
   /// The name you choose for the font family can be any name (it's not inside the TTF file and the filename doesn't need to match).
   final String fontFamily;
 
-  /// The [TextAlign] to be used when creating the [material.TextPainter].
-  ///
-  /// Beware: it's recommended to leave this with the default value of [TextAlign.left].
-  /// Use the anchor parameter to [render] to specify a proper relative position.
-  final TextAlign textAlign;
-
-  /// The direction to render this text (left to right or right to left).
-  ///
-  /// Normally, leave this as is for most languages.
-  /// For proper fonts of languages like Hebrew or Arabic, replace this with [TextDirection.rtl].
-  final TextDirection textDirection;
-
-  /// The height of line, as a multiple of font size.
-  final double? lineHeight;
-
-  final MemoryCache<String, material.TextPainter> _textPainterCache =
-      MemoryCache();
-
   /// Creates a constant [TextPaint] with sensible defaults.
   ///
   /// Every parameter can be specified.
-  TextPaint({
-    this.fontSize = 24.0,
+  const TextPaintConfig({
     this.color = const Color(0xFF000000),
     this.fontFamily = 'Arial',
-    this.textAlign = TextAlign.left,
-    this.textDirection = TextDirection.ltr,
-    this.lineHeight,
-  });
+    double fontSize = 24.0,
+    TextDirection textDirection = TextDirection.rtl,
+    double? lineHeight,
+  }) : super(
+            fontSize: fontSize,
+            textDirection: textDirection,
+            lineHeight: lineHeight);
+
+  /// Creates a new [TextPaintConfig] changing only the [fontSize].
+  ///
+  /// This does not change the original (as it's immutable).
+  TextPaintConfig withFontSize(double fontSize) {
+    return TextPaintConfig(
+      fontSize: fontSize,
+      color: color,
+      fontFamily: fontFamily,
+      textDirection: textDirection,
+    );
+  }
+
+  /// Creates a new [TextPaintConfig] changing only the [color].
+  ///
+  /// This does not change the original (as it's immutable).
+  TextPaintConfig withColor(Color color) {
+    return TextPaintConfig(
+      fontSize: fontSize,
+      color: color,
+      fontFamily: fontFamily,
+      textDirection: textDirection,
+    );
+  }
+
+  /// Creates a new [TextPaintConfig] changing only the [fontFamily].
+  ///
+  /// This does not change the original (as it's immutable).
+  TextPaintConfig withFontFamily(String fontFamily) {
+    return TextPaintConfig(
+      fontSize: fontSize,
+      color: color,
+      fontFamily: fontFamily,
+      textDirection: textDirection,
+    );
+  }
+
+  /// Creates a new [TextPaintConfig] changing only the [textAlign].
+  ///
+  /// This does not change the original (as it's immutable).
+  TextPaintConfig withTextAlign(TextAlign textAlign) {
+    return TextPaintConfig(
+      fontSize: fontSize,
+      color: color,
+      fontFamily: fontFamily,
+      textDirection: textDirection,
+    );
+  }
+
+  /// Creates a new [TextPaintConfig] changing only the [textDirection].
+  ///
+  /// This does not change the original (as it's immutable).
+  TextPaintConfig withTextDirection(TextDirection textDirection) {
+    return TextPaintConfig(
+      fontSize: fontSize,
+      color: color,
+      fontFamily: fontFamily,
+      textDirection: textDirection,
+    );
+  }
+}
+
+/// A Text Config contains all typographical information required to render texts; i.e., font size and color, family, etc.
+///
+/// It does not hold information regarding the position of the text to be render neither the text itself (the string).
+/// To hold all those information, use the Text component.
+///
+/// It is used by [TextComponent].
+class TextPaint extends TextRenderer<TextPaintConfig> {
+  final MemoryCache<String, material.TextPainter> _textPainterCache =
+      MemoryCache();
+
+  TextPaint({
+    TextPaintConfig config = const TextPaintConfig(),
+  }) : super(config: config);
 
   @override
   void render(
@@ -143,10 +220,10 @@ class TextPaint extends TextRenderer {
   material.TextPainter toTextPainter(String text) {
     if (!_textPainterCache.containsKey(text)) {
       final style = material.TextStyle(
-        color: color,
-        fontSize: fontSize,
-        fontFamily: fontFamily,
-        height: lineHeight,
+        color: config.color,
+        fontSize: config.fontSize,
+        fontFamily: config.fontFamily,
+        height: config.lineHeight,
       );
       final span = material.TextSpan(
         style: style,
@@ -154,78 +231,12 @@ class TextPaint extends TextRenderer {
       );
       final tp = material.TextPainter(
         text: span,
-        textAlign: textAlign,
-        textDirection: textDirection,
+        textDirection: config.textDirection,
       );
       tp.layout();
 
       _textPainterCache.setValue(text, tp);
     }
     return _textPainterCache.getValue(text)!;
-  }
-
-  /// Creates a new [TextPaint] changing only the [fontSize].
-  ///
-  /// This does not change the original (as it's immutable).
-  TextPaint withFontSize(double fontSize) {
-    return TextPaint(
-      fontSize: fontSize,
-      color: color,
-      fontFamily: fontFamily,
-      textAlign: textAlign,
-      textDirection: textDirection,
-    );
-  }
-
-  /// Creates a new [TextPaint] changing only the [color].
-  ///
-  /// This does not change the original (as it's immutable).
-  TextPaint withColor(Color color) {
-    return TextPaint(
-      fontSize: fontSize,
-      color: color,
-      fontFamily: fontFamily,
-      textAlign: textAlign,
-      textDirection: textDirection,
-    );
-  }
-
-  /// Creates a new [TextPaint] changing only the [fontFamily].
-  ///
-  /// This does not change the original (as it's immutable).
-  TextPaint withFontFamily(String fontFamily) {
-    return TextPaint(
-      fontSize: fontSize,
-      color: color,
-      fontFamily: fontFamily,
-      textAlign: textAlign,
-      textDirection: textDirection,
-    );
-  }
-
-  /// Creates a new [TextPaint] changing only the [textAlign].
-  ///
-  /// This does not change the original (as it's immutable).
-  TextPaint withTextAlign(TextAlign textAlign) {
-    return TextPaint(
-      fontSize: fontSize,
-      color: color,
-      fontFamily: fontFamily,
-      textAlign: textAlign,
-      textDirection: textDirection,
-    );
-  }
-
-  /// Creates a new [TextPaint] changing only the [textDirection].
-  ///
-  /// This does not change the original (as it's immutable).
-  TextPaint withTextDirection(TextDirection textDirection) {
-    return TextPaint(
-      fontSize: fontSize,
-      color: color,
-      fontFamily: fontFamily,
-      textAlign: textAlign,
-      textDirection: textDirection,
-    );
   }
 }

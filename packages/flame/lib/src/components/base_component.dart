@@ -50,7 +50,12 @@ abstract class BaseComponent extends Component {
     ..strokeWidth = 1
     ..style = PaintingStyle.stroke;
 
-  TextPaint get debugTextPaint => TextPaint(color: debugColor, fontSize: 12);
+  TextPaint get debugTextPaint => TextPaint(
+        config: TextPaintConfig(
+          color: debugColor,
+          fontSize: 12,
+        ),
+      );
 
   /// This method is called periodically by the game engine to request that your component updates itself.
   ///

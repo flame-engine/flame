@@ -4,7 +4,11 @@ import 'package:flame/timer.dart';
 import 'package:flame/gestures.dart';
 
 class RenderedTimeComponent extends TimerComponent {
-  final TextPaint textPaint = TextPaint(color: const Color(0xFFFFFFFF));
+  final TextPaint textPaint = TextPaint(
+    config: const TextPaintConfig(
+      color: Color(0xFFFFFFFF),
+    ),
+  );
 
   RenderedTimeComponent(Timer timer) : super(timer);
 

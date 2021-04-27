@@ -5,19 +5,25 @@ Flame has some dedicated classes to help you render text.
 ## TextRenderer
 
 `TextRenderer` is the abstract class used by Flame to render text. Flame provides one
-implementation for this called `TextPaint` but anyone can implement this and create
-a custom way to render text.
+implementation for this called `TextPaint` but anyone can implement this abstraction
+and create a custom way to render text.
 
 ## TextPaint
 
 A Text Paint is the built in implementation of text rendering on Flame, it is based on top of
-Flutter's `TextPainter` class (hence the name) and contains all typographical information
-required to render text; i.e., font size and color, family, etc.
+Flutter's `TextPainter` class (hence the name), it can be configured by its config class
+`TextPaingConfig` which contains all typographical information required to render text; i.e., font
+size and color, family, etc.
 
 Example usage:
 
 ```dart
-const TextPaint textPaint = TextPaint(fontSize: 48.0, fontFamily: 'Awesome Font');
+const TextPaint textPaint = TextPaint(
+  config: TextPaintConfig(
+    fontSize: 48.0,
+    fontFamily: 'Awesome Font',
+  ),
+);
 ```
 
  - `fontFamily`: a commonly available font, like Arial (default), or a custom font added in your
@@ -32,7 +38,7 @@ For more information regarding colors and how to create then, see the
 After the creation of the text paint you can use its `render` method to draw some string on a canvas:
 
 ```dart
-textPaint.render(canvas, "Flame is awesome", Position(10, 10));
+textPaint.render(canvas, "Flame is awesome", Vector2(10, 10));
 ```
 
 If you want to set the anchor of the text you can also do that in the render call, with the optional

@@ -22,7 +22,9 @@ class ParticlesGame extends BaseGame {
   final StepTween steppedTween = StepTween(begin: 0, end: 5);
   final trafficLight = TrafficLightComponent();
   final TextPaint fpsTextPaint = TextPaint(
-    color: const Color(0xFFFFFFFF),
+    config: const TextPaintConfig(
+      color: Color(0xFFFFFFFF),
+    ),
   );
 
   /// Defines the lifespan of all the particles in these examples
