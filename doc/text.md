@@ -12,7 +12,7 @@ and create a custom way to render text.
 
 A Text Paint is the built in implementation of text rendering on Flame, it is based on top of
 Flutter's `TextPainter` class (hence the name), it can be configured by its config class
-`TextPaingConfig` which contains all typographical information required to render text; i.e., font
+`TextPaintConfig` which contains all typographical information required to render text; i.e., font
 size and color, family, etc.
 
 Example usage:
