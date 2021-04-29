@@ -4,13 +4,17 @@ import 'package:flame/timer.dart';
 import 'package:flame/gestures.dart';
 
 class RenderedTimeComponent extends TimerComponent {
-  final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
+  final TextPaint textPaint = TextPaint(
+    config: const TextPaintConfig(
+      color: Color(0xFFFFFFFF),
+    ),
+  );
 
   RenderedTimeComponent(Timer timer) : super(timer);
 
   @override
   void render(Canvas canvas) {
-    textConfig.render(
+    textPaint.render(
       canvas,
       'Elapsed time: ${timer.current}',
       Vector2(10, 150),
