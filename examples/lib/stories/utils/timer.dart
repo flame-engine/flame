@@ -4,7 +4,11 @@ import 'package:flame/timer.dart';
 import 'package:flame/gestures.dart';
 
 class TimerGame extends Game with TapDetector {
-  final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
+  final TextPaint textConfig = TextPaint(
+    config: const TextPaintConfig(
+      color: Color(0xFFFFFFFF),
+    ),
+  );
   late Timer countdown;
   late Timer interval;
 
