@@ -8,6 +8,10 @@ import 'extensions/size.dart';
 import 'extensions/vector2.dart';
 import 'memory_cache.dart';
 
+/// [TextRenderer] is the abstract API that Flame uses for rendering text in its features
+/// this class can be extended to provide an implementation of text rendering in the engine.
+///
+/// See [TextPaint] for the default implementation offered by Flame
 abstract class TextRenderer<T extends BaseTextConfig> {
   final T config;
 
