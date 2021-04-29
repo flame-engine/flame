@@ -183,22 +183,22 @@ class Camera extends Projector {
 
   @override
   Vector2 unprojectVector(Vector2 screenCoordinates) {
-    return screenCoordinates * zoom + _position;
+    return (screenCoordinates + _position) / zoom;
   }
 
   @override
   Vector2 projectVector(Vector2 worldCoordinates) {
-    return (worldCoordinates - _position) / zoom;
+    return (worldCoordinates - _position) * zoom;
   }
 
   @override
   Vector2 unscaleVector(Vector2 screenCoordinates) {
-    return screenCoordinates * zoom;
+    return screenCoordinates / zoom;
   }
 
   @override
   Vector2 scaleVector(Vector2 worldCoordinates) {
-    return worldCoordinates / zoom;
+    return worldCoordinates * zoom;
   }
 
   /// This is the (current) absolute target of the camera, i.e., the

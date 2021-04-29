@@ -18,7 +18,7 @@ class Block {
 }
 
 /// This component renders a tilemap, represented by an int matrix, given a
-/// tileset, in witch the integers are the block ids.
+/// tileset, in which the integers are the block ids.
 ///
 /// It can change the scale of each block by using the optional destTileSize
 /// property.
@@ -68,7 +68,7 @@ class IsometricTileMapComponent extends PositionComponent {
     }
   }
 
-  /// Get the position in witch a block must be in the isometric space.
+  /// Get the position in which a block must be in the isometric space.
   ///
   /// This does not include the (x,y) PositionComponent offset!
   Vector2 getBlockPosition(Block block) {
