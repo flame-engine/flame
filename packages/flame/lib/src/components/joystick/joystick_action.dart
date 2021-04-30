@@ -163,13 +163,13 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   }
 
   @override
-  bool onDragStart(int pointerId, Vector2 startPosition) {
+  bool onDragStart(int pointerId, DragStartInfo info) {
     if (_dragging) {
       return true;
     }
 
     if (enableDirection) {
-      _dragPosition = startPosition;
+      _dragPosition = info.eventPosition.widget;
       _dragging = true;
     }
     _sendEvent(ActionEvent.down);

@@ -1,4 +1,3 @@
-import '../../extensions.dart';
 import '../game/game.dart';
 import 'events.dart';
 
@@ -11,7 +10,7 @@ mixin MultiTouchTapDetector on Game {
 }
 
 mixin MultiTouchDragDetector on Game {
-  void onDragStart(int pointerId, Vector2 startPosition) {}
+  void onDragStart(int pointerId, DragStartInfo info) {}
   void onDragUpdate(int pointerId, DragUpdateInfo info) {}
   void onDragEnd(int pointerId, DragEndInfo info) {}
   void onDragCancel(int pointerId) {}
