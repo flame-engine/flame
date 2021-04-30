@@ -138,5 +138,21 @@ void main() {
       expect(child.rendered, true);
       expect(child.updated, true);
     });
+
+    test('initially same debugMode as parent', () {
+      final game = MyGame();
+      game.onResize(Vector2.all(100));
+      final child = MyTap();
+      final wrapper = MyComposed();
+      wrapper.debugMode = true;
+
+      wrapper.addChild(child);
+      game.add(wrapper);
+      game.update(0.0);
+
+      expect(child.debugMode, true);
+      wrapper.debugMode = false;
+      expect(child.debugMode, true);
+    });
   });
 }
