@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../../../extensions.dart';
 import '../../game/base_game.dart';
 import '../../gestures/events.dart';
 import '../base_component.dart';
 
 mixin Draggable on BaseComponent {
-  bool onDragStart(int pointerId, Vector2 startPosition) {
+  bool onDragStart(int pointerId, DragStartInfo info) {
     return true;
   }
 
-  bool onDragUpdate(int pointerId, DragUpdateInfo details) {
+  bool onDragUpdate(int pointerId, DragUpdateInfo info) {
     return true;
   }
 
-  bool onDragEnd(int pointerId, DragEndInfo details) {
+  bool onDragEnd(int pointerId, DragEndInfo info) {
     return true;
   }
 
@@ -25,10 +24,10 @@ mixin Draggable on BaseComponent {
   final List<int> _currentPointerIds = [];
   bool _checkPointerId(int pointerId) => _currentPointerIds.contains(pointerId);
 
-  bool handleDragStart(int pointerId, Vector2 startPosition) {
-    if (containsPoint(startPosition)) {
+  bool handleDragStart(int pointerId, DragStartInfo info) {
+    if (containsPoint(info.eventPosition.game)) {
       _currentPointerIds.add(pointerId);
-      return onDragStart(pointerId, startPosition);
+      return onDragStart(pointerId, info);
     }
     return true;
   }
@@ -59,8 +58,8 @@ mixin Draggable on BaseComponent {
 
 mixin HasDraggableComponents on BaseGame {
   @mustCallSuper
-  void onDragStart(int pointerId, Vector2 startPosition) {
-    _onGenericEventReceived((c) => c.handleDragStart(pointerId, startPosition));
+  void onDragStart(int pointerId, DragStartInfo info) {
+    _onGenericEventReceived((c) => c.handleDragStart(pointerId, info));
   }
 
   @mustCallSuper

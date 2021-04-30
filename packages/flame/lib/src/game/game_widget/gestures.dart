@@ -192,14 +192,28 @@ Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
     );
   }
 
-  void addDragRecognizer(Drag Function(int, Vector2) config) {
+  void addDragRecognizer(Game game, Drag Function(int, DragStartInfo) config) {
     addAndConfigureRecognizer(
       () => ImmediateMultiDragGestureRecognizer(),
       (ImmediateMultiDragGestureRecognizer instance) {
         instance.onStart = (Offset o) {
           final pointerId = lastGeneratedDragId++;
-          final position = game.convertGlobalToLocalCoordinate(o.toVector2());
-          return config(pointerId, position);
+
+          final global = o;
+          final local = game
+              .convertGlobalToLocalCoordinate(
+                global.toVector2(),
+              )
+              .toOffset();
+
+          final details = DragStartDetails(
+            localPosition: local,
+            globalPosition: global,
+          );
+          return config(
+            pointerId,
+            DragStartInfo.fromDetails(game, details),
+          );
         };
       },
     );
@@ -228,15 +242,15 @@ Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
   }
 
   if (game is MultiTouchDragDetector) {
-    addDragRecognizer((int pointerId, Vector2 position) {
-      game.onDragStart(pointerId, position);
+    addDragRecognizer(game, (int pointerId, DragStartInfo info) {
+      game.onDragStart(pointerId, info);
       return _DragEvent(game)
         ..onUpdate = ((details) => game.onDragUpdate(pointerId, details))
         ..onEnd = ((details) => game.onDragEnd(pointerId, details))
         ..onCancel = (() => game.onDragCancel(pointerId));
     });
   } else if (game is HasDraggableComponents) {
-    addDragRecognizer((int pointerId, Vector2 position) {
+    addDragRecognizer(game, (int pointerId, DragStartInfo position) {
       game.onDragStart(pointerId, position);
       return _DragEvent(game)
         ..onUpdate = ((details) => game.onDragUpdate(pointerId, details))
