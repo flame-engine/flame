@@ -158,6 +158,7 @@ abstract class BaseComponent extends Component {
 
     if (child is BaseComponent) {
       child._parent = this;
+      child.debugMode = debugMode;
     }
 
     final childOnLoadFuture = child.onLoad();
