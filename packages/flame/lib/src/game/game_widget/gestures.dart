@@ -200,17 +200,19 @@ Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
           final pointerId = lastGeneratedDragId++;
 
           final global = o;
-          final local = game.convertGlobalToLocalCoordinate(
-              global.toVector2(),
-          ).toOffset();
+          final local = game
+              .convertGlobalToLocalCoordinate(
+                global.toVector2(),
+              )
+              .toOffset();
 
           final details = DragStartDetails(
-              localPosition: local,
-              globalPosition: global,
+            localPosition: local,
+            globalPosition: global,
           );
           return config(
-              pointerId,
-              DragStartInfo.fromDetails(game, details),
+            pointerId,
+            DragStartInfo.fromDetails(game, details),
           );
         };
       },

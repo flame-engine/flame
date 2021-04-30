@@ -67,7 +67,7 @@ class BatchItem {
     required this.source,
     required this.transform,
     required this.color,
-  })   : matrix = Matrix4(
+  })  : matrix = Matrix4(
           transform.scos, transform.ssin, 0, 0, //
           -transform.ssin, transform.scos, 0, 0, //
           0, 0, _defaultScale, 0, //

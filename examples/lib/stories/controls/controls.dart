@@ -52,7 +52,17 @@ void addControlsStories(Dashbook dashbook) {
     )
     ..add(
       'Draggables',
-      (_) => GameWidget(game: DraggablesGame()),
+      (context) {
+        return GameWidget(
+          game: DraggablesGame(
+            zoom: context.listProperty(
+              'zoom',
+              1,
+              [0.5, 1, 1.5],
+            ),
+          ),
+        );
+      },
       codeLink: baseLink('gestures/draggables.dart'),
     )
     ..add(
