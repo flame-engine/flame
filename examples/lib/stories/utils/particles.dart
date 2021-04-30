@@ -21,8 +21,10 @@ class ParticlesGame extends BaseGame {
   final Random rnd = Random();
   final StepTween steppedTween = StepTween(begin: 0, end: 5);
   final trafficLight = TrafficLightComponent();
-  final TextConfig fpsTextConfig = TextConfig(
-    color: const Color(0xFFFFFFFF),
+  final TextPaint fpsTextPaint = TextPaint(
+    config: const TextPaintConfig(
+      color: Color(0xFFFFFFFF),
+    ),
   );
 
   /// Defines the lifespan of all the particles in these examples
@@ -474,7 +476,7 @@ class ParticlesGame extends BaseGame {
     super.render(canvas);
 
     if (debugMode) {
-      fpsTextConfig.render(
+      fpsTextPaint.render(
         canvas,
         '${fps(120).toStringAsFixed(2)}fps',
         Vector2(0, size.y - 24),

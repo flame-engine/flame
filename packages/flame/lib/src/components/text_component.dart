@@ -4,14 +4,12 @@ import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
 import '../extensions/vector2.dart';
-import '../text_config.dart';
+import '../text.dart';
 import 'position_component.dart';
 
 class TextComponent extends PositionComponent {
   String _text;
-  TextConfig _config;
-
-  late TextPainter _tp;
+  TextRenderer _textRenderer;
 
   String get text => _text;
 
@@ -22,32 +20,32 @@ class TextComponent extends PositionComponent {
     }
   }
 
-  TextConfig get config => _config;
+  TextRenderer get textRenderer => _textRenderer;
 
-  set config(TextConfig config) {
-    _config = config;
+  set textRenderer(TextRenderer textRenderer) {
+    _textRenderer = textRenderer;
     _updateBox();
   }
 
   TextComponent(
     this._text, {
-    TextConfig? config,
+    TextRenderer? textRenderer,
     Vector2? position,
     Vector2? size,
-  })  : _config = config ?? TextConfig(),
+  })  : _textRenderer = textRenderer ?? TextPaint(),
         super(position: position, size: size) {
     _updateBox();
   }
 
   void _updateBox() {
-    _tp = config.toTextPainter(_text);
-    size.setValues(_tp.width, _tp.height);
+    final size = textRenderer.measureText(_text);
+    size.setValues(size.x, size.y);
   }
 
   @mustCallSuper
   @override
-  void render(Canvas c) {
-    super.render(c);
-    _tp.paint(c, Offset.zero);
+  void render(Canvas canvas) {
+    super.render(canvas);
+    _textRenderer.render(canvas, text, Vector2.zero());
   }
 }

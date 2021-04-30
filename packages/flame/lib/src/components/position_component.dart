@@ -156,7 +156,7 @@ abstract class PositionComponent extends BaseComponent {
       (this as Hitbox).renderShapes(canvas);
     }
     canvas.drawRect(size.toRect(), debugPaint);
-    debugTextConfig.render(
+    debugTextPaint.render(
       canvas,
       'x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}',
       Vector2(-50, -15),
@@ -165,7 +165,7 @@ abstract class PositionComponent extends BaseComponent {
     final rect = toRect();
     final dx = rect.right;
     final dy = rect.bottom;
-    debugTextConfig.render(
+    debugTextPaint.render(
       canvas,
       'x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}',
       Vector2(width - 50, height),
