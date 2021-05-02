@@ -9,6 +9,7 @@
  - Add a new renderRect method to Sprite
  - Addresses the TODO to change the camera public APIs to take Anchors for relativePositions
  - Adds methods to support moving the camera relative to its current position
+ - Abstracting the text api to allow custom text renderers on the framework
 
 ## [1.0.0-rc9]
  - Fix input bug with other anchors than center

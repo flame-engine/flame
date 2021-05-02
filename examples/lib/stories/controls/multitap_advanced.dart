@@ -39,9 +39,9 @@ class MultitapAdvancedGame extends BaseGame
   }
 
   @override
-  void onDragStart(int pointerId, Vector2 position) {
+  void onDragStart(int pointerId, DragStartInfo info) {
     end = null;
-    start = position;
+    start = info.eventPosition.game;
   }
 
   @override

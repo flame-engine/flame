@@ -27,8 +27,8 @@ class DraggableSquare extends PositionComponent
   }
 
   @override
-  bool onDragStart(int pointerId, Vector2 startPosition) {
-    dragDeltaPosition = startPosition - position;
+  bool onDragStart(int pointerId, DragStartInfo info) {
+    dragDeltaPosition = info.eventPosition.game - position;
     return false;
   }
 
@@ -57,8 +57,13 @@ class DraggableSquare extends PositionComponent
 }
 
 class DraggablesGame extends BaseGame with HasDraggableComponents {
+  final double zoom;
+
+  DraggablesGame({required this.zoom});
+
   @override
   Future<void> onLoad() async {
+    camera.zoom = zoom;
     add(DraggableSquare());
     add(DraggableSquare()..y = 350);
   }

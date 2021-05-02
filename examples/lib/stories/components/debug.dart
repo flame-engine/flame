@@ -34,7 +34,11 @@ class LogoCompomnent extends SpriteComponent with HasGameRef<DebugGame> {
 }
 
 class DebugGame extends BaseGame {
-  static final fpsTextConfig = TextConfig(color: const Color(0xFFFFFFFF));
+  static final fpsTextPaint = TextPaint(
+    config: const TextPaintConfig(
+      color: Color(0xFFFFFFFF),
+    ),
+  );
 
   @override
   bool debugMode = true;
@@ -67,7 +71,7 @@ class DebugGame extends BaseGame {
     super.render(canvas);
 
     if (debugMode) {
-      fpsTextConfig.render(canvas, fps(120).toString(), Vector2(0, 50));
+      fpsTextPaint.render(canvas, fps(120).toString(), Vector2(0, 50));
     }
   }
 }
