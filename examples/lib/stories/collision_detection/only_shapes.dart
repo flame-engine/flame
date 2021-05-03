@@ -36,9 +36,7 @@ class OnlyShapes extends BaseGame with TapDetector {
         final points = [
           Vector2.random(_rng),
           Vector2.random(_rng)..y *= -1,
-          Vector2.random(_rng)
-            ..y *= -1
-            ..x *= -1,
+          -Vector2.random(_rng),
           Vector2.random(_rng)..x *= -1,
         ];
         return Polygon.fromDefinition(
