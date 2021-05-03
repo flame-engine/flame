@@ -1,16 +1,9 @@
 import 'dart:ui' hide Offset;
 
-import 'package:flame/components.dart';
-import 'package:flame/geometry.dart';
-
+import '../../components.dart';
+import '../../geometry.dart';
 import '../anchor.dart';
-import '../extensions/offset.dart';
-import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
-import '../geometry/rectangle.dart';
-import 'base_component.dart';
-import 'component.dart';
-import 'mixins/hitbox.dart';
 
 class ShapeComponent extends PositionComponent {
   final Shape shape;

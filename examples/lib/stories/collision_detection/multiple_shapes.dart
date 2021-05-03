@@ -208,7 +208,6 @@ class MultipleShapes extends BaseGame
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    camera.zoom = 2.0;
     final screenCollidable = ScreenCollidable();
     final snowman = CollidableSnowman(
       Vector2.all(150),
@@ -269,9 +268,6 @@ class MultipleShapes extends BaseGame
     }
   }
 
-  final Paint _pathPaint = Paint()
-    ..color = Colors.amber
-    ..style = PaintingStyle.stroke;
   @override
   void render(Canvas canvas) {
     super.render(canvas);
@@ -280,27 +276,5 @@ class MultipleShapes extends BaseGame
       '${fps(120).toStringAsFixed(2)}fps',
       Vector2(0, size.y - 24),
     );
-    const superDebug = false;
-    if (superDebug) {
-      for (final c in components) {
-        if (c is Collidable) {
-          for (final shape in c.shapes) {
-            canvas.renderPoint(shape.absoluteCenter, size: 10);
-            canvas.renderPoint(c.absolutePosition, size: 10);
-            if (shape is Polygon) {
-              final path = Path()
-                ..addPolygon(
-                  (shape as Polygon)
-                      .hitbox()
-                      .map((point) => point.toOffset())
-                      .toList(),
-                  true,
-                );
-              canvas.drawPath(path, _pathPaint);
-            }
-          }
-        }
-      }
-    }
   }
 }
