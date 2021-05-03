@@ -143,8 +143,9 @@ class Camera extends Projector {
   /// When using this method you are responsible for saving/restoring canvas
   /// state to avoid leakage.
   void apply(Canvas canvas) {
-    canvas.translateVector(-position
-      ..scale(zoom));
+    canvas.translateVector(
+      (-position)..scale(zoom),
+    );
     canvas.scale(zoom);
   }
 
