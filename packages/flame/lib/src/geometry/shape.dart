@@ -92,43 +92,18 @@ abstract class Shape {
     return _absoluteCenterCache.value!;
   }
 
-  Vector2 get renderCenter {
-    final zoom = isTranslated ? 1.0 : (camera?.zoom ?? 1);
-    return (isTranslated ? localCenter : absoluteCenter) / zoom;
-  }
-
-  /// Whether the canvas has been translated or not when it comes to rendering
-  /// the shape
-  final bool isTranslated = false;
-
-  /// Needed if you want your shapes to align with the zoom level set in the
-  /// camera
-  final Camera? camera;
-
   Shape({
     Vector2? position,
     Vector2? size,
     this.angle = 0,
     this.parentAngle = 0,
-    this.camera,
   })  : position = position ?? Vector2.zero(),
         size = size ?? Vector2.zero();
 
   /// Whether the point [p] is within the shapes boundaries or not
   bool containsPoint(Vector2 p);
 
-  void render(Canvas canvas, Paint paint) {
-    canvas.save();
-    if (!isTranslated && camera != null) {
-      camera!.apply(canvas);
-    }
-    renderShape(canvas, paint);
-    canvas.restore();
-  }
-
-  /// This is what should be overridden to render the shape so that the camera
-  /// is taken into account
-  void renderShape(Canvas canvas, Paint paint);
+  void render(Canvas canvas, Paint paint);
 
   /// Where this Shape has intersection points with another shape
   Set<Vector2> intersections(Shape other) {
@@ -138,9 +113,6 @@ abstract class Shape {
 
 mixin HitboxShape on Shape {
   late PositionComponent component;
-
-  @override
-  final bool isTranslated = true;
 
   @override
   Vector2 get size => component.size;

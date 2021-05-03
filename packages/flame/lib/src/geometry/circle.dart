@@ -18,12 +18,10 @@ class Circle extends Shape {
     double? radius,
     Vector2? position,
     double angle = 0,
-    Camera? camera,
   }) : super(
           position: position,
           size: Vector2.all((radius ?? 0) * 2),
           angle: angle,
-          camera: camera,
         );
 
   /// This constructor is used by [HitboxCircle]
@@ -34,16 +32,15 @@ class Circle extends Shape {
     Vector2? position,
     Vector2? size,
     double? angle,
-    Camera? camera,
-  }) : super(position: position, size: size, angle: angle ?? 0, camera: camera);
+  }) : super(position: position, size: size, angle: angle ?? 0);
 
   double get radius => (min(size.x, size.y) / 2) * normalizedRadius;
 
   /// This render method doesn't rotate the canvas according to angle since a
   /// circle will look the same rotated as not rotated.
   @override
-  void renderShape(Canvas canvas, Paint paint) {
-    canvas.drawCircle(renderCenter.toOffset(), radius, paint);
+  void render(Canvas canvas, Paint paint) {
+    canvas.drawCircle(localCenter.toOffset(), radius, paint);
   }
 
   /// Checks whether the represented circle contains the [point].

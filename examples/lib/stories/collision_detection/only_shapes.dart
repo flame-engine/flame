@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
@@ -10,27 +11,21 @@ import 'package:flutter/material.dart' hide Image, Draggable;
 
 enum Shapes { circle, rectangle, polygon }
 
-class OnlyShapes extends BaseGame with TapDetector {
-  final shapes = List<Shape>.empty(growable: true);
-  final myPaint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
+class OnlyShapes extends BaseGame with HasTapableComponents {
+  final shapePaint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
   final _rng = Random();
-
-  OnlyShapes() {
-    camera.zoom = 2.0;
-  }
 
   Shape randomShape(Vector2 position) {
     final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
     const size = 50.0;
     switch (shapeType) {
       case Shapes.circle:
-        return Circle(radius: size / 2, position: position, camera: camera);
+        return Circle(radius: size / 2, position: position);
       case Shapes.rectangle:
         return Rectangle(
           position: position,
           size: Vector2.all(size),
           angle: _rng.nextDouble() * 6,
-          camera: camera,
         );
       case Shapes.polygon:
         final points = [
@@ -44,25 +39,26 @@ class OnlyShapes extends BaseGame with TapDetector {
           position: position,
           size: Vector2.all(size),
           angle: _rng.nextDouble() * 6,
-          camera: camera,
         );
     }
   }
 
   @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    shapes.forEach((shape) => shape.renderShape(canvas, myPaint));
-  }
-
-  @override
-  void onTapDown(TapDownInfo event) {
+  void onTapDown(int pointerId, TapDownInfo event) {
+    super.onTapDown(pointerId, event);
     final tapDownPoint = event.eventPosition.game;
-    final shapesToRemove = shapes.where((e) => e.containsPoint(tapDownPoint));
-    if (shapesToRemove.isNotEmpty) {
-      shapes.removeWhere(shapesToRemove.contains);
-    } else {
-      shapes.add(randomShape(tapDownPoint));
-    }
+    final component = ShapeComponent2(randomShape(tapDownPoint), shapePaint);
+    add(component);
   }
 }
+
+class ShapeComponent2 extends ShapeComponent with Tapable {
+  ShapeComponent2(Shape shape, Paint shapePaint) : super(shape, shapePaint);
+  
+  @override
+  bool onTapDown(TapDownInfo event) {
+    remove();
+    return true;
+  }
+}
+

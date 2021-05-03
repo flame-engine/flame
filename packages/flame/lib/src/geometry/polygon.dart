@@ -21,7 +21,6 @@ class Polygon extends Shape {
   factory Polygon(
     List<Vector2> points, {
     double angle = 0,
-    Camera? camera,
   }) {
     final center = points.fold<Vector2>(
           Vector2.zero(),
@@ -45,7 +44,6 @@ class Polygon extends Shape {
       position: center,
       size: halfSize * 2,
       angle: angle,
-      camera: camera,
     );
   }
 
@@ -59,12 +57,10 @@ class Polygon extends Shape {
     Vector2? position,
     Vector2? size,
     double? angle,
-    Camera? camera,
   }) : super(
           position: position,
           size: size,
           angle: angle ?? 0,
-          camera: camera,
         ) {
     _sizedVertices =
         normalizedVertices.map((_) => Vector2.zero()).toList(growable: false);
@@ -89,10 +85,10 @@ class Polygon extends Shape {
   final _cachedRenderPath = ShapeCache<Path>();
 
   @override
-  void renderShape(Canvas canvas, Paint paint) {
+  void render(Canvas canvas, Paint paint) {
     if (!_cachedRenderPath
         .isCacheValid([offsetPosition, relativeOffset, size, angle])) {
-      final center = renderCenter;
+      final center = localCenter;
       _cachedRenderPath.updateCache(
         Path()
           ..addPolygon(

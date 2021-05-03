@@ -17,13 +17,11 @@ class Rectangle extends Polygon {
     Vector2? position,
     Vector2? size,
     double angle = 0,
-    Camera? camera,
   }) : super.fromDefinition(
           _defaultNormalizedVertices,
           position: position,
           size: size,
           angle: angle,
-          camera: camera,
         );
 
   /// This constructor is used by [HitboxRectangle] and is most often not useful
@@ -44,7 +42,6 @@ class Rectangle extends Polygon {
     Vector2? position,
     Vector2? size,
     double angle = 0,
-    Camera? camera,
   }) : super.fromDefinition(
           relation != null
               ? [
@@ -57,7 +54,6 @@ class Rectangle extends Polygon {
           position: position,
           size: size,
           angle: angle,
-          camera: camera,
         );
 
   /// With this helper method you can create your [Rectangle] from a positioned
@@ -66,13 +62,11 @@ class Rectangle extends Polygon {
   factory Rectangle.fromRect(
     Rect rect, {
     double angle = 0,
-    Camera? camera,
   }) {
     return Rectangle.fromDefinition(
       position: rect.center.toVector2(),
       size: rect.size.toVector2(),
       angle: angle,
-      camera: camera,
     );
   }
 }
