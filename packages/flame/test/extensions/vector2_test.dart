@@ -3,12 +3,10 @@ import 'dart:math' as math;
 import 'package:flame/extensions.dart';
 import 'package:test/test.dart';
 
+import '../util/expect_vector2.dart';
+
 void expectDouble(double d1, double d2) {
   expect((d1 - d2).abs() <= 0.0001, true);
-}
-
-void expectVector2(Vector2 v1, Vector2 v2) {
-  expect(v1.distanceTo(v2) <= 0.0001, true);
 }
 
 void main() {

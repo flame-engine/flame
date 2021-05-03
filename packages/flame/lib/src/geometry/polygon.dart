@@ -66,12 +66,10 @@ class Polygon extends Shape {
           angle: angle ?? 0,
           camera: camera,
         ) {
-    _sizedVertices = normalizedVertices
-        .map((_) => Vector2.zero())
-        .toList(growable: false);
-    _hitboxVertices = normalizedVertices
-        .map((_) => Vector2.zero())
-        .toList(growable: false);
+    _sizedVertices =
+        normalizedVertices.map((_) => Vector2.zero()).toList(growable: false);
+    _hitboxVertices =
+        normalizedVertices.map((_) => Vector2.zero()).toList(growable: false);
   }
 
   final _cachedScaledShape = ShapeCache<Iterable<Vector2>>();

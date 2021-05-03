@@ -191,11 +191,11 @@ void main() {
       component.angle = 2.0;
       component.anchor = Anchor.center;
 
-      expect(component.center == component.position, true);
-      expect(component.absoluteCenter == component.position, true);
+      expect(component.center, component.position);
+      expect(component.absoluteCenter, component.position);
       expect(
-        component.topLeftPosition == component.position - component.size / 2,
-        true,
+        component.topLeftPosition,
+        component.position - component.size / 2,
       );
     });
 
@@ -206,11 +206,8 @@ void main() {
       component.angle = 0.0;
       component.anchor = Anchor.topLeft;
 
-      expect(component.center == component.position + component.size / 2, true);
-      expect(
-        component.absoluteCenter == component.position + component.size / 2,
-        true,
-      );
+      expect(component.center, component.position + component.size / 2);
+      expect(component.absoluteCenter, component.position + component.size / 2);
     });
 
     test('component with parent has the correct center', () {
@@ -224,19 +221,12 @@ void main() {
       child.anchor = Anchor.topLeft;
       parent.addChild(child);
 
+      expect(child.absoluteTopLeftPosition, child.position + parent.position);
       expect(
-        child.absoluteTopLeftPosition == child.position + parent.position,
-        true,
+        child.absoluteTopLeftPosition,
+        child.topLeftPosition + parent.topLeftPosition,
       );
-      expect(
-        child.absoluteTopLeftPosition ==
-            child.topLeftPosition + parent.topLeftPosition,
-        true,
-      );
-      expect(
-        child.absoluteCenter == parent.position + child.center,
-        true,
-      );
+      expect(child.absoluteCenter, parent.position + child.center);
     });
   });
 }
