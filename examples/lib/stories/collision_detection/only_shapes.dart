@@ -54,11 +54,10 @@ class OnlyShapes extends BaseGame with HasTapableComponents {
 
 class ShapeComponent2 extends ShapeComponent with Tapable {
   ShapeComponent2(Shape shape, Paint shapePaint) : super(shape, shapePaint);
-  
+
   @override
   bool onTapDown(TapDownInfo event) {
     remove();
     return true;
   }
 }
-
