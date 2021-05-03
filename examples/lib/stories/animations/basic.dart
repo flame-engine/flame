@@ -5,17 +5,14 @@ import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 
 class BasicAnimations extends BaseGame with TapDetector {
-  late Image chopper;
   late Image creature;
-  late SpriteAnimation animation;
 
   @override
   Future<void> onLoad() async {
-    chopper = await images.load('animations/chopper.png');
     creature = await images.load('animations/creature.png');
 
-    animation = SpriteAnimation.fromFrameData(
-      chopper,
+    final animation = await loadSpriteAnimation(
+      'animations/chopper.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         textureSize: Vector2.all(48),

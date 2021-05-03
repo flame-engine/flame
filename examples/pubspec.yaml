@@ -11,14 +11,14 @@ environment:
 dependencies:
   flame:
     path: ../packages/flame
-  dashbook: 0.1.1
+  dashbook: 0.1.2
   flutter:
     sdk: flutter
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  dart_code_metrics: ^2.4.0
+  dart_code_metrics: ^3.1.0
 
 flutter:
   uses-material-design: true
