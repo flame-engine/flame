@@ -260,7 +260,7 @@ void main() {
       // each screen unit is 1/2 a viewport unit
       // each viewport unit is 1/4 of a camera unit
       // so a game unit is 1/8 the screen unit
-      expect(game.unprojectVector(Vector2.zero()), Vector2(50, -100/8));
+      expect(game.unprojectVector(Vector2.zero()), Vector2(50, -100 / 8));
       // the top left of the camera (50, 0) should be at screen coordinates
       // (0, 100)
       expect(game.unprojectVector(Vector2(0, 100)), Vector2(50, 0));
