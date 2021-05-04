@@ -1,3 +1,4 @@
+import 'package:flame/extensions.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:test/test.dart';
 
@@ -25,6 +26,28 @@ void main() {
         () => Anchor.valueOf('foobar'),
         throwsA(const TypeMatcher<AssertionError>()),
       );
+    });
+
+    test('can convert topLeft anchor to another anchor positions', () {
+      final position = Vector2(3, 1);
+      final size = Vector2(2, 3);
+      final center = Anchor.topLeft.toOtherAnchorPosition(
+        position,
+        Anchor.center,
+        size,
+      );
+      expect(center, position + size / 2);
+    });
+
+    test('can convert center anchor to another anchor positions', () {
+      final position = Vector2(3, 1);
+      final size = Vector2(2, 3);
+      final topLeft = Anchor.center.toOtherAnchorPosition(
+        position,
+        Anchor.topLeft,
+        size,
+      );
+      expect(topLeft, position - size / 2);
     });
   });
 }

@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import '../../game.dart';
 import '../../geometry.dart';
 import '../extensions/vector2.dart';
 import 'shape.dart';
@@ -33,23 +34,19 @@ class Circle extends Shape {
     double? angle,
   }) : super(position: position, size: size, angle: angle ?? 0);
 
-  double get radius => (min(size!.x, size!.y) / 2) * normalizedRadius;
+  double get radius => (min(size.x, size.y) / 2) * normalizedRadius;
 
+  /// This render method doesn't rotate the canvas according to angle since a
+  /// circle will look the same rotated as not rotated.
   @override
   void render(Canvas canvas, Paint paint) {
-    final localPosition = size! / 2 + position;
-    final localRelativePosition = (size! / 2)..multiply(relativePosition);
-    canvas.drawCircle(
-      (localPosition + localRelativePosition).toOffset(),
-      radius,
-      paint,
-    );
+    canvas.drawCircle(localCenter.toOffset(), radius, paint);
   }
 
   /// Checks whether the represented circle contains the [point].
   @override
   bool containsPoint(Vector2 point) {
-    return shapeCenter.distanceToSquared(point) < radius * radius;
+    return absoluteCenter.distanceToSquared(point) < radius * radius;
   }
 
   /// Returns the locus of points in which the provided line segment intersect
@@ -63,8 +60,8 @@ class Circle extends Shape {
   }) {
     double sq(double x) => pow(x, 2).toDouble();
 
-    final cx = shapeCenter.x;
-    final cy = shapeCenter.y;
+    final cx = absoluteCenter.x;
+    final cy = absoluteCenter.y;
 
     final point1 = line.from;
     final point2 = line.to;
