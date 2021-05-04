@@ -8,8 +8,7 @@ This tutorial will introduce you to:
  - Basic rendering: You will get introduced to the basics of using the `Canvas` class from `dart:ui`
  which is the class that Flame uses for rendering your game.
 
-All the code of this tutorial code can be found [here](./code) and is based on the Flame `1.0.0-rc9`
-version.
+All the code of this tutorial code can be found [here](./code).
 
 By the end of this tutorial you will have built a simple game that renders a square bouncing on the
 screen that will look like this:
