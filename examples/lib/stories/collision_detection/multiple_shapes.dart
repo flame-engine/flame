@@ -12,7 +12,7 @@ import 'package:flutter/material.dart' hide Image, Draggable;
 enum Shapes { circle, rectangle, polygon }
 
 abstract class MyCollidable extends PositionComponent
-    with Draggable, Hitbox, Collidable, HasGameRef<MultipleShapes> {
+    with Draggable, Hitbox, Collidable {
   double rotationSpeed = 0.0;
   final Vector2 velocity;
   final delta = Vector2.zero();
@@ -55,7 +55,7 @@ abstract class MyCollidable extends PositionComponent
         topLeft.y + size.y < 0 ||
         topLeft.x > screenCollidable.size.x ||
         topLeft.y > screenCollidable.size.y) {
-      final moduloSize = screenCollidable.size + (size * gameRef.camera.zoom);
+      final moduloSize = screenCollidable.size + size;
       topLeftPosition = topLeftPosition % moduloSize;
     }
   }
