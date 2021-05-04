@@ -3,7 +3,6 @@ import 'package:flame/game.dart';
 
 import '../../commons/commons.dart';
 import 'follow_object.dart';
-import 'test.dart';
 import 'zoom.dart';
 
 void addCameraAndViewportStories(Dashbook dashbook) {
@@ -27,21 +26,6 @@ void addCameraAndViewportStories(Dashbook dashbook) {
          Move around with W, A, S, D and notice how the camera follows the white square
          The blue squares can also be clicked to show how the coordinate system respect
          The camera transformation
-      */
-    )
-    ..add(
-      'Test',
-          (context) {
-        return GameWidget(
-          game: TestGame(),
-        );
-      },
-      codeLink: baseLink('camera_and_viewport/test.dart'),
-      /*
-         Text for instructions:
-
-         On web: use scroll to zoom in and out
-         On mobile: use scale gesture to zoom in and out
       */
     )
     ..add(

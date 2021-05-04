@@ -1,6 +1,6 @@
 name: flame
 description: A minimalist Flutter game engine, provides a nice set of somewhat independent modules you can choose from.
-version: 1.0.0-rc9
+version: 1.0.0-rc10
 homepage: https://github.com/flame-engine/flame
 
 dependencies:
@@ -14,7 +14,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   test: ^1.16.0
-  dart_code_metrics: ^3.0.0-nullsafety.1
+  dart_code_metrics: ^3.1.0
   dartdoc: ^0.42.0
 
 environment:
