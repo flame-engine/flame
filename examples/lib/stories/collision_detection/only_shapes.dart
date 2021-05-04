@@ -47,13 +47,13 @@ class OnlyShapes extends BaseGame with HasTapableComponents {
   void onTapDown(int pointerId, TapDownInfo event) {
     super.onTapDown(pointerId, event);
     final tapDownPoint = event.eventPosition.game;
-    final component = ShapeComponent2(randomShape(tapDownPoint), shapePaint);
+    final component = MyShapeComponent(randomShape(tapDownPoint), shapePaint);
     add(component);
   }
 }
 
-class ShapeComponent2 extends ShapeComponent with Tapable {
-  ShapeComponent2(Shape shape, Paint shapePaint) : super(shape, shapePaint);
+class MyShapeComponent extends ShapeComponent with Tapable {
+  MyShapeComponent(Shape shape, Paint shapePaint) : super(shape, shapePaint);
 
   @override
   bool onTapDown(TapDownInfo event) {
