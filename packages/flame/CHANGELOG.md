@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [next]
+## [1.0.0-rc10]
  - Updated tutorial documentation to indicate use of new version
  - Fix bounding box check in collision detection
  - Refactor on flame input system to correctly take camera into account
