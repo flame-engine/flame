@@ -76,11 +76,11 @@ void main() {
       _assertIdentityOfProjector(game);
 
       expect(game.unprojectVector(Vector2.zero()), Vector2.zero());
-      expect(game.unprojectVector(Vector2(1, 2)), Vector2(3, 6));
+      expect(game.unprojectVector(Vector2(3, 6)), Vector2(1, 2));
 
       // delta considers the zoom
       expect(game.unscaleVector(Vector2.zero()), Vector2.zero());
-      expect(game.unscaleVector(Vector2(1, 2)), Vector2(3, 6));
+      expect(game.unscaleVector(Vector2(3, 6)), Vector2(1, 2));
     });
     test('camera only with translation (default viewport)', () {
       final game = BaseGame(); // default viewport
@@ -111,10 +111,10 @@ void main() {
 
       expect(game.unprojectVector(Vector2.zero()), Vector2(-100, -100));
       // let's "walk" 10 pixels down on the screen;
-      // that means the world walks 20 units
-      expect(game.unprojectVector(Vector2(0, 10)), Vector2(-100, -80));
-      // to get to the world 0,0 we need to walk 50 units
-      expect(game.unprojectVector(Vector2.all(50)), Vector2.zero());
+      // that means the world walks 5 units
+      expect(game.unprojectVector(Vector2(0, 10)), Vector2(-100, -95));
+      // to get to the world 0,0 we need to walk 200 screen units
+      expect(game.unprojectVector(Vector2.all(200)), Vector2.zero());
 
       // note: in the current implementation, if we change the relative position
       // the zoom is still applied w.r.t. the top left of the screen
@@ -125,13 +125,13 @@ void main() {
       // meaning the topLeft will be -105, -105 (regardless of zoom)
       expect(game.unprojectVector(Vector2.zero()), Vector2.all(-105));
       // and with 2x zoom the center will actually be -95, -95
-      expect(game.unprojectVector(Vector2.all(5)), Vector2.all(-95));
+      expect(game.unprojectVector(Vector2.all(5)), Vector2.all(-102.5));
       // TODO(luan) we might want to change the behaviour so that the zoom
       // is applied w.r.t. the relativeOffset and not topLeft
 
       // for deltas, we consider only the zoom
       expect(game.unscaleVector(Vector2.zero()), Vector2.zero());
-      expect(game.unscaleVector(Vector2(1, 2)), Vector2(2, 4));
+      expect(game.unscaleVector(Vector2(2, 4)), Vector2(1, 2));
     });
     test('camera & viewport - two translations', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
@@ -166,20 +166,20 @@ void main() {
       // (50, 0) is the top left corner of the camera
       expect(game.unprojectVector(Vector2(50, 0)), Vector2.zero());
       // the top left of the screen is 50 viewport units to the left,
-      // but applying the camera zoom on top results in 100 units
+      // but applying the camera zoom on top results in 25 units
       // in the game space
-      expect(game.unprojectVector(Vector2.zero()), Vector2(-100, 0));
-      // each one unit we walk to right or bottom means two units
-      expect(game.unprojectVector(Vector2(51, 10)), Vector2(2, 20));
+      expect(game.unprojectVector(Vector2.zero()), Vector2(-25, 0));
+      // for every two units we walk to right or bottom means one game units
+      expect(game.unprojectVector(Vector2(52, 20)), Vector2(1, 10));
       // the bottom right of the viewport is at (150, 100) on screen coordinates
       // for the viewport that is walking (100, 100) in viewport units
-      // for the camera we need to double that so it means walking (200, 200)
+      // for the camera we need to half that so it means walking (50, 50)
       // this is the bottom-right most world pixel that is painted
-      expect(game.unprojectVector(Vector2(150, 100)), Vector2.all(200));
+      expect(game.unprojectVector(Vector2(150, 100)), Vector2.all(50));
 
       // for deltas, we consider only the 2x zoom of the camera
       expect(game.unscaleVector(Vector2.zero()), Vector2.zero());
-      expect(game.unscaleVector(Vector2(1, 2)), Vector2(2, 4));
+      expect(game.unscaleVector(Vector2(2, 4)), Vector2(1, 2));
     });
     test('camera translation & viewport scale+translation', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
@@ -212,9 +212,9 @@ void main() {
       expect(viewport.scale, 2);
       expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
 
-      // the camera should apply a (10, 10) translation + a 2x zoom on top of
+      // the camera should apply a (10, 10) translation + a 0.5x zoom on top of
       // the viewport coordinate system
-      game.camera.zoom = 2;
+      game.camera.zoom = 0.5;
       game.camera.snapTo(Vector2.all(10));
 
       _assertIdentityOfProjector(game);
@@ -226,15 +226,15 @@ void main() {
       expect(game.unprojectVector(Vector2.zero()), Vector2(10, -90));
       // the top-left most visible pixel on the viewport would be at (0, 100)
       // in screen coordinates. That should be the top left of the camera that
-      // is snaped to 10,10 by definition.
+      // is snapped to 10,10 by definition.
       expect(game.unprojectVector(Vector2(0, 100)), Vector2(10, 10));
-      // now each unit we walk in screen space means only 1/2 units on the
+      // now each unit we walk in screen space means only 2 units on the
       // viewport space because of the scale. however, since the camera applies
-      // a 2x zoom, each unit step equals to 1 unit on the game space
+      // a 1/2x zoom, each unit step equals to 1 unit on the game space
       expect(game.unprojectVector(Vector2(1, 100)), Vector2(11, 10));
       // the last pixel of the viewport is on screen coordinates of (200, 300)
       // for the camera, that should be: top left (10,10) + effective size
-      // (100, 100) * zoom (2)
+      // (100, 100) * zoom (1/2)
       expect(game.unprojectVector(Vector2(200, 300)), Vector2.all(210));
 
       // for deltas, since the scale and the zoom cancel out, this should no-op
@@ -259,23 +259,22 @@ void main() {
       // that means 100 screen units above the top left of the camera (50, 0)
       // each screen unit is 1/2 a viewport unit
       // each viewport unit is 1/4 of a camera unit
-      // so a game unit is 2x the screen unit
-      expect(game.unprojectVector(Vector2.zero()), Vector2(50, -200));
+      // so a game unit is 1/8 the screen unit
+      expect(game.unprojectVector(Vector2.zero()), Vector2(50, -100 / 8));
       // the top left of the camera (50, 0) should be at screen coordinates
       // (0, 100)
       expect(game.unprojectVector(Vector2(0, 100)), Vector2(50, 0));
       // now each unit we walk on that 200 unit square on screen equals to
       // 1/2 units on the same 100 unit square on the viewport space
-      // then, given the 4x camera zoom, each viewport unit becomes 1/4 of a
+      // then, given the 4x camera zoom, each viewport unit becomes 4x a
       // game unit.
-      // Meaning in total we have a 2x multiplier for each step
-      expect(game.unprojectVector(Vector2(1, 100)), Vector2(52, 0));
-      expect(game.unprojectVector(Vector2(1, 102)), Vector2(52, 4));
-      expect(game.unprojectVector(Vector2(10, 112)), Vector2(70, 24));
+      expect(game.unprojectVector(Vector2(8, 108)), Vector2(51, 1));
+      expect(game.unprojectVector(Vector2(16, 104)), Vector2(52, 0.5));
+      expect(game.unprojectVector(Vector2(12, 112)), Vector2(51.5, 1.5));
 
-      // deltas only care about the effective scaling factor, witch is 2x
+      // deltas only care about the effective scaling factor, which is 8x
       expect(game.unscaleVector(Vector2.zero()), Vector2.zero());
-      expect(game.unscaleVector(Vector2(1, 2)), Vector2(2, 4));
+      expect(game.unscaleVector(Vector2(8, 16)), Vector2(1, 2));
     });
   });
 }
