@@ -220,7 +220,7 @@ class TextPaint extends TextRenderer<TextPaintConfig> {
   ///     final tp = config.toTextPainter('Score: $score');
   ///     tp.paint(c, Offset(size.width - p.width - 10, size.height - p.height - 10));
   ///
-  /// However, you probably want to use the [render] method witch already renders for you considering the anchor.
+  /// However, you probably want to use the [render] method which already renders for you considering the anchor.
   /// That way, you don't need to perform the math for yourself.
   material.TextPainter toTextPainter(String text) {
     if (!_textPainterCache.containsKey(text)) {

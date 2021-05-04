@@ -82,8 +82,35 @@ void main() {
         DragStartInfo.fromDetails(
           game,
           DragStartDetails(
-            localPosition: const Offset(12, 12),
-            globalPosition: const Offset(12, 12),
+            localPosition: const Offset(15, 15),
+            globalPosition: const Offset(15, 15),
+          ),
+        ),
+      );
+      expect(component.hasStartedDragging, true);
+    });
+
+    test('when the game has a moved camera, dragging works', () async {
+      final game = _GameWithDraggables();
+      game.onResize(Vector2.all(100));
+      final component = DraggableComponent()
+        ..x = 50
+        ..y = 50
+        ..width = 10
+        ..height = 10;
+
+      await game.add(component);
+      game.camera.zoom = 1.5;
+      game.camera.snapTo(Vector2.all(50));
+      // So component is added
+      game.update(0.01);
+      game.onDragStart(
+        1,
+        DragStartInfo.fromDetails(
+          game,
+          DragStartDetails(
+            localPosition: const Offset(5, 5),
+            globalPosition: const Offset(5, 5),
           ),
         ),
       );

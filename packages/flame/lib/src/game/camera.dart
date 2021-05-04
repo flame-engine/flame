@@ -143,7 +143,9 @@ class Camera extends Projector {
   /// When using this method you are responsible for saving/restoring canvas
   /// state to avoid leakage.
   void apply(Canvas canvas) {
-    canvas.translateVector(-position);
+    canvas.translateVector(
+      (-position)..scale(zoom),
+    );
     canvas.scale(zoom);
   }
 
@@ -183,22 +185,22 @@ class Camera extends Projector {
 
   @override
   Vector2 unprojectVector(Vector2 screenCoordinates) {
-    return screenCoordinates * zoom + _position;
+    return _position + (screenCoordinates / zoom);
   }
 
   @override
   Vector2 projectVector(Vector2 worldCoordinates) {
-    return (worldCoordinates - _position) / zoom;
+    return (worldCoordinates - _position) * zoom;
   }
 
   @override
   Vector2 unscaleVector(Vector2 screenCoordinates) {
-    return screenCoordinates * zoom;
+    return screenCoordinates / zoom;
   }
 
   @override
   Vector2 scaleVector(Vector2 worldCoordinates) {
-    return worldCoordinates / zoom;
+    return worldCoordinates * zoom;
   }
 
   /// This is the (current) absolute target of the camera, i.e., the

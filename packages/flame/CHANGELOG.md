@@ -11,6 +11,7 @@
  - Adds methods to support moving the camera relative to its current position
  - Abstracting the text api to allow custom text renderers on the framework
  - Set the same debug mode for children as for the parent when added
+ - Fix camera projections when camera is zoomed
 
 ## [1.0.0-rc9]
  - Fix input bug with other anchors than center
