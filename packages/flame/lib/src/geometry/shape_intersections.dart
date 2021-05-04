@@ -75,7 +75,7 @@ class CirclePolygonIntersections extends Intersections<Circle, Polygon> {
 class CircleCircleIntersections extends Intersections<Circle, Circle> {
   @override
   Set<Vector2> intersect(Circle shapeA, Circle shapeB) {
-    final distance = shapeA.shapeCenter.distanceTo(shapeB.shapeCenter);
+    final distance = shapeA.absoluteCenter.distanceTo(shapeB.absoluteCenter);
     final radiusA = shapeA.radius;
     final radiusB = shapeB.radius;
     if (distance > radiusA + radiusB) {
@@ -91,10 +91,10 @@ class CircleCircleIntersections extends Intersections<Circle, Circle> {
       // infinite number of solutions. Since it is problematic to return a
       // set of infinite size, we'll return 4 distinct points here.
       return {
-        shapeA.shapeCenter + Vector2(radiusA, 0),
-        shapeA.shapeCenter + Vector2(0, -radiusA),
-        shapeA.shapeCenter + Vector2(-radiusA, 0),
-        shapeA.shapeCenter + Vector2(0, radiusA),
+        shapeA.absoluteCenter + Vector2(radiusA, 0),
+        shapeA.absoluteCenter + Vector2(0, -radiusA),
+        shapeA.absoluteCenter + Vector2(-radiusA, 0),
+        shapeA.absoluteCenter + Vector2(0, radiusA),
       };
     } else {
       /// There are definitely collision points if we end up in here.
@@ -115,14 +115,14 @@ class CircleCircleIntersections extends Intersections<Circle, Circle> {
       final lengthA = (pow(radiusA, 2) - pow(radiusB, 2) + pow(distance, 2)) /
           (2 * distance);
       final lengthB = sqrt((pow(radiusA, 2) - pow(lengthA, 2)).abs());
-      final centerPoint = shapeA.shapeCenter +
-          (shapeB.shapeCenter - shapeA.shapeCenter) * lengthA / distance;
+      final centerPoint = shapeA.absoluteCenter +
+          (shapeB.absoluteCenter - shapeA.absoluteCenter) * lengthA / distance;
       final delta = Vector2(
         lengthB *
-            (shapeB.shapeCenter.y - shapeA.shapeCenter.y).abs() /
+            (shapeB.absoluteCenter.y - shapeA.absoluteCenter.y).abs() /
             distance,
         -lengthB *
-            (shapeB.shapeCenter.x - shapeA.shapeCenter.x).abs() /
+            (shapeB.absoluteCenter.x - shapeA.absoluteCenter.x).abs() /
             distance,
       );
       return {
