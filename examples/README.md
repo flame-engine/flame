@@ -2,14 +2,14 @@
 ![Test](https://github.com/flame-engine/flame_example/workflows/Test/badge.svg?branch=main&event=push)
 [![Discord](https://img.shields.io/discord/509714518008528896.svg)](https://discord.gg/pxrBmy4)
 
-# flame_example
+# Flame examples
 
-This is set of small examples showcasing specific features of the Flame Engine, so it's a great
-source of learning how to do certain things.
-[See it live here](https://flame-engine.github.io/flame_example).
+This is set of small examples showcasing specific features of the Flame Engine, it's a great
+source of learning how to use certain things.
+[See it live here](https://examples.flame-engine.org/).
 
 This app is composed of a main menu in which you can select one of the examples and play with it.
-Each example is a totally standalone game and is within its own file, so you can easily checkout
+Each example is a standalone game and is contained within its own file, so you can easily checkout
 the code and see how it works.
 
 For a very simple but complete game in Flame, check the
