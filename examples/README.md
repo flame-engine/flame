@@ -15,8 +15,8 @@ the code and see how it works.
 For a very simple but complete game in Flame, check the
 [example folder inside the Flame package](https://github.com/flame-engine/flame/tree/main/packages/flame/example).
 
-This example is kept up-to-date with the `main` branch of Flame. We are still working on v1 and
-this will be the official example when we launch, but for now it is a playground for us to test
+These examples are kept up-to-date with the `main` branch of Flame. We are still working on v1 and
+these will be the official examples when we launch, but for now it is a playground for us to test
 release candidates and make sure that it all works as intended.
 
 ## Help
