@@ -4,7 +4,7 @@
 
 # Flame examples
 
-This is set of small examples showcasing specific features of the Flame Engine, it's a great
+This is a set of small examples showcasing specific features of the Flame Engine, it's a great
 source of learning how to use certain things.
 [See it live here](https://examples.flame-engine.org/).
 
