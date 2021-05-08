@@ -1,8 +1,8 @@
 # CHANGELOG
 
 ## [Next]
- - Remove deprecated analysis option lines-of-executable-code
- 
+ - Pin dart_doc_metrics version due to deprecated analysis option lines-of-executable-code
+
 ## [1.0.0-rc10]
  - Updated tutorial documentation to indicate use of new version
  - Fix bounding box check in collision detection
