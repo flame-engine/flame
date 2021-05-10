@@ -13,26 +13,26 @@ void addWidgetsStories(Dashbook dashbook) {
     ..add(
       'Nine Tile Box',
       nineTileBoxBuilder,
-      codeLink: baseLink('utils/nine-box.dart'),
+      codeLink: baseLink('widgets/nine-box.dart'),
     )
     ..add(
       'Sprite Button',
       spriteButtonBuilder,
-      codeLink: baseLink('utils/sprite_button.dart'),
+      codeLink: baseLink('widgets/sprite_button.dart'),
     )
     ..add(
       'Sprite Widget',
       spriteWidgetBuilder,
-      codeLink: baseLink('utils/sprite_widget.dart'),
+      codeLink: baseLink('widgets/sprite_widget.dart'),
     )
     ..add(
       'Sprite Animation Widget',
       spriteAnimationWidgetBuilder,
-      codeLink: baseLink('utils/sprite_animation_widget.dart'),
+      codeLink: baseLink('widgets/sprite_animation_widget.dart'),
     )
     ..add(
       'Overlay',
       overlayBuilder,
-      codeLink: baseLink('utils/overlay.dart'),
+      codeLink: baseLink('widgets/overlay.dart'),
     );
 }

@@ -1,7 +1,8 @@
 # CHANGELOG
 
 ## [Next]
- - Pin dart_doc_metrics version due to deprecated analysis option lines-of-executable-code
+ - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code
+ - Fix the anchor of SpriteWidget
 
 ## [1.0.0-rc10]
  - Updated tutorial documentation to indicate use of new version
