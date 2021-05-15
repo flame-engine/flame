@@ -54,7 +54,7 @@ void _handleCollisionEnd(Collidable collidableA, Collidable collidableB) {
   if (hasActiveCollision(collidableA, collidableB)) {
     collidableA.onCollisionEnd(collidableB);
     collidableB.onCollisionEnd(collidableA);
-    _shapeHashes.remove(_combineHashCodes(collidableA, collidableB));
+    _collidableHashes.remove(_combineHashCodes(collidableA, collidableB));
   }
 }
 
