@@ -66,7 +66,7 @@ void _handleShapeCollisionEnd(HitboxShape shapeA, HitboxShape shapeB) {
   }
 }
 
-  /// Check what the intersection points of two collidables are
+/// Check what the intersection points of two collidables are
 /// returns an empty list if there are no intersections
 Set<Vector2> intersections(
   Collidable collidableA,
