@@ -18,9 +18,9 @@ abstract class MyCollidable extends PositionComponent
   final delta = Vector2.zero();
   double angleDelta = 0;
   bool _isDragged = false;
-  final _activePaint = Paint()..color = Colors.amber;
-  late final Color _defaultDebugColor = debugColor;
-  bool _isHit = false;
+  late final Paint _activePaint;
+  final Color _defaultColor = Colors.blue.withOpacity(0.8);
+  final Set<Collidable> _activeCollisions = {};
   final ScreenCollidable screenCollidable;
 
   MyCollidable(
@@ -35,15 +35,16 @@ abstract class MyCollidable extends PositionComponent
   }
 
   @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    _activePaint = Paint()..color = _defaultColor;
+  }
+
+  @override
   void update(double dt) {
     super.update(dt);
     if (_isDragged) {
       return;
-    }
-    if (!_isHit) {
-      debugColor = _defaultDebugColor;
-    } else {
-      _isHit = false;
     }
     delta.setFrom(velocity * dt);
     position.add(delta);
@@ -63,6 +64,7 @@ abstract class MyCollidable extends PositionComponent
   @override
   void render(Canvas canvas) {
     super.render(canvas);
+    renderShapes(canvas, paint: _activePaint);
     if (_isDragged) {
       final localCenter = (size / 2).toOffset();
       canvas.drawCircle(localCenter, 5, _activePaint);
@@ -71,25 +73,34 @@ abstract class MyCollidable extends PositionComponent
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
-    _isHit = true;
+    final isNew = _activeCollisions.add(other);
+    if (isNew) {
+      _activePaint..color = collisionColor(other).withOpacity(0.8);
+    }
+  }
+
+  @override
+  void onCollisionEnd(Collidable other) {
+    _activeCollisions.remove(other);
+    if (_activeCollisions.isEmpty) {
+      _activePaint.color = _defaultColor;
+    }
+  }
+
+  Color collisionColor(Collidable other) {
     switch (other.runtimeType) {
       case ScreenCollidable:
-        debugColor = Colors.teal;
-        break;
+        return Colors.teal;
       case CollidablePolygon:
-        debugColor = Colors.blue;
-        break;
+        return Colors.deepOrange;
       case CollidableCircle:
-        debugColor = Colors.green;
-        break;
+        return Colors.green;
       case CollidableRectangle:
-        debugColor = Colors.cyan;
-        break;
+        return Colors.cyan;
       case CollidableSnowman:
-        debugColor = Colors.amber;
-        break;
+        return Colors.amber;
       default:
-        debugColor = Colors.pink;
+        return Colors.pink;
     }
   }
 
@@ -152,20 +163,18 @@ class CollidableCircle extends MyCollidable {
 }
 
 class SnowmanPart extends HitboxCircle {
-  static const startColor = Colors.white;
-  final hitPaint = Paint()
-    ..color = startColor
-    ..strokeWidth = 1
-    ..style = PaintingStyle.stroke;
+  final startColor = Colors.blue.withOpacity(0.8);
+  final hitPaint = Paint();
 
   SnowmanPart(double definition, Vector2 relativeOffset, Color hitColor)
       : super(definition: definition) {
     this.relativeOffset.setFrom(relativeOffset);
+    hitPaint..color = startColor;
     onCollision = (Set<Vector2> intersectionPoints, HitboxShape other) {
       if (other.component is ScreenCollidable) {
         hitPaint..color = startColor;
       } else {
-        hitPaint..color = hitColor;
+        hitPaint..color = hitColor.withOpacity(0.8);
       }
     };
   }
@@ -196,9 +205,6 @@ class CollidableSnowman extends MyCollidable {
 
 class MultipleShapes extends BaseGame
     with HasCollidables, HasDraggableComponents {
-  @override
-  bool debugMode = true;
-
   final TextPaint fpsTextPaint = TextPaint(
     config: TextPaintConfig(
       color: BasicPalette.white.color,
@@ -219,7 +225,7 @@ class MultipleShapes extends BaseGame
     add(screenCollidable);
     add(snowman);
     var totalAdded = 1;
-    while (totalAdded < 10) {
+    while (totalAdded < 20) {
       lastToAdd = createRandomCollidable(lastToAdd, screenCollidable);
       final lastBottomRight =
           lastToAdd.toAbsoluteRect().bottomRight.toVector2();

@@ -12,7 +12,7 @@ class TestGame extends BaseGame with HasCollidables {
 }
 
 class TestBlock extends PositionComponent with Hitbox, Collidable {
-  final List<Collidable> collisions = List.empty(growable: true);
+  final Set<Collidable> collisions = {};
 
   TestBlock(Vector2 position, Vector2 size, CollidableType type)
       : super(
@@ -33,9 +33,7 @@ class TestBlock extends PositionComponent with Hitbox, Collidable {
     List<Collidable> otherCollidables, {
     bool containsSelf = true,
   }) {
-    return collisions
-            .toSet()
-            .containsAll(otherCollidables.toList()..remove(this)) &&
+    return collisions.containsAll(otherCollidables..remove(this)) &&
         collisions.length == otherCollidables.length - (containsSelf ? 1 : 0);
   }
 
