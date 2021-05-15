@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 import '../../../components.dart';
 import '../../../game.dart';
 import '../../components/position_component.dart';
