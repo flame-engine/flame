@@ -25,16 +25,14 @@ void collisionDetection(List<Collidable> collidables) {
         break;
       }
 
-      final collisionHash = _combineHashCodes(collidableX, collidableY);
       final intersectionPoints = intersections(collidableX, collidableY);
       if (intersectionPoints.isNotEmpty) {
         collidableX.onCollision(intersectionPoints, collidableY);
         collidableY.onCollision(intersectionPoints, collidableX);
+        final collisionHash = _combineHashCodes(collidableX, collidableY);
         _collidableHashes.add(collisionHash);
-      } else if (_collidableHashes.contains(collisionHash)) {
-        collidableX.onCollisionEnd(collidableY);
-        collidableY.onCollisionEnd(collidableX);
-        _collidableHashes.remove(collisionHash);
+      } else {
+        _handleCollisionEnd(collidableX, collidableY);
       }
     }
   }
@@ -52,7 +50,23 @@ bool hasActiveShapeCollision(HitboxShape shapeA, HitboxShape shapeB) {
   );
 }
 
-/// Check what the intersection points of two collidables are
+void _handleCollisionEnd(Collidable collidableA, Collidable collidableB) {
+  if (hasActiveCollision(collidableA, collidableB)) {
+    collidableA.onCollisionEnd(collidableB);
+    collidableB.onCollisionEnd(collidableA);
+    _shapeHashes.remove(_combineHashCodes(collidableA, collidableB));
+  }
+}
+
+void _handleShapeCollisionEnd(HitboxShape shapeA, HitboxShape shapeB) {
+  if (hasActiveShapeCollision(shapeA, shapeB)) {
+    shapeA.onCollisionEnd(shapeB);
+    shapeB.onCollisionEnd(shapeA);
+    _shapeHashes.remove(_combineHashCodes(shapeA, shapeB));
+  }
+}
+
+  /// Check what the intersection points of two collidables are
 /// returns an empty list if there are no intersections
 Set<Vector2> intersections(
   Collidable collidableA,
@@ -63,11 +77,7 @@ Set<Vector2> intersections(
     if (hasActiveCollision(collidableA, collidableB)) {
       for (final shapeA in collidableA.shapes) {
         for (final shapeB in collidableB.shapes) {
-          if (hasActiveShapeCollision(shapeA, shapeB)) {
-            shapeA.onCollisionEnd(shapeB);
-            shapeB.onCollisionEnd(shapeA);
-            _shapeHashes.remove(_combineHashCodes(shapeA, shapeB));
-          }
+          _handleShapeCollisionEnd(shapeA, shapeB);
         }
       }
     }
@@ -86,10 +96,8 @@ Set<Vector2> intersections(
         shapeB.onCollision(currentResult, shapeA);
         currentResult.clear();
         _shapeHashes.add(_combineHashCodes(shapeA, shapeB));
-      } else if (_shapeHashes.contains(_combineHashCodes(shapeA, shapeB))) {
-        shapeA.onCollisionEnd(shapeB);
-        shapeB.onCollisionEnd(shapeA);
-        _shapeHashes.remove(_combineHashCodes(shapeA, shapeB));
+      } else {
+        _handleShapeCollisionEnd(shapeA, shapeB);
       }
     }
   }
