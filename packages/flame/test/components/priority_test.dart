@@ -64,7 +64,7 @@ void main() {
       expect(componentsSorted(components), true);
       final first = components.first;
       final last = components.last;
-      game.changePriorities({first : 20, last : -1});
+      game.changePriorities({first: 20, last: -1});
       expect(components.first, last);
       expect(components.last, first);
     });
@@ -96,7 +96,7 @@ void main() {
       expect(componentsSorted(children), true);
       final first = children.first;
       final last = children.last;
-      game.changePriorities({first : 20, last : -1});
+      game.changePriorities({first: 20, last: -1});
       expect(children.first, last);
       expect(children.last, first);
     });

@@ -173,7 +173,10 @@ abstract class BaseComponent extends Component {
     }
   }
 
-  Future<void> addChildren(Iterable<Component> children, {Game? gameRef,}) async {
+  Future<void> addChildren(
+    Iterable<Component> children, {
+    Game? gameRef,
+  }) async {
     children.forEach((child) => addChild(child, gameRef: gameRef));
   }
 
