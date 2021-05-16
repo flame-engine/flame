@@ -57,7 +57,7 @@ abstract class BaseComponent extends Component {
         ),
       );
 
-  BaseComponent({int? priority = 0}) : super(priority: priority);
+  BaseComponent({int priority = 0}) : super(priority: priority);
 
   /// This method is called periodically by the game engine to request that your component updates itself.
   ///

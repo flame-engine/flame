@@ -139,7 +139,7 @@ abstract class PositionComponent extends BaseComponent {
     this.anchor = Anchor.topLeft,
     this.renderFlipX = false,
     this.renderFlipY = false,
-    int? priority = 0,
+    int priority = 0,
   })  : _position = position ?? Vector2.zero(),
         _size = size ?? Vector2.zero(),
         super(priority: priority);
