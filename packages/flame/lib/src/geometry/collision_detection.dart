@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import '../../extensions.dart';
 import '../../geometry.dart';
 import '../components/mixins/collidable.dart';
@@ -107,5 +105,5 @@ Set<Vector2> intersections(
 }
 
 int _combinedHash(Object o1, Object o2) {
-  return o1.hashCode < o2.hashCode ? hashValues(o1, o2) : hashValues(o2, o1);
+  return o1.hashCode ^ o2.hashCode;
 }
