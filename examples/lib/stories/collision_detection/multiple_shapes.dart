@@ -36,7 +36,6 @@ abstract class MyCollidable extends PositionComponent
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     _activePaint = Paint()..color = _defaultColor;
   }
 
