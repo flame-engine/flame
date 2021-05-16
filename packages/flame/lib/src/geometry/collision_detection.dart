@@ -31,7 +31,7 @@ void collisionDetection(List<Collidable> collidables) {
       if (intersectionPoints.isNotEmpty) {
         collidableX.onCollision(intersectionPoints, collidableY);
         collidableY.onCollision(intersectionPoints, collidableX);
-        final collisionHash = hashValues(collidableX, collidableY);
+        final collisionHash = _combineHashCodes(collidableX, collidableY);
         _collidableHashes.add(collisionHash);
       } else {
         _handleCollisionEnd(collidableX, collidableY);
@@ -42,13 +42,13 @@ void collisionDetection(List<Collidable> collidables) {
 
 bool hasActiveCollision(Collidable collidableA, Collidable collidableB) {
   return _collidableHashes.contains(
-    hashValues(collidableA, collidableB),
+    _combineHashCodes(collidableA, collidableB),
   );
 }
 
 bool hasActiveShapeCollision(HitboxShape shapeA, HitboxShape shapeB) {
   return _shapeHashes.contains(
-    hashValues(shapeA, shapeB),
+    _combineHashCodes(shapeA, shapeB),
   );
 }
 
@@ -56,7 +56,7 @@ void _handleCollisionEnd(Collidable collidableA, Collidable collidableB) {
   if (hasActiveCollision(collidableA, collidableB)) {
     collidableA.onCollisionEnd(collidableB);
     collidableB.onCollisionEnd(collidableA);
-    _collidableHashes.remove(hashValues(collidableA, collidableB));
+    _collidableHashes.remove(_combineHashCodes(collidableA, collidableB));
   }
 }
 
@@ -64,7 +64,7 @@ void _handleShapeCollisionEnd(HitboxShape shapeA, HitboxShape shapeB) {
   if (hasActiveShapeCollision(shapeA, shapeB)) {
     shapeA.onCollisionEnd(shapeB);
     shapeB.onCollisionEnd(shapeA);
-    _shapeHashes.remove(hashValues(shapeA, shapeB));
+    _shapeHashes.remove(_combineHashCodes(shapeA, shapeB));
   }
 }
 
@@ -104,4 +104,8 @@ Set<Vector2> intersections(
     }
   }
   return result;
+}
+
+int _combineHashCodes(Object o1, Object o2) {
+  return o1.hashCode < o2.hashCode ? hashValues(o1, o2) : hashValues(o2, o1);
 }
