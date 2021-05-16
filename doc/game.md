@@ -70,6 +70,10 @@ because rebalancing the component list is a fairly computationally expensive ope
 would rather reorder the list once after all the priorities have been changed and not once for each
 priority change, if you have several changes.
 
+The higher a priority is the later it is rendered and updated, which will make it appear closer on
+the screen since it will be rendered on top of any components with lower priority that were rendered
+before it.
+
 ## Debug mode
 
 Flame's `BaseGame` class provides a variable called `debugMode`, which by default is `false`. It can
