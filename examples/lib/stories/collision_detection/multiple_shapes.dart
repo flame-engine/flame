@@ -174,7 +174,7 @@ class SnowmanPart extends HitboxCircle {
       if (other.component is ScreenCollidable) {
         hitPaint..color = startColor;
       } else {
-        hitPaint..color = hitColor.withOpacity(0.8);
+        hitPaint.color = hitColor.withOpacity(0.8);
       }
     };
   }
