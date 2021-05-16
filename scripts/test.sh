@@ -15,7 +15,11 @@ for file in $(find . -type d -name "test"); do
 
   if [ -f ".min_coverage" ]; then
     min_coverage=$(cat .min_coverage)
-    current_cov=$(lcov --summary coverage/lcov.info | grep lines | grep -Eow '\d+\.\d+')
+
+    coverage_summary=$(lcov --summary coverage/lcov.info)
+    echo "$coverage_summary"
+
+    current_cov=$(echo "$coverage_summary" | grep lines | grep -Eow '\d+\.\d+')
 
     dart "$root_dir/scripts/check_coverage.dart" "$current_cov" "$min_coverage"
     coverage_result=$?
