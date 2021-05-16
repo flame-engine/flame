@@ -269,7 +269,6 @@ class BaseGame extends Game with FPSCounter {
         }
         parent.propagateToChildren<BaseComponent>((child) {
           if (child == component.parent) {
-            print("Found parent");
             foundParent = child;
             return false;
           }
