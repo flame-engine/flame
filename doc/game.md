@@ -65,7 +65,7 @@ simply by doing `yourComponent.remove();`.
 ## Changing component priorities (render/update order)
 To update a component with a new priority you have to call either `BaseGame.changePriority`, or
 `BaseGame.changePriorities` if you want to change the priorities of many components at once.
-This design is due to that the components doesn't always have access to the component list and
+This design is due to the fact that the components doesn't always have access to the component list and
 because rebalancing the component list is a fairly computationally expensive operation, so you
 would rather reorder the list once after all the priorities have been changed and not once for each
 priority change, if you have several changes.
