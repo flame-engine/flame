@@ -57,6 +57,8 @@ abstract class BaseComponent extends Component {
         ),
       );
 
+  BaseComponent({int priority = 0}) : super(priority: priority);
+
   /// This method is called periodically by the game engine to request that your component updates itself.
   ///
   /// The time [dt] in seconds (with microseconds precision provided by Flutter) since the last update cycle.
@@ -171,6 +173,10 @@ abstract class BaseComponent extends Component {
     }
   }
 
+  Future<void> addChildren(Iterable<Component> children, {Game? gameRef,}) async {
+    children.forEach((child) => addChild(child, gameRef: gameRef));
+  }
+
   bool removeChild(Component c) {
     return _children.remove(c);
   }
@@ -180,6 +186,8 @@ abstract class BaseComponent extends Component {
   }
 
   bool containsChild(Component c) => _children.contains(c);
+
+  void reorderChildren() => _children.rebalanceAll();
 
   /// This method first calls the passed handler on the leaves in the tree,
   /// the children without any children of their own.

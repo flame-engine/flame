@@ -4,6 +4,7 @@
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code
  - Fix the anchor of SpriteWidget
  - Add test for re-adding previously removed component
+ - Add possibility to dynamically change priority of components
 
 ## [1.0.0-rc10]
  - Updated tutorial documentation to indicate use of new version

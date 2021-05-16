@@ -18,37 +18,37 @@ void addControlsStories(Dashbook dashbook) {
     ..add(
       'Keyboard',
       (_) => GameWidget(game: KeyboardGame()),
-      codeLink: baseLink('gestures/keyboard.dart'),
+      codeLink: baseLink('controls/keyboard.dart'),
     )
     ..add(
       'Mouse Movement',
       (_) => GameWidget(game: MouseMovementGame()),
-      codeLink: baseLink('gestures/mouse_movement.dart'),
+      codeLink: baseLink('controls/mouse_movement.dart'),
     )
     ..add(
       'Scroll',
       (_) => GameWidget(game: ScrollGame()),
-      codeLink: baseLink('gestures/scroll.dart'),
+      codeLink: baseLink('controls/scroll.dart'),
     )
     ..add(
       'Multitap',
       (_) => GameWidget(game: MultitapGame()),
-      codeLink: baseLink('gestures/multitap.dart'),
+      codeLink: baseLink('controls/multitap.dart'),
     )
     ..add(
       'Multitap Advanced',
       (_) => GameWidget(game: MultitapAdvancedGame()),
-      codeLink: baseLink('gestures/multitap_advanced.dart'),
+      codeLink: baseLink('controls/multitap_advanced.dart'),
     )
     ..add(
       'Tapables',
       (_) => GameWidget(game: TapablesGame()),
-      codeLink: baseLink('gestures/tappables.dart'),
+      codeLink: baseLink('controls/tapables.dart'),
     )
     ..add(
       'Overlaping Tappables',
       (_) => GameWidget(game: OverlappingTapablesGame()),
-      codeLink: baseLink('gestures/overlaping_tappables.dart'),
+      codeLink: baseLink('controls/overlaping_tappables.dart'),
     )
     ..add(
       'Draggables',
@@ -63,16 +63,16 @@ void addControlsStories(Dashbook dashbook) {
           ),
         );
       },
-      codeLink: baseLink('gestures/draggables.dart'),
+      codeLink: baseLink('controls/draggables.dart'),
     )
     ..add(
       'Joystick',
       (_) => GameWidget(game: JoystickGame()),
-      codeLink: baseLink('gestures/joystick.dart'),
+      codeLink: baseLink('controls/joystick.dart'),
     )
     ..add(
       'Joystick Advanced',
       (_) => GameWidget(game: AdvancedJoystickGame()),
-      codeLink: baseLink('gestures/advanced_joystick.dart'),
+      codeLink: baseLink('controls/advanced_joystick.dart'),
     );
 }
