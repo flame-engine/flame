@@ -75,7 +75,7 @@ abstract class MyCollidable extends PositionComponent
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
     final isNew = _activeCollisions.add(other);
     if (isNew) {
-      _activePaint..color = collisionColor(other).withOpacity(0.8);
+      _activePaint.color = collisionColor(other).withOpacity(0.8);
     }
   }
 
