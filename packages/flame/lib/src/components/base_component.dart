@@ -177,7 +177,11 @@ abstract class BaseComponent extends Component {
     Iterable<Component> children, {
     Game? gameRef,
   }) async {
-    children.forEach((child) => addChild(child, gameRef: gameRef));
+    await Future.wait(
+      children.map(
+        (child) => addChild(child, gameRef: gameRef),
+      ),
+    );
   }
 
   bool removeChild(Component c) {
