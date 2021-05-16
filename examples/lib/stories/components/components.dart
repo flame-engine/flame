@@ -7,7 +7,7 @@ import 'debug.dart';
 import 'priority.dart';
 
 const priorityInfo = '''
-On this example, click on the squared to bring them to the front by changing the
+On this example, click on the square to bring them to the front by changing the
 priority.
 ''';
 
