@@ -112,7 +112,7 @@ class IsometricTileMapComponent extends PositionComponent {
     matrix[pos.y][pos.x] = block;
   }
 
-  int getBlockValue(Block pos) {
+  int blockValue(Block pos) {
     return matrix[pos.y][pos.x];
   }
 
