@@ -4,6 +4,7 @@ import 'package:flame/game.dart';
 import '../../commons/commons.dart';
 import 'advanced_joystick.dart';
 import 'draggables.dart';
+import 'hoverables.dart';
 import 'joystick.dart';
 import 'keyboard.dart';
 import 'mouse_movement.dart';
@@ -55,15 +56,16 @@ void addControlsStories(Dashbook dashbook) {
       (context) {
         return GameWidget(
           game: DraggablesGame(
-            zoom: context.listProperty(
-              'zoom',
-              1,
-              [0.5, 1, 1.5],
-            ),
+            zoom: context.listProperty('zoom', 1, [0.5, 1, 1.5]),
           ),
         );
       },
       codeLink: baseLink('controls/draggables.dart'),
+    )
+    ..add(
+      'Hoverables',
+      (_) => GameWidget(game: HoverablesGame()),
+      codeLink: baseLink('controls/hoverables.dart'),
     )
     ..add(
       'Joystick',

@@ -28,15 +28,11 @@ void main() {
 
       final game2 = _GameWithoutDraggables();
       game2.onResize(Vector2.all(100));
-      var hasError = false;
 
-      try {
-        await game2.add(DraggableComponent());
-      } catch (e) {
-        hasError = true;
-      }
-
-      expect(hasError, true);
+      expect(
+        () => game2.add(DraggableComponent()),
+        throwsA(const TypeMatcher<AssertionError>()),
+      );
     });
 
     test('can be dragged', () async {
