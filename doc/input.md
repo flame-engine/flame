@@ -279,7 +279,7 @@ Just like the others, this mixin allows for easy wiring of your component to lis
 and events.
 
 By adding the `HasHoverableComponents` mixin to your base game, and by using the mixin `Hoverable` on
-your components, they get a `isHovered` field and a couple methods (`onHoverStart`, `onHoverEnd`) that
+your components, they get an `isHovered` field and a couple of methods (`onHoverStart`, `onHoverEnd`) that
 you can override if you want to listen to the events.
 
 ```dart
@@ -290,7 +290,7 @@ you can override if you want to listen to the events.
 
 The provided event info is from the mouse move that triggered the action (entering or leaving).
 While the mouse move keeping inside or outside, no events are fired and those mouse move events are
-not propagated. Only when the state is changed that the handlers are triggered.
+not propagated. Only when the state is changed the handlers are triggered.
 
 ## Hitbox
 The `Hitbox` mixin is used to make detection of gestures on top of your `PositionComponent`s more
