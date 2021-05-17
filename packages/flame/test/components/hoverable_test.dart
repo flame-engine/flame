@@ -5,7 +5,6 @@ import 'package:flame/game.dart';
 import 'package:flame/src/components/mixins/hoverable.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart' show PointerHoverEvent;
-import 'package:flutter/material.dart';
 import 'package:test/test.dart';
 
 class _GameWithHoverables extends BaseGame with HasHoverableComponents {}
