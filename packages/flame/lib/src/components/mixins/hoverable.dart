@@ -7,8 +7,8 @@ import '../base_component.dart';
 
 mixin Hoverable on BaseComponent {
   bool isHovered = false;
-  void onEnter(PointerHoverInfo event) {}
-  void onLeave(PointerHoverInfo event) {}
+  void onHoverEnter(PointerHoverInfo event) {}
+  void onHoverLeave(PointerHoverInfo event) {}
 }
 
 mixin HasHoverableComponents on BaseGame {
@@ -19,12 +19,12 @@ mixin HasHoverableComponents on BaseGame {
       if (c.containsPoint(p)) {
         if (!c.isHovered) {
           c.isHovered = true;
-          c.onEnter(event);
+          c.onHoverEnter(event);
         }
       } else {
         if (c.isHovered) {
           c.isHovered = false;
-          c.onLeave(event);
+          c.onHoverLeave(event);
         }
       }
       return true; // always continue

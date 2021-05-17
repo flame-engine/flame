@@ -138,10 +138,10 @@ class MyGame extends Game with TapDetector {
 You can also check more complete examples
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/controls/).
 
-## Tapable and Draggable components
+## Tapable, Draggable and Hoverable components
 
-Any component derived from `BaseComponent` (most components) can add the `Tapable` and/or the
-`Draggable` mixins to handle taps and drags on the component.
+Any component derived from `BaseComponent` (most components) can add the `Tapable`, the
+`Draggable`, and/or the `Hoverable` mixins to handle taps, drags and hovers on the component.
 
 All overridden methods return a boolean to control if the event should be passed down further along
 to components underneath it. So say that you only want your top visible component to receive a tap
@@ -229,8 +229,7 @@ Minimal component example (this example ignores pointerId so it wont work well i
 multi-drag):
 
 ```dart
-import 'package:flame/components/component.dart';
-import 'package:flame/components/mixins/draggable.dart';
+import 'package:flame/components.dart';
 
 class DraggableComponent extends PositionComponent with Draggable {
 
@@ -274,6 +273,25 @@ class MyGame extends BaseGame with HasDraggableComponents {
 
 **Note**: `HasDraggableComponents` uses an advanced gesture detector under the hood and as explained
 further up on this page, shouldn't be used alongside basic detectors.
+
+### Hoverable components
+
+Just like the others, this mixin allows for easy wiring of your component to listen to hover states
+and events.
+
+By adding the `HasHoverableComponents` mixin to your base game, and by using the mixin `Hoverable` on
+your components, they get a `isHovered` field and a couple methods (`onHoverStart`, `onHoverEnd`) that
+you can override if you want to listen to the events.
+
+```dart
+  bool isHovered = false; // note: you should not modify this value yourself
+  void onHoverEnter(PointerHoverInfo event) {}
+  void onHoverLeave(PointerHoverInfo event) {}
+```
+
+The provided event info is from the mouse move that triggered the action (entering or leaving).
+While the mouse move keeping inside or outside, no events are fired and those mouse move events are
+not propagated. Only when the state is changed that the handlers are triggered.
 
 ## Hitbox
 The `Hitbox` mixin is used to make detection of gestures on top of your `PositionComponent`s more

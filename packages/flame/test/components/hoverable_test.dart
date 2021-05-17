@@ -17,12 +17,12 @@ class HoverableComponent extends PositionComponent with Hoverable {
   int leaveCount = 0;
 
   @override
-  void onEnter(PointerHoverInfo event) {
+  void onHoverEnter(PointerHoverInfo event) {
     enterCount++;
   }
 
   @override
-  void onLeave(PointerHoverInfo event) {
+  void onHoverLeave(PointerHoverInfo event) {
     leaveCount++;
   }
 }
