@@ -166,8 +166,7 @@ void onTapUp(TapUpInfo event) {}
 Minimal component example:
 
 ```dart
-import 'package:flame/components/component.dart';
-import 'package:flame/components/mixins/tapable.dart';
+import 'package:flame/components.dart';
 
 class TapableComponent extends PositionComponent with Tapable {
 
