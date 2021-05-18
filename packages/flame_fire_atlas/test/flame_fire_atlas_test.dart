@@ -9,7 +9,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class AssetsCacheMock extends Mock implements AssetsCache {}
+
 class ImagesMock extends Mock implements Images {}
+
 class ImageMock extends Mock implements Image {}
 
 class MockedGame extends Mock implements Game {
@@ -29,24 +31,24 @@ Future<List<int>> readExampleFile() async {
 }
 
 Future<FireAtlas> readTestAtlas() async {
-      final assetsMock = AssetsCacheMock();
+  final assetsMock = AssetsCacheMock();
 
-      when(() => assetsMock.readBinaryFile('cave.fa')).thenAnswer((_) async {
-        return await readExampleFile();
-      });
+  when(() => assetsMock.readBinaryFile('cave.fa')).thenAnswer((_) async {
+    return await readExampleFile();
+  });
 
-      final imagesMock = ImagesMock();
+  final imagesMock = ImagesMock();
 
-      when(() => imagesMock.fromBase64(any(), any())).thenAnswer((_) async {
-        return ImageMock();
-      });
+  when(() => imagesMock.fromBase64(any(), any())).thenAnswer((_) async {
+    return ImageMock();
+  });
 
-      final atlas = await FireAtlas.loadAsset(
-          'cave.fa',
-          assets: assetsMock,
-          images: imagesMock,
-      );
-      return atlas;
+  final atlas = await FireAtlas.loadAsset(
+    'cave.fa',
+    assets: assetsMock,
+    images: imagesMock,
+  );
+  return atlas;
 }
 
 void main() {
@@ -91,8 +93,9 @@ void main() {
       final atlas = await readTestAtlas();
 
       expect(
-          () => atlas.getSprite('bla'),
-          throwsA(equals('There is no selection with the id "bla" on this atlas')),
+        () => atlas.getSprite('bla'),
+        throwsA(
+            equals('There is no selection with the id "bla" on this atlas')),
       );
     });
 
@@ -100,8 +103,8 @@ void main() {
       final atlas = await readTestAtlas();
 
       expect(
-          () => atlas.getSprite('bomb_ptero'),
-          throwsA(equals('Selection "bomb_ptero" is not a Sprite')),
+        () => atlas.getSprite('bomb_ptero'),
+        throwsA(equals('Selection "bomb_ptero" is not a Sprite')),
       );
     });
 
@@ -115,8 +118,9 @@ void main() {
       final atlas = await readTestAtlas();
 
       expect(
-          () => atlas.getAnimation('bla'),
-          throwsA(equals('There is no selection with the id "bla" on this atlas')),
+        () => atlas.getAnimation('bla'),
+        throwsA(
+            equals('There is no selection with the id "bla" on this atlas')),
       );
     });
 
@@ -124,8 +128,8 @@ void main() {
       final atlas = await readTestAtlas();
 
       expect(
-          () => atlas.getAnimation('bullet'),
-          throwsA(equals('Selection "bullet" is not an Animation')),
+        () => atlas.getAnimation('bullet'),
+        throwsA(equals('Selection "bullet" is not an Animation')),
       );
     });
 
@@ -144,7 +148,8 @@ void main() {
       expect(copy.id, atlas.id);
     });
 
-    test('Uses the game images and assets when loading from the game', () async {
+    test('Uses the game images and assets when loading from the game',
+        () async {
       final game = MockedGame();
 
       when(() => game.assets.readBinaryFile('cave.fa')).thenAnswer((_) async {
