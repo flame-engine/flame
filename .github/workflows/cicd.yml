@@ -58,5 +58,6 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
+      - run: sudo apt-get install lcov -y
       - run: ./scripts/test.sh
   # END TESTING STAGE

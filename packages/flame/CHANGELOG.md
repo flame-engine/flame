@@ -5,6 +5,7 @@
  - Fix the anchor of SpriteWidget
  - Add test for re-adding previously removed component
  - Add onCollisionEnd to make it possible for the user to easily detect when a collision ends
+ - Adding test coverage to packages
 
 ## [1.0.0-rc10]
  - Updated tutorial documentation to indicate use of new version
