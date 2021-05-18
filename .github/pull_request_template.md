@@ -8,6 +8,7 @@ Before you create this PR confirm that it meets all requirements listed below by
 
 - [ ] I read the [Contributor Guide] and followed the process outlined there for submitting PRs.
 - [ ] My PR includes unit or integration tests for *all* changed/updated/fixed behaviors and are passing (See [Contributor Guide]).
+- [ ] My PR does not decrease the code coverage, or I have __a very special case__ and explained on the PR description why this PR decreases the coverage.
 - [ ] I updated/added relevant documentation (doc comments with `///`) and updated/added examples in `doc/examples`.
 - [ ] I have formatted my code with `./scripts/format.sh` and the Flame analyzer (`./scripts/analyze.sh`) does not report any problems.
 - [ ] I read and followed the [Flame Style Guide].
