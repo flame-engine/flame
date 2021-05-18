@@ -17,11 +17,10 @@ for file in $(find . -type d -name "test"); do
     min_coverage=$(cat .min_coverage)
 
     coverage_summary=$(lcov --summary coverage/lcov.info)
+    coverage_line=$(echo "$coverage_summary" | grep lines)
     echo "$coverage_summary"
 
-    current_cov=$(echo "$coverage_summary" | grep lines | grep -Pow '\d+\.\d+')
-
-    dart "$root_dir/scripts/check_coverage.dart" "$current_cov" "$min_coverage"
+    dart "$root_dir/scripts/check_coverage.dart" "$coverage_line" "$min_coverage"
     coverage_result=$?
     if [ $coverage_result -ne 0 ]; then
       echo "Current coverage $current_cov is smaller than min: $min_coverage"
