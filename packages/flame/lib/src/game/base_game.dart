@@ -277,7 +277,7 @@ class BaseGame extends Game with FPSCounter {
         reorderRoot: false,
       );
       if (wasUpdated) {
-        if (component.parent != null) {
+        if (component.parent != null && component.parent is BaseComponent) {
           parents.add(component.parent! as BaseComponent);
         } else {
           hasRootComponents |= components.contains(component);
