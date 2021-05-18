@@ -27,6 +27,7 @@ abstract class BaseComponent extends Component {
   /// If the component has a parent it will be set here
   BaseComponent? _parent;
 
+  @override
   BaseComponent? get parent => _parent;
 
   /// The children list shouldn't be modified directly, that is why an

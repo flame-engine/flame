@@ -253,34 +253,15 @@ class BaseGame extends Game with FPSCounter {
     if (component.priority == priority) {
       return false;
     }
-    if (components.contains(component)) {
-      component.changePriorityWithoutResorting(priority);
-      if (reorderRoot) {
+    component.changePriorityWithoutResorting(priority);
+    if (reorderRoot) {
+      if (component.parent != null && component.parent is BaseComponent) {
+        (component.parent! as BaseComponent).reorderChildren();
+      } else if (components.contains(component)) {
         components.rebalanceAll();
       }
-      return true;
-    } else if (component is BaseComponent) {
-      component.changePriorityWithoutResorting(priority);
-      BaseComponent? foundParent;
-      for (final parent in components.whereType<BaseComponent>()) {
-        if (parent == component.parent) {
-          foundParent = parent;
-          break;
-        }
-        parent.propagateToChildren<BaseComponent>((child) {
-          if (child == component.parent) {
-            foundParent = child;
-            return false;
-          }
-          return true;
-        });
-        if (foundParent != null) {
-          break;
-        }
-      }
-      foundParent?.reorderChildren();
     }
-    return false;
+    return true;
   }
 
   /// Since changing priorities is quite an expensive operation you should use
@@ -288,17 +269,25 @@ class BaseGame extends Game with FPSCounter {
   /// tree doesn't have to be reordered multiple times.
   void changePriorities(Map<Component, int> priorities) {
     var hasRootComponents = false;
+    final parents = <BaseComponent>{};
     priorities.forEach((component, priority) {
-      final isRootComponent = changePriority(
+      final wasUpdated = changePriority(
         component,
         priority,
         reorderRoot: false,
       );
-      hasRootComponents |= isRootComponent;
+      if (wasUpdated) {
+        if (component.parent != null) {
+          parents.add(component.parent! as BaseComponent);
+        } else {
+          hasRootComponents |= components.contains(component);
+        }
+      }
     });
     if (hasRootComponents) {
       components.rebalanceAll();
     }
+    parents.forEach((parent) => parent.reorderChildren());
   }
 
   /// Returns the current time in seconds with microseconds precision.

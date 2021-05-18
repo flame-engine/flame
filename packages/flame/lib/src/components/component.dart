@@ -21,6 +21,11 @@ abstract class Component {
   /// Whether this component is currently mounted on a game or not
   bool get isMounted => _isMounted;
 
+  /// If the component has a parent it will be set here
+  Component? _parent;
+
+  Component? get parent => _parent;
+
   /// Render priority of this component. This allows you to control the order in which your components are rendered.
   ///
   /// Components are always updated and rendered in the order defined by what this number is when the component is added to the game.

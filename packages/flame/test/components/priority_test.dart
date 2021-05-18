@@ -6,24 +6,9 @@ class PriorityComponent extends BaseComponent {
   PriorityComponent(int priority) : super(priority: priority);
 }
 
-bool isSorted<T>(Iterable<T> list, [int Function(T, T)? compare]) {
-  compare ??= (T a, T b) => (a as Comparable<T>).compareTo(b);
-  T? prev;
-  for (final current in list) {
-    if (prev == null) {
-      prev = current;
-      continue;
-    }
-    if (compare(prev, current) > 0) {
-      return false;
-    }
-  }
-  return true;
-}
-
-bool componentsSorted(Iterable<Component> components) {
-  int compare(Component c1, Component c2) => c1.priority - c2.priority;
-  return isSorted<Component>(components, compare);
+void componentsSorted(Iterable<Component> components) {
+  final priorities = components.map<int>((c) => c.priority).toList();
+  expect(priorities.toList(), orderedEquals(priorities..sort()));
 }
 
 void main() {
@@ -34,7 +19,7 @@ void main() {
       final game = BaseGame()..onResize(Vector2.zero());
       game.addAll(priorityComponents);
       game.update(0);
-      expect(componentsSorted(game.components), true);
+      componentsSorted(game.components);
     });
 
     test('changing priority should reorder component list', () {
@@ -46,7 +31,7 @@ void main() {
       final components = game.components;
       game.addAll(priorityComponents);
       game.update(0);
-      expect(componentsSorted(components), true);
+      componentsSorted(components);
       expect(components.first, firstCompopnent);
       game.changePriority(firstCompopnent, 11);
       expect(components.last, firstCompopnent);
@@ -59,7 +44,7 @@ void main() {
       final components = game.components;
       game.addAll(priorityComponents);
       game.update(0);
-      expect(componentsSorted(components), true);
+      componentsSorted(components);
       final first = components.first;
       final last = components.last;
       game.changePriorities({first: 20, last: -1});
@@ -76,7 +61,7 @@ void main() {
       parentComponent.addChildren(priorityComponents, gameRef: game);
       final children = parentComponent.children;
       game.update(0);
-      expect(componentsSorted(children), true);
+      componentsSorted(children);
       final first = children.first;
       game.changePriority(first, 20);
       expect(children.last, first);
@@ -91,7 +76,7 @@ void main() {
       parentComponent.addChildren(priorityComponents, gameRef: game);
       final children = parentComponent.children;
       game.update(0);
-      expect(componentsSorted(children), true);
+      componentsSorted(children);
       final first = children.first;
       final last = children.last;
       game.changePriorities({first: 20, last: -1});
@@ -110,7 +95,7 @@ void main() {
       parentComponent.addChildren(priorityComponents, gameRef: game);
       final children = parentComponent.children;
       game.update(0);
-      expect(componentsSorted(children), true);
+      componentsSorted(children);
       final first = children.first;
       game.changePriority(first, 20);
       expect(children.last, first);
