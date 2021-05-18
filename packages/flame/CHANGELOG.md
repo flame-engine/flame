@@ -4,6 +4,7 @@
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code
  - Fix the anchor of SpriteWidget
  - Add test for re-adding previously removed component
+ - Add onCollisionEnd to make it possible for the user to easily detect when a collision ends
 
 ## [1.0.0-rc10]
  - Updated tutorial documentation to indicate use of new version
