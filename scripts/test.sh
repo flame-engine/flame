@@ -2,7 +2,7 @@
 
 echo "Starting Flame Tester"
 echo "---------------------"
-root_dir="$(realpath "$0")/.."
+root_dir=$(pwd)
 for file in $(find . -type d -name "test"); do
   dir=$(dirname $file)
   cd $dir
