@@ -18,6 +18,7 @@ mixin Collidable on Hitbox {
   CollidableType collidableType = CollidableType.active;
 
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {}
+  void onCollisionEnd(Collidable other) {}
 }
 
 class ScreenCollidable extends PositionComponent
