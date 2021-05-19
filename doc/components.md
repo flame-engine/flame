@@ -355,7 +355,6 @@ final layers = images.map((image) => ParallaxLayer(await image, velocityMultipli
 final parallaxComponent = ParallaxComponent.fromParallax(
   Parallax(
     await Future.wait(layers),
-    size, // size is a property on the Game class
     baseVelocity: Vector2(50, 0),
   ),
 );
@@ -375,6 +374,9 @@ Also, don't forget to add you images to the `pubspec.yaml` file as assets or the
 The `Parallax` file contains an extension of the game which adds `loadParallax`, `loadParallaxLayer`
 and `loadParallaxImage` so that it automatically uses your game's image cache instead of the global
 one. The same goes for the `ParallaxComponent` file, but that provides `loadParallaxComponent`.
+
+If you want a fullscreen `ParallaxComponent` simply omit the `size` argument and it will take the
+size of the game, it will also resize to fullscreen when the game changes size or orientation.
 
 Three example implementations can be found in the
 [examples directory](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/parallax).
