@@ -13,8 +13,8 @@ import 'game/game.dart';
 
 extension ParallaxExtension on Game {
   Future<Parallax> loadParallax(
-    List<String> paths,
-    Vector2? size, {
+    List<String> paths, {
+    Vector2? size,
     Vector2? baseVelocity,
     Vector2? velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
@@ -23,7 +23,7 @@ extension ParallaxExtension on Game {
   }) {
     return Parallax.load(
       paths,
-      size,
+      size: size,
       baseVelocity: baseVelocity,
       velocityMultiplierDelta: velocityMultiplierDelta,
       repeat: repeat,
@@ -193,6 +193,9 @@ class ParallaxLayer {
   }
 
   void render(Canvas canvas) {
+    if (_paintArea.isEmpty) {
+      return;
+    }
     paintImage(
       canvas: canvas,
       image: parallaxImage.image,
@@ -235,17 +238,27 @@ enum LayerFill { height, width, none }
 /// layer moves with different velocities to give an effect of depth.
 class Parallax {
   late Vector2 baseVelocity;
-  Vector2 _size = Vector2.zero();
   late Rect _clipRect;
   final List<ParallaxLayer> layers;
 
+  Vector2? _size;
+
+  /// Do not modify this directly, since the layers won't be resized if you do
+  Vector2? get size => _size;
+  set size(Vector2? newSize) {
+    assert(newSize != null, "Don't set the size to null");
+    resize(newSize!);
+  }
+
   Parallax(
-    this.layers,
-    Vector2? size, {
+    this.layers, {
+    Vector2? size,
     Vector2? baseVelocity,
   }) {
     this.baseVelocity = baseVelocity ?? Vector2.zero();
-    resize(size ?? _size);
+    if(size != null) {
+      resize(size);
+    }
   }
 
   /// The base offset of the parallax, can be used in an outer update loop
@@ -256,9 +269,13 @@ class Parallax {
   /// on creation.
   void resize(Vector2 newSize) {
     if (newSize != _size) {
-      _size = newSize;
-      _clipRect = newSize.toRect();
-      layers.forEach((layer) => layer.resize(newSize));
+      if(_size == null) {
+        _size = newSize.clone();
+      } else {
+        _size!.setFrom(newSize);
+      }
+      _clipRect = _size!.toRect();
+      layers.forEach((layer) => layer.resize(_size!));
     }
   }
 
@@ -288,8 +305,8 @@ class Parallax {
   /// used can also be passed in.
   /// If no image cache is set, the global flame cache is used.
   static Future<Parallax> load(
-    List<String> paths,
-    Vector2? size, {
+    List<String> paths, {
+    Vector2? size,
     Vector2? baseVelocity,
     Vector2? velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
@@ -322,12 +339,13 @@ class Parallax {
     );
     return Parallax(
       layers,
-      size,
+      size: size,
       baseVelocity: baseVelocity,
     );
   }
 
   void render(Canvas canvas, {Vector2? position}) {
+    assert(_size != null, 'You have to set a size');
     canvas.save();
     if (position != null) {
       canvas.translateVector(position);

@@ -6,6 +6,8 @@
  - Add test for re-adding previously removed component
  - Add onCollisionEnd to make it possible for the user to easily detect when a collision ends
  - Adding test coverage to packages
+ - Possibility to have non-fullscreen ParallaxComponent
+ - No need to send size in ParallaxComponent.fromParallax since Parallax already contains it
 
 ## [1.0.0-rc10]
  - Updated tutorial documentation to indicate use of new version
