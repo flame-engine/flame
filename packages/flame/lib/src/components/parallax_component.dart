@@ -62,8 +62,10 @@ class ParallaxComponent extends PositionComponent {
     Parallax parallax, {
     Vector2? position,
   }) {
-    return ParallaxComponent(position: position, size: parallax.size)
-      ..parallax = parallax;
+    return ParallaxComponent(
+      position: position,
+      size: parallax.isSized ? parallax.size : null,
+    )..parallax = parallax;
   }
 
   @mustCallSuper

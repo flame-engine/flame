@@ -241,13 +241,13 @@ class Parallax {
   late Rect _clipRect;
   final List<ParallaxLayer> layers;
 
-  Vector2? _size;
+  bool isSized = false;
+  late final Vector2 _size;
 
   /// Do not modify this directly, since the layers won't be resized if you do
-  Vector2? get size => _size;
-  set size(Vector2? newSize) {
-    assert(newSize != null, "Don't set the size to null");
-    resize(newSize!);
+  Vector2 get size => _size;
+  set size(Vector2 newSize) {
+    resize(newSize);
   }
 
   Parallax(
@@ -268,15 +268,15 @@ class Parallax {
   /// If the `ParallaxComponent` isn't used your own wrapper needs to call this
   /// on creation.
   void resize(Vector2 newSize) {
-    if (newSize != _size) {
-      if (_size == null) {
-        _size = newSize.clone();
-      } else {
-        _size!.setFrom(newSize);
-      }
-      _clipRect = _size!.toRect();
-      layers.forEach((layer) => layer.resize(_size!));
+    if (!isSized) {
+      _size = Vector2.zero();
     }
+    if (newSize != _size || !isSized) {
+      _size.setFrom(newSize);
+      _clipRect = _size.toRect();
+      layers.forEach((layer) => layer.resize(_size));
+    }
+    isSized |= true;
   }
 
   void update(double dt) {
