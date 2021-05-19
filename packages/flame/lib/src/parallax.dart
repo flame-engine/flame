@@ -256,7 +256,7 @@ class Parallax {
     Vector2? baseVelocity,
   }) {
     this.baseVelocity = baseVelocity ?? Vector2.zero();
-    if(size != null) {
+    if (size != null) {
       resize(size);
     }
   }
@@ -269,7 +269,7 @@ class Parallax {
   /// on creation.
   void resize(Vector2 newSize) {
     if (newSize != _size) {
-      if(_size == null) {
+      if (_size == null) {
         _size = newSize.clone();
       } else {
         _size!.setFrom(newSize);
