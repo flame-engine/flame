@@ -98,6 +98,18 @@ void main() {
       expect(child.tapped, true);
     });
 
+    test('add multiple children with addChildren', () {
+      final game = MyGame();
+      final children = List.generate(10, (_) => MyTap());
+      final wrapper = MyComposed();
+      wrapper.addChildren(children);
+
+      game.onResize(size);
+      game.add(wrapper);
+      game.update(0.0);
+      expect(wrapper.children.length, children.length);
+    });
+
     test('tap on offset children', () {
       final game = MyGame();
       final child = MyTap()

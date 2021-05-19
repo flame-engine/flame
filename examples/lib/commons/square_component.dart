@@ -6,7 +6,11 @@ import 'package:flame/palette.dart';
 class SquareComponent extends PositionComponent {
   Paint paint = BasicPalette.white.paint();
 
-  SquareComponent() : super(size: Vector2.all(100.0));
+  SquareComponent({int priority = 0})
+      : super(
+          size: Vector2.all(100.0),
+          priority: priority,
+        );
 
   @override
   void render(Canvas c) {

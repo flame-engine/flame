@@ -4,6 +4,7 @@
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code
  - Fix the anchor of SpriteWidget
  - Add test for re-adding previously removed component
+ - Add possibility to dynamically change priority of components
  - Add onCollisionEnd to make it possible for the user to easily detect when a collision ends
  - Adding test coverage to packages
  - Fix Text Rendering not working properly
