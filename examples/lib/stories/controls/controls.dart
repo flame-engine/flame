@@ -66,6 +66,7 @@ void addControlsStories(Dashbook dashbook) {
       'Hoverables',
       (_) => GameWidget(game: HoverablesGame()),
       codeLink: baseLink('controls/hoverables.dart'),
+      info: 'Add more squares by clicking. Hover squares to change colors.',
     )
     ..add(
       'Joystick',
