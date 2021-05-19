@@ -6,6 +6,7 @@ import 'advanced.dart';
 import 'basic.dart';
 import 'component.dart';
 import 'no_fcs.dart';
+import 'small_parallax.dart';
 
 void addParallaxStories(Dashbook dashbook) {
   dashbook.storiesOf('Parallax')
@@ -18,6 +19,11 @@ void addParallaxStories(Dashbook dashbook) {
       'Component',
       (_) => GameWidget(game: ComponentParallaxGame()),
       codeLink: baseLink('parallax/component.dart'),
+    )
+    ..add(
+      'Non-fullscreen',
+      (_) => GameWidget(game: SmallParallaxGame()),
+      codeLink: baseLink('parallax/small_parallax.dart'),
     )
     ..add(
       'No FCS',
