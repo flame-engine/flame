@@ -126,6 +126,10 @@ mixin HitboxShape on Shape {
   /// Assign your own [CollisionCallback] if you want a callback when this
   /// shape collides with another [HitboxShape]
   CollisionCallback onCollision = emptyCollisionCallback;
+
+  /// Assign your own [CollisionEndCallback] if you want a callback when this
+  /// shape stops colliding with another [HitboxShape]
+  CollisionEndCallback onCollisionEnd = emptyCollisionEndCallback;
 }
 
 typedef CollisionCallback = void Function(
@@ -133,7 +137,10 @@ typedef CollisionCallback = void Function(
   HitboxShape other,
 );
 
+typedef CollisionEndCallback = void Function(HitboxShape other);
+
 void emptyCollisionCallback(Set<Vector2> _, HitboxShape __) {}
+void emptyCollisionEndCallback(HitboxShape _) {}
 
 /// Used for caching calculated shapes, the cache is determined to be valid by
 /// comparing a list of values that can be of any type and is compared to the

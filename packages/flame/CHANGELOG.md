@@ -5,6 +5,10 @@
  - Fix the anchor of SpriteWidget
  - Add test for re-adding previously removed component
  - Add possibility to dynamically change priority of components
+ - Add onCollisionEnd to make it possible for the user to easily detect when a collision ends
+ - Adding test coverage to packages
+ - Fix Text Rendering not working properly
+ - Add more useful methods to the IsometricTileMap component
 
 ## [1.0.0-rc10]
  - Updated tutorial documentation to indicate use of new version

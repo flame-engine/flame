@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:ui';
 
 import '../../../extensions.dart';
 import '../../geometry/shape.dart';
@@ -26,8 +27,8 @@ mixin Hitbox on PositionComponent {
         _shapes.any((shape) => shape.containsPoint(point));
   }
 
-  void renderShapes(Canvas canvas) {
-    _shapes.forEach((shape) => shape.render(canvas, debugPaint));
+  void renderShapes(Canvas canvas, {Paint? paint}) {
+    _shapes.forEach((shape) => shape.render(canvas, paint ?? debugPaint));
   }
 
   /// Since this is a cheaper calculation than checking towards all shapes, this
