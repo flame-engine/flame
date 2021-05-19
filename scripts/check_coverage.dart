@@ -3,8 +3,8 @@ import 'dart:io';
 void main(args) {
   final coverageSummary = args[0] as String;
   final currentRaw = coverageSummary.replaceFirstMapped(
-      RegExp(r".* (\d+\.\d+)%.*"), 
-      (matches) => '${matches[1]}',
+    RegExp(r".* (\d+\.\d+)%.*"),
+    (matches) => '${matches[1]}',
   );
 
   final current = double.parse(currentRaw);
