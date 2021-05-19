@@ -40,6 +40,5 @@ void main() {
       game.update(0);
       expect(game.parallaxComponent.size, game.size);
     });
-
   });
 }
