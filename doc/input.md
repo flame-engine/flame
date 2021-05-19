@@ -289,7 +289,7 @@ you can override if you want to listen to the events.
 ```
 
 The provided event info is from the mouse move that triggered the action (entering or leaving).
-While the mouse move keeping inside or outside, no events are fired and those mouse move events are
+While the mouse movement is kept inside or outside, no events are fired and those mouse move events are
 not propagated. Only when the state is changed the handlers are triggered.
 
 ## Hitbox
