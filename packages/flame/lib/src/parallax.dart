@@ -345,7 +345,6 @@ class Parallax {
   }
 
   void render(Canvas canvas, {Vector2? position}) {
-    assert(_size != null, 'You have to set a size');
     canvas.save();
     if (position != null) {
       canvas.translateVector(position);
