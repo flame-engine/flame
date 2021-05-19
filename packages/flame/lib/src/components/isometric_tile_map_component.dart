@@ -108,6 +108,14 @@ class IsometricTileMapComponent extends PositionComponent {
     return Block(px, py);
   }
 
+  void setBlockValue(Block pos, int block) {
+    matrix[pos.y][pos.x] = block;
+  }
+
+  int blockValue(Block pos) {
+    return matrix[pos.y][pos.x];
+  }
+
   /// Return whether the matrix contains a block in its bounds.
   bool containsBlock(Block block) {
     return block.y >= 0 &&
