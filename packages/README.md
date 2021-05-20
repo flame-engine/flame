@@ -15,4 +15,4 @@ Bridge packages are packages which:
 
 ## Index
  - [Flame](./flame)
- - [FireAtlas](./fire_atlas)
+ - [Fire Atlas](./flame_fire_atlas)
