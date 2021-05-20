@@ -7,6 +7,8 @@
  - Add possibility to dynamically change priority of components
  - Add onCollisionEnd to make it possible for the user to easily detect when a collision ends
  - Adding test coverage to packages
+ - Possibility to have non-fullscreen ParallaxComponent
+ - No need to send size in ParallaxComponent.fromParallax since Parallax already contains it
  - Fix Text Rendering not working properly
  - Add more useful methods to the IsometricTileMap component
 

@@ -22,7 +22,7 @@ class NoFCSParallaxGame extends Game {
         'parallax/trees.png',
         'parallax/foreground-trees.png',
       ],
-      size,
+      size: size,
       baseVelocity: Vector2(20, 0),
       velocityMultiplierDelta: Vector2(1.8, 1.0),
     );

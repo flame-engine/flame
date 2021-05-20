@@ -20,10 +20,9 @@ extension ParallaxComponentExtension on Game {
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
   }) async {
-    final componentSize = size ?? this.size;
     final component = await ParallaxComponent.load(
       paths,
-      size: componentSize,
+      size: size,
       baseVelocity: baseVelocity,
       velocityMultiplierDelta: velocityMultiplierDelta,
       repeat: repeat,
@@ -32,13 +31,14 @@ extension ParallaxComponentExtension on Game {
       images: images,
     );
 
-    return component..size.setFrom(componentSize);
+    return component;
   }
 }
 
 /// A full parallax, several layers of images drawn out on the screen and each
 /// layer moves with different velocities to give an effect of depth.
 class ParallaxComponent extends PositionComponent {
+  bool isFullscreen = true;
   Parallax? _parallax;
 
   Parallax? get parallax => _parallax;
@@ -51,21 +51,31 @@ class ParallaxComponent extends PositionComponent {
   ParallaxComponent({
     Vector2? position,
     Vector2? size,
-  }) : super(position: position, size: size);
+  }) : super(position: position, size: size) {
+    if (size != null) {
+      isFullscreen = false;
+    }
+  }
 
   /// Creates a component from a [Parallax] object.
-  ParallaxComponent.fromParallax(
-    this._parallax, {
+  factory ParallaxComponent.fromParallax(
+    Parallax parallax, {
     Vector2? position,
-    Vector2? size,
-  }) : super(position: position, size: size);
+  }) {
+    return ParallaxComponent(
+      position: position,
+      size: parallax.isSized ? parallax.size : null,
+    )..parallax = parallax;
+  }
 
   @mustCallSuper
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
-    this.size.setFrom(size);
-    parallax?.resize(size);
+    if (isFullscreen) {
+      this.size.setFrom(size);
+      parallax?.resize(size);
+    }
   }
 
   @override
@@ -111,7 +121,7 @@ class ParallaxComponent extends PositionComponent {
     final component = ParallaxComponent.fromParallax(
       await Parallax.load(
         paths,
-        size,
+        size: size,
         baseVelocity: baseVelocity,
         velocityMultiplierDelta: velocityMultiplierDelta,
         repeat: repeat,
