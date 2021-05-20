@@ -105,7 +105,7 @@ class TextPaintConfig extends BaseTextConfig {
     this.color = const Color(0xFF000000),
     this.fontFamily = 'Arial',
     double fontSize = 24.0,
-    TextDirection textDirection = TextDirection.rtl,
+    TextDirection textDirection = TextDirection.ltr,
     double? lineHeight,
   }) : super(
           fontSize: fontSize,

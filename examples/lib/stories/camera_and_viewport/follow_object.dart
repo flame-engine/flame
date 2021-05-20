@@ -23,7 +23,7 @@ class MovableSquare extends SquareComponent
   final Vector2 velocity = Vector2.zero();
   late Timer timer;
 
-  MovableSquare() {
+  MovableSquare() : super(priority: 1) {
     addShape(HitboxRectangle());
     timer = Timer(3.0)
       ..stop()
@@ -49,9 +49,6 @@ class MovableSquare extends SquareComponent
   }
 
   @override
-  int get priority => 1;
-
-  @override
   void onCollision(Set<Vector2> points, Collidable other) {
     if (other is Rock) {
       gameRef.camera.setRelativeOffset(Anchor.topCenter);
@@ -70,15 +67,14 @@ class Map extends Component {
     ..style = PaintingStyle.stroke;
   static final Paint _paintBg = Paint()..color = const Color(0xFF333333);
 
+  Map() : super(priority: 0);
+
   @override
   void render(Canvas canvas) {
     super.render(canvas);
     canvas.drawRect(bounds, _paintBg);
     canvas.drawRect(bounds, _paintBorder);
   }
-
-  @override
-  int get priority => 0;
 
   static double genCoord() {
     return -S + R.nextDouble() * (2 * S);
@@ -89,7 +85,7 @@ class Rock extends SquareComponent with Hitbox, Collidable, Tapable {
   static final unpressedPaint = Paint()..color = const Color(0xFF2222FF);
   static final pressedPaint = Paint()..color = const Color(0xFF414175);
 
-  Rock(Vector2 position) {
+  Rock(Vector2 position) : super(priority: 2) {
     this.position.setFrom(position);
     size.setValues(50, 50);
     paint = unpressedPaint;
@@ -113,9 +109,6 @@ class Rock extends SquareComponent with Hitbox, Collidable, Tapable {
     paint = unpressedPaint;
     return true;
   }
-
-  @override
-  int get priority => 2;
 }
 
 class CameraAndViewportGame extends BaseGame
