@@ -6,9 +6,25 @@ import '../../gestures/events.dart';
 import '../base_component.dart';
 
 mixin Hoverable on BaseComponent {
-  bool isHovered = false;
+  bool _isHovered = false;
+  bool get isHovered => _isHovered;
   void onHoverEnter(PointerHoverInfo event) {}
   void onHoverLeave(PointerHoverInfo event) {}
+
+  @nonVirtual
+  void doHandleMouseMovement(PointerHoverInfo event, Vector2 p) {
+    if (containsPoint(p)) {
+      if (!_isHovered) {
+        _isHovered = true;
+        onHoverEnter(event);
+      }
+    } else {
+      if (_isHovered) {
+        _isHovered = false;
+        onHoverLeave(event);
+      }
+    }
+  }
 }
 
 mixin HasHoverableComponents on BaseGame {
@@ -16,17 +32,7 @@ mixin HasHoverableComponents on BaseGame {
   void onMouseMove(PointerHoverInfo event) {
     final p = event.eventPosition.game;
     bool _mouseMoveHandler(Hoverable c) {
-      if (c.containsPoint(p)) {
-        if (!c.isHovered) {
-          c.isHovered = true;
-          c.onHoverEnter(event);
-        }
-      } else {
-        if (c.isHovered) {
-          c.isHovered = false;
-          c.onHoverLeave(event);
-        }
-      }
+      c.doHandleMouseMovement(event, p);
       return true; // always continue
     }
 

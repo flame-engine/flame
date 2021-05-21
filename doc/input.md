@@ -283,7 +283,7 @@ your components, they get an `isHovered` field and a couple of methods (`onHover
 you can override if you want to listen to the events.
 
 ```dart
-  bool isHovered = false; // note: you should not modify this value yourself
+  bool isHovered = false;
   void onHoverEnter(PointerHoverInfo event) {}
   void onHoverLeave(PointerHoverInfo event) {}
 ```
