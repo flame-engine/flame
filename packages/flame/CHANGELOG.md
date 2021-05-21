@@ -12,6 +12,7 @@
  - Fix Text Rendering not working properly
  - Add more useful methods to the IsometricTileMap component
  - Add Hoverables
+ - Brief semantic update to second tutorial.
 
 ## [1.0.0-rc10]
  - Updated tutorial documentation to indicate use of new version

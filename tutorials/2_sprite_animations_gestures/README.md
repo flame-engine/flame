@@ -43,7 +43,7 @@ void main() {
   runApp(GameWidget(game: myGame));
 }
 
-class MyGame extends Game with TapDetector {
+class MyGame extends Game {
 
   @override
   void update(double dt) {
