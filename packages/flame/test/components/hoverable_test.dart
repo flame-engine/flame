@@ -39,7 +39,7 @@ void main() {
 
       expect(
         () => game2.add(HoverableComponent()),
-        throwsA(const TypeMatcher<AssertionError>()),
+        throwsA(isA<AssertionError>()),
       );
     });
     test('single component', () async {

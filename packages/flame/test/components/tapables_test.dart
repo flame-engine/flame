@@ -21,7 +21,7 @@ void main() {
 
       expect(
         () => game2.add(TapableComponent()),
-        throwsA(const TypeMatcher<AssertionError>()),
+        throwsA(isA<AssertionError>()),
       );
     });
   });

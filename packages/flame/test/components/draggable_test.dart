@@ -31,7 +31,7 @@ void main() {
 
       expect(
         () => game2.add(DraggableComponent()),
-        throwsA(const TypeMatcher<AssertionError>()),
+        throwsA(isA<AssertionError>()),
       );
     });
 
