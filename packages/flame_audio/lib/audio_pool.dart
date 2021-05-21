@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:synchronized/synchronized.dart';
 
-typedef void Stoppable();
+typedef Stoppable = void Function();
 
 /// An AudioPool is a provider of AudioPlayers that leaves them pre-loaded to minimize delays.
 ///
@@ -11,8 +11,8 @@ typedef void Stoppable();
 /// Use this class if you'd like have extremely quick firing, repetitive and simultaneous sounds, like shooting a laser in a fast-paced spaceship game.
 class AudioPool {
   final AudioCache _cache;
-  Map<String, AudioPlayer> _currentPlayers = {};
-  List<AudioPlayer> _availablePlayers = [];
+  final Map<String, AudioPlayer> _currentPlayers = {};
+  final List<AudioPlayer> _availablePlayers = [];
 
   final String sound;
   final bool repeating;
@@ -27,9 +27,9 @@ class AudioPool {
     int? minPlayers = 1,
     String? prefix,
   })  : _cache = AudioCache(prefix: prefix ?? 'assets/audio/sfx/'),
-        this.repeating = repeating ?? false,
-        this.maxPlayers = maxPlayers ?? 1,
-        this.minPlayers = minPlayers ?? 1;
+        repeating = repeating ?? false,
+        maxPlayers = maxPlayers ?? 1,
+        minPlayers = minPlayers ?? 1;
 
   static Future<AudioPool> create(
     String sound, {
@@ -45,7 +45,7 @@ class AudioPool {
       minPlayers: minPlayers,
       prefix: prefix,
     );
-    for (int i = 0; i < instance.minPlayers; i++) {
+    for (var i = 0; i < instance.minPlayers; i++) {
       instance._availablePlayers.add(await instance._createNewAudioPlayer());
     }
 
@@ -57,14 +57,14 @@ class AudioPool {
       if (_availablePlayers.isEmpty) {
         _availablePlayers.add(await _createNewAudioPlayer());
       }
-      final AudioPlayer player = _availablePlayers.removeAt(0);
+      final player = _availablePlayers.removeAt(0);
       _currentPlayers[player.playerId] = player;
       await player.setVolume(volume);
       await player.resume();
 
       late StreamSubscription<void> subscription;
 
-      final Stoppable stop = () {
+      void stop() {
         _lock.synchronized(() async {
           final p = _currentPlayers.remove(player.playerId);
           if (p != null) {
@@ -77,7 +77,9 @@ class AudioPool {
             }
           }
         });
-      };
+      }
+
+      ;
 
       subscription = player.onPlayerCompletion.listen((_) {
         if (repeating) {

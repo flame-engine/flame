@@ -146,3 +146,4 @@ dart_code_metrics:
     number-of-methods: 32
     source-lines-of-code: 200
     cyclomatic-complexity: 36
+    maximum-nesting-level: 8
