@@ -16,6 +16,7 @@ dependencies:
 
 dev_dependencies:
   dart_code_metrics: ^3.2.2
+  dartdoc: ^0.42.0
   flutter_test:
     sdk: flutter
   test: ^1.9.4
