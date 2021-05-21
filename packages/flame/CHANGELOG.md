@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [Next]
+ - Fix link to code in example stories
+
 ## [1.0.0-releasecandidate.11]
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code
  - Fix the anchor of SpriteWidget
