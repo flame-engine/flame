@@ -11,6 +11,7 @@
  - No need to send size in ParallaxComponent.fromParallax since Parallax already contains it
  - Fix Text Rendering not working properly
  - Add more useful methods to the IsometricTileMap component
+ - Add Hoverables
 
 ## [1.0.0-rc10]
  - Updated tutorial documentation to indicate use of new version

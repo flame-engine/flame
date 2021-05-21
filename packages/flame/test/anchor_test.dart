@@ -24,7 +24,7 @@ void main() {
     test('fail to parse invalid anchor', () {
       expect(
         () => Anchor.valueOf('foobar'),
-        throwsA(const TypeMatcher<AssertionError>()),
+        throwsA(isA<AssertionError>()),
       );
     });
 

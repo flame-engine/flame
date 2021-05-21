@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../../components.dart';
 import '../../../extensions.dart';
 import '../../components/mixins/draggable.dart';
 import '../../components/mixins/tapable.dart';
@@ -27,7 +28,9 @@ bool hasAdvancedGesturesDetectors(Game game) =>
     game is HasDraggableComponents;
 
 bool hasMouseDetectors(Game game) =>
-    game is MouseMovementDetector || game is ScrollDetector;
+    game is MouseMovementDetector ||
+    game is ScrollDetector ||
+    game is HasHoverableComponents;
 
 Widget applyBasicGesturesDetectors(Game game, Widget child) {
   return GestureDetector(
@@ -267,12 +270,13 @@ Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
 }
 
 Widget applyMouseDetectors(Game game, Widget child) {
+  final mouseMoveFn = game is MouseMovementDetector
+      ? game.onMouseMove
+      : (game is HasHoverableComponents ? game.onMouseMove : null);
   return Listener(
     child: MouseRegion(
       child: child,
-      onHover: game is MouseMovementDetector
-          ? (e) => game.onMouseMove(PointerHoverInfo.fromDetails(game, e))
-          : null,
+      onHover: (e) => mouseMoveFn?.call(PointerHoverInfo.fromDetails(game, e)),
     ),
     onPointerSignal: (event) =>
         game is ScrollDetector && event is PointerScrollEvent
