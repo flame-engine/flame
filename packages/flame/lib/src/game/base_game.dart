@@ -11,6 +11,7 @@ import '../components/mixins/collidable.dart';
 import '../components/mixins/draggable.dart';
 import '../components/mixins/has_collidables.dart';
 import '../components/mixins/has_game_ref.dart';
+import '../components/mixins/hoverable.dart';
 import '../components/mixins/tapable.dart';
 import '../components/position_component.dart';
 import '../fps_counter.dart';
@@ -104,6 +105,12 @@ class BaseGame extends Game with FPSCounter {
       assert(
         this is HasDraggableComponents,
         'Draggable Components can only be added to a BaseGame with HasDraggableComponents',
+      );
+    }
+    if (c is Hoverable) {
+      assert(
+        this is HasHoverableComponents,
+        'Hoverable Components can only be added to a BaseGame with HasHoverableComponents',
       );
     }
 

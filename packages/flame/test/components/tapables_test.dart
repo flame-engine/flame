@@ -19,15 +19,10 @@ void main() {
       final game2 = _GameWithoutTapables();
       game2.onResize(Vector2.all(100));
 
-      var hasError = false;
-
-      try {
-        await game2.add(TapableComponent());
-      } catch (e) {
-        hasError = true;
-      }
-
-      expect(hasError, true);
+      expect(
+        () => game2.add(TapableComponent()),
+        throwsA(isA<AssertionError>()),
+      );
     });
   });
 }
