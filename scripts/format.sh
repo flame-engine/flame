@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ "$1" != "fix" ]; then
+if [ "$1" == "fix" ]; then
   params=""
 else
   params="--set-exit-if-changed -n"
