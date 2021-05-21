@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('Anchor', () {
-    test('can parse to and from string', () async {
+    test('can parse to and from string', () {
       expect(Anchor.center.toString(), 'center');
       expect(Anchor.valueOf('topRight'), Anchor.topRight);
 
@@ -16,15 +16,15 @@ void main() {
       }
     });
 
-    test('can parse custom anchor', () async {
+    test('can parse custom anchor', () {
       expect(const Anchor(0.2, 0.2).toString(), 'Anchor(0.2, 0.2)');
       expect(Anchor.valueOf('Anchor(0.2, 0.2)'), const Anchor(0.2, 0.2));
     });
 
-    test('fail to parse invalid anchor', () async {
+    test('fail to parse invalid anchor', () {
       expect(
         () => Anchor.valueOf('foobar'),
-        throwsA(const TypeMatcher<AssertionError>()),
+        throwsA(isA<AssertionError>()),
       );
     });
 

@@ -8,6 +8,7 @@ export 'src/components/mixins/draggable.dart';
 export 'src/components/mixins/has_collidables.dart';
 export 'src/components/mixins/has_game_ref.dart';
 export 'src/components/mixins/hitbox.dart';
+export 'src/components/mixins/hoverable.dart';
 export 'src/components/mixins/single_child_particle.dart';
 export 'src/components/mixins/tapable.dart';
 export 'src/components/nine_tile_box_component.dart';

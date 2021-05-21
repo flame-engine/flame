@@ -4,6 +4,12 @@ import 'package:flame/game.dart';
 import '../../commons/commons.dart';
 import 'composability.dart';
 import 'debug.dart';
+import 'priority.dart';
+
+const priorityInfo = '''
+On this example, click on the square to bring them to the front by changing the
+priority.
+''';
 
 void addComponentsStories(Dashbook dashbook) {
   dashbook.storiesOf('Components')
@@ -11,6 +17,12 @@ void addComponentsStories(Dashbook dashbook) {
       'Composability',
       (_) => GameWidget(game: Composability()),
       codeLink: baseLink('components/composability.dart'),
+    )
+    ..add(
+      'Priority',
+      (_) => GameWidget(game: Priority()),
+      codeLink: baseLink('components/priority.dart'),
+      info: priorityInfo,
     )
     ..add(
       'Debug',
