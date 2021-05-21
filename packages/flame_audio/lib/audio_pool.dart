@@ -79,8 +79,6 @@ class AudioPool {
         });
       }
 
-      ;
-
       subscription = player.onPlayerCompletion.listen((_) {
         if (repeating) {
           player.resume();
