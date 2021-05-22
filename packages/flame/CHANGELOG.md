@@ -2,6 +2,8 @@
 
 ## [Next]
  - Fix link to code in example stories
+ - Fix RotateEffect with netative deltas
+ - Add isDragged to Draggable
 
 ## [1.0.0-releasecandidate.11]
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code
