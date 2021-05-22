@@ -35,4 +35,16 @@ extension ColorExtension on Color {
       blue + ((255 - blue) * amount).round(),
     );
   }
+
+  /// Parses an RGB color from a valid hex string (e.g. #1C1C1C).
+  ///
+  /// If the string is not valid, an error is thrown.
+  static Color fromHexString(String hexString) {
+    final regex = RegExp('\\#(.{2})(.{2})(.{2})');
+    final m = regex.firstMatch(hexString)!;
+    final r = int.parse(m.group(1)!, radix: 16);
+    final g = int.parse(m.group(2)!, radix: 16);
+    final b = int.parse(m.group(3)!, radix: 16);
+    return Color.fromARGB(255, r, g, b);
+  }
 }
