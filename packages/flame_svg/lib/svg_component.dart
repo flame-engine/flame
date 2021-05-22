@@ -1,6 +1,6 @@
-import 'package:flame/components.dart';
-
 import 'dart:ui';
+
+import 'package:flame/components.dart';
 
 import './svg.dart';
 

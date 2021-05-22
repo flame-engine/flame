@@ -15,11 +15,10 @@ dependencies:
   flame_svg:
     path: ../
 
-  cupertino_icons: ^0.1.3
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  dart_code_metrics: ^3.2.2
 
 flutter:
   uses-material-design: true
