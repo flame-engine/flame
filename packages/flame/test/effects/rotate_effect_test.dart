@@ -5,15 +5,21 @@ import 'package:flutter_test/flutter_test.dart';
 import 'effect_test_utils.dart';
 
 void main() {
-  const angleArgument = 6.0;
+  const defaultAngle = 6.0;
   TestComponent component() => TestComponent(angle: 0.5);
 
-  RotateEffect effect({bool isInfinite = false, bool isAlternating = false}) {
+  RotateEffect effect({
+    bool isInfinite = false,
+    bool isAlternating = false,
+    bool isRelative = false,
+    double angle = defaultAngle,
+  }) {
     return RotateEffect(
-      angle: angleArgument,
+      angle: angle,
       duration: 1 + random.nextInt(5).toDouble(),
       isInfinite: isInfinite,
       isAlternating: isAlternating,
+      isRelative: isRelative,
     );
   }
 
@@ -22,7 +28,7 @@ void main() {
       tester,
       component(),
       effect(),
-      expectedAngle: angleArgument,
+      expectedAngle: defaultAngle,
     );
   });
 
@@ -33,7 +39,7 @@ void main() {
         tester,
         component(),
         effect(),
-        expectedAngle: angleArgument,
+        expectedAngle: defaultAngle,
         iterations: 1.5,
       );
     },
@@ -70,7 +76,7 @@ void main() {
       tester,
       positionComponent,
       effect(isAlternating: true),
-      expectedAngle: angleArgument,
+      expectedAngle: defaultAngle,
       shouldComplete: false,
       iterations: 0.5,
     );
@@ -82,9 +88,35 @@ void main() {
       tester,
       positionComponent,
       effect(isInfinite: true),
-      expectedAngle: angleArgument,
+      expectedAngle: defaultAngle,
       iterations: 3.0,
       shouldComplete: false,
     );
   });
+
+  testWidgets(
+    'RotateEffect can handle negative relative angles',
+    (WidgetTester tester) async {
+      final PositionComponent positionComponent = component();
+      effectTest(
+        tester,
+        positionComponent,
+        effect(angle: -1, isRelative: true),
+        expectedAngle: component().angle - 1,
+      );
+    },
+  );
+
+  testWidgets(
+    'RotateEffect can handle absolute relative angles',
+    (WidgetTester tester) async {
+      final PositionComponent positionComponent = component();
+      effectTest(
+        tester,
+        positionComponent,
+        effect(angle: -1),
+        expectedAngle: -1,
+      );
+    },
+  );
 }

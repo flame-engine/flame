@@ -113,4 +113,51 @@ void main() {
       expect(component.hasStartedDragging, true);
     });
   });
+
+  test('isDragged is changed', () async {
+    final game = _GameWithDraggables();
+    game.onResize(Vector2.all(100));
+    final component = DraggableComponent()
+      ..x = 10
+      ..y = 10
+      ..width = 10
+      ..height = 10;
+
+    await game.add(component);
+    // So component is added
+    game.update(0.01);
+    expect(component.isDragged, false);
+    game.onDragStart(
+      1,
+      DragStartInfo.fromDetails(
+        game,
+        DragStartDetails(
+          localPosition: const Offset(12, 12),
+          globalPosition: const Offset(12, 12),
+        ),
+      ),
+    );
+    expect(component.isDragged, true);
+    game.onDragEnd(
+      1,
+      DragEndInfo.fromDetails(
+        game,
+        DragEndDetails(),
+      ),
+    );
+    expect(component.isDragged, false);
+    game.onDragStart(
+      1,
+      DragStartInfo.fromDetails(
+        game,
+        DragStartDetails(
+          localPosition: const Offset(12, 12),
+          globalPosition: const Offset(12, 12),
+        ),
+      ),
+    );
+    expect(component.isDragged, true);
+    game.onDragCancel(1);
+    expect(component.isDragged, false);
+  });
 }
