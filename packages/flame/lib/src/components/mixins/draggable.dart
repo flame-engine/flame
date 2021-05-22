@@ -5,6 +5,9 @@ import '../../gestures/events.dart';
 import '../base_component.dart';
 
 mixin Draggable on BaseComponent {
+  bool _isDragged = false;
+  bool get isDragged => _isDragged;
+
   bool onDragStart(int pointerId, DragStartInfo info) {
     return true;
   }
@@ -26,6 +29,7 @@ mixin Draggable on BaseComponent {
 
   bool handleDragStart(int pointerId, DragStartInfo info) {
     if (containsPoint(info.eventPosition.game)) {
+      _isDragged = true;
       _currentPointerIds.add(pointerId);
       return onDragStart(pointerId, info);
     }
@@ -41,6 +45,7 @@ mixin Draggable on BaseComponent {
 
   bool handleDragEnded(int pointerId, DragEndInfo details) {
     if (_checkPointerId(pointerId)) {
+      _isDragged = false;
       _currentPointerIds.remove(pointerId);
       return onDragEnd(pointerId, details);
     }
@@ -49,6 +54,7 @@ mixin Draggable on BaseComponent {
 
   bool handleDragCanceled(int pointerId) {
     if (_checkPointerId(pointerId)) {
+      _isDragged = false;
       _currentPointerIds.remove(pointerId);
       return handleDragCanceled(pointerId);
     }
