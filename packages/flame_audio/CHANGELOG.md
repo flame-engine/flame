@@ -1,4 +1,4 @@
-## [next]
+## [1.0.0-rc.1]
 * Moved project to the mono-repo
 * Updated flame, audioplayers
 
