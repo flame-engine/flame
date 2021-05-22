@@ -43,8 +43,8 @@ class RotateEffect extends SimplePositionComponentEffect {
     if (!isAlternating) {
       endAngle = _startAngle + _delta;
     }
-    speed ??= _delta / duration!;
-    duration ??= _delta / speed!;
+    speed ??= _delta.abs() / duration!;
+    duration ??= _delta.abs() / speed!;
     peakTime = isAlternating ? duration! / 2 : duration!;
   }
 
