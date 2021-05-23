@@ -87,7 +87,7 @@ Flame 的官方网站（包含文档），请 [访问此处](https://flame-engin
 
 [![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/fireslime)
 
-或者通过 But Me A Coffet 捐赠我们：
+或者通过 Buy Me A Coffet 捐赠我们：
 
 [![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/fireslime)
 
