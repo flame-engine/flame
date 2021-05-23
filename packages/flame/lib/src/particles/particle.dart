@@ -22,7 +22,7 @@ typedef ParticleGenerator = Particle Function(int);
 /// Intention is to follow the same "Extreme Composability" style as seen across
 /// the whole Flutter framework. Each type of particle implements some
 /// particular behavior which then could be nested and combined to create
-/// specifically required experience.
+/// the experience you are looking for.
 abstract class Particle {
   /// Generates a given amount of particles and then combining them into one
   /// single [ComposedParticle].
