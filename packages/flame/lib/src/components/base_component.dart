@@ -9,7 +9,7 @@ import '../../game.dart';
 import '../effects/effects.dart';
 import '../effects/effects_handler.dart';
 import '../extensions/vector2.dart';
-import '../text_config.dart';
+import '../text.dart';
 import 'component.dart';
 import 'mixins/has_game_ref.dart';
 
@@ -27,6 +27,7 @@ abstract class BaseComponent extends Component {
   /// If the component has a parent it will be set here
   BaseComponent? _parent;
 
+  @override
   BaseComponent? get parent => _parent;
 
   /// The children list shouldn't be modified directly, that is why an
@@ -50,7 +51,14 @@ abstract class BaseComponent extends Component {
     ..strokeWidth = 1
     ..style = PaintingStyle.stroke;
 
-  TextConfig get debugTextConfig => TextConfig(color: debugColor, fontSize: 12);
+  TextPaint get debugTextPaint => TextPaint(
+        config: TextPaintConfig(
+          color: debugColor,
+          fontSize: 12,
+        ),
+      );
+
+  BaseComponent({int priority = 0}) : super(priority: priority);
 
   /// This method is called periodically by the game engine to request that your component updates itself.
   ///
@@ -153,6 +161,7 @@ abstract class BaseComponent extends Component {
 
     if (child is BaseComponent) {
       child._parent = this;
+      child.debugMode = debugMode;
     }
 
     final childOnLoadFuture = child.onLoad();
@@ -165,6 +174,17 @@ abstract class BaseComponent extends Component {
     }
   }
 
+  Future<void> addChildren(
+    Iterable<Component> children, {
+    Game? gameRef,
+  }) async {
+    await Future.wait(
+      children.map(
+        (child) => addChild(child, gameRef: gameRef),
+      ),
+    );
+  }
+
   bool removeChild(Component c) {
     return _children.remove(c);
   }
@@ -174,6 +194,8 @@ abstract class BaseComponent extends Component {
   }
 
   bool containsChild(Component c) => _children.contains(c);
+
+  void reorderChildren() => _children.rebalanceAll();
 
   /// This method first calls the passed handler on the leaves in the tree,
   /// the children without any children of their own.

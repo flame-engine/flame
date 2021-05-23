@@ -4,26 +4,7 @@ import 'dart:ui' show Rect, Canvas;
 import '../../components.dart';
 import '../../extensions.dart';
 import '../../game.dart';
-
-/// Utility method to smoothly transition vectors.
-///
-/// It will move [current] in the direction [target] by a displacement
-/// given by [ds] pixels in that direction.
-void _moveToTarget(
-  Vector2 current,
-  Vector2 target,
-  double ds,
-) {
-  if (current != target) {
-    final diff = target - current;
-    if (diff.length < ds) {
-      current.setFrom(target);
-    } else {
-      diff.scaleTo(ds);
-      current.setFrom(current + diff);
-    }
-  }
-}
+import 'projector.dart';
 
 /// A camera translates your game coordinate system; this is useful when your
 /// world is not 1:1 with your screen size.
@@ -59,11 +40,7 @@ void _moveToTarget(
 /// the position where components are rendered with relation to the Viewport.
 /// Components marked as `isHud = true` are always rendered in screen
 /// coordinates, bypassing the camera altogether.
-///
-/// Note: right now this only applies to rendering. No transformation is
-/// done on event handling (for gestures). You have to transform it yourself
-/// using [screenToWorld].
-class Camera {
+class Camera extends Projector {
   static const defaultCameraSpeed = 50.0; // in pixels/s
   static const defaultShakeIntensity = 75.0; // in pixels
   static const defaultShakeDuration = 0.3; // in seconds
@@ -143,8 +120,8 @@ class Camera {
   /// add any non-smooth movement.
   Rect? worldBounds;
 
-  /// If set, the camera will zoom by this ratio. This can be greater than 1 (zoom in)
-  /// or smaller (zoom out), but should always be greater than zero.
+  /// If set, the camera will zoom by this ratio. This can be greater than 1
+  /// (zoom in) or smaller (zoom out), but should always be greater than zero.
   ///
   /// Note: do not confuse this with the zoom applied by the viewport. The
   /// viewport applies a (normally) fixed zoom to adapt multiple screens into
@@ -166,7 +143,9 @@ class Camera {
   /// When using this method you are responsible for saving/restoring canvas
   /// state to avoid leakage.
   void apply(Canvas canvas) {
-    canvas.translateVector(-position);
+    canvas.translateVector(
+      (-position)..scale(zoom),
+    );
     canvas.scale(zoom);
   }
 
@@ -177,9 +156,9 @@ class Camera {
     final ds = cameraSpeed * dt;
     final shake = Vector2(_shakeDelta(), _shakeDelta());
 
-    _moveToTarget(_currentRelativeOffset, _targetRelativeOffset, ds);
+    _currentRelativeOffset.moveToTarget(_targetRelativeOffset, ds);
     if (_targetCameraDelta != null && _currentCameraDelta != null) {
-      _moveToTarget(_currentCameraDelta!, _targetCameraDelta!, ds);
+      _currentCameraDelta?.moveToTarget(_targetCameraDelta!, ds);
     }
     _position = _target() + shake;
 
@@ -202,14 +181,33 @@ class Camera {
     update(0);
   }
 
-  /// Converts a vector in the screen space to the world space.
-  Vector2 screenToWorld(Vector2 screenCoordinates) {
-    return (screenCoordinates + _position) / zoom;
+  // Coordinates
+
+  @override
+  Vector2 unprojectVector(Vector2 screenCoordinates) {
+    return _position + (screenCoordinates / zoom);
   }
 
-  /// Converts a vector in the world space to the screen space.
-  Vector2 worldToScreen(Vector2 worldCoordinates) {
-    return worldCoordinates * zoom - _position;
+  @override
+  Vector2 projectVector(Vector2 worldCoordinates) {
+    return (worldCoordinates - _position) * zoom;
+  }
+
+  @override
+  Vector2 unscaleVector(Vector2 screenCoordinates) {
+    return screenCoordinates / zoom;
+  }
+
+  @override
+  Vector2 scaleVector(Vector2 worldCoordinates) {
+    return worldCoordinates * zoom;
+  }
+
+  /// This is the (current) absolute target of the camera, i.e., the
+  /// coordinate that should be on the top left, regardless of relative
+  /// offset, world boundaries or shake.
+  Vector2 absoluteTarget() {
+    return _currentCameraDelta ?? follow ?? Vector2.zero();
   }
 
   // Follow
@@ -227,7 +225,7 @@ class Camera {
   /// position, set the components anchor to center.
   void followComponent(
     PositionComponent component, {
-    Vector2? relativeOffset,
+    Anchor relativeOffset = Anchor.center,
     Rect? worldBounds,
   }) {
     followVector2(
@@ -247,12 +245,12 @@ class Camera {
   /// camera is allowed to move.
   void followVector2(
     Vector2 vector2, {
-    Vector2? relativeOffset,
+    Anchor relativeOffset = Anchor.center,
     Rect? worldBounds,
   }) {
     follow = vector2;
     this.worldBounds = worldBounds;
-    _targetRelativeOffset.setFrom(relativeOffset ?? Anchor.center.toVector2());
+    _targetRelativeOffset.setFrom(relativeOffset.toVector2());
     _currentRelativeOffset.setFrom(_targetRelativeOffset);
   }
 
@@ -262,8 +260,8 @@ class Camera {
   /// you have two different options for the player to choose or your have a
   /// "dialog" camera that puts the player in a better place to show the
   /// dialog UI.
-  void setRelativeOffset(Vector2 newRelativeOffset) {
-    _targetRelativeOffset.setFrom(newRelativeOffset);
+  void setRelativeOffset(Anchor newRelativeOffset) {
+    _targetRelativeOffset.setFrom(newRelativeOffset.toVector2());
   }
 
   Vector2 _screenDelta() {
@@ -271,7 +269,7 @@ class Camera {
   }
 
   Vector2 _target() {
-    final target = _currentCameraDelta ?? follow ?? Vector2.zero();
+    final target = absoluteTarget();
     final attemptedTarget = target - _screenDelta();
 
     final bounds = worldBounds;
@@ -305,6 +303,13 @@ class Camera {
   }
 
   // Movement
+
+  /// Moves the camera by a given [displacement] (delta). This is the same as
+  /// [moveTo] but instead of providing an absolute end position, you can
+  /// provide a desired translation vector.
+  void translateBy(Vector2 displacement) {
+    moveTo(absoluteTarget() + displacement);
+  }
 
   /// Applies an ad-hoc movement to the camera towards the target, bypassing
   /// follow. Once it arrives the camera will not move until [resetMovement]

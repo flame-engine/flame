@@ -11,11 +11,13 @@ import '../components/mixins/collidable.dart';
 import '../components/mixins/draggable.dart';
 import '../components/mixins/has_collidables.dart';
 import '../components/mixins/has_game_ref.dart';
+import '../components/mixins/hoverable.dart';
 import '../components/mixins/tapable.dart';
 import '../components/position_component.dart';
 import '../fps_counter.dart';
 import 'camera.dart';
 import 'game.dart';
+import 'projector.dart';
 import 'viewport.dart';
 
 /// This is a more complete and opinionated implementation of Game.
@@ -59,7 +61,10 @@ class BaseGame extends Game with FPSCounter {
     } else {
       _viewport = value;
     }
+    _combinedProjector = Projector.compose([camera, value]);
   }
+
+  late Projector _combinedProjector;
 
   /// This is overwritten to consider the viewport transformation.
   ///
@@ -80,6 +85,7 @@ class BaseGame extends Game with FPSCounter {
 
   BaseGame() {
     camera.gameRef = this;
+    _combinedProjector = Projector.compose([camera, viewport]);
   }
 
   /// This method is called for every component added.
@@ -99,6 +105,12 @@ class BaseGame extends Game with FPSCounter {
       assert(
         this is HasDraggableComponents,
         'Draggable Components can only be added to a BaseGame with HasDraggableComponents',
+      );
+    }
+    if (c is Hoverable) {
+      assert(
+        this is HasHoverableComponents,
+        'Hoverable Components can only be added to a BaseGame with HasHoverableComponents',
       );
     }
 
@@ -233,11 +245,83 @@ class BaseGame extends Game with FPSCounter {
   /// show extra information on the screen when debug mode is activated
   bool debugMode = false;
 
+  /// Changes the priority of [component] and reorders the games component list.
+  ///
+  /// Returns true if changing the component's priority modified one of the
+  /// components that existed directly on the game and false if it
+  /// either was a child of another component, if it didn't exist at all or if
+  /// it was a component added directly on the game but its priority didn't
+  /// change.
+  bool changePriority(
+    Component component,
+    int priority, {
+    bool reorderRoot = true,
+  }) {
+    if (component.priority == priority) {
+      return false;
+    }
+    component.changePriorityWithoutResorting(priority);
+    if (reorderRoot) {
+      if (component.parent != null && component.parent is BaseComponent) {
+        (component.parent! as BaseComponent).reorderChildren();
+      } else if (components.contains(component)) {
+        components.rebalanceAll();
+      }
+    }
+    return true;
+  }
+
+  /// Since changing priorities is quite an expensive operation you should use
+  /// this method if you want to change multiple priorities at once so that the
+  /// tree doesn't have to be reordered multiple times.
+  void changePriorities(Map<Component, int> priorities) {
+    var hasRootComponents = false;
+    final parents = <BaseComponent>{};
+    priorities.forEach((component, priority) {
+      final wasUpdated = changePriority(
+        component,
+        priority,
+        reorderRoot: false,
+      );
+      if (wasUpdated) {
+        if (component.parent != null && component.parent is BaseComponent) {
+          parents.add(component.parent! as BaseComponent);
+        } else {
+          hasRootComponents |= components.contains(component);
+        }
+      }
+    });
+    if (hasRootComponents) {
+      components.rebalanceAll();
+    }
+    parents.forEach((parent) => parent.reorderChildren());
+  }
+
   /// Returns the current time in seconds with microseconds precision.
   ///
   /// This is compatible with the `dt` value used in the [update] method.
   double currentTime() {
     return DateTime.now().microsecondsSinceEpoch.toDouble() /
         Duration.microsecondsPerSecond;
+  }
+
+  @override
+  Vector2 projectVector(Vector2 vector) {
+    return _combinedProjector.projectVector(vector);
+  }
+
+  @override
+  Vector2 unprojectVector(Vector2 vector) {
+    return _combinedProjector.unprojectVector(vector);
+  }
+
+  @override
+  Vector2 scaleVector(Vector2 vector) {
+    return _combinedProjector.scaleVector(vector);
+  }
+
+  @override
+  Vector2 unscaleVector(Vector2 vector) {
+    return _combinedProjector.unscaleVector(vector);
   }
 }

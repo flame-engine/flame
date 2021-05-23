@@ -222,9 +222,10 @@ Methods:
   optionally defined `Vector2`, otherwise around the center.
  - `scaleTo`: Changes the length of the `Vector2` to the length provided, without changing
   direction.
+ - `moveToTarget`: Smoothly moves a Vector2 in the target direction by a given distance.
 
 Factories:
- - `fromInts`: Create a `Vector2` with ints as input,
+ - `fromInts`: Create a `Vector2` with ints as input.
 
 Operators:
  - `&`: Combines two `Vector2`s to form a Rect, the origin should be on the left and the size on the

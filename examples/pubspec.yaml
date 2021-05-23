@@ -11,38 +11,21 @@ environment:
 dependencies:
   flame:
     path: ../packages/flame
-  dashbook: 0.1.0
+  dashbook: 0.1.2
   flutter:
     sdk: flutter
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  dart_code_metrics: ^2.4.0
+  dart_code_metrics: ^3.2.2
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/animations/chopper.png
-    - assets/images/animations/chopper.json
-    - assets/images/animations/creature.png
-    - assets/images/joystick.png
-    - assets/images/flame.png
-    - assets/images/spritesheet.png
-    - assets/images/boom.png
-    - assets/images/zap.png
-    - assets/images/buttons.png
-    - assets/images/nine-box.png
-    - assets/images/shield.png
-    - assets/images/bomb_ptero.png
-    - assets/images/tile_maps/selector.png
-    - assets/images/tile_maps/tiles.png
-    - assets/images/layers/background.png
-    - assets/images/layers/enemy.png
-    - assets/images/layers/player.png
-    - assets/images/parallax/bg.png
-    - assets/images/parallax/foreground-trees.png
-    - assets/images/parallax/mountain-far.png
-    - assets/images/parallax/mountains.png
-    - assets/images/parallax/trees.png
+    - assets/images/animations/
+    - assets/images/
+    - assets/images/tile_maps/
+    - assets/images/layers/
+    - assets/images/parallax/

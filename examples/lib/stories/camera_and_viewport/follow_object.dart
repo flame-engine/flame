@@ -14,17 +14,21 @@ final R = Random();
 class MovableSquare extends SquareComponent
     with Hitbox, Collidable, HasGameRef<CameraAndViewportGame> {
   static const double speed = 300;
-  static final TextConfig config = TextConfig(fontSize: 12);
+  static final TextPaint textRenderer = TextPaint(
+    config: const TextPaintConfig(
+      fontSize: 12,
+    ),
+  );
 
   final Vector2 velocity = Vector2.zero();
   late Timer timer;
 
-  MovableSquare() {
+  MovableSquare() : super(priority: 1) {
     addShape(HitboxRectangle());
     timer = Timer(3.0)
       ..stop()
       ..callback = () {
-        gameRef.camera.setRelativeOffset(Anchor.center.toVector2());
+        gameRef.camera.setRelativeOffset(Anchor.center);
       };
   }
 
@@ -41,16 +45,13 @@ class MovableSquare extends SquareComponent
   void render(Canvas c) {
     super.render(c);
     final text = '(${x.toInt()}, ${y.toInt()})';
-    config.render(c, text, size / 2, anchor: Anchor.center);
+    textRenderer.render(c, text, size / 2, anchor: Anchor.center);
   }
-
-  @override
-  int get priority => 1;
 
   @override
   void onCollision(Set<Vector2> points, Collidable other) {
     if (other is Rock) {
-      gameRef.camera.setRelativeOffset(Anchor.topCenter.toVector2());
+      gameRef.camera.setRelativeOffset(Anchor.topCenter);
       timer.start();
     }
   }
@@ -66,6 +67,8 @@ class Map extends Component {
     ..style = PaintingStyle.stroke;
   static final Paint _paintBg = Paint()..color = const Color(0xFF333333);
 
+  Map() : super(priority: 0);
+
   @override
   void render(Canvas canvas) {
     super.render(canvas);
@@ -73,33 +76,54 @@ class Map extends Component {
     canvas.drawRect(bounds, _paintBorder);
   }
 
-  @override
-  int get priority => 0;
-
   static double genCoord() {
     return -S + R.nextDouble() * (2 * S);
   }
 }
 
-class Rock extends SquareComponent with Hitbox, Collidable {
-  Rock(Vector2 position) {
+class Rock extends SquareComponent with Hitbox, Collidable, Tapable {
+  static final unpressedPaint = Paint()..color = const Color(0xFF2222FF);
+  static final pressedPaint = Paint()..color = const Color(0xFF414175);
+
+  Rock(Vector2 position) : super(priority: 2) {
     this.position.setFrom(position);
     size.setValues(50, 50);
-    paint = Paint()..color = const Color(0xFF2222FF);
+    paint = unpressedPaint;
     addShape(HitboxRectangle());
   }
 
   @override
-  int get priority => 2;
+  bool onTapDown(_) {
+    paint = pressedPaint;
+    return true;
+  }
+
+  @override
+  bool onTapUp(_) {
+    paint = unpressedPaint;
+    return true;
+  }
+
+  @override
+  bool onTapCancel() {
+    paint = unpressedPaint;
+    return true;
+  }
 }
 
 class CameraAndViewportGame extends BaseGame
-    with KeyboardEvents, HasCollidables {
+    with KeyboardEvents, HasCollidables, HasTapableComponents {
   late MovableSquare square;
+
+  final Vector2 viewportResolution;
+
+  CameraAndViewportGame({
+    required this.viewportResolution,
+  });
 
   @override
   Future<void> onLoad() async {
-    viewport = FixedResolutionViewport(Vector2(500, 500));
+    viewport = FixedResolutionViewport(viewportResolution);
     add(Map());
 
     add(square = MovableSquare());

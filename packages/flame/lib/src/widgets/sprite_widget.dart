@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 
+import '../../extensions.dart';
 import '../anchor.dart';
-import '../extensions/size.dart';
 import '../sprite.dart';
 import 'animation_widget.dart';
 
@@ -45,16 +45,15 @@ class _SpritePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final widthRate = size.width / _sprite.srcSize.x;
-    final heightRate = size.height / _sprite.srcSize.y;
-    final rate = min(widthRate, heightRate);
-
-    final paintSize = _sprite.srcSize * rate;
+    final boxSize = size.toVector2();
+    final rate = boxSize.clone()..divide(_sprite.srcSize);
+    final minRate = min(rate.x, rate.y);
+    final paintSize = _sprite.srcSize * minRate;
     final anchorPosition = _anchor.toVector2();
-    final anchoredPosition = size.toVector2()..multiply(anchorPosition);
-    final delta = (anchoredPosition - paintSize)..multiply(anchorPosition);
+    final boxAnchorPosition = boxSize..multiply(anchorPosition);
+    final spriteAnchorPosition = anchorPosition..multiply(paintSize);
 
-    canvas.translate(delta.x, delta.y);
+    canvas.translateVector(boxAnchorPosition..sub(spriteAnchorPosition));
     _sprite.render(canvas, size: paintSize);
   }
 }

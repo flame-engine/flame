@@ -18,7 +18,7 @@ class Block {
 }
 
 /// This component renders a tilemap, represented by an int matrix, given a
-/// tileset, in witch the integers are the block ids.
+/// tileset, in which the integers are the block ids.
 ///
 /// It can change the scale of each block by using the optional destTileSize
 /// property.
@@ -32,15 +32,24 @@ class IsometricTileMapComponent extends PositionComponent {
   /// Optionally provide a new tile size to render it scaled.
   Vector2? destTileSize;
 
+  /// This is the vertical height of each block in the tile set.
+  ///
+  /// Note: this must be measured in the destination space.
+  double? tileHeight;
+
   IsometricTileMapComponent(
     this.tileset,
     this.matrix, {
     this.destTileSize,
+    this.tileHeight,
     Vector2? position,
   }) : super(position: position);
 
   /// This is the size the tiles will be drawn (either original or overwritten).
   Vector2 get effectiveTileSize => destTileSize ?? tileset.srcSize;
+
+  /// This is the vertical height of each block; by default it's half the tile size.
+  double get effectiveTileHeight => tileHeight ?? (effectiveTileSize.x / 2);
 
   @override
   void render(Canvas c) {
@@ -59,7 +68,7 @@ class IsometricTileMapComponent extends PositionComponent {
     }
   }
 
-  /// Get the position in witch a block must be in the isometric space.
+  /// Get the position in which a block must be in the isometric space.
   ///
   /// This does not include the (x,y) PositionComponent offset!
   Vector2 getBlockPosition(Block block) {
@@ -67,9 +76,9 @@ class IsometricTileMapComponent extends PositionComponent {
   }
 
   Vector2 getBlockPositionInts(int i, int j) {
-    final pos = Vector2(i.toDouble(), j.toDouble())
-      ..multiply(effectiveTileSize / 2);
-    return cartToIso(pos) - Vector2(effectiveTileSize.x / 2, 0);
+    final halfTile = effectiveTileSize / 2;
+    final pos = Vector2(i.toDouble(), j.toDouble())..multiply(halfTile);
+    return cartToIso(pos) - halfTile;
   }
 
   /// Converts a coordinate from the isometric space to the cartesian space.
@@ -90,10 +99,21 @@ class IsometricTileMapComponent extends PositionComponent {
   ///
   /// This can be used to handle clicks or hovers.
   Block getBlock(Vector2 p) {
-    final cart = isoToCart(p - position);
-    final px = cart.x ~/ (effectiveTileSize.x / 2);
-    final py = cart.y ~/ (effectiveTileSize.y / 2);
+    final halfTile = effectiveTileSize / 2;
+    final multiplier = 1 - halfTile.y / (2 * effectiveTileHeight);
+    final delta = halfTile.clone()..multiply(Vector2(1, multiplier));
+    final cart = isoToCart(p - position + delta);
+    final px = (cart.x / halfTile.x - 1).ceil();
+    final py = (cart.y / halfTile.y).ceil();
     return Block(px, py);
+  }
+
+  void setBlockValue(Block pos, int block) {
+    matrix[pos.y][pos.x] = block;
+  }
+
+  int blockValue(Block pos) {
+    return matrix[pos.y][pos.x];
   }
 
   /// Return whether the matrix contains a block in its bounds.

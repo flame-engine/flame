@@ -33,12 +33,12 @@ class TapableSquare extends PositionComponent with Tapable {
   }
 
   @override
-  bool onTapUp(TapUpDetails details) {
+  bool onTapUp(_) {
     return false;
   }
 
   @override
-  bool onTapDown(TapDownDetails details) {
+  bool onTapDown(_) {
     angle += 1.0;
     return false;
   }

@@ -1,6 +1,41 @@
 # CHANGELOG
 
-## [next]
+## [Next]
+ - Fix link to code in example stories
+ - Fix RotateEffect with netative deltas
+ - Add isDragged to Draggable
+ - Migrated the `Particle` API to `Vector2`
+
+## [1.0.0-releasecandidate.11]
+ - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code
+ - Fix the anchor of SpriteWidget
+ - Add test for re-adding previously removed component
+ - Add possibility to dynamically change priority of components
+ - Add onCollisionEnd to make it possible for the user to easily detect when a collision ends
+ - Adding test coverage to packages
+ - Possibility to have non-fullscreen ParallaxComponent
+ - No need to send size in ParallaxComponent.fromParallax since Parallax already contains it
+ - Fix Text Rendering not working properly
+ - Add more useful methods to the IsometricTileMap component
+ - Add Hoverables
+ - Brief semantic update to second tutorial.
+
+## [1.0.0-rc10]
+ - Updated tutorial documentation to indicate use of new version
+ - Fix bounding box check in collision detection
+ - Refactor on flame input system to correctly take camera into account
+ - Adding `SpriteAnimationGroupComponent`
+ - Allow isometric tile maps with custom heights
+ - Add a new renderRect method to Sprite
+ - Addresses the TODO to change the camera public APIs to take Anchors for relativePositions
+ - Adds methods to support moving the camera relative to its current position
+ - Abstracting the text api to allow custom text renderers on the framework
+ - Set the same debug mode for children as for the parent when added
+ - Fix camera projections when camera is zoomed
+ - Fix collision detection system with angle and parentAngle
+ - Fix rendering of shapes that aren't HitboxShape
+
+## [1.0.0-rc9]
  - Fix input bug with other anchors than center
  - Fixed `Shape` so that the `position` is now a `late`
  - Updated the documentation for the supported platforms
@@ -20,7 +55,10 @@
  - Fix Scroll example
  - Add a `renderPoint` method to `Canvas`
  - Add zoom to the camera
- - Migrated the `Particle` API to `Vector2`
+ - Add `moveToTarget` as an extension method to `Vector2`
+ - Bring back collision detection examples
+ - Fix collision detection in Collidable with multiple offset shapes
+ - Publishing Flame examples on github pages
 
 ## 1.0.0-rc8
  - Migrate to null safety

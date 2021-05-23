@@ -3,20 +3,16 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
-import 'package:flutter/gestures.dart' show TapDownDetails;
 
 class BasicAnimations extends BaseGame with TapDetector {
-  late Image chopper;
   late Image creature;
-  late SpriteAnimation animation;
 
   @override
   Future<void> onLoad() async {
-    chopper = await images.load('animations/chopper.png');
     creature = await images.load('animations/creature.png');
 
-    animation = SpriteAnimation.fromFrameData(
-      chopper,
+    final animation = await loadSpriteAnimation(
+      'animations/chopper.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         textureSize: Vector2.all(48),
@@ -64,7 +60,7 @@ class BasicAnimations extends BaseGame with TapDetector {
   }
 
   @override
-  void onTapDown(TapDownDetails evt) {
-    addAnimation(Vector2(evt.globalPosition.dx, evt.globalPosition.dy));
+  void onTapDown(TapDownInfo event) {
+    addAnimation(event.eventPosition.game);
   }
 }

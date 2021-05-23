@@ -44,7 +44,7 @@ The latest version can be found on [pub.dev](https://pub.dev/packages/flame/inst
 ## Getting started
 
 There is a set of tutorials that you can follow to get started in the
-[flame_tutorials](https://github.com/flame-engine/flame_tutorials) repository.
+[tutorials folder](https://github.com/flame-engine/flame/tree/main/tutorials).
 
 Simple examples for all features can be found in the
 [examples folder](https://github.com/flame-engine/flame/tree/main/examples).

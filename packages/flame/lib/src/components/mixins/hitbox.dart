@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:ui';
 
 import '../../../extensions.dart';
 import '../../geometry/shape.dart';
@@ -26,34 +27,17 @@ mixin Hitbox on PositionComponent {
         _shapes.any((shape) => shape.containsPoint(point));
   }
 
-  void renderShapes(Canvas canvas) {
-    _shapes.forEach((shape) => shape.render(canvas, debugPaint));
-  }
-
-  final _cachedBoundingRect = ShapeCache<Rect>();
-
-  /// Returns the absolute [Rect] that contains all the corners of the rotated
-  /// [toAbsoluteRect] rect.
-  Rect toBoundingRect() {
-    if (!_cachedBoundingRect.isCacheValid([position, size])) {
-      final maxRadius = size.length;
-      _cachedBoundingRect.updateCache(
-        Rect.fromCenter(
-          center: absoluteCenter.toOffset(),
-          width: maxRadius,
-          height: maxRadius,
-        ),
-        [position.clone(), size.clone()],
-      );
-    }
-    return _cachedBoundingRect.value!;
+  void renderShapes(Canvas canvas, {Paint? paint}) {
+    _shapes.forEach((shape) => shape.render(canvas, paint ?? debugPaint));
   }
 
   /// Since this is a cheaper calculation than checking towards all shapes, this
   /// check can be done first to see if it even is possible that the shapes can
   /// overlap, since the shapes have to be within the size of the component.
   bool possiblyOverlapping(Hitbox other) {
-    return toBoundingRect().overlaps(other.toBoundingRect());
+    final maxDistance = other.size.length + size.length;
+    return other.absoluteCenter.distanceToSquared(absoluteCenter) <=
+        maxDistance * maxDistance;
   }
 
   /// Since this is a cheaper calculation than checking towards all shapes this
@@ -61,6 +45,6 @@ mixin Hitbox on PositionComponent {
   /// contain the point, since the shapes have to be within the size of the
   /// component.
   bool possiblyContainsPoint(Vector2 point) {
-    return toBoundingRect().containsPoint(point);
+    return absoluteCenter.distanceToSquared(point) <= size.length2;
   }
 }

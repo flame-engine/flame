@@ -2,11 +2,11 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart' show Colors;
-import 'package:flutter/widgets.dart'
-    show EdgeInsets, DragUpdateDetails, DragEndDetails;
+import 'package:flutter/widgets.dart' show EdgeInsets;
 
 import '../../../components.dart';
 import '../../../extensions.dart';
+import '../../gestures/events.dart';
 import 'joystick_component.dart';
 import 'joystick_element.dart';
 import 'joystick_events.dart';
@@ -130,11 +130,11 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
   }
 
   @override
-  bool onDragStart(int pointerId, Vector2 startPosition) {
-    _updateDirectionalRect(startPosition);
+  bool onDragStart(int pointerId, DragStartInfo info) {
+    _updateDirectionalRect(info.eventPosition.widget);
     if (!_dragging) {
       _dragging = true;
-      _dragPosition = startPosition;
+      _dragPosition = info.eventPosition.widget;
       return true;
     }
     return false;
@@ -161,18 +161,16 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
   }
 
   @override
-  bool onDragUpdate(int pointerId, DragUpdateDetails details) {
+  bool onDragUpdate(_, DragUpdateInfo event) {
     if (_dragging) {
-      _dragPosition = gameRef.convertGlobalToLocalCoordinate(
-        details.globalPosition.toVector2(),
-      );
+      _dragPosition = event.eventPosition.game;
       return false;
     }
     return true;
   }
 
   @override
-  bool onDragEnd(int pointerId, DragEndDetails details) {
+  bool onDragEnd(_, __) {
     _dragging = false;
     _dragPosition = background.center;
     joystickController.joystickChangeDirectional(JoystickDirectionalEvent(
@@ -182,7 +180,7 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
   }
 
   @override
-  bool onDragCancel(int pointerId) {
+  bool onDragCancel(_) {
     _dragging = false;
     _dragPosition = background.center;
     joystickController.joystickChangeDirectional(JoystickDirectionalEvent(

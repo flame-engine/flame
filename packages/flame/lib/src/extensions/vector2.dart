@@ -34,9 +34,19 @@ extension Vector2Extension on Vector2 {
     setFrom(this + (to - this) * t);
   }
 
+  /// Whether the [Vector2] is the zero vector or not
+  bool isZero() => x == 0 && y == 0;
+
   /// Rotates the [Vector2] with [angle] in radians
   /// rotates around [center] if it is defined
+  /// In a screen coordinate system (where the y-axis is flipped) it rotates in
+  /// a clockwise fashion
+  /// In a normal coordinate system it rotates in a counter-clockwise fashion
   void rotate(double angle, {Vector2? center}) {
+    if (isZero() || angle == 0) {
+      // No point in rotating the zero vector or to rotate with 0 as angle
+      return;
+    }
     if (center == null) {
       setValues(
         x * cos(angle) - y * sin(angle),
@@ -57,6 +67,29 @@ extension Vector2Extension on Vector2 {
     final l = length;
     if (l != 0) {
       scale(newLength.abs() / l);
+    }
+  }
+
+  /// Smoothly moves this [Vector2] in the direction [target] by a displacement
+  /// given by a distance [ds] in that direction.
+  ///
+  /// It does not goes beyond target, regardless of [ds], so the final value
+  /// is always [target].
+  ///
+  /// Note: [ds] is the displacement vector in units of the vector space. It is
+  /// **not** a percentage (relative value).
+  void moveToTarget(
+    Vector2 target,
+    double ds,
+  ) {
+    if (this != target) {
+      final diff = target - this;
+      if (diff.length < ds) {
+        setFrom(target);
+      } else {
+        diff.scaleTo(ds);
+        setFrom(this + diff);
+      }
     }
   }
 

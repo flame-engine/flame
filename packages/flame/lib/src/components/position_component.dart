@@ -88,14 +88,17 @@ abstract class PositionComponent extends BaseComponent {
     }
   }
 
-  /// Get the position of the center of the component's bounding rectangle without rotation
+  /// Get the position of the center of the component's bounding rectangle
   Vector2 get center {
-    return anchor == Anchor.center
-        ? position
-        : anchor.toOtherAnchorPosition(position, Anchor.center, size);
+    if (anchor == Anchor.center) {
+      return position;
+    } else {
+      return anchor.toOtherAnchorPosition(position, Anchor.center, size)
+        ..rotate(angle, center: absolutePosition);
+    }
   }
 
-  /// Get the absolute center of the component without rotation
+  /// Get the absolute center of the component
   Vector2 get absoluteCenter => absoluteParentPosition + center;
 
   /// Angle (with respect to the x-axis) this component should be rendered with.
@@ -136,13 +139,15 @@ abstract class PositionComponent extends BaseComponent {
     this.anchor = Anchor.topLeft,
     this.renderFlipX = false,
     this.renderFlipY = false,
+    int priority = 0,
   })  : _position = position ?? Vector2.zero(),
-        _size = size ?? Vector2.zero();
+        _size = size ?? Vector2.zero(),
+        super(priority: priority);
 
   @override
   bool containsPoint(Vector2 point) {
     final rectangle = Rectangle.fromRect(toAbsoluteRect(), angle: angle)
-      ..anchorPosition = absolutePosition;
+      ..position = absoluteCenter;
     return rectangle.containsPoint(point);
   }
 
@@ -156,7 +161,7 @@ abstract class PositionComponent extends BaseComponent {
       (this as Hitbox).renderShapes(canvas);
     }
     canvas.drawRect(size.toRect(), debugPaint);
-    debugTextConfig.render(
+    debugTextPaint.render(
       canvas,
       'x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}',
       Vector2(-50, -15),
@@ -165,7 +170,7 @@ abstract class PositionComponent extends BaseComponent {
     final rect = toRect();
     final dx = rect.right;
     final dy = rect.bottom;
-    debugTextConfig.render(
+    debugTextPaint.render(
       canvas,
       'x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}',
       Vector2(width - 50, height),

@@ -1,20 +1,22 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../../../extensions.dart';
 import '../../game/base_game.dart';
+import '../../gestures/events.dart';
 import '../base_component.dart';
 
 mixin Draggable on BaseComponent {
-  bool onDragStart(int pointerId, Vector2 startPosition) {
+  bool _isDragged = false;
+  bool get isDragged => _isDragged;
+
+  bool onDragStart(int pointerId, DragStartInfo info) {
     return true;
   }
 
-  bool onDragUpdate(int pointerId, DragUpdateDetails details) {
+  bool onDragUpdate(int pointerId, DragUpdateInfo info) {
     return true;
   }
 
-  bool onDragEnd(int pointerId, DragEndDetails details) {
+  bool onDragEnd(int pointerId, DragEndInfo info) {
     return true;
   }
 
@@ -25,23 +27,25 @@ mixin Draggable on BaseComponent {
   final List<int> _currentPointerIds = [];
   bool _checkPointerId(int pointerId) => _currentPointerIds.contains(pointerId);
 
-  bool handleDragStart(int pointerId, Vector2 startPosition) {
-    if (containsPoint(startPosition)) {
+  bool handleDragStart(int pointerId, DragStartInfo info) {
+    if (containsPoint(info.eventPosition.game)) {
+      _isDragged = true;
       _currentPointerIds.add(pointerId);
-      return onDragStart(pointerId, startPosition);
+      return onDragStart(pointerId, info);
     }
     return true;
   }
 
-  bool handleDragUpdated(int pointerId, DragUpdateDetails details) {
+  bool handleDragUpdated(int pointerId, DragUpdateInfo details) {
     if (_checkPointerId(pointerId)) {
       return onDragUpdate(pointerId, details);
     }
     return true;
   }
 
-  bool handleDragEnded(int pointerId, DragEndDetails details) {
+  bool handleDragEnded(int pointerId, DragEndInfo details) {
     if (_checkPointerId(pointerId)) {
+      _isDragged = false;
       _currentPointerIds.remove(pointerId);
       return onDragEnd(pointerId, details);
     }
@@ -50,6 +54,7 @@ mixin Draggable on BaseComponent {
 
   bool handleDragCanceled(int pointerId) {
     if (_checkPointerId(pointerId)) {
+      _isDragged = false;
       _currentPointerIds.remove(pointerId);
       return handleDragCanceled(pointerId);
     }
@@ -59,17 +64,17 @@ mixin Draggable on BaseComponent {
 
 mixin HasDraggableComponents on BaseGame {
   @mustCallSuper
-  void onDragStart(int pointerId, Vector2 startPosition) {
-    _onGenericEventReceived((c) => c.handleDragStart(pointerId, startPosition));
+  void onDragStart(int pointerId, DragStartInfo info) {
+    _onGenericEventReceived((c) => c.handleDragStart(pointerId, info));
   }
 
   @mustCallSuper
-  void onDragUpdate(int pointerId, DragUpdateDetails details) {
+  void onDragUpdate(int pointerId, DragUpdateInfo details) {
     _onGenericEventReceived((c) => c.handleDragUpdated(pointerId, details));
   }
 
   @mustCallSuper
-  void onDragEnd(int pointerId, DragEndDetails details) {
+  void onDragEnd(int pointerId, DragEndInfo details) {
     _onGenericEventReceived((c) => c.handleDragEnded(pointerId, details));
   }
 

@@ -14,12 +14,13 @@ import '../keyboard.dart';
 import '../sprite.dart';
 import '../sprite_animation.dart';
 import 'game_render_box.dart';
+import 'projector.dart';
 
 /// Represents a generic game.
 ///
 /// Subclass this to implement the [update] and [render] methods.
 /// Flame will deal with calling these methods properly when the game's widget is rendered.
-abstract class Game {
+abstract class Game extends Projector {
   final images = Images();
   final assets = AssetsCache();
 
@@ -133,8 +134,8 @@ abstract class Game {
     images.clearCache();
   }
 
-  /// Converts a global coordinate (i.e. wrt to the app itself) to a local
-  /// coordinate (i.e. wrt to the game widget).
+  /// Converts a global coordinate (i.e. w.r.t. the app itself) to a local
+  /// coordinate (i.e. w.r.t. he game widget).
   /// If the widget occupies the whole app ("full screen" games), this operation
   /// is the identity.
   Vector2 convertGlobalToLocalCoordinate(Vector2 point) {
@@ -146,8 +147,8 @@ abstract class Game {
     return _gameRenderBox!.globalToLocal(point.toOffset()).toVector2();
   }
 
-  /// Converts a local coordinate (i.e. wrt to the game widget) to a global
-  /// coordinate (i.e. wrt to the app itself).
+  /// Converts a local coordinate (i.e. w.r.t. the game widget) to a global
+  /// coordinate (i.e. w.r.t. the app itself).
   /// If the widget occupies the whole app ("full screen" games), this operation
   /// is the identity.
   Vector2 convertLocalToGlobalCoordinate(Vector2 point) {
@@ -158,6 +159,18 @@ abstract class Game {
     }
     return _gameRenderBox!.localToGlobal(point.toOffset()).toVector2();
   }
+
+  @override
+  Vector2 unprojectVector(Vector2 vector) => vector;
+
+  @override
+  Vector2 projectVector(Vector2 vector) => vector;
+
+  @override
+  Vector2 unscaleVector(Vector2 vector) => vector;
+
+  @override
+  Vector2 scaleVector(Vector2 vector) => vector;
 
   /// Utility method to load and cache the image for a sprite based on its options
   Future<Sprite> loadSprite(

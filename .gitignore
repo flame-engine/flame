@@ -16,3 +16,5 @@ android/
 ios/
 desktop/
 build/
+
+coverage

@@ -37,11 +37,7 @@ extension RectExtension on Rect {
       bottomLeft.toVector2(),
     ];
   }
-}
 
-// Until [extension] will allow static methods we need to keep these functions
-// in a utility class
-class RectFactory {
   /// Creates bounds in from of a [Rect] from a list of [Vector2]
   static Rect fromBounds(List<Vector2> pts) {
     final minX = pts.map((e) => e.x).reduce(min);
@@ -49,5 +45,20 @@ class RectFactory {
     final minY = pts.map((e) => e.y).reduce(min);
     final maxY = pts.map((e) => e.y).reduce(max);
     return Rect.fromPoints(Offset(minX, minY), Offset(maxX, maxY));
+  }
+
+  /// Constructs a rectangle from its center point (specified as a Vector2),
+  /// width and height.
+  static Rect fromVector2Center({
+    required Vector2 center,
+    required double width,
+    required double height,
+  }) {
+    return Rect.fromLTRB(
+      center.x - width / 2,
+      center.y - height / 2,
+      center.x + width / 2,
+      center.y + height / 2,
+    );
   }
 }

@@ -9,7 +9,7 @@ class Device {
   /// Sets the app to be full-screen (no buttons, bar or notifications on top).
   Future<void> fullScreen() {
     if (kIsWeb) {
-      // TODO: We probably could use dart:html and implement this for web as well
+      // TODO(erickzanardo): We probably could use dart:html and implement this for web as well
       return Future.value();
     }
     return SystemChrome.setEnabledSystemUIOverlays([]);

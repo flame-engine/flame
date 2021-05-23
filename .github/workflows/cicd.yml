@@ -18,7 +18,7 @@ jobs:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'beta'
+          channel: 'stable'
       - run: ./scripts/dartdoc.sh
 
   format:
@@ -30,7 +30,7 @@ jobs:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'beta'
+          channel: 'stable'
       - run: ./scripts/format.sh
 
   analyze:
@@ -42,7 +42,7 @@ jobs:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'beta'
+          channel: 'stable'
       - run: ./scripts/analyze.sh
   # END LINTING STAGE
 
@@ -57,6 +57,7 @@ jobs:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'beta'
+          channel: 'stable'
+      - run: sudo apt-get install lcov -y
       - run: ./scripts/test.sh
   # END TESTING STAGE

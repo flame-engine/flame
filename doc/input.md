@@ -95,6 +95,28 @@ and [MouseRegion widget](https://api.flutter.dev/flutter/widgets/MouseRegion-cla
 also read more about Flutter's gestures
 [here](https://api.flutter.dev/flutter/gestures/gestures-library.html).
 
+## Event coordinate system
+
+On events that have positions, like for example `Tap*` or `Drag`, you will notice that the `eventPosition`
+attribute includes 3 fields: `game`, `widget` and `global`. Below you will find a brief explanation
+about each one of them.
+
+### global
+
+The position where the event occurred considering the entire screen, same as
+`globalPosition` in Flutter's native events.
+
+### widget
+
+The position where the event occurred relative to the `GameWidget` position and size
+, same as `localPosition` in Flutter's native events.
+
+### game
+
+The position where the event ocurred relative to the `GameWidget` and with any
+transformations that the game applied to the game (e.g. camera). If the game doesn't have any
+transformations, this will be equal to the `widget` attribute.
+
 ## Example
 
 ```dart
@@ -102,13 +124,13 @@ class MyGame extends Game with TapDetector {
   // Other methods omitted
 
   @override
-  void onTapDown(TapDownDetails details) {
-    print("Player tap down on ${details.globalPosition.dx} - ${details.globalPosition.dy}");
+  void onTapDown(TapDownInfo event) {
+    print("Player tap down on ${event.eventPosition.game}");
   }
 
   @override
-  void onTapUp(TapUpDetails details) {
-    print("Player tap up on ${details.globalPosition.dx} - ${details.globalPosition.dy}");
+  void onTapUp(TapUpInfo event) {
+    print("Player tap up on ${event.eventPosition.game}");
   }
 }
 ```
@@ -116,10 +138,10 @@ class MyGame extends Game with TapDetector {
 You can also check more complete examples
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/controls/).
 
-## Tapable and Draggable components
+## Tapable, Draggable and Hoverable components
 
-Any component derived from `BaseComponent` (most components) can add the `Tapable` and/or the
-`Draggable` mixins to handle taps and drags on the component.
+Any component derived from `BaseComponent` (most components) can add the `Tapable`, the
+`Draggable`, and/or the `Hoverable` mixins to handle taps, drags and hovers on the component.
 
 All overridden methods return a boolean to control if the event should be passed down further along
 to components underneath it. So say that you only want your top visible component to receive a tap
@@ -137,27 +159,26 @@ components, you can override the following methods on your components:
 
 ```dart
 void onTapCancel() {}
-void onTapDown(TapDownDetails details) {}
-void onTapUp(TapUpDetails details) {}
+void onTapDown(TapDownInfo event) {}
+void onTapUp(TapUpInfo event) {}
 ```
 
 Minimal component example:
 
 ```dart
-import 'package:flame/components/component.dart';
-import 'package:flame/components/mixins/tapable.dart';
+import 'package:flame/components.dart';
 
 class TapableComponent extends PositionComponent with Tapable {
 
   // update and render omitted
 
   @override
-  void onTapUp(TapUpDetails details) {
+  void onTapUp(TapUpInfo event) {
     print("tap up");
   }
 
   @override
-  void onTapDown(TapDownDetails details) {
+  void onTapDown(TapDownInfo event) {
     print("tap down");
   }
 
@@ -187,8 +208,8 @@ components.
 
 ```dart
   void onDragStart(int pointerId, Vector2 startPosition) {}
-  void onDragUpdate(int pointerId, DragUpdateDetails details) {}
-  void onDragEnd(int pointerId, DragEndDetails details) {}
+  void onDragUpdate(int pointerId, DragUpdateInfo event) {}
+  void onDragEnd(int pointerId, DragEndInfo event) {}
   void onDragCancel(int pointerId) {}
 ```
 
@@ -207,8 +228,7 @@ Minimal component example (this example ignores pointerId so it wont work well i
 multi-drag):
 
 ```dart
-import 'package:flame/components/component.dart';
-import 'package:flame/components/mixins/draggable.dart';
+import 'package:flame/components.dart';
 
 class DraggableComponent extends PositionComponent with Draggable {
 
@@ -224,16 +244,14 @@ class DraggableComponent extends PositionComponent with Draggable {
   }
 
   @override
-  bool onDragUpdate(int pointerId, DragUpdateDetails details) {
-    final localCoords = gameRef.convertGlobalToLocalCoordinate(
-      details.globalPosition.toVector2(),
-    );
+  bool onDragUpdate(int pointerId, DragUpdateInfo event) {
+    final localCoords = event.eventPosition.game;
     position = localCoords - dragDeltaPosition;
     return false;
   }
 
   @override
-  bool onDragEnd(int pointerId, DragEndDetails details) {
+  bool onDragEnd(int pointerId, DragEndInfo event) {
     dragDeltaPosition = null;
     return false;
   }
@@ -254,6 +272,25 @@ class MyGame extends BaseGame with HasDraggableComponents {
 
 **Note**: `HasDraggableComponents` uses an advanced gesture detector under the hood and as explained
 further up on this page, shouldn't be used alongside basic detectors.
+
+### Hoverable components
+
+Just like the others, this mixin allows for easy wiring of your component to listen to hover states
+and events.
+
+By adding the `HasHoverableComponents` mixin to your base game, and by using the mixin `Hoverable` on
+your components, they get an `isHovered` field and a couple of methods (`onHoverStart`, `onHoverEnd`) that
+you can override if you want to listen to the events.
+
+```dart
+  bool isHovered = false;
+  void onHoverEnter(PointerHoverInfo event) {}
+  void onHoverLeave(PointerHoverInfo event) {}
+```
+
+The provided event info is from the mouse move that triggered the action (entering or leaving).
+While the mouse movement is kept inside or outside, no events are fired and those mouse move events are
+not propagated. Only when the state is changed the handlers are triggered.
 
 ## Hitbox
 The `Hitbox` mixin is used to make detection of gestures on top of your `PositionComponent`s more

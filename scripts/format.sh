@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 
+if [ "$1" == "fix" ]; then
+  params=""
+else
+  params="--set-exit-if-changed -n"
+fi
+
 function run_format() {
-  FORMAT_ISSUES=$(flutter format --set-exit-if-changed -n .)
+  FORMAT_ISSUES=$(flutter format $params -n .)
   if [ $? -eq 1 ]; then
     echo "flutter format issues on"
     echo $FORMAT_ISSUES
