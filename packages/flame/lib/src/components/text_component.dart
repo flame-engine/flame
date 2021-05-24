@@ -46,6 +46,6 @@ class TextComponent extends PositionComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    _textRenderer.render(canvas, text, Vector2.zero());
+    _textRenderer.render(canvas, text, Vector2.zero(), anchor: anchor);
   }
 }
