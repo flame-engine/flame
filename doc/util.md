@@ -195,9 +195,15 @@ Methods:
  - `toVector2`: Creates a `Vector2` starting in (0,0) and goes to the size of the `Rect`.
  - `containsPoint` Whether this `Rect` contains a `Vector2` point or not.
  - `intersectsSegment`; Whether the segment formed by two `Vector2`s intersects this `Rect`.
- - `intersectsLineSegment`: Whether the `LineSegmet` intersects the `Rect`.
- - `toVertices`: Turns the four corners of the `Rect` into a list of `Vector2`,
+ - `intersectsLineSegment`: Whether the `LineSegment` intersects the `Rect`.
+ - `toVertices`: Turns the four corners of the `Rect` into a list of `Vector2`.
+ - `toMathRectangle`: Converts this `Rect` into a `math.Rectangle`.
+ - `toGeometryRectangle`: Converts this `Rect` into a `Rectangle` from flame-geom.
 
+### math.Rectangle
+
+Methods:
+ - `toRect`: Converts this math `Rectangle` into an ui `Rect`.
 ### Size
 
 Methods:

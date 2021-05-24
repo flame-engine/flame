@@ -38,6 +38,7 @@ extension RectExtension on Rect {
         max(pointA.y, pointB.y) >= top;
   }
 
+  /// Whether the [LineSegment] intersects the [Rect]
   bool intersectsLineSegment(LineSegment segment) {
     return intersectsSegment(segment.from, segment.to);
   }
