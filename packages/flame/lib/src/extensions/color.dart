@@ -46,6 +46,9 @@ extension ColorExtension on Color {
   /// ccc, CCC, #ccc, #CCC, #c1c1c1, #C1C1C1, c1c1c1, C1C1C1
   ///
   /// If the string is not valid, an error is thrown.
+  ///
+  /// Note: if you are hardcoding colors, use Dart's built-in hexadecimal
+  /// literals instead.
   static Color fromRGBHexString(String hexString) {
     if (hexString.length == 3 || hexString.length == 4) {
       return _parseRegex(1, 3, hexString);
@@ -66,6 +69,9 @@ extension ColorExtension on Color {
   /// fccc, FCCC, #fccc, #FCCC, #ffc1c1c1, #FFC1C1C1, ffc1c1c1, FFC1C1C1
   ///
   /// If the string is not valid, an error is thrown.
+  ///
+  /// Note: if you are hardcoding colors, use Dart's built-in hexadecimal
+  /// literals instead.
   static Color fromARGBHexString(String hexString) {
     if (hexString.length == 4 || hexString.length == 5) {
       return _parseRegex(1, 4, hexString);
