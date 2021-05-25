@@ -5,6 +5,7 @@
  - Fix RotateEffect with netative deltas
  - Add isDragged to Draggable
  - Fix anchor of rendered text in TextComponent
+ - Implement color parsing methods
 
 ## [1.0.0-releasecandidate.11]
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code
