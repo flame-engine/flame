@@ -1,8 +1,10 @@
-import 'dart:math';
+import 'dart:math' show min, max;
+import 'dart:math' as math;
 import 'dart:ui';
 
 import '../../geometry.dart';
 import 'offset.dart';
+import 'size.dart';
 import 'vector2.dart';
 
 export 'dart:ui' show Rect;
@@ -13,6 +15,17 @@ extension RectExtension on Rect {
 
   /// Creates a [Vector2] starting in top left and going to [width, height].
   Vector2 toVector2() => Vector2(width, height);
+
+  /// Converts this [Rect] into a [math.Rectangle].
+  math.Rectangle toMathRectangle() => math.Rectangle(left, top, width, height);
+
+  /// Converts this [Rect] into a Rectangle from flame-geom.
+  Rectangle toGeometryRectangle() {
+    return Rectangle(
+      position: topLeft.toVector2(),
+      size: size.toVector2(),
+    );
+  }
 
   /// Whether this [Rect] contains a [Vector2] point or not
   bool containsPoint(Vector2 point) => contains(point.toOffset());
@@ -25,6 +38,7 @@ extension RectExtension on Rect {
         max(pointA.y, pointB.y) >= top;
   }
 
+  /// Whether the [LineSegment] intersects the [Rect]
   bool intersectsLineSegment(LineSegment segment) {
     return intersectsSegment(segment.from, segment.to);
   }
