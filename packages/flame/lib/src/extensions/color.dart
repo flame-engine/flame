@@ -83,9 +83,10 @@ extension ColorExtension on Color {
   }
 
   static Color _parseRegex(int size, int blocks, String target) {
-    final regex = RegExp('^\\#?([0-9a-fA-F]{$size}){$blocks}\$');
-    final matcher = regex.firstMatch(target)!;
     final groups = [for (var i = 1; i <= blocks; i++) i];
+    final regexBlocks = groups.map((_) => '([0-9a-fA-F]{$size})').join();
+    final regex = RegExp('^\\#?$regexBlocks\$');
+    final matcher = regex.firstMatch(target)!;
     final extracted = matcher
         .groups(groups)
         .map((e) => e!)
