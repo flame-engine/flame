@@ -170,6 +170,10 @@ Methods:
  - `darken`: Darken the shade of the color by an amount between 0 to 1.
  - `brighten`: Brighten the shade of the color by an amount between 0 to 1.
 
+Factories:
+- `fromRGBHexString`: Parses an RGB color from a valid hex string (e.g. #1C1C1C).
+- `fromARGBHexString`: Parses an ARGB color from a valid hex string (e.g. #FF1C1C1C).
+
 ### Image
 
 Methods:
