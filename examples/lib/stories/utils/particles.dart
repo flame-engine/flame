@@ -456,10 +456,10 @@ class ParticlesGame extends BaseGame {
             .translated(halfCellSize),
         rect
             .rotating(to: -pi)
-            .moving(to: cellSize..multiply(Vector2(1, -1)))
+            .moving(to: Vector2(1, -1)..multiply(cellSize))
             .scaled(2)
-            .translated(halfCellSize..multiply(Vector2(-1, 1)))
-            .accelerated(acceleration: halfCellSize..multiply(Vector2(-5, 5))),
+            .translated(Vector2(1, -1)..multiply(halfCellSize))
+            .accelerated(acceleration: Vector2(-5, 5)..multiply(halfCellSize)),
       ],
     );
   }
@@ -482,7 +482,7 @@ class ParticlesGame extends BaseGame {
 
   /// Returns random [Vector2] within a virtual grid cell
   Vector2 randomCellVector2() {
-    return cellSize..multiply(Vector2.random() - Vector2.random());
+    return (Vector2.random() - Vector2.random())..multiply(cellSize);
   }
 
   /// Returns random [Color] from primary swatches
