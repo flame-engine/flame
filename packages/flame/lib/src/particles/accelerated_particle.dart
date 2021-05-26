@@ -7,7 +7,7 @@ import 'particle.dart';
 
 /// A particle that serves as a container for basic acceleration physics.
 ///
-/// [Vector2] unit is logical px per second.
+/// [speed] is logical px per second.
 ///
 /// ```dart
 /// AcceleratedParticle(

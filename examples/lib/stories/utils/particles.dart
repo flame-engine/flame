@@ -258,7 +258,7 @@ class ParticlesGame extends BaseGame {
       generator: (i) => MovingParticle(
         curve: Interval(rnd.nextDouble() * .1, rnd.nextDouble() * .8 + .1),
         to: randomCellVector2() * .5,
-        child: reusablePatricle,
+        child: reusablePatricle!,
       ),
     );
   }
@@ -456,10 +456,10 @@ class ParticlesGame extends BaseGame {
             .translated(halfCellSize),
         rect
             .rotating(to: -pi)
-            .moving(to: cellSize..scaleBy(Vector2(1, -1)))
+            .moving(to: cellSize..multiply(Vector2(1, -1)))
             .scaled(2)
-            .translated(halfCellSize..scaleBy(Vector2(-1, 1)))
-            .accelerated(acceleration: halfCellSize..scaleBy(Vector2(-5, 5))),
+            .translated(halfCellSize..multiply(Vector2(-1, 1)))
+            .accelerated(acceleration: halfCellSize..multiply(Vector2(-5, 5))),
       ],
     );
   }
@@ -482,7 +482,7 @@ class ParticlesGame extends BaseGame {
 
   /// Returns random [Vector2] within a virtual grid cell
   Vector2 randomCellVector2() {
-    return cellSize * (Vector2.random() - Vector2.random());
+    return cellSize..multiply(Vector2.random() - Vector2.random());
   }
 
   /// Returns random [Color] from primary swatches

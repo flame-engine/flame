@@ -238,7 +238,7 @@ desired positioning.
 game.add(
   ParticleComponent(
     particle: CircleParticle(
-      radius: game.size.width / 2,
+      radius: game.size.x / 2,
       paint: Paint()..color = Colors.red.withOpacity(.5),
     ),
   ),
@@ -363,7 +363,7 @@ game.add(
 );
 ```
 
-## Computed Particle
+## ComputedParticle
 
 A `Particle` which could help you when:
 * Default behavior is not enough
