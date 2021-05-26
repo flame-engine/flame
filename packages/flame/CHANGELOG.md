@@ -2,9 +2,11 @@
 
 ## [Next]
  - Fix link to code in example stories
- - Fix RotateEffect with netative deltas
+ - Fix RotateEffect with negative deltas
  - Add isDragged to Draggable
  - Fix anchor of rendered text in TextComponent
+ - Add new extensions to handle math.Rectangles nicely
+ - Implement color parsing methods
 
 ## [1.0.0-releasecandidate.11]
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code
