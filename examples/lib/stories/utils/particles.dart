@@ -156,7 +156,7 @@ class ParticlesGame extends BaseGame {
     return Particle.generate(
       count: 5,
       generator: (i) => MovingParticle(
-        to: randomCellVector2() * .5,
+        to: randomCellVector2()..scale(.5),
         child: CircleParticle(
           radius: 5 + rnd.nextDouble() * 5,
           paint: Paint()..color = Colors.deepOrange,
@@ -172,7 +172,7 @@ class ParticlesGame extends BaseGame {
       count: 5,
       generator: (i) => MovingParticle(
         curve: Curves.easeOutQuad,
-        to: randomCellVector2() * .5,
+        to: randomCellVector2()..scale(.5),
         child: CircleParticle(
           radius: 5 + rnd.nextDouble() * 5,
           paint: Paint()..color = Colors.deepPurple,
@@ -191,7 +191,7 @@ class ParticlesGame extends BaseGame {
       count: 5,
       generator: (i) => MovingParticle(
         curve: const Interval(.2, .6, curve: Curves.easeInOutCubic),
-        to: randomCellVector2() * .5,
+        to: randomCellVector2()..scale(.5),
         child: CircleParticle(
           radius: 5 + rnd.nextDouble() * 5,
           paint: Paint()..color = Colors.greenAccent,
@@ -257,7 +257,7 @@ class ParticlesGame extends BaseGame {
     return Particle.generate(
       generator: (i) => MovingParticle(
         curve: Interval(rnd.nextDouble() * .1, rnd.nextDouble() * .8 + .1),
-        to: randomCellVector2() * .5,
+        to: randomCellVector2()..scale(.5),
         child: reusablePatricle!,
       ),
     );
