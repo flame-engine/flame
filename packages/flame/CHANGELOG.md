@@ -7,6 +7,7 @@
  - Fix anchor of rendered text in TextComponent
  - Add new extensions to handle math.Rectangles nicely
  - Implement color parsing methods
+ - Migrated the `Particle` API to `Vector2`
 
 ## [1.0.0-releasecandidate.11]
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code
