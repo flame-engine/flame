@@ -2,35 +2,35 @@ import 'dart:ui';
 
 import 'package:flutter/animation.dart';
 
+import '../../extensions.dart';
 import '../components/mixins/single_child_particle.dart';
 import '../particles/curved_particle.dart';
 import 'particle.dart';
 
-/// Statically offset given child [Particle] by given [Offset]
-/// If you're looking to move the child, consider [MovingParticle]
+/// Statically move given child [Particle] by given [Vector2].
+///
+/// If you're looking to move the child, consider the [MovingParticle].
 class MovingParticle extends CurvedParticle with SingleChildParticle {
   @override
   Particle child;
 
-  final Offset from;
-  final Offset to;
+  final Vector2 from;
+  final Vector2 to;
 
   MovingParticle({
     required this.child,
     required this.to,
-    this.from = Offset.zero,
+    Vector2? from,
     double? lifespan,
     Curve curve = Curves.linear,
-  }) : super(
-          lifespan: lifespan,
-          curve: curve,
-        );
+  })  : from = from ?? Vector2.zero(),
+        super(lifespan: lifespan, curve: curve);
 
   @override
   void render(Canvas c) {
     c.save();
-    final current = Offset.lerp(from, to, progress)!;
-    c.translate(current.dx, current.dy);
+    final current = from.clone()..lerp(to, progress);
+    c.translateVector(current);
     super.render(c);
     c.restore();
   }
