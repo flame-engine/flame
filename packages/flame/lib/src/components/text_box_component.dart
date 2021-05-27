@@ -57,7 +57,7 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     Vector2? size,
   })  : _text = text,
         _boxConfig = boxConfig ?? TextBoxConfig(),
-        _textRenderer = textRenderer ?? TextRenderer.createDefault(),
+        _textRenderer = textRenderer ?? TextRenderer.createDefault<T>(),
         super(position: position, size: size) {
     _lines = [];
     double? lineHeight;
