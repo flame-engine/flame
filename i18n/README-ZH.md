@@ -49,10 +49,10 @@
     - [Flame 中文网](https://www.flame-cn.com/)
     - [Flame 中文文档](https://docs.flame-cn.com/)
 
-你可以在这里看到完整的 [开发文档](doc/README.md)。
+你可以在这里看到完整的 [开发文档](/doc/README.md) 。
 
 你可以在浏览器中尝试 [我们提供的一些示例](https://flame-engine.github.io/flame/)。
-你也可以在 [这里](https://github.com/flame-engine/flame/tree/main/examples) 查看示例的源码。
+你也可以在 [这里](/examples) 查看示例的源码。
 
 Flame 的官方网站（包含文档），请 [访问此处](https://flame-engine.org/)。
 
@@ -64,7 +64,8 @@ Flame 的官方网站（包含文档），请 [访问此处](https://flame-engin
 
 我们在 Discord 上有一个互助频道，[点击加入](https://discord.gg/pxrBmy4)。
 
-我们也有 [FAQ](FAQ.md)，所以在提问前，请先搜索是否有你需要的答案。
+我们也有 [FAQ](/FAQ.md) ，
+所以在提问前，请先搜索是否有你需要的答案。
 
 ## 项目目标
 
@@ -91,7 +92,7 @@ Flame 的官方网站（包含文档），请 [访问此处](https://flame-engin
 
 [![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/fireslime)
 
-或者通过 Buy Me A Coffet 捐赠我们：
+或者通过 Buy Me A Coffee 捐赠我们：
 
 [![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/fireslime)
 
@@ -118,11 +119,12 @@ Flame 的官方网站（包含文档），请 [访问此处](https://flame-engin
 
 如果你找到了 bug 或对 Flame 有更好的建议，请创建一个 issue，我们将会尽快处理。
 
-你想通过 PR 进行贡献吗？我们欢迎 PR，只要确保你的分支是 `develop`，并遵循 [PR 模板](.github/pull_request_template.md) 即可。
+你想通过 PR 进行贡献吗？我们欢迎 PR，只要确保你的分支是 `develop`，
+并遵循 [PR 模板](/.github/pull_request_template.md) 即可。
 
 ## 立即开始
 
-你可以在 [这里](./tutorials) 找到一系列教程。
+你可以在 [这里](/tutorials) 找到一系列教程。
 注意这些教程都基于主分支。
 如需查看你正在使用的版本的教程，请选择对应的版本标签。
 
