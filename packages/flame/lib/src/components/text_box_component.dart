@@ -25,13 +25,13 @@ class TextBoxConfig {
   });
 }
 
-class TextBoxComponent extends PositionComponent {
+class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
   static final Paint _imagePaint = BasicPalette.white.paint()
     ..filterQuality = FilterQuality.high;
   Vector2 _gameSize = Vector2.zero();
 
   final String _text;
-  final TextRenderer _textRenderer;
+  final T _textRenderer;
   final TextBoxConfig _boxConfig;
 
   late List<String> _lines;
@@ -51,13 +51,13 @@ class TextBoxComponent extends PositionComponent {
 
   TextBoxComponent(
     String text, {
-    TextRenderer? textRenderer,
+    T? textRenderer,
     TextBoxConfig? boxConfig,
     Vector2? position,
     Vector2? size,
   })  : _text = text,
         _boxConfig = boxConfig ?? TextBoxConfig(),
-        _textRenderer = textRenderer ?? TextPaint(),
+        _textRenderer = textRenderer ?? TextRenderer.createDefault(),
         super(position: position, size: size) {
     _lines = [];
     double? lineHeight;

@@ -50,6 +50,15 @@ abstract class TextRenderer<T extends BaseTextConfig> {
   /// Creates a new instance of this painter but transforming the [config]
   /// object via the provided lambda.
   TextRenderer<T> copyWith(T Function(T) transform);
+
+  /// Given a generic type [T], creates a default renderer of that type.
+  static T createDefault<T extends TextRenderer>() {
+    if (T == TextPaint || T == TextRenderer) {
+      return TextPaint() as T;
+    } else {
+      throw 'Unkown implementation of TextRenderer: $T';
+    }
+  }
 }
 
 /// A Text Config contains all typographical information required to render texts; i.e., font size, text direction, etc.
