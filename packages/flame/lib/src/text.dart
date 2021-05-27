@@ -46,6 +46,10 @@ abstract class TextRenderer<T extends BaseTextConfig> {
       measureTextHeight(text),
     );
   }
+
+  /// Creates a new instance of this painter but transforming the [config]
+  /// object via the provided lambda.
+  TextRenderer<T> copyWith(T Function(T) transform);
 }
 
 /// A Text Config contains all typographical information required to render texts; i.e., font size, text direction, etc.
@@ -243,5 +247,12 @@ class TextPaint extends TextRenderer<TextPaintConfig> {
       _textPainterCache.setValue(text, tp);
     }
     return _textPainterCache.getValue(text)!;
+  }
+
+  @override
+  TextPaint copyWith(
+    TextPaintConfig Function(TextPaintConfig) transform,
+  ) {
+    return TextPaint(config: transform(config));
   }
 }
