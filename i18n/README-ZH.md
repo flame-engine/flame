@@ -58,6 +58,10 @@ Flame 的官方网站（包含文档），请 [访问此处](https://flame-engin
 
 ## 问题互助
 
+国内无法使用 Discord 或希望快速学习 Flame 的用户，
+欢迎加入 [「Flame 交流」QQ 群](https://jq.qq.com/?_wv=1027&k=5ETLFm3)
+（非官方, 针对国内用户的讨论群）。
+
 我们在 Discord 上有一个互助频道，[点击加入](https://discord.gg/pxrBmy4)。
 
 我们也有 [FAQ](FAQ.md)，所以在提问前，请先搜索是否有你需要的答案。
