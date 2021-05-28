@@ -8,7 +8,8 @@ environment:
   flutter: ">=1.24.0-10.2.pre"
 
 dependencies:
-  flame: ^1.0.0-releasecandidate.11
+  flame:
+    path: "../flame"
   flutter_svg: ^0.22.0
   flutter:
     sdk: flutter

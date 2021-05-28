@@ -25,12 +25,14 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent {
     required this.animations,
     Vector2? position,
     Vector2? size,
+    int? priority,
     this.current,
     this.overridePaint,
     this.removeOnFinish = const {},
   }) : super(
           position: position,
           size: size,
+          priority: priority,
         );
 
   /// Creates a SpriteAnimationGroupComponent from a [size], an [image] and [data].
@@ -44,11 +46,13 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent {
     this.current,
     Vector2? position,
     Vector2? size,
+    int? priority,
     this.overridePaint,
     this.removeOnFinish = const {},
   }) : super(
           position: position,
           size: size,
+          priority: priority,
         ) {
     animations = data.map((key, value) {
       return MapEntry(

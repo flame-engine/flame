@@ -40,7 +40,7 @@ abstract class Component {
   /// It will be checked once per component per tick, and if it is true, BaseGame will remove it.
   bool shouldRemove = false;
 
-  Component({int priority = 0}) : _priority = priority;
+  Component({int? priority}) : _priority = priority ?? 0;
 
   /// This method is called periodically by the game engine to request that your component updates itself.
   ///

@@ -32,8 +32,9 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
     T? textRenderer,
     Vector2? position,
     Vector2? size,
+    int? priority,
   })  : _textRenderer = textRenderer ?? TextRenderer.createDefault<T>(),
-        super(position: position, size: size) {
+        super(position: position, size: size, priority: priority) {
     _updateBox();
   }
 
