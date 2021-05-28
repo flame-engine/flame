@@ -5,6 +5,9 @@ import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../util/expect_double.dart';
+import '../util/expect_vector2.dart';
+
 final Random random = Random();
 
 class Callback {
@@ -45,20 +48,19 @@ void effectTest(
   }
 
   if (!shouldComplete) {
-    const floatRange = 0.01;
-    expect(
-      component.position.absoluteError(expectedPosition),
-      closeTo(0.0, floatRange),
+    expectVector2(
+      component.position,
+      expectedPosition,
       reason: 'Position is not correct',
     );
-    expect(
+    expectDouble(
       component.angle,
-      closeTo(expectedAngle, floatRange),
+      expectedAngle,
       reason: 'Angle is not correct',
     );
-    expect(
-      component.size.absoluteError(expectedSize),
-      closeTo(0.0, floatRange),
+    expectVector2(
+      component.size,
+      expectedSize,
       reason: 'Size is not correct',
     );
   } else {
@@ -70,17 +72,17 @@ void effectTest(
       game.update(effect.peakTime - effect.currentTime);
     }
 
-    expect(
+    expectVector2(
       component.position,
       expectedPosition,
       reason: 'Position is not exactly correct',
     );
-    expect(
+    expectDouble(
       component.angle,
       expectedAngle,
       reason: 'Angle is not exactly correct',
     );
-    expect(
+    expectVector2(
       component.size,
       expectedSize,
       reason: 'Size is not exactly correct',
