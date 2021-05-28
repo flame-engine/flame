@@ -13,6 +13,11 @@ import 'memory_cache.dart';
 ///
 /// See [TextPaint] for the default implementation offered by Flame
 abstract class TextRenderer<T extends BaseTextConfig> {
+  static Map<Type, TextRenderer Function()> defaultCreatorsRegistry = {
+    TextRenderer: () => TextPaint(),
+    TextPaint: () => TextPaint(),
+  };
+
   final T config;
 
   TextRenderer({required this.config});
@@ -53,10 +58,11 @@ abstract class TextRenderer<T extends BaseTextConfig> {
 
   /// Given a generic type [T], creates a default renderer of that type.
   static T createDefault<T extends TextRenderer>() {
-    if (T == TextPaint || T == TextRenderer) {
-      return TextPaint() as T;
+    final creator = defaultCreatorsRegistry[T];
+    if (creator != null) {
+      return creator() as T;
     } else {
-      throw 'Unkown implementation of TextRenderer: $T';
+      throw 'Unkown implementation of TextRenderer: $T. Please register it under [defaultCreatorsRegistry].';
     }
   }
 }
