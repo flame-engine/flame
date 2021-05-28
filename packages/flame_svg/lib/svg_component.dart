@@ -11,10 +11,12 @@ class SvgComponent extends PositionComponent {
     this.svg, {
     Vector2? position,
     Vector2? size,
-    int? priority,
-  }) : super(position: position, size: size, priority: priority);
+  }) : super(position: position, size: size);
+  /// TODO(spydon): Once rc12 is released
+  //  int? priority,
+  //}) : super(position: position, size: size, priority: priority);
 
-  @override
+@override
   void render(Canvas canvas) {
     super.render(canvas);
     svg.render(canvas, size);
