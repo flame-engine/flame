@@ -58,7 +58,7 @@ void main() {
       final wrapper = MyComposed();
       wrapper.addChild(child);
 
-      expect(true, wrapper.containsChild(child));
+      expect(wrapper.containsChild(child), true);
     });
 
     test('removes the child from the component', () {
@@ -68,7 +68,7 @@ void main() {
       expect(true, wrapper.containsChild(child));
 
       wrapper.removeChild(child);
-      expect(false, wrapper.containsChild(child));
+      expect(wrapper.containsChild(child), false);
     });
 
     test(
@@ -78,7 +78,7 @@ void main() {
         final wrapper = MyComposed();
         await wrapper.addChild(child);
 
-        expect(true, wrapper.containsChild(child));
+        expect(wrapper.containsChild(child), true);
       },
     );
 

@@ -3,11 +3,8 @@ import 'dart:math' as math;
 import 'package:flame/extensions.dart';
 import 'package:test/test.dart';
 
+import '../util/expect_double.dart';
 import '../util/expect_vector2.dart';
-
-void expectDouble(double d1, double d2) {
-  expect((d1 - d2).abs() <= 0.0001, true);
-}
 
 void main() {
   group('Vector2 test', () {
