@@ -1,5 +1,35 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:test/test.dart';
+
+class _CustomTextRenderer extends TextRenderer<TextPaintConfig> {
+  _CustomTextRenderer() : super(config: const TextPaintConfig());
+  @override
+  TextRenderer<TextPaintConfig> copyWith(
+    BaseTextConfig Function(TextPaintConfig) transform,
+  ) {
+    return this;
+  }
+
+  @override
+  double measureTextHeight(String text) {
+    return 0;
+  }
+
+  @override
+  double measureTextWidth(String text) {
+    return 0;
+  }
+
+  @override
+  void render(
+    Canvas canvas,
+    String text,
+    Vector2 position, {
+    Anchor anchor = Anchor.topLeft,
+  }) {}
+}
 
 void main() {
   group('Text', () {
@@ -23,6 +53,12 @@ void main() {
       final tc = TextComponent<TextPaint>('foo');
       tc.textRenderer = tc.textRenderer.copyWith((c) => c.withFontSize(200));
       expect(tc.textRenderer.config.fontSize, 200);
+    });
+    test('custom renderer', () {
+      TextRenderer.defaultCreatorsRegistry[_CustomTextRenderer] =
+          () => _CustomTextRenderer();
+      final tc = TextComponent<_CustomTextRenderer>('foo');
+      expect(tc.textRenderer, isA<_CustomTextRenderer>());
     });
   });
 }
