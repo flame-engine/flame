@@ -7,6 +7,7 @@
  - Fix anchor of rendered text in TextComponent
  - Add new extensions to handle math.Rectangles nicely
  - Implement color parsing methods
+ - Migrated the `Particle` API to `Vector2`
  - Add copyWith function to TextRenderer
 
 ## [1.0.0-releasecandidate.11]
