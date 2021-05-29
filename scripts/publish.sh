@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # This script manages publishing of Flame and its bridge packages.
 #
+# Usage: ./publish.sh (no arguments and can be run from any path)
+#
 # Before publishing this script does the following:
 #  * Sets the chosen package's pubspec.yaml file to depend on the newest
 #    version of Flame (if it is not Flame itself)
