@@ -96,9 +96,10 @@ then
 fi
 
 tag="$upgrade_package-$new_version"
-git checkout -B publish-$tag
+branch=publish-$tag
+git checkout -B $branch
 git commit -a -m "Publish $tag"
-git push --set-upstream origin $(git_current_branch)
+git push --set-upstream origin $branch
 echo "Pushing tag $tag"
 git tag $tag
 git push origin $tag
