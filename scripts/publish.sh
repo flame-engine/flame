@@ -14,7 +14,6 @@
 # Note: Don't forget to open a PR with the created branch
 
 set -e
-trap 'echo Publishing failed' EXIT
 
 yellow=$(tput setaf 3)
 bold=$(tput bold)
@@ -86,7 +85,7 @@ then
 fi
 
 set_version $upgrade_dir
-pub publish -n
+pub publish
 
 if [[ ! $upgrade_package = "flame" ]]
 then
