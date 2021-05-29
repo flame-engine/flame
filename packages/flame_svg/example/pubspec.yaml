@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   flame:
-    path: ../../flame/
+    path: ../../flame
   flame_svg:
     path: ../
 

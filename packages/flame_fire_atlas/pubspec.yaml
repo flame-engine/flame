@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   flame:
-    path: ../flame/
+    path: ../flame
   archive: ^3.1.2
 
 dev_dependencies:

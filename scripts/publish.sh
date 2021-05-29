@@ -28,7 +28,7 @@ function set_flame_version() {
 function set_relative_flame_version() {
   pubspec_file="$1/pubspec.yaml"
   sed -i "s/flame:.*/flame:/" $pubspec_file
-  sed -i "/^flame:.*/a     path: $2/flame" $pubspec_file
+  sed -i "/flame:.*/a \ \ \ \ path: $2/flame" $pubspec_file
 }
 
 function set_version() {
@@ -39,6 +39,7 @@ function set_version() {
   read -r new_version
   echo -en "Is $yellow$bold$new_version$endcolor the version you want to publish? (y/N) "
   read -r -n 1
+  printf "\n"
   if [[ $REPLY =~ ^[Yy]$ ]]
   then
     sed -i '/version: "..\/flame\/"/d' $pubspec_file
@@ -90,8 +91,8 @@ pub publish
 if [[ ! $upgrade_package = "flame" ]]
 then
   sed -i "/^homepage:.*/a publish_to: 'none'" $upgrade_dir/pubspec.yaml
-  set_relative_flame_version $upgrade_dir "../"
-  set_relative_flame_version $upgrade_dir/example "../../"
+  set_relative_flame_version $upgrade_dir ".."
+  set_relative_flame_version $upgrade_dir/example "../.."
 fi
 
 tag="$upgrade_package-$new_version"
@@ -102,5 +103,5 @@ git push --set-upstream origin $branch
 echo "Pushing tag $tag"
 git tag $tag
 git push origin $tag
-echo -e "Done! Don't forget to open a $yellow$bold pull request$endcolor."
+echo -e "Done! Don't forget to open a$yellow$bold pull request$endcolor."
 exit 0
