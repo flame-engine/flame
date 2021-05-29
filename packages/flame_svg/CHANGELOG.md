@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [Next]
+ - Takes priority as an argument on SvgComponent
+
 ## [1.0.0-rc4]
  - Update to flutter_svg 0.22.0
 
