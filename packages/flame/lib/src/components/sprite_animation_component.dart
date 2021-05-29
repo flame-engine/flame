@@ -17,10 +17,11 @@ class SpriteAnimationComponent extends PositionComponent {
   SpriteAnimationComponent({
     Vector2? position,
     Vector2? size,
+    int? priority,
     this.animation,
     this.overridePaint,
     this.removeOnFinish = false,
-  }) : super(position: position, size: size);
+  }) : super(position: position, size: size, priority: priority);
 
   /// Creates a SpriteAnimationComponent from a [size], an [image] and [data]. Check [SpriteAnimationData] for more info on the available options.
   ///
@@ -30,8 +31,9 @@ class SpriteAnimationComponent extends PositionComponent {
     SpriteAnimationData data, {
     Vector2? position,
     Vector2? size,
+    int? priority,
     this.removeOnFinish = false,
-  }) : super(position: position, size: size) {
+  }) : super(position: position, size: size, priority: priority) {
     animation = SpriteAnimation.fromFrameData(image, data);
   }
 

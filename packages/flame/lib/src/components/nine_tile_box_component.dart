@@ -19,7 +19,8 @@ class NineTileBoxComponent extends PositionComponent {
     this.nineTileBox, {
     Vector2? position,
     Vector2? size,
-  }) : super(position: position, size: size);
+    int? priority,
+  }) : super(position: position, size: size, priority: priority);
 
   @mustCallSuper
   @override
