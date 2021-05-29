@@ -13,6 +13,11 @@ import 'memory_cache.dart';
 ///
 /// See [TextPaint] for the default implementation offered by Flame
 abstract class TextRenderer<T extends BaseTextConfig> {
+  /// A registry containing default providers for every [TextRenderer] subclass;
+  /// used by [createDefault] to create default parameter values.
+  ///
+  /// If you add a new [TextRenderer] child, you can register it by adding it,
+  /// alongisde a provider lambda, to this map.
   static Map<Type, TextRenderer Function()> defaultCreatorsRegistry = {
     TextRenderer: () => TextPaint(),
     TextPaint: () => TextPaint(),
