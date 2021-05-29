@@ -9,6 +9,9 @@
  - Implement color parsing methods
  - Migrated the `Particle` API to `Vector2`
  - Add copyWith function to TextRenderer
+ - Fix debug mode is not propagated to children of non-Position components
+ - Fix size property of TextComponent was not correctly set
+ - Fix anchor property was being incorrectly passed along to text renderer
 
 ## [1.0.0-releasecandidate.11]
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code
