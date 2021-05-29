@@ -38,8 +38,8 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
   }
 
   void _updateBox() {
-    final size = textRenderer.measureText(_text);
-    this.size.setValues(size.x, size.y);
+    final expectedSize = textRenderer.measureText(_text);
+    this.size.setValues(expectedSize.x, expectedSize.y);
   }
 
   @mustCallSuper
