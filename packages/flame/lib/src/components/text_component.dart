@@ -7,9 +7,9 @@ import '../extensions/vector2.dart';
 import '../text.dart';
 import 'position_component.dart';
 
-class TextComponent extends PositionComponent {
+class TextComponent<T extends TextRenderer> extends PositionComponent {
   String _text;
-  TextRenderer _textRenderer;
+  T _textRenderer;
 
   String get text => _text;
 
@@ -20,19 +20,19 @@ class TextComponent extends PositionComponent {
     }
   }
 
-  TextRenderer get textRenderer => _textRenderer;
+  T get textRenderer => _textRenderer;
 
-  set textRenderer(TextRenderer textRenderer) {
+  set textRenderer(T textRenderer) {
     _textRenderer = textRenderer;
     _updateBox();
   }
 
   TextComponent(
     this._text, {
-    TextRenderer? textRenderer,
+    T? textRenderer,
     Vector2? position,
     Vector2? size,
-  })  : _textRenderer = textRenderer ?? TextPaint(),
+  })  : _textRenderer = textRenderer ?? TextRenderer.createDefault<T>(),
         super(position: position, size: size) {
     _updateBox();
   }
