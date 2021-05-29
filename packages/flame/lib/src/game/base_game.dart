@@ -13,7 +13,6 @@ import '../components/mixins/has_collidables.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/hoverable.dart';
 import '../components/mixins/tapable.dart';
-import '../components/position_component.dart';
 import '../fps_counter.dart';
 import 'camera.dart';
 import 'game.dart';
