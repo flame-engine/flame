@@ -13,7 +13,9 @@
  - Fix size property of TextComponent was not correctly set
  - Fix anchor property was being incorrectly passed along to text renderer
  - All components take priority as an argument on their constructors
+ - Fix renderRotated
  - Use QueryableOrderedSet for Collidables
+
 
 ## [1.0.0-releasecandidate.11]
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code
