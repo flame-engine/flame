@@ -114,7 +114,7 @@ class BaseGame extends Game with FPSCounter {
       );
     }
 
-    if (debugMode && c is PositionComponent) {
+    if (debugMode && c is BaseComponent) {
       c.debugMode = true;
     }
 

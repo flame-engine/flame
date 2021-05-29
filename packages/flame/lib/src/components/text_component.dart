@@ -39,13 +39,13 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
 
   void _updateBox() {
     final size = textRenderer.measureText(_text);
-    size.setValues(size.x, size.y);
+    this.size.setValues(size.x, size.y);
   }
 
   @mustCallSuper
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    _textRenderer.render(canvas, text, Vector2.zero(), anchor: anchor);
+    _textRenderer.render(canvas, text, Vector2.zero());
   }
 }
