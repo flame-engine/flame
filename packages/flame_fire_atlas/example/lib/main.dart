@@ -56,15 +56,14 @@ class ExampleGame extends BaseGame with TapDetector {
 
   @override
   void onTapUp(details) {
-    final o = details.localPosition;
-
-    add(SpriteAnimationComponent(
-      size: Vector2(100, 100),
-      animation: _atlas.getAnimation('explosion'),
-      removeOnFinish: true,
-    )
-      ..anchor = Anchor.center
-      ..x = o.dx
-      ..y = o.dy);
+    add(
+      SpriteAnimationComponent(
+        size: Vector2(100, 100),
+        animation: _atlas.getAnimation('explosion'),
+        removeOnFinish: true,
+      )
+        ..anchor = Anchor.center
+        ..position = details.eventPosition.game,
+    );
   }
 }
