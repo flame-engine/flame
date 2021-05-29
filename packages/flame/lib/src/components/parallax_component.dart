@@ -19,7 +19,7 @@ extension ParallaxComponentExtension on Game {
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
-    int priority = 0,
+    int? priority,
   }) async {
     final component = await ParallaxComponent.load(
       paths,
