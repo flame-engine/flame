@@ -12,7 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^0.1.3
-  flame: 1.0.0-rc9
+  flame:
+    path: ../../flame
   flame_fire_atlas:
     path: ../
 
