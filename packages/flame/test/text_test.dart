@@ -60,5 +60,9 @@ void main() {
       final tc = TextComponent<_CustomTextRenderer>('foo');
       expect(tc.textRenderer, isA<_CustomTextRenderer>());
     });
+    test('text component size is set', () {
+      final t = TextComponent('foobar');
+      expect(t.size, isNot(equals(Vector2.zero())));
+    });
   });
 }
