@@ -10,7 +10,6 @@ environment:
 
 dependencies:
   flame:
-    path: ../flame
   flutter_svg: ^0.22.0
   flutter:
     sdk: flutter
