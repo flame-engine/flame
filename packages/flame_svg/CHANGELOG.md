@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [1.0.0-rc5]
+## [Next]
  - Takes priority as an argument on SvgComponent
 
 ## [1.0.0-rc4]
