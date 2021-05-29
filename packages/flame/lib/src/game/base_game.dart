@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
+import 'package:ordered_set/queryable_ordered_set.dart';
 
 import '../../components.dart';
 import '../../extensions.dart';
@@ -27,8 +28,7 @@ import 'viewport.dart';
 /// It is based on the Component system.
 class BaseGame extends Game with FPSCounter {
   /// The list of components to be updated and rendered by the base game.
-  final OrderedSet<Component> components =
-      OrderedSet(Comparing.on((c) => c.priority));
+  late final OrderedSet<Component> components = createOrderedSet();
 
   /// Components to be added on the next update.
   ///
@@ -87,6 +87,21 @@ class BaseGame extends Game with FPSCounter {
     _combinedProjector = Projector.compose([camera, viewport]);
   }
 
+  /// This method setps up the OrderedSet instance used by this game, before
+  /// any lifecycle methods happen.
+  ///
+  /// You can return a specific sub-class of OrderedSet, like
+  /// [QueryableOrderedSet] for example, that we use for Collidables.
+  OrderedSet<Component> createOrderedSet() {
+    final comparator = Comparing.on<Component>((c) => c.priority);
+    if (this is HasCollidables) {
+      final qos = QueryableOrderedSet<Component>(comparator);
+      qos.register<Collidable>();
+      return qos;
+    }
+    return OrderedSet<Component>(comparator);
+  }
+
   /// This method is called for every component added.
   /// It does preparation on a component before any update or render method is called on it.
   ///
@@ -94,6 +109,12 @@ class BaseGame extends Game with FPSCounter {
   /// By default, this calls the first time resize for every component, so don't forget to call super.preAdd when overriding.
   @mustCallSuper
   void prepare(Component c) {
+    if (c is Collidable) {
+      assert(
+        this is HasCollidables,
+        'You can only use the Hitbox/Collidable feature with games that has the HasCollidables mixin',
+      );
+    }
     if (c is Tapable) {
       assert(
         this is HasTapableComponents,
@@ -134,10 +155,6 @@ class BaseGame extends Game with FPSCounter {
     assert(
       hasLayout,
       '"add" called before the game is ready. Did you try to access it on the Game constructor? Use the "onLoad" method instead.',
-    );
-    assert(
-      c is Collidable ? this is HasCollidables : true,
-      'You can only use the Hitbox/Collidable feature with games that has the HasCollidables mixin',
     );
     prepare(c);
     final loadFuture = c.onLoad();
@@ -201,15 +218,22 @@ class BaseGame extends Game with FPSCounter {
   @override
   @mustCallSuper
   void update(double dt) {
+    _updateComponentList();
+
+    if (this is HasCollidables) {
+      (this as HasCollidables).handleCollidables();
+    }
+
+    components.forEach((c) => c.update(dt));
+    camera.update(dt);
+  }
+
+  void _updateComponentList() {
     _removeLater.addAll(components.where((c) => c.shouldRemove));
     _removeLater.forEach((c) {
       c.onRemove();
       components.remove(c);
     });
-
-    if (this is HasCollidables) {
-      (this as HasCollidables).handleCollidables(_removeLater, _addLater);
-    }
     _removeLater.clear();
 
     if (_addLater.isNotEmpty) {
@@ -218,9 +242,6 @@ class BaseGame extends Game with FPSCounter {
       components.addAll(addNow);
       addNow.forEach((component) => component.onMount());
     }
-
-    components.forEach((c) => c.update(dt));
-    camera.update(dt);
   }
 
   /// This implementation of resize passes the resize call along to every
