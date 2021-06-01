@@ -51,6 +51,9 @@ class MyComposed extends PositionComponent with HasGameRef, Tapable {}
 
 class MySimpleComposed extends BaseComponent with HasGameRef, Tapable {}
 
+// composed w/o HasGameRef
+class PlainComposed extends BaseComponent {}
+
 Vector2 size = Vector2.all(300);
 
 void main() {
@@ -180,6 +183,27 @@ void main() {
       game.update(0.0);
 
       expect(child.debugMode, true);
+    });
+    test('fail to add child if no gameRef can be acquired', () {
+      final game = MyGame();
+      game.onResize(Vector2.all(100));
+
+      final parent = PlainComposed();
+
+      // this is ok; when the parent is added to the game the children will
+      // get mounted
+      parent.addChild(MyTap());
+
+      game.add(parent);
+      game.update(0);
+
+      // this is not ok, the child would never be mounted!
+      expect(
+        () => parent.addChild(MyTap()),
+        throwsA(
+          'Parent was already added to Game and has no HasGameRef; in this case, gameRef is mandatory.',
+        ),
+      );
     });
   });
 }
