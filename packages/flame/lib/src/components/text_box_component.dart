@@ -112,9 +112,13 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
 
   bool get finished => _lifeTime > totalCharTime + _boxConfig.dismissDelay;
 
+  int get _actualTextLength {
+    return _lines.map((e) => e.length).fold(0, (p, c) => p + c);
+  }
+
   int get currentChar => _boxConfig.timePerChar == 0.0
-      ? _lines.map((e) => e.length).fold(0, (p, c) => p + c)
-      : math.min(_lifeTime ~/ _boxConfig.timePerChar, _text.length);
+      ? _actualTextLength
+      : math.min(_lifeTime ~/ _boxConfig.timePerChar, _actualTextLength);
 
   int get currentLine {
     var totalCharCount = 0;
