@@ -200,9 +200,7 @@ void main() {
       // this is not ok, the child would never be mounted!
       expect(
         () => parent.addChild(MyTap()),
-        throwsA(
-          'Parent was already added to Game and has no HasGameRef; in this case, gameRef is mandatory.',
-        ),
+        throwsA(isA<AssertionError()>),
       );
     });
   });
