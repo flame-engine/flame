@@ -154,6 +154,11 @@ abstract class BaseComponent extends Component {
     if (this is HasGameRef) {
       final c = this as HasGameRef;
       gameRef ??= c.hasGameRef ? c.gameRef : null;
+    } else if (gameRef == null) {
+      assert(
+        !isMounted,
+        'Parent was already added to Game and has no HasGameRef; in this case, gameRef is mandatory.',
+      );
     }
     if (gameRef is BaseGame) {
       gameRef.prepare(child);
