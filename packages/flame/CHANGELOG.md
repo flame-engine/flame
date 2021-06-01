@@ -15,6 +15,8 @@
  - All components take priority as an argument on their constructors
  - Fix renderRotated
  - Use QueryableOrderedSet for Collidables
+ - Refactor and fix bugs with TextBoxComponent
+ - Improve error message for composed components
 
 
 ## [1.0.0-releasecandidate.11]
