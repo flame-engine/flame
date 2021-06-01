@@ -200,7 +200,7 @@ void main() {
       // this is not ok, the child would never be mounted!
       expect(
         () => parent.addChild(MyTap()),
-        throwsA(isA<AssertionError()>),
+        throwsA(isA<AssertionError>()),
       );
     });
   });
