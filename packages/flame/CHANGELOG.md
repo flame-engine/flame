@@ -8,6 +8,8 @@
  - Add new extensions to handle math.Rectangles nicely
  - Implement color parsing methods
  - Migrated the `Particle` API to `Vector2`
+ - Adding SpriteAnimation support to parallax
+ - Fixing Parallax alignment for images with different width and height
 
 ## [1.0.0-releasecandidate.11]
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code

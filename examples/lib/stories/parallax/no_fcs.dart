@@ -16,11 +16,11 @@ class NoFCSParallaxGame extends Game {
   Future<void> onLoad() async {
     parallax = await loadParallax(
       [
-        'parallax/bg.png',
-        'parallax/mountain-far.png',
-        'parallax/mountains.png',
-        'parallax/trees.png',
-        'parallax/foreground-trees.png',
+        ParallaxImageData('parallax/bg.png'),
+        ParallaxImageData('parallax/mountain-far.png'),
+        ParallaxImageData('parallax/mountains.png'),
+        ParallaxImageData('parallax/trees.png'),
+        ParallaxImageData('parallax/foreground-trees.png'),
       ],
       size: size,
       baseVelocity: Vector2(20, 0),

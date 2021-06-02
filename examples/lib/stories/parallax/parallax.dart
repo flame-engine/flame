@@ -3,6 +3,7 @@ import 'package:flame/game.dart';
 
 import '../../commons/commons.dart';
 import 'advanced.dart';
+import 'animation.dart';
 import 'basic.dart';
 import 'component.dart';
 import 'no_fcs.dart';
@@ -22,6 +23,12 @@ void addParallaxStories(Dashbook dashbook) {
       codeLink: baseLink('parallax/component.dart'),
       info: 'Shows how to do initiation and loading of assets from within an '
           'extended ParallaxComponent',
+    )
+    ..add(
+      'Animation',
+      (_) => GameWidget(game: AnimationParallaxGame()),
+      codeLink: baseLink('parallax/animation.dart'),
+      info: 'Shows how to use animations in a parallax',
     )
     ..add(
       'Non-fullscreen',
