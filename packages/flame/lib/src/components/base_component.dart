@@ -58,7 +58,7 @@ abstract class BaseComponent extends Component {
         ),
       );
 
-  BaseComponent({int priority = 0}) : super(priority: priority);
+  BaseComponent({int? priority}) : super(priority: priority);
 
   /// This method is called periodically by the game engine to request that your component updates itself.
   ///
@@ -154,6 +154,11 @@ abstract class BaseComponent extends Component {
     if (this is HasGameRef) {
       final c = this as HasGameRef;
       gameRef ??= c.hasGameRef ? c.gameRef : null;
+    } else if (gameRef == null) {
+      assert(
+        !isMounted,
+        'Parent was already added to Game and has no HasGameRef; in this case, gameRef is mandatory.',
+      );
     }
     if (gameRef is BaseGame) {
       gameRef.prepare(child);

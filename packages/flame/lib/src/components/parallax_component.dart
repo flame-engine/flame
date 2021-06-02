@@ -19,6 +19,7 @@ extension ParallaxComponentExtension on Game {
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
+    int? priority,
   }) async {
     final component = await ParallaxComponent.load(
       dataList,
@@ -29,6 +30,7 @@ extension ParallaxComponentExtension on Game {
       alignment: alignment,
       fill: fill,
       images: images,
+      priority: priority,
     );
 
     return component;
@@ -51,7 +53,8 @@ class ParallaxComponent extends PositionComponent {
   ParallaxComponent({
     Vector2? position,
     Vector2? size,
-  }) : super(position: position, size: size) {
+    int? priority,
+  }) : super(position: position, size: size, priority: priority) {
     if (size != null) {
       isFullscreen = false;
     }
@@ -61,10 +64,12 @@ class ParallaxComponent extends PositionComponent {
   factory ParallaxComponent.fromParallax(
     Parallax parallax, {
     Vector2? position,
+    int? priority,
   }) {
     return ParallaxComponent(
       position: position,
       size: parallax.isSized ? parallax.size : null,
+      priority: priority,
     )..parallax = parallax;
   }
 
@@ -117,6 +122,7 @@ class ParallaxComponent extends PositionComponent {
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
     Images? images,
+    int? priority,
   }) async {
     final component = ParallaxComponent.fromParallax(
       await Parallax.load(
@@ -129,6 +135,7 @@ class ParallaxComponent extends PositionComponent {
         fill: fill,
         images: images,
       ),
+      priority: priority,
     );
 
     if (size != null) {

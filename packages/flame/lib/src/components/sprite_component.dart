@@ -28,9 +28,10 @@ class SpriteComponent extends PositionComponent {
   SpriteComponent({
     Vector2? position,
     Vector2? size,
+    int? priority,
     this.sprite,
     this.overridePaint,
-  }) : super(position: position, size: size);
+  }) : super(position: position, size: size, priority: priority);
 
   factory SpriteComponent.fromImage(
     Image image, {

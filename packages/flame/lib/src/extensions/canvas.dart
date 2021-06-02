@@ -49,9 +49,9 @@ extension CanvasExtension on Canvas {
     void Function(Canvas) fn,
   ) {
     save();
-    translateVector(-rotationCenter);
-    rotate(angle);
     translateVector(rotationCenter);
+    rotate(angle);
+    translateVector(-rotationCenter);
     fn(this);
     restore();
   }

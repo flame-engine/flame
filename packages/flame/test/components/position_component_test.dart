@@ -211,10 +211,10 @@ void main() {
     });
 
     test('component with parent has the correct center', () {
-      final PositionComponent parent = MyComponent();
+      final parent = MyComponent();
       parent.position.setValues(2.0, 1.0);
       parent.anchor = Anchor.topLeft;
-      final PositionComponent child = MyComponent();
+      final child = MyComponent();
       child.position.setValues(2.0, 1.0);
       child.size.setValues(3.0, 1.0);
       child.angle = 0.0;
