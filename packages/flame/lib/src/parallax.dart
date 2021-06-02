@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/painting.dart';
@@ -248,9 +247,11 @@ class ParallaxLayer {
 
     // Align image to correct side of the screen
     final alignment = parallaxRenderer.alignment;
-    final marginX = alignment.x == 0 ? overflow.x / 2 : alignment.x;
-    final marginY = alignment.y == 0 ? overflow.y / 2 : alignment.y;
-    _scroll = Vector2(math.max(marginX, 0), math.max(marginY, 0));
+
+    final marginX = alignment.x * overflow.x / 2 + overflow.x / 2;
+    final marginY = alignment.y * overflow.y / 2 + overflow.y / 2;
+
+    _scroll = Vector2(marginX, marginY);
 
     // Size of the area to paint the images on
     final paintSize = count..multiply(_imageSize);
