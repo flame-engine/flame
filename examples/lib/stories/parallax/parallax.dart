@@ -1,7 +1,6 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
-import 'package:flame_example/stories/parallax/sandbox_layer.dart';
 import 'package:flutter/painting.dart';
 
 import '../../commons/commons.dart';
@@ -10,6 +9,7 @@ import 'animation.dart';
 import 'basic.dart';
 import 'component.dart';
 import 'no_fcs.dart';
+import 'sandbox_layer.dart';
 import 'small_parallax.dart';
 
 void addParallaxStories(Dashbook dashbook) {
