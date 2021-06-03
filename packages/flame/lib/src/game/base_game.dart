@@ -74,7 +74,9 @@ class BaseGame extends Game with FPSCounter {
   @override
   Vector2 get size {
     assertHasLayout();
-    return _sizeBuffer..setFrom(viewport.effectiveSize)..scale(1/camera.zoom);
+    return _sizeBuffer
+      ..setFrom(viewport.effectiveSize)
+      ..scale(1 / camera.zoom);
   }
 
   /// This is the original Flutter widget size, without any transformation.
