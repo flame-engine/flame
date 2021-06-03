@@ -26,28 +26,18 @@ class ScreenCollidable extends PositionComponent
   @override
   CollidableType collidableType = CollidableType.passive;
 
-  final Vector2 _effectiveSize = Vector2.zero();
-  double _zoom = 1.0;
-
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    _updateSize();
+    size = gameRef.size;
     addShape(HitboxRectangle());
   }
 
+  final _zeroVector = Vector2.zero();
   @override
   void update(double dt) {
     super.update(dt);
-    _updateSize();
-  }
-
-  void _updateSize() {
-    if (_effectiveSize != gameRef.viewport.effectiveSize ||
-        _zoom != gameRef.camera.zoom) {
-      _effectiveSize.setFrom(gameRef.viewport.effectiveSize);
-      _zoom = gameRef.camera.zoom;
-      size = _effectiveSize / _zoom;
-    }
+    position = gameRef.camera.unprojectVector(_zeroVector);
+    size = gameRef.size;
   }
 }

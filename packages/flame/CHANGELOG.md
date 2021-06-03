@@ -18,7 +18,7 @@
  - Refactor TextBoxComponent
  - Fix bugs with TextBoxComponent
  - Improve error message for composed components
-
+ - Fix game.size to take zoom into consideration (which also fixes followComponent when zoom != 1)
 
 ## [1.0.0-releasecandidate.11]
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code

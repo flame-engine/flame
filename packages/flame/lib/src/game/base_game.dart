@@ -68,12 +68,13 @@ class BaseGame extends Game with FPSCounter {
   /// This is overwritten to consider the viewport transformation.
   ///
   /// Which means that this is the logical size of the game screen area as
-  /// exposed to the canvas after viewport transformations.
+  /// exposed to the canvas after viewport transformations and camera zooming.
   /// This does not match the Flutter widget size; for that see [canvasSize].
+  final Vector2 _sizeBuffer = Vector2.zero();
   @override
   Vector2 get size {
     assertHasLayout();
-    return viewport.effectiveSize;
+    return _sizeBuffer..setFrom(viewport.effectiveSize)..scale(1/camera.zoom);
   }
 
   /// This is the original Flutter widget size, without any transformation.
