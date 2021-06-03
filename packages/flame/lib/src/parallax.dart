@@ -49,6 +49,23 @@ extension ParallaxExtension on Game {
     );
   }
 
+  Future<ParallaxAnimation> loadParallaxAnimation(
+    String path,
+    SpriteAnimationData animaitonData, {
+    ImageRepeat repeat = ImageRepeat.repeatX,
+    Alignment alignment = Alignment.bottomLeft,
+    LayerFill fill = LayerFill.height,
+  }) {
+    return ParallaxAnimation.load(
+      path,
+      animaitonData,
+      repeat: repeat,
+      alignment: alignment,
+      fill: fill,
+      images: images,
+    );
+  }
+
   Future<ParallaxLayer> loadParallaxLayer(
     ParallaxData data, {
     ImageRepeat repeat = ImageRepeat.repeatX,

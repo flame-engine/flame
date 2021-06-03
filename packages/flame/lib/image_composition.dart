@@ -92,8 +92,8 @@ class ImageComposition {
     isAntiAlias ??= defaultAntiAlias;
 
     assert(
-        imageRect.topLeft <= source.topLeft &&
-        imageRect.bottomRight >= source.bottomRight,
+      imageRect.topLeft <= source.topLeft &&
+          imageRect.bottomRight >= source.bottomRight,
       'Source rect should fit within in the image constraints',
     );
 
