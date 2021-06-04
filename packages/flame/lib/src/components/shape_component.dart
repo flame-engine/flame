@@ -12,12 +12,13 @@ class ShapeComponent extends PositionComponent {
   ShapeComponent(
     this.shape,
     this.shapePaint, {
+    Anchor? anchor,
     int? priority,
   }) : super(
           position: shape.position,
           size: shape.size,
           angle: shape.angle,
-          anchor: Anchor.center,
+          anchor: anchor ?? Anchor.center,
           priority: priority,
         );
 
