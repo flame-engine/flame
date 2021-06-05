@@ -18,6 +18,7 @@
  - Refactor TextBoxComponent
  - Fix bugs with TextBoxComponent
  - Improve error message for composed components
+ - Add `anchor` for `ShapeComponent` constructor
 
 
 ## [1.0.0-releasecandidate.11]
