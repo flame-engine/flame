@@ -70,6 +70,7 @@ class BaseGame extends Game with FPSCounter {
   ///
   /// Which means that this is the logical size of the game screen area as
   /// exposed to the canvas after viewport transformations and camera zooming.
+  ///
   /// This does not match the Flutter widget size; for that see [canvasSize].
   @override
   Vector2 get size {
