@@ -208,6 +208,7 @@ Methods:
 
 Methods:
  - `toRect`: Converts this math `Rectangle` into an ui `Rect`.
+
 ### Size
 
 Methods:
@@ -241,3 +242,34 @@ Operators:
  - `&`: Combines two `Vector2`s to form a Rect, the origin should be on the left and the size on the
   right.
  - `%`: Modulo/Remainder of x and y separately of two `Vector2`s.
+
+### Matrix4
+
+This class comes from the `vector_math` pacakage. We have created a few extension methods on top
+of what is already offered by `vector_math`.
+
+Methods:
+  - `transform2`: Create a new `Vector2` by transforming the given `Vector2` using the `Matrix4`.
+  - `transformed2`: Transform the input `Vector2` into the output `Vector2`.
+
+Getters:
+  - `m11`: Returns the value at the first row and first column.
+  - `m12`: Returns the value at the first row and second column.
+  - `m13`: Returns the value at the first row and third column.
+  - `m14`: Returns the value at the first row and fourth column.
+  - `m21`: Returns the value at the second row and first column.
+  - `m22`: Returns the value at the second row and second column.
+  - `m23`: Returns the value at the second row and third column.
+  - `m24`: Returns the value at the second row and fourth column.
+  - `m31`: Returns the value at the third row and first column.
+  - `m32`: Returns the value at the third row and second column.
+  - `m33`: Returns the value at the third row and third column.
+  - `m34`: Returns the value at the third row and fourth column.
+  - `m41`: Returns the value at the fourth row and first column.
+  - `m42`: Returns the value at the fourth row and second column.
+  - `m43`: Returns the value at the fourth row and third column.
+  - `m44`: Returns the value at the fourth row and fourth column.
+
+Factories:
+ - `scale`: Create a scaled `Matrix4`. Either by passing a `Vector4` or `Vector2` as it's first 
+    argument, or by passing x y z doubles.

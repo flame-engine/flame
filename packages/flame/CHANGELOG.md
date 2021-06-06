@@ -19,6 +19,7 @@
  - Fix bugs with TextBoxComponent
  - Improve error message for composed components
  - Add `anchor` for `ShapeComponent` constructor
+ - Added `Matrix4` extensions
 
 
 ## [1.0.0-releasecandidate.11]
