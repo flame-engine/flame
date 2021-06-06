@@ -204,13 +204,13 @@ class Camera extends Projector {
   }
 
   /// Takes coordinates in the screen space and returns their counter-part in
-  /// the world space
+  /// the world space.
   Vector2 screenToWorld(Vector2 screenCoordinates) {
     return unprojectVector(screenCoordinates);
   }
 
   /// Takes coordinates in the world space and returns their counter-part in
-  /// the screen space
+  /// the screen space.
   Vector2 worldToScreen(Vector2 worldCoordinates) {
     return projectVector(worldCoordinates);
   }

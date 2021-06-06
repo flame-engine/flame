@@ -31,11 +31,11 @@ When using `BaseGame`, the operations performed by the viewport are done automat
 render operation, and the `size` property in the game, instead of the logical widget size, becomes
 the size as seen through the viewport together with the zoom of the camera. If for some reason you
 need to access the original real logical pixel size, you can use `canvasSize`. For a more in depth
-description on what each Viewport does and how it operates, check the documentation on its class.
+description on what each `Viewport` does and how it operates, check the documentation on its class.
 
 ## Camera
 
-Unlike the Viewport, the Camera is a more dynamic Canvas transformation that is normally dependent
+Unlike the `Viewport`, the `Camera` is a more dynamic `Canvas` transformation that is normally dependent
 on:
 
  * world coordinates that do not match screen coordinates 1:1
