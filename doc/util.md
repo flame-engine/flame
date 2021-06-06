@@ -245,7 +245,7 @@ Operators:
 
 ### Matrix4
 
-This class comes from the `vector_math` pacakage. We have created a few extension methods on top
+This class comes from the `vector_math` package. We have created a few extension methods on top
 of what is already offered by `vector_math`.
 
 Methods:
