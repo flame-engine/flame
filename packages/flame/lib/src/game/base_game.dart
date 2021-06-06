@@ -66,6 +66,7 @@ class BaseGame extends Game with FPSCounter {
   late Projector _combinedProjector;
 
   final Vector2 _sizeBuffer = Vector2.zero();
+
   /// This is overwritten to consider the viewport transformation.
   ///
   /// Which means that this is the logical size of the game screen area as
