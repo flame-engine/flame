@@ -47,7 +47,7 @@ abstract class Shape {
   double parentAngle;
 
   /// Whether the context that the shape is in has already prepared (rotated
-  /// etc) the canvas before coming to the shape's render method.
+  /// and translated) the canvas before coming to the shape's render method.
   bool isCanvasPrepared = false;
 
   /// The center position of the shape within itself, without rotation
