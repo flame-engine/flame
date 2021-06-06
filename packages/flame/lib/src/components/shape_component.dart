@@ -20,7 +20,9 @@ class ShapeComponent extends PositionComponent {
           angle: shape.angle,
           anchor: anchor,
           priority: priority,
-        );
+        ) {
+    shape.isCanvasPrepared = true;
+  }
 
   @override
   void render(Canvas canvas) {

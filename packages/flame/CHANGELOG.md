@@ -19,7 +19,7 @@
  - Fix bugs with TextBoxComponent
  - Improve error message for composed components
  - Add `anchor` for `ShapeComponent` constructor
-
+ - Fix rendering of polygons in ShapeComponent
 
 ## [1.0.0-releasecandidate.11]
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code
