@@ -76,7 +76,6 @@ extension Matrix4Extension on Matrix4 {
   /// Create a scaled matrix.
   ///
   /// Scale by a [Vector3], [Vector4], or x,y,z
-  static Matrix4 scale(dynamic x, [double? y, double? z]) => Matrix4.zero()
-    ..setIdentity()
-    ..scale(x, y, z);
+  static Matrix4 scale(dynamic x, [double? y, double? z]) =>
+      Matrix4.identity()..scale(x, y, z);
 }
