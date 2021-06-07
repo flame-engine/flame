@@ -12,7 +12,7 @@ import 'position_component.dart';
 
 extension ParallaxComponentExtension on Game {
   Future<ParallaxComponent> loadParallaxComponent(
-    List<String> paths, {
+    List<ParallaxData> dataList, {
     Vector2? size,
     Vector2? baseVelocity,
     Vector2? velocityMultiplierDelta,
@@ -22,7 +22,7 @@ extension ParallaxComponentExtension on Game {
     int? priority,
   }) async {
     final component = await ParallaxComponent.load(
-      paths,
+      dataList,
       size: size,
       baseVelocity: baseVelocity,
       velocityMultiplierDelta: velocityMultiplierDelta,
@@ -101,8 +101,9 @@ class ParallaxComponent extends PositionComponent {
   /// and filled), otherwise load the [ParallaxLayer]s individually and use the
   /// normal constructor.
   ///
-  /// [load] takes a list of paths to all the images and a size that you want to use in the
+  /// [load] takes a list of [ParallaxData] of all the images and a size that you want to use in the
   /// parallax.
+  ///
   /// Optionally arguments for the [baseVelocity] and [velocityMultiplierDelta] can be passed
   /// in, [baseVelocity] defines what the base velocity of the layers should be
   /// and [velocityMultiplierDelta] defines how the velocity should change the
@@ -112,9 +113,10 @@ class ParallaxComponent extends PositionComponent {
   /// which edge it should align with ([alignment]), which axis it should fill
   /// the image on ([fill]) and [images] which is the image cache that should be
   /// used can also be passed in.
+  ///
   /// If no image cache is set, the global flame cache is used.
   static Future<ParallaxComponent> load(
-    List<String> paths, {
+    List<ParallaxData> dataList, {
     Vector2? size,
     Vector2? baseVelocity,
     Vector2? velocityMultiplierDelta,
@@ -126,7 +128,7 @@ class ParallaxComponent extends PositionComponent {
   }) async {
     final component = ParallaxComponent.fromParallax(
       await Parallax.load(
-        paths,
+        dataList,
         size: size,
         baseVelocity: baseVelocity,
         velocityMultiplierDelta: velocityMultiplierDelta,
