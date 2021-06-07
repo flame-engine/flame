@@ -64,7 +64,6 @@ class SandBoxLayerParallaxGame extends BaseGame {
       baseVelocity: Vector2(20, 0),
     );
 
-    final comp = ParallaxComponent.fromParallax(parallax);
-    add(comp);
+    add( ParallaxComponent.fromParallax(parallax));
   }
 }
