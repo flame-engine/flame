@@ -17,6 +17,8 @@ class ZoomGame extends BaseGame with ScrollDetector, ScaleDetector {
     final flameSprite = await loadSprite('flame.png');
 
     viewport = FixedResolutionViewport(viewportResolution);
+    camera.setRelativeOffset(Anchor.center);
+    camera.cameraSpeed = 1;
 
     final flameSize = Vector2(149, 211);
     add(
@@ -25,7 +27,6 @@ class ZoomGame extends BaseGame with ScrollDetector, ScaleDetector {
         size: flameSize,
       )..anchor = Anchor.center,
     );
-    camera.followComponent(flame);
   }
 
   static const zoomPerScrollUnit = 0.001;

@@ -62,6 +62,9 @@ class Camera extends Projector {
   /// Remaining time in seconds for the camera shake.
   double _shakeTimer = 0.0;
 
+  /// The matrix used for scaling and translating the canvas
+  final Matrix4 _transform = Matrix4.identity();
+
   // Configurable parameters
 
   double cameraSpeed = defaultCameraSpeed;
@@ -143,10 +146,10 @@ class Camera extends Projector {
   /// When using this method you are responsible for saving/restoring canvas
   /// state to avoid leakage.
   void apply(Canvas canvas) {
-    canvas.translateVector(
-      (-position)..scale(zoom),
-    );
-    canvas.scale(zoom);
+    _transform.setIdentity();
+    _transform.translate(-_position.x, -position.y);
+    _transform.scale(zoom);
+    canvas.transform(_transform.storage);
   }
 
   /// This smoothly updates the camera for an amount of time [dt].
