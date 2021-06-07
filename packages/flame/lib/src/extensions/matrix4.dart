@@ -51,6 +51,11 @@ extension Matrix4Extension on Matrix4 {
   /// A fourth row and fourth column value.
   double get m44 => storage[15];
 
+  /// Translate this matrix by a [Vector2].
+  void translateVector2(Vector2 vector) {
+    return translate(vector.x, vector.y);
+  }
+
   /// Transform [position] of type [Vector2] using the transformation defined by
   /// this.
   Vector2 transform2(Vector2 position) {
