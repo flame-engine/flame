@@ -9,7 +9,8 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  flame: 1.0.0-releasecandidate.11
+  flame:
+    path: ../../flame
   flame_audio:
     path: ../
   flutter:

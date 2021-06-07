@@ -13,6 +13,16 @@ import 'memory_cache.dart';
 ///
 /// See [TextPaint] for the default implementation offered by Flame
 abstract class TextRenderer<T extends BaseTextConfig> {
+  /// A registry containing default providers for every [TextRenderer] subclass;
+  /// used by [createDefault] to create default parameter values.
+  ///
+  /// If you add a new [TextRenderer] child, you can register it by adding it,
+  /// alongisde a provider lambda, to this map.
+  static Map<Type, TextRenderer Function()> defaultCreatorsRegistry = {
+    TextRenderer: () => TextPaint(),
+    TextPaint: () => TextPaint(),
+  };
+
   final T config;
 
   TextRenderer({required this.config});
@@ -45,6 +55,20 @@ abstract class TextRenderer<T extends BaseTextConfig> {
       measureTextWidth(text),
       measureTextHeight(text),
     );
+  }
+
+  /// Creates a new instance of this painter but transforming the [config]
+  /// object via the provided lambda.
+  TextRenderer<T> copyWith(T Function(T) transform);
+
+  /// Given a generic type [T], creates a default renderer of that type.
+  static T createDefault<T extends TextRenderer>() {
+    final creator = defaultCreatorsRegistry[T];
+    if (creator != null) {
+      return creator() as T;
+    } else {
+      throw 'Unkown implementation of TextRenderer: $T. Please register it under [defaultCreatorsRegistry].';
+    }
   }
 }
 
@@ -243,5 +267,12 @@ class TextPaint extends TextRenderer<TextPaintConfig> {
       _textPainterCache.setValue(text, tp);
     }
     return _textPainterCache.getValue(text)!;
+  }
+
+  @override
+  TextPaint copyWith(
+    TextPaintConfig Function(TextPaintConfig) transform,
+  ) {
+    return TextPaint(config: transform(config));
   }
 }

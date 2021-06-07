@@ -49,6 +49,11 @@ class MyAsyncChild extends MyTap {
 
 class MyComposed extends PositionComponent with HasGameRef, Tapable {}
 
+class MySimpleComposed extends BaseComponent with HasGameRef, Tapable {}
+
+// composed w/o HasGameRef
+class PlainComposed extends BaseComponent {}
+
 Vector2 size = Vector2.all(300);
 
 void main() {
@@ -58,7 +63,7 @@ void main() {
       final wrapper = MyComposed();
       wrapper.addChild(child);
 
-      expect(true, wrapper.containsChild(child));
+      expect(wrapper.containsChild(child), true);
     });
 
     test('removes the child from the component', () {
@@ -68,7 +73,7 @@ void main() {
       expect(true, wrapper.containsChild(child));
 
       wrapper.removeChild(child);
-      expect(false, wrapper.containsChild(child));
+      expect(wrapper.containsChild(child), false);
     });
 
     test(
@@ -78,7 +83,7 @@ void main() {
         final wrapper = MyComposed();
         await wrapper.addChild(child);
 
-        expect(true, wrapper.containsChild(child));
+        expect(wrapper.containsChild(child), true);
       },
     );
 
@@ -165,6 +170,38 @@ void main() {
       expect(child.debugMode, true);
       wrapper.debugMode = false;
       expect(child.debugMode, true);
+    });
+    test('initially same debugMode as parent when BaseComponent', () {
+      final game = MyGame();
+      game.onResize(Vector2.all(100));
+      final child = MyTap();
+      final wrapper = MySimpleComposed();
+      wrapper.debugMode = true;
+
+      wrapper.addChild(child);
+      game.add(wrapper);
+      game.update(0.0);
+
+      expect(child.debugMode, true);
+    });
+    test('fail to add child if no gameRef can be acquired', () {
+      final game = MyGame();
+      game.onResize(Vector2.all(100));
+
+      final parent = PlainComposed();
+
+      // this is ok; when the parent is added to the game the children will
+      // get mounted
+      parent.addChild(MyTap());
+
+      game.add(parent);
+      game.update(0);
+
+      // this is not ok, the child would never be mounted!
+      expect(
+        () => parent.addChild(MyTap()),
+        throwsA(isA<AssertionError>()),
+      );
     });
   });
 }

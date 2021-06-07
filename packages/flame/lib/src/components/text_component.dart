@@ -7,9 +7,9 @@ import '../extensions/vector2.dart';
 import '../text.dart';
 import 'position_component.dart';
 
-class TextComponent extends PositionComponent {
+class TextComponent<T extends TextRenderer> extends PositionComponent {
   String _text;
-  TextRenderer _textRenderer;
+  T _textRenderer;
 
   String get text => _text;
 
@@ -20,32 +20,33 @@ class TextComponent extends PositionComponent {
     }
   }
 
-  TextRenderer get textRenderer => _textRenderer;
+  T get textRenderer => _textRenderer;
 
-  set textRenderer(TextRenderer textRenderer) {
+  set textRenderer(T textRenderer) {
     _textRenderer = textRenderer;
     _updateBox();
   }
 
   TextComponent(
     this._text, {
-    TextRenderer? textRenderer,
+    T? textRenderer,
     Vector2? position,
     Vector2? size,
-  })  : _textRenderer = textRenderer ?? TextPaint(),
-        super(position: position, size: size) {
+    int? priority,
+  })  : _textRenderer = textRenderer ?? TextRenderer.createDefault<T>(),
+        super(position: position, size: size, priority: priority) {
     _updateBox();
   }
 
   void _updateBox() {
-    final size = textRenderer.measureText(_text);
-    size.setValues(size.x, size.y);
+    final expectedSize = textRenderer.measureText(_text);
+    size.setValues(expectedSize.x, expectedSize.y);
   }
 
   @mustCallSuper
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    _textRenderer.render(canvas, text, Vector2.zero(), anchor: anchor);
+    _textRenderer.render(canvas, text, Vector2.zero());
   }
 }

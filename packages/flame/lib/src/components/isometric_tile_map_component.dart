@@ -43,7 +43,8 @@ class IsometricTileMapComponent extends PositionComponent {
     this.destTileSize,
     this.tileHeight,
     Vector2? position,
-  }) : super(position: position);
+    int? priority,
+  }) : super(position: position, priority: priority);
 
   /// This is the size the tiles will be drawn (either original or overwritten).
   Vector2 get effectiveTileSize => destTileSize ?? tileset.srcSize;

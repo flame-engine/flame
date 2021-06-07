@@ -11,13 +11,18 @@ class ShapeComponent extends PositionComponent {
 
   ShapeComponent(
     this.shape,
-    this.shapePaint,
-  ) : super(
+    this.shapePaint, {
+    Anchor anchor = Anchor.center,
+    int? priority,
+  }) : super(
           position: shape.position,
           size: shape.size,
           angle: shape.angle,
-          anchor: Anchor.center,
-        );
+          anchor: anchor,
+          priority: priority,
+        ) {
+    shape.isCanvasPrepared = true;
+  }
 
   @override
   void render(Canvas canvas) {
