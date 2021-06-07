@@ -46,6 +46,10 @@ abstract class Shape {
   /// applications of [Shape], for example [HitboxShape]
   double parentAngle;
 
+  /// Whether the context that the shape is in has already prepared (rotated
+  /// and translated) the canvas before coming to the shape's render method.
+  bool isCanvasPrepared = false;
+
   /// The center position of the shape within itself, without rotation
   Vector2 get localCenter {
     final stateValues = [
