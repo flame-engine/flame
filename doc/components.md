@@ -276,8 +276,9 @@ For a working example, check the example in the
 
 ## ParallaxComponent
 
-This Component can be used to render backgrounds with a depth feeling by drawing several transparent
-images on top of each other, where each image is moving with a different velocity.
+This `Component` can be used to render backgrounds with a depth feeling by drawing several transparent
+images on top of each other, where each image or animation (`ParallaxRenderer`) is moving with a
+different velocity.
 
 The rationale is that when you look at the horizon and moving, closer objects seem to move faster
 than distant ones.
@@ -289,7 +290,10 @@ The simplest `ParallaxComponent` is created like this:
 ```dart
 @override
 Future<void> onLoad() async {
-  final parallaxComponent = await loadParallaxComponent(['bg.png', 'trees.png']);
+  final parallaxComponent = await loadParallaxComponent([
+    ParallaxImageData('bg.png'),
+    ParallaxImageData('trees.png'),
+  ]);
   add(parallax);
 }
 ```
@@ -300,7 +304,10 @@ A ParallaxComponent can also "load itself" by implementing the `onLoad` method:
 class MyParallaxComponent extends ParallaxComponent with HasGameRef<MyGame> {
   @override
   Future<void> onLoad() async {
-    parallax = await gameRef.loadParallax(['bg.png', 'trees.png']);
+    parallax = await gameRef.loadParallax([
+      ParallaxImageData('bg.png'),
+      ParallaxImageData('trees.png'),
+    ]);
   }
 }
 
@@ -323,7 +330,7 @@ For example if you want to move your background images along the X-axis with a f
 
 ```dart
 final parallaxComponent = await loadParallaxComponent(
-  _paths,
+  _dataList,
   baseVelocity: Vector2(20, 0),
   velocityMultiplierDelta: Vector2(1.8, 1.0),
 );
@@ -341,7 +348,7 @@ parallax.velocityMultiplierDelta = Vector2(2.0, 1.0);
 By default the images are aligned to the bottom left, repeated along the X-axis and scaled
 proportionally so that the image covers the height of the screen. If you want to change this
 behavior, for example if you are not making a side scrolling game, you can set the `repeat`,
-`alignment` and `fill` parameters for each `ParallaxImage` and add them to `ParallaxLayer`s that you
+`alignment` and `fill` parameters for each `ParallaxRenderer` and add them to `ParallaxLayer`s that you
 then pass in to the `ParallaxComponent`'s constructor.
 
 Advanced example:
@@ -372,11 +379,14 @@ component (`game.add(parallaxComponent`).
 Also, don't forget to add you images to the `pubspec.yaml` file as assets or they wont be found.
 
 The `Parallax` file contains an extension of the game which adds `loadParallax`, `loadParallaxLayer`
-and `loadParallaxImage` so that it automatically uses your game's image cache instead of the global
+, `loadParallaxImage` and `loadParallaxAnimation` so that it automatically uses your game's image cache instead of the global
 one. The same goes for the `ParallaxComponent` file, but that provides `loadParallaxComponent`.
 
 If you want a fullscreen `ParallaxComponent` simply omit the `size` argument and it will take the
 size of the game, it will also resize to fullscreen when the game changes size or orientation.
+
+Flame provides two kinds of `ParallaxRenderer`: `ParallaxImage` and `ParallaxAnimation`, `ParallaxImage` is a static image renderer and `ParallaxAnimation` is, as it's name implies, an animation and frame based renderer.
+It is also possible to create custom renderers by extending the `ParallaxRenderer` class.
 
 Three example implementations can be found in the
 [examples directory](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/parallax).
