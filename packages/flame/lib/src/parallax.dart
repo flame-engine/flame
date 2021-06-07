@@ -10,10 +10,11 @@ import 'extensions/rect.dart';
 import 'extensions/vector2.dart';
 import 'flame.dart';
 import 'game/game.dart';
+import 'sprite_animation.dart';
 
 extension ParallaxExtension on Game {
   Future<Parallax> loadParallax(
-    List<String> paths, {
+    List<ParallaxData> dataList, {
     Vector2? size,
     Vector2? baseVelocity,
     Vector2? velocityMultiplierDelta,
@@ -22,7 +23,7 @@ extension ParallaxExtension on Game {
     LayerFill fill = LayerFill.height,
   }) {
     return Parallax.load(
-      paths,
+      dataList,
       size: size,
       baseVelocity: baseVelocity,
       velocityMultiplierDelta: velocityMultiplierDelta,
@@ -48,15 +49,32 @@ extension ParallaxExtension on Game {
     );
   }
 
+  Future<ParallaxAnimation> loadParallaxAnimation(
+    String path,
+    SpriteAnimationData animaitonData, {
+    ImageRepeat repeat = ImageRepeat.repeatX,
+    Alignment alignment = Alignment.bottomLeft,
+    LayerFill fill = LayerFill.height,
+  }) {
+    return ParallaxAnimation.load(
+      path,
+      animaitonData,
+      repeat: repeat,
+      alignment: alignment,
+      fill: fill,
+      images: images,
+    );
+  }
+
   Future<ParallaxLayer> loadParallaxLayer(
-    String path, {
+    ParallaxData data, {
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
     Vector2? velocityMultiplier,
   }) {
     return ParallaxLayer.load(
-      path,
+      data,
       velocityMultiplier: velocityMultiplier,
       repeat: repeat,
       alignment: alignment,
@@ -66,12 +84,7 @@ extension ParallaxExtension on Game {
   }
 }
 
-/// Specifications with a path to an image and how it should be drawn in
-/// relation to the device screen
-class ParallaxImage {
-  /// The image
-  final Image image;
-
+abstract class ParallaxRenderer {
   /// If and how the image should be repeated on the canvas
   final ImageRepeat repeat;
 
@@ -81,12 +94,34 @@ class ParallaxImage {
   /// How to fill the screen with the image, always proportionally scaled.
   final LayerFill fill;
 
+  ParallaxRenderer({
+    ImageRepeat? repeat,
+    Alignment? alignment,
+    LayerFill? fill,
+  })  : repeat = repeat ?? ImageRepeat.repeatX,
+        alignment = alignment ?? Alignment.bottomLeft,
+        fill = fill ?? LayerFill.height;
+
+  void update(double dt);
+  Image get image;
+}
+
+/// Specifications with a path to an image and how it should be drawn in
+/// relation to the device screen
+class ParallaxImage extends ParallaxRenderer {
+  /// The image
+  final Image _image;
+
   ParallaxImage(
-    this.image, {
-    this.repeat = ImageRepeat.repeatX,
-    this.alignment = Alignment.bottomLeft,
-    this.fill = LayerFill.height,
-  });
+    this._image, {
+    ImageRepeat? repeat,
+    Alignment? alignment,
+    LayerFill? fill,
+  }) : super(
+          repeat: repeat,
+          alignment: alignment,
+          fill: fill,
+        );
 
   /// Takes a path of an image, and optionally arguments for how the image should
   /// repeat ([repeat]), which edge it should align with ([alignment]), which axis
@@ -107,24 +142,96 @@ class ParallaxImage {
       fill: fill,
     );
   }
+
+  @override
+  Image get image => _image;
+
+  @override
+  void update(_) {
+    // noop
+  }
+}
+
+/// Specifications with a SpriteAnimation and how it should be drawn in
+/// relation to the device screen
+class ParallaxAnimation extends ParallaxRenderer {
+  /// The Animation
+  final SpriteAnimation _animation;
+
+  /// The animation's frames prerended into images so it can be used in the parallax
+  final List<Image> _prerenderedFrames;
+
+  ParallaxAnimation(
+    this._animation,
+    this._prerenderedFrames, {
+    ImageRepeat? repeat,
+    Alignment? alignment,
+    LayerFill? fill,
+  }) : super(
+          repeat: repeat,
+          alignment: alignment,
+          fill: fill,
+        );
+
+  /// Takes a path of an image, a SpriteAnimationData, and optionally arguments for how the image should
+  /// repeat ([repeat]), which edge it should align with ([alignment]), which axis
+  /// it should fill the image on ([fill]) and [images] which is the image cache
+  /// that should be used. If no image cache is set, the global flame cache is used.
+  ///
+  /// _IMPORTANT_: This method pre render all the frames of the animation into image instances
+  /// so it can be used inside the parallax. Just keep that in mind when using animations in
+  /// in parallax, the over use of it, or the use of big animations (be it in number of frames
+  /// or the size of the images) can lead to high use of memory.
+  static Future<ParallaxAnimation> load(
+    String path,
+    SpriteAnimationData animationData, {
+    ImageRepeat repeat = ImageRepeat.repeatX,
+    Alignment alignment = Alignment.bottomLeft,
+    LayerFill fill = LayerFill.height,
+    Images? images,
+  }) async {
+    images ??= Flame.images;
+
+    final animation =
+        await SpriteAnimation.load(path, animationData, images: images);
+    final prerendedFrames = await Future.wait(
+      animation.frames.map((frame) => frame.sprite.toImage()).toList(),
+    );
+
+    return ParallaxAnimation(
+      animation,
+      prerendedFrames,
+      repeat: repeat,
+      alignment: alignment,
+      fill: fill,
+    );
+  }
+
+  @override
+  Image get image => _prerenderedFrames[_animation.currentIndex];
+
+  @override
+  void update(double dt) {
+    _animation.update(dt);
+  }
 }
 
 /// Represents one layer in the parallax, draws out an image on a canvas in the
 /// manner specified by the parallaxImage
 class ParallaxLayer {
-  final ParallaxImage parallaxImage;
+  final ParallaxRenderer parallaxRenderer;
   late Vector2 velocityMultiplier;
   late Rect _paintArea;
   late Vector2 _scroll;
   late Vector2 _imageSize;
   double _scale = 1.0;
 
-  /// [parallaxImage] is the representation of the image with data of how the
-  /// image should behave.
+  /// [parallaxRenderer] is the representation of the renderer with data of how the
+  /// layer should behave.
   /// [velocityMultiplier] will be used to determine the velocity of the layer by
   /// multiplying the [Parallax.baseVelocity] with the [velocityMultiplier].
   ParallaxLayer(
-    this.parallaxImage, {
+    this.parallaxRenderer, {
     Vector2? velocityMultiplier,
   }) : velocityMultiplier = velocityMultiplier ?? Vector2.all(1.0);
 
@@ -134,18 +241,18 @@ class ParallaxLayer {
     double scale(LayerFill fill) {
       switch (fill) {
         case LayerFill.height:
-          return parallaxImage.image.height / size.y;
+          return parallaxRenderer.image.height / size.y;
         case LayerFill.width:
-          return parallaxImage.image.width / size.x;
+          return parallaxRenderer.image.width / size.x;
         default:
           return _scale;
       }
     }
 
-    _scale = scale(parallaxImage.fill);
+    _scale = scale(parallaxRenderer.fill);
 
     // The image size so that it fulfills the LayerFill parameter
-    _imageSize = parallaxImage.image.size / _scale;
+    _imageSize = parallaxRenderer.image.size / _scale;
 
     // Number of images that can fit on the canvas plus one
     // to have something to scroll to without leaving canvas empty
@@ -156,9 +263,11 @@ class ParallaxLayer {
       ..divide(_imageSize);
 
     // Align image to correct side of the screen
-    final alignment = parallaxImage.alignment;
-    final marginX = alignment.x == 0 ? overflow.x / 2 : alignment.x;
-    final marginY = alignment.y == 0 ? overflow.y / 2 : alignment.y;
+    final alignment = parallaxRenderer.alignment;
+
+    final marginX = alignment.x * overflow.x / 2 + overflow.x / 2;
+    final marginY = alignment.y * overflow.y / 2 + overflow.y / 2;
+
     _scroll = Vector2(marginX, marginY);
 
     // Size of the area to paint the images on
@@ -166,10 +275,11 @@ class ParallaxLayer {
     _paintArea = paintSize.toRect();
   }
 
-  void update(Vector2 delta) {
+  void update(Vector2 delta, double dt) {
+    parallaxRenderer.update(dt);
     // Scale the delta so that images that are larger don't scroll faster
     _scroll += delta.clone()..divide(_imageSize);
-    switch (parallaxImage.repeat) {
+    switch (parallaxRenderer.repeat) {
       case ImageRepeat.repeat:
         _scroll = Vector2(_scroll.x % 1, _scroll.y % 1);
         break;
@@ -198,20 +308,20 @@ class ParallaxLayer {
     }
     paintImage(
       canvas: canvas,
-      image: parallaxImage.image,
+      image: parallaxRenderer.image,
       rect: _paintArea,
-      repeat: parallaxImage.repeat,
+      repeat: parallaxRenderer.repeat,
       scale: _scale,
-      alignment: parallaxImage.alignment,
+      alignment: parallaxRenderer.alignment,
     );
   }
 
-  /// Takes a path of an image, and optionally arguments for how the image should
+  /// Takes a data of a parallax renderer, and optionally arguments for how it should
   /// repeat ([repeat]), which edge it should align with ([alignment]), which axis
   /// it should fill the image on ([fill]) and [images] which is the image cache
   /// that should be used. If no image cache is set, the global flame cache is used.
   static Future<ParallaxLayer> load(
-    String path, {
+    ParallaxData data, {
     Vector2? velocityMultiplier,
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
@@ -219,12 +329,11 @@ class ParallaxLayer {
     Images? images,
   }) async {
     return ParallaxLayer(
-      await ParallaxImage.load(
-        path,
-        repeat: repeat,
-        alignment: alignment,
-        fill: fill,
-        images: images,
+      await data.load(
+        repeat,
+        alignment,
+        fill,
+        images,
       ),
       velocityMultiplier: velocityMultiplier,
     );
@@ -233,6 +342,63 @@ class ParallaxLayer {
 
 /// How to fill the screen with the image, always proportionally scaled.
 enum LayerFill { height, width, none }
+
+abstract class ParallaxData {
+  Future<ParallaxRenderer> load(
+    ImageRepeat repeat,
+    Alignment alignment,
+    LayerFill fill,
+    Images? images,
+  );
+}
+
+/// Contains the fields and logic to load a [ParallaxImage]
+class ParallaxImageData extends ParallaxData {
+  final String path;
+
+  ParallaxImageData(this.path);
+
+  @override
+  Future<ParallaxRenderer> load(
+    ImageRepeat repeat,
+    Alignment alignment,
+    LayerFill fill,
+    Images? images,
+  ) {
+    return ParallaxImage.load(
+      path,
+      repeat: repeat,
+      alignment: alignment,
+      fill: fill,
+      images: images,
+    );
+  }
+}
+
+/// Contains the fields and logic to load a [ParallaxAnimation]
+class ParallaxAnimationData extends ParallaxData {
+  final String path;
+  final SpriteAnimationData animationData;
+
+  ParallaxAnimationData(this.path, this.animationData);
+
+  @override
+  Future<ParallaxRenderer> load(
+    ImageRepeat repeat,
+    Alignment alignment,
+    LayerFill fill,
+    Images? images,
+  ) {
+    return ParallaxAnimation.load(
+      path,
+      animationData,
+      repeat: repeat,
+      alignment: alignment,
+      fill: fill,
+      images: images,
+    );
+  }
+}
 
 /// A full parallax, several layers of images drawn out on the screen and each
 /// layer moves with different velocities to give an effect of depth.
@@ -283,6 +449,7 @@ class Parallax {
     layers.forEach((layer) {
       layer.update(
         (baseVelocity.clone()..multiply(layer.velocityMultiplier)) * dt,
+        dt,
       );
     });
   }
@@ -305,7 +472,7 @@ class Parallax {
   /// used can also be passed in.
   /// If no image cache is set, the global flame cache is used.
   static Future<Parallax> load(
-    List<String> paths, {
+    List<ParallaxData> dataList, {
     Vector2? size,
     Vector2? baseVelocity,
     Vector2? velocityMultiplierDelta,
@@ -317,13 +484,12 @@ class Parallax {
     final velocityDelta = velocityMultiplierDelta ?? Vector2.all(1.0);
     var depth = 0;
     final layers = await Future.wait<ParallaxLayer>(
-      paths.map((path) async {
-        final image = ParallaxImage.load(
-          path,
-          repeat: repeat,
-          alignment: alignment,
-          fill: fill,
-          images: images,
+      dataList.map((data) async {
+        final renderer = await data.load(
+          repeat,
+          alignment,
+          fill,
+          images,
         );
         final velocityMultiplier =
             List.filled(depth, velocityDelta).fold<Vector2>(
@@ -332,7 +498,7 @@ class Parallax {
         );
         ++depth;
         return ParallaxLayer(
-          await image,
+          renderer,
           velocityMultiplier: velocityMultiplier,
         );
       }),
