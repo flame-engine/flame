@@ -253,22 +253,22 @@ Methods:
   - `transformed2`: Transform the input `Vector2` into the output `Vector2`.
 
 Getters:
-  - `m11`: Returns the value at the first row and first column.
-  - `m12`: Returns the value at the first row and second column.
-  - `m13`: Returns the value at the first row and third column.
-  - `m14`: Returns the value at the first row and fourth column.
-  - `m21`: Returns the value at the second row and first column.
-  - `m22`: Returns the value at the second row and second column.
-  - `m23`: Returns the value at the second row and third column.
-  - `m24`: Returns the value at the second row and fourth column.
-  - `m31`: Returns the value at the third row and first column.
-  - `m32`: Returns the value at the third row and second column.
-  - `m33`: Returns the value at the third row and third column.
-  - `m34`: Returns the value at the third row and fourth column.
-  - `m41`: Returns the value at the fourth row and first column.
-  - `m42`: Returns the value at the fourth row and second column.
-  - `m43`: Returns the value at the fourth row and third column.
-  - `m44`: Returns the value at the fourth row and fourth column.
+  - `m11`: The first row and first column.
+  - `m12`: The first row and second column.
+  - `m13`: The first row and third column.
+  - `m14`: The first row and fourth column.
+  - `m21`: The second row and first column.
+  - `m22`: The second row and second column.
+  - `m23`: The second row and third column.
+  - `m24`: The second row and fourth column.
+  - `m31`: The third row and first column.
+  - `m32`: The third row and second column.
+  - `m33`: The third row and third column.
+  - `m34`: The third row and fourth column.
+  - `m41`: The fourth row and first column.
+  - `m42`: The fourth row and second column.
+  - `m43`: The fourth row and third column.
+  - `m44`: The fourth row and fourth column.
 
 Factories:
  - `scale`: Create a scaled `Matrix4`. Either by passing a `Vector4` or `Vector2` as it's first 
