@@ -129,7 +129,6 @@ class CameraAndViewportGame extends BaseGame
     add(square = MovableSquare());
     camera.cameraSpeed = 1;
     camera.followComponent(square, worldBounds: Map.bounds);
-    camera.zoom = 2;
 
     for (var i = 0; i < 30; i++) {
       add(Rock(Vector2(Map.genCoord(), Map.genCoord())));
