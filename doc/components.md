@@ -276,8 +276,8 @@ For a working example, check the example in the
 
 ## ParallaxComponent
 
-This Component can be used to render backgrounds with a depth feeling by drawing several transparent
-images on top of each other, where each image or animation (parallax renderer) is moving with a
+This `Component` can be used to render backgrounds with a depth feeling by drawing several transparent
+images on top of each other, where each image or animation (`ParallaxRenderer`) is moving with a
 different velocity.
 
 The rationale is that when you look at the horizon and moving, closer objects seem to move faster
@@ -386,7 +386,7 @@ If you want a fullscreen `ParallaxComponent` simply omit the `size` argument and
 size of the game, it will also resize to fullscreen when the game changes size or orientation.
 
 Flame provides two kinds of `ParallaxRenderer`: `ParallaxImage` and `ParallaxAnimation`, both work
-the same way (despite the fact that one is a static image and the other a frame based animation).
+the same way (`ParallaxImage` is a static image renderer and `ParallaxAnimation` is, as it's name implies, an animation and frame based renderer).
 It is also possible to create custom renderers by extending the `ParallaxRenderer` class.
 
 Three example implementations can be found in the
