@@ -1,4 +1,4 @@
-part of flame_oxygen;
+part of flame_oxygen.system;
 
 mixin UpdateSystem on System {
   FlameWorld? get world => super.world as FlameWorld?;

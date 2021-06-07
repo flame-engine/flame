@@ -1,4 +1,4 @@
-part of flame_oxygen;
+part of flame_oxygen.system;
 
 mixin RenderSystem on System {
   FlameWorld? get flameWorld => world as FlameWorld;
