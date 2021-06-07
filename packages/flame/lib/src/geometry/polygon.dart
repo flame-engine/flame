@@ -92,12 +92,15 @@ class Polygon extends Shape {
       _cachedRenderPath.updateCache(
         Path()
           ..addPolygon(
-            scaled()
-                .map(
-                  (point) => ((center + point)..rotate(angle, center: center))
-                      .toOffset(),
-                )
-                .toList(),
+            scaled().map(
+              (point) {
+                final pathPoint = center + point;
+                if (!isCanvasPrepared) {
+                  pathPoint.rotate(angle, center: center);
+                }
+                return pathPoint.toOffset();
+              },
+            ).toList(),
             true,
           ),
         [
