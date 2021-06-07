@@ -2,21 +2,21 @@
 
 ## [Next]
  - Fix link to code in example stories
- - Fix RotateEffect with negative deltas
- - Add isDragged to Draggable
- - Fix anchor of rendered text in TextComponent
- - Add new extensions to handle math.Rectangles nicely
+ - Fix `RotateEffect` with negative deltas
+ - Add `isDragged` to `Draggable`
+ - Fix the anchor of rendered text in `TextComponent`
+ - Add new extensions to handle `math.Rectangles` nicely
  - Implement color parsing methods
  - Migrated the `Particle` API to `Vector2`
- - Add copyWith function to TextRenderer
- - Fix debug mode is not propagated to children of non-Position components
- - Fix size property of TextComponent was not correctly set
- - Fix anchor property was being incorrectly passed along to text renderer
+ - Add `copyWith` function to `TextRenderer`
+ - Fix debug mode is not propagated to children of non-`Position` components
+ - The `size` property of `TextComponent` was not correctly set
+ - The `anchor` property was being incorrectly passed along to `TextRenderer`
  - All components take priority as an argument on their constructors
- - Fix renderRotated
- - Use QueryableOrderedSet for Collidables
- - Refactor TextBoxComponent
- - Fix bugs with TextBoxComponent
+ - Fix `renderRotated`
+ - Use `QueryableOrderedSet` for `Collidable`s
+ - Refactored `TextBoxComponent`
+ - Fixed bugs with `TextBoxComponent`
  - Improve error message for composed components
  - Add `anchor` for `ShapeComponent` constructor
  - Fix rendering of polygons in `ShapeComponent`
