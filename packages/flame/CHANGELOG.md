@@ -18,6 +18,8 @@
  - Refactor TextBoxComponent
  - Fix bugs with TextBoxComponent
  - Improve error message for composed components
+ - Add `anchor` for `ShapeComponent` constructor
+ - Fix rendering of polygons in `ShapeComponent`
  - Add `SpriteAnimation` support to parallax
  - Fix `Parallax` alignment for images with different width and height
  - Fix `ImageComposition` image bounds validation
