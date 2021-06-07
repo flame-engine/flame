@@ -19,7 +19,8 @@ class AnimationParallaxGame extends BaseGame {
             textureSize: Vector2(80, 160),
           ),
         ),
-        velocityMultiplier: Vector2(2, 0));
+        velocityMultiplier: Vector2(2, 0),
+      );
 
     final cloudsLayer = await loadParallaxLayer(
       ParallaxImageData('parallax/heavy_clouded.png'),
