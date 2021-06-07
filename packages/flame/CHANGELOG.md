@@ -18,7 +18,8 @@
  - Refactor TextBoxComponent
  - Fix bugs with TextBoxComponent
  - Improve error message for composed components
- - Fix `game.size` to take zoom into consideration (which also fixes `camera.followComponent` when `zoom != 1`)
+ - Fix `game.size` to take zoom into consideration 
+ - Fix `camera.followComponent` when `zoom != 1`
  - Add `anchor` for `ShapeComponent` constructor
 
 ## [1.0.0-releasecandidate.11]
