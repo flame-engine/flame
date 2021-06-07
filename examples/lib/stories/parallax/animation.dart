@@ -11,16 +11,16 @@ class AnimationParallaxGame extends BaseGame {
     );
 
     final rainLayer = await loadParallaxLayer(
-        ParallaxAnimationData(
-          'parallax/rain.png',
-          SpriteAnimationData.sequenced(
-            amount: 4,
-            stepTime: 0.3,
-            textureSize: Vector2(80, 160),
-          ),
+      ParallaxAnimationData(
+        'parallax/rain.png',
+        SpriteAnimationData.sequenced(
+          amount: 4,
+          stepTime: 0.3,
+          textureSize: Vector2(80, 160),
         ),
-        velocityMultiplier: Vector2(2, 0),
-      );
+      ),
+      velocityMultiplier: Vector2(2, 0),
+    );
 
     final cloudsLayer = await loadParallaxLayer(
       ParallaxImageData('parallax/heavy_clouded.png'),
