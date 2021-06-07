@@ -385,8 +385,7 @@ one. The same goes for the `ParallaxComponent` file, but that provides `loadPara
 If you want a fullscreen `ParallaxComponent` simply omit the `size` argument and it will take the
 size of the game, it will also resize to fullscreen when the game changes size or orientation.
 
-Flame provides two kinds of `ParallaxRenderer`: `ParallaxImage` and `ParallaxAnimation`, both work
-the same way (`ParallaxImage` is a static image renderer and `ParallaxAnimation` is, as it's name implies, an animation and frame based renderer).
+Flame provides two kinds of `ParallaxRenderer`: `ParallaxImage` and `ParallaxAnimation`, `ParallaxImage` is a static image renderer and `ParallaxAnimation` is, as it's name implies, an animation and frame based renderer.
 It is also possible to create custom renderers by extending the `ParallaxRenderer` class.
 
 Three example implementations can be found in the
