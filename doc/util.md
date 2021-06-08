@@ -249,6 +249,7 @@ This class comes from the `vector_math` package. We have created a few extension
 of what is already offered by `vector_math`.
 
 Methods:
+  - `translateVector2`: Translate the `Matrix4` by the given `Vector2`.
   - `transform2`: Create a new `Vector2` by transforming the given `Vector2` using the `Matrix4`.
   - `transformed2`: Transform the input `Vector2` into the output `Vector2`.
 

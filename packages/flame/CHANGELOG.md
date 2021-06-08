@@ -16,7 +16,7 @@
  - Fix `renderRotated`
  - Use `QueryableOrderedSet` for `Collidable`s
  - Refactored `TextBoxComponent`
- - Fixed bugs with `TextBoxComponent`
+ - Fix bugs with `TextBoxComponent`
  - Improve error message for composed components
  - Add `anchor` for `ShapeComponent` constructor
  - Fix rendering of polygons in `ShapeComponent`
