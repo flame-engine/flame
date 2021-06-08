@@ -146,10 +146,21 @@ class Camera extends Projector {
   /// When using this method you are responsible for saving/restoring canvas
   /// state to avoid leakage.
   void apply(Canvas canvas) {
+    canvas.transform(_transformMatrix(position, zoom).storage);
+  }
+
+  Matrix4 _transformMatrix(Vector2 position, double zoom) {
+    if (_transform.m11 == zoom &&
+        _transform.m22 == zoom &&
+        _transform.m33 == zoom &&
+        _transform.m14 == -position.x &&
+        _transform.m24 == -position.y) {
+      return _transform;
+    }
     _transform.setIdentity();
     _transform.translate(-_position.x, -position.y);
     _transform.scale(zoom);
-    canvas.transform(_transform.storage);
+    return _transform;
   }
 
   /// This smoothly updates the camera for an amount of time [dt].
