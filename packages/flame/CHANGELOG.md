@@ -9,7 +9,7 @@
  - Implement color parsing methods
  - Migrated the `Particle` API to `Vector2`
  - Add copyWith function to TextRenderer
- - Fix debug mode is not propagated to children of non-`Position` components
+ - Fix debug mode is not propagated to children of non-Position components
  - Fix size property of TextComponent was not correctly set
  - Fix anchor property was being incorrectly passed along to text renderer
  - All components take priority as an argument on their constructors
