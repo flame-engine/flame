@@ -2,28 +2,28 @@
 
 ## [Next]
  - Fix link to code in example stories
- - Fix `RotateEffect` with negative deltas
- - Add `isDragged` to `Draggable`
- - Fix the anchor of rendered text in `TextComponent`
- - Add new extensions to handle `math.Rectangles` nicely
+ - Fix RotateEffect with negative deltas
+ - Add isDragged to Draggable
+ - Fix the anchor of rendered text in TextComponent
+ - Add new extensions to handle math.Rectangles nicely
  - Implement color parsing methods
  - Migrated the `Particle` API to `Vector2`
- - Add `copyWith` function to `TextRenderer`
+ - Add copyWith function to TextRenderer
  - Fix debug mode is not propagated to children of non-`Position` components
- - The `size` property of `TextComponent` was not correctly set
- - The `anchor` property was being incorrectly passed along to `TextRenderer`
+ - The size property of TextComponent was not correctly set
+ - The anchor property was being incorrectly passed along to TextRenderer
  - All components take priority as an argument on their constructors
- - Fix `renderRotated`
- - Use `QueryableOrderedSet` for `Collidable`s
- - Refactored `TextBoxComponent`
- - Fix bugs with `TextBoxComponent`
+ - Fix renderRotated
+ - Use QueryableOrderedSet for Collidables
+ - Refactor TextBoxComponent
+ - Fix bugs with TextBoxComponent
  - Improve error message for composed components
  - Add `anchor` for `ShapeComponent` constructor
  - Fix rendering of polygons in `ShapeComponent`
  - Add `SpriteAnimation` support to parallax
  - Fix `Parallax` alignment for images with different width and height
  - Fix `ImageComposition` image bounds validation
- - Added `Matrix4` extensions
+ - Add `Matrix4` extensions
 
 ## [1.0.0-releasecandidate.11]
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code

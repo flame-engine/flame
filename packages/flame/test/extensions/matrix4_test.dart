@@ -13,34 +13,20 @@ void main() {
     ]);
 
     test('test m11', () => expect(matrix4.m11, matrix4.storage[0]));
-
     test('test m12', () => expect(matrix4.m12, matrix4.storage[1]));
-
     test('test m13', () => expect(matrix4.m13, matrix4.storage[2]));
-
     test('test m14', () => expect(matrix4.m14, matrix4.storage[3]));
-
     test('test m21', () => expect(matrix4.m21, matrix4.storage[4]));
-
     test('test m22', () => expect(matrix4.m22, matrix4.storage[5]));
-
     test('test m23', () => expect(matrix4.m23, matrix4.storage[6]));
-
     test('test m24', () => expect(matrix4.m24, matrix4.storage[7]));
-
     test('test m31', () => expect(matrix4.m31, matrix4.storage[8]));
-
     test('test m32', () => expect(matrix4.m32, matrix4.storage[9]));
-
     test('test m33', () => expect(matrix4.m33, matrix4.storage[10]));
-
     test('test m34', () => expect(matrix4.m34, matrix4.storage[11]));
-
     test('test m41', () => expect(matrix4.m41, matrix4.storage[12]));
     test('test m42', () => expect(matrix4.m42, matrix4.storage[13]));
-
     test('test m43', () => expect(matrix4.m43, matrix4.storage[14]));
-
     test('test m44', () => expect(matrix4.m44, matrix4.storage[15]));
 
     test('test transform2', () {
