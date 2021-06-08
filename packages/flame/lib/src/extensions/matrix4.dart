@@ -52,7 +52,7 @@ extension Matrix4Extension on Matrix4 {
   double get m44 => storage[15];
 
   /// Translate this matrix by a [Vector2].
-  void translateVector2(Vector2 vector) {
+  void translate2(Vector2 vector) {
     return translate(vector.x, vector.y);
   }
 
