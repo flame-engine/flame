@@ -24,6 +24,9 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   bool get sizedByParent => true;
 
   @override
+  bool get isRepaintBoundary => true;
+
+  @override
   void performResize() {
     super.performResize();
     game.onResize(constraints.biggest.toVector2());
@@ -48,7 +51,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   void detach() {
     super.detach();
     game.detach();
-    gameLoop.stop();
+    gameLoop.dispose();
     _unbindLifecycleListener();
   }
 
@@ -58,6 +61,11 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     }
     game.update(dt);
     markNeedsPaint();
+  }
+
+  @override
+  void performLayout() {
+    size = constraints.biggest;
   }
 
   @override

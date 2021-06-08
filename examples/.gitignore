@@ -1,3 +1,6 @@
+macos/
+test/
+
 # Miscellaneous
 *.class
 *.log
