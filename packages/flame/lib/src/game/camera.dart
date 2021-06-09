@@ -217,6 +217,18 @@ class Camera extends Projector {
     return worldCoordinates * zoom;
   }
 
+  /// Takes coordinates in the screen space and returns their counter-part in
+  /// the world space.
+  Vector2 screenToWorld(Vector2 screenCoordinates) {
+    return unprojectVector(screenCoordinates);
+  }
+
+  /// Takes coordinates in the world space and returns their counter-part in
+  /// the screen space.
+  Vector2 worldToScreen(Vector2 worldCoordinates) {
+    return projectVector(worldCoordinates);
+  }
+
   /// This is the (current) absolute target of the camera, i.e., the
   /// coordinate that should be on the top left, regardless of relative
   /// offset, world boundaries or shake.
