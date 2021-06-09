@@ -186,9 +186,9 @@ class JoystickAction extends BaseComponent with Draggable, HasGameRef {
   }
 
   @override
-  bool onDragUpdate(int pointerId, DragUpdateInfo event) {
+  bool onDragUpdate(int pointerId, DragUpdateInfo info) {
     if (_dragging) {
-      _dragPosition = event.eventPosition.game;
+      _dragPosition = info.eventPosition.game;
       return true;
     }
     return false;

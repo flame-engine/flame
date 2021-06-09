@@ -110,8 +110,8 @@ abstract class MyCollidable extends PositionComponent
   }
 
   @override
-  bool onDragEnd(int pointerId, DragEndInfo event) {
-    velocity.setFrom(event.velocity / 10);
+  bool onDragEnd(int pointerId, DragEndInfo info) {
+    velocity.setFrom(info.velocity / 10);
     _isDragged = false;
     return true;
   }

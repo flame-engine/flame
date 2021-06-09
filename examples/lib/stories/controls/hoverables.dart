@@ -28,7 +28,7 @@ class HoverablesGame extends BaseGame with HasHoverableComponents, TapDetector {
   }
 
   @override
-  void onTapDown(TapDownInfo event) {
-    add(HoverableSquare(event.eventPosition.game));
+  void onTapDown(TapDownInfo info) {
+    add(HoverableSquare(info.eventPosition.game));
   }
 }
