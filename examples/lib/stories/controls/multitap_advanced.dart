@@ -17,8 +17,8 @@ class MultitapAdvancedGame extends BaseGame
   Rect? panRect;
 
   @override
-  void onTapDown(int pointerId, TapDownInfo event) {
-    taps[pointerId] = event.eventPosition.game.toPositionedRect(tapSize);
+  void onTapDown(int pointerId, TapDownInfo info) {
+    taps[pointerId] = info.eventPosition.game.toPositionedRect(tapSize);
   }
 
   @override
@@ -45,8 +45,8 @@ class MultitapAdvancedGame extends BaseGame
   }
 
   @override
-  void onDragUpdate(int pointerId, DragUpdateInfo event) {
-    end = event.eventPosition.game;
+  void onDragUpdate(int pointerId, DragUpdateInfo info) {
+    end = info.eventPosition.game;
   }
 
   @override

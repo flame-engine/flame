@@ -233,7 +233,7 @@ abstract class BaseComponent extends Component {
   }
 
   @protected
-  Vector2 eventPosition(PositionInfo event) {
-    return isHud ? event.eventPosition.widget : event.eventPosition.game;
+  Vector2 eventPosition(PositionInfo info) {
+    return isHud ? info.eventPosition.widget : info.eventPosition.game;
   }
 }

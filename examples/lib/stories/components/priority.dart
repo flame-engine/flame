@@ -17,7 +17,7 @@ class Square extends PositionComponent with HasGameRef<Priority>, Tapable {
   }
 
   @override
-  bool onTapDown(TapDownInfo event) {
+  bool onTapDown(TapDownInfo info) {
     final topComponent = gameRef.components.last;
     if (topComponent != this) {
       gameRef.changePriority(this, topComponent.priority + 1);

@@ -27,9 +27,9 @@ class CombinedEffectGame extends BaseGame with TapDetector {
   }
 
   @override
-  void onTapUp(TapUpInfo event) {
+  void onTapUp(TapUpInfo info) {
     greenSquare.clearEffects();
-    final currentTap = event.eventPosition.game;
+    final currentTap = info.eventPosition.game;
 
     final move = MoveEffect(
       path: [
