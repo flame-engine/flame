@@ -128,9 +128,11 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.where((e) => e.startsWith('translate')),
+        canvas.methodCalls.where(
+          (e) => e.startsWith(RegExp('translate|transform')),
+        ),
         [
-          'translate(0.0, 0.0)', // camera translation
+          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)', // camera translation
           'translate(10.0, 10.0)', // position component translation
           'translate(0.0, 0.0)', // position component anchor
         ],
@@ -154,9 +156,11 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.where((e) => e.startsWith('translate')),
+        canvas.methodCalls.where(
+          (e) => e.startsWith(RegExp('translate|transform')),
+        ),
         [
-          'translate(-4.0, -4.0)', // camera translation
+          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -4.0, -4.0, 0.0, 1.0)', // camera translation
           'translate(10.0, 10.0)', // position component translation
           'translate(0.0, 0.0)', // position component anchor
         ],
@@ -197,9 +201,11 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.where((e) => e.startsWith('translate')),
+        canvas.methodCalls.where(
+          (e) => e.startsWith(RegExp('translate|transform')),
+        ),
         [
-          'translate(40.0, 30.0)', // camera translation
+          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 40.0, 30.0, 0.0, 1.0)', // camera translation
           'translate(10.0, 20.0)', // position component translation
           'translate(-0.5, -0.5)', // position component anchor
         ],
@@ -226,9 +232,11 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.where((e) => e.startsWith('translate')),
+        canvas.methodCalls.where(
+          (e) => e.startsWith(RegExp('translate|transform')),
+        ),
         [
-          'translate(-550.0, -1920.0)', // camera translation
+          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -550.0, -1920.0, 0.0, 1.0)', // camera translation
           'translate(600.0, 2000.0)', // position component translation
           'translate(-0.5, -0.5)', // position component anchor
         ],
@@ -316,11 +324,11 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls
-            .where((e) => e.startsWith('translate') || e.startsWith('scale')),
+        canvas.methodCalls.where(
+          (e) => e.startsWith(RegExp('translate|transform|scale')),
+        ),
         [
-          'translate(0.0, 0.0)', // camera translation
-          'scale(2.0)', // camera zoom
+          'transform(2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 1.0)', // camera translation and zoom
           'translate(100.0, 100.0)', // position component
           'translate(-0.5, -0.5)', // anchor
         ],
