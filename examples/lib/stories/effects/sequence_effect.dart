@@ -20,8 +20,8 @@ class SequenceEffectGame extends BaseGame with TapDetector {
   }
 
   @override
-  void onTapUp(TapUpInfo event) {
-    final currentTap = event.eventPosition.game;
+  void onTapUp(TapUpInfo info) {
+    final currentTap = info.eventPosition.game;
     greenSquare.clearEffects();
 
     final move1 = MoveEffect(

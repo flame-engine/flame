@@ -10,11 +10,11 @@ mixin Tapable on BaseComponent {
     return true;
   }
 
-  bool onTapDown(TapDownInfo event) {
+  bool onTapDown(TapDownInfo info) {
     return true;
   }
 
-  bool onTapUp(TapUpInfo event) {
+  bool onTapUp(TapUpInfo info) {
     return true;
   }
 
@@ -22,18 +22,18 @@ mixin Tapable on BaseComponent {
 
   bool _checkPointerId(int pointerId) => _currentPointerId == pointerId;
 
-  bool handleTapDown(int pointerId, TapDownInfo event) {
-    if (containsPoint(event.eventPosition.game)) {
+  bool handleTapDown(int pointerId, TapDownInfo info) {
+    if (containsPoint(eventPosition(info))) {
       _currentPointerId = pointerId;
-      return onTapDown(event);
+      return onTapDown(info);
     }
     return true;
   }
 
-  bool handleTapUp(int pointerId, TapUpInfo event) {
-    if (_checkPointerId(pointerId) && containsPoint(event.eventPosition.game)) {
+  bool handleTapUp(int pointerId, TapUpInfo info) {
+    if (_checkPointerId(pointerId) && containsPoint(eventPosition(info))) {
       _currentPointerId = null;
-      return onTapUp(event);
+      return onTapUp(info);
     }
     return true;
   }
@@ -69,12 +69,12 @@ mixin HasTapableComponents on BaseGame {
   }
 
   @mustCallSuper
-  void onTapDown(int pointerId, TapDownInfo event) {
-    _handleTapEvent((Tapable child) => child.handleTapDown(pointerId, event));
+  void onTapDown(int pointerId, TapDownInfo info) {
+    _handleTapEvent((Tapable child) => child.handleTapDown(pointerId, info));
   }
 
   @mustCallSuper
-  void onTapUp(int pointerId, TapUpInfo event) {
-    _handleTapEvent((Tapable child) => child.handleTapUp(pointerId, event));
+  void onTapUp(int pointerId, TapUpInfo info) {
+    _handleTapEvent((Tapable child) => child.handleTapUp(pointerId, info));
   }
 }
