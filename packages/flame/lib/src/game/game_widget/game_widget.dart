@@ -298,6 +298,6 @@ class _GameRenderObjectWidget extends LeafRenderObjectWidget {
 
   @override
   void updateRenderObject(BuildContext context, GameRenderBox renderObject) {
-    renderObject..game = game;
+    renderObject.game = game;
   }
 }
