@@ -228,9 +228,7 @@ class MultipleShapes extends BaseGame
       lastToAdd = createRandomCollidable(lastToAdd, screenCollidable);
       final lastBottomRight =
           lastToAdd.toAbsoluteRect().bottomRight.toVector2();
-      final screenSize = size / camera.zoom;
-      if (lastBottomRight.x < screenSize.x &&
-          lastBottomRight.y < screenSize.y) {
+      if (lastBottomRight.x < size.x && lastBottomRight.y < size.y) {
         add(lastToAdd);
         totalAdded++;
       } else {

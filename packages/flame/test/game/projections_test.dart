@@ -123,9 +123,11 @@ void main() {
 
       // that means that the center would be -100, -100 if the zoom was 1
       // meaning the topLeft will be -105, -105 (regardless of zoom)
-      expect(game.unprojectVector(Vector2.zero()), Vector2.all(-105));
-      // and with 2x zoom the center will actually be -95, -95
-      expect(game.unprojectVector(Vector2.all(5)), Vector2.all(-102.5));
+      // but since the offset is set to center, topLeft will be -102.5, -102.5
+      expect(game.unprojectVector(Vector2.zero()), Vector2.all(-102.5));
+      // and with 2x zoom the center will actually be -100, -100 since the
+      // relative offset is set to center.
+      expect(game.unprojectVector(Vector2.all(5)), Vector2.all(-100));
       // TODO(luan) we might want to change the behaviour so that the zoom
       // is applied w.r.t. the relativeOffset and not topLeft
 

@@ -62,6 +62,9 @@ class Camera extends Projector {
   /// Remaining time in seconds for the camera shake.
   double _shakeTimer = 0.0;
 
+  /// The matrix used for scaling and translating the canvas
+  final Matrix4 _transform = Matrix4.identity();
+
   // Configurable parameters
 
   double cameraSpeed = defaultCameraSpeed;
@@ -143,10 +146,21 @@ class Camera extends Projector {
   /// When using this method you are responsible for saving/restoring canvas
   /// state to avoid leakage.
   void apply(Canvas canvas) {
-    canvas.translateVector(
-      (-position)..scale(zoom),
-    );
-    canvas.scale(zoom);
+    canvas.transform(_transformMatrix(position, zoom).storage);
+  }
+
+  Matrix4 _transformMatrix(Vector2 position, double zoom) {
+    if (_transform.m11 == zoom &&
+        _transform.m22 == zoom &&
+        _transform.m33 == zoom &&
+        _transform.m14 == -position.x &&
+        _transform.m24 == -position.y) {
+      return _transform;
+    }
+    _transform.setIdentity();
+    _transform.translate(-_position.x, -position.y);
+    _transform.scale(zoom);
+    return _transform;
   }
 
   /// This smoothly updates the camera for an amount of time [dt].
@@ -201,6 +215,18 @@ class Camera extends Projector {
   @override
   Vector2 scaleVector(Vector2 worldCoordinates) {
     return worldCoordinates * zoom;
+  }
+
+  /// Takes coordinates in the screen space and returns their counter-part in
+  /// the world space.
+  Vector2 screenToWorld(Vector2 screenCoordinates) {
+    return unprojectVector(screenCoordinates);
+  }
+
+  /// Takes coordinates in the world space and returns their counter-part in
+  /// the screen space.
+  Vector2 worldToScreen(Vector2 worldCoordinates) {
+    return projectVector(worldCoordinates);
   }
 
   /// This is the (current) absolute target of the camera, i.e., the
