@@ -23,7 +23,7 @@ mixin Tapable on BaseComponent {
   bool _checkPointerId(int pointerId) => _currentPointerId == pointerId;
 
   bool handleTapDown(int pointerId, TapDownInfo event) {
-    if (containsPoint(event.eventPosition.game)) {
+    if (containsPoint(eventPosition(event))) {
       _currentPointerId = pointerId;
       return onTapDown(event);
     }
@@ -31,7 +31,7 @@ mixin Tapable on BaseComponent {
   }
 
   bool handleTapUp(int pointerId, TapUpInfo event) {
-    if (_checkPointerId(pointerId) && containsPoint(event.eventPosition.game)) {
+    if (_checkPointerId(pointerId) && containsPoint(eventPosition(event))) {
       _currentPointerId = null;
       return onTapUp(event);
     }

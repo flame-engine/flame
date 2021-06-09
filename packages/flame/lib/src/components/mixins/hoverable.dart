@@ -12,8 +12,8 @@ mixin Hoverable on BaseComponent {
   void onHoverLeave(PointerHoverInfo event) {}
 
   @nonVirtual
-  void doHandleMouseMovement(PointerHoverInfo event, Vector2 p) {
-    if (containsPoint(p)) {
+  void handleMouseMovement(PointerHoverInfo event) {
+    if (containsPoint(eventPosition(event))) {
       if (!_isHovered) {
         _isHovered = true;
         onHoverEnter(event);
@@ -30,9 +30,8 @@ mixin Hoverable on BaseComponent {
 mixin HasHoverableComponents on BaseGame {
   @mustCallSuper
   void onMouseMove(PointerHoverInfo event) {
-    final p = event.eventPosition.game;
     bool _mouseMoveHandler(Hoverable c) {
-      c.doHandleMouseMovement(event, p);
+      c.handleMouseMovement(event);
       return true; // always continue
     }
 
