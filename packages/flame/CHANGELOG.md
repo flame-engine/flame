@@ -25,6 +25,7 @@
  - Add `SpriteAnimation` support to parallax
  - Fix `Parallax` alignment for images with different width and height
  - Fix `ImageComposition` image bounds validation
+ - Improved the internal `RenderObject` widget performance
  - Add `Matrix4` extensions
  - `Camera.apply` is done with matrix transformations
  - `Camera` zooming is taking current `relativeOffset` into account

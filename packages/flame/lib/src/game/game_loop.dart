@@ -28,6 +28,10 @@ class GameLoop {
     _ticker.stop();
   }
 
+  void dispose() {
+    _ticker.dispose();
+  }
+
   void pause() {
     _ticker.muted = true;
     previous = Duration.zero;
