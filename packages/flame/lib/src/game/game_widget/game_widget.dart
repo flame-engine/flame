@@ -293,9 +293,11 @@ class _GameRenderObjectWidget extends LeafRenderObjectWidget {
 
   @override
   RenderBox createRenderObject(BuildContext context) {
-    return RenderConstrainedBox(
-      child: GameRenderBox(context, game),
-      additionalConstraints: const BoxConstraints.expand(),
-    );
+    return GameRenderBox(context, game);
+  }
+
+  @override
+  void updateRenderObject(BuildContext context, GameRenderBox renderObject) {
+    renderObject.game = game;
   }
 }

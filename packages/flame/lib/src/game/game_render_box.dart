@@ -13,15 +13,17 @@ import 'game_loop.dart';
 class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   BuildContext buildContext;
   Game game;
-  late GameLoop gameLoop;
+  GameLoop? gameLoop;
 
   GameRenderBox(this.buildContext, this.game) {
-    gameLoop = GameLoop(gameLoopCallback);
     WidgetsBinding.instance!.addTimingsCallback(game.onTimingsCallback);
   }
 
   @override
   bool get sizedByParent => true;
+
+  @override
+  bool get isRepaintBoundary => true;
 
   @override
   void performResize() {
@@ -33,6 +35,8 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   void attach(PipelineOwner owner) {
     super.attach(owner);
     game.attach(owner, this);
+
+    final gameLoop = this.gameLoop = GameLoop(gameLoopCallback);
 
     game.pauseEngineFn = gameLoop.pause;
     game.resumeEngineFn = gameLoop.resume;
@@ -48,7 +52,8 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   void detach() {
     super.detach();
     game.detach();
-    gameLoop.stop();
+    gameLoop?.dispose();
+    gameLoop = null;
     _unbindLifecycleListener();
   }
 
@@ -58,6 +63,11 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     }
     game.update(dt);
     markNeedsPaint();
+  }
+
+  @override
+  void performLayout() {
+    size = constraints.biggest;
   }
 
   @override
