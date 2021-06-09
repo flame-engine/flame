@@ -161,9 +161,9 @@ class JoystickDirectional extends BaseComponent with Draggable, HasGameRef {
   }
 
   @override
-  bool onDragUpdate(_, DragUpdateInfo event) {
+  bool onDragUpdate(_, DragUpdateInfo info) {
     if (_dragging) {
-      _dragPosition = event.eventPosition.game;
+      _dragPosition = info.eventPosition.game;
       return false;
     }
     return true;

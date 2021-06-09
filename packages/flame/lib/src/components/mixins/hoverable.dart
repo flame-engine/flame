@@ -8,20 +8,20 @@ import '../base_component.dart';
 mixin Hoverable on BaseComponent {
   bool _isHovered = false;
   bool get isHovered => _isHovered;
-  void onHoverEnter(PointerHoverInfo event) {}
-  void onHoverLeave(PointerHoverInfo event) {}
+  void onHoverEnter(PointerHoverInfo info) {}
+  void onHoverLeave(PointerHoverInfo info) {}
 
   @nonVirtual
-  void doHandleMouseMovement(PointerHoverInfo event, Vector2 p) {
-    if (containsPoint(p)) {
+  void handleMouseMovement(PointerHoverInfo info) {
+    if (containsPoint(eventPosition(info))) {
       if (!_isHovered) {
         _isHovered = true;
-        onHoverEnter(event);
+        onHoverEnter(info);
       }
     } else {
       if (_isHovered) {
         _isHovered = false;
-        onHoverLeave(event);
+        onHoverLeave(info);
       }
     }
   }
@@ -29,10 +29,9 @@ mixin Hoverable on BaseComponent {
 
 mixin HasHoverableComponents on BaseGame {
   @mustCallSuper
-  void onMouseMove(PointerHoverInfo event) {
-    final p = event.eventPosition.game;
+  void onMouseMove(PointerHoverInfo info) {
     bool _mouseMoveHandler(Hoverable c) {
-      c.doHandleMouseMovement(event, p);
+      c.handleMouseMovement(info);
       return true; // always continue
     }
 

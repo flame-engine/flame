@@ -31,8 +31,8 @@ class InfiniteEffectGame extends BaseGame with TapDetector {
   }
 
   @override
-  void onTapUp(TapUpInfo event) {
-    final p = event.eventPosition.game;
+  void onTapUp(TapUpInfo info) {
+    final p = info.eventPosition.game;
 
     greenSquare.clearEffects();
     redSquare.clearEffects();

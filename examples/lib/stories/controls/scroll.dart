@@ -13,8 +13,8 @@ class ScrollGame extends BaseGame with ScrollDetector {
   Vector2? target;
 
   @override
-  void onScroll(PointerScrollInfo event) {
-    target = position + event.scrollDelta.game * 5;
+  void onScroll(PointerScrollInfo info) {
+    target = position + info.scrollDelta.game * 5;
   }
 
   @override

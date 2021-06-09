@@ -33,13 +33,13 @@ class DraggableSquare extends PositionComponent
   }
 
   @override
-  bool onDragUpdate(int pointerId, DragUpdateInfo event) {
+  bool onDragUpdate(int pointerId, DragUpdateInfo info) {
     final dragDeltaPosition = this.dragDeltaPosition;
     if (dragDeltaPosition == null) {
       return false;
     }
 
-    position.setFrom(event.eventPosition.game - dragDeltaPosition);
+    position.setFrom(info.eventPosition.game - dragDeltaPosition);
     return false;
   }
 
