@@ -28,3 +28,5 @@
     - [Tiled](tiled.md)
     - [Debugging](debug.md)
     - [Splash screen](splash_screen.md)
+
+- [Tutorials](https://github.com/flame-engine/flame/tree/main/tutorials)
