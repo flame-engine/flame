@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:test/fake.dart';
@@ -54,6 +55,12 @@ class MockCanvas extends Fake implements Canvas {
     methodCalls.add(
       'clipRect(${rect.left}, ${rect.top}, ${rect.width}, ${rect.height})',
     );
+  }
+
+  @override
+  void transform(Float64List matrix4) {
+    final asString = matrix4.map<String>((e) => e.toString()).join(', ');
+    methodCalls.add('transform($asString)');
   }
 
   @override
