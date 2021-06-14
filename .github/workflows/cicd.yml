@@ -16,7 +16,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - run: ./scripts/dartdoc.sh
+      - uses: flame-engine/flame-dartdoc-action@main
 
   format:
     runs-on: ubuntu-latest
