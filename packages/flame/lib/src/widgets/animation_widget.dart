@@ -3,10 +3,81 @@ import 'dart:math';
 import 'package:flutter/material.dart' hide Animation;
 
 import '../anchor.dart';
+import '../assets/images.dart';
 import '../sprite_animation.dart';
 import 'sprite_widget.dart';
 
 export '../sprite_animation.dart';
+
+/// A [StatefulWidget] which loads a SpriteAnimation from metadata
+/// and renders a [SpriteAnimationWidget]
+class SpriteAnimationWidgetBuilder extends StatefulWidget {
+  /// Image [path] used to build the animation
+  final String path;
+
+  /// SpriteAnimation [data] used to build the animation frames
+  final SpriteAnimationData data;
+
+  /// Images instance used to load the image, uses Flame.images when
+  /// omitted
+  final Images? images;
+
+  /// The positioning [Anchor]
+  final Anchor anchor;
+
+  /// Should the animation be playing or not
+  final bool playing;
+
+  const SpriteAnimationWidgetBuilder({
+    required this.path,
+    required this.data,
+    this.playing = true,
+    this.anchor = Anchor.topLeft,
+    this.images,
+  });
+
+  @override
+  State<StatefulWidget> createState() {
+    return _SpriteAnimationWidgetBuilderState();
+  }
+}
+
+class _SpriteAnimationWidgetBuilderState
+    extends State<SpriteAnimationWidgetBuilder> {
+  late Future<SpriteAnimation> _animationFuture;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationFuture = SpriteAnimation.load(
+      widget.path,
+      widget.data,
+      images: widget.images,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<SpriteAnimation>(
+      future: _animationFuture,
+      builder: (_, snapshot) {
+        if (snapshot.hasData) {
+          final spriteAnimation = snapshot.data;
+          if (spriteAnimation != null) {
+            return SpriteAnimationWidget(
+              animation: spriteAnimation,
+              anchor: widget.anchor,
+              playing: widget.playing,
+            );
+          }
+        }
+
+        return Container();
+      },
+    );
+  }
+}
 
 /// A [StatefulWidget] that render a [SpriteAnimation].
 class SpriteAnimationWidget extends StatefulWidget {
