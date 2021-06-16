@@ -25,7 +25,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - run: ./scripts/format.sh
+      - uses: flame-engine/flame-format-action@main
 
   analyze:
     runs-on: ubuntu-latest
