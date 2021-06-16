@@ -34,7 +34,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - run: ./scripts/analyze.sh
+      - uses: flame-engine/flame-analyze-action@main
   # END LINTING STAGE
 
   # BEGIN TESTING STAGE
