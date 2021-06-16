@@ -46,6 +46,5 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - run: sudo apt-get install lcov -y
-      - run: ./scripts/test.sh
+      - uses: flame-engine/flame-test-action@main
   # END TESTING STAGE
