@@ -20,9 +20,6 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   }
 
   @override
-  bool get sizedByParent => true;
-
-  @override
   bool get isRepaintBoundary => true;
 
   @override
@@ -91,6 +88,6 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     game.lifecycleStateChange(state);
   }
 
-  // ignore: annotate_overrides
+  @override
   Size computeDryLayout(BoxConstraints constraints) => constraints.biggest;
 }
