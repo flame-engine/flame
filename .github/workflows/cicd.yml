@@ -46,5 +46,5 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - uses: flame-engine/flame-test-action@main
+      - uses: flame-engine/flame-test-action@v1
   # END TESTING STAGE
