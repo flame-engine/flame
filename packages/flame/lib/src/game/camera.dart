@@ -150,15 +150,17 @@ class Camera extends Projector {
   }
 
   Matrix4 _transformMatrix(Vector2 position, double zoom) {
+    final translateX = -_position.x * zoom;
+    final translateY = -_position.y * zoom;
     if (_transform.m11 == zoom &&
         _transform.m22 == zoom &&
         _transform.m33 == zoom &&
-        _transform.m14 == -position.x &&
-        _transform.m24 == -position.y) {
+        _transform.m14 == translateX &&
+        _transform.m24 == translateY) {
       return _transform;
     }
     _transform.setIdentity();
-    _transform.translate(-_position.x, -position.y);
+    _transform.translate(translateX, translateY);
     _transform.scale(zoom);
     return _transform;
   }
