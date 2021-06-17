@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [Next]
+## [1.0.0-releasecandidate.12]
  - Fix link to code in example stories
  - Fix RotateEffect with negative deltas
  - Add isDragged to Draggable
