@@ -16,7 +16,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - run: ./scripts/dartdoc.sh
+      - uses: flame-engine/flame-dartdoc-action@v1
 
   format:
     runs-on: ubuntu-latest
@@ -25,7 +25,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - run: ./scripts/format.sh
+      - uses: flame-engine/flame-format-action@v1
 
   analyze:
     runs-on: ubuntu-latest
@@ -34,7 +34,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - run: ./scripts/analyze.sh
+      - uses: flame-engine/flame-analyze-action@v1
   # END LINTING STAGE
 
   # BEGIN TESTING STAGE
@@ -46,6 +46,5 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - run: sudo apt-get install lcov -y
-      - run: ./scripts/test.sh
+      - uses: flame-engine/flame-test-action@v1
   # END TESTING STAGE
