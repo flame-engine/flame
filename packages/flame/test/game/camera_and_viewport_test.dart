@@ -348,7 +348,7 @@ void main() {
       game.render(canvas);
       expect(
         canvas.methodCalls.where(
-              (e) => e.startsWith(RegExp('translate|transform|scale')),
+          (e) => e.startsWith(RegExp('translate|transform|scale')),
         ),
         [
           'transform(2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 100.0, 100.0, 0.0, 1.0)', // camera translation and zoom
