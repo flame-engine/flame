@@ -60,12 +60,14 @@ for i in "${!packages[@]}"; do
   printf "%s\t%s\n" "$(expr $i + 1)" "${packages[$i]}"
 done
 
-while [[ ! " ${!packages[@]} " =~ " $choice " ]]; do
+choice=-1
+while [[ "$choice" -gt "${#packages[@]}" || "$choice" -le "0" ]]; do
   read -n 1 -r -p "Enter a number: " choice
   printf "\n"
 done
 
-upgrade_package=${packages[$(expr $choice - 1)]}
+choice=$((choice-1))
+upgrade_package="${packages[$choice]}"
 echo -en "You have chosen to publish $yellow$bold$upgrade_package$endcolor, is this correct? (y/N): "
 read -n 1 -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]
