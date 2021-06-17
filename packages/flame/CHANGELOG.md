@@ -30,6 +30,7 @@
  - `Camera.apply` is done with matrix transformations
  - `Camera` zooming is taking current `relativeOffset` into account
  - Fix gestures for when `isHud = true` and `Camera` is modified
+ - Fix `Camera` zoom behaviour with offset/anchor
 
 ## [1.0.0-releasecandidate.11]
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code
