@@ -6,6 +6,7 @@ import 'overlay.dart';
 import 'sprite_animation_widget.dart';
 import 'sprite_button.dart';
 import 'sprite_widget.dart';
+import 'sprite_widget_section.dart';
 
 void addWidgetsStories(Dashbook dashbook) {
   dashbook.storiesOf('Widgets')
@@ -21,9 +22,14 @@ void addWidgetsStories(Dashbook dashbook) {
       codeLink: baseLink('widgets/sprite_button.dart'),
     )
     ..add(
-      'Sprite Widget',
+      'Sprite Widget (full image)',
       spriteWidgetBuilder,
       codeLink: baseLink('widgets/sprite_widget.dart'),
+    )
+    ..add(
+      'Sprite Widget (section of image)',
+      spriteSectionWidgetBuilder,
+      codeLink: baseLink('widgets/sprite_widget_section.dart'),
     )
     ..add(
       'Sprite Animation Widget',

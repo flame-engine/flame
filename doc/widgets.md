@@ -72,6 +72,19 @@ SpriteWidget(
 )
 ```
 
+Or the builder can be used to avoid needing loading the Sprite before using it:
+
+```dart
+SpriteWidgetBuilder(
+  path: 'bomb_ptero.png',
+  srcPosition: Vector2(48, 0),
+  srcSize: Vector2(48, 32),
+  anchor: Anchor.valueOf(
+    ctx.listProperty('anchor', 'center', anchorOptions),
+  ),
+)
+```
+
 ## SpriteAnimationWidget
 
 `SpriteAnimationWidget` is a widget used to display [SpriteAnimations](images.md#animation) inside
@@ -82,6 +95,21 @@ This is how to use it:
 ```dart
 SpriteAnimationWidget(
     animation: _animation,
+    playing: true,
+    anchor: Anchor.center,
+)
+```
+
+Or the builder can be used to avoid needing loading the Animation before using it:
+
+```
+SpriteAnimationWidgetBuilder(
+    path: 'animation.png',
+    data: SpriteAnimationData.sequenced(
+        amount: 4,
+        stepTime: 0.2,
+        textureSize: Vector2(48, 32),
+    ),
     playing: true,
     anchor: Anchor.center,
 )

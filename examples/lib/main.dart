@@ -44,6 +44,6 @@ Future<void> _setupWidgetsExample() async {
   // note: you do *not* need to do this on your regular Flame games!
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.images.loadAll(
-    ['nine-box.png', 'buttons.png', 'shield.png'],
+    ['nine-box.png', 'buttons.png'],
   );
 }
