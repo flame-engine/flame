@@ -10,7 +10,7 @@ import 'animation_widget.dart';
 
 export '../sprite.dart';
 
-/// A [StatefulWidget] which loads a SpriteAnimation from metadata
+/// A [StatefulWidget] which loads a Sprite from metadata
 /// and renders a [SpriteWidget]
 class SpriteWidgetBuilder extends StatefulWidget {
   /// Image [path] used to build the sprite

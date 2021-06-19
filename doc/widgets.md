@@ -58,6 +58,28 @@ SpriteButton(
 )
 ```
 
+Or the builder can be used to avoid needing loading the Sprite before using it:
+
+```
+SpriteButtonBuilder(
+  path: 'buttons.png',
+  pressedPath: 'buttons.png',
+  srcPosition: Vector2(0, 0),
+  srcSize: Vector2(60, 20),
+  pressedSrcPosition: Vector2(0, 20),
+  pressedSrcSize: Vector2(60, 20),
+  onPressed: () {
+    print('Pressed');
+  },
+  label: const Text(
+    'Sprite Button',
+    style: TextStyle(color: Color(0xFF5D275D)),
+  ),
+  width: ctx.numberProperty('width', 250),
+  height: ctx.numberProperty('height', 75),
+)
+```
+
 ## SpriteWidget
 
 `SpriteWidget` is a widget used to display a [Sprite](images.md#sprite) inside a widget
