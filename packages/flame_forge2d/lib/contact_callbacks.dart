@@ -42,7 +42,11 @@ class ContactCallbacks extends ContactListener {
     _callbacks.clear();
   }
 
-  void _maybeCallback(Contact contact, ContactCallback callback, ContactCallbackFun f) {
+  void _maybeCallback(
+    Contact contact,
+    ContactCallback callback,
+    ContactCallbackFun f,
+  ) {
     final a = contact.fixtureA.body.userData;
     final b = contact.fixtureB.body.userData;
     final wanted = callback.types;
@@ -71,6 +75,7 @@ class ContactCallbacks extends ContactListener {
       void preSolveAux(Object a, Object b, Contact contact) {
         c.preSolve(a, b, contact, oldManifold);
       }
+
       _maybeCallback(contact, c, preSolveAux);
     });
   }
@@ -81,6 +86,7 @@ class ContactCallbacks extends ContactListener {
       void postSolveAux(Object a, Object b, Contact contact) {
         c.postSolve(a, b, contact, impulse);
       }
+
       _maybeCallback(contact, c, postSolveAux);
     });
   }
