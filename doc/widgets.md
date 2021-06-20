@@ -93,8 +93,8 @@ SpriteButtonBuilder(
     'Sprite Button',
     style: TextStyle(color: Color(0xFF5D275D)),
   ),
-  width: ctx.numberProperty('width', 250),
-  height: ctx.numberProperty('height', 75),
+  width: 250,
+  height: 75,
 )
 ```
 
@@ -119,9 +119,7 @@ SpriteWidgetBuilder(
   path: 'bomb_ptero.png',
   srcPosition: Vector2(48, 0),
   srcSize: Vector2(48, 32),
-  anchor: Anchor.valueOf(
-    ctx.listProperty('anchor', 'center', anchorOptions),
-  ),
+  anchor: Anchor.center,
 )
 ```
 
