@@ -3,11 +3,11 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame_forge2d/forge2d_camera.dart';
 import 'package:forge2d/forge2d.dart' hide Timer;
 
 import 'body_component.dart';
 import 'contact_callbacks.dart';
+import 'forge2d_camera.dart';
 
 class Forge2DGame extends BaseGame {
   static final Vector2 defaultGravity = Vector2(0, -10.0);

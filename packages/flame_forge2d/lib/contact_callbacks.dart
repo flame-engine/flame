@@ -16,6 +16,8 @@ class ContactTypes<T1, T2> {
       (o1 is T1 && o2 is T2) || (o2 is T1 && o1 is T2);
 }
 
+typedef ContactCallbackFun = void Function(Object a, Object b, Contact contact);
+
 abstract class ContactCallback<Type1, Type2> {
   ContactTypes<Type1, Type2> types = ContactTypes<Type1, Type2>();
 
@@ -40,10 +42,10 @@ class ContactCallbacks extends ContactListener {
     _callbacks.clear();
   }
 
-  void _maybeCallback(Contact contact, ContactCallback callback, Function f) {
-    final Object? a = contact.fixtureA.body.userData;
-    final Object? b = contact.fixtureB.body.userData;
-    final ContactTypes wanted = callback.types;
+  void _maybeCallback(Contact contact, ContactCallback callback, ContactCallbackFun f) {
+    final a = contact.fixtureA.body.userData;
+    final b = contact.fixtureB.body.userData;
+    final wanted = callback.types;
 
     if (a == null || b == null) {
       return;
@@ -66,10 +68,9 @@ class ContactCallbacks extends ContactListener {
   @override
   void preSolve(Contact contact, Manifold oldManifold) {
     _callbacks.forEach((c) {
-      final void Function(Object, Object, Contact) preSolveAux =
-          (Object a, Object b, Contact contact) {
+      void preSolveAux(Object a, Object b, Contact contact) {
         c.preSolve(a, b, contact, oldManifold);
-      };
+      }
       _maybeCallback(contact, c, preSolveAux);
     });
   }
@@ -77,10 +78,9 @@ class ContactCallbacks extends ContactListener {
   @override
   void postSolve(Contact contact, ContactImpulse impulse) {
     _callbacks.forEach((c) {
-      final void Function(Object, Object, Contact) postSolveAux =
-          (Object a, Object b, Contact contact) {
+      void postSolveAux(Object a, Object b, Contact contact) {
         c.postSolve(a, b, contact, impulse);
-      };
+      }
       _maybeCallback(contact, c, postSolveAux);
     });
   }

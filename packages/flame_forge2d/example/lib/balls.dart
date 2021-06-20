@@ -12,7 +12,7 @@ class Ball extends BodyComponent {
   late Paint originalPaint;
   bool giveNudge = false;
   final double radius;
-  Vector2 _position;
+  final Vector2 _position;
   double _timeSinceNudge = 0.0;
   static const double _minNudgeRest = 2.0;
 
@@ -20,7 +20,7 @@ class Ball extends BodyComponent {
 
   Ball(this._position, {this.radius = 2}) {
     originalPaint = randomPaint();
-    this.paint = originalPaint;
+    paint = originalPaint;
   }
 
   Paint randomPaint() {
@@ -37,7 +37,7 @@ class Ball extends BodyComponent {
 
   @override
   Body createBody() {
-    final CircleShape shape = CircleShape();
+    final shape = CircleShape();
     shape.radius = radius;
 
     final fixtureDef = FixtureDef(shape)

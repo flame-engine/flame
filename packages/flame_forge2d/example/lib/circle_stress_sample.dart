@@ -16,18 +16,18 @@ class CircleShuffler extends BodyComponent {
 
   @override
   Body createBody() {
-    var bd = BodyDef()
+    final bodyDef = BodyDef()
       ..type = BodyType.dynamic
       ..position = _center + Vector2(0.0, -25.0);
-    double numPieces = 5;
-    double radius = 6.0;
-    var body = world.createBody(bd);
+    const numPieces = 5;
+    const radius = 6.0;
+    final body = world.createBody(bodyDef);
 
-    for (int i = 0; i < numPieces; i++) {
-      double xPos = radius * cos(2 * pi * (i / numPieces));
-      double yPos = radius * sin(2 * pi * (i / numPieces));
+    for (var i = 0; i < numPieces; i++) {
+      final xPos = radius * cos(2 * pi * (i / numPieces));
+      final yPos = radius * sin(2 * pi * (i / numPieces));
 
-      var shape = CircleShape()
+      final shape = CircleShape()
         ..radius = 1.2
         ..position.setValues(xPos, yPos);
 
@@ -39,16 +39,15 @@ class CircleShuffler extends BodyComponent {
       body.createFixture(fixtureDef);
     }
     // Create an empty ground body.
-    var bodyDef = BodyDef();
-    var groundBody = world.createBody(bodyDef);
+    final groundBody = world.createBody(BodyDef());
 
-    RevoluteJointDef rjd = RevoluteJointDef()
+    final revoluteJointDef = RevoluteJointDef()
       ..initialize(body, groundBody, body.position)
       ..motorSpeed = pi
       ..maxMotorTorque = 1000000.0
       ..enableMotor = true;
 
-    world.createJoint(rjd);
+    world.createJoint(revoluteJointDef);
     return body;
   }
 }
@@ -61,10 +60,10 @@ class CornerRamp extends BodyComponent {
 
   @override
   Body createBody() {
-    final ChainShape shape = ChainShape();
-    final int mirrorFactor = isMirrored ? -1 : 1;
-    final double diff = 2.0 * mirrorFactor;
-    List<Vector2> vertices = [
+    final shape = ChainShape();
+    final mirrorFactor = isMirrored ? -1 : 1;
+    final diff = 2.0 * mirrorFactor;
+    final vertices = [
       Vector2(diff, 0),
       Vector2(diff + 20.0 * mirrorFactor, 20.0),
       Vector2(diff + 35.0 * mirrorFactor, 30.0),
@@ -86,6 +85,7 @@ class CornerRamp extends BodyComponent {
 class CircleStressSample extends Forge2DGame with TapDetector {
   CircleStressSample() : super(gravity: Vector2(0, -10.0));
 
+  @override
   Future<void> onLoad() async {
     await super.onLoad();
     final boundaries = createBoundaries(this);
@@ -93,17 +93,16 @@ class CircleStressSample extends Forge2DGame with TapDetector {
     final center = screenToWorld(viewport.effectiveSize / 2);
     add(CircleShuffler(center));
     add(CornerRamp(center, isMirrored: true));
-    add(CornerRamp(center, isMirrored: false));
+    add(CornerRamp(center));
   }
 
   @override
   void onTapDown(TapDownInfo details) {
     super.onTapDown(details);
-    final Vector2 tapPosition = details.eventPosition.game;
-    final Random random = Random();
+    final tapPosition = details.eventPosition.game;
+    final random = Random();
     List.generate(15, (i) {
-      final Vector2 randomVector =
-          (Vector2.random() - Vector2.all(-0.5)).normalized();
+      final randomVector = (Vector2.random() - Vector2.all(-0.5)).normalized();
       add(Ball(tapPosition + randomVector, radius: random.nextDouble()));
     });
   }

@@ -8,13 +8,15 @@ import 'package:flutter/gestures.dart';
 import 'package:forge2d/forge2d.dart' hide Timer, Vector2;
 
 import 'forge2d_game.dart';
+import 'position_body_component.dart';
+import 'sprite_body_component.dart';
 
 /// Since a pure BodyComponent doesn't have anything drawn on top of it,
 /// it is a good idea to turn on [debugMode] for it so that the bodies can be
 /// seen
 abstract class BodyComponent<T extends Forge2DGame> extends BaseComponent
     with HasGameRef<T> {
-  static const defaultColor = const Color.fromARGB(255, 255, 255, 255);
+  static const defaultColor = Color.fromARGB(255, 255, 255, 255);
   late Body body;
   late Paint paint;
 
@@ -65,7 +67,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends BaseComponent
 
   @override
   void renderDebugMode(Canvas canvas) {
-    for (Fixture fixture in body.fixtures) {
+    for (final fixture in body.fixtures) {
       switch (fixture.type) {
         case ShapeType.chain:
           _renderChain(canvas, fixture);
@@ -84,7 +86,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends BaseComponent
   }
 
   void _renderChain(Canvas canvas, Fixture fixture) {
-    final ChainShape chainShape = fixture.shape as ChainShape;
+    final chainShape = fixture.shape as ChainShape;
     renderChain(
       canvas,
       chainShape.vertices.map((v) => v.toOffset()).toList(growable: false),
@@ -97,7 +99,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends BaseComponent
   }
 
   void _renderCircle(Canvas canvas, Fixture fixture) {
-    final CircleShape circle = fixture.shape as CircleShape;
+    final circle = fixture.shape as CircleShape;
     renderCircle(canvas, circle.position.toOffset(), circle.radius);
   }
 
@@ -106,7 +108,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends BaseComponent
   }
 
   void _renderPolygon(Canvas canvas, Fixture fixture) {
-    final PolygonShape polygon = fixture.shape as PolygonShape;
+    final polygon = fixture.shape as PolygonShape;
     renderPolygon(
       canvas,
       polygon.vertices.map((v) => v.toOffset()).toList(growable: false),

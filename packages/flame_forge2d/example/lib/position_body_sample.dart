@@ -52,7 +52,6 @@ class PositionBodySample extends Forge2DGame with TapDetector {
         amount: 4,
         textureSize: Vector2.all(48),
         stepTime: 0.15,
-        loop: true,
       ),
     );
 
@@ -63,7 +62,7 @@ class PositionBodySample extends Forge2DGame with TapDetector {
   @override
   void onTapDown(TapDownInfo details) {
     super.onTapDown(details);
-    final Vector2 position = details.eventPosition.game;
+    final position = details.eventPosition.game;
     final spriteSize = Vector2.all(10);
     final animationComponent = SpriteAnimationComponent(
       animation: animation,

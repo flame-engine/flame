@@ -16,7 +16,7 @@ class Pizza extends SpriteBodyComponent {
 
   @override
   Body createBody() {
-    final PolygonShape shape = PolygonShape();
+    final shape = PolygonShape();
 
     final vertices = [
       Vector2(-size.x / 2, -size.y / 2),
@@ -46,13 +46,13 @@ class Platform extends BodyComponent {
 
   @override
   Body createBody() {
-    PolygonShape shape = PolygonShape()..setAsBoxXY(14.8, 0.125);
-    FixtureDef fd = FixtureDef(shape);
+    final shape = PolygonShape()..setAsBoxXY(14.8, 0.125);
+    final fixtureDef = FixtureDef(shape);
 
-    BodyDef bd = BodyDef();
-    bd.position = position;
-    final body = world.createBody(bd);
-    return body..createFixture(fd);
+    final bodyDef = BodyDef();
+    bodyDef.position = position;
+    final body = world.createBody(bodyDef);
+    return body..createFixture(fixtureDef);
   }
 }
 
@@ -64,12 +64,12 @@ class DominoBrick extends BodyComponent {
   @override
   Body createBody() {
     final shape = PolygonShape()..setAsBoxXY(0.125, 2.0);
-    FixtureDef fixtureDef = FixtureDef(shape)
+    final fixtureDef = FixtureDef(shape)
       ..density = 25.0
       ..restitution = 0.4
       ..friction = 0.5;
 
-    BodyDef bodyDef = BodyDef()
+    final bodyDef = BodyDef()
       ..type = BodyType.dynamic
       ..position = position;
 
@@ -90,15 +90,15 @@ class DominoSample extends Forge2DGame with TapDetector {
     pizzaImage = await images.load('pizza.png');
     final center = screenToWorld(viewport.effectiveSize / 2);
 
-    for (int i = 0; i < 8; i++) {
+    for (var i = 0; i < 8; i++) {
       final position = center + Vector2(0.0, -30.0 + 5 * i);
       add(Platform(position));
     }
 
-    final numberOfRows = 10;
-    final numberPerRow = 25;
-    for (int i = 0; i < numberOfRows; ++i) {
-      for (int j = 0; j < numberPerRow; j++) {
+    const numberOfRows = 10;
+    const numberPerRow = 25;
+    for (var i = 0; i < numberOfRows; ++i) {
+      for (var j = 0; j < numberPerRow; j++) {
         final position = center +
             Vector2(-14.75 + j * (29.5 / (numberPerRow - 1)), -27.7 + 5 * i);
         add(DominoBrick(position));
@@ -109,7 +109,7 @@ class DominoSample extends Forge2DGame with TapDetector {
   @override
   void onTapDown(TapDownInfo details) {
     super.onTapDown(details);
-    final Vector2 position = details.eventPosition.game;
+    final position = details.eventPosition.game;
     final pizza = Pizza(position, pizzaImage);
     add(pizza);
   }

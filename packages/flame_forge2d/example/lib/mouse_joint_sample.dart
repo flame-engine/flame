@@ -30,7 +30,7 @@ class MouseJointSample extends Forge2DGame with MultiTouchDragDetector {
 
   @override
   bool onDragUpdate(int pointerId, DragUpdateInfo details) {
-    MouseJointDef mouseJointDef = MouseJointDef()
+    final mouseJointDef = MouseJointDef()
       ..maxForce = 3000 * ball.body.mass * 10
       ..dampingRatio = 0.1
       ..frequencyHz = 5
@@ -45,6 +45,7 @@ class MouseJointSample extends Forge2DGame with MultiTouchDragDetector {
     return false;
   }
 
+  @override
   bool onDragEnd(int pointerId, DragEndInfo details) {
     if (mouseJoint == null) {
       return true;

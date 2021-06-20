@@ -1,17 +1,17 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:forge2d_samples/draggable_sample.dart';
-import 'package:forge2d_samples/mouse_joint_sample.dart';
-import 'package:forge2d_samples/position_body_sample.dart';
-import 'package:forge2d_samples/tapable_sample.dart';
 
-import './sprite_body_sample.dart';
-import './contact_callbacks_sample.dart';
-import './domino_sample.dart';
 import 'blob_sample.dart';
 import 'camera_sample.dart';
 import 'circle_stress_sample.dart';
+import 'contact_callbacks_sample.dart';
+import 'domino_sample.dart';
+import 'draggable_sample.dart';
+import 'mouse_joint_sample.dart';
+import 'position_body_sample.dart';
+import 'sprite_body_sample.dart';
+import 'tapable_sample.dart';
 
 String link(String example) =>
     'https://github.com/flame-engine/flame_forge2d/tree/main/example/lib/$example';

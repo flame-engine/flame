@@ -15,7 +15,7 @@ class Pizza extends SpriteBodyComponent {
 
   @override
   Body createBody() {
-    final PolygonShape shape = PolygonShape();
+    final shape = PolygonShape();
 
     final vertices = [
       Vector2(-size.x / 2, -size.y / 2),
@@ -52,7 +52,7 @@ class SpriteBodySample extends Forge2DGame with TapDetector {
   @override
   void onTapDown(TapDownInfo details) {
     super.onTapDown(details);
-    final Vector2 position = details.eventPosition.game;
+    final position = details.eventPosition.game;
     add(Pizza(position, _pizzaImage));
   }
 }

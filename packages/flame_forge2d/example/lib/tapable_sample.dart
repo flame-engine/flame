@@ -10,6 +10,7 @@ import 'boundaries.dart';
 class TapableSample extends Forge2DGame with HasTapableComponents {
   TapableSample() : super(zoom: 20, gravity: Vector2(0, -10.0));
 
+  @override
   Future<void> onLoad() async {
     final boundaries = createBoundaries(this);
     boundaries.forEach(add);
