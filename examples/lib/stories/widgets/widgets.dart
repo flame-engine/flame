@@ -14,7 +14,7 @@ void addWidgetsStories(Dashbook dashbook) {
     ..add(
       'Nine Tile Box',
       nineTileBoxBuilder,
-      codeLink: baseLink('widgets/nine-box.dart'),
+      codeLink: baseLink('widgets/nine_tile_box.dart'),
     )
     ..add(
       'Sprite Button',

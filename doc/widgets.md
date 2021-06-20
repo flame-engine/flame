@@ -38,6 +38,24 @@ NineTileBox(
 )
 ```
 
+Or the builder can be used to avoid needing loading the image before using it:
+
+```dart
+NineTileBoxBuilder(
+  path: 'nine-box.png',
+  tileSize: 8,
+  destTileSize: 50,
+  child: Center(
+    child: Text(
+      'Cool label',
+      style: TextStyle(
+        color: Color(0xFF000000),
+      ),
+    ),
+  ),
+)
+```
+
 ## SpriteButton
 
 `SpriteButton` is a simple widget that creates a button based on Flame sprites. This can be very

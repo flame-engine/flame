@@ -2,6 +2,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/widgets.dart';
 
+import '../../assets.dart';
+import '../../flame.dart';
 import '../extensions/vector2.dart';
 import '../sprite.dart';
 
@@ -119,6 +121,79 @@ class _Painter extends CustomPainter {
 
   @override
   bool shouldRepaint(_) => false;
+}
+
+/// A [StatefulWidget] which loads an image and metadata
+/// and renders a [NineTileBox]
+class NineTileBoxBuilder extends StatefulWidget {
+  /// Image [path] used for the nine tile box
+  final String path;
+
+  /// The size of the tile on the image
+  final double tileSize;
+
+  /// The size of the tile that will be used to render on the canvas
+  final double destTileSize;
+  final double? width;
+  final double? height;
+
+  final Widget? child;
+
+  /// Images instance used to load the image, uses Flame.images when
+  /// omitted
+  final Images? images;
+
+  const NineTileBoxBuilder({
+    required this.path,
+    required this.tileSize,
+    required this.destTileSize,
+    this.width,
+    this.height,
+    this.child,
+    this.images,
+  });
+
+  @override
+  State<StatefulWidget> createState() {
+    return _NineTileBoxBuilderState();
+  }
+}
+
+class _NineTileBoxBuilderState extends State<NineTileBoxBuilder> {
+  late Future<ui.Image> _imageFuture;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final images = widget.images ?? Flame.images;
+
+    _imageFuture = images.load(widget.path);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<ui.Image>(
+      future: _imageFuture,
+      builder: (_, snapshot) {
+        if (snapshot.hasData) {
+          final image = snapshot.data;
+          if (image != null) {
+            return NineTileBox(
+              image: image,
+              tileSize: widget.tileSize,
+              destTileSize: widget.destTileSize,
+              width: widget.width,
+              height: widget.height,
+              child: widget.child,
+            );
+          }
+        }
+
+        return Container();
+      },
+    );
+  }
 }
 
 class NineTileBox extends StatelessWidget {
