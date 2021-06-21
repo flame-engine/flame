@@ -4,13 +4,14 @@ We (the Flame organization) maintain a ported version of the Box2D physics engin
 is called Forge2D.
 
 If you want to use Forge2D specifically for Flame you should use our bridge library
-[flame_forge2d](https://github.com/flame-engine/flame_forge2d) and if you just want to use it
-in a Dart project you can use the [forge2d](https://github.com/flame-engine/forge2d) library
-directly.
+[flame_forge2d](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d) and if you
+just want to use it in a Dart project you can use the
+[forge2d](https://github.com/flame-engine/forge2d) library directly.
 
 To use it in your game you just need to add `flame_forge2d` to your pubspec.yaml, as can be seen
-in the [Forge2D example](https://github.com/flame-engine/flame_forge2d/tree/main/example) and in the
-pub.dev [installation instructions](https://pub.dev/packages/flame_forge2d).
+in the
+[Forge2D example](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d/example)
+and in the pub.dev [installation instructions](https://pub.dev/packages/flame_forge2d).
 
 ## Forge2DGame (BaseGame extension)
 
@@ -107,7 +108,7 @@ An implementation example can be seen in the
 ## Viewport and Camera
 
 `Forge2DGame` is using an implementation of the normal Flame `Viewport` and `Camera`, which can be
-read more about [here](//TODO: Link to viewport and camera docs).
+read more about [here](camera_and_viewport.md).
 
 If you see your screen as a window and the outside as the Forge2D world, then the `Viewport` is the
 part of the world outside that you can see through the window, so the parts that you can see on
