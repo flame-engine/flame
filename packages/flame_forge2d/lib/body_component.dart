@@ -57,7 +57,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends BaseComponent
         _transform.m24 != body.position.y ||
         _lastAngle != angle) {
       _transform.setIdentity();
-      _transform.scale(1, -1);
+      _transform.scale(1.0, -1.0);
       _transform.translate2(body.position);
       _transform.rotateZ(angle);
       _lastAngle = angle;
