@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.7.3-releasecandidate.12]
+ - Fix prepareCanvas type error
+ 
 ## [0.7.2-releasecandidate.12]
  - Update to Forge2D 0.7.2
  - Update to Flame 1.0.0-releasecandidate.12
