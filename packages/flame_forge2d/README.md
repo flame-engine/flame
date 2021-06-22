@@ -20,7 +20,7 @@ Add the following to the dependencies section of your `pubspec.yaml` file:
 ```
 dependencies:
   flame: ^1.0.0-releasecandidate.12
-  flame_forge2d: ^0.7.2-releasecandidate.12
+  flame_forge2d: ^0.7.3-releasecandidate.12
 ```
 
 ## Examples
