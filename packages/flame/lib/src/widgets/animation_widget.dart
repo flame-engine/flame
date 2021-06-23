@@ -5,6 +5,7 @@ import 'package:flutter/material.dart' hide Animation;
 import '../anchor.dart';
 import '../assets/images.dart';
 import '../sprite_animation.dart';
+import 'base_future_builder.dart';
 import 'sprite_widget.dart';
 
 export '../sprite_animation.dart';
@@ -28,12 +29,20 @@ class SpriteAnimationWidgetBuilder extends StatefulWidget {
   /// Should the animation be playing or not
   final bool playing;
 
+  /// A builder function that is called if the loading fails
+  final WidgetBuilder? errorBuilder;
+
+  /// A builder function that is called while the loading is on the way
+  final WidgetBuilder? loadingBuilder;
+
   const SpriteAnimationWidgetBuilder({
     required this.path,
     required this.data,
     this.playing = true,
     this.anchor = Anchor.topLeft,
     this.images,
+    this.errorBuilder,
+    this.loadingBuilder,
   });
 
   @override
@@ -59,22 +68,17 @@ class _SpriteAnimationWidgetBuilderState
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<SpriteAnimation>(
+    return BaseFutureBuilder<SpriteAnimation>(
       future: _animationFuture,
-      builder: (_, snapshot) {
-        if (snapshot.hasData) {
-          final spriteAnimation = snapshot.data;
-          if (spriteAnimation != null) {
-            return SpriteAnimationWidget(
-              animation: spriteAnimation,
-              anchor: widget.anchor,
-              playing: widget.playing,
-            );
-          }
-        }
-
-        return Container();
+      builder: (_, spriteAnimation) {
+        return SpriteAnimationWidget(
+          animation: spriteAnimation,
+          anchor: widget.anchor,
+          playing: widget.playing,
+        );
       },
+      errorBuilder: widget.errorBuilder,
+      loadingBuilder: widget.loadingBuilder,
     );
   }
 }

@@ -6,6 +6,7 @@ import '../../assets.dart';
 import '../../flame.dart';
 import '../extensions/vector2.dart';
 import '../sprite.dart';
+import 'base_future_builder.dart';
 
 export '../nine_tile_box.dart';
 export '../sprite.dart';
@@ -139,6 +140,12 @@ class NineTileBoxBuilder extends StatefulWidget {
 
   final Widget? child;
 
+  /// A builder function that is called if the loading fails
+  final WidgetBuilder? errorBuilder;
+
+  /// A builder function that is called while the loading is on the way
+  final WidgetBuilder? loadingBuilder;
+
   /// Images instance used to load the image, uses Flame.images when
   /// omitted
   final Images? images;
@@ -151,6 +158,8 @@ class NineTileBoxBuilder extends StatefulWidget {
     this.height,
     this.child,
     this.images,
+    this.errorBuilder,
+    this.loadingBuilder,
   });
 
   @override
@@ -173,25 +182,20 @@ class _NineTileBoxBuilderState extends State<NineTileBoxBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<ui.Image>(
+    return BaseFutureBuilder<ui.Image>(
       future: _imageFuture,
-      builder: (_, snapshot) {
-        if (snapshot.hasData) {
-          final image = snapshot.data;
-          if (image != null) {
-            return NineTileBox(
-              image: image,
-              tileSize: widget.tileSize,
-              destTileSize: widget.destTileSize,
-              width: widget.width,
-              height: widget.height,
-              child: widget.child,
-            );
-          }
-        }
-
-        return Container();
+      builder: (_, image) {
+        return NineTileBox(
+          image: image,
+          tileSize: widget.tileSize,
+          destTileSize: widget.destTileSize,
+          width: widget.width,
+          height: widget.height,
+          child: widget.child,
+        );
       },
+      errorBuilder: widget.errorBuilder,
+      loadingBuilder: widget.loadingBuilder,
     );
   }
 }

@@ -4,6 +4,7 @@ import '../../assets.dart';
 import '../extensions/size.dart';
 import '../extensions/vector2.dart';
 import '../sprite.dart';
+import 'base_future_builder.dart';
 
 export '../sprite.dart';
 
@@ -40,6 +41,12 @@ class SpriteButtonBuilder extends StatefulWidget {
   /// omitted
   final Images? images;
 
+  /// A builder function that is called if the loading fails
+  final WidgetBuilder? errorBuilder;
+
+  /// A builder function that is called while the loading is on the way
+  final WidgetBuilder? loadingBuilder;
+
   const SpriteButtonBuilder({
     required this.path,
     required this.pressedPath,
@@ -52,6 +59,8 @@ class SpriteButtonBuilder extends StatefulWidget {
     this.pressedSrcPosition,
     this.pressedSrcSize,
     this.images,
+    this.errorBuilder,
+    this.loadingBuilder,
   });
 
   @override
@@ -85,32 +94,26 @@ class _SpriteButtonBuilderState extends State<SpriteButtonBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Sprite>>(
+    return BaseFutureBuilder<List<Sprite>>(
       future: Future.wait([
         _spriteFuture,
         _pressedSpriteFuture,
       ]),
-      builder: (_, snapshot) {
-        if (snapshot.hasData) {
-          final data = snapshot.data;
+      builder: (_, list) {
+        final sprite = list[0];
+        final pressedSprite = list[1];
 
-          if (data != null) {
-            final sprite = data[0];
-            final pressedSprite = data[1];
-
-            return SpriteButton(
-              onPressed: widget.onPressed,
-              label: widget.label,
-              width: widget.width,
-              height: widget.height,
-              sprite: sprite,
-              pressedSprite: pressedSprite,
-            );
-          }
-        }
-
-        return Container();
+        return SpriteButton(
+          onPressed: widget.onPressed,
+          label: widget.label,
+          width: widget.width,
+          height: widget.height,
+          sprite: sprite,
+          pressedSprite: pressedSprite,
+        );
       },
+      errorBuilder: widget.errorBuilder,
+      loadingBuilder: widget.loadingBuilder,
     );
   }
 }

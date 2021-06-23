@@ -7,6 +7,7 @@ import '../../extensions.dart';
 import '../anchor.dart';
 import '../sprite.dart';
 import 'animation_widget.dart';
+import 'base_future_builder.dart';
 
 export '../sprite.dart';
 
@@ -29,12 +30,20 @@ class SpriteWidgetBuilder extends StatefulWidget {
   /// Holds the size of the sprite on the image
   final Vector2? srcSize;
 
+  /// A builder function that is called if the loading fails
+  final WidgetBuilder? errorBuilder;
+
+  /// A builder function that is called while the loading is on the way
+  final WidgetBuilder? loadingBuilder;
+
   const SpriteWidgetBuilder({
     required this.path,
     this.images,
     this.anchor = Anchor.topLeft,
     this.srcPosition,
     this.srcSize,
+    this.errorBuilder,
+    this.loadingBuilder,
   });
 
   @override
@@ -60,21 +69,16 @@ class _SpriteWidgetBuilderState extends State<SpriteWidgetBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Sprite>(
+    return BaseFutureBuilder<Sprite>(
       future: _spriteFuture,
-      builder: (_, snapshot) {
-        if (snapshot.hasData) {
-          final sprite = snapshot.data;
-          if (sprite != null) {
-            return SpriteWidget(
-              sprite: sprite,
-              anchor: widget.anchor,
-            );
-          }
-        }
-
-        return Container();
+      builder: (_, sprite) {
+        return SpriteWidget(
+          sprite: sprite,
+          anchor: widget.anchor,
+        );
       },
+      errorBuilder: widget.errorBuilder,
+      loadingBuilder: widget.loadingBuilder,
     );
   }
 }
