@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [Next]
+ - Fix camera not ending up in the correct position on long jumps
+
 ## [1.0.0-releasecandidate.12]
  - Fix link to code in example stories
  - Fix RotateEffect with negative deltas
