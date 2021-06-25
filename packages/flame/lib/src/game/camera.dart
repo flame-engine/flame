@@ -155,8 +155,8 @@ class Camera extends Projector {
     if (_transform.m11 == zoom &&
         _transform.m22 == zoom &&
         _transform.m33 == zoom &&
-        _transform.m14 == translateX &&
-        _transform.m24 == translateY) {
+        _transform.m41 == translateX &&
+        _transform.m42 == translateY) {
       return _transform;
     }
     _transform.setIdentity();
@@ -232,8 +232,8 @@ class Camera extends Projector {
   }
 
   /// This is the (current) absolute target of the camera, i.e., the
-  /// coordinate that should be on the top left, regardless of relative
-  /// offset, world boundaries or shake.
+  /// coordinate that should with `relativeOffset` taken into consideration but
+  /// regardless of world boundaries or shake.
   Vector2 absoluteTarget() {
     return _currentCameraDelta ?? follow ?? Vector2.zero();
   }
@@ -302,7 +302,7 @@ class Camera extends Projector {
 
     final bounds = worldBounds;
     if (bounds != null) {
-      if (bounds.width > gameRef.size.x) {
+      if (bounds.width > gameRef.size.x * zoom) {
         final cameraLeftEdge = attemptedTarget.x;
         final cameraRightEdge = attemptedTarget.x + gameRef.size.x;
         if (cameraLeftEdge < bounds.left) {
@@ -314,7 +314,7 @@ class Camera extends Projector {
         attemptedTarget.x = (gameRef.size.x - bounds.width) / 2;
       }
 
-      if (bounds.height > gameRef.size.y) {
+      if (bounds.height > gameRef.size.y * zoom) {
         final cameraTopEdge = attemptedTarget.y;
         final cameraBottomEdge = attemptedTarget.y + gameRef.size.y;
         if (cameraTopEdge < bounds.top) {
