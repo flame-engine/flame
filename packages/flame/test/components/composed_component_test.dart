@@ -107,7 +107,7 @@ void main() {
       final game = MyGame();
       final children = List.generate(10, (_) => MyTap());
       final wrapper = MyComposed();
-      wrapper.addChildren(children);
+      wrapper.children.addChildren(children);
 
       game.onResize(size);
       game.add(wrapper);

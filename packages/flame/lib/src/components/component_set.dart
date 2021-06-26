@@ -2,6 +2,7 @@ import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/queryable_ordered_set.dart';
 
 import '../../components.dart';
+import '../game/base_game.dart';
 
 class ComponentSet extends QueryableOrderedSet<Component> {
   /// Components to be added on the next update.
@@ -16,35 +17,88 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// concurrency issues.
   final Set<Component> _removeLater = {};
 
-  ComponentSet(int Function(Component e1, Component e2)? compare)
-      : super(compare);
+  /// This is the "prepare" function that will be called *before* the
+  /// component is added to the component list by the add/addAll methods.
+  final void Function(Component child, {BaseGame? gameRef}) prepare;
 
+  ComponentSet(
+    int Function(Component e1, Component e2)? compare,
+    this.prepare,
+  ) : super(compare);
+
+  /// Prepares and registers one component to be added on the next game tick.
+  ///
+  /// This is the interface compliant version; if you want to provide an
+  /// explicit gameRef or await for the onLoad, use [addChild].
+  ///
+  /// Note: the component is only added on the next tick. This method always
+  /// returns true.
   @override
   bool add(Component c) {
-    _addLater.add(c);
+    addChild(c);
     return true;
   }
 
-  /// Prepares and registers a list of components to be added on the next game tick
+  /// Prepares and registers a list of components to be added on the next game
+  /// tick.
+  ///
+  /// This is the interface compliant version; if you want to provide an
+  /// explicit gameRef or await for the onLoad, use [addChild].
+  ///
+  /// Note: the components are only added on the next tick. This method always
+  /// returns the total lenght of the provided list.
   @override
   int addAll(Iterable<Component> components) {
-    components.forEach(add);
+    addChildren(components);
     return components.length;
   }
 
-  /// Marks a component to be removed from the components list on the next game tick
+  /// Prepares and registers one component to be added on the next game tick.
+  ///
+  /// This allows you to provide a specific gameRef if this component is being
+  /// added from within another component that is already on a BaseGame.
+  /// You can await for the onLoad function, if present.
+  /// This method can be considered sync for all intents and purposes if no
+  /// onLoad is provided by the component.
+  Future<void> addChild(Component c, {BaseGame? gameRef}) async {
+    prepare(c, gameRef: gameRef);
+
+    final loadFuture = c.onLoad();
+    if (loadFuture != null) {
+      await loadFuture;
+    }
+
+    _addLater.add(c);
+  }
+
+  /// Prepares and registers a list of component to be added on the next game
+  /// tick.
+  ///
+  /// See [addChild] for more details.
+  Future<void> addChildren(
+    Iterable<Component> components, {
+    BaseGame? gameRef,
+  }) async {
+    final ps = components.map((c) => addChild(c, gameRef: gameRef));
+    await Future.wait(ps);
+  }
+
+  /// Marks a component to be removed from the components list on the next game
+  /// tick.
   @override
   bool remove(Component c) {
     _removeLater.add(c);
     return true;
   }
 
-  /// Marks a list of components to be removed from the components list on the next game tick
+  /// Marks a list of components to be removed from the components list on the
+  /// next game tick.
   void removeAll(Iterable<Component> components) {
     _removeLater.addAll(components);
   }
 
-  /// Marks all existing components to be removed from the components list on the next game tick
+  /// Marks all existing components to be removed from the components list on
+  /// the next game tick.
   @override
   void clear() {
     _removeLater.addAll(this);
@@ -72,7 +126,12 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     }
   }
 
-  static ComponentSet createDefault() {
-    return ComponentSet(Comparing.on<Component>((c) => c.priority));
+  static ComponentSet createDefault(
+    void Function(Component child, {BaseGame? gameRef}) prepare,
+  ) {
+    return ComponentSet(
+      Comparing.on<Component>((c) => c.priority),
+      prepare,
+    );
   }
 }

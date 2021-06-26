@@ -134,13 +134,7 @@ abstract class BaseComponent extends Component {
   /// Get a list of non removed effects
   List<ComponentEffect> get effects => _effectsHandler.effects;
 
-  /// Uses the game passed in, or uses the game from [HasGameRef] otherwise,
-  /// to prepare the child component before it is added to the list of children.
-  /// Note that this component needs to be added to the game first if
-  /// [this.gameRef] should be used to prepare the child.
-  /// For children that don't need preparation from the game instance can
-  /// disregard both the options given above.
-  Future<void> addChild(Component child, {Game? gameRef}) async {
+  void prepare(Component child, {Game? gameRef}) {
     if (this is HasGameRef) {
       final c = this as HasGameRef;
       gameRef ??= c.hasGameRef ? c.gameRef : null;
@@ -158,26 +152,16 @@ abstract class BaseComponent extends Component {
       child._parent = this;
       child.debugMode = debugMode;
     }
-
-    final childOnLoadFuture = child.onLoad();
-    if (childOnLoadFuture != null) {
-      await childOnLoadFuture;
-    }
-    children.add(child);
-    if (isMounted) {
-      child.onMount();
-    }
   }
 
-  Future<void> addChildren(
-    Iterable<Component> children, {
-    Game? gameRef,
-  }) async {
-    await Future.wait(
-      children.map(
-        (child) => addChild(child, gameRef: gameRef),
-      ),
-    );
+  /// Uses the game passed in, or uses the game from [HasGameRef] otherwise,
+  /// to prepare the child component before it is added to the list of children.
+  /// Note that this component needs to be added to the game first if
+  /// [this.gameRef] should be used to prepare the child.
+  /// For children that don't need preparation from the game instance can
+  /// disregard both the options given above.
+  Future<void> addChild(Component child, {BaseGame? gameRef}) {
+    return children.addChild(child, gameRef: gameRef);
   }
 
   bool containsChild(Component c) => children.contains(c);
@@ -219,7 +203,7 @@ abstract class BaseComponent extends Component {
   }
 
   ComponentSet createComponentSet() {
-    final components = ComponentSet.createDefault();
+    final components = ComponentSet.createDefault(prepare);
     if (this is HasGameRef) {
       components.register<HasGameRef>();
     }
