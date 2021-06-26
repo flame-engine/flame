@@ -4,6 +4,17 @@ import 'package:ordered_set/queryable_ordered_set.dart';
 import '../../components.dart';
 import '../game/base_game.dart';
 
+/// This is a simple wrapper over [QueryableOrderedSet] to be used by
+/// [BaseGame] and [BaseComponent].
+///
+/// Instead of immediatly modifying the component list, all insertion
+/// and removal operations are queued to be performed on the next tick.
+///
+/// This will avoid any concurrent modification exceptions while the game
+/// iterates through the component list.
+///
+/// This wrapper also garantueed that prepare, onLoad, onMount and all the
+/// lifecycle methods are called properly.
 class ComponentSet extends QueryableOrderedSet<Component> {
   /// Components to be added on the next update.
   ///
@@ -124,6 +135,21 @@ class ComponentSet extends QueryableOrderedSet<Component> {
         c.onMount();
       });
     }
+  }
+
+  @override
+  void rebalanceAll() {
+    final elements = toList();
+    // bypass the wrapper because the components are already added
+    super.clear();
+    elements.forEach(super.add);
+  }
+
+  @override
+  void rebalanceWhere(bool Function(Component element) test) {
+    // bypass the wrapper because the components are already added
+    final elements = super.removeWhere(test).toList();
+    elements.forEach(super.add);
   }
 
   static ComponentSet createDefault(
