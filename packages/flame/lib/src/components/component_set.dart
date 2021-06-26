@@ -115,10 +115,16 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     _removeLater.addAll(this);
   }
 
+  /// Materializes the component list in reversed order.
   Iterable<Component> reversed() {
     return toList().reversed;
   }
 
+  /// Call this on your update method.
+  ///
+  /// This method effectuates any pending operations of insertion or removal,
+  /// and thus actually modifies the components set.
+  /// Note: do not call this while iterating the set.
   void updateComponentList() {
     _removeLater.addAll(where((c) => c.shouldRemove));
     _removeLater.forEach((c) {
@@ -152,6 +158,10 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     elements.forEach(super.add);
   }
 
+  /// Creates a [ComponentSet] with a default value for the compare function,
+  /// using the Component's priority for sorting.
+  ///
+  /// You must still provide your [prepare] function depending on the context.
   static ComponentSet createDefault(
     void Function(Component child, {BaseGame? gameRef}) prepare,
   ) {
