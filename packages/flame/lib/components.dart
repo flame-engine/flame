@@ -2,6 +2,7 @@ export 'joystick.dart';
 export 'src/anchor.dart';
 export 'src/components/base_component.dart';
 export 'src/components/component.dart';
+export 'src/components/component_set.dart';
 export 'src/components/isometric_tile_map_component.dart';
 export 'src/components/mixins/collidable.dart';
 export 'src/components/mixins/draggable.dart';

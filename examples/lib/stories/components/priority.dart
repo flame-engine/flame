@@ -52,6 +52,6 @@ class Priority extends BaseGame with HasTapableComponents {
       Square(Vector2(170, 150)),
       Square(Vector2(110, 150)),
     ];
-    addAll(squares);
+    components.addAll(squares);
   }
 }

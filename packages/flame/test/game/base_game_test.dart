@@ -172,7 +172,7 @@ void main() {
       // by the function on the component, but the onRemove callback should
       // only be called once.
       component.remove();
-      game.remove(component);
+      game.components.remove(component);
       // The component is not removed from the component list until an update has been performed
       game.update(0.0);
 
@@ -208,13 +208,13 @@ void main() {
     final components = List.generate(3, (index) => MyComponent());
 
     game.onResize(size);
-    game.addAll(components);
+    game.components.addAll(components);
 
     // The components are not added to the component list until an update has been performed
     game.update(0.0);
     expect(game.components.length, equals(3));
 
-    game.clear();
+    game.components.clear();
 
     // Ensure clear does not remove components directly
     expect(game.components.length, equals(3));

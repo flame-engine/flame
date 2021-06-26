@@ -1,9 +1,6 @@
-import 'dart:collection';
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
-import 'package:ordered_set/comparing.dart';
-import 'package:ordered_set/ordered_set.dart';
 
 import '../../game.dart';
 import '../../gestures.dart';
@@ -12,6 +9,7 @@ import '../effects/effects_handler.dart';
 import '../extensions/vector2.dart';
 import '../text.dart';
 import 'component.dart';
+import 'component_set.dart';
 import 'mixins/has_game_ref.dart';
 
 /// This can be extended to represent a basic Component for your game.
@@ -22,22 +20,13 @@ import 'mixins/has_game_ref.dart';
 abstract class BaseComponent extends Component {
   final EffectsHandler _effectsHandler = EffectsHandler();
 
-  final OrderedSet<Component> _children =
-      OrderedSet(Comparing.on((c) => c.priority));
+  late final ComponentSet children = createComponentSet();
 
   /// If the component has a parent it will be set here
   BaseComponent? _parent;
 
   @override
   BaseComponent? get parent => _parent;
-
-  /// The children list shouldn't be modified directly, that is why an
-  /// [UnmodifiableListView] is used. If you want to add children use the
-  /// [addChild] method, and if you want to propagate something to the children
-  /// use the [propagateToChildren] method.
-  UnmodifiableListView<Component> get children {
-    return UnmodifiableListView<Component>(_children);
-  }
 
   /// This is set by the BaseGame to tell this component to render additional debug information,
   /// like borders, coordinates, etc.
@@ -69,9 +58,9 @@ abstract class BaseComponent extends Component {
   @mustCallSuper
   @override
   void update(double dt) {
+    children.updateComponentList();
     _effectsHandler.update(dt);
-    _children.removeWhere((c) => c.shouldRemove).forEach((c) => c.onRemove());
-    _children.forEach((c) => c.update(dt));
+    children.forEach((c) => c.update(dt));
   }
 
   @mustCallSuper
@@ -84,7 +73,7 @@ abstract class BaseComponent extends Component {
   @override
   void renderTree(Canvas canvas) {
     render(canvas);
-    _children.forEach((c) {
+    children.forEach((c) {
       canvas.save();
       c.renderTree(canvas);
       canvas.restore();
@@ -105,21 +94,21 @@ abstract class BaseComponent extends Component {
   @override
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
-    _children.forEach((child) => child.onGameResize(gameSize));
+    children.forEach((child) => child.onGameResize(gameSize));
   }
 
   @mustCallSuper
   @override
   void onMount() {
     super.onMount();
-    _children.forEach((child) => child.onMount());
+    children.forEach((child) => child.onMount());
   }
 
   @mustCallSuper
   @override
   void onRemove() {
     super.onRemove();
-    _children.forEach((child) => child.onRemove());
+    children.forEach((child) => child.onRemove());
   }
 
   /// Called to check whether the point is to be counted as within the component
@@ -174,7 +163,7 @@ abstract class BaseComponent extends Component {
     if (childOnLoadFuture != null) {
       await childOnLoadFuture;
     }
-    _children.add(child);
+    children.add(child);
     if (isMounted) {
       child.onMount();
     }
@@ -191,17 +180,9 @@ abstract class BaseComponent extends Component {
     );
   }
 
-  bool removeChild(Component c) {
-    return _children.remove(c);
-  }
+  bool containsChild(Component c) => children.contains(c);
 
-  void clearChildren() {
-    _children.clear();
-  }
-
-  bool containsChild(Component c) => _children.contains(c);
-
-  void reorderChildren() => _children.rebalanceAll();
+  void reorderChildren() => children.rebalanceAll();
 
   /// This method first calls the passed handler on the leaves in the tree,
   /// the children without any children of their own.
@@ -218,7 +199,7 @@ abstract class BaseComponent extends Component {
     bool Function(T) handler,
   ) {
     var shouldContinue = true;
-    for (final child in _children) {
+    for (final child in children) {
       if (child is BaseComponent) {
         shouldContinue = child.propagateToChildren(handler);
       }
@@ -235,5 +216,13 @@ abstract class BaseComponent extends Component {
   @protected
   Vector2 eventPosition(PositionInfo info) {
     return isHud ? info.eventPosition.widget : info.eventPosition.game;
+  }
+
+  ComponentSet createComponentSet() {
+    final components = ComponentSet.createDefault();
+    if (this is HasGameRef) {
+      components.register<HasGameRef>();
+    }
+    return components;
   }
 }

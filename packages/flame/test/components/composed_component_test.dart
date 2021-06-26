@@ -72,7 +72,7 @@ void main() {
       wrapper.addChild(child);
       expect(true, wrapper.containsChild(child));
 
-      wrapper.removeChild(child);
+      wrapper.children.remove(child);
       expect(wrapper.containsChild(child), false);
     });
 

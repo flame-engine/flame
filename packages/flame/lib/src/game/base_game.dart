@@ -1,8 +1,6 @@
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
-import 'package:ordered_set/comparing.dart';
-import 'package:ordered_set/ordered_set.dart';
 import 'package:ordered_set/queryable_ordered_set.dart';
 
 import '../../components.dart';
@@ -28,19 +26,7 @@ import 'viewport.dart';
 /// It is based on the Component system.
 class BaseGame extends Game with FPSCounter {
   /// The list of components to be updated and rendered by the base game.
-  late final OrderedSet<Component> components = createOrderedSet();
-
-  /// Components to be added on the next update.
-  ///
-  /// The component list is only changed at the start of each [update] to avoid
-  /// concurrency issues.
-  final List<Component> _addLater = [];
-
-  /// Components to be removed on the next update.
-  ///
-  /// The component list is only changed at the start of each [update] to avoid
-  /// concurrency issues.
-  final Set<Component> _removeLater = {};
+  late final ComponentSet components = createComponentSet();
 
   /// The camera translates the coordinate space after the viewport is applied.
   final Camera camera = Camera();
@@ -97,14 +83,12 @@ class BaseGame extends Game with FPSCounter {
   ///
   /// You can return a specific sub-class of OrderedSet, like
   /// [QueryableOrderedSet] for example, that we use for Collidables.
-  OrderedSet<Component> createOrderedSet() {
-    final comparator = Comparing.on<Component>((c) => c.priority);
+  ComponentSet createComponentSet() {
+    final components = ComponentSet.createDefault();
     if (this is HasCollidables) {
-      final qos = QueryableOrderedSet<Component>(comparator);
-      qos.register<Collidable>();
-      return qos;
+      components.register<Collidable>();
     }
-    return OrderedSet<Component>(comparator);
+    return components;
   }
 
   /// This method is called for every component added.
@@ -144,7 +128,7 @@ class BaseGame extends Game with FPSCounter {
     }
 
     if (c is HasGameRef) {
-      (c as HasGameRef).gameRef = this;
+      c.gameRef = this;
     }
 
     // first time resize
@@ -167,27 +151,7 @@ class BaseGame extends Game with FPSCounter {
     if (loadFuture != null) {
       await loadFuture;
     }
-    _addLater.add(c);
-  }
-
-  /// Prepares and registers a list of components to be added on the next game tick
-  void addAll(Iterable<Component> components) {
-    components.forEach(add);
-  }
-
-  /// Marks a component to be removed from the components list on the next game tick
-  void remove(Component c) {
-    _removeLater.add(c);
-  }
-
-  /// Marks a list of components to be removed from the components list on the next game tick
-  void removeAll(Iterable<Component> components) {
-    _removeLater.addAll(components);
-  }
-
-  /// Marks all existing components to be removed from the components list on the next game tick
-  void clear() {
-    _removeLater.addAll(components);
+    components.add(c);
   }
 
   /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.
@@ -223,7 +187,7 @@ class BaseGame extends Game with FPSCounter {
   @override
   @mustCallSuper
   void update(double dt) {
-    _updateComponentList();
+    components.updateComponentList();
 
     if (this is HasCollidables) {
       (this as HasCollidables).handleCollidables();
@@ -231,22 +195,6 @@ class BaseGame extends Game with FPSCounter {
 
     components.forEach((c) => c.update(dt));
     camera.update(dt);
-  }
-
-  void _updateComponentList() {
-    _removeLater.addAll(components.where((c) => c.shouldRemove));
-    _removeLater.forEach((c) {
-      c.onRemove();
-      components.remove(c);
-    });
-    _removeLater.clear();
-
-    if (_addLater.isNotEmpty) {
-      final addNow = _addLater.toList(growable: false);
-      _addLater.clear();
-      components.addAll(addNow);
-      addNow.forEach((component) => component.onMount());
-    }
   }
 
   /// This implementation of resize passes the resize call along to every

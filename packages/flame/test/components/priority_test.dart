@@ -17,7 +17,7 @@ void main() {
       final priorityComponents = List.generate(10, (i) => PriorityComponent(i));
       priorityComponents.shuffle();
       final game = BaseGame()..onResize(Vector2.zero());
-      game.addAll(priorityComponents);
+      game.components.addAll(priorityComponents);
       game.update(0);
       componentsSorted(game.components);
     });
@@ -29,7 +29,7 @@ void main() {
       priorityComponents.shuffle();
       final game = BaseGame()..onResize(Vector2.zero());
       final components = game.components;
-      game.addAll(priorityComponents);
+      game.components.addAll(priorityComponents);
       game.update(0);
       componentsSorted(components);
       expect(components.first, firstCompopnent);
@@ -42,7 +42,7 @@ void main() {
       priorityComponents.shuffle();
       final game = BaseGame()..onResize(Vector2.zero());
       final components = game.components;
-      game.addAll(priorityComponents);
+      game.components.addAll(priorityComponents);
       game.update(0);
       componentsSorted(components);
       final first = components.first;
