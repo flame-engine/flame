@@ -94,7 +94,7 @@ class BlobSample extends Forge2DGame with TapDetector {
     final worldCenter = screenToWorld(size * camera.zoom / 2);
     final blobCenter = worldCenter + Vector2(0, 10);
     final blobRadius = Vector2.all(6.0);
-    addAll(createBoundaries(this));
+    components.addAll(createBoundaries(this));
     add(Ground(worldCenter));
     final jointDef = ConstantVolumeJointDef()
       ..frequencyHz = 20.0
