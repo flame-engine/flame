@@ -1,6 +1,9 @@
 # CHANGELOG
 
 ## [Next]
+ - Fix camera not ending up in the correct position on long jumps
+
+## [1.0.0-releasecandidate.12]
  - Fix link to code in example stories
  - Fix RotateEffect with negative deltas
  - Add isDragged to Draggable
@@ -18,11 +21,19 @@
  - Refactor TextBoxComponent
  - Fix bugs with TextBoxComponent
  - Improve error message for composed components
+ - Fix `game.size` to take zoom into consideration 
+ - Fix `camera.followComponent` when `zoom != 1`
  - Add `anchor` for `ShapeComponent` constructor
  - Fix rendering of polygons in `ShapeComponent`
  - Add `SpriteAnimation` support to parallax
  - Fix `Parallax` alignment for images with different width and height
  - Fix `ImageComposition` image bounds validation
+ - Improved the internal `RenderObject` widget performance
+ - Add `Matrix4` extensions
+ - `Camera.apply` is done with matrix transformations
+ - `Camera` zooming is taking current `relativeOffset` into account
+ - Fix gestures for when `isHud = true` and `Camera` is modified
+ - Fix `Camera` zoom behaviour with offset/anchor
 
 ## [1.0.0-releasecandidate.11]
  - Replace deprecated analysis option lines-of-executable-code with source-lines-of-code

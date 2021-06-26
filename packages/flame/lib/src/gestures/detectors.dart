@@ -4,9 +4,9 @@ import 'events.dart';
 mixin MultiTouchTapDetector on Game {
   void onTap(int pointerId) {}
   void onTapCancel(int pointerId) {}
-  void onTapDown(int pointerId, TapDownInfo event) {}
-  void onTapUp(int pointerId, TapUpInfo event) {}
-  void onLongTapDown(int pointerId, TapDownInfo event) {}
+  void onTapDown(int pointerId, TapDownInfo info) {}
+  void onTapUp(int pointerId, TapUpInfo info) {}
+  void onLongTapDown(int pointerId, TapDownInfo info) {}
 }
 
 mixin MultiTouchDragDetector on Game {
@@ -20,13 +20,13 @@ mixin MultiTouchDragDetector on Game {
 mixin TapDetector on Game {
   void onTap() {}
   void onTapCancel() {}
-  void onTapDown(TapDownInfo event) {}
-  void onTapUp(TapUpInfo event) {}
+  void onTapDown(TapDownInfo info) {}
+  void onTapUp(TapUpInfo info) {}
 }
 
 mixin SecondaryTapDetector on Game {
-  void onSecondaryTapDown(TapDownInfo event) {}
-  void onSecondaryTapUp(TapUpInfo event) {}
+  void onSecondaryTapDown(TapDownInfo info) {}
+  void onSecondaryTapUp(TapUpInfo info) {}
   void onSecondaryTapCancel() {}
 }
 
@@ -36,10 +36,10 @@ mixin DoubleTapDetector on Game {
 
 mixin LongPressDetector on Game {
   void onLongPress() {}
-  void onLongPressStart(LongPressStartInfo event) {}
-  void onLongPressMoveUpdate(LongPressMoveUpdateInfo event) {}
+  void onLongPressStart(LongPressStartInfo info) {}
+  void onLongPressMoveUpdate(LongPressMoveUpdateInfo info) {}
   void onLongPressUp() {}
-  void onLongPressEnd(LongPressEndInfo event) {}
+  void onLongPressEnd(LongPressEndInfo info) {}
 }
 
 mixin VerticalDragDetector on Game {
@@ -80,9 +80,9 @@ mixin ScaleDetector on Game {
 }
 
 mixin MouseMovementDetector on Game {
-  void onMouseMove(PointerHoverInfo event) {}
+  void onMouseMove(PointerHoverInfo info) {}
 }
 
 mixin ScrollDetector on Game {
-  void onScroll(PointerScrollInfo event) {}
+  void onScroll(PointerScrollInfo info) {}
 }

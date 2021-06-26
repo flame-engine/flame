@@ -60,7 +60,7 @@ class BasicAnimations extends BaseGame with TapDetector {
   }
 
   @override
-  void onTapDown(TapDownInfo event) {
-    addAnimation(event.eventPosition.game);
+  void onTapDown(TapDownInfo info) {
+    addAnimation(info.eventPosition.game);
   }
 }

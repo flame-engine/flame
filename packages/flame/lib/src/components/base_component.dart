@@ -6,6 +6,7 @@ import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
 import '../../game.dart';
+import '../../gestures.dart';
 import '../effects/effects.dart';
 import '../effects/effects_handler.dart';
 import '../extensions/vector2.dart';
@@ -229,5 +230,10 @@ abstract class BaseComponent extends Component {
       }
     }
     return shouldContinue;
+  }
+
+  @protected
+  Vector2 eventPosition(PositionInfo info) {
+    return isHud ? info.eventPosition.widget : info.eventPosition.game;
   }
 }

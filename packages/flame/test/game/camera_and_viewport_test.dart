@@ -128,9 +128,11 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.where((e) => e.startsWith('translate')),
+        canvas.methodCalls.where(
+          (e) => e.startsWith(RegExp('translate|transform')),
+        ),
         [
-          'translate(0.0, 0.0)', // camera translation
+          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)', // camera translation
           'translate(10.0, 10.0)', // position component translation
           'translate(0.0, 0.0)', // position component anchor
         ],
@@ -154,9 +156,11 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.where((e) => e.startsWith('translate')),
+        canvas.methodCalls.where(
+          (e) => e.startsWith(RegExp('translate|transform')),
+        ),
         [
-          'translate(-4.0, -4.0)', // camera translation
+          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -4.0, -4.0, 0.0, 1.0)', // camera translation
           'translate(10.0, 10.0)', // position component translation
           'translate(0.0, 0.0)', // position component anchor
         ],
@@ -197,9 +201,11 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.where((e) => e.startsWith('translate')),
+        canvas.methodCalls.where(
+          (e) => e.startsWith(RegExp('translate|transform')),
+        ),
         [
-          'translate(40.0, 30.0)', // camera translation
+          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 40.0, 30.0, 0.0, 1.0)', // camera translation
           'translate(10.0, 20.0)', // position component translation
           'translate(-0.5, -0.5)', // position component anchor
         ],
@@ -226,9 +232,11 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.where((e) => e.startsWith('translate')),
+        canvas.methodCalls.where(
+          (e) => e.startsWith(RegExp('translate|transform')),
+        ),
         [
-          'translate(-550.0, -1920.0)', // camera translation
+          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -550.0, -1920.0, 0.0, 1.0)', // camera translation
           'translate(600.0, 2000.0)', // position component translation
           'translate(-0.5, -0.5)', // position component anchor
         ],
@@ -316,15 +324,39 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls
-            .where((e) => e.startsWith('translate') || e.startsWith('scale')),
+        canvas.methodCalls.where(
+          (e) => e.startsWith(RegExp('translate|transform|scale')),
+        ),
         [
-          'translate(0.0, 0.0)', // camera translation
-          'scale(2.0)', // camera zoom
+          'transform(2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 1.0)', // camera translation and zoom
           'translate(100.0, 100.0)', // position component
           'translate(-0.5, -0.5)', // anchor
         ],
       );
+    });
+    test('camera zoom with setRelativeOffset', () {
+      final game = BaseGame();
+      game.onResize(Vector2.all(200.0));
+      game.camera.zoom = 2;
+      game.camera.setRelativeOffset(Anchor.center);
+
+      final p = TestComponent(Vector2.all(100.0))..anchor = Anchor.center;
+      game.add(p);
+      game.update(10000);
+
+      final canvas = MockCanvas();
+      game.render(canvas);
+      expect(
+        canvas.methodCalls.where(
+          (e) => e.startsWith(RegExp('translate|transform|scale')),
+        ),
+        [
+          'transform(2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 100.0, 100.0, 0.0, 1.0)', // camera translation and zoom
+          'translate(100.0, 100.0)', // position component
+          'translate(-0.5, -0.5)', // anchor
+        ],
+      );
+      expect(game.camera.position, Vector2.all(-50.0));
     });
   });
   group('viewport & camera', () {

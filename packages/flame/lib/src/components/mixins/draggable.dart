@@ -28,7 +28,7 @@ mixin Draggable on BaseComponent {
   bool _checkPointerId(int pointerId) => _currentPointerIds.contains(pointerId);
 
   bool handleDragStart(int pointerId, DragStartInfo info) {
-    if (containsPoint(info.eventPosition.game)) {
+    if (containsPoint(eventPosition(info))) {
       _isDragged = true;
       _currentPointerIds.add(pointerId);
       return onDragStart(pointerId, info);

@@ -110,8 +110,8 @@ abstract class MyCollidable extends PositionComponent
   }
 
   @override
-  bool onDragEnd(int pointerId, DragEndInfo event) {
-    velocity.setFrom(event.velocity / 10);
+  bool onDragEnd(int pointerId, DragEndInfo info) {
+    velocity.setFrom(info.velocity / 10);
     _isDragged = false;
     return true;
   }
@@ -228,9 +228,7 @@ class MultipleShapes extends BaseGame
       lastToAdd = createRandomCollidable(lastToAdd, screenCollidable);
       final lastBottomRight =
           lastToAdd.toAbsoluteRect().bottomRight.toVector2();
-      final screenSize = size / camera.zoom;
-      if (lastBottomRight.x < screenSize.x &&
-          lastBottomRight.y < screenSize.y) {
+      if (lastBottomRight.x < size.x && lastBottomRight.y < size.y) {
         add(lastToAdd);
         totalAdded++;
       } else {

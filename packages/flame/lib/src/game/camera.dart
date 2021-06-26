@@ -62,6 +62,9 @@ class Camera extends Projector {
   /// Remaining time in seconds for the camera shake.
   double _shakeTimer = 0.0;
 
+  /// The matrix used for scaling and translating the canvas
+  final Matrix4 _transform = Matrix4.identity();
+
   // Configurable parameters
 
   double cameraSpeed = defaultCameraSpeed;
@@ -143,10 +146,23 @@ class Camera extends Projector {
   /// When using this method you are responsible for saving/restoring canvas
   /// state to avoid leakage.
   void apply(Canvas canvas) {
-    canvas.translateVector(
-      (-position)..scale(zoom),
-    );
-    canvas.scale(zoom);
+    canvas.transform(_transformMatrix(position, zoom).storage);
+  }
+
+  Matrix4 _transformMatrix(Vector2 position, double zoom) {
+    final translateX = -_position.x * zoom;
+    final translateY = -_position.y * zoom;
+    if (_transform.m11 == zoom &&
+        _transform.m22 == zoom &&
+        _transform.m33 == zoom &&
+        _transform.m41 == translateX &&
+        _transform.m42 == translateY) {
+      return _transform;
+    }
+    _transform.setIdentity();
+    _transform.translate(translateX, translateY);
+    _transform.scale(zoom);
+    return _transform;
   }
 
   /// This smoothly updates the camera for an amount of time [dt].
@@ -203,9 +219,21 @@ class Camera extends Projector {
     return worldCoordinates * zoom;
   }
 
+  /// Takes coordinates in the screen space and returns their counter-part in
+  /// the world space.
+  Vector2 screenToWorld(Vector2 screenCoordinates) {
+    return unprojectVector(screenCoordinates);
+  }
+
+  /// Takes coordinates in the world space and returns their counter-part in
+  /// the screen space.
+  Vector2 worldToScreen(Vector2 worldCoordinates) {
+    return projectVector(worldCoordinates);
+  }
+
   /// This is the (current) absolute target of the camera, i.e., the
-  /// coordinate that should be on the top left, regardless of relative
-  /// offset, world boundaries or shake.
+  /// coordinate that should with `relativeOffset` taken into consideration but
+  /// regardless of world boundaries or shake.
   Vector2 absoluteTarget() {
     return _currentCameraDelta ?? follow ?? Vector2.zero();
   }
@@ -274,7 +302,7 @@ class Camera extends Projector {
 
     final bounds = worldBounds;
     if (bounds != null) {
-      if (bounds.width > gameRef.size.x) {
+      if (bounds.width > gameRef.size.x * zoom) {
         final cameraLeftEdge = attemptedTarget.x;
         final cameraRightEdge = attemptedTarget.x + gameRef.size.x;
         if (cameraLeftEdge < bounds.left) {
@@ -286,7 +314,7 @@ class Camera extends Projector {
         attemptedTarget.x = (gameRef.size.x - bounds.width) / 2;
       }
 
-      if (bounds.height > gameRef.size.y) {
+      if (bounds.height > gameRef.size.y * zoom) {
         final cameraTopEdge = attemptedTarget.y;
         final cameraBottomEdge = attemptedTarget.y + gameRef.size.y;
         if (cameraTopEdge < bounds.top) {
