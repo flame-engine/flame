@@ -2,6 +2,7 @@
 
 ## [Next]
  - Fix camera not ending up in the correct position on long jumps
+ - Extract shared logic when handling components set in BaseComponent and BaseGame to ComponentSet.
 
 ## [1.0.0-releasecandidate.12]
  - Fix link to code in example stories
@@ -21,7 +22,7 @@
  - Refactor TextBoxComponent
  - Fix bugs with TextBoxComponent
  - Improve error message for composed components
- - Fix `game.size` to take zoom into consideration 
+ - Fix `game.size` to take zoom into consideration
  - Fix `camera.followComponent` when `zoom != 1`
  - Add `anchor` for `ShapeComponent` constructor
  - Fix rendering of polygons in `ShapeComponent`
