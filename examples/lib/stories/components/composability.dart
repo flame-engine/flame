@@ -9,7 +9,7 @@ class Square extends PositionComponent {
   }
 }
 
-class ParentSquare extends Square {
+class ParentSquare extends Square with HasGameRef {
   ParentSquare(Vector2 position, Vector2 size) : super(position, size);
 
   @override
@@ -27,7 +27,7 @@ class ParentSquare extends Square {
       Square(Vector2(70, 200), Vector2(50, 50), angle: 5),
     ];
 
-    children.forEach(addChild);
+    children.forEach((c) => addChild(c, gameRef: gameRef));
   }
 }
 

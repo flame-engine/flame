@@ -65,8 +65,10 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     if (_addLater.isNotEmpty) {
       final addNow = _addLater.toList(growable: false);
       _addLater.clear();
-      super.addAll(addNow);
-      addNow.forEach((component) => component.onMount());
+      addNow.forEach((c) {
+        super.add(c);
+        c.onMount();
+      });
     }
   }
 
