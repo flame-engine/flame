@@ -19,7 +19,12 @@ class JoystickPlayer extends PositionComponent implements JoystickListener {
   Paint paint;
   late Rect rect;
 
-  JoystickPlayer() : paint = _whitePaint, super(size: Vector2.all(50.0), anchor: Anchor.center,) {
+  JoystickPlayer()
+      : paint = _whitePaint,
+        super(
+          size: Vector2.all(50.0),
+          anchor: Anchor.center,
+        ) {
     rect = size.toRect();
   }
 
@@ -45,7 +50,7 @@ class JoystickPlayer extends PositionComponent implements JoystickListener {
 
   @override
   void joystickAction(JoystickActionEvent event) {
-    switch(event.event) {
+    switch (event.event) {
       case ActionEvent.down:
         switch (event.id) {
           case 1:
@@ -62,7 +67,7 @@ class JoystickPlayer extends PositionComponent implements JoystickListener {
         }
         break;
       default:
-        // Do nothing
+      // Do nothing
     }
   }
 
