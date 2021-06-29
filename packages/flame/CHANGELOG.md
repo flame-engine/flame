@@ -2,6 +2,7 @@
 
 ## [Next]
  - Fix camera not ending up in the correct position on long jumps
+ - Make the `JoystickPlayer` a `PositionComponent`
 
 ## [1.0.0-releasecandidate.12]
  - Fix link to code in example stories
