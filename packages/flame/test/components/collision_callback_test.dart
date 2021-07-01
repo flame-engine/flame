@@ -60,7 +60,7 @@ class TestBlock extends PositionComponent with Hitbox, Collidable {
 void main() {
   TestGame gameWithCollidables(List<Collidable> collidables) {
     final game = TestGame();
-    game.components.addAll(collidables);
+    game.addAll(collidables);
     game.update(0);
     expect(game.components.isNotEmpty, collidables.isNotEmpty);
     return game;

@@ -208,7 +208,7 @@ void main() {
     final components = List.generate(3, (index) => MyComponent());
 
     game.onResize(size);
-    game.components.addAll(components);
+    game.addAll(components);
 
     // The components are not added to the component list until an update has been performed
     game.update(0.0);

@@ -151,6 +151,14 @@ class BaseGame extends Game with FPSCounter {
     return components.addChild(c);
   }
 
+  /// Adds a list of components, calling addChild for each one.
+  ///
+  /// The returned Future completes once all are loaded and added.
+  /// Component loading is done in parallel.
+  Future<void> addAll(List<Component> cs) {
+    return components.addChildren(cs);
+  }
+
   /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.
   ///
   /// You can override it further to add more custom behavior.
