@@ -11,68 +11,77 @@ final _whitePaint = BasicPalette.white.paint();
 final _bluePaint = BasicPalette.blue.paint();
 final _greenPaint = BasicPalette.green.paint();
 
-class JoystickPlayer extends Component implements JoystickListener {
-  static const speed = 32.0;
-  static final Vector2 size = Vector2.all(50.0);
+class JoystickPlayer extends PositionComponent implements JoystickListener {
+  static const speed = 64.0;
 
   double currentSpeed = 0;
-  double angle = 0;
-  bool move = false;
+  bool isMoving = false;
   Paint paint;
   late Rect rect;
 
-  JoystickPlayer() : paint = _whitePaint;
+  JoystickPlayer()
+      : paint = _whitePaint,
+        super(
+          size: Vector2.all(50.0),
+          anchor: Anchor.center,
+        ) {
+    rect = size.toRect();
+  }
 
   @override
   void render(Canvas canvas) {
-    canvas.translate(rect.center.dx, rect.center.dy);
-    canvas.rotate(angle == 0.0 ? 0.0 : angle + (pi / 2));
-    canvas.translate(-rect.center.dx, -rect.center.dy);
+    super.render(canvas);
     canvas.drawRect(rect, paint);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    if (move) {
+    if (isMoving) {
       moveFromAngle(dt);
     }
   }
 
   @override
   void onGameResize(Vector2 gameSize) {
-    final offset = (gameSize - size) / 2;
-    rect = offset & size;
     super.onGameResize(gameSize);
+    position = gameSize / 2;
   }
 
   @override
   void joystickAction(JoystickActionEvent event) {
-    if (event.event == ActionEvent.down) {
-      if (event.id == 1) {
-        paint = paint == _whitePaint ? _bluePaint : _whitePaint;
-      }
-      if (event.id == 2) {
-        paint = paint == _whitePaint ? _greenPaint : _whitePaint;
-      }
-    } else if (event.event == ActionEvent.move) {
-      if (event.id == 3) {
-        angle = event.angle;
-      }
+    switch (event.event) {
+      case ActionEvent.down:
+        switch (event.id) {
+          case 1:
+            paint = paint == _whitePaint ? _bluePaint : _whitePaint;
+            break;
+          case 2:
+            paint = paint == _whitePaint ? _greenPaint : _whitePaint;
+            break;
+        }
+        break;
+      case ActionEvent.move:
+        if (event.id == 3) {
+          angle = event.angle;
+        }
+        break;
+      default:
+      // Do nothing
     }
   }
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    move = event.directional != JoystickMoveDirectional.idle;
-    if (move) {
+    isMoving = event.directional != JoystickMoveDirectional.idle;
+    if (isMoving) {
       angle = event.angle;
       currentSpeed = speed * event.intensity;
     }
   }
 
-  void moveFromAngle(double dtUpdate) {
-    final next = Vector2(cos(angle), sin(angle)) * (currentSpeed * dtUpdate);
-    rect = rect.shift(next.toOffset());
+  void moveFromAngle(double dt) {
+    final delta = Vector2(cos(angle), sin(angle)) * (currentSpeed * dt);
+    position.add(delta);
   }
 }

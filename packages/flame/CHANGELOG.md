@@ -2,6 +2,7 @@
 
 ## [Next]
  - Fix camera not ending up in the correct position on long jumps
+ - Make the `JoystickPlayer` a `PositionComponent`
  - Extract shared logic when handling components set in BaseComponent and BaseGame to ComponentSet.
 
 ## [1.0.0-releasecandidate.12]

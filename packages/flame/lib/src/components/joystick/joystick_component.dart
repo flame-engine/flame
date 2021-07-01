@@ -12,6 +12,9 @@ mixin JoystickListener {
 
 abstract class JoystickController extends BaseComponent
     with HasGameRef<BaseGame>, Draggable {
+  @override
+  bool isHud = true;
+
   final List<JoystickListener> _observers = [];
 
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
@@ -25,9 +28,6 @@ abstract class JoystickController extends BaseComponent
   void addObserver(JoystickListener listener) {
     _observers.add(listener);
   }
-
-  @override
-  bool isHud = true;
 }
 
 class JoystickComponent extends JoystickController {
