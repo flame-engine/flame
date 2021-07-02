@@ -73,10 +73,10 @@ class MyGame extends Game with TapDetector {
   void render(Canvas canvas) {
     runningRobot
         .getSprite()
-        .render(canvas, position: robotPosition, size: robotSize);
+        .render(canvas, size: robotPosition, size: robotSize);
 
     final button = isPressed ? pressedButton : unpressedButton;
-    button.render(canvas, position: buttonPosition, size: buttonSize);
+    button.render(canvas, size: buttonPosition, size: buttonSize);
   }
 
   @override

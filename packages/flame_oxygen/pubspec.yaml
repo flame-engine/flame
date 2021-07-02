@@ -9,8 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flame: ^1.0.0-releasecandidate.11
-  oxygen: ^0.1.0
+  flame: 
+    path: ../flame
+  oxygen: ^0.2.0
 
 dev_dependencies:
   dart_code_metrics: ^3.2.2

@@ -1,12 +1,41 @@
 part of flame_oxygen;
 
 abstract class OxygenGame extends Game {
-  late FlameWorld world;
+  late final FlameWorld world;
+
+  OxygenGame() {
+    world = FlameWorld(this);
+  }
+
+  /// Create a new [Entity].
+  Entity createEntity({
+    String? name,
+    required Vector2 position,
+    required Vector2 size,
+    double? angle,
+  }) {
+    final entity = world.entityManager.createEntity(name)
+      ..add<PositionComponent, Vector2>(position)
+      ..add<SizeComponent, Vector2>(size);
+    if (angle != null) {
+      entity.add<AngleComponent, double>(angle);
+    }
+    return entity;
+  }
 
   @override
   @mustCallSuper
   Future<void> onLoad() async {
-    world = FlameWorld(this);
+    // Registering few default components.
+    world.registerComponent<SizeComponent, Vector2>(() => SizeComponent());
+    world.registerComponent<PositionComponent, Vector2>(
+        () => PositionComponent());
+    world.registerComponent<AngleComponent, double>(() => AngleComponent());
+    world.registerComponent<SpriteComponent, SpriteInit>(() => SpriteComponent());
+
+    // Registering default systems.
+    world.registerSystem(FlameSystem());
+
     await init();
     world.init();
   }
