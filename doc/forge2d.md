@@ -21,6 +21,12 @@ extension of the `BaseGame` class.
 It is called `Forge2DGame` and it will control the adding and removal of Forge2D's `BodyComponents`
 as well as your normal components.
 
+In `Forge2DGame` the `Camera` has a zoom level set to 10 by default, so your components will be a
+lot bigger than in a normal Flame game. This is due to the speed limitation in the `Forge2D` world,
+which you would hit very quickly if you are using it with `zoom = 1.0`. You can easily change the
+zoom level eiter by calling `super(zoom: yourZoom)` in your constructor, or do
+`game.camera.zoom = yourZoom;` at a later stage.
+
 If you are previously familiar with Box2D it can be good to know that the whole concept of the
 Box2d world is mapped to `world` in the `Forge2DGame` component and every `Body` should be a
 `BodyComponent`, and added to your `Forge2DGame`.
@@ -36,6 +42,11 @@ A simple `Forge2DGame` implementation examples can be seen in the
 
 If you don't need to have a sprite on top of your body you should use the plain `BodyComponent`, for
 example if you want a circle, rectangle or polygon but only painted with a Flutter `Paint`.
+
+The `BodyComponent` is by default having `debugMode = true`, since otherwise it wouldn't show
+anything after you have created a `Body` and added the `BodyComponent` to the game. If you want to
+turn it off you can either override `debugMode` to set it to false or assign false to it in your
+component constructor.
 
 ## SpriteBodyComponent
 
