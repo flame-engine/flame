@@ -164,8 +164,22 @@ abstract class BaseComponent extends Component {
     return children.addChild(child, gameRef: gameRef);
   }
 
+  /// Adds mutiple children.
+  ///
+  /// See [addChild] for details (or `children.addChildren()`).
+  Future<void> addChildren(List<Component> cs, {BaseGame? gameRef}) {
+    return children.addChildren(cs, gameRef: gameRef);
+  }
+
+  /// Whether the children list contains the given component.
+  ///
+  /// This method uses reference equality.
   bool containsChild(Component c) => children.contains(c);
 
+  /// Call this if any of this component's children priorities have changed
+  /// at runtime.
+  ///
+  /// This will call `rebalanceAll` on the [children] ordered set.
   void reorderChildren() => children.rebalanceAll();
 
   /// This method first calls the passed handler on the leaves in the tree,

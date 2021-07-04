@@ -46,7 +46,7 @@ class SpriteBodySample extends Forge2DGame with TapDetector {
   @override
   Future<void> onLoad() async {
     _pizzaImage = await images.load('pizza.png');
-    components.addAll(createBoundaries(this));
+    addAll(createBoundaries(this));
   }
 
   @override
