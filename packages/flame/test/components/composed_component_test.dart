@@ -62,6 +62,7 @@ void main() {
       final child = MyTap();
       final wrapper = MyComposed();
       wrapper.addChild(child);
+      wrapper.update(0); // children are only added on the next tick
 
       expect(wrapper.containsChild(child), true);
     });
@@ -69,10 +70,15 @@ void main() {
     test('removes the child from the component', () {
       final child = MyTap();
       final wrapper = MyComposed();
-      wrapper.addChild(child);
-      expect(true, wrapper.containsChild(child));
 
-      wrapper.removeChild(child);
+      wrapper.addChild(child);
+      expect(wrapper.containsChild(child), false);
+      wrapper.update(0); // children are only added on the next tick
+      expect(wrapper.containsChild(child), true);
+
+      wrapper.children.remove(child);
+      expect(wrapper.containsChild(child), true);
+      wrapper.update(0); // children are only removed on the next tick
       expect(wrapper.containsChild(child), false);
     });
 
@@ -81,8 +87,12 @@ void main() {
       () async {
         final child = MyAsyncChild();
         final wrapper = MyComposed();
-        await wrapper.addChild(child);
 
+        final future = wrapper.addChild(child);
+        expect(wrapper.containsChild(child), false);
+        await future;
+        expect(wrapper.containsChild(child), false);
+        wrapper.update(0);
         expect(wrapper.containsChild(child), true);
       },
     );
@@ -107,7 +117,7 @@ void main() {
       final game = MyGame();
       final children = List.generate(10, (_) => MyTap());
       final wrapper = MyComposed();
-      wrapper.addChildren(children);
+      wrapper.children.addChildren(children);
 
       game.onResize(size);
       game.add(wrapper);

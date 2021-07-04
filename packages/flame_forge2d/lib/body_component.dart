@@ -133,4 +133,10 @@ abstract class BodyComponent<T extends Forge2DGame> extends BaseComponent
   bool containsPoint(Vector2 point) {
     return body.fixtures.any((fixture) => fixture.testPoint(point));
   }
+
+  @override
+  void onRemove() {
+    super.onRemove();
+    world.destroyBody(body);
+  }
 }

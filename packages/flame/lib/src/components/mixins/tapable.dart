@@ -49,7 +49,7 @@ mixin Tapable on BaseComponent {
 
 mixin HasTapableComponents on BaseGame {
   void _handleTapEvent(bool Function(Tapable child) tapEventHandler) {
-    for (final c in components.toList().reversed) {
+    for (final c in components.reversed()) {
       var shouldContinue = true;
       if (c is BaseComponent) {
         shouldContinue = c.propagateToChildren<Tapable>(tapEventHandler);
