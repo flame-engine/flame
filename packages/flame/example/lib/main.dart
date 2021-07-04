@@ -70,7 +70,7 @@ class MyGame extends BaseGame with DoubleTapDetector, TapDetector {
 
     final handled = components.any((c) {
       if (c is PositionComponent && c.toRect().overlaps(touchArea)) {
-        remove(c);
+        components.remove(c);
         return true;
       }
       return false;

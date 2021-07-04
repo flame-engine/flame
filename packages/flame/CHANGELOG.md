@@ -1,6 +1,9 @@
 # CHANGELOG
 
 ## [next]
+ - Fix camera not ending up in the correct position on long jumps
+ - Make the `JoystickPlayer` a `PositionComponent`
+ - Extract shared logic when handling components set in BaseComponent and BaseGame to ComponentSet.
  - Add `SpriteAnimationWidgetBuilder`
  - Add `SpriteWidgetBuilder`
  - Add `SpriteButtonBuilder`

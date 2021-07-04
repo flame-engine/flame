@@ -1,8 +1,6 @@
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
-import 'package:ordered_set/comparing.dart';
-import 'package:ordered_set/ordered_set.dart';
 import 'package:ordered_set/queryable_ordered_set.dart';
 
 import '../../components.dart';
@@ -28,19 +26,7 @@ import 'viewport.dart';
 /// It is based on the Component system.
 class BaseGame extends Game with FPSCounter {
   /// The list of components to be updated and rendered by the base game.
-  late final OrderedSet<Component> components = createOrderedSet();
-
-  /// Components to be added on the next update.
-  ///
-  /// The component list is only changed at the start of each [update] to avoid
-  /// concurrency issues.
-  final List<Component> _addLater = [];
-
-  /// Components to be removed on the next update.
-  ///
-  /// The component list is only changed at the start of each [update] to avoid
-  /// concurrency issues.
-  final Set<Component> _removeLater = {};
+  late final ComponentSet components = createComponentSet();
 
   /// The camera translates the coordinate space after the viewport is applied.
   final Camera camera = Camera();
@@ -97,14 +83,14 @@ class BaseGame extends Game with FPSCounter {
   ///
   /// You can return a specific sub-class of OrderedSet, like
   /// [QueryableOrderedSet] for example, that we use for Collidables.
-  OrderedSet<Component> createOrderedSet() {
-    final comparator = Comparing.on<Component>((c) => c.priority);
+  ComponentSet createComponentSet() {
+    final components = ComponentSet.createDefault(
+      (c, {BaseGame? gameRef}) => prepare(c),
+    );
     if (this is HasCollidables) {
-      final qos = QueryableOrderedSet<Component>(comparator);
-      qos.register<Collidable>();
-      return qos;
+      components.register<Collidable>();
     }
-    return OrderedSet<Component>(comparator);
+    return components;
   }
 
   /// This method is called for every component added.
@@ -114,6 +100,11 @@ class BaseGame extends Game with FPSCounter {
   /// By default, this calls the first time resize for every component, so don't forget to call super.preAdd when overriding.
   @mustCallSuper
   void prepare(Component c) {
+    assert(
+      hasLayout,
+      '"prepare/add" called before the game is ready. Did you try to access it on the Game constructor? Use the "onLoad" method instead.',
+    );
+
     if (c is Collidable) {
       assert(
         this is HasCollidables,
@@ -144,7 +135,7 @@ class BaseGame extends Game with FPSCounter {
     }
 
     if (c is HasGameRef) {
-      (c as HasGameRef).gameRef = this;
+      c.gameRef = this;
     }
 
     // first time resize
@@ -156,38 +147,16 @@ class BaseGame extends Game with FPSCounter {
   /// This methods is an async operation since it await the `onLoad` method of the component. Nevertheless, this method only need to be waited to finish if by some reason, your logic needs to be sure that the component has finished loading, otherwise, this method can be called without waiting for it to finish as the BaseGame already handle the loading of the component.
   ///
   /// *Note:* Do not add components on the game constructor. This method can only be called after the game already has its layout set, this can be verified by the [hasLayout] property, to add components upon a game initialization, the [onLoad] method can be used instead.
-  Future<void> add(Component c) async {
-    assert(
-      hasLayout,
-      '"add" called before the game is ready. Did you try to access it on the Game constructor? Use the "onLoad" method instead.',
-    );
-    prepare(c);
-    final loadFuture = c.onLoad();
-
-    if (loadFuture != null) {
-      await loadFuture;
-    }
-    _addLater.add(c);
+  Future<void> add(Component c) {
+    return components.addChild(c);
   }
 
-  /// Prepares and registers a list of components to be added on the next game tick
-  void addAll(Iterable<Component> components) {
-    components.forEach(add);
-  }
-
-  /// Marks a component to be removed from the components list on the next game tick
-  void remove(Component c) {
-    _removeLater.add(c);
-  }
-
-  /// Marks a list of components to be removed from the components list on the next game tick
-  void removeAll(Iterable<Component> components) {
-    _removeLater.addAll(components);
-  }
-
-  /// Marks all existing components to be removed from the components list on the next game tick
-  void clear() {
-    _removeLater.addAll(components);
+  /// Adds a list of components, calling addChild for each one.
+  ///
+  /// The returned Future completes once all are loaded and added.
+  /// Component loading is done in parallel.
+  Future<void> addAll(List<Component> cs) {
+    return components.addChildren(cs);
   }
 
   /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.
@@ -223,7 +192,7 @@ class BaseGame extends Game with FPSCounter {
   @override
   @mustCallSuper
   void update(double dt) {
-    _updateComponentList();
+    components.updateComponentList();
 
     if (this is HasCollidables) {
       (this as HasCollidables).handleCollidables();
@@ -231,22 +200,6 @@ class BaseGame extends Game with FPSCounter {
 
     components.forEach((c) => c.update(dt));
     camera.update(dt);
-  }
-
-  void _updateComponentList() {
-    _removeLater.addAll(components.where((c) => c.shouldRemove));
-    _removeLater.forEach((c) {
-      c.onRemove();
-      components.remove(c);
-    });
-    _removeLater.clear();
-
-    if (_addLater.isNotEmpty) {
-      final addNow = _addLater.toList(growable: false);
-      _addLater.clear();
-      components.addAll(addNow);
-      addNow.forEach((component) => component.onMount());
-    }
   }
 
   /// This implementation of resize passes the resize call along to every

@@ -5,7 +5,6 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:forge2d/forge2d.dart' hide Timer;
 
-import 'body_component.dart';
 import 'contact_callbacks.dart';
 import 'forge2d_camera.dart';
 
@@ -51,15 +50,6 @@ class Forge2DGame extends BaseGame {
       case AppLifecycleState.detached:
         pauseEngine();
         break;
-    }
-  }
-
-  @override
-  void remove(Component component) {
-    super.remove(component);
-    if (component is BodyComponent) {
-      world.destroyBody(component.body);
-      component.remove();
     }
   }
 
