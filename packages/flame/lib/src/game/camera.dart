@@ -375,11 +375,8 @@ class Camera extends Projector {
   /// Whether the camera is currently shaking or not.
   bool get shaking => _shakeTimer > 0.0;
 
-  /// Keep track how much the [Camera] shook in the last tick.
-  final _lastShake = Vector2.zero();
-
-  /// Keep track how much the [Camera] shook for this shake session.
-  final _totalShakeOffset = Vector2.zero();
+  /// Buffer to re-use for the shake delta.
+  final _shakeBuffer = Vector2.zero();
 
   /// The random number generator to use for shaking
   final _shakeRng = math.Random();
@@ -392,19 +389,11 @@ class Camera extends Projector {
   /// This will be a random number every tick causing a shakiness effect.
   Vector2 _shakeDelta() {
     if (shaking) {
-      _lastShake.setValues(_shakeValue(), _shakeValue());
-      _totalShakeOffset.add(_lastShake);
-      print(_lastShake);
-      return _lastShake;
-    } else if (!_totalShakeOffset.isZero()) {
-      final shakeOffset = _totalShakeOffset.clone()..negate();
-      _totalShakeOffset.setZero();
-      _lastShake.setZero();
-      print(shakeOffset);
-      return shakeOffset;
-    } else {
-      return _lastShake;
+      _shakeBuffer.setValues(_shakeValue(), _shakeValue());
+    } else if (!_shakeBuffer.isZero()) {
+      _shakeBuffer.setZero();
     }
+    return _shakeBuffer;
   }
 
   /// If you need updated on when the position of the camera is updated you
