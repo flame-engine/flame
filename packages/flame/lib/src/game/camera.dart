@@ -386,7 +386,7 @@ class Camera extends Projector {
   double _shakeValue() => (_shakeRng.nextDouble() - 0.5) * 2 * shakeIntensity;
 
   /// Generates a random [Vector2] of displacement applied to the camera.
-  /// This will be a random number every tick causing a shakiness effect.
+  /// This will be a random [Vector2] every tick causing a shakiness effect.
   Vector2 _shakeDelta() {
     if (shaking) {
       _shakeBuffer.setValues(_shakeValue(), _shakeValue());
