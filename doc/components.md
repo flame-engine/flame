@@ -132,18 +132,20 @@ class MyGame extends BaseGame {
 
 ## SpriteAnimationComponent
 
-This class is used to represent a Component that has a sprite that runs a single cyclic animation.
+This class is used to represent a Component that has sprites that run in a single cyclic animation.
 
 This will create a simple three frame animation using 3 different images:
 
 ```dart
 final sprites = [0, 1, 2]
-    .map((i) => await Sprite.load('player_$i.png'))
-    .toList();
-final size = Vector2.all(64.0);
+    .map((i) => Sprite.load('player_$i.png'));
+final animation = SpriteAnimation.spriteList(
+    await Future.wait(sprites),
+    stepTime: 0.01,
+);
 this.player = SpriteAnimationComponent(
-  SpriteAnimation.spriteList(sprites, stepTime: 0.01),
-  size: size,
+  animation: animation,
+  size: Vector2.all(64.0),
 );
 ```
 
