@@ -1,28 +1,38 @@
 part of flame_oxygen.system;
 
-class FlameSystem extends System with RenderSystem, UpdateSystem {
-  Query? query;
+/// System that provides base rendering for default components.
+///
+/// Based on the PositionComponent logic from Flame.
+abstract class BaseSystem extends System with RenderSystem {
+  Query? _query;
+
+  /// Filters used for querying entities.
+  ///
+  /// The [PositionComponent] and [SizeComponent] will be added automatically.
+  List<Filter<Component>> get filters;
 
   @override
+  @mustCallSuper
   void init() {
-    query = createQuery([
+    _query = createQuery([
       Has<PositionComponent>(),
       Has<SizeComponent>(),
+      ...filters,
     ]);
-    // TODO: implement init
   }
 
   @override
   void dispose() {
-    query = null;
+    _query = null;
     super.dispose();
   }
 
   @override
   void render(Canvas canvas) {
-    for (final entity in query?.entities ?? <Entity>[]) {
+    for (final entity in _query?.entities ?? <Entity>[]) {
       final position = entity.get<PositionComponent>()!;
       final size = entity.get<SizeComponent>()!.size;
+      final anchor = entity.get<AnchorComponent>()?.anchor ?? Anchor.topLeft;
 
       canvas.save();
 
@@ -31,9 +41,9 @@ class FlameSystem extends System with RenderSystem, UpdateSystem {
         final angle = entity.get<AngleComponent>()!.radians;
         canvas.rotate(angle);
       }
-      // final delta = -anchor.toVector2()
-      //   ..multiply(size);
-      // canvas.translate(delta.x, delta.y);
+      final delta = -anchor.toVector2()
+        ..multiply(size);
+      canvas.translate(delta.x, delta.y);
 
       // Handle inverted rendering by moving center and flipping.
       // if (renderFlipX || renderFlipY) {
@@ -41,18 +51,14 @@ class FlameSystem extends System with RenderSystem, UpdateSystem {
       //   canvas.scale(renderFlipX ? -1.0 : 1.0, renderFlipY ? -1.0 : 1.0);
       //   canvas.translate(-width / 2, -height / 2);
       // }
-
-      if (entity.has<SpriteComponent>()) {
-        final sprite = entity.get<SpriteComponent>()?.sprite;
-        sprite?.render(canvas, size: size);
-      }
+      renderEntity(canvas, entity);
 
       canvas.restore();
     }
   }
 
-  @override
-  void update(double delta) {
-    // TODO: implement update
-  }
+  /// Render given entity.
+  ///
+  /// The canvas is already prepared for this entity.
+  void renderEntity(Canvas canvas, Entity entity);
 }

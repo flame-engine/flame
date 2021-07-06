@@ -1,5 +1,10 @@
 part of flame_oxygen;
 
+/// This is a Oxygen based implementation of [Game].
+///
+/// OxygenGame should be extended to add your game logic.
+///
+/// It is based on the Oxygen package.
 abstract class OxygenGame extends Game {
   late final FlameWorld world;
 
@@ -29,12 +34,15 @@ abstract class OxygenGame extends Game {
     // Registering few default components.
     world.registerComponent<SizeComponent, Vector2>(() => SizeComponent());
     world.registerComponent<PositionComponent, Vector2>(
-        () => PositionComponent());
+      () => PositionComponent(),
+    );
     world.registerComponent<AngleComponent, double>(() => AngleComponent());
-    world.registerComponent<SpriteComponent, SpriteInit>(() => SpriteComponent());
+    world.registerComponent<SpriteComponent, SpriteInit>(
+      () => SpriteComponent(),
+    );
 
     // Registering default systems.
-    world.registerSystem(FlameSystem());
+    // world.registerSystem(BaseSystem());
 
     await init();
     world.init();

@@ -5,6 +5,9 @@ import 'package:flame/particles.dart';
 import 'package:flame/sprite.dart';
 import 'package:oxygen/oxygen.dart';
 
+export 'package:flame/particles.dart' show Anchor, Particle;
+
+part 'component/anchor_component.dart';
 part 'component/angle_component.dart';
 part 'component/particle_component.dart';
 part 'component/position_component.dart';

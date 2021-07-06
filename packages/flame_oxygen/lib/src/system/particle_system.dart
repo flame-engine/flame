@@ -1,20 +1,21 @@
 part of flame_oxygen.system;
 
+/// Allows Particles from Flame to be rendered.
 class ParticleSystem extends System with RenderSystem, UpdateSystem {
-  Query? query;
+  Query? _query;
 
   @override
-  void init() => query = createQuery([Has<ParticleComponent>()]);
+  void init() => _query = createQuery([Has<ParticleComponent>()]);
 
   @override
   void dispose() {
-    query = null;
+    _query = null;
     super.dispose();
   }
 
   @override
   void render(Canvas canvas) {
-    for (final entity in query?.entities ?? <Entity>[]) {
+    for (final entity in _query?.entities ?? <Entity>[]) {
       final particle = entity.get<ParticleComponent>()!.particle;
       particle?.render(canvas);
     }
@@ -22,9 +23,9 @@ class ParticleSystem extends System with RenderSystem, UpdateSystem {
 
   @override
   void update(double delta) {
-    for (final entity in query?.entities ?? <Entity>[]) {
+    for (final entity in _query?.entities ?? <Entity>[]) {
       final particle = entity.get<ParticleComponent>()!.particle;
       particle?.update(delta);
-    } 
+    }
   }
 }
