@@ -5,6 +5,7 @@
  - Make the `JoystickPlayer` a `PositionComponent`
  - Extract shared logic when handling components set in BaseComponent and BaseGame to ComponentSet.
  - Fix `SpriteAnimationComponent` docs to use `Future.wait`
+ - Add an empty `postRender` method that will run after each components render method
 
 ## [1.0.0-releasecandidate.12]
  - Fix link to code in example stories
