@@ -82,7 +82,7 @@ import 'package:ordered_set/ordered_set.dart';
 import '../../extensions.dart';
 import '../components/component.dart';
 import '../components/mixins/has_game_ref.dart';
-import '../components/mixins/tapable.dart';
+import '../components/mixins/tappable.dart';
 import '../components/position_component.dart';
 import '../fps_counter.dart';
 import 'camera.dart';

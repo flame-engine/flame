@@ -11,7 +11,7 @@ import '../components/mixins/draggable.dart';
 import '../components/mixins/has_collidables.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/hoverable.dart';
-import '../components/mixins/tapable.dart';
+import '../components/mixins/tappable.dart';
 import '../fps_counter.dart';
 import 'camera.dart';
 import 'game.dart';
@@ -111,10 +111,10 @@ class BaseGame extends Game with FPSCounter {
         'You can only use the Hitbox/Collidable feature with games that has the HasCollidables mixin',
       );
     }
-    if (c is Tapable) {
+    if (c is Tappable) {
       assert(
-        this is HasTapableComponents,
-        'Tapable Components can only be added to a BaseGame with HasTapableComponents',
+        this is HasTappableComponents,
+        'Tappable Components can only be added to a BaseGame with HasTappableComponents',
       );
     }
     if (c is Draggable) {
