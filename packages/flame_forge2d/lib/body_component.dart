@@ -52,7 +52,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends BaseComponent
   double? _lastAngle;
 
   @override
-  void prepareCanvas(Canvas canvas) {
+  void preRender(Canvas canvas) {
     if (_transform.m14 != body.position.x ||
         _transform.m24 != body.position.y ||
         _lastAngle != angle) {

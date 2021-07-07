@@ -2,6 +2,7 @@
 
 ## [next]
  - Update mechanism by which `BodyComponent`'s are disposed to use the `onRemove` method
+ - Rename `prepareCanvas` to `preRender`
 
 ## [0.7.3-releasecandidate.12]
  - Fix prepareCanvas type error
