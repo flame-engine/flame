@@ -358,6 +358,17 @@ void main() {
       );
       expect(game.camera.position, Vector2.all(-50.0));
     });
+    test('camera shake should return to where it started', () {
+      final game = BaseGame();
+      final camera = game.camera;
+      game.onResize(Vector2.all(200.0));
+      expect(camera.position, Vector2.zero());
+      camera.shake(duration: 9000);
+      game.update(5000);
+      game.update(5000);
+      game.update(5000);
+      expect(camera.position, Vector2.zero());
+    });
   });
   group('viewport & camera', () {
     test('default ratio viewport + camera with world boundaries', () {
