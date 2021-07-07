@@ -138,6 +138,9 @@ class FixedResolutionViewport extends Viewport {
   /// The matrix used for scaling and translating the canvas
   final Matrix4 _transform = Matrix4.identity();
 
+  /// The Rect that is used to clip the canvas
+  late Rect _clipRect;
+
   FixedResolutionViewport(this.effectiveSize);
 
   @override
@@ -156,17 +159,19 @@ class FixedResolutionViewport extends Viewport {
       ..setFrom(canvasSize)
       ..sub(scaledSize)
       ..scale(0.5);
+
+    _clipRect = resizeOffset & scaledSize;
+
+    _transform.setIdentity();
+    _transform.translate(resizeOffset.x, resizeOffset.y);
+    _transform.scale(scale);
   }
 
   @override
   void render(Canvas c, void Function(Canvas) renderGame) {
     c.save();
-    _transform.setIdentity();
-    _transform.translate(resizeOffset.x, resizeOffset.y);
-    _transform.scale(scale);
-    c.clipRect(resizeOffset & scaledSize);
+    c.clipRect(_clipRect);
     c.transform(_transform.storage);
-
     renderGame(c);
     c.restore();
   }
