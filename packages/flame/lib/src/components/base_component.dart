@@ -86,7 +86,7 @@ abstract class BaseComponent extends Component {
     }
   }
 
-  /// A life cycle callback that runs after the component has been rendered, 
+  /// A render cycle callback that runs after the component has been rendered, 
   /// but before any children has been rendered.
   void postRender(Canvas canvas) {}
 
