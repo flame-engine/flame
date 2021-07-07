@@ -11,7 +11,7 @@ import 'draggable_sample.dart';
 import 'mouse_joint_sample.dart';
 import 'position_body_sample.dart';
 import 'sprite_body_sample.dart';
-import 'tapable_sample.dart';
+import 'tappable_sample.dart';
 
 String link(String example) =>
     'https://github.com/flame-engine/flame_forge2d/tree/main/example/lib/$example';
@@ -52,9 +52,9 @@ void main() async {
       codeLink: link('position_body_sample.dart'),
     )
     ..add(
-      'Tapable Body',
-      (DashbookContext ctx) => GameWidget(game: TapableSample()),
-      codeLink: link('tapable_sample.dart'),
+      'Tappable Body',
+      (DashbookContext ctx) => GameWidget(game: TappableSample()),
+      codeLink: link('tappable_sample.dart'),
     )
     ..add(
       'Draggable Body',

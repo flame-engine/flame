@@ -7,9 +7,9 @@ import 'package:test/test.dart';
 import '../util/mock_canvas.dart';
 import '../util/mock_gesture_events.dart';
 
-class MyGame extends BaseGame with HasTapableComponents {}
+class MyGame extends BaseGame with HasTappableComponents {}
 
-class MyTap extends PositionComponent with Tapable {
+class MyTap extends PositionComponent with Tappable {
   late Vector2 gameSize;
 
   int tapTimes = 0;
@@ -47,9 +47,9 @@ class MyAsyncChild extends MyTap {
   Future<void> onLoad() => Future.value();
 }
 
-class MyComposed extends PositionComponent with HasGameRef, Tapable {}
+class MyComposed extends PositionComponent with HasGameRef, Tappable {}
 
-class MySimpleComposed extends BaseComponent with HasGameRef, Tapable {}
+class MySimpleComposed extends BaseComponent with HasGameRef, Tappable {}
 
 // composed w/o HasGameRef
 class PlainComposed extends BaseComponent {}

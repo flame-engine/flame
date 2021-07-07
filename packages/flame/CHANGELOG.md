@@ -6,6 +6,8 @@
  - Extract shared logic when handling components set in BaseComponent and BaseGame to ComponentSet.
  - Rename `camera.shake(amount: x)` to `camera.shake(duration: x)`
  - Fix `SpriteAnimationComponent` docs to use `Future.wait`
+ - Rename `Tapable` to `Tappable`
+ - Rename `HasTapableComponents` to `HasTappableComponents`
 
 ## [1.0.0-releasecandidate.12]
  - Fix link to code in example stories

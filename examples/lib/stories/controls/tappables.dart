@@ -1,15 +1,15 @@
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
-import 'package:flame/game.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
 
-class TapableSquare extends PositionComponent with Tapable {
+class TappableSquare extends PositionComponent with Tappable {
   static final Paint _white = Paint()..color = const Color(0xFFFFFFFF);
   static final Paint _grey = Paint()..color = const Color(0xFFA5A5A5);
 
   bool _beenPressed = false;
 
-  TapableSquare({Vector2? position})
+  TappableSquare({Vector2? position})
       : super(
           position: position ?? Vector2.all(100),
           size: Vector2.all(100),
@@ -41,10 +41,10 @@ class TapableSquare extends PositionComponent with Tapable {
   }
 }
 
-class TapablesGame extends BaseGame with HasTapableComponents {
+class TappablesGame extends BaseGame with HasTappableComponents {
   @override
   Future<void> onLoad() async {
-    add(TapableSquare()..anchor = Anchor.center);
-    add(TapableSquare()..y = 350);
+    add(TappableSquare()..anchor = Anchor.center);
+    add(TappableSquare()..y = 350);
   }
 }
