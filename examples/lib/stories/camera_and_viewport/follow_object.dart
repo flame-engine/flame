@@ -81,7 +81,7 @@ class Map extends Component {
   }
 }
 
-class Rock extends SquareComponent with Hitbox, Collidable, Tapable {
+class Rock extends SquareComponent with Hitbox, Collidable, Tappable {
   static final unpressedPaint = Paint()..color = const Color(0xFF2222FF);
   static final pressedPaint = Paint()..color = const Color(0xFF414175);
 
@@ -112,7 +112,7 @@ class Rock extends SquareComponent with Hitbox, Collidable, Tapable {
 }
 
 class CameraAndViewportGame extends BaseGame
-    with KeyboardEvents, HasCollidables, HasTapableComponents {
+    with KeyboardEvents, HasCollidables, HasTappableComponents {
   late MovableSquare square;
 
   final Vector2 viewportResolution;

@@ -11,9 +11,9 @@ import 'package:test/test.dart';
 
 import '../util/mock_gesture_events.dart';
 
-class MyGame extends BaseGame with HasTapableComponents {}
+class MyGame extends BaseGame with HasTappableComponents {}
 
-class MyComponent extends PositionComponent with Tapable, HasGameRef {
+class MyComponent extends PositionComponent with Tappable, HasGameRef {
   bool tapped = false;
   bool isUpdateCalled = false;
   bool isRenderCalled = false;
@@ -59,7 +59,7 @@ class MyAsyncComponent extends MyComponent {
   Future<void> onLoad() => Future.value();
 }
 
-class PositionComponentNoNeedForRect extends PositionComponent with Tapable {}
+class PositionComponentNoNeedForRect extends PositionComponent with Tappable {}
 
 Vector2 size = Vector2(1.0, 1.0);
 
