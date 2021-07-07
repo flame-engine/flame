@@ -9,6 +9,7 @@
  - Add an empty `postRender` method that will run after each components render method
  - Rename `Tapable` to `Tappable`
  - Rename `HasTapableComponents` to `HasTappableComponents`
+ - Rename `prepareCanvas` to `preRender`
  - Add `intensity` to `Camera.shake`
  - `FixedResolutionViewport` to use matrix transformations for `Canvas`
 
