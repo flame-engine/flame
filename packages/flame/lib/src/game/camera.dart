@@ -42,8 +42,6 @@ import 'projector.dart';
 /// coordinates, bypassing the camera altogether.
 class Camera extends Projector {
   static const defaultCameraSpeed = 50.0; // in pixels/s
-  static const defaultShakeIntensity = 75.0; // in pixels
-  static const defaultShakeDuration = 0.3; // in seconds
 
   /// This must be set by the Game as soon as the Camera is created.
   ///
@@ -62,13 +60,17 @@ class Camera extends Projector {
   /// Remaining time in seconds for the camera shake.
   double _shakeTimer = 0.0;
 
+  /// The intensity of the current shake action.
+  double _shakeIntensity = 0.0;
+
   /// The matrix used for scaling and translating the canvas
   final Matrix4 _transform = Matrix4.identity();
 
   // Configurable parameters
 
   double cameraSpeed = defaultCameraSpeed;
-  double shakeIntensity = defaultShakeIntensity;
+  double defaultShakeIntensity = 75.0; // in pixels
+  double defaultShakeDuration = 0.3; // in seconds
 
   /// This is the current position of the camera, ie the world coordinate that
   /// is rendered on the top left of the screen (origin of the screen space).
@@ -365,11 +367,11 @@ class Camera extends Projector {
 
   // Shake
 
-  /// Applies a shaking effect to the camera for [duration] seconds.
-  ///
-  /// The intensity can be controlled via the [shakeIntensity] property.
-  void shake({double duration = defaultShakeDuration}) {
-    _shakeTimer += duration;
+  /// Applies a shaking effect to the camera for [duration] seconds and with
+  /// [intensity] expressed in pixels.
+  void shake({double? duration, double? intensity}) {
+    _shakeTimer += duration ?? defaultShakeDuration;
+    _shakeIntensity = intensity ?? defaultShakeIntensity;
   }
 
   /// Whether the camera is currently shaking or not.
@@ -381,9 +383,9 @@ class Camera extends Projector {
   /// The random number generator to use for shaking
   final _shakeRng = math.Random();
 
-  /// Generates one value between [-1, 1] * [shakeIntensity] used once for each
+  /// Generates one value between [-1, 1] * [_shakeIntensity] used once for each
   /// of the axis in the shake delta.
-  double _shakeValue() => (_shakeRng.nextDouble() - 0.5) * 2 * shakeIntensity;
+  double _shakeValue() => (_shakeRng.nextDouble() - 0.5) * 2 * _shakeIntensity;
 
   /// Generates a random [Vector2] of displacement applied to the camera.
   /// This will be a random [Vector2] every tick causing a shakiness effect.
