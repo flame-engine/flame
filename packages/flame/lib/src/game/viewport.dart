@@ -131,9 +131,12 @@ class FixedResolutionViewport extends Viewport {
   @override
   late Vector2 effectiveSize;
 
-  late Vector2 scaledSize;
-  late Vector2 resizeOffset;
+  final Vector2 scaledSize = Vector2.zero();
+  final Vector2 resizeOffset = Vector2.zero();
   late double scale;
+
+  /// The matrix used for scaling and translating the canvas
+  final Matrix4 _transform = Matrix4.identity();
 
   FixedResolutionViewport(this.effectiveSize);
 
@@ -141,33 +144,41 @@ class FixedResolutionViewport extends Viewport {
   void resize(Vector2 newCanvasSize) {
     canvasSize = newCanvasSize;
 
-    final scaleVector = canvasSize.clone()..divide(effectiveSize);
-    scale = math.min(scaleVector.x, scaleVector.y);
+    scale = math.min(
+      canvasSize.x / effectiveSize.x,
+      canvasSize.y / effectiveSize.y,
+    );
 
-    scaledSize = effectiveSize.clone()..scale(scale);
-    resizeOffset = (canvasSize - scaledSize) / 2;
+    scaledSize
+      ..setFrom(effectiveSize)
+      ..scale(scale);
+    resizeOffset
+      ..setFrom(canvasSize)
+      ..sub(scaledSize)
+      ..scale(0.5);
   }
 
   @override
   void render(Canvas c, void Function(Canvas) renderGame) {
     c.save();
+    _transform.setIdentity();
+    _transform.translate(resizeOffset.x, resizeOffset.y);
+    _transform.scale(scale);
     c.clipRect(resizeOffset & scaledSize);
-    c.translateVector(resizeOffset);
-    c.scale(scale, scale);
+    c.transform(_transform.storage);
 
     renderGame(c);
-
     c.restore();
   }
 
   @override
   Vector2 projectVector(Vector2 viewportCoordinates) {
-    return viewportCoordinates * scale + resizeOffset;
+    return (viewportCoordinates * scale)..add(resizeOffset);
   }
 
   @override
   Vector2 unprojectVector(Vector2 screenCoordinates) {
-    return (screenCoordinates - resizeOffset) / scale;
+    return (screenCoordinates - resizeOffset)..scale(1 / scale);
   }
 
   @override
