@@ -10,6 +10,7 @@
  - Rename `Tapable` to `Tappable`
  - Rename `HasTapableComponents` to `HasTappableComponents`
  - Rename `prepareCanvas` to `preRender`
+ - Add `intensity` to `Camera.shake`
 
 ## [1.0.0-releasecandidate.12]
  - Fix link to code in example stories
