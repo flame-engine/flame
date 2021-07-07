@@ -1,11 +1,11 @@
 import 'dart:math' as math;
 
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
-import 'package:flame/game.dart';
 
-class TapableSquare extends PositionComponent with Tapable {
+class TappableSquare extends PositionComponent with Tappable {
   static Paint _randomPaint() {
     final rng = math.Random();
     final color = Color.fromRGBO(
@@ -19,7 +19,7 @@ class TapableSquare extends PositionComponent with Tapable {
 
   Paint currentPaint;
 
-  TapableSquare({Vector2? position})
+  TappableSquare({Vector2? position})
       : currentPaint = _randomPaint(),
         super(
           position: position ?? Vector2.all(100),
@@ -49,11 +49,11 @@ class TapableSquare extends PositionComponent with Tapable {
   }
 }
 
-class OverlappingTapablesGame extends BaseGame with HasTapableComponents {
+class OverlappingTappablesGame extends BaseGame with HasTappableComponents {
   @override
   Future<void> onLoad() async {
-    add(TapableSquare(position: Vector2(100, 100)));
-    add(TapableSquare(position: Vector2(150, 150)));
-    add(TapableSquare(position: Vector2(100, 200)));
+    add(TappableSquare(position: Vector2(100, 100)));
+    add(TappableSquare(position: Vector2(150, 150)));
+    add(TappableSquare(position: Vector2(100, 200)));
   }
 }

@@ -4,6 +4,11 @@
  - Fix camera not ending up in the correct position on long jumps
  - Make the `JoystickPlayer` a `PositionComponent`
  - Extract shared logic when handling components set in BaseComponent and BaseGame to ComponentSet.
+ - Rename `camera.shake(amount: x)` to `camera.shake(duration: x)`
+ - Fix `SpriteAnimationComponent` docs to use `Future.wait`
+ - Add an empty `postRender` method that will run after each components render method
+ - Rename `Tapable` to `Tappable`
+ - Rename `HasTapableComponents` to `HasTappableComponents`
  - Add `SpriteAnimationWidgetBuilder`
  - Add `SpriteWidgetBuilder`
  - Add `SpriteButtonBuilder`

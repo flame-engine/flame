@@ -73,6 +73,7 @@ abstract class BaseComponent extends Component {
   @override
   void renderTree(Canvas canvas) {
     render(canvas);
+    postRender(canvas);
     children.forEach((c) {
       canvas.save();
       c.renderTree(canvas);
@@ -84,6 +85,10 @@ abstract class BaseComponent extends Component {
       renderDebugMode(canvas);
     }
   }
+
+  /// A render cycle callback that runs after the component has been
+  /// rendered, but before any children has been rendered.
+  void postRender(Canvas canvas) {}
 
   void renderDebugMode(Canvas canvas) {}
 
