@@ -34,19 +34,22 @@ class TapableBall extends Ball with Tappable {
   TapableBall(Vector2 position) : super(position) {
     originalPaint = BasicPalette.white.paint();
     paint = originalPaint;
-    _textPaint = TextPaint(config: _textConfig);
-    textComponent = TextComponent(counter.toString(), textRenderer: _textPaint);
   }
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
+    _textPaint = TextPaint(config: _textConfig);
+    textComponent = TextComponent(counter.toString(), textRenderer: _textPaint);
     addChild(textComponent);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
+    // This is unfortunately needed since [BodyComponent] will set all its
+    // children to `debugMode = true` currently, we should come up with a
+    // nicer solution to this.
     textComponent.debugMode = false;
     textComponent.text = counter.toString();
   }
