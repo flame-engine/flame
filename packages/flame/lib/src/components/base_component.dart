@@ -66,7 +66,7 @@ abstract class BaseComponent extends Component {
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    prepareCanvas(canvas);
+    preRender(canvas);
   }
 
   @mustCallSuper
@@ -86,14 +86,16 @@ abstract class BaseComponent extends Component {
     }
   }
 
+  /// A render cycle callback that runs before the component and its children
+  /// has been rendered.
+  @protected
+  void preRender(Canvas canvas) {}
+
   /// A render cycle callback that runs after the component has been
   /// rendered, but before any children has been rendered.
   void postRender(Canvas canvas) {}
 
   void renderDebugMode(Canvas canvas) {}
-
-  @protected
-  void prepareCanvas(Canvas canvas) {}
 
   @mustCallSuper
   @override
