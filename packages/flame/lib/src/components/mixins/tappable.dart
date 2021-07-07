@@ -5,7 +5,7 @@ import '../../game/base_game.dart';
 import '../../gestures/events.dart';
 import '../base_component.dart';
 
-mixin Tapable on BaseComponent {
+mixin Tappable on BaseComponent {
   bool onTapCancel() {
     return true;
   }
@@ -47,14 +47,14 @@ mixin Tapable on BaseComponent {
   }
 }
 
-mixin HasTapableComponents on BaseGame {
-  void _handleTapEvent(bool Function(Tapable child) tapEventHandler) {
+mixin HasTappableComponents on BaseGame {
+  void _handleTapEvent(bool Function(Tappable child) tapEventHandler) {
     for (final c in components.reversed()) {
       var shouldContinue = true;
       if (c is BaseComponent) {
-        shouldContinue = c.propagateToChildren<Tapable>(tapEventHandler);
+        shouldContinue = c.propagateToChildren<Tappable>(tapEventHandler);
       }
-      if (c is Tapable && shouldContinue) {
+      if (c is Tappable && shouldContinue) {
         shouldContinue = tapEventHandler(c);
       }
       if (!shouldContinue) {
@@ -65,16 +65,16 @@ mixin HasTapableComponents on BaseGame {
 
   @mustCallSuper
   void onTapCancel(int pointerId) {
-    _handleTapEvent((Tapable child) => child.handleTapCancel(pointerId));
+    _handleTapEvent((Tappable child) => child.handleTapCancel(pointerId));
   }
 
   @mustCallSuper
   void onTapDown(int pointerId, TapDownInfo info) {
-    _handleTapEvent((Tapable child) => child.handleTapDown(pointerId, info));
+    _handleTapEvent((Tappable child) => child.handleTapDown(pointerId, info));
   }
 
   @mustCallSuper
   void onTapUp(int pointerId, TapUpInfo info) {
-    _handleTapEvent((Tapable child) => child.handleTapUp(pointerId, info));
+    _handleTapEvent((Tappable child) => child.handleTapUp(pointerId, info));
   }
 }

@@ -7,7 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/palette.dart';
 
-class Square extends PositionComponent with HasGameRef<Priority>, Tapable {
+class Square extends PositionComponent with HasGameRef<Priority>, Tappable {
   late final Paint paint;
 
   Square(Vector2 position) {
@@ -43,7 +43,7 @@ class Square extends PositionComponent with HasGameRef<Priority>, Tapable {
   }
 }
 
-class Priority extends BaseGame with HasTapableComponents {
+class Priority extends BaseGame with HasTappableComponents {
   @override
   Future<void> onLoad() async {
     final squares = [

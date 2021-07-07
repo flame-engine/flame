@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import '../../../components.dart';
 import '../../../extensions.dart';
 import '../../components/mixins/draggable.dart';
-import '../../components/mixins/tapable.dart';
 import '../../extensions/offset.dart';
 import '../../gestures/detectors.dart';
 import '../../gestures/events.dart';
@@ -24,7 +23,7 @@ bool hasBasicGestureDetectors(Game game) =>
 bool hasAdvancedGesturesDetectors(Game game) =>
     game is MultiTouchTapDetector ||
     game is MultiTouchDragDetector ||
-    game is HasTapableComponents ||
+    game is HasTappableComponents ||
     game is HasDraggableComponents;
 
 bool hasMouseDetectors(Game game) =>
@@ -231,7 +230,7 @@ Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
       instance.onTapCancel = game.onTapCancel;
       instance.onTap = game.onTap;
     });
-  } else if (game is HasTapableComponents) {
+  } else if (game is HasTappableComponents) {
     addAndConfigureRecognizer(
       () => MultiTapGestureRecognizer(),
       (MultiTapGestureRecognizer instance) {

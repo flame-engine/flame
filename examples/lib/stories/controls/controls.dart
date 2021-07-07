@@ -10,9 +10,9 @@ import 'keyboard.dart';
 import 'mouse_movement.dart';
 import 'multitap.dart';
 import 'multitap_advanced.dart';
-import 'overlapping_tapables.dart';
+import 'overlapping_tappables.dart';
 import 'scroll.dart';
-import 'tapables.dart';
+import 'tappables.dart';
 
 void addControlsStories(Dashbook dashbook) {
   dashbook.storiesOf('Controls')
@@ -42,13 +42,13 @@ void addControlsStories(Dashbook dashbook) {
       codeLink: baseLink('controls/multitap_advanced.dart'),
     )
     ..add(
-      'Tapables',
-      (_) => GameWidget(game: TapablesGame()),
-      codeLink: baseLink('controls/tapables.dart'),
+      'Tappables',
+      (_) => GameWidget(game: TappablesGame()),
+      codeLink: baseLink('controls/tappables.dart'),
     )
     ..add(
       'Overlaping Tappables',
-      (_) => GameWidget(game: OverlappingTapablesGame()),
+      (_) => GameWidget(game: OverlappingTappablesGame()),
       codeLink: baseLink('controls/overlaping_tappables.dart'),
     )
     ..add(
