@@ -9,6 +9,7 @@
  - Add an empty `postRender` method that will run after each components render method
  - Rename `Tapable` to `Tappable`
  - Rename `HasTapableComponents` to `HasTappableComponents`
+ - Add `intensity` to `Camera.shake`
 
 ## [1.0.0-releasecandidate.12]
  - Fix link to code in example stories
