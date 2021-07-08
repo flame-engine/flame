@@ -131,9 +131,14 @@ class FixedResolutionViewport extends Viewport {
   @override
   late Vector2 effectiveSize;
 
-  final Vector2 scaledSize = Vector2.zero();
-  final Vector2 resizeOffset = Vector2.zero();
-  late double scale;
+  final Vector2 _scaledSize = Vector2.zero();
+  Vector2 get scaledSize => _scaledSize.clone();
+
+  final Vector2 _resizeOffset = Vector2.zero();
+  Vector2 get resizeOffset => _resizeOffset.clone();
+
+  late double _scale;
+  double get scale => _scale;
 
   /// The matrix used for scaling and translating the canvas
   final Matrix4 _transform = Matrix4.identity();
@@ -147,24 +152,24 @@ class FixedResolutionViewport extends Viewport {
   void resize(Vector2 newCanvasSize) {
     canvasSize = newCanvasSize;
 
-    scale = math.min(
+    _scale = math.min(
       canvasSize.x / effectiveSize.x,
       canvasSize.y / effectiveSize.y,
     );
 
-    scaledSize
+    _scaledSize
       ..setFrom(effectiveSize)
-      ..scale(scale);
-    resizeOffset
+      ..scale(_scale);
+    _resizeOffset
       ..setFrom(canvasSize)
-      ..sub(scaledSize)
+      ..sub(_scaledSize)
       ..scale(0.5);
 
-    _clipRect = resizeOffset & scaledSize;
+    _clipRect = _resizeOffset & _scaledSize;
 
     _transform.setIdentity();
-    _transform.translate(resizeOffset.x, resizeOffset.y);
-    _transform.scale(scale);
+    _transform.translate(_resizeOffset.x, _resizeOffset.y);
+    _transform.scale(_scale);
   }
 
   @override
@@ -178,12 +183,12 @@ class FixedResolutionViewport extends Viewport {
 
   @override
   Vector2 projectVector(Vector2 viewportCoordinates) {
-    return (viewportCoordinates * scale)..add(resizeOffset);
+    return (viewportCoordinates * _scale)..add(_resizeOffset);
   }
 
   @override
   Vector2 unprojectVector(Vector2 screenCoordinates) {
-    return (screenCoordinates - resizeOffset)..scale(1 / scale);
+    return (screenCoordinates - _resizeOffset)..scale(1 / _scale);
   }
 
   @override
