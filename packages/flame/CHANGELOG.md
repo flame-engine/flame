@@ -13,6 +13,7 @@
  - Rename `HasTapableComponents` to `HasTappableComponents`
  - Rename `prepareCanvas` to `preRender`
  - Add `intensity` to `Camera.shake`
+ - `FixedResolutionViewport` to use matrix transformations for `Canvas`
 
 ## [1.0.0-releasecandidate.12]
  - Fix link to code in example stories
