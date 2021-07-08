@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'blob_sample.dart';
 import 'camera_sample.dart';
 import 'circle_stress_sample.dart';
+import 'composition_sample.dart';
 import 'contact_callbacks_sample.dart';
 import 'domino_sample.dart';
 import 'draggable_sample.dart';
@@ -25,6 +26,12 @@ void main() async {
       'Blob sample',
       (DashbookContext ctx) => GameWidget(game: BlobSample()),
       codeLink: link('blob_sample.dart'),
+    )
+    ..add(
+      'Composition sample',
+      (DashbookContext ctx) => GameWidget(game: CompositionSample()),
+      codeLink: link('composition_sample.dart'),
+      info: CompositionSample.info,
     )
     ..add(
       'Domino sample',
