@@ -1,10 +1,10 @@
 import 'dart:math' as math;
 
-import 'package:forge2d/forge2d.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_forge2d/body_component.dart';
 import 'package:flame_forge2d/contact_callbacks.dart';
 import 'package:flutter/material.dart';
+import 'package:forge2d/forge2d.dart';
 
 import 'boundaries.dart';
 
@@ -63,9 +63,9 @@ class Ball extends BodyComponent {
   }
 
   @override
-  void update(double t) {
-    super.update(t);
-    _timeSinceNudge += t;
+  void update(double dt) {
+    super.update(dt);
+    _timeSinceNudge += dt;
     if (giveNudge) {
       giveNudge = false;
       if (_timeSinceNudge > _minNudgeRest) {

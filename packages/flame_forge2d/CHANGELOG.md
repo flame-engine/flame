@@ -1,7 +1,10 @@
 # CHANGELOG
 
-## [next]
+## [Next]
  - Update mechanism by which `BodyComponent`'s are disposed to use the `onRemove` method
+ - Flip y-axis after translation of body position, so that normal flame components can be children
+ - Update to Forge2D 0.8.0
+ - Update to Flame 1.0.0-releasecandidate.13
  - Rename `prepareCanvas` to `preRender`
 
 ## [0.7.3-releasecandidate.12]

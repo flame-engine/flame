@@ -8,6 +8,8 @@
  - Fix `SpriteAnimationComponent` docs to use `Future.wait`
  - Add an empty `postRender` method that will run after each components render method
  - Rename `Tapable` to `Tappable`
+ - Fix `SpriteAnimationComponent` docs to use `Future.wait`
+ - Add an empty `postRender` method that will run after each components render method
  - Rename `HasTapableComponents` to `HasTappableComponents`
  - Rename `prepareCanvas` to `preRender`
  - Add `intensity` to `Camera.shake`
