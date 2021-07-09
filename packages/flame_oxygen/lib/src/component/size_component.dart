@@ -13,7 +13,7 @@ class SizeComponent extends Component<Vector2> {
   set height(double height) => _size.y = height;
 
   @override
-  void init([Vector2? size]) => _size = size ?? Vector2.zero();
+  void init([Vector2? size]) => _size = size?.clone() ?? Vector2.zero();
 
   @override
   void reset() => _size.setZero();

@@ -1,92 +1,51 @@
+import 'dart:math';
+
+import 'package:example/component/timer_component.dart';
+import 'package:example/system/kawabunga_system.dart';
 import 'package:flame/game.dart';
 import 'package:flame_oxygen/flame_oxygen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:oxygen/oxygen.dart';
+
+import 'component/velocity_component.dart';
+import 'system/debug_system.dart';
+import 'system/move_system.dart';
+import 'system/sprite_system.dart';
 
 void main() {
   runApp(GameWidget(game: ExampleGame()));
 }
 
-class SpriteSystem extends BaseSystem {
-  @override
-  List<Filter<Component>> get filters => [Has<SpriteComponent>()];
-
-  @override
-  void renderEntity(Canvas canvas, Entity entity) {
-    final size = entity.get<SizeComponent>()!.size;
-    final sprite = entity.get<SpriteComponent>()?.sprite;
-
-    sprite?.render(canvas, size: size);
-  }
-}
-
-class DebugSystem extends BaseSystem {
-  final debugPaint = Paint()
-    ..color = Colors.green
-    ..style = PaintingStyle.stroke;
-
-  final textPainter = TextPaint(
-    config: const TextPaintConfig(
-      color: Colors.green,
-      fontSize: 10,
-    ),
-  );
-
-  @override
-  List<Filter<Component>> get filters => [];
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    textPainter.copyWith((config) => config.withFontSize(16)).render(
-          canvas,
-          [
-            'FPS: ${(world!.game as FPSCounter).fps()}',
-            'Entities: ${world!.entities.length}',
-          ].join('\n'),
-          Vector2.zero(),
-        );
-  }
-
-  @override
-  void renderEntity(Canvas canvas, Entity entity) {
-    final size = entity.get<SizeComponent>()!.size;
-
-    canvas.drawRect(Vector2.zero() & size, debugPaint);
-
-    textPainter.render(
-      canvas,
-      [
-        'position: ${entity.get<PositionComponent>()!.position}',
-        'size: $size',
-        'angle: ${entity.get<AngleComponent>()?.radians ?? 0}',
-        'anchor: ${entity.get<AnchorComponent>()?.anchor ?? Anchor.topLeft}'
-      ].join('\n'),
-      Vector2(size.x + 2, 0),
-    );
-    textPainter.render(
-      canvas,
-      entity.name ?? '',
-      Vector2(size.x / 2, size.y + 2),
-      anchor: Anchor.topCenter,
-    );
-  }
-}
-
 class ExampleGame extends OxygenGame with FPSCounter {
   @override
   Future<void> init() async {
-    world.registerSystem(DebugSystem());
+    if (kDebugMode) {
+      world.registerSystem(DebugSystem());
+    }
+    world.registerSystem(MoveSystem());
     world.registerSystem(SpriteSystem());
-    world.registerSystem(DebugSystem());
+    world.registerSystem(KawabungaSystem());
 
-    createEntity(
-      name: 'Entity 1',
-      position: size / 2,
-      size: Vector2.all(64),
-      angle: 0,
-    )..add<SpriteComponent, SpriteInit>(
-        SpriteInit(await loadSprite('pizza.png')),
-      );
+    world.registerComponent<TimerComponent, double>(() => TimerComponent());
+    world.registerComponent<VelocityComponent, Vector2>(
+      () => VelocityComponent(),
+    );
+
+    final random = Random();
+    for (var i = 0; i < 10; i++) {
+      createEntity(
+        name: 'Entity $i',
+        position: size / 2,
+        size: Vector2.all(64),
+        angle: 0,
+      )
+        ..add<SpriteComponent, SpriteInit>(
+          SpriteInit(await loadSprite('pizza.png')),
+        )
+        ..add<VelocityComponent, Vector2>(Vector2(
+          random.nextDouble() * 100 * (random.nextDouble() < 0.5 ? 1 : -1),
+          random.nextDouble() * 100 * (random.nextDouble() < 0.5 ? 1 : -1),
+        ));
+    }
   }
 }

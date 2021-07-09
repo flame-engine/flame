@@ -6,6 +6,9 @@ part of flame_oxygen.system;
 abstract class BaseSystem extends System with RenderSystem {
   Query? _query;
 
+  /// List of all the entities found using the [filters].
+  List<Entity> get entities => _query?.entities ?? [];
+
   /// Filters used for querying entities.
   ///
   /// The [PositionComponent] and [SizeComponent] will be added automatically.
@@ -29,18 +32,17 @@ abstract class BaseSystem extends System with RenderSystem {
 
   @override
   void render(Canvas canvas) {
-    for (final entity in _query?.entities ?? <Entity>[]) {
+    for (final entity in entities) {
       final position = entity.get<PositionComponent>()!;
       final size = entity.get<SizeComponent>()!.size;
       final anchor = entity.get<AnchorComponent>()?.anchor ?? Anchor.topLeft;
+      final angle = entity.get<AngleComponent>()?.radians ?? 0;
 
-      canvas.save();
+      canvas
+        ..save()
+        ..translate(position.x, position.y)
+        ..rotate(angle);
 
-      canvas.translate(position.x, position.y);
-      if (entity.has<AngleComponent>()) {
-        final angle = entity.get<AngleComponent>()!.radians;
-        canvas.rotate(angle);
-      }
       final delta = -anchor.toVector2()
         ..multiply(size);
       canvas.translate(delta.x, delta.y);

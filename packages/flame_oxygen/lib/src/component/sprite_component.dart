@@ -1,9 +1,9 @@
 part of flame_oxygen.component;
 
 class SpriteInit {
-  Sprite sprite;
+  final Sprite sprite;
 
-  SpriteInit(this.sprite);
+  const SpriteInit(this.sprite);
 
   factory SpriteInit.fromImage(
     Image image, {

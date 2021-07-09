@@ -6,6 +6,9 @@ mixin UpdateSystem on System {
   @override
   FlameWorld? get world => super.world as FlameWorld?;
 
+  /// The [Game] this system belongs to.
+  OxygenGame? get game => world?.game;
+
   /// Implement this method to update the game state, given the time [delta]
   /// that has passed since the last update.
   void update(double delta);

@@ -6,6 +6,9 @@ mixin RenderSystem on System {
   @override
   FlameWorld? get world => super.world as FlameWorld?;
 
+  /// The [Game] this system belongs to.
+  Game? get game => world?.game;
+
   /// Implement this method to render the current game state in the [canvas].
   void render(Canvas canvas);
 

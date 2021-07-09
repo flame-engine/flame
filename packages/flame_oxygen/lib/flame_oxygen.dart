@@ -8,6 +8,8 @@ import 'package:oxygen/oxygen.dart';
 import 'src/component.dart';
 import 'src/system.dart';
 
+export 'package:oxygen/oxygen.dart';
+
 export 'src/component.dart';
 export 'src/system.dart';
 

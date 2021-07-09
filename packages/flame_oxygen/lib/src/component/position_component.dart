@@ -13,7 +13,9 @@ class PositionComponent extends Component<Vector2> {
   set y(double y) => _position.y = y;
 
   @override
-  void init([Vector2? position]) => _position = position ?? Vector2.zero();
+  void init([Vector2? position]) {
+    _position = position?.clone() ?? Vector2.zero();
+  }
 
   @override
   void reset() => _position.setZero();
