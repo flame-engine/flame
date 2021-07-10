@@ -3,40 +3,41 @@ import 'dart:ui';
 import '../../../components.dart';
 import '../../../extensions.dart';
 
-/// This is an element drawn on the canvas on the position [rect];
+/// This is an element used to draw a part of a [JoystickComponent].
 ///
-/// It can be either a [sprite] or a [paint] (solid color circle). Not both.
-class JoystickElement {
+/// It can be either a [sprite] or a [paint] (colored circle). Not both.
+class JoystickElement extends PositionComponent {
   final Sprite? sprite;
   final Paint? paint;
 
-  late Rect rect;
+  JoystickElement.sprite(
+    this.sprite,
+  { required Vector2 size,
+    Anchor anchor = Anchor.center,
+  })  : paint = null,
+        super(size: size, anchor: anchor);
 
-  JoystickElement.sprite(this.sprite) : paint = null;
+  JoystickElement.paint(
+    this.paint,
+  { required Vector2 size,
+    Anchor anchor = Anchor.center,
+  })  : sprite = null,
+        super(size: size, anchor: anchor);
 
-  JoystickElement.paint(this.paint) : sprite = null;
-
-  Vector2 get center => rect.center.toVector2();
-
-  void shift(Vector2 diff) {
-    rect = rect.shift(diff.toOffset());
-  }
-
-  void render(Canvas c) {
-    final rect = this.rect;
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
     final sprite = this.sprite;
     final paint = this.paint;
 
     if (sprite == null) {
       assert(paint != null, '`paint` must not be `null` if `sprite` is `null`');
 
-      final radius = rect.width / 2;
-      c.drawCircle(rect.center, radius, paint!);
+      canvas.drawCircle(Offset.zero, size.x / 2, paint!);
     } else {
       sprite.render(
-        c,
-        position: rect.topLeft.toVector2(),
-        size: rect.size.toVector2(),
+        canvas,
+        size: size,
       );
     }
   }

@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 
 import 'joystick_player.dart';
 
-class AdvancedJoystickGame extends BaseGame with HasDraggableComponents {
+class JoystickGame extends BaseGame with HasDraggableComponents {
+  late final JoystickPlayer player;
+
   Future<Sprite> loadJoystick(int idx) async {
     return loadSprite(
       'joystick.png',
@@ -18,41 +20,12 @@ class AdvancedJoystickGame extends BaseGame with HasDraggableComponents {
   @override
   Future<void> onLoad() async {
     final joystick = JoystickComponent(
-      gameRef: this,
-      directional: JoystickDirectional(
-        background: JoystickElement.sprite(await loadJoystick(0)),
-        knob: JoystickElement.sprite(await loadJoystick(1)),
-      ),
-      actions: [
-        JoystickAction(
-          actionId: 1,
-          margin: const EdgeInsets.all(50),
-          action: JoystickElement.sprite(await loadJoystick(2)),
-          actionPressed: JoystickElement.sprite(await loadJoystick(4)),
-        ),
-        JoystickAction(
-          actionId: 2,
-          action: JoystickElement.sprite(await loadJoystick(3)),
-          actionPressed: JoystickElement.sprite(await loadJoystick(5)),
-          margin: const EdgeInsets.only(
-            right: 50,
-            bottom: 120,
-          ),
-        ),
-        JoystickAction(
-          actionId: 3,
-          margin: const EdgeInsets.only(bottom: 50, right: 120),
-          enableDirection: true,
-          color: const Color(0xFFFF00FF),
-          opacityBackground: 0.1,
-          opacityKnob: 0.9,
-        ),
-      ],
+      knob: JoystickElement.sprite(await loadJoystick(1), size: Vector2.all(20),),
+      background: JoystickElement.sprite(await loadJoystick(0), size: Vector2.all(40),),
+      margin: const EdgeInsets.only(left: 50, bottom: 50),
     );
 
-    final player = JoystickPlayer();
-    joystick.addObserver(player);
-
+    player = JoystickPlayer(joystick);
     add(player);
     add(joystick);
   }

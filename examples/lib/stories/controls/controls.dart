@@ -5,7 +5,6 @@ import '../../commons/commons.dart';
 import 'advanced_joystick.dart';
 import 'draggables.dart';
 import 'hoverables.dart';
-import 'joystick.dart';
 import 'keyboard.dart';
 import 'mouse_movement.dart';
 import 'multitap.dart';
@@ -72,10 +71,5 @@ void addControlsStories(Dashbook dashbook) {
       'Joystick',
       (_) => GameWidget(game: JoystickGame()),
       codeLink: baseLink('controls/joystick.dart'),
-    )
-    ..add(
-      'Joystick Advanced',
-      (_) => GameWidget(game: AdvancedJoystickGame()),
-      codeLink: baseLink('controls/advanced_joystick.dart'),
     );
 }

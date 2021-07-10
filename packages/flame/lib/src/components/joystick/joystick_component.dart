@@ -1,58 +1,145 @@
+import 'dart:math';
+import 'package:flutter/widgets.dart' show EdgeInsets;
+
 import '../../../components.dart';
-import '../../game/base_game.dart';
-import '../mixins/has_game_ref.dart';
-import 'joystick_action.dart';
-import 'joystick_directional.dart';
-import 'joystick_events.dart';
+import '../../../extensions.dart';
+import '../../gestures/events.dart';
+import 'joystick_element.dart';
 
-mixin JoystickListener {
-  void joystickChangeDirectional(JoystickDirectionalEvent event);
-  void joystickAction(JoystickActionEvent event);
+enum JoystickDirection {
+  up,
+  upLeft,
+  upRight,
+  right,
+  down,
+  downRight,
+  downLeft,
+  left,
+  idle,
 }
 
-abstract class JoystickController extends BaseComponent
-    with HasGameRef<BaseGame>, Draggable {
+class JoystickComponent extends PositionComponent with Draggable, HasGameRef {
   @override
-  bool isHud = true;
+  final bool isHud = true;
 
-  final List<JoystickListener> _observers = [];
+  late final JoystickElement knob;
+  late final JoystickElement? background;
 
-  void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    _observers.forEach((o) => o.joystickChangeDirectional(event));
-  }
+  /// The percentage [0.0, 1.0] the knob is dragged from the center to the edge
+  double intensity = 0.0;
 
-  void joystickAction(JoystickActionEvent event) {
-    _observers.forEach((o) => o.joystickAction(event));
-  }
+  /// The amount the knob is dragged from the center
+  Vector2 get delta => knob.position;
 
-  void addObserver(JoystickListener listener) {
-    _observers.add(listener);
-  }
-}
+  late final double radius;
 
-class JoystickComponent extends JoystickController {
-  @override
-  int priority;
+  final bool _definedPosition;
+
+  final EdgeInsets? margin;
 
   JoystickComponent({
-    required BaseGame gameRef,
-    List<JoystickAction> actions = const [],
-    JoystickDirectional? directional,
-    this.priority = 0,
-  }) {
-    if (directional != null) {
-      addChild(directional, gameRef: gameRef);
+    required this.knob,
+    this.background,
+    this.margin,
+    Vector2? position,
+    double? size,
+    Anchor anchor = Anchor.center,
+  })  : assert(
+          size != null || background != null,
+          'Either size or background must be defined',
+        ),
+        assert(
+        margin != null || position != null,
+        'Either margin or position must be defined',
+        ),
+        _definedPosition = position != null,
+        super(
+          size: background?.size ?? Vector2.all(size ?? 0),
+          position: position,
+          anchor: anchor,
+        ) {
+    radius = this.size.x / 2;
+  }
+
+  @override
+  Future<void> onLoad() async {
+    if (!_definedPosition) {
+      final margin = this.margin!;
+      final x = margin.right != 0
+          ? margin.right
+          : gameRef.viewport.effectiveSize.x - margin.right;
+      final y = margin.top != 0
+          ? margin.top
+          : gameRef.viewport.effectiveSize.y - margin.bottom;
+      position.setValues(x, y);
     }
-    actions.forEach((action) => addChild(action, gameRef: gameRef));
+    if (background != null) {
+      addChild(background!);
+    }
+    addChild(knob);
   }
 
-  void addAction(JoystickAction action) {
-    addChild(action, gameRef: gameRef);
+  @override
+  void update(double dt) {
+    super.update(dt);
+    intensity = knob.position.length2 / radius * radius;
   }
 
-  void removeAction(int actionId) {
-    final action = children
-        .firstWhere((e) => e is JoystickAction && e.actionId == actionId);
-    children.remove(action);
+  void _clampKnob() {
+    knob.position.clampScalar(-radius, radius);
+  }
+
+  @override
+  bool onDragStart(int pointerId, DragStartInfo info) {
+    knob.position = center - info.eventPosition.widget;
+    _clampKnob();
+    return false;
+  }
+
+  @override
+  bool onDragUpdate(_, DragUpdateInfo info) {
+    knob.position.add(info.delta.global);
+    _clampKnob();
+    return true;
+  }
+
+  @override
+  bool onDragEnd(_, __) {
+    knob.position.setZero();
+    return true;
+  }
+
+  @override
+  bool onDragCancel(_) {
+    knob.position.setZero();
+    return true;
+  }
+
+  static const double _sixteenthOfPi = pi / 16;
+
+  JoystickDirection get direction {
+    if (delta.isZero()) {
+      return JoystickDirection.idle;
+    } else if (angle >= 0 * _sixteenthOfPi && angle <= 1 * _sixteenthOfPi) {
+      return JoystickDirection.right;
+    } else if (angle > 1 * _sixteenthOfPi && angle <= 3 * _sixteenthOfPi) {
+      return JoystickDirection.downRight;
+    } else if (angle > 3 * _sixteenthOfPi && angle <= 5 * _sixteenthOfPi) {
+      return JoystickDirection.down;
+    } else if (angle > 5 * _sixteenthOfPi && angle <= 7 * _sixteenthOfPi) {
+      return JoystickDirection.downLeft;
+    } else if (angle > 7 * _sixteenthOfPi && angle <= 9 * _sixteenthOfPi) {
+      return JoystickDirection.left;
+    } else if (angle > 9 * _sixteenthOfPi && angle <= 11 * _sixteenthOfPi) {
+      return JoystickDirection.upLeft;
+    } else if (angle > 11 * _sixteenthOfPi && angle <= 13 * _sixteenthOfPi) {
+      return JoystickDirection.up;
+    } else if (angle > 13 * _sixteenthOfPi && angle <= 15 * _sixteenthOfPi) {
+      return JoystickDirection.upRight;
+    } else if (angle > 15 * _sixteenthOfPi) {
+      return JoystickDirection.right;
+    } else {
+      return JoystickDirection.idle;
+    }
   }
 }

@@ -93,6 +93,10 @@ extension Vector2Extension on Vector2 {
     }
   }
 
+  // TODO: better explanation
+  /// Angle to trigonometric zero
+  double angle() => angleTo(Vector2(1.0, 0.0));
+
   /// Modulo/Remainder
   Vector2 operator %(Vector2 mod) => Vector2(x % mod.x, y % mod.y);
 
