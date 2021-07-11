@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/palette.dart';
+import 'package:flame/geometry.dart';
 import 'package:flutter/widgets.dart';
 import 'package:test/test.dart';
 
@@ -10,8 +10,7 @@ class JoystickTester extends JoystickComponent {
 
   JoystickTester()
       : super(
-          knob: JoystickElement.paint(BasicPalette.white.paint(),
-              size: Vector2.all(5)),
+          knob: Circle(radius: 5.0).toComponent(),
           size: 20,
           margin: const EdgeInsets.only(left: 20, bottom: 20),
         );

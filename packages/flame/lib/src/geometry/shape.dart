@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flame/palette.dart';
+
 import '../../components.dart';
 import '../../game.dart';
 import '../extensions/vector2.dart';
@@ -109,9 +111,14 @@ abstract class Shape {
 
   void render(Canvas canvas, Paint paint);
 
-  /// Where this Shape has intersection points with another shape
+  /// Where this [Shape] has intersection points with another shape
   Set<Vector2> intersections(Shape other) {
     return intersection_system.intersections(this, other);
+  }
+
+  /// Turns a [Shape] into a [ShapeComponent]
+  ShapeComponent toComponent({Paint? withPaint}) {
+    return ShapeComponent(this, withPaint ?? BasicPalette.white.paint());
   }
 }
 

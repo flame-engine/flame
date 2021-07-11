@@ -97,7 +97,7 @@ extension Vector2Extension on Vector2 {
 
   /// Signed angle to (0.0, 1.0) in a coordinate system where positive is down
   /// and negative is up.
-  double screenAngle() => (clone()..y*=-1).angleToSigned(Vector2(0.0, -1.0));
+  double screenAngle() => (clone()..y *= -1).angleToSigned(Vector2(0.0, 1.0));
 
   /// Modulo/Remainder
   Vector2 operator %(Vector2 mod) => Vector2(x % mod.x, y % mod.y);

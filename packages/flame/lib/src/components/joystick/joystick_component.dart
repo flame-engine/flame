@@ -1,9 +1,11 @@
 import 'dart:math';
-import 'package:flutter/widgets.dart' show EdgeInsets;
+
+import 'package:flutter/rendering.dart' show EdgeInsets;
 
 import '../../../components.dart';
 import '../../../extensions.dart';
 import '../../gestures/events.dart';
+import 'margin_hud_component.dart';
 
 enum JoystickDirection {
   up,
@@ -17,10 +19,7 @@ enum JoystickDirection {
   idle,
 }
 
-class JoystickComponent extends PositionComponent with Draggable, HasGameRef {
-  @override
-  final bool isHud = true;
-
+class JoystickComponent extends MarginHudComponent with Draggable {
   late final PositionComponent knob;
   late final PositionComponent? background;
 
@@ -28,63 +27,48 @@ class JoystickComponent extends PositionComponent with Draggable, HasGameRef {
   double intensity = 0.0;
 
   /// The amount the knob is dragged from the center.
-  Vector2 get delta => knob.position;
+  Vector2 delta = Vector2.zero();
 
   /// The radius from the center of the knob to the edge of as far as the knob
   /// can be dragged.
-  late final double radius;
+  late double knobRadius;
 
-  /// The knob radius squared.
-  late final double radius2;
-
-  /// Instead of setting a position of the [JoystickComponent] a margin from the
-  /// edges of the viewport can be used instead.
-  final EdgeInsets? margin;
+  /// The position where the knob rests.
+  late Vector2 _baseKnobPosition;
 
   JoystickComponent({
     required this.knob,
     this.background,
-    this.margin,
+    EdgeInsets? margin,
     Vector2? position,
     double? size,
+    double? knobRadius,
     Anchor anchor = Anchor.center,
   })  : assert(
           size != null || background != null,
           'Either size or background must be defined',
         ),
         assert(
-          margin != null || position != null,
-          'Either margin or position must be defined',
-        ),
-        assert(
           knob.position.isZero() && (background?.position.isZero() ?? true),
-        'Positions should not be set for the knob or the background',
+          'Positions should not be set for the knob or the background',
         ),
         super(
-          size: background?.size ?? Vector2.all(size ?? 0),
+          margin: margin,
           position: position,
+          size: background?.size ?? Vector2.all(size ?? 0),
           anchor: anchor,
         ) {
-    radius = knob.size.x / 2;
-    radius2 = radius * radius;
+    this.knobRadius = knobRadius ?? this.size.x / 2;
   }
 
   @override
   Future<void> onLoad() async {
-    if (margin != null) {
-      final margin = this.margin!;
-      final x = margin.left != 0
-          ? margin.left + size.x / 2
-          : gameRef.viewport.effectiveSize.x - margin.right - size.x / 2;
-      final y = margin.top != 0
-          ? margin.top + size.y / 2
-          : gameRef.viewport.effectiveSize.y - margin.bottom - size.y / 2;
-      position.setValues(x, y);
-      position = Anchor.center.toOtherAnchorPosition(center, anchor, size);
-      print(size);
-      print(position);
-      print(gameRef.size);
-    }
+    await super.onLoad();
+    knob.anchor = Anchor.center;
+    knob.position = size / 2;
+    background?.anchor = Anchor.center;
+    background?.position = size / 2;
+    _baseKnobPosition = knob.position.clone();
     if (background != null) {
       addChild(background!);
     }
@@ -94,38 +78,44 @@ class JoystickComponent extends PositionComponent with Draggable, HasGameRef {
   @override
   void update(double dt) {
     super.update(dt);
-    if (knob.position.length2 > radius2) {
-      knob.position.scaleTo(radius);
+    final knobRadius2 = knobRadius * knobRadius;
+    if (delta.isZero() && _baseKnobPosition != knob.position) {
+      knob.position = _baseKnobPosition;
+    } else if (delta.length2 > knobRadius2) {
+      delta.scaleTo(knobRadius);
     }
-    intensity = knob.position.length2 / radius2;
+    if (!delta.isZero()) {
+      knob.position
+        ..setFrom(_baseKnobPosition)
+        ..add(delta);
+    }
+    intensity = delta.length2 / knobRadius2;
   }
 
   @override
   bool onDragStart(int pointerId, DragStartInfo info) {
-    knob.position = center - info.eventPosition.widget;
     return false;
   }
 
   @override
   bool onDragUpdate(_, DragUpdateInfo info) {
-    knob.position.add(info.delta.global);
+    delta.add(info.delta.global);
     return false;
   }
 
   @override
-  bool onDragEnd(_, __) {
-    knob.position.setZero();
+  bool onDragEnd(int id, __) {
+    onDragCancel(id);
     return false;
   }
 
   @override
   bool onDragCancel(_) {
-    knob.position.setZero();
+    delta.setZero();
     return false;
   }
 
   static const double _eighthOfPi = pi / 8;
-  final _circleStart = Vector2(0.0, 1.0);
 
   JoystickDirection get direction {
     if (delta.isZero()) {
@@ -135,7 +125,7 @@ class JoystickComponent extends PositionComponent with Draggable, HasGameRef {
     // Since angleTo doesn't care about "direction" of the angle we have to use
     // angleToSigned and create an only increasing angle by removing negative
     // angles from 2*pi.
-    var knobAngle = delta.angleToSigned(_circleStart);
+    var knobAngle = delta.screenAngle();
     knobAngle = knobAngle < 0 ? 2 * pi + knobAngle : knobAngle;
     if (knobAngle >= 0 && knobAngle <= _eighthOfPi) {
       return JoystickDirection.up;
