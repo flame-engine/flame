@@ -170,13 +170,13 @@ class Camera extends Projector {
   /// This should be called by the Game class during the update cycle.
   void update(double dt) {
     final ds = cameraSpeed * dt;
-    final shake = Vector2(_shakeDelta(), _shakeDelta());
+    final shake = _shakeDelta();
 
     _currentRelativeOffset.moveToTarget(_targetRelativeOffset, ds);
     if (_targetCameraDelta != null && _currentCameraDelta != null) {
       _currentCameraDelta?.moveToTarget(_targetCameraDelta!, ds);
     }
-    _position = _target() + shake;
+    _position = _target()..add(shake);
 
     if (shaking) {
       _shakeTimer -= dt;
@@ -365,23 +365,35 @@ class Camera extends Projector {
 
   // Shake
 
-  /// Applies a shaking effect to the camera for [amount] seconds.
+  /// Applies a shaking effect to the camera for [duration] seconds.
   ///
   /// The intensity can be controlled via the [shakeIntensity] property.
-  void shake({double amount = defaultShakeDuration}) {
-    _shakeTimer += amount;
+  void shake({double duration = defaultShakeDuration}) {
+    _shakeTimer += duration;
   }
 
   /// Whether the camera is currently shaking or not.
   bool get shaking => _shakeTimer > 0.0;
 
-  /// Generates a random amount of displacement applied to the camera.
-  /// This will be a random number every tick causing a shakiness effect.
-  double _shakeDelta() {
+  /// Buffer to re-use for the shake delta.
+  final _shakeBuffer = Vector2.zero();
+
+  /// The random number generator to use for shaking
+  final _shakeRng = math.Random();
+
+  /// Generates one value between [-1, 1] * [shakeIntensity] used once for each
+  /// of the axis in the shake delta.
+  double _shakeValue() => (_shakeRng.nextDouble() - 0.5) * 2 * shakeIntensity;
+
+  /// Generates a random [Vector2] of displacement applied to the camera.
+  /// This will be a random [Vector2] every tick causing a shakiness effect.
+  Vector2 _shakeDelta() {
     if (shaking) {
-      return math.Random.secure().nextDouble() * shakeIntensity;
+      _shakeBuffer.setValues(_shakeValue(), _shakeValue());
+    } else if (!_shakeBuffer.isZero()) {
+      _shakeBuffer.setZero();
     }
-    return 0.0;
+    return _shakeBuffer;
   }
 
   /// If you need updated on when the position of the camera is updated you
