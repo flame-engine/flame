@@ -2,9 +2,9 @@ import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
 
 import '../../commons/commons.dart';
-import 'advanced_joystick.dart';
 import 'draggables.dart';
 import 'hoverables.dart';
+import 'joystick.dart';
 import 'keyboard.dart';
 import 'mouse_movement.dart';
 import 'multitap.dart';

@@ -33,9 +33,9 @@ class JoystickComponent extends PositionComponent with Draggable, HasGameRef {
 
   late final double radius;
 
-  final bool _definedPosition;
-
   final EdgeInsets? margin;
+
+  final bool _definedPosition;
 
   JoystickComponent({
     required this.knob,
@@ -65,13 +65,14 @@ class JoystickComponent extends PositionComponent with Draggable, HasGameRef {
   Future<void> onLoad() async {
     if (!_definedPosition) {
       final margin = this.margin!;
-      final x = margin.right != 0
-          ? margin.right
-          : gameRef.viewport.effectiveSize.x - margin.right;
+      final x = margin.left != 0
+          ? margin.left + size.x/2
+          : gameRef.viewport.effectiveSize.x - margin.right - size.x/2;
       final y = margin.top != 0
-          ? margin.top
-          : gameRef.viewport.effectiveSize.y - margin.bottom;
-      position.setValues(x, y);
+          ? margin.top + size.y/2
+          : gameRef.viewport.effectiveSize.y - margin.bottom - size.y/2;
+      final center = Vector2(x, y);
+      position = Anchor.center.toOtherAnchorPosition(center, anchor, size);
     }
     if (background != null) {
       addChild(background!);
@@ -115,29 +116,37 @@ class JoystickComponent extends PositionComponent with Draggable, HasGameRef {
     return true;
   }
 
-  static const double _sixteenthOfPi = pi / 16;
+  static const double _eighthOfPi = pi / 8;
+  final _circleStart = Vector2(0.0, 1.0);
 
   JoystickDirection get direction {
     if (delta.isZero()) {
       return JoystickDirection.idle;
-    } else if (angle >= 0 * _sixteenthOfPi && angle <= 1 * _sixteenthOfPi) {
-      return JoystickDirection.right;
-    } else if (angle > 1 * _sixteenthOfPi && angle <= 3 * _sixteenthOfPi) {
-      return JoystickDirection.downRight;
-    } else if (angle > 3 * _sixteenthOfPi && angle <= 5 * _sixteenthOfPi) {
-      return JoystickDirection.down;
-    } else if (angle > 5 * _sixteenthOfPi && angle <= 7 * _sixteenthOfPi) {
-      return JoystickDirection.downLeft;
-    } else if (angle > 7 * _sixteenthOfPi && angle <= 9 * _sixteenthOfPi) {
-      return JoystickDirection.left;
-    } else if (angle > 9 * _sixteenthOfPi && angle <= 11 * _sixteenthOfPi) {
-      return JoystickDirection.upLeft;
-    } else if (angle > 11 * _sixteenthOfPi && angle <= 13 * _sixteenthOfPi) {
+    }
+
+    // Since angleTo doesn't care about "direction" of the angle we have to use
+    // angleToSigned and create an only increasing angle by removing negative
+    // angles from 2*pi.
+    var knobAngle = delta.angleToSigned(_circleStart);
+    knobAngle = knobAngle < 0 ? 2 * pi + knobAngle : knobAngle;
+    if (knobAngle >= 0 && knobAngle <= _eighthOfPi) {
       return JoystickDirection.up;
-    } else if (angle > 13 * _sixteenthOfPi && angle <= 15 * _sixteenthOfPi) {
+    } else if (knobAngle > 1 * _eighthOfPi && knobAngle <= 3 * _eighthOfPi) {
       return JoystickDirection.upRight;
-    } else if (angle > 15 * _sixteenthOfPi) {
+    } else if (knobAngle > 3 * _eighthOfPi && knobAngle <= 5 * _eighthOfPi) {
       return JoystickDirection.right;
+    } else if (knobAngle > 5 * _eighthOfPi && knobAngle <= 7 * _eighthOfPi) {
+      return JoystickDirection.downRight;
+    } else if (knobAngle > 7 * _eighthOfPi && knobAngle <= 9 * _eighthOfPi) {
+      return JoystickDirection.down;
+    } else if (knobAngle > 9 * _eighthOfPi && knobAngle <= 11 * _eighthOfPi) {
+      return JoystickDirection.downLeft;
+    } else if (knobAngle > 11 * _eighthOfPi && knobAngle <= 13 * _eighthOfPi) {
+      return JoystickDirection.left;
+    } else if (knobAngle > 13 * _eighthOfPi && knobAngle <= 15 * _eighthOfPi) {
+      return JoystickDirection.upLeft;
+    } else if (knobAngle > 15 * _eighthOfPi) {
+      return JoystickDirection.up;
     } else {
       return JoystickDirection.idle;
     }
