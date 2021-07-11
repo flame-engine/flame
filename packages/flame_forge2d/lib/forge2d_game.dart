@@ -11,10 +11,8 @@ import 'forge2d_camera.dart';
 class Forge2DGame extends BaseGame {
   static final Vector2 defaultGravity = Vector2(0, -10.0);
   static const double defaultZoom = 10.0;
-  final int velocityIterations = 10;
-  final int positionIterations = 10;
 
-  late World world;
+  final World world;
 
   final ContactCallbacks _contactCallbacks = ContactCallbacks();
 
@@ -24,17 +22,15 @@ class Forge2DGame extends BaseGame {
   Forge2DGame({
     Vector2? gravity,
     double zoom = defaultZoom,
-  }) {
-    gravity ??= defaultGravity;
+  }) : world = World(gravity ?? defaultGravity) {
     camera.zoom = zoom;
-    world = World(gravity);
     world.setContactListener(_contactCallbacks);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    world.stepDt(dt, velocityIterations, positionIterations);
+    world.stepDt(dt);
   }
 
   @override

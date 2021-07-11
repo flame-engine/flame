@@ -131,9 +131,20 @@ class FixedResolutionViewport extends Viewport {
   @override
   late Vector2 effectiveSize;
 
-  late Vector2 scaledSize;
-  late Vector2 resizeOffset;
-  late double scale;
+  final Vector2 _scaledSize = Vector2.zero();
+  Vector2 get scaledSize => _scaledSize.clone();
+
+  final Vector2 _resizeOffset = Vector2.zero();
+  Vector2 get resizeOffset => _resizeOffset.clone();
+
+  late double _scale;
+  double get scale => _scale;
+
+  /// The matrix used for scaling and translating the canvas
+  final Matrix4 _transform = Matrix4.identity();
+
+  /// The Rect that is used to clip the canvas
+  late Rect _clipRect;
 
   FixedResolutionViewport(this.effectiveSize);
 
@@ -141,33 +152,43 @@ class FixedResolutionViewport extends Viewport {
   void resize(Vector2 newCanvasSize) {
     canvasSize = newCanvasSize;
 
-    final scaleVector = canvasSize.clone()..divide(effectiveSize);
-    scale = math.min(scaleVector.x, scaleVector.y);
+    _scale = math.min(
+      canvasSize.x / effectiveSize.x,
+      canvasSize.y / effectiveSize.y,
+    );
 
-    scaledSize = effectiveSize.clone()..scale(scale);
-    resizeOffset = (canvasSize - scaledSize) / 2;
+    _scaledSize
+      ..setFrom(effectiveSize)
+      ..scale(_scale);
+    _resizeOffset
+      ..setFrom(canvasSize)
+      ..sub(_scaledSize)
+      ..scale(0.5);
+
+    _clipRect = _resizeOffset & _scaledSize;
+
+    _transform.setIdentity();
+    _transform.translate(_resizeOffset.x, _resizeOffset.y);
+    _transform.scale(_scale);
   }
 
   @override
   void render(Canvas c, void Function(Canvas) renderGame) {
     c.save();
-    c.clipRect(resizeOffset & scaledSize);
-    c.translateVector(resizeOffset);
-    c.scale(scale, scale);
-
+    c.clipRect(_clipRect);
+    c.transform(_transform.storage);
     renderGame(c);
-
     c.restore();
   }
 
   @override
   Vector2 projectVector(Vector2 viewportCoordinates) {
-    return viewportCoordinates * scale + resizeOffset;
+    return (viewportCoordinates * _scale)..add(_resizeOffset);
   }
 
   @override
   Vector2 unprojectVector(Vector2 screenCoordinates) {
-    return (screenCoordinates - resizeOffset) / scale;
+    return (screenCoordinates - _resizeOffset)..scale(1 / _scale);
   }
 
   @override

@@ -2,6 +2,7 @@ import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
 
 import '../../commons/commons.dart';
+import 'fixed_resolution.dart';
 import 'follow_object.dart';
 import 'zoom.dart';
 
@@ -46,6 +47,26 @@ void addCameraAndViewportStories(Dashbook dashbook) {
 
          On web: use scroll to zoom in and out
          On mobile: use scale gesture to zoom in and out
+      */
+    )
+    ..add(
+      'Fixed Resolution viewport',
+      (context) {
+        return GameWidget(
+          game: FixedResolutionGame(
+            viewportResolution: Vector2(
+              context.numberProperty('viewport width', 600),
+              context.numberProperty('viewport height', 1024),
+            ),
+          ),
+        );
+      },
+      codeLink: baseLink('camera_and_viewport/fixed_resolution.dart'),
+      info: FixedResolutionGame.info,
+      /*
+         Text for instructions:
+
+         You can change the resolution of the viewport in the right pane.
       */
     );
 }

@@ -53,11 +53,9 @@ void main() {
       );
       expect(
         canvas.methodCalls,
-        contains('scale(4.0, 4.0)'),
-      );
-      expect(
-        canvas.methodCalls,
-        contains('translate(0.0, 0.0)'),
+        contains(
+          'transform(4.0, 0.0, 0.0, 0.0, 0.0, 4.0, 0.0, 0.0, 0.0, 0.0, 4.0, 0.0, 0.0, 0.0, 0.0, 1.0)',
+        ),
       );
     });
     test('fixed ratio viewport maxes width', () {
@@ -80,11 +78,9 @@ void main() {
       );
       expect(
         canvas.methodCalls,
-        contains('scale(2.0, 2.0)'),
-      );
-      expect(
-        canvas.methodCalls,
-        contains('translate(0.0, 50.0)'),
+        contains(
+          'transform(2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 50.0, 0.0, 1.0)',
+        ),
       );
     });
     test('fixed ratio viewport maxes height', () {
@@ -107,11 +103,9 @@ void main() {
       );
       expect(
         canvas.methodCalls,
-        contains('scale(0.5, 0.5)'),
-      );
-      expect(
-        canvas.methodCalls,
-        contains('translate(25.0, 0.0)'),
+        contains(
+          'transform(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 25.0, 0.0, 0.0, 1.0)',
+        ),
       );
     });
   });

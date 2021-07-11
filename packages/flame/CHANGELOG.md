@@ -1,6 +1,12 @@
 # CHANGELOG
 
 ## [next]
+ - Add `SpriteAnimationWidget.asset`
+ - Add `SpriteWidget.asset`
+ - Add `SpriteButton.asset`
+ - Add `NineTileBox.asset`
+
+## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
  - Make the `JoystickPlayer` a `PositionComponent`
  - Extract shared logic when handling components set in BaseComponent and BaseGame to ComponentSet.
@@ -8,11 +14,12 @@
  - Fix `SpriteAnimationComponent` docs to use `Future.wait`
  - Add an empty `postRender` method that will run after each components render method
  - Rename `Tapable` to `Tappable`
+ - Fix `SpriteAnimationComponent` docs to use `Future.wait`
+ - Add an empty `postRender` method that will run after each components render method
  - Rename `HasTapableComponents` to `HasTappableComponents`
- - Add `SpriteAnimationWidgetBuilder`
- - Add `SpriteWidgetBuilder`
- - Add `SpriteButtonBuilder`
- - Add `NineTileBoxBuilder`
+ - Rename `prepareCanvas` to `preRender`
+ - Add `intensity` to `Camera.shake`
+ - `FixedResolutionViewport` to use matrix transformations for `Canvas`
 
 ## [1.0.0-releasecandidate.12]
  - Fix link to code in example stories

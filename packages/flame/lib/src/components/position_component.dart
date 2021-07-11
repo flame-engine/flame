@@ -178,7 +178,7 @@ abstract class PositionComponent extends BaseComponent {
   }
 
   @override
-  void prepareCanvas(Canvas canvas) {
+  void preRender(Canvas canvas) {
     canvas.translate(x, y);
     canvas.rotate(angle);
     final delta = -anchor.toVector2()
