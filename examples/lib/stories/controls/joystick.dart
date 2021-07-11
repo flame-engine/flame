@@ -28,7 +28,7 @@ class JoystickGame extends BaseGame with HasDraggableComponents {
         await loadJoystick(0),
         size: Vector2.all(40),
       ),
-      margin: const EdgeInsets.only(left: 200, bottom: 200),
+      margin: const EdgeInsets.only(left: 40, bottom: 40),
     );
 
     player = JoystickPlayer(joystick);

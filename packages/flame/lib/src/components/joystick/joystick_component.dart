@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart' show EdgeInsets;
 import '../../../components.dart';
 import '../../../extensions.dart';
 import '../../gestures/events.dart';
-import 'joystick_element.dart';
 
 enum JoystickDirection {
   up,
@@ -22,8 +21,8 @@ class JoystickComponent extends PositionComponent with Draggable, HasGameRef {
   @override
   final bool isHud = true;
 
-  late final JoystickElement knob;
-  late final JoystickElement? background;
+  late final PositionComponent knob;
+  late final PositionComponent? background;
 
   /// The percentage [0.0, 1.0] the knob is dragged from the center to the edge.
   double intensity = 0.0;
@@ -56,6 +55,10 @@ class JoystickComponent extends PositionComponent with Draggable, HasGameRef {
         assert(
           margin != null || position != null,
           'Either margin or position must be defined',
+        ),
+        assert(
+          knob.position.isZero() && (background?.position.isZero() ?? true),
+        'Positions should not be set for the knob or the background',
         ),
         super(
           size: background?.size ?? Vector2.all(size ?? 0),
