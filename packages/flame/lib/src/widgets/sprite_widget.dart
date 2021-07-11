@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/widgets.dart';
 
 import '../../assets.dart';
@@ -8,19 +6,13 @@ import '../anchor.dart';
 import '../sprite.dart';
 import 'animation_widget.dart';
 import 'base_future_builder.dart';
+import 'sprite_painter.dart';
 
 export '../sprite.dart';
 
-/// A [StatefulWidget] which loads a Sprite from metadata
-/// and renders a [SpriteWidget]
-class SpriteWidgetBuilder extends StatefulWidget {
-  /// Image [path] used to build the sprite
-  final String path;
-
-  /// Images instance used to load the image, uses Flame.images when
-  /// omitted
-  final Images? images;
-
+/// A [StatelessWidget] which renders a Sprite
+/// To render an animation, use [SpriteAnimationWidget].
+class SpriteWidget extends StatelessWidget {
   /// The positioning [Anchor]
   final Anchor anchor;
 
@@ -36,64 +28,57 @@ class SpriteWidgetBuilder extends StatefulWidget {
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
-  const SpriteWidgetBuilder({
-    required this.path,
-    this.images,
+  final Future<Sprite> Function() _spriteFuture;
+
+  SpriteWidget({
+    required Sprite sprite,
     this.anchor = Anchor.topLeft,
     this.srcPosition,
     this.srcSize,
     this.errorBuilder,
     this.loadingBuilder,
-  });
+  }) : _spriteFuture = (() => Future.value(sprite));
 
-  @override
-  State createState() {
-    return _SpriteWidgetBuilderState();
-  }
-}
-
-class _SpriteWidgetBuilderState extends State<SpriteWidgetBuilder> {
-  late Future<Sprite> _spriteFuture;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _spriteFuture = Sprite.load(
-      widget.path,
-      srcSize: widget.srcSize,
-      srcPosition: widget.srcPosition,
-      images: widget.images,
-    );
-  }
+  SpriteWidget.asset({
+    required String path,
+    Images? images,
+    this.anchor = Anchor.topLeft,
+    this.srcPosition,
+    this.srcSize,
+    this.errorBuilder,
+    this.loadingBuilder,
+  }) : _spriteFuture = (() => Sprite.load(
+              path,
+              srcSize: srcSize,
+              srcPosition: srcPosition,
+              images: images,
+            ));
 
   @override
   Widget build(BuildContext context) {
     return BaseFutureBuilder<Sprite>(
-      future: _spriteFuture,
+      futureBuilder: _spriteFuture,
       builder: (_, sprite) {
-        return SpriteWidget(
+        return _SpriteWidget(
           sprite: sprite,
-          anchor: widget.anchor,
+          anchor: anchor,
         );
       },
-      errorBuilder: widget.errorBuilder,
-      loadingBuilder: widget.loadingBuilder,
+      errorBuilder: errorBuilder,
+      loadingBuilder: loadingBuilder,
     );
   }
 }
 
 /// A [StatefulWidget] that renders a still [Sprite].
-///
-/// To render an animation, use [SpriteAnimationWidget].
-class SpriteWidget extends StatelessWidget {
+class _SpriteWidget extends StatelessWidget {
   /// The [Sprite] to be rendered
   final Sprite sprite;
 
   /// The positioning [Anchor] for the [sprite]
   final Anchor anchor;
 
-  const SpriteWidget({
+  const _SpriteWidget({
     required this.sprite,
     this.anchor = Anchor.topLeft,
   });
@@ -101,33 +86,7 @@ class SpriteWidget extends StatelessWidget {
   @override
   Widget build(_) {
     return Container(
-      child: CustomPaint(painter: _SpritePainter(sprite, anchor)),
+      child: CustomPaint(painter: SpritePainter(sprite, anchor)),
     );
-  }
-}
-
-class _SpritePainter extends CustomPainter {
-  final Sprite _sprite;
-  final Anchor _anchor;
-
-  _SpritePainter(this._sprite, this._anchor);
-
-  @override
-  bool shouldRepaint(_SpritePainter old) {
-    return old._sprite != _sprite || old._anchor != _anchor;
-  }
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final boxSize = size.toVector2();
-    final rate = boxSize.clone()..divide(_sprite.srcSize);
-    final minRate = min(rate.x, rate.y);
-    final paintSize = _sprite.srcSize * minRate;
-    final anchorPosition = _anchor.toVector2();
-    final boxAnchorPosition = boxSize..multiply(anchorPosition);
-    final spriteAnchorPosition = anchorPosition..multiply(paintSize);
-
-    canvas.translateVector(boxAnchorPosition..sub(spriteAnchorPosition));
-    _sprite.render(canvas, size: paintSize);
   }
 }

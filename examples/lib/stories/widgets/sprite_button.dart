@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 Widget spriteButtonBuilder(DashbookContext ctx) {
   return Container(
     padding: const EdgeInsets.all(20),
-    child: SpriteButtonBuilder(
+    child: SpriteButton.asset(
       path: 'buttons.png',
       pressedPath: 'buttons.png',
       srcPosition: Vector2(0, 0),

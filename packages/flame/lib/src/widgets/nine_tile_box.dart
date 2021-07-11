@@ -124,11 +124,9 @@ class _Painter extends CustomPainter {
   bool shouldRepaint(_) => false;
 }
 
-/// A [StatefulWidget] which loads an image and metadata
-/// and renders a [NineTileBox]
-class NineTileBoxBuilder extends StatefulWidget {
-  /// Image [path] used for the nine tile box
-  final String path;
+/// A [StatelessWidget] that renders NineTileBox
+class NineTileBox extends StatelessWidget {
+  final Future<ui.Image> Function() _imageFuture;
 
   /// The size of the tile on the image
   final double tileSize;
@@ -146,61 +144,50 @@ class NineTileBoxBuilder extends StatefulWidget {
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
-  /// Images instance used to load the image, uses Flame.images when
-  /// omitted
-  final Images? images;
-
-  const NineTileBoxBuilder({
-    required this.path,
+  NineTileBox({
+    required ui.Image image,
     required this.tileSize,
     required this.destTileSize,
     this.width,
     this.height,
     this.child,
-    this.images,
     this.errorBuilder,
     this.loadingBuilder,
-  });
+  }) : _imageFuture = (() => Future.value(image));
 
-  @override
-  State<StatefulWidget> createState() {
-    return _NineTileBoxBuilderState();
-  }
-}
-
-class _NineTileBoxBuilderState extends State<NineTileBoxBuilder> {
-  late Future<ui.Image> _imageFuture;
-
-  @override
-  void initState() {
-    super.initState();
-
-    final images = widget.images ?? Flame.images;
-
-    _imageFuture = images.load(widget.path);
-  }
+  NineTileBox.asset({
+    required String path,
+    required this.tileSize,
+    required this.destTileSize,
+    Images? images,
+    this.width,
+    this.height,
+    this.child,
+    this.errorBuilder,
+    this.loadingBuilder,
+  }) : _imageFuture = (() => (images ?? Flame.images).load(path));
 
   @override
   Widget build(BuildContext context) {
     return BaseFutureBuilder<ui.Image>(
-      future: _imageFuture,
+      futureBuilder: _imageFuture,
       builder: (_, image) {
-        return NineTileBox(
+        return _NineTileBox(
           image: image,
-          tileSize: widget.tileSize,
-          destTileSize: widget.destTileSize,
-          width: widget.width,
-          height: widget.height,
-          child: widget.child,
+          tileSize: tileSize,
+          destTileSize: destTileSize,
+          width: width,
+          height: height,
+          child: child,
         );
       },
-      errorBuilder: widget.errorBuilder,
-      loadingBuilder: widget.loadingBuilder,
+      errorBuilder: errorBuilder,
+      loadingBuilder: loadingBuilder,
     );
   }
 }
 
-class NineTileBox extends StatelessWidget {
+class _NineTileBox extends StatelessWidget {
   final ui.Image image;
   final double tileSize;
   final double destTileSize;
@@ -211,7 +198,7 @@ class NineTileBox extends StatelessWidget {
 
   final EdgeInsetsGeometry? padding;
 
-  const NineTileBox({
+  const _NineTileBox({
     required this.image,
     required this.tileSize,
     required this.destTileSize,

@@ -11,7 +11,7 @@ Widget spriteSectionWidgetBuilder(DashbookContext ctx) {
     width: ctx.numberProperty('container width', 400),
     height: ctx.numberProperty('container height', 200),
     decoration: BoxDecoration(border: Border.all(color: Colors.amber)),
-    child: SpriteWidgetBuilder(
+    child: SpriteWidget.asset(
       path: 'bomb_ptero.png',
       srcPosition: Vector2(48, 0),
       srcSize: Vector2(48, 32),

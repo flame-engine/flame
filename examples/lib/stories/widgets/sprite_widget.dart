@@ -10,7 +10,7 @@ Widget spriteWidgetBuilder(DashbookContext ctx) {
     width: ctx.numberProperty('container width', 400),
     height: ctx.numberProperty('container height', 200),
     decoration: BoxDecoration(border: Border.all(color: Colors.amber)),
-    child: SpriteWidgetBuilder(
+    child: SpriteWidget.asset(
       path: 'shield.png',
       anchor: Anchor.valueOf(
         ctx.listProperty('anchor', 'center', anchorOptions),

@@ -6,11 +6,11 @@ Widget nineTileBoxBuilder(DashbookContext ctx) {
   return Container(
     width: ctx.numberProperty('width', 200),
     height: ctx.numberProperty('height', 200),
-    child: const NineTileBoxBuilder(
+    child: NineTileBox.asset(
       path: 'nine-box.png',
       tileSize: 8,
       destTileSize: 50,
-      child: Center(
+      child: const Center(
         child: Text(
           'Cool label',
           style: TextStyle(

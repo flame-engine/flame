@@ -30,29 +30,11 @@ Here you can find an example of how to use it (without using the `NineTileBoxCom
 ```dart
 import 'package:flame/widgets/nine_tile_box.dart';
 
-NineTileBox(
+NineTileBox.asset(
     image: image, // dart:ui image instance
     tileSize: 16, // The width/height of the tile on your grid image
     destTileSize: 50, // The dimensions to be used when drawing the tile on the canvas
     child: SomeWidget(), // Any Flutter widget
-)
-```
-
-Or the builder can be used to avoid needing loading the image before using it:
-
-```dart
-NineTileBoxBuilder(
-  path: 'nine-box.png',
-  tileSize: 8,
-  destTileSize: 50,
-  child: Center(
-    child: Text(
-      'Cool label',
-      style: TextStyle(
-        color: Color(0xFF000000),
-      ),
-    ),
-  ),
 )
 ```
 
@@ -66,35 +48,13 @@ in Flutter.
 How to use it:
 
 ```dart
-SpriteButton(
+SpriteButton.asset(
     onPressed: () {
       print('Pressed');
     },
     label: const Text('Sprite Button', style: const TextStyle(color: const Color(0xFF5D275D))),
     sprite: _spriteButton,
     pressedSprite: _pressedSprite,
-)
-```
-
-Or the builder can be used to avoid needing loading the Sprite before using it:
-
-```
-SpriteButtonBuilder(
-  path: 'buttons.png',
-  pressedPath: 'buttons.png',
-  srcPosition: Vector2(0, 0),
-  srcSize: Vector2(60, 20),
-  pressedSrcPosition: Vector2(0, 20),
-  pressedSrcSize: Vector2(60, 20),
-  onPressed: () {
-    print('Pressed');
-  },
-  label: const Text(
-    'Sprite Button',
-    style: TextStyle(color: Color(0xFF5D275D)),
-  ),
-  width: 250,
-  height: 75,
 )
 ```
 
@@ -106,20 +66,9 @@ tree.
 This is how to use it:
 
 ```dart
-SpriteWidget(
+SpriteWidget.asset(
     sprite: yourSprite,
     anchor: Anchor.center,
-)
-```
-
-Or the builder can be used to avoid needing loading the Sprite before using it:
-
-```dart
-SpriteWidgetBuilder(
-  path: 'bomb_ptero.png',
-  srcPosition: Vector2(48, 0),
-  srcSize: Vector2(48, 32),
-  anchor: Anchor.center,
 )
 ```
 
@@ -131,23 +80,8 @@ a widget tree.
 This is how to use it:
 
 ```dart
-SpriteAnimationWidget(
+SpriteAnimationWidget.asset(
     animation: _animation,
-    playing: true,
-    anchor: Anchor.center,
-)
-```
-
-Or the builder can be used to avoid needing loading the Animation before using it:
-
-```
-SpriteAnimationWidgetBuilder(
-    path: 'animation.png',
-    data: SpriteAnimationData.sequenced(
-        amount: 4,
-        stepTime: 0.2,
-        textureSize: Vector2(48, 32),
-    ),
     playing: true,
     anchor: Anchor.center,
 )

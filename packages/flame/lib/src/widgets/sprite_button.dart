@@ -8,20 +8,14 @@ import 'base_future_builder.dart';
 
 export '../sprite.dart';
 
-/// A [StatefulWidget] which loads a SpriteButton from metadata
-/// and renders a [SpriteButton]
-class SpriteButtonBuilder extends StatefulWidget {
-  /// Image [path] used to build the sprite button
-  final String path;
-
+/// A [StatelessWidget] that uses SpriteWidgets to render
+/// a pressable button
+class SpriteButton extends StatelessWidget {
   /// Holds the position of the sprite on the image
   final Vector2? srcPosition;
 
   /// Holds the size of the sprite on the image
   final Vector2? srcSize;
-
-  /// Image [pressedPath] used to build the sprite button
-  final String pressedPath;
 
   /// Holds the position of the sprite on the image
   final Vector2? pressedSrcPosition;
@@ -37,19 +31,17 @@ class SpriteButtonBuilder extends StatefulWidget {
 
   final double height;
 
-  /// Images instance used to load the image, uses Flame.images when
-  /// omitted
-  final Images? images;
-
   /// A builder function that is called if the loading fails
   final WidgetBuilder? errorBuilder;
 
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
-  const SpriteButtonBuilder({
-    required this.path,
-    required this.pressedPath,
+  final Future<List<Sprite>> Function() _buttonsFuture;
+
+  SpriteButton({
+    required Sprite sprite,
+    required Sprite pressedSprite,
     required this.onPressed,
     required this.width,
     required this.height,
@@ -58,67 +50,66 @@ class SpriteButtonBuilder extends StatefulWidget {
     this.srcSize,
     this.pressedSrcPosition,
     this.pressedSrcSize,
-    this.images,
     this.errorBuilder,
     this.loadingBuilder,
-  });
+  }) : _buttonsFuture = (() => Future.wait([
+              Future.value(sprite),
+              Future.value(pressedSprite),
+            ]));
 
-  @override
-  State createState() {
-    return _SpriteButtonBuilderState();
-  }
-}
-
-class _SpriteButtonBuilderState extends State<SpriteButtonBuilder> {
-  late Future<Sprite> _spriteFuture;
-  late Future<Sprite> _pressedSpriteFuture;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _spriteFuture = Sprite.load(
-      widget.path,
-      srcSize: widget.srcSize,
-      srcPosition: widget.srcPosition,
-      images: widget.images,
-    );
-
-    _pressedSpriteFuture = Sprite.load(
-      widget.pressedPath,
-      srcSize: widget.pressedSrcSize,
-      srcPosition: widget.pressedSrcPosition,
-      images: widget.images,
-    );
-  }
+  SpriteButton.asset({
+    required String path,
+    required String pressedPath,
+    required this.onPressed,
+    required this.width,
+    required this.height,
+    required this.label,
+    Images? images,
+    this.srcPosition,
+    this.srcSize,
+    this.pressedSrcPosition,
+    this.pressedSrcSize,
+    this.errorBuilder,
+    this.loadingBuilder,
+  }) : _buttonsFuture = (() => Future.wait([
+              Sprite.load(
+                path,
+                srcSize: srcSize,
+                srcPosition: srcPosition,
+                images: images,
+              ),
+              Sprite.load(
+                pressedPath,
+                srcSize: pressedSrcSize,
+                srcPosition: pressedSrcPosition,
+                images: images,
+              ),
+            ]));
 
   @override
   Widget build(BuildContext context) {
     return BaseFutureBuilder<List<Sprite>>(
-      future: Future.wait([
-        _spriteFuture,
-        _pressedSpriteFuture,
-      ]),
+      futureBuilder: _buttonsFuture,
       builder: (_, list) {
         final sprite = list[0];
         final pressedSprite = list[1];
 
-        return SpriteButton(
-          onPressed: widget.onPressed,
-          label: widget.label,
-          width: widget.width,
-          height: widget.height,
+        return _SpriteButton(
+          onPressed: onPressed,
+          label: label,
+          width: width,
+          height: height,
           sprite: sprite,
           pressedSprite: pressedSprite,
         );
       },
-      errorBuilder: widget.errorBuilder,
-      loadingBuilder: widget.loadingBuilder,
+      errorBuilder: errorBuilder,
+      loadingBuilder: loadingBuilder,
     );
   }
 }
 
-class SpriteButton extends StatefulWidget {
+class _SpriteButton extends StatefulWidget {
   final VoidCallback onPressed;
   final Widget label;
   final Sprite sprite;
@@ -126,7 +117,7 @@ class SpriteButton extends StatefulWidget {
   final double width;
   final double height;
 
-  const SpriteButton({
+  const _SpriteButton({
     required this.onPressed,
     required this.label,
     required this.sprite,
@@ -139,7 +130,7 @@ class SpriteButton extends StatefulWidget {
   State createState() => _ButtonState();
 }
 
-class _ButtonState extends State<SpriteButton> {
+class _ButtonState extends State<_SpriteButton> {
   bool _pressed = false;
 
   @override

@@ -10,7 +10,7 @@ Widget spriteAnimationWidgetBuilder(DashbookContext ctx) {
   return Container(
     width: ctx.numberProperty('container width', 400),
     height: ctx.numberProperty('container height', 200),
-    child: SpriteAnimationWidgetBuilder(
+    child: SpriteAnimationWidget.asset(
       path: 'bomb_ptero.png',
       data: SpriteAnimationData.sequenced(
         amount: 4,
