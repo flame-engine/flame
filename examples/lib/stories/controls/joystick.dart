@@ -20,9 +20,15 @@ class JoystickGame extends BaseGame with HasDraggableComponents {
   @override
   Future<void> onLoad() async {
     final joystick = JoystickComponent(
-      knob: JoystickElement.sprite(await loadJoystick(1), size: Vector2.all(20),),
-      background: JoystickElement.sprite(await loadJoystick(0), size: Vector2.all(40),),
-      margin: const EdgeInsets.only(left: 50, bottom: 50),
+      knob: JoystickElement.sprite(
+        await loadJoystick(1),
+        size: Vector2.all(20),
+      ),
+      background: JoystickElement.sprite(
+        await loadJoystick(0),
+        size: Vector2.all(40),
+      ),
+      margin: const EdgeInsets.only(left: 200, bottom: 200),
     );
 
     player = JoystickPlayer(joystick);

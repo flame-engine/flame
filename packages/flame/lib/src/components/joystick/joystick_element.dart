@@ -11,15 +11,15 @@ class JoystickElement extends PositionComponent {
   final Paint? paint;
 
   JoystickElement.sprite(
-    this.sprite,
-  { required Vector2 size,
+    this.sprite, {
+    required Vector2 size,
     Anchor anchor = Anchor.center,
   })  : paint = null,
         super(size: size, anchor: anchor);
 
   JoystickElement.paint(
-    this.paint,
-  { required Vector2 size,
+    this.paint, {
+    required Vector2 size,
     Anchor anchor = Anchor.center,
   })  : sprite = null,
         super(size: size, anchor: anchor);

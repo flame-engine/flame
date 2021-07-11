@@ -10,8 +10,8 @@ class JoystickTester extends JoystickComponent {
 
   JoystickTester()
       : super(
-          knob:
-              JoystickElement.paint(BasicPalette.white.paint(), size: Vector2.all(5)),
+          knob: JoystickElement.paint(BasicPalette.white.paint(),
+              size: Vector2.all(5)),
           size: 20,
           margin: const EdgeInsets.only(left: 20, bottom: 20),
         );

@@ -60,9 +60,11 @@ extension Vector2Extension on Vector2 {
     }
   }
 
-  /// Changes the [length] of the vector to the length provided, without changing direction.
+  /// Changes the [length] of the vector to the length provided, without
+  /// changing direction.
   ///
-  /// If you try to scale the zero (empty) vector, it will remain unchanged, and no error will be thrown.
+  /// If you try to scale the zero (empty) vector, it will remain unchanged, and
+  /// no error will be thrown.
   void scaleTo(double newLength) {
     final l = length;
     if (l != 0) {
@@ -93,9 +95,9 @@ extension Vector2Extension on Vector2 {
     }
   }
 
-  // TODO: better explanation
-  /// Angle to trigonometric zero
-  double angle() => angleTo(Vector2(1.0, 0.0));
+  /// Signed angle to (0.0, 1.0) in a coordinate system where positive is down
+  /// and negative is up.
+  double screenAngle() => (clone()..y*=-1).angleToSigned(Vector2(0.0, -1.0));
 
   /// Modulo/Remainder
   Vector2 operator %(Vector2 mod) => Vector2(x % mod.x, y % mod.y);

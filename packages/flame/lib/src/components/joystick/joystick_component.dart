@@ -25,17 +25,22 @@ class JoystickComponent extends PositionComponent with Draggable, HasGameRef {
   late final JoystickElement knob;
   late final JoystickElement? background;
 
-  /// The percentage [0.0, 1.0] the knob is dragged from the center to the edge
+  /// The percentage [0.0, 1.0] the knob is dragged from the center to the edge.
   double intensity = 0.0;
 
-  /// The amount the knob is dragged from the center
+  /// The amount the knob is dragged from the center.
   Vector2 get delta => knob.position;
 
+  /// The radius from the center of the knob to the edge of as far as the knob
+  /// can be dragged.
   late final double radius;
 
-  final EdgeInsets? margin;
+  /// The knob radius squared.
+  late final double radius2;
 
-  final bool _definedPosition;
+  /// Instead of setting a position of the [JoystickComponent] a margin from the
+  /// edges of the viewport can be used instead.
+  final EdgeInsets? margin;
 
   JoystickComponent({
     required this.knob,
@@ -49,30 +54,33 @@ class JoystickComponent extends PositionComponent with Draggable, HasGameRef {
           'Either size or background must be defined',
         ),
         assert(
-        margin != null || position != null,
-        'Either margin or position must be defined',
+          margin != null || position != null,
+          'Either margin or position must be defined',
         ),
-        _definedPosition = position != null,
         super(
           size: background?.size ?? Vector2.all(size ?? 0),
           position: position,
           anchor: anchor,
         ) {
-    radius = this.size.x / 2;
+    radius = knob.size.x / 2;
+    radius2 = radius * radius;
   }
 
   @override
   Future<void> onLoad() async {
-    if (!_definedPosition) {
+    if (margin != null) {
       final margin = this.margin!;
       final x = margin.left != 0
-          ? margin.left + size.x/2
-          : gameRef.viewport.effectiveSize.x - margin.right - size.x/2;
+          ? margin.left + size.x / 2
+          : gameRef.viewport.effectiveSize.x - margin.right - size.x / 2;
       final y = margin.top != 0
-          ? margin.top + size.y/2
-          : gameRef.viewport.effectiveSize.y - margin.bottom - size.y/2;
-      final center = Vector2(x, y);
+          ? margin.top + size.y / 2
+          : gameRef.viewport.effectiveSize.y - margin.bottom - size.y / 2;
+      position.setValues(x, y);
       position = Anchor.center.toOtherAnchorPosition(center, anchor, size);
+      print(size);
+      print(position);
+      print(gameRef.size);
     }
     if (background != null) {
       addChild(background!);
@@ -83,37 +91,34 @@ class JoystickComponent extends PositionComponent with Draggable, HasGameRef {
   @override
   void update(double dt) {
     super.update(dt);
-    intensity = knob.position.length2 / radius * radius;
-  }
-
-  void _clampKnob() {
-    knob.position.clampScalar(-radius, radius);
+    if (knob.position.length2 > radius2) {
+      knob.position.scaleTo(radius);
+    }
+    intensity = knob.position.length2 / radius2;
   }
 
   @override
   bool onDragStart(int pointerId, DragStartInfo info) {
     knob.position = center - info.eventPosition.widget;
-    _clampKnob();
     return false;
   }
 
   @override
   bool onDragUpdate(_, DragUpdateInfo info) {
     knob.position.add(info.delta.global);
-    _clampKnob();
-    return true;
+    return false;
   }
 
   @override
   bool onDragEnd(_, __) {
     knob.position.setZero();
-    return true;
+    return false;
   }
 
   @override
   bool onDragCancel(_) {
     knob.position.setZero();
-    return true;
+    return false;
   }
 
   static const double _eighthOfPi = pi / 8;
