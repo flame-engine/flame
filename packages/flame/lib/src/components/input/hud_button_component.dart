@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 
 import '../../../components.dart';
 import '../../../extensions.dart';
+import '../../../input.dart';
 import '../../gestures/events.dart';
 
 class HudButtonComponent extends HudMarginComponent with Tappable {

@@ -316,7 +316,7 @@ Minimal example:
 
 ```dart
 import 'package:flame/game.dart';
-import 'package:flame/keyboard.dart';
+import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
 
 class MyGame extends Game with KeyboardEvents {

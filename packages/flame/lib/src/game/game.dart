@@ -10,10 +10,10 @@ import '../assets/assets_cache.dart';
 import '../assets/images.dart';
 import '../extensions/offset.dart';
 import '../extensions/vector2.dart';
-import '../keyboard.dart';
 import '../sprite.dart';
 import '../sprite_animation.dart';
 import 'game_render_box.dart';
+import 'mixins/keyboard.dart';
 import 'projector.dart';
 
 /// Represents a generic game.

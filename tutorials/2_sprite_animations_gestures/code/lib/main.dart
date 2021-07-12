@@ -1,7 +1,7 @@
-import 'package:flame/gestures.dart';
+import 'package:flame/game.dart';
+import 'package:flame/input.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
-import 'package:flame/game.dart';
 
 void main() {
   final myGame = MyGame();
