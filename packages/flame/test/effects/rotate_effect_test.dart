@@ -20,7 +20,7 @@ void main() {
       isInfinite: isInfinite,
       isAlternating: isAlternating,
       isRelative: isRelative,
-    );
+    )..skipEffectReset = true;
   }
 
   testWidgets('RotateEffect can rotate', (WidgetTester tester) async {
