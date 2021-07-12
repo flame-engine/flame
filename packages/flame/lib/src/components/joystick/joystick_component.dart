@@ -29,6 +29,10 @@ class JoystickComponent extends MarginHudComponent with Draggable {
   /// The amount the knob is dragged from the center.
   Vector2 delta = Vector2.zero();
 
+  /// The percentage, presented as a [Vector2], and direction that the knob is
+  /// currently pulled from its base position to a edge of the joystick.
+  Vector2 get velocity => delta / knobRadius;
+
   /// The radius from the center of the knob to the edge of as far as the knob
   /// can be dragged.
   late double knobRadius;
@@ -65,9 +69,7 @@ class JoystickComponent extends MarginHudComponent with Draggable {
   Future<void> onLoad() async {
     await super.onLoad();
     knob.anchor = Anchor.center;
-    knob.position = size / 2;
-    background?.anchor = Anchor.center;
-    background?.position = size / 2;
+    knob.position.add(size / 2);
     _baseKnobPosition = knob.position.clone();
     if (background != null) {
       addChild(background!);
@@ -122,9 +124,6 @@ class JoystickComponent extends MarginHudComponent with Draggable {
       return JoystickDirection.idle;
     }
 
-    // Since angleTo doesn't care about "direction" of the angle we have to use
-    // angleToSigned and create an only increasing angle by removing negative
-    // angles from 2*pi.
     var knobAngle = delta.screenAngle();
     knobAngle = knobAngle < 0 ? 2 * pi + knobAngle : knobAngle;
     if (knobAngle >= 0 && knobAngle <= _eighthOfPi) {

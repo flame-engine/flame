@@ -107,6 +107,11 @@ abstract class ComponentEffect<T extends BaseComponent> {
     }
   }
 
+  void onRemove() {
+    onComplete?.call();
+    reset();
+  }
+
   void setComponentToOriginalState();
   void setComponentToEndState();
 }

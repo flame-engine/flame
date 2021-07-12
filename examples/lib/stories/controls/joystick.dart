@@ -1,8 +1,14 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/joystick.dart';
+import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
+import 'package:flutter/animation.dart';
 import 'package:flutter/painting.dart';
 
 import 'joystick_player.dart';
@@ -10,17 +16,19 @@ import 'joystick_player.dart';
 class JoystickGame extends BaseGame
     with HasDraggableComponents, HasTappableComponents {
   late final JoystickPlayer player;
+  late final JoystickComponent joystick;
+  late final TextComponent speedText;
+  late final TextComponent directionText;
 
   @override
   Future<void> onLoad() async {
-    debugMode = true;
     final image = await images.load('joystick.png');
     final sheet = SpriteSheet.fromColumnsAndRows(
       image: image,
       columns: 6,
       rows: 1,
     );
-    final joystick = JoystickComponent(
+    joystick = JoystickComponent(
       knob: SpriteComponent(
         sprite: sheet.getSpriteById(1),
         size: Vector2.all(100),
@@ -31,8 +39,11 @@ class JoystickGame extends BaseGame
       ),
       margin: const EdgeInsets.only(left: 40, bottom: 40),
     );
+    player = JoystickPlayer(joystick);
 
     final buttonSize = Vector2.all(60);
+    // A button with margin from the edge of the viewport that flips the
+    // rendering of the player on the X-axis.
     final flipButton = MarginButtonComponent(
       button: SpriteComponent(
         sprite: sheet.getSpriteById(2),
@@ -48,6 +59,9 @@ class JoystickGame extends BaseGame
       ),
       onPressed: () => player.renderFlipX = !player.renderFlipX,
     );
+
+    // A button with margin from the edge of the viewport that flips the
+    // rendering of the player on the Y-axis.
     final flopButton = MarginButtonComponent(
       button: SpriteComponent(
         sprite: sheet.getSpriteById(3),
@@ -64,10 +78,69 @@ class JoystickGame extends BaseGame
       onPressed: () => player.renderFlipY = !player.renderFlipY,
     );
 
-    player = JoystickPlayer(joystick);
+    final rotateEffect = RotateEffect(
+      angle: 0,
+      curve: Curves.bounceOut,
+      isAlternating: true,
+      speed: 2,
+    );
+    final rng = Random();
+    // A button, created from a shape, that adds a rotation effect to the player
+    // when it is pressed.
+    final shapeButton = MarginButtonComponent(
+      button: Circle(radius: buttonSize.x / 2)
+          .toComponent(paint: BasicPalette.white.paint()),
+      buttonDown: Rectangle(size: buttonSize)
+          .toComponent(paint: BasicPalette.blue.paint()),
+      margin: const EdgeInsets.only(
+        right: 200,
+        bottom: 60,
+      ),
+      onPressed: () => player.addEffect(
+        rotateEffect..angle = 8 * rng.nextDouble(),
+      ),
+    );
+
+    final _regularTextConfig = TextPaintConfig(color: BasicPalette.white.color);
+    final _regular = TextPaint(config: _regularTextConfig);
+    speedText = TextComponent(
+      'Speed: 0',
+      textRenderer: _regular,
+    )..isHud = true;
+    directionText = TextComponent(
+      'Direction: idle',
+      textRenderer: _regular,
+    )..isHud = true;
+
+    final speedWithMargin = MarginHudComponent(
+      margin: const EdgeInsets.only(
+        top: 80,
+        left: 80,
+      ),
+    )..addChild(speedText);
+
+    final directionWithMargin = MarginHudComponent(
+      margin: const EdgeInsets.only(
+        top: 110,
+        left: 80,
+      ),
+    )..addChild(directionText);
+
     add(player);
     add(joystick);
     add(flipButton);
     add(flopButton);
+    add(shapeButton);
+    add(speedWithMargin);
+    add(directionWithMargin);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    speedText.text = 'Speed: ${(joystick.intensity * player.maxSpeed).round()}';
+    final direction =
+        joystick.direction.toString().replaceAll('JoystickDirection.', '');
+    directionText.text = 'Direction: $direction';
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/rendering.dart' show EdgeInsets, VoidCallback;
+import 'package:meta/meta.dart';
 
 import '../../../components.dart';
 import '../../../extensions.dart';
@@ -36,6 +37,7 @@ class MarginButtonComponent extends MarginHudComponent with Tappable {
   }
 
   @override
+  @mustCallSuper
   bool onTapDown(TapDownInfo info) {
     if (buttonDown != null) {
       children.remove(button);
@@ -46,12 +48,14 @@ class MarginButtonComponent extends MarginHudComponent with Tappable {
   }
 
   @override
+  @mustCallSuper
   bool onTapUp(TapUpInfo info) {
     onTapCancel();
     return true;
   }
 
   @override
+  @mustCallSuper
   bool onTapCancel() {
     if (buttonDown != null) {
       children.remove(buttonDown!);

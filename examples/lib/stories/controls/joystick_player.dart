@@ -2,15 +2,14 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
 class JoystickPlayer extends SpriteComponent with HasGameRef {
-  static const speed = 16.0;
+  /// Pixels/s
+  double maxSpeed = 300.0;
 
   final JoystickComponent joystick;
 
-  double currentSpeed = 0;
-
   JoystickPlayer(this.joystick)
       : super(
-          size: Vector2.all(50.0),
+          size: Vector2.all(100.0),
         ) {
     anchor = Anchor.center;
   }
@@ -26,7 +25,7 @@ class JoystickPlayer extends SpriteComponent with HasGameRef {
   void update(double dt) {
     super.update(dt);
     if (!joystick.delta.isZero()) {
-      position.add(joystick.delta * speed * dt);
+      position.add(joystick.velocity * maxSpeed * dt);
       angle = joystick.delta.screenAngle();
     }
   }
