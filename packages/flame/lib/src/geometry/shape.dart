@@ -1,9 +1,8 @@
 import 'dart:ui';
 
-import 'package:flame/palette.dart';
-
 import '../../components.dart';
 import '../../game.dart';
+import '../../palette.dart';
 import '../extensions/vector2.dart';
 import 'shape_intersections.dart' as intersection_system;
 
