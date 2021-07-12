@@ -4,18 +4,17 @@ import 'package:meta/meta.dart';
 import '../../../components.dart';
 import '../../../extensions.dart';
 import '../../gestures/events.dart';
-import 'margin_hud_component.dart';
 
-class MarginButtonComponent extends MarginHudComponent with Tappable {
+class HudButtonComponent extends HudMarginComponent with Tappable {
   late final PositionComponent button;
   late final PositionComponent? buttonDown;
 
   /// Callback for what should happen when the button is pressed.
   /// If you want to interact with [onTapUp] or [onTapCancel] it is recommended
-  /// to extend [MarginButtonComponent].
+  /// to extend [HudButtonComponent].
   VoidCallback? onPressed;
 
-  MarginButtonComponent({
+  HudButtonComponent({
     required this.button,
     this.buttonDown,
     EdgeInsets? margin,

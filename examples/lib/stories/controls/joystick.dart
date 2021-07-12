@@ -41,10 +41,10 @@ class JoystickGame extends BaseGame
     );
     player = JoystickPlayer(joystick);
 
-    final buttonSize = Vector2.all(60);
+    final buttonSize = Vector2.all(80);
     // A button with margin from the edge of the viewport that flips the
     // rendering of the player on the X-axis.
-    final flipButton = MarginButtonComponent(
+    final flipButton = HudButtonComponent(
       button: SpriteComponent(
         sprite: sheet.getSpriteById(2),
         size: buttonSize,
@@ -62,7 +62,7 @@ class JoystickGame extends BaseGame
 
     // A button with margin from the edge of the viewport that flips the
     // rendering of the player on the Y-axis.
-    final flopButton = MarginButtonComponent(
+    final flopButton = HudButtonComponent(
       button: SpriteComponent(
         sprite: sheet.getSpriteById(3),
         size: buttonSize,
@@ -72,7 +72,7 @@ class JoystickGame extends BaseGame
         size: buttonSize,
       ),
       margin: const EdgeInsets.only(
-        right: 140,
+        right: 160,
         bottom: 60,
       ),
       onPressed: () => player.renderFlipY = !player.renderFlipY,
@@ -87,14 +87,13 @@ class JoystickGame extends BaseGame
     final rng = Random();
     // A button, created from a shape, that adds a rotation effect to the player
     // when it is pressed.
-    final shapeButton = MarginButtonComponent(
-      button: Circle(radius: buttonSize.x / 2)
-          .toComponent(paint: BasicPalette.white.paint()),
+    final shapeButton = HudButtonComponent(
+      button: Circle(radius: 35).toComponent(paint: BasicPalette.white.paint()),
       buttonDown: Rectangle(size: buttonSize)
           .toComponent(paint: BasicPalette.blue.paint()),
       margin: const EdgeInsets.only(
-        right: 200,
-        bottom: 60,
+        right: 85,
+        bottom: 150,
       ),
       onPressed: () => player.addEffect(
         rotateEffect..angle = 8 * rng.nextDouble(),
@@ -112,14 +111,14 @@ class JoystickGame extends BaseGame
       textRenderer: _regular,
     )..isHud = true;
 
-    final speedWithMargin = MarginHudComponent(
+    final speedWithMargin = HudMarginComponent(
       margin: const EdgeInsets.only(
         top: 80,
         left: 80,
       ),
     )..addChild(speedText);
 
-    final directionWithMargin = MarginHudComponent(
+    final directionWithMargin = HudMarginComponent(
       margin: const EdgeInsets.only(
         top: 110,
         left: 80,

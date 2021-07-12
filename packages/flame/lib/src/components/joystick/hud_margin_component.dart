@@ -4,15 +4,15 @@ import 'package:meta/meta.dart';
 import '../../../components.dart';
 import '../../../extensions.dart';
 
-class MarginHudComponent extends PositionComponent with HasGameRef {
+class HudMarginComponent extends PositionComponent with HasGameRef {
   @override
   bool isHud = true;
 
-  /// Instead of setting a position of the [MarginHudComponent] a margin
+  /// Instead of setting a position of the [HudMarginComponent] a margin
   /// from the edges of the viewport can be used instead.
   EdgeInsets? margin;
 
-  MarginHudComponent({
+  HudMarginComponent({
     this.margin,
     Vector2? position,
     Vector2? size,

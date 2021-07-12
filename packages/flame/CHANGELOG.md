@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [Next]
+ - Reset effects after they are done so that they can be repeated
+ - Remove integrated joystick buttons
+ - Add `MarginHudComponent`, used when components need to have a margin to the viewport edge
+ - Refactor `JoystickComponent`
+
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
  - Make the `JoystickPlayer` a `PositionComponent`

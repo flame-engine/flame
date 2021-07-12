@@ -5,7 +5,7 @@ import 'package:flutter/rendering.dart' show EdgeInsets;
 import '../../../components.dart';
 import '../../../extensions.dart';
 import '../../gestures/events.dart';
-import 'margin_hud_component.dart';
+import 'hud_margin_component.dart';
 
 enum JoystickDirection {
   up,
@@ -19,7 +19,7 @@ enum JoystickDirection {
   idle,
 }
 
-class JoystickComponent extends MarginHudComponent with Draggable {
+class JoystickComponent extends HudMarginComponent with Draggable {
   late final PositionComponent knob;
   late final PositionComponent? background;
 
