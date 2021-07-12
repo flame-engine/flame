@@ -95,8 +95,7 @@ extension Vector2Extension on Vector2 {
     }
   }
 
-  /// Signed angle to (0.0, 1.0) in a coordinate system where positive is down
-  /// and negative is up.
+  /// Signed angle in a coordinate system where the Y-axis is flipped.
   double screenAngle() => (clone()..y *= -1).angleToSigned(Vector2(0.0, 1.0));
 
   /// Modulo/Remainder

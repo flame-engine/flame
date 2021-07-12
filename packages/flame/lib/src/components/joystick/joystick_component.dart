@@ -125,6 +125,9 @@ class JoystickComponent extends HudMarginComponent with Draggable {
     }
 
     var knobAngle = delta.screenAngle();
+    // Since screenAngle and angleTo doesn't care about "direction" of the angle
+    // we have to use angleToSigned and create an only increasing angle by
+    // removing negative angles from 2*pi.
     knobAngle = knobAngle < 0 ? 2 * pi + knobAngle : knobAngle;
     if (knobAngle >= 0 && knobAngle <= _eighthOfPi) {
       return JoystickDirection.up;
