@@ -336,7 +336,7 @@ You can also check a more complete example
 ## Joystick
 
 Flame provides a component capable of creating a virtual joystick for taking input for your game.
-To use this feature. You need to create a `JoystickComponent`, configure it the way you want, and
+To use this feature you need to create a `JoystickComponent`, configure it the way you want, and
 add it to your game.
 
 To receive the inputs from the joystick component, pass your `JoystickComponent` to the component
