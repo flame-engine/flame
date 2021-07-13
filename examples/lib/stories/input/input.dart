@@ -1,11 +1,11 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
-import 'package:flame_example/stories/input/joystick_advanced.dart';
 
 import '../../commons/commons.dart';
 import 'draggables.dart';
 import 'hoverables.dart';
 import 'joystick.dart';
+import 'joystick_advanced.dart';
 import 'keyboard.dart';
 import 'mouse_movement.dart';
 import 'multitap.dart';
