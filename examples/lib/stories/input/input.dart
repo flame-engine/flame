@@ -13,7 +13,7 @@ import 'overlapping_tappables.dart';
 import 'scroll.dart';
 import 'tappables.dart';
 
-void addControlsStories(Dashbook dashbook) {
+void addInputStories(Dashbook dashbook) {
   dashbook.storiesOf('Controls')
     ..add(
       'Keyboard',
