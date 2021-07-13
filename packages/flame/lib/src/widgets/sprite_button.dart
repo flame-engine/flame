@@ -1,11 +1,115 @@
 import 'package:flutter/widgets.dart';
 
+import '../../assets.dart';
 import '../extensions/size.dart';
+import '../extensions/vector2.dart';
 import '../sprite.dart';
+import 'base_future_builder.dart';
 
 export '../sprite.dart';
 
-class SpriteButton extends StatefulWidget {
+/// A [StatelessWidget] that uses SpriteWidgets to render
+/// a pressable button
+class SpriteButton extends StatelessWidget {
+  /// Holds the position of the sprite on the image
+  final Vector2? srcPosition;
+
+  /// Holds the size of the sprite on the image
+  final Vector2? srcSize;
+
+  /// Holds the position of the sprite on the image
+  final Vector2? pressedSrcPosition;
+
+  /// Holds the size of the sprite on the image
+  final Vector2? pressedSrcSize;
+
+  final Widget label;
+
+  final VoidCallback onPressed;
+
+  final double width;
+
+  final double height;
+
+  /// A builder function that is called if the loading fails
+  final WidgetBuilder? errorBuilder;
+
+  /// A builder function that is called while the loading is on the way
+  final WidgetBuilder? loadingBuilder;
+
+  final Future<List<Sprite>> Function() _buttonsFuture;
+
+  SpriteButton({
+    required Sprite sprite,
+    required Sprite pressedSprite,
+    required this.onPressed,
+    required this.width,
+    required this.height,
+    required this.label,
+    this.srcPosition,
+    this.srcSize,
+    this.pressedSrcPosition,
+    this.pressedSrcSize,
+    this.errorBuilder,
+    this.loadingBuilder,
+  }) : _buttonsFuture = (() => Future.wait([
+              Future.value(sprite),
+              Future.value(pressedSprite),
+            ]));
+
+  SpriteButton.asset({
+    required String path,
+    required String pressedPath,
+    required this.onPressed,
+    required this.width,
+    required this.height,
+    required this.label,
+    Images? images,
+    this.srcPosition,
+    this.srcSize,
+    this.pressedSrcPosition,
+    this.pressedSrcSize,
+    this.errorBuilder,
+    this.loadingBuilder,
+  }) : _buttonsFuture = (() => Future.wait([
+              Sprite.load(
+                path,
+                srcSize: srcSize,
+                srcPosition: srcPosition,
+                images: images,
+              ),
+              Sprite.load(
+                pressedPath,
+                srcSize: pressedSrcSize,
+                srcPosition: pressedSrcPosition,
+                images: images,
+              ),
+            ]));
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseFutureBuilder<List<Sprite>>(
+      futureBuilder: _buttonsFuture,
+      builder: (_, list) {
+        final sprite = list[0];
+        final pressedSprite = list[1];
+
+        return _SpriteButton(
+          onPressed: onPressed,
+          label: label,
+          width: width,
+          height: height,
+          sprite: sprite,
+          pressedSprite: pressedSprite,
+        );
+      },
+      errorBuilder: errorBuilder,
+      loadingBuilder: loadingBuilder,
+    );
+  }
+}
+
+class _SpriteButton extends StatefulWidget {
   final VoidCallback onPressed;
   final Widget label;
   final Sprite sprite;
@@ -13,7 +117,7 @@ class SpriteButton extends StatefulWidget {
   final double width;
   final double height;
 
-  const SpriteButton({
+  const _SpriteButton({
     required this.onPressed,
     required this.label,
     required this.sprite,
@@ -26,7 +130,7 @@ class SpriteButton extends StatefulWidget {
   State createState() => _ButtonState();
 }
 
-class _ButtonState extends State<SpriteButton> {
+class _ButtonState extends State<_SpriteButton> {
   bool _pressed = false;
 
   @override

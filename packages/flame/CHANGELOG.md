@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [next]
+ - Add `SpriteAnimationWidget.asset`
+ - Add `SpriteWidget.asset`
+ - Add `SpriteButton.asset`
+ - Add `NineTileBox.asset`
+
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
  - Make the `JoystickPlayer` a `PositionComponent`
