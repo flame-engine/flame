@@ -30,7 +30,7 @@ Here you can find an example of how to use it (without using the `NineTileBoxCom
 ```dart
 import 'package:flame/widgets/nine_tile_box.dart';
 
-NineTileBox(
+NineTileBox.asset(
     image: image, // dart:ui image instance
     tileSize: 16, // The width/height of the tile on your grid image
     destTileSize: 50, // The dimensions to be used when drawing the tile on the canvas
@@ -48,7 +48,7 @@ in Flutter.
 How to use it:
 
 ```dart
-SpriteButton(
+SpriteButton.asset(
     onPressed: () {
       print('Pressed');
     },
@@ -66,7 +66,7 @@ tree.
 This is how to use it:
 
 ```dart
-SpriteWidget(
+SpriteWidget.asset(
     sprite: yourSprite,
     anchor: Anchor.center,
 )
@@ -80,7 +80,7 @@ a widget tree.
 This is how to use it:
 
 ```dart
-SpriteAnimationWidget(
+SpriteAnimationWidget.asset(
     animation: _animation,
     playing: true,
     anchor: Anchor.center,

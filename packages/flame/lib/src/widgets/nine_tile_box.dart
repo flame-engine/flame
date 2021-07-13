@@ -2,8 +2,11 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/widgets.dart';
 
+import '../../assets.dart';
+import '../../flame.dart';
 import '../extensions/vector2.dart';
 import '../sprite.dart';
+import 'base_future_builder.dart';
 
 export '../nine_tile_box.dart';
 export '../sprite.dart';
@@ -121,7 +124,70 @@ class _Painter extends CustomPainter {
   bool shouldRepaint(_) => false;
 }
 
+/// A [StatelessWidget] that renders NineTileBox
 class NineTileBox extends StatelessWidget {
+  final Future<ui.Image> Function() _imageFuture;
+
+  /// The size of the tile on the image
+  final double tileSize;
+
+  /// The size of the tile that will be used to render on the canvas
+  final double destTileSize;
+  final double? width;
+  final double? height;
+
+  final Widget? child;
+
+  /// A builder function that is called if the loading fails
+  final WidgetBuilder? errorBuilder;
+
+  /// A builder function that is called while the loading is on the way
+  final WidgetBuilder? loadingBuilder;
+
+  NineTileBox({
+    required ui.Image image,
+    required this.tileSize,
+    required this.destTileSize,
+    this.width,
+    this.height,
+    this.child,
+    this.errorBuilder,
+    this.loadingBuilder,
+  }) : _imageFuture = (() => Future.value(image));
+
+  NineTileBox.asset({
+    required String path,
+    required this.tileSize,
+    required this.destTileSize,
+    Images? images,
+    this.width,
+    this.height,
+    this.child,
+    this.errorBuilder,
+    this.loadingBuilder,
+  }) : _imageFuture = (() => (images ?? Flame.images).load(path));
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseFutureBuilder<ui.Image>(
+      futureBuilder: _imageFuture,
+      builder: (_, image) {
+        return _NineTileBox(
+          image: image,
+          tileSize: tileSize,
+          destTileSize: destTileSize,
+          width: width,
+          height: height,
+          child: child,
+        );
+      },
+      errorBuilder: errorBuilder,
+      loadingBuilder: loadingBuilder,
+    );
+  }
+}
+
+class _NineTileBox extends StatelessWidget {
   final ui.Image image;
   final double tileSize;
   final double destTileSize;
@@ -132,7 +198,7 @@ class NineTileBox extends StatelessWidget {
 
   final EdgeInsetsGeometry? padding;
 
-  const NineTileBox({
+  const _NineTileBox({
     required this.image,
     required this.tileSize,
     required this.destTileSize,

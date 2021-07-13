@@ -1,5 +1,4 @@
 import 'package:dashbook/dashbook.dart';
-import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 
 import 'stories/animations/animations.dart';
@@ -33,17 +32,7 @@ void main() async {
   addCameraAndViewportStories(dashbook);
   addParallaxStories(dashbook);
 
-  await _setupWidgetsExample();
   addWidgetsStories(dashbook);
 
   runApp(dashbook);
-}
-
-Future<void> _setupWidgetsExample() async {
-  // used for the widgets examples
-  // note: you do *not* need to do this on your regular Flame games!
-  WidgetsFlutterBinding.ensureInitialized();
-  await Flame.images.loadAll(
-    ['nine-box.png', 'buttons.png', 'shield.png', 'bomb_ptero.png'],
-  );
 }
