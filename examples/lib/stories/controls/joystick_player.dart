@@ -17,7 +17,7 @@ class JoystickPlayer extends SpriteComponent with HasGameRef {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    sprite = await Sprite.load('layers/player.png');
+    sprite = await gameRef.loadSprite('layers/player.png');
     position = gameRef.size / 2;
   }
 
