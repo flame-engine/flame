@@ -1,5 +1,6 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
+import 'package:flame_example/stories/input/joystick_advanced.dart';
 
 import '../../commons/commons.dart';
 import 'draggables.dart';
@@ -74,7 +75,7 @@ void addInputStories(Dashbook dashbook) {
     )
     ..add(
       'Joystick Advanced',
-      (_) => GameWidget(game: JoystickGame()),
+      (_) => GameWidget(game: JoystickAdvancedGame()),
       codeLink: baseLink('input/joystick_advanced.dart'),
     );
 }
