@@ -5,6 +5,10 @@
  - Remove integrated joystick buttons
  - Add `MarginHudComponent`, used when components need to have a margin to the viewport edge
  - Refactor `JoystickComponent`
+ - Add `SpriteAnimationWidget.asset`
+ - Add `SpriteWidget.asset`
+ - Add `SpriteButton.asset`
+ - Add `NineTileBox.asset`
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
