@@ -5,6 +5,8 @@
  - Add `SpriteWidget.asset`
  - Add `SpriteButton.asset`
  - Add `NineTileBox.asset`
+ - Generalize `paint` usage on fields
+ - Create `OpacityEffect`
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps

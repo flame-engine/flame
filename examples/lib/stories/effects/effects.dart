@@ -5,6 +5,7 @@ import '../../commons/commons.dart';
 import 'combined_effect.dart';
 import 'infinite_effect.dart';
 import 'move_effect.dart';
+import 'opacity_effect.dart';
 import 'rotate_effect.dart';
 import 'scale_effect.dart';
 import 'sequence_effect.dart';
@@ -40,5 +41,10 @@ void addEffectsStories(Dashbook dashbook) {
       'Infinite Effect',
       (_) => GameWidget(game: InfiniteEffectGame()),
       codeLink: baseLink('effects/infinite_effect.dart'),
+    )
+    ..add(
+      'Opacity Effect',
+      (_) => GameWidget(game: OpacityEffectGame()),
+      codeLink: baseLink('effects/opacity_effect.dart'),
     );
 }
