@@ -188,12 +188,13 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
   Future<Image> _redrawCache() {
     final recorder = PictureRecorder();
     final c = Canvas(recorder, size.toRect());
+    final devicePixelRatio = window.devicePixelRatio;
+    c.scale(devicePixelRatio);
     _fullRender(c);
     //final devicePixelRatio = window.devicePixelRatio;
-    final devicePixelRatio = window.devicePixelRatio;
     return recorder.endRecording().toImage(
-          (width * devicePixelRatio).toInt(),
-          (height * devicePixelRatio).toInt(),
+          (width * devicePixelRatio).ceil(),
+          (height * devicePixelRatio).ceil(),
         );
   }
 
