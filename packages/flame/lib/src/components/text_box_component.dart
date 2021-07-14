@@ -189,12 +189,7 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     final recorder = PictureRecorder();
     final c = Canvas(recorder, size.toRect());
     _fullRender(c);
-    //final devicePixelRatio = window.devicePixelRatio;
-    final devicePixelRatio = window.devicePixelRatio;
-    return recorder.endRecording().toImage(
-          (width * devicePixelRatio).toInt(),
-          (height * devicePixelRatio).toInt(),
-        );
+    return recorder.endRecording().toImage(width.toInt(), height.toInt());
   }
 
   /// Override this method to provide a custom background to the text box.
