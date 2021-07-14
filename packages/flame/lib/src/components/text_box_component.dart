@@ -183,8 +183,10 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     }
     super.render(c);
     final devicePixelRatio = window.devicePixelRatio;
+    c.save();
     c.scale(1 / devicePixelRatio);
     c.drawImage(_cache!, Offset.zero, _imagePaint);
+    c.restore();
   }
 
   Future<Image> _redrawCache() {
