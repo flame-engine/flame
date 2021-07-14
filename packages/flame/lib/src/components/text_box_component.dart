@@ -193,8 +193,8 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     _fullRender(c);
     //final devicePixelRatio = window.devicePixelRatio;
     return recorder.endRecording().toImage(
-          (width * devicePixelRatio).ceil(),
-          (height * devicePixelRatio).ceil(),
+          (width / devicePixelRatio).ceil(),
+          (height / devicePixelRatio).ceil(),
         );
   }
 
