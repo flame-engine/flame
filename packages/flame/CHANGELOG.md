@@ -5,6 +5,7 @@
  - Add `SpriteWidget.asset`
  - Add `SpriteButton.asset`
  - Add `NineTileBox.asset`
+ - Add `BaseGame.remove` and `BaseGame.removeAll` helpers for removing components
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
