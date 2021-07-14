@@ -182,19 +182,20 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
       return;
     }
     super.render(c);
+    final devicePixelRatio = window.devicePixelRatio;
+    c.scale(1 / devicePixelRatio);
     c.drawImage(_cache!, Offset.zero, _imagePaint);
   }
 
   Future<Image> _redrawCache() {
+    final devicePixelRatio = window.devicePixelRatio;
     final recorder = PictureRecorder();
     final c = Canvas(recorder, size.toRect());
-    final devicePixelRatio = window.devicePixelRatio;
     c.scale(devicePixelRatio);
     _fullRender(c);
-    //final devicePixelRatio = window.devicePixelRatio;
     return recorder.endRecording().toImage(
-          (width / devicePixelRatio).ceil(),
-          (height / devicePixelRatio).ceil(),
+          (width * devicePixelRatio).ceil(),
+          (height * devicePixelRatio).ceil(),
         );
   }
 
