@@ -25,7 +25,7 @@ class JoystickPlayer extends SpriteComponent with HasGameRef {
   void update(double dt) {
     super.update(dt);
     if (!joystick.delta.isZero()) {
-      position.add(joystick.velocity * maxSpeed * dt);
+      position.add(joystick.relativeDelta * maxSpeed * dt);
       angle = joystick.delta.screenAngle();
     }
   }

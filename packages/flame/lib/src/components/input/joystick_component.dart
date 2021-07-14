@@ -31,7 +31,7 @@ class JoystickComponent extends HudMarginComponent with Draggable {
 
   /// The percentage, presented as a [Vector2], and direction that the knob is
   /// currently pulled from its base position to a edge of the joystick.
-  Vector2 get velocity => delta / knobRadius;
+  Vector2 get relativeDelta => delta / knobRadius;
 
   /// The radius from the center of the knob to the edge of as far as the knob
   /// can be dragged.
