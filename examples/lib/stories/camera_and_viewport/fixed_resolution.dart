@@ -25,7 +25,7 @@ class FixedResolutionGame extends BaseGame with ScrollDetector, ScaleDetector {
 
     viewport = FixedResolutionViewport(viewportResolution);
     camera.setRelativeOffset(Anchor.topLeft);
-    camera.cameraSpeed = 1;
+    camera.speed = 1;
 
     add(Background());
     add(
