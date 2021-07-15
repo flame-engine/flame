@@ -127,7 +127,7 @@ class CameraAndViewportGame extends BaseGame
     add(Map());
 
     add(square = MovableSquare());
-    camera.cameraSpeed = 1;
+    camera.speed = 1;
     camera.followComponent(square, worldBounds: Map.bounds);
 
     for (var i = 0; i < 30; i++) {
