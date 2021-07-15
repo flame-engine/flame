@@ -60,9 +60,11 @@ extension Vector2Extension on Vector2 {
     }
   }
 
-  /// Changes the [length] of the vector to the length provided, without changing direction.
+  /// Changes the [length] of the vector to the length provided, without
+  /// changing direction.
   ///
-  /// If you try to scale the zero (empty) vector, it will remain unchanged, and no error will be thrown.
+  /// If you try to scale the zero (empty) vector, it will remain unchanged, and
+  /// no error will be thrown.
   void scaleTo(double newLength) {
     final l = length;
     if (l != 0) {
@@ -92,6 +94,19 @@ extension Vector2Extension on Vector2 {
       }
     }
   }
+
+  /// Signed angle in a coordinate system where the Y-axis is flipped.
+  ///
+  /// Since on a canvas/screen y is smaller the further up you go, instead of
+  /// larger like on a normal coordinate system, to get an angle that is in that
+  /// coordinate system we have to flip the Y-axis of the [Vector].
+  ///
+  /// Example:
+  /// Up: Vector(0.0, -1.0).screenAngle == 0
+  /// Down: Vector(0.0, 1.0).screenAngle == +-pi
+  /// Left: Vector(-1.0, 0.0).screenAngle == -pi/2
+  /// Right: Vector(-1.0, 0.0).screenAngle == pi/2
+  double screenAngle() => (clone()..y *= -1).angleToSigned(Vector2(0.0, 1.0));
 
   /// Modulo/Remainder
   Vector2 operator %(Vector2 mod) => Vector2(x % mod.x, y % mod.y);

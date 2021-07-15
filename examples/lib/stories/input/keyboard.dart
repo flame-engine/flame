@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/game.dart';
-import 'package:flame/keyboard.dart';
+import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/services.dart' show RawKeyDownEvent, RawKeyEvent;
 

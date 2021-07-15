@@ -1,6 +1,10 @@
 # CHANGELOG
 
-## [next]
+## [Next]
+ - Reset effects after they are done so that they can be repeated
+ - Remove integrated joystick buttons
+ - Add `MarginHudComponent`, used when components need to have a margin to the viewport edge
+ - Refactor `JoystickComponent`
  - Add `SpriteAnimationWidget.asset`
  - Add `SpriteWidget.asset`
  - Add `SpriteButton.asset`

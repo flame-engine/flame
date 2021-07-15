@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 
 import '../../game.dart';
-import '../../gestures.dart';
+import '../../input.dart';
 import '../effects/effects.dart';
 import '../effects/effects_handler.dart';
 import '../extensions/vector2.dart';
