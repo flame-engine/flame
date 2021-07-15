@@ -89,6 +89,7 @@ void effectTest(
     );
   }
   expect(effect.hasCompleted(), shouldComplete, reason: 'Effect shouldFinish');
+  game.update(0.0);
   expect(
     callback.isCalled,
     shouldComplete,

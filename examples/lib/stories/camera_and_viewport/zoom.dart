@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/gestures.dart';
+import 'package:flame/input.dart';
 
 class ZoomGame extends BaseGame with ScrollDetector, ScaleDetector {
   final Vector2 viewportResolution;

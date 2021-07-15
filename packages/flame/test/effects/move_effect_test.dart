@@ -18,7 +18,7 @@ void main() {
       duration: 1 + random.nextInt(100).toDouble(),
       isInfinite: isInfinite,
       isAlternating: isAlternating,
-    );
+    )..skipEffectReset = true;
   }
 
   testWidgets('MoveEffect can move', (WidgetTester tester) async {

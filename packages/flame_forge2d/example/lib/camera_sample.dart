@@ -1,4 +1,5 @@
-import 'package:flame/gestures.dart';
+import 'package:flame/input.dart';
+
 import 'domino_sample.dart';
 
 class CameraSample extends DominoSample {

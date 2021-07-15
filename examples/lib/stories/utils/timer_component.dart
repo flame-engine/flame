@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
+import 'package:flame/input.dart';
 import 'package:flame/timer.dart';
-import 'package:flame/gestures.dart';
+import 'package:flutter/material.dart';
 
 class RenderedTimeComponent extends TimerComponent {
   final TextPaint textPaint = TextPaint(

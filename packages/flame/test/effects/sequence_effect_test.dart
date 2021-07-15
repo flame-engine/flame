@@ -34,22 +34,22 @@ void main() {
       path: path,
       duration: randomDuration(),
       isAlternating: hasAlternatingMoveEffect,
-    );
+    )..skipEffectReset = true;
     final rotate = RotateEffect(
       angle: argumentAngle,
       duration: randomDuration(),
       isAlternating: hasAlternatingRotateEffect,
-    );
+    )..skipEffectReset = true;
     final scale = ScaleEffect(
       size: argumentSize,
       duration: randomDuration(),
       isAlternating: hasAlternatingScaleEffect,
-    );
+    )..skipEffectReset = true;
     return SequenceEffect(
       effects: [move, scale, rotate],
       isInfinite: isInfinite,
       isAlternating: isAlternating,
-    );
+    )..skipEffectReset = true;
   }
 
   testWidgets('SequenceEffect can sequence', (WidgetTester tester) async {

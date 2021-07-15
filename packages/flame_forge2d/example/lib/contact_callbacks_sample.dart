@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
-import 'package:forge2d/forge2d.dart';
-import 'package:flame/gestures.dart';
+import 'package:flame/input.dart';
 import 'package:flame_forge2d/forge2d_game.dart';
+import 'package:forge2d/forge2d.dart';
 
 import 'balls.dart';
 import 'boundaries.dart';

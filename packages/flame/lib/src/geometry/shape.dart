@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import '../../components.dart';
 import '../../game.dart';
+import '../../palette.dart';
 import '../extensions/vector2.dart';
 import 'shape_intersections.dart' as intersection_system;
 
@@ -109,9 +110,22 @@ abstract class Shape {
 
   void render(Canvas canvas, Paint paint);
 
-  /// Where this Shape has intersection points with another shape
+  /// Where this [Shape] has intersection points with another shape
   Set<Vector2> intersections(Shape other) {
     return intersection_system.intersections(this, other);
+  }
+
+  /// Turns a [Shape] into a [ShapeComponent]
+  ///
+  /// Do note that while a [Shape] is defined from the center, a
+  /// [ShapeComponent] like all other components default to an [Anchor] in the
+  /// top left corner.
+  ShapeComponent toComponent({Paint? paint, Anchor anchor = Anchor.topLeft}) {
+    return ShapeComponent(
+      this,
+      paint ?? BasicPalette.white.paint(),
+      anchor: anchor,
+    );
   }
 }
 

@@ -2,10 +2,10 @@ import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
 
 import '../../commons/commons.dart';
-import 'advanced_joystick.dart';
 import 'draggables.dart';
 import 'hoverables.dart';
 import 'joystick.dart';
+import 'joystick_advanced.dart';
 import 'keyboard.dart';
 import 'mouse_movement.dart';
 import 'multitap.dart';
@@ -14,42 +14,42 @@ import 'overlapping_tappables.dart';
 import 'scroll.dart';
 import 'tappables.dart';
 
-void addControlsStories(Dashbook dashbook) {
-  dashbook.storiesOf('Controls')
+void addInputStories(Dashbook dashbook) {
+  dashbook.storiesOf('Input')
     ..add(
       'Keyboard',
       (_) => GameWidget(game: KeyboardGame()),
-      codeLink: baseLink('controls/keyboard.dart'),
+      codeLink: baseLink('input/keyboard.dart'),
     )
     ..add(
       'Mouse Movement',
       (_) => GameWidget(game: MouseMovementGame()),
-      codeLink: baseLink('controls/mouse_movement.dart'),
+      codeLink: baseLink('input/mouse_movement.dart'),
     )
     ..add(
       'Scroll',
       (_) => GameWidget(game: ScrollGame()),
-      codeLink: baseLink('controls/scroll.dart'),
+      codeLink: baseLink('input/scroll.dart'),
     )
     ..add(
       'Multitap',
       (_) => GameWidget(game: MultitapGame()),
-      codeLink: baseLink('controls/multitap.dart'),
+      codeLink: baseLink('input/multitap.dart'),
     )
     ..add(
       'Multitap Advanced',
       (_) => GameWidget(game: MultitapAdvancedGame()),
-      codeLink: baseLink('controls/multitap_advanced.dart'),
+      codeLink: baseLink('input/multitap_advanced.dart'),
     )
     ..add(
       'Tappables',
       (_) => GameWidget(game: TappablesGame()),
-      codeLink: baseLink('controls/tappables.dart'),
+      codeLink: baseLink('input/tappables.dart'),
     )
     ..add(
       'Overlaping Tappables',
       (_) => GameWidget(game: OverlappingTappablesGame()),
-      codeLink: baseLink('controls/overlaping_tappables.dart'),
+      codeLink: baseLink('input/overlaping_tappables.dart'),
     )
     ..add(
       'Draggables',
@@ -60,22 +60,22 @@ void addControlsStories(Dashbook dashbook) {
           ),
         );
       },
-      codeLink: baseLink('controls/draggables.dart'),
+      codeLink: baseLink('input/draggables.dart'),
     )
     ..add(
       'Hoverables',
       (_) => GameWidget(game: HoverablesGame()),
-      codeLink: baseLink('controls/hoverables.dart'),
+      codeLink: baseLink('input/hoverables.dart'),
       info: 'Add more squares by clicking. Hover squares to change colors.',
     )
     ..add(
       'Joystick',
       (_) => GameWidget(game: JoystickGame()),
-      codeLink: baseLink('controls/joystick.dart'),
+      codeLink: baseLink('input/joystick.dart'),
     )
     ..add(
       'Joystick Advanced',
-      (_) => GameWidget(game: AdvancedJoystickGame()),
-      codeLink: baseLink('controls/advanced_joystick.dart'),
+      (_) => GameWidget(game: JoystickAdvancedGame()),
+      codeLink: baseLink('input/joystick_advanced.dart'),
     );
 }
