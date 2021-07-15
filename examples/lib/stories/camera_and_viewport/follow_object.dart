@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/keyboard.dart';
+import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -127,7 +127,7 @@ class CameraAndViewportGame extends BaseGame
     add(Map());
 
     add(square = MovableSquare());
-    camera.cameraSpeed = 1;
+    camera.speed = 1;
     camera.followComponent(square, worldBounds: Map.bounds);
 
     for (var i = 0; i < 30; i++) {

@@ -1,11 +1,16 @@
 # CHANGELOG
 
-## [next]
+## [Next]
+ - Reset effects after they are done so that they can be repeated
+ - Remove integrated joystick buttons
+ - Add `MarginHudComponent`, used when components need to have a margin to the viewport edge
+ - Refactor `JoystickComponent`
  - Add `SpriteAnimationWidget.asset`
  - Add `SpriteWidget.asset`
  - Add `SpriteButton.asset`
  - Add `NineTileBox.asset`
  - Fix resolution of `TextBoxComponent`
+ - Rename `Camera.cameraSpeed` to `Camera.speed`
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
