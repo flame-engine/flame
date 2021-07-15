@@ -194,5 +194,20 @@ void main() {
       position.rotate(math.pi / 2, center: center);
       expectVector2(position, Vector2(4.0, -3.0));
     });
+
+    test('screenAngle', () {
+      // Up
+      final position = Vector2(0.0, -1.0);
+      expectDouble(position.screenAngle(), 0.0);
+      // Down
+      position.setValues(0.0, 1.0);
+      expectDouble(position.screenAngle().abs(), math.pi);
+      // Left
+      position.setValues(-1.0, 0.0);
+      expectDouble(position.screenAngle(), -math.pi / 2);
+      // Right
+      position.setValues(1.0, 0.0);
+      expectDouble(position.screenAngle(), math.pi / 2);
+    });
   });
 }

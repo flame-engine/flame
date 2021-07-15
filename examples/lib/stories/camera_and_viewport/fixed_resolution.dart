@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/gestures.dart';
+import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 
 class FixedResolutionGame extends BaseGame with ScrollDetector, ScaleDetector {
@@ -25,7 +25,7 @@ class FixedResolutionGame extends BaseGame with ScrollDetector, ScaleDetector {
 
     viewport = FixedResolutionViewport(viewportResolution);
     camera.setRelativeOffset(Anchor.topLeft);
-    camera.cameraSpeed = 1;
+    camera.speed = 1;
 
     add(Background());
     add(

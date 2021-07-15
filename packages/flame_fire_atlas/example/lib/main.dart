@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/gestures.dart';
-import 'package:flame/components.dart';
+import 'package:flame/input.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
+import 'package:flutter/material.dart';
 
 void main() async {
   try {

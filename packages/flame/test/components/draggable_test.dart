@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/gestures.dart';
+import 'package:flame/input.dart';
 import 'package:flutter/gestures.dart';
 import 'package:test/test.dart';
 
