@@ -41,7 +41,7 @@ import 'projector.dart';
 /// Components marked as `isHud = true` are always rendered in screen
 /// coordinates, bypassing the camera altogether.
 class Camera extends Projector {
-  static const defaultCameraSpeed = 50.0; // in pixels/s
+  static const defaultSpeed = 50.0; // in pixels/s
 
   /// This must be set by the Game as soon as the Camera is created.
   ///
@@ -68,7 +68,7 @@ class Camera extends Projector {
 
   // Configurable parameters
 
-  double cameraSpeed = defaultCameraSpeed;
+  double speed = defaultSpeed;
   double defaultShakeIntensity = 75.0; // in pixels
   double defaultShakeDuration = 0.3; // in seconds
 
@@ -171,7 +171,7 @@ class Camera extends Projector {
   ///
   /// This should be called by the Game class during the update cycle.
   void update(double dt) {
-    final ds = cameraSpeed * dt;
+    final ds = speed * dt;
     final shake = _shakeDelta();
 
     _currentRelativeOffset.moveToTarget(_targetRelativeOffset, ds);
