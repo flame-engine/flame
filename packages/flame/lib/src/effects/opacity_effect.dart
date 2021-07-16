@@ -8,6 +8,7 @@ import 'effects.dart';
 class OpacityEffect extends ComponentEffect<HasPaint> {
   final double opacity;
   final double duration;
+  final String? paintId;
 
   late Color _original;
   late Color _final;
@@ -17,6 +18,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
   OpacityEffect({
     required this.opacity,
     required this.duration,
+    this.paintId,
     Curve? curve,
     bool initialIsInfinite = false,
     bool initialIsAlternating = false,
@@ -28,10 +30,12 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
 
   OpacityEffect.fadeOff({
     this.duration = 1,
+    this.paintId,
     Curve? curve,
     bool initialIsInfinite = false,
     bool initialIsAlternating = false,
-  }) : opacity = 0, super(
+  })  : opacity = 0,
+        super(
           initialIsInfinite,
           initialIsAlternating,
           curve: curve,
@@ -39,10 +43,12 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
 
   OpacityEffect.fadeIn({
     this.duration = 1,
+    this.paintId,
     Curve? curve,
     bool initialIsInfinite = false,
     bool initialIsAlternating = false,
-  }) : opacity = 1, super(
+  })  : opacity = 1,
+        super(
           initialIsInfinite,
           initialIsAlternating,
           curve: curve,
@@ -53,7 +59,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     super.initialize(component);
     peakTime = duration;
 
-    _original = component.paint.color;
+    _original = component.getPaint(paintId).color;
     _final = _original.withOpacity(opacity);
 
     _difference = _original.opacity - opacity;
@@ -61,22 +67,26 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
 
   @override
   void setComponentToEndState() {
-    component?.paint.color = _final;
+    component?.setColor(
+      _final,
+      paintId: paintId,
+    );
   }
 
   @override
   void setComponentToOriginalState() {
-    component?.paint.color = _original;
+    component?.setColor(
+      _original,
+      paintId: paintId,
+    );
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    final color = component?.paint.color;
-    if (color != null) {
-      component?.paint.color = _original.withOpacity(
-          _original.opacity - _difference * curveProgress,
-      );
-    }
+    component?.setOpacity(
+      _original.opacity - _difference * curveProgress,
+      paintId: paintId,
+    );
   }
 }
