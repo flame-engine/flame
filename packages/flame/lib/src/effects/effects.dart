@@ -38,6 +38,10 @@ abstract class ComponentEffect<T extends BaseComponent> {
   int curveDirection = 1;
   Curve curve;
 
+  /// If this is set to true the effect will not be set to its original state
+  /// once it is done.
+  bool skipEffectReset = false;
+
   double get iterationTime => peakTime * (isAlternating ? 2 : 1);
 
   ComponentEffect(
@@ -76,6 +80,7 @@ abstract class ComponentEffect<T extends BaseComponent> {
 
   void dispose() => _isDisposed = true;
 
+  /// Whether the effect has completed or not.
   bool hasCompleted() {
     return (!isInfinite && !isAlternating && isMax()) ||
         (!isInfinite && isAlternating && isMin()) ||
@@ -86,14 +91,20 @@ abstract class ComponentEffect<T extends BaseComponent> {
   bool isMin() => percentage == null ? false : percentage == 0.0;
   bool isRootEffect() => component?.effects.contains(this) == true;
 
+  /// Resets the effect and the component which the effect was added to.
   void reset() {
+    resetEffect();
+    setComponentToOriginalState();
+  }
+
+  /// Resets the effect to its original state so that it can be re-run.
+  void resetEffect() {
     _isDisposed = false;
     percentage = null;
     currentTime = 0.0;
     curveDirection = 1;
     isInfinite = _initialIsInfinite;
     isAlternating = _initialIsAlternating;
-    setComponentToOriginalState();
   }
 
   // When the time overshoots the max and min it needs to add that time to
@@ -106,6 +117,16 @@ abstract class ComponentEffect<T extends BaseComponent> {
       driftTime = currentTime.abs();
     } else {
       driftTime = 0;
+    }
+  }
+
+  /// Called when the effect is removed from the component.
+  /// Calls the [onComplete] callback if it is defined and sets the effect back
+  /// to its original state so that it can be re-added.
+  void onRemove() {
+    onComplete?.call();
+    if (!skipEffectReset) {
+      resetEffect();
     }
   }
 

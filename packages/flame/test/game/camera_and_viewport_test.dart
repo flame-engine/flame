@@ -164,7 +164,7 @@ void main() {
       final game = BaseGame(); // no camera changes
       game.onResize(Vector2.all(100.0));
 
-      game.camera.cameraSpeed = 1; // 1 pixel per second
+      game.camera.speed = 1; // 1 pixel per second
       game.camera.moveTo(Vector2(0.0, 10.0));
 
       // nothing should change yet

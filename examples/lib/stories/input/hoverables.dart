@@ -1,8 +1,8 @@
 import 'package:flame/components.dart';
-import 'package:flame/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flame/game.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
+import 'package:flame/input.dart';
+import 'package:flutter/material.dart';
 
 class HoverableSquare extends PositionComponent with Hoverable {
   static final Paint _white = Paint()..color = const Color(0xFFFFFFFF);

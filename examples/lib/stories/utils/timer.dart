@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
+import 'package:flame/input.dart';
 import 'package:flame/timer.dart';
-import 'package:flame/gestures.dart';
+import 'package:flutter/material.dart';
 
 class TimerGame extends Game with TapDetector {
   final TextPaint textConfig = TextPaint(
