@@ -29,7 +29,7 @@ mixin HasPaint on BaseComponent {
     return paint;
   }
 
-  /// Setts a paint on the collection
+  /// Sets a paint on the collection
   void setPaint(String key, Paint paint) => _paints[key] = paint;
 
   /// Removes a paint from the collection
@@ -65,5 +65,9 @@ mixin HasPaint on BaseComponent {
 
   void setColor(Color color, {String? paintId}) {
     getPaint(paintId).color = color;
+  }
+
+  void tint(Color color, {String? paintId}) {
+    getPaint(paintId).colorFilter = ColorFilter.mode(color, BlendMode.multiply);
   }
 }

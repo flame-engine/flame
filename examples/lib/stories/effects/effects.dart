@@ -2,6 +2,7 @@ import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
 
 import '../../commons/commons.dart';
+import 'color_effect.dart';
 import 'combined_effect.dart';
 import 'infinite_effect.dart';
 import 'move_effect.dart';
@@ -46,5 +47,10 @@ void addEffectsStories(Dashbook dashbook) {
       'Opacity Effect',
       (_) => GameWidget(game: OpacityEffectGame()),
       codeLink: baseLink('effects/opacity_effect.dart'),
+    )
+    ..add(
+      'Color Effect',
+      (_) => GameWidget(game: ColorEffectGame()),
+      codeLink: baseLink('effects/color_effect.dart'),
     );
 }
