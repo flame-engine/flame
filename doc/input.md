@@ -331,7 +331,7 @@ class MyGame extends Game with KeyboardEvents {
 ```
 
 You can also check a more complete example
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/controls/keyboard.dart).
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/keyboard.dart).
 
 ## Joystick
 
@@ -427,7 +427,7 @@ If you want to create buttons to go with your joystick, check out
 [`MarginButtonComponent`](#HudButtonComponent).
 
 A full examples of how to use it can be found
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/controls/joystick).
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/joystick.dart).
 And it can be seen running [here](https://examples.flame-engine.org/#/Controls_Joystick).
 
 ## HudButtonComponent
