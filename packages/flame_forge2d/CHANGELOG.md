@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [Next]
+ - Added physics tied to widgets example
+
 ## [0.8.0-releasecandidate.13]
  - Update mechanism by which `BodyComponent`'s are disposed to use the `onRemove` method
  - Flip y-axis after translation of body position, so that normal flame components can be children
