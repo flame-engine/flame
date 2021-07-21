@@ -2,6 +2,7 @@
 
 ## [Next]
  - Added physics tied to widgets example
+ - Added basic joint example
 
 ## [0.8.0-releasecandidate.13]
  - Update mechanism by which `BodyComponent`'s are disposed to use the `onRemove` method

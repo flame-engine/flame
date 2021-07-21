@@ -85,26 +85,31 @@ class BodyButtonWidget extends StatefulWidget {
 class _BodyButtonState extends State<BodyButtonWidget> {
   final WidgetSample _game;
   final int _bodyId;
+  Body? _body;
 
   _BodyButtonState(this._game, this._bodyId) {
-    _game.updateStates.add(() => setState(() {}));
+    _game.updateStates.add(() {
+      setState(() {
+        _body = _game.bodyIdMap[_bodyId];
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final _body = _game.bodyIdMap[_bodyId];
-    if (_body == null) {
+    final body = _body;
+    if (body == null) {
       return widgets.Container();
     } else {
       return Positioned(
-        top: _game.screenPosition(_body).y - 18,
-        left: _game.screenPosition(_body).x - 90,
+        top: _game.screenPosition(body).y - 18,
+        left: _game.screenPosition(body).x - 90,
         child: widgets.Transform.rotate(
-          angle: -_body.angle,
+          angle: -body.angle,
           child: ElevatedButton(
             onPressed: () {
               setState(
-                () => _body.applyLinearImpulse(Vector2(0.0, 1000)),
+                () => body.applyLinearImpulse(Vector2(0.0, 1000)),
               );
             },
             child: const Text(
