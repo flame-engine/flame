@@ -141,7 +141,7 @@ square.addEffect(RotateEffect(
 
 This effect is a combination of other effects. You provide it with a list of your predefined
 effects.
- 
+
 The effects in the list should only be passed to the `SequenceEffect`, never added to a
 `PositionComponent` with `addEffect`.
 
@@ -154,19 +154,19 @@ Usage example:
 ```dart
 final sequence = SequenceEffect(
     effects: [move1, scale, move2, rotate],
-    isInfinite: true, 
+    isInfinite: true,
     isAlternating: true);
 myComponent.addEffect(sequence);
 ```
 
 An example of how to use the `SequenceEffect` can be found
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects/sequence_effect.dart).
- 
+
 ## CombinedEffect
 
 This effect runs several different type of effects simultaneously. You provide it with a list of
 your predefined effects and an offset in time which should pass in between starting each effect.
- 
+
 The effects in the list should only be passed to the `CombinedEffect`, never added to a
 `PositionComponent` with `addEffect`.
 
@@ -180,13 +180,66 @@ Usage example:
 ```dart
 final combination = CombinedEffect(
     effects: [move, scale, rotate],
-    isInfinite: true, 
+    isInfinite: true,
     isAlternating: true);
 myComponent.addEffect(combination);
 ```
 
 An example of how to use the `CombinedEffect` can be found
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects/combined_effect.dart).
+
+## Common for paint effects
+
+Flame provides an useful mixin that adds paint variables to your components, that is used by some
+of Flame's own components like `SpriteComponent`, `SpriteAnimationComponent`, but you can also use
+it on you any custom component that your game has, and any component that uses that mixin can have
+paint affects applied to it.
+
+By default all effects will animate the main paint of the component, that can be changed by passing
+a `paintId` to the effect contructor. This can be useful for when you have a component that have
+multiple paints, for example a component which has a foreground and background layer.
+
+Check below for a list of the available paint effects
+
+## OpacityEffect
+
+This effect allows you animate the opacity of your paint, it receives a double for the opacity,
+which must be between 0 and 1 (including) and a duration in seconds, represented by a double as
+well.
+
+Usage example:
+
+```dart
+myComponent.addEffect(
+  OpacityEffect(
+    opacity: 0,
+    duration: 0.5,
+  ),
+);
+```
+
+An example of how to use the `OpacityEffect` can be found
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects/opacity_effect.dart).
+
+## ColorEffect
+
+This effect will change the base color of the paint, making things rendered with it, looks like
+it was tinted with the passed color.
+
+
+Usage Example:
+
+```dart
+myComponent.addEffect(
+  ColorEffect(
+    color: const Color(0xFF00FF00),
+    duration: 0.5,
+  ),
+);
+```
+
+An example of how to use the `ColorEffect` can be found
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects/color_effect.dart).
 
 ## Examples
 
