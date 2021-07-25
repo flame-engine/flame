@@ -43,14 +43,17 @@ mixin HasPaint on BaseComponent {
     _paints.remove(key);
   }
 
+  /// Manipulate the paint to make it fully transparent
   void makeTransparent({String? paintId}) {
     setOpacity(0, paintId: paintId);
   }
 
+  /// Manipulate the paint to make it fully opaque
   void makeOpaque({String? paintId}) {
     setOpacity(1, paintId: paintId);
   }
 
+  /// Changes the opacity of the paint
   void setOpacity(double opacity, {String? paintId}) {
     if (opacity < 0 || opacity > 1) {
       throw ArgumentError('Opacity needs to be between 0 and 1');
@@ -59,14 +62,19 @@ mixin HasPaint on BaseComponent {
     getPaint(paintId).color = paint.color.withOpacity(opacity);
   }
 
+  /// Returns the current opacity
   double getOpacity({String? paintId}) {
     return getPaint(paintId).color.opacity;
   }
 
+  /// Shortcut for changing the color of the paint
   void setColor(Color color, {String? paintId}) {
     getPaint(paintId).color = color;
   }
 
+  /// Applies a color filter to the paint which will make
+  /// things rendered with the paint looking like it was
+  // tinted with the given color
   void tint(Color color, {String? paintId}) {
     getPaint(paintId).colorFilter = ColorFilter.mode(color, BlendMode.multiply);
   }
