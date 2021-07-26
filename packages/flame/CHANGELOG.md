@@ -14,7 +14,6 @@
  - Rename `Camera.cameraSpeed` to `Camera.speed`
  - Rename `addShape` to `addHitbox` in `Hitbox` mixin
 
-
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
  - Make the `JoystickPlayer` a `PositionComponent`
