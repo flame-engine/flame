@@ -183,6 +183,18 @@ abstract class BaseComponent extends Component {
     return children.addChildren(cs, gameRef: gameRef);
   }
 
+  /// Removes a component from the component list, calling onRemove for it and
+  /// its children.
+  void removeChild(Component c) {
+    children.remove(c);
+  }
+
+  /// Removes all the children in the list and calls onRemove for all of them
+  /// and their children.
+  void removeChildren(Iterable<Component> cs) {
+    children.removeAll(cs);
+  }
+
   /// Whether the children list contains the given component.
   ///
   /// This method uses reference equality.
