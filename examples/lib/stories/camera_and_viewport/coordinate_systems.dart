@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+/// A simple widget that "wraps" a Flame game with some Contaienrs
+/// on each direction (top, bottom, left and right) and allow adding
+/// or removing containers.
 class CoordinateSystemsWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -16,73 +19,57 @@ class CoordinateSystemsWidget extends StatefulWidget {
 }
 
 class _CoordinateSystemsState extends State<CoordinateSystemsWidget> {
-  int rowsBefore = 1;
-  int rowsAfter = 1;
-  int colsBefore = 1;
-  int colsAfter = 1;
+  /// The number of blocks in each direction (top, left, right, bottom).
+  List<int> blocks = [1, 1, 1, 1];
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ...blocks(
-          rowsBefore,
-          (v) => rowsBefore = v,
-          rotated: false,
-          start: true,
-        ),
+        ...createBlocks(index: 0, rotated: false, start: true),
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ...blocks(
-                colsBefore,
-                (v) => colsBefore = v,
-                rotated: true,
-                start: true,
-              ),
+              ...createBlocks(index: 1, rotated: true, start: true),
               Expanded(
                 child: GameWidget(game: CoordinateSystemsGame()),
               ),
-              ...blocks(
-                colsAfter,
-                (v) => colsAfter = v,
-                rotated: true,
-                start: false,
-              ),
+              ...createBlocks(index: 2, rotated: true, start: false),
             ],
           ),
         ),
-        ...blocks(
-          rowsAfter,
-          (v) => rowsAfter = v,
-          rotated: false,
-          start: false,
-        ),
+        ...createBlocks(index: 3, rotated: false, start: false),
       ],
     );
   }
 
-  List<Widget> blocks(
-    int variable,
-    void Function(int) setVariable, {
+  /// Just creates a list of Widgets + the "add" button
+  List<Widget> createBlocks({
+    /// Index on the [blocks] array
+    required int index,
+
+    /// If true, render vertical text
     required bool rotated,
+
+    /// Whether to render the "add" button before or after
     required bool start,
   }) {
     final add = Container(
       child: Center(
         child: TextButton(
           child: const Text('+'),
-          onPressed: () => setState(() => setVariable(variable + 1)),
+          onPressed: () => setState(() => blocks[index]++),
         ),
       ),
       margin: const EdgeInsets.all(32),
     );
     return [
       if (start) add,
-      for (int i = 1; i <= variable; i++)
+      for (int i = 1; i <= blocks[index]; i++)
         GestureDetector(
           child: Container(
             child: Center(
@@ -93,13 +80,16 @@ class _CoordinateSystemsState extends State<CoordinateSystemsWidget> {
             ),
             margin: const EdgeInsets.all(32),
           ),
-          onTap: () => setState(() => setVariable(variable - 1)),
+          onTap: () => setState(() => blocks[index]--),
         ),
       if (!start) add,
     ];
   }
 }
 
+/// A game that allows for camera control and displays Tap, Drag & Scroll
+/// events information on the screen, to allow exploration of the 3 coordinate
+/// systems of Flame (global, widget, game).
 class CoordinateSystemsGame extends BaseGame
     with
         MultiTouchTapDetector,
@@ -117,7 +107,7 @@ class CoordinateSystemsGame extends BaseGame
     ),
   );
 
-  String? lastEventDesc;
+  String? lastEventDescription;
   Vector2 cameraPosition = Vector2.zero();
   Vector2 cameraVelocity = Vector2.zero();
 
@@ -146,39 +136,46 @@ class CoordinateSystemsGame extends BaseGame
       canvasSize - Vector2.all(5.0),
       anchor: Anchor.bottomRight,
     );
-    final lastEventDesc = this.lastEventDesc;
-    if (lastEventDesc != null) {
-      _text.render(c, lastEventDesc, canvasSize / 2, anchor: Anchor.center);
+    final lastEventDescription = this.lastEventDescription;
+    if (lastEventDescription != null) {
+      _text.render(
+        c,
+        lastEventDescription,
+        canvasSize / 2,
+        anchor: Anchor.center,
+      );
     }
     super.render(c);
   }
 
   @override
   void onTapUp(int pointer, TapUpInfo info) {
-    lastEventDesc = describe('TapUp', info);
+    lastEventDescription = _describe('TapUp', info);
   }
 
   @override
   void onTapDown(int pointer, TapDownInfo info) {
-    lastEventDesc = describe('TapDown', info);
+    lastEventDescription = _describe('TapDown', info);
   }
 
   @override
   void onDragStart(int pointerId, DragStartInfo info) {
-    lastEventDesc = describe('DragStart', info);
+    lastEventDescription = _describe('DragStart', info);
   }
 
   @override
   void onDragUpdate(int pointerId, DragUpdateInfo info) {
-    lastEventDesc = describe('DragUpdate', info);
+    lastEventDescription = _describe('DragUpdate', info);
   }
 
   @override
   void onScroll(PointerScrollInfo info) {
-    lastEventDesc = describe('Scroll', info);
+    lastEventDescription = _describe('Scroll', info);
   }
 
-  static String describe(String name, PositionInfo info) {
+  /// Describes generic event information + some event specific details for
+  /// some events.
+  static String _describe(String name, PositionInfo info) {
     return [
       name,
       'Global: ${info.eventPosition.global}',
@@ -201,15 +198,18 @@ class CoordinateSystemsGame extends BaseGame
   void update(double dt) {
     super.update(dt);
     cameraPosition.add(cameraVelocity * dt * 10);
-    cameraPosition.x = dp(cameraPosition.x, 5);
-    cameraPosition.y = dp(cameraPosition.y, 5);
+    // just make it look pretty
+    cameraPosition.x = _dp(cameraPosition.x, 5);
+    cameraPosition.y = _dp(cameraPosition.y, 5);
   }
 
-  static double dp(double val, int places) {
+  /// Round [val] up to [places] decimal places.
+  static double _dp(double val, int places) {
     final mod = pow(10.0, places);
     return (val * mod).round().toDouble() / mod;
   }
 
+  /// Camera controls.
   @override
   void onKeyEvent(RawKeyEvent e) {
     final isKeyDown = e is RawKeyDownEvent;
