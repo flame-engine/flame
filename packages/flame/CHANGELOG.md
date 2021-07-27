@@ -10,6 +10,8 @@
  - Add `SpriteButton.asset`
  - Add `NineTileBox.asset`
  - Fix resolution of `TextBoxComponent`
+ - Add `BaseGame.remove` and `BaseGame.removeAll` helpers for removing components
+ - Add `BaseComponent.remove` and `BaseComponent.removeAll` helpers for removing children
  - Rename `Camera.cameraSpeed` to `Camera.speed`
  - Rename `addShape` to `addHitbox` in `Hitbox` mixin
 
