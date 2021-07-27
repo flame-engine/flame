@@ -9,7 +9,10 @@
  - Add `SpriteWidget.asset`
  - Add `SpriteButton.asset`
  - Add `NineTileBox.asset`
+ - Add `BaseGame.remove` and `BaseGame.removeAll` helpers for removing components
+ - Add `BaseComponent.remove` and `BaseComponent.removeAll` helpers for removing children
  - Rename `Camera.cameraSpeed` to `Camera.speed`
+ - Rename `addShape` to `addHitbox` in `Hitbox` mixin
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
