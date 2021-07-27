@@ -86,8 +86,9 @@ void main() async {
       codeLink: link('camera_sample.dart'),
     )
     ..add(
-      'Widget overlay',
-      (DashbookContext ctx) => WidgetSample.gameWidget(),
+      'Widget sample',
+      (DashbookContext ctx) => BodyWidgetSample(),
+      info: widgetSampleDescription,
       codeLink: link('widget_sample.dart'),
     );
   runApp(dashbook);

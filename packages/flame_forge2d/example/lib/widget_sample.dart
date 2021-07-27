@@ -1,13 +1,17 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:flame_forge2d/flame_forge2d.dart' hide Transform;
 import 'package:flame_forge2d/forge2d_game.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart' as widgets;
+import 'package:flutter/material.dart' as material;
+import 'package:flutter/widgets.dart';
 import 'package:forge2d/forge2d.dart' hide Transform;
 
 import 'boundaries.dart';
+
+const widgetSampleDescription = '''
+This examples shows how to render a widget on top of a Forge2D body.
+''';
 
 class WidgetSample extends Forge2DGame with TapDetector {
   List<Function()> updateStates = [];
@@ -53,8 +57,11 @@ class WidgetSample extends Forge2DGame with TapDetector {
     addLaterIds.clear();
     updateStates.forEach((f) => f());
   }
+}
 
-  static GameWidget gameWidget() {
+class BodyWidgetSample extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return GameWidget<WidgetSample>(
       game: WidgetSample(),
       overlayBuilderMap: {
@@ -99,14 +106,14 @@ class _BodyButtonState extends State<BodyButtonWidget> {
   Widget build(BuildContext context) {
     final body = _body;
     if (body == null) {
-      return widgets.Container();
+      return Container();
     } else {
       return Positioned(
         top: _game.screenPosition(body).y - 18,
         left: _game.screenPosition(body).x - 90,
-        child: widgets.Transform.rotate(
+        child: Transform.rotate(
           angle: -body.angle,
-          child: ElevatedButton(
+          child: material.ElevatedButton(
             onPressed: () {
               setState(
                 () => body.applyLinearImpulse(Vector2(0.0, 1000)),
