@@ -28,7 +28,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
           curve: curve,
         );
 
-  OpacityEffect.fadeOff({
+  OpacityEffect.fadeOut({
     this.duration = 1,
     this.paintId,
     Curve? curve,

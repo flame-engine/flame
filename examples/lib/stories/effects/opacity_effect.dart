@@ -36,7 +36,7 @@ class OpacityEffectGame extends BaseGame with TapDetector {
   @override
   void onTap() {
     if (sprite.paint.color.opacity == 1) {
-      sprite.addEffect(OpacityEffect.fadeOff());
+      sprite.addEffect(OpacityEffect.fadeOut());
     } else if (sprite.paint.color.opacity == 0) {
       sprite.addEffect(OpacityEffect.fadeIn());
     }
