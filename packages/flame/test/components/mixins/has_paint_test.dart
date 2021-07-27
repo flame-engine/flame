@@ -10,7 +10,7 @@ void main() {
     test('paint returns the default paint', () {
       final comp = MyComponent();
 
-      expect(comp.paint, comp.getPaint('main'));
+      expect(comp.paint, comp.getPaint());
     });
 
     test(
@@ -21,7 +21,7 @@ void main() {
         const color = Color(0xFFE5E5E5);
         comp.paint = Paint()..color = color;
 
-        expect(comp.getPaint('main').color, color);
+        expect(comp.getPaint().color, color);
       },
     );
 
@@ -59,18 +59,6 @@ void main() {
 
         expect(
           () => comp.getPaint('background'),
-          throwsArgumentError,
-        );
-      },
-    );
-
-    test(
-      'deletePaint cannot remove the main paint',
-      () {
-        final comp = MyComponent();
-
-        expect(
-          () => comp.deletePaint('main'),
           throwsArgumentError,
         );
       },
