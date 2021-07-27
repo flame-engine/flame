@@ -108,9 +108,10 @@ class _BodyButtonState extends State<BodyButtonWidget> {
     if (body == null) {
       return Container();
     } else {
+      final bodyPosition = _game.screenPosition(body);
       return Positioned(
-        top: _game.screenPosition(body).y - 18,
-        left: _game.screenPosition(body).x - 90,
+        top: bodyPosition.y - 18,
+        left: bodyPosition.x - 90,
         child: Transform.rotate(
           angle: -body.angle,
           child: material.ElevatedButton(
