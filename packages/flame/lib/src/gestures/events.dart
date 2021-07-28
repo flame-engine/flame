@@ -10,20 +10,18 @@ import '../game/game.dart';
 /// game: same as `widget` but also applies any transformations from the camera or viewport to the coordinate system
 class EventPosition {
   final Game _game;
-  final Offset _localPosition;
-  final Offset? _globalPosition;
-
-  /// Coordinates of the event relative to the game position/size and transformations
-  late final Vector2 game = _game.unprojectVector(_localPosition.toVector2());
-
-  /// Coordinates of the event relative to the game widget position/size
-  late final Vector2 widget = _localPosition.toVector2();
+  final Offset _globalPosition;
 
   /// Coordinates of the event relative to the whole screen
-  late final Vector2 global = _globalPosition?.toVector2() ??
-      _game.convertLocalToGlobalCoordinate(_localPosition.toVector2());
+  late final Vector2 global = _globalPosition.toVector2();
 
-  EventPosition(this._game, this._localPosition, this._globalPosition);
+  /// Coordinates of the event relative to the game widget position/size
+  late final Vector2 widget = _game.convertGlobalToLocalCoordinate(global);
+
+  /// Coordinates of the event relative to the game position/size and transformations
+  late final Vector2 game = _game.unprojectVector(widget);
+
+  EventPosition(this._game, this._globalPosition);
 }
 
 /// [EventDelta] converts deltas based events to two different values (game and global).
@@ -34,11 +32,11 @@ class EventDelta {
   final Game _game;
   final Offset _delta;
 
-  /// Scaled value relative to the game transformations
-  late final Vector2 game = _game.scaleVector(_delta.toVector2());
-
   /// Raw value relative to the game transformations
   late final Vector2 global = _delta.toVector2();
+
+  /// Scaled value relative to the game transformations
+  late final Vector2 game = _game.unscaleVector(global);
 
   EventDelta(this._game, this._delta);
 }
@@ -56,18 +54,12 @@ abstract class BaseInfo<T> {
 /// events on Flame.
 abstract class PositionInfo<T> extends BaseInfo<T> {
   final Game _game;
-  final Offset _position;
-  final Offset? _globalPosition;
+  final Offset _globalPosition;
 
-  late final eventPosition = EventPosition(
-    _game,
-    _position,
-    _globalPosition,
-  );
+  late final eventPosition = EventPosition(_game, _globalPosition);
 
   PositionInfo(
     this._game,
-    this._position,
     this._globalPosition,
     T raw,
   ) : super(raw);
@@ -77,21 +69,21 @@ class TapDownInfo extends PositionInfo<TapDownDetails> {
   TapDownInfo.fromDetails(
     Game game,
     TapDownDetails raw,
-  ) : super(game, raw.localPosition, raw.globalPosition, raw);
+  ) : super(game, raw.globalPosition, raw);
 }
 
 class TapUpInfo extends PositionInfo<TapUpDetails> {
   TapUpInfo.fromDetails(
     Game game,
     TapUpDetails raw,
-  ) : super(game, raw.localPosition, raw.globalPosition, raw);
+  ) : super(game, raw.globalPosition, raw);
 }
 
 class LongPressStartInfo extends PositionInfo<LongPressStartDetails> {
   LongPressStartInfo.fromDetails(
     Game game,
     LongPressStartDetails raw,
-  ) : super(game, raw.localPosition, raw.globalPosition, raw);
+  ) : super(game, raw.globalPosition, raw);
 }
 
 class LongPressEndInfo extends PositionInfo<LongPressEndDetails> {
@@ -101,14 +93,14 @@ class LongPressEndInfo extends PositionInfo<LongPressEndDetails> {
   LongPressEndInfo.fromDetails(
     Game game,
     LongPressEndDetails raw,
-  ) : super(game, raw.localPosition, raw.globalPosition, raw);
+  ) : super(game, raw.globalPosition, raw);
 }
 
 class LongPressMoveUpdateInfo extends PositionInfo<LongPressMoveUpdateDetails> {
   LongPressMoveUpdateInfo.fromDetails(
     Game game,
     LongPressMoveUpdateDetails raw,
-  ) : super(game, raw.localPosition, raw.globalPosition, raw);
+  ) : super(game, raw.globalPosition, raw);
 }
 
 class ForcePressInfo extends PositionInfo<ForcePressDetails> {
@@ -117,7 +109,7 @@ class ForcePressInfo extends PositionInfo<ForcePressDetails> {
   ForcePressInfo.fromDetails(
     Game game,
     ForcePressDetails raw,
-  ) : super(game, raw.localPosition, raw.globalPosition, raw);
+  ) : super(game, raw.globalPosition, raw);
 }
 
 class PointerScrollInfo extends PositionInfo<PointerScrollEvent> {
@@ -126,28 +118,28 @@ class PointerScrollInfo extends PositionInfo<PointerScrollEvent> {
   PointerScrollInfo.fromDetails(
     Game game,
     PointerScrollEvent raw,
-  ) : super(game, raw.localPosition, null, raw);
+  ) : super(game, raw.position, raw);
 }
 
 class PointerHoverInfo extends PositionInfo<PointerHoverEvent> {
   PointerHoverInfo.fromDetails(
     Game game,
     PointerHoverEvent raw,
-  ) : super(game, raw.localPosition, null, raw);
+  ) : super(game, raw.position, raw);
 }
 
 class DragDownInfo extends PositionInfo<DragDownDetails> {
   DragDownInfo.fromDetails(
     Game game,
     DragDownDetails raw,
-  ) : super(game, raw.localPosition, raw.globalPosition, raw);
+  ) : super(game, raw.globalPosition, raw);
 }
 
 class DragStartInfo extends PositionInfo<DragStartDetails> {
   DragStartInfo.fromDetails(
     Game game,
     DragStartDetails raw,
-  ) : super(game, raw.localPosition, raw.globalPosition, raw);
+  ) : super(game, raw.globalPosition, raw);
 }
 
 class DragUpdateInfo extends PositionInfo<DragUpdateDetails> {
@@ -156,7 +148,7 @@ class DragUpdateInfo extends PositionInfo<DragUpdateDetails> {
   DragUpdateInfo.fromDetails(
     Game game,
     DragUpdateDetails raw,
-  ) : super(game, raw.localPosition, raw.globalPosition, raw);
+  ) : super(game, raw.globalPosition, raw);
 }
 
 class DragEndInfo extends BaseInfo<DragEndDetails> {
@@ -177,13 +169,15 @@ class ScaleStartInfo extends PositionInfo<ScaleStartDetails> {
   ScaleStartInfo.fromDetails(
     Game game,
     ScaleStartDetails raw,
-  ) : super(game, raw.localFocalPoint, raw.focalPoint, raw);
+  ) : super(game, raw.focalPoint, raw);
 }
 
 class ScaleEndInfo extends BaseInfo<ScaleEndDetails> {
   final Game _game;
-  late final EventDelta velocity =
-      EventDelta(_game, raw.velocity.pixelsPerSecond);
+  late final EventDelta velocity = EventDelta(
+    _game,
+    raw.velocity.pixelsPerSecond,
+  );
 
   int get pointerCount => raw.pointerCount;
 
@@ -204,5 +198,5 @@ class ScaleUpdateInfo extends PositionInfo<ScaleUpdateDetails> {
   ScaleUpdateInfo.fromDetails(
     Game game,
     ScaleUpdateDetails raw,
-  ) : super(game, raw.localFocalPoint, raw.focalPoint, raw);
+  ) : super(game, raw.focalPoint, raw);
 }
