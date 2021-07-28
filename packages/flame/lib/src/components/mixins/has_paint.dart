@@ -7,13 +7,15 @@ import '../../palette.dart';
 ///
 /// Component will always have a main Paint that can be accessed
 /// by the [paint] attribute and other paints can be manipulated/accessed
-/// using [getPaint], [setPaint] and [deletePaint]
+/// using [getPaint], [setPaint] and [deletePaint] by a key of generic type [T], that can be omited if the component only have one paint.
 mixin HasPaint<T extends Object> on BaseComponent {
   final Map<T, Paint> _paints = {};
 
   Paint paint = BasicPalette.white.paint();
 
-  /// Gets a paint from the collection, returns the main paint if no [key] is provided
+  /// Gets a paint from the collection.
+  ///
+  /// Returns the main paint if no [key] is provided.
   Paint getPaint([T? key]) {
     if (key == null) {
       return paint;

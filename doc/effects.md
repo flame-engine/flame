@@ -190,21 +190,21 @@ An example of how to use the `CombinedEffect` can be found
 
 ## Common for paint effects
 
-Flame provides an useful mixin that adds paint variables to your components, that is used by some
+Flame provides an useful mixin that adds paint variables to your components. This mixin is used by some
 of Flame's own components like `SpriteComponent`, `SpriteAnimationComponent`, but you can also use
-it on you any custom component that your game has, and any component that uses that mixin can have
-paint affects applied to it.
+it on you any of your custom components. Any component that uses this mixin can have
+paint effects applied to it.
 
 By default all effects will animate the main paint of the component, that can be changed by passing
 a `paintId` to the effect contructor. This can be useful for when you have a component that have
 multiple paints, for example a component which has a foreground and background layer.
 
-Check below for a list of the available paint effects
+Below is a list of the available paint effects.
 
 ## OpacityEffect
 
-This effect allows you animate the opacity of your paint, it receives a double for the opacity,
-which must be between 0 and 1 (including) and a duration in seconds, represented by a double as
+This effect allows you animate the opacity of your paint. It receives a double for the opacity,
+which must be between 0 and 1 (including), and a duration in seconds, represented by a double as
 well.
 
 Usage example:
@@ -223,11 +223,10 @@ An example of how to use the `OpacityEffect` can be found
 
 ## ColorEffect
 
-This effect will change the base color of the paint, making things rendered with it, looks like
-it was tinted with the passed color.
+This effect will change the base color of the paint, causing the rendered component to be tinted by the provided color.
 
 
-Usage Example:
+Usage example:
 
 ```dart
 myComponent.addEffect(
@@ -238,7 +237,7 @@ myComponent.addEffect(
 );
 ```
 
-An example of how to use the `ColorEffect` can be found
+A more in-depth example can be found
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects/color_effect.dart).
 
 ## Examples
