@@ -26,8 +26,8 @@ class OpacityEffectGame extends BaseGame with TapDetector {
           OpacityEffect(
             opacity: 0,
             duration: 0.5,
-            initialIsInfinite: true,
-            initialIsAlternating: true,
+            isInfinite: true,
+            isAlternating: true,
           ),
         ),
     );
@@ -35,9 +35,10 @@ class OpacityEffectGame extends BaseGame with TapDetector {
 
   @override
   void onTap() {
-    if (sprite.paint.color.opacity == 1) {
+    final opacity = sprite.paint.color.opacity;
+    if (opacity == 1) {
       sprite.addEffect(OpacityEffect.fadeOut());
-    } else if (sprite.paint.color.opacity == 0) {
+    } else if (opacity == 0) {
       sprite.addEffect(OpacityEffect.fadeIn());
     }
   }

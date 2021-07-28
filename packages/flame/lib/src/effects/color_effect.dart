@@ -19,11 +19,11 @@ class ColorEffect extends ComponentEffect<HasPaint> {
     required this.duration,
     this.paintId,
     Curve? curve,
-    bool initialIsInfinite = false,
-    bool initialIsAlternating = false,
+    bool isInfinite = false,
+    bool isAlternating = false,
   }) : super(
-          initialIsInfinite,
-          initialIsAlternating,
+          isInfinite,
+          isAlternating,
           curve: curve,
         );
 

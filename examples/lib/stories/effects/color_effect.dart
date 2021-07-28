@@ -19,8 +19,8 @@ class ColorEffectGame extends BaseGame with TapDetector {
           ColorEffect(
             color: const Color(0xFF00FF00),
             duration: 0.5,
-            initialIsInfinite: true,
-            initialIsAlternating: true,
+            isInfinite: true,
+            isAlternating: true,
           ),
         ),
     );

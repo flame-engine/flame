@@ -15,7 +15,7 @@
  - Rename `Camera.cameraSpeed` to `Camera.speed`
  - Rename `addShape` to `addHitbox` in `Hitbox` mixin
  - Fix bug with Events and Draggables
- - Generalize `paint` usage on fields
+ - Generalize `paint` usage on components
  - Create `OpacityEffect`
  - Create `ColorEffect`
 

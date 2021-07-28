@@ -20,11 +20,11 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     required this.duration,
     this.paintId,
     Curve? curve,
-    bool initialIsInfinite = false,
-    bool initialIsAlternating = false,
+    bool isInfinite = false,
+    bool isAlternating = false,
   }) : super(
-          initialIsInfinite,
-          initialIsAlternating,
+          isInfinite,
+          isAlternating,
           curve: curve,
         );
 
@@ -32,12 +32,12 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     this.duration = 1,
     this.paintId,
     Curve? curve,
-    bool initialIsInfinite = false,
-    bool initialIsAlternating = false,
+    bool isInfinite = false,
+    bool isAlternating = false,
   })  : opacity = 0,
         super(
-          initialIsInfinite,
-          initialIsAlternating,
+          isInfinite,
+          isAlternating,
           curve: curve,
         );
 
@@ -45,12 +45,12 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     this.duration = 1,
     this.paintId,
     Curve? curve,
-    bool initialIsInfinite = false,
-    bool initialIsAlternating = false,
+    bool isInfinite = false,
+    bool isAlternating = false,
   })  : opacity = 1,
         super(
-          initialIsInfinite,
-          initialIsAlternating,
+          isInfinite,
+          isAlternating,
           curve: curve,
         );
 

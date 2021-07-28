@@ -7,7 +7,7 @@ import '../../palette.dart';
 ///
 /// Component will always have a main Paint that can be accessed
 /// by the [paint] attribute and other paints can be manipulated/accessed
-/// using [getPaint], [setPaint] and [deletePaint] by a key of generic type [T], that can be omited if the component only have one paint.
+/// using [getPaint], [setPaint] and [deletePaint] by a paintId of generic type [T], that can be omited if the component only have one paint.
 mixin HasPaint<T extends Object> on BaseComponent {
   final Map<T, Paint> _paints = {};
 
@@ -15,27 +15,27 @@ mixin HasPaint<T extends Object> on BaseComponent {
 
   /// Gets a paint from the collection.
   ///
-  /// Returns the main paint if no [key] is provided.
-  Paint getPaint([T? key]) {
-    if (key == null) {
+  /// Returns the main paint if no [paintId] is provided.
+  Paint getPaint([T? paintId]) {
+    if (paintId == null) {
       return paint;
     }
 
-    final _paint = _paints[key];
+    final _paint = _paints[paintId];
 
     if (_paint == null) {
-      throw ArgumentError('No Paint found for $key');
+      throw ArgumentError('No Paint found for $paintId');
     }
 
     return _paint;
   }
 
   /// Sets a paint on the collection
-  void setPaint(T key, Paint paint) => _paints[key] = paint;
+  void setPaint(T paintId, Paint paint) => _paints[paintId] = paint;
 
   /// Removes a paint from the collection
-  void deletePaint(T key) {
-    _paints.remove(key);
+  void deletePaint(T paintId) {
+    _paints.remove(paintId);
   }
 
   /// Manipulate the paint to make it fully transparent
