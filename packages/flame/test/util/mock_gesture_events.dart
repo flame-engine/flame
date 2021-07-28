@@ -5,13 +5,13 @@ import 'package:flutter/gestures.dart';
 
 TapDownInfo createTapDownEvent(
   Game game, {
-  Offset? position,
   Offset? globalPosition,
+  Offset? localPosition,
 }) {
   return TapDownInfo.fromDetails(
     game,
     TapDownDetails(
-      localPosition: position ?? Offset.zero,
+      localPosition: localPosition ?? Offset.zero,
       globalPosition: globalPosition ?? Offset.zero,
     ),
   );
