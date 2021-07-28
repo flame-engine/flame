@@ -190,14 +190,18 @@ An example of how to use the `CombinedEffect` can be found
 
 ## Common for paint effects
 
-Flame provides an useful mixin that adds paint variables to your components. This mixin is used by some
-of Flame's own components like `SpriteComponent`, `SpriteAnimationComponent`, but you can also use
-it on you any of your custom components. Any component that uses this mixin can have
-paint effects applied to it.
+Flame provides an useful mixin called `HasPaint` that adds paint variables to your components.
+It adds a default `Paint` attribute to the class and an additional collection of paints in case
+your component requires more than a single `Paint`. In addition to those attributes, a few
+methods to make it easy to manipulate the paints will became available, for example `setOpacity`.
 
-By default all effects will animate the main paint of the component, that can be changed by passing
+This mixin is used by some of Flame's own components like `SpriteComponent`,
+`SpriteAnimationComponent`, but you can also use it on you any of your custom components. Any
+component that uses this mixin can have paint effects applied to it.
+
+By default, all effects will animate the main paint of the component. That can be changed by passing
 a `paintId` to the effect contructor. This can be useful for when you have a component that have
-multiple paints, for example a component which has a foreground and background layer.
+multiple paints; for example a component which has a foreground and background layer.
 
 Below is a list of the available paint effects.
 
