@@ -199,12 +199,12 @@ class CoordinateSystemsGame extends BaseGame
     super.update(dt);
     cameraPosition.add(cameraVelocity * dt * 10);
     // just make it look pretty
-    cameraPosition.x = _roundDouble(cameraPosition.x, 5);
-    cameraPosition.y = _roundDouble(cameraPosition.y, 5);
+    cameraPosition.x = _dp(cameraPosition.x, 5);
+    cameraPosition.y = _dp(cameraPosition.y, 5);
   }
 
   /// Round [val] up to [places] decimal places.
-  static double _roundDouble(double val, int places) {
+  static double _dp(double val, int places) {
     final mod = pow(10.0, places);
     return (val * mod).round().toDouble() / mod;
   }
