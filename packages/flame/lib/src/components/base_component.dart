@@ -28,10 +28,11 @@ abstract class BaseComponent extends Component {
   @override
   BaseComponent? get parent => _parent;
 
-  /// This is set by the BaseGame to tell this component to render additional debug information,
-  /// like borders, coordinates, etc.
+  /// This is set by the BaseGame to tell this component to render additional
+  /// debug information, like borders, coordinates, etc.
   /// This is very helpful while debugging. Set your BaseGame debugMode to true.
-  /// You can also manually override this for certain components in order to identify issues.
+  /// You can also manually override this for certain components in order to
+  /// identify issues.
   bool debugMode = false;
 
   Color debugColor = const Color(0xFFFF00FF);
@@ -50,11 +51,15 @@ abstract class BaseComponent extends Component {
 
   BaseComponent({int? priority}) : super(priority: priority);
 
-  /// This method is called periodically by the game engine to request that your component updates itself.
+  /// This method is called periodically by the game engine to request that your
+  /// component updates itself.
   ///
-  /// The time [dt] in seconds (with microseconds precision provided by Flutter) since the last update cycle.
-  /// This time can vary according to hardware capacity, so make sure to update your state considering this.
-  /// All components on [BaseGame] are always updated by the same amount. The time each one takes to update adds up to the next update cycle.
+  /// The time [dt] in seconds (with microseconds precision provided by Flutter)
+  /// since the last update cycle.
+  /// This time can vary according to hardware capacity, so make sure to update
+  /// your state considering this.
+  /// All components on [BaseGame] are always updated by the same amount. The
+  /// time each one takes to update adds up to the next update cycle.
   @mustCallSuper
   @override
   void update(double dt) {
@@ -176,6 +181,18 @@ abstract class BaseComponent extends Component {
   /// See [addChild] for details (or `children.addChildren()`).
   Future<void> addChildren(List<Component> cs, {BaseGame? gameRef}) {
     return children.addChildren(cs, gameRef: gameRef);
+  }
+
+  /// Removes a component from the component list, calling onRemove for it and
+  /// its children.
+  void removeChild(Component c) {
+    children.remove(c);
+  }
+
+  /// Removes all the children in the list and calls onRemove for all of them
+  /// and their children.
+  void removeChildren(Iterable<Component> cs) {
+    children.removeAll(cs);
   }
 
   /// Whether the children list contains the given component.
