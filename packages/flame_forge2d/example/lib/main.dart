@@ -9,10 +9,12 @@ import 'composition_sample.dart';
 import 'contact_callbacks_sample.dart';
 import 'domino_sample.dart';
 import 'draggable_sample.dart';
+import 'joint_sample.dart';
 import 'mouse_joint_sample.dart';
 import 'position_body_sample.dart';
 import 'sprite_body_sample.dart';
 import 'tappable_sample.dart';
+import 'widget_sample.dart';
 
 String link(String example) =>
     'https://github.com/flame-engine/flame_forge2d/tree/main/example/lib/$example';
@@ -69,6 +71,11 @@ void main() async {
       codeLink: link('draggable_sample.dart'),
     )
     ..add(
+      'Basic joint',
+      (DashbookContext ctx) => GameWidget(game: JointSample()),
+      codeLink: link('joint_sample.dart'),
+    )
+    ..add(
       'Mouse Joint',
       (DashbookContext ctx) => GameWidget(game: MouseJointSample()),
       codeLink: link('mouse_joint_sample.dart'),
@@ -77,6 +84,12 @@ void main() async {
       'Camera',
       (DashbookContext ctx) => GameWidget(game: CameraSample()),
       codeLink: link('camera_sample.dart'),
+    )
+    ..add(
+      'Widget sample',
+      (DashbookContext ctx) => BodyWidgetSample(),
+      info: widgetSampleDescription,
+      codeLink: link('widget_sample.dart'),
     );
   runApp(dashbook);
 }

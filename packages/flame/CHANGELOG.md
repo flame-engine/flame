@@ -14,6 +14,7 @@
  - Add `BaseComponent.remove` and `BaseComponent.removeAll` helpers for removing children
  - Rename `Camera.cameraSpeed` to `Camera.speed`
  - Rename `addShape` to `addHitbox` in `Hitbox` mixin
+ - Fix bug with Events and Draggables
  - Generalize `paint` usage on fields
  - Create `OpacityEffect`
  - Create `ColorEffect`
