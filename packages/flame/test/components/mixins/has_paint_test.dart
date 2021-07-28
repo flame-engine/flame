@@ -9,7 +9,9 @@ enum MyComponentKeys {
   background,
   foreground,
 }
-class MyComponentWithType extends PositionComponent with HasPaint<MyComponentKeys> {}
+
+class MyComponentWithType extends PositionComponent
+    with HasPaint<MyComponentKeys> {}
 
 void main() {
   group('Components - HasPaint', () {
@@ -106,7 +108,8 @@ void main() {
       'makeOpaque sets opacity to 1 on informed paintId',
       () {
         final comp = MyComponentWithType();
-        comp.setPaint(MyComponentKeys.background, Paint()..color = const Color(0x00E5E5E5));
+        comp.setPaint(MyComponentKeys.background,
+            Paint()..color = const Color(0x00E5E5E5));
         comp.makeOpaque(paintId: MyComponentKeys.background);
 
         expect(comp.getPaint(MyComponentKeys.background).color.opacity, 1);
