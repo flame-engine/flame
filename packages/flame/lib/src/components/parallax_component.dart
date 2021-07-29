@@ -78,6 +78,7 @@ class ParallaxComponent<T extends BaseGame> extends PositionComponent
     )..parallax = parallax;
   }
 
+  @mustCallSuper
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
