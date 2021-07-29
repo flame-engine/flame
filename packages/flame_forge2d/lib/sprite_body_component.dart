@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
-import 'package:flame_forge2d/forge2d_game.dart';
 
+import 'forge2d_game.dart';
 import 'position_body_component.dart';
 
 abstract class SpriteBodyComponent<T extends Forge2DGame>

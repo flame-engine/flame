@@ -1,8 +1,8 @@
 import 'package:flame/components.dart';
-import 'package:flame_forge2d/forge2d_game.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import 'body_component.dart';
+import 'forge2d_game.dart';
 
 /// A [PositionBodyComponent] handles a [PositionComponent] on top of a
 /// [BodyComponent]. You have to keep track of the size of the
