@@ -15,6 +15,7 @@
  - Rename `Camera.cameraSpeed` to `Camera.speed`
  - Rename `addShape` to `addHitbox` in `Hitbox` mixin
  - Fix bug with Events and Draggables
+ - Fix parallax fullscreen bug when game is resized
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
