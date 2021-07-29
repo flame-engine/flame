@@ -16,6 +16,7 @@
  - Rename `addShape` to `addHitbox` in `Hitbox` mixin
  - Fix bug with Events and Draggables
  - Fix parallax fullscreen bug when game is resized
+ - Test
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
