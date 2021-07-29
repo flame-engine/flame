@@ -3,8 +3,10 @@ import 'package:meta/meta.dart';
 
 import '../../../components.dart';
 import '../../../extensions.dart';
+import '../../../game.dart';
 
-class HudMarginComponent extends PositionComponent with HasGameRef {
+class HudMarginComponent<T extends BaseGame> extends PositionComponent
+    with HasGameRef<T> {
   @override
   bool isHud = true;
 
