@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
+import '../../components.dart';
+import '../../game.dart';
 import '../assets/images.dart';
 import '../extensions/vector2.dart';
 import '../game/game.dart';
@@ -39,7 +41,10 @@ extension ParallaxComponentExtension on Game {
 
 /// A full parallax, several layers of images drawn out on the screen and each
 /// layer moves with different velocities to give an effect of depth.
-class ParallaxComponent extends PositionComponent {
+class ParallaxComponent<T extends BaseGame> extends PositionComponent
+    with HasGameRef<T> {
+  @override
+  bool isHud = true;
   bool isFullscreen = true;
   Parallax? _parallax;
 
@@ -77,10 +82,12 @@ class ParallaxComponent extends PositionComponent {
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
-    if (isFullscreen) {
-      this.size.setFrom(size);
-      parallax?.resize(size);
+    if (!isFullscreen) {
+      return;
     }
+    final newSize = gameRef.viewport.effectiveSize;
+    this.size.setFrom(newSize);
+    parallax?.resize(newSize);
   }
 
   @override

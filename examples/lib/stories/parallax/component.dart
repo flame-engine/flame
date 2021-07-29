@@ -9,8 +9,7 @@ class ComponentParallaxGame extends BaseGame {
   }
 }
 
-class MyParallaxComponent extends ParallaxComponent
-    with HasGameRef<ComponentParallaxGame> {
+class MyParallaxComponent extends ParallaxComponent<ComponentParallaxGame> {
   @override
   Future<void> onLoad() async {
     parallax = await gameRef.loadParallax(
