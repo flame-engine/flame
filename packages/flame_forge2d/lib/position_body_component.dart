@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame_forge2d/forge2d_game.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'body_component.dart';
@@ -6,7 +7,8 @@ import 'body_component.dart';
 /// A [PositionBodyComponent] handles a [PositionComponent] on top of a
 /// [BodyComponent]. You have to keep track of the size of the
 /// [PositionComponent] and it can only have its anchor in the center.
-abstract class PositionBodyComponent extends BodyComponent {
+abstract class PositionBodyComponent<T extends Forge2DGame>
+    extends BodyComponent<T> {
   PositionComponent positionComponent;
   Vector2 size;
 

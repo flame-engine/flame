@@ -1,8 +1,10 @@
 import 'package:flame/components.dart';
+import 'package:flame_forge2d/forge2d_game.dart';
 
 import 'position_body_component.dart';
 
-abstract class SpriteBodyComponent extends PositionBodyComponent {
+abstract class SpriteBodyComponent<T extends Forge2DGame>
+    extends PositionBodyComponent<T> {
   /// Make sure that the [size] of the sprite matches the bounding shape of the
   /// body that is create in createBody()
   SpriteBodyComponent(
