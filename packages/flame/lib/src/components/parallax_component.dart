@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flame/components.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
+import '../../components.dart';
 import '../../game.dart';
 import '../assets/images.dart';
 import '../extensions/vector2.dart';
