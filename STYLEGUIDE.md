@@ -1,7 +1,7 @@
 # Style Guide
 
-This is a general style guide that shall govern over all Flame repositories. The aim is to keep a
-common stable general environment. This includes high level guidance to help with simple decisions
+This is a general style guide that shall govern over all Flame repositories. The aim is to keep
+all codebases clean and pristine. This includes high level guidance to help with simple decisions
 in the day-to-day development life.
 
 This extends rules on the official [Flutter Style
