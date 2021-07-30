@@ -142,7 +142,7 @@ void main() {
         1,
         createTapDownEvent(
           game,
-          position: const Offset(250, 250),
+          globalPosition: const Offset(250, 250),
         ),
       );
 
