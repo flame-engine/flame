@@ -109,6 +109,7 @@ void something(int smaller, int bigger) {
   // ...
 }
 ````
+
 ## Comments
 
 * For any `//` comments, always add a space after the second slash and before the next character.
