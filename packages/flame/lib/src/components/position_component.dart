@@ -56,7 +56,7 @@ abstract class PositionComponent extends BaseComponent {
 
   /// The size that this component is rendered with after [scale] is applied.
   Vector2 get scaledSize {
-    if (_scale.x != 0.0 || _scale.y != 0.0) {
+    if (_scale.x != 1.0 || _scale.y != 1.0) {
       return size.clone()..multiply(_scale);
     } else {
       return size;
@@ -195,23 +195,29 @@ abstract class PositionComponent extends BaseComponent {
     );
   }
 
+  final Matrix4 _preRenderMatrix = Matrix4.identity();
+
   @override
   void preRender(Canvas canvas) {
-    canvas.translate(x, y);
-    canvas.rotate(angle);
+    // Move canvas to the components anchor position.
+    _preRenderMatrix.translate(x, y);
+    if (scale.x != 1.0 || scale.y != 1.0) {
+      _preRenderMatrix.scale(scale.x, scale.y);
+    }
+    _preRenderMatrix.rotateZ(angle);
+    canvas.transform(_preRenderMatrix.storage);
+    _preRenderMatrix.setIdentity();
+
     final delta = -anchor.toVector2()
-      ..multiply(size);
+      ..multiply(scaledSize);
     canvas.translate(delta.x, delta.y);
 
     // Handle inverted rendering by moving center and flipping.
     if (renderFlipX || renderFlipY) {
+      // TODO: Use _preRenderMatrix here
       canvas.translate(width / 2, height / 2);
       canvas.scale(renderFlipX ? -1.0 : 1.0, renderFlipY ? -1.0 : 1.0);
       canvas.translate(-width / 2, -height / 2);
-    }
-
-    if (scale.x != 1.0 || scale.y != 1.0) {
-      canvas.scale(scale.x, scale.y);
     }
   }
 }
