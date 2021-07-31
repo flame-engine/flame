@@ -36,25 +36,26 @@ class HudMarginComponent<T extends BaseGame> extends PositionComponent
     if (margin != null) {
       final margin = this.margin!;
       final x = margin.left != 0
-          ? margin.left + size.x / 2
-          : gameRef.viewport.effectiveSize.x - margin.right - size.x / 2;
+          ? margin.left + scaledSize.x / 2
+          : gameRef.viewport.effectiveSize.x - margin.right - scaledSize.x / 2;
       final y = margin.top != 0
-          ? margin.top + size.y / 2
-          : gameRef.viewport.effectiveSize.y - margin.bottom - size.y / 2;
+          ? margin.top + scaledSize.y / 2
+          : gameRef.viewport.effectiveSize.y - margin.bottom - scaledSize.y / 2;
       position.setValues(x, y);
-      position = Anchor.center.toOtherAnchorPosition(center, anchor, size);
+      position =
+          Anchor.center.toOtherAnchorPosition(center, anchor, scaledSize);
     } else {
       final topLeft = gameRef.viewport.effectiveSize -
           anchor.toOtherAnchorPosition(
             position,
             Anchor.topLeft,
-            size,
+            scaledSize,
           );
       final bottomRight = gameRef.viewport.effectiveSize -
           anchor.toOtherAnchorPosition(
             position,
             Anchor.bottomRight,
-            size,
+            scaledSize,
           );
       margin = EdgeInsets.fromLTRB(
         topLeft.x,

@@ -133,7 +133,7 @@ mixin HitboxShape on Shape {
   late PositionComponent component;
 
   @override
-  Vector2 get size => component.size;
+  Vector2 get size => component.scaledSize;
 
   @override
   double get parentAngle => component.angle;

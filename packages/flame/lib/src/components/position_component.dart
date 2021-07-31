@@ -35,7 +35,7 @@ abstract class PositionComponent extends BaseComponent {
   double get y => _position.y;
   set y(double y) => _position.y = y;
 
-  /// The size that this component is rendered with.
+  /// The size that this component is rendered with before [scale] is applied.
   /// This is not necessarily the source size of the asset.
   final Vector2 _size;
   Vector2 get size => _size;
@@ -49,6 +49,20 @@ abstract class PositionComponent extends BaseComponent {
   double get height => size.y;
   set height(double height) => size.y = height;
 
+  /// The scale factor of this component
+  final Vector2 _scale;
+  Vector2 get scale => _scale;
+  set scale(Vector2 scale) => _scale.setFrom(scale);
+
+  /// The size that this component is rendered with after [scale] is applied.
+  Vector2 get scaledSize {
+    if (_scale.x != 0.0 || _scale.y != 0.0) {
+      return size.clone()..multiply(_scale);
+    } else {
+      return size;
+    }
+  }
+
   /// Get the absolute position, with the anchor taken into consideration
   Vector2 get absolutePosition => absoluteParentPosition + position;
 
@@ -57,13 +71,13 @@ abstract class PositionComponent extends BaseComponent {
     return anchor.toOtherAnchorPosition(
       position,
       Anchor.topLeft,
-      size,
+      scaledSize,
     );
   }
 
   /// Set the top left position regardless of the anchor
   set topLeftPosition(Vector2 position) {
-    this.position = position + (anchor.toVector2()..multiply(size));
+    this.position = position + (anchor.toVector2()..multiply(scaledSize));
   }
 
   /// Get the absolute top left position regardless of whether it is a child or not
@@ -93,7 +107,7 @@ abstract class PositionComponent extends BaseComponent {
     if (anchor == Anchor.center) {
       return position;
     } else {
-      return anchor.toOtherAnchorPosition(position, Anchor.center, size)
+      return anchor.toOtherAnchorPosition(position, Anchor.center, scaledSize)
         ..rotate(angle, center: absolutePosition);
     }
   }
@@ -118,10 +132,12 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Returns the relative position/size of this component.
   /// Relative because it might be translated by their parents (which is not considered here).
+  // TODO: Should scale be taken into consideration here
   Rect toRect() => topLeftPosition.toPositionedRect(size);
 
   /// Returns the absolute position/size of this component.
   /// Absolute because it takes any possible parent position into consideration.
+  // TODO: Should scale be taken into consideration here
   Rect toAbsoluteRect() => absoluteTopLeftPosition.toPositionedRect(size);
 
   /// Mutates position and size using the provided [rect] as basis.
@@ -135,6 +151,7 @@ abstract class PositionComponent extends BaseComponent {
   PositionComponent({
     Vector2? position,
     Vector2? size,
+    Vector2? scale,
     this.angle = 0.0,
     this.anchor = Anchor.topLeft,
     this.renderFlipX = false,
@@ -142,6 +159,7 @@ abstract class PositionComponent extends BaseComponent {
     int? priority,
   })  : _position = position ?? Vector2.zero(),
         _size = size ?? Vector2.zero(),
+        _scale = scale ?? Vector2.all(1.0),
         super(priority: priority);
 
   @override
@@ -160,7 +178,7 @@ abstract class PositionComponent extends BaseComponent {
     if (this is Hitbox) {
       (this as Hitbox).renderHitboxes(canvas);
     }
-    canvas.drawRect(size.toRect(), debugPaint);
+    canvas.drawRect(scaledSize.toRect(), debugPaint);
     debugTextPaint.render(
       canvas,
       'x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}',
@@ -190,6 +208,10 @@ abstract class PositionComponent extends BaseComponent {
       canvas.translate(width / 2, height / 2);
       canvas.scale(renderFlipX ? -1.0 : 1.0, renderFlipY ? -1.0 : 1.0);
       canvas.translate(-width / 2, -height / 2);
+    }
+
+    if (scale.x != 1.0 || scale.y != 1.0) {
+      canvas.scale(scale.x, scale.y);
     }
   }
 }
