@@ -127,7 +127,7 @@ void main() {
         ),
         [
           'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)', // camera translation
-          'translate(10.0, 10.0)', // position component translation
+          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 10.0, 0.0, 1.0)', // position component translate
           'translate(0.0, 0.0)', // position component anchor
         ],
       );
@@ -155,7 +155,7 @@ void main() {
         ),
         [
           'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -4.0, -4.0, 0.0, 1.0)', // camera translation
-          'translate(10.0, 10.0)', // position component translation
+          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 10.0, 0.0, 1.0)', // position component translate
           'translate(0.0, 0.0)', // position component anchor
         ],
       );
@@ -200,7 +200,7 @@ void main() {
         ),
         [
           'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 40.0, 30.0, 0.0, 1.0)', // camera translation
-          'translate(10.0, 20.0)', // position component translation
+          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 20.0, 0.0, 1.0)', // position component translate
           'translate(-0.5, -0.5)', // position component anchor
         ],
         // result: 50 - w/2, 50 - h/2 (perfectly centered)
@@ -231,7 +231,7 @@ void main() {
         ),
         [
           'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -550.0, -1920.0, 0.0, 1.0)', // camera translation
-          'translate(600.0, 2000.0)', // position component translation
+          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 600.0, 2000.0, 0.0, 1.0)', // position component translation
           'translate(-0.5, -0.5)', // position component anchor
         ],
         // result: 50 - w/2, 80 - h/2 (respects fractional relative offset)
@@ -323,7 +323,7 @@ void main() {
         ),
         [
           'transform(2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 1.0)', // camera translation and zoom
-          'translate(100.0, 100.0)', // position component
+          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 100.0, 100.0, 0.0, 1.0)', // position component translate
           'translate(-0.5, -0.5)', // anchor
         ],
       );
@@ -346,7 +346,7 @@ void main() {
         ),
         [
           'transform(2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 100.0, 100.0, 0.0, 1.0)', // camera translation and zoom
-          'translate(100.0, 100.0)', // position component
+          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 100.0, 100.0, 0.0, 1.0)', // position component translate
           'translate(-0.5, -0.5)', // anchor
         ],
       );
