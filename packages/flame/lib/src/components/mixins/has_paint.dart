@@ -13,6 +13,13 @@ mixin HasPaint<T extends Object> on BaseComponent {
 
   Paint paint = BasicPalette.white.paint();
 
+  void _asserGenerics() {
+    assert(
+      T != Object,
+      'When using the paint collection, component should declare a generic type',
+    );
+  }
+
   /// Gets a paint from the collection.
   ///
   /// Returns the main paint if no [paintId] is provided.
@@ -21,6 +28,7 @@ mixin HasPaint<T extends Object> on BaseComponent {
       return paint;
     }
 
+    _asserGenerics();
     final _paint = _paints[paintId];
 
     if (_paint == null) {
@@ -31,10 +39,14 @@ mixin HasPaint<T extends Object> on BaseComponent {
   }
 
   /// Sets a paint on the collection
-  void setPaint(T paintId, Paint paint) => _paints[paintId] = paint;
+  void setPaint(T paintId, Paint paint) {
+    _asserGenerics();
+    _paints[paintId] = paint;
+  }
 
   /// Removes a paint from the collection
   void deletePaint(T paintId) {
+    _asserGenerics();
     _paints.remove(paintId);
   }
 

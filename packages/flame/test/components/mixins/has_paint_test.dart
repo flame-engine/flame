@@ -46,6 +46,18 @@ void main() {
     );
 
     test(
+      'getPaint throws exception when used on genericless component',
+      () {
+        final comp = MyComponent();
+
+        expect(
+          () => comp.getPaint(MyComponentKeys.background),
+          throwsAssertionError,
+        );
+      },
+    );
+
+    test(
       'setPaint sets a paint',
       () {
         final comp = MyComponentWithType();
@@ -54,6 +66,22 @@ void main() {
         comp.setPaint(MyComponentKeys.background, Paint()..color = color);
 
         expect(comp.getPaint(MyComponentKeys.background).color, color);
+      },
+    );
+
+    test(
+      'setPaint throws exception when used on genericless component',
+      () {
+        final comp = MyComponent();
+
+        const color = Color(0xFFA9A9A9);
+        expect(
+          () => comp.setPaint(
+            MyComponentKeys.background,
+            Paint()..color = color,
+          ),
+          throwsAssertionError,
+        );
       },
     );
 
@@ -68,6 +96,18 @@ void main() {
         expect(
           () => comp.getPaint(MyComponentKeys.background),
           throwsArgumentError,
+        );
+      },
+    );
+
+    test(
+      'deletePaint throws exception when used on genericless component',
+      () {
+        final comp = MyComponent();
+
+        expect(
+          () => comp.deletePaint(MyComponentKeys.background),
+          throwsAssertionError,
         );
       },
     );
