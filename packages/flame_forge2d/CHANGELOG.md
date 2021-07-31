@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [Next]
+## [0.8.1-releasecandidate.13]
  - Added physics tied to widgets example
  - Added basic joint example
  - Add generics passed to HasGameRef from PositionBodyComponent and SpriteBodyComponent
