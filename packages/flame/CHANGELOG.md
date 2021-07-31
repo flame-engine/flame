@@ -15,6 +15,8 @@
  - Rename `Camera.cameraSpeed` to `Camera.speed`
  - Rename `addShape` to `addHitbox` in `Hitbox` mixin
  - Fix bug with Events and Draggables
+ - Add generics to components with HasGameRef so that they can be extended and have another gameRef
+ - Fix parallax fullscreen bug when game is resized
  - Generalize `paint` usage on components
  - Create `OpacityEffect`
  - Create `ColorEffect`
