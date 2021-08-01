@@ -152,7 +152,7 @@ void main() async {
       final component = SpriteAnimationComponent(
         animation: animation,
         removeOnFinish: true,
-        playing: false
+        playing: false,
       );
 
       game.onResize(size);
