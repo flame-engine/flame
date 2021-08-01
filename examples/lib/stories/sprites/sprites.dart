@@ -4,6 +4,7 @@ import 'package:flame/game.dart';
 import '../../commons/commons.dart';
 import 'base64.dart';
 import 'basic.dart';
+import 'sprite_group.dart';
 import 'spritebatch.dart';
 import 'spritebatch_auto_load.dart';
 import 'spritesheet.dart';
@@ -34,5 +35,10 @@ void addSpritesStories(Dashbook dashbook) {
       'Spritebatch Auto Load',
       (_) => GameWidget(game: SpritebatchAutoLoadGame()),
       codeLink: baseLink('sprites/spritebatch_auto_load.dart'),
+    )
+    ..add(
+      'SpriteGroup',
+      (_) => GameWidget(game: SpriteGroupExample()),
+      codeLink: baseLink('sprites/sprite_group.dart'),
     );
 }

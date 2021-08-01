@@ -20,6 +20,7 @@
  - Generalize `paint` usage on components
  - Create `OpacityEffect`
  - Create `ColorEffect`
+ - Adding `SpriteGroupComponent`
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
