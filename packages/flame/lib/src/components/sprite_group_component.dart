@@ -9,6 +9,8 @@ import 'position_component.dart';
 
 export '../sprite_animation.dart';
 
+/// A [PositionComponent] that can have mutiple [Sprite]s and render
+/// the one mapped with the [current] key.
 class SpriteGroupComponent<T> extends PositionComponent with HasPaint {
   /// Key with the current playing animation
   T? current;
