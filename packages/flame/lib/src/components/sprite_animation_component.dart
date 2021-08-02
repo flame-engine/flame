@@ -12,6 +12,7 @@ export '../sprite_animation.dart';
 class SpriteAnimationComponent extends PositionComponent with HasPaint {
   SpriteAnimation? animation;
   bool removeOnFinish = false;
+  bool playing;
 
   /// Creates a component with an empty animation which can be set later
   SpriteAnimationComponent({
@@ -21,6 +22,7 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
     this.animation,
     Paint? paint,
     this.removeOnFinish = false,
+    this.playing = true,
   }) : super(position: position, size: size, priority: priority) {
     if (paint != null) {
       this.paint = paint;
@@ -38,6 +40,7 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
     int? priority,
     Paint? paint,
     this.removeOnFinish = false,
+    this.playing = true,
   }) : super(position: position, size: size, priority: priority) {
     animation = SpriteAnimation.fromFrameData(image, data);
 
@@ -67,6 +70,8 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
   @override
   void update(double dt) {
     super.update(dt);
-    animation?.update(dt);
+    if (playing) {
+      animation?.update(dt);
+    }
   }
 }
