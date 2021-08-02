@@ -166,7 +166,7 @@ void main() async {
       game.update(2);
       expect(component.shouldRemove, false);
 
-      // runs a cycle to remove the component
+      // runs a cycle to potentially remove the component
       game.update(0.1);
       expect(game.components.length, 1);
     });
