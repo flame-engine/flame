@@ -20,6 +20,7 @@
  - Generalize `paint` usage on components
  - Create `OpacityEffect`
  - Create `ColorEffect`
+ - Adding ability to pause `SpriteAnimationComponent`
  - Adding `SpriteGroupComponent`
 
 ## [1.0.0-releasecandidate.13]
