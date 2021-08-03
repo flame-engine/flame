@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 import '../util/mock_image.dart';
 
 void main() async {
-  // Generate a image
+  // Generate an image
   final image = await generateImage();
 
   final size = Vector2(1.0, 1.0);
@@ -170,7 +170,9 @@ void main() async {
       game.update(0.1);
       expect(game.components.length, 1);
     });
+  });
 
+  group('SpriteAnimation timing of animation frames', () {
     test('Last animation frame is not skipped', () {
       // See https://github.com/flame-engine/flame/issues/895
       final game = BaseGame();
