@@ -27,6 +27,10 @@ having full access to the Flame game loop.
 A simple `OxygenGame` implementation example can be seen in the
 [example folder](https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen/example).
 
+The `OxygenGame` also comes with it's own `createEntity` method that automically adds certain
+default components on the entity. This is especially helpfull when you are using the 
+[BaseSystem](#BaseSystem) as your base.
+
 ## Systems
 
 Systems define the logic of your game. In FCS you normally would add your logic inside a component 
@@ -100,6 +104,9 @@ and `SizeComponent` from `flame_oxygen`. On top of that you can add your own fil
 a getter called `filters`. These filters are then used to filter down the entities you are 
 interested in.
 
+The `BaseSystem` is also fully aware of the game instance. You can access the game instance by using 
+the `game` property. This also gives you access to the `createEntity` helper method on `OxygenGame`.
+
 On each render loop the `BaseSystem` will prepare your canvas the same way the `PositionComponent` 
 from FCS would (translating, rotating and setting the anchor. After that it will call the 
 `renderEntity` method so you can add your own render logic for that entity on a prepared canvas.
@@ -136,30 +143,157 @@ functionality, they are often accompanied by predefined systems that you can use
 
 ### PositionComponent
 
-TODO: Describe
+The `PositionComponent` is as its name implies is a component that describe the position of an 
+entity. And it is registered to the world by default.
+
+Creating a positioned entity using OxygenGame:
+
+```dart
+game.createEntity(
+  position: Vector2(100, 100),
+  size: // ...
+);
+```
+
+Creating a positioned entity using the World:
+
+```dart
+world.createEntity()
+  ..add<PositionComponent, Vector2>(Vector2(100, 100));
+```
 
 ### SizeComponent
 
-TODO: Describe
+The `SizeComponent` is as its name implies is a component that describe the size of an entity. 
+And it is registered to the world by default.
+
+Creating a sized entity using OxygenGame:
+
+```dart
+game.createEntity(
+  position: // ...
+  size: Vector2(50, 50),
+);
+```
+
+Creating a sized entity using the World:
+
+```dart
+world.createEntity()
+  ..add<SizeComponent, Vector2>(Vector2(50, 50));
+```
 
 ### AnchorComponent
 
-TODO: Describe
+The `AnchorComponent` is as its name implies is a component that describe the anchor position of an 
+entity. And it is registered to the world by default.
+
+This component is especially useful when you are using the [BaseSystem](#BaseSystem). But can also 
+be used for your own anchoring logic.
+
+Creating an anchored entity using OxygenGame:
+
+```dart
+game.createEntity(
+  position: // ...
+  size: // ...
+  anchor: Anchor.center,
+);
+```
+
+Creating an anchored entity using the World:
+
+```dart
+world.createEntity()
+  ..add<AnchorComponent, Anchor>(Anchor.center);
+```
 
 ### AngleComponent
 
-TODO: Describe
+The `AngleComponent` is as its name implies is a component that describe the angle of an entity. 
+And it is registered to the world by default. The angle is in radians.
+
+This component is especially useful when you are using the [BaseSystem](#BaseSystem). But can also 
+be used for your own angle logic.
+
+Creating an angled entity using OxygenGame:
+
+```dart
+game.createEntity(
+  position: // ...
+  size: // ...
+  angle: 1.570796,
+);
+```
+
+Creating an angled entity using the World:
+
+```dart
+world.createEntity()
+  ..add<AngleComponent, double>(1.570796);
+```
 
 ### SpriteComponent
 
-TODO: Describe
+The `SpriteComponent` is as its name implies is a component that describe the sprite of an entity. 
+And it is registered to the world by default.
+
+This allows you to assigning a Sprite to an Entity.
+
+Creating an entity with a sprite using OxygenGame:
+
+```dart
+game.createEntity(
+  position: // ...
+  size: // ...
+)..add<SpriteComponent, SpriteInit>(
+  SpriteInit(await game.loadSprite('pizza.png')),
+);
+```
+
+Creating an entity with a sprite using World:
+
+```dart
+world.createEntity()
+  ..add<SpriteComponent, SpriteInit>(
+    SpriteInit(await game.loadSprite('pizza.png')),
+  );
+```
+
+### TextComponent
+
+The `TextComponent` is as its name implies is a component that adds a text component to an entity. 
+And it is registered to the world by default.
+
+This allows you to add text to your entity, combined with the `PositionComponent` you can use it
+as a text entity.
+
+Creating an entity with text using OxygenGame:
+
+```dart
+game.createEntity(
+  position: // ...
+  size: // ...
+)..add<TextComponent, TextInit>(
+  TextInit(
+    'Your text',
+    config: const TextPaintConfig(),
+  ),
+);
+```
+
+Creating an entity with text using World:
+
+```dart
+world.createEntity()
+  ..add<TextComponent, TextInit>(
+    TextInit(
+      'Your text',
+      config: const TextPaintConfig(),
+    ),
+  );
+```
 
 ### ParticleComponent
 
 TODO: Describe
-
-### TextComponent
-
-TODO: Describe
-
-
