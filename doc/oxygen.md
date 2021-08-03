@@ -22,7 +22,11 @@ If you are going to use Oxygen in your project it can be a good idea to use the 
 extension of the `Game` class.
 
 It is called `OxygenGame` and it will give you full access to the Oxygen framework while also
-having full access to the Flame game loop.
+having full access to the Flame game loop. 
+
+Instead of using `onLoad`, as you are used to with Flame, `OxygenGame` comes with the `init` 
+method. This method is called in the `onLoad` but before the world initialization, allowing you 
+to register components and systems and do anything else that you normally would do in `onLoad`.
 
 A simple `OxygenGame` implementation example can be seen in the
 [example folder](https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen/example).
@@ -49,6 +53,9 @@ to give you the same default functionality we also created a class called `BaseS
 acts almost identical to the prerender logic from the `PositionComponent` in FCS. You only have 
 to extend your own system from it to access it. For more information see the 
 [BaseSystem](#BaseSystem) section.
+
+Systems can be registered to the world using the `world.registerSystem` method on 
+[OxygenGame](#OxygenGame).
 
 ### mixin RenderSystem
 
@@ -128,8 +135,25 @@ class SimpleBaseSystem extends BaseSystem {
     // The canvas is translated, rotated and fully prepared for rendering.
   }
 }
-
 ```
+
+### ParticleSystem
+
+The `ParticleSystem` is a simple system that brings the Particle API from Flame to Oxygen. This
+allows you to use the [ParticleComponent](#ParticleComponent) without having to worry about how
+it will render or when to update it. As most of that logic is already contained in the Particle 
+itself.
+
+Simply register the `ParticleSystem` and the `ParticleComponent` to your world like so:
+
+```dart
+world.registerSystem(ParticleSystem());
+
+world.registerComponent<ParticleComponent, Particle>(() => ParticleComponent);
+```
+
+You can now create a new entity with a `ParticleComponent`. For more info about that see the 
+[ParticleComponent](#ParticleComponent) section.
 
 ## Components
 
@@ -140,6 +164,9 @@ To accomdate people who are switching from FCS to Oxygen we implemented a few co
 you get started. Some of these components are based on the multiple functionalities that the 
 `PositionComponent` from FCS has. Others are just easy wrappers around certain Flame API 
 functionality, they are often accompanied by predefined systems that you can use.
+
+Components can be registered to the world using the `world.registerComponent` method on 
+[OxygenGame](#OxygenGame).
 
 ### PositionComponent
 
@@ -296,4 +323,26 @@ world.createEntity()
 
 ### ParticleComponent
 
-TODO: Describe
+The `ParticleComponent` wraps a `Particle` from Flame. Combined with the 
+[ParticleSystem](#ParticleSystem) you can easily add particles to your game without having to 
+worry about how to render a particle or when/how to update one.
+
+Creating an entity with a particle using OxygenGame:
+
+```dart
+game.createEntity(
+  position: // ...
+  size: // ...
+)..add<ParticleComponent, Particle>(
+  // Your Particle.
+);
+```
+
+Creating an entity with a particle using World:
+
+```dart
+world.createEntity()
+  ..add<ParticleComponent, Particle>(
+    // Your Particle.
+  );
+```
