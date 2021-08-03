@@ -180,9 +180,9 @@ void main() async {
         stepTime: 0.1,
         loop: false,
       );
-      var callbackInvoked = false;
+      var callbackInvoked = 0;
       animation.onComplete = () {
-        callbackInvoked = true;
+        callbackInvoked++;
       };
       final component = SpriteAnimationComponent(animation: animation);
       game.onResize(size);
@@ -199,11 +199,28 @@ void main() async {
       expect(animation.currentIndex, 4);
       expect(animation.clock, closeTo(0.099, 1e-10));
       expect(animation.done(), false);
-      expect(callbackInvoked, false);
+      expect(callbackInvoked, 0);
       // This last tick moves the total clock to 0.5001 s,
       // completing the last animation frame.
       game.update(0.0011);
-      expect(callbackInvoked, true);
+      expect(callbackInvoked, 1);
+      expect(animation.currentIndex, 4);
+      expect(animation.done(), true);
+      // Now move the timer forward again, and verify that the callback won't be
+      // invoked multiple times.
+      for (var i = 0; i < 10; i++) {
+        game.update(1);
+      }
+      expect(callbackInvoked, 1);
+      expect(animation.currentIndex, 4);
+      expect(animation.done(), true);
+      // Lastly, let's reset the animation and see if it still works properly
+      callbackInvoked = 0;
+      animation.reset();
+      expect(animation.currentIndex, 0);
+      expect(animation.done(), false);
+      game.update(100);
+      expect(callbackInvoked, 1);
       expect(animation.currentIndex, 4);
       expect(animation.done(), true);
     });
