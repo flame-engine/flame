@@ -36,13 +36,15 @@ no render loop. It only knows `execute`, which is a method equal to the `update`
 On each `execute` Oxygen automatically calls all the systems that were registered in order. But in
 Flame we can have different logic for different loops (render/update). So in `flame_oxygen` we 
 introduced the `RenderSystem` and `UpdateSystem` mixin. These mixins allow you to add the `render`
-method and the `update` method respectivally to your custom system. For more information see the [RenderSystem](#RenderSystem) and [UpdateSystem](#UpdateSystem) section.
+method and the `update` method respectivally to your custom system. For more information see the 
+[RenderSystem](#RenderSystem) and [UpdateSystem](#UpdateSystem) section.
 
 If you are coming from FCS you might expect certain default functionality that you normally got 
 from the `PositionComponent`. As mentioned before components do not contain any kind of logic, but
-to give you the same default functionality we also created a class called `BaseSystem`. This system
-acts almost identical to the prerender logic from the `PositionComponent` in FCS. You only have to
-extend your own system from it to access it. For more information see the [BaseSystem](#BaseSystem) section.
+to give you the same default functionality we also created a class called `BaseSystem`. This system 
+acts almost identical to the prerender logic from the `PositionComponent` in FCS. You only have 
+to extend your own system from it to access it. For more information see the 
+[BaseSystem](#BaseSystem) section.
 
 ### mixin RenderSystem
 
@@ -70,7 +72,8 @@ class SimpleRenderSystem extends System with RenderSystem {
 ### mixin UpdateSystem
 
 The `MixinSystem` mixin allows a system to be registered for the update loop.
-By adding a `update` method to the system you get full access to the delta time as you normally would in Flame.
+By adding a `update` method to the system you get full access to the delta time as you 
+normally would in Flame.
 
 ```dart
 class SimpleUpdateSystem extends System with UpdateSystem {
@@ -91,14 +94,15 @@ class SimpleUpdateSystem extends System with UpdateSystem {
 
 ### BaseSystem
 
-The `BaseSystem` is an abstract class whoms logic can be compared to the 
-`PositionComponent` from FCS. The `BaseSystem` automatically filters all entities
-that have the `PositionComponent` and `SizeComponent` from `flame_oxygen`. On top
-of that you can add your own filters by defining a getter called `filters`. These
-filters are then used to filter down the entities you are interested in.
+The `BaseSystem` is an abstract class whoms logic can be compared to the `PositionComponent` 
+from FCS. The `BaseSystem` automatically filters all entities that have the `PositionComponent` 
+and `SizeComponent` from `flame_oxygen`. On top of that you can add your own filters by defining 
+a getter called `filters`. These filters are then used to filter down the entities you are 
+interested in.
 
-On each render loop the `BaseSystem` will prepare your canvas the same way the `PositionComponent` from FCS would (translating, rotating and setting the anchor.
-After that it will call the `renderEntity` method so you can add your own render logic for that entity on a prepared canvas.
+On each render loop the `BaseSystem` will prepare your canvas the same way the `PositionComponent` 
+from FCS would (translating, rotating and setting the anchor. After that it will call the 
+`renderEntity` method so you can add your own render logic for that entity on a prepared canvas.
 
 The following components will be checked by `BaseSystem` for the prepartion of the
 canvas:
