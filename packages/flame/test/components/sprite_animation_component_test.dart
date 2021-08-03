@@ -138,5 +138,41 @@ void main() async {
       game.update(0.1);
       expect(game.components.length, 1);
     });
+
+    test('Last animation frame is not skipped', () {
+      // See issue #895
+      final game = BaseGame();
+      final animation = SpriteAnimation.spriteList(
+        List.filled(5, Sprite(image)),
+        stepTime: 0.1,
+        loop: false,
+      );
+      var callbackInvoked = false;
+      animation.onComplete = () {
+        callbackInvoked = true;
+      };
+      final component = SpriteAnimationComponent(animation: animation);
+      game.onResize(size);
+      game.add(component);
+      game.update(0.01);
+      expect(animation.currentIndex, 0);
+      game.update(0.1);
+      expect(animation.currentIndex, 1);
+      game.update(0.3);
+      expect(animation.currentIndex, 4);
+      game.update(0.089);
+      // At this point we're still on the last frame, which has
+      // almost finished. Total clock time = 0.499 s
+      expect(animation.currentIndex, 4);
+      expect(animation.clock, closeTo(0.099, 1e-10));
+      expect(animation.done(), false);
+      expect(callbackInvoked, false);
+      // This last tick moves the total clock to 0.5001 s,
+      // completing the last animation frame.
+      game.update(0.0011);
+      expect(callbackInvoked, true);
+      expect(animation.currentIndex, 4);
+      expect(animation.done(), true);
+    });
   });
 }

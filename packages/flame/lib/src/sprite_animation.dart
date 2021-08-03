@@ -244,9 +244,8 @@ class SpriteAnimation {
   /// If [loop] is false, returns whether the animation is done (fixed in the last Sprite).
   ///
   /// Always returns false otherwise.
-  bool done() {
-    return loop ? false : (isLastFrame && clock >= currentFrame.stepTime);
-  }
+  bool _done = false;
+  bool done() => _done;
 
   /// Updates this animation, ticking the lifeTime by an amount [dt] (in seconds).
   void update(double dt) {
@@ -255,19 +254,18 @@ class SpriteAnimation {
     if (isSingleFrame) {
       return;
     }
-    if (!loop && isLastFrame) {
-      onComplete?.call();
-      return;
-    }
-    while (clock > currentFrame.stepTime) {
-      if (!isLastFrame) {
-        clock -= currentFrame.stepTime;
-        currentIndex++;
-      } else if (loop) {
-        clock -= currentFrame.stepTime;
-        currentIndex = 0;
+    while (clock >= currentFrame.stepTime) {
+      clock -= currentFrame.stepTime;
+      if (isLastFrame) {
+        if (loop) {
+          currentIndex = 0;
+        } else {
+          _done = true;
+          onComplete?.call();
+          return;
+        }
       } else {
-        break;
+        currentIndex++;
       }
     }
   }
