@@ -20,6 +20,8 @@
  - Generalize `paint` usage on components
  - Create `OpacityEffect`
  - Create `ColorEffect`
+ - Adding ability to pause `SpriteAnimationComponent`
+ - Adding `SpriteGroupComponent`
  - Fix truncated last frame in non-looping animations
 
 ## [1.0.0-releasecandidate.13]

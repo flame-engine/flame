@@ -139,6 +139,38 @@ void main() async {
       expect(game.components.length, 1);
     });
 
+    test("component isn't removed if it is not playing", () {
+      final game = BaseGame();
+      final animation = SpriteAnimation.spriteList(
+        [
+          Sprite(image),
+          Sprite(image),
+        ],
+        stepTime: 1,
+        loop: false,
+      );
+      final component = SpriteAnimationComponent(
+        animation: animation,
+        removeOnFinish: true,
+        playing: false,
+      );
+
+      game.onResize(size);
+      game.add(component);
+
+      // runs a cycle to add the component
+      game.update(0.1);
+      expect(component.shouldRemove, false);
+      expect(game.components.length, 1);
+
+      game.update(2);
+      expect(component.shouldRemove, false);
+
+      // runs a cycle to potentially remove the component
+      game.update(0.1);
+      expect(game.components.length, 1);
+    });
+
     test('Last animation frame is not skipped', () {
       // See issue #895
       final game = BaseGame();

@@ -200,6 +200,32 @@ final robot = SpriteAnimationGroupComponent<RobotState>(
 robot.current = RobotState.running;
 ```
 
+## SpriteGroup
+
+`SpriteGroupComponent` is pretty similar to its animation counterpart, but especially for sprites.
+
+Example:
+
+```dart
+class ButtonComponent extends SpriteGroupComponent<ButtonState>
+    with HasGameRef<SpriteGroupExample>, Tappable {
+  @override
+  Future<void>? onLoad() async {
+    final pressedSprite = await gameRef.loadSprite(/* omited */);
+    final unpressedSprite = await gameRef.loadSprite(/* omited /*);
+
+    sprites = {
+      ButtonState.pressed: pressedSprite,
+      ButtonState.unpressed: unpressedSprite,
+    };
+
+    current = ButtonState.unpressed;
+  }
+
+  // tap methods handler omited...
+}
+
+```
 
 ## SvgComponent
 
