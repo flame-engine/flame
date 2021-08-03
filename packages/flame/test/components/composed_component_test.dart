@@ -7,9 +7,9 @@ import 'package:test/test.dart';
 import '../util/mock_canvas.dart';
 import '../util/mock_gesture_events.dart';
 
-class MyGame extends BaseGame with HasTapableComponents {}
+class MyGame extends BaseGame with HasTappableComponents {}
 
-class MyTap extends PositionComponent with Tapable {
+class MyTap extends PositionComponent with Tappable {
   late Vector2 gameSize;
 
   int tapTimes = 0;
@@ -47,9 +47,9 @@ class MyAsyncChild extends MyTap {
   Future<void> onLoad() => Future.value();
 }
 
-class MyComposed extends PositionComponent with HasGameRef, Tapable {}
+class MyComposed extends PositionComponent with HasGameRef, Tappable {}
 
-class MySimpleComposed extends BaseComponent with HasGameRef, Tapable {}
+class MySimpleComposed extends BaseComponent with HasGameRef, Tappable {}
 
 // composed w/o HasGameRef
 class PlainComposed extends BaseComponent {}
@@ -62,6 +62,7 @@ void main() {
       final child = MyTap();
       final wrapper = MyComposed();
       wrapper.addChild(child);
+      wrapper.update(0); // children are only added on the next tick
 
       expect(wrapper.containsChild(child), true);
     });
@@ -69,10 +70,15 @@ void main() {
     test('removes the child from the component', () {
       final child = MyTap();
       final wrapper = MyComposed();
-      wrapper.addChild(child);
-      expect(true, wrapper.containsChild(child));
 
-      wrapper.removeChild(child);
+      wrapper.addChild(child);
+      expect(wrapper.containsChild(child), false);
+      wrapper.update(0); // children are only added on the next tick
+      expect(wrapper.containsChild(child), true);
+
+      wrapper.children.remove(child);
+      expect(wrapper.containsChild(child), true);
+      wrapper.update(0); // children are only removed on the next tick
       expect(wrapper.containsChild(child), false);
     });
 
@@ -81,8 +87,12 @@ void main() {
       () async {
         final child = MyAsyncChild();
         final wrapper = MyComposed();
-        await wrapper.addChild(child);
 
+        final future = wrapper.addChild(child);
+        expect(wrapper.containsChild(child), false);
+        await future;
+        expect(wrapper.containsChild(child), false);
+        wrapper.update(0);
         expect(wrapper.containsChild(child), true);
       },
     );
@@ -107,7 +117,7 @@ void main() {
       final game = MyGame();
       final children = List.generate(10, (_) => MyTap());
       final wrapper = MyComposed();
-      wrapper.addChildren(children);
+      wrapper.children.addChildren(children);
 
       game.onResize(size);
       game.add(wrapper);
@@ -132,7 +142,7 @@ void main() {
         1,
         createTapDownEvent(
           game,
-          position: const Offset(250, 250),
+          globalPosition: const Offset(250, 250),
         ),
       );
 

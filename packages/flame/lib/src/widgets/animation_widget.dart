@@ -3,13 +3,67 @@ import 'dart:math';
 import 'package:flutter/material.dart' hide Animation;
 
 import '../anchor.dart';
+import '../assets/images.dart';
 import '../sprite_animation.dart';
-import 'sprite_widget.dart';
+import 'base_future_builder.dart';
+import 'sprite_painter.dart';
 
 export '../sprite_animation.dart';
 
+/// A [StatelessWidget] that renders a [SpriteAnimation]
+class SpriteAnimationWidget extends StatelessWidget {
+  /// The positioning [Anchor]
+  final Anchor anchor;
+
+  /// Should the animation be playing or not
+  final bool playing;
+
+  final Future<SpriteAnimation> Function() _animationFuture;
+
+  /// A builder function that is called if the loading fails
+  final WidgetBuilder? errorBuilder;
+
+  /// A builder function that is called while the loading is on the way
+  final WidgetBuilder? loadingBuilder;
+
+  SpriteAnimationWidget({
+    required SpriteAnimation animation,
+    this.playing = true,
+    this.anchor = Anchor.topLeft,
+    this.errorBuilder,
+    this.loadingBuilder,
+  }) : _animationFuture = (() => Future.value(animation));
+
+  SpriteAnimationWidget.asset({
+    required String path,
+    required SpriteAnimationData data,
+    Images? images,
+    this.playing = true,
+    this.anchor = Anchor.topLeft,
+    this.errorBuilder,
+    this.loadingBuilder,
+  }) : _animationFuture =
+            (() => SpriteAnimation.load(path, data, images: images));
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseFutureBuilder<SpriteAnimation>(
+      futureBuilder: _animationFuture,
+      builder: (_, spriteAnimation) {
+        return _SpriteAnimationWidget(
+          animation: spriteAnimation,
+          anchor: anchor,
+          playing: playing,
+        );
+      },
+      errorBuilder: errorBuilder,
+      loadingBuilder: loadingBuilder,
+    );
+  }
+}
+
 /// A [StatefulWidget] that render a [SpriteAnimation].
-class SpriteAnimationWidget extends StatefulWidget {
+class _SpriteAnimationWidget extends StatefulWidget {
   /// The [SpriteAnimation] to be rendered
   final SpriteAnimation animation;
 
@@ -19,23 +73,23 @@ class SpriteAnimationWidget extends StatefulWidget {
   /// Should the [animation] be playing or not
   final bool playing;
 
-  const SpriteAnimationWidget({
+  const _SpriteAnimationWidget({
     required this.animation,
     this.playing = true,
     this.anchor = Anchor.topLeft,
   });
 
   @override
-  State createState() => _AnimationWidget();
+  State createState() => _SpriteAnimationWidgetState();
 }
 
-class _AnimationWidget extends State<SpriteAnimationWidget>
+class _SpriteAnimationWidgetState extends State<_SpriteAnimationWidget>
     with SingleTickerProviderStateMixin {
   AnimationController? _controller;
   double? _lastUpdated;
 
   @override
-  void didUpdateWidget(SpriteAnimationWidget oldWidget) {
+  void didUpdateWidget(_SpriteAnimationWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.playing) {
       _initAnimation();
@@ -90,9 +144,13 @@ class _AnimationWidget extends State<SpriteAnimationWidget>
 
   @override
   Widget build(BuildContext ctx) {
-    return SpriteWidget(
-      sprite: widget.animation.getSprite(),
-      anchor: widget.anchor,
+    return Container(
+      child: CustomPaint(
+        painter: SpritePainter(
+          widget.animation.getSprite(),
+          widget.anchor,
+        ),
+      ),
     );
   }
 }

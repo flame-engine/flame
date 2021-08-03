@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/gestures.dart';
+import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
@@ -70,7 +70,7 @@ class MyGame extends BaseGame with DoubleTapDetector, TapDetector {
 
     final handled = components.any((c) {
       if (c is PositionComponent && c.toRect().overlaps(touchArea)) {
-        remove(c);
+        components.remove(c);
         return true;
       }
       return false;

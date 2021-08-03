@@ -21,8 +21,8 @@ mixin Collidable on Hitbox {
   void onCollisionEnd(Collidable other) {}
 }
 
-class ScreenCollidable extends PositionComponent
-    with Hitbox, Collidable, HasGameRef<BaseGame> {
+class ScreenCollidable<T extends BaseGame> extends PositionComponent
+    with Hitbox, Collidable, HasGameRef<T> {
   @override
   CollidableType collidableType = CollidableType.passive;
 
@@ -30,7 +30,7 @@ class ScreenCollidable extends PositionComponent
   Future<void> onLoad() async {
     await super.onLoad();
     size = gameRef.size;
-    addShape(HitboxRectangle());
+    addHitbox(HitboxRectangle());
   }
 
   final _zeroVector = Vector2.zero();

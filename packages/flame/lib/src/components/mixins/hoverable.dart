@@ -35,7 +35,7 @@ mixin HasHoverableComponents on BaseGame {
       return true; // always continue
     }
 
-    for (final c in components.toList().reversed) {
+    for (final c in components.reversed()) {
       if (c is BaseComponent) {
         c.propagateToChildren<Hoverable>(_mouseMoveHandler);
       }

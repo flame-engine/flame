@@ -1,8 +1,20 @@
 # CHANGELOG
 
+## [0.8.1-releasecandidate.13]
+ - Added physics tied to widgets example
+ - Added basic joint example
+ - Add generics passed to HasGameRef from PositionBodyComponent and SpriteBodyComponent
+
+## [0.8.0-releasecandidate.13]
+ - Update mechanism by which `BodyComponent`'s are disposed to use the `onRemove` method
+ - Flip y-axis after translation of body position, so that normal flame components can be children
+ - Update to Forge2D 0.8.0
+ - Update to Flame 1.0.0-releasecandidate.13
+ - Rename `prepareCanvas` to `preRender`
+
 ## [0.7.3-releasecandidate.12]
  - Fix prepareCanvas type error
- 
+
 ## [0.7.2-releasecandidate.12]
  - Update to Forge2D 0.7.2
  - Update to Flame 1.0.0-releasecandidate.12

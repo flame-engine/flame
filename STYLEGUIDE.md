@@ -1,15 +1,17 @@
 # Style Guide
 
-This is a general style guide that shall govern over the Flame Engine repository. The aim is to keep
-a common stable general environment. This includes high level guidance to help with simple decisions
+This is a general style guide that shall govern over all Flame repositories. The aim is to keep
+all codebases clean and pristine. This includes high level guidance to help with simple decisions
 in the day-to-day development life.
 
 This extends rules on the official [Flutter Style
-Guide](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo).
+Guide](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo) and [Effective Dart
+Patterns](https://dart.dev/guides/language/effective-dart). Those rules apply unless otherwise
+specified in this document.
 
 Note that this is not yet an exhaustive guide, and consider it a work in progress. PRs are welcome!
 
-## Code formatting
+## Code Formatting
 
 ### Max line length
 
@@ -82,7 +84,7 @@ import 'package:ordered_set/ordered_set.dart';
 import '../../extensions.dart';
 import '../components/component.dart';
 import '../components/mixins/has_game_ref.dart';
-import '../components/mixins/tapable.dart';
+import '../components/mixins/tappable.dart';
 import '../components/position_component.dart';
 import '../fps_counter.dart';
 import 'camera.dart';
@@ -90,24 +92,40 @@ import 'game.dart';
 import 'viewport.dart';
 ```
 
-### Identifiers
+## Code Structure
+### Global Variables
 
-Use all [effective dart patterns](https://dart.dev/guides/language/effective-dart)
+Do not use public global variables or constants; namespace everything inside appropriate scopes.
 
-* Do not use global constants that are public in our exposed APIs; namespace any variables in
-  appropriate classes.
+### Asserts
 
-### Comments
+Use asserts to detect contract violation.
 
-* Add an identifier for TODO comments
-* Use fully capitalized TODO notation
+Example:
+
+````dart
+void something(int smaller, int bigger) {
+  assert(small < bigger, 'smaller is not smaller than bigger');
+  // ...
+}
+````
+
+## Comments
+
+* For any `//` comments, always add a space after the second slash and before the next character.
+* Use `//` (or block comments) for comments about the code; use `///` for dartdocs about APIs.
+
+### TODO
 
 TODO comments should follow this template: `// TODO(username): Comment`
 
-```dart
-// bad: missing identifier
+I.e., double slash, one space, `TODO` in caps followed by your name in parenthesis, colon, one space
+and the comment, capitalized as a sentence. No need to include a period if it's a single sentence.
 
-// Todo: This thing should be that thing
+```dart
+// bad: missing identifier, mixed-case "TODO" and lowercase comment
+
+// Todo: this thing should be that thing
 final thisThing = 13;
 
 // good:
@@ -116,36 +134,19 @@ final thisThing = 13;
 const thisThing = 13;
 ```
 
-* For any `//` comments, always add a space after the second slash and before the next character.
-* Use `//` (or block comments) for comments about the code; use `///` for dartdocs about APIs.
 
-### Asserts
+### Dartdocs
 
-* Use asserts to detect contract violation.
-
-Example:
-
-````dart
-void something(int smaller, int bigger) {
-  assert(small < bigger, "smaller is not smaller than bigger");
-  // ...
-}
-````
-
-## Code documentation 
-
-Specific guides for dartdoc documentation.
-
-### Consider adding examples
+#### Consider adding examples
 
 Some elements may benefit from a simple usage example.
 
-### Avoid useless code documentation
+#### Avoid useless code documentation
 
 Avoid documentation that just repeats the obvious. For example, `void doStuff()` be documented as
 "Method that does stuff".
 
-### Consider adding linkage between docs
+#### Consider adding linkage between docs
 
 You should use `[]` (brackets) to link dartdoc elements that can be referenced on the same file.
 Also, consider adding a "See also" section to element documentation.

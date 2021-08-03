@@ -11,9 +11,9 @@ import 'package:test/test.dart';
 
 import '../util/mock_gesture_events.dart';
 
-class MyGame extends BaseGame with HasTapableComponents {}
+class MyGame extends BaseGame with HasTappableComponents {}
 
-class MyComponent extends PositionComponent with Tapable, HasGameRef {
+class MyComponent extends PositionComponent with Tappable, HasGameRef {
   bool tapped = false;
   bool isUpdateCalled = false;
   bool isRenderCalled = false;
@@ -59,7 +59,7 @@ class MyAsyncComponent extends MyComponent {
   Future<void> onLoad() => Future.value();
 }
 
-class PositionComponentNoNeedForRect extends PositionComponent with Tapable {}
+class PositionComponentNoNeedForRect extends PositionComponent with Tappable {}
 
 Vector2 size = Vector2(1.0, 1.0);
 
@@ -172,7 +172,7 @@ void main() {
       // by the function on the component, but the onRemove callback should
       // only be called once.
       component.remove();
-      game.remove(component);
+      game.components.remove(component);
       // The component is not removed from the component list until an update has been performed
       game.update(0.0);
 
@@ -214,7 +214,7 @@ void main() {
     game.update(0.0);
     expect(game.components.length, equals(3));
 
-    game.clear();
+    game.components.clear();
 
     // Ensure clear does not remove components directly
     expect(game.components.length, equals(3));

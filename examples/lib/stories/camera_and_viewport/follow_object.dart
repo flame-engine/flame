@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/keyboard.dart';
+import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -24,7 +24,7 @@ class MovableSquare extends SquareComponent
   late Timer timer;
 
   MovableSquare() : super(priority: 1) {
-    addShape(HitboxRectangle());
+    addHitbox(HitboxRectangle());
     timer = Timer(3.0)
       ..stop()
       ..callback = () {
@@ -81,7 +81,7 @@ class Map extends Component {
   }
 }
 
-class Rock extends SquareComponent with Hitbox, Collidable, Tapable {
+class Rock extends SquareComponent with Hitbox, Collidable, Tappable {
   static final unpressedPaint = Paint()..color = const Color(0xFF2222FF);
   static final pressedPaint = Paint()..color = const Color(0xFF414175);
 
@@ -89,7 +89,7 @@ class Rock extends SquareComponent with Hitbox, Collidable, Tapable {
     this.position.setFrom(position);
     size.setValues(50, 50);
     paint = unpressedPaint;
-    addShape(HitboxRectangle());
+    addHitbox(HitboxRectangle());
   }
 
   @override
@@ -112,7 +112,7 @@ class Rock extends SquareComponent with Hitbox, Collidable, Tapable {
 }
 
 class CameraAndViewportGame extends BaseGame
-    with KeyboardEvents, HasCollidables, HasTapableComponents {
+    with KeyboardEvents, HasCollidables, HasTappableComponents {
   late MovableSquare square;
 
   final Vector2 viewportResolution;
@@ -127,7 +127,7 @@ class CameraAndViewportGame extends BaseGame
     add(Map());
 
     add(square = MovableSquare());
-    camera.cameraSpeed = 1;
+    camera.speed = 1;
     camera.followComponent(square, worldBounds: Map.bounds);
 
     for (var i = 0; i < 30; i++) {

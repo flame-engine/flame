@@ -10,10 +10,10 @@ import '../assets/assets_cache.dart';
 import '../assets/images.dart';
 import '../extensions/offset.dart';
 import '../extensions/vector2.dart';
-import '../keyboard.dart';
 import '../sprite.dart';
 import '../sprite_animation.dart';
 import 'game_render_box.dart';
+import 'mixins/keyboard.dart';
 import 'projector.dart';
 
 /// Represents a generic game.
@@ -136,26 +136,22 @@ abstract class Game extends Projector {
 
   /// Converts a global coordinate (i.e. w.r.t. the app itself) to a local
   /// coordinate (i.e. w.r.t. he game widget).
-  /// If the widget occupies the whole app ("full screen" games), this operation
-  /// is the identity.
+  /// If the widget occupies the whole app ("full screen" games), or is not
+  /// attached to Flutter, this operation is the identity.
   Vector2 convertGlobalToLocalCoordinate(Vector2 point) {
     if (!isAttached) {
-      throw UnsupportedError(
-        'This method can only be called if the game is attached',
-      );
+      return point.clone();
     }
     return _gameRenderBox!.globalToLocal(point.toOffset()).toVector2();
   }
 
   /// Converts a local coordinate (i.e. w.r.t. the game widget) to a global
   /// coordinate (i.e. w.r.t. the app itself).
-  /// If the widget occupies the whole app ("full screen" games), this operation
-  /// is the identity.
+  /// If the widget occupies the whole app ("full screen" games), or is not
+  /// attached to Flutter, this operation is the identity.
   Vector2 convertLocalToGlobalCoordinate(Vector2 point) {
     if (!isAttached) {
-      throw UnsupportedError(
-        'This method can only be called if the game is attached',
-      );
+      return point.clone();
     }
     return _gameRenderBox!.localToGlobal(point.toOffset()).toVector2();
   }

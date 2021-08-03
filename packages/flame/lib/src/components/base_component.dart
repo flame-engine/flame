@@ -1,17 +1,15 @@
-import 'dart:collection';
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
-import 'package:ordered_set/comparing.dart';
-import 'package:ordered_set/ordered_set.dart';
 
 import '../../game.dart';
-import '../../gestures.dart';
+import '../../input.dart';
 import '../effects/effects.dart';
 import '../effects/effects_handler.dart';
 import '../extensions/vector2.dart';
 import '../text.dart';
 import 'component.dart';
+import 'component_set.dart';
 import 'mixins/has_game_ref.dart';
 
 /// This can be extended to represent a basic Component for your game.
@@ -22,8 +20,7 @@ import 'mixins/has_game_ref.dart';
 abstract class BaseComponent extends Component {
   final EffectsHandler _effectsHandler = EffectsHandler();
 
-  final OrderedSet<Component> _children =
-      OrderedSet(Comparing.on((c) => c.priority));
+  late final ComponentSet children = createComponentSet();
 
   /// If the component has a parent it will be set here
   BaseComponent? _parent;
@@ -31,18 +28,11 @@ abstract class BaseComponent extends Component {
   @override
   BaseComponent? get parent => _parent;
 
-  /// The children list shouldn't be modified directly, that is why an
-  /// [UnmodifiableListView] is used. If you want to add children use the
-  /// [addChild] method, and if you want to propagate something to the children
-  /// use the [propagateToChildren] method.
-  UnmodifiableListView<Component> get children {
-    return UnmodifiableListView<Component>(_children);
-  }
-
-  /// This is set by the BaseGame to tell this component to render additional debug information,
-  /// like borders, coordinates, etc.
+  /// This is set by the BaseGame to tell this component to render additional
+  /// debug information, like borders, coordinates, etc.
   /// This is very helpful while debugging. Set your BaseGame debugMode to true.
-  /// You can also manually override this for certain components in order to identify issues.
+  /// You can also manually override this for certain components in order to
+  /// identify issues.
   bool debugMode = false;
 
   Color debugColor = const Color(0xFFFF00FF);
@@ -61,30 +51,35 @@ abstract class BaseComponent extends Component {
 
   BaseComponent({int? priority}) : super(priority: priority);
 
-  /// This method is called periodically by the game engine to request that your component updates itself.
+  /// This method is called periodically by the game engine to request that your
+  /// component updates itself.
   ///
-  /// The time [dt] in seconds (with microseconds precision provided by Flutter) since the last update cycle.
-  /// This time can vary according to hardware capacity, so make sure to update your state considering this.
-  /// All components on [BaseGame] are always updated by the same amount. The time each one takes to update adds up to the next update cycle.
+  /// The time [dt] in seconds (with microseconds precision provided by Flutter)
+  /// since the last update cycle.
+  /// This time can vary according to hardware capacity, so make sure to update
+  /// your state considering this.
+  /// All components on [BaseGame] are always updated by the same amount. The
+  /// time each one takes to update adds up to the next update cycle.
   @mustCallSuper
   @override
   void update(double dt) {
+    children.updateComponentList();
     _effectsHandler.update(dt);
-    _children.removeWhere((c) => c.shouldRemove).forEach((c) => c.onRemove());
-    _children.forEach((c) => c.update(dt));
+    children.forEach((c) => c.update(dt));
   }
 
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    prepareCanvas(canvas);
+    preRender(canvas);
   }
 
   @mustCallSuper
   @override
   void renderTree(Canvas canvas) {
     render(canvas);
-    _children.forEach((c) {
+    postRender(canvas);
+    children.forEach((c) {
       canvas.save();
       c.renderTree(canvas);
       canvas.restore();
@@ -96,30 +91,36 @@ abstract class BaseComponent extends Component {
     }
   }
 
-  void renderDebugMode(Canvas canvas) {}
-
+  /// A render cycle callback that runs before the component and its children
+  /// has been rendered.
   @protected
-  void prepareCanvas(Canvas canvas) {}
+  void preRender(Canvas canvas) {}
+
+  /// A render cycle callback that runs after the component has been
+  /// rendered, but before any children has been rendered.
+  void postRender(Canvas canvas) {}
+
+  void renderDebugMode(Canvas canvas) {}
 
   @mustCallSuper
   @override
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
-    _children.forEach((child) => child.onGameResize(gameSize));
+    children.forEach((child) => child.onGameResize(gameSize));
   }
 
   @mustCallSuper
   @override
   void onMount() {
     super.onMount();
-    _children.forEach((child) => child.onMount());
+    children.forEach((child) => child.onMount());
   }
 
   @mustCallSuper
   @override
   void onRemove() {
     super.onRemove();
-    _children.forEach((child) => child.onRemove());
+    children.forEach((child) => child.onRemove());
   }
 
   /// Called to check whether the point is to be counted as within the component
@@ -145,13 +146,7 @@ abstract class BaseComponent extends Component {
   /// Get a list of non removed effects
   List<ComponentEffect> get effects => _effectsHandler.effects;
 
-  /// Uses the game passed in, or uses the game from [HasGameRef] otherwise,
-  /// to prepare the child component before it is added to the list of children.
-  /// Note that this component needs to be added to the game first if
-  /// [this.gameRef] should be used to prepare the child.
-  /// For children that don't need preparation from the game instance can
-  /// disregard both the options given above.
-  Future<void> addChild(Component child, {Game? gameRef}) async {
+  void prepare(Component child, {Game? gameRef}) {
     if (this is HasGameRef) {
       final c = this as HasGameRef;
       gameRef ??= c.hasGameRef ? c.gameRef : null;
@@ -169,39 +164,47 @@ abstract class BaseComponent extends Component {
       child._parent = this;
       child.debugMode = debugMode;
     }
-
-    final childOnLoadFuture = child.onLoad();
-    if (childOnLoadFuture != null) {
-      await childOnLoadFuture;
-    }
-    _children.add(child);
-    if (isMounted) {
-      child.onMount();
-    }
   }
 
-  Future<void> addChildren(
-    Iterable<Component> children, {
-    Game? gameRef,
-  }) async {
-    await Future.wait(
-      children.map(
-        (child) => addChild(child, gameRef: gameRef),
-      ),
-    );
+  /// Uses the game passed in, or uses the game from [HasGameRef] otherwise,
+  /// to prepare the child component before it is added to the list of children.
+  /// Note that this component needs to be added to the game first if
+  /// [this.gameRef] should be used to prepare the child.
+  /// For children that don't need preparation from the game instance can
+  /// disregard both the options given above.
+  Future<void> addChild(Component child, {BaseGame? gameRef}) {
+    return children.addChild(child, gameRef: gameRef);
   }
 
-  bool removeChild(Component c) {
-    return _children.remove(c);
+  /// Adds mutiple children.
+  ///
+  /// See [addChild] for details (or `children.addChildren()`).
+  Future<void> addChildren(List<Component> cs, {BaseGame? gameRef}) {
+    return children.addChildren(cs, gameRef: gameRef);
   }
 
-  void clearChildren() {
-    _children.clear();
+  /// Removes a component from the component list, calling onRemove for it and
+  /// its children.
+  void removeChild(Component c) {
+    children.remove(c);
   }
 
-  bool containsChild(Component c) => _children.contains(c);
+  /// Removes all the children in the list and calls onRemove for all of them
+  /// and their children.
+  void removeChildren(Iterable<Component> cs) {
+    children.removeAll(cs);
+  }
 
-  void reorderChildren() => _children.rebalanceAll();
+  /// Whether the children list contains the given component.
+  ///
+  /// This method uses reference equality.
+  bool containsChild(Component c) => children.contains(c);
+
+  /// Call this if any of this component's children priorities have changed
+  /// at runtime.
+  ///
+  /// This will call `rebalanceAll` on the [children] ordered set.
+  void reorderChildren() => children.rebalanceAll();
 
   /// This method first calls the passed handler on the leaves in the tree,
   /// the children without any children of their own.
@@ -218,7 +221,7 @@ abstract class BaseComponent extends Component {
     bool Function(T) handler,
   ) {
     var shouldContinue = true;
-    for (final child in _children) {
+    for (final child in children) {
       if (child is BaseComponent) {
         shouldContinue = child.propagateToChildren(handler);
       }
@@ -235,5 +238,13 @@ abstract class BaseComponent extends Component {
   @protected
   Vector2 eventPosition(PositionInfo info) {
     return isHud ? info.eventPosition.widget : info.eventPosition.game;
+  }
+
+  ComponentSet createComponentSet() {
+    final components = ComponentSet.createDefault(prepare);
+    if (this is HasGameRef) {
+      components.register<HasGameRef>();
+    }
+    return components;
   }
 }

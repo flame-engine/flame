@@ -138,9 +138,9 @@ class MyGame extends Game with TapDetector {
 You can also check more complete examples
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/controls/).
 
-## Tapable, Draggable and Hoverable components
+## Tappable, Draggable and Hoverable components
 
-Any component derived from `BaseComponent` (most components) can add the `Tapable`, the
+Any component derived from `BaseComponent` (most components) can add the `Tappable`, the
 `Draggable`, and/or the `Hoverable` mixins to handle taps, drags and hovers on the component.
 
 All overridden methods return a boolean to control if the event should be passed down further along
@@ -152,9 +152,9 @@ you should return `true`.
 The same applies if your component has children, then the event is first sent to the leaves in the
 children tree and then passed further down until a method returns `false`.
 
-### Tapable components
+### Tappable components
 
-By adding the `HasTapableComponents` mixin to your game, and using the mixin `Tapable` on your
+By adding the `HasTappableComponents` mixin to your game, and using the mixin `Tappable` on your
 components, you can override the following methods on your components:
 
 ```dart
@@ -168,7 +168,7 @@ Minimal component example:
 ```dart
 import 'package:flame/components.dart';
 
-class TapableComponent extends PositionComponent with Tapable {
+class TappableComponent extends PositionComponent with Tappable {
 
   // update and render omitted
 
@@ -188,19 +188,19 @@ class TapableComponent extends PositionComponent with Tapable {
   }
 }
 
-class MyGame extends BaseGame with HasTapableComponents {
+class MyGame extends BaseGame with HasTappableComponents {
   MyGame() {
-    add(TapableComponent());
+    add(TappableComponent());
   }
 }
 ```
 
-**Note**: `HasTapableComponents` uses an advanced gesture detector under the hood and as explained
+**Note**: `HasTappableComponents` uses an advanced gesture detector under the hood and as explained
 further up on this page it shouldn't be used alongside basic detectors.
 
 ### Draggable components
 
-Just like with `Tapable`, Flame offers a mixin for `Draggable`.
+Just like with `Tappable`, Flame offers a mixin for `Draggable`.
 
 By adding the `HasDraggableComponents` mixin to your game, and by using the mixin `Draggable` on
 your components, they can override the simple methods that enable an easy to use drag api on your
@@ -316,7 +316,7 @@ Minimal example:
 
 ```dart
 import 'package:flame/game.dart';
-import 'package:flame/keyboard.dart';
+import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
 
 class MyGame extends Game with KeyboardEvents {
@@ -331,62 +331,21 @@ class MyGame extends Game with KeyboardEvents {
 ```
 
 You can also check a more complete example
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/controls/keyboard.dart).
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/keyboard.dart).
 
 ## Joystick
 
-Flame provides a component capable of creating a virtual joystick for taking input for your game. It
-can be configured with a variety of combinations, like using two sticks, or only one stick and some
-pressable buttons, and so on.
-
-To use this feature. You need to create a `JoystickComponent`, configure it the way you want, and
+Flame provides a component capable of creating a virtual joystick for taking input for your game.
+To use this feature you need to create a `JoystickComponent`, configure it the way you want, and
 add it to your game.
 
-To receive the inputs from the joystick component, you need to have a class which implements a
-`JoystickListener`, and that class needs to be added as an observer of the joystick component
-previous created. That implementation of the the `JoystickListener` could be any class, but one
-common practice is for it to be your component that will be controlled by the joystick, like a
-player component for example.
+To receive the inputs from the joystick component, pass your `JoystickComponent` to the component
+that you want it to control, or simply act upon input from it in the update-loop of your game.
 
 Check this example to get a better understanding:
 
 ```dart
-import 'package:flame/game.dart';
-import 'package:flame/gestures.dart';
-import 'package:flame/joystick/joystick.dart';
-import 'package:flutter/material.dart';
-
-class MyGame extends BaseGame with MultiTouchDragDetector {
-  final player = Player();
-  final joystick = JoystickComponent(
-    componentPriority: 0,
-    directional: JoystickDirectional(
-      spriteBackgroundDirectional: Sprite('directional_background.png'), // optional
-      spriteKnobDirectional: Sprite('directional_knob.png'), // optional
-      isFixed: true, // optional
-      margin: const EdgeInsets.only(left: 100, bottom: 100), // optional
-      size: 80, // optional
-      color: Colors.blueGrey, // optional
-      opacityBackground: 0.5, // optional
-      opacityKnob: 0.8, // optional
-    ),
-    actions: [
-      JoystickAction(
-        actionId: 1, // required
-        sprite: Sprite('action.png'), // optional
-        spritePressed: Sprite('action_pressed.png'), // optional
-        spriteBackgroundDirection: Sprite('action_direction_background.png'), // optional
-        enableDirection: false, // optional
-        size: 50, // optional
-        sizeFactorBackgroundDirection: 1.5, // optional
-        margin: const EdgeInsets.all(50), // optional
-        color: Colors.blueGrey, // optional
-        align: JoystickActionAlign.BOTTOM_RIGHT, // optional
-        opacityBackground: 0.5, // optional
-        opacityKnob: 0.8, // optional
-      ),
-    ],
-  );
+class MyGame extends BaseGame with HasDraggableComponents {
 
   MyGame() {
     joystick.addObserver(player);
@@ -395,77 +354,96 @@ class MyGame extends BaseGame with MultiTouchDragDetector {
   }
 
   @override
-  void onReceiveDrag(DragEvent drag) {
-    joystick.onReceiveDrag(drag);
-    super.onReceiveDrag(drag);
+  Future<void> onLoad() async {
+    super.onLoad();
+    final image = await images.load('joystick.png');
+    final sheet = SpriteSheet.fromColumnsAndRows(
+      image: image,
+      columns: 6,
+      rows: 1,
+    );
+    final joystick = JoystickComponent(
+      knob: SpriteComponent(
+        sprite: sheet.getSpriteById(1),
+        size: Vector2.all(100),
+      ),
+      background: SpriteComponent(
+        sprite: sheet.getSpriteById(0),
+        size: Vector2.all(150),
+      ),
+      margin: const EdgeInsets.only(left: 40, bottom: 40),
+    );
+
+    final player = Player(joystick);
+    add(player);
+    add(joystick);
   }
 }
 
-class Player extends Component implements JoystickListener {
+class JoystickPlayer extends SpriteComponent with HasGameRef {
+  /// Pixels/s
+  double maxSpeed = 300.0;
 
-  @override
-  void render(Canvas canvas) {}
+  final JoystickComponent joystick;
 
-  @override
-  void update(double dt) {}
-
-  @override
-  void joystickAction(JoystickActionEvent event) {
-    // Do anything when click in action button.
-    print('Action: $event');
+  JoystickPlayer(this.joystick)
+      : super(
+          size: Vector2.all(100.0),
+        ) {
+    anchor = Anchor.center;
   }
 
   @override
-  void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    // Do anything when interact with directional.
-    print('Directional: $event');
+  Future<void> onLoad() async {
+    super.onLoad();
+    sprite = await gameRef.loadSprite('layers/player.png');
+    position = gameRef.size / 2;
   }
 
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (joystick.direction != JoystickDirection.idle) {
+      position.add(joystick.velocity * maxSpeed * dt);
+      angle = joystick.delta.screenAngle();
+    }
+  }
 }
-
 ```
 
-### JoystickDirectionalEvent
+So in this example we create the classes `MyGame` and `Player`. `MyGame` creates a joystick which is
+passed to the `Player` when it is created. In the `Player` class we act upon the current state of
+the joystick.
 
-```dart
+The joystick has a few fields that change depending on what state it is in.
+These are the fields that should be used to know the state of the joystick:
+ - `intensity`: The percentage [0.0, 1.0] that the knob is dragged from the epicenter to the edge of
+  the joystick (or `knobRadius` if that is set).
+ - `delta`: The absolute amount (defined as a `Vector2`) that the knob is dragged from its epicenter.
+ - `velocity`: The percentage, presented as a `Vector2`, and direction that the knob is currently
+  pulled from its base position to a edge of the joystick.
 
-JoystickDirectionalEvent({
-    JoystickMoveDirectional directional,
-    double intensity = 0.0,
-    double radAngle = 0.0,
-});
+If you want to create buttons to go with your joystick, check out
+[`MarginButtonComponent`](#HudButtonComponent).
 
-enum JoystickMoveDirectional {
-    MOVE_UP,
-    MOVE_UP_LEFT,
-    MOVE_UP_RIGHT,
-    MOVE_RIGHT,
-    MOVE_DOWN,
-    MOVE_DOWN_RIGHT,
-    MOVE_DOWN_LEFT,
-    MOVE_LEFT,
-    IDLE
-}
+A full examples of how to use it can be found
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/joystick.dart).
+And it can be seen running [here](https://examples.flame-engine.org/#/Controls_Joystick).
 
-```
+## HudButtonComponent
+A `HudButtonComponent` is a button that can be defined with margins to the edge of the `Viewport`
+instead of with a position. It takes two `PositionComponent`s. `button` and `buttonDown`, the first
+is used for when the button is idle and the second is shown when the button is being pressed. The
+second one is optional if you don't want to change the look of the button when it is pressed, or if
+you handle this through the `button` component.
 
-### JoystickActionEvent
+As the name suggests this button is a hud by default, which means that it will be static on your
+screen even if the camera for the game moves around. You can also use this component as a non-hud by
+setting `hudButtonComponent.isHud = false;`.
 
-```dart
-
-JoystickActionEvent({
-  int id,
-  double intensity = 0.0,
-  double radAngle = 0.0,
-  ActionEvent event,
-});
-
-enum ActionEvent { DOWN, UP, MOVE, CANCEL }
-
-```
-
-You can also check a more complete example
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/controls/joystick.dart).
+If you want to act upon the button being pressed (which I guess that you do) you can either pass in
+a callback function as the `onPressed` argument, or you extend the component and override
+`onTapDown`, `onTapUp` and/or `onTapCancel` and implement your logic in there.
 
 ## Gamepad
 

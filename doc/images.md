@@ -180,8 +180,8 @@ images, each at their own position, onto a new image:
 final composition = ImageComposition()
   ..add(image1, Vector2(0, 0))
   ..add(image2, Vector2(64, 0));
-  ..add(image3, 
-    Vector2(128, 0), 
+  ..add(image3,
+    Vector2(128, 0),
     source: Rect.fromLTWH(32, 32, 64, 64),
   );
 
@@ -389,7 +389,7 @@ data on the web this method can be used as a replacement for `dart-ui decodeImag
 ```dart
 Image image = await Flame.images.decodeImageFromPixels(
   data, // A Uint8List containing pixel data in the RGBA format.
-  200, 
+  200,
   200,
 );
 ```

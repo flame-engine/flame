@@ -5,13 +5,16 @@ import 'package:flutter/material.dart';
 import 'blob_sample.dart';
 import 'camera_sample.dart';
 import 'circle_stress_sample.dart';
+import 'composition_sample.dart';
 import 'contact_callbacks_sample.dart';
 import 'domino_sample.dart';
 import 'draggable_sample.dart';
+import 'joint_sample.dart';
 import 'mouse_joint_sample.dart';
 import 'position_body_sample.dart';
 import 'sprite_body_sample.dart';
-import 'tapable_sample.dart';
+import 'tappable_sample.dart';
+import 'widget_sample.dart';
 
 String link(String example) =>
     'https://github.com/flame-engine/flame_forge2d/tree/main/example/lib/$example';
@@ -25,6 +28,12 @@ void main() async {
       'Blob sample',
       (DashbookContext ctx) => GameWidget(game: BlobSample()),
       codeLink: link('blob_sample.dart'),
+    )
+    ..add(
+      'Composition sample',
+      (DashbookContext ctx) => GameWidget(game: CompositionSample()),
+      codeLink: link('composition_sample.dart'),
+      info: CompositionSample.info,
     )
     ..add(
       'Domino sample',
@@ -52,14 +61,19 @@ void main() async {
       codeLink: link('position_body_sample.dart'),
     )
     ..add(
-      'Tapable Body',
-      (DashbookContext ctx) => GameWidget(game: TapableSample()),
-      codeLink: link('tapable_sample.dart'),
+      'Tappable Body',
+      (DashbookContext ctx) => GameWidget(game: TappableSample()),
+      codeLink: link('tappable_sample.dart'),
     )
     ..add(
       'Draggable Body',
       (DashbookContext ctx) => GameWidget(game: DraggableSample()),
       codeLink: link('draggable_sample.dart'),
+    )
+    ..add(
+      'Basic joint',
+      (DashbookContext ctx) => GameWidget(game: JointSample()),
+      codeLink: link('joint_sample.dart'),
     )
     ..add(
       'Mouse Joint',
@@ -70,6 +84,12 @@ void main() async {
       'Camera',
       (DashbookContext ctx) => GameWidget(game: CameraSample()),
       codeLink: link('camera_sample.dart'),
+    )
+    ..add(
+      'Widget sample',
+      (DashbookContext ctx) => BodyWidgetSample(),
+      info: widgetSampleDescription,
+      codeLink: link('widget_sample.dart'),
     );
   runApp(dashbook);
 }

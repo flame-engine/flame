@@ -53,11 +53,9 @@ void main() {
       );
       expect(
         canvas.methodCalls,
-        contains('scale(4.0, 4.0)'),
-      );
-      expect(
-        canvas.methodCalls,
-        contains('translate(0.0, 0.0)'),
+        contains(
+          'transform(4.0, 0.0, 0.0, 0.0, 0.0, 4.0, 0.0, 0.0, 0.0, 0.0, 4.0, 0.0, 0.0, 0.0, 0.0, 1.0)',
+        ),
       );
     });
     test('fixed ratio viewport maxes width', () {
@@ -80,11 +78,9 @@ void main() {
       );
       expect(
         canvas.methodCalls,
-        contains('scale(2.0, 2.0)'),
-      );
-      expect(
-        canvas.methodCalls,
-        contains('translate(0.0, 50.0)'),
+        contains(
+          'transform(2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 50.0, 0.0, 1.0)',
+        ),
       );
     });
     test('fixed ratio viewport maxes height', () {
@@ -107,11 +103,9 @@ void main() {
       );
       expect(
         canvas.methodCalls,
-        contains('scale(0.5, 0.5)'),
-      );
-      expect(
-        canvas.methodCalls,
-        contains('translate(25.0, 0.0)'),
+        contains(
+          'transform(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 25.0, 0.0, 0.0, 1.0)',
+        ),
       );
     });
   });
@@ -170,7 +164,7 @@ void main() {
       final game = BaseGame(); // no camera changes
       game.onResize(Vector2.all(100.0));
 
-      game.camera.cameraSpeed = 1; // 1 pixel per second
+      game.camera.speed = 1; // 1 pixel per second
       game.camera.moveTo(Vector2(0.0, 10.0));
 
       // nothing should change yet
@@ -357,6 +351,17 @@ void main() {
         ],
       );
       expect(game.camera.position, Vector2.all(-50.0));
+    });
+    test('camera shake should return to where it started', () {
+      final game = BaseGame();
+      final camera = game.camera;
+      game.onResize(Vector2.all(200.0));
+      expect(camera.position, Vector2.zero());
+      camera.shake(duration: 9000);
+      game.update(5000);
+      game.update(5000);
+      game.update(5000);
+      expect(camera.position, Vector2.zero());
     });
   });
   group('viewport & camera', () {

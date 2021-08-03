@@ -16,12 +16,17 @@ class EffectsHandler {
   void update(double dt) {
     _effects.addAll(_addLater);
     _addLater.clear();
-    _effects.removeWhere((e) => e.hasCompleted());
+    _effects.removeWhere((e) {
+      final hasCompleted = e.hasCompleted();
+      if (hasCompleted) {
+        e.onRemove();
+      }
+      return hasCompleted;
+    });
     _effects.where((e) => !e.isPaused).forEach((e) {
       e.update(dt);
       if (e.hasCompleted()) {
         e.setComponentToEndState();
-        e.onComplete?.call();
       }
     });
   }

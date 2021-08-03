@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/gestures.dart';
+import 'package:flame/input.dart';
 
 class BasicAnimations extends BaseGame with TapDetector {
   late Image creature;

@@ -5,13 +5,13 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/gestures.dart';
+import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
 enum Shapes { circle, rectangle, polygon }
 
-class OnlyShapes extends BaseGame with HasTapableComponents {
+class OnlyShapes extends BaseGame with HasTappableComponents {
   final shapePaint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
   final _rng = Random();
 
@@ -52,7 +52,7 @@ class OnlyShapes extends BaseGame with HasTapableComponents {
   }
 }
 
-class MyShapeComponent extends ShapeComponent with Tapable {
+class MyShapeComponent extends ShapeComponent with Tappable {
   MyShapeComponent(Shape shape, Paint shapePaint) : super(shape, shapePaint);
 
   @override
