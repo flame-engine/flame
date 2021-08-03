@@ -1,6 +1,6 @@
 # Oxygen
 
-We (the Flame organization) build an ECS(Entity Component System) named Oxygen.
+We (the Flame organization) built an ECS(Entity Component System) named Oxygen.
 
 If you want to use Oxygen specifically for Flame as a replacement for the 
 FCS(Flame Component System) you should use our bridge library
