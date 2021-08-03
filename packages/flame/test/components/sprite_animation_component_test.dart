@@ -172,8 +172,9 @@ void main() async {
     });
 
     test('Last animation frame is not skipped', () {
-      // See issue #895
+      // See https://github.com/flame-engine/flame/issues/895
       final game = BaseGame();
+      // Non-looping animation, with the expected total duration of 0.500 s
       final animation = SpriteAnimation.spriteList(
         List.filled(5, Sprite(image)),
         stepTime: 0.1,
