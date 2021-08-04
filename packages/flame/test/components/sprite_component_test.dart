@@ -17,11 +17,17 @@ void main() async {
       final component2 = SpriteComponent.fromImage(image, size: Vector2(5, 10));
       expect(component2.size, Vector2(5, 10));
 
-      final component3 = SpriteComponent.fromImage(image, srcSize: Vector2(4, 3));
+      final component3 = SpriteComponent.fromImage(
+        image,
+        srcSize: Vector2(4, 3),
+      );
       expect(component3.size, Vector2(4, 3));
 
-      final component4 =
-          SpriteComponent.fromImage(image, size: Vector2(40, 30), srcSize: Vector2(4, 3));
+      final component4 = SpriteComponent.fromImage(
+        image,
+        size: Vector2(40, 30),
+        srcSize: Vector2(4, 3),
+      );
       expect(component4.size, Vector2(40, 30));
     });
   });
