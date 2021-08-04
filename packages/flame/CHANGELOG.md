@@ -22,7 +22,7 @@
  - Create `ColorEffect`
  - Adding ability to pause `SpriteAnimationComponent`
  - Adding `SpriteGroupComponent`
- - Default size of `SpriteComponent` is not `srcSize` instead of spritesheet size
+ - Default size of `SpriteComponent` is `srcSize` instead of spritesheet size
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
