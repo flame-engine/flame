@@ -229,4 +229,120 @@ void main() {
       expect(child.absoluteCenter, parent.position + child.center);
     });
   });
+
+  group('coordinates transforms test', () {
+    test('local<->parent transforms', () {
+      final component = MyComponent()
+          .. size = Vector2(10, 10)
+          .. position = Vector2(50, 20)
+          .. anchor = Anchor.center;
+
+      expect(component.localToParent(Vector2(0, 0)), Vector2(45, 15));
+      expect(component.localToParent(Vector2(5, 5)), Vector2(50, 20));
+      expect(component.localToParent(Vector2(10, 0)), Vector2(55, 15));
+      expect(component.localToParent(Vector2(0, 10)), Vector2(45, 25));
+
+      expect(component.parentToLocal(Vector2(0, 0)), Vector2(-45, -15));
+      expect(component.parentToLocal(Vector2(50, 20)), Vector2(5, 5));
+      expect(component.parentToLocal(Vector2(55, 25)), Vector2(10, 10));
+      expect(component.parentToLocal(Vector2(100, 100)), Vector2(55, 85));
+    });
+
+    test('flips', () {
+      final component = MyComponent()
+          .. size = Vector2(10, 10)
+          .. position = Vector2(50, 20)
+          .. anchor = const Anchor(0.6, 0.8);
+
+      expect(component.localToParent(Vector2(6, 8)), Vector2(50, 20));
+      expect(component.localToParent(Vector2(0, 0)), Vector2(44, 12));
+      component.flipHorizontally();
+      expect(component.localToParent(Vector2(6, 8)), Vector2(50, 20));
+      expect(component.localToParent(Vector2(0, 0)), Vector2(56, 12));
+      component.flipVertically();
+      expect(component.localToParent(Vector2(6, 8)), Vector2(50, 20));
+      expect(component.localToParent(Vector2(0, 0)), Vector2(56, 28));
+      component.flipHorizontally();
+      expect(component.localToParent(Vector2(6, 8)), Vector2(50, 20));
+      expect(component.localToParent(Vector2(0, 0)), Vector2(44, 28));
+      component.flipVertically();
+      expect(component.localToParent(Vector2(6, 8)), Vector2(50, 20));
+      expect(component.localToParent(Vector2(0, 0)), Vector2(44, 12));
+    });
+
+    test('center flips', () {
+      final component = MyComponent()
+        .. size = Vector2(10, 10)
+        .. position = Vector2(50, 20)
+        .. anchor = const Anchor(0.6, 0.8);
+
+      expect(component.localToParent(Vector2(6, 8)), Vector2(50, 20));
+      expect(component.localToParent(Vector2(0, 0)), Vector2(44, 12));
+      expect(component.localToParent(Vector2(10, 0)), Vector2(54, 12));
+      component.flipHorizontallyAroundCenter();
+      expect(component.localToParent(Vector2(6, 8)), Vector2(48, 20));
+      expect(component.localToParent(Vector2(0, 0)), Vector2(54, 12));
+      expect(component.localToParent(Vector2(10, 0)), Vector2(44, 12));
+      component.flipVerticallyAroundCenter();
+      expect(component.localToParent(Vector2(6, 8)), Vector2(48, 14));
+      expect(component.localToParent(Vector2(0, 0)), Vector2(54, 22));
+      expect(component.localToParent(Vector2(10, 0)), Vector2(44, 22));
+    });
+
+    test('rotations', () {
+      final component = MyComponent()
+        .. size = Vector2(8, 6)
+        .. position = Vector2(50, 20)
+        .. anchor = Anchor.center;
+
+      // Rotate the component in small increments counterclockwise
+      // and track the coordinate of its top-right corner
+      for (var i = 0; i < 30; i++) {
+        component.angle = - i / 10;
+        final cosA = math.cos(i / 10);
+        final sinA = math.sin(i / 10);
+        final expectedX = 50 + 5*(0.8*cosA - 0.6*sinA);
+        final expectedY = 20 - 5*(0.6*cosA + 0.8*sinA);
+        final topRight = component.localToParent(Vector2(8, 0));
+        expect(topRight.x, closeTo(expectedX, 1e-10));
+        expect(topRight.y, closeTo(expectedY, 1e-10));
+      }
+    });
+
+    test('random local<->global', () {
+      final parent = MyComponent()
+          .. size = Vector2(50, 25);
+      final child = MyComponent()
+          .. size = Vector2(10, 8)
+          .. position = Vector2(50, 20)
+          .. anchor = const Anchor(0.1, 0.2);
+      parent.addChild(child);
+
+      final rnd = math.Random();
+      for (var i = 0; i < 100; i++) {
+        child.angle = (rnd.nextDouble() - 0.5) * 10;
+        child.x = rnd.nextDouble() * 100;
+        child.y = rnd.nextDouble() * 70 + 30;
+        parent.angle = (rnd.nextDouble() - 0.5) * 5;
+        parent.x = rnd.nextDouble() * 300;
+        parent.y = rnd.nextDouble() * 1000;
+        if (rnd.nextBool()) {
+          child.flipHorizontally();
+        }
+        if (rnd.nextBool()) {
+          child.flipVertically();
+        }
+        if (rnd.nextDouble() < 0.1) {
+          parent.flipHorizontally();
+        }
+
+        final globalX = (rnd.nextDouble() - 0.3) * 200;
+        final globalY = (rnd.nextDouble() - 0.1) * 200;
+        final localPoint = child.absoluteToLocal(Vector2(globalX, globalY));
+        final globalPoint = child.localToAbsolute(localPoint);
+        expect(globalPoint.x, closeTo(globalX, 1e-10));
+        expect(globalPoint.y, closeTo(globalY, 1e-10));
+      }
+    });
+  });
 }
