@@ -1,10 +1,10 @@
+import 'dart:math' as math;
 import 'dart:ui' hide Offset;
 
 import '../anchor.dart';
 import '../extensions/offset.dart';
 import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
-import '../geometry/rectangle.dart';
 import 'base_component.dart';
 import 'component.dart';
 import 'mixins/hitbox.dart';
@@ -22,32 +22,63 @@ import 'mixins/hitbox.dart';
 /// They are translated by this component's (x,y). They do not need to fit
 /// within this component's (width, height).
 abstract class PositionComponent extends BaseComponent {
-  /// The position of this component on the screen (relative to the anchor).
+  /// The matrix that combines all the transforms into a single entity.
+  /// This matrix is cached and automatically recalculated when the position/
+  /// rotation/scale of the component changes.
+  final Matrix4 _transformMatrix;
+
+  /// This variable keeps track whether the transform matrix is "dirty" and
+  /// needs to be recalculated. It ensures that if the user updates multiple
+  /// properties at once, such as [x], [y] and [angle], then the transform
+  /// matrix will be recalculated only once, usually during the rendering stage.
+  bool _recalculateTransform;
+
+  /// The position of this component's anchor on the screen.
   final Vector2 _position;
   Vector2 get position => _position;
-  set position(Vector2 position) => _position.setFrom(position);
+  set position(Vector2 position) {
+    _recalculateTransform = true;
+    _position.setFrom(position);
+  }
 
-  /// X position of this component on the screen (relative to the anchor).
+  /// X position of this component's anchor on the screen.
   double get x => _position.x;
-  set x(double x) => _position.x = x;
+  set x(double x) {
+    _recalculateTransform = true;
+    _position.x = x;
+  }
 
-  /// Y position of this component on the screen (relative to the anchor).
+  /// Y position of this component's anchor on the screen.
   double get y => _position.y;
-  set y(double y) => _position.y = y;
+  set y(double y) {
+    _recalculateTransform = true;
+    _position.y = y;
+  }
 
-  /// The size that this component is rendered with.
-  /// This is not necessarily the source size of the asset.
+  /// The logical size of the component. The game assumes that this is the
+  /// approximate size of the object that will be drawn on the screen.
+  /// This size will therefore be used for collision detection and tap
+  /// handling.
   final Vector2 _size;
   Vector2 get size => _size;
-  set size(Vector2 size) => _size.setFrom(size);
+  set size(Vector2 size) {
+    _recalculateTransform = true;
+    _size.setFrom(size);
+  }
 
   /// Width (size) that this component is rendered with.
   double get width => size.x;
-  set width(double width) => size.x = width;
+  set width(double width) {
+    _recalculateTransform = true;
+    _size.x = width;
+  }
 
   /// Height (size) that this component is rendered with.
   double get height => size.y;
-  set height(double height) => size.y = height;
+  set height(double height) {
+    _recalculateTransform = true;
+    _size.y = height;
+  }
 
   /// Get the absolute position, with the anchor taken into consideration
   Vector2 get absolutePosition => absoluteParentPosition + position;
@@ -101,9 +132,48 @@ abstract class PositionComponent extends BaseComponent {
   /// Get the absolute center of the component
   Vector2 get absoluteCenter => absoluteParentPosition + center;
 
-  /// Angle (with respect to the x-axis) this component should be rendered with.
-  /// It is rotated around its anchor.
-  double angle;
+  /// Rotation angle (in radians) of the component. The component will be
+  /// rotated around its anchor point in the clockwise direction if the
+  /// angle is positive, or counterclockwise if the angle is negative.
+  double _angle;
+  double get angle => _angle;
+  set angle(double a) {
+    _recalculateTransform = true;
+    _angle = a;
+  }
+
+  /// Scale factor applied to the component.
+  final Vector2 _scale;
+
+  /// Flip the component horizontally around its anchor point.
+  void flipHorizontally() {
+    _recalculateTransform = true;
+    _scale.x = -_scale.x;
+  }
+
+  /// Flip the component horizontally around its center line.
+  void flipHorizontallyAroundCenter() {
+    final delta = (1 - 2 * anchor.x) * _size.x * _scale.x;
+    _position.x += delta * math.cos(_angle);
+    _position.y += delta * math.sin(_angle);
+    _scale.x = -_scale.x;
+    _recalculateTransform = true;
+  }
+
+  /// Flip the component vertically around its anchor point.
+  void flipVertically() {
+    _recalculateTransform = true;
+    _scale.y = -_scale.y;
+  }
+
+  /// Flip the component vertically around its center line.
+  void flipVerticallyAroundCenter() {
+    final delta = (1 - 2 * anchor.y) * _size.y * _scale.y;
+    _position.x += -delta * math.sin(_angle);
+    _position.y += delta * math.cos(_angle);
+    _scale.y = -_scale.y;
+    _recalculateTransform = true;
+  }
 
   /// Anchor point for this component. This is where flame "grabs it".
   /// The [position] is relative to this point inside the component.
@@ -135,20 +205,104 @@ abstract class PositionComponent extends BaseComponent {
   PositionComponent({
     Vector2? position,
     Vector2? size,
-    this.angle = 0.0,
+    double angle = 0.0,
     this.anchor = Anchor.topLeft,
     this.renderFlipX = false,
     this.renderFlipY = false,
     int? priority,
   })  : _position = position ?? Vector2.zero(),
         _size = size ?? Vector2.zero(),
+        _angle = angle,
+        _scale = Vector2(1, 1),
+        _transformMatrix = Matrix4.identity(),
+        _recalculateTransform = true,
         super(priority: priority);
 
+  /// The total transformation matrix for the component. This matrix combines
+  /// translation, rotation and scale transforms into a single entity. The
+  /// matrix is cached and gets recalculated only as necessary.
+  Matrix4 get transformMatrix {
+    if (_recalculateTransform) {
+      final m = _transformMatrix.storage;
+      final cosA = math.cos(_angle);
+      final sinA = math.sin(_angle);
+      final deltaX = -anchor.x * _size.x;
+      final deltaY = -anchor.y * _size.y;
+      m[0] = cosA * _scale.x;
+      m[1] = sinA * _scale.x;
+      m[4] = -sinA * _scale.y;
+      m[5] = cosA * _scale.y;
+      m[12] = _position.x + m[0] * deltaX + m[4] * deltaY;
+      m[13] = _position.y + m[1] * deltaX + m[5] * deltaY;
+      _recalculateTransform = false;
+    }
+    return _transformMatrix;
+  }
+
+  /// Transform `point` from local coordinates into the parent coordinate space.
+  Vector2 localToParent(Vector2 point) {
+    final m = transformMatrix.storage;
+    return Vector2(
+      m[0] * point.x + m[4] * point.y + m[12],
+      m[1] * point.x + m[5] * point.y + m[13],
+    );
+  }
+
+  /// Transform `point` from local coordinates into the global (screen)
+  /// coordinate space. For example, local point (0, 0) corresponds to
+  /// the top left corner of the component. Thus,
+  /// `localToAbsolute(Vector2(0, 0))` returns the screen coordinates
+  /// of the top left corner of the component.
+  Vector2 localToAbsolute(Vector2 point) {
+    var c = parent;
+    while (c != null) {
+      if (c is PositionComponent) {
+        return c.localToAbsolute(localToParent(point));
+      }
+      c = c.parent;
+    }
+    return localToParent(point);
+  }
+
+  /// Transform `point` from the parent's coordinate space into the local
+  /// coordinates.
+  Vector2 parentToLocal(Vector2 point) {
+    // Here we rely on the fact that in the transform matrix only elements
+    // `m[0]`, `m[1]`, `m[4]`, `m[5]`, `m[12]`, and `m[13]` are modified.
+    // This greatly simplifies computation of the inverse matrix.
+    final m = transformMatrix.storage;
+    final det = m[0] * m[5] - m[1] * m[4];
+    return Vector2(
+      ((point.x - m[12]) * m[5] - (point.y - m[13]) * m[4]) / det,
+      ((point.y - m[13]) * m[0] - (point.x - m[12]) * m[1]) / det,
+    );
+  }
+
+  /// Transform `point` from the global (screen) coordinate space into the
+  /// local coordinates. This can be used, for example, to detect whether
+  /// a specific point on the screen lies within this `PositionComponent`,
+  /// and where exactly it is.
+  Vector2 absoluteToLocal(Vector2 point) {
+    var c = parent;
+    while (c != null) {
+      if (c is PositionComponent) {
+        return parentToLocal(c.absoluteToLocal(point));
+      }
+      c = c.parent;
+    }
+    return parentToLocal(point);
+  }
+
+  /// Test whether the `point` (given in global coordinates) lies within this
+  /// component. The top and the left borders of the component are inclusive,
+  /// while the bottom and the right borders are exclusive.
   @override
   bool containsPoint(Vector2 point) {
-    final rectangle = Rectangle.fromRect(toAbsoluteRect(), angle: angle)
-      ..position = absoluteCenter;
-    return rectangle.containsPoint(point);
+    final local = absoluteToLocal(point);
+    return (local.x >= 0) &&
+        (local.y >= 0) &&
+        (local.x < _size.x) &&
+        (local.y < _size.y);
   }
 
   double angleTo(PositionComponent c) => position.angleTo(c.position);
@@ -179,11 +333,7 @@ abstract class PositionComponent extends BaseComponent {
 
   @override
   void preRender(Canvas canvas) {
-    canvas.translate(x, y);
-    canvas.rotate(angle);
-    final delta = -anchor.toVector2()
-      ..multiply(size);
-    canvas.translate(delta.x, delta.y);
+    canvas.transform(transformMatrix.storage);
 
     // Handle inverted rendering by moving center and flipping.
     if (renderFlipX || renderFlipY) {
