@@ -22,6 +22,7 @@
  - Create `ColorEffect`
  - Adding ability to pause `SpriteAnimationComponent`
  - Adding `SpriteGroupComponent`
+ - Fix truncated last frame in non-looping animations
  - Default size of `SpriteComponent` is `srcSize` instead of spritesheet size
 
 ## [1.0.0-releasecandidate.13]
