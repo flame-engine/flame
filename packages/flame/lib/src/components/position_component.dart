@@ -60,12 +60,13 @@ abstract class PositionComponent extends BaseComponent {
 
   /// The size that this component is rendered with after [scale] is applied.
   Vector2 get scaledSize {
-    if (_scaledSizeCache.isCacheValid([_scale])) {
-      return _scaledSizeCache.value!;
-    } else {
-      _scaledSizeCache.updateCache(size.clone()..multiply(_scale), [_scale]);
-      return _scaledSizeCache.value!;
+    if (!_scaledSizeCache.isCacheValid([scale, size])) {
+      _scaledSizeCache.updateCache(
+        size.clone()..multiply(scale),
+        [scale.clone(), size.clone()],
+      );
     }
+    return _scaledSizeCache.value!;
   }
 
   /// Get the absolute position, with the anchor taken into consideration
@@ -134,24 +135,6 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Whether this component should be flipped ofn the Y axis before being rendered.
   bool renderFlipY = false;
-
-  /// Returns the relative position/size of this component.
-  /// Relative because it might be translated by their parents (which is not considered here).
-  // TODO: Should scale be taken into consideration here
-  Rect toRect() => topLeftPosition.toPositionedRect(size);
-
-  /// Returns the absolute position/size of this component.
-  /// Absolute because it takes any possible parent position into consideration.
-  // TODO: Should scale be taken into consideration here
-  Rect toAbsoluteRect() => absoluteTopLeftPosition.toPositionedRect(size);
-
-  /// Mutates position and size using the provided [rect] as basis.
-  /// This is a relative rect, same definition that [toRect] use
-  /// (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
-  void setByRect(Rect rect) {
-    size.setValues(rect.width, rect.height);
-    topLeftPosition = rect.topLeft.toVector2();
-  }
 
   PositionComponent({
     Vector2? position,
@@ -230,5 +213,21 @@ abstract class PositionComponent extends BaseComponent {
       canvas.translate(-size.x / 2, -size.y / 2);
       _preRenderMatrix.setIdentity();
     }
+  }
+
+  /// Returns the relative position/size of this component.
+  /// Relative because it might be translated by their parents (which is not considered here).
+  Rect toRect() => topLeftPosition.toPositionedRect(scaledSize);
+
+  /// Returns the absolute position/size of this component.
+  /// Absolute because it takes any possible parent position into consideration.
+  Rect toAbsoluteRect() => absoluteTopLeftPosition.toPositionedRect(scaledSize);
+
+  /// Mutates position and size using the provided [rect] as basis.
+  /// This is a relative rect, same definition that [toRect] use
+  /// (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
+  void setByRect(Rect rect) {
+    size.setValues(rect.width, rect.height);
+    topLeftPosition = rect.topLeft.toVector2();
   }
 }
