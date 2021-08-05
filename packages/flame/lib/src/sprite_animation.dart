@@ -231,6 +231,7 @@ class SpriteAnimation {
     clock = 0.0;
     elapsed = 0.0;
     currentIndex = 0;
+    _done = false;
   }
 
   /// Gets the current [Sprite] that should be shown.
@@ -244,30 +245,29 @@ class SpriteAnimation {
   /// If [loop] is false, returns whether the animation is done (fixed in the last Sprite).
   ///
   /// Always returns false otherwise.
-  bool done() {
-    return loop ? false : (isLastFrame && clock >= currentFrame.stepTime);
-  }
+  bool _done = false;
+  bool done() => _done;
 
   /// Updates this animation, ticking the lifeTime by an amount [dt] (in seconds).
   void update(double dt) {
     clock += dt;
     elapsed += dt;
-    if (isSingleFrame) {
+    if (isSingleFrame || _done) {
       return;
     }
-    if (!loop && isLastFrame) {
-      onComplete?.call();
-      return;
-    }
-    while (clock > currentFrame.stepTime) {
-      if (!isLastFrame) {
+    while (clock >= currentFrame.stepTime) {
+      if (isLastFrame) {
+        if (loop) {
+          clock -= currentFrame.stepTime;
+          currentIndex = 0;
+        } else {
+          _done = true;
+          onComplete?.call();
+          return;
+        }
+      } else {
         clock -= currentFrame.stepTime;
         currentIndex++;
-      } else if (loop) {
-        clock -= currentFrame.stepTime;
-        currentIndex = 0;
-      } else {
-        break;
       }
     }
   }
