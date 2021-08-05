@@ -8,8 +8,8 @@ export './color_effect.dart';
 export './move_effect.dart';
 export './opacity_effect.dart';
 export './rotate_effect.dart';
-export './scale_effect.dart';
 export './sequence_effect.dart';
+export './size_effect.dart';
 
 abstract class ComponentEffect<T extends BaseComponent> {
   T? component;

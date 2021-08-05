@@ -14,9 +14,9 @@ import 'sequence_effect.dart';
 void addEffectsStories(Dashbook dashbook) {
   dashbook.storiesOf('Effects')
     ..add(
-      'Scale Effect',
-      (_) => GameWidget(game: ScaleEffectGame()),
-      codeLink: baseLink('effects/scale_effect.dart'),
+      'Size Effect',
+      (_) => GameWidget(game: SizeEffectGame()),
+      codeLink: baseLink('effects/size_effect.dart'),
     )
     ..add(
       'Move Effect',

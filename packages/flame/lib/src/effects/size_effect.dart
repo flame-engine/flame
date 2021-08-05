@@ -6,13 +6,13 @@ import '../../components.dart';
 import '../extensions/vector2.dart';
 import 'effects.dart';
 
-class ScaleEffect extends SimplePositionComponentEffect {
+class SizeEffect extends SimplePositionComponentEffect {
   Vector2 size;
   late Vector2 _startSize;
   late Vector2 _delta;
 
   /// Duration or speed needs to be defined
-  ScaleEffect({
+  SizeEffect({
     required this.size,
     double? duration, // How long it should take for completion
     double? speed, // The speed of the scaling in pixels per second

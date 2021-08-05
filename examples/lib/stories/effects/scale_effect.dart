@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../../commons/square_component.dart';
 
-class ScaleEffectGame extends BaseGame with TapDetector {
+class SizeEffectGame extends BaseGame with TapDetector {
   late SquareComponent square;
   bool grow = true;
 
@@ -25,7 +25,7 @@ class ScaleEffectGame extends BaseGame with TapDetector {
 
     grow = !grow;
     square.addEffect(
-      ScaleEffect(
+      SizeEffect(
         size: Vector2.all(s),
         speed: 250.0,
         curve: Curves.bounceInOut,

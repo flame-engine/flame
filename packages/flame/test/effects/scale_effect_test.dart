@@ -12,8 +12,8 @@ void main() {
   final argumentSize = randomVector2();
   TestComponent component() => TestComponent(size: randomVector2());
 
-  ScaleEffect effect({bool isInfinite = false, bool isAlternating = false}) {
-    return ScaleEffect(
+  SizeEffect effect({bool isInfinite = false, bool isAlternating = false}) {
+    return SizeEffect(
       size: argumentSize,
       duration: 1 + random.nextInt(100).toDouble(),
       isInfinite: isInfinite,
@@ -21,7 +21,7 @@ void main() {
     )..skipEffectReset = true;
   }
 
-  testWidgets('ScaleEffect can scale', (WidgetTester tester) async {
+  testWidgets('SizeEffect can scale', (WidgetTester tester) async {
     effectTest(
       tester,
       component(),
@@ -31,7 +31,7 @@ void main() {
   });
 
   testWidgets(
-    'ScaleEffect will stop scaling after it is done',
+    'SizeEffect will stop scaling after it is done',
     (WidgetTester tester) async {
       effectTest(
         tester,
@@ -43,7 +43,7 @@ void main() {
     },
   );
 
-  testWidgets('ScaleEffect can alternate', (WidgetTester tester) async {
+  testWidgets('SizeEffect can alternate', (WidgetTester tester) async {
     final PositionComponent positionComponent = component();
     effectTest(
       tester,
@@ -54,7 +54,7 @@ void main() {
   });
 
   testWidgets(
-    'ScaleEffect can alternate and be infinite',
+    'SizeEffect can alternate and be infinite',
     (WidgetTester tester) async {
       final PositionComponent positionComponent = component();
       effectTest(
@@ -67,7 +67,7 @@ void main() {
     },
   );
 
-  testWidgets('ScaleEffect alternation can peak', (WidgetTester tester) async {
+  testWidgets('SizeEffect alternation can peak', (WidgetTester tester) async {
     final PositionComponent positionComponent = component();
     effectTest(
       tester,
@@ -79,7 +79,7 @@ void main() {
     );
   });
 
-  testWidgets('ScaleEffect can be infinite', (WidgetTester tester) async {
+  testWidgets('SizeEffect can be infinite', (WidgetTester tester) async {
     final PositionComponent positionComponent = component();
     effectTest(
       tester,
