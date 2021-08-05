@@ -233,9 +233,9 @@ void main() {
   group('coordinates transforms test', () {
     test('local<->parent transforms', () {
       final component = MyComponent()
-          .. size = Vector2(10, 10)
-          .. position = Vector2(50, 20)
-          .. anchor = Anchor.center;
+        ..size = Vector2(10, 10)
+        ..position = Vector2(50, 20)
+        ..anchor = Anchor.center;
 
       expect(component.localToParent(Vector2(0, 0)), Vector2(45, 15));
       expect(component.localToParent(Vector2(5, 5)), Vector2(50, 20));
@@ -250,9 +250,9 @@ void main() {
 
     test('flips', () {
       final component = MyComponent()
-          .. size = Vector2(10, 10)
-          .. position = Vector2(50, 20)
-          .. anchor = const Anchor(0.6, 0.8);
+        ..size = Vector2(10, 10)
+        ..position = Vector2(50, 20)
+        ..anchor = const Anchor(0.6, 0.8);
 
       expect(component.localToParent(Vector2(6, 8)), Vector2(50, 20));
       expect(component.localToParent(Vector2(0, 0)), Vector2(44, 12));
@@ -272,9 +272,9 @@ void main() {
 
     test('center flips', () {
       final component = MyComponent()
-        .. size = Vector2(10, 10)
-        .. position = Vector2(50, 20)
-        .. anchor = const Anchor(0.6, 0.8);
+        ..size = Vector2(10, 10)
+        ..position = Vector2(50, 20)
+        ..anchor = const Anchor(0.6, 0.8);
 
       expect(component.localToParent(Vector2(6, 8)), Vector2(50, 20));
       expect(component.localToParent(Vector2(0, 0)), Vector2(44, 12));
@@ -291,18 +291,18 @@ void main() {
 
     test('rotations', () {
       final component = MyComponent()
-        .. size = Vector2(8, 6)
-        .. position = Vector2(50, 20)
-        .. anchor = Anchor.center;
+        ..size = Vector2(8, 6)
+        ..position = Vector2(50, 20)
+        ..anchor = Anchor.center;
 
       // Rotate the component in small increments counterclockwise
       // and track the coordinate of its top-right corner
       for (var i = 0; i < 30; i++) {
-        component.angle = - i / 10;
+        component.angle = -i / 10;
         final cosA = math.cos(i / 10);
         final sinA = math.sin(i / 10);
-        final expectedX = 50 + 5*(0.8*cosA - 0.6*sinA);
-        final expectedY = 20 - 5*(0.6*cosA + 0.8*sinA);
+        final expectedX = 50 + 5 * (0.8 * cosA - 0.6 * sinA);
+        final expectedY = 20 - 5 * (0.6 * cosA + 0.8 * sinA);
         final topRight = component.localToParent(Vector2(8, 0));
         expect(topRight.x, closeTo(expectedX, 1e-10));
         expect(topRight.y, closeTo(expectedY, 1e-10));
@@ -310,12 +310,11 @@ void main() {
     });
 
     test('random local<->global', () {
-      final parent = MyComponent()
-          .. size = Vector2(50, 25);
+      final parent = MyComponent()..size = Vector2(50, 25);
       final child = MyComponent()
-          .. size = Vector2(10, 8)
-          .. position = Vector2(50, 20)
-          .. anchor = const Anchor(0.1, 0.2);
+        ..size = Vector2(10, 8)
+        ..position = Vector2(50, 20)
+        ..anchor = const Anchor(0.1, 0.2);
       parent.addChild(child);
 
       final rnd = math.Random();
