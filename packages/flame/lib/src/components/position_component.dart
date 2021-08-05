@@ -34,54 +34,50 @@ abstract class PositionComponent extends BaseComponent {
   bool _recalculateTransform;
 
   /// The position of this component's anchor on the screen.
-  Vector2 get position => Vector2(_x, _y);
+  late _NotifyingVector2 _position;
+  Vector2 get position => _position;
   set position(Vector2 position) {
     _recalculateTransform = true;
-    _x = position.x;
-    _y = position.y;
+    _position.setFrom(position);
   }
 
   /// X position of this component's anchor on the screen.
-  double _x;
-  double get x => _x;
+  double get x => _position.x;
   set x(double x) {
     _recalculateTransform = true;
-    _x = x;
+    _position.x = x;
   }
 
   /// Y position of this component's anchor on the screen.
-  double _y;
-  double get y => _y;
+  double get y => _position.y;
   set y(double y) {
     _recalculateTransform = true;
-    _y = y;
+    _position.y = y;
   }
 
   /// The logical size of the component. The game assumes that this is the
   /// approximate size of the object that will be drawn on the screen.
   /// This size will therefore be used for collision detection and tap
   /// handling.
-  Vector2 get size => Vector2(_width, _height);
+  late _NotifyingVector2 _size;
+  Vector2 get size => _size;
   set size(Vector2 size) {
     _recalculateTransform = true;
-    _width = size.x;
-    _height = size.y;
+    _size.setFrom(size);
   }
 
   /// Width (size) that this component is rendered with.
-  double _width;
-  double get width => _width;
+  double get width => _size.x;
   set width(double width) {
     _recalculateTransform = true;
-    _width = width;
+    _size.x = width;
   }
 
   /// Height (size) that this component is rendered with.
-  double _height;
   double get height => size.y;
   set height(double height) {
     _recalculateTransform = true;
-    _height = height;
+    _size.y = height;
   }
 
   /// Get the absolute position, with the anchor taken into consideration
@@ -158,9 +154,9 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Flip the component horizontally around its center line.
   void flipHorizontallyAroundCenter() {
-    final delta = (1 - 2 * anchor.x) * _width * _scaleX;
-    _x += delta * math.cos(_angle);
-    _y += delta * math.sin(_angle);
+    final delta = (1 - 2 * anchor.x) * _size.x * _scaleX;
+    _position.x += delta * math.cos(_angle);
+    _position.y += delta * math.sin(_angle);
     _scaleX = -_scaleX;
     _recalculateTransform = true;
   }
@@ -173,9 +169,9 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Flip the component vertically around its center line.
   void flipVerticallyAroundCenter() {
-    final delta = (1 - 2 * anchor.y) * _height * _scaleY;
-    _x += -delta * math.sin(_angle);
-    _y += delta * math.cos(_angle);
+    final delta = (1 - 2 * anchor.y) * _size.y * _scaleY;
+    _position.x += -delta * math.sin(_angle);
+    _position.y += delta * math.cos(_angle);
     _scaleY = -_scaleY;
     _recalculateTransform = true;
   }
@@ -215,16 +211,15 @@ abstract class PositionComponent extends BaseComponent {
     this.renderFlipX = false,
     this.renderFlipY = false,
     int? priority,
-  })  : _x = position?.x ?? 0.0,
-        _y = position?.y ?? 0.0,
-        _width = size?.x ?? 0.0,
-        _height = size?.y ?? 0.0,
-        _angle = angle,
+  })  : _angle = angle,
         _scaleX = 1.0,
         _scaleY = 1.0,
         _transformMatrix = Matrix4.identity(),
         _recalculateTransform = true,
-        super(priority: priority);
+        super(priority: priority) {
+    _position = _NotifyingVector2(this)..setFrom(position ?? Vector2.zero());
+    _size = _NotifyingVector2(this)..setFrom(size ?? Vector2.zero());
+  }
 
   /// The total transformation matrix for the component. This matrix combines
   /// translation, rotation and scale transforms into a single entity. The
@@ -234,14 +229,14 @@ abstract class PositionComponent extends BaseComponent {
       final m = _transformMatrix.storage;
       final cosA = math.cos(_angle);
       final sinA = math.sin(_angle);
-      final deltaX = -anchor.x * _width;
-      final deltaY = -anchor.y * _height;
+      final deltaX = -anchor.x * _size.x;
+      final deltaY = -anchor.y * _size.y;
       m[0] = cosA * _scaleX;
       m[1] = sinA * _scaleX;
       m[4] = -sinA * _scaleY;
       m[5] = cosA * _scaleY;
-      m[12] = _x + m[0] * deltaX + m[4] * deltaY;
-      m[13] = _y + m[1] * deltaX + m[5] * deltaY;
+      m[12] = _position.x + m[0] * deltaX + m[4] * deltaY;
+      m[13] = _position.y + m[1] * deltaX + m[5] * deltaY;
       _recalculateTransform = false;
     }
     return _transformMatrix;
@@ -309,8 +304,8 @@ abstract class PositionComponent extends BaseComponent {
     final local = absoluteToLocal(point);
     return (local.x >= 0) &&
         (local.y >= 0) &&
-        (local.x < _width) &&
-        (local.y < _height);
+        (local.x < _size.x) &&
+        (local.y < _size.y);
   }
 
   double angleTo(PositionComponent c) => position.angleTo(c.position);
@@ -351,3 +346,45 @@ abstract class PositionComponent extends BaseComponent {
     }
   }
 } // ignore: number-of-methods
+
+class _NotifyingVector2 extends Vector2 {
+  final PositionComponent _parent;
+
+  _NotifyingVector2(this._parent) : super.zero();
+
+  @override
+  void setValues(double x, double y) {
+    super.setValues(x, y);
+    _parent._recalculateTransform = true;
+  }
+
+  @override
+  void setFrom(Vector2 v) {
+    super.setFrom(v);
+    _parent._recalculateTransform = true;
+  }
+
+  @override
+  void setZero() {
+    super.setZero();
+    _parent._recalculateTransform = true;
+  }
+
+  @override
+  void splat(double arg) {
+    super.splat(arg);
+    _parent._recalculateTransform = true;
+  }
+
+  @override
+  set x(double x) {
+    super.x = x;
+    _parent._recalculateTransform = true;
+  }
+
+  @override
+  set y(double y) {
+    super.y = y;
+    _parent._recalculateTransform = true;
+  }
+}
