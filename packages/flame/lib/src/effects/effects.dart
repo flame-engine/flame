@@ -140,16 +140,19 @@ abstract class PositionComponentEffect
   Vector2? originalPosition;
   double? originalAngle;
   Vector2? originalSize;
+  Vector2? originalScale;
 
   /// Used to be able to determine the end state of a sequence of effects
   Vector2? endPosition;
   double? endAngle;
   Vector2? endSize;
+  Vector2? endScale;
 
   /// Whether the state of a certain field was modified by the effect
   final bool modifiesPosition;
   final bool modifiesAngle;
   final bool modifiesSize;
+  final bool modifiesScale;
 
   PositionComponentEffect(
     bool initialIsInfinite,
@@ -159,6 +162,7 @@ abstract class PositionComponentEffect
     this.modifiesPosition = false,
     this.modifiesAngle = false,
     this.modifiesSize = false,
+    this.modifiesScale = false,
     VoidCallback? onComplete,
   }) : super(
           initialIsInfinite,
@@ -176,6 +180,7 @@ abstract class PositionComponentEffect
     originalPosition = component.position.clone();
     originalAngle = component.angle;
     originalSize = component.size.clone();
+    originalScale = component.scale.clone();
 
     /// If these aren't modified by the extending effect it is assumed that the
     /// effect didn't bring the component to another state than the one it
@@ -183,12 +188,18 @@ abstract class PositionComponentEffect
     endPosition = component.position.clone();
     endAngle = component.angle;
     endSize = component.size.clone();
+    endScale = component.scale.clone();
   }
 
   /// Only change the parts of the component that is affected by the
   /// effect, and only set the state if it is the root effect (not part of
   /// another effect, like children of a CombinedEffect or SequenceEffect).
-  void _setComponentState(Vector2? position, double? angle, Vector2? size) {
+  void _setComponentState(
+    Vector2? position,
+    double? angle,
+    Vector2? size,
+    Vector2? scale,
+  ) {
     if (isRootEffect()) {
       if (modifiesPosition) {
         assert(
@@ -211,17 +222,29 @@ abstract class PositionComponentEffect
         );
         component?.size.setFrom(size!);
       }
+      if (modifiesScale) {
+        assert(
+          scale != null,
+          '`scale` must not be `null` for an effect which modifies `scale`',
+        );
+        component?.scale.setFrom(scale!);
+      }
     }
   }
 
   @override
   void setComponentToOriginalState() {
-    _setComponentState(originalPosition, originalAngle, originalSize);
+    _setComponentState(
+      originalPosition,
+      originalAngle,
+      originalSize,
+      originalScale,
+    );
   }
 
   @override
   void setComponentToEndState() {
-    _setComponentState(endPosition, endAngle, endSize);
+    _setComponentState(endPosition, endAngle, endSize, endScale);
   }
 }
 
@@ -239,6 +262,7 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
     bool modifiesPosition = false,
     bool modifiesAngle = false,
     bool modifiesSize = false,
+    bool modifiesScale = false,
     VoidCallback? onComplete,
   })  : assert(
           (duration != null) ^ (speed != null),
@@ -252,6 +276,7 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
           modifiesPosition: modifiesPosition,
           modifiesAngle: modifiesAngle,
           modifiesSize: modifiesSize,
+          modifiesScale: modifiesScale,
           onComplete: onComplete,
         );
 }

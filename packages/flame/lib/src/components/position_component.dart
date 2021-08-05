@@ -5,6 +5,7 @@ import '../extensions/offset.dart';
 import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
 import '../geometry/rectangle.dart';
+import '../value_cache.dart';
 import 'base_component.dart';
 import 'component.dart';
 import 'mixins/hitbox.dart';
@@ -42,24 +43,28 @@ abstract class PositionComponent extends BaseComponent {
   set size(Vector2 size) => _size.setFrom(size);
 
   /// Width (size) that this component is rendered with.
-  double get width => size.x;
-  set width(double width) => size.x = width;
+  double get width => scaledSize.x;
+  set width(double width) => size.x = width / scale.x;
 
   /// Height (size) that this component is rendered with.
-  double get height => size.y;
-  set height(double height) => size.y = height;
+  double get height => scaledSize.y;
+  set height(double height) => size.y = height / scale.y;
 
   /// The scale factor of this component
   final Vector2 _scale;
   Vector2 get scale => _scale;
   set scale(Vector2 scale) => _scale.setFrom(scale);
 
+  /// Cache to store the calculated scaled size
+  final ValueCache<Vector2> _scaledSizeCache = ValueCache();
+
   /// The size that this component is rendered with after [scale] is applied.
   Vector2 get scaledSize {
-    if (_scale.x != 1.0 || _scale.y != 1.0) {
-      return size.clone()..multiply(_scale);
+    if (_scaledSizeCache.isCacheValid([_scale])) {
+      return _scaledSizeCache.value!;
     } else {
-      return size;
+      _scaledSizeCache.updateCache(size.clone()..multiply(_scale), [_scale]);
+      return _scaledSizeCache.value!;
     }
   }
 
@@ -201,23 +206,29 @@ abstract class PositionComponent extends BaseComponent {
   void preRender(Canvas canvas) {
     // Move canvas to the components anchor position.
     _preRenderMatrix.translate(x, y);
+    // Rotate canvas around anchor
+    _preRenderMatrix.rotateZ(angle);
+    // Scale canvas if it should be scaled
     if (scale.x != 1.0 || scale.y != 1.0) {
       _preRenderMatrix.scale(scale.x, scale.y);
     }
-    _preRenderMatrix.rotateZ(angle);
     canvas.transform(_preRenderMatrix.storage);
     _preRenderMatrix.setIdentity();
 
-    final delta = -anchor.toVector2()
-      ..multiply(scaledSize);
-    canvas.translate(delta.x, delta.y);
+    final delta = anchor.toVector2()..multiply(scaledSize);
+    canvas.translate(-delta.x, -delta.y);
 
     // Handle inverted rendering by moving center and flipping.
     if (renderFlipX || renderFlipY) {
-      // TODO: Use _preRenderMatrix here
-      canvas.translate(width / 2, height / 2);
-      canvas.scale(renderFlipX ? -1.0 : 1.0, renderFlipY ? -1.0 : 1.0);
-      canvas.translate(-width / 2, -height / 2);
+      final size = scaledSize;
+      _preRenderMatrix.translate(size.x / 2, size.y / 2);
+      _preRenderMatrix.scale(
+        renderFlipX ? -1.0 : 1.0,
+        renderFlipY ? -1.0 : 1.0,
+      );
+      canvas.transform(_preRenderMatrix.storage);
+      canvas.translate(-size.x / 2, -size.y / 2);
+      _preRenderMatrix.setIdentity();
     }
   }
 }

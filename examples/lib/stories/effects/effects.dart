@@ -10,6 +10,7 @@ import 'opacity_effect.dart';
 import 'rotate_effect.dart';
 import 'scale_effect.dart';
 import 'sequence_effect.dart';
+import 'size_effect.dart';
 
 void addEffectsStories(Dashbook dashbook) {
   dashbook.storiesOf('Effects')
@@ -17,6 +18,11 @@ void addEffectsStories(Dashbook dashbook) {
       'Size Effect',
       (_) => GameWidget(game: SizeEffectGame()),
       codeLink: baseLink('effects/size_effect.dart'),
+    )
+    ..add(
+      'Scale Effect',
+      (_) => GameWidget(game: ScaleEffectGame()),
+      codeLink: baseLink('effects/scale_effect.dart'),
     )
     ..add(
       'Move Effect',
