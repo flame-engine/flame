@@ -34,50 +34,54 @@ abstract class PositionComponent extends BaseComponent {
   bool _recalculateTransform;
 
   /// The position of this component's anchor on the screen.
-  final Vector2 _position;
-  Vector2 get position => _position;
+  Vector2 get position => Vector2(_x, _y);
   set position(Vector2 position) {
     _recalculateTransform = true;
-    _position.setFrom(position);
+    _x = position.x;
+    _y = position.y;
   }
 
   /// X position of this component's anchor on the screen.
-  double get x => _position.x;
+  double _x;
+  double get x => _x;
   set x(double x) {
     _recalculateTransform = true;
-    _position.x = x;
+    _x = x;
   }
 
   /// Y position of this component's anchor on the screen.
-  double get y => _position.y;
+  double _y;
+  double get y => _y;
   set y(double y) {
     _recalculateTransform = true;
-    _position.y = y;
+    _y = y;
   }
 
   /// The logical size of the component. The game assumes that this is the
   /// approximate size of the object that will be drawn on the screen.
   /// This size will therefore be used for collision detection and tap
   /// handling.
-  final Vector2 _size;
-  Vector2 get size => _size;
+  Vector2 get size => Vector2(_width, _height);
   set size(Vector2 size) {
     _recalculateTransform = true;
-    _size.setFrom(size);
+    _width = size.x;
+    _height = size.y;
   }
 
   /// Width (size) that this component is rendered with.
-  double get width => size.x;
+  double _width;
+  double get width => _width;
   set width(double width) {
     _recalculateTransform = true;
-    _size.x = width;
+    _width = width;
   }
 
   /// Height (size) that this component is rendered with.
+  double _height;
   double get height => size.y;
   set height(double height) {
     _recalculateTransform = true;
-    _size.y = height;
+    _height = height;
   }
 
   /// Get the absolute position, with the anchor taken into consideration
@@ -143,35 +147,36 @@ abstract class PositionComponent extends BaseComponent {
   }
 
   /// Scale factor applied to the component.
-  final Vector2 _scale;
+  double _scaleX;
+  double _scaleY;
 
   /// Flip the component horizontally around its anchor point.
   void flipHorizontally() {
     _recalculateTransform = true;
-    _scale.x = -_scale.x;
+    _scaleX = -_scaleX;
   }
 
   /// Flip the component horizontally around its center line.
   void flipHorizontallyAroundCenter() {
-    final delta = (1 - 2 * anchor.x) * _size.x * _scale.x;
-    _position.x += delta * math.cos(_angle);
-    _position.y += delta * math.sin(_angle);
-    _scale.x = -_scale.x;
+    final delta = (1 - 2 * anchor.x) * _width * _scaleX;
+    _x += delta * math.cos(_angle);
+    _y += delta * math.sin(_angle);
+    _scaleX = -_scaleX;
     _recalculateTransform = true;
   }
 
   /// Flip the component vertically around its anchor point.
   void flipVertically() {
     _recalculateTransform = true;
-    _scale.y = -_scale.y;
+    _scaleY = -_scaleY;
   }
 
   /// Flip the component vertically around its center line.
   void flipVerticallyAroundCenter() {
-    final delta = (1 - 2 * anchor.y) * _size.y * _scale.y;
-    _position.x += -delta * math.sin(_angle);
-    _position.y += delta * math.cos(_angle);
-    _scale.y = -_scale.y;
+    final delta = (1 - 2 * anchor.y) * _height * _scaleY;
+    _x += -delta * math.sin(_angle);
+    _y += delta * math.cos(_angle);
+    _scaleY = -_scaleY;
     _recalculateTransform = true;
   }
 
@@ -210,10 +215,13 @@ abstract class PositionComponent extends BaseComponent {
     this.renderFlipX = false,
     this.renderFlipY = false,
     int? priority,
-  })  : _position = position ?? Vector2.zero(),
-        _size = size ?? Vector2.zero(),
+  })  : _x = position?.x ?? 0.0,
+        _y = position?.y ?? 0.0,
+        _width = size?.x ?? 0.0,
+        _height = size?.y ?? 0.0,
         _angle = angle,
-        _scale = Vector2(1, 1),
+        _scaleX = 1.0,
+        _scaleY = 1.0,
         _transformMatrix = Matrix4.identity(),
         _recalculateTransform = true,
         super(priority: priority);
@@ -226,14 +234,14 @@ abstract class PositionComponent extends BaseComponent {
       final m = _transformMatrix.storage;
       final cosA = math.cos(_angle);
       final sinA = math.sin(_angle);
-      final deltaX = -anchor.x * _size.x;
-      final deltaY = -anchor.y * _size.y;
-      m[0] = cosA * _scale.x;
-      m[1] = sinA * _scale.x;
-      m[4] = -sinA * _scale.y;
-      m[5] = cosA * _scale.y;
-      m[12] = _position.x + m[0] * deltaX + m[4] * deltaY;
-      m[13] = _position.y + m[1] * deltaX + m[5] * deltaY;
+      final deltaX = -anchor.x * _width;
+      final deltaY = -anchor.y * _height;
+      m[0] = cosA * _scaleX;
+      m[1] = sinA * _scaleX;
+      m[4] = -sinA * _scaleY;
+      m[5] = cosA * _scaleY;
+      m[12] = _x + m[0] * deltaX + m[4] * deltaY;
+      m[13] = _y + m[1] * deltaX + m[5] * deltaY;
       _recalculateTransform = false;
     }
     return _transformMatrix;
@@ -301,8 +309,8 @@ abstract class PositionComponent extends BaseComponent {
     final local = absoluteToLocal(point);
     return (local.x >= 0) &&
         (local.y >= 0) &&
-        (local.x < _size.x) &&
-        (local.y < _size.y);
+        (local.x < _width) &&
+        (local.y < _height);
   }
 
   double angleTo(PositionComponent c) => position.angleTo(c.position);
