@@ -350,4 +350,4 @@ abstract class PositionComponent extends BaseComponent {
       canvas.translate(-width / 2, -height / 2);
     }
   }
-}  // ignore: number-of-methods
+} // ignore: number-of-methods
