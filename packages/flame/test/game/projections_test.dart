@@ -1,11 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/game/base_game.dart';
-import 'package:flame/src/game/projector.dart';
+import 'package:flame/test.dart';
 import 'package:test/test.dart';
-
-import '../../lib/src/test_helpers/expect_vector2.dart';
 
 void main() {
   group('projections', () {
