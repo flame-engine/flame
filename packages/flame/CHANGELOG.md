@@ -25,7 +25,7 @@
  - Fix truncated last frame in non-looping animations
  - Default size of `SpriteComponent` is `srcSize` instead of spritesheet size
  - Rename `ScaleEffect` to `SizeEffect`
- - Introduce `Scale` on `PositionComponent`
+ - Introduce `scale` on `PositionComponent`
  - Add `ScaleEffect` that works on `scale` instead of `size`
 
 ## [1.0.0-releasecandidate.13]
