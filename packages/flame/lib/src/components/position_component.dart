@@ -24,9 +24,9 @@ import 'mixins/hitbox.dart';
 /// within this component's (width, height).
 abstract class PositionComponent extends BaseComponent {
   /// The position of this component on the screen (relative to the anchor).
-  final Vector2 _position;
   Vector2 get position => _position;
   set position(Vector2 position) => _position.setFrom(position);
+  final Vector2 _position;
 
   /// X position of this component on the screen (relative to the anchor).
   double get x => _position.x;
@@ -38,9 +38,9 @@ abstract class PositionComponent extends BaseComponent {
 
   /// The size that this component is rendered with before [scale] is applied.
   /// This is not necessarily the source size of the asset.
-  final Vector2 _size;
   Vector2 get size => _size;
   set size(Vector2 size) => _size.setFrom(size);
+  final Vector2 _size;
 
   /// Width (size) that this component is rendered with.
   double get width => scaledSize.x;
@@ -51,9 +51,9 @@ abstract class PositionComponent extends BaseComponent {
   set height(double height) => size.y = height / scale.y;
 
   /// The scale factor of this component
-  final Vector2 _scale;
   Vector2 get scale => _scale;
   set scale(Vector2 scale) => _scale.setFrom(scale);
+  final Vector2 _scale;
 
   /// Cache to store the calculated scaled size
   final ValueCache<Vector2> _scaledSizeCache = ValueCache();
