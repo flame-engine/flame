@@ -3,6 +3,7 @@ import 'dart:ui';
 import '../../components.dart';
 import '../../game.dart';
 import '../../palette.dart';
+import '../components/cache/value_cache.dart';
 import '../extensions/vector2.dart';
 import 'shape_intersections.dart' as intersection_system;
 
@@ -11,9 +12,9 @@ import 'shape_intersections.dart' as intersection_system;
 /// center.
 /// A point can be determined to be within of outside of a shape.
 abstract class Shape {
-  final ShapeCache<Vector2> _halfSizeCache = ShapeCache();
-  final ShapeCache<Vector2> _localCenterCache = ShapeCache();
-  final ShapeCache<Vector2> _absoluteCenterCache = ShapeCache();
+  final ValueCache<Vector2> _halfSizeCache = ValueCache();
+  final ValueCache<Vector2> _localCenterCache = ValueCache();
+  final ValueCache<Vector2> _absoluteCenterCache = ValueCache();
 
   /// Should be the center of that [offsetPosition] and [relativeOffset]
   /// should be calculated from, if they are not set this is the center of the
@@ -133,7 +134,7 @@ mixin HitboxShape on Shape {
   late PositionComponent component;
 
   @override
-  Vector2 get size => component.size;
+  Vector2 get size => component.scaledSize;
 
   @override
   double get parentAngle => component.angle;
@@ -159,32 +160,3 @@ typedef CollisionEndCallback = void Function(HitboxShape other);
 
 void emptyCollisionCallback(Set<Vector2> _, HitboxShape __) {}
 void emptyCollisionEndCallback(HitboxShape _) {}
-
-/// Used for caching calculated shapes, the cache is determined to be valid by
-/// comparing a list of values that can be of any type and is compared to the
-/// values that was last used when the cache was updated.
-class ShapeCache<T> {
-  T? value;
-
-  List<dynamic> _lastValidCacheValues = <dynamic>[];
-
-  ShapeCache();
-
-  bool isCacheValid<F>(List<F> validCacheValues) {
-    if (value == null) {
-      return false;
-    }
-    for (var i = 0; i < _lastValidCacheValues.length; ++i) {
-      if (_lastValidCacheValues[i] != validCacheValues[i]) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  T updateCache<F>(T value, List<F> validCacheValues) {
-    this.value = value;
-    _lastValidCacheValues = validCacheValues;
-    return value;
-  }
-}

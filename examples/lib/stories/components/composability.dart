@@ -1,12 +1,14 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/input.dart';
 
 class Square extends PositionComponent {
-  Square(Vector2 position, Vector2 size, {double angle = 0}) {
-    this.position.setFrom(position);
-    this.size.setFrom(size);
-    this.angle = angle;
-  }
+  Square(Vector2 position, Vector2 size, {double angle = 0})
+      : super(
+          position: position,
+          size: size,
+          angle: angle,
+        );
 }
 
 class ParentSquare extends Square with HasGameRef {
@@ -31,7 +33,7 @@ class ParentSquare extends Square with HasGameRef {
   }
 }
 
-class Composability extends BaseGame {
+class Composability extends BaseGame with TapDetector {
   late ParentSquare _parent;
 
   @override
@@ -48,5 +50,11 @@ class Composability extends BaseGame {
   void update(double dt) {
     super.update(dt);
     _parent.angle += dt;
+  }
+
+  @override
+  void onTap() {
+    super.onTap();
+    _parent.scale = Vector2.all(2.0);
   }
 }
