@@ -4,8 +4,8 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:test/test.dart';
 
-import '../util/mock_canvas.dart';
-import '../util/mock_gesture_events.dart';
+import '../../lib/src/test_helpers/mock_canvas.dart';
+import '../../lib/src/test_helpers/mock_gesture_events.dart';
 
 class MyGame extends BaseGame with HasTappableComponents {}
 

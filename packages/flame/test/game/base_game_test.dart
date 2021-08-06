@@ -9,7 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart' as flutter;
 import 'package:test/test.dart';
 
-import '../util/mock_gesture_events.dart';
+import '../../lib/src/test_helpers/mock_gesture_events.dart';
 
 class MyGame extends BaseGame with HasTappableComponents {}
 

@@ -5,8 +5,8 @@ import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../util/expect_double.dart';
-import '../util/expect_vector2.dart';
+import '../../lib/src/test_helpers/expect_double.dart';
+import '../../lib/src/test_helpers/expect_vector2.dart';
 
 final Random random = Random();
 

@@ -7,7 +7,7 @@ import 'package:flame/src/game/base_game.dart';
 import 'package:flame/src/game/viewport.dart';
 import 'package:test/test.dart';
 
-import '../util/mock_canvas.dart';
+import '../../lib/src/test_helpers/mock_canvas.dart';
 
 class TestComponent extends PositionComponent {
   static final Paint _paint = Paint();

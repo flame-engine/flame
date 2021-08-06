@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:test/test.dart';
 
-import '../util/mock_image.dart';
+import '../../lib/src/test_helpers/mock_image.dart';
 
 enum SpriteState {
   idle,

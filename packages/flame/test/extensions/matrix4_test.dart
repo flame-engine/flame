@@ -1,7 +1,7 @@
 import 'package:flame/extensions.dart';
 import 'package:test/test.dart';
 
-import '../util/expect_vector2.dart';
+import '../../lib/src/test_helpers/expect_vector2.dart';
 
 void main() {
   group('Matrix4 test', () {
