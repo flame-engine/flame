@@ -232,6 +232,12 @@ abstract class PositionComponent extends BaseComponent {
   /// matrix is cached and gets recalculated only as necessary.
   Matrix4 get transformMatrix {
     if (_recalculateTransform) {
+      // The transforms below are equivalent to:
+      //   _transformMatrix = Matrix4.identity()
+      //       .. translate(_position.x, _position.y)
+      //       .. rotateZ(_angle)
+      //       .. scale(_scaleX, _scaleY, 1)
+      //       .. translate(-anchor.x*width, -anchor.y*height);
       final m = _transformMatrix.storage;
       final cosA = math.cos(_angle);
       final sinA = math.sin(_angle);

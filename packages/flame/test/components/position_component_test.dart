@@ -344,11 +344,38 @@ void main() {
       }
     });
 
+    test('transform matrix', () {
+      final component = MyComponent()
+        ..size = Vector2(5, 10)
+        ..anchor = Anchor.center;
+
+      final rnd = math.Random();
+      for (var i = 0; i < 10; i++) {
+        final x = rnd.nextDouble() * 100;
+        final y = rnd.nextDouble() * 70 + 30;
+        final angle = (rnd.nextDouble() - 0.5) * 10;
+        component.x = x;
+        component.y = y;
+        component.angle = angle;
+
+        final transform = Matrix4.identity()
+          ..translate(x, y)
+          ..rotateZ(angle)
+          ..translate(
+            -component.anchor.x * component.width,
+            -component.anchor.y * component.height,
+          );
+        for (var j = 0; j < 16; j++) {
+          expect(component.transformMatrix[j], closeTo(transform[j], 1e-10));
+        }
+      }
+    });
+
     test('change anchor', () {
       final component = MyComponent()
-          .. size = Vector2(10, 10)
-          .. position = Vector2(100, 100)
-          .. anchor = Anchor.center;
+        ..size = Vector2(10, 10)
+        ..position = Vector2(100, 100)
+        ..anchor = Anchor.center;
 
       expect(component.parentToLocal(Vector2(100, 100)), Vector2(5, 5));
       component.anchor = Anchor.topLeft;
