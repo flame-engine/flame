@@ -343,5 +343,24 @@ void main() {
         expect(globalPoint.y, closeTo(globalY, 1e-10));
       }
     });
+
+    test('change anchor', () {
+      final component = MyComponent()
+          .. size = Vector2(10, 10)
+          .. position = Vector2(100, 100)
+          .. anchor = Anchor.center;
+
+      expect(component.parentToLocal(Vector2(100, 100)), Vector2(5, 5));
+      component.anchor = Anchor.topLeft;
+      expect(component.parentToLocal(Vector2(100, 100)), Vector2(0, 0));
+      component.anchor = Anchor.topRight;
+      expect(component.parentToLocal(Vector2(100, 100)), Vector2(10, 0));
+      component.anchor = Anchor.bottomLeft;
+      expect(component.parentToLocal(Vector2(100, 100)), Vector2(0, 10));
+      component.anchor = Anchor.bottomRight;
+      expect(component.parentToLocal(Vector2(100, 100)), Vector2(10, 10));
+      component.anchor = const Anchor(0.1, 0.2);
+      expect(component.parentToLocal(Vector2(100, 100)), Vector2(1, 2));
+    });
   });
 }
