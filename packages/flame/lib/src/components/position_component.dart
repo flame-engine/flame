@@ -5,8 +5,8 @@ import '../extensions/offset.dart';
 import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
 import '../geometry/rectangle.dart';
-import '../value_cache.dart';
 import 'base_component.dart';
+import 'cache/value_cache.dart';
 import 'component.dart';
 import 'mixins/hitbox.dart';
 
