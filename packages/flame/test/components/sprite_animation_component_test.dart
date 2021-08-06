@@ -1,8 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/test.dart';
 import 'package:test/test.dart';
-
-import '../../lib/src/test_helpers/mock_image.dart';
 
 void main() async {
   // Generate an image

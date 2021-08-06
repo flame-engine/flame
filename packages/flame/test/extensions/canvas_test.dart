@@ -1,7 +1,6 @@
 import 'package:flame/extensions.dart';
+import 'package:flame/test.dart';
 import 'package:test/test.dart';
-
-import '../../lib/src/test_helpers/mock_canvas.dart';
 
 void main() {
   group('Canvas extensions tests', () {

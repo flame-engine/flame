@@ -1,13 +1,10 @@
 import 'dart:ui' show Paint;
 
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/src/anchor.dart';
-import 'package:flame/src/components/position_component.dart';
-import 'package:flame/src/game/base_game.dart';
-import 'package:flame/src/game/viewport.dart';
+import 'package:flame/game.dart';
+import 'package:flame/test.dart';
 import 'package:test/test.dart';
-
-import '../../lib/src/test_helpers/mock_canvas.dart';
 
 class TestComponent extends PositionComponent {
   static final Paint _paint = Paint();
