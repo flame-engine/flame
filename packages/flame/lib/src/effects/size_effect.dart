@@ -6,14 +6,14 @@ import '../../components.dart';
 import '../extensions/vector2.dart';
 import 'effects.dart';
 
-class ScaleEffect extends SimplePositionComponentEffect {
-  Vector2 scale;
-  late Vector2 _startScale;
+class SizeEffect extends SimplePositionComponentEffect {
+  Vector2 size;
+  late Vector2 _startSize;
   late Vector2 _delta;
 
   /// Duration or speed needs to be defined
-  ScaleEffect({
-    required this.scale,
+  SizeEffect({
+    required this.size,
     double? duration, // How long it should take for completion
     double? speed, // The speed of the scaling in pixels per second
     Curve? curve,
@@ -32,17 +32,17 @@ class ScaleEffect extends SimplePositionComponentEffect {
           speed: speed,
           curve: curve,
           isRelative: isRelative,
-          modifiesScale: true,
+          modifiesSize: true,
           onComplete: onComplete,
         );
 
   @override
   void initialize(PositionComponent component) {
     super.initialize(component);
-    _startScale = component.scale.clone();
-    _delta = isRelative ? scale : scale - _startScale;
+    _startSize = component.size.clone();
+    _delta = isRelative ? size : size - _startSize;
     if (!isAlternating) {
-      endScale = _startScale + _delta;
+      endSize = _startSize + _delta;
     }
     speed ??= _delta.length / duration!;
     duration ??= _delta.length / speed!;
@@ -52,6 +52,6 @@ class ScaleEffect extends SimplePositionComponentEffect {
   @override
   void update(double dt) {
     super.update(dt);
-    component?.scale.setFrom(_startScale + _delta * curveProgress);
+    component?.size.setFrom(_startSize + _delta * curveProgress);
   }
 }

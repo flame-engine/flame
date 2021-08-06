@@ -3,6 +3,7 @@ import 'dart:ui' hide Canvas;
 
 import '../../game.dart';
 import '../../geometry.dart';
+import '../components/cache/value_cache.dart';
 import '../extensions/canvas.dart';
 import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
@@ -68,7 +69,7 @@ class Polygon extends Shape {
         normalizedVertices.map((_) => Vector2.zero()).toList(growable: false);
   }
 
-  final _cachedScaledShape = ShapeCache<Iterable<Vector2>>();
+  final _cachedScaledShape = ValueCache<Iterable<Vector2>>();
 
   /// Gives back the shape vectors multiplied by the size
   Iterable<Vector2> scaled() {
@@ -82,7 +83,7 @@ class Polygon extends Shape {
     return _cachedScaledShape.value!;
   }
 
-  final _cachedRenderPath = ShapeCache<Path>();
+  final _cachedRenderPath = ValueCache<Path>();
 
   @override
   void render(Canvas canvas, Paint paint) {
@@ -114,7 +115,7 @@ class Polygon extends Shape {
     canvas.drawPath(_cachedRenderPath.value!, paint);
   }
 
-  final _cachedHitbox = ShapeCache<List<Vector2>>();
+  final _cachedHitbox = ValueCache<List<Vector2>>();
 
   /// Gives back the vertices represented as a list of points which
   /// are the "corners" of the hitbox rotated with [angle].
