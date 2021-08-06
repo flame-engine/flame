@@ -35,12 +35,13 @@ mixin HasHoverableComponents on BaseGame {
       return true; // always continue
     }
 
-    for (final c in components.reversed()) {
-      if (c is BaseComponent) {
-        c.propagateToChildren<Hoverable>(_mouseMoveHandler);
+    for (final c in children.reversed()) {
+      var shouldContinue = c.propagateToChildren<Hoverable>(_mouseMoveHandler);
+      if (c is Hoverable && shouldContinue) {
+        shouldContinue = _mouseMoveHandler(c);
       }
-      if (c is Hoverable) {
-        _mouseMoveHandler(c);
+      if (!shouldContinue) {
+        break;
       }
     }
   }

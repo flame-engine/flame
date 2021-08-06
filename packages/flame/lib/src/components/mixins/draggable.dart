@@ -84,11 +84,8 @@ mixin HasDraggableComponents on BaseGame {
   }
 
   void _onGenericEventReceived(bool Function(Draggable) handler) {
-    for (final c in components.reversed()) {
-      var shouldContinue = true;
-      if (c is BaseComponent) {
-        shouldContinue = c.propagateToChildren<Draggable>(handler);
-      }
+    for (final c in children.reversed()) {
+      var shouldContinue = c.propagateToChildren<Draggable>(handler);
       if (c is Draggable && shouldContinue) {
         shouldContinue = handler(c);
       }

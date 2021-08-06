@@ -116,14 +116,14 @@ class JoystickAdvancedGame extends BaseGame
         top: 80,
         left: 80,
       ),
-    )..addChild(speedText);
+    )..add(speedText);
 
     final directionWithMargin = HudMarginComponent(
       margin: const EdgeInsets.only(
         top: 110,
         left: 80,
       ),
-    )..addChild(directionText);
+    )..add(directionText);
 
     add(player);
     add(joystick);

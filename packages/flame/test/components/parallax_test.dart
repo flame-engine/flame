@@ -7,7 +7,7 @@ class ParallaxGame extends BaseGame {
   late final Vector2? parallaxSize;
 
   ParallaxGame({this.parallaxSize}) {
-    onResize(Vector2.all(500));
+    onGameResize(Vector2.all(500));
   }
 
   @override

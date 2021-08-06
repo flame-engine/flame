@@ -33,7 +33,7 @@ class HudButtonComponent extends HudMarginComponent with Tappable {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    addChild(button);
+    add(button);
   }
 
   @override
@@ -41,7 +41,7 @@ class HudButtonComponent extends HudMarginComponent with Tappable {
   bool onTapDown(TapDownInfo info) {
     if (buttonDown != null) {
       children.remove(button);
-      addChild(buttonDown!);
+      add(buttonDown!);
     }
     onPressed?.call();
     return false;
@@ -59,7 +59,7 @@ class HudButtonComponent extends HudMarginComponent with Tappable {
   bool onTapCancel() {
     if (buttonDown != null) {
       children.remove(buttonDown!);
-      addChild(button);
+      add(button);
     }
     return false;
   }

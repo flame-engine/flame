@@ -15,7 +15,7 @@ void main() {
         size: 20,
         margin: const EdgeInsets.only(left: 20, bottom: 20),
       );
-      final game = TestGame()..onResize(Vector2.all(200));
+      final game = TestGame()..onGameResize(Vector2.all(200));
       game.add(joystick);
       game.update(0);
 

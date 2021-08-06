@@ -7,7 +7,7 @@ import 'package:vector_math/vector_math_64.dart';
 
 class TestGame extends BaseGame with HasCollidables {
   TestGame() {
-    onResize(Vector2.all(200));
+    onGameResize(Vector2.all(200));
   }
 }
 
@@ -50,7 +50,7 @@ void main() {
     final game = TestGame();
     game.addAll(collidables);
     game.update(0);
-    expect(game.components.isNotEmpty, collidables.isNotEmpty);
+    expect(game.children.isNotEmpty, collidables.isNotEmpty);
     return game;
   }
 

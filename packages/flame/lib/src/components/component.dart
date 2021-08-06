@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
+import '../../components.dart';
+import '../../game.dart';
 import '../extensions/vector2.dart';
 
 /// This represents a Component for your game.
@@ -25,6 +27,8 @@ abstract class Component {
   Component? _parent;
 
   Component? get parent => _parent;
+
+  late final ComponentSet children = createComponentSet();
 
   /// Render priority of this component. This allows you to control the order in which your components are rendered.
   ///
@@ -56,12 +60,16 @@ abstract class Component {
   /// of [Component] on the provided Canvas [c].
   void renderTree(Canvas c) => render(c);
 
-  /// It receives the new game size.
-  /// Executed right after the component is attached to a game and right before [onMount] is called
-  void onGameResize(Vector2 gameSize) {}
-
   /// Remove the component from the game it is added to in the next tick
-  void remove() => shouldRemove = true;
+  void removeFromParent() => shouldRemove = true;
+
+  /// It receives the new game size.
+  /// Executed right after the component is attached to a game and right before
+  /// [onMount] is called
+  @mustCallSuper
+  void onGameResize(Vector2 gameSize) {
+    children.forEach((child) => child.onGameResize(gameSize));
+  }
 
   /// Called when the component has been added and prepared by the game instance.
   ///
@@ -70,12 +78,101 @@ abstract class Component {
   @mustCallSuper
   void onMount() {
     _isMounted = true;
+    children.forEach((child) => child.onMount());
   }
 
   /// Called right before the component is removed from the game
   @mustCallSuper
   void onRemove() {
     _isMounted = false;
+    children.forEach((child) => child.onRemove());
+  }
+
+  // TODO: Look over what text to keep
+  /// Uses the game passed in, or uses the game from [HasGameRef] otherwise,
+  /// to prepare the child component before it is added to the list of children.
+  /// Note that this component needs to be added to the game first if
+  /// [this.gameRef] should be used to prepare the child.
+  /// For children that don't need preparation from the game instance can
+  /// disregard both the options given above.
+  ///
+  /// Prepares and registers a component to be added on the next game tick
+  ///
+  /// This methods is an async operation since it await the `onLoad` method of
+  /// the component. Nevertheless, this method only need to be waited to finish
+  /// if by some reason, your logic needs to be sure that the component has
+  /// finished loading, otherwise, this method can be called without waiting
+  /// for it to finish as the BaseGame already handle the loading of the
+  /// component.
+  ///
+  /// *Note:* Do not add components on the game constructor. This method can
+  /// only be called after the game already has its layout set, this can be
+  /// verified by the [hasLayout] property, to add components upon a game
+  /// initialization, the [onLoad] method can be used instead.
+  Future<void> add(Component child, {BaseGame? gameRef}) {
+    return children.addChild(child, gameRef: gameRef);
+  }
+
+  /// Adds multiple children.
+  ///
+  /// See [add] for details.
+  Future<void> addAll(List<Component> cs, {BaseGame? gameRef}) {
+    return children.addChildren(cs, gameRef: gameRef);
+  }
+
+  /// Removes a component from the component list, calling onRemove for it and
+  /// its children.
+  void remove(Component c) {
+    children.remove(c);
+  }
+
+  /// Removes all the children in the list and calls onRemove for all of them
+  /// and their children.
+  void removeAll(Iterable<Component> cs) {
+    children.removeAll(cs);
+  }
+
+  /// Whether the children list contains the given component.
+  ///
+  /// This method uses reference equality.
+  bool contains(Component c) => children.contains(c);
+
+  /// Call this if any of this component's children priorities have changed
+  /// at runtime.
+  ///
+  /// This will call `rebalanceAll` on the [children] ordered set.
+  void reorderChildren() => children.rebalanceAll();
+
+  /// This method first calls the passed handler on the leaves in the tree,
+  /// the children without any children of their own.
+  /// Then it continues through all other children. The propagation continues
+  /// until the handler returns false, which means "do not continue", or when
+  /// the handler has been called with all children
+  ///
+  /// This method is important to be used by the engine to propagate actions
+  /// like rendering, taps, etc, but you can call it yourself if you need to
+  /// apply an action to the whole component chain.
+  /// It will only consider components of type T in the hierarchy,
+  /// so use T = Component to target everything.
+  bool propagateToChildren<T extends Component>(
+    bool Function(T) handler,
+  ) {
+    var shouldContinue = true;
+    for (final child in children) {
+      if (child is BaseComponent) {
+        shouldContinue = child.propagateToChildren(handler);
+      }
+      if (shouldContinue && child is T) {
+        shouldContinue = handler(child);
+      } else if (shouldContinue && child is BaseGame) {
+        shouldContinue = child.propagateToChildren<T>(handler);
+        print("Do we go here");
+      }
+      if (!shouldContinue) {
+        break;
+      }
+    }
+    return shouldContinue;
   }
 
   /// Called before the component is added to the BaseGame by the add method.
@@ -93,10 +190,45 @@ abstract class Component {
   ///   myImage = await gameRef.load('my_image.png');
   /// }
   /// ```
-  Future<void>? onLoad() => null;
+  Future<void> onLoad() async {}
+
+  /// Called to check whether the point is to be counted as within the component
+  /// It needs to be overridden to have any effect, like it is in
+  /// PositionComponent.
+  bool containsPoint(Vector2 point) => false;
 
   /// Usually this is not something that the user would want to call since the
   /// component list isn't re-ordered when it is called.
   /// See BaseGame.changePriority instead.
   void changePriorityWithoutResorting(int priority) => _priority = priority;
+
+  // TODO: Write comment
+  void prepare(Component child, {Game? gameRef}) {
+    if (this is HasGameRef) {
+      final c = this as HasGameRef;
+      gameRef ??= c.hasGameRef ? c.gameRef : null;
+    } else if (gameRef == null) {
+      assert(
+        !isMounted,
+        'Parent was already added to Game and has no HasGameRef; in this case, gameRef is mandatory.',
+      );
+    }
+    if (gameRef is BaseGame) {
+      gameRef.prepareComponent(child);
+    }
+
+    child._parent = this;
+    if (child is BaseComponent && this is BaseComponent) {
+      child.debugMode = (this as BaseComponent).debugMode;
+    }
+  }
+
+  @mustCallSuper
+  ComponentSet createComponentSet() {
+    final components = ComponentSet.createDefault(prepare);
+    if (this is HasGameRef) {
+      components.register<HasGameRef>();
+    }
+    return components;
+  }
 }

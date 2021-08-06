@@ -57,7 +57,7 @@ class MyShapeComponent extends ShapeComponent with Tappable {
 
   @override
   bool onTapDown(TapDownInfo info) {
-    remove();
+    removeFromParent();
     return true;
   }
 }

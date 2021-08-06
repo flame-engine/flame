@@ -232,7 +232,7 @@ void main() {
       child.size.setValues(3.0, 1.0);
       child.angle = 0.0;
       child.anchor = Anchor.topLeft;
-      parent.addChild(child);
+      parent.add(child);
 
       expect(child.absoluteTopLeftPosition, child.position + parent.position);
       expect(

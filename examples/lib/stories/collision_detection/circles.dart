@@ -34,7 +34,7 @@ class MyCollidable extends PositionComponent
   void update(double dt) {
     super.update(dt);
     if (_isWallHit) {
-      remove();
+      removeFromParent();
       return;
     }
     debugColor = _isCollision ? _collisionColor : _defaultColor;

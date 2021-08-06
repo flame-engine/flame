@@ -24,7 +24,7 @@ void main() {
     test('game calls resize on add', () {
       final a = MyComponent('a');
       final game = MyGame();
-      game.onResize(size);
+      game.onGameResize(size);
 
       game.add(a);
       // component is just added on the next iteration
@@ -35,25 +35,25 @@ void main() {
     test('game calls resize after added', () {
       final a = MyComponent('a');
       final game = MyGame();
-      game.onResize(Vector2.all(10));
+      game.onGameResize(Vector2.all(10));
 
       game.add(a);
       // component is just added on the next iteration
       game.update(0);
 
-      game.onResize(size);
+      game.onGameResize(size);
       expect(a.gameSize, size);
     });
     test("game calls doesn't change component size", () {
       final a = MyComponent('a');
       final game = MyGame();
-      game.onResize(Vector2.all(10));
+      game.onGameResize(Vector2.all(10));
 
       game.add(a);
       // component is just added on the next iteration
       game.update(0);
 
-      game.onResize(size);
+      game.onGameResize(size);
       expect(a.size, isNot(size));
     });
   });

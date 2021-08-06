@@ -41,7 +41,7 @@ class TapableBall extends Ball with Tappable {
     super.onLoad();
     _textPaint = TextPaint(config: _textConfig);
     textComponent = TextComponent(counter.toString(), textRenderer: _textPaint);
-    addChild(textComponent);
+    add(textComponent);
   }
 
   @override

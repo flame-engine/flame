@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../components.dart';
 import '../assets/assets_cache.dart';
 import '../assets/images.dart';
 import '../extensions/offset.dart';
@@ -19,7 +20,7 @@ import 'projector.dart';
 ///
 /// Subclass this to implement the [update] and [render] methods.
 /// Flame will deal with calling these methods properly when the game's widget is rendered.
-abstract class Game extends Projector {
+abstract class Game extends Component implements Projector {
   final images = Images();
   final assets = AssetsCache();
 
@@ -37,7 +38,8 @@ abstract class Game extends Projector {
   /// Use [size] and [hasLayout] for safe access.
   Vector2? _size;
 
-  /// Current game viewport size, updated every resize via the [onResize] method hook
+  /// Current game viewport size, updated every resize via the [onGameResize]
+  /// method hook
   Vector2 get size {
     assertHasLayout();
     return _size!;
@@ -53,20 +55,14 @@ abstract class Game extends Projector {
   /// It cannot be changed at runtime, because the game widget does not get rebuild when this value changes.
   Color backgroundColor() => const Color(0xFF000000);
 
-  /// Implement this method to update the game state, given the time [dt] that has passed since the last update.
-  ///
-  /// Keep the updates as short as possible. [dt] is in seconds, with microseconds precision.
-  void update(double dt);
-
-  /// Implement this method to render the current game state in the [canvas].
-  void render(Canvas canvas);
-
   /// This is the resize hook; every time the game widget is resized, this hook is called.
   ///
   /// The default implementation just sets the new size on the size field
   @mustCallSuper
-  void onResize(Vector2 size) {
+  @override
+  void onGameResize(Vector2 size) {
     _size = (_size ?? Vector2.zero())..setFrom(size);
+    super.onGameResize(size);
   }
 
   @protected
@@ -190,9 +186,6 @@ abstract class Game extends Projector {
 
   VoidCallback? pauseEngineFn;
   VoidCallback? resumeEngineFn;
-
-  /// Use this method to load the assets need for the game instance to run
-  Future<void> onLoad() async {}
 
   /// A property that stores an [ActiveOverlaysNotifier]
   ///

@@ -30,12 +30,12 @@ void main() {
   group('hoverable test', () {
     test('make sure they cannot be added to invalid games', () async {
       final game1 = _GameWithHoverables();
-      game1.onResize(Vector2.all(100));
+      game1.onGameResize(Vector2.all(100));
       // should be ok
       await game1.add(HoverableComponent());
 
       final game2 = _GameWithoutHoverables();
-      game2.onResize(Vector2.all(100));
+      game2.onGameResize(Vector2.all(100));
 
       expect(
         () => game2.add(HoverableComponent()),
@@ -44,7 +44,7 @@ void main() {
     });
     test('single component', () async {
       final game = _GameWithHoverables();
-      game.onResize(Vector2.all(100));
+      game.onGameResize(Vector2.all(100));
 
       final c = HoverableComponent()
         ..position = Vector2(10, 20)
@@ -88,7 +88,7 @@ void main() {
     });
     test('camera is respected', () async {
       final game = _GameWithHoverables();
-      game.onResize(Vector2.all(100));
+      game.onGameResize(Vector2.all(100));
 
       final c = HoverableComponent()
         ..position = Vector2(10, 20)
@@ -110,7 +110,7 @@ void main() {
     });
     test('multiple components', () async {
       final game = _GameWithHoverables();
-      game.onResize(Vector2.all(100));
+      game.onGameResize(Vector2.all(100));
 
       final a = HoverableComponent()
         ..position = Vector2(10, 0)

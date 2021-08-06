@@ -18,7 +18,7 @@ void main() {
           final comp = MyComponent();
           final game = MyGame();
 
-          game.onResize(Vector2.all(100));
+          game.onGameResize(Vector2.all(100));
           game.add(comp);
           game.update(0); // Making sure the component was added
 
@@ -43,7 +43,7 @@ void main() {
           final comp = MyComponent();
           final game = MyGame();
 
-          game.onResize(Vector2.all(100));
+          game.onGameResize(Vector2.all(100));
           game.add(comp);
           game.update(0); // Making sure the component was added
 

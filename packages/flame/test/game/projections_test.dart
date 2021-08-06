@@ -18,7 +18,7 @@ void main() {
     test('viewport only with scale projection (no camera)', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
       final game = BaseGame()..camera.viewport = viewport; // default camera
-      game.onResize(Vector2(200, 200));
+      game.onGameResize(Vector2(200, 200));
       expect(viewport.scale, 2);
       expect(viewport.resizeOffset, Vector2.zero()); // no translation
       _assertIdentityOfProjector(game);
@@ -31,7 +31,7 @@ void main() {
     test('viewport only with translation projection (no camera)', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
       final game = BaseGame()..camera.viewport = viewport; // default camera
-      game.onResize(Vector2(200, 100));
+      game.onGameResize(Vector2(200, 100));
       expect(viewport.scale, 1); // no scale
       expect(viewport.resizeOffset, Vector2(50, 0)); // y is unchanged
       _assertIdentityOfProjector(game);
@@ -54,7 +54,7 @@ void main() {
     test('viewport only with both scale and translation (no camera)', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
       final game = BaseGame()..camera.viewport = viewport; // default camera
-      game.onResize(Vector2(200, 400));
+      game.onGameResize(Vector2(200, 400));
       expect(viewport.scale, 2);
       expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
       _assertIdentityOfProjector(game);
@@ -67,7 +67,7 @@ void main() {
     });
     test('camera only with zoom (default viewport)', () {
       final game = BaseGame(); // default viewport
-      game.onResize(Vector2.all(1));
+      game.onGameResize(Vector2.all(1));
 
       game.camera.zoom = 3; // 3x zoom
       _assertIdentityOfProjector(game);
@@ -81,7 +81,7 @@ void main() {
     });
     test('camera only with translation (default viewport)', () {
       final game = BaseGame(); // default viewport
-      game.onResize(Vector2.all(1));
+      game.onGameResize(Vector2.all(1));
 
       // top left corner of the screen is (50, 100)
       game.camera.snapTo(Vector2(50, 100));
@@ -96,7 +96,7 @@ void main() {
     });
     test('camera only with both zoom and translation (default viewport)', () {
       final game = BaseGame(); // default viewport
-      game.onResize(Vector2.all(10));
+      game.onGameResize(Vector2.all(10));
 
       // no-op because the default is already top left
       game.camera.setRelativeOffset(Anchor.topLeft);
@@ -135,7 +135,7 @@ void main() {
     test('camera & viewport - two translations', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
       final game = BaseGame()..camera.viewport = viewport; // default camera
-      game.onResize(Vector2(200, 100));
+      game.onGameResize(Vector2(200, 100));
       game.camera.snapTo(Vector2(10, 100));
       expect(viewport.scale, 1); // no scale
       expect(viewport.resizeOffset, Vector2(50, 0)); // y is unchanged
@@ -155,7 +155,7 @@ void main() {
     test('camera zoom & viewport translation', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
       final game = BaseGame()..camera.viewport = viewport;
-      game.onResize(Vector2(200, 100));
+      game.onGameResize(Vector2(200, 100));
       game.camera.zoom = 2;
       game.camera.snap();
       expect(viewport.scale, 1); // no scale
@@ -183,7 +183,7 @@ void main() {
     test('camera translation & viewport scale+translation', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
       final game = BaseGame()..camera.viewport = viewport;
-      game.onResize(Vector2(200, 400));
+      game.onGameResize(Vector2(200, 400));
       expect(viewport.scale, 2);
       expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
 
@@ -207,7 +207,7 @@ void main() {
     test('camera & viewport scale/zoom + translation (cancel out scaling)', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
       final game = BaseGame()..camera.viewport = viewport;
-      game.onResize(Vector2(200, 400));
+      game.onGameResize(Vector2(200, 400));
       expect(viewport.scale, 2);
       expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
 
@@ -243,7 +243,7 @@ void main() {
     test('camera & viewport scale/zoom + translation', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
       final game = BaseGame()..camera.viewport = viewport;
-      game.onResize(Vector2(200, 400));
+      game.onGameResize(Vector2(200, 400));
       expect(viewport.scale, 2);
       expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
 

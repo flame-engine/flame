@@ -30,7 +30,7 @@ void effectTest(
   final callback = Callback();
   effect.onComplete = callback.call;
   final game = BaseGame();
-  game.onResize(Vector2.all(200));
+  game.onGameResize(Vector2.all(200));
   game.add(component);
   component.addEffect(effect);
   final duration = effect.iterationTime;

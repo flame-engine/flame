@@ -59,25 +59,25 @@ void main() {
     test('adds the child to the component', () {
       final child = MyTap();
       final wrapper = MyComposed();
-      wrapper.addChild(child);
+      wrapper.add(child);
       wrapper.update(0); // children are only added on the next tick
 
-      expect(wrapper.containsChild(child), true);
+      expect(wrapper.contains(child), true);
     });
 
     test('removes the child from the component', () {
       final child = MyTap();
       final wrapper = MyComposed();
 
-      wrapper.addChild(child);
-      expect(wrapper.containsChild(child), false);
+      wrapper.add(child);
+      expect(wrapper.contains(child), false);
       wrapper.update(0); // children are only added on the next tick
-      expect(wrapper.containsChild(child), true);
+      expect(wrapper.contains(child), true);
 
       wrapper.children.remove(child);
-      expect(wrapper.containsChild(child), true);
+      expect(wrapper.contains(child), true);
       wrapper.update(0); // children are only removed on the next tick
-      expect(wrapper.containsChild(child), false);
+      expect(wrapper.contains(child), false);
     });
 
     test(
@@ -86,12 +86,12 @@ void main() {
         final child = MyAsyncChild();
         final wrapper = MyComposed();
 
-        final future = wrapper.addChild(child);
-        expect(wrapper.containsChild(child), false);
+        final future = wrapper.add(child);
+        expect(wrapper.contains(child), false);
         await future;
-        expect(wrapper.containsChild(child), false);
+        expect(wrapper.contains(child), false);
         wrapper.update(0);
-        expect(wrapper.containsChild(child), true);
+        expect(wrapper.contains(child), true);
       },
     );
 
@@ -100,10 +100,10 @@ void main() {
       final child = MyTap();
       final wrapper = MyComposed();
 
-      game.onResize(size);
+      game.onGameResize(size);
       child.size.setValues(1.0, 1.0);
       game.add(wrapper);
-      wrapper.addChild(child);
+      wrapper.add(child);
       game.update(0.0);
       game.onTapDown(1, createTapDownEvent(game));
 
@@ -111,13 +111,13 @@ void main() {
       expect(child.tapped, true);
     });
 
-    test('add multiple children with addChildren', () {
+    test('add multiple children with addAll', () {
       final game = MyGame();
       final children = List.generate(10, (_) => MyTap());
       final wrapper = MyComposed();
-      wrapper.children.addChildren(children);
+      wrapper.children.addAll(children);
 
-      game.onResize(size);
+      game.onGameResize(size);
       game.add(wrapper);
       game.update(0.0);
       expect(wrapper.children.length, children.length);
@@ -132,9 +132,9 @@ void main() {
         ..position.setFrom(Vector2.all(100))
         ..size.setFrom(Vector2.all(300));
 
-      game.onResize(size);
+      game.onGameResize(size);
       game.add(wrapper);
-      wrapper.addChild(child);
+      wrapper.add(child);
       game.update(0.0);
       game.onTapDown(
         1,
@@ -151,11 +151,11 @@ void main() {
 
     test('updates and renders children', () {
       final game = MyGame();
-      game.onResize(Vector2.all(100));
+      game.onGameResize(Vector2.all(100));
       final child = MyTap();
       final wrapper = MyComposed();
 
-      wrapper.addChild(child);
+      wrapper.add(child);
       game.add(wrapper);
       game.update(0.0);
       game.render(MockCanvas());
@@ -166,12 +166,12 @@ void main() {
 
     test('initially same debugMode as parent', () {
       final game = MyGame();
-      game.onResize(Vector2.all(100));
+      game.onGameResize(Vector2.all(100));
       final child = MyTap();
       final wrapper = MyComposed();
       wrapper.debugMode = true;
 
-      wrapper.addChild(child);
+      wrapper.add(child);
       game.add(wrapper);
       game.update(0.0);
 
@@ -181,12 +181,12 @@ void main() {
     });
     test('initially same debugMode as parent when BaseComponent', () {
       final game = MyGame();
-      game.onResize(Vector2.all(100));
+      game.onGameResize(Vector2.all(100));
       final child = MyTap();
       final wrapper = MySimpleComposed();
       wrapper.debugMode = true;
 
-      wrapper.addChild(child);
+      wrapper.add(child);
       game.add(wrapper);
       game.update(0.0);
 
@@ -194,20 +194,20 @@ void main() {
     });
     test('fail to add child if no gameRef can be acquired', () {
       final game = MyGame();
-      game.onResize(Vector2.all(100));
+      game.onGameResize(Vector2.all(100));
 
       final parent = PlainComposed();
 
       // this is ok; when the parent is added to the game the children will
       // get mounted
-      parent.addChild(MyTap());
+      parent.add(MyTap());
 
       game.add(parent);
       game.update(0);
 
       // this is not ok, the child would never be mounted!
       expect(
-        () => parent.addChild(MyTap()),
+        () => parent.add(MyTap()),
         throwsA(isA<AssertionError>()),
       );
     });
