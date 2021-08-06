@@ -85,7 +85,7 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Get the relative top left position regardless of the anchor and angle
   Vector2 get topLeftPosition {
-    return anchor.toOtherAnchorPosition(
+    return _anchor.toOtherAnchorPosition(
       position,
       Anchor.topLeft,
       size,
@@ -94,7 +94,7 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Set the top left position regardless of the anchor
   set topLeftPosition(Vector2 position) {
-    this.position = position + (anchor.toVector2()..multiply(size));
+    this.position = position + (_anchor.toVector2()..multiply(size));
   }
 
   /// Get the absolute top left position regardless of whether it is a child or not
@@ -121,10 +121,10 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Get the position of the center of the component's bounding rectangle
   Vector2 get center {
-    if (anchor == Anchor.center) {
+    if (_anchor == Anchor.center) {
       return position;
     } else {
-      return anchor.toOtherAnchorPosition(position, Anchor.center, size)
+      return _anchor.toOtherAnchorPosition(position, Anchor.center, size)
         ..rotate(angle, center: absolutePosition);
     }
   }
@@ -154,7 +154,7 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Flip the component horizontally around its center line.
   void flipHorizontallyAroundCenter() {
-    final delta = (1 - 2 * anchor.x) * _size.x * _scaleX;
+    final delta = (1 - 2 * _anchor.x) * _size.x * _scaleX;
     _position.x += delta * math.cos(_angle);
     _position.y += delta * math.sin(_angle);
     _scaleX = -_scaleX;
@@ -169,7 +169,7 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Flip the component vertically around its center line.
   void flipVerticallyAroundCenter() {
-    final delta = (1 - 2 * anchor.y) * _size.y * _scaleY;
+    final delta = (1 - 2 * _anchor.y) * _size.y * _scaleY;
     _position.x += -delta * math.sin(_angle);
     _position.y += delta * math.cos(_angle);
     _scaleY = -_scaleY;
@@ -179,7 +179,12 @@ abstract class PositionComponent extends BaseComponent {
   /// Anchor point for this component. This is where flame "grabs it".
   /// The [position] is relative to this point inside the component.
   /// The [angle] is rotated around this point.
-  Anchor anchor;
+  Anchor _anchor;
+  Anchor get anchor => _anchor;
+  set anchor(Anchor a) {
+    _anchor = a;
+    _recalculateTransform = true;
+  }
 
   /// Whether this component should be flipped on the X axis before being rendered.
   bool renderFlipX = false;
@@ -207,11 +212,12 @@ abstract class PositionComponent extends BaseComponent {
     Vector2? position,
     Vector2? size,
     double angle = 0.0,
-    this.anchor = Anchor.topLeft,
+    Anchor anchor = Anchor.topLeft,
     this.renderFlipX = false,
     this.renderFlipY = false,
     int? priority,
-  })  : _angle = angle,
+  })  : _anchor = anchor,
+        _angle = angle,
         _scaleX = 1.0,
         _scaleY = 1.0,
         _transformMatrix = Matrix4.identity(),
@@ -229,8 +235,8 @@ abstract class PositionComponent extends BaseComponent {
       final m = _transformMatrix.storage;
       final cosA = math.cos(_angle);
       final sinA = math.sin(_angle);
-      final deltaX = -anchor.x * _size.x;
-      final deltaY = -anchor.y * _size.y;
+      final deltaX = -_anchor.x * _size.x;
+      final deltaY = -_anchor.y * _size.y;
       m[0] = cosA * _scaleX;
       m[1] = sinA * _scaleX;
       m[4] = -sinA * _scaleY;
