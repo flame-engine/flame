@@ -11,6 +11,7 @@ import 'package:flame/extensions.dart';
 import '../flame_oxygen.dart';
 
 part 'system/base_system.dart';
+part 'system/game_ref.dart';
 part 'system/particle_system.dart';
 part 'system/render_system.dart';
 part 'system/update_system.dart';
