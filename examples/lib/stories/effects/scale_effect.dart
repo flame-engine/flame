@@ -23,7 +23,7 @@ class ScaleEffectGame extends BaseGame with TapDetector {
       ..size = Vector2.all(20)
       ..anchor = Anchor.center;
 
-    square.addChild(childSquare);
+    square.add(childSquare);
     add(square);
   }
 
