@@ -41,7 +41,7 @@ class SequenceEffectGame extends BaseGame with TapDetector {
       curve: Curves.easeIn,
     );
 
-    final scale = ScaleEffect(
+    final scale = SizeEffect(
       size: currentTap,
       speed: 100.0,
       curve: Curves.easeInCubic,

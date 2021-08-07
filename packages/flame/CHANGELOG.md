@@ -24,6 +24,9 @@
  - Adding `SpriteGroupComponent`
  - Fix truncated last frame in non-looping animations
  - Default size of `SpriteComponent` is `srcSize` instead of spritesheet size
+ - Rename `ScaleEffect` to `SizeEffect`
+ - Introduce `scale` on `PositionComponent`
+ - Add `ScaleEffect` that works on `scale` instead of `size`
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps

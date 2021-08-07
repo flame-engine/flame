@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart' as material;
 
 import 'anchor.dart';
+import 'components/cache/memory_cache.dart';
 import 'components/text_component.dart';
 import 'extensions/size.dart';
 import 'extensions/vector2.dart';
-import 'memory_cache.dart';
 
 /// [TextRenderer] is the abstract API that Flame uses for rendering text in its features
 /// this class can be extended to provide an implementation of text rendering in the engine.

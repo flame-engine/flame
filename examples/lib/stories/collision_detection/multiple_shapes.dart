@@ -50,12 +50,12 @@ abstract class MyCollidable extends PositionComponent
     angleDelta = dt * rotationSpeed;
     angle = (angle + angleDelta) % (2 * pi);
     // Takes rotation into consideration (which topLeftPosition doesn't)
-    final topLeft = absoluteCenter - (size / 2);
-    if (topLeft.x + size.x < 0 ||
-        topLeft.y + size.y < 0 ||
-        topLeft.x > screenCollidable.size.x ||
-        topLeft.y > screenCollidable.size.y) {
-      final moduloSize = screenCollidable.size + size;
+    final topLeft = absoluteCenter - (scaledSize / 2);
+    if (topLeft.x + scaledSize.x < 0 ||
+        topLeft.y + scaledSize.y < 0 ||
+        topLeft.x > screenCollidable.scaledSize.x ||
+        topLeft.y > screenCollidable.scaledSize.y) {
+      final moduloSize = screenCollidable.scaledSize + scaledSize;
       topLeftPosition = topLeftPosition % moduloSize;
     }
   }
@@ -65,7 +65,7 @@ abstract class MyCollidable extends PositionComponent
     super.render(canvas);
     renderHitboxes(canvas, paint: _activePaint);
     if (_isDragged) {
-      final localCenter = (size / 2).toOffset();
+      final localCenter = (scaledSize / 2).toOffset();
       canvas.drawCircle(localCenter, 5, _activePaint);
     }
   }

@@ -6,6 +6,7 @@ import '../extensions/offset.dart';
 import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
 import 'base_component.dart';
+import 'cache/value_cache.dart';
 import 'component.dart';
 import 'mixins/hitbox.dart';
 
@@ -67,17 +68,39 @@ abstract class PositionComponent extends BaseComponent {
   }
 
   /// Width (size) that this component is rendered with.
-  double get width => _size.x;
+  double get width => scaledSize.x;
   set width(double width) {
     _recalculateTransform = true;
-    _size.x = width;
+    _size.x = width / scale.x;
   }
 
   /// Height (size) that this component is rendered with.
-  double get height => size.y;
+  double get height => scaledSize.y;
   set height(double height) {
     _recalculateTransform = true;
-    _size.y = height;
+    _size.y = height / scale.y;
+  }
+
+  /// The scale factor of this component
+  late _NotifyingVector2 _scale;
+  Vector2 get scale => _scale;
+  set scale(Vector2 scale) {
+    _recalculateTransform = true;
+    _scale.setFrom(scale);
+  }
+
+  /// Cache to store the calculated scaled size
+  final ValueCache<Vector2> _scaledSizeCache = ValueCache();
+
+  /// The size that this component is rendered with after [scale] is applied.
+  Vector2 get scaledSize {
+    if (!_scaledSizeCache.isCacheValid([scale, size])) {
+      _scaledSizeCache.updateCache(
+        size.clone()..multiply(scale),
+        [scale.clone(), size.clone()],
+      );
+    }
+    return _scaledSizeCache.value!;
   }
 
   /// Get the absolute position, with the anchor taken into consideration
@@ -88,13 +111,13 @@ abstract class PositionComponent extends BaseComponent {
     return _anchor.toOtherAnchorPosition(
       position,
       Anchor.topLeft,
-      size,
+      scaledSize,
     );
   }
 
   /// Set the top left position regardless of the anchor
   set topLeftPosition(Vector2 position) {
-    this.position = position + (_anchor.toVector2()..multiply(size));
+    this.position = position + (anchor.toVector2()..multiply(scaledSize));
   }
 
   /// Get the absolute top left position regardless of whether it is a child or not
@@ -124,7 +147,7 @@ abstract class PositionComponent extends BaseComponent {
     if (_anchor == Anchor.center) {
       return position;
     } else {
-      return _anchor.toOtherAnchorPosition(position, Anchor.center, size)
+      return anchor.toOtherAnchorPosition(position, Anchor.center, scaledSize)
         ..rotate(angle, center: absolutePosition);
     }
   }
@@ -142,37 +165,33 @@ abstract class PositionComponent extends BaseComponent {
     _angle = a;
   }
 
-  /// Scale factor applied to the component.
-  double _scaleX;
-  double _scaleY;
-
   /// Flip the component horizontally around its anchor point.
   void flipHorizontally() {
     _recalculateTransform = true;
-    _scaleX = -_scaleX;
+    _scale.x = -_scale.x;
   }
 
   /// Flip the component horizontally around its center line.
   void flipHorizontallyAroundCenter() {
-    final delta = (1 - 2 * _anchor.x) * _size.x * _scaleX;
+    final delta = (1 - 2 * _anchor.x) * _size.x * _scale.x;
     _position.x += delta * math.cos(_angle);
     _position.y += delta * math.sin(_angle);
-    _scaleX = -_scaleX;
+    _scale.x = -_scale.x;
     _recalculateTransform = true;
   }
 
   /// Flip the component vertically around its anchor point.
   void flipVertically() {
     _recalculateTransform = true;
-    _scaleY = -_scaleY;
+    _scale.y = -_scale.y;
   }
 
   /// Flip the component vertically around its center line.
   void flipVerticallyAroundCenter() {
-    final delta = (1 - 2 * _anchor.y) * _size.y * _scaleY;
+    final delta = (1 - 2 * _anchor.y) * _size.y * _scale.y;
     _position.x += -delta * math.sin(_angle);
     _position.y += delta * math.cos(_angle);
-    _scaleY = -_scaleY;
+    _scale.y = -_scale.y;
     _recalculateTransform = true;
   }
 
@@ -192,25 +211,10 @@ abstract class PositionComponent extends BaseComponent {
   /// Whether this component should be flipped ofn the Y axis before being rendered.
   bool renderFlipY = false;
 
-  /// Returns the relative position/size of this component.
-  /// Relative because it might be translated by their parents (which is not considered here).
-  Rect toRect() => topLeftPosition.toPositionedRect(size);
-
-  /// Returns the absolute position/size of this component.
-  /// Absolute because it takes any possible parent position into consideration.
-  Rect toAbsoluteRect() => absoluteTopLeftPosition.toPositionedRect(size);
-
-  /// Mutates position and size using the provided [rect] as basis.
-  /// This is a relative rect, same definition that [toRect] use
-  /// (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
-  void setByRect(Rect rect) {
-    size.setValues(rect.width, rect.height);
-    topLeftPosition = rect.topLeft.toVector2();
-  }
-
   PositionComponent({
     Vector2? position,
     Vector2? size,
+    Vector2? scale,
     double angle = 0.0,
     Anchor anchor = Anchor.topLeft,
     this.renderFlipX = false,
@@ -218,13 +222,12 @@ abstract class PositionComponent extends BaseComponent {
     int? priority,
   })  : _anchor = anchor,
         _angle = angle,
-        _scaleX = 1.0,
-        _scaleY = 1.0,
         _transformMatrix = Matrix4.identity(),
         _recalculateTransform = true,
         super(priority: priority) {
     _position = _NotifyingVector2(this)..setFrom(position ?? Vector2.zero());
     _size = _NotifyingVector2(this)..setFrom(size ?? Vector2.zero());
+    _scale = _NotifyingVector2(this)..setFrom(scale ?? Vector2(1, 1));
   }
 
   /// The total transformation matrix for the component. This matrix combines
@@ -243,10 +246,10 @@ abstract class PositionComponent extends BaseComponent {
       final sinA = math.sin(_angle);
       final deltaX = -_anchor.x * _size.x;
       final deltaY = -_anchor.y * _size.y;
-      m[0] = cosA * _scaleX;
-      m[1] = sinA * _scaleX;
-      m[4] = -sinA * _scaleY;
-      m[5] = cosA * _scaleY;
+      m[0] = cosA * _scale.x;
+      m[1] = sinA * _scale.x;
+      m[4] = -sinA * _scale.y;
+      m[5] = cosA * _scale.y;
       m[12] = _position.x + m[0] * deltaX + m[4] * deltaY;
       m[13] = _position.y + m[1] * deltaX + m[5] * deltaY;
       _recalculateTransform = false;
@@ -329,7 +332,7 @@ abstract class PositionComponent extends BaseComponent {
     if (this is Hitbox) {
       (this as Hitbox).renderHitboxes(canvas);
     }
-    canvas.drawRect(size.toRect(), debugPaint);
+    canvas.drawRect(scaledSize.toRect(), debugPaint);
     debugTextPaint.render(
       canvas,
       'x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}',
@@ -351,11 +354,32 @@ abstract class PositionComponent extends BaseComponent {
     canvas.transform(transformMatrix.storage);
 
     // Handle inverted rendering by moving center and flipping.
+    // TODO(st-pasha): remove this, using `flipHorizontallyAroundCenter()` instead
     if (renderFlipX || renderFlipY) {
-      canvas.translate(width / 2, height / 2);
-      canvas.scale(renderFlipX ? -1.0 : 1.0, renderFlipY ? -1.0 : 1.0);
-      canvas.translate(-width / 2, -height / 2);
+      final size = scaledSize;
+      canvas.translate(size.x / 2, size.y / 2);
+      canvas.scale(
+        renderFlipX ? -1.0 : 1.0,
+        renderFlipY ? -1.0 : 1.0,
+      );
+      canvas.translate(-size.x / 2, -size.y / 2);
     }
+  }
+
+  /// Returns the relative position/size of this component.
+  /// Relative because it might be translated by their parents (which is not considered here).
+  Rect toRect() => topLeftPosition.toPositionedRect(scaledSize);
+
+  /// Returns the absolute position/size of this component.
+  /// Absolute because it takes any possible parent position into consideration.
+  Rect toAbsoluteRect() => absoluteTopLeftPosition.toPositionedRect(scaledSize);
+
+  /// Mutates position and size using the provided [rect] as basis.
+  /// This is a relative rect, same definition that [toRect] use
+  /// (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
+  void setByRect(Rect rect) {
+    size.setValues(rect.width, rect.height);
+    topLeftPosition = rect.topLeft.toVector2();
   }
 } // ignore: number-of-methods
 
