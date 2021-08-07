@@ -2,6 +2,8 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+import 'notifying_vector2.dart';
+
 class Transform2D extends ChangeNotifier {
   /// The matrix that combines all the transforms into a single entity.
   /// This matrix is cached and automatically recalculated when the position/
@@ -16,7 +18,7 @@ class Transform2D extends ChangeNotifier {
   bool get isDirty => _recalculate;
 
   /// The position of this component's anchor on the screen.
-  late final NotifyingVector2 _position;
+  final NotifyingVector2 _position;
   NotifyingVector2 get position => _position;
   set position(Vector2 position) => _position.setFrom(position);
 
@@ -45,12 +47,12 @@ class Transform2D extends ChangeNotifier {
   }
 
   /// The scale factor of this component
-  late final NotifyingVector2 _scale;
+  final NotifyingVector2 _scale;
   NotifyingVector2 get scale => _scale;
   set scale(Vector2 scale) => _scale.setFrom(scale);
 
   /// Additional offset applied after all other transforms
-  late final NotifyingVector2 _offset;
+  final NotifyingVector2 _offset;
   NotifyingVector2 get offset => _offset;
   set offset(Vector2 offset) => _offset.setFrom(offset);
 
@@ -126,47 +128,6 @@ class Transform2D extends ChangeNotifier {
 
   void _notify() {
     _recalculate = true;
-    notifyListeners();
-  }
-}
-
-// ignore: prefer_mixin
-class NotifyingVector2 extends Vector2 with ChangeNotifier {
-  NotifyingVector2() : super.zero();
-
-  @override
-  void setValues(double x, double y) {
-    super.setValues(x, y);
-    notifyListeners();
-  }
-
-  @override
-  void setFrom(Vector2 v) {
-    super.setFrom(v);
-    notifyListeners();
-  }
-
-  @override
-  void setZero() {
-    super.setZero();
-    notifyListeners();
-  }
-
-  @override
-  void splat(double arg) {
-    super.splat(arg);
-    notifyListeners();
-  }
-
-  @override
-  set x(double x) {
-    super.x = x;
-    notifyListeners();
-  }
-
-  @override
-  set y(double y) {
-    super.y = y;
     notifyListeners();
   }
 }
