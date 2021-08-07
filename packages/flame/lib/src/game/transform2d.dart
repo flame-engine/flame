@@ -2,7 +2,6 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-
 class Transform2D extends ChangeNotifier {
   /// The matrix that combines all the transforms into a single entity.
   /// This matrix is cached and automatically recalculated when the position/
@@ -53,16 +52,15 @@ class Transform2D extends ChangeNotifier {
   /// Additional offset applied after all other transforms
   late final NotifyingVector2 _offset;
   NotifyingVector2 get offset => _offset;
-  set offset(Vector2 offset) =>_offset.setFrom(offset);
-
+  set offset(Vector2 offset) => _offset.setFrom(offset);
 
   Transform2D()
-    : _transformMatrix = Matrix4.identity(),
-      _recalculate = true,
-      _position = NotifyingVector2(),
-      _angle = 0,
-      _scale = NotifyingVector2() .. setValues(1, 1),
-      _offset = NotifyingVector2() {
+      : _transformMatrix = Matrix4.identity(),
+        _recalculate = true,
+        _position = NotifyingVector2(),
+        _angle = 0,
+        _scale = NotifyingVector2()..setValues(1, 1),
+        _offset = NotifyingVector2() {
     _position.addListener(_notify);
     _scale.addListener(_notify);
     _offset.addListener(_notify);
@@ -131,8 +129,6 @@ class Transform2D extends ChangeNotifier {
     notifyListeners();
   }
 }
-
-
 
 // ignore: prefer_mixin
 class NotifyingVector2 extends Vector2 with ChangeNotifier {

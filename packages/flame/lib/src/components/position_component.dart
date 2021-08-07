@@ -176,12 +176,11 @@ abstract class PositionComponent extends BaseComponent {
     this.renderFlipY = false,
     int? priority,
   })  : _transform = Transform2D()
-          .. position = position ?? Vector2.zero()
-          .. angle = angle
-          .. scale = scale ?? Vector2(1, 1),
+          ..position = position ?? Vector2.zero()
+          ..angle = angle
+          ..scale = scale ?? Vector2(1, 1),
         _anchor = anchor,
-        _size = NotifyingVector2()
-          .. setFrom(size ?? Vector2.zero()),
+        _size = NotifyingVector2()..setFrom(size ?? Vector2.zero()),
         _scaledSize = Vector2(0, 0),
         super(priority: priority) {
     _size.addListener(_handleSizeOrAnchorChange);
