@@ -5,8 +5,8 @@ import '../anchor.dart';
 import '../extensions/offset.dart';
 import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
+import '../game/transform2d.dart';
 import 'base_component.dart';
-import 'cache/value_cache.dart';
 import 'component.dart';
 import 'mixins/hitbox.dart';
 
@@ -23,84 +23,67 @@ import 'mixins/hitbox.dart';
 /// They are translated by this component's (x,y). They do not need to fit
 /// within this component's (width, height).
 abstract class PositionComponent extends BaseComponent {
-  /// The matrix that combines all the transforms into a single entity.
-  /// This matrix is cached and automatically recalculated when the position/
-  /// rotation/scale of the component changes.
-  final Matrix4 _transformMatrix;
-
-  /// This variable keeps track whether the transform matrix is "dirty" and
-  /// needs to be recalculated. It ensures that if the user updates multiple
-  /// properties at once, such as [x], [y] and [angle], then the transform
-  /// matrix will be recalculated only once, usually during the rendering stage.
-  bool _recalculateTransform;
+  final Transform2D _transform;
 
   /// The position of this component's anchor on the screen.
-  late _NotifyingVector2 _position;
-  Vector2 get position => _position;
-  set position(Vector2 position) {
-    _recalculateTransform = true;
-    _position.setFrom(position);
-  }
+  Vector2 get position => _transform.position;
+  set position(Vector2 position) => _transform.position = position;
 
   /// X position of this component's anchor on the screen.
-  double get x => _position.x;
-  set x(double x) {
-    _recalculateTransform = true;
-    _position.x = x;
-  }
+  double get x => _transform.x;
+  set x(double x) => _transform.x = x;
 
   /// Y position of this component's anchor on the screen.
-  double get y => _position.y;
-  set y(double y) {
-    _recalculateTransform = true;
-    _position.y = y;
+  double get y => _transform.y;
+  set y(double y) => _transform.y = y;
+
+  /// Rotation angle (in radians) of the component. The component will be
+  /// rotated around its anchor point in the clockwise direction if the
+  /// angle is positive, or counterclockwise if the angle is negative.
+  double get angle => _transform.angle;
+  set angle(double a) => _transform.angle = a;
+
+  /// The scale factor of this component
+  Vector2 get scale => _transform.scale;
+  set scale(Vector2 scale) => _transform.scale = scale;
+
+  /// Anchor point for this component. This is where flame "grabs it".
+  /// The [position] is relative to this point inside the component.
+  /// The [angle] is rotated around this point.
+  Anchor _anchor;
+  Anchor get anchor => _anchor;
+  set anchor(Anchor a) {
+    _anchor = a;
+    _updateOffset();
   }
 
   /// The logical size of the component. The game assumes that this is the
   /// approximate size of the object that will be drawn on the screen.
   /// This size will therefore be used for collision detection and tap
   /// handling.
-  late _NotifyingVector2 _size;
+  final NotifyingVector2 _size;
   Vector2 get size => _size;
-  set size(Vector2 size) {
-    _recalculateTransform = true;
-    _size.setFrom(size);
-  }
+  set size(Vector2 size) => _size.setFrom(size);
 
   /// Width (size) that this component is rendered with.
   double get width => scaledSize.x;
-  set width(double width) {
-    _recalculateTransform = true;
-    _size.x = width / scale.x;
-  }
+  set width(double width) => _size.x = width / scale.x.abs();
 
   /// Height (size) that this component is rendered with.
   double get height => scaledSize.y;
-  set height(double height) {
-    _recalculateTransform = true;
-    _size.y = height / scale.y;
-  }
-
-  /// The scale factor of this component
-  late _NotifyingVector2 _scale;
-  Vector2 get scale => _scale;
-  set scale(Vector2 scale) {
-    _recalculateTransform = true;
-    _scale.setFrom(scale);
-  }
+  set height(double height) => _size.y = height / scale.y.abs();
 
   /// Cache to store the calculated scaled size
-  final ValueCache<Vector2> _scaledSizeCache = ValueCache();
+  final Vector2 _scaledSize;
+  Vector2 get scaledSize => _scaledSize;
 
-  /// The size that this component is rendered with after [scale] is applied.
-  Vector2 get scaledSize {
-    if (!_scaledSizeCache.isCacheValid([scale, size])) {
-      _scaledSizeCache.updateCache(
-        size.clone()..multiply(scale),
-        [scale.clone(), size.clone()],
-      );
-    }
-    return _scaledSizeCache.value!;
+  void _updateScaledSize() {
+    _scaledSize.x = _size.x * scale.x.abs();
+    _scaledSize.y = _size.y * scale.y.abs();
+  }
+
+  void _updateOffset() {
+    _transform.offset = Vector2(-_anchor.x * _size.x, -_anchor.y * _size.y);
   }
 
   /// Get the absolute position, with the anchor taken into consideration
@@ -155,54 +138,26 @@ abstract class PositionComponent extends BaseComponent {
   /// Get the absolute center of the component
   Vector2 get absoluteCenter => absoluteParentPosition + center;
 
-  /// Rotation angle (in radians) of the component. The component will be
-  /// rotated around its anchor point in the clockwise direction if the
-  /// angle is positive, or counterclockwise if the angle is negative.
-  double _angle;
-  double get angle => _angle;
-  set angle(double a) {
-    _recalculateTransform = true;
-    _angle = a;
-  }
-
   /// Flip the component horizontally around its anchor point.
-  void flipHorizontally() {
-    _recalculateTransform = true;
-    _scale.x = -_scale.x;
-  }
+  void flipHorizontally() => _transform.flipHorizontally();
+
+  /// Flip the component vertically around its anchor point.
+  void flipVertically() => _transform.flipVertically();
 
   /// Flip the component horizontally around its center line.
   void flipHorizontallyAroundCenter() {
-    final delta = (1 - 2 * _anchor.x) * _size.x * _scale.x;
-    _position.x += delta * math.cos(_angle);
-    _position.y += delta * math.sin(_angle);
-    _scale.x = -_scale.x;
-    _recalculateTransform = true;
-  }
-
-  /// Flip the component vertically around its anchor point.
-  void flipVertically() {
-    _recalculateTransform = true;
-    _scale.y = -_scale.y;
+    final delta = (1 - 2 * _anchor.x) * width;
+    _transform.x += delta * math.cos(_transform.angle);
+    _transform.y += delta * math.sin(_transform.angle);
+    _transform.flipHorizontally();
   }
 
   /// Flip the component vertically around its center line.
   void flipVerticallyAroundCenter() {
-    final delta = (1 - 2 * _anchor.y) * _size.y * _scale.y;
-    _position.x += -delta * math.sin(_angle);
-    _position.y += delta * math.cos(_angle);
-    _scale.y = -_scale.y;
-    _recalculateTransform = true;
-  }
-
-  /// Anchor point for this component. This is where flame "grabs it".
-  /// The [position] is relative to this point inside the component.
-  /// The [angle] is rotated around this point.
-  Anchor _anchor;
-  Anchor get anchor => _anchor;
-  set anchor(Anchor a) {
-    _anchor = a;
-    _recalculateTransform = true;
+    final delta = (1 - 2 * _anchor.y) * height;
+    _transform.x += -delta * math.sin(_transform.angle);
+    _transform.y += delta * math.cos(_transform.angle);
+    _transform.flipVertically();
   }
 
   /// Whether this component should be flipped on the X axis before being rendered.
@@ -220,51 +175,33 @@ abstract class PositionComponent extends BaseComponent {
     this.renderFlipX = false,
     this.renderFlipY = false,
     int? priority,
-  })  : _anchor = anchor,
-        _angle = angle,
-        _transformMatrix = Matrix4.identity(),
-        _recalculateTransform = true,
+  })  : _transform = Transform2D()
+          .. position = position ?? Vector2.zero()
+          .. angle = angle
+          .. scale = scale ?? Vector2(1, 1),
+        _anchor = anchor,
+        _size = NotifyingVector2()
+          .. setFrom(size ?? Vector2.zero()),
+        _scaledSize = Vector2(0, 0),
         super(priority: priority) {
-    _position = _NotifyingVector2(this)..setFrom(position ?? Vector2.zero());
-    _size = _NotifyingVector2(this)..setFrom(size ?? Vector2.zero());
-    _scale = _NotifyingVector2(this)..setFrom(scale ?? Vector2(1, 1));
+    _size.addListener(_handleSizeOrAnchorChange);
+    _size.addListener(_updateScaledSize);
+    _transform.scale.addListener(_updateScaledSize);
+    _updateOffset();
+    _updateScaledSize();
+  }
+
+  void _handleSizeOrAnchorChange() {
+    _updateOffset();
   }
 
   /// The total transformation matrix for the component. This matrix combines
   /// translation, rotation and scale transforms into a single entity. The
   /// matrix is cached and gets recalculated only as necessary.
-  Matrix4 get transformMatrix {
-    if (_recalculateTransform) {
-      // The transforms below are equivalent to:
-      //   _transformMatrix = Matrix4.identity()
-      //       .. translate(_position.x, _position.y)
-      //       .. rotateZ(_angle)
-      //       .. scale(_scaleX, _scaleY, 1)
-      //       .. translate(-anchor.x*width, -anchor.y*height);
-      final m = _transformMatrix.storage;
-      final cosA = math.cos(_angle);
-      final sinA = math.sin(_angle);
-      final deltaX = -_anchor.x * _size.x;
-      final deltaY = -_anchor.y * _size.y;
-      m[0] = cosA * _scale.x;
-      m[1] = sinA * _scale.x;
-      m[4] = -sinA * _scale.y;
-      m[5] = cosA * _scale.y;
-      m[12] = _position.x + m[0] * deltaX + m[4] * deltaY;
-      m[13] = _position.y + m[1] * deltaX + m[5] * deltaY;
-      _recalculateTransform = false;
-    }
-    return _transformMatrix;
-  }
+  Matrix4 get transformMatrix => _transform.transformMatrix;
 
   /// Transform `point` from local coordinates into the parent coordinate space.
-  Vector2 localToParent(Vector2 point) {
-    final m = transformMatrix.storage;
-    return Vector2(
-      m[0] * point.x + m[4] * point.y + m[12],
-      m[1] * point.x + m[5] * point.y + m[13],
-    );
-  }
+  Vector2 localToParent(Vector2 point) => _transform.localToGlobal(point);
 
   /// Transform `point` from local coordinates into the global (screen)
   /// coordinate space. For example, local point (0, 0) corresponds to
@@ -284,17 +221,7 @@ abstract class PositionComponent extends BaseComponent {
 
   /// Transform `point` from the parent's coordinate space into the local
   /// coordinates.
-  Vector2 parentToLocal(Vector2 point) {
-    // Here we rely on the fact that in the transform matrix only elements
-    // `m[0]`, `m[1]`, `m[4]`, `m[5]`, `m[12]`, and `m[13]` are modified.
-    // This greatly simplifies computation of the inverse matrix.
-    final m = transformMatrix.storage;
-    final det = m[0] * m[5] - m[1] * m[4];
-    return Vector2(
-      ((point.x - m[12]) * m[5] - (point.y - m[13]) * m[4]) / det,
-      ((point.y - m[13]) * m[0] - (point.x - m[12]) * m[1]) / det,
-    );
-  }
+  Vector2 parentToLocal(Vector2 point) => _transform.globalToLocal(point);
 
   /// Transform `point` from the global (screen) coordinate space into the
   /// local coordinates. This can be used, for example, to detect whether
@@ -382,45 +309,3 @@ abstract class PositionComponent extends BaseComponent {
     topLeftPosition = rect.topLeft.toVector2();
   }
 } // ignore: number-of-methods
-
-class _NotifyingVector2 extends Vector2 {
-  final PositionComponent _parent;
-
-  _NotifyingVector2(this._parent) : super.zero();
-
-  @override
-  void setValues(double x, double y) {
-    super.setValues(x, y);
-    _parent._recalculateTransform = true;
-  }
-
-  @override
-  void setFrom(Vector2 v) {
-    super.setFrom(v);
-    _parent._recalculateTransform = true;
-  }
-
-  @override
-  void setZero() {
-    super.setZero();
-    _parent._recalculateTransform = true;
-  }
-
-  @override
-  void splat(double arg) {
-    super.splat(arg);
-    _parent._recalculateTransform = true;
-  }
-
-  @override
-  set x(double x) {
-    super.x = x;
-    _parent._recalculateTransform = true;
-  }
-
-  @override
-  set y(double y) {
-    super.y = y;
-    _parent._recalculateTransform = true;
-  }
-}
