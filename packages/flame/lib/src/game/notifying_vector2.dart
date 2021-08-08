@@ -6,6 +6,10 @@ import 'package:vector_math/vector_math_64.dart';
 /// functionality. This allows any interested party to be notified when the
 /// value of this vector changes.
 ///
+/// This class can be used as a regular [Vector2] class. However, if you do
+/// subscribe to notifications, don't forget to eventually unsubscribe in
+/// order to avoid resource leaks.
+///
 /// Direct access to this vector's [storage] is not allowed.
 ///
 // ignore: prefer_mixin
