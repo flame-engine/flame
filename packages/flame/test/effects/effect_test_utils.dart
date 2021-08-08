@@ -3,10 +3,8 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/test.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import '../util/expect_double.dart';
-import '../util/expect_vector2.dart';
 
 final Random random = Random();
 
