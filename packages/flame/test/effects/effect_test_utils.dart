@@ -23,9 +23,11 @@ void effectTest(
   double expectedAngle = 0.0,
   Vector2? expectedPosition,
   Vector2? expectedSize,
+  Vector2? expectedScale,
 }) async {
   expectedPosition ??= Vector2.zero();
   expectedSize ??= Vector2.all(100.0);
+  expectedScale ??= Vector2.all(1.0);
   final callback = Callback();
   effect.onComplete = callback.call;
   final game = BaseGame();
@@ -61,6 +63,11 @@ void effectTest(
       expectedSize,
       reason: 'Size is not correct',
     );
+    expectVector2(
+      component.scale,
+      expectedScale,
+      reason: 'Scale is not correct',
+    );
   } else {
     // To account for float number operations making effects not finish
     const epsilon = 0.001;
@@ -85,6 +92,11 @@ void effectTest(
       expectedSize,
       reason: 'Size is not exactly correct',
     );
+    expectVector2(
+      component.scale,
+      expectedScale,
+      reason: 'Scale is not exactly correct',
+    );
   }
   expect(effect.hasCompleted(), shouldComplete, reason: 'Effect shouldFinish');
   game.update(0.0);
@@ -101,11 +113,13 @@ class TestComponent extends PositionComponent {
   TestComponent({
     Vector2? position,
     Vector2? size,
+    Vector2? scale,
     double angle = 0.0,
     Anchor anchor = Anchor.center,
   }) : super(
           position: position,
           size: size ?? Vector2.all(100.0),
+          scale: scale,
           angle: angle,
           anchor: anchor,
         );

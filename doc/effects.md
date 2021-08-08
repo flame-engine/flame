@@ -35,17 +35,18 @@ the value you give it no matter where it started.
 When an effect is completed the callback `onComplete` will be called, it can be set as an optional
 argument to your effect.
 
-## Common for MoveEffect, ScaleEffect and RotateEffect (SimplePositionComponentEffects)
+## Common for MoveEffect, ScaleEffect, SizeEffect and RotateEffect (SimplePositionComponentEffects)
 
-A common thing for `MoveEffect`, `ScaleEffect` and `RotateEffect` is that it takes `duration` and
-`speed` as arguments, but only use one of them at a time.
+A common thing for `MoveEffect`, `ScaleEffect`, `SizeEffect` and `RotateEffect` is that it takes
+`duration` and `speed` as arguments, but only use one of them at a time.
 
  - Duration means the time it takes for one iteration from beginning to end, with alternation taken
  into account (but not `isInfinite`).
  - Speed is the speed of the effect
     + pixels per second for `MoveEffect`
-    + pixels per second for `ScaleEffect`
+    + pixels per second for `SizeEffect`
     + radians per second for `RotateEffect`
+    + percentage/100 per second for `ScaleEffect`
 
 One of these two needs to be defined, if both are defined `duration` takes precedence.
 
@@ -93,6 +94,29 @@ component will first move to `(120, 0)` and then to `(120, 100)`.
 
 ## ScaleEffect
 
+Applied to `PositionComponent`s, this effect can be used to change the scale with which the
+component and its children is rendered on the canvas with, using an
+[animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
+
+This also affects the `scaledSize` property of the component.
+
+The speed is measured in percentage/100 per second, and remember that you can give `duration` as an
+argument instead of `speed`.
+
+Usage example:
+```dart
+import 'package:flame/effects.dart';
+
+// Square is a PositionComponent
+square.addEffect(ScaleEffect(
+  scale: Vector2.all(2.0),
+  speed: 1.0,
+  curve: Curves.bounceInOut,
+));
+```
+
+## SizeEffect
+
 Applied to `PositionComponent`s, this effect can be used to change the width and height of the
 component, using an [animation curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
 
@@ -104,8 +128,8 @@ Usage example:
 import 'package:flame/effects.dart';
 
 // Square is a PositionComponent
-square.addEffect(ScaleEffect(
-  size: Size(300, 300),
+square.addEffect(SizeEffect(
+  size: Vector2.all(300),
   speed: 250.0,
   curve: Curves.bounceInOut,
 ));
@@ -153,7 +177,7 @@ You can make the sequence go in a loop by setting both `isInfinite: true` and `i
 Usage example:
 ```dart
 final sequence = SequenceEffect(
-    effects: [move1, scale, move2, rotate],
+    effects: [move1, size, move2, rotate],
     isInfinite: true,
     isAlternating: true);
 myComponent.addEffect(sequence);
@@ -179,7 +203,7 @@ You can make the combined effect go in a loop by setting both `isInfinite: true`
 Usage example:
 ```dart
 final combination = CombinedEffect(
-    effects: [move, scale, rotate],
+    effects: [move, size, rotate],
     isInfinite: true,
     isAlternating: true);
 myComponent.addEffect(combination);

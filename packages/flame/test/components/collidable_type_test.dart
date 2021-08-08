@@ -256,6 +256,41 @@ void main() {
           true,
         );
       });
+      test('Detects collision after scale', () {
+        final blockA = TestBlock(
+          Vector2.zero(),
+          Vector2.all(10),
+          CollidableType.active,
+        );
+        final blockB = TestBlock(
+          Vector2.all(11),
+          Vector2.all(10),
+          CollidableType.active,
+        );
+        final game = gameWithCollidables([blockA, blockB]);
+        expect(blockA.collidedWith(blockB), false);
+        expect(blockB.collidedWith(blockA), false);
+        expect(blockA.collisions.length, 0);
+        expect(blockB.collisions.length, 0);
+        blockA.scale = Vector2.all(2.0);
+        game.update(0);
+        expect(blockA.collidedWith(blockB), true);
+        expect(blockB.collidedWith(blockA), true);
+        expect(blockA.collisions.length, 1);
+        expect(blockB.collisions.length, 1);
+      });
+      test('TestPoint detects point after scale', () {
+        final blockA = TestBlock(
+          Vector2.zero(),
+          Vector2.all(10),
+          CollidableType.active,
+        );
+        final game = gameWithCollidables([blockA]);
+        expect(blockA.containsPoint(Vector2.all(11)), false);
+        blockA.scale = Vector2.all(2.0);
+        game.update(0);
+        expect(blockA.containsPoint(Vector2.all(11)), true);
+      });
     },
   );
 }

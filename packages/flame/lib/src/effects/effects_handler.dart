@@ -3,8 +3,8 @@ import 'effects.dart';
 
 export './move_effect.dart';
 export './rotate_effect.dart';
-export './scale_effect.dart';
 export './sequence_effect.dart';
+export './size_effect.dart';
 
 class EffectsHandler {
   /// The effects that should run on the component
