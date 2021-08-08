@@ -19,13 +19,15 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     required this.opacity,
     required this.duration,
     this.paintId,
-    Curve? curve,
     bool isInfinite = false,
     bool isAlternating = false,
+    Curve? curve,
+    bool? removeOnFinish,
   }) : super(
           isInfinite,
           isAlternating,
           curve: curve,
+          removeOnFinish: removeOnFinish,
         );
 
   OpacityEffect.fadeOut({
@@ -55,11 +57,11 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
         );
 
   @override
-  void initialize(HasPaint component) {
-    super.initialize(component);
+  Future<void> onLoad() async {
+    super.onLoad();
     peakTime = duration;
 
-    _original = component.getPaint(paintId).color;
+    _original = affectedComponent!.getPaint(paintId).color;
     _final = _original.withOpacity(opacity);
 
     _difference = _original.opacity - opacity;
@@ -67,7 +69,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
 
   @override
   void setComponentToEndState() {
-    component?.setColor(
+    affectedComponent!.setColor(
       _final,
       paintId: paintId,
     );
@@ -75,7 +77,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
 
   @override
   void setComponentToOriginalState() {
-    component?.setColor(
+    affectedComponent?.setColor(
       _original,
       paintId: paintId,
     );
@@ -84,7 +86,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
   @override
   void update(double dt) {
     super.update(dt);
-    component?.setOpacity(
+    affectedComponent?.setOpacity(
       _original.opacity - _difference * curveProgress,
       paintId: paintId,
     );

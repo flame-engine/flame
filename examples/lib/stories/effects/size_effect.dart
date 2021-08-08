@@ -24,7 +24,7 @@ class SizeEffectGame extends BaseGame with TapDetector {
     final s = grow ? 300.0 : 100.0;
 
     grow = !grow;
-    square.addEffect(
+    square.add(
       SizeEffect(
         size: Vector2.all(s),
         speed: 250.0,

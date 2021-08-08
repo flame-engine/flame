@@ -4,8 +4,6 @@ import 'package:meta/meta.dart';
 
 import '../../game.dart';
 import '../../input.dart';
-import '../effects/effects.dart';
-import '../effects/effects_handler.dart';
 import '../extensions/vector2.dart';
 import '../text.dart';
 import 'component.dart';
@@ -16,8 +14,6 @@ import 'component.dart';
 /// have children, handle effects and can be used to see whether a position on
 /// the screen is on your component, which is useful for handling gestures.
 abstract class BaseComponent extends Component {
-  final EffectsHandler _effectsHandler = EffectsHandler();
-
   /// This is set by the BaseGame to tell this component to render additional
   /// debug information, like borders, coordinates, etc.
   /// This is very helpful while debugging. Set your BaseGame debugMode to true.
@@ -59,7 +55,6 @@ abstract class BaseComponent extends Component {
   @override
   void update(double dt) {
     children.updateComponentList();
-    _effectsHandler.update(dt);
     children.forEach((c) => c.update(dt));
   }
 
@@ -96,24 +91,6 @@ abstract class BaseComponent extends Component {
   void postRender(Canvas canvas) {}
 
   void renderDebugMode(Canvas canvas) {}
-
-  /// Add an effect to the component
-  void addEffect(ComponentEffect effect) {
-    _effectsHandler.add(effect, this);
-  }
-
-  /// Mark an effect for removal on the component
-  void removeEffect(ComponentEffect effect) {
-    _effectsHandler.removeEffect(effect);
-  }
-
-  /// Remove all effects
-  void clearEffects() {
-    _effectsHandler.clearEffects();
-  }
-
-  /// Get a list of non removed effects
-  List<ComponentEffect> get effects => _effectsHandler.effects;
 
   @protected
   Vector2 eventPosition(PositionInfo info) {

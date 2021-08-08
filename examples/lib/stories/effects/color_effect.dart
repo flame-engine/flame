@@ -15,7 +15,7 @@ class ColorEffectGame extends BaseGame with TapDetector {
         sprite: flameSprite,
         position: Vector2(300, 100),
         size: Vector2(149, 211),
-      )..addEffect(
+      )..add(
           ColorEffect(
             color: const Color(0xFF00FF00),
             duration: 0.5,

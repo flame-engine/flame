@@ -21,7 +21,7 @@ class RotateEffectGame extends BaseGame with TapDetector {
 
   @override
   void onTap() {
-    square.addEffect(
+    square.add(
       RotateEffect(
         angle: 2 * pi,
         isRelative: true,

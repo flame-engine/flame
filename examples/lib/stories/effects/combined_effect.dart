@@ -60,6 +60,6 @@ class CombinedEffectGame extends BaseGame with TapDetector {
       offset: 0.5,
       onComplete: () => print('onComplete callback'),
     );
-    greenSquare.addEffect(combination);
+    greenSquare.add(combination);
   }
 }

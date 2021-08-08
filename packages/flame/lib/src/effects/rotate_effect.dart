@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/animation.dart';
 
-import '../../components.dart';
 import 'effects.dart';
 
 class RotateEffect extends SimplePositionComponentEffect {
@@ -19,6 +18,7 @@ class RotateEffect extends SimplePositionComponentEffect {
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
+    bool? removeOnFinish,
     VoidCallback? onComplete,
   })  : assert(
           (duration != null) ^ (speed != null),
@@ -31,14 +31,15 @@ class RotateEffect extends SimplePositionComponentEffect {
           speed: speed,
           curve: curve,
           isRelative: isRelative,
+          removeOnFinish: removeOnFinish,
           modifiesAngle: true,
           onComplete: onComplete,
         );
 
   @override
-  void initialize(PositionComponent component) {
-    super.initialize(component);
-    _startAngle = component.angle;
+  Future<void> onLoad() async {
+    super.onLoad();
+    _startAngle = affectedComponent!.angle;
     _delta = isRelative ? angle : angle - _startAngle;
     if (!isAlternating) {
       endAngle = _startAngle + _delta;
@@ -51,6 +52,6 @@ class RotateEffect extends SimplePositionComponentEffect {
   @override
   void update(double dt) {
     super.update(dt);
-    component?.angle = _startAngle + _delta * curveProgress;
+    affectedComponent!.angle = _startAngle + _delta * curveProgress;
   }
 }

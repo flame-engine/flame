@@ -58,7 +58,7 @@ void main() {
       priorityComponents.shuffle();
       final game = BaseGame()..onGameResize(Vector2.zero());
       game.add(parentComponent);
-      parentComponent.addAll(priorityComponents, gameRef: game);
+      parentComponent.addAll(priorityComponents);
       final children = parentComponent.children;
       game.update(0);
       componentsSorted(children);
@@ -73,7 +73,7 @@ void main() {
       priorityComponents.shuffle();
       final game = BaseGame()..onGameResize(Vector2.zero());
       game.add(parentComponent);
-      parentComponent.addAll(priorityComponents, gameRef: game);
+      parentComponent.addAll(priorityComponents);
       final children = parentComponent.children;
       game.update(0);
       componentsSorted(children);
@@ -91,8 +91,8 @@ void main() {
       priorityComponents.shuffle();
       final game = BaseGame()..onGameResize(Vector2.zero());
       game.add(grandParentComponent);
-      grandParentComponent.add(parentComponent, gameRef: game);
-      parentComponent.addAll(priorityComponents, gameRef: game);
+      grandParentComponent.add(parentComponent);
+      parentComponent.addAll(priorityComponents);
       final children = parentComponent.children;
       game.update(0);
       componentsSorted(children);

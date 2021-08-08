@@ -32,7 +32,7 @@ class ScaleEffectGame extends BaseGame with TapDetector {
     final s = grow ? 3.0 : 1.0;
 
     grow = !grow;
-    square.addEffect(
+    square.add(
       ScaleEffect(
         scale: Vector2.all(s),
         speed: 2.0,

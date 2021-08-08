@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import '../components/position_component.dart';
 import 'effects.dart';
 
 class SequenceEffect extends PositionComponentEffect {
@@ -18,6 +17,7 @@ class SequenceEffect extends PositionComponentEffect {
     required this.effects,
     bool isInfinite = false,
     bool isAlternating = false,
+    bool? removeOnFinish,
     VoidCallback? onComplete,
   }) : super(
           isInfinite,
@@ -25,10 +25,11 @@ class SequenceEffect extends PositionComponentEffect {
           modifiesPosition: effects.any((e) => e.modifiesPosition),
           modifiesAngle: effects.any((e) => e.modifiesAngle),
           modifiesSize: effects.any((e) => e.modifiesSize),
+          removeOnFinish: removeOnFinish,
           onComplete: onComplete,
         ) {
     assert(
-      effects.every((effect) => effect.component == null),
+      effects.every((effect) => effect.parent == null),
       'Each effect can only be added once',
     );
     assert(
@@ -38,17 +39,21 @@ class SequenceEffect extends PositionComponentEffect {
   }
 
   @override
-  void initialize(PositionComponent component) {
-    super.initialize(component);
+  Future<void> onLoad() async {
+    super.onLoad();
     _currentIndex = _initialIndex;
     _driftModifier = _initialDriftModifier;
 
-    effects.forEach((effect) {
+    effects.forEach((effect) async {
       effect.reset();
-      component.position.setFrom(endPosition!);
-      component.angle = endAngle!;
-      component.size.setFrom(endSize!);
-      effect.initialize(component);
+      affectedComponent!.position.setFrom(endPosition!);
+      affectedComponent!.angle = endAngle!;
+      affectedComponent!.size.setFrom(endSize!);
+      if (effect.affectedComponent == null) {
+        await add(effect);
+      } else {
+        await effect.onLoad();
+      }
       endPosition = effect.endPosition;
       endAngle = effect.endAngle;
       endSize = effect.endSize;
@@ -64,9 +69,9 @@ class SequenceEffect extends PositionComponentEffect {
       endAngle = originalAngle;
       endSize = originalSize;
     }
-    component.position.setFrom(originalPosition!);
-    component.angle = originalAngle!;
-    component.size.setFrom(originalSize!);
+    affectedComponent!.position.setFrom(originalPosition!);
+    affectedComponent!.angle = originalAngle!;
+    affectedComponent!.size.setFrom(originalSize!);
     currentEffect = effects.first;
     _currentWasAlternating = currentEffect.isAlternating;
   }
@@ -106,8 +111,8 @@ class SequenceEffect extends PositionComponentEffect {
   void reset() {
     super.reset();
     effects.forEach((e) => e.reset());
-    if (component != null) {
-      initialize(component!);
+    if (affectedComponent != null) {
+      onLoad();
     }
   }
 }

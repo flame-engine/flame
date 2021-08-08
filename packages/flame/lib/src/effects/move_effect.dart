@@ -35,6 +35,7 @@ class MoveEffect extends SimplePositionComponentEffect {
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
+    bool? removeOnFinish,
     VoidCallback? onComplete,
   })  : assert(
           (duration != null) ^ (speed != null),
@@ -47,15 +48,16 @@ class MoveEffect extends SimplePositionComponentEffect {
           speed: speed,
           curve: curve,
           isRelative: isRelative,
+          removeOnFinish: removeOnFinish,
           modifiesPosition: true,
           onComplete: onComplete,
         );
 
   @override
-  void initialize(PositionComponent component) {
-    super.initialize(component);
+  Future<void> onLoad() async {
+    super.onLoad();
     List<Vector2> _movePath;
-    _startPosition = component.position.clone();
+    _startPosition = affectedComponent!.position.clone();
     // With relative here we mean that any vector in the list is relative
     // to the previous vector in the list, except the first one which is
     // relative to the start position of the component.
@@ -126,7 +128,7 @@ class MoveEffect extends SimplePositionComponentEffect {
     final lastEndAt = _currentSubPath!.startAt;
     final localPercentage =
         (curveProgress - lastEndAt) / (_currentSubPath!.endAt - lastEndAt);
-    component?.position.setFrom(_currentSubPath!.previous +
+    affectedComponent!.position.setFrom(_currentSubPath!.previous +
         ((_currentSubPath!.v - _currentSubPath!.previous) * localPercentage));
   }
 }

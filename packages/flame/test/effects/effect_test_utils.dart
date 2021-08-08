@@ -32,7 +32,7 @@ void effectTest(
   final game = BaseGame();
   game.onGameResize(Vector2.all(200));
   game.add(component);
-  component.addEffect(effect);
+  component.add(effect);
   final duration = effect.iterationTime;
   await tester.pumpWidget(GameWidget(
     game: game,
@@ -105,7 +105,7 @@ void effectTest(
     reason: 'Callback was treated wrong',
   );
   game.update(0.0); // Since effects are removed before they are updated
-  expect(component.effects.isEmpty, shouldComplete);
+  expect(component.children.query<ComponentEffect>().isEmpty, shouldComplete);
 }
 
 class TestComponent extends PositionComponent {

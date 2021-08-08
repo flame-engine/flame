@@ -95,7 +95,7 @@ class JoystickAdvancedGame extends BaseGame
         right: 85,
         bottom: 150,
       ),
-      onPressed: () => player.addEffect(
+      onPressed: () => player.add(
         rotateEffect..angle = 8 * rng.nextDouble(),
       ),
     );

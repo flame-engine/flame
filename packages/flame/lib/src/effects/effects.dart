@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../components/base_component.dart';
+import '../../components.dart';
 import '../components/position_component.dart';
 import '../extensions/vector2.dart';
 
@@ -11,8 +11,21 @@ export './rotate_effect.dart';
 export './sequence_effect.dart';
 export './size_effect.dart';
 
-abstract class ComponentEffect<T extends BaseComponent> {
-  T? component;
+abstract class ComponentEffect<T extends Component> extends Component {
+  /// If the component has a parent it will be set here
+  @override
+  T? get parent => super.parent != null ? super.parent! as T : null;
+
+  T _affectedParent(Component component) {
+    if (parent is T) {
+      return parent!;
+    } else {
+      return _affectedParent(parent!);
+    }
+  }
+
+  T? affectedComponent;
+
   Function()? onComplete;
 
   bool _isDisposed = false;
@@ -28,6 +41,7 @@ abstract class ComponentEffect<T extends BaseComponent> {
   bool isInfinite;
   bool isAlternating;
   final bool isRelative;
+  final bool removeOnFinish;
   final bool _initialIsInfinite;
   final bool _initialIsAlternating;
   double? percentage;
@@ -48,12 +62,21 @@ abstract class ComponentEffect<T extends BaseComponent> {
     this._initialIsInfinite,
     this._initialIsAlternating, {
     this.isRelative = false,
+    bool? removeOnFinish,
     Curve? curve,
     this.onComplete,
   })  : isInfinite = _initialIsInfinite,
         isAlternating = _initialIsAlternating,
+        removeOnFinish = removeOnFinish ?? true,
         curve = curve ?? Curves.linear;
 
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
+    affectedComponent = _affectedParent(parent!);
+  }
+
+  @override
   @mustCallSuper
   void update(double dt) {
     if (isAlternating) {
@@ -64,18 +87,18 @@ abstract class ComponentEffect<T extends BaseComponent> {
         reset();
       }
     }
-    if (!hasCompleted()) {
+    if (hasCompleted()) {
+      setComponentToEndState();
+      if (removeOnFinish) {
+        removeFromParent();
+      }
+    } else {
       currentTime += (dt + driftTime) * curveDirection;
       percentage = (currentTime / peakTime).clamp(0.0, 1.0).toDouble();
       curveProgress = curve.transform(percentage!);
       _updateDriftTime();
       currentTime = currentTime.clamp(0.0, peakTime).toDouble();
     }
-  }
-
-  @mustCallSuper
-  void initialize(T component) {
-    this.component = component;
   }
 
   void dispose() => _isDisposed = true;
@@ -89,7 +112,9 @@ abstract class ComponentEffect<T extends BaseComponent> {
 
   bool isMax() => percentage == null ? false : percentage == 1.0;
   bool isMin() => percentage == null ? false : percentage == 0.0;
-  bool isRootEffect() => component?.effects.contains(this) == true;
+  bool isRootEffect() {
+    return parent is! ComponentEffect;
+  }
 
   /// Resets the effect and the component which the effect was added to.
   void reset() {
@@ -123,7 +148,9 @@ abstract class ComponentEffect<T extends BaseComponent> {
   /// Called when the effect is removed from the component.
   /// Calls the [onComplete] callback if it is defined and sets the effect back
   /// to its original state so that it can be re-added.
+  @override
   void onRemove() {
+    super.onRemove();
     onComplete?.call();
     if (!skipEffectReset) {
       resetEffect();
@@ -158,6 +185,7 @@ abstract class PositionComponentEffect
     bool initialIsInfinite,
     bool initialIsAlternating, {
     bool isRelative = false,
+    bool? removeOnFinish,
     Curve? curve,
     this.modifiesPosition = false,
     this.modifiesAngle = false,
@@ -168,15 +196,17 @@ abstract class PositionComponentEffect
           initialIsInfinite,
           initialIsAlternating,
           isRelative: isRelative,
+          removeOnFinish: removeOnFinish,
           curve: curve,
           onComplete: onComplete,
         );
 
   @mustCallSuper
   @override
-  void initialize(PositionComponent component) {
-    super.initialize(component);
-    this.component = component;
+  Future<void> onLoad() async {
+    super.onLoad();
+    final component = parent!;
+
     originalPosition = component.position.clone();
     originalAngle = component.angle;
     originalSize = component.size.clone();
@@ -206,28 +236,28 @@ abstract class PositionComponentEffect
           position != null,
           '`position` must not be `null` for an effect which modifies `position`',
         );
-        component?.position.setFrom(position!);
+        parent?.position.setFrom(position!);
       }
       if (modifiesAngle) {
         assert(
           angle != null,
           '`angle` must not be `null` for an effect which modifies `angle`',
         );
-        component?.angle = angle!;
+        parent?.angle = angle!;
       }
       if (modifiesSize) {
         assert(
           size != null,
           '`size` must not be `null` for an effect which modifies `size`',
         );
-        component?.size.setFrom(size!);
+        parent?.size.setFrom(size!);
       }
       if (modifiesScale) {
         assert(
           scale != null,
           '`scale` must not be `null` for an effect which modifies `scale`',
         );
-        component?.scale.setFrom(scale!);
+        parent?.scale.setFrom(scale!);
       }
     }
   }
@@ -259,6 +289,7 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
     this.speed,
     Curve? curve,
     bool isRelative = false,
+    bool? removeOnFinish,
     bool modifiesPosition = false,
     bool modifiesAngle = false,
     bool modifiesSize = false,
@@ -272,6 +303,7 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
           initialIsInfinite,
           initialIsAlternating,
           isRelative: isRelative,
+          removeOnFinish: removeOnFinish,
           curve: curve,
           modifiesPosition: modifiesPosition,
           modifiesAngle: modifiesAngle,
@@ -279,4 +311,15 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
           modifiesScale: modifiesScale,
           onComplete: onComplete,
         );
+}
+
+mixin EffectsHelper on Component {
+  void clearEffects() {
+    children.removeAll(effects());
+  }
+
+  List<ComponentEffect> effects() {
+    // TODO: check if query is registered
+    return children.query<ComponentEffect>();
+  }
 }

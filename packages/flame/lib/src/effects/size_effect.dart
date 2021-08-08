@@ -20,6 +20,7 @@ class SizeEffect extends SimplePositionComponentEffect {
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
+    bool? removeOnFinish,
     VoidCallback? onComplete,
   })  : assert(
           duration != null || speed != null,
@@ -32,14 +33,15 @@ class SizeEffect extends SimplePositionComponentEffect {
           speed: speed,
           curve: curve,
           isRelative: isRelative,
+          removeOnFinish: removeOnFinish,
           modifiesSize: true,
           onComplete: onComplete,
         );
 
   @override
-  void initialize(PositionComponent component) {
-    super.initialize(component);
-    _startSize = component.size.clone();
+  Future<void> onLoad() async {
+    super.onLoad();
+    _startSize = affectedComponent!.size.clone();
     _delta = isRelative ? size : size - _startSize;
     if (!isAlternating) {
       endSize = _startSize + _delta;
@@ -52,6 +54,6 @@ class SizeEffect extends SimplePositionComponentEffect {
   @override
   void update(double dt) {
     super.update(dt);
-    component?.size.setFrom(_startSize + _delta * curveProgress);
+    affectedComponent!.size.setFrom(_startSize + _delta * curveProgress);
   }
 }

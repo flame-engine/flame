@@ -17,7 +17,7 @@ class MoveEffectGame extends BaseGame with TapDetector {
 
   @override
   void onTapUp(TapUpInfo info) {
-    square.addEffect(
+    square.add(
       MoveEffect(
         path: [
           info.eventPosition.game,

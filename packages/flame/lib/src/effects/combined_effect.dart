@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
 
-import '../components/position_component.dart';
 import 'effects.dart';
 
 class CombinedEffect extends PositionComponentEffect {
@@ -13,17 +12,19 @@ class CombinedEffect extends PositionComponentEffect {
     this.offset = 0.0,
     bool isInfinite = false,
     bool isAlternating = false,
+    bool? removeOnFinish,
     VoidCallback? onComplete,
   }) : super(
           isInfinite,
           isAlternating,
+          removeOnFinish: removeOnFinish,
           modifiesPosition: effects.any((e) => e.modifiesPosition),
           modifiesAngle: effects.any((e) => e.modifiesAngle),
           modifiesSize: effects.any((e) => e.modifiesSize),
           onComplete: onComplete,
         ) {
     assert(
-      effects.every((effect) => effect.component == null),
+      effects.every((effect) => effect.parent == null),
       'Each effect can only be added once',
     );
     final types = effects.map((e) => e.runtimeType);
@@ -34,10 +35,10 @@ class CombinedEffect extends PositionComponentEffect {
   }
 
   @override
-  void initialize(PositionComponent component) {
-    super.initialize(component);
-    effects.forEach((effect) {
-      effect.initialize(component);
+  Future<void> onLoad() async {
+    super.onLoad();
+    effects.forEach((effect) async {
+      await add(effect);
       // Only change these if the effect modifies these
       endPosition = effect.originalPosition != effect.endPosition
           ? effect.endPosition
@@ -73,8 +74,8 @@ class CombinedEffect extends PositionComponentEffect {
   void reset() {
     super.reset();
     effects.forEach((effect) => effect.reset());
-    if (component != null) {
-      initialize(component!);
+    if (parent != null) {
+      onLoad();
     }
   }
 

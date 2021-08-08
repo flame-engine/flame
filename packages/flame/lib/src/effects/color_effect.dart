@@ -18,21 +18,23 @@ class ColorEffect extends ComponentEffect<HasPaint> {
     required this.color,
     required this.duration,
     this.paintId,
-    Curve? curve,
     bool isInfinite = false,
     bool isAlternating = false,
+    Curve? curve,
+    bool? removeOnFinish,
   }) : super(
           isInfinite,
           isAlternating,
+          removeOnFinish: removeOnFinish,
           curve: curve,
         );
 
   @override
-  void initialize(HasPaint component) {
-    super.initialize(component);
+  Future<void> onLoad() async {
+    super.onLoad();
     peakTime = duration;
 
-    _original = component.getPaint(paintId);
+    _original = affectedComponent!.getPaint(paintId);
 
     _tween = ColorTween(
       begin: _original.color,
@@ -42,12 +44,12 @@ class ColorEffect extends ComponentEffect<HasPaint> {
 
   @override
   void setComponentToEndState() {
-    component?.tint(color);
+    affectedComponent?.tint(color);
   }
 
   @override
   void setComponentToOriginalState() {
-    component?.paint = _original;
+    affectedComponent?.paint = _original;
   }
 
   @override
@@ -55,7 +57,7 @@ class ColorEffect extends ComponentEffect<HasPaint> {
     super.update(dt);
     final color = _tween.lerp(curveProgress);
     if (color != null) {
-      component?.tint(color);
+      affectedComponent?.tint(color);
     }
   }
 }

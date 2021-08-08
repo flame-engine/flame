@@ -64,6 +64,6 @@ class SequenceEffectGame extends BaseGame with TapDetector {
       isAlternating: true,
     );
     sequence.onComplete = () => print('sequence complete');
-    greenSquare.addEffect(sequence);
+    greenSquare.add(sequence);
   }
 }

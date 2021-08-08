@@ -38,7 +38,7 @@ class InfiniteEffectGame extends BaseGame with TapDetector {
     redSquare.clearEffects();
     orangeSquare.clearEffects();
 
-    greenSquare.addEffect(
+    greenSquare.add(
       MoveEffect(
         path: [p],
         speed: 250.0,
@@ -48,7 +48,7 @@ class InfiniteEffectGame extends BaseGame with TapDetector {
       ),
     );
 
-    redSquare.addEffect(
+    redSquare.add(
       SizeEffect(
         size: p,
         speed: 250.0,
@@ -58,7 +58,7 @@ class InfiniteEffectGame extends BaseGame with TapDetector {
       ),
     );
 
-    orangeSquare.addEffect(
+    orangeSquare.add(
       RotateEffect(
         angle: (p.x + p.y) % (2 * pi),
         speed: 1.0, // Radians per second
