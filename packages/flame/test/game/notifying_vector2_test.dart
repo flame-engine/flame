@@ -7,9 +7,10 @@ typedef VectorOperation = void Function(Vector2);
 void check(NotifyingVector2 v1, VectorOperation operation) {
   final v2 = v1.clone();
   var notified = 0;
-  void listener () {
+  void listener() {
     notified++;
   }
+
   v1.addListener(listener);
   operation(v1);
   operation(v2);
@@ -47,7 +48,7 @@ void main() {
       check(nv, (v) => v.t = 104);
     });
     test('methods', () {
-      final nv = NotifyingVector2() ..setValues(23, 3);
+      final nv = NotifyingVector2()..setValues(23, 3);
       check(nv, (v) => v.length = 15);
       check(nv, (v) => v.normalize());
       check(nv, (v) => v.postmultiply(Matrix2.rotation(1)));
