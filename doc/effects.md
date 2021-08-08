@@ -6,7 +6,7 @@ At the moment there are only `PositionComponentEffect`s, which are applied to `P
 which are presented below.
 
 If you want to create an effect for another component just extend the `ComponentEffect` class and
-add your created effect to the component by calling `component.addEffect(yourEffect)`.
+add your created effect to the component by calling `component.add(yourEffect)`.
 
 ## Common for all effects
 
@@ -76,7 +76,7 @@ Usage example:
 import 'package:flame/effects.dart';
 
 // Square is a PositionComponent
-square.addEffect(MoveEffect(
+square.add(MoveEffect(
   path: [Vector2(200, 200), Vector2(200, 100), Vector(0, 50)],
   speed: 250.0,
   curve: Curves.bounceInOut,
@@ -108,7 +108,7 @@ Usage example:
 import 'package:flame/effects.dart';
 
 // Square is a PositionComponent
-square.addEffect(ScaleEffect(
+square.add(ScaleEffect(
   scale: Vector2.all(2.0),
   speed: 1.0,
   curve: Curves.bounceInOut,
@@ -128,7 +128,7 @@ Usage example:
 import 'package:flame/effects.dart';
 
 // Square is a PositionComponent
-square.addEffect(SizeEffect(
+square.add(SizeEffect(
   size: Vector2.all(300),
   speed: 250.0,
   curve: Curves.bounceInOut,
@@ -154,7 +154,7 @@ import 'dart:math';
 import 'package:flame/effects.dart';
 
 // Square is a PositionComponent
-square.addEffect(RotateEffect(
+square.add(RotateEffect(
   radians: 2 * pi, // In radians
   speed: 1.0, // Radians per second
   curve: Curves.easeInOut,
@@ -167,7 +167,7 @@ This effect is a combination of other effects. You provide it with a list of you
 effects.
 
 The effects in the list should only be passed to the `SequenceEffect`, never added to a
-`PositionComponent` with `addEffect`.
+`PositionComponent` with `add`.
 
 **Note**:  No effect (except the last) added to the sequence should have their `isInfinite` property
 set to `true`, because then naturally the sequence will get stuck once it gets to that effect.
@@ -180,7 +180,7 @@ final sequence = SequenceEffect(
     effects: [move1, size, move2, rotate],
     isInfinite: true,
     isAlternating: true);
-myComponent.addEffect(sequence);
+myComponent.add(sequence);
 ```
 
 An example of how to use the `SequenceEffect` can be found
@@ -192,7 +192,7 @@ This effect runs several different type of effects simultaneously. You provide i
 your predefined effects and an offset in time which should pass in between starting each effect.
 
 The effects in the list should only be passed to the `CombinedEffect`, never added to a
-`PositionComponent` with `addEffect`.
+`PositionComponent` with `add`.
 
 **Note**: No effects should be of the same type since they will clash when trying to modify the
 `PositionComponent`.
@@ -206,7 +206,7 @@ final combination = CombinedEffect(
     effects: [move, size, rotate],
     isInfinite: true,
     isAlternating: true);
-myComponent.addEffect(combination);
+myComponent.add(combination);
 ```
 
 An example of how to use the `CombinedEffect` can be found
@@ -238,7 +238,7 @@ well.
 Usage example:
 
 ```dart
-myComponent.addEffect(
+myComponent.add(
   OpacityEffect(
     opacity: 0,
     duration: 0.5,
@@ -257,7 +257,7 @@ This effect will change the base color of the paint, causing the rendered compon
 Usage example:
 
 ```dart
-myComponent.addEffect(
+myComponent.add(
   ColorEffect(
     color: const Color(0xFF00FF00),
     duration: 0.5,

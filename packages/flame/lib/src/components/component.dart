@@ -63,6 +63,13 @@ abstract class Component {
   /// Remove the component from the game it is added to in the next tick
   void removeFromParent() => shouldRemove = true;
 
+  /// Changes the current parent for another parent and prepares the tree under
+  /// the new root.
+  void changeParent(Component component) {
+    removeFromParent();
+    component.add(this);
+  }
+
   /// It receives the new game size.
   /// Executed right after the component is attached to a game and right before
   /// [onMount] is called
@@ -109,15 +116,15 @@ abstract class Component {
   /// only be called after the game already has its layout set, this can be
   /// verified by the [hasLayout] property, to add components upon a game
   /// initialization, the [onLoad] method can be used instead.
-  Future<void> add(Component child, {BaseGame? gameRef}) {
-    return children.addChild(child, gameRef: gameRef);
+  Future<void> add(Component component) {
+    return children.addChild(component);
   }
 
   /// Adds multiple children.
   ///
   /// See [add] for details.
-  Future<void> addAll(List<Component> cs, {BaseGame? gameRef}) {
-    return children.addChildren(cs, gameRef: gameRef);
+  Future<void> addAll(List<Component> components) {
+    return children.addChildren(components);
   }
 
   /// Removes a component from the component list, calling onRemove for it and
@@ -166,13 +173,16 @@ abstract class Component {
         shouldContinue = handler(child);
       } else if (shouldContinue && child is BaseGame) {
         shouldContinue = child.propagateToChildren<T>(handler);
-        print("Do we go here");
       }
       if (!shouldContinue) {
         break;
       }
     }
     return shouldContinue;
+  }
+
+  T? findParent<T extends Component>() {
+    return (parent is T ? parent : parent?.findParent<T>()) as T?;
   }
 
   /// Called before the component is added to the BaseGame by the add method.
@@ -190,6 +200,7 @@ abstract class Component {
   ///   myImage = await gameRef.load('my_image.png');
   /// }
   /// ```
+// TODO: Why not Future<void>?
   Future<void> onLoad() async {}
 
   /// Called to check whether the point is to be counted as within the component
@@ -202,24 +213,33 @@ abstract class Component {
   /// See BaseGame.changePriority instead.
   void changePriorityWithoutResorting(int priority) => _priority = priority;
 
-  // TODO: Write comment
-  void prepare(Component child, {Game? gameRef}) {
-    if (this is HasGameRef) {
-      final c = this as HasGameRef;
-      gameRef ??= c.hasGameRef ? c.gameRef : null;
-    } else if (gameRef == null) {
-      assert(
-        !isMounted,
-        'Parent was already added to Game and has no HasGameRef; in this case, gameRef is mandatory.',
-      );
-    }
-    if (gameRef is BaseGame) {
-      gameRef.prepareComponent(child);
-    }
-
+  /// Prepares the [Component] child to be added to a [Game].
+  /// If there are no parents that are a [Game] this will run again once a
+  /// parent is added to a [Game] and false will be returned.
+  @mustCallSuper
+  bool prepare(Component child) {
     child._parent = this;
-    if (child is BaseComponent && this is BaseComponent) {
-      child.debugMode = (this as BaseComponent).debugMode;
+    final parentGame = child.findParent<Game>();
+    if (parentGame == null) {
+      return false;
+    } else {
+      if (this is HasGameRef) {
+        final c = this as HasGameRef;
+        c.gameRef = c.hasGameRef ? parentGame : null;
+      }
+      if (parentGame is BaseGame) {
+        parentGame.prepareComponent(child);
+      }
+
+      if (child is BaseComponent && this is BaseComponent) {
+        child.debugMode = (this as BaseComponent).debugMode;
+      }
+
+      child.propagateToChildren((Component c) {
+        prepare(c);
+        return true;
+      });
+      return true;
     }
   }
 

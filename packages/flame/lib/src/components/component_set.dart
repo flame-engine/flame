@@ -28,9 +28,13 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// concurrency issues.
   final Set<Component> _removeLater = {};
 
+  /// Components that hasn't yet been prepared since there was no [Game] root
+  /// available when they were added to the tree.
+  final List<Component> _nonPrepared = [];
+
   /// This is the "prepare" function that will be called *before* the
   /// component is added to the component list by the add/addAll methods.
-  final void Function(Component child, {BaseGame? gameRef}) prepare;
+  final bool Function(Component child) prepare;
 
   ComponentSet(
     int Function(Component e1, Component e2)? compare,
@@ -71,15 +75,21 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// You can await for the onLoad function, if present.
   /// This method can be considered sync for all intents and purposes if no
   /// onLoad is provided by the component.
-  Future<void> addChild(Component c, {BaseGame? gameRef}) async {
-    prepare(c, gameRef: gameRef);
+  Future<void> addChild(Component component) async {
+    final isPrepared = prepare(component);
+    if (!isPrepared) {
+      _nonPrepared.add(component);
+      return;
+    }
 
-    final loadFuture = c.onLoad();
+    final loadFuture = component.onLoad();
     if (loadFuture != null) {
       await loadFuture;
     }
+    Future.wait(_nonPrepared.map(addChild));
+    _nonPrepared.clear();
 
-    _addLater.add(c);
+    _addLater.add(component);
   }
 
   /// Prepares and registers a list of component to be added on the next game
@@ -90,7 +100,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     Iterable<Component> components, {
     BaseGame? gameRef,
   }) async {
-    final ps = components.map((c) => addChild(c, gameRef: gameRef));
+    final ps = components.map(addChild);
     await Future.wait(ps);
   }
 
@@ -163,7 +173,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   ///
   /// You must still provide your [prepare] function depending on the context.
   static ComponentSet createDefault(
-    void Function(Component child, {BaseGame? gameRef}) prepare,
+    bool Function(Component child) prepare,
   ) {
     return ComponentSet(
       Comparing.on<Component>((c) => c.priority),
