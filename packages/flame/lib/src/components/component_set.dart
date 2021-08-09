@@ -106,8 +106,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// prepared and onLoad:ed again. Used when a parent is changed further up the
   /// tree.
   Future<void> reAddChildren() async {
-    map(addChild);
-    _addLater.forEach(addChild);
+    Future.wait(map(addChild)..followedBy(_addLater.map(addChild)));
   }
 
   /// Marks a component to be removed from the components list on the next game
