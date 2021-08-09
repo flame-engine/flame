@@ -81,8 +81,12 @@ void main() {
       expect(nv, Vector2.zero());
       final storage = nv.storage;
       // Check that storage is not writable
-      expect(() { storage[0] = 1; }, throwsA(isA<UnsupportedError>()));
-      expect(() { storage[1] = 1; }, throwsA(isA<UnsupportedError>()));
+      expect(() {
+        storage[0] = 1;
+      }, throwsA(isA<UnsupportedError>()));
+      expect(() {
+        storage[1] = 1;
+      }, throwsA(isA<UnsupportedError>()));
       // Check that the vector wasn't modified, and that storage is readable
       expect(storage[0], 0);
       expect(storage[1], 0);
