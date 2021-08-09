@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:flame/flame.dart';
+import '../../flame.dart';
 
 Future<Image> generateImage() {
   final data = Uint8List(4);

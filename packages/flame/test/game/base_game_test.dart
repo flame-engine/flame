@@ -3,13 +3,12 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/game/game_render_box.dart';
+import 'package:flame/test.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart' as flutter;
 import 'package:test/test.dart';
-
-import '../util/mock_gesture_events.dart';
 
 class MyGame extends BaseGame with HasTappableComponents {}
 
