@@ -5,7 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/services.dart'
-    show KeyEvent, LogicalKeyboardKey, RawKeyDownEvent;
+    show RawKeyEvent, LogicalKeyboardKey, RawKeyDownEvent;
 import 'package:flutter/widgets.dart';
 
 class KeyboardGame extends Game {
@@ -28,7 +28,7 @@ class KeyboardGame extends Game {
 
   @override
   KeyEventResult onKeyEvent(
-    KeyEvent event,
+    RawKeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     final isKeyDown = event is RawKeyDownEvent;

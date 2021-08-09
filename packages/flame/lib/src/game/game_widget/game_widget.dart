@@ -195,7 +195,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     });
   }
 
-  KeyEventResult handleKeyEvent(FocusNode focusNode, KeyEvent event) {
+  KeyEventResult handleKeyEvent(FocusNode focusNode, RawKeyEvent event) {
     return widget.game.onKeyEvent(event, RawKeyboard.instance.keysPressed);
   }
 
@@ -243,7 +243,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     return Focus(
       focusNode: widget.focusNode,
       autofocus: true,
-      onKeyEvent: handleKeyEvent,
+      onKey: handleKeyEvent,
       child: Directionality(
         textDirection: textDir,
         child: Container(

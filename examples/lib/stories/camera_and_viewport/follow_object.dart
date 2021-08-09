@@ -62,7 +62,7 @@ class MovableSquare extends SquareComponent
   }
 
   @override
-  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     final isKeyDown = event is RawKeyDownEvent;
 
     if (event.logicalKey == LogicalKeyboardKey.keyA) {

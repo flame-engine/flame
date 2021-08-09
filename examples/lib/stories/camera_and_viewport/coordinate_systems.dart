@@ -208,7 +208,7 @@ class CoordinateSystemsGame extends BaseGame
   /// Camera controls.
   @override
   KeyEventResult onKeyEvent(
-    KeyEvent event,
+    RawKeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     final isKeyDown = e is RawKeyDownEvent;

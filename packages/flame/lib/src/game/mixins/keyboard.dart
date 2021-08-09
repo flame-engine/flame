@@ -5,7 +5,7 @@ import '../../../game.dart';
 
 mixin KeyboardHandler on BaseComponent {
   bool onKeyEvent(
-    KeyEvent event,
+    RawKeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     return true;
@@ -36,7 +36,7 @@ mixin HasKeyboardHandlerComponents on BaseGame {
 
   @override
   KeyEventResult onKeyEvent(
-    KeyEvent event,
+    RawKeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     final blockedPropagation = !_handleKeyboardEvent(

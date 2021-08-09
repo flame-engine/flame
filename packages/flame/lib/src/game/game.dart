@@ -88,7 +88,7 @@ abstract class Game extends Projector {
 
   @mustCallSuper
   KeyEventResult onKeyEvent(
-    KeyEvent event,
+    RawKeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     return KeyEventResult.skipRemainingHandlers;
