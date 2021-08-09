@@ -28,12 +28,9 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// concurrency issues.
   final Set<Component> _removeLater = {};
 
-  /// Components that hasn't yet been prepared since there was no [Game] root
-  /// available when they were added to the tree.
-  final List<Component> _nonPrepared = [];
-
   /// This is the "prepare" function that will be called *before* the
   /// component is added to the component list by the add/addAll methods.
+  /// It is also called when the component changes parent.
   final bool Function(Component child) prepare;
 
   ComponentSet(
@@ -77,8 +74,11 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// onLoad is provided by the component.
   Future<void> addChild(Component component) async {
     final isPrepared = prepare(component);
-    if (!isPrepared) {
-      _nonPrepared.add(component);
+    if (component.parent == null) {
+      // Since the components won't be added until a proper game is added
+      // further up in the tree we can add them to _addLater and then re-add
+      // them once there is a proper root.
+      _addLater.add(component);
       return;
     }
 
@@ -86,8 +86,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     if (loadFuture != null) {
       await loadFuture;
     }
-    Future.wait(_nonPrepared.map(addChild));
-    _nonPrepared.clear();
+    await component.children.reAddChildren();
 
     _addLater.add(component);
   }
@@ -102,6 +101,22 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   }) async {
     final ps = components.map(addChild);
     await Future.wait(ps);
+  }
+
+  /// The children are removed and then added again to the component set so that
+  /// they are prepared and onLoad:ed again. Used when a parent is changed
+  /// further up the tree.
+  // TODO: Needs to mark the children for removal and then
+  Future<void> reAddChildren() async {
+    final removedChildren = removeWhere((c) {
+      c.onRemove();
+      return true;
+    })
+      ..followedBy(_addLater)
+      ..toList(growable: false);
+    _addLater.clear();
+    Future.wait(removedChildren.map(addChild));
+    Future.wait(_addLater.map(addChild));
   }
 
   /// Marks a component to be removed from the components list on the next game
@@ -140,6 +155,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     _removeLater.forEach((c) {
       c.onRemove();
       super.remove(c);
+      c.shouldRemove = false;
     });
     _removeLater.clear();
 
@@ -147,6 +163,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
       final addNow = _addLater.toList(growable: false);
       _addLater.clear();
       addNow.forEach((c) {
+        prepare(c);
         super.add(c);
         c.onMount();
       });

@@ -24,9 +24,7 @@ abstract class Component {
   bool get isMounted => _isMounted;
 
   /// If the component has a parent it will be set here
-  Component? _parent;
-
-  Component? get parent => _parent;
+  Component? parent;
 
   late final ComponentSet children = createComponentSet();
 
@@ -66,6 +64,7 @@ abstract class Component {
   /// Changes the current parent for another parent and prepares the tree under
   /// the new root.
   void changeParent(Component component) {
+    component.parent = null;
     removeFromParent();
     component.add(this);
   }
@@ -92,7 +91,14 @@ abstract class Component {
   @mustCallSuper
   void onRemove() {
     _isMounted = false;
-    children.forEach((child) => child.onRemove());
+    children.forEach((child) {
+      child.onRemove();
+      if (child is HasGameRef) {
+        child.gameRef = null;
+      }
+    });
+    print('call onRemove');
+    parent = null;
   }
 
   // TODO: Look over what text to keep
@@ -218,7 +224,8 @@ abstract class Component {
   /// parent is added to a [Game] and false will be returned.
   @mustCallSuper
   bool prepare(Component child) {
-    child._parent = this;
+    print('prepare in: $this');
+    child.parent = this;
     final parentGame = child.findParent<Game>();
     if (parentGame == null) {
       return false;
