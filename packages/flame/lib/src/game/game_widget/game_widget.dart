@@ -1,4 +1,5 @@
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../extensions.dart';
@@ -58,6 +59,10 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// - [Game.overlays]
   final List<String>? initialActiveOverlays;
 
+  final FocusNode? focusNode;
+
+  final bool autofocus;
+
   /// Renders a [game] in a flutter widget tree.
   ///
   /// Ex:
@@ -104,6 +109,8 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.backgroundBuilder,
     this.overlayBuilderMap,
     this.initialActiveOverlays,
+    this.focusNode,
+    this.autofocus = true,
   }) : super(key: key);
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
@@ -117,6 +124,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   Set<String> initialActiveOverlays = {};
 
   Future<void>? _gameLoaderFuture;
+
   Future<void> get _gameLoaderFutureCache =>
       _gameLoaderFuture ?? (_gameLoaderFuture = widget.game.onLoad());
 
@@ -187,6 +195,10 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     });
   }
 
+  KeyEventResult handleKeyEvent(FocusNode focusNode, KeyEvent event) {
+    return widget.game.onKeyEvent(event, RawKeyboard.instance.keysPressed);
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget internalGameWidget = _GameRenderObjectWidget(widget.game);
@@ -228,30 +240,35 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     // We can use Directionality.maybeOf when that method lands on stable
     final textDir = widget.textDirection ?? TextDirection.ltr;
 
-    return Directionality(
-      textDirection: textDir,
-      child: Container(
-        color: widget.game.backgroundColor(),
-        child: LayoutBuilder(
-          builder: (_, BoxConstraints constraints) {
-            widget.game.onResize(constraints.biggest.toVector2());
-            return FutureBuilder(
-              future: _gameLoaderFutureCache,
-              builder: (_, snapshot) {
-                if (snapshot.hasError) {
-                  if (widget.errorBuilder == null) {
-                    throw snapshot.error!;
-                  } else {
-                    return widget.errorBuilder!(context, snapshot.error!);
+    return Focus(
+      focusNode: widget.focusNode,
+      autofocus: true,
+      onKeyEvent: handleKeyEvent,
+      child: Directionality(
+        textDirection: textDir,
+        child: Container(
+          color: widget.game.backgroundColor(),
+          child: LayoutBuilder(
+            builder: (_, BoxConstraints constraints) {
+              widget.game.onResize(constraints.biggest.toVector2());
+              return FutureBuilder(
+                future: _gameLoaderFutureCache,
+                builder: (_, snapshot) {
+                  if (snapshot.hasError) {
+                    if (widget.errorBuilder == null) {
+                      throw snapshot.error!;
+                    } else {
+                      return widget.errorBuilder!(context, snapshot.error!);
+                    }
                   }
-                }
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return Stack(children: stackedWidgets);
-                }
-                return widget.loadingBuilder?.call(context) ?? Container();
-              },
-            );
-          },
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return Stack(children: stackedWidgets);
+                  }
+                  return widget.loadingBuilder?.call(context) ?? Container();
+                },
+              );
+            },
+          ),
         ),
       ),
     );
