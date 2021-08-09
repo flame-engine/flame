@@ -20,7 +20,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   ///
   /// The component list is only changed at the start of each update to avoid
   /// concurrency issues.
-  final List<Component> _addLater = [];
+  final Set<Component> _addLater = {};
 
   /// Components to be removed on the next update.
   ///
@@ -31,7 +31,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// This is the "prepare" function that will be called *before* the
   /// component is added to the component list by the add/addAll methods.
   /// It is also called when the component changes parent.
-  final bool Function(Component child) prepare;
+  final void Function(Component child) prepare;
 
   ComponentSet(
     int Function(Component e1, Component e2)? compare,
@@ -73,18 +73,17 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// This method can be considered sync for all intents and purposes if no
   /// onLoad is provided by the component.
   Future<void> addChild(Component component) async {
-    final isPrepared = prepare(component);
-    if (component.parent == null) {
+    prepare(component);
+    if (!component.isPrepared) {
       // Since the components won't be added until a proper game is added
       // further up in the tree we can add them to _addLater and then re-add
       // them once there is a proper root.
       _addLater.add(component);
       return;
     }
-
-    final loadFuture = component.onLoad();
-    if (loadFuture != null) {
-      await loadFuture;
+    final onLoad = component.onLoad;
+    if (onLoad != null) {
+      await onLoad();
     }
     await component.children.reAddChildren();
 
@@ -103,20 +102,12 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     await Future.wait(ps);
   }
 
-  /// The children are removed and then added again to the component set so that
-  /// they are prepared and onLoad:ed again. Used when a parent is changed
-  /// further up the tree.
-  // TODO: Needs to mark the children for removal and then
+  /// The children are added again to the component set so that they are
+  /// prepared and onLoad:ed again. Used when a parent is changed further up the
+  /// tree.
   Future<void> reAddChildren() async {
-    final removedChildren = removeWhere((c) {
-      c.onRemove();
-      return true;
-    })
-      ..followedBy(_addLater)
-      ..toList(growable: false);
-    _addLater.clear();
-    Future.wait(removedChildren.map(addChild));
-    Future.wait(_addLater.map(addChild));
+    map(addChild);
+    _addLater.forEach(addChild);
   }
 
   /// Marks a component to be removed from the components list on the next game
@@ -159,15 +150,14 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     });
     _removeLater.clear();
 
-    if (_addLater.isNotEmpty) {
-      final addNow = _addLater.toList(growable: false);
-      _addLater.clear();
-      addNow.forEach((c) {
-        prepare(c);
-        super.add(c);
-        c.onMount();
-      });
-    }
+    _addLater.removeWhere((c) {
+      if (!c.isPrepared) {
+        return false;
+      }
+      super.add(c);
+      c.onMount();
+      return true;
+    });
   }
 
   @override
@@ -190,7 +180,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   ///
   /// You must still provide your [prepare] function depending on the context.
   static ComponentSet createDefault(
-    bool Function(Component child) prepare,
+    void Function(Component child) prepare,
   ) {
     return ComponentSet(
       Comparing.on<Component>((c) => c.priority),

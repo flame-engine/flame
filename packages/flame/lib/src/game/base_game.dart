@@ -24,7 +24,6 @@ import 'game.dart';
 /// It is based on the Component system.
 class BaseGame extends Game {
   BaseGame() {
-    components = createComponentSet();
     _cameraWrapper = CameraWrapper(Camera(), components);
   }
 
@@ -166,24 +165,12 @@ class BaseGame extends Game {
 
   /// Returns whether this [Game] is in debug mode or not.
   ///
-  /// Returns `false` by default. Override it, or set it to true, to use debug mode.
-  /// You can use this value to enable debug behaviors for your game and many components will
+  /// Returns `false` by default. Override it, or set it to true, to use debug
+  /// mode.
+  /// You can use this value to enable debug behaviors for your game and many
+  /// components will
   /// show extra information on the screen when debug mode is activated
   bool debugMode = false;
-
-  // TODO: Write dartdoc
-  @override
-  Future<void> add(Component child, {BaseGame? gameRef}) {
-    return children.addChild(child, gameRef: gameRef ?? this);
-  }
-
-  /// Adds multiple children.
-  ///
-  /// See [add] for details.
-  @override
-  Future<void> addAll(List<Component> cs, {BaseGame? gameRef}) {
-    return children.addChildren(cs, gameRef: gameRef ?? this);
-  }
 
   /// Changes the priority of [component] and reorders the games component list.
   ///

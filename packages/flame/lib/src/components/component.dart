@@ -9,13 +9,16 @@ import '../extensions/vector2.dart';
 
 /// This represents a Component for your game.
 ///
-/// Components can be bullets flying on the screen, a spaceship or your player's fighter.
-/// Anything that either renders or updates can be added to the list on BaseGame. It will deal with calling those methods for you.
-/// Components also have other methods that can help you out if you want to override them.
+/// Components can be bullets flying on the screen, a spaceship or your player's
+/// fighter. Anything that either renders or updates can be added to the list on
+/// BaseGame. It will deal with calling those methods for you.
+/// Components also have other methods that can help you out if you want to
+/// override them.
 abstract class Component {
   /// Whether this component is HUD object or not.
   ///
-  /// HUD objects ignore the BaseGame.camera when rendered (so their position coordinates are considered relative to the device screen).
+  /// HUD objects ignore the BaseGame.camera when rendered (so their position
+  /// coordinates are considered relative to the device screen).
   bool isHud = false;
 
   bool _isMounted = false;
@@ -23,32 +26,45 @@ abstract class Component {
   /// Whether this component is currently mounted on a game or not
   bool get isMounted => _isMounted;
 
+  /// Whether this component has been prepared and is ready to be added to the
+  /// game loop
+  bool isPrepared = false;
+
   /// If the component has a parent it will be set here
   Component? parent;
 
   late final ComponentSet children = createComponentSet();
 
-  /// Render priority of this component. This allows you to control the order in which your components are rendered.
+  /// Render priority of this component. This allows you to control the order in
+  /// which your components are rendered.
   ///
-  /// Components are always updated and rendered in the order defined by what this number is when the component is added to the game.
-  /// The smaller the priority, the sooner your component will be updated/rendered.
+  /// Components are always updated and rendered in the order defined by what
+  /// this number is when the component is added to the game.
+  /// The smaller the priority, the sooner your component will be
+  /// updated/rendered.
   /// It can be any integer (negative, zero, or positive).
-  /// If two components share the same priority, they will probably be drawn in the order they were added.
+  /// If two components share the same priority, they will probably be drawn in
+  /// the order they were added.
   int get priority => _priority;
   int _priority;
 
   /// Whether this component should be removed or not.
   ///
-  /// It will be checked once per component per tick, and if it is true, BaseGame will remove it.
+  /// It will be checked once per component per tick, and if it is true,
+  /// BaseGame will remove it.
   bool shouldRemove = false;
 
   Component({int? priority}) : _priority = priority ?? 0;
 
-  /// This method is called periodically by the game engine to request that your component updates itself.
+  /// This method is called periodically by the game engine to request that your
+  /// component updates itself.
   ///
-  /// The time [dt] in seconds (with microseconds precision provided by Flutter) since the last update cycle.
-  /// This time can vary according to hardware capacity, so make sure to update your state considering this.
-  /// All components on BaseGame are always updated by the same amount. The time each one takes to update adds up to the next update cycle.
+  /// The time [dt] in seconds (with microseconds precision provided by Flutter)
+  /// since the last update cycle.
+  /// This time can vary according to hardware capacity, so make sure to update
+  /// your state considering this.
+  /// All components on BaseGame are always updated by the same amount. The time
+  /// each one takes to update adds up to the next update cycle.
   void update(double dt) {}
 
   /// Renders this component on the provided Canvas [c].
@@ -64,7 +80,6 @@ abstract class Component {
   /// Changes the current parent for another parent and prepares the tree under
   /// the new root.
   void changeParent(Component component) {
-    component.parent = null;
     removeFromParent();
     component.add(this);
   }
@@ -77,9 +92,11 @@ abstract class Component {
     children.forEach((child) => child.onGameResize(gameSize));
   }
 
-  /// Called when the component has been added and prepared by the game instance.
+  /// Called when the component has been added and prepared by the game
+  /// instance.
   ///
-  /// This can be used to make initializations on your component as, when this method is called,
+  /// This can be used to make initializations on your component as, when this
+  /// method is called,
   /// things like [onGameResize] are already set and usable.
   @mustCallSuper
   void onMount() {
@@ -90,6 +107,9 @@ abstract class Component {
   /// Called right before the component is removed from the game
   @mustCallSuper
   void onRemove() {
+    if (parent != this) {
+      return;
+    }
     _isMounted = false;
     children.forEach((child) {
       child.onRemove();
@@ -192,7 +212,8 @@ abstract class Component {
   }
 
   /// Called before the component is added to the BaseGame by the add method.
-  /// Whenever this returns something, BaseGame will wait for the [Future] to be resolved before adding the component on the list.
+  /// Whenever this returns something, BaseGame will wait for the [Future] to be
+  /// resolved before adding the component on the list.
   /// If `null` is returned, the component is added right away.
   ///
   /// Has a default implementation which just returns null.
@@ -206,7 +227,6 @@ abstract class Component {
   ///   myImage = await gameRef.load('my_image.png');
   /// }
   /// ```
-// TODO: Why not Future<void>?
   Future<void> onLoad() async {}
 
   /// Called to check whether the point is to be counted as within the component
@@ -223,30 +243,26 @@ abstract class Component {
   /// If there are no parents that are a [Game] this will run again once a
   /// parent is added to a [Game] and false will be returned.
   @mustCallSuper
-  bool prepare(Component child) {
+  void prepare(Component component) {
     print('prepare in: $this');
-    child.parent = this;
-    final parentGame = child.findParent<Game>();
+    component.parent = this;
+    final parentGame = component.findParent<Game>();
     if (parentGame == null) {
-      return false;
+      component.isPrepared = false;
     } else {
       if (this is HasGameRef) {
         final c = this as HasGameRef;
         c.gameRef = c.hasGameRef ? parentGame : null;
       }
       if (parentGame is BaseGame) {
-        parentGame.prepareComponent(child);
+        parentGame.prepareComponent(component);
       }
 
-      if (child is BaseComponent && this is BaseComponent) {
-        child.debugMode = (this as BaseComponent).debugMode;
+      if (component is BaseComponent && this is BaseComponent) {
+        component.debugMode = (this as BaseComponent).debugMode;
       }
 
-      child.propagateToChildren((Component c) {
-        prepare(c);
-        return true;
-      });
-      return true;
+      component.isPrepared = true;
     }
   }
 
