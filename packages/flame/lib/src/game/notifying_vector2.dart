@@ -12,7 +12,6 @@ import 'package:vector_math/vector_math_64.dart';
 ///
 /// Direct access to this vector's [storage] is not allowed.
 ///
-// ignore: prefer_mixin
 class NotifyingVector2 extends Vector2 with ChangeNotifier {
   NotifyingVector2() : super.zero();
 
