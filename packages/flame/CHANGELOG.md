@@ -41,6 +41,7 @@
  - Update `Camera` docs to showcase usage with `Game` class
  - Fixed a bug with `worldBounds` being set to `null` in `Camera`
  - `MockCanvas` is now strongly typed and matches numeric coordinates up to a tolerance
+ - Review the keyboard API with new mixins (KeyboardHandler and HasKeyboardHandlerComponents), focus node on the game widget and keyboard handling in the game.
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
