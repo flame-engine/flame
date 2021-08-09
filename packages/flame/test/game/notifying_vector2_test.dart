@@ -4,8 +4,14 @@ import 'package:vector_math/vector_math_64.dart';
 
 typedef VectorOperation = void Function(Vector2);
 
+/// This helper function creates a "normal" Vector2 copy of [v1],
+/// then applies [operation] to both vectors, and verifies that the
+/// end result is the same. It also checks that [v1] produces a
+/// notification during a modifying operation.
 void check(NotifyingVector2 v1, VectorOperation operation) {
   final v2 = v1.clone();
+  expect(v2 is Vector2, true);
+  expect(v2 is NotifyingVector2, false);
   var notified = 0;
   void listener() {
     notified++;
@@ -36,7 +42,7 @@ void main() {
       check(nv, (v) => v.st = Vector2(-5, -89));
       check(nv, (v) => v.ts = Vector2(-5, -89));
     });
-    test('field setters', () {
+    test('individual field setters', () {
       final nv = NotifyingVector2();
       check(nv, (v) => v[0] = 2.5);
       check(nv, (v) => v[1] = 1.25);
@@ -47,7 +53,7 @@ void main() {
       check(nv, (v) => v.s = 103);
       check(nv, (v) => v.t = 104);
     });
-    test('methods', () {
+    test('modification methods', () {
       final nv = NotifyingVector2()..setValues(23, 3);
       check(nv, (v) => v.length = 15);
       check(nv, (v) => v.normalize());
@@ -70,9 +76,16 @@ void main() {
       nv.multiply(Vector2(1.23, -4.791));
       check(nv, (v) => v.roundToZero());
     });
-    test('storage', () {
+    test('storage is read-only', () {
       final nv = NotifyingVector2();
-      expect(() => nv.storage, throwsA(isA<UnsupportedError>()));
+      expect(nv, Vector2.zero());
+      final storage = nv.storage;
+      // Check that storage is not writable
+      expect(() { storage[0] = 1; }, throwsA(isA<UnsupportedError>()));
+      expect(() { storage[1] = 1; }, throwsA(isA<UnsupportedError>()));
+      // Check that the vector wasn't modified, and that storage is readable
+      expect(storage[0], 0);
+      expect(storage[1], 0);
     });
   });
 }

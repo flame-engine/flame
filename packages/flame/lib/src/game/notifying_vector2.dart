@@ -10,7 +10,7 @@ import 'package:vector_math/vector_math_64.dart';
 /// subscribe to notifications, don't forget to eventually unsubscribe in
 /// order to avoid resource leaks.
 ///
-/// Direct access to this vector's [storage] is not allowed.
+/// Direct modification of this vector's [storage] is not allowed.
 ///
 class NotifyingVector2 extends Vector2 with ChangeNotifier {
   NotifyingVector2() : super.zero();
@@ -179,11 +179,5 @@ class NotifyingVector2 extends Vector2 with ChangeNotifier {
   }
 
   @override
-  Float64List get storage {
-    // If we allow this, then the user would be able to modify the internal
-    // state of the vector without triggering notifications to the listeners.
-    throw UnsupportedError(
-      "Direct access to this vector's internal storage is not allowed",
-    );
-  }
+  Float64List get storage => UnmodifiableFloat64ListView(super.storage);
 }
