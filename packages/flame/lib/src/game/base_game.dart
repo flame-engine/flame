@@ -12,7 +12,6 @@ import '../components/mixins/has_collidables.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/hoverable.dart';
 import '../components/mixins/tappable.dart';
-import '../fps_counter.dart';
 import 'camera.dart';
 import 'game.dart';
 import 'projector.dart';
@@ -24,7 +23,7 @@ import 'viewport.dart';
 /// [update], [render] and [onResize] methods have default implementations.
 /// This is the recommended structure to use for most games.
 /// It is based on the Component system.
-class BaseGame extends Game with FPSCounter {
+class BaseGame extends Game {
   /// The list of components to be updated and rendered by the base game.
   late final ComponentSet components = createComponentSet();
 
