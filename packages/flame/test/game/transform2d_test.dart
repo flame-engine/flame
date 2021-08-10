@@ -4,7 +4,6 @@ import 'package:flame/src/game/transform2d.dart';
 import 'package:test/test.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-
 void main() {
   group('Transform2D', () {
     test('basic construction', () {
@@ -99,12 +98,12 @@ void main() {
       expect(t.angle, closeTo(tau / 8, 1e-10));
       t.angle = 1;
       expect(t.angle, 1);
-      expect(t.angleDegrees, closeTo(360/tau, 1e-10));
+      expect(t.angleDegrees, closeTo(360 / tau, 1e-10));
     });
 
     test('.closeTo', () {
       final t1 = Transform2D();
-      final t2 = Transform2D() .. angleDegrees = 359;
+      final t2 = Transform2D()..angleDegrees = 359;
       expect(t1.closeTo(t2, tolerance: 0.02), true);
       expect(t1.closeTo(t2, tolerance: 0.01), false);
       t1.angle += 17.2855;
@@ -148,10 +147,13 @@ void main() {
     test('random', () {
       final rnd = math.Random();
       for (var i = 0; i < 20; i++) {
-        final translation = Vector2(rnd.nextDouble() * 10, rnd.nextDouble() * 10);
+        final translation =
+            Vector2(rnd.nextDouble() * 10, rnd.nextDouble() * 10);
         final rotation = rnd.nextDouble() * 10;
-        final scale = Vector2((rnd.nextDouble() - 0.3) * 3, (rnd.nextDouble() - 0.2) * 3);
-        final offset = Vector2((rnd.nextDouble() - 0.5) * 10, (rnd.nextDouble() - 0.5) * 10);
+        final scale =
+            Vector2((rnd.nextDouble() - 0.3) * 3, (rnd.nextDouble() - 0.2) * 3);
+        final offset = Vector2(
+            (rnd.nextDouble() - 0.5) * 10, (rnd.nextDouble() - 0.5) * 10);
         final transform2d = Transform2D()
           ..position = translation
           ..angle = rotation
@@ -163,11 +165,14 @@ void main() {
           ..scale(scale.x, scale.y, 1)
           ..translate(offset.x, offset.y);
         for (var k = 0; k < 16; k++) {
-          expect(transform2d.transformMatrix.storage[k], closeTo(matrix4.storage[k], 1e-10));
+          expect(transform2d.transformMatrix.storage[k],
+              closeTo(matrix4.storage[k], 1e-10));
         }
         // Check that converting between local and global is round-trippable
-        final point1 = Vector2((rnd.nextDouble() - 0.5) * 5, (rnd.nextDouble() - 0.5) * 5);
-        final point2 = transform2d.globalToLocal(transform2d.localToGlobal(point1));
+        final point1 =
+            Vector2((rnd.nextDouble() - 0.5) * 5, (rnd.nextDouble() - 0.5) * 5);
+        final point2 =
+            transform2d.globalToLocal(transform2d.localToGlobal(point1));
         expect(point1.x, closeTo(point2.x, 1e-10));
         expect(point1.y, closeTo(point2.y, 1e-10));
       }
@@ -181,8 +186,8 @@ void main() {
       expect(t.globalToLocal(point), Vector2(0, 0));
 
       t.angleDegrees = 60;
-      expect(t.localToGlobal(point).x, closeTo(1/2, 1e-10));
-      expect(t.localToGlobal(point).y, closeTo(math.sqrt(3)/2, 1e-10));
+      expect(t.localToGlobal(point).x, closeTo(1 / 2, 1e-10));
+      expect(t.localToGlobal(point).y, closeTo(math.sqrt(3) / 2, 1e-10));
       expect(t.globalToLocal(point), Vector2(0, 0));
 
       t.scale = Vector2(0, 1);
