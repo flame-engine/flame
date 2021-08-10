@@ -13,7 +13,7 @@ mixin RenderSystem on System {
   void render(Canvas canvas);
 
   @override
-  void execute(double delta) => throw Exception(
-        'RenderSystem.execute is not supported in flame_oxygen',
-      );
+  void execute(double delta) {
+    throw Exception('RenderSystem.execute is not supported in flame_oxygen');
+  }
 }

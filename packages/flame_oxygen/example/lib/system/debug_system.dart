@@ -14,20 +14,27 @@ class DebugSystem extends BaseSystem {
     ),
   );
 
+  final statusPainter = TextPaint(
+    config: const TextPaintConfig(
+      color: Colors.green,
+      fontSize: 16,
+    ),
+  );
+
   @override
   List<Filter<Component>> get filters => [];
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    textPainter.copyWith((config) => config.withFontSize(16)).render(
-          canvas,
-          [
-            'FPS: ${(world!.game as FPSCounter).fps()}',
-            'Entities: ${world!.entities.length}',
-          ].join('\n'),
-          Vector2.zero(),
-        );
+    statusPainter.render(
+      canvas,
+      [
+        'FPS: ${(world!.game as FPSCounter).fps()}',
+        'Entities: ${world!.entities.length}',
+      ].join('\n'),
+      Vector2.zero(),
+    );
   }
 
   @override

@@ -13,12 +13,13 @@ class SpriteInit {
     Image image, {
     Vector2? srcPosition,
     Vector2? srcSize,
-  }) =>
-      SpriteInit(Sprite(
-        image,
-        srcPosition: srcPosition,
-        srcSize: srcSize,
-      ));
+  }) {
+    return SpriteInit(Sprite(
+      image,
+      srcPosition: srcPosition,
+      srcSize: srcSize,
+    ));
+  }
 }
 
 class SpriteComponent extends Component<SpriteInit> {

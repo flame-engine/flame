@@ -13,7 +13,7 @@ mixin UpdateSystem on System {
   void update(double delta);
 
   @override
-  void execute(double delta) => throw Exception(
-        'UpdateSystem.execute is not supported in flame_oxygen',
-      );
+  void execute(double delta) {
+    throw Exception('UpdateSystem.execute is not supported in flame_oxygen');
+  }
 }
