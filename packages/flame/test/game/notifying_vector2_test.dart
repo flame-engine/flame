@@ -16,6 +16,7 @@ void check(NotifyingVector2 v1, VectorOperation operation) {
   void listener() {
     notified++;
   }
+
   v1.addListener(listener);
   operation(v1);
   operation(v2);

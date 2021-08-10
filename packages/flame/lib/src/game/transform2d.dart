@@ -40,18 +40,18 @@ class Transform2D extends ChangeNotifier {
         _recalculate = true,
         _angle = 0,
         _position = NotifyingVector2(),
-        _scale = NotifyingVector2() ..setValues(1, 1),
+        _scale = NotifyingVector2()..setValues(1, 1),
         _offset = NotifyingVector2() {
     _position.addListener(_notify);
     _scale.addListener(_notify);
     _offset.addListener(_notify);
   }
 
-  factory Transform2D.copy(Transform2D other) =>
-    Transform2D() .. angle = other.angle
-                  .. position = other.position
-                  .. scale = other.scale
-                  .. offset = other.offset;
+  factory Transform2D.copy(Transform2D other) => Transform2D()
+    ..angle = other.angle
+    ..position = other.position
+    ..scale = other.scale
+    ..offset = other.offset;
 
   /// Check whether this transform is equal to other, up to the given
   /// [tolerance]. Setting tolerance to zero will check for exact equality.
