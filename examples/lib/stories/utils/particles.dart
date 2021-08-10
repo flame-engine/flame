@@ -3,13 +3,13 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart' hide Timer;
-import 'package:flame/timer.dart' as flame_timer;
 import 'package:flame/game.dart';
 import 'package:flame/particles.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame/timer.dart' as flame_timer;
 import 'package:flutter/material.dart' hide Image;
 
-class ParticlesGame extends BaseGame {
+class ParticlesGame extends BaseGame with FPSCounter {
   /// Defines dimensions of the sample
   /// grid to be displayed on the screen,
   /// 5x5 in this particular case
