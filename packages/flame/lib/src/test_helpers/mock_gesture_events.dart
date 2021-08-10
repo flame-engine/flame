@@ -1,7 +1,8 @@
-import 'package:flame/extensions.dart';
-import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/gestures.dart';
+
+import '../../extensions.dart';
+import '../../game.dart';
+import '../../input.dart';
 
 TapDownInfo createTapDownEvent(
   Game game, {

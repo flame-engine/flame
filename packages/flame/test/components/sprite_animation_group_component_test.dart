@@ -1,8 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/test.dart';
 import 'package:test/test.dart';
-
-import '../util/mock_image.dart';
 
 enum AnimationState {
   idle,
