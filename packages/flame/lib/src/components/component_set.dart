@@ -81,9 +81,9 @@ class ComponentSet extends QueryableOrderedSet<Component> {
       _addLater.add(component);
       return;
     }
-    final onLoad = component.onLoad;
+    final onLoad = component.onLoad();
     if (onLoad != null) {
-      await onLoad();
+      await onLoad;
     }
     await component.children.reAddChildren();
 

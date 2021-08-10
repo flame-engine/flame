@@ -215,7 +215,7 @@ abstract class Component {
   ///   myImage = await gameRef.load('my_image.png');
   /// }
   /// ```
-  Future<void> onLoad() async {}
+  Future<void>? onLoad() => null;
 
   /// Called to check whether the point is to be counted as within the component
   /// It needs to be overridden to have any effect, like it is in
