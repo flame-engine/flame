@@ -29,10 +29,17 @@ class ZoomGame extends BaseGame with ScrollDetector, ScaleDetector {
     );
   }
 
-  static const zoomPerScrollUnit = 0.001;
+  void resetIfZero() {
+    if (camera.zoom < 0) {
+      camera.zoom = 1.0;
+    }
+  }
+
+  static const zoomPerScrollUnit = 0.01;
   @override
   void onScroll(PointerScrollInfo info) {
-    camera.zoom += info.scrollDelta.game.y * zoomPerScrollUnit;
+    camera.zoom += info.scrollDelta.game.y.sign * zoomPerScrollUnit;
+    resetIfZero();
   }
 
   @override
@@ -41,6 +48,7 @@ class ZoomGame extends BaseGame with ScrollDetector, ScaleDetector {
     if (scale != null) {
       final delta = info.scale.game - scale;
       camera.zoom += delta.y;
+      resetIfZero();
     }
 
     lastScale = info.scale.game;

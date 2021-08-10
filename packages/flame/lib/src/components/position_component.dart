@@ -198,7 +198,7 @@ abstract class PositionComponent extends BaseComponent {
     canvas.transform(_preRenderMatrix.storage);
     _preRenderMatrix.setIdentity();
 
-    final delta = anchor.toVector2()..multiply(scaledSize);
+    final delta = anchor.toVector2()..multiply(size);
     canvas.translate(-delta.x, -delta.y);
 
     // Handle inverted rendering by moving center and flipping.
