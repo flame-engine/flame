@@ -10,10 +10,10 @@ import 'component.dart';
 
 /// This can be extended to represent a basic Component for your game.
 ///
-/// The difference between this and [Component] is that the [BaseComponent] can
-/// have children, handle effects and can be used to see whether a position on
-/// the screen is on your component, which is useful for handling gestures.
-abstract class BaseComponent extends Component {
+/// The difference between this and [Component] is that the [BaseComponent]
+/// implements the [update] and [render] methods, meanwhile you have to do that
+/// yourself in [Component].
+class BaseComponent extends Component {
   /// This is set by the BaseGame to tell this component to render additional
   /// debug information, like borders, coordinates, etc.
   /// This is very helpful while debugging. Set your BaseGame debugMode to true.

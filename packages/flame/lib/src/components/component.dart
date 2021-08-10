@@ -117,7 +117,6 @@ abstract class Component {
         child.gameRef = null;
       }
     });
-    print('call onRemove');
     parent = null;
   }
 
@@ -132,7 +131,7 @@ abstract class Component {
   ///
   /// *Note:* Do not add components on the game constructor. This method can
   /// only be called after the game already has its layout set, this can be
-  /// verified by the [hasLayout] property, to add components upon a game
+  /// verified by the [Game.hasLayout] property, to add components upon game
   /// initialization, the [onLoad] method can be used instead.
   Future<void> add(Component component) {
     return children.addChild(component);
