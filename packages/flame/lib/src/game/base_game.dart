@@ -9,7 +9,6 @@ import '../components/component.dart';
 import '../components/mixins/collidable.dart';
 import '../components/mixins/draggable.dart';
 import '../components/mixins/has_collidables.dart';
-import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/hoverable.dart';
 import '../components/mixins/tappable.dart';
 import 'camera/camera.dart';
@@ -105,10 +104,6 @@ class BaseGame extends Game {
 
     if (debugMode && c is BaseComponent) {
       c.debugMode = true;
-    }
-
-    if (c is HasGameRef) {
-      c.gameRef = this;
     }
 
     // first time resize

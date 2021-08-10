@@ -113,9 +113,6 @@ abstract class Component {
     _isMounted = false;
     children.forEach((child) {
       child.onRemove();
-      if (child is HasGameRef) {
-        child.gameRef = null;
-      }
     });
     parent = null;
   }
@@ -241,10 +238,6 @@ abstract class Component {
     if (parentGame == null) {
       component.isPrepared = false;
     } else {
-      if (this is HasGameRef) {
-        final c = this as HasGameRef;
-        c.gameRef = c.hasGameRef ? parentGame : null;
-      }
       if (parentGame is BaseGame) {
         parentGame.prepareComponent(component);
       }
