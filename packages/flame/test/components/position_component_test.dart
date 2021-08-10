@@ -228,5 +228,61 @@ void main() {
       );
       expect(child.absoluteCenter, parent.position + child.center);
     });
+
+    test('scaled component contains point', () {
+      final component = MyComponent();
+      component.anchor = Anchor.center;
+      component.position = Vector2.all(10.0);
+      component.size = Vector2.all(5.0);
+
+      final topLeftPoint = component.position - component.size / 2;
+      final bottomRightPoint = component.position + component.size / 2;
+      final topRightPoint = Vector2(bottomRightPoint.x, topLeftPoint.y);
+      final bottomLeftPoint = Vector2(topLeftPoint.x, bottomRightPoint.y);
+      final epsilon = Vector2.all(0.0001);
+      void checkOutsideCorners(
+        bool expectedResult, {
+        bool? topLeftResult,
+        bool? bottomRightResult,
+        bool? topRightResult,
+        bool? bottomLeftResult,
+      }) {
+        expect(
+          component.containsPoint(topLeftPoint - epsilon),
+          topLeftResult ?? expectedResult,
+        );
+        expect(
+          component.containsPoint(bottomRightPoint + epsilon),
+          bottomRightResult ?? expectedResult,
+        );
+        expect(
+          component.containsPoint(topRightPoint
+            ..x += epsilon.x
+            ..y -= epsilon.y),
+          topRightResult ?? expectedResult,
+        );
+        expect(
+          component.containsPoint(bottomLeftPoint
+            ..x -= epsilon.x
+            ..y += epsilon.y),
+          bottomLeftResult ?? expectedResult,
+        );
+      }
+
+      checkOutsideCorners(false);
+      component.scale = Vector2.all(1.0001);
+      checkOutsideCorners(true);
+      component.angle = 1;
+      checkOutsideCorners(false);
+      component.angle = 0;
+      component.anchor = Anchor.topLeft;
+      checkOutsideCorners(false, bottomRightResult: true);
+      component.anchor = Anchor.bottomRight;
+      checkOutsideCorners(false, topLeftResult: true);
+      component.anchor = Anchor.topRight;
+      checkOutsideCorners(false, bottomLeftResult: true);
+      component.anchor = Anchor.bottomLeft;
+      checkOutsideCorners(false, topRightResult: true);
+    });
   });
 }
