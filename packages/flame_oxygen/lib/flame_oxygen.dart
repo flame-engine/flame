@@ -1,5 +1,3 @@
-library flame_oxygen;
-
 export 'package:oxygen/oxygen.dart';
 
 export 'src/component.dart';
