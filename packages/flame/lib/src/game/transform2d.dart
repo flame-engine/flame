@@ -42,8 +42,7 @@ class Transform2D extends ChangeNotifier {
         _angle = 0,
         _position = NotifyingVector2(),
         _scale = NotifyingVector2()..setValues(1, 1),
-        _offset = NotifyingVector2()
-  {
+        _offset = NotifyingVector2() {
     _position.addListener(_markAsModified);
     _scale.addListener(_markAsModified);
     _offset.addListener(_markAsModified);
@@ -176,17 +175,24 @@ class Transform2D extends ChangeNotifier {
   }
 
   /// Transform [point] from the global coordinate space into the local
-  /// coordinates.
-  /// Thus, this method performs the inverse of the current transform.
+  /// coordinates. Thus, this method performs the inverse of the current
+  /// transform.
+  ///
+  /// If the current transform is degenerate due to one of the scale
+  /// factors being 0, then this method will return a zero vector.
+  ///
   Vector2 globalToLocal(Vector2 point) {
     // Here we rely on the fact that in the transform matrix only elements
     // `m[0]`, `m[1]`, `m[4]`, `m[5]`, `m[12]`, and `m[13]` are modified.
     // This greatly simplifies computation of the inverse matrix.
     final m = transformMatrix.storage;
-    final det = m[0] * m[5] - m[1] * m[4];
+    var det = m[0] * m[5] - m[1] * m[4];
+    if (det != 0) {
+      det = 1 / det;
+    }
     return Vector2(
-      ((point.x - m[12]) * m[5] - (point.y - m[13]) * m[4]) / det,
-      ((point.y - m[13]) * m[0] - (point.x - m[12]) * m[1]) / det,
+      ((point.x - m[12]) * m[5] - (point.y - m[13]) * m[4]) * det,
+      ((point.y - m[13]) * m[0] - (point.x - m[12]) * m[1]) * det,
     );
   }
 
