@@ -41,7 +41,7 @@ class CombinedEffectGame extends BaseGame with TapDetector {
       curve: Curves.bounceInOut,
     );
 
-    final scale = ScaleEffect(
+    final scale = SizeEffect(
       size: currentTap,
       speed: 200.0,
       curve: Curves.linear,

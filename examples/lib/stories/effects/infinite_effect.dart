@@ -49,7 +49,7 @@ class InfiniteEffectGame extends BaseGame with TapDetector {
     );
 
     redSquare.addEffect(
-      ScaleEffect(
+      SizeEffect(
         size: p,
         speed: 250.0,
         curve: Curves.easeInCubic,

@@ -27,7 +27,7 @@ void main() {
     bool isAlternating = false,
     bool hasAlternatingMoveEffect = false,
     bool hasAlternatingRotateEffect = false,
-    bool hasAlternatingScaleEffect = false,
+    bool hasAlternatingSizeEffect = false,
   }) {
     final move = MoveEffect(
       path: path,
@@ -39,10 +39,10 @@ void main() {
       duration: randomDuration(),
       isAlternating: hasAlternatingRotateEffect,
     )..skipEffectReset = true;
-    final scale = ScaleEffect(
+    final scale = SizeEffect(
       size: argumentSize,
       duration: randomDuration(),
-      isAlternating: hasAlternatingScaleEffect,
+      isAlternating: hasAlternatingSizeEffect,
     )..skipEffectReset = true;
     return CombinedEffect(
       effects: [move, scale, rotate],
@@ -169,13 +169,13 @@ void main() {
   );
 
   testWidgets(
-    'CombinedEffect can contain alternating ScaleEffect',
+    'CombinedEffect can contain alternating SizeEffect',
     (WidgetTester tester) async {
       final PositionComponent positionComponent = component();
       effectTest(
         tester,
         positionComponent,
-        effect(hasAlternatingScaleEffect: true),
+        effect(hasAlternatingSizeEffect: true),
         expectedPosition: path.last,
         expectedAngle: argumentAngle,
         expectedSize: positionComponent.size.clone(),

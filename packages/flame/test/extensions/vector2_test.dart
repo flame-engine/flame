@@ -1,10 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:flame/extensions.dart';
+import 'package:flame/test.dart';
 import 'package:test/test.dart';
-
-import '../util/expect_double.dart';
-import '../util/expect_vector2.dart';
 
 void main() {
   group('Vector2 test', () {

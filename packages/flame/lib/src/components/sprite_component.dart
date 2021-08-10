@@ -42,7 +42,7 @@ class SpriteComponent extends PositionComponent with HasPaint {
   }) =>
       SpriteComponent(
         position: position,
-        size: size ?? image.size,
+        size: size ?? srcSize ?? image.size,
         sprite: Sprite(
           image,
           srcPosition: srcPosition,

@@ -9,83 +9,83 @@ import 'effect_test_utils.dart';
 void main() {
   final random = Random();
   Vector2 randomVector2() => (Vector2.random(random) * 100)..round();
-  final argumentScale = randomVector2();
-  TestComponent component() => TestComponent(scale: randomVector2());
+  final argumentSize = randomVector2();
+  TestComponent component() => TestComponent(size: randomVector2());
 
-  ScaleEffect effect({bool isInfinite = false, bool isAlternating = false}) {
-    return ScaleEffect(
-      scale: argumentScale,
+  SizeEffect effect({bool isInfinite = false, bool isAlternating = false}) {
+    return SizeEffect(
+      size: argumentSize,
       duration: 1 + random.nextInt(100).toDouble(),
       isInfinite: isInfinite,
       isAlternating: isAlternating,
     )..skipEffectReset = true;
   }
 
-  testWidgets('ScaleEffect can scale', (WidgetTester tester) async {
+  testWidgets('SizeEffect can scale', (WidgetTester tester) async {
     effectTest(
       tester,
       component(),
       effect(),
-      expectedScale: argumentScale,
+      expectedSize: argumentSize,
     );
   });
 
   testWidgets(
-    'ScaleEffect will stop scaling after it is done',
+    'SizeEffect will stop scaling after it is done',
     (WidgetTester tester) async {
       effectTest(
         tester,
         component(),
         effect(),
-        expectedScale: argumentScale,
+        expectedSize: argumentSize,
         iterations: 1.5,
       );
     },
   );
 
-  testWidgets('ScaleEffect can alternate', (WidgetTester tester) async {
+  testWidgets('SizeEffect can alternate', (WidgetTester tester) async {
     final PositionComponent positionComponent = component();
     effectTest(
       tester,
       positionComponent,
       effect(isAlternating: true),
-      expectedScale: positionComponent.scale.clone(),
+      expectedSize: positionComponent.size.clone(),
     );
   });
 
   testWidgets(
-    'ScaleEffect can alternate and be infinite',
+    'SizeEffect can alternate and be infinite',
     (WidgetTester tester) async {
       final PositionComponent positionComponent = component();
       effectTest(
         tester,
         positionComponent,
         effect(isInfinite: true, isAlternating: true),
-        expectedScale: positionComponent.scale.clone(),
+        expectedSize: positionComponent.size.clone(),
         shouldComplete: false,
       );
     },
   );
 
-  testWidgets('ScaleEffect alternation can peak', (WidgetTester tester) async {
+  testWidgets('SizeEffect alternation can peak', (WidgetTester tester) async {
     final PositionComponent positionComponent = component();
     effectTest(
       tester,
       positionComponent,
       effect(isAlternating: true),
-      expectedScale: argumentScale,
+      expectedSize: argumentSize,
       shouldComplete: false,
       iterations: 0.5,
     );
   });
 
-  testWidgets('ScaleEffect can be infinite', (WidgetTester tester) async {
+  testWidgets('SizeEffect can be infinite', (WidgetTester tester) async {
     final PositionComponent positionComponent = component();
     effectTest(
       tester,
       positionComponent,
       effect(isInfinite: true),
-      expectedScale: argumentScale,
+      expectedSize: argumentSize,
       iterations: 3.0,
       shouldComplete: false,
     );

@@ -6,6 +6,7 @@ import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
 import '../geometry/rectangle.dart';
 import 'base_component.dart';
+import 'cache/value_cache.dart';
 import 'component.dart';
 import 'mixins/hitbox.dart';
 
@@ -23,9 +24,9 @@ import 'mixins/hitbox.dart';
 /// within this component's (width, height).
 abstract class PositionComponent extends BaseComponent {
   /// The position of this component on the screen (relative to the anchor).
-  final Vector2 _position;
   Vector2 get position => _position;
   set position(Vector2 position) => _position.setFrom(position);
+  final Vector2 _position;
 
   /// X position of this component on the screen (relative to the anchor).
   double get x => _position.x;
@@ -35,19 +36,38 @@ abstract class PositionComponent extends BaseComponent {
   double get y => _position.y;
   set y(double y) => _position.y = y;
 
-  /// The size that this component is rendered with.
+  /// The size that this component is rendered with before [scale] is applied.
   /// This is not necessarily the source size of the asset.
-  final Vector2 _size;
   Vector2 get size => _size;
   set size(Vector2 size) => _size.setFrom(size);
+  final Vector2 _size;
 
   /// Width (size) that this component is rendered with.
-  double get width => size.x;
-  set width(double width) => size.x = width;
+  double get width => scaledSize.x;
+  set width(double width) => size.x = width / scale.x;
 
   /// Height (size) that this component is rendered with.
-  double get height => size.y;
-  set height(double height) => size.y = height;
+  double get height => scaledSize.y;
+  set height(double height) => size.y = height / scale.y;
+
+  /// The scale factor of this component
+  Vector2 get scale => _scale;
+  set scale(Vector2 scale) => _scale.setFrom(scale);
+  final Vector2 _scale;
+
+  /// Cache to store the calculated scaled size
+  final ValueCache<Vector2> _scaledSizeCache = ValueCache();
+
+  /// The size that this component is rendered with after [scale] is applied.
+  Vector2 get scaledSize {
+    if (!_scaledSizeCache.isCacheValid([scale, size])) {
+      _scaledSizeCache.updateCache(
+        size.clone()..multiply(scale),
+        [scale.clone(), size.clone()],
+      );
+    }
+    return _scaledSizeCache.value!;
+  }
 
   /// Get the absolute position, with the anchor taken into consideration
   Vector2 get absolutePosition => absoluteParentPosition + position;
@@ -57,13 +77,13 @@ abstract class PositionComponent extends BaseComponent {
     return anchor.toOtherAnchorPosition(
       position,
       Anchor.topLeft,
-      size,
+      scaledSize,
     );
   }
 
   /// Set the top left position regardless of the anchor
   set topLeftPosition(Vector2 position) {
-    this.position = position + (anchor.toVector2()..multiply(size));
+    this.position = position + (anchor.toVector2()..multiply(scaledSize));
   }
 
   /// Get the absolute top left position regardless of whether it is a child or not
@@ -93,7 +113,7 @@ abstract class PositionComponent extends BaseComponent {
     if (anchor == Anchor.center) {
       return position;
     } else {
-      return anchor.toOtherAnchorPosition(position, Anchor.center, size)
+      return anchor.toOtherAnchorPosition(position, Anchor.center, scaledSize)
         ..rotate(angle, center: absolutePosition);
     }
   }
@@ -116,25 +136,10 @@ abstract class PositionComponent extends BaseComponent {
   /// Whether this component should be flipped ofn the Y axis before being rendered.
   bool renderFlipY = false;
 
-  /// Returns the relative position/size of this component.
-  /// Relative because it might be translated by their parents (which is not considered here).
-  Rect toRect() => topLeftPosition.toPositionedRect(size);
-
-  /// Returns the absolute position/size of this component.
-  /// Absolute because it takes any possible parent position into consideration.
-  Rect toAbsoluteRect() => absoluteTopLeftPosition.toPositionedRect(size);
-
-  /// Mutates position and size using the provided [rect] as basis.
-  /// This is a relative rect, same definition that [toRect] use
-  /// (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
-  void setByRect(Rect rect) {
-    size.setValues(rect.width, rect.height);
-    topLeftPosition = rect.topLeft.toVector2();
-  }
-
   PositionComponent({
     Vector2? position,
     Vector2? size,
+    Vector2? scale,
     this.angle = 0.0,
     this.anchor = Anchor.topLeft,
     this.renderFlipX = false,
@@ -142,6 +147,7 @@ abstract class PositionComponent extends BaseComponent {
     int? priority,
   })  : _position = position ?? Vector2.zero(),
         _size = size ?? Vector2.zero(),
+        _scale = scale ?? Vector2.all(1.0),
         super(priority: priority);
 
   @override
@@ -160,7 +166,7 @@ abstract class PositionComponent extends BaseComponent {
     if (this is Hitbox) {
       (this as Hitbox).renderHitboxes(canvas);
     }
-    canvas.drawRect(size.toRect(), debugPaint);
+    canvas.drawRect(scaledSize.toRect(), debugPaint);
     debugTextPaint.render(
       canvas,
       'x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}',
@@ -177,19 +183,51 @@ abstract class PositionComponent extends BaseComponent {
     );
   }
 
+  final Matrix4 _preRenderMatrix = Matrix4.identity();
+
   @override
   void preRender(Canvas canvas) {
-    canvas.translate(x, y);
-    canvas.rotate(angle);
-    final delta = -anchor.toVector2()
-      ..multiply(size);
-    canvas.translate(delta.x, delta.y);
+    // Move canvas to the components anchor position.
+    _preRenderMatrix.translate(x, y);
+    // Rotate canvas around anchor
+    _preRenderMatrix.rotateZ(angle);
+    // Scale canvas if it should be scaled
+    if (scale.x != 1.0 || scale.y != 1.0) {
+      _preRenderMatrix.scale(scale.x, scale.y);
+    }
+    canvas.transform(_preRenderMatrix.storage);
+    _preRenderMatrix.setIdentity();
+
+    final delta = anchor.toVector2()..multiply(size);
+    canvas.translate(-delta.x, -delta.y);
 
     // Handle inverted rendering by moving center and flipping.
     if (renderFlipX || renderFlipY) {
-      canvas.translate(width / 2, height / 2);
-      canvas.scale(renderFlipX ? -1.0 : 1.0, renderFlipY ? -1.0 : 1.0);
-      canvas.translate(-width / 2, -height / 2);
+      final size = scaledSize;
+      _preRenderMatrix.translate(size.x / 2, size.y / 2);
+      _preRenderMatrix.scale(
+        renderFlipX ? -1.0 : 1.0,
+        renderFlipY ? -1.0 : 1.0,
+      );
+      canvas.transform(_preRenderMatrix.storage);
+      canvas.translate(-size.x / 2, -size.y / 2);
+      _preRenderMatrix.setIdentity();
     }
+  }
+
+  /// Returns the relative position/size of this component.
+  /// Relative because it might be translated by their parents (which is not considered here).
+  Rect toRect() => topLeftPosition.toPositionedRect(scaledSize);
+
+  /// Returns the absolute position/size of this component.
+  /// Absolute because it takes any possible parent position into consideration.
+  Rect toAbsoluteRect() => absoluteTopLeftPosition.toPositionedRect(scaledSize);
+
+  /// Mutates position and size using the provided [rect] as basis.
+  /// This is a relative rect, same definition that [toRect] use
+  /// (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
+  void setByRect(Rect rect) {
+    size.setValues(rect.width, rect.height);
+    topLeftPosition = rect.topLeft.toVector2();
   }
 }
