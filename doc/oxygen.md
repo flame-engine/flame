@@ -57,6 +57,22 @@ to extend your own system from it to access it. For more information see the
 Systems can be registered to the world using the `world.registerSystem` method on 
 [OxygenGame](#OxygenGame).
 
+### mixin GameRef
+
+The `GameRef` mixin allows a system to become aware of the `OxygenGame` instance its attached to. This 
+allows easy access to the methods on the game class.
+
+```dart
+class YourSystem extends System with GameRef<YourGame> {
+  @override
+  void init() {
+    // Access to game using the .game propery
+  }
+
+  // ...
+}
+```
+
 ### mixin RenderSystem
 
 The `RenderSystem` mixin allows a system to be registered for the render loop.
