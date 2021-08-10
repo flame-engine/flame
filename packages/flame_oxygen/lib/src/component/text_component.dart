@@ -1,4 +1,5 @@
-part of flame_oxygen.component;
+import 'package:flame/game.dart';
+import 'package:oxygen/oxygen.dart';
 
 class TextInit {
   final String text;

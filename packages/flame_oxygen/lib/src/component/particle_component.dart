@@ -1,4 +1,7 @@
-part of flame_oxygen.component;
+import 'package:flame/particles.dart';
+import 'package:oxygen/oxygen.dart';
+
+export 'package:flame/particles.dart' show Particle;
 
 class ParticleComponent extends Component<Particle> {
   Particle? particle;

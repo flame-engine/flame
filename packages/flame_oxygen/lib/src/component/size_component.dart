@@ -1,4 +1,5 @@
-part of flame_oxygen.component;
+import 'package:flame/extensions.dart';
+import 'package:oxygen/oxygen.dart';
 
 class SizeComponent extends Component<Vector2> {
   late Vector2 _size;

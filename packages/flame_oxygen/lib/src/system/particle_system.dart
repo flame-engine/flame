@@ -1,4 +1,9 @@
-part of flame_oxygen.system;
+import 'package:flame/extensions.dart';
+import 'package:oxygen/oxygen.dart';
+
+import '../component.dart';
+import 'render_system.dart';
+import 'update_system.dart';
 
 /// Allows Particles from Flame to be rendered.
 class ParticleSystem extends System with RenderSystem, UpdateSystem {

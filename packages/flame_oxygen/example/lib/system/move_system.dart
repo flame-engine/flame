@@ -1,12 +1,13 @@
-import 'package:example/component/timer_component.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_oxygen/flame_oxygen.dart';
-import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 
+import '../component/timer_component.dart';
 import '../component/velocity_component.dart';
+import '../main.dart';
 
-class MoveSystem extends System with UpdateSystem {
+class MoveSystem extends System with UpdateSystem, GameRef<ExampleGame> {
   Query? _query;
 
   @override

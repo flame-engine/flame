@@ -1,4 +1,10 @@
-part of flame_oxygen;
+import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
+import 'package:oxygen/oxygen.dart';
+
+import 'component.dart';
+import 'flame_world.dart';
 
 /// This is an Oxygen based implementation of [Game].
 ///

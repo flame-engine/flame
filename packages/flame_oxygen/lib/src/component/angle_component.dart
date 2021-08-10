@@ -1,4 +1,5 @@
-part of flame_oxygen.component;
+import 'package:flame/extensions.dart';
+import 'package:oxygen/oxygen.dart';
 
 class AngleComponent extends Component<double> {
   late double radians;

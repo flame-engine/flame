@@ -1,4 +1,8 @@
-part of flame_oxygen.component;
+import 'package:flame/extensions.dart';
+import 'package:flame/sprite.dart';
+import 'package:oxygen/oxygen.dart';
+
+export 'package:flame/sprite.dart';
 
 class SpriteInit {
   final Sprite sprite;

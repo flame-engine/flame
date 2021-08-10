@@ -1,4 +1,6 @@
-part of flame_oxygen;
+import 'package:oxygen/oxygen.dart';
+
+import 'system.dart';
 
 /// Extension class for adding Flame specific system filters.
 extension FlameSystemManager on SystemManager {
