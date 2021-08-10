@@ -1,17 +1,16 @@
-
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:vector_math/vector_math_64.dart';
 import 'notifying_vector2.dart';
 
 /// This class describes a generic 2D transform, which is a combination of
-/// translations, rotations and scaling. These transforms are combined into
-/// a single matrix, that can be either applied to a canvas, or used directly
-/// to compute coordinate transforms.
+/// translations, rotations, reflections and scaling. These transforms are
+/// combined into a single matrix, that can be either applied to a canvas,
+/// composed with another transform, or used directly to convert coordinates.
 ///
 /// The transform can be visualized as 2 reference frames: a "global" and
-/// a "local". Originally, the two reference frames coincide. Then, the
-/// following sequence of transforms are applied:
+/// a "local". At first, these two reference frames coincide. Then, the
+/// following sequence of transforms is applied:
 ///   - translation to point [position];
 ///   - rotation by [angle] radians clockwise;
 ///   - scaling in X and Y directions by [scale] factors;
@@ -35,6 +34,7 @@ class Transform2D extends ChangeNotifier {
   final NotifyingVector2 _position;
   final NotifyingVector2 _scale;
   final NotifyingVector2 _offset;
+  static const tau = 2 * math.pi;
 
   Transform2D()
       : _transformMatrix = Matrix4.identity(),
@@ -42,10 +42,11 @@ class Transform2D extends ChangeNotifier {
         _angle = 0,
         _position = NotifyingVector2(),
         _scale = NotifyingVector2()..setValues(1, 1),
-        _offset = NotifyingVector2() {
-    _position.addListener(_notify);
-    _scale.addListener(_notify);
-    _offset.addListener(_notify);
+        _offset = NotifyingVector2()
+  {
+    _position.addListener(_markAsModified);
+    _scale.addListener(_markAsModified);
+    _offset.addListener(_markAsModified);
   }
 
   factory Transform2D.copy(Transform2D other) => Transform2D()
@@ -62,7 +63,6 @@ class Transform2D extends ChangeNotifier {
   ///
   /// The [tolerance] parameter is in absolute units, not relative.
   bool closeTo(Transform2D other, {double tolerance = 1e-10}) {
-    const tau = 2 * math.pi;
     final deltaAngle = (angle - other.angle) % tau;
     assert(deltaAngle >= 0);
     return (deltaAngle <= tolerance || deltaAngle >= tau - tolerance) &&
@@ -78,7 +78,7 @@ class Transform2D extends ChangeNotifier {
   /// relative to the global coordinate space.
   ///
   /// The returned vector can be modified by the user, and the changes
-  /// will be properly applied to the transform matrix.
+  /// will be propagated back to the transform matrix.
   NotifyingVector2 get position => _position;
   set position(Vector2 position) => _position.setFrom(position);
 
@@ -96,7 +96,14 @@ class Transform2D extends ChangeNotifier {
   double get angle => _angle;
   set angle(double a) {
     _angle = a;
-    _notify();
+    _markAsModified();
+  }
+
+  /// Similar to [angle], but uses degrees instead of radians.
+  double get angleDegrees => _angle * (360 / tau);
+  set angleDegrees(double a) {
+    _angle = a * (tau / 360);
+    _markAsModified();
   }
 
   /// The scale part of the transform. The default scale factor is (1, 1),
@@ -106,14 +113,15 @@ class Transform2D extends ChangeNotifier {
   /// Scale factors can be different for X and Y directions.
   ///
   /// The returned vector can be modified by the user, and the changes
-  /// will be properly applied to the transform matrix.
+  /// will be propagated back to the transform matrix.
   NotifyingVector2 get scale => _scale;
   set scale(Vector2 scale) => _scale.setFrom(scale);
 
   /// Additional offset applied after all other transforms. Unlike other
   /// transforms, this offset is applied in the local coordinate system.
   /// For example, an [offset] of (1, 0) describes a shift by 1 unit along
-  /// the X axis, but after that axis was repositioned, rotated and scaled.
+  /// the X axis, however, this shift is applied after that axis was
+  /// repositioned, rotated and scaled.
   ///
   /// The returned vector can be modified by the user, and the changes
   /// will be properly applied to the transform matrix.
@@ -182,7 +190,7 @@ class Transform2D extends ChangeNotifier {
     );
   }
 
-  void _notify() {
+  void _markAsModified() {
     _recalculate = true;
     notifyListeners();
   }
