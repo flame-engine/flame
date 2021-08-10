@@ -43,8 +43,8 @@ class ExampleGame extends OxygenGame with FPSCounter {
           SpriteInit(await loadSprite('pizza.png')),
         )
         ..add<VelocityComponent, Vector2>(Vector2(
-          random.nextDouble() * 100 * (random.nextDouble() < 0.5 ? 1 : -1),
-          random.nextDouble() * 100 * (random.nextDouble() < 0.5 ? 1 : -1),
+          random.nextDouble() * 100 * (random.nextBool() ? 1 : -1),
+          random.nextDouble() * 100 * (random.nextBool() ? 1 : -1),
         ));
     }
   }
