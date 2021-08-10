@@ -147,13 +147,19 @@ void main() {
     test('random', () {
       final rnd = math.Random();
       for (var i = 0; i < 20; i++) {
-        final translation =
-            Vector2(rnd.nextDouble() * 10, rnd.nextDouble() * 10);
+        final translation = Vector2(
+          rnd.nextDouble() * 10,
+          rnd.nextDouble() * 10,
+        );
         final rotation = rnd.nextDouble() * 10;
-        final scale =
-            Vector2((rnd.nextDouble() - 0.3) * 3, (rnd.nextDouble() - 0.2) * 3);
+        final scale = Vector2(
+          (rnd.nextDouble() - 0.3) * 3,
+          (rnd.nextDouble() - 0.2) * 3,
+        );
         final offset = Vector2(
-            (rnd.nextDouble() - 0.5) * 10, (rnd.nextDouble() - 0.5) * 10);
+          (rnd.nextDouble() - 0.5) * 10,
+          (rnd.nextDouble() - 0.5) * 10,
+        );
         final transform2d = Transform2D()
           ..position = translation
           ..angle = rotation
@@ -165,8 +171,10 @@ void main() {
           ..scale(scale.x, scale.y, 1)
           ..translate(offset.x, offset.y);
         for (var k = 0; k < 16; k++) {
-          expect(transform2d.transformMatrix.storage[k],
-              closeTo(matrix4.storage[k], 1e-10));
+          expect(
+            transform2d.transformMatrix.storage[k],
+            closeTo(matrix4.storage[k], 1e-10),
+          );
         }
         // Check that converting between local and global is round-trippable
         final point1 =
