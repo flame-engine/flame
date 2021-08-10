@@ -91,7 +91,11 @@ class _CoordinateSystemsState extends State<CoordinateSystemsWidget> {
 /// events information on the screen, to allow exploration of the 3 coordinate
 /// systems of Flame (global, widget, game).
 class CoordinateSystemsGame extends BaseGame
-    with MultiTouchTapDetector, MultiTouchDragDetector, ScrollDetector {
+    with
+        MultiTouchTapDetector,
+        MultiTouchDragDetector,
+        ScrollDetector,
+        KeyboardEvents {
   static final _borderPaint = Paint()
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2

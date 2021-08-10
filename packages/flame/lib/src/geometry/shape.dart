@@ -60,7 +60,9 @@ abstract class Shape {
       offsetPosition,
     ];
     if (!_localCenterCache.isCacheValid(stateValues)) {
-      final center = (size / 2)..add(relativePosition)..add(offsetPosition);
+      final center = (size / 2)
+        ..add(relativePosition)
+        ..add(offsetPosition);
       _localCenterCache.updateCache(
         center,
         stateValues.map((e) => e.clone()).toList(growable: false),

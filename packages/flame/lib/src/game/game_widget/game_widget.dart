@@ -1,3 +1,4 @@
+import 'package:flame/input.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -196,7 +197,13 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   }
 
   KeyEventResult handleKeyEvent(FocusNode focusNode, RawKeyEvent event) {
-    return widget.game.onKeyEvent(event, RawKeyboard.instance.keysPressed);
+    final game = widget.game;
+
+    if (game is KeyboardEvents) {
+      return game.onKeyEvent(event, RawKeyboard.instance.keysPressed);
+    }
+
+    return KeyEventResult.handled;
   }
 
   @override

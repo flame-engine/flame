@@ -138,7 +138,11 @@ class Rock extends SquareComponent with Hitbox, Collidable, Tappable {
 }
 
 class CameraAndViewportGame extends BaseGame
-    with HasCollidables, HasTappableComponents, HasKeyboardHandlerComponents {
+    with
+        HasCollidables,
+        HasTappableComponents,
+        HasKeyboardHandlerComponents,
+        KeyboardEvents {
   late MovableSquare square;
 
   final Vector2 viewportResolution;

@@ -12,7 +12,7 @@ mixin KeyboardHandler on BaseComponent {
   }
 }
 
-mixin HasKeyboardHandlerComponents on BaseGame {
+mixin HasKeyboardHandlerComponents on BaseGame implements KeyboardEvents {
   bool _handleKeyboardEvent(
     bool Function(KeyboardHandler child) keyboardEventHandler,
   ) {
@@ -46,6 +46,15 @@ mixin HasKeyboardHandlerComponents on BaseGame {
     if (blockedPropagation) {
       return KeyEventResult.handled;
     }
-    return super.onKeyEvent(event, keysPressed);
+    return KeyEventResult.handled;
+  }
+}
+
+mixin KeyboardEvents on Game {
+  KeyEventResult onKeyEvent(
+    RawKeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    return KeyEventResult.handled;
   }
 }

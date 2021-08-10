@@ -4,11 +4,10 @@ import 'package:flame/game.dart';
 
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
-import 'package:flutter/services.dart'
-    show RawKeyEvent, LogicalKeyboardKey, RawKeyDownEvent;
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-class KeyboardGame extends Game {
+class KeyboardGame extends Game with KeyboardEvents {
   static final Paint white = BasicPalette.white.paint();
   static const int speed = 200;
 

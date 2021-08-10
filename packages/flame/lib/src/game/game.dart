@@ -86,14 +86,6 @@ abstract class Game extends Projector {
   /// Use for calculating the FPS.
   void onTimingsCallback(List<FrameTiming> timings) {}
 
-  @mustCallSuper
-  KeyEventResult onKeyEvent(
-    RawKeyEvent event,
-    Set<LogicalKeyboardKey> keysPressed,
-  ) {
-    return KeyEventResult.skipRemainingHandlers;
-  }
-
   /// Marks game as not attached tto any widget tree.
   ///
   /// Should be called manually.
