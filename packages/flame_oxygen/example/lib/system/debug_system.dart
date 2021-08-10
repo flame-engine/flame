@@ -42,7 +42,7 @@ class DebugSystem extends BaseSystem {
         'position: ${entity.get<PositionComponent>()!.position}',
         'size: $size',
         'angle: ${entity.get<AngleComponent>()?.radians ?? 0}',
-        'anchor: ${entity.get<AnchorComponent>()?.anchor ?? Anchor.topLeft}'
+        'anchor: ${entity.get<AnchorComponent>()?.anchor ?? Anchor.topLeft}',
       ].join('\n'),
       Vector2(size.x + 2, 0),
     );
