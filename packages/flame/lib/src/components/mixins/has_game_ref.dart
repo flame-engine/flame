@@ -8,8 +8,8 @@ mixin HasGameRef<T extends Game> on Component {
     if (_gameRef == null) {
       var c = parent;
       while (c != null) {
-        if (c is HasGameRef<T> && c._gameRef != null) {
-          _gameRef = c._gameRef;
+        if (c is HasGameRef<T>) {
+          _gameRef = c.gameRef;
           return _gameRef!;
         } else if (c is T) {
           _gameRef = c;

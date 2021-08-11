@@ -251,10 +251,6 @@ abstract class Component {
 
   @mustCallSuper
   ComponentSet createComponentSet() {
-    final components = ComponentSet.createDefault(prepare);
-    if (this is HasGameRef) {
-      components.register<HasGameRef>();
-    }
-    return components;
+    return ComponentSet.createDefault(prepare);
   }
 }
