@@ -54,7 +54,7 @@ class Transform2D extends ChangeNotifier {
     ..scale = other.scale
     ..offset = other.offset;
 
-  /// Check whether this transform is equal to other, up to the given
+  /// Check whether this transform is equal to [other], up to the given
   /// [tolerance]. Setting tolerance to zero will check for exact equality.
   /// Transforms are considered equal if their rotation angles are the same
   /// or differ by a multiple of 2π, and if all other transform parameters:
