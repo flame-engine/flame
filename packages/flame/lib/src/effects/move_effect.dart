@@ -39,11 +39,7 @@ class MoveEffect extends SimplePositionComponentEffect {
     double? postOffset,
     bool? removeOnFinish,
     VoidCallback? onComplete,
-  })  : assert(
-          (duration != null) ^ (speed != null),
-          'Either speed or duration necessary',
-        ),
-        super(
+  }) : super(
           isInfinite,
           isAlternating,
           duration: duration,
@@ -105,14 +101,10 @@ class MoveEffect extends SimplePositionComponentEffect {
     final totalPathLength = isAlternating ? pathLength * 2 : pathLength;
     speed ??= totalPathLength / duration!;
 
-    final offsetTime = preOffset + postOffset;
-
     // `duration` is not null when speed is null
     duration ??= totalPathLength / speed!;
-    duration = duration! + (isAlternating ? 2 * offsetTime : offsetTime);
-
-    // `speed` is always not null here already
-    peakTime = isAlternating ? duration! / 2 : duration!;
+    duration = duration! + totalOffset;
+    setPeakTimeFromDuration(duration!);
   }
 
   @override

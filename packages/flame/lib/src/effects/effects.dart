@@ -38,12 +38,33 @@ abstract class ComponentEffect<T extends Component> extends BaseComponent {
   final bool removeOnFinish;
   final bool _initialIsInfinite;
   final bool _initialIsAlternating;
+
+  /// The percentage of the effect that has passed including [preOffset] and
+  /// [postOffset].
   double percentage = 0.0;
+
+  /// The outcome the curve function, only updates after [preOffset] and before
+  /// [postOffset]
   double curveProgress = 0.0;
+
+  /// How long time it takes for the effect to peak, which means right before it
+  /// starts any potential reversal or reset. Including offsets.
   double peakTime = 0.0;
+
+  /// The time passed since the start of the effect, it will start to decrease
+  /// after it has reached [peakTime] if [isAlternating] is true, and reset to
+  /// zero if it is not.
   double currentTime = 0.0;
+
+  /// When an effect reaches the end, and the beginning if it is alternating,
+  /// it will overshoot 0.0 and [peakTime], this time is added to the next time
+  /// step.
   double driftTime = 0.0;
+
+  /// Whether the effect is going forward or is reversing.
   int curveDirection = 1;
+
+  /// Which curve that the effect is following.
   Curve curve;
 
   /// The time (in seconds) that should pass before the component starts each
@@ -53,6 +74,10 @@ abstract class ComponentEffect<T extends Component> extends BaseComponent {
   /// The time (in seconds) that should pass before the component ends each
   /// iteration.
   double postOffset;
+
+  /// The total time offset spent waiting in one iteration, so from the start to
+  /// the end of the effect and then back again if it [isAlternating].
+  double get totalOffset => preOffset + postOffset * (isAlternating ? 2 : 1);
 
   /// The [preOffset] that the component was initialized with.
   final double originalPreOffset;
@@ -64,6 +89,7 @@ abstract class ComponentEffect<T extends Component> extends BaseComponent {
   /// once it is done.
   bool skipEffectReset = false;
 
+  /// The total time of one iteration of the effect, including offsets.
   double get iterationTime => peakTime * (isAlternating ? 2 : 1);
 
   ComponentEffect(
@@ -183,6 +209,10 @@ abstract class ComponentEffect<T extends Component> extends BaseComponent {
 
   void setComponentToOriginalState();
   void setComponentToEndState();
+
+  void setPeakTimeFromDuration(double duration) {
+    peakTime = duration / (isAlternating ? 2 : 1) + preOffset + postOffset;
+  }
 }
 
 abstract class PositionComponentEffect
@@ -346,12 +376,17 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
 }
 
 mixin EffectsHelper on Component {
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
+    children.register<ComponentEffect>();
+  }
+
   void clearEffects() {
     children.removeAll(effects());
   }
 
   List<ComponentEffect> effects() {
-    // TODO: check if query is registered
     return children.query<ComponentEffect>();
   }
 }

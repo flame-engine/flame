@@ -19,6 +19,7 @@ class RotateEffectGame extends BaseGame with TapDetector {
     add(square);
   }
 
+  // TODO(spydon): Is rotate effect not working when isAlternate?
   @override
   void onTap() {
     square.add(

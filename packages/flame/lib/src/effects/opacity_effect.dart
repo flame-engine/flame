@@ -69,6 +69,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     _final = _original.withOpacity(opacity);
 
     _difference = _original.opacity - opacity;
+    setPeakTimeFromDuration(duration);
   }
 
   @override

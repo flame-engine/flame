@@ -36,7 +36,7 @@ class ColorEffect extends ComponentEffect<HasPaint> {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    peakTime = duration;
+    setPeakTimeFromDuration(duration);
 
     _original = affectedParent!.getPaint(paintId);
 

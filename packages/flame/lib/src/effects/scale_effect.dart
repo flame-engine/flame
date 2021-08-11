@@ -24,11 +24,7 @@ class ScaleEffect extends SimplePositionComponentEffect {
     double? postOffset,
     bool? removeOnFinish,
     VoidCallback? onComplete,
-  })  : assert(
-          duration != null || speed != null,
-          'Either speed or duration necessary',
-        ),
-        super(
+  }) : super(
           isInfinite,
           isAlternating,
           duration: duration,
@@ -52,7 +48,7 @@ class ScaleEffect extends SimplePositionComponentEffect {
     }
     speed ??= _delta.length / duration!;
     duration ??= _delta.length / speed!;
-    peakTime = isAlternating ? duration! / 2 : duration!;
+    setPeakTimeFromDuration(duration!);
   }
 
   @override

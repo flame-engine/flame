@@ -71,9 +71,9 @@ void effectTest(
   } else {
     // To account for float number operations making effects not finish
     const epsilon = 0.001;
-    if (effect.percentage! < epsilon) {
+    if (effect.percentage < epsilon) {
       game.update(effect.currentTime);
-    } else if (1.0 - effect.percentage! < epsilon) {
+    } else if (1.0 - effect.percentage < epsilon) {
       game.update(effect.peakTime - effect.currentTime);
     }
 

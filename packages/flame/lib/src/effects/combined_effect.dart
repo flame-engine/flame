@@ -3,6 +3,13 @@ import 'dart:ui';
 
 import 'effects.dart';
 
+/// The [CombinedEffect] runs several effects in parallel on a component.
+///
+/// If an underlying effect has [isAlternating] set to true and the
+/// [CombinedEffect] also is set to [isAlternating] then it will run the
+/// full underlying effect, forward and reverse, on the forward iteration of the
+/// curve of the [CombinedEffect] and then it will run it again on the backward
+/// direction of the curve.
 class CombinedEffect extends PositionComponentEffect {
   final List<PositionComponentEffect> effects;
   final double offset;
@@ -22,6 +29,7 @@ class CombinedEffect extends PositionComponentEffect {
           removeOnFinish: removeOnFinish,
           modifiesPosition: effects.any((e) => e.modifiesPosition),
           modifiesAngle: effects.any((e) => e.modifiesAngle),
+          modifiesScale: effects.any((e) => e.modifiesScale),
           modifiesSize: effects.any((e) => e.modifiesSize),
           preOffset: preOffset,
           postOffset: postOffset,
@@ -55,12 +63,14 @@ class CombinedEffect extends PositionComponentEffect {
           effect.originalSize != effect.endSize ? effect.endSize : endSize;
       peakTime = max(
         peakTime,
-        // TODO(spydon): Should this really be iteration time?
         effect.iterationTime,
       );
     });
     effects.forEach((effect) {
-      effect.postOffset = peakTime - effect.peakTime;
+      // Since the postOffset will run for "double" the time if the effect is
+      // alternating we have to divide it by 2.
+      effect.postOffset +=
+          (peakTime - effect.iterationTime) / (effect.isAlternating ? 2 : 1);
     });
     if (isAlternating) {
       endPosition = originalPosition;

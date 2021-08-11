@@ -22,11 +22,7 @@ class RotateEffect extends SimplePositionComponentEffect {
     double? postOffset,
     bool? removeOnFinish,
     VoidCallback? onComplete,
-  })  : assert(
-          (duration != null) ^ (speed != null),
-          'Either speed or duration necessary',
-        ),
-        super(
+  }) : super(
           isInfinite,
           isAlternating,
           duration: duration,
@@ -50,7 +46,7 @@ class RotateEffect extends SimplePositionComponentEffect {
     }
     speed ??= _delta.abs() / duration!;
     duration ??= _delta.abs() / speed!;
-    peakTime = isAlternating ? duration! / 2 : duration!;
+    setPeakTimeFromDuration(duration!);
   }
 
   @override

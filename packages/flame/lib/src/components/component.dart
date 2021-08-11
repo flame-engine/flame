@@ -131,6 +131,7 @@ abstract class Component {
   /// verified by the [Game.hasLayout] property, to add components upon game
   /// initialization, the [onLoad] method can be used instead.
   Future<void> add(Component component) {
+    print('Added $component to $this');
     return children.addChild(component);
   }
 
@@ -235,6 +236,7 @@ abstract class Component {
     component.parent = this;
     final parentGame = component.findParent<Game>();
     if (parentGame == null) {
+      print('$this could not prepare $component');
       component.isPrepared = false;
     } else {
       if (parentGame is BaseGame) {

@@ -19,20 +19,19 @@ class MoveEffectGame extends BaseGame with TapDetector {
   void onTapUp(TapUpInfo info) {
     square.add(
       MoveEffect(
-          path: [
-            info.eventPosition.game,
-            Vector2(100, 100),
-            Vector2(50, 120),
-            Vector2(200, 400),
-            Vector2(150, 0),
-            Vector2(100, 300),
-          ],
-          speed: 250.0,
-          curve: Curves.bounceInOut,
-          isAlternating: true,
-          isInfinite: true,
-          preOffset: 5.0,
-          postOffset: 2.0),
+        path: [
+          info.eventPosition.game,
+          Vector2(100, 100),
+          Vector2(50, 120),
+          Vector2(200, 400),
+          Vector2(150, 0),
+          Vector2(100, 300),
+        ],
+        speed: 250.0,
+        curve: Curves.bounceInOut,
+        isAlternating: true,
+        postOffset: 2.0,
+      ),
     );
   }
 }

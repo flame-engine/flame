@@ -26,6 +26,7 @@ class SequenceEffect extends PositionComponentEffect {
           isAlternating,
           modifiesPosition: effects.any((e) => e.modifiesPosition),
           modifiesAngle: effects.any((e) => e.modifiesAngle),
+          modifiesScale: effects.any((e) => e.modifiesScale),
           modifiesSize: effects.any((e) => e.modifiesSize),
           preOffset: preOffset,
           postOffset: postOffset,
@@ -48,6 +49,7 @@ class SequenceEffect extends PositionComponentEffect {
     _currentIndex = _initialIndex;
     _driftModifier = _initialDriftModifier;
 
+    // TODO(spydon): add all the underlying effects and add preOffsets to them
     effects.forEach((effect) async {
       effect.reset();
       affectedParent!.position.setFrom(endPosition!);
