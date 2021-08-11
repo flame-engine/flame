@@ -94,10 +94,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// tick.
   ///
   /// See [addChild] for more details.
-  Future<void> addChildren(
-    Iterable<Component> components, {
-    BaseGame? gameRef,
-  }) async {
+  Future<void> addChildren(Iterable<Component> components) async {
     final ps = components.map(addChild);
     await Future.wait(ps);
   }
