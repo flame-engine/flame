@@ -29,6 +29,8 @@
  - Introduce `scale` on `PositionComponent`
  - Add `ScaleEffect` that works on `scale` instead of `size`
  - Add class `NotifyingVector2`
+ - Add class `Transform2D`
+ - Remove `FPSCounter` from `BaseGame`
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps

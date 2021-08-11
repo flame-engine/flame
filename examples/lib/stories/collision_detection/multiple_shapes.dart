@@ -203,7 +203,7 @@ class CollidableSnowman extends MyCollidable {
 }
 
 class MultipleShapes extends BaseGame
-    with HasCollidables, HasDraggableComponents {
+    with HasCollidables, HasDraggableComponents, FPSCounter {
   final TextPaint fpsTextPaint = TextPaint(
     config: TextPaintConfig(
       color: BasicPalette.white.color,
