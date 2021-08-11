@@ -27,8 +27,18 @@ void check(NotifyingVector2 v1, VectorOperation operation) {
 
 void main() {
   group('NotifyingVector2', () {
+    test('constructors', () {
+      final nv0 = NotifyingVector2.zero();
+      expect(nv0, Vector2.zero());
+      final nv1 = NotifyingVector2(3, 1415);
+      expect(nv1, Vector2(3, 1415));
+      final nv2 = NotifyingVector2.all(111);
+      expect(nv2, Vector2.all(111));
+      final nv3 = NotifyingVector2.copy(Vector2(4, 9));
+      expect(nv3, Vector2(4, 9));
+    });
     test('full setters', () {
-      final nv = NotifyingVector2();
+      final nv = NotifyingVector2.zero();
       check(nv, (v) => v.setValues(3, 2));
       check(nv, (v) => v.setFrom(Vector2(5, 8)));
       check(nv, (v) => v.setZero());
@@ -43,7 +53,7 @@ void main() {
       check(nv, (v) => v.ts = Vector2(-5, -89));
     });
     test('individual field setters', () {
-      final nv = NotifyingVector2();
+      final nv = NotifyingVector2.zero();
       check(nv, (v) => v[0] = 2.5);
       check(nv, (v) => v[1] = 1.25);
       check(nv, (v) => v.x = 425);
@@ -54,7 +64,7 @@ void main() {
       check(nv, (v) => v.t = 104);
     });
     test('modification methods', () {
-      final nv = NotifyingVector2()..setValues(23, 3);
+      final nv = NotifyingVector2(23, 3);
       check(nv, (v) => v.length = 15);
       check(nv, (v) => v.normalize());
       check(nv, (v) => v.postmultiply(Matrix2.rotation(1)));
@@ -77,7 +87,7 @@ void main() {
       check(nv, (v) => v.roundToZero());
     });
     test('storage is read-only', () {
-      final nv = NotifyingVector2();
+      final nv = NotifyingVector2.zero();
       expect(nv, Vector2.zero());
       final storage = nv.storage;
       // Check that storage is not writable
