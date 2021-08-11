@@ -232,7 +232,6 @@ abstract class Component {
   /// parent is added to a [Game] and false will be returned.
   @mustCallSuper
   void prepare(Component component) {
-    print('prepare in: $this');
     component.parent = this;
     final parentGame = component.findParent<Game>();
     if (parentGame == null) {

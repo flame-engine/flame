@@ -7,11 +7,6 @@ import 'debug.dart';
 import 'game_in_game.dart';
 import 'priority.dart';
 
-const priorityInfo = '''
-On this example, click on the square to bring them to the front by changing the
-priority.
-''';
-
 void addComponentsStories(Dashbook dashbook) {
   dashbook.storiesOf('Components')
     ..add(
@@ -34,6 +29,6 @@ void addComponentsStories(Dashbook dashbook) {
       'Game-in-game',
       (_) => GameWidget(game: GameInGame()),
       codeLink: baseLink('components/game_in_game.dart'),
-      info: priorityInfo,
+      info: gameInGameInfo,
     );
 }
