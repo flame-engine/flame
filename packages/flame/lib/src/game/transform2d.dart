@@ -40,9 +40,9 @@ class Transform2D extends ChangeNotifier {
       : _transformMatrix = Matrix4.identity(),
         _recalculate = true,
         _angle = 0,
-        _position = NotifyingVector2(),
-        _scale = NotifyingVector2()..setValues(1, 1),
-        _offset = NotifyingVector2() {
+        _position = NotifyingVector2.zero(),
+        _scale = NotifyingVector2.all(1),
+        _offset = NotifyingVector2.zero() {
     _position.addListener(_markAsModified);
     _scale.addListener(_markAsModified);
     _offset.addListener(_markAsModified);
