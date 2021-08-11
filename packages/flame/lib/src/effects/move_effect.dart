@@ -35,6 +35,8 @@ class MoveEffect extends SimplePositionComponentEffect {
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
+    double? preOffset,
+    double? postOffset,
     bool? removeOnFinish,
     VoidCallback? onComplete,
   })  : assert(
@@ -48,8 +50,10 @@ class MoveEffect extends SimplePositionComponentEffect {
           speed: speed,
           curve: curve,
           isRelative: isRelative,
-          removeOnFinish: removeOnFinish,
           modifiesPosition: true,
+          preOffset: preOffset,
+          postOffset: postOffset,
+          removeOnFinish: removeOnFinish,
           onComplete: onComplete,
         );
 
@@ -57,7 +61,7 @@ class MoveEffect extends SimplePositionComponentEffect {
   Future<void> onLoad() async {
     super.onLoad();
     List<Vector2> _movePath;
-    _startPosition = affectedComponent!.position.clone();
+    _startPosition = affectedParent!.position.clone();
     // With relative here we mean that any vector in the list is relative
     // to the previous vector in the list, except the first one which is
     // relative to the start position of the component.
@@ -101,8 +105,11 @@ class MoveEffect extends SimplePositionComponentEffect {
     final totalPathLength = isAlternating ? pathLength * 2 : pathLength;
     speed ??= totalPathLength / duration!;
 
+    final offsetTime = preOffset + postOffset;
+
     // `duration` is not null when speed is null
     duration ??= totalPathLength / speed!;
+    duration = duration! + (isAlternating ? 2 * offsetTime : offsetTime);
 
     // `speed` is always not null here already
     peakTime = isAlternating ? duration! / 2 : duration!;
@@ -128,7 +135,7 @@ class MoveEffect extends SimplePositionComponentEffect {
     final lastEndAt = _currentSubPath!.startAt;
     final localPercentage =
         (curveProgress - lastEndAt) / (_currentSubPath!.endAt - lastEndAt);
-    affectedComponent!.position.setFrom(_currentSubPath!.previous +
+    affectedParent!.position.setFrom(_currentSubPath!.previous +
         ((_currentSubPath!.v - _currentSubPath!.previous) * localPercentage));
   }
 }

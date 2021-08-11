@@ -21,11 +21,15 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     this.paintId,
     bool isInfinite = false,
     bool isAlternating = false,
+    double? preOffset,
+    double? postOffset,
     Curve? curve,
     bool? removeOnFinish,
   }) : super(
           isInfinite,
           isAlternating,
+          preOffset: preOffset,
+          postOffset: postOffset,
           curve: curve,
           removeOnFinish: removeOnFinish,
         );
@@ -61,7 +65,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     super.onLoad();
     peakTime = duration;
 
-    _original = affectedComponent!.getPaint(paintId).color;
+    _original = affectedParent!.getPaint(paintId).color;
     _final = _original.withOpacity(opacity);
 
     _difference = _original.opacity - opacity;
@@ -69,7 +73,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
 
   @override
   void setComponentToEndState() {
-    affectedComponent!.setColor(
+    affectedParent!.setColor(
       _final,
       paintId: paintId,
     );
@@ -77,7 +81,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
 
   @override
   void setComponentToOriginalState() {
-    affectedComponent?.setColor(
+    affectedParent?.setColor(
       _original,
       paintId: paintId,
     );
@@ -86,7 +90,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
   @override
   void update(double dt) {
     super.update(dt);
-    affectedComponent?.setOpacity(
+    affectedParent?.setOpacity(
       _original.opacity - _difference * curveProgress,
       paintId: paintId,
     );

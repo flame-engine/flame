@@ -12,6 +12,8 @@ class CombinedEffect extends PositionComponentEffect {
     this.offset = 0.0,
     bool isInfinite = false,
     bool isAlternating = false,
+    double? preOffset,
+    double? postOffset,
     bool? removeOnFinish,
     VoidCallback? onComplete,
   }) : super(
@@ -21,6 +23,8 @@ class CombinedEffect extends PositionComponentEffect {
           modifiesPosition: effects.any((e) => e.modifiesPosition),
           modifiesAngle: effects.any((e) => e.modifiesAngle),
           modifiesSize: effects.any((e) => e.modifiesSize),
+          preOffset: preOffset,
+          postOffset: postOffset,
           onComplete: onComplete,
         ) {
     assert(
@@ -38,6 +42,8 @@ class CombinedEffect extends PositionComponentEffect {
   Future<void> onLoad() async {
     super.onLoad();
     effects.forEach((effect) async {
+      final indexOffset = effects.indexOf(effect) * offset;
+      effect.preOffset += preOffset + indexOffset;
       await add(effect);
       // Only change these if the effect modifies these
       endPosition = effect.originalPosition != effect.endPosition
@@ -49,8 +55,12 @@ class CombinedEffect extends PositionComponentEffect {
           effect.originalSize != effect.endSize ? effect.endSize : endSize;
       peakTime = max(
         peakTime,
-        effect.iterationTime + offset * effects.indexOf(effect),
+        // TODO(spydon): Should this really be iteration time?
+        effect.iterationTime,
       );
+    });
+    effects.forEach((effect) {
+      effect.postOffset = peakTime - effect.peakTime;
     });
     if (isAlternating) {
       endPosition = originalPosition;
@@ -60,51 +70,16 @@ class CombinedEffect extends PositionComponentEffect {
   }
 
   @override
-  void update(double dt) {
-    super.update(dt);
-    effects.forEach((effect) => _updateEffect(effect, dt));
-    if (effects.every((effect) => effect.hasCompleted())) {
-      if (isAlternating && curveDirection.isNegative) {
-        effects.forEach((effect) => effect.isAlternating = true);
-      }
-    }
-  }
-
-  @override
   void reset() {
     super.reset();
     effects.forEach((effect) => effect.reset());
-    if (parent != null) {
+    if (affectedParent != null) {
       onLoad();
     }
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    effects.forEach((effect) => effect.dispose());
-  }
-
-  void _updateEffect(PositionComponentEffect effect, double dt) {
-    final isReverse = curveDirection.isNegative;
-    final initialOffset = effects.indexOf(effect) * offset;
-    final effectOffset =
-        isReverse ? peakTime - effect.peakTime - initialOffset : initialOffset;
-    final passedOffset = isReverse ? peakTime - currentTime : currentTime;
-    if (!effect.hasCompleted() && effectOffset < passedOffset) {
-      final time =
-          effectOffset < passedOffset - dt ? dt : passedOffset - effectOffset;
-      effect.update(time);
-    }
-    if (isMax()) {
-      _maybeReverse(effect);
-    }
-  }
-
-  void _maybeReverse(PositionComponentEffect effect) {
-    if (isAlternating && !effect.isAlternating && effect.isMax()) {
-      // Make the effect go in reverse
-      effect.isAlternating = true;
-    }
+  void onRemove() {
+    super.onRemove();
   }
 }

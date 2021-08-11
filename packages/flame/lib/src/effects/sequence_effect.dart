@@ -17,6 +17,8 @@ class SequenceEffect extends PositionComponentEffect {
     required this.effects,
     bool isInfinite = false,
     bool isAlternating = false,
+    double? preOffset,
+    double? postOffset,
     bool? removeOnFinish,
     VoidCallback? onComplete,
   }) : super(
@@ -25,6 +27,8 @@ class SequenceEffect extends PositionComponentEffect {
           modifiesPosition: effects.any((e) => e.modifiesPosition),
           modifiesAngle: effects.any((e) => e.modifiesAngle),
           modifiesSize: effects.any((e) => e.modifiesSize),
+          preOffset: preOffset,
+          postOffset: postOffset,
           removeOnFinish: removeOnFinish,
           onComplete: onComplete,
         ) {
@@ -46,10 +50,10 @@ class SequenceEffect extends PositionComponentEffect {
 
     effects.forEach((effect) async {
       effect.reset();
-      affectedComponent!.position.setFrom(endPosition!);
-      affectedComponent!.angle = endAngle!;
-      affectedComponent!.size.setFrom(endSize!);
-      if (effect.affectedComponent == null) {
+      affectedParent!.position.setFrom(endPosition!);
+      affectedParent!.angle = endAngle!;
+      affectedParent!.size.setFrom(endSize!);
+      if (effect.affectedParent == null) {
         await add(effect);
       } else {
         await effect.onLoad();
@@ -69,9 +73,9 @@ class SequenceEffect extends PositionComponentEffect {
       endAngle = originalAngle;
       endSize = originalSize;
     }
-    affectedComponent!.position.setFrom(originalPosition!);
-    affectedComponent!.angle = originalAngle!;
-    affectedComponent!.size.setFrom(originalSize!);
+    affectedParent!.position.setFrom(originalPosition!);
+    affectedParent!.angle = originalAngle!;
+    affectedParent!.size.setFrom(originalSize!);
     currentEffect = effects.first;
     _currentWasAlternating = currentEffect.isAlternating;
   }
@@ -111,7 +115,7 @@ class SequenceEffect extends PositionComponentEffect {
   void reset() {
     super.reset();
     effects.forEach((e) => e.reset());
-    if (affectedComponent != null) {
+    if (affectedParent != null) {
       onLoad();
     }
   }

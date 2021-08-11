@@ -11,25 +11,19 @@ export './rotate_effect.dart';
 export './sequence_effect.dart';
 export './size_effect.dart';
 
-abstract class ComponentEffect<T extends Component> extends Component {
+abstract class ComponentEffect<T extends Component> extends BaseComponent {
   /// If the component has a parent it will be set here
-  @override
-  T? get parent => super.parent != null ? super.parent! as T : null;
-
   T _affectedParent(Component component) {
     if (parent is T) {
-      return parent!;
+      return parent! as T;
     } else {
       return _affectedParent(parent!);
     }
   }
 
-  T? affectedComponent;
+  T? affectedParent;
 
   Function()? onComplete;
-
-  bool _isDisposed = false;
-  bool get isDisposed => _isDisposed;
 
   bool _isPaused = false;
   bool get isPaused => _isPaused;
@@ -44,13 +38,27 @@ abstract class ComponentEffect<T extends Component> extends Component {
   final bool removeOnFinish;
   final bool _initialIsInfinite;
   final bool _initialIsAlternating;
-  double? percentage;
+  double percentage = 0.0;
   double curveProgress = 0.0;
   double peakTime = 0.0;
   double currentTime = 0.0;
   double driftTime = 0.0;
   int curveDirection = 1;
   Curve curve;
+
+  /// The time (in seconds) that should pass before the component starts each
+  /// iteration.
+  double preOffset;
+
+  /// The time (in seconds) that should pass before the component ends each
+  /// iteration.
+  double postOffset;
+
+  /// The [preOffset] that the component was initialized with.
+  final double originalPreOffset;
+
+  /// The [postOffset] that the component was initialized with.
+  final double originalPostOffset;
 
   /// If this is set to true the effect will not be set to its original state
   /// once it is done.
@@ -62,23 +70,30 @@ abstract class ComponentEffect<T extends Component> extends Component {
     this._initialIsInfinite,
     this._initialIsAlternating, {
     this.isRelative = false,
+    double? preOffset,
+    double? postOffset,
     bool? removeOnFinish,
     Curve? curve,
     this.onComplete,
   })  : isInfinite = _initialIsInfinite,
         isAlternating = _initialIsAlternating,
+        preOffset = preOffset ?? 0.0,
+        postOffset = postOffset ?? 0.0,
+        originalPreOffset = preOffset ?? 0.0,
+        originalPostOffset = postOffset ?? 0.0,
         removeOnFinish = removeOnFinish ?? true,
         curve = curve ?? Curves.linear;
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    affectedComponent = _affectedParent(parent!);
+    affectedParent = _affectedParent(parent!);
   }
 
   @override
   @mustCallSuper
   void update(double dt) {
+    super.update(dt);
     if (isAlternating) {
       curveDirection = isMax() ? -1 : (isMin() ? 1 : curveDirection);
     }
@@ -95,41 +110,50 @@ abstract class ComponentEffect<T extends Component> extends Component {
     } else {
       currentTime += (dt + driftTime) * curveDirection;
       percentage = (currentTime / peakTime).clamp(0.0, 1.0).toDouble();
-      curveProgress = curve.transform(percentage!);
+      if (currentTime >= preOffset && currentTime <= peakTime - postOffset) {
+        final effectPercentage = percentage - preOffset / peakTime;
+        curveProgress = curve.transform(effectPercentage);
+      }
       _updateDriftTime();
       currentTime = currentTime.clamp(0.0, peakTime).toDouble();
     }
   }
 
-  void dispose() => _isDisposed = true;
-
   /// Whether the effect has completed or not.
   bool hasCompleted() {
     return (!isInfinite && !isAlternating && isMax()) ||
         (!isInfinite && isAlternating && isMin()) ||
-        isDisposed;
+        shouldRemove;
   }
 
-  bool isMax() => percentage == null ? false : percentage == 1.0;
-  bool isMin() => percentage == null ? false : percentage == 0.0;
+  /// Whether the effect has reached its end, before potentially reversing
+  bool isMax() => percentage == 1.0;
+
+  /// Whether the effect is at its beginning
+  bool isMin() => percentage == 0.0;
+
   bool isRootEffect() {
     return parent is! ComponentEffect;
   }
 
   /// Resets the effect and the component which the effect was added to.
+  @mustCallSuper
   void reset() {
     resetEffect();
     setComponentToOriginalState();
   }
 
   /// Resets the effect to its original state so that it can be re-run.
+  @mustCallSuper
   void resetEffect() {
-    _isDisposed = false;
-    percentage = null;
+    shouldRemove = false;
+    percentage = 0.0;
     currentTime = 0.0;
     curveDirection = 1;
     isInfinite = _initialIsInfinite;
     isAlternating = _initialIsAlternating;
+    preOffset = originalPreOffset;
+    postOffset = originalPostOffset;
   }
 
   // When the time overshoots the max and min it needs to add that time to
@@ -185,6 +209,8 @@ abstract class PositionComponentEffect
     bool initialIsInfinite,
     bool initialIsAlternating, {
     bool isRelative = false,
+    double? preOffset,
+    double? postOffset,
     bool? removeOnFinish,
     Curve? curve,
     this.modifiesPosition = false,
@@ -196,6 +222,8 @@ abstract class PositionComponentEffect
           initialIsInfinite,
           initialIsAlternating,
           isRelative: isRelative,
+          preOffset: preOffset,
+          postOffset: postOffset,
           removeOnFinish: removeOnFinish,
           curve: curve,
           onComplete: onComplete,
@@ -205,7 +233,7 @@ abstract class PositionComponentEffect
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    final component = parent!;
+    final component = affectedParent!;
 
     originalPosition = component.position.clone();
     originalAngle = component.angle;
@@ -236,28 +264,28 @@ abstract class PositionComponentEffect
           position != null,
           '`position` must not be `null` for an effect which modifies `position`',
         );
-        parent?.position.setFrom(position!);
+        affectedParent?.position.setFrom(position!);
       }
       if (modifiesAngle) {
         assert(
           angle != null,
           '`angle` must not be `null` for an effect which modifies `angle`',
         );
-        parent?.angle = angle!;
+        affectedParent?.angle = angle!;
       }
       if (modifiesSize) {
         assert(
           size != null,
           '`size` must not be `null` for an effect which modifies `size`',
         );
-        parent?.size.setFrom(size!);
+        affectedParent?.size.setFrom(size!);
       }
       if (modifiesScale) {
         assert(
           scale != null,
           '`scale` must not be `null` for an effect which modifies `scale`',
         );
-        parent?.scale.setFrom(scale!);
+        affectedParent?.scale.setFrom(scale!);
       }
     }
   }
@@ -289,6 +317,8 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
     this.speed,
     Curve? curve,
     bool isRelative = false,
+    double? preOffset,
+    double? postOffset,
     bool? removeOnFinish,
     bool modifiesPosition = false,
     bool modifiesAngle = false,
@@ -303,6 +333,8 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
           initialIsInfinite,
           initialIsAlternating,
           isRelative: isRelative,
+          preOffset: preOffset,
+          postOffset: postOffset,
           removeOnFinish: removeOnFinish,
           curve: curve,
           modifiesPosition: modifiesPosition,

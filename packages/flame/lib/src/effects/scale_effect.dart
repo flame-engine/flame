@@ -20,6 +20,8 @@ class ScaleEffect extends SimplePositionComponentEffect {
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
+    double? preOffset,
+    double? postOffset,
     bool? removeOnFinish,
     VoidCallback? onComplete,
   })  : assert(
@@ -33,15 +35,17 @@ class ScaleEffect extends SimplePositionComponentEffect {
           speed: speed,
           curve: curve,
           isRelative: isRelative,
-          removeOnFinish: removeOnFinish,
           modifiesScale: true,
+          preOffset: preOffset,
+          postOffset: postOffset,
+          removeOnFinish: removeOnFinish,
           onComplete: onComplete,
         );
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    _startScale = affectedComponent!.scale.clone();
+    _startScale = affectedParent!.scale.clone();
     _delta = isRelative ? scale : scale - _startScale;
     if (!isAlternating) {
       endScale = _startScale + _delta;
@@ -54,6 +58,6 @@ class ScaleEffect extends SimplePositionComponentEffect {
   @override
   void update(double dt) {
     super.update(dt);
-    affectedComponent!.scale.setFrom(_startScale + _delta * curveProgress);
+    affectedParent!.scale.setFrom(_startScale + _delta * curveProgress);
   }
 }

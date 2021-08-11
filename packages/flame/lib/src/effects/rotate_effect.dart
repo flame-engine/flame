@@ -18,6 +18,8 @@ class RotateEffect extends SimplePositionComponentEffect {
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
+    double? preOffset,
+    double? postOffset,
     bool? removeOnFinish,
     VoidCallback? onComplete,
   })  : assert(
@@ -32,6 +34,8 @@ class RotateEffect extends SimplePositionComponentEffect {
           curve: curve,
           isRelative: isRelative,
           removeOnFinish: removeOnFinish,
+          preOffset: preOffset,
+          postOffset: postOffset,
           modifiesAngle: true,
           onComplete: onComplete,
         );
@@ -39,7 +43,7 @@ class RotateEffect extends SimplePositionComponentEffect {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    _startAngle = affectedComponent!.angle;
+    _startAngle = affectedParent!.angle;
     _delta = isRelative ? angle : angle - _startAngle;
     if (!isAlternating) {
       endAngle = _startAngle + _delta;
@@ -52,6 +56,6 @@ class RotateEffect extends SimplePositionComponentEffect {
   @override
   void update(double dt) {
     super.update(dt);
-    affectedComponent!.angle = _startAngle + _delta * curveProgress;
+    affectedParent!.angle = _startAngle + _delta * curveProgress;
   }
 }
