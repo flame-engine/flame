@@ -3,11 +3,22 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
+import 'package:flame/src/test_helpers/mock_canvas.dart';
 import 'package:test/test.dart';
 
 class MyBaseComponent extends BaseComponent {}
 
 class MyHitboxComponent extends PositionComponent with Hitbox {}
+
+class MyDebugComponent extends PositionComponent {
+  int? precision = 0;
+
+  @override
+  bool get debugMode => true;
+
+  @override
+  int? get debugCoordinatesPrecision => precision;
+}
 
 void main() {
   group('PositionComponent overlap test', () {
@@ -513,6 +524,61 @@ void main() {
       // if the component is part of a nested tree where not all of
       // the components are [PositionComponent]s.
       expect(c5.absoluteToLocal(Vector2(14, 19)), Vector2.zero());
+    });
+
+    test('auxiliary getters/setters', () {
+      final parent = PositionComponent(position: Vector2(12, 19));
+      final child = PositionComponent(position: Vector2(11, -1), size: Vector2(4, 6));
+      parent.addChild(child);
+
+      expect(child.anchor, Anchor.topLeft);
+      expect(child.topLeftPosition, Vector2(11, -1));
+      expect(child.absoluteTopLeftPosition, Vector2(23, 18));
+      expect(child.center, Vector2(13, 2));
+      expect(child.absoluteCenter, Vector2(25, 21));
+      expect(child.position, Vector2(11, -1));
+      expect(child.absolutePosition, Vector2(23, 18));
+
+      child.center = Vector2(5, 5);
+      expect(child.center, Vector2(5, 5));
+      expect(child.position, Vector2(3, 2));
+      expect(child.absolutePosition, Vector2(15, 21));
+    });
+  });
+
+  group('rendering', () {
+    test('render in debug mode', () {
+      final component = MyDebugComponent()
+        .. position = Vector2(23, 17)
+        .. size = Vector2.all(10);
+      final canvas = MockCanvas();
+      component.renderTree(canvas);
+      final calls = canvas.methodCalls;
+      expect(calls.length, 6);
+      expect(calls[0],
+          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 23.0, 17.0, 0.0, 1.0)');
+      expect(calls[1], 'drawRect(0.0, 0.0, 10.0, 10.0)');
+      expect(calls[2], 'drawLine(0.0, -2.0, 0.0, 2.0)');
+      expect(calls[3], 'drawLine(-2.0, 0.0, 2.0, 0.0)');
+      expect(calls[4], 'drawParagraph(?, -30.0, -15.0)');
+      expect(calls[5], 'drawParagraph(?, -20.0, 10.0)');
+    });
+
+    test('render without coordinates', () {
+      final component = MyDebugComponent()
+        .. position = Vector2(23, 17)
+        .. size = Vector2.all(10)
+        .. anchor = Anchor.center
+        .. precision = null;
+      final canvas = MockCanvas();
+      component.renderTree(canvas);
+      final calls = canvas.methodCalls;
+      expect(calls.length, 4);
+      expect(calls[0],
+          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 18.0, 12.0, 0.0, 1.0)');
+      expect(calls[1], 'drawRect(0.0, 0.0, 10.0, 10.0)');
+      expect(calls[2], 'drawLine(5.0, 3.0, 5.0, 7.0)');
+      expect(calls[3], 'drawLine(3.0, 5.0, 7.0, 5.0)');
     });
   });
 }
