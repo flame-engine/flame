@@ -31,6 +31,13 @@
  - Add class `NotifyingVector2`
  - Add class `Transform2D`
  - Remove `FPSCounter` from `BaseGame`
+ - Refactor `PositionComponent` to work with `Transform2D`. Several methods were updated to work
+   correctly in the presence of rotations / scale, or when PositionComponent is nested within
+   other components. Properties `renderFlipX`, `renderFlipY` removed and replaced with methods
+   `flipHorizontally()` and `flipVertically()`. Setters for `.width` and `.height` removed,
+   please use setters for `.size` or `.scale` instead. Methods `.angleTo` and `.toAbsoluteRect`
+   removed as they were not working properly. In debug mode `PositionComponent` now displays an
+   indicator for the anchor position.
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
