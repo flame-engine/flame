@@ -35,9 +35,9 @@
    correctly in the presence of rotations / scale, or when PositionComponent is nested within
    other components. Properties `renderFlipX`, `renderFlipY` removed and replaced with methods
    `flipHorizontally()` and `flipVertically()`. Setters for `.width` and `.height` removed,
-   please use setters for `.size` or `.scale` instead. Methods `.angleTo` and `.toAbsoluteRect`
-   removed as they were not working properly. In debug mode `PositionComponent` now displays an
-   indicator for the anchor position.
+   please use setters for `.size` or `.scale` instead. Method `.angleTo` removed as it was not 
+   working properly. In debug mode `PositionComponent` now displays an indicator for the anchor 
+   position.
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
