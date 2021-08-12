@@ -1,8 +1,11 @@
 import 'dart:math' as math;
+import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 import 'package:test/test.dart';
+
+class MyBaseComponent extends BaseComponent {}
 
 class MyHitboxComponent extends PositionComponent with Hitbox {}
 
@@ -284,6 +287,26 @@ void main() {
   });
 
   group('coordinates transforms test', () {
+    test('.positionOf', () {
+      final component = PositionComponent()
+          ..size = Vector2(50, 100)
+          ..position = Vector2(500, 700)
+          ..scale = Vector2(2, 1)
+          ..anchor = Anchor.center;
+      expect(component.positionOf(Anchor.center), Vector2(500, 700));
+      expect(component.positionOf(Anchor.topLeft), Vector2(450, 650));
+      expect(component.positionOf(Anchor.topCenter), Vector2(500, 650));
+      expect(component.positionOf(Anchor.topRight), Vector2(550, 650));
+      expect(component.positionOf(Anchor.centerLeft), Vector2(450, 700));
+      expect(component.positionOf(Anchor.centerRight), Vector2(550, 700));
+      expect(component.positionOf(Anchor.bottomLeft), Vector2(450, 750));
+      expect(component.positionOf(Anchor.bottomCenter), Vector2(500, 750));
+      expect(component.positionOf(Anchor.bottomRight), Vector2(550, 750));
+      expect(component.positionOf(Vector2(-3, 2)), Vector2(444, 652));
+      expect(component.positionOf(const Offset(7, 16)), Vector2(464, 666));
+      expect(() => component.positionOf(5), throwsA(isA<ArgumentError>()));
+    });
+
     test('local<->parent transforms', () {
       final component = PositionComponent()
         ..size = Vector2(10, 10)
@@ -441,6 +464,55 @@ void main() {
       expect(component.toLocal(Vector2(100, 100)), Vector2(10, 10));
       component.anchor = const Anchor(0.1, 0.2);
       expect(component.toLocal(Vector2(100, 100)), Vector2(1, 2));
+    });
+
+    test('rotation with degrees', () {
+      const tau = 2 * math.pi;
+      final component = PositionComponent(size: Vector2.all(10));
+      expect(component.angleDegrees, 0);
+      component.angle = tau/4;
+      expect(component.angleDegrees, 90);
+      component.angleDegrees = -60;
+      expect(component.angle, -tau/6);
+    });
+
+    test('distance', () {
+      final parent = PositionComponent(size: Vector2.all(100));
+      final comp1 = PositionComponent(position: Vector2(10, 20));
+      final comp2 = PositionComponent(position: Vector2(40, 60));
+      parent.addChild(comp1);
+      parent.addChild(comp2);
+
+      // The distance is the same in both directions
+      expect(comp1.distance(comp2), 50);
+      expect(comp2.distance(comp1), 50);
+
+      // Rotations/rescaling should not affect the distance
+      comp1.angle = 1;
+      comp2.angle = -0.5;
+      comp1.scale = Vector2(2, 1.1);
+      comp2.flipVertically();
+      expect(comp1.distance(comp2), 50);
+
+      // The distance is not affected by parent's rescaling
+      parent.scale = Vector2.all(10);
+      expect(comp1.distance(comp2), 50);
+    });
+
+    test('deep nested', () {
+      final c1 = PositionComponent() .. position = Vector2(10, 20);
+      final c2 = MyBaseComponent();
+      final c3 = PositionComponent() .. position = Vector2(-1, -1);
+      final c4 = MyBaseComponent();
+      final c5 = PositionComponent() .. position = Vector2(5, 0);
+      c1.addChild(c2);
+      c2.addChild(c3);
+      c3.addChild(c4);
+      c4.addChild(c5);
+      // Verify that the absolute coordinate is computed correctly even
+      // if the component is part of a nested tree where not all of
+      // the components are [PositionComponent]s.
+      expect(c5.absoluteToLocal(Vector2(14, 19)), Vector2.zero());
     });
   });
 }

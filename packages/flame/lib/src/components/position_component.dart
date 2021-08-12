@@ -148,8 +148,6 @@ class PositionComponent extends BaseComponent {
   double distance(PositionComponent other) =>
       position.distanceTo(other.position);
 
-  double angleTo(PositionComponent other) => position.angleTo(other.position);
-
   //----------------------------------------------------------------------------
   // Coordinate transformations
   //----------------------------------------------------------------------------
