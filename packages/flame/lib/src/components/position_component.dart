@@ -140,7 +140,7 @@ class PositionComponent extends BaseComponent {
   /// The scaled width of the component.
   double get width => scaledSize.x;
 
-  /// Height (size) that this component is rendered with.
+  /// The scaled height of the component.
   double get height => scaledSize.y;
 
   /// Measure the distance (in parent's coordinate space) between this
