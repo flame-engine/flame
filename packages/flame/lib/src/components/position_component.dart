@@ -130,18 +130,22 @@ class PositionComponent extends BaseComponent {
   Vector2 get size => _size;
   set size(Vector2 size) => _size.setFrom(size);
 
+  /// The width of the component in local coordinates. Note that the object
+  /// may visually appear larger or smaller due to application of [scale].
+  double get width => _size.x;
+  set width(double w) => _size.x = w;
+
+  /// The height of the component in local coordinates. Note that the object
+  /// may visually appear larger or smaller due to application of [scale].
+  double get height => _size.y;
+  set height(double h) => _size.y = h;
+
   /// The "physical" size of the component. This is the size of the
   /// component as seen from the parent's perspective, and it is equal to
   /// [size] * [scale]. This is a computed property and cannot be
   /// modified by the user.
   final Vector2 _scaledSize;
   Vector2 get scaledSize => _scaledSize;
-
-  /// The scaled width of the component.
-  double get width => scaledSize.x;
-
-  /// The scaled height of the component.
-  double get height => scaledSize.y;
 
   /// Measure the distance (in parent's coordinate space) between this
   /// component's anchor and the [other] component's anchor.
