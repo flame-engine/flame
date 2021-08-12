@@ -47,8 +47,8 @@ abstract class ComponentEffect<T extends Component> extends BaseComponent {
   /// [postOffset]
   double curveProgress = 0.0;
 
-  /// How long time it takes for the effect to peak, which means right before it
-  /// starts any potential reversal or reset. Including offsets.
+  /// How much time it takes for the effect to peak, which means right before it
+  /// starts any potential reversal or reset. Including both offsets.
   double peakTime = 0.0;
 
   /// The time passed since the start of the effect, it will start to decrease
@@ -62,6 +62,10 @@ abstract class ComponentEffect<T extends Component> extends BaseComponent {
   double driftTime = 0.0;
 
   /// Whether the effect is going forward or is reversing.
+  ///
+  /// Reversing in this context means that after the effect has peaked and if it
+  /// has [isAlternating] set to true, it will do the effect backwards back to
+  /// its original state.
   int curveDirection = 1;
 
   /// Which curve that the effect is following.
