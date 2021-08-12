@@ -41,6 +41,39 @@ import 'mixins/hitbox.dart';
 class PositionComponent extends BaseComponent {
   final Transform2D _transform;
 
+  PositionComponent({
+    Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double angle = 0.0,
+    Anchor anchor = Anchor.topLeft,
+    int? priority,
+  })  : _transform = Transform2D(),
+        _anchor = anchor,
+        _size = NotifyingVector2.copy(size ?? Vector2.zero()),
+        _scaledSize = Vector2.zero(),
+        super(priority: priority) {
+    if (position != null) {
+      _transform.position = position;
+    }
+    if (angle != 0) {
+      _transform.angle = angle;
+    }
+    if (scale != null) {
+      _transform.scale = scale;
+    }
+    _size.addListener(_onModifiedSizeOrAnchor);
+    _size.addListener(_onModifiedSizeOrScale);
+    _transform.scale.addListener(_onModifiedSizeOrScale);
+    _onModifiedSizeOrAnchor();
+    _onModifiedSizeOrScale();
+  }
+
+  /// The total transformation matrix for the component. This matrix combines
+  /// translation, rotation and scale transforms into a single entity. The
+  /// matrix is cached and gets recalculated only as necessary.
+  Matrix4 get transformMatrix => _transform.transformMatrix;
+
   /// The position of this component's anchor on the screen.
   NotifyingVector2 get position => _transform.position;
   set position(Vector2 position) => _transform.position = position;
@@ -115,13 +148,9 @@ class PositionComponent extends BaseComponent {
   // Coordinate transformations
   //----------------------------------------------------------------------------
 
-  /// Return the outer coordinates of a point [p] within the
-  /// [PositionComponent]. Point [p] can be either a [Vector2], an [Anchor],
-  /// or an [Offset].
-  ///
-  /// Here "outer coordinates" refers to the coordinate space of this
-  /// component's parent. Contrast this with method [absolutePositionOf()],
-  /// which returns the global (world) coordinates.
+  /// Convert local coordinates of a point [p] inside the component into
+  /// the parent's coordinate space. Point [p] can be either a [Vector2],
+  /// an [Anchor] (relative to component's [size]), or an [Offset].
   Vector2 positionOf(dynamic p) {
     if (p is Vector2) {
       return _transform.localToGlobal(p);
@@ -138,6 +167,10 @@ class PositionComponent extends BaseComponent {
     throw ArgumentError(p);
   }
 
+  /// Convert local coordinates of a point [p] inside the component into
+  /// the global (world) coordinate space. Point [p] can be either a
+  /// [Vector2], an [Anchor] (relative to component's [size]), or an
+  /// [Offset].
   Vector2 absolutePositionOf(dynamic p) {
     var point = positionOf(p);
     var ancestor = parent;
@@ -150,49 +183,36 @@ class PositionComponent extends BaseComponent {
     return point;
   }
 
-  /// The [anchor]'s position in absolute (world) coordinates.
-  Vector2 get absolutePosition => absolutePositionOf(_anchor);
+  /// Transform `point` from the parent's coordinate space into the local
+  /// coordinates.
+  Vector2 toLocal(Vector2 point) => _transform.globalToLocal(point);
+
 
   /// The top-left corner's position in the parent's coordinates.
   Vector2 get topLeftPosition => positionOf(Anchor.topLeft);
-  set topLeftPosition(Vector2 position) {
-    this.position += position - topLeftPosition;
+  set topLeftPosition(Vector2 point) {
+    position += point - topLeftPosition;
   }
+
+  /// The position of the center of the component's bounding rectangle
+  /// in the parent's coordinates.
+  Vector2 get center => positionOf(Anchor.center);
+  set center(Vector2 point) {
+    position += point - center;
+  }
+
+  /// The [anchor]'s position in absolute (world) coordinates.
+  Vector2 get absolutePosition => absolutePositionOf(_anchor);
 
   /// Get the absolute top left position regardless of whether it is a child or not
-  Vector2 get absoluteTopLeftPosition {
-    final p = parent;
-    if (p is PositionComponent) {
-      return p.absoluteTopLeftPosition + topLeftPosition;
-    } else {
-      return topLeftPosition;
-    }
-  }
-
-  /// Get the position that everything in this component is positioned in relation to
-  /// If this component has no parent the absolute parent position is the origin,
-  /// otherwise it's the parents absolute top left position
-  Vector2 get absoluteParentPosition {
-    final p = parent;
-    if (p is PositionComponent) {
-      return p.absoluteTopLeftPosition;
-    } else {
-      return Vector2.zero();
-    }
-  }
-
-  /// Get the position of the center of the component's bounding rectangle
-  Vector2 get center {
-    if (_anchor == Anchor.center) {
-      return position;
-    } else {
-      return anchor.toOtherAnchorPosition(position, Anchor.center, scaledSize)
-        ..rotate(angle, center: absolutePosition);
-    }
-  }
+  Vector2 get absoluteTopLeftPosition => absolutePositionOf(Anchor.topLeft);
 
   /// Get the absolute center of the component
-  Vector2 get absoluteCenter => absoluteParentPosition + center;
+  Vector2 get absoluteCenter => absolutePositionOf(Anchor.center);
+
+  //----------------------------------------------------------------------------
+  // Mutators
+  //----------------------------------------------------------------------------
 
   /// Flip the component horizontally around its anchor point.
   void flipHorizontally() => _transform.flipHorizontally();
@@ -216,34 +236,6 @@ class PositionComponent extends BaseComponent {
     _transform.flipVertically();
   }
 
-  PositionComponent({
-    Vector2? position,
-    Vector2? size,
-    Vector2? scale,
-    double angle = 0.0,
-    Anchor anchor = Anchor.topLeft,
-    int? priority,
-  })  : _transform = Transform2D(),
-        _anchor = anchor,
-        _size = NotifyingVector2.copy(size ?? Vector2.zero()),
-        _scaledSize = Vector2.zero(),
-        super(priority: priority) {
-    if (position != null) {
-      _transform.position = position;
-    }
-    if (angle != 0) {
-      _transform.angle = angle;
-    }
-    if (scale != null) {
-      _transform.scale = scale;
-    }
-    _size.addListener(_onModifiedSizeOrAnchor);
-    _size.addListener(_onModifiedSizeOrScale);
-    _transform.scale.addListener(_onModifiedSizeOrScale);
-    _onModifiedSizeOrAnchor();
-    _onModifiedSizeOrScale();
-  }
-
   /// Internal handler which is called automatically whenever either
   /// the [size] or [scale] change.
   void _onModifiedSizeOrScale() {
@@ -256,11 +248,6 @@ class PositionComponent extends BaseComponent {
   void _onModifiedSizeOrAnchor() {
     _transform.offset = Vector2(-_anchor.x * _size.x, -_anchor.y * _size.y);
   }
-
-  /// The total transformation matrix for the component. This matrix combines
-  /// translation, rotation and scale transforms into a single entity. The
-  /// matrix is cached and gets recalculated only as necessary.
-  Matrix4 get transformMatrix => _transform.transformMatrix;
 
   /// Transform `point` from local coordinates into the parent coordinate space.
   Vector2 localToParent(Vector2 point) => _transform.localToGlobal(point);
@@ -281,10 +268,6 @@ class PositionComponent extends BaseComponent {
     return localToParent(point);
   }
 
-  /// Transform `point` from the parent's coordinate space into the local
-  /// coordinates.
-  Vector2 parentToLocal(Vector2 point) => _transform.globalToLocal(point);
-
   /// Transform `point` from the global (screen) coordinate space into the
   /// local coordinates. This can be used, for example, to detect whether
   /// a specific point on the screen lies within this `PositionComponent`,
@@ -293,11 +276,11 @@ class PositionComponent extends BaseComponent {
     var c = parent;
     while (c != null) {
       if (c is PositionComponent) {
-        return parentToLocal(c.absoluteToLocal(point));
+        return toLocal(c.absoluteToLocal(point));
       }
       c = c.parent;
     }
-    return parentToLocal(point);
+    return toLocal(point);
   }
 
   /// Test whether the `point` (given in global coordinates) lies within this

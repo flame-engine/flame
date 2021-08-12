@@ -295,10 +295,10 @@ void main() {
       expect(component.localToParent(Vector2(10, 0)), Vector2(55, 15));
       expect(component.localToParent(Vector2(0, 10)), Vector2(45, 25));
 
-      expect(component.parentToLocal(Vector2(0, 0)), Vector2(-45, -15));
-      expect(component.parentToLocal(Vector2(50, 20)), Vector2(5, 5));
-      expect(component.parentToLocal(Vector2(55, 25)), Vector2(10, 10));
-      expect(component.parentToLocal(Vector2(100, 100)), Vector2(55, 85));
+      expect(component.toLocal(Vector2(0, 0)), Vector2(-45, -15));
+      expect(component.toLocal(Vector2(50, 20)), Vector2(5, 5));
+      expect(component.toLocal(Vector2(55, 25)), Vector2(10, 10));
+      expect(component.toLocal(Vector2(100, 100)), Vector2(55, 85));
     });
 
     test('flips', () {
@@ -430,17 +430,17 @@ void main() {
         ..position = Vector2(100, 100)
         ..anchor = Anchor.center;
 
-      expect(component.parentToLocal(Vector2(100, 100)), Vector2(5, 5));
+      expect(component.toLocal(Vector2(100, 100)), Vector2(5, 5));
       component.anchor = Anchor.topLeft;
-      expect(component.parentToLocal(Vector2(100, 100)), Vector2(0, 0));
+      expect(component.toLocal(Vector2(100, 100)), Vector2(0, 0));
       component.anchor = Anchor.topRight;
-      expect(component.parentToLocal(Vector2(100, 100)), Vector2(10, 0));
+      expect(component.toLocal(Vector2(100, 100)), Vector2(10, 0));
       component.anchor = Anchor.bottomLeft;
-      expect(component.parentToLocal(Vector2(100, 100)), Vector2(0, 10));
+      expect(component.toLocal(Vector2(100, 100)), Vector2(0, 10));
       component.anchor = Anchor.bottomRight;
-      expect(component.parentToLocal(Vector2(100, 100)), Vector2(10, 10));
+      expect(component.toLocal(Vector2(100, 100)), Vector2(10, 10));
       component.anchor = const Anchor(0.1, 0.2);
-      expect(component.parentToLocal(Vector2(100, 100)), Vector2(1, 2));
+      expect(component.toLocal(Vector2(100, 100)), Vector2(1, 2));
     });
   });
 }
