@@ -34,8 +34,7 @@
  - Refactor `PositionComponent` to work with `Transform2D`. Several methods were updated to work
    correctly in the presence of rotations / scale, or when PositionComponent is nested within
    other components. Properties `renderFlipX`, `renderFlipY` removed and replaced with methods
-   `flipHorizontally()` and `flipVertically()`. Setters for `.width` and `.height` removed,
-   please use setters for `.size` or `.scale` instead. Method `.angleTo` removed as it was not 
+   `flipHorizontally()` and `flipVertically()`. Method `.angleTo` removed as it was not
    working properly. In debug mode `PositionComponent` now displays an indicator for the anchor 
    position.
 

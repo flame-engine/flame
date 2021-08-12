@@ -298,6 +298,21 @@ void main() {
   });
 
   group('coordinates transforms test', () {
+    test('width and height', () {
+      final component = PositionComponent(size: Vector2.all(3));
+      component.scale = Vector2(5, -7);
+      expect(component.width, 3);
+      expect(component.height, 3);
+      expect(component.scaledSize.x, 15);
+      expect(component.scaledSize.y, 21);
+      component.width = 1;
+      component.height = 2;
+      expect(component.width, 1);
+      expect(component.height, 2);
+      expect(component.scaledSize.x, 5);
+      expect(component.scaledSize.y, 14);
+    });
+
     test('.positionOf', () {
       final component = PositionComponent()
         ..size = Vector2(50, 100)
