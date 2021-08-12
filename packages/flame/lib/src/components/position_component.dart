@@ -111,6 +111,45 @@ class PositionComponent extends BaseComponent {
   /// Height (size) that this component is rendered with.
   double get height => scaledSize.y;
 
+  //----------------------------------------------------------------------------
+  // Coordinate transformations
+  //----------------------------------------------------------------------------
+
+  /// Return the outer coordinates of a point [p] within the
+  /// [PositionComponent]. Point [p] can be either a [Vector2], an [Anchor],
+  /// or an [Offset].
+  ///
+  /// Here "outer coordinates" refers to the coordinate space of this
+  /// component's parent. Contrast this with method [absolutePositionOf()],
+  /// which returns the global (world) coordinates.
+  Vector2 positionOf(dynamic p) {
+    if (p is Vector2) {
+      return _transform.localToGlobal(p);
+    }
+    if (p is Anchor) {
+      if (p == _anchor) {
+        return position;
+      }
+      return positionOf(Vector2(p.x * size.x, p.y * size.y));
+    }
+    if (p is Offset) {
+      return positionOf(Vector2(p.dx, p.dy));
+    }
+    throw ArgumentError(p);
+  }
+
+  Vector2 absolutePositionOf(dynamic p) {
+    var point = positionOf(p);
+    var ancestor = parent;
+    while (ancestor != null) {
+      if (ancestor is PositionComponent) {
+        point = ancestor.positionOf(point);
+      }
+      ancestor = ancestor.parent;
+    }
+    return point;
+  }
+
   /// Get the absolute position, with the anchor taken into consideration
   Vector2 get absolutePosition => absoluteParentPosition + position;
 
@@ -184,7 +223,6 @@ class PositionComponent extends BaseComponent {
     _transform.y += delta * math.cos(_transform.angle);
     _transform.flipVertically();
   }
-
 
   PositionComponent({
     Vector2? position,
