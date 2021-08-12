@@ -185,11 +185,6 @@ class PositionComponent extends BaseComponent {
     _transform.flipVertically();
   }
 
-  /// Whether this component should be flipped on the X axis before being rendered.
-  bool renderFlipX = false;
-
-  /// Whether this component should be flipped ofn the Y axis before being rendered.
-  bool renderFlipY = false;
 
   PositionComponent({
     Vector2? position,
@@ -197,8 +192,6 @@ class PositionComponent extends BaseComponent {
     Vector2? scale,
     double angle = 0.0,
     Anchor anchor = Anchor.topLeft,
-    this.renderFlipX = false,
-    this.renderFlipY = false,
     int? priority,
   })  : _transform = Transform2D(),
         _anchor = anchor,
@@ -318,18 +311,6 @@ class PositionComponent extends BaseComponent {
   @override
   void preRender(Canvas canvas) {
     canvas.transform(transformMatrix.storage);
-
-    // Handle inverted rendering by moving center and flipping.
-    // TODO(st-pasha): remove this, using `flipHorizontallyAroundCenter()` instead
-    if (renderFlipX || renderFlipY) {
-      final size = scaledSize;
-      canvas.translate(size.x / 2, size.y / 2);
-      canvas.scale(
-        renderFlipX ? -1.0 : 1.0,
-        renderFlipY ? -1.0 : 1.0,
-      );
-      canvas.translate(-size.x / 2, -size.y / 2);
-    }
   }
 
   /// Returns the relative position/size of this component.
