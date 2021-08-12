@@ -41,7 +41,8 @@ void main() {
       final component = DraggableComponent()
         ..x = 10
         ..y = 10
-        ..size = Vector2.all(10);
+        ..width = 10
+        ..height = 10;
 
       await game.add(component);
       // So component is added
@@ -65,7 +66,8 @@ void main() {
       final component = DraggableComponent()
         ..x = 10
         ..y = 10
-        ..size = Vector2.all(10);
+        ..width = 10
+        ..height = 10;
 
       await game.add(component);
       game.camera.zoom = 1.5;
@@ -90,7 +92,8 @@ void main() {
       final component = DraggableComponent()
         ..x = 50
         ..y = 50
-        ..size = Vector2.all(10);
+        ..width = 10
+        ..height = 10;
 
       await game.add(component);
       game.camera.zoom = 1.5;
@@ -117,7 +120,8 @@ void main() {
     final component = DraggableComponent()
       ..x = 10
       ..y = 10
-      ..size = Vector2.all(10);
+      ..width = 10
+      ..height = 10;
 
     await game.add(component);
     // So component is added
