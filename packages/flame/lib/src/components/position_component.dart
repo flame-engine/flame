@@ -10,23 +10,39 @@ import 'base_component.dart';
 import 'component.dart';
 import 'mixins/hitbox.dart';
 
-/// A [Component] implementation that represents a component that has a
-/// specific, possibly dynamic position on the screen.
+/// A [Component] implementation that represents a component that can be
+/// freely moved around the screen, rotated, and scaled.
 ///
-/// It represents a rectangle of dimension [size], on the [position],
-/// rotated around its [anchor] with angle [angle].
+/// The [PositionComponent] class has no visual representation (except in
+/// debug mode). It is common, therefore, to derive from this class,
+/// implementing a particular rendering logic.
 ///
-/// It also uses the [anchor] property to properly position itself.
+/// The base [PositionComponent] class can also be used as a container for
+/// a group of other components. In this case, changing the position,
+/// rotating or scaling the container component will affect the whole
+/// group as if it was a single entity.
 ///
-/// A [PositionComponent] can have children. The children are all updated and
-/// rendered automatically when this is updated and rendered.
-/// They are translated by this component's (x,y). They do not need to fit
-/// within this component's (width, height).
-abstract class PositionComponent extends BaseComponent {
+/// The main properties of this class is the [_transform] (which combines
+/// the [position], [angle] of rotation, and [scale]), the [size], and
+/// the [anchor]. Thus, the [PositionComponent] can be imagined as an
+/// abstract picture whose size originally is [size]; within that picture
+/// a point at location [anchor] is selected, that point is designated as
+/// a logical "center" of the picture. Then, the transform is applied to
+/// the picture: its anchor is moved to the point [position] on the screen,
+/// then the picture is rotated by [angle] around the anchor point, and
+/// scaled by [scale] also around the anchor point.
+///
+/// The [size] property of the [PositionComponent] is used primarily for
+/// tap and collision detection. Thus, the [size] should be set equal to
+/// the approximate bounding rectangle of the rendered picture. If you
+/// do not specify the size of a PositionComponent, then it will be
+/// equal to zero and the component won't be able to respond to taps.
+///
+class PositionComponent extends BaseComponent {
   final Transform2D _transform;
 
   /// The position of this component's anchor on the screen.
-  Vector2 get position => _transform.position;
+  NotifyingVector2 get position => _transform.position;
   set position(Vector2 position) => _transform.position = position;
 
   /// X position of this component's anchor on the screen.
@@ -43,48 +59,57 @@ abstract class PositionComponent extends BaseComponent {
   double get angle => _transform.angle;
   set angle(double a) => _transform.angle = a;
 
-  /// The scale factor of this component
-  Vector2 get scale => _transform.scale;
+  /// Rotation angle (in degrees) of the component. The component will be
+  /// rotated around its anchor point in the clockwise direction if the
+  /// angle is positive, or counterclockwise if the angle is negative.
+  double get angleDegrees => _transform.angleDegrees;
+  set angleDegrees(double a) => _transform.angleDegrees = a;
+
+  /// The scale factor of this component. The scale can be different along
+  /// the X and Y dimensions. A scale greater than 1 makes the component
+  /// bigger, and less than 1 smaller. The scale can also be negative,
+  /// which results in a mirror reflection along the corresponding axis.
+  NotifyingVector2 get scale => _transform.scale;
   set scale(Vector2 scale) => _transform.scale = scale;
 
-  /// Anchor point for this component. This is where flame "grabs it".
-  /// The [position] is relative to this point inside the component.
-  /// The [angle] is rotated around this point.
+  /// Anchor point for this component. An anchor point describes a point
+  /// within the rectangle of size [size]. This point is considered to
+  /// be the logical "center" of the component. This can be visualized
+  /// as the point where Flame "grabs" the component. All transforms
+  /// occur around this point: the [position] is where the anchor point
+  /// will end up after the component is translated; the rotation and
+  /// scaling also happen around this anchor point.
   Anchor _anchor;
   Anchor get anchor => _anchor;
   set anchor(Anchor a) {
     _anchor = a;
-    _updateOffset();
+    _onModifiedSizeOrAnchor();
   }
 
   /// The logical size of the component. The game assumes that this is the
   /// approximate size of the object that will be drawn on the screen.
   /// This size will therefore be used for collision detection and tap
   /// handling.
+  ///
+  /// This property can be reassigned at runtime, although this is not
+  /// recommended. Instead, in order to make the [PositionComponent] larger
+  /// or smaller, change its [scale].
   final NotifyingVector2 _size;
   Vector2 get size => _size;
   set size(Vector2 size) => _size.setFrom(size);
 
-  /// Width (size) that this component is rendered with.
-  double get width => scaledSize.x;
-  set width(double width) => _size.x = width / scale.x.abs();
-
-  /// Height (size) that this component is rendered with.
-  double get height => scaledSize.y;
-  set height(double height) => _size.y = height / scale.y.abs();
-
-  /// Cache to store the calculated scaled size
+  /// The "physical" size of the component. This is the size of the
+  /// component as seen from the parent's perspective, and it is equal to
+  /// [size] * [scale]. This is a computed property and cannot be
+  /// modified by the user.
   final Vector2 _scaledSize;
   Vector2 get scaledSize => _scaledSize;
 
-  void _updateScaledSize() {
-    _scaledSize.x = _size.x * scale.x.abs();
-    _scaledSize.y = _size.y * scale.y.abs();
-  }
+  /// The scaled width of the component.
+  double get width => scaledSize.x;
 
-  void _updateOffset() {
-    _transform.offset = Vector2(-_anchor.x * _size.x, -_anchor.y * _size.y);
-  }
+  /// Height (size) that this component is rendered with.
+  double get height => scaledSize.y;
 
   /// Get the absolute position, with the anchor taken into consideration
   Vector2 get absolutePosition => absoluteParentPosition + position;
@@ -189,15 +214,24 @@ abstract class PositionComponent extends BaseComponent {
     if (scale != null) {
       _transform.scale = scale;
     }
-    _size.addListener(_handleSizeOrAnchorChange);
-    _size.addListener(_updateScaledSize);
-    _transform.scale.addListener(_updateScaledSize);
-    _updateOffset();
-    _updateScaledSize();
+    _size.addListener(_onModifiedSizeOrAnchor);
+    _size.addListener(_onModifiedSizeOrScale);
+    _transform.scale.addListener(_onModifiedSizeOrScale);
+    _onModifiedSizeOrAnchor();
+    _onModifiedSizeOrScale();
   }
 
-  void _handleSizeOrAnchorChange() {
-    _updateOffset();
+  /// Internal handler which is called automatically whenever either
+  /// the [size] or [scale] change.
+  void _onModifiedSizeOrScale() {
+    _scaledSize.x = _size.x * scale.x.abs();
+    _scaledSize.y = _size.y * scale.y.abs();
+  }
+
+  /// Internal handler that must be invoked whenever either the [size]
+  /// or the [anchor] change.
+  void _onModifiedSizeOrAnchor() {
+    _transform.offset = Vector2(-_anchor.x * _size.x, -_anchor.y * _size.y);
   }
 
   /// The total transformation matrix for the component. This matrix combines
