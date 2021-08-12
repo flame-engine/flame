@@ -144,9 +144,28 @@ class PositionComponent extends BaseComponent {
   /// Height (size) that this component is rendered with.
   double get height => scaledSize.y;
 
+  /// Measure the distance (in parent's coordinate space) between this
+  /// component's anchor and the [other] component's anchor.
+  double distance(PositionComponent other) =>
+      position.distanceTo(other.position);
+
+  double angleTo(PositionComponent other) => position.angleTo(other.position);
+
   //----------------------------------------------------------------------------
   // Coordinate transformations
   //----------------------------------------------------------------------------
+
+  /// Test whether the `point` (given in global coordinates) lies within this
+  /// component. The top and the left borders of the component are inclusive,
+  /// while the bottom and the right borders are exclusive.
+  @override
+  bool containsPoint(Vector2 point) {
+    final local = absoluteToLocal(point);
+    return (local.x >= 0) &&
+        (local.y >= 0) &&
+        (local.x < _size.x) &&
+        (local.y < _size.y);
+  }
 
   /// Convert local coordinates of a point [p] inside the component into
   /// the parent's coordinate space. Point [p] can be either a [Vector2],
@@ -183,10 +202,24 @@ class PositionComponent extends BaseComponent {
     return point;
   }
 
-  /// Transform `point` from the parent's coordinate space into the local
+  /// Transform [point] from the parent's coordinate space into the local
   /// coordinates.
   Vector2 toLocal(Vector2 point) => _transform.globalToLocal(point);
 
+  /// Transform [point] from the global (world) coordinate space into the
+  /// local coordinates. This can be used, for example, to detect whether
+  /// a specific point on the screen lies within this [PositionComponent],
+  /// and where exactly it is.
+  Vector2 absoluteToLocal(Vector2 point) {
+    var c = parent;
+    while (c != null) {
+      if (c is PositionComponent) {
+        return toLocal(c.absoluteToLocal(point));
+      }
+      c = c.parent;
+    }
+    return toLocal(point);
+  }
 
   /// The top-left corner's position in the parent's coordinates.
   Vector2 get topLeftPosition => positionOf(Anchor.topLeft);
@@ -236,6 +269,10 @@ class PositionComponent extends BaseComponent {
     _transform.flipVertically();
   }
 
+  //----------------------------------------------------------------------------
+  // Private
+  //----------------------------------------------------------------------------
+
   /// Internal handler which is called automatically whenever either
   /// the [size] or [scale] change.
   void _onModifiedSizeOrScale() {
@@ -249,74 +286,24 @@ class PositionComponent extends BaseComponent {
     _transform.offset = Vector2(-_anchor.x * _size.x, -_anchor.y * _size.y);
   }
 
-  /// Transform `point` from local coordinates into the parent coordinate space.
-  Vector2 localToParent(Vector2 point) => _transform.localToGlobal(point);
-
-  /// Transform `point` from local coordinates into the global (screen)
-  /// coordinate space. For example, local point (0, 0) corresponds to
-  /// the top left corner of the component. Thus,
-  /// `localToAbsolute(Vector2(0, 0))` returns the screen coordinates
-  /// of the top left corner of the component.
-  Vector2 localToAbsolute(Vector2 point) {
-    var c = parent;
-    while (c != null) {
-      if (c is PositionComponent) {
-        return c.localToAbsolute(localToParent(point));
-      }
-      c = c.parent;
-    }
-    return localToParent(point);
-  }
-
-  /// Transform `point` from the global (screen) coordinate space into the
-  /// local coordinates. This can be used, for example, to detect whether
-  /// a specific point on the screen lies within this `PositionComponent`,
-  /// and where exactly it is.
-  Vector2 absoluteToLocal(Vector2 point) {
-    var c = parent;
-    while (c != null) {
-      if (c is PositionComponent) {
-        return toLocal(c.absoluteToLocal(point));
-      }
-      c = c.parent;
-    }
-    return toLocal(point);
-  }
-
-  /// Test whether the `point` (given in global coordinates) lies within this
-  /// component. The top and the left borders of the component are inclusive,
-  /// while the bottom and the right borders are exclusive.
-  @override
-  bool containsPoint(Vector2 point) {
-    final local = absoluteToLocal(point);
-    return (local.x >= 0) &&
-        (local.y >= 0) &&
-        (local.x < _size.x) &&
-        (local.y < _size.y);
-  }
-
-  double angleTo(PositionComponent c) => position.angleTo(c.position);
-
-  double distance(PositionComponent c) => position.distanceTo(c.position);
-
   @override
   void renderDebugMode(Canvas canvas) {
     if (this is Hitbox) {
       (this as Hitbox).renderHitboxes(canvas);
     }
-    canvas.drawRect(scaledSize.toRect(), debugPaint);
+    canvas.drawRect(size.toRect(), debugPaint);
+
+    final p1 = absolutePositionOf(Anchor.topLeft);
     debugTextPaint.render(
       canvas,
-      'x: ${x.toStringAsFixed(2)} y:${y.toStringAsFixed(2)}',
+      'x: ${p1.x.toStringAsFixed(2)} y:${p1.y.toStringAsFixed(2)}',
       Vector2(-50, -15),
     );
 
-    final rect = toRect();
-    final dx = rect.right;
-    final dy = rect.bottom;
+    final p2 = absolutePositionOf(Anchor.bottomRight);
     debugTextPaint.render(
       canvas,
-      'x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}',
+      'x:${p2.x.toStringAsFixed(2)} y:${p2.y.toStringAsFixed(2)}',
       Vector2(width - 50, height),
     );
   }
