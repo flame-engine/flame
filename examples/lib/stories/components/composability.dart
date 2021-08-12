@@ -41,7 +41,7 @@ class Composability extends BaseGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    _parent = ParentSquare(Vector2.all(200), Vector2.all(300))
+    _parent = ParentSquare(Vector2.all(400), Vector2.all(250))
       ..anchor = Anchor.center;
     add(_parent);
   }
@@ -49,12 +49,12 @@ class Composability extends BaseGame with TapDetector {
   @override
   void update(double dt) {
     super.update(dt);
-    _parent.angle += dt;
+    _parent.angle += dt / 2;
   }
 
   @override
   void onTap() {
     super.onTap();
-    _parent.scale = Vector2.all(2.0);
+    _parent.scale = Vector2.all(1.5);
   }
 }

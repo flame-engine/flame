@@ -288,25 +288,32 @@ class PositionComponent extends BaseComponent {
   @override
   void renderDebugMode(Canvas canvas) {
     super.renderDebugMode(canvas);
+    final precision = debugCoordinatesPrecision;
     canvas.drawRect(size.toRect(), debugPaint);
     // draw small cross at the anchor point
     final p0 = -_transform.offset;
     canvas.drawLine(Offset(p0.x, p0.y - 2), Offset(p0.x, p0.y + 2), debugPaint);
     canvas.drawLine(Offset(p0.x - 2, p0.y), Offset(p0.x + 2, p0.y), debugPaint);
-    // print coordinates at the top-left corner
-    final p1 = absolutePositionOf(Anchor.topLeft);
-    debugTextPaint.render(
-      canvas,
-      'x: ${p1.x.toStringAsFixed(2)} y:${p1.y.toStringAsFixed(2)}',
-      Vector2(-50, -15),
-    );
-    // print coordinates at the bottom-right corner
-    final p2 = absolutePositionOf(Anchor.bottomRight);
-    debugTextPaint.render(
-      canvas,
-      'x:${p2.x.toStringAsFixed(2)} y:${p2.y.toStringAsFixed(2)}',
-      Vector2(width - 50, height),
-    );
+    if (precision != null) {
+      // print coordinates at the top-left corner
+      final p1 = absolutePositionOf(Anchor.topLeft);
+      final x1str = p1.x.toStringAsFixed(precision);
+      final y1str = p1.y.toStringAsFixed(precision);
+      debugTextPaint.render(
+        canvas,
+        'x:$x1str y:$y1str',
+        Vector2(-10 * (precision + 3), -15),
+      );
+      // print coordinates at the bottom-right corner
+      final p2 = absolutePositionOf(Anchor.bottomRight);
+      final x2str = p2.x.toStringAsFixed(precision);
+      final y2str = p2.y.toStringAsFixed(precision);
+      debugTextPaint.render(
+        canvas,
+        'x:$x2str y:$y2str',
+        Vector2(size.x - 10 * (precision + 3), size.y),
+      );
+    }
   }
 
   @override
