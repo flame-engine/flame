@@ -4,14 +4,12 @@ import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 import 'package:test/test.dart';
 
-class MyComponent extends PositionComponent {}
-
 class MyHitboxComponent extends PositionComponent with Hitbox {}
 
 void main() {
   group('PositionComponent overlap test', () {
     test('overlap', () {
-      final PositionComponent component = MyComponent();
+      final component = PositionComponent();
       component.position.setValues(2.0, 2.0);
       component.size.setValues(4.0, 4.0);
       component.angle = 0.0;
@@ -22,7 +20,7 @@ void main() {
     });
 
     test('overlap on edge', () {
-      final PositionComponent component = MyComponent();
+      final component = PositionComponent();
       component.position.setValues(2.0, 2.0);
       component.size.setValues(2.0, 2.0);
       component.angle = 0.0;
@@ -33,7 +31,7 @@ void main() {
     });
 
     test('not overlapping with x', () {
-      final PositionComponent component = MyComponent();
+      final component = PositionComponent();
       component.position.setValues(2.0, 2.0);
       component.size.setValues(2.0, 2.0);
       component.angle = 0.0;
@@ -44,7 +42,7 @@ void main() {
     });
 
     test('not overlapping with y', () {
-      final PositionComponent component = MyComponent();
+      final component = PositionComponent();
       component.position.setValues(2.0, 2.0);
       component.size.setValues(2.0, 2.0);
       component.angle = 0.0;
@@ -55,7 +53,7 @@ void main() {
     });
 
     test('overlapping with angle', () {
-      final PositionComponent component = MyComponent();
+      final component = PositionComponent();
       component.position.setValues(2.0, 2.0);
       component.size.setValues(2.0, 2.0);
       component.angle = math.pi / 4;
@@ -66,7 +64,7 @@ void main() {
     });
 
     test('not overlapping with angle', () {
-      final PositionComponent component = MyComponent();
+      final component = PositionComponent();
       component.position.setValues(2.0, 2.0);
       component.size.setValues(2.0, 2.0);
       component.angle = math.pi / 4;
@@ -77,7 +75,7 @@ void main() {
     });
 
     test('overlapping with angle and topLeft anchor', () {
-      final PositionComponent component = MyComponent();
+      final component = PositionComponent();
       component.position.setValues(1.0, 1.0);
       component.size.setValues(2.0, 2.0);
       component.angle = math.pi / 4;
@@ -163,7 +161,7 @@ void main() {
     });
 
     test('component with zero size does not contain point', () {
-      final PositionComponent component = MyComponent();
+      final component = PositionComponent();
       component.position.setValues(2.0, 2.0);
       component.size.setValues(0.0, 0.0);
       component.angle = 0.0;
@@ -174,7 +172,7 @@ void main() {
     });
 
     test('component with zero size does not contain point', () {
-      final PositionComponent component = MyComponent();
+      final component = PositionComponent();
       component.position.setValues(2.0, 2.0);
       component.size.setValues(0.0, 0.0);
       component.angle = 0.0;
@@ -185,10 +183,9 @@ void main() {
     });
 
     test('component with anchor center has the same center and position', () {
-      final PositionComponent component = MyComponent();
+      final component = PositionComponent();
       component.position.setValues(2.0, 1.0);
       component.size.setValues(3.0, 1.0);
-      component.angle = 2.0;
       component.anchor = Anchor.center;
 
       expect(component.center, component.position);
@@ -200,7 +197,7 @@ void main() {
     });
 
     test('component with anchor topLeft has the correct center', () {
-      final PositionComponent component = MyComponent();
+      final component = PositionComponent();
       component.position.setValues(2.0, 1.0);
       component.size.setValues(3.0, 1.0);
       component.angle = 0.0;
@@ -211,10 +208,10 @@ void main() {
     });
 
     test('component with parent has the correct center', () {
-      final parent = MyComponent();
+      final parent = PositionComponent();
       parent.position.setValues(2.0, 1.0);
       parent.anchor = Anchor.topLeft;
-      final child = MyComponent();
+      final child = PositionComponent();
       child.position.setValues(2.0, 1.0);
       child.size.setValues(3.0, 1.0);
       child.angle = 0.0;
@@ -230,7 +227,7 @@ void main() {
     });
 
     test('scaled component contains point', () {
-      final component = MyComponent();
+      final component = PositionComponent();
       component.anchor = Anchor.center;
       component.position = Vector2.all(10.0);
       component.size = Vector2.all(5.0);
@@ -288,7 +285,7 @@ void main() {
 
   group('coordinates transforms test', () {
     test('local<->parent transforms', () {
-      final component = MyComponent()
+      final component = PositionComponent()
         ..size = Vector2(10, 10)
         ..position = Vector2(50, 20)
         ..anchor = Anchor.center;
@@ -305,7 +302,7 @@ void main() {
     });
 
     test('flips', () {
-      final component = MyComponent()
+      final component = PositionComponent()
         ..size = Vector2(10, 10)
         ..position = Vector2(50, 20)
         ..anchor = const Anchor(0.6, 0.8);
@@ -327,7 +324,7 @@ void main() {
     });
 
     test('center flips', () {
-      final component = MyComponent()
+      final component = PositionComponent()
         ..size = Vector2(10, 10)
         ..position = Vector2(50, 20)
         ..anchor = const Anchor(0.6, 0.8);
@@ -346,7 +343,7 @@ void main() {
     });
 
     test('rotations', () {
-      final component = MyComponent()
+      final component = PositionComponent()
         ..size = Vector2(8, 6)
         ..position = Vector2(50, 20)
         ..anchor = Anchor.center;
@@ -366,8 +363,8 @@ void main() {
     });
 
     test('random local<->global', () {
-      final parent = MyComponent()..size = Vector2(50, 25);
-      final child = MyComponent()
+      final parent = PositionComponent()..size = Vector2(50, 25);
+      final child = PositionComponent()
         ..size = Vector2(10, 8)
         ..position = Vector2(50, 20)
         ..anchor = const Anchor(0.1, 0.2);
@@ -401,7 +398,7 @@ void main() {
     });
 
     test('transform matrix', () {
-      final component = MyComponent()
+      final component = PositionComponent()
         ..size = Vector2(5, 10)
         ..anchor = Anchor.center;
 
@@ -428,7 +425,7 @@ void main() {
     });
 
     test('change anchor', () {
-      final component = MyComponent()
+      final component = PositionComponent()
         ..size = Vector2(10, 10)
         ..position = Vector2(100, 100)
         ..anchor = Anchor.center;

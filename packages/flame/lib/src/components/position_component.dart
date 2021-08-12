@@ -150,21 +150,13 @@ class PositionComponent extends BaseComponent {
     return point;
   }
 
-  /// Get the absolute position, with the anchor taken into consideration
-  Vector2 get absolutePosition => absoluteParentPosition + position;
+  /// The [anchor]'s position in absolute (world) coordinates.
+  Vector2 get absolutePosition => absolutePositionOf(_anchor);
 
-  /// Get the relative top left position regardless of the anchor and angle
-  Vector2 get topLeftPosition {
-    return _anchor.toOtherAnchorPosition(
-      position,
-      Anchor.topLeft,
-      scaledSize,
-    );
-  }
-
-  /// Set the top left position regardless of the anchor
+  /// The top-left corner's position in the parent's coordinates.
+  Vector2 get topLeftPosition => positionOf(Anchor.topLeft);
   set topLeftPosition(Vector2 position) {
-    this.position = position + (anchor.toVector2()..multiply(scaledSize));
+    this.position += position - topLeftPosition;
   }
 
   /// Get the absolute top left position regardless of whether it is a child or not
