@@ -8,7 +8,6 @@ import '../game/notifying_vector2.dart';
 import '../game/transform2d.dart';
 import 'base_component.dart';
 import 'component.dart';
-import 'mixins/hitbox.dart';
 
 /// A [Component] implementation that represents a component that can be
 /// freely moved around the screen, rotated, and scaled.
@@ -288,18 +287,20 @@ class PositionComponent extends BaseComponent {
 
   @override
   void renderDebugMode(Canvas canvas) {
-    if (this is Hitbox) {
-      (this as Hitbox).renderHitboxes(canvas);
-    }
+    super.renderDebugMode(canvas);
     canvas.drawRect(size.toRect(), debugPaint);
-
+    // draw small cross at the anchor point
+    final p0 = -_transform.offset;
+    canvas.drawLine(Offset(p0.x, p0.y - 2), Offset(p0.x, p0.y + 2), debugPaint);
+    canvas.drawLine(Offset(p0.x - 2, p0.y), Offset(p0.x + 2, p0.y), debugPaint);
+    // print coordinates at the top-left corner
     final p1 = absolutePositionOf(Anchor.topLeft);
     debugTextPaint.render(
       canvas,
       'x: ${p1.x.toStringAsFixed(2)} y:${p1.y.toStringAsFixed(2)}',
       Vector2(-50, -15),
     );
-
+    // print coordinates at the bottom-right corner
     final p2 = absolutePositionOf(Anchor.bottomRight);
     debugTextPaint.render(
       canvas,
