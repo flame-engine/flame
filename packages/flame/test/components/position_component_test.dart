@@ -300,10 +300,10 @@ void main() {
   group('coordinates transforms test', () {
     test('.positionOf', () {
       final component = PositionComponent()
-          ..size = Vector2(50, 100)
-          ..position = Vector2(500, 700)
-          ..scale = Vector2(2, 1)
-          ..anchor = Anchor.center;
+        ..size = Vector2(50, 100)
+        ..position = Vector2(500, 700)
+        ..scale = Vector2(2, 1)
+        ..anchor = Anchor.center;
       expect(component.positionOf(Anchor.center), Vector2(500, 700));
       expect(component.positionOf(Anchor.topLeft), Vector2(450, 650));
       expect(component.positionOf(Anchor.topCenter), Vector2(500, 650));
@@ -481,10 +481,10 @@ void main() {
       const tau = 2 * math.pi;
       final component = PositionComponent(size: Vector2.all(10));
       expect(component.angleDegrees, 0);
-      component.angle = tau/4;
+      component.angle = tau / 4;
       expect(component.angleDegrees, 90);
       component.angleDegrees = -60;
-      expect(component.angle, -tau/6);
+      expect(component.angle, -tau / 6);
     });
 
     test('distance', () {
@@ -511,11 +511,11 @@ void main() {
     });
 
     test('deep nested', () {
-      final c1 = PositionComponent() .. position = Vector2(10, 20);
+      final c1 = PositionComponent()..position = Vector2(10, 20);
       final c2 = MyBaseComponent();
-      final c3 = PositionComponent() .. position = Vector2(-1, -1);
+      final c3 = PositionComponent()..position = Vector2(-1, -1);
       final c4 = MyBaseComponent();
-      final c5 = PositionComponent() .. position = Vector2(5, 0);
+      final c5 = PositionComponent()..position = Vector2(5, 0);
       c1.addChild(c2);
       c2.addChild(c3);
       c3.addChild(c4);
@@ -528,7 +528,8 @@ void main() {
 
     test('auxiliary getters/setters', () {
       final parent = PositionComponent(position: Vector2(12, 19));
-      final child = PositionComponent(position: Vector2(11, -1), size: Vector2(4, 6));
+      final child =
+          PositionComponent(position: Vector2(11, -1), size: Vector2(4, 6));
       parent.addChild(child);
 
       expect(child.anchor, Anchor.topLeft);
@@ -549,8 +550,8 @@ void main() {
   group('rendering', () {
     test('render in debug mode', () {
       final component = MyDebugComponent()
-        .. position = Vector2(23, 17)
-        .. size = Vector2.all(10);
+        ..position = Vector2(23, 17)
+        ..size = Vector2.all(10);
       final canvas = MockCanvas();
       component.renderTree(canvas);
       final calls = canvas.methodCalls;
@@ -566,10 +567,10 @@ void main() {
 
     test('render without coordinates', () {
       final component = MyDebugComponent()
-        .. position = Vector2(23, 17)
-        .. size = Vector2.all(10)
-        .. anchor = Anchor.center
-        .. precision = null;
+        ..position = Vector2(23, 17)
+        ..size = Vector2.all(10)
+        ..anchor = Anchor.center
+        ..precision = null;
       final canvas = MockCanvas();
       component.renderTree(canvas);
       final calls = canvas.methodCalls;
