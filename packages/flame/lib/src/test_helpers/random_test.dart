@@ -3,7 +3,8 @@ import 'package:meta/meta.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final _seedGenerator = Random();
-const _maxSeed = 4294967296;
+// Maximum value allowed for `Random.nextInt()`
+const _maxSeed = 1 << 32;
 
 /// This function is equivalent to `test(name, body)`, except that it is
 /// better suited for randomized testing: it will create a Random
