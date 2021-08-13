@@ -95,9 +95,10 @@ abstract class Component {
   /// Called when the component has been added and prepared by the game
   /// instance.
   ///
-  /// This can be used to make initializations on your component as, when this
-  /// method is called,
-  /// things like [onGameResize] are already set and usable.
+  /// This can be used to make initializations of your component, most setup
+  /// for your component should usually go in [onLoad] though.
+  /// When this method is called, variables like [onGameResize] are already set
+  /// and usable.
   @mustCallSuper
   void onMount() {
     _isMounted = true;

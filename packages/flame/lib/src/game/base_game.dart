@@ -106,7 +106,7 @@ class BaseGame extends Game {
       c.debugMode = true;
     }
 
-    // first time resize
+    // First time resize
     c.onGameResize(size);
   }
 
@@ -125,8 +125,9 @@ class BaseGame extends Game {
 
   /// This implementation of update updates every component in the list.
   ///
-  /// It also actually adds the components added via [add] since the previous tick,
-  /// and remove those that are marked for destruction via the [Component.shouldRemove] method.
+  /// It also actually adds the components added via [add] since the previous
+  /// tick, and remove those that are marked for destruction via the
+  /// [Component.shouldRemove] method.
   /// You can override it further to add more custom behavior.
   @override
   @mustCallSuper

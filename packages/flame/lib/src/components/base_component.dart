@@ -49,8 +49,8 @@ class BaseComponent extends Component {
   /// since the last update cycle.
   /// This time can vary according to hardware capacity, so make sure to update
   /// your state considering this.
-  /// All components on [BaseGame] are always updated by the same amount. The
-  /// time each one takes to update adds up to the next update cycle.
+  /// All components in the tree are always updated by the same amount. The time
+  /// each one takes to update adds up to the next update cycle.
   @mustCallSuper
   @override
   void update(double dt) {
