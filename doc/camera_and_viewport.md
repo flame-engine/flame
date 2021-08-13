@@ -103,7 +103,7 @@ class YourGame extends Game {
 }
 ```
 
-We first create a new camera instance on load and asign our game as the reference:
+We first create a new camera instance on load and assign our game as the reference:
 
 ```dart
   // ...
