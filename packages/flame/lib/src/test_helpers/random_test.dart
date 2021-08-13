@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:meta/meta.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-final _rnd = Random(); // for generating seeds
+final _seedGenerator = Random();
 const _maxSeed = 4294967296;
 
 /// This function is equivalent to `test(name, body)`, except that it is
@@ -12,33 +12,31 @@ const _maxSeed = 4294967296;
 /// fails for a specific rare seed, it would be easy to reproduce this
 /// failure.
 ///
-/// In order for this to work properly, all random number generation
-/// within `testRandom()` must be performed through the provided random
-/// generator.
+/// In order for this to work properly, all random numbers used within
+/// `testRandom()` must be obtained through the provided random generator.
 ///
 /// Example of use:
-///
-///     testRandom('description', (Random random) {
-///       expect(random.nextDouble() == random.nextDouble(), false);
-///     });
-///
-/// Then if the test output shows that the test failed with seed `S`,
-/// simply adding parameter `seed=S` into the function will force it
-/// to run for that specific seed.
-///
+/// ```dart
+/// testRandom('description', (Random random) {
+///   expect(random.nextDouble() == random.nextDouble(), false);
+/// });
+/// ```
+/// Then if the test output shows that the test failed with seed `s`,
+/// simply adding parameter `seed=s` into the function will force it
+/// to use that specific seed.
 @isTest
 void testRandom(
   String name,
   void Function(Random random) body, {
+  int? seed,
   String? testOn,
   Timeout? timeout,
   dynamic skip,
   dynamic tags,
   Map<String, dynamic>? onPlatform,
   int? retry,
-  int? seed,
 }) {
-  seed ??= _rnd.nextInt(_maxSeed);
+  seed ??= _seedGenerator.nextInt(_maxSeed);
   test(
     '$name [seed=$seed]',
     () => body(Random(seed)),
@@ -50,6 +48,9 @@ void testRandom(
     retry: retry,
   );
 }
+
+typedef TestWidgetsCallback = Future<void> Function(
+    Random random, WidgetTester widgetTester);
 
 /// This function is equivalent to `testWidgets(name, body)`, except that
 /// it is better suited for randomized testing: it will create a Random
@@ -63,30 +64,29 @@ void testRandom(
 /// random generator.
 ///
 /// Example of use:
-///
-///     testRandomWidgets(
-///       'description',
-///       (Random random, WidgetTester tester) async {
-///         ...
-///       },
-///     );
-///
-/// Then if the test output shows that the test failed with seed `S`,
-/// simply adding parameter `seed=S` into the function will force it
+/// ```dart
+/// testRandomWidgets(
+///   'description',
+///   (Random random, WidgetTester tester) async {
+///     ...
+///   },
+/// );
+/// ```
+/// Then if the test output shows that the test failed with seed `s`,
+/// simply adding parameter `seed=s` into the function will force it
 /// to run for that specific seed.
-///
 @isTest
 void testWidgetsRandom(
   String description,
-  Future<void> Function(Random random, WidgetTester widgetTester) callback, {
+  TestWidgetsCallback callback, {
+  int? seed,
   bool? skip,
   Timeout? timeout,
   Duration? initialTimeout,
   bool semanticsEnabled = true,
   dynamic tags,
-  int? seed,
 }) {
-  seed ??= _rnd.nextInt(_maxSeed);
+  seed ??= _seedGenerator.nextInt(_maxSeed);
   testWidgets(
     '$description [seed=$seed]',
     (WidgetTester widgetTester) => callback(Random(seed), widgetTester),
