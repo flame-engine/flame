@@ -75,7 +75,7 @@ class JoystickAdvancedGame extends BaseGame
         right: 160,
         bottom: 60,
       ),
-      onPressed: () => player.flipVertically,
+      onPressed: player.flipVertically,
     );
 
     final rotateEffect = RotateEffect(
