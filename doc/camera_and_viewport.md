@@ -151,7 +151,7 @@ used to translate the canvas in the render method:
   // ...
 ```
 
-The only thing left to do is call the `update` method on the `Camera` so it can smoothly follow 
+The only thing left to do is to call the `update` method on the `Camera` so it can smoothly follow 
 your given position:
 
 ```dart
