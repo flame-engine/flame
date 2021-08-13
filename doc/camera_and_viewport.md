@@ -124,7 +124,7 @@ We first create a new camera instance on load and assign our game as the referen
 ```
 
 The camera also needs to be aware of which position to follow, this can be done anywhere in your 
-code and the `Camera` class provides multiple methods for it but let's showcase the simpleste one
+code and the `Camera` class provides multiple methods for it but let's showcase the simplest one
 and that is the `followVector2`:
 
 ```dart
