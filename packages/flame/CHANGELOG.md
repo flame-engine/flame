@@ -30,6 +30,7 @@
  - Add `ScaleEffect` that works on `scale` instead of `size`
  - Add class `NotifyingVector2`
  - Add class `Transform2D`
+ - Added helper functions `testRandom()` and `testWidgetsRandom()`
  - Remove `FPSCounter` from `BaseGame`
 
 ## [1.0.0-releasecandidate.13]
