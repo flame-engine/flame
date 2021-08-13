@@ -84,3 +84,84 @@ you when changing. The `zoom` variable is immediately applied.
 When dealing with input events, it is imperative to convert screen coordinates to world coordinates
 (or, for some reasons, you might want to do the reverse). The Camera provides two functions,
 `screenToWorld` and `worldToScreen` to easily convert between these coordinate spaces.
+
+### Using the camera with the Game class
+
+If you are not using `BaseGame` but instead are using the `Game` class then you need to manage 
+calling certain camera methods yourself. Let's say we have the following game structure, and we 
+want to add the camera functionality:
+
+```dart
+class YourGame extends Game {
+  Camera? camera;
+
+  Future<void> onLoad() async {}
+
+  void render(Canvas canvas) {}
+
+  void update(double dt) {}
+}
+```
+
+We first create a new camera instance on load and asign our game as the reference:
+
+```dart
+  // ...
+  
+  Future<void> onLoad() async {
+    camera = Camera();
+
+    // This is required for the camera to work.
+    camera?.gameRef = this;
+
+    // Not required but recommend to set it now or when you set the follow target.
+    camera?.worldBounds = yourWorldBounds;
+
+    // Rest of your on load code.
+  }
+
+  // ...
+```
+
+The camera also needs to be aware of which position to follow, this can be done anywhere in your 
+code and the `Camera` class provides multiple methods for it but let's showcase the simpleste one
+and that is the `followVector2`:
+
+```dart
+  // Somewhere in your code.
+
+  camera?.followVector2(
+    yourPositionToFollow,
+    worldBounds: yourWorldBounds, // Optional to pass, it will overwrite the previous bounds.
+  );
+```
+
+With the camera now created it, aware of the follow position and the world bounds it can now be 
+used to translate the canvas in the render method:
+
+```dart
+  // ...
+
+  void render(Canvas canvas) {
+    camera?.apply(canvas); // This will apply the camera transformation.
+
+    // Rest of your rendering code.
+  }
+
+  // ...
+```
+
+The only thing left to do is call the `update` method on the `Camera` so it can smoothly follow 
+your given position:
+
+```dart
+  // ...
+
+  void update(double dt) {
+    camera?.update(dt);
+
+    // Rest of your update code.
+  }
+
+  // ...
+```

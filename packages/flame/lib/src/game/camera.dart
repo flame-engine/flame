@@ -46,7 +46,7 @@ class Camera extends Projector {
   /// This must be set by the Game as soon as the Camera is created.
   ///
   /// Do not change this reference.
-  late BaseGame gameRef;
+  late Game gameRef;
 
   /// If set, this bypasses follow and moves the camera to a specific point
   /// in the world.
@@ -279,7 +279,9 @@ class Camera extends Projector {
     Rect? worldBounds,
   }) {
     follow = vector2;
-    this.worldBounds = worldBounds;
+    if (worldBounds != null) {
+      this.worldBounds = worldBounds;
+    }
     _targetRelativeOffset.setFrom(relativeOffset.toVector2());
     _currentRelativeOffset.setFrom(_targetRelativeOffset);
   }

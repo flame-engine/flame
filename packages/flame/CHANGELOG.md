@@ -31,6 +31,8 @@
  - Add class `NotifyingVector2`
  - Add class `Transform2D`
  - Remove `FPSCounter` from `BaseGame`
+ - Update `Camera` docs to showcase usage with `Game` class
+ - Fixed a bug with `worldBounds` being set to `null` in `Camera`
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
