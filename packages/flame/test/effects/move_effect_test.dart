@@ -2,14 +2,19 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/src/test_helpers/random_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'effect_test_utils.dart';
 
-void main() {
-  final random = Random();
+class Elements {
+  final Random random;
+  late final List<Vector2> path;
+  Elements(this.random) {
+    path = List.generate(3, (i) => randomVector2());
+  }
+
   Vector2 randomVector2() => (Vector2.random(random) * 100)..round();
-  final path = List.generate(3, (i) => randomVector2());
   TestComponent component() => TestComponent(position: randomVector2());
 
   MoveEffect effect({bool isInfinite = false, bool isAlternating = false}) {
@@ -20,74 +25,100 @@ void main() {
       isAlternating: isAlternating,
     )..skipEffectReset = true;
   }
+}
 
-  testWidgets('MoveEffect can move', (WidgetTester tester) async {
-    effectTest(
-      tester,
-      component(),
-      effect(),
-      expectedPosition: path.last,
-    );
-  });
-
-  testWidgets(
-    'MoveEffect will stop moving after it is done',
-    (WidgetTester tester) async {
+void main() {
+  testWidgetsRandom(
+    'MoveEffect can move',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
       effectTest(
         tester,
-        component(),
-        effect(),
-        expectedPosition: path.last,
-        iterations: 1.5,
+        e.component(),
+        e.effect(),
+        expectedPosition: e.path.last,
+        random: random,
       );
     },
   );
 
-  testWidgets('MoveEffect can alternate', (WidgetTester tester) async {
-    final PositionComponent positionComponent = component();
-    effectTest(
-      tester,
-      positionComponent,
-      effect(isAlternating: true),
-      expectedPosition: positionComponent.position.clone(),
-    );
-  });
+  testWidgetsRandom(
+    'MoveEffect will stop moving after it is done',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      effectTest(
+        tester,
+        e.component(),
+        e.effect(),
+        expectedPosition: e.path.last,
+        iterations: 1.5,
+        random: random,
+      );
+    },
+  );
 
-  testWidgets(
-    'MoveEffect can alternate and be infinite',
-    (WidgetTester tester) async {
-      final PositionComponent positionComponent = component();
+  testWidgetsRandom(
+    'MoveEffect can alternate',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final positionComponent = e.component();
       effectTest(
         tester,
         positionComponent,
-        effect(isInfinite: true, isAlternating: true),
+        e.effect(isAlternating: true),
         expectedPosition: positionComponent.position.clone(),
-        shouldComplete: false,
+        random: random,
       );
     },
   );
 
-  testWidgets('MoveEffect alternation can peak', (WidgetTester tester) async {
-    final PositionComponent positionComponent = component();
-    effectTest(
-      tester,
-      positionComponent,
-      effect(isAlternating: true),
-      expectedPosition: path.last,
-      shouldComplete: false,
-      iterations: 0.5,
-    );
-  });
+  testWidgetsRandom(
+    'MoveEffect can alternate and be infinite',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final positionComponent = e.component();
+      effectTest(
+        tester,
+        positionComponent,
+        e.effect(isInfinite: true, isAlternating: true),
+        expectedPosition: positionComponent.position.clone(),
+        shouldComplete: false,
+        random: random,
+      );
+    },
+  );
 
-  testWidgets('MoveEffect can be infinite', (WidgetTester tester) async {
-    final PositionComponent positionComponent = component();
-    effectTest(
-      tester,
-      positionComponent,
-      effect(isInfinite: true),
-      expectedPosition: path.last,
-      iterations: 3.0,
-      shouldComplete: false,
-    );
-  });
+  testWidgetsRandom(
+    'MoveEffect alternation can peak',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final positionComponent = e.component();
+      effectTest(
+        tester,
+        positionComponent,
+        e.effect(isAlternating: true),
+        expectedPosition: e.path.last,
+        shouldComplete: false,
+        iterations: 0.5,
+        random: random,
+      );
+    },
+  );
+
+  testWidgetsRandom(
+    'MoveEffect can be infinite',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final positionComponent = e.component();
+      effectTest(
+        tester,
+        positionComponent,
+        e.effect(isInfinite: true),
+        expectedPosition: e.path.last,
+        iterations: 3.0,
+        shouldComplete: false,
+        random: random,
+      );
+    },
+  );
 }

@@ -2,18 +2,26 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/src/test_helpers/random_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'effect_test_utils.dart';
 
-void main() {
-  final random = Random();
+class Elements {
+  final Random random;
+  late final Vector2 argumentSize;
+  late final double argumentAngle;
+  late final List<Vector2> path;
+
+  Elements(this.random) {
+    argumentSize = randomVector2();
+    argumentAngle = randomAngle();
+    path = List.generate(3, (i) => randomVector2());
+  }
+
   Vector2 randomVector2() => (Vector2.random(random) * 100)..round();
   double randomAngle() => 1.0 + random.nextInt(5);
   double randomDuration() => 1.0 + random.nextInt(100);
-  final argumentSize = randomVector2();
-  final argumentAngle = randomAngle();
-  final path = List.generate(3, (i) => randomVector2());
 
   TestComponent component() {
     return TestComponent(
@@ -51,134 +59,163 @@ void main() {
       isAlternating: isAlternating,
     )..skipEffectReset = true;
   }
+}
 
-  testWidgets('SequenceEffect can sequence', (WidgetTester tester) async {
-    effectTest(
-      tester,
-      component(),
-      effect(),
-      expectedPosition: path.last,
-      expectedAngle: argumentAngle,
-      expectedSize: argumentSize,
-    );
-  });
-
-  testWidgets(
-    'SequenceEffect will stop sequence after it is done',
-    (WidgetTester tester) async {
+void main() {
+  testWidgetsRandom(
+    'SequenceEffect can sequence',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
       effectTest(
         tester,
-        component(),
-        effect(),
-        expectedPosition: path.last,
-        expectedAngle: argumentAngle,
-        expectedSize: argumentSize,
-        iterations: 1.5,
+        e.component(),
+        e.effect(),
+        expectedPosition: e.path.last,
+        expectedAngle: e.argumentAngle,
+        expectedSize: e.argumentSize,
+        random: random,
       );
     },
   );
 
-  testWidgets('SequenceEffect can alternate', (WidgetTester tester) async {
-    final PositionComponent positionComponent = component();
-    effectTest(
-      tester,
-      positionComponent,
-      effect(isAlternating: true),
-      expectedPosition: positionComponent.position.clone(),
-      expectedAngle: positionComponent.angle,
-      expectedSize: positionComponent.size.clone(),
-      iterations: 2.0,
-    );
-  });
+  testWidgetsRandom(
+    'SequenceEffect will stop sequence after it is done',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      effectTest(
+        tester,
+        e.component(),
+        e.effect(),
+        expectedPosition: e.path.last,
+        expectedAngle: e.argumentAngle,
+        expectedSize: e.argumentSize,
+        iterations: 1.5,
+        random: random,
+      );
+    },
+  );
 
-  testWidgets(
-    'SequenceEffect can alternate and be infinite',
-    (WidgetTester tester) async {
-      final PositionComponent positionComponent = component();
+  testWidgetsRandom(
+    'SequenceEffect can alternate',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final positionComponent = e.component();
       effectTest(
         tester,
         positionComponent,
-        effect(isInfinite: true, isAlternating: true),
+        e.effect(isAlternating: true),
+        expectedPosition: positionComponent.position.clone(),
+        expectedAngle: positionComponent.angle,
+        expectedSize: positionComponent.size.clone(),
+        iterations: 2.0,
+        random: random,
+      );
+    },
+  );
+
+  testWidgetsRandom(
+    'SequenceEffect can alternate and be infinite',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final positionComponent = e.component();
+      effectTest(
+        tester,
+        positionComponent,
+        e.effect(isInfinite: true, isAlternating: true),
         expectedPosition: positionComponent.position.clone(),
         expectedAngle: positionComponent.angle,
         expectedSize: positionComponent.size.clone(),
         shouldComplete: false,
+        random: random,
       );
     },
   );
 
-  testWidgets(
+  testWidgetsRandom(
     'SequenceEffect alternation can peak',
-    (WidgetTester tester) async {
-      final PositionComponent positionComponent = component();
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final PositionComponent positionComponent = e.component();
       effectTest(
         tester,
         positionComponent,
-        effect(isAlternating: true),
-        expectedPosition: path.last,
-        expectedAngle: argumentAngle,
-        expectedSize: argumentSize,
+        e.effect(isAlternating: true),
+        expectedPosition: e.path.last,
+        expectedAngle: e.argumentAngle,
+        expectedSize: e.argumentSize,
         shouldComplete: false,
         iterations: 0.5,
+        random: random,
       );
     },
   );
 
-  testWidgets('SequenceEffect can be infinite', (WidgetTester tester) async {
-    final PositionComponent positionComponent = component();
-    effectTest(
-      tester,
-      positionComponent,
-      effect(isInfinite: true),
-      expectedPosition: path.last,
-      expectedAngle: argumentAngle,
-      expectedSize: argumentSize,
-      iterations: 3.0,
-      shouldComplete: false,
-    );
-  });
+  testWidgetsRandom(
+    'SequenceEffect can be infinite',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final PositionComponent positionComponent = e.component();
+      effectTest(
+        tester,
+        positionComponent,
+        e.effect(isInfinite: true),
+        expectedPosition: e.path.last,
+        expectedAngle: e.argumentAngle,
+        expectedSize: e.argumentSize,
+        iterations: 3.0,
+        shouldComplete: false,
+        random: random,
+      );
+    },
+  );
 
-  testWidgets(
+  testWidgetsRandom(
     'SequenceEffect can contain alternating MoveEffect',
-    (WidgetTester tester) async {
-      final PositionComponent positionComponent = component();
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final PositionComponent positionComponent = e.component();
       effectTest(
         tester,
         positionComponent,
-        effect(hasAlternatingMoveEffect: true),
+        e.effect(hasAlternatingMoveEffect: true),
         expectedPosition: positionComponent.position.clone(),
-        expectedAngle: argumentAngle,
-        expectedSize: argumentSize,
+        expectedAngle: e.argumentAngle,
+        expectedSize: e.argumentSize,
+        random: random,
       );
     },
   );
 
-  testWidgets(
+  testWidgetsRandom(
     'SequenceEffect can contain alternating RotateEffect',
-    (WidgetTester tester) async {
-      final PositionComponent positionComponent = component();
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final PositionComponent positionComponent = e.component();
       effectTest(
         tester,
         positionComponent,
-        effect(hasAlternatingRotateEffect: true),
-        expectedPosition: path.last,
+        e.effect(hasAlternatingRotateEffect: true),
+        expectedPosition: e.path.last,
         expectedAngle: positionComponent.angle,
-        expectedSize: argumentSize,
+        expectedSize: e.argumentSize,
+        random: random,
       );
     },
   );
 
-  testWidgets(
+  testWidgetsRandom(
     'SequenceEffect can contain alternating SizeEffect',
-    (WidgetTester tester) async {
-      final PositionComponent positionComponent = component();
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final PositionComponent positionComponent = e.component();
       effectTest(
         tester,
         positionComponent,
-        effect(hasAlternatingSizeEffect: true),
-        expectedPosition: path.last,
-        expectedAngle: argumentAngle,
+        e.effect(hasAlternatingSizeEffect: true),
+        expectedPosition: e.path.last,
+        expectedAngle: e.argumentAngle,
         expectedSize: positionComponent.size.clone(),
+        random: random,
       );
     },
   );

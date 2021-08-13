@@ -6,7 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame/test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-final Random random = Random();
+final Random _global_random = Random();
 
 class Callback {
   bool isCalled = false;
@@ -24,6 +24,7 @@ void effectTest(
   Vector2? expectedPosition,
   Vector2? expectedSize,
   Vector2? expectedScale,
+  required Random random,
 }) async {
   expectedPosition ??= Vector2.zero();
   expectedSize ??= Vector2.all(100.0);
