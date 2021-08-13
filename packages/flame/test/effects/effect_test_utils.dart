@@ -6,8 +6,6 @@ import 'package:flame/game.dart';
 import 'package:flame/test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-final Random _global_random = Random();
-
 class Callback {
   bool isCalled = false;
 

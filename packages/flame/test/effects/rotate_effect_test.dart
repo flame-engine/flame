@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/src/test_helpers/random_test.dart';
 import 'package:flutter_test/flutter_test.dart';
