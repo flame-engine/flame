@@ -136,8 +136,8 @@ and that is the `followVector2`:
   );
 ```
 
-With the camera now created it, aware of the follow position and the world bounds it can now be 
-used to translate the canvas in the render method:
+Now that the camera is created and it is aware of both the world bounds and the position it should 
+follow, it can be used to translate the canvas in the render method:
 
 ```dart
   // ...
