@@ -87,7 +87,7 @@ When dealing with input events, it is imperative to convert screen coordinates t
 
 ### Using the camera with the Game class
 
-If you are not using `BaseGame` but instead are using the `Game` class then you need to manage 
+If you are not using `BaseGame`, but instead are using the `Game` class, then you need to manage 
 calling certain camera methods yourself. Let's say we have the following game structure, and we 
 want to add the camera functionality:
 
