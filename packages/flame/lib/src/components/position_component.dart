@@ -9,27 +9,49 @@ import '../game/transform2d.dart';
 import 'base_component.dart';
 import 'component.dart';
 
-/// A [Component] implementation that represents a component that can be
+/// A [Component] implementation that represents an object that can be
 /// freely moved around the screen, rotated, and scaled.
 ///
-/// The [PositionComponent] class has no visual representation (except in
-/// debug mode). It is common, therefore, to derive from this class,
-/// implementing a particular rendering logic.
+/// The [PositionComponent] class has no visual representation of its own
+/// (except in debug mode). It is common, therefore, to derive from this
+/// class, implementing a specific rendering logic. For example:
+/// ```dart
+/// class MyCircle extends PositionComponent {
+///   MyCircle({required double radius, Paint? paint, Vector2? position})
+///     : _radius = radius,
+///       _paint = paint ?? Paint()..color=Color(0xFF80C080),
+///       super(
+///         position: position,
+///         size: Vector2.all(2 * radius),
+///         anchor: Anchor.center,
+///       );
 ///
-/// The base [PositionComponent] class can also be used as a container for
-/// a group of other components. In this case, changing the position,
-/// rotating or scaling the container component will affect the whole
+///   double _radius;
+///   Paint _paint;
+///
+///   @override
+///   void render(Canvas canvas) {
+///     super.render(canvas);
+///     canvas.drawCircle(Offset(_radius, _radius), _radius, _paint);
+///   }
+/// }
+/// ```
+///
+/// The base [PositionComponent] class can also be used as a container
+/// for several other components. In this case, changing the position,
+/// rotating or scaling the [PositionComponent] will affect the whole
 /// group as if it was a single entity.
 ///
 /// The main properties of this class is the [_transform] (which combines
 /// the [position], [angle] of rotation, and [scale]), the [size], and
 /// the [anchor]. Thus, the [PositionComponent] can be imagined as an
-/// abstract picture whose size originally is [size]; within that picture
-/// a point at location [anchor] is selected, that point is designated as
-/// a logical "center" of the picture. Then, the transform is applied to
-/// the picture: its anchor is moved to the point [position] on the screen,
-/// then the picture is rotated by [angle] around the anchor point, and
-/// scaled by [scale] also around the anchor point.
+/// abstract picture whose of a certain [size]. Within that picture
+/// a point at location [anchor] is selected, and that point is designated as
+/// a "logical center" of the picture. Then, a sequence of transforms is
+/// applied: the picture is moved so that the anchor becomes at point
+/// [position] on the screen, then the picture is rotated for [angle]
+/// radians around the anchor point, and finally scaled by [scale] also
+/// around the anchor point.
 ///
 /// The [size] property of the [PositionComponent] is used primarily for
 /// tap and collision detection. Thus, the [size] should be set equal to
@@ -113,8 +135,8 @@ class PositionComponent extends BaseComponent {
   /// scaling also happen around this anchor point.
   Anchor _anchor;
   Anchor get anchor => _anchor;
-  set anchor(Anchor a) {
-    _anchor = a;
+  set anchor(Anchor anchor) {
+    _anchor = anchor;
     _onModifiedSizeOrAnchor();
   }
 
@@ -168,37 +190,39 @@ class PositionComponent extends BaseComponent {
         (local.y < _size.y);
   }
 
-  /// Convert local coordinates of a point [p] inside the component into
-  /// the parent's coordinate space.
-  Vector2 positionOf(Vector2 p) {
-    return _transform.localToGlobal(p);
+  /// Convert local coordinates of a point [point] inside the component
+  /// into the parent's coordinate space.
+  Vector2 positionOf(Vector2 point) {
+    return _transform.localToGlobal(point);
   }
 
   /// Similar to [positionOf()], but applies to any anchor point within
   /// the component.
-  Vector2 positionOfAnchor(Anchor a) {
-    if (a == _anchor) {
+  Vector2 positionOfAnchor(Anchor anchor) {
+    if (anchor == _anchor) {
       return position;
     }
-    return positionOf(Vector2(a.x * size.x, a.y * size.y));
+    return positionOf(Vector2(anchor.x * size.x, anchor.y * size.y));
   }
 
-  /// Convert local coordinates of a point [p] inside the component into
-  /// the global (world) coordinate space.
-  Vector2 absolutePositionOf(Vector2 p) {
-    var point = positionOf(p);
+  /// Convert local coordinates of a point [point] inside the component
+  /// into the global (world) coordinate space.
+  Vector2 absolutePositionOf(Vector2 point) {
+    var parentPoint = positionOf(point);
     var ancestor = parent;
     while (ancestor != null) {
       if (ancestor is PositionComponent) {
-        point = ancestor.positionOf(point);
+        parentPoint = ancestor.positionOf(parentPoint);
       }
       ancestor = ancestor.parent;
     }
-    return point;
+    return parentPoint;
   }
 
-  Vector2 absolutePositionOfAnchor(Anchor a) {
-    var point = positionOfAnchor(a);
+  /// Similar to [absolutePositionOf()], but applies to any anchor
+  /// point within the component.
+  Vector2 absolutePositionOfAnchor(Anchor anchor) {
+    var point = positionOfAnchor(anchor);
     var ancestor = parent;
     while (ancestor != null) {
       if (ancestor is PositionComponent) {
@@ -210,13 +234,16 @@ class PositionComponent extends BaseComponent {
   }
 
   /// Transform [point] from the parent's coordinate space into the local
-  /// coordinates.
+  /// coordinates. This function is the inverse of [positionOf()].
   Vector2 toLocal(Vector2 point) => _transform.globalToLocal(point);
 
   /// Transform [point] from the global (world) coordinate space into the
-  /// local coordinates. This can be used, for example, to detect whether
-  /// a specific point on the screen lies within this [PositionComponent],
-  /// and where exactly it is.
+  /// local coordinates. This function is the inverse of
+  /// [absolutePositionOf()].
+  ///
+  /// This can be used, for example, to detect whether a specific point
+  /// on the screen lies within this [PositionComponent], and where
+  /// exactly it hits.
   Vector2 absoluteToLocal(Vector2 point) {
     var c = parent;
     while (c != null) {
