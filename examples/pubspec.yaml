@@ -15,6 +15,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+dependency_overrides:
+  flutter_colorpicker: 0.5.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

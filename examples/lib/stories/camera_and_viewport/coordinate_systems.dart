@@ -215,7 +215,7 @@ class CoordinateSystemsGame extends BaseGame
     RawKeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
-    final isKeyDown = e is RawKeyDownEvent;
+    final isKeyDown = event is RawKeyDownEvent;
 
     if (event.logicalKey == LogicalKeyboardKey.keyA) {
       cameraVelocity.x = isKeyDown ? -1 : 0;
@@ -233,6 +233,6 @@ class CoordinateSystemsGame extends BaseGame
       }
     }
 
-    return super.onKeyEvent(event, keysPressed);
+    return KeyEventResult.handled;
   }
 }

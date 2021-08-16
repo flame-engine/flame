@@ -1,9 +1,9 @@
-import 'package:flame/input.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../extensions.dart';
+import '../../../input.dart';
 import '../../extensions/size.dart';
 import '../game.dart';
 import '../game_render_box.dart';
