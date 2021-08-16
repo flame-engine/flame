@@ -1,35 +1,20 @@
 import 'dart:math';
 
-import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/src/test_helpers/random_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'effect_test_utils.dart';
 
-class Elements {
-  final Random random;
-  late final Vector2 argumentSize;
-  late final double argumentAngle;
-  late final List<Vector2> path;
+class Elements extends BaseElements {
+  Elements(Random random) : super(random);
 
-  Elements(this.random) {
-    argumentSize = randomVector2();
-    argumentAngle = randomAngle();
-    path = List.generate(3, (i) => randomVector2());
-  }
-
-  Vector2 randomVector2() => (Vector2.random(random) * 100)..round();
-  double randomAngle() => 1.0 + random.nextInt(5);
-  double randomDuration() => 1.0 + random.nextInt(100);
-
-  TestComponent component() {
-    return TestComponent(
-      position: randomVector2(),
-      size: randomVector2(),
-      angle: randomAngle(),
-    );
-  }
+  @override
+  TestComponent component() => TestComponent(
+        position: randomVector2(),
+        size: randomVector2(),
+        angle: randomAngle(),
+      );
 
   SequenceEffect effect({
     bool isInfinite = false,
@@ -135,7 +120,7 @@ void main() {
     'SequenceEffect alternation can peak',
     (Random random, WidgetTester tester) async {
       final e = Elements(random);
-      final PositionComponent positionComponent = e.component();
+      final positionComponent = e.component();
       effectTest(
         tester,
         positionComponent,
@@ -154,7 +139,7 @@ void main() {
     'SequenceEffect can be infinite',
     (Random random, WidgetTester tester) async {
       final e = Elements(random);
-      final PositionComponent positionComponent = e.component();
+      final positionComponent = e.component();
       effectTest(
         tester,
         positionComponent,
@@ -173,7 +158,7 @@ void main() {
     'SequenceEffect can contain alternating MoveEffect',
     (Random random, WidgetTester tester) async {
       final e = Elements(random);
-      final PositionComponent positionComponent = e.component();
+      final positionComponent = e.component();
       effectTest(
         tester,
         positionComponent,
@@ -190,7 +175,7 @@ void main() {
     'SequenceEffect can contain alternating RotateEffect',
     (Random random, WidgetTester tester) async {
       final e = Elements(random);
-      final PositionComponent positionComponent = e.component();
+      final positionComponent = e.component();
       effectTest(
         tester,
         positionComponent,
@@ -207,7 +192,7 @@ void main() {
     'SequenceEffect can contain alternating SizeEffect',
     (Random random, WidgetTester tester) async {
       final e = Elements(random);
-      final PositionComponent positionComponent = e.component();
+      final positionComponent = e.component();
       effectTest(
         tester,
         positionComponent,

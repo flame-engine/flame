@@ -1,19 +1,15 @@
 import 'dart:math';
 
-import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/src/test_helpers/random_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'effect_test_utils.dart';
 
-class Elements {
-  final Random random;
-  late final Vector2 argumentScale;
-  Elements(this.random) {
-    argumentScale = randomVector2();
-  }
-  Vector2 randomVector2() => (Vector2.random(random) * 100)..round();
+class Elements extends BaseElements {
+  Elements(Random random) : super(random);
+
+  @override
   TestComponent component() => TestComponent(scale: randomVector2());
 
   ScaleEffect effect({bool isInfinite = false, bool isAlternating = false}) {

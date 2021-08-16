@@ -1,21 +1,15 @@
 import 'dart:math';
 
-import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/src/test_helpers/random_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'effect_test_utils.dart';
 
-class Elements {
-  final Random random;
-  late final Vector2 argumentSize;
-  Elements(this.random) {
-    argumentSize = randomVector2();
-  }
+class Elements extends BaseElements {
+  Elements(Random random) : super(random);
 
-  Vector2 randomVector2() => (Vector2.random(random) * 100)..round();
-
+  @override
   TestComponent component() => TestComponent(size: randomVector2());
 
   SizeEffect effect({bool isInfinite = false, bool isAlternating = false}) {

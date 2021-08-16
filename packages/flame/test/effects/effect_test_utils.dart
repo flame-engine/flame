@@ -123,3 +123,24 @@ class TestComponent extends PositionComponent {
           anchor: anchor,
         );
 }
+
+abstract class BaseElements {
+  BaseElements(this.random) {
+    argumentSize = randomVector2();
+    argumentScale = randomVector2();
+    argumentAngle = randomAngle();
+    path = List.generate(3, (i) => randomVector2());
+  }
+
+  final Random random;
+  late final Vector2 argumentSize;
+  late final Vector2 argumentScale;
+  late final double argumentAngle;
+  late final List<Vector2> path;
+
+  Vector2 randomVector2() => (Vector2.random(random) * 100)..round();
+  double randomAngle() => 1.0 + random.nextInt(5);
+  double randomDuration() => 1.0 + random.nextInt(100);
+
+  TestComponent component();
+}

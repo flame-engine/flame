@@ -8,10 +8,10 @@ import 'effect_test_utils.dart';
 
 const defaultAngle = 6.0;
 
-class Elements {
-  final Random random;
-  Elements(this.random);
+class Elements extends BaseElements {
+  Elements(Random random) : super(random);
 
+  @override
   TestComponent component() => TestComponent(angle: 0.5);
 
   RotateEffect effect({

@@ -1,20 +1,15 @@
 import 'dart:math';
 
-import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/src/test_helpers/random_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'effect_test_utils.dart';
 
-class Elements {
-  final Random random;
-  late final List<Vector2> path;
-  Elements(this.random) {
-    path = List.generate(3, (i) => randomVector2());
-  }
+class Elements extends BaseElements {
+  Elements(Random random) : super(random);
 
-  Vector2 randomVector2() => (Vector2.random(random) * 100)..round();
+  @override
   TestComponent component() => TestComponent(position: randomVector2());
 
   MoveEffect effect({bool isInfinite = false, bool isAlternating = false}) {
