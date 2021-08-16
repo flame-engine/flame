@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
@@ -319,18 +318,17 @@ void main() {
         ..position = Vector2(500, 700)
         ..scale = Vector2(2, 1)
         ..anchor = Anchor.center;
-      expect(component.positionOf(Anchor.center), Vector2(500, 700));
-      expect(component.positionOf(Anchor.topLeft), Vector2(450, 650));
-      expect(component.positionOf(Anchor.topCenter), Vector2(500, 650));
-      expect(component.positionOf(Anchor.topRight), Vector2(550, 650));
-      expect(component.positionOf(Anchor.centerLeft), Vector2(450, 700));
-      expect(component.positionOf(Anchor.centerRight), Vector2(550, 700));
-      expect(component.positionOf(Anchor.bottomLeft), Vector2(450, 750));
-      expect(component.positionOf(Anchor.bottomCenter), Vector2(500, 750));
-      expect(component.positionOf(Anchor.bottomRight), Vector2(550, 750));
+      expect(component.positionOfAnchor(Anchor.center), Vector2(500, 700));
+      expect(component.positionOfAnchor(Anchor.topLeft), Vector2(450, 650));
+      expect(component.positionOfAnchor(Anchor.topCenter), Vector2(500, 650));
+      expect(component.positionOfAnchor(Anchor.topRight), Vector2(550, 650));
+      expect(component.positionOfAnchor(Anchor.centerLeft), Vector2(450, 700));
+      expect(component.positionOfAnchor(Anchor.centerRight), Vector2(550, 700));
+      expect(component.positionOfAnchor(Anchor.bottomLeft), Vector2(450, 750));
+      expect(component.positionOfAnchor(Anchor.bottomCenter), Vector2(500, 750));
+      expect(component.positionOfAnchor(Anchor.bottomRight), Vector2(550, 750));
       expect(component.positionOf(Vector2(-3, 2)), Vector2(444, 652));
-      expect(component.positionOf(const Offset(7, 16)), Vector2(464, 666));
-      expect(() => component.positionOf(5), throwsA(isA<ArgumentError>()));
+      expect(component.positionOf(Vector2(7, 16)), Vector2(464, 666));
     });
 
     test('local<->parent transforms', () {
@@ -572,7 +570,8 @@ void main() {
       final calls = canvas.methodCalls;
       expect(calls.length, 6);
       expect(calls[0],
-          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 23.0, 17.0, 0.0, 1.0)');
+          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 23.0, 17.0, 0.0, 1.0)',
+      );
       expect(calls[1], 'drawRect(0.0, 0.0, 10.0, 10.0)');
       expect(calls[2], 'drawLine(0.0, -2.0, 0.0, 2.0)');
       expect(calls[3], 'drawLine(-2.0, 0.0, 2.0, 0.0)');
@@ -591,7 +590,8 @@ void main() {
       final calls = canvas.methodCalls;
       expect(calls.length, 4);
       expect(calls[0],
-          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 18.0, 12.0, 0.0, 1.0)');
+          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 18.0, 12.0, 0.0, 1.0)',
+      );
       expect(calls[1], 'drawRect(0.0, 0.0, 10.0, 10.0)');
       expect(calls[2], 'drawLine(5.0, 3.0, 5.0, 7.0)');
       expect(calls[3], 'drawLine(3.0, 5.0, 7.0, 5.0)');

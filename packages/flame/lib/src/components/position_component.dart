@@ -169,30 +169,36 @@ class PositionComponent extends BaseComponent {
   }
 
   /// Convert local coordinates of a point [p] inside the component into
-  /// the parent's coordinate space. Point [p] can be either a [Vector2],
-  /// an [Anchor] (relative to component's [size]), or an [Offset].
-  Vector2 positionOf(dynamic p) {
-    if (p is Vector2) {
-      return _transform.localToGlobal(p);
+  /// the parent's coordinate space.
+  Vector2 positionOf(Vector2 p) {
+    return _transform.localToGlobal(p);
+  }
+
+  /// Similar to [positionOf()], but applies to any anchor point within
+  /// the component.
+  Vector2 positionOfAnchor(Anchor a) {
+    if (a == _anchor) {
+      return position;
     }
-    if (p is Anchor) {
-      if (p == _anchor) {
-        return position;
-      }
-      return positionOf(Vector2(p.x * size.x, p.y * size.y));
-    }
-    if (p is Offset) {
-      return positionOf(Vector2(p.dx, p.dy));
-    }
-    throw ArgumentError(p);
+    return positionOf(Vector2(a.x * size.x, a.y * size.y));
   }
 
   /// Convert local coordinates of a point [p] inside the component into
-  /// the global (world) coordinate space. Point [p] can be either a
-  /// [Vector2], an [Anchor] (relative to component's [size]), or an
-  /// [Offset].
-  Vector2 absolutePositionOf(dynamic p) {
+  /// the global (world) coordinate space.
+  Vector2 absolutePositionOf(Vector2 p) {
     var point = positionOf(p);
+    var ancestor = parent;
+    while (ancestor != null) {
+      if (ancestor is PositionComponent) {
+        point = ancestor.positionOf(point);
+      }
+      ancestor = ancestor.parent;
+    }
+    return point;
+  }
+
+  Vector2 absolutePositionOfAnchor(Anchor a) {
+    var point = positionOfAnchor(a);
     var ancestor = parent;
     while (ancestor != null) {
       if (ancestor is PositionComponent) {
@@ -223,26 +229,26 @@ class PositionComponent extends BaseComponent {
   }
 
   /// The top-left corner's position in the parent's coordinates.
-  Vector2 get topLeftPosition => positionOf(Anchor.topLeft);
+  Vector2 get topLeftPosition => positionOfAnchor(Anchor.topLeft);
   set topLeftPosition(Vector2 point) {
     position += point - topLeftPosition;
   }
 
   /// The position of the center of the component's bounding rectangle
   /// in the parent's coordinates.
-  Vector2 get center => positionOf(Anchor.center);
+  Vector2 get center => positionOfAnchor(Anchor.center);
   set center(Vector2 point) {
     position += point - center;
   }
 
   /// The [anchor]'s position in absolute (world) coordinates.
-  Vector2 get absolutePosition => absolutePositionOf(_anchor);
+  Vector2 get absolutePosition => absolutePositionOfAnchor(_anchor);
 
   /// Get the absolute top left position regardless of whether it is a child or not
-  Vector2 get absoluteTopLeftPosition => absolutePositionOf(Anchor.topLeft);
+  Vector2 get absoluteTopLeftPosition => absolutePositionOfAnchor(Anchor.topLeft);
 
   /// Get the absolute center of the component
-  Vector2 get absoluteCenter => absolutePositionOf(Anchor.center);
+  Vector2 get absoluteCenter => absolutePositionOfAnchor(Anchor.center);
 
   //----------------------------------------------------------------------------
   // Mutators
@@ -298,7 +304,7 @@ class PositionComponent extends BaseComponent {
     canvas.drawLine(Offset(p0.x - 2, p0.y), Offset(p0.x + 2, p0.y), debugPaint);
     if (precision != null) {
       // print coordinates at the top-left corner
-      final p1 = absolutePositionOf(Anchor.topLeft);
+      final p1 = absolutePositionOfAnchor(Anchor.topLeft);
       final x1str = p1.x.toStringAsFixed(precision);
       final y1str = p1.y.toStringAsFixed(precision);
       debugTextPaint.render(
@@ -307,7 +313,7 @@ class PositionComponent extends BaseComponent {
         Vector2(-10 * (precision + 3), -15),
       );
       // print coordinates at the bottom-right corner
-      final p2 = absolutePositionOf(Anchor.bottomRight);
+      final p2 = absolutePositionOfAnchor(Anchor.bottomRight);
       final x2str = p2.x.toStringAsFixed(precision);
       final y2str = p2.y.toStringAsFixed(precision);
       debugTextPaint.render(
