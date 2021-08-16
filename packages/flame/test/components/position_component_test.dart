@@ -325,7 +325,8 @@ void main() {
       expect(component.positionOfAnchor(Anchor.centerLeft), Vector2(450, 700));
       expect(component.positionOfAnchor(Anchor.centerRight), Vector2(550, 700));
       expect(component.positionOfAnchor(Anchor.bottomLeft), Vector2(450, 750));
-      expect(component.positionOfAnchor(Anchor.bottomCenter), Vector2(500, 750));
+      expect(
+          component.positionOfAnchor(Anchor.bottomCenter), Vector2(500, 750));
       expect(component.positionOfAnchor(Anchor.bottomRight), Vector2(550, 750));
       expect(component.positionOf(Vector2(-3, 2)), Vector2(444, 652));
       expect(component.positionOf(Vector2(7, 16)), Vector2(464, 666));
@@ -569,8 +570,9 @@ void main() {
       component.renderTree(canvas);
       final calls = canvas.methodCalls;
       expect(calls.length, 6);
-      expect(calls[0],
-          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 23.0, 17.0, 0.0, 1.0)',
+      expect(
+        calls[0],
+        'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 23.0, 17.0, 0.0, 1.0)',
       );
       expect(calls[1], 'drawRect(0.0, 0.0, 10.0, 10.0)');
       expect(calls[2], 'drawLine(0.0, -2.0, 0.0, 2.0)');
@@ -589,8 +591,9 @@ void main() {
       component.renderTree(canvas);
       final calls = canvas.methodCalls;
       expect(calls.length, 4);
-      expect(calls[0],
-          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 18.0, 12.0, 0.0, 1.0)',
+      expect(
+        calls[0],
+        'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 18.0, 12.0, 0.0, 1.0)',
       );
       expect(calls[1], 'drawRect(0.0, 0.0, 10.0, 10.0)');
       expect(calls[2], 'drawLine(5.0, 3.0, 5.0, 7.0)');

@@ -245,7 +245,8 @@ class PositionComponent extends BaseComponent {
   Vector2 get absolutePosition => absolutePositionOfAnchor(_anchor);
 
   /// Get the absolute top left position regardless of whether it is a child or not
-  Vector2 get absoluteTopLeftPosition => absolutePositionOfAnchor(Anchor.topLeft);
+  Vector2 get absoluteTopLeftPosition =>
+      absolutePositionOfAnchor(Anchor.topLeft);
 
   /// Get the absolute center of the component
   Vector2 get absoluteCenter => absolutePositionOfAnchor(Anchor.center);
