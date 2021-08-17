@@ -1,5 +1,12 @@
 # Other inputs
 
+This includes documentation for input methods besides keyboard and mouse.
+
+For other input documents, see also:
+
+- [Gesture Input](gesture-input.md): for mouse and touch pointer gestures
+- [Other Inputs](other-inputs.md): For joysticks, game pads, etc.
+
 ## Joystick
 
 Flame provides a component capable of creating a virtual joystick for taking input for your game.

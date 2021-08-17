@@ -1,5 +1,14 @@
 # Gesture Input
 
+This includes documentation for gesture inputs, which is, mouse and touch pointers.
+
+For other input documents, see also:
+
+- [Keyboard Input](keyboard-input.md): for keystrokes
+- [Other Inputs](other-inputs.md): For joysticks, game pads, etc.
+
+## Intro
+
 Inside `package:flame/gestures.dart` you can find a whole set of `mixin`s which can be included on
 your game class instance to be able to receive touch input events. Below you can see the full list
 of these `mixin`s and its methods:

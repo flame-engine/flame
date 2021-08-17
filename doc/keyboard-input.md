@@ -1,5 +1,14 @@
 # Keyboard Input
 
+This includes documentation for keyboard inputs.
+
+For other input documents, see also:
+
+- [Gesture Input](gesture-input.md): for mouse and touch pointer gestures
+- [Keyboard Input](keyboard-input.md): for keystrokes
+
+## Intro
+
 The keyboard API on flame relies on the 
 [Flutter's Focus widget](https://api.flutter.dev/flutter/widgets/Focus-class.html).
 
