@@ -113,12 +113,6 @@ class PositionComponent extends BaseComponent {
   double get angle => _transform.angle;
   set angle(double a) => _transform.angle = a;
 
-  /// Rotation angle (in degrees) of the component. The component will be
-  /// rotated around its anchor point in the clockwise direction if the
-  /// angle is positive, or counterclockwise if the angle is negative.
-  double get angleDegrees => _transform.angleDegrees;
-  set angleDegrees(double a) => _transform.angleDegrees = a;
-
   /// The scale factor of this component. The scale can be different along
   /// the X and Y dimensions. A scale greater than 1 makes the component
   /// bigger, and less than 1 smaller. The scale can also be negative,

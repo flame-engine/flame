@@ -326,7 +326,9 @@ void main() {
       expect(component.positionOfAnchor(Anchor.centerRight), Vector2(550, 700));
       expect(component.positionOfAnchor(Anchor.bottomLeft), Vector2(450, 750));
       expect(
-          component.positionOfAnchor(Anchor.bottomCenter), Vector2(500, 750));
+        component.positionOfAnchor(Anchor.bottomCenter),
+        Vector2(500, 750),
+      );
       expect(component.positionOfAnchor(Anchor.bottomRight), Vector2(550, 750));
       expect(component.positionOf(Vector2(-3, 2)), Vector2(444, 652));
       expect(component.positionOf(Vector2(7, 16)), Vector2(464, 666));
@@ -489,16 +491,6 @@ void main() {
       expect(component.toLocal(Vector2(100, 100)), Vector2(10, 10));
       component.anchor = const Anchor(0.1, 0.2);
       expect(component.toLocal(Vector2(100, 100)), Vector2(1, 2));
-    });
-
-    test('rotation with degrees', () {
-      const tau = 2 * math.pi;
-      final component = PositionComponent(size: Vector2.all(10));
-      expect(component.angleDegrees, 0);
-      component.angle = tau / 4;
-      expect(component.angleDegrees, 90);
-      component.angleDegrees = -60;
-      expect(component.angle, -tau / 6);
     });
 
     test('distance', () {
