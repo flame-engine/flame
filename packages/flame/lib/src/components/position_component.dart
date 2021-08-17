@@ -58,7 +58,6 @@ import 'component.dart';
 /// the approximate bounding rectangle of the rendered picture. If you
 /// do not specify the size of a PositionComponent, then it will be
 /// equal to zero and the component won't be able to respond to taps.
-///
 class PositionComponent extends BaseComponent {
   final Transform2D _transform;
 
@@ -168,9 +167,7 @@ class PositionComponent extends BaseComponent {
   double distance(PositionComponent other) =>
       position.distanceTo(other.position);
 
-  //----------------------------------------------------------------------------
-  // Coordinate transformations
-  //----------------------------------------------------------------------------
+  //#region Coordinate transformations
 
   /// Test whether the `point` (given in global coordinates) lies within this
   /// component. The top and the left borders of the component are inclusive,
@@ -272,9 +269,9 @@ class PositionComponent extends BaseComponent {
   /// Get the absolute center of the component
   Vector2 get absoluteCenter => absolutePositionOfAnchor(Anchor.center);
 
-  //----------------------------------------------------------------------------
-  // Mutators
-  //----------------------------------------------------------------------------
+  //#endregion
+
+  //#region Mutators
 
   /// Flip the component horizontally around its anchor point.
   void flipHorizontally() => _transform.flipHorizontally();
@@ -298,9 +295,7 @@ class PositionComponent extends BaseComponent {
     _transform.flipVertically();
   }
 
-  //----------------------------------------------------------------------------
-  // Private
-  //----------------------------------------------------------------------------
+  //#endregion
 
   /// Internal handler which is called automatically whenever either
   /// the [size] or [scale] change.

@@ -32,12 +32,12 @@
  - Add class `Transform2D`
  - Added helper functions `testRandom()` and `testWidgetsRandom()`
  - Remove `FPSCounter` from `BaseGame`
- - Refactor `PositionComponent` to work with `Transform2D`. Several methods were updated to work
-   correctly in the presence of rotations / scale, or when PositionComponent is nested within
-   other components. Properties `renderFlipX`, `renderFlipY` removed and replaced with methods
-   `flipHorizontally()` and `flipVertically()`. Method `.angleTo` removed as it was not
-   working properly. In debug mode `PositionComponent` now displays an indicator for the anchor 
-   position.
+ - Refactor `PositionComponent` to work with `Transform2D`: the component now works more reliably
+   when nested
+ - Properties `renderFlipX`, `renderFlipY` removed and replaced with methods
+   `flipHorizontally()` and `flipVertically()`.
+ - Method `.angleTo` removed as it was not working properly.
+ - In debug mode `PositionComponent` now displays an indicator for the anchor position.
  - Update `Camera` docs to showcase usage with `Game` class
  - Fixed a bug with `worldBounds` being set to `null` in `Camera`
 
