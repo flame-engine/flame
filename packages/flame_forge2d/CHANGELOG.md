@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [0.8.1-releasecandidate.14]
+## [Next]
  - Behavior of BodyComponent render has changed so that it can work with flame coordinate system
 
 ## [0.8.1-releasecandidate.13]
