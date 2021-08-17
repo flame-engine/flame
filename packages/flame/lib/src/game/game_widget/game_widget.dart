@@ -60,8 +60,12 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// - [Game.overlays]
   final List<String>? initialActiveOverlays;
 
+  /// The [FocusNode] to control the games focus to receive event inputs.
+  /// If omitted, defaults to an internally controlled focus node.
   final FocusNode? focusNode;
 
+  /// Whether the [focusNode] requests focus once the game is mounted.
+  /// Defaults to true.
   final bool autofocus;
 
   /// Renders a [game] in a flutter widget tree.
@@ -196,7 +200,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     });
   }
 
-  KeyEventResult handleKeyEvent(FocusNode focusNode, RawKeyEvent event) {
+  KeyEventResult _handleKeyEvent(FocusNode focusNode, RawKeyEvent event) {
     final game = widget.game;
     if (game is KeyboardEvents) {
       return game.onKeyEvent(event, RawKeyboard.instance.keysPressed);
@@ -248,7 +252,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     return Focus(
       focusNode: widget.focusNode,
       autofocus: widget.autofocus,
-      onKey: handleKeyEvent,
+      onKey: _handleKeyEvent,
       child: Directionality(
         textDirection: textDir,
         child: Container(
