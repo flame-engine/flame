@@ -1,11 +1,17 @@
-import 'package:flame/components.dart';
+import 'dart:math';
+
 import 'package:flame/effects.dart';
+import 'package:flame/src/test_helpers/random_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'effect_test_utils.dart';
 
-void main() {
-  const defaultAngle = 6.0;
+const defaultAngle = 6.0;
+
+class Elements extends BaseElements {
+  Elements(Random random) : super(random);
+
+  @override
   TestComponent component() => TestComponent(angle: 0.5);
 
   RotateEffect effect({
@@ -22,100 +28,130 @@ void main() {
       isRelative: isRelative,
     )..skipEffectReset = true;
   }
+}
 
-  testWidgets('RotateEffect can rotate', (WidgetTester tester) async {
-    effectTest(
-      tester,
-      component(),
-      effect(),
-      expectedAngle: defaultAngle,
-    );
-  });
-
-  testWidgets(
-    'RotateEffect will stop rotating after it is done',
-    (WidgetTester tester) async {
+void main() {
+  testWidgetsRandom(
+    'RotateEffect can rotate',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
       effectTest(
         tester,
-        component(),
-        effect(),
+        e.component(),
+        e.effect(),
+        expectedAngle: defaultAngle,
+        random: random,
+      );
+    },
+  );
+
+  testWidgetsRandom(
+    'RotateEffect will stop rotating after it is done',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      effectTest(
+        tester,
+        e.component(),
+        e.effect(),
         expectedAngle: defaultAngle,
         iterations: 1.5,
+        random: random,
       );
     },
   );
 
-  testWidgets('RotateEffect can alternate', (WidgetTester tester) async {
-    final PositionComponent positionComponent = component();
-    effectTest(
-      tester,
-      positionComponent,
-      effect(isAlternating: true),
-      expectedAngle: positionComponent.angle,
-      iterations: 2.0,
-    );
-  });
-
-  testWidgets(
-    'RotateEffect can alternate and be infinite',
-    (WidgetTester tester) async {
-      final PositionComponent positionComponent = component();
+  testWidgetsRandom(
+    'RotateEffect can alternate',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final positionComponent = e.component();
       effectTest(
         tester,
         positionComponent,
-        effect(isInfinite: true, isAlternating: true),
+        e.effect(isAlternating: true),
+        expectedAngle: positionComponent.angle,
+        iterations: 2.0,
+        random: random,
+      );
+    },
+  );
+
+  testWidgetsRandom(
+    'RotateEffect can alternate and be infinite',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final positionComponent = e.component();
+      effectTest(
+        tester,
+        positionComponent,
+        e.effect(isInfinite: true, isAlternating: true),
         expectedAngle: positionComponent.angle,
         shouldComplete: false,
+        random: random,
       );
     },
   );
 
-  testWidgets('RotateEffect alternation can peak', (WidgetTester tester) async {
-    final PositionComponent positionComponent = component();
-    effectTest(
-      tester,
-      positionComponent,
-      effect(isAlternating: true),
-      expectedAngle: defaultAngle,
-      shouldComplete: false,
-      iterations: 0.5,
-    );
-  });
+  testWidgetsRandom(
+    'RotateEffect alternation can peak',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final positionComponent = e.component();
+      effectTest(
+        tester,
+        positionComponent,
+        e.effect(isAlternating: true),
+        expectedAngle: defaultAngle,
+        shouldComplete: false,
+        iterations: 0.5,
+        random: random,
+      );
+    },
+  );
 
-  testWidgets('RotateEffect can be infinite', (WidgetTester tester) async {
-    final PositionComponent positionComponent = component();
-    effectTest(
-      tester,
-      positionComponent,
-      effect(isInfinite: true),
-      expectedAngle: defaultAngle,
-      iterations: 3.0,
-      shouldComplete: false,
-    );
-  });
+  testWidgetsRandom(
+    'RotateEffect can be infinite',
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final positionComponent = e.component();
+      effectTest(
+        tester,
+        positionComponent,
+        e.effect(isInfinite: true),
+        expectedAngle: defaultAngle,
+        iterations: 3.0,
+        shouldComplete: false,
+        random: random,
+      );
+    },
+  );
 
-  testWidgets(
+  testWidgetsRandom(
     'RotateEffect can handle negative relative angles',
-    (WidgetTester tester) async {
-      final PositionComponent positionComponent = component();
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final positionComponent = e.component();
       effectTest(
         tester,
         positionComponent,
-        effect(angle: -1, isRelative: true),
-        expectedAngle: component().angle - 1,
+        e.effect(angle: -1, isRelative: true),
+        expectedAngle: e.component().angle - 1,
+        random: random,
       );
     },
   );
 
-  testWidgets(
+  testWidgetsRandom(
     'RotateEffect can handle absolute relative angles',
-    (WidgetTester tester) async {
-      final PositionComponent positionComponent = component();
+    (Random random, WidgetTester tester) async {
+      final e = Elements(random);
+      final positionComponent = e.component();
       effectTest(
         tester,
         positionComponent,
-        effect(angle: -1),
+        e.effect(angle: -1),
         expectedAngle: -1,
+        random: random,
       );
     },
   );
