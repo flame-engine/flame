@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## [Next]
- - Behavior of BodyComponent render has changed so that it can work with flame coordinate system
+ - The rendering of `BodyComponent` is now inline with the Flame coordinate system
 
 ## [0.8.1-releasecandidate.13]
  - Added physics tied to widgets example
