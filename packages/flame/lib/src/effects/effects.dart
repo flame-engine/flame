@@ -12,15 +12,16 @@ export './sequence_effect.dart';
 export './size_effect.dart';
 
 abstract class ComponentEffect<T extends Component> extends BaseComponent {
-  /// If the component has a parent it will be set here
-  T _affectedParent(Component component) {
-    if (parent is T) {
-      return parent! as T;
+  T _affectedParent(Component? component) {
+    if (component is T) {
+      return component;
     } else {
-      return _affectedParent(parent!);
+      return _affectedParent(component!.parent);
     }
   }
 
+  /// If the effect has a parent further up in the tree that will be affected by
+  /// this effect, that parent will be set here.
   T? affectedParent;
 
   Function()? onComplete;
@@ -44,8 +45,11 @@ abstract class ComponentEffect<T extends Component> extends BaseComponent {
   double percentage = 0.0;
 
   /// The outcome the curve function, only updates after [preOffset] and before
-  /// [postOffset]
+  /// [postOffset].
   double curveProgress = 0.0;
+
+  /// Whether the effect has started or not.
+  bool hasStarted = false;
 
   /// How much time it takes for the effect to peak, which means right before it
   /// starts any potential reversal or reset. Including both offsets.
@@ -71,12 +75,12 @@ abstract class ComponentEffect<T extends Component> extends BaseComponent {
   /// Which curve that the effect is following.
   Curve curve;
 
-  /// The time (in seconds) that should pass before the component starts each
+  /// The time (in seconds) that should pass before the effect starts each
   /// iteration.
   double preOffset;
 
-  /// The time (in seconds) that should pass before the component ends each
-  /// iteration.
+  /// The time (in seconds) that should pass before the effect ends each
+  /// peak.
   double postOffset;
 
   /// The total time offset spent waiting in one iteration, so from the start to
@@ -117,7 +121,7 @@ abstract class ComponentEffect<T extends Component> extends BaseComponent {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    affectedParent = _affectedParent(parent!);
+    affectedParent = _affectedParent(parent);
   }
 
   @override
@@ -139,20 +143,25 @@ abstract class ComponentEffect<T extends Component> extends BaseComponent {
       }
     } else {
       currentTime += (dt + driftTime) * curveDirection;
+      print(currentTime);
       percentage = (currentTime / peakTime).clamp(0.0, 1.0).toDouble();
       if (currentTime >= preOffset && currentTime <= peakTime - postOffset) {
-        final effectPercentage = percentage - preOffset / peakTime;
+        final effectPercentage =
+            ((currentTime - preOffset) / (peakTime - preOffset - postOffset))
+                .clamp(0.0, 1.0);
+        print(effectPercentage);
         curveProgress = curve.transform(effectPercentage);
       }
       _updateDriftTime();
       currentTime = currentTime.clamp(0.0, peakTime).toDouble();
     }
+    hasStarted = true;
   }
 
   /// Whether the effect has completed or not.
   bool hasCompleted() {
     return (!isInfinite && !isAlternating && isMax()) ||
-        (!isInfinite && isAlternating && isMin()) ||
+        (!isInfinite && isAlternating && isMin() && hasStarted) ||
         shouldRemove;
   }
 
@@ -234,10 +243,10 @@ abstract class PositionComponentEffect
   Vector2? endScale;
 
   /// Whether the state of a certain field was modified by the effect
-  final bool modifiesPosition;
-  final bool modifiesAngle;
-  final bool modifiesSize;
-  final bool modifiesScale;
+  bool modifiesPosition;
+  bool modifiesAngle;
+  bool modifiesSize;
+  bool modifiesScale;
 
   PositionComponentEffect(
     bool initialIsInfinite,
@@ -292,35 +301,33 @@ abstract class PositionComponentEffect
     Vector2? size,
     Vector2? scale,
   ) {
-    if (isRootEffect()) {
-      if (modifiesPosition) {
-        assert(
-          position != null,
-          '`position` must not be `null` for an effect which modifies `position`',
-        );
-        affectedParent?.position.setFrom(position!);
-      }
-      if (modifiesAngle) {
-        assert(
-          angle != null,
-          '`angle` must not be `null` for an effect which modifies `angle`',
-        );
-        affectedParent?.angle = angle!;
-      }
-      if (modifiesSize) {
-        assert(
-          size != null,
-          '`size` must not be `null` for an effect which modifies `size`',
-        );
-        affectedParent?.size.setFrom(size!);
-      }
-      if (modifiesScale) {
-        assert(
-          scale != null,
-          '`scale` must not be `null` for an effect which modifies `scale`',
-        );
-        affectedParent?.scale.setFrom(scale!);
-      }
+    if (modifiesPosition) {
+      assert(
+        position != null,
+        '`position` must not be `null` for an effect which modifies `position`',
+      );
+      affectedParent?.position.setFrom(position!);
+    }
+    if (modifiesAngle) {
+      assert(
+        angle != null,
+        '`angle` must not be `null` for an effect which modifies `angle`',
+      );
+      affectedParent?.angle = angle!;
+    }
+    if (modifiesSize) {
+      assert(
+        size != null,
+        '`size` must not be `null` for an effect which modifies `size`',
+      );
+      affectedParent?.size.setFrom(size!);
+    }
+    if (modifiesScale) {
+      assert(
+        scale != null,
+        '`scale` must not be `null` for an effect which modifies `scale`',
+      );
+      affectedParent?.scale.setFrom(scale!);
     }
   }
 

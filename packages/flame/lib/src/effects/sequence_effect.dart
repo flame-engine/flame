@@ -49,20 +49,15 @@ class SequenceEffect extends PositionComponentEffect {
     _currentIndex = _initialIndex;
     _driftModifier = _initialDriftModifier;
 
-    // TODO(spydon): add all the underlying effects and add preOffsets to them
     effects.forEach((effect) async {
-      effect.reset();
       affectedParent!.position.setFrom(endPosition!);
       affectedParent!.angle = endAngle!;
       affectedParent!.size.setFrom(endSize!);
-      if (effect.affectedParent == null) {
-        await add(effect);
-      } else {
-        await effect.onLoad();
-      }
+      await add(effect);
       endPosition = effect.endPosition;
       endAngle = effect.endAngle;
       endSize = effect.endSize;
+      effect.pause();
     });
     // Add all the effects iteration time since they can alternate within the
     // sequence effect
@@ -79,6 +74,7 @@ class SequenceEffect extends PositionComponentEffect {
     affectedParent!.angle = originalAngle!;
     affectedParent!.size.setFrom(originalSize!);
     currentEffect = effects.first;
+    currentEffect.resume();
     _currentWasAlternating = currentEffect.isAlternating;
   }
 
@@ -88,7 +84,7 @@ class SequenceEffect extends PositionComponentEffect {
 
     // If the last effect's time to completion overshot its total time, add that
     // time to the first time step of the next effect.
-    currentEffect.update(dt + _driftModifier);
+    currentEffect.driftTime = _driftModifier;
     _driftModifier = 0.0;
     if (currentEffect.hasCompleted()) {
       currentEffect.setComponentToEndState();
@@ -99,6 +95,8 @@ class SequenceEffect extends PositionComponentEffect {
       // Make sure the current effect has the `isAlternating` value it
       // initially started with
       currentEffect.isAlternating = _currentWasAlternating;
+      // Pause the current effect so that the next effect can continue
+      currentEffect.pause();
       // Get the next effect that should be executed
       currentEffect = orderedEffects[_currentIndex % effects.length];
       // Keep track of what value of `isAlternating` the effect had from the
@@ -110,6 +108,7 @@ class SequenceEffect extends PositionComponentEffect {
         // Make the effect go in reverse
         currentEffect.isAlternating = true;
       }
+      currentEffect.resume();
     }
   }
 

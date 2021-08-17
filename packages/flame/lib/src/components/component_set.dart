@@ -73,13 +73,11 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// This method can be considered sync for all intents and purposes if no
   /// onLoad is provided by the component.
   Future<void> addChild(Component component) async {
-    print('Trying to addChild $component to $this');
     prepare(component);
     if (!component.isPrepared) {
       // Since the components won't be added until a proper game is added
       // further up in the tree we can add them to _addLater and then re-add
       // them once there is a proper root.
-      print('$component is not prepared in addChild');
       _addLater.add(component);
       return;
     }
@@ -88,6 +86,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
       await onLoad;
     }
     if (component.children.isNotEmpty) {
+      print('do we readd?');
       await component.children.reAddChildren();
     }
 
@@ -107,8 +106,8 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// prepared and onLoad:ed again. Used when a parent is changed further up the
   /// tree.
   Future<void> reAddChildren() async {
-    await Future.wait(map(addChild));
-    await Future.wait(_addLater.map(addChild));
+    await Future.wait(map((child) => child.parent!.add(child)));
+    await Future.wait(_addLater.map((child) => child.parent!.add(child)));
   }
 
   /// Marks a component to be removed from the components list on the next game

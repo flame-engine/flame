@@ -132,7 +132,6 @@ abstract class Component {
   /// verified by the [Game.hasLayout] property, to add components upon game
   /// initialization, the [onLoad] method can be used instead.
   Future<void> add(Component component) {
-    print('Added $component to $this');
     return children.addChild(component);
   }
 

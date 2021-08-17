@@ -40,8 +40,6 @@ class Elements extends BaseElements {
     )..skipEffectReset = true;
     return CombinedEffect(
       effects: [move, scale, rotate],
-      isInfinite: isInfinite,
-      isAlternating: isAlternating,
     )..skipEffectReset = true;
   }
 }

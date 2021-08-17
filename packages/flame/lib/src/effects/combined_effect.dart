@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import '../../components.dart';
 import 'effects.dart';
 
 /// The [CombinedEffect] runs several effects in parallel on a component.
@@ -11,11 +12,13 @@ import 'effects.dart';
 /// curve of the [CombinedEffect] and then it will run it again on the backward
 /// direction of the curve.
 class CombinedEffect extends PositionComponentEffect {
-  final List<PositionComponentEffect> effects;
   final double offset;
+  List<PositionComponentEffect> get effects {
+    return children.query<PositionComponentEffect>();
+  }
 
   CombinedEffect({
-    required this.effects,
+    required List<PositionComponentEffect> effects,
     this.offset = 0.0,
     bool isInfinite = false,
     bool isAlternating = false,
@@ -35,49 +38,58 @@ class CombinedEffect extends PositionComponentEffect {
           postOffset: postOffset,
           onComplete: onComplete,
         ) {
-    assert(
-      effects.every((effect) => effect.parent == null),
-      'Each effect can only be added once',
-    );
-    final types = effects.map((e) => e.runtimeType);
-    assert(
-      types.toSet().length == types.length,
-      "All effect types have to be different so that they don't clash",
-    );
+    children.register<PositionComponentEffect>();
+    effects.forEach(add);
   }
 
   @override
-  Future<void> onLoad() async {
-    super.onLoad();
-    effects.forEach((effect) async {
-      final indexOffset = effects.indexOf(effect) * offset;
-      effect.preOffset += preOffset + indexOffset;
-      await add(effect);
-      // Only change these if the effect modifies these
-      endPosition = effect.originalPosition != effect.endPosition
-          ? effect.endPosition
-          : endPosition;
-      endAngle =
-          effect.originalAngle != effect.endAngle ? effect.endAngle : endAngle;
-      endSize =
-          effect.originalSize != effect.endSize ? effect.endSize : endSize;
-      peakTime = max(
-        peakTime,
-        effect.iterationTime,
+  Future<void> add(Component component) async {
+    await super.add(component);
+    if (component is PositionComponentEffect && component.isPrepared) {
+      final effects = children.query<PositionComponentEffect>()..add(component);
+      final types = effects.map((e) => e.runtimeType);
+      assert(
+        types.toSet().length == types.length,
+        "All effect types have to be different so that they don't clash",
       );
-    });
-    effects.forEach((effect) {
-      // Since the postOffset will run for "double" the time if the effect is
-      // alternating we have to divide it by 2.
-      effect.postOffset +=
-          (peakTime - effect.iterationTime) / (effect.isAlternating ? 2 : 1);
-    });
-    if (isAlternating) {
-      endPosition = originalPosition;
-      endAngle = originalAngle;
-      endSize = originalSize;
+      modifiesPosition = modifiesPosition || component.modifiesPosition;
+      modifiesAngle = modifiesAngle || component.modifiesAngle;
+      modifiesScale = modifiesScale || component.modifiesScale;
+      modifiesSize = modifiesSize || component.modifiesSize;
+      final indexOffset = effects.indexOf(component) * offset;
+      component.preOffset += preOffset + indexOffset;
+      if (component.isPrepared) {
+        final iterationTime = component.iterationTime;
+        peakTime = max(iterationTime, peakTime);
+        print(
+          'peakTime is now $peakTime and iteration time ${this.iterationTime}',
+        );
+        if (!component.isAlternating) {
+          component.postOffset += peakTime - iterationTime;
+          print('Setting offset $component.postOffset');
+        }
+      }
     }
   }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (isAlternating && isMax()) {
+      print('is alternating');
+      for (final effect in effects) {
+        if (!effect.isAlternating) {
+          effect.isAlternating = true;
+        } else if (!hasCompleted()) {
+          effect.reset();
+        }
+      }
+    }
+  }
+
+  /// No-op, since the child effects handle their own end state
+  @override
+  void setComponentToEndState() {}
 
   @override
   void reset() {
@@ -86,10 +98,5 @@ class CombinedEffect extends PositionComponentEffect {
     if (affectedParent != null) {
       onLoad();
     }
-  }
-
-  @override
-  void onRemove() {
-    super.onRemove();
   }
 }

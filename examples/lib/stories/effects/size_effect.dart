@@ -16,6 +16,7 @@ class SizeEffectGame extends BaseGame with TapDetector {
     square = SquareComponent()
       ..position.setValues(200, 200)
       ..anchor = Anchor.center;
+    onTap();
     add(square);
   }
 

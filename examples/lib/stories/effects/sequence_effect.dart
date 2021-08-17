@@ -55,7 +55,6 @@ class SequenceEffectGame extends BaseGame with TapDetector {
 
     final combination = CombinedEffect(
       effects: [move2, rotate],
-      isAlternating: true,
       onComplete: () => print('combination complete'),
     );
 
