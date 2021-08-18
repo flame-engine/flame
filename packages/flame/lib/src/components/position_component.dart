@@ -214,17 +214,8 @@ class PositionComponent extends BaseComponent {
 
   /// Similar to [absolutePositionOf()], but applies to any anchor
   /// point within the component.
-  Vector2 absolutePositionOfAnchor(Anchor anchor) {
-    var point = positionOfAnchor(anchor);
-    var ancestor = parent;
-    while (ancestor != null) {
-      if (ancestor is PositionComponent) {
-        point = ancestor.positionOf(point);
-      }
-      ancestor = ancestor.parent;
-    }
-    return point;
-  }
+  Vector2 absolutePositionOfAnchor(Anchor anchor) =>
+      absolutePositionOf(Vector2(anchor.x * size.x, anchor.y * size.y));
 
   /// Transform [point] from the parent's coordinate space into the local
   /// coordinates. This function is the inverse of [positionOf()].
