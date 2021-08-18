@@ -1,8 +1,10 @@
 import 'dart:math' as math;
+import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/test_helpers/mock_canvas.dart';
+import 'package:flame/src/test_helpers/random_test.dart';
 import 'package:test/test.dart';
 
 class MyBaseComponent extends BaseComponent {}
@@ -412,7 +414,7 @@ void main() {
       }
     });
 
-    test('random local<->global', () {
+    testRandom('random local<->global', (Random rnd) {
       final parent = PositionComponent()..size = Vector2(50, 25);
       final child = PositionComponent()
         ..size = Vector2(10, 8)
@@ -420,7 +422,6 @@ void main() {
         ..anchor = const Anchor(0.1, 0.2);
       parent.addChild(child);
 
-      final rnd = math.Random();
       for (var i = 0; i < 100; i++) {
         child.angle = (rnd.nextDouble() - 0.5) * 10;
         child.x = rnd.nextDouble() * 100;
@@ -447,12 +448,11 @@ void main() {
       }
     });
 
-    test('transform matrix', () {
+    testRandom('transform matrix', (Random rnd) {
       final component = PositionComponent()
         ..size = Vector2(5, 10)
         ..anchor = Anchor.center;
 
-      final rnd = math.Random();
       for (var i = 0; i < 10; i++) {
         final x = rnd.nextDouble() * 100;
         final y = rnd.nextDouble() * 70 + 30;
