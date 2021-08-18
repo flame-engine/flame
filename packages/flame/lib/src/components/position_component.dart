@@ -84,6 +84,8 @@ class PositionComponent extends BaseComponent {
   }
 
   final Transform2D _transform;
+  final NotifyingVector2 _size;
+  Anchor _anchor;
 
   /// The total transformation matrix for the component. This matrix combines
   /// translation, rotation and scale transforms into a single entity. The
@@ -133,7 +135,6 @@ class PositionComponent extends BaseComponent {
     _anchor = anchor;
     _onModifiedSizeOrAnchor();
   }
-  Anchor _anchor;
 
   /// The logical size of the component. The game assumes that this is the
   /// approximate size of the object that will be drawn on the screen.
@@ -143,7 +144,6 @@ class PositionComponent extends BaseComponent {
   /// This property can be reassigned at runtime, although this is not
   /// recommended. Instead, in order to make the [PositionComponent] larger
   /// or smaller, change its [scale].
-  final NotifyingVector2 _size;
   Vector2 get size => _size;
   set size(Vector2 size) => _size.setFrom(size);
 
