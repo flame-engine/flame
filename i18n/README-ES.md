@@ -63,9 +63,9 @@ Tenemos un canal de ayuda en el servidor de Discord Fireslime, únete [aquí](ht
 
 También contamos con un [FAQ](FAQ.md), por favor busque respuesta primero allí para resolver sus preguntas.
 
-## Metas
+## Objetivos
 
-La meta de este proyecto es la de ofrecer un conjunto completo y sin obstáculos de soluciones para
+El objetivo de este proyecto es la de ofrecer un conjunto completo y sin obstáculos de soluciones para
 los problemas más comunes que comparten todos los desarrolladores de videojuegos en Flutter.
 
 Actualmente te ofrece:
