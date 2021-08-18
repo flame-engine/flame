@@ -59,8 +59,6 @@ import 'component.dart';
 /// do not specify the size of a PositionComponent, then it will be
 /// equal to zero and the component won't be able to respond to taps.
 class PositionComponent extends BaseComponent {
-  final Transform2D _transform;
-
   PositionComponent({
     Vector2? position,
     Vector2? size,
@@ -84,6 +82,8 @@ class PositionComponent extends BaseComponent {
     _size.addListener(_onModifiedSizeOrAnchor);
     _onModifiedSizeOrAnchor();
   }
+
+  final Transform2D _transform;
 
   /// The total transformation matrix for the component. This matrix combines
   /// translation, rotation and scale transforms into a single entity. The
@@ -122,12 +122,18 @@ class PositionComponent extends BaseComponent {
   /// occur around this point: the [position] is where the anchor point
   /// will end up after the component is translated; the rotation and
   /// scaling also happen around this anchor point.
-  Anchor _anchor;
+  ///
+  /// The [anchor] of a component can be modified during runtime. When
+  /// this happens, the [position] of the component will remain unchanged,
+  /// which means that visually the component will shift on the screen
+  /// so that its new anchor will be at the same screen coordinates as
+  /// the old anchor was.
   Anchor get anchor => _anchor;
   set anchor(Anchor anchor) {
     _anchor = anchor;
     _onModifiedSizeOrAnchor();
   }
+  Anchor _anchor;
 
   /// The logical size of the component. The game assumes that this is the
   /// approximate size of the object that will be drawn on the screen.
