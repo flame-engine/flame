@@ -21,7 +21,7 @@ Minimalista motor para el desarrollo de videojuegos con Flutter.
 
 ---
 
-## Sobre 1.0.0
+## Acerca de 1.0.0
 
 Nuestro objetivo es lanzar la v1 pronto. Periódicamente lanzamos RCs (release candidates) a medida que el código evoluciona,
 y estamos bastante complacidos con el punto en el que nos encontramos (aunque aún puede haber cambios).
