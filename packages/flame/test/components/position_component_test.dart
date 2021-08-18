@@ -410,11 +410,18 @@ void main() {
         component.angle = -i / 10;
         final cosA = math.cos(i / 10);
         final sinA = math.sin(i / 10);
+        // The component's diagonal is 10, so it's radius (distance from the
+        // center to any vertex) is 5. If we denote φ the angle that the
+        // diagonal makes with a bimedian, then the cosine of that angle is
+        // 0.8 and the sine is 0.6. Thus, when the whole rectangle is rotated
+        // by angle A = i/10, the coordinates of any vertex can be computed
+        // from the trigonometric formulas for `sin(φ + A)` and `cos(φ + A)`,
+        // scaled by the radius of the rectangle.
         final expectedX = 50 + 5 * (0.8 * cosA - 0.6 * sinA);
         final expectedY = 20 - 5 * (0.6 * cosA + 0.8 * sinA);
         final topRight = component.positionOf(Vector2(8, 0));
-        expect(topRight.x, closeTo(expectedX, 1e-10));
-        expect(topRight.y, closeTo(expectedY, 1e-10));
+        expect(topRight.x, closeTo(expectedX, 1e-13));
+        expect(topRight.y, closeTo(expectedY, 1e-13));
       }
     });
 
@@ -473,7 +480,7 @@ void main() {
             -component.anchor.y * component.height,
           );
         for (var j = 0; j < 16; j++) {
-          expect(component.transformMatrix[j], closeTo(transform[j], 1e-10));
+          expect(component.transformMatrix[j], closeTo(transform[j], 1e-13));
         }
       }
     });
