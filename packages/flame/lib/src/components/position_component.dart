@@ -361,4 +361,4 @@ class PositionComponent extends BaseComponent {
     size.setValues(rect.width, rect.height);
     topLeftPosition = rect.topLeft.toVector2();
   }
-} // ignore: number-of-methods
+}
