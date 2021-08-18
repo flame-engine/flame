@@ -312,6 +312,10 @@ void main() {
       expect(component.height, 2);
       expect(component.scaledSize.x, 5);
       expect(component.scaledSize.y, 14);
+      // Changing scaledSize won't have any effect...
+      component.scaledSize.setValues(1, 1);
+      expect(component.scaledSize.x, 5);
+      expect(component.scaledSize.y, 14);
     });
 
     test('.positionOf', () {

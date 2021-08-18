@@ -71,7 +71,6 @@ class PositionComponent extends BaseComponent {
   })  : _transform = Transform2D(),
         _anchor = anchor,
         _size = NotifyingVector2.copy(size ?? Vector2.zero()),
-        _scaledSize = Vector2.zero(),
         super(priority: priority) {
     if (position != null) {
       _transform.position = position;
@@ -83,10 +82,7 @@ class PositionComponent extends BaseComponent {
       _transform.scale = scale;
     }
     _size.addListener(_onModifiedSizeOrAnchor);
-    _size.addListener(_onModifiedSizeOrScale);
-    _transform.scale.addListener(_onModifiedSizeOrScale);
     _onModifiedSizeOrAnchor();
-    _onModifiedSizeOrScale();
   }
 
   /// The total transformation matrix for the component. This matrix combines
@@ -159,8 +155,8 @@ class PositionComponent extends BaseComponent {
   /// component as seen from the parent's perspective, and it is equal to
   /// [size] * [scale]. This is a computed property and cannot be
   /// modified by the user.
-  final Vector2 _scaledSize;
-  Vector2 get scaledSize => _scaledSize;
+  Vector2 get scaledSize =>
+      Vector2(width * scale.x.abs(), height * scale.y.abs());
 
   /// Measure the distance (in parent's coordinate space) between this
   /// component's anchor and the [other] component's anchor.
@@ -296,13 +292,6 @@ class PositionComponent extends BaseComponent {
   }
 
   //#endregion
-
-  /// Internal handler which is called automatically whenever either
-  /// the [size] or [scale] change.
-  void _onModifiedSizeOrScale() {
-    _scaledSize.x = _size.x * scale.x.abs();
-    _scaledSize.y = _size.y * scale.y.abs();
-  }
 
   /// Internal handler that must be invoked whenever either the [size]
   /// or the [anchor] change.
