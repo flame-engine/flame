@@ -136,7 +136,7 @@ Además, ofrecemos una selecta lista de juegos, librerías y artículos en
 
 Tome a consideración que algunos de los artículos podrían estar algo desactualizados, pero aún son de utilidad.
 
-## Creditos
+## Créditos
 
  - El [Flame Engine team](https://github.com/orgs/flame-engine/people), quienes están trabajando
  continuamente en mantener y mejorar Flame.
