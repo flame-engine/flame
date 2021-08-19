@@ -121,7 +121,7 @@ __ВНИМАНИЕ__: Мы работаем над доведением Flame д
 
 ## Благодарности
 
- * [Fireslime](https://fireslime.xyz), команда ответственная за поддержку Flame.
+ * [Blue Fire](https://patreon.com/bluefireoss), команда ответственная за поддержку Flame.
  * Все дружелюбные участники и люди которые помогают в сообществе.
  * [Luanpotter](https://github.com/luanpotter)'s основатель Flame и [audioplayers](https://github.com/luanpotter/audioplayer) библиотеки, которая является форком [rxlabz's](https://github.com/rxlabz/audioplayer).
  * Дарт порт [Box2D](https://github.com/google/box2d.dart).

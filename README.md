@@ -61,7 +61,7 @@ The official site for Flame, which also contains the documentation can be found
 
 ## Help
 
-We have a Flame help channel on Fireslime's Discord, join it [here](https://discord.gg/pxrBmy4).
+We have a Flame help channel on Blue Fire's Discord, join it [here](https://discord.gg/5unKpdQD78).
 
 We also have a [FAQ](FAQ.md), so please search for your question there first.
 

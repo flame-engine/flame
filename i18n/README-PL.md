@@ -21,7 +21,7 @@ A minimalistic Flutter game engine.
 
 ## Pomoc
 
-Mamy kanał pomocy Flame na Discord Fireslime, dołącz do niego [tutaj](https://discord.gg/pxrBmy4).
+Mamy kanał pomocy Flame na Discord Blue Fire, dołącz do niego [tutaj](https://discord.gg/5unKpdQD78).
 
 Mamy też najczęściej zadawane pytania - [FAQ](FAQ.md), więc najpierw wyszukaj tam swoje pytanie.
 
@@ -98,7 +98,7 @@ Oficjalną stronę Flame, która zawiera również dokumentację, można znaleź
 
 ## Uznanie
 
- * [Fireslime](https://fireslime.xyz), zespół odpowiedzialny za utrzymanie Flame'a.
+ * [Blue Fire](https://patreon.com/bluefireoss), zespół odpowiedzialny za utrzymanie Flame'a.
  * Wszyscy życzliwi współtwórcy i ludzie, którzy pomagają w społeczności.
  * [Luanpotter](https://github.com/luanpotter)'a (założyciel Flame) biblioteka [audioplayers](https://github.com/luanpotter/audioplayer) lib, która z kolei jest rozwidlona (zforkowana) z [rxlabz's](https://github.com/rxlabz/audioplayer).
  * Port Dart w [Box2D](https://github.com/google/box2d.dart).
