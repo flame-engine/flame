@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:flame/src/game/transform2d.dart';
 import 'package:test/fake.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 class MockCanvas extends Fake implements Canvas {
   int saveCount = 1;
@@ -77,4 +79,40 @@ class MockCanvas extends Fake implements Canvas {
   void save() {
     saveCount++;
   }
+}
+
+
+class MokkCanvas extends Fake implements Canvas {
+  MokkCanvas()
+    : _commands = [];
+
+  final List<_CanvasCommand> _commands;
+
+  @override
+  void translate(double dx, double dy) {
+    _currentTransform.translate(dx, dy);
+  }
+
+  _Transform2DCanvasCommand get _currentTransform {
+    if (_commands.isNotEmpty && _commands.last is _Transform2DCanvasCommand) {
+      return _commands.last as _Transform2DCanvasCommand;
+    }
+    final transform2d = _Transform2DCanvasCommand();
+    _commands.add(transform2d);
+    return transform2d;
+  }
+}
+
+abstract class _CanvasCommand {
+
+}
+
+class _Transform2DCanvasCommand extends _CanvasCommand {
+  _Transform2DCanvasCommand()
+    : _transform = Transform2D();
+
+  final Transform2D _transform;
+
+  void translate(double dx, double dy) => _transform.position += Vector2(dx, dy);
+  void rotate(double angle) => _transform.angle += angle;
 }
