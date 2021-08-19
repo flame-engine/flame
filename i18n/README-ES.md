@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-Minimalista motor para el desarrollo de videojuegos con Flutter.
+Motor minimalista para el desarrollo de videojuegos con Flutter.
 </p>
 
 <p align="center">
@@ -23,14 +23,14 @@ Minimalista motor para el desarrollo de videojuegos con Flutter.
 
 ## Acerca de 1.0.0
 
-Nuestro objetivo es lanzar la v1 pronto. Periódicamente lanzamos RCs (release candidates) a medida que el código evoluciona,
-y estamos bastante complacidos con el punto en el que nos encontramos (aunque aún puede haber cambios).
+Nuestro objetivo es lanzar pronto la v1. Periódicamente lanzamos RCs (release candidates) a medida que el código evoluciona,
+y estamos bastante complacidos en el punto que nos encontramos (aunque aún pueden existir cambios).
 
-Por favor usar esta versión como un avance de la nueva versión de Flame y también para aportar feedback al equipo sobre
+Favor de usar esta versión como un avance de la nueva versión de Flame y también para aportar feedback al equipo sobre
 la nueva estructura y/o características.
 
 La rama `main` es lo más próximo a una migración hacia la v1. La rama `master-v0.x` es el último lanzamiento v0
-(en el cual aún estamos fusionando algunos parches y arreglos críticos).
+(en la cual aún estamos fusionando algunos parches y arreglos críticos).
 
 La actual v1 lanzada es
 <a title="Pub" href="https://pub.dartlang.org/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout&include_prereleases" /></a>
@@ -42,7 +42,7 @@ Siéntase libre de elegir la versión que mejor se adapte a sus necesidades.
 
 ## Documentación
 
-Tome en cuenta que la documentación en la rama `main` de este repositorio es más nueva que la de la última versión lanzada.
+Tome en cuenta que la documentación en la rama `main` de este repositorio es más nueva que la última versión lanzada.
 
 Aquí puede encontrar la documentación para las diferentes versiones:
 - Última versión estable: [Flame-engine website](https://flame-engine.org/)
@@ -61,7 +61,7 @@ El sitio oficial de Flame, el cual también contiene la documentación se puede 
 
 Tenemos un canal de ayuda en el servidor de Discord Fireslime, únete [aquí](https://discord.gg/pxrBmy4).
 
-También contamos con un [FAQ](FAQ.md), por favor busque respuesta primero allí para resolver sus preguntas.
+También contamos con un [FAQ](FAQ.md), por favor busque su respuesta primero ahí.
 
 ## Objetivos
 
