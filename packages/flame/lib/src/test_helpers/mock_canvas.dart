@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:test/fake.dart';
 import 'package:vector_math/vector_math_64.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -81,33 +82,59 @@ class MockCanvas extends Fake implements Canvas {
   }
 }
 
+//==================================================================================================
 
 class MokkCanvas extends Fake implements Canvas, Matcher {
   MokkCanvas()
-    : _commands = [];
+    : _commands = [],
+      _saveCount = 1;
 
   final List<_CanvasCommand> _commands;
+  int _saveCount;
 
   @override
-  bool matches(covariant MokkCanvas item, Map matchState) {
-    if (_commands.length != item._commands.length) {
-      return _fail('Canvas contains ${_commands.length} commands, but '
-                   '${item._commands.length} expected', matchState);
+  bool matches(covariant MokkCanvas other, Map matchState) {
+    final n1 = _commands.length;
+    final n2 = other._commands.length;
+    if (n1 != n2) {
+      return _fail(
+        'Canvas contains $n1 commands, but $n2 expected',
+        matchState,
+      );
     }
-    for (var i = 0; i < _commands.length; i++) {
+    for (var i = 0; i < n1; i++) {
       final cmd1 = _commands[i];
-      final cmd2 = item._commands[i];
+      final cmd2 = other._commands[i];
       if (cmd1.runtimeType != cmd2.runtimeType) {
-        return _fail('Mismatched canvas commands at index $i: the actual '
-                     'command is ${cmd1.runtimeType}, while the expected '
-                     'was ${cmd2.runtimeType}', matchState);
+        return _fail(
+          'Mismatched canvas commands at index $i: the actual '
+          'command is ${cmd1.runtimeType}, while the expected '
+          'was ${cmd2.runtimeType}',
+          matchState,
+        );
       }
-      if (!cmd1.matches(cmd2, matchState)) {
-        return false;
+      if (!cmd1.equals(cmd2)) {
+        return _fail(
+          'Mismatched canvas commands at index $i: the actual '
+          'command is ${cmd1.toString()}, while the expected '
+          'was ${cmd2.toString()}',
+          matchState,
+        );
       }
     }
     return true;
   }
+
+  @override
+  Description describe(Description description) {
+    description.add('Canvas[length=${_commands.length}]');
+    return description;
+  }
+
+  @override
+  Description describeMismatch(dynamic item, Description mismatchDescription,
+      Map matchState, bool verbose)
+    => mismatchDescription.add(matchState['description'] as String);
 
   //#region Canvas API
 
@@ -147,6 +174,15 @@ class MokkCanvas extends Fake implements Canvas, Matcher {
     _commands.add(_LineCommand(p1, p2, paint));
   }
 
+  @override
+  int getSaveCount() => _saveCount;
+
+  @override
+  void restore() => _saveCount--;
+
+  @override
+  void save() => _saveCount++;
+
   //#endregion
 
   //#region Private helpers
@@ -169,7 +205,68 @@ class MokkCanvas extends Fake implements Canvas, Matcher {
 }
 
 abstract class _CanvasCommand {
-  bool matches(covariant _CanvasCommand cmd, Map matchState);
+  double tolerance = 1e-10;
+
+  /// Return true if this command is equal to [other], up to the
+  /// given absolute [tolerance]. The argument [other] is guaranteed
+  /// to have the same type as the current command.
+  bool equals(covariant _CanvasCommand other);
+
+  bool eq(dynamic a, dynamic b) {
+    if (a == null || b == null) {
+      return true;
+    }
+    if (a is num && b is num) {
+      return (a - b).abs() < tolerance;
+    }
+    if (a is Offset && b is Offset) {
+      return eq(a.dx, b.dx) && eq(a.dy, b.dy);
+    }
+    if (a is List && b is List) {
+      return a.length == b.length &&
+        Iterable<int>.generate(a.length).every((i) => eq(a[i], b[i]));
+    }
+    if (a is Rect && b is Rect) {
+      return eq(_rectAsList(a), _rectAsList(b));
+    }
+    if (a is RRect && b is RRect) {
+      return eq(_rrectAsList(a), _rrectAsList(b));
+    }
+    if (a is Paint && b is Paint) {
+      return eq(_paintAsList(a), _paintAsList(b));
+    }
+    return a == b;
+  }
+
+  String repr(dynamic a) {
+    if (a is Offset) {
+      return '[${a.dx}, ${a.dy}]';
+    }
+    if (a is List) {
+      return a.map(repr).join(', ');
+    }
+    if (a is Rect) {
+      return 'Rect(${repr(_rectAsList(a))})';
+    }
+    if (a is RRect) {
+      return 'RRect(${repr(_rrectAsList(a))})';
+    }
+    if (a is Paint) {
+      return 'Paint(${repr(_paintAsList(a))})';
+    }
+    return a.toString();
+  }
+
+  List<double> _rectAsList(Rect rect)
+    => [rect.left, rect.top, rect.right, rect.bottom];
+
+  List<double> _rrectAsList(RRect rect)
+    => [rect.left, rect.top, rect.right, rect.bottom,
+        rect.tlRadiusX, rect.tlRadiusY, rect.trRadiusX, rect.trRadiusY,
+        rect.blRadiusX, rect.blRadiusY, rect.brRadiusX, rect.brRadiusY,];
+
+  List _paintAsList(Paint paint)
+    => <dynamic>[paint.color, paint.blendMode, paint.style, paint.strokeWidth];
 }
 
 class _TransformCanvasCommand extends _CanvasCommand {
@@ -184,13 +281,13 @@ class _TransformCanvasCommand extends _CanvasCommand {
   void scale(double sx, double sy) => _transform.scale(sx, sy, 1);
 
   @override
-  bool matches(_TransformCanvasCommand cmd, Map state) {
-    final storage1 = _transform.storage;
-    final storage2 = cmd._transform.storage;
-    for (var i = 0; i < 16; i++) {
+  bool equals(_TransformCanvasCommand other)
+    => eq(_transform.storage, other._transform.storage);
 
-    }
-    return true;
+  @override
+  String toString() {
+    final content = _transform.storage.map((e) => e.toString()).join(', ');
+    return 'transform($content)';
   }
 }
 
@@ -199,16 +296,43 @@ class _LineCommand extends _CanvasCommand {
   final Offset p1;
   final Offset p2;
   final Paint? paint;
+
+  @override
+  bool equals(_LineCommand other)
+    => eq(p1, other.p1) && eq(p2, other.p2) && eq(paint, other.paint);
+
+  @override
+  String toString() {
+    return 'drawLine(${repr(p1)}, ${repr(p2)}, ${repr(paint)})';
+  }
 }
 
 class _RectCommand extends _CanvasCommand {
   _RectCommand(this.rect, this.paint);
   final Rect rect;
   final Paint? paint;
+
+  @override
+  bool equals(_RectCommand other)
+    => eq(rect, other.rect) && eq(paint, other.paint);
+
+  @override
+  String toString() {
+    return 'drawRect(${repr(rect)}, ${repr(paint)})';
+  }
 }
 
 class _RRectCommand extends _CanvasCommand {
   _RRectCommand(this.rrect, this.paint);
   final RRect rrect;
   final Paint? paint;
+
+  @override
+  bool equals(_RRectCommand other)
+    => eq(rrect, other.rrect) && eq(paint, other.paint);
+
+  @override
+  String toString() {
+    return 'drawRRect(${repr(rrect)}, ${repr(paint)})';
+  }
 }
