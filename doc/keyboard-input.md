@@ -72,7 +72,7 @@ subclass.
 KeyboardHandlers must only be added to games that are mixed with `HasKeyboardHandlerComponents`.
 
 > ⚠️ Attention: If `HasKeyboardHandlerComponents` is used, you must remove `KeyboardEvents` 
-> from the game mixing list to avoid conflict.
+> from the game mixing list to avoid conflicts.
 
 After applying `HasKeyboardHandlerComponents`, it will be possible to override an `onKeyEvent` method.
 
