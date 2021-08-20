@@ -58,22 +58,18 @@ abstract class BodyComponent<T extends Forge2DGame> extends BaseComponent
         _transform.m24 != body.position.y ||
         _lastAngle != angle) {
       _transform.setIdentity();
-      _transform.scale(1.0, -1.0);
-      _transform.translate2(body.position);
-      _transform.rotateZ(angle);
+      _transform.translate(body.position.x, -body.position.y);
+      _transform.rotateZ(-angle);
       _lastAngle = angle;
     }
-    canvas.transform(_transform.storage);
-  }
 
-  @override
-  void postRender(Canvas canvas) {
-    canvas.transform(_flipYTransform.storage);
+    canvas.transform(_transform.storage);
   }
 
   @override
   void renderDebugMode(Canvas canvas) {
     canvas.transform(_flipYTransform.storage);
+
     for (final fixture in body.fixtures) {
       switch (fixture.type) {
         case ShapeType.chain:
