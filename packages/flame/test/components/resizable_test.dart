@@ -4,11 +4,9 @@ import 'package:test/test.dart';
 
 class MyComponent extends PositionComponent {
   String name;
-  @override
-  final Vector2 size = Vector2(2.0, 2.0);
   late Vector2 gameSize;
 
-  MyComponent(this.name);
+  MyComponent(this.name) : super(size: Vector2.all(2.0));
 
   @override
   void onGameResize(Vector2 gameSize) {

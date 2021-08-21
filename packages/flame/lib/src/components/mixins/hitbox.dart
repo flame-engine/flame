@@ -29,6 +29,12 @@ mixin Hitbox on PositionComponent {
         _hitboxes.any((shape) => shape.containsPoint(point));
   }
 
+  @override
+  void renderDebugMode(Canvas canvas) {
+    super.renderDebugMode(canvas);
+    renderHitboxes(canvas);
+  }
+
   void renderHitboxes(Canvas canvas, {Paint? paint}) {
     _hitboxes.forEach((shape) => shape.render(canvas, paint ?? debugPaint));
   }
