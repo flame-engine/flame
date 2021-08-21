@@ -14,12 +14,12 @@ class FlipSpriteGame extends BaseGame {
 
     final flipX = buildAnimationComponent(image);
     flipX.y = 300;
-    flipX.renderFlipX = true;
+    flipX.flipHorizontally();
     add(flipX);
 
     final flipY = buildAnimationComponent(image);
     flipY.y = 500;
-    flipY.renderFlipY = true;
+    flipY.flipVertically();
     add(flipY);
   }
 

@@ -57,7 +57,7 @@ class JoystickAdvancedGame extends BaseGame
         right: 80,
         bottom: 60,
       ),
-      onPressed: () => player.renderFlipX = !player.renderFlipX,
+      onPressed: player.flipHorizontally,
     );
 
     // A button with margin from the edge of the viewport that flips the
@@ -75,7 +75,7 @@ class JoystickAdvancedGame extends BaseGame
         right: 160,
         bottom: 60,
       ),
-      onPressed: () => player.renderFlipY = !player.renderFlipY,
+      onPressed: player.flipVertically,
     );
 
     final rotateEffect = RotateEffect(
