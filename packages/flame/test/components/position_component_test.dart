@@ -432,7 +432,7 @@ void main() {
         ..size = Vector2(10, 8)
         ..position = Vector2(50, 20)
         ..anchor = const Anchor(0.1, 0.2);
-      parent.addChild(child);
+      parent.add(child);
 
       for (var i = 0; i < 100; i++) {
         child.angle = (rnd.nextDouble() - 0.5) * 10;
@@ -509,8 +509,8 @@ void main() {
       final parent = PositionComponent(size: Vector2.all(100));
       final comp1 = PositionComponent(position: Vector2(10, 20));
       final comp2 = PositionComponent(position: Vector2(40, 60));
-      parent.addChild(comp1);
-      parent.addChild(comp2);
+      parent.add(comp1);
+      parent.add(comp2);
 
       // The distance is the same in both directions
       expect(comp1.distance(comp2), 50);
@@ -534,10 +534,10 @@ void main() {
       final c3 = PositionComponent()..position = Vector2(-1, -1);
       final c4 = MyBaseComponent();
       final c5 = PositionComponent()..position = Vector2(5, 0);
-      c1.addChild(c2);
-      c2.addChild(c3);
-      c3.addChild(c4);
-      c4.addChild(c5);
+      c1.add(c2);
+      c2.add(c3);
+      c3.add(c4);
+      c4.add(c5);
       // Verify that the absolute coordinate is computed correctly even
       // if the component is part of a nested tree where not all of
       // the components are [PositionComponent]s.
@@ -548,7 +548,7 @@ void main() {
       final parent = PositionComponent(position: Vector2(12, 19));
       final child =
           PositionComponent(position: Vector2(11, -1), size: Vector2(4, 6));
-      parent.addChild(child);
+      parent.add(child);
 
       expect(child.anchor, Anchor.topLeft);
       expect(child.topLeftPosition, Vector2(11, -1));
