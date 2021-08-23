@@ -76,11 +76,11 @@
 
 Так же вы можете оказать нам финансовую поддержку став патроном на Patreon:
 
-[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/fireslime)
+[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/bluefireoss)
 
 Или сделав разовое пожертвование, купив нам кофе:
 
-[![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/fireslime)
+[![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/bluefire)
 
 Еще вы можете показать в своем репозитории что ваш проект сделан с использованием Flame, поместив туда один из бейджей:
 
@@ -121,7 +121,7 @@ __ВНИМАНИЕ__: Мы работаем над доведением Flame д
 
 ## Благодарности
 
- * [Fireslime](https://fireslime.xyz), команда ответственная за поддержку Flame.
+ * [Blue Fire](https://patreon.com/bluefireoss), команда ответственная за поддержку Flame.
  * Все дружелюбные участники и люди которые помогают в сообществе.
  * [Luanpotter](https://github.com/luanpotter)'s основатель Flame и [audioplayers](https://github.com/luanpotter/audioplayer) библиотеки, которая является форком [rxlabz's](https://github.com/rxlabz/audioplayer).
  * Дарт порт [Box2D](https://github.com/google/box2d.dart).
