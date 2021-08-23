@@ -59,7 +59,7 @@ El sitio oficial de Flame, el cual también contiene la documentación se puede 
 
 ## Ayuda
 
-Tenemos un canal de ayuda en el servidor de Discord Fireslime, únete [aquí](https://discord.gg/pxrBmy4).
+Tenemos un canal de ayuda en el servidor de Discord Blue Fire, únete [aquí](https://discord.gg/pxrBmy4).
 
 También contamos con un [FAQ](FAQ.md), por favor busque su respuesta primero ahí.
 
@@ -88,11 +88,11 @@ La forma más simple de mostrar su apoyo a este proyecto es dando una estrella.
 
 También puede apoyarnos convirtiéndose patrón en Patreon:
 
-[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/fireslime)
+[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/bluefireoss)
 
 O realizando una única donación al comprarnos un café:
 
-[![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/fireslime)
+[![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/bluefire)
 
 Además puede mostrar en su repositorio que su juego está hecho con Flame al utilizar una de las siguientes insignias:
 
