@@ -48,11 +48,11 @@ Najprostszym sposobem, aby pokazać nam swoje wsparcie, jest przyznanie gwiazdki
 
 Możesz nas wesprzeć, zostając patronem na Patreon:
 
-[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/fireslime)
+[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/bluefireoss)
 
 Lub przekazując jakąś darowiznę, kupując nam kawę:
 
-[![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/fireslime)
+[![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/bluefire)
 
 Możesz również pokazać w swoim repozytorium, że twoja gra została wykonana przy użyciu Flame'a, używając jednej z następujących odznak:
 

@@ -54,12 +54,12 @@ However there is another
 root which showcases most of the features that exist in Flame.
 
 If you want a more full-fledged game, please check:
- - [BGUG](https://github.com/fireslime/bgug): Blue Fire's open source fast paced side-scrolling
+ - [BGUG](https://github.com/bluefireteam/bgug): Blue Fire's open source fast paced side-scrolling
  platformer. It is mostly up-to-date with Flame and uses a good chunk of the features offered by the
  engine.
  - [renancaraujo](https://github.com/renancaraujo)'s port of the
  [trex](https://github.com/flame-engine/trex-flame) Chrome game in Flame
- - [Bob Box](https://github.com/fireslime/bounce_box): which is easy to grasp and a good display of
+ - [Bob Box](https://github.com/bluefireteam/bounce_box): which is easy to grasp and a good display of
  our core features.
 
 ## What is the difference between Game and BaseGame?

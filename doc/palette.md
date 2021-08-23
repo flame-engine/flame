@@ -60,7 +60,7 @@ canvas.drawRect(rect, BasicPalette.black.paint);
 However, the idea is that you can create your own palette, following the `BasicPalette` example, and
 add the color palette/scheme of your game. Then you will be able to statically access any color in
 your components and classes. Below is an example of a `Palette` implementation, from the example
-game [BGUG](https://github.com/fireslime/bgug/blob/master/lib/palette.dart):
+game [BGUG](https://github.com/bluefireteam/bgug/blob/master/lib/palette.dart):
 
 ```dart
 import 'dart:ui';

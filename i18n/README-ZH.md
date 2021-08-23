@@ -90,11 +90,11 @@ Flame 的官方网站（包含文档），请 [访问此处](https://flame-engin
 
 你也可以成为赞助者，通过 Patreon 来支持我们：
 
-[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/fireslime)
+[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/bluefireoss)
 
 或者通过 Buy Me A Coffee 捐赠我们：
 
-[![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/fireslime)
+[![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/bluefire)
 
 你也可以在仓库中展示下面的其中一个徽章，表示游戏是通过 Flame 制作的，来支持我们:
 
