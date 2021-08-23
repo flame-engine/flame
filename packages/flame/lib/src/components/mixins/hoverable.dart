@@ -1,11 +1,11 @@
 import 'package:meta/meta.dart';
 
+import '../../../components.dart';
 import '../../../game.dart';
 import '../../game/base_game.dart';
 import '../../gestures/events.dart';
-import '../base_component.dart';
 
-mixin Hoverable on BaseComponent {
+mixin Hoverable on Component {
   bool _isHovered = false;
   bool get isHovered => _isHovered;
   void onHoverEnter(PointerHoverInfo info) {}

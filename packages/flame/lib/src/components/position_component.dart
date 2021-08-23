@@ -7,7 +7,6 @@ import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
 import '../game/notifying_vector2.dart';
 import '../game/transform2d.dart';
-import 'base_component.dart';
 import 'component.dart';
 
 /// A [Component] implementation that represents an object that can be
@@ -59,7 +58,7 @@ import 'component.dart';
 /// the approximate bounding rectangle of the rendered picture. If you
 /// do not specify the size of a PositionComponent, then it will be
 /// equal to zero and the component won't be able to respond to taps.
-class PositionComponent extends BaseComponent {
+class PositionComponent extends Component {
   PositionComponent({
     Vector2? position,
     Vector2? size,

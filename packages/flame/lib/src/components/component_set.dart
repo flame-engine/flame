@@ -5,7 +5,7 @@ import '../../components.dart';
 import '../game/base_game.dart';
 
 /// This is a simple wrapper over [QueryableOrderedSet] to be used by
-/// [BaseGame] and [BaseComponent].
+/// [BaseGame] and [Component].
 ///
 /// Instead of immediately modifying the component list, all insertion
 /// and removal operations are queued to be performed on the next tick.

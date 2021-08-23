@@ -102,7 +102,7 @@ class BaseGame extends Game {
       );
     }
 
-    if (debugMode && c is BaseComponent) {
+    if (debugMode && c is Component) {
       c.debugMode = true;
     }
 
@@ -185,8 +185,8 @@ class BaseGame extends Game {
     }
     component.changePriorityWithoutResorting(priority);
     if (reorderRoot) {
-      if (component.parent != null && component.parent is BaseComponent) {
-        (component.parent! as BaseComponent).reorderChildren();
+      if (component.parent != null && component.parent is Component) {
+        (component.parent! as Component).reorderChildren();
       } else if (contains(component)) {
         children.rebalanceAll();
       }
@@ -199,7 +199,7 @@ class BaseGame extends Game {
   /// tree doesn't have to be reordered multiple times.
   void changePriorities(Map<Component, int> priorities) {
     var hasRootComponents = false;
-    final parents = <BaseComponent>{};
+    final parents = <Component>{};
     priorities.forEach((component, priority) {
       final wasUpdated = changePriority(
         component,
@@ -207,8 +207,8 @@ class BaseGame extends Game {
         reorderRoot: false,
       );
       if (wasUpdated) {
-        if (component.parent != null && component.parent is BaseComponent) {
-          parents.add(component.parent! as BaseComponent);
+        if (component.parent != null && component.parent is Component) {
+          parents.add(component.parent! as Component);
         } else {
           hasRootComponents |= contains(component);
         }

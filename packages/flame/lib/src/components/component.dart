@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 
 import '../../components.dart';
 import '../../game.dart';
+import '../../input.dart';
 import '../extensions/vector2.dart';
 
 /// This represents a Component for your game.
@@ -14,7 +15,7 @@ import '../extensions/vector2.dart';
 /// BaseGame. It will deal with calling those methods for you.
 /// Components also have other methods that can help you out if you want to
 /// override them.
-abstract class Component {
+class Component {
   /// Whether this component is HUD object or not.
   ///
   /// HUD objects ignore the BaseGame.camera when rendered (so their position
@@ -54,6 +55,32 @@ abstract class Component {
   /// BaseGame will remove it.
   bool shouldRemove = false;
 
+  /// This is set by the BaseGame to tell this component to render additional
+  /// debug information, like borders, coordinates, etc.
+  /// This is very helpful while debugging. Set your BaseGame debugMode to true.
+  /// You can also manually override this for certain components in order to
+  /// identify issues.
+  bool debugMode = false;
+
+  /// How many decimal digits to print when displaying coordinates in the
+  /// debug mode. Setting this to null will suppress all coordinates from
+  /// the output.
+  int? get debugCoordinatesPrecision => 0;
+
+  Color debugColor = const Color(0xFFFF00FF);
+
+  Paint get debugPaint => Paint()
+    ..color = debugColor
+    ..strokeWidth = 1
+    ..style = PaintingStyle.stroke;
+
+  TextPaint get debugTextPaint => TextPaint(
+        config: TextPaintConfig(
+          color: debugColor,
+          fontSize: 12,
+        ),
+      );
+
   Component({int? priority}) : _priority = priority ?? 0;
 
   /// This method is called periodically by the game engine to request that your
@@ -63,16 +90,50 @@ abstract class Component {
   /// since the last update cycle.
   /// This time can vary according to hardware capacity, so make sure to update
   /// your state considering this.
-  /// All components on BaseGame are always updated by the same amount. The time
+  /// All components in the tree are always updated by the same amount. The time
   /// each one takes to update adds up to the next update cycle.
-  void update(double dt) {}
+  @mustCallSuper
+  void update(double dt) {
+    children.updateComponentList();
+    children.forEach((c) => c.update(dt));
+  }
 
-  /// Renders this component on the provided Canvas [c].
-  void render(Canvas c) {}
+  @mustCallSuper
+  void render(Canvas canvas) {
+    preRender(canvas);
+  }
 
-  /// This is used to render this component and potential children on subclasses
-  /// of [Component] on the provided Canvas [c].
-  void renderTree(Canvas c) => render(c);
+  @mustCallSuper
+  void renderTree(Canvas canvas) {
+    render(canvas);
+    postRender(canvas);
+    children.forEach((c) {
+      canvas.save();
+      c.renderTree(canvas);
+      canvas.restore();
+    });
+
+    // Any debug rendering should be rendered on top of everything
+    if (debugMode) {
+      renderDebugMode(canvas);
+    }
+  }
+
+  /// A render cycle callback that runs before the component and its children
+  /// has been rendered.
+  @protected
+  void preRender(Canvas canvas) {}
+
+  /// A render cycle callback that runs after the component has been
+  /// rendered, but before any children has been rendered.
+  void postRender(Canvas canvas) {}
+
+  void renderDebugMode(Canvas canvas) {}
+
+  @protected
+  Vector2 eventPosition(PositionInfo info) {
+    return isHud ? info.eventPosition.widget : info.eventPosition.game;
+  }
 
   /// Remove the component from the game it is added to in the next tick
   void removeFromParent() => shouldRemove = true;
@@ -181,7 +242,7 @@ abstract class Component {
   ) {
     var shouldContinue = true;
     for (final child in children) {
-      if (child is BaseComponent) {
+      if (child is Component) {
         shouldContinue = child.propagateToChildren(handler);
       }
       if (shouldContinue && child is T) {
@@ -239,14 +300,12 @@ abstract class Component {
       print('$this could not prepare $component');
       component.isPrepared = false;
     } else {
+      print('$this could prepare $component!');
       if (parentGame is BaseGame) {
         parentGame.prepareComponent(component);
       }
 
-      if (component is BaseComponent && this is BaseComponent) {
-        component.debugMode = (this as BaseComponent).debugMode;
-      }
-
+      component.debugMode = debugMode;
       component.isPrepared = true;
     }
   }

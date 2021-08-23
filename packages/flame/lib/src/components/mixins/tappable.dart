@@ -1,11 +1,11 @@
 import 'package:meta/meta.dart';
 
+import '../../../components.dart';
 import '../../../game.dart';
 import '../../game/base_game.dart';
 import '../../gestures/events.dart';
-import '../base_component.dart';
 
-mixin Tappable on BaseComponent {
+mixin Tappable on Component {
   bool onTapCancel() {
     return true;
   }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../../components.dart';
 import '../../game/base_game.dart';
 import '../../gestures/events.dart';
-import '../base_component.dart';
 
-mixin Draggable on BaseComponent {
+mixin Draggable on Component {
   bool _isDragged = false;
   bool get isDragged => _isDragged;
 
