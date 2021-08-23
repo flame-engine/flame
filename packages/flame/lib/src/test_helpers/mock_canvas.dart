@@ -47,6 +47,22 @@ class MockCanvas extends Fake implements Canvas {
   }
 
   @override
+  void drawLine(Offset p1, Offset p2, Paint paint) {
+    methodCalls.add(
+      'drawLine(${p1.dx}, ${p1.dy}, ${p2.dx}, ${p2.dy})',
+    );
+  }
+
+  @override
+  void drawParagraph(Paragraph paragraph, Offset offset) {
+    // There appears to be no way of extracting text content from the
+    // [paragraph].
+    methodCalls.add(
+      'drawParagraph(?, ${offset.dx}, ${offset.dy})',
+    );
+  }
+
+  @override
   void clipRect(
     Rect rect, {
     ClipOp clipOp = ClipOp.intersect,

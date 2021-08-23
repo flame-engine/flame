@@ -26,7 +26,6 @@ import 'notifying_vector2.dart';
 /// for notifications whenever the transform matrix changes. In addition, you
 /// can subscribe to get notified when individual components of the transform
 /// change: [position], [scale], and [offset] (but not [angle]).
-///
 class Transform2D extends ChangeNotifier {
   final Matrix4 _transformMatrix;
   bool _recalculate;

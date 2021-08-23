@@ -124,8 +124,7 @@ void main() {
         ),
         [
           'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)', // camera translation
-          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 10.0, 0.0, 1.0)', // position component translate
-          'translate(0.0, 0.0)', // position component anchor
+          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 10.0, 0.0, 1.0)', // position component translation
         ],
       );
     });
@@ -152,8 +151,7 @@ void main() {
         ),
         [
           'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -4.0, -4.0, 0.0, 1.0)', // camera translation
-          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 10.0, 0.0, 1.0)', // position component translate
-          'translate(0.0, 0.0)', // position component anchor
+          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 10.0, 0.0, 1.0)', // position component translation
         ],
       );
     });
@@ -197,8 +195,7 @@ void main() {
         ),
         [
           'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 40.0, 30.0, 0.0, 1.0)', // camera translation
-          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 20.0, 0.0, 1.0)', // position component translate
-          'translate(-0.5, -0.5)', // position component anchor
+          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 9.5, 19.5, 0.0, 1.0)', // position component translation
         ],
         // result: 50 - w/2, 50 - h/2 (perfectly centered)
       );
@@ -228,8 +225,7 @@ void main() {
         ),
         [
           'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -550.0, -1920.0, 0.0, 1.0)', // camera translation
-          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 600.0, 2000.0, 0.0, 1.0)', // position component translation
-          'translate(-0.5, -0.5)', // position component anchor
+          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 599.5, 1999.5, 0.0, 1.0)', // position component translation
         ],
         // result: 50 - w/2, 80 - h/2 (respects fractional relative offset)
       );
@@ -320,8 +316,7 @@ void main() {
         ),
         [
           'transform(2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 1.0)', // camera translation and zoom
-          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 100.0, 100.0, 0.0, 1.0)', // position component translate
-          'translate(-0.5, -0.5)', // anchor
+          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 99.5, 99.5, 0.0, 1.0)', // position component
         ],
       );
     });
@@ -343,8 +338,7 @@ void main() {
         ),
         [
           'transform(2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 100.0, 100.0, 0.0, 1.0)', // camera translation and zoom
-          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 100.0, 100.0, 0.0, 1.0)', // position component translate
-          'translate(-0.5, -0.5)', // anchor
+          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 99.5, 99.5, 0.0, 1.0)', // position component
         ],
       );
       expect(game.camera.position, Vector2.all(-50.0));
