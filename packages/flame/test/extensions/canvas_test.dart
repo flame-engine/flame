@@ -9,8 +9,7 @@ void main() {
       canvas.renderPoint(Vector2.all(10.0), size: 2);
       expect(
         canvas,
-        MokkCanvas()
-          ..drawRect(const Rect.fromLTWH(9, 9, 2, 2)),
+        MokkCanvas()..drawRect(const Rect.fromLTWH(9, 9, 2, 2)),
       );
     });
   });

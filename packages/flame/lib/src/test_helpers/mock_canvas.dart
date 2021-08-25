@@ -102,8 +102,8 @@ class MockCanvas extends Fake implements Canvas {
 
 class MokkCanvas extends Fake implements Canvas, Matcher {
   MokkCanvas()
-    : _commands = [],
-      _saveCount = 1;
+      : _commands = [],
+        _saveCount = 1;
 
   final List<_CanvasCommand> _commands;
   int _saveCount;
@@ -149,8 +149,8 @@ class MokkCanvas extends Fake implements Canvas, Matcher {
 
   @override
   Description describeMismatch(dynamic item, Description mismatchDescription,
-      Map matchState, bool verbose)
-    => mismatchDescription.add(matchState['description'] as String);
+          Map matchState, bool verbose) =>
+      mismatchDescription.add(matchState['description'] as String);
 
   //#region Canvas API
 
@@ -240,7 +240,7 @@ abstract class _CanvasCommand {
     }
     if (a is List && b is List) {
       return a.length == b.length &&
-        Iterable<int>.generate(a.length).every((i) => eq(a[i], b[i]));
+          Iterable<int>.generate(a.length).every((i) => eq(a[i], b[i]));
     }
     if (a is Rect && b is Rect) {
       return eq(_rectAsList(a), _rectAsList(b));
@@ -273,32 +273,42 @@ abstract class _CanvasCommand {
     return a.toString();
   }
 
-  List<double> _rectAsList(Rect rect)
-    => [rect.left, rect.top, rect.right, rect.bottom];
+  List<double> _rectAsList(Rect rect) =>
+      [rect.left, rect.top, rect.right, rect.bottom];
 
-  List<double> _rrectAsList(RRect rect)
-    => [rect.left, rect.top, rect.right, rect.bottom,
-        rect.tlRadiusX, rect.tlRadiusY, rect.trRadiusX, rect.trRadiusY,
-        rect.blRadiusX, rect.blRadiusY, rect.brRadiusX, rect.brRadiusY,];
+  List<double> _rrectAsList(RRect rect) => [
+        rect.left,
+        rect.top,
+        rect.right,
+        rect.bottom,
+        rect.tlRadiusX,
+        rect.tlRadiusY,
+        rect.trRadiusX,
+        rect.trRadiusY,
+        rect.blRadiusX,
+        rect.blRadiusY,
+        rect.brRadiusX,
+        rect.brRadiusY,
+      ];
 
-  List _paintAsList(Paint paint)
-    => <dynamic>[paint.color, paint.blendMode, paint.style, paint.strokeWidth];
+  List _paintAsList(Paint paint) =>
+      <dynamic>[paint.color, paint.blendMode, paint.style, paint.strokeWidth];
 }
 
 class _TransformCanvasCommand extends _CanvasCommand {
-  _TransformCanvasCommand()
-    : _transform = Matrix4.identity();
+  _TransformCanvasCommand() : _transform = Matrix4.identity();
 
   final Matrix4 _transform;
 
-  void transform(Float64List matrix) => _transform.multiply(Matrix4.fromFloat64List(matrix));
+  void transform(Float64List matrix) =>
+      _transform.multiply(Matrix4.fromFloat64List(matrix));
   void translate(double dx, double dy) => _transform.translate(dx, dy);
   void rotate(double angle) => _transform.rotateZ(angle);
   void scale(double sx, double sy) => _transform.scale(sx, sy, 1);
 
   @override
-  bool equals(_TransformCanvasCommand other)
-    => eq(_transform.storage, other._transform.storage);
+  bool equals(_TransformCanvasCommand other) =>
+      eq(_transform.storage, other._transform.storage);
 
   @override
   String toString() {
@@ -314,8 +324,8 @@ class _LineCommand extends _CanvasCommand {
   final Paint? paint;
 
   @override
-  bool equals(_LineCommand other)
-    => eq(p1, other.p1) && eq(p2, other.p2) && eq(paint, other.paint);
+  bool equals(_LineCommand other) =>
+      eq(p1, other.p1) && eq(p2, other.p2) && eq(paint, other.paint);
 
   @override
   String toString() {
@@ -329,8 +339,8 @@ class _RectCommand extends _CanvasCommand {
   final Paint? paint;
 
   @override
-  bool equals(_RectCommand other)
-    => eq(rect, other.rect) && eq(paint, other.paint);
+  bool equals(_RectCommand other) =>
+      eq(rect, other.rect) && eq(paint, other.paint);
 
   @override
   String toString() {
@@ -344,8 +354,8 @@ class _RRectCommand extends _CanvasCommand {
   final Paint? paint;
 
   @override
-  bool equals(_RRectCommand other)
-    => eq(rrect, other.rrect) && eq(paint, other.paint);
+  bool equals(_RRectCommand other) =>
+      eq(rrect, other.rrect) && eq(paint, other.paint);
 
   @override
   String toString() {
