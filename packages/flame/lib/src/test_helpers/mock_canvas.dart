@@ -16,7 +16,7 @@ import 'package:flutter_test/flutter_test.dart';
 ///   canvas,
 ///   MockCanvas()
 ///     ..translate(10, 10)
-///     ..drawRect(const Rect.fromLTWH(0, 0, 100, 100))
+///     ..drawRect(const Rect.fromLTWH(0, 0, 100, 100)),
 /// );
 /// ```
 ///
@@ -90,11 +90,11 @@ class MockCanvas extends Fake implements Canvas, Matcher {
 
   @override
   Description describeMismatch(
-      dynamic item,
-      Description mismatchDescription,
-      Map matchState,
-      bool verbose,
-      ) =>
+    dynamic item,
+    Description mismatchDescription,
+    Map matchState,
+    bool verbose,
+  ) =>
       mismatchDescription.add(matchState['description'] as String);
 
   //#endregion
@@ -123,7 +123,8 @@ class MockCanvas extends Fake implements Canvas, Matcher {
   }
 
   @override
-  void clipRect(Rect rect, {ClipOp clipOp = ClipOp.intersect, bool doAntiAlias = true}) {
+  void clipRect(Rect rect,
+      {ClipOp clipOp = ClipOp.intersect, bool doAntiAlias = true}) {
     _commands.add(_ClipRectCommand(rect, clipOp, doAntiAlias));
   }
 
@@ -365,8 +366,7 @@ class _ParagraphCommand extends _CanvasCommand {
   final Offset offset;
 
   @override
-  bool equals(_ParagraphCommand other) =>
-      eq(offset, other.offset);
+  bool equals(_ParagraphCommand other) => eq(offset, other.offset);
 
   @override
   String toString() {

@@ -46,11 +46,10 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-        canvas,
-        MockCanvas()
-          ..clipRect(const Rect.fromLTWH(0, 0, 200, 200))
-          ..scale(4)
-      );
+          canvas,
+          MockCanvas()
+            ..clipRect(const Rect.fromLTWH(0, 0, 200, 200))
+            ..scale(4));
     });
 
     test('fixed ratio viewport maxes width', () {
@@ -68,12 +67,11 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-        canvas,
-        MockCanvas()
-          ..clipRect(const Rect.fromLTWH(0, 50, 100, 100))
-          ..translate(0, 50)
-          ..scale(2)
-      );
+          canvas,
+          MockCanvas()
+            ..clipRect(const Rect.fromLTWH(0, 50, 100, 100))
+            ..translate(0, 50)
+            ..scale(2));
     });
 
     test('fixed ratio viewport maxes height', () {
@@ -91,12 +89,11 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-        canvas,
-        MockCanvas()
-          ..clipRect(const Rect.fromLTWH(25, 0, 50, 200))
-          ..translate(25, 0)
-          ..scale(0.5)
-      );
+          canvas,
+          MockCanvas()
+            ..clipRect(const Rect.fromLTWH(25, 0, 50, 200))
+            ..translate(25, 0)
+            ..scale(0.5));
     });
   });
 
@@ -116,7 +113,7 @@ void main() {
         canvas,
         MockCanvas()
           ..translate(10, 10)
-          ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
+          ..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
       );
     });
 
@@ -142,7 +139,7 @@ void main() {
         MockCanvas()
           ..translate(-4, -4) // Camera translation
           ..translate(10, 10) // PositionComponent translation
-          ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
+          ..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
       );
     });
 
@@ -184,9 +181,9 @@ void main() {
       expect(
         canvas,
         MockCanvas()
-          ..translate(40, 30)    // Camera translation
+          ..translate(40, 30) // Camera translation
           ..translate(9.5, 19.5) // PositionComponent translation
-          ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
+          ..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
         // result: 50 - w/2, 50 - h/2 (perfectly centered)
       );
     });
@@ -213,9 +210,9 @@ void main() {
       expect(
         canvas,
         MockCanvas()
-          ..translate(-550, -1920)    // Camera translation
+          ..translate(-550, -1920) // Camera translation
           ..translate(599.5, 1999.5) // PositionComponent translation
-          ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
+          ..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
       );
     });
     test('camera follow with world boundaries', () {
@@ -300,11 +297,11 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-          canvas,
-          MockCanvas()
-            ..scale(2)              // Camera zoom
-            ..translate(99.5, 99.5) // PositionComponent translation
-            ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
+        canvas,
+        MockCanvas()
+          ..scale(2) // Camera zoom
+          ..translate(99.5, 99.5) // PositionComponent translation
+          ..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
       );
     });
 
@@ -323,10 +320,10 @@ void main() {
       expect(
         canvas,
         MockCanvas()
-          ..translate(100, 100)    // camera translation
-          ..scale(2)               // camera zoom
-          ..translate(99.5, 99.5)  // position component
-          ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
+          ..translate(100, 100) // camera translation
+          ..scale(2) // camera zoom
+          ..translate(99.5, 99.5) // position component
+          ..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
       );
       expect(game.camera.position, Vector2.all(-50.0));
     });
