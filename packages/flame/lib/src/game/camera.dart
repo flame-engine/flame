@@ -163,7 +163,7 @@ class Camera extends Projector {
     }
     _transform.setIdentity();
     _transform.translate(translateX, translateY);
-    _transform.scale(zoom);
+    _transform.scale(zoom, zoom, 1);
     return _transform;
   }
 

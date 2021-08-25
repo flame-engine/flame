@@ -30,6 +30,7 @@ void main() {
       expect(game.canvasSize, Vector2(100.0, 200.00));
       expect(game.size, Vector2(100.0, 200.00));
     });
+
     test('fixed ratio viewport has perfect ratio', () {
       final game = BaseGame()
         ..viewport = FixedResolutionViewport(Vector2.all(50));
@@ -42,19 +43,16 @@ void main() {
       expect(viewport.scaledSize, Vector2(200.0, 200.0));
       expect(viewport.scale, 4.0);
 
-      final canvas = MockCanvas();
+      final canvas = MokkCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.singleWhere((e) => e.startsWith('clipRect')),
-        'clipRect(0.0, 0.0, 200.0, 200.0)',
-      );
-      expect(
-        canvas.methodCalls,
-        contains(
-          'transform(4.0, 0.0, 0.0, 0.0, 0.0, 4.0, 0.0, 0.0, 0.0, 0.0, 4.0, 0.0, 0.0, 0.0, 0.0, 1.0)',
-        ),
+        canvas,
+        MokkCanvas()
+          ..clipRect(const Rect.fromLTWH(0, 0, 200, 200))
+          ..scale(4)
       );
     });
+
     test('fixed ratio viewport maxes width', () {
       final game = BaseGame()
         ..viewport = FixedResolutionViewport(Vector2.all(50));
@@ -67,19 +65,17 @@ void main() {
       expect(viewport.scaledSize, Vector2(100.0, 100.0));
       expect(viewport.scale, 2.0);
 
-      final canvas = MockCanvas();
+      final canvas = MokkCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.singleWhere((e) => e.startsWith('clipRect')),
-        'clipRect(0.0, 50.0, 100.0, 100.0)',
-      );
-      expect(
-        canvas.methodCalls,
-        contains(
-          'transform(2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 50.0, 0.0, 1.0)',
-        ),
+        canvas,
+        MokkCanvas()
+          ..clipRect(const Rect.fromLTWH(0, 50, 100, 100))
+          ..translate(0, 50)
+          ..scale(2)
       );
     });
+
     test('fixed ratio viewport maxes height', () {
       final game = BaseGame()
         ..viewport = FixedResolutionViewport(Vector2(100.0, 400.0));
@@ -92,20 +88,18 @@ void main() {
       expect(viewport.scaledSize, Vector2(50.0, 200.0));
       expect(viewport.scale, 0.5);
 
-      final canvas = MockCanvas();
+      final canvas = MokkCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.singleWhere((e) => e.startsWith('clipRect')),
-        'clipRect(25.0, 0.0, 50.0, 200.0)',
-      );
-      expect(
-        canvas.methodCalls,
-        contains(
-          'transform(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 25.0, 0.0, 0.0, 1.0)',
-        ),
+        canvas,
+        MokkCanvas()
+          ..clipRect(const Rect.fromLTWH(25, 0, 50, 200))
+          ..translate(25, 0)
+          ..scale(0.5)
       );
     });
   });
+
   group('camera', () {
     test('default camera applies no translation', () {
       final game = BaseGame(); // no camera changes
@@ -116,18 +110,16 @@ void main() {
       game.add(p);
       game.update(0);
 
-      final canvas = MockCanvas();
+      final canvas = MokkCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.where(
-          (e) => e.startsWith(RegExp('translate|transform')),
-        ),
-        [
-          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)', // camera translation
-          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 10.0, 0.0, 1.0)', // position component translation
-        ],
+        canvas,
+        MokkCanvas()
+          ..translate(10, 10)
+          ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
       );
     });
+
     test('camera snap movement', () {
       final game = BaseGame(); // no camera changes
       game.onResize(Vector2.all(100.0));
@@ -143,18 +135,17 @@ void main() {
       // the component will now be at 10 - 4 = (6, 6)
       expect(game.camera.position, Vector2.all(4.0));
 
-      final canvas = MockCanvas();
+      final canvas = MokkCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.where(
-          (e) => e.startsWith(RegExp('translate|transform')),
-        ),
-        [
-          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -4.0, -4.0, 0.0, 1.0)', // camera translation
-          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 10.0, 10.0, 0.0, 1.0)', // position component translation
-        ],
+        canvas,
+        MokkCanvas()
+          ..translate(-4, -4) // Camera translation
+          ..translate(10, 10) // PositionComponent translation
+          ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
       );
     });
+
     test('camera smooth movement', () {
       final game = BaseGame(); // no camera changes
       game.onResize(Vector2.all(100.0));
@@ -171,6 +162,7 @@ void main() {
       game.update(100.0); // more than needed at once
       expect(game.camera.position, Vector2(0.0, 10.0));
     });
+
     test('camera follow', () {
       final game = BaseGame(); // no camera changes
       game.onResize(Vector2.all(100.0));
@@ -187,19 +179,18 @@ void main() {
       // (10,20) - half screen (50,50)
       expect(game.camera.position, Vector2(-40, -30));
 
-      final canvas = MockCanvas();
+      final canvas = MokkCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.where(
-          (e) => e.startsWith(RegExp('translate|transform')),
-        ),
-        [
-          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 40.0, 30.0, 0.0, 1.0)', // camera translation
-          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 9.5, 19.5, 0.0, 1.0)', // position component translation
-        ],
+        canvas,
+        MokkCanvas()
+          ..translate(40, 30)    // Camera translation
+          ..translate(9.5, 19.5) // PositionComponent translation
+          ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
         // result: 50 - w/2, 50 - h/2 (perfectly centered)
       );
     });
+
     test('camera follow with relative position', () {
       final game = BaseGame(); // no camera changes
       game.onResize(Vector2.all(100.0));
@@ -217,17 +208,14 @@ void main() {
       // (600,2000) - fractional screen (50,80)
       expect(game.camera.position, Vector2(550, 1920));
 
-      final canvas = MockCanvas();
+      final canvas = MokkCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.where(
-          (e) => e.startsWith(RegExp('translate|transform')),
-        ),
-        [
-          'transform(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -550.0, -1920.0, 0.0, 1.0)', // camera translation
-          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 599.5, 1999.5, 0.0, 1.0)', // position component translation
-        ],
-        // result: 50 - w/2, 80 - h/2 (respects fractional relative offset)
+        canvas,
+        MokkCanvas()
+          ..translate(-550, -1920)    // Camera translation
+          ..translate(599.5, 1999.5) // PositionComponent translation
+          ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
       );
     });
     test('camera follow with world boundaries', () {
@@ -299,6 +287,7 @@ void main() {
       game.update(10000);
       expect(game.camera.position, Vector2.all(-100.0));
     });
+
     test('camera zoom', () {
       final game = BaseGame();
       game.onResize(Vector2.all(200.0));
@@ -308,18 +297,17 @@ void main() {
       game.add(p);
       game.update(0);
 
-      final canvas = MockCanvas();
+      final canvas = MokkCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.where(
-          (e) => e.startsWith(RegExp('translate|transform|scale')),
-        ),
-        [
-          'transform(2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 1.0)', // camera translation and zoom
-          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 99.5, 99.5, 0.0, 1.0)', // position component
-        ],
+          canvas,
+          MokkCanvas()
+            ..scale(2)              // Camera zoom
+            ..translate(99.5, 99.5) // PositionComponent translation
+            ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
       );
     });
+
     test('camera zoom with setRelativeOffset', () {
       final game = BaseGame();
       game.onResize(Vector2.all(200.0));
@@ -330,19 +318,19 @@ void main() {
       game.add(p);
       game.update(10000);
 
-      final canvas = MockCanvas();
+      final canvas = MokkCanvas();
       game.render(canvas);
       expect(
-        canvas.methodCalls.where(
-          (e) => e.startsWith(RegExp('translate|transform|scale')),
-        ),
-        [
-          'transform(2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 100.0, 100.0, 0.0, 1.0)', // camera translation and zoom
-          'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 99.5, 99.5, 0.0, 1.0)', // position component
-        ],
+        canvas,
+        MokkCanvas()
+          ..translate(100, 100)    // camera translation
+          ..scale(2)               // camera zoom
+          ..translate(99.5, 99.5)  // position component
+          ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
       );
       expect(game.camera.position, Vector2.all(-50.0));
     });
+
     test('camera shake should return to where it started', () {
       final game = BaseGame();
       final camera = game.camera;
@@ -355,6 +343,7 @@ void main() {
       expect(camera.position, Vector2.zero());
     });
   });
+
   group('viewport & camera', () {
     test('default ratio viewport + camera with world boundaries', () {
       final game = BaseGame()

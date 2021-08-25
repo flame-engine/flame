@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
@@ -569,19 +570,18 @@ void main() {
       final component = MyDebugComponent()
         ..position = Vector2(23, 17)
         ..size = Vector2.all(10);
-      final canvas = MockCanvas();
+      final canvas = MokkCanvas();
       component.renderTree(canvas);
-      final calls = canvas.methodCalls;
-      expect(calls.length, 6);
       expect(
-        calls[0],
-        'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 23.0, 17.0, 0.0, 1.0)',
+        canvas,
+        MokkCanvas()
+          ..translate(23, 17)
+          ..drawRect(const Rect.fromLTWH(0, 0, 10, 10))
+          ..drawLine(const Offset(0, -2), const Offset(0, 2))
+          ..drawLine(const Offset(-2, 0), const Offset(2, 0))
+          ..drawParagraph(null, const Offset(-30, -15))
+          ..drawParagraph(null, const Offset(-20, 10))
       );
-      expect(calls[1], 'drawRect(0.0, 0.0, 10.0, 10.0)');
-      expect(calls[2], 'drawLine(0.0, -2.0, 0.0, 2.0)');
-      expect(calls[3], 'drawLine(-2.0, 0.0, 2.0, 0.0)');
-      expect(calls[4], 'drawParagraph(?, -30.0, -15.0)');
-      expect(calls[5], 'drawParagraph(?, -20.0, 10.0)');
     });
 
     test('render without coordinates', () {
@@ -590,17 +590,16 @@ void main() {
         ..size = Vector2.all(10)
         ..anchor = Anchor.center
         ..precision = null;
-      final canvas = MockCanvas();
+      final canvas = MokkCanvas();
       component.renderTree(canvas);
-      final calls = canvas.methodCalls;
-      expect(calls.length, 4);
       expect(
-        calls[0],
-        'transform(1.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 18.0, 12.0, 0.0, 1.0)',
+        canvas,
+        MokkCanvas()
+          ..translate(18, 12)
+          ..drawRect(const Rect.fromLTWH(0, 0, 10, 10))
+          ..drawLine(const Offset(5, 3), const Offset(5, 7))
+          ..drawLine(const Offset(3, 5), const Offset(7, 5))
       );
-      expect(calls[1], 'drawRect(0.0, 0.0, 10.0, 10.0)');
-      expect(calls[2], 'drawLine(5.0, 3.0, 5.0, 7.0)');
-      expect(calls[3], 'drawLine(3.0, 5.0, 7.0, 5.0)');
     });
   });
 }

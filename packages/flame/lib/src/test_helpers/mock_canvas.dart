@@ -143,13 +143,17 @@ class MokkCanvas extends Fake implements Canvas, Matcher {
 
   @override
   Description describe(Description description) {
-    description.add('Canvas[length=${_commands.length}]');
+    description.add('Canvas$_commands');
     return description;
   }
 
   @override
-  Description describeMismatch(dynamic item, Description mismatchDescription,
-          Map matchState, bool verbose) =>
+  Description describeMismatch(
+      dynamic item,
+      Description mismatchDescription,
+      Map matchState,
+      bool verbose,
+      ) =>
       mismatchDescription.add(matchState['description'] as String);
 
   //#region Canvas API
@@ -176,6 +180,11 @@ class MokkCanvas extends Fake implements Canvas, Matcher {
   }
 
   @override
+  void clipRect(Rect rect, {ClipOp clipOp = ClipOp.intersect, bool doAntiAlias = true}) {
+    _commands.add(_ClipRectCommand(rect, clipOp, doAntiAlias));
+  }
+
+  @override
   void drawRect(Rect rect, [Paint? paint]) {
     _commands.add(_RectCommand(rect, paint));
   }
@@ -188,6 +197,11 @@ class MokkCanvas extends Fake implements Canvas, Matcher {
   @override
   void drawLine(Offset p1, Offset p2, [Paint? paint]) {
     _commands.add(_LineCommand(p1, p2, paint));
+  }
+
+  @override
+  void drawParagraph(Paragraph? paragraph, Offset offset) {
+    _commands.add(_ParagraphCommand(offset));
   }
 
   @override
@@ -317,6 +331,25 @@ class _TransformCanvasCommand extends _CanvasCommand {
   }
 }
 
+class _ClipRectCommand extends _CanvasCommand {
+  _ClipRectCommand(this.clipRect, this.clipOp, this.doAntiAlias);
+
+  final Rect clipRect;
+  final ClipOp clipOp;
+  final bool doAntiAlias;
+
+  @override
+  bool equals(_ClipRectCommand other) =>
+      eq(clipRect, other.clipRect) &&
+      clipOp == other.clipOp &&
+      doAntiAlias == other.doAntiAlias;
+
+  @override
+  String toString() {
+    return 'clipRect(${repr(clipRect)}, clipOp=$clipOp, doAntiAlias=$doAntiAlias)';
+  }
+}
+
 class _LineCommand extends _CanvasCommand {
   _LineCommand(this.p1, this.p2, this.paint);
   final Offset p1;
@@ -360,5 +393,19 @@ class _RRectCommand extends _CanvasCommand {
   @override
   String toString() {
     return 'drawRRect(${repr(rrect)}, ${repr(paint)})';
+  }
+}
+
+class _ParagraphCommand extends _CanvasCommand {
+  _ParagraphCommand(this.offset);
+  final Offset offset;
+
+  @override
+  bool equals(_ParagraphCommand other) =>
+      eq(offset, other.offset);
+
+  @override
+  String toString() {
+    return 'drawParagraph(${repr(offset)})';
   }
 }
