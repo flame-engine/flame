@@ -570,11 +570,11 @@ void main() {
       final component = MyDebugComponent()
         ..position = Vector2(23, 17)
         ..size = Vector2.all(10);
-      final canvas = MokkCanvas();
+      final canvas = MockCanvas();
       component.renderTree(canvas);
       expect(
         canvas,
-        MokkCanvas()
+        MockCanvas()
           ..translate(23, 17)
           ..drawRect(const Rect.fromLTWH(0, 0, 10, 10))
           ..drawLine(const Offset(0, -2), const Offset(0, 2))
@@ -590,11 +590,11 @@ void main() {
         ..size = Vector2.all(10)
         ..anchor = Anchor.center
         ..precision = null;
-      final canvas = MokkCanvas();
+      final canvas = MockCanvas();
       component.renderTree(canvas);
       expect(
         canvas,
-        MokkCanvas()
+        MockCanvas()
           ..translate(18, 12)
           ..drawRect(const Rect.fromLTWH(0, 0, 10, 10))
           ..drawLine(const Offset(5, 3), const Offset(5, 7))

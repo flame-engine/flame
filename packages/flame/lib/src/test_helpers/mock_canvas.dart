@@ -6,8 +6,8 @@ import 'package:test/fake.dart';
 import 'package:vector_math/vector_math_64.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MokkCanvas extends Fake implements Canvas, Matcher {
-  MokkCanvas()
+class MockCanvas extends Fake implements Canvas, Matcher {
+  MockCanvas()
       : _commands = [],
         _saveCount = 1;
 
@@ -15,7 +15,7 @@ class MokkCanvas extends Fake implements Canvas, Matcher {
   int _saveCount;
 
   @override
-  bool matches(covariant MokkCanvas other, Map matchState) {
+  bool matches(covariant MockCanvas other, Map matchState) {
     final n1 = _commands.length;
     final n2 = other._commands.length;
     if (n1 != n2) {

@@ -158,7 +158,7 @@ void main() {
       wrapper.addChild(child);
       game.add(wrapper);
       game.update(0.0);
-      game.render(MokkCanvas());
+      game.render(MockCanvas());
 
       expect(child.rendered, true);
       expect(child.updated, true);

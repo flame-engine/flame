@@ -43,11 +43,11 @@ void main() {
       expect(viewport.scaledSize, Vector2(200.0, 200.0));
       expect(viewport.scale, 4.0);
 
-      final canvas = MokkCanvas();
+      final canvas = MockCanvas();
       game.render(canvas);
       expect(
         canvas,
-        MokkCanvas()
+        MockCanvas()
           ..clipRect(const Rect.fromLTWH(0, 0, 200, 200))
           ..scale(4)
       );
@@ -65,11 +65,11 @@ void main() {
       expect(viewport.scaledSize, Vector2(100.0, 100.0));
       expect(viewport.scale, 2.0);
 
-      final canvas = MokkCanvas();
+      final canvas = MockCanvas();
       game.render(canvas);
       expect(
         canvas,
-        MokkCanvas()
+        MockCanvas()
           ..clipRect(const Rect.fromLTWH(0, 50, 100, 100))
           ..translate(0, 50)
           ..scale(2)
@@ -88,11 +88,11 @@ void main() {
       expect(viewport.scaledSize, Vector2(50.0, 200.0));
       expect(viewport.scale, 0.5);
 
-      final canvas = MokkCanvas();
+      final canvas = MockCanvas();
       game.render(canvas);
       expect(
         canvas,
-        MokkCanvas()
+        MockCanvas()
           ..clipRect(const Rect.fromLTWH(25, 0, 50, 200))
           ..translate(25, 0)
           ..scale(0.5)
@@ -110,11 +110,11 @@ void main() {
       game.add(p);
       game.update(0);
 
-      final canvas = MokkCanvas();
+      final canvas = MockCanvas();
       game.render(canvas);
       expect(
         canvas,
-        MokkCanvas()
+        MockCanvas()
           ..translate(10, 10)
           ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
       );
@@ -135,11 +135,11 @@ void main() {
       // the component will now be at 10 - 4 = (6, 6)
       expect(game.camera.position, Vector2.all(4.0));
 
-      final canvas = MokkCanvas();
+      final canvas = MockCanvas();
       game.render(canvas);
       expect(
         canvas,
-        MokkCanvas()
+        MockCanvas()
           ..translate(-4, -4) // Camera translation
           ..translate(10, 10) // PositionComponent translation
           ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
@@ -179,11 +179,11 @@ void main() {
       // (10,20) - half screen (50,50)
       expect(game.camera.position, Vector2(-40, -30));
 
-      final canvas = MokkCanvas();
+      final canvas = MockCanvas();
       game.render(canvas);
       expect(
         canvas,
-        MokkCanvas()
+        MockCanvas()
           ..translate(40, 30)    // Camera translation
           ..translate(9.5, 19.5) // PositionComponent translation
           ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
@@ -208,11 +208,11 @@ void main() {
       // (600,2000) - fractional screen (50,80)
       expect(game.camera.position, Vector2(550, 1920));
 
-      final canvas = MokkCanvas();
+      final canvas = MockCanvas();
       game.render(canvas);
       expect(
         canvas,
-        MokkCanvas()
+        MockCanvas()
           ..translate(-550, -1920)    // Camera translation
           ..translate(599.5, 1999.5) // PositionComponent translation
           ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
@@ -297,11 +297,11 @@ void main() {
       game.add(p);
       game.update(0);
 
-      final canvas = MokkCanvas();
+      final canvas = MockCanvas();
       game.render(canvas);
       expect(
           canvas,
-          MokkCanvas()
+          MockCanvas()
             ..scale(2)              // Camera zoom
             ..translate(99.5, 99.5) // PositionComponent translation
             ..drawRect(const Rect.fromLTWH(0, 0, 1, 1))
@@ -318,11 +318,11 @@ void main() {
       game.add(p);
       game.update(10000);
 
-      final canvas = MokkCanvas();
+      final canvas = MockCanvas();
       game.render(canvas);
       expect(
         canvas,
-        MokkCanvas()
+        MockCanvas()
           ..translate(100, 100)    // camera translation
           ..scale(2)               // camera zoom
           ..translate(99.5, 99.5)  // position component
