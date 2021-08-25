@@ -94,8 +94,9 @@ class MockCanvas extends Fake implements Canvas, Matcher {
     Description mismatchDescription,
     Map matchState,
     bool verbose,
-  ) =>
-      mismatchDescription.add(matchState['description'] as String);
+  ) {
+    return mismatchDescription.add(matchState['description'] as String);
+  }
 
   //#endregion
 
