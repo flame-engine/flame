@@ -1,21 +1,56 @@
 import 'dart:typed_data';
 import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:test/fake.dart';
 import 'package:vector_math/vector_math_64.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+/// [MockCanvas] is a utility class for writing tests. It supports the same API
+/// as the regular [Canvas] class from dart:ui (in theory; any missing commands
+/// can be added as the need arises). In addition, this class is also a
+/// [Matcher], allowing it to be used in `expect()` calls:
+/// ```dart
+/// final canvas = MockCanvas();
+/// // ... draw something on the canvas
+/// // then check that the commands issued were the ones that you'd expect:
+/// expect(
+///   canvas,
+///   MockCanvas()
+///     ..translate(10, 10)
+///     ..drawRect(const Rect.fromLTWH(0, 0, 100, 100))
+/// );
+/// ```
+///
+/// Two mock canvases will match only if they have the same number of commands,
+/// and if each pair of corresponding commands matches.
+///
+/// Multiple transform commands (`translate()`, `scale()`, `rotate()` and
+/// `transform()`) that are issued in a row are always joined into a single
+/// combined transform. Thus, for example, calling `translate(10, 10)` and
+/// then `translate(30, -10)` will match a single call `translate(40, 0)`.
+///
+/// Some commands can be partially specified. For example, in `drawLine()` and
+/// `drawRect()` the `paint` argument is optional. If provided, it will be
+/// checked against the actual Paint used, but if omitted, the match will still
+/// succeed.
+///
+/// Commands that involve numeric components (i.e. coordinates, dimensions,
+/// etc) will be matched approximately, with the default absolute tolerance of
+/// 1e-10.
 class MockCanvas extends Fake implements Canvas, Matcher {
   MockCanvas()
       : _commands = [],
-        _saveCount = 1;
+        _saveCount = 0;
 
   final List<_CanvasCommand> _commands;
   int _saveCount;
 
+  //#region Matcher API
+
   @override
   bool matches(covariant MockCanvas other, Map matchState) {
+    if (_saveCount != 0) {
+      return _fail('Canvas finished with saveCount=$_saveCount', matchState);
+    }
     final n1 = _commands.length;
     final n2 = other._commands.length;
     if (n1 != n2) {
@@ -61,6 +96,8 @@ class MockCanvas extends Fake implements Canvas, Matcher {
       bool verbose,
       ) =>
       mismatchDescription.add(matchState['description'] as String);
+
+  //#endregion
 
   //#region Canvas API
 
@@ -140,6 +177,19 @@ class MockCanvas extends Fake implements Canvas, Matcher {
   //#endregion
 }
 
+/// This class encapsulates a single command that was issued to a [MockCanvas].
+/// Most methods of [MockCanvas] will use a dedicated class derived from
+/// [_CanvasCommand] to store all the arguments and then match them against
+/// the expected values.
+///
+/// Each subclass is expected to implement two methods:
+///   - `equals()`, which compares the current object against another instance
+///     of the same class; and
+///   - `toString()`, which is used when printing error messages in case of a
+///     mismatch.
+///
+/// Use helper function `eq()` to implement the first method, and `repr()` to
+/// implement the second.
 abstract class _CanvasCommand {
   double tolerance = 1e-10;
 
@@ -148,6 +198,7 @@ abstract class _CanvasCommand {
   /// to have the same type as the current command.
   bool equals(covariant _CanvasCommand other);
 
+  /// Helper function to check the equality of any two objects.
   bool eq(dynamic a, dynamic b) {
     if (a == null || b == null) {
       return true;
@@ -174,9 +225,11 @@ abstract class _CanvasCommand {
     return a == b;
   }
 
+  /// Helper function to generate string representations of various
+  /// components of a command.
   String repr(dynamic a) {
     if (a is Offset) {
-      return '[${a.dx}, ${a.dy}]';
+      return 'Offset(${a.dx}, ${a.dy})';
     }
     if (a is List) {
       return a.map(repr).join(', ');
@@ -237,6 +290,7 @@ class _TransformCanvasCommand extends _CanvasCommand {
   }
 }
 
+/// canvas.clipRect()
 class _ClipRectCommand extends _CanvasCommand {
   _ClipRectCommand(this.clipRect, this.clipOp, this.doAntiAlias);
 
@@ -256,6 +310,7 @@ class _ClipRectCommand extends _CanvasCommand {
   }
 }
 
+/// canvas.drawLine()
 class _LineCommand extends _CanvasCommand {
   _LineCommand(this.p1, this.p2, this.paint);
   final Offset p1;
@@ -272,6 +327,7 @@ class _LineCommand extends _CanvasCommand {
   }
 }
 
+/// canvas.drawRect()
 class _RectCommand extends _CanvasCommand {
   _RectCommand(this.rect, this.paint);
   final Rect rect;
@@ -287,6 +343,7 @@ class _RectCommand extends _CanvasCommand {
   }
 }
 
+/// canvas.drawRRect()
 class _RRectCommand extends _CanvasCommand {
   _RRectCommand(this.rrect, this.paint);
   final RRect rrect;
@@ -302,6 +359,7 @@ class _RRectCommand extends _CanvasCommand {
   }
 }
 
+/// canvas.drawParagraph()
 class _ParagraphCommand extends _CanvasCommand {
   _ParagraphCommand(this.offset);
   final Offset offset;
