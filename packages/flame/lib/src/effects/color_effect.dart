@@ -11,6 +11,7 @@ class ColorEffect extends ComponentEffect<HasPaint> {
   final String? paintId;
 
   late Paint _original;
+  late Paint _end;
 
   late ColorTween _tween;
 
@@ -38,7 +39,8 @@ class ColorEffect extends ComponentEffect<HasPaint> {
     super.onLoad();
     setPeakTimeFromDuration(duration);
 
-    _original = affectedParent!.getPaint(paintId);
+    _original = affectedParent.getPaint(paintId);
+    _end = Paint()..color = (isAlternating ? _original.color : color);
 
     _tween = ColorTween(
       begin: _original.color,
@@ -48,20 +50,28 @@ class ColorEffect extends ComponentEffect<HasPaint> {
 
   @override
   void setComponentToEndState() {
-    affectedParent?.tint(color);
+    affectedParent.tint(_end.color);
   }
 
   @override
   void setComponentToOriginalState() {
-    affectedParent?.paint = _original;
+    affectedParent.paint = _original;
+  }
+
+  @override
+  void setEndToOriginalState() {
+    _end.color = _original.color;
   }
 
   @override
   void update(double dt) {
+    if (isPaused) {
+      return;
+    }
     super.update(dt);
     final color = _tween.lerp(curveProgress);
     if (color != null) {
-      affectedParent?.tint(color);
+      affectedParent.tint(color);
     }
   }
 }

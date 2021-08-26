@@ -55,11 +55,15 @@ class Component {
   /// BaseGame will remove it.
   bool shouldRemove = false;
 
-  /// This is set by the BaseGame to tell this component to render additional
-  /// debug information, like borders, coordinates, etc.
-  /// This is very helpful while debugging. Set your BaseGame debugMode to true.
-  /// You can also manually override this for certain components in order to
-  /// identify issues.
+  /// Returns whether this [Component] is in debug mode or not.
+  /// When a child is added to the [Component] it gets the same [debugMode] as
+  /// its parent has when it is prepared.
+  ///
+  /// Returns `false` by default. Override it, or set it to true, to use debug
+  /// mode.
+  /// You can use this value to enable debug behaviors for your game and many
+  /// components will
+  /// show extra information on the screen when debug mode is activated
   bool debugMode = false;
 
   /// How many decimal digits to print when displaying coordinates in the
@@ -98,12 +102,10 @@ class Component {
     children.forEach((c) => c.update(dt));
   }
 
-  @mustCallSuper
   void render(Canvas canvas) {
     preRender(canvas);
   }
 
-  @mustCallSuper
   void renderTree(Canvas canvas) {
     render(canvas);
     postRender(canvas);
@@ -297,10 +299,8 @@ class Component {
     component.parent = this;
     final parentGame = component.findParent<Game>();
     if (parentGame == null) {
-      print('$this could not prepare $component');
       component.isPrepared = false;
     } else {
-      print('$this could prepare $component!');
       if (parentGame is BaseGame) {
         parentGame.prepareComponent(component);
       }

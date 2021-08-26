@@ -8,7 +8,6 @@ import 'effects.dart';
 
 class SizeEffect extends SimplePositionComponentEffect {
   Vector2 size;
-  late Vector2 _startSize;
   late Vector2 _delta;
 
   /// Duration or speed needs to be defined
@@ -41,10 +40,10 @@ class SizeEffect extends SimplePositionComponentEffect {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    _startSize = affectedParent!.size.clone();
-    _delta = isRelative ? size : size - _startSize;
+    final startSize = originalSize!;
+    _delta = isRelative ? size : size - startSize;
     if (!isAlternating) {
-      endSize = _startSize + _delta;
+      endSize = startSize + _delta;
     }
     speed ??= _delta.length / duration!;
     duration ??= _delta.length / speed!;
@@ -53,7 +52,10 @@ class SizeEffect extends SimplePositionComponentEffect {
 
   @override
   void update(double dt) {
+    if (isPaused) {
+      return;
+    }
     super.update(dt);
-    affectedParent!.size.setFrom(_startSize + _delta * curveProgress);
+    affectedParent.size.setFrom(originalSize! + _delta * curveProgress);
   }
 }

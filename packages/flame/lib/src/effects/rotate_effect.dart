@@ -6,7 +6,6 @@ import 'effects.dart';
 
 class RotateEffect extends SimplePositionComponentEffect {
   double angle;
-  late double _startAngle;
   late double _delta;
 
   /// Duration or speed needs to be defined
@@ -39,10 +38,10 @@ class RotateEffect extends SimplePositionComponentEffect {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    _startAngle = affectedParent!.angle;
-    _delta = isRelative ? angle : angle - _startAngle;
+    final startAngle = originalAngle!;
+    _delta = isRelative ? angle : angle - startAngle;
     if (!isAlternating) {
-      endAngle = _startAngle + _delta;
+      endAngle = startAngle + _delta;
     }
     speed ??= _delta.abs() / duration!;
     duration ??= _delta.abs() / speed!;
@@ -51,7 +50,10 @@ class RotateEffect extends SimplePositionComponentEffect {
 
   @override
   void update(double dt) {
+    if (isPaused) {
+      return;
+    }
     super.update(dt);
-    affectedParent!.angle = _startAngle + _delta * curveProgress;
+    affectedParent.angle = originalAngle! + _delta * curveProgress;
   }
 }

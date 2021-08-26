@@ -47,10 +47,10 @@ class MyAsyncChild extends MyTap {
 
 class MyComposed extends PositionComponent with HasGameRef, Tappable {}
 
-class MySimpleComposed extends BaseComponent with HasGameRef, Tappable {}
+class MySimpleComposed extends Component with HasGameRef, Tappable {}
 
 // composed w/o HasGameRef
-class PlainComposed extends BaseComponent {}
+class PlainComposed extends Component {}
 
 Vector2 size = Vector2.all(300);
 
@@ -179,7 +179,7 @@ void main() {
       wrapper.debugMode = false;
       expect(child.debugMode, true);
     });
-    test('initially same debugMode as parent when BaseComponent', () {
+    test('initially same debugMode as parent when Component', () {
       final game = MyGame();
       game.onGameResize(Vector2.all(100));
       final child = MyTap();

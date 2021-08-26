@@ -12,17 +12,26 @@ import 'scale_effect.dart';
 import 'sequence_effect.dart';
 import 'size_effect.dart';
 
+const scaleInfo = '''
+The `ScaleEffect` scales up the canvas before drawing the components and its
+children.
+In this example you can tap the screen and the component will scale up or down,
+depending on its current state.
+''';
+
 void addEffectsStories(Dashbook dashbook) {
   dashbook.storiesOf('Effects')
     ..add(
       'Size Effect',
       (_) => GameWidget(game: SizeEffectGame()),
       codeLink: baseLink('effects/size_effect.dart'),
+      info: sizeInfo,
     )
     ..add(
       'Scale Effect',
       (_) => GameWidget(game: ScaleEffectGame()),
       codeLink: baseLink('effects/scale_effect.dart'),
+      info: scaleInfo,
     )
     ..add(
       'Move Effect',

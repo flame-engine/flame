@@ -86,7 +86,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
       await onLoad;
     }
     if (component.children.isNotEmpty) {
-      print('do we readd?');
       await component.children.reAddChildren();
     }
 

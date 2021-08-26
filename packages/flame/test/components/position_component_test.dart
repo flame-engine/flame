@@ -8,7 +8,7 @@ import 'package:flame/src/test_helpers/mock_canvas.dart';
 import 'package:flame/src/test_helpers/random_test.dart';
 import 'package:test/test.dart';
 
-class MyBaseComponent extends BaseComponent {}
+class MyComponent extends Component {}
 
 class MyHitboxComponent extends PositionComponent with Hitbox {}
 
@@ -530,9 +530,9 @@ void main() {
 
     test('deep nested', () {
       final c1 = PositionComponent()..position = Vector2(10, 20);
-      final c2 = MyBaseComponent();
+      final c2 = MyComponent();
       final c3 = PositionComponent()..position = Vector2(-1, -1);
-      final c4 = MyBaseComponent();
+      final c4 = MyComponent();
       final c5 = PositionComponent()..position = Vector2(5, 0);
       c1.add(c2);
       c2.add(c3);

@@ -16,6 +16,7 @@ class SequenceEffectGame extends BaseGame with TapDetector {
     greenSquare = SquareComponent()
       ..paint = green
       ..position.setValues(100, 100);
+    debugMode = true;
     add(greenSquare);
   }
 
@@ -24,14 +25,7 @@ class SequenceEffectGame extends BaseGame with TapDetector {
     final currentTap = info.eventPosition.game;
     greenSquare.clearEffects();
 
-    final move1 = MoveEffect(
-      path: [currentTap],
-      speed: 250.0,
-      curve: Curves.bounceInOut,
-      isAlternating: true,
-    );
-
-    final move2 = MoveEffect(
+    final move = MoveEffect(
       path: [
         currentTap + Vector2(0, 50),
         currentTap + Vector2(-50, -50),
@@ -41,7 +35,7 @@ class SequenceEffectGame extends BaseGame with TapDetector {
       curve: Curves.easeIn,
     );
 
-    final scale = SizeEffect(
+    final size = SizeEffect(
       size: currentTap,
       speed: 100.0,
       curve: Curves.easeInCubic,
@@ -53,14 +47,10 @@ class SequenceEffectGame extends BaseGame with TapDetector {
       curve: Curves.decelerate,
     );
 
-    final combination = CombinedEffect(
-      effects: [move2, rotate],
-      onComplete: () => print('combination complete'),
-    );
-
     final sequence = SequenceEffect(
-      effects: [move1, scale, combination],
+      effects: [size, rotate, move],
       isAlternating: true,
+      isInfinite: true,
     );
     sequence.onComplete = () => print('sequence complete');
     greenSquare.add(sequence);

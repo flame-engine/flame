@@ -24,7 +24,6 @@ class MoveEffect extends SimplePositionComponentEffect {
   List<Vector2> path;
   Vector2Percentage? _currentSubPath;
   List<Vector2Percentage>? _percentagePath;
-  late Vector2 _startPosition;
 
   /// Duration or speed needs to be defined
   MoveEffect({
@@ -57,12 +56,11 @@ class MoveEffect extends SimplePositionComponentEffect {
   Future<void> onLoad() async {
     super.onLoad();
     List<Vector2> _movePath;
-    _startPosition = affectedParent!.position.clone();
     // With relative here we mean that any vector in the list is relative
     // to the previous vector in the list, except the first one which is
     // relative to the start position of the component.
     if (isRelative) {
-      var lastPosition = _startPosition;
+      var lastPosition = originalPosition!;
       _movePath = [];
       for (final v in path) {
         final nextPosition = v + lastPosition;
@@ -72,17 +70,17 @@ class MoveEffect extends SimplePositionComponentEffect {
     } else {
       _movePath = path;
     }
-    endPosition = isAlternating ? _startPosition : _movePath.last;
+    endPosition = isAlternating ? originalPosition : _movePath.last;
 
     var pathLength = 0.0;
-    var lastPosition = _startPosition;
+    var lastPosition = originalPosition!;
     for (final v in _movePath) {
       pathLength += v.distanceTo(lastPosition);
       lastPosition = v;
     }
 
     _percentagePath = <Vector2Percentage>[];
-    lastPosition = _startPosition;
+    lastPosition = originalPosition!;
     for (final v in _movePath) {
       final lengthToPrevious = lastPosition.distanceTo(v);
       final lastEndAt =
@@ -108,8 +106,8 @@ class MoveEffect extends SimplePositionComponentEffect {
   }
 
   @override
-  void reset() {
-    super.reset();
+  void resetEffect() {
+    super.resetEffect();
     if (_percentagePath?.isNotEmpty ?? false) {
       _currentSubPath = _percentagePath!.first;
     }
@@ -117,6 +115,9 @@ class MoveEffect extends SimplePositionComponentEffect {
 
   @override
   void update(double dt) {
+    if (isPaused) {
+      return;
+    }
     super.update(dt);
     _currentSubPath ??= _percentagePath!.first;
     if (!curveDirection.isNegative && _currentSubPath!.endAt < curveProgress ||
@@ -127,7 +128,7 @@ class MoveEffect extends SimplePositionComponentEffect {
     final lastEndAt = _currentSubPath!.startAt;
     final localPercentage =
         (curveProgress - lastEndAt) / (_currentSubPath!.endAt - lastEndAt);
-    affectedParent!.position.setFrom(_currentSubPath!.previous +
+    affectedParent.position.setFrom(_currentSubPath!.previous +
         ((_currentSubPath!.v - _currentSubPath!.previous) * localPercentage));
   }
 }

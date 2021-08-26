@@ -8,7 +8,6 @@ import 'effects.dart';
 
 class ScaleEffect extends SimplePositionComponentEffect {
   Vector2 scale;
-  late Vector2 _startScale;
   late Vector2 _delta;
 
   /// Duration or speed needs to be defined
@@ -41,10 +40,10 @@ class ScaleEffect extends SimplePositionComponentEffect {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    _startScale = affectedParent!.scale.clone();
-    _delta = isRelative ? scale : scale - _startScale;
+    final startScale = originalScale!;
+    _delta = isRelative ? scale : scale - startScale;
     if (!isAlternating) {
-      endScale = _startScale + _delta;
+      endScale = startScale + _delta;
     }
     speed ??= _delta.length / duration!;
     duration ??= _delta.length / speed!;
@@ -53,7 +52,10 @@ class ScaleEffect extends SimplePositionComponentEffect {
 
   @override
   void update(double dt) {
+    if (isPaused) {
+      return;
+    }
     super.update(dt);
-    affectedParent!.scale.setFrom(_startScale + _delta * curveProgress);
+    affectedParent.scale.setFrom(originalScale! + _delta * curveProgress);
   }
 }

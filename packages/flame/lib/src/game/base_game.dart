@@ -26,9 +26,6 @@ class BaseGame extends Game {
     _cameraWrapper = CameraWrapper(Camera(), components);
   }
 
-  /// The list of components to be updated and rendered by the base game.
-  late final ComponentSet components;
-
   /// The camera translates the coordinate space after the viewport is applied.
   Camera get camera => _cameraWrapper.camera;
 
@@ -102,10 +99,6 @@ class BaseGame extends Game {
       );
     }
 
-    if (debugMode && c is Component) {
-      c.debugMode = true;
-    }
-
     // First time resize
     c.onGameResize(size);
   }
@@ -132,13 +125,12 @@ class BaseGame extends Game {
   @override
   @mustCallSuper
   void update(double dt) {
-    children.updateComponentList();
+    super.update(dt);
 
     if (this is HasCollidables) {
       (this as HasCollidables).handleCollidables();
     }
 
-    children.forEach((c) => c.update(dt));
     _cameraWrapper.update(dt);
   }
 
@@ -159,15 +151,6 @@ class BaseGame extends Game {
     super.onGameResize(canvasSize);
   }
 
-  /// Returns whether this [Game] is in debug mode or not.
-  ///
-  /// Returns `false` by default. Override it, or set it to true, to use debug
-  /// mode.
-  /// You can use this value to enable debug behaviors for your game and many
-  /// components will
-  /// show extra information on the screen when debug mode is activated
-  bool debugMode = false;
-
   /// Changes the priority of [component] and reorders the games component list.
   ///
   /// Returns true if changing the component's priority modified one of the
@@ -185,8 +168,8 @@ class BaseGame extends Game {
     }
     component.changePriorityWithoutResorting(priority);
     if (reorderRoot) {
-      if (component.parent != null && component.parent is Component) {
-        (component.parent! as Component).reorderChildren();
+      if (component.parent != null) {
+        component.parent!.reorderChildren();
       } else if (contains(component)) {
         children.rebalanceAll();
       }
@@ -207,8 +190,8 @@ class BaseGame extends Game {
         reorderRoot: false,
       );
       if (wasUpdated) {
-        if (component.parent != null && component.parent is Component) {
-          parents.add(component.parent! as Component);
+        if (component.parent != null) {
+          parents.add(component.parent!);
         } else {
           hasRootComponents |= contains(component);
         }

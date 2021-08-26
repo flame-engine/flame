@@ -4,99 +4,73 @@ import 'dart:ui';
 import '../../components.dart';
 import 'effects.dart';
 
-/// The [CombinedEffect] runs several effects in parallel on a component.
-///
-/// If an underlying effect has [isAlternating] set to true and the
-/// [CombinedEffect] also is set to [isAlternating] then it will run the
-/// full underlying effect, forward and reverse, on the forward iteration of the
-/// curve of the [CombinedEffect] and then it will run it again on the backward
-/// direction of the curve.
-class CombinedEffect extends PositionComponentEffect {
-  final double offset;
-  List<PositionComponentEffect> get effects {
-    return children.query<PositionComponentEffect>();
-  }
+/// The [CombinedEffect] is just a container for multiple effects, all settings
+/// are handled on each individual effect. [CombinedEffect] is not an effect
+/// itself.
+class CombinedEffect extends ComponentEffect with EffectsHelper {
+  /// A [CombinedEffect] is infinite if any of its children has [isInfinite] set
+  /// to true.
+  @override
+  bool get isInfinite => effects.any((effect) => effect.isInfinite);
+
+  /// A [CombinedEffect] can't alternate, but it can have alternating children.
+  @override
+  final bool isAlternating = false;
+
+  @override
+  final double preOffset = 0.0;
+
+  @override
+  final double postOffset = 0.0;
 
   CombinedEffect({
-    required List<PositionComponentEffect> effects,
-    this.offset = 0.0,
-    bool isInfinite = false,
-    bool isAlternating = false,
-    double? preOffset,
-    double? postOffset,
+    List<ComponentEffect> effects = const [],
     bool? removeOnFinish,
     VoidCallback? onComplete,
   }) : super(
-          isInfinite,
-          isAlternating,
+          false,
+          false,
           removeOnFinish: removeOnFinish,
-          modifiesPosition: effects.any((e) => e.modifiesPosition),
-          modifiesAngle: effects.any((e) => e.modifiesAngle),
-          modifiesScale: effects.any((e) => e.modifiesScale),
-          modifiesSize: effects.any((e) => e.modifiesSize),
-          preOffset: preOffset,
-          postOffset: postOffset,
           onComplete: onComplete,
         ) {
-    children.register<PositionComponentEffect>();
     effects.forEach(add);
   }
 
   @override
   Future<void> add(Component component) async {
     await super.add(component);
-    if (component is PositionComponentEffect && component.isPrepared) {
-      final effects = children.query<PositionComponentEffect>()..add(component);
+    if (component is ComponentEffect && component.isPrepared) {
+      final effect = component;
+      final effects = children.query<ComponentEffect>();
       final types = effects.map((e) => e.runtimeType);
       assert(
-        types.toSet().length == types.length,
+        !types.contains(effect.runtimeType),
         "All effect types have to be different so that they don't clash",
       );
-      modifiesPosition = modifiesPosition || component.modifiesPosition;
-      modifiesAngle = modifiesAngle || component.modifiesAngle;
-      modifiesScale = modifiesScale || component.modifiesScale;
-      modifiesSize = modifiesSize || component.modifiesSize;
-      final indexOffset = effects.indexOf(component) * offset;
-      component.preOffset += preOffset + indexOffset;
-      if (component.isPrepared) {
-        final iterationTime = component.iterationTime;
-        peakTime = max(iterationTime, peakTime);
-        print(
-          'peakTime is now $peakTime and iteration time ${this.iterationTime}',
-        );
-        if (!component.isAlternating) {
-          component.postOffset += peakTime - iterationTime;
-          print('Setting offset $component.postOffset');
-        }
-      }
+      peakTime = max(peakTime, effect.iterationTime);
     }
   }
 
   @override
   void update(double dt) {
-    super.update(dt);
-    if (isAlternating && isMax()) {
-      print('is alternating');
-      for (final effect in effects) {
-        if (!effect.isAlternating) {
-          effect.isAlternating = true;
-        } else if (!hasCompleted()) {
-          effect.reset();
-        }
-      }
+    if (isPaused) {
+      return;
     }
+    super.update(dt);
   }
 
-  /// No-op, since the child effects handle their own end state
   @override
-  void setComponentToEndState() {}
+  void setComponentToEndState() {
+    effects.forEach((effect) => effect.setComponentToEndState());
+  }
 
   @override
-  void reset() {
-    super.reset();
-    effects.forEach((effect) => effect.reset());
-    if (affectedParent != null) {
-      onLoad();
-    }
+  void setComponentToOriginalState() {
+    effects.forEach((effect) => effect.setComponentToOriginalState());
+  }
+
+  @override
+  void setEndToOriginalState() {
+    // No-op, since children handle this
   }
 }

@@ -11,7 +11,7 @@ export './rotate_effect.dart';
 export './sequence_effect.dart';
 export './size_effect.dart';
 
-abstract class ComponentEffect<T extends Component> extends BaseComponent {
+abstract class ComponentEffect<T extends Component> extends Component {
   T _affectedParent(Component? component) {
     if (component is T) {
       return component;
@@ -22,21 +22,36 @@ abstract class ComponentEffect<T extends Component> extends BaseComponent {
 
   /// If the effect has a parent further up in the tree that will be affected by
   /// this effect, that parent will be set here.
-  T? affectedParent;
+  late T affectedParent;
 
+  /// The callback that is called when the effect is completed.
   Function()? onComplete;
 
   bool _isPaused = false;
+
+  /// Whether the effect is paused or not.
   bool get isPaused => _isPaused;
+
+  /// Resume the effect from a paused state.
   void resume() => _isPaused = false;
+
+  /// Pause the effect.
   void pause() => _isPaused = true;
 
-  /// If the animation should first follow the initial curve and then follow the
-  /// curve backwards
-  bool isInfinite;
+  /// If the effect should first follow the initial curve and then follow the
+  /// curve backwards.
   bool isAlternating;
+
+  /// Whether the effect should continue to loop forever.
+  bool isInfinite;
+
+  /// Whether the effect should be removed from its parent once it has
+  /// completed.
+  bool removeOnFinish;
+
+  /// If the effect is relative to the current state of the component or not.
   final bool isRelative;
-  final bool removeOnFinish;
+
   final bool _initialIsInfinite;
   final bool _initialIsAlternating;
 
@@ -122,11 +137,15 @@ abstract class ComponentEffect<T extends Component> extends BaseComponent {
   Future<void> onLoad() async {
     super.onLoad();
     affectedParent = _affectedParent(parent);
+    parent?.children.register<ComponentEffect>();
   }
 
   @override
   @mustCallSuper
   void update(double dt) {
+    if (isPaused) {
+      return;
+    }
     super.update(dt);
     if (isAlternating) {
       curveDirection = isMax() ? -1 : (isMin() ? 1 : curveDirection);
@@ -143,13 +162,11 @@ abstract class ComponentEffect<T extends Component> extends BaseComponent {
       }
     } else {
       currentTime += (dt + driftTime) * curveDirection;
-      print(currentTime);
       percentage = (currentTime / peakTime).clamp(0.0, 1.0).toDouble();
       if (currentTime >= preOffset && currentTime <= peakTime - postOffset) {
         final effectPercentage =
             ((currentTime - preOffset) / (peakTime - preOffset - postOffset))
                 .clamp(0.0, 1.0);
-        print(effectPercentage);
         curveProgress = curve.transform(effectPercentage);
       }
       _updateDriftTime();
@@ -178,6 +195,7 @@ abstract class ComponentEffect<T extends Component> extends BaseComponent {
   /// Resets the effect and the component which the effect was added to.
   @mustCallSuper
   void reset() {
+    print('We do RESET $this');
     resetEffect();
     setComponentToOriginalState();
   }
@@ -220,8 +238,16 @@ abstract class ComponentEffect<T extends Component> extends BaseComponent {
     }
   }
 
+  /// Sets the affected component to the state that it should be in before the
+  /// effect is started.
   void setComponentToOriginalState();
+
+  /// Sets the affected component to the state that it should be in after the
+  /// effect is done.
   void setComponentToEndState();
+
+  /// This is used when a parent effect changes this effect to be alternating.
+  void setEndToOriginalState();
 
   void setPeakTimeFromDuration(double duration) {
     peakTime = duration / (isAlternating ? 2 : 1) + preOffset + postOffset;
@@ -276,7 +302,7 @@ abstract class PositionComponentEffect
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    final component = affectedParent!;
+    final component = affectedParent;
 
     originalPosition = component.position.clone();
     originalAngle = component.angle;
@@ -306,28 +332,28 @@ abstract class PositionComponentEffect
         position != null,
         '`position` must not be `null` for an effect which modifies `position`',
       );
-      affectedParent?.position.setFrom(position!);
+      affectedParent.position.setFrom(position!);
     }
     if (modifiesAngle) {
       assert(
         angle != null,
         '`angle` must not be `null` for an effect which modifies `angle`',
       );
-      affectedParent?.angle = angle!;
+      affectedParent.angle = angle!;
     }
     if (modifiesSize) {
       assert(
         size != null,
         '`size` must not be `null` for an effect which modifies `size`',
       );
-      affectedParent?.size.setFrom(size!);
+      affectedParent.size.setFrom(size!);
     }
     if (modifiesScale) {
       assert(
         scale != null,
         '`scale` must not be `null` for an effect which modifies `scale`',
       );
-      affectedParent?.scale.setFrom(scale!);
+      affectedParent.scale.setFrom(scale!);
     }
   }
 
@@ -343,6 +369,7 @@ abstract class PositionComponentEffect
 
   @override
   void setComponentToEndState() {
+    print('$this set to end state');
     _setComponentState(endPosition, endAngle, endSize, endScale);
   }
 }
@@ -384,20 +411,32 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
           modifiesScale: modifiesScale,
           onComplete: onComplete,
         );
+
+  @override
+  void setEndToOriginalState() {
+    if (modifiesPosition) {
+      endPosition = originalPosition;
+    }
+    if (modifiesAngle) {
+      endAngle = originalAngle;
+    }
+    if (modifiesSize) {
+      endSize = originalSize;
+    }
+    if (modifiesScale) {
+      endScale = originalScale;
+    }
+  }
 }
 
 mixin EffectsHelper on Component {
-  @override
-  Future<void> onLoad() async {
-    super.onLoad();
-    children.register<ComponentEffect>();
-  }
-
   void clearEffects() {
-    children.removeAll(effects());
+    children.removeAll(effects);
   }
 
-  List<ComponentEffect> effects() {
-    return children.query<ComponentEffect>();
+  List<ComponentEffect> get effects {
+    return children.isRegistered<ComponentEffect>()
+        ? children.query<ComponentEffect>()
+        : [];
   }
 }

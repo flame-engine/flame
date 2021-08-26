@@ -15,7 +15,7 @@ class Callback {
 void effectTest(
   WidgetTester tester,
   PositionComponent component,
-  PositionComponentEffect effect, {
+  ComponentEffect effect, {
   bool shouldComplete = true,
   double iterations = 1.0,
   double expectedAngle = 0.0,
@@ -71,7 +71,7 @@ void effectTest(
   } else {
     // To account for float number operations making effects not finish
     const epsilon = 0.001;
-    final percentage = effect.percentage!;
+    final percentage = effect.percentage;
     if (percentage < epsilon) {
       game.update(effect.currentTime);
     } else if (1.0 - percentage < epsilon) {

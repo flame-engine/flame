@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:test/test.dart';
 
-class RemoveComponent extends BaseComponent {
+class RemoveComponent extends Component {
   int removeCounter = 0;
 
   @override

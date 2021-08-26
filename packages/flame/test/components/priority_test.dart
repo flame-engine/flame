@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:test/test.dart';
 
-class PriorityComponent extends BaseComponent {
+class PriorityComponent extends Component {
   PriorityComponent(int priority) : super(priority: priority);
 }
 
