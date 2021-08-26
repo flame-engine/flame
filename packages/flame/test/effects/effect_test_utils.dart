@@ -100,13 +100,12 @@ void effectTest(
     );
   }
   expect(effect.hasCompleted(), shouldComplete, reason: 'Effect shouldFinish');
-  game.update(0.0);
+  game.update(0.0); // Since effects are removed before they are updated
   expect(
     callback.isCalled,
     shouldComplete,
     reason: 'Callback was treated wrong',
   );
-  game.update(0.0); // Since effects are removed before they are updated
   expect(component.children.query<ComponentEffect>().isEmpty, shouldComplete);
 }
 

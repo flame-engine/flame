@@ -70,9 +70,7 @@ void main() {
         game.update(timeStep);
         timePassed += timeStep;
       }
-      game.update(1000);
-      game.update(timeStep);
-      game.update(timeStep);
+      game.update(0);
       expect(effect.hasCompleted(), true);
       expect(e.onCompleteCalled, true);
     },

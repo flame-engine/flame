@@ -171,9 +171,6 @@ class Component {
   /// Called right before the component is removed from the game
   @mustCallSuper
   void onRemove() {
-    if (parent != this) {
-      return;
-    }
     _isMounted = false;
     children.forEach((child) {
       child.onRemove();
