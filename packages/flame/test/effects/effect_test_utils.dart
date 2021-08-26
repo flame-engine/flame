@@ -32,12 +32,12 @@ void effectTest(
   effect.onComplete = callback.call;
   final game = BaseGame();
   game.onGameResize(Vector2.all(200));
-  game.add(component);
-  component.add(effect);
-  final duration = effect.iterationTime;
   await tester.pumpWidget(GameWidget(
     game: game,
   ));
+  await game.add(component);
+  await component.add(effect);
+  final duration = effect.iterationTime;
   var timeLeft = iterations * duration;
   while (timeLeft > 0) {
     var stepDelta = 50.0 + random.nextInt(50);

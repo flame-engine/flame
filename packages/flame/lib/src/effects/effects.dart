@@ -102,12 +102,6 @@ abstract class ComponentEffect<T extends Component> extends Component {
   /// the end of the effect and then back again if it [isAlternating].
   double get totalOffset => preOffset + postOffset * (isAlternating ? 2 : 1);
 
-  /// The [preOffset] that the component was initialized with.
-  final double originalPreOffset;
-
-  /// The [postOffset] that the component was initialized with.
-  final double originalPostOffset;
-
   /// If this is set to true the effect will not be set to its original state
   /// once it is done.
   bool skipEffectReset = false;
@@ -128,8 +122,6 @@ abstract class ComponentEffect<T extends Component> extends Component {
         isAlternating = _initialIsAlternating,
         preOffset = preOffset ?? 0.0,
         postOffset = postOffset ?? 0.0,
-        originalPreOffset = preOffset ?? 0.0,
-        originalPostOffset = postOffset ?? 0.0,
         removeOnFinish = removeOnFinish ?? true,
         curve = curve ?? Curves.linear;
 
@@ -195,7 +187,6 @@ abstract class ComponentEffect<T extends Component> extends Component {
   /// Resets the effect and the component which the effect was added to.
   @mustCallSuper
   void reset() {
-    print('We do RESET $this');
     resetEffect();
     setComponentToOriginalState();
   }
@@ -209,8 +200,6 @@ abstract class ComponentEffect<T extends Component> extends Component {
     curveDirection = 1;
     isInfinite = _initialIsInfinite;
     isAlternating = _initialIsAlternating;
-    preOffset = originalPreOffset;
-    postOffset = originalPostOffset;
   }
 
   // When the time overshoots the max and min it needs to add that time to
@@ -232,6 +221,7 @@ abstract class ComponentEffect<T extends Component> extends Component {
   @override
   void onRemove() {
     super.onRemove();
+    print('$this Should call onComplete');
     onComplete?.call();
     if (!skipEffectReset) {
       resetEffect();

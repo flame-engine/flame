@@ -7,22 +7,20 @@ import 'package:flutter_test/flutter_test.dart';
 
 class MyComponent extends PositionComponent with HasPaint {}
 
-class MyGame extends BaseGame {}
-
 void main() {
   group('Paint Effects', () {
     group('OpacityEffect', () {
       test(
         'Sets the correct opacity on the paint',
-        () {
+        () async {
           final component = MyComponent();
-          final game = MyGame();
+          final game = BaseGame();
 
           game.onGameResize(Vector2.all(100));
           game.add(component);
           game.update(0); // Making sure the component was added
 
-          component.add(
+          await component.add(
             OpacityEffect(
               opacity: 0,
               duration: 1,
@@ -39,15 +37,15 @@ void main() {
     group('ColorEffect', () {
       test(
         'Sets the correct color filter on the paint',
-        () {
+        () async {
           final component = MyComponent();
-          final game = MyGame();
+          final game = BaseGame();
 
           game.onGameResize(Vector2.all(100));
           game.add(component);
           game.update(0); // Making sure the component was added
 
-          component.add(
+          await component.add(
             ColorEffect(
               color: const Color(0xFF000000),
               duration: 1,
