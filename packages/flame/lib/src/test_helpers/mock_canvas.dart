@@ -248,26 +248,35 @@ abstract class _CanvasCommand {
     return a.toString();
   }
 
-  List<double> _rectAsList(Rect rect) =>
-      [rect.left, rect.top, rect.right, rect.bottom];
+  List<double> _rectAsList(Rect rect) {
+    return [rect.left, rect.top, rect.right, rect.bottom];
+  }
 
-  List<double> _rrectAsList(RRect rect) => [
-        rect.left,
-        rect.top,
-        rect.right,
-        rect.bottom,
-        rect.tlRadiusX,
-        rect.tlRadiusY,
-        rect.trRadiusX,
-        rect.trRadiusY,
-        rect.blRadiusX,
-        rect.blRadiusY,
-        rect.brRadiusX,
-        rect.brRadiusY,
-      ];
+  List<double> _rrectAsList(RRect rect) {
+    return [
+      rect.left,
+      rect.top,
+      rect.right,
+      rect.bottom,
+      rect.tlRadiusX,
+      rect.tlRadiusY,
+      rect.trRadiusX,
+      rect.trRadiusY,
+      rect.blRadiusX,
+      rect.blRadiusY,
+      rect.brRadiusX,
+      rect.brRadiusY,
+    ];
+  }
 
-  List _paintAsList(Paint paint) =>
-      <dynamic>[paint.color, paint.blendMode, paint.style, paint.strokeWidth];
+  List _paintAsList(Paint paint) {
+    return <dynamic>[
+      paint.color,
+      paint.blendMode,
+      paint.style,
+      paint.strokeWidth,
+    ];
+  }
 }
 
 class _TransformCanvasCommand extends _CanvasCommand {
@@ -301,10 +310,11 @@ class _ClipRectCommand extends _CanvasCommand {
   final bool doAntiAlias;
 
   @override
-  bool equals(_ClipRectCommand other) =>
-      eq(clipRect, other.clipRect) &&
-      clipOp == other.clipOp &&
-      doAntiAlias == other.doAntiAlias;
+  bool equals(_ClipRectCommand other) {
+    return eq(clipRect, other.clipRect) &&
+        clipOp == other.clipOp &&
+        doAntiAlias == other.doAntiAlias;
+  }
 
   @override
   String toString() {
@@ -320,8 +330,9 @@ class _LineCommand extends _CanvasCommand {
   final Paint? paint;
 
   @override
-  bool equals(_LineCommand other) =>
-      eq(p1, other.p1) && eq(p2, other.p2) && eq(paint, other.paint);
+  bool equals(_LineCommand other) {
+    return eq(p1, other.p1) && eq(p2, other.p2) && eq(paint, other.paint);
+  }
 
   @override
   String toString() {
@@ -336,8 +347,9 @@ class _RectCommand extends _CanvasCommand {
   final Paint? paint;
 
   @override
-  bool equals(_RectCommand other) =>
-      eq(rect, other.rect) && eq(paint, other.paint);
+  bool equals(_RectCommand other) {
+    return eq(rect, other.rect) && eq(paint, other.paint);
+  }
 
   @override
   String toString() {
@@ -352,8 +364,9 @@ class _RRectCommand extends _CanvasCommand {
   final Paint? paint;
 
   @override
-  bool equals(_RRectCommand other) =>
-      eq(rrect, other.rrect) && eq(paint, other.paint);
+  bool equals(_RRectCommand other) {
+    return eq(rrect, other.rrect) && eq(paint, other.paint);
+  }
 
   @override
   String toString() {
