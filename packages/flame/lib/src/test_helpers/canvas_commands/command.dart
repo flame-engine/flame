@@ -52,8 +52,13 @@ abstract class CanvasCommand {
   /// Helper function to generate string representations of various
   /// components of a command.
   String repr(dynamic a) {
+    if (a is num) {
+      // A more compact stringification for a floating-point [a]: it avoids
+      // printing ".0" at the end of round floating numbers.
+      return (a == a.toInt()) ? a.toInt().toString() : a.toString();
+    }
     if (a is Offset) {
-      return 'Offset(${a.dx}, ${a.dy})';
+      return 'Offset(${repr(a.dx)}, ${repr(a.dy)})';
     }
     if (a is List) {
       return a.map(repr).join(', ');
