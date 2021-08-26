@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:test/fake.dart';
@@ -50,6 +51,14 @@ class MockCanvas extends Fake implements Canvas, Matcher {
   final List<CanvasCommand> _commands;
   int _saveCount;
 
+  /// The absolute tolerance used when comparing numeric quantities for
+  /// equality. Two numeric variables `x` and `y` are considered equal if they
+  /// are within the distance [tolerance] from each other.
+  ///
+  /// When comparing two [MockCanvas] objects, the largest of their respective
+  /// [tolerance]s will be used.
+  double tolerance = 1e-10;
+
   //#region Matcher API
 
   @override
@@ -65,6 +74,7 @@ class MockCanvas extends Fake implements Canvas, Matcher {
         matchState,
       );
     }
+    final useTolerance = max(tolerance, other.tolerance);
     for (var i = 0; i < n1; i++) {
       final cmd1 = _commands[i];
       final cmd2 = other._commands[i];
@@ -76,6 +86,7 @@ class MockCanvas extends Fake implements Canvas, Matcher {
           matchState,
         );
       }
+      cmd1.tolerance = useTolerance;
       if (!cmd1.equals(cmd2)) {
         return _fail(
           'Mismatched canvas commands at index $i: the actual '
