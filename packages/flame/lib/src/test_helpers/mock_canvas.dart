@@ -56,7 +56,7 @@ class MockCanvas extends Fake implements Canvas, Matcher {
   /// are within the distance [tolerance] from each other.
   ///
   /// When comparing two [MockCanvas] objects, the largest of their respective
-  /// [tolerance]s will be used.
+  /// [tolerance]s is used.
   double tolerance = 1e-10;
 
   //#region Matcher API
