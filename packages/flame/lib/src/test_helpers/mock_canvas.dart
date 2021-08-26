@@ -1,8 +1,14 @@
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:test/fake.dart';
-import 'package:vector_math/vector_math_64.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'canvas_commands/cliprect_command.dart';
+import 'canvas_commands/command.dart';
+import 'canvas_commands/line_command.dart';
+import 'canvas_commands/paragraph_command.dart';
+import 'canvas_commands/rect_command.dart';
+import 'canvas_commands/rrect_command.dart';
+import 'canvas_commands/transform_command.dart';
 
 /// [MockCanvas] is a utility class for writing tests. It supports the same API
 /// as the regular [Canvas] class from dart:ui (in theory; any missing commands
@@ -41,7 +47,7 @@ class MockCanvas extends Fake implements Canvas, Matcher {
       : _commands = [],
         _saveCount = 0;
 
-  final List<_CanvasCommand> _commands;
+  final List<CanvasCommand> _commands;
   int _saveCount;
 
   //#region Matcher API
@@ -126,27 +132,27 @@ class MockCanvas extends Fake implements Canvas, Matcher {
   @override
   void clipRect(Rect rect,
       {ClipOp clipOp = ClipOp.intersect, bool doAntiAlias = true}) {
-    _commands.add(_ClipRectCommand(rect, clipOp, doAntiAlias));
+    _commands.add(ClipRectCommand(rect, clipOp, doAntiAlias));
   }
 
   @override
   void drawRect(Rect rect, [Paint? paint]) {
-    _commands.add(_RectCommand(rect, paint));
+    _commands.add(RectCommand(rect, paint));
   }
 
   @override
   void drawRRect(RRect rrect, [Paint? paint]) {
-    _commands.add(_RRectCommand(rrect, paint));
+    _commands.add(RRectCommand(rrect, paint));
   }
 
   @override
   void drawLine(Offset p1, Offset p2, [Paint? paint]) {
-    _commands.add(_LineCommand(p1, p2, paint));
+    _commands.add(LineCommand(p1, p2, paint));
   }
 
   @override
   void drawParagraph(Paragraph? paragraph, Offset offset) {
-    _commands.add(_ParagraphCommand(offset));
+    _commands.add(ParagraphCommand(offset));
   }
 
   @override
@@ -162,11 +168,11 @@ class MockCanvas extends Fake implements Canvas, Matcher {
 
   //#region Private helpers
 
-  _TransformCanvasCommand get _lastTransform {
-    if (_commands.isNotEmpty && _commands.last is _TransformCanvasCommand) {
-      return _commands.last as _TransformCanvasCommand;
+  TransformCommand get _lastTransform {
+    if (_commands.isNotEmpty && _commands.last is TransformCommand) {
+      return _commands.last as TransformCommand;
     }
-    final transform2d = _TransformCanvasCommand();
+    final transform2d = TransformCommand();
     _commands.add(transform2d);
     return transform2d;
   }
@@ -177,213 +183,4 @@ class MockCanvas extends Fake implements Canvas, Matcher {
   }
 
   //#endregion
-}
-
-/// This class encapsulates a single command that was issued to a [MockCanvas].
-/// Most methods of [MockCanvas] will use a dedicated class derived from
-/// [_CanvasCommand] to store all the arguments and then match them against
-/// the expected values.
-///
-/// Each subclass is expected to implement two methods:
-///   - `equals()`, which compares the current object against another instance
-///     of the same class; and
-///   - `toString()`, which is used when printing error messages in case of a
-///     mismatch.
-///
-/// Use helper function `eq()` to implement the first method, and `repr()` to
-/// implement the second.
-abstract class _CanvasCommand {
-  double tolerance = 1e-10;
-
-  /// Return true if this command is equal to [other], up to the
-  /// given absolute [tolerance]. The argument [other] is guaranteed
-  /// to have the same type as the current command.
-  bool equals(covariant _CanvasCommand other);
-
-  /// Helper function to check the equality of any two objects.
-  bool eq(dynamic a, dynamic b) {
-    if (a == null || b == null) {
-      return true;
-    }
-    if (a is num && b is num) {
-      return (a - b).abs() < tolerance;
-    }
-    if (a is Offset && b is Offset) {
-      return eq(a.dx, b.dx) && eq(a.dy, b.dy);
-    }
-    if (a is List && b is List) {
-      return a.length == b.length &&
-          Iterable<int>.generate(a.length).every((i) => eq(a[i], b[i]));
-    }
-    if (a is Rect && b is Rect) {
-      return eq(_rectAsList(a), _rectAsList(b));
-    }
-    if (a is RRect && b is RRect) {
-      return eq(_rrectAsList(a), _rrectAsList(b));
-    }
-    if (a is Paint && b is Paint) {
-      return eq(_paintAsList(a), _paintAsList(b));
-    }
-    return a == b;
-  }
-
-  /// Helper function to generate string representations of various
-  /// components of a command.
-  String repr(dynamic a) {
-    if (a is Offset) {
-      return 'Offset(${a.dx}, ${a.dy})';
-    }
-    if (a is List) {
-      return a.map(repr).join(', ');
-    }
-    if (a is Rect) {
-      return 'Rect(${repr(_rectAsList(a))})';
-    }
-    if (a is RRect) {
-      return 'RRect(${repr(_rrectAsList(a))})';
-    }
-    if (a is Paint) {
-      return 'Paint(${repr(_paintAsList(a))})';
-    }
-    return a.toString();
-  }
-
-  List<double> _rectAsList(Rect rect) {
-    return [rect.left, rect.top, rect.right, rect.bottom];
-  }
-
-  List<double> _rrectAsList(RRect rect) {
-    return [
-      rect.left,
-      rect.top,
-      rect.right,
-      rect.bottom,
-      rect.tlRadiusX,
-      rect.tlRadiusY,
-      rect.trRadiusX,
-      rect.trRadiusY,
-      rect.blRadiusX,
-      rect.blRadiusY,
-      rect.brRadiusX,
-      rect.brRadiusY,
-    ];
-  }
-
-  List _paintAsList(Paint paint) {
-    return <dynamic>[
-      paint.color,
-      paint.blendMode,
-      paint.style,
-      paint.strokeWidth,
-    ];
-  }
-}
-
-class _TransformCanvasCommand extends _CanvasCommand {
-  _TransformCanvasCommand() : _transform = Matrix4.identity();
-
-  final Matrix4 _transform;
-
-  void transform(Float64List matrix) =>
-      _transform.multiply(Matrix4.fromFloat64List(matrix));
-  void translate(double dx, double dy) => _transform.translate(dx, dy);
-  void rotate(double angle) => _transform.rotateZ(angle);
-  void scale(double sx, double sy) => _transform.scale(sx, sy, 1);
-
-  @override
-  bool equals(_TransformCanvasCommand other) =>
-      eq(_transform.storage, other._transform.storage);
-
-  @override
-  String toString() {
-    final content = _transform.storage.map((e) => e.toString()).join(', ');
-    return 'transform($content)';
-  }
-}
-
-/// canvas.clipRect()
-class _ClipRectCommand extends _CanvasCommand {
-  _ClipRectCommand(this.clipRect, this.clipOp, this.doAntiAlias);
-
-  final Rect clipRect;
-  final ClipOp clipOp;
-  final bool doAntiAlias;
-
-  @override
-  bool equals(_ClipRectCommand other) {
-    return eq(clipRect, other.clipRect) &&
-        clipOp == other.clipOp &&
-        doAntiAlias == other.doAntiAlias;
-  }
-
-  @override
-  String toString() {
-    return 'clipRect(${repr(clipRect)}, clipOp=$clipOp, doAntiAlias=$doAntiAlias)';
-  }
-}
-
-/// canvas.drawLine()
-class _LineCommand extends _CanvasCommand {
-  _LineCommand(this.p1, this.p2, this.paint);
-  final Offset p1;
-  final Offset p2;
-  final Paint? paint;
-
-  @override
-  bool equals(_LineCommand other) {
-    return eq(p1, other.p1) && eq(p2, other.p2) && eq(paint, other.paint);
-  }
-
-  @override
-  String toString() {
-    return 'drawLine(${repr(p1)}, ${repr(p2)}, ${repr(paint)})';
-  }
-}
-
-/// canvas.drawRect()
-class _RectCommand extends _CanvasCommand {
-  _RectCommand(this.rect, this.paint);
-  final Rect rect;
-  final Paint? paint;
-
-  @override
-  bool equals(_RectCommand other) {
-    return eq(rect, other.rect) && eq(paint, other.paint);
-  }
-
-  @override
-  String toString() {
-    return 'drawRect(${repr(rect)}, ${repr(paint)})';
-  }
-}
-
-/// canvas.drawRRect()
-class _RRectCommand extends _CanvasCommand {
-  _RRectCommand(this.rrect, this.paint);
-  final RRect rrect;
-  final Paint? paint;
-
-  @override
-  bool equals(_RRectCommand other) {
-    return eq(rrect, other.rrect) && eq(paint, other.paint);
-  }
-
-  @override
-  String toString() {
-    return 'drawRRect(${repr(rrect)}, ${repr(paint)})';
-  }
-}
-
-/// canvas.drawParagraph()
-class _ParagraphCommand extends _CanvasCommand {
-  _ParagraphCommand(this.offset);
-  final Offset offset;
-
-  @override
-  bool equals(_ParagraphCommand other) => eq(offset, other.offset);
-
-  @override
-  String toString() {
-    return 'drawParagraph(${repr(offset)})';
-  }
 }
