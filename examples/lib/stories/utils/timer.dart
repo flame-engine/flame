@@ -3,7 +3,7 @@ import 'package:flame/input.dart';
 import 'package:flame/timer.dart';
 import 'package:flutter/material.dart';
 
-class TimerGame extends Game with TapDetector {
+class TimerGame extends BaseGame with TapDetector {
   final TextPaint textConfig = TextPaint(
     config: const TextPaintConfig(
       color: Color(0xFFFFFFFF),
@@ -32,12 +32,14 @@ class TimerGame extends Game with TapDetector {
 
   @override
   void update(double dt) {
+    super.update(dt);
     countdown.update(dt);
     interval.update(dt);
   }
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     textConfig.render(
       canvas,
       'Countdown: ${countdown.current}',

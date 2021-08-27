@@ -44,7 +44,7 @@ class BackgroundLayer extends PreRenderedLayer {
   }
 }
 
-class LayerGame extends Game {
+class LayerGame extends BaseGame {
   late Layer gameLayer;
   late Layer backgroundLayer;
 
@@ -59,10 +59,8 @@ class LayerGame extends Game {
   }
 
   @override
-  void update(double dt) {}
-
-  @override
   void render(Canvas canvas) {
+    super.render(canvas);
     gameLayer.render(canvas);
     backgroundLayer.render(canvas);
   }

@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-class NineTileBoxGame extends Game {
+class NineTileBoxGame extends BaseGame {
   late NineTileBox nineTileBox;
 
   @override
@@ -13,12 +13,10 @@ class NineTileBoxGame extends Game {
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     const length = 300.0;
     final boxSize = Vector2.all(length);
     final position = (size - boxSize) / 2;
     nineTileBox.draw(canvas, position, boxSize);
   }
-
-  @override
-  void update(double t) {}
 }
