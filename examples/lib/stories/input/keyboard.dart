@@ -23,6 +23,7 @@ class KeyboardGame extends BaseGame with KeyboardEvents {
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     canvas.drawRect(rect, white);
   }
 

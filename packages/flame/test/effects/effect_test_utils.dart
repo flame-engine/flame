@@ -39,7 +39,12 @@ void effectTest(
   await game.add(component);
   await component.add(effect);
   final duration = effect.iterationTime;
-  var timeLeft = iterations * duration;
+  // Since the effects will flip over to 0 again when they reach their peak and
+  // they are infinite and not alternating, we don't want to go all the way to
+  // the peak.
+  final lessFlipOvertime =
+      effect.isInfinite && !effect.isAlternating ? 0.00001 : 0.0;
+  var timeLeft = (iterations - lessFlipOvertime) * duration;
   while (timeLeft > 0) {
     var stepDelta = 50.0 + random.nextInt(50);
     stepDelta /= 1000;
@@ -47,7 +52,7 @@ void effectTest(
     game.update(stepDelta);
     timeLeft -= stepDelta;
   }
-  game.update(0.0); // Since effects are removed before they are updated
+  game.update(0.0);
 
   if (!shouldComplete) {
     expectVector2(
