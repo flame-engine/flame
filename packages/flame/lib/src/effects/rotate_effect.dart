@@ -54,6 +54,9 @@ class RotateEffect extends SimplePositionComponentEffect {
       return;
     }
     super.update(dt);
+    if (hasCompleted()) {
+      return;
+    }
     affectedParent.angle = originalAngle! + _delta * curveProgress;
   }
 }

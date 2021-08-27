@@ -69,6 +69,9 @@ class ColorEffect extends ComponentEffect<HasPaint> {
       return;
     }
     super.update(dt);
+    if (hasCompleted()) {
+      return;
+    }
     final color = _tween.lerp(curveProgress);
     if (color != null) {
       affectedParent.tint(color);

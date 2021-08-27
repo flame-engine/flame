@@ -16,6 +16,7 @@ class KeyboardGame extends Game with KeyboardEvents {
 
   @override
   void update(double dt) {
+    super.update(dt);
     final displacement = velocity * (speed * dt);
     rect = rect.translate(displacement.x, displacement.y);
   }

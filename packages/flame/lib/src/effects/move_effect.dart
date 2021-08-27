@@ -119,6 +119,9 @@ class MoveEffect extends SimplePositionComponentEffect {
       return;
     }
     super.update(dt);
+    if (hasCompleted()) {
+      return;
+    }
     _currentSubPath ??= _percentagePath!.first;
     if (!curveDirection.isNegative && _currentSubPath!.endAt < curveProgress ||
         curveDirection.isNegative && _currentSubPath!.startAt > curveProgress) {

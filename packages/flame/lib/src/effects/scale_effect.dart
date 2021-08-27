@@ -56,6 +56,9 @@ class ScaleEffect extends SimplePositionComponentEffect {
       return;
     }
     super.update(dt);
+    if (hasCompleted()) {
+      return;
+    }
     affectedParent.scale.setFrom(originalScale! + _delta * curveProgress);
   }
 }

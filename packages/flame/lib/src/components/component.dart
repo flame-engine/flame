@@ -137,7 +137,7 @@ class Component {
     return isHud ? info.eventPosition.widget : info.eventPosition.game;
   }
 
-  /// Remove the component from the game it is added to in the next tick
+  /// Remove the component from its parent in the next tick.
   void removeFromParent() => shouldRemove = true;
 
   /// Changes the current parent for another parent and prepares the tree under
@@ -149,7 +149,7 @@ class Component {
 
   /// It receives the new game size.
   /// Executed right after the component is attached to a game and right before
-  /// [onMount] is called
+  /// [onMount] is called.
   @mustCallSuper
   void onGameResize(Vector2 gameSize) {
     children.forEach((child) => child.onGameResize(gameSize));
@@ -302,7 +302,7 @@ class Component {
         parentGame.prepareComponent(component);
       }
 
-      component.debugMode = debugMode;
+      component.debugMode |= debugMode;
       component.isPrepared = true;
     }
   }

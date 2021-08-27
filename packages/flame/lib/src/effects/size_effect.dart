@@ -56,6 +56,9 @@ class SizeEffect extends SimplePositionComponentEffect {
       return;
     }
     super.update(dt);
+    if (hasCompleted()) {
+      return;
+    }
     affectedParent.size.setFrom(originalSize! + _delta * curveProgress);
   }
 }

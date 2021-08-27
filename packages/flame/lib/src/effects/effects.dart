@@ -149,7 +149,10 @@ abstract class ComponentEffect<T extends Component> extends Component {
     }
     if (hasCompleted()) {
       setComponentToEndState();
+      print('$this Should call onComplete');
+      onComplete?.call();
       if (removeOnFinish) {
+        print('set it to be removed now when it has completed');
         removeFromParent();
       }
     } else {
@@ -221,8 +224,6 @@ abstract class ComponentEffect<T extends Component> extends Component {
   @override
   void onRemove() {
     super.onRemove();
-    print('$this Should call onComplete');
-    onComplete?.call();
     if (!skipEffectReset) {
       resetEffect();
     }
@@ -322,7 +323,9 @@ abstract class PositionComponentEffect
         position != null,
         '`position` must not be `null` for an effect which modifies `position`',
       );
+      print('sets position $position');
       affectedParent.position.setFrom(position!);
+      print('position is ${affectedParent.position}');
     }
     if (modifiesAngle) {
       assert(

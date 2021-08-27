@@ -7,9 +7,10 @@ import 'package:flame/test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class Callback {
-  bool isCalled = false;
+  int calledNumber = 0;
+  bool get isCalledOnce => calledNumber == 1;
 
-  void call() => isCalled = true;
+  void call() => calledNumber++;
 }
 
 void effectTest(
@@ -46,6 +47,7 @@ void effectTest(
     game.update(stepDelta);
     timeLeft -= stepDelta;
   }
+  game.update(0.0); // Since effects are removed before they are updated
 
   if (!shouldComplete) {
     expectVector2(
@@ -73,11 +75,14 @@ void effectTest(
     const epsilon = 0.001;
     final percentage = effect.percentage;
     if (percentage < epsilon) {
+      print('hit percentage < epsilon');
       game.update(effect.currentTime);
     } else if (1.0 - percentage < epsilon) {
+      print('hit 1.0 - percentage < epsilon');
       game.update(effect.peakTime - effect.currentTime);
     }
 
+    print('$expectedPosition ${component.position}');
     expectVector2(
       component.position,
       expectedPosition,
@@ -99,14 +104,22 @@ void effectTest(
       reason: 'Scale is not exactly correct',
     );
   }
+  print('${effect.percentage} ${component.position}');
+  print(expectedPosition);
+  print('Should remove: ${effect.shouldRemove}');
   expect(effect.hasCompleted(), shouldComplete, reason: 'Effect shouldFinish');
-  game.update(0.0); // Since effects are removed before they are updated
+  game.update(0); // Children are removed before update logic
   expect(
-    callback.isCalled,
-    shouldComplete,
+    callback.calledNumber,
+    shouldComplete ? 1 : 0,
     reason: 'Callback was treated wrong',
   );
-  expect(component.children.query<ComponentEffect>().isEmpty, shouldComplete);
+  print('Should remove2: ${effect.shouldRemove}');
+  expect(
+    component.children.query<ComponentEffect>().every((e) => e.shouldRemove),
+    shouldComplete,
+    reason: 'Component had wrong number of children',
+  );
 }
 
 class TestComponent extends PositionComponent {

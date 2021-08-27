@@ -99,6 +99,9 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
       return;
     }
     super.update(dt);
+    if (hasCompleted()) {
+      return;
+    }
     affectedParent.setOpacity(
       _original.opacity - _difference * curveProgress,
       paintId: paintId,
