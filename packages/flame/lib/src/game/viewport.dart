@@ -169,7 +169,7 @@ class FixedResolutionViewport extends Viewport {
 
     _transform.setIdentity();
     _transform.translate(_resizeOffset.x, _resizeOffset.y);
-    _transform.scale(_scale);
+    _transform.scale(_scale, _scale, 1);
   }
 
   @override
