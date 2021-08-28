@@ -12,9 +12,9 @@ For other input documents, see also:
 The keyboard API on flame relies on the 
 [Flutter's Focus widget](https://api.flutter.dev/flutter/widgets/Focus-class.html).
 
-To customize focus behavior see [Controlling focus](#controlling-focus)
+To customize focus behavior, see [Controlling focus](#controlling-focus).
 
-There is two ways a game can be sensitive to key strokes, ina game level and in a component level.
+There are two ways a game can be sensitive to key strokes; at the game level and at a component level.
 For each we have a mixin that can me added to  `Game`s and `BaseComponent`s, respectively. 
 
 ### Receive keyboard events in a game level
@@ -28,7 +28,7 @@ that triggered the callback in the first place. The second is a set of the curre
 
 The return value should be a [`KeyEventResult`](https://api.flutter.dev/flutter/widgets/KeyEventResult-class.html). 
 
-`KeyEventResult.handled` will tell the framework that he key stroke was resolved inside of flame and skip any other keyboard handler widget apart of `GameWidget`.
+`KeyEventResult.handled` will tell the framework that he key stroke was resolved inside of Flame and skip any other keyboard handler widgets apart of `GameWidget`.
 
 `KeyEventResult.ignored` will tell the framework to keep testing this event in any other keyboard handler widget apart of `GameWidget`. If the event is not resolved by any handler, the framework will trigger `SystemSoundType.alert`.
 
@@ -72,11 +72,11 @@ subclass.
 KeyboardHandlers must only be added to games that are mixed with `HasKeyboardHandlerComponents`.
 
 > ⚠️ Attention: If `HasKeyboardHandlerComponents` is used, you must remove `KeyboardEvents` 
-> from the game mixing list to avoid conflicts.
+> from the game mixin list to avoid conflicts.
 
 After applying `HasKeyboardHandlerComponents`, it will be possible to override an `onKeyEvent` method.
 
-This method receives two parameters, first the [`RawKeyEvent`](https://api.flutter.dev/flutter/services/RawKeyEvent-class.html) 
+This method receives two parameters. First the [`RawKeyEvent`](https://api.flutter.dev/flutter/services/RawKeyEvent-class.html) 
 that triggered the callback in the first place. The second is a set of the currently pressed [`LogicalKeyboardKey`](https://api.flutter.dev/flutter/widgets/KeyEventResult-class.html).
 
 The returned value should be `true` to allow the continuous propagation of the key event among other components. 
@@ -89,7 +89,7 @@ In the widget level, it is possible to use the [`FocusNode`](https://api.flutter
 
 `GameWidget` has an optional `focusNode` parameter that allow its focus to be controlled externally.
 
-By default `GameWidget` has its `autofocus` set to true, which is, it will be focused once it is mounted. to override that behavior, set `autofocus` to false.
+By default `GameWidget` has its `autofocus` set to true, which is, it will be focused once it is mounted. To override that behavior, set `autofocus` to false.
 
 ```
 You can also check a more complete example

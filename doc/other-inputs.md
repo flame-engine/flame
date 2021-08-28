@@ -10,7 +10,7 @@ For other input documents, see also:
 ## Joystick
 
 Flame provides a component capable of creating a virtual joystick for taking input for your game.
-To use this feature you need to create a `JoystickComponent`, configure it the way you want, and
+To use this feature, you need to create a `JoystickComponent`, configure it the way you want, and
 add it to your game.
 
 To receive the inputs from the joystick component, pass your `JoystickComponent` to the component
@@ -85,7 +85,7 @@ class JoystickPlayer extends SpriteComponent with HasGameRef {
 }
 ```
 
-So in this example we create the classes `MyGame` and `Player`. `MyGame` creates a joystick which is
+So in this example, we create the classes `MyGame` and `Player`. `MyGame` creates a joystick which is
 passed to the `Player` when it is created. In the `Player` class we act upon the current state of
 the joystick.
 
