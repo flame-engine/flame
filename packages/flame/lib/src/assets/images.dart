@@ -46,7 +46,7 @@ class Images {
   /// Loads all images from the specified (or default) [prefix] into the cache.
   Future<List<Image>> loadAllImages() async {
     return loadAllFromPattern(RegExp(
-      r'\.(png|jpg|jpeg|svg|gif)$',
+      r'\.(png|jpg|jpeg|svg|gif|webp|bmp|wbmp)$',
       caseSensitive: false,
     ));
   }
