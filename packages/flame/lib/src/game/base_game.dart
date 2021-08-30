@@ -30,27 +30,9 @@ class BaseGame extends Game {
   /// The camera translates the coordinate space after the viewport is applied.
   final Camera camera = Camera();
 
-  /// The viewport transforms the coordinate space depending on your chosen
-  /// implementation.
-  /// The default implementation no-ops, but you can use this to have a fixed
-  /// screen ratio for example.
-  Viewport get viewport => _viewport;
-
-  Viewport _viewport = DefaultViewport();
-  set viewport(Viewport value) {
-    if (hasLayout) {
-      final previousSize = canvasSize;
-      _viewport = value;
-      onResize(previousSize);
-    } else {
-      _viewport = value;
-    }
-    _combinedProjector = Projector.compose([camera, value]);
-  }
-
-  late Projector _combinedProjector;
-
-  final Vector2 _sizeBuffer = Vector2.zero();
+  @Deprecated('Access this property via the camera')
+  Viewport get viewport => camera.viewport;
+  set viewport(Viewport value) => camera.viewport = value;
 
   /// This is overwritten to consider the viewport transformation.
   ///
@@ -59,23 +41,15 @@ class BaseGame extends Game {
   ///
   /// This does not match the Flutter widget size; for that see [canvasSize].
   @override
-  Vector2 get size {
-    assertHasLayout();
-    return _sizeBuffer
-      ..setFrom(viewport.effectiveSize)
-      ..scale(1 / camera.zoom);
-  }
+  Vector2 get size => camera.gameSize;
 
   /// This is the original Flutter widget size, without any transformation.
   Vector2 get canvasSize {
     assertHasLayout();
-    return viewport.canvasSize;
+    return viewport.canvasSize!;
   }
 
-  BaseGame() {
-    camera.gameRef = this;
-    _combinedProjector = Projector.compose([camera, viewport]);
-  }
+  BaseGame();
 
   /// This method setps up the OrderedSet instance used by this game, before
   /// any lifecycle methods happen.
@@ -231,7 +205,7 @@ class BaseGame extends Game {
   @mustCallSuper
   void onResize(Vector2 canvasSize) {
     super.onResize(canvasSize);
-    viewport.resize(canvasSize.clone());
+    camera.handleResize(canvasSize);
     components.forEach((c) => c.onGameResize(size));
   }
 
@@ -304,21 +278,21 @@ class BaseGame extends Game {
 
   @override
   Vector2 projectVector(Vector2 vector) {
-    return _combinedProjector.projectVector(vector);
+    return camera.combinedProjector.projectVector(vector);
   }
 
   @override
   Vector2 unprojectVector(Vector2 vector) {
-    return _combinedProjector.unprojectVector(vector);
+    return camera.combinedProjector.unprojectVector(vector);
   }
 
   @override
   Vector2 scaleVector(Vector2 vector) {
-    return _combinedProjector.scaleVector(vector);
+    return camera.combinedProjector.scaleVector(vector);
   }
 
   @override
   Vector2 unscaleVector(Vector2 vector) {
-    return _combinedProjector.unscaleVector(vector);
+    return camera.combinedProjector.unscaleVector(vector);
   }
 }

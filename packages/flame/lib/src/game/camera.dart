@@ -41,12 +41,24 @@ import 'projector.dart';
 /// Components marked as `isHud = true` are always rendered in screen
 /// coordinates, bypassing the camera altogether.
 class Camera extends Projector {
-  static const defaultSpeed = 50.0; // in pixels/s
+  Camera()
+    : _viewport = DefaultViewport()
+  {
+    _combinedProjector = Projector.compose([this, _viewport]);
+  }
 
-  /// This must be set by the Game as soon as the Camera is created.
-  ///
-  /// Do not change this reference.
-  late Game gameRef;
+  Viewport get viewport => _viewport;
+  Viewport _viewport;
+  set viewport(Viewport value) {
+    _viewport = value;
+    if (_canvasSize != null) {
+      _viewport.resize(canvasSize);
+    }
+    _combinedProjector = Projector.compose([this, _viewport]);
+  }
+
+
+  static const defaultSpeed = 50.0; // in pixels/s
 
   /// If set, this bypasses follow and moves the camera to a specific point
   /// in the world.
@@ -138,7 +150,7 @@ class Camera extends Projector {
   /// is any kind of user configurable camera on your game.
   double zoom = 1.0;
 
-  Camera();
+  Vector2 get gameSize => _viewport.effectiveSize / zoom;
 
   /// Use this method to transform the canvas using the current rules provided
   /// by this camera object.
@@ -149,6 +161,20 @@ class Camera extends Projector {
   /// state to avoid leakage.
   void apply(Canvas canvas) {
     canvas.transform(_transformMatrix(position, zoom).storage);
+  }
+
+  Vector2? _canvasSize;
+  Vector2 get canvasSize {
+    assert(
+      _canvasSize != null,
+      'Property `canvasSize` cannot be accessed before the layout stage'
+    );
+    return _canvasSize!;
+  }
+
+  void handleResize(Vector2 canvasSize) {
+    _canvasSize = canvasSize.clone();
+    _viewport.resize(canvasSize);
   }
 
   Matrix4 _transformMatrix(Vector2 position, double zoom) {
@@ -166,6 +192,10 @@ class Camera extends Projector {
     _transform.scale(zoom, zoom, 1);
     return _transform;
   }
+
+  // TODO: replace with the transform matrix
+  late Projector _combinedProjector;
+  Projector get combinedProjector => _combinedProjector;
 
   /// This smoothly updates the camera for an amount of time [dt].
   ///
@@ -297,7 +327,7 @@ class Camera extends Projector {
   }
 
   Vector2 _screenDelta() {
-    return gameRef.size.clone()..multiply(_currentRelativeOffset);
+    return gameSize.clone()..multiply(_currentRelativeOffset);
   }
 
   Vector2 _target() {
@@ -306,28 +336,28 @@ class Camera extends Projector {
 
     final bounds = worldBounds;
     if (bounds != null) {
-      if (bounds.width > gameRef.size.x * zoom) {
+      if (bounds.width > gameSize.x * zoom) {
         final cameraLeftEdge = attemptedTarget.x;
-        final cameraRightEdge = attemptedTarget.x + gameRef.size.x;
+        final cameraRightEdge = attemptedTarget.x + gameSize.x;
         if (cameraLeftEdge < bounds.left) {
           attemptedTarget.x = bounds.left;
         } else if (cameraRightEdge > bounds.right) {
-          attemptedTarget.x = bounds.right - gameRef.size.x;
+          attemptedTarget.x = bounds.right - gameSize.x;
         }
       } else {
-        attemptedTarget.x = (gameRef.size.x - bounds.width) / 2;
+        attemptedTarget.x = (gameSize.x - bounds.width) / 2;
       }
 
-      if (bounds.height > gameRef.size.y * zoom) {
+      if (bounds.height > gameSize.y * zoom) {
         final cameraTopEdge = attemptedTarget.y;
-        final cameraBottomEdge = attemptedTarget.y + gameRef.size.y;
+        final cameraBottomEdge = attemptedTarget.y + gameSize.y;
         if (cameraTopEdge < bounds.top) {
           attemptedTarget.y = bounds.top;
         } else if (cameraBottomEdge > bounds.bottom) {
-          attemptedTarget.y = bounds.bottom - gameRef.size.y;
+          attemptedTarget.y = bounds.bottom - gameSize.y;
         }
       } else {
-        attemptedTarget.y = (gameRef.size.y - bounds.height) / 2;
+        attemptedTarget.y = (gameSize.y - bounds.height) / 2;
       }
     }
 
