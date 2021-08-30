@@ -173,7 +173,7 @@ You now should see the button on the screen, but right now, it is pretty much us
 
 So, to change that, we will now add some interactivity to our game and make the button tappable/clickable.
 
-Flame provides several input handlers, which you can check with more in depth on [our docs](https://github.com/flame-engine/flame/blob/main/doc/gesture-input.md). 
+Flame provides several input handlers, about which you can check with more in depth on [our docs](https://github.com/flame-engine/flame/blob/main/doc/gesture-input.md). 
 For this tutorial, we will be using the `TapDetector` which enables us to detect taps on the screen, as well as mouse click when running on web or desktop.
 
 All Flame input detectors are mixins which can be added to your game, enabling you to override listener methods related to that detector. For the `TapDetector`, we will need to override three methods:
