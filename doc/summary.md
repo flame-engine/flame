@@ -4,13 +4,15 @@
     - [File structure](structure.md)
     - [Game loop](game.md)
     - [Components](components.md)
-    - [Gesture Input](gesture-input.md)
-    - [Keyboard Input](keyboard-input.md)
-    - [Other Inputs](other-inputs.md)
     - [Platforms](platforms.md)
     - [Collision detection](collision_detection.md)
     - [Effects](effects.md)
     - [Camera & Viewport](camera_and_viewport.md)
+
+- Inputs
+    - [Gesture Input](gesture-input.md)
+    - [Keyboard Input](keyboard-input.md)
+    - [Other Inputs](other-inputs.md)
 
 - Audio
     - [General Audio](audio.md)

@@ -5,16 +5,13 @@ This includes documentation for input methods besides keyboard and mouse.
 For other input documents, see also:
 
 - [Gesture Input](gesture-input.md): for mouse and touch pointer gestures
-- [Other Inputs](other-inputs.md): For joysticks, game pads, etc.
+- [Keyboard Input](keyboard-input.md): for keystrokes
 
 ## Joystick
 
 Flame provides a component capable of creating a virtual joystick for taking input for your game.
 To use this feature, you need to create a `JoystickComponent`, configure it the way you want, and
 add it to your game.
-
-To receive the inputs from the joystick component, pass your `JoystickComponent` to the component
-that you want it to control, or simply act upon input from it in the update-loop of your game.
 
 Check this example to get a better understanding:
 
@@ -121,5 +118,5 @@ a callback function as the `onPressed` argument, or you extend the component and
 
 ## Gamepad
 
-Flame has a separate plugin for gamepad support, you can checkout the plugin
+Flame has a separate plugin to support external game controllers (gamepads), checkout
 [here](https://github.com/flame-engine/flame_gamepad) for more information.

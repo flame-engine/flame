@@ -5,7 +5,7 @@ This includes documentation for keyboard inputs.
 For other input documents, see also:
 
 - [Gesture Input](gesture-input.md): for mouse and touch pointer gestures
-- [Keyboard Input](keyboard-input.md): for keystrokes
+- [Other Inputs](other-inputs.md): For joysticks, game pads, etc.
 
 ## Intro
 
@@ -82,7 +82,6 @@ that triggered the callback in the first place. The second is a set of the curre
 The returned value should be `true` to allow the continuous propagation of the key event among other components. 
 To not allow any other component to receive the event, return `false`
 
-
 ### Controlling focus
 
 In the widget level, it is possible to use the [`FocusNode`](https://api.flutter.dev/flutter/widgets/FocusNode-class.html) API to control whether the game is focused or not. 
@@ -91,6 +90,5 @@ In the widget level, it is possible to use the [`FocusNode`](https://api.flutter
 
 By default `GameWidget` has its `autofocus` set to true, which is, it will be focused once it is mounted. To override that behavior, set `autofocus` to false.
 
-```
 You can also check a more complete example
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/keyboard.dart).
