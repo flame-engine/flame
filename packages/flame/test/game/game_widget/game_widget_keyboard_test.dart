@@ -101,10 +101,7 @@ void main() async {
       ),
     );
 
-    final focus = tester.widget(find.byType(Focus)) as Focus;
-
-    expect(focus.focusNode, focusNode);
-    expect(focus.autofocus, true);
+    expect(focusNode.hasFocus, true);
   });
 
   testWidgets('KeyboardEvents receives keys', (tester) async {
