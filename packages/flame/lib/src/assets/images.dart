@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'dart:convert' show base64;
+import 'dart:convert' show base64, json;
 import 'dart:typed_data';
 import 'dart:ui';
 import 'dart:ui' as ui show decodeImageFromPixels;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 import '../flame.dart';
 
@@ -40,6 +41,16 @@ class Images {
       _loadedFiles[fileName] = _ImageAssetLoader(_fetchToMemory(fileName));
     }
     return _loadedFiles[fileName]!.retrieve();
+  }
+
+  Future<List<Image>> loadAllImages() async {
+    final manifestContent = await rootBundle.loadString('AssetManifest.json');
+    final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
+    final imagePaths = manifestMap.keys.where((path) {
+      return path.startsWith(prefix) &&
+          path.toLowerCase().contains(RegExp(r'\.(png|jpg|jpeg|svg|gif)$'));
+    }).map((path) => path.replaceFirst(prefix, ''));
+    return loadAll(imagePaths.toList());
   }
 
   /// Convert an array of pixel values into an [Image] object.
