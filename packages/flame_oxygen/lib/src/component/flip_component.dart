@@ -1,4 +1,3 @@
-import 'package:flame/extensions.dart';
 import 'package:oxygen/oxygen.dart';
 
 class FlipInit {
