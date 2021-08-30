@@ -74,7 +74,6 @@ abstract class Viewport extends Projector {
 /// translation is applied.
 /// This basically no-ops the viewport.
 class DefaultViewport extends Viewport {
-
   @override
   void render(Canvas c, void Function(Canvas c) renderGame) {
     renderGame(c);
@@ -123,7 +122,6 @@ class DefaultViewport extends Viewport {
 /// transformation whatsoever, and if the a device with a different ratio is
 /// used it will try to adapt the best as possible.
 class FixedResolutionViewport extends Viewport {
-
   @override
   late Vector2 effectiveSize;
 

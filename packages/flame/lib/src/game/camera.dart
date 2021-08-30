@@ -41,9 +41,7 @@ import 'projector.dart';
 /// Components marked as `isHud = true` are always rendered in screen
 /// coordinates, bypassing the camera altogether.
 class Camera extends Projector {
-  Camera()
-    : _viewport = DefaultViewport()
-  {
+  Camera() : _viewport = DefaultViewport() {
     _combinedProjector = Projector.compose([this, _viewport]);
   }
 
@@ -56,7 +54,6 @@ class Camera extends Projector {
     }
     _combinedProjector = Projector.compose([this, _viewport]);
   }
-
 
   static const defaultSpeed = 50.0; // in pixels/s
 
@@ -165,10 +162,8 @@ class Camera extends Projector {
 
   Vector2? _canvasSize;
   Vector2 get canvasSize {
-    assert(
-      _canvasSize != null,
-      'Property `canvasSize` cannot be accessed before the layout stage'
-    );
+    assert(_canvasSize != null,
+        'Property `canvasSize` cannot be accessed before the layout stage');
     return _canvasSize!;
   }
 
