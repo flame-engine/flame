@@ -38,7 +38,7 @@ void main() {
       expect(game.canvasSize, Vector2.all(200.00));
       expect(game.size, Vector2.all(50.00));
 
-      final viewport = game.viewport as FixedResolutionViewport;
+      final viewport = game.camera.viewport as FixedResolutionViewport;
       expect(viewport.resizeOffset, Vector2.zero());
       expect(viewport.scaledSize, Vector2(200.0, 200.0));
       expect(viewport.scale, 4.0);
@@ -46,10 +46,11 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-          canvas,
-          MockCanvas()
-            ..clipRect(const Rect.fromLTWH(0, 0, 200, 200))
-            ..scale(4));
+        canvas,
+        MockCanvas()
+          ..clipRect(const Rect.fromLTWH(0, 0, 200, 200))
+          ..scale(4),
+      );
     });
 
     test('fixed ratio viewport maxes width', () {
@@ -59,7 +60,7 @@ void main() {
       expect(game.canvasSize, Vector2(100.0, 200.00));
       expect(game.size, Vector2.all(50.00));
 
-      final viewport = game.viewport as FixedResolutionViewport;
+      final viewport = game.camera.viewport as FixedResolutionViewport;
       expect(viewport.resizeOffset, Vector2(0, 50.0));
       expect(viewport.scaledSize, Vector2(100.0, 100.0));
       expect(viewport.scale, 2.0);
@@ -67,11 +68,12 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-          canvas,
-          MockCanvas()
-            ..clipRect(const Rect.fromLTWH(0, 50, 100, 100))
-            ..translate(0, 50)
-            ..scale(2));
+        canvas,
+        MockCanvas()
+          ..clipRect(const Rect.fromLTWH(0, 50, 100, 100))
+          ..translate(0, 50)
+          ..scale(2),
+      );
     });
 
     test('fixed ratio viewport maxes height', () {
@@ -81,7 +83,7 @@ void main() {
       expect(game.canvasSize, Vector2(100.0, 200.00));
       expect(game.size, Vector2(100.00, 400.0));
 
-      final viewport = game.viewport as FixedResolutionViewport;
+      final viewport = game.camera.viewport as FixedResolutionViewport;
       expect(viewport.resizeOffset, Vector2(25.0, 0));
       expect(viewport.scaledSize, Vector2(50.0, 200.0));
       expect(viewport.scale, 0.5);
@@ -89,11 +91,12 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-          canvas,
-          MockCanvas()
-            ..clipRect(const Rect.fromLTWH(25, 0, 50, 200))
-            ..translate(25, 0)
-            ..scale(0.5));
+        canvas,
+        MockCanvas()
+          ..clipRect(const Rect.fromLTWH(25, 0, 50, 200))
+          ..translate(25, 0)
+          ..scale(0.5),
+      );
     });
   });
 
