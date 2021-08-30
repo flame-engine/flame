@@ -35,6 +35,11 @@ abstract class BaseComponent extends Component {
   /// identify issues.
   bool debugMode = false;
 
+  /// How many decimal digits to print when displaying coordinates in the
+  /// debug mode. Setting this to null will suppress all coordinates from
+  /// the output.
+  int? get debugCoordinatesPrecision => 0;
+
   Color debugColor = const Color(0xFFFF00FF);
 
   Paint get debugPaint => Paint()

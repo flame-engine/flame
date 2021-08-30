@@ -163,7 +163,7 @@ class Camera extends Projector {
     }
     _transform.setIdentity();
     _transform.translate(translateX, translateY);
-    _transform.scale(zoom);
+    _transform.scale(zoom, zoom, 1);
     return _transform;
   }
 
@@ -279,7 +279,9 @@ class Camera extends Projector {
     Rect? worldBounds,
   }) {
     follow = vector2;
-    this.worldBounds = worldBounds;
+    if (worldBounds != null) {
+      this.worldBounds = worldBounds;
+    }
     _targetRelativeOffset.setFrom(relativeOffset.toVector2());
     _currentRelativeOffset.setFrom(_targetRelativeOffset);
   }

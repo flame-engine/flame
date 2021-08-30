@@ -29,7 +29,18 @@
  - Introduce `scale` on `PositionComponent`
  - Add `ScaleEffect` that works on `scale` instead of `size`
  - Add class `NotifyingVector2`
+ - Add class `Transform2D`
+ - Added helper functions `testRandom()` and `testWidgetsRandom()`
  - Remove `FPSCounter` from `BaseGame`
+ - Refactor `PositionComponent` to work with `Transform2D`: the component now works more reliably
+   when nested
+ - Properties `renderFlipX`, `renderFlipY` removed and replaced with methods
+   `flipHorizontally()` and `flipVertically()`.
+ - Method `.angleTo` removed as it was not working properly.
+ - In debug mode `PositionComponent` now displays an indicator for the anchor position.
+ - Update `Camera` docs to showcase usage with `Game` class
+ - Fixed a bug with `worldBounds` being set to `null` in `Camera`
+ - `MockCanvas` is now strongly typed and matches numeric coordinates up to a tolerance
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps

@@ -6,8 +6,6 @@ import 'package:flame/game.dart';
 import 'package:flame/test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-final Random random = Random();
-
 class Callback {
   bool isCalled = false;
 
@@ -24,6 +22,7 @@ void effectTest(
   Vector2? expectedPosition,
   Vector2? expectedSize,
   Vector2? expectedScale,
+  required Random random,
 }) async {
   expectedPosition ??= Vector2.zero();
   expectedSize ??= Vector2.all(100.0);
@@ -123,4 +122,25 @@ class TestComponent extends PositionComponent {
           angle: angle,
           anchor: anchor,
         );
+}
+
+abstract class BaseElements {
+  BaseElements(this.random) {
+    argumentSize = randomVector2();
+    argumentScale = randomVector2();
+    argumentAngle = randomAngle();
+    path = List.generate(3, (i) => randomVector2());
+  }
+
+  final Random random;
+  late final Vector2 argumentSize;
+  late final Vector2 argumentScale;
+  late final double argumentAngle;
+  late final List<Vector2> path;
+
+  Vector2 randomVector2() => (Vector2.random(random) * 100)..round();
+  double randomAngle() => 1.0 + random.nextInt(5);
+  double randomDuration() => 1.0 + random.nextInt(100);
+
+  TestComponent component();
 }

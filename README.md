@@ -17,7 +17,7 @@ A minimalistic Flutter game engine.
 
 ---
 
-[English](/README.md) | [简体中文](/i18n/README-ZH.md) | [Polski](/i18n/README-PL.md) | [Русский](/i18n/README-RU.md)
+[English](/README.md) | [简体中文](/i18n/README-ZH.md) | [Polski](/i18n/README-PL.md) | [Русский](/i18n/README-RU.md) | [Español](/i18n/README-ES.md)
 
 ---
 
@@ -61,7 +61,7 @@ The official site for Flame, which also contains the documentation can be found
 
 ## Help
 
-We have a Flame help channel on Fireslime's Discord, join it [here](https://discord.gg/pxrBmy4).
+We have a Flame help channel on Blue Fire's Discord, join it [here](https://discord.gg/5unKpdQD78).
 
 We also have a [FAQ](FAQ.md), so please search for your question there first.
 
@@ -90,11 +90,11 @@ The simplest way to show us your support is by giving the project a star.
 
 You can also support us by becoming a patron on Patreon:
 
-[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/fireslime)
+[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/bluefireoss)
 
 Or by making a single donation by buying us a coffee:
 
-[![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/fireslime)
+[![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/bluefire)
 
 You can also show on your repository that your game is made with Flame by using one of the following
 badges:
