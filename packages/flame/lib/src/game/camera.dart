@@ -193,7 +193,7 @@ class Camera extends Projector {
     return _transform;
   }
 
-  // TODO: replace with the transform matrix
+  // TODO(st-pasha): replace with the transform matrix
   late Projector _combinedProjector;
   Projector get combinedProjector => _combinedProjector;
 

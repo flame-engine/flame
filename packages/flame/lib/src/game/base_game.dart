@@ -14,7 +14,6 @@ import '../components/mixins/hoverable.dart';
 import '../components/mixins/tappable.dart';
 import 'camera.dart';
 import 'game.dart';
-import 'projector.dart';
 import 'viewport.dart';
 
 /// This is a more complete and opinionated implementation of Game.
@@ -44,10 +43,7 @@ class BaseGame extends Game {
   Vector2 get size => camera.gameSize;
 
   /// This is the original Flutter widget size, without any transformation.
-  Vector2 get canvasSize {
-    assertHasLayout();
-    return viewport.canvasSize!;
-  }
+  Vector2 get canvasSize => camera.canvasSize;
 
   BaseGame();
 
@@ -152,29 +148,27 @@ class BaseGame extends Game {
     components.removeAll(cs);
   }
 
-  /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.
+  /// This implementation of render renders each component, making sure the
+  /// canvas is reset for each one.
   ///
   /// You can override it further to add more custom behavior.
-  /// Beware of however you are rendering components if not using this; you must be careful to save and restore the canvas to avoid components messing up with each other.
+  /// Beware of however you are rendering components if not using this; you
+  /// must be careful to save and restore the canvas to avoid components
+  /// messing up with each other.
   @override
   @mustCallSuper
   void render(Canvas canvas) {
-    viewport.render(canvas, (c) {
-      components.forEach((comp) => renderComponent(c, comp));
+    // TODO(st-pasha): this logic should belong to CameraComponent
+    camera.viewport.render(canvas, (_canvas) {
+      components.forEach((component) {
+        canvas.save();
+        if (!component.isHud) {
+          camera.apply(canvas);
+        }
+        component.renderTree(canvas);
+        canvas.restore();
+      });
     });
-  }
-
-  /// This renders a single component obeying BaseGame rules.
-  ///
-  /// It translates the camera unless hud, call the render method and restore the canvas.
-  /// This makes sure the canvas is not messed up by one component and all components render independently.
-  void renderComponent(Canvas canvas, Component c) {
-    canvas.save();
-    if (!c.isHud) {
-      camera.apply(canvas);
-    }
-    c.renderTree(canvas);
-    canvas.restore();
   }
 
   /// This implementation of update updates every component in the list.
@@ -200,7 +194,7 @@ class BaseGame extends Game {
   ///
   /// It also updates the [size] field of the class to be used by later added components and other methods.
   /// You can override it further to add more custom behavior, but you should seriously consider calling the super implementation as well.
-  /// This implementation also uses the current [viewport] in order to transform the coordinate system appropriately.
+  /// This implementation also uses the current [camera] in order to transform the coordinate system appropriately.
   @override
   @mustCallSuper
   void onResize(Vector2 canvasSize) {
