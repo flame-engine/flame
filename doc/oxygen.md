@@ -276,6 +276,31 @@ world.createEntity()
   ..add<AngleComponent, double>(1.570796);
 ```
 
+### FlipComponent
+
+The `FlipComponent` can be used to flip your rendering on either the X or Y axis. It is registered 
+to the world by default.
+
+This component is especially useful when you are using the [BaseSystem](#BaseSystem). But can also 
+be used for your own flipping logic.
+
+Creating an entity that is flipped on it's X axis using OxygenGame:
+
+```dart
+game.createEntity(
+  position: // ...
+  size: // ...
+  flipX: true
+);
+```
+
+Creating an entity that is flipped on it's X axis using the World:
+
+```dart
+world.createEntity()
+  ..add<FlipComponent, FlipInit>(FlipInit(flipX: true));
+```
+
 ### SpriteComponent
 
 The `SpriteComponent` is as its name implies is a component that describe the sprite of an entity. 

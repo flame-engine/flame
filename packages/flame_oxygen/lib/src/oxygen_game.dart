@@ -25,12 +25,15 @@ abstract class OxygenGame extends Game {
     required Vector2 size,
     double? angle,
     Anchor? anchor,
+    bool flipX = false,
+    bool flipY = false,
   }) {
     final entity = world.entityManager.createEntity(name)
       ..add<PositionComponent, Vector2>(position)
       ..add<SizeComponent, Vector2>(size)
       ..add<AnchorComponent, Anchor>(anchor)
-      ..add<AngleComponent, double>(angle);
+      ..add<AngleComponent, double>(angle)
+      ..add<FlipComponent, FlipInit>(FlipInit(flipX: flipX, flipY: flipY));
     return entity;
   }
 
@@ -48,6 +51,7 @@ abstract class OxygenGame extends Game {
       () => SpriteComponent(),
     );
     world.registerComponent<TextComponent, TextInit>(() => TextComponent());
+    world.registerComponent<FlipComponent, FlipInit>(() => FlipComponent());
 
     await init();
     world.init();

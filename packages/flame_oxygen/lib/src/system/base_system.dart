@@ -41,6 +41,7 @@ abstract class BaseSystem extends System with RenderSystem {
       final size = entity.get<SizeComponent>()!.size;
       final anchor = entity.get<AnchorComponent>()?.anchor ?? Anchor.topLeft;
       final angle = entity.get<AngleComponent>()?.radians ?? 0;
+      final flip = entity.get<FlipComponent>();
 
       canvas
         ..save()
@@ -52,11 +53,11 @@ abstract class BaseSystem extends System with RenderSystem {
       canvas.translate(delta.x, delta.y);
 
       // Handle inverted rendering by moving center and flipping.
-      // if (renderFlipX || renderFlipY) {
-      //   canvas.translate(width / 2, height / 2);
-      //   canvas.scale(renderFlipX ? -1.0 : 1.0, renderFlipY ? -1.0 : 1.0);
-      //   canvas.translate(-width / 2, -height / 2);
-      // }
+      if (flip != null && (flip.flipX || flip.flipY)) {
+        canvas.translate(size.x / 2, size.y / 2);
+        canvas.scale(flip.flipX ? -1.0 : 1.0, flip.flipY ? -1.0 : 1.0);
+        canvas.translate(-size.x / 2, -size.y / 2);
+      }
       renderEntity(canvas, entity);
 
       canvas.restore();
