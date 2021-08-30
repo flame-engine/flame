@@ -43,6 +43,7 @@ class Images {
     return _loadedFiles[fileName]!.retrieve();
   }
 
+  /// Loads all images from the specified (or default) [prefix] into the cache.
   Future<List<Image>> loadAllImages() async {
     final manifestContent = await rootBundle.loadString('AssetManifest.json');
     final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
