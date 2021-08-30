@@ -45,11 +45,19 @@ class Images {
 
   /// Loads all images from the specified (or default) [prefix] into the cache.
   Future<List<Image>> loadAllImages() async {
+    return loadAllFromPattern(RegExp(
+      r'\.(png|jpg|jpeg|svg|gif)$',
+      caseSensitive: false,
+    ));
+  }
+
+  /// Loads all images in the [prefix]ed path that are matching the specified
+  /// pattern.
+  Future<List<Image>> loadAllFromPattern(Pattern pattern) async {
     final manifestContent = await rootBundle.loadString('AssetManifest.json');
     final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
     final imagePaths = manifestMap.keys.where((path) {
-      return path.startsWith(prefix) &&
-          path.toLowerCase().contains(RegExp(r'\.(png|jpg|jpeg|svg|gif)$'));
+      return path.startsWith(prefix) && path.toLowerCase().contains(pattern);
     }).map((path) => path.replaceFirst(prefix, ''));
     return loadAll(imagePaths.toList());
   }
