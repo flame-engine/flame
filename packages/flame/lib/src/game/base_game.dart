@@ -12,7 +12,7 @@ import '../components/mixins/has_collidables.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/hoverable.dart';
 import '../components/mixins/tappable.dart';
-import 'camera.dart';
+import 'camera/camera.dart';
 import 'game.dart';
 
 /// This is a more complete and opinionated implementation of Game.
