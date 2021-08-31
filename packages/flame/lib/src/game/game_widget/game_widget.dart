@@ -264,10 +264,11 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                 future: _gameLoaderFutureCache,
                 builder: (_, snapshot) {
                   if (snapshot.hasError) {
-                    if (widget.errorBuilder == null) {
+                    final errorBuilder = widget.errorBuilder;
+                    if (errorBuilder == null) {
                       throw snapshot.error!;
                     } else {
-                      return widget.errorBuilder!(context, snapshot.error!);
+                      return errorBuilder(context, snapshot.error!);
                     }
                   }
                   if (snapshot.connectionState == ConnectionState.done) {
