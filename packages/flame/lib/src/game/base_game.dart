@@ -13,6 +13,7 @@ import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/hoverable.dart';
 import '../components/mixins/tappable.dart';
 import 'camera/camera.dart';
+import 'camera/camera_component.dart';
 import 'game.dart';
 
 /// This is a more complete and opinionated implementation of Game.
@@ -22,13 +23,21 @@ import 'game.dart';
 /// This is the recommended structure to use for most games.
 /// It is based on the Component system.
 class BaseGame extends Game {
-  BaseGame();
+  BaseGame() {
+    components = createComponentSet();
+    camera = Camera();
+    _cameraComponent = CameraComponent(camera, components);
+  }
 
   /// The list of components to be updated and rendered by the base game.
-  late final ComponentSet components = createComponentSet();
+  late final ComponentSet components;
 
   /// The camera translates the coordinate space after the viewport is applied.
-  final Camera camera = Camera();
+  late final Camera camera;
+
+  // When the Game becomes a Component (#906), this could be added directly
+  // into the component tree.
+  late final CameraComponent _cameraComponent;
 
   /// This is overwritten to consider the viewport transformation.
   ///
@@ -153,17 +162,7 @@ class BaseGame extends Game {
   @override
   @mustCallSuper
   void render(Canvas canvas) {
-    // TODO(st-pasha): this logic should belong to CameraComponent
-    camera.viewport.render(canvas, (_canvas) {
-      components.forEach((component) {
-        canvas.save();
-        if (!component.isHud) {
-          camera.apply(canvas);
-        }
-        component.renderTree(canvas);
-        canvas.restore();
-      });
-    });
+    _cameraComponent.render(canvas);
   }
 
   /// This implementation of update updates every component in the list.
@@ -181,7 +180,7 @@ class BaseGame extends Game {
     }
 
     components.forEach((c) => c.update(dt));
-    camera.update(dt);
+    _cameraComponent.update(dt);
   }
 
   /// This implementation of resize passes the resize call along to every
