@@ -40,6 +40,7 @@
  - In debug mode `PositionComponent` now displays an indicator for the anchor position.
  - Update `Camera` docs to showcase usage with `Game` class
  - Fixed a bug with `worldBounds` being set to `null` in `Camera`
+ - Remove `.viewport` from `BaseGame`, use `camera.viewport` instead
  - `MockCanvas` is now strongly typed and matches numeric coordinates up to a tolerance
 
 ## [1.0.0-releasecandidate.13]
