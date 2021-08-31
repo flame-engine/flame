@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
-import 'package:flame/parallax.dart';
 import 'package:flame/game.dart';
+import 'package:flame/parallax.dart';
 
 class AdvancedParallaxGame extends BaseGame {
   final _layersMeta = {

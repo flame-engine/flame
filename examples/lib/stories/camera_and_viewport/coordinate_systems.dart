@@ -211,22 +211,28 @@ class CoordinateSystemsGame extends BaseGame
 
   /// Camera controls.
   @override
-  void onKeyEvent(RawKeyEvent e) {
-    final isKeyDown = e is RawKeyDownEvent;
-    if (e.data.keyLabel == 'a') {
+  KeyEventResult onKeyEvent(
+    RawKeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    final isKeyDown = event is RawKeyDownEvent;
+
+    if (event.logicalKey == LogicalKeyboardKey.keyA) {
       cameraVelocity.x = isKeyDown ? -1 : 0;
-    } else if (e.data.keyLabel == 'd') {
+    } else if (event.logicalKey == LogicalKeyboardKey.keyD) {
       cameraVelocity.x = isKeyDown ? 1 : 0;
-    } else if (e.data.keyLabel == 'w') {
+    } else if (event.logicalKey == LogicalKeyboardKey.keyW) {
       cameraVelocity.y = isKeyDown ? -1 : 0;
-    } else if (e.data.keyLabel == 's') {
+    } else if (event.logicalKey == LogicalKeyboardKey.keyS) {
       cameraVelocity.y = isKeyDown ? 1 : 0;
     } else if (isKeyDown) {
-      if (e.data.keyLabel == 'q') {
+      if (event.logicalKey == LogicalKeyboardKey.keyQ) {
         camera.zoom *= 2;
-      } else if (e.data.keyLabel == 'e') {
+      } else if (event.logicalKey == LogicalKeyboardKey.keyE) {
         camera.zoom /= 2;
       }
     }
+
+    return KeyEventResult.handled;
   }
 }

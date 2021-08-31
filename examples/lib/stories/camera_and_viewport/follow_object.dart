@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,7 +13,11 @@ import '../../commons/square_component.dart';
 final R = Random();
 
 class MovableSquare extends SquareComponent
-    with Hitbox, Collidable, HasGameRef<CameraAndViewportGame> {
+    with
+        Hitbox,
+        Collidable,
+        HasGameRef<CameraAndViewportGame>,
+        KeyboardHandler {
   static const double speed = 300;
   static final TextPaint textRenderer = TextPaint(
     config: const TextPaintConfig(
@@ -54,6 +59,27 @@ class MovableSquare extends SquareComponent
       gameRef.camera.setRelativeOffset(Anchor.topCenter);
       timer.start();
     }
+  }
+
+  @override
+  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    final isKeyDown = event is RawKeyDownEvent;
+
+    if (event.logicalKey == LogicalKeyboardKey.keyA) {
+      velocity.x = isKeyDown ? -1 : 0;
+      return false;
+    } else if (event.logicalKey == LogicalKeyboardKey.keyD) {
+      velocity.x = isKeyDown ? 1 : 0;
+      return false;
+    } else if (event.logicalKey == LogicalKeyboardKey.keyW) {
+      velocity.y = isKeyDown ? -1 : 0;
+      return false;
+    } else if (event.logicalKey == LogicalKeyboardKey.keyS) {
+      velocity.y = isKeyDown ? 1 : 0;
+      return false;
+    }
+
+    return super.onKeyEvent(event, keysPressed);
   }
 }
 
@@ -112,7 +138,7 @@ class Rock extends SquareComponent with Hitbox, Collidable, Tappable {
 }
 
 class CameraAndViewportGame extends BaseGame
-    with KeyboardEvents, HasCollidables, HasTappableComponents {
+    with HasCollidables, HasTappableComponents, HasKeyboardHandlerComponents {
   late MovableSquare square;
 
   final Vector2 viewportResolution;
@@ -132,20 +158,6 @@ class CameraAndViewportGame extends BaseGame
 
     for (var i = 0; i < 30; i++) {
       add(Rock(Vector2(Map.genCoord(), Map.genCoord())));
-    }
-  }
-
-  @override
-  void onKeyEvent(RawKeyEvent e) {
-    final isKeyDown = e is RawKeyDownEvent;
-    if (e.data.keyLabel == 'a') {
-      square.velocity.x = isKeyDown ? -1 : 0;
-    } else if (e.data.keyLabel == 'd') {
-      square.velocity.x = isKeyDown ? 1 : 0;
-    } else if (e.data.keyLabel == 'w') {
-      square.velocity.y = isKeyDown ? -1 : 0;
-    } else if (e.data.keyLabel == 's') {
-      square.velocity.y = isKeyDown ? 1 : 0;
     }
   }
 }
