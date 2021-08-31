@@ -102,6 +102,7 @@ A full examples of how to use it can be found
 And it can be seen running [here](https://examples.flame-engine.org/#/Controls_Joystick).
 
 ## HudButtonComponent
+
 A `HudButtonComponent` is a button that can be defined with margins to the edge of the `Viewport`
 instead of with a position. It takes two `PositionComponent`s. `button` and `buttonDown`, the first
 is used for when the button is idle and the second is shown when the button is being pressed. The
@@ -112,7 +113,7 @@ As the name suggests this button is a hud by default, which means that it will b
 screen even if the camera for the game moves around. You can also use this component as a non-hud by
 setting `hudButtonComponent.isHud = false;`.
 
-If you want to act upon the button being pressed (which I guess that you do) you can either pass in
+If you want to act upon the button being pressed (which would be the common thing to do) you can either pass in
 a callback function as the `onPressed` argument, or you extend the component and override
 `onTapDown`, `onTapUp` and/or `onTapCancel` and implement your logic in there.
 

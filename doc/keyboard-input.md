@@ -28,11 +28,11 @@ that triggered the callback in the first place. The second is a set of the curre
 
 The return value should be a [`KeyEventResult`](https://api.flutter.dev/flutter/widgets/KeyEventResult-class.html). 
 
-`KeyEventResult.handled` will tell the framework that he key stroke was resolved inside of Flame and skip any other keyboard handler widgets apart of `GameWidget`.
+`KeyEventResult.handled` will tell the framework that the key stroke was resolved inside of Flame and skip any other keyboard handler widgets apart of `GameWidget`.
 
 `KeyEventResult.ignored` will tell the framework to keep testing this event in any other keyboard handler widget apart of `GameWidget`. If the event is not resolved by any handler, the framework will trigger `SystemSoundType.alert`.
 
-`KeyEventResult.skipRemainingHandlers` is very similar to `.ignored`, apart from the fatc that will skip any other handler widget and will straight up play the alert sound.
+`KeyEventResult.skipRemainingHandlers` is very similar to `.ignored`, apart from the fact that will skip any other handler widget and will straight up play the alert sound.
 
 Minimal example:
 
@@ -77,18 +77,18 @@ KeyboardHandlers must only be added to games that are mixed with `HasKeyboardHan
 After applying `HasKeyboardHandlerComponents`, it will be possible to override an `onKeyEvent` method.
 
 This method receives two parameters. First the [`RawKeyEvent`](https://api.flutter.dev/flutter/services/RawKeyEvent-class.html) 
-that triggered the callback in the first place. The second is a set of the currently pressed [`LogicalKeyboardKey`](https://api.flutter.dev/flutter/widgets/KeyEventResult-class.html).
+that triggered the callback in the first place. The second is a set of the currently pressed [`LogicalKeyboardKey`](https://api.flutter.dev/flutter/widgets/KeyEventResult-class.html)s.
 
 The returned value should be `true` to allow the continuous propagation of the key event among other components. 
-To not allow any other component to receive the event, return `false`
+To not allow any other component to receive the event, return `false`.
 
 ### Controlling focus
 
-In the widget level, it is possible to use the [`FocusNode`](https://api.flutter.dev/flutter/widgets/FocusNode-class.html) API to control whether the game is focused or not. 
+On the widget level, it is possible to use the [`FocusNode`](https://api.flutter.dev/flutter/widgets/FocusNode-class.html) API to control whether the game is focused or not. 
 
 `GameWidget` has an optional `focusNode` parameter that allow its focus to be controlled externally.
 
-By default `GameWidget` has its `autofocus` set to true, which is, it will be focused once it is mounted. To override that behavior, set `autofocus` to false.
+By default `GameWidget` has its `autofocus` set to true, which means it will get focused once it is mounted. To override that behavior, set `autofocus` to false.
 
-You can also check a more complete example
+For a more complete example see 
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/keyboard.dart).

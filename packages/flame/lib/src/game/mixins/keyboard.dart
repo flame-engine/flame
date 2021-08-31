@@ -5,7 +5,7 @@ import '../../../game.dart';
 
 /// A [BaseComponent] mixin to add keyboard handling capability to components.
 /// Must be used in components that can only be added to games that are mixed
-/// with [HasKeyboardHandlerComponents]
+/// with [HasKeyboardHandlerComponents].
 mixin KeyboardHandler on BaseComponent {
   bool onKeyEvent(
     RawKeyEvent event,
