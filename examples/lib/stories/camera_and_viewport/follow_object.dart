@@ -123,7 +123,7 @@ class CameraAndViewportGame extends BaseGame
 
   @override
   Future<void> onLoad() async {
-    viewport = FixedResolutionViewport(viewportResolution);
+    camera.viewport = FixedResolutionViewport(viewportResolution);
     add(Map());
 
     add(square = MovableSquare());

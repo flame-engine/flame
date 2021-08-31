@@ -14,7 +14,6 @@ import '../components/mixins/hoverable.dart';
 import '../components/mixins/tappable.dart';
 import 'camera.dart';
 import 'game.dart';
-import 'viewport.dart';
 
 /// This is a more complete and opinionated implementation of Game.
 ///
@@ -23,15 +22,13 @@ import 'viewport.dart';
 /// This is the recommended structure to use for most games.
 /// It is based on the Component system.
 class BaseGame extends Game {
+  BaseGame();
+
   /// The list of components to be updated and rendered by the base game.
   late final ComponentSet components = createComponentSet();
 
   /// The camera translates the coordinate space after the viewport is applied.
   final Camera camera = Camera();
-
-  @Deprecated('Access this property via the camera')
-  Viewport get viewport => camera.viewport;
-  set viewport(Viewport value) => camera.viewport = value;
 
   /// This is overwritten to consider the viewport transformation.
   ///
@@ -44,8 +41,6 @@ class BaseGame extends Game {
 
   /// This is the original Flutter widget size, without any transformation.
   Vector2 get canvasSize => camera.canvasSize;
-
-  BaseGame();
 
   /// This method setps up the OrderedSet instance used by this game, before
   /// any lifecycle methods happen.

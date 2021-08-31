@@ -32,7 +32,7 @@ class WidgetSample extends Forge2DGame with TapDetector {
     final bodyDef = BodyDef()
       ..angularVelocity = 3
       ..position =
-          screenToWorld(Vector2.random()..multiply(viewport.effectiveSize))
+          screenToWorld(Vector2.random()..multiply(camera.viewport.effectiveSize))
       ..type = BodyType.dynamic;
     final body = world.createBody(bodyDef);
 
