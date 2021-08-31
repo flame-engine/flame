@@ -51,7 +51,7 @@ If you are coming from FCS you might expect certain default functionality that y
 from the `PositionComponent`. As mentioned before components do not contain any kind of logic, but
 to give you the same default functionality we also created a class called `BaseSystem`. This system 
 acts almost identical to the prerender logic from the `PositionComponent` in FCS. You only have 
-to extend your own system from it to access it. For more information see the 
+to subclass it to your own system. For more information see the 
 [BaseSystem](#BaseSystem) section.
 
 Systems can be registered to the world using the `world.registerSystem` method on 
