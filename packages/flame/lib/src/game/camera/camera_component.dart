@@ -39,6 +39,5 @@ class CameraComponent extends Component {
         }
       });
     });
-
   }
 }
