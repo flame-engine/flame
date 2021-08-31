@@ -25,15 +25,14 @@ import 'game.dart';
 class BaseGame extends Game {
   BaseGame() {
     components = createComponentSet();
-    camera = Camera();
-    _cameraComponent = CameraComponent(camera, components);
+    _cameraComponent = CameraComponent(Camera(), components);
   }
 
   /// The list of components to be updated and rendered by the base game.
   late final ComponentSet components;
 
   /// The camera translates the coordinate space after the viewport is applied.
-  late final Camera camera;
+  Camera get camera => _cameraComponent.camera;
 
   // When the Game becomes a Component (#906), this could be added directly
   // into the component tree.
