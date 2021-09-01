@@ -32,7 +32,7 @@ class _KeyboardEventsGame extends Game with KeyboardEvents {
   }
 }
 
-class _KeyboardHandlerComponent extends BaseComponent with KeyboardHandler {
+class _KeyboardHandlerComponent extends Component with KeyboardHandler {
   final List<String> keysPressed = [];
 
   @override
@@ -133,7 +133,7 @@ void main() async {
       ),
     );
 
-    game.onResize(size);
+    game.onGameResize(size);
     game.update(0.1);
 
     await tester.pump();
