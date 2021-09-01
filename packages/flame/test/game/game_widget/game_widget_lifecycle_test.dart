@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,12 +6,6 @@ class MyGame extends Game {
   final List<String> events;
 
   MyGame(this.events);
-
-  @override
-  void update(double dt) {}
-
-  @override
-  void render(Canvas canvas) {}
 
   @override
   void onAttach() {

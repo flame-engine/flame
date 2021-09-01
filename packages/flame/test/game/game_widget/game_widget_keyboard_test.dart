@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -14,12 +12,6 @@ class _KeyboardEventsGame extends Game with KeyboardEvents {
   final List<String> keysPressed = [];
 
   _KeyboardEventsGame();
-
-  @override
-  void render(Canvas canvas) {}
-
-  @override
-  void update(double dt) {}
 
   @override
   KeyEventResult onKeyEvent(
