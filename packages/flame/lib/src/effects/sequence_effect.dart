@@ -97,17 +97,12 @@ class SequenceEffect extends PositionComponentEffect {
 
   @override
   void update(double dt) {
-    if (isPaused) {
+    if (isPaused || hasCompleted()) {
+      print('Sequence thinks that it is done or paused');
       return;
     }
     super.update(dt);
-    if (hasCompleted()) {
-      return;
-    }
 
-    // If the last effect's time to completion overshot its total time, add that
-    // time to the first time step of the next effect.
-    currentEffect.driftTime = _driftModifier;
     _driftModifier = 0.0;
     if (currentEffect.hasCompleted()) {
       _driftModifier = currentEffect.driftTime;
@@ -128,6 +123,9 @@ class SequenceEffect extends PositionComponentEffect {
           curveDirection.isNegative ? effects.reversed.toList() : effects;
       // Get the next effect that should be executed.
       currentEffect = orderedEffects[_currentIndex % effects.length];
+      // If the last effect's time to completion overshot its total time, add that
+      // time to the first time step of the next effect.
+      currentEffect.driftTime = _driftModifier;
       // Keep track of what value of `isAlternating` the effect had from the
       // start.
       _currentWasAlternating = currentEffect.isAlternating;
@@ -140,6 +138,12 @@ class SequenceEffect extends PositionComponentEffect {
       }
       currentEffect.resume();
     }
+  }
+
+  @override
+  bool hasCompleted() {
+    return super.hasCompleted() &&
+        effects.every((element) => element.hasCompleted());
   }
 
   @override

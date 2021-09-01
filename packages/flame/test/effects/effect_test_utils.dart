@@ -81,13 +81,17 @@ void effectTest(
     final percentage = effect.percentage;
     if (percentage < epsilon) {
       print('hit percentage < epsilon');
-      game.update(effect.currentTime);
+      game.update(effect.currentTime + epsilon);
     } else if (1.0 - percentage < epsilon) {
       print('hit 1.0 - percentage < epsilon');
-      game.update(effect.peakTime - effect.currentTime);
+      game.update(effect.peakTime - effect.currentTime + epsilon);
     }
 
-    print('$expectedPosition ${component.position}');
+    effect.children.forEach((e) {
+      print(e);
+      print((e as ComponentEffect).percentage);
+    });
+    print('$expectedPosition ${component.position} ${effect.percentage}');
     expectVector2(
       component.position,
       expectedPosition,

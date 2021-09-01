@@ -147,6 +147,18 @@ abstract class ComponentEffect<T extends Component> extends Component {
         reset();
       }
     }
+
+    currentTime += (dt + driftTime) * curveDirection;
+    percentage = (currentTime / peakTime).clamp(0.0, 1.0).toDouble();
+    if (currentTime >= preOffset && currentTime <= peakTime - postOffset) {
+      final effectPercentage =
+          ((currentTime - preOffset) / (peakTime - preOffset - postOffset))
+              .clamp(0.0, 1.0);
+      curveProgress = curve.transform(effectPercentage);
+    }
+    _updateDriftTime();
+    currentTime = currentTime.clamp(0.0, peakTime).toDouble();
+
     if (hasCompleted()) {
       setComponentToEndState();
       print('$this Should call onComplete');
@@ -155,17 +167,6 @@ abstract class ComponentEffect<T extends Component> extends Component {
         print('set it to be removed now when it has completed');
         removeFromParent();
       }
-    } else {
-      currentTime += (dt + driftTime) * curveDirection;
-      percentage = (currentTime / peakTime).clamp(0.0, 1.0).toDouble();
-      if (currentTime >= preOffset && currentTime <= peakTime - postOffset) {
-        final effectPercentage =
-            ((currentTime - preOffset) / (peakTime - preOffset - postOffset))
-                .clamp(0.0, 1.0);
-        curveProgress = curve.transform(effectPercentage);
-      }
-      _updateDriftTime();
-      currentTime = currentTime.clamp(0.0, peakTime).toDouble();
     }
     hasStarted = true;
   }
