@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
-import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 
 /// This examples serves to test the Parallax feature outside of the
