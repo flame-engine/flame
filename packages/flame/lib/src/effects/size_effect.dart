@@ -42,9 +42,7 @@ class SizeEffect extends SimplePositionComponentEffect {
     super.onLoad();
     final startSize = originalSize!;
     _delta = isRelative ? size : size - startSize;
-    if (!isAlternating) {
-      endSize = startSize + _delta;
-    }
+    peakSize = startSize + _delta;
     speed ??= _delta.length / duration!;
     duration ??= _delta.length / speed!;
     setPeakTimeFromDuration(duration!);

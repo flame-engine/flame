@@ -234,12 +234,15 @@ abstract class ComponentEffect<T extends Component> extends Component {
   /// effect is started.
   void setComponentToOriginalState();
 
+  /// Sets the affected component to the state that it should be in when the
+  /// effect is peaking (before it potentially starts reversing).
+  void setComponentToPeakState();
+
   /// Sets the affected component to the state that it should be in after the
   /// effect is done.
-  void setComponentToEndState();
-
-  /// This is used when a parent effect changes this effect to be alternating.
-  void setEndToOriginalState();
+  void setComponentToEndState() {
+    isAlternating ? setComponentToOriginalState() : setComponentToPeakState();
+  }
 
   void setPeakTimeFromDuration(double duration) {
     peakTime = duration / (isAlternating ? 2 : 1) + preOffset + postOffset;
@@ -254,11 +257,12 @@ abstract class PositionComponentEffect
   Vector2? originalSize;
   Vector2? originalScale;
 
-  /// Used to be able to determine the end state of a sequence of effects
-  Vector2? endPosition;
-  double? endAngle;
-  Vector2? endSize;
-  Vector2? endScale;
+  /// Used to be able to determine what state that the component should be in
+  /// when the effect is done.
+  Vector2? peakPosition;
+  double? peakAngle;
+  Vector2? peakSize;
+  Vector2? peakScale;
 
   /// Whether the state of a certain field was modified by the effect
   bool modifiesPosition;
@@ -304,10 +308,10 @@ abstract class PositionComponentEffect
     /// If these aren't modified by the extending effect it is assumed that the
     /// effect didn't bring the component to another state than the one it
     /// started in
-    endPosition = component.position.clone();
-    endAngle = component.angle;
-    endSize = component.size.clone();
-    endScale = component.scale.clone();
+    peakPosition = component.position.clone();
+    peakAngle = component.angle;
+    peakSize = component.size.clone();
+    peakScale = component.scale.clone();
   }
 
   /// Only change the parts of the component that is affected by the
@@ -362,9 +366,9 @@ abstract class PositionComponentEffect
   }
 
   @override
-  void setComponentToEndState() {
+  void setComponentToPeakState() {
     print('$this set to end state');
-    _setComponentState(endPosition, endAngle, endSize, endScale);
+    _setComponentState(peakPosition, peakAngle, peakSize, peakScale);
   }
 }
 
@@ -409,16 +413,16 @@ abstract class SimplePositionComponentEffect extends PositionComponentEffect {
   @override
   void setEndToOriginalState() {
     if (modifiesPosition) {
-      endPosition = originalPosition;
+      peakPosition = originalPosition;
     }
     if (modifiesAngle) {
-      endAngle = originalAngle;
+      peakAngle = originalAngle;
     }
     if (modifiesSize) {
-      endSize = originalSize;
+      peakSize = originalSize;
     }
     if (modifiesScale) {
-      endScale = originalScale;
+      peakScale = originalScale;
     }
   }
 }

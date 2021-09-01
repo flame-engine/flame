@@ -115,8 +115,11 @@ void effectTest(
   }
   print('${effect.percentage} ${component.position}');
   print(expectedPosition);
-  print('Should remove: ${effect.shouldRemove}');
-  expect(effect.hasCompleted(), shouldComplete, reason: 'Effect shouldFinish');
+  print('Percentage before hasComplete check: ${effect.percentage}');
+  print(
+    'Did all children finish: ${effect.children.whereType<ComponentEffect>().map((e) => e.percentage)}',
+  );
+  expect(effect.hasCompleted(), shouldComplete, reason: 'Effect should finish');
   game.update(0); // Children are removed before update logic
   expect(
     callback.calledNumber,

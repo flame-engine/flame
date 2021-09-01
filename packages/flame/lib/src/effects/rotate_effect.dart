@@ -40,9 +40,7 @@ class RotateEffect extends SimplePositionComponentEffect {
     super.onLoad();
     final startAngle = originalAngle!;
     _delta = isRelative ? angle : angle - startAngle;
-    if (!isAlternating) {
-      endAngle = startAngle + _delta;
-    }
+    peakAngle = startAngle + _delta;
     speed ??= _delta.abs() / duration!;
     duration ??= _delta.abs() / speed!;
     setPeakTimeFromDuration(duration!);

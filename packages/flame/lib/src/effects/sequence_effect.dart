@@ -5,7 +5,6 @@ import 'effects.dart';
 class SequenceEffect extends PositionComponentEffect {
   final List<ComponentEffect> effects;
   late ComponentEffect currentEffect;
-  late bool _currentWasAlternating;
 
   static const int _initialIndex = 0;
   static const double _initialDriftModifier = 0.0;
@@ -54,15 +53,15 @@ class SequenceEffect extends PositionComponentEffect {
     for (final effect in effects) {
       effect.removeOnFinish = false;
       if (effect is PositionComponentEffect) {
-        affectedParent.position.setFrom(endPosition!);
-        affectedParent.angle = endAngle!;
-        affectedParent.size.setFrom(endSize!);
-        affectedParent.scale.setFrom(endScale!);
+        affectedParent.position.setFrom(peakPosition!);
+        affectedParent.angle = peakAngle!;
+        affectedParent.size.setFrom(peakSize!);
+        affectedParent.scale.setFrom(peakScale!);
         await add(effect);
-        endPosition!.setFrom(effect.endPosition!);
-        endAngle = effect.endAngle;
-        endSize!.setFrom(effect.endSize!);
-        endScale!.setFrom(effect.endScale!);
+        peakPosition!.setFrom(effect.peakPosition!);
+        peakAngle = effect.peakAngle;
+        peakSize!.setFrom(effect.peakSize!);
+        peakScale!.setFrom(effect.peakScale!);
         // Since only the parent effect will reset the affected component we
         // need to check what properties the child effects affect.
         modifiesPosition |= effect.modifiesPosition;
@@ -84,15 +83,14 @@ class SequenceEffect extends PositionComponentEffect {
     affectedParent.scale.setFrom(originalScale!);
 
     if (isAlternating) {
-      endPosition = originalPosition;
-      endAngle = originalAngle;
-      endSize = originalSize;
-      endScale = originalScale;
+      peakPosition = originalPosition;
+      peakAngle = originalAngle;
+      peakSize = originalSize;
+      peakScale = originalScale;
     }
 
     currentEffect = effects[0];
     currentEffect.resume();
-    _currentWasAlternating = currentEffect.isAlternating;
   }
 
   @override
@@ -106,9 +104,6 @@ class SequenceEffect extends PositionComponentEffect {
     _driftModifier = 0.0;
     if (currentEffect.hasCompleted()) {
       _driftModifier = currentEffect.driftTime;
-      // Make sure the current effect has the `isAlternating` value it
-      // initially started with.
-      currentEffect.isAlternating = _currentWasAlternating;
       // Reset the effect if it was initially alternating so that it can repeat
       // when the CombinedEffect alternates.
       if (currentEffect.isAlternating && isAlternating) {
@@ -126,15 +121,11 @@ class SequenceEffect extends PositionComponentEffect {
       // If the last effect's time to completion overshot its total time, add that
       // time to the first time step of the next effect.
       currentEffect.driftTime = _driftModifier;
-      // Keep track of what value of `isAlternating` the effect had from the
-      // start.
-      _currentWasAlternating = currentEffect.isAlternating;
       if (isAlternating &&
           !currentEffect.isAlternating &&
           curveDirection.isNegative) {
         // Make the effect go in reverse.
         currentEffect.isAlternating = true;
-        currentEffect.setEndToOriginalState();
       }
       currentEffect.resume();
     }
@@ -142,18 +133,13 @@ class SequenceEffect extends PositionComponentEffect {
 
   @override
   bool hasCompleted() {
-    return super.hasCompleted() &&
-        effects.every((element) => element.hasCompleted());
+    // TODO: is this necessary?
+    return super.hasCompleted() && effects.every((e) => e.hasCompleted());
   }
 
   @override
   void reset() {
     super.reset();
     effects.forEach((e) => e.resetEffect());
-  }
-
-  @override
-  void setEndToOriginalState() {
-    // No-op since children handle this.
   }
 }

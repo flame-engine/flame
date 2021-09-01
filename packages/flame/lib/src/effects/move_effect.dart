@@ -70,7 +70,7 @@ class MoveEffect extends SimplePositionComponentEffect {
     } else {
       _movePath = path;
     }
-    endPosition = isAlternating ? originalPosition : _movePath.last;
+    peakPosition = _movePath.last;
 
     var pathLength = 0.0;
     var lastPosition = originalPosition!;

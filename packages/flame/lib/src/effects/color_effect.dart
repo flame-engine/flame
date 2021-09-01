@@ -11,7 +11,7 @@ class ColorEffect extends ComponentEffect<HasPaint> {
   final String? paintId;
 
   late Paint _original;
-  late Paint _end;
+  late Paint _peak;
 
   late ColorTween _tween;
 
@@ -40,7 +40,7 @@ class ColorEffect extends ComponentEffect<HasPaint> {
     setPeakTimeFromDuration(duration);
 
     _original = affectedParent.getPaint(paintId);
-    _end = Paint()..color = (isAlternating ? _original.color : color);
+    _peak = Paint()..color = color;
 
     _tween = ColorTween(
       begin: _original.color,
@@ -49,18 +49,13 @@ class ColorEffect extends ComponentEffect<HasPaint> {
   }
 
   @override
-  void setComponentToEndState() {
-    affectedParent.tint(_end.color);
-  }
-
-  @override
   void setComponentToOriginalState() {
     affectedParent.paint = _original;
   }
 
   @override
-  void setEndToOriginalState() {
-    _end.color = _original.color;
+  void setComponentToPeakState() {
+    affectedParent.tint(_peak.color);
   }
 
   @override

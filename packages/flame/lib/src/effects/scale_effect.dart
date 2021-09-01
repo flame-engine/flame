@@ -42,9 +42,7 @@ class ScaleEffect extends SimplePositionComponentEffect {
     super.onLoad();
     final startScale = originalScale!;
     _delta = isRelative ? scale : scale - startScale;
-    if (!isAlternating) {
-      endScale = startScale + _delta;
-    }
+    peakScale = startScale + _delta;
     speed ??= _delta.length / duration!;
     duration ??= _delta.length / speed!;
     setPeakTimeFromDuration(duration!);

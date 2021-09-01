@@ -59,18 +59,12 @@ class CombinedEffect extends ComponentEffect with EffectsHelper {
     super.update(dt);
   }
 
+  // no-op, since the CombinedEffect can't alternate.
   @override
-  void setComponentToEndState() {
-    effects.forEach((effect) => effect.setComponentToEndState());
-  }
+  void setComponentToPeakState() {}
 
   @override
   void setComponentToOriginalState() {
     effects.forEach((effect) => effect.setComponentToOriginalState());
-  }
-
-  @override
-  void setEndToOriginalState() {
-    // No-op, since children handle this
   }
 }

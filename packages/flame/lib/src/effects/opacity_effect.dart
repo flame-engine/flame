@@ -11,7 +11,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
   final String? paintId;
 
   late Color _original;
-  late Color _final;
+  late Color _peak;
 
   late double _difference;
 
@@ -66,16 +66,16 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     peakTime = duration;
 
     _original = affectedParent.getPaint(paintId).color;
-    _final = _original.withOpacity(opacity);
+    _peak = _original.withOpacity(opacity);
 
     _difference = _original.opacity - opacity;
     setPeakTimeFromDuration(duration);
   }
 
   @override
-  void setComponentToEndState() {
+  void setComponentToPeakState() {
     affectedParent.setColor(
-      _final,
+      _peak,
       paintId: paintId,
     );
   }
@@ -86,11 +86,6 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
       _original,
       paintId: paintId,
     );
-  }
-
-  @override
-  void setEndToOriginalState() {
-    _final = _original;
   }
 
   @override
