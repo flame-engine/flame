@@ -15,14 +15,17 @@ class Images {
 
   Images({this.prefix = 'assets/images/'});
 
+  /// Remove the image with the specified [fileName] from the cache.
   void clear(String fileName) {
     _loadedFiles.remove(fileName);
   }
 
+  /// Clear all cached images.
   void clearCache() {
     _loadedFiles.clear();
   }
 
+  /// Gets the specified image with [fileName] from the cache.
   Image fromCache(String fileName) {
     final image = _loadedFiles[fileName];
     assert(
@@ -32,15 +35,17 @@ class Images {
     return image!.loadedImage!;
   }
 
-  Future<List<Image>> loadAll(List<String> fileNames) async {
-    return Future.wait(fileNames.map(load));
-  }
-
+  /// Loads the specified image with [fileName] into the cache.
   Future<Image> load(String fileName) async {
     if (!_loadedFiles.containsKey(fileName)) {
       _loadedFiles[fileName] = _ImageAssetLoader(_fetchToMemory(fileName));
     }
     return _loadedFiles[fileName]!.retrieve();
+  }
+
+  /// Load all images with the specified [fileNames] into the cache.
+  Future<List<Image>> loadAll(List<String> fileNames) async {
+    return Future.wait(fileNames.map(load));
   }
 
   /// Loads all images from the specified (or default) [prefix] into the cache.
