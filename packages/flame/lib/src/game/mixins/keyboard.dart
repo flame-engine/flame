@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import '../../../components.dart';
 import '../../../game.dart';
 
-/// A [BaseComponent] mixin to add keyboard handling capability to components.
+/// A [Component] mixin to add keyboard handling capability to components.
 /// Must be used in components that can only be added to games that are mixed
 /// with [HasKeyboardHandlerComponents].
-mixin KeyboardHandler on BaseComponent {
+mixin KeyboardHandler on Component {
   bool onKeyEvent(
     RawKeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
@@ -25,12 +26,10 @@ mixin HasKeyboardHandlerComponents on BaseGame implements KeyboardEvents {
     bool Function(KeyboardHandler child) keyboardEventHandler,
   ) {
     var shouldContinue = true;
-    for (final c in components.toList().reversed) {
-      if (c is BaseComponent) {
-        shouldContinue = c.propagateToChildren<KeyboardHandler>(
-          keyboardEventHandler,
-        );
-      }
+    for (final c in children.toList().reversed) {
+      shouldContinue = c.propagateToChildren<KeyboardHandler>(
+        keyboardEventHandler,
+      );
       if (c is KeyboardHandler && shouldContinue) {
         shouldContinue = keyboardEventHandler(c);
       }
