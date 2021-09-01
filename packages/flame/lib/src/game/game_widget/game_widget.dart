@@ -1,7 +1,9 @@
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../extensions.dart';
+import '../../../input.dart';
 import '../../extensions/size.dart';
 import '../game.dart';
 import '../game_render_box.dart';
@@ -58,6 +60,14 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// - [Game.overlays]
   final List<String>? initialActiveOverlays;
 
+  /// The [FocusNode] to control the games focus to receive event inputs.
+  /// If omitted, defaults to an internally controlled focus node.
+  final FocusNode? focusNode;
+
+  /// Whether the [focusNode] requests focus once the game is mounted.
+  /// Defaults to true.
+  final bool autofocus;
+
   /// Renders a [game] in a flutter widget tree.
   ///
   /// Ex:
@@ -104,6 +114,8 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.backgroundBuilder,
     this.overlayBuilderMap,
     this.initialActiveOverlays,
+    this.focusNode,
+    this.autofocus = true,
   }) : super(key: key);
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
@@ -117,6 +129,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   Set<String> initialActiveOverlays = {};
 
   Future<void>? _gameLoaderFuture;
+
   Future<void> get _gameLoaderFutureCache =>
       _gameLoaderFuture ?? (_gameLoaderFuture = widget.game.onLoad());
 
@@ -187,6 +200,14 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     });
   }
 
+  KeyEventResult _handleKeyEvent(FocusNode focusNode, RawKeyEvent event) {
+    final game = widget.game;
+    if (game is KeyboardEvents) {
+      return game.onKeyEvent(event, RawKeyboard.instance.keysPressed);
+    }
+    return KeyEventResult.handled;
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget internalGameWidget = _GameRenderObjectWidget(widget.game);
@@ -228,30 +249,36 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     // We can use Directionality.maybeOf when that method lands on stable
     final textDir = widget.textDirection ?? TextDirection.ltr;
 
-    return Directionality(
-      textDirection: textDir,
-      child: Container(
-        color: widget.game.backgroundColor(),
-        child: LayoutBuilder(
-          builder: (_, BoxConstraints constraints) {
-            widget.game.onResize(constraints.biggest.toVector2());
-            return FutureBuilder(
-              future: _gameLoaderFutureCache,
-              builder: (_, snapshot) {
-                if (snapshot.hasError) {
-                  if (widget.errorBuilder == null) {
-                    throw snapshot.error!;
-                  } else {
-                    return widget.errorBuilder!(context, snapshot.error!);
+    return Focus(
+      focusNode: widget.focusNode,
+      autofocus: widget.autofocus,
+      onKey: _handleKeyEvent,
+      child: Directionality(
+        textDirection: textDir,
+        child: Container(
+          color: widget.game.backgroundColor(),
+          child: LayoutBuilder(
+            builder: (_, BoxConstraints constraints) {
+              widget.game.onResize(constraints.biggest.toVector2());
+              return FutureBuilder(
+                future: _gameLoaderFutureCache,
+                builder: (_, snapshot) {
+                  if (snapshot.hasError) {
+                    final errorBuilder = widget.errorBuilder;
+                    if (errorBuilder == null) {
+                      throw snapshot.error!;
+                    } else {
+                      return errorBuilder(context, snapshot.error!);
+                    }
                   }
-                }
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return Stack(children: stackedWidgets);
-                }
-                return widget.loadingBuilder?.call(context) ?? Container();
-              },
-            );
-          },
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return Stack(children: stackedWidgets);
+                  }
+                  return widget.loadingBuilder?.call(context) ?? Container();
+                },
+              );
+            },
+          ),
         ),
       ),
     );

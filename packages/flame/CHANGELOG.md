@@ -42,6 +42,8 @@
  - Fixed a bug with `worldBounds` being set to `null` in `Camera`
  - `MockCanvas` is now strongly typed and matches numeric coordinates up to a tolerance
  - Add `loadAllImages` to `Images`, which loads all images from the prefixed path
+ - Reviewed the keyboard API with new mixins (`KeyboardHandler` and `HasKeyboardHandlerComponents`)
+ - Added `FocusNode` on the game widget and improved keyboard handling in the game.
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps

@@ -1,9 +1,9 @@
-import 'package:flame/geometry.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/geometry.dart' as geometry;
 import 'package:flame/src/geometry/circle.dart';
-import 'package:flame/src/geometry/line_segment.dart';
 import 'package:flame/src/geometry/line.dart';
+import 'package:flame/src/geometry/line_segment.dart';
 import 'package:test/test.dart';
 
 void main() {
