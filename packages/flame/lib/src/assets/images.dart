@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'dart:convert' show base64;
+import 'dart:convert' show base64, json;
 import 'dart:typed_data';
 import 'dart:ui';
 import 'dart:ui' as ui show decodeImageFromPixels;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 import '../flame.dart';
 
@@ -14,14 +15,17 @@ class Images {
 
   Images({this.prefix = 'assets/images/'});
 
+  /// Remove the image with the specified [fileName] from the cache.
   void clear(String fileName) {
     _loadedFiles.remove(fileName);
   }
 
+  /// Clear all cached images.
   void clearCache() {
     _loadedFiles.clear();
   }
 
+  /// Gets the specified image with [fileName] from the cache.
   Image fromCache(String fileName) {
     final image = _loadedFiles[fileName];
     assert(
@@ -31,15 +35,36 @@ class Images {
     return image!.loadedImage!;
   }
 
-  Future<List<Image>> loadAll(List<String> fileNames) async {
-    return Future.wait(fileNames.map(load));
-  }
-
+  /// Loads the specified image with [fileName] into the cache.
   Future<Image> load(String fileName) async {
     if (!_loadedFiles.containsKey(fileName)) {
       _loadedFiles[fileName] = _ImageAssetLoader(_fetchToMemory(fileName));
     }
     return _loadedFiles[fileName]!.retrieve();
+  }
+
+  /// Load all images with the specified [fileNames] into the cache.
+  Future<List<Image>> loadAll(List<String> fileNames) async {
+    return Future.wait(fileNames.map(load));
+  }
+
+  /// Loads all images from the specified (or default) [prefix] into the cache.
+  Future<List<Image>> loadAllImages() async {
+    return loadAllFromPattern(RegExp(
+      r'\.(png|jpg|jpeg|svg|gif|webp|bmp|wbmp)$',
+      caseSensitive: false,
+    ));
+  }
+
+  /// Loads all images in the [prefix]ed path that are matching the specified
+  /// pattern.
+  Future<List<Image>> loadAllFromPattern(Pattern pattern) async {
+    final manifestContent = await rootBundle.loadString('AssetManifest.json');
+    final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
+    final imagePaths = manifestMap.keys.where((path) {
+      return path.startsWith(prefix) && path.toLowerCase().contains(pattern);
+    }).map((path) => path.replaceFirst(prefix, ''));
+    return loadAll(imagePaths.toList());
   }
 
   /// Convert an array of pixel values into an [Image] object.
