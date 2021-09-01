@@ -1,9 +1,11 @@
 import 'dart:ui';
 
 import 'package:flame/game.dart';
+
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
-import 'package:flutter/services.dart' show RawKeyDownEvent, RawKeyEvent;
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 class KeyboardGame extends Game with KeyboardEvents {
   static final Paint white = BasicPalette.white.paint();
@@ -24,16 +26,22 @@ class KeyboardGame extends Game with KeyboardEvents {
   }
 
   @override
-  void onKeyEvent(RawKeyEvent e) {
-    final isKeyDown = e is RawKeyDownEvent;
-    if (e.data.keyLabel == 'a') {
+  KeyEventResult onKeyEvent(
+    RawKeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    final isKeyDown = event is RawKeyDownEvent;
+
+    if (event.logicalKey == LogicalKeyboardKey.keyA) {
       velocity.x = isKeyDown ? -1 : 0;
-    } else if (e.data.keyLabel == 'd') {
+    } else if (event.logicalKey == LogicalKeyboardKey.keyD) {
       velocity.x = isKeyDown ? 1 : 0;
-    } else if (e.data.keyLabel == 'w') {
+    } else if (event.logicalKey == LogicalKeyboardKey.keyW) {
       velocity.y = isKeyDown ? -1 : 0;
-    } else if (e.data.keyLabel == 's') {
+    } else if (event.logicalKey == LogicalKeyboardKey.keyS) {
       velocity.y = isKeyDown ? 1 : 0;
     }
+
+    return super.onKeyEvent(event, keysPressed);
   }
 }

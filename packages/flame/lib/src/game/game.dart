@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../assets/assets_cache.dart';
@@ -13,7 +12,6 @@ import '../extensions/vector2.dart';
 import '../sprite.dart';
 import '../sprite_animation.dart';
 import 'game_render_box.dart';
-import 'mixins/keyboard.dart';
 import 'projector.dart';
 
 /// Represents a generic game.
@@ -87,10 +85,6 @@ abstract class Game extends Projector {
   /// Use for calculating the FPS.
   void onTimingsCallback(List<FrameTiming> timings) {}
 
-  void _handleKeyEvent(RawKeyEvent e) {
-    (this as KeyboardEvents).onKeyEvent(e);
-  }
-
   /// Marks game as not attached tto any widget tree.
   ///
   /// Should be called manually.
@@ -107,11 +101,7 @@ abstract class Game extends Projector {
 
   // Called when the Game widget is attached
   @mustCallSuper
-  void onAttach() {
-    if (this is KeyboardEvents) {
-      RawKeyboard.instance.addListener(_handleKeyEvent);
-    }
-  }
+  void onAttach() {}
 
   /// Marks game as not attached tto any widget tree.
   ///
@@ -125,12 +115,6 @@ abstract class Game extends Projector {
   // Called when the Game widget is detached
   @mustCallSuper
   void onDetach() {
-    // Keeping this here, because if we leave this on HasWidgetsOverlay
-    // and somebody overrides this and forgets to call the stream close
-    // we can face some leaks.
-    if (this is KeyboardEvents) {
-      RawKeyboard.instance.removeListener(_handleKeyEvent);
-    }
     images.clearCache();
   }
 
