@@ -58,7 +58,7 @@ class Elements extends BaseElements {
     return CombinedEffect(
       effects: [move, size, rotate, scale],
       onComplete: () => onCompleteCalled = true,
-    );
+    )..skipEffectReset = true;
   }
 }
 
