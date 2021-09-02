@@ -55,7 +55,8 @@ class Camera extends Projector {
     _combinedProjector = Projector.compose([this, _viewport]);
   }
 
-  static const defaultSpeed = 50.0; // in pixels/s
+  // camera movement speed, in pixels/s
+  static const defaultSpeed = 50.0;
 
   /// If set, this bypasses follow and moves the camera to a specific point
   /// in the world.
