@@ -27,7 +27,8 @@ class SequenceEffectGame extends BaseGame with TapDetector {
 
     final move = MoveEffect(
       path: [
-        currentTap + Vector2(0, 50),
+        currentTap,
+        currentTap + Vector2(-20, 50),
         currentTap + Vector2(-50, -50),
         currentTap + Vector2(50, 0),
       ],
@@ -36,7 +37,7 @@ class SequenceEffectGame extends BaseGame with TapDetector {
     );
 
     final size = SizeEffect(
-      size: currentTap,
+      size: currentTap - greenSquare.position,
       speed: 100.0,
       curve: Curves.easeInCubic,
     );
@@ -50,7 +51,6 @@ class SequenceEffectGame extends BaseGame with TapDetector {
     final sequence = SequenceEffect(
       effects: [size, rotate, move],
       isAlternating: true,
-      isInfinite: true,
     );
     sequence.onComplete = () => print('sequence complete');
     greenSquare.add(sequence);

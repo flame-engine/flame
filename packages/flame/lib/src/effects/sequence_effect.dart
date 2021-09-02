@@ -53,15 +53,18 @@ class SequenceEffect extends PositionComponentEffect {
     for (final effect in effects) {
       effect.removeOnFinish = false;
       if (effect is PositionComponentEffect) {
+        // We set the affected parent to the current peak position on the
+        // sequence effect so that it can continue from where the last effect
+        // ended.
         affectedParent.position.setFrom(peakPosition!);
         affectedParent.angle = peakAngle!;
         affectedParent.size.setFrom(peakSize!);
         affectedParent.scale.setFrom(peakScale!);
         await add(effect);
-        peakPosition!.setFrom(effect.peakPosition!);
-        peakAngle = effect.peakAngle;
-        peakSize!.setFrom(effect.peakSize!);
-        peakScale!.setFrom(effect.peakScale!);
+        peakPosition!.setFrom(effect.endPosition!);
+        peakAngle = effect.endAngle;
+        peakSize!.setFrom(effect.endSize!);
+        peakScale!.setFrom(effect.endScale!);
         // Since only the parent effect will reset the affected component we
         // need to check what properties the child effects affect.
         modifiesPosition |= effect.modifiesPosition;
@@ -82,13 +85,6 @@ class SequenceEffect extends PositionComponentEffect {
     affectedParent.size.setFrom(originalSize!);
     affectedParent.scale.setFrom(originalScale!);
 
-    if (isAlternating) {
-      peakPosition = originalPosition;
-      peakAngle = originalAngle;
-      peakSize = originalSize;
-      peakScale = originalScale;
-    }
-
     currentEffect = effects[0];
     currentEffect.resume();
   }
@@ -96,7 +92,6 @@ class SequenceEffect extends PositionComponentEffect {
   @override
   void update(double dt) {
     if (isPaused || hasCompleted()) {
-      print('Sequence thinks that it is done or paused');
       return;
     }
     super.update(dt);
@@ -104,37 +99,31 @@ class SequenceEffect extends PositionComponentEffect {
     _driftModifier = 0.0;
     if (currentEffect.hasCompleted()) {
       _driftModifier = currentEffect.driftTime;
-      // Reset the effect if it was initially alternating so that it can repeat
-      // when the CombinedEffect alternates.
+      // Reset the effect if it was alternating so that it can repeat when the
+      // SequenceEffect alternates.
       if (currentEffect.isAlternating && isAlternating) {
-        print('alternation reset sequence');
         currentEffect.resetEffect();
       }
       // Pause the current effect so that the next effect can continue.
       currentEffect.pause();
 
       _currentIndex++;
+      // Whether the effects should start to go in reverse in this time step.
+      final shouldReverse =
+          isAlternating && (curveDirection.isNegative || isMax());
       final orderedEffects =
-          curveDirection.isNegative ? effects.reversed.toList() : effects;
+          shouldReverse ? effects.reversed.toList() : effects;
       // Get the next effect that should be executed.
       currentEffect = orderedEffects[_currentIndex % effects.length];
       // If the last effect's time to completion overshot its total time, add that
       // time to the first time step of the next effect.
       currentEffect.driftTime = _driftModifier;
-      if (isAlternating &&
-          !currentEffect.isAlternating &&
-          curveDirection.isNegative) {
-        // Make the effect go in reverse.
+      if (shouldReverse && !currentEffect.isAlternating) {
+        // Make the current upcoming effect go in reverse.
         currentEffect.isAlternating = true;
       }
       currentEffect.resume();
     }
-  }
-
-  @override
-  bool hasCompleted() {
-    // TODO: is this necessary?
-    return super.hasCompleted() && effects.every((e) => e.hasCompleted());
   }
 
   @override

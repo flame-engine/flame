@@ -42,9 +42,9 @@ void effectTest(
   // Since the effects will flip over to 0 again when they reach their peak and
   // they are infinite and not alternating, we don't want to go all the way to
   // the peak.
-  final lessFlipOvertime =
+  final noOvershootTime =
       effect.isInfinite && !effect.isAlternating ? 0.00001 : 0.0;
-  var timeLeft = (iterations - lessFlipOvertime) * duration;
+  var timeLeft = (iterations - noOvershootTime) * duration;
   while (timeLeft > 0) {
     var stepDelta = 50.0 + random.nextInt(50);
     stepDelta /= 1000;
@@ -52,9 +52,10 @@ void effectTest(
     game.update(stepDelta);
     timeLeft -= stepDelta;
   }
-  game.update(0.0);
+  game.update(0);
 
   if (!shouldComplete) {
+    final e = effect as PositionComponentEffect;
     expectVector2(
       component.position,
       expectedPosition,
@@ -80,18 +81,11 @@ void effectTest(
     const epsilon = 0.001;
     final percentage = effect.percentage;
     if (percentage < epsilon) {
-      print('hit percentage < epsilon');
       game.update(effect.currentTime + epsilon);
     } else if (1.0 - percentage < epsilon) {
-      print('hit 1.0 - percentage < epsilon');
       game.update(effect.peakTime - effect.currentTime + epsilon);
     }
 
-    effect.children.forEach((e) {
-      print(e);
-      print((e as ComponentEffect).percentage);
-    });
-    print('$expectedPosition ${component.position} ${effect.percentage}');
     expectVector2(
       component.position,
       expectedPosition,
@@ -113,12 +107,6 @@ void effectTest(
       reason: 'Scale is not exactly correct',
     );
   }
-  print('${effect.percentage} ${component.position}');
-  print(expectedPosition);
-  print('Percentage before hasComplete check: ${effect.percentage}');
-  print(
-    'Did all children finish: ${effect.children.whereType<ComponentEffect>().map((e) => e.percentage)}',
-  );
   expect(effect.hasCompleted(), shouldComplete, reason: 'Effect should finish');
   game.update(0); // Children are removed before update logic
   expect(
@@ -126,7 +114,6 @@ void effectTest(
     shouldComplete ? 1 : 0,
     reason: 'Callback was treated wrong',
   );
-  print('Should remove2: ${effect.shouldRemove}');
   expect(
     component.children.query<ComponentEffect>().every((e) => e.shouldRemove),
     shouldComplete,

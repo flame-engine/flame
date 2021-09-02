@@ -161,10 +161,8 @@ abstract class ComponentEffect<T extends Component> extends Component {
 
     if (hasCompleted()) {
       setComponentToEndState();
-      print('$this Should call onComplete');
       onComplete?.call();
       if (removeOnFinish) {
-        print('set it to be removed now when it has completed');
         removeFromParent();
       }
     }
@@ -258,11 +256,18 @@ abstract class PositionComponentEffect
   Vector2? originalScale;
 
   /// Used to be able to determine what state that the component should be in
-  /// when the effect is done.
+  /// when the effect is peaking.
   Vector2? peakPosition;
   double? peakAngle;
   Vector2? peakSize;
   Vector2? peakScale;
+
+  /// Used to be able to determine what state that the component should be in
+  /// when the effect is done.
+  Vector2? get endPosition => isAlternating ? originalPosition : peakPosition;
+  double? get endAngle => isAlternating ? originalAngle : peakAngle;
+  Vector2? get endSize => isAlternating ? originalSize : peakSize;
+  Vector2? get endScale => isAlternating ? originalScale : peakScale;
 
   /// Whether the state of a certain field was modified by the effect
   bool modifiesPosition;
@@ -328,9 +333,7 @@ abstract class PositionComponentEffect
         position != null,
         '`position` must not be `null` for an effect which modifies `position`',
       );
-      print('sets position $position');
       affectedParent.position.setFrom(position!);
-      print('position is ${affectedParent.position}');
     }
     if (modifiesAngle) {
       assert(
@@ -367,7 +370,6 @@ abstract class PositionComponentEffect
 
   @override
   void setComponentToPeakState() {
-    print('$this set to end state');
     _setComponentState(peakPosition, peakAngle, peakSize, peakScale);
   }
 }

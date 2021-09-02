@@ -34,8 +34,9 @@ class CombinedEffectGame extends BaseGame with TapDetector {
     final move = MoveEffect(
       path: [
         currentTap,
-        currentTap - Vector2(50, 20),
-        currentTap + Vector2.all(30),
+        currentTap + Vector2(-20, 50),
+        currentTap + Vector2(-50, -50),
+        currentTap + Vector2(50, 0),
       ],
       isAlternating: true,
       duration: 4.0,
