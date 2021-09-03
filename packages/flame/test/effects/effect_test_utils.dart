@@ -55,7 +55,6 @@ void effectTest(
   game.update(0);
 
   if (!shouldComplete) {
-    final e = effect as PositionComponentEffect;
     expectVector2(
       component.position,
       expectedPosition,
