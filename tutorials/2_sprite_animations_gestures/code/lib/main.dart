@@ -64,6 +64,7 @@ class MyGame extends Game with TapDetector {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (isPressed) {
       runningRobot.update(dt);
     }
