@@ -2,19 +2,17 @@ import 'dart:ui';
 import '../../../components.dart';
 import 'camera.dart';
 
-class CameraComponent extends Component {
+// TODO(st-pasha): extend from BaseComponent
+class CameraComponent {
   CameraComponent(this.camera, this.world);
 
   final Camera camera;
   final ComponentSet world;
 
-  @override
   void update(double dt) {
-    super.update(dt);
     camera.update(dt);
   }
 
-  @override
   void render(Canvas canvas) {
     // TODO(st-pasha): it would be easier to keep the world and the
     //   HUD as two separate component trees.
