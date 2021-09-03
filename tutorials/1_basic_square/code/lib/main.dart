@@ -1,6 +1,6 @@
+import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
-import 'package:flame/game.dart';
 
 void main() {
   final myGame = MyGame();
@@ -24,6 +24,7 @@ class MyGame extends Game {
 
   @override
   void update(double dt) {
+    super.update(dt);
     squarePos = squarePos.translate(squareSpeed * squareDirection * dt, 0);
 
     if (squareDirection == 1 && squarePos.right > size.x) {
