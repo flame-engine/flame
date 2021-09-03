@@ -4,7 +4,7 @@ import 'package:flutter/animation.dart';
 
 import 'effects.dart';
 
-class RotateEffect extends SimplePositionComponentEffect {
+class RotateEffect extends PositionComponentEffect {
   double angle;
   late double _delta;
 

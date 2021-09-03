@@ -23,6 +23,7 @@ class SequenceEffect extends PositionComponentEffect {
   }) : super(
           isInfinite,
           isAlternating,
+          duration: 0.0,
           preOffset: preOffset,
           postOffset: postOffset,
           removeOnFinish: removeOnFinish,

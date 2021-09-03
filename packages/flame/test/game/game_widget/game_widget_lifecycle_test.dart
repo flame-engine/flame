@@ -8,8 +8,15 @@ class MyGame extends Game {
   MyGame(this.events);
 
   @override
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    events.add('onGameResize');
+  }
+
+  @override
   void onAttach() {
     super.onAttach();
+    print('attach');
 
     events.add('attach');
   }
@@ -17,6 +24,7 @@ class MyGame extends Game {
   @override
   void onDetach() {
     super.onDetach();
+    print('detach');
 
     events.add('detach');
   }

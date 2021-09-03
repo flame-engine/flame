@@ -20,7 +20,7 @@ class Vector2Percentage {
   );
 }
 
-class MoveEffect extends SimplePositionComponentEffect {
+class MoveEffect extends PositionComponentEffect {
   List<Vector2> path;
   Vector2Percentage? _currentSubPath;
   List<Vector2Percentage>? _percentagePath;

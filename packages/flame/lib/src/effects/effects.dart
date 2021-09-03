@@ -249,6 +249,12 @@ abstract class ComponentEffect<T extends Component> extends Component {
 
 abstract class PositionComponentEffect
     extends ComponentEffect<PositionComponent> {
+  /// The duration of the effect
+  double? duration;
+
+  /// The speed of the effect
+  double? speed;
+
   /// Used to be able to determine the start state of the component
   Vector2? originalPosition;
   double? originalAngle;
@@ -278,6 +284,8 @@ abstract class PositionComponentEffect
   PositionComponentEffect(
     bool initialIsInfinite,
     bool initialIsAlternating, {
+    this.duration,
+    this.speed,
     bool isRelative = false,
     double? preOffset,
     double? postOffset,
@@ -288,7 +296,11 @@ abstract class PositionComponentEffect
     this.modifiesSize = false,
     this.modifiesScale = false,
     VoidCallback? onComplete,
-  }) : super(
+  })  : assert(
+          (duration != null) ^ (speed != null),
+          'Either speed or duration necessary',
+        ),
+        super(
           initialIsInfinite,
           initialIsAlternating,
           isRelative: isRelative,
@@ -371,61 +383,6 @@ abstract class PositionComponentEffect
   @override
   void setComponentToPeakState() {
     _setComponentState(peakPosition, peakAngle, peakSize, peakScale);
-  }
-}
-
-abstract class SimplePositionComponentEffect extends PositionComponentEffect {
-  double? duration;
-  double? speed;
-
-  SimplePositionComponentEffect(
-    bool initialIsInfinite,
-    bool initialIsAlternating, {
-    this.duration,
-    this.speed,
-    Curve? curve,
-    bool isRelative = false,
-    double? preOffset,
-    double? postOffset,
-    bool? removeOnFinish,
-    bool modifiesPosition = false,
-    bool modifiesAngle = false,
-    bool modifiesSize = false,
-    bool modifiesScale = false,
-    VoidCallback? onComplete,
-  })  : assert(
-          (duration != null) ^ (speed != null),
-          'Either speed or duration necessary',
-        ),
-        super(
-          initialIsInfinite,
-          initialIsAlternating,
-          isRelative: isRelative,
-          preOffset: preOffset,
-          postOffset: postOffset,
-          removeOnFinish: removeOnFinish,
-          curve: curve,
-          modifiesPosition: modifiesPosition,
-          modifiesAngle: modifiesAngle,
-          modifiesSize: modifiesSize,
-          modifiesScale: modifiesScale,
-          onComplete: onComplete,
-        );
-
-  @override
-  void setEndToOriginalState() {
-    if (modifiesPosition) {
-      peakPosition = originalPosition;
-    }
-    if (modifiesAngle) {
-      peakAngle = originalAngle;
-    }
-    if (modifiesSize) {
-      peakSize = originalSize;
-    }
-    if (modifiesScale) {
-      peakScale = originalScale;
-    }
   }
 }
 

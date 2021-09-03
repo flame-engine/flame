@@ -6,7 +6,7 @@ import '../../components.dart';
 import '../extensions/vector2.dart';
 import 'effects.dart';
 
-class SizeEffect extends SimplePositionComponentEffect {
+class SizeEffect extends PositionComponentEffect {
   Vector2 size;
   late Vector2 _delta;
 
