@@ -18,3 +18,5 @@ desktop/
 build/
 
 coverage
+
+.fvm
