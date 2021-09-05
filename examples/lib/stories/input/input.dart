@@ -1,5 +1,6 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
 
 import '../../commons/commons.dart';
 import 'draggables.dart';
@@ -7,6 +8,7 @@ import 'hoverables.dart';
 import 'joystick.dart';
 import 'joystick_advanced.dart';
 import 'keyboard.dart';
+import 'mouse_cursor.dart';
 import 'mouse_movement.dart';
 import 'multitap.dart';
 import 'multitap_advanced.dart';
@@ -25,6 +27,18 @@ void addInputStories(Dashbook dashbook) {
       'Mouse Movement',
       (_) => GameWidget(game: MouseMovementGame()),
       codeLink: baseLink('input/mouse_movement.dart'),
+    )
+    ..add(
+      'Mouse Cursor',
+      (_) => GameWidget(
+        game: MouseCursorGame(),
+        mouseCursor: SystemMouseCursors.move,
+      ),
+      codeLink: baseLink('input/mouse_cursor.dart'),
+      info: '''
+      Example showcasing the ability to change the game cursor in runtime
+      hover the little square to see the cursor changing
+      ''',
     )
     ..add(
       'Scroll',

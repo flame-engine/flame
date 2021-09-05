@@ -68,6 +68,10 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// Defaults to true.
   final bool autofocus;
 
+  /// Initial mouse cursor for this [GameWidget]
+  /// mouse cursor can be changed in runtime using [Game.mouseCursor]
+  final MouseCursor? mouseCursor;
+
   /// Renders a [game] in a flutter widget tree.
   ///
   /// Ex:
@@ -116,6 +120,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.initialActiveOverlays,
     this.focusNode,
     this.autofocus = true,
+    this.mouseCursor,
   }) : super(key: key);
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
@@ -128,6 +133,8 @@ class GameWidget<T extends Game> extends StatefulWidget {
 class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   Set<String> initialActiveOverlays = {};
 
+  MouseCursor? _mouseCursor;
+
   Future<void>? _gameLoaderFuture;
 
   Future<void> get _gameLoaderFutureCache =>
@@ -139,8 +146,18 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
     // Add the initial overlays
     _initActiveOverlays();
+    addOverlaysListener();
 
-    addOverlaysListener(widget.game);
+    // Add the initial mouse cursor
+    _initMouseCursor();
+    addMouseCursorListener();
+  }
+
+  void _initMouseCursor() {
+    if (widget.mouseCursor != null) {
+      widget.game.mouseCursor.value = widget.mouseCursor;
+      _mouseCursor = widget.game.mouseCursor.value;
+    }
   }
 
   void _initActiveOverlays() {
@@ -161,7 +178,11 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
       // Reset the overlays
       _initActiveOverlays();
-      addOverlaysListener(widget.game);
+      addOverlaysListener();
+
+      // Reset mouse cursor
+      _initMouseCursor();
+      addMouseCursorListener();
 
       // Reset the loader future
       _gameLoaderFuture = null;
@@ -174,8 +195,18 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     removeOverlaysListener(widget.game);
   }
 
+  void addMouseCursorListener() {
+    widget.game.mouseCursor.addListener(onChangeMouseCursor);
+  }
+
+  void onChangeMouseCursor() {
+    setState(() {
+      _mouseCursor = widget.game.mouseCursor.value;
+    });
+  }
+
   // widget overlay stuff
-  void addOverlaysListener(T game) {
+  void addOverlaysListener() {
     widget.game.overlays.addListener(onChangeActiveOverlays);
     initialActiveOverlays = widget.game.overlays.value;
   }
@@ -249,35 +280,38 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     // We can use Directionality.maybeOf when that method lands on stable
     final textDir = widget.textDirection ?? TextDirection.ltr;
 
-    return Focus(
-      focusNode: widget.focusNode,
-      autofocus: widget.autofocus,
-      onKey: _handleKeyEvent,
-      child: Directionality(
-        textDirection: textDir,
-        child: Container(
-          color: widget.game.backgroundColor(),
-          child: LayoutBuilder(
-            builder: (_, BoxConstraints constraints) {
-              widget.game.onResize(constraints.biggest.toVector2());
-              return FutureBuilder(
-                future: _gameLoaderFutureCache,
-                builder: (_, snapshot) {
-                  if (snapshot.hasError) {
-                    final errorBuilder = widget.errorBuilder;
-                    if (errorBuilder == null) {
-                      throw snapshot.error!;
-                    } else {
-                      return errorBuilder(context, snapshot.error!);
+    return MouseRegion(
+      cursor: _mouseCursor ?? MouseCursor.defer,
+      child: Focus(
+        focusNode: widget.focusNode,
+        autofocus: widget.autofocus,
+        onKey: _handleKeyEvent,
+        child: Directionality(
+          textDirection: textDir,
+          child: Container(
+            color: widget.game.backgroundColor(),
+            child: LayoutBuilder(
+              builder: (_, BoxConstraints constraints) {
+                widget.game.onResize(constraints.biggest.toVector2());
+                return FutureBuilder(
+                  future: _gameLoaderFutureCache,
+                  builder: (_, snapshot) {
+                    if (snapshot.hasError) {
+                      final errorBuilder = widget.errorBuilder;
+                      if (errorBuilder == null) {
+                        throw snapshot.error!;
+                      } else {
+                        return errorBuilder(context, snapshot.error!);
+                      }
                     }
-                  }
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return Stack(children: stackedWidgets);
-                  }
-                  return widget.loadingBuilder?.call(context) ?? Container();
-                },
-              );
-            },
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return Stack(children: stackedWidgets);
+                    }
+                    return widget.loadingBuilder?.call(context) ?? Container();
+                  },
+                );
+              },
+            ),
           ),
         ),
       ),
