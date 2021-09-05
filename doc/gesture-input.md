@@ -102,6 +102,22 @@ and [MouseRegion widget](https://api.flutter.dev/flutter/widgets/MouseRegion-cla
 also read more about Flutter's gestures
 [here](https://api.flutter.dev/flutter/gestures/gestures-library.html).
 
+It is also possible to change the current mouse cursor displayed on the `GameWidget` region. To do
+so the following code can be used inside the `Game` class
+
+```dart
+mouseCursor.value = SystemMouseCursors.move;
+```
+
+To already initialize the `GameWidget` with a custom cursor, the `mouseCursor` property can be used
+
+```dart
+GameWidget(
+  game: MouseCursorGame(),
+  mouseCursor: SystemMouseCursors.move,
+);
+```
+
 ## Event coordinate system
 
 On events that have positions, like for example `Tap*` or `Drag`, you will notice that the `eventPosition`
