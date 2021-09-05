@@ -211,9 +211,9 @@ abstract class Game extends Projector {
   /// - [Game.overlays]
   final overlays = ActiveOverlaysNotifier();
 
-  /// Used to change the mouse cursor of the GameWidget running this game
-  /// when setting the value to null will make the GameWidget defer the choice
-  /// of the cursor to the closest region available on the tree
+  /// Used to change the mouse cursor of the GameWidget running this game.
+  /// Setting the value to null will make the GameWidget defer the choice
+  /// of the cursor to the closest region available on the tree.
   final mouseCursor = ValueNotifier<MouseCursor?>(null);
 }
 
