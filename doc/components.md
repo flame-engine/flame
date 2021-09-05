@@ -14,22 +14,24 @@ Every `Component` has a few methods that you can optionally implement, which are
 `BaseGame` class. If you are not using `BaseGame`, you can alternatively use these methods on your
 own game loop.
 
-The `resize` method is called whenever the screen is resized, and in the beginning once when the
-component is added to the game via the `add` method.
+The `onGameResize` method is called whenever the screen is resized, and once in the beginning when
+the component is added to the game via the `add` method.
 
 The `shouldRemove` variable can be overridden or set to true and `BaseGame` will remove the
 component before the next update loop. It will then no longer be rendered or updated. Note that
-`game.remove(Component c)` can also be used to remove components from the game.
+`game.remove(Component c)` and `component.removeFromParent()` also can be used to remove components
+from its parent.
 
 The `isHUD` variable can be overridden or set to true (defaults to `false`) to make the `BaseGame`
-ignore the `camera` for this element, make it static in relation to the screen that is.
+ignore the `camera` for this element, making it static in relation to the screen that is.
+Do note that this currently only works if the component is added directly to the root `BaseGame`.
 
 The `onMount` method can be overridden to run initialization code for the component. When this
 method is called, BaseGame ensures that all the mixins which would change this component's behavior
 are already resolved.
 
 The `onRemove` method can be overridden to run code before the component is removed from the game,
-it is only run once even if the component is removed both by using the `BaseGame` remove method and
+it is only run once even if the component is removed both by using the parents remove method and
 the `Component` remove method.
 
 The `onLoad` method can be overridden to run asynchronous initialization code for the component,
@@ -40,17 +42,17 @@ of the component in the `BaseGame`'s list of components.
 ## BaseComponent
 Usually if you are going to make your own component you want to extend `PositionComponent`, but if
 you want to be able to handle effects and child components but handle the positioning differently
-you can extend the `BaseComponent`.
+you can extend the `Component` directly.
 
-It is used by `SpriteBodyComponent`, `PositionBodyComponent`, and `BodyComponent` in Forge2D since
-those components doesn't have their position in relation to the screen, but in relation to the
-Forge2D world.
+`Component` is used by `SpriteBodyComponent`, `PositionBodyComponent`, and `BodyComponent` in
+`flame_forge2d` since those components doesn't have their position in relation to the screen, but in
+relation to the Forge2D world.
 
 ### Composability of components
 
 Sometimes it is useful to wrap other components inside of your component. For example by grouping
-visual components through a hierarchy. You can do this by having child components on any component
-that extends `BaseComponent`, for example `PositionComponent` or `BodyComponent`.
+visual components through a hierarchy. You can do this by adding child components to any component,
+for example `PositionComponent`.
 When you have child components on a component every time the parent is updated and rendered, all the
 children are rendered and updated with the same conditions.
 
@@ -68,8 +70,8 @@ class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
     final gameOverText = GameOverText(spriteImage); // GameOverText is a Component
     final gameOverButton = GameOverButton(spriteImage); // GameOverRestart is a SpriteComponent
 
-    addChild(gameRef, gameOverText);
-    addChild(gameRef, gameOverButton);
+    add(gameOverText);
+    add(gameOverButton);
   }
 
   @override

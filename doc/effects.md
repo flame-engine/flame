@@ -1,12 +1,10 @@
 # Effects
 
-An effect can be applied to any `Component` that the effect supports.
+An effect can be added to any `Component` that the effect supports.
 
-At the moment there are only `PositionComponentEffect`s, which are applied to `PositionComponent`s,
-which are presented below.
-
-If you want to create an effect for another component just extend the `ComponentEffect` class and
-add your created effect to the component by calling `component.add(yourEffect)`.
+If you want to create an effect for another component than the ones that already exist, just extend
+the `ComponentEffect` class and add your created effect to the component by calling
+`component.add(yourEffect)`.
 
 ## Common for all effects
 
@@ -188,24 +186,20 @@ An example of how to use the `SequenceEffect` can be found
 
 ## CombinedEffect
 
-This effect runs several different type of effects simultaneously. You provide it with a list of
-your predefined effects and an offset in time which should pass in between starting each effect.
+This effect runs several different type of effects simultaneously on the component that it is added
+to. You provide it with a list of your predefined effects and if you don't want them to start or end
+at the same time you can utilize the `preOffset` and `postOffset` to add time before or after the
+effect runs.
 
 The effects in the list should only be passed to the `CombinedEffect`, never added to a
-`PositionComponent` with `add`.
+`PositionComponent` with `add` at the same time.
 
-**Note**: No effects should be of the same type since they will clash when trying to modify the
-`PositionComponent`.
-
-You can make the combined effect go in a loop by setting both `isInfinite: true` and
-`isAlternating: true`.
+**Note**: No effects should be of the same type since they will clash when trying to modify for
+example a `PositionComponent`.
 
 Usage example:
 ```dart
-final combination = CombinedEffect(
-    effects: [move, size, rotate],
-    isInfinite: true,
-    isAlternating: true);
+final combination = CombinedEffect(effects: [move, size, rotate]);
 myComponent.add(combination);
 ```
 
@@ -251,8 +245,8 @@ An example of how to use the `OpacityEffect` can be found
 
 ## ColorEffect
 
-This effect will change the base color of the paint, causing the rendered component to be tinted by the provided color.
-
+This effect will change the base color of the paint, causing the rendered component to be tinted by
+the provided color.
 
 Usage example:
 
