@@ -25,7 +25,7 @@ import 'game.dart';
 class BaseGame extends Game {
   BaseGame() {
     components = createComponentSet();
-    _cameraComponent = CameraComponent(Camera(), components);
+    _cameraComponent = CameraCo(Camera(), components);
   }
 
   /// The list of components to be updated and rendered by the base game.
@@ -36,7 +36,7 @@ class BaseGame extends Game {
 
   // When the Game becomes a Component (#906), this could be added directly
   // into the component tree.
-  late final CameraComponent _cameraComponent;
+  late final CameraCo _cameraComponent;
 
   /// This is overwritten to consider the viewport transformation.
   ///

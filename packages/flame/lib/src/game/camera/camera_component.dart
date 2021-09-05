@@ -2,9 +2,16 @@ import 'dart:ui';
 import '../../../components.dart';
 import 'camera.dart';
 
-// TODO(st-pasha): extend from BaseComponent
-class CameraComponent {
-  CameraComponent(this.camera, this.world);
+/// Do not use.
+///
+/// This class encapsulates BaseGame's rendering functionality. It will be
+/// converted into a proper Component in a future release, but until then
+/// using it in any code other than from the BaseGame class is unsafe and
+/// therefore not recommended.
+///
+/// "Co" means unfinished Component.
+class CameraCo { // TODO(st-pasha): extend from BaseComponent
+  CameraCo(this.camera, this.world);
 
   final Camera camera;
   final ComponentSet world;
