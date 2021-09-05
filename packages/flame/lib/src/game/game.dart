@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
@@ -213,7 +214,7 @@ abstract class Game extends Projector {
   /// Used to change the mouse cursor of the GameWidget running this game
   /// when setting the value to null will make the GameWidget defer the choice
   /// of the cursor to the closest region available on the tree
-  final mouseCursor = GameMouseCursorNotifier();
+  final mouseCursor = ValueNotifier<MouseCursor?>(null);
 }
 
 /// A [ChangeNotifier] used to control the visibility of overlays on a [Game] instance.
@@ -254,21 +255,4 @@ class ActiveOverlaysNotifier extends ChangeNotifier {
 
   /// Returns if the given [overlayName] is active
   bool isActive(String overlayName) => _activeOverlays.contains(overlayName);
-}
-
-/// A [ChangeNotifier] used to control the mouse cursor of the GameWidget which is running this game
-class GameMouseCursorNotifier extends ChangeNotifier {
-  MouseCursor? _cursor;
-
-  GameMouseCursorNotifier();
-
-  MouseCursor? get value => _cursor;
-
-  set value(MouseCursor? cursor) {
-    final hasChanges = _cursor != cursor;
-    _cursor = cursor;
-    if (hasChanges) {
-      notifyListeners();
-    }
-  }
 }
