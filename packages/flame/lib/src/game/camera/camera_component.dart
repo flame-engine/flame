@@ -10,7 +10,8 @@ import 'camera.dart';
 /// therefore not recommended.
 ///
 /// "Co" means unfinished Component.
-class CameraCo { // TODO(st-pasha): extend from BaseComponent
+class CameraCo {
+  // TODO(st-pasha): extend from BaseComponent
   CameraCo(this.camera, this.world);
 
   final Camera camera;
