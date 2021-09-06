@@ -193,6 +193,14 @@ class Component {
     return children.addChildren(components);
   }
 
+  /// The children are added again to the component set so that they are
+  /// prepared and onLoad:ed again. Used when a parent is changed further up the
+  /// tree.
+  Future<void> reAddChildren() async {
+    await Future.wait(children.map(add));
+    await Future.wait(children.addLater.map(add));
+  }
+
   /// Removes a component from the component list, calling onRemove for it and
   /// its children.
   void remove(Component c) {

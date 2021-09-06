@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/queryable_ordered_set.dart';
 
@@ -85,7 +87,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
       await onLoad;
     }
     if (component.children.isNotEmpty) {
-      await component.children.reAddChildren();
+      await component.reAddChildren();
     }
 
     _addLater.add(component);
@@ -98,14 +100,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   Future<void> addChildren(Iterable<Component> components) async {
     final ps = components.map(addChild);
     await Future.wait(ps);
-  }
-
-  /// The children are added again to the component set so that they are
-  /// prepared and onLoad:ed again. Used when a parent is changed further up the
-  /// tree.
-  Future<void> reAddChildren() async {
-    await Future.wait(map((child) => child.parent!.add(child)));
-    await Future.wait(_addLater.map((child) => child.parent!.add(child)));
   }
 
   /// Marks a component to be removed from the components list on the next game
@@ -143,6 +137,11 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// marked to be added later.
   @override
   bool get isNotEmpty => !isEmpty;
+
+  /// All the children that has been queued to be added to the component set.
+  UnmodifiableListView<Component> get addLater {
+    return UnmodifiableListView<Component>(_addLater);
+  }
 
   /// Call this on your update method.
   ///
