@@ -13,8 +13,8 @@ import '../game/base_game.dart';
 /// This will avoid any concurrent modification exceptions while the game
 /// iterates through the component list.
 ///
-/// This wrapper also guaranteed that prepare, onLoad, onMount and all the
-/// lifecycle methods are called properly.
+/// This wrapper also guaranteed that prepare, onLoad and all the lifecycle
+/// methods are called properly.
 class ComponentSet extends QueryableOrderedSet<Component> {
   /// Components to be added on the next update.
   ///
@@ -164,7 +164,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
         return false;
       }
       super.add(c);
-      c.onMount();
       return true;
     });
   }

@@ -41,8 +41,8 @@ class Square extends PositionComponent {
   }
 
   @override
-  void onMount() {
-    super.onMount();
+  Future<void> onLoad() async {
+    super.onLoad();
     size.setValues(squareSize, squareSize);
     anchor = Anchor.center;
   }

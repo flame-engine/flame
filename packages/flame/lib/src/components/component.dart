@@ -149,29 +149,16 @@ class Component {
 
   /// It receives the new game size.
   /// Executed right after the component is attached to a game and right before
-  /// [onMount] is called.
+  /// [onLoad] is called.
   @mustCallSuper
   void onGameResize(Vector2 gameSize) {
     children.forEach((child) => child.onGameResize(gameSize));
   }
 
-  /// Called when the component has been added and prepared by the game
-  /// instance.
-  ///
-  /// This can be used to make initializations of your component, most setup
-  /// for your component should usually go in [onLoad] though.
-  /// When this method is called, variables like [onGameResize] are already set
-  /// and usable.
-  @mustCallSuper
-  void onMount() {
-    _isMounted = true;
-    children.forEach((child) => child.onMount());
-  }
-
   /// Called right before the component is removed from the game
   @mustCallSuper
   void onRemove() {
-    _isMounted = false;
+    print('Removed from $this');
     children.forEach((child) {
       child.onRemove();
     });
@@ -293,6 +280,13 @@ class Component {
   /// parent is added to a [Game] and false will be returned.
   @mustCallSuper
   void prepare(Component component) {
+    if (component.parent != null && component.parent != this) {
+      print(component.parent);
+      // The component is swapping parents and it has not yet been removed from
+      // its previous parent.
+      component.isPrepared = false;
+      return;
+    }
     component.parent = this;
     final parentGame = component.findParent<Game>();
     if (parentGame == null) {

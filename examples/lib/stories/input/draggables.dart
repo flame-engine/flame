@@ -14,6 +14,7 @@ class DraggableSquare extends PositionComponent with Draggable, HasGameRef {
       : super(
           position: position ?? Vector2.all(100),
           size: Vector2.all(100),
+          priority: 1,
         );
 
   Vector2? dragDeltaPosition;
@@ -40,6 +41,7 @@ class DraggableSquare extends PositionComponent with Draggable, HasGameRef {
     }
     final dragDeltaPosition = this.dragDeltaPosition;
     if (dragDeltaPosition == null) {
+      print('We got null');
       return false;
     }
 
@@ -69,8 +71,7 @@ class DraggablesGame extends BaseGame with HasDraggableComponents {
   @override
   Future<void> onLoad() async {
     camera.zoom = zoom;
-    square = DraggableSquare();
-    add(square);
+    add(square = DraggableSquare());
     add(DraggableSquare()..y = 350);
   }
 }

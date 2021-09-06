@@ -26,18 +26,14 @@ The `isHUD` variable can be overridden or set to true (defaults to `false`) to m
 ignore the `camera` for this element, making it static in relation to the screen that is.
 Do note that this currently only works if the component is added directly to the root `BaseGame`.
 
-The `onMount` method can be overridden to run initialization code for the component. When this
-method is called, BaseGame ensures that all the mixins which would change this component's behavior
-are already resolved.
-
 The `onRemove` method can be overridden to run code before the component is removed from the game,
 it is only run once even if the component is removed both by using the parents remove method and
 the `Component` remove method.
 
 The `onLoad` method can be overridden to run asynchronous initialization code for the component,
 like loading an image for example. This method is executed after the initial "preparation" of the
-component is run, meaning that this method is executed after `onMount` and just before the inclusion
-of the component in the `BaseGame`'s list of components.
+component is run, meaning that this method is executed after the first `onGameResize` call and just
+before the inclusion of the component in the `BaseGame`'s list of components.
 
 ## BaseComponent
 Usually if you are going to make your own component you want to extend `PositionComponent`, but if
