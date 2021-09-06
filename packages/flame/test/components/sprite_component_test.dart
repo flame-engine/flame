@@ -28,6 +28,13 @@ void main() async {
         srcSize: Vector2(4, 3),
       );
       expect(component4.size, Vector2(40, 30));
+
+      final sprite = Sprite(image, srcSize: Vector2(2, 2));
+      final component5 = SpriteComponent(sprite: sprite, size: Vector2(10, 10));
+      expect(component5.size, Vector2(10, 10));
+
+      final component6 = SpriteComponent(sprite: sprite);
+      expect(component6.size, Vector2(2, 2));
     });
   });
 }
