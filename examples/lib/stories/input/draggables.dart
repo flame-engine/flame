@@ -41,7 +41,6 @@ class DraggableSquare extends PositionComponent with Draggable, HasGameRef {
     }
     final dragDeltaPosition = this.dragDeltaPosition;
     if (dragDeltaPosition == null) {
-      print('We got null');
       return false;
     }
 

@@ -58,7 +58,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// explicit gameRef or await for the onLoad, use [addChild].
   ///
   /// Note: the components are only added on the next tick. This method always
-  /// returns the total lenght of the provided list.
+  /// returns the total length of the provided list.
   @override
   int addAll(Iterable<Component> components) {
     addChildren(components);
@@ -76,8 +76,8 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     prepare(component);
     if (!component.isPrepared) {
       // Since the components won't be added until a proper game is added
-      // further up in the tree we can add them to _addLater and then re-add
-      // them once there is a proper root.
+      // further up in the tree we can add them to the _addLater list and
+      // then re-add them once there is a proper root.
       _addLater.add(component);
       return;
     }
@@ -159,13 +159,8 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     });
     _removeLater.clear();
 
-    _addLater.removeWhere((c) {
-      if (!c.isPrepared) {
-        return false;
-      }
-      super.add(c);
-      return true;
-    });
+    _addLater.forEach(super.add);
+    _addLater.clear();
   }
 
   @override

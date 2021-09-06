@@ -29,13 +29,10 @@ class GameInGame extends BaseGame with HasDraggableComponents {
     final t = Timer(
       5,
       callback: () {
-        print('In callback, parent: ${child.parent}');
-        print('parent square: ${composedGame.parentSquare}');
-        child.changeParent(
-          child.parent == draggablesGame
-              ? composedGame.parentSquare
-              : draggablesGame,
-        );
+        final newParent = child.parent == draggablesGame
+            ? composedGame.parentSquare
+            : draggablesGame;
+        child.changeParent(newParent);
       },
       repeat: true,
     );

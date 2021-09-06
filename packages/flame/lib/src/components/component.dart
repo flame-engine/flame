@@ -22,17 +22,16 @@ class Component {
   /// coordinates are considered relative to the device screen).
   bool isHud = false;
 
-  bool _isMounted = false;
-
-  /// Whether this component is currently mounted on a game or not
-  bool get isMounted => _isMounted;
-
   /// Whether this component has been prepared and is ready to be added to the
   /// game loop
   bool isPrepared = false;
 
-  /// If the component has a parent it will be set here
+  /// If the component has a parent it will be set here.
   Component? parent;
+
+  /// If the component should be added to another parent once it has been
+  /// removed from its current parent.
+  Component? nextParent;
 
   late final ComponentSet children = createComponentSet();
 
@@ -143,8 +142,8 @@ class Component {
   /// Changes the current parent for another parent and prepares the tree under
   /// the new root.
   void changeParent(Component component) {
-    removeFromParent();
-    component.add(this);
+    parent?.remove(this);
+    nextParent = component;
   }
 
   /// It receives the new game size.
@@ -158,11 +157,12 @@ class Component {
   /// Called right before the component is removed from the game
   @mustCallSuper
   void onRemove() {
-    print('Removed from $this');
     children.forEach((child) {
       child.onRemove();
     });
     parent = null;
+    nextParent?.add(this);
+    nextParent = null;
   }
 
   /// Prepares and registers a component to be added on the next game tick
@@ -243,6 +243,8 @@ class Component {
     return shouldContinue;
   }
 
+  /// Finds the closest parent further up the hierarchy that satisfies type=T,
+  /// or null if none is found.
   T? findParent<T extends Component>() {
     return (parent is T ? parent : parent?.findParent<T>()) as T?;
   }
@@ -280,13 +282,6 @@ class Component {
   /// parent is added to a [Game] and false will be returned.
   @mustCallSuper
   void prepare(Component component) {
-    if (component.parent != null && component.parent != this) {
-      print(component.parent);
-      // The component is swapping parents and it has not yet been removed from
-      // its previous parent.
-      component.isPrepared = false;
-      return;
-    }
     component.parent = this;
     final parentGame = component.findParent<Game>();
     if (parentGame == null) {
