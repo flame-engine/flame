@@ -59,43 +59,50 @@ class BaseGame extends Game {
     return components;
   }
 
-  /// This method is called for every component.
+  /// This method is called for every component before it is added to the
+  /// component tree.
   /// It does preparation on a component before any update or render method is
   /// called on it.
   ///
-  /// You can use this to setup your mixins, pre-calculate stuff on every
-  /// component, or anything you desire.
-  /// By default, this calls the first time resize for every component, so don't
-  /// forget to call super.prepareComponent when overriding.
+  /// You can use this to set up your mixins or pre-calculate things for
+  /// example.
+  /// By default, this calls the first [onGameResize] for every component, so
+  /// don't forget to call `super.prepareComponent` when overriding.
   @mustCallSuper
   void prepareComponent(Component c) {
     assert(
       hasLayout,
-      '"prepare/add" called before the game is ready. Did you try to access it on the Game constructor? Use the "onLoad" method instead.',
+      '"prepare/add" called before the game is ready. '
+      'Did you try to access it on the Game constructor? '
+      'Use the "onLoad" method instead.',
     );
 
     if (c is Collidable) {
       assert(
         this is HasCollidables,
-        'You can only use the Hitbox/Collidable feature with games that has the HasCollidables mixin',
+        'You can only use the Hitbox/Collidable feature with games that has the '
+        'HasCollidables mixin',
       );
     }
     if (c is Tappable) {
       assert(
         this is HasTappableComponents,
-        'Tappable Components can only be added to a BaseGame with HasTappableComponents',
+        'Tappable Components can only be added to a BaseGame with '
+        'HasTappableComponents',
       );
     }
     if (c is Draggable) {
       assert(
         this is HasDraggableComponents,
-        'Draggable Components can only be added to a BaseGame with HasDraggableComponents',
+        'Draggable Components can only be added to a BaseGame with '
+        'HasDraggableComponents',
       );
     }
     if (c is Hoverable) {
       assert(
         this is HasHoverableComponents,
-        'Hoverable Components can only be added to a BaseGame with HasHoverableComponents',
+        'Hoverable Components can only be added to a BaseGame with '
+        'HasHoverableComponents',
       );
     }
 
@@ -107,21 +114,21 @@ class BaseGame extends Game {
   /// canvas is reset for each one.
   ///
   /// You can override it further to add more custom behavior.
-  /// Beware of however you are rendering components if not using this; you
-  /// must be careful to save and restore the canvas to avoid components
-  /// messing up with each other.
+  /// Beware of that if you are rendering components without using this method;
+  /// you must be careful to save and restore the canvas to avoid components
+  /// interfering with each others rendering.
   @override
   @mustCallSuper
   void render(Canvas canvas) {
     _cameraWrapper.render(canvas);
   }
 
-  /// This implementation of update updates every component in the list.
+  /// This updates every component in the tree.
   ///
-  /// It also actually adds the components added via [add] since the previous
-  /// tick, and remove those that are marked for destruction via the
-  /// [Component.shouldRemove] method.
-  /// You can override it further to add more custom behavior.
+  /// It also adds the components added via [add] since the previous tick, and
+  /// removes those that are marked for removal via the [remove] and
+  /// [Component.removeFromParent] methods.
+  /// You can override it to add more custom behavior.
   @override
   @mustCallSuper
   void update(double dt) {
@@ -134,9 +141,9 @@ class BaseGame extends Game {
     _cameraWrapper.update(dt);
   }
 
-  /// This implementation of resize passes the resize call along to every
-  /// component in the list, enabling each one to make their decisions as how to
-  /// handle the resize.
+  /// This passes the new size along to every component in the tree via their
+  /// [Component.onGameResize] method, enabling each one to make their decision
+  /// of how to handle the resize event.
   ///
   /// It also updates the [size] field of the class to be used by later added
   /// components and other methods.
@@ -203,10 +210,10 @@ class BaseGame extends Game {
     parents.forEach((parent) => parent.reorderChildren());
   }
 
+  /// Whether a point is within the boundaries of the visible part of the game.
   @override
   bool containsPoint(Vector2 p) {
-    return parent?.containsPoint(p) ??
-        p.x > 0 && p.y > 0 && p.x < size.x && p.y < size.y;
+    return p.x > 0 && p.y > 0 && p.x < size.x && p.y < size.y;
   }
 
   /// Returns the current time in seconds with microseconds precision.

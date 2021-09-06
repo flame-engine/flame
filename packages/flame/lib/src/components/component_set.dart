@@ -2,10 +2,9 @@ import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/queryable_ordered_set.dart';
 
 import '../../components.dart';
-import '../game/base_game.dart';
 
 /// This is a simple wrapper over [QueryableOrderedSet] to be used by
-/// [BaseGame] and [Component].
+/// [Component].
 ///
 /// Instead of immediately modifying the component list, all insertion
 /// and removal operations are queued to be performed on the next tick.
@@ -13,8 +12,8 @@ import '../game/base_game.dart';
 /// This will avoid any concurrent modification exceptions while the game
 /// iterates through the component list.
 ///
-/// This wrapper also guaranteed that prepare, onLoad and all the lifecycle
-/// methods are called properly.
+/// This wrapper also guaranteed that [Component.prepare], [Component.onLoad]
+/// and all the lifecycle methods are called properly.
 class ComponentSet extends QueryableOrderedSet<Component> {
   /// Components to be added on the next update.
   ///
