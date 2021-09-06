@@ -33,6 +33,7 @@ class MouseCursorGame extends Game with MouseMovementDetector {
 
   @override
   void update(double dt) {
+    super.update(dt);
     final target = this.target;
     if (target != null) {
       final hovering = _toRect().contains(target.toOffset());
