@@ -8,7 +8,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 class Callback {
   int calledNumber = 0;
-  bool get isCalledOnce => calledNumber == 1;
 
   void call() => calledNumber++;
 }

@@ -211,14 +211,14 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     }
   }
 
+  void addMouseCursorListener() {
+    widget.game.mouseCursor.addListener(onChangeMouseCursor);
+  }
+
   void onChangeMouseCursor() {
     setState(() {
       _mouseCursor = widget.game.mouseCursor.value;
     });
-  }
-
-  void addMouseCursorListener() {
-    widget.game.mouseCursor.addListener(onChangeMouseCursor);
   }
 
   //#region Widget overlay methods
