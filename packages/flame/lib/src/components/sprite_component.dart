@@ -27,7 +27,11 @@ class SpriteComponent extends PositionComponent with HasPaint {
     int? priority,
     this.sprite,
     Paint? paint,
-  }) : super(position: position, size: size, priority: priority) {
+  }) : super(
+          position: position,
+          size: size ?? sprite?.srcSize,
+          priority: priority,
+        ) {
     if (paint != null) {
       this.paint = paint;
     }
