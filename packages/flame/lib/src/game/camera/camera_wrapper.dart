@@ -7,7 +7,7 @@ import 'camera.dart';
 /// This class encapsulates BaseGame's rendering functionality. It will be
 /// converted into a proper Component in a future release, but until then
 /// using it in any code other than the BaseGame class is unsafe and
-/// therefore not recommended.
+/// not recommended.
 class CameraWrapper {
   // TODO(st-pasha): extend from BaseComponent
   CameraWrapper(this.camera, this.world);
