@@ -17,7 +17,7 @@ class TextBoxConfig {
   /// word boundaries in as many lines as necessary.
   final double maxWidth;
 
-  /// Margins of the text box w.r.t the [TextBoxComponent.size].
+  /// Margins of the text box w.r.t the [PositionComponent.size].
   final EdgeInsets margins;
 
   /// Defaults to 0. If not zero the characters will appear one by one giving
