@@ -17,7 +17,7 @@ class TextBoxConfig {
   /// word boundaries in as many lines as necessary.
   final double maxWidth;
 
-  /// Margins of the text box w.r.t the [TextBoxComponent.size].
+  /// Margins of the text box w.r.t the [PositionComponent.size].
   final EdgeInsets margins;
 
   /// Defaults to 0. If not zero the characters will appear one by one giving
@@ -73,12 +73,11 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     T? textRenderer,
     TextBoxConfig? boxConfig,
     Vector2? position,
-    Vector2? size,
     int? priority,
   })  : _text = text,
         _boxConfig = boxConfig ?? TextBoxConfig(),
         _textRenderer = textRenderer ?? TextRenderer.createDefault<T>(),
-        super(position: position, size: size, priority: priority) {
+        super(position: position, priority: priority) {
     _lines = [];
     double? lineHeight;
     text.split(' ').forEach((word) {
@@ -100,6 +99,7 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     });
     _totalLines = _lines.length;
     _lineHeight = lineHeight ?? 0.0;
+    size = _recomputeSize();
   }
 
   void _updateMaxWidth(double w) {
@@ -132,22 +132,13 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     return _lines.length - 1;
   }
 
-  @override
-  Vector2 get size => Vector2(width, height);
-
   double getLineWidth(String line, int charCount) {
     return _textRenderer.measureTextWidth(
       line.substring(0, math.min(charCount, line.length)),
     );
   }
 
-  double? _cachedWidth;
-
-  @override
-  double get width {
-    if (_cachedWidth != null) {
-      return _cachedWidth!;
-    }
+  Vector2 _recomputeSize() {
     if (_boxConfig.growingBox) {
       var i = 0;
       var totalCharCount = 0;
@@ -160,19 +151,15 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
         i++;
         return getLineWidth(line, charCount);
       }).reduce(math.max);
-      _cachedWidth = textWidth + _boxConfig.margins.horizontal;
+      return Vector2(
+        textWidth + _boxConfig.margins.horizontal,
+        _lineHeight * _lines.length + _boxConfig.margins.vertical,
+      );
     } else {
-      _cachedWidth = _boxConfig.maxWidth + _boxConfig.margins.horizontal;
-    }
-    return _cachedWidth!;
-  }
-
-  @override
-  double get height {
-    if (_boxConfig.growingBox) {
-      return _lineHeight * _lines.length + _boxConfig.margins.vertical;
-    } else {
-      return _lineHeight * _totalLines + _boxConfig.margins.vertical;
+      return Vector2(
+        _boxConfig.maxWidth + _boxConfig.margins.horizontal,
+        _lineHeight * _totalLines + _boxConfig.margins.vertical,
+      );
     }
   }
 
@@ -232,7 +219,7 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     super.update(dt);
     _lifeTime += dt;
     if (_previousChar != currentChar) {
-      _cachedWidth = null;
+      size = _recomputeSize();
       redrawLater();
     }
     _previousChar = currentChar;
