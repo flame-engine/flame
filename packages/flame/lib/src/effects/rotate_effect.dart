@@ -17,8 +17,8 @@ class RotateEffect extends PositionComponentEffect {
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
-    double? preOffset,
-    double? postOffset,
+    double? initialDelay,
+    double? peakDelay,
     bool? removeOnFinish,
     VoidCallback? onComplete,
   }) : super(
@@ -29,8 +29,8 @@ class RotateEffect extends PositionComponentEffect {
           curve: curve,
           isRelative: isRelative,
           removeOnFinish: removeOnFinish,
-          preOffset: preOffset,
-          postOffset: postOffset,
+          initialDelay: initialDelay,
+          peakDelay: peakDelay,
           modifiesAngle: true,
           onComplete: onComplete,
         );

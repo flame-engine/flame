@@ -54,7 +54,7 @@
  - `Game` is now a `Component`
  - `ComponentEffect` is now a `Component`
  - `HasGameRef` can now operate independently from `Game`
- - `preOffset` and `postOffset` for effects to handle time before and after an effect
+ - `initialDelay` and `peakDelay` for effects to handle time before and after an effect
  - Removes `component.onMount` since `onLoad` can be used for all its purposes
 
 ## [1.0.0-releasecandidate.13]

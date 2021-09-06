@@ -30,7 +30,7 @@ class MoveEffectGame extends BaseGame with TapDetector {
         speed: 250.0,
         curve: Curves.bounceInOut,
         isAlternating: true,
-        postOffset: 2.0,
+        peakDelay: 2.0,
       ),
     );
   }

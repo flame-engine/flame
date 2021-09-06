@@ -16,16 +16,16 @@ class SequenceEffect extends PositionComponentEffect {
     this.effects = const [],
     bool isInfinite = false,
     bool isAlternating = false,
-    double? preOffset,
-    double? postOffset,
+    double? initialDelay,
+    double? peakDelay,
     bool? removeOnFinish,
     VoidCallback? onComplete,
   }) : super(
           isInfinite,
           isAlternating,
           duration: 0.0,
-          preOffset: preOffset,
-          postOffset: postOffset,
+          initialDelay: initialDelay,
+          peakDelay: peakDelay,
           removeOnFinish: removeOnFinish,
           onComplete: onComplete,
         ) {
@@ -49,7 +49,7 @@ class SequenceEffect extends PositionComponentEffect {
     await super.onLoad();
     _currentIndex = _initialIndex;
     _driftModifier = _initialDriftModifier;
-    peakTime = preOffset + postOffset;
+    peakTime = initialDelay + peakDelay;
 
     for (final effect in effects) {
       effect.removeOnFinish = false;

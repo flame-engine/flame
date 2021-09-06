@@ -19,8 +19,8 @@ class SizeEffect extends PositionComponentEffect {
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
-    double? preOffset,
-    double? postOffset,
+    double? initialDelay,
+    double? peakDelay,
     bool? removeOnFinish,
     VoidCallback? onComplete,
   }) : super(
@@ -31,8 +31,8 @@ class SizeEffect extends PositionComponentEffect {
           curve: curve,
           isRelative: isRelative,
           modifiesSize: true,
-          preOffset: preOffset,
-          postOffset: postOffset,
+          initialDelay: initialDelay,
+          peakDelay: peakDelay,
           removeOnFinish: removeOnFinish,
           onComplete: onComplete,
         );

@@ -41,7 +41,7 @@ class CombinedEffectGame extends BaseGame with TapDetector {
       isAlternating: true,
       duration: 4.0,
       curve: Curves.bounceInOut,
-      preOffset: 0.6,
+      initialDelay: 0.6,
     );
 
     final scale = SizeEffect(
@@ -49,7 +49,7 @@ class CombinedEffectGame extends BaseGame with TapDetector {
       speed: 200.0,
       curve: Curves.linear,
       isAlternating: true,
-      postOffset: 1.0,
+      peakDelay: 1.0,
     );
 
     final rotate = RotateEffect(
@@ -57,8 +57,8 @@ class CombinedEffectGame extends BaseGame with TapDetector {
       duration: 3,
       curve: Curves.decelerate,
       isAlternating: true,
-      preOffset: 1.0,
-      postOffset: 1.0,
+      initialDelay: 1.0,
+      peakDelay: 1.0,
     );
 
     final combination = CombinedEffect(

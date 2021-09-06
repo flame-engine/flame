@@ -18,10 +18,10 @@ class CombinedEffect extends ComponentEffect with EffectsHelper {
   final bool isAlternating = false;
 
   @override
-  final double preOffset = 0.0;
+  final double initialDelay = 0.0;
 
   @override
-  final double postOffset = 0.0;
+  final double peakDelay = 0.0;
 
   CombinedEffect({
     List<ComponentEffect> effects = const [],

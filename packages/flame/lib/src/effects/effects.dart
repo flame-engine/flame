@@ -55,12 +55,12 @@ abstract class ComponentEffect<T extends Component> extends Component {
   final bool _initialIsInfinite;
   final bool _initialIsAlternating;
 
-  /// The percentage of the effect that has passed including [preOffset] and
-  /// [postOffset].
+  /// The percentage of the effect that has passed including [initialDelay] and
+  /// [peakDelay].
   double percentage = 0.0;
 
-  /// The outcome the curve function, only updates after [preOffset] and before
-  /// [postOffset].
+  /// The outcome the curve function, only updates after [initialDelay] and before
+  /// [peakDelay].
   double curveProgress = 0.0;
 
   /// Whether the effect has started or not.
@@ -92,15 +92,15 @@ abstract class ComponentEffect<T extends Component> extends Component {
 
   /// The time (in seconds) that should pass before the effect starts each
   /// iteration.
-  double preOffset;
+  double initialDelay;
 
   /// The time (in seconds) that should pass before the effect ends each
   /// peak.
-  double postOffset;
+  double peakDelay;
 
   /// The total time offset spent waiting in one iteration, so from the start to
   /// the end of the effect and then back again if it [isAlternating].
-  double get totalOffset => preOffset + postOffset * (isAlternating ? 2 : 1);
+  double get totalOffset => initialDelay + peakDelay * (isAlternating ? 2 : 1);
 
   /// If this is set to true the effect will not be set to its original state
   /// once it is done.
@@ -113,15 +113,15 @@ abstract class ComponentEffect<T extends Component> extends Component {
     this._initialIsInfinite,
     this._initialIsAlternating, {
     this.isRelative = false,
-    double? preOffset,
-    double? postOffset,
+    double? initialDelay,
+    double? peakDelay,
     bool? removeOnFinish,
     Curve? curve,
     this.onComplete,
   })  : isInfinite = _initialIsInfinite,
         isAlternating = _initialIsAlternating,
-        preOffset = preOffset ?? 0.0,
-        postOffset = postOffset ?? 0.0,
+        initialDelay = initialDelay ?? 0.0,
+        peakDelay = peakDelay ?? 0.0,
         removeOnFinish = removeOnFinish ?? true,
         curve = curve ?? Curves.linear;
 
@@ -150,9 +150,9 @@ abstract class ComponentEffect<T extends Component> extends Component {
 
     currentTime += (dt + driftTime) * curveDirection;
     percentage = (currentTime / peakTime).clamp(0.0, 1.0).toDouble();
-    if (currentTime >= preOffset && currentTime <= peakTime - postOffset) {
+    if (currentTime >= initialDelay && currentTime <= peakTime - peakDelay) {
       final effectPercentage =
-          ((currentTime - preOffset) / (peakTime - preOffset - postOffset))
+          ((currentTime - initialDelay) / (peakTime - initialDelay - peakDelay))
               .clamp(0.0, 1.0);
       curveProgress = curve.transform(effectPercentage);
     }
@@ -243,7 +243,7 @@ abstract class ComponentEffect<T extends Component> extends Component {
   }
 
   void setPeakTimeFromDuration(double duration) {
-    peakTime = duration / (isAlternating ? 2 : 1) + preOffset + postOffset;
+    peakTime = duration / (isAlternating ? 2 : 1) + initialDelay + peakDelay;
   }
 }
 
@@ -287,8 +287,8 @@ abstract class PositionComponentEffect
     this.duration,
     this.speed,
     bool isRelative = false,
-    double? preOffset,
-    double? postOffset,
+    double? initialDelay,
+    double? peakDelay,
     bool? removeOnFinish,
     Curve? curve,
     this.modifiesPosition = false,
@@ -304,8 +304,8 @@ abstract class PositionComponentEffect
           initialIsInfinite,
           initialIsAlternating,
           isRelative: isRelative,
-          preOffset: preOffset,
-          postOffset: postOffset,
+          initialDelay: initialDelay,
+          peakDelay: peakDelay,
           removeOnFinish: removeOnFinish,
           curve: curve,
           onComplete: onComplete,

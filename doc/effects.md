@@ -188,7 +188,7 @@ An example of how to use the `SequenceEffect` can be found
 
 This effect runs several different type of effects simultaneously on the component that it is added
 to. You provide it with a list of your predefined effects and if you don't want them to start or end
-at the same time you can utilize the `preOffset` and `postOffset` to add time before or after the
+at the same time you can utilize the `initialDelay` and `peakDelay` to add time before or after the
 effect runs.
 
 The effects in the list should only be passed to the `CombinedEffect`, never added to a

@@ -34,8 +34,8 @@ class MoveEffect extends PositionComponentEffect {
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
-    double? preOffset,
-    double? postOffset,
+    double? initialDelay,
+    double? peakDelay,
     bool? removeOnFinish,
     VoidCallback? onComplete,
   }) : super(
@@ -46,8 +46,8 @@ class MoveEffect extends PositionComponentEffect {
           curve: curve,
           isRelative: isRelative,
           modifiesPosition: true,
-          preOffset: preOffset,
-          postOffset: postOffset,
+          initialDelay: initialDelay,
+          peakDelay: peakDelay,
           removeOnFinish: removeOnFinish,
           onComplete: onComplete,
         );
