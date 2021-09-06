@@ -13,7 +13,7 @@ import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/hoverable.dart';
 import '../components/mixins/tappable.dart';
 import 'camera/camera.dart';
-import 'camera/camera_component.dart';
+import 'camera/camera_wrapper.dart';
 import 'game.dart';
 
 /// This is a more complete and opinionated implementation of Game.
@@ -25,7 +25,7 @@ import 'game.dart';
 class BaseGame extends Game {
   BaseGame() {
     components = createComponentSet();
-    _cameraComponent = CameraCo(Camera(), components);
+    _cameraComponent = CameraWrapper(Camera(), components);
   }
 
   /// The list of components to be updated and rendered by the base game.
@@ -36,7 +36,7 @@ class BaseGame extends Game {
 
   // When the Game becomes a Component (#906), this could be added directly
   // into the component tree.
-  late final CameraCo _cameraComponent;
+  late final CameraWrapper _cameraComponent;
 
   /// This is overwritten to consider the viewport transformation.
   ///
