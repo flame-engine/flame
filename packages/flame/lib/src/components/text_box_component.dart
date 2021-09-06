@@ -73,12 +73,11 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     T? textRenderer,
     TextBoxConfig? boxConfig,
     Vector2? position,
-    Vector2? size,
     int? priority,
   })  : _text = text,
         _boxConfig = boxConfig ?? TextBoxConfig(),
         _textRenderer = textRenderer ?? TextRenderer.createDefault<T>(),
-        super(position: position, size: size, priority: priority) {
+        super(position: position, priority: priority) {
     _lines = [];
     double? lineHeight;
     text.split(' ').forEach((word) {
