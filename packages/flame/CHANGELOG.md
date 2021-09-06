@@ -45,6 +45,7 @@
  - Add `loadAllImages` to `Images`, which loads all images from the prefixed path
  - Reviewed the keyboard API with new mixins (`KeyboardHandler` and `HasKeyboardHandlerComponents`)
  - Added `FocusNode` on the game widget and improved keyboard handling in the game.
+ - Added ability to have custom mouse cursor on the `GameWidget` region
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
