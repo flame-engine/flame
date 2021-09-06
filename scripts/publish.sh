@@ -90,7 +90,7 @@ then
 fi
 
 set_version $upgrade_dir
-pub publish
+dart pub publish
 
 if [[ ! $upgrade_package = "flame" ]]
 then
