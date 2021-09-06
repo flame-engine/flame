@@ -14,18 +14,16 @@ class DraggableSquare extends PositionComponent with Draggable, HasGameRef {
       : super(
           position: position ?? Vector2.all(100),
           size: Vector2.all(100),
-          priority: 1,
         );
 
   Vector2? dragDeltaPosition;
-  bool get isDragging => dragDeltaPosition != null;
 
   @override
   void update(double dt) {
     super.update(dt);
-    if (parent is DraggablesGame) {
-      debugColor = isDragging ? Colors.greenAccent : Colors.purple;
-    }
+    debugColor = isDragged && parent is DraggablesGame
+        ? Colors.greenAccent
+        : Colors.purple;
   }
 
   @override

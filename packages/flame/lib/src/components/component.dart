@@ -10,20 +10,20 @@ import '../extensions/vector2.dart';
 
 /// This represents a Component for your game.
 ///
-/// Components can be bullets flying on the screen, a spaceship or your player's
-/// fighter. Anything that either renders or updates can be added to the list on
-/// BaseGame. It will deal with calling those methods for you.
-/// Components also have other methods that can help you out if you want to
-/// override them.
+/// Components can be for example bullets flying on the screen, a spaceship, a
+/// timer or an enemy. Anything that either needs to be rendered and/or updated
+/// is a good idea to have as a [Component], since [update] and [render] will be
+/// called automatically once the component is added to the component tree in
+/// your game (with `game.add`).
 class Component {
-  /// Whether this component is HUD object or not.
+  /// Whether this component is a HUD (Heads-up display) object or not.
   ///
   /// HUD objects ignore the BaseGame.camera when rendered (so their position
   /// coordinates are considered relative to the device screen).
   bool isHud = false;
 
   /// Whether this component has been prepared and is ready to be added to the
-  /// game loop
+  /// game loop.
   bool isPrepared = false;
 
   /// If the component has a parent it will be set here.
@@ -70,13 +70,17 @@ class Component {
   /// the output.
   int? get debugCoordinatesPrecision => 0;
 
+  /// The color that the debug output should be rendered with.
   Color debugColor = const Color(0xFFFF00FF);
 
+  /// The [debugColor] represented as a [Paint] object.
   Paint get debugPaint => Paint()
     ..color = debugColor
     ..strokeWidth = 1
     ..style = PaintingStyle.stroke;
 
+  /// Returns a [TextPaint] object with the [debugColor] set as color for the
+  /// text.
   TextPaint get debugTextPaint => TextPaint(
         config: TextPaintConfig(
           color: debugColor,

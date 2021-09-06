@@ -26,7 +26,7 @@ class GameInGame extends BaseGame with HasDraggableComponents {
     await add(composedGame);
     await add(draggablesGame);
     final child = draggablesGame.square;
-    final t = Timer(
+    final timer = Timer(
       5,
       callback: () {
         final newParent = child.parent == draggablesGame
@@ -36,7 +36,7 @@ class GameInGame extends BaseGame with HasDraggableComponents {
       },
       repeat: true,
     );
-    t.start();
-    add(t.asComponent());
+    timer.start();
+    add(timer.asComponent());
   }
 }

@@ -10,8 +10,15 @@ import 'position_component.dart';
 export '../sprite_animation.dart';
 
 class SpriteAnimationComponent extends PositionComponent with HasPaint {
+  /// The animation used by the component.
   SpriteAnimation? animation;
+
+  /// If the component should be removed once the animation has finished.
+  /// (Needs the animation to have `loop = false`, since it will never finish
+  /// otherwise.
   bool removeOnFinish = false;
+
+  /// Whether the animation is paused or playing.
   bool playing;
 
   /// Creates a component with an empty animation which can be set later

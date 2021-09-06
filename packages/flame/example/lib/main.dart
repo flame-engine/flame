@@ -62,14 +62,10 @@ class MyGame extends BaseGame with DoubleTapDetector, TapDetector {
 
   @override
   void onTapUp(TapUpInfo info) {
-    final touchArea = RectExtension.fromVector2Center(
-      center: info.eventPosition.game,
-      width: 20,
-      height: 20,
-    );
+    final touchPoint = info.eventPosition.game;
 
     final handled = children.any((c) {
-      if (c is PositionComponent && c.toRect().overlaps(touchArea)) {
+      if (c is PositionComponent && c.containsPoint(touchPoint)) {
         remove(c);
         return true;
       }
@@ -77,9 +73,7 @@ class MyGame extends BaseGame with DoubleTapDetector, TapDetector {
     });
 
     if (!handled) {
-      add(Square()
-        ..x = touchArea.left
-        ..y = touchArea.top);
+      add(Square()..position = touchPoint);
     }
   }
 

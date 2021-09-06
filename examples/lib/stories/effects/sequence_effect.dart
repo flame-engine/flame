@@ -16,7 +16,6 @@ class SequenceEffectGame extends BaseGame with TapDetector {
     greenSquare = SquareComponent()
       ..paint = green
       ..position.setValues(100, 100);
-    debugMode = true;
     add(greenSquare);
   }
 
