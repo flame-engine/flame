@@ -33,8 +33,8 @@ class GameWidget<T extends Game> extends StatefulWidget {
   final TextDirection? textDirection;
 
   /// Builder to provide a widget tree to be built whilst the [Future] provided
-  /// via `Game.onLoad` is not resolved. By default this is an empty
-  /// Container().
+  /// via `Game.onLoad` and `Game.onParentChange` is not resolved.
+  /// By default this is an empty Container().
   final GameLoadingWidgetBuilder? loadingBuilder;
 
   /// If set, errors during the onLoad method will not be thrown
@@ -138,10 +138,14 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   MouseCursor? _mouseCursor;
 
-  Future<void>? _gameLoaderFuture;
+  Future<void>? _gamePreparationFuture;
 
-  Future<void>? get _gameLoaderFutureCache {
-    return _gameLoaderFuture ?? (_gameLoaderFuture = widget.game.onLoad());
+  Future<void>? get _gamePreparationFutureCache {
+    final game = widget.game;
+    _gamePreparationFuture ??= game.isLoaded ? null : game.onLoad();
+    _gamePreparationFuture =
+        _gamePreparationFuture?.then<void>((_) => game.onParentChange());
+    return _gamePreparationFuture ??= game.onParentChange();
   }
 
   late FocusNode _focusNode;
@@ -195,8 +199,8 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       _initMouseCursor();
       addMouseCursorListener();
 
-      // Reset the loader future
-      _gameLoaderFuture = null;
+      // Reset the preparation future
+      _gamePreparationFuture = null;
     }
   }
 
@@ -313,7 +317,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
               builder: (_, BoxConstraints constraints) {
                 widget.game.onGameResize(constraints.biggest.toVector2());
                 return FutureBuilder(
-                  future: _gameLoaderFutureCache,
+                  future: _gamePreparationFutureCache,
                   builder: (_, snapshot) {
                     if (snapshot.hasError) {
                       final errorBuilder = widget.errorBuilder;

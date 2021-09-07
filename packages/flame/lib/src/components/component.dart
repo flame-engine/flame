@@ -26,6 +26,9 @@ class Component {
   /// game loop.
   bool isPrepared = false;
 
+  /// Whether this component is done loading through [onLoad]
+  bool isLoaded = false;
+
   /// If the component has a parent it will be set here.
   Component? parent;
 
@@ -171,7 +174,7 @@ class Component {
 
   /// Prepares and registers a component to be added on the next game tick
   ///
-  /// This methods is an async operation since it await the `onLoad` method of
+  /// This methods is an async operation since it await the [onLoad] method of
   /// the component. Nevertheless, this method only need to be waited to finish
   /// if by some reason, your logic needs to be sure that the component has
   /// finished loading, otherwise, this method can be called without waiting
@@ -193,9 +196,9 @@ class Component {
     return children.addChildren(components);
   }
 
-  /// The children are added again to the component set so that they are
-  /// prepared and onLoad:ed again. Used when a parent is changed further up the
-  /// tree.
+  /// The children are added again to the component set so that [prepare],
+  /// [onLoad] and [onParentChange] runs again. Used when a parent is changed
+  /// further up the tree.
   Future<void> reAddChildren() async {
     await Future.wait(children.map(add));
     await Future.wait(children.addLater.map(add));
@@ -261,14 +264,16 @@ class Component {
     return (parent is T ? parent : parent?.findParent<T>()) as T?;
   }
 
-  /// Called before the component is added to the BaseGame by the add method.
-  /// Whenever this returns something, BaseGame will wait for the [Future] to be
-  /// resolved before adding the component on the list.
+  /// Called after the component has successfully run [prepare] and it is called
+  /// before the component is added to a parent for the first time.
+  ///
+  /// Whenever [onLoad] returns something, the parent will wait for the [Future]
+  /// to be resolved before adding the component on the list.
   /// If `null` is returned, the component is added right away.
   ///
-  /// Has a default implementation which just returns null.
+  /// The default implementation just returns null.
   ///
-  /// This can be overwritten this to add custom logic to the component loading.
+  /// This can be overwritten to add custom logic to the component loading.
   ///
   /// Example:
   /// ```dart
@@ -278,6 +283,26 @@ class Component {
   /// }
   /// ```
   Future<void>? onLoad() => null;
+
+  /// Called after the component has successfully run [prepare] and [onLoad] and
+  /// called before the component is added to its new parent.
+  ///
+  /// Whenever [onParentChange] returns something, the parent will wait for the
+  /// [Future] to be resolved before adding the component on the list.
+  /// If `null` is returned, the component is added right away.
+  ///
+  /// The default implementation just returns null.
+  ///
+  /// This can be overwritten this to add custom logic to the component loading.
+  ///
+  /// Example:
+  /// ```dart
+  /// @override
+  /// Future<void> onParentChange() async {
+  ///   position = parent!.size / 2;
+  /// }
+  /// ```
+  Future<void>? onParentChange() => null;
 
   /// Called to check whether the point is to be counted as within the component
   /// It needs to be overridden to have any effect, like it is in

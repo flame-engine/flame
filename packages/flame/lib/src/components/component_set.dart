@@ -42,7 +42,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// Prepares and registers one component to be added on the next game tick.
   ///
   /// This is the interface compliant version; if you want to provide an
-  /// explicit gameRef or await for the onLoad, use [addChild].
+  /// explicit gameRef or await for the [Component.onLoad], use [addChild].
   ///
   /// Note: the component is only added on the next tick. This method always
   /// returns true.
@@ -56,7 +56,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// tick.
   ///
   /// This is the interface compliant version; if you want to provide an
-  /// explicit gameRef or await for the onLoad, use [addChild].
+  /// explicit gameRef or await for the [Component.onLoad], use [addChild].
   ///
   /// Note: the components are only added on the next tick. This method always
   /// returns the total length of the provided list.
@@ -82,9 +82,21 @@ class ComponentSet extends QueryableOrderedSet<Component> {
       _addLater.add(component);
       return;
     }
-    final onLoad = component.onLoad();
-    if (onLoad != null) {
-      await onLoad;
+    // [Component.onLoad] (if it is defined) should only run the first time that
+    // a component is added to a parent.
+    if (!component.isLoaded) {
+      final onLoad = component.onLoad();
+      if (onLoad != null) {
+        await onLoad;
+      }
+      component.isLoaded = true;
+    }
+
+    // Should run every time the component gets a new parent, including its
+    // first parent.
+    final onParentChange = component.onParentChange();
+    if (onParentChange != null) {
+      await onParentChange;
     }
     if (component.children.isNotEmpty) {
       await component.reAddChildren();

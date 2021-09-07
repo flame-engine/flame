@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,17 +17,25 @@ class MyGame extends Game {
   @override
   void onAttach() {
     super.onAttach();
-    print('attach');
-
     events.add('attach');
   }
 
   @override
   void onDetach() {
     super.onDetach();
-    print('detach');
-
     events.add('detach');
+  }
+}
+
+class MyComponent extends Component {
+  final List<String> events;
+
+  MyComponent(this.events);
+
+  @override
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    events.add('onGameResize');
   }
 }
 

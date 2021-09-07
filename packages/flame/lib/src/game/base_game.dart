@@ -74,14 +74,14 @@ class BaseGame extends Game {
       hasLayout,
       '"prepare/add" called before the game is ready. '
       'Did you try to access it on the Game constructor? '
-      'Use the "onLoad" method instead.',
+      'Use the "onLoad" ot "onParentMethod" method instead.',
     );
 
     if (c is Collidable) {
       assert(
         this is HasCollidables,
-        'You can only use the Hitbox/Collidable feature with games that has the '
-        'HasCollidables mixin',
+        'You can only use the Hitbox/Collidable feature with games that has '
+        'the HasCollidables mixin',
       );
     }
     if (c is Tappable) {
