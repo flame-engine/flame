@@ -163,8 +163,10 @@ class Camera extends Projector {
 
   Vector2? _canvasSize;
   Vector2 get canvasSize {
-    assert(_canvasSize != null,
-        'Property `canvasSize` cannot be accessed before the layout stage');
+    assert(
+      _canvasSize != null,
+      'Property `canvasSize` cannot be accessed before the layout stage',
+    );
     return _canvasSize!;
   }
 
