@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
@@ -7,13 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class ValidGame extends Game with KeyboardEvents {
-  @override
-  void render(Canvas canvas) {}
-
-  @override
-  void update(double dt) {}
-}
+class ValidGame extends BaseGame with KeyboardEvents {}
 
 class InvalidGame extends BaseGame
     with HasKeyboardHandlerComponents, KeyboardEvents {}
