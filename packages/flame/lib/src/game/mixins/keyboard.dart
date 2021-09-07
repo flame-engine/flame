@@ -70,7 +70,7 @@ mixin KeyboardEvents on Game {
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     assert(
-      this is HasKeyboardHandlerComponents,
+      this is! HasKeyboardHandlerComponents,
       'A keyboard event was registered by KeyboardEvents for a game also '
       'mixed with HasKeyboardHandlerComponents. Do not mix with both, '
       'HasKeyboardHandlerComponents removes the necessity of KeyboardEvents',
