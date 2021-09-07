@@ -140,6 +140,8 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   Future<void> get _gameLoaderFutureCache =>
       _gameLoaderFuture ?? (_gameLoaderFuture = widget.game.onLoad());
 
+  late FocusNode _focusNode;
+
   @override
   void initState() {
     super.initState();
@@ -151,6 +153,11 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     // Add the initial mouse cursor
     _initMouseCursor();
     addMouseCursorListener();
+
+    _focusNode = widget.focusNode ?? FocusNode();
+    if (widget.autofocus) {
+      _focusNode.requestFocus();
+    }
   }
 
   void _initMouseCursor() {
@@ -193,6 +200,11 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   void dispose() {
     super.dispose();
     removeOverlaysListener(widget.game);
+    // If we received a focus node from the user, they are responsible
+    // for disposing it
+    if (widget.focusNode == null) {
+      _focusNode.dispose();
+    }
   }
 
   void addMouseCursorListener() {
@@ -280,12 +292,12 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     // We can use Directionality.maybeOf when that method lands on stable
     final textDir = widget.textDirection ?? TextDirection.ltr;
 
-    return MouseRegion(
-      cursor: _mouseCursor ?? MouseCursor.defer,
-      child: Focus(
-        focusNode: widget.focusNode,
-        autofocus: widget.autofocus,
-        onKey: _handleKeyEvent,
+    return Focus(
+      focusNode: _focusNode,
+      autofocus: widget.autofocus,
+      onKey: _handleKeyEvent,
+      child: MouseRegion(
+        cursor: _mouseCursor ?? MouseCursor.defer,
         child: Directionality(
           textDirection: textDir,
           child: Container(

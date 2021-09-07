@@ -105,15 +105,12 @@ void main() async {
   });
 
   testWidgets('KeyboardEvents receives keys', (tester) async {
-    final focusNode = FocusNode();
-
     final game = _KeyboardEventsGame();
 
     await tester.pumpWidget(
       _GamePage(
         child: GameWidget(
           game: game,
-          focusNode: focusNode,
         ),
       ),
     );
@@ -126,15 +123,12 @@ void main() async {
   });
 
   testWidgets('HasKeyboardHandlerComponents receives keys', (tester) async {
-    final focusNode = FocusNode();
-
     final game = _HasKeyboardHandlerComponentsGame();
 
     await tester.pumpWidget(
       _GamePage(
         child: GameWidget(
           game: game,
-          focusNode: focusNode,
         ),
       ),
     );
