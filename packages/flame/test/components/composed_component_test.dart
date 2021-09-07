@@ -64,13 +64,17 @@ void main() {
       final child = MyTap();
       final wrapper = MyComposed();
       await wrapper.add(child);
-      wrapper.update(0); // children are only added on the next tick
 
+      expect(child.isPrepared, false);
+      expect(child.isLoaded, false);
       expect(wrapper.contains(child), false);
+
       final game = MyGame();
       await game.add(wrapper);
       wrapper.update(0); // children are only added on the next tick
 
+      expect(child.isPrepared, true);
+      expect(child.isLoaded, true);
       expect(wrapper.contains(child), true);
     });
 
