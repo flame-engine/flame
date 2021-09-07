@@ -14,18 +14,24 @@ class MyGame extends Game {
   }
 
   @override
+  Future<void>? onLoad() {
+    events.add('onLoad');
+  }
+
+  @override
+  Future<void>? onParentChange() {
+    events.add('onParentChange');
+  }
+
+  @override
   void onAttach() {
     super.onAttach();
-    print('attach');
-
     events.add('attach');
   }
 
   @override
   void onDetach() {
     super.onDetach();
-    print('detach');
-
     events.add('detach');
   }
 }
@@ -121,7 +127,11 @@ void main() {
       await tester.pump(const Duration(milliseconds: 1000));
       await tester.pump(const Duration(milliseconds: 1000));
 
-      expect(events, ['attach']);
+      expect(
+        events.contains('attach'),
+        true,
+        reason: 'attach event was not fired',
+      );
     });
 
     testWidgets('detach when navigating out of the page', (tester) async {
@@ -139,7 +149,32 @@ void main() {
       // happens, if it was, then the pumpAndSettle would break with a timeout
       await tester.pumpAndSettle();
 
-      expect(events, ['attach', 'detach']);
+      expect(
+        ['attach', 'detach'].every(events.contains),
+        true,
+        reason: 'attach and detach event was not fired',
+      );
+    });
+
+    testWidgets('all events are executed in the correct order', (tester) async {
+      final events = <String>[];
+      await tester.pumpWidget(MyApp(events));
+
+      await tester.tap(find.text('Play'));
+
+      await tester.pump(const Duration(milliseconds: 1000));
+      await tester.pump(const Duration(milliseconds: 1000));
+
+      await tester.tap(find.text('Back'));
+
+      // This ensures that Flame is not running anymore after the navigation
+      // happens, if it was, then the pumpAndSettle would break with a timeout
+      await tester.pumpAndSettle();
+
+      expect(
+        events,
+        ['attach', 'onGameResize', 'onLoad', 'onParentChange', 'detach'],
+      );
     });
   });
 }
