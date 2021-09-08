@@ -67,7 +67,7 @@ simply by doing `yourComponent.remove();`.
 ![Game Lifecycle Diagram](images/game_lifecycle.png)
 
 When a game first is added to a Flutter widget tree the following lifecycle methods will be called
-in order: `onGameResize`, `onLoad`, `onParentChange` and `onAttach`. After that it goes on to call
+in order: `onGameResize`, `onLoad`, `onMount` and `onAttach`. After that it goes on to call
 `update` and `render` back and forth every tick, until the widget is removed from the tree.
 Once the `GameWidget` is removed from the tree, `onRemove` and `onDetach` is called.
 

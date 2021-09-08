@@ -41,7 +41,7 @@ class ParticlesGame extends BaseGame with FPSCounter {
   }
 
   @override
-  Future<void> onParentChange() async {
+  Future<void> onMount() async {
     spawnParticles();
     // Spawn new particles every second
     spawnTimer = Timer.periodic(sceneDuration, (_) {
@@ -552,7 +552,7 @@ class TrafficLightComponent extends Component {
   ];
 
   @override
-  Future<void> onParentChange() async {
+  Future<void> onMount() async {
     colorChangeTimer.start();
   }
 

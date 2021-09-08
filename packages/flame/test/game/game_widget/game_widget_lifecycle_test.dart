@@ -19,8 +19,8 @@ class MyGame extends Game {
   }
 
   @override
-  Future<void>? onParentChange() {
-    events.add('onParentChange');
+  Future<void>? onMount() {
+    events.add('onMount');
   }
 
   @override
@@ -194,12 +194,12 @@ void main() {
         [
           'onGameResize',
           'onLoad',
-          'onParentChange',
+          'onMount',
           'onAttach',
           'onRemove',
           'onDetach',
           'onGameResize',
-          'onParentChange',
+          'onMount',
           'onAttach',
         ],
       );

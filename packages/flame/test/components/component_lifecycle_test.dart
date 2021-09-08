@@ -19,8 +19,8 @@ class MyComponent extends Component {
   }
 
   @override
-  Future<void> onParentChange() async {
-    events.add('onParentChange');
+  Future<void> onMount() async {
+    events.add('onMount');
   }
 
   @override
@@ -40,7 +40,7 @@ void main() {
 
       expect(
         events,
-        ['onGameResize', 'prepared: true', 'onLoad', 'onParentChange'],
+        ['onGameResize', 'prepared: true', 'onLoad', 'onMount'],
       );
     });
 
@@ -58,7 +58,7 @@ void main() {
       // the child when it has a proper root.
       expect(
         parentEvents,
-        ['onGameResize', 'prepared: true', 'onLoad', 'onParentChange'],
+        ['onGameResize', 'prepared: true', 'onLoad', 'onMount'],
       );
       expect(
         childEvents,
@@ -67,7 +67,7 @@ void main() {
           'onGameResize',
           'prepared: true',
           'onLoad',
-          'onParentChange',
+          'onMount',
         ],
       );
     });
@@ -91,7 +91,7 @@ void main() {
           'onGameResize',
           'prepared: true',
           'onLoad',
-          'onParentChange',
+          'onMount',
         ],
       );
       // onLoad should only be called the first time that the component is
@@ -103,10 +103,10 @@ void main() {
           'onGameResize',
           'prepared: true',
           'onLoad',
-          'onParentChange',
+          'onMount',
           'onGameResize',
           'prepared: true',
-          'onParentChange',
+          'onMount',
         ],
       );
     });

@@ -33,7 +33,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   final TextDirection? textDirection;
 
   /// Builder to provide a widget tree to be built whilst the [Future] provided
-  /// via `Game.onLoad` and `Game.onParentChange` is not resolved.
+  /// via `Game.onLoad` and `Game.onMount` is not resolved.
   /// By default this is an empty Container().
   final GameLoadingWidgetBuilder? loadingBuilder;
 
@@ -140,11 +140,11 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   Future<void> get _loaderFuture {
     final onLoad = widget.game.onLoadCache;
-    final onParentChange = widget.game.onParentChange;
+    final onMount = widget.game.onMount;
     if (onLoad != null) {
-      return onLoad.then((_) => onParentChange());
+      return onLoad.then((_) => onMount());
     } else {
-      return onParentChange() ?? Future<void>.value();
+      return onMount() ?? Future<void>.value();
     }
   }
 

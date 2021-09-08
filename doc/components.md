@@ -38,7 +38,7 @@ component has finished the first time, meaning that this method is executed afte
 `onGameResize` call and just before the inclusion of the component in the `BaseGame`'s (or another
 `Component`'s) list of components.
 
-The `onParentChange` method can be overridden to run asynchronous initialization code that should
+The `onMount` method can be overridden to run asynchronous initialization code that should
 run every time the component is added to a new parent. This means that you should not initialize
 `late` variables here, since this method might run several times throughout the component's
 lifetime. This method is executed after the initial "preparation" of the component is done and after

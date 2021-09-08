@@ -29,6 +29,9 @@ class Component {
   /// Whether this component is done loading through [onLoad]
   bool isLoaded = false;
 
+  /// Whether this component has been fully added to a component tree.
+  bool isMounted = false;
+
   /// If the component has a parent it will be set here.
   Component? _parent;
 
@@ -170,6 +173,7 @@ class Component {
     children.forEach((child) {
       child.onRemove();
     });
+    isMounted = false;
     _parent = null;
     nextParent?.add(this);
     nextParent = null;
@@ -200,7 +204,7 @@ class Component {
   }
 
   /// The children are added again to the component set so that [prepare],
-  /// [onLoad] and [onParentChange] runs again. Used when a parent is changed
+  /// [onLoad] and [onMount] runs again. Used when a parent is changed
   /// further up the tree.
   Future<void> reAddChildren() async {
     await Future.wait(children.map(add));
@@ -297,7 +301,7 @@ class Component {
   /// Called after the component has successfully run [prepare] and [onLoad] and
   /// called before the component is added to its new parent.
   ///
-  /// Whenever [onParentChange] returns something, the parent will wait for the
+  /// Whenever [onMount] returns something, the parent will wait for the
   /// [Future] to be resolved before adding the component on the list.
   /// If `null` is returned, the component is added right away.
   ///
@@ -308,11 +312,11 @@ class Component {
   /// Example:
   /// ```dart
   /// @override
-  /// Future<void> onParentChange() async {
+  /// Future<void> onMount() async {
   ///   position = parent!.size / 2;
   /// }
   /// ```
-  Future<void>? onParentChange() => null;
+  Future<void>? onMount() => null;
 
   /// Called to check whether the point is to be counted as within the component
   /// It needs to be overridden to have any effect, like it is in

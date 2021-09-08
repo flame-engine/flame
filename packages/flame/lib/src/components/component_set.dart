@@ -94,9 +94,9 @@ class ComponentSet extends QueryableOrderedSet<Component> {
 
     // Should run every time the component gets a new parent, including its
     // first parent.
-    final onParentChange = component.onParentChange();
-    if (onParentChange != null) {
-      await onParentChange;
+    final onMount = component.onMount();
+    if (onMount != null) {
+      await onMount;
     }
     if (component.children.isNotEmpty) {
       await component.reAddChildren();
@@ -169,7 +169,10 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     });
     _removeLater.clear();
 
-    _addLater.forEach(super.add);
+    _addLater.forEach((c) {
+      super.add(c);
+      c.isMounted = true;
+    });
     _addLater.clear();
   }
 
