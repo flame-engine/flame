@@ -19,6 +19,7 @@ class ParticlesGame extends BaseGame with FPSCounter {
   /// Miscellaneous values used
   /// by examples below
   final Random rnd = Random();
+  Timer? spawnTimer;
   final StepTween steppedTween = StepTween(begin: 0, end: 5);
   final trafficLight = TrafficLightComponent();
   final TextPaint fpsTextPaint = TextPaint(
@@ -37,9 +38,21 @@ class ParticlesGame extends BaseGame with FPSCounter {
   Future<void> onLoad() async {
     await images.load('zap.png');
     await images.load('boom.png');
+  }
 
+  @override
+  Future<void> onParentChange() async {
+    spawnParticles();
     // Spawn new particles every second
-    Timer.periodic(sceneDuration, (_) => spawnParticles());
+    spawnTimer = Timer.periodic(sceneDuration, (_) {
+      spawnParticles();
+    });
+  }
+
+  @override
+  void onDetach() {
+    super.onDetach();
+    spawnTimer?.cancel();
   }
 
   /// Showcases various different uses of [Particle]
@@ -538,7 +551,8 @@ class TrafficLightComponent extends Component {
     Colors.red,
   ];
 
-  TrafficLightComponent() {
+  @override
+  Future<void> onParentChange() async {
     colorChangeTimer.start();
   }
 
