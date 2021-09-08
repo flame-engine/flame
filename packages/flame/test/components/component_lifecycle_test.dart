@@ -59,5 +59,36 @@ void main() {
       );
       expect(childEvents, ['onGameResize', 'onLoad', 'onParentChange']);
     });
+
+    test('Correct lifecycle on parent change', () async {
+      final parentEvents = <String>[];
+      final childEvents = <String>[];
+      final game = BaseGame();
+      game.onGameResize(Vector2.zero());
+      final parent = MyComponent(parentEvents);
+      final child = MyComponent(childEvents);
+      await parent.add(child);
+      await game.add(parent);
+      game.update(0);
+      child.changeParent(game);
+      game.update(0);
+
+      expect(
+        parentEvents,
+        ['prepare', 'onGameResize', 'onLoad', 'onParentChange', 'prepare'],
+      );
+      // onLoad should only be called the first time that the component is
+      // loaded.
+      expect(
+        childEvents,
+        [
+          'onGameResize',
+          'onLoad',
+          'onParentChange',
+          'onGameResize',
+          'onParentChange',
+        ],
+      );
+    });
   });
 }
