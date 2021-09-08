@@ -48,6 +48,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void detach() {
     super.detach();
+    game.onRemove();
     game.detach();
     gameLoop?.dispose();
     gameLoop = null;

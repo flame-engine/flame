@@ -24,15 +24,21 @@ class MyGame extends Game {
   }
 
   @override
+  void onRemove() {
+    super.onRemove();
+    events.add('onRemove');
+  }
+
+  @override
   void onAttach() {
     super.onAttach();
-    events.add('attach');
+    events.add('onAttach');
   }
 
   @override
   void onDetach() {
     super.onDetach();
-    events.add('detach');
+    events.add('onDetach');
   }
 }
 
@@ -130,7 +136,7 @@ void main() {
       await tester.pump();
 
       expect(
-        events.contains('attach'),
+        events.contains('onAttach'),
         true,
         reason: 'attach event was not fired',
       );
@@ -152,9 +158,14 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        ['attach', 'detach'].every(events.contains),
+        events.contains('onAttach'),
         true,
-        reason: 'attach and detach event was not fired',
+        reason: 'onAttach was not called',
+      );
+      expect(
+        events.contains('onDetach'),
+        true,
+        reason: 'onDetach was not called',
       );
     });
 
@@ -184,11 +195,12 @@ void main() {
           'onGameResize',
           'onLoad',
           'onParentChange',
-          'attach',
-          'detach',
+          'onAttach',
+          'onRemove',
+          'onDetach',
           'onGameResize',
           'onParentChange',
-          'attach',
+          'onAttach',
         ],
       );
     });
