@@ -30,7 +30,10 @@ class Component {
   bool isLoaded = false;
 
   /// If the component has a parent it will be set here.
-  Component? parent;
+  Component? _parent;
+
+  /// Get the current parent of the component, if there is one, otherwise null.
+  Component? get parent => _parent;
 
   /// If the component should be added to another parent once it has been
   /// removed from its current parent.
@@ -167,7 +170,7 @@ class Component {
     children.forEach((child) {
       child.onRemove();
     });
-    parent = null;
+    _parent = null;
     nextParent?.add(this);
     nextParent = null;
   }
@@ -321,27 +324,30 @@ class Component {
   /// See BaseGame.changePriority instead.
   void changePriorityWithoutResorting(int priority) => _priority = priority;
 
-  /// Prepares the [Component] child to be added to a [Game].
-  /// If there are no parents that are a [Game] this will run again once a
-  /// parent is added to a [Game] and false will be returned.
+  /// Prepares the [Component] to be added to a [parent], and if there is an
+  /// ancestor that is a [BaseGame] that game will do necessary preparations for
+  /// this component.
+  /// If there are no parents that are a [Game] false will be returned and this
+  /// will run again once an ancestor or the component itself is added to a
+  /// [Game].
   @mustCallSuper
-  void prepare(Component component) {
-    component.parent = this;
-    final parentGame = component.findParent<Game>();
+  void prepare(Component parent) {
+    _parent = parent;
+    final parentGame = findParent<Game>();
     if (parentGame == null) {
-      component.isPrepared = false;
+      isPrepared = false;
     } else {
       if (parentGame is BaseGame) {
-        parentGame.prepareComponent(component);
+        parentGame.prepareComponent(this);
       }
 
-      component.debugMode |= debugMode;
-      component.isPrepared = true;
+      debugMode |= parent.debugMode;
+      isPrepared = true;
     }
   }
 
   @mustCallSuper
   ComponentSet createComponentSet() {
-    return ComponentSet.createDefault(prepare);
+    return ComponentSet.createDefault(this);
   }
 }

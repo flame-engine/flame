@@ -8,9 +8,9 @@ class MyComponent extends Component {
   MyComponent(this.events);
 
   @override
-  void prepare(Component component) {
-    super.prepare(component);
-    events.add('prepare');
+  void prepare(Component parent) {
+    super.prepare(parent);
+    events.add('prepared: $isPrepared');
   }
 
   @override
@@ -38,7 +38,10 @@ void main() {
       game.onGameResize(Vector2.zero());
       await game.add(MyComponent(events));
 
-      expect(events, ['onGameResize', 'onLoad', 'onParentChange']);
+      expect(
+        events,
+        ['onGameResize', 'prepared: true', 'onLoad', 'onParentChange'],
+      );
     });
 
     test('Parent prepares the component', () async {
@@ -55,9 +58,18 @@ void main() {
       // the child when it has a proper root.
       expect(
         parentEvents,
-        ['prepare', 'onGameResize', 'onLoad', 'onParentChange', 'prepare'],
+        ['onGameResize', 'prepared: true', 'onLoad', 'onParentChange'],
       );
-      expect(childEvents, ['onGameResize', 'onLoad', 'onParentChange']);
+      expect(
+        childEvents,
+        [
+          'prepared: false',
+          'onGameResize',
+          'prepared: true',
+          'onLoad',
+          'onParentChange',
+        ],
+      );
     });
 
     test('Correct lifecycle on parent change', () async {
@@ -75,17 +87,25 @@ void main() {
 
       expect(
         parentEvents,
-        ['prepare', 'onGameResize', 'onLoad', 'onParentChange', 'prepare'],
+        [
+          'onGameResize',
+          'prepared: true',
+          'onLoad',
+          'onParentChange',
+        ],
       );
       // onLoad should only be called the first time that the component is
       // loaded.
       expect(
         childEvents,
         [
+          'prepared: false',
           'onGameResize',
+          'prepared: true',
           'onLoad',
           'onParentChange',
           'onGameResize',
+          'prepared: true',
           'onParentChange',
         ],
       );

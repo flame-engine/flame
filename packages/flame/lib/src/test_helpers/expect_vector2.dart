@@ -2,10 +2,11 @@ import 'package:test/test.dart';
 
 import '../../extensions.dart';
 
+// Default is that one pixel away from the expected value is accepted
 void expectVector2(
   Vector2 actual,
   Vector2 expected, {
-  double epsilon = 0.4,
+  double epsilon = 1.0,
   String? reason,
 }) {
   expect(

@@ -32,11 +32,11 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// This is the "prepare" function that will be called *before* the
   /// component is added to the component list by the add/addAll methods.
   /// It is also called when the component changes parent.
-  final void Function(Component child) prepare;
+  final Component parent;
 
   ComponentSet(
     int Function(Component e1, Component e2)? compare,
-    this.prepare,
+    this.parent,
   ) : super(compare);
 
   /// Prepares and registers one component to be added on the next game tick.
@@ -74,7 +74,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// This method can be considered sync for all intents and purposes if no
   /// onLoad is provided by the component.
   Future<void> addChild(Component component) async {
-    prepare(component);
+    component.prepare(parent);
     if (!component.isPrepared) {
       // Since the components won't be added until a proper game is added
       // further up in the tree we can add them to the _addLater list and
@@ -193,11 +193,11 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   ///
   /// You must still provide your [prepare] function depending on the context.
   static ComponentSet createDefault(
-    void Function(Component child) prepare,
+    Component parent,
   ) {
     return ComponentSet(
       Comparing.on<Component>((c) => c.priority),
-      prepare,
+      parent,
     );
   }
 }
