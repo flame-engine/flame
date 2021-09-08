@@ -62,7 +62,20 @@ want to remove a list of components.
 Any component on which the `remove()` method has been called will also be removed. You can do this
 simply by doing `yourComponent.remove();`.
 
+## Lifecycle
+
+![Game Lifecycle Diagram](images/game_lifecycle.png)
+
+When a game first is added to a Flutter widget tree the following lifecycle methods will be called
+in order: `onGameResize`, `onLoad`, `onParentChange` and `onAttach`. After that it goes on to call
+`update` and `render` back and forth every tick, until the widget is removed from the tree.
+Once the `GameWidget` is removed from the tree, `onRemove` and `onDetach` is called.
+
+If the game is added to another `Component` instead of a `GameWidget`, `onAttach` and `onDetach`
+will not be called.
+
 ## Changing component priorities (render/update order)
+
 To update a component with a new priority you have to call either `BaseGame.changePriority`, or
 `BaseGame.changePriorities` if you want to change the priorities of many components at once.
 This design is due to the fact that the components doesn't always have access to the component list and
