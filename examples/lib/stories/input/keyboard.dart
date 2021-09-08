@@ -13,6 +13,7 @@ class KeyboardGame extends BaseGame with KeyboardEvents {
   Rect rect = const Rect.fromLTWH(0, 100, 100, 100);
   final Vector2 velocity = Vector2(0, 0);
 
+  @override
   void update(double dt) {
     super.update(dt);
     final displacement = velocity * (speed * dt);
