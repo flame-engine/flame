@@ -85,7 +85,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     // [Component.onLoad] (if it is defined) should only run the first time that
     // a component is added to a parent.
     if (!component.isLoaded) {
-      final onLoad = component.onLoad();
+      final onLoad = component.onLoadCache;
       if (onLoad != null) {
         await onLoad;
       }

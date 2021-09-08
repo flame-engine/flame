@@ -14,7 +14,7 @@ class MyGame extends Game {
   }
 
   @override
-  Future<void>? onLoad() {
+  Future<void> onLoad() async {
     events.add('onLoad');
   }
 
@@ -51,9 +51,9 @@ class TitlePage extends StatelessWidget {
 }
 
 class GamePage extends StatefulWidget {
-  final List<String> events;
+  final MyGame game;
 
-  const GamePage(this.events);
+  const GamePage(this.game);
 
   @override
   State<StatefulWidget> createState() {
@@ -67,8 +67,7 @@ class _GamePageState extends State<GamePage> {
   @override
   void initState() {
     super.initState();
-
-    _game = MyGame(widget.events);
+    _game = widget.game;
   }
 
   @override
@@ -99,15 +98,18 @@ class _GamePageState extends State<GamePage> {
 
 class MyApp extends StatelessWidget {
   final List<String> events;
+  late final MyGame game;
 
-  const MyApp(this.events);
+  MyApp(this.events) {
+    game = MyGame(events);
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
         '/': (_) => TitlePage(),
-        '/game': (_) => GamePage(events),
+        '/game': (_) => GamePage(game),
       },
     );
   }
@@ -124,8 +126,8 @@ void main() {
       // I am unsure why I need two bumps here, my best theory is
       // that we need the first one for the navigation animation
       // and the second one for the page to render
-      await tester.pump(const Duration(milliseconds: 1000));
-      await tester.pump(const Duration(milliseconds: 1000));
+      await tester.pump();
+      await tester.pump();
 
       expect(
         events.contains('attach'),
@@ -140,8 +142,8 @@ void main() {
 
       await tester.tap(find.text('Play'));
 
-      await tester.pump(const Duration(milliseconds: 1000));
-      await tester.pump(const Duration(milliseconds: 1000));
+      await tester.pump();
+      await tester.pump();
 
       await tester.tap(find.text('Back'));
 
@@ -162,8 +164,8 @@ void main() {
 
       await tester.tap(find.text('Play'));
 
-      await tester.pump(const Duration(milliseconds: 1000));
-      await tester.pump(const Duration(milliseconds: 1000));
+      await tester.pump();
+      await tester.pump();
 
       await tester.tap(find.text('Back'));
 
@@ -171,9 +173,23 @@ void main() {
       // happens, if it was, then the pumpAndSettle would break with a timeout
       await tester.pumpAndSettle();
 
+      await tester.tap(find.text('Play'));
+
+      await tester.pump();
+      await tester.pump();
+
       expect(
         events,
-        ['attach', 'onGameResize', 'onLoad', 'onParentChange', 'detach'],
+        [
+          'onGameResize',
+          'onLoad',
+          'onParentChange',
+          'attach',
+          'detach',
+          'onGameResize',
+          'onParentChange',
+          'attach',
+        ],
       );
     });
   });

@@ -284,6 +284,13 @@ class Component {
   /// ```
   Future<void>? onLoad() => null;
 
+  Future<void>? _onLoadCache;
+
+  /// Since [onLoad] only should run once throughout a components lifetime it is
+  /// cached so that it can be reused when the parent component/game/widget
+  /// changes.
+  Future<void>? get onLoadCache => _onLoadCache ?? (_onLoadCache = onLoad());
+
   /// Called after the component has successfully run [prepare] and [onLoad] and
   /// called before the component is added to its new parent.
   ///

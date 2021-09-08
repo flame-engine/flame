@@ -57,17 +57,11 @@ class _OverlayExampleWidgetState extends State<OverlayExampleWidget> {
   void newGame() {
     setState(() {
       _myGame = ExampleGame();
-      print('New game created');
     });
   }
 }
 
 class ExampleGame extends BaseGame with TapDetector {
-  @override
-  Future<void> onLoad() async {
-    print('game loaded');
-  }
-
   @override
   void render(Canvas canvas) {
     super.render(canvas);

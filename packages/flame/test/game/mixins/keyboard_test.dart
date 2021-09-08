@@ -18,7 +18,7 @@ class MockRawKeyEventData extends Mock implements RawKeyEventData {
 }
 
 void main() {
-  group('Keyboarde events', () {
+  group('Keyboard events', () {
     test(
       'cannot mix KeyboardEvent and HasKeyboardHandlerComponents together',
       () {
