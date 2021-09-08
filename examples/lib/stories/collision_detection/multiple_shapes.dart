@@ -9,6 +9,19 @@ import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
+const multipleShapesInfo = '''
+An example with many hitboxes that move around on the screen and during
+collisions they change color depending on what it is that they have collided
+with. 
+
+The snowman, the component built with three circles on top of each other, works
+a little bit differently than the other components to show that you can have
+multiple hitboxes within one component.
+
+On this example, you can "throw" the components by dragging them quickly in any
+direction.
+''';
+
 enum Shapes { circle, rectangle, polygon }
 
 abstract class MyCollidable extends PositionComponent

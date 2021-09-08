@@ -9,6 +9,12 @@ import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
+const onlyShapesInfo = '''
+An example which adds random shapes on the screen when you tap it, if you tap on
+an already existing shape it will remove that shape and replace it with a new
+one.
+''';
+
 enum Shapes { circle, rectangle, polygon }
 
 class OnlyShapes extends BaseGame with HasTappableComponents {
@@ -53,7 +59,12 @@ class OnlyShapes extends BaseGame with HasTappableComponents {
 }
 
 class MyShapeComponent extends ShapeComponent with Tappable {
-  MyShapeComponent(Shape shape, Paint shapePaint) : super(shape, shapePaint);
+  MyShapeComponent(Shape shape, Paint shapePaint)
+      : super(
+          shape,
+          shapePaint,
+          anchor: Anchor.center,
+        );
 
   @override
   bool onTapDown(TapDownInfo info) {
