@@ -1,10 +1,13 @@
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
-import 'package:test/fake.dart';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:test/fake.dart';
+
 import 'canvas_commands/cliprect_command.dart';
 import 'canvas_commands/command.dart';
+import 'canvas_commands/image_command.dart';
 import 'canvas_commands/line_command.dart';
 import 'canvas_commands/paragraph_command.dart';
 import 'canvas_commands/rect_command.dart';
@@ -115,6 +118,34 @@ class MockCanvas extends Fake implements Canvas, Matcher {
     return mismatchDescription.add(matchState['description'] as String);
   }
 
+  bool containsAtLeast(covariant MockCanvas other, Map matchState) {
+    if (_saveCount != 0) {
+      return _fail('Canvas finished with saveCount=$_saveCount', matchState);
+    }
+    final useTolerance = max(tolerance, other.tolerance);
+    final remainingExpectedCommands = other._commands.toList();
+    for (final expectedCommand in _commands) {
+      final idx = remainingExpectedCommands.indexWhere((cmd) {
+        if (expectedCommand.runtimeType != cmd.runtimeType) {
+          return false;
+        }
+
+        expectedCommand.tolerance = cmd.tolerance = useTolerance;
+        return expectedCommand.equals(cmd);
+      });
+      if (idx == -1) {
+        return _fail(
+          'Expected canvas command not found: $expectedCommand. '
+          'Actual commands: $_commands',
+          matchState,
+        );
+      } else {
+        remainingExpectedCommands.removeAt(idx);
+      }
+    }
+    return true;
+  }
+
   //#endregion
 
   //#region Canvas API
@@ -164,6 +195,12 @@ class MockCanvas extends Fake implements Canvas, Matcher {
   @override
   void drawParagraph(Paragraph? paragraph, Offset offset) {
     _commands.add(ParagraphCommand(offset));
+  }
+
+  @override
+  void drawImage(Image? image, Offset offset, [Paint? paint]) {
+    // don't compare the actual images as that would be slow, brittle and hard to test
+    _commands.add(ImageCommand(offset, paint));
   }
 
   @override
