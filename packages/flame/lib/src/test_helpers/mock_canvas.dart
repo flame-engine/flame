@@ -172,8 +172,11 @@ class MockCanvas extends Fake implements Canvas, Matcher {
   }
 
   @override
-  void clipRect(Rect rect,
-      {ClipOp clipOp = ClipOp.intersect, bool doAntiAlias = true}) {
+  void clipRect(
+    Rect rect, {
+    ClipOp clipOp = ClipOp.intersect,
+    bool doAntiAlias = true,
+  }) {
     _commands.add(ClipRectCommand(rect, clipOp, doAntiAlias));
   }
 
