@@ -46,10 +46,11 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-          canvas,
-          MockCanvas()
-            ..clipRect(const Rect.fromLTWH(0, 0, 200, 200))
-            ..scale(4));
+        canvas,
+        MockCanvas()
+          ..clipRect(const Rect.fromLTWH(0, 0, 200, 200))
+          ..scale(4),
+      );
     });
 
     test('fixed ratio viewport maxes width', () {
@@ -67,11 +68,12 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-          canvas,
-          MockCanvas()
-            ..clipRect(const Rect.fromLTWH(0, 50, 100, 100))
-            ..translate(0, 50)
-            ..scale(2));
+        canvas,
+        MockCanvas()
+          ..clipRect(const Rect.fromLTWH(0, 50, 100, 100))
+          ..translate(0, 50)
+          ..scale(2),
+      );
     });
 
     test('fixed ratio viewport maxes height', () {
@@ -89,11 +91,12 @@ void main() {
       final canvas = MockCanvas();
       game.render(canvas);
       expect(
-          canvas,
-          MockCanvas()
-            ..clipRect(const Rect.fromLTWH(25, 0, 50, 200))
-            ..translate(25, 0)
-            ..scale(0.5));
+        canvas,
+        MockCanvas()
+          ..clipRect(const Rect.fromLTWH(25, 0, 50, 200))
+          ..translate(25, 0)
+          ..scale(0.5),
+      );
     });
   });
 
