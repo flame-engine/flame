@@ -191,7 +191,8 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// Creates a [ComponentSet] with a default value for the compare function,
   /// using the Component's priority for sorting.
   ///
-  /// You must still provide your [prepare] function depending on the context.
+  /// You must provide the parent so that it can be handed to the children that
+  /// will be added.
   static ComponentSet createDefault(
     Component parent,
   ) {
