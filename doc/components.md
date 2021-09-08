@@ -1,6 +1,6 @@
 # Components
 
-![Component Diagram](images/diagram.png)
+![Components Diagram](images/diagram.png)
 
 This diagram might look intimidating, but don't worry, it is not as complex as it looks.
 
@@ -11,8 +11,10 @@ If you want to skip reading about abstract classes you can jump directly to
 [PositionComponent](./components.md#PositionComponent).
 
 Every `Component` has a few methods that you can optionally implement, which are used by the
-`BaseGame` class. If you are not using `BaseGame`, you can alternatively use these methods on your
-own game loop.
+`BaseGame` class. If you are not using `BaseGame`, you can use these methods on your own game loop
+if you wish.
+
+![Component Lifecycle Diagram](images/diagram.png)
 
 The `onGameResize` method is called whenever the screen is resized, and once in the beginning when
 the component is added to the game via the `add` method.
@@ -32,8 +34,16 @@ the `Component` remove method.
 
 The `onLoad` method can be overridden to run asynchronous initialization code for the component,
 like loading an image for example. This method is executed after the initial "preparation" of the
-component is run, meaning that this method is executed after the first `onGameResize` call and just
-before the inclusion of the component in the `BaseGame`'s list of components.
+component has finished the first time, meaning that this method is executed after the first
+`onGameResize` call and just before the inclusion of the component in the `BaseGame`'s (or another
+`Component`'s) list of components.
+
+The `onParentChange` method can be overridden to run asynchronous initialization code that should
+run every time the component is added to a new parent. This means that you should not initialize
+`late` variables here, since this method might run several times throughout the component's
+lifetime. This method is executed after the initial "preparation" of the component is done and after
+`onGameResize` and `onLoad`, but before the inclusion of the component in the parent's list of
+components.
 
 ## BaseComponent
 Usually if you are going to make your own component you want to extend `PositionComponent`, but if
