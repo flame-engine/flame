@@ -19,16 +19,24 @@ class CameraWrapper {
 
   void render(Canvas canvas) {
     // TODO(st-pasha): it would be easier to keep the world and the
-    //   HUD as two separate component trees.
+    // HUD as two separate component trees.
     camera.viewport.render(canvas, (_canvas) {
       // First render regular world objects
       canvas.save();
       camera.apply(canvas);
       world.forEach((component) {
         if (!component.isHud) {
+          // TODO(st-pasha): refactor [ParallaxComponent] so that it
+          // wouldn't require any camera hacks.
+          if (component is ParallaxComponent) {
+            canvas.restore();
+          }
           canvas.save();
           component.renderTree(canvas);
           canvas.restore();
+          if (component is ParallaxComponent) {
+            camera.apply(canvas);
+          }
         }
       });
       canvas.restore();
