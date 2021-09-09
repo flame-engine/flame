@@ -19,7 +19,7 @@ class MyComponent extends Component {
   }
 
   @override
-  Future<void> onMount() async {
+  void onMount() {
     events.add('onMount');
   }
 

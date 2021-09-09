@@ -144,7 +144,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     if (onLoad != null) {
       return onLoad.then((_) => onMount());
     } else {
-      return onMount() ?? Future<void>.value();
+      return Future<void>.value().then((_) => onMount());
     }
   }
 

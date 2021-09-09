@@ -312,11 +312,11 @@ class Component {
   /// Example:
   /// ```dart
   /// @override
-  /// Future<void> onMount() async {
+  /// void onMount() {
   ///   position = parent!.size / 2;
   /// }
   /// ```
-  Future<void>? onMount() => null;
+  void onMount() {}
 
   /// Called to check whether the point is to be counted as within the component
   /// It needs to be overridden to have any effect, like it is in
