@@ -58,9 +58,9 @@ class TestBlock extends PositionComponent with Hitbox, Collidable {
 }
 
 void main() {
-  TestGame gameWithCollidables(List<Collidable> collidables) {
+  Future<TestGame> gameWithCollidables(List<Collidable> collidables) async {
     final game = TestGame();
-    game.addAll(collidables);
+    await game.addAll(collidables);
     game.update(0);
     expect(game.children.isNotEmpty, collidables.isNotEmpty);
     return game;
@@ -69,7 +69,7 @@ void main() {
   group(
     'Collision callbacks are called properly',
     () {
-      test('collidable callbacks are called', () {
+      test('collidable callbacks are called', () async {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
@@ -78,7 +78,7 @@ void main() {
           Vector2.all(1),
           Vector2.all(10),
         );
-        final game = gameWithCollidables([blockA, blockB]);
+        final game = await gameWithCollidables([blockA, blockB]);
         expect(blockA.hasCollisionWith(blockB), true);
         expect(blockB.hasCollisionWith(blockA), true);
         expect(blockA.collisions.length, 1);
@@ -96,7 +96,7 @@ void main() {
         expect(blockB.endCounter, 1);
       });
 
-      test('hitbox callbacks are called', () {
+      test('hitbox callbacks are called', () async {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
@@ -107,7 +107,7 @@ void main() {
         );
         final hitboxA = blockA.hitbox;
         final hitboxB = blockB.hitbox;
-        final game = gameWithCollidables([blockA, blockB]);
+        final game = await gameWithCollidables([blockA, blockB]);
         expect(hitboxA.hasCollisionWith(hitboxB), true);
         expect(hitboxB.hasCollisionWith(hitboxA), true);
         expect(hitboxA.collisions.length, 1);
