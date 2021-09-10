@@ -19,6 +19,12 @@ mixin Collidable on Hitbox {
 
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {}
   void onCollisionEnd(Collidable other) {}
+
+  @override
+  void onRemove() {
+    super.onRemove();
+    findParent<HasCollidables>()?.collidables.remove(this);
+  }
 }
 
 class ScreenCollidable<T extends FlameGame> extends PositionComponent

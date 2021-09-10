@@ -2,8 +2,6 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 
-import '../../components.dart';
-import '../../extensions.dart';
 import '../components/component.dart';
 import '../components/mixins/collidable.dart';
 import '../components/mixins/draggable.dart';

@@ -1,8 +1,21 @@
+import '../../../components.dart';
 import '../../../game.dart';
 import '../../components/mixins/collidable.dart';
 import '../../geometry/collision_detection.dart';
 
+/// Keeps track of all the [Collidable]s in the component tree and initiates
+/// collision detection every tick.
 mixin HasCollidables on FlameGame {
+  final List<Collidable> collidables = [];
+
+  @override
+  void prepareComponent(Component component) {
+    super.prepareComponent(component);
+    if (component is Collidable) {
+      collidables.add(component);
+    }
+  }
+
   @override
   Future<void>? onLoad() {
     children.register<Collidable>();
@@ -16,6 +29,6 @@ mixin HasCollidables on FlameGame {
   }
 
   void handleCollidables() {
-    collisionDetection(children.query<Collidable>());
+    collisionDetection(collidables);
   }
 }
