@@ -82,7 +82,7 @@ abstract class Game extends Component implements Projector {
   /// Use for calculating the FPS.
   void onTimingsCallback(List<FrameTiming> timings) {}
 
-  /// Marks game as attached to any widget tree.
+  /// Marks game as attached to any Flutter widget tree.
   ///
   /// Should not be called manually.
   void attach(PipelineOwner owner, GameRenderBox gameRenderBox) {
@@ -96,11 +96,11 @@ abstract class Game extends Component implements Projector {
     onAttach();
   }
 
-  /// Called when the Game widget is attached.
+  /// Called when the Game widget is attached to a Flutter widget tree.
   @mustCallSuper
   void onAttach() {}
 
-  /// Marks game as no longer attached to any widget tree.
+  /// Marks game as no longer attached to any Flutter widget tree.
   ///
   /// Should not be called manually.
   void detach() {
@@ -109,7 +109,7 @@ abstract class Game extends Component implements Projector {
     onDetach();
   }
 
-  /// Called when the Game widget is detached.
+  /// Called when the Game widget is detached from a Flutter widget tree.
   @mustCallSuper
   void onDetach() {
     images.clearCache();
