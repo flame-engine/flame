@@ -52,6 +52,7 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
   final String _text;
   final T _textRenderer;
   final TextBoxConfig _boxConfig;
+  final double pixelRatio;
 
   late List<String> _lines;
   double _maxLineWidth = 0.0;
@@ -74,9 +75,11 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     TextBoxConfig? boxConfig,
     Vector2? position,
     int? priority,
+    double? pixelRatio,
   })  : _text = text,
         _boxConfig = boxConfig ?? TextBoxConfig(),
         _textRenderer = textRenderer ?? TextRenderer.createDefault<T>(),
+        pixelRatio = pixelRatio ?? window.devicePixelRatio,
         super(position: position, priority: priority) {
     _lines = [];
     double? lineHeight;
@@ -100,6 +103,11 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     _totalLines = _lines.length;
     _lineHeight = lineHeight ?? 0.0;
     size = _recomputeSize();
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await redraw();
   }
 
   void _updateMaxWidth(double w) {
@@ -169,22 +177,20 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
       return;
     }
     super.render(c);
-    final devicePixelRatio = window.devicePixelRatio;
     c.save();
-    c.scale(1 / devicePixelRatio);
+    c.scale(1 / pixelRatio);
     c.drawImage(_cache!, Offset.zero, _imagePaint);
     c.restore();
   }
 
-  Future<Image> _redrawCache() {
-    final devicePixelRatio = window.devicePixelRatio;
+  Future<Image> _fullRenderAsImage(Vector2 size) {
     final recorder = PictureRecorder();
     final c = Canvas(recorder, size.toRect());
-    c.scale(devicePixelRatio);
+    c.scale(pixelRatio);
     _fullRender(c);
     return recorder.endRecording().toImage(
-          (width * devicePixelRatio).ceil(),
-          (height * devicePixelRatio).ceil(),
+          (width * pixelRatio).ceil(),
+          (height * pixelRatio).ceil(),
         );
   }
 
@@ -210,8 +216,10 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     _textRenderer.render(c, line, Vector2(_boxConfig.margins.left, dy));
   }
 
-  void redrawLater() async {
-    _cache = await _redrawCache();
+  Future<void> redraw() async {
+    final newSize = _recomputeSize();
+    _cache = await _fullRenderAsImage(newSize);
+    size = newSize;
   }
 
   @override
@@ -219,8 +227,7 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     super.update(dt);
     _lifeTime += dt;
     if (_previousChar != currentChar) {
-      size = _recomputeSize();
-      redrawLater();
+      redraw();
     }
     _previousChar = currentChar;
   }
