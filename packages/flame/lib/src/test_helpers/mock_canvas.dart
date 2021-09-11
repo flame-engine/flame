@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:test/fake.dart';
 
+import 'assertion_mode.dart';
 import 'canvas_commands/cliprect_command.dart';
 import 'canvas_commands/command.dart';
 import 'canvas_commands/image_command.dart';
@@ -47,10 +48,11 @@ import 'canvas_commands/transform_command.dart';
 /// etc) will be matched approximately, with the default absolute tolerance of
 /// 1e-10.
 class MockCanvas extends Fake implements Canvas, Matcher {
-  MockCanvas()
+  MockCanvas({this.mode = AssertionMode.matchExactly})
       : _commands = [],
         _saveCount = 0;
 
+  final AssertionMode mode;
   final List<CanvasCommand> _commands;
   int _saveCount;
 
@@ -66,6 +68,31 @@ class MockCanvas extends Fake implements Canvas, Matcher {
 
   @override
   bool matches(covariant MockCanvas other, Map matchState) {
+    switch (mode) {
+      case AssertionMode.matchExactly:
+        return matchExactly(other, matchState);
+      case AssertionMode.containsAnyOrder:
+        return containsAnyOrder(other, matchState);
+    }
+  }
+
+  @override
+  Description describe(Description description) {
+    description.add('Canvas$_commands');
+    return description;
+  }
+
+  @override
+  Description describeMismatch(
+    dynamic item,
+    Description mismatchDescription,
+    Map matchState,
+    bool verbose,
+  ) {
+    return mismatchDescription.add(matchState['description'] as String);
+  }
+
+  bool matchExactly(covariant MockCanvas other, Map matchState) {
     if (_saveCount != 0) {
       return _fail('Canvas finished with saveCount=$_saveCount', matchState);
     }
@@ -102,30 +129,14 @@ class MockCanvas extends Fake implements Canvas, Matcher {
     return true;
   }
 
-  @override
-  Description describe(Description description) {
-    description.add('Canvas$_commands');
-    return description;
-  }
-
-  @override
-  Description describeMismatch(
-    dynamic item,
-    Description mismatchDescription,
-    Map matchState,
-    bool verbose,
-  ) {
-    return mismatchDescription.add(matchState['description'] as String);
-  }
-
-  bool containsAtLeast(covariant MockCanvas other, Map matchState) {
+  bool containsAnyOrder(covariant MockCanvas other, Map matchState) {
     if (_saveCount != 0) {
       return _fail('Canvas finished with saveCount=$_saveCount', matchState);
     }
     final useTolerance = max(tolerance, other.tolerance);
-    final remainingExpectedCommands = other._commands.toList();
+    final remainingActualCommands = other._commands.toList();
     for (final expectedCommand in _commands) {
-      final idx = remainingExpectedCommands.indexWhere((cmd) {
+      final idx = remainingActualCommands.indexWhere((cmd) {
         if (expectedCommand.runtimeType != cmd.runtimeType) {
           return false;
         }
@@ -140,7 +151,7 @@ class MockCanvas extends Fake implements Canvas, Matcher {
           matchState,
         );
       } else {
-        remainingExpectedCommands.removeAt(idx);
+        remainingActualCommands.removeAt(idx);
       }
     }
     return true;

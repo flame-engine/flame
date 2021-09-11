@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/src/test_helpers/contains_at_least_mock_canvas.dart';
 import 'package:flame/test.dart';
 import 'package:test/test.dart';
 
@@ -33,7 +32,7 @@ void main() {
       game.render(canvas); // this should render the cache
       expect(
         canvas,
-        ContainsAtLeastMockCanvas()
+        MockCanvas(mode: AssertionMode.containsAnyOrder)
           ..drawImage(
             null,
             Offset.zero,
