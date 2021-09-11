@@ -1,6 +1,7 @@
 import 'dart:math';
-import 'package:meta/meta.dart';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:meta/meta.dart';
 
 final _seedGenerator = Random();
 // Maximum value allowed for `Random.nextInt()`
