@@ -18,7 +18,12 @@ class ValidGame extends Game with KeyboardEvents {
 class InvalidGame extends BaseGame
     with HasKeyboardHandlerComponents, KeyboardEvents {}
 
-class MockRawKeyEventData extends Mock implements RawKeyEventData {}
+class MockRawKeyEventData extends Mock implements RawKeyEventData {
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.debug}) {
+    return super.toString();
+  }
+}
 
 void main() {
   group('Keyboarde events', () {
