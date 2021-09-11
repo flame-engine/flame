@@ -46,6 +46,10 @@
  - Added `FocusNode` on the game widget and improved keyboard handling in the game.
  - Added ability to have custom mouse cursor on the `GameWidget` region
  - Change sprite component to default to the Sprite size if not provided
+ - `TextBoxComponent` waits for cache to be filled on `onLoad`
+ - `TextBoxComponent` can have customizable `pixelRatio`
+ - Add `ContainsAtLeastMockCanvas` to facilitate testing with `MockCanvas`
+ - Support for `drawImage` for `MockCanvas`
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
