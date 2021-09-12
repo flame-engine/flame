@@ -10,9 +10,7 @@ import 'component.dart';
 class ParticleComponent extends Component {
   Particle particle;
 
-  ParticleComponent({
-    required this.particle,
-  });
+  ParticleComponent(this.particle);
 
   /// This [ParticleComponent] will be removed by the BaseGame.
   @override

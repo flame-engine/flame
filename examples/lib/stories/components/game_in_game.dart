@@ -37,6 +37,6 @@ class GameInGame extends BaseGame with HasDraggableComponents {
       repeat: true,
     );
     timer.start();
-    add(timer.asComponent());
+    add(TimerComponent(timer));
   }
 }

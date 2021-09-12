@@ -95,11 +95,13 @@ class ParticlesGame extends BaseGame with FPSCounter {
       add(
         // Bind all the particles to a [Component] update
         // lifecycle from the [BaseGame].
-        TranslatedParticle(
-          lifespan: 1,
-          offset: cellCenter,
-          child: particle,
-        ).asComponent(),
+        ParticleComponent(
+          TranslatedParticle(
+            lifespan: 1,
+            offset: cellCenter,
+            child: particle,
+          ),
+        ),
       );
     } while (particles.isNotEmpty);
   }

@@ -63,10 +63,6 @@ class Timer {
   void resume() {
     _running = true;
   }
-
-  TimerComponent asComponent() {
-    return TimerComponent(this);
-  }
 }
 
 /// Simple component which wraps a [Timer] instance allowing it to be easily
