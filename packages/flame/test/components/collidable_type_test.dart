@@ -46,9 +46,9 @@ class TestBlock extends PositionComponent with Hitbox, Collidable {
 }
 
 void main() {
-  TestGame gameWithCollidables(List<Collidable> collidables) {
+  Future<TestGame> gameWithCollidables(List<Collidable> collidables) async {
     final game = TestGame();
-    game.addAll(collidables);
+    await game.addAll(collidables);
     game.update(0);
     expect(game.children.isNotEmpty, collidables.isNotEmpty);
     return game;
