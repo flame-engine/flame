@@ -29,8 +29,8 @@ class NoFCSParallaxGame extends Game {
   }
 
   @override
-  // ignore: must_call_super
   void update(double dt) {
+    super.update(dt);
     parallax.update(dt);
   }
 
