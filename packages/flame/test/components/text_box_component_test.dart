@@ -23,7 +23,7 @@ void main() {
       final c = TextBoxComponent('foo bar');
 
       final game = BaseGame();
-      game.onResize(Vector2.all(100));
+      game.onGameResize(Vector2.all(100));
 
       await game.add(c);
       game.update(0);

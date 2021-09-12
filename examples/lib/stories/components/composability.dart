@@ -29,7 +29,7 @@ class ParentSquare extends Square with HasGameRef {
       Square(Vector2(70, 200), Vector2(50, 50), angle: 5),
     ];
 
-    children.forEach((c) => add(c, gameRef: gameRef));
+    addAll(children);
   }
 }
 
