@@ -256,7 +256,7 @@ void main() {
           true,
         );
       });
-      test('Detects collision after scale', () {
+      test('Detects collision after scale', () async {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
@@ -267,7 +267,7 @@ void main() {
           Vector2.all(10),
           CollidableType.active,
         );
-        final game = gameWithCollidables([blockA, blockB]);
+        final game = await gameWithCollidables([blockA, blockB]);
         expect(blockA.collidedWith(blockB), false);
         expect(blockB.collidedWith(blockA), false);
         expect(blockA.collisions.length, 0);
@@ -279,13 +279,13 @@ void main() {
         expect(blockA.collisions.length, 1);
         expect(blockB.collisions.length, 1);
       });
-      test('TestPoint detects point after scale', () {
+      test('TestPoint detects point after scale', () async {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
           CollidableType.active,
         );
-        final game = gameWithCollidables([blockA]);
+        final game = await gameWithCollidables([blockA]);
         expect(blockA.containsPoint(Vector2.all(11)), false);
         blockA.scale = Vector2.all(2.0);
         game.update(0);
