@@ -141,7 +141,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   Future<void> get _loaderFuture {
     final onLoad = widget.game.onLoadCache;
     final onMount = widget.game.onMount;
-    return onLoad?.then((_) => onMount()) ?? Future<void>(onMount);
+    return (onLoad ?? Future<void>.value()).then((_) => onMount());
   }
 
   late FocusNode _focusNode;

@@ -139,7 +139,7 @@ void main() {
         game.onGameResize(size);
         game.add(component);
         late GameRenderBox renderBox;
-        tester.pumpWidget(
+        await tester.pumpWidget(
           Builder(
             builder: (BuildContext context) {
               renderBox = GameRenderBox(context, game);
