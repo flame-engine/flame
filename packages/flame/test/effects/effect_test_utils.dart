@@ -22,6 +22,7 @@ void effectTest(
   Vector2? expectedPosition,
   Vector2? expectedSize,
   Vector2? expectedScale,
+  double epsilon = 0.01,
   required Random random,
 }) async {
   component.children.register<ComponentEffect>();
@@ -57,21 +58,25 @@ void effectTest(
     expectVector2(
       component.position,
       expectedPosition,
+      epsilon: epsilon,
       reason: 'Position is not correct',
     );
     expectDouble(
       component.angle,
       expectedAngle,
+      epsilon: epsilon,
       reason: 'Angle is not correct',
     );
     expectVector2(
       component.size,
       expectedSize,
+      epsilon: epsilon,
       reason: 'Size is not correct',
     );
     expectVector2(
       component.scale,
       expectedScale,
+      epsilon: epsilon,
       reason: 'Scale is not correct',
     );
   } else {
