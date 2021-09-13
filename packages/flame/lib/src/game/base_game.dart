@@ -175,8 +175,9 @@ class BaseGame extends Game {
     }
     component.changePriorityWithoutResorting(priority);
     if (reorderRoot) {
-      if (component.parent != null) {
-        component.parent!.reorderChildren();
+      final parent = component.parent;
+      if (parent != null) {
+        parent.reorderChildren();
       } else if (contains(component)) {
         children.rebalanceAll();
       }
@@ -197,8 +198,9 @@ class BaseGame extends Game {
         reorderRoot: false,
       );
       if (wasUpdated) {
-        if (component.parent != null) {
-          parents.add(component.parent!);
+        final parent = component.parent;
+        if (parent != null) {
+          parents.add(parent);
         } else {
           hasRootComponents |= contains(component);
         }
