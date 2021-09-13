@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/src/components/cache/value_cache.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
@@ -82,20 +83,35 @@ class Component {
   /// The color that the debug output should be rendered with.
   Color debugColor = const Color(0xFFFF00FF);
 
+  final ValueCache<Paint> _debugPaintCache = ValueCache<Paint>();
+  final ValueCache<TextPaint> _debugTextPaintCache = ValueCache<TextPaint>();
+
   /// The [debugColor] represented as a [Paint] object.
-  Paint get debugPaint => Paint()
-    ..color = debugColor
-    ..strokeWidth = 1
-    ..style = PaintingStyle.stroke;
+  Paint get debugPaint {
+    if (!_debugPaintCache.isCacheValid([debugColor])) {
+      final paint = Paint()
+        ..color = debugColor
+        ..strokeWidth = 1
+        ..style = PaintingStyle.stroke;
+      _debugPaintCache.updateCache(paint, [debugColor]);
+    }
+    return _debugPaintCache.value!;
+  }
 
   /// Returns a [TextPaint] object with the [debugColor] set as color for the
   /// text.
-  TextPaint get debugTextPaint => TextPaint(
+  TextPaint get debugTextPaint {
+    if (!_debugTextPaintCache.isCacheValid([debugColor])) {
+      final textPaint = TextPaint(
         config: TextPaintConfig(
           color: debugColor,
           fontSize: 12,
         ),
       );
+      _debugTextPaintCache.updateCache(textPaint, [debugColor]);
+    }
+    return _debugTextPaintCache.value!;
+  }
 
   Component({int? priority}) : _priority = priority ?? 0;
 
