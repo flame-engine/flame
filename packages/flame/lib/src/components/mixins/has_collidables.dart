@@ -9,6 +9,12 @@ mixin HasCollidables on BaseGame {
     return super.onLoad();
   }
 
+  @override
+  void update(double dt) {
+    super.update(dt);
+    handleCollidables();
+  }
+
   void handleCollidables() {
     collisionDetection(children.query<Collidable>());
   }

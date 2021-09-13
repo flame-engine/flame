@@ -118,11 +118,6 @@ class BaseGame extends Game {
   @mustCallSuper
   void update(double dt) {
     super.update(dt);
-
-    if (this is HasCollidables) {
-      (this as HasCollidables).handleCollidables();
-    }
-
     _cameraWrapper.update(dt);
   }
 
