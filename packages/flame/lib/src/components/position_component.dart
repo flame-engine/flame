@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 import 'dart:ui' hide Offset;
 
+import 'package:meta/meta.dart';
+
 import '../anchor.dart';
 import '../extensions/offset.dart';
 import '../extensions/rect.dart';
@@ -81,6 +83,18 @@ class PositionComponent extends Component {
     }
     _size.addListener(_onModifiedSizeOrAnchor);
     _onModifiedSizeOrAnchor();
+  }
+
+  @override
+  @mustCallSuper
+  void update(double dt) {
+    super.update(dt);
+  }
+
+  @override
+  @mustCallSuper
+  void render(Canvas canvas) {
+    super.render(canvas);
   }
 
   final Transform2D _transform;

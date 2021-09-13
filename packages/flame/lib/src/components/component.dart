@@ -108,7 +108,6 @@ class Component {
   /// your state considering this.
   /// All components in the tree are always updated by the same amount. The time
   /// each one takes to update adds up to the next update cycle.
-  @mustCallSuper
   void update(double dt) {
     children.updateComponentList();
     children.forEach((c) => c.update(dt));

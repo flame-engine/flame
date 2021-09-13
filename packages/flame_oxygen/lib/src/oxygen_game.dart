@@ -66,6 +66,5 @@ abstract class OxygenGame extends Game {
 
   @override
   @mustCallSuper
-  //ignore: must_call_super
   void update(double delta) => world.update(delta);
 }
