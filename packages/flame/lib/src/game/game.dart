@@ -93,12 +93,7 @@ abstract class Game extends Component implements Projector {
       ''');
     }
     _gameRenderBox = gameRenderBox;
-    onAttach();
   }
-
-  /// Called when the Game widget is attached to a Flutter widget tree.
-  @mustCallSuper
-  void onAttach() {}
 
   /// Marks game as no longer attached to any Flutter widget tree.
   ///
@@ -106,13 +101,6 @@ abstract class Game extends Component implements Projector {
   void detach() {
     _gameRenderBox = null;
     _size = null;
-    onDetach();
-  }
-
-  /// Called when the Game widget is detached from a Flutter widget tree.
-  @mustCallSuper
-  void onDetach() {
-    images.clearCache();
   }
 
   /// Converts a global coordinate (i.e. w.r.t. the app itself) to a local

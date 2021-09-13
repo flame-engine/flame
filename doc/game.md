@@ -64,15 +64,13 @@ simply by doing `yourComponent.remove();`.
 
 ## Lifecycle
 
-![Game Lifecycle Diagram](images/game_lifecycle.png)
+![Game Lifecycle Diagram](images/component_lifecycle.png)
 
 When a game first is added to a Flutter widget tree the following lifecycle methods will be called
-in order: `onGameResize`, `onLoad`, `onMount` and `onAttach`. After that it goes on to call
-`update` and `render` back and forth every tick, until the widget is removed from the tree.
-Once the `GameWidget` is removed from the tree, `onRemove` and `onDetach` is called.
-
-If the game is added to another `Component` instead of a `GameWidget`, `onAttach` and `onDetach`
-will not be called.
+in order: `onGameResize`, `onLoad` and `onMount`. After that it goes on to call `update` and
+`render` back and forth every tick, until the widget is removed from the tree.
+Once the `GameWidget` is removed from the tree, `onRemove` is called, just like when a normal
+component is removed from the component tree.
 
 ## Changing component priorities (render/update order)
 

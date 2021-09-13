@@ -28,18 +28,6 @@ class MyGame extends Game {
     super.onRemove();
     events.add('onRemove');
   }
-
-  @override
-  void onAttach() {
-    super.onAttach();
-    events.add('onAttach');
-  }
-
-  @override
-  void onDetach() {
-    super.onDetach();
-    events.add('onDetach');
-  }
 }
 
 class TitlePage extends StatelessWidget {
@@ -136,9 +124,9 @@ void main() {
       await tester.pump();
 
       expect(
-        events.contains('onAttach'),
+        events.contains('onLoad'),
         true,
-        reason: 'attach event was not fired',
+        reason: 'onLoad event was not fired on attach',
       );
     });
 
@@ -158,14 +146,14 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        events.contains('onAttach'),
+        events.contains('onLoad'),
         true,
-        reason: 'onAttach was not called',
+        reason: 'onLoad was not called',
       );
       expect(
-        events.contains('onDetach'),
+        events.contains('onRemove'),
         true,
-        reason: 'onDetach was not called',
+        reason: 'onRemove was not called',
       );
     });
 
@@ -195,12 +183,9 @@ void main() {
           'onGameResize',
           'onLoad',
           'onMount',
-          'onAttach',
           'onRemove',
-          'onDetach',
           'onGameResize',
           'onMount',
-          'onAttach',
         ],
       );
     });

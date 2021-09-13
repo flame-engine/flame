@@ -50,8 +50,8 @@ class ParticlesGame extends BaseGame with FPSCounter {
   }
 
   @override
-  void onDetach() {
-    super.onDetach();
+  void onRemove() {
+    super.onRemove();
     spawnTimer?.cancel();
   }
 
