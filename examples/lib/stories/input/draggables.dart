@@ -67,6 +67,7 @@ class DraggablesGame extends BaseGame with HasDraggableComponents {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     camera.zoom = zoom;
     add(square = DraggableSquare());
     add(DraggableSquare()..y = 350);

@@ -7,6 +7,7 @@ class NineTileBoxGame extends BaseGame {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final sprite = Sprite(await images.load('nine-box.png'));
     nineTileBox = NineTileBox(sprite, tileSize: 8, destTileSize: 24);
   }

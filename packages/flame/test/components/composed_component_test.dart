@@ -46,7 +46,10 @@ class MyTap extends PositionComponent with Tappable {
 
 class MyAsyncChild extends MyTap {
   @override
-  Future<void> onLoad() => Future.value();
+  Future<void> onLoad() async {
+    await super.onLoad();
+    return Future.value();
+  }
 }
 
 class MyComposed extends PositionComponent with HasGameRef, Tappable {}

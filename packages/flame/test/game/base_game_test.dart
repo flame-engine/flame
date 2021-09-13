@@ -55,7 +55,10 @@ class MyComponent extends PositionComponent with Tappable, HasGameRef {
 
 class MyAsyncComponent extends MyComponent {
   @override
-  Future<void> onLoad() => Future.value();
+  Future<void> onLoad() async {
+    await super.onLoad();
+    return Future.value();
+  }
 }
 
 class PositionComponentNoNeedForRect extends PositionComponent with Tappable {}

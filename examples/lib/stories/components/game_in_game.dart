@@ -21,6 +21,7 @@ class GameInGame extends BaseGame with HasDraggableComponents {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     composedGame = Composability();
     draggablesGame = DraggablesGame(zoom: 1.0);
     await add(composedGame);

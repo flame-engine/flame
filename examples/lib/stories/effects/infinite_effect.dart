@@ -25,6 +25,7 @@ class InfiniteEffectGame extends BaseGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     add(greenSquare = makeSquare(green));
     add(redSquare = makeSquare(red));
     add(orangeSquare = makeSquare(orange));

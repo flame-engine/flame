@@ -1,6 +1,5 @@
 import 'package:flame/game.dart';
 import 'package:flame_svg/flame_svg.dart';
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -22,6 +21,7 @@ class MyGame extends BaseGame {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     svgInstance = await loadSvg('android.svg');
     final android = SvgComponent.fromSvg(
       svgInstance,

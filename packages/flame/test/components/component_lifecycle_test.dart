@@ -15,6 +15,7 @@ class MyComponent extends Component {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     events.add('onLoad');
   }
 

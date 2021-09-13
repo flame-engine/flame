@@ -48,6 +48,7 @@ class TestBlock extends PositionComponent with Hitbox, Collidable {
 void main() {
   Future<TestGame> gameWithCollidables(List<Collidable> collidables) async {
     final game = TestGame();
+    await game.onLoad();
     await game.addAll(collidables);
     game.update(0);
     expect(game.children.isNotEmpty, collidables.isNotEmpty);
@@ -256,6 +257,7 @@ void main() {
           true,
         );
       });
+
       test('Detects collision after scale', () async {
         final blockA = TestBlock(
           Vector2.zero(),
@@ -279,6 +281,7 @@ void main() {
         expect(blockA.collisions.length, 1);
         expect(blockB.collisions.length, 1);
       });
+
       test('TestPoint detects point after scale', () async {
         final blockA = TestBlock(
           Vector2.zero(),

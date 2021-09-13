@@ -52,6 +52,7 @@ class TappableSquare extends PositionComponent with Tappable {
 class OverlappingTappablesGame extends BaseGame with HasTappableComponents {
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     add(TappableSquare(position: Vector2(100, 100)));
     add(TappableSquare(position: Vector2(150, 150)));
     add(TappableSquare(position: Vector2(100, 200)));

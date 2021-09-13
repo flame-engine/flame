@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
-import 'package:ordered_set/queryable_ordered_set.dart';
 
 import '../../components.dart';
 import '../../extensions.dart';
@@ -23,7 +22,7 @@ import 'game.dart';
 /// It is based on the Component system.
 class BaseGame extends Game {
   BaseGame() {
-    _cameraWrapper = CameraWrapper(Camera(), components);
+    _cameraWrapper = CameraWrapper(Camera(), children);
   }
 
   /// The camera translates the coordinate space after the viewport is applied.
@@ -44,20 +43,6 @@ class BaseGame extends Game {
 
   /// This is the original Flutter widget size, without any transformation.
   Vector2 get canvasSize => camera.canvasSize;
-
-  /// This method sets up the OrderedSet instance used by this game, before
-  /// any lifecycle methods happen.
-  ///
-  /// You can return a specific sub-class of OrderedSet, like
-  /// [QueryableOrderedSet] for example, that we use for Collidables.
-  @override
-  ComponentSet createComponentSet() {
-    final components = super.createComponentSet();
-    if (this is HasCollidables) {
-      components.register<Collidable>();
-    }
-    return components;
-  }
 
   /// This method is called for every component before it is added to the
   /// component tree.

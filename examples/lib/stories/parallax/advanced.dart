@@ -13,6 +13,7 @@ class AdvancedParallaxGame extends BaseGame {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final layers = _layersMeta.entries.map(
       (e) => loadParallaxLayer(
         ParallaxImageData(e.key),

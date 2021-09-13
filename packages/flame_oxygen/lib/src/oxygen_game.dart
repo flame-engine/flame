@@ -40,6 +40,7 @@ abstract class OxygenGame extends Game {
   @override
   @mustCallSuper
   Future<void> onLoad() async {
+    await super.onLoad();
     // Registering default components.
     world.registerComponent<SizeComponent, Vector2>(() => SizeComponent());
     world.registerComponent<PositionComponent, Vector2>(

@@ -11,6 +11,7 @@ class MoveEffectGame extends BaseGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     square = SquareComponent()..position.setValues(100, 100);
     add(square);
   }

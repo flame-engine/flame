@@ -12,6 +12,7 @@ class ParallaxGame extends BaseGame {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     parallaxComponent = await loadParallaxComponent(
       [],
       size: parallaxSize,

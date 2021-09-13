@@ -21,6 +21,7 @@ class SizeEffectGame extends BaseGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     square = SquareComponent()
       ..position.setValues(200, 200)
       ..anchor = Anchor.center;

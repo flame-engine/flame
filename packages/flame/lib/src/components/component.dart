@@ -304,6 +304,7 @@ class Component {
   ///   myImage = await gameRef.load('my_image.png');
   /// }
   /// ```
+  @mustCallSuper
   Future<void>? onLoad() => null;
 
   Future<void>? _onLoadCache;

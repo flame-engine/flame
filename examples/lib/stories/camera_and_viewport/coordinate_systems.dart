@@ -113,6 +113,7 @@ class CoordinateSystemsGame extends BaseGame
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     camera.followVector2(cameraPosition, relativeOffset: Anchor.topLeft);
   }
 

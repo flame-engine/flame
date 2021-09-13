@@ -6,6 +6,7 @@ import 'package:flutter/painting.dart';
 class AnimationParallaxGame extends BaseGame {
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final cityLayer = await loadParallaxLayer(
       ParallaxImageData('parallax/city.png'),
     );

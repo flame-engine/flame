@@ -21,6 +21,7 @@ class FixedResolutionGame extends BaseGame with ScrollDetector, ScaleDetector {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final flameSprite = await loadSprite('layers/player.png');
 
     camera.viewport = FixedResolutionViewport(viewportResolution);
@@ -49,6 +50,7 @@ class Background extends PositionComponent with HasGameRef {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     white = BasicPalette.white.paint();
     hugeRect = size.toRect();
   }

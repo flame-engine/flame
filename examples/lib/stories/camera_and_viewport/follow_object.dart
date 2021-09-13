@@ -4,7 +4,6 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -149,6 +148,7 @@ class CameraAndViewportGame extends BaseGame
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     camera.viewport = FixedResolutionViewport(viewportResolution);
     add(Map());
 

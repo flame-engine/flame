@@ -51,6 +51,7 @@ class Square extends PositionComponent with HasGameRef<Priority>, Tappable {
 class Priority extends BaseGame with HasTappableComponents {
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final squares = [
       Square(Vector2(100, 100)),
       Square(Vector2(160, 100)),

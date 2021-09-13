@@ -9,6 +9,7 @@ class BasicAnimations extends BaseGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     creature = await images.load('animations/creature.png');
 
     final animation = await loadSpriteAnimation(

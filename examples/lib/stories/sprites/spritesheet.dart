@@ -5,6 +5,7 @@ import 'package:flame/sprite.dart';
 class SpritesheetGame extends BaseGame {
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final spriteSheet = SpriteSheet(
       image: await images.load('spritesheet.png'),
       srcSize: Vector2(16.0, 18.0),

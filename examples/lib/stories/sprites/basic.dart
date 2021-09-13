@@ -4,6 +4,7 @@ import 'package:flame/game.dart';
 class BasicSpriteGame extends BaseGame {
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final sprite = await loadSprite('flame.png');
     add(
       SpriteComponent(

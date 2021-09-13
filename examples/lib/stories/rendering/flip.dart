@@ -6,6 +6,7 @@ import 'package:flame/game.dart';
 class FlipSpriteGame extends BaseGame {
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final image = await images.load('animations/chopper.png');
 
     final regular = buildAnimationComponent(image);

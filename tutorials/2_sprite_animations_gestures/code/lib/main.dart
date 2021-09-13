@@ -23,6 +23,7 @@ class MyGame extends Game with TapDetector {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     runningRobot = await loadSpriteAnimation(
       'robot.png',
       SpriteAnimationData.sequenced(

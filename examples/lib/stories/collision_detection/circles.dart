@@ -32,6 +32,7 @@ class MyCollidable extends PositionComponent
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final center = gameRef.size / 2;
     velocity = (center - position)..scaleTo(150);
   }
@@ -67,6 +68,7 @@ class MyCollidable extends PositionComponent
 class Circles extends BaseGame with HasCollidables, TapDetector {
   @override
   Future<void> onLoad() async {
+    super.onLoad();
     add(ScreenCollidable());
   }
 

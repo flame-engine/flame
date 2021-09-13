@@ -53,6 +53,7 @@ class MyGame extends BaseGame with DoubleTapDetector, TapDetector {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     add(
       Square()
         ..x = 100

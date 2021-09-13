@@ -8,6 +8,7 @@ class OpacityEffectGame extends BaseGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final flameSprite = await loadSprite('flame.png');
     add(
       sprite = SpriteComponent(

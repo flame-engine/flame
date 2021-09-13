@@ -16,6 +16,7 @@ class TimerGame extends BaseGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     countdown = Timer(2);
     interval = Timer(
       1,

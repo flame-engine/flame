@@ -42,6 +42,7 @@ class _HasKeyboardHandlerComponentsGame extends BaseGame
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     keyboardHandler = _KeyboardHandlerComponent();
     add(keyboardHandler);
   }

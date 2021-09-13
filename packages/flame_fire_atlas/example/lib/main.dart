@@ -21,6 +21,7 @@ class ExampleGame extends BaseGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     _atlas = await loadFireAtlas('caveace.fa');
     add(
       SpriteAnimationComponent(

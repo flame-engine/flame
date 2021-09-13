@@ -15,6 +15,7 @@ class MyGame extends Game {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     events.add('onLoad');
   }
 

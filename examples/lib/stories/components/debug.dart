@@ -45,6 +45,7 @@ class DebugGame extends BaseGame with FPSCounter {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final flameLogo = await loadSprite('flame.png');
 
     final flame1 = LogoCompomnent(flameLogo);

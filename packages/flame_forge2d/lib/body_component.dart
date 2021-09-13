@@ -39,6 +39,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
   @mustCallSuper
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     body = createBody();
   }
 
