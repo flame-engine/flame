@@ -12,7 +12,7 @@ class Device {
       // TODO(erickzanardo): We probably could use dart:html and implement this for web as well
       return Future.value();
     }
-    return SystemChrome.setEnabledSystemUIOverlays([]);
+    return SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
   /// Sets the preferred orientation (landscape or portrait) for the app.

@@ -1,8 +1,8 @@
+import 'package:flame/game.dart';
+import 'package:flame_forge2d/body_component.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_forge2d/forge2d_game.dart';
 import 'package:forge2d/forge2d.dart';
-import 'package:flame/game.dart';
-import 'package:flame_forge2d/body_component.dart';
 
 List<Wall> createBoundaries(Forge2DGame game) {
   final topLeft = Vector2.zero();
