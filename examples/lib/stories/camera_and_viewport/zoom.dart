@@ -16,7 +16,7 @@ class ZoomGame extends BaseGame with ScrollDetector, ScaleDetector {
   Future<void> onLoad() async {
     final flameSprite = await loadSprite('flame.png');
 
-    viewport = FixedResolutionViewport(viewportResolution);
+    camera.viewport = FixedResolutionViewport(viewportResolution);
     camera.setRelativeOffset(Anchor.center);
     camera.speed = 1;
 

@@ -3,9 +3,9 @@ import 'dart:ui';
 
 import 'package:flutter/painting.dart';
 
-import '../../extensions.dart';
-import '../../game.dart';
-import 'projector.dart';
+import '../../../extensions.dart';
+import '../../../game.dart';
+import '../projector.dart';
 
 /// A viewport is a class that potentially translates and resizes the screen.
 /// The reason you might want to have a viewport is to make sure you handle any
@@ -66,7 +66,7 @@ abstract class Viewport extends Projector {
   /// any viewport.
   ///
   /// You probably don't need to care about this if you are using a viewport.
-  Vector2 get canvasSize;
+  Vector2? canvasSize;
 }
 
 /// This is the default viewport if you want no transformation.
@@ -75,20 +75,17 @@ abstract class Viewport extends Projector {
 /// This basically no-ops the viewport.
 class DefaultViewport extends Viewport {
   @override
-  late Vector2 canvasSize;
-
-  @override
   void render(Canvas c, void Function(Canvas c) renderGame) {
     renderGame(c);
   }
 
   @override
   void resize(Vector2 newCanvasSize) {
-    canvasSize = newCanvasSize;
+    canvasSize = newCanvasSize.clone();
   }
 
   @override
-  Vector2 get effectiveSize => canvasSize;
+  Vector2 get effectiveSize => canvasSize!;
 
   @override
   Vector2 projectVector(Vector2 vector) => vector;
@@ -126,9 +123,6 @@ class DefaultViewport extends Viewport {
 /// used it will try to adapt the best as possible.
 class FixedResolutionViewport extends Viewport {
   @override
-  late Vector2 canvasSize;
-
-  @override
   late Vector2 effectiveSize;
 
   final Vector2 _scaledSize = Vector2.zero();
@@ -150,18 +144,18 @@ class FixedResolutionViewport extends Viewport {
 
   @override
   void resize(Vector2 newCanvasSize) {
-    canvasSize = newCanvasSize;
+    canvasSize = newCanvasSize.clone();
 
     _scale = math.min(
-      canvasSize.x / effectiveSize.x,
-      canvasSize.y / effectiveSize.y,
+      canvasSize!.x / effectiveSize.x,
+      canvasSize!.y / effectiveSize.y,
     );
 
     _scaledSize
       ..setFrom(effectiveSize)
       ..scale(_scale);
     _resizeOffset
-      ..setFrom(canvasSize)
+      ..setFrom(canvasSize!)
       ..sub(_scaledSize)
       ..scale(0.5);
 

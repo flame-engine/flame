@@ -43,8 +43,6 @@ extension ParallaxComponentExtension on Game {
 /// layer moves with different velocities to give an effect of depth.
 class ParallaxComponent<T extends BaseGame> extends PositionComponent
     with HasGameRef<T> {
-  @override
-  bool isHud = true;
   bool isFullscreen = true;
   Parallax? _parallax;
 
@@ -85,7 +83,7 @@ class ParallaxComponent<T extends BaseGame> extends PositionComponent
     if (!isFullscreen) {
       return;
     }
-    final newSize = gameRef.viewport.effectiveSize;
+    final newSize = gameRef.camera.viewport.effectiveSize;
     this.size.setFrom(newSize);
     parallax?.resize(newSize);
   }

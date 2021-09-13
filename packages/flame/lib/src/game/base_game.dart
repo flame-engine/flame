@@ -12,10 +12,9 @@ import '../components/mixins/has_collidables.dart';
 import '../components/mixins/has_game_ref.dart';
 import '../components/mixins/hoverable.dart';
 import '../components/mixins/tappable.dart';
-import 'camera.dart';
+import 'camera/camera.dart';
+import 'camera/camera_wrapper.dart';
 import 'game.dart';
-import 'projector.dart';
-import 'viewport.dart';
 
 /// This is a more complete and opinionated implementation of Game.
 ///
@@ -24,33 +23,20 @@ import 'viewport.dart';
 /// This is the recommended structure to use for most games.
 /// It is based on the Component system.
 class BaseGame extends Game {
-  /// The list of components to be updated and rendered by the base game.
-  late final ComponentSet components = createComponentSet();
-
-  /// The camera translates the coordinate space after the viewport is applied.
-  final Camera camera = Camera();
-
-  /// The viewport transforms the coordinate space depending on your chosen
-  /// implementation.
-  /// The default implementation no-ops, but you can use this to have a fixed
-  /// screen ratio for example.
-  Viewport get viewport => _viewport;
-
-  Viewport _viewport = DefaultViewport();
-  set viewport(Viewport value) {
-    if (hasLayout) {
-      final previousSize = canvasSize;
-      _viewport = value;
-      onResize(previousSize);
-    } else {
-      _viewport = value;
-    }
-    _combinedProjector = Projector.compose([camera, value]);
+  BaseGame() {
+    components = createComponentSet();
+    _cameraWrapper = CameraWrapper(Camera(), components);
   }
 
-  late Projector _combinedProjector;
+  /// The list of components to be updated and rendered by the base game.
+  late final ComponentSet components;
 
-  final Vector2 _sizeBuffer = Vector2.zero();
+  /// The camera translates the coordinate space after the viewport is applied.
+  Camera get camera => _cameraWrapper.camera;
+
+  // When the Game becomes a Component (#906), this could be added directly
+  // into the component tree.
+  late final CameraWrapper _cameraWrapper;
 
   /// This is overwritten to consider the viewport transformation.
   ///
@@ -59,23 +45,10 @@ class BaseGame extends Game {
   ///
   /// This does not match the Flutter widget size; for that see [canvasSize].
   @override
-  Vector2 get size {
-    assertHasLayout();
-    return _sizeBuffer
-      ..setFrom(viewport.effectiveSize)
-      ..scale(1 / camera.zoom);
-  }
+  Vector2 get size => camera.gameSize;
 
   /// This is the original Flutter widget size, without any transformation.
-  Vector2 get canvasSize {
-    assertHasLayout();
-    return viewport.canvasSize;
-  }
-
-  BaseGame() {
-    camera.gameRef = this;
-    _combinedProjector = Projector.compose([camera, viewport]);
-  }
+  Vector2 get canvasSize => camera.canvasSize;
 
   /// This method setps up the OrderedSet instance used by this game, before
   /// any lifecycle methods happen.
@@ -178,29 +151,17 @@ class BaseGame extends Game {
     components.removeAll(cs);
   }
 
-  /// This implementation of render basically calls [renderComponent] for every component, making sure the canvas is reset for each one.
+  /// This implementation of render renders each component, making sure the
+  /// canvas is reset for each one.
   ///
   /// You can override it further to add more custom behavior.
-  /// Beware of however you are rendering components if not using this; you must be careful to save and restore the canvas to avoid components messing up with each other.
+  /// Beware of however you are rendering components if not using this; you
+  /// must be careful to save and restore the canvas to avoid components
+  /// messing up with each other.
   @override
   @mustCallSuper
   void render(Canvas canvas) {
-    viewport.render(canvas, (c) {
-      components.forEach((comp) => renderComponent(c, comp));
-    });
-  }
-
-  /// This renders a single component obeying BaseGame rules.
-  ///
-  /// It translates the camera unless hud, call the render method and restore the canvas.
-  /// This makes sure the canvas is not messed up by one component and all components render independently.
-  void renderComponent(Canvas canvas, Component c) {
-    canvas.save();
-    if (!c.isHud) {
-      camera.apply(canvas);
-    }
-    c.renderTree(canvas);
-    canvas.restore();
+    _cameraWrapper.render(canvas);
   }
 
   /// This implementation of update updates every component in the list.
@@ -218,7 +179,7 @@ class BaseGame extends Game {
     }
 
     components.forEach((c) => c.update(dt));
-    camera.update(dt);
+    _cameraWrapper.update(dt);
   }
 
   /// This implementation of resize passes the resize call along to every
@@ -226,12 +187,12 @@ class BaseGame extends Game {
   ///
   /// It also updates the [size] field of the class to be used by later added components and other methods.
   /// You can override it further to add more custom behavior, but you should seriously consider calling the super implementation as well.
-  /// This implementation also uses the current [viewport] in order to transform the coordinate system appropriately.
+  /// This implementation also uses the current [camera] in order to transform the coordinate system appropriately.
   @override
   @mustCallSuper
   void onResize(Vector2 canvasSize) {
     super.onResize(canvasSize);
-    viewport.resize(canvasSize.clone());
+    camera.handleResize(canvasSize);
     components.forEach((c) => c.onGameResize(size));
   }
 
@@ -304,21 +265,21 @@ class BaseGame extends Game {
 
   @override
   Vector2 projectVector(Vector2 vector) {
-    return _combinedProjector.projectVector(vector);
+    return camera.combinedProjector.projectVector(vector);
   }
 
   @override
   Vector2 unprojectVector(Vector2 vector) {
-    return _combinedProjector.unprojectVector(vector);
+    return camera.combinedProjector.unprojectVector(vector);
   }
 
   @override
   Vector2 scaleVector(Vector2 vector) {
-    return _combinedProjector.scaleVector(vector);
+    return camera.combinedProjector.scaleVector(vector);
   }
 
   @override
   Vector2 unscaleVector(Vector2 vector) {
-    return _combinedProjector.unscaleVector(vector);
+    return camera.combinedProjector.unscaleVector(vector);
   }
 }

@@ -23,14 +23,14 @@ class FixedResolutionGame extends BaseGame with ScrollDetector, ScaleDetector {
   Future<void> onLoad() async {
     final flameSprite = await loadSprite('layers/player.png');
 
-    viewport = FixedResolutionViewport(viewportResolution);
+    camera.viewport = FixedResolutionViewport(viewportResolution);
     camera.setRelativeOffset(Anchor.topLeft);
     camera.speed = 1;
 
     add(Background());
     add(
       SpriteComponent(
-        position: viewport.effectiveSize / 2,
+        position: camera.viewport.effectiveSize / 2,
         sprite: flameSprite,
         size: Vector2(149, 211),
       )..anchor = Anchor.center,
