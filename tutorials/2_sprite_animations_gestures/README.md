@@ -190,8 +190,8 @@ class MyGame extends Game with TapDetector {
   // Variables declaration, onLoad and render methods omited...
 
   @override
-  void onTapDown(TapDownInfo event) {
-    // On tap down we need to check if the event ocurred on the
+  bool onTapDown(TapDownInfo event) {
+    // On tap down we need to check if the event occurred on the
     // button area. There are several ways of doing it, for this
     // tutorial we do that by transforming ours position and size
     // vectors into a dart:ui Rect by using the `&` operator, and
@@ -200,18 +200,21 @@ class MyGame extends Game with TapDetector {
     final buttonArea = buttonPosition & buttonSize;
 
     isPressed = buttonArea.contains(event.eventPosition.game.toOffset());
+    return true;
   }
 
   // On both tap up and tap cancel we just set the isPressed
   // variable to false
   @override
-  void onTapUp(TapUpInfo event) {
+  bool onTapUp(TapUpInfo event) {
     isPressed = false;
+    return true;
   }
 
   @override
-  void onTapCancel() {
+  bool onTapCancel() {
     isPressed = false;
+    return true;
   }
 
   // Finally, we just modify our update method so the animation is

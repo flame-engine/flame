@@ -147,13 +147,15 @@ class MyGame extends Game with TapDetector {
   // Other methods omitted
 
   @override
-  void onTapDown(TapDownInfo event) {
+  bool onTapDown(TapDownInfo event) {
     print("Player tap down on ${event.eventPosition.game}");
+    return true;
   }
 
   @override
-  void onTapUp(TapUpInfo event) {
+  bool onTapUp(TapUpInfo event) {
     print("Player tap up on ${event.eventPosition.game}");
+    return true;
   }
 }
 ```
@@ -181,9 +183,9 @@ By adding the `HasTappableComponents` mixin to your game, and using the mixin `T
 components, you can override the following methods on your components:
 
 ```dart
-void onTapCancel() {}
-void onTapDown(TapDownInfo event) {}
-void onTapUp(TapUpInfo event) {}
+bool onTapCancel();
+bool onTapDown(TapDownInfo event);
+bool onTapUp(TapUpInfo event);
 ```
 
 Minimal component example:
@@ -196,18 +198,21 @@ class TappableComponent extends PositionComponent with Tappable {
   // update and render omitted
 
   @override
-  void onTapUp(TapUpInfo event) {
+  bool onTapUp(TapUpInfo event) {
     print("tap up");
+    return true;
   }
 
   @override
-  void onTapDown(TapDownInfo event) {
+  bool onTapDown(TapDownInfo event) {
     print("tap down");
+    return true;
   }
 
   @override
-  void onTapCancel() {
+  bool onTapCancel() {
     print("tap cancel");
+    return true;
   }
 }
 
@@ -230,10 +235,10 @@ your components, they can override the simple methods that enable an easy to use
 components.
 
 ```dart
-  void onDragStart(int pointerId, Vector2 startPosition) {}
-  void onDragUpdate(int pointerId, DragUpdateInfo event) {}
-  void onDragEnd(int pointerId, DragEndInfo event) {}
-  void onDragCancel(int pointerId) {}
+  bool onDragStart(int pointerId, Vector2 startPosition);
+  bool onDragUpdate(int pointerId, DragUpdateInfo event);
+  bool onDragEnd(int pointerId, DragEndInfo event);
+  bool onDragCancel(int pointerId);
 ```
 
 Note that all events take a uniquely generated pointer id so you can, if desired, distinguish
