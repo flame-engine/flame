@@ -19,6 +19,7 @@ class MyGame extends Game {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     squarePos = Rect.fromLTWH(0, 0, 100, 100);
   }
 
