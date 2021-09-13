@@ -27,10 +27,10 @@ class Component {
   /// game loop.
   bool isPrepared = false;
 
-  /// Whether this component is done loading through [onLoad]
+  /// Whether this component is done loading through [onLoad].
   bool isLoaded = false;
 
-  /// Whether this component has been fully added to a component tree.
+  /// Whether this component is currently added to a component tree.
   bool isMounted = false;
 
   /// If the component has a parent it will be set here.
@@ -188,6 +188,7 @@ class Component {
     children.forEach((child) {
       child.onRemove();
     });
+    isPrepared = false;
     isMounted = false;
     _parent = null;
     nextParent?.add(this);
@@ -226,13 +227,13 @@ class Component {
     await Future.wait(children.addLater.map(add));
   }
 
-  /// Removes a component from the component list, calling onRemove for it and
+  /// Removes a component from the component tree, calling [onRemove] for it and
   /// its children.
   void remove(Component c) {
     children.remove(c);
   }
 
-  /// Removes all the children in the list and calls onRemove for all of them
+  /// Removes all the children in the list and calls [onRemove] for all of them
   /// and their children.
   void removeAll(Iterable<Component> cs) {
     children.removeAll(cs);
@@ -246,7 +247,7 @@ class Component {
   /// Call this if any of this component's children priorities have changed
   /// at runtime.
   ///
-  /// This will call `rebalanceAll` on the [children] ordered set.
+  /// This will call [ComponentSet.rebalanceAll] on the [children] ordered set.
   void reorderChildren() => children.rebalanceAll();
 
   /// This method first calls the passed handler on the leaves in the tree,

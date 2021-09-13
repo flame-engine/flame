@@ -32,8 +32,8 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// The text direction to be used in text elements in a game.
   final TextDirection? textDirection;
 
-  /// Builder to provide a widget tree to be built whilst the [Future] provided
-  /// via `Game.onLoad` and `Game.onMount` is not resolved.
+  /// Builder to provide a widget tree to be built while the Game's [Future]
+  /// provided via `Game.onLoad` and `Game.onMount` is not resolved.
   /// By default this is an empty Container().
   final GameLoadingWidgetBuilder? loadingBuilder;
 
