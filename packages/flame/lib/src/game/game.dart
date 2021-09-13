@@ -19,12 +19,14 @@ import 'projector.dart';
 /// Represents a generic game.
 ///
 /// Subclass this to implement the [update] and [render] methods.
-/// Flame will deal with calling these methods properly when the game's widget is rendered.
+/// Flame will deal with calling these methods properly when the game's widget
+/// is rendered.
 abstract class Game extends Component implements Projector {
   final images = Images();
   final assets = AssetsCache();
 
-  /// Just a reference back to the render box that is kept up to date by the engine.
+  /// Just a reference back to the render box that is kept up to date by the
+  /// engine.
   GameRenderBox? _gameRenderBox;
 
   /// Currently attached build context. Can be null if not attached.
@@ -33,29 +35,33 @@ abstract class Game extends Component implements Projector {
   /// Whether the game widget was attached to the Flutter tree.
   bool get isAttached => buildContext != null;
 
-  /// Current size of the game as provided by the framework; it will be null if layout has not been computed yet.
+  /// Current size of the game as provided by the framework; it will be null if
+  /// layout has not been computed yet.
   ///
   /// Use [size] and [hasLayout] for safe access.
   Vector2? _size;
 
   /// Current game viewport size, updated every resize via the [onGameResize]
-  /// method hook
+  /// method hook.
   Vector2 get size {
     assertHasLayout();
     return _size!;
   }
 
-  /// Indicates if the this game instance had its layout layed into the GameWidget
-  /// Only this is true, the game is ready to have its size used or in the case
+  /// Indicates if this game instance is connected to a GameWidget that is live
+  /// in the flutter widget tree.
+  /// Once this is true, the game is ready to have its size used or in the case
   /// of a BaseGame, to receive components.
   bool get hasLayout => _size != null;
 
   /// Returns the game background color.
   /// By default it will return a black color.
-  /// It cannot be changed at runtime, because the game widget does not get rebuild when this value changes.
+  /// It cannot be changed at runtime, because the game widget does not get
+  /// rebuild when this value changes.
   Color backgroundColor() => const Color(0xFF000000);
 
-  /// This is the resize hook; every time the game widget is resized, this hook is called.
+  /// This is the resize hook; every time the game widget is resized, this hook
+  /// is called.
   ///
   /// The default implementation just sets the new size on the size field
   @mustCallSuper
@@ -69,11 +75,13 @@ abstract class Game extends Component implements Projector {
   void assertHasLayout() {
     assert(
       hasLayout,
-      '"size" is not ready yet. Did you try to access it on the Game constructor? Use the "onLoad" method instead.',
+      '"size" is not ready yet. Did you try to access it on the Game '
+      'constructor? Use the "onLoad" method instead.',
     );
   }
 
-  /// This is the lifecycle state change hook; every time the game is resumed, paused or suspended, this is called.
+  /// This is the lifecycle state change hook; every time the game is resumed,
+  /// paused or suspended, this is called.
   ///
   /// The default implementation does nothing; override to use the hook.
   /// Check [AppLifecycleState] for details about the events received.
@@ -137,7 +145,8 @@ abstract class Game extends Component implements Projector {
   @override
   Vector2 scaleVector(Vector2 vector) => vector;
 
-  /// Utility method to load and cache the image for a sprite based on its options
+  /// Utility method to load and cache the image for a sprite based on its
+  /// options.
   Future<Sprite> loadSprite(
     String path, {
     Vector2? srcSize,
@@ -151,7 +160,8 @@ abstract class Game extends Component implements Projector {
     );
   }
 
-  /// Utility method to load and cache the image for a sprite animation based on its options
+  /// Utility method to load and cache the image for a sprite animation based on
+  /// its options.
   Future<SpriteAnimation> loadSpriteAnimation(
     String path,
     SpriteAnimationData data,
@@ -163,13 +173,13 @@ abstract class Game extends Component implements Projector {
     );
   }
 
-  /// Flag to tell the game loop if it should start running upon creation
+  /// Flag to tell the game loop if it should start running upon creation.
   bool runOnCreation = true;
 
-  /// Pauses the engine game loop execution
+  /// Pauses the engine game loop execution.
   void pauseEngine() => pauseEngineFn?.call();
 
-  /// Resumes the engine game loop execution
+  /// Resumes the engine game loop execution.
   void resumeEngine() => resumeEngineFn?.call();
 
   VoidCallback? pauseEngineFn;
@@ -177,8 +187,10 @@ abstract class Game extends Component implements Projector {
 
   /// A property that stores an [ActiveOverlaysNotifier]
   ///
-  /// This is useful to render widgets above a game, like a pause menu for example.
-  /// Overlays visible or hidden via [overlays].add or [overlays].remove, respectively.
+  /// This is useful to render widgets above a game, like a pause menu for
+  /// example.
+  /// Overlays visible or hidden via [overlays].add or [overlays].remove,
+  /// respectively.
   ///
   /// Ex:
   /// ```
@@ -198,7 +210,8 @@ abstract class Game extends Component implements Projector {
   final mouseCursor = ValueNotifier<MouseCursor?>(null);
 }
 
-/// A [ChangeNotifier] used to control the visibility of overlays on a [Game] instance.
+/// A [ChangeNotifier] used to control the visibility of overlays on a [Game]
+/// instance.
 ///
 /// To learn more, see:
 /// - [Game.overlays]
