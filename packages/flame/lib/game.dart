@@ -1,5 +1,5 @@
 export 'src/extensions/vector2.dart';
-export 'src/fps_counter.dart';
+export 'src/game/mixins/fps_counter.dart';
 export 'src/game/camera/camera.dart';
 export 'src/game/camera/viewport.dart';
 export 'src/game/flame_game.dart';

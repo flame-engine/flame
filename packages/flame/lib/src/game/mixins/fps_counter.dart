@@ -1,6 +1,6 @@
 import 'package:flutter/scheduler.dart';
 
-import '../game.dart';
+import '../../../game.dart';
 
 const _maxFrames = 60;
 const frameInterval =
