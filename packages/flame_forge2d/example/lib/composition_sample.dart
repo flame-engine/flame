@@ -17,6 +17,7 @@ component. Click the ball to see the number increment.
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final boundaries = createBoundaries(this);
     boundaries.forEach(add);
     final center = screenToWorld(camera.viewport.effectiveSize / 2);
@@ -41,7 +42,7 @@ class TapableBall extends Ball with Tappable {
     super.onLoad();
     _textPaint = TextPaint(config: _textConfig);
     textComponent = TextComponent(counter.toString(), textRenderer: _textPaint);
-    addChild(textComponent);
+    add(textComponent);
   }
 
   @override

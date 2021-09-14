@@ -72,9 +72,9 @@ class JoystickComponent extends HudMarginComponent with Draggable {
     knob.position.add(size / 2);
     _baseKnobPosition = knob.position.clone();
     if (background != null) {
-      addChild(background!);
+      add(background!);
     }
-    addChild(knob);
+    add(knob);
   }
 
   @override

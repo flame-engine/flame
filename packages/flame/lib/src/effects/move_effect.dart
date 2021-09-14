@@ -20,11 +20,10 @@ class Vector2Percentage {
   );
 }
 
-class MoveEffect extends SimplePositionComponentEffect {
+class MoveEffect extends PositionComponentEffect {
   List<Vector2> path;
   Vector2Percentage? _currentSubPath;
   List<Vector2Percentage>? _percentagePath;
-  late Vector2 _startPosition;
 
   /// Duration or speed needs to be defined
   MoveEffect({
@@ -35,12 +34,11 @@ class MoveEffect extends SimplePositionComponentEffect {
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
+    double? initialDelay,
+    double? peakDelay,
+    bool? removeOnFinish,
     VoidCallback? onComplete,
-  })  : assert(
-          (duration != null) ^ (speed != null),
-          'Either speed or duration necessary',
-        ),
-        super(
+  }) : super(
           isInfinite,
           isAlternating,
           duration: duration,
@@ -48,19 +46,21 @@ class MoveEffect extends SimplePositionComponentEffect {
           curve: curve,
           isRelative: isRelative,
           modifiesPosition: true,
+          initialDelay: initialDelay,
+          peakDelay: peakDelay,
+          removeOnFinish: removeOnFinish,
           onComplete: onComplete,
         );
 
   @override
-  void initialize(PositionComponent component) {
-    super.initialize(component);
+  Future<void> onLoad() async {
+    super.onLoad();
     List<Vector2> _movePath;
-    _startPosition = component.position.clone();
     // With relative here we mean that any vector in the list is relative
     // to the previous vector in the list, except the first one which is
     // relative to the start position of the component.
     if (isRelative) {
-      var lastPosition = _startPosition;
+      var lastPosition = originalPosition!;
       _movePath = [];
       for (final v in path) {
         final nextPosition = v + lastPosition;
@@ -70,17 +70,17 @@ class MoveEffect extends SimplePositionComponentEffect {
     } else {
       _movePath = path;
     }
-    endPosition = isAlternating ? _startPosition : _movePath.last;
+    peakPosition = _movePath.last;
 
     var pathLength = 0.0;
-    var lastPosition = _startPosition;
+    var lastPosition = originalPosition!;
     for (final v in _movePath) {
       pathLength += v.distanceTo(lastPosition);
       lastPosition = v;
     }
 
     _percentagePath = <Vector2Percentage>[];
-    lastPosition = _startPosition;
+    lastPosition = originalPosition!;
     for (final v in _movePath) {
       final lengthToPrevious = lastPosition.distanceTo(v);
       final lastEndAt =
@@ -101,14 +101,13 @@ class MoveEffect extends SimplePositionComponentEffect {
 
     // `duration` is not null when speed is null
     duration ??= totalPathLength / speed!;
-
-    // `speed` is always not null here already
-    peakTime = isAlternating ? duration! / 2 : duration!;
+    duration = duration! + totalOffset;
+    setPeakTimeFromDuration(duration!);
   }
 
   @override
-  void reset() {
-    super.reset();
+  void resetEffect() {
+    super.resetEffect();
     if (_percentagePath?.isNotEmpty ?? false) {
       _currentSubPath = _percentagePath!.first;
     }
@@ -116,7 +115,13 @@ class MoveEffect extends SimplePositionComponentEffect {
 
   @override
   void update(double dt) {
+    if (isPaused) {
+      return;
+    }
     super.update(dt);
+    if (hasCompleted()) {
+      return;
+    }
     _currentSubPath ??= _percentagePath!.first;
     if (!curveDirection.isNegative && _currentSubPath!.endAt < curveProgress ||
         curveDirection.isNegative && _currentSubPath!.startAt > curveProgress) {
@@ -126,7 +131,7 @@ class MoveEffect extends SimplePositionComponentEffect {
     final lastEndAt = _currentSubPath!.startAt;
     final localPercentage =
         (curveProgress - lastEndAt) / (_currentSubPath!.endAt - lastEndAt);
-    component?.position.setFrom(_currentSubPath!.previous +
+    affectedParent.position.setFrom(_currentSubPath!.previous +
         ((_currentSubPath!.v - _currentSubPath!.previous) * localPercentage));
   }
 }

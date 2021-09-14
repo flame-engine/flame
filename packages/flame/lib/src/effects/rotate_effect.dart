@@ -2,12 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/animation.dart';
 
-import '../../components.dart';
 import 'effects.dart';
 
-class RotateEffect extends SimplePositionComponentEffect {
+class RotateEffect extends PositionComponentEffect {
   double angle;
-  late double _startAngle;
   late double _delta;
 
   /// Duration or speed needs to be defined
@@ -19,38 +17,44 @@ class RotateEffect extends SimplePositionComponentEffect {
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
+    double? initialDelay,
+    double? peakDelay,
+    bool? removeOnFinish,
     VoidCallback? onComplete,
-  })  : assert(
-          (duration != null) ^ (speed != null),
-          'Either speed or duration necessary',
-        ),
-        super(
+  }) : super(
           isInfinite,
           isAlternating,
           duration: duration,
           speed: speed,
           curve: curve,
           isRelative: isRelative,
+          removeOnFinish: removeOnFinish,
+          initialDelay: initialDelay,
+          peakDelay: peakDelay,
           modifiesAngle: true,
           onComplete: onComplete,
         );
 
   @override
-  void initialize(PositionComponent component) {
-    super.initialize(component);
-    _startAngle = component.angle;
-    _delta = isRelative ? angle : angle - _startAngle;
-    if (!isAlternating) {
-      endAngle = _startAngle + _delta;
-    }
+  Future<void> onLoad() async {
+    super.onLoad();
+    final startAngle = originalAngle!;
+    _delta = isRelative ? angle : angle - startAngle;
+    peakAngle = startAngle + _delta;
     speed ??= _delta.abs() / duration!;
     duration ??= _delta.abs() / speed!;
-    peakTime = isAlternating ? duration! / 2 : duration!;
+    setPeakTimeFromDuration(duration!);
   }
 
   @override
   void update(double dt) {
+    if (isPaused) {
+      return;
+    }
     super.update(dt);
-    component?.angle = _startAngle + _delta * curveProgress;
+    if (hasCompleted()) {
+      return;
+    }
+    affectedParent.angle = originalAngle! + _delta * curveProgress;
   }
 }

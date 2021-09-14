@@ -90,7 +90,7 @@ class _CoordinateSystemsState extends State<CoordinateSystemsWidget> {
 /// A game that allows for camera control and displays Tap, Drag & Scroll
 /// events information on the screen, to allow exploration of the 3 coordinate
 /// systems of Flame (global, widget, game).
-class CoordinateSystemsGame extends BaseGame
+class CoordinateSystemsGame extends FlameGame
     with
         MultiTouchTapDetector,
         MultiTouchDragDetector,
@@ -113,6 +113,7 @@ class CoordinateSystemsGame extends BaseGame
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     camera.followVector2(cameraPosition, relativeOffset: Anchor.topLeft);
   }
 

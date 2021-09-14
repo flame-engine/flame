@@ -62,21 +62,21 @@ If you want a more full-fledged game, please check:
  - [Bob Box](https://github.com/bluefireteam/bounce_box): which is easy to grasp and a good display of
  our core features.
 
-## What is the difference between Game and BaseGame?
+## What is the difference between Game and FlameGame?
 
-`Game` is the most barebone interface that Flame exposes. If you extend `Game` instead of `BaseGame`
+`Game` is the most barebone interface that Flame exposes. If you extend `Game` instead of `FlameGame`
 , you will need to implement a lot of things yourself. Flame will hook you up on the game loop, so
 you will have to implement `render` and `update` yourself from scratch. If you want to use the
 component system, you can, but you don't need to.
 
-`BaseGame` extends `Game` and adds lots of functionality on top of that. Just add your components to
+`FlameGame` extends `Game` and adds lots of functionality on top of that. Just add your components to
 it and it works. They are rendered and updated automatically. You might still want to override some
-of `BaseGame`'s methods to add custom functionality, but you will probably be calling the super
-method to let `BaseGame` do its work.
+of `FlameGame`'s methods to add custom functionality, but you will probably be calling the super
+method to let `FlameGame` do its work.
 
 ## How does the Camera work?
 
-If you are using `BaseGame`, you have a `camera` attribute that allows you to off-set all non-HUD
+If you are using `FlameGame`, you have a `camera` attribute that allows you to off-set all non-HUD
 components by a certain amount. You can add custom logic to your `update` method to have the camera
 position be tracked based on the player position, for example, so the player can be always on the
 center or on the bottom.

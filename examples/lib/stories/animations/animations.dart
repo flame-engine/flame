@@ -7,11 +7,11 @@ import 'aseprite.dart';
 import 'basic.dart';
 
 const basicInfo = '''
-Basic example of `SpriteAnimation`s use in Flame's `BaseGame`
+Basic example of `SpriteAnimation`s use in Flame's `FlameGame`
 
 The snippet shows how an animation can be loaded and added to the game
 ```
-class MyGame extends BaseGame {
+class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     final animation = await loadSpriteAnimation(

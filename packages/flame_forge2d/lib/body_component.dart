@@ -14,7 +14,7 @@ import 'sprite_body_component.dart';
 /// Since a pure BodyComponent doesn't have anything drawn on top of it,
 /// it is a good idea to turn on [debugMode] for it so that the bodies can be
 /// seen
-abstract class BodyComponent<T extends Forge2DGame> extends BaseComponent
+abstract class BodyComponent<T extends Forge2DGame> extends Component
     with HasGameRef<T> {
   static const defaultColor = Color.fromARGB(255, 255, 255, 255);
   late Body body;
@@ -39,6 +39,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends BaseComponent
   @mustCallSuper
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     body = createBody();
   }
 

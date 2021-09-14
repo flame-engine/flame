@@ -1,5 +1,4 @@
 export 'src/anchor.dart';
-export 'src/components/base_component.dart';
 export 'src/components/component.dart';
 export 'src/components/component_set.dart';
 export 'src/components/input/joystick_component.dart';

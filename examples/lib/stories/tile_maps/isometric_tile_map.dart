@@ -41,7 +41,7 @@ class Selector extends SpriteComponent {
   }
 }
 
-class IsometricTileMapGame extends BaseGame with MouseMovementDetector {
+class IsometricTileMapGame extends FlameGame with MouseMovementDetector {
   late IsometricTileMapComponent base;
   late Selector selector;
 
@@ -49,6 +49,7 @@ class IsometricTileMapGame extends BaseGame with MouseMovementDetector {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final tilesetImage = await images.load('tile_maps/tiles$suffix.png');
     final tileset = SpriteSheet(
       image: tilesetImage,

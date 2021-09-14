@@ -36,7 +36,7 @@ import '../projector.dart';
 /// The shake adds a random immediate delta to each tick to simulate the shake
 /// effect.
 ///
-/// Note: in the context of the BaseGame, the camera effectively translates
+/// Note: in the context of the FlameGame, the camera effectively translates
 /// the position where components are rendered with relation to the Viewport.
 /// Components marked as `isHud = true` are always rendered in screen
 /// coordinates, bypassing the camera altogether.
@@ -142,7 +142,7 @@ class Camera extends Projector {
   /// viewport applies a (normally) fixed zoom to adapt multiple screens into
   /// one aspect ratio. The zoom might be different per dimension depending
   /// on the Viewport implementation. Also, if used with the default
-  /// BaseGame implementation, it will apply to all components.
+  /// FlameGame implementation, it will apply to all components.
   /// The zoom from the camera is only for components that respect camera,
   /// and is applied after the viewport is set. It exists to be used if there
   /// is any kind of user configurable camera on your game.
@@ -153,7 +153,7 @@ class Camera extends Projector {
   /// Use this method to transform the canvas using the current rules provided
   /// by this camera object.
   ///
-  /// If you are using BaseGame, this will be done for you for all non-HUD
+  /// If you are using FlameGame, this will be done for you for all non-HUD
   /// components.
   /// When using this method you are responsible for saving/restoring canvas
   /// state to avoid leakage.

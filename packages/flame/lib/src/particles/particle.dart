@@ -4,8 +4,6 @@ import 'dart:ui';
 import 'package:flutter/animation.dart';
 
 import '../../extensions.dart';
-import '../components/component.dart';
-import '../components/particle_component.dart';
 import '../timer.dart';
 import 'accelerated_particle.dart';
 import 'composed_particle.dart';
@@ -174,9 +172,4 @@ abstract class Particle {
   Particle scaled(double scale) {
     return ScaledParticle(scale: scale, child: this, lifespan: _lifespan);
   }
-
-  /// Wraps this particle with a [ParticleComponent].
-  ///
-  /// Should be used with the FCS.
-  Component asComponent() => ParticleComponent(particle: this);
 }

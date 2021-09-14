@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 import 'package:flutter/painting.dart';
 
-class SandBoxLayerParallaxGame extends BaseGame {
+class SandBoxLayerParallaxGame extends FlameGame {
   final Vector2 planeSpeed;
   final ImageRepeat planeRepeat;
   final LayerFill planeFill;
@@ -18,6 +18,7 @@ class SandBoxLayerParallaxGame extends BaseGame {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final bgLayer = await loadParallaxLayer(
       ParallaxImageData('parallax/bg.png'),
     );

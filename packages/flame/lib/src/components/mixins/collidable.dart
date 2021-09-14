@@ -21,7 +21,7 @@ mixin Collidable on Hitbox {
   void onCollisionEnd(Collidable other) {}
 }
 
-class ScreenCollidable<T extends BaseGame> extends PositionComponent
+class ScreenCollidable<T extends FlameGame> extends PositionComponent
     with Hitbox, Collidable, HasGameRef<T> {
   @override
   CollidableType collidableType = CollidableType.passive;

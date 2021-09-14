@@ -111,6 +111,7 @@ void main() {
         expectedAngle: positionComponent.angle,
         expectedSize: positionComponent.size.clone(),
         shouldComplete: false,
+        epsilon: 3.0,
         random: random,
       );
     },

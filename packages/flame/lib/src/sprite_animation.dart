@@ -96,7 +96,8 @@ class SpriteAnimationFrame {
 
 typedef OnCompleteSpriteAnimation = void Function();
 
-/// Represents a sprite animation, that is, a list of sprites that change with time.
+/// Represents a sprite animation, that is, a list of sprites that change with
+/// time.
 class SpriteAnimation {
   /// The frames that compose this animation.
   List<SpriteAnimationFrame> frames = [];
@@ -104,7 +105,8 @@ class SpriteAnimation {
   /// Index of the current frame that should be displayed.
   int currentIndex = 0;
 
-  /// Current clock time (total time) of this animation, in seconds, since last frame.
+  /// Current clock time (total time) of this animation, in seconds, since last
+  /// frame.
   ///
   /// It's ticked by the update method. It's reset every frame change.
   double clock = 0.0;
@@ -112,7 +114,8 @@ class SpriteAnimation {
   /// Total elapsed time of this animation, in seconds, since start or a reset.
   double elapsed = 0.0;
 
-  /// Whether the animation loops after the last sprite of the list, going back to the first, or keeps returning the last when done.
+  /// Whether the animation loops after the last sprite of the list, going back
+  /// to the first, or keeps returning the last when done.
   bool loop = true;
 
   /// Registered method to be triggered when the animation complete.

@@ -7,37 +7,44 @@ import 'package:flame/test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class Callback {
-  bool isCalled = false;
+  int calledNumber = 0;
 
-  void call() => isCalled = true;
+  void call() => calledNumber++;
 }
 
 void effectTest(
   WidgetTester tester,
   PositionComponent component,
-  PositionComponentEffect effect, {
+  ComponentEffect effect, {
   bool shouldComplete = true,
   double iterations = 1.0,
   double expectedAngle = 0.0,
   Vector2? expectedPosition,
   Vector2? expectedSize,
   Vector2? expectedScale,
+  double epsilon = 0.01,
   required Random random,
 }) async {
+  component.children.register<ComponentEffect>();
   expectedPosition ??= Vector2.zero();
   expectedSize ??= Vector2.all(100.0);
   expectedScale ??= Vector2.all(1.0);
   final callback = Callback();
   effect.onComplete = callback.call;
-  final game = BaseGame();
-  game.onResize(Vector2.all(200));
-  game.add(component);
-  component.addEffect(effect);
-  final duration = effect.iterationTime;
+  final game = FlameGame();
+  game.onGameResize(Vector2.all(200));
   await tester.pumpWidget(GameWidget(
     game: game,
   ));
-  var timeLeft = iterations * duration;
+  await game.add(component);
+  await component.add(effect);
+  final duration = effect.iterationTime;
+  // Since the effects will flip over to 0 again when they reach their peak and
+  // they are infinite and not alternating, we don't want to go all the way to
+  // the peak.
+  final noOvershootTime =
+      effect.isInfinite && !effect.isAlternating ? 0.00001 : 0.0;
+  var timeLeft = (iterations - noOvershootTime) * duration;
   while (timeLeft > 0) {
     var stepDelta = 50.0 + random.nextInt(50);
     stepDelta /= 1000;
@@ -45,35 +52,41 @@ void effectTest(
     game.update(stepDelta);
     timeLeft -= stepDelta;
   }
+  game.update(0);
 
   if (!shouldComplete) {
     expectVector2(
       component.position,
       expectedPosition,
+      epsilon: epsilon,
       reason: 'Position is not correct',
     );
     expectDouble(
       component.angle,
       expectedAngle,
+      epsilon: epsilon,
       reason: 'Angle is not correct',
     );
     expectVector2(
       component.size,
       expectedSize,
+      epsilon: epsilon,
       reason: 'Size is not correct',
     );
     expectVector2(
       component.scale,
       expectedScale,
+      epsilon: epsilon,
       reason: 'Scale is not correct',
     );
   } else {
     // To account for float number operations making effects not finish
     const epsilon = 0.001;
-    if (effect.percentage! < epsilon) {
-      game.update(effect.currentTime);
-    } else if (1.0 - effect.percentage! < epsilon) {
-      game.update(effect.peakTime - effect.currentTime);
+    final percentage = effect.percentage;
+    if (percentage < epsilon) {
+      game.update(effect.currentTime + epsilon);
+    } else if (1.0 - percentage < epsilon) {
+      game.update(effect.peakTime - effect.currentTime + epsilon);
     }
 
     expectVector2(
@@ -97,15 +110,18 @@ void effectTest(
       reason: 'Scale is not exactly correct',
     );
   }
-  expect(effect.hasCompleted(), shouldComplete, reason: 'Effect shouldFinish');
-  game.update(0.0);
+  expect(effect.hasCompleted(), shouldComplete, reason: 'Effect should finish');
+  game.update(0); // Children are removed before update logic
   expect(
-    callback.isCalled,
-    shouldComplete,
+    callback.calledNumber,
+    shouldComplete ? 1 : 0,
     reason: 'Callback was treated wrong',
   );
-  game.update(0.0); // Since effects are removed before they are updated
-  expect(component.effects.isEmpty, shouldComplete);
+  expect(
+    component.children.query<ComponentEffect>().every((e) => e.shouldRemove),
+    shouldComplete,
+    reason: 'Component had wrong number of children',
+  );
 }
 
 class TestComponent extends PositionComponent {

@@ -5,9 +5,10 @@ import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
-class SpritebatchGame extends BaseGame {
+class SpritebatchGame extends FlameGame {
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final spriteBatch = await SpriteBatch.load('boom.png');
 
     spriteBatch.add(

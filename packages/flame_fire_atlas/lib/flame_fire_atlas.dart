@@ -1,15 +1,14 @@
 library flame_fire_atlas;
 
+import 'dart:convert';
+import 'dart:ui';
+
+import 'package:archive/archive.dart';
+import 'package:flame/assets.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame/extensions.dart';
-import 'package:flame/assets.dart';
-
-import 'package:archive/archive.dart';
-
-import 'dart:convert';
-import 'dart:ui';
 
 extension FireAtlasExtensions on Game {
   /// Load a [FireAtlas] instances from the given [asset]

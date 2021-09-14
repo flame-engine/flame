@@ -31,7 +31,6 @@ void main() async {
   addUtilsStories(dashbook);
   addCameraAndViewportStories(dashbook);
   addParallaxStories(dashbook);
-
   addWidgetsStories(dashbook);
 
   runApp(dashbook);

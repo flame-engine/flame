@@ -16,7 +16,7 @@ add it to your game.
 Check this example to get a better understanding:
 
 ```dart
-class MyGame extends BaseGame with HasDraggableComponents {
+class MyGame extends FlameGame with HasDraggableComponents {
 
   MyGame() {
     joystick.addObserver(player);

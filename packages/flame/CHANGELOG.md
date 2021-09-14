@@ -51,6 +51,11 @@
  - `TextBoxComponent` can have customizable `pixelRatio`
  - Add `ContainsAtLeastMockCanvas` to facilitate testing with `MockCanvas`
  - Support for `drawImage` for `MockCanvas`
+ - `Game` is now a `Component`
+ - `ComponentEffect` is now a `Component`
+ - `HasGameRef` can now operate independently from `Game`
+ - `initialDelay` and `peakDelay` for effects to handle time before and after an effect
+ - `component.onMount` now runs every time a component gets a new parent
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps

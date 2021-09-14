@@ -13,7 +13,7 @@ import 'package:flutter/painting.dart';
 
 import 'joystick_player.dart';
 
-class JoystickAdvancedGame extends BaseGame
+class JoystickAdvancedGame extends FlameGame
     with HasDraggableComponents, HasTappableComponents {
   late final JoystickPlayer player;
   late final JoystickComponent joystick;
@@ -22,6 +22,7 @@ class JoystickAdvancedGame extends BaseGame
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final image = await images.load('joystick.png');
     final sheet = SpriteSheet.fromColumnsAndRows(
       image: image,
@@ -95,7 +96,7 @@ class JoystickAdvancedGame extends BaseGame
         right: 85,
         bottom: 150,
       ),
-      onPressed: () => player.addEffect(
+      onPressed: () => player.add(
         rotateEffect..angle = 8 * rng.nextDouble(),
       ),
     );
@@ -116,14 +117,14 @@ class JoystickAdvancedGame extends BaseGame
         top: 80,
         left: 80,
       ),
-    )..addChild(speedText);
+    )..add(speedText);
 
     final directionWithMargin = HudMarginComponent(
       margin: const EdgeInsets.only(
         top: 110,
         left: 80,
       ),
-    )..addChild(directionText);
+    )..add(directionText);
 
     add(player);
     add(joystick);

@@ -1,9 +1,10 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-class Aseprite extends BaseGame {
+class Aseprite extends FlameGame {
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final image = await images.load('animations/chopper.png');
     final jsonData = await assets.readJson('images/animations/chopper.json');
     final animation = SpriteAnimation.fromAsepriteData(image, jsonData);

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../game/base_game.dart';
+import '../../../components.dart';
+import '../../game/flame_game.dart';
 import '../../gestures/events.dart';
-import '../base_component.dart';
 
-mixin Draggable on BaseComponent {
+mixin Draggable on Component {
   bool _isDragged = false;
   bool get isDragged => _isDragged;
 
@@ -62,7 +62,7 @@ mixin Draggable on BaseComponent {
   }
 }
 
-mixin HasDraggableComponents on BaseGame {
+mixin HasDraggableComponents on FlameGame {
   @mustCallSuper
   void onDragStart(int pointerId, DragStartInfo info) {
     _onGenericEventReceived((c) => c.handleDragStart(pointerId, info));
@@ -84,11 +84,8 @@ mixin HasDraggableComponents on BaseGame {
   }
 
   void _onGenericEventReceived(bool Function(Draggable) handler) {
-    for (final c in components.reversed()) {
-      var shouldContinue = true;
-      if (c is BaseComponent) {
-        shouldContinue = c.propagateToChildren<Draggable>(handler);
-      }
+    for (final c in children.reversed()) {
+      var shouldContinue = c.propagateToChildren<Draggable>(handler);
       if (c is Draggable && shouldContinue) {
         shouldContinue = handler(c);
       }

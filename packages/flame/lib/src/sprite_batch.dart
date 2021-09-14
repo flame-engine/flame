@@ -3,11 +3,11 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
+import '../game.dart';
 import 'assets/images.dart';
 import 'extensions/image.dart';
 import 'extensions/vector2.dart';
 import 'flame.dart';
-import 'game/game.dart';
 
 extension SpriteBatchExtension on Game {
   /// Utility method to load and cache the image for a [SpriteBatch] based on its options

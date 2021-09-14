@@ -1,13 +1,18 @@
 import 'dart:ui';
 
 import 'package:flame/game.dart';
-
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-class KeyboardGame extends Game with KeyboardEvents {
+const keyboardInfo = '''
+Example showcasing how to act on keyboard events.
+It also briefly showcases how to create a game without the FlameGame.
+Usage: Use A S D F to steer the rectangle.
+''';
+
+class KeyboardGame with Loadable, Game, KeyboardEvents {
   static final Paint white = BasicPalette.white.paint();
   static const int speed = 200;
 

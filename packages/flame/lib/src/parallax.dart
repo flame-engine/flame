@@ -3,13 +3,13 @@ import 'dart:ui';
 
 import 'package:flutter/painting.dart';
 
+import '../game.dart';
 import 'assets/images.dart';
 import 'extensions/canvas.dart';
 import 'extensions/image.dart';
 import 'extensions/rect.dart';
 import 'extensions/vector2.dart';
 import 'flame.dart';
-import 'game/game.dart';
 import 'sprite_animation.dart';
 
 extension ParallaxExtension on Game {

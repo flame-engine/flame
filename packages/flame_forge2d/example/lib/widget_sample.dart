@@ -24,6 +24,7 @@ class WidgetSample extends Forge2DGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final boundaries = createBoundaries(this);
     addAll(boundaries);
   }

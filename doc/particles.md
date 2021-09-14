@@ -3,7 +3,7 @@
 Flame offers a basic, yet robust and extendable particle system. The core concept of this system is
 the `Particle` class, which is very similar in its behavior to the `ParticleComponent`.
 
-The most basic usage of a `Particle` with `BaseGame` would look as following:
+The most basic usage of a `Particle` with `FlameGame` would look as following:
 
 ```dart
 import 'package:flame/components.dart';

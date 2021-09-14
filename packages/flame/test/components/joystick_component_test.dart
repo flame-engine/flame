@@ -5,7 +5,7 @@ import 'package:flame/input.dart';
 import 'package:flutter/widgets.dart';
 import 'package:test/test.dart';
 
-class TestGame extends BaseGame with HasDraggableComponents {}
+class TestGame extends FlameGame with HasDraggableComponents {}
 
 void main() {
   group('JoystickDirection tests', () {
@@ -15,7 +15,7 @@ void main() {
         size: 20,
         margin: const EdgeInsets.only(left: 20, bottom: 20),
       );
-      final game = TestGame()..onResize(Vector2.all(200));
+      final game = TestGame()..onGameResize(Vector2.all(200));
       game.add(joystick);
       game.update(0);
 

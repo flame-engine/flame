@@ -4,9 +4,9 @@ import 'package:flame/input.dart';
 import 'package:flutter/gestures.dart';
 import 'package:test/test.dart';
 
-class _GameWithDraggables extends BaseGame with HasDraggableComponents {}
+class _GameWithDraggables extends FlameGame with HasDraggableComponents {}
 
-class _GameWithoutDraggables extends BaseGame {}
+class _GameWithoutDraggables extends FlameGame {}
 
 class DraggableComponent extends PositionComponent with Draggable {
   bool hasStartedDragging = false;
@@ -22,12 +22,12 @@ void main() {
   group('draggables test', () {
     test('make sure they cannot be added to invalid games', () async {
       final game1 = _GameWithDraggables();
-      game1.onResize(Vector2.all(100));
+      game1.onGameResize(Vector2.all(100));
       // should be ok
       await game1.add(DraggableComponent());
 
       final game2 = _GameWithoutDraggables();
-      game2.onResize(Vector2.all(100));
+      game2.onGameResize(Vector2.all(100));
 
       expect(
         () => game2.add(DraggableComponent()),
@@ -37,7 +37,7 @@ void main() {
 
     test('can be dragged', () async {
       final game = _GameWithDraggables();
-      game.onResize(Vector2.all(100));
+      game.onGameResize(Vector2.all(100));
       final component = DraggableComponent()
         ..x = 10
         ..y = 10
@@ -62,7 +62,7 @@ void main() {
 
     test('when the game has camera zoom, can be dragged', () async {
       final game = _GameWithDraggables();
-      game.onResize(Vector2.all(100));
+      game.onGameResize(Vector2.all(100));
       final component = DraggableComponent()
         ..x = 10
         ..y = 10
@@ -88,7 +88,7 @@ void main() {
 
     test('when the game has a moved camera, dragging works', () async {
       final game = _GameWithDraggables();
-      game.onResize(Vector2.all(100));
+      game.onGameResize(Vector2.all(100));
       final component = DraggableComponent()
         ..x = 50
         ..y = 50
@@ -116,7 +116,7 @@ void main() {
 
   test('isDragged is changed', () async {
     final game = _GameWithDraggables();
-    game.onResize(Vector2.all(100));
+    game.onGameResize(Vector2.all(100));
     final component = DraggableComponent()
       ..x = 10
       ..y = 10

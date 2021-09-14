@@ -11,7 +11,7 @@ environment:
 dependencies:
   flame:
     path: ../packages/flame
-  dashbook: 0.1.2
+  dashbook: 0.1.4
   flutter:
     sdk: flutter
 
