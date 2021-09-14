@@ -9,6 +9,7 @@ class MySpriteBatchComponent extends SpriteBatchComponent
     with HasGameRef<SpritebatchAutoLoadGame> {
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final spriteBatch = await gameRef.loadSpriteBatch('boom.png');
     this.spriteBatch = spriteBatch;
 
@@ -42,9 +43,10 @@ class MySpriteBatchComponent extends SpriteBatchComponent
   }
 }
 
-class SpritebatchAutoLoadGame extends BaseGame {
+class SpritebatchAutoLoadGame extends FlameGame {
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     add(MySpriteBatchComponent());
   }
 }

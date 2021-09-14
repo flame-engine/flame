@@ -8,11 +8,12 @@ import '../../commons/square_component.dart';
 
 final green = Paint()..color = const Color(0xAA338833);
 
-class SequenceEffectGame extends BaseGame with TapDetector {
+class SequenceEffectGame extends FlameGame with TapDetector {
   late SquareComponent greenSquare;
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     greenSquare = SquareComponent()
       ..paint = green
       ..position.setValues(100, 100);
@@ -24,16 +25,10 @@ class SequenceEffectGame extends BaseGame with TapDetector {
     final currentTap = info.eventPosition.game;
     greenSquare.clearEffects();
 
-    final move1 = MoveEffect(
-      path: [currentTap],
-      speed: 250.0,
-      curve: Curves.bounceInOut,
-      isAlternating: true,
-    );
-
-    final move2 = MoveEffect(
+    final move = MoveEffect(
       path: [
-        currentTap + Vector2(0, 50),
+        currentTap,
+        currentTap + Vector2(-20, 50),
         currentTap + Vector2(-50, -50),
         currentTap + Vector2(50, 0),
       ],
@@ -41,8 +36,8 @@ class SequenceEffectGame extends BaseGame with TapDetector {
       curve: Curves.easeIn,
     );
 
-    final scale = SizeEffect(
-      size: currentTap,
+    final size = SizeEffect(
+      size: currentTap - greenSquare.position,
       speed: 100.0,
       curve: Curves.easeInCubic,
     );
@@ -53,17 +48,11 @@ class SequenceEffectGame extends BaseGame with TapDetector {
       curve: Curves.decelerate,
     );
 
-    final combination = CombinedEffect(
-      effects: [move2, rotate],
-      isAlternating: true,
-      onComplete: () => print('combination complete'),
-    );
-
     final sequence = SequenceEffect(
-      effects: [move1, scale, combination],
+      effects: [size, rotate, move],
       isAlternating: true,
     );
     sequence.onComplete = () => print('sequence complete');
-    greenSquare.addEffect(sequence);
+    greenSquare.add(sequence);
   }
 }

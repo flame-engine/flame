@@ -8,11 +8,12 @@ import 'package:flutter/material.dart';
 
 import '../../commons/square_component.dart';
 
-class RotateEffectGame extends BaseGame with TapDetector {
+class RotateEffectGame extends FlameGame with TapDetector {
   late SquareComponent square;
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     square = SquareComponent()
       ..position.setValues(200, 200)
       ..anchor = Anchor.center;
@@ -21,7 +22,7 @@ class RotateEffectGame extends BaseGame with TapDetector {
 
   @override
   void onTap() {
-    square.addEffect(
+    square.add(
       RotateEffect(
         angle: 2 * pi,
         isRelative: true,

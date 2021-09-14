@@ -2,9 +2,10 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 
-class SpritesheetGame extends BaseGame {
+class SpritesheetGame extends FlameGame {
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final spriteSheet = SpriteSheet(
       image: await images.load('spritesheet.png'),
       srcSize: Vector2(16.0, 18.0),

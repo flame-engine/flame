@@ -8,7 +8,7 @@ import '../../palette.dart';
 /// Component will always have a main Paint that can be accessed
 /// by the [paint] attribute and other paints can be manipulated/accessed
 /// using [getPaint], [setPaint] and [deletePaint] by a paintId of generic type [T], that can be omited if the component only have one paint.
-mixin HasPaint<T extends Object> on BaseComponent {
+mixin HasPaint<T extends Object> on Component {
   final Map<T, Paint> _paints = {};
 
   Paint paint = BasicPalette.white.paint();

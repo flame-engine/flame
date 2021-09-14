@@ -5,9 +5,9 @@ import 'package:flame/geometry.dart';
 import 'package:test/test.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-class TestGame extends BaseGame with HasCollidables {
+class TestGame extends FlameGame with HasCollidables {
   TestGame() {
-    onResize(Vector2.all(200));
+    onGameResize(Vector2.all(200));
   }
 }
 
@@ -46,18 +46,19 @@ class TestBlock extends PositionComponent with Hitbox, Collidable {
 }
 
 void main() {
-  TestGame gameWithCollidables(List<Collidable> collidables) {
+  Future<TestGame> gameWithCollidables(List<Collidable> collidables) async {
     final game = TestGame();
-    game.addAll(collidables);
+    await game.onLoad();
+    await game.addAll(collidables);
     game.update(0);
-    expect(game.components.isNotEmpty, collidables.isNotEmpty);
+    expect(game.children.isNotEmpty, collidables.isNotEmpty);
     return game;
   }
 
   group(
     'Varying CollisionType tests',
     () {
-      test('Actives do collide', () {
+      test('Actives do collide', () async {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
@@ -68,14 +69,14 @@ void main() {
           Vector2.all(10),
           CollidableType.active,
         );
-        gameWithCollidables([blockA, blockB]);
+        await gameWithCollidables([blockA, blockB]);
         expect(blockA.collidedWith(blockB), true);
         expect(blockB.collidedWith(blockA), true);
         expect(blockA.collisions.length, 1);
         expect(blockB.collisions.length, 1);
       });
 
-      test('Sensors do not collide', () {
+      test('Sensors do not collide', () async {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
@@ -86,12 +87,12 @@ void main() {
           Vector2.all(10),
           CollidableType.passive,
         );
-        gameWithCollidables([blockA, blockB]);
+        await gameWithCollidables([blockA, blockB]);
         expect(blockA.collisions.isEmpty, true);
         expect(blockB.collisions.isEmpty, true);
       });
 
-      test('Inactives do not collide', () {
+      test('Inactives do not collide', () async {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
@@ -102,12 +103,12 @@ void main() {
           Vector2.all(10),
           CollidableType.inactive,
         );
-        gameWithCollidables([blockA, blockB]);
+        await gameWithCollidables([blockA, blockB]);
         expect(blockA.collisions.isEmpty, true);
         expect(blockB.collisions.isEmpty, true);
       });
 
-      test('Active collides with static', () {
+      test('Active collides with static', () async {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
@@ -118,14 +119,14 @@ void main() {
           Vector2.all(10),
           CollidableType.passive,
         );
-        gameWithCollidables([blockA, blockB]);
+        await gameWithCollidables([blockA, blockB]);
         expect(blockA.collidedWith(blockB), true);
         expect(blockB.collidedWith(blockA), true);
         expect(blockA.collisions.length, 1);
         expect(blockB.collisions.length, 1);
       });
 
-      test('Sensor collides with active', () {
+      test('Sensor collides with active', () async {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
@@ -136,14 +137,14 @@ void main() {
           Vector2.all(10),
           CollidableType.active,
         );
-        gameWithCollidables([blockA, blockB]);
+        await gameWithCollidables([blockA, blockB]);
         expect(blockA.collidedWith(blockB), true);
         expect(blockB.collidedWith(blockA), true);
         expect(blockA.collisions.length, 1);
         expect(blockB.collisions.length, 1);
       });
 
-      test('Sensor does not collide with inactive', () {
+      test('Sensor does not collide with inactive', () async {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
@@ -154,12 +155,12 @@ void main() {
           Vector2.all(10),
           CollidableType.inactive,
         );
-        gameWithCollidables([blockA, blockB]);
+        await gameWithCollidables([blockA, blockB]);
         expect(blockA.collisions.length, 0);
         expect(blockB.collisions.length, 0);
       });
 
-      test('Inactive does not collide with static', () {
+      test('Inactive does not collide with static', () async {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
@@ -170,12 +171,12 @@ void main() {
           Vector2.all(10),
           CollidableType.passive,
         );
-        gameWithCollidables([blockA, blockB]);
+        await gameWithCollidables([blockA, blockB]);
         expect(blockA.collisions.length, 0);
         expect(blockB.collisions.length, 0);
       });
 
-      test('Active does not collide with inactive', () {
+      test('Active does not collide with inactive', () async {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
@@ -186,12 +187,12 @@ void main() {
           Vector2.all(10),
           CollidableType.inactive,
         );
-        gameWithCollidables([blockA, blockB]);
+        await gameWithCollidables([blockA, blockB]);
         expect(blockA.collisions.length, 0);
         expect(blockB.collisions.length, 0);
       });
 
-      test('Inactive does not collide with active', () {
+      test('Inactive does not collide with active', () async {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
@@ -202,12 +203,12 @@ void main() {
           Vector2.all(10),
           CollidableType.active,
         );
-        gameWithCollidables([blockA, blockB]);
+        await gameWithCollidables([blockA, blockB]);
         expect(blockA.collisions.length, 0);
         expect(blockB.collisions.length, 0);
       });
 
-      test('Correct collisions with many involved collidables', () {
+      test('Correct collisions with many involved collidables', () async {
         final actives = List.generate(
           100,
           (_) => TestBlock(
@@ -232,7 +233,7 @@ void main() {
             CollidableType.inactive,
           ),
         );
-        gameWithCollidables((actives + statics + inactives)..shuffle());
+        await gameWithCollidables((actives + statics + inactives)..shuffle());
         expect(
           actives.fold<bool>(
             true,
@@ -256,7 +257,8 @@ void main() {
           true,
         );
       });
-      test('Detects collision after scale', () {
+
+      test('Detects collision after scale', () async {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
@@ -267,7 +269,7 @@ void main() {
           Vector2.all(10),
           CollidableType.active,
         );
-        final game = gameWithCollidables([blockA, blockB]);
+        final game = await gameWithCollidables([blockA, blockB]);
         expect(blockA.collidedWith(blockB), false);
         expect(blockB.collidedWith(blockA), false);
         expect(blockA.collisions.length, 0);
@@ -279,13 +281,14 @@ void main() {
         expect(blockA.collisions.length, 1);
         expect(blockB.collisions.length, 1);
       });
-      test('TestPoint detects point after scale', () {
+
+      test('TestPoint detects point after scale', () async {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
           CollidableType.active,
         );
-        final game = gameWithCollidables([blockA]);
+        final game = await gameWithCollidables([blockA]);
         expect(blockA.containsPoint(Vector2.all(11)), false);
         blockA.scale = Vector2.all(2.0);
         game.update(0);

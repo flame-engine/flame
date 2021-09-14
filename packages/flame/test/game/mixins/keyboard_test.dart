@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
@@ -7,15 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class ValidGame extends Game with KeyboardEvents {
-  @override
-  void render(Canvas canvas) {}
+class ValidGame extends FlameGame with KeyboardEvents {}
 
-  @override
-  void update(double dt) {}
-}
-
-class InvalidGame extends BaseGame
+class InvalidGame extends FlameGame
     with HasKeyboardHandlerComponents, KeyboardEvents {}
 
 class MockRawKeyEventData extends Mock implements RawKeyEventData {
@@ -26,7 +18,7 @@ class MockRawKeyEventData extends Mock implements RawKeyEventData {
 }
 
 void main() {
-  group('Keyboarde events', () {
+  group('Keyboard events', () {
     test(
       'cannot mix KeyboardEvent and HasKeyboardHandlerComponents together',
       () {

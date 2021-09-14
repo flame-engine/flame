@@ -4,11 +4,12 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
-class BasicAnimations extends BaseGame with TapDetector {
+class BasicAnimations extends FlameGame with TapDetector {
   late Image creature;
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     creature = await images.load('animations/creature.png');
 
     final animation = await loadSpriteAnimation(

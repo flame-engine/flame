@@ -4,7 +4,7 @@ import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
-class ScrollGame extends BaseGame with ScrollDetector {
+class ScrollGame extends FlameGame with ScrollDetector {
   static const speed = 2000.0;
   final _size = Vector2.all(50);
   final _paint = BasicPalette.white.paint();

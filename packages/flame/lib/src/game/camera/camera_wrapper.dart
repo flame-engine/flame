@@ -1,13 +1,14 @@
 import 'dart:ui';
+
 import '../../../components.dart';
 import 'camera.dart';
 
-/// This class encapsulates BaseGame's rendering functionality. It will be
+/// This class encapsulates FlameGame's rendering functionality. It will be
 /// converted into a proper Component in a future release, but until then
-/// using it in any code other than the BaseGame class is unsafe and
+/// using it in any code other than the FlameGame class is unsafe and
 /// not recommended.
 class CameraWrapper {
-  // TODO(st-pasha): extend from BaseComponent
+  // TODO(st-pasha): extend from Component
   CameraWrapper(this.camera, this.world);
 
   final Camera camera;

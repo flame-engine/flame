@@ -4,7 +4,7 @@ import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
-class MouseMovementGame extends BaseGame with MouseMovementDetector {
+class MouseMovementGame extends FlameGame with MouseMovementDetector {
   static const speed = 200;
   static final Paint _blue = BasicPalette.blue.paint();
   static final Paint _white = BasicPalette.white.paint();

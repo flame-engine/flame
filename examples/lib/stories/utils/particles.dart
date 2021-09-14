@@ -9,7 +9,7 @@ import 'package:flame/sprite.dart';
 import 'package:flame/timer.dart' as flame_timer;
 import 'package:flutter/material.dart' hide Image;
 
-class ParticlesGame extends BaseGame with FPSCounter {
+class ParticlesGame extends FlameGame with FPSCounter {
   /// Defines dimensions of the sample
   /// grid to be displayed on the screen,
   /// 5x5 in this particular case
@@ -19,6 +19,7 @@ class ParticlesGame extends BaseGame with FPSCounter {
   /// Miscellaneous values used
   /// by examples below
   final Random rnd = Random();
+  Timer? spawnTimer;
   final StepTween steppedTween = StepTween(begin: 0, end: 5);
   final trafficLight = TrafficLightComponent();
   final TextPaint fpsTextPaint = TextPaint(
@@ -35,11 +36,24 @@ class ParticlesGame extends BaseGame with FPSCounter {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     await images.load('zap.png');
     await images.load('boom.png');
+  }
 
+  @override
+  void onMount() {
+    spawnParticles();
     // Spawn new particles every second
-    Timer.periodic(sceneDuration, (_) => spawnParticles());
+    spawnTimer = Timer.periodic(sceneDuration, (_) {
+      spawnParticles();
+    });
+  }
+
+  @override
+  void onRemove() {
+    super.onRemove();
+    spawnTimer?.cancel();
   }
 
   /// Showcases various different uses of [Particle]
@@ -81,12 +95,14 @@ class ParticlesGame extends BaseGame with FPSCounter {
 
       add(
         // Bind all the particles to a [Component] update
-        // lifecycle from the [BaseGame].
-        TranslatedParticle(
-          lifespan: 1,
-          offset: cellCenter,
-          child: particle,
-        ).asComponent(),
+        // lifecycle from the [FlameGame].
+        ParticleComponent(
+          TranslatedParticle(
+            lifespan: 1,
+            offset: cellCenter,
+            child: particle,
+          ),
+        ),
       );
     } while (particles.isNotEmpty);
   }
@@ -512,7 +528,7 @@ class ParticlesGame extends BaseGame with FPSCounter {
   }
 }
 
-Future<BaseGame> loadGame() async {
+Future<FlameGame> loadGame() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   return ParticlesGame();
@@ -538,7 +554,8 @@ class TrafficLightComponent extends Component {
     Colors.red,
   ];
 
-  TrafficLightComponent() {
+  @override
+  void onMount() {
     colorChangeTimer.start();
   }
 

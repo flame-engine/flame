@@ -66,7 +66,7 @@ class Timer {
 }
 
 /// Simple component which wraps a [Timer] instance allowing it to be easily
-/// used inside a BaseGame game.
+/// used inside a FlameGame game.
 class TimerComponent extends Component {
   Timer timer;
 

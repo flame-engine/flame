@@ -62,7 +62,7 @@ Example usage:
 ```dart
 TextPaint regular = TextPaint(color: BasicPalette.white.color);
 
-class MyGame extends BaseGame {
+class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     add(TextComponent('Hello, Flame', textRenderer: regular)

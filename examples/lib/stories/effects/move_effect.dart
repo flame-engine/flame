@@ -6,18 +6,19 @@ import 'package:flutter/material.dart';
 
 import '../../commons/square_component.dart';
 
-class MoveEffectGame extends BaseGame with TapDetector {
+class MoveEffectGame extends FlameGame with TapDetector {
   late SquareComponent square;
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     square = SquareComponent()..position.setValues(100, 100);
     add(square);
   }
 
   @override
   void onTapUp(TapUpInfo info) {
-    square.addEffect(
+    square.add(
       MoveEffect(
         path: [
           info.eventPosition.game,
@@ -30,6 +31,7 @@ class MoveEffectGame extends BaseGame with TapDetector {
         speed: 250.0,
         curve: Curves.bounceInOut,
         isAlternating: true,
+        peakDelay: 2.0,
       ),
     );
   }

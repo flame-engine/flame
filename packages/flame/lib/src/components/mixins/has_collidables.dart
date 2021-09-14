@@ -2,8 +2,20 @@ import '../../../game.dart';
 import '../../components/mixins/collidable.dart';
 import '../../geometry/collision_detection.dart';
 
-mixin HasCollidables on BaseGame {
+mixin HasCollidables on FlameGame {
+  @override
+  Future<void>? onLoad() {
+    children.register<Collidable>();
+    return super.onLoad();
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    handleCollidables();
+  }
+
   void handleCollidables() {
-    collisionDetection(components.query<Collidable>());
+    collisionDetection(children.query<Collidable>());
   }
 }

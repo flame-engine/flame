@@ -138,7 +138,7 @@ to your game so that the game knows that it should keep track of which component
 
 Example:
 ```dart
-class MyGame extends BaseGame with HasCollidables {
+class MyGame extends FlameGame with HasCollidables {
   ...
 }
 ```

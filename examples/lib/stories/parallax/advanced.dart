@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 
-class AdvancedParallaxGame extends BaseGame {
+class AdvancedParallaxGame extends FlameGame {
   final _layersMeta = {
     'parallax/bg.png': 1.0,
     'parallax/mountain-far.png': 1.5,
@@ -13,6 +13,7 @@ class AdvancedParallaxGame extends BaseGame {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final layers = _layersMeta.entries.map(
       (e) => loadParallaxLayer(
         ParallaxImageData(e.key),

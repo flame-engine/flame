@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -10,16 +8,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 Vector2 size = Vector2(1.0, 1.0);
 
-class _KeyboardEventsGame extends Game with KeyboardEvents {
+class _KeyboardEventsGame extends FlameGame with KeyboardEvents {
   final List<String> keysPressed = [];
 
   _KeyboardEventsGame();
-
-  @override
-  void render(Canvas canvas) {}
-
-  @override
-  void update(double dt) {}
 
   @override
   KeyEventResult onKeyEvent(
@@ -32,7 +24,7 @@ class _KeyboardEventsGame extends Game with KeyboardEvents {
   }
 }
 
-class _KeyboardHandlerComponent extends BaseComponent with KeyboardHandler {
+class _KeyboardHandlerComponent extends Component with KeyboardHandler {
   final List<String> keysPressed = [];
 
   @override
@@ -42,7 +34,7 @@ class _KeyboardHandlerComponent extends BaseComponent with KeyboardHandler {
   }
 }
 
-class _HasKeyboardHandlerComponentsGame extends BaseGame
+class _HasKeyboardHandlerComponentsGame extends FlameGame
     with HasKeyboardHandlerComponents {
   _HasKeyboardHandlerComponentsGame();
 
@@ -50,6 +42,7 @@ class _HasKeyboardHandlerComponentsGame extends BaseGame
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     keyboardHandler = _KeyboardHandlerComponent();
     add(keyboardHandler);
   }
@@ -133,7 +126,7 @@ void main() async {
       ),
     );
 
-    game.onResize(size);
+    game.onGameResize(size);
     game.update(0.1);
 
     await tester.pump();

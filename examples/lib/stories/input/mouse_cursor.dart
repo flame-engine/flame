@@ -5,7 +5,7 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class MouseCursorGame extends Game with MouseMovementDetector {
+class MouseCursorGame extends FlameGame with MouseMovementDetector {
   static const speed = 200;
   static final Paint _blue = BasicPalette.blue.paint();
   static final Paint _white = BasicPalette.white.paint();
@@ -25,6 +25,7 @@ class MouseCursorGame extends Game with MouseMovementDetector {
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     canvas.drawRect(
       _toRect(),
       onTarget ? _blue : _white,
@@ -33,6 +34,7 @@ class MouseCursorGame extends Game with MouseMovementDetector {
 
   @override
   void update(double dt) {
+    super.update(dt);
     final target = this.target;
     if (target != null) {
       final hovering = _toRect().contains(target.toOffset());

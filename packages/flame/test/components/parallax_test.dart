@@ -2,16 +2,17 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:test/test.dart';
 
-class ParallaxGame extends BaseGame {
+class ParallaxGame extends FlameGame {
   late final ParallaxComponent parallaxComponent;
   late final Vector2? parallaxSize;
 
   ParallaxGame({this.parallaxSize}) {
-    onResize(Vector2.all(500));
+    onGameResize(Vector2.all(500));
   }
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     parallaxComponent = await loadParallaxComponent(
       [],
       size: parallaxSize,

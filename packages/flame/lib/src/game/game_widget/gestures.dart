@@ -7,7 +7,7 @@ import '../../components/mixins/draggable.dart';
 import '../../extensions/offset.dart';
 import '../../gestures/detectors.dart';
 import '../../gestures/events.dart';
-import '../game.dart';
+import '../mixins/game.dart';
 
 bool hasBasicGestureDetectors(Game game) =>
     game is TapDetector ||

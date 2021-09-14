@@ -19,13 +19,13 @@ class MyGame extends Game with FPSCounter {
 }
 ```
 
-## BaseGame features
+## FlameGame features
 
-Flame provides some debugging features for the `BaseGame` class. These features are enabled when
+Flame provides some debugging features for the `FlameGame` class. These features are enabled when
 the `debugMode` property is set to `true` (or overridden to be `true`).
 When `debugMode` is enabled, each `PositionComponent` will be rendered with their bounding size, and
 have their positions written on the screen. This way, you can visually verify the components
 boundaries and positions.
 
-To see a working example of the debugging features of the `BaseGame`, check this
+To see a working example of the debugging features of the `FlameGame`, check this
 [example](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/components/debug.dart).
