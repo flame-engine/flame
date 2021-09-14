@@ -94,7 +94,7 @@ if you change the `debugMode` at runtime, it will not affect already added compo
 
 To read more about the `debugMode` on Flame, please refer to the [Debug Docs](debug.md)
 
-# Game
+# Low-level Game API
 
 ![Game low-level API](images/game_mixin.png)
 
@@ -104,6 +104,12 @@ how the game engine should be structured. `Game` does not implement any `update`
 
 As you can see in the image above you'll have to use the `Loadable` and `Game` mixins if you want to
 create your own game class, which is what is done with `OxygenGame`.
+
+The `Loadable` mixin has the lifecycle methods `onLoad`, `onMount` and `onRemove` in it, which are
+called from the `GameWidget` (or another parent) when the game is loaded + mounted, or removed.
+`onLoad` is only called the first time the class is added to a parent, but `onMount` (which is
+called after `onLoad`) is called every time it is added to a new parent. `onRemove` is called when
+the class is removed from a parent.
 
 **Note**: The `Game` mixin allows for more freedom of how to implement things, but you are also
 missing out on all of the built-in features in Flame if you use it.
