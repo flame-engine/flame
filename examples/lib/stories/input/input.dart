@@ -22,6 +22,7 @@ void addInputStories(Dashbook dashbook) {
       'Keyboard',
       (_) => GameWidget(game: KeyboardGame()),
       codeLink: baseLink('input/keyboard.dart'),
+      info: keyboardInfo,
     )
     ..add(
       'Mouse Movement',

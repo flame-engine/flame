@@ -6,7 +6,13 @@ import 'package:flame/palette.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-class KeyboardGame extends FlameGame with KeyboardEvents {
+const keyboardInfo = '''
+Example showcasing how to act on keyboard events.
+It also briefly showcases how to create a game without the FlameGame.
+Usage: Use A S D F to steer the rectangle.
+''';
+
+class KeyboardGame with Loadable, Game, KeyboardEvents {
   static final Paint white = BasicPalette.white.paint();
   static const int speed = 200;
 
@@ -15,14 +21,12 @@ class KeyboardGame extends FlameGame with KeyboardEvents {
 
   @override
   void update(double dt) {
-    super.update(dt);
     final displacement = velocity * (speed * dt);
     rect = rect.translate(displacement.x, displacement.y);
   }
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     canvas.drawRect(rect, white);
   }
 
