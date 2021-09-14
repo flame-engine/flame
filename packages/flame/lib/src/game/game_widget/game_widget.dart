@@ -24,7 +24,7 @@ typedef OverlayWidgetBuilder<T extends Game> = Widget Function(
 );
 
 /// A [StatefulWidget] that is in charge of attaching a [Game] instance into the
-/// flutter tree.
+/// Flutter tree.
 class GameWidget<T extends Game> extends StatefulWidget {
   /// The game instance in which this widget will render
   final T game;
