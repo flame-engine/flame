@@ -9,7 +9,7 @@ import 'package:flame/sprite.dart';
 import 'package:flame/timer.dart' as flame_timer;
 import 'package:flutter/material.dart' hide Image;
 
-class ParticlesGame extends BaseGame with FPSCounter {
+class ParticlesGame extends FlameGame with FPSCounter {
   /// Defines dimensions of the sample
   /// grid to be displayed on the screen,
   /// 5x5 in this particular case
@@ -95,7 +95,7 @@ class ParticlesGame extends BaseGame with FPSCounter {
 
       add(
         // Bind all the particles to a [Component] update
-        // lifecycle from the [BaseGame].
+        // lifecycle from the [FlameGame].
         ParticleComponent(
           TranslatedParticle(
             lifespan: 1,
@@ -528,7 +528,7 @@ class ParticlesGame extends BaseGame with FPSCounter {
   }
 }
 
-Future<BaseGame> loadGame() async {
+Future<FlameGame> loadGame() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   return ParticlesGame();

@@ -18,7 +18,7 @@ SquareComponent makeSquare(Paint paint) {
     ..position.setValues(100, 100);
 }
 
-class InfiniteEffectGame extends BaseGame with TapDetector {
+class InfiniteEffectGame extends FlameGame with TapDetector {
   late SquareComponent greenSquare;
   late SquareComponent redSquare;
   late SquareComponent orangeSquare;

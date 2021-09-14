@@ -214,7 +214,7 @@ svgInstance.renderPosition(canvas, position, size);
 or use the [SvgComponent]:
 
 ```dart
-class MyGame extends BaseGame {
+class MyGame extends FlameGame {
     Future<void> onLoad() async {
       final svgInstance = await Svg.load('android.svg');
       final size = Vector2.all(100);
@@ -345,7 +345,7 @@ class MyGame extends Game {
 }
 ```
 
-FlareAnimations are normally used inside `FlareComponent`s, that way `BaseGame` will handle calling
+FlareAnimations are normally used inside `FlareComponent`s, that way `FlameGame` will handle calling
 `render` and `update` automatically.
 
 You can see a full example of how to use Flare together with Flame in the example

@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 
-class AdvancedParallaxGame extends BaseGame {
+class AdvancedParallaxGame extends FlameGame {
   final _layersMeta = {
     'parallax/bg.png': 1.0,
     'parallax/mountain-far.png': 1.5,

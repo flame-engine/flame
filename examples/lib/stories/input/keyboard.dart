@@ -6,7 +6,7 @@ import 'package:flame/palette.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-class KeyboardGame extends BaseGame with KeyboardEvents {
+class KeyboardGame extends FlameGame with KeyboardEvents {
   static final Paint white = BasicPalette.white.paint();
   static const int speed = 200;
 

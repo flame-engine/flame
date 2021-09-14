@@ -11,7 +11,7 @@ void main() async {
 
   group('SpriteAnimationComponent shouldRemove test', () {
     test('removeOnFinish is true and animation#loop is false', () {
-      final game = BaseGame();
+      final game = FlameGame();
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -42,7 +42,7 @@ void main() async {
     });
 
     test('removeOnFinish is true and animation#loop is true', () {
-      final game = BaseGame();
+      final game = FlameGame();
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -74,7 +74,7 @@ void main() async {
     });
 
     test('removeOnFinish is false and animation#loop is false', () {
-      final game = BaseGame();
+      final game = FlameGame();
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -106,7 +106,7 @@ void main() async {
     });
 
     test('removeOnFinish is false and animation#loop is true', () {
-      final game = BaseGame();
+      final game = FlameGame();
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -139,7 +139,7 @@ void main() async {
     });
 
     test("component isn't removed if it is not playing", () {
-      final game = BaseGame();
+      final game = FlameGame();
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -174,7 +174,7 @@ void main() async {
   group('SpriteAnimation timing of animation frames', () {
     test('Last animation frame is not skipped', () {
       // See https://github.com/flame-engine/flame/issues/895
-      final game = BaseGame();
+      final game = FlameGame();
       // Non-looping animation, with the expected total duration of 0.500 s
       final animation = SpriteAnimation.spriteList(
         List.filled(5, Sprite(image)),

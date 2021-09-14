@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 import 'package:flutter/painting.dart';
 
-class AnimationParallaxGame extends BaseGame {
+class AnimationParallaxGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();

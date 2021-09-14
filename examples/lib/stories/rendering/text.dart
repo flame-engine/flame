@@ -41,7 +41,7 @@ class MyTextBox extends TextBoxComponent {
   }
 }
 
-class TextGame extends BaseGame {
+class TextGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();

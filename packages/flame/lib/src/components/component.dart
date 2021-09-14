@@ -7,6 +7,7 @@ import '../../components.dart';
 import '../../game.dart';
 import '../../input.dart';
 import '../extensions/vector2.dart';
+import '../game/mixins/loadable.dart';
 import 'cache/value_cache.dart';
 
 /// This represents a Component for your game.
@@ -16,10 +17,10 @@ import 'cache/value_cache.dart';
 /// is a good idea to have as a [Component], since [update] and [render] will be
 /// called automatically once the component is added to the component tree in
 /// your game (with `game.add`).
-class Component {
+class Component with Loadable {
   /// Whether this component is a HUD (Heads-up display) object or not.
   ///
-  /// HUD objects ignore the BaseGame.camera when rendered (so their position
+  /// HUD objects ignore the FlameGame.camera when rendered (so their position
   /// coordinates are considered relative to the device screen).
   bool isHud = false;
 
@@ -61,7 +62,7 @@ class Component {
   /// Whether this component should be removed or not.
   ///
   /// It will be checked once per component per tick, and if it is true,
-  /// BaseGame will remove it.
+  /// FlameGame will remove it.
   bool shouldRemove = false;
 
   /// Returns whether this [Component] is in debug mode or not.
@@ -201,7 +202,7 @@ class Component {
   /// the component. Nevertheless, this method only need to be waited to finish
   /// if by some reason, your logic needs to be sure that the component has
   /// finished loading, otherwise, this method can be called without waiting
-  /// for it to finish as the BaseGame already handle the loading of the
+  /// for it to finish as the FlameGame already handle the loading of the
   /// component.
   ///
   /// *Note:* Do not add components on the game constructor. This method can
@@ -271,7 +272,7 @@ class Component {
       }
       if (shouldContinue && child is T) {
         shouldContinue = handler(child);
-      } else if (shouldContinue && child is BaseGame) {
+      } else if (shouldContinue && child is FlameGame) {
         shouldContinue = child.propagateToChildren<T>(handler);
       }
       if (!shouldContinue) {
@@ -287,53 +288,6 @@ class Component {
     return (parent is T ? parent : parent?.findParent<T>()) as T?;
   }
 
-  /// Called after the component has successfully run [prepare] and it is called
-  /// before the component is added to a parent for the first time.
-  ///
-  /// Whenever [onLoad] returns something, the parent will wait for the [Future]
-  /// to be resolved before adding the component on the list.
-  /// If `null` is returned, the component is added right away.
-  ///
-  /// The default implementation just returns null.
-  ///
-  /// This can be overwritten to add custom logic to the component loading.
-  ///
-  /// Example:
-  /// ```dart
-  /// @override
-  /// Future<void> onLoad() async {
-  ///   myImage = await gameRef.load('my_image.png');
-  /// }
-  /// ```
-  @mustCallSuper
-  Future<void>? onLoad() => null;
-
-  Future<void>? _onLoadCache;
-
-  /// Since [onLoad] only should run once throughout a components lifetime it is
-  /// cached so that it can be reused when the parent component/game/widget
-  /// changes.
-  @internal
-  Future<void>? get onLoadCache => _onLoadCache ?? (_onLoadCache = onLoad());
-
-  /// Called after the component has successfully run [prepare] and [onLoad] and
-  /// before the component is added to its new parent.
-  ///
-  /// Whenever [onMount] returns something, the parent will wait for the
-  /// [Future] to be resolved before adding the component on the list.
-  /// If `null` is returned, the component is added right away.
-  ///
-  /// This can be overwritten this to add custom logic to the component loading.
-  ///
-  /// Example:
-  /// ```dart
-  /// @override
-  /// void onMount() {
-  ///   position = parent!.size / 2;
-  /// }
-  /// ```
-  void onMount() {}
-
   /// Called to check whether the point is to be counted as within the component
   /// It needs to be overridden to have any effect, like it is in
   /// PositionComponent.
@@ -341,11 +295,11 @@ class Component {
 
   /// Usually this is not something that the user would want to call since the
   /// component list isn't re-ordered when it is called.
-  /// See BaseGame.changePriority instead.
+  /// See FlameGame.changePriority instead.
   void changePriorityWithoutResorting(int priority) => _priority = priority;
 
   /// Prepares the [Component] to be added to a [parent], and if there is an
-  /// ancestor that is a [BaseGame] that game will do necessary preparations for
+  /// ancestor that is a [FlameGame] that game will do necessary preparations for
   /// this component.
   /// If there are no parents that are a [Game] false will be returned and this
   /// will run again once an ancestor or the component itself is added to a
@@ -353,11 +307,11 @@ class Component {
   @mustCallSuper
   void prepare(Component parent) {
     _parent = parent;
-    final parentGame = findParent<Game>();
+    final parentGame = findParent<FlameGame>();
     if (parentGame == null) {
       isPrepared = false;
     } else {
-      if (parentGame is BaseGame) {
+      if (parentGame is FlameGame) {
         parentGame.prepareComponent(this);
       }
 

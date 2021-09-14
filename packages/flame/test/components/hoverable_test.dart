@@ -7,9 +7,9 @@ import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart' show PointerHoverEvent;
 import 'package:test/test.dart';
 
-class _GameWithHoverables extends BaseGame with HasHoverableComponents {}
+class _GameWithHoverables extends FlameGame with HasHoverableComponents {}
 
-class _GameWithoutHoverables extends BaseGame {}
+class _GameWithoutHoverables extends FlameGame {}
 
 class HoverableComponent extends PositionComponent with Hoverable {
   int enterCount = 0;

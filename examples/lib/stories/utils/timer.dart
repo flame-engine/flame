@@ -3,7 +3,7 @@ import 'package:flame/input.dart';
 import 'package:flame/timer.dart';
 import 'package:flutter/material.dart';
 
-class TimerGame extends BaseGame with TapDetector {
+class TimerGame extends FlameGame with TapDetector {
   final TextPaint textConfig = TextPaint(
     config: const TextPaintConfig(
       color: Color(0xFFFFFFFF),

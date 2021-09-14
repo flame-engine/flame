@@ -35,7 +35,7 @@ class ParentSquare extends Square with HasGameRef {
 
 // This class only has `HasDraggableComponents` since the game-in-game example
 // moves a draggable component to this game.
-class Composability extends BaseGame with HasDraggableComponents {
+class Composability extends FlameGame with HasDraggableComponents {
   late ParentSquare parentSquare;
 
   @override

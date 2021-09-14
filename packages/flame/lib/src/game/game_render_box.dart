@@ -6,8 +6,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
 import '../extensions/size.dart';
-import 'game.dart';
 import 'game_loop.dart';
+import 'mixins/game.dart';
 
 // ignore: prefer_mixin
 class GameRenderBox extends RenderBox with WidgetsBindingObserver {

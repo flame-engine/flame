@@ -15,7 +15,7 @@ In this example you can tap the screen and the component will size up or down,
 depending on its current state.
 ''';
 
-class SizeEffectGame extends BaseGame with TapDetector {
+class SizeEffectGame extends FlameGame with TapDetector {
   late SquareComponent square;
   bool grow = true;
 

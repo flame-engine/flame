@@ -5,7 +5,7 @@ import '../../../components.dart';
 import '../../../extensions.dart';
 import '../../../game.dart';
 
-class HudMarginComponent<T extends BaseGame> extends PositionComponent
+class HudMarginComponent<T extends FlameGame> extends PositionComponent
     with HasGameRef<T> {
   @override
   bool isHud = true;

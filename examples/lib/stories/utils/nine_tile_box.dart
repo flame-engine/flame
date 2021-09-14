@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-class NineTileBoxGame extends BaseGame {
+class NineTileBoxGame extends FlameGame {
   late NineTileBox nineTileBox;
 
   @override

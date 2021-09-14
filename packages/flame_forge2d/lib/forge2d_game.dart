@@ -8,7 +8,7 @@ import 'package:forge2d/forge2d.dart' hide Timer;
 import 'contact_callbacks.dart';
 import 'forge2d_camera.dart';
 
-class Forge2DGame extends BaseGame {
+class Forge2DGame extends FlameGame {
   static final Vector2 defaultGravity = Vector2(0, -10.0);
   static const double defaultZoom = 10.0;
 

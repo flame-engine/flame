@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 
 import '../../extensions.dart';
-import '../game/game.dart';
+import '../game/mixins/game.dart';
 
 /// [EventPosition] converts position based events to three different coordinate systems (global, local and game).
 ///

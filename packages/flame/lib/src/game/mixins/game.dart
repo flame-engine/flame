@@ -6,24 +6,33 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../components.dart';
-import '../assets/assets_cache.dart';
-import '../assets/images.dart';
-import '../extensions/offset.dart';
-import '../extensions/vector2.dart';
-import '../sprite.dart';
-import '../sprite_animation.dart';
-import 'game_render_box.dart';
-import 'projector.dart';
+import '../../../components.dart';
+import '../../assets/assets_cache.dart';
+import '../../assets/images.dart';
+import '../../extensions/offset.dart';
+import '../../extensions/vector2.dart';
+import '../../sprite.dart';
+import '../../sprite_animation.dart';
+import '../game_render_box.dart';
+import '../projector.dart';
+import 'loadable.dart';
 
-/// Represents a generic game.
+/// This gives access to a low-level game API, to not build everything from a
+/// low level `FlameGame` should be used.
 ///
-/// Subclass this to implement the [update] and [render] methods.
+/// Add this mixin to your game class and implement the [update] and [render]
+/// methods to use it in a `GameWidget`.
 /// Flame will deal with calling these methods properly when the game's widget
 /// is rendered.
-abstract class Game extends Component implements Projector {
+mixin Game on Loadable implements Projector {
   final images = Images();
   final assets = AssetsCache();
+
+  /// This should update the state of the game.
+  void update(double dt);
+
+  /// This should render the game.
+  void render(Canvas canvas);
 
   /// Just a reference back to the render box that is kept up to date by the
   /// engine.
@@ -51,7 +60,7 @@ abstract class Game extends Component implements Projector {
   /// Indicates if this game instance is connected to a GameWidget that is live
   /// in the flutter widget tree.
   /// Once this is true, the game is ready to have its size used or in the case
-  /// of a BaseGame, to receive components.
+  /// of a FlameGame, to receive components.
   bool get hasLayout => _size != null;
 
   /// Returns the game background color.
@@ -65,10 +74,8 @@ abstract class Game extends Component implements Projector {
   ///
   /// The default implementation just sets the new size on the size field
   @mustCallSuper
-  @override
   void onGameResize(Vector2 size) {
     _size = (_size ?? Vector2.zero())..setFrom(size);
-    super.onGameResize(size);
   }
 
   @protected

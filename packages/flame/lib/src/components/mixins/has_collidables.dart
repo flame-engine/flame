@@ -2,7 +2,7 @@ import '../../../game.dart';
 import '../../components/mixins/collidable.dart';
 import '../../geometry/collision_detection.dart';
 
-mixin HasCollidables on BaseGame {
+mixin HasCollidables on FlameGame {
   @override
   Future<void>? onLoad() {
     children.register<Collidable>();

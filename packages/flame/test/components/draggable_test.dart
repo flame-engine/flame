@@ -4,9 +4,9 @@ import 'package:flame/input.dart';
 import 'package:flutter/gestures.dart';
 import 'package:test/test.dart';
 
-class _GameWithDraggables extends BaseGame with HasDraggableComponents {}
+class _GameWithDraggables extends FlameGame with HasDraggableComponents {}
 
-class _GameWithoutDraggables extends BaseGame {}
+class _GameWithoutDraggables extends FlameGame {}
 
 class DraggableComponent extends PositionComponent with Draggable {
   bool hasStartedDragging = false;

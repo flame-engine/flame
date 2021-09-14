@@ -41,7 +41,7 @@ class TappableSquare extends PositionComponent with Tappable {
   }
 }
 
-class TappablesGame extends BaseGame with HasTappableComponents {
+class TappablesGame extends FlameGame with HasTappableComponents {
   @override
   Future<void> onLoad() async {
     await super.onLoad();

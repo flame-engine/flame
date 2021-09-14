@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../components.dart';
-import '../../game/base_game.dart';
+import '../../game/flame_game.dart';
 import '../../gestures/events.dart';
 
 mixin Draggable on Component {
@@ -62,7 +62,7 @@ mixin Draggable on Component {
   }
 }
 
-mixin HasDraggableComponents on BaseGame {
+mixin HasDraggableComponents on FlameGame {
   @mustCallSuper
   void onDragStart(int pointerId, DragStartInfo info) {
     _onGenericEventReceived((c) => c.handleDragStart(pointerId, info));

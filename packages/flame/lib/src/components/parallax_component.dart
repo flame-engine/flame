@@ -8,11 +8,10 @@ import '../../components.dart';
 import '../../game.dart';
 import '../assets/images.dart';
 import '../extensions/vector2.dart';
-import '../game/game.dart';
 import '../parallax.dart';
 import 'position_component.dart';
 
-extension ParallaxComponentExtension on Game {
+extension ParallaxComponentExtension on FlameGame {
   Future<ParallaxComponent> loadParallaxComponent(
     List<ParallaxData> dataList, {
     Vector2? size,
@@ -41,7 +40,7 @@ extension ParallaxComponentExtension on Game {
 
 /// A full parallax, several layers of images drawn out on the screen and each
 /// layer moves with different velocities to give an effect of depth.
-class ParallaxComponent<T extends BaseGame> extends PositionComponent
+class ParallaxComponent<T extends FlameGame> extends PositionComponent
     with HasGameRef<T> {
   bool isFullscreen = true;
   Parallax? _parallax;

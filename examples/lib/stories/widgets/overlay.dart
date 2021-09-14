@@ -61,7 +61,7 @@ class _OverlayExampleWidgetState extends State<OverlayExampleWidget> {
   }
 }
 
-class ExampleGame extends BaseGame with TapDetector {
+class ExampleGame extends FlameGame with TapDetector {
   @override
   void render(Canvas canvas) {
     super.render(canvas);

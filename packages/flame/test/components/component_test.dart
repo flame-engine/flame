@@ -99,7 +99,7 @@ void main() {
     });
 
     test('remove and re-add should not double trigger onRemove', () {
-      final game = BaseGame()..onGameResize(Vector2.zero());
+      final game = FlameGame()..onGameResize(Vector2.zero());
       final component = RemoveComponent();
 
       game.add(component);

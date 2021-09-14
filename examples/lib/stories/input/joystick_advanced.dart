@@ -13,7 +13,7 @@ import 'package:flutter/painting.dart';
 
 import 'joystick_player.dart';
 
-class JoystickAdvancedGame extends BaseGame
+class JoystickAdvancedGame extends FlameGame
     with HasDraggableComponents, HasTappableComponents {
   late final JoystickPlayer player;
   late final JoystickComponent joystick;

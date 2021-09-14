@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../../components.dart';
 import '../../../game.dart';
+import 'game.dart';
 
 /// A [Component] mixin to add keyboard handling capability to components.
 /// Must be used in components that can only be added to games that are mixed
@@ -16,12 +17,12 @@ mixin KeyboardHandler on Component {
   }
 }
 
-/// A [BaseGame] mixin that implements [KeyboardEvents] with keyboard event
+/// A [FlameGame] mixin that implements [KeyboardEvents] with keyboard event
 /// propagation to components that are mixed with [KeyboardHandler].
 ///
 /// Attention: should not be used alongside [KeyboardEvents] in a game subclass.
 /// Using this mixin remove the necessity of [KeyboardEvents].
-mixin HasKeyboardHandlerComponents on BaseGame implements KeyboardEvents {
+mixin HasKeyboardHandlerComponents on FlameGame implements KeyboardEvents {
   bool _handleKeyboardEvent(
     bool Function(KeyboardHandler child) keyboardEventHandler,
   ) {

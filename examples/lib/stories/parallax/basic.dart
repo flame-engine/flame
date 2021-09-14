@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 
-class BasicParallaxGame extends BaseGame {
+class BasicParallaxGame extends FlameGame {
   final _imageNames = [
     ParallaxImageData('parallax/bg.png'),
     ParallaxImageData('parallax/mountain-far.png'),

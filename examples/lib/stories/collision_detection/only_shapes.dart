@@ -17,7 +17,7 @@ one.
 
 enum Shapes { circle, rectangle, polygon }
 
-class OnlyShapes extends BaseGame with HasTappableComponents {
+class OnlyShapes extends FlameGame with HasTappableComponents {
   final shapePaint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
   final _rng = Random();
 

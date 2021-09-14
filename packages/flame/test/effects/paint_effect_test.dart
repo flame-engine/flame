@@ -14,7 +14,7 @@ void main() {
         'Sets the correct opacity on the paint',
         () async {
           final component = MyComponent();
-          final game = BaseGame();
+          final game = FlameGame();
 
           game.onGameResize(Vector2.all(100));
           game.add(component);
@@ -39,7 +39,7 @@ void main() {
         'Sets the correct color filter on the paint',
         () async {
           final component = MyComponent();
-          final game = BaseGame();
+          final game = FlameGame();
 
           game.onGameResize(Vector2.all(100));
           game.add(component);

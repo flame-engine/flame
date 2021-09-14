@@ -25,14 +25,14 @@ class TestComponent extends PositionComponent {
 void main() {
   group('viewport', () {
     test('default viewport does not change size', () {
-      final game = BaseGame(); // default viewport
+      final game = FlameGame(); // default viewport
       game.onGameResize(Vector2(100.0, 200.0));
       expect(game.canvasSize, Vector2(100.0, 200.00));
       expect(game.size, Vector2(100.0, 200.00));
     });
 
     test('fixed ratio viewport has perfect ratio', () {
-      final game = BaseGame()
+      final game = FlameGame()
         ..camera.viewport = FixedResolutionViewport(Vector2.all(50));
       game.onGameResize(Vector2.all(200.0));
       expect(game.canvasSize, Vector2.all(200.00));
@@ -54,7 +54,7 @@ void main() {
     });
 
     test('fixed ratio viewport maxes width', () {
-      final game = BaseGame()
+      final game = FlameGame()
         ..camera.viewport = FixedResolutionViewport(Vector2.all(50));
       game.onGameResize(Vector2(100.0, 200.0));
       expect(game.canvasSize, Vector2(100.0, 200.00));
@@ -77,7 +77,7 @@ void main() {
     });
 
     test('fixed ratio viewport maxes height', () {
-      final game = BaseGame()
+      final game = FlameGame()
         ..camera.viewport = FixedResolutionViewport(Vector2(100.0, 400.0));
       game.onGameResize(Vector2(100.0, 200.0));
       expect(game.canvasSize, Vector2(100.0, 200.00));
@@ -102,7 +102,7 @@ void main() {
 
   group('camera', () {
     test('default camera applies no translation', () {
-      final game = BaseGame(); // no camera changes
+      final game = FlameGame(); // no camera changes
       game.onGameResize(Vector2.all(100.0));
       expect(game.camera.position, Vector2.zero());
 
@@ -121,7 +121,7 @@ void main() {
     });
 
     test('camera snap movement', () {
-      final game = BaseGame(); // no camera changes
+      final game = FlameGame(); // no camera changes
       game.onGameResize(Vector2.all(100.0));
       expect(game.camera.position, Vector2.zero());
 
@@ -147,7 +147,7 @@ void main() {
     });
 
     test('camera smooth movement', () {
-      final game = BaseGame(); // no camera changes
+      final game = FlameGame(); // no camera changes
       game.onGameResize(Vector2.all(100.0));
 
       game.camera.speed = 1; // 1 pixel per second
@@ -164,7 +164,7 @@ void main() {
     });
 
     test('camera follow', () {
-      final game = BaseGame(); // no camera changes
+      final game = FlameGame(); // no camera changes
       game.onGameResize(Vector2.all(100.0));
 
       final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
@@ -192,7 +192,7 @@ void main() {
     });
 
     test('camera follow with relative position', () {
-      final game = BaseGame(); // no camera changes
+      final game = FlameGame(); // no camera changes
       game.onGameResize(Vector2.all(100.0));
 
       final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
@@ -219,7 +219,7 @@ void main() {
       );
     });
     test('camera follow with world boundaries', () {
-      final game = BaseGame(); // no camera changes
+      final game = FlameGame(); // no camera changes
       game.onGameResize(Vector2.all(100.0));
 
       final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
@@ -252,7 +252,7 @@ void main() {
       expect(game.camera.position, Vector2(900, 900));
     });
     test('camera follow with world boundaries smaller than the screen', () {
-      final game = BaseGame(); // no camera changes
+      final game = FlameGame(); // no camera changes
       game.onGameResize(Vector2.all(200.0));
 
       final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
@@ -276,7 +276,7 @@ void main() {
       expect(game.camera.position, Vector2(50, 50));
     });
     test('camera relative offset without follow', () {
-      final game = BaseGame();
+      final game = FlameGame();
       game.onGameResize(Vector2.all(200.0));
 
       game.camera.setRelativeOffset(Anchor.center);
@@ -289,7 +289,7 @@ void main() {
     });
 
     test('camera zoom', () {
-      final game = BaseGame();
+      final game = FlameGame();
       game.onGameResize(Vector2.all(200.0));
       game.camera.zoom = 2;
 
@@ -309,7 +309,7 @@ void main() {
     });
 
     test('camera zoom with setRelativeOffset', () {
-      final game = BaseGame();
+      final game = FlameGame();
       game.onGameResize(Vector2.all(200.0));
       game.camera.zoom = 2;
       game.camera.setRelativeOffset(Anchor.center);
@@ -332,7 +332,7 @@ void main() {
     });
 
     test('camera shake should return to where it started', () {
-      final game = BaseGame();
+      final game = FlameGame();
       final camera = game.camera;
       game.onGameResize(Vector2.all(200.0));
       expect(camera.position, Vector2.zero());
@@ -346,7 +346,7 @@ void main() {
 
   group('viewport & camera', () {
     test('default ratio viewport + camera with world boundaries', () {
-      final game = BaseGame()
+      final game = FlameGame()
         ..camera.viewport = FixedResolutionViewport(Vector2.all(100));
       game.onGameResize(Vector2.all(200.0));
       expect(game.canvasSize, Vector2.all(200.00));

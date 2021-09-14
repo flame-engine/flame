@@ -12,16 +12,16 @@ import '../components/mixins/hoverable.dart';
 import '../components/mixins/tappable.dart';
 import 'camera/camera.dart';
 import 'camera/camera_wrapper.dart';
-import 'game.dart';
+import 'mixins/game.dart';
 
 /// This is a more complete and opinionated implementation of Game.
 ///
-/// BaseGame should be extended to add your game logic.
+/// FlameGame should be extended to add your game logic.
 /// [update], [render] and [onGameResize] methods have default implementations.
 /// This is the recommended structure to use for most games.
 /// It is based on the Component system.
-class BaseGame extends Game {
-  BaseGame() {
+class FlameGame extends Component with Game {
+  FlameGame() {
     _cameraWrapper = CameraWrapper(Camera(), children);
   }
 
@@ -72,21 +72,21 @@ class BaseGame extends Game {
     if (c is Tappable) {
       assert(
         this is HasTappableComponents,
-        'Tappable Components can only be added to a BaseGame with '
+        'Tappable Components can only be added to a FlameGame with '
         'HasTappableComponents',
       );
     }
     if (c is Draggable) {
       assert(
         this is HasDraggableComponents,
-        'Draggable Components can only be added to a BaseGame with '
+        'Draggable Components can only be added to a FlameGame with '
         'HasDraggableComponents',
       );
     }
     if (c is Hoverable) {
       assert(
         this is HasHoverableComponents,
-        'Hoverable Components can only be added to a BaseGame with '
+        'Hoverable Components can only be added to a FlameGame with '
         'HasHoverableComponents',
       );
     }

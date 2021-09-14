@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 Vector2 size = Vector2(1.0, 1.0);
 
-class _KeyboardEventsGame extends Game with KeyboardEvents {
+class _KeyboardEventsGame extends FlameGame with KeyboardEvents {
   final List<String> keysPressed = [];
 
   _KeyboardEventsGame();
@@ -34,7 +34,7 @@ class _KeyboardHandlerComponent extends Component with KeyboardHandler {
   }
 }
 
-class _HasKeyboardHandlerComponentsGame extends BaseGame
+class _HasKeyboardHandlerComponentsGame extends FlameGame
     with HasKeyboardHandlerComponents {
   _HasKeyboardHandlerComponentsGame();
 

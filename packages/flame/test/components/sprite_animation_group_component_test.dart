@@ -51,7 +51,7 @@ void main() async {
   });
   group('SpriteAnimationGroupComponent shouldRemove test', () {
     test('removeOnFinish is true and there is no any state yet', () {
-      final game = BaseGame();
+      final game = FlameGame();
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -84,7 +84,7 @@ void main() async {
     test(
       'removeOnFinish is true and current state animation#loop is false',
       () {
-        final game = BaseGame();
+        final game = FlameGame();
         final animation = SpriteAnimation.spriteList(
           [
             Sprite(image),
@@ -117,7 +117,7 @@ void main() async {
     );
 
     test('removeOnFinish is true and current animation#loop is true', () {
-      final game = BaseGame();
+      final game = FlameGame();
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -150,7 +150,7 @@ void main() async {
     });
 
     test('removeOnFinish is false and current animation#loop is false', () {
-      final game = BaseGame();
+      final game = FlameGame();
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -182,7 +182,7 @@ void main() async {
     });
 
     test('removeOnFinish is false and current animation#loop is true', () {
-      final game = BaseGame();
+      final game = FlameGame();
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),

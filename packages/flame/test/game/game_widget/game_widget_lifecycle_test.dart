@@ -2,7 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MyGame extends Game {
+class MyGame extends FlameGame {
   final List<String> events;
 
   MyGame(this.events);

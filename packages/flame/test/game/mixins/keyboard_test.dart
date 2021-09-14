@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class ValidGame extends BaseGame with KeyboardEvents {}
+class ValidGame extends FlameGame with KeyboardEvents {}
 
-class InvalidGame extends BaseGame
+class InvalidGame extends FlameGame
     with HasKeyboardHandlerComponents, KeyboardEvents {}
 
 class MockRawKeyEventData extends Mock implements RawKeyEventData {

@@ -3,7 +3,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
-class OpacityEffectGame extends BaseGame with TapDetector {
+class OpacityEffectGame extends FlameGame with TapDetector {
   late final SpriteComponent sprite;
 
   @override

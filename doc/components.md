@@ -11,7 +11,7 @@ If you want to skip reading about abstract classes you can jump directly to
 [PositionComponent](./components.md#PositionComponent).
 
 Every `Component` has a few methods that you can optionally implement, which are used by the
-`BaseGame` class. If you are not using `BaseGame`, you can use these methods on your own game loop
+`FlameGame` class. If you are not using `FlameGame`, you can use these methods on your own game loop
 if you wish.
 
 ![Component Lifecycle Diagram](images/diagram.png)
@@ -19,14 +19,14 @@ if you wish.
 The `onGameResize` method is called whenever the screen is resized, and once in the beginning when
 the component is added to the game via the `add` method.
 
-The `shouldRemove` variable can be overridden or set to true and `BaseGame` will remove the
+The `shouldRemove` variable can be overridden or set to true and `FlameGame` will remove the
 component before the next update loop. It will then no longer be rendered or updated. Note that
 `game.remove(Component c)` and `component.removeFromParent()` also can be used to remove components
 from its parent.
 
-The `isHUD` variable can be overridden or set to true (defaults to `false`) to make the `BaseGame`
+The `isHUD` variable can be overridden or set to true (defaults to `false`) to make the `FlameGame`
 ignore the `camera` for this element, making it static in relation to the screen that is.
-Do note that this currently only works if the component is added directly to the root `BaseGame`.
+Do note that this currently only works if the component is added directly to the root `FlameGame`.
 
 The `onRemove` method can be overridden to run code before the component is removed from the game,
 it is only run once even if the component is removed both by using the parents remove method and
@@ -35,7 +35,7 @@ the `Component` remove method.
 The `onLoad` method can be overridden to run asynchronous initialization code for the component,
 like loading an image for example. This method is executed after the initial "preparation" of the
 component has finished the first time, meaning that this method is executed after the first
-`onGameResize` call and just before the inclusion of the component in the `BaseGame`'s (or another
+`onGameResize` call and just before the inclusion of the component in the `FlameGame`'s (or another
 `Component`'s) list of components.
 
 The `onMount` method can be overridden to run asynchronous initialization code that should
@@ -121,7 +121,7 @@ created with a `Sprite`:
 ```dart
 import 'package:flame/components/component.dart';
 
-class MyGame extends BaseGame {
+class MyGame extends FlameGame {
   late final SpriteComponent player;
 
   @override
@@ -173,7 +173,7 @@ this.player = SpriteAnimationComponent.fromFrameData(
 );
 ```
 
-If you are not using `BaseGame`, don't forget this component needs to be updated, because the
+If you are not using `FlameGame`, don't forget this component needs to be updated, because the
 animation object needs to be ticked to move the frames.
 
 ## SpriteAnimationGroup
@@ -347,7 +347,7 @@ class MyParallaxComponent extends ParallaxComponent with HasGameRef<MyGame> {
   }
 }
 
-class MyGame extends BaseGame {
+class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     add(MyParallaxComponent());

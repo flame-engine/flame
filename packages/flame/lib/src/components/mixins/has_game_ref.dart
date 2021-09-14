@@ -1,7 +1,7 @@
 import '../../../components.dart';
 import '../../../game.dart';
 
-mixin HasGameRef<T extends Game> on Component {
+mixin HasGameRef<T extends FlameGame> on Component {
   T? _gameRef;
 
   T get gameRef {

@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 
-class ComponentParallaxGame extends BaseGame {
+class ComponentParallaxGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();

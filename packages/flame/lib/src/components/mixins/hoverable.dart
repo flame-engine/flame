@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 
 import '../../../components.dart';
 import '../../../game.dart';
-import '../../game/base_game.dart';
+import '../../game/flame_game.dart';
 import '../../gestures/events.dart';
 
 mixin Hoverable on Component {
@@ -27,7 +27,7 @@ mixin Hoverable on Component {
   }
 }
 
-mixin HasHoverableComponents on BaseGame {
+mixin HasHoverableComponents on FlameGame {
   @mustCallSuper
   void onMouseMove(PointerHoverInfo info) {
     bool _mouseMoveHandler(Hoverable c) {

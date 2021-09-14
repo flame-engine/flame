@@ -45,7 +45,7 @@ class ButtonComponent extends SpriteGroupComponent<ButtonState>
   }
 }
 
-class SpriteGroupExample extends BaseGame with HasTappableComponents {
+class SpriteGroupExample extends FlameGame with HasTappableComponents {
   @override
   Future<void> onLoad() async {
     await super.onLoad();

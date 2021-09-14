@@ -41,7 +41,7 @@ class Selector extends SpriteComponent {
   }
 }
 
-class IsometricTileMapGame extends BaseGame with MouseMovementDetector {
+class IsometricTileMapGame extends FlameGame with MouseMovementDetector {
   late IsometricTileMapComponent base;
   late Selector selector;
 

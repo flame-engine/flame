@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:test/test.dart';
 
-class MyGame extends BaseGame {
+class MyGame extends FlameGame {
   bool calledFoo = false;
   void foo() {
     calledFoo = true;

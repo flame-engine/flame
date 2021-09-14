@@ -15,41 +15,41 @@ class MyComponent extends PositionComponent {
   }
 }
 
-class MyGame extends BaseGame {}
+class MyGame extends FlameGame {}
 
 Vector2 size = Vector2(1.0, 1.0);
 
 void main() {
   group('resizable test', () {
-    test('game calls resize on add', () {
+    test('game calls resize on add', () async {
       final a = MyComponent('a');
       final game = MyGame();
       game.onGameResize(size);
 
-      game.add(a);
+      await game.add(a);
       // component is just added on the next iteration
       game.update(0);
 
       expect(a.gameSize, size);
     });
-    test('game calls resize after added', () {
+    test('game calls resize after added', () async {
       final a = MyComponent('a');
       final game = MyGame();
       game.onGameResize(Vector2.all(10));
 
-      game.add(a);
+      await game.add(a);
       // component is just added on the next iteration
       game.update(0);
 
       game.onGameResize(size);
       expect(a.gameSize, size);
     });
-    test("game calls doesn't change component size", () {
+    test("game calls doesn't change component size", () async {
       final a = MyComponent('a');
       final game = MyGame();
       game.onGameResize(Vector2.all(10));
 
-      game.add(a);
+      await game.add(a);
       // component is just added on the next iteration
       game.update(0);
 

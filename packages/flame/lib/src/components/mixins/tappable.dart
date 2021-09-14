@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 
 import '../../../components.dart';
 import '../../../game.dart';
-import '../../game/base_game.dart';
+import '../../game/flame_game.dart';
 import '../../gestures/events.dart';
 
 mixin Tappable on Component {
@@ -47,7 +47,7 @@ mixin Tappable on Component {
   }
 }
 
-mixin HasTappableComponents on BaseGame {
+mixin HasTappableComponents on FlameGame {
   void _handleTapEvent(bool Function(Tappable child) tapEventHandler) {
     for (final c in children.reversed()) {
       var shouldContinue = c.propagateToChildren<Tappable>(tapEventHandler);

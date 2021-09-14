@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../../commons/square_component.dart';
 
-class ScaleEffectGame extends BaseGame with TapDetector {
+class ScaleEffectGame extends FlameGame with TapDetector {
   late SquareComponent square;
   bool grow = true;
 

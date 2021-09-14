@@ -14,7 +14,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: GameWidget(
-            game: BaseGame(),
+            game: FlameGame(),
             mouseCursor: SystemMouseCursors.grab,
           ),
         ),
@@ -27,7 +27,7 @@ void main() {
     });
 
     testWidgets('can change the cursor', (tester) async {
-      final game = BaseGame();
+      final game = FlameGame();
 
       await tester.pumpWidget(
         MaterialApp(

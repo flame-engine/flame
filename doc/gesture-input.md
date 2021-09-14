@@ -216,7 +216,7 @@ class TappableComponent extends PositionComponent with Tappable {
   }
 }
 
-class MyGame extends BaseGame with HasTappableComponents {
+class MyGame extends FlameGame with HasTappableComponents {
   MyGame() {
     add(TappableComponent());
   }
@@ -291,7 +291,7 @@ class DraggableComponent extends PositionComponent with Draggable {
   }
 }
 
-class MyGame extends BaseGame with HasDraggableComponents {
+class MyGame extends FlameGame with HasDraggableComponents {
   MyGame() {
     add(DraggableComponent());
   }

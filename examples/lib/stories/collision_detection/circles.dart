@@ -65,7 +65,7 @@ class MyCollidable extends PositionComponent
   }
 }
 
-class Circles extends BaseGame with HasCollidables, TapDetector {
+class Circles extends FlameGame with HasCollidables, TapDetector {
   @override
   Future<void> onLoad() async {
     super.onLoad();

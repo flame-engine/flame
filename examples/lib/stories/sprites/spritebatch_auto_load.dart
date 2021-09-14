@@ -43,7 +43,7 @@ class MySpriteBatchComponent extends SpriteBatchComponent
   }
 }
 
-class SpritebatchAutoLoadGame extends BaseGame {
+class SpritebatchAutoLoadGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();

@@ -22,7 +22,7 @@ void main() {
     test('onLoad waits for cache to be done', () async {
       final c = TextBoxComponent('foo bar');
 
-      final game = BaseGame();
+      final game = FlameGame();
       game.onGameResize(Vector2.all(100));
 
       await game.add(c);

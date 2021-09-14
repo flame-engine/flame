@@ -16,7 +16,7 @@ void main() async {
   }
 }
 
-class ExampleGame extends BaseGame with TapDetector {
+class ExampleGame extends FlameGame with TapDetector {
   late FireAtlas _atlas;
 
   @override

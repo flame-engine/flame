@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
-class BasicAnimations extends BaseGame with TapDetector {
+class BasicAnimations extends FlameGame with TapDetector {
   late Image creature;
 
   @override

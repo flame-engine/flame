@@ -69,7 +69,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// Prepares and registers one component to be added on the next game tick.
   ///
   /// This allows you to provide a specific gameRef if this component is being
-  /// added from within another component that is already on a BaseGame.
+  /// added from within another component that is already on a FlameGame.
   /// You can await for the onLoad function, if present.
   /// This method can be considered sync for all intents and purposes if no
   /// onLoad is provided by the component.

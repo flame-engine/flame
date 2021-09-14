@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
-class ZoomGame extends BaseGame with ScrollDetector, ScaleDetector {
+class ZoomGame extends FlameGame with ScrollDetector, ScaleDetector {
   final Vector2 viewportResolution;
   late SpriteComponent flame;
 

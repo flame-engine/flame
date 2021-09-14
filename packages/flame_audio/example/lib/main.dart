@@ -18,7 +18,7 @@ void main() async {
 /// 2. Uses a custom AudioPool for extremely efficient audio loading and pooling
 /// for tapping elsewhere.
 /// 3. Uses the Bgm utility for background music.
-class AudioGame extends BaseGame with TapDetector {
+class AudioGame extends FlameGame with TapDetector {
   static Paint black = BasicPalette.black.paint();
   static Paint gray = const PaletteEntry(Color(0xFFCCCCCC)).paint();
   static TextPaint text = TextPaint(

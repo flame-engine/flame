@@ -17,17 +17,17 @@ The Viewport is an attempt to unify multiple screen (or, rather, game widget) si
 configuration for your game by translating and resizing the canvas.
 
 The `Viewport` interface has multiple implementations and can be used from scratch on your `Game`
-or, if you are using `BaseGame` instead, it's already built-in (with a default no-op viewport).
+or, if you are using `FlameGame` instead, it's already built-in (with a default no-op viewport).
 
 These are the viewports available to pick from (or you can implement the interface yourself to suit
 your needs):
 
- * `DefaultViewport`: this is the no-op viewport that is associated by default with any `BaseGame`.
+ * `DefaultViewport`: this is the no-op viewport that is associated by default with any `FlameGame`.
  * `FixedResolutionViewport`: this viewport transforms your Canvas so that, from the game
    perspective, the dimensions are always set to a fixed pre-defined value. This means it will scale
    the game as much as possible and add black bars if needed.
 
-When using `BaseGame`, the operations performed by the viewport are done automatically to every
+When using `FlameGame`, the operations performed by the viewport are done automatically to every
 render operation, and the `size` property in the game, instead of the logical widget size, becomes
 the size as seen through the viewport together with the zoom of the camera. If for some reason you
 need to access the original real logical pixel size, you can use `canvasSize`. For a more in depth
@@ -43,7 +43,7 @@ dependent on:
  * User controlled zooming in and out.
 
 There is only one Camera implementation but it allows for many different configurations. Again, you
-can use it standalone on your `Game` but it's already included and wired into `BaseGame`.
+can use it standalone on your `Game` but it's already included and wired into `FlameGame`.
 
 One important thing to note about the Camera is that since (unlike the Viewport) it's intended to be
 dynamic, most camera movements won't immediately happen. Instead, the camera has a configurable
@@ -87,7 +87,7 @@ When dealing with input events, it is imperative to convert screen coordinates t
 
 ### Using the camera with the Game class
 
-If you are not using `BaseGame`, but instead are using the `Game` class, then you need to manage 
+If you are not using `FlameGame`, but instead are using the `Game` class, then you need to manage
 calling certain camera methods yourself. Let's say we have the following game structure, and we 
 want to add the camera functionality:
 

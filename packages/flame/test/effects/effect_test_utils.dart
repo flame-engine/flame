@@ -31,7 +31,7 @@ void effectTest(
   expectedScale ??= Vector2.all(1.0);
   final callback = Callback();
   effect.onComplete = callback.call;
-  final game = BaseGame();
+  final game = FlameGame();
   game.onGameResize(Vector2.all(200));
   await tester.pumpWidget(GameWidget(
     game: game,

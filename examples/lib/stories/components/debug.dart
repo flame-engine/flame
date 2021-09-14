@@ -33,7 +33,7 @@ class LogoCompomnent extends SpriteComponent with HasGameRef<DebugGame> {
   }
 }
 
-class DebugGame extends BaseGame with FPSCounter {
+class DebugGame extends FlameGame with FPSCounter {
   static final fpsTextPaint = TextPaint(
     config: const TextPaintConfig(
       color: Color(0xFFFFFFFF),

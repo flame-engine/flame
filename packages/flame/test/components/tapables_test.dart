@@ -2,9 +2,9 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:test/test.dart';
 
-class _GameWithTappables extends BaseGame with HasTappableComponents {}
+class _GameWithTappables extends FlameGame with HasTappableComponents {}
 
-class _GameWithoutTappables extends BaseGame {}
+class _GameWithoutTappables extends FlameGame {}
 
 class TappableComponent extends PositionComponent with Tappable {}
 

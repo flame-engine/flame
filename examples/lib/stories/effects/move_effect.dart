@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../../commons/square_component.dart';
 
-class MoveEffectGame extends BaseGame with TapDetector {
+class MoveEffectGame extends FlameGame with TapDetector {
   late SquareComponent square;
 
   @override

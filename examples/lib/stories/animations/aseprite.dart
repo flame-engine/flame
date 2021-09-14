@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-class Aseprite extends BaseGame {
+class Aseprite extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();

@@ -8,7 +8,7 @@ import '../../commons/square_component.dart';
 
 final green = Paint()..color = const Color(0xAA338833);
 
-class SequenceEffectGame extends BaseGame with TapDetector {
+class SequenceEffectGame extends FlameGame with TapDetector {
   late SquareComponent greenSquare;
 
   @override

@@ -5,7 +5,7 @@ import 'package:flame/geometry.dart';
 import 'package:test/test.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-class TestGame extends BaseGame with HasCollidables {
+class TestGame extends FlameGame with HasCollidables {
   TestGame() {
     onGameResize(Vector2.all(200));
   }

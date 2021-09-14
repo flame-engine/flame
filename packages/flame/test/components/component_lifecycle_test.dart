@@ -35,7 +35,7 @@ void main() {
   group('Component - Lifecycle', () {
     test('Lifecycle in correct order', () async {
       final events = <String>[];
-      final game = BaseGame();
+      final game = FlameGame();
       game.onGameResize(Vector2.zero());
       await game.add(MyComponent(events));
 
@@ -48,7 +48,7 @@ void main() {
     test('Parent prepares the component', () async {
       final parentEvents = <String>[];
       final childEvents = <String>[];
-      final game = BaseGame();
+      final game = FlameGame();
       game.onGameResize(Vector2.zero());
       final parent = MyComponent(parentEvents);
       await parent.add(MyComponent(childEvents));
@@ -76,7 +76,7 @@ void main() {
     test('Correct lifecycle on parent change', () async {
       final parentEvents = <String>[];
       final childEvents = <String>[];
-      final game = BaseGame();
+      final game = FlameGame();
       game.onGameResize(Vector2.zero());
       final parent = MyComponent(parentEvents);
       final child = MyComponent(childEvents);

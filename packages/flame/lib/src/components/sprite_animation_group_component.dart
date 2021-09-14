@@ -42,7 +42,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
   /// Check [SpriteAnimationData] for more info on the available options.
   ///
   /// Optionally [removeOnFinish] can be mapped to true to have this component be auto
-  /// removed from the BaseGame when the animation is finished.
+  /// removed from the FlameGame when the animation is finished.
   SpriteAnimationGroupComponent.fromFrameData(
     Image image,
     Map<T, SpriteAnimationData> data, {

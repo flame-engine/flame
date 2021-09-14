@@ -13,7 +13,7 @@ changes its parent from its original game to the component that is rotating.
 After another 5 seconds it changes back to its original parent, and so on.
 ''';
 
-class GameInGame extends BaseGame with HasDraggableComponents {
+class GameInGame extends FlameGame with HasDraggableComponents {
   @override
   bool debugMode = true;
   late final Composability composedGame;

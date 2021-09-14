@@ -5,7 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flame/test.dart';
 import 'package:test/test.dart';
 
-class MyGame extends BaseGame with HasTappableComponents {
+class MyGame extends FlameGame with HasTappableComponents {
   MyGame() : super() {
     onGameResize(Vector2.zero());
   }

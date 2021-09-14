@@ -216,7 +216,7 @@ class CollidableSnowman extends MyCollidable {
   }
 }
 
-class MultipleShapes extends BaseGame
+class MultipleShapes extends FlameGame
     with HasCollidables, HasDraggableComponents, FPSCounter {
   final TextPaint fpsTextPaint = TextPaint(
     config: TextPaintConfig(

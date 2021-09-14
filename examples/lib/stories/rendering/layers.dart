@@ -44,7 +44,7 @@ class BackgroundLayer extends PreRenderedLayer {
   }
 }
 
-class LayerGame extends BaseGame {
+class LayerGame extends FlameGame {
   late Layer gameLayer;
   late Layer backgroundLayer;
 

@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 void main() {
   group('projections', () {
     test('default viewport and camera should no-op projections', () {
-      final game = BaseGame(); // default viewport & camera
+      final game = FlameGame(); // default viewport & camera
       _assertIdentityOfProjector(game);
 
       expect(game.projectVector(Vector2(1, 2)), Vector2(1, 2));
@@ -17,7 +17,7 @@ void main() {
     });
     test('viewport only with scale projection (no camera)', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
-      final game = BaseGame()..camera.viewport = viewport; // default camera
+      final game = FlameGame()..camera.viewport = viewport; // default camera
       game.onGameResize(Vector2(200, 200));
       expect(viewport.scale, 2);
       expect(viewport.resizeOffset, Vector2.zero()); // no translation
@@ -30,7 +30,7 @@ void main() {
     });
     test('viewport only with translation projection (no camera)', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
-      final game = BaseGame()..camera.viewport = viewport; // default camera
+      final game = FlameGame()..camera.viewport = viewport; // default camera
       game.onGameResize(Vector2(200, 100));
       expect(viewport.scale, 1); // no scale
       expect(viewport.resizeOffset, Vector2(50, 0)); // y is unchanged
@@ -53,7 +53,7 @@ void main() {
     });
     test('viewport only with both scale and translation (no camera)', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
-      final game = BaseGame()..camera.viewport = viewport; // default camera
+      final game = FlameGame()..camera.viewport = viewport; // default camera
       game.onGameResize(Vector2(200, 400));
       expect(viewport.scale, 2);
       expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
@@ -66,7 +66,7 @@ void main() {
       expect(game.unprojectVector(Vector2(0, 400)), Vector2(0, 150));
     });
     test('camera only with zoom (default viewport)', () {
-      final game = BaseGame(); // default viewport
+      final game = FlameGame(); // default viewport
       game.onGameResize(Vector2.all(1));
 
       game.camera.zoom = 3; // 3x zoom
@@ -80,7 +80,7 @@ void main() {
       expect(game.unscaleVector(Vector2(3, 6)), Vector2(1, 2));
     });
     test('camera only with translation (default viewport)', () {
-      final game = BaseGame(); // default viewport
+      final game = FlameGame(); // default viewport
       game.onGameResize(Vector2.all(1));
 
       // top left corner of the screen is (50, 100)
@@ -95,7 +95,7 @@ void main() {
       expect(game.scaleVector(Vector2(-50, 50)), Vector2(-50, 50));
     });
     test('camera only with both zoom and translation (default viewport)', () {
-      final game = BaseGame(); // default viewport
+      final game = FlameGame(); // default viewport
       game.onGameResize(Vector2.all(10));
 
       // no-op because the default is already top left
@@ -134,7 +134,7 @@ void main() {
     });
     test('camera & viewport - two translations', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
-      final game = BaseGame()..camera.viewport = viewport; // default camera
+      final game = FlameGame()..camera.viewport = viewport; // default camera
       game.onGameResize(Vector2(200, 100));
       game.camera.snapTo(Vector2(10, 100));
       expect(viewport.scale, 1); // no scale
@@ -154,7 +154,7 @@ void main() {
     });
     test('camera zoom & viewport translation', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
-      final game = BaseGame()..camera.viewport = viewport;
+      final game = FlameGame()..camera.viewport = viewport;
       game.onGameResize(Vector2(200, 100));
       game.camera.zoom = 2;
       game.camera.snap();
@@ -182,7 +182,7 @@ void main() {
     });
     test('camera translation & viewport scale+translation', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
-      final game = BaseGame()..camera.viewport = viewport;
+      final game = FlameGame()..camera.viewport = viewport;
       game.onGameResize(Vector2(200, 400));
       expect(viewport.scale, 2);
       expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
@@ -206,7 +206,7 @@ void main() {
     });
     test('camera & viewport scale/zoom + translation (cancel out scaling)', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
-      final game = BaseGame()..camera.viewport = viewport;
+      final game = FlameGame()..camera.viewport = viewport;
       game.onGameResize(Vector2(200, 400));
       expect(viewport.scale, 2);
       expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
@@ -242,7 +242,7 @@ void main() {
     });
     test('camera & viewport scale/zoom + translation', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
-      final game = BaseGame()..camera.viewport = viewport;
+      final game = FlameGame()..camera.viewport = viewport;
       game.onGameResize(Vector2(200, 400));
       expect(viewport.scale, 2);
       expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged

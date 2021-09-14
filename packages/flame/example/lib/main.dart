@@ -48,7 +48,7 @@ class Square extends PositionComponent {
   }
 }
 
-class MyGame extends BaseGame with DoubleTapDetector, TapDetector {
+class MyGame extends FlameGame with DoubleTapDetector, TapDetector {
   bool running = true;
 
   @override

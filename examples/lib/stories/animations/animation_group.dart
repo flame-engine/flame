@@ -9,7 +9,7 @@ enum RobotState {
   running,
 }
 
-class AnimationGroupExample extends BaseGame with TapDetector {
+class AnimationGroupExample extends FlameGame with TapDetector {
   late SpriteAnimationGroupComponent robot;
 
   @override

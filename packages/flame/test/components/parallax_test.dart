@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:test/test.dart';
 
-class ParallaxGame extends BaseGame {
+class ParallaxGame extends FlameGame {
   late final ParallaxComponent parallaxComponent;
   late final Vector2? parallaxSize;
 

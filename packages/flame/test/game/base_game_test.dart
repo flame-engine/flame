@@ -10,7 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart' as flutter;
 import 'package:test/test.dart';
 
-class MyGame extends BaseGame with HasTappableComponents {}
+class MyGame extends FlameGame with HasTappableComponents {}
 
 class MyComponent extends PositionComponent with Tappable, HasGameRef {
   bool tapped = false;
@@ -66,7 +66,7 @@ class PositionComponentNoNeedForRect extends PositionComponent with Tappable {}
 Vector2 size = Vector2(1.0, 1.0);
 
 void main() {
-  group('BaseGame test', () {
+  group('FlameGame test', () {
     test('adds the component to the component list', () {
       final game = MyGame();
       final component = MyComponent();

@@ -5,7 +5,7 @@ import 'package:flame/input.dart';
 import 'package:flutter/widgets.dart';
 import 'package:test/test.dart';
 
-class TestGame extends BaseGame with HasDraggableComponents {}
+class TestGame extends FlameGame with HasDraggableComponents {}
 
 void main() {
   group('JoystickDirection tests', () {
