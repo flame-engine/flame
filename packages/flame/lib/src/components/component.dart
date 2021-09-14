@@ -180,8 +180,10 @@ class Component with Loadable {
   /// It receives the new game size.
   /// Executed right after the component is attached to a game and right before
   /// [onLoad] is called.
+  @override
   @mustCallSuper
   void onGameResize(Vector2 gameSize) {
+    super.onGameResize(gameSize);
     children.forEach((child) => child.onGameResize(gameSize));
   }
 

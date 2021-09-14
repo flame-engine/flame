@@ -73,8 +73,10 @@ mixin Game on Loadable implements Projector {
   /// is called.
   ///
   /// The default implementation just sets the new size on the size field
+  @override
   @mustCallSuper
   void onGameResize(Vector2 size) {
+    super.onGameResize(size);
     _size = (_size ?? Vector2.zero())..setFrom(size);
   }
 
