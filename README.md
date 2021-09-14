@@ -9,8 +9,8 @@ A minimalistic Flutter game engine.
 </p>
 
 <p align="center">
-  <a title="Pub" href="https://pub.dartlang.org/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout&include_prereleases" /></a>
-  <a title="Pub" href="https://pub.dartlang.org/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a>
+  <a title="Pub" href="https://pub.dev/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout&include_prereleases" /></a>
+  <a title="Pub" href="https://pub.dev/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a>
   <img src="https://github.com/flame-engine/flame/workflows/Test/badge.svg?branch=main&event=push" alt="Test" />
   <a title="Discord" href="https://discord.gg/pxrBmy4" ><img src="https://img.shields.io/discord/509714518008528896.svg" /></a>
 </p>
@@ -36,7 +36,7 @@ v0 release (where we are still merging some patches and crucial fixes).
 The current v1 release is
 <a title="Pub" href="https://pub.dev/packages/flame/versions/1.0.0-releasecandidate.13" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout&include_prereleases" /></a>
 on pub. The latest stable version so far is
-<a title="Pub" href="https://pub.dartlang.org/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a>.
+<a title="Pub" href="https://pub.dev/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a>.
 Feel free to choose the one that better suits your needs.
 
 ---
