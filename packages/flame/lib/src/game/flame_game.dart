@@ -14,12 +14,13 @@ import 'camera/camera.dart';
 import 'camera/camera_wrapper.dart';
 import 'mixins/game.dart';
 
-/// This is a more complete and opinionated implementation of Game.
+/// This is a more complete and opinionated implementation of [Game].
 ///
-/// FlameGame should be extended to add your game logic.
-/// [update], [render] and [onGameResize] methods have default implementations.
-/// This is the recommended structure to use for most games.
-/// It is based on the Component system.
+/// [FlameGame] can be extended to add your game logic, or you can keep the
+/// logic in child [Component]s.
+///
+/// This is the recommended base class to use for most games made with Flame.
+/// It is based on the Flame Component System (also known as FCS).
 class FlameGame extends Component with Game {
   FlameGame() {
     _cameraWrapper = CameraWrapper(Camera(), children);

@@ -57,5 +57,6 @@ mixin Loadable {
   void onMount() {}
 
   /// Called when the class is removed from its parent.
+  /// The parent could be for example a [GameWidget] or a `Component`.
   void onRemove() {}
 }
