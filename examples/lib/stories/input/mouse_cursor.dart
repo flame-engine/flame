@@ -25,6 +25,7 @@ class MouseCursorGame extends FlameGame with MouseMovementDetector {
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     canvas.drawRect(
       _toRect(),
       onTarget ? _blue : _white,
