@@ -25,6 +25,7 @@ class ParticleComponent extends Component {
   /// [Particle] within this [Component].
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     particle.render(canvas);
   }
 

@@ -8,7 +8,7 @@ import 'camera.dart';
 /// using it in any code other than the FlameGame class is unsafe and
 /// not recommended.
 class CameraWrapper {
-  // TODO(st-pasha): extend from BaseComponent
+  // TODO(st-pasha): extend from Component
   CameraWrapper(this.camera, this.world);
 
   final Camera camera;

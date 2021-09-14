@@ -4,6 +4,7 @@ import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/queryable_ordered_set.dart';
 
 import '../../components.dart';
+import '../../game.dart';
 
 /// This is a simple wrapper over [QueryableOrderedSet] to be used by
 /// [Component].
@@ -14,7 +15,7 @@ import '../../components.dart';
 /// This will avoid any concurrent modification exceptions while the game
 /// iterates through the component list.
 ///
-/// This wrapper also guaranteed that [Component.prepare], [Component.onLoad]
+/// This wrapper also guaranteed that [Component.prepare], [Loadable.onLoad]
 /// and all the lifecycle methods are called properly.
 class ComponentSet extends QueryableOrderedSet<Component> {
   /// Components to be added on the next update.
@@ -42,7 +43,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// Prepares and registers one component to be added on the next game tick.
   ///
   /// This is the interface compliant version; if you want to provide an
-  /// explicit gameRef or await for the [Component.onLoad], use [addChild].
+  /// explicit gameRef or await for the [Loadable.onLoad], use [addChild].
   ///
   /// Note: the component is only added on the next tick. This method always
   /// returns true.
@@ -56,7 +57,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// tick.
   ///
   /// This is the interface compliant version; if you want to provide an
-  /// explicit gameRef or await for the [Component.onLoad], use [addChild].
+  /// explicit gameRef or await for the [Loadable.onLoad], use [addChild].
   ///
   /// Note: the components are only added on the next tick. This method always
   /// returns the total length of the provided list.

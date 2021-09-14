@@ -5,8 +5,8 @@ import 'package:flutter/widgets.dart';
 import '../../../extensions.dart';
 import '../../../input.dart';
 import '../../extensions/size.dart';
-import '../mixins/game.dart';
 import '../game_render_box.dart';
+import '../mixins/game.dart';
 import 'gestures.dart';
 
 typedef GameLoadingWidgetBuilder = Widget Function(

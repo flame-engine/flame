@@ -1,5 +1,17 @@
 import 'package:meta/meta.dart';
 
+import '../../../game.dart';
+
+/// From an end-user perspective this mixin is usually used together with [Game]
+/// to create a game class which is more low-level than the [FlameGame].
+///
+/// What it provides in practice is a cache for [onLoad], so that a
+/// component/class can be certain that [onLoad] only runs once which then gives
+/// the possibility to do late initializations in [onLoad].
+///
+/// It also provides empty implementations of [onMount] and [onRemove] which are
+/// called when the implementing class/component is added or removed from a
+/// parent/widget, in that respective order.
 mixin Loadable {
   /// Whenever [onLoad] returns something, the parent will wait for the [Future]
   /// to be resolved before adding it.
