@@ -34,7 +34,7 @@ The `main` branch is the bleeding edge of the v1 migration. The `master-v0.x` br
 v0 release (where we are still merging some patches and crucial fixes).
 
 The current v1 release is
-<a title="Pub" href="https://pub.dev/packages/flame/versions/1.0.0-releasecandidate.13" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout&include_prereleases" /></a>
+<a title="Pub" href="https://pub.dev/packages/flame/versions#prerelease" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout&include_prereleases" /></a>
 on pub. The latest stable version so far is
 <a title="Pub" href="https://pub.dev/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a>.
 Feel free to choose the one that better suits your needs.
