@@ -129,8 +129,8 @@ This could be used for example if you have components outside of the screen that
 about at the moment but that might later come back in to view so they are not completely removed
 from the game.
 
-These are just examples of how you could use these types, there will be a lot more usecases for them
-so don't doubt to use them even if your use-case isn't listed here.
+These are just examples of how you could use these types, there will be a lot more use cases for
+them so don't doubt to use them even if your use case isn't listed here.
 
 ### HasCollidables
 If you want to use this collision detection in your game you have to add the `HasCollidables` mixin
