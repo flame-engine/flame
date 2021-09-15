@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a title="Pub" href="https://pub.dartlang.org/packages/flame_forge2d" ><img src="https://img.shields.io/pub/v/flame_forge2d.svg?style=popout" /></a> <img src="https://github.com/flame-engine/flame_forge2d/workflows/Test/badge.svg?branch=main&event=push" alt="Test" /> <a title="Discord" href="https://discord.gg/pxrBmy4" ><img src="https://img.shields.io/discord/509714518008528896.svg" /></a>
+  <a title="Pub" href="https://pub.dev/packages/flame_forge2d/versions#prerelease" ><img src="https://img.shields.io/pub/v/flame_forge2d.svg?style=popout" /></a> <img src="https://github.com/flame-engine/flame_forge2d/workflows/Test/badge.svg?branch=main&event=push" alt="Test" /> <a title="Discord" href="https://discord.gg/pxrBmy4" ><img src="https://img.shields.io/discord/509714518008528896.svg" /></a>
 </p>
 
 This library acts as a bridge between [Forge2D](https://github.com/flame-engine/forge2d) (our port of Box2D) and the Flame game engine.
