@@ -1,6 +1,5 @@
+import 'package:flame/extensions.dart';
 import 'package:test/test.dart';
-
-import '../../extensions.dart';
 
 void expectVector2(
   Vector2 actual,

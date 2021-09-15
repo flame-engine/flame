@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/test.dart';
+import 'package:flame_test_helpers/flame_test_helpers.dart';
 import 'package:test/test.dart';
 
 class MyGame extends FlameGame with HasTappableComponents {

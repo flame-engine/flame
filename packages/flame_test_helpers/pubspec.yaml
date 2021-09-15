@@ -1,0 +1,21 @@
+name: flame_test_helpers
+description: A package with classes to help testing applications using the Flame
+version: 0.1.0
+homepage: https://pub.dev/packages/flame_test_helpers
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flame:
+    path: ../flame
+  flutter:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+  test: ^1.17.10
+  vector_math: '>=2.1.0 <3.0.0'
+
+dev_dependencies:
+  flutter_lints: ^1.0.0
