@@ -2,6 +2,7 @@ name: flame_test_helpers
 description: A package with classes to help testing applications using the Flame
 version: 0.1.0
 homepage: https://pub.dev/packages/flame_test_helpers
+publish_to: 'none'
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -14,6 +15,8 @@ dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
+  dart_code_metrics: ^4.1.0
+  dartdoc: ^0.42.0
   test: ^1.17.10
   vector_math: '>=2.1.0 <3.0.0'
 
