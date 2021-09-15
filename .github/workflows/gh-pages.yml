@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
-      - uses: erickzanardo/flutter-gh-pages@v3
+      - uses: bluefireteam/flutter-gh-pages@v7
         with:
           workingDir: examples
           webRenderer: canvaskit
