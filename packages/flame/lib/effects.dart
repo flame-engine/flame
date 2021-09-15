@@ -1,6 +1,5 @@
 export 'src/effects/combined_effect.dart';
 export 'src/effects/effects.dart';
-export 'src/effects/effects_handler.dart';
 export 'src/effects/move_effect.dart';
 export 'src/effects/rotate_effect.dart';
 export 'src/effects/scale_effect.dart';

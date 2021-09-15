@@ -1,4 +1,4 @@
-import '../game/game.dart';
+import '../game/mixins/game.dart';
 import 'events.dart';
 
 mixin MultiTouchTapDetector on Game {

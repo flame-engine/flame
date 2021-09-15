@@ -5,8 +5,8 @@ import 'package:flutter/widgets.dart';
 import '../../../extensions.dart';
 import '../../../input.dart';
 import '../../extensions/size.dart';
-import '../game.dart';
 import '../game_render_box.dart';
+import '../mixins/game.dart';
 import 'gestures.dart';
 
 typedef GameLoadingWidgetBuilder = Widget Function(
@@ -23,8 +23,8 @@ typedef OverlayWidgetBuilder<T extends Game> = Widget Function(
   T game,
 );
 
-/// A [StatefulWidget] that is in charge of attaching a [Game] instance into the flutter tree
-///
+/// A [StatefulWidget] that is in charge of attaching a [Game] instance into the
+/// Flutter tree.
 class GameWidget<T extends Game> extends StatefulWidget {
   /// The game instance in which this widget will render
   final T game;
@@ -32,8 +32,9 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// The text direction to be used in text elements in a game.
   final TextDirection? textDirection;
 
-  /// Builder to provide a widget tree to be built whilst the [Future] provided
-  /// via [Game.onLoad] is not resolved. By default this is an empty Container().
+  /// Builder to provide a widget tree to be built while the Game's [Future]
+  /// provided via `Game.onLoad` and `Game.onMount` is not resolved.
+  /// By default this is an empty Container().
   final GameLoadingWidgetBuilder? loadingBuilder;
 
   /// If set, errors during the onLoad method will not be thrown
@@ -42,7 +43,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   final GameErrorWidgetBuilder? errorBuilder;
 
   /// Builder to provide a widget tree to be built between the game elements and
-  /// the background color provided via [Game.backgroundColor]
+  /// the background color provided via [Game.backgroundColor].
   final WidgetBuilder? backgroundBuilder;
 
   /// A map to show widgets overlay.
@@ -52,8 +53,9 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// - [Game.overlays]
   final Map<String, OverlayWidgetBuilder<T>>? overlayBuilderMap;
 
-  /// A List of the initially active overlays, this is used only on the first build of the widget.
-  /// To control the overlays that are active use [Game.overlays]
+  /// A List of the initially active overlays, this is used only on the first
+  /// build of the widget.
+  /// To control the overlays that are active use [Game.overlays].
   ///
   /// See also:
   /// - [new GameWidget]
@@ -85,7 +87,8 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// ...
   /// ```
   ///
-  /// It is also possible to render layers of widgets over the game surface with widget subtrees.
+  /// It is also possible to render layers of widgets over the game surface with
+  /// widget subtrees.
   ///
   /// To do that a [overlayBuilderMap] should be provided. The visibility of
   /// these overlays are controlled by [Game.overlays] property
@@ -135,10 +138,11 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   MouseCursor? _mouseCursor;
 
-  Future<void>? _gameLoaderFuture;
-
-  Future<void> get _gameLoaderFutureCache =>
-      _gameLoaderFuture ?? (_gameLoaderFuture = widget.game.onLoad());
+  Future<void> get _loaderFuture {
+    final onLoad = widget.game.onLoadCache;
+    final onMount = widget.game.onMount;
+    return (onLoad ?? Future<void>.value()).then((_) => onMount());
+  }
 
   late FocusNode _focusNode;
 
@@ -190,9 +194,6 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       // Reset mouse cursor
       _initMouseCursor();
       addMouseCursorListener();
-
-      // Reset the loader future
-      _gameLoaderFuture = null;
     }
   }
 
@@ -217,7 +218,8 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     });
   }
 
-  // widget overlay stuff
+  //#region Widget overlay methods
+
   void addOverlaysListener() {
     widget.game.overlays.addListener(onChangeActiveOverlays);
     initialActiveOverlays = widget.game.overlays.value;
@@ -242,6 +244,8 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       initialActiveOverlays = widget.game.overlays.value;
     });
   }
+
+  //#endregion
 
   KeyEventResult _handleKeyEvent(FocusNode focusNode, RawKeyEvent event) {
     final game = widget.game;
@@ -304,9 +308,9 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
             color: widget.game.backgroundColor(),
             child: LayoutBuilder(
               builder: (_, BoxConstraints constraints) {
-                widget.game.onResize(constraints.biggest.toVector2());
+                widget.game.onGameResize(constraints.biggest.toVector2());
                 return FutureBuilder(
-                  future: _gameLoaderFutureCache,
+                  future: _loaderFuture,
                   builder: (_, snapshot) {
                     if (snapshot.hasError) {
                       final errorBuilder = widget.errorBuilder;

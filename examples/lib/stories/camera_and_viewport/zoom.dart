@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
-class ZoomGame extends BaseGame with ScrollDetector, ScaleDetector {
+class ZoomGame extends FlameGame with ScrollDetector, ScaleDetector {
   final Vector2 viewportResolution;
   late SpriteComponent flame;
 
@@ -14,9 +14,10 @@ class ZoomGame extends BaseGame with ScrollDetector, ScaleDetector {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final flameSprite = await loadSprite('flame.png');
 
-    viewport = FixedResolutionViewport(viewportResolution);
+    camera.viewport = FixedResolutionViewport(viewportResolution);
     camera.setRelativeOffset(Anchor.center);
     camera.speed = 1;
 

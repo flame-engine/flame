@@ -5,7 +5,7 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 /// Showcases how to mix two advanced detectors
-class MultitapAdvancedGame extends BaseGame
+class MultitapAdvancedGame extends FlameGame
     with MultiTouchTapDetector, MultiTouchDragDetector {
   static final whitePaint = BasicPalette.white.paint();
   static final tapSize = Vector2.all(50);

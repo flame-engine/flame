@@ -14,7 +14,7 @@ class ImagesMock extends Mock implements Images {}
 
 class ImageMock extends Mock implements Image {}
 
-class MockedGame extends Mock implements Game {
+class MockedGame extends Mock implements FlameGame {
   final _imagesMock = ImagesMock();
   @override
   Images get images => _imagesMock;

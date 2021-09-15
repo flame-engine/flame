@@ -33,7 +33,7 @@ class LogoCompomnent extends SpriteComponent with HasGameRef<DebugGame> {
   }
 }
 
-class DebugGame extends BaseGame with FPSCounter {
+class DebugGame extends FlameGame with FPSCounter {
   static final fpsTextPaint = TextPaint(
     config: const TextPaintConfig(
       color: Color(0xFFFFFFFF),
@@ -45,6 +45,7 @@ class DebugGame extends BaseGame with FPSCounter {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final flameLogo = await loadSprite('flame.png');
 
     final flame1 = LogoCompomnent(flameLogo);

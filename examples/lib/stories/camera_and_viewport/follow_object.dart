@@ -4,7 +4,6 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -137,7 +136,7 @@ class Rock extends SquareComponent with Hitbox, Collidable, Tappable {
   }
 }
 
-class CameraAndViewportGame extends BaseGame
+class CameraAndViewportGame extends FlameGame
     with HasCollidables, HasTappableComponents, HasKeyboardHandlerComponents {
   late MovableSquare square;
 
@@ -149,7 +148,8 @@ class CameraAndViewportGame extends BaseGame
 
   @override
   Future<void> onLoad() async {
-    viewport = FixedResolutionViewport(viewportResolution);
+    await super.onLoad();
+    camera.viewport = FixedResolutionViewport(viewportResolution);
     add(Map());
 
     add(square = MovableSquare());

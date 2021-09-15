@@ -51,7 +51,7 @@ void main() async {
   });
   group('SpriteAnimationGroupComponent shouldRemove test', () {
     test('removeOnFinish is true and there is no any state yet', () {
-      final game = BaseGame();
+      final game = FlameGame();
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -65,26 +65,26 @@ void main() async {
         removeOnFinish: {AnimationState.idle: true},
       );
 
-      game.onResize(size);
+      game.onGameResize(size);
       game.add(component);
 
       // runs a cycle to add the component
       game.update(0.1);
       expect(component.shouldRemove, false);
-      expect(game.components.length, 1);
+      expect(game.children.length, 1);
 
       game.update(2);
       expect(component.shouldRemove, false);
 
       // runs a cycle and the component should still be there
       game.update(0.1);
-      expect(game.components.length, 1);
+      expect(game.children.length, 1);
     });
 
     test(
       'removeOnFinish is true and current state animation#loop is false',
       () {
-        final game = BaseGame();
+        final game = FlameGame();
         final animation = SpriteAnimation.spriteList(
           [
             Sprite(image),
@@ -99,25 +99,25 @@ void main() async {
           current: AnimationState.idle,
         );
 
-        game.onResize(size);
+        game.onGameResize(size);
         game.add(component);
 
         // runs a cycle to add the component
         game.update(0.1);
         expect(component.shouldRemove, false);
-        expect(game.components.length, 1);
+        expect(game.children.length, 1);
 
         game.update(2);
         expect(component.shouldRemove, true);
 
         // runs a cycle to remove the component
         game.update(0.1);
-        expect(game.components.length, 0);
+        expect(game.children.length, 0);
       },
     );
 
     test('removeOnFinish is true and current animation#loop is true', () {
-      final game = BaseGame();
+      final game = FlameGame();
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -133,24 +133,24 @@ void main() async {
         current: AnimationState.idle,
       );
 
-      game.onResize(size);
+      game.onGameResize(size);
       game.add(component);
 
       // runs a cycle to add the component
       game.update(0.1);
       expect(component.shouldRemove, false);
-      expect(game.components.length, 1);
+      expect(game.children.length, 1);
 
       game.update(2);
       expect(component.shouldRemove, false);
 
       // runs a cycle to remove the component, but failed
       game.update(0.1);
-      expect(game.components.length, 1);
+      expect(game.children.length, 1);
     });
 
     test('removeOnFinish is false and current animation#loop is false', () {
-      final game = BaseGame();
+      final game = FlameGame();
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -165,24 +165,24 @@ void main() async {
         // when omited, removeOnFinish is false for all states
       );
 
-      game.onResize(size);
+      game.onGameResize(size);
       game.add(component);
 
       // runs a cycle to add the component
       game.update(0.1);
       expect(component.shouldRemove, false);
-      expect(game.components.length, 1);
+      expect(game.children.length, 1);
 
       game.update(2);
       expect(component.shouldRemove, false);
 
       // runs a cycle to remove the component, but failed
       game.update(0.1);
-      expect(game.components.length, 1);
+      expect(game.children.length, 1);
     });
 
     test('removeOnFinish is false and current animation#loop is true', () {
-      final game = BaseGame();
+      final game = FlameGame();
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -198,20 +198,20 @@ void main() async {
         current: AnimationState.idle,
       );
 
-      game.onResize(size);
+      game.onGameResize(size);
       game.add(component);
 
       // runs a cycle to add the component
       game.update(0.1);
       expect(component.shouldRemove, false);
-      expect(game.components.length, 1);
+      expect(game.children.length, 1);
 
       game.update(2);
       expect(component.shouldRemove, false);
 
       // runs a cycle to remove the component, but failed
       game.update(0.1);
-      expect(game.components.length, 1);
+      expect(game.children.length, 1);
     });
   });
 }

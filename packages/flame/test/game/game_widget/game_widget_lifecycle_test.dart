@@ -1,32 +1,33 @@
-import 'dart:ui';
-
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MyGame extends Game {
+class MyGame extends FlameGame {
   final List<String> events;
 
   MyGame(this.events);
 
   @override
-  void update(double dt) {}
-
-  @override
-  void render(Canvas canvas) {}
-
-  @override
-  void onAttach() {
-    super.onAttach();
-
-    events.add('attach');
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    events.add('onGameResize');
   }
 
   @override
-  void onDetach() {
-    super.onDetach();
+  Future<void> onLoad() async {
+    await super.onLoad();
+    events.add('onLoad');
+  }
 
-    events.add('detach');
+  @override
+  Future<void>? onMount() {
+    events.add('onMount');
+  }
+
+  @override
+  void onRemove() {
+    super.onRemove();
+    events.add('onRemove');
   }
 }
 
@@ -45,9 +46,9 @@ class TitlePage extends StatelessWidget {
 }
 
 class GamePage extends StatefulWidget {
-  final List<String> events;
+  final MyGame game;
 
-  const GamePage(this.events);
+  const GamePage(this.game);
 
   @override
   State<StatefulWidget> createState() {
@@ -61,8 +62,7 @@ class _GamePageState extends State<GamePage> {
   @override
   void initState() {
     super.initState();
-
-    _game = MyGame(widget.events);
+    _game = widget.game;
   }
 
   @override
@@ -93,15 +93,18 @@ class _GamePageState extends State<GamePage> {
 
 class MyApp extends StatelessWidget {
   final List<String> events;
+  late final MyGame game;
 
-  const MyApp(this.events);
+  MyApp(this.events) {
+    game = MyGame(events);
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
         '/': (_) => TitlePage(),
-        '/game': (_) => GamePage(events),
+        '/game': (_) => GamePage(game),
       },
     );
   }
@@ -118,10 +121,14 @@ void main() {
       // I am unsure why I need two bumps here, my best theory is
       // that we need the first one for the navigation animation
       // and the second one for the page to render
-      await tester.pump(const Duration(milliseconds: 1000));
-      await tester.pump(const Duration(milliseconds: 1000));
+      await tester.pump();
+      await tester.pump();
 
-      expect(events, ['attach']);
+      expect(
+        events.contains('onLoad'),
+        true,
+        reason: 'onLoad event was not fired on attach',
+      );
     });
 
     testWidgets('detach when navigating out of the page', (tester) async {
@@ -130,8 +137,8 @@ void main() {
 
       await tester.tap(find.text('Play'));
 
-      await tester.pump(const Duration(milliseconds: 1000));
-      await tester.pump(const Duration(milliseconds: 1000));
+      await tester.pump();
+      await tester.pump();
 
       await tester.tap(find.text('Back'));
 
@@ -139,7 +146,49 @@ void main() {
       // happens, if it was, then the pumpAndSettle would break with a timeout
       await tester.pumpAndSettle();
 
-      expect(events, ['attach', 'detach']);
+      expect(
+        events.contains('onLoad'),
+        true,
+        reason: 'onLoad was not called',
+      );
+      expect(
+        events.contains('onRemove'),
+        true,
+        reason: 'onRemove was not called',
+      );
+    });
+
+    testWidgets('all events are executed in the correct order', (tester) async {
+      final events = <String>[];
+      await tester.pumpWidget(MyApp(events));
+
+      await tester.tap(find.text('Play'));
+
+      await tester.pump();
+      await tester.pump();
+
+      await tester.tap(find.text('Back'));
+
+      // This ensures that Flame is not running anymore after the navigation
+      // happens, if it was, then the pumpAndSettle would break with a timeout
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Play'));
+
+      await tester.pump();
+      await tester.pump();
+
+      expect(
+        events,
+        [
+          'onGameResize',
+          'onLoad',
+          'onMount',
+          'onRemove',
+          'onGameResize',
+          'onMount',
+        ],
+      );
     });
   });
 }

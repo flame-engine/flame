@@ -11,6 +11,7 @@ class ColorEffect extends ComponentEffect<HasPaint> {
   final String? paintId;
 
   late Paint _original;
+  late Paint _peak;
 
   late ColorTween _tween;
 
@@ -18,21 +19,28 @@ class ColorEffect extends ComponentEffect<HasPaint> {
     required this.color,
     required this.duration,
     this.paintId,
-    Curve? curve,
     bool isInfinite = false,
     bool isAlternating = false,
+    double? initialDelay,
+    double? peakDelay,
+    Curve? curve,
+    bool? removeOnFinish,
   }) : super(
           isInfinite,
           isAlternating,
+          initialDelay: initialDelay,
+          peakDelay: peakDelay,
+          removeOnFinish: removeOnFinish,
           curve: curve,
         );
 
   @override
-  void initialize(HasPaint component) {
-    super.initialize(component);
-    peakTime = duration;
+  Future<void> onLoad() async {
+    super.onLoad();
+    setPeakTimeFromDuration(duration);
 
-    _original = component.getPaint(paintId);
+    _original = affectedParent.getPaint(paintId);
+    _peak = Paint()..color = color;
 
     _tween = ColorTween(
       begin: _original.color,
@@ -41,21 +49,27 @@ class ColorEffect extends ComponentEffect<HasPaint> {
   }
 
   @override
-  void setComponentToEndState() {
-    component?.tint(color);
+  void setComponentToOriginalState() {
+    affectedParent.paint = _original;
   }
 
   @override
-  void setComponentToOriginalState() {
-    component?.paint = _original;
+  void setComponentToPeakState() {
+    affectedParent.tint(_peak.color);
   }
 
   @override
   void update(double dt) {
+    if (isPaused) {
+      return;
+    }
     super.update(dt);
+    if (hasCompleted()) {
+      return;
+    }
     final color = _tween.lerp(curveProgress);
     if (color != null) {
-      component?.tint(color);
+      affectedParent.tint(color);
     }
   }
 }

@@ -122,7 +122,7 @@ class MyGame extends Game {
 
 ```
 
-`Timer` instances can also be used inside a `BaseGame` game by using the `TimerComponent` class.
+`Timer` instances can also be used inside a `FlameGame` game by using the `TimerComponent` class.
 
 `TimerComponent` example:
 
@@ -131,8 +131,8 @@ import 'package:flame/timer.dart';
 import 'package:flame/components/timer_component.dart';
 import 'package:flame/game.dart';
 
-class MyBaseGame extends BaseGame {
-  MyBaseGame() {
+class MyFlameGame extends FlameGame {
+  MyFlameGame() {
     add(
       TimerComponent(
         Timer(

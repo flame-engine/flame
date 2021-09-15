@@ -1,16 +1,6 @@
-import 'dart:ui';
-
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class TestGame extends Game {
-  @override
-  void render(Canvas canvas) {}
-
-  @override
-  void update(double dt) {}
-}
 
 Finder byMouseCursor(MouseCursor cursor) {
   return find.byWidgetPredicate(
@@ -24,7 +14,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: GameWidget(
-            game: TestGame(),
+            game: FlameGame(),
             mouseCursor: SystemMouseCursors.grab,
           ),
         ),
@@ -37,7 +27,7 @@ void main() {
     });
 
     testWidgets('can change the cursor', (tester) async {
-      final game = TestGame();
+      final game = FlameGame();
 
       await tester.pumpWidget(
         MaterialApp(

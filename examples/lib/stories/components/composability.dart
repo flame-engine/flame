@@ -15,8 +15,8 @@ class ParentSquare extends Square with HasGameRef {
   ParentSquare(Vector2 position, Vector2 size) : super(position, size);
 
   @override
-  void onMount() {
-    super.onMount();
+  Future<void> onLoad() async {
+    super.onLoad();
     createChildren();
   }
 
@@ -29,32 +29,29 @@ class ParentSquare extends Square with HasGameRef {
       Square(Vector2(70, 200), Vector2(50, 50), angle: 5),
     ];
 
-    children.forEach((c) => addChild(c, gameRef: gameRef));
+    addAll(children);
   }
 }
 
-class Composability extends BaseGame with TapDetector {
-  late ParentSquare _parent;
+// This class only has `HasDraggableComponents` since the game-in-game example
+// moves a draggable component to this game.
+class Composability extends FlameGame with HasDraggableComponents {
+  late ParentSquare parentSquare;
 
   @override
   bool debugMode = true;
 
   @override
   Future<void> onLoad() async {
-    _parent = ParentSquare(Vector2.all(400), Vector2.all(250))
+    await super.onLoad();
+    parentSquare = ParentSquare(Vector2.all(200), Vector2.all(300))
       ..anchor = Anchor.center;
-    add(_parent);
+    add(parentSquare);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    _parent.angle += dt / 2;
-  }
-
-  @override
-  void onTap() {
-    super.onTap();
-    _parent.scale = Vector2.all(1.5);
+    parentSquare.angle += dt;
   }
 }

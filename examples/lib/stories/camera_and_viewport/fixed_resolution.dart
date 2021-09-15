@@ -5,7 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 
-class FixedResolutionGame extends BaseGame with ScrollDetector, ScaleDetector {
+class FixedResolutionGame extends FlameGame with ScrollDetector, ScaleDetector {
   static const info = '''
   This example shows how to create a viewport with a fixed resolution.
   It is useful when you want the visible part of the game to be the same on all
@@ -21,16 +21,17 @@ class FixedResolutionGame extends BaseGame with ScrollDetector, ScaleDetector {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final flameSprite = await loadSprite('layers/player.png');
 
-    viewport = FixedResolutionViewport(viewportResolution);
+    camera.viewport = FixedResolutionViewport(viewportResolution);
     camera.setRelativeOffset(Anchor.topLeft);
     camera.speed = 1;
 
     add(Background());
     add(
       SpriteComponent(
-        position: viewport.effectiveSize / 2,
+        position: camera.viewport.effectiveSize / 2,
         sprite: flameSprite,
         size: Vector2(149, 211),
       )..anchor = Anchor.center,
@@ -49,6 +50,7 @@ class Background extends PositionComponent with HasGameRef {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     white = BasicPalette.white.paint();
     hugeRect = size.toRect();
   }

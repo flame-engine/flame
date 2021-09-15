@@ -90,7 +90,7 @@ class CircleStressSample extends Forge2DGame with TapDetector {
     await super.onLoad();
     final boundaries = createBoundaries(this);
     boundaries.forEach(add);
-    final center = screenToWorld(viewport.effectiveSize / 2);
+    final center = screenToWorld(camera.viewport.effectiveSize / 2);
     add(CircleShuffler(center));
     add(CornerRamp(center, isMirrored: true));
     add(CornerRamp(center));

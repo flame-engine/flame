@@ -57,22 +57,14 @@ class _OverlayExampleWidgetState extends State<OverlayExampleWidget> {
   void newGame() {
     setState(() {
       _myGame = ExampleGame();
-      print('New game created');
     });
   }
 }
 
-class ExampleGame extends Game with TapDetector {
-  @override
-  void update(double dt) {}
-
-  @override
-  Future<void> onLoad() async {
-    print('game loaded');
-  }
-
+class ExampleGame extends FlameGame with TapDetector {
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     canvas.drawRect(
       const Rect.fromLTWH(100, 100, 100, 100),
       Paint()..color = BasicPalette.white.color,

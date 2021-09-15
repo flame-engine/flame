@@ -44,12 +44,13 @@ class BackgroundLayer extends PreRenderedLayer {
   }
 }
 
-class LayerGame extends Game {
+class LayerGame extends FlameGame {
   late Layer gameLayer;
   late Layer backgroundLayer;
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final playerSprite = Sprite(await images.load('layers/player.png'));
     final enemySprite = Sprite(await images.load('layers/enemy.png'));
     final backgroundSprite = Sprite(await images.load('layers/background.png'));
@@ -59,10 +60,8 @@ class LayerGame extends Game {
   }
 
   @override
-  void update(double dt) {}
-
-  @override
   void render(Canvas canvas) {
+    super.render(canvas);
     gameLayer.render(canvas);
     backgroundLayer.render(canvas);
   }

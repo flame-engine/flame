@@ -20,7 +20,7 @@ class MouseJointSample extends Forge2DGame with MultiTouchDragDetector {
     final boundaries = createBoundaries(this);
     boundaries.forEach(add);
 
-    final center = screenToWorld(viewport.effectiveSize / 2);
+    final center = screenToWorld(camera.viewport.effectiveSize / 2);
     groundBody = world.createBody(BodyDef());
     ball = Ball(center, radius: 5);
     add(ball);

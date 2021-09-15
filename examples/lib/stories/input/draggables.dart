@@ -6,8 +6,7 @@ import 'package:flutter/material.dart' show Colors;
 
 // Note: this component does not consider the possibility of multiple
 // simultaneous drags with different pointerIds.
-class DraggableSquare extends PositionComponent
-    with Draggable, HasGameRef<DraggablesGame> {
+class DraggableSquare extends PositionComponent with Draggable, HasGameRef {
   @override
   bool debugMode = true;
 
@@ -18,12 +17,13 @@ class DraggableSquare extends PositionComponent
         );
 
   Vector2? dragDeltaPosition;
-  bool get isDragging => dragDeltaPosition != null;
 
   @override
   void update(double dt) {
     super.update(dt);
-    debugColor = isDragging ? Colors.greenAccent : Colors.purple;
+    debugColor = isDragged && parent is DraggablesGame
+        ? Colors.greenAccent
+        : Colors.purple;
   }
 
   @override
@@ -34,6 +34,9 @@ class DraggableSquare extends PositionComponent
 
   @override
   bool onDragUpdate(int pointerId, DragUpdateInfo info) {
+    if (parent is! DraggablesGame) {
+      return true;
+    }
     final dragDeltaPosition = this.dragDeltaPosition;
     if (dragDeltaPosition == null) {
       return false;
@@ -56,15 +59,17 @@ class DraggableSquare extends PositionComponent
   }
 }
 
-class DraggablesGame extends BaseGame with HasDraggableComponents {
+class DraggablesGame extends FlameGame with HasDraggableComponents {
   final double zoom;
+  late final DraggableSquare square;
 
   DraggablesGame({required this.zoom});
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     camera.zoom = zoom;
-    add(DraggableSquare());
+    add(square = DraggableSquare());
     add(DraggableSquare()..y = 350);
   }
 }

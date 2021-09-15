@@ -1,27 +1,39 @@
 import 'dart:math';
 
 import 'package:flame/effects.dart';
+import 'package:flame/game.dart';
 import 'package:flame/src/test_helpers/random_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'effect_test_utils.dart';
 
+class ReadyGame extends FlameGame {
+  ReadyGame() {
+    onGameResize(Vector2.zero());
+  }
+}
+
 class Elements extends BaseElements {
+  bool onCompleteCalled = false;
+
   Elements(Random random) : super(random);
 
   @override
-  TestComponent component() => TestComponent(
-        position: randomVector2(),
-        size: randomVector2(),
-        angle: randomAngle(),
-      );
+  TestComponent component() {
+    return TestComponent(
+      position: randomVector2(),
+      size: randomVector2(),
+      angle: randomAngle(),
+    );
+  }
+
+  FlameGame game() => ReadyGame();
 
   CombinedEffect effect({
-    bool isInfinite = false,
-    bool isAlternating = false,
     bool hasAlternatingMoveEffect = false,
     bool hasAlternatingRotateEffect = false,
     bool hasAlternatingSizeEffect = false,
+    bool hasAlternatingScaleEffect = false,
   }) {
     final move = MoveEffect(
       path: path,
@@ -33,15 +45,19 @@ class Elements extends BaseElements {
       duration: randomDuration(),
       isAlternating: hasAlternatingRotateEffect,
     )..skipEffectReset = true;
-    final scale = SizeEffect(
+    final size = SizeEffect(
       size: argumentSize,
       duration: randomDuration(),
       isAlternating: hasAlternatingSizeEffect,
     )..skipEffectReset = true;
+    final scale = ScaleEffect(
+      scale: argumentScale,
+      duration: randomDuration(),
+      isAlternating: hasAlternatingScaleEffect,
+    )..skipEffectReset = true;
     return CombinedEffect(
-      effects: [move, scale, rotate],
-      isInfinite: isInfinite,
-      isAlternating: isAlternating,
+      effects: [move, size, rotate, scale],
+      onComplete: () => onCompleteCalled = true,
     )..skipEffectReset = true;
   }
 }
@@ -51,157 +67,36 @@ void main() {
     'CombinedEffect can combine',
     (Random random, WidgetTester tester) async {
       final e = Elements(random);
-      final positionComponent = e.component();
-      effectTest(
-        tester,
-        positionComponent,
-        e.effect(),
-        expectedPosition: e.path.last,
-        expectedAngle: e.argumentAngle,
-        expectedSize: e.argumentSize,
-        random: random,
-      );
+      final component = e.component();
+      final game = e.game();
+      final effect = e.effect();
+      await game.add(component);
+      await component.add(effect);
+      var timePassed = 0.0;
+      const timeStep = 1 / 60;
+      while (timePassed <= effect.iterationTime) {
+        game.update(timeStep);
+        timePassed += timeStep;
+      }
+      game.update(0);
+      expect(effect.hasCompleted(), true);
+      expect(e.onCompleteCalled, true);
     },
   );
 
   testWidgetsRandom(
-    'CombinedEffect will stop sequence after it is done',
+    'CombinedEffect can not contain children of same type',
     (Random random, WidgetTester tester) async {
       final e = Elements(random);
-      effectTest(
-        tester,
-        e.component(),
-        e.effect(),
-        expectedPosition: e.path.last,
-        expectedAngle: e.argumentAngle,
-        expectedSize: e.argumentSize,
-        iterations: 1.5,
-        random: random,
-      );
-    },
-  );
-
-  testWidgetsRandom(
-    'CombinedEffect can alternate',
-    (Random random, WidgetTester tester) async {
-      final e = Elements(random);
-      final positionComponent = e.component();
-      effectTest(
-        tester,
-        positionComponent,
-        e.effect(isAlternating: true),
-        expectedPosition: positionComponent.position.clone(),
-        expectedAngle: positionComponent.angle,
-        expectedSize: positionComponent.size.clone(),
-        iterations: 2.0,
-        random: random,
-      );
-    },
-  );
-
-  testWidgetsRandom(
-    'CombinedEffect can alternate and be infinite',
-    (Random random, WidgetTester tester) async {
-      final e = Elements(random);
-      final positionComponent = e.component();
-      effectTest(
-        tester,
-        positionComponent,
-        e.effect(isInfinite: true, isAlternating: true),
-        expectedPosition: positionComponent.position.clone(),
-        expectedAngle: positionComponent.angle,
-        expectedSize: positionComponent.size.clone(),
-        shouldComplete: false,
-        random: random,
-      );
-    },
-  );
-
-  testWidgetsRandom(
-    'CombinedEffect alternation can peak',
-    (Random random, WidgetTester tester) async {
-      final e = Elements(random);
-      final positionComponent = e.component();
-      effectTest(
-        tester,
-        positionComponent,
-        e.effect(isAlternating: true),
-        expectedPosition: e.path.last,
-        expectedAngle: e.argumentAngle,
-        expectedSize: e.argumentSize,
-        shouldComplete: false,
-        iterations: 0.5,
-        random: random,
-      );
-    },
-  );
-
-  testWidgetsRandom(
-    'CombinedEffect can be infinite',
-    (Random random, WidgetTester tester) async {
-      final e = Elements(random);
-      final positionComponent = e.component();
-      effectTest(
-        tester,
-        positionComponent,
-        e.effect(isInfinite: true),
-        expectedPosition: e.path.last,
-        expectedAngle: e.argumentAngle,
-        expectedSize: e.argumentSize,
-        iterations: 3.0,
-        shouldComplete: false,
-        random: random,
-      );
-    },
-  );
-
-  testWidgetsRandom(
-    'CombinedEffect can contain alternating MoveEffect',
-    (Random random, WidgetTester tester) async {
-      final e = Elements(random);
-      final positionComponent = e.component();
-      effectTest(
-        tester,
-        positionComponent,
-        e.effect(hasAlternatingMoveEffect: true),
-        expectedPosition: positionComponent.position.clone(),
-        expectedAngle: e.argumentAngle,
-        expectedSize: e.argumentSize,
-        random: random,
-      );
-    },
-  );
-
-  testWidgetsRandom(
-    'CombinedEffect can contain alternating RotateEffect',
-    (Random random, WidgetTester tester) async {
-      final e = Elements(random);
-      final positionComponent = e.component();
-      effectTest(
-        tester,
-        positionComponent,
-        e.effect(hasAlternatingRotateEffect: true),
-        expectedPosition: e.path.last,
-        expectedAngle: positionComponent.angle,
-        expectedSize: e.argumentSize,
-        random: random,
-      );
-    },
-  );
-
-  testWidgetsRandom(
-    'CombinedEffect can contain alternating SizeEffect',
-    (Random random, WidgetTester tester) async {
-      final e = Elements(random);
-      final positionComponent = e.component();
-      effectTest(
-        tester,
-        positionComponent,
-        e.effect(hasAlternatingSizeEffect: true),
-        expectedPosition: e.path.last,
-        expectedAngle: e.argumentAngle,
-        expectedSize: positionComponent.size.clone(),
-        random: random,
+      final component = e.component();
+      final game = e.game();
+      final effect = e.effect();
+      await game.add(component);
+      await component.add(effect);
+      game.update(0);
+      expect(
+        () async => effect.add(SizeEffect(duration: 1.0, size: Vector2.zero())),
+        throwsA(isA<AssertionError>()),
       );
     },
   );

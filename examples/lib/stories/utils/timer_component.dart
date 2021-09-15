@@ -22,7 +22,7 @@ class RenderedTimeComponent extends TimerComponent {
   }
 }
 
-class TimerComponentGame extends BaseGame with TapDetector, DoubleTapDetector {
+class TimerComponentGame extends FlameGame with TapDetector, DoubleTapDetector {
   @override
   void onTapDown(_) {
     add(RenderedTimeComponent(Timer(1)..start()));

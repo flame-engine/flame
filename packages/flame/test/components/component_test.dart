@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:test/test.dart';
 
-class RemoveComponent extends BaseComponent {
+class RemoveComponent extends Component {
   int removeCounter = 0;
 
   @override
@@ -86,12 +86,12 @@ void main() {
     test('test remove and shouldRemove', () {
       final c1 = SpriteComponent();
       expect(c1.shouldRemove, equals(false));
-      c1.remove();
+      c1.removeFromParent();
       expect(c1.shouldRemove, equals(true));
 
       final c2 = SpriteAnimationComponent();
       expect(c2.shouldRemove, equals(false));
-      c2.remove();
+      c2.removeFromParent();
       expect(c2.shouldRemove, equals(true));
 
       c2.shouldRemove = false;
@@ -99,12 +99,12 @@ void main() {
     });
 
     test('remove and re-add should not double trigger onRemove', () {
-      final game = BaseGame()..onResize(Vector2.zero());
+      final game = FlameGame()..onGameResize(Vector2.zero());
       final component = RemoveComponent();
 
       game.add(component);
       game.update(0);
-      component.remove();
+      component.removeFromParent();
       game.update(0);
       expect(component.removeCounter, 1);
       component.shouldRemove = false;
@@ -112,7 +112,7 @@ void main() {
       game.add(component);
       game.update(0);
       expect(component.removeCounter, 0);
-      expect(game.components.length, 1);
+      expect(game.children.length, 1);
     });
   });
 }

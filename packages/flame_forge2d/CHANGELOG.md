@@ -2,6 +2,7 @@
 
 ## [Next]
  - The rendering of `BodyComponent` is now inline with the Flame coordinate system
+ - Moved `BodyComponent` base from `BaseComponent` to `Component`
 
 ## [0.8.1-releasecandidate.13]
  - Added physics tied to widgets example

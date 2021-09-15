@@ -24,6 +24,7 @@ class WidgetSample extends Forge2DGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final boundaries = createBoundaries(this);
     addAll(boundaries);
   }
@@ -31,8 +32,9 @@ class WidgetSample extends Forge2DGame with TapDetector {
   Body createBody() {
     final bodyDef = BodyDef()
       ..angularVelocity = 3
-      ..position =
-          screenToWorld(Vector2.random()..multiply(viewport.effectiveSize))
+      ..position = screenToWorld(
+        Vector2.random()..multiply(camera.viewport.effectiveSize),
+      )
       ..type = BodyType.dynamic;
     final body = world.createBody(bodyDef);
 

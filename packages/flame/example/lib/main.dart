@@ -41,18 +41,19 @@ class Square extends PositionComponent {
   }
 
   @override
-  void onMount() {
-    super.onMount();
+  Future<void> onLoad() async {
+    super.onLoad();
     size.setValues(squareSize, squareSize);
     anchor = Anchor.center;
   }
 }
 
-class MyGame extends BaseGame with DoubleTapDetector, TapDetector {
+class MyGame extends FlameGame with DoubleTapDetector, TapDetector {
   bool running = true;
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     add(
       Square()
         ..x = 100
@@ -62,24 +63,18 @@ class MyGame extends BaseGame with DoubleTapDetector, TapDetector {
 
   @override
   void onTapUp(TapUpInfo info) {
-    final touchArea = RectExtension.fromVector2Center(
-      center: info.eventPosition.game,
-      width: 20,
-      height: 20,
-    );
+    final touchPoint = info.eventPosition.game;
 
-    final handled = components.any((c) {
-      if (c is PositionComponent && c.toRect().overlaps(touchArea)) {
-        components.remove(c);
+    final handled = children.any((c) {
+      if (c is PositionComponent && c.containsPoint(touchPoint)) {
+        remove(c);
         return true;
       }
       return false;
     });
 
     if (!handled) {
-      add(Square()
-        ..x = touchArea.left
-        ..y = touchArea.top);
+      add(Square()..position = touchPoint);
     }
   }
 

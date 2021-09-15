@@ -9,11 +9,12 @@ enum RobotState {
   running,
 }
 
-class AnimationGroupExample extends BaseGame with TapDetector {
+class AnimationGroupExample extends FlameGame with TapDetector {
   late SpriteAnimationGroupComponent robot;
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final running = await loadSpriteAnimation(
       'animations/robot.png',
       SpriteAnimationData.sequenced(

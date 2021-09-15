@@ -1,6 +1,6 @@
 # Components
 
-![Component Diagram](images/diagram.png)
+![Components Diagram](images/diagram.png)
 
 This diagram might look intimidating, but don't worry, it is not as complex as it looks.
 
@@ -11,46 +11,54 @@ If you want to skip reading about abstract classes you can jump directly to
 [PositionComponent](./components.md#PositionComponent).
 
 Every `Component` has a few methods that you can optionally implement, which are used by the
-`BaseGame` class. If you are not using `BaseGame`, you can alternatively use these methods on your
-own game loop.
+`FlameGame` class. If you are not using `FlameGame`, you can use these methods on your own game loop
+if you wish.
 
-The `resize` method is called whenever the screen is resized, and in the beginning once when the
-component is added to the game via the `add` method.
+![Component Lifecycle Diagram](images/diagram.png)
 
-The `shouldRemove` variable can be overridden or set to true and `BaseGame` will remove the
+The `onGameResize` method is called whenever the screen is resized, and once in the beginning when
+the component is added to the game via the `add` method.
+
+The `shouldRemove` variable can be overridden or set to true and `FlameGame` will remove the
 component before the next update loop. It will then no longer be rendered or updated. Note that
-`game.remove(Component c)` can also be used to remove components from the game.
+`game.remove(Component c)` and `component.removeFromParent()` also can be used to remove components
+from its parent.
 
-The `isHUD` variable can be overridden or set to true (defaults to `false`) to make the `BaseGame`
-ignore the `camera` for this element, make it static in relation to the screen that is.
-
-The `onMount` method can be overridden to run initialization code for the component. When this
-method is called, BaseGame ensures that all the mixins which would change this component's behavior
-are already resolved.
+The `isHUD` variable can be overridden or set to true (defaults to `false`) to make the `FlameGame`
+ignore the `camera` for this element, making it static in relation to the screen that is.
+Do note that this currently only works if the component is added directly to the root `FlameGame`.
 
 The `onRemove` method can be overridden to run code before the component is removed from the game,
-it is only run once even if the component is removed both by using the `BaseGame` remove method and
+it is only run once even if the component is removed both by using the parents remove method and
 the `Component` remove method.
 
 The `onLoad` method can be overridden to run asynchronous initialization code for the component,
 like loading an image for example. This method is executed after the initial "preparation" of the
-component is run, meaning that this method is executed after `onMount` and just before the inclusion
-of the component in the `BaseGame`'s list of components.
+component has finished the first time, meaning that this method is executed after the first
+`onGameResize` call and just before the inclusion of the component in the `FlameGame`'s (or another
+`Component`'s) list of components.
+
+The `onMount` method can be overridden to run asynchronous initialization code that should
+run every time the component is added to a new parent. This means that you should not initialize
+`late` variables here, since this method might run several times throughout the component's
+lifetime. This method is executed after the initial "preparation" of the component is done and after
+`onGameResize` and `onLoad`, but before the inclusion of the component in the parent's list of
+components.
 
 ## BaseComponent
 Usually if you are going to make your own component you want to extend `PositionComponent`, but if
 you want to be able to handle effects and child components but handle the positioning differently
-you can extend the `BaseComponent`.
+you can extend the `Component` directly.
 
-It is used by `SpriteBodyComponent`, `PositionBodyComponent`, and `BodyComponent` in Forge2D since
-those components doesn't have their position in relation to the screen, but in relation to the
-Forge2D world.
+`Component` is used by `SpriteBodyComponent`, `PositionBodyComponent`, and `BodyComponent` in
+`flame_forge2d` since those components doesn't have their position in relation to the screen, but in
+relation to the Forge2D world.
 
 ### Composability of components
 
 Sometimes it is useful to wrap other components inside of your component. For example by grouping
-visual components through a hierarchy. You can do this by having child components on any component
-that extends `BaseComponent`, for example `PositionComponent` or `BodyComponent`.
+visual components through a hierarchy. You can do this by adding child components to any component,
+for example `PositionComponent`.
 When you have child components on a component every time the parent is updated and rendered, all the
 children are rendered and updated with the same conditions.
 
@@ -68,8 +76,8 @@ class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
     final gameOverText = GameOverText(spriteImage); // GameOverText is a Component
     final gameOverButton = GameOverButton(spriteImage); // GameOverRestart is a SpriteComponent
 
-    addChild(gameRef, gameOverText);
-    addChild(gameRef, gameOverButton);
+    add(gameOverText);
+    add(gameOverButton);
   }
 
   @override
@@ -113,7 +121,7 @@ created with a `Sprite`:
 ```dart
 import 'package:flame/components/component.dart';
 
-class MyGame extends BaseGame {
+class MyGame extends FlameGame {
   late final SpriteComponent player;
 
   @override
@@ -165,7 +173,7 @@ this.player = SpriteAnimationComponent.fromFrameData(
 );
 ```
 
-If you are not using `BaseGame`, don't forget this component needs to be updated, because the
+If you are not using `FlameGame`, don't forget this component needs to be updated, because the
 animation object needs to be ticked to move the frames.
 
 ## SpriteAnimationGroup
@@ -339,7 +347,7 @@ class MyParallaxComponent extends ParallaxComponent with HasGameRef<MyGame> {
   }
 }
 
-class MyGame extends BaseGame {
+class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     add(MyParallaxComponent());

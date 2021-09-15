@@ -10,7 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart' as flutter;
 import 'package:test/test.dart';
 
-class MyGame extends BaseGame with HasTappableComponents {}
+class MyGame extends FlameGame with HasTappableComponents {}
 
 class MyComponent extends PositionComponent with Tappable, HasGameRef {
   bool tapped = false;
@@ -55,7 +55,10 @@ class MyComponent extends PositionComponent with Tappable, HasGameRef {
 
 class MyAsyncComponent extends MyComponent {
   @override
-  Future<void> onLoad() => Future.value();
+  Future<void> onLoad() async {
+    await super.onLoad();
+    return Future.value();
+  }
 }
 
 class PositionComponentNoNeedForRect extends PositionComponent with Tappable {}
@@ -63,17 +66,17 @@ class PositionComponentNoNeedForRect extends PositionComponent with Tappable {}
 Vector2 size = Vector2(1.0, 1.0);
 
 void main() {
-  group('BaseGame test', () {
+  group('FlameGame test', () {
     test('adds the component to the component list', () {
       final game = MyGame();
       final component = MyComponent();
 
-      game.onResize(size);
+      game.onGameResize(size);
       game.add(component);
       // runs a cycle to add the component
       game.update(0.1);
 
-      expect(true, game.components.contains(component));
+      expect(true, game.children.contains(component));
     });
 
     test(
@@ -82,12 +85,12 @@ void main() {
         final game = MyGame();
         final component = MyAsyncComponent();
 
-        game.onResize(size);
+        game.onGameResize(size);
         await game.add(component);
         // runs a cycle to add the component
         game.update(0.1);
 
-        expect(true, game.components.contains(component));
+        expect(true, game.children.contains(component));
 
         expect(component.gameSize, size);
         expect(component.gameRef, game);
@@ -98,7 +101,7 @@ void main() {
       final game = MyGame();
       final component = MyComponent();
 
-      game.onResize(size);
+      game.onGameResize(size);
       game.add(component);
 
       expect(component.gameSize, size);
@@ -109,7 +112,7 @@ void main() {
       final game = MyGame();
       final component = MyComponent();
 
-      game.onResize(size);
+      game.onGameResize(size);
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
@@ -122,12 +125,12 @@ void main() {
       final game = MyGame();
       final component = MyComponent();
 
-      game.onResize(size);
+      game.onGameResize(size);
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
 
-      expect(game.components.contains(component), true);
+      expect(game.children.contains(component), true);
     });
 
     flutter.testWidgets(
@@ -136,10 +139,10 @@ void main() {
         final game = MyGame();
         final component = MyComponent();
 
-        game.onResize(size);
+        game.onGameResize(size);
         game.add(component);
         late GameRenderBox renderBox;
-        tester.pumpWidget(
+        await tester.pumpWidget(
           Builder(
             builder: (BuildContext context) {
               renderBox = GameRenderBox(context, game);
@@ -163,15 +166,15 @@ void main() {
       final game = MyGame();
       final component = MyComponent();
 
-      game.onResize(size);
+      game.onGameResize(size);
       game.add(component);
       // The component is not added to the component list until an update has been performed
       game.update(0.0);
       // The component is removed both by removing it on the game instance and
       // by the function on the component, but the onRemove callback should
       // only be called once.
-      component.remove();
-      game.components.remove(component);
+      component.removeFromParent();
+      game.children.remove(component);
       // The component is not removed from the component list until an update has been performed
       game.update(0.0);
 
@@ -180,44 +183,44 @@ void main() {
   });
 
   test('remove depend SpriteComponent.shouldRemove', () {
-    final game = MyGame()..onResize(size);
+    final game = MyGame()..onGameResize(size);
 
     // addLater here
     game.add(SpriteComponent()..shouldRemove = true);
     game.update(0);
-    expect(game.components.length, equals(1));
+    expect(game.children.length, equals(1));
 
     // remove effected here
     game.update(0);
-    expect(game.components.isEmpty, equals(true));
+    expect(game.children.isEmpty, equals(true));
   });
 
   test('remove depend SpriteAnimationComponent.shouldRemove', () {
-    final game = MyGame()..onResize(size);
+    final game = MyGame()..onGameResize(size);
     game.add(SpriteAnimationComponent()..shouldRemove = true);
     game.update(0);
-    expect(game.components.length, equals(1));
+    expect(game.children.length, equals(1));
 
     game.update(0);
-    expect(game.components.isEmpty, equals(true));
+    expect(game.children.isEmpty, equals(true));
   });
 
   test('clear removes all components', () {
     final game = MyGame();
     final components = List.generate(3, (index) => MyComponent());
 
-    game.onResize(size);
+    game.onGameResize(size);
     game.addAll(components);
 
     // The components are not added to the component list until an update has been performed
     game.update(0.0);
-    expect(game.components.length, equals(3));
+    expect(game.children.length, equals(3));
 
-    game.components.clear();
+    game.children.clear();
 
     // Ensure clear does not remove components directly
-    expect(game.components.length, equals(3));
+    expect(game.children.length, equals(3));
     game.update(0.0);
-    expect(game.components.isEmpty, equals(true));
+    expect(game.children.isEmpty, equals(true));
   });
 }

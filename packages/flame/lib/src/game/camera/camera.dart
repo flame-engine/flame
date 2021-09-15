@@ -1,10 +1,10 @@
 import 'dart:math' as math;
 import 'dart:ui' show Rect, Canvas;
 
-import '../../components.dart';
-import '../../extensions.dart';
-import '../../game.dart';
-import 'projector.dart';
+import '../../../components.dart';
+import '../../../extensions.dart';
+import '../../../game.dart';
+import '../projector.dart';
 
 /// A camera translates your game coordinate system; this is useful when your
 /// world is not 1:1 with your screen size.
@@ -36,17 +36,27 @@ import 'projector.dart';
 /// The shake adds a random immediate delta to each tick to simulate the shake
 /// effect.
 ///
-/// Note: in the context of the BaseGame, the camera effectively translates
+/// Note: in the context of the FlameGame, the camera effectively translates
 /// the position where components are rendered with relation to the Viewport.
 /// Components marked as `isHud = true` are always rendered in screen
 /// coordinates, bypassing the camera altogether.
 class Camera extends Projector {
-  static const defaultSpeed = 50.0; // in pixels/s
+  Camera() : _viewport = DefaultViewport() {
+    _combinedProjector = Projector.compose([this, _viewport]);
+  }
 
-  /// This must be set by the Game as soon as the Camera is created.
-  ///
-  /// Do not change this reference.
-  late Game gameRef;
+  Viewport get viewport => _viewport;
+  Viewport _viewport;
+  set viewport(Viewport value) {
+    _viewport = value;
+    if (_canvasSize != null) {
+      _viewport.resize(canvasSize);
+    }
+    _combinedProjector = Projector.compose([this, _viewport]);
+  }
+
+  // camera movement speed, in pixels/s
+  static const defaultSpeed = 50.0;
 
   /// If set, this bypasses follow and moves the camera to a specific point
   /// in the world.
@@ -132,23 +142,37 @@ class Camera extends Projector {
   /// viewport applies a (normally) fixed zoom to adapt multiple screens into
   /// one aspect ratio. The zoom might be different per dimension depending
   /// on the Viewport implementation. Also, if used with the default
-  /// BaseGame implementation, it will apply to all components.
+  /// FlameGame implementation, it will apply to all components.
   /// The zoom from the camera is only for components that respect camera,
   /// and is applied after the viewport is set. It exists to be used if there
   /// is any kind of user configurable camera on your game.
   double zoom = 1.0;
 
-  Camera();
+  Vector2 get gameSize => _viewport.effectiveSize / zoom;
 
   /// Use this method to transform the canvas using the current rules provided
   /// by this camera object.
   ///
-  /// If you are using BaseGame, this will be done for you for all non-HUD
+  /// If you are using FlameGame, this will be done for you for all non-HUD
   /// components.
   /// When using this method you are responsible for saving/restoring canvas
   /// state to avoid leakage.
   void apply(Canvas canvas) {
     canvas.transform(_transformMatrix(position, zoom).storage);
+  }
+
+  Vector2? _canvasSize;
+  Vector2 get canvasSize {
+    assert(
+      _canvasSize != null,
+      'Property `canvasSize` cannot be accessed before the layout stage',
+    );
+    return _canvasSize!;
+  }
+
+  void handleResize(Vector2 canvasSize) {
+    _canvasSize = canvasSize.clone();
+    _viewport.resize(canvasSize);
   }
 
   Matrix4 _transformMatrix(Vector2 position, double zoom) {
@@ -166,6 +190,10 @@ class Camera extends Projector {
     _transform.scale(zoom, zoom, 1);
     return _transform;
   }
+
+  // TODO(st-pasha): replace with the transform matrix
+  late Projector _combinedProjector;
+  Projector get combinedProjector => _combinedProjector;
 
   /// This smoothly updates the camera for an amount of time [dt].
   ///
@@ -297,7 +325,7 @@ class Camera extends Projector {
   }
 
   Vector2 _screenDelta() {
-    return gameRef.size.clone()..multiply(_currentRelativeOffset);
+    return gameSize.clone()..multiply(_currentRelativeOffset);
   }
 
   Vector2 _target() {
@@ -306,28 +334,28 @@ class Camera extends Projector {
 
     final bounds = worldBounds;
     if (bounds != null) {
-      if (bounds.width > gameRef.size.x * zoom) {
+      if (bounds.width > gameSize.x * zoom) {
         final cameraLeftEdge = attemptedTarget.x;
-        final cameraRightEdge = attemptedTarget.x + gameRef.size.x;
+        final cameraRightEdge = attemptedTarget.x + gameSize.x;
         if (cameraLeftEdge < bounds.left) {
           attemptedTarget.x = bounds.left;
         } else if (cameraRightEdge > bounds.right) {
-          attemptedTarget.x = bounds.right - gameRef.size.x;
+          attemptedTarget.x = bounds.right - gameSize.x;
         }
       } else {
-        attemptedTarget.x = (gameRef.size.x - bounds.width) / 2;
+        attemptedTarget.x = (gameSize.x - bounds.width) / 2;
       }
 
-      if (bounds.height > gameRef.size.y * zoom) {
+      if (bounds.height > gameSize.y * zoom) {
         final cameraTopEdge = attemptedTarget.y;
-        final cameraBottomEdge = attemptedTarget.y + gameRef.size.y;
+        final cameraBottomEdge = attemptedTarget.y + gameSize.y;
         if (cameraTopEdge < bounds.top) {
           attemptedTarget.y = bounds.top;
         } else if (cameraBottomEdge > bounds.bottom) {
-          attemptedTarget.y = bounds.bottom - gameRef.size.y;
+          attemptedTarget.y = bounds.bottom - gameSize.y;
         }
       } else {
-        attemptedTarget.y = (gameRef.size.y - bounds.height) / 2;
+        attemptedTarget.y = (gameSize.y - bounds.height) / 2;
       }
     }
 

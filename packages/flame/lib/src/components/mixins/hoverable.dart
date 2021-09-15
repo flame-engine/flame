@@ -1,11 +1,11 @@
 import 'package:meta/meta.dart';
 
+import '../../../components.dart';
 import '../../../game.dart';
-import '../../game/base_game.dart';
+import '../../game/flame_game.dart';
 import '../../gestures/events.dart';
-import '../base_component.dart';
 
-mixin Hoverable on BaseComponent {
+mixin Hoverable on Component {
   bool _isHovered = false;
   bool get isHovered => _isHovered;
   void onHoverEnter(PointerHoverInfo info) {}
@@ -27,7 +27,7 @@ mixin Hoverable on BaseComponent {
   }
 }
 
-mixin HasHoverableComponents on BaseGame {
+mixin HasHoverableComponents on FlameGame {
   @mustCallSuper
   void onMouseMove(PointerHoverInfo info) {
     bool _mouseMoveHandler(Hoverable c) {
@@ -35,12 +35,13 @@ mixin HasHoverableComponents on BaseGame {
       return true; // always continue
     }
 
-    for (final c in components.reversed()) {
-      if (c is BaseComponent) {
-        c.propagateToChildren<Hoverable>(_mouseMoveHandler);
+    for (final c in children.reversed()) {
+      var shouldContinue = c.propagateToChildren<Hoverable>(_mouseMoveHandler);
+      if (c is Hoverable && shouldContinue) {
+        shouldContinue = _mouseMoveHandler(c);
       }
-      if (c is Hoverable) {
-        _mouseMoveHandler(c);
+      if (!shouldContinue) {
+        break;
       }
     }
   }

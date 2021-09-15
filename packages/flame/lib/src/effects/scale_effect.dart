@@ -6,9 +6,8 @@ import '../../components.dart';
 import '../extensions/vector2.dart';
 import 'effects.dart';
 
-class ScaleEffect extends SimplePositionComponentEffect {
+class ScaleEffect extends PositionComponentEffect {
   Vector2 scale;
-  late Vector2 _startScale;
   late Vector2 _delta;
 
   /// Duration or speed needs to be defined
@@ -20,12 +19,11 @@ class ScaleEffect extends SimplePositionComponentEffect {
     bool isInfinite = false,
     bool isAlternating = false,
     bool isRelative = false,
+    double? initialDelay,
+    double? peakDelay,
+    bool? removeOnFinish,
     VoidCallback? onComplete,
-  })  : assert(
-          duration != null || speed != null,
-          'Either speed or duration necessary',
-        ),
-        super(
+  }) : super(
           isInfinite,
           isAlternating,
           duration: duration,
@@ -33,25 +31,32 @@ class ScaleEffect extends SimplePositionComponentEffect {
           curve: curve,
           isRelative: isRelative,
           modifiesScale: true,
+          initialDelay: initialDelay,
+          peakDelay: peakDelay,
+          removeOnFinish: removeOnFinish,
           onComplete: onComplete,
         );
 
   @override
-  void initialize(PositionComponent component) {
-    super.initialize(component);
-    _startScale = component.scale.clone();
-    _delta = isRelative ? scale : scale - _startScale;
-    if (!isAlternating) {
-      endScale = _startScale + _delta;
-    }
+  Future<void> onLoad() async {
+    super.onLoad();
+    final startScale = originalScale!;
+    _delta = isRelative ? scale : scale - startScale;
+    peakScale = startScale + _delta;
     speed ??= _delta.length / duration!;
     duration ??= _delta.length / speed!;
-    peakTime = isAlternating ? duration! / 2 : duration!;
+    setPeakTimeFromDuration(duration!);
   }
 
   @override
   void update(double dt) {
+    if (isPaused) {
+      return;
+    }
     super.update(dt);
-    component?.scale.setFrom(_startScale + _delta * curveProgress);
+    if (hasCompleted()) {
+      return;
+    }
+    affectedParent.scale.setFrom(originalScale! + _delta * curveProgress);
   }
 }

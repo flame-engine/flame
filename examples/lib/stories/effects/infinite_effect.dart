@@ -18,13 +18,14 @@ SquareComponent makeSquare(Paint paint) {
     ..position.setValues(100, 100);
 }
 
-class InfiniteEffectGame extends BaseGame with TapDetector {
+class InfiniteEffectGame extends FlameGame with TapDetector {
   late SquareComponent greenSquare;
   late SquareComponent redSquare;
   late SquareComponent orangeSquare;
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     add(greenSquare = makeSquare(green));
     add(redSquare = makeSquare(red));
     add(orangeSquare = makeSquare(orange));
@@ -38,7 +39,7 @@ class InfiniteEffectGame extends BaseGame with TapDetector {
     redSquare.clearEffects();
     orangeSquare.clearEffects();
 
-    greenSquare.addEffect(
+    greenSquare.add(
       MoveEffect(
         path: [p],
         speed: 250.0,
@@ -48,7 +49,7 @@ class InfiniteEffectGame extends BaseGame with TapDetector {
       ),
     );
 
-    redSquare.addEffect(
+    redSquare.add(
       SizeEffect(
         size: p,
         speed: 250.0,
@@ -58,7 +59,7 @@ class InfiniteEffectGame extends BaseGame with TapDetector {
       ),
     );
 
-    orangeSquare.addEffect(
+    orangeSquare.add(
       RotateEffect(
         angle: (p.x + p.y) % (2 * pi),
         speed: 1.0, // Radians per second

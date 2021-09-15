@@ -6,7 +6,8 @@ enum ButtonState { unpressed, pressed }
 class ButtonComponent extends SpriteGroupComponent<ButtonState>
     with HasGameRef<SpriteGroupExample>, Tappable {
   @override
-  Future<void>? onLoad() async {
+  Future<void> onLoad() async {
+    await super.onLoad();
     final pressedSprite = await gameRef.loadSprite(
       'buttons.png',
       srcPosition: Vector2(0, 20),
@@ -44,9 +45,10 @@ class ButtonComponent extends SpriteGroupComponent<ButtonState>
   }
 }
 
-class SpriteGroupExample extends BaseGame with HasTappableComponents {
+class SpriteGroupExample extends FlameGame with HasTappableComponents {
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     add(
       ButtonComponent()
         ..position = Vector2(100, 100)

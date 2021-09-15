@@ -2,9 +2,10 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 
-class SmallParallaxGame extends BaseGame {
+class SmallParallaxGame extends FlameGame {
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final component = await loadParallaxComponent(
       [
         ParallaxImageData('parallax/bg.png'),

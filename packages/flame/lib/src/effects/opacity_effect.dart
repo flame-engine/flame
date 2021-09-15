@@ -11,7 +11,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
   final String? paintId;
 
   late Color _original;
-  late Color _final;
+  late Color _peak;
 
   late double _difference;
 
@@ -19,13 +19,19 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     required this.opacity,
     required this.duration,
     this.paintId,
-    Curve? curve,
     bool isInfinite = false,
     bool isAlternating = false,
+    double? initialDelay,
+    double? peakDelay,
+    Curve? curve,
+    bool? removeOnFinish,
   }) : super(
           isInfinite,
           isAlternating,
+          initialDelay: initialDelay,
+          peakDelay: peakDelay,
           curve: curve,
+          removeOnFinish: removeOnFinish,
         );
 
   OpacityEffect.fadeOut({
@@ -55,27 +61,28 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
         );
 
   @override
-  void initialize(HasPaint component) {
-    super.initialize(component);
+  Future<void> onLoad() async {
+    super.onLoad();
     peakTime = duration;
 
-    _original = component.getPaint(paintId).color;
-    _final = _original.withOpacity(opacity);
+    _original = affectedParent.getPaint(paintId).color;
+    _peak = _original.withOpacity(opacity);
 
     _difference = _original.opacity - opacity;
+    setPeakTimeFromDuration(duration);
   }
 
   @override
-  void setComponentToEndState() {
-    component?.setColor(
-      _final,
+  void setComponentToPeakState() {
+    affectedParent.setColor(
+      _peak,
       paintId: paintId,
     );
   }
 
   @override
   void setComponentToOriginalState() {
-    component?.setColor(
+    affectedParent.setColor(
       _original,
       paintId: paintId,
     );
@@ -83,8 +90,14 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
 
   @override
   void update(double dt) {
+    if (isPaused) {
+      return;
+    }
     super.update(dt);
-    component?.setOpacity(
+    if (hasCompleted()) {
+      return;
+    }
+    affectedParent.setOpacity(
       _original.opacity - _difference * curveProgress,
       paintId: paintId,
     );
