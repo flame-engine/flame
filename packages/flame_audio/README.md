@@ -11,7 +11,7 @@ Adds audio support for <a href="https://github.com/flame-engine/flame">Flame</a>
 </p>
 
 <p align="center">
-  <a title="Pub" href="https://pub.dartlang.org/packages/flame_audio" ><img src="https://img.shields.io/pub/v/flame_audio.svg?style=popout&include_prereleases" /></a>
+  <a title="Pub" href="https://pub.dev/packages/flame_audio/versions#prerelease" ><img src="https://img.shields.io/pub/v/flame_audio.svg?style=popout&include_prereleases" /></a>
   <img src="https://github.com/flame-engine/flame_audio/workflows/Lint/badge.svg?branch=master&event=push" alt="Test" />
   <a title="Discord" href="https://discord.gg/pxrBmy4" ><img src="https://img.shields.io/discord/509714518008528896.svg" /></a>
 </p>

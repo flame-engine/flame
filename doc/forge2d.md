@@ -36,7 +36,7 @@ component list along with your physical entities. When the update is called, it 
 physics engine to properly update every child.
 
 A simple `Forge2DGame` implementation examples can be seen in the
-[examples folder](https://github.com/flame-engine/flame_box2d/blob/main/examples/).
+[examples folder](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d/example).
 
 ## BodyComponent
 
