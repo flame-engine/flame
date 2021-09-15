@@ -1,6 +1,15 @@
 export 'src/test_helpers/assertion_mode.dart';
+export 'src/test_helpers/canvas_commands/cliprect_command.dart';
+export 'src/test_helpers/canvas_commands/command.dart';
+export 'src/test_helpers/canvas_commands/image_command.dart';
+export 'src/test_helpers/canvas_commands/line_command.dart';
+export 'src/test_helpers/canvas_commands/paragraph_command.dart';
+export 'src/test_helpers/canvas_commands/rect_command.dart';
+export 'src/test_helpers/canvas_commands/rrect_command.dart';
+export 'src/test_helpers/canvas_commands/transform_command.dart';
 export 'src/test_helpers/expect_double.dart';
 export 'src/test_helpers/expect_vector2.dart';
 export 'src/test_helpers/mock_canvas.dart';
 export 'src/test_helpers/mock_gesture_events.dart';
 export 'src/test_helpers/mock_image.dart';
+export 'src/test_helpers/random_test.dart';
