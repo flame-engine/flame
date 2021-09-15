@@ -213,6 +213,35 @@ class CollidableSnowman extends MyCollidable {
     addHitbox(top);
     addHitbox(middle);
     addHitbox(bottom);
+    add(randomCollidable(
+      Vector2(size.x / 2, size.y * 0.75),
+      size / 4,
+      Vector2.zero(),
+      screenCollidable,
+    ));
+  }
+}
+
+MyCollidable randomCollidable(
+  Vector2 position,
+  Vector2 size,
+  Vector2 velocity,
+  ScreenCollidable screenCollidable, {
+  Random? rng,
+}) {
+  final _rng = rng ?? Random();
+  final rotationSpeed = 0.5 - _rng.nextDouble();
+  final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
+  switch (shapeType) {
+    case Shapes.circle:
+      return CollidableCircle(position, size, velocity, screenCollidable)
+        ..rotationSpeed = rotationSpeed;
+    case Shapes.rectangle:
+      return CollidableRectangle(position, size, velocity, screenCollidable)
+        ..rotationSpeed = rotationSpeed;
+    case Shapes.polygon:
+      return CollidablePolygon(position, size, velocity, screenCollidable)
+        ..rotationSpeed = rotationSpeed;
   }
 }
 
@@ -239,7 +268,7 @@ class MultipleShapes extends FlameGame
     add(snowman);
     var totalAdded = 1;
     while (totalAdded < 20) {
-      lastToAdd = createRandomCollidable(lastToAdd, screenCollidable);
+      lastToAdd = nextRandomCollidable(lastToAdd, screenCollidable);
       final lastBottomRight =
           lastToAdd.toAbsoluteRect().bottomRight.toVector2();
       if (lastBottomRight.x < size.x && lastBottomRight.y < size.y) {
@@ -254,9 +283,9 @@ class MultipleShapes extends FlameGame
   final _rng = Random();
   final _distance = Vector2(100, 0);
 
-  MyCollidable createRandomCollidable(
+  MyCollidable nextRandomCollidable(
     MyCollidable lastCollidable,
-    ScreenCollidable screen,
+    ScreenCollidable screenCollidable,
   ) {
     final collidableSize = Vector2.all(50) + Vector2.random(_rng) * 100;
     final isXOverflow = lastCollidable.position.x +
@@ -270,19 +299,13 @@ class MultipleShapes extends FlameGame
         ..x += collidableSize.x / 2;
     }
     final velocity = (Vector2.random(_rng) - Vector2.random(_rng)) * 400;
-    final rotationSpeed = 0.5 - _rng.nextDouble();
-    final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
-    switch (shapeType) {
-      case Shapes.circle:
-        return CollidableCircle(position, collidableSize, velocity, screen)
-          ..rotationSpeed = rotationSpeed;
-      case Shapes.rectangle:
-        return CollidableRectangle(position, collidableSize, velocity, screen)
-          ..rotationSpeed = rotationSpeed;
-      case Shapes.polygon:
-        return CollidablePolygon(position, collidableSize, velocity, screen)
-          ..rotationSpeed = rotationSpeed;
-    }
+    return randomCollidable(
+      position,
+      collidableSize,
+      velocity,
+      screenCollidable,
+      rng: _rng,
+    );
   }
 
   @override

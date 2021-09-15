@@ -294,6 +294,38 @@ void main() {
         game.update(0);
         expect(blockA.containsPoint(Vector2.all(11)), true);
       });
+
+      test('Detects collision on child components', () async {
+        final blockA = TestBlock(
+          Vector2.zero(),
+          Vector2.all(10),
+          CollidableType.active,
+        );
+        final innerBlockA = TestBlock(
+          blockA.size / 4,
+          blockA.size / 2,
+          CollidableType.active,
+        );
+        blockA.add(innerBlockA);
+
+        final blockB = TestBlock(
+          Vector2.all(5),
+          Vector2.all(10),
+          CollidableType.active,
+        );
+        final innerBlockB = TestBlock(
+          blockA.size / 4,
+          blockA.size / 2,
+          CollidableType.active,
+        );
+        blockB.add(innerBlockB);
+
+        await gameWithCollidables([blockA, blockB]);
+        expect(blockA.collisions, <Collidable>[blockB, innerBlockB]);
+        expect(blockB.collisions, <Collidable>[blockA, innerBlockA]);
+        expect(innerBlockA.collisions, <Collidable>[blockB, innerBlockB]);
+        expect(innerBlockB.collisions, <Collidable>[blockA, innerBlockA]);
+      });
     },
   );
 }
