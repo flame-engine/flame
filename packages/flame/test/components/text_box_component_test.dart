@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:canvas_test_helpers/canvas_test_helpers.dart';
+import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';

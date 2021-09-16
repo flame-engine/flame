@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame_test_helpers/flame_test_helpers.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {

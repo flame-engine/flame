@@ -1,7 +1,7 @@
-name: flame_test_helpers
+name: flame_test
 description: A package with classes to help testing applications using Flame
 version: 0.1.0
-homepage: https://pub.dev/packages/flame_test_helpers
+homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_test
 publish_to: 'none'
 
 environment:
