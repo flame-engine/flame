@@ -1,0 +1,23 @@
+name: example
+description: Example of how to test with the flame_test package
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flame:
+    path: ../../flame
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flame_test:
+    path: ../
+  test: ^1.17.10
+  dart_code_metrics: ^4.1.0
