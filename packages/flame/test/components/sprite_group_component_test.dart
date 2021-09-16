@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flame/test.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 enum SpriteState {
