@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flame/extensions.dart';
-import 'package:flame/test.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {

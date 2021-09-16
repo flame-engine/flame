@@ -2,10 +2,10 @@ import 'dart:math' as math;
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/src/test_helpers/mock_canvas.dart';
-import 'package:flame/src/test_helpers/random_test.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 class MyComponent extends Component {}

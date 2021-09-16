@@ -1,9 +1,9 @@
 import 'dart:ui' show Paint;
 
+import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/test.dart';
 import 'package:test/test.dart';
 
 class TestComponent extends PositionComponent {

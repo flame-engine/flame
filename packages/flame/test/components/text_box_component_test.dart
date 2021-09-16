@@ -1,9 +1,9 @@
 import 'dart:ui';
 
+import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/test.dart';
 import 'package:test/test.dart';
 
 void main() {
