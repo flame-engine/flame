@@ -20,6 +20,6 @@ dependencies:
   vector_math: '>=2.1.0 <3.0.0'
 
 dev_dependencies:
-  flutter_lints: ^1.0.0
   dartdoc: ^0.42.0
+  flutter_lints: ^1.0.0
   dart_code_metrics: ^4.1.0
