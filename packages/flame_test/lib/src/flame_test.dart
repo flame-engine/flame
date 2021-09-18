@@ -48,7 +48,7 @@ typedef WidgetVerifyFunction<T extends Game> = Future<void> Function(
 );
 
 /// Creates a [Game] specific test case with given [description]
-/// which runs inside the flutter inside the Flutter test enviroment.
+/// which runs inside the Flutter test environment.
 ///
 /// Use [createGame] to create your game instance.
 ///
