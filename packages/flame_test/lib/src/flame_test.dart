@@ -22,7 +22,7 @@ typedef VerifyFunction<T extends Game> = void Function(T);
 void flameTest<T extends Game>(
   String description, {
   required GameCreateFunction<T> createGame,
-  required VerifyFunction<T>? verify,
+  VerifyFunction<T>? verify,
   Vector2? gameSize,
 }) {
   test(description, () async {
