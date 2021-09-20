@@ -191,6 +191,7 @@ class Component with Loadable {
   @override
   @mustCallSuper
   void onRemove() {
+    super.onRemove();
     children.forEach((child) {
       child.onRemove();
     });
