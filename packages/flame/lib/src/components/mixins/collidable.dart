@@ -22,8 +22,11 @@ mixin Collidable on Hitbox {
 
   @override
   void onRemove() {
+    final parentGame = findParent<FlameGame>();
+    if (parentGame is HasCollidables) {
+      parentGame.collidables.remove(this);
+    }
     super.onRemove();
-    findParent<HasCollidables>()?.collidables.remove(this);
   }
 }
 
