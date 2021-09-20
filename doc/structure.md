@@ -13,7 +13,7 @@ If using the following example code:
 
 The file structure Flame would expect to find the files in would be:
 
-```
+```text
 .
 └── assets
     ├── audio
@@ -27,7 +27,7 @@ Optionally you can split your `audio` folder into two subfolders, one for `music
 
 Don't forget to add these files to your `pubspec.yaml` file:
 
-```
+```yaml
 flutter:
   assets:
     - assets/audio/explosion.mp3

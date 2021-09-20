@@ -1,4 +1,4 @@
-## Splash screen
+# Splash screen
 
 ![](https://raw.githubusercontent.com/flame-engine/flame_splash_screen/main/demogif.gif)
 

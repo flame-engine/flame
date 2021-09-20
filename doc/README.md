@@ -13,7 +13,7 @@ short).
 
 We also provide stand-alone packages that extend the Flame functionality:
 - [flame_audio](https://pub.dev/packages/flame_audio) Which provides audio capabilities using the
- `audioplayers` package.
+  `audioplayers` package.
 - [flame_forge2d](https://pub.dev/packages/flame_forge2d) Which provides physics capabilities using
   our own `Box2D` port called `Forge2D`.
 - [flame_tiled](https://pub.dev/packages/flame_tiled) Which provides integration with the
@@ -53,3 +53,48 @@ You can also check out the
 [awesome flame repository](https://github.com/flame-engine/awesome-flame#articles--tutorials),
 It contains quite a lot of good tutorials and articles written by the community to get you started
 with Flame.
+
+```{toctree}
+:caption: Basic concepts
+:hidden:
+File structure       <structure.md>
+Game loop            <game.md>
+Components           <components.md>
+Platforms            <platforms.md>
+Collision detection  <collision_detection.md>
+Effects              <effects.md>
+Camera & Viewport    <camera_and_viewport.md>
+```
+```{toctree}
+:caption: Inputs
+:hidden:
+Gesture input   <gesture-input.md>
+Keyboard input  <keyboard-input.md>
+Other inputs    <other-inputs.md>
+```
+```{toctree}
+:caption: Audio
+:hidden:
+General audio    <audio.md>
+Background music <bgm.md>
+```
+```{toctree}
+:caption: Rendering
+:hidden:
+Images, sprites and animations  <images.md>
+Text rendering                  <text.md>
+Colors and palette              <palette.md>
+Particles                       <particles.md>
+Layers                          <layers.md>
+```
+```{toctree}
+:caption: Other Modules
+:hidden:
+Util           <util.md>
+Widgets        <widgets.md>
+Forge2D        <forge2d.md>
+Oxygen         <oxygen.md>
+Tiled          <tiled.md>
+Debugging      <debug.md>
+Splash screen  <splash_screen.md>
+```
