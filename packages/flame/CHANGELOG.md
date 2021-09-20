@@ -2,6 +2,7 @@
 
 ## [Next]
  - Fix issue with `Draggable`s not being removed from `draggables` list
+ - Increase Flutter SDK constraint to ">= 2.5.0".
 
 ## [1.0.0-releasecandidate.14]
  - Reset effects after they are done so that they can be repeated
