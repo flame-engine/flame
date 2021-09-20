@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [next]
+ - Add `flameTest` and `flameWidgetTest`
+
 ## [0.1.1-releasecandidate.13]
  - Move dartdoc and dart_code_metrics to dev_dependencies
 
