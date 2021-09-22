@@ -11,9 +11,8 @@ import 'device.dart';
 /// You can access shared instances of [AssetsCache], [Images] and [Device].
 /// Most games should need only one instance of each, and should use this class to manage that reference.
 class Flame {
-  // Flame asset bundle, defaults to root
-  static AssetBundle? _bundle;
-  static AssetBundle get bundle => _bundle ?? rootBundle;
+  // Flame asset bundle, defaults to the root bundle but can be globally changed.
+  static AssetBundle bundle = rootBundle;
 
   /// Access a shared instance of [AssetsCache] class.
   static AssetsCache assets = AssetsCache();

@@ -1,0 +1,23 @@
+name: flame_tiled
+description: Tiled support for the Flame game engine. This uses the tiled package and provides wrappers and components to be used inside Flame.
+version: 0.1.0
+homepage: https://github.com/flame-engine/flame_tiled
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flame:
+    path: ../flame
+  tiled:
+    path: ../../../plugins/tiled.dart
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  dart_code_metrics: ^3.2.2
+  dartdoc: ^0.42.0
+  flutter_test:
+    sdk: flutter
+  test: ^1.9.4

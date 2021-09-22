@@ -1,0 +1,23 @@
+name: example
+description: Simple project to showcase the usage of flame_tiled
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flame:
+    path: ../../flame
+  flame_tiled:
+    path: ../
+  flutter:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/tiles/map.tmx
+    - assets/images/map-level1.png
+    - assets/images/map-level2.png
+    - assets/images/coins.png
