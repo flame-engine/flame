@@ -4,6 +4,10 @@ import 'package:flame/components.dart';
 
 import 'renderable_tile_map.dart';
 
+/// A Flame [Component] to render a Tiled TiledMap.
+///
+/// It uses a preloaded [RenderableTiledMap] to batch rendering calls into
+/// Sprite Batches.
 class TiledComponent extends Component {
   RenderableTiledMap tileMap;
 
