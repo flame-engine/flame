@@ -19,15 +19,6 @@ mixin Collidable on Hitbox {
 
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {}
   void onCollisionEnd(Collidable other) {}
-
-  @override
-  void onRemove() {
-    final parentGame = findParent<FlameGame>();
-    if (parentGame is HasCollidables) {
-      parentGame.collidables.remove(this);
-    }
-    super.onRemove();
-  }
 }
 
 class ScreenCollidable<T extends FlameGame> extends PositionComponent
