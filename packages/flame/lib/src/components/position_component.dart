@@ -360,7 +360,9 @@ class PositionComponent extends Component {
     }
   }
 
-  // FIXME
+  /// Mutates position and size using the provided [rect] as basis.
+  /// This is a relative rect, same definition that [toRect] use
+  /// (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
   void setByRect(Rect rect) {
     size.setValues(rect.width, rect.height);
     topLeftPosition = rect.topLeft.toVector2();
