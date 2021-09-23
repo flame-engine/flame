@@ -4,6 +4,7 @@
  - Fix issue with `Draggable`s not being removed from `draggables` list
  - Increase Flutter SDK constraint to `>= 2.5.0`.
  - Method `PositionComponent.toRect()` now works for flipped/rotated components.
+ - Make the root bundle exposed via `Flame.bundle` actually configurable
 
 ## [1.0.0-releasecandidate.14]
  - Reset effects after they are done so that they can be repeated
