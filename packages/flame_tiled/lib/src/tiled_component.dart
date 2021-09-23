@@ -2,16 +2,16 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 
-import 'tiled.dart';
+import 'renderable_tile_map.dart';
 
 class TiledComponent extends Component {
-  RenderableTiledMap renderableTiledMap;
+  RenderableTiledMap tileMap;
 
-  TiledComponent(this.renderableTiledMap);
+  TiledComponent(this.tileMap);
 
   @override
   void render(Canvas canvas) {
-    renderableTiledMap.render(canvas);
+    tileMap.render(canvas);
   }
 
   static Future<TiledComponent> load(
@@ -19,7 +19,7 @@ class TiledComponent extends Component {
     Vector2 destTileSize,
   ) async {
     return TiledComponent(
-      await RenderableTiledMap.parse(fileName, destTileSize),
+      await RenderableTiledMap.fromFile(fileName, destTileSize),
     );
   }
 }

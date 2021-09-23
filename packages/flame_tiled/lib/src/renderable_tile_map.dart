@@ -6,99 +6,91 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter/material.dart' show Colors;
 import 'package:tiled/tiled.dart';
 import 'package:xml/xml.dart';
 
 import 'flame_tsx_provider.dart';
 import 'simple_flips.dart';
 
-/// This component renders a tile map based on a TMX file from Tiled.
+/// This is a wrapper over Tiled's [TiledMap] with pre-computed SpriteBatches
+/// for rendering each layer of the map.
 class RenderableTiledMap {
-  static Paint paint = Paint()..color = Colors.white;
-
-  TiledMap map;
-  Map<String, SpriteBatch> batches;
-  Vector2 destTileSize;
+  final TiledMap map;
+  final Map<String, SpriteBatch> batches;
+  final Vector2 destTileSize;
 
   RenderableTiledMap(
     this.map,
     this.batches,
     this.destTileSize,
-  );
+  ) {
+    _fillBatches();
+  }
 
-  static Future<RenderableTiledMap> parse(
+  static Future<RenderableTiledMap> fromFile(
     String fileName,
     Vector2 destTileSize,
   ) async {
-    final map = await _loadMap(fileName);
+    final contents = await Flame.bundle.loadString('assets/tiles/$fileName');
+    return fromString(contents, destTileSize);
+  }
+
+  static Future<RenderableTiledMap> fromString(
+    String contents,
+    Vector2 destTileSize,
+  ) async {
+    final map = await _loadMap(contents);
     final batches = await _loadImages(map);
-    generate(map, batches, destTileSize);
 
     return RenderableTiledMap(map, batches, destTileSize);
   }
 
-  static XmlDocument _parseXml(String input) => XmlDocument.parse(input);
-
-  static Future<TiledMap> _loadMap(String fileName) async {
-    String file = await Flame.bundle.loadString('assets/tiles/$fileName');
-    final tsxSourcePath = _parseXml(file)
+  static Future<TiledMap> _loadMap(String contents) async {
+    final tsxSourcePath = XmlDocument.parse(contents)
         .rootElement
         .children
         .whereType<XmlElement>()
         .firstWhere((element) => element.name.local == 'tileset')
         .getAttribute('source');
+
+    TsxProvider? tsxProvider;
     if (tsxSourcePath != null) {
-      final tsxProvider = FlameTsxProvider(tsxSourcePath);
-      await tsxProvider.initialize();
-      return TileMapParser.parseTmx(file, tsx: tsxProvider);
+      tsxProvider = await FlameTsxProvider.parse(tsxSourcePath);
     } else {
-      return TileMapParser.parseTmx(file);
+      tsxProvider = null;
     }
+    return TileMapParser.parseTmx(contents, tsx: tsxProvider);
   }
 
   static Future<Map<String, SpriteBatch>> _loadImages(TiledMap map) async {
     final result = <String, SpriteBatch>{};
 
-    await Future.forEach(map.tiledImages(), ((TiledImage img) async {
-      String? src = img.source;
+    await Future.forEach(map.tiledImages(), (TiledImage img) async {
+      final src = img.source;
       if (src != null) {
         result[src] = await SpriteBatch.load(src);
       }
-    }));
+    });
     return result;
   }
 
-  /// Generate the sprite batches from the existing tilemap.
-  static void generate(
-    TiledMap map,
-    Map<String, SpriteBatch> batches,
-    Vector2 destTileSize,
-  ) {
-    for (var batch in batches.keys) {
+  void _fillBatches() {
+    for (final batch in batches.keys) {
       batches[batch]!.clear();
     }
-    _drawTiles(map, batches, destTileSize);
-  }
 
-  static void _drawTiles(
-    TiledMap map,
-    Map<String, SpriteBatch> batches,
-    Vector2 destTileSize,
-  ) {
-    print(batches.keys);
     map.layers.where((layer) => layer.visible).forEach((Layer tileLayer) {
       if (tileLayer is TileLayer) {
-        var tileData = tileLayer.tileData;
+        final tileData = tileLayer.tileData;
         if (tileData != null) {
           tileData.asMap().forEach((ty, tileRow) {
             tileRow.asMap().forEach((tx, tile) {
               if (tile.tile == 0) {
                 return;
               }
-              Tile t = map.tileByGid(tile.tile);
-              Tileset ts = map.tilesetByTileGId(tile.tile);
-              TiledImage? img = t.image ?? ts.image;
+              final t = map.tileByGid(tile.tile);
+              final ts = map.tilesetByTileGId(tile.tile);
+              final img = t.image ?? ts.image;
               if (img != null) {
                 final batch = batches[img.source];
                 final src = ts.computeDrawRect(t).toRect();
@@ -123,6 +115,7 @@ class RenderableTiledMap {
     });
   }
 
+  /// Render all [batches] that compose this tile map.
   void render(Canvas c) {
     batches.forEach((_, batch) => batch.render(c));
   }
@@ -130,8 +123,9 @@ class RenderableTiledMap {
   /// This returns an object group fetch by name from a given layer.
   /// Use this to add custom behaviour to special objects and groups.
   ObjectGroup getObjectGroupFromLayer(String name) {
-    var g = map.layers
-        .firstWhere((layer) => layer is ObjectGroup && layer.name == name);
+    final g = map.layers.firstWhere((layer) {
+      return layer is ObjectGroup && layer.name == name;
+    });
     return g as ObjectGroup;
   }
 }

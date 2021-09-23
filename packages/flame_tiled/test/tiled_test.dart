@@ -12,7 +12,7 @@ void main() {
   test('correct loads the file', () async {
     Flame.bundle = TestAssetBundle();
     final tiled = await TiledComponent.load('x', Vector2.all(16));
-    expect(tiled.renderableTiledMap.batches, isNotEmpty);
+    expect(tiled.tileMap.batches, isNotEmpty);
   });
 }
 
