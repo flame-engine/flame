@@ -338,32 +338,22 @@ class PositionComponent extends Component {
   /// defined as the smallest axes-aligned rectangle that can fit this
   /// component. The aspect ratio of the bounding rectangle may be different
   /// from [size] if the component was scaled and/or rotated.
-  Rect toRect() {
-    final topLeft = positionOfAnchor(Anchor.topLeft);
-    final bottomRight = positionOfAnchor(Anchor.bottomRight);
-    if (angle == 0) {
-      return Rect.fromPoints(topLeft.toOffset(), bottomRight.toOffset());
-    } else {
-      final topRight = positionOfAnchor(Anchor.topRight);
-      final bottomLeft = positionOfAnchor(Anchor.bottomLeft);
-      final xs = [topLeft.x, topRight.x, bottomLeft.x, bottomRight.x]..sort();
-      final ys = [topLeft.y, topRight.y, bottomLeft.y, bottomRight.y]..sort();
-      return Rect.fromLTRB(xs.first, ys.first, xs.last, ys.last);
-    }
-  }
+  Rect toRect() => _toRectImpl(positionOfAnchor);
 
   /// The bounding rectangle of the component in global coordinate space.
   ///
   /// This is similar to [toRect()], except the rectangle is projected into the
   /// outermost coordinate frame.
-  Rect toAbsoluteRect() {
-    final topLeft = absolutePositionOfAnchor(Anchor.topLeft);
-    final bottomRight = absolutePositionOfAnchor(Anchor.bottomRight);
+  Rect toAbsoluteRect() => _toRectImpl(absolutePositionOfAnchor);
+
+  Rect _toRectImpl(Vector2 Function(Anchor point) projector) {
+    final topLeft = projector(Anchor.topLeft);
+    final bottomRight = projector(Anchor.bottomRight);
     if (angle == 0) {
       return Rect.fromPoints(topLeft.toOffset(), bottomRight.toOffset());
     } else {
-      final topRight = absolutePositionOfAnchor(Anchor.topRight);
-      final bottomLeft = absolutePositionOfAnchor(Anchor.bottomLeft);
+      final topRight = projector(Anchor.topRight);
+      final bottomLeft = projector(Anchor.bottomLeft);
       final xs = [topLeft.x, topRight.x, bottomLeft.x, bottomRight.x]..sort();
       final ys = [topLeft.y, topRight.y, bottomLeft.y, bottomRight.y]..sort();
       return Rect.fromLTRB(xs.first, ys.first, xs.last, ys.last);
