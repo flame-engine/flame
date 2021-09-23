@@ -2,7 +2,6 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart' hide Animation, Image;
-import 'package:tiled/tiled.dart' show ObjectGroup, TmxObject;
 import 'package:flame_tiled/flame_tiled.dart';
 
 void main() {
