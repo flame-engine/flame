@@ -79,39 +79,38 @@ class RenderableTiledMap {
       batches[batch]!.clear();
     }
 
-    map.layers.where((layer) => layer.visible).forEach((Layer tileLayer) {
-      if (tileLayer is TileLayer) {
-        final tileData = tileLayer.tileData;
-        if (tileData != null) {
-          tileData.asMap().forEach((ty, tileRow) {
-            tileRow.asMap().forEach((tx, tile) {
-              if (tile.tile == 0) {
-                return;
-              }
-              final t = map.tileByGid(tile.tile);
-              final ts = map.tilesetByTileGId(tile.tile);
-              final img = t.image ?? ts.image;
-              if (img != null) {
-                final batch = batches[img.source];
-                final src = ts.computeDrawRect(t).toRect();
-                final flips = SimpleFlips.fromFlips(tile.flips);
-                final size = destTileSize;
-                if (batch != null) {
-                  batch.add(
-                    source: src,
-                    offset: Vector2(
-                      tx * size.x + (tile.flips.horizontally ? size.x : 0),
-                      ty * size.y + (tile.flips.vertically ? size.y : 0),
-                    ),
-                    rotation: flips.angle * math.pi / 2,
-                    scale: size.x / src.width,
-                  );
-                }
-              }
-            });
-          });
+    map.layers
+        .where((layer) => layer.visible)
+        .whereType<TileLayer>()
+        .map((e) => e.tileData)
+        .whereType<List<List<Gid>>>()
+        .forEach(_renderLayer);
+  }
+
+  void _renderLayer(List<List<Gid>> tileData) {
+    tileData.asMap().forEach((ty, tileRow) {
+      tileRow.asMap().forEach((tx, tile) {
+        if (tile.tile == 0) {
+          return;
         }
-      }
+        final t = map.tileByGid(tile.tile);
+        final ts = map.tilesetByTileGId(tile.tile);
+        final img = t.image ?? ts.image;
+        if (img != null) {
+          final batch = batches[img.source];
+          final src = ts.computeDrawRect(t).toRect();
+          final flips = SimpleFlips.fromFlips(tile.flips);
+          final size = destTileSize;
+          if (batch != null) {
+            batch.add(
+              source: src,
+              offset: Vector2(tx * size.x, ty * size.y),
+              rotation: flips.angle * math.pi / 2,
+              scale: size.x / src.width,
+            );
+          }
+        }
+      });
     });
   }
 

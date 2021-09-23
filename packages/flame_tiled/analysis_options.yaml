@@ -94,7 +94,7 @@ linter:
     - prefer_is_not_empty
     - prefer_is_not_operator
     - prefer_iterable_whereType
-#    - prefer_mixin
+    - prefer_mixin
     - prefer_null_aware_operators
     - prefer_single_quotes
     - prefer_spread_collections
