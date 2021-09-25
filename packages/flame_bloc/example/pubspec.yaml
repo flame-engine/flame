@@ -12,8 +12,10 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  equatable: ^2.0.3
   flame_bloc:
     path: ../
+  flutter_bloc: ^7.3.0
 
 dev_dependencies:
   flutter_test:

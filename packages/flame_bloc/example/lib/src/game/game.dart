@@ -1,23 +1,24 @@
+import 'package:example/src/game_stats/bloc/game_stats_bloc.dart';
+import 'package:example/src/game_stats/bloc/game_stats_event.dart';
+import 'package:example/src/game_stats/bloc/game_stats_state.dart';
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flame/input.dart';
 
 import './components/player.dart';
 import './components/enemy_creator.dart';
 
-class SpaceShooterGame extends FlameGame with PanDetector, HasCollidables {
+class SpaceShooterGame extends FlameBlocGame<GameStatsBloc, GameStatsState> with PanDetector, HasCollidables {
 
   late PlayerComponent player;
 
-  int score = 0;
-
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
+
     add(player = PlayerComponent());
 
     add(EnemyCreator());
-
-    //add(ScoreComponent());
   }
 
   @override
@@ -41,11 +42,6 @@ class SpaceShooterGame extends FlameGame with PanDetector, HasCollidables {
   }
 
   void increaseScore() {
-    score++;
+    bloc.add(const AddScoreEvent(100));
   }
-
-  //void playerTakeHit() {
-  //  player.takeHit();
-  //  score = 0;
-  //}
 }

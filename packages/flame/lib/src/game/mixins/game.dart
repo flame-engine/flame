@@ -110,7 +110,13 @@ mixin Game on Loadable implements Projector {
       ''');
     }
     _gameRenderBox = gameRenderBox;
+    onAttach();
   }
+
+  /// Called when the game has been attached this can be overriden
+  /// to add logic that requires that the game to be already attached
+  /// to the widget tree
+  void onAttach() {}
 
   /// Marks game as no longer attached to any Flutter widget tree.
   ///
@@ -118,7 +124,14 @@ mixin Game on Loadable implements Projector {
   void detach() {
     _gameRenderBox = null;
     _size = null;
+
+    onDetach();
   }
+
+  /// Called after the game has left the widget tree
+  /// this can be overriden to add logic that requires the game
+  /// not be on the flutter widget tree anymore
+  void onDetach() {}
 
   /// Converts a global coordinate (i.e. w.r.t. the app itself) to a local
   /// coordinate (i.e. w.r.t. he game widget).

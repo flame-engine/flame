@@ -13,6 +13,7 @@ dependencies:
   bloc: ^7.2.0
   flame:
     path: ../flame
+  flutter_bloc: ^7.3.0
 
 dev_dependencies:
   flutter_test:
