@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../components.dart';
 import '../components/position_component.dart';
 import '../extensions/vector2.dart';
+import 'flame_animation_controller.dart';
 
 export './color_effect.dart';
 export './move_effect.dart';
@@ -19,6 +20,8 @@ abstract class ComponentEffect<T extends Component> extends Component {
       return _affectedParent(component!.parent);
     }
   }
+
+  FlameAnimationController controller;
 
   /// If the effect has a parent further up in the tree that will be affected by
   /// this effect, that parent will be set here.
@@ -40,10 +43,10 @@ abstract class ComponentEffect<T extends Component> extends Component {
 
   /// If the effect should first follow the initial curve and then follow the
   /// curve backwards.
-  bool isAlternating;
+  bool get isAlternating => controller.isAlternating;
 
   /// Whether the effect should continue to loop forever.
-  bool isInfinite;
+  bool get isInfinite => controller.isInfinite;
 
   /// Whether the effect should be removed from its parent once it has
   /// completed.
@@ -118,8 +121,10 @@ abstract class ComponentEffect<T extends Component> extends Component {
     bool? removeOnFinish,
     Curve? curve,
     this.onComplete,
-  })  : isInfinite = _initialIsInfinite,
-        isAlternating = _initialIsAlternating,
+  })  : controller = FlameAnimationController(
+          infinite: _initialIsInfinite,
+          alternating: _initialIsAlternating,
+        ),
         initialDelay = initialDelay ?? 0.0,
         peakDelay = peakDelay ?? 0.0,
         removeOnFinish = removeOnFinish ?? true,
@@ -200,8 +205,6 @@ abstract class ComponentEffect<T extends Component> extends Component {
     percentage = 0.0;
     currentTime = 0.0;
     curveDirection = 1;
-    isInfinite = _initialIsInfinite;
-    isAlternating = _initialIsAlternating;
   }
 
   // When the time overshoots the max and min it needs to add that time to
