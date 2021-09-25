@@ -129,7 +129,6 @@ abstract class ComponentEffect<T extends Component> extends Component {
   Future<void> onLoad() async {
     super.onLoad();
     affectedParent = _affectedParent(parent);
-    parent?.children.register<ComponentEffect>();
   }
 
   @override

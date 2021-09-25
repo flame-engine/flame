@@ -133,6 +133,21 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     _removeLater.addAll(this);
   }
 
+  /// Return sublist of all components of type [C].
+  ///
+  /// This is equivalent to `List.whereType<C>()`, except the result of this
+  /// operation is memoized for each distinct type [C]. The type [C] may be
+  /// "registered" in advance using `register<C>()`, or it may not, in which
+  /// case the type will be registered at the time of the first query. There
+  /// is no performance difference between these two approaches.
+  @override
+  List<C> query<C extends Component>() {
+    if (!isRegistered<C>()) {
+      super.register<C>();
+    }
+    return super.query<C>();
+  }
+
   /// Materializes the component list in reversed order.
   Iterable<Component> reversed() {
     return toList().reversed;
