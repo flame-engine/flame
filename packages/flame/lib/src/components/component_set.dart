@@ -138,8 +138,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// This is equivalent to `List.whereType<C>()`, except the result of this
   /// operation is memoized for each distinct type [C]. The type [C] may be
   /// "registered" in advance using `register<C>()`, or it may not, in which
-  /// case the type will be registered at the time of the first query. There
-  /// is no performance difference between these two approaches.
+  /// case the type will be registered at the time of the first query.
   @override
   List<C> query<C extends Component>() {
     if (!isRegistered<C>()) {
