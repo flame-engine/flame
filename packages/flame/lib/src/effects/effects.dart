@@ -122,8 +122,10 @@ abstract class ComponentEffect<T extends Component> extends Component {
     Curve? curve,
     this.onComplete,
   })  : controller = FlameAnimationController(
+          duration: 1.0,
           infinite: _initialIsInfinite,
           alternating: _initialIsAlternating,
+          delay: initialDelay,
         ),
         initialDelay = initialDelay ?? 0.0,
         peakDelay = peakDelay ?? 0.0,
