@@ -16,13 +16,11 @@ class Forge2DGame extends FlameGame {
 
   final ContactCallbacks _contactCallbacks = ContactCallbacks();
 
-  @override
-  final Forge2DCamera camera = Forge2DCamera();
-
   Forge2DGame({
     Vector2? gravity,
     double zoom = defaultZoom,
-  }) : world = World(gravity ?? defaultGravity) {
+  })  : world = World(gravity ?? defaultGravity),
+        super(camera: Forge2DCamera()) {
     camera.zoom = zoom;
     world.setContactListener(_contactCallbacks);
   }
