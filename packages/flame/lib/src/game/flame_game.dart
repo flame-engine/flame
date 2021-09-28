@@ -21,8 +21,8 @@ import 'mixins/has_collidables.dart';
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
 class FlameGame extends Component with Game {
-  FlameGame() {
-    _cameraWrapper = CameraWrapper(Camera(), children);
+  FlameGame({Camera? camera}) {
+    _cameraWrapper = CameraWrapper(camera ?? Camera(), children);
   }
 
   /// The camera translates the coordinate space after the viewport is applied.
