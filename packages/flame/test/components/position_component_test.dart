@@ -4,11 +4,10 @@ import 'dart:ui';
 
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
-
-class MyComponent extends Component {}
 
 class MyHitboxComponent extends PositionComponent with Hitbox {}
 
@@ -530,9 +529,9 @@ void main() {
 
     test('deep nested', () {
       final c1 = PositionComponent()..position = Vector2(10, 20);
-      final c2 = MyComponent();
+      final c2 = Component();
       final c3 = PositionComponent()..position = Vector2(-1, -1);
-      final c4 = MyComponent();
+      final c4 = Component();
       final c5 = PositionComponent()..position = Vector2(5, 0);
       c1.add(c2);
       c2.add(c3);
@@ -600,6 +599,68 @@ void main() {
           ..drawLine(const Offset(5, 3), const Offset(5, 7))
           ..drawLine(const Offset(3, 5), const Offset(7, 5)),
       );
+    });
+  });
+
+  group('bounding rectangle', () {
+    test('Scale/flip', () {
+      final component = PositionComponent(
+        position: Vector2(5, 5),
+        size: Vector2(4, 2),
+        anchor: Anchor.center,
+      );
+      expect(component.toRect(), const Rect.fromLTWH(3, 4, 4, 2));
+      component.scale = Vector2(0.5, 1);
+      expect(component.toRect(), const Rect.fromLTWH(4, 4, 2, 2));
+      component.flipHorizontally();
+      expect(component.toRect(), const Rect.fromLTWH(4, 4, 2, 2));
+      component.flipVertically();
+      expect(component.toRect(), const Rect.fromLTWH(4, 4, 2, 2));
+    });
+
+    test('flip with non-central anchor', () {
+      final component = PositionComponent(
+        position: Vector2(0, 0),
+        size: Vector2(4, 2),
+      );
+      expect(component.toRect(), const Rect.fromLTWH(0, 0, 4, 2));
+      component.flipHorizontally();
+      expect(component.toRect(), const Rect.fromLTWH(-4, 0, 4, 2));
+      component.flipVertically();
+      expect(component.toRect(), const Rect.fromLTWH(-4, -2, 4, 2));
+    });
+
+    test('rotated component', () {
+      const w = 5.0;
+      const h = 2.0;
+      final component = PositionComponent(size: Vector2(w, h));
+      for (var i = 0; i < 10; i++) {
+        final a = (i / 10) * Transform2D.tau / 4;
+        component.angle = a;
+        expect(
+          component.toRect(),
+          Rect.fromLTRB(
+            -h * math.sin(a),
+            0,
+            w * math.cos(a),
+            w * math.sin(a) + h * math.cos(a),
+          ),
+        );
+      }
+    });
+
+    test('absolute toRect', () {
+      final parent = PositionComponent(
+        position: Vector2(10, 10),
+        size: Vector2(6, 6),
+      );
+      final child = PositionComponent(
+        position: Vector2(-3, 3),
+        size: Vector2(1, 1),
+      );
+      parent.add(child);
+      expect(child.toRect(), const Rect.fromLTWH(-3, 3, 1, 1));
+      expect(child.toAbsoluteRect(), const Rect.fromLTWH(7, 13, 1, 1));
     });
   });
 }
