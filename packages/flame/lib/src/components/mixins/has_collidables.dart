@@ -17,12 +17,6 @@ mixin HasCollidables on FlameGame {
   }
 
   @override
-  Future<void>? onLoad() {
-    children.register<Collidable>();
-    return super.onLoad();
-  }
-
-  @override
   void update(double dt) {
     super.update(dt);
     handleCollidables();

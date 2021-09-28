@@ -5,6 +5,7 @@
  - Increase Flutter SDK constraint to `>= 2.5.0`.
  - Method `PositionComponent.toRect()` now works for flipped/rotated components.
  - Make the root bundle exposed via `Flame.bundle` actually configurable
+ - It's no longer necessary to call `ComponentSet.register()` before `.query()`
 
 ## [1.0.0-releasecandidate.14]
  - Reset effects after they are done so that they can be repeated
