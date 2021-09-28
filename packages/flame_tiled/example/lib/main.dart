@@ -11,6 +11,7 @@ void main() {
 class TiledGame extends FlameGame {
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     final tiledMap = await TiledComponent.load('map.tmx', Vector2.all(16));
     add(tiledMap);
 
