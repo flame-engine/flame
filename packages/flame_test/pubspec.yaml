@@ -1,6 +1,6 @@
 name: flame_test
 description: A package with classes to help testing applications using Flame
-version: 0.1.1-releasecandidate.13
+version: 0.1.1-releasecandidate.14
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_test
 publish_to: 'none'
 
