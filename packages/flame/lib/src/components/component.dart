@@ -332,7 +332,6 @@ class Component with Loadable {
   ///
   /// You can return a specific sub-class of OrderedSet, like
   /// `QueryableOrderedSet` for example.
-  @mustCallSuper
   ComponentSet createComponentSet() {
     return ComponentSet.createDefault(this);
   }

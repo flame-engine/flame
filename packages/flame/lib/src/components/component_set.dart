@@ -36,9 +36,10 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   final Component parent;
 
   ComponentSet(
-    int Function(Component e1, Component e2)? compare,
-    this.parent,
-  ) : super(compare);
+    int Function(Component e1, Component e2)? comparator,
+    this.parent, {
+    bool strictMode = true,
+  }) : super(comparator: comparator, strictMode: strictMode);
 
   /// Prepares and registers one component to be added on the next game tick.
   ///
@@ -133,20 +134,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     _removeLater.addAll(this);
   }
 
-  /// Return sublist of all components of type [C].
-  ///
-  /// This is equivalent to `List.whereType<C>()`, except the result of this
-  /// operation is memoized for each distinct type [C]. The type [C] may be
-  /// "registered" in advance using `register<C>()`, or it may not, in which
-  /// case the type will be registered at the time of the first query.
-  @override
-  List<C> query<C extends Component>() {
-    if (!isRegistered<C>()) {
-      super.register<C>();
-    }
-    return super.query<C>();
-  }
-
   /// Materializes the component list in reversed order.
   Iterable<Component> reversed() {
     return toList().reversed;
@@ -209,11 +196,13 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// You must provide the parent so that it can be handed to the children that
   /// will be added.
   static ComponentSet createDefault(
-    Component parent,
-  ) {
+    Component parent, {
+    bool strictMode = false,
+  }) {
     return ComponentSet(
       Comparing.on<Component>((c) => c.priority),
       parent,
+      strictMode: strictMode,
     );
   }
 }
