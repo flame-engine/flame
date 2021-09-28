@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [next]
+## [Next]
  - Add `flameTest` and `flameWidgetTest`
 
 ## [0.1.1-releasecandidate.13]
