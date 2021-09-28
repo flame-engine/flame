@@ -12,6 +12,8 @@ class MyGameWidget extends StatelessWidget {
 class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
+
     final citySprite = await loadSprite('city.png');
     await add(SpriteComponent(sprite: citySprite, size: Vector2.all(200)));
   }

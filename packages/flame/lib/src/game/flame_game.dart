@@ -5,13 +5,13 @@ import 'package:meta/meta.dart';
 import '../components/component.dart';
 import '../components/mixins/collidable.dart';
 import '../components/mixins/draggable.dart';
-import '../components/mixins/has_collidables.dart';
 import '../components/mixins/hoverable.dart';
 import '../components/mixins/tappable.dart';
 import '../extensions/vector2.dart';
 import 'camera/camera.dart';
 import 'camera/camera_wrapper.dart';
 import 'mixins/game.dart';
+import 'mixins/has_collidables.dart';
 
 /// This is a more complete and opinionated implementation of [Game].
 ///
