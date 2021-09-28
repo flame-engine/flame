@@ -6,7 +6,7 @@
  - Method `PositionComponent.toRect()` now works for flipped/rotated components.
  - Make the root bundle exposed via `Flame.bundle` actually configurable
  - It's no longer necessary to call `ComponentSet.register()` before `.query()`
- - Fix performance issues with RC14 Collidables
+ - Make super.onLoad mandatory to avoid memory leaks
 
 ## [1.0.0-releasecandidate.14]
  - Reset effects after they are done so that they can be repeated
