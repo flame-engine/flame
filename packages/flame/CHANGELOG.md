@@ -7,7 +7,7 @@
  - Make the root bundle exposed via `Flame.bundle` actually configurable
  - Take in an optional `Camera` as a parameter to `FlameGame`
  - Make super.onLoad mandatory to avoid memory leaks
- - QueryableOrderedSet strictMode is configurable so you don't need to call `register` before `query`
+ - `QueryableOrderedSet`'s `strictMode` is configurable so it is no longer necessary to call `register` before `query`
 
 ## [1.0.0-releasecandidate.14]
  - Reset effects after they are done so that they can be repeated
