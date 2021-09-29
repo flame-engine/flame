@@ -25,7 +25,6 @@ void effectTest(
   double epsilon = 0.01,
   required Random random,
 }) async {
-  component.children.register<ComponentEffect>();
   expectedPosition ??= Vector2.zero();
   expectedSize ??= Vector2.all(100.0);
   expectedScale ??= Vector2.all(1.0);
