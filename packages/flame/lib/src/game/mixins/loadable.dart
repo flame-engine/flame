@@ -32,6 +32,7 @@ mixin Loadable {
   ///   myImage = await gameRef.load('my_image.png');
   /// }
   /// ```
+  @mustCallSuper
   Future<void>? onLoad() => null;
 
   /// Since [onLoad] only should run once throughout a the lifetime of the

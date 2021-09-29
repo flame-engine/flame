@@ -7,6 +7,7 @@
  - Make the root bundle exposed via `Flame.bundle` actually configurable
  - Take in an optional `Camera` as a parameter to `FlameGame`
  - It's no longer necessary to call `ComponentSet.register()` before `.query()`
+ - Make super.onLoad mandatory to avoid memory leaks
 
 ## [1.0.0-releasecandidate.14]
  - Reset effects after they are done so that they can be repeated
