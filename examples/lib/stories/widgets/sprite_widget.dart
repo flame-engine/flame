@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dashbook/dashbook.dart';
 import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,7 @@ Widget spriteWidgetBuilder(DashbookContext ctx) {
     decoration: BoxDecoration(border: Border.all(color: Colors.amber)),
     child: SpriteWidget.asset(
       path: 'shield.png',
+      angle: pi / 180 * ctx.numberProperty('angle (deg)', 0),
       anchor: Anchor.valueOf(
         ctx.listProperty('anchor', 'center', anchorOptions),
       ),
