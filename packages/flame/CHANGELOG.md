@@ -8,6 +8,7 @@
  - Take in an optional `Camera` as a parameter to `FlameGame`
  - Make super.onLoad mandatory to avoid memory leaks
  - `QueryableOrderedSet`'s `strictMode` is configurable so it is no longer necessary to call `register` before `query`
+  - Add option to rotate `SpriteWidget`
 
 ## [1.0.0-releasecandidate.14]
  - Reset effects after they are done so that they can be repeated
