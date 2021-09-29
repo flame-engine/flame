@@ -1,3 +1,4 @@
+import 'package:example/src/inventory/bloc/inventory_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'game/game.dart';
 import 'game_stats/bloc/game_stats_bloc.dart';
 import 'game_stats/view/game_stat.dart';
+import 'inventory/view/inventory.dart';
 
 class GamePage extends StatelessWidget {
   const GamePage({Key? key}) : super(key: key);
@@ -12,14 +14,32 @@ class GamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider(
-        create: (_) => GameStatsBloc(),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider<GameStatsBloc>(
+              create: (_) => GameStatsBloc(),
+          ),
+          BlocProvider<InventoryBloc>(
+              create: (_) => InventoryBloc(),
+          ),
+        ],
         child: Column(
           children: [
             const GameStat(),
             Expanded(
-              child: GameWidget(
-                game: SpaceShooterGame(),
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: GameWidget(
+                      game: SpaceShooterGame(),
+                    ),
+                  ),
+                  const Positioned(
+                      top: 50,
+                      right: 10,
+                      child: Inventory(),
+                  ),
+                ],
               ),
             ),
           ],

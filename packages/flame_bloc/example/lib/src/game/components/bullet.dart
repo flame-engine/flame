@@ -1,30 +1,72 @@
+import 'package:example/src/inventory/bloc/inventory_state.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 
 import '../game.dart';
 import 'enemy.dart';
 
-class BulletComponent extends SpriteAnimationComponent with HasGameRef<SpaceShooterGame>, Hitbox, Collidable {
+class BulletComponent extends SpriteAnimationComponent
+    with HasGameRef<SpaceShooterGame>, Hitbox, Collidable {
   static const bulletSpeed = -500;
 
   bool destroyed = false;
 
   double xDirection;
 
-  BulletComponent(double x, double y, { this.xDirection = 0.0 }): super(
-      position: Vector2(x, y),
-      size: Vector2(10, 20),
-  ) {
+  final Weapon weapon;
+
+  BulletComponent(
+    double x,
+    double y,
+    this.weapon, {
+    this.xDirection = 0.0,
+  }) : super( position: Vector2(x, y)) {
+
+    size = Vector2(_mapWidth(), 20);
+
     addHitbox(HitboxRectangle());
+  }
+
+  double _mapWidth() {
+    switch(weapon) {
+      case Weapon.bullet:
+        return 10;
+      case Weapon.laser:
+      case Weapon.plasma:
+        return 5;
+    }
+  }
+
+  String _mapSpritePath() {
+    switch(weapon) {
+      case Weapon.bullet:
+        return 'bullet.png';
+      case Weapon.laser:
+        return 'laser.png';
+      case Weapon.plasma:
+        return 'plasma.png';
+    }
+  }
+
+  double _mapSpriteWidth() {
+    switch(weapon) {
+      case Weapon.bullet:
+        return 8;
+      case Weapon.laser:
+      case Weapon.plasma:
+        return 4;
+    }
   }
 
   @override
   Future<void> onLoad() async {
-    animation = await gameRef.loadSpriteAnimation('bullet.png', SpriteAnimationData.sequenced(
-      stepTime: 0.2,
-      amount: 4,
-      textureSize: Vector2(8, 16),
-    ));
+    animation = await gameRef.loadSpriteAnimation(
+        _mapSpritePath(),
+        SpriteAnimationData.sequenced(
+          stepTime: 0.2,
+          amount: 4,
+          textureSize: Vector2(_mapSpriteWidth(), 16),
+        ));
   }
 
   @override
@@ -44,6 +86,6 @@ class BulletComponent extends SpriteAnimationComponent with HasGameRef<SpaceShoo
       x += bulletSpeed * dt * xDirection;
     }
 
-    shouldRemove =  destroyed || toRect().bottom <= 0;
+    shouldRemove = destroyed || toRect().bottom <= 0;
   }
 }

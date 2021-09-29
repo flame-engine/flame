@@ -4,8 +4,8 @@ abstract class GameStatsEvent extends Equatable {
   const GameStatsEvent();
 }
 
-class AddScoreEvent extends GameStatsEvent {
-  const AddScoreEvent(this.score);
+class ScoreEventAdded extends GameStatsEvent {
+  const ScoreEventAdded(this.score);
 
   final int score;
 
@@ -13,8 +13,8 @@ class AddScoreEvent extends GameStatsEvent {
   List<Object?> get props => [score];
 }
 
-class ResetScoreEvent extends GameStatsEvent {
-  const ResetScoreEvent();
+class ScoreEventCleared extends GameStatsEvent {
+  const ScoreEventCleared();
 
   @override
   List<Object?> get props => [];

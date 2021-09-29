@@ -1,6 +1,5 @@
 import 'package:example/src/game_stats/bloc/game_stats_bloc.dart';
 import 'package:example/src/game_stats/bloc/game_stats_event.dart';
-import 'package:example/src/game_stats/bloc/game_stats_state.dart';
 import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flame/input.dart';
@@ -8,8 +7,8 @@ import 'package:flame/input.dart';
 import './components/player.dart';
 import './components/enemy_creator.dart';
 
-class SpaceShooterGame extends FlameBlocGame<GameStatsBloc, GameStatsState> with PanDetector, HasCollidables {
-
+class SpaceShooterGame extends FlameBlocGame
+    with PanDetector, HasCollidables, HasKeyboardHandlerComponents {
   late PlayerComponent player;
 
   @override
@@ -42,6 +41,6 @@ class SpaceShooterGame extends FlameBlocGame<GameStatsBloc, GameStatsState> with
   }
 
   void increaseScore() {
-    bloc.add(const AddScoreEvent(100));
+    read<GameStatsBloc>().add(const ScoreEventAdded(100));
   }
 }
