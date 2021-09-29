@@ -43,7 +43,7 @@ abstract class ComponentEffect<T extends Component> extends Component {
 
   /// If the effect should first follow the initial curve and then follow the
   /// curve backwards.
-  bool get isAlternating => controller.isAlternating;
+  bool get isAlternating => controller.backwardDuration > 0;
 
   /// Whether the effect should continue to loop forever.
   bool get isInfinite => controller.isInfinite;
@@ -124,7 +124,6 @@ abstract class ComponentEffect<T extends Component> extends Component {
   })  : controller = FlameAnimationController(
           duration: 1.0,
           infinite: _initialIsInfinite,
-          alternating: _initialIsAlternating,
           delay: initialDelay,
         ),
         initialDelay = initialDelay ?? 0.0,
