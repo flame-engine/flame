@@ -13,7 +13,7 @@ project = 'Flame'
 copyright = '2021, Blue Fire Team'
 author = 'Blue Fire Team'
 
-root_doc = "README"   #os.path.abspath("../README")
+root_doc = "README"
 
 
 # -- General configuration ---------------------------------------------------
@@ -38,9 +38,6 @@ myst_enable_extensions = [
 
 # Auto-generate link anchors for headers at levels H1 and H2
 myst_heading_anchors = 2
-
-# Add any paths that contain templates here, relative to this directory.
-# templates_path = ['../_templates']
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
