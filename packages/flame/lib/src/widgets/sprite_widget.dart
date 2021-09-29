@@ -16,6 +16,9 @@ class SpriteWidget extends StatelessWidget {
   /// The positioning [Anchor]
   final Anchor anchor;
 
+  /// The angle to rotate this [Sprite], in rad. (default = 0)
+  final double angle;
+
   /// Holds the position of the sprite on the image
   final Vector2? srcPosition;
 
@@ -33,6 +36,7 @@ class SpriteWidget extends StatelessWidget {
   SpriteWidget({
     required Sprite sprite,
     this.anchor = Anchor.topLeft,
+    this.angle = 0,
     this.srcPosition,
     this.srcSize,
     this.errorBuilder,
@@ -43,6 +47,7 @@ class SpriteWidget extends StatelessWidget {
     required String path,
     Images? images,
     this.anchor = Anchor.topLeft,
+    this.angle = 0,
     this.srcPosition,
     this.srcSize,
     this.errorBuilder,
@@ -62,6 +67,7 @@ class SpriteWidget extends StatelessWidget {
         return _SpriteWidget(
           sprite: sprite,
           anchor: anchor,
+          angle: angle,
         );
       },
       errorBuilder: errorBuilder,
@@ -78,15 +84,19 @@ class _SpriteWidget extends StatelessWidget {
   /// The positioning [Anchor] for the [sprite]
   final Anchor anchor;
 
+  /// The angle to rotate this [sprite], in rad. (default = 0)
+  final double angle;
+
   const _SpriteWidget({
     required this.sprite,
     this.anchor = Anchor.topLeft,
+    this.angle = 0,
   });
 
   @override
   Widget build(_) {
     return Container(
-      child: CustomPaint(painter: SpritePainter(sprite, anchor)),
+      child: CustomPaint(painter: SpritePainter(sprite, anchor, angle: angle)),
     );
   }
 }
