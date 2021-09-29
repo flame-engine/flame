@@ -58,9 +58,14 @@ html_theme_options = {
     "github_url": "https://github.com/flame-engine/flame",
     "repository_url": "https://github.com/flame-engine/flame",
     "use_edit_page_button": True,
+    "use_repository_button": True,
     "repository_branch": "main",
     "path_to_docs": "doc",
+    "logo_only": True,
 }
+html_title = "Flame"
+html_logo = "../_static/logo_flame.png"
+html_favicon = "../_static/favicon.ico"
 
 # Style for syntax highlighting
 pygments_style = 'monokai'
