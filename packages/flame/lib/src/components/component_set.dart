@@ -197,7 +197,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// will be added.
   static ComponentSet createDefault(
     Component parent, {
-    bool strictMode = false,
+    bool strictMode = true,
   }) {
     return ComponentSet(
       Comparing.on<Component>((c) => c.priority),
