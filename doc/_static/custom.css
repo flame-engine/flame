@@ -17,12 +17,17 @@ body {
 #site-navigation {
     background-color: #202225;
 }
+#site-navigation::-webkit-scrollbar {
+    width: 4px;
+}
 #site-navigation::-webkit-scrollbar-track {
-    background: #555;
+    background: #202225;
 }
-#site-navigation::-webkit-scrollbar-thumb {
-    background: #888;
+#site-navigation::-webkit-scrollbar-thumb,
+#site-navigation::-webkit-scrollbar-thumb:vertical {
+    background: #000;
 }
+
 
 .topbar .topbar-main button.topbarbtn {
     background-color: #636363;
