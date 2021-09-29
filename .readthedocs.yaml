@@ -5,10 +5,10 @@ version: 2
 
 sphinx:
   builder: html
-  configuration: doc/conf.py
+  configuration: doc/_conf/conf.py
   fail_on_warning: false
 
 python:
   version: "3.8"
   install:
-    - requirements: doc/requirements.txt
+    - requirements: doc/_conf/requirements.txt

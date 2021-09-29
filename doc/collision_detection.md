@@ -65,7 +65,7 @@ class MyCollidable extends PositionComponent with Hitbox, Collidable {
 ```
 
 The `HitboxPolygon` added to the `Collidable` here is a diamond shape(◇).
-More about how the different shapes are defined in the [Shapes](#shapes) section.
+More about how the different shapes are defined in the [Shapes](#Shapes) section.
 
 Remember that you can add as many `HitboxShape`s as you want to your `Collidable` to make up more
 complex hitboxes. For example a snowman with a hat could be represented by three `HitboxCircle`s and
@@ -161,8 +161,8 @@ A Shape is the base class for representing a scalable geometrical shape. The sha
 ways of defining how they look, but they all have a size and angle that can be modified and the
 shape definition will scale or rotate the shape accordingly.
 
-There are currently three shapes: [Polygon](#polygon), [Rectangle](#rectangle) and
-[Cirlce](#circle).
+There are currently three shapes: [Polygon](#Polygon), [Rectangle](#Rectangle) and
+[Cirlce](#Circle).
 
 ### HitboxShape
 A `HitboxShape` is a `Shape` defined from the center position of the component that it is attached
