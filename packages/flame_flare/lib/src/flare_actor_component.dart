@@ -1,6 +1,7 @@
-part of flame_flare;
+import 'package:flame/components.dart';
+import 'package:flutter/widgets.dart';
 
-class _FlareActorComponentPipelineOwner extends PipelineOwner {}
+import '../flame_flare.dart';
 
 /// A [PositionComponent] that renders a [FlareActorAnimation]
 class FlareActorComponent extends PositionComponent {

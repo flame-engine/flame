@@ -6,6 +6,7 @@
 
 Integrate awesome [Flare animations](https://rive.app/explore/popular/trending/all) to your [Flame](https://flame-engine.org/) game.
 
+> :warning: **Flare is deprecated and no longer supported.** Please consider upgrading to Rive. Also, to run this, you must use `--no-sound-null-safety`, as the latest released version of Flare does not support NS. Use at your own risk.
 ## Install
 
 Add `flame_flare` as a dependency in your `pubspec.yaml` file ([what?](https://flutter.io/using-packages/)).

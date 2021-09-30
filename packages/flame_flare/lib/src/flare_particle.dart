@@ -1,4 +1,7 @@
-part of flame_flare;
+import 'package:flame/extensions.dart';
+import 'package:flame/particles.dart';
+
+import '../flame_flare.dart';
 
 /// A [Particle] that renders a [FlareActorAnimation].
 class FlareParticle extends Particle {
