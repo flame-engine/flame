@@ -200,6 +200,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   @override
   void dispose() {
     super.dispose();
+    widget.game.onRemove();
     removeOverlaysListener(widget.game);
     // If we received a focus node from the user, they are responsible
     // for disposing it
