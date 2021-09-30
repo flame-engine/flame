@@ -13,7 +13,7 @@ project = 'Flame'
 copyright = '2021, Blue Fire Team'
 author = 'Blue Fire Team'
 
-root_doc = "README"
+root_doc = "index"
 
 
 # -- General configuration ---------------------------------------------------
@@ -42,7 +42,7 @@ myst_heading_anchors = 2
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'summary.md']
 
 
 # -- Options for HTML output -------------------------------------------------
