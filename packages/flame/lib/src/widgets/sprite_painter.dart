@@ -8,12 +8,16 @@ import '../sprite.dart';
 class SpritePainter extends CustomPainter {
   final Sprite _sprite;
   final Anchor _anchor;
+  final double _angle;
 
-  SpritePainter(this._sprite, this._anchor);
+  SpritePainter(this._sprite, this._anchor, {double angle = 0})
+      : _angle = angle;
 
   @override
   bool shouldRepaint(SpritePainter old) {
-    return old._sprite != _sprite || old._anchor != _anchor;
+    return old._sprite != _sprite ||
+        old._anchor != _anchor ||
+        old._angle != _angle;
   }
 
   @override
@@ -23,10 +27,14 @@ class SpritePainter extends CustomPainter {
     final minRate = min(rate.x, rate.y);
     final paintSize = _sprite.srcSize * minRate;
     final anchorPosition = _anchor.toVector2();
-    final boxAnchorPosition = boxSize..multiply(anchorPosition);
+    final boxAnchorPosition = boxSize.clone()..multiply(anchorPosition);
     final spriteAnchorPosition = anchorPosition..multiply(paintSize);
 
     canvas.translateVector(boxAnchorPosition..sub(spriteAnchorPosition));
-    _sprite.render(canvas, size: paintSize);
+    canvas.renderRotated(
+      _angle,
+      spriteAnchorPosition,
+      (canvas) => _sprite.render(canvas, size: paintSize),
+    );
   }
 }
