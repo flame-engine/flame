@@ -1,5 +1,5 @@
 :root {
-    --pst-color-inline-code: 50, 230, 250;
+    --pst-color-inline-code: 255, 140, 50;
     --pst-color-link: 100, 150, 200;
     --pst-color-preformatted-background: 50, 50, 50;
     --pst-color-primary: 240, 240, 240;
@@ -63,6 +63,12 @@ pre {
     position: relative;
 }
 
+code {
+    background-color: #222;
+    border-radius: 3pt;
+    padding: 2pt 3pt;
+}
+
 div[class^="highlight-"] pre:before {
     background: black;
     border-bottom-left-radius: 5px;
@@ -102,6 +108,9 @@ div.highlight-text pre:before {
 }
 .bd-toc nav > .nav {
     border-color: #111;
+}
+nav.bd-links p.caption {
+    margin-bottom: 0.2em;
 }
 main.bd-content #main-content h1 {
     color: rgba(var(--pst-color-h1), 1);
