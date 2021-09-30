@@ -1,3 +1,7 @@
+## [1.0.0-releasecandidate.14]
+
+- Migrate to NS (to the extent that Flare allows us) & migrate to Flame 1.0
+
 ## [0.1.0] - API change, fix positioning
 
 - Fix alignment issue
