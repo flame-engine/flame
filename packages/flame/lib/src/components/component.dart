@@ -194,6 +194,8 @@ class Component with Loadable {
   @mustCallSuper
   void onRemove() {
     super.onRemove();
+    final parentGame = findParent<FlameGame>();
+
     children.forEach((child) {
       child.onRemove();
     });
@@ -203,7 +205,6 @@ class Component with Loadable {
     nextParent?.add(this);
     nextParent = null;
 
-    final parentGame = findParent<FlameGame>();
     if (parentGame is FlameGame) {
       parentGame.cleanComponent(this);
     }

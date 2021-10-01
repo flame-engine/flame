@@ -10,7 +10,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart' as flutter;
 import 'package:test/test.dart';
 
-class MyGame extends FlameGame with HasTappableComponents {}
+class MyGame extends FlameGame with HasTappableComponents {
+  Component? lastCleanedComponent;
+
+  @override
+  void cleanComponent(Component component) {
+    lastCleanedComponent = component;
+  }
+}
 
 class MyComponent extends PositionComponent with Tappable, HasGameRef {
   bool tapped = false;
@@ -223,4 +230,22 @@ void main() {
     game.update(0.0);
     expect(game.children.isEmpty, equals(true));
   });
+
+  flameTest<MyGame>(
+    'cleanComponent is called when the component is removed',
+    createGame: () => MyGame(),
+    verify: (game) {
+      final component = MyComponent();
+      game.add(component);
+      game.update(0);
+
+      game.remove(component);
+      game.update(0);
+
+      expect(
+        game.lastCleanedComponent,
+        equals(component),
+      );
+    },
+  );
 }
