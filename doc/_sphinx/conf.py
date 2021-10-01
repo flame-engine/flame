@@ -45,17 +45,17 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'summary.md']
 
 # -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
+# The theme to use for HTML and HTML Help pages.
 html_theme = "sphinx_book_theme"
 
+# See https://sphinx-book-theme.readthedocs.io/en/latest/customize/index.html
 html_theme_options = {
+    "logo_only": True,
+    "path_to_docs": "doc",
+    "repository_branch": "main",
     "repository_url": "https://github.com/flame-engine/flame",
     "use_edit_page_button": True,
     "use_repository_button": True,
-    "repository_branch": "main",
-    "path_to_docs": "doc",
-    "logo_only": True,
 }
 html_title = "Flame"
 html_logo = "images/logo_flame.png"
