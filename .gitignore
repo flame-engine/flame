@@ -16,6 +16,7 @@ android/
 ios/
 desktop/
 build/
+_build/
 
 coverage
 
