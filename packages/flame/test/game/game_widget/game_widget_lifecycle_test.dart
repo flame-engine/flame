@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -110,6 +111,32 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class MyContainer extends StatefulWidget {
+  final List<String> events;
+
+  const MyContainer(this.events, {Key? key}) : super(key: key);
+
+  @override
+  State<MyContainer> createState() => MyContainerState();
+}
+
+class MyContainerState extends State<MyContainer> {
+  double size = 300;
+
+  void causeResize() {
+    setState(() => size = 400);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      child: GameWidget(game: MyGame(widget.events)),
+    );
+  }
+}
+
 void main() {
   group('Game Widget - Lifecycle', () {
     testWidgets('attach upon navigation', (tester) async {
@@ -156,6 +183,20 @@ void main() {
         true,
         reason: 'onRemove was not called',
       );
+    });
+
+    testWidgets('on resize, parents are kept', (tester) async {
+      final events = <String>[];
+      await tester.pumpWidget(MyContainer(events));
+
+      events.clear();
+      final state = tester.state<MyContainerState>(find.byType(MyContainer));
+      state.causeResize();
+
+      await tester.pump();
+      expect(events, ['onGameResize', 'onLoad', 'onMount']); // no onRemove
+      final game = tester.allWidgets.whereType<GameWidget<MyGame>>().first.game;
+      expect(game.children, everyElement((Component c) => c.parent == game));
     });
 
     testWidgets('all events are executed in the correct order', (tester) async {
