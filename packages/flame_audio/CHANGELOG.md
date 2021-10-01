@@ -1,3 +1,7 @@
+## [Next]
+
+* Bump audioplayers version to 0.20.1
+
 ## [1.0.0-rc.1]
 * Moved project to the mono-repo
 * Updated flame, audioplayers
