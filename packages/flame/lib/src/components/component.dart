@@ -187,7 +187,9 @@ class Component with Loadable {
     children.forEach((child) => child.onGameResize(gameSize));
   }
 
-  /// Called right before the component is removed from the game
+  /// Called right before the component is removed from the game,
+  /// and if there is an ancestor that is a [FlameGame] that game
+  /// will do necessary clears for this component.
   @override
   @mustCallSuper
   void onRemove() {
@@ -200,6 +202,11 @@ class Component with Loadable {
     _parent = null;
     nextParent?.add(this);
     nextParent = null;
+
+    final parentGame = findParent<FlameGame>();
+    if (parentGame is FlameGame) {
+      parentGame.cleanComponent(this);
+    }
   }
 
   /// Prepares and registers a component to be added on the next game tick

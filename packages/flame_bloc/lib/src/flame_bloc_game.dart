@@ -50,10 +50,10 @@ class FlameBlocGame extends FlameGame {
     _runSubscriptionQueue();
   }
 
-
   @override
   @mustCallSuper
-  void onDetach() {
+  void onRemove() {
+    super.onRemove();
 
     _unsubscribe();
   }
@@ -78,6 +78,15 @@ class FlameBlocGame extends FlameGame {
       } else {
         _subscriptionQueue.add(c);
       }
+    }
+  }
+
+  @override
+  void cleanComponent(Component c) {
+    super.cleanComponent(c);
+
+    if (c is BlocComponent) {
+      c._unsubscribe();
     }
   }
 
