@@ -3,8 +3,6 @@
 # This file only contains a selection of the most common options. For a full
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
-import os, sys
-sys.path.append(os.path.abspath('..'))
 
 
 # -- Project information -----------------------------------------------------
@@ -52,7 +50,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'summary.md']
 html_theme = "sphinx_book_theme"
 
 html_theme_options = {
-    "github_url": "https://github.com/flame-engine/flame",
     "repository_url": "https://github.com/flame-engine/flame",
     "use_edit_page_button": True,
     "use_repository_button": True,
@@ -61,8 +58,8 @@ html_theme_options = {
     "logo_only": True,
 }
 html_title = "Flame"
-html_logo = "../_static/logo_flame.png"
-html_favicon = "../_static/favicon.ico"
+html_logo = "images/logo_flame.png"
+html_favicon = "images/favicon.ico"
 
 # Style for syntax highlighting
 pygments_style = 'monokai'
@@ -70,7 +67,7 @@ pygments_style = 'monokai'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['../_static']
+html_static_path = ['images', 'styles']
 
 
 def setup(app):
