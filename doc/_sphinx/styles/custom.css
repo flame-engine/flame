@@ -52,7 +52,7 @@ div.navbar-brand-box a.navbar-brand {
 }
 
 div.navbar-brand-box a.navbar-brand img {
-    max-width: 24vh;
+    max-width: 100%;
     margin: 0;
 }
 
@@ -145,9 +145,5 @@ main.bd-content #main-content .prev-next-bottom .right-next .prevnext-label, mai
 
 .bd-sidebar .nav li>a {
     padding: .1rem 1.5rem;
-}
-
-img.logo {
-  width: 100% !important;
 }
 
