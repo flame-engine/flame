@@ -12,20 +12,21 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
   S? _state;
   S? get state => _state;
 
-  void _subscribe(FlameBlocGame game) {
-    _subscription = game.read<B>().stream.listen((newState) {
-      if (isMounted) {
-        _state = newState;
+  @visibleForTesting
+  void subscribe(FlameBlocGame game) {
+    final _bloc = game.read<B>();
+    _state = _bloc.state;
 
+    _subscription = _bloc.stream.listen((newState) {
+      if (_state != newState) {
+        _state = newState;
         onNewState(newState);
-      // if we are not on the tree anymore, we can clean our subscription
-      } else {
-        _unsubscribe();
       }
     });
   }
 
-  void _unsubscribe() {
+  @visibleForTesting
+  void unsubscribe() {
     _subscription?.cancel();
     _subscription = null;
   }
@@ -42,7 +43,8 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
 /// {@endtemplate}
 class FlameBlocGame extends FlameGame {
 
-  final List<BlocComponent> _subscriptionQueue = [];
+  @visibleForTesting
+  final List<BlocComponent> subscriptionQueue = [];
 
   @override
   @mustCallSuper
@@ -74,9 +76,9 @@ class FlameBlocGame extends FlameGame {
 
     if (c is BlocComponent) {
       if (isAttached) {
-        c._subscribe(this);
+        c.subscribe(this);
       } else {
-        _subscriptionQueue.add(c);
+        subscriptionQueue.add(c);
       }
     }
   }
@@ -86,20 +88,20 @@ class FlameBlocGame extends FlameGame {
     super.cleanComponent(c);
 
     if (c is BlocComponent) {
-      c._unsubscribe();
+      c.unsubscribe();
     }
   }
 
   void _runSubscriptionQueue() {
-    while (_subscriptionQueue.isNotEmpty) {
-      final component = _subscriptionQueue.removeAt(0);
-      component._subscribe(this);
+    while (subscriptionQueue.isNotEmpty) {
+      final component = subscriptionQueue.removeAt(0);
+      component.subscribe(this);
     }
   }
 
   void _unsubscribe() {
     children.whereType<BlocComponent>().forEach((element) {
-      element._unsubscribe();
+      element.unsubscribe();
     });
   }
 }

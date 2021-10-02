@@ -19,5 +19,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
+  flame_test:
+    path: ../flame_test
+  mocktail: ^0.1.4
 
 flutter:
