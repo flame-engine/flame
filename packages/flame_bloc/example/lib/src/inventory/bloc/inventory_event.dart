@@ -16,7 +16,6 @@ class WeaponEquiped extends InventoryEvent {
 }
 
 class NextWeaponEquiped extends InventoryEvent {
-
   const NextWeaponEquiped();
 
   @override

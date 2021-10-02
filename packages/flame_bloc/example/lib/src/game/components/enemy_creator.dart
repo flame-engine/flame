@@ -8,15 +8,15 @@ import '../game.dart';
 
 import './enemy.dart';
 
-class EnemyCreator extends Component with HasGameRef<SpaceShooterGame>{
-
+class EnemyCreator extends Component with HasGameRef<SpaceShooterGame> {
   late Timer enemyCreator;
 
   Random random = Random();
 
   EnemyCreator() {
     enemyCreator = Timer(1, repeat: true, callback: () {
-      gameRef.add(EnemyComponent((gameRef.size.x - 25) * random.nextDouble(), 0));
+      gameRef
+          .add(EnemyComponent((gameRef.size.x - 25) * random.nextDouble(), 0));
     });
     enemyCreator.start();
   }
@@ -28,5 +28,5 @@ class EnemyCreator extends Component with HasGameRef<SpaceShooterGame>{
   }
 
   @override
-  void render(Canvas canvas) { }
+  void render(Canvas canvas) {}
 }

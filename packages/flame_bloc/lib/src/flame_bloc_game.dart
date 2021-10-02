@@ -42,7 +42,6 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
 ///
 /// {@endtemplate}
 class FlameBlocGame extends FlameGame {
-
   @visibleForTesting
   final List<BlocComponent> subscriptionQueue = [];
 

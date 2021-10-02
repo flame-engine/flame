@@ -17,10 +17,10 @@ class GamePage extends StatelessWidget {
       body: MultiBlocProvider(
         providers: [
           BlocProvider<GameStatsBloc>(
-              create: (_) => GameStatsBloc(),
+            create: (_) => GameStatsBloc(),
           ),
           BlocProvider<InventoryBloc>(
-              create: (_) => InventoryBloc(),
+            create: (_) => InventoryBloc(),
           ),
         ],
         child: Column(
@@ -35,9 +35,9 @@ class GamePage extends StatelessWidget {
                     ),
                   ),
                   const Positioned(
-                      top: 50,
-                      right: 10,
-                      child: Inventory(),
+                    top: 50,
+                    right: 10,
+                    child: Inventory(),
                   ),
                 ],
               ),

@@ -10,16 +10,14 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
       ),
     );
 
-    on<NextWeaponEquiped>(
-        (event, emit) {
-          const values = Weapon.values;
-          final i = values.indexOf(state.weapon);
-          if (i == values.length - 1) {
-            emit(state.copyWith(weapon: Weapon.bullet));
-          } else {
-            emit(state.copyWith(weapon: values[i + 1]));
-          }
-        }
-    );
+    on<NextWeaponEquiped>((event, emit) {
+      const values = Weapon.values;
+      final i = values.indexOf(state.weapon);
+      if (i == values.length - 1) {
+        emit(state.copyWith(weapon: Weapon.bullet));
+      } else {
+        emit(state.copyWith(weapon: values[i + 1]));
+      }
+    });
   }
 }

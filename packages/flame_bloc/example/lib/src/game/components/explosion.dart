@@ -2,21 +2,24 @@ import 'package:flame/components.dart';
 
 import '../game.dart';
 
-class ExplosionComponent extends SpriteAnimationComponent with HasGameRef<SpaceShooterGame> {
-
-  ExplosionComponent(double x, double y): super(
-      position: Vector2(x, y),
-      size: Vector2.all(50),
-      removeOnFinish: true,
-  );
+class ExplosionComponent extends SpriteAnimationComponent
+    with HasGameRef<SpaceShooterGame> {
+  ExplosionComponent(double x, double y)
+      : super(
+          position: Vector2(x, y),
+          size: Vector2.all(50),
+          removeOnFinish: true,
+        );
 
   @override
   Future<void> onLoad() async {
-    animation = await gameRef.loadSpriteAnimation('explosion.png', SpriteAnimationData.sequenced(
-      stepTime: 0.1,
-      amount: 6,
-      loop: false,
-      textureSize: Vector2.all(32),
-    ));
+    animation = await gameRef.loadSpriteAnimation(
+        'explosion.png',
+        SpriteAnimationData.sequenced(
+          stepTime: 0.1,
+          amount: 6,
+          loop: false,
+          textureSize: Vector2.all(32),
+        ));
   }
 }

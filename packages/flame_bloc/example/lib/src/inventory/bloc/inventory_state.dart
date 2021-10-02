@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 enum Weapon {
   bullet,
   laser,
-  plasma,  
+  plasma,
 }
 
 class InventoryState extends Equatable {
@@ -13,7 +13,7 @@ class InventoryState extends Equatable {
     required this.weapon,
   });
 
-  const InventoryState.empty(): this(weapon: Weapon.bullet);
+  const InventoryState.empty() : this(weapon: Weapon.bullet);
 
   InventoryState copyWith({
     Weapon? weapon,

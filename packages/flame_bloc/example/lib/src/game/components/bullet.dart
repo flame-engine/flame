@@ -20,15 +20,14 @@ class BulletComponent extends SpriteAnimationComponent
     double y,
     this.weapon, {
     this.xDirection = 0.0,
-  }) : super( position: Vector2(x, y)) {
-
+  }) : super(position: Vector2(x, y)) {
     size = Vector2(_mapWidth(), 20);
 
     addHitbox(HitboxRectangle());
   }
 
   double _mapWidth() {
-    switch(weapon) {
+    switch (weapon) {
       case Weapon.bullet:
         return 10;
       case Weapon.laser:
@@ -38,7 +37,7 @@ class BulletComponent extends SpriteAnimationComponent
   }
 
   String _mapSpritePath() {
-    switch(weapon) {
+    switch (weapon) {
       case Weapon.bullet:
         return 'bullet.png';
       case Weapon.laser:
@@ -49,7 +48,7 @@ class BulletComponent extends SpriteAnimationComponent
   }
 
   double _mapSpriteWidth() {
-    switch(weapon) {
+    switch (weapon) {
       case Weapon.bullet:
         return 8;
       case Weapon.laser:

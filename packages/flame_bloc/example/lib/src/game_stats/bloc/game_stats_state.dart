@@ -1,14 +1,13 @@
 import 'package:equatable/equatable.dart';
 
 class GameStatsState extends Equatable {
-
   final int score;
 
   const GameStatsState({
     required this.score,
   });
 
-  const GameStatsState.empty(): this(score: 0);
+  const GameStatsState.empty() : this(score: 0);
 
   GameStatsState copyWith({
     int? score,
