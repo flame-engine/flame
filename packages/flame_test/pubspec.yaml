@@ -1,6 +1,6 @@
 name: flame_test
 description: A package with classes to help testing applications using Flame
-version: 0.1.1-releasecandidate.13
+version: 0.1.1-releasecandidate.14
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_test
 publish_to: 'none'
 
@@ -15,7 +15,7 @@ dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  meta: ^1.3.0
+  meta: ^1.7.0
   test: ^1.17.10
   vector_math: '>=2.1.0 <3.0.0'
 

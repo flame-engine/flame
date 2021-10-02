@@ -333,13 +333,33 @@ class PositionComponent extends Component {
     canvas.transform(transformMatrix.storage);
   }
 
-  /// Returns the relative position/size of this component.
-  /// Relative because it might be translated by their parents (which is not considered here).
-  Rect toRect() => topLeftPosition.toPositionedRect(scaledSize);
+  /// Returns the bounding rectangle for this component.
+  ///
+  /// The bounding rectangle is given in parent's coordinate space, and is
+  /// defined as the smallest axes-aligned rectangle that can fit this
+  /// component. The aspect ratio of the bounding rectangle may be different
+  /// from [size] if the component was scaled and/or rotated.
+  Rect toRect() => _toRectImpl(positionOfAnchor);
 
-  /// Returns the absolute position/size of this component.
-  /// Absolute because it takes any possible parent position into consideration.
-  Rect toAbsoluteRect() => absoluteTopLeftPosition.toPositionedRect(scaledSize);
+  /// The bounding rectangle of the component in global coordinate space.
+  ///
+  /// This is similar to [toRect()], except the rectangle is projected into the
+  /// outermost coordinate frame.
+  Rect toAbsoluteRect() => _toRectImpl(absolutePositionOfAnchor);
+
+  Rect _toRectImpl(Vector2 Function(Anchor point) projector) {
+    final topLeft = projector(Anchor.topLeft);
+    final bottomRight = projector(Anchor.bottomRight);
+    if (angle == 0) {
+      return Rect.fromPoints(topLeft.toOffset(), bottomRight.toOffset());
+    } else {
+      final topRight = projector(Anchor.topRight);
+      final bottomLeft = projector(Anchor.bottomLeft);
+      final xs = [topLeft.x, topRight.x, bottomLeft.x, bottomRight.x]..sort();
+      final ys = [topLeft.y, topRight.y, bottomLeft.y, bottomRight.y]..sort();
+      return Rect.fromLTRB(xs.first, ys.first, xs.last, ys.last);
+    }
+  }
 
   /// Mutates position and size using the provided [rect] as basis.
   /// This is a relative rect, same definition that [toRect] use

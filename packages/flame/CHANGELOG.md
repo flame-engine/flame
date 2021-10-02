@@ -3,7 +3,13 @@
 ## [Next]
  - Fix issue with `Draggable`s not being removed from `draggables` list
  - Increase Flutter SDK constraint to `>= 2.5.0`.
+ - Method `PositionComponent.toRect()` now works for flipped/rotated components.
  - Make the root bundle exposed via `Flame.bundle` actually configurable
+ - Take in an optional `Camera` as a parameter to `FlameGame`
+ - Make super.onLoad mandatory to avoid memory leaks
+ - `QueryableOrderedSet`'s `strictMode` is configurable so it is no longer necessary to call `register` before `query`
+ - Add option to rotate `SpriteWidget`
+ - Fix bug where onRemove was called during resizing
 
 ## [1.0.0-releasecandidate.14]
  - Reset effects after they are done so that they can be repeated

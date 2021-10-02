@@ -32,15 +32,14 @@ mixin Loadable {
   ///   myImage = await gameRef.load('my_image.png');
   /// }
   /// ```
+  @mustCallSuper
   Future<void>? onLoad() => null;
-
-  Future<void>? _onLoadCache;
 
   /// Since [onLoad] only should run once throughout a the lifetime of the
   /// implementing class, it is cached so that it can be reused when the parent
   /// component/game/widget changes.
   @internal
-  Future<void>? get onLoadCache => _onLoadCache ?? (_onLoadCache = onLoad());
+  late Future<void>? onLoadCache = onLoad();
 
   /// Called after the component has successfully run [onLoad] and before the
   /// component is added to its new parent.

@@ -13,7 +13,7 @@ short).
 
 We also provide stand-alone packages that extend the Flame functionality:
 - [flame_audio](https://pub.dev/packages/flame_audio) Which provides audio capabilities using the
- `audioplayers` package.
+  `audioplayers` package.
 - [flame_forge2d](https://pub.dev/packages/flame_forge2d) Which provides physics capabilities using
   our own `Box2D` port called `Forge2D`.
 - [flame_tiled](https://pub.dev/packages/flame_tiled) Which provides integration with the

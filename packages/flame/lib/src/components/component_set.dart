@@ -36,9 +36,10 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   final Component parent;
 
   ComponentSet(
-    int Function(Component e1, Component e2)? compare,
-    this.parent,
-  ) : super(compare);
+    int Function(Component e1, Component e2)? comparator,
+    this.parent, {
+    bool strictMode = true,
+  }) : super(comparator: comparator, strictMode: strictMode);
 
   /// Prepares and registers one component to be added on the next game tick.
   ///
@@ -195,11 +196,13 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// You must provide the parent so that it can be handed to the children that
   /// will be added.
   static ComponentSet createDefault(
-    Component parent,
-  ) {
+    Component parent, {
+    bool strictMode = true,
+  }) {
     return ComponentSet(
       Comparing.on<Component>((c) => c.priority),
       parent,
+      strictMode: strictMode,
     );
   }
 }
