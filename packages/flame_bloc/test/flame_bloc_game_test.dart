@@ -29,6 +29,7 @@ class MyBlocGame extends FlameBlocGame {}
 class InventoryComponent extends Component
     with BlocComponent<InventoryCubit, InventoryState> {}
 
+// ignore: implicit_dynamic_type
 class MockInventoryComponent extends Mock implements BlocComponent {}
 
 void main() {

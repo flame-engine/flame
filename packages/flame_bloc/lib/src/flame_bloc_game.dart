@@ -69,7 +69,7 @@ class FlameBlocGame extends FlameGame {
     _unsubscribe();
   }
 
-  T read<T extends BlocBase>() {
+  T read<T>() {
     final context = buildContext;
     if (context == null) {
       throw Exception('build context is not available yet');
