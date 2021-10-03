@@ -95,15 +95,6 @@ class FlameGame extends Component with Game {
     c.onGameResize(size);
   }
 
-  /// This method is called for every component before it is removed from the
-  /// component tree
-  ///
-  /// You can use this to clean any necessary data or bindings that a component
-  /// may be created.
-  ///
-  /// default implementation is a no-op
-  void cleanComponent(Component c) {}
-
   /// This implementation of render renders each component, making sure the
   /// canvas is reset for each one.
   ///

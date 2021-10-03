@@ -11,7 +11,6 @@
  - Add option to rotate `SpriteWidget`
  - Fix bug where onRemove was called during resizing
  - Add `onAttach` and `onDetach` to `Game`
- - Add `cleanComponent` to `FlameGame`
 
 ## [1.0.0-releasecandidate.14]
  - Reset effects after they are done so that they can be repeated

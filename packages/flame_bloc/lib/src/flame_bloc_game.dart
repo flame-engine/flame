@@ -44,6 +44,13 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
   /// Listener called everytime a new state is emitted to this component
   /// default implementation is a no-op
   void onNewState(S state) {}
+
+  @override
+  @mustCallSuper
+  void onRemove() {
+    super.onRemove();
+    unsubscribe();
+  }
 }
 
 /// {@template flame_bloc_game}
@@ -89,15 +96,6 @@ class FlameBlocGame extends FlameGame {
       } else {
         subscriptionQueue.add(c);
       }
-    }
-  }
-
-  @override
-  void cleanComponent(Component c) {
-    super.cleanComponent(c);
-
-    if (c is BlocComponent) {
-      c.unsubscribe();
     }
   }
 
