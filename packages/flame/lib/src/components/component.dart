@@ -189,7 +189,7 @@ class Component with Loadable {
 
   /// Called right before the component is removed from the game,
   /// and if there is an ancestor that is a [FlameGame] that game
-  /// will do necessary clears for this component.
+  /// will do necessary cleanup for this component.
   @override
   @mustCallSuper
   void onRemove() {
