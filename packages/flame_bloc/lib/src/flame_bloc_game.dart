@@ -19,8 +19,12 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
 
     _subscription = _bloc.stream.listen((newState) {
       if (_state != newState) {
+        final _callNewState = listenWhen(_state, newState);
         _state = newState;
-        onNewState(newState);
+
+        if (_callNewState) {
+          onNewState(newState);
+        }
       }
     });
   }
@@ -31,9 +35,15 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
     _subscription = null;
   }
 
+  /// Override this to make [onNewState] be called only when
+  /// a certain state change happens.
+  ///
+  /// default implementation returns true
+  bool listenWhen(S? previousState, S newState) => true;
+
   /// Listener called everytime a new state is emitted to this component
   /// default implementation is a no-op
-  void onNewState(S s) {}
+  void onNewState(S state) {}
 }
 
 /// {@template flame_bloc_game}

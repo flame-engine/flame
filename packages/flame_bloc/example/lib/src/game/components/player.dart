@@ -7,10 +7,31 @@ import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/services.dart';
 
 import './bullet.dart';
+import '../../game_stats/bloc/game_stats_bloc.dart';
 import '../../inventory/bloc/inventory_bloc.dart';
 import '../game.dart';
 
+import 'enemy.dart';
 import 'explosion.dart';
+
+class PlayerController extends Component
+    with
+        HasGameRef<SpaceShooterGame>,
+        BlocComponent<GameStatsBloc, GameStatsState> {
+  @override
+  bool listenWhen(GameStatsState? previousState, GameStatsState newState) {
+    return previousState?.status != newState.status;
+  }
+
+  @override
+  void onNewState(GameStatsState state) {
+    if (state.status == GameStatus.respawn ||
+        state.status == GameStatus.initial) {
+      gameRef.read<GameStatsBloc>().add(const PlayerRespawned());
+      gameRef.add(gameRef.player = PlayerComponent());
+    }
+  }
+}
 
 class PlayerComponent extends SpriteAnimationComponent
     with
@@ -79,6 +100,8 @@ class PlayerComponent extends SpriteAnimationComponent
 
   void takeHit() {
     gameRef.add(ExplosionComponent(x, y));
+    shouldRemove = true;
+    gameRef.read<GameStatsBloc>().add(const PlayerDied());
   }
 
   @override
@@ -93,11 +116,11 @@ class PlayerComponent extends SpriteAnimationComponent
     return false;
   }
 
-  //@override
-  //  void onCollision(Set<Vector2> points, Collidable other) {
-  //    if (other is EnemyComponent) {
-  //      takeHit();
-  //      other.takeHit();
-  //    }
-  //  }
+  @override
+  void onCollision(Set<Vector2> points, Collidable other) {
+    if (other is EnemyComponent) {
+      takeHit();
+      other.takeHit();
+    }
+  }
 }

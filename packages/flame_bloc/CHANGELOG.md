@@ -1,2 +1,2 @@
-## 0.0.1
+## [Next]
  - Initial release

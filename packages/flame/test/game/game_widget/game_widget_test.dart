@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _Wrapper extends StatefulWidget {
-
-  const _Wrapper({ required this.child });
+  const _Wrapper({required this.child});
 
   final Widget child;
 
@@ -20,20 +19,19 @@ class _WrapperState extends State<_Wrapper> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-          body: Column(
-              children: [
-                if (_open)
-                  Expanded(child: widget.child),
-                ElevatedButton(
-                    child: const Text('Toogle'),
-                    onPressed: () {
-                      setState(() {
-                          _open = !_open;
-                      });
-                    },
-                ),
-              ],
-          ),
+        body: Column(
+          children: [
+            if (_open) Expanded(child: widget.child),
+            ElevatedButton(
+              child: const Text('Toogle'),
+              onPressed: () {
+                setState(() {
+                  _open = !_open;
+                });
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -60,27 +58,26 @@ class MyGame extends FlameGame {
 
 void main() {
   flameWidgetTest<MyGame>(
-    'calls onAttach when it enters the tree and onDetach and it leaves',
-    createGame: () => MyGame(),
-    pumpWidget: (gameWidget, tester) async {
-      await tester.pumpWidget(_Wrapper(child: gameWidget));
-    },
-    verify: (game, tester) async {
-      expect(game.onAttachCalled, isFalse);
+      'calls onAttach when it enters the tree and onDetach and it leaves',
+      createGame: () => MyGame(),
+      pumpWidget: (gameWidget, tester) async {
+        await tester.pumpWidget(_Wrapper(child: gameWidget));
+      },
+      verify: (game, tester) async {
+        expect(game.onAttachCalled, isFalse);
 
-      await tester.tap(find.text('Toogle'));
-      // First will be the build of the wrapper
-      await tester.pump();
-      // Second will be the build of the game widget itself
-      await tester.pump();
+        await tester.tap(find.text('Toogle'));
+        // First will be the build of the wrapper
+        await tester.pump();
+        // Second will be the build of the game widget itself
+        await tester.pump();
 
-      expect(game.onAttachCalled, isTrue);
-      expect(game.onDettachCalled, isFalse);
+        expect(game.onAttachCalled, isTrue);
+        expect(game.onDettachCalled, isFalse);
 
-      await tester.tap(find.text('Toogle'));
-      await tester.pump();
+        await tester.tap(find.text('Toogle'));
+        await tester.pump();
 
-      expect(game.onDettachCalled, isTrue);
-    }
-  );
+        expect(game.onDettachCalled, isTrue);
+      });
 }
