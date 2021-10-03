@@ -13,13 +13,15 @@ class ExplosionComponent extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     animation = await gameRef.loadSpriteAnimation(
-        'explosion.png',
-        SpriteAnimationData.sequenced(
-          stepTime: 0.1,
-          amount: 6,
-          loop: false,
-          textureSize: Vector2.all(32),
-        ));
+      'explosion.png',
+      SpriteAnimationData.sequenced(
+        stepTime: 0.1,
+        amount: 6,
+        loop: false,
+        textureSize: Vector2.all(32),
+      ),
+    );
   }
 }

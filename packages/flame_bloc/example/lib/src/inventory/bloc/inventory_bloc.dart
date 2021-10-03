@@ -1,6 +1,8 @@
-import 'package:example/src/inventory/bloc/inventory_event.dart';
-import 'package:example/src/inventory/bloc/inventory_state.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+part 'inventory_state.dart';
+part 'inventory_event.dart';
 
 class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
   InventoryBloc() : super(const InventoryState.empty()) {

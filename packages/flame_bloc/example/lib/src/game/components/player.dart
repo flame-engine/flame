@@ -1,17 +1,15 @@
-import 'package:example/src/inventory/bloc/inventory_bloc.dart';
-import 'package:example/src/inventory/bloc/inventory_event.dart';
-import 'package:example/src/inventory/bloc/inventory_state.dart';
 import 'package:flame/components.dart';
-import 'package:flame/input.dart';
 import 'package:flame/geometry.dart';
+import 'package:flame/input.dart';
 
 import 'package:flame/timer.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/services.dart';
 
+import './bullet.dart';
+import '../../inventory/bloc/inventory_bloc.dart';
 import '../game.dart';
 
-import './bullet.dart';
 import 'explosion.dart';
 
 class PlayerComponent extends SpriteAnimationComponent
@@ -33,14 +31,15 @@ class PlayerComponent extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     animation = await gameRef.loadSpriteAnimation(
-        'player.png',
-        SpriteAnimationData.sequenced(
-          stepTime: 0.2,
-          amount: 4,
-          textureSize: Vector2(32, 48),
-        ));
+      'player.png',
+      SpriteAnimationData.sequenced(
+        stepTime: 0.2,
+        amount: 4,
+        textureSize: Vector2(32, 48),
+      ),
+    );
   }
 
   void _createBullet() {

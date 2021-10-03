@@ -1,9 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 
-import '../game.dart';
-
 import './explosion.dart';
+import '../game.dart';
 
 class EnemyComponent extends SpriteAnimationComponent
     with HasGameRef<SpaceShooterGame>, Hitbox, Collidable {
@@ -19,6 +18,7 @@ class EnemyComponent extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     animation = await gameRef.loadSpriteAnimation(
       'enemy.png',
       SpriteAnimationData.sequenced(

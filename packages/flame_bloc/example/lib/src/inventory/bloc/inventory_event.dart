@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'inventory_state.dart';
+part of 'inventory_bloc.dart';
 
 abstract class InventoryEvent extends Equatable {
   const InventoryEvent();

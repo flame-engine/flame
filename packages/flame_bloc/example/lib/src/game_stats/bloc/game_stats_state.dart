@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'game_stats_bloc.dart';
 
 class GameStatsState extends Equatable {
   final int score;

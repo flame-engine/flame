@@ -1,8 +1,7 @@
-import 'package:example/src/inventory/bloc/inventory_bloc.dart';
-import 'package:example/src/inventory/bloc/inventory_event.dart';
-import 'package:example/src/inventory/bloc/inventory_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../bloc/inventory_bloc.dart';
 
 class Inventory extends StatelessWidget {
   const Inventory({Key? key}) : super(key: key);

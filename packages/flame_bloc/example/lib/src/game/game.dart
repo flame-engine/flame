@@ -1,11 +1,10 @@
-import 'package:example/src/game_stats/bloc/game_stats_bloc.dart';
-import 'package:example/src/game_stats/bloc/game_stats_event.dart';
 import 'package:flame/components.dart';
-import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flame/input.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 
-import './components/player.dart';
 import './components/enemy_creator.dart';
+import './components/player.dart';
+import '../game_stats/bloc/game_stats_bloc.dart';
 
 class SpaceShooterGame extends FlameBlocGame
     with PanDetector, HasCollidables, HasKeyboardHandlerComponents {
@@ -21,12 +20,12 @@ class SpaceShooterGame extends FlameBlocGame
   }
 
   @override
-  void onPanStart(info) {
+  void onPanStart(_) {
     player.beginFire();
   }
 
   @override
-  void onPanEnd(info) {
+  void onPanEnd(_) {
     player.stopFire();
   }
 
@@ -36,7 +35,7 @@ class SpaceShooterGame extends FlameBlocGame
   }
 
   @override
-  void onPanUpdate(info) {
+  void onPanUpdate(DragUpdateInfo info) {
     player.move(info.delta.game.x, info.delta.game.y);
   }
 

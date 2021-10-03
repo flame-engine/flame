@@ -1,12 +1,11 @@
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame/timer.dart';
 
-import 'dart:ui';
-import 'dart:math';
-
-import '../game.dart';
-
 import './enemy.dart';
+import '../game.dart';
 
 class EnemyCreator extends Component with HasGameRef<SpaceShooterGame> {
   late Timer enemyCreator;
@@ -15,8 +14,12 @@ class EnemyCreator extends Component with HasGameRef<SpaceShooterGame> {
 
   EnemyCreator() {
     enemyCreator = Timer(1, repeat: true, callback: () {
-      gameRef
-          .add(EnemyComponent((gameRef.size.x - 25) * random.nextDouble(), 0));
+      gameRef.add(
+        EnemyComponent(
+          (gameRef.size.x - 25) * random.nextDouble(),
+          0,
+        ),
+      );
     });
     enemyCreator.start();
   }

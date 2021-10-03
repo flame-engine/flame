@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'inventory_bloc.dart';
 
 enum Weapon {
   bullet,

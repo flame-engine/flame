@@ -1,7 +1,7 @@
-import 'package:example/src/inventory/bloc/inventory_state.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 
+import '../../inventory/bloc/inventory_bloc.dart';
 import '../game.dart';
 import 'enemy.dart';
 
@@ -59,13 +59,15 @@ class BulletComponent extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     animation = await gameRef.loadSpriteAnimation(
-        _mapSpritePath(),
-        SpriteAnimationData.sequenced(
-          stepTime: 0.2,
-          amount: 4,
-          textureSize: Vector2(_mapSpriteWidth(), 16),
-        ));
+      _mapSpritePath(),
+      SpriteAnimationData.sequenced(
+        stepTime: 0.2,
+        amount: 4,
+        textureSize: Vector2(_mapSpriteWidth(), 16),
+      ),
+    );
   }
 
   @override

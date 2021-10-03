@@ -1,6 +1,8 @@
-import 'package:example/src/game_stats/bloc/game_stats_event.dart';
-import 'package:example/src/game_stats/bloc/game_stats_state.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+part 'game_stats_event.dart';
+part 'game_stats_state.dart';
 
 class GameStatsBloc extends Bloc<GameStatsEvent, GameStatsState> {
   GameStatsBloc() : super(const GameStatsState.empty()) {
