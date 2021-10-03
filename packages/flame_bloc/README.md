@@ -1,12 +1,11 @@
 # Flame Bloc 🔥🧱
 
 `flame_bloc` adds easy access to blocs/cubits that are available on the widget tree to your Flame game and
-makes it possible for flame components to listen to state changes to those blocs/cubits.
+makes it possible for Flame components to listen to state changes to those blocs/cubits.
 
 ## How to use
 
-Lets assume we have a bloc that handles player invetory and it is available on the widget tree by
-from a `BlocProvider` like this:
+Lets assume we have a bloc that handles player invetory and it is available on the widget tree via a `BlocProvider` like this:
 
 ```dart
 BlocProvider<ExampleGame>(

@@ -25,9 +25,7 @@ class _WrapperState extends State<_Wrapper> {
             ElevatedButton(
               child: const Text('Toogle'),
               onPressed: () {
-                setState(() {
-                  _open = !_open;
-                });
+                setState(() =>  _open = !_open);
               },
             ),
           ],
