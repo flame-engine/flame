@@ -33,6 +33,7 @@ class PlayerComponent extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
+    super.onLoad();
     animation = await gameRef.loadSpriteAnimation(
         'player.png',
         SpriteAnimationData.sequenced(
