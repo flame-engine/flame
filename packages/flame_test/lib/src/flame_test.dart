@@ -61,7 +61,7 @@ typedef PumpWidgetFunction<T extends Game> = Future<void> Function(
 /// an empty [GameWidget] instance.
 ///
 /// Use [pumpWidget] to define your own function to pump widgets into
-/// the Flutter test environment, when omitted, [flameWidgetTest] simply
+/// the Flutter test environment. When omitted, [flameWidgetTest] simply
 /// will pass the created game widget instance to the test.
 ///
 /// Use [verify] closure to make verifications/assertions.
