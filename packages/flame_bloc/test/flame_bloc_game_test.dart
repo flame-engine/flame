@@ -51,14 +51,16 @@ void main() {
       );
     }
 
-    flameWidgetTest<MyBlocGame>('can emit states',
-        createGame: () => MyBlocGame(),
-        pumpWidget: _pumpWidget,
-        verify: (game, tester) async {
-          game.read<InventoryCubit>().selectBow();
+    flameWidgetTest<MyBlocGame>(
+      'can emit states',
+      createGame: () => MyBlocGame(),
+      pumpWidget: _pumpWidget,
+      verify: (game, tester) async {
+        game.read<InventoryCubit>().selectBow();
 
-          expect(cubit.state, equals(InventoryState.bow));
-        });
+        expect(cubit.state, equals(InventoryState.bow));
+      },
+    );
 
     flameTest<MyBlocGame>(
       'read throws exection when game is not attached yet',

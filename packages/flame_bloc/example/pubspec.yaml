@@ -1,5 +1,5 @@
 name: example
-description: A new Flutter project.
+description: Example game using the flame_bloc package
 
 publish_to: 'none'
 
