@@ -8,7 +8,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart' as flutter;
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class MyGame extends FlameGame with HasTappableComponents {}
 
@@ -222,5 +222,15 @@ void main() {
     expect(game.children.length, equals(3));
     game.update(0.0);
     expect(game.children.isEmpty, equals(true));
+  });
+
+  test("can't add a component to a game that don't have layout yet", () {
+    final game = MyGame();
+    final component = MyComponent();
+
+    expect(
+      () => game.add(component),
+      throwsAssertionError,
+    );
   });
 }
