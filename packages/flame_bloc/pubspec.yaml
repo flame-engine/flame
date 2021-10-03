@@ -18,6 +18,7 @@ dependencies:
 
 dev_dependencies:
   dart_code_metrics: ^4.1.0
+  dartdoc: ^0.42.0
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
