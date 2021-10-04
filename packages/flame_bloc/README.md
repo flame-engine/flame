@@ -5,7 +5,7 @@ makes it possible for Flame components to listen to state changes to those blocs
 
 ## How to use
 
-Lets assume we have a bloc that handles player invetory and it is available on the widget tree via a `BlocProvider` like this:
+Lets assume we have a bloc that handles player inventory and it is available on the widget tree via a `BlocProvider` like this:
 
 ```dart
 BlocProvider<ExampleGame>(
