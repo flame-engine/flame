@@ -1,0 +1,29 @@
+name: flame_bloc
+description: Bloc integration to Flame games
+version: 0.0.1
+homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_bloc
+publish_to: 'none'
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  bloc: ^7.2.0
+  flame:
+    path: ../flame
+  flutter_bloc: ^7.3.0
+
+dev_dependencies:
+  dart_code_metrics: ^4.1.0
+  dartdoc: ^0.42.0
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^1.0.0
+  flame_test:
+    path: ../flame_test
+  mocktail: ^0.1.4
+
+flutter:
