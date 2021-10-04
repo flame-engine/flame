@@ -42,7 +42,8 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
   bool listenWhen(S? previousState, S newState) => true;
 
   /// Listener called everytime a new state is emitted to this component.
-  /// default implementation is a no-op
+  ///
+  /// Default implementation is a no-op.
   void onNewState(S state) {}
 
   @override
