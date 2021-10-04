@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [Next]
+## [1.0.0-releasecandidate.15]
  - Fix issue with `Draggable`s not being removed from `draggables` list
  - Increase Flutter SDK constraint to `>= 2.5.0`.
  - Method `PositionComponent.toRect()` now works for flipped/rotated components.
