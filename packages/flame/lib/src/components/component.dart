@@ -187,7 +187,7 @@ class Component with Loadable {
     children.forEach((child) => child.onGameResize(gameSize));
   }
 
-  /// Called right before the component is removed from the game
+  /// Called right before the component is removed from the game.
   @override
   @mustCallSuper
   void onRemove() {
