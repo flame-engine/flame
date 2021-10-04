@@ -38,10 +38,10 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
   /// Override this to make [onNewState] be called only when
   /// a certain state change happens.
   ///
-  /// default implementation returns true
+  /// Default implementation returns true.
   bool listenWhen(S? previousState, S newState) => true;
 
-  /// Listener called everytime a new state is emitted to this component
+  /// Listener called everytime a new state is emitted to this component.
   /// default implementation is a no-op
   void onNewState(S state) {}
 
@@ -55,7 +55,7 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
 
 /// {@template flame_bloc_game}
 /// An enhanced [FlameGame] that has the capability to listen
-/// and emit changes to a [Bloc] state
+/// and emit changes to a [Bloc] state.
 ///
 /// {@endtemplate}
 class FlameBlocGame extends FlameGame {

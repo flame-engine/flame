@@ -23,7 +23,7 @@ class _WrapperState extends State<_Wrapper> {
           children: [
             if (_open) Expanded(child: widget.child),
             ElevatedButton(
-              child: const Text('Toogle'),
+              child: const Text('Toggle'),
               onPressed: () {
                 setState(() => _open = !_open);
               },
@@ -64,7 +64,7 @@ void main() {
     verify: (game, tester) async {
       expect(game.onAttachCalled, isFalse);
 
-      await tester.tap(find.text('Toogle'));
+      await tester.tap(find.text('Toggle'));
       // First will be the build of the wrapper
       await tester.pump();
       // Second will be the build of the game widget itself
@@ -73,7 +73,7 @@ void main() {
       expect(game.onAttachCalled, isTrue);
       expect(game.onDettachCalled, isFalse);
 
-      await tester.tap(find.text('Toogle'));
+      await tester.tap(find.text('Toggle'));
       await tester.pump();
 
       expect(game.onDettachCalled, isTrue);
