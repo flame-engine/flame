@@ -33,7 +33,8 @@ void main() {
       game.update(0);
       componentsSorted(components);
       expect(components.first, firstCompopnent);
-      game.changePriority(firstCompopnent, 11);
+      game.children.changePriority(firstCompopnent, 11);
+      game.update(0);
       expect(components.last, firstCompopnent);
     });
 
@@ -47,7 +48,9 @@ void main() {
       componentsSorted(components);
       final first = components.first;
       final last = components.last;
-      game.changePriorities({first: 20, last: -1});
+      game.children.changePriority(first, 20);
+      game.children.changePriority(last, -1);
+      game.update(0);
       expect(components.first, last);
       expect(components.last, first);
     });
@@ -63,7 +66,9 @@ void main() {
       game.update(0);
       componentsSorted(children);
       final first = children.first;
-      game.changePriority(first, 20);
+      game.children.changePriority(first, 20);
+      expect(children.last, isNot(first));
+      game.update(0);
       expect(children.last, first);
     });
 
@@ -79,7 +84,9 @@ void main() {
       componentsSorted(children);
       final first = children.first;
       final last = children.last;
-      game.changePriorities({first: 20, last: -1});
+      game.children.changePriority(first, 20);
+      game.children.changePriority(last, -1);
+      game.update(0);
       expect(children.first, last);
       expect(children.last, first);
     });
@@ -97,7 +104,9 @@ void main() {
       game.update(0);
       componentsSorted(children);
       final first = children.first;
-      game.changePriority(first, 20);
+      game.children.changePriority(first, 20);
+      expect(children.last, isNot(first));
+      game.update(0);
       expect(children.last, first);
     });
   });
