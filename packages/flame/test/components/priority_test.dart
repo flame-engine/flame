@@ -50,6 +50,8 @@ void main() {
       final last = components.last;
       game.children.changePriority(first, 20);
       game.children.changePriority(last, -1);
+      expect(components.first, first);
+      expect(components.last, last);
       game.update(0);
       expect(components.first, last);
       expect(components.last, first);
@@ -86,6 +88,8 @@ void main() {
       final last = children.last;
       game.children.changePriority(first, 20);
       game.children.changePriority(last, -1);
+      expect(children.first, first);
+      expect(children.last, last);
       game.update(0);
       expect(children.first, last);
       expect(children.last, first);
