@@ -6,9 +6,25 @@ class PriorityComponent extends Component {
   PriorityComponent(int priority) : super(priority: priority);
 }
 
-void componentsSorted(Iterable<Component> components) {
-  final priorities = components.map<int>((c) => c.priority).toList();
+void componentsSorted(Iterable<Component> components) { final priorities = components.map<int>((c) => c.priority).toList();
   expect(priorities.toList(), orderedEquals(priorities..sort()));
+}
+
+class ParentWithReorderSpy extends Component {
+  int callCount = 0;
+
+  ParentWithReorderSpy(int priority) : super(priority: priority);
+
+  @override
+  void reorderChildren() {
+    callCount++;
+    super.reorderChildren();
+  }
+
+  void assertCalled(int n) {
+    expect(callCount, n);
+    callCount = 0;
+  }
 }
 
 void main() {
@@ -112,6 +128,73 @@ void main() {
       expect(children.last, isNot(first));
       game.update(0);
       expect(children.last, first);
+    });
+
+    test('#reorderParent is only called once per parent per tick', () {
+      final a = ParentWithReorderSpy(1);
+      final a1 = PriorityComponent(1);
+      final a2 = PriorityComponent(2);
+      a.addAll([a1, a2]);
+
+      final b = ParentWithReorderSpy(3);
+      final b1 = PriorityComponent(1);
+      b.add(b1);
+
+      final c = ParentWithReorderSpy(2);
+      final c1 = PriorityComponent(1);
+      final c2 = PriorityComponent(0);
+      final c3 = PriorityComponent(-1);
+      c.addAll([c1, c2, c3]);
+
+      final game = FlameGame()..onGameResize(Vector2.zero());
+      game.addAll([a, b, c]);
+      componentsSorted(game.children);
+      componentsSorted(a.children);
+      componentsSorted(b.children);
+      componentsSorted(c.children);
+      a.assertCalled(0);
+      b.assertCalled(0);
+      c.assertCalled(0);
+
+      game.children.changePriority(a, 10);
+      game.update(0);
+
+      componentsSorted(game.children);
+      componentsSorted(a.children);
+      componentsSorted(b.children);
+      componentsSorted(c.children);
+      a.assertCalled(0);
+      b.assertCalled(0);
+      c.assertCalled(0);
+
+      // change priority multiple times on c and once on a (and zero on b)
+      game.children.changePriority(c3, 2);
+      game.children.changePriority(c1, 10);
+      game.children.changePriority(a2, 0);
+      game.update(0);
+
+      a.assertCalled(1);
+      b.assertCalled(0);
+      c.assertCalled(1);
+
+      componentsSorted(game.children);
+      componentsSorted(a.children);
+      componentsSorted(b.children);
+      componentsSorted(c.children);
+
+      // change of b now
+      game.children.changePriority(b1, 2);
+      game.children.changePriority(a1, 1); // no-op!
+      game.update(0);
+
+      a.assertCalled(0);
+      b.assertCalled(1);
+      c.assertCalled(0);
+
+      componentsSorted(game.children);
+      componentsSorted(a.children);
+      componentsSorted(b.children);
+      componentsSorted(c.children);
     });
   });
 }
