@@ -6,5 +6,4 @@ Package to bridge the `tiled` library into easy-to-use Flame components.
     <img alt="flame_tiled example" width="200px" src="/packages/flame_tiled/screenshot.png">
 </p>
 
-
-More on https://flame-engine.org/docs/tiled.md
+More [here](https://docs.flame-engine.org/main/tiled.html).
