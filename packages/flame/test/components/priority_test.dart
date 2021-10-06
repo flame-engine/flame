@@ -116,7 +116,6 @@ void main() {
         final priorityComponents =
             List.generate(10, (i) => PriorityComponent(i));
         priorityComponents.shuffle();
-        final game = FlameGame()..onGameResize(Vector2.zero());
         game.add(parentComponent);
         parentComponent.addAll(priorityComponents);
         final children = parentComponent.children;
@@ -143,7 +142,6 @@ void main() {
         final priorityComponents =
             List.generate(10, (i) => PriorityComponent(i));
         priorityComponents.shuffle();
-        final game = FlameGame()..onGameResize(Vector2.zero());
         game.add(grandParentComponent);
         grandParentComponent.add(parentComponent);
         parentComponent.addAll(priorityComponents);
