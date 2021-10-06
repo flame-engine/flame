@@ -13,9 +13,16 @@ void main() {
       "can't add collidables to a game without HasCollidables",
       createGame: () => NonCollidableGame(),
       verify: (game) {
+        const message =
+            'You can only use the Hitbox/Collidable feature with games that has '
+            'the HasCollidables mixin';
         expect(
           () => game.add(MyCollidable()),
-          throwsAssertionError,
+          throwsA(
+            predicate(
+              (e) => e is AssertionError && e.message == message,
+            ),
+          ),
         );
       },
     );

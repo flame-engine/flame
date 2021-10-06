@@ -228,9 +228,17 @@ void main() {
     final game = MyGame();
     final component = MyComponent();
 
+    const message = '"prepare/add" called before the game is ready. '
+        'Did you try to access it on the Game constructor? '
+        'Use the "onLoad" ot "onParentMethod" method instead.';
+
     expect(
       () => game.add(component),
-      throwsAssertionError,
+      throwsA(
+        predicate(
+          (e) => e is AssertionError && e.message == message,
+        ),
+      ),
     );
   });
 }
