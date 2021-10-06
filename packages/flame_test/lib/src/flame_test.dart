@@ -13,6 +13,8 @@ extension FlameFinds on CommonFinders {
 typedef GameCreateFunction<T extends Game> = T Function();
 typedef VerifyFunction<T extends Game> = void Function(T);
 
+FlameGame _defaultCreate() => FlameGame();
+
 /// Creates a [Game] specific test case with given [description].
 ///
 /// Use [createGame] to create your game instance.
@@ -21,12 +23,15 @@ typedef VerifyFunction<T extends Game> = void Function(T);
 @isTest
 void flameTest<T extends Game>(
   String description, {
-  required GameCreateFunction<T> createGame,
+  GameCreateFunction<T>? createGame,
   VerifyFunction<T>? verify,
   Vector2? gameSize,
 }) {
   test(description, () async {
-    final game = createGame();
+    final game = (createGame ?? _defaultCreate)();
+    if (game is! T) {
+      fail('createGame provider must be of type T');
+    }
 
     final size = gameSize ?? Vector2.all(500);
     game.onGameResize(size);
