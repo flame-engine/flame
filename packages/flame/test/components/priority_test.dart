@@ -6,7 +6,8 @@ class PriorityComponent extends Component {
   PriorityComponent(int priority) : super(priority: priority);
 }
 
-void componentsSorted(Iterable<Component> components) { final priorities = components.map<int>((c) => c.priority).toList();
+void componentsSorted(Iterable<Component> components) {
+  final priorities = components.map<int>((c) => c.priority).toList();
   expect(priorities.toList(), orderedEquals(priorities..sort()));
 }
 
