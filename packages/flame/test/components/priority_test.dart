@@ -131,7 +131,7 @@ void main() {
       expect(children.last, first);
     });
 
-    test('#reorderParent is only called once per parent per tick', () {
+    test('#reorderChildren is only called once per parent per tick', () {
       final a = ParentWithReorderSpy(1);
       final a1 = PriorityComponent(1);
       final a2 = PriorityComponent(2);

@@ -138,60 +138,6 @@ class FlameGame extends Component with Game {
     super.onGameResize(canvasSize);
   }
 
-  /// Changes the priority of [component] and reorders the games component list.
-  ///
-  /// Returns true if changing the component's priority modified one of the
-  /// components that existed directly on the game and false if it
-  /// either was a child of another component, if it didn't exist at all or if
-  /// it was a component added directly on the game but its priority didn't
-  /// change.
-  bool changePriority(
-    Component component,
-    int priority, {
-    bool reorderRoot = true,
-  }) {
-    if (component.priority == priority) {
-      return false;
-    }
-    component.changePriorityWithoutResorting(priority);
-    if (reorderRoot) {
-      final parent = component.parent;
-      if (parent != null) {
-        parent.reorderChildren();
-      } else if (contains(component)) {
-        children.rebalanceAll();
-      }
-    }
-    return true;
-  }
-
-  /// Since changing priorities is quite an expensive operation you should use
-  /// this method if you want to change multiple priorities at once so that the
-  /// tree doesn't have to be reordered multiple times.
-  void changePriorities(Map<Component, int> priorities) {
-    var hasRootComponents = false;
-    final parents = <Component>{};
-    priorities.forEach((component, priority) {
-      final wasUpdated = changePriority(
-        component,
-        priority,
-        reorderRoot: false,
-      );
-      if (wasUpdated) {
-        final parent = component.parent;
-        if (parent != null) {
-          parents.add(parent);
-        } else {
-          hasRootComponents |= contains(component);
-        }
-      }
-    });
-    if (hasRootComponents) {
-      children.rebalanceAll();
-    }
-    parents.forEach((parent) => parent.reorderChildren());
-  }
-
   /// Whether a point is within the boundaries of the visible part of the game.
   @override
   bool containsPoint(Vector2 p) {
