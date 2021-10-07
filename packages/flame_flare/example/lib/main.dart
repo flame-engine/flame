@@ -6,7 +6,6 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_flare/flame_flare.dart';
 import 'package:flutter/material.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:flare_flutter/flare_controls.dart';
 
 void main() {
