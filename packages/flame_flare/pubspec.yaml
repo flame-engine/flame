@@ -12,7 +12,6 @@ dependencies:
   flame:
     path: ../flame
   flare_flutter: ^3.0.2
-  memoize: ^2.0.0
   flutter:
     sdk: flutter
 
