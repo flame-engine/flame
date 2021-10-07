@@ -90,9 +90,11 @@ published via FireSlime.
 
 You can always use all the Widgets and features that Flutter already provide, but Flame wraps
 the gesture detector callbacks on its base Game class so it can be a little easier to handle those
-events, you can find more about it on the input documentation page:
+events, you can find more about it on our docs:
 
-https://flame-engine.org/docs/#/input
+ * [Gesture/Mouse](https://docs.flame-engine.org/main/gesture-input.html)
+ * [Keyboard](https://docs.flame-engine.org/main/keyboard-input.html)
+ * [Other](https://docs.flame-engine.org/main/other-inputs.html)
 
 ## Other questions?
 

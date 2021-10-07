@@ -8,4 +8,4 @@
 
 Package to add SVG rendering support for the Flame game engine.
 
-More on https://flame-engine.org/docs/#/docs/images?id=svg
+More [here](https://docs.flame-engine.org/main/images.html#svg).
