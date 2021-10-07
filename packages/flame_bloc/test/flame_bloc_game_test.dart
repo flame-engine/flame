@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,41 +39,37 @@ void main() {
       cubit = InventoryCubit();
     });
 
-    Future<void> _pumpWidget(
-      GameWidget<MyBlocGame> gameWidget,
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(
-        BlocProvider<InventoryCubit>.value(
-          value: cubit,
-          child: gameWidget,
-        ),
-      );
-    }
+    final blocGame = FlameTester<MyBlocGame>(
+      () => MyBlocGame(),
+      pumpWidget: (gameWidget, tester) async {
+        await tester.pumpWidget(
+          BlocProvider<InventoryCubit>.value(
+            value: cubit,
+            child: gameWidget,
+          ),
+        );
+      },
+    );
 
-    flameWidgetTest<MyBlocGame>(
+    blocGame.widgetTest(
       'can emit states',
-      createGame: () => MyBlocGame(),
-      pumpWidget: _pumpWidget,
-      verify: (game, tester) async {
+      (game, tester) async {
         game.read<InventoryCubit>().selectBow();
 
         expect(cubit.state, equals(InventoryState.bow));
       },
     );
 
-    flameTest<MyBlocGame>(
+    blocGame.test(
       'read throws exection when game is not attached yet',
-      createGame: () => MyBlocGame(),
-      verify: (game) {
+      (game) {
         expect(() => game.read<InventoryCubit>(), throwsException);
       },
     );
 
-    flameTest<MyBlocGame>(
+    blocGame.test(
       'adds component to queue when is not attached',
-      createGame: () => MyBlocGame(),
-      verify: (game) {
+      (game) {
         game.add(InventoryComponent());
         game.update(0);
 
@@ -82,10 +77,9 @@ void main() {
       },
     );
 
-    flameTest<MyBlocGame>(
+    blocGame.test(
       'runs the queue when game is attached',
-      createGame: () => MyBlocGame(),
-      verify: (game) {
+      (game) {
         final component = MockInventoryComponent();
 
         game.prepareComponent(component);
@@ -96,23 +90,19 @@ void main() {
       },
     );
 
-    flameWidgetTest<MyBlocGame>(
+    blocGame.widgetTest(
       'init components with the initial state',
-      createGame: () => MyBlocGame(),
-      pumpWidget: _pumpWidget,
-      verify: (game, tester) async {
+      (game, tester) async {
         final component = InventoryComponent();
         game.add(component);
 
-        expect(component.state, equals(InventoryState.sword));
+        expect(component.state, equals(InventoryState.bow));
       },
     );
 
-    flameWidgetTest<MyBlocGame>(
+    blocGame.widgetTest(
       'components listen to changes',
-      createGame: () => MyBlocGame(),
-      pumpWidget: _pumpWidget,
-      verify: (game, tester) async {
+      (game, tester) async {
         final component = InventoryComponent();
         game.add(component);
         game.read<InventoryCubit>().selectBow();
