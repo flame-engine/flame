@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [Next]
+ - `changePriority` no longer breaks game loop iteration
+
 ## [1.0.0-releasecandidate.15]
  - Fix issue with `Draggable`s not being removed from `draggables` list
  - Increase Flutter SDK constraint to `>= 2.5.0`.
