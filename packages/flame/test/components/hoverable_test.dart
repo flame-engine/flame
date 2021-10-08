@@ -37,9 +37,17 @@ void main() {
       final game2 = _GameWithoutHoverables();
       game2.onGameResize(Vector2.all(100));
 
+      const message =
+          'Hoverable Components can only be added to a FlameGame with '
+          'HasHoverableComponents';
+
       expect(
         () => game2.add(HoverableComponent()),
-        throwsA(isA<AssertionError>()),
+        throwsA(
+          predicate(
+            (e) => e is AssertionError && e.message == message,
+          ),
+        ),
       );
     });
     test('single component', () async {

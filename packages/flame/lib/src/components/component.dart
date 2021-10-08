@@ -313,10 +313,17 @@ class Component with Loadable {
   @mustCallSuper
   void prepare(Component parent) {
     _parent = parent;
+
     final parentGame = findParent<FlameGame>();
     if (parentGame == null) {
       isPrepared = false;
     } else {
+      assert(
+        parentGame.hasLayout,
+        '"prepare/add" called before the game is ready. '
+        'Did you try to access it on the Game constructor? '
+        'Use the "onLoad" ot "onParentMethod" method instead.',
+      );
       if (parentGame is FlameGame) {
         parentGame.prepareComponent(this);
       }
