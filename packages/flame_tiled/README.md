@@ -1,5 +1,7 @@
 # flame_tiled
 
+> :warning: Under the current sprite batch implementation, Flips are not working prperly. Any help is appreciated looking into this issue.
+
 Package to bridge the `tiled` library into easy-to-use Flame components.
 
 <p align="center">
