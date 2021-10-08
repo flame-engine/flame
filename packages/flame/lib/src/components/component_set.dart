@@ -30,6 +30,12 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// concurrency issues.
   final Set<Component> _removeLater = {};
 
+  /// Components whose priority changed since the last update.
+  ///
+  /// When priorities change we need to re-balance the component set, but
+  /// we can only do that after each update to avoid concurrency issues.
+  final Set<Component> _changedPriorities = {};
+
   /// This is the "prepare" function that will be called *before* the
   /// component is added to the component list by the add/addAll methods.
   /// It is also called when the component changes parent.
@@ -160,6 +166,12 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// and thus actually modifies the components set.
   /// Note: do not call this while iterating the set.
   void updateComponentList() {
+    _actuallyUpdatePriorities();
+    _actuallyRemove();
+    _actuallyAdd();
+  }
+
+  void _actuallyRemove() {
     _removeLater.addAll(where((c) => c.shouldRemove));
     _removeLater.forEach((c) {
       c.onRemove();
@@ -167,7 +179,9 @@ class ComponentSet extends QueryableOrderedSet<Component> {
       c.shouldRemove = false;
     });
     _removeLater.clear();
+  }
 
+  void _actuallyAdd() {
     _addLater.forEach((c) {
       super.add(c);
       c.isMounted = true;
@@ -188,6 +202,43 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     // bypass the wrapper because the components are already added
     final elements = super.removeWhere(test).toList();
     elements.forEach(super.add);
+  }
+
+  /// Changes the priority of [component] and reorders the games component list.
+  ///
+  /// Returns true if changing the component's priority modified one of the
+  /// components that existed directly on the game and false if it
+  /// either was a child of another component, if it didn't exist at all or if
+  /// it was a component added directly on the game but its priority didn't
+  /// change.
+  bool changePriority(
+    Component component,
+    int priority,
+  ) {
+    if (component.priority == priority) {
+      return false;
+    }
+    component.changePriorityWithoutResorting(priority);
+    _changedPriorities.add(component);
+    return true;
+  }
+
+  void _actuallyUpdatePriorities() {
+    var hasRootComponents = false;
+    final parents = <Component>{};
+    _changedPriorities.forEach((component) {
+      final parent = component.parent;
+      if (parent != null) {
+        parents.add(parent);
+      } else {
+        hasRootComponents |= contains(component);
+      }
+    });
+    if (hasRootComponents) {
+      rebalanceAll();
+    }
+    parents.forEach((parent) => parent.reorderChildren());
+    _changedPriorities.clear();
   }
 
   /// Creates a [ComponentSet] with a default value for the compare function,

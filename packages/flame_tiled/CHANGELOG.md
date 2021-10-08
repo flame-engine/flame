@@ -1,7 +1,5 @@
-## [next]
+## [1.0.0-releasecandidate.15]
 
-
-## [1.0.0-releasecandidate.14]
 * Upgrade to work with latest Flame version
 * Move to the mono-repo
 

@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [Next]
+ - `changePriority` no longer breaks game loop iteration
  - Move component mixin checks to their own files
 
 ## [1.0.0-releasecandidate.15]
