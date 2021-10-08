@@ -25,6 +25,20 @@ mixin Hoverable on Component {
       }
     }
   }
+
+  @override
+  @mustCallSuper
+  void prepare(Component component) {
+    super.prepare(component);
+    if (isPrepared) {
+      final parentGame = findParent<FlameGame>();
+      assert(
+        parentGame is HasHoverableComponents,
+        'Hoverable Components can only be added to a FlameGame with '
+        'HasHoverableComponents',
+      );
+    }
+  }
 }
 
 mixin HasHoverableComponents on FlameGame {
