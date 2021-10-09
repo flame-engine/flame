@@ -1,8 +1,7 @@
 const tutorial = [
   '''
 # Controlling the player and adding some graphics
-''',
-  '''
+
 Now that the base for our game and we have a component for our player, lets add some interactive to
 it, lets begin that by allowing the player to be controlled by the mouse/touch gestures.
 
