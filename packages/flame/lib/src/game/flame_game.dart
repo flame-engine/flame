@@ -3,15 +3,10 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 
 import '../components/component.dart';
-import '../components/mixins/collidable.dart';
-import '../components/mixins/draggable.dart';
-import '../components/mixins/hoverable.dart';
-import '../components/mixins/tappable.dart';
 import '../extensions/vector2.dart';
 import 'camera/camera.dart';
 import 'camera/camera_wrapper.dart';
 import 'mixins/game.dart';
-import 'mixins/has_collidables.dart';
 
 /// This is a more complete and opinionated implementation of [Game].
 ///
@@ -55,42 +50,6 @@ class FlameGame extends Component with Game {
   /// don't forget to call `super.prepareComponent` when overriding.
   @mustCallSuper
   void prepareComponent(Component c) {
-    assert(
-      hasLayout,
-      '"prepare/add" called before the game is ready. '
-      'Did you try to access it on the Game constructor? '
-      'Use the "onLoad" ot "onParentMethod" method instead.',
-    );
-
-    if (c is Collidable) {
-      assert(
-        this is HasCollidables,
-        'You can only use the Hitbox/Collidable feature with games that has '
-        'the HasCollidables mixin',
-      );
-    }
-    if (c is Tappable) {
-      assert(
-        this is HasTappableComponents,
-        'Tappable Components can only be added to a FlameGame with '
-        'HasTappableComponents',
-      );
-    }
-    if (c is Draggable) {
-      assert(
-        this is HasDraggableComponents,
-        'Draggable Components can only be added to a FlameGame with '
-        'HasDraggableComponents',
-      );
-    }
-    if (c is Hoverable) {
-      assert(
-        this is HasHoverableComponents,
-        'Hoverable Components can only be added to a FlameGame with '
-        'HasHoverableComponents',
-      );
-    }
-
     // First time resize
     c.onGameResize(size);
   }

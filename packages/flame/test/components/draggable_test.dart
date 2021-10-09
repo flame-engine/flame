@@ -29,9 +29,17 @@ void main() {
       final game2 = _GameWithoutDraggables();
       game2.onGameResize(Vector2.all(100));
 
+      const message =
+          'Draggable Components can only be added to a FlameGame with '
+          'HasDraggableComponents';
+
       expect(
         () => game2.add(DraggableComponent()),
-        throwsA(isA<AssertionError>()),
+        throwsA(
+          predicate(
+            (e) => e is AssertionError && e.message == message,
+          ),
+        ),
       );
     });
 

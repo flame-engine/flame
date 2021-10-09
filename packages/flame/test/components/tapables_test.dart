@@ -19,9 +19,17 @@ void main() {
       final game2 = _GameWithoutTappables();
       game2.onGameResize(Vector2.all(100));
 
+      const message =
+          'Tappable Components can only be added to a FlameGame with '
+          'HasTappableComponents';
+
       expect(
         () => game2.add(TappableComponent()),
-        throwsA(isA<AssertionError>()),
+        throwsA(
+          predicate(
+            (e) => e is AssertionError && e.message == message,
+          ),
+        ),
       );
     });
   });
