@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/assets.dart';
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -18,22 +19,20 @@ class Svg {
     return Svg(await svg.fromSvgString(svgString, svgString));
   }
 
-  /// Renders the svg on the [canvas] using the dimensions provided by [size]
+  /// Renders the svg on the [canvas] using the dimensions provided by [size].
   void render(Canvas canvas, Vector2 size) {
     svgRoot.scaleCanvasToViewBox(canvas, size.toSize());
     svgRoot.draw(canvas, svgRoot.viewport.viewBoxRect);
   }
 
-  /// Renders the svg on the [canvas] on the given [position] using the dimensions provided by [size]
+  /// Renders the svg on the [canvas] on the given [position] using the
+  /// dimensions provided by [size].
   void renderPosition(
     Canvas canvas,
     Vector2 position,
     Vector2 size,
   ) {
-    canvas.save();
-    canvas.translate(position.x, position.y);
-    render(canvas, size);
-    canvas.restore();
+    canvas.renderAt(position, (c) => render(c, size));
   }
 }
 
