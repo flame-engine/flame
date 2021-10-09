@@ -44,11 +44,13 @@ class StepScaffold extends StatelessWidget {
                             alignment: Alignment.topLeft,
                             child: HighlightView(
                               code,
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
                               language: 'dart',
-                              theme: Theme.of(context).brightness == Brightness.light
-                              ? githubTheme
-                              : darkTheme,
+                              theme: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? githubTheme
+                                  : darkTheme,
                             ),
                           ),
                         );

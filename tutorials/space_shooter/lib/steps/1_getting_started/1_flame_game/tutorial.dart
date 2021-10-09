@@ -1,4 +1,5 @@
-const tutorial = ['''
+const tutorial = [
+  '''
 # Getting Started
 
 This tutorial will guide you on the development of a full Flame game, starting from the ground,
@@ -13,7 +14,8 @@ a position and dimensions in the game space.
 
 Lets start by creating our game class and the `GameWidget` that will run it.
 
-''','''
+''',
+  '''
 ```
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
@@ -25,7 +27,8 @@ void main() {
   runApp(GameWidget(game: SpaceShooterGame()));
 }
 ```
-''','''
+''',
+  '''
 That is it! If you run this, you will only see an empty black screen for now, from that, we can
 start implementing our game.
 
@@ -33,7 +36,8 @@ Next, lets create our player component, to do so, we will create a new class bas
 `PositionComponent`, this component is the base for all components that has a position and a dimension
 on the game screen. For now, our component will only render a white square, such component could be
 implemented as the following:
-''','''```
+''',
+  '''```
 import 'package:flame/components.dart';
 
 class Player extends PositionComponent {
@@ -43,11 +47,13 @@ class Player extends PositionComponent {
   }
 }
 ```
-''','''
+''',
+  '''
 Now lets add our new component to our game. Any component addition on game startup should be done
 on the `onLoad` method, so lets override `FlameGame.onLoad` and add our logic there, the modified
 code will like the following:
-''','''```
+''',
+  '''```
 class SpaceShooterGame extends FlameGame {
   @override
   Future<void>? onLoad() async {
@@ -63,7 +69,8 @@ class SpaceShooterGame extends FlameGame {
     );
   }
 }
-```''','''
+```''',
+  '''
 If you run this, you will now see a white rectangle being rendered in the center of the screen.
 
 A couple of points worth commenting at this point:

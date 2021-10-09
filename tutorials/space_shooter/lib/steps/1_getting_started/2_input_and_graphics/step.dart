@@ -10,9 +10,8 @@ class InputAndGraphicsStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const StepScaffold(
-        tutorial: tutorial,
-        game: MyGame(),
+      tutorial: tutorial,
+      game: MyGame(),
     );
   }
 }
-

@@ -1,6 +1,8 @@
-const tutorial = ['''
+const tutorial = [
+  '''
 # Controlling the player and adding some graphics
-''','''
+''',
+  '''
 Now that the base for our game and we have a component for our player, lets add some interactive to
 it, lets begin that by allowing the player to be controlled by the mouse/touch gestures.
 
@@ -10,7 +12,8 @@ Flame's gestures detectors: `PanDetector`.
 This detector will make our game class receive pan (or drag) events, to do so, we just need to
 add the `PanDetector` mixin to our game class and override its listeners methods, for our game
 we will use the `onPadUpdate` method, our updated code will look like the following:
-''','''```
+''',
+  '''```
 import 'package:flame/input.dart';
 
 class SpaceShooterGame extends FlameGame with PanDetector {
@@ -25,13 +28,15 @@ class SpaceShooterGame extends FlameGame with PanDetector {
   void onPanUpdate(DragUpdateInfo info) {
   }
 }
-```''','''
+```''',
+  '''
 At this point our game should be receiving all the pan updates inputs, but we are not doing
 anything with those events.
 
 We need now a way to move our player, that can be achieved by simply saving our `Player` component to a
 variable inside our game class, add a method `move` to our `Player` and just connect them:
-''','''```
+''',
+  '''```
 class Player extends PositionComponent {
   @override
   void render(Canvas canvas) {
@@ -65,7 +70,8 @@ class SpaceShooterGame extends FlameGame with PanDetector {
     player.move(info.delta.game);
   }
 }
-```''','''
+```''',
+  '''
 That is it! If you drag the screen, the player should follow your movement and we have just
 implemented our very first interactive game!
 
@@ -80,7 +86,8 @@ features into a component.
 
 So lets refactor our current implementation, first we can replace our inheritance from
 `PositionComponent` to `SpriteComponent` and load the sprite:
-''','''```
+''',
+  '''```
 class Player extends SpriteComponent {
   void move(Vector2 delta) {
     position.add(delta);
@@ -111,7 +118,8 @@ class SpaceShooterGame extends FlameGame with PanDetector {
     player.move(info.delta.game);
   }
 }
-```''','''
+```''',
+  '''
 And now, you should see a small blue spaceship on the screen!
 
 A couple of notes worth mentioning:
@@ -134,7 +142,8 @@ That is not a problem, everytime our component needs to access things from its g
 mix our component with the `HasGameRef` mixin, that will add a new variable to our component called
 `gameRef` which will point to the game instance where the component is running. Now, lets refactor
 our game a little bit:
-''','''```
+''',
+  '''```
 class Player extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   @override
   Future<void>? onLoad() async {
@@ -172,7 +181,8 @@ class SpaceShooterGame extends FlameGame with PanDetector {
     player.move(info.delta.game);
   }
 }
-```''','''
+```''',
+  '''
 If you run the game now, you will not notice any visual differences, but now we have a more
 scalable structure to grow our game on. And that closes this step!
 '''
