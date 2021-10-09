@@ -45,6 +45,20 @@ mixin Tappable on Component {
     }
     return true;
   }
+
+  @override
+  @mustCallSuper
+  void prepare(Component component) {
+    super.prepare(component);
+    if (isPrepared) {
+      final parentGame = findParent<FlameGame>();
+      assert(
+        parentGame is HasTappableComponents,
+        'Tappable Components can only be added to a FlameGame with '
+        'HasTappableComponents',
+      );
+    }
+  }
 }
 
 mixin HasTappableComponents on FlameGame {

@@ -60,6 +60,20 @@ mixin Draggable on Component {
     }
     return true;
   }
+
+  @override
+  @mustCallSuper
+  void prepare(Component component) {
+    super.prepare(component);
+    if (isPrepared) {
+      final parentGame = findParent<FlameGame>();
+      assert(
+        parentGame is HasDraggableComponents,
+        'Draggable Components can only be added to a FlameGame with '
+        'HasDraggableComponents',
+      );
+    }
+  }
 }
 
 mixin HasDraggableComponents on FlameGame {
