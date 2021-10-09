@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [Next]
+## [1.0.0-releasecandidate.15]
  - Takes priority as an argument on SvgComponent
  - Simplify implementation of `renderPosition`
 
