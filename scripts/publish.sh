@@ -62,7 +62,7 @@ done
 
 choice=-1
 while [[ "$choice" -gt "${#packages[@]}" || "$choice" -le "0" ]]; do
-  read -n 1 -r -p "Enter a number: " choice
+  read -r -p "Enter a number: " choice
   printf "\n"
 done
 
