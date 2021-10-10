@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 class Player extends PositionComponent {
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(toRect(), Paint()..color = Colors.white);
+    super.render(canvas);
+    canvas.drawRect(size.toRect(), Paint()..color = Colors.white);
   }
 }
 
