@@ -14,7 +14,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   dashbook:
     git:
-      url: git@github.com:bluefireteam/dashbook.git
+      url: https://github.com/bluefireteam/dashbook.git
       ref: erick.update-markdown
   flame: ^1.0.0-releasecandidate.15
   flutter_markdown: ^0.6.7
