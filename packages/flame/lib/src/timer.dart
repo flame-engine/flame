@@ -79,8 +79,5 @@ class TimerComponent extends Component {
   }
 
   @override
-  void render(Canvas canvas) {}
-
-  @override
   bool get shouldRemove => timer.finished;
 }
