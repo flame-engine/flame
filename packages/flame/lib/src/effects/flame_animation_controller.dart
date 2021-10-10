@@ -57,7 +57,7 @@ class FlameAnimationController {
             'An infinite animation cannot have a repeat count'),
         assert(infinite ? onComplete == null : true,
             'An infinite animation cannot have onComplete callback'),
-        assert(!infinite ? (repeatCount ?? 0) > 0 : true,
+        assert(!infinite ? (repeatCount ?? 1) > 0 : true,
             'repeatCount must be positive'),
         assert(duration > 0, 'duration must be positive'),
         assert(reverseDuration >= 0, 'reverseDuration cannot be negative'),

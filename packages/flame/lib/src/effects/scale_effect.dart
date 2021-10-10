@@ -1,12 +1,9 @@
-import 'dart:ui';
 
-import 'package:flame/src/effects/flame_animation_controller.dart';
 import 'package:flutter/animation.dart';
-
 import '../../components.dart';
 import '../extensions/vector2.dart';
-import 'effect_component.dart';
 import 'effects.dart';
+import 'flame_animation_controller.dart';
 
 class ScaleEffect extends PositionComponentEffect {
   Vector2 scale;
@@ -60,28 +57,5 @@ class ScaleEffect extends PositionComponentEffect {
       return;
     }
     affectedParent.scale.setFrom(originalScale! + _delta * curveProgress);
-  }
-}
-
-class ScaleEffect2 extends EffectComponent {
-  ScaleEffect2({
-    required Vector2 scale,
-    required FlameAnimationController controller,
-    bool absolute = false,
-    bool? removeOnFinish,
-  })  : effectValue = scale.clone(),
-        isAbsolute = absolute,
-        super(controller: controller, removeOnFinish: removeOnFinish);
-
-  final Vector2 effectValue;
-  final bool isAbsolute;
-
-  @override
-  void onStart() {
-
-  }
-  @override
-  void apply(double progress) {
-    // TODO: implement apply
   }
 }
