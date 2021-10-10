@@ -4,16 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _Wrapper extends StatefulWidget {
-  const _Wrapper({required this.child});
+  const _Wrapper({
+    required this.child,
+    this.open = false,
+  });
 
   final Widget child;
+  final bool open;
 
   @override
   State<_Wrapper> createState() => _WrapperState();
 }
 
 class _WrapperState extends State<_Wrapper> {
-  bool _open = false;
+  late bool _open;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _open = widget.open;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +88,23 @@ void main() {
       await tester.pump();
 
       expect(game.onDettachCalled, isTrue);
+    },
+  );
+  flameWidgetTest<MyGame>(
+    'size is kept on game after a detach',
+    createGame: () => MyGame(),
+    pumpWidget: (gameWidget, tester) async {
+      await tester.pumpWidget(_Wrapper(child: gameWidget, open: true,));
+    },
+    verify: (game, tester) async {
+      expect(game.hasLayout, isTrue);
+
+      await tester.tap(find.text('Toggle'));
+      await tester.pump();
+
+      expect(game.isAttached, isFalse);
+      expect(game.size, isNotNull);
+      expect(game.hasLayout, isTrue);
     },
   );
 }
