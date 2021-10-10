@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class Player extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   @override
-  Future<void>? onLoad() async {
+  Future<void> onLoad() async {
     await super.onLoad();
 
     final playerSprite = await gameRef.loadSprite('player-sprite.png');

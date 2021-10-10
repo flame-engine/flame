@@ -1,7 +1,7 @@
 name: space_shooter
 description: Flame Space Shooter Tutorial
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
 version: 1.0.0+1
 
