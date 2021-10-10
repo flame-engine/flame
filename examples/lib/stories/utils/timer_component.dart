@@ -14,6 +14,7 @@ class RenderedTimeComponent extends TimerComponent {
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     textPaint.render(
       canvas,
       'Elapsed time: ${timer.current}',

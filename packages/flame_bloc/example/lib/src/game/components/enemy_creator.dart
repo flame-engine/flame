@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/timer.dart';
@@ -29,7 +28,4 @@ class EnemyCreator extends Component with HasGameRef<SpaceShooterGame> {
     super.update(dt);
     enemyCreator.update(dt);
   }
-
-  @override
-  void render(Canvas canvas) {}
 }
