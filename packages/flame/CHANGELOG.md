@@ -3,6 +3,7 @@
 ## [Next]
  - `changePriority` no longer breaks game loop iteration
  - Move component mixin checks to their own files
+ - Fix exception when game was rebuilt
 
 ## [1.0.0-releasecandidate.15]
  - Fix issue with `Draggable`s not being removed from `draggables` list
