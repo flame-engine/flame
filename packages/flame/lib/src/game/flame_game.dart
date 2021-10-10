@@ -64,6 +64,7 @@ class FlameGame extends Component with Game {
   @override
   @mustCallSuper
   void render(Canvas canvas) {
+    super.render(canvas);
     _cameraWrapper.render(canvas);
   }
 

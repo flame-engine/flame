@@ -131,6 +131,7 @@ class Component with Loadable {
     children.forEach((c) => c.update(dt));
   }
 
+  @mustCallSuper
   void render(Canvas canvas) {
     preRender(canvas);
   }
