@@ -29,7 +29,4 @@ class EnemyCreator extends Component with HasGameRef<SpaceShooterGame> {
     super.update(dt);
     enemyCreator.update(dt);
   }
-
-  @override
-  void render(Canvas canvas) {}
 }
