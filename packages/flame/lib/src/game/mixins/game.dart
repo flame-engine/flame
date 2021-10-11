@@ -110,6 +110,7 @@ mixin Game on Loadable implements Projector {
       ''');
     }
     _gameRenderBox = gameRenderBox;
+
     onAttach();
   }
 
@@ -123,7 +124,6 @@ mixin Game on Loadable implements Projector {
   /// Should not be called manually.
   void detach() {
     _gameRenderBox = null;
-    _size = null;
 
     onDetach();
   }
