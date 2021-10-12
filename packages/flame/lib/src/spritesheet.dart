@@ -113,7 +113,7 @@ class SpriteSheet {
     );
   }
 
-  /// Creates a [SpriteAnimation] sequenced from this SpriteSheet, using the sequence
+  /// Creates a [SpriteAnimation] from this SpriteSheet, using the sequence
   /// of sprites on a given row with different duration for each.
   ///
   /// [from] and [to] can be specified to create an animation
