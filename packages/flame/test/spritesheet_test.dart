@@ -10,7 +10,6 @@ void main() {
   late final Image image = MockImage();
 
   setUpAll(() {
-    image = MockImage();
     when(() => image.width).thenReturn(100);
     when(() => image.height).thenReturn(100);
   });
