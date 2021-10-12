@@ -27,7 +27,7 @@ void main() {
   });
 
   group('SpriteSheet createAnimationVariable', () {
-    test('Should put correct time in sprite', () {
+    test('assign the correct time in sprite', () {
       final sprite = SpriteSheet(
         image: image,
         srcSize: Vector2(50, 50),
