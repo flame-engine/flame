@@ -100,4 +100,29 @@ class SpriteSheet {
       loop: loop,
     );
   }
+
+  /// Creates a [SpriteAnimation] sequenced from this SpriteSheet, using the sequence
+  /// of sprites on a given row with different duration for each.
+  ///
+  /// [from] and [to] can be specified to create an animation
+  /// from a subset of the columns on the row
+  SpriteAnimation createAnimationVariable({
+    required int row,
+    required List<double> stepTime,
+    bool loop = true,
+    int from = 0,
+    int? to,
+  }) {
+    to ??= columns;
+
+    final spriteList = List<int>.generate(to - from, (i) => from + i)
+        .map((e) => getSprite(row, e))
+        .toList();
+
+    return SpriteAnimation.spriteList(
+      spriteList,
+      loop: loop,
+      stepTime: stepTime.first,
+    )..variableStepTimes = stepTime;
+  }
 }
