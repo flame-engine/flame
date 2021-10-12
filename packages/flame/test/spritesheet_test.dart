@@ -15,7 +15,7 @@ void main() {
   });
 
   group('SpriteSheet', () {
-    test('Should calc all field from SpriteSheet', () async {
+    test('calculates all field from SpriteSheet', () async {
       final sprite = SpriteSheet(
         image: image,
         srcSize: Vector2(1, 2),
