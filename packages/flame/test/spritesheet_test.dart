@@ -42,7 +42,7 @@ void main() {
     });
 
     test(
-        'Should throw assetetion error'
+        'throws assertion error'
         ' When the size of stepTime is different from sprite', () {
       final sprite = SpriteSheet(
         image: image,
