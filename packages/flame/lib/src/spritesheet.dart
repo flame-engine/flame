@@ -76,7 +76,7 @@ class SpriteSheet {
     );
   }
 
-  List<Sprite> _generateListSprites({
+  List<Sprite> _generateSpriteList({
     required int row,
     int from = 0,
     int? to,
@@ -100,7 +100,7 @@ class SpriteSheet {
     int from = 0,
     int? to,
   }) {
-    final spriteList = _generateListSprites(
+    final spriteList = _generateSpriteList(
       row: row,
       to: to,
       from: from,
@@ -125,7 +125,7 @@ class SpriteSheet {
     int from = 0,
     int? to,
   }) {
-    final spriteList = _generateListSprites(
+    final spriteList = _generateSpriteList(
       row: row,
       to: to,
       from: from,
