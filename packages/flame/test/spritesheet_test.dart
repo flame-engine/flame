@@ -7,7 +7,7 @@ import 'package:mocktail/mocktail.dart';
 class MockImage extends Mock implements Image {}
 
 void main() {
-  late final Image image;
+  late final Image image = MockImage();
 
   setUpAll(() {
     image = MockImage();
