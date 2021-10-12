@@ -76,6 +76,18 @@ class SpriteSheet {
     );
   }
 
+  List<Sprite> _generateListSprites({
+    required int row,
+    int from = 0,
+    int? to,
+  }) {
+    to ??= columns;
+
+    return List<int>.generate(to - from, (i) => from + i)
+        .map((e) => getSprite(row, e))
+        .toList();
+  }
+
   /// Creates a [SpriteAnimation] from this SpriteSheet, using the sequence
   /// of sprites on a given row.
   ///
@@ -88,11 +100,11 @@ class SpriteSheet {
     int from = 0,
     int? to,
   }) {
-    to ??= columns;
-
-    final spriteList = List<int>.generate(to - from, (i) => from + i)
-        .map((e) => getSprite(row, e))
-        .toList();
+    final spriteList = _generateListSprites(
+      row: row,
+      to: to,
+      from: from,
+    );
 
     return SpriteAnimation.spriteList(
       spriteList,
@@ -113,11 +125,11 @@ class SpriteSheet {
     int from = 0,
     int? to,
   }) {
-    to ??= columns;
-
-    final spriteList = List<int>.generate(to - from, (i) => from + i)
-        .map((e) => getSprite(row, e))
-        .toList();
+    final spriteList = _generateListSprites(
+      row: row,
+      to: to,
+      from: from,
+    );
 
     return SpriteAnimation.spriteList(
       spriteList,
