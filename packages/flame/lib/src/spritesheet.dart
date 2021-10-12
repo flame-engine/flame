@@ -120,7 +120,7 @@ class SpriteSheet {
   /// from a subset of the columns on the row
   SpriteAnimation createAnimationVariable({
     required int row,
-    required List<double> stepTime,
+    required List<double> stepTimes,
     bool loop = true,
     int from = 0,
     int? to,
@@ -131,10 +131,10 @@ class SpriteSheet {
       from: from,
     );
 
-    return SpriteAnimation.spriteList(
+    return SpriteAnimation.variableSpriteList(
       spriteList,
       loop: loop,
-      stepTime: stepTime.first,
-    )..variableStepTimes = stepTime;
+      stepTimes: stepTimes,
+    );
   }
 }

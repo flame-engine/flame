@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
+
 import 'assets/images.dart';
 import 'extensions/vector2.dart';
 import 'flame.dart';
@@ -193,6 +195,23 @@ class SpriteAnimation {
 
     this.frames = frames.toList();
     loop = true;
+  }
+
+  SpriteAnimation.variableSpriteList(
+    List<Sprite> sprites, {
+    required List<double> stepTimes,
+    this.loop = true,
+  }) {
+    if (sprites.isEmpty) {
+      throw Exception('You must have at least one frame!');
+    }
+    if (stepTimes.length != sprites.length) {
+      throw Exception('The length of stepTimes and sprites must be the same!');
+    }
+
+    frames = sprites
+        .mapIndexed((i, s) => SpriteAnimationFrame(s, stepTimes[i]))
+        .toList();
   }
 
   /// Takes a path of an image, a [SpriteAnimationData] and loads the sprite animation

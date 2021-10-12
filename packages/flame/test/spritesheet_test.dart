@@ -35,7 +35,7 @@ void main() {
 
       final spriteAnimation = sprite.createAnimationVariable(
         row: 1,
-        stepTime: [2.0, 3.0],
+        stepTimes: [2.0, 3.0],
       );
 
       expect(spriteAnimation.totalDuration(), 5.0);
@@ -52,9 +52,9 @@ void main() {
       expect(
         () => sprite.createAnimationVariable(
           row: 1,
-          stepTime: [2.0],
+          stepTimes: [2.0],
         ),
-        throwsAssertionError,
+        throwsException,
       );
     });
   });
