@@ -140,7 +140,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
 
   @override
   void onRemove() {
-    super.onRemove();
     world.destroyBody(body);
+    super.onRemove();
   }
 }
