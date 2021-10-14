@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [Next]
+## [0.8.2-releasecandidate.15]
  - Destroy body before calling `super.onRemove`
 
 ## [0.8.1-releasecandidate.15]
