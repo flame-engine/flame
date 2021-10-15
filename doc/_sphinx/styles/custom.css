@@ -146,3 +146,37 @@ main.bd-content #main-content .prev-next-bottom .right-next .prevnext-label, mai
 .bd-sidebar .nav li>a {
     padding: .1rem 1.5rem;
 }
+
+
+/* Search-related elements */
+
+form.bd-search #search-input {
+    border-bottom-color: #a99a2f;
+}
+
+form.bd-search #search-input:focus {
+    color: white;
+    background: none;
+    border-bottom: none;
+    box-shadow: 0 0 4px 0px #ffffff88;
+    border-radius: 4px;
+}
+
+form.bd-search i.icon.fa-search {
+    color: #a99a2f;
+}
+
+form.bd-search:focus-within i.icon.fa-search {
+    opacity: 25%;
+}
+
+.highlighted {
+    background: #ffe000;
+    color: black;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+p.search-summary {
+    opacity: 35%;
+}
