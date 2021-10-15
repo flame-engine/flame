@@ -26,8 +26,12 @@ class JoystickComponent extends HudMarginComponent with Draggable {
   /// The percentage [0.0, 1.0] the knob is dragged from the center to the edge.
   double intensity = 0.0;
 
-  /// The amount the knob is dragged from the center.
-  Vector2 delta = Vector2.zero();
+  /// The amount the knob is dragged from the center, scaled to fit inside the
+  /// bounds of the joystick.
+  final Vector2 delta = Vector2.zero();
+
+  /// The total amount the knob is dragged from the center of the joystick.
+  final Vector2 _unscaledDelta = Vector2.zero();
 
   /// The percentage, presented as a [Vector2], and direction that the knob is
   /// currently pulled from its base position to a edge of the joystick.
@@ -81,6 +85,7 @@ class JoystickComponent extends HudMarginComponent with Draggable {
   void update(double dt) {
     super.update(dt);
     final knobRadius2 = knobRadius * knobRadius;
+    delta..setFrom(_unscaledDelta);
     if (delta.isZero() && _baseKnobPosition != knob.position) {
       knob.position = _baseKnobPosition;
     } else if (delta.length2 > knobRadius2) {
@@ -101,7 +106,7 @@ class JoystickComponent extends HudMarginComponent with Draggable {
 
   @override
   bool onDragUpdate(_, DragUpdateInfo info) {
-    delta.add(info.delta.global);
+    _unscaledDelta.add(info.delta.global);
     return false;
   }
 
@@ -113,7 +118,7 @@ class JoystickComponent extends HudMarginComponent with Draggable {
 
   @override
   bool onDragCancel(_) {
-    delta.setZero();
+    _unscaledDelta.setZero();
     return false;
   }
 
