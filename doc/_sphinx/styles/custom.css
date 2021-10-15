@@ -151,15 +151,17 @@ main.bd-content #main-content .prev-next-bottom .right-next .prevnext-label, mai
 /* Search-related elements */
 
 form.bd-search #search-input {
-    border-bottom-color: #a99a2f;
+    border-bottom-color: #ffe689;
+    color: #ffe689;
+    opacity: 0.3;
 }
 
 form.bd-search #search-input:focus {
-    color: white;
     background: none;
     border-bottom: none;
-    box-shadow: 0 0 4px 0px #ffffff88;
-    border-radius: 4px;
+    border-radius: 6px;
+    box-shadow: 0 0 5px 1px #ffe689;
+    opacity: 1.0;
 }
 
 form.bd-search i.icon.fa-search {
