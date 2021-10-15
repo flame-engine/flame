@@ -1,7 +1,11 @@
 
+import 'package:flutter/cupertino.dart';
+
 import '../../components.dart';
 import 'flame_animation_controller.dart';
 
+/// An Effect's main purpose it to create a change over time in some other
+/// component's properties or appearance.
 abstract class EffectComponent extends Component {
   EffectComponent({
     required this.controller,
@@ -39,6 +43,7 @@ abstract class EffectComponent extends Component {
   void pause() => _paused = true;
   void resume() => _paused = false;
 
+  @mustCallSuper
   void reset() {
     _paused = false;
     controller.reset();

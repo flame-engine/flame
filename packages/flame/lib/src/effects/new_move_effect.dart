@@ -4,8 +4,8 @@ import 'flame_animation_controller.dart';
 import 'transform2d_effect.dart';
 
 
-class MoveToEffect extends Transform2DEffect {
-  MoveToEffect.to({
+class NewMoveEffect extends Transform2DEffect {
+  NewMoveEffect.to({
     required Vector2 destination,
     required FlameAnimationController controller,
   })  : _absolute = true,
@@ -13,7 +13,7 @@ class MoveToEffect extends Transform2DEffect {
         _lastProgress = 0,
         super(controller: controller);
 
-  MoveToEffect.by({
+  NewMoveEffect.by({
     required Vector2 offset,
     required FlameAnimationController controller,
   })  : _absolute = false,
