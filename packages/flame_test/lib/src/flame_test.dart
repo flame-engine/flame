@@ -41,7 +41,8 @@ void flameTest<T extends Game>(
 }
 
 typedef GameWidgetCreateFunction<T extends Game> = GameWidget<T> Function(
-    T game);
+  T game,
+);
 typedef WidgetVerifyFunction<T extends Game> = Future<void> Function(
   T,
   WidgetTester,
