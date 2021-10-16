@@ -1,6 +1,13 @@
 # CHANGELOG
 
 ## [Next]
+ - `changePriority` no longer breaks game loop iteration
+ - Move component mixin checks to their own files
+ - Fix exception when game was rebuilt
+ - Add `@mustCallSuper` on `Component.render`
+ - Use the full delta in `JoystickComponent` so that it can't go to the wrong direction on the wrong side
+
+## [1.0.0-releasecandidate.15]
  - Fix issue with `Draggable`s not being removed from `draggables` list
  - Increase Flutter SDK constraint to `>= 2.5.0`.
  - Method `PositionComponent.toRect()` now works for flipped/rotated components.
@@ -9,7 +16,8 @@
  - Make super.onLoad mandatory to avoid memory leaks
  - `QueryableOrderedSet`'s `strictMode` is configurable so it is no longer necessary to call `register` before `query`
  - Add option to rotate `SpriteWidget`
- - Fix bug where onRemove was called during resizing
+ - Fix bug where `onRemove` was called during resizing
+ - Add `onAttach` and `onDetach` to `Game`
 
 ## [1.0.0-releasecandidate.14]
  - Reset effects after they are done so that they can be repeated

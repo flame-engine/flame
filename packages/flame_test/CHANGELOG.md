@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.0-releasecandidate.15]
+ - Add `pumpWidget` to flame widget test
+
 ## [0.1.1-releasecandidate.14]
  - Add `flameTest` and `flameWidgetTest`
 

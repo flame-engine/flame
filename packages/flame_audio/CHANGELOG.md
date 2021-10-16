@@ -1,4 +1,4 @@
-## [Next]
+## [1.0.0-rc.15]
 
 * Bump audioplayers version to 0.20.1
 

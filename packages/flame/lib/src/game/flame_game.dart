@@ -3,15 +3,10 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 
 import '../components/component.dart';
-import '../components/mixins/collidable.dart';
-import '../components/mixins/draggable.dart';
-import '../components/mixins/hoverable.dart';
-import '../components/mixins/tappable.dart';
 import '../extensions/vector2.dart';
 import 'camera/camera.dart';
 import 'camera/camera_wrapper.dart';
 import 'mixins/game.dart';
-import 'mixins/has_collidables.dart';
 
 /// This is a more complete and opinionated implementation of [Game].
 ///
@@ -55,42 +50,6 @@ class FlameGame extends Component with Game {
   /// don't forget to call `super.prepareComponent` when overriding.
   @mustCallSuper
   void prepareComponent(Component c) {
-    assert(
-      hasLayout,
-      '"prepare/add" called before the game is ready. '
-      'Did you try to access it on the Game constructor? '
-      'Use the "onLoad" ot "onParentMethod" method instead.',
-    );
-
-    if (c is Collidable) {
-      assert(
-        this is HasCollidables,
-        'You can only use the Hitbox/Collidable feature with games that has '
-        'the HasCollidables mixin',
-      );
-    }
-    if (c is Tappable) {
-      assert(
-        this is HasTappableComponents,
-        'Tappable Components can only be added to a FlameGame with '
-        'HasTappableComponents',
-      );
-    }
-    if (c is Draggable) {
-      assert(
-        this is HasDraggableComponents,
-        'Draggable Components can only be added to a FlameGame with '
-        'HasDraggableComponents',
-      );
-    }
-    if (c is Hoverable) {
-      assert(
-        this is HasHoverableComponents,
-        'Hoverable Components can only be added to a FlameGame with '
-        'HasHoverableComponents',
-      );
-    }
-
     // First time resize
     c.onGameResize(size);
   }
@@ -105,6 +64,7 @@ class FlameGame extends Component with Game {
   @override
   @mustCallSuper
   void render(Canvas canvas) {
+    super.render(canvas);
     _cameraWrapper.render(canvas);
   }
 
@@ -136,60 +96,6 @@ class FlameGame extends Component with Game {
   void onGameResize(Vector2 canvasSize) {
     camera.handleResize(canvasSize);
     super.onGameResize(canvasSize);
-  }
-
-  /// Changes the priority of [component] and reorders the games component list.
-  ///
-  /// Returns true if changing the component's priority modified one of the
-  /// components that existed directly on the game and false if it
-  /// either was a child of another component, if it didn't exist at all or if
-  /// it was a component added directly on the game but its priority didn't
-  /// change.
-  bool changePriority(
-    Component component,
-    int priority, {
-    bool reorderRoot = true,
-  }) {
-    if (component.priority == priority) {
-      return false;
-    }
-    component.changePriorityWithoutResorting(priority);
-    if (reorderRoot) {
-      final parent = component.parent;
-      if (parent != null) {
-        parent.reorderChildren();
-      } else if (contains(component)) {
-        children.rebalanceAll();
-      }
-    }
-    return true;
-  }
-
-  /// Since changing priorities is quite an expensive operation you should use
-  /// this method if you want to change multiple priorities at once so that the
-  /// tree doesn't have to be reordered multiple times.
-  void changePriorities(Map<Component, int> priorities) {
-    var hasRootComponents = false;
-    final parents = <Component>{};
-    priorities.forEach((component, priority) {
-      final wasUpdated = changePriority(
-        component,
-        priority,
-        reorderRoot: false,
-      );
-      if (wasUpdated) {
-        final parent = component.parent;
-        if (parent != null) {
-          parents.add(parent);
-        } else {
-          hasRootComponents |= contains(component);
-        }
-      }
-    });
-    if (hasRootComponents) {
-      children.rebalanceAll();
-    }
-    parents.forEach((parent) => parent.reorderChildren());
   }
 
   /// Whether a point is within the boundaries of the visible part of the game.

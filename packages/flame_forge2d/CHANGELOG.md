@@ -1,6 +1,9 @@
 # CHANGELOG
 
-## [Next]
+## [0.8.2-releasecandidate.15]
+ - Destroy body before calling `super.onRemove`
+
+## [0.8.1-releasecandidate.15]
  - The rendering of `BodyComponent` is now inline with the Flame coordinate system
  - Moved `BodyComponent` base from `BaseComponent` to `Component`
  - Pass `Forge2DCamera` to super class in `Forge2DGame`

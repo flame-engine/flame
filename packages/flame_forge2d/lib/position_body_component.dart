@@ -39,10 +39,10 @@ abstract class PositionBodyComponent<T extends Forge2DGame>
 
   @override
   void onRemove() {
-    super.onRemove();
     // Since the PositionComponent was added to the game in this class it should
     // also be removed by this class when the BodyComponent is removed.
     positionComponent.removeFromParent();
+    super.onRemove();
   }
 
   void updatePositionComponent() {

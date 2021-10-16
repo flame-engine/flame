@@ -52,7 +52,7 @@ div.navbar-brand-box a.navbar-brand {
 }
 
 div.navbar-brand-box a.navbar-brand img {
-    max-width: 24vh;
+    max-width: 100%;
     margin: 0;
 }
 

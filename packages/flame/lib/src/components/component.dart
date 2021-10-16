@@ -131,6 +131,7 @@ class Component with Loadable {
     children.forEach((c) => c.update(dt));
   }
 
+  @mustCallSuper
   void render(Canvas canvas) {
     preRender(canvas);
   }
@@ -187,7 +188,7 @@ class Component with Loadable {
     children.forEach((child) => child.onGameResize(gameSize));
   }
 
-  /// Called right before the component is removed from the game
+  /// Called right before the component is removed from the game.
   @override
   @mustCallSuper
   void onRemove() {
@@ -313,10 +314,17 @@ class Component with Loadable {
   @mustCallSuper
   void prepare(Component parent) {
     _parent = parent;
+
     final parentGame = findParent<FlameGame>();
     if (parentGame == null) {
       isPrepared = false;
     } else {
+      assert(
+        parentGame.hasLayout,
+        '"prepare/add" called before the game is ready. '
+        'Did you try to access it on the Game constructor? '
+        'Use the "onLoad" ot "onParentMethod" method instead.',
+      );
       if (parentGame is FlameGame) {
         parentGame.prepareComponent(this);
       }

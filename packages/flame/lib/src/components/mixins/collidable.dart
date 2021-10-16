@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 import '../../../components.dart';
 import '../../../game.dart';
 import '../../components/position_component.dart';
@@ -27,6 +29,21 @@ mixin Collidable on Hitbox {
       parentGame.collidables.remove(this);
     }
     super.onRemove();
+  }
+
+  @override
+  @mustCallSuper
+  void prepare(Component parent) {
+    super.prepare(parent);
+
+    if (isPrepared) {
+      final parentGame = findParent<FlameGame>();
+      assert(
+        parentGame is HasCollidables,
+        'You can only use the Hitbox/Collidable feature with games that has '
+        'the HasCollidables mixin',
+      );
+    }
   }
 }
 

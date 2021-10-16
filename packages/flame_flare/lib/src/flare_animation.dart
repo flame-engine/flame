@@ -1,14 +1,10 @@
-// Flare does not support Null-Safety, so we have no option here.
-// ignore_for_file: import_of_legacy_library_into_null_safe
-
 import 'dart:math';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'package:flare_dart/math/aabb.dart';
-import 'package:flare_dart/math/mat2d.dart';
-import 'package:flare_dart/math/vec2d.dart';
 import 'package:flare_flutter/asset_provider.dart';
+import 'package:flare_flutter/base/math/aabb.dart';
+import 'package:flare_flutter/flare.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controller.dart';
 import 'package:flare_flutter/provider/asset_flare.dart';
@@ -16,12 +12,12 @@ import 'package:flutter/rendering.dart';
 
 class _FlareActorComponentPipelineOwner extends PipelineOwner {}
 
-/// A class that wraps all the settings of a flare animation from [filename].
+/// A class that wraps all the settings of a flare animation from [fileName].
 ///
 /// It has a similar API to the [FlareActor] widget.
 class FlareActorAnimation {
   FlareActorAnimation(
-    this.filename, {
+    this.fileName, {
     this.boundsNode,
     this.animation,
     this.fit = BoxFit.contain,
@@ -52,7 +48,7 @@ class FlareActorAnimation {
     this.sizeFromArtboard = false,
     this.artboard,
     this.useAntialias = true,
-  }) : filename = null;
+  }) : fileName = null;
 
   FlareActorRenderObject? _renderObject;
 
@@ -61,7 +57,7 @@ class FlareActorAnimation {
 
   // Fields are ported from flare actor widget
   /// Mirror to [FlareActor.filename]
-  final String? filename;
+  final String? fileName;
 
   /// Mirror to [FlareActor.flareProvider]
   final AssetProvider? flareProvider;
@@ -111,8 +107,9 @@ class FlareActorAnimation {
 
   FlareActorRenderObject _generateRenderObject() {
     final renderObject = FlareActorRenderObject()
+      // either flareProvider or fileName must be provided
       ..assetProvider =
-          flareProvider ?? AssetFlare(bundle: Flame.bundle, name: filename)
+          flareProvider ?? AssetFlare(bundle: Flame.bundle, name: fileName!)
       ..alignment = alignment
       ..animationName = animation
       ..snapToEnd = snapToEnd
@@ -135,11 +132,8 @@ class FlareActorAnimation {
     if (renderObject == null) {
       throw 'FlareActorAnimation was rendered before initialization. Run FlareActorAnimation.init() before rendering it';
     }
-    // dart doesn't understand this can be null
-    final bounds = renderObject.aabb as AABB?;
-    if (bounds != null) {
-      _paintActor(canvas, bounds, size);
-    }
+    final bounds = renderObject.aabb;
+    _paintActor(canvas, bounds, size);
   }
 
   void advance(double dt) {
