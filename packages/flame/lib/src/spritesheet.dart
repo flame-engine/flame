@@ -118,7 +118,7 @@ class SpriteSheet {
   ///
   /// [from] and [to] can be specified to create an animation
   /// from a subset of the columns on the row
-  SpriteAnimation createAnimationVariable({
+  SpriteAnimation createAnimationWithVariableStepTimes({
     required int row,
     required List<double> stepTimes,
     bool loop = true,

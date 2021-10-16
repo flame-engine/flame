@@ -33,7 +33,7 @@ void main() {
         srcSize: Vector2(50, 50),
       );
 
-      final spriteAnimation = sprite.createAnimationVariable(
+      final spriteAnimation = sprite.createAnimationWithVariableStepTimes(
         row: 1,
         stepTimes: [2.0, 3.0],
       );
@@ -50,7 +50,7 @@ void main() {
       );
 
       expect(
-        () => sprite.createAnimationVariable(
+        () => sprite.createAnimationWithVariableStepTimes(
           row: 1,
           stepTimes: [2.0],
         ),
