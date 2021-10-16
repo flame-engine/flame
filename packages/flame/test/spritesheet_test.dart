@@ -42,8 +42,8 @@ void main() {
     });
 
     test(
-        'throws assertion error'
-        ' when the length of stepTime is different from sprite', () {
+        'throws assertion error when the length of stepTime is different from sprite',
+        () {
       final sprite = SpriteSheet(
         image: image,
         srcSize: Vector2(50, 50),
