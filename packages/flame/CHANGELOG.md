@@ -5,6 +5,7 @@
  - Move component mixin checks to their own files
  - Fix exception when game was rebuilt
  - Add `@mustCallSuper` on `Component.render`
+ - Add `SpriteSheet.createAnimationVariable` method to allow animations with different `stepTime` for each sprite
  - Use the full delta in `JoystickComponent` so that it can't go to the wrong direction on the wrong side
  - Improved the menu for documentation version selection
 
