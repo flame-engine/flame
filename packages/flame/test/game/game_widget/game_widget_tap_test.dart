@@ -4,15 +4,18 @@ import 'package:flame/input.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class TapGame extends FlameGame with TapDetector, DoubleTapDetector {
+class TapGame extends FlameGame with TapDetector {
   bool tapRegistered = false;
-  bool doubleTapRegistered = false;
-  Vector2? doubleTapPosition;
 
   @override
   void onTap() {
     tapRegistered = true;
   }
+}
+
+class DoubleTapGame extends FlameGame with DoubleTapDetector {
+  bool doubleTapRegistered = false;
+  Vector2? doubleTapPosition;
 
   @override
   void onDoubleTap() {
@@ -36,15 +39,15 @@ void main() {
       },
     );
 
-    flameWidgetTest<TapGame>(
+    flameWidgetTest<DoubleTapGame>(
       'can receive double taps',
-      createGame: () => TapGame(),
+      createGame: () => DoubleTapGame(),
       verify: (game, tester) async {
         const tapPosition = Offset(10, 10);
         await tester.tapAt(tapPosition);
+        await Future<void>.delayed(const Duration(milliseconds: 50));
         await tester.tapAt(tapPosition);
         expect(game.doubleTapRegistered, isTrue);
-        expect(game.tapRegistered, isFalse);
         expectVector2(game.doubleTapPosition!, tapPosition.toVector2());
       },
     );
