@@ -1,16 +1,15 @@
-
 import 'dart:ui';
 
 import 'package:vector_math/vector_math_64.dart';
 
 import '../../components.dart';
-import 'standard_animation_controller.dart';
+import 'flame_animation_controller.dart';
 import 'transform2d_effect.dart';
 
 class MoveAlongPathEffect extends Transform2DEffect {
   MoveAlongPathEffect({
     required Path path,
-    required StandardAnimationController controller,
+    required FlameAnimationController controller,
   }) : _lastPosition = Vector2.zero(),
         super(controller: controller) {
     final metrics = path.computeMetrics().toList();

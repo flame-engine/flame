@@ -1,5 +1,4 @@
-
-import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 
 import '../../components.dart';
 import 'flame_animation_controller.dart';

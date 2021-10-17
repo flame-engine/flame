@@ -1,13 +1,12 @@
-
 import 'package:vector_math/vector_math_64.dart';
-import 'standard_animation_controller.dart';
+import 'flame_animation_controller.dart';
 import 'transform2d_effect.dart';
 
 
 class NewMoveEffect extends Transform2DEffect {
   NewMoveEffect.to({
     required Vector2 destination,
-    required StandardAnimationController controller,
+    required FlameAnimationController controller,
   })  : _absolute = true,
         _offset = destination.clone(),
         _lastProgress = 0,
@@ -15,7 +14,7 @@ class NewMoveEffect extends Transform2DEffect {
 
   NewMoveEffect.by({
     required Vector2 offset,
-    required StandardAnimationController controller,
+    required FlameAnimationController controller,
   })  : _absolute = false,
         _offset = offset.clone(),
         _lastProgress = 0,
