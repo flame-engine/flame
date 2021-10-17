@@ -1,9 +1,10 @@
+import 'dart:ui';
 
 import 'package:flutter/animation.dart';
+
 import '../../components.dart';
 import '../extensions/vector2.dart';
 import 'effects.dart';
-import 'flame_animation_controller.dart';
 
 class ScaleEffect extends PositionComponentEffect {
   Vector2 scale;

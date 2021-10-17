@@ -121,7 +121,7 @@ class SequenceEffect extends PositionComponentEffect {
       currentEffect.driftTime = _driftModifier;
       if (shouldReverse && !currentEffect.isAlternating) {
         // Make the current upcoming effect go in reverse.
-        currentEffect.curveDirection *= -1;
+        currentEffect.isAlternating = true;
       }
       currentEffect.resume();
     }

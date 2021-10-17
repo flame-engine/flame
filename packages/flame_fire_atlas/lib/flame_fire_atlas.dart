@@ -183,9 +183,9 @@ class FireAtlas {
     );
 
     json['selections'].entries.forEach((entry) {
-      BaseSelection selection = entry.progress['type'] == 'animation'
-          ? AnimationSelection.fromJson(entry.progress)
-          : SpriteSelection.fromJson(entry.progress);
+      BaseSelection selection = entry.value['type'] == 'animation'
+          ? AnimationSelection.fromJson(entry.value)
+          : SpriteSelection.fromJson(entry.value);
 
       atlas.selections[entry.key] = selection;
     });
