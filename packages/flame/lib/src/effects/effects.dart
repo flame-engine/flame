@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../components.dart';
 import '../components/position_component.dart';
 import '../extensions/vector2.dart';
-import 'flame_animation_controller.dart';
+import 'standard_animation_controller.dart';
 
 export './color_effect.dart';
 export './move_effect.dart';
@@ -21,7 +21,7 @@ abstract class ComponentEffect<T extends Component> extends Component {
     }
   }
 
-  FlameAnimationController controller;
+  StandardAnimationController controller;
 
   /// If the effect has a parent further up in the tree that will be affected by
   /// this effect, that parent will be set here.
@@ -121,7 +121,7 @@ abstract class ComponentEffect<T extends Component> extends Component {
     bool? removeOnFinish,
     Curve? curve,
     this.onComplete,
-  })  : controller = FlameAnimationController(
+  })  : controller = StandardAnimationController(
           duration: 1.0,
           infinite: _initialIsInfinite,
           delay: initialDelay,

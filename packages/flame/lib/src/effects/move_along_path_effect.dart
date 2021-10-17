@@ -4,19 +4,20 @@ import 'dart:ui';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../../components.dart';
-import 'flame_animation_controller.dart';
+import 'standard_animation_controller.dart';
 import 'transform2d_effect.dart';
 
 class MoveAlongPathEffect extends Transform2DEffect {
   MoveAlongPathEffect({
     required Path path,
-    required FlameAnimationController controller,
+    required StandardAnimationController controller,
   }) : _lastPosition = Vector2.zero(),
         super(controller: controller) {
     final metrics = path.computeMetrics().toList();
     if (metrics.length != 1) {
       throw ArgumentError(
-          'Only single-contour paths are allowed in MoveAlongPathEffect');
+          'Only single-contour paths are allowed in MoveAlongPathEffect',
+      );
     }
     _pathMetric = metrics[0];
     _pathLength = _pathMetric.length;

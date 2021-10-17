@@ -10,18 +10,9 @@ abstract class EffectComponent extends Component {
   EffectComponent({
     required this.controller,
   })  : _removeOnFinish = true,
-        _paused = false
-  {
-    if (controller.onStart == null) {
-      controller.onStart = onStart;
-    } else {
-      final callback = controller.onStart!;
-      controller.onStart = () {
-        onStart();
-        callback();
-      };
-    }
-  }
+        _paused = false,
+        _started = false,
+        _finished = false;
 
   final FlameAnimationController controller;
 
@@ -40,12 +31,17 @@ abstract class EffectComponent extends Component {
   bool get isPaused => _paused;
   bool _paused;
 
+  bool _started;
+  bool _finished;
+
   void pause() => _paused = true;
   void resume() => _paused = false;
 
   @mustCallSuper
   void reset() {
     _paused = false;
+    _started = false;
+    _finished = false;
     controller.reset();
     apply(0);
   }
@@ -57,12 +53,21 @@ abstract class EffectComponent extends Component {
     }
     super.update(dt);
     controller.update(dt);
+    if (!_started && controller.started) {
+      _started = true;
+      onStart();
+    }
     apply(controller.progress);
-    if (controller.completed && _removeOnFinish) {
-      removeFromParent();
+    if (!_finished && controller.completed) {
+      _finished = true;
+      onFinish();
+      if (_removeOnFinish) {
+        removeFromParent();
+      }
     }
   }
 
   void onStart() {}
+  void onFinish() {}
   void apply(double progress);
 }

@@ -21,7 +21,7 @@ abstract class Transform2DEffect extends EffectComponent {
     // TODO: add Camera support once it uses Transform2D
     else {
       throw UnsupportedError(
-        'Can apply a Transform2DEffect to a PositionComponent class',
+        'Can only apply a Transform2DEffect to a PositionComponent class',
       );
     }
   }

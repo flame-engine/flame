@@ -6,7 +6,7 @@ import '../../components.dart';
 import '../extensions/vector2.dart';
 import 'effect_component.dart';
 import 'effects.dart';
-import 'flame_animation_controller.dart';
+import 'standard_animation_controller.dart';
 
 class Vector2Percentage {
   final Vector2 v;
