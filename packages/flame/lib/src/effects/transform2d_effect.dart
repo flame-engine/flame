@@ -1,4 +1,3 @@
-
 import '../../components.dart';
 import '../../game.dart';
 import 'effect_component.dart';

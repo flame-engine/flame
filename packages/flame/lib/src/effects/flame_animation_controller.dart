@@ -1,4 +1,3 @@
-
 typedef VoidCallback = void Function();
 
 /// Helper class to facilitate animation of Effects.

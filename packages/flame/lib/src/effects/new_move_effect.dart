@@ -1,7 +1,7 @@
 import 'package:vector_math/vector_math_64.dart';
+
 import 'flame_animation_controller.dart';
 import 'transform2d_effect.dart';
-
 
 class NewMoveEffect extends Transform2DEffect {
   NewMoveEffect.to({

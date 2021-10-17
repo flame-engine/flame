@@ -21,7 +21,7 @@ abstract class EffectComponent extends Component {
   set removeOnFinish(bool value) {
     if (controller.isInfinite) {
       assert(value == false,
-        'Infinitely repeating effect cannot have removeOnFinish=true');
+          'Infinitely repeating effect cannot have removeOnFinish=true');
     }
     _removeOnFinish = value;
   }

@@ -10,12 +10,12 @@ class MoveAlongPathEffect extends Transform2DEffect {
   MoveAlongPathEffect({
     required Path path,
     required FlameAnimationController controller,
-  }) : _lastPosition = Vector2.zero(),
+  })  : _lastPosition = Vector2.zero(),
         super(controller: controller) {
     final metrics = path.computeMetrics().toList();
     if (metrics.length != 1) {
       throw ArgumentError(
-          'Only single-contour paths are allowed in MoveAlongPathEffect',
+        'Only single-contour paths are allowed in MoveAlongPathEffect',
       );
     }
     _pathMetric = metrics[0];
