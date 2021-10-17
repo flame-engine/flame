@@ -11,7 +11,6 @@ class SquareComponent extends PositionComponent with EffectsHelper {
       : super(
           size: Vector2.all(100.0),
           priority: priority,
-          anchor: Anchor.center,
         );
 
   @override
