@@ -29,7 +29,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - uses: mugbug/flame-dartdoc-action@parallel-docs
+      - uses: flame-engine/flame-dartdoc-action@v2
         with:
           package-path: ${{ matrix.package }}
 
