@@ -76,6 +76,18 @@ class SpriteSheet {
     );
   }
 
+  List<Sprite> _generateSpriteList({
+    required int row,
+    int from = 0,
+    int? to,
+  }) {
+    to ??= columns;
+
+    return List<int>.generate(to - from, (i) => from + i)
+        .map((e) => getSprite(row, e))
+        .toList();
+  }
+
   /// Creates a [SpriteAnimation] from this SpriteSheet, using the sequence
   /// of sprites on a given row.
   ///
@@ -88,16 +100,41 @@ class SpriteSheet {
     int from = 0,
     int? to,
   }) {
-    to ??= columns;
-
-    final spriteList = List<int>.generate(to - from, (i) => from + i)
-        .map((e) => getSprite(row, e))
-        .toList();
+    final spriteList = _generateSpriteList(
+      row: row,
+      to: to,
+      from: from,
+    );
 
     return SpriteAnimation.spriteList(
       spriteList,
       stepTime: stepTime,
       loop: loop,
+    );
+  }
+
+  /// Creates a [SpriteAnimation] from this SpriteSheet, using the sequence
+  /// of sprites on a given row with different duration for each.
+  ///
+  /// [from] and [to] can be specified to create an animation
+  /// from a subset of the columns on the row
+  SpriteAnimation createAnimationWithVariableStepTimes({
+    required int row,
+    required List<double> stepTimes,
+    bool loop = true,
+    int from = 0,
+    int? to,
+  }) {
+    final spriteList = _generateSpriteList(
+      row: row,
+      to: to,
+      from: from,
+    );
+
+    return SpriteAnimation.variableSpriteList(
+      spriteList,
+      loop: loop,
+      stepTimes: stepTimes,
     );
   }
 }
