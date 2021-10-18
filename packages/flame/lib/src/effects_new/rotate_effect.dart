@@ -1,10 +1,10 @@
 import 'flame_animation_controller.dart';
 import 'transform2d_effect.dart';
 
-/// Move a component to a new point that is at an `offset` from the component's
-/// position at the onset of the effect.
+/// Rotate a component by a specified `angle` relative to its orientation
+/// at the onset of the effect.
 ///
-/// This effect applies incremental changes to the component's coordinates, and
+/// This effect applies incremental changes to the component's angle, and
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
 class RotateEffect extends Transform2DEffect {
