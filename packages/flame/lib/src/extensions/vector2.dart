@@ -111,9 +111,6 @@ extension Vector2Extension on Vector2 {
   /// Modulo/Remainder
   Vector2 operator %(Vector2 mod) => Vector2(x % mod.x, y % mod.y);
 
-  /// Create a Vector2 from a dart:ui point presented as an Offset.
-  static Vector2 fromOffset(Offset o) => Vector2(o.dx, o.dy);
-
   /// Create a Vector2 with ints as input
   static Vector2 fromInts(int x, int y) => Vector2(x.toDouble(), y.toDouble());
 
