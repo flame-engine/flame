@@ -21,6 +21,13 @@ A minimalistic Flutter game engine.
 
 ---
 
+## Sponsors
+
+The Flame Engine top sponsors!
+
+![Cypher Stack](/media/logo_cypherstack.png)
+[Cypher Stack](https://cypherstack.com/)
+
 ## About 1.0.0
 
 Our goal is to release v1 soon. We are periodically launching RCs (release candidates) as we evolve
