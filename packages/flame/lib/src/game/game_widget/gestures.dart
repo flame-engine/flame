@@ -60,6 +60,12 @@ Widget applyBasicGesturesDetectors(Game game, Widget child) {
 
     // Double tap
     onDoubleTap: game is DoubleTapDetector ? () => game.onDoubleTap() : null,
+    onDoubleTapCancel:
+        game is DoubleTapDetector ? () => game.onDoubleTapCancel() : null,
+    onDoubleTapDown: game is DoubleTapDetector
+        ? (TapDownDetails d) =>
+            game.onDoubleTapDown(TapDownInfo.fromDetails(game, d))
+        : null,
 
     // Long presses
     onLongPress: game is LongPressDetector ? () => game.onLongPress() : null,
