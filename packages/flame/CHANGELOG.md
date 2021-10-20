@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [Next]
+ - Changed `onHoverEnter` and `onHoverLeave` to return `bool` (breaking change)
  - `changePriority` no longer breaks game loop iteration
  - Move component mixin checks to their own files
  - Fix exception when game was rebuilt
