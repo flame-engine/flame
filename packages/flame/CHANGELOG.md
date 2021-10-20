@@ -8,6 +8,7 @@
  - Add `SpriteSheet.createAnimationVariable` method to allow animations with different `stepTime` for each sprite
  - Use the full delta in `JoystickComponent` so that it can't go to the wrong direction on the wrong side
  - Introduce `onDoubleTapDown` with info and `onDoubleTapCancel`
+ - Improved "move effect" example in the Dashbook
 
 ## [1.0.0-releasecandidate.15]
  - Fix issue with `Draggable`s not being removed from `draggables` list
