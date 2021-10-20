@@ -32,6 +32,8 @@ mixin SecondaryTapDetector on Game {
 
 mixin DoubleTapDetector on Game {
   void onDoubleTap() {}
+  void onDoubleTapCancel() {}
+  void onDoubleTapDown(TapDownInfo info) {}
 }
 
 mixin LongPressDetector on Game {
