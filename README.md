@@ -84,6 +84,14 @@ Currently it provides you with:
 
 You can use whichever ones you want, as they are all somewhat independent.
 
+## Sponsors
+
+The Flame Engine's top sponsors:
+
+[![Cypher Stack](/media/logo_cypherstack.png)](https://cypherstack.com/)
+
+Want to sponsor Flame? Check our Patreon on the section below or contact us on Discord.
+
 ## Support
 
 The simplest way to show us your support is by giving the project a star.
