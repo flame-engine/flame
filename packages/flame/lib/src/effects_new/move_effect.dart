@@ -41,7 +41,6 @@ class MoveToEffect extends Transform2DEffect {
   }
 }
 
-
 /// Move a component to a new point that is at an `offset` from the component's
 /// position at the onset of the effect.
 ///
@@ -72,7 +71,6 @@ class MoveByEffect extends Transform2DEffect {
     _lastProgress = 0;
   }
 }
-
 
 /// Move a component along the specified `path`. The path may contain curved
 /// segments, but must be single-component, i.e. it should be simply connected.
