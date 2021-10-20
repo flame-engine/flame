@@ -15,7 +15,7 @@ function getCurrentDocVersion() {
 
 // Given a list of versions (as plain strings), convert them into HTML <A/>
 // links, so that they can be placed into the menu.
-function convertVersionsToHTML(versionsList, currentVersion) {
+function convertVersionsToHtmlLinks(versionsList, currentVersion) {
   let out = '';
   for (let version of versionsList) {
     version = version.trim();
@@ -29,24 +29,27 @@ function convertVersionsToHTML(versionsList, currentVersion) {
   return out;
 }
 
+function buildVersionsMenu(data) {
+  const currentVersion = getCurrentDocVersion();
+  const versionButtons = convertVersionsToHtmlLinks(data.split('\n'), currentVersion);
+  $('div.topbar-main').append(`
+    <div class="dropdown-buttons-trigger" id="versions-menu">
+      <button class="btn btn-secondary topbarbtn">
+        <span class="tag">version:</span>
+        <span class="version-id">${currentVersion}</span>
+      </button>
+      <div class="dropdown-buttons">${versionButtons}</div>
+    </div>
+  `);
+}
+
 // Start loading the versions list as soon as possible, don't wait for DOM
-const versionsURL = "https://raw.githubusercontent.com/flame-engine/flame/317dfceabacaab7c829651a8aa0e6b153bd7643a/documentation_versions.txt";
-const versionsRequest = $.get(versionsURL);
+const versionsRequest = $.get(
+    "https://raw.githubusercontent.com/flame-engine/flame/main/documentation_versions.txt"
+);
 
 // Now wait for DOM to finish loading
 $(function() {
   // Lastly, wait for versions to finish loading too.
-  versionsRequest.then(function(data) {
-    const currentVersion = getCurrentDocVersion();
-    const versionButtons = convertVersionsToHTML(data.split('\n'), currentVersion);
-    $('div.topbar-main').append(`
-      <div class="dropdown-buttons-trigger" id="versions-menu">
-        <button class="btn btn-secondary topbarbtn">
-          <span class="tag">version:</span>
-          <span class="version-id">${currentVersion}</span>
-        </button>
-        <div class="dropdown-buttons">${versionButtons}</div>
-      </div>
-    `);
-  });
+  versionsRequest.then(buildVersionsMenu);
 });
