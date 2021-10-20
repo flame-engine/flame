@@ -86,7 +86,7 @@ You can use whichever ones you want, as they are all somewhat independent.
 
 ## Sponsors
 
-The Flame Engine top sponsors!
+The Flame Engine's top sponsors:
 
 [![Cypher Stack](/media/logo_cypherstack.png)](https://cypherstack.com/)
 
