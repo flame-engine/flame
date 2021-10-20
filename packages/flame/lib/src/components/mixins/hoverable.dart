@@ -8,8 +8,12 @@ import '../../gestures/events.dart';
 mixin Hoverable on Component {
   bool _isHovered = false;
   bool get isHovered => _isHovered;
-  void onHoverEnter(PointerHoverInfo info) {}
-  void onHoverLeave(PointerHoverInfo info) {}
+  bool onHoverEnter(PointerHoverInfo info) {
+    return true;
+  }
+  bool onHoverLeave(PointerHoverInfo info) {
+    return true;
+  }
 
   @nonVirtual
   void handleMouseMovement(PointerHoverInfo info) {
