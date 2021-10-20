@@ -88,7 +88,7 @@ You can use whichever ones you want, as they are all somewhat independent.
 
 The Flame Engine top sponsors!
 
-![Cypher Stack](/media/logo_cypherstack.png)
+[![Cypher Stack](/media/logo_cypherstack.png)](https://cypherstack.com/)
 
 [Cypher Stack](https://cypherstack.com/)
 
