@@ -11,12 +11,6 @@ typedef VoidCallback = void Function();
 /// of 0.0 corresponds to the beginning of the animation, and the value of 1.0
 /// is the end of the animation.
 abstract class FlameAnimationController {
-  /// The callback which is called when the effect is about to start.
-  // VoidCallback? onStart;
-
-  /// The callback which is called when the effect is completed.
-  // VoidCallback? onComplete;
-
   /// Will the effect continue to run forever?
   bool get isInfinite;
 
