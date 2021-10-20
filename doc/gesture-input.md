@@ -312,8 +312,14 @@ you can override if you want to listen to the events.
 
 ```dart
   bool isHovered = false;
-  void onHoverEnter(PointerHoverInfo event) {}
-  void onHoverLeave(PointerHoverInfo event) {}
+  bool onHoverEnter(PointerHoverInfo event) {
+    print("hover enter");
+    return true;
+  }
+  bool onHoverLeave(PointerHoverInfo event) {
+   print("hover leave");
+   return true;
+  }
 ```
 
 The provided event info is from the mouse move that triggered the action (entering or leaving).
