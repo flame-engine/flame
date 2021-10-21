@@ -10,6 +10,7 @@
  - Improved the menu for documentation version selection
  - Introduce `onDoubleTapDown` with info and `onDoubleTapCancel`
  - Improved "move effect" example in the Dashbook
+ - Use documentation versions generated from flame-docs-site
 
 ## [1.0.0-releasecandidate.15]
  - Fix issue with `Draggable`s not being removed from `draggables` list
