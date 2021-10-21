@@ -45,7 +45,7 @@ function buildVersionsMenu(data) {
 
 // Start loading the versions list as soon as possible, don't wait for DOM
 const versionsRequest = $.get(
-    "../versions.txt"
+    "/versions.txt"
 );
 
 // Now wait for DOM to finish loading
