@@ -9,6 +9,7 @@
  - Use the full delta in `JoystickComponent` so that it can't go to the wrong direction on the wrong side
  - Improved the menu for documentation version selection
  - Introduce `onDoubleTapDown` with info and `onDoubleTapCancel`
+ - Changed `onHoverEnter` and `onHoverLeave` to return `bool` (breaking change)
  - Improved "move effect" example in the Dashbook
  - Use documentation versions generated from flame-docs-site
 

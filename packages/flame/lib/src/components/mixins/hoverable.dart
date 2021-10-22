@@ -8,22 +8,28 @@ import '../../gestures/events.dart';
 mixin Hoverable on Component {
   bool _isHovered = false;
   bool get isHovered => _isHovered;
-  void onHoverEnter(PointerHoverInfo info) {}
-  void onHoverLeave(PointerHoverInfo info) {}
+  bool onHoverEnter(PointerHoverInfo info) {
+    return true;
+  }
+
+  bool onHoverLeave(PointerHoverInfo info) {
+    return true;
+  }
 
   @nonVirtual
-  void handleMouseMovement(PointerHoverInfo info) {
+  bool handleMouseMovement(PointerHoverInfo info) {
     if (containsPoint(eventPosition(info))) {
       if (!_isHovered) {
         _isHovered = true;
-        onHoverEnter(info);
+        return onHoverEnter(info);
       }
     } else {
       if (_isHovered) {
         _isHovered = false;
-        onHoverLeave(info);
+        return onHoverLeave(info);
       }
     }
+    return true;
   }
 
   @override
@@ -45,8 +51,7 @@ mixin HasHoverableComponents on FlameGame {
   @mustCallSuper
   void onMouseMove(PointerHoverInfo info) {
     bool _mouseMoveHandler(Hoverable c) {
-      c.handleMouseMovement(info);
-      return true; // always continue
+      return c.handleMouseMovement(info);
     }
 
     for (final c in children.reversed()) {
