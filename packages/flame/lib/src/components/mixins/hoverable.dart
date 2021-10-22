@@ -11,6 +11,7 @@ mixin Hoverable on Component {
   bool onHoverEnter(PointerHoverInfo info) {
     return true;
   }
+
   bool onHoverLeave(PointerHoverInfo info) {
     return true;
   }
