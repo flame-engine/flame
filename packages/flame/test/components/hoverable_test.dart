@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/components/mixins/hoverable.dart';
 import 'package:flame/src/gestures/events.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter/gestures.dart' show PointerHoverEvent;
 import 'package:test/test.dart';
 
@@ -25,6 +26,20 @@ class HoverableComponent extends PositionComponent with Hoverable {
   bool onHoverLeave(PointerHoverInfo info) {
     leaveCount++;
     return true;
+  }
+}
+
+class NonPropagatingComponent extends HoverableComponent {
+  @override
+  bool onHoverEnter(PointerHoverInfo info) {
+    super.onHoverEnter(info);
+    return false;
+  }
+
+  @override
+  bool onHoverLeave(PointerHoverInfo info) {
+    super.onHoverLeave(info);
+    return false;
   }
 }
 
@@ -119,6 +134,71 @@ void main() {
       expect(c.isHovered, false);
     });
     test('multiple components', () async {
+      final game = _GameWithHoverables();
+      game.onGameResize(Vector2.all(100));
+
+      final a = HoverableComponent()
+        ..position = Vector2(10, 0)
+        ..size = Vector2(2, 20);
+      final b = HoverableComponent()
+        ..position = Vector2(10, 10)
+        ..size = Vector2(2, 2);
+      final c = HoverableComponent()
+        ..position = Vector2(0, 7)
+        ..size = Vector2(20, 2);
+      await game.add(a);
+      await game.add(b);
+      await game.add(c);
+      game.update(0);
+
+      _triggerMouseMove(game, 0, 0);
+      expect(a.isHovered, false);
+      expect(b.isHovered, false);
+      expect(c.isHovered, false);
+
+      _triggerMouseMove(game, 10, 10);
+      expect(a.isHovered, true);
+      expect(b.isHovered, true);
+      expect(c.isHovered, false);
+
+      _triggerMouseMove(game, 11, 8);
+      expect(a.isHovered, true);
+      expect(b.isHovered, false);
+      expect(c.isHovered, true);
+
+      _triggerMouseMove(game, 11, 6);
+      expect(a.isHovered, true);
+      expect(b.isHovered, false);
+      expect(c.isHovered, false);
+    });
+
+    flameTest<_GameWithHoverables>(
+      'events does not propagate to parent when child returns false',
+      createGame: () => _GameWithHoverables(),
+      verify: (game) async {
+        final parent = HoverableComponent()
+          ..position = Vector2.all(10)
+          ..size = Vector2.all(10);
+        final child = NonPropagatingComponent()
+          ..position = Vector2.all(0)
+          ..size = Vector2.all(10);
+        await parent.add(child);
+        await game.add(parent);
+        game.update(0);
+        _triggerMouseMove(game, 15, 15);
+        expect(child.isHovered, true);
+        expect(parent.isHovered, false);
+        expect(child.enterCount, 1);
+        expect(parent.enterCount, 0);
+        _triggerMouseMove(game, 35, 35);
+        expect(child.isHovered, false);
+        expect(parent.isHovered, false);
+        expect(child.leaveCount, 1);
+        expect(parent.leaveCount, 0);
+      },
+    );
+
+    test('composed components', () async {
       final game = _GameWithHoverables();
       game.onGameResize(Vector2.all(100));
 
