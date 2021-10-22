@@ -1,2 +1,0 @@
-main
-1.0.0-releasecandidate.15
