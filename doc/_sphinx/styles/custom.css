@@ -193,7 +193,7 @@ main.bd-content #main-content .prev-next-bottom .right-next .prevnext-label, mai
 form.bd-search #search-input {
     border-bottom-color: #ffe689;
     color: #ffe689;
-    opacity: 0.3;
+    opacity: 50%;
 }
 
 form.bd-search #search-input:focus {
@@ -208,6 +208,7 @@ form.bd-search i.icon.fa-search {
     color: #a99a2f;
 }
 
+form.bd-search:focus-within .form-control::placeholder,
 form.bd-search:focus-within i.icon.fa-search {
     opacity: 25%;
 }
@@ -219,6 +220,17 @@ form.bd-search:focus-within i.icon.fa-search {
     border-radius: 4px;
 }
 
+h1#search-documentation,
+h1#search-documentation ~ p,
+h1#search-documentation ~ form,
+h1#search-documentation ~ noscript {
+    display: none;
+}
+
 p.search-summary {
     opacity: 35%;
+}
+
+div#search-results > h2 {
+    margin-top: 0;
 }
