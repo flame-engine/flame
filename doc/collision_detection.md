@@ -250,5 +250,8 @@ If you know how long your circle's position and/or how long the radius is going 
 you can use the optional arguments `radius` and `position` to set those, if the `radius` is set the
 `size` of the `Circle` will be automatically set too.
 
-## Example
-https://github.com/flame-engine/flame/tree/main/examples/lib/stories/collidables
+## Examples
+https://examples.flame-engine.org/#/Collision%20Detection_Circles
+https://examples.flame-engine.org/#/Collision%20Detection_Multiple%20shapes
+https://examples.flame-engine.org/#/Collision%20Detection_Shapes%20without%20components
+https://github.com/flame-engine/flame/tree/main/examples/lib/stories/collision_detection
