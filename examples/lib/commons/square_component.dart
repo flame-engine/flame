@@ -7,10 +7,11 @@ import 'package:flame/palette.dart';
 class SquareComponent extends PositionComponent with EffectsHelper {
   Paint paint = BasicPalette.white.paint();
 
-  SquareComponent({int priority = 0})
+  SquareComponent({int priority = 0, double size = 100.0})
       : super(
-          size: Vector2.all(100.0),
+          size: Vector2.all(size),
           priority: priority,
+          anchor: Anchor.center,
         );
 
   @override
