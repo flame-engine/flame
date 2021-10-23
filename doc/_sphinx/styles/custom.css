@@ -209,12 +209,16 @@ main.bd-content #main-content h5 {
 .tocsection {
     border-color: black;
 }
-main.bd-content #main-content .prev-next-bottom .right-next .prevnext-label, main.bd-content #main-content .prev-next-bottom .left-prev .prevnext-label {
-    color: #808080;
-}
 
 .bd-sidebar .nav li>a {
     padding: .1rem 1.5rem;
+}
+
+footer.footer {
+    border: none;
+    font-size: 85%;
+    font-style: italic;
+    opacity: 30%;
 }
 
 
@@ -251,4 +255,50 @@ form.bd-search:focus-within i.icon.fa-search {
 
 p.search-summary {
     opacity: 35%;
+}
+
+
+/* Previous/next buttons */
+
+main.bd-content #main-content .prev-next-bottom {
+    padding: 3px;
+}
+
+main.bd-content #main-content .prev-next-bottom a.left-prev {
+    border-radius: 100px 0 0 100px;
+    padding-left: 15px;
+    padding-right: 20px;
+}
+
+main.bd-content #main-content .prev-next-bottom a.right-next {
+    border-radius: 0 100px 100px 0;
+    padding-left: 20px;
+    padding-right: 15px;
+}
+
+main.bd-content #main-content .prev-next-bottom a.left-prev > i,
+main.bd-content #main-content .prev-next-bottom a.right-next > i {
+    font-size: 200%;
+}
+
+main.bd-content #main-content .prev-next-bottom a.right-next .prevnext-label,
+main.bd-content #main-content .prev-next-bottom a.left-prev .prevnext-label {
+    color: #808080;
+}
+
+main.bd-content #main-content .prev-next-bottom a.right-next:hover .prevnext-label,
+main.bd-content #main-content .prev-next-bottom a.left-prev:hover .prevnext-label {
+    color: #BBB;
+}
+
+main.bd-content #main-content .prev-next-bottom a.right-next:hover .prevnext-title,
+main.bd-content #main-content .prev-next-bottom a.left-prev:hover .prevnext-title {
+    color: #8CE4FF;
+}
+
+main.bd-content #main-content .prev-next-bottom a.left-prev:hover,
+main.bd-content #main-content .prev-next-bottom a.right-next:hover {
+    background: #484848;
+    box-shadow: 1px 1px 2px #000;
+    text-decoration: none;
 }
