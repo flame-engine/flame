@@ -185,6 +185,9 @@ main.bd-content #main-content h5 {
 }
 
 footer.footer {
+    border: none;
+    font-size: 85%;
+    font-style: italic;
     opacity: 30%;
 }
 
