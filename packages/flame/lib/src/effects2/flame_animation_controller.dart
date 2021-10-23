@@ -1,5 +1,3 @@
-typedef VoidCallback = void Function();
-
 /// Base "animation controller" class to facilitate animation of effects.
 ///
 /// The purpose of an animation controller is to define how an animation or an
@@ -27,7 +25,7 @@ typedef VoidCallback = void Function();
 /// to keep track of time. Instead, it must be pushed through time manually, by
 /// calling the `update()` method within the game loop.
 abstract class FlameAnimationController {
-  /// Will the effect continue to run forever (i.e. has no logical "end")?
+  /// Will the effect continue to run forever (i.e. has no logical end)?
   bool get isInfinite;
 
   /// Has the effect started running? Some effects use a "delay" parameter to
@@ -37,9 +35,9 @@ abstract class FlameAnimationController {
 
   /// Has the effect already completed running?
   ///
-  /// For a "finite" animation, this property will turn true once the animation
+  /// For a finite animation, this property will turn true once the animation
   /// has finished running and the [progress] variable will no longer change
-  /// in the future.
+  /// in the future. For an infinite animation this should always return false.
   bool get completed;
 
   /// The current value of the animation/effect, a value between 0 and 1.
