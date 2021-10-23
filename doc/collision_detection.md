@@ -212,7 +212,7 @@ A `HitboxRectangle` is really just a simplified Polygon, but it can be defined m
 To create rectangle you add a `relation` in the constructor which defines the relationship between
 the length of the horizontal and vertical side and the size of the bounding box. To create a
 `HitboxRectangle` that has half of the width and the full height of the bounding box (`size`)) you
-do this: `HitboxRectangle(definition: Vector2(0.5, 1.0));`.
+do this: `HitboxRectangle(relation: Vector2(0.5, 1.0));`.
 
 Once you have added the `HitboxRectangle` to a collidable component it will be sized and positioned
 in relation to that component. So if the size of your component is `Vector2(400, 200)` and the
