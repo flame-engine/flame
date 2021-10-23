@@ -232,11 +232,15 @@ main.bd-content #main-content .prev-next-bottom {
 }
 
 main.bd-content #main-content .prev-next-bottom a.left-prev {
+    border-radius: 100px 0 0 100px;
+    padding-left: 15px;
     padding-right: 20px;
 }
 
 main.bd-content #main-content .prev-next-bottom a.right-next {
+    border-radius: 0 100px 100px 0;
     padding-left: 20px;
+    padding-right: 15px;
 }
 
 main.bd-content #main-content .prev-next-bottom a.left-prev > i,
