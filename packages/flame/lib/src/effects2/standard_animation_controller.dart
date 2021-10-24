@@ -2,6 +2,8 @@ import 'package:flutter/animation.dart';
 
 import 'flame_animation_controller.dart';
 
+/// A commonly used implementation of a [FlameAnimationController].
+///
 /// In the simplest case, [StandardAnimationController] will have a positive
 /// `duration` and will change its [progress] linearly from 0 to 1 over the
 /// period of that duration.
