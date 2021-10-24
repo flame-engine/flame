@@ -35,7 +35,7 @@ import 'flame_animation_controller.dart';
 class StandardAnimationController extends FlameAnimationController {
   StandardAnimationController({
     required double duration,
-    Curve? curve,
+    Curve curve = Curves.linear,
     double reverseDuration = 0.0,
     Curve? reverseCurve,
     bool infinite = false,
@@ -56,8 +56,9 @@ class StandardAnimationController extends FlameAnimationController {
         onsetDelay = delay ?? 0.0,
         forwardDuration = duration,
         backwardDuration = reverseDuration,
-        forwardCurve = curve ?? Curves.linear,
-        backwardCurve = reverseCurve ?? (curve?.flipped ?? Curves.linear),
+        forwardCurve = curve,
+        backwardCurve =
+            reverseCurve ?? (curve == Curves.linear ? curve : curve.flipped),
         _progress = 0,
         _remainingIterationsCount = repeatCount ?? (infinite ? -1 : 1),
         _remainingTimeAtCurrentStage = delay ?? 0.0,
