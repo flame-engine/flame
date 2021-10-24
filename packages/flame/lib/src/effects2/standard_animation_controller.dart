@@ -57,7 +57,7 @@ class StandardAnimationController extends FlameAnimationController {
         forwardCurve = curve ?? Curves.linear,
         backwardCurve = reverseCurve ?? (curve?.flipped ?? Curves.linear),
         _progress = 0,
-        _remainingIterationsCount = repeatCount ?? 1,
+        _remainingIterationsCount = repeatCount ?? (infinite ? -1 : 1),
         _remainingTimeAtCurrentStage = delay ?? 0.0,
         _stage = _AnimationStage.beforeStart;
 
@@ -137,20 +137,6 @@ class StandardAnimationController extends FlameAnimationController {
       return;
     }
     _remainingTimeAtCurrentStage -= dt;
-    if (_remainingTimeAtCurrentStage > 0) {
-      if (_stage == _AnimationStage.forward) {
-        _progress = forwardCurve.transform(
-          1 - _remainingTimeAtCurrentStage / forwardDuration,
-        );
-      }
-      if (_stage == _AnimationStage.backward) {
-        _progress = backwardCurve.transform(
-          _remainingTimeAtCurrentStage / backwardDuration,
-        );
-      }
-      // All other stages are just "waiting", so no need to do anything
-      return;
-    }
     // When remaining time becomes zero or negative, it means we're
     // transitioning into the next stage.
     //
@@ -205,6 +191,17 @@ class StandardAnimationController extends FlameAnimationController {
         case _AnimationStage.afterEnd:
           assert(false, 'this should not be reachable');
       }
+    }
+    assert(_remainingTimeAtCurrentStage > 0);
+    if (_stage == _AnimationStage.forward) {
+      _progress = forwardCurve.transform(
+        1 - _remainingTimeAtCurrentStage / forwardDuration,
+      );
+    }
+    if (_stage == _AnimationStage.backward) {
+      _progress = backwardCurve.transform(
+        _remainingTimeAtCurrentStage / backwardDuration,
+      );
     }
   }
 
