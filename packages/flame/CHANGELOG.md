@@ -1,10 +1,17 @@
 # CHANGELOG
 
-## [Next]
+## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
  - Move component mixin checks to their own files
  - Fix exception when game was rebuilt
  - Add `@mustCallSuper` on `Component.render`
+ - Add `SpriteSheet.createAnimationVariable` method to allow animations with different `stepTime` for each sprite
+ - Use the full delta in `JoystickComponent` so that it can't go to the wrong direction on the wrong side
+ - Improved the menu for documentation version selection
+ - Introduce `onDoubleTapDown` with info and `onDoubleTapCancel`
+ - Changed `onHoverEnter` and `onHoverLeave` to return `bool` (breaking change)
+ - Improved "move effect" example in the Dashbook
+ - Use documentation versions generated from flame-docs-site
 
 ## [1.0.0-releasecandidate.15]
  - Fix issue with `Draggable`s not being removed from `draggables` list

@@ -195,6 +195,25 @@ class SpriteAnimation {
     loop = true;
   }
 
+  SpriteAnimation.variableSpriteList(
+    List<Sprite> sprites, {
+    required List<double> stepTimes,
+    this.loop = true,
+  }) {
+    if (sprites.isEmpty) {
+      throw Exception('You must have at least one frame!');
+    }
+    if (stepTimes.length != sprites.length) {
+      throw Exception('The length of stepTimes and sprites must be the same!');
+    }
+
+    frames = List.generate(
+      sprites.length,
+      (i) => SpriteAnimationFrame(sprites[i], stepTimes[i]),
+      growable: false,
+    );
+  }
+
   /// Takes a path of an image, a [SpriteAnimationData] and loads the sprite animation
   /// When the [images] is omitted, the global [Flame.images] is used
   static Future<SpriteAnimation> load(
