@@ -83,6 +83,7 @@ class PositionComponent extends Component {
     _onModifiedSizeOrAnchor();
   }
 
+  Transform2D get transform => _transform;
   final Transform2D _transform;
   final NotifyingVector2 _size;
   Anchor _anchor;
