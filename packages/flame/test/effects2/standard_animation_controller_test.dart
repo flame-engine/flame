@@ -247,18 +247,21 @@ void main() {
     test('curve', () {
       final curve = Curves.easeIn;
       final ac = StandardAnimationController(
-          duration: 1, curve: curve, reverseDuration: 0.8,
+        duration: 1,
+        curve: curve,
+        reverseDuration: 0.8,
       );
       expect(ac.started, false);
       expect(ac.cycleDuration, 1.8);
 
       for (var i = 0; i < 100; i++) {
         ac.update(0.01);
-        expect(ac.progress, closeTo(curve.transform((i+1)/100), 1e-10));
+        expect(ac.progress, closeTo(curve.transform((i + 1) / 100), 1e-10));
       }
       for (var i = 0; i < 80; i++) {
         ac.update(0.01);
-        expect(ac.progress, closeTo(curve.flipped.transform(1 - (i+1)/80), 1e-10));
+        expect(ac.progress,
+            closeTo(curve.flipped.transform(1 - (i + 1) / 80), 1e-10));
       }
       ac.update(1e-10);
       expect(ac.completed, true);
@@ -268,7 +271,9 @@ void main() {
     test('reverse curve', () {
       final curve = Curves.easeInQuad;
       final ac = StandardAnimationController(
-          duration: 1, reverseDuration: 1, reverseCurve: curve,
+        duration: 1,
+        reverseDuration: 1,
+        reverseCurve: curve,
       );
       expect(ac.started, false);
       expect(ac.cycleDuration, 2);
@@ -279,7 +284,7 @@ void main() {
 
       for (var i = 0; i < 100; i++) {
         ac.update(0.01);
-        expect(ac.progress, closeTo(curve.transform(1 - (i+1)/100), 1e-10));
+        expect(ac.progress, closeTo(curve.transform(1 - (i + 1) / 100), 1e-10));
       }
       ac.update(1e-10);
       expect(ac.completed, true);
