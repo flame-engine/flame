@@ -15,7 +15,7 @@ import 'flame_animation_controller.dart';
 ///
 /// In the most general case, the animation proceeds through the following
 /// steps:
-///   1. wait for [onsetDelay] seconds,
+///   1. wait for [startDelay] seconds,
 ///   2. repeat the following steps [repeatCount] times (or infinitely):
 ///       a. progress from 0 to 1 over the [forwardDuration] seconds,
 ///       b. wait for [atPeakDuration] seconds,
@@ -53,7 +53,7 @@ class StandardAnimationController extends FlameAnimationController {
         assert(atPeakDuration >= 0, 'atPeakDuration cannot be negative'),
         assert(atPitDuration >= 0, 'atPitDuration cannot be negative'),
         repeatCount = infinite ? -1 : (repeatCount ?? 1),
-        onsetDelay = delay ?? 0.0,
+        startDelay = delay ?? 0.0,
         forwardDuration = duration,
         backwardDuration = reverseDuration,
         forwardCurve = curve,
@@ -116,8 +116,8 @@ class StandardAnimationController extends FlameAnimationController {
   bool get completed => _remainingIterationsCount == 0;
 
   /// The time (in seconds) before the animation begins. During this time
-  /// the property [started] will be returning false.
-  final double onsetDelay;
+  /// the property [started] will be returning false, and [progress] will be 0.
+  final double startDelay;
 
   final double forwardDuration;
   final double backwardDuration;
@@ -211,7 +211,7 @@ class StandardAnimationController extends FlameAnimationController {
   void reset() {
     _progress = 0;
     _stage = _AnimationStage.beforeStart;
-    _remainingTimeAtCurrentStage = onsetDelay;
+    _remainingTimeAtCurrentStage = startDelay;
     _remainingIterationsCount = repeatCount;
   }
 
