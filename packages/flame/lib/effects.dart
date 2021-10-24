@@ -7,4 +7,6 @@ export 'src/effects/sequence_effect.dart';
 export 'src/effects/size_effect.dart';
 export 'src/effects2/flame_animation_controller.dart'
     show FlameAnimationController;
+export 'src/effects2/standard_animation_controller.dart'
+    show StandardAnimationController;
 export 'src/extensions/vector2.dart';
