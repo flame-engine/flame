@@ -1,9 +1,9 @@
 import '../../components.dart';
 import '../../game.dart';
-import 'effect_component.dart';
+import 'effect.dart';
 import 'flame_animation_controller.dart';
 
-abstract class Transform2DEffect extends EffectComponent {
+abstract class Transform2DEffect extends Effect {
   Transform2DEffect({
     required FlameAnimationController controller,
   }) : super(controller: controller);

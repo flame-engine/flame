@@ -5,10 +5,9 @@ import 'flame_animation_controller.dart';
 
 /// An Effect's main purpose it to create a change over time in some other
 /// component's properties or appearance.
-abstract class EffectComponent extends Component {
-  EffectComponent({
-    required this.controller,
-  })  : _removeOnFinish = true,
+abstract class Effect extends Component {
+  Effect({required this.controller})
+      : _removeOnFinish = true,
         _paused = false,
         _started = false,
         _finished = false;
