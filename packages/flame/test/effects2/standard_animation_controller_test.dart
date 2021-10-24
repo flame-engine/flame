@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/src/effects2/standard_animation_controller.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/animation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -31,6 +32,21 @@ void main() {
       expect(ac.progress, 1.0);
     });
 
+    test('forward x 2', () {
+      final ac = StandardAnimationController(duration: 1, repeatCount: 2);
+      expect(ac.isSimpleAnimation, true);
+      expect(ac.started, false);
+      expect(ac.progress, 0);
+
+      ac.update(1);
+      expect(ac.progress, 1);
+      ac.update(0);
+      expect(ac.progress, 0);
+      ac.update(1);
+      expect(ac.progress, 1);
+      expect(ac.completed, true);
+    });
+
     test('forward + delay', () {
       final ac = StandardAnimationController(duration: 1.0, delay: 0.2);
       expect(ac.isInfinite, false);
@@ -56,6 +72,22 @@ void main() {
       ac.update(1e-10);
       expect(ac.completed, true);
       expect(ac.progress, 1);
+    });
+
+    test('forward + atPeak', () {
+      final ac = StandardAnimationController(duration: 1, atPeakDuration: 0.5);
+      expect(ac.cycleDuration, 1.5);
+      expect(ac.isSimpleAnimation, false);
+      expect(ac.isInfinite, false);
+      expect(ac.progress, 0);
+
+      ac.update(1.5);
+      expect(ac.progress, 1);
+      expect(ac.started, true);
+      expect(ac.completed, false);
+      ac.update(0);
+      expect(ac.progress, 1);
+      expect(ac.completed, true);
     });
 
     test('(forward + reverse) x 5', () {
@@ -108,6 +140,7 @@ void main() {
         }
       }
 
+      // In the end, the progress will remain at zero
       ac.update(1e-10);
       expect(ac.started, true);
       expect(ac.completed, true);
@@ -146,6 +179,110 @@ void main() {
       expect(ac.started, true);
       expect(ac.completed, false);
       expect(ac.isInfinite, true);
+    });
+
+    test('reset', () {
+      final ac = StandardAnimationController(duration: 1.23);
+      expect(ac.started, false);
+      expect(ac.progress, 0);
+
+      ac.update(0.4);
+      expect(ac.started, true);
+      expect(ac.completed, false);
+      expect(ac.progress, closeTo(0.4 / 1.23, 1e-10));
+
+      ac.reset();
+      expect(ac.started, false);
+      expect(ac.completed, false);
+      expect(ac.progress, 0);
+
+      ac.update(0.5);
+      expect(ac.started, true);
+      expect(ac.completed, false);
+      expect(ac.progress, closeTo(0.5 / 1.23, 1e-10));
+
+      ac.update(1);
+      expect(ac.started, true);
+      expect(ac.completed, true);
+      expect(ac.progress, 1);
+
+      ac.reset();
+      expect(ac.started, false);
+      expect(ac.completed, false);
+      expect(ac.progress, 0);
+    });
+
+    test('errors', () {
+      void expectThrows(void Function() func) {
+        expect(func, throwsA(isA<AssertionError>()));
+      }
+
+      expectThrows(
+        () => StandardAnimationController(duration: -1),
+      );
+      expectThrows(
+        () => StandardAnimationController(duration: 1, repeatCount: 0),
+      );
+      expectThrows(
+        () => StandardAnimationController(
+            duration: 1, infinite: true, repeatCount: 3),
+      );
+      expectThrows(
+        () => StandardAnimationController(duration: 1, repeatCount: -1),
+      );
+      expectThrows(
+        () => StandardAnimationController(duration: 1, reverseDuration: -1),
+      );
+      expectThrows(
+        () => StandardAnimationController(duration: 1, delay: -1),
+      );
+      expectThrows(
+        () => StandardAnimationController(duration: 1, atPeakDuration: -1),
+      );
+      expectThrows(
+        () => StandardAnimationController(duration: 1, atPitDuration: -1),
+      );
+    });
+
+    test('curve', () {
+      final curve = Curves.easeIn;
+      final ac = StandardAnimationController(
+          duration: 1, curve: curve, reverseDuration: 0.8,
+      );
+      expect(ac.started, false);
+      expect(ac.cycleDuration, 1.8);
+
+      for (var i = 0; i < 100; i++) {
+        ac.update(0.01);
+        expect(ac.progress, closeTo(curve.transform((i+1)/100), 1e-10));
+      }
+      for (var i = 0; i < 80; i++) {
+        ac.update(0.01);
+        expect(ac.progress, closeTo(curve.flipped.transform(1 - (i+1)/80), 1e-10));
+      }
+      ac.update(1e-10);
+      expect(ac.completed, true);
+      expect(ac.progress, 0);
+    });
+
+    test('reverse curve', () {
+      final curve = Curves.easeInQuad;
+      final ac = StandardAnimationController(
+          duration: 1, reverseDuration: 1, reverseCurve: curve,
+      );
+      expect(ac.started, false);
+      expect(ac.cycleDuration, 2);
+
+      ac.update(1);
+      expect(ac.progress, 1);
+      expect(ac.completed, false);
+
+      for (var i = 0; i < 100; i++) {
+        ac.update(0.01);
+        expect(ac.progress, closeTo(curve.transform(1 - (i+1)/100), 1e-10));
+      }
+      ac.update(1e-10);
+      expect(ac.completed, true);
     });
   });
 }

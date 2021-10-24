@@ -188,8 +188,7 @@ class StandardAnimationController extends FlameAnimationController {
             }
           }
           break;
-        case _AnimationStage.afterEnd:
-          assert(false, 'this should not be reachable');
+        default: // LCOV_EXCL_LINE
       }
     }
     assert(_remainingTimeAtCurrentStage > 0);
