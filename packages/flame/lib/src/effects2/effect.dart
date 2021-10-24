@@ -23,7 +23,7 @@ import 'flame_animation_controller.dart';
 ///
 /// This class describes an abstract effect. Concrete implementations are
 /// expected to define the `apply()` method, which facilitates the necessary
-/// changes in the effect's target; and also `reset()` method if they have
+/// changes in the effect's target; and also the `reset()` method if they have
 /// non-trivial internal state.
 abstract class Effect extends Component {
   Effect({required this.controller})
