@@ -6,7 +6,7 @@ import 'flame_animation_controller.dart';
 abstract class Transform2DEffect extends Effect {
   Transform2DEffect({
     required FlameAnimationController controller,
-  }) : super(controller: controller);
+  }) : super(controller);
 
   late Transform2D target;
 

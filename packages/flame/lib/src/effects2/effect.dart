@@ -26,7 +26,7 @@ import 'flame_animation_controller.dart';
 /// changes in the effect's target; and also the `reset()` method if they have
 /// non-trivial internal state.
 abstract class Effect extends Component {
-  Effect({required this.controller})
+  Effect(this.controller)
       : _removeOnFinish = !controller.isInfinite,
         _paused = false,
         _started = false,
