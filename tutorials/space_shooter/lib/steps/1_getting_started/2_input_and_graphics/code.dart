@@ -8,11 +8,9 @@ class Player extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final playerSprite = await gameRef.loadSprite('player-sprite.png');
-    sprite = playerSprite;
+    sprite = await gameRef.loadSprite('player-sprite.png');
 
-    x = gameRef.size.x / 2;
-    y = gameRef.size.y / 2;
+    position = gameRef.size / 2;
     width = 100;
     height = 150;
     anchor = Anchor.center;

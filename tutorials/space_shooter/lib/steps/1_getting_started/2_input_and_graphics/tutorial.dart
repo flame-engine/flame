@@ -56,8 +56,7 @@ class SpaceShooterGame extends FlameGame with PanDetector {
     await super.onLoad();
 
     player = Player()
-      ..x = size.x / 2
-      ..y = size.y / 2
+      ..position = size / 2
       ..width = 50
       ..height = 100
       ..anchor = Anchor.center;
@@ -85,7 +84,8 @@ the `Sprite` class.
 features into a component.
 
 So lets refactor our current implementation, first we can replace our inheritance from
-`PositionComponent` to `SpriteComponent` and load the sprite:
+`PositionComponent` to `SpriteComponent` (which is a component that extends from
+`PositionComponent`) and load the sprite:
 ''',
   '''```
 class Player extends SpriteComponent {
@@ -149,11 +149,9 @@ class Player extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final playerSprite = await gameRef.loadSprite('player-sprite.png');
-    sprite = playerSprite;
+    sprite = await gameRef.loadSprite('player-sprite.png');
 
-    x = gameRef.size.x / 2;
-    y = gameRef.size.y / 2;
+    position = gameRef.size / 2;
     width = 100;
     height = 150;
     anchor = Anchor.center;

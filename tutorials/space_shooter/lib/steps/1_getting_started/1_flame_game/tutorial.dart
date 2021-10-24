@@ -41,10 +41,12 @@ implemented as follows:
 import 'package:flame/components.dart';
 
 class Player extends PositionComponent {
+  static final _paint = Paint()..color = Colors.white;
+
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    canvas.drawRect(size.toRect(), Paint()..color = Colors.white);
+    canvas.drawRect(size.toRect(), _paint);
   }
 }
 ```
@@ -62,8 +64,7 @@ class SpaceShooterGame extends FlameGame {
 
     add(
       Player()
-        ..x = size.x / 2
-        ..y = size.y / 2
+        ..position = size / 2
         ..width = 50
         ..height = 100
         ..anchor = Anchor.center,

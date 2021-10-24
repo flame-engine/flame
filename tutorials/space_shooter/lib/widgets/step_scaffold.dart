@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_highlight/flutter_highlight.dart';
-import 'package:flutter_highlight/themes/dark.dart';
-import 'package:flutter_highlight/themes/github.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
+
+import 'code_block.dart';
 
 class StepScaffold extends StatelessWidget {
   final List<String> tutorial;
@@ -38,46 +36,7 @@ class StepScaffold extends StatelessWidget {
                   children: tutorial.map(
                     (text) {
                       if (text.startsWith('```')) {
-                        final code = text.replaceAll('```', '');
-                        return Padding(
-                          padding: const EdgeInsets.all(22.0),
-                          child: Stack(
-                            children: [
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: HighlightView(
-                                  code,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 22,
-                                  ),
-                                  language: 'dart',
-                                  theme: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? githubTheme
-                                      : darkTheme,
-                                ),
-                              ),
-                              Positioned(
-                                top: 10,
-                                right: 10,
-                                child: IconButton(
-                                  onPressed: () {
-                                    Clipboard.setData(
-                                      ClipboardData(text: code),
-                                    );
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Code copied!'),
-                                      ),
-                                    );
-                                  },
-                                  tooltip: 'Copy code',
-                                  icon: const Icon(Icons.copy),
-                                ),
-                              )
-                            ],
-                          ),
-                        );
+                        return CodeBlock(value: text);
                       } else {
                         return Align(
                           alignment: Alignment.topLeft,
