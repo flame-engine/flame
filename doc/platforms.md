@@ -16,13 +16,15 @@ To use Flame on web you need to make sure your game is using the CanvasKit/[Skia
 renderer. This will increase performance on the web, as it will use the `canvas` element instead of
 separate DOM elements. 
 
-To run your game using skia, use the following command: 
-
-`$ flutter run -d chrome --web-renderer canvaskit`
+To run your game using skia, use the following command:
+```console
+$ flutter run -d chrome --web-renderer canvaskit
+```
 
 To build the game for production, using skia, use the following:
-
-`$ flutter build web --release --web-renderer canvaskit`
+```console
+$ flutter build web --release --web-renderer canvaskit
+```
 
 ### Web support
 
