@@ -33,7 +33,7 @@ That is it! If you run this, you will only see an empty black screen for now, fr
 start implementing our game.
 
 Next, lets create our player component. To do so, we will create a new class based on Flame's
-`PositionComponent`. This component is the base for all components that have a position and a dimension
+`PositionComponent`. This component is the base for all components that have a position and a size
 on the game screen. For now, our component will only render a white square; it could be
 implemented as follows:
 ''',
