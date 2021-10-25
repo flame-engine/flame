@@ -5,12 +5,12 @@ const tutorial = [
 Now that we have the base for our game and a component for our player, lets add some interactivity to
 it. We can begin that by allowing the player to be controlled by mouse/touch gestures.
 
-There are a couple of ways of doing that on Flame. For this tutorial, we will do that by using one of
+There are a couple of ways of doing that in Flame. For this tutorial, we will do that by using one of
 Flame's gestures detectors: `PanDetector`.
 
 This detector will make our game class receive pan (or drag) events. To do so, we just need to
-add the `PanDetector` mixin to our game class and override its listeners methods; in our case,
-we will use the `onPadUpdate` method. The updated code will look like the following:
+add the `PanDetector` mixin to our game class and override its listener methods; in our case,
+we will use the `onPanUpdate` method. The updated code will look like the following:
 ''',
   '''```
 import 'package:flame/input.dart';
@@ -29,10 +29,10 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 }
 ```''',
   '''
-At this point our game should be receiving all the pan updates inputs, but we are not doing
+At this point our game should be receiving all the pan update inputs, but we are not doing
 anything with these events.
 
-We need now a way to move our player. That can be achieved by simply saving our `Player` component to a
+We now need a way to move our player. That can be achieved by simply saving our `Player` component to a
 variable inside our game class, and adding a method `move` to our `Player` and just connect them:
 ''',
   '''```
@@ -127,13 +127,13 @@ A couple of notes worth mentioning:
 we can delete the previous override.  that actually renders something, so we don't need to override
 it anymore.
  - `FlameGame` has a couple of methods for loading assets, like `loadSprite`. Those methods are
-quite handful, because when used, `FlameGame` will take care of cleaning any cache when the game
-is removed from the Flutter widget tree.
+quite handful, because when used, `FlameGame` will take care of cleaning any cache when the game is
+removed from the Flutter widget tree.
 
 Before we close this step, there is one small improvement that we can do. Right now, we are loading
 the sprite and passing it to our component. For now, this may seen fine, but imagine a game with
 dozen of components; if the game is responsible for loading assets for all coponents, our code can
-get a mess quite fast.
+become a mess quite fast.
 
 Just like `FlameGame`, components also have an `onLoad` method that can be overridden to do
 initializations. But before we implement our player's own load method, note that we use an attribute
@@ -183,6 +183,6 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 ```''',
   '''
 If you run the game now, you will not notice any visual differences, but now we have a more
-scalable structure to grow our game on. And that closes this step!
+scalable structure for developing our game. And that closes this step!
 '''
 ];
