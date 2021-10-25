@@ -189,10 +189,20 @@ void main() {
       expect(nStarted, 1);
       expect(nFinished, 1);
 
+      // As more time passes, `onStart` and `onFinish` are no longer called
       effect.update(0.5);
       expect(effect.x, 1);
       expect(nStarted, 1);
       expect(nFinished, 1);
+
+      // However, if we reset the effect, the callbacks will be invoked again
+      effect.reset();
+      effect.update(0);
+      expect(nStarted, 2);
+      expect(nFinished, 1);
+      effect.update(1);
+      expect(nStarted, 2);
+      expect(nFinished, 2);
     });
   });
 }
