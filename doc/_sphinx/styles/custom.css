@@ -10,12 +10,48 @@
     --pst-color-toc-link: 130, 130, 130;
 }
 
-body {
-    background-color: #3a3a3a;
+body,
+.topbar .topbar-main {
+    background-color: #202225;
+    color: #d3d3d3;
+}
+
+.topbar .topbar-main {
+    padding-left: 0 !important;
+}
+
+.topbar .topbar-main button.topbarbtn {
+    background-color: #484848;
+    color: #020202;
+}
+
+.scrolled .topbar {
+    box-shadow: none;
+}
+
+.scrolled .topbar-main {
+    box-shadow: 0 3px 6px 0 #000000AA;
+}
+
+main.bd-content {
+    padding-left: 0 !important;
+}
+
+main.bd-content > #main-content {
+    margin: 0;
+    padding: 0;
+}
+
+main.bd-content > #main-content > div {
+    background: #333;
+    flex: 1;
+    max-width: calc(100% - 18vw + 15px);
+    padding: 20px 25px !important;
 }
 
 #site-navigation {
     background-color: #202225;
+    border: none;
 }
 #site-navigation::-webkit-scrollbar {
     width: 4px;
@@ -29,21 +65,33 @@ body {
 }
 
 
-.topbar .topbar-main button.topbarbtn {
-    background-color: #636363;
-    color: #2f2f2f;
-}
-
 #navbar-toggler {
-    color: #777;
+    background: #484848;
+    color: #020202;
+    height: calc(100% - 3px);
+    min-width: 40px;
 }
 
-div.dropdown-buttons-trigger div.dropdown-buttons {
+#navbar-toggler:focus, #navbar-toggler:hover {
+    background: #666;
+    outline: none;
+}
+
+#navbar-toggler i {
+    left: 9px;
+    top: 5px;
+}
+
+.topbar div.dropdown-buttons-trigger:hover > button {
+    background: #666;
+}
+
+.topbar div.dropdown-buttons-trigger div.dropdown-buttons {
     max-width: inherit;
     transform: inherit;
 }
 
-div.dropdown-buttons-trigger:hover div.dropdown-buttons {
+.topbar div.dropdown-buttons-trigger:hover div.dropdown-buttons {
     background: #505050;
     border-radius: 6px;
     display: flex;
@@ -51,7 +99,7 @@ div.dropdown-buttons-trigger:hover div.dropdown-buttons {
     padding: 2px 0;
 }
 
-div.dropdown-buttons-trigger:hover div.dropdown-buttons button.topbarbtn {
+.topbar div.dropdown-buttons-trigger:hover div.dropdown-buttons button.topbarbtn {
     border: none !important;
     color: #ccc;
     margin: 2px 4px;
@@ -63,14 +111,19 @@ div.dropdown-buttons-trigger:hover div.dropdown-buttons button.topbarbtn {
     width: -webkit-fill-available;
 }
 
-div.dropdown-buttons-trigger:hover div.dropdown-buttons button.topbarbtn:hover {
+.topbar div.dropdown-buttons-trigger:hover div.dropdown-buttons button.topbarbtn:hover {
     background: #ffffff33;
 }
 
-div.dropdown-buttons-trigger:hover div.dropdown-buttons button.topbarbtn.selected {
+.topbar div.dropdown-buttons-trigger:hover div.dropdown-buttons button.topbarbtn.selected {
     background: #ffffff22;
     color: #fff;
     outline: 1px solid #777;
+}
+
+.topbar-main button.topbarbtn.btn-secondary:focus,
+.topbar-main button.topbarbtn.btn-secondary:active:focus {
+    box-shadow: none;
 }
 
 #versions-menu button span.tag {
@@ -97,6 +150,7 @@ div.navbar-brand-box a.navbar-brand img {
 }
 
 pre {
+    background: #424242;
     border: none;
     box-shadow: 0px 0px 3px black;
     color: #888;
@@ -104,8 +158,9 @@ pre {
 }
 
 code {
-    background-color: #222;
+    background-color: #282828;
     border-radius: 3pt;
+    color: #FFC479;
     padding: 2pt 3pt;
 }
 
@@ -121,6 +176,10 @@ div[class^="highlight-"] pre:before {
     top: 0;
 }
 
+div.highlight-console pre:before {
+    content: "bash";
+    color: #666;
+}
 div.highlight-dart pre:before {
     content: "dart";
 }
@@ -140,14 +199,24 @@ div.highlight-text pre:before {
 #site-navigation nav ul.nav a:hover, #site-navigation nav ul.nav li.active>a, #site-navigation nav ul.nav li.active>a:hover {
     color: rgba(var(--pst-color-sidebar-link-active), 1);
 }
+
+div.bd-toc.show {
+    background: #202225;
+    flex: initial;
+    max-width: 18vw;
+    width: 18vw;
+}
+
 .bd-toc div.onthispage, .bd-toc .toc-entry a {
+    border: none;
     color: rgba(var(--pst-color-toc-link), 1);
 }
 .bd-toc nav {
     background: inherit;
+    overflow-x: clip;
 }
 .bd-toc nav > .nav {
-    border-color: #111;
+    border: none;
 }
 nav.bd-links p.caption {
     margin-bottom: 0.2em;
@@ -239,10 +308,13 @@ div#search-results > h2 {
     margin-top: 0;
 }
 
+
 /* Previous/next buttons */
 
 main.bd-content #main-content .prev-next-bottom {
-    padding: 3px;
+    background: #202225;
+    margin: 0 -25px -20px -25px;
+    padding: 20px 0;
 }
 
 main.bd-content #main-content .prev-next-bottom a.left-prev {
