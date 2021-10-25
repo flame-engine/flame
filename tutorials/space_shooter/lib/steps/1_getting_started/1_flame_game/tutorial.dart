@@ -9,7 +9,7 @@ animations, input using gestures, mouse and keyboard controls, collision detecti
 This first part will introduce you to:
  - `FlameGame`: The base class for games using the Flame Component System.
  - `GameWidget`: The `Widget` that will insert your game into the Flutter widget tree.
- - `PositionComponent`: One of the most basic Flame components which is holds both
+ - `PositionComponent`: One of the most basic Flame components which holds both
 a position and dimensions in the game space.
 
 Lets start by creating our game class and the `GameWidget` that will run it.
@@ -53,7 +53,7 @@ class Player extends PositionComponent {
 ''',
   '''
 Now, lets add our new component to the game. Adding any component on game startup should be done
-on the `onLoad` method, so let's override `FlameGame.onLoad` and add our logic there. The modified
+in the `onLoad` method, so let's override `FlameGame.onLoad` and add our logic there. The modified
 code will look like the following:
 ''',
   '''```
@@ -79,11 +79,11 @@ A couple of points worth commenting:
 
  - Always call `await super.onLoad()` as the first instruction of your custom `onLoad` method.
  - `size` is a `Vector2` variable from the game class and it holds the current dimension of the game
-area, where `x` is the horizontal dimension, or the width, and `y` the vertical, or the height.
+area, where `x` is the horizontal dimension, or the width, and `y` the vertical dimension, or the height.
  - By default, Flame follows Flutter's canvas anchoring, which means that (0, 0) is anchored on the
 top left corner of the canvas. So the game and all components use that same anchor by default. We
 can change this by changing our component's `anchor` attribute to `Anchor.center`, which will make
-our life way easier to center the component on the screen.
+our life way easier if you want to center the component on the screen.
 
 And that is it for this first part! On this first step, we learned the basics on how to create a
 game class, insert it into the Flutter widget tree, and render a simple component.
