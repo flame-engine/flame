@@ -18,12 +18,12 @@ import 'flame_animation_controller.dart';
 ///   1. wait for [startDelay] seconds,
 ///   2. repeat the following steps [repeatCount] times (or infinitely):
 ///       a. progress from 0 to 1 over the [forwardDuration] seconds,
-///       b. wait for [atPeakDuration] seconds,
+///       b. wait for [atMaxDuration] seconds,
 ///       c. progress from 1 to 0 over the [backwardDuration] seconds,
-///       d. wait for [atPitDuration] seconds,
+///       d. wait for [atMinDuration] seconds,
 ///   3. mark the animation as [completed].
 ///
-/// If the animation is finite and there are no `backward` or `atPit` stages
+/// If the animation is finite and there are no `backward` or `atMin` stages
 /// then the animation will complete at `progress == 1`, otherwise it will
 /// complete at `progress == 0`.
 ///
@@ -41,8 +41,8 @@ class StandardAnimationController extends FlameAnimationController {
     bool infinite = false,
     int? repeatCount,
     double? delay,
-    this.atPeakDuration = 0.0,
-    this.atPitDuration = 0.0,
+    this.atMaxDuration = 0.0,
+    this.atMinDuration = 0.0,
   })  : assert(infinite ? repeatCount == null : true,
             'An infinite animation cannot have a repeat count'),
         assert(!infinite ? (repeatCount ?? 1) > 0 : true,
@@ -50,8 +50,8 @@ class StandardAnimationController extends FlameAnimationController {
         assert(duration > 0, 'duration must be positive'),
         assert(reverseDuration >= 0, 'reverseDuration cannot be negative'),
         assert((delay ?? 0) >= 0, 'delay cannot be negative'),
-        assert(atPeakDuration >= 0, 'atPeakDuration cannot be negative'),
-        assert(atPitDuration >= 0, 'atPitDuration cannot be negative'),
+        assert(atMaxDuration >= 0, 'atMaxDuration cannot be negative'),
+        assert(atMinDuration >= 0, 'atMinDuration cannot be negative'),
         repeatCount = infinite ? -1 : (repeatCount ?? 1),
         startDelay = delay ?? 0.0,
         forwardDuration = duration,
@@ -70,8 +70,8 @@ class StandardAnimationController extends FlameAnimationController {
   /// animation to produce the desired transition effect. In essence, you can
   /// think of this variable as a "logical time".
   ///
-  /// This variable is guaranteed to be 0 during the `beforeStart` and `atPit`
-  /// periods, and to be 1 during the `atPeak` period. During the `forward`
+  /// This variable is guaranteed to be 0 during the `beforeStart` and `atMin`
+  /// periods, and to be 1 during the `atMax` period. During the `forward`
   /// period this variable changes from 0 to 1, and during the `backward` period
   /// it goes back from 1 to 0. However, during the latter two periods it is
   /// possible for `progress` to become less than 0 or greater than 1 if either
@@ -121,15 +121,15 @@ class StandardAnimationController extends FlameAnimationController {
 
   final double forwardDuration;
   final double backwardDuration;
-  final double atPeakDuration;
-  final double atPitDuration;
+  final double atMaxDuration;
+  final double atMinDuration;
 
   double get cycleDuration {
-    return forwardDuration + atPeakDuration + backwardDuration + atPitDuration;
+    return forwardDuration + atMaxDuration + backwardDuration + atMinDuration;
   }
 
   bool get isSimpleAnimation =>
-      atPeakDuration + backwardDuration + atPitDuration == 0;
+      atMaxDuration + backwardDuration + atMinDuration == 0;
 
   _AnimationStage _stage;
   double _remainingTimeAtCurrentStage;
@@ -161,27 +161,27 @@ class StandardAnimationController extends FlameAnimationController {
           break;
         case _AnimationStage.forward:
           _progress = 1;
-          _remainingTimeAtCurrentStage += atPeakDuration;
-          _stage = _AnimationStage.atPeak;
+          _remainingTimeAtCurrentStage += atMaxDuration;
+          _stage = _AnimationStage.atMax;
           if (_remainingIterationsCount == 1 && isSimpleAnimation) {
             _markCompleted();
           }
           return;
-        case _AnimationStage.atPeak:
+        case _AnimationStage.atMax:
           _remainingTimeAtCurrentStage += backwardDuration;
           _stage = _AnimationStage.backward;
           if (_remainingIterationsCount == 1 &&
               backwardDuration == 0 &&
-              atPitDuration == 0) {
+              atMinDuration == 0) {
             _markCompleted();
           }
           break;
         case _AnimationStage.backward:
           _progress = 0;
-          _remainingTimeAtCurrentStage += atPitDuration;
-          _stage = _AnimationStage.atPit;
+          _remainingTimeAtCurrentStage += atMinDuration;
+          _stage = _AnimationStage.atMin;
           return;
-        case _AnimationStage.atPit:
+        case _AnimationStage.atMin:
           _remainingTimeAtCurrentStage += forwardDuration;
           _stage = _AnimationStage.forward;
           if (!isInfinite) {
@@ -226,8 +226,8 @@ class StandardAnimationController extends FlameAnimationController {
 enum _AnimationStage {
   beforeStart,
   forward,
-  atPeak,
+  atMax,
   backward,
-  atPit,
+  atMin,
   afterEnd,
 }

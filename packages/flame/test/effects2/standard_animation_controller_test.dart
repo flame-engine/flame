@@ -75,7 +75,7 @@ void main() {
     });
 
     test('forward + atPeak', () {
-      final ac = StandardAnimationController(duration: 1, atPeakDuration: 0.5);
+      final ac = StandardAnimationController(duration: 1, atMaxDuration: 0.5);
       expect(ac.cycleDuration, 1.5);
       expect(ac.isSimpleAnimation, false);
       expect(ac.isInfinite, false);
@@ -95,8 +95,8 @@ void main() {
         delay: 1.0,
         duration: 2.0,
         reverseDuration: 1.0,
-        atPeakDuration: 0.2,
-        atPitDuration: 0.5,
+        atMaxDuration: 0.2,
+        atMinDuration: 0.5,
         repeatCount: 5,
       );
       expect(ac.isInfinite, false);
@@ -106,8 +106,8 @@ void main() {
       expect(ac.completed, false);
       expect(ac.forwardDuration, 2.0);
       expect(ac.backwardDuration, 1.0);
-      expect(ac.atPeakDuration, 0.2);
-      expect(ac.atPitDuration, 0.5);
+      expect(ac.atMaxDuration, 0.2);
+      expect(ac.atMinDuration, 0.5);
       expect(ac.cycleDuration, 3.7);
       expect(ac.isSimpleAnimation, false);
 
@@ -237,10 +237,10 @@ void main() {
         () => StandardAnimationController(duration: 1, delay: -1),
       );
       expectThrows(
-        () => StandardAnimationController(duration: 1, atPeakDuration: -1),
+        () => StandardAnimationController(duration: 1, atMaxDuration: -1),
       );
       expectThrows(
-        () => StandardAnimationController(duration: 1, atPitDuration: -1),
+        () => StandardAnimationController(duration: 1, atMinDuration: -1),
       );
     });
 
