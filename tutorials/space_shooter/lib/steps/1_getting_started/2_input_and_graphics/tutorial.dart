@@ -124,8 +124,7 @@ And now, you should see a small blue spaceship on the screen!
 
 A couple of notes worth mentioning:
  - Unlike `PositionComponent`, `SpriteComponent` has an implementation for the `render` method, so
-we can delete the previous override.  that actually renders something, so we don't need to override
-it anymore.
+we can delete the previous override.
  - `FlameGame` has a couple of methods for loading assets, like `loadSprite`. Those methods are
 quite handful, because when used, `FlameGame` will take care of cleaning any cache when the game is
 removed from the Flutter widget tree.
