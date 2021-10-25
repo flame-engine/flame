@@ -5,10 +5,14 @@ import 'package:flame/src/game/flame_game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+typedef VoidCallback = void Function();
+
 class MyEffect extends Effect {
   MyEffect(FlameAnimationController controller) : super(controller);
 
   double x = -1;
+  VoidCallback? onStartCallback;
+  VoidCallback? onFinishCallback;
 
   @override
   void apply(double progress) {
@@ -19,6 +23,18 @@ class MyEffect extends Effect {
   void reset() {
     super.reset();
     x = -1;
+  }
+
+  @override
+  void onStart() {
+    super.onStart();
+    onStartCallback?.call();
+  }
+
+  @override
+  void onFinish() {
+    super.onFinish();
+    onFinishCallback?.call();
   }
 }
 
@@ -133,5 +149,50 @@ void main() {
         expect(effect.isMounted, true);
       },
     );
+
+    test('removeOnFinish = error', () {
+      final effect = MyEffect(
+        StandardAnimationController(duration: 1, infinite: true),
+      );
+      expect(effect.controller.isInfinite, true);
+      expect(effect.removeOnFinish, false);
+      expect(() => effect.removeOnFinish = true, throwsAssertionError);
+    });
+
+    test('onStart & onFinish', () {
+      var nStarted = 0;
+      var nFinished = 0;
+      final effect = MyEffect(StandardAnimationController(duration: 1))
+        ..onStartCallback = () {
+          nStarted++;
+        }
+        ..onFinishCallback = () {
+          nFinished++;
+        };
+
+      effect.update(0);
+      expect(effect.controller.started, true);
+      expect(effect.x, 0);
+      expect(nStarted, 1);
+      expect(nFinished, 0);
+
+      effect.update(0.5);
+      expect(effect.controller.started, true);
+      expect(effect.x, 0.5);
+      expect(nStarted, 1);
+      expect(nFinished, 0);
+
+      effect.update(0.5);
+      expect(effect.controller.started, true);
+      expect(effect.controller.completed, true);
+      expect(effect.x, 1);
+      expect(nStarted, 1);
+      expect(nFinished, 1);
+
+      effect.update(0.5);
+      expect(effect.x, 1);
+      expect(nStarted, 1);
+      expect(nFinished, 1);
+    });
   });
 }
