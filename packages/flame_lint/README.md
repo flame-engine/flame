@@ -8,7 +8,7 @@ Add `flame_lint` as dependency to your pubspec.yaml
 
 ```yaml
 dev_dependencies:
-  lint: ^1.0.0
+  flame_lint: ^0.0.1
 ```
 
 Include it on your `analysis_options.yaml` file.
