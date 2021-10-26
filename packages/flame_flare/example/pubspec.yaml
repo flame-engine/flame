@@ -19,7 +19,6 @@ dev_dependencies:
   flame_lint:
     path: ../../flame_lint
 
-
 flutter:
   assets:
     - assets/Bob_Minion.flr
