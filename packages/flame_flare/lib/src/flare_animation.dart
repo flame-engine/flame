@@ -176,7 +176,7 @@ class FlareActorAnimation {
         contentHeight / 2.0 -
         (alignment.y * contentHeight / 2.0);
 
-    double scaleX = 1.0, scaleY = 1.0;
+    var scaleX = 1.0, scaleY = 1.0;
 
     c.save();
     // pre paint
@@ -191,26 +191,26 @@ class FlareActorAnimation {
         scaleY = size.y / contentHeight;
         break;
       case BoxFit.contain:
-        double minScale = min(size.x / contentWidth, size.y / contentHeight);
+        final minScale = min(size.x / contentWidth, size.y / contentHeight);
         scaleX = scaleY = minScale;
         break;
       case BoxFit.cover:
-        double maxScale = max(size.x / contentWidth, size.y / contentHeight);
+        final maxScale = max(size.x / contentWidth, size.y / contentHeight);
         scaleX = scaleY = maxScale;
         break;
       case BoxFit.fitHeight:
-        double minScale = size.y / contentHeight;
+        final minScale = size.y / contentHeight;
         scaleX = scaleY = minScale;
         break;
       case BoxFit.fitWidth:
-        double minScale = size.x / contentWidth;
+        final minScale = size.x / contentWidth;
         scaleX = scaleY = minScale;
         break;
       case BoxFit.none:
         scaleX = scaleY = 1.0;
         break;
       case BoxFit.scaleDown:
-        double minScale = min(size.x / contentWidth, size.y / contentHeight);
+        final minScale = min(size.x / contentWidth, size.y / contentHeight);
         scaleX = scaleY = minScale < 1.0 ? minScale : 1.0;
         break;
     }

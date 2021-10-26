@@ -32,9 +32,11 @@ void effectTest(
   effect.onComplete = callback.call;
   final game = FlameGame();
   game.onGameResize(Vector2.all(200));
-  await tester.pumpWidget(GameWidget(
-    game: game,
-  ));
+  await tester.pumpWidget(
+    GameWidget(
+      game: game,
+    ),
+  );
   await game.add(component);
   await component.add(effect);
   final duration = effect.iterationTime;
