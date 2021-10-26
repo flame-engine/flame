@@ -6,7 +6,7 @@ publish_to: 'none'
 
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.14.0 <3.0.0"
   flutter: ">=1.24.0"
 
 dependencies:
@@ -22,4 +22,6 @@ dev_dependencies:
     sdk: flutter
   test: ^1.16.0
   dartdoc: ^0.42.0
-  dart_code_metrics: ^3.2.2
+  flame_lint:
+    path: ../flame_lint
+

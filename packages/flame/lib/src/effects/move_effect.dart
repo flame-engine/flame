@@ -131,7 +131,9 @@ class MoveEffect extends PositionComponentEffect {
     final lastEndAt = _currentSubPath!.startAt;
     final localPercentage =
         (curveProgress - lastEndAt) / (_currentSubPath!.endAt - lastEndAt);
-    affectedParent.position.setFrom(_currentSubPath!.previous +
-        ((_currentSubPath!.v - _currentSubPath!.previous) * localPercentage));
+    affectedParent.position.setFrom(
+      _currentSubPath!.previous +
+          ((_currentSubPath!.v - _currentSubPath!.previous) * localPercentage),
+    );
   }
 }

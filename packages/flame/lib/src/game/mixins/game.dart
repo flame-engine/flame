@@ -104,10 +104,12 @@ mixin Game on Loadable implements Projector {
   /// Should not be called manually.
   void attach(PipelineOwner owner, GameRenderBox gameRenderBox) {
     if (isAttached) {
-      throw UnsupportedError('''
+      throw UnsupportedError(
+        '''
       Game attachment error:
       A game instance can only be attached to one widget at a time.
-      ''');
+      ''',
+      );
     }
     _gameRenderBox = gameRenderBox;
 

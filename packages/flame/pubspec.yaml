@@ -14,15 +14,16 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   test: ^1.17.10
-  dart_code_metrics: ^4.1.0
   dartdoc: ^0.42.0
   mocktail: ^0.1.4
   canvas_test: ^0.1.1
   flame_test:
     path: ../flame_test
+  flame_lint:
+    path: ../flame_lint
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.14.0 <3.0.0"
   flutter: ">=2.5.0"
 
 flutter:
