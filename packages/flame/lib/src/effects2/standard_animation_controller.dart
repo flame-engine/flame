@@ -40,7 +40,7 @@ class StandardAnimationController extends FlameAnimationController {
     Curve? reverseCurve,
     bool infinite = false,
     int? repeatCount,
-    double? delay,
+    this.startDelay = 0.0,
     this.atMaxDuration = 0.0,
     this.atMinDuration = 0.0,
   })  : assert(infinite ? repeatCount == null : true,
@@ -49,11 +49,10 @@ class StandardAnimationController extends FlameAnimationController {
             'repeatCount must be positive'),
         assert(duration > 0, 'duration must be positive'),
         assert(reverseDuration >= 0, 'reverseDuration cannot be negative'),
-        assert((delay ?? 0) >= 0, 'delay cannot be negative'),
+        assert(startDelay >= 0, 'startDelay cannot be negative'),
         assert(atMaxDuration >= 0, 'atMaxDuration cannot be negative'),
         assert(atMinDuration >= 0, 'atMinDuration cannot be negative'),
         repeatCount = infinite ? -1 : (repeatCount ?? 1),
-        startDelay = delay ?? 0.0,
         forwardDuration = duration,
         backwardDuration = reverseDuration,
         forwardCurve = curve,
@@ -61,7 +60,7 @@ class StandardAnimationController extends FlameAnimationController {
             reverseCurve ?? (curve == Curves.linear ? curve : curve.flipped),
         _progress = 0,
         _remainingIterationsCount = repeatCount ?? (infinite ? -1 : 1),
-        _remainingTimeAtCurrentStage = delay ?? 0.0,
+        _remainingTimeAtCurrentStage = startDelay,
         _stage = _AnimationStage.beforeStart;
 
   /// The current value of the animation.

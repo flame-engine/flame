@@ -48,7 +48,7 @@ void main() {
     });
 
     test('forward + delay', () {
-      final ac = StandardAnimationController(duration: 1.0, delay: 0.2);
+      final ac = StandardAnimationController(duration: 1.0, startDelay: 0.2);
       expect(ac.isInfinite, false);
       expect(ac.isSimpleAnimation, true);
 
@@ -92,7 +92,7 @@ void main() {
 
     test('(forward + reverse) x 5', () {
       final ac = StandardAnimationController(
-        delay: 1.0,
+        startDelay: 1.0,
         duration: 2.0,
         reverseDuration: 1.0,
         atMaxDuration: 0.2,
@@ -234,7 +234,7 @@ void main() {
         () => StandardAnimationController(duration: 1, reverseDuration: -1),
       );
       expectThrows(
-        () => StandardAnimationController(duration: 1, delay: -1),
+        () => StandardAnimationController(duration: 1, startDelay: -1),
       );
       expectThrows(
         () => StandardAnimationController(duration: 1, atMaxDuration: -1),
