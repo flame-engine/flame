@@ -1,6 +1,6 @@
 # Flame Lint
 
-Package with the lint rules used on the Flame Engine project.
+Package with the lint rules used on the Flame Engine related projects.
 
 # Install
 
