@@ -18,11 +18,12 @@ dependencies:
     sdk: flutter
 
 dev_dependencies:
-  dart_code_metrics: ^4.1.0
   dartdoc: ^0.42.0
   flutter_test:
     sdk: flutter
   test: ^1.9.4
+  flame_lint:
+    path: ../flame_lint
 
 flutter:
   uses-material-design: false

@@ -20,7 +20,8 @@ dev_dependencies:
   flame_test:
     path: ../
   test: ^1.17.10
-  dart_code_metrics: ^4.1.0
+  flame_lint:
+    path: ../../flame_lint
 
 flutter:
   assets:

@@ -16,7 +16,9 @@ dependencies:
     sdk: flutter
 
 dev_dependencies:
-  dart_code_metrics: ^4.1.0
+  flame_lint:
+    path: ../../flame_lint
+
 
 flutter:
   assets:
