@@ -35,9 +35,10 @@ abstract class FlameAnimationController {
 
   /// Has the effect already completed running?
   ///
-  /// For a finite animation, this property will turn true once the animation
+  /// For a finite animation, this property will turn `true` once the animation
   /// has finished running and the [progress] variable will no longer change
-  /// in the future. For an infinite animation this should always return false.
+  /// in the future. For an infinite animation this should always return
+  /// `false`.
   bool get completed;
 
   /// The current value of the animation/effect, a value between 0 and 1.
@@ -50,8 +51,7 @@ abstract class FlameAnimationController {
   /// Advances this animation controller's internal clock by [dt] seconds.
   ///
   /// Normally, this method will be called by the owner of the controller class.
-  /// For example, if the controller is passed to an EffectComponent class,
-  /// then that class will take care of calling the `update()` method as
-  /// necessary.
+  /// For example, if the controller is passed to an `Effect` class, then that
+  /// class will take care of calling the `update()` method as necessary.
   void update(double dt);
 }
