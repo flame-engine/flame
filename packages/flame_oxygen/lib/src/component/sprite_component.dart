@@ -14,11 +14,13 @@ class SpriteInit {
     Vector2? srcPosition,
     Vector2? srcSize,
   }) {
-    return SpriteInit(Sprite(
-      image,
-      srcPosition: srcPosition,
-      srcSize: srcSize,
-    ));
+    return SpriteInit(
+      Sprite(
+        image,
+        srcPosition: srcPosition,
+        srcSize: srcSize,
+      ),
+    );
   }
 }
 
