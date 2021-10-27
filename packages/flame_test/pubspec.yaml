@@ -5,7 +5,7 @@ homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_test
 publish_to: 'none'
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.14.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -22,4 +22,6 @@ dependencies:
 dev_dependencies:
   dartdoc: ^0.42.0
   flutter_lints: ^1.0.0
-  dart_code_metrics: ^4.1.0
+  flame_lint:
+    path: ../flame_lint
+

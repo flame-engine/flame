@@ -6,9 +6,6 @@ analyzer:
     implicit-casts: false
     implicit-dynamic: false
 
-  plugins:
-    #  - dart_code_metrics
-
 linter:
   rules:
     - always_declare_return_types
@@ -131,18 +128,4 @@ linter:
     - unrelated_type_equality_checks
     - unsafe_html
     - void_checks
-
-dart_code_metrics:
-  rules:
-    - prefer-trailing-comma
-    - prefer-trailing-comma-for-collection
-    - no-equal-then-else
-    - no-object-declaration
-    - potential-null-dereference
-  metrics-exclude:
-    - test/**
-  metrics:
-    number-of-parameters: 10
-    number-of-methods: 50
-    source-lines-of-code: 200
-    cyclomatic-complexity: 36
+    - require_trailing_commas

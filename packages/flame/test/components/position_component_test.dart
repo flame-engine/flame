@@ -164,12 +164,14 @@ void main() {
       component.position.setValues(1.0, 1.0);
       component.anchor = Anchor.topLeft;
       component.size.setValues(2.0, 2.0);
-      component.addHitbox(HitboxPolygon([
-        Vector2(1, 0),
-        Vector2(0, -1),
-        Vector2(-1, 0),
-        Vector2(0, 1),
-      ]));
+      component.addHitbox(
+        HitboxPolygon([
+          Vector2(1, 0),
+          Vector2(0, -1),
+          Vector2(-1, 0),
+          Vector2(0, 1),
+        ]),
+      );
 
       final point = Vector2(1.1, 1.1);
       expect(component.containsPoint(point), false);
@@ -268,15 +270,19 @@ void main() {
           bottomRightResult ?? expectedResult,
         );
         expect(
-          component.containsPoint(topRightPoint
-            ..x += epsilon.x
-            ..y -= epsilon.y),
+          component.containsPoint(
+            topRightPoint
+              ..x += epsilon.x
+              ..y -= epsilon.y,
+          ),
           topRightResult ?? expectedResult,
         );
         expect(
-          component.containsPoint(bottomLeftPoint
-            ..x -= epsilon.x
-            ..y += epsilon.y),
+          component.containsPoint(
+            bottomLeftPoint
+              ..x -= epsilon.x
+              ..y += epsilon.y,
+          ),
           bottomLeftResult ?? expectedResult,
         );
       }
