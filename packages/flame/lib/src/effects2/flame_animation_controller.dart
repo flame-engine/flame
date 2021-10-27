@@ -1,7 +1,7 @@
-/// Base "animation controller" class to facilitate animation of effects.
+/// Base "controller" class to facilitate animation of effects.
 ///
-/// The purpose of an animation controller is to define how an animation or an
-/// effect should progress over time. To facilitate that, this class provides
+/// The purpose of an effect controller is to define how an effect or an
+/// animation should progress over time. To facilitate that, this class provides
 /// variable [progress], which will grow from 0.0 to 1.0 over time. The value
 /// of 0 corresponds to the beginning of an animation, and the value of 1.0 is
 /// the end of the animation.
@@ -24,7 +24,7 @@
 /// Unlike the `dart.ui.AnimationController`, this class does not use a `Ticker`
 /// to keep track of time. Instead, it must be pushed through time manually, by
 /// calling the `update()` method within the game loop.
-abstract class FlameAnimationController {
+abstract class EffectController {
   /// Will the effect continue to run forever (i.e. has no logical end)?
   bool get isInfinite;
 
@@ -41,14 +41,14 @@ abstract class FlameAnimationController {
   /// `false`.
   bool get completed;
 
-  /// The current value of the animation/effect, a value between 0 and 1.
+  /// The current value of the effect/animation, a value between 0 and 1.
   double get progress;
 
   /// Reverts the controller to its initial state, as it was before the start
   /// of the animation.
   void reset();
 
-  /// Advances this animation controller's internal clock by [dt] seconds.
+  /// Advances this controller's internal clock by [dt] seconds.
   ///
   /// Normally, this method will be called by the owner of the controller class.
   /// For example, if the controller is passed to an `Effect` class, then that

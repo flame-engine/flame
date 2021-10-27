@@ -225,7 +225,10 @@ void main() {
       );
       expectThrows(
         () => StandardAnimationController(
-            duration: 1, infinite: true, repeatCount: 3),
+          duration: 1,
+          infinite: true,
+          repeatCount: 3,
+        ),
       );
       expectThrows(
         () => StandardAnimationController(duration: 1, repeatCount: -1),
@@ -260,8 +263,10 @@ void main() {
       }
       for (var i = 0; i < 80; i++) {
         ac.update(0.01);
-        expect(ac.progress,
-            closeTo(curve.flipped.transform(1 - (i + 1) / 80), 1e-10));
+        expect(
+          ac.progress,
+          closeTo(curve.flipped.transform(1 - (i + 1) / 80), 1e-10),
+        );
       }
       ac.update(1e-10);
       expect(ac.completed, true);

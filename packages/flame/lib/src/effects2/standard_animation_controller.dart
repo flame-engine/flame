@@ -2,7 +2,7 @@ import 'package:flutter/animation.dart';
 
 import 'flame_animation_controller.dart';
 
-/// A commonly used implementation of a [FlameAnimationController].
+/// A commonly used implementation of a [EffectController].
 ///
 /// In the simplest case, [StandardAnimationController] will have a positive
 /// `duration` and will change its [progress] linearly from 0 to 1 over the
@@ -32,7 +32,7 @@ import 'flame_animation_controller.dart';
 /// these stages but will not move on to the next ones. Thus, you're guaranteed
 /// to be able to observe `progress == 1` and `progress == 0` at least once
 /// within each iteration cycle.
-class StandardAnimationController extends FlameAnimationController {
+class StandardAnimationController extends EffectController {
   StandardAnimationController({
     required double duration,
     Curve curve = Curves.linear,
@@ -43,10 +43,14 @@ class StandardAnimationController extends FlameAnimationController {
     this.startDelay = 0.0,
     this.atMaxDuration = 0.0,
     this.atMinDuration = 0.0,
-  })  : assert(infinite ? repeatCount == null : true,
-            'An infinite animation cannot have a repeat count'),
-        assert(!infinite ? (repeatCount ?? 1) > 0 : true,
-            'repeatCount must be positive'),
+  })  : assert(
+          infinite ? repeatCount == null : true,
+          'An infinite animation cannot have a repeat count',
+        ),
+        assert(
+          !infinite ? (repeatCount ?? 1) > 0 : true,
+          'repeatCount must be positive',
+        ),
         assert(duration > 0, 'duration must be positive'),
         assert(reverseDuration >= 0, 'reverseDuration cannot be negative'),
         assert(startDelay >= 0, 'startDelay cannot be negative'),
