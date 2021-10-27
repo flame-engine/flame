@@ -1,6 +1,6 @@
 import 'package:flutter/animation.dart';
 
-import 'flame_animation_controller.dart';
+import 'effect_controller.dart';
 
 /// A commonly used implementation of a [EffectController].
 ///
