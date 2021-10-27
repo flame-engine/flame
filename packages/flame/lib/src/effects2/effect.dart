@@ -27,7 +27,7 @@ import 'effect_controller.dart';
 /// non-trivial internal state.
 abstract class Effect extends Component {
   Effect(this.controller)
-      : _removeOnFinish = !controller.isInfinite,
+      : removeOnFinish = true,
         _paused = false,
         _started = false,
         _finished = false;
@@ -35,25 +35,13 @@ abstract class Effect extends Component {
   /// An object that describes how the effect should evolve over time.
   final EffectController controller;
 
-  /// Whether the effect should be removed from its parent once it is completed.
+  /// Whether the effect should be removed from its parent once it is completed,
+  /// true by default.
   ///
-  /// By default, this property is true for finite effects, and false for
-  /// infinite effects.
-  ///
-  /// Setting this to false for finite effects will cause the effect component
-  /// to remain in the game tree in the "completed" state. However, you can
-  /// `reset()` the effect in order to make it run once again.
-  bool get removeOnFinish => _removeOnFinish;
-  bool _removeOnFinish;
-  set removeOnFinish(bool value) {
-    if (controller.isInfinite) {
-      assert(
-        value == false,
-        'Infinitely repeating effect cannot have removeOnFinish=true',
-      );
-    }
-    _removeOnFinish = value;
-  }
+  /// Setting this to false will cause the effect component to remain in the
+  /// game tree in the "completed" state. However, you can `reset()` the effect
+  /// in order to make it run once again.
+  bool removeOnFinish;
 
   /// Boolean indicators of the effect's state, their purpose is to ensure that
   /// the `onStart()` and `onFinish()` callbacks are called exactly once.
@@ -112,13 +100,13 @@ abstract class Effect extends Component {
     if (!_finished && controller.completed) {
       _finished = true;
       onFinish();
-      if (_removeOnFinish) {
+      if (removeOnFinish) {
         removeFromParent();
       }
     }
   }
 
-  //#region Children's API
+  //#region API to be implemented by the derived classes
 
   /// This method is called once when the effect is about to start, but before
   /// the first call to `apply()`. The notion of "about to start" is defined by

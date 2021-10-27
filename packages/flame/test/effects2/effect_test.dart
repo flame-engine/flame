@@ -151,15 +151,6 @@ void main() {
       },
     );
 
-    test('removeOnFinish = error', () {
-      final effect = MyEffect(
-        StandardEffectController(duration: 1, infinite: true),
-      );
-      expect(effect.controller.isInfinite, true);
-      expect(effect.removeOnFinish, false);
-      expect(() => effect.removeOnFinish = true, throwsAssertionError);
-    });
-
     test('onStart & onFinish', () {
       var nStarted = 0;
       var nFinished = 0;
