@@ -4,11 +4,11 @@ import 'effect_controller.dart';
 
 /// A commonly used implementation of a [EffectController].
 ///
-/// In the simplest case, [StandardAnimationController] will have a positive
+/// In the simplest case, [StandardEffectController] will have a positive
 /// `duration` and will change its [progress] linearly from 0 to 1 over the
 /// period of that duration.
 ///
-/// More generally, a [StandardAnimationController] allows to add a delay before
+/// More generally, a [StandardEffectController] allows to add a delay before
 /// the beginning of the animation, to animate both forward and in reverse,
 /// to iterate several times (or infinitely), to apply an arbitrary [Curve]
 /// making the effect progression non-linear, etc.
@@ -32,8 +32,8 @@ import 'effect_controller.dart';
 /// these stages but will not move on to the next ones. Thus, you're guaranteed
 /// to be able to observe `progress == 1` and `progress == 0` at least once
 /// within each iteration cycle.
-class StandardAnimationController extends EffectController {
-  StandardAnimationController({
+class StandardEffectController extends EffectController {
+  StandardEffectController({
     required double duration,
     Curve curve = Curves.linear,
     double reverseDuration = 0.0,
