@@ -173,6 +173,7 @@ class StandardAnimationController extends FlameAnimationController {
               backwardDuration == 0 &&
               atMinDuration == 0) {
             _markCompleted();
+            return;
           }
           break;
         case _AnimationStage.backward:
@@ -187,11 +188,10 @@ class StandardAnimationController extends FlameAnimationController {
             _remainingIterationsCount -= 1;
             if (_remainingIterationsCount == 0) {
               _markCompleted();
+              return;
             }
           }
           break;
-        case _AnimationStage.afterEnd:
-          assert(false, 'Not reachable'); // LCOV_EXCL_LINE
       }
     }
     assert(_remainingTimeAtCurrentStage > 0);
@@ -216,7 +216,6 @@ class StandardAnimationController extends FlameAnimationController {
   }
 
   void _markCompleted() {
-    _stage = _AnimationStage.afterEnd;
     _remainingTimeAtCurrentStage = double.infinity;
     _remainingIterationsCount = 0;
   }
@@ -228,5 +227,4 @@ enum _AnimationStage {
   atMax,
   backward,
   atMin,
-  afterEnd,
 }
