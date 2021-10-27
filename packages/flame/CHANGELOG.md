@@ -2,6 +2,7 @@
 
 ## [next]
  - Added `EffectController` and `StandardEffectController` classes
+ - Added `Effect` (version 2) class, and `Transform2DEffect` class
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
