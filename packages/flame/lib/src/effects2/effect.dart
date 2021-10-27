@@ -3,8 +3,8 @@ import 'package:meta/meta.dart';
 import '../../components.dart';
 import 'effect_controller.dart';
 
-/// An [Effect] is a component that changes over time properties or appearance
-/// of another component.
+/// An [Effect] is a component that changes properties or appearance of another
+/// component over time.
 ///
 /// For example, suppose you have an object "Foo", and you want to move it
 /// to some other point on the screen. Directly changing that object's position
