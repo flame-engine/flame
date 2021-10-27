@@ -1,12 +1,10 @@
 import '../../components.dart';
 import '../../game.dart';
 import 'effect.dart';
-import 'flame_animation_controller.dart';
+import 'effect_controller.dart';
 
 abstract class Transform2DEffect extends Effect {
-  Transform2DEffect({
-    required FlameAnimationController controller,
-  }) : super(controller);
+  Transform2DEffect(EffectController controller) : super(controller);
 
   late Transform2D target;
 

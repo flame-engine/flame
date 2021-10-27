@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 import '../../components.dart';
-import 'flame_animation_controller.dart';
+import 'effect_controller.dart';
 
 /// An [Effect] is a component that changes over time properties or appearance
 /// of another component.
@@ -33,7 +33,7 @@ abstract class Effect extends Component {
         _finished = false;
 
   /// An object that describes how the effect should evolve over time.
-  final FlameAnimationController controller;
+  final EffectController controller;
 
   /// Whether the effect should be removed from its parent once it is completed.
   ///

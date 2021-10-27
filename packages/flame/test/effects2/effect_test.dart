@@ -1,6 +1,8 @@
-import 'package:flame/effects.dart';
+
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/effects2/effect.dart';
+import 'package:flame/src/effects2/effect_controller.dart';
+import 'package:flame/src/effects2/standard_effect_controller.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 typedef VoidCallback = void Function();
 
 class MyEffect extends Effect {
-  MyEffect(FlameAnimationController controller) : super(controller);
+  MyEffect(EffectController controller) : super(controller);
 
   double x = -1;
   VoidCallback? onStartCallback;
@@ -41,7 +43,7 @@ class MyEffect extends Effect {
 void main() {
   group('Effect', () {
     test('Pause & Resume', () {
-      final effect = MyEffect(StandardAnimationController(duration: 10));
+      final effect = MyEffect(StandardEffectController(duration: 10));
       expect(effect.x, -1);
       expect(effect.isPaused, false);
 
@@ -84,7 +86,7 @@ void main() {
       verify: (game) {
         final obj = Component();
         game.add(obj);
-        final effect = MyEffect(StandardAnimationController(duration: 1));
+        final effect = MyEffect(StandardEffectController(duration: 1));
         obj.add(effect);
         game.update(0);
         expect(obj.children.length, 1);
@@ -106,7 +108,7 @@ void main() {
       verify: (game) {
         final obj = Component();
         game.add(obj);
-        final effect = MyEffect(StandardAnimationController(duration: 1));
+        final effect = MyEffect(StandardEffectController(duration: 1));
         effect.removeOnFinish = false;
         obj.add(effect);
         game.update(0);
@@ -152,7 +154,7 @@ void main() {
 
     test('removeOnFinish = error', () {
       final effect = MyEffect(
-        StandardAnimationController(duration: 1, infinite: true),
+        StandardEffectController(duration: 1, infinite: true),
       );
       expect(effect.controller.isInfinite, true);
       expect(effect.removeOnFinish, false);
@@ -162,7 +164,7 @@ void main() {
     test('onStart & onFinish', () {
       var nStarted = 0;
       var nFinished = 0;
-      final effect = MyEffect(StandardAnimationController(duration: 1))
+      final effect = MyEffect(StandardEffectController(duration: 1))
         ..onStartCallback = () {
           nStarted++;
         }
