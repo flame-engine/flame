@@ -1,4 +1,3 @@
-
 import 'package:flame/src/components/component.dart';
 import 'package:flame/src/effects2/effect.dart';
 import 'package:flame/src/effects2/effect_controller.dart';

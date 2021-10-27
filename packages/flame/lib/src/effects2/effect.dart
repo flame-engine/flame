@@ -47,8 +47,10 @@ abstract class Effect extends Component {
   bool _removeOnFinish;
   set removeOnFinish(bool value) {
     if (controller.isInfinite) {
-      assert(value == false,
-          'Infinitely repeating effect cannot have removeOnFinish=true');
+      assert(
+        value == false,
+        'Infinitely repeating effect cannot have removeOnFinish=true',
+      );
     }
     _removeOnFinish = value;
   }
@@ -140,7 +142,7 @@ abstract class Effect extends Component {
   ///
   /// Here [progress] is a variable that is typically in the range from 0 to 1,
   /// with 0 being the initial state, and 1 the final state of the effect. See
-  /// [FlameAnimationController] for details.
+  /// [EffectController] for details.
   ///
   /// This is a main method that MUST be implemented in every derived class.
   void apply(double progress);
