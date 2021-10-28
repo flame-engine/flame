@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [next]
+ - Added `StandardEffectController` class
+
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
  - Move component mixin checks to their own files

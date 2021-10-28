@@ -12,14 +12,18 @@ class EnemyCreator extends Component with HasGameRef<SpaceShooterGame> {
   Random random = Random();
 
   EnemyCreator() {
-    enemyCreator = Timer(1, repeat: true, callback: () {
-      gameRef.add(
-        EnemyComponent(
-          (gameRef.size.x - 25) * random.nextDouble(),
-          0,
-        ),
-      );
-    });
+    enemyCreator = Timer(
+      1,
+      repeat: true,
+      callback: () {
+        gameRef.add(
+          EnemyComponent(
+            (gameRef.size.x - 25) * random.nextDouble(),
+            0,
+          ),
+        );
+      },
+    );
     enemyCreator.start();
   }
 

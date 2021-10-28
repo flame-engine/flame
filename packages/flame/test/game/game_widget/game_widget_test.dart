@@ -94,10 +94,12 @@ void main() {
     'size is kept on game after a detach',
     createGame: () => MyGame(),
     pumpWidget: (gameWidget, tester) async {
-      await tester.pumpWidget(_Wrapper(
-        child: gameWidget,
-        open: true,
-      ));
+      await tester.pumpWidget(
+        _Wrapper(
+          child: gameWidget,
+          open: true,
+        ),
+      );
     },
     verify: (game, tester) async {
       expect(game.hasLayout, isTrue);
