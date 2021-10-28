@@ -4,7 +4,7 @@ import '../../../widgets/step_scaffold.dart';
 import 'code.dart';
 import 'tutorial.dart';
 
-class RunngingFlameStep extends StatelessWidget {
+class RunningFlameStep extends StatelessWidget {
   const RunngingFlameStep({Key? key}) : super(key: key);
 
   @override
