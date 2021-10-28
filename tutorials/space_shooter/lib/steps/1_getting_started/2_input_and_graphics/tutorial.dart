@@ -3,7 +3,7 @@ const tutorial = [
 # Controlling the player and adding some graphics
 
 Now that we have the base for our game and a component for our player, lets add some interactivity to
-it. We can begin that by allowing the player to be controlled by mouse/touch gestures.
+it. We can begin by allowing the player to be controlled by mouse/touch gestures.
 
 There are a couple of ways of doing that in Flame. For this tutorial, we will do that by using one of
 Flame's gestures detectors: `PanDetector`.
