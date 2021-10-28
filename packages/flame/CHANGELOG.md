@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## [next]
- - Added `EffectController` and `StandardEffectController` classes
+ - Added `StandardEffectController` class
  - Refactored `Effect` class to use `EffectController`, added `Transform2DEffect` class
 
 ## [1.0.0-releasecandidate.16]
