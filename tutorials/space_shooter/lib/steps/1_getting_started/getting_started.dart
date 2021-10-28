@@ -8,7 +8,7 @@ void addGettingStarted(Dashbook dashbook) {
       .storiesOf('1 - Getting Started')
       .add(
         'Running a Flame Game',
-        (context) => const RunngingFlameStep(),
+        (context) => const RunningFlameStep(),
       )
       .add(
         'Adding input and graphics',
