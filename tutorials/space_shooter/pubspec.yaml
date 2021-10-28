@@ -13,7 +13,8 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   dashbook: ^0.1.5
-  flame: ^1.0.0-releasecandidate.16
+  flame:
+    path: ../../packages/flame
   flutter_markdown: ^0.6.7
   flutter_highlight: ^0.7.0
 
@@ -22,6 +23,8 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^1.0.0
   dart_code_metrics: ^4.1.0
+  flame_lint:
+    path: ../../packages/flame_lint
 
 flutter:
   uses-material-design: true
