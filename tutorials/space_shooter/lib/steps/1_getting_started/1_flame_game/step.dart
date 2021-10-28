@@ -5,7 +5,7 @@ import 'code.dart';
 import 'tutorial.dart';
 
 class RunningFlameStep extends StatelessWidget {
-  const RunngingFlameStep({Key? key}) : super(key: key);
+  const RunningFlameStep({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
