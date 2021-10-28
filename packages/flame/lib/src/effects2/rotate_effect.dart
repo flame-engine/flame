@@ -18,26 +18,19 @@ import 'transform2d_effect.dart';
 class RotateEffect extends Transform2DEffect {
   RotateEffect.by(double angle, EffectController controller)
       : _angle = angle,
-        _relative = true,
-        _lastProgress = 0,
         super(controller);
 
-  RotateEffect.to(double angle, EffectController controller)
-      : _angle = angle,
-        _relative = false,
-        _lastProgress = 0,
-        super(controller);
-
-  final bool _relative;
-  double _angle;
-  double _lastProgress;
-
-  @override
-  void onStart() {
-    if (!_relative) {
-      _angle -= target.angle;
-    }
+  factory RotateEffect.to(double angle, EffectController controller) {
+    return _RotateToEffect(angle, controller);
   }
+
+  /// The magnitude of the effect: how much the target should turn as the
+  /// progress goes from 0 to 1.
+  double _angle;
+
+  /// This variable keeps track of the effect's `progress` from the last time
+  /// that the `apply()` method was called.
+  double _lastProgress = 0;
 
   @override
   void apply(double progress) {
@@ -50,5 +43,19 @@ class RotateEffect extends Transform2DEffect {
   void reset() {
     super.reset();
     _lastProgress = 0;
+  }
+}
+
+
+class _RotateToEffect extends RotateEffect {
+  _RotateToEffect(double angle, EffectController controller)
+    : _destinationAngle = angle,
+      super.by(0, controller);
+
+  final double _destinationAngle;
+
+  @override
+  void onStart() {
+    _angle = _destinationAngle - target.angle;
   }
 }
