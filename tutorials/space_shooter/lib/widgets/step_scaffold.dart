@@ -47,7 +47,7 @@ class StepScaffold extends StatelessWidget {
                               md.ExtensionSet.gitHubFlavored.blockSyntaxes,
                               [
                                 md.EmojiSyntax(),
-                                ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes
+                                ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes,
                               ],
                             ),
                           ),
