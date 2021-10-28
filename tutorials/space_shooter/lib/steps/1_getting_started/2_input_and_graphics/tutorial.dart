@@ -37,10 +37,12 @@ variable inside our game class, and adding a method `move` to our `Player` and j
 ''',
   '''```
 class Player extends PositionComponent {
+  static final _paint = Paint()..color = Colors.white;
+  
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    canvas.drawRect(toRect(), Paint()..color = Colors.white);
+    canvas.drawRect(size.toRect(), _paint);
   }
 
   void move(Vector2 delta) {
