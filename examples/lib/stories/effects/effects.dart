@@ -73,6 +73,14 @@ void addEffectsStories(Dashbook dashbook) {
       'Rotate Effect (v2)',
       (_) => GameWidget(game: RotateEffect2Game()),
       codeLink: baseLink('effects/rotate_effect2.dart'),
+      info: '''
+        The outer rim rotates at a different speed forward and reverse, and
+        uses the "ease" animation curve. 
+        
+        The compass arrow has 3 rotation effects applied to it at the same
+        time: one effect rotates the arrow at a constant speed, and two more 
+        add small amounts of wobble each creating quasi-chaotic movement.
+      ''',
     )
   ;
 }
