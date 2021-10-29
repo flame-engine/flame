@@ -4,23 +4,23 @@ import 'transform2d_effect.dart';
 /// Rotate a component around its anchor.
 ///
 /// Two constructors are provided:
-///   - [RotateEffect.by] will rotate the target by the specified `angle`
+///   - [RotateEffect2.by] will rotate the target by the specified `angle`
 ///     relative to its orientation at the onset of the effect. For example,
 ///     rotating by `angle = tau/4` will turn the component 90° clockwise
 ///     relative to its initial direction;
-///   - [RotateEffect.to] will rotate the target to the fixed orientation
+///   - [RotateEffect2.to] will rotate the target to the fixed orientation
 ///     specified by the `angle`. For example, rotating to `angle = tau/4` will
 ///     turn the component to look East regardless of its initial bearing.
 ///
 /// This effect applies incremental changes to the component's angle, and
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
-class RotateEffect extends Transform2DEffect {
-  RotateEffect.by(double angle, EffectController controller)
+class RotateEffect2 extends Transform2DEffect {
+  RotateEffect2.by(double angle, EffectController controller)
       : _angle = angle,
         super(controller);
 
-  factory RotateEffect.to(double angle, EffectController controller) {
+  factory RotateEffect2.to(double angle, EffectController controller) {
     return _RotateToEffect(angle, controller);
   }
 
@@ -47,7 +47,7 @@ class RotateEffect extends Transform2DEffect {
 }
 
 
-class _RotateToEffect extends RotateEffect {
+class _RotateToEffect extends RotateEffect2 {
   _RotateToEffect(double angle, EffectController controller)
     : _destinationAngle = angle,
       super.by(0, controller);
