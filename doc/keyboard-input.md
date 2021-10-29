@@ -45,8 +45,8 @@ class MyGame extends Game with KeyboardEvents {
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     final isKeyDown = event is RawKeyDownEvent;
-    
-    final isSpace = event == LogicalKeyboardKey.space;
+
+    final isSpace = keysPressed.contains(LogicalKeyboardKey.space);
 
     if (isSpace && isKeyDown) {
       if (keysPressed.contains(LogicalKeyboardKey.altLeft) ||
