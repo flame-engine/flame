@@ -5,4 +5,6 @@ export 'src/effects/rotate_effect.dart';
 export 'src/effects/scale_effect.dart';
 export 'src/effects/sequence_effect.dart';
 export 'src/effects/size_effect.dart';
+export 'src/effects2/rotate_effect.dart';
+export 'src/effects2/standard_effect_controller.dart';
 export 'src/extensions/vector2.dart';
