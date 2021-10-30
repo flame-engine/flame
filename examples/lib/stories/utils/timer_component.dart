@@ -10,27 +10,29 @@ class RenderedTimeComponent extends TimerComponent {
     ),
   );
 
-  RenderedTimeComponent(Timer timer) : super(timer);
+  final double yOffset;
+
+  RenderedTimeComponent(Timer timer, {this.yOffset = 150}) : super(timer);
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
     textPaint.render(
       canvas,
-      'Elapsed time: ${timer.current}',
-      Vector2(10, 150),
+      'Elapsed time: ${timer.current.toStringAsFixed(3)}',
+      Vector2(10, yOffset),
     );
   }
 }
 
 class TimerComponentGame extends FlameGame with TapDetector, DoubleTapDetector {
   @override
-  void onTapDown(_) {
+  void onTap() {
     add(RenderedTimeComponent(Timer(1)..start()));
   }
 
   @override
   void onDoubleTap() {
-    add(RenderedTimeComponent(Timer(5)..start()));
+    add(RenderedTimeComponent(Timer(5)..start(), yOffset: 180));
   }
 }
