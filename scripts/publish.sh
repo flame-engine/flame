@@ -86,7 +86,9 @@ then
   sed -i "/publish_to: 'none'/d" $upgrade_dir/pubspec.yaml
   sed -i '/path: "..\/flame\/"/d' $upgrade_dir/pubspec.yaml
   set_flame_version $upgrade_dir $flame_version
-  set_flame_version $upgrade_dir/example $flame_version
+  if [ -d "$upgrade_dir/example" ]; then
+    set_flame_version $upgrade_dir/example $flame_version
+  fi
 fi
 
 set_version $upgrade_dir
@@ -96,7 +98,9 @@ if [[ ! $upgrade_package = "flame" ]]
 then
   sed -i "/^homepage:.*/a publish_to: 'none'" $upgrade_dir/pubspec.yaml
   set_relative_flame_version $upgrade_dir ".."
-  set_relative_flame_version $upgrade_dir/example "../.."
+  if [ -d "$upgrade_dir/example" ]; then
+    set_relative_flame_version $upgrade_dir/example "../.."
+  fi
 fi
 
 tag="$upgrade_package-$new_version"
