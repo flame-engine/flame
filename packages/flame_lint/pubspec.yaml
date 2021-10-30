@@ -2,6 +2,7 @@ name: flame_lint
 description: Flame lint package
 version: 0.0.1
 homepage: https://github.com/flame-engine/flame
+publish_to: 'none'
 
 environment:
   sdk: ">=2.14.0 <3.0.0"
