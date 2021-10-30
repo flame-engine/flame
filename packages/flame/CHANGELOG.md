@@ -2,6 +2,7 @@
 
 ## [next]
  - Added `StandardEffectController` class
+ - Clarified `TimerComponent` example
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
