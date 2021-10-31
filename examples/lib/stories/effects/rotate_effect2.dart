@@ -89,7 +89,6 @@ class Compass extends PositionComponent {
           _radius + (_radius - markLength) * cos(angle),
         );
     }
-    print(_marksPath);
 
     arrow = CompassArrow(width: _radius * 0.3, radius: _radius * 0.7)
       ..position = Vector2(_radius, _radius);
