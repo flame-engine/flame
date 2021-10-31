@@ -2,23 +2,20 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/effects2/rotate_effect.dart'; // ignore: implementation_imports
 import 'package:flame/src/effects2/standard_effect_controller.dart'; // ignore: implementation_imports
 import 'package:flutter/animation.dart';
 
 class RotateEffect2Game extends FlameGame {
-  late Compass compass;
-
   @override
   void onMount() {
     camera.viewport = FixedResolutionViewport(Vector2(400, 600));
-    compass = Compass(200)..position = Vector2(200, 300);
+    final compass = Compass(200)..position = Vector2(200, 300);
     add(compass);
 
     compass.rim.add(
-      RotateEffect2.by(
+      RotateEffect.by(
         1.0,
         StandardEffectController(
           duration: 6,
@@ -29,20 +26,20 @@ class RotateEffect2Game extends FlameGame {
       ),
     );
     compass.arrow
-      ..add(RotateEffect2.to(
+      ..add(RotateEffect.to(
           Transform2D.tau,
           StandardEffectController(
             duration: 20,
             infinite: true,
           )))
-      ..add(RotateEffect2.by(
+      ..add(RotateEffect.by(
           Transform2D.tau * 0.015,
           StandardEffectController(
             duration: 0.1,
             reverseDuration: 0.1,
             infinite: true,
           )))
-      ..add(RotateEffect2.by(
+      ..add(RotateEffect.by(
           Transform2D.tau * 0.021,
           StandardEffectController(
             duration: 0.13,
