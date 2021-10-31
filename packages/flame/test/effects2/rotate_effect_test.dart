@@ -1,4 +1,3 @@
-
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/effects2/rotate_effect.dart';
@@ -58,13 +57,13 @@ void main() {
     });
 
     test('reset relative', () {
-      final game = FlameGame() ..onGameResize(Vector2(1, 1));
+      final game = FlameGame()..onGameResize(Vector2(1, 1));
       final object = PositionComponent();
       game.add(object);
       game.update(0);
 
       final effect = RotateEffect.by(1, StandardEffectController(duration: 1));
-      object.add(effect ..removeOnFinish = false);
+      object.add(effect..removeOnFinish = false);
       for (var i = 0; i < 5; i++) {
         expect(object.angle, i);
         // After each reset the object will be rotated by 1 radian relative to
@@ -76,13 +75,13 @@ void main() {
     });
 
     test('reset absolute', () {
-      final game = FlameGame() ..onGameResize(Vector2(1, 1));
+      final game = FlameGame()..onGameResize(Vector2(1, 1));
       final object = PositionComponent();
       game.add(object);
       game.update(0);
 
       final effect = RotateEffect.to(1, StandardEffectController(duration: 1));
-      object.add(effect ..removeOnFinish = false);
+      object.add(effect..removeOnFinish = false);
       for (var i = 0; i < 5; i++) {
         object.angle = 1 + 4.0 * i;
         // After each reset the object will be rotated to the value of
@@ -94,7 +93,7 @@ void main() {
     });
 
     test('rotation composition', () {
-      final game = FlameGame() ..onGameResize(Vector2(1, 1));
+      final game = FlameGame()..onGameResize(Vector2(1, 1));
       final object = PositionComponent();
       game.add(object);
       game.update(0);
@@ -114,9 +113,9 @@ void main() {
       );
 
       game.update(1);
-      expect(object.angle, closeTo(1, 1e-15));  // 5*1/10 + 0.5*1
+      expect(object.angle, closeTo(1, 1e-15)); // 5*1/10 + 0.5*1
       game.update(1);
-      expect(object.angle, closeTo(1, 1e-15));  // 5*2/10 + 0.5*1 - 0.5*1
+      expect(object.angle, closeTo(1, 1e-15)); // 5*2/10 + 0.5*1 - 0.5*1
       for (var i = 0; i < 10; i++) {
         game.update(1);
       }
