@@ -2,6 +2,7 @@
 
 ## [next]
  - Added `StandardEffectController` class
+ - Refactored `Effect` class to use `EffectController`, added `Transform2DEffect` class
  - Clarified `TimerComponent` example
 
 ## [1.0.0-releasecandidate.16]

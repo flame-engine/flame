@@ -42,7 +42,7 @@ import 'component.dart';
 /// rotating or scaling the [PositionComponent] will affect the whole
 /// group as if it was a single entity.
 ///
-/// The main properties of this class is the [_transform] (which combines
+/// The main properties of this class is the [transform] (which combines
 /// the [position], [angle] of rotation, and [scale]), the [size], and
 /// the [anchor]. Thus, the [PositionComponent] can be imagined as an
 /// abstract picture whose of a certain [size]. Within that picture
@@ -66,56 +66,56 @@ class PositionComponent extends Component {
     double angle = 0.0,
     Anchor anchor = Anchor.topLeft,
     int? priority,
-  })  : _transform = Transform2D(),
+  })  : transform = Transform2D(),
         _anchor = anchor,
         _size = NotifyingVector2.copy(size ?? Vector2.zero()),
         super(priority: priority) {
     if (position != null) {
-      _transform.position = position;
+      transform.position = position;
     }
     if (angle != 0) {
-      _transform.angle = angle;
+      transform.angle = angle;
     }
     if (scale != null) {
-      _transform.scale = scale;
+      transform.scale = scale;
     }
     _size.addListener(_onModifiedSizeOrAnchor);
     _onModifiedSizeOrAnchor();
   }
 
-  final Transform2D _transform;
+  final Transform2D transform;
   final NotifyingVector2 _size;
   Anchor _anchor;
 
   /// The total transformation matrix for the component. This matrix combines
   /// translation, rotation and scale transforms into a single entity. The
   /// matrix is cached and gets recalculated only as necessary.
-  Matrix4 get transformMatrix => _transform.transformMatrix;
+  Matrix4 get transformMatrix => transform.transformMatrix;
 
   /// The position of this component's anchor on the screen.
-  NotifyingVector2 get position => _transform.position;
-  set position(Vector2 position) => _transform.position = position;
+  NotifyingVector2 get position => transform.position;
+  set position(Vector2 position) => transform.position = position;
 
   /// X position of this component's anchor on the screen.
-  double get x => _transform.x;
-  set x(double x) => _transform.x = x;
+  double get x => transform.x;
+  set x(double x) => transform.x = x;
 
   /// Y position of this component's anchor on the screen.
-  double get y => _transform.y;
-  set y(double y) => _transform.y = y;
+  double get y => transform.y;
+  set y(double y) => transform.y = y;
 
   /// Rotation angle (in radians) of the component. The component will be
   /// rotated around its anchor point in the clockwise direction if the
   /// angle is positive, or counterclockwise if the angle is negative.
-  double get angle => _transform.angle;
-  set angle(double a) => _transform.angle = a;
+  double get angle => transform.angle;
+  set angle(double a) => transform.angle = a;
 
   /// The scale factor of this component. The scale can be different along
   /// the X and Y dimensions. A scale greater than 1 makes the component
   /// bigger, and less than 1 smaller. The scale can also be negative,
   /// which results in a mirror reflection along the corresponding axis.
-  NotifyingVector2 get scale => _transform.scale;
-  set scale(Vector2 scale) => _transform.scale = scale;
+  NotifyingVector2 get scale => transform.scale;
+  set scale(Vector2 scale) => transform.scale = scale;
 
   /// Anchor point for this component. An anchor point describes a point
   /// within the rectangle of size [size]. This point is considered to
@@ -186,7 +186,7 @@ class PositionComponent extends Component {
   /// Convert local coordinates of a point [point] inside the component
   /// into the parent's coordinate space.
   Vector2 positionOf(Vector2 point) {
-    return _transform.localToGlobal(point);
+    return transform.localToGlobal(point);
   }
 
   /// Similar to [positionOf()], but applies to any anchor point within
@@ -219,7 +219,7 @@ class PositionComponent extends Component {
 
   /// Transform [point] from the parent's coordinate space into the local
   /// coordinates. This function is the inverse of [positionOf()].
-  Vector2 toLocal(Vector2 point) => _transform.globalToLocal(point);
+  Vector2 toLocal(Vector2 point) => transform.globalToLocal(point);
 
   /// Transform [point] from the global (world) coordinate space into the
   /// local coordinates. This function is the inverse of
@@ -267,25 +267,25 @@ class PositionComponent extends Component {
   //#region Mutators
 
   /// Flip the component horizontally around its anchor point.
-  void flipHorizontally() => _transform.flipHorizontally();
+  void flipHorizontally() => transform.flipHorizontally();
 
   /// Flip the component vertically around its anchor point.
-  void flipVertically() => _transform.flipVertically();
+  void flipVertically() => transform.flipVertically();
 
   /// Flip the component horizontally around its center line.
   void flipHorizontallyAroundCenter() {
     final delta = (1 - 2 * _anchor.x) * width;
-    _transform.x += delta * math.cos(_transform.angle);
-    _transform.y += delta * math.sin(_transform.angle);
-    _transform.flipHorizontally();
+    transform.x += delta * math.cos(transform.angle);
+    transform.y += delta * math.sin(transform.angle);
+    transform.flipHorizontally();
   }
 
   /// Flip the component vertically around its center line.
   void flipVerticallyAroundCenter() {
     final delta = (1 - 2 * _anchor.y) * height;
-    _transform.x += -delta * math.sin(_transform.angle);
-    _transform.y += delta * math.cos(_transform.angle);
-    _transform.flipVertically();
+    transform.x += -delta * math.sin(transform.angle);
+    transform.y += delta * math.cos(transform.angle);
+    transform.flipVertically();
   }
 
   //#endregion
@@ -293,7 +293,7 @@ class PositionComponent extends Component {
   /// Internal handler that must be invoked whenever either the [size]
   /// or the [anchor] change.
   void _onModifiedSizeOrAnchor() {
-    _transform.offset = Vector2(-_anchor.x * _size.x, -_anchor.y * _size.y);
+    transform.offset = Vector2(-_anchor.x * _size.x, -_anchor.y * _size.y);
   }
 
   @override
@@ -302,7 +302,7 @@ class PositionComponent extends Component {
     final precision = debugCoordinatesPrecision;
     canvas.drawRect(size.toRect(), debugPaint);
     // draw small cross at the anchor point
-    final p0 = -_transform.offset;
+    final p0 = -transform.offset;
     canvas.drawLine(Offset(p0.x, p0.y - 2), Offset(p0.x, p0.y + 2), debugPaint);
     canvas.drawLine(Offset(p0.x - 2, p0.y), Offset(p0.x + 2, p0.y), debugPaint);
     if (precision != null) {
