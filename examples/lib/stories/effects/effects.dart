@@ -79,7 +79,7 @@ void addEffectsStories(Dashbook dashbook) {
         
         The compass arrow has 3 rotation effects applied to it at the same
         time: one effect rotates the arrow at a constant speed, and two more 
-        add small amounts of wobble each creating quasi-chaotic movement.
+        add small amounts of wobble, creating quasi-chaotic movement.
       ''',
     );
 }
