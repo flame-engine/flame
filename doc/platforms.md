@@ -39,7 +39,7 @@ First thing, lets create the branch where your deployed files will live:
 git checkout -b gh-pages
 ```
 
-This branch be created from `main` or any other place, it doesn't matter much. After you push that
+This branch can be created from `main` or any other place, it doesn't matter much. After you push that
 branch go back to your `main` branch.
 
 Now you should add the [flutter-gh-pages](https://github.com/bluefireteam/flutter-gh-pages)
