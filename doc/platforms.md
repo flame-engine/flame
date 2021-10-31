@@ -28,10 +28,10 @@ $ flutter build web --release --web-renderer canvaskit
 
 ## Deploy your game to GitHub Pages
 
-One easy easy way to deploy your game online, it to use [GitHub Pages])https://pages.github.com/).
+One easy way to deploy your game online, is to use [GitHub Pages])https://pages.github.com/).
 It is a cool feature from GitHub, where you can easily host web content from your repository.
 
-Here we will explain the easiest way to get your game hosted using that.
+Here we will explain the easiest way to get your game hosted using GitHub pages.
 
 First thing, lets create the branch where your deployed files will live:
 
@@ -68,7 +68,7 @@ jobs:
 
 Be sure to change `NAME_OF_YOUR_REPOSITORY` to the name of your GitHub repository.
 
-Now, whenever you commit something on the `main` branch, the action will run and updated your
+Now, whenever you push something to the `main` branch, the action will run and update your
 deployed game.
 
 The game should be available at an URL like this:
