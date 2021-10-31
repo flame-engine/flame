@@ -81,6 +81,5 @@ void addEffectsStories(Dashbook dashbook) {
         time: one effect rotates the arrow at a constant speed, and two more 
         add small amounts of wobble each creating quasi-chaotic movement.
       ''',
-    )
-  ;
+    );
 }
