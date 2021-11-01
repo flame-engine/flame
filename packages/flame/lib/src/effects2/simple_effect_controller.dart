@@ -1,4 +1,3 @@
-
 import 'effect_controller.dart';
 import 'standard_effect_controller.dart';
 
@@ -16,8 +15,8 @@ class SimpleEffectController extends EffectController {
   SimpleEffectController({
     this.duration = 0.0,
     this.delay = 0.0,
-  }) : assert(duration >= 0, 'duration cannot be negative: $duration'),
-       assert(delay >= 0, 'delay cannot be negative: $delay');
+  })  : assert(duration >= 0, 'duration cannot be negative: $duration'),
+        assert(delay >= 0, 'delay cannot be negative: $delay');
 
   final double duration;
   final double delay;
@@ -36,9 +35,11 @@ class SimpleEffectController extends EffectController {
   double get progress {
     // If duration == 0, then `completed == started`, and the middle case
     // (which divides by duration) cannot occur.
-    return completed? 1 :
-           started? (_timer - delay) / duration :
-           0;
+    return completed
+        ? 1
+        : started
+            ? (_timer - delay) / duration
+            : 0;
   }
 
   @override
