@@ -46,24 +46,29 @@ class Timer {
     }
   }
 
+  /// Start the timer from 0.
   void start() {
     reset();
     resume();
   }
 
+  /// Stop and reset the timer.
   void stop() {
     reset();
     pause();
   }
 
+  /// Reset the timer to 0, but continue running if it currently is running.
   void reset() {
     _current = 0;
   }
 
+  ///  Pause the timer (no-op if it is already paused).
   void pause() {
     _running = false;
   }
 
+  /// Resume a paused timer (no-op if it is already running).
   void resume() {
     _running = true;
   }
