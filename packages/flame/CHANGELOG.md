@@ -5,6 +5,7 @@
  - Refactored `Effect` class to use `EffectController`, added `Transform2DEffect` class
  - Clarified `TimerComponent` example
  - Fix `onGameResize` margin bug in `HudMarginComponent`
+ - `PositionComponent.size` now returns a `NotifyingVector2`
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
