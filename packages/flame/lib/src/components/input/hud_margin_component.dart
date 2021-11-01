@@ -34,18 +34,8 @@ class HudMarginComponent<T extends FlameGame> extends PositionComponent
   Future<void> onLoad() async {
     super.onLoad();
     final size = gameRef.camera.viewport.effectiveSize;
-    if (margin != null) {
-      final margin = this.margin!;
-      final x = margin.left != 0
-          ? margin.left + scaledSize.x / 2
-          : size.x - margin.right - scaledSize.x / 2;
-      final y = margin.top != 0
-          ? margin.top + scaledSize.y / 2
-          : size.y - margin.bottom - scaledSize.y / 2;
-      position.setValues(x, y);
-      position =
-          Anchor.center.toOtherAnchorPosition(center, anchor, scaledSize);
-    } else {
+    // If margin is not null we will update the position `onGameResize` instead
+    if (margin == null) {
       final topLeft = size -
           anchor.toOtherAnchorPosition(
             position,
@@ -65,5 +55,25 @@ class HudMarginComponent<T extends FlameGame> extends PositionComponent
         bottomRight.y,
       );
     }
+  }
+
+  @override
+  void onGameResize(Vector2 gameSize) {
+    super.onGameResize(gameSize);
+    if (margin != null) {
+      _updateMargins(gameSize);
+    }
+  }
+
+  void _updateMargins(Vector2 gameSize) {
+    final margin = this.margin!;
+    final x = margin.left != 0
+        ? margin.left + scaledSize.x / 2
+        : gameSize.x - margin.right - scaledSize.x / 2;
+    final y = margin.top != 0
+        ? margin.top + scaledSize.y / 2
+        : gameSize.y - margin.bottom - scaledSize.y / 2;
+    position.setValues(x, y);
+    position = Anchor.center.toOtherAnchorPosition(center, anchor, scaledSize);
   }
 }
