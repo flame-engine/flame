@@ -14,7 +14,7 @@ don't support them. This means that issues happening outside the stable channel 
 
 To use Flame on web you need to make sure your game is using the CanvasKit/[Skia](https://skia.org/)
 renderer. This will increase performance on the web, as it will use the `canvas` element instead of
-separate DOM elements. 
+separate DOM elements.
 
 To run your game using skia, use the following command:
 ```console
@@ -25,6 +25,54 @@ To build the game for production, using skia, use the following:
 ```console
 $ flutter build web --release --web-renderer canvaskit
 ```
+
+## Deploy your game to GitHub Pages
+
+One easy way to deploy your game online, is to use [GitHub Pages](https://pages.github.com/).
+It is a cool feature from GitHub, by which you can easily host web content from your repository.
+
+Here we will explain the easiest way to get your game hosted using GitHub pages.
+
+First thing, lets create the branch where your deployed files will live:
+
+```bash
+git checkout -b gh-pages
+```
+
+This branch can be created from `main` or any other place, it doesn't matter much. After you push that
+branch go back to your `main` branch.
+
+Now you should add the [flutter-gh-pages](https://github.com/bluefireteam/flutter-gh-pages)
+action to your repository, you can do that by creating a file `gh-pages.yaml` under the folder
+`.github/workflows`.
+
+```yaml
+name: Gh-Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+      - uses: bluefireteam/flutter-gh-pages@v7
+        with:
+          baseHref: /NAME_OF_YOUR_REPOSITORY/
+          webRenderer: canvaskit
+```
+
+Be sure to change `NAME_OF_YOUR_REPOSITORY` to the name of your GitHub repository.
+
+Now, whenever you push something to the `main` branch, the action will run and update your
+deployed game.
+
+The game should be available at an URL like this:
+`https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/`
 
 ### Web support
 
