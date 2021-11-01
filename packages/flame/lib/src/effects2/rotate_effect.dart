@@ -28,21 +28,11 @@ class RotateEffect extends Transform2DEffect {
   /// progress goes from 0 to 1.
   double _angle;
 
-  /// This variable keeps track of the effect's `progress` from the last time
-  /// that the `apply()` method was called.
-  double _lastProgress = 0;
-
   @override
   void apply(double progress) {
-    final dProgress = progress - _lastProgress;
+    final dProgress = progress - previousProgress;
     target.angle += _angle * dProgress;
-    _lastProgress = progress;
-  }
-
-  @override
-  void reset() {
-    super.reset();
-    _lastProgress = 0;
+    super.apply(progress);
   }
 }
 
