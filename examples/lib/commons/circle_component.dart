@@ -18,4 +18,11 @@ class CircleComponent extends PositionComponent {
     super.render(canvas);
     canvas.drawCircle(Offset(radius, radius), radius, paint);
   }
+
+  @override
+  bool containsPoint(Vector2 point) {
+    final local = absoluteToLocal(point);
+    final center = Vector2.all(radius);
+    return local.distanceToSquared(center) <= radius * radius;
+  }
 }
