@@ -47,13 +47,17 @@ class Timer {
   }
 
   void start() {
-    _current = 0;
-    _running = true;
+    reset();
+    resume();
   }
 
   void stop() {
+    reset();
+    pause();
+  }
+
+  void reset() {
     _current = 0;
-    _running = false;
   }
 
   void pause() {
@@ -69,15 +73,16 @@ class Timer {
 /// used inside a FlameGame game.
 class TimerComponent extends Component {
   Timer timer;
+  final bool removeOnFinish;
 
-  TimerComponent(this.timer);
+  TimerComponent(this.timer, {this.removeOnFinish = false});
 
   @override
   void update(double dt) {
     super.update(dt);
     timer.update(dt);
+    if (removeOnFinish && timer.finished) {
+      removeFromParent();
+    }
   }
-
-  @override
-  bool get shouldRemove => timer.finished;
 }
