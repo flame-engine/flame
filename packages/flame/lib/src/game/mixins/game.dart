@@ -199,7 +199,7 @@ mixin Game on Loadable implements Projector {
 
   bool _paused = false;
 
-  /// Returns is the engine is currently paused or running
+  /// Returns is the engine if currently paused or running
   bool get paused => _paused;
 
   /// Pauses or resume the engine
