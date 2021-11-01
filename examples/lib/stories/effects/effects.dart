@@ -77,6 +77,5 @@ void addEffectsStories(Dashbook dashbook) {
         Click on any circle to apply a RemoveEffect, which will make the circle
         disappear after a 0.5 second delay.
       ''',
-    )
-  ;
+    );
 }

@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:flame/components.dart';
@@ -21,14 +20,13 @@ class RemoveEffectGame extends FlameGame with HasTappableComponents {
 }
 
 class _RandomCircle extends CircleComponent with Tappable {
-  _RandomCircle(Random rng)
-    : super(radius: rng.nextDouble() * 30 + 10) {
+  _RandomCircle(Random rng) : super(radius: rng.nextDouble() * 30 + 10) {
     position = Vector2(
       rng.nextDouble() * 320 + 40,
       rng.nextDouble() * 520 + 40,
     );
     paint = Paint()
-      .. color = Colors.primaries[rng.nextInt(Colors.primaries.length)];
+      ..color = Colors.primaries[rng.nextInt(Colors.primaries.length)];
   }
 
   @override
