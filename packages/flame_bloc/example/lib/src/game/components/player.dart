@@ -36,7 +36,7 @@ class PlayerController extends Component
 class PlayerComponent extends SpriteAnimationComponent
     with
         HasGameRef<SpaceShooterGame>,
-        Hitbox,
+        HasHitboxes,
         Collidable,
         KeyboardHandler,
         BlocComponent<InventoryBloc, InventoryState> {

@@ -28,7 +28,7 @@ class TestHitbox extends HitboxRectangle {
   }
 }
 
-class TestBlock extends PositionComponent with Hitbox, Collidable {
+class TestBlock extends PositionComponent with HasHitboxes, Collidable {
   final Set<Collidable> collisions = {};
   final hitbox = TestHitbox();
   int endCounter = 0;

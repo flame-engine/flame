@@ -6,6 +6,9 @@
  - Clarified `TimerComponent` example
  - Fixed pause and resume engines when `GameWidget` had rebuilds
  - Removed `runOnCreation` attribute in favor of the `paused` attribute on `FlameGame`
+ - Possibility to manually remove `TimerComponent`
+ - Rename `Hitbox` mixin to `HasHitboxes`
+ - Added `RemoveEffect` and `SimpleEffectController`
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
