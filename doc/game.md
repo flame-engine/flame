@@ -160,7 +160,6 @@ A Flame `Game` can be paused and resumed in two ways:
 When pausing a Flame `Game`, the `GameLoop` is effectively paused, meaning that no updates or new
 renders will happen until it is resumed.
 
-
 # Flutter Widgets and Game instances
 
 Since a Flame game can be wrapped in a widget, it is quite easy to use it alongside other Flutter
