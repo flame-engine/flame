@@ -144,7 +144,7 @@ class PositionComponent extends Component {
   /// This property can be reassigned at runtime, although this is not
   /// recommended. Instead, in order to make the [PositionComponent] larger
   /// or smaller, change its [scale].
-  Vector2 get size => _size;
+  NotifyingVector2 get size => _size;
   set size(Vector2 size) => _size.setFrom(size);
 
   /// The width of the component in local coordinates. Note that the object
