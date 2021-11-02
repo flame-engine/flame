@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import '../../components.dart';
 import '../../game.dart';
-import '../../palette.dart';
 import '../components/cache/value_cache.dart';
 import '../extensions/vector2.dart';
 import 'shape_intersections.dart' as intersection_system;
@@ -125,8 +124,8 @@ abstract class Shape {
   /// top left corner.
   ShapeComponent toComponent({Paint? paint, Anchor anchor = Anchor.topLeft}) {
     return ShapeComponent(
-      this,
-      paint ?? BasicPalette.white.paint(),
+      shape: this,
+      paint: paint,
       anchor: anchor,
     );
   }

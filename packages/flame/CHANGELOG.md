@@ -5,6 +5,7 @@
  - Refactored `Effect` class to use `EffectController`, added `Transform2DEffect` class
  - Clarified `TimerComponent` example
  - Added `RemoveEffect` and `SimpleEffectController`
+ - Create default implementations of `RectangleComponent`, `CircleComponent` and `PolygonComponent`
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration

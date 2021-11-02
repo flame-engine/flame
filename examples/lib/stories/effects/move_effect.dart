@@ -23,10 +23,9 @@ class MoveEffectGame extends FlameGame with TapDetector {
     await super.onLoad();
     square = SquareComponent(size: 50)..position.setValues(200, 150);
     add(square);
-    add(Component()
-      ..addAll([
-        for (final point in path) CircleComponent(radius: 3)..position = point
-      ]));
+    final pathMarkers =
+        path.map((point) => ExampleCircleComponent(radius: 3, position: point));
+    addAll(pathMarkers);
   }
 
   @override
