@@ -135,9 +135,9 @@ void main() {
       final effect = RotateEffect.by(
         1.0,
         StandardEffectController(
-            duration: 1,
-            reverseDuration: 1,
-            infinite: true,
+          duration: 1,
+          reverseDuration: 1,
+          infinite: true,
         ),
       );
       object.add(effect);
