@@ -11,7 +11,7 @@ class TestGame extends FlameGame with HasCollidables {
   }
 }
 
-class TestBlock extends PositionComponent with Hitbox, Collidable {
+class TestBlock extends PositionComponent with HasHitboxes, Collidable {
   final List<Collidable> collisions = List.empty(growable: true);
 
   TestBlock(Vector2 position, Vector2 size, CollidableType type)

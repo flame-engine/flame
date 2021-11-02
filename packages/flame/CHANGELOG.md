@@ -6,6 +6,8 @@
  - Clarified `TimerComponent` example
  - Fix `onGameResize` margin bug in `HudMarginComponent`
  - `PositionComponent.size` now returns a `NotifyingVector2`
+ - Rename `Hitbox` mixin to `HasHitboxes`
+ - Added `RemoveEffect` and `SimpleEffectController`
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration

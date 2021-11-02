@@ -13,7 +13,7 @@ final R = Random();
 
 class MovableSquare extends SquareComponent
     with
-        Hitbox,
+        HasHitboxes,
         Collidable,
         HasGameRef<CameraAndViewportGame>,
         KeyboardHandler {
@@ -106,7 +106,7 @@ class Map extends Component {
   }
 }
 
-class Rock extends SquareComponent with Hitbox, Collidable, Tappable {
+class Rock extends SquareComponent with HasHitboxes, Collidable, Tappable {
   static final unpressedPaint = Paint()..color = const Color(0xFF2222FF);
   static final pressedPaint = Paint()..color = const Color(0xFF414175);
 
