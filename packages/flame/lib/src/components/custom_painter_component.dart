@@ -8,15 +8,18 @@ import 'position_component.dart';
 /// angle.
 ///
 /// This component is usefull to [CustomPainter]s between your Flutter UI and Flame game.
+///
+/// Note that given the active rendering nature of a game, `shouldRepaint` is ignored by
+/// this component.
 class CustomPainterComponent extends PositionComponent {
   /// The [CustomPainter] used to render this component
   CustomPainter? painter;
 
   CustomPainterComponent({
+    this.painter,
     Vector2? position,
     Vector2? size,
     int? priority,
-    this.painter,
   }) : super(
           position: position,
           size: size,
