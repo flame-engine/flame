@@ -4,7 +4,6 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
-import '../../commons/circle_component.dart';
 import '../../commons/square_component.dart';
 
 class MoveEffectGame extends FlameGame with TapDetector {
@@ -23,8 +22,7 @@ class MoveEffectGame extends FlameGame with TapDetector {
     await super.onLoad();
     square = SquareComponent(size: 50)..position.setValues(200, 150);
     add(square);
-    final pathMarkers =
-        path.map((point) => ExampleCircleComponent(radius: 3, position: point));
+    final pathMarkers = path.map((p) => CircleComponent(3, position: p));
     addAll(pathMarkers);
   }
 

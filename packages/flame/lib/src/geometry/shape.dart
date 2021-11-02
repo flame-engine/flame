@@ -122,12 +122,8 @@ abstract class Shape {
   /// Do note that while a [Shape] is defined from the center, a
   /// [ShapeComponent] like all other components default to an [Anchor] in the
   /// top left corner.
-  ShapeComponent toComponent({Paint? paint, Anchor anchor = Anchor.topLeft}) {
-    return ShapeComponent(
-      this,
-      paint: paint,
-      anchor: anchor,
-    );
+  ShapeComponent toComponent({Paint? paint}) {
+    return ShapeComponent(this, paint: paint);
   }
 }
 

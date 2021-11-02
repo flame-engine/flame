@@ -15,7 +15,5 @@ class SquareComponent extends RectangleComponent with EffectsHelper {
           position: position,
           paint: paint,
           priority: priority,
-        ) {
-    anchor = Anchor.center;
-  }
+        );
 }

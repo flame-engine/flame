@@ -12,17 +12,21 @@ class ShapeComponent extends PositionComponent {
   final Shape shape;
   Paint paint;
 
+  /// Currently the [anchor] can only be center for [ShapeComponent], since
+  /// shape doesn't take any anchor into consideration.
+  @override
+  final Anchor anchor = Anchor.center;
+
   ShapeComponent(
     this.shape, {
     Paint? paint,
-    Anchor anchor = Anchor.topLeft,
     int? priority,
   })  : paint = paint ?? BasicPalette.white.paint(),
         super(
           position: shape.position,
           size: shape.size,
           angle: shape.angle,
-          anchor: anchor,
+          anchor: Anchor.center,
           priority: priority,
         ) {
     shape.isCanvasPrepared = true;
