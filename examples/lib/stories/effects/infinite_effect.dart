@@ -13,9 +13,7 @@ final red = Paint()..color = const Color(0xAA883333);
 final orange = Paint()..color = const Color(0xAABB6633);
 
 SquareComponent makeSquare(Paint paint) {
-  return SquareComponent()
-    ..paint = paint
-    ..position.setValues(100, 100);
+  return SquareComponent(position: Vector2.all(100), paint: paint);
 }
 
 class InfiniteEffectGame extends FlameGame with TapDetector {

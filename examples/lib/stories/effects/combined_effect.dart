@@ -15,11 +15,8 @@ class CombinedEffectGame extends FlameGame with TapDetector {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    greenSquare = SquareComponent(position: Vector2.all(100))..paint = green;
-
-    redSquare = SquareComponent()
-      ..paint = red
-      ..position.setValues(100, 100);
+    greenSquare = SquareComponent(position: Vector2.all(100), paint: green);
+    redSquare = SquareComponent(position: Vector2.all(100), paint: red);
 
     add(greenSquare);
     add(redSquare);
