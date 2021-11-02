@@ -73,6 +73,6 @@ void addEffectsStories(Dashbook dashbook) {
       'Remove Effect',
       (_) => GameWidget(game: RemoveEffectExample()),
       codeLink: baseLink('effects/remove_effect_example.dart'),
-      info: kRemoveEffectExampleDescription,
+      info: RemoveEffectExample.description,
     );
 }
