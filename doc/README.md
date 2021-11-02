@@ -55,15 +55,15 @@ It contains quite a lot of good tutorials and articles written by the community 
 with Flame.
 
 
-## Out of the scope of the engine
+## Outside of the scope of the engine
 
-Games sometimes require complex faturesets depending on what the game is all about. And some of
-those faturesets are out of the scope on the Flame Engine ecosystem, in this section you can find
+Games sometimes require complex feature sets depending on what the game is all about. And some of
+those feature sets are outside of the scope of the Flame Engine ecosystem, in this section you can find
 them, and also some recommendations of packages/services that can be used:
 
 ## Multiplayer (netcode)
 
-Flame don't bundle any network feature, which may be needed to write online multiplayer games.
+Flame doesn't bundle any network feature, which may be needed to write online multiplayer games.
 
 If you are building a multipler game, here are some recommendations of packages/services:
 
@@ -74,14 +74,14 @@ simpler multiplayer experiences.
 
 ## External assets
 
-Flame don't bundle any helpers to load assets from a external source (external storage or online
+Flame doesn't bundle any helpers to load assets from an external source (external storage or online
 sources).
 
-But most Flame's API can be loaded from concrete assets instances, for examples, `Sprite`s can be
+But most of Flame's API can be loaded from concrete asset instances, for examples, `Sprite`s can be
 created from `dart:ui`s `Image` instaces, so the user can write custom code to load images from
 anywhere they need, and then load it into Flame's classes.
 
-Here are some suggestions for http communication pacakages:
+Here are some suggestions for http client packages:
 
  - [http](https://pub.dev/packages/http): A simple pacakage for perfoming http requests.
  - [Dio](https://pub.dev/packages/dio): A popular and powerful package for perfoming http requests.
