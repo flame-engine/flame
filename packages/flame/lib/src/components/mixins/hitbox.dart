@@ -5,7 +5,7 @@ import '../../../extensions.dart';
 import '../../geometry/shape.dart';
 import '../position_component.dart';
 
-mixin Hitbox on PositionComponent {
+mixin HasHitboxes on PositionComponent {
   final List<HitboxShape> _hitboxes = <HitboxShape>[];
 
   UnmodifiableListView<HitboxShape> get hitboxes {
@@ -42,7 +42,7 @@ mixin Hitbox on PositionComponent {
   /// Since this is a cheaper calculation than checking towards all shapes, this
   /// check can be done first to see if it even is possible that the shapes can
   /// overlap, since the shapes have to be within the size of the component.
-  bool possiblyOverlapping(Hitbox other) {
+  bool possiblyOverlapping(HasHitboxes other) {
     final maxDistance = other.scaledSize.length + scaledSize.length;
     return other.absoluteCenter.distanceToSquared(absoluteCenter) <=
         maxDistance * maxDistance;
