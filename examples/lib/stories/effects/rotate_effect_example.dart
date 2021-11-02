@@ -70,18 +70,16 @@ class Compass extends PositionComponent {
   late PositionComponent rim;
 
   final double _radius;
-  late Paint _bgPaint;
-  late Paint _marksPaint;
+  final _bgPaint = Paint()..color = const Color(0xffeacb31);
+  final _marksPaint = Paint()
+    ..color = const Color(0xFF7F6D36)
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 1.5;
   late Path _marksPath;
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    _bgPaint = Paint()..color = const Color(0xffeacb31);
-    _marksPaint = Paint()
-      ..color = const Color(0xFF7F6D36)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
     _marksPath = Path();
     for (var i = 0; i < 12; i++) {
       final angle = Transform2D.tau * (i / 12);
@@ -124,14 +122,14 @@ class CompassArrow extends PositionComponent {
 
   final double _radius;
   final double _width;
-  late final Path _northPath, _southPath;
-  late final Paint _northPaint, _southPaint;
+  late final Path _northPath;
+  late final Path _southPath;
+  final _northPaint = Paint()..color = const Color(0xff387fcb);
+  final _southPaint = Paint()..color = const Color(0xffa83636);
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    _northPaint = Paint()..color = const Color(0xff387fcb);
-    _southPaint = Paint()..color = const Color(0xffa83636);
     _northPath = Path()
       ..moveTo(0, _radius)
       ..lineTo(_width / 2, 0)
@@ -165,20 +163,18 @@ class CompassRim extends PositionComponent {
   static const int numberOfNotches = 144;
   final double _radius;
   final double _width;
-  late final Paint _bgPaint;
-  late final Paint _marksPaint;
   late final Path _marksPath;
+  final _bgPaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..color = const Color(0xffb6a241);
+  final _marksPaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..color = const Color(0xff3d3b26);
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    _bgPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = _width
-      ..color = const Color(0xffb6a241);
-    _marksPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..color = const Color(0xff3d3b26);
+    _bgPaint.strokeWidth = _width;
     _marksPath = Path();
     final innerRadius = _radius - _width;
     final midRadius = _radius - _width / 3;
