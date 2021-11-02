@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MyCollidable extends PositionComponent with Hitbox, Collidable {}
+class MyCollidable extends PositionComponent with HasHitboxes, Collidable {}
 
 void main() {
   group('HasCollidables', () {

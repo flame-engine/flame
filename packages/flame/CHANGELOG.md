@@ -4,6 +4,8 @@
  - Added `StandardEffectController` class
  - Refactored `Effect` class to use `EffectController`, added `Transform2DEffect` class
  - Clarified `TimerComponent` example
+ - Rename `Hitbox` mixin to `HasHitboxes`
+ - Added `RemoveEffect` and `SimpleEffectController`
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration

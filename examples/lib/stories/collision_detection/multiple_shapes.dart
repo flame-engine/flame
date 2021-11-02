@@ -25,7 +25,7 @@ direction.
 enum Shapes { circle, rectangle, polygon }
 
 abstract class MyCollidable extends PositionComponent
-    with Draggable, Hitbox, Collidable {
+    with Draggable, HasHitboxes, Collidable {
   double rotationSpeed = 0.0;
   final Vector2 velocity;
   final delta = Vector2.zero();
