@@ -157,7 +157,7 @@ A Flame `Game` can be paused and resumed in two ways:
  - With the use of the `pauseEngine` and `resumeEngine` methods.
  - By changing the `paused` attribute.
 
-When pausing a Flame `Game`, the `GameLoop` is effectively paused, meaning that no updates and new
+When pausing a Flame `Game`, the `GameLoop` is effectively paused, meaning that no updates or new
 renders will happen until it is resumed.
 
 To pause/resume the update of custom components, custom logic needs to be implemented on each
