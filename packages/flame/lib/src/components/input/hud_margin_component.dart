@@ -8,6 +8,7 @@ import '../../../game.dart';
 /// The [HudMarginComponent] positions itself by a margin to the edge of the
 /// screen instead of by an absolute position on the screen or on the game, so
 /// if the game is resized the component will move to keep its margin.
+///
 /// Note that the margin is calculated to the [Anchor], not to the edge of the
 /// component.
 ///
