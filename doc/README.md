@@ -53,3 +53,35 @@ You can also check out the
 [awesome flame repository](https://github.com/flame-engine/awesome-flame#articles--tutorials),
 It contains quite a lot of good tutorials and articles written by the community to get you started
 with Flame.
+
+
+## Out of the scope of the engine
+
+Games sometimes require complex faturesets depending on what the game is all about. And some of
+those faturesets are out of the scope on the Flame Engine ecosystem, in this section you can find
+them, and also some recommendations of packages/services that can be used:
+
+## Multiplayer (netcode)
+
+Flame don't bundle any network feature, which may be needed to write online multiplayer games.
+
+If you are building a multipler game, here are some recommendations of packages/services:
+
+ - [Nakama](https://github.com/Allan-Nava/nakama-flutter): Nakama is an open-source server designed
+ to power modern games and apps.
+ - [Firebase](https://firebase.google.com/): Provides dozens of services that can be used to write
+simpler multiplayer experiences.
+
+## External assets
+
+Flame don't bundle any helpers to load assets from a external source (external storage or online
+sources).
+
+But most Flame's API can be loaded from concrete assets instances, for examples, `Sprite`s can be
+created from `dart:ui`s `Image` instaces, so the user can write custom code to load images from
+anywhere they need, and then load it into Flame's classes.
+
+Here are some suggestions for http communication pacakages:
+
+ - [http](https://pub.dev/packages/http): A simple pacakage for perfoming http requests.
+ - [Dio](https://pub.dev/packages/dio): A popular and powerful package for perfoming http requests.
