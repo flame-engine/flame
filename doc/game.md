@@ -150,6 +150,16 @@ built upon two methods:
 
 The `GameLoop` is used by all of Flame's `Game` implementations.
 
+# Pause/Resuming game execution
+
+A Flame `Game` can be paused and resumed in two ways:
+
+ - With the use of the `pauseEngine` and `resumeEngine` methods.
+ - By changing the `paused` attribute.
+
+When pausing a Flame `Game`, the `GameLoop` is effectively paused, meaning that no updates or new
+renders will happen until it is resumed.
+
 # Flutter Widgets and Game instances
 
 Since a Flame game can be wrapped in a widget, it is quite easy to use it alongside other Flutter
