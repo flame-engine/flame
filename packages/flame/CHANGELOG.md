@@ -5,6 +5,9 @@
  - Refactored `Effect` class to use `EffectController`, added `Transform2DEffect` class
  - Clarified `TimerComponent` example
  - Alternative implementation of `RotateEffect`, based on `Transform2DEffect`
+ - Fix `onGameResize` margin bug in `HudMarginComponent`
+ - `PositionComponent.size` now returns a `NotifyingVector2`
+ - Possibility to manually remove `TimerComponent`
  - Rename `Hitbox` mixin to `HasHitboxes`
  - Added `RemoveEffect` and `SimpleEffectController`
 
