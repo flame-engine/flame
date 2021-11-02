@@ -494,13 +494,13 @@ for details on how to use it.
 
 ## CustomPainterComponent
 
-A `CustomPainter` is a useful Flutter class used with the `CustomPaint` widget to render custom
+A `CustomPainter` is a Flutter class used with the `CustomPaint` widget to render custom
 shapes inside a Flutter application.
 
 Flame provides a component that can render a `CustomPainter` called `CustomPainterComponent`, it
-receives a custom painter and just render it on the game canvas.
+receives a custom painter and renders it on the game canvas.
 
-This can be useful for sharing custom rendering logic between your Flame game, and your Flutter
+This can be used for sharing custom rendering logic between your Flame game, and your Flutter
 widgets.
 
 Check the example app
