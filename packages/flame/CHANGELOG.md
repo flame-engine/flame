@@ -6,6 +6,7 @@
  - Clarified `TimerComponent` example
  - Fix `onGameResize` margin bug in `HudMarginComponent`
  - `PositionComponent.size` now returns a `NotifyingVector2`
+ - Possibility to manually remove `TimerComponent`
  - Rename `Hitbox` mixin to `HasHitboxes`
  - Added `RemoveEffect` and `SimpleEffectController`
 
