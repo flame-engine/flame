@@ -9,7 +9,7 @@ import 'package:flame/geometry.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class MyHitboxComponent extends PositionComponent with Hitbox {}
+class MyHitboxComponent extends PositionComponent with HasHitboxes {}
 
 class MyDebugComponent extends PositionComponent {
   int? precision = 0;
@@ -101,7 +101,7 @@ void main() {
     });
 
     test('component with hitbox contains point', () {
-      final Hitbox component = MyHitboxComponent();
+      final HasHitboxes component = MyHitboxComponent();
       component.position.setValues(1.0, 1.0);
       component.anchor = Anchor.topLeft;
       component.size.setValues(2.0, 2.0);
@@ -118,7 +118,7 @@ void main() {
     });
 
     test('component with anchor topLeft contains point on edge', () {
-      final Hitbox component = MyHitboxComponent();
+      final HasHitboxes component = MyHitboxComponent();
       component.position.setValues(-1, -1);
       component.anchor = Anchor.topLeft;
       component.size.setValues(2.0, 2.0);
@@ -132,7 +132,7 @@ void main() {
     });
 
     test('component with anchor bottomRight contains point on edge', () {
-      final Hitbox component = MyHitboxComponent();
+      final HasHitboxes component = MyHitboxComponent();
       component.position.setValues(1, 1);
       component.anchor = Anchor.bottomRight;
       component.size.setValues(2.0, 2.0);
@@ -146,7 +146,7 @@ void main() {
     });
 
     test('component with anchor topRight does not contain close points', () {
-      final Hitbox component = MyHitboxComponent();
+      final HasHitboxes component = MyHitboxComponent();
       component.position.setValues(1, 1);
       component.anchor = Anchor.topLeft;
       component.size.setValues(2.0, 2.0);
@@ -160,7 +160,7 @@ void main() {
     });
 
     test('component with hitbox does not contains point', () {
-      final Hitbox component = MyHitboxComponent();
+      final HasHitboxes component = MyHitboxComponent();
       component.position.setValues(1.0, 1.0);
       component.anchor = Anchor.topLeft;
       component.size.setValues(2.0, 2.0);

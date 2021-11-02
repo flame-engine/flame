@@ -6,7 +6,7 @@ import '../game.dart';
 import 'enemy.dart';
 
 class BulletComponent extends SpriteAnimationComponent
-    with HasGameRef<SpaceShooterGame>, Hitbox, Collidable {
+    with HasGameRef<SpaceShooterGame>, HasHitboxes, Collidable {
   static const bulletSpeed = -500;
 
   bool destroyed = false;

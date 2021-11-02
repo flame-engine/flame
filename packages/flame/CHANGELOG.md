@@ -5,6 +5,8 @@
  - Refactored `Effect` class to use `EffectController`, added `Transform2DEffect` class
  - Clarified `TimerComponent` example
  - Alternative implementation of `RotateEffect`, based on `Transform2DEffect`
+ - Rename `Hitbox` mixin to `HasHitboxes`
+ - Added `RemoveEffect` and `SimpleEffectController`
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration

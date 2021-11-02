@@ -14,7 +14,7 @@ circle both of them will change color.
 ''';
 
 class MyCollidable extends PositionComponent
-    with HasGameRef<Circles>, Hitbox, Collidable {
+    with HasGameRef<Circles>, HasHitboxes, Collidable {
   late Vector2 velocity;
   final _collisionColor = Colors.amber;
   final _defaultColor = Colors.cyan;

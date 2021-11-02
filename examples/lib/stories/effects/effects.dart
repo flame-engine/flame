@@ -7,6 +7,7 @@ import 'combined_effect.dart';
 import 'infinite_effect.dart';
 import 'move_effect.dart';
 import 'opacity_effect.dart';
+import 'remove_effect_example.dart';
 import 'rotate_effect.dart';
 import 'rotate_effect_example.dart';
 import 'scale_effect.dart';
@@ -74,5 +75,11 @@ void addEffectsStories(Dashbook dashbook) {
       (_) => GameWidget(game: RotateEffectExample()),
       codeLink: baseLink('effects/rotate_effect_example.dart'),
       info: RotateEffectExample.description,
+    )
+    ..add(
+      'Remove Effect',
+      (_) => GameWidget(game: RemoveEffectExample()),
+      codeLink: baseLink('effects/remove_effect_example.dart'),
+      info: RemoveEffectExample.description,
     );
 }

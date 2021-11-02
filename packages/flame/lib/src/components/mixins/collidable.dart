@@ -16,7 +16,7 @@ enum CollidableType {
   inactive,
 }
 
-mixin Collidable on Hitbox {
+mixin Collidable on HasHitboxes {
   CollidableType collidableType = CollidableType.active;
 
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {}
@@ -48,7 +48,7 @@ mixin Collidable on Hitbox {
 }
 
 class ScreenCollidable<T extends FlameGame> extends PositionComponent
-    with Hitbox, Collidable, HasGameRef<T> {
+    with HasHitboxes, Collidable, HasGameRef<T> {
   @override
   CollidableType collidableType = CollidableType.passive;
 
