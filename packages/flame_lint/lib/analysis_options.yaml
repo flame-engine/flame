@@ -100,6 +100,7 @@ linter:
     - prefer_void_to_null
     - provide_deprecation_message
     - recursive_getters
+    - require_trailing_commas
     - slash_for_doc_comments
     - sort_unnamed_constructors_first
     - test_types_in_equals
@@ -121,11 +122,10 @@ linter:
     - unnecessary_string_escapes
     - unnecessary_string_interpolations
     - unnecessary_this
+    - unrelated_type_equality_checks
+    - unsafe_html
     - use_full_hex_values_for_flutter_colors
     - use_function_type_syntax_for_parameters
     - use_is_even_rather_than_modulo
     - use_rethrow_when_possible
-    - unrelated_type_equality_checks
-    - unsafe_html
     - void_checks
-    - require_trailing_commas

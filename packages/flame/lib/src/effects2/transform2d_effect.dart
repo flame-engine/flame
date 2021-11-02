@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../components/position_component.dart';
 import '../game/transform2d.dart';
 import 'effect.dart';
@@ -17,6 +19,11 @@ abstract class Transform2DEffect extends Effect {
 
   late Transform2D target;
 
+  /// The effect's `progress` variable as it was the last time that the
+  /// `apply()` method was called. Mostly used by the derived classes.
+  double get previousProgress => _lastProgress;
+  double _lastProgress = 0;
+
   @override
   void onMount() {
     super.onMount();
@@ -30,5 +37,18 @@ abstract class Transform2DEffect extends Effect {
         'Can only apply a Transform2DEffect to a PositionComponent class',
       );
     }
+  }
+
+  // In the derived class, call `super.apply()` last.
+  @mustCallSuper
+  @override
+  void apply(double progress) {
+    _lastProgress = progress;
+  }
+
+  @override
+  void reset() {
+    super.reset();
+    _lastProgress = 0;
   }
 }

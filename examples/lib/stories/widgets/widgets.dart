@@ -1,6 +1,7 @@
 import 'package:dashbook/dashbook.dart';
 
 import '../../commons/commons.dart';
+import 'custom_painter_component.dart';
 import 'nine_tile_box.dart';
 import 'overlay.dart';
 import 'sprite_animation_widget.dart';
@@ -40,5 +41,11 @@ void addWidgetsStories(Dashbook dashbook) {
       'Overlay',
       overlayBuilder,
       codeLink: baseLink('widgets/overlay.dart'),
+    )
+    ..add(
+      'CustomPainterComponent',
+      customPainterBuilder,
+      codeLink: baseLink('widgets/custom_painter_component.dart'),
+      info: CustomPainterGame.info,
     );
 }

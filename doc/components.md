@@ -492,6 +492,21 @@ Check the example app
 [nine_tile_box](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/utils/nine_tile_box.dart)
 for details on how to use it.
 
+## CustomPainterComponent
+
+A `CustomPainter` is a Flutter class used with the `CustomPaint` widget to render custom
+shapes inside a Flutter application.
+
+Flame provides a component that can render a `CustomPainter` called `CustomPainterComponent`, it
+receives a custom painter and renders it on the game canvas.
+
+This can be used for sharing custom rendering logic between your Flame game, and your Flutter
+widgets.
+
+Check the example app
+[custom_painter_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/custom_painter_component.dart)
+for details on how to use it.
+
 ## Effects
 
 Flame provides a set of effects that can be applied to a certain type of components, these effects
