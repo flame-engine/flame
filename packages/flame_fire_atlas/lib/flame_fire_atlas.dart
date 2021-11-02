@@ -182,7 +182,7 @@ class FireAtlas {
       id: json['id'] as String,
       imageData: json['imageData'] as String?,
       tileHeight: (tileHeight ?? tileSize).toDouble(),
-      tileWidth:  (tileWidth ?? tileSize).toDouble(),
+      tileWidth: (tileWidth ?? tileSize).toDouble(),
     );
 
     final selections = json['selections'] as Map<String, dynamic>;
@@ -199,8 +199,11 @@ class FireAtlas {
   }
 
   /// Load the FireAtlas from an asset
-  static Future<FireAtlas> loadAsset(String fileName,
-      {AssetsCache? assets, Images? images,}) async {
+  static Future<FireAtlas> loadAsset(
+    String fileName, {
+    AssetsCache? assets,
+    Images? images,
+  }) async {
     final _assets = assets ?? Flame.assets;
 
     final bytes = await _assets.readBinaryFile(fileName);
