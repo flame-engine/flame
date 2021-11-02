@@ -7,7 +7,16 @@ import 'package:flame/src/effects2/rotate_effect.dart'; // ignore: implementatio
 import 'package:flame/src/effects2/standard_effect_controller.dart'; // ignore: implementation_imports
 import 'package:flutter/animation.dart';
 
-class RotateEffect2Game extends FlameGame {
+class RotateEffectExample extends FlameGame {
+  static const description = '''
+    The outer rim rotates at a different speed forward and reverse, and
+    uses the "ease" animation curve.
+
+    The compass arrow has 3 rotation effects applied to it at the same
+    time: one effect rotates the arrow at a constant speed, and two more
+    add small amounts of wobble, creating quasi-chaotic movement.
+  ''';
+
   @override
   void onMount() {
     camera.viewport = FixedResolutionViewport(Vector2(400, 600));

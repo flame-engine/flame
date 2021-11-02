@@ -8,7 +8,7 @@ import 'infinite_effect.dart';
 import 'move_effect.dart';
 import 'opacity_effect.dart';
 import 'rotate_effect.dart';
-import 'rotate_effect2.dart';
+import 'rotate_effect_example.dart';
 import 'scale_effect.dart';
 import 'sequence_effect.dart';
 import 'size_effect.dart';
@@ -71,15 +71,8 @@ void addEffectsStories(Dashbook dashbook) {
     )
     ..add(
       'Rotate Effect (v2)',
-      (_) => GameWidget(game: RotateEffect2Game()),
-      codeLink: baseLink('effects/rotate_effect2.dart'),
-      info: '''
-        The outer rim rotates at a different speed forward and reverse, and
-        uses the "ease" animation curve. 
-        
-        The compass arrow has 3 rotation effects applied to it at the same
-        time: one effect rotates the arrow at a constant speed, and two more 
-        add small amounts of wobble, creating quasi-chaotic movement.
-      ''',
+      (_) => GameWidget(game: RotateEffectExample()),
+      codeLink: baseLink('effects/rotate_effect_example.dart'),
+      info: RotateEffectExample.description,
     );
 }
