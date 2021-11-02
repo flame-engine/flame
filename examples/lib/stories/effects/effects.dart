@@ -7,7 +7,7 @@ import 'combined_effect.dart';
 import 'infinite_effect.dart';
 import 'move_effect.dart';
 import 'opacity_effect.dart';
-import 'remove_effect_game.dart';
+import 'remove_effect_example.dart';
 import 'rotate_effect.dart';
 import 'scale_effect.dart';
 import 'sequence_effect.dart';
@@ -71,11 +71,8 @@ void addEffectsStories(Dashbook dashbook) {
     )
     ..add(
       'Remove Effect',
-      (_) => GameWidget(game: RemoveEffectGame()),
-      codeLink: baseLink('effects/remove_effect_game.dart'),
-      info: '''
-        Click on any circle to apply a RemoveEffect, which will make the circle
-        disappear after a 0.5 second delay.
-      ''',
+      (_) => GameWidget(game: RemoveEffectExample()),
+      codeLink: baseLink('effects/remove_effect_example.dart'),
+      info: kRemoveEffectExampleDescription,
     );
 }
