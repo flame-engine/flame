@@ -17,8 +17,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  dart_code_metrics: ^3.2.2
   mocktail: ^0.1.2
   dartdoc: ^0.42.0
+  flame_lint:
+    path: ../flame_lint
 
 flutter:
