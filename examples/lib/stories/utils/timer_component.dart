@@ -12,7 +12,11 @@ class RenderedTimeComponent extends TimerComponent {
 
   final double yOffset;
 
-  RenderedTimeComponent(Timer timer, {this.yOffset = 150}) : super(timer);
+  RenderedTimeComponent(Timer timer, {this.yOffset = 150})
+      : super(
+          timer,
+          removeOnFinish: true,
+        );
 
   @override
   void render(Canvas canvas) {
