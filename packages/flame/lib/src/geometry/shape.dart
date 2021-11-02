@@ -124,7 +124,7 @@ abstract class Shape {
   /// top left corner.
   ShapeComponent toComponent({Paint? paint, Anchor anchor = Anchor.topLeft}) {
     return ShapeComponent(
-      shape: this,
+      this,
       paint: paint,
       anchor: anchor,
     );

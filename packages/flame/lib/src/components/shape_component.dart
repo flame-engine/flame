@@ -9,40 +9,33 @@ import '../anchor.dart';
 import '../extensions/vector2.dart';
 
 class ShapeComponent extends PositionComponent {
-  Shape? shape;
-  Paint paint = BasicPalette.white.paint();
+  final Shape shape;
+  Paint paint;
 
-  ShapeComponent({
-    this.shape,
+  ShapeComponent(
+    this.shape, {
     Paint? paint,
     Anchor anchor = Anchor.topLeft,
     int? priority,
-  }) : super(
-          position: shape?.position,
-          size: shape?.size,
-          angle: shape?.angle ?? 0,
+  })  : paint = paint ?? BasicPalette.white.paint(),
+        super(
+          position: shape.position,
+          size: shape.size,
+          angle: shape.angle,
           anchor: anchor,
           priority: priority,
         ) {
-    this.paint = paint ?? this.paint;
-    shape?.isCanvasPrepared = true;
+    shape.isCanvasPrepared = true;
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    shape?.render(canvas, paint);
+    shape.render(canvas, paint);
   }
 
   @override
-  bool containsPoint(Vector2 point) => shape?.containsPoint(point) ?? false;
-
-  void updateShape(Shape shape) {
-    this.shape = shape..isCanvasPrepared = true;
-    position = shape.position;
-    size = shape.size;
-    angle = shape.angle;
-  }
+  bool containsPoint(Vector2 point) => shape.containsPoint(point);
 }
 
 class CircleComponent extends ShapeComponent {
@@ -51,12 +44,11 @@ class CircleComponent extends ShapeComponent {
     Vector2? position,
     Paint? paint,
     int? priority,
-  }) {
-    final circle = Circle(radius: radius, position: position);
-    this.paint = paint ?? this.paint;
-    updateShape(circle);
-    changePriorityWithoutResorting(priority ?? 0);
-  }
+  }) : super(
+          Circle(radius: radius, position: position),
+          paint: paint,
+          priority: priority,
+        );
 }
 
 class RectangleComponent extends ShapeComponent {
@@ -65,26 +57,22 @@ class RectangleComponent extends ShapeComponent {
     Vector2? position,
     Paint? paint,
     int? priority,
-  }) {
-    final rectangle = Rectangle(size: size, position: position);
-    this.paint = paint ?? this.paint;
-    updateShape(rectangle);
-    changePriorityWithoutResorting(priority ?? 0);
-  }
+  }) : super(
+          Rectangle(size: size, position: position),
+          paint: paint,
+          priority: priority,
+        );
 
-  factory RectangleComponent.square(
+  RectangleComponent.square(
     double edgeLength, {
     Vector2? position,
     Paint? paint,
     int? priority,
-  }) {
-    return RectangleComponent(
-      Vector2.all(edgeLength),
-      position: position,
-      paint: paint,
-      priority: priority,
-    );
-  }
+  }) : super(
+          Rectangle(size: Vector2.all(edgeLength), position: position),
+          paint: paint,
+          priority: priority,
+        );
 }
 
 class PolygonComponent extends ShapeComponent {
@@ -92,12 +80,7 @@ class PolygonComponent extends ShapeComponent {
     List<Vector2> points, {
     Paint? paint,
     int? priority,
-  }) {
-    final polygon = Polygon(points);
-    this.paint = paint ?? this.paint;
-    updateShape(polygon);
-    changePriorityWithoutResorting(priority ?? 0);
-  }
+  }) : super(Polygon(points), paint: paint, priority: priority);
 
   PolygonComponent.fromDefinition(
     List<Vector2> normalizedVertices, {
@@ -105,14 +88,13 @@ class PolygonComponent extends ShapeComponent {
     Vector2? position,
     Paint? paint,
     int? priority,
-  }) {
-    final polygon = Polygon.fromDefinition(
-      normalizedVertices,
-      position: position,
-      size: size,
-    );
-    this.paint = paint ?? this.paint;
-    updateShape(polygon);
-    changePriorityWithoutResorting(priority ?? 0);
-  }
+  }) : super(
+          Polygon.fromDefinition(
+            normalizedVertices,
+            position: position,
+            size: size,
+          ),
+          paint: paint,
+          priority: priority,
+        );
 }
