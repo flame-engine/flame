@@ -197,14 +197,35 @@ mixin Game on Loadable implements Projector {
     );
   }
 
-  /// Flag to tell the game loop if it should start running upon creation.
-  bool runOnCreation = true;
+  bool _paused = false;
+
+  /// Returns is the engine if currently paused or running
+  bool get paused => _paused;
+
+  /// Pauses or resume the engine
+  set paused(bool value) {
+    if (pauseEngineFn != null && resumeEngineFn != null) {
+      if (value) {
+        pauseEngine();
+      } else {
+        resumeEngine();
+      }
+    } else {
+      _paused = value;
+    }
+  }
 
   /// Pauses the engine game loop execution.
-  void pauseEngine() => pauseEngineFn?.call();
+  void pauseEngine() {
+    _paused = true;
+    pauseEngineFn?.call();
+  }
 
   /// Resumes the engine game loop execution.
-  void resumeEngine() => resumeEngineFn?.call();
+  void resumeEngine() {
+    _paused = false;
+    resumeEngineFn?.call();
+  }
 
   VoidCallback? pauseEngineFn;
   VoidCallback? resumeEngineFn;
