@@ -4,6 +4,7 @@
  - Added `StandardEffectController` class
  - Refactored `Effect` class to use `EffectController`, added `Transform2DEffect` class
  - Clarified `TimerComponent` example
+ - Rename `Hitbox` mixin to `HasHitboxes`
  - Added `RemoveEffect` and `SimpleEffectController`
  - Create default implementations of `RectangleComponent`, `CircleComponent` and `PolygonComponent`
 
