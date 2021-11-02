@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/effects2/rotate_effect.dart';
 import 'package:flame/src/effects2/standard_effect_controller.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -121,6 +124,34 @@ void main() {
       }
       expect(object.angle, closeTo(5, 1e-15));
       expect(object.children.length, 0);
+    });
+
+    testRandom('a very long rotation', (Random rng) {
+      final game = FlameGame()..onGameResize(Vector2(1, 1));
+      final object = PositionComponent();
+      game.add(object);
+      game.update(0);
+
+      final effect = RotateEffect.by(
+        1.0,
+        StandardEffectController(
+            duration: 1,
+            reverseDuration: 1,
+            infinite: true,
+        ),
+      );
+      object.add(effect);
+
+      var totalTime = 0.0;
+      while (totalTime < 999.9) {
+        final dt = rng.nextDouble() * 0.02;
+        totalTime += dt;
+        game.update(dt);
+      }
+      game.update(1000 - totalTime);
+      // Typically, `object.angle` could accumulate numeric discrepancy on the
+      // order of 1e-11 .. 1e-12 by now.
+      expect(object.angle, closeTo(0, 1e-10));
     });
   });
 }
