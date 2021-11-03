@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 
+import '../../components.dart';
 import '../extensions/vector2.dart';
 import '../sprite_animation.dart';
 import 'mixins/has_paint.dart';
@@ -21,14 +22,20 @@ class SpriteGroupComponent<T> extends PositionComponent with HasPaint {
   /// Creates a component with an empty animation which can be set later
   SpriteGroupComponent({
     this.sprites,
-    Vector2? position,
-    Vector2? size,
-    int? priority,
     this.current,
     Paint? paint,
+    Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
+    int? priority,
   }) : super(
           position: position,
           size: size,
+          scale: scale,
+          angle: angle,
+          anchor: anchor,
           priority: priority,
         ) {
     if (paint != null) {

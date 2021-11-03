@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 
+import '../../components.dart';
 import '../extensions/vector2.dart';
 import '../sprite_animation.dart';
 import 'mixins/has_paint.dart';
@@ -17,20 +18,27 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
   final Map<T, bool> removeOnFinish;
 
   /// Map with the available states for this animation group
-  late Map<T, SpriteAnimation> animations;
+  Map<T, SpriteAnimation>? animations;
 
   /// Creates a component with an empty animation which can be set later
   SpriteAnimationGroupComponent({
-    required this.animations,
+    this.animations,
+    this.current,
+    Map<T, bool>? removeOnFinish,
+    Paint? paint,
     Vector2? position,
     Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
     int? priority,
-    this.current,
-    Paint? paint,
-    this.removeOnFinish = const {},
-  }) : super(
+  })  : removeOnFinish = removeOnFinish ?? const {},
+        super(
           position: position,
           size: size,
+          scale: scale,
+          angle: angle,
+          anchor: anchor,
           priority: priority,
         ) {
     if (paint != null) {
@@ -38,41 +46,46 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
     }
   }
 
-  /// Creates a SpriteAnimationGroupComponent from a [size], an [image] and [data].
+  /// Creates a SpriteAnimationGroupComponent from a [size], an [image] and
+  /// [data].
   /// Check [SpriteAnimationData] for more info on the available options.
   ///
-  /// Optionally [removeOnFinish] can be mapped to true to have this component be auto
-  /// removed from the FlameGame when the animation is finished.
+  /// Optionally [removeOnFinish] can be mapped to true to have this component
+  /// be auto removed from the FlameGame when the animation is finished.
   SpriteAnimationGroupComponent.fromFrameData(
     Image image,
     Map<T, SpriteAnimationData> data, {
-    this.current,
+    T? current,
+    Map<T, bool>? removeOnFinish,
+    Paint? paint,
     Vector2? position,
     Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
     int? priority,
-    Paint? paint,
-    this.removeOnFinish = const {},
-  }) : super(
+  }) : this(
+          animations: data.map((key, value) {
+            return MapEntry(
+              key,
+              SpriteAnimation.fromFrameData(
+                image,
+                value,
+              ),
+            );
+          }),
+          current: current,
+          removeOnFinish: removeOnFinish,
+          paint: paint,
           position: position,
           size: size,
+          scale: scale,
+          angle: angle,
+          anchor: anchor,
           priority: priority,
-        ) {
-    animations = data.map((key, value) {
-      return MapEntry(
-        key,
-        SpriteAnimation.fromFrameData(
-          image,
-          value,
-        ),
-      );
-    });
+        );
 
-    if (paint != null) {
-      this.paint = paint;
-    }
-  }
-
-  SpriteAnimation? get animation => animations[current];
+  SpriteAnimation? get animation => animations?[current];
 
   /// Component will be removed after animation is done and the current state
   /// is true on [removeOnFinish].
