@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flutter/material.dart';
 
 class SquareComponent extends RectangleComponent with EffectsHelper {
   SquareComponent({
