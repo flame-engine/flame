@@ -68,12 +68,12 @@ class RectangleComponent extends ShapeComponent {
         );
 
   RectangleComponent.square(
-    double edgeLength, {
+    double size, {
     Vector2? position,
     Paint? paint,
     int? priority,
   }) : super(
-          Rectangle(size: Vector2.all(edgeLength), position: position),
+          Rectangle(size: Vector2.all(size), position: position),
           paint: paint,
           priority: priority,
         );
