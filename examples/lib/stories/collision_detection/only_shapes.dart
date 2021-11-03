@@ -60,11 +60,7 @@ class OnlyShapes extends FlameGame with HasTappableComponents {
 
 class MyShapeComponent extends ShapeComponent with Tappable {
   MyShapeComponent(Shape shape, Paint shapePaint)
-      : super(
-          shape,
-          shapePaint,
-          anchor: Anchor.center,
-        );
+      : super(shape, paint: shapePaint);
 
   @override
   bool onTapDown(TapDownInfo info) {

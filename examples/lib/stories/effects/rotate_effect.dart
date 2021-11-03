@@ -14,9 +14,7 @@ class RotateEffectGame extends FlameGame with TapDetector {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    square = SquareComponent()
-      ..position.setValues(200, 200)
-      ..anchor = Anchor.center;
+    square = SquareComponent(position: Vector2.all(200));
     add(square);
   }
 
