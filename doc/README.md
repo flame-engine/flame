@@ -61,7 +61,7 @@ Games sometimes require complex feature sets depending on what the game is all a
 those feature sets are outside of the scope of the Flame Engine ecosystem, in this section you can find
 them, and also some recommendations of packages/services that can be used:
 
-## Multiplayer (netcode)
+### Multiplayer (netcode)
 
 Flame doesn't bundle any network feature, which may be needed to write online multiplayer games.
 
@@ -72,7 +72,7 @@ If you are building a multipler game, here are some recommendations of packages/
  - [Firebase](https://firebase.google.com/): Provides dozens of services that can be used to write
 simpler multiplayer experiences.
 
-## External assets
+### External assets
 
 Flame doesn't bundle any helpers to load assets from an external source (external storage or online
 sources).
