@@ -14,9 +14,7 @@ class SequenceEffectGame extends FlameGame with TapDetector {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    greenSquare = SquareComponent()
-      ..paint = green
-      ..position.setValues(100, 100);
+    greenSquare = SquareComponent(position: Vector2.all(100), paint: green);
     add(greenSquare);
   }
 
