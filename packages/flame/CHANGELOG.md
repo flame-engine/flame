@@ -4,6 +4,8 @@
  - Added `StandardEffectController` class
  - Refactored `Effect` class to use `EffectController`, added `Transform2DEffect` class
  - Clarified `TimerComponent` example
+ - Fixed pause and resume engines when `GameWidget` had rebuilds
+ - Removed `runOnCreation` attribute in favor of the `paused` attribute on `FlameGame`
  - Add `CustomPainterComponent`
  - Alternative implementation of `RotateEffect`, based on `Transform2DEffect`
  - Fix `onGameResize` margin bug in `HudMarginComponent`

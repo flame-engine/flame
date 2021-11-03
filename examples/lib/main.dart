@@ -10,6 +10,7 @@ import 'stories/input/input.dart';
 import 'stories/parallax/parallax.dart';
 import 'stories/rendering/rendering.dart';
 import 'stories/sprites/sprites.dart';
+import 'stories/system/system.dart';
 import 'stories/tile_maps/tile_maps.dart';
 import 'stories/utils/utils.dart';
 import 'stories/widgets/widgets.dart';
@@ -32,6 +33,7 @@ void main() async {
   addCameraAndViewportStories(dashbook);
   addParallaxStories(dashbook);
   addWidgetsStories(dashbook);
+  addSystemStories(dashbook);
 
   runApp(dashbook);
 }
