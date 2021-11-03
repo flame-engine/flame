@@ -9,6 +9,7 @@ import 'move_effect.dart';
 import 'opacity_effect.dart';
 import 'remove_effect_example.dart';
 import 'rotate_effect.dart';
+import 'rotate_effect_example.dart';
 import 'scale_effect.dart';
 import 'sequence_effect.dart';
 import 'size_effect.dart';
@@ -68,6 +69,12 @@ void addEffectsStories(Dashbook dashbook) {
       'Color Effect',
       (_) => GameWidget(game: ColorEffectGame()),
       codeLink: baseLink('effects/color_effect.dart'),
+    )
+    ..add(
+      'Rotate Effect (v2)',
+      (_) => GameWidget(game: RotateEffectExample()),
+      codeLink: baseLink('effects/rotate_effect_example.dart'),
+      info: RotateEffectExample.description,
     )
     ..add(
       'Remove Effect',
