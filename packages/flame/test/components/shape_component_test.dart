@@ -26,7 +26,7 @@ void main() {
       );
       final component = shape.toComponent();
       expect(
-        component.containsPoint(Vector2.all(1.9)),
+        component.containsPoint(Vector2.all(1.5)),
         true,
       );
     });
