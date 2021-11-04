@@ -76,7 +76,6 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     TextBoxConfig? boxConfig,
     double? pixelRatio,
     Vector2? position,
-    Vector2? size,
     Vector2? scale,
     double? angle,
     Anchor? anchor,
@@ -87,7 +86,6 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
         pixelRatio = pixelRatio ?? window.devicePixelRatio,
         super(
           position: position,
-          size: size,
           scale: scale,
           angle: angle,
           anchor: anchor,

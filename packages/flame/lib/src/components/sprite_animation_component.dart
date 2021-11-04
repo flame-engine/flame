@@ -17,7 +17,7 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
   /// If the component should be removed once the animation has finished.
   /// Needs the animation to have `loop = false` to ever remove the component,
   /// since it will never finish otherwise.
-  bool removeOnFinish = false;
+  bool removeOnFinish;
 
   /// Whether the animation is paused or playing.
   bool playing;
