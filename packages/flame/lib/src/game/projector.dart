@@ -43,6 +43,22 @@ abstract class Projector {
   }
 }
 
+/// A simple Projector implementation that represents the identity operation
+/// (i.e. no-op).
+class IdentityProjector extends Projector {
+  @override
+  Vector2 projectVector(Vector2 v) => v;
+
+  @override
+  Vector2 scaleVector(Vector2 v) => v;
+
+  @override
+  Vector2 unprojectVector(Vector2 v) => v;
+
+  @override
+  Vector2 unscaleVector(Vector2 v) => v;
+}
+
 /// This is a [Projector] implementation that composes a list of projectors,
 /// in the order provided.
 ///
