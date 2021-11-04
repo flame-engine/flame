@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame/src/effects2/effect.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import 'effect_controller.dart';
@@ -18,7 +17,7 @@ import 'transform2d_effect.dart';
 ///     coordinates
 ///
 ///   - [MoveEffect.along] will move the target along the specified path, which
-///     may contain curved segments, but must be simply-connected. 
+///     may contain curved segments, but must be simply-connected.
 ///
 /// This effect applies incremental changes to the component's position, and
 /// requires that any other effect or update logic applied to the same component
@@ -28,11 +27,11 @@ class MoveEffect extends Transform2DEffect {
       : _offset = offset.clone(),
         super(controller);
 
-  factory MoveEffect.to(Vector2 destination, EffectController controller)
-      => _MoveToEffect(destination, controller);
+  factory MoveEffect.to(Vector2 destination, EffectController controller) =>
+      _MoveToEffect(destination, controller);
 
-  factory MoveEffect.along(Path path, EffectController controller)
-      => _MoveAlongPathEffect(path, controller);
+  factory MoveEffect.along(Path path, EffectController controller) =>
+      _MoveAlongPathEffect(path, controller);
 
   Vector2 _offset;
 
