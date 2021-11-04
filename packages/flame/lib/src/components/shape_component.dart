@@ -8,6 +8,9 @@ import '../../palette.dart';
 import '../anchor.dart';
 import '../extensions/vector2.dart';
 
+/// A [ShapeComponent] is a [Shape] wrapped in a [PositionComponent] so that it
+/// can be added to a component tree and take the camera and viewport into
+/// consideration when rendering.
 class ShapeComponent extends PositionComponent {
   final Shape shape;
   Paint paint;
@@ -17,19 +20,29 @@ class ShapeComponent extends PositionComponent {
   @override
   final Anchor anchor = Anchor.center;
 
+  @override
+  set angle(double a) {
+    super.angle = a;
+    shape.angle = a;
+  }
+
   ShapeComponent(
     this.shape, {
     Paint? paint,
+    Vector2? scale,
     int? priority,
   })  : paint = paint ?? BasicPalette.white.paint(),
         super(
           position: shape.position,
           size: shape.size,
+          scale: scale,
           angle: shape.angle,
           anchor: Anchor.center,
           priority: priority,
         ) {
     shape.isCanvasPrepared = true;
+    position.addListener(() => shape.position.setFrom(position));
+    size.addListener(() => shape.size.setFrom(position));
   }
 
   @override

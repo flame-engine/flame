@@ -84,6 +84,7 @@ class Polygon extends Shape {
   }
 
   final _cachedRenderPath = ValueCache<Path>();
+  final _path = Path();
 
   @override
   void render(Canvas canvas, Paint paint) {
@@ -91,7 +92,8 @@ class Polygon extends Shape {
         .isCacheValid([offsetPosition, relativeOffset, size, angle])) {
       final center = localCenter;
       _cachedRenderPath.updateCache(
-        Path()
+        _path
+          ..reset()
           ..addPolygon(
             scaled().map(
               (point) {

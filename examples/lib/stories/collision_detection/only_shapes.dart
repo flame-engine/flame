@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
@@ -20,6 +21,12 @@ enum Shapes { circle, rectangle, polygon }
 class OnlyShapes extends FlameGame with HasTappableComponents {
   final shapePaint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
   final _rng = Random();
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    camera.zoom = 2;
+  }
 
   Shape randomShape(Vector2 position) {
     final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
@@ -55,6 +62,18 @@ class OnlyShapes extends FlameGame with HasTappableComponents {
     final tapDownPoint = info.eventPosition.game;
     final component = MyShapeComponent(randomShape(tapDownPoint), shapePaint);
     add(component);
+    component.add(MoveEffect(
+      path: [size / 2],
+      speed: 30,
+      isAlternating: true,
+      isInfinite: true,
+    ));
+    component.add(RotateEffect(
+      angle: 3,
+      speed: 0.4,
+      isAlternating: true,
+      isInfinite: true,
+    ));
   }
 }
 
@@ -63,7 +82,7 @@ class MyShapeComponent extends ShapeComponent with Tappable {
       : super(shape, paint: shapePaint);
 
   @override
-  bool onTapDown(TapDownInfo info) {
+  bool onTapDown(TapDownInfo _) {
     removeFromParent();
     return true;
   }
