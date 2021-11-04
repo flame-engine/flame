@@ -46,7 +46,7 @@ void main() {
     });
 
     test('MoveEffect.along()', () {
-      final tau = Transform2D.tau;
+      const tau = Transform2D.tau;
       final game = FlameGame();
       game.onGameResize(Vector2(100, 100));
       final object = PositionComponent()..position = Vector2(3, 4);
