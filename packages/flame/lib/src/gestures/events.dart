@@ -20,10 +20,10 @@ class EventPosition {
 
   /// Coordinates of the event relative to the game position/size but applying only viewport transformations (not camera).
   late final Vector2 viewportOnly =
-      _game.viewportProjector().unprojectVector(widget);
+      _game.viewportProjector.unprojectVector(widget);
 
   /// Coordinates of the event relative to the game position/size and transformations
-  late final Vector2 game = _game.projector().unprojectVector(widget);
+  late final Vector2 game = _game.projector.unprojectVector(widget);
 
   EventPosition(this._game, this._globalPosition);
 }
@@ -41,10 +41,10 @@ class EventDelta {
 
   /// Scaled value relative to the game viewport only transformations (not camera).
   late final Vector2 viewportOnly =
-      _game.viewportProjector().unscaleVector(global);
+      _game.viewportProjector.unscaleVector(global);
 
   /// Scaled value relative to the game transformations
-  late final Vector2 game = _game.projector().unscaleVector(global);
+  late final Vector2 game = _game.projector.unscaleVector(global);
 
   EventDelta(this._game, this._delta);
 }
@@ -96,7 +96,7 @@ class LongPressStartInfo extends PositionInfo<LongPressStartDetails> {
 
 class LongPressEndInfo extends PositionInfo<LongPressEndDetails> {
   late final Vector2 velocity =
-      _game.projector().unscaleVector(raw.velocity.pixelsPerSecond.toVector2());
+      _game.projector.unscaleVector(raw.velocity.pixelsPerSecond.toVector2());
 
   LongPressEndInfo.fromDetails(
     Game game,
@@ -162,7 +162,7 @@ class DragUpdateInfo extends PositionInfo<DragUpdateDetails> {
 class DragEndInfo extends BaseInfo<DragEndDetails> {
   final Game _game;
   late final Vector2 velocity =
-      _game.projector().unscaleVector(raw.velocity.pixelsPerSecond.toVector2());
+      _game.projector.unscaleVector(raw.velocity.pixelsPerSecond.toVector2());
   double? get primaryVelocity => raw.primaryVelocity;
 
   DragEndInfo.fromDetails(

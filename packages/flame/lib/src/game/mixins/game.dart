@@ -157,8 +157,13 @@ mixin Game on Loadable {
     return _gameRenderBox!.localToGlobal(point.toOffset()).toVector2();
   }
 
-  Projector projector() => IdentityProjector();
-  Projector viewportProjector() => IdentityProjector();
+  /// This is the projector used by non-isHUD components.
+  /// This can be overriden on your [Game] implementation.
+  Projector projector = IdentityProjector();
+
+  /// This is the projector used by isHUD components.
+  /// This can be overriden on your [Game] implementation.
+  Projector viewportProjector = IdentityProjector();
 
   /// Utility method to load and cache the image for a sprite based on its
   /// options.

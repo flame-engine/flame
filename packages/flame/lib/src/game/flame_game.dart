@@ -114,8 +114,8 @@ class FlameGame extends Component with Game {
   }
 
   @override
-  Projector viewportProjector() => camera.viewport;
+  Projector get viewportProjector => camera.viewport;
 
   @override
-  Projector projector() => camera.combinedProjector;
+  Projector get projector => camera.combinedProjector;
 }
