@@ -14,10 +14,12 @@ import 'transform2d_effect.dart';
 ///     of the effect;
 ///
 ///   - [MoveEffect.to] will move the target in a straight line to the specified
-///     coordinates
+///     coordinates;
 ///
 ///   - [MoveEffect.along] will move the target along the specified path, which
-///     may contain curved segments, but must be simply-connected.
+///     may contain curved segments, but must be simply-connected. The `path`
+///     argument is taken as relative to the target's position at the start of
+///     the effect.
 ///
 /// This effect applies incremental changes to the component's position, and
 /// requires that any other effect or update logic applied to the same component
@@ -60,7 +62,8 @@ class _MoveToEffect extends MoveEffect {
 /// Implementation class for [MoveEffect.along].
 class _MoveAlongPathEffect extends MoveEffect {
   _MoveAlongPathEffect(Path path, EffectController controller)
-      : super.by(Vector2.zero(), controller) {
+      : _lastPosition = Vector2.zero(),
+        super.by(Vector2.zero(), controller) {
     final metrics = path.computeMetrics().toList();
     if (metrics.length != 1) {
       throw ArgumentError(
@@ -74,7 +77,6 @@ class _MoveAlongPathEffect extends MoveEffect {
         'Zero-length paths are not allowed in MoveEffect.along',
       );
     }
-    reset(); // initializes _lastPosition
   }
 
   late final PathMetric _pathMetric;
@@ -95,7 +97,6 @@ class _MoveAlongPathEffect extends MoveEffect {
   @override
   void reset() {
     super.reset();
-    final tangent = _pathMetric.getTangentForOffset(0)!;
-    _lastPosition = Vector2(tangent.position.dx, tangent.position.dy);
+    _lastPosition = Vector2.zero();
   }
 }
