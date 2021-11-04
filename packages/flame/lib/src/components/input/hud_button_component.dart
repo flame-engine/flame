@@ -9,10 +9,8 @@ import '../../gestures/events.dart';
 /// The [HudButtonComponent] bundles two [PositionComponent]s, one that shows
 /// when the button is being pressed, and one that shows otherwise.
 ///
-/// Note: if you are setting the [button] in [onLoad] instead of passing it in
-/// through the constructor, be sure that you add it to the component too by
-/// simply doing `add(button);` and that you also set the [button] variable to
-/// your [PositionComponent] with `button = yourPositionComponent;`.
+/// Note: You have to set the [button] in [onLoad] if you are not passing it in
+/// through the constructor.
 class HudButtonComponent extends HudMarginComponent with Tappable {
   late final PositionComponent? button;
   late final PositionComponent? buttonDown;
