@@ -84,9 +84,9 @@ class _MoveAlongPathEffect extends MoveEffect {
     final distance = progress * _pathLength;
     final tangent = _pathMetric.getTangentForOffset(distance)!;
     final offset = tangent.position;
-    final newPosition = Vector2(offset.dx, offset.dy);
-    target.position += newPosition - _lastPosition;
-    _lastPosition = newPosition;
+    target.position.x += offset.dx - _lastPosition.x;
+    target.position.y += offset.dy - _lastPosition.y;
+    _lastPosition.setValues(offset.dx, offset.dy);
     super.apply(progress);
   }
 
