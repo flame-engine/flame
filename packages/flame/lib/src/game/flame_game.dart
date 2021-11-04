@@ -7,6 +7,7 @@ import '../extensions/vector2.dart';
 import 'camera/camera.dart';
 import 'camera/camera_wrapper.dart';
 import 'mixins/game.dart';
+import 'projector.dart';
 
 /// This is a more complete and opinionated implementation of [Game].
 ///
@@ -113,22 +114,8 @@ class FlameGame extends Component with Game {
   }
 
   @override
-  Vector2 projectVector(Vector2 vector) {
-    return camera.combinedProjector.projectVector(vector);
-  }
+  Projector get viewportProjector => camera.viewport;
 
   @override
-  Vector2 unprojectVector(Vector2 vector) {
-    return camera.combinedProjector.unprojectVector(vector);
-  }
-
-  @override
-  Vector2 scaleVector(Vector2 vector) {
-    return camera.combinedProjector.scaleVector(vector);
-  }
-
-  @override
-  Vector2 unscaleVector(Vector2 vector) {
-    return camera.combinedProjector.unscaleVector(vector);
-  }
+  Projector get projector => camera.combinedProjector;
 }
