@@ -27,6 +27,23 @@ void main() {
       expect(game.projector().unprojectVector(Vector2(2, 4)), Vector2(1, 2));
       expect(game.projector().scaleVector(Vector2(1, 2)), Vector2(2, 4));
       expect(game.projector().unscaleVector(Vector2(2, 4)), Vector2(1, 2));
+
+      expect(
+        game.viewportProjector().projectVector(Vector2(1, 2)),
+        Vector2(2, 4),
+      );
+      expect(
+        game.viewportProjector().unprojectVector(Vector2(2, 4)),
+        Vector2(1, 2),
+      );
+      expect(
+        game.viewportProjector().scaleVector(Vector2(1, 2)),
+        Vector2(2, 4),
+      );
+      expect(
+        game.viewportProjector().unscaleVector(Vector2(2, 4)),
+        Vector2(1, 2),
+      );
     });
     test('viewport only with translation projection (no camera)', () {
       final viewport = FixedResolutionViewport(Vector2.all(100));
@@ -89,6 +106,15 @@ void main() {
 
       expect(game.projector().unprojectVector(Vector2.zero()), Vector2.zero());
       expect(game.projector().unprojectVector(Vector2(3, 6)), Vector2(1, 2));
+
+      expect(
+        game.viewportProjector().unprojectVector(Vector2.zero()),
+        Vector2.zero(),
+      );
+      expect(
+        game.viewportProjector().unprojectVector(Vector2(3, 6)),
+        Vector2(3, 6),
+      );
 
       // delta considers the zoom
       expect(game.projector().unscaleVector(Vector2.zero()), Vector2.zero());
@@ -181,6 +207,11 @@ void main() {
       expect(
         game.projector().unprojectVector(Vector2(50, 0)),
         Vector2(10, 100),
+      );
+      // viewport only, top left should be the top left of screen
+      expect(
+        game.viewportProjector().unprojectVector(Vector2(50, 0)),
+        Vector2.zero(),
       );
       // top right of viewport is top left of camera + effective screen width
       expect(
