@@ -11,6 +11,9 @@ import '../extensions/vector2.dart';
 /// A [ShapeComponent] is a [Shape] wrapped in a [PositionComponent] so that it
 /// can be added to a component tree and take the camera and viewport into
 /// consideration when rendering.
+///
+/// Once you have added a shape in the [ShapeComponent] you should only edit
+/// [position], [size] and [angle] of the [ShapeComponent], not of the [Shape].
 class ShapeComponent extends PositionComponent {
   final Shape shape;
   Paint paint;
