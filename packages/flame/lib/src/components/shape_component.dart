@@ -25,8 +25,7 @@ class ShapeComponent extends PositionComponent {
 
   @override
   set angle(double a) {
-    super.angle = a;
-    shape.angle = a;
+    super.angle = shape.angle = a;
   }
 
   ShapeComponent(
