@@ -44,10 +44,15 @@ class HudButtonComponent extends HudMarginComponent with Tappable {
         );
 
   @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    if (button != null) {
-      add(button!);
+  @mustCallSuper
+  void onMount() {
+    assert(
+      button != null,
+      'The button has to either be passed in as an argument or set in onLoad',
+    );
+    final idleButton = button;
+    if (idleButton != null && !contains(idleButton)) {
+      add(idleButton);
     }
   }
 
