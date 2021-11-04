@@ -96,12 +96,13 @@ class MoveEffectExample extends FlameGame {
         SquareComponent(size: 10)
           ..paint = (Paint()..color = const Color(0xFF00FFF7))
           ..add(MoveEffect.along(
-              path2,
-              StandardEffectController(
-                duration: 6,
-                startDelay: i * 0.3,
-                infinite: true,
-              ))),
+            path2,
+            StandardEffectController(
+              duration: 6,
+              startDelay: i * 0.3,
+              infinite: true,
+            ),
+          )),
       );
     }
   }
