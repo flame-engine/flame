@@ -90,8 +90,7 @@ class MoveEffectExample extends FlameGame {
       );
     }
 
-    final path2 = Path()
-      ..addArc(const Rect.fromLTRB(80, 230, 320, 470), 0, tau);
+    final path2 = Path()..addOval(const Rect.fromLTRB(80, 230, 320, 470));
     for (var i = 0; i < 20; i++) {
       add(
         SquareComponent(size: 10)

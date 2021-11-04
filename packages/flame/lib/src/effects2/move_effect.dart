@@ -72,11 +72,7 @@ class _MoveAlongPathEffect extends MoveEffect {
     }
     _pathMetric = metrics[0];
     _pathLength = _pathMetric.length;
-    if (_pathLength == 0) {
-      throw ArgumentError(
-        'Zero-length paths are not allowed in MoveEffect.along',
-      );
-    }
+    assert(_pathLength > 0);
   }
 
   late final PathMetric _pathMetric;
