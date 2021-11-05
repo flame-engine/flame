@@ -14,6 +14,7 @@ class Polygon extends Shape {
   // These lists are used to minimize the amount of [Vector2] objects that are
   // created, only change them if the cache is deemed invalid
   late final List<Vector2> _sizedVertices;
+  late final List<Vector2> _scaledVertices;
   late final List<Vector2> _hitboxVertices;
 
   /// With this constructor you create your [Polygon] from positions in your
@@ -63,24 +64,52 @@ class Polygon extends Shape {
           size: size,
           angle: angle ?? 0,
         ) {
-    _sizedVertices =
-        normalizedVertices.map((_) => Vector2.zero()).toList(growable: false);
-    _hitboxVertices =
-        normalizedVertices.map((_) => Vector2.zero()).toList(growable: false);
+    List<Vector2> generateList() {
+      return List.generate(
+        normalizedVertices.length,
+        (_) => Vector2.zero(),
+        growable: false,
+      );
+    }
+
+    _sizedVertices = generateList();
+    _scaledVertices = generateList();
+    _hitboxVertices = generateList();
   }
 
-  final _cachedScaledShape = ValueCache<Iterable<Vector2>>();
+  final _cachedSizedVertices = ValueCache<Iterable<Vector2>>();
 
   /// Gives back the shape vectors multiplied by the size
-  Iterable<Vector2> scaled() {
-    if (!_cachedScaledShape.isCacheValid([size])) {
+  Iterable<Vector2> sizedVertices() {
+    if (!_cachedSizedVertices.isCacheValid([size])) {
       for (var i = 0; i < _sizedVertices.length; i++) {
         final point = normalizedVertices[i];
         (_sizedVertices[i]..setFrom(point)).multiply(halfSize);
       }
-      _cachedScaledShape.updateCache(_sizedVertices, [size.clone()]);
+      _cachedSizedVertices.updateCache(_sizedVertices, [size.clone()]);
     }
-    return _cachedScaledShape.value!;
+    return _cachedSizedVertices.value!;
+  }
+
+  final _cachedScaledVertices = ValueCache<Iterable<Vector2>>();
+  final _identityVector = Vector2.all(1.0);
+
+  /// Gives back the shape vectors multiplied by the size and scale
+  Iterable<Vector2> scaledVertices() {
+    final scale = scaledSize ?? _identityVector;
+    if (!_cachedScaledVertices.isCacheValid([size, scale])) {
+      final sizedVertices = this.sizedVertices();
+      var i = 0;
+      for (final point in sizedVertices) {
+        _scaledVertices[i]
+          ..setFrom(point)
+          ..multiply(scale);
+        i++;
+      }
+      _cachedScaledVertices
+          .updateCache(_scaledVertices, [size.clone(), scaledSize]);
+    }
+    return _cachedScaledVertices.value!;
   }
 
   final _cachedRenderPath = ValueCache<Path>();
@@ -95,7 +124,7 @@ class Polygon extends Shape {
         _path
           ..reset()
           ..addPolygon(
-            scaled().map(
+            (isCanvasPrepared ? sizedVertices() : scaledVertices()).map(
               (point) {
                 final pathPoint = center + point;
                 if (!isCanvasPrepared) {
@@ -125,7 +154,7 @@ class Polygon extends Shape {
     // Use cached bounding vertices if state of the component hasn't changed
     if (!_cachedHitbox
         .isCacheValid([absoluteCenter, size, parentAngle, angle])) {
-      final scaledVertices = scaled().toList(growable: false);
+      final scaledVertices = sizedVertices().toList(growable: false);
       final center = absoluteCenter;
       for (var i = 0; i < _hitboxVertices.length; i++) {
         _hitboxVertices[i]

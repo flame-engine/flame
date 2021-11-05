@@ -14,8 +14,8 @@ import '../extensions/vector2.dart';
 ///
 /// Once you have added a shape in the [ShapeComponent] you should only edit
 /// [position], [size] and [angle] of the [ShapeComponent], not of the [Shape].
-class ShapeComponent extends PositionComponent {
-  final Shape shape;
+class ShapeComponent extends PositionComponent with HasHitboxes {
+  final HitboxShape shape;
   Paint paint;
 
   /// Currently the [anchor] can only be center for [ShapeComponent], since
@@ -31,20 +31,22 @@ class ShapeComponent extends PositionComponent {
   ShapeComponent(
     this.shape, {
     Paint? paint,
+    Vector2? position,
+    Vector2? size,
     Vector2? scale,
+    double? angle,
     int? priority,
   })  : paint = paint ?? BasicPalette.white.paint(),
         super(
-          position: shape.position,
-          size: shape.size,
+          position: position,
+          size: size,
           scale: scale,
-          angle: shape.angle,
+          angle: angle,
           anchor: Anchor.center,
           priority: priority,
         ) {
     shape.isCanvasPrepared = true;
-    position.addListener(() => shape.position.setFrom(position));
-    size.addListener(() => shape.size.setFrom(position));
+    addHitbox(shape);
   }
 
   @override
@@ -52,67 +54,108 @@ class ShapeComponent extends PositionComponent {
     shape.render(canvas, paint);
   }
 
-  @override
-  bool containsPoint(Vector2 point) => shape.containsPoint(point);
+  //@override
+  //bool containsPoint(Vector2 point) => shape.containsPoint(point);
 }
 
 class CircleComponent extends ShapeComponent {
-  CircleComponent(
-    double radius, {
-    Vector2? position,
+  CircleComponent({
+    required double radius,
     Paint? paint,
+    Vector2? position,
+    Vector2? scale,
+    double? angle,
     int? priority,
   }) : super(
-          Circle(radius: radius, position: position),
+          HitboxCircle(),
           paint: paint,
+          position: position,
+          size: Vector2.all(radius * 2),
+          scale: scale,
+          angle: angle,
           priority: priority,
         );
 }
 
 class RectangleComponent extends ShapeComponent {
-  RectangleComponent(
-    Vector2 size, {
-    Vector2? position,
+  RectangleComponent({
+    required Vector2 size,
     Paint? paint,
+    Vector2? position,
+    Vector2? scale,
+    double? angle,
     int? priority,
   }) : super(
-          Rectangle(size: size, position: position),
+          HitboxRectangle(),
           paint: paint,
+          position: position,
+          size: size,
+          scale: scale,
+          angle: angle,
           priority: priority,
         );
 
-  RectangleComponent.square(
-    double size, {
-    Vector2? position,
+  RectangleComponent.square({
+    required double size,
     Paint? paint,
+    Vector2? position,
+    Vector2? scale,
+    double? angle,
     int? priority,
   }) : super(
-          Rectangle(size: Vector2.all(size), position: position),
+          HitboxRectangle(),
           paint: paint,
+          position: position,
+          size: Vector2.all(size),
+          scale: scale,
+          angle: angle,
           priority: priority,
         );
 }
 
 class PolygonComponent extends ShapeComponent {
-  PolygonComponent(
-    List<Vector2> points, {
+  /// The [normalizedVertices] should be a list of points that range between
+  /// [0.0, 1.0] which defines the relation of the polygon to the size of the
+  /// component.
+  PolygonComponent({
+    required List<Vector2> normalizedVertices,
     Paint? paint,
-    int? priority,
-  }) : super(Polygon(points), paint: paint, priority: priority);
-
-  PolygonComponent.fromDefinition(
-    List<Vector2> normalizedVertices, {
-    Vector2? size,
     Vector2? position,
-    Paint? paint,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
     int? priority,
   }) : super(
-          Polygon.fromDefinition(
-            normalizedVertices,
-            position: position,
-            size: size,
-          ),
+          HitboxPolygon(normalizedVertices),
           paint: paint,
+          position: position,
+          size: size,
+          scale: scale,
+          angle: angle,
           priority: priority,
         );
+
+  /// Instead of using vertices that are in relation to the size of the
+  /// component you can use this factory with absolute points which will set the
+  /// position and size of the component and calculate the normalized vertices.
+  factory PolygonComponent.fromPoints(
+    List<Vector2> points, {
+    Paint? paint,
+    Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    int? priority,
+  }) {
+    final polygon = Polygon(points);
+    return PolygonComponent(
+      normalizedVertices: polygon.normalizedVertices,
+      paint: paint,
+      position: position ?? polygon.position,
+      size: size ?? polygon.size,
+      scale: scale,
+      angle: angle,
+      priority: priority,
+    );
+  }
 }

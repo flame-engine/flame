@@ -23,6 +23,10 @@ abstract class Shape {
   /// The size is the bounding box of the [Shape]
   Vector2 size;
 
+  /// The scaled size of the bounding box of the [Shape], if no scaling of the
+  /// parent is supported this should be set to null.
+  Vector2? scaledSize;
+
   Vector2 get halfSize {
     if (!_halfSizeCache.isCacheValid([size])) {
       _halfSizeCache.updateCache(size / 2, [size.clone()]);
@@ -116,22 +120,16 @@ abstract class Shape {
   Set<Vector2> intersections(Shape other) {
     return intersection_system.intersections(this, other);
   }
-
-  /// Turns a [Shape] into a [ShapeComponent]
-  ///
-  /// Do note that while a [Shape] is defined from the center, a
-  /// [ShapeComponent] like all other components default to an [Anchor] in the
-  /// top left corner.
-  ShapeComponent toComponent({Paint? paint}) {
-    return ShapeComponent(this, paint: paint);
-  }
 }
 
 mixin HitboxShape on Shape {
   late PositionComponent component;
 
   @override
-  Vector2 get size => component.absoluteScaledSize;
+  Vector2 get size => component.size;
+
+  @override
+  Vector2 get scaledSize => component.absoluteScaledSize;
 
   @override
   double get parentAngle => component.absoluteAngle;

@@ -10,7 +10,7 @@ class SquareComponent extends RectangleComponent with EffectsHelper {
     Paint? paint,
     int priority = 0,
   }) : super(
-          Vector2.all(size),
+          size: Vector2.all(size),
           position: position,
           paint: paint,
           priority: priority,

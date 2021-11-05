@@ -4,7 +4,7 @@ import 'package:flame/game.dart';
 import '../../commons/commons.dart';
 import 'circles.dart';
 import 'multiple_shapes.dart';
-import 'only_shapes.dart';
+import 'simple_shapes.dart';
 
 void addCollisionDetectionStories(Dashbook dashbook) {
   dashbook.storiesOf('Collision Detection')
@@ -22,8 +22,8 @@ void addCollisionDetectionStories(Dashbook dashbook) {
     )
     ..add(
       'Simple Shapes',
-      (_) => GameWidget(game: OnlyShapes()),
-      codeLink: baseLink('collision_detection/only_shapes.dart'),
+      (_) => GameWidget(game: SimpleShapes()),
+      codeLink: baseLink('collision_detection/simple_shapes.dart'),
       info: onlyShapesInfo,
     );
 }

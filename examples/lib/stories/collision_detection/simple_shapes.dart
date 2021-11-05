@@ -18,8 +18,7 @@ one.
 
 enum Shapes { circle, rectangle, polygon }
 
-class OnlyShapes extends FlameGame with HasTappableComponents {
-  final shapePaint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
+class SimpleShapes extends FlameGame with HasTappableComponents {
   final _rng = Random();
 
   @override
@@ -28,17 +27,25 @@ class OnlyShapes extends FlameGame with HasTappableComponents {
     camera.zoom = 2;
   }
 
-  Shape randomShape(Vector2 position) {
+  MyShapeComponent randomShape(Vector2 position) {
     final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
-    const size = 50.0;
+    final shapeSize =
+        Vector2.all(25) + Vector2.all(50.0).scaled(_rng.nextDouble());
+    final shapeAngle = _rng.nextDouble() * 6;
     switch (shapeType) {
       case Shapes.circle:
-        return Circle(radius: size / 2, position: position);
-      case Shapes.rectangle:
-        return Rectangle(
+        return MyShapeComponent(
+          HitboxCircle(),
           position: position,
-          size: Vector2.all(size),
-          angle: _rng.nextDouble() * 6,
+          size: shapeSize,
+          angle: shapeAngle,
+        );
+      case Shapes.rectangle:
+        return MyShapeComponent(
+          HitboxRectangle(),
+          position: position,
+          size: shapeSize,
+          angle: shapeAngle,
         );
       case Shapes.polygon:
         final points = [
@@ -47,11 +54,11 @@ class OnlyShapes extends FlameGame with HasTappableComponents {
           -Vector2.random(_rng),
           Vector2.random(_rng)..x *= -1,
         ];
-        return Polygon.fromDefinition(
-          points,
+        return MyShapeComponent(
+          HitboxPolygon(points),
           position: position,
-          size: Vector2.all(size),
-          angle: _rng.nextDouble() * 6,
+          size: shapeSize,
+          angle: shapeAngle,
         );
     }
   }
@@ -60,14 +67,14 @@ class OnlyShapes extends FlameGame with HasTappableComponents {
   void onTapDown(int pointerId, TapDownInfo info) {
     super.onTapDown(pointerId, info);
     final tapDownPoint = info.eventPosition.game;
-    final component = MyShapeComponent(randomShape(tapDownPoint), shapePaint);
+    final component = randomShape(tapDownPoint);
     add(component);
-    component.add(MoveEffect(
-      path: [size / 2],
-      speed: 30,
-      isAlternating: true,
-      isInfinite: true,
-    ));
+    //component.add(MoveEffect(
+    //  path: [size / 2],
+    //  speed: 30,
+    //  isAlternating: true,
+    //  isInfinite: true,
+    //));
     component.add(RotateEffect(
       angle: 3,
       speed: 0.4,
@@ -78,8 +85,20 @@ class OnlyShapes extends FlameGame with HasTappableComponents {
 }
 
 class MyShapeComponent extends ShapeComponent with Tappable {
-  MyShapeComponent(Shape shape, Paint shapePaint)
-      : super(shape, paint: shapePaint);
+  @override
+  final Paint paint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
+
+  MyShapeComponent(
+    HitboxShape shape, {
+    Vector2? position,
+    Vector2? size,
+    double? angle,
+  }) : super(
+          shape,
+          position: position,
+          size: size,
+          angle: angle,
+        );
 
   @override
   bool onTapDown(TapDownInfo _) {

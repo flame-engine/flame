@@ -137,7 +137,7 @@ class CollidablePolygon extends MyCollidable {
     Vector2 velocity,
     ScreenCollidable screenCollidable,
   ) : super(position, size, velocity, screenCollidable) {
-    final shape = HitboxPolygon([
+    final hitbox = HitboxPolygon([
       Vector2(-1.0, 0.0),
       Vector2(-0.8, 0.6),
       Vector2(0.0, 1.0),
@@ -147,7 +147,7 @@ class CollidablePolygon extends MyCollidable {
       Vector2(0, -1.0),
       Vector2(-0.8, -0.8),
     ]);
-    addHitbox(shape);
+    addHitbox(hitbox);
   }
 }
 
@@ -169,8 +169,7 @@ class CollidableCircle extends MyCollidable {
     Vector2 velocity,
     ScreenCollidable screenCollidable,
   ) : super(position, size, velocity, screenCollidable) {
-    final shape = HitboxCircle();
-    addHitbox(shape);
+    addHitbox(HitboxCircle());
   }
 }
 
@@ -179,7 +178,7 @@ class SnowmanPart extends HitboxCircle {
   final hitPaint = Paint();
 
   SnowmanPart(double definition, Vector2 relativeOffset, Color hitColor)
-      : super(definition: definition) {
+      : super(normalizedRadius: definition) {
     this.relativeOffset.setFrom(relativeOffset);
     hitPaint..color = startColor;
     onCollision = (Set<Vector2> intersectionPoints, HitboxShape other) {
@@ -288,7 +287,7 @@ class MultipleShapes extends FlameGame
     MyCollidable lastCollidable,
     ScreenCollidable screenCollidable,
   ) {
-    final collidableSize = Vector2.all(50) + Vector2.random(_rng) * 100;
+    final collidableSize = Vector2.all(50); // + Vector2.random(_rng) * 100;
     final isXOverflow = lastCollidable.position.x +
             lastCollidable.size.x / 2 +
             _distance.x +
