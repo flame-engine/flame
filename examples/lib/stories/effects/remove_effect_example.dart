@@ -5,7 +5,6 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/src/effects2/remove_effect.dart'; // ignore: implementation_imports
 import 'package:flutter/material.dart';
-import '../../commons/circle_component.dart';
 
 class RemoveEffectExample extends FlameGame with HasTappableComponents {
   static const description = '''
@@ -19,18 +18,24 @@ class RemoveEffectExample extends FlameGame with HasTappableComponents {
     camera.viewport = FixedResolutionViewport(Vector2(400, 600));
     final rng = Random();
     for (var i = 0; i < 20; i++) {
-      add(_RandomCircle(rng));
+      add(_RandomCircle.random(rng));
     }
   }
 }
 
 class _RandomCircle extends CircleComponent with Tappable {
-  _RandomCircle(Random rng) : super(radius: rng.nextDouble() * 30 + 10) {
-    position.setValues(
+  _RandomCircle(double radius, {Vector2? position, Paint? paint})
+      : super(radius, position: position, paint: paint);
+
+  factory _RandomCircle.random(Random rng) {
+    final radius = rng.nextDouble() * 30 + 10;
+    final position = Vector2(
       rng.nextDouble() * 320 + 40,
       rng.nextDouble() * 520 + 40,
     );
-    paint.color = Colors.primaries[rng.nextInt(Colors.primaries.length)];
+    final paint = Paint()
+      ..color = Colors.primaries[rng.nextInt(Colors.primaries.length)];
+    return _RandomCircle(radius, position: position, paint: paint);
   }
 
   @override

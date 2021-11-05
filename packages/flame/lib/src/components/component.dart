@@ -165,7 +165,7 @@ class Component with Loadable {
 
   @protected
   Vector2 eventPosition(PositionInfo info) {
-    return isHud ? info.eventPosition.widget : info.eventPosition.game;
+    return isHud ? info.eventPosition.viewportOnly : info.eventPosition.game;
   }
 
   /// Remove the component from its parent in the next tick.
@@ -223,7 +223,7 @@ class Component with Loadable {
   /// Adds multiple children.
   ///
   /// See [add] for details.
-  Future<void> addAll(List<Component> components) {
+  Future<void> addAll(Iterable<Component> components) {
     return children.addChildren(components);
   }
 

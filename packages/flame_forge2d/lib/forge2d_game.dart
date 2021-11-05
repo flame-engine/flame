@@ -59,6 +59,11 @@ class Forge2DGame extends FlameGame {
     _contactCallbacks.clear();
   }
 
-  Vector2 worldToScreen(Vector2 position) => projectVector(position);
-  Vector2 screenToWorld(Vector2 position) => unprojectVector(position);
+  Vector2 worldToScreen(Vector2 position) {
+    return projector.projectVector(position);
+  }
+
+  Vector2 screenToWorld(Vector2 position) {
+    return projector.unprojectVector(position);
+  }
 }

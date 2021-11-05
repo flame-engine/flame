@@ -63,18 +63,18 @@ class PositionComponent extends Component {
     Vector2? position,
     Vector2? size,
     Vector2? scale,
-    double angle = 0.0,
-    Anchor anchor = Anchor.topLeft,
+    double? angle,
+    Anchor? anchor,
     int? priority,
   })  : transform = Transform2D(),
-        _anchor = anchor,
+        _anchor = anchor ?? Anchor.topLeft,
         _size = NotifyingVector2.copy(size ?? Vector2.zero()),
         super(priority: priority) {
     if (position != null) {
       transform.position = position;
     }
     if (angle != 0) {
-      transform.angle = angle;
+      transform.angle = angle ?? 0;
     }
     if (scale != null) {
       transform.scale = scale;
@@ -144,7 +144,7 @@ class PositionComponent extends Component {
   /// This property can be reassigned at runtime, although this is not
   /// recommended. Instead, in order to make the [PositionComponent] larger
   /// or smaller, change its [scale].
-  Vector2 get size => _size;
+  NotifyingVector2 get size => _size;
   set size(Vector2 size) => _size.setFrom(size);
 
   /// The width of the component in local coordinates. Note that the object
