@@ -166,6 +166,31 @@ class PositionComponent extends Component {
   Vector2 get scaledSize =>
       Vector2(width * scale.x.abs(), height * scale.y.abs());
 
+  final _totalScale = Vector2.zero();
+
+  /// The resulting scale after all the ancestors and the components own scale
+  /// has been applied.
+  Vector2 get absoluteScale {
+    _totalScale.setValues(scale.x.abs(), scale.y.abs());
+    ancestors().whereType<PositionComponent>().forEach((c) {
+      _totalScale..x *= c.scale.x.abs();
+      _totalScale..y *= c.scale.y.abs();
+    });
+    return _totalScale;
+  }
+
+  /// The size of the component after all ancestors and the components own
+  /// scale has been multiplied with its [size].
+  Vector2 get absoluteScaledSize => absoluteScale..multiply(size);
+
+  /// The resulting angle after all the ancestors and the components own angle
+  /// has been applied.
+  double get absoluteAngle {
+    return ancestors()
+        .whereType<PositionComponent>()
+        .fold<double>(angle, (totalAngle, c) => totalAngle + c.angle);
+  }
+
   /// Measure the distance (in parent's coordinate space) between this
   /// component's anchor and the [other] component's anchor.
   double distance(PositionComponent other) =>

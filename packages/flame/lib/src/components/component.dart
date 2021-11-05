@@ -176,6 +176,20 @@ class Component with Loadable {
     nextParent = component;
   }
 
+  final List<Component> _ancestors = [];
+
+  /// A list containing the current parent and its parent, and so on, until it
+  /// reaches a component without a parent.
+  List<Component> ancestors() {
+    _ancestors.clear();
+    for (var currentParent = parent;
+        currentParent != null;
+        currentParent = currentParent.parent) {
+      _ancestors.add(currentParent);
+    }
+    return _ancestors;
+  }
+
   /// It receives the new game size.
   /// Executed right after the component is attached to a game and right before
   /// [onLoad] is called.
