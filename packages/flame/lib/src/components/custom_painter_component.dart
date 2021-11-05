@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../../components.dart';
 import '../extensions/vector2.dart';
 import 'position_component.dart';
 
@@ -19,10 +20,16 @@ class CustomPainterComponent extends PositionComponent {
     this.painter,
     Vector2? position,
     Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
     int? priority,
   }) : super(
           position: position,
           size: size,
+          scale: scale,
+          angle: angle,
+          anchor: anchor,
           priority: priority,
         );
 

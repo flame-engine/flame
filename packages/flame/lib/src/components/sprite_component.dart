@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 
+import '../../components.dart';
 import '../extensions/image.dart';
 import '../extensions/vector2.dart';
 import '../sprite.dart';
@@ -22,14 +23,20 @@ class SpriteComponent extends PositionComponent with HasPaint {
 
   /// Creates a component with an empty sprite which can be set later
   SpriteComponent({
-    Vector2? position,
-    Vector2? size,
-    int? priority,
     this.sprite,
     Paint? paint,
+    Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
+    int? priority,
   }) : super(
           position: position,
           size: size ?? sprite?.srcSize,
+          scale: scale,
+          angle: angle,
+          anchor: anchor,
           priority: priority,
         ) {
     if (paint != null) {
@@ -37,22 +44,29 @@ class SpriteComponent extends PositionComponent with HasPaint {
     }
   }
 
-  factory SpriteComponent.fromImage(
+  SpriteComponent.fromImage(
     Image image, {
-    Vector2? position,
-    Vector2? size,
     Vector2? srcPosition,
     Vector2? srcSize,
-  }) =>
-      SpriteComponent(
-        position: position,
-        size: size ?? srcSize ?? image.size,
-        sprite: Sprite(
-          image,
-          srcPosition: srcPosition,
-          srcSize: srcSize,
-        ),
-      );
+    Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
+    int? priority,
+  }) : this(
+          sprite: Sprite(
+            image,
+            srcPosition: srcPosition,
+            srcSize: srcSize,
+          ),
+          position: position,
+          size: size ?? srcSize ?? image.size,
+          scale: scale,
+          angle: angle,
+          anchor: anchor,
+          priority: priority,
+        );
 
   @mustCallSuper
   @override
