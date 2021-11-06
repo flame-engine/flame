@@ -165,7 +165,7 @@ class Component with Loadable {
 
   @protected
   Vector2 eventPosition(PositionInfo info) {
-    return isHud ? info.eventPosition.widget : info.eventPosition.game;
+    return isHud ? info.eventPosition.viewportOnly : info.eventPosition.game;
   }
 
   /// Remove the component from its parent in the next tick.

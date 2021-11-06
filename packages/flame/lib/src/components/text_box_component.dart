@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart' hide Image;
 
+import '../../components.dart';
 import '../extensions/vector2.dart';
 import '../palette.dart';
 import '../text.dart';
@@ -73,14 +74,23 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     String text, {
     T? textRenderer,
     TextBoxConfig? boxConfig,
-    Vector2? position,
-    int? priority,
     double? pixelRatio,
+    Vector2? position,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
+    int? priority,
   })  : _text = text,
         _boxConfig = boxConfig ?? TextBoxConfig(),
         _textRenderer = textRenderer ?? TextRenderer.createDefault<T>(),
         pixelRatio = pixelRatio ?? window.devicePixelRatio,
-        super(position: position, priority: priority) {
+        super(
+          position: position,
+          scale: scale,
+          angle: angle,
+          anchor: anchor,
+          priority: priority,
+        ) {
     _lines = [];
     double? lineHeight;
     text.split(' ').forEach((word) {

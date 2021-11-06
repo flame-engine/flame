@@ -24,7 +24,7 @@ import 'loadable.dart';
 /// methods to use it in a `GameWidget`.
 /// Flame will deal with calling these methods properly when the game's widget
 /// is rendered.
-mixin Game on Loadable implements Projector {
+mixin Game on Loadable {
   final images = Images();
   final assets = AssetsCache();
 
@@ -157,17 +157,13 @@ mixin Game on Loadable implements Projector {
     return _gameRenderBox!.localToGlobal(point.toOffset()).toVector2();
   }
 
-  @override
-  Vector2 unprojectVector(Vector2 vector) => vector;
+  /// This is the projector used by non-isHUD components.
+  /// This can be overriden on your [Game] implementation.
+  Projector projector = IdentityProjector();
 
-  @override
-  Vector2 projectVector(Vector2 vector) => vector;
-
-  @override
-  Vector2 unscaleVector(Vector2 vector) => vector;
-
-  @override
-  Vector2 scaleVector(Vector2 vector) => vector;
+  /// This is the projector used by isHUD components.
+  /// This can be overriden on your [Game] implementation.
+  Projector viewportProjector = IdentityProjector();
 
   /// Utility method to load and cache the image for a sprite based on its
   /// options.
