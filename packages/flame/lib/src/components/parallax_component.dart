@@ -14,27 +14,33 @@ import 'position_component.dart';
 extension ParallaxComponentExtension on FlameGame {
   Future<ParallaxComponent> loadParallaxComponent(
     List<ParallaxData> dataList, {
-    Vector2? size,
     Vector2? baseVelocity,
     Vector2? velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
+    Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
     int? priority,
   }) async {
-    final component = await ParallaxComponent.load(
+    return ParallaxComponent.load(
       dataList,
-      size: size,
       baseVelocity: baseVelocity,
       velocityMultiplierDelta: velocityMultiplierDelta,
       repeat: repeat,
       alignment: alignment,
       fill: fill,
       images: images,
+      position: position,
+      size: size,
+      scale: scale,
+      angle: angle,
+      anchor: anchor,
       priority: priority,
     );
-
-    return component;
   }
 }
 
@@ -55,22 +61,36 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
   ParallaxComponent({
     Vector2? position,
     Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
     int? priority,
-  }) : super(position: position, size: size, priority: priority) {
-    if (size != null) {
-      isFullscreen = false;
-    }
-  }
+  })  : isFullscreen = size == null ? true : false,
+        super(
+          position: position,
+          size: size,
+          scale: scale,
+          angle: angle,
+          anchor: anchor,
+          priority: priority,
+        );
 
   /// Creates a component from a [Parallax] object.
   factory ParallaxComponent.fromParallax(
     Parallax parallax, {
     Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
     int? priority,
   }) {
     return ParallaxComponent(
       position: position,
-      size: parallax.isSized ? parallax.size : null,
+      size: size ?? (parallax.isSized ? parallax.size : null),
+      scale: scale,
+      angle: angle,
+      anchor: anchor,
       priority: priority,
     )..parallax = parallax;
   }
@@ -121,16 +141,20 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
   /// If no image cache is set, the global flame cache is used.
   static Future<ParallaxComponent> load(
     List<ParallaxData> dataList, {
-    Vector2? size,
     Vector2? baseVelocity,
     Vector2? velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
     Images? images,
+    Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
     int? priority,
   }) async {
-    final component = ParallaxComponent.fromParallax(
+    return ParallaxComponent.fromParallax(
       await Parallax.load(
         dataList,
         size: size,
@@ -141,13 +165,12 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
         fill: fill,
         images: images,
       ),
+      position: position,
+      size: size,
+      scale: scale,
+      angle: angle,
+      anchor: anchor,
       priority: priority,
     );
-
-    if (size != null) {
-      component.size.setFrom(size);
-    }
-
-    return component;
   }
 }
