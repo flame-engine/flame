@@ -3,6 +3,10 @@ description: A minimalist Flutter game engine, provides a nice set of somewhat i
 version: 1.0.0-releasecandidate.16
 homepage: https://github.com/flame-engine/flame
 
+environment:
+  sdk: ">=2.14.0 <3.0.0"
+  flutter: ">=2.5.0"
+
 dependencies:
   flutter:
     sdk: flutter
@@ -21,10 +25,3 @@ dev_dependencies:
     path: ../flame_test
   flame_lint:
     path: ../flame_lint
-
-environment:
-  sdk: ">=2.14.0 <3.0.0"
-  flutter: ">=2.5.0"
-
-flutter:
-  uses-material-design: false
