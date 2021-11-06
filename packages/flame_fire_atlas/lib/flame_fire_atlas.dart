@@ -38,11 +38,11 @@ class Selection {
 
   factory Selection.fromJson(Map<String, dynamic> json) {
     return Selection(
-      id: json['id'],
-      x: json['x'],
-      y: json['y'],
-      w: json['w'],
-      h: json['h'],
+      id: json['id'] as String,
+      x: json['x'] as int,
+      y: json['y'] as int,
+      w: json['w'] as int,
+      h: json['h'] as int,
     );
   }
 }
@@ -104,9 +104,9 @@ class AnimationSelection extends BaseSelection {
 
     return AnimationSelection(
       info: info,
-      frameCount: json['frameCount'],
-      stepTime: json['stepTime'],
-      loop: json['loop'],
+      frameCount: json['frameCount'] as int,
+      stepTime: json['stepTime'] as double,
+      loop: json['loop'] as bool,
     );
   }
 
@@ -163,7 +163,7 @@ class FireAtlas {
       selectionsJson[entry.key] = entry.value.toJson();
     });
 
-    final Map<String, dynamic> json = {}
+    final json = <String, dynamic>{}
       ..['id'] = id
       ..['imageData'] = imageData
       ..['selections'] = selectionsJson
@@ -174,18 +174,23 @@ class FireAtlas {
   }
 
   static FireAtlas _fromJson(Map<String, dynamic> json) {
+    final tileHeight = json['tileHeight'] as num?;
+    final tileWidth = json['tileWidth'] as num?;
+    final tileSize = json['tileSize'] as num? ?? 0;
+
     final atlas = FireAtlas(
-      id: json['id'],
-      imageData: json['imageData'],
-      tileHeight:
-          json['tileHeight']?.toDouble() ?? json['tileSize']?.toDouble(),
-      tileWidth: json['tileWidth']?.toDouble() ?? json['tileSize']?.toDouble(),
+      id: json['id'] as String,
+      imageData: json['imageData'] as String?,
+      tileHeight: (tileHeight ?? tileSize).toDouble(),
+      tileWidth: (tileWidth ?? tileSize).toDouble(),
     );
 
-    json['selections'].entries.forEach((entry) {
-      BaseSelection selection = entry.value['type'] == 'animation'
-          ? AnimationSelection.fromJson(entry.value)
-          : SpriteSelection.fromJson(entry.value);
+    final selections = json['selections'] as Map<String, dynamic>;
+    selections.entries.forEach((entry) {
+      final value = entry.value as Map<String, dynamic>;
+      final selection = value['type'] == 'animation'
+          ? AnimationSelection.fromJson(value)
+          : SpriteSelection.fromJson(value);
 
       atlas.selections[entry.key] = selection;
     });
@@ -194,8 +199,11 @@ class FireAtlas {
   }
 
   /// Load the FireAtlas from an asset
-  static Future<FireAtlas> loadAsset(String fileName,
-      {AssetsCache? assets, Images? images}) async {
+  static Future<FireAtlas> loadAsset(
+    String fileName, {
+    AssetsCache? assets,
+    Images? images,
+  }) async {
     final _assets = assets ?? Flame.assets;
 
     final bytes = await _assets.readBinaryFile(fileName);
@@ -205,10 +213,10 @@ class FireAtlas {
   }
 
   List<int> serialize() {
-    String raw = jsonEncode(toJson());
+    final raw = jsonEncode(toJson());
 
-    List<int> stringBytes = utf8.encode(raw);
-    List<int>? gzipBytes = GZipEncoder().encode(stringBytes);
+    final stringBytes = utf8.encode(raw);
+    final gzipBytes = GZipEncoder().encode(stringBytes);
 
     if (gzipBytes == null) {
       throw 'Generated an empty file';
@@ -219,7 +227,7 @@ class FireAtlas {
   static FireAtlas deserialize(List<int> bytes) {
     final unzipedBytes = GZipDecoder().decodeBytes(bytes);
     final unzipedString = utf8.decode(unzipedBytes);
-    return _fromJson(jsonDecode(unzipedString));
+    return _fromJson(jsonDecode(unzipedString) as Map<String, dynamic>);
   }
 
   Image _assertImageLoaded() {
@@ -238,7 +246,7 @@ class FireAtlas {
       throw 'There is no selection with the id "$selectionId" on this atlas';
     }
 
-    if (!(selection is SpriteSelection)) {
+    if (selection is! SpriteSelection) {
       throw 'Selection "$selectionId" is not a Sprite';
     }
 
@@ -266,7 +274,7 @@ class FireAtlas {
     if (selection == null) {
       throw 'There is no selection with the id "$selectionId" on this atlas';
     }
-    if (!(selection is AnimationSelection)) {
+    if (selection is! AnimationSelection) {
       throw 'Selection "$selectionId" is not an Animation';
     }
 

@@ -34,7 +34,7 @@ Future<FireAtlas> readTestAtlas() async {
   final assetsMock = AssetsCacheMock();
 
   when(() => assetsMock.readBinaryFile('cave.fa')).thenAnswer((_) async {
-    return await readExampleFile();
+    return readExampleFile();
   });
 
   final imagesMock = ImagesMock();
@@ -64,7 +64,7 @@ void main() {
       final assetsMock = AssetsCacheMock();
 
       when(() => assetsMock.readBinaryFile('cave.fa')).thenAnswer((_) async {
-        return await readExampleFile();
+        return readExampleFile();
       });
 
       final imagesMock = ImagesMock();
@@ -95,7 +95,8 @@ void main() {
       expect(
         () => atlas.getSprite('bla'),
         throwsA(
-            equals('There is no selection with the id "bla" on this atlas')),
+          equals('There is no selection with the id "bla" on this atlas'),
+        ),
       );
     });
 
@@ -120,7 +121,8 @@ void main() {
       expect(
         () => atlas.getAnimation('bla'),
         throwsA(
-            equals('There is no selection with the id "bla" on this atlas')),
+          equals('There is no selection with the id "bla" on this atlas'),
+        ),
       );
     });
 
@@ -148,22 +150,24 @@ void main() {
       expect(copy.id, atlas.id);
     });
 
-    test('Uses the game images and assets when loading from the game',
-        () async {
-      final game = MockedGame();
+    test(
+      'Uses the game images and assets when loading from the game',
+      () async {
+        final game = MockedGame();
 
-      when(() => game.assets.readBinaryFile('cave.fa')).thenAnswer((_) async {
-        return await readExampleFile();
-      });
+        when(() => game.assets.readBinaryFile('cave.fa')).thenAnswer((_) async {
+          return readExampleFile();
+        });
 
-      when(() => game.images.fromBase64(any(), any())).thenAnswer((_) async {
-        return ImageMock();
-      });
+        when(() => game.images.fromBase64(any(), any())).thenAnswer((_) async {
+          return ImageMock();
+        });
 
-      await game.loadFireAtlas('cave.fa');
+        await game.loadFireAtlas('cave.fa');
 
-      verify(() => game.assets.readBinaryFile(any())).called(1);
-      verify(() => game.images.fromBase64(any(), any())).called(1);
-    });
+        verify(() => game.assets.readBinaryFile(any())).called(1);
+        verify(() => game.images.fromBase64(any(), any())).called(1);
+      },
+    );
   });
 }
