@@ -165,7 +165,7 @@ You can also check more complete examples
 
 ## Tappable, Draggable and Hoverable components
 
-Any component derived from `BaseComponent` (most components) can add the `Tappable`, the
+Any component derived from `Component` (most components) can add the `Tappable`, the
 `Draggable`, and/or the `Hoverable` mixins to handle taps, drags and hovers on the component.
 
 All overridden methods return a boolean to control if the event should be passed down further along
