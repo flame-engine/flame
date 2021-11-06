@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
@@ -31,10 +30,9 @@ class ParentWithReorderSpy extends Component {
 
 void main() {
   group('priority test', () {
-    flameTest<FlameGame>(
+    flameGame.test(
       'components with different priorities are sorted in the list',
-      createGame: () => FlameGame(),
-      verify: (game) {
+      (game) {
         final priorityComponents =
             List.generate(10, (i) => PriorityComponent(i));
         priorityComponents.shuffle();
@@ -44,10 +42,9 @@ void main() {
       },
     );
 
-    flameTest<FlameGame>(
+    flameGame.test(
       'changing priority should reorder component list',
-      createGame: () => FlameGame(),
-      verify: (game) {
+      (game) {
         final firstCompopnent = PriorityComponent(-1);
         final priorityComponents =
             List.generate(10, (i) => PriorityComponent(i))
@@ -64,10 +61,9 @@ void main() {
       },
     );
 
-    flameTest<FlameGame>(
+    flameGame.test(
       'changing priorities should reorder component list',
-      createGame: () => FlameGame(),
-      verify: (game) {
+      (game) {
         final priorityComponents =
             List.generate(10, (i) => PriorityComponent(i));
         priorityComponents.shuffle();
@@ -87,10 +83,9 @@ void main() {
       },
     );
 
-    flameTest<FlameGame>(
+    flameGame.test(
       'changing child priority should reorder component list',
-      createGame: () => FlameGame(),
-      verify: (game) {
+      (game) {
         final parentComponent = PriorityComponent(0);
         final priorityComponents =
             List.generate(10, (i) => PriorityComponent(i));
@@ -108,10 +103,9 @@ void main() {
       },
     );
 
-    flameTest<FlameGame>(
+    flameGame.test(
       'changing child priorities should reorder component list',
-      createGame: () => FlameGame(),
-      verify: (game) {
+      (game) {
         final parentComponent = PriorityComponent(0);
         final priorityComponents =
             List.generate(10, (i) => PriorityComponent(i));
@@ -133,10 +127,9 @@ void main() {
       },
     );
 
-    flameTest<FlameGame>(
+    flameGame.test(
       'changing grand child priority should reorder component list',
-      createGame: () => FlameGame(),
-      verify: (game) {
+      (game) {
         final grandParentComponent = PriorityComponent(0);
         final parentComponent = PriorityComponent(0);
         final priorityComponents =
@@ -156,10 +149,9 @@ void main() {
       },
     );
 
-    flameTest<FlameGame>(
+    flameGame.test(
       '#reorderChildren is only called once per parent per tick',
-      createGame: () => FlameGame(),
-      verify: (game) {
+      (game) {
         final a = ParentWithReorderSpy(1);
         final a1 = PriorityComponent(1);
         final a2 = PriorityComponent(2);

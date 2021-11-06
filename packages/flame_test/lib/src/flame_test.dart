@@ -119,3 +119,7 @@ class FlameTester<T extends Game> {
     );
   }
 }
+
+/// Default instance of Flame Tester to be used when you don't care about
+/// changing any configuration.
+final flameGame = FlameTester<FlameGame>(() => FlameGame());
