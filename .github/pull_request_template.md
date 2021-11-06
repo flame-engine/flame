@@ -10,7 +10,7 @@ Before you create this PR confirm that it meets all requirements listed below by
 - [ ] My PR includes unit or integration tests for *all* changed/updated/fixed behaviors and are passing (See [Contributor Guide]).
 - [ ] My PR does not decrease the code coverage, or I have __a very special case__ and explained on the PR description why this PR decreases the coverage.
 - [ ] I updated/added relevant documentation (doc comments with `///`) and updated/added examples in `doc/examples`.
-- [ ] I have formatted my code with `./scripts/format.sh` and the Flame analyzer (`./scripts/analyze.sh`) does not report any problems.
+- [ ] I have formatted my code with `flutter format` and the `flutter analyze` does not report any problems.
 - [ ] I read and followed the [Flame Style Guide].
 - [ ] I have added a description of the change under `[next]` in `CHANGELOG.md`.
 - [ ] I removed the `Draft` status, by clicking on the `Ready for review` button in this PR.
