@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import '../../components.dart';
 import '../extensions/vector2.dart';
 import '../spritesheet.dart';
 import 'position_component.dart';
@@ -43,8 +44,19 @@ class IsometricTileMapComponent extends PositionComponent {
     this.destTileSize,
     this.tileHeight,
     Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
     int? priority,
-  }) : super(position: position, priority: priority);
+  }) : super(
+          position: position,
+          size: size,
+          scale: scale,
+          angle: angle,
+          anchor: anchor,
+          priority: priority,
+        );
 
   /// This is the size the tiles will be drawn (either original or overwritten).
   Vector2 get effectiveTileSize => destTileSize ?? tileset.srcSize;
