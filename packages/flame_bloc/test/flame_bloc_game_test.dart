@@ -96,7 +96,7 @@ void main() {
         final component = InventoryComponent();
         game.add(component);
 
-        expect(component.state, equals(InventoryState.bow));
+        expect(component.state, equals(InventoryState.sword));
       },
     );
 
