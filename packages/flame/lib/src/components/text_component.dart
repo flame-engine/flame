@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
+import '../../components.dart';
 import '../extensions/vector2.dart';
 import '../text.dart';
 import 'position_component.dart';
@@ -32,9 +33,19 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
     T? textRenderer,
     Vector2? position,
     Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
     int? priority,
   })  : _textRenderer = textRenderer ?? TextRenderer.createDefault<T>(),
-        super(position: position, size: size, priority: priority) {
+        super(
+          position: position,
+          size: size,
+          scale: scale,
+          angle: angle,
+          anchor: anchor,
+          priority: priority,
+        ) {
     _updateBox();
   }
 

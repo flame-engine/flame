@@ -40,8 +40,8 @@ mixin Collidable on HasHitboxes {
       final parentGame = findParent<FlameGame>();
       assert(
         parentGame is HasCollidables,
-        'You can only use the Hitbox/Collidable feature with games that has '
-        'the HasCollidables mixin',
+        'You can only use the HasHitboxes/Collidable feature with games that '
+        'has the HasCollidables mixin',
       );
     }
   }

@@ -28,15 +28,21 @@ class HudMarginComponent<T extends FlameGame> extends PositionComponent
     this.margin,
     Vector2? position,
     Vector2? size,
-    Anchor anchor = Anchor.topLeft,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
+    int? priority,
   })  : assert(
           margin != null || position != null,
           'Either margin or position must be defined',
         ),
         super(
-          size: size,
           position: position,
+          size: size,
+          scale: scale,
+          angle: angle,
           anchor: anchor,
+          priority: priority,
         );
 
   @override

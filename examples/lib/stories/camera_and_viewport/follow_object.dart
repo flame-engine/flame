@@ -110,10 +110,13 @@ class Rock extends SquareComponent with HasHitboxes, Collidable, Tappable {
   static final unpressedPaint = Paint()..color = const Color(0xFF2222FF);
   static final pressedPaint = Paint()..color = const Color(0xFF414175);
 
-  Rock(Vector2 position) : super(priority: 2) {
-    this.position.setFrom(position);
-    size.setValues(50, 50);
-    paint = unpressedPaint;
+  Rock(Vector2 position)
+      : super(
+          position: position,
+          size: 50,
+          priority: 2,
+          paint: unpressedPaint,
+        ) {
     addHitbox(HitboxRectangle());
   }
 
