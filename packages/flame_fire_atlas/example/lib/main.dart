@@ -30,12 +30,14 @@ class ExampleGame extends FlameGame with TapDetector {
       )..y = 50,
     );
 
-    add(SpriteAnimationComponent(
-      size: Vector2(150, 100),
-      animation: _atlas.getAnimation('bomb_ptero'),
-    )
-      ..y = 50
-      ..x = 200);
+    add(
+      SpriteAnimationComponent(
+        size: Vector2(150, 100),
+        animation: _atlas.getAnimation('bomb_ptero'),
+      )
+        ..y = 50
+        ..x = 200,
+    );
 
     add(
       SpriteComponent(size: Vector2(50, 50), sprite: _atlas.getSprite('bullet'))
@@ -56,7 +58,7 @@ class ExampleGame extends FlameGame with TapDetector {
   }
 
   @override
-  void onTapUp(details) {
+  void onTapUp(TapUpInfo details) {
     add(
       SpriteAnimationComponent(
         size: Vector2(100, 100),
