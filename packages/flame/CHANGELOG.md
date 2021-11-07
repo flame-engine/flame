@@ -15,6 +15,7 @@
  - Rename `Hitbox` mixin to `HasHitboxes`
  - Added `RemoveEffect` and `SimpleEffectController`
  - Create default implementations of `RectangleComponent`, `CircleComponent` and `PolygonComponent`
+ - Streamlined the argument list for all components extending `PositionComponent`
  - Improved interaction between viewport and isHud components
 
 ## [1.0.0-releasecandidate.16]

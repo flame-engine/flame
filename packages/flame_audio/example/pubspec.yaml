@@ -21,7 +21,6 @@ dev_dependencies:
     path: ../../flame_lint
 
 flutter:
-  uses-material-design: false
   assets:
     - assets/audio/music/bg_music.ogg
     - assets/audio/sfx/fire_1.mp3

@@ -1,12 +1,13 @@
 name: flame_example
 description: A set of small game examples showcasing each feature provided by the Flame Engine.
+homepage: https://github.com/flame-engine/flame/tree/main/examples
 publish_to: 'none'
 
 version: 0.1.0
 
 environment:
-  sdk: ">=2.12.0-29.10.beta <3.0.0"
-  flutter: ">=1.24.0-10.2.pre"
+  sdk: ">=2.14.0 <3.0.0"
+  flutter: ">=2.5.0"
 
 dependencies:
   flame:

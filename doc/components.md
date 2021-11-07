@@ -45,7 +45,7 @@ lifetime. This method is executed after the initial "preparation" of the compone
 `onGameResize` and `onLoad`, but before the inclusion of the component in the parent's list of
 components.
 
-## BaseComponent
+## Component
 Usually if you are going to make your own component you want to extend `PositionComponent`, but if
 you want to be able to handle effects and child components but handle the positioning differently
 you can extend the `Component` directly.
