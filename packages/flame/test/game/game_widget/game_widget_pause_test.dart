@@ -61,15 +61,17 @@ class MyGame extends FlameGame {
   }
 }
 
-final myGame = FlameTester(
-  () => MyGame(),
-  pumpWidget: (gameWidget, tester) async {
-    await tester.pumpWidget(_Wrapper(child: gameWidget));
-  },
-);
+FlameTester<MyGame> myGame({bool paused = false}) {
+  return FlameTester(
+    () => MyGame()..paused = paused,
+    pumpWidget: (gameWidget, tester) async {
+      await tester.pumpWidget(_Wrapper(child: gameWidget));
+    },
+  );
+}
 
 void main() {
-  myGame.widgetTest(
+  myGame().widgetTest(
     'can pause the engine',
     (game, tester) async {
       // Run two frames
@@ -85,7 +87,7 @@ void main() {
     },
   );
 
-  myGame.widgetTest(
+  myGame().widgetTest(
     'can resume the engine',
     (game, tester) async {
       // Run two frames
@@ -104,7 +106,7 @@ void main() {
     },
   );
 
-  myGame.widgetTest(
+  myGame().widgetTest(
     "when paused, don't auto start after a rebuild",
     (game, tester) async {
       // Run two frames
@@ -120,8 +122,8 @@ void main() {
     },
   );
 
-  myGame.widgetTest(
-    'can started paused',
+  myGame(paused: true).widgetTest(
+    'can start paused',
     (game, tester) async {
       // Run two frames
       await tester.pump();
@@ -131,8 +133,8 @@ void main() {
     },
   );
 
-  myGame.widgetTest(
-    'can started paused and resumed later',
+  myGame(paused: true).widgetTest(
+    'can start paused and resumed later',
     (game, tester) async {
       // Run two frames
       await tester.pump();
