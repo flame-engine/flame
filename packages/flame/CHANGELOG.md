@@ -17,6 +17,8 @@
  - Create default implementations of `RectangleComponent`, `CircleComponent` and `PolygonComponent`
  - Streamlined the argument list for all components extending `PositionComponent`
  - Improved interaction between viewport and isHud components
+ - Calling super-method in `.render()` is now optional
+ - Rendering code that does canvas manipulation is now responsible for saving/restoring the canvas
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
