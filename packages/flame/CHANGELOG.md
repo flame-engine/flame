@@ -8,6 +8,7 @@
  - Removed `runOnCreation` attribute in favor of the `paused` attribute on `FlameGame`
  - Add `CustomPainterComponent`
  - Alternative implementation of `RotateEffect`, based on `Transform2DEffect`
+ - Alternative implementation of `MoveEffect`, based on `Transform2DEffect`
  - Fix `onGameResize` margin bug in `HudMarginComponent`
  - `PositionComponent.size` now returns a `NotifyingVector2`
  - Possibility to manually remove `TimerComponent`
