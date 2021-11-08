@@ -61,14 +61,19 @@ class MyGame extends FlameGame {
   }
 }
 
-void main() {
-  flameWidgetTest<MyGame>(
-    'can pause the engine',
-    createGame: () => MyGame(),
+FlameTester<MyGame> myGame({bool paused = false}) {
+  return FlameTester(
+    () => MyGame()..paused = paused,
     pumpWidget: (gameWidget, tester) async {
       await tester.pumpWidget(_Wrapper(child: gameWidget));
     },
-    verify: (game, tester) async {
+  );
+}
+
+void main() {
+  myGame().widgetTest(
+    'can pause the engine',
+    (game, tester) async {
       // Run two frames
       await tester.pump();
       await tester.pump();
@@ -82,13 +87,9 @@ void main() {
     },
   );
 
-  flameWidgetTest<MyGame>(
+  myGame().widgetTest(
     'can resume the engine',
-    createGame: () => MyGame(),
-    pumpWidget: (gameWidget, tester) async {
-      await tester.pumpWidget(_Wrapper(child: gameWidget));
-    },
-    verify: (game, tester) async {
+    (game, tester) async {
       // Run two frames
       await tester.pump();
       await tester.pump();
@@ -105,13 +106,9 @@ void main() {
     },
   );
 
-  flameWidgetTest<MyGame>(
+  myGame().widgetTest(
     "when paused, don't auto start after a rebuild",
-    createGame: () => MyGame(),
-    pumpWidget: (gameWidget, tester) async {
-      await tester.pumpWidget(_Wrapper(child: gameWidget));
-    },
-    verify: (game, tester) async {
+    (game, tester) async {
       // Run two frames
       await tester.pump();
       await tester.pump();
@@ -125,13 +122,9 @@ void main() {
     },
   );
 
-  flameWidgetTest<MyGame>(
-    'can started paused',
-    createGame: () => MyGame()..paused = true,
-    pumpWidget: (gameWidget, tester) async {
-      await tester.pumpWidget(_Wrapper(child: gameWidget));
-    },
-    verify: (game, tester) async {
+  myGame(paused: true).widgetTest(
+    'can start paused',
+    (game, tester) async {
       // Run two frames
       await tester.pump();
       await tester.pump();
@@ -140,13 +133,9 @@ void main() {
     },
   );
 
-  flameWidgetTest<MyGame>(
-    'can started paused and resumed later',
-    createGame: () => MyGame()..paused = true,
-    pumpWidget: (gameWidget, tester) async {
-      await tester.pumpWidget(_Wrapper(child: gameWidget));
-    },
-    verify: (game, tester) async {
+  myGame(paused: true).widgetTest(
+    'can start paused and resumed later',
+    (game, tester) async {
       // Run two frames
       await tester.pump();
       await tester.pump();

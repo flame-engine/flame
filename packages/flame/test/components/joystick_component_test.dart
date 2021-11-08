@@ -8,6 +8,8 @@ import 'package:test/test.dart';
 
 class TestGame extends FlameGame with HasDraggableComponents {}
 
+final testGame = FlameTester(() => TestGame());
+
 void main() {
   group('JoystickDirection tests', () {
     test('Can convert angle to JoystickDirection', () {
@@ -41,10 +43,9 @@ void main() {
   });
 
   group('Joystick input tests', () {
-    flameTest<TestGame>(
-      'Knob should stay on correct side when the total delta is larger than the size and then the knob is moved slightly back again',
-      createGame: () => TestGame(),
-      verify: (game) async {
+    testGame.test(
+      'knob should stay on correct side when the total delta is larger than the size and then the knob is moved slightly back again',
+      (game) async {
         final joystick = JoystickComponent(
           knob: Circle(radius: 5.0).toComponent(),
           size: 20,

@@ -2,7 +2,6 @@ import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/effects2/effect_controller.dart';
 import 'package:flame/src/effects2/standard_effect_controller.dart';
 import 'package:flame/src/effects2/transform2d_effect.dart';
-import 'package:flame/src/game/flame_game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -12,10 +11,9 @@ class MyEffect extends Transform2DEffect {
 
 void main() {
   group('Transform2DEffect', () {
-    flameTest<FlameGame>(
+    flameGame.test(
       'onMount',
-      createGame: () => FlameGame(),
-      verify: (game) {
+      (game) {
         final obj = PositionComponent();
         game.add(obj);
         game.update(0);

@@ -65,14 +65,19 @@ class MyGame extends FlameGame {
   }
 }
 
-void main() {
-  flameWidgetTest<MyGame>(
-    'calls onAttach when it enters the tree and onDetach and it leaves',
-    createGame: () => MyGame(),
+FlameTester<MyGame> myGame({required bool open}) {
+  return FlameTester(
+    () => MyGame(),
     pumpWidget: (gameWidget, tester) async {
-      await tester.pumpWidget(_Wrapper(child: gameWidget));
+      await tester.pumpWidget(_Wrapper(child: gameWidget, open: open));
     },
-    verify: (game, tester) async {
+  );
+}
+
+void main() {
+  myGame(open: false).widgetTest(
+    'calls onAttach when it enters the tree and onDetach and it leaves',
+    (game, tester) async {
       expect(game.onAttachCalled, isFalse);
 
       await tester.tap(find.text('Toggle'));
@@ -90,18 +95,9 @@ void main() {
       expect(game.onDettachCalled, isTrue);
     },
   );
-  flameWidgetTest<MyGame>(
+  myGame(open: true).widgetTest(
     'size is kept on game after a detach',
-    createGame: () => MyGame(),
-    pumpWidget: (gameWidget, tester) async {
-      await tester.pumpWidget(
-        _Wrapper(
-          child: gameWidget,
-          open: true,
-        ),
-      );
-    },
-    verify: (game, tester) async {
+    (game, tester) async {
       expect(game.hasLayout, isTrue);
 
       await tester.tap(find.text('Toggle'));
