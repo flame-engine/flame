@@ -150,8 +150,8 @@ class Component with Loadable {
   @protected
   void preRender(Canvas canvas) {}
 
-  /// A render cycle callback that runs after the component has been
-  /// rendered, but before any children has been rendered.
+  /// A render cycle callback that runs after the component and its children
+  /// has been rendered.
   @protected
   void postRender(Canvas canvas) {}
 
