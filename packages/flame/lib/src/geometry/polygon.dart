@@ -42,7 +42,6 @@ class Polygon extends Shape {
     final halfSize = (boundingRect.bottomRight - centerOffset).toVector2();
     final definition =
         points.map<Vector2>((v) => (v - center)..divide(halfSize)).toList();
-    print(definition);
     return Polygon.fromDefinition(
       definition,
       position: center,
@@ -55,7 +54,8 @@ class Polygon extends Shape {
   /// percentages of the size of the shape.
   /// Example: [[1.0, 0.0], [0.0, 1.0], [-1.0, 0.0], [0.0, -1.0]]
   /// This will form a diamond shape within the bounding size box.
-  /// NOTE: Always define your shape in a clockwise fashion
+  /// NOTE: Always define your shape in a counter-clockwise fashion (in the
+  /// screen coordinate system).
   Polygon.fromDefinition(
     this.normalizedVertices, {
     Vector2? position,
@@ -113,7 +113,6 @@ class Polygon extends Shape {
     }
     if (!_cachedScaledVertices.isCacheValid([size, scale])) {
       final sizedVertices = this.sizedVertices();
-      print('Sized vertices $sizedVertices');
       var i = 0;
       for (final point in sizedVertices) {
         _scaledVertices[i]
@@ -180,7 +179,7 @@ class Polygon extends Shape {
       }
       _cachedHitbox.updateCache(
         _hitboxVertices,
-        [absoluteCenter, size.clone(), scale, parentAngle, angle],
+        [absoluteCenter, size.clone(), scale.clone(), parentAngle, angle],
       );
     }
     return _cachedHitbox.value!;
@@ -194,6 +193,7 @@ class Polygon extends Shape {
     if (size.x == 0 || size.y == 0) {
       return false;
     }
+    print('Tap down: $point');
 
     final vertices = hitbox();
     for (var i = 0; i < vertices.length; i++) {

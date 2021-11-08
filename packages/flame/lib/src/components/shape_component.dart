@@ -23,11 +23,6 @@ class ShapeComponent extends PositionComponent with HasHitboxes {
   @override
   final Anchor anchor = Anchor.center;
 
-  @override
-  set angle(double a) {
-    super.angle = shape.angle = a;
-  }
-
   ShapeComponent(
     this.shape, {
     Paint? paint,

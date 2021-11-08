@@ -21,18 +21,10 @@ enum Shapes { circle, rectangle, polygon }
 class SimpleShapes extends FlameGame with HasTappableComponents {
   final _rng = Random();
 
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    camera.zoom = 2;
-    //debugMode = true;
-  }
-
   MyShapeComponent randomShape(Vector2 position) {
-    //final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
-    final shapeType = Shapes.rectangle;
+    final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
     final shapeSize =
-        Vector2.all(25) + Vector2.all(50.0).scaled(_rng.nextDouble());
+        Vector2.all(50) + Vector2.all(50.0).scaled(_rng.nextDouble());
     final shapeAngle = _rng.nextDouble() * 6;
     switch (shapeType) {
       case Shapes.circle:
@@ -71,12 +63,12 @@ class SimpleShapes extends FlameGame with HasTappableComponents {
     final tapPosition = info.eventPosition.game;
     final component = randomShape(tapPosition);
     add(component);
-    //component.add(MoveEffect(
-    //  path: [size / 2],
-    //  speed: 30,
-    //  isAlternating: true,
-    //  isInfinite: true,
-    //));
+    component.add(MoveEffect(
+      path: [size / 2],
+      speed: 30,
+      isAlternating: true,
+      isInfinite: true,
+    ));
     component.add(RotateEffect(
       angle: 3,
       speed: 0.4,
