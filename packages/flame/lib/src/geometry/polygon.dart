@@ -1,14 +1,15 @@
-import 'dart:math';
 import 'dart:ui' hide Canvas;
 
 import '../../game.dart';
 import '../../geometry.dart';
 import '../components/cache/value_cache.dart';
 import '../extensions/canvas.dart';
+import '../extensions/offset.dart';
 import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
 import 'shape.dart';
 
+// TODO(spydon): Migrate this to [Path]
 class Polygon extends Shape {
   final List<Vector2> normalizedVertices;
   // These lists are used to minimize the amount of objects that are created,
@@ -26,22 +27,22 @@ class Polygon extends Shape {
     List<Vector2> points, {
     double angle = 0,
   }) {
-    final center = points.fold<Vector2>(
-      Vector2.zero(),
-      (sum, v) => sum..add(v),
-    )..scale(1 / points.length);
-    final bottomRight = points.fold<Vector2>(
-      Vector2.all(double.negativeInfinity),
-      (bottomRight, v) {
-        return Vector2(
-          max(bottomRight.x, v.x),
-          max(bottomRight.y, v.y),
-        );
-      },
+    assert(
+      points.length > 2,
+      'List of points is too short to create a polygon',
     );
-    final halfSize = bottomRight - center;
+    final path = Path()
+      ..addPolygon(
+        points.map((p) => p.toOffset()).toList(growable: false),
+        true,
+      );
+    final boundingRect = path.getBounds();
+    final centerOffset = boundingRect.center;
+    final center = centerOffset.toVector2();
+    final halfSize = (boundingRect.bottomRight - centerOffset).toVector2();
     final definition =
         points.map<Vector2>((v) => (v - center)..divide(halfSize)).toList();
+    print(definition);
     return Polygon.fromDefinition(
       definition,
       position: center,
@@ -185,8 +186,8 @@ class Polygon extends Shape {
     return _cachedHitbox.value!;
   }
 
-  /// Checks whether the polygon represented by the list of [Vector2] contains
-  /// the [point].
+  /// Checks whether the polygon contains the [point].
+  /// Note: The polygon needs to be convex for this to work.
   @override
   bool containsPoint(Vector2 point) {
     // If the size is 0 then it can't contain any points
@@ -236,4 +237,7 @@ class Polygon extends Shape {
 
 class HitboxPolygon extends Polygon with HitboxShape {
   HitboxPolygon(List<Vector2> definition) : super.fromDefinition(definition);
+
+  factory HitboxPolygon.fromPolygon(Polygon polygon) =>
+      HitboxPolygon(polygon.normalizedVertices);
 }
