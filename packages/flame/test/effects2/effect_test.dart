@@ -2,7 +2,6 @@ import 'package:flame/src/components/component.dart';
 import 'package:flame/src/effects2/effect.dart';
 import 'package:flame/src/effects2/effect_controller.dart';
 import 'package:flame/src/effects2/standard_effect_controller.dart';
-import 'package:flame/src/game/flame_game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -79,10 +78,9 @@ void main() {
       expect(effect.x, closeTo(1, 1e-15));
     });
 
-    flameTest<FlameGame>(
+    flameGame.test(
       'removeOnFinish = true',
-      createGame: () => FlameGame(),
-      verify: (game) {
+      (game) {
         final obj = Component();
         game.add(obj);
         final effect = MyEffect(StandardEffectController(duration: 1));
@@ -101,10 +99,9 @@ void main() {
       },
     );
 
-    flameTest<FlameGame>(
+    flameGame.test(
       'removeOnFinish = false',
-      createGame: () => FlameGame(),
-      verify: (game) {
+      (game) {
         final obj = Component();
         game.add(obj);
         final effect = MyEffect(StandardEffectController(duration: 1));

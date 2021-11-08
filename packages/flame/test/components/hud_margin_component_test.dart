@@ -6,10 +6,9 @@ import 'package:test/test.dart';
 
 void main() async {
   group('HudMarginComponent test', () {
-    flameTest<FlameGame>(
+    flameGame.test(
       'position set from margin should change onGameResize',
-      createGame: () => FlameGame(),
-      verify: (game) async {
+      (game) async {
         final marginComponent = HudMarginComponent(
           margin: const EdgeInsets.only(right: 10, bottom: 20),
           size: Vector2.all(20),
