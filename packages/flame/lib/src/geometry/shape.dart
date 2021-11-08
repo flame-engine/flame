@@ -15,6 +15,8 @@ abstract class Shape {
   final ValueCache<Vector2> _localCenterCache = ValueCache();
   final ValueCache<Vector2> _absoluteCenterCache = ValueCache();
 
+  final Vector2 _identityVector2 = Vector2Extension.identity();
+
   /// Should be the center of that [offsetPosition] and [relativeOffset]
   /// should be calculated from, if they are not set this is the center of the
   /// shape
@@ -24,8 +26,8 @@ abstract class Shape {
   Vector2 size;
 
   /// The scaled size of the bounding box of the [Shape], if no scaling of the
-  /// parent is supported this should be set to null.
-  Vector2? scaledSize;
+  /// parent is supported this will return [size].
+  Vector2 get scale => _identityVector2;
 
   Vector2 get halfSize {
     if (!_halfSizeCache.isCacheValid([size])) {
@@ -129,7 +131,7 @@ mixin HitboxShape on Shape {
   Vector2 get size => component.size;
 
   @override
-  Vector2 get scaledSize => component.absoluteScaledSize;
+  Vector2 get scale => component.absoluteScale;
 
   @override
   double get parentAngle => component.absoluteAngle;

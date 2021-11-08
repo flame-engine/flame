@@ -41,11 +41,7 @@ abstract class MyCollidable extends PositionComponent
     Vector2 size,
     this.velocity,
     this.screenCollidable,
-  ) {
-    this.position = position;
-    this.size = size;
-    anchor = Anchor.center;
-  }
+  ) : super(position: position, size: size, anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
@@ -287,7 +283,7 @@ class MultipleShapes extends FlameGame
     MyCollidable lastCollidable,
     ScreenCollidable screenCollidable,
   ) {
-    final collidableSize = Vector2.all(50); // + Vector2.random(_rng) * 100;
+    final collidableSize = Vector2.all(50) + Vector2.random(_rng) * 100;
     final isXOverflow = lastCollidable.position.x +
             lastCollidable.size.x / 2 +
             _distance.x +

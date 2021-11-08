@@ -35,7 +35,16 @@ class Circle extends Shape {
   })  : normalizedRadius = relation ?? 1.0,
         super(position: position, size: size, angle: angle ?? 0);
 
-  double get radius => (min(size.x, size.y) / 2) * normalizedRadius;
+  // Used to not create new Vector2 objects every time radius is called.
+  final Vector2 _scaledSize = Vector2.zero();
+
+  /// Get the radius of the circle after it has been sized and scaled.
+  double get radius {
+    _scaledSize
+      ..setFrom(size)
+      ..multiply(scale);
+    return (min(_scaledSize.x, _scaledSize.y) / 2) * normalizedRadius;
+  }
 
   /// This render method doesn't rotate the canvas according to angle since a
   /// circle will look the same rotated as not rotated.

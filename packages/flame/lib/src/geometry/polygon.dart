@@ -25,12 +25,11 @@ class Polygon extends Shape {
     double angle = 0,
   }) {
     final center = points.fold<Vector2>(
-          Vector2.zero(),
-          (sum, v) => sum + v,
-        ) /
-        points.length.toDouble();
-    final bottomRight = points.fold<Vector2>(
       Vector2.zero(),
+      (sum, v) => sum..add(v),
+    )..scale(1 / points.length);
+    final bottomRight = points.fold<Vector2>(
+      Vector2.all(double.negativeInfinity),
       (bottomRight, v) {
         return Vector2(
           max(bottomRight.x, v.x),
@@ -92,13 +91,16 @@ class Polygon extends Shape {
   }
 
   final _cachedScaledVertices = ValueCache<Iterable<Vector2>>();
-  final _identityVector = Vector2.all(1.0);
 
   /// Gives back the shape vectors multiplied by the size and scale
   Iterable<Vector2> scaledVertices() {
-    final scale = scaledSize ?? _identityVector;
+    final scale = this.scale;
+    if (scale.isIdentity()) {
+      return sizedVertices();
+    }
     if (!_cachedScaledVertices.isCacheValid([size, scale])) {
       final sizedVertices = this.sizedVertices();
+      print('Sized vertices $sizedVertices');
       var i = 0;
       for (final point in sizedVertices) {
         _scaledVertices[i]
@@ -106,8 +108,7 @@ class Polygon extends Shape {
           ..multiply(scale);
         i++;
       }
-      _cachedScaledVertices
-          .updateCache(_scaledVertices, [size.clone(), scaledSize]);
+      _cachedScaledVertices.updateCache(_scaledVertices, [size.clone(), scale]);
     }
     return _cachedScaledVertices.value!;
   }
@@ -124,7 +125,7 @@ class Polygon extends Shape {
         _path
           ..reset()
           ..addPolygon(
-            (isCanvasPrepared ? sizedVertices() : scaledVertices()).map(
+            sizedVertices().map(
               (point) {
                 final pathPoint = center + point;
                 if (!isCanvasPrepared) {
@@ -150,11 +151,13 @@ class Polygon extends Shape {
 
   /// Gives back the vertices represented as a list of points which
   /// are the "corners" of the hitbox rotated with [angle].
+  /// These are in the global hitbox coordinate space since all hitboxes are
+  /// compared towards each other.
   List<Vector2> hitbox() {
     // Use cached bounding vertices if state of the component hasn't changed
     if (!_cachedHitbox
-        .isCacheValid([absoluteCenter, size, parentAngle, angle])) {
-      final scaledVertices = sizedVertices().toList(growable: false);
+        .isCacheValid([absoluteCenter, size, scale, parentAngle, angle])) {
+      final scaledVertices = this.scaledVertices().toList(growable: false);
       final center = absoluteCenter;
       for (var i = 0; i < _hitboxVertices.length; i++) {
         _hitboxVertices[i]
@@ -164,7 +167,7 @@ class Polygon extends Shape {
       }
       _cachedHitbox.updateCache(
         _hitboxVertices,
-        [absoluteCenter, size.clone(), parentAngle, angle],
+        [absoluteCenter, size.clone(), scale, parentAngle, angle],
       );
     }
     return _cachedHitbox.value!;

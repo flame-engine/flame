@@ -25,13 +25,15 @@ class SimpleShapes extends FlameGame with HasTappableComponents {
   Future<void> onLoad() async {
     await super.onLoad();
     camera.zoom = 2;
+    debugMode = true;
   }
 
   MyShapeComponent randomShape(Vector2 position) {
     final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
     final shapeSize =
         Vector2.all(25) + Vector2.all(50.0).scaled(_rng.nextDouble());
-    final shapeAngle = _rng.nextDouble() * 6;
+    //final shapeAngle = _rng.nextDouble() * 6;
+    final shapeAngle = 0.0;
     switch (shapeType) {
       case Shapes.circle:
         return MyShapeComponent(
@@ -66,8 +68,8 @@ class SimpleShapes extends FlameGame with HasTappableComponents {
   @override
   void onTapDown(int pointerId, TapDownInfo info) {
     super.onTapDown(pointerId, info);
-    final tapDownPoint = info.eventPosition.game;
-    final component = randomShape(tapDownPoint);
+    final tapPosition = info.eventPosition.game;
+    final component = randomShape(tapPosition);
     add(component);
     //component.add(MoveEffect(
     //  path: [size / 2],
@@ -75,12 +77,12 @@ class SimpleShapes extends FlameGame with HasTappableComponents {
     //  isAlternating: true,
     //  isInfinite: true,
     //));
-    component.add(RotateEffect(
-      angle: 3,
-      speed: 0.4,
-      isAlternating: true,
-      isInfinite: true,
-    ));
+    //component.add(RotateEffect(
+    //  angle: 3,
+    //  speed: 0.4,
+    //  isAlternating: true,
+    //  isInfinite: true,
+    //));
   }
 }
 
