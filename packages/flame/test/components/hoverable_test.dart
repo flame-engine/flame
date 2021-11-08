@@ -10,7 +10,11 @@ import 'package:test/test.dart';
 
 class _GameWithHoverables extends FlameGame with HasHoverableComponents {}
 
+final withHoverables = FlameTester(() => _GameWithHoverables());
+
 class _GameWithoutHoverables extends FlameGame {}
+
+final withoutHoverables = FlameTester(() => _GameWithoutHoverables());
 
 class HoverableComponent extends PositionComponent with Hoverable {
   int enterCount = 0;
@@ -45,10 +49,9 @@ class NonPropagatingComponent extends HoverableComponent {
 
 void main() {
   group('hoverable test', () {
-    flameTest<_GameWithHoverables>(
+    withHoverables.test(
       'make sure they cannot be added to invalid games',
-      createGame: () => _GameWithHoverables(),
-      verify: (game) async {
+      (game) async {
         // should be ok
         await game.add(HoverableComponent());
 
@@ -70,10 +73,9 @@ void main() {
       },
     );
 
-    flameTest<_GameWithHoverables>(
+    withHoverables.test(
       'single component',
-      createGame: () => _GameWithHoverables(),
-      verify: (game) async {
+      (game) async {
         final c = HoverableComponent()
           ..position = Vector2(10, 20)
           ..size = Vector2(3, 3);
@@ -116,10 +118,9 @@ void main() {
       },
     );
 
-    flameTest<_GameWithHoverables>(
+    withHoverables.test(
       'camera is respected',
-      createGame: () => _GameWithHoverables(),
-      verify: (game) async {
+      (game) async {
         final c = HoverableComponent()
           ..position = Vector2(10, 20)
           ..size = Vector2(3, 3);
@@ -140,10 +141,9 @@ void main() {
       },
     );
 
-    flameTest<_GameWithHoverables>(
+    withHoverables.test(
       'multiple components',
-      createGame: () => _GameWithHoverables(),
-      verify: (game) async {
+      (game) async {
         final a = HoverableComponent()
           ..position = Vector2(10, 0)
           ..size = Vector2(2, 20);
@@ -180,10 +180,9 @@ void main() {
       },
     );
 
-    flameTest<_GameWithHoverables>(
+    withHoverables.test(
       'composed components',
-      createGame: () => _GameWithHoverables(),
-      verify: (game) async {
+      (game) async {
         final parent = HoverableComponent()
           ..position = Vector2.all(10)
           ..size = Vector2.all(10);

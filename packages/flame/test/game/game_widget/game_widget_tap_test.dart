@@ -28,21 +28,22 @@ class DoubleTapGame extends FlameGame with DoubleTapDetector {
   }
 }
 
+final tapGame = FlameTester(() => TapGame());
+final doubleTapGame = FlameTester(() => DoubleTapGame());
+
 void main() {
   group('GameWidget - TapDetectors', () {
-    flameWidgetTest<TapGame>(
+    tapGame.widgetTest(
       'can receive taps',
-      createGame: () => TapGame(),
-      verify: (game, tester) async {
+      (game, tester) async {
         await tester.tapAt(const Offset(10, 10));
         expect(game.tapRegistered, isTrue);
       },
     );
 
-    flameWidgetTest<DoubleTapGame>(
+    doubleTapGame.widgetTest(
       'can receive double taps',
-      createGame: () => DoubleTapGame(),
-      verify: (game, tester) async {
+      (game, tester) async {
         const tapPosition = Offset(10, 10);
         await tester.tapAt(tapPosition);
         await Future<void>.delayed(const Duration(milliseconds: 50));
