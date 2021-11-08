@@ -11,11 +11,13 @@ import 'shape.dart';
 
 class Polygon extends Shape {
   final List<Vector2> normalizedVertices;
-  // These lists are used to minimize the amount of [Vector2] objects that are
-  // created, only change them if the cache is deemed invalid
+  // These lists are used to minimize the amount of objects that are created,
+  // and only change the contained object if the cache is deemed outdated.
   late final List<Vector2> _sizedVertices;
   late final List<Vector2> _scaledVertices;
   late final List<Vector2> _hitboxVertices;
+  late final List<Offset> _renderVertices;
+  late final List<LineSegment> _lineSegments;
 
   /// With this constructor you create your [Polygon] from positions in your
   /// intended space. It will automatically calculate the [size] and center
@@ -74,6 +76,16 @@ class Polygon extends Shape {
     _sizedVertices = generateList();
     _scaledVertices = generateList();
     _hitboxVertices = generateList();
+    _renderVertices = List.filled(
+      normalizedVertices.length,
+      Offset.zero,
+      growable: false,
+    );
+    _lineSegments = List.generate(
+      normalizedVertices.length,
+      (_) => LineSegment.zero(),
+      growable: false,
+    );
   }
 
   final _cachedSizedVertices = ValueCache<Iterable<Vector2>>();
@@ -121,21 +133,19 @@ class Polygon extends Shape {
     if (!_cachedRenderPath
         .isCacheValid([offsetPosition, relativeOffset, size, angle])) {
       final center = localCenter;
+      var i = 0;
+      scaledVertices().forEach((point) {
+        final pathPoint = center + point;
+        if (!isCanvasPrepared) {
+          pathPoint.rotate(angle, center: center);
+        }
+        _renderVertices[i] = pathPoint.toOffset();
+        i++;
+      });
       _cachedRenderPath.updateCache(
         _path
           ..reset()
-          ..addPolygon(
-            sizedVertices().map(
-              (point) {
-                final pathPoint = center + point;
-                if (!isCanvasPrepared) {
-                  pathPoint.rotate(angle, center: center);
-                }
-                return pathPoint.toOffset();
-              },
-            ).toList(),
-            true,
-          ),
+          ..addPolygon(_renderVertices, true),
         [
           offsetPosition.clone(),
           relativeOffset.clone(),
@@ -157,13 +167,15 @@ class Polygon extends Shape {
     // Use cached bounding vertices if state of the component hasn't changed
     if (!_cachedHitbox
         .isCacheValid([absoluteCenter, size, scale, parentAngle, angle])) {
-      final scaledVertices = this.scaledVertices().toList(growable: false);
+      final scaledVertices = this.scaledVertices();
       final center = absoluteCenter;
-      for (var i = 0; i < _hitboxVertices.length; i++) {
+      var i = 0;
+      for (final scaledVertex in scaledVertices) {
         _hitboxVertices[i]
           ..setFrom(center)
-          ..add(scaledVertices[i])
+          ..add(scaledVertex)
           ..rotate(parentAngle + angle, center: center);
+        i++;
       }
       _cachedHitbox.updateCache(
         _hitboxVertices,
@@ -211,13 +223,9 @@ class Polygon extends Shape {
   }
 
   LineSegment getEdge(int i, {required List<Vector2> vertices}) {
-    return LineSegment(
-      getVertex(i, vertices: vertices),
-      getVertex(
-        i + 1,
-        vertices: vertices,
-      ),
-    );
+    _lineSegments[i].from.setFrom(getVertex(i, vertices: vertices));
+    _lineSegments[i].to.setFrom(getVertex(i + 1, vertices: vertices));
+    return _lineSegments[i];
   }
 
   Vector2 getVertex(int i, {List<Vector2>? vertices}) {
