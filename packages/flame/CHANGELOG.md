@@ -17,6 +17,7 @@
  - Create default implementations of `RectangleComponent`, `CircleComponent` and `PolygonComponent`
  - Streamlined the argument list for all components extending `PositionComponent`
  - Improved interaction between viewport and isHud components
+ - `randomColor` method in the `Color` extension
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
