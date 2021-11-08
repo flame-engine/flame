@@ -329,7 +329,13 @@ class PositionComponent extends Component {
 
   @override
   void preRender(Canvas canvas) {
+    canvas.save();
     canvas.transform(transformMatrix.storage);
+  }
+
+  @override
+  void postRender(Canvas canvas) {
+    canvas.restore();
   }
 
   /// Returns the bounding rectangle for this component.

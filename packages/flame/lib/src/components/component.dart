@@ -131,25 +131,18 @@ class Component with Loadable {
     children.forEach((c) => c.update(dt));
   }
 
-  @mustCallSuper
-  void render(Canvas canvas) {
-    preRender(canvas);
-  }
+  void render(Canvas canvas) {}
 
-  @mustCallSuper
   void renderTree(Canvas canvas) {
+    preRender(canvas);
     render(canvas);
-    postRender(canvas);
-    children.forEach((c) {
-      canvas.save();
-      c.renderTree(canvas);
-      canvas.restore();
-    });
+    children.forEach((c) => c.renderTree(canvas));
 
     // Any debug rendering should be rendered on top of everything
     if (debugMode) {
       renderDebugMode(canvas);
     }
+    postRender(canvas);
   }
 
   /// A render cycle callback that runs before the component and its children
@@ -159,6 +152,7 @@ class Component with Loadable {
 
   /// A render cycle callback that runs after the component has been
   /// rendered, but before any children has been rendered.
+  @protected
   void postRender(Canvas canvas) {}
 
   void renderDebugMode(Canvas canvas) {}
