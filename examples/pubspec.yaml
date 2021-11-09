@@ -9,7 +9,6 @@ environment:
   sdk: ">=2.14.0 <3.0.0"
   flutter: ">=2.5.0"
 
-
 dependencies:
   flame:
     path: ../packages/flame
