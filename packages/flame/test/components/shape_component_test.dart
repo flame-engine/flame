@@ -122,6 +122,19 @@ void main() {
       );
     });
 
+    test('Horizontally flipped rectangle contains point', () {
+      final component = RectangleComponent(
+        position: Vector2.all(1.0),
+        size: Vector2.all(2.0),
+      )..flipVerticallyAroundCenter();
+      print(component.absoluteScale);
+      print((component.hitboxes[0] as Polygon).globalVertices());
+      expect(
+        component.containsPoint(Vector2(1.0, 2.1)),
+        true,
+      );
+    });
+
     test('Initially rotated CircleComponent does not contain point', () {
       final component = CircleComponent(
         radius: 1.0,

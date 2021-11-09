@@ -137,6 +137,9 @@ mixin HitboxShape on Shape {
   late PositionComponent component;
 
   @override
+  bool isCanvasPrepared = true;
+
+  @override
   Vector2 get size => component.size;
 
   @override

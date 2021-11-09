@@ -102,7 +102,7 @@ extension Vector2Extension on Vector2 {
   ///
   /// Since on a canvas/screen y is smaller the further up you go, instead of
   /// larger like on a normal coordinate system, to get an angle that is in that
-  /// coordinate system we have to flip the Y-axis of the [Vector].
+  /// coordinate system we have to flip the Y-axis of the [Vector2].
   ///
   /// Example:
   /// Up: Vector(0.0, -1.0).screenAngle == 0

@@ -15,10 +15,12 @@ class Polygon extends Shape {
   // These lists are used to minimize the amount of objects that are created,
   // and only change the contained object if the cache is deemed outdated.
   late final List<Vector2> _sizedVertices;
-  late final List<Vector2> _scaledVertices;
-  late final List<Vector2> _hitboxVertices;
+  late final List<Vector2> _transformedVertices;
   late final List<Offset> _renderVertices;
   late final List<LineSegment> _lineSegments;
+
+  final _cachedLocalVertices = ValueCache<Iterable<Vector2>>();
+  final _cachedGlobalVertices = ValueCache<List<Vector2>>();
 
   /// With this constructor you create your [Polygon] from positions in your
   /// intended space. It will automatically calculate the [size] and center
@@ -75,8 +77,7 @@ class Polygon extends Shape {
     }
 
     _sizedVertices = generateList();
-    _scaledVertices = generateList();
-    _hitboxVertices = generateList();
+    _transformedVertices = generateList();
     _renderVertices = List.filled(
       normalizedVertices.length,
       Offset.zero,
@@ -89,40 +90,66 @@ class Polygon extends Shape {
     );
   }
 
-  final _cachedSizedVertices = ValueCache<Iterable<Vector2>>();
-
   /// Gives back the shape vectors multiplied by the size
-  Iterable<Vector2> sizedVertices() {
-    if (!_cachedSizedVertices.isCacheValid([size])) {
+  Iterable<Vector2> localVertices() {
+    final center = localCenter;
+    if (!_cachedLocalVertices.isCacheValid([size, center])) {
+      final halfSize = this.halfSize;
       for (var i = 0; i < _sizedVertices.length; i++) {
         final point = normalizedVertices[i];
-        (_sizedVertices[i]..setFrom(point)).multiply(halfSize);
+        (_sizedVertices[i]..setFrom(point))
+          ..multiply(halfSize)
+          ..add(center)
+          ..rotate(angle, center: center);
       }
-      _cachedSizedVertices.updateCache(_sizedVertices, [size.clone()]);
+      _cachedLocalVertices.updateCache(_sizedVertices, [
+        size.clone(),
+        center.clone(),
+      ]);
     }
-    return _cachedSizedVertices.value!;
+    return _cachedLocalVertices.value!;
   }
 
-  final _cachedScaledVertices = ValueCache<Iterable<Vector2>>();
-
   /// Gives back the shape vectors multiplied by the size and scale
-  Iterable<Vector2> scaledVertices() {
+  List<Vector2> globalVertices() {
     final scale = this.scale;
-    if (scale.isIdentity()) {
-      return sizedVertices();
-    }
-    if (!_cachedScaledVertices.isCacheValid([size, scale])) {
-      final sizedVertices = this.sizedVertices();
+    if (!_cachedGlobalVertices.isCacheValid([
+      position,
+      offsetPosition,
+      relativeOffset,
+      size,
+      scale,
+      parentAngle,
+      angle,
+    ])) {
       var i = 0;
-      for (final point in sizedVertices) {
-        _scaledVertices[i]
-          ..setFrom(point)
-          ..multiply(scale);
+      final center = absoluteCenter;
+      final halfSize = this.halfSize;
+      for (final normalizedPoint in normalizedVertices) {
+        _transformedVertices[i]
+          ..setFrom(normalizedPoint)
+          ..multiply(halfSize)
+          ..multiply(scale)
+          ..add(center)
+          ..rotate(parentAngle + angle, center: center);
         i++;
       }
-      _cachedScaledVertices.updateCache(_scaledVertices, [size.clone(), scale]);
+      if (scale.y.isNegative || scale.x.isNegative) {
+        // Since the list will be clockwise we have to reverse it for it to
+        // become counterclockwise.
+        _reverseList(_transformedVertices);
+      }
+      _cachedGlobalVertices.updateCache(_transformedVertices, [
+        position.clone(),
+        offsetPosition.clone(),
+        relativeOffset.clone(),
+        size.clone(),
+        scale.clone(),
+        parentAngle,
+        angle,
+      ]);
     }
-    return _cachedScaledVertices.value!;
+    return _cachedGlobalVertices.value!;
   }
 
   final _cachedRenderPath = ValueCache<Path>();
@@ -130,16 +157,16 @@ class Polygon extends Shape {
 
   @override
   void render(Canvas canvas, Paint paint) {
-    if (!_cachedRenderPath
-        .isCacheValid([offsetPosition, relativeOffset, size, angle])) {
-      final center = localCenter;
+    if (!_cachedRenderPath.isCacheValid([
+      offsetPosition,
+      relativeOffset,
+      size,
+      parentAngle,
+      angle,
+    ])) {
       var i = 0;
-      scaledVertices().forEach((point) {
-        final pathPoint = center + point;
-        if (!isCanvasPrepared) {
-          pathPoint.rotate(angle, center: center);
-        }
-        _renderVertices[i] = pathPoint.toOffset();
+      (isCanvasPrepared ? localVertices() : globalVertices()).forEach((point) {
+        _renderVertices[i] = point.toOffset();
         i++;
       });
       _cachedRenderPath.updateCache(
@@ -150,6 +177,7 @@ class Polygon extends Shape {
           offsetPosition.clone(),
           relativeOffset.clone(),
           size.clone(),
+          parentAngle,
           angle,
         ],
       );
@@ -157,33 +185,10 @@ class Polygon extends Shape {
     canvas.drawPath(_cachedRenderPath.value!, paint);
   }
 
-  final _cachedHitbox = ValueCache<List<Vector2>>();
-
   /// Gives back the vertices represented as a list of points which
   /// are the "corners" of the hitbox rotated with [angle].
   /// These are in the global hitbox coordinate space since all hitboxes are
   /// compared towards each other.
-  List<Vector2> hitbox() {
-    // Use cached bounding vertices if state of the component hasn't changed
-    if (!_cachedHitbox
-        .isCacheValid([absoluteCenter, size, scale, parentAngle, angle])) {
-      final scaledVertices = this.scaledVertices();
-      final center = absoluteCenter;
-      var i = 0;
-      for (final scaledVertex in scaledVertices) {
-        _hitboxVertices[i]
-          ..setFrom(center)
-          ..add(scaledVertex)
-          ..rotate(parentAngle + angle, center: center);
-        i++;
-      }
-      _cachedHitbox.updateCache(
-        _hitboxVertices,
-        [absoluteCenter, size.clone(), scale.clone(), parentAngle, angle],
-      );
-    }
-    return _cachedHitbox.value!;
-  }
 
   /// Checks whether the polygon contains the [point].
   /// Note: The polygon needs to be convex for this to work.
@@ -193,9 +198,8 @@ class Polygon extends Shape {
     if (size.x == 0 || size.y == 0) {
       return false;
     }
-    print('Tap down: $point');
 
-    final vertices = hitbox();
+    final vertices = globalVertices();
     for (var i = 0; i < vertices.length; i++) {
       final edge = getEdge(i, vertices: vertices);
       final isOutside = (edge.to.x - edge.from.x) * (point.y - edge.from.y) -
@@ -213,7 +217,7 @@ class Polygon extends Shape {
   /// is null return all vertices as [LineSegment]s.
   List<LineSegment> possibleIntersectionVertices(Rect? rect) {
     final rectIntersections = <LineSegment>[];
-    final vertices = hitbox();
+    final vertices = globalVertices();
     for (var i = 0; i < vertices.length; i++) {
       final edge = getEdge(i, vertices: vertices);
       if (rect?.intersectsSegment(edge.from, edge.to) ?? true) {
@@ -230,8 +234,16 @@ class Polygon extends Shape {
   }
 
   Vector2 getVertex(int i, {List<Vector2>? vertices}) {
-    vertices ??= hitbox();
+    vertices ??= globalVertices();
     return vertices[i % vertices.length];
+  }
+
+  void _reverseList(List<Object> list) {
+    for (var i = 0; i < list.length / 2; i++) {
+      final temp = list[i];
+      list[i] = list[list.length - 1 - i];
+      list[list.length - 1 - i] = temp;
+    }
   }
 }
 

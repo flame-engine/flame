@@ -3,11 +3,18 @@ import 'package:flame/game.dart';
 
 import '../../commons/commons.dart';
 import 'circles.dart';
+import 'collidable_animation.dart';
 import 'multiple_shapes.dart';
 import 'simple_shapes.dart';
 
 void addCollisionDetectionStories(Dashbook dashbook) {
   dashbook.storiesOf('Collision Detection')
+    ..add(
+      'Collidable AnimationComponent',
+      (_) => GameWidget(game: CollidableAnimationGame()),
+      codeLink: baseLink('collision_detection/collidable_animation.dart'),
+      info: CollidableAnimationGame.description,
+    )
     ..add(
       'Circles',
       (_) => GameWidget(game: Circles()),

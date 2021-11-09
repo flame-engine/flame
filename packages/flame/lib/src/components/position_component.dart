@@ -171,10 +171,9 @@ class PositionComponent extends Component {
   /// The resulting scale after all the ancestors and the components own scale
   /// has been applied.
   Vector2 get absoluteScale {
-    _totalScale.setValues(scale.x.abs(), scale.y.abs());
+    _totalScale.setValues(scale.x, scale.y);
     ancestors().whereType<PositionComponent>().forEach((c) {
-      _totalScale..x *= c.scale.x.abs();
-      _totalScale..y *= c.scale.y.abs();
+      _totalScale.multiply(c.scale);
     });
     return _totalScale;
   }
