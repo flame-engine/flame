@@ -57,12 +57,12 @@ class AnimatedComponent extends SpriteAnimationComponent
 
   @override
   void render(Canvas canvas) {
-    // This is just to clearly see the vertices in the hitboxes
-    hitbox
-        .globalVertices()
-        .forEach((p) => canvas.drawCircle(p.toOffset(), 4, dotPaint));
     super.render(canvas);
+    // This is just to clearly see the vertices in the hitboxes
     hitbox.render(canvas, hitboxPaint);
+    hitbox
+        .localVertices()
+        .forEach((p) => canvas.drawCircle(p.toOffset(), 4, dotPaint));
   }
 
   @override

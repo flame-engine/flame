@@ -9,7 +9,6 @@ import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
 import 'shape.dart';
 
-// TODO(spydon): Migrate this to [Path]
 class Polygon extends Shape {
   final List<Vector2> normalizedVertices;
   // These lists are used to minimize the amount of objects that are created,

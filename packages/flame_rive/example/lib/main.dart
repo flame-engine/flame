@@ -77,19 +77,3 @@ class SkillsAnimationComponent extends RiveComponent with Tappable {
     return true;
   }
 }
-
-class Square extends PositionComponent with HasGameRef<RiveExampleGame> {
-  late final Paint paint;
-
-  Square(Vector2 position) {
-    this.position.setFrom(position);
-    size.setValues(100, 100);
-    paint = PaintExtension.random(withAlpha: 0.9, base: 100);
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    canvas.drawRect(size.toRect(), paint);
-  }
-}
