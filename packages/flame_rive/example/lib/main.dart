@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
@@ -85,23 +84,12 @@ class Square extends PositionComponent with HasGameRef<RiveExampleGame> {
   Square(Vector2 position) {
     this.position.setFrom(position);
     size.setValues(100, 100);
-    paint = _randomPaint();
+    paint = PaintExtension.random(withAlpha: 0.9, base: 100);
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
     canvas.drawRect(size.toRect(), paint);
-  }
-
-  static Paint _randomPaint() {
-    final rng = Random();
-    final color = Color.fromRGBO(
-      rng.nextInt(256),
-      rng.nextInt(256),
-      rng.nextInt(256),
-      0.9,
-    );
-    return PaletteEntry(color).paint();
   }
 }

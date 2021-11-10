@@ -17,6 +17,7 @@
  - Create default implementations of `RectangleComponent`, `CircleComponent` and `PolygonComponent`
  - Streamlined the argument list for all components extending `PositionComponent`
  - Improved interaction between viewport and isHud components
+ - `randomColor` method in the `Color` extension
  - Calling super-method in `.render()` is now optional
  - Components that manipulate canvas state are now responsible for saving/restoring that state
 
