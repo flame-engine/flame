@@ -18,6 +18,8 @@
  - Streamlined the argument list for all components extending `PositionComponent`
  - Improved interaction between viewport and isHud components
  - `randomColor` method in the `Color` extension
+ - Calling super-method in `.render()` is now optional
+ - Components that manipulate canvas state are now responsible for saving/restoring that state
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
