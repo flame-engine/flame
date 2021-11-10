@@ -33,7 +33,6 @@ class MyComponent extends PositionComponent with Tappable, HasGameRef {
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     isRenderCalled = true;
   }
 

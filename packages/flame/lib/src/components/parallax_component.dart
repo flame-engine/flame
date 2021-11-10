@@ -116,7 +116,6 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     parallax?.render(canvas);
   }
 

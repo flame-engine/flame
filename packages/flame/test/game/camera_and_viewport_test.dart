@@ -17,7 +17,6 @@ class TestComponent extends PositionComponent {
 
   @override
   void render(Canvas c) {
-    super.render(c);
     c.drawRect(size.toRect(), _paint);
   }
 }

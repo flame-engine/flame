@@ -107,7 +107,6 @@ class Compass extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     canvas.drawCircle(Offset(_radius, _radius), _radius, _bgPaint);
     canvas.drawPath(_marksPath, _marksPaint);
   }
@@ -144,7 +143,6 @@ class CompassArrow extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     canvas.drawPath(_northPath, _northPaint);
     canvas.drawPath(_southPath, _southPaint);
   }
@@ -193,7 +191,6 @@ class CompassRim extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     canvas.drawCircle(Offset(_radius, _radius), _radius - _width / 2, _bgPaint);
     canvas.drawCircle(Offset(_radius, _radius), _radius - _width, _marksPaint);
     canvas.drawPath(_marksPath, _marksPaint);

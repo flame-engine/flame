@@ -100,7 +100,6 @@ class BGComponent extends Component with HasGameRef {
 
   @override
   void render(Canvas c) {
-    super.render(c);
     c.drawRect(gameRef.size.toRect(), paint);
   }
 }

@@ -76,7 +76,6 @@ abstract class MyCollidable extends PositionComponent
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     renderHitboxes(canvas, paint: _activePaint);
     if (_isDragged) {
       final localCenter = (scaledSize / 2).toOffset();

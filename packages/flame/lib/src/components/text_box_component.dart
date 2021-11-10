@@ -187,7 +187,6 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     if (_cache == null) {
       return;
     }
-    super.render(c);
     c.save();
     c.scale(1 / pixelRatio);
     c.drawImage(_cache!, Offset.zero, _imagePaint);

@@ -47,7 +47,6 @@ class MovableSquare extends SquareComponent
 
   @override
   void render(Canvas c) {
-    super.render(c);
     final text = '(${x.toInt()}, ${y.toInt()})';
     textRenderer.render(c, text, size / 2, anchor: Anchor.center);
   }
@@ -96,7 +95,6 @@ class Map extends Component {
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     canvas.drawRect(bounds, _paintBg);
     canvas.drawRect(bounds, _paintBorder);
   }

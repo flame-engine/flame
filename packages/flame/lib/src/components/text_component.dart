@@ -57,7 +57,6 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     _textRenderer.render(canvas, text, Vector2.zero());
   }
 }
