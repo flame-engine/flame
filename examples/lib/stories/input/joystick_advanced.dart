@@ -101,8 +101,9 @@ class JoystickAdvancedGame extends FlameGame
       ),
     );
 
-    final _regularTextConfig = TextPaintConfig(color: BasicPalette.white.color);
-    final _regular = TextPaint(config: _regularTextConfig);
+    final _regular = TextPaint(
+      style: TextStyle(color: BasicPalette.white.color),
+    );
     speedText = TextComponent(
       'Speed: 0',
       textRenderer: _regular,

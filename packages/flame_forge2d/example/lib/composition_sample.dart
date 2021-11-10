@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_forge2d/forge2d_game.dart';
+import 'package:flutter/material.dart';
 import 'package:forge2d/forge2d.dart';
 
 import 'balls.dart';
@@ -28,8 +29,8 @@ component. Click the ball to see the number increment.
 class TapableBall extends Ball with Tappable {
   late final TextComponent textComponent;
   int counter = 0;
-  final TextPaintConfig _textConfig =
-      TextPaintConfig(color: BasicPalette.white.color, fontSize: 4);
+  final TextStyle _textStyle =
+      TextStyle(color: BasicPalette.white.color, fontSize: 4);
   late final TextPaint _textPaint;
 
   TapableBall(Vector2 position) : super(position) {
@@ -40,7 +41,7 @@ class TapableBall extends Ball with Tappable {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    _textPaint = TextPaint(config: _textConfig);
+    _textPaint = TextPaint(style: _textStyle);
     textComponent = TextComponent(counter.toString(), textRenderer: _textPaint);
     add(textComponent);
   }

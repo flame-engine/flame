@@ -1,6 +1,7 @@
-import 'dart:ui';
+import 'dart:ui' hide TextStyle;
 
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 import 'package:test/test.dart';
 
 class _CustomTextRenderer extends TextRenderer<TextPaintConfig> {
@@ -34,11 +35,13 @@ class _CustomTextRenderer extends TextRenderer<TextPaintConfig> {
 void main() {
   group('Text', () {
     test('copyWith', () {
-      const config = TextPaintConfig(fontSize: 12, fontFamily: 'Times');
-      final tp = TextPaint(config: config)
+      const style = TextStyle(fontSize: 12, fontFamily: 'Times');
+      final tp = TextPaint(style: style)
           .copyWith((t) => t.withFontFamily('Helvetica'));
       expect(tp.config.fontSize, 12);
       expect(tp.config.fontFamily, 'Helvetica');
+      expect(tp.style.fontSize, 12);
+      expect(tp.style.fontFamily, 'Helvetica');
     });
     test('createDefault', () {
       final tp = TextRenderer.createDefault<TextPaint>();
@@ -51,7 +54,9 @@ void main() {
     });
     test('change parameters of text component', () {
       final tc = TextComponent<TextPaint>('foo');
-      tc.textRenderer = tc.textRenderer.copyWith((c) => c.withFontSize(200));
+      tc.textRenderer = tc.textRenderer.copyWithStyle(
+        (c) => c.copyWith(fontSize: 200),
+      );
       expect(tc.textRenderer.config.fontSize, 200);
     });
     test('custom renderer', () {

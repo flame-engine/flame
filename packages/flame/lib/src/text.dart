@@ -1,6 +1,6 @@
-import 'dart:ui';
+import 'dart:ui' hide TextStyle, TextDirection;
 
-import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart';
 
 import 'anchor.dart';
 import 'components/cache/memory_cache.dart';
@@ -8,8 +8,9 @@ import 'components/text_component.dart';
 import 'extensions/size.dart';
 import 'extensions/vector2.dart';
 
-/// [TextRenderer] is the abstract API that Flame uses for rendering text in its features
-/// this class can be extended to provide an implementation of text rendering in the engine.
+/// [TextRenderer] is the abstract API that Flame uses for rendering text.
+/// This class can be extended to provide an another implementation of text
+/// rendering in the engine.
 ///
 /// See [TextPaint] for the default implementation offered by Flame
 abstract class TextRenderer<T extends BaseTextConfig> {
@@ -27,10 +28,12 @@ abstract class TextRenderer<T extends BaseTextConfig> {
 
   TextRenderer({required this.config});
 
-  /// Renders a given [text] in a given position [position] using the provided [canvas] and [anchor].
+  /// Renders a given [text] in a given position [position] using the provided
+  /// [canvas] and [anchor].
   ///
   /// Renders it in the given position, considering the [anchor] specified.
-  /// For example, if [Anchor.center] is specified, it's going to be drawn centered around [position].
+  /// For example, if [Anchor.center] is specified, it's going to be drawn
+  /// centered around [position].
   ///
   /// Example usage (Using TextPaint implementation):
   ///
@@ -67,12 +70,13 @@ abstract class TextRenderer<T extends BaseTextConfig> {
     if (creator != null) {
       return creator() as T;
     } else {
-      throw 'Unkown implementation of TextRenderer: $T. Please register it under [defaultCreatorsRegistry].';
+      throw 'Unknown implementation of TextRenderer: $T. Please register it under [defaultCreatorsRegistry].';
     }
   }
 }
 
-/// A Text Config contains all typographical information required to render texts; i.e., font size, text direction, etc.
+/// A Text Config contains all typographical information required to render
+/// texts; i.e., font size, text direction, etc.
 abstract class BaseTextConfig {
   /// The font size to be used, in points.
   final double fontSize;
@@ -80,7 +84,8 @@ abstract class BaseTextConfig {
   /// The direction to render this text (left to right or right to left).
   ///
   /// Normally, leave this as is for most languages.
-  /// For proper fonts of languages like Hebrew or Arabic, replace this with [TextDirection.rtl].
+  /// For proper fonts of languages like Hebrew or Arabic, replace this with
+  /// [TextDirection.rtl].
   final TextDirection textDirection;
 
   /// The height of line, as a multiple of font size.
@@ -98,7 +103,8 @@ abstract class BaseTextConfig {
 class TextPaintConfig extends BaseTextConfig {
   /// The font color to be used.
   ///
-  /// Dart's [Color] class is just a plain wrapper on top of ARGB color (0xAARRGGBB).
+  /// Dart's [Color] class is just a plain wrapper on top of ARGB color
+  /// (0xAARRGGBB).
   /// For example,
   ///
   ///     const TextPaint config = TextPaint(color: const Color(0xFF00FF00)); // green
@@ -106,7 +112,8 @@ class TextPaintConfig extends BaseTextConfig {
   /// You can also use your Palette class to access colors used in your game.
   final Color color;
 
-  /// The font family to be used. You can use available by default fonts for your platform (like Arial), or you can add custom fonts.
+  /// The font family to be used. You can use available by default fonts for
+  /// your platform (like Arial), or you can add custom fonts.
   ///
   /// To add custom fonts, add the following code to your pubspec.yaml file:
   ///
@@ -116,10 +123,14 @@ class TextPaintConfig extends BaseTextConfig {
   ///           fonts:
   ///             - asset: assets/fonts/5x5_pixel.ttf
   ///
-  /// In this example we are adding a font family that's being named '5x5' provided in the specified ttf file.
-  /// You must provide the full path of the ttf file (from root); you should put it into your assets folder, and preferably inside a fonts folder.
-  /// You don't need to add this together with the other assets on the flutter/assets bit.
-  /// The name you choose for the font family can be any name (it's not inside the TTF file and the filename doesn't need to match).
+  /// In this example we are adding a font family that's being named '5x5'
+  /// provided in the specified ttf file.
+  /// You must provide the full path of the ttf file (from root); you should put
+  /// it into your assets folder, and preferably inside a fonts folder.
+  /// You don't need to add this together with the other assets on the
+  /// flutter/assets bit.
+  /// The name you choose for the font family can be any name (it's not inside
+  /// the TTF file and the filename doesn't need to match).
   final String fontFamily;
 
   /// Creates a constant [TextPaint] with sensible defaults.
@@ -173,18 +184,6 @@ class TextPaintConfig extends BaseTextConfig {
     );
   }
 
-  /// Creates a new [TextPaintConfig] changing only the [textAlign].
-  ///
-  /// This does not change the original (as it's immutable).
-  TextPaintConfig withTextAlign(TextAlign textAlign) {
-    return TextPaintConfig(
-      fontSize: fontSize,
-      color: color,
-      fontFamily: fontFamily,
-      textDirection: textDirection,
-    );
-  }
-
   /// Creates a new [TextPaintConfig] changing only the [textDirection].
   ///
   /// This does not change the original (as it's immutable).
@@ -198,19 +197,31 @@ class TextPaintConfig extends BaseTextConfig {
   }
 }
 
-/// A Text Config contains all typographical information required to render texts; i.e., font size and color, family, etc.
-///
-/// It does not hold information regarding the position of the text to be render neither the text itself (the string).
-/// To hold all those information, use the Text component.
-///
-/// It is used by [TextComponent].
+/// It does not hold information regarding the position of the text to be
+/// rendered, nor does it contain the text itself (the string).
+/// To use that information, use the [TextComponent], which uses [TextPaint].
 class TextPaint extends TextRenderer<TextPaintConfig> {
-  final MemoryCache<String, material.TextPainter> _textPainterCache =
-      MemoryCache();
+  static const _baseConfig = TextPaintConfig();
+  final MemoryCache<String, TextPainter> _textPainterCache = MemoryCache();
+  final TextStyle style;
 
-  TextPaint({
-    TextPaintConfig config = const TextPaintConfig(),
-  }) : super(config: config);
+  TextPaint({TextStyle? style, TextDirection? textDirection})
+      : style = style ??
+            TextStyle(
+              color: _baseConfig.color,
+              fontFamily: _baseConfig.fontFamily,
+              fontSize: _baseConfig.fontSize,
+              height: _baseConfig.lineHeight,
+            ),
+        super(
+          config: TextPaintConfig(
+            color: style?.color ?? _baseConfig.color,
+            fontFamily: style?.fontFamily ?? _baseConfig.fontFamily,
+            fontSize: style?.fontSize ?? _baseConfig.fontSize,
+            textDirection: textDirection ?? TextDirection.ltr,
+            lineHeight: style?.height ?? _baseConfig.lineHeight,
+          ),
+        );
 
   @override
   void render(
@@ -234,9 +245,11 @@ class TextPaint extends TextRenderer<TextPaintConfig> {
     return toTextPainter(text).height;
   }
 
-  /// Returns a [material.TextPainter] that allows for text rendering and size measuring.
+  /// Returns a [TextPainter] that allows for text rendering and size
+  /// measuring.
   ///
-  /// A [material.TextPainter] has three important properties: paint, width and height (or size).
+  /// A [TextPainter] has three important properties: paint, width and
+  /// height (or size).
   ///
   /// Example usage:
   ///
@@ -244,21 +257,16 @@ class TextPaint extends TextRenderer<TextPaintConfig> {
   ///     final tp = config.toTextPainter('Score: $score');
   ///     tp.paint(c, Offset(size.width - p.width - 10, size.height - p.height - 10));
   ///
-  /// However, you probably want to use the [render] method which already renders for you considering the anchor.
-  /// That way, you don't need to perform the math for yourself.
-  material.TextPainter toTextPainter(String text) {
+  /// However, you probably want to use the [render] method which already
+  /// takes the anchor into consideration.
+  /// That way, you don't need to perform the math for that yourself.
+  TextPainter toTextPainter(String text) {
     if (!_textPainterCache.containsKey(text)) {
-      final style = material.TextStyle(
-        color: config.color,
-        fontSize: config.fontSize,
-        fontFamily: config.fontFamily,
-        height: config.lineHeight,
-      );
-      final span = material.TextSpan(
+      final span = TextSpan(
         style: style,
         text: text,
       );
-      final tp = material.TextPainter(
+      final tp = TextPainter(
         text: span,
         textDirection: config.textDirection,
       );
@@ -273,6 +281,13 @@ class TextPaint extends TextRenderer<TextPaintConfig> {
   TextPaint copyWith(
     TextPaintConfig Function(TextPaintConfig) transform,
   ) {
-    return TextPaint(config: transform(config));
+    throw UnimplementedError('Use copyWithStyle instead');
+  }
+
+  TextPaint copyWithStyle(
+    TextStyle Function(TextStyle) transform, {
+    TextDirection? textDirection,
+  }) {
+    return TextPaint(style: transform(style), textDirection: textDirection);
   }
 }

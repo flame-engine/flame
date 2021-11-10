@@ -249,9 +249,7 @@ MyCollidable randomCollidable(
 class MultipleShapes extends FlameGame
     with HasCollidables, HasDraggableComponents, FPSCounter {
   final TextPaint fpsTextPaint = TextPaint(
-    config: TextPaintConfig(
-      color: BasicPalette.white.color,
-    ),
+    style: TextStyle(color: BasicPalette.white.color),
   );
 
   @override

@@ -5,9 +5,19 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
-final _regularTextConfig = TextPaintConfig(color: BasicPalette.white.color);
-final _regular = TextPaint(config: _regularTextConfig);
-final _tiny = TextPaint(config: _regularTextConfig.withFontSize(12.0));
+final _regularTextConfig = TextStyle(color: BasicPalette.white.color);
+final _regular = TextPaint(style: _regularTextConfig);
+final _tiny = TextPaint(style: _regularTextConfig.copyWith(fontSize: 12.0));
+final _shaded = TextPaint(
+  style: TextStyle(
+    color: BasicPalette.white.color,
+    fontSize: 40.0,
+    shadows: const [
+      Shadow(color: Colors.red, offset: Offset(2, 2), blurRadius: 2),
+      Shadow(color: Colors.yellow, offset: Offset(4, 4), blurRadius: 4),
+    ],
+  ),
+);
 
 final _white = Paint()
   ..color = BasicPalette.white.color
@@ -50,6 +60,12 @@ class TextGame extends FlameGame {
         ..anchor = Anchor.topCenter
         ..x = size.x / 2
         ..y = 32.0,
+    );
+
+    add(
+      TextComponent('Text with shade', textRenderer: _shaded)
+        ..anchor = Anchor.topRight
+        ..position = size - Vector2.all(300),
     );
 
     add(

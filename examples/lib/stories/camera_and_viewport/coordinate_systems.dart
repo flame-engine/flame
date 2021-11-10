@@ -101,10 +101,7 @@ class CoordinateSystemsGame extends FlameGame
     ..strokeWidth = 2
     ..color = BasicPalette.red.color;
   static final _text = TextPaint(
-    config: TextPaintConfig(
-      color: BasicPalette.red.color,
-      fontSize: 12,
-    ),
+    style: TextStyle(color: BasicPalette.red.color, fontSize: 12),
   );
 
   String? lastEventDescription;
