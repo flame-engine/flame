@@ -147,6 +147,10 @@ class Component with Loadable {
 
   /// A render cycle callback that runs before the component and its children
   /// has been rendered.
+  /// 
+  /// A possible use-case for this function is to transform the canvas, in which
+  /// case you would also override `postRender()` in order to restore the state
+  /// of the canvas as it was originally.
   @protected
   void preRender(Canvas canvas) {}
 
