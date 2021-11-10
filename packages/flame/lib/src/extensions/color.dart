@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 export 'dart:ui' show Color;
@@ -99,6 +100,29 @@ extension ColorExtension on Color {
       components[1],
       components[2],
       components[3],
+    );
+  }
+
+  /// Generates a random [Color] with the set [withAlpha] or the default (1.0).
+  /// You can pass in a random number generator [rng], if omitted the function
+  /// will create a new [Random] object without a seed and use that.
+  /// [base] can be used to get the random colors in only a lighter spectrum, it
+  /// should be between [0-256].
+  static Color random({
+    double withAlpha = 1.0,
+    int base = 0,
+    Random? rng,
+  }) {
+    assert(
+      base >= 0 && base <= 256,
+      'The base argument should be between 0-256',
+    );
+    rng ??= Random();
+    return Color.fromRGBO(
+      base + (base == 256 ? 0 : rng.nextInt(256 - base)),
+      base + (base == 256 ? 0 : rng.nextInt(256 - base)),
+      base + (base == 256 ? 0 : rng.nextInt(256 - base)),
+      withAlpha,
     );
   }
 }

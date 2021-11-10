@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flame/palette.dart';
 import 'package:flame_forge2d/body_component.dart';
 import 'package:flame_forge2d/contact_callbacks.dart';
@@ -23,17 +21,7 @@ class Ball extends BodyComponent {
     paint = originalPaint;
   }
 
-  Paint randomPaint() {
-    final rng = math.Random();
-    return PaletteEntry(
-      Color.fromARGB(
-        100 + rng.nextInt(155),
-        100 + rng.nextInt(155),
-        100 + rng.nextInt(155),
-        255,
-      ),
-    ).paint();
-  }
+  Paint randomPaint() => PaintExtension.random(withAlpha: 0.9, base: 100);
 
   @override
   Body createBody() {

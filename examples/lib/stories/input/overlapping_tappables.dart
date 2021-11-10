@@ -1,26 +1,13 @@
-import 'dart:math' as math;
-
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 class TappableSquare extends PositionComponent with Tappable {
-  static Paint _randomPaint() {
-    final rng = math.Random();
-    final color = Color.fromRGBO(
-      rng.nextInt(256),
-      rng.nextInt(256),
-      rng.nextInt(256),
-      0.9,
-    );
-    return PaletteEntry(color).paint();
-  }
-
   Paint currentPaint;
 
   TappableSquare({Vector2? position})
-      : currentPaint = _randomPaint(),
+      : currentPaint = PaintExtension.random(withAlpha: 0.9, base: 100),
         super(
           position: position ?? Vector2.all(100),
           size: Vector2.all(100),
