@@ -1,6 +1,6 @@
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flame/timer.dart';
 import 'package:flutter/material.dart';
 
 class RenderedTimeComponent extends TimerComponent {
@@ -12,10 +12,11 @@ class RenderedTimeComponent extends TimerComponent {
 
   final double yOffset;
 
-  RenderedTimeComponent(Timer timer, {this.yOffset = 150})
+  RenderedTimeComponent(double limit, {this.yOffset = 150})
       : super(
-          timer,
+          limit: limit,
           removeOnFinish: true,
+          autoStart: true,
         );
 
   @override
@@ -31,11 +32,11 @@ class RenderedTimeComponent extends TimerComponent {
 class TimerComponentGame extends FlameGame with TapDetector, DoubleTapDetector {
   @override
   void onTap() {
-    add(RenderedTimeComponent(Timer(1)..start()));
+    add(RenderedTimeComponent(1));
   }
 
   @override
   void onDoubleTap() {
-    add(RenderedTimeComponent(Timer(5)..start(), yOffset: 180));
+    add(RenderedTimeComponent(5, yOffset: 180));
   }
 }

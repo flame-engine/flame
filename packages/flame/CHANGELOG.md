@@ -22,6 +22,7 @@
  - Components that manipulate canvas state are now responsible for saving/restoring that state
  - Remove `super.render` calls that are no longer needed
  - Fixed typo in error message
+ - Improved `TimerComponent`
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration

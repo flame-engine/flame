@@ -1,8 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'components/component.dart';
-
 /// Simple utility class that helps handling time counting and implementing
 /// interval like events.
 class Timer {
@@ -71,23 +69,5 @@ class Timer {
   /// Resume a paused timer (no-op if it is already running).
   void resume() {
     _running = true;
-  }
-}
-
-/// Simple component which wraps a [Timer] instance allowing it to be easily
-/// used inside a FlameGame game.
-class TimerComponent extends Component {
-  Timer timer;
-  final bool removeOnFinish;
-
-  TimerComponent(this.timer, {this.removeOnFinish = false});
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    timer.update(dt);
-    if (removeOnFinish && timer.finished) {
-      removeFromParent();
-    }
   }
 }

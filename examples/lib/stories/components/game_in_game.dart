@@ -13,6 +13,19 @@ changes its parent from its original game to the component that is rotating.
 After another 5 seconds it changes back to its original parent, and so on.
 ''';
 
+class GameChangeTimer extends TimerComponent with HasGameRef<GameInGame> {
+  GameChangeTimer() : super(limit: 5, repeat: true, autoStart: true);
+
+  @override
+  void tick() {
+    final child = gameRef.draggablesGame.square;
+    final newParent = child.parent == gameRef.draggablesGame
+        ? gameRef.composedGame.parentSquare
+        : gameRef.draggablesGame;
+    child.changeParent(newParent);
+  }
+}
+
 class GameInGame extends FlameGame with HasDraggableComponents {
   @override
   bool debugMode = true;
@@ -24,20 +37,10 @@ class GameInGame extends FlameGame with HasDraggableComponents {
     await super.onLoad();
     composedGame = Composability();
     draggablesGame = DraggablesGame(zoom: 1.0);
+
     await add(composedGame);
     await add(draggablesGame);
-    final child = draggablesGame.square;
-    final timer = Timer(
-      5,
-      callback: () {
-        final newParent = child.parent == draggablesGame
-            ? composedGame.parentSquare
-            : draggablesGame;
-        child.changeParent(newParent);
-      },
-      repeat: true,
-    );
-    timer.start();
-    add(TimerComponent(timer));
+
+    add(GameChangeTimer());
   }
 }
