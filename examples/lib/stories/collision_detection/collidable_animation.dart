@@ -53,13 +53,14 @@ class AnimatedComponent extends SpriteAnimationComponent
 
   final Paint hitboxPaint = BasicPalette.green.paint()
     ..style = PaintingStyle.stroke;
+  final Paint dotPaint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
 
   @override
   void render(Canvas canvas) {
     // This is just to clearly see the vertices in the hitboxes
     hitbox
         .globalVertices()
-        .forEach((p) => canvas.drawCircle(p.toOffset(), 2, hitboxPaint));
+        .forEach((p) => canvas.drawCircle(p.toOffset(), 4, dotPaint));
     super.render(canvas);
     hitbox.render(canvas, hitboxPaint);
   }

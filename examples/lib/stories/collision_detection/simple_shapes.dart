@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -7,8 +6,6 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
-import 'package:flame/palette.dart';
-import 'package:flutter/material.dart' hide Image, Draggable;
 
 const onlyShapesInfo = '''
 An example which adds random shapes on the screen when you tap it, if you tap on
@@ -20,8 +17,6 @@ enum Shapes { circle, rectangle, polygon }
 
 class SimpleShapes extends FlameGame with HasTappableComponents {
   final _rng = Random();
-  @override
-  bool debugMode = true;
 
   MyShapeComponent randomShape(Vector2 position) {
     final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
@@ -55,7 +50,7 @@ class SimpleShapes extends FlameGame with HasTappableComponents {
           position: position,
           size: shapeSize,
           angle: shapeAngle,
-        )..flipHorizontallyAroundCenter();
+        );
     }
   }
 
@@ -65,24 +60,24 @@ class SimpleShapes extends FlameGame with HasTappableComponents {
     final tapPosition = info.eventPosition.game;
     final component = randomShape(tapPosition);
     add(component);
-    //component.add(MoveEffect(
-    //  path: [size / 2],
-    //  speed: 30,
-    //  isAlternating: true,
-    //  isInfinite: true,
-    //));
-    //component.add(RotateEffect(
-    //  angle: 3,
-    //  speed: 0.4,
-    //  isAlternating: true,
-    //  isInfinite: true,
-    //));
+    component.add(MoveEffect(
+      path: [size / 2],
+      speed: 30,
+      isAlternating: true,
+      isInfinite: true,
+    ));
+    component.add(RotateEffect(
+      angle: 3,
+      speed: 0.4,
+      isAlternating: true,
+      isInfinite: true,
+    ));
   }
 }
 
 class MyShapeComponent extends ShapeComponent with Tappable {
   @override
-  final Paint paint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
+  //final Paint paint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
 
   MyShapeComponent(
     HitboxShape shape, {
