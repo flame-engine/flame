@@ -131,34 +131,32 @@ class Component with Loadable {
     children.forEach((c) => c.update(dt));
   }
 
-  @mustCallSuper
-  void render(Canvas canvas) {
-    preRender(canvas);
-  }
+  void render(Canvas canvas) {}
 
-  @mustCallSuper
   void renderTree(Canvas canvas) {
+    preRender(canvas);
     render(canvas);
-    postRender(canvas);
-    children.forEach((c) {
-      canvas.save();
-      c.renderTree(canvas);
-      canvas.restore();
-    });
+    children.forEach((c) => c.renderTree(canvas));
 
     // Any debug rendering should be rendered on top of everything
     if (debugMode) {
       renderDebugMode(canvas);
     }
+    postRender(canvas);
   }
 
   /// A render cycle callback that runs before the component and its children
   /// has been rendered.
+  ///
+  /// A possible use-case for this function is to transform the canvas, in which
+  /// case you would also override `postRender()` in order to restore the state
+  /// of the canvas as it was originally.
   @protected
   void preRender(Canvas canvas) {}
 
-  /// A render cycle callback that runs after the component has been
-  /// rendered, but before any children has been rendered.
+  /// A render cycle callback that runs after the component and its children
+  /// has been rendered.
+  @protected
   void postRender(Canvas canvas) {}
 
   void renderDebugMode(Canvas canvas) {}

@@ -53,6 +53,7 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
   final Matrix4 _flipYTransform = Matrix4.identity()..scale(1.0, -1.0);
   double? _lastAngle;
 
+  @mustCallSuper
   @override
   void preRender(Canvas canvas) {
     if (_transform.m14 != body.position.x ||
@@ -63,8 +64,14 @@ abstract class BodyComponent<T extends Forge2DGame> extends Component
       _transform.rotateZ(-angle);
       _lastAngle = angle;
     }
-
+    canvas.save();
     canvas.transform(_transform.storage);
+  }
+
+  @mustCallSuper
+  @override
+  void postRender(Canvas canvas) {
+    canvas.restore();
   }
 
   @override
