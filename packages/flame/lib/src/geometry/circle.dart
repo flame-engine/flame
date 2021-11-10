@@ -7,8 +7,8 @@ import '../extensions/vector2.dart';
 import 'shape.dart';
 
 class Circle extends Shape {
-  /// The [normalizedRadius] is what ration (0.0, 1.0] of the shortest edge of
-  /// [size] that the circle should cover.
+  /// The [normalizedRadius] is what ratio (0.0, 1.0] of the shortest edge of
+  /// [size]/2 that the circle should cover.
   double normalizedRadius = 1.0;
 
   /// With this constructor you can create your [Circle] from a radius and
