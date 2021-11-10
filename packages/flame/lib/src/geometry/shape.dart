@@ -143,7 +143,7 @@ mixin HitboxShape on Shape {
   Vector2 get size => component.size;
 
   @override
-  Vector2 get scale => component.absoluteScale;
+  Vector2 get scale => component.scale;
 
   @override
   double get parentAngle => component.absoluteAngle;

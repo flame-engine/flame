@@ -127,10 +127,9 @@ void main() {
         position: Vector2.all(1.0),
         size: Vector2.all(2.0),
       )..flipVerticallyAroundCenter();
-      print(component.absoluteScale);
       print((component.hitboxes[0] as Polygon).globalVertices());
       expect(
-        component.containsPoint(Vector2(1.0, 2.1)),
+        component.containsPoint(Vector2(2.0, 2.0)),
         true,
       );
     });

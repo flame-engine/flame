@@ -53,7 +53,6 @@ mixin HasHitboxes on PositionComponent {
   /// contain the point, since the shapes have to be within the size of the
   /// component.
   bool possiblyContainsPoint(Vector2 point) {
-    return absoluteCenter.distanceToSquared(point) <=
-        absoluteScaledSize.scaled(0.5).length2;
+    return absoluteCenter.distanceToSquared(point) <= scaledSize.length2;
   }
 }

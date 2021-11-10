@@ -163,24 +163,9 @@ class PositionComponent extends Component {
   /// component as seen from the parent's perspective, and it is equal to
   /// [size] * [scale]. This is a computed property and cannot be
   /// modified by the user.
-  Vector2 get scaledSize =>
-      Vector2(width * scale.x.abs(), height * scale.y.abs());
-
-  final _totalScale = Vector2.zero();
-
-  /// The resulting scale after all the ancestors and the components own scale
-  /// has been applied.
-  Vector2 get absoluteScale {
-    _totalScale.setValues(scale.x, scale.y);
-    ancestors().whereType<PositionComponent>().forEach((c) {
-      _totalScale.multiply(c.scale);
-    });
-    return _totalScale;
+  Vector2 get scaledSize {
+    return Vector2(width * scale.x.abs(), height * scale.y.abs());
   }
-
-  /// The size of the component after all ancestors and the components own
-  /// scale has been multiplied with its [size].
-  Vector2 get absoluteScaledSize => absoluteScale..multiply(size);
 
   /// The resulting angle after all the ancestors and the components own angle
   /// has been applied.
