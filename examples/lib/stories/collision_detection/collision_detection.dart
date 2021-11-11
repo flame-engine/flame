@@ -19,18 +19,18 @@ void addCollisionDetectionStories(Dashbook dashbook) {
       'Circles',
       (_) => GameWidget(game: Circles()),
       codeLink: baseLink('collision_detection/circles.dart'),
-      info: circlesInfo,
+      info: Circles.description,
     )
     ..add(
       'Multiple shapes',
       (_) => GameWidget(game: MultipleShapes()),
       codeLink: baseLink('collision_detection/multiple_shapes.dart'),
-      info: multipleShapesInfo,
+      info: MultipleShapes.description,
     )
     ..add(
       'Simple Shapes',
       (_) => GameWidget(game: SimpleShapes()),
       codeLink: baseLink('collision_detection/simple_shapes.dart'),
-      info: onlyShapesInfo,
+      info: SimpleShapes.description,
     );
 }

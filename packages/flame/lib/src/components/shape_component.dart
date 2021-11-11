@@ -15,11 +15,6 @@ class ShapeComponent extends PositionComponent with HasHitboxes {
   final HitboxShape shape;
   Paint paint;
 
-  /// Currently the [anchor] can only be center for [ShapeComponent], since
-  /// shape doesn't take any anchor into consideration.
-  @override
-  final Anchor anchor = Anchor.center;
-
   ShapeComponent(
     this.shape, {
     Paint? paint,
@@ -27,6 +22,7 @@ class ShapeComponent extends PositionComponent with HasHitboxes {
     Vector2? size,
     Vector2? scale,
     double? angle,
+    Anchor? anchor,
     int? priority,
   })  : paint = paint ?? BasicPalette.white.paint(),
         super(
@@ -34,7 +30,7 @@ class ShapeComponent extends PositionComponent with HasHitboxes {
           size: size,
           scale: scale,
           angle: angle,
-          anchor: Anchor.center,
+          anchor: anchor,
           priority: priority,
         ) {
     shape.isCanvasPrepared = true;

@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -6,16 +7,16 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
-
-const onlyShapesInfo = '''
-An example which adds random shapes on the screen when you tap it, if you tap on
-an already existing shape it will remove that shape and replace it with a new
-one.
-''';
+import 'package:flame/palette.dart';
 
 enum Shapes { circle, rectangle, polygon }
 
 class SimpleShapes extends FlameGame with HasTappableComponents {
+  static const description = '''
+    An example which adds random shapes on the screen when you tap it, if you
+    tap on an already existing shape it will remove that shape and replace it
+    with a new one.
+  ''';
   final _rng = Random();
 
   MyShapeComponent randomShape(Vector2 position) {
@@ -77,7 +78,7 @@ class SimpleShapes extends FlameGame with HasTappableComponents {
 
 class MyShapeComponent extends ShapeComponent with Tappable {
   @override
-  //final Paint paint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
+  final Paint paint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
 
   MyShapeComponent(
     HitboxShape shape, {
@@ -89,6 +90,7 @@ class MyShapeComponent extends ShapeComponent with Tappable {
           position: position,
           size: size,
           angle: angle,
+          anchor: Anchor.center,
         );
 
   @override
