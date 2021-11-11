@@ -9,7 +9,7 @@ import 'extensions/size.dart';
 import 'extensions/vector2.dart';
 
 /// [TextRenderer] is the abstract API that Flame uses for rendering text.
-/// This class can be extended to provide an another implementation of text
+/// This class can be extended to provide another implementation of text
 /// rendering in the engine.
 ///
 /// See [TextPaint] for the default implementation offered by Flame
