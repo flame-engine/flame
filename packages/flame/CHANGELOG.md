@@ -20,6 +20,7 @@
  - `randomColor` method in the `Color` extension
  - Calling super-method in `.render()` is now optional
  - Components that manipulate canvas state are now responsible for saving/restoring that state
+ - Remove `super.render` calls that are no longer needed
  - Fixed typo in error message
 
 ## [1.0.0-releasecandidate.16]

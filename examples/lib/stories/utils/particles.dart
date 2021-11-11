@@ -561,7 +561,6 @@ class TrafficLightComponent extends Component {
 
   @override
   void render(Canvas c) {
-    super.render(c);
     c.drawRect(rect, Paint()..color = currentColor);
   }
 

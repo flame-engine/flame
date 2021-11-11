@@ -5,7 +5,6 @@ import 'dart:ui' as ui;
 import 'package:flame/components.dart';
 import 'package:flutter/rendering.dart';
 import 'package:rive/rive.dart';
-
 // ignore_for_file: implementation_imports
 import 'package:rive/src/rive_core/math/aabb.dart';
 import 'package:rive/src/rive_core/math/mat2d.dart';
@@ -47,7 +46,6 @@ class RiveComponent extends PositionComponent {
 
   @override
   void render(ui.Canvas canvas) {
-    super.render(canvas);
     _renderer.render(canvas, size.toSize());
   }
 

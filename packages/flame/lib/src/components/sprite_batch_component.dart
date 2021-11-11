@@ -21,7 +21,6 @@ class SpriteBatchComponent extends Component {
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     spriteBatch?.render(
       canvas,
       blendMode: blendMode,

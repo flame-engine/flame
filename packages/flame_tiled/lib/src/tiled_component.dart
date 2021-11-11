@@ -15,7 +15,6 @@ class TiledComponent extends Component {
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     tileMap.render(canvas);
   }
 

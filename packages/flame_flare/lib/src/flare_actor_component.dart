@@ -20,13 +20,13 @@ class FlareActorComponent extends PositionComponent {
   }
 
   @override
+  @mustCallSuper
   void render(Canvas canvas) {
-    super.render(canvas);
     flareAnimation.render(canvas, size);
   }
 
-  @mustCallSuper
   @override
+  @mustCallSuper
   void update(double dt) {
     super.update(dt);
     flareAnimation.advance(dt);

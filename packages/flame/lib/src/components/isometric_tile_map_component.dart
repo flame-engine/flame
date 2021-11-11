@@ -66,8 +66,6 @@ class IsometricTileMapComponent extends PositionComponent {
 
   @override
   void render(Canvas c) {
-    super.render(c);
-
     final size = effectiveTileSize;
     for (var i = 0; i < matrix.length; i++) {
       for (var j = 0; j < matrix[i].length; j++) {

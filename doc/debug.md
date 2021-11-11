@@ -7,7 +7,7 @@ that extends from `Game`. Once applied you can access the current fps by using t
 like shown in the example below.
 
 ```dart
-class MyGame extends Game with FPSCounter {
+class MyGame extends FlameGame with FPSCounter {
   static final fpsTextConfig = TextConfig(color: BasicPalette.white.color);
 
   @override

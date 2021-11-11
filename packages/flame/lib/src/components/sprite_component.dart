@@ -71,7 +71,6 @@ class SpriteComponent extends PositionComponent with HasPaint {
   @mustCallSuper
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     sprite?.render(
       canvas,
       size: size,

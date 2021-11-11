@@ -36,7 +36,6 @@ class NineTileBoxComponent extends PositionComponent {
   @mustCallSuper
   @override
   void render(Canvas c) {
-    super.render(c);
     nineTileBox.drawRect(c, size.toRect());
   }
 }
