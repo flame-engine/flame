@@ -47,7 +47,7 @@ Some common properties of `TextStyle` are the following (here is the
 For more information regarding colors and how to create then, see the
 [Colors and the Palette](palette.md) guide.
 
-After the creation of the `TextPaint` object you can use its `render` method to draw some string on
+After the creation of the `TextPaint` object you can use its `render` method to draw strings on
 a canvas:
 
 ```dart
@@ -73,8 +73,8 @@ Flame provides two text components that make it even easier to render text in yo
 Example usage:
 
 ```dart
-TextStyle style = TextStyle(color: BasicPalette.white.color);
-TextPaint regular = TextPaint(style: style);
+final style = TextStyle(color: BasicPalette.white.color);
+final regular = TextPaint(style: style);
 
 class MyGame extends FlameGame {
   @override
