@@ -9,6 +9,41 @@ import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 
+class CollidableAnimationGame extends FlameGame with HasCollidables {
+  static const description = '''
+    In this example you can see four animated birds which are flying straight
+    along the same route until they hit either another bird or the wall, which
+    makes them turn. The birds have PolygonHitboxes which are marked with the
+    green lines and dots.
+  ''';
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    add(ScreenCollidable());
+    // Top left component
+    add(AnimatedComponent(Vector2.all(200), Vector2.all(100))
+      ..flipVertically());
+    // Bottom right component
+    add(AnimatedComponent(
+      Vector2(-100, -100),
+      size.clone()..sub(Vector2.all(200)),
+    ));
+    // Bottom left component
+    add(AnimatedComponent(
+      Vector2(100, -100),
+      Vector2(100, size.y - 100),
+      angle: pi / 4,
+    ));
+    // Top right component
+    add(AnimatedComponent(
+      Vector2(-300, 300),
+      Vector2(size.x - 100, 100),
+      angle: pi / 4,
+    )..flipVertically());
+  }
+}
+
 class AnimatedComponent extends SpriteAnimationComponent
     with HasHitboxes, Collidable, HasGameRef {
   final Vector2 velocity;
@@ -77,40 +112,5 @@ class AnimatedComponent extends SpriteAnimationComponent
   @override
   void onCollisionEnd(Collidable other) {
     activeCollisions.remove(other);
-  }
-}
-
-class CollidableAnimationGame extends FlameGame with HasCollidables {
-  static const description = '''
-    In this example you can see four animated birds which are flying straight
-    along the same route until they hit either another bird or the wall, which
-    makes them turn. The birds have PolygonHitboxes which are marked with the
-    green lines and dots.
-  ''';
-
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    add(ScreenCollidable());
-    // Top left component
-    add(AnimatedComponent(Vector2.all(200), Vector2.all(100))
-      ..flipVertically());
-    // Bottom right component
-    add(AnimatedComponent(
-      Vector2(-100, -100),
-      size.clone()..sub(Vector2.all(200)),
-    ));
-    // Bottom left component
-    add(AnimatedComponent(
-      Vector2(100, -100),
-      Vector2(100, size.y - 100),
-      angle: pi / 4,
-    ));
-    // Top right component
-    add(AnimatedComponent(
-      Vector2(-300, 300),
-      Vector2(size.x - 100, 100),
-      angle: pi / 4,
-    )..flipVertically());
   }
 }

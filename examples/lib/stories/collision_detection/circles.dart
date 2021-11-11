@@ -7,6 +7,25 @@ import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
+class Circles extends FlameGame with HasCollidables, TapDetector {
+  static const description = '''
+    This example will create a circle every time you tap on the screen. It will
+    have the initial velocity towards the center of the screen and if it touches
+    another circle both of them will change color.
+  ''';
+
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
+    add(ScreenCollidable());
+  }
+
+  @override
+  void onTapDown(TapDownInfo info) {
+    add(MyCollidable(info.eventPosition.game));
+  }
+}
+
 class MyCollidable extends PositionComponent
     with HasGameRef<Circles>, HasHitboxes, Collidable {
   late Vector2 velocity;
@@ -55,24 +74,5 @@ class MyCollidable extends PositionComponent
       return;
     }
     _isCollision = true;
-  }
-}
-
-class Circles extends FlameGame with HasCollidables, TapDetector {
-  static const description = '''
-    This example will create a circle every time you tap on the screen. It will
-    have the initial velocity towards the center of the screen and if it touches
-    another circle both of them will change color.
-  ''';
-
-  @override
-  Future<void> onLoad() async {
-    super.onLoad();
-    add(ScreenCollidable());
-  }
-
-  @override
-  void onTapDown(TapDownInfo info) {
-    add(MyCollidable(info.eventPosition.game));
   }
 }
