@@ -51,7 +51,6 @@ class MyCollidable extends PositionComponent
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     renderHitboxes(canvas);
   }
 

@@ -41,7 +41,6 @@ class Player extends PositionComponent {
   
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     canvas.drawRect(size.toRect(), _paint);
   }
 
@@ -133,7 +132,7 @@ removed from the Flutter widget tree.
 
 Before we close this step, there is one small improvement that we can do. Right now, we are loading
 the sprite and passing it to our component. For now, this may seen fine, but imagine a game with
-a lot of components; if the game is responsible for loading assets for all coponents, our code can
+a lot of components; if the game is responsible for loading assets for all components, our code can
 become a mess quite fast.
 
 Just like `FlameGame`, components also have an `onLoad` method that can be overridden to do

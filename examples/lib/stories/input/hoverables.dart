@@ -15,7 +15,6 @@ class HoverableSquare extends PositionComponent with Hoverable {
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     canvas.drawRect(size.toRect(), isHovered ? _grey : _white);
   }
 }

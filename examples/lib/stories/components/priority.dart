@@ -30,7 +30,6 @@ class Square extends PositionComponent with HasGameRef<Priority>, Tappable {
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     canvas.drawRect(size.toRect(), paint);
   }
 }

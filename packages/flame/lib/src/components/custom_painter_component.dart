@@ -36,8 +36,6 @@ class CustomPainterComponent extends PositionComponent {
   @override
   @mustCallSuper
   void render(Canvas canvas) {
-    super.render(canvas);
-
     painter?.paint(canvas, size.toSize());
   }
 }

@@ -26,8 +26,6 @@ class Square extends PositionComponent {
 
   @override
   void render(Canvas c) {
-    super.render(c);
-
     c.drawRect(size.toRect(), white);
     c.drawRect(const Rect.fromLTWH(0, 0, 3, 3), red);
     c.drawRect(Rect.fromLTWH(width / 2, height / 2, 3, 3), blue);

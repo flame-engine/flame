@@ -83,7 +83,6 @@ class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
   @override
   void render(Canvas canvas) {
     if (visible) {
-      super.render(canvas);
     } // If not visible none of the children will be rendered
   }
 }
@@ -100,10 +99,6 @@ When implementing the `render` method for a component that extends `PositionComp
 render from the top left corner (0.0). Your render method should not handle where on the screen your
 component should be rendered. To handle where and how your component should be rendered use the
 `position`, `angle` and `anchor` properties and flame will automatically handle the rest for you.
-
-If you really want to handle the canvas translations yourself you can just omit the
-`super.render(canvas)` line and suppress the warning, but for most use cases this is not
-recommended.
 
 If you want to know where on the screen the bounding box of the component is you can use the
 `toRect` method.

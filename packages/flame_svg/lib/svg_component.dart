@@ -16,7 +16,6 @@ class SvgComponent extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     svg.render(canvas, size);
   }
 }
