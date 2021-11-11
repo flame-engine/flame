@@ -35,26 +35,35 @@ class RotateEffectExample extends FlameGame {
       ),
     );
     compass.arrow
-      ..add(RotateEffect.to(
+      ..add(
+        RotateEffect.to(
           Transform2D.tau,
           StandardEffectController(
             duration: 20,
             infinite: true,
-          )))
-      ..add(RotateEffect.by(
+          ),
+        ),
+      )
+      ..add(
+        RotateEffect.by(
           Transform2D.tau * 0.015,
           StandardEffectController(
             duration: 0.1,
             reverseDuration: 0.1,
             infinite: true,
-          )))
-      ..add(RotateEffect.by(
+          ),
+        ),
+      )
+      ..add(
+        RotateEffect.by(
           Transform2D.tau * 0.021,
           StandardEffectController(
             duration: 0.13,
             reverseDuration: 0.13,
             infinite: true,
-          )));
+          ),
+        ),
+      );
   }
 }
 
