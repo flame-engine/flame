@@ -56,7 +56,7 @@ class Polygon extends Shape {
 
   /// With this constructor you define the [Polygon] from the center of and with
   /// percentages of the size of the shape.
-  /// Example: [[1.0, 0.0], [0.0, 1.0], [-1.0, 0.0], [0.0, -1.0]]
+  /// Example: [[1.0, 0.0], [0.0, -1.0], [-1.0, 0.0], [0.0, 1.0]]
   /// This will form a diamond shape within the bounding size box.
   /// NOTE: Always define your shape in a counter-clockwise fashion (in the
   /// screen coordinate system).
