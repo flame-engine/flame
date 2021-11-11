@@ -12,14 +12,17 @@ import 'shape.dart';
 class Polygon extends Shape {
   final List<Vector2> normalizedVertices;
   // These lists are used to minimize the amount of objects that are created,
-  // and only change the contained object if the cache is deemed outdated.
-  late final List<Vector2> _sizedVertices;
-  late final List<Vector2> _transformedVertices;
+  // and only change the contained object if the corresponding `ValueCache` is
+  // deemed outdated.
+  late final List<Vector2> _localVertices;
+  late final List<Vector2> _globalVertices;
   late final List<Offset> _renderVertices;
   late final List<LineSegment> _lineSegments;
+  final _path = Path();
 
   final _cachedLocalVertices = ValueCache<Iterable<Vector2>>();
   final _cachedGlobalVertices = ValueCache<List<Vector2>>();
+  final _cachedRenderPath = ValueCache<Path>();
 
   /// With this constructor you create your [Polygon] from positions in your
   /// intended space. It will automatically calculate the [size] and center
@@ -75,8 +78,8 @@ class Polygon extends Shape {
       );
     }
 
-    _sizedVertices = generateList();
-    _transformedVertices = generateList();
+    _localVertices = generateList();
+    _globalVertices = generateList();
     _renderVertices = List.filled(
       normalizedVertices.length,
       Offset.zero,
@@ -94,14 +97,14 @@ class Polygon extends Shape {
     final center = localCenter;
     if (!_cachedLocalVertices.isCacheValid([size, center])) {
       final halfSize = this.halfSize;
-      for (var i = 0; i < _sizedVertices.length; i++) {
+      for (var i = 0; i < _localVertices.length; i++) {
         final point = normalizedVertices[i];
-        (_sizedVertices[i]..setFrom(point))
+        (_localVertices[i]..setFrom(point))
           ..multiply(halfSize)
           ..add(center)
           ..rotate(angle, center: center);
       }
-      _cachedLocalVertices.updateCache(_sizedVertices, [
+      _cachedLocalVertices.updateCache(_localVertices, [
         size.clone(),
         center.clone(),
       ]);
@@ -125,7 +128,7 @@ class Polygon extends Shape {
       final center = absoluteCenter;
       final halfSize = this.halfSize;
       for (final normalizedPoint in normalizedVertices) {
-        _transformedVertices[i]
+        _globalVertices[i]
           ..setFrom(normalizedPoint)
           ..multiply(halfSize)
           ..multiply(scale)
@@ -136,9 +139,9 @@ class Polygon extends Shape {
       if (scale.y.isNegative || scale.x.isNegative) {
         // Since the list will be clockwise we have to reverse it for it to
         // become counterclockwise.
-        _reverseList(_transformedVertices);
+        _reverseList(_globalVertices);
       }
-      _cachedGlobalVertices.updateCache(_transformedVertices, [
+      _cachedGlobalVertices.updateCache(_globalVertices, [
         position.clone(),
         offsetPosition.clone(),
         relativeOffset.clone(),
@@ -150,9 +153,6 @@ class Polygon extends Shape {
     }
     return _cachedGlobalVertices.value!;
   }
-
-  final _cachedRenderPath = ValueCache<Path>();
-  final _path = Path();
 
   @override
   void render(Canvas canvas, Paint paint) {
