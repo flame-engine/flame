@@ -64,5 +64,22 @@ void main() {
       game.update(0);
       expect(game.children.length, equals(0));
     });
+
+    tester.test('calls callback when provided', (game) {
+      var called = false;
+      game.add(
+        TimerComponent(
+          limit: 1,
+          autoStart: true,
+          callback: () {
+            called = true;
+          },
+        ),
+      );
+      game.update(0);
+      game.update(1.2);
+
+      expect(called, isTrue);
+    });
   });
 }
