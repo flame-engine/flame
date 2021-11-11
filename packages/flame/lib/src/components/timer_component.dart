@@ -9,20 +9,20 @@ class TimerComponent extends Component {
 
   /// Creates a [TimerComponent]
   ///
-  /// [limit] The period of time in seconds that the tick will be called
-  /// [repeat] When true, this will continue running after [limit] is reached
+  /// [period] The period of time in seconds that the tick will be called
+  /// [repeat] When true, this will continue running after [period] is reached
   /// [autoStart] When true, will start upon instantiation
-  /// [callback] When provided, will be called everytime [limit] is reached. This
+  /// [callback] When provided, will be called everytime [period] is reached. This
   /// overrides the [tick] method
   TimerComponent({
-    required double limit,
+    required double period,
     bool repeat = false,
     bool autoStart = false,
     this.removeOnFinish = false,
     VoidCallback? callback,
   }) {
     timer = Timer(
-      limit,
+      period,
       repeat: repeat,
       callback: callback ?? tick,
     );

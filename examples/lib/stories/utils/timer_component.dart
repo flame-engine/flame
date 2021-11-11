@@ -12,9 +12,9 @@ class RenderedTimeComponent extends TimerComponent {
 
   final double yOffset;
 
-  RenderedTimeComponent(double limit, {this.yOffset = 150})
+  RenderedTimeComponent(double period, {this.yOffset = 150})
       : super(
-          limit: limit,
+          period: period,
           removeOnFinish: true,
           autoStart: true,
         );

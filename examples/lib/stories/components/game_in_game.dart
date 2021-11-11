@@ -14,7 +14,7 @@ After another 5 seconds it changes back to its original parent, and so on.
 ''';
 
 class GameChangeTimer extends TimerComponent with HasGameRef<GameInGame> {
-  GameChangeTimer() : super(limit: 5, repeat: true, autoStart: true);
+  GameChangeTimer() : super(period: 5, repeat: true, autoStart: true);
 
   @override
   void tick() {

@@ -8,7 +8,7 @@ class MyTimerComponent extends TimerComponent {
 
   MyTimerComponent()
       : super(
-          limit: 1,
+          period: 1,
           repeat: true,
           removeOnFinish: false,
           autoStart: true,
@@ -23,7 +23,7 @@ class MyTimerComponent extends TimerComponent {
 class NonRepeatingTimerComponent extends TimerComponent {
   NonRepeatingTimerComponent()
       : super(
-          limit: 1,
+          period: 1,
           repeat: false,
           removeOnFinish: true,
           autoStart: true,
@@ -69,7 +69,7 @@ void main() {
       var called = false;
       game.add(
         TimerComponent(
-          limit: 1,
+          period: 1,
           autoStart: true,
           callback: () {
             called = true;
