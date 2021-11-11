@@ -2,8 +2,7 @@ import 'dart:ui';
 
 import '../../components.dart';
 
-/// Simple component which wraps a [Timer] instance allowing it to be easily
-/// used inside a FlameGame game.
+/// A component that uses a [Timer] instance which you can react to when it has finished.
 class TimerComponent extends Component {
   late final Timer timer;
   final bool removeOnFinish;
