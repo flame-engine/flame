@@ -4,11 +4,11 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:test/test.dart';
 
-class _CustomTextRenderer extends TextRenderer<TextPaintConfig> {
-  _CustomTextRenderer() : super(config: const TextPaintConfig());
+class _CustomTextRenderer extends TextRenderer<TextStyle> {
+  _CustomTextRenderer() : super(style: const TextStyle());
   @override
-  TextRenderer<TextPaintConfig> copyWith(
-    BaseTextConfig Function(TextPaintConfig) transform,
+  TextRenderer<TextStyle> copyWith(
+    TextStyle Function(TextStyle) transform,
   ) {
     return this;
   }
@@ -37,9 +37,7 @@ void main() {
     test('copyWith', () {
       const style = TextStyle(fontSize: 12, fontFamily: 'Times');
       final tp = TextPaint(style: style)
-          .copyWith((t) => t.withFontFamily('Helvetica'));
-      expect(tp.config.fontSize, 12);
-      expect(tp.config.fontFamily, 'Helvetica');
+          .copyWith((t) => t.copyWith(fontFamily: 'Helvetica'));
       expect(tp.style.fontSize, 12);
       expect(tp.style.fontFamily, 'Helvetica');
     });
@@ -54,13 +52,13 @@ void main() {
     });
     test('change parameters of text component', () {
       final tc = TextComponent<TextPaint>('foo');
-      tc.textRenderer = tc.textRenderer.copyWithStyle(
+      tc.textRenderer = tc.textRenderer.copyWith(
         (c) => c.copyWith(fontSize: 200),
       );
-      expect(tc.textRenderer.config.fontSize, 200);
+      expect(tc.textRenderer.style.fontSize, 200);
     });
     test('custom renderer', () {
-      TextRenderer.defaultCreatorsRegistry[_CustomTextRenderer] =
+      TextRenderer.defaultRenderersRegistry[_CustomTextRenderer] =
           () => _CustomTextRenderer();
       final tc = TextComponent<_CustomTextRenderer>('foo');
       expect(tc.textRenderer, isA<_CustomTextRenderer>());

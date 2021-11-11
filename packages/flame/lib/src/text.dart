@@ -13,32 +13,34 @@ import 'extensions/vector2.dart';
 /// rendering in the engine.
 ///
 /// See [TextPaint] for the default implementation offered by Flame
-abstract class TextRenderer<T extends BaseTextConfig> {
+abstract class TextRenderer<T extends TextStyle> {
   /// A registry containing default providers for every [TextRenderer] subclass;
   /// used by [createDefault] to create default parameter values.
   ///
   /// If you add a new [TextRenderer] child, you can register it by adding it,
-  /// alongisde a provider lambda, to this map.
-  static Map<Type, TextRenderer Function()> defaultCreatorsRegistry = {
+  /// together with a provider lambda, to this map.
+  static Map<Type, TextRenderer Function()> defaultRenderersRegistry = {
     TextRenderer: () => TextPaint(),
     TextPaint: () => TextPaint(),
   };
 
-  final T config;
+  final T style;
+  final TextDirection textDirection;
 
-  TextRenderer({required this.config});
+  TextRenderer({required this.style, TextDirection? textDirection})
+      : textDirection = textDirection ?? TextDirection.ltr;
 
   /// Renders a given [text] in a given position [position] using the provided
   /// [canvas] and [anchor].
   ///
-  /// Renders it in the given position, considering the [anchor] specified.
   /// For example, if [Anchor.center] is specified, it's going to be drawn
   /// centered around [position].
   ///
   /// Example usage (Using TextPaint implementation):
   ///
-  ///     const TextPaint config = TextPaint(fontSize: 48.0, fontFamily: 'Awesome Font');
-  ///     config.render(canvas, Vector2(size.x - 10, size.y - 10, anchor: Anchor.bottomRight);
+  ///     const TextStyle style = TextStyle(fontSize: 48.0, fontFamily: 'Awesome Font');
+  ///     const TextPaint textPaint = TextPaint(style: style);
+  ///     textPaint.render(canvas, Vector2(size.x - 10, size.y - 10, anchor: Anchor.bottomRight);
   void render(
     Canvas canvas,
     String text,
@@ -60,13 +62,13 @@ abstract class TextRenderer<T extends BaseTextConfig> {
     );
   }
 
-  /// Creates a new instance of this painter but transforming the [config]
+  /// Creates a new instance of this painter but transforming the [style]
   /// object via the provided lambda.
   TextRenderer<T> copyWith(T Function(T) transform);
 
   /// Given a generic type [T], creates a default renderer of that type.
   static T createDefault<T extends TextRenderer>() {
-    final creator = defaultCreatorsRegistry[T];
+    final creator = defaultRenderersRegistry[T];
     if (creator != null) {
       return creator() as T;
     } else {
@@ -98,129 +100,21 @@ abstract class BaseTextConfig {
   });
 }
 
-/// An extension of the BaseTextConfig which includes more configs supported by
-/// TextPaint
-class TextPaintConfig extends BaseTextConfig {
-  /// The font color to be used.
-  ///
-  /// Dart's [Color] class is just a plain wrapper on top of ARGB color
-  /// (0xAARRGGBB).
-  /// For example,
-  ///
-  ///     const TextPaint config = TextPaint(color: const Color(0xFF00FF00)); // green
-  ///
-  /// You can also use your Palette class to access colors used in your game.
-  final Color color;
-
-  /// The font family to be used. You can use available by default fonts for
-  /// your platform (like Arial), or you can add custom fonts.
-  ///
-  /// To add custom fonts, add the following code to your pubspec.yaml file:
-  ///
-  ///     flutter:
-  ///       fonts:
-  ///         - family: 5x5
-  ///           fonts:
-  ///             - asset: assets/fonts/5x5_pixel.ttf
-  ///
-  /// In this example we are adding a font family that's being named '5x5'
-  /// provided in the specified ttf file.
-  /// You must provide the full path of the ttf file (from root); you should put
-  /// it into your assets folder, and preferably inside a fonts folder.
-  /// You don't need to add this together with the other assets on the
-  /// flutter/assets bit.
-  /// The name you choose for the font family can be any name (it's not inside
-  /// the TTF file and the filename doesn't need to match).
-  final String fontFamily;
-
-  /// Creates a constant [TextPaint] with sensible defaults.
-  ///
-  /// Every parameter can be specified.
-  const TextPaintConfig({
-    this.color = const Color(0xFF000000),
-    this.fontFamily = 'Arial',
-    double fontSize = 24.0,
-    TextDirection textDirection = TextDirection.ltr,
-    double? lineHeight,
-  }) : super(
-          fontSize: fontSize,
-          textDirection: textDirection,
-          lineHeight: lineHeight,
-        );
-
-  /// Creates a new [TextPaintConfig] changing only the [fontSize].
-  ///
-  /// This does not change the original (as it's immutable).
-  TextPaintConfig withFontSize(double fontSize) {
-    return TextPaintConfig(
-      fontSize: fontSize,
-      color: color,
-      fontFamily: fontFamily,
-      textDirection: textDirection,
-    );
-  }
-
-  /// Creates a new [TextPaintConfig] changing only the [color].
-  ///
-  /// This does not change the original (as it's immutable).
-  TextPaintConfig withColor(Color color) {
-    return TextPaintConfig(
-      fontSize: fontSize,
-      color: color,
-      fontFamily: fontFamily,
-      textDirection: textDirection,
-    );
-  }
-
-  /// Creates a new [TextPaintConfig] changing only the [fontFamily].
-  ///
-  /// This does not change the original (as it's immutable).
-  TextPaintConfig withFontFamily(String fontFamily) {
-    return TextPaintConfig(
-      fontSize: fontSize,
-      color: color,
-      fontFamily: fontFamily,
-      textDirection: textDirection,
-    );
-  }
-
-  /// Creates a new [TextPaintConfig] changing only the [textDirection].
-  ///
-  /// This does not change the original (as it's immutable).
-  TextPaintConfig withTextDirection(TextDirection textDirection) {
-    return TextPaintConfig(
-      fontSize: fontSize,
-      color: color,
-      fontFamily: fontFamily,
-      textDirection: textDirection,
-    );
-  }
-}
-
 /// It does not hold information regarding the position of the text to be
 /// rendered, nor does it contain the text itself (the string).
 /// To use that information, use the [TextComponent], which uses [TextPaint].
-class TextPaint extends TextRenderer<TextPaintConfig> {
-  static const _baseConfig = TextPaintConfig();
+class TextPaint extends TextRenderer {
   final MemoryCache<String, TextPainter> _textPainterCache = MemoryCache();
-  final TextStyle style;
 
   TextPaint({TextStyle? style, TextDirection? textDirection})
-      : style = style ??
-            TextStyle(
-              color: _baseConfig.color,
-              fontFamily: _baseConfig.fontFamily,
-              fontSize: _baseConfig.fontSize,
-              height: _baseConfig.lineHeight,
-            ),
-        super(
-          config: TextPaintConfig(
-            color: style?.color ?? _baseConfig.color,
-            fontFamily: style?.fontFamily ?? _baseConfig.fontFamily,
-            fontSize: style?.fontSize ?? _baseConfig.fontSize,
-            textDirection: textDirection ?? TextDirection.ltr,
-            lineHeight: style?.height ?? _baseConfig.lineHeight,
-          ),
+      : super(
+          style: style ??
+              const TextStyle(
+                color: Colors.white,
+                fontFamily: 'Arial',
+                fontSize: 24,
+              ),
+          textDirection: textDirection,
         );
 
   @override
@@ -268,7 +162,7 @@ class TextPaint extends TextRenderer<TextPaintConfig> {
       );
       final tp = TextPainter(
         text: span,
-        textDirection: config.textDirection,
+        textDirection: textDirection,
       );
       tp.layout();
 
@@ -279,12 +173,6 @@ class TextPaint extends TextRenderer<TextPaintConfig> {
 
   @override
   TextPaint copyWith(
-    TextPaintConfig Function(TextPaintConfig) transform,
-  ) {
-    throw UnimplementedError('Use copyWithStyle instead');
-  }
-
-  TextPaint copyWithStyle(
     TextStyle Function(TextStyle) transform, {
     TextDirection? textDirection,
   }) {
