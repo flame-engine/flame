@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -325,5 +326,95 @@ void main() {
         true,
       );
     });
+
+    flameGame.test(
+      'CircleComponent with multiple parents contains point',
+      (game) async {
+        PositionComponent createParent() {
+          return PositionComponent(
+            position: Vector2.all(1.0),
+            size: Vector2.all(2.0),
+            angle: pi / 2,
+          );
+        }
+
+        final component = CircleComponent(
+          radius: 1.0,
+          position: Vector2.all(1.0),
+          anchor: Anchor.center,
+        );
+        final grandParent = createParent();
+        final parent = createParent();
+        grandParent.add(parent);
+        parent.add(component);
+        await game.add(grandParent);
+        expect(
+          component.containsPoint(Vector2(-1.0, 1.0)),
+          true,
+        );
+      },
+    );
+
+    flameGame.test(
+      'RectangleComponent with multiple parents contains point',
+      (game) async {
+        PositionComponent createParent() {
+          return PositionComponent(
+            position: Vector2.all(1.0),
+            size: Vector2.all(2.0),
+            angle: pi / 2,
+          );
+        }
+
+        final component = RectangleComponent(
+          size: Vector2.all(1.0),
+          position: Vector2.all(1.0),
+          anchor: Anchor.center,
+        );
+        final grandParent = createParent();
+        final parent = createParent();
+        grandParent.add(parent);
+        parent.add(component);
+        await game.add(grandParent);
+        expect(
+          component.containsPoint(Vector2(-1.0, 1.0)),
+          true,
+        );
+      },
+    );
+
+    flameGame.test(
+      'PolygonComponent with multiple parents contains point',
+      (game) async {
+        PositionComponent createParent() {
+          return PositionComponent(
+            position: Vector2.all(1.0),
+            size: Vector2.all(2.0),
+            angle: pi / 2,
+          );
+        }
+
+        final component = PolygonComponent(
+          normalizedVertices: [
+            Vector2(1, 0),
+            Vector2(0, -1),
+            Vector2(-1, 0),
+            Vector2(0, 1),
+          ],
+          size: Vector2.all(1.0),
+          position: Vector2.all(1.0),
+          anchor: Anchor.center,
+        );
+        final grandParent = createParent();
+        final parent = createParent();
+        grandParent.add(parent);
+        parent.add(component);
+        await game.add(grandParent);
+        expect(
+          component.containsPoint(Vector2(-1.0, 1.0)),
+          true,
+        );
+      },
+    );
   });
 }
