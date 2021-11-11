@@ -13,7 +13,7 @@ import 'extensions/vector2.dart';
 /// rendering in the engine.
 ///
 /// See [TextPaint] for the default implementation offered by Flame
-abstract class TextRenderer<T extends TextStyle> {
+abstract class TextRenderer {
   /// A registry containing default providers for every [TextRenderer] subclass;
   /// used by [createDefault] to create default parameter values.
   ///
@@ -24,10 +24,9 @@ abstract class TextRenderer<T extends TextStyle> {
     TextPaint: () => TextPaint(),
   };
 
-  final T style;
   final TextDirection textDirection;
 
-  TextRenderer({required this.style, TextDirection? textDirection})
+  TextRenderer({TextDirection? textDirection})
       : textDirection = textDirection ?? TextDirection.ltr;
 
   /// Renders a given [text] in a given position [position] using the provided
@@ -62,10 +61,6 @@ abstract class TextRenderer<T extends TextStyle> {
     );
   }
 
-  /// Creates a new instance of this painter but transforming the [style]
-  /// object via the provided lambda.
-  TextRenderer<T> copyWith(T Function(T) transform);
-
   /// Given a generic type [T], creates a default renderer of that type.
   static T createDefault<T extends TextRenderer>() {
     final creator = defaultRenderersRegistry[T];
@@ -77,43 +72,22 @@ abstract class TextRenderer<T extends TextStyle> {
   }
 }
 
-/// A Text Config contains all typographical information required to render
-/// texts; i.e., font size, text direction, etc.
-abstract class BaseTextConfig {
-  /// The font size to be used, in points.
-  final double fontSize;
-
-  /// The direction to render this text (left to right or right to left).
-  ///
-  /// Normally, leave this as is for most languages.
-  /// For proper fonts of languages like Hebrew or Arabic, replace this with
-  /// [TextDirection.rtl].
-  final TextDirection textDirection;
-
-  /// The height of line, as a multiple of font size.
-  final double? lineHeight;
-
-  const BaseTextConfig({
-    this.fontSize = 24.0,
-    this.textDirection = TextDirection.ltr,
-    this.lineHeight,
-  });
-}
-
 /// It does not hold information regarding the position of the text to be
 /// rendered, nor does it contain the text itself (the string).
 /// To use that information, use the [TextComponent], which uses [TextPaint].
 class TextPaint extends TextRenderer {
+  static const TextStyle defaultTextStyle = TextStyle(
+    color: Colors.white,
+    fontFamily: 'Arial',
+    fontSize: 24,
+  );
+
   final MemoryCache<String, TextPainter> _textPainterCache = MemoryCache();
+  final TextStyle style;
 
   TextPaint({TextStyle? style, TextDirection? textDirection})
-      : super(
-          style: style ??
-              const TextStyle(
-                color: Colors.white,
-                fontFamily: 'Arial',
-                fontSize: 24,
-              ),
+      : style = style ?? defaultTextStyle,
+        super(
           textDirection: textDirection,
         );
 
@@ -171,7 +145,6 @@ class TextPaint extends TextRenderer {
     return _textPainterCache.getValue(text)!;
   }
 
-  @override
   TextPaint copyWith(
     TextStyle Function(TextStyle) transform, {
     TextDirection? textDirection,

@@ -4,15 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:test/test.dart';
 
-class _CustomTextRenderer extends TextRenderer<TextStyle> {
-  _CustomTextRenderer() : super(style: const TextStyle());
-  @override
-  TextRenderer<TextStyle> copyWith(
-    TextStyle Function(TextStyle) transform,
-  ) {
-    return this;
-  }
-
+class _CustomTextRenderer extends TextRenderer {
   @override
   double measureTextHeight(String text) {
     return 0;
