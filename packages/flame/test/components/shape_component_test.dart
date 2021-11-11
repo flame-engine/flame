@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/geometry.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -11,6 +10,7 @@ void main() {
       final component = CircleComponent(
         radius: 1.0,
         position: Vector2(1, 1),
+        anchor: Anchor.center,
       );
       expect(
         component.containsPoint(Vector2.all(1.5)),
@@ -30,12 +30,15 @@ void main() {
     });
 
     test('Simple polygon contains point', () {
-      final component = Polygon([
-        Vector2(2, 2),
-        Vector2(2, 1),
-        Vector2(2, 0),
-        Vector2(1, 1),
-      ]);
+      final component = PolygonComponent.fromPoints(
+        [
+          Vector2(2, 2),
+          Vector2(2, 1),
+          Vector2(2, 0),
+          Vector2(1, 1),
+        ],
+        anchor: Anchor.center,
+      );
       expect(
         component.containsPoint(Vector2(2.0, 1.9)),
         true,
@@ -47,6 +50,7 @@ void main() {
         radius: 1.0,
         position: Vector2(1, 1),
         angle: pi / 4,
+        anchor: Anchor.center,
       );
       expect(
         component.containsPoint(Vector2.all(1.9)),
@@ -59,6 +63,7 @@ void main() {
         position: Vector2.all(1.0),
         size: Vector2.all(2.0),
         angle: pi / 4,
+        anchor: Anchor.center,
       );
       expect(
         component.containsPoint(Vector2.all(1.9)),
@@ -67,7 +72,7 @@ void main() {
     });
 
     test('Rotated polygon does not contain point', () {
-      final component = Polygon(
+      final component = PolygonComponent.fromPoints(
         [
           Vector2(2, 2),
           Vector2(2, 1),
@@ -75,6 +80,7 @@ void main() {
           Vector2(1, 1),
         ],
         angle: pi / 4,
+        anchor: Anchor.center,
       );
       expect(
         component.containsPoint(Vector2.all(1.9)),
@@ -87,6 +93,7 @@ void main() {
         radius: 1.0,
         position: Vector2(1, 1),
         angle: pi / 4,
+        anchor: Anchor.center,
       );
       expect(
         component.containsPoint(Vector2(1.0, 1.9)),
@@ -99,6 +106,7 @@ void main() {
         position: Vector2.all(1.0),
         size: Vector2.all(2.0),
         angle: pi / 4,
+        anchor: Anchor.center,
       );
       expect(
         component.containsPoint(Vector2(1.0, 2.1)),
@@ -107,7 +115,7 @@ void main() {
     });
 
     test('Rotated polygon contains point', () {
-      final component = Polygon(
+      final component = PolygonComponent.fromPoints(
         [
           Vector2(2, 2),
           Vector2(3, 1),
@@ -115,6 +123,7 @@ void main() {
           Vector2(1, 1),
         ],
         angle: pi / 4,
+        anchor: Anchor.center,
       );
       expect(
         component.containsPoint(Vector2(2.7, 1.7)),
@@ -126,6 +135,7 @@ void main() {
       final component = RectangleComponent(
         position: Vector2.all(1.0),
         size: Vector2.all(2.0),
+        anchor: Anchor.center,
       )..flipVerticallyAroundCenter();
       expect(
         component.containsPoint(Vector2(2.0, 2.0)),
@@ -138,6 +148,7 @@ void main() {
         radius: 1.0,
         position: Vector2(1, 1),
         angle: pi / 4,
+        anchor: Anchor.center,
       );
       expect(
         component.containsPoint(Vector2.all(1.9)),
@@ -150,6 +161,7 @@ void main() {
         position: Vector2.all(1.0),
         size: Vector2.all(2.0),
         angle: pi / 4,
+        anchor: Anchor.center,
       );
       expect(
         component.containsPoint(Vector2.all(1.9)),
@@ -166,6 +178,7 @@ void main() {
           Vector2(1, 1),
         ],
         angle: pi / 4,
+        anchor: Anchor.center,
       );
       expect(
         component.containsPoint(Vector2.all(1.9)),
@@ -181,6 +194,7 @@ void main() {
           Vector2(2, 0),
           Vector2(1, 1),
         ],
+        anchor: Anchor.center,
       );
       component.angle = pi / 4;
       expect(
@@ -193,6 +207,7 @@ void main() {
       final component = CircleComponent(
         radius: 1.0,
         position: Vector2(2, 2),
+        anchor: Anchor.center,
       );
       expect(
         component.containsPoint(Vector2.all(2.1)),
@@ -204,6 +219,7 @@ void main() {
       final component = RectangleComponent(
         position: Vector2(2, 2),
         size: Vector2(1, 1),
+        anchor: Anchor.center,
       );
       expect(
         component.containsPoint(Vector2.all(2.1)),
@@ -220,6 +236,7 @@ void main() {
           Vector2(3, 1),
         ],
         position: Vector2.all(1.0),
+        anchor: Anchor.center,
       );
       expect(
         component.containsPoint(Vector2(0.9, 1.0)),
@@ -231,6 +248,7 @@ void main() {
       final component = CircleComponent(
         radius: 1.0,
         position: Vector2(1, 1),
+        anchor: Anchor.center,
       );
       component.size += Vector2.all(1.0);
       expect(
@@ -243,6 +261,7 @@ void main() {
       final component = RectangleComponent(
         position: Vector2(1, 1),
         size: Vector2(2, 2),
+        anchor: Anchor.center,
       );
       expect(
         component.containsPoint(Vector2.all(2.1)),
@@ -251,16 +270,59 @@ void main() {
     });
 
     test('Sized PolygonComponent does not contain point', () {
-      final component = PolygonComponent.fromPoints([
-        Vector2(2, 0),
-        Vector2(1, 1),
-        Vector2(2, 2),
-        Vector2(3, 1),
-      ]);
+      final component = PolygonComponent.fromPoints(
+        [
+          Vector2(2, 0),
+          Vector2(1, 1),
+          Vector2(2, 2),
+          Vector2(3, 1),
+        ],
+        anchor: Anchor.center,
+      );
       component.size += Vector2.all(1.0);
       expect(
         component.containsPoint(Vector2(2.0, 2.6)),
         false,
+      );
+    });
+
+    test('CircleComponent with default anchor (topLeft) contains point', () {
+      final component = CircleComponent(
+        radius: 1.0,
+        position: Vector2.all(1.0),
+        angle: pi / 4,
+      );
+      expect(
+        component.containsPoint(Vector2(0.9, 2.0)),
+        true,
+      );
+    });
+
+    test('RectangleComponent with default anchor (topLeft) contains point', () {
+      final component = RectangleComponent(
+        position: Vector2.all(1.0),
+        size: Vector2.all(1.0),
+        angle: pi / 4,
+      );
+      expect(
+        component.containsPoint(Vector2(0.9, 2.0)),
+        true,
+      );
+    });
+
+    test('PolygonComponent with default anchor (topLeft) contains point', () {
+      final component = PolygonComponent.fromPoints(
+        [
+          Vector2(2, 0),
+          Vector2(1, 1),
+          Vector2(2, 2),
+          Vector2(3, 1),
+        ],
+        angle: pi / 4,
+      );
+      expect(
+        component.containsPoint(Vector2(1.0, 0.99)),
+        true,
       );
     });
   });

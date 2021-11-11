@@ -50,6 +50,7 @@ class CircleComponent extends ShapeComponent {
     Vector2? position,
     Vector2? scale,
     double? angle,
+    Anchor? anchor,
     int? priority,
   }) : super(
           HitboxCircle(),
@@ -58,6 +59,7 @@ class CircleComponent extends ShapeComponent {
           size: Vector2.all(radius * 2),
           scale: scale,
           angle: angle,
+          anchor: anchor,
           priority: priority,
         );
 }
@@ -69,6 +71,7 @@ class RectangleComponent extends ShapeComponent {
     Vector2? position,
     Vector2? scale,
     double? angle,
+    Anchor? anchor,
     int? priority,
   }) : super(
           HitboxRectangle(),
@@ -77,6 +80,7 @@ class RectangleComponent extends ShapeComponent {
           size: size,
           scale: scale,
           angle: angle,
+          anchor: anchor,
           priority: priority,
         );
 
@@ -86,6 +90,7 @@ class RectangleComponent extends ShapeComponent {
     Vector2? position,
     Vector2? scale,
     double? angle,
+    Anchor? anchor,
     int? priority,
   }) : super(
           HitboxRectangle(),
@@ -94,6 +99,7 @@ class RectangleComponent extends ShapeComponent {
           size: Vector2.all(size),
           scale: scale,
           angle: angle,
+          anchor: anchor,
           priority: priority,
         );
 }
@@ -109,6 +115,7 @@ class PolygonComponent extends ShapeComponent {
     Vector2? size,
     Vector2? scale,
     double? angle,
+    Anchor? anchor,
     int? priority,
   }) : super(
           HitboxPolygon(normalizedVertices),
@@ -117,6 +124,7 @@ class PolygonComponent extends ShapeComponent {
           size: size,
           scale: scale,
           angle: angle,
+          anchor: anchor,
           priority: priority,
         );
 
@@ -130,16 +138,24 @@ class PolygonComponent extends ShapeComponent {
     Vector2? size,
     Vector2? scale,
     double? angle,
+    Anchor? anchor,
     int? priority,
   }) {
     final polygon = Polygon(points);
+    final anchorPosition = position ??
+        Anchor.center.toOtherAnchorPosition(
+          polygon.position,
+          anchor ?? Anchor.topLeft,
+          size ?? polygon.size,
+        );
     return PolygonComponent(
       normalizedVertices: polygon.normalizedVertices,
       paint: paint,
-      position: position ?? polygon.position,
+      position: anchorPosition,
       size: size ?? polygon.size,
       scale: scale,
       angle: angle,
+      anchor: anchor,
       priority: priority,
     );
   }
