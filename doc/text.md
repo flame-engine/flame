@@ -109,9 +109,9 @@ class MyTextBox extends TextBoxComponent {
     c.drawRect(rect, Paint()..color = Color(0xFFFF00FF));
     c.drawRect(
         rect.deflate(boxConfig.margin),
-        Paint()
-          ..color = BasicPalette.black.color
-          ..style = PaintingStyle.stroke);
+        BasicPalette.black.Paint()
+          ..style = PaintingStyle.stroke,
+    );
   }
 }
 ```

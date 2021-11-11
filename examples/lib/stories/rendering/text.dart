@@ -5,10 +5,10 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
-final _regularTextConfig =
+final _regularTextStyle =
     TextStyle(fontSize: 18, color: BasicPalette.white.color);
-final _regular = TextPaint(style: _regularTextConfig);
-final _tiny = TextPaint(style: _regularTextConfig.copyWith(fontSize: 14.0));
+final _regular = TextPaint(style: _regularTextStyle);
+final _tiny = TextPaint(style: _regularTextStyle.copyWith(fontSize: 14.0));
 final _box = _regular.copyWith(
   (style) => style.copyWith(
     color: Colors.lightGreenAccent,
