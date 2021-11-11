@@ -135,12 +135,10 @@ class MyFlameGame extends FlameGame {
   MyFlameGame() {
     add(
       TimerComponent(
-        Timer(
-          10,
-          callback: () => print("10 seconds elapsed"),
-          repeat: true,
-        )
-        ..start()
+        period: 10,
+        repeat: true,
+        callback: () => print("10 seconds elapsed"),
+        autoStart: true,
       )
     );
   }
