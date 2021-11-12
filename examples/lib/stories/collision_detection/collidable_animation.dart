@@ -22,25 +22,32 @@ class CollidableAnimationExample extends FlameGame with HasCollidables {
     await super.onLoad();
     add(ScreenCollidable());
     // Top left component
-    add(AnimatedComponent(Vector2.all(200), Vector2.all(100))
-      ..flipVertically());
+    add(
+      AnimatedComponent(Vector2.all(200), Vector2.all(100))..flipVertically(),
+    );
     // Bottom right component
-    add(AnimatedComponent(
-      Vector2(-100, -100),
-      size.clone()..sub(Vector2.all(200)),
-    ));
+    add(
+      AnimatedComponent(
+        Vector2(-100, -100),
+        size.clone()..sub(Vector2.all(200)),
+      ),
+    );
     // Bottom left component
-    add(AnimatedComponent(
-      Vector2(100, -100),
-      Vector2(100, size.y - 100),
-      angle: pi / 4,
-    ));
+    add(
+      AnimatedComponent(
+        Vector2(100, -100),
+        Vector2(100, size.y - 100),
+        angle: pi / 4,
+      ),
+    );
     // Top right component
-    add(AnimatedComponent(
-      Vector2(-300, 300),
-      Vector2(size.x - 100, 100),
-      angle: pi / 4,
-    )..flipVertically());
+    add(
+      AnimatedComponent(
+        Vector2(-300, 300),
+        Vector2(size.x - 100, 100),
+        angle: pi / 4,
+      )..flipVertically(),
+    );
   }
 }
 
