@@ -11,7 +11,7 @@ import 'package:flame/palette.dart';
 
 enum Shapes { circle, rectangle, polygon }
 
-class SimpleShapes extends FlameGame with HasTappableComponents {
+class SimpleShapesExample extends FlameGame with HasTappableComponents {
   static const description = '''
     An example which adds random shapes on the screen when you tap it, if you
     tap on an already existing shape it will remove that shape and replace it

@@ -9,7 +9,7 @@ import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 
-class CollidableAnimationGame extends FlameGame with HasCollidables {
+class CollidableAnimationExample extends FlameGame with HasCollidables {
   static const description = '''
     In this example you can see four animated birds which are flying straight
     along the same route until they hit either another bird or the wall, which

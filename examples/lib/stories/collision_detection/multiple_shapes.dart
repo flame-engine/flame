@@ -11,7 +11,7 @@ import 'package:flutter/material.dart' hide Image, Draggable;
 
 enum Shapes { circle, rectangle, polygon }
 
-class MultipleShapes extends FlameGame
+class MultipleShapesExample extends FlameGame
     with HasCollidables, HasDraggableComponents, FPSCounter {
   static const description = '''
     An example with many hitboxes that move around on the screen and during

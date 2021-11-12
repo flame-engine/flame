@@ -11,26 +11,26 @@ void addCollisionDetectionStories(Dashbook dashbook) {
   dashbook.storiesOf('Collision Detection')
     ..add(
       'Collidable AnimationComponent',
-      (_) => GameWidget(game: CollidableAnimationGame()),
+      (_) => GameWidget(game: CollidableAnimationExample()),
       codeLink: baseLink('collision_detection/collidable_animation.dart'),
-      info: CollidableAnimationGame.description,
+      info: CollidableAnimationExample.description,
     )
     ..add(
       'Circles',
-      (_) => GameWidget(game: Circles()),
+      (_) => GameWidget(game: CirclesExample()),
       codeLink: baseLink('collision_detection/circles.dart'),
-      info: Circles.description,
+      info: CirclesExample.description,
     )
     ..add(
       'Multiple shapes',
-      (_) => GameWidget(game: MultipleShapes()),
+      (_) => GameWidget(game: MultipleShapesExample()),
       codeLink: baseLink('collision_detection/multiple_shapes.dart'),
-      info: MultipleShapes.description,
+      info: MultipleShapesExample.description,
     )
     ..add(
       'Simple Shapes',
-      (_) => GameWidget(game: SimpleShapes()),
+      (_) => GameWidget(game: SimpleShapesExample()),
       codeLink: baseLink('collision_detection/simple_shapes.dart'),
-      info: SimpleShapes.description,
+      info: SimpleShapesExample.description,
     );
 }
