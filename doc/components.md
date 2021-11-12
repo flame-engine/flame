@@ -431,7 +431,7 @@ the shape of the specific component, it also takes all the arguments that can be
 `PositionComponent`.
 
 ### CircleComponent
-A `CircleComponent` can be created only defining it's `radius`, but you most likely want to pass it
+A `CircleComponent` can be created only by defining its `radius`, but you most likely want to pass it
 a `position` and maybe `paint` (the default is white) too.
 
 Example:
