@@ -25,6 +25,7 @@
  - `TextPaint` to use `TextStyle` (material) instead of `TextPaintConfig`
  - Underlying `Shape`s in `ShapeComponent` transform with components position, size and angle
  - `HitboxShape` takes parents ancestors transformations into consideration (not scaling)
+ - Fixed black frame when updating game widget (ex: adding overlays)
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
