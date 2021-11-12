@@ -442,7 +442,7 @@ final circle = CircleComponent(radius: 200.0, position: Vector2(100, 200), paint
 
 ### RectangleComponent
 A `RectangleComponent` can be created in two ways, depending on if it is a square or not.
-To create a `RectangleComponent` that is 300px wide and 200px in height you can do the following:
+To create a `RectangleComponent` that is 300 in width and 200 in height you can do the following:
 
 Example:
 ```dart
@@ -456,7 +456,7 @@ final rectangle = RectangleComponent(
 
 To create a square you can instead use the slightly simpler named constructor
 `RectangleComponent.square`. This is an example of how to create a red square with width and height
-200px:
+200:
 
 ```dart
 final paint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
