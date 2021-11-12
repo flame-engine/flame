@@ -15,7 +15,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2.all(1.5)),
-        true,
+        isTrue,
       );
     });
 
@@ -26,7 +26,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2.all(1.5)),
-        true,
+        isTrue,
       );
     });
 
@@ -42,7 +42,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2(2.0, 1.9)),
-        true,
+        isTrue,
       );
     });
 
@@ -55,7 +55,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2.all(1.9)),
-        false,
+        isFalse,
       );
     });
 
@@ -68,7 +68,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2.all(1.9)),
-        false,
+        isFalse,
       );
     });
 
@@ -85,7 +85,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2.all(1.9)),
-        false,
+        isFalse,
       );
     });
 
@@ -98,7 +98,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2(1.0, 1.9)),
-        true,
+        isTrue,
       );
     });
 
@@ -111,7 +111,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2(1.0, 2.1)),
-        true,
+        isTrue,
       );
     });
 
@@ -128,7 +128,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2(2.7, 1.7)),
-        true,
+        isTrue,
       );
     });
 
@@ -140,7 +140,7 @@ void main() {
       )..flipVerticallyAroundCenter();
       expect(
         component.containsPoint(Vector2(2.0, 2.0)),
-        true,
+        isTrue,
       );
     });
 
@@ -153,7 +153,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2.all(1.9)),
-        false,
+        isFalse,
       );
     });
 
@@ -166,7 +166,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2.all(1.9)),
-        false,
+        isFalse,
       );
     });
 
@@ -183,7 +183,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2.all(1.9)),
-        false,
+        isFalse,
       );
     });
 
@@ -200,7 +200,7 @@ void main() {
       component.angle = pi / 4;
       expect(
         component.containsPoint(Vector2(2.7, 1.7)),
-        true,
+        isTrue,
       );
     });
 
@@ -212,7 +212,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2.all(2.1)),
-        true,
+        isTrue,
       );
     });
 
@@ -224,7 +224,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2.all(2.1)),
-        true,
+        isTrue,
       );
     });
 
@@ -241,7 +241,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2(0.9, 1.0)),
-        true,
+        isTrue,
       );
     });
 
@@ -254,7 +254,7 @@ void main() {
       component.size += Vector2.all(1.0);
       expect(
         component.containsPoint(Vector2.all(2.1)),
-        false,
+        isFalse,
       );
     });
 
@@ -266,7 +266,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2.all(2.1)),
-        false,
+        isFalse,
       );
     });
 
@@ -283,7 +283,7 @@ void main() {
       component.size += Vector2.all(1.0);
       expect(
         component.containsPoint(Vector2(2.0, 2.6)),
-        false,
+        isFalse,
       );
     });
 
@@ -295,7 +295,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2(0.9, 2.0)),
-        true,
+        isTrue,
       );
     });
 
@@ -307,7 +307,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2(0.9, 2.0)),
-        true,
+        isTrue,
       );
     });
 
@@ -323,7 +323,7 @@ void main() {
       );
       expect(
         component.containsPoint(Vector2(1.0, 0.99)),
-        true,
+        isTrue,
       );
     });
 
@@ -350,7 +350,7 @@ void main() {
         await game.add(grandParent);
         expect(
           component.containsPoint(Vector2(-1.0, 1.0)),
-          true,
+          isTrue,
         );
       },
     );
@@ -378,7 +378,7 @@ void main() {
         await game.add(grandParent);
         expect(
           component.containsPoint(Vector2(-1.0, 1.0)),
-          true,
+          isTrue,
         );
       },
     );
@@ -412,7 +412,7 @@ void main() {
         await game.add(grandParent);
         expect(
           component.containsPoint(Vector2(-1.0, 1.0)),
-          true,
+          isTrue,
         );
       },
     );
