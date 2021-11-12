@@ -10,25 +10,24 @@ import '../palette.dart';
 import '../text.dart';
 import 'position_component.dart';
 
-/// A set of configurations for the [TextBoxComponent] itself (as opposed to
-/// the [TextRenderer], that contains the configuration for how to render the
-/// text only (font size, color, family, etc)).
+/// A set of configurations for the [TextBoxComponent] itself, as opposed to
+/// the [TextRenderer], which contains the configuration for how to render the
+/// text only (font size, color, family, etc).
 class TextBoxConfig {
   /// Max width this paragraph can take. Lines will be broken trying to respect
   /// word boundaries in as many lines as necessary.
   final double maxWidth;
 
-  /// Margins of the text box w.r.t the [PositionComponent.size].
+  /// Margins of the text box with respect to the [PositionComponent.size].
   final EdgeInsets margins;
 
-  /// Defaults to 0. If not zero the characters will appear one by one giving
-  /// a typying effect to the text box, and this will be the delay in seconds
-  /// between each char.
+  /// Defaults to 0. If not zero, the characters will appear one-by-one giving
+  /// a typing effect to the text box, and this will be the delay in seconds
+  /// between each character.
   final double timePerChar;
 
-  /// Defaults to 9. If not zero, this component will disapear this amount of
-  /// seconds after being completed (if [timePerChar] is set) or after first
-  /// appearing (otherwise).
+  /// Defaults to 0. If not zero, this component will disappear after this many
+  /// seconds after being fully typed out.
   final double dismissDelay;
 
   /// Only relevant if [timePerChar] is set. If true, the box will start with
