@@ -441,7 +441,7 @@ final circle = CircleComponent(radius: 200.0, position: Vector2(100, 200), paint
 ```
 
 ### RectangleComponent
-A `RectangleComponent` can be created in two ways, depending on if it is a square or not.
+A `RectangleComponent` can be created in two ways, depending on if it's a square or not.
 To create a `RectangleComponent` that is 300 in width and 200 in height you can do the following:
 
 Example:
