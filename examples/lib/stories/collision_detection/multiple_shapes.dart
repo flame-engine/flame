@@ -212,12 +212,14 @@ class CollidableSnowman extends MyCollidable {
     addHitbox(top);
     addHitbox(middle);
     addHitbox(bottom);
-    add(randomCollidable(
-      Vector2(size.x / 2, size.y * 0.75),
-      size / 4,
-      Vector2.zero(),
-      screenCollidable,
-    ));
+    add(
+      randomCollidable(
+        Vector2(size.x / 2, size.y * 0.75),
+        size / 4,
+        Vector2.zero(),
+        screenCollidable,
+      ),
+    );
   }
 }
 

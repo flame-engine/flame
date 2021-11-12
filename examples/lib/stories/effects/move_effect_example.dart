@@ -5,6 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flame/src/effects2/move_effect.dart'; // ignore: implementation_imports
 import 'package:flame/src/effects2/standard_effect_controller.dart'; // ignore: implementation_imports
 import 'package:flutter/material.dart';
+
 import '../../commons/square_component.dart';
 
 class MoveEffectExample extends FlameGame {
@@ -36,37 +37,43 @@ class MoveEffectExample extends FlameGame {
 
     add(
       SquareComponent(position: Vector2(20, 50), size: 20, paint: paint1)
-        ..add(MoveEffect.to(
-          Vector2(380, 50),
-          StandardEffectController(
-            duration: 3,
-            reverseDuration: 3,
-            infinite: true,
-            curve: Curves.easeOut,
+        ..add(
+          MoveEffect.to(
+            Vector2(380, 50),
+            StandardEffectController(
+              duration: 3,
+              reverseDuration: 3,
+              infinite: true,
+              curve: Curves.easeOut,
+            ),
           ),
-        )),
+        ),
     );
     add(
       SquareComponent(position: Vector2(20, 150), size: 20, paint: paint2)
-        ..add(MoveEffect.to(
-          Vector2(380, 150),
-          StandardEffectController(
-            duration: 3,
-            reverseDuration: 3,
-            infinite: true,
+        ..add(
+          MoveEffect.to(
+            Vector2(380, 150),
+            StandardEffectController(
+              duration: 3,
+              reverseDuration: 3,
+              infinite: true,
+            ),
           ),
-        ))
-        ..add(MoveEffect.by(
-          Vector2(0, -50),
-          StandardEffectController(
-            duration: 0.25,
-            reverseDuration: 0.25,
-            startDelay: 1,
-            atMinDuration: 2,
-            curve: Curves.ease,
-            infinite: true,
+        )
+        ..add(
+          MoveEffect.by(
+            Vector2(0, -50),
+            StandardEffectController(
+              duration: 0.25,
+              reverseDuration: 0.25,
+              startDelay: 1,
+              atMinDuration: 2,
+              curve: Curves.ease,
+              infinite: true,
+            ),
           ),
-        )),
+        ),
     );
 
     final path1 = Path()..moveTo(200, 250);
@@ -80,12 +87,13 @@ class MoveEffectExample extends FlameGame {
         CircleComponent(5)
           ..add(
             MoveEffect.along(
-                path1,
-                StandardEffectController(
-                  duration: 10,
-                  startDelay: i * 0.2,
-                  infinite: true,
-                )),
+              path1,
+              StandardEffectController(
+                duration: 10,
+                startDelay: i * 0.2,
+                infinite: true,
+              ),
+            ),
           ),
       );
     }
@@ -95,14 +103,16 @@ class MoveEffectExample extends FlameGame {
       add(
         SquareComponent(size: 10)
           ..paint = (Paint()..color = const Color(0xFF00FFF7))
-          ..add(MoveEffect.along(
-            path2,
-            StandardEffectController(
-              duration: 6,
-              startDelay: i * 0.3,
-              infinite: true,
+          ..add(
+            MoveEffect.along(
+              path2,
+              StandardEffectController(
+                duration: 6,
+                startDelay: i * 0.3,
+                infinite: true,
+              ),
             ),
-          )),
+          ),
       );
     }
   }

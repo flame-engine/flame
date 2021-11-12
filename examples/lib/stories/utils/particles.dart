@@ -428,21 +428,23 @@ class ParticlesGame extends FlameGame with FPSCounter {
         return AcceleratedParticle(
           speed: initialSpeed,
           acceleration: deceleration + gravity,
-          child: ComputedParticle(renderer: (canvas, particle) {
-            final paint = randomElement(paints);
-            // Override the color to dynamically update opacity
-            paint.color = paint.color.withOpacity(1 - particle.progress);
+          child: ComputedParticle(
+            renderer: (canvas, particle) {
+              final paint = randomElement(paints);
+              // Override the color to dynamically update opacity
+              paint.color = paint.color.withOpacity(1 - particle.progress);
 
-            canvas.drawCircle(
-              Offset.zero,
-              // Closer to the end of lifespan particles
-              // will turn into larger glaring circles
-              rnd.nextDouble() * particle.progress > .6
-                  ? rnd.nextDouble() * (50 * particle.progress)
-                  : 2 + (3 * particle.progress),
-              paint,
-            );
-          }),
+              canvas.drawCircle(
+                Offset.zero,
+                // Closer to the end of lifespan particles
+                // will turn into larger glaring circles
+                rnd.nextDouble() * particle.progress > .6
+                    ? rnd.nextDouble() * (50 * particle.progress)
+                    : 2 + (3 * particle.progress),
+                paint,
+              );
+            },
+          ),
         );
       },
     );
