@@ -199,7 +199,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       _initMouseCursor();
       addMouseCursorListener();
 
-      // reset the onload
+      // Reset the loaderFuture so that onMount will run again (onLoad is still cached).
       _loaderFuture = null;
     }
   }
