@@ -138,11 +138,15 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   MouseCursor? _mouseCursor;
 
-  late final Future<void> _loaderFuture = (() {
-    final onLoad = widget.game.onLoadCache;
-    final onMount = widget.game.onMount;
-    return (onLoad ?? Future<void>.value()).then((_) => onMount());
-  })();
+  Future<void> get onloadFuture =>
+      _loaderFuture ??
+      (_loaderFuture = (() {
+        final onLoad = widget.game.onLoadCache;
+        final onMount = widget.game.onMount;
+        return (onLoad ?? Future<void>.value()).then((_) => onMount());
+      })());
+
+  Future<void>? _loaderFuture;
 
   late FocusNode _focusNode;
 
@@ -194,6 +198,9 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       // Reset mouse cursor
       _initMouseCursor();
       addMouseCursorListener();
+
+      // reset the onload
+      _loaderFuture = null;
     }
   }
 
@@ -311,7 +318,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
               builder: (_, BoxConstraints constraints) {
                 widget.game.onGameResize(constraints.biggest.toVector2());
                 return FutureBuilder(
-                  future: _loaderFuture,
+                  future: onloadFuture,
                   builder: (_, snapshot) {
                     if (snapshot.hasError) {
                       final errorBuilder = widget.errorBuilder;
