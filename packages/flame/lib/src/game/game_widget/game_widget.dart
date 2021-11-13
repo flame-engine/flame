@@ -318,7 +318,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
               builder: (_, BoxConstraints constraints) {
                 widget.game.onGameResize(constraints.biggest.toVector2());
                 return FutureBuilder(
-                  future: onloadFuture,
+                  future: loaderFuture,
                   builder: (_, snapshot) {
                     if (snapshot.hasError) {
                       final errorBuilder = widget.errorBuilder;
