@@ -138,13 +138,11 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   MouseCursor? _mouseCursor;
 
-  Future<void> get loaderFuture =>
-      _loaderFuture ??
-      (_loaderFuture = (() {
+  Future<void> get loaderFuture => _loaderFuture ??= (() {
         final onLoad = widget.game.onLoadCache;
         final onMount = widget.game.onMount;
         return (onLoad ?? Future<void>.value()).then((_) => onMount());
-      })());
+      })();
 
   Future<void>? _loaderFuture;
 
@@ -200,6 +198,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       addMouseCursorListener();
 
       // Reset the loaderFuture so that onMount will run again (onLoad is still cached).
+      oldWidget.game.onRemove();
       _loaderFuture = null;
     }
   }
