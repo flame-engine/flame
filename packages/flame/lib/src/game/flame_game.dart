@@ -118,4 +118,10 @@ class FlameGame extends Component with Game {
 
   @override
   Projector get projector => camera.combinedProjector;
+
+  // TODO: mark as only for testing
+  Future<void> _addAllUpdate(Iterable<Component> components) async {
+    await addAll(components);
+    update(0);
+  }
 }

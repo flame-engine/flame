@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_test/flutter_test.dart' as flutter_test show test;
 import 'package:flutter_test/flutter_test.dart' hide test;
@@ -28,8 +29,9 @@ typedef PumpWidgetFunction<T extends Game> = Future<void> Function(
 
 /// Customize this class with your specific Game type [T] and a custom
 /// provider `() -> T`, plus some additional configurations including a game
-/// widget builder [createGameWidget], a custom [pumpWidget] function and a custom [gameSize].
-class FlameTester<T extends Game> {
+/// widget builder [createGameWidget], a custom [pumpWidget] function and a
+/// custom [gameSize].
+class GameTester<T extends Game> {
   /// Use [createGame] to create your game instance.
   final GameCreateFunction<T> createGame;
 
@@ -47,12 +49,23 @@ class FlameTester<T extends Game> {
   /// By default it will be a 500x500 square.
   final Vector2? gameSize;
 
-  FlameTester(
+  GameTester(
     this.createGame, {
     this.gameSize,
     this.createGameWidget,
     this.pumpWidget,
   });
+
+  Future<T> initializeGame() async {
+    final game = createGame();
+
+    final size = gameSize ?? Vector2.all(500);
+    game.onGameResize(size);
+
+    await game.onLoad();
+    game.update(0);
+    return game;
+  }
 
   /// Creates a [Game] specific test case with given [description].
   ///
@@ -63,14 +76,7 @@ class FlameTester<T extends Game> {
     VerifyFunction<T> verify,
   ) {
     flutter_test.test(description, () async {
-      final game = createGame();
-
-      final size = gameSize ?? Vector2.all(500);
-      game.onGameResize(size);
-
-      await game.onLoad();
-      game.update(0);
-
+      final game = await initializeGame();
       verify(game);
     });
   }
@@ -105,19 +111,37 @@ class FlameTester<T extends Game> {
     });
   }
 
-  FlameTester<T> configure({
+  GameTester<T> configure({
     GameCreateFunction<T>? createGame,
     Vector2? gameSize,
     GameWidgetCreateFunction<T>? createGameWidget,
     PumpWidgetFunction<T>? pumpWidget,
   }) {
-    return FlameTester<T>(
+    return GameTester<T>(
       createGame ?? this.createGame,
       gameSize: gameSize ?? this.gameSize,
       createGameWidget: createGameWidget ?? this.createGameWidget,
       pumpWidget: pumpWidget ?? this.pumpWidget,
     );
   }
+}
+
+/// Customize this class with your specific FlameGame type [T] and a custom
+/// provider `() -> T`, plus some additional configurations including a game
+/// widget builder [createGameWidget], a custom [pumpWidget] function and a
+/// custom [gameSize].
+class FlameTester<T extends FlameGame> extends GameTester<T> {
+  FlameTester(
+    GameCreateFunction<T> createGame, {
+    Vector2? gameSize,
+    GameWidgetCreateFunction<T>? createGameWidget,
+    PumpWidgetFunction<T>? pumpWidget,
+  }) : super(
+          createGame,
+          gameSize: gameSize,
+          createGameWidget: createGameWidget,
+          pumpWidget: pumpWidget,
+        );
 }
 
 /// Default instance of Flame Tester to be used when you don't care about
