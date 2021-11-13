@@ -423,12 +423,13 @@ Three example implementations can be found in the
 [examples directory](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/parallax).
 
 ## ShapeComponents
-
-There exist three basic components that can be used if you want to draw geometrical shapes as
-components on the screen. Since the `ShapeComponent`s are `PositionComponent`s you can use effects
-on them. All `ShapeComponent`s take a `Paint` as an argument and then arguments to define
+The `ShapeComponent` is a basic component that can be used if you want to draw geometrical shapes as
+components on the screen.  Since the `ShapeComponent` is a `PositionComponent`s you can use effects
+on it. All `ShapeComponent`s take a `Paint` as an argument and then arguments to define
 the shape of the specific component, it also takes all the arguments that can be passed to the
 `PositionComponent`.
+
+There are three implementations of `ShapeComponent`, which are the following:
 
 ### CircleComponent
 A `CircleComponent` can be created only by defining its `radius`, but you most likely want to pass it
