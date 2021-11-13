@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/painting.dart';
@@ -17,8 +16,8 @@ class JoystickGame extends FlameGame with HasDraggableComponents {
     final knobPaint = BasicPalette.blue.withAlpha(200).paint();
     final backgroundPaint = BasicPalette.blue.withAlpha(100).paint();
     joystick = JoystickComponent(
-      knob: Circle(radius: 30).toComponent(paint: knobPaint),
-      background: Circle(radius: 100).toComponent(paint: backgroundPaint),
+      knob: CircleComponent(radius: 30, paint: knobPaint),
+      background: CircleComponent(radius: 100, paint: backgroundPaint),
       margin: const EdgeInsets.only(left: 40, bottom: 40),
     );
     player = JoystickPlayer(joystick);
