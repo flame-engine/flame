@@ -22,6 +22,7 @@
  - Components that manipulate canvas state are now responsible for saving/restoring that state
  - Remove `super.render` calls that are no longer needed
  - Fixed typo in error message
+ - `TextPaint` to use `TextStyle` (material) instead of `TextPaintConfig`
  - Underlying `Shape`s in `ShapeComponent` transform with components position, size and angle
  - `HitboxShape` takes parents ancestors transformations into consideration (not scaling)
 

@@ -26,11 +26,7 @@ class MultipleShapesExample extends FlameGame
     any direction.
   ''';
 
-  final TextPaint fpsTextPaint = TextPaint(
-    config: TextPaintConfig(
-      color: BasicPalette.white.color,
-    ),
-  );
+  final TextPaint fpsTextPaint = TextPaint();
 
   @override
   Future<void> onLoad() async {

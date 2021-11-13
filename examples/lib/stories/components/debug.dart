@@ -1,7 +1,8 @@
-import 'dart:ui';
+import 'dart:ui' hide TextStyle;
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
 
 class LogoCompomnent extends SpriteComponent with HasGameRef<DebugGame> {
   static const int speed = 150;
@@ -35,9 +36,7 @@ class LogoCompomnent extends SpriteComponent with HasGameRef<DebugGame> {
 
 class DebugGame extends FlameGame with FPSCounter {
   static final fpsTextPaint = TextPaint(
-    config: const TextPaintConfig(
-      color: Color(0xFFFFFFFF),
-    ),
+    style: const TextStyle(color: Color(0xFFFFFFFF)),
   );
 
   @override

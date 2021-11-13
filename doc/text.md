@@ -10,32 +10,45 @@ and create a custom way to render text.
 
 ## TextPaint
 
-A Text Paint is the built in implementation of text rendering on Flame, it is based on top of
-Flutter's `TextPainter` class (hence the name), it can be configured by its config class
-`TextPaintConfig` which contains all typographical information required to render text; i.e., font
-size and color, family, etc.
+A `TextPaint` is the built in implementation of text rendering in Flame, it is based on top of
+Flutter's `TextPainter` class (hence the name), it can be configured by the style class `TextStyle`
+which contains all typographical information required to render text; i.e., font size and color,
+font family, etc.
 
 Example usage:
 
 ```dart
 const TextPaint textPaint = TextPaint(
-  config: TextPaintConfig(
+  style: TextStyle(
     fontSize: 48.0,
     fontFamily: 'Awesome Font',
   ),
 );
 ```
 
+Note: there are several packages that contain the class `TextStyle`, make sure that you import
+either `package:flutter/material.dart` or `package:flutter/painting.dart` and if you also need to
+import `dart:ui` you need to import it like this (since that contains another class that is also
+named `TextStyle`):
+
+```dart
+import 'dart:ui' hide TextStyle;
+```
+
+Some common properties of `TextStyle` are the following (here is the
+[full list](https://api.flutter.dev/flutter/painting/TextStyle-class.html)):
+
  - `fontFamily`: a commonly available font, like Arial (default), or a custom font added in your
  pubspec (see [here](https://flutter.io/custom-fonts/) how to do it).
  - `fontSize`: font size, in pts (default `24.0`).
- - `lineHeight`: height of text line, as a multiple of font size (default `null`).
- - `color`: the color, as a `ui.Color` (default black).
+ - `height`: height of text line, as a multiple of font size (default `null`).
+ - `color`: the color, as a `ui.Color` (default white).
 
 For more information regarding colors and how to create then, see the
 [Colors and the Palette](palette.md) guide.
 
-After the creation of the text paint you can use its `render` method to draw some string on a canvas:
+After the creation of the `TextPaint` object you can use its `render` method to draw strings on
+a canvas:
 
 ```dart
 textPaint.render(canvas, "Flame is awesome", Vector2(10, 10));
@@ -60,7 +73,8 @@ Flame provides two text components that make it even easier to render text in yo
 Example usage:
 
 ```dart
-TextPaint regular = TextPaint(color: BasicPalette.white.color);
+final style = TextStyle(color: BasicPalette.white.color);
+final regular = TextPaint(style: style);
 
 class MyGame extends FlameGame {
   @override
@@ -95,9 +109,9 @@ class MyTextBox extends TextBoxComponent {
     c.drawRect(rect, Paint()..color = Color(0xFFFF00FF));
     c.drawRect(
         rect.deflate(boxConfig.margin),
-        Paint()
-          ..color = BasicPalette.black.color
-          ..style = PaintingStyle.stroke);
+        BasicPalette.black.Paint()
+          ..style = PaintingStyle.stroke,
+    );
   }
 }
 ```

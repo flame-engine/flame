@@ -14,9 +14,7 @@ class MovableSquare extends SquareComponent
     with Collidable, HasGameRef<CameraAndViewportGame>, KeyboardHandler {
   static const double speed = 300;
   static final TextPaint textRenderer = TextPaint(
-    config: const TextPaintConfig(
-      fontSize: 12,
-    ),
+    style: const TextStyle(fontSize: 12),
   );
 
   final Vector2 velocity = Vector2.zero();

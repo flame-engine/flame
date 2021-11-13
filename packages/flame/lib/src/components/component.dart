@@ -104,10 +104,7 @@ class Component with Loadable {
   TextPaint get debugTextPaint {
     if (!_debugTextPaintCache.isCacheValid([debugColor])) {
       final textPaint = TextPaint(
-        config: TextPaintConfig(
-          color: debugColor,
-          fontSize: 12,
-        ),
+        style: TextStyle(color: debugColor, fontSize: 12),
       );
       _debugTextPaintCache.updateCache(textPaint, [debugColor]);
     }

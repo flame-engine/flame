@@ -23,9 +23,7 @@ class ParticlesGame extends FlameGame with FPSCounter {
   final StepTween steppedTween = StepTween(begin: 0, end: 5);
   final trafficLight = TrafficLightComponent();
   final TextPaint fpsTextPaint = TextPaint(
-    config: const TextPaintConfig(
-      color: Color(0xFFFFFFFF),
-    ),
+    style: const TextStyle(color: Colors.white),
   );
 
   /// Defines the lifespan of all the particles in these examples

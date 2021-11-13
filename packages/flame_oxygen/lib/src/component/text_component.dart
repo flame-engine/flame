@@ -1,31 +1,31 @@
-import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
 import 'package:oxygen/oxygen.dart';
 
 class TextInit {
   final String text;
 
-  TextPaintConfig? config;
+  TextStyle? style;
 
   TextInit(
     this.text, {
-    this.config,
+    this.style,
   });
 }
 
 class TextComponent extends Component<TextInit> {
   late String text;
 
-  late TextPaintConfig config;
+  late TextStyle style;
 
   @override
   void init([TextInit? initValue]) {
-    config = initValue?.config ?? const TextPaintConfig();
+    style = initValue?.style ?? const TextStyle();
     text = initValue?.text ?? '';
   }
 
   @override
   void reset() {
-    config = const TextPaintConfig();
+    style = const TextStyle();
     text = '';
   }
 }
