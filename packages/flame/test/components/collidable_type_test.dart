@@ -230,7 +230,9 @@ void main() {
           ),
         );
         await FlameTester.addAllUpdate(
-            game, (actives + statics + inactives)..shuffle());
+          game,
+          (actives + statics + inactives)..shuffle(),
+        );
         expect(
           actives.fold<bool>(
             true,
