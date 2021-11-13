@@ -119,8 +119,18 @@ class FlameGame extends Component with Game {
   @override
   Projector get projector => camera.combinedProjector;
 
-  // TODO: mark as only for testing
-  Future<void> _addAllUpdate(Iterable<Component> components) async {
+  /// Only use this method for tests, it makes sure that the [component]s
+  /// added to the tree if you wait for the returned future to resolve.
+  @visibleForTesting
+  Future<void> addUpdate(Component component) async {
+    await add(component);
+    update(0);
+  }
+
+  /// Only use this method for tests, it makes sure that the [components] are
+  /// added to the tree if you wait for the returned future to resolve.
+  @visibleForTesting
+  Future<void> addAllUpdate(Iterable<Component> components) async {
     await addAll(components);
     update(0);
   }
