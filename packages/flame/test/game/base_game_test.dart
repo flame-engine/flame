@@ -229,7 +229,7 @@ void main() {
 
     const message = '"prepare/add" called before the game is ready. '
         'Did you try to access it on the Game constructor? '
-        'Use the "onLoad" or "onParentMethod" method instead.';
+        'Use the "onLoad" or "onMount" method instead.';
 
     expect(
       () => game.add(component),

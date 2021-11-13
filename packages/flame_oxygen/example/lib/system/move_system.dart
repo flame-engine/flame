@@ -46,7 +46,7 @@ class MoveSystem extends System with UpdateSystem, GameRef<ExampleGame> {
           ..add<TextComponent, TextInit>(
             TextInit(
               'Kawabunga',
-              config: const TextPaintConfig(color: Colors.blue, fontSize: 12),
+              style: const TextStyle(color: Colors.blue, fontSize: 12),
             ),
           )
           ..add<TimerComponent, double>(3);

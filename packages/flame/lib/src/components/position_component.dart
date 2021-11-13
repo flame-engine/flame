@@ -163,8 +163,17 @@ class PositionComponent extends Component {
   /// component as seen from the parent's perspective, and it is equal to
   /// [size] * [scale]. This is a computed property and cannot be
   /// modified by the user.
-  Vector2 get scaledSize =>
-      Vector2(width * scale.x.abs(), height * scale.y.abs());
+  Vector2 get scaledSize {
+    return Vector2(width * scale.x.abs(), height * scale.y.abs());
+  }
+
+  /// The resulting angle after all the ancestors and the components own angle
+  /// has been applied.
+  double get absoluteAngle {
+    return ancestors()
+        .whereType<PositionComponent>()
+        .fold<double>(angle, (totalAngle, c) => totalAngle + c.angle);
+  }
 
   /// Measure the distance (in parent's coordinate space) between this
   /// component's anchor and the [other] component's anchor.

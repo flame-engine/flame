@@ -7,9 +7,9 @@ import '../extensions/vector2.dart';
 import 'shape.dart';
 
 class Circle extends Shape {
-  /// The [normalizedRadius] is how many percentages of the shortest edge of
-  /// [size] that the circle should cover.
-  double normalizedRadius = 1;
+  /// The [normalizedRadius] is what ratio (0.0, 1.0] of the shortest edge of
+  /// [size]/2 that the circle should cover.
+  double normalizedRadius = 1.0;
 
   /// With this constructor you can create your [Circle] from a radius and
   /// a position. It will also calculate the bounding rectangle [size] for the
@@ -25,16 +25,26 @@ class Circle extends Shape {
         );
 
   /// This constructor is used by [HitboxCircle]
-  /// definition is the percentages of the shortest edge of [size] that the
-  /// circle should fill.
+  /// [relation] is the relation [0.0, 1.0] of the shortest edge of [size] that
+  /// the circle should fill.
   Circle.fromDefinition({
-    this.normalizedRadius = 1.0,
+    double? relation,
     Vector2? position,
     Vector2? size,
     double? angle,
-  }) : super(position: position, size: size, angle: angle ?? 0);
+  })  : normalizedRadius = relation ?? 1.0,
+        super(position: position, size: size, angle: angle ?? 0);
 
-  double get radius => (min(size.x, size.y) / 2) * normalizedRadius;
+  // Used to not create new Vector2 objects every time radius is called.
+  final Vector2 _scaledSize = Vector2.zero();
+
+  /// Get the radius of the circle after it has been sized and scaled.
+  double get radius {
+    _scaledSize
+      ..setFrom(size)
+      ..multiply(scale);
+    return (min(_scaledSize.x, _scaledSize.y) / 2) * normalizedRadius;
+  }
 
   /// This render method doesn't rotate the canvas according to angle since a
   /// circle will look the same rotated as not rotated.
@@ -100,9 +110,15 @@ class Circle extends Shape {
 }
 
 class HitboxCircle extends Circle with HitboxShape {
-  @override
-  HitboxCircle({double definition = 1})
-      : super.fromDefinition(
-          normalizedRadius: definition,
+  HitboxCircle({
+    double? normalizedRadius,
+    Vector2? position,
+    Vector2? size,
+    double? angle,
+  }) : super.fromDefinition(
+          relation: normalizedRadius,
+          position: position,
+          size: size,
+          angle: angle ?? 0,
         );
 }

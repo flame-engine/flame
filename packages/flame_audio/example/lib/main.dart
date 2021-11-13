@@ -22,7 +22,7 @@ class AudioGame extends FlameGame with TapDetector {
   static Paint black = BasicPalette.black.paint();
   static Paint gray = const PaletteEntry(Color(0xFFCCCCCC)).paint();
   static TextPaint text = TextPaint(
-    config: TextPaintConfig(color: BasicPalette.white.color),
+    style: TextStyle(color: BasicPalette.white.color),
   );
 
   late AudioPool pool;
