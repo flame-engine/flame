@@ -422,6 +422,100 @@ It is also possible to create custom renderers by extending the `ParallaxRendere
 Three example implementations can be found in the
 [examples directory](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/parallax).
 
+## ShapeComponents
+The `ShapeComponent` is a basic component that can be used if you want to draw geometrical shapes as
+components on the screen.  Since the `ShapeComponent` is a `PositionComponent`s you can use effects
+on it. All `ShapeComponent`s take a `Paint` as an argument and then arguments to define
+the shape of the specific component, it also takes all the arguments that can be passed to the
+`PositionComponent`.
+
+There are three implementations of `ShapeComponent`, which are the following:
+
+### CircleComponent
+A `CircleComponent` can be created only by defining its `radius`, but you most likely want to pass it
+a `position` and maybe `paint` (the default is white) too.
+
+Example:
+```dart
+final paint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
+final circle = CircleComponent(radius: 200.0, position: Vector2(100, 200), paint: paint);
+```
+
+### RectangleComponent
+A `RectangleComponent` can be created in two ways, depending on if it's a square or not.
+To create a `RectangleComponent` that is 300 in width and 200 in height you can do the following:
+
+Example:
+```dart
+final paint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
+final rectangle = RectangleComponent(
+  size: Vector2(300.0, 200.0),
+  position: Vector2(100, 200),
+  paint: paint,
+);
+```
+
+To create a square you can instead use the slightly simpler named constructor
+`RectangleComponent.square`. This is an example of how to create a red square with width and height
+200:
+
+```dart
+final paint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
+final square = RectangleComponent.square(
+  size: 200.0,
+  position: Vector2(100, 200),
+  paint: paint,
+);
+```
+
+### PolygonComponent
+The `PolygonComponent` is the most complicated of the `ShapeComponent`s since you'll have to define
+all the "corners" of your polygon. You can create the `PolygonComponent` in two different ways,
+either you use the default constructor which takes a list of `Vector2` where each of them should be
+between -1.0 and 1.0 that describes the ration of the length from the center to the edge of the size
+of the component. So
+`[Vector2(1.0, 1.0), Vector2(1.0, -1.0), Vector2(-1.0, -1.0), Vector2(-1.0, 1.0)]`
+would describe a rectangle that fills the full size of the component. Remember to define the list in
+a counter clockwise manner (if you think in the screen coordinate system where the y-axis is
+flipped, otherwise it is clockwise).
+
+So to create a diamond shaped `PolygonComponent` which is slightly smaller than the defined size you
+would do this:
+
+```dart
+final vertices = ([
+  Vector2(0.0, 0.9),  // Middle of top wall
+  Vector2(-0.9, 0.0), // Middle of left wall
+  Vector2(0.0, -0.9), // Middle of bottom wall
+  Vector2(0.9, 0.0),  // Middle of right wall
+]);
+
+final diamond = PolygonComponent(
+  normalizedVertices: vertices,
+  size: Vector2(200, 300),
+  position: Vector2.all(500),
+)
+```
+
+If you instead want to define your polygon from absolute points you can do that too with the
+`PolygonComponent.fromPoints` factory. When using that one you don't have to define a `size` or a
+`position` either since it will be calculated for you, but if you decide to add those arguments
+anyways they will override what has been calculated from your list of vertices.
+
+Example (diamond shape again):
+
+```dart
+final vertices = ([
+  Vector2(100, 100),  // Middle of top wall
+  Vector2(50, 150), // Middle of left wall
+  Vector2(100, 200), // Middle of bottom wall
+  Vector2(200, 150),  // Middle of right wall
+]);
+
+final diamond = PolygonComponent.fromPoints(vertices);
+)
+```
+
 ## SpriteBodyComponent
 
 See [SpriteBodyComponent](forge2d.md#SpriteBodyComponent) in the Forge2D documentation.

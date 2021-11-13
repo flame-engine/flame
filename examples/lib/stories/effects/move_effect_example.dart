@@ -84,7 +84,7 @@ class MoveEffectExample extends FlameGame {
     }
     for (var i = 0; i < 40; i++) {
       add(
-        CircleComponent(5)
+        CircleComponent(radius: 5)
           ..add(
             MoveEffect.along(
               path1,

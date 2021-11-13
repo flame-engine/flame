@@ -37,6 +37,9 @@ extension Vector2Extension on Vector2 {
   /// Whether the [Vector2] is the zero vector or not
   bool isZero() => x == 0 && y == 0;
 
+  /// Whether the [Vector2] is the identity vector or not
+  bool isIdentity() => x == 1 && y == 1;
+
   /// Rotates the [Vector2] with [angle] in radians
   /// rotates around [center] if it is defined
   /// In a screen coordinate system (where the y-axis is flipped) it rotates in
@@ -99,7 +102,7 @@ extension Vector2Extension on Vector2 {
   ///
   /// Since on a canvas/screen y is smaller the further up you go, instead of
   /// larger like on a normal coordinate system, to get an angle that is in that
-  /// coordinate system we have to flip the Y-axis of the [Vector].
+  /// coordinate system we have to flip the Y-axis of the [Vector2].
   ///
   /// Example:
   /// Up: Vector(0.0, -1.0).screenAngle == 0
@@ -119,4 +122,7 @@ extension Vector2Extension on Vector2 {
 
   /// Creates a heading [Vector2] with the given angle in degrees.
   static Vector2 fromDegrees(double d) => fromRadians(d * degrees2Radians);
+
+  /// Creates a new identity [Vector2] (1.0, 1.0).
+  static Vector2 identity() => Vector2.all(1.0);
 }

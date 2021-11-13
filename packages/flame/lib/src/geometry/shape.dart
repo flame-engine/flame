@@ -14,6 +14,10 @@ abstract class Shape {
   final ValueCache<Vector2> _halfSizeCache = ValueCache();
   final ValueCache<Vector2> _localCenterCache = ValueCache();
   final ValueCache<Vector2> _absoluteCenterCache = ValueCache();
+  final ValueCache<Vector2> _relativePositionCache = ValueCache();
+
+  // These are used to avoid creating new vector objects on some method calls
+  final Vector2 _identityVector2 = Vector2Extension.identity();
 
   /// Should be the center of that [offsetPosition] and [relativeOffset]
   /// should be calculated from, if they are not set this is the center of the
@@ -22,6 +26,10 @@ abstract class Shape {
 
   /// The size is the bounding box of the [Shape]
   Vector2 size;
+
+  /// The scaled size of the bounding box of the [Shape], if no scaling of the
+  /// parent is supported this will return [size].
+  Vector2 get scale => _identityVector2;
 
   Vector2 get halfSize {
     if (!_halfSizeCache.isCacheValid([size])) {
@@ -41,11 +49,19 @@ abstract class Shape {
   Vector2 relativeOffset = Vector2.zero();
 
   /// The [relativeOffset] converted to a length vector
-  Vector2 get relativePosition => (size / 2)..multiply(relativeOffset);
+  Vector2 get relativePosition {
+    if (!_relativePositionCache.isCacheValid([size, relativeOffset])) {
+      _relativePositionCache.updateCache(
+        (size / 2)..multiply(relativeOffset),
+        [size.clone(), relativeOffset.clone()],
+      );
+    }
+    return _relativePositionCache.value!;
+  }
 
   /// The angle of the parent that has to be taken into consideration for some
   /// applications of [Shape], for example [HitboxShape]
-  double parentAngle;
+  double parentAngle = 0;
 
   /// Whether the context that the shape is in has already prepared (rotated
   /// and translated) the canvas before coming to the shape's render method.
@@ -103,7 +119,6 @@ abstract class Shape {
     Vector2? position,
     Vector2? size,
     this.angle = 0,
-    this.parentAngle = 0,
   })  : position = position ?? Vector2.zero(),
         size = size ?? Vector2.zero();
 
@@ -116,25 +131,22 @@ abstract class Shape {
   Set<Vector2> intersections(Shape other) {
     return intersection_system.intersections(this, other);
   }
-
-  /// Turns a [Shape] into a [ShapeComponent]
-  ///
-  /// Do note that while a [Shape] is defined from the center, a
-  /// [ShapeComponent] like all other components default to an [Anchor] in the
-  /// top left corner.
-  ShapeComponent toComponent({Paint? paint}) {
-    return ShapeComponent(this, paint: paint);
-  }
 }
 
 mixin HitboxShape on Shape {
   late PositionComponent component;
 
   @override
-  Vector2 get size => component.scaledSize;
+  bool isCanvasPrepared = true;
 
   @override
-  double get parentAngle => component.angle;
+  Vector2 get size => component.size;
+
+  @override
+  Vector2 get scale => component.scale;
+
+  @override
+  double get parentAngle => component.absoluteAngle;
 
   @override
   Vector2 get position => component.absoluteCenter;
