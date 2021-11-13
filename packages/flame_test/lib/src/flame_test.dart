@@ -142,6 +142,23 @@ class FlameTester<T extends FlameGame> extends GameTester<T> {
           createGameWidget: createGameWidget,
           pumpWidget: pumpWidget,
         );
+
+  /// Makes sure that the [component] is added to the tree if you wait for the
+  /// returned future to resolve.
+  static Future<void> addUpdate(FlameGame game, Component component) async {
+    game.add(component);
+    game.update(0);
+  }
+
+  /// Makes sure that the [components] are added to the tree if you wait for the
+  /// returned future to resolve.
+  static Future<void> addAllUpdate(
+    FlameGame game,
+    Iterable<Component> components,
+  ) async {
+    game.addAll(components);
+    game.update(0);
+  }
 }
 
 /// Default instance of Flame Tester to be used when you don't care about
