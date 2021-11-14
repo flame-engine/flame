@@ -295,12 +295,11 @@ class PositionComponent extends Component {
 
   /// Flip the component vertically around its center line.
   void flipVerticallyAroundCenter() {
-    if (anchor.y == 0.5) {
-      return flipVertically();
+    if (anchor.y != 0.5) {
+      final delta = (1 - 2 * _anchor.y) * height;
+      transform.x += -delta * math.sin(transform.angle);
+      transform.y += delta * math.cos(transform.angle);
     }
-    final delta = (1 - 2 * _anchor.y) * height;
-    transform.x += -delta * math.sin(transform.angle);
-    transform.y += delta * math.cos(transform.angle);
     transform.flipVertically();
   }
 
