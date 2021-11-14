@@ -32,9 +32,9 @@ class TimerComponent extends Component {
     }
   }
 
-  /// Called everytime the [timer] reached a tick and
-  /// no onStep is provided on the component instantiation
-  /// default implementaiton is a no-op, override this
+  /// Called everytime the [timer] reached a tick (but
+  /// only if onStep is provided on the component instantiation).
+  /// The default implementaiton is a no-op; override this
   /// to add custom logic.
   void onTick() {}
 
