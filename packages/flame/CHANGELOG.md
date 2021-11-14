@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [next]
+ - Added possibility to extend `JoystickComponent` (made `knob` unrequired)
  - Added `StandardEffectController` class
  - Refactored `Effect` class to use `EffectController`, added `Transform2DEffect` class
  - Clarified `TimerComponent` example
