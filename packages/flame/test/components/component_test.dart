@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:test/test.dart';
@@ -15,7 +16,7 @@ class RemoveComponent extends Component {
 }
 
 void main() {
-  group('component test', () {
+  group('Component', () {
     test('test get/set x/y or position', () {
       final PositionComponent c = SpriteComponent();
       c.position.setValues(2.2, 3.4);
@@ -113,6 +114,29 @@ void main() {
       game.update(0);
       expect(component.removeCounter, 0);
       expect(game.children.length, 1);
+    });
+
+    test('onRender can replace the main render', () {
+      final game = FlameGame()..onGameResize(Vector2.zero());
+      final component = Component();
+      game.add(component);
+      game.update(0);
+
+      final canvas = MockCanvas();
+      game.render(canvas);
+      expect(canvas, MockCanvas()..translate(0, 0));
+
+      const rect = Rect.fromLTWH(0, 0, 1, 1);
+      component.onRender = (Canvas canvas) => canvas.drawRect(rect, Paint());
+
+      final canvas2 = MockCanvas();
+      game.render(canvas2);
+      expect(
+        canvas2,
+        MockCanvas()
+          ..translate(0, 0)
+          ..drawRect(rect),
+      );
     });
   });
 }

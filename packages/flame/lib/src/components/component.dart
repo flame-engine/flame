@@ -44,6 +44,11 @@ class Component with Loadable {
   /// removed from its current parent.
   Component? nextParent;
 
+  /// Custom rendering function that replaces the traditional `render()` method
+  /// when it is not null. Use this if you want to temporarily alter the way
+  /// a component is rendered.
+  void Function(Canvas)? onRender;
+
   late final ComponentSet children = createComponentSet();
 
   /// Render priority of this component. This allows you to control the order in
@@ -132,7 +137,7 @@ class Component with Loadable {
 
   void renderTree(Canvas canvas) {
     preRender(canvas);
-    render(canvas);
+    (onRender ?? render)(canvas);
     children.forEach((c) => c.renderTree(canvas));
 
     // Any debug rendering should be rendered on top of everything
