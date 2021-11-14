@@ -15,14 +15,14 @@ extension FlameFinds on CommonFinders {
 extension FlameGameExtension on FlameGame {
   /// Makes sure that the [component] is added to the tree if you wait for the
   /// returned future to resolve.
-  Future<void> addUpdate(Component component) async {
+  Future<void> ensureAdd(Component component) async {
     await add(component);
     update(0);
   }
 
   /// Makes sure that the [components] are added to the tree if you wait for the
   /// returned future to resolve.
-  Future<void> addAllUpdate(Iterable<Component> components) async {
+  Future<void> ensureAddAll(Iterable<Component> components) async {
     await addAll(components);
     update(0);
   }
