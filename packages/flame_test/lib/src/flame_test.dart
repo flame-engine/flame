@@ -23,7 +23,7 @@ extension FlameGameExtension on FlameGame {
   /// Makes sure that the [components] are added to the tree if you wait for the
   /// returned future to resolve.
   Future<void> addAllUpdate(Iterable<Component> components) async {
-    addAll(components);
+    await addAll(components);
     update(0);
   }
 }
