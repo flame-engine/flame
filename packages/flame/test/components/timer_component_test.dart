@@ -14,7 +14,7 @@ class MyTimerComponent extends TimerComponent {
         );
 
   @override
-  void onStep() {
+  void onTick() {
     count++;
   }
 }
@@ -63,12 +63,12 @@ void main() {
       expect(game.children.length, equals(0));
     });
 
-    tester.test('calls onStep when provided', (game) {
+    tester.test('calls onTick when provided', (game) {
       var called = false;
       game.add(
         TimerComponent(
           period: 1,
-          onStep: () {
+          onTick: () {
             called = true;
           },
         ),

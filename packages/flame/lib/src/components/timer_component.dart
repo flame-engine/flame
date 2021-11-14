@@ -12,19 +12,19 @@ class TimerComponent extends Component {
   /// [period] The period of time in seconds that the tick will be called
   /// [repeat] When true, this will continue running after [period] is reached
   /// [autoStart] When true, will start upon instantiation
-  /// [onStep] When provided, will be called everytime [period] is reached. This
-  /// overrides the [onStep] method
+  /// [onTick] When provided, will be called everytime [period] is reached. This
+  /// overrides the [onTick] method
   TimerComponent({
     required double period,
     bool repeat = false,
     bool autoStart = true,
     this.removeOnFinish = false,
-    VoidCallback? onStep,
+    VoidCallback? onTick,
   }) {
     timer = Timer(
       period,
       repeat: repeat,
-      onStep: onStep ?? onStep,
+      onTick: onTick ?? onTick,
     );
 
     if (autoStart) {
@@ -36,7 +36,7 @@ class TimerComponent extends Component {
   /// no onStep is provided on the component instantiation
   /// default implementaiton is a no-op, override this
   /// to add custom logic.
-  void onStep() {}
+  void onTick() {}
 
   @override
   void update(double dt) {

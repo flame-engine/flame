@@ -103,7 +103,7 @@ class MyGame extends Game {
   MyGame() {
     interval = Timer(
       1,
-      callback: () => elapsedSecs += 1,
+      onTick: () => elapsedSecs += 1,
       repeat: true,
     );
     interval.start();
@@ -137,7 +137,7 @@ class MyFlameGame extends FlameGame {
       TimerComponent(
         period: 10,
         repeat: true,
-        callback: () => print("10 seconds elapsed"),
+        onTick: () => print("10 seconds elapsed"),
         autoStart: true,
       )
     );

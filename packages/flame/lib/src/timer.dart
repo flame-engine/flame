@@ -5,12 +5,12 @@ import 'dart:ui';
 /// interval like events.
 class Timer {
   final double limit;
-  VoidCallback? onStep;
+  VoidCallback? onTick;
   bool repeat;
   double _current = 0;
   bool _running = false;
 
-  Timer(this.limit, {this.onStep, this.repeat = false});
+  Timer(this.limit, {this.onTick, this.repeat = false});
 
   /// The current amount of ms that has passed on this iteration
   double get current => _current;
@@ -30,15 +30,15 @@ class Timer {
       if (_current >= limit) {
         if (!repeat) {
           _running = false;
-          onStep?.call();
+          onTick?.call();
           return;
         }
         // This is used to cover the rare case of _current being more than
-        // two times the value of limit, so that the onStep is called the
+        // two times the value of limit, so that the onTick is called the
         // correct number of times
         while (_current >= limit) {
           _current -= limit;
-          onStep?.call();
+          onTick?.call();
         }
       }
     }
