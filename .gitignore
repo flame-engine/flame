@@ -21,3 +21,5 @@ _build/
 coverage
 
 .fvm
+Makefile
+!doc/_sphinx/Makefile
