@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
@@ -14,7 +13,7 @@ void main() {
   group('JoystickDirection tests', () {
     test('Can convert angle to JoystickDirection', () {
       final joystick = JoystickComponent(
-        knob: Circle(radius: 5.0).toComponent(),
+        knob: CircleComponent(radius: 5.0),
         size: 20,
         margin: const EdgeInsets.only(left: 20, bottom: 20),
       );
@@ -47,7 +46,7 @@ void main() {
       'knob should stay on correct side when the total delta is larger than the size and then the knob is moved slightly back again',
       (game) async {
         final joystick = JoystickComponent(
-          knob: Circle(radius: 5.0).toComponent(),
+          knob: CircleComponent(radius: 5.0),
           size: 20,
           margin: const EdgeInsets.only(left: 20, top: 20),
         );

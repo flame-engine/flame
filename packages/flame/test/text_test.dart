@@ -1,17 +1,10 @@
-import 'dart:ui';
+import 'dart:ui' hide TextStyle;
 
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 import 'package:test/test.dart';
 
-class _CustomTextRenderer extends TextRenderer<TextPaintConfig> {
-  _CustomTextRenderer() : super(config: const TextPaintConfig());
-  @override
-  TextRenderer<TextPaintConfig> copyWith(
-    BaseTextConfig Function(TextPaintConfig) transform,
-  ) {
-    return this;
-  }
-
+class _CustomTextRenderer extends TextRenderer {
   @override
   double measureTextHeight(String text) {
     return 0;
@@ -34,11 +27,11 @@ class _CustomTextRenderer extends TextRenderer<TextPaintConfig> {
 void main() {
   group('Text', () {
     test('copyWith', () {
-      const config = TextPaintConfig(fontSize: 12, fontFamily: 'Times');
-      final tp = TextPaint(config: config)
-          .copyWith((t) => t.withFontFamily('Helvetica'));
-      expect(tp.config.fontSize, 12);
-      expect(tp.config.fontFamily, 'Helvetica');
+      const style = TextStyle(fontSize: 12, fontFamily: 'Times');
+      final tp = TextPaint(style: style)
+          .copyWith((t) => t.copyWith(fontFamily: 'Helvetica'));
+      expect(tp.style.fontSize, 12);
+      expect(tp.style.fontFamily, 'Helvetica');
     });
     test('createDefault', () {
       final tp = TextRenderer.createDefault<TextPaint>();
@@ -51,11 +44,13 @@ void main() {
     });
     test('change parameters of text component', () {
       final tc = TextComponent<TextPaint>('foo');
-      tc.textRenderer = tc.textRenderer.copyWith((c) => c.withFontSize(200));
-      expect(tc.textRenderer.config.fontSize, 200);
+      tc.textRenderer = tc.textRenderer.copyWith(
+        (c) => c.copyWith(fontSize: 200),
+      );
+      expect(tc.textRenderer.style.fontSize, 200);
     });
     test('custom renderer', () {
-      TextRenderer.defaultCreatorsRegistry[_CustomTextRenderer] =
+      TextRenderer.defaultRenderersRegistry[_CustomTextRenderer] =
           () => _CustomTextRenderer();
       final tc = TextComponent<_CustomTextRenderer>('foo');
       expect(tc.textRenderer, isA<_CustomTextRenderer>());

@@ -9,6 +9,8 @@ class LineSegment {
 
   LineSegment(this.from, this.to);
 
+  factory LineSegment.zero() => LineSegment(Vector2.zero(), Vector2.zero());
+
   /// Returns an empty list if there are no intersections between the segments
   /// If the segments are concurrent, the intersecting point is returned as a
   /// list with a single point

@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 
 class TimerGame extends FlameGame with TapDetector {
   final TextPaint textConfig = TextPaint(
-    config: const TextPaintConfig(
-      color: Color(0xFFFFFFFF),
-    ),
+    style: const TextStyle(color: Colors.white),
   );
   late Timer countdown;
   late Timer interval;

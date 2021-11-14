@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 
 class RenderedTimeComponent extends TimerComponent {
   final TextPaint textPaint = TextPaint(
-    config: const TextPaintConfig(
-      color: Color(0xFFFFFFFF),
-    ),
+    style: const TextStyle(color: Colors.white),
   );
 
   final double yOffset;

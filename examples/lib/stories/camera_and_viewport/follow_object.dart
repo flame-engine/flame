@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,23 +11,20 @@ import '../../commons/square_component.dart';
 final R = Random();
 
 class MovableSquare extends SquareComponent
-    with
-        HasHitboxes,
-        Collidable,
-        HasGameRef<CameraAndViewportGame>,
-        KeyboardHandler {
+    with Collidable, HasGameRef<CameraAndViewportGame>, KeyboardHandler {
   static const double speed = 300;
   static final TextPaint textRenderer = TextPaint(
-    config: const TextPaintConfig(
-      fontSize: 12,
-    ),
+    style: const TextStyle(fontSize: 12),
   );
 
   final Vector2 velocity = Vector2.zero();
   late Timer timer;
 
-  MovableSquare() : super(priority: 1) {
-    addHitbox(HitboxRectangle());
+  MovableSquare() : super(priority: 1);
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
     timer = Timer(3.0)
       ..stop()
       ..onTick = () {
@@ -104,7 +100,7 @@ class Map extends Component {
   }
 }
 
-class Rock extends SquareComponent with HasHitboxes, Collidable, Tappable {
+class Rock extends SquareComponent with Collidable, Tappable {
   static final unpressedPaint = Paint()..color = const Color(0xFF2222FF);
   static final pressedPaint = Paint()..color = const Color(0xFF414175);
 
@@ -114,9 +110,7 @@ class Rock extends SquareComponent with HasHitboxes, Collidable, Tappable {
           size: 50,
           priority: 2,
           paint: unpressedPaint,
-        ) {
-    addHitbox(HitboxRectangle());
-  }
+        );
 
   @override
   bool onTapDown(_) {

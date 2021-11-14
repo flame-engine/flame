@@ -4,7 +4,6 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
@@ -89,9 +88,11 @@ class JoystickAdvancedGame extends FlameGame
     // A button, created from a shape, that adds a rotation effect to the player
     // when it is pressed.
     final shapeButton = HudButtonComponent(
-      button: Circle(radius: 35).toComponent(paint: BasicPalette.white.paint()),
-      buttonDown: Rectangle(size: buttonSize)
-          .toComponent(paint: BasicPalette.blue.paint()),
+      button: CircleComponent(radius: 35),
+      buttonDown: RectangleComponent(
+        size: buttonSize,
+        paint: BasicPalette.blue.paint(),
+      ),
       margin: const EdgeInsets.only(
         right: 85,
         bottom: 150,
@@ -101,8 +102,9 @@ class JoystickAdvancedGame extends FlameGame
       ),
     );
 
-    final _regularTextConfig = TextPaintConfig(color: BasicPalette.white.color);
-    final _regular = TextPaint(config: _regularTextConfig);
+    final _regular = TextPaint(
+      style: TextStyle(color: BasicPalette.white.color),
+    );
     speedText = TextComponent(
       'Speed: 0',
       textRenderer: _regular,

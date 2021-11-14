@@ -5,39 +5,45 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
-final _regularTextConfig = TextPaintConfig(color: BasicPalette.white.color);
-final _regular = TextPaint(config: _regularTextConfig);
-final _tiny = TextPaint(config: _regularTextConfig.withFontSize(12.0));
-
-final _white = Paint()
-  ..color = BasicPalette.white.color
-  ..style = PaintingStyle.stroke;
+final _regularTextStyle =
+    TextStyle(fontSize: 18, color: BasicPalette.white.color);
+final _regular = TextPaint(style: _regularTextStyle);
+final _tiny = TextPaint(style: _regularTextStyle.copyWith(fontSize: 14.0));
+final _box = _regular.copyWith(
+  (style) => style.copyWith(
+    color: Colors.lightGreenAccent,
+    fontFamily: 'monospace',
+    letterSpacing: 2.0,
+  ),
+);
+final _shaded = TextPaint(
+  style: TextStyle(
+    color: BasicPalette.white.color,
+    fontSize: 40.0,
+    shadows: const [
+      Shadow(color: Colors.red, offset: Offset(2, 2), blurRadius: 2),
+      Shadow(color: Colors.yellow, offset: Offset(4, 4), blurRadius: 4),
+    ],
+  ),
+);
 
 class MyTextBox extends TextBoxComponent {
   MyTextBox(String text)
       : super(
           text,
-          textRenderer: _regular,
+          textRenderer: _box,
           boxConfig: TextBoxConfig(
             maxWidth: 400,
             timePerChar: 0.05,
             growingBox: true,
-            margins: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            margins: const EdgeInsets.all(25),
           ),
         );
 
   @override
   void drawBackground(Canvas c) {
     final rect = Rect.fromLTWH(0, 0, width, height);
-    c.drawRect(rect, Paint()..color = Colors.amber);
-    final margin = boxConfig.margins;
-    final innerRect = Rect.fromLTWH(
-      margin.left,
-      margin.top,
-      width - margin.horizontal,
-      height - margin.vertical,
-    );
-    c.drawRect(innerRect, _white);
+    c.drawRect(rect, Paint()..color = Colors.white10);
   }
 }
 
@@ -50,6 +56,12 @@ class TextGame extends FlameGame {
         ..anchor = Anchor.topCenter
         ..x = size.x / 2
         ..y = 32.0,
+    );
+
+    add(
+      TextComponent('Text with shade', textRenderer: _shaded)
+        ..anchor = Anchor.topRight
+        ..position = size - Vector2.all(100),
     );
 
     add(
@@ -66,7 +78,11 @@ class TextGame extends FlameGame {
 
     add(
       MyTextBox(
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget ligula eu lectus lobortis condimentum.',
+        '"This is our world now. The world of the electron and the switch; '
+        'the beauty of the baud. We exist without nationality, skin color, '
+        'or religious bias. You wage wars, murder, cheat, lie to us and try '
+        "to make us believe it's for our own good, yet we're the "
+        'criminals. Yes, I am a criminal. My crime is that of curiosity."',
       )
         ..anchor = Anchor.bottomLeft
         ..y = size.y,

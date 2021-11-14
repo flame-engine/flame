@@ -104,10 +104,7 @@ class Component with Loadable {
   TextPaint get debugTextPaint {
     if (!_debugTextPaintCache.isCacheValid([debugColor])) {
       final textPaint = TextPaint(
-        config: TextPaintConfig(
-          color: debugColor,
-          fontSize: 12,
-        ),
+        style: TextStyle(color: debugColor, fontSize: 12),
       );
       _debugTextPaintCache.updateCache(textPaint, [debugColor]);
     }
@@ -174,6 +171,20 @@ class Component with Loadable {
   void changeParent(Component component) {
     parent?.remove(this);
     nextParent = component;
+  }
+
+  final List<Component> _ancestors = [];
+
+  /// A list containing the current parent and its parent, and so on, until it
+  /// reaches a component without a parent.
+  List<Component> ancestors() {
+    _ancestors.clear();
+    for (var currentParent = parent;
+        currentParent != null;
+        currentParent = currentParent.parent) {
+      _ancestors.add(currentParent);
+    }
+    return _ancestors;
   }
 
   /// It receives the new game size.
@@ -321,7 +332,7 @@ class Component with Loadable {
         parentGame.hasLayout,
         '"prepare/add" called before the game is ready. '
         'Did you try to access it on the Game constructor? '
-        'Use the "onLoad" or "onParentMethod" method instead.',
+        'Use the "onLoad" or "onMount" method instead.',
       );
       if (parentGame is FlameGame) {
         parentGame.prepareComponent(this);

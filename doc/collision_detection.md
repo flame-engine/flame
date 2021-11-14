@@ -30,6 +30,9 @@ that overshoot each other into account, this could happen when they either move 
 being called with a large delta time (for example if your app is not in the foreground). This
 behaviour is called tunneling, if you want to read more about it.
 
+Also note that the collision detection system doesn't work properly if you scale ancestors of the
+component that is `Collidable`.
+
 ## Mixins
 ### HasHitboxes
 The `HasHitboxes` mixin is mainly used for two things; to make detection of collisions with other

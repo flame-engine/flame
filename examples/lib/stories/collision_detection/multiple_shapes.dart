@@ -9,20 +9,90 @@ import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
-const multipleShapesInfo = '''
-An example with many hitboxes that move around on the screen and during
-collisions they change color depending on what it is that they have collided
-with. 
-
-The snowman, the component built with three circles on top of each other, works
-a little bit differently than the other components to show that you can have
-multiple hitboxes within one component.
-
-On this example, you can "throw" the components by dragging them quickly in any
-direction.
-''';
-
 enum Shapes { circle, rectangle, polygon }
+
+class MultipleShapesExample extends FlameGame
+    with HasCollidables, HasDraggableComponents, FPSCounter {
+  static const description = '''
+    An example with many hitboxes that move around on the screen and during
+    collisions they change color depending on what it is that they have collided
+    with. 
+    
+    The snowman, the component built with three circles on top of each other, 
+    works a little bit differently than the other components to show that you
+    can have multiple hitboxes within one component.
+    
+    On this example, you can "throw" the components by dragging them quickly in
+    any direction.
+  ''';
+
+  final TextPaint fpsTextPaint = TextPaint();
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    final screenCollidable = ScreenCollidable();
+    final snowman = CollidableSnowman(
+      Vector2.all(150),
+      Vector2(100, 200),
+      Vector2(-100, 100),
+      screenCollidable,
+    );
+    MyCollidable lastToAdd = snowman;
+    add(screenCollidable);
+    add(snowman);
+    var totalAdded = 1;
+    while (totalAdded < 20) {
+      lastToAdd = nextRandomCollidable(lastToAdd, screenCollidable);
+      final lastBottomRight =
+          lastToAdd.toAbsoluteRect().bottomRight.toVector2();
+      if (lastBottomRight.x < size.x && lastBottomRight.y < size.y) {
+        add(lastToAdd);
+        totalAdded++;
+      } else {
+        break;
+      }
+    }
+  }
+
+  final _rng = Random();
+  final _distance = Vector2(100, 0);
+
+  MyCollidable nextRandomCollidable(
+    MyCollidable lastCollidable,
+    ScreenCollidable screenCollidable,
+  ) {
+    final collidableSize = Vector2.all(50) + Vector2.random(_rng) * 100;
+    final isXOverflow = lastCollidable.position.x +
+            lastCollidable.size.x / 2 +
+            _distance.x +
+            collidableSize.x >
+        size.x;
+    var position = _distance + Vector2(0, lastCollidable.position.y + 200);
+    if (!isXOverflow) {
+      position = (lastCollidable.position + _distance)
+        ..x += collidableSize.x / 2;
+    }
+    final velocity = (Vector2.random(_rng) - Vector2.random(_rng)) * 400;
+    return randomCollidable(
+      position,
+      collidableSize,
+      velocity,
+      screenCollidable,
+      rng: _rng,
+    );
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    fpsTextPaint.render(
+      canvas,
+      '${fps(120).toStringAsFixed(2)}fps',
+      Vector2(0, size.y - 24),
+    );
+  }
+}
 
 abstract class MyCollidable extends PositionComponent
     with Draggable, HasHitboxes, Collidable {
@@ -41,11 +111,7 @@ abstract class MyCollidable extends PositionComponent
     Vector2 size,
     this.velocity,
     this.screenCollidable,
-  ) {
-    this.position = position;
-    this.size = size;
-    anchor = Anchor.center;
-  }
+  ) : super(position: position, size: size, anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
@@ -137,7 +203,7 @@ class CollidablePolygon extends MyCollidable {
     Vector2 velocity,
     ScreenCollidable screenCollidable,
   ) : super(position, size, velocity, screenCollidable) {
-    final shape = HitboxPolygon([
+    final hitbox = HitboxPolygon([
       Vector2(-1.0, 0.0),
       Vector2(-0.8, 0.6),
       Vector2(0.0, 1.0),
@@ -147,7 +213,7 @@ class CollidablePolygon extends MyCollidable {
       Vector2(0, -1.0),
       Vector2(-0.8, -0.8),
     ]);
-    addHitbox(shape);
+    addHitbox(hitbox);
   }
 }
 
@@ -169,8 +235,7 @@ class CollidableCircle extends MyCollidable {
     Vector2 velocity,
     ScreenCollidable screenCollidable,
   ) : super(position, size, velocity, screenCollidable) {
-    final shape = HitboxCircle();
-    addHitbox(shape);
+    addHitbox(HitboxCircle());
   }
 }
 
@@ -179,7 +244,7 @@ class SnowmanPart extends HitboxCircle {
   final hitPaint = Paint();
 
   SnowmanPart(double definition, Vector2 relativeOffset, Color hitColor)
-      : super(definition: definition) {
+      : super(normalizedRadius: definition) {
     this.relativeOffset.setFrom(relativeOffset);
     hitPaint..color = startColor;
     onCollision = (Set<Vector2> intersectionPoints, HitboxShape other) {
@@ -243,79 +308,5 @@ MyCollidable randomCollidable(
     case Shapes.polygon:
       return CollidablePolygon(position, size, velocity, screenCollidable)
         ..rotationSpeed = rotationSpeed;
-  }
-}
-
-class MultipleShapes extends FlameGame
-    with HasCollidables, HasDraggableComponents, FPSCounter {
-  final TextPaint fpsTextPaint = TextPaint(
-    config: TextPaintConfig(
-      color: BasicPalette.white.color,
-    ),
-  );
-
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    final screenCollidable = ScreenCollidable();
-    final snowman = CollidableSnowman(
-      Vector2.all(150),
-      Vector2(100, 200),
-      Vector2(-100, 100),
-      screenCollidable,
-    );
-    MyCollidable lastToAdd = snowman;
-    add(screenCollidable);
-    add(snowman);
-    var totalAdded = 1;
-    while (totalAdded < 20) {
-      lastToAdd = nextRandomCollidable(lastToAdd, screenCollidable);
-      final lastBottomRight =
-          lastToAdd.toAbsoluteRect().bottomRight.toVector2();
-      if (lastBottomRight.x < size.x && lastBottomRight.y < size.y) {
-        add(lastToAdd);
-        totalAdded++;
-      } else {
-        break;
-      }
-    }
-  }
-
-  final _rng = Random();
-  final _distance = Vector2(100, 0);
-
-  MyCollidable nextRandomCollidable(
-    MyCollidable lastCollidable,
-    ScreenCollidable screenCollidable,
-  ) {
-    final collidableSize = Vector2.all(50) + Vector2.random(_rng) * 100;
-    final isXOverflow = lastCollidable.position.x +
-            lastCollidable.size.x / 2 +
-            _distance.x +
-            collidableSize.x >
-        size.x;
-    var position = _distance + Vector2(0, lastCollidable.position.y + 200);
-    if (!isXOverflow) {
-      position = (lastCollidable.position + _distance)
-        ..x += collidableSize.x / 2;
-    }
-    final velocity = (Vector2.random(_rng) - Vector2.random(_rng)) * 400;
-    return randomCollidable(
-      position,
-      collidableSize,
-      velocity,
-      screenCollidable,
-      rng: _rng,
-    );
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    fpsTextPaint.render(
-      canvas,
-      '${fps(120).toStringAsFixed(2)}fps',
-      Vector2(0, size.y - 24),
-    );
   }
 }

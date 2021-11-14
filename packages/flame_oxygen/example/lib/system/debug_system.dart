@@ -8,17 +8,11 @@ class DebugSystem extends BaseSystem {
     ..style = PaintingStyle.stroke;
 
   final textPainter = TextPaint(
-    config: const TextPaintConfig(
-      color: Colors.green,
-      fontSize: 10,
-    ),
+    style: const TextStyle(color: Colors.green, fontSize: 10),
   );
 
   final statusPainter = TextPaint(
-    config: const TextPaintConfig(
-      color: Colors.green,
-      fontSize: 16,
-    ),
+    style: const TextStyle(color: Colors.green, fontSize: 16),
   );
 
   @override
