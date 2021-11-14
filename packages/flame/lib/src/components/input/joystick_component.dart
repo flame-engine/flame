@@ -20,7 +20,7 @@ enum JoystickDirection {
 }
 
 class JoystickComponent extends HudMarginComponent with Draggable {
-  late final PositionComponent knob;
+  late final PositionComponent? knob;
   late final PositionComponent? background;
 
   /// The percentage [0.0, 1.0] the knob is dragged from the center to the edge.
@@ -45,7 +45,7 @@ class JoystickComponent extends HudMarginComponent with Draggable {
   late Vector2 _baseKnobPosition;
 
   JoystickComponent({
-    required this.knob,
+    this.knob,
     this.background,
     EdgeInsets? margin,
     Vector2? position,
@@ -57,7 +57,8 @@ class JoystickComponent extends HudMarginComponent with Draggable {
           'Either size or background must be defined',
         ),
         assert(
-          knob.position.isZero() && (background?.position.isZero() ?? true),
+          (knob?.position.isZero() ?? true) &&
+              (background?.position.isZero() ?? true),
           'Positions should not be set for the knob or the background',
         ),
         super(
@@ -72,13 +73,15 @@ class JoystickComponent extends HudMarginComponent with Draggable {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    knob.anchor = Anchor.center;
-    knob.position.add(size / 2);
-    _baseKnobPosition = knob.position.clone();
+    knob?.anchor = Anchor.center;
+    knob?.position.add(size / 2);
+    _baseKnobPosition = knob?.position.clone() ?? Vector2.all(0);
     if (background != null) {
       add(background!);
     }
-    add(knob);
+    if (knob != null) {
+      add(knob!);
+    }
   }
 
   @override
@@ -86,14 +89,14 @@ class JoystickComponent extends HudMarginComponent with Draggable {
     super.update(dt);
     final knobRadius2 = knobRadius * knobRadius;
     delta..setFrom(_unscaledDelta);
-    if (delta.isZero() && _baseKnobPosition != knob.position) {
-      knob.position = _baseKnobPosition;
+    if (delta.isZero() && _baseKnobPosition != knob?.position) {
+      knob?.position = _baseKnobPosition;
     } else if (delta.length2 > knobRadius2) {
       delta.scaleTo(knobRadius);
     }
     if (!delta.isZero()) {
-      knob.position
-        ..setFrom(_baseKnobPosition)
+      knob?.position
+        ?..setFrom(_baseKnobPosition)
         ..add(delta);
     }
     intensity = delta.length2 / knobRadius2;
