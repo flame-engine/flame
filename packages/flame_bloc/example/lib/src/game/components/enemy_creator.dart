@@ -11,7 +11,7 @@ class EnemyCreator extends TimerComponent with HasGameRef<SpaceShooterGame> {
   EnemyCreator() : super(period: 1, repeat: true, autoStart: true);
 
   @override
-  void tick() {
+  void onStep() {
     gameRef.add(
       EnemyComponent(
         (gameRef.size.x - 25) * random.nextDouble(),
