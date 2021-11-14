@@ -6,6 +6,7 @@ import '../../components.dart';
 class TimerComponent extends Component {
   late final Timer timer;
   final bool removeOnFinish;
+  final VoidCallback? _onTick;
 
   /// Creates a [TimerComponent]
   ///
@@ -20,11 +21,11 @@ class TimerComponent extends Component {
     bool autoStart = true,
     this.removeOnFinish = false,
     VoidCallback? onTick,
-  }) {
+  }) : _onTick = onTick {
     timer = Timer(
       period,
       repeat: repeat,
-      onTick: onTick ?? onTick,
+      onTick: this.onTick,
     );
 
     if (autoStart) {
@@ -32,11 +33,12 @@ class TimerComponent extends Component {
     }
   }
 
-  /// Called everytime the [timer] reached a tick (but
-  /// only if onStep is provided on the component instantiation).
-  /// The default implementaiton is a no-op; override this
-  /// to add custom logic.
-  void onTick() {}
+  /// Called everytime the [timer] reached a tick.
+  /// The default implementation calls the closure received on the
+  /// constructor and can be overriden to add custom logic.
+  void onTick() {
+    _onTick?.call();
+  }
 
   @override
   void update(double dt) {

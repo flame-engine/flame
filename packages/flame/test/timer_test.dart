@@ -47,16 +47,16 @@ void main() {
       expect(timer.progress, 1.0);
     });
 
-    test('callback fires once if non-repeating', () {
-      var callbackCount = 0;
-      final timer = Timer(1.0, callback: () => callbackCount++);
+    test('onTick fires once if non-repeating', () {
+      var onTickCount = 0;
+      final timer = Timer(1.0, onTick: () => onTickCount++);
       timer.start();
       timer.update(0.9);
-      expect(callbackCount, 0);
+      expect(onTickCount, 0);
       timer.update(0.2);
-      expect(callbackCount, 1);
+      expect(onTickCount, 1);
       timer.update(1.0);
-      expect(callbackCount, 1);
+      expect(onTickCount, 1);
     });
 
     test('finishes when complete if non-repeating', () {
@@ -67,16 +67,16 @@ void main() {
       expect(timer.finished, true);
     });
 
-    test('callback fires repeatedly if repeating', () {
-      var callbackCount = 0;
-      final timer = Timer(1.0, repeat: true, callback: () => callbackCount++);
+    test('onTick fires repeatedly if repeating', () {
+      var onTickCount = 0;
+      final timer = Timer(1.0, repeat: true, onTick: () => onTickCount++);
       timer.start();
       timer.update(0.9);
-      expect(callbackCount, 0);
+      expect(onTickCount, 0);
       timer.update(0.2);
-      expect(callbackCount, 1);
+      expect(onTickCount, 1);
       timer.update(1.0);
-      expect(callbackCount, 2);
+      expect(onTickCount, 2);
     });
 
     test('does not finish past limit if repeating', () {
