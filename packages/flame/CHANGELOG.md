@@ -25,7 +25,8 @@
  - `TextPaint` to use `TextStyle` (material) instead of `TextPaintConfig`
  - Underlying `Shape`s in `ShapeComponent` transform with components position, size and angle
  - `HitboxShape` takes parents ancestors transformations into consideration (not scaling)
- - Unify tests to use `FlameTester` where possible
+ - Renamed `FlameTester` to `GameTester`
+ - Modified `FlameTester` to be specific for `T extends FlameGame`
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
