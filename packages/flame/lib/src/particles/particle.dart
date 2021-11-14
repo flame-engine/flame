@@ -93,7 +93,7 @@ abstract class Particle {
     // TODO: Maybe make it into a setter/getter?
     _lifespan = lifespan;
     _timer?.stop();
-    _timer = Timer(lifespan, callback: () => _shouldBeRemoved = true)..start();
+    _timer = Timer(lifespan, onStep: () => _shouldBeRemoved = true)..start();
   }
 
   /// Wraps this particle with a [TranslatedParticle].

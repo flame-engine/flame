@@ -11,11 +11,10 @@ class MyTimerComponent extends TimerComponent {
           period: 1,
           repeat: true,
           removeOnFinish: false,
-          autoStart: true,
         );
 
   @override
-  void tick() {
+  void onStep() {
     count++;
   }
 }
@@ -26,7 +25,6 @@ class NonRepeatingTimerComponent extends TimerComponent {
           period: 1,
           repeat: false,
           removeOnFinish: true,
-          autoStart: true,
         );
 }
 
@@ -65,13 +63,12 @@ void main() {
       expect(game.children.length, equals(0));
     });
 
-    tester.test('calls callback when provided', (game) {
+    tester.test('calls onStep when provided', (game) {
       var called = false;
       game.add(
         TimerComponent(
           period: 1,
-          autoStart: true,
-          callback: () {
+          onStep: () {
             called = true;
           },
         ),

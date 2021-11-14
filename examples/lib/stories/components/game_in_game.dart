@@ -17,7 +17,7 @@ class GameChangeTimer extends TimerComponent with HasGameRef<GameInGame> {
   GameChangeTimer() : super(period: 5, repeat: true, autoStart: true);
 
   @override
-  void tick() {
+  void onStep() {
     final child = gameRef.draggablesGame.square;
     final newParent = child.parent == gameRef.draggablesGame
         ? gameRef.composedGame.parentSquare

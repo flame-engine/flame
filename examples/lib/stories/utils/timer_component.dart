@@ -16,7 +16,6 @@ class RenderedTimeComponent extends TimerComponent {
       : super(
           period: period,
           removeOnFinish: true,
-          autoStart: true,
         );
 
   @override

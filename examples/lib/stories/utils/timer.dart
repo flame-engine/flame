@@ -20,7 +20,7 @@ class TimerGame extends FlameGame with TapDetector {
     countdown = Timer(2);
     interval = Timer(
       1,
-      callback: () => elapsedSecs += 1,
+      onStep: () => elapsedSecs += 1,
       repeat: true,
     );
     interval.start();

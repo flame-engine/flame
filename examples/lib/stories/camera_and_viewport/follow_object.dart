@@ -31,7 +31,7 @@ class MovableSquare extends SquareComponent
     addHitbox(HitboxRectangle());
     timer = Timer(3.0)
       ..stop()
-      ..callback = () {
+      ..onStep = () {
         gameRef.camera.setRelativeOffset(Anchor.center);
       };
   }
