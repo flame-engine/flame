@@ -3,14 +3,21 @@ import 'dart:ui';
 
 /// Simple utility class that helps handling time counting and implementing
 /// interval like events.
+///
+/// Timer auto start by default.
 class Timer {
   final double limit;
   VoidCallback? onTick;
   bool repeat;
   double _current = 0;
-  bool _running = false;
+  bool _running;
 
-  Timer(this.limit, {this.onTick, this.repeat = false});
+  Timer(
+    this.limit, {
+    this.onTick,
+    this.repeat = false,
+    bool autoStart = true,
+  }) : _running = autoStart;
 
   /// The current amount of ms that has passed on this iteration
   double get current => _current;

@@ -60,10 +60,6 @@ class MyGame extends Game {
   final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
   final countdown = Timer(2);
 
-  MyGame() {
-    countdown.start();
-  }
-
   @override
   void update(double dt) {
     countdown.update(dt);
@@ -106,7 +102,6 @@ class MyGame extends Game {
       onTick: () => elapsedSecs += 1,
       repeat: true,
     );
-    interval.start();
   }
 
   @override
@@ -138,7 +133,6 @@ class MyFlameGame extends FlameGame {
         period: 10,
         repeat: true,
         onTick: () => print('10 seconds elapsed'),
-        autoStart: true,
       )
     );
   }
