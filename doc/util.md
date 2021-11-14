@@ -137,7 +137,7 @@ class MyFlameGame extends FlameGame {
       TimerComponent(
         period: 10,
         repeat: true,
-        onTick: () => print("10 seconds elapsed"),
+        onTick: () => print('10 seconds elapsed'),
         autoStart: true,
       )
     );

@@ -8,7 +8,7 @@ import '../game.dart';
 class EnemyCreator extends TimerComponent with HasGameRef<SpaceShooterGame> {
   Random random = Random();
 
-  EnemyCreator() : super(period: 1, repeat: true, autoStart: true);
+  EnemyCreator() : super(period: 1, repeat: true);
 
   @override
   void onTick() {
