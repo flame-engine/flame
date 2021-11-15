@@ -41,8 +41,8 @@ class Svg {
   }
 }
 
-/// Provides loading extensions for [Svg] on [Game] class.
+/// Provides a loading method for [Svg] on the [Game] class.
 extension SvgLoader on Game {
-  /// Loads a [Svg] using [Game] own asset loader.
+  /// Loads a [Svg] using the [Game]'s own asset loader.
   Future<Svg> loadSvg(String fileName) => Svg.load(fileName, cache: assets);
 }
