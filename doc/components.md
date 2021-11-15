@@ -14,7 +14,7 @@ Every `Component` has a few methods that you can optionally implement, which are
 `FlameGame` class. If you are not using `FlameGame`, you can use these methods on your own game loop
 if you wish.
 
-![Component Lifecycle Diagram](images/diagram.png)
+![Component Lifecycle Diagram](images/component_lifecycle.png)
 
 The `onGameResize` method is called whenever the screen is resized, and once in the beginning when
 the component is added to the game via the `add` method.
