@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:synchronized/synchronized.dart';
 
+/// Represents a function that can stop an audio playing.
 typedef Stoppable = void Function();
 
 /// An AudioPool is a provider of AudioPlayers that leaves them pre-loaded to minimize delays.
@@ -14,8 +15,13 @@ class AudioPool {
   final Map<String, AudioPlayer> _currentPlayers = {};
   final List<AudioPlayer> _availablePlayers = [];
 
+  /// The path of the sound of this pool
   final String sound;
+
+  /// If the poop is repeating
   final bool repeating;
+
+  /// Max and min numbers of players
   final int minPlayers, maxPlayers;
 
   final Lock _lock = Lock();
@@ -31,6 +37,7 @@ class AudioPool {
         maxPlayers = maxPlayers ?? 1,
         minPlayers = minPlayers ?? 1;
 
+  /// Creates a [AudioPool] instance with the given parameters
   static Future<AudioPool> create(
     String sound, {
     bool? repeating,
@@ -52,6 +59,7 @@ class AudioPool {
     return instance;
   }
 
+  /// Starts playing the audio, returns a function that can stopped the audio.
   Future<Stoppable> start({double volume = 1.0}) async {
     return _lock.synchronized(() async {
       if (_availablePlayers.isEmpty) {

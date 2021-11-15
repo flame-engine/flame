@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/widgets.dart';
 
+/// {@template _bgm}
 /// The looping background music class.
 ///
 /// This class helps with looping background music management that reacts to
@@ -10,12 +11,20 @@ import 'package:flutter/widgets.dart';
 /// as an observer to the [WidgetsBinding] instance. A [dispose] function is
 /// provided in case this functionality needs to be unloaded but the app needs
 /// to keep running.
+/// {@endtemplate}
 class Bgm extends WidgetsBindingObserver {
   bool _isRegistered = false;
+
+  /// [AudioCache] instance of the [Bgm]
   late AudioCache audioCache;
+
+  /// The [AudioPlayer] instance that is currently playing the audio
   AudioPlayer? audioPlayer;
+
+  /// If the [Bgm] is playing or not
   bool isPlaying = false;
 
+  /// {@macro _bgm}
   Bgm({AudioCache? audioCache}) : audioCache = audioCache ?? AudioCache();
 
   /// Registers a [WidgetsBinding] observer.
