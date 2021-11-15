@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs
 part of 'game_stats_bloc.dart';
 
 enum GameStatus {

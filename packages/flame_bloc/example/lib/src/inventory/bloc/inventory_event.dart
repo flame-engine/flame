@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs
 part of 'inventory_bloc.dart';
 
 abstract class InventoryEvent extends Equatable {

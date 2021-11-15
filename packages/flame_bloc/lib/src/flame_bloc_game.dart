@@ -6,12 +6,20 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+/// Adds capabilities for a [Component] to listen and have access
+/// to a [Bloc] state.
 mixin BlocComponent<B extends BlocBase<S>, S> on Component {
   StreamSubscription<S>? _subscription;
 
   S? _state;
+
+  /// The current state of the [Bloc] that this [Component] is listenning to.
+  /// Flame keeps a copy of the state on the [Component] so this can be directly accessed
+  /// on both [update] or [render] method.
   S? get state => _state;
 
+  /// Makes this component subscribe to the Bloc changes.
+  /// Visible only for test purposes.
   @visibleForTesting
   void subscribe(FlameBlocGame game) {
     final _bloc = game.read<B>();
@@ -29,6 +37,8 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
     });
   }
 
+  /// Makes this component stop listenning to the [Bloc] changes.
+  /// Visible only for test purposes.
   @visibleForTesting
   void unsubscribe() {
     _subscription?.cancel();
@@ -61,6 +71,8 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
 /// {@endtemplate}
 class FlameBlocGame extends FlameGame {
   @visibleForTesting
+  /// Contains a list of all of the [BlocComponent] with an active
+  /// subscription. Only visible for testing.
   final List<BlocComponent> subscriptionQueue = [];
 
   @override
@@ -77,6 +89,10 @@ class FlameBlocGame extends FlameGame {
     _unsubscribe();
   }
 
+  /// Shortcurt method for obtaining the nearest ancestor provider of type [T].
+  ///
+  /// This method will do a lookup in the tree for [T], so avoid calling this inside
+  /// the game loop methods like update and render to avoid perfomance issues.
   T read<T>() {
     final context = buildContext;
     if (context == null) {
