@@ -51,7 +51,7 @@ class Selection {
     required this.h,
   });
 
-  /// Creates a [Selection] from a json
+  /// Creates a [Selection] from [json]
   factory Selection.fromJson(Map<String, dynamic> json) {
     return Selection(
       id: json['id'] as String,
@@ -101,7 +101,7 @@ abstract class BaseSelection {
 }
 
 /// {@template _sprite_selection}
-/// Represents a specific selection for Flame's [Sprite]s
+/// Represents a specific selection of Flame [Sprite]s
 /// {@endtemplate}
 class SpriteSelection extends BaseSelection {
   /// {@macro _sprite_selection}
@@ -109,7 +109,7 @@ class SpriteSelection extends BaseSelection {
     required Selection info,
   }) : super(info);
 
-  /// Creates a [SpriteSelection] from a json
+  /// Creates a [SpriteSelection] from [json]
   @override
   factory SpriteSelection.fromJson(Map<String, dynamic> json) {
     final info = Selection.fromJson(json);
@@ -124,7 +124,7 @@ class SpriteSelection extends BaseSelection {
 }
 
 /// {@template _animation_selection}
-/// Represents a specific selection for Flame's [Sprite]s
+/// Represents a specific selection of Flame [Sprite]s as an animation
 /// {@endtemplate}
 class AnimationSelection extends BaseSelection {
   /// The number of frames of this animation
@@ -144,7 +144,7 @@ class AnimationSelection extends BaseSelection {
     required this.loop,
   }) : super(info);
 
-  /// Creates a [AnimationSelection] from a json
+  /// Creates a [AnimationSelection] from [json]
   @override
   factory AnimationSelection.fromJson(Map<String, dynamic> json) {
     final info = Selection.fromJson(json);
@@ -157,7 +157,7 @@ class AnimationSelection extends BaseSelection {
     );
   }
 
-  /// Returns this instance as a json.
+  /// Returns this instance as json.
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()
@@ -170,7 +170,7 @@ class AnimationSelection extends BaseSelection {
 
 /// FireAtlas is a mapping file that can hold several [Sprite]s and [SpriteAnimation]s
 ///
-/// Use [getSprite] and [getAnimation] to recover mapped assets.
+/// Use [getSprite] and [getAnimation] to retrieve mapped assets.
 class FireAtlas {
   /// Id of the FireAtlas
   String id;
@@ -275,7 +275,7 @@ class FireAtlas {
     return atlas;
   }
 
-  /// Serializes this instances to a byte array
+  /// Serializes this instances into a byte array
   List<int> serialize() {
     final raw = jsonEncode(toJson());
 
