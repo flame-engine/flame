@@ -26,6 +26,8 @@
  - Underlying `Shape`s in `ShapeComponent` transform with components position, size and angle
  - `HitboxShape` takes parents ancestors transformations into consideration (not scaling)
  - `Component` has now `.onRenderTree()` callback, in addition to standard `renderTree()` method
+ - Renamed `FlameTester` to `GameTester`
+ - Modified `FlameTester` to be specific for `T extends FlameGame`
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
