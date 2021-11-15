@@ -1,18 +1,23 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'components/component.dart';
-
 /// Simple utility class that helps handling time counting and implementing
 /// interval like events.
+///
+/// Timer auto start by default.
 class Timer {
   final double limit;
-  VoidCallback? callback;
+  VoidCallback? onTick;
   bool repeat;
   double _current = 0;
-  bool _running = false;
+  bool _running;
 
-  Timer(this.limit, {this.callback, this.repeat = false});
+  Timer(
+    this.limit, {
+    this.onTick,
+    this.repeat = false,
+    bool autoStart = true,
+  }) : _running = autoStart;
 
   /// The current amount of ms that has passed on this iteration
   double get current => _current;
@@ -32,15 +37,15 @@ class Timer {
       if (_current >= limit) {
         if (!repeat) {
           _running = false;
-          callback?.call();
+          onTick?.call();
           return;
         }
         // This is used to cover the rare case of _current being more than
-        // two times the value of limit, so that the callback is called the
+        // two times the value of limit, so that the onTick is called the
         // correct number of times
         while (_current >= limit) {
           _current -= limit;
-          callback?.call();
+          onTick?.call();
         }
       }
     }
@@ -71,23 +76,5 @@ class Timer {
   /// Resume a paused timer (no-op if it is already running).
   void resume() {
     _running = true;
-  }
-}
-
-/// Simple component which wraps a [Timer] instance allowing it to be easily
-/// used inside a FlameGame game.
-class TimerComponent extends Component {
-  Timer timer;
-  final bool removeOnFinish;
-
-  TimerComponent(this.timer, {this.removeOnFinish = false});
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    timer.update(dt);
-    if (removeOnFinish && timer.finished) {
-      removeFromParent();
-    }
   }
 }
