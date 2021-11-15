@@ -12,10 +12,6 @@ class _GameWithHoverables extends FlameGame with HasHoverableComponents {}
 
 final withHoverables = FlameTester(() => _GameWithHoverables());
 
-class _GameWithoutHoverables extends FlameGame {}
-
-final withoutHoverables = FlameTester(() => _GameWithoutHoverables());
-
 class HoverableComponent extends PositionComponent with Hoverable {
   int enterCount = 0;
   int leaveCount = 0;
@@ -50,20 +46,21 @@ class NonPropagatingComponent extends HoverableComponent {
 void main() {
   group('hoverable test', () {
     withHoverables.test(
+      'make sure they can be added to game with HasHoverables',
+      (game) async {
+        await game.add(HoverableComponent());
+      },
+    );
+
+    flameGame.test(
       'make sure they cannot be added to invalid games',
       (game) async {
-        // should be ok
-        await game.add(HoverableComponent());
-
-        final game2 = _GameWithoutHoverables();
-        game2.onGameResize(Vector2.all(100));
-
         const message =
             'Hoverable Components can only be added to a FlameGame with '
             'HasHoverableComponents';
 
         expect(
-          () => game2.add(HoverableComponent()),
+          () => game.add(HoverableComponent()),
           throwsA(
             predicate(
               (e) => e is AssertionError && e.message == message,
@@ -79,8 +76,7 @@ void main() {
         final c = HoverableComponent()
           ..position = Vector2(10, 20)
           ..size = Vector2(3, 3);
-        await game.add(c);
-        game.update(0);
+        await game.ensureAdd(c);
 
         expect(c.isHovered, false);
         expect(c.enterCount, 0);
@@ -124,8 +120,7 @@ void main() {
         final c = HoverableComponent()
           ..position = Vector2(10, 20)
           ..size = Vector2(3, 3);
-        await game.add(c);
-        game.update(0);
+        await game.ensureAdd(c);
 
         // component is now at the corner of the screen
         game.camera.snapTo(Vector2(10, 20));
@@ -153,10 +148,9 @@ void main() {
         final c = HoverableComponent()
           ..position = Vector2(0, 7)
           ..size = Vector2(20, 2);
-        await game.add(a);
-        await game.add(b);
-        await game.add(c);
-        game.update(0);
+        await game.ensureAdd(a);
+        await game.ensureAdd(b);
+        await game.ensureAdd(c);
 
         _triggerMouseMove(game, 0, 0);
         expect(a.isHovered, false);
@@ -190,8 +184,7 @@ void main() {
           ..position = Vector2.all(0)
           ..size = Vector2.all(10);
         await parent.add(child);
-        await game.add(parent);
-        game.update(0);
+        await game.ensureAdd(parent);
         _triggerMouseMove(game, 15, 15);
         expect(child.isHovered, true);
         expect(parent.isHovered, false);

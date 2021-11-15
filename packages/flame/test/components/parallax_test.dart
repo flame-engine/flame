@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 class ParallaxGame extends FlameGame {
@@ -24,19 +25,19 @@ class ParallaxGame extends FlameGame {
 }
 
 void main() {
-  group('parallax test', () {
-    test('can have non-fullscreen ParallaxComponent', () async {
-      final parallaxSize = Vector2.all(100);
-      final game = ParallaxGame(parallaxSize: parallaxSize.clone());
-      await game.onLoad();
-      game.update(0);
-      expect(game.parallaxComponent.size, parallaxSize);
-    });
+  final parallaxGame = FlameTester(() => ParallaxGame());
 
-    test('can have fullscreen ParallaxComponent', () async {
-      final game = ParallaxGame();
-      await game.onLoad();
-      game.update(0);
+  group('parallax test', () {
+    parallaxGame.test(
+      'can have non-fullscreen ParallaxComponent',
+      (game) async {
+        final parallaxSize = Vector2.all(100);
+        game.onGameResize(parallaxSize);
+        expect(game.parallaxComponent.size, parallaxSize);
+      },
+    );
+
+    parallaxGame.test('can have fullscreen ParallaxComponent', (game) async {
       expect(game.parallaxComponent.size, game.size);
     });
   });

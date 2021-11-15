@@ -6,12 +6,12 @@ import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-class HasCollidablesGame extends FlameGame with HasCollidables {}
+class _HasCollidablesGame extends FlameGame with HasCollidables {}
 
-class TestBlock extends PositionComponent with HasHitboxes, Collidable {
+class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
   final List<Collidable> collisions = List.empty(growable: true);
 
-  TestBlock(Vector2 position, Vector2 size, CollidableType type)
+  _TestBlock(Vector2 position, Vector2 size, CollidableType type)
       : super(position: position, size: size) {
     collidableType = type;
     addHitbox(
@@ -40,20 +40,16 @@ class TestBlock extends PositionComponent with HasHitboxes, Collidable {
 }
 
 void main() {
-  FlameTester withCollidables() {
-    return FlameTester(
-      () => HasCollidablesGame(),
-    );
-  }
+  final withCollidables = FlameTester(() => _HasCollidablesGame());
 
   group('Varying CollisionType tests', () {
-    withCollidables().test('Actives do collide', (game) async {
-      final blockA = TestBlock(
+    withCollidables.test('Actives do collide', (game) async {
+      final blockA = _TestBlock(
         Vector2.zero(),
         Vector2.all(10),
         CollidableType.active,
       );
-      final blockB = TestBlock(
+      final blockB = _TestBlock(
         Vector2.all(1),
         Vector2.all(10),
         CollidableType.active,
@@ -65,13 +61,13 @@ void main() {
       expect(blockB.collisions.length, 1);
     });
 
-    withCollidables().test('Sensors do not collide', (game) async {
-      final blockA = TestBlock(
+    withCollidables.test('Sensors do not collide', (game) async {
+      final blockA = _TestBlock(
         Vector2.zero(),
         Vector2.all(10),
         CollidableType.passive,
       );
-      final blockB = TestBlock(
+      final blockB = _TestBlock(
         Vector2.all(1),
         Vector2.all(10),
         CollidableType.passive,
@@ -82,13 +78,13 @@ void main() {
       expect(blockB.collisions.isEmpty, true);
     });
 
-    withCollidables().test('Inactives do not collide', (game) async {
-      final blockA = TestBlock(
+    withCollidables.test('Inactives do not collide', (game) async {
+      final blockA = _TestBlock(
         Vector2.zero(),
         Vector2.all(10),
         CollidableType.inactive,
       );
-      final blockB = TestBlock(
+      final blockB = _TestBlock(
         Vector2.all(1),
         Vector2.all(10),
         CollidableType.inactive,
@@ -98,13 +94,13 @@ void main() {
       expect(blockB.collisions.isEmpty, true);
     });
 
-    withCollidables().test('Active collides with static', (game) async {
-      final blockA = TestBlock(
+    withCollidables.test('Active collides with static', (game) async {
+      final blockA = _TestBlock(
         Vector2.zero(),
         Vector2.all(10),
         CollidableType.active,
       );
-      final blockB = TestBlock(
+      final blockB = _TestBlock(
         Vector2.all(1),
         Vector2.all(10),
         CollidableType.passive,
@@ -116,13 +112,13 @@ void main() {
       expect(blockB.collisions.length, 1);
     });
 
-    withCollidables().test('Sensor collides with active', (game) async {
-      final blockA = TestBlock(
+    withCollidables.test('Sensor collides with active', (game) async {
+      final blockA = _TestBlock(
         Vector2.zero(),
         Vector2.all(10),
         CollidableType.passive,
       );
-      final blockB = TestBlock(
+      final blockB = _TestBlock(
         Vector2.all(1),
         Vector2.all(10),
         CollidableType.active,
@@ -134,14 +130,13 @@ void main() {
       expect(blockB.collisions.length, 1);
     });
 
-    withCollidables().test('Sensor does not collide with inactive',
-        (game) async {
-      final blockA = TestBlock(
+    withCollidables.test('Sensor does not collide with inactive', (game) async {
+      final blockA = _TestBlock(
         Vector2.zero(),
         Vector2.all(10),
         CollidableType.passive,
       );
-      final blockB = TestBlock(
+      final blockB = _TestBlock(
         Vector2.all(1),
         Vector2.all(10),
         CollidableType.inactive,
@@ -151,14 +146,13 @@ void main() {
       expect(blockB.collisions.length, 0);
     });
 
-    withCollidables().test('Inactive does not collide with static',
-        (game) async {
-      final blockA = TestBlock(
+    withCollidables.test('Inactive does not collide with static', (game) async {
+      final blockA = _TestBlock(
         Vector2.zero(),
         Vector2.all(10),
         CollidableType.inactive,
       );
-      final blockB = TestBlock(
+      final blockB = _TestBlock(
         Vector2.all(1),
         Vector2.all(10),
         CollidableType.passive,
@@ -168,14 +162,13 @@ void main() {
       expect(blockB.collisions.length, 0);
     });
 
-    withCollidables().test('Active does not collide with inactive',
-        (game) async {
-      final blockA = TestBlock(
+    withCollidables.test('Active does not collide with inactive', (game) async {
+      final blockA = _TestBlock(
         Vector2.zero(),
         Vector2.all(10),
         CollidableType.active,
       );
-      final blockB = TestBlock(
+      final blockB = _TestBlock(
         Vector2.all(1),
         Vector2.all(10),
         CollidableType.inactive,
@@ -185,14 +178,13 @@ void main() {
       expect(blockB.collisions.length, 0);
     });
 
-    withCollidables().test('Inactive does not collide with active',
-        (game) async {
-      final blockA = TestBlock(
+    withCollidables.test('Inactive does not collide with active', (game) async {
+      final blockA = _TestBlock(
         Vector2.zero(),
         Vector2.all(10),
         CollidableType.inactive,
       );
-      final blockB = TestBlock(
+      final blockB = _TestBlock(
         Vector2.all(1),
         Vector2.all(10),
         CollidableType.active,
@@ -202,12 +194,12 @@ void main() {
       expect(blockB.collisions.length, 0);
     });
 
-    withCollidables().test(
+    withCollidables.test(
       'Correct collisions with many involved collidables',
       (game) async {
         final actives = List.generate(
           100,
-          (_) => TestBlock(
+          (_) => _TestBlock(
             Vector2.random() - Vector2.random(),
             Vector2.all(10),
             CollidableType.active,
@@ -215,7 +207,7 @@ void main() {
         );
         final statics = List.generate(
           100,
-          (_) => TestBlock(
+          (_) => _TestBlock(
             Vector2.random() - Vector2.random(),
             Vector2.all(10),
             CollidableType.passive,
@@ -223,7 +215,7 @@ void main() {
         );
         final inactives = List.generate(
           100,
-          (_) => TestBlock(
+          (_) => _TestBlock(
             Vector2.random() - Vector2.random(),
             Vector2.all(10),
             CollidableType.inactive,
@@ -255,13 +247,13 @@ void main() {
       },
     );
 
-    withCollidables().test('Detects collision after scale', (game) async {
-      final blockA = TestBlock(
+    withCollidables.test('Detects collision after scale', (game) async {
+      final blockA = _TestBlock(
         Vector2.zero(),
         Vector2.all(10),
         CollidableType.active,
       );
-      final blockB = TestBlock(
+      final blockB = _TestBlock(
         Vector2.all(11),
         Vector2.all(10),
         CollidableType.active,
@@ -279,8 +271,8 @@ void main() {
       expect(blockB.collisions.length, 1);
     });
 
-    withCollidables().test('TestPoint detects point after scale', (game) async {
-      final blockA = TestBlock(
+    withCollidables.test('TestPoint detects point after scale', (game) async {
+      final blockA = _TestBlock(
         Vector2.zero(),
         Vector2.all(10),
         CollidableType.active,
@@ -292,26 +284,25 @@ void main() {
       expect(blockA.containsPoint(Vector2.all(11)), true);
     });
 
-    withCollidables().test('Detects collision on child components',
-        (game) async {
-      final blockA = TestBlock(
+    withCollidables.test('Detects collision on child components', (game) async {
+      final blockA = _TestBlock(
         Vector2.zero(),
         Vector2.all(10),
         CollidableType.active,
       );
-      final innerBlockA = TestBlock(
+      final innerBlockA = _TestBlock(
         blockA.size / 4,
         blockA.size / 2,
         CollidableType.active,
       );
       blockA.add(innerBlockA);
 
-      final blockB = TestBlock(
+      final blockB = _TestBlock(
         Vector2.all(5),
         Vector2.all(10),
         CollidableType.active,
       );
-      final innerBlockB = TestBlock(
+      final innerBlockB = _TestBlock(
         blockA.size / 4,
         blockA.size / 2,
         CollidableType.active,

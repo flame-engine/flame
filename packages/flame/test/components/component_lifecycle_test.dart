@@ -1,11 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MyComponent extends Component {
+class _MyComponent extends Component {
   final List<String> events;
 
-  MyComponent(this.events);
+  _MyComponent(this.events);
 
   @override
   void prepare(Component parent) {
@@ -33,11 +34,9 @@ class MyComponent extends Component {
 
 void main() {
   group('Component - Lifecycle', () {
-    test('Lifecycle in correct order', () async {
+    flameGame.test('Lifecycle in correct order', (game) async {
       final events = <String>[];
-      final game = FlameGame();
-      game.onGameResize(Vector2.zero());
-      await game.add(MyComponent(events));
+      await game.ensureAdd(_MyComponent(events));
 
       expect(
         events,
@@ -45,14 +44,12 @@ void main() {
       );
     });
 
-    test('Parent prepares the component', () async {
+    flameGame.test('Parent prepares the component', (game) async {
       final parentEvents = <String>[];
       final childEvents = <String>[];
-      final game = FlameGame();
-      game.onGameResize(Vector2.zero());
-      final parent = MyComponent(parentEvents);
-      await parent.add(MyComponent(childEvents));
-      await game.add(parent);
+      final parent = _MyComponent(parentEvents);
+      await parent.add(_MyComponent(childEvents));
+      await game.ensureAdd(parent);
 
       // The parent tries to prepare the component before it is added to the
       // game and fails since it doesn't have a game root and therefore re-adds
@@ -73,16 +70,13 @@ void main() {
       );
     });
 
-    test('Correct lifecycle on parent change', () async {
+    flameGame.test('Correct lifecycle on parent change', (game) async {
       final parentEvents = <String>[];
       final childEvents = <String>[];
-      final game = FlameGame();
-      game.onGameResize(Vector2.zero());
-      final parent = MyComponent(parentEvents);
-      final child = MyComponent(childEvents);
+      final parent = _MyComponent(parentEvents);
+      final child = _MyComponent(childEvents);
       await parent.add(child);
-      await game.add(parent);
-      game.update(0);
+      await game.ensureAdd(parent);
       child.changeParent(game);
       game.update(0);
 

@@ -50,8 +50,8 @@ void main() async {
     });
   });
   group('SpriteAnimationGroupComponent shouldRemove test', () {
-    test('removeOnFinish is true and there is no any state yet', () {
-      final game = FlameGame();
+    flameGame.test('removeOnFinish is true and there is no any state yet',
+        (game) async {
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -65,11 +65,7 @@ void main() async {
         removeOnFinish: {AnimationState.idle: true},
       );
 
-      game.onGameResize(size);
-      game.add(component);
-
-      // runs a cycle to add the component
-      game.update(0.1);
+      await game.ensureAdd(component);
       expect(component.shouldRemove, false);
       expect(game.children.length, 1);
 
@@ -81,10 +77,9 @@ void main() async {
       expect(game.children.length, 1);
     });
 
-    test(
+    flameGame.test(
       'removeOnFinish is true and current state animation#loop is false',
-      () {
-        final game = FlameGame();
+      (game) async {
         final animation = SpriteAnimation.spriteList(
           [
             Sprite(image),
@@ -99,11 +94,7 @@ void main() async {
           current: AnimationState.idle,
         );
 
-        game.onGameResize(size);
-        game.add(component);
-
-        // runs a cycle to add the component
-        game.update(0.1);
+        await game.ensureAdd(component);
         expect(component.shouldRemove, false);
         expect(game.children.length, 1);
 
@@ -116,8 +107,8 @@ void main() async {
       },
     );
 
-    test('removeOnFinish is true and current animation#loop is true', () {
-      final game = FlameGame();
+    flameGame.test('removeOnFinish is true and current animation#loop is true',
+        (game) async {
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -133,11 +124,7 @@ void main() async {
         current: AnimationState.idle,
       );
 
-      game.onGameResize(size);
-      game.add(component);
-
-      // runs a cycle to add the component
-      game.update(0.1);
+      await game.ensureAdd(component);
       expect(component.shouldRemove, false);
       expect(game.children.length, 1);
 
@@ -149,8 +136,9 @@ void main() async {
       expect(game.children.length, 1);
     });
 
-    test('removeOnFinish is false and current animation#loop is false', () {
-      final game = FlameGame();
+    flameGame
+        .test('removeOnFinish is false and current animation#loop is false',
+            (game) async {
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -162,14 +150,10 @@ void main() async {
       final component = SpriteAnimationGroupComponent<AnimationState>(
         animations: {AnimationState.idle: animation},
         current: AnimationState.idle,
-        // when omited, removeOnFinish is false for all states
+        // when omitted, removeOnFinish is false for all states
       );
 
-      game.onGameResize(size);
-      game.add(component);
-
-      // runs a cycle to add the component
-      game.update(0.1);
+      await game.ensureAdd(component);
       expect(component.shouldRemove, false);
       expect(game.children.length, 1);
 
@@ -181,8 +165,8 @@ void main() async {
       expect(game.children.length, 1);
     });
 
-    test('removeOnFinish is false and current animation#loop is true', () {
-      final game = FlameGame();
+    flameGame.test('removeOnFinish is false and current animation#loop is true',
+        (game) async {
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -198,11 +182,8 @@ void main() async {
         current: AnimationState.idle,
       );
 
-      game.onGameResize(size);
-      game.add(component);
+      await game.ensureAdd(component);
 
-      // runs a cycle to add the component
-      game.update(0.1);
       expect(component.shouldRemove, false);
       expect(game.children.length, 1);
 

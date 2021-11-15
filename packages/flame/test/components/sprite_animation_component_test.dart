@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
@@ -7,11 +6,9 @@ void main() async {
   // Generate an image
   final image = await generateImage();
 
-  final size = Vector2(1.0, 1.0);
-
   group('SpriteAnimationComponent shouldRemove test', () {
-    test('removeOnFinish is true and animation#loop is false', () {
-      final game = FlameGame();
+    flameGame.test('removeOnFinish is true and animation#loop is false',
+        (game) async {
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -25,11 +22,8 @@ void main() async {
         removeOnFinish: true,
       );
 
-      game.onGameResize(size);
-      game.add(component);
+      await game.ensureAdd(component);
 
-      // runs a cycle to add the component
-      game.update(0.1);
       expect(component.shouldRemove, false);
       expect(game.children.length, 1);
 
@@ -41,8 +35,8 @@ void main() async {
       expect(game.children.length, 0);
     });
 
-    test('removeOnFinish is true and animation#loop is true', () {
-      final game = FlameGame();
+    flameGame.test('removeOnFinish is true and animation#loop is true',
+        (game) async {
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -57,11 +51,8 @@ void main() async {
         removeOnFinish: true,
       );
 
-      game.onGameResize(size);
-      game.add(component);
+      await game.ensureAdd(component);
 
-      // runs a cycle to add the component
-      game.update(0.1);
       expect(component.shouldRemove, false);
       expect(game.children.length, 1);
 
@@ -73,8 +64,8 @@ void main() async {
       expect(game.children.length, 1);
     });
 
-    test('removeOnFinish is false and animation#loop is false', () {
-      final game = FlameGame();
+    flameGame.test('removeOnFinish is false and animation#loop is false',
+        (game) async {
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -89,11 +80,8 @@ void main() async {
         removeOnFinish: false,
       );
 
-      game.onGameResize(size);
-      game.add(component);
+      await game.ensureAdd(component);
 
-      // runs a cycle to add the component
-      game.update(0.1);
       expect(component.shouldRemove, false);
       expect(game.children.length, 1);
 
@@ -105,8 +93,8 @@ void main() async {
       expect(game.children.length, 1);
     });
 
-    test('removeOnFinish is false and animation#loop is true', () {
-      final game = FlameGame();
+    flameGame.test('removeOnFinish is false and animation#loop is true',
+        (game) async {
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -122,11 +110,8 @@ void main() async {
         removeOnFinish: false,
       );
 
-      game.onGameResize(size);
-      game.add(component);
+      await game.ensureAdd(component);
 
-      // runs a cycle to add the component
-      game.update(0.1);
       expect(component.shouldRemove, false);
       expect(game.children.length, 1);
 
@@ -138,8 +123,8 @@ void main() async {
       expect(game.children.length, 1);
     });
 
-    test("component isn't removed if it is not playing", () {
-      final game = FlameGame();
+    flameGame.test("component isn't removed if it is not playing",
+        (game) async {
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -154,11 +139,8 @@ void main() async {
         playing: false,
       );
 
-      game.onGameResize(size);
-      game.add(component);
+      await game.ensureAdd(component);
 
-      // runs a cycle to add the component
-      game.update(0.1);
       expect(component.shouldRemove, false);
       expect(game.children.length, 1);
 
@@ -172,9 +154,8 @@ void main() async {
   });
 
   group('SpriteAnimation timing of animation frames', () {
-    test('Last animation frame is not skipped', () {
-      // See https://github.com/flame-engine/flame/issues/895
-      final game = FlameGame();
+    // See https://github.com/flame-engine/flame/issues/895
+    flameGame.test('Last animation frame is not skipped', (game) async {
       // Non-looping animation, with the expected total duration of 0.500 s
       final animation = SpriteAnimation.spriteList(
         List.filled(5, Sprite(image)),
@@ -186,8 +167,7 @@ void main() async {
         callbackInvoked++;
       };
       final component = SpriteAnimationComponent(animation: animation);
-      game.onGameResize(size);
-      game.add(component);
+      await game.ensureAdd(component);
       game.update(0.01);
       expect(animation.currentIndex, 0);
       game.update(0.1);
