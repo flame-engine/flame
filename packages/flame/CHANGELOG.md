@@ -28,6 +28,7 @@
  - Renamed `FlameTester` to `GameTester`
  - Modified `FlameTester` to be specific for `T extends FlameGame`
  - Improved `TimerComponent`
+ - Use `FlameTester` everywhere where it makes sense in the tests
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
