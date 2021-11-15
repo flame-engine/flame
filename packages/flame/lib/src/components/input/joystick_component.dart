@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/rendering.dart' show EdgeInsets;
+import 'package:meta/meta.dart';
 
 import '../../../components.dart';
 import '../../../extensions.dart';
@@ -20,7 +21,7 @@ enum JoystickDirection {
 }
 
 class JoystickComponent extends HudMarginComponent with Draggable {
-  late final PositionComponent knob;
+  late final PositionComponent? knob;
   late final PositionComponent? background;
 
   /// The percentage [0.0, 1.0] the knob is dragged from the center to the edge.
@@ -45,7 +46,7 @@ class JoystickComponent extends HudMarginComponent with Draggable {
   late Vector2 _baseKnobPosition;
 
   JoystickComponent({
-    PositionComponent? knob,
+    this.knob,
     this.background,
     EdgeInsets? margin,
     Vector2? position,
@@ -68,23 +69,26 @@ class JoystickComponent extends HudMarginComponent with Draggable {
           anchor: anchor,
         ) {
     this.knobRadius = knobRadius ?? this.size.x / 2;
-
-    // If knob is null - assume it is set in `onLoad`
-    if (knob != null) {
-      this.knob = knob;
-    }
   }
 
   @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    knob.anchor = Anchor.center;
-    knob.position = size / 2;
-    _baseKnobPosition = knob.position.clone();
-    if (background != null) {
-      add(background!);
-    }
-    add(knob);
+  @mustCallSuper
+  void onMount() {
+    assert(
+      background != null,
+      'The background has to either be passed in as an argument or set in onLoad',
+    );
+
+    assert(
+      knob != null,
+      'The knob has to either be passed in as an argument or set in onLoad',
+    );
+
+    knob!.anchor = Anchor.center;
+    knob!.position = size / 2;
+    _baseKnobPosition = knob!.position.clone();
+    add(background!);
+    add(knob!);
   }
 
   @override
@@ -92,13 +96,13 @@ class JoystickComponent extends HudMarginComponent with Draggable {
     super.update(dt);
     final knobRadius2 = knobRadius * knobRadius;
     delta..setFrom(_unscaledDelta);
-    if (delta.isZero() && _baseKnobPosition != knob.position) {
-      knob.position = _baseKnobPosition;
+    if (delta.isZero() && _baseKnobPosition != knob!.position) {
+      knob!.position = _baseKnobPosition;
     } else if (delta.length2 > knobRadius2) {
       delta.scaleTo(knobRadius);
     }
     if (!delta.isZero()) {
-      knob.position
+      knob!.position
         ..setFrom(_baseKnobPosition)
         ..add(delta);
     }
