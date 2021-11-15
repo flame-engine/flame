@@ -90,11 +90,11 @@ void main() {
       () {
         final comp = _MyComponentWithType();
 
-        comp.setPaint(_MyComponentKeys.background, Paint());
-        comp.deletePaint(_MyComponentKeys.background);
+        comp.setPaint(_MyComponentKeys.foreground, Paint());
+        comp.deletePaint(_MyComponentKeys.foreground);
 
         expect(
-          () => comp.getPaint(_MyComponentKeys.background),
+          () => comp.getPaint(_MyComponentKeys.foreground),
           throwsArgumentError,
         );
       },
