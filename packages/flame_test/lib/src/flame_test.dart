@@ -12,6 +12,7 @@ extension FlameFinds on CommonFinders {
   }
 }
 
+@visibleForTesting
 extension FlameGameExtension on Component {
   /// Makes sure that the [component] is added to the tree if you wait for the
   /// returned future to resolve.
