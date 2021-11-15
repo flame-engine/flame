@@ -80,7 +80,7 @@ class _GamePage extends StatelessWidget {
 void main() async {
   final size = Vector2(1.0, 1.0);
 
-  testWidgets('Adds focus', (tester) async {
+  testWidgets('adds focus', (tester) async {
     final focusNode = FocusNode();
 
     final game = _KeyboardEventsGame();
@@ -97,7 +97,7 @@ void main() async {
     expect(focusNode.hasFocus, true);
   });
 
-  testWidgets('KeyboardEvents receives keys', (tester) async {
+  testWidgets('game with KeyboardEvents receives keys', (tester) async {
     final game = _KeyboardEventsGame();
 
     await tester.pumpWidget(
@@ -115,26 +115,29 @@ void main() async {
     expect(game.keysPressed, ['a', 'b', 'c']);
   });
 
-  testWidgets('HasKeyboardHandlerComponents receives keys', (tester) async {
-    final game = _HasKeyboardHandlerComponentsGame();
+  testWidgets(
+    'game with HasKeyboardHandlerComponents receives keys',
+    (tester) async {
+      final game = _HasKeyboardHandlerComponentsGame();
 
-    await tester.pumpWidget(
-      _GamePage(
-        child: GameWidget(
-          game: game,
+      await tester.pumpWidget(
+        _GamePage(
+          child: GameWidget(
+            game: game,
+          ),
         ),
-      ),
-    );
+      );
 
-    game.onGameResize(size);
-    game.update(0.1);
+      game.onGameResize(size);
+      game.update(0.1);
 
-    await tester.pump();
+      await tester.pump();
 
-    await tester.sendKeyDownEvent(LogicalKeyboardKey.keyZ);
-    await tester.sendKeyDownEvent(LogicalKeyboardKey.keyF);
-    await tester.sendKeyDownEvent(LogicalKeyboardKey.keyI);
+      await tester.sendKeyDownEvent(LogicalKeyboardKey.keyZ);
+      await tester.sendKeyDownEvent(LogicalKeyboardKey.keyF);
+      await tester.sendKeyDownEvent(LogicalKeyboardKey.keyI);
 
-    expect(game.keyboardHandler.keysPressed, ['z', 'f', 'i']);
-  });
+      expect(game.keyboardHandler.keysPressed, ['z', 'f', 'i']);
+    },
+  );
 }

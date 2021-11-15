@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 
 class _GameHasDraggables extends FlameGame with HasDraggableComponents {}
 
-class DraggableComponent extends PositionComponent with Draggable {
+class _DraggableComponent extends PositionComponent with Draggable {
   bool hasStartedDragging = false;
 
   @override
@@ -20,11 +20,11 @@ class DraggableComponent extends PositionComponent with Draggable {
 void main() {
   final withDraggables = FlameTester(() => _GameHasDraggables());
 
-  group('draggables test', () {
+  group('Draggables', () {
     withDraggables.test(
       'make sure they can be added to game with HasDraggables',
       (game) async {
-        await game.add(DraggableComponent());
+        await game.add(_DraggableComponent());
       },
     );
 
@@ -36,7 +36,7 @@ void main() {
             'HasDraggableComponents';
 
         expect(
-          () => game.add(DraggableComponent()),
+          () => game.add(_DraggableComponent()),
           throwsA(
             predicate(
               (e) => e is AssertionError && e.message == message,
@@ -47,7 +47,7 @@ void main() {
     );
 
     withDraggables.test('can be dragged', (game) async {
-      final component = DraggableComponent()
+      final component = _DraggableComponent()
         ..x = 10
         ..y = 10
         ..width = 10
@@ -69,7 +69,7 @@ void main() {
 
     withDraggables.test('when the game has camera zoom, can be dragged',
         (game) async {
-      final component = DraggableComponent()
+      final component = _DraggableComponent()
         ..x = 10
         ..y = 10
         ..width = 10
@@ -92,7 +92,7 @@ void main() {
 
     withDraggables.test('when the game has a moved camera, dragging works',
         (game) async {
-      final component = DraggableComponent()
+      final component = _DraggableComponent()
         ..x = 50
         ..y = 50
         ..width = 10
@@ -116,7 +116,7 @@ void main() {
   });
 
   withDraggables.test('isDragged is changed', (game) async {
-    final component = DraggableComponent()
+    final component = _DraggableComponent()
       ..x = 10
       ..y = 10
       ..width = 10

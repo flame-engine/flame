@@ -10,7 +10,7 @@ class _TappableComponent extends PositionComponent with Tappable {}
 void main() {
   final withTappables = FlameTester(() => _GameWithTappables());
 
-  group('tappables test', () {
+  group('Tappable', () {
     withTappables.test(
       'make sure Tappables can be added to valid games',
       (game) async {

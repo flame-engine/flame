@@ -11,7 +11,7 @@ void main() {
   final withDraggables = FlameTester(() => _GameHasDraggables());
 
   group('JoystickDirection tests', () {
-    withDraggables.test('Can convert angle to JoystickDirection', (game) async {
+    withDraggables.test('can convert angle to JoystickDirection', (game) async {
       final joystick = JoystickComponent(
         knob: CircleComponent(radius: 5.0),
         size: 20,

@@ -3,11 +3,11 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class ParallaxGame extends FlameGame {
+class _ParallaxGame extends FlameGame {
   late final ParallaxComponent parallaxComponent;
   late final Vector2? parallaxSize;
 
-  ParallaxGame({this.parallaxSize}) {
+  _ParallaxGame({this.parallaxSize}) {
     onGameResize(Vector2.all(500));
   }
 
@@ -25,7 +25,7 @@ class ParallaxGame extends FlameGame {
 }
 
 void main() {
-  final parallaxGame = FlameTester(() => ParallaxGame());
+  final parallaxGame = FlameTester(() => _ParallaxGame());
 
   group('parallax test', () {
     parallaxGame.test(

@@ -7,10 +7,10 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class TestComponent extends PositionComponent {
+class _TestComponent extends PositionComponent {
   static final Paint _paint = Paint();
 
-  TestComponent(Vector2 position)
+  _TestComponent(Vector2 position)
       : super(
           position: position,
           size: Vector2.all(1.0),
@@ -101,7 +101,7 @@ void main() {
       game.onGameResize(Vector2.all(100.0));
       expect(game.camera.position, Vector2.zero());
 
-      final p = TestComponent(Vector2.all(10.0));
+      final p = _TestComponent(Vector2.all(10.0));
       game.add(p);
       game.update(0);
 
@@ -119,7 +119,7 @@ void main() {
       game.onGameResize(Vector2.all(100.0));
       expect(game.camera.position, Vector2.zero());
 
-      final p = TestComponent(Vector2.all(10.0));
+      final p = _TestComponent(Vector2.all(10.0));
       game.add(p);
       game.update(0);
 
@@ -159,7 +159,7 @@ void main() {
     flameGame.test('camera follow', (game) {
       game.onGameResize(Vector2.all(100.0));
 
-      final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
+      final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
       game.add(p);
       game.update(0);
       game.camera.followComponent(p);
@@ -186,7 +186,7 @@ void main() {
     flameGame.test('camera follow with relative position', (game) {
       game.onGameResize(Vector2.all(100.0));
 
-      final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
+      final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
       game.add(p);
       game.update(0);
       // this would be a typical vertical shoot-em-up
@@ -212,7 +212,7 @@ void main() {
     flameGame.test('camera follow with world boundaries', (game) {
       game.onGameResize(Vector2.all(100.0));
 
-      final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
+      final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
       game.add(p);
       game.update(0);
       game.camera.followComponent(
@@ -247,7 +247,7 @@ void main() {
       (game) {
         game.onGameResize(Vector2.all(200.0));
 
-        final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
+        final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
         game.add(p);
         game.update(0);
         game.camera.followComponent(
@@ -285,7 +285,7 @@ void main() {
       game.onGameResize(Vector2.all(200.0));
       game.camera.zoom = 2;
 
-      final p = TestComponent(Vector2.all(100.0))..anchor = Anchor.center;
+      final p = _TestComponent(Vector2.all(100.0))..anchor = Anchor.center;
       game.add(p);
       game.update(0);
 
@@ -305,7 +305,7 @@ void main() {
       game.camera.zoom = 2;
       game.camera.setRelativeOffset(Anchor.center);
 
-      final p = TestComponent(Vector2.all(100.0))..anchor = Anchor.center;
+      final p = _TestComponent(Vector2.all(100.0))..anchor = Anchor.center;
       game.add(p);
       game.update(10000);
 
@@ -344,7 +344,7 @@ void main() {
         expect(game.canvasSize, Vector2.all(200.00));
         expect(game.size, Vector2.all(100.00));
 
-        final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
+        final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
         game.add(p);
         game.camera.followComponent(
           p,

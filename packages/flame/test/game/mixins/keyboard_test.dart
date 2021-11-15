@@ -5,12 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class ValidGame extends FlameGame with KeyboardEvents {}
+class _ValidGame extends FlameGame with KeyboardEvents {}
 
-class InvalidGame extends FlameGame
+class _InvalidGame extends FlameGame
     with HasKeyboardHandlerComponents, KeyboardEvents {}
 
-class MockRawKeyEventData extends Mock implements RawKeyEventData {
+class _MockRawKeyEventData extends Mock implements RawKeyEventData {
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.debug}) {
     return super.toString();
@@ -20,10 +20,10 @@ class MockRawKeyEventData extends Mock implements RawKeyEventData {
 void main() {
   group('Keyboard events', () {
     test(
-      'FlameGame with KeyboardEvents can handle key events',
+      'game with KeyboardEvents can handle key events',
       () {
-        final validGame = ValidGame();
-        final event = RawKeyDownEvent(data: MockRawKeyEventData());
+        final validGame = _ValidGame();
+        final event = RawKeyDownEvent(data: _MockRawKeyEventData());
 
         // Should just work with the default implementation
         expect(
@@ -36,8 +36,8 @@ void main() {
     test(
       'cannot mix KeyboardEvent and HasKeyboardHandlerComponents together',
       () {
-        final invalidGame = InvalidGame();
-        final event = RawKeyDownEvent(data: MockRawKeyEventData());
+        final invalidGame = _InvalidGame();
+        final event = RawKeyDownEvent(data: _MockRawKeyEventData());
 
         // Should throw an assertion error
         expect(

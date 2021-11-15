@@ -33,8 +33,8 @@ class _MyComponent extends Component {
 }
 
 void main() {
-  group('Component - Lifecycle', () {
-    flameGame.test('Lifecycle in correct order', (game) async {
+  group('Component Lifecycle', () {
+    flameGame.test('correct order', (game) async {
       final events = <String>[];
       await game.ensureAdd(_MyComponent(events));
 
@@ -44,7 +44,7 @@ void main() {
       );
     });
 
-    flameGame.test('Parent prepares the component', (game) async {
+    flameGame.test('parent prepares the component', (game) async {
       final parentEvents = <String>[];
       final childEvents = <String>[];
       final parent = _MyComponent(parentEvents);
@@ -70,7 +70,7 @@ void main() {
       );
     });
 
-    flameGame.test('Correct lifecycle on parent change', (game) async {
+    flameGame.test('correct lifecycle on parent change', (game) async {
       final parentEvents = <String>[];
       final childEvents = <String>[];
       final parent = _MyComponent(parentEvents);

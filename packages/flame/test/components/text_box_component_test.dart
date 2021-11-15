@@ -7,7 +7,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('text box component test', () {
+  group('TextBoxComponent', () {
     test('size is properly computed', () async {
       final c = TextBoxComponent(
         'The quick brown fox jumps over the lazy dog.',

@@ -4,7 +4,7 @@ import 'package:flame/input.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class TapGame extends FlameGame with TapDetector {
+class _TapGame extends FlameGame with TapDetector {
   bool tapRegistered = false;
 
   @override
@@ -13,7 +13,7 @@ class TapGame extends FlameGame with TapDetector {
   }
 }
 
-class DoubleTapGame extends FlameGame with DoubleTapDetector {
+class _DoubleTapGame extends FlameGame with DoubleTapDetector {
   bool doubleTapRegistered = false;
   Vector2? doubleTapPosition;
 
@@ -29,8 +29,8 @@ class DoubleTapGame extends FlameGame with DoubleTapDetector {
 }
 
 void main() {
-  final tapGame = FlameTester(() => TapGame());
-  final doubleTapGame = FlameTester(() => DoubleTapGame());
+  final tapGame = FlameTester(() => _TapGame());
+  final doubleTapGame = FlameTester(() => _DoubleTapGame());
 
   group('GameWidget - TapDetectors', () {
     tapGame.widgetTest(

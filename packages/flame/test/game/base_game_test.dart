@@ -12,7 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 class _GameWithTappables extends FlameGame with HasTappableComponents {}
 
-class MyTappableComponent extends MyComponent with Tappable {
+class _MyTappableComponent extends _MyComponent with Tappable {
   bool tapped = false;
 
   @override
@@ -22,7 +22,7 @@ class MyTappableComponent extends MyComponent with Tappable {
   }
 }
 
-class MyComponent extends PositionComponent with HasGameRef {
+class _MyComponent extends PositionComponent with HasGameRef {
   bool isUpdateCalled = false;
   bool isRenderCalled = false;
   int onRemoveCallCounter = 0;
@@ -55,7 +55,7 @@ class MyComponent extends PositionComponent with HasGameRef {
   }
 }
 
-class MyAsyncComponent extends MyComponent {
+class _MyAsyncComponent extends _MyComponent {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -80,7 +80,7 @@ void main() {
     withTappables.test(
       'when the component has onLoad function, adds after load completion',
       (game) async {
-        final component = MyAsyncComponent();
+        final component = _MyAsyncComponent();
         await game.ensureAdd(component);
 
         expect(true, game.children.contains(component));
@@ -90,7 +90,7 @@ void main() {
     );
 
     flameGame.test('prepare adds gameRef and calls onGameResize', (game) async {
-      final component = MyComponent();
+      final component = _MyComponent();
       await game.ensureAdd(component);
 
       expect(component.gameSize, game.size);
@@ -98,7 +98,7 @@ void main() {
     });
 
     withTappables.test('component can be tapped', (game) async {
-      final component = MyTappableComponent();
+      final component = _MyTappableComponent();
       await game.ensureAdd(component);
       game.onTapDown(1, createTapDownEvent(game));
 
@@ -106,7 +106,7 @@ void main() {
     });
 
     flameGame.test('component is added to component list', (game) async {
-      final component = MyComponent();
+      final component = _MyComponent();
       await game.ensureAdd(component);
 
       expect(game.children.contains(component), true);
@@ -116,7 +116,7 @@ void main() {
       'component render and update is called',
       (flutter.WidgetTester tester) async {
         final game = FlameGame();
-        final component = MyComponent();
+        final component = _MyComponent();
 
         game.onGameResize(Vector2.zero());
         game.add(component);
@@ -142,7 +142,7 @@ void main() {
     );
 
     flameGame.test('onRemove is only called once on component', (game) async {
-      final component = MyComponent();
+      final component = _MyComponent();
 
       await game.ensureAdd(component);
       // The component is removed both by removing it on the game instance and

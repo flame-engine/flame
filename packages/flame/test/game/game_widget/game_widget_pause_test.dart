@@ -50,7 +50,7 @@ class _WrapperState extends State<_Wrapper> {
   }
 }
 
-class MyGame extends FlameGame {
+class _MyGame extends FlameGame {
   int callCount = 0;
 
   @override
@@ -62,9 +62,9 @@ class MyGame extends FlameGame {
 }
 
 void main() {
-  FlameTester<MyGame> myGame({bool paused = false}) {
+  FlameTester<_MyGame> myGame({bool paused = false}) {
     return FlameTester(
-      () => MyGame()..paused = paused,
+      () => _MyGame()..paused = paused,
       pumpWidget: (gameWidget, tester) async {
         await tester.pumpWidget(_Wrapper(child: gameWidget));
       },

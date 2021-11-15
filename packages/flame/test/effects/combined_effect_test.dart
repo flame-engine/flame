@@ -7,10 +7,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'effect_test_utils.dart';
 
-class Elements extends BaseElements {
+class _Elements extends BaseElements {
   bool onCompleteCalled = false;
 
-  Elements(Random random) : super(random);
+  _Elements(Random random) : super(random);
 
   @override
   TestComponent component() {
@@ -57,41 +57,44 @@ class Elements extends BaseElements {
 }
 
 void main() {
-  testWidgetsRandom(
-    'CombinedEffect can combine',
-    (Random random, WidgetTester tester) async {
-      final e = Elements(random);
-      final component = e.component();
-      final game = e.game();
-      final effect = e.effect();
-      await game.add(component);
-      await component.add(effect);
-      var timePassed = 0.0;
-      const timeStep = 1 / 60;
-      while (timePassed <= effect.iterationTime) {
-        game.update(timeStep);
-        timePassed += timeStep;
-      }
-      game.update(0);
-      expect(effect.hasCompleted(), true);
-      expect(e.onCompleteCalled, true);
-    },
-  );
+  group('CombinedEffect', () {
+    testWidgetsRandom(
+      'can combine',
+      (Random random, WidgetTester tester) async {
+        final e = _Elements(random);
+        final component = e.component();
+        final game = e.game();
+        final effect = e.effect();
+        await game.add(component);
+        await component.add(effect);
+        var timePassed = 0.0;
+        const timeStep = 1 / 60;
+        while (timePassed <= effect.iterationTime) {
+          game.update(timeStep);
+          timePassed += timeStep;
+        }
+        game.update(0);
+        expect(effect.hasCompleted(), true);
+        expect(e.onCompleteCalled, true);
+      },
+    );
 
-  testWidgetsRandom(
-    'CombinedEffect can not contain children of same type',
-    (Random random, WidgetTester tester) async {
-      final e = Elements(random);
-      final component = e.component();
-      final game = e.game();
-      final effect = e.effect();
-      await game.add(component);
-      await component.add(effect);
-      game.update(0);
-      expect(
-        () async => effect.add(SizeEffect(duration: 1.0, size: Vector2.zero())),
-        throwsA(isA<AssertionError>()),
-      );
-    },
-  );
+    testWidgetsRandom(
+      'can not contain children of same type',
+      (Random random, WidgetTester tester) async {
+        final e = _Elements(random);
+        final component = e.component();
+        final game = e.game();
+        final effect = e.effect();
+        await game.add(component);
+        await component.add(effect);
+        game.update(0);
+        expect(
+          () async =>
+              effect.add(SizeEffect(duration: 1.0, size: Vector2.zero())),
+          throwsA(isA<AssertionError>()),
+        );
+      },
+    );
+  });
 }

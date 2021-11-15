@@ -2,19 +2,14 @@ import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class PriorityComponent extends Component {
-  PriorityComponent(int priority) : super(priority: priority);
+class _PriorityComponent extends Component {
+  _PriorityComponent(int priority) : super(priority: priority);
 }
 
-void componentsSorted(Iterable<Component> components) {
-  final priorities = components.map<int>((c) => c.priority).toList();
-  expect(priorities.toList(), orderedEquals(priorities..sort()));
-}
-
-class ParentWithReorderSpy extends Component {
+class _ParentWithReorderSpy extends Component {
   int callCount = 0;
 
-  ParentWithReorderSpy(int priority) : super(priority: priority);
+  _ParentWithReorderSpy(int priority) : super(priority: priority);
 
   @override
   void reorderChildren() {
@@ -29,12 +24,17 @@ class ParentWithReorderSpy extends Component {
 }
 
 void main() {
+  void componentsSorted(Iterable<Component> components) {
+    final priorities = components.map<int>((c) => c.priority).toList();
+    expect(priorities.toList(), orderedEquals(priorities..sort()));
+  }
+
   group('priority test', () {
     flameGame.test(
       'components with different priorities are sorted in the list',
       (game) async {
         final priorityComponents =
-            List.generate(10, (i) => PriorityComponent(i));
+            List.generate(10, (i) => _PriorityComponent(i));
         priorityComponents.shuffle();
         await game.ensureAddAll(priorityComponents);
         componentsSorted(game.children);
@@ -44,9 +44,9 @@ void main() {
     flameGame.test(
       'changing priority should reorder component list',
       (game) async {
-        final firstCompopnent = PriorityComponent(-1);
+        final firstCompopnent = _PriorityComponent(-1);
         final priorityComponents =
-            List.generate(10, (i) => PriorityComponent(i))
+            List.generate(10, (i) => _PriorityComponent(i))
               ..add(firstCompopnent);
         priorityComponents.shuffle();
         final components = game.children;
@@ -63,7 +63,7 @@ void main() {
       'changing priorities should reorder component list',
       (game) async {
         final priorityComponents =
-            List.generate(10, (i) => PriorityComponent(i));
+            List.generate(10, (i) => _PriorityComponent(i));
         priorityComponents.shuffle();
         final components = game.children;
         await game.ensureAddAll(priorityComponents);
@@ -83,9 +83,9 @@ void main() {
     flameGame.test(
       'changing child priority should reorder component list',
       (game) async {
-        final parentComponent = PriorityComponent(0);
+        final parentComponent = _PriorityComponent(0);
         final priorityComponents =
-            List.generate(10, (i) => PriorityComponent(i));
+            List.generate(10, (i) => _PriorityComponent(i));
         priorityComponents.shuffle();
         await game.ensureAdd(parentComponent);
         await parentComponent.ensureAddAll(priorityComponents);
@@ -102,9 +102,9 @@ void main() {
     flameGame.test(
       'changing child priorities should reorder component list',
       (game) async {
-        final parentComponent = PriorityComponent(0);
+        final parentComponent = _PriorityComponent(0);
         final priorityComponents =
-            List.generate(10, (i) => PriorityComponent(i));
+            List.generate(10, (i) => _PriorityComponent(i));
         priorityComponents.shuffle();
         await game.ensureAdd(parentComponent);
         await parentComponent.ensureAddAll(priorityComponents);
@@ -125,10 +125,10 @@ void main() {
     flameGame.test(
       'changing grand child priority should reorder component list',
       (game) async {
-        final grandParentComponent = PriorityComponent(0);
-        final parentComponent = PriorityComponent(0);
+        final grandParentComponent = _PriorityComponent(0);
+        final parentComponent = _PriorityComponent(0);
         final priorityComponents =
-            List.generate(10, (i) => PriorityComponent(i));
+            List.generate(10, (i) => _PriorityComponent(i));
         priorityComponents.shuffle();
         await game.ensureAdd(grandParentComponent);
         await grandParentComponent.ensureAdd(parentComponent);
@@ -146,19 +146,19 @@ void main() {
     flameGame.test(
       '#reorderChildren is only called once per parent per tick',
       (game) async {
-        final a = ParentWithReorderSpy(1);
-        final a1 = PriorityComponent(1);
-        final a2 = PriorityComponent(2);
+        final a = _ParentWithReorderSpy(1);
+        final a1 = _PriorityComponent(1);
+        final a2 = _PriorityComponent(2);
         a.addAll([a1, a2]);
 
-        final b = ParentWithReorderSpy(3);
-        final b1 = PriorityComponent(1);
+        final b = _ParentWithReorderSpy(3);
+        final b1 = _PriorityComponent(1);
         b.add(b1);
 
-        final c = ParentWithReorderSpy(2);
-        final c1 = PriorityComponent(1);
-        final c2 = PriorityComponent(0);
-        final c3 = PriorityComponent(-1);
+        final c = _ParentWithReorderSpy(2);
+        final c1 = _PriorityComponent(1);
+        final c2 = _PriorityComponent(0);
+        final c3 = _PriorityComponent(-1);
         c.addAll([c1, c2, c3]);
 
         await game.ensureAddAll([a, b, c]);

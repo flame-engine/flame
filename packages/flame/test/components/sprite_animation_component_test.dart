@@ -6,7 +6,7 @@ void main() async {
   // Generate an image
   final image = await generateImage();
 
-  group('SpriteAnimationComponent shouldRemove test', () {
+  group('SpriteAnimationComponent shouldRemove', () {
     flameGame.test('removeOnFinish is true and animation#loop is false',
         (game) async {
       final animation = SpriteAnimation.spriteList(

@@ -11,7 +11,7 @@ void main() {
   group('Paint Effects', () {
     group('OpacityEffect', () {
       flameGame.test(
-        'Sets the correct opacity on the paint',
+        'sets the correct opacity on the paint',
         (game) async {
           final component = _MyComponent();
           game.ensureAdd(component);
@@ -32,7 +32,7 @@ void main() {
 
     group('ColorEffect', () {
       flameGame.test(
-        'Sets the correct color filter on the paint',
+        'sets the correct color filter on the paint',
         (game) async {
           final component = _MyComponent();
           game.ensureAdd(component);

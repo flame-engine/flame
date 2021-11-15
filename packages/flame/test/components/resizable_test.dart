@@ -3,11 +3,11 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class MyComponent extends PositionComponent {
+class _MyComponent extends PositionComponent {
   String name;
   late Vector2 gameSize;
 
-  MyComponent(this.name) : super(size: Vector2.all(2.0));
+  _MyComponent(this.name) : super(size: Vector2.all(2.0));
 
   @override
   void onGameResize(Vector2 gameSize) {
@@ -22,7 +22,7 @@ void main() {
   // manually in them.
   group('resizable test', () {
     test('game calls resize on add', () async {
-      final a = MyComponent('a');
+      final a = _MyComponent('a');
       final game = FlameGame();
       game.onGameResize(size);
 
@@ -31,7 +31,7 @@ void main() {
     });
 
     test('game calls resize after added', () async {
-      final a = MyComponent('a');
+      final a = _MyComponent('a');
       final game = FlameGame();
       game.onGameResize(Vector2.all(10));
 
@@ -41,7 +41,7 @@ void main() {
     });
 
     test("game calls doesn't change component size", () async {
-      final a = MyComponent('a');
+      final a = _MyComponent('a');
       final game = FlameGame();
       game.onGameResize(Vector2.all(10));
 

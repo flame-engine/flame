@@ -1,9 +1,8 @@
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-enum AnimationState {
+enum _AnimationState {
   idle,
   running,
 }
@@ -12,9 +11,7 @@ void main() async {
   // Generate a image
   final image = await generateImage();
 
-  final size = Vector2(1.0, 1.0);
-
-  group('SpriteAnimationGroupComponent test', () {
+  group('SpriteAnimationGroupComponent', () {
     test('returns the correct animation according to its state', () {
       final animation1 = SpriteAnimation.spriteList(
         [
@@ -30,10 +27,10 @@ void main() async {
         ],
         stepTime: 1,
       );
-      final component = SpriteAnimationGroupComponent<AnimationState>(
+      final component = SpriteAnimationGroupComponent<_AnimationState>(
         animations: {
-          AnimationState.idle: animation1,
-          AnimationState.running: animation2,
+          _AnimationState.idle: animation1,
+          _AnimationState.running: animation2,
         },
       );
 
@@ -41,15 +38,16 @@ void main() async {
       expect(component.animation, null);
 
       // Setting the idle state, we need to see the animation1
-      component.current = AnimationState.idle;
+      component.current = _AnimationState.idle;
       expect(component.animation, animation1);
 
       // Setting the running state, we need to see the animation2
-      component.current = AnimationState.running;
+      component.current = _AnimationState.running;
       expect(component.animation, animation2);
     });
   });
-  group('SpriteAnimationGroupComponent shouldRemove test', () {
+
+  group('SpriteAnimationGroupComponent.shouldRemove', () {
     flameGame.test('removeOnFinish is true and there is no any state yet',
         (game) async {
       final animation = SpriteAnimation.spriteList(
@@ -60,9 +58,9 @@ void main() async {
         stepTime: 1,
         loop: false,
       );
-      final component = SpriteAnimationGroupComponent<AnimationState>(
-        animations: {AnimationState.idle: animation},
-        removeOnFinish: {AnimationState.idle: true},
+      final component = SpriteAnimationGroupComponent<_AnimationState>(
+        animations: {_AnimationState.idle: animation},
+        removeOnFinish: {_AnimationState.idle: true},
       );
 
       await game.ensureAdd(component);
@@ -88,10 +86,10 @@ void main() async {
           stepTime: 1,
           loop: false,
         );
-        final component = SpriteAnimationGroupComponent<AnimationState>(
-          animations: {AnimationState.idle: animation},
-          removeOnFinish: {AnimationState.idle: true},
-          current: AnimationState.idle,
+        final component = SpriteAnimationGroupComponent<_AnimationState>(
+          animations: {_AnimationState.idle: animation},
+          removeOnFinish: {_AnimationState.idle: true},
+          current: _AnimationState.idle,
         );
 
         await game.ensureAdd(component);
@@ -118,10 +116,10 @@ void main() async {
         // ignore: avoid_redundant_argument_values
         loop: true,
       );
-      final component = SpriteAnimationGroupComponent<AnimationState>(
-        animations: {AnimationState.idle: animation},
-        removeOnFinish: {AnimationState.idle: true},
-        current: AnimationState.idle,
+      final component = SpriteAnimationGroupComponent<_AnimationState>(
+        animations: {_AnimationState.idle: animation},
+        removeOnFinish: {_AnimationState.idle: true},
+        current: _AnimationState.idle,
       );
 
       await game.ensureAdd(component);
@@ -147,9 +145,9 @@ void main() async {
         stepTime: 1,
         loop: false,
       );
-      final component = SpriteAnimationGroupComponent<AnimationState>(
-        animations: {AnimationState.idle: animation},
-        current: AnimationState.idle,
+      final component = SpriteAnimationGroupComponent<_AnimationState>(
+        animations: {_AnimationState.idle: animation},
+        current: _AnimationState.idle,
         // when omitted, removeOnFinish is false for all states
       );
 
@@ -176,10 +174,10 @@ void main() async {
         // ignore: avoid_redundant_argument_values
         loop: true,
       );
-      final component = SpriteAnimationGroupComponent<AnimationState>(
-        animations: {AnimationState.idle: animation},
+      final component = SpriteAnimationGroupComponent<_AnimationState>(
+        animations: {_AnimationState.idle: animation},
         // when omited, removeOnFinish is false for all states
-        current: AnimationState.idle,
+        current: _AnimationState.idle,
       );
 
       await game.ensureAdd(component);

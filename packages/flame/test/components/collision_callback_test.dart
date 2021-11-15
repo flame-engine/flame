@@ -56,7 +56,7 @@ class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
 void main() {
   final withCollidables = FlameTester(() => _HasCollidablesGame());
 
-  group('Collision callbacks are called properly', () {
+  group('Collision callbacks', () {
     withCollidables.test('collidable callbacks are called', (game) async {
       final blockA = _TestBlock(
         Vector2.zero(),

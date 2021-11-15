@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('MoveEffect', () {
-    test('MoveEffect.by()', () {
+    test('#by', () {
       final game = FlameGame();
       game.onGameResize(Vector2(100, 100));
       final object = PositionComponent()..position = Vector2(3, 4);
@@ -27,7 +27,7 @@ void main() {
       expect(object.position.y, closeTo(4 + -1, 1e-15));
     });
 
-    test('MoveEffect.to()', () {
+    test('#to', () {
       final game = FlameGame();
       game.onGameResize(Vector2(100, 100));
       final object = PositionComponent()..position = Vector2(3, 4);
@@ -45,7 +45,7 @@ void main() {
       expect(object.position.y, closeTo(-1, 1e-15));
     });
 
-    test('MoveEffect.along()', () {
+    test('#along', () {
       const tau = Transform2D.tau;
       final game = FlameGame();
       game.onGameResize(Vector2(100, 100));
@@ -72,7 +72,7 @@ void main() {
       }
     });
 
-    test('MoveEffect.along() wrong arguments', () {
+    test('#along wrong arguments', () {
       final controller = SimpleEffectController();
       expect(
         () => MoveEffect.along(Path(), controller),

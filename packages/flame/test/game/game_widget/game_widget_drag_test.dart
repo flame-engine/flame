@@ -68,7 +68,7 @@ void main() {
     );
   });
 
-  group('GameWidget - VerticallDragDetector', () {
+  group('GameWidget - VerticalDragDetector', () {
     verticalGame.widgetTest(
       'register drags',
       (game, tester) async {
