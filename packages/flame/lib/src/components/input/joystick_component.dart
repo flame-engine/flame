@@ -21,7 +21,7 @@ enum JoystickDirection {
 
 class JoystickComponent extends HudMarginComponent with Draggable {
   late final PositionComponent knob;
-  late final PositionComponent background;
+  late final PositionComponent? background;
 
   /// The percentage [0.0, 1.0] the knob is dragged from the center to the edge.
   double intensity = 0.0;
@@ -46,7 +46,7 @@ class JoystickComponent extends HudMarginComponent with Draggable {
 
   JoystickComponent({
     PositionComponent? knob,
-    PositionComponent? background,
+    this.background,
     EdgeInsets? margin,
     Vector2? position,
     double? size,
@@ -64,7 +64,7 @@ class JoystickComponent extends HudMarginComponent with Draggable {
         super(
           margin: margin,
           position: position,
-          size: background?.size ?? Vector2.zero(),
+          size: background?.size ?? Vector2.all(size ?? 0),
           anchor: anchor,
         ) {
     this.knobRadius = knobRadius ?? this.size.x / 2;
@@ -72,11 +72,6 @@ class JoystickComponent extends HudMarginComponent with Draggable {
     // If knob is null - assume it is set in `onLoad`
     if (knob != null) {
       this.knob = knob;
-    }
-
-    // If background is null - assume it is set in `onLoad`
-    if (background != null) {
-      this.background = background;
     }
   }
 
@@ -86,7 +81,9 @@ class JoystickComponent extends HudMarginComponent with Draggable {
     knob.anchor = Anchor.center;
     knob.position = size / 2;
     _baseKnobPosition = knob.position.clone();
-    add(background);
+    if (background != null) {
+      add(background!);
+    }
     add(knob);
   }
 
