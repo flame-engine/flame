@@ -44,10 +44,10 @@ class Component with Loadable {
   /// removed from its current parent.
   Component? nextParent;
 
-  /// Custom rendering function that replaces the traditional `render()` method
+  /// Custom rendering function to replace the normal `renderTree()` method.
   /// when it is not null. Use this if you want to temporarily alter the way
   /// a component is rendered.
-  void Function(Canvas)? onRender;
+  void Function(Canvas)? onRenderTree;
 
   late final ComponentSet children = createComponentSet();
 
@@ -137,8 +137,8 @@ class Component with Loadable {
 
   void renderTree(Canvas canvas) {
     preRender(canvas);
-    (onRender ?? render)(canvas);
-    children.forEach((c) => c.renderTree(canvas));
+    render(canvas);
+    children.forEach((c) => (c.onRenderTree ?? c.renderTree)(canvas));
 
     // Any debug rendering should be rendered on top of everything
     if (debugMode) {

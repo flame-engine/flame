@@ -116,7 +116,7 @@ void main() {
       expect(game.children.length, 1);
     });
 
-    test('onRender can replace the main render', () {
+    test('onRenderTree can replace the main render', () {
       final game = FlameGame()..onGameResize(Vector2.zero());
       final component = Component();
       game.add(component);
@@ -127,10 +127,11 @@ void main() {
       expect(canvas, MockCanvas()..translate(0, 0));
 
       const rect = Rect.fromLTWH(0, 0, 1, 1);
-      component.onRender = (Canvas canvas) => canvas.drawRect(rect, Paint());
+      component.onRenderTree =
+          (Canvas canvas) => canvas.drawRect(rect, Paint());
 
       final canvas2 = MockCanvas();
-      game.render(canvas2);
+      game.renderTree(canvas2);
       expect(
         canvas2,
         MockCanvas()

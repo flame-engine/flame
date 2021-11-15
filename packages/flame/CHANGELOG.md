@@ -25,7 +25,7 @@
  - `TextPaint` to use `TextStyle` (material) instead of `TextPaintConfig`
  - Underlying `Shape`s in `ShapeComponent` transform with components position, size and angle
  - `HitboxShape` takes parents ancestors transformations into consideration (not scaling)
- - `Component` has now `.onRender()` callback, in addition to standard `render()`
+ - `Component` has now `.onRenderTree()` callback, in addition to standard `renderTree()` method
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
