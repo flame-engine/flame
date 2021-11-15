@@ -52,7 +52,7 @@ void main() {
         );
         await game.add(joystick);
         game.update(0);
-        expectVector2(joystick.knob!.position, Vector2(10, 10));
+        expectVector2(joystick.knob.position, Vector2(10, 10));
         // Start dragging the joystick
         game.onDragStart(
           1,
@@ -78,7 +78,7 @@ void main() {
           ),
         );
         game.update(0);
-        expectVector2(joystick.knob!.position, Vector2(20, 10));
+        expectVector2(joystick.knob.position, Vector2(20, 10));
         // Drag the knob back towards it's base position
         game.onDragUpdate(
           1,
@@ -92,7 +92,7 @@ void main() {
           ),
         );
         game.update(0);
-        expectVector2(joystick.knob!.position, Vector2(20, 10));
+        expectVector2(joystick.knob.position, Vector2(20, 10));
       },
     );
   });

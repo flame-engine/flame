@@ -1,7 +1,6 @@
 # CHANGELOG
 
 ## [next]
- - Added possibility to extend `JoystickComponent` (made `knob` unrequired)
  - Added `StandardEffectController` class
  - Refactored `Effect` class to use `EffectController`, added `Transform2DEffect` class
  - Clarified `TimerComponent` example
@@ -26,6 +25,7 @@
  - `TextPaint` to use `TextStyle` (material) instead of `TextPaintConfig`
  - Underlying `Shape`s in `ShapeComponent` transform with components position, size and angle
  - `HitboxShape` takes parents ancestors transformations into consideration (not scaling)
+ - Added possibility to extend `JoystickComponent` (made `knob` unrequired)
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
