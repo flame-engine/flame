@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 class _MyGame extends FlameGame {
@@ -16,11 +17,11 @@ class _MyComponent extends Component with HasGameRef<_MyGame> {
 }
 
 void main() {
+  final withHasGameRef = FlameTester(() => _MyGame());
+
   group('HasGameRef', () {
-    test('simple test', () {
+    withHasGameRef.test('simple test', (game) {
       final c = _MyComponent();
-      final game = _MyGame();
-      game.onGameResize(Vector2.all(200));
       game.add(c);
       c.foo();
       expect(game.calledFoo, true);

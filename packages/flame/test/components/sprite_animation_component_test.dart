@@ -7,150 +7,160 @@ void main() async {
   final image = await generateImage();
 
   group('SpriteAnimationComponent shouldRemove', () {
-    flameGame.test('removeOnFinish is true and animation#loop is false',
-        (game) async {
-      final animation = SpriteAnimation.spriteList(
-        [
-          Sprite(image),
-          Sprite(image),
-        ],
-        stepTime: 1,
-        loop: false,
-      );
-      final component = SpriteAnimationComponent(
-        animation: animation,
-        removeOnFinish: true,
-      );
+    flameGame.test(
+      'removeOnFinish is true and animation#loop is false',
+      (game) async {
+        final animation = SpriteAnimation.spriteList(
+          [
+            Sprite(image),
+            Sprite(image),
+          ],
+          stepTime: 1,
+          loop: false,
+        );
+        final component = SpriteAnimationComponent(
+          animation: animation,
+          removeOnFinish: true,
+        );
 
-      await game.ensureAdd(component);
+        await game.ensureAdd(component);
 
-      expect(component.shouldRemove, false);
-      expect(game.children.length, 1);
+        expect(component.shouldRemove, false);
+        expect(game.children.length, 1);
 
-      game.update(2);
-      expect(component.shouldRemove, true);
+        game.update(2);
+        expect(component.shouldRemove, true);
 
-      // runs a cycle to remove the component
-      game.update(0.1);
-      expect(game.children.length, 0);
-    });
+        // runs a cycle to remove the component
+        game.update(0.1);
+        expect(game.children.length, 0);
+      },
+    );
 
-    flameGame.test('removeOnFinish is true and animation#loop is true',
-        (game) async {
-      final animation = SpriteAnimation.spriteList(
-        [
-          Sprite(image),
-          Sprite(image),
-        ],
-        stepTime: 1,
-        // ignore: avoid_redundant_argument_values
-        loop: true,
-      );
-      final component = SpriteAnimationComponent(
-        animation: animation,
-        removeOnFinish: true,
-      );
+    flameGame.test(
+      'removeOnFinish is true and animation#loop is true',
+      (game) async {
+        final animation = SpriteAnimation.spriteList(
+          [
+            Sprite(image),
+            Sprite(image),
+          ],
+          stepTime: 1,
+          // ignore: avoid_redundant_argument_values
+          loop: true,
+        );
+        final component = SpriteAnimationComponent(
+          animation: animation,
+          removeOnFinish: true,
+        );
 
-      await game.ensureAdd(component);
+        await game.ensureAdd(component);
 
-      expect(component.shouldRemove, false);
-      expect(game.children.length, 1);
+        expect(component.shouldRemove, false);
+        expect(game.children.length, 1);
 
-      game.update(2);
-      expect(component.shouldRemove, false);
+        game.update(2);
+        expect(component.shouldRemove, false);
 
-      // runs a cycle to remove the component, but failed
-      game.update(0.1);
-      expect(game.children.length, 1);
-    });
+        // runs a cycle to remove the component, but failed
+        game.update(0.1);
+        expect(game.children.length, 1);
+      },
+    );
 
-    flameGame.test('removeOnFinish is false and animation#loop is false',
-        (game) async {
-      final animation = SpriteAnimation.spriteList(
-        [
-          Sprite(image),
-          Sprite(image),
-        ],
-        stepTime: 1,
-        loop: false,
-      );
-      final component = SpriteAnimationComponent(
-        animation: animation,
-        // ignore: avoid_redundant_argument_values
-        removeOnFinish: false,
-      );
+    flameGame.test(
+      'removeOnFinish is false and animation#loop is false',
+      (game) async {
+        final animation = SpriteAnimation.spriteList(
+          [
+            Sprite(image),
+            Sprite(image),
+          ],
+          stepTime: 1,
+          loop: false,
+        );
+        final component = SpriteAnimationComponent(
+          animation: animation,
+          // ignore: avoid_redundant_argument_values
+          removeOnFinish: false,
+        );
 
-      await game.ensureAdd(component);
+        await game.ensureAdd(component);
 
-      expect(component.shouldRemove, false);
-      expect(game.children.length, 1);
+        expect(component.shouldRemove, false);
+        expect(game.children.length, 1);
 
-      game.update(2);
-      expect(component.shouldRemove, false);
+        game.update(2);
+        expect(component.shouldRemove, false);
 
-      // runs a cycle to remove the component, but failed
-      game.update(0.1);
-      expect(game.children.length, 1);
-    });
+        // runs a cycle to remove the component, but failed
+        game.update(0.1);
+        expect(game.children.length, 1);
+      },
+    );
 
-    flameGame.test('removeOnFinish is false and animation#loop is true',
-        (game) async {
-      final animation = SpriteAnimation.spriteList(
-        [
-          Sprite(image),
-          Sprite(image),
-        ],
-        stepTime: 1,
-        // ignore: avoid_redundant_argument_values
-        loop: true,
-      );
-      final component = SpriteAnimationComponent(
-        animation: animation,
-        // ignore: avoid_redundant_argument_values
-        removeOnFinish: false,
-      );
+    flameGame.test(
+      'removeOnFinish is false and animation#loop is true',
+      (game) async {
+        final animation = SpriteAnimation.spriteList(
+          [
+            Sprite(image),
+            Sprite(image),
+          ],
+          stepTime: 1,
+          // ignore: avoid_redundant_argument_values
+          loop: true,
+        );
+        final component = SpriteAnimationComponent(
+          animation: animation,
+          // ignore: avoid_redundant_argument_values
+          removeOnFinish: false,
+        );
 
-      await game.ensureAdd(component);
+        await game.ensureAdd(component);
 
-      expect(component.shouldRemove, false);
-      expect(game.children.length, 1);
+        expect(component.shouldRemove, false);
+        expect(game.children.length, 1);
 
-      game.update(2);
-      expect(component.shouldRemove, false);
+        game.update(2);
+        expect(component.shouldRemove, false);
 
-      // runs a cycle to remove the component, but failed
-      game.update(0.1);
-      expect(game.children.length, 1);
-    });
+        // runs a cycle to remove the component, but failed
+        game.update(0.1);
+        expect(game.children.length, 1);
+      },
+    );
 
-    flameGame.test("component isn't removed if it is not playing",
-        (game) async {
-      final animation = SpriteAnimation.spriteList(
-        [
-          Sprite(image),
-          Sprite(image),
-        ],
-        stepTime: 1,
-        loop: false,
-      );
-      final component = SpriteAnimationComponent(
-        animation: animation,
-        removeOnFinish: true,
-        playing: false,
-      );
+    flameGame.test(
+      "component isn't removed if it is not playing",
+      (game) async {
+        final animation = SpriteAnimation.spriteList(
+          [
+            Sprite(image),
+            Sprite(image),
+          ],
+          stepTime: 1,
+          loop: false,
+        );
+        final component = SpriteAnimationComponent(
+          animation: animation,
+          removeOnFinish: true,
+          playing: false,
+        );
 
-      await game.ensureAdd(component);
+        await game.ensureAdd(component);
 
-      expect(component.shouldRemove, false);
-      expect(game.children.length, 1);
+        expect(component.shouldRemove, false);
+        expect(game.children.length, 1);
 
-      game.update(2);
-      expect(component.shouldRemove, false);
+        game.update(2);
+        expect(component.shouldRemove, false);
 
-      // runs a cycle to potentially remove the component
-      game.update(0.1);
-      expect(game.children.length, 1);
-    });
+        // runs a cycle to potentially remove the component
+        game.update(0.1);
+        expect(game.children.length, 1);
+      },
+    );
   });
 
   group('SpriteAnimation timing of animation frames', () {
