@@ -41,7 +41,7 @@ class Timer {
           return;
         }
         // This is used to cover the rare case of _current being more than
-// two times the value of limit, so that the onTick is called the
+        // two times the value of limit, so that the onTick is called the
         // correct number of times
         while (_current >= limit) {
           _current -= limit;
