@@ -45,7 +45,7 @@ class PlayerComponent extends SpriteAnimationComponent
 
   PlayerComponent()
       : super(size: Vector2(50, 75), position: Vector2(100, 500)) {
-    bulletCreator = Timer(0.5, repeat: true, callback: _createBullet);
+    bulletCreator = Timer(0.5, repeat: true, onTick: _createBullet);
 
     addHitbox(HitboxRectangle());
   }
