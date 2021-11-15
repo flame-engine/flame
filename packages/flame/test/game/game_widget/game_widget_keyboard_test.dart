@@ -6,8 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Vector2 size = Vector2(1.0, 1.0);
-
 class _KeyboardEventsGame extends FlameGame with KeyboardEvents {
   final List<String> keysPressed = [];
 
@@ -80,6 +78,8 @@ class _GamePage extends StatelessWidget {
 }
 
 void main() async {
+  final size = Vector2(1.0, 1.0);
+
   testWidgets('Adds focus', (tester) async {
     final focusNode = FocusNode();
 

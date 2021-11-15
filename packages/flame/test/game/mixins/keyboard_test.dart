@@ -20,11 +20,9 @@ class MockRawKeyEventData extends Mock implements RawKeyEventData {
 void main() {
   group('Keyboard events', () {
     test(
-      'cannot mix KeyboardEvent and HasKeyboardHandlerComponents together',
+      'FlameGame with KeyboardEvents can handle key events',
       () {
         final validGame = ValidGame();
-        final invalidGame = InvalidGame();
-
         final event = RawKeyDownEvent(data: MockRawKeyEventData());
 
         // Should just work with the default implementation
@@ -32,6 +30,14 @@ void main() {
           validGame.onKeyEvent(event, {}),
           KeyEventResult.handled,
         );
+      },
+    );
+
+    test(
+      'cannot mix KeyboardEvent and HasKeyboardHandlerComponents together',
+      () {
+        final invalidGame = InvalidGame();
+        final event = RawKeyDownEvent(data: MockRawKeyEventData());
 
         // Should throw an assertion error
         expect(

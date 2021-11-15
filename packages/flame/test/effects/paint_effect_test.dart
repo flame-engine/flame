@@ -2,23 +2,19 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/game.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MyComponent extends PositionComponent with HasPaint {}
+class _MyComponent extends PositionComponent with HasPaint {}
 
 void main() {
   group('Paint Effects', () {
     group('OpacityEffect', () {
-      test(
+      flameGame.test(
         'Sets the correct opacity on the paint',
-        () async {
-          final component = MyComponent();
-          final game = FlameGame();
-
-          game.onGameResize(Vector2.all(100));
-          game.add(component);
-          game.update(0); // Making sure the component was added
+        (game) async {
+          final component = _MyComponent();
+          game.ensureAdd(component);
 
           await component.add(
             OpacityEffect(
@@ -35,15 +31,11 @@ void main() {
     });
 
     group('ColorEffect', () {
-      test(
+      flameGame.test(
         'Sets the correct color filter on the paint',
-        () async {
-          final component = MyComponent();
-          final game = FlameGame();
-
-          game.onGameResize(Vector2.all(100));
-          game.add(component);
-          game.update(0); // Making sure the component was added
+        (game) async {
+          final component = _MyComponent();
+          game.ensureAdd(component);
 
           await component.add(
             ColorEffect(

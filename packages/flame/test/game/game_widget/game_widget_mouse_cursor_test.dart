@@ -2,13 +2,13 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Finder byMouseCursor(MouseCursor cursor) {
-  return find.byWidgetPredicate(
-    (widget) => widget is MouseRegion && widget.cursor == cursor,
-  );
-}
-
 void main() {
+  Finder byMouseCursor(MouseCursor cursor) {
+    return find.byWidgetPredicate(
+      (widget) => widget is MouseRegion && widget.cursor == cursor,
+    );
+  }
+
   group('GameWidget - MouseCursor', () {
     testWidgets('renders with the initial cursor', (tester) async {
       await tester.pumpWidget(

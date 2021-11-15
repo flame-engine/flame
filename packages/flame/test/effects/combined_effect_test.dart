@@ -7,12 +7,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'effect_test_utils.dart';
 
-class ReadyGame extends FlameGame {
-  ReadyGame() {
-    onGameResize(Vector2.zero());
-  }
-}
-
 class Elements extends BaseElements {
   bool onCompleteCalled = false;
 
@@ -27,7 +21,7 @@ class Elements extends BaseElements {
     );
   }
 
-  FlameGame game() => ReadyGame();
+  FlameGame game() => FlameGame()..onGameResize(Vector2.zero());
 
   CombinedEffect effect({
     bool hasAlternatingMoveEffect = false,
