@@ -71,6 +71,7 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
 /// {@endtemplate}
 class FlameBlocGame extends FlameGame {
   @visibleForTesting
+
   /// Contains a list of all of the [BlocComponent] with an active
   /// subscription. Only visible for testing.
   final List<BlocComponent> subscriptionQueue = [];
