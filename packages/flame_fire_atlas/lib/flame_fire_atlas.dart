@@ -29,16 +29,19 @@ extension FireAtlasExtensions on Game {
 class Selection {
   /// The id of the selection
   String id;
+
   /// The horizontal coordinate of the selection
   int x;
+
   /// The vertical coordinate of the selection
   int y;
+
   /// The width of the selection
   int w;
+
   /// The height of the selection
   int h;
 
-  
   /// {@macro _selection}
   Selection({
     required this.id,
@@ -71,12 +74,16 @@ abstract class BaseSelection {
 
   /// The id of the selection
   String get id => _info.id;
+
   /// The horizontal coordinate of the selection
   int get x => _info.x;
+
   /// The vertical coordinate of the selection
   int get y => _info.y;
+
   /// The width of the selection
   int get w => _info.w;
+
   /// The height of the selection
   int get h => _info.h;
 
@@ -122,8 +129,10 @@ class SpriteSelection extends BaseSelection {
 class AnimationSelection extends BaseSelection {
   /// The number of frames of this animation
   int frameCount;
+
   /// The time between each frame
   double stepTime;
+
   /// If the animation is looping or not
   bool loop;
 
@@ -165,10 +174,13 @@ class AnimationSelection extends BaseSelection {
 class FireAtlas {
   /// Id of the FireAtlas
   String id;
+
   /// The width of the tile
   double tileWidth;
+
   /// The height of the tile
   double tileHeight;
+
   /// Stores the asset data once this instance has loaded
   String? imageData;
   Image? _image;
