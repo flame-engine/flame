@@ -123,6 +123,8 @@ class MyContainer extends StatefulWidget {
 class MyContainerState extends State<MyContainer> {
   double size = 300;
 
+  late final game = MyGame(widget.events);
+
   void causeResize() {
     setState(() => size = 400);
   }
@@ -132,7 +134,7 @@ class MyContainerState extends State<MyContainer> {
     return Container(
       width: size,
       height: size,
-      child: GameWidget(game: MyGame(widget.events)),
+      child: GameWidget(game: game),
     );
   }
 }
@@ -194,7 +196,7 @@ void main() {
       state.causeResize();
 
       await tester.pump();
-      expect(events, ['onGameResize', 'onLoad', 'onMount']); // no onRemove
+      expect(events, ['onGameResize']); // no onRemove
       final game = tester.allWidgets.whereType<GameWidget<MyGame>>().first.game;
       expect(game.children, everyElement((Component c) => c.parent == game));
     });
