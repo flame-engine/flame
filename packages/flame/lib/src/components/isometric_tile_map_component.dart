@@ -93,7 +93,7 @@ class IsometricTileMapComponent extends PositionComponent {
     }
   }
 
-  /// Get the position in which a block must be rendered in the isometric space.
+  /// Get the position in which a block is rendered in, in the isometric space.
   ///
   /// This does not include the (x,y) PositionComponent offset!
   /// This assumes the tile sprite as a rectangular tile.
