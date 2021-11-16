@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
+
 import '../../components.dart';
 import '../extensions/vector2.dart';
 import '../spritesheet.dart';
@@ -8,14 +10,28 @@ import 'position_component.dart';
 /// This is just a pair of <int, int>.
 ///
 /// Represents a position in a matrix, or in this case, on the tilemap.
+@immutable
 class Block {
   /// x and y coordinates on the matrix
-  int x, y;
+  final int x, y;
 
-  Block(this.x, this.y);
+  const Block(this.x, this.y);
 
   @override
   String toString() => '($x, $y)';
+
+  Vector2 toVector2() => Vector2Extension.fromInts(x, y);
+
+  @override
+  bool operator ==(Object other) {
+    if (other is! Block) {
+      return false;
+    }
+    return other.x == x && other.y == y;
+  }
+
+  @override
+  int get hashCode => hashValues(x, y);
 }
 
 /// This component renders a tilemap, represented by an int matrix, given a
@@ -72,24 +88,37 @@ class IsometricTileMapComponent extends PositionComponent {
         final element = matrix[i][j];
         if (element != -1) {
           final sprite = tileset.getSpriteById(element);
-          final p = getBlockPositionInts(j, i);
+          final p = getBlockRenderPositionInts(j, i);
           sprite.render(c, position: p, size: size);
         }
       }
     }
   }
 
-  /// Get the position in which a block must be in the isometric space.
+  /// Get the position in which a block is rendered in, in the isometric space.
   ///
   /// This does not include the (x,y) PositionComponent offset!
-  Vector2 getBlockPosition(Block block) {
-    return getBlockPositionInts(block.x, block.y);
+  /// This assumes the tile sprite as a rectangular tile.
+  /// This is the opposite of [getBlockRenderedAt].
+  Vector2 getBlockRenderPosition(Block block) {
+    return getBlockRenderPositionInts(block.x, block.y);
   }
 
-  Vector2 getBlockPositionInts(int i, int j) {
+  /// Same as getBlockRenderPosition but the arguments are exploded as integers.
+  Vector2 getBlockRenderPositionInts(int i, int j) {
     final halfTile = effectiveTileSize / 2;
     final pos = Vector2(i.toDouble(), j.toDouble())..multiply(halfTile);
     return cartToIso(pos) - halfTile;
+  }
+
+  /// Get the position of the center of the surface of the isometric tile in
+  /// the cartesian coordinate space.
+  ///
+  /// This is the opposite of [getBlock].
+  Vector2 getBlockCenterPosition(Block block) {
+    final tile = effectiveTileSize;
+    return getBlockRenderPosition(block) +
+        Vector2(tile.x / 2, tile.y - effectiveTileHeight);
   }
 
   /// Converts a coordinate from the isometric space to the cartesian space.
@@ -106,9 +135,10 @@ class IsometricTileMapComponent extends PositionComponent {
     return Vector2(x, y);
   }
 
-  /// Get what block is at isometric position p.
+  /// Get which block's surface is at isometric position [p].
   ///
   /// This can be used to handle clicks or hovers.
+  /// This is the opposite of [getBlockCenterPosition].
   Block getBlock(Vector2 p) {
     final halfTile = effectiveTileSize / 2;
     final multiplier = 1 - halfTile.y / (2 * effectiveTileHeight);
@@ -119,10 +149,20 @@ class IsometricTileMapComponent extends PositionComponent {
     return Block(px, py);
   }
 
+  /// Get which block should be rendered on position [p].
+  ///
+  /// This is the opposite of [getBlockRenderPosition].
+  Block getBlockRenderedAt(Vector2 p) {
+    final tile = effectiveTileSize;
+    return getBlock(p + Vector2(tile.x / 2, tile.y - effectiveTileHeight));
+  }
+
+  /// Sets the block value into the matrix.
   void setBlockValue(Block pos, int block) {
     matrix[pos.y][pos.x] = block;
   }
 
+  /// Gets the block value from the matrix.
   int blockValue(Block pos) {
     return matrix[pos.y][pos.x];
   }
