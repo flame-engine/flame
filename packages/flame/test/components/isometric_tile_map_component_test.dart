@@ -18,7 +18,7 @@ void main() {
         tileHeight: 8.0,
       );
 
-      final blocks = [Block(0, 0), Block(1, 1), Block(-1, 0), Block(2, -10)];
+      const blocks = [Block(0, 0), Block(1, 1), Block(-1, 0), Block(2, -10)];
       for (final block in blocks) {
         expect(c.getBlockRenderedAt(c.getBlockRenderPosition(block)), block);
         expect(c.getBlock(c.getBlockCenterPosition(block)), block);

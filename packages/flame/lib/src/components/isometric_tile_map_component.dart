@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
+
 import '../../components.dart';
 import '../extensions/vector2.dart';
 import '../spritesheet.dart';
@@ -8,21 +10,26 @@ import 'position_component.dart';
 /// This is just a pair of <int, int>.
 ///
 /// Represents a position in a matrix, or in this case, on the tilemap.
+@immutable
 class Block {
   /// x and y coordinates on the matrix
-  int x, y;
+  final int x, y;
 
-  Block(this.x, this.y);
+  const Block(this.x, this.y);
 
   @override
   String toString() => '($x, $y)';
 
-  operator ==(Object other) {
+  @override
+  bool operator ==(Object other) {
     if (other is! Block) {
       return false;
     }
     return other.x == x && other.y == y;
   }
+
+  @override
+  int get hashCode => hashValues(x, y);
 }
 
 /// This component renders a tilemap, represented by an int matrix, given a
