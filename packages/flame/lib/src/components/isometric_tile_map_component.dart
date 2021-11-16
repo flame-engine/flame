@@ -20,7 +20,7 @@ class Block {
   @override
   String toString() => '($x, $y)';
 
-Vector2 toVector2() => Vector2Extension.fromInts(x, y);
+  Vector2 toVector2() => Vector2Extension.fromInts(x, y);
 
   @override
   bool operator ==(Object other) {
