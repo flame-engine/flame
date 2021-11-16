@@ -18,7 +18,7 @@ class AudioPool {
   /// The path of the sound of this pool
   final String sound;
 
-  /// If the poop is repeating
+  /// If the pool is repeating
   final bool repeating;
 
   /// Max and min numbers of players
