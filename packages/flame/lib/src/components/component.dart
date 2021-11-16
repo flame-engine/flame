@@ -131,7 +131,6 @@ class Component with Loadable {
   void render(Canvas canvas) {}
 
   void renderTree(Canvas canvas) {
-    preRender(canvas); // ignore: deprecated_member_use_from_same_package
     render(canvas);
     children.forEach((c) => c.renderTree(canvas));
 
@@ -139,24 +138,7 @@ class Component with Loadable {
     if (debugMode) {
       renderDebugMode(canvas);
     }
-    postRender(canvas); // ignore: deprecated_member_use_from_same_package
   }
-
-  /// A render cycle callback that runs before the component and its children
-  /// has been rendered.
-  ///
-  /// A possible use-case for this function is to transform the canvas, in which
-  /// case you would also override `postRender()` in order to restore the state
-  /// of the canvas as it was originally.
-  @nonVirtual
-  @Deprecated('Override renderTree() instead')
-  void preRender(Canvas canvas) {}
-
-  /// A render cycle callback that runs after the component and its children
-  /// has been rendered.
-  @nonVirtual
-  @Deprecated('Override renderTree() instead')
-  void postRender(Canvas canvas) {}
 
   void renderDebugMode(Canvas canvas) {}
 
