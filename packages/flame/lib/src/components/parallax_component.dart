@@ -67,7 +67,8 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     Anchor? anchor,
     int? priority,
   })  : _parallax = parallax,
-        isFullscreen = size == null ? true : false,
+        isFullscreen =
+            size == null && !(parallax?.isSized ?? false) ? true : false,
         super(
           position: position,
           size: size ?? ((parallax?.isSized ?? false) ? parallax?.size : null),
