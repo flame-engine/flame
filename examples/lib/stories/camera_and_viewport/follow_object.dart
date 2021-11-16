@@ -27,7 +27,7 @@ class MovableSquare extends SquareComponent
     await super.onLoad();
     timer = Timer(3.0)
       ..stop()
-      ..callback = () {
+      ..onTick = () {
         gameRef.camera.setRelativeOffset(Anchor.center);
       };
   }
