@@ -75,11 +75,6 @@ class JoystickComponent extends HudMarginComponent with Draggable {
   @mustCallSuper
   void onMount() {
     assert(
-      background != null,
-      'The background has to either be passed in as an argument or set in onLoad',
-    );
-
-    assert(
       knob != null,
       'The knob has to either be passed in as an argument or set in onLoad',
     );
@@ -87,7 +82,10 @@ class JoystickComponent extends HudMarginComponent with Draggable {
     knob!.anchor = Anchor.center;
     knob!.position = size / 2;
     _baseKnobPosition = knob!.position.clone();
-    add(background!);
+
+    if (background != null) {
+      add(background!);
+    }
     add(knob!);
   }
 
