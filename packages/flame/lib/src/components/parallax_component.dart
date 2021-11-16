@@ -13,7 +13,7 @@ import 'position_component.dart';
 
 extension ParallaxComponentExtension on FlameGame {
   Future<ParallaxComponent> loadParallaxComponent(
-    List<ParallaxData> dataList, {
+    Iterable<ParallaxData> dataList, {
     Vector2? baseVelocity,
     Vector2? velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
@@ -59,41 +59,23 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
 
   /// Creates a component with an empty parallax which can be set later.
   ParallaxComponent({
+    Parallax? parallax,
     Vector2? position,
     Vector2? size,
     Vector2? scale,
     double? angle,
     Anchor? anchor,
     int? priority,
-  })  : isFullscreen = size == null ? true : false,
+  })  : _parallax = parallax,
+        isFullscreen = size == null ? true : false,
         super(
           position: position,
-          size: size,
+          size: size ?? ((parallax?.isSized ?? false) ? parallax?.size : null),
           scale: scale,
           angle: angle,
           anchor: anchor,
           priority: priority,
         );
-
-  /// Creates a component from a [Parallax] object.
-  factory ParallaxComponent.fromParallax(
-    Parallax parallax, {
-    Vector2? position,
-    Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    int? priority,
-  }) {
-    return ParallaxComponent(
-      position: position,
-      size: size ?? (parallax.isSized ? parallax.size : null),
-      scale: scale,
-      angle: angle,
-      anchor: anchor,
-      priority: priority,
-    )..parallax = parallax;
-  }
 
   @mustCallSuper
   @override
@@ -105,6 +87,14 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     final newSize = gameRef.camera.viewport.effectiveSize;
     this.size.setFrom(newSize);
     parallax?.resize(newSize);
+  }
+
+  @override
+  void onMount() {
+    assert(
+      parallax != null,
+      'The parallax needs to be set in either the constructor or in onLoad',
+    );
   }
 
   @override
@@ -139,7 +129,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
   ///
   /// If no image cache is set, the global flame cache is used.
   static Future<ParallaxComponent> load(
-    List<ParallaxData> dataList, {
+    Iterable<ParallaxData> dataList, {
     Vector2? baseVelocity,
     Vector2? velocityMultiplierDelta,
     ImageRepeat repeat = ImageRepeat.repeatX,
@@ -153,8 +143,8 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     Anchor? anchor,
     int? priority,
   }) async {
-    return ParallaxComponent.fromParallax(
-      await Parallax.load(
+    return ParallaxComponent(
+      parallax: await Parallax.load(
         dataList,
         size: size,
         baseVelocity: baseVelocity,
