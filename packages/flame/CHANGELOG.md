@@ -28,6 +28,7 @@
  - Renamed `FlameTester` to `GameTester`
  - Modified `FlameTester` to be specific for `T extends FlameGame`
  - Improved `TimerComponent`
+ - Method `preRender()` and `postRender()` are now deprecated
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
