@@ -10,6 +10,11 @@ final green = Paint()..color = const Color(0xAA338833);
 final red = Paint()..color = const Color(0xAA883333);
 
 class CombinedEffectGame extends FlameGame with TapDetector {
+  static const String description = '''
+    In this example we show how multiple effects can be combined into one effect
+    with the `CombinedEffect`. Click anywhere on the screen to run the effect.
+  ''';
+
   late SquareComponent greenSquare, redSquare;
 
   @override

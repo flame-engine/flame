@@ -4,6 +4,12 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
 class OpacityEffectGame extends FlameGame with TapDetector {
+  static const String description = '''
+    In this example we show how the `OpacityEffect` can be used in two ways.
+    The right flame will constantly pulse in and out of opacity and the left
+    flame will change opacity when you click the screen.
+  ''';
+
   late final SpriteComponent sprite;
 
   @override
@@ -26,7 +32,7 @@ class OpacityEffectGame extends FlameGame with TapDetector {
       )..add(
           OpacityEffect(
             opacity: 0,
-            duration: 0.5,
+            duration: 1.5,
             isInfinite: true,
             isAlternating: true,
           ),

@@ -9,6 +9,13 @@ import 'package:flutter/material.dart';
 import '../../commons/square_component.dart';
 
 class ScaleEffectGame extends FlameGame with TapDetector {
+  static const String description = '''
+    The `ScaleEffect` scales up the canvas before drawing the components and its
+    children.
+    In this example you can tap the screen and the component will scale up or down,
+    depending on its current state.
+  ''';
+
   late SquareComponent square;
   bool grow = true;
 

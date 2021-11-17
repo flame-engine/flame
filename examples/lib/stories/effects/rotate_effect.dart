@@ -9,6 +9,11 @@ import 'package:flutter/material.dart';
 import '../../commons/square_component.dart';
 
 class RotateEffectGame extends FlameGame with TapDetector {
+  static const String description = '''
+    In this example we simply rotate the square around it's anchor (which is in
+    the top left corner) when the screen is clicked.
+  ''';
+
   late SquareComponent square;
 
   @override

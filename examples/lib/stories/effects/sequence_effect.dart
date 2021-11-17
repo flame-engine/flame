@@ -9,6 +9,12 @@ import '../../commons/square_component.dart';
 final green = Paint()..color = const Color(0xAA338833);
 
 class SequenceEffectGame extends FlameGame with TapDetector {
+  static const String description = '''
+    In this example we show how different effects can be chained in the
+    `SequenceEffect`. Click anywhere on the screen to start the effects
+    sequence.
+  ''';
+
   late SquareComponent greenSquare;
 
   @override

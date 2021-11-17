@@ -8,14 +8,14 @@ import 'package:flutter/material.dart';
 
 import '../../commons/square_component.dart';
 
-const sizeInfo = '''
-The `SizeEffect` changes the size of the component, the sizes of the children
-will stay the same.
-In this example you can tap the screen and the component will size up or down,
-depending on its current state.
-''';
-
 class SizeEffectGame extends FlameGame with TapDetector {
+  static const String description = '''
+    The `SizeEffect` changes the size of the component, the sizes of the
+    children will stay the same.
+    In this example you can tap the screen and the component will size up or
+    down, depending on its current state.
+  ''';
+
   late SquareComponent square;
   bool grow = true;
 

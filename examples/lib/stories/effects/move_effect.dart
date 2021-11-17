@@ -7,6 +7,13 @@ import 'package:flame/input.dart';
 import '../../commons/square_component.dart';
 
 class MoveEffectGame extends FlameGame with TapDetector {
+  static const String description = '''
+    This example showcases the `MoveEffect`. Click somewhere on the screen and
+    the white square will go there and then it will follow the path that is
+    laid out by the white circular markers. After it has finished the path it
+    waits for a bit and then returns to its original position.
+  ''';
+
   late SquareComponent square;
 
   final List<Vector2> path = [
