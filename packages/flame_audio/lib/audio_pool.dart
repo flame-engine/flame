@@ -15,13 +15,13 @@ class AudioPool {
   final Map<String, AudioPlayer> _currentPlayers = {};
   final List<AudioPlayer> _availablePlayers = [];
 
-  /// The path of the sound of this pool
+  /// The path of the sound of this pool.
   final String sound;
 
-  /// If the pool is repeating
+  /// If the pool is repeating.
   final bool repeating;
 
-  /// Max and min numbers of players
+  /// Max and min numbers of players.
   final int minPlayers, maxPlayers;
 
   final Lock _lock = Lock();
@@ -37,7 +37,7 @@ class AudioPool {
         maxPlayers = maxPlayers ?? 1,
         minPlayers = minPlayers ?? 1;
 
-  /// Creates a [AudioPool] instance with the given parameters
+  /// Creates an [AudioPool] instance with the given parameters.
   static Future<AudioPool> create(
     String sound, {
     bool? repeating,

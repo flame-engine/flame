@@ -15,13 +15,13 @@ import 'package:flutter/widgets.dart';
 class Bgm extends WidgetsBindingObserver {
   bool _isRegistered = false;
 
-  /// [AudioCache] instance of the [Bgm]
+  /// [AudioCache] instance of the [Bgm].
   late AudioCache audioCache;
 
-  /// The [AudioPlayer] instance that is currently playing the audio
+  /// The [AudioPlayer] instance that is currently playing the audio.
   AudioPlayer? audioPlayer;
 
-  /// If the [Bgm] is playing or not
+  /// If the [Bgm] is playing or not.
   bool isPlaying = false;
 
   /// {@macro _bgm}
@@ -80,7 +80,7 @@ class Bgm extends WidgetsBindingObserver {
     }
   }
 
-  /// Pauses the background music without unloading or resetting the audio
+  /// Pauses the background music without unloading or resetting the audio.
   /// player.
   Future<void> pause() async {
     if (audioPlayer != null) {
