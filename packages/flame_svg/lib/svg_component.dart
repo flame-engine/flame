@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 
 import './svg.dart';
 
-/// Wraps a [Svg] into a Flame component.
+/// Wraps [Svg] in a Flame component.
 class SvgComponent extends PositionComponent {
   /// [Svg] instance
   Svg svg;
