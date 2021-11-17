@@ -4,12 +4,13 @@ import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class TestComponent extends PositionComponent {
+class _TestComponent extends PositionComponent {
   static final Paint _paint = Paint();
 
-  TestComponent(Vector2 position)
+  _TestComponent(Vector2 position)
       : super(
           position: position,
           size: Vector2.all(1.0),
@@ -23,16 +24,14 @@ class TestComponent extends PositionComponent {
 
 void main() {
   group('viewport', () {
-    test('default viewport does not change size', () {
-      final game = FlameGame(); // default viewport
+    flameGame.test('default viewport does not change size', (game) {
       game.onGameResize(Vector2(100.0, 200.0));
       expect(game.canvasSize, Vector2(100.0, 200.00));
       expect(game.size, Vector2(100.0, 200.00));
     });
 
-    test('fixed ratio viewport has perfect ratio', () {
-      final game = FlameGame()
-        ..camera.viewport = FixedResolutionViewport(Vector2.all(50));
+    flameGame.test('fixed ratio viewport has perfect ratio', (game) {
+      game..camera.viewport = FixedResolutionViewport(Vector2.all(50));
       game.onGameResize(Vector2.all(200.0));
       expect(game.canvasSize, Vector2.all(200.00));
       expect(game.size, Vector2.all(50.00));
@@ -52,9 +51,8 @@ void main() {
       );
     });
 
-    test('fixed ratio viewport maxes width', () {
-      final game = FlameGame()
-        ..camera.viewport = FixedResolutionViewport(Vector2.all(50));
+    flameGame.test('fixed ratio viewport maxes width', (game) {
+      game..camera.viewport = FixedResolutionViewport(Vector2.all(50));
       game.onGameResize(Vector2(100.0, 200.0));
       expect(game.canvasSize, Vector2(100.0, 200.00));
       expect(game.size, Vector2.all(50.00));
@@ -75,9 +73,8 @@ void main() {
       );
     });
 
-    test('fixed ratio viewport maxes height', () {
-      final game = FlameGame()
-        ..camera.viewport = FixedResolutionViewport(Vector2(100.0, 400.0));
+    flameGame.test('fixed ratio viewport maxes height', (game) {
+      game..camera.viewport = FixedResolutionViewport(Vector2(100.0, 400.0));
       game.onGameResize(Vector2(100.0, 200.0));
       expect(game.canvasSize, Vector2(100.0, 200.00));
       expect(game.size, Vector2(100.00, 400.0));
@@ -100,12 +97,11 @@ void main() {
   });
 
   group('camera', () {
-    test('default camera applies no translation', () {
-      final game = FlameGame(); // no camera changes
+    flameGame.test('default camera applies no translation', (game) {
       game.onGameResize(Vector2.all(100.0));
       expect(game.camera.position, Vector2.zero());
 
-      final p = TestComponent(Vector2.all(10.0));
+      final p = _TestComponent(Vector2.all(10.0));
       game.add(p);
       game.update(0);
 
@@ -119,12 +115,11 @@ void main() {
       );
     });
 
-    test('camera snap movement', () {
-      final game = FlameGame(); // no camera changes
+    flameGame.test('camera snap movement', (game) {
       game.onGameResize(Vector2.all(100.0));
       expect(game.camera.position, Vector2.zero());
 
-      final p = TestComponent(Vector2.all(10.0));
+      final p = _TestComponent(Vector2.all(10.0));
       game.add(p);
       game.update(0);
 
@@ -145,8 +140,7 @@ void main() {
       );
     });
 
-    test('camera smooth movement', () {
-      final game = FlameGame(); // no camera changes
+    flameGame.test('camera smooth movement', (game) {
       game.onGameResize(Vector2.all(100.0));
 
       game.camera.speed = 1; // 1 pixel per second
@@ -162,11 +156,10 @@ void main() {
       expect(game.camera.position, Vector2(0.0, 10.0));
     });
 
-    test('camera follow', () {
-      final game = FlameGame(); // no camera changes
+    flameGame.test('camera follow', (game) {
       game.onGameResize(Vector2.all(100.0));
 
-      final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
+      final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
       game.add(p);
       game.update(0);
       game.camera.followComponent(p);
@@ -190,11 +183,10 @@ void main() {
       );
     });
 
-    test('camera follow with relative position', () {
-      final game = FlameGame(); // no camera changes
+    flameGame.test('camera follow with relative position', (game) {
       game.onGameResize(Vector2.all(100.0));
 
-      final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
+      final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
       game.add(p);
       game.update(0);
       // this would be a typical vertical shoot-em-up
@@ -217,11 +209,10 @@ void main() {
           ..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
       );
     });
-    test('camera follow with world boundaries', () {
-      final game = FlameGame(); // no camera changes
+    flameGame.test('camera follow with world boundaries', (game) {
       game.onGameResize(Vector2.all(100.0));
 
-      final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
+      final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
       game.add(p);
       game.update(0);
       game.camera.followComponent(
@@ -250,32 +241,35 @@ void main() {
       game.update(0);
       expect(game.camera.position, Vector2(900, 900));
     });
-    test('camera follow with world boundaries smaller than the screen', () {
-      final game = FlameGame(); // no camera changes
-      game.onGameResize(Vector2.all(200.0));
 
-      final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
-      game.add(p);
-      game.update(0);
-      game.camera.followComponent(
-        p,
-        worldBounds: const Rect.fromLTWH(0, 0, 100, 100),
-      );
+    flameGame.test(
+      'camera follow with world boundaries smaller than the screen',
+      (game) {
+        game.onGameResize(Vector2.all(200.0));
 
-      // in this case the camera will just center the world, no matter the player position
-      game.update(0);
-      expect(game.camera.position, Vector2(50, 50));
+        final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
+        game.add(p);
+        game.update(0);
+        game.camera.followComponent(
+          p,
+          worldBounds: const Rect.fromLTWH(0, 0, 100, 100),
+        );
 
-      p.position.setValues(60.0, 50.0);
-      game.update(0);
-      expect(game.camera.position, Vector2(50, 50));
+        // in this case the camera will just center the world, no matter the player position
+        game.update(0);
+        expect(game.camera.position, Vector2(50, 50));
 
-      p.position.setValues(-10.0, -20.0);
-      game.update(0);
-      expect(game.camera.position, Vector2(50, 50));
-    });
-    test('camera relative offset without follow', () {
-      final game = FlameGame();
+        p.position.setValues(60.0, 50.0);
+        game.update(0);
+        expect(game.camera.position, Vector2(50, 50));
+
+        p.position.setValues(-10.0, -20.0);
+        game.update(0);
+        expect(game.camera.position, Vector2(50, 50));
+      },
+    );
+
+    flameGame.test('camera relative offset without follow', (game) {
       game.onGameResize(Vector2.all(200.0));
 
       game.camera.setRelativeOffset(Anchor.center);
@@ -287,12 +281,11 @@ void main() {
       expect(game.camera.position, Vector2.all(-100.0));
     });
 
-    test('camera zoom', () {
-      final game = FlameGame();
+    flameGame.test('camera zoom', (game) {
       game.onGameResize(Vector2.all(200.0));
       game.camera.zoom = 2;
 
-      final p = TestComponent(Vector2.all(100.0))..anchor = Anchor.center;
+      final p = _TestComponent(Vector2.all(100.0))..anchor = Anchor.center;
       game.add(p);
       game.update(0);
 
@@ -307,13 +300,12 @@ void main() {
       );
     });
 
-    test('camera zoom with setRelativeOffset', () {
-      final game = FlameGame();
+    flameGame.test('camera zoom with setRelativeOffset', (game) {
       game.onGameResize(Vector2.all(200.0));
       game.camera.zoom = 2;
       game.camera.setRelativeOffset(Anchor.center);
 
-      final p = TestComponent(Vector2.all(100.0))..anchor = Anchor.center;
+      final p = _TestComponent(Vector2.all(100.0))..anchor = Anchor.center;
       game.add(p);
       game.update(10000);
 
@@ -330,8 +322,7 @@ void main() {
       expect(game.camera.position, Vector2.all(-50.0));
     });
 
-    test('camera shake should return to where it started', () {
-      final game = FlameGame();
+    flameGame.test('camera shake should return to where it started', (game) {
       final camera = game.camera;
       game.onGameResize(Vector2.all(200.0));
       expect(camera.position, Vector2.zero());
@@ -344,41 +335,44 @@ void main() {
   });
 
   group('viewport & camera', () {
-    test('default ratio viewport + camera with world boundaries', () {
-      final game = FlameGame()
-        ..camera.viewport = FixedResolutionViewport(Vector2.all(100));
-      game.onGameResize(Vector2.all(200.0));
-      expect(game.canvasSize, Vector2.all(200.00));
-      expect(game.size, Vector2.all(100.00));
+    flameGame.test(
+      'default ratio viewport + camera with world boundaries',
+      (game) {
+        final game = FlameGame()
+          ..camera.viewport = FixedResolutionViewport(Vector2.all(100));
+        game.onGameResize(Vector2.all(200.0));
+        expect(game.canvasSize, Vector2.all(200.00));
+        expect(game.size, Vector2.all(100.00));
 
-      final p = TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
-      game.add(p);
-      game.camera.followComponent(
-        p,
-        // this could be a typical mario-like platformer, where the player is
-        // more on the bottom left to allow the scenario to be seem
-        relativeOffset: const Anchor(0.25, 0.25),
-        worldBounds: const Rect.fromLTWH(0, 0, 1000, 1000),
-      );
+        final p = _TestComponent(Vector2.all(10.0))..anchor = Anchor.center;
+        game.add(p);
+        game.camera.followComponent(
+          p,
+          // this could be a typical mario-like platformer, where the player is
+          // more on the bottom left to allow the scenario to be seem
+          relativeOffset: const Anchor(0.25, 0.25),
+          worldBounds: const Rect.fromLTWH(0, 0, 1000, 1000),
+        );
 
-      game.update(0);
-      expect(game.camera.position, Vector2(0, 0));
+        game.update(0);
+        expect(game.camera.position, Vector2(0, 0));
 
-      p.position.setValues(30.0, 0.0);
-      game.update(0);
-      expect(game.camera.position, Vector2(5, 0));
+        p.position.setValues(30.0, 0.0);
+        game.update(0);
+        expect(game.camera.position, Vector2(5, 0));
 
-      p.position.setValues(30.0, 100.0);
-      game.update(0);
-      expect(game.camera.position, Vector2(5, 75));
+        p.position.setValues(30.0, 100.0);
+        game.update(0);
+        expect(game.camera.position, Vector2(5, 75));
 
-      p.position.setValues(30.0, 1000.0);
-      game.update(0);
-      expect(game.camera.position, Vector2(5, 900));
+        p.position.setValues(30.0, 1000.0);
+        game.update(0);
+        expect(game.camera.position, Vector2(5, 900));
 
-      p.position.setValues(950.0, 20.0);
-      game.update(0);
-      expect(game.camera.position, Vector2(900, 0));
-    });
+        p.position.setValues(950.0, 20.0);
+        game.update(0);
+        expect(game.camera.position, Vector2(900, 0));
+      },
+    );
   });
 }

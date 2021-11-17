@@ -35,7 +35,7 @@ myst_enable_extensions = [
 ]
 
 # Auto-generate link anchors for headers at levels H1 and H2
-myst_heading_anchors = 2
+myst_heading_anchors = 4
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.

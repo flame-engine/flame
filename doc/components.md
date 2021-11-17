@@ -8,13 +8,13 @@ This diagram might look intimidating, but don't worry, it is not as complex as i
 All components inherit from the abstract class `Component`.
 
 If you want to skip reading about abstract classes you can jump directly to
-[PositionComponent](./components.md#PositionComponent).
+[PositionComponent](#positioncomponent).
 
 Every `Component` has a few methods that you can optionally implement, which are used by the
 `FlameGame` class. If you are not using `FlameGame`, you can use these methods on your own game loop
 if you wish.
 
-![Component Lifecycle Diagram](images/diagram.png)
+![Component Lifecycle Diagram](images/component_lifecycle.png)
 
 The `onGameResize` method is called whenever the screen is resized, and once in the beginning when
 the component is added to the game via the `add` method.
@@ -188,8 +188,8 @@ enum RobotState {
   running,
 }
 
-final running = await loadSpriteAnimation(/* omited */);
-final idle = await loadSpriteAnimation(/* omited */);
+final running = await loadSpriteAnimation(/* omitted */);
+final idle = await loadSpriteAnimation(/* omitted */);
 
 final robot = SpriteAnimationGroupComponent<RobotState>(
   animations: {
@@ -214,8 +214,8 @@ class ButtonComponent extends SpriteGroupComponent<ButtonState>
     with HasGameRef<SpriteGroupExample>, Tappable {
   @override
   Future<void>? onLoad() async {
-    final pressedSprite = await gameRef.loadSprite(/* omited */);
-    final unpressedSprite = await gameRef.loadSprite(/* omited /*);
+    final pressedSprite = await gameRef.loadSprite(/* omitted */);
+    final unpressedSprite = await gameRef.loadSprite(/* omitted /*);
 
     sprites = {
       ButtonState.pressed: pressedSprite,
@@ -225,7 +225,7 @@ class ButtonComponent extends SpriteGroupComponent<ButtonState>
     current = ButtonState.unpressed;
   }
 
-  // tap methods handler omited...
+  // tap methods handler omitted...
 }
 
 ```
@@ -350,14 +350,13 @@ class MyGame extends FlameGame {
 }
 ```
 
-This creates a static background, if you want a moving parallax (which is the whole point of a
-parallax), you can do it in a few different ways depending on how fine grained you want to set the
+This creates a static background. If you want a moving parallax (which is the whole point of a
+parallax), you can do it in a few different ways depending on how fine-grained you want to set the
 settings for each layer.
-They simplest way is to set the named optional parameters `baseVelocity` and
-`velocityMultiplierDelta` in the `load` helper function.
 
-For example if you want to move your background images along the X-axis with a faster speed the
-"closer" the image is:
+They simplest way is to set the named optional parameters `baseVelocity` and
+`velocityMultiplierDelta` in the `load` helper function. For example if you want to move your 
+background images along the X-axis with a faster speed the "closer" the image is:
 
 ```dart
 final parallaxComponent = await loadParallaxComponent(
@@ -376,9 +375,9 @@ parallax.baseSpeed = Vector2(100, 0);
 parallax.velocityMultiplierDelta = Vector2(2.0, 1.0);
 ```
 
-By default the images are aligned to the bottom left, repeated along the X-axis and scaled
+By default, the images are aligned to the bottom left, repeated along the X-axis and scaled
 proportionally so that the image covers the height of the screen. If you want to change this
-behavior, for example if you are not making a side scrolling game, you can set the `repeat`,
+behavior, for example if you are not making a side-scrolling game, you can set the `repeat`,
 `alignment` and `fill` parameters for each `ParallaxRenderer` and add them to `ParallaxLayer`s that you
 then pass in to the `ParallaxComponent`'s constructor.
 
@@ -564,6 +563,7 @@ Flame's Example app contains a more in-depth example, featuring how to parse coo
 selector. The code can be found
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/tile_maps/isometric_tile_map.dart),
 and a live version can be seen [here](https://examples.flame-engine.org/#/Tile%20Maps_Isometric%20Tile%20Map).
+
 ## NineTileBoxComponent
 
 A Nine Tile Box is a rectangle drawn using a grid sprite.

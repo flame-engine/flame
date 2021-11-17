@@ -46,9 +46,9 @@ class _WrapperState extends State<_Wrapper> {
   }
 }
 
-class MyGame extends FlameGame {
+class _MyGame extends FlameGame {
   bool onAttachCalled = false;
-  bool onDettachCalled = false;
+  bool onDetachCalled = false;
 
   @override
   void onAttach() {
@@ -61,13 +61,13 @@ class MyGame extends FlameGame {
   void onDetach() {
     super.onDetach();
 
-    onDettachCalled = true;
+    onDetachCalled = true;
   }
 }
 
-FlameTester<MyGame> myGame({required bool open}) {
+FlameTester<_MyGame> myGame({required bool open}) {
   return FlameTester(
-    () => MyGame(),
+    () => _MyGame(),
     pumpWidget: (gameWidget, tester) async {
       await tester.pumpWidget(_Wrapper(child: gameWidget, open: open));
     },
@@ -87,12 +87,12 @@ void main() {
       await tester.pump();
 
       expect(game.onAttachCalled, isTrue);
-      expect(game.onDettachCalled, isFalse);
+      expect(game.onDetachCalled, isFalse);
 
       await tester.tap(find.text('Toggle'));
       await tester.pump();
 
-      expect(game.onDettachCalled, isTrue);
+      expect(game.onDetachCalled, isTrue);
     },
   );
   myGame(open: true).widgetTest(
