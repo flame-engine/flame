@@ -1,36 +1,39 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 class _GameWithTappables extends FlameGame with HasTappableComponents {}
 
-class _GameWithoutTappables extends FlameGame {}
-
-class TappableComponent extends PositionComponent with Tappable {}
+class _TappableComponent extends PositionComponent with Tappable {}
 
 void main() {
-  group('tappables test', () {
-    test('make sure they cannot be added to invalid games', () async {
-      final game1 = _GameWithTappables();
-      game1.onGameResize(Vector2.all(100));
-      // should be ok
-      await game1.add(TappableComponent());
+  final withTappables = FlameTester(() => _GameWithTappables());
 
-      final game2 = _GameWithoutTappables();
-      game2.onGameResize(Vector2.all(100));
+  group('Tappable', () {
+    withTappables.test(
+      'make sure Tappables can be added to valid games',
+      (game) async {
+        await game.ensureAdd(_TappableComponent());
+      },
+    );
 
-      const message =
-          'Tappable Components can only be added to a FlameGame with '
-          'HasTappableComponents';
+    flameGame.test(
+      'make sure Tappables cannot be added to invalid games',
+      (game) async {
+        const message =
+            'Tappable Components can only be added to a FlameGame with '
+            'HasTappableComponents';
 
-      expect(
-        () => game2.add(TappableComponent()),
-        throwsA(
-          predicate(
-            (e) => e is AssertionError && e.message == message,
+        expect(
+          () => game.add(_TappableComponent()),
+          throwsA(
+            predicate(
+              (e) => e is AssertionError && e.message == message,
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   });
 }

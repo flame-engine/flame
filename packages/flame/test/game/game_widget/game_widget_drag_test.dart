@@ -3,7 +3,7 @@ import 'package:flame/input.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class HorizontalDragGame extends FlameGame with HorizontalDragDetector {
+class _HorizontalDragGame extends FlameGame with HorizontalDragDetector {
   bool horizontalDragStarted = false;
   bool horizontalDragEnded = false;
 
@@ -18,9 +18,7 @@ class HorizontalDragGame extends FlameGame with HorizontalDragDetector {
   }
 }
 
-final horizontalGame = FlameTester(() => HorizontalDragGame());
-
-class VerticalDragGame extends FlameGame with VerticalDragDetector {
+class _VerticalDragGame extends FlameGame with VerticalDragDetector {
   bool verticalDragStarted = false;
   bool verticalDragEnded = false;
 
@@ -35,9 +33,7 @@ class VerticalDragGame extends FlameGame with VerticalDragDetector {
   }
 }
 
-final verticalGame = FlameTester(() => VerticalDragGame());
-
-class PanGame extends FlameGame with PanDetector {
+class _PanGame extends FlameGame with PanDetector {
   bool panStarted = false;
   bool panEnded = false;
 
@@ -52,15 +48,17 @@ class PanGame extends FlameGame with PanDetector {
   }
 }
 
-final panGame = FlameTester(() => PanGame());
-
 void main() {
+  final horizontalGame = FlameTester(() => _HorizontalDragGame());
+  final verticalGame = FlameTester(() => _VerticalDragGame());
+  final panGame = FlameTester(() => _PanGame());
+
   group('GameWidget - HorizontalDragDetector', () {
     horizontalGame.widgetTest(
       'register drags',
       (game, tester) async {
         await tester.drag(
-          find.byGame<HorizontalDragGame>(),
+          find.byGame<_HorizontalDragGame>(),
           const Offset(50, 0),
         );
 
@@ -69,12 +67,13 @@ void main() {
       },
     );
   });
-  group('GameWidget - VerticallDragDetector', () {
+
+  group('GameWidget - VerticalDragDetector', () {
     verticalGame.widgetTest(
       'register drags',
       (game, tester) async {
         await tester.drag(
-          find.byGame<VerticalDragGame>(),
+          find.byGame<_VerticalDragGame>(),
           const Offset(50, 0),
         );
 
@@ -83,12 +82,13 @@ void main() {
       },
     );
   });
+
   group('GameWidget - PanDetector', () {
     panGame.widgetTest(
       'register drags',
       (game, tester) async {
         await tester.drag(
-          find.byGame<PanGame>(),
+          find.byGame<_PanGame>(),
           const Offset(50, 0),
         );
 
