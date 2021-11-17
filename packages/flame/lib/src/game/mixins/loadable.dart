@@ -39,6 +39,7 @@ mixin Loadable {
   /// implementing class, it is cached so that it can be reused when the parent
   /// component/game/widget changes.
   @internal
+  @nonVirtual
   late Future<void>? onLoadCache = onLoad();
 
   /// Called after the component has successfully run [onLoad] and before the
