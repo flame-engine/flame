@@ -69,6 +69,7 @@ class SpriteComponent extends PositionComponent with HasPaint {
         );
 
   @override
+  @mustCallSuper
   void onMount() {
     assert(
       sprite != null,

@@ -86,6 +86,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
         );
 
   @override
+  @mustCallSuper
   Future<void> onLoad() async {
     await super.onLoad();
     await redraw();

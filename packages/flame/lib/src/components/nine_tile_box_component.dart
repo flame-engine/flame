@@ -34,6 +34,7 @@ class NineTileBoxComponent extends PositionComponent {
         );
 
   @override
+  @mustCallSuper
   void onMount() {
     assert(
       nineTileBox != null,

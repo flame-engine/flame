@@ -46,6 +46,7 @@ class SpriteGroupComponent<T> extends PositionComponent with HasPaint {
   Sprite? get sprite => sprites?[current];
 
   @override
+  @mustCallSuper
   void onMount() {
     assert(
       sprites != null,

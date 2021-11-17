@@ -104,7 +104,7 @@ parent, if the parent is a `FlameGame` it is in relation to the viewport.
 ### Size
 
 The `size` is the size of the component when the zoom level of the camera is 1.0 (no zoom, default).
-The `size` is not set in relation to the parent of the component.its
+The `size` is not in relation to the parent of the component.
 
 ### Scale
 

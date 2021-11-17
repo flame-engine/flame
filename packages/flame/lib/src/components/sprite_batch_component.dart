@@ -18,6 +18,7 @@ class SpriteBatchComponent extends Component {
   });
 
   @override
+  @mustCallSuper
   void onMount() {
     assert(
       spriteBatch != null,
