@@ -1,8 +1,6 @@
 import 'dart:math' as math;
 import 'dart:ui' hide Offset;
 
-import 'package:meta/meta.dart';
-
 import '../anchor.dart';
 import '../extensions/offset.dart';
 import '../extensions/rect.dart';
@@ -342,16 +340,11 @@ class PositionComponent extends Component {
     }
   }
 
-  @mustCallSuper
   @override
-  void preRender(Canvas canvas) {
+  void renderTree(Canvas canvas) {
     canvas.save();
     canvas.transform(transformMatrix.storage);
-  }
-
-  @mustCallSuper
-  @override
-  void postRender(Canvas canvas) {
+    super.renderTree(canvas);
     canvas.restore();
   }
 
