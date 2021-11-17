@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
+
 import '../sprite_batch.dart';
 import 'component.dart';
 
