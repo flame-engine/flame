@@ -17,13 +17,13 @@ class GameInGameExample extends FlameGame with HasDraggables {
   @override
   bool debugMode = true;
   late final ComposabilityExample composedGame;
-  late final DraggablesGame draggablesGame;
+  late final DraggablesExample draggablesGame;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     composedGame = ComposabilityExample();
-    draggablesGame = DraggablesGame(zoom: 1.0);
+    draggablesGame = DraggablesExample(zoom: 1.0);
 
     await add(composedGame);
     await add(draggablesGame);

@@ -5,7 +5,12 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class MouseCursorGame extends FlameGame with MouseMovementDetector {
+class MouseCursorExample extends FlameGame with MouseMovementDetector {
+  static const String description = '''
+    Example showcasing the ability to change the game cursor in runtime
+    hover the little square to see the cursor changing
+  ''';
+
   static const speed = 200;
   static final Paint _blue = BasicPalette.blue.paint();
   static final Paint _white = BasicPalette.white.paint();

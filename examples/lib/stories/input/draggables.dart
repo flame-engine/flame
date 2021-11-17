@@ -21,7 +21,7 @@ class DraggableSquare extends PositionComponent with Draggable, HasGameRef {
   @override
   void update(double dt) {
     super.update(dt);
-    debugColor = isDragged && parent is DraggablesGame
+    debugColor = isDragged && parent is DraggablesExample
         ? Colors.greenAccent
         : Colors.purple;
   }
@@ -34,7 +34,7 @@ class DraggableSquare extends PositionComponent with Draggable, HasGameRef {
 
   @override
   bool onDragUpdate(int pointerId, DragUpdateInfo info) {
-    if (parent is! DraggablesGame) {
+    if (parent is! DraggablesExample) {
       return true;
     }
     final dragDeltaPosition = this.dragDeltaPosition;
@@ -59,11 +59,11 @@ class DraggableSquare extends PositionComponent with Draggable, HasGameRef {
   }
 }
 
-class DraggablesGame extends FlameGame with HasDraggables {
+class DraggablesExample extends FlameGame with HasDraggables {
   final double zoom;
   late final DraggableSquare square;
 
-  DraggablesGame({required this.zoom});
+  DraggablesExample({required this.zoom});
 
   @override
   Future<void> onLoad() async {
