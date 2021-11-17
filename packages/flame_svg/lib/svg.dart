@@ -8,12 +8,12 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-/// A [Svg] to be rendered on a Flame [Game]
+/// A [Svg] to be rendered on a Flame [Game].
 class Svg {
-  /// The [DrawableRoot] that this [Svg] represents
+  /// The [DrawableRoot] that this [Svg] represents.
   DrawableRoot svgRoot;
 
-  /// Creates a [Svg] with the received [svgRoot]
+  /// Creates a [Svg] with the received [svgRoot].
   Svg(this.svgRoot);
 
   /// Loads a [Svg] with the received [cache]. When no [cache] is provided, the global
