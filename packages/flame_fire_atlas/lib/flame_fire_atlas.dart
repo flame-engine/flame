@@ -27,19 +27,19 @@ extension FireAtlasExtensions on Game {
 /// containing its [id] and its coordinates and dimensions.
 /// {@endtemplate}
 class Selection {
-  /// The id of the selection
+  /// The id of the selection.
   String id;
 
-  /// The horizontal coordinate of the selection
+  /// The horizontal coordinate of the selection.
   int x;
 
-  /// The vertical coordinate of the selection
+  /// The vertical coordinate of the selection.
   int y;
 
-  /// The width of the selection
+  /// The width of the selection.
   int w;
 
-  /// The height of the selection
+  /// The height of the selection.
   int h;
 
   /// {@macro _selection}
@@ -51,7 +51,7 @@ class Selection {
     required this.h,
   });
 
-  /// Creates a [Selection] from [json]
+  /// Creates a [Selection] from [json].
   factory Selection.fromJson(Map<String, dynamic> json) {
     return Selection(
       id: json['id'] as String,
@@ -64,7 +64,7 @@ class Selection {
 }
 
 /// {@template _base_selection}
-/// Base class for all FireAtlas selections
+/// Base class for all FireAtlas selections.
 /// {@endtemplate}
 abstract class BaseSelection {
   final Selection _info;
@@ -72,19 +72,19 @@ abstract class BaseSelection {
   /// {@macro _base_selection}
   BaseSelection(this._info);
 
-  /// The id of the selection
+  /// The id of the selection.
   String get id => _info.id;
 
-  /// The horizontal coordinate of the selection
+  /// The horizontal coordinate of the selection.
   int get x => _info.x;
 
-  /// The vertical coordinate of the selection
+  /// The vertical coordinate of the selection.
   int get y => _info.y;
 
-  /// The width of the selection
+  /// The width of the selection.
   int get w => _info.w;
 
-  /// The height of the selection
+  /// The height of the selection.
   int get h => _info.h;
 
   /// Returns this instance as a json.
@@ -101,7 +101,7 @@ abstract class BaseSelection {
 }
 
 /// {@template _sprite_selection}
-/// Represents a specific selection of Flame [Sprite]s
+/// Represents a specific selection of Flame [Sprite]s.
 /// {@endtemplate}
 class SpriteSelection extends BaseSelection {
   /// {@macro _sprite_selection}
@@ -124,16 +124,16 @@ class SpriteSelection extends BaseSelection {
 }
 
 /// {@template _animation_selection}
-/// Represents a specific selection of Flame [Sprite]s as an animation
+/// Represents a specific selection of Flame [Sprite]s as an animation.
 /// {@endtemplate}
 class AnimationSelection extends BaseSelection {
-  /// The number of frames of this animation
+  /// The number of frames of this animation.
   int frameCount;
 
-  /// The time between each frame
+  /// The time between each frame.
   double stepTime;
 
-  /// If the animation is looping or not
+  /// If the animation is looping or not.
   bool loop;
 
   /// {@macro _animation_selection}
@@ -144,7 +144,7 @@ class AnimationSelection extends BaseSelection {
     required this.loop,
   }) : super(info);
 
-  /// Creates a [AnimationSelection] from [json]
+  /// Creates a [AnimationSelection] from [json].
   @override
   factory AnimationSelection.fromJson(Map<String, dynamic> json) {
     final info = Selection.fromJson(json);
@@ -168,27 +168,27 @@ class AnimationSelection extends BaseSelection {
   }
 }
 
-/// FireAtlas is a mapping file that can hold several [Sprite]s and [SpriteAnimation]s
+/// FireAtlas is a mapping file that can hold several [Sprite]s and [SpriteAnimation]s.
 ///
 /// Use [getSprite] and [getAnimation] to retrieve mapped assets.
 class FireAtlas {
-  /// Id of the FireAtlas
+  /// Id of the FireAtlas.
   String id;
 
-  /// The width of the tile
+  /// The width of the tile.
   double tileWidth;
 
-  /// The height of the tile
+  /// The height of the tile.
   double tileHeight;
 
-  /// Stores the asset data once this instance has loaded
+  /// Stores the asset data once this instance has loaded.
   String? imageData;
   Image? _image;
 
   /// Creates a FireAtlas instance.
   ///
   /// This constructor is often used internally, to load a FireAtlas instance into you game
-  /// check [loadAsset]
+  /// check [loadAsset].
   FireAtlas({
     required this.id,
     required this.tileWidth,
@@ -201,10 +201,10 @@ class FireAtlas {
 
   /// Loads the atlas image into memory so it can be used, this method
   /// is used internally by [loadAsset], prefer that method unless
-  /// there is a very specific use case for it
+  /// there is a very specific use case for it.
   ///
   /// [clearImageData] Can be set to false to avoid clearing the stored information about the image on this object, this is true by default, its use is intended to enable serializing this object
-  /// [images] The images cache to be used, falls back to [Flame.images] when omitted
+  /// [images] The images cache to be used, falls back to [Flame.images] when omitted.
   ///
   Future<void> loadImage({bool clearImageData = true, Images? images}) async {
     if (imageData == null) {
@@ -219,7 +219,7 @@ class FireAtlas {
     }
   }
 
-  /// Serializes the mappings on this Atlas in a json format
+  /// Serializes the mappings on this Atlas in a json format.
   Map<String, dynamic> toJson() {
     final selectionsJson = <String, dynamic>{};
     selections.entries.forEach((entry) {
@@ -261,7 +261,7 @@ class FireAtlas {
     return atlas;
   }
 
-  /// Load the FireAtlas from an asset
+  /// Load the FireAtlas from an asset.
   static Future<FireAtlas> loadAsset(
     String fileName, {
     AssetsCache? assets,
@@ -275,7 +275,7 @@ class FireAtlas {
     return atlas;
   }
 
-  /// Serializes this instances into a byte array
+  /// Serializes this instances into a byte array.
   List<int> serialize() {
     final raw = jsonEncode(toJson());
 
@@ -288,7 +288,7 @@ class FireAtlas {
     return gzipBytes;
   }
 
-  /// Reads a FireAtlas instance from a byte array
+  /// Reads a FireAtlas instance from a byte array.
   static FireAtlas deserialize(List<int> bytes) {
     final unzipedBytes = GZipDecoder().decodeBytes(bytes);
     final unzipedString = utf8.decode(unzipedBytes);
@@ -303,7 +303,7 @@ class FireAtlas {
     return _image!;
   }
 
-  /// Returns a Sprite with the given [selectionId]
+  /// Returns a Sprite with the given [selectionId].
   Sprite getSprite(String selectionId) {
     final selection = selections[selectionId];
 
@@ -330,7 +330,7 @@ class FireAtlas {
     );
   }
 
-  /// Returns a SpriteAnimation with the given [selectionId]
+  /// Returns a SpriteAnimation with the given [selectionId].
   SpriteAnimation getAnimation(String selectionId) {
     final selection = selections[selectionId];
 
