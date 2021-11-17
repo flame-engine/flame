@@ -8,7 +8,40 @@ import 'package:flutter/services.dart';
 
 import '../../commons/square_component.dart';
 
-final R = Random();
+class CameraAndViewportGame extends FlameGame
+    with HasCollidables, HasTappables, HasKeyboardHandlerComponents {
+  static const String description = '''
+    Move around with W, A, S, D and notice how the camera follows the white 
+    square.\n
+    If you collide with the blue squares, the camera reference is changed from
+    center to topCenter.\n
+    The blue squares can also be clicked to show how the coordinate system
+    respects the camera transformation.
+  ''';
+
+  late MovableSquare square;
+
+  final Vector2 viewportResolution;
+
+  CameraAndViewportGame({
+    required this.viewportResolution,
+  });
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    camera.viewport = FixedResolutionViewport(viewportResolution);
+    add(Map());
+
+    add(square = MovableSquare());
+    camera.speed = 1;
+    camera.followComponent(square, worldBounds: Map.bounds);
+
+    for (var i = 0; i < 30; i++) {
+      add(Rock(Vector2(Map.genCoord(), Map.genCoord())));
+    }
+  }
+}
 
 class MovableSquare extends SquareComponent
     with Collidable, HasGameRef<CameraAndViewportGame>, KeyboardHandler {
@@ -87,6 +120,8 @@ class Map extends Component {
     ..style = PaintingStyle.stroke;
   static final Paint _paintBg = Paint()..color = const Color(0xFF333333);
 
+  static final _rng = Random();
+
   Map() : super(priority: 0);
 
   @override
@@ -96,7 +131,7 @@ class Map extends Component {
   }
 
   static double genCoord() {
-    return -S + R.nextDouble() * (2 * S);
+    return -S + _rng.nextDouble() * (2 * S);
   }
 }
 
@@ -128,31 +163,5 @@ class Rock extends SquareComponent with Collidable, Tappable {
   bool onTapCancel() {
     paint = unpressedPaint;
     return true;
-  }
-}
-
-class CameraAndViewportGame extends FlameGame
-    with HasCollidables, HasTappables, HasKeyboardHandlerComponents {
-  late MovableSquare square;
-
-  final Vector2 viewportResolution;
-
-  CameraAndViewportGame({
-    required this.viewportResolution,
-  });
-
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    camera.viewport = FixedResolutionViewport(viewportResolution);
-    add(Map());
-
-    add(square = MovableSquare());
-    camera.speed = 1;
-    camera.followComponent(square, worldBounds: Map.bounds);
-
-    for (var i = 0; i < 30; i++) {
-      add(Rock(Vector2(Map.genCoord(), Map.genCoord())));
-    }
   }
 }

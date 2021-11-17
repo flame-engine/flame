@@ -1,40 +1,14 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
-const priorityInfo = '''
-On this example, click on the square to bring them to the front by changing the
-priority.
-''';
+class PriorityExample extends FlameGame with HasTappables {
+  static const String description = '''
+    On this example, click on the square to bring them to the front by changing
+    the priority.
+  ''';
 
-class Square extends PositionComponent with HasGameRef<Priority>, Tappable {
-  late final Paint paint;
-
-  Square(Vector2 position) {
-    this.position.setFrom(position);
-    size.setValues(100, 100);
-    paint = PaintExtension.random(withAlpha: 0.9, base: 100);
-  }
-
-  @override
-  bool onTapDown(TapDownInfo info) {
-    final topComponent = gameRef.children.last;
-    if (topComponent != this) {
-      gameRef.children.changePriority(this, topComponent.priority + 1);
-    }
-    return false;
-  }
-
-  @override
-  void render(Canvas canvas) {
-    canvas.drawRect(size.toRect(), paint);
-  }
-}
-
-class Priority extends FlameGame with HasTappables {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -45,5 +19,24 @@ class Priority extends FlameGame with HasTappables {
       Square(Vector2(110, 150)),
     ];
     addAll(squares);
+  }
+}
+
+class Square extends RectangleComponent
+    with HasGameRef<PriorityExample>, Tappable {
+  Square(Vector2 position)
+      : super(
+          position: position,
+          size: Vector2.all(100),
+          paint: PaintExtension.random(withAlpha: 0.9, base: 100),
+        );
+
+  @override
+  bool onTapDown(TapDownInfo info) {
+    final topComponent = gameRef.children.last;
+    if (topComponent != this) {
+      gameRef.children.changePriority(this, topComponent.priority + 1);
+    }
+    return false;
   }
 }

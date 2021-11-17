@@ -22,10 +22,7 @@ void addCameraAndViewportStories(Dashbook dashbook) {
         );
       },
       codeLink: baseLink('camera_and_viewport/follow_object.dart'),
-      info: ''
-          'Move around with W, A, S, D and notice how the camera follows the white square.\n'
-          'If you collide with the blue squares, the camera reference is changed from center to topCenter.\n'
-          'The blue squares can also be clicked to show how the coordinate system respects the camera transformation.',
+      info: CameraAndViewportGame.description,
     )
     ..add(
       'Zoom',
@@ -40,9 +37,7 @@ void addCameraAndViewportStories(Dashbook dashbook) {
         );
       },
       codeLink: baseLink('camera_and_viewport/zoom.dart'),
-      info: ''
-          'On web: use scroll to zoom in and out.\n'
-          'On mobile: use scale gesture to zoom in and out.',
+      info: ZoomGame.description,
     )
     ..add(
       'Fixed Resolution viewport',
@@ -57,15 +52,12 @@ void addCameraAndViewportStories(Dashbook dashbook) {
         );
       },
       codeLink: baseLink('camera_and_viewport/fixed_resolution.dart'),
-      info: FixedResolutionGame.info,
+      info: FixedResolutionGame.description,
     )
     ..add(
       'Coordinate Systems',
       (context) => CoordinateSystemsWidget(),
       codeLink: baseLink('camera_and_viewport/coordinate_systems.dart'),
-      info: ''
-          'Displays event data in all 3 coordinte systems (global, widget and game).\n'
-          'Use WASD to move the camera and Q/E to zoom in/out.\n'
-          'Trigger events to see the coordinates on each coordinate space.',
+      info: CoordinateSystemsGame.description,
     );
 }

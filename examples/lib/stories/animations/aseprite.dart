@@ -1,7 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-class Aseprite extends FlameGame {
+class AsepriteExample extends FlameGame {
+  static const String description = '''
+    This example shows how to load animations from a asprite json file and a
+    sprite sheet. There is no interaction on this example.
+  ''';
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();

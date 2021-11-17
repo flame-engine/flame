@@ -10,6 +10,14 @@ enum RobotState {
 }
 
 class AnimationGroupExample extends FlameGame with TapDetector {
+  static const description = '''
+    This example shows how to create a component that can be switched between
+    different states to change the animation that is playing.\n\n
+    
+    Usage: Click/tap and hold the screen to change state and then let go to go
+    back to the original animation.
+  ''';
+
   late SpriteAnimationGroupComponent robot;
 
   @override

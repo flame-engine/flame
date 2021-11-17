@@ -6,11 +6,11 @@ import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 
 class FixedResolutionGame extends FlameGame with ScrollDetector, ScaleDetector {
-  static const info = '''
-  This example shows how to create a viewport with a fixed resolution.
-  It is useful when you want the visible part of the game to be the same on all
-  devices no matter the actual screen size of the device.
-  Resize the window or change device orientation to see the difference.
+  static const description = '''
+    This example shows how to create a viewport with a fixed resolution.
+    It is useful when you want the visible part of the game to be the same on
+    all devices no matter the actual screen size of the device.
+    Resize the window or change device orientation to see the difference.
   ''';
 
   final Vector2 viewportResolution;

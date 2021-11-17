@@ -17,6 +17,7 @@ class SimpleShapesExample extends FlameGame with HasTappables {
     tap on an already existing shape it will remove that shape and replace it
     with a new one.
   ''';
+
   final _rng = Random();
 
   MyShapeComponent randomShape(Vector2 position) {
