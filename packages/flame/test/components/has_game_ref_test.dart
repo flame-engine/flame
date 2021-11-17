@@ -1,26 +1,27 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class MyGame extends FlameGame {
+class _MyGame extends FlameGame {
   bool calledFoo = false;
   void foo() {
     calledFoo = true;
   }
 }
 
-class MyComponent extends PositionComponent with HasGameRef<MyGame> {
+class _MyComponent extends Component with HasGameRef<_MyGame> {
   void foo() {
     gameRef.foo();
   }
 }
 
 void main() {
-  group('has game ref test', () {
-    test('simple test', () {
-      final c = MyComponent();
-      final game = MyGame();
-      game.onGameResize(Vector2.all(200));
+  final withHasGameRef = FlameTester(() => _MyGame());
+
+  group('HasGameRef', () {
+    withHasGameRef.test('simple test', (game) {
+      final c = _MyComponent();
       game.add(c);
       c.foo();
       expect(game.calledFoo, true);

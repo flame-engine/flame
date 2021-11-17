@@ -3,20 +3,20 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MyComponent extends PositionComponent with HasPaint {}
+class _MyComponent extends PositionComponent with HasPaint {}
 
-enum MyComponentKeys {
+enum _MyComponentKeys {
   background,
   foreground,
 }
 
-class MyComponentWithType extends PositionComponent
-    with HasPaint<MyComponentKeys> {}
+class _MyComponentWithType extends PositionComponent
+    with HasPaint<_MyComponentKeys> {}
 
 void main() {
-  group('Components - HasPaint', () {
+  group('HasPaint', () {
     test('paint returns the default paint', () {
-      final comp = MyComponent();
+      final comp = _MyComponent();
 
       expect(comp.paint, comp.getPaint());
     });
@@ -24,7 +24,7 @@ void main() {
     test(
       'paint setter sets the main paint',
       () {
-        final comp = MyComponent();
+        final comp = _MyComponent();
 
         const color = Color(0xFFE5E5E5);
         comp.paint = Paint()..color = color;
@@ -36,10 +36,10 @@ void main() {
     test(
       'getPaint throws exception when retrieving a paint that does not exists',
       () {
-        final comp = MyComponentWithType();
+        final comp = _MyComponentWithType();
 
         expect(
-          () => comp.getPaint(MyComponentKeys.background),
+          () => comp.getPaint(_MyComponentKeys.background),
           throwsArgumentError,
         );
       },
@@ -48,10 +48,10 @@ void main() {
     test(
       'getPaint throws exception when used on genericless component',
       () {
-        final comp = MyComponent();
+        final comp = _MyComponent();
 
         expect(
-          () => comp.getPaint(MyComponentKeys.background),
+          () => comp.getPaint(_MyComponentKeys.background),
           throwsAssertionError,
         );
       },
@@ -60,24 +60,24 @@ void main() {
     test(
       'setPaint sets a paint',
       () {
-        final comp = MyComponentWithType();
+        final comp = _MyComponentWithType();
 
         const color = Color(0xFFA9A9A9);
-        comp.setPaint(MyComponentKeys.background, Paint()..color = color);
+        comp.setPaint(_MyComponentKeys.background, Paint()..color = color);
 
-        expect(comp.getPaint(MyComponentKeys.background).color, color);
+        expect(comp.getPaint(_MyComponentKeys.background).color, color);
       },
     );
 
     test(
       'setPaint throws exception when used on genericless component',
       () {
-        final comp = MyComponent();
+        final comp = _MyComponent();
 
         const color = Color(0xFFA9A9A9);
         expect(
           () => comp.setPaint(
-            MyComponentKeys.background,
+            _MyComponentKeys.background,
             Paint()..color = color,
           ),
           throwsAssertionError,
@@ -88,13 +88,13 @@ void main() {
     test(
       'deletePaint removes a paint from the map',
       () {
-        final comp = MyComponentWithType();
+        final comp = _MyComponentWithType();
 
-        comp.setPaint(MyComponentKeys.background, Paint());
-        comp.deletePaint(MyComponentKeys.background);
+        comp.setPaint(_MyComponentKeys.foreground, Paint());
+        comp.deletePaint(_MyComponentKeys.foreground);
 
         expect(
-          () => comp.getPaint(MyComponentKeys.background),
+          () => comp.getPaint(_MyComponentKeys.foreground),
           throwsArgumentError,
         );
       },
@@ -103,10 +103,10 @@ void main() {
     test(
       'deletePaint throws exception when used on genericless component',
       () {
-        final comp = MyComponent();
+        final comp = _MyComponent();
 
         expect(
-          () => comp.deletePaint(MyComponentKeys.background),
+          () => comp.deletePaint(_MyComponentKeys.background),
           throwsAssertionError,
         );
       },
@@ -115,7 +115,7 @@ void main() {
     test(
       'makeTransparent sets opacity to 0 on the main when paintId is omitted',
       () {
-        final comp = MyComponent();
+        final comp = _MyComponent();
         comp.makeTransparent();
 
         expect(comp.paint.color.opacity, 0);
@@ -125,18 +125,18 @@ void main() {
     test(
       'makeTransparent sets opacity to 0 on informed paintId',
       () {
-        final comp = MyComponentWithType();
-        comp.setPaint(MyComponentKeys.background, Paint());
-        comp.makeTransparent(paintId: MyComponentKeys.background);
+        final comp = _MyComponentWithType();
+        comp.setPaint(_MyComponentKeys.background, Paint());
+        comp.makeTransparent(paintId: _MyComponentKeys.background);
 
-        expect(comp.getPaint(MyComponentKeys.background).color.opacity, 0);
+        expect(comp.getPaint(_MyComponentKeys.background).color.opacity, 0);
       },
     );
 
     test(
       'makeOpaque sets opacity to 1 on the main when paintId is omitted',
       () {
-        final comp = MyComponent();
+        final comp = _MyComponent();
         comp.makeTransparent();
         comp.makeOpaque();
 
@@ -147,21 +147,21 @@ void main() {
     test(
       'makeOpaque sets opacity to 1 on informed paintId',
       () {
-        final comp = MyComponentWithType();
+        final comp = _MyComponentWithType();
         comp.setPaint(
-          MyComponentKeys.background,
+          _MyComponentKeys.background,
           Paint()..color = const Color(0x00E5E5E5),
         );
-        comp.makeOpaque(paintId: MyComponentKeys.background);
+        comp.makeOpaque(paintId: _MyComponentKeys.background);
 
-        expect(comp.getPaint(MyComponentKeys.background).color.opacity, 1);
+        expect(comp.getPaint(_MyComponentKeys.background).color.opacity, 1);
       },
     );
 
     test(
       'setOpacity sets opacity of the main when paintId is omitted',
       () {
-        final comp = MyComponent();
+        final comp = _MyComponent();
         comp.setOpacity(0.2);
 
         expect(comp.paint.color.opacity, 0.2);
@@ -171,18 +171,18 @@ void main() {
     test(
       'setOpacity sets opacity of the informed paintId',
       () {
-        final comp = MyComponentWithType();
-        comp.setPaint(MyComponentKeys.background, Paint());
-        comp.setOpacity(0.2, paintId: MyComponentKeys.background);
+        final comp = _MyComponentWithType();
+        comp.setPaint(_MyComponentKeys.background, Paint());
+        comp.setOpacity(0.2, paintId: _MyComponentKeys.background);
 
-        expect(comp.getPaint(MyComponentKeys.background).color.opacity, 0.2);
+        expect(comp.getPaint(_MyComponentKeys.background).color.opacity, 0.2);
       },
     );
 
     test(
       'throws error if opacity is less than 0',
       () {
-        final comp = MyComponent();
+        final comp = _MyComponent();
 
         expect(
           () => comp.setOpacity(-0.5),
@@ -194,7 +194,7 @@ void main() {
     test(
       'throws error if opacity is greater than 1',
       () {
-        final comp = MyComponent();
+        final comp = _MyComponent();
 
         expect(
           () => comp.setOpacity(1.1),
@@ -206,7 +206,7 @@ void main() {
     test(
       'setColor sets color of the main when paintId is omitted',
       () {
-        final comp = MyComponent();
+        final comp = _MyComponent();
         const color = Color(0xFFE5E5E5);
         comp.setColor(color);
 
@@ -217,19 +217,19 @@ void main() {
     test(
       'setOpacity sets opacity of the informed paintId',
       () {
-        final comp = MyComponentWithType();
+        final comp = _MyComponentWithType();
         const color = Color(0xFFE5E5E5);
-        comp.setPaint(MyComponentKeys.background, Paint());
-        comp.setColor(color, paintId: MyComponentKeys.background);
+        comp.setPaint(_MyComponentKeys.background, Paint());
+        comp.setColor(color, paintId: _MyComponentKeys.background);
 
-        expect(comp.getPaint(MyComponentKeys.background).color, color);
+        expect(comp.getPaint(_MyComponentKeys.background).color, color);
       },
     );
 
     test(
       'tint sets the correct color filter of the main when paintId is omitted',
       () {
-        final comp = MyComponent();
+        final comp = _MyComponent();
         const color = Color(0xFFE5E5E5);
         comp.tint(color);
 
@@ -243,13 +243,13 @@ void main() {
     test(
       'setOpacity sets opacity of the informed paintId',
       () {
-        final comp = MyComponentWithType();
+        final comp = _MyComponentWithType();
         const color = Color(0xFFE5E5E5);
-        comp.setPaint(MyComponentKeys.background, Paint());
-        comp.tint(color, paintId: MyComponentKeys.background);
+        comp.setPaint(_MyComponentKeys.background, Paint());
+        comp.tint(color, paintId: _MyComponentKeys.background);
 
         expect(
-          comp.getPaint(MyComponentKeys.background).colorFilter,
+          comp.getPaint(_MyComponentKeys.background).colorFilter,
           const ColorFilter.mode(color, BlendMode.multiply),
         );
       },

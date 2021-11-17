@@ -5,14 +5,12 @@ import 'package:flame/src/effects2/standard_effect_controller.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-typedef VoidCallback = void Function();
-
-class MyEffect extends Effect {
-  MyEffect(EffectController controller) : super(controller);
+class _MyEffect extends Effect {
+  _MyEffect(EffectController controller) : super(controller);
 
   double x = -1;
-  VoidCallback? onStartCallback;
-  VoidCallback? onFinishCallback;
+  Function()? onStartCallback;
+  Function()? onFinishCallback;
 
   @override
   void apply(double progress) {
@@ -40,8 +38,8 @@ class MyEffect extends Effect {
 
 void main() {
   group('Effect', () {
-    test('Pause & Resume', () {
-      final effect = MyEffect(StandardEffectController(duration: 10));
+    test('pause & resume', () {
+      final effect = _MyEffect(StandardEffectController(duration: 10));
       expect(effect.x, -1);
       expect(effect.isPaused, false);
 
@@ -83,7 +81,7 @@ void main() {
       (game) {
         final obj = Component();
         game.add(obj);
-        final effect = MyEffect(StandardEffectController(duration: 1));
+        final effect = _MyEffect(StandardEffectController(duration: 1));
         obj.add(effect);
         game.update(0);
         expect(obj.children.length, 1);
@@ -104,7 +102,7 @@ void main() {
       (game) {
         final obj = Component();
         game.add(obj);
-        final effect = MyEffect(StandardEffectController(duration: 1));
+        final effect = _MyEffect(StandardEffectController(duration: 1));
         effect.removeOnFinish = false;
         obj.add(effect);
         game.update(0);
@@ -151,7 +149,7 @@ void main() {
     test('onStart & onFinish', () {
       var nStarted = 0;
       var nFinished = 0;
-      final effect = MyEffect(StandardEffectController(duration: 1))
+      final effect = _MyEffect(StandardEffectController(duration: 1))
         ..onStartCallback = () {
           nStarted++;
         }

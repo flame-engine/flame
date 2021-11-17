@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MyCollidable extends PositionComponent with HasHitboxes, Collidable {}
+class _MyCollidable extends PositionComponent with HasHitboxes, Collidable {}
 
 void main() {
   group('HasCollidables', () {
@@ -13,7 +13,7 @@ void main() {
             'You can only use the HasHitboxes/Collidable feature with games '
             'that has the HasCollidables mixin';
         expect(
-          () => game.add(MyCollidable()),
+          () => game.add(_MyCollidable()),
           throwsA(
             predicate(
               (e) => e is AssertionError && e.message == message,
