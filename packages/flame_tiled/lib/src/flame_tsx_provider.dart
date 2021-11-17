@@ -6,7 +6,7 @@ import 'package:xml/xml.dart';
 ///
 /// It uses [Flame.bundle] and has a built-in cache for the file read.
 class FlameTsxProvider implements TsxProvider {
-  /// Parsed data for this tsx file
+  /// Parsed data for this tsx file.
   final String data;
 
   FlameTsxProvider._(this.data);
@@ -19,7 +19,7 @@ class FlameTsxProvider implements TsxProvider {
 
   /// Parses a file returning a [FlameTsxProvider].
   ///
-  /// NOTE: this method looks for files under the path "assets/tiles/"
+  /// NOTE: this method looks for files under the path "assets/tiles/".
   static Future<FlameTsxProvider> parse(String key) async {
     final data = await Flame.bundle.loadString('assets/tiles/$key');
     return FlameTsxProvider._(data);

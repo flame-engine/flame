@@ -37,7 +37,7 @@ class RenderableTiledMap {
 
   /// Parses a file returning a [RenderableTiledMap].
   ///
-  /// NOTE: this method looks for files under the path "assets/tiles/"
+  /// NOTE: this method looks for files under the path "assets/tiles/".
   static Future<RenderableTiledMap> fromFile(
     String fileName,
     Vector2 destTileSize,

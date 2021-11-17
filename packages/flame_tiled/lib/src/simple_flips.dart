@@ -3,7 +3,7 @@ import 'package:tiled/tiled.dart';
 /// {@template _simple_flips}
 /// Tiled represents all flips and rotation using three possible flips: horizontal, vertical and diagonal.
 /// This class converts that representation to a simpler one, that uses one angle (with pi/2 steps) and two flips (H or V).
-/// More reference: https://doc.mapeditor.org/en/stable/reference/tmx-map-format/#tile-flipping
+/// More reference: https://doc.mapeditor.org/en/stable/reference/tmx-map-format/#tile-flipping.
 /// {@endtemplate}
 class SimpleFlips {
   /// The angle (in steps of pi/2 rads), clockwise, around the center of the tile.

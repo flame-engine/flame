@@ -11,7 +11,7 @@ import 'renderable_tile_map.dart';
 /// Sprite Batches.
 /// {@endtemplate}
 class TiledComponent extends Component {
-  /// Map instance of this component
+  /// Map instance of this component.
   RenderableTiledMap tileMap;
 
   /// {@macro _tiled_component}
@@ -22,7 +22,7 @@ class TiledComponent extends Component {
     tileMap.render(canvas);
   }
 
-  /// Loads a [TiledComponent] from a file
+  /// Loads a [TiledComponent] from a file.
   static Future<TiledComponent> load(
     String fileName,
     Vector2 destTileSize,
