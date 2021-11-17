@@ -28,6 +28,7 @@ void main() {
         const Color(0xFFB210AF),
       );
     });
+
     test('test parse short ARGB', () {
       expect(
         ColorExtension.fromARGBHexString('#fccc'),
@@ -46,6 +47,7 @@ void main() {
         const Color(0x00BB2211),
       );
     });
+
     test('test parse long ARGB', () {
       expect(
         ColorExtension.fromARGBHexString('#ffcc1050'),

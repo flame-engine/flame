@@ -3,10 +3,10 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MyTimerComponent extends TimerComponent {
+class _MyTimerComponent extends TimerComponent {
   int count = 0;
 
-  MyTimerComponent()
+  _MyTimerComponent()
       : super(
           period: 1,
           repeat: true,
@@ -19,8 +19,8 @@ class MyTimerComponent extends TimerComponent {
   }
 }
 
-class NonRepeatingTimerComponent extends TimerComponent {
-  NonRepeatingTimerComponent()
+class _NonRepeatingTimerComponent extends TimerComponent {
+  _NonRepeatingTimerComponent()
       : super(
           period: 1,
           repeat: false,
@@ -33,7 +33,7 @@ void main() {
     final tester = FlameTester(() => FlameGame());
 
     tester.test('runs the tick method', (game) {
-      final timer = MyTimerComponent();
+      final timer = _MyTimerComponent();
       game.add(timer);
       game.update(0);
 
@@ -44,7 +44,7 @@ void main() {
     });
 
     tester.test('never remove from the game when is repeating', (game) {
-      game.add(MyTimerComponent());
+      game.add(_MyTimerComponent());
       game.update(0);
 
       game.update(1.2);
@@ -54,7 +54,7 @@ void main() {
     });
 
     tester.test('is removed from the game when is finished', (game) {
-      game.add(NonRepeatingTimerComponent());
+      game.add(_NonRepeatingTimerComponent());
       game.update(0);
 
       game.update(1.2);

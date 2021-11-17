@@ -42,20 +42,21 @@ void main() {
     });
 
     test(
-        'throws assertion error when the length of stepTime is different from sprite',
-        () {
-      final sprite = SpriteSheet(
-        image: image,
-        srcSize: Vector2(50, 50),
-      );
+      'throws assertion error when the length of stepTime is different from sprite',
+      () {
+        final sprite = SpriteSheet(
+          image: image,
+          srcSize: Vector2(50, 50),
+        );
 
-      expect(
-        () => sprite.createAnimationWithVariableStepTimes(
-          row: 1,
-          stepTimes: [2.0],
-        ),
-        throwsException,
-      );
-    });
+        expect(
+          () => sprite.createAnimationWithVariableStepTimes(
+            row: 1,
+            stepTimes: [2.0],
+          ),
+          throwsException,
+        );
+      },
+    );
   });
 }
