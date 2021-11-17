@@ -52,7 +52,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   final TextBoxConfig _boxConfig;
   final double pixelRatio;
 
-  late List<String> _lines;
+  final List<String> _lines = [];
   double _maxLineWidth = 0.0;
   late double _lineHeight;
   late int _totalLines;
@@ -94,7 +94,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   @override
   @internal
   void updateBounds() {
-    _lines = [];
+    _lines.clear();
     double? lineHeight;
     text.split(' ').forEach((word) {
       final possibleLine = _lines.isEmpty ? word : '${_lines.last} $word';

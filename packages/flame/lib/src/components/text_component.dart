@@ -47,7 +47,7 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
           anchor: anchor,
           priority: priority,
         ) {
-    this.text = _text;
+    updateBounds();
   }
 
   @internal
