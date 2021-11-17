@@ -42,7 +42,10 @@ class TapableBall extends Ball with Tappable {
   Future<void> onLoad() async {
     super.onLoad();
     _textPaint = TextPaint(style: _textStyle);
-    textComponent = TextComponent(counter.toString(), textRenderer: _textPaint);
+    textComponent = TextComponent(
+      text: counter.toString(),
+      textRenderer: _textPaint,
+    );
     add(textComponent);
   }
 

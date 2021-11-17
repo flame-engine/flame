@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/widgets.dart' hide Image;
+import 'package:meta/meta.dart';
 
 import '../../components.dart';
 import '../extensions/vector2.dart';
@@ -45,12 +46,9 @@ class TextBoxConfig {
   });
 }
 
-class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
+class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   static final Paint _imagePaint = BasicPalette.white.paint()
     ..filterQuality = FilterQuality.high;
-
-  final String _text;
-  final T _textRenderer;
   final TextBoxConfig _boxConfig;
   final double pixelRatio;
 
@@ -63,14 +61,10 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
   Image? _cache;
   int? _previousChar;
 
-  String get text => _text;
-
-  TextRenderer get renderer => _textRenderer;
-
   TextBoxConfig get boxConfig => _boxConfig;
 
-  TextBoxComponent(
-    String text, {
+  TextBoxComponent({
+    String? text,
     T? textRenderer,
     TextBoxConfig? boxConfig,
     double? pixelRatio,
@@ -79,24 +73,34 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     double? angle,
     Anchor? anchor,
     int? priority,
-  })  : _text = text,
-        _boxConfig = boxConfig ?? TextBoxConfig(),
-        _textRenderer = textRenderer ?? TextRenderer.createDefault<T>(),
+  })  : _boxConfig = boxConfig ?? TextBoxConfig(),
         pixelRatio = pixelRatio ?? window.devicePixelRatio,
         super(
+          text: text,
+          textRenderer: textRenderer,
           position: position,
           scale: scale,
           angle: angle,
           anchor: anchor,
           priority: priority,
-        ) {
+        );
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    await redraw();
+  }
+
+  @override
+  @internal
+  void updateBounds() {
     _lines = [];
     double? lineHeight;
     text.split(' ').forEach((word) {
       final possibleLine = _lines.isEmpty ? word : '${_lines.last} $word';
-      lineHeight ??= _textRenderer.measureTextHeight(possibleLine);
+      lineHeight ??= textRenderer.measureTextHeight(possibleLine);
 
-      final textWidth = _textRenderer.measureTextWidth(possibleLine);
+      final textWidth = textRenderer.measureTextWidth(possibleLine);
       if (textWidth <= _boxConfig.maxWidth - _boxConfig.margins.horizontal) {
         if (_lines.isNotEmpty) {
           _lines.last = possibleLine;
@@ -114,19 +118,13 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
     size = _recomputeSize();
   }
 
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    await redraw();
-  }
-
   void _updateMaxWidth(double w) {
     if (w > _maxLineWidth) {
       _maxLineWidth = w;
     }
   }
 
-  double get totalCharTime => _text.length * _boxConfig.timePerChar;
+  double get totalCharTime => text.length * _boxConfig.timePerChar;
 
   bool get finished => _lifeTime > totalCharTime + _boxConfig.dismissDelay;
 
@@ -151,7 +149,7 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
   }
 
   double getLineWidth(String line, int charCount) {
-    return _textRenderer.measureTextWidth(
+    return textRenderer.measureTextWidth(
       line.substring(0, math.min(charCount, line.length)),
     );
   }
@@ -222,7 +220,7 @@ class TextBoxComponent<T extends TextRenderer> extends PositionComponent {
   }
 
   void _drawLine(Canvas c, String line, double dy) {
-    _textRenderer.render(c, line, Vector2(_boxConfig.margins.left, dy));
+    textRenderer.render(c, line, Vector2(_boxConfig.margins.left, dy));
   }
 
   Future<void> redraw() async {

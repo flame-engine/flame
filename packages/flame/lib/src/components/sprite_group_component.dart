@@ -45,6 +45,18 @@ class SpriteGroupComponent<T> extends PositionComponent with HasPaint {
 
   Sprite? get sprite => sprites?[current];
 
+  @override
+  void onMount() {
+    assert(
+      sprites != null,
+      'You have to set the sprites in either the constructor or in onLoad',
+    );
+    assert(
+      current != null,
+      'You have to set current in either the constructor or in onLoad',
+    );
+  }
+
   @mustCallSuper
   @override
   void render(Canvas canvas) {

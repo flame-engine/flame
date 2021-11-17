@@ -106,11 +106,11 @@ class JoystickAdvancedGame extends FlameGame
       style: TextStyle(color: BasicPalette.white.color),
     );
     speedText = TextComponent(
-      'Speed: 0',
+      text: 'Speed: 0',
       textRenderer: _regular,
     )..isHud = true;
     directionText = TextComponent(
-      'Direction: idle',
+      text: 'Direction: idle',
       textRenderer: _regular,
     )..isHud = true;
 

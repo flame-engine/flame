@@ -17,7 +17,7 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
   set text(String text) {
     if (_text != text) {
       _text = text;
-      _updateBox();
+      updateBounds();
     }
   }
 
@@ -25,11 +25,11 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
 
   set textRenderer(T textRenderer) {
     _textRenderer = textRenderer;
-    _updateBox();
+    updateBounds();
   }
 
-  TextComponent(
-    this._text, {
+  TextComponent({
+    String? text,
     T? textRenderer,
     Vector2? position,
     Vector2? size,
@@ -37,7 +37,8 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
     double? angle,
     Anchor? anchor,
     int? priority,
-  })  : _textRenderer = textRenderer ?? TextRenderer.createDefault<T>(),
+  })  : _text = text ?? '',
+        _textRenderer = textRenderer ?? TextRenderer.createDefault<T>(),
         super(
           position: position,
           size: size,
@@ -46,15 +47,15 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
           anchor: anchor,
           priority: priority,
         ) {
-    _updateBox();
+    this.text = _text;
   }
 
-  void _updateBox() {
+  @internal
+  void updateBounds() {
     final expectedSize = textRenderer.measureText(_text);
     size.setValues(expectedSize.x, expectedSize.y);
   }
 
-  @mustCallSuper
   @override
   void render(Canvas canvas) {
     _textRenderer.render(canvas, text, Vector2.zero());

@@ -11,13 +11,13 @@ export '../nine_tile_box.dart';
 
 /// This class is a thin wrapper on top of [NineTileBox] as a component.
 class NineTileBoxComponent extends PositionComponent {
-  NineTileBox nineTileBox;
+  NineTileBox? nineTileBox;
 
   /// Takes the [NineTileBox] instance used to render this box.
   ///
   /// It uses the x, y, width and height coordinates from the [PositionComponent] to render.
-  NineTileBoxComponent(
-    this.nineTileBox, {
+  NineTileBoxComponent({
+    this.nineTileBox,
     Vector2? position,
     Vector2? size,
     Vector2? scale,
@@ -33,9 +33,17 @@ class NineTileBoxComponent extends PositionComponent {
           priority: priority,
         );
 
+  @override
+  void onMount() {
+    assert(
+      nineTileBox != null,
+      'The nineTileBox should be set either in the constructor or in onLoad',
+    );
+  }
+
   @mustCallSuper
   @override
   void render(Canvas c) {
-    nineTileBox.drawRect(c, size.toRect());
+    nineTileBox?.drawRect(c, size.toRect());
   }
 }

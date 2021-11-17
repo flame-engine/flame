@@ -68,6 +68,14 @@ class SpriteComponent extends PositionComponent with HasPaint {
           priority: priority,
         );
 
+  @override
+  void onMount() {
+    assert(
+      sprite != null,
+      'You have to set the sprite in either the constructor or in onLoad',
+    );
+  }
+
   @mustCallSuper
   @override
   void render(Canvas canvas) {
