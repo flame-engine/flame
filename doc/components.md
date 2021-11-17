@@ -8,7 +8,7 @@ This diagram might look intimidating, but don't worry, it is not as complex as i
 All components inherit from the abstract class `Component`.
 
 If you want to skip reading about abstract classes you can jump directly to
-[PositionComponent](#positioncomponent).
+[](#positioncomponent).
 
 Every `Component` has a few methods that you can optionally implement, which are used by the
 `FlameGame` class. If you are not using `FlameGame`, you can use these methods on your own game loop
@@ -90,15 +90,65 @@ class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
 
 ## PositionComponent
 
-This class represent a single object on the screen, being a floating rectangle or a rotating sprite.
+This class represent a positioned object on the screen, being a floating rectangle or a rotating
+sprite. It can also represent a group of positioned components if children are added to it.
 
-A `PositionComponent` has a `position`, `size` and `angle`, as well as some useful methods like
-`distance` and `angleBetween`.
+The base of the `PositionComponent` is that it has a `position`, `size`, `scale`, `angle` and
+`anchor` which transforms how the component is rendered.
+
+### Position
+
+The `position` is just a `Vector2` which represents the position of the component in relation to its
+parent, if the parent is a `FlameGame` it is in relation to the viewport.
+
+### Size
+
+The `size` is the size of the component when the zoom level of the camera is 1.0 (no zoom, default).
+The `size` is not set in relation to the parent of the component.its
+
+### Scale
+
+The `scale` is how much the component and its children should be scaled and since it is represented
+by a `Vector2` you can scale in uniform way by changing `x` and `y` with the same amount, if you
+want to scale in a non-uniform way, change `x` or `y` more than the other.
+
+### Angle
+
+The `angle` is the angle represented as a double in radians and it is relative to the parents angle.
+
+### Anchor
+
+The `anchor` is where on the component that the position and rotation should be defined from (the
+default is `Anchor.topLeft`). So if you have the anchor set as `Anchor.center` the component's
+position on the screen will be in the center of the component and if an `angle` is applied, it is
+rotated around the anchor, so in this case around the center of the component.
+
+### PositionComponent children
+
+All children of the `PositionComponent` will be transformed in relation to the parent, which means
+that the `position`, `angle` and `scale` will be relative to the parents state.
+So if you for example want to position a child 50 logical pixels above the center of the parent you
+would do this:
+
+```
+final parent = PositionComponent(
+  position: Vector2(100, 100),
+  size: Vector2(100, 100),
+  anchor: Anchor.center,
+);
+final child = PositionComponent(position: Vector2(0, -50));
+parent.add(child);
+```
+
+Remember that almost all components that are rendered on the screen are `PositionComponent`s, so
+this pattern can be used in for example [](#spritecomponent) and [](#spriteanimationcomponent) too.
+
+### Render PositionComponent
 
 When implementing the `render` method for a component that extends `PositionComponent` remember to
 render from the top left corner (0.0). Your render method should not handle where on the screen your
 component should be rendered. To handle where and how your component should be rendered use the
-`position`, `angle` and `anchor` properties and flame will automatically handle the rest for you.
+`position`, `angle` and `anchor` properties and Flame will automatically handle the rest for you.
 
 If you want to know where on the screen the bounding box of the component is you can use the
 `toRect` method.
@@ -307,9 +357,9 @@ For a working example, check the example in the
 
 ## ParallaxComponent
 
-This `Component` can be used to render backgrounds with a depth feeling by drawing several transparent
-images on top of each other, where each image or animation (`ParallaxRenderer`) is moving with a
-different velocity.
+This `Component` can be used to render backgrounds with a depth feeling by drawing several
+transparent images on top of each other, where each image or animation (`ParallaxRenderer`) is
+moving with a different velocity.
 
 The rationale is that when you look at the horizon and moving, closer objects seem to move faster
 than distant ones.
