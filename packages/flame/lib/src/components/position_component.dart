@@ -285,8 +285,9 @@ class PositionComponent extends Component {
   void flipHorizontallyAroundCenter() {
     if (_anchor.x != 0.5) {
       final delta = (1 - 2 * _anchor.x) * width;
-      transform.x += delta * math.cos(transform.angle);
-      transform.y += delta * math.sin(transform.angle);
+      final scale = transform.scale;
+      transform.x += delta * math.cos(transform.angle) * scale.x.sign;
+      transform.y += delta * math.sin(transform.angle) * scale.y.sign;
     }
     transform.flipHorizontally();
   }
@@ -295,8 +296,9 @@ class PositionComponent extends Component {
   void flipVerticallyAroundCenter() {
     if (anchor.y != 0.5) {
       final delta = (1 - 2 * _anchor.y) * height;
-      transform.x += -delta * math.sin(transform.angle);
-      transform.y += delta * math.cos(transform.angle);
+      final scale = transform.scale;
+      transform.x += -delta * math.sin(transform.angle) * scale.x.sign;
+      transform.y += delta * math.cos(transform.angle) * scale.y.sign;
     }
     transform.flipVertically();
   }

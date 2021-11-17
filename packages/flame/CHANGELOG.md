@@ -33,6 +33,7 @@
  - Removed methods `preRender()` and `postRender()` in `Component`
  - Use `FlameTester` everywhere where it makes sense in the tests
  - Improved `IsometricTileMap`
+ - Fix `PositionComponent`'s `flipHorizontallyAroundCenter` and `flipVerticallyAroundCenter`
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
