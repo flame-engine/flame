@@ -9,7 +9,11 @@ import 'package:flame/sprite.dart';
 import 'package:flame/timer.dart' as flame_timer;
 import 'package:flutter/material.dart' hide Image;
 
-class ParticlesGame extends FlameGame with FPSCounter {
+class ParticlesExample extends FlameGame with FPSCounter {
+  static const String description = '''
+    In this example we show how to render a lot of different particles.
+  ''';
+
   /// Defines dimensions of the sample
   /// grid to be displayed on the screen,
   /// 5x5 in this particular case
@@ -531,7 +535,7 @@ class ParticlesGame extends FlameGame with FPSCounter {
 Future<FlameGame> loadGame() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  return ParticlesGame();
+  return ParticlesExample();
 }
 
 /// A curve which maps sinus output (-1..1,0..pi)

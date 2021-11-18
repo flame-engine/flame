@@ -7,45 +7,29 @@ import 'package:flame/input.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart' hide Image;
 
-const x = 500.0;
-const y = 500.0;
-final topLeft = Vector2(x, y);
+class IsometricTileMapExample extends FlameGame with MouseMovementDetector {
+  static const String description = '''
+    Shows an example of how to use the `IsometricTileMapComponent`.\n\n
+    Move the mouse over the board to see a selector appearing on the tiles.
+  ''';
 
-const scale = 2.0;
-const srcTileSize = 32.0;
-const destTileSize = scale * srcTileSize;
+  final topLeft = Vector2.all(500);
 
-final originColor = Paint()..color = const Color(0xFFFF00FF);
-final originColor2 = Paint()..color = const Color(0xFFAA55FF);
+  static const scale = 2.0;
+  static const srcTileSize = 32.0;
+  static const destTileSize = scale * srcTileSize;
 
-const halfSize = true;
-const tileHeight = scale * (halfSize ? 8.0 : 16.0);
-const suffix = halfSize ? '-short' : '';
+  static const halfSize = true;
+  static const tileHeight = scale * (halfSize ? 8.0 : 16.0);
+  static const suffix = halfSize ? '-short' : '';
 
-class Selector extends SpriteComponent {
-  bool show = false;
+  final originColor = Paint()..color = const Color(0xFFFF00FF);
+  final originColor2 = Paint()..color = const Color(0xFFAA55FF);
 
-  Selector(double s, Image image)
-      : super(
-          sprite: Sprite(image, srcSize: Vector2.all(32.0)),
-          size: Vector2.all(s),
-        );
-
-  @override
-  void render(Canvas canvas) {
-    if (!show) {
-      return;
-    }
-
-    super.render(canvas);
-  }
-}
-
-class IsometricTileMapGame extends FlameGame with MouseMovementDetector {
   late IsometricTileMapComponent base;
   late Selector selector;
 
-  IsometricTileMapGame();
+  IsometricTileMapExample();
 
   @override
   Future<void> onLoad() async {
@@ -69,9 +53,8 @@ class IsometricTileMapGame extends FlameGame with MouseMovementDetector {
         matrix,
         destTileSize: Vector2.all(destTileSize),
         tileHeight: tileHeight,
-      )
-        ..x = x
-        ..y = y,
+        position: topLeft,
+      ),
     );
 
     final selectorImage = await images.load('tile_maps/selector$suffix.png');
@@ -83,7 +66,7 @@ class IsometricTileMapGame extends FlameGame with MouseMovementDetector {
     super.render(canvas);
     canvas.renderPoint(topLeft, size: 5, paint: originColor);
     canvas.renderPoint(
-      Vector2(x, y - tileHeight),
+      topLeft.clone()..y -= tileHeight,
       size: 5,
       paint: originColor2,
     );
@@ -95,5 +78,24 @@ class IsometricTileMapGame extends FlameGame with MouseMovementDetector {
     final block = base.getBlock(screenPosition);
     selector.show = base.containsBlock(block);
     selector.position.setFrom(topLeft + base.getBlockRenderPosition(block));
+  }
+}
+
+class Selector extends SpriteComponent {
+  bool show = true;
+
+  Selector(double s, Image image)
+      : super(
+          sprite: Sprite(image, srcSize: Vector2.all(32.0)),
+          size: Vector2.all(s),
+        );
+
+  @override
+  void render(Canvas canvas) {
+    if (!show) {
+      return;
+    }
+
+    super.render(canvas);
   }
 }

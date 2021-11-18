@@ -1,39 +1,22 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
-import 'package:flame_example/stories/utils/without_flamegame.dart';
 
 import '../../commons/commons.dart';
-import 'nine_tile_box.dart';
-import 'particles.dart';
 import 'timer.dart';
 import 'timer_component.dart';
 
 void addUtilsStories(Dashbook dashbook) {
   dashbook.storiesOf('Utils')
     ..add(
-      'Nine Tile Box',
-      (_) => GameWidget(game: NineTileBoxGame()),
-      codeLink: baseLink('utils/nine_tile_box.dart'),
-    )
-    ..add(
       'Timer',
-      (_) => GameWidget(game: TimerGame()),
+      (_) => GameWidget(game: TimerExample()),
       codeLink: baseLink('utils/timer.dart'),
+      info: TimerExample.description,
     )
     ..add(
       'Timer Component',
-      (_) => GameWidget(game: TimerComponentGame()),
+      (_) => GameWidget(game: TimerComponentExample()),
       codeLink: baseLink('utils/timer_component.dart'),
-    )
-    ..add(
-      'Particles',
-      (_) => GameWidget(game: ParticlesGame()),
-      codeLink: baseLink('utils/particles.dart'),
-    )
-    ..add(
-      'Without FlameGame',
-      (_) => GameWidget(game: NoFlameGameExample()),
-      codeLink: baseLink('utils/without_flamegame.dart'),
-      info: NoFlameGameExample.description,
+      info: TimerComponentExample.description,
     );
 }

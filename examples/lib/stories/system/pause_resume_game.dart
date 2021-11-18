@@ -2,15 +2,18 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
-class PauseResumeGame extends FlameGame with TapDetector, DoubleTapDetector {
-  static const info = '''
-      Demonstrate how to use the pause and resume engine methods and paused attribute.
+class PauseResumeExample extends FlameGame with TapDetector, DoubleTapDetector {
+  static const description = '''
+    Demonstrate how to use the pause and resume engine methods and paused
+    attribute.
 
-      Tap on the screen to toggle the execution of the engine using the `resumeEngine` and
-      `pauseEngine`
+    Tap on the screen to toggle the execution of the engine using the
+    `resumeEngine` and `pauseEngine`.
 
-      Double Tap on the screen to toggle the execution of the engine using the `paused` attribute
+    Double Tap on the screen to toggle the execution of the engine using the
+    `paused` attribute.
   ''';
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
