@@ -174,7 +174,7 @@ class AnimationSelection extends BaseSelection {
 ///
 /// Use [getSprite] and [getAnimation] to retrieve mapped assets.
 class FireAtlas {
-  /// Id of the FireAtlas.
+  /// Id of the FireAtlas, mainly used by the Fire Atlas Editor for file identification.
   String id;
 
   /// The width of the tile.
@@ -263,7 +263,7 @@ class FireAtlas {
     return atlas;
   }
 
-  /// Load the [FireAtlas] from an asset.
+  /// Loads the [FireAtlas] from an asset.
   static Future<FireAtlas> loadAsset(
     String fileName, {
     AssetsCache? assets,
