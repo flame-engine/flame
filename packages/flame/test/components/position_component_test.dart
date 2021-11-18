@@ -404,6 +404,51 @@ void main() {
       expect(component.positionOf(Vector2(10, 0)), Vector2(44, 22));
     });
 
+    test('double center flips', () {
+      final startPosition = Vector2(50, 20);
+      final component = PositionComponent()
+        ..size = Vector2(10, 20)
+        ..position = startPosition;
+      final centerPosition = component.center;
+
+      component.flipVerticallyAroundCenter();
+      // Same position after one vertical flip.
+      expectVector2(component.center, centerPosition);
+
+      component.flipVerticallyAroundCenter();
+      // Same position after flipping back the vertical flip.
+      expectVector2(component.center, centerPosition);
+
+      component.flipHorizontallyAroundCenter();
+      // Same position after one horizontal flip.
+      expectVector2(component.center, centerPosition);
+
+      component.flipHorizontallyAroundCenter();
+      // Same position after flipping back the horizontal flip.
+      expectVector2(component.center, centerPosition);
+
+      component.flipVerticallyAroundCenter();
+      component.flipHorizontallyAroundCenter();
+      // Same position after flipping both vertically and horizontally.
+      expectVector2(component.center, centerPosition);
+
+      component.flipVerticallyAroundCenter();
+      component.flipHorizontallyAroundCenter();
+      // Same position after flipping back both vertically and horizontally.
+      expectVector2(component.center, centerPosition);
+
+      component.flipHorizontallyAroundCenter();
+      component.flipVerticallyAroundCenter();
+      // Same position after flipping both horizontally and vertically.
+      expectVector2(component.center, centerPosition);
+
+      component.flipVerticallyAroundCenter();
+      component.flipHorizontallyAroundCenter();
+      // Same position after flipping back both horizontally and vertically in
+      // the reverse order.
+      expectVector2(component.center, centerPosition);
+    });
+
     test('rotations', () {
       final component = PositionComponent()
         ..size = Vector2(8, 6)
