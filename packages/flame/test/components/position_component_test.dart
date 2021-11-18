@@ -408,6 +408,8 @@ void main() {
       final startPosition = Vector2(50, 20);
       final component = PositionComponent()
         ..size = Vector2(10, 20)
+        ..angle = 2
+        ..scale = Vector2(2.0, 3.0)
         ..position = startPosition;
       final centerPosition = component.center;
 
