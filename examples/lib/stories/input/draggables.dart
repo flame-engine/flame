@@ -2,11 +2,33 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame_example/commons/ember.dart';
 import 'package:flutter/material.dart' show Colors;
+
+class DraggablesExample extends FlameGame with HasDraggables {
+  static const String description = '''
+    In this example we show you can use the `Draggable` mixin on
+    `PositionComponent`s. Drag around the Embers and see their position
+    changing.
+  ''';
+
+  final double zoom;
+  late final DraggableSquare square;
+
+  DraggablesExample({required this.zoom});
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    camera.zoom = zoom;
+    add(square = DraggableSquare());
+    add(DraggableSquare()..y = 350);
+  }
+}
 
 // Note: this component does not consider the possibility of multiple
 // simultaneous drags with different pointerIds.
-class DraggableSquare extends PositionComponent with Draggable, HasGameRef {
+class DraggableSquare extends Ember with Draggable {
   @override
   bool debugMode = true;
 
@@ -56,20 +78,5 @@ class DraggableSquare extends PositionComponent with Draggable, HasGameRef {
   bool onDragCancel(int pointerId) {
     dragDeltaPosition = null;
     return false;
-  }
-}
-
-class DraggablesExample extends FlameGame with HasDraggables {
-  final double zoom;
-  late final DraggableSquare square;
-
-  DraggablesExample({required this.zoom});
-
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    camera.zoom = zoom;
-    add(square = DraggableSquare());
-    add(DraggableSquare()..y = 350);
   }
 }

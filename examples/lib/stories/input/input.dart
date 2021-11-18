@@ -28,6 +28,7 @@ void addInputStories(Dashbook dashbook) {
       'Mouse Movement',
       (_) => GameWidget(game: MouseMovementExample()),
       codeLink: baseLink('input/mouse_movement.dart'),
+      info: MouseMovementExample.description,
     )
     ..add(
       'Mouse Cursor',
@@ -42,26 +43,31 @@ void addInputStories(Dashbook dashbook) {
       'Scroll',
       (_) => GameWidget(game: ScrollExample()),
       codeLink: baseLink('input/scroll.dart'),
+      info: ScrollExample.description,
     )
     ..add(
       'Multitap',
       (_) => GameWidget(game: MultitapExample()),
       codeLink: baseLink('input/multitap.dart'),
+      info: MultitapExample.description,
     )
     ..add(
       'Multitap Advanced',
       (_) => GameWidget(game: MultitapAdvancedExample()),
       codeLink: baseLink('input/multitap_advanced.dart'),
+      info: MultitapAdvancedExample.description,
     )
     ..add(
       'Tappables',
       (_) => GameWidget(game: TappablesExample()),
       codeLink: baseLink('input/tappables.dart'),
+      info: TappablesExample.description,
     )
     ..add(
-      'Overlaping Tappables',
+      'Overlapping Tappables',
       (_) => GameWidget(game: OverlappingTappablesExample()),
-      codeLink: baseLink('input/overlaping_tappables.dart'),
+      codeLink: baseLink('input/overlapping_tappables.dart'),
+      info: OverlappingTappablesExample.description,
     )
     ..add(
       'Draggables',
@@ -73,6 +79,7 @@ void addInputStories(Dashbook dashbook) {
         );
       },
       codeLink: baseLink('input/draggables.dart'),
+      info: DraggablesExample.description,
     )
     ..add(
       'Hoverables',
@@ -84,10 +91,12 @@ void addInputStories(Dashbook dashbook) {
       'Joystick',
       (_) => GameWidget(game: JoystickExample()),
       codeLink: baseLink('input/joystick.dart'),
+      info: JoystickExample.description,
     )
     ..add(
       'Joystick Advanced',
       (_) => GameWidget(game: JoystickAdvancedExample()),
       codeLink: baseLink('input/joystick_advanced.dart'),
+      info: JoystickAdvancedExample.description,
     );
 }

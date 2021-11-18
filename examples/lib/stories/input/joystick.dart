@@ -7,6 +7,12 @@ import 'package:flutter/painting.dart';
 import 'joystick_player.dart';
 
 class JoystickExample extends FlameGame with HasDraggables {
+  static const String description = '''
+    In this example we showcase how to use the joystick by creating simple
+    `CircleComponent`s that serve as the joystick's knob and background.
+    Steer the player by using the joystick.
+  ''';
+
   late final JoystickPlayer player;
   late final JoystickComponent joystick;
 

@@ -1,5 +1,6 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
+import 'package:flame_example/stories/utils/without_flamegame.dart';
 
 import '../../commons/commons.dart';
 import 'nine_tile_box.dart';
@@ -28,5 +29,11 @@ void addUtilsStories(Dashbook dashbook) {
       'Particles',
       (_) => GameWidget(game: ParticlesGame()),
       codeLink: baseLink('utils/particles.dart'),
+    )
+    ..add(
+      'Without FlameGame',
+      (_) => GameWidget(game: NoFlameGameExample()),
+      codeLink: baseLink('utils/without_flamegame.dart'),
+      info: NoFlameGameExample.description,
     );
 }

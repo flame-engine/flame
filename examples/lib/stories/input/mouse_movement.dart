@@ -5,6 +5,12 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 class MouseMovementExample extends FlameGame with MouseMovementDetector {
+  static const String description = '''
+    In this example we show how you can use `MouseMovementDetector`.\n\n
+    Move around the mouse on the canvas and the white square will follow it and
+    turn into blue if it reaches the mouse, or the edge of the canvas.
+  ''';
+
   static const speed = 200;
   static final Paint _blue = BasicPalette.blue.paint();
   static final Paint _white = BasicPalette.white.paint();

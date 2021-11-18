@@ -7,6 +7,12 @@ import 'package:flutter/material.dart';
 /// Showcases how to mix two advanced detectors
 class MultitapAdvancedExample extends FlameGame
     with MultiTouchTapDetector, MultiTouchDragDetector {
+  static const String description = '''
+    This showcases the use of both `MultiTouchTapDetector` and
+    `MultiTouchDragDetector` simultaneously. Drag multiple fingers on the screen
+    to see rectangles of different sizes being drawn.
+  ''';
+
   static final whitePaint = BasicPalette.white.paint();
   static final tapSize = Vector2.all(50);
 

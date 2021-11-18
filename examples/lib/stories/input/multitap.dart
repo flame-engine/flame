@@ -6,6 +6,12 @@ import 'package:flutter/material.dart';
 
 /// Includes an example including advanced detectors
 class MultitapExample extends FlameGame with MultiTouchTapDetector {
+  static const String description = '''
+    In this example we showcase the multi touch capabilities
+    Touch multiple places on the screen and you will see multiple squares drawn,
+    one under each finger.
+  ''';
+
   static final whitePaint = BasicPalette.white.paint();
   static final tapSize = Vector2.all(50);
 

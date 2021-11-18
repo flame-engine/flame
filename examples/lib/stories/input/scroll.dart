@@ -5,6 +5,12 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 class ScrollExample extends FlameGame with ScrollDetector {
+  static const String description = '''
+    In this example we show how to use the `ScrollDetector`.\n\n
+    Scroll within the canvas (both horizontally and vertically) and the white
+    square will move around.
+  ''';
+
   static const speed = 2000.0;
   final _size = Vector2.all(50);
   final _paint = BasicPalette.white.paint();

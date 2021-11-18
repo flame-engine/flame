@@ -14,6 +14,16 @@ import 'joystick_player.dart';
 
 class JoystickAdvancedExample extends FlameGame
     with HasDraggables, HasTappables {
+  static const String description = '''
+    In this example we showcase how to use the joystick by creating 
+    `SpriteComponent`s that serve as the joystick's knob and background.
+    We also showcase the `HudButtonComponent` which is a button that has its
+    position defined by margins to the edges, which can be useful when making
+    controller buttons.\n\n
+    Steer the player by using the joystick and flip and rotate it by pressing
+    the buttons.
+  ''';
+
   late final JoystickPlayer player;
   late final JoystickComponent joystick;
   late final TextComponent speedText;

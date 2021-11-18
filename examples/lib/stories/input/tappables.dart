@@ -3,6 +3,21 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
+class TappablesExample extends FlameGame with HasTappables {
+  static const String description = '''
+    In this example we show the `Tappable` mixin functionality. You can add the
+    `Tappable` mixin to any `PositionComponent`.\n\n
+    Tap the squares to see them change their angle around their anchor.
+  ''';
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    add(TappableSquare()..anchor = Anchor.center);
+    add(TappableSquare()..y = 350);
+  }
+}
+
 class TappableSquare extends PositionComponent with Tappable {
   static final Paint _white = Paint()..color = const Color(0xFFFFFFFF);
   static final Paint _grey = Paint()..color = const Color(0xFFA5A5A5);
@@ -37,14 +52,5 @@ class TappableSquare extends PositionComponent with Tappable {
   bool onTapCancel() {
     _beenPressed = false;
     return true;
-  }
-}
-
-class TappablesExample extends FlameGame with HasTappables {
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    add(TappableSquare()..anchor = Anchor.center);
-    add(TappableSquare()..y = 350);
   }
 }
