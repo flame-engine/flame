@@ -39,15 +39,15 @@ mixin Hoverable on Component {
     if (isPrepared) {
       final parentGame = findParent<FlameGame>();
       assert(
-        parentGame is HasHoverableComponents,
+        parentGame is HasHoverables,
         'Hoverable Components can only be added to a FlameGame with '
-        'HasHoverableComponents',
+        'HasHoverables',
       );
     }
   }
 }
 
-mixin HasHoverableComponents on FlameGame {
+mixin HasHoverables on FlameGame {
   @mustCallSuper
   void onMouseMove(PointerHoverInfo info) {
     bool _mouseMoveHandler(Hoverable c) {

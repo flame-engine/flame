@@ -25,9 +25,17 @@
  - `TextPaint` to use `TextStyle` (material) instead of `TextPaintConfig`
  - Underlying `Shape`s in `ShapeComponent` transform with components position, size and angle
  - `HitboxShape` takes parents ancestors transformations into consideration (not scaling)
+ - Fixed black frame when updating game widget (ex: adding overlays)
+ - Added possibility to extend `JoystickComponent`
  - Renamed `FlameTester` to `GameTester`
  - Modified `FlameTester` to be specific for `T extends FlameGame`
  - Improved `TimerComponent`
+ - Removed methods `preRender()` and `postRender()` in `Component`
+ - Use `FlameTester` everywhere where it makes sense in the tests
+ - Improved `IsometricTileMap`
+ - Rename `HasTappableComponents` to `HasTappables`
+ - Rename `HasDraggableComponents` to `HasDraggables`
+ - Rename `HasHoverableComponents` to `HasHoverableis`
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration

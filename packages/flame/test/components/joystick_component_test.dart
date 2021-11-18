@@ -5,21 +5,19 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:test/test.dart';
 
-class TestGame extends FlameGame with HasDraggableComponents {}
-
-final testGame = FlameTester(() => TestGame());
+class _GameHasDraggables extends FlameGame with HasDraggables {}
 
 void main() {
+  final withDraggables = FlameTester(() => _GameHasDraggables());
+
   group('JoystickDirection tests', () {
-    test('Can convert angle to JoystickDirection', () {
+    withDraggables.test('can convert angle to JoystickDirection', (game) async {
       final joystick = JoystickComponent(
         knob: CircleComponent(radius: 5.0),
         size: 20,
         margin: const EdgeInsets.only(left: 20, bottom: 20),
       );
-      final game = TestGame()..onGameResize(Vector2.all(200));
-      game.add(joystick);
-      game.update(0);
+      await game.ensureAdd(joystick);
 
       expect(joystick.direction, JoystickDirection.idle);
       joystick.delta.setValues(1.0, 0.0);
@@ -42,7 +40,7 @@ void main() {
   });
 
   group('Joystick input tests', () {
-    testGame.test(
+    withDraggables.test(
       'knob should stay on correct side when the total delta is larger than the size and then the knob is moved slightly back again',
       (game) async {
         final joystick = JoystickComponent(
@@ -52,7 +50,7 @@ void main() {
         );
         await game.add(joystick);
         game.update(0);
-        expectVector2(joystick.knob.position, Vector2(10, 10));
+        expectVector2(joystick.knob!.position, Vector2(10, 10));
         // Start dragging the joystick
         game.onDragStart(
           1,
@@ -78,7 +76,7 @@ void main() {
           ),
         );
         game.update(0);
-        expectVector2(joystick.knob.position, Vector2(20, 10));
+        expectVector2(joystick.knob!.position, Vector2(20, 10));
         // Drag the knob back towards it's base position
         game.onDragUpdate(
           1,
@@ -92,7 +90,7 @@ void main() {
           ),
         );
         game.update(0);
-        expectVector2(joystick.knob.position, Vector2(20, 10));
+        expectVector2(joystick.knob!.position, Vector2(20, 10));
       },
     );
   });

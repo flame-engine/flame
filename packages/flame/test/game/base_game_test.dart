@@ -10,20 +10,23 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart' as flutter;
 import 'package:flutter_test/flutter_test.dart';
 
-class MyGame extends FlameGame with HasTappableComponents {}
+class _GameWithTappables extends FlameGame with HasTappables {}
 
-class MyComponent extends PositionComponent with Tappable, HasGameRef {
+class _MyTappableComponent extends _MyComponent with Tappable {
   bool tapped = false;
-  bool isUpdateCalled = false;
-  bool isRenderCalled = false;
-  int onRemoveCallCounter = 0;
-  late Vector2 gameSize;
 
   @override
   bool onTapDown(_) {
     tapped = true;
     return true;
   }
+}
+
+class _MyComponent extends PositionComponent with HasGameRef {
+  bool isUpdateCalled = false;
+  bool isRenderCalled = false;
+  int onRemoveCallCounter = 0;
+  late Vector2 gameSize;
 
   @override
   void update(double dt) {
@@ -52,7 +55,7 @@ class MyComponent extends PositionComponent with Tappable, HasGameRef {
   }
 }
 
-class MyAsyncComponent extends MyComponent {
+class _MyAsyncComponent extends _MyComponent {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -60,74 +63,51 @@ class MyAsyncComponent extends MyComponent {
   }
 }
 
-class PositionComponentNoNeedForRect extends PositionComponent with Tappable {}
-
-Vector2 size = Vector2(1.0, 1.0);
-
 void main() {
+  final withTappables = FlameTester(() => _GameWithTappables());
+
   group('FlameGame test', () {
-    test('adds the component to the component list', () {
-      final game = MyGame();
-      final component = MyComponent();
-
-      game.onGameResize(size);
-      game.add(component);
-      // runs a cycle to add the component
-      game.update(0.1);
-
-      expect(true, game.children.contains(component));
-    });
-
-    test(
-      'when the component has onLoad function, adds after load completion',
-      () async {
-        final game = MyGame();
-        final component = MyAsyncComponent();
-
-        game.onGameResize(size);
-        await game.add(component);
-        // runs a cycle to add the component
-        game.update(0.1);
+    flameGame.test(
+      'adds the component to the component list',
+      (game) async {
+        final component = Component();
+        await game.ensureAdd(component);
 
         expect(true, game.children.contains(component));
+      },
+    );
 
-        expect(component.gameSize, size);
+    withTappables.test(
+      'when the component has onLoad function, adds after load completion',
+      (game) async {
+        final component = _MyAsyncComponent();
+        await game.ensureAdd(component);
+
+        expect(true, game.children.contains(component));
+        expect(component.gameSize, game.size);
         expect(component.gameRef, game);
       },
     );
 
-    test('prepare adds gameRef and calls onGameResize', () {
-      final game = MyGame();
-      final component = MyComponent();
+    flameGame.test('prepare adds gameRef and calls onGameResize', (game) async {
+      final component = _MyComponent();
+      await game.ensureAdd(component);
 
-      game.onGameResize(size);
-      game.add(component);
-
-      expect(component.gameSize, size);
+      expect(component.gameSize, game.size);
       expect(component.gameRef, game);
     });
 
-    test('component can be tapped', () {
-      final game = MyGame();
-      final component = MyComponent();
-
-      game.onGameResize(size);
-      game.add(component);
-      // The component is not added to the component list until an update has been performed
-      game.update(0.0);
+    withTappables.test('component can be tapped', (game) async {
+      final component = _MyTappableComponent();
+      await game.ensureAdd(component);
       game.onTapDown(1, createTapDownEvent(game));
 
       expect(component.tapped, true);
     });
 
-    test('component is added to component list', () {
-      final game = MyGame();
-      final component = MyComponent();
-
-      game.onGameResize(size);
-      game.add(component);
-      // The component is not added to the component list until an update has been performed
-      game.update(0.0);
+    flameGame.test('component is added to component list', (game) async {
+      final component = _MyComponent();
+      await game.ensureAdd(component);
 
       expect(game.children.contains(component), true);
     });
@@ -135,10 +115,10 @@ void main() {
     flutter.testWidgets(
       'component render and update is called',
       (flutter.WidgetTester tester) async {
-        final game = MyGame();
-        final component = MyComponent();
+        final game = FlameGame();
+        final component = _MyComponent();
 
-        game.onGameResize(size);
+        game.onGameResize(Vector2.zero());
         game.add(component);
         late GameRenderBox renderBox;
         await tester.pumpWidget(
@@ -161,14 +141,10 @@ void main() {
       },
     );
 
-    test('onRemove is only called once on component', () {
-      final game = MyGame();
-      final component = MyComponent();
+    flameGame.test('onRemove is only called once on component', (game) async {
+      final component = _MyComponent();
 
-      game.onGameResize(size);
-      game.add(component);
-      // The component is not added to the component list until an update has been performed
-      game.update(0.0);
+      await game.ensureAdd(component);
       // The component is removed both by removing it on the game instance and
       // by the function on the component, but the onRemove callback should
       // only be called once.
@@ -181,12 +157,9 @@ void main() {
     });
   });
 
-  test('remove depend SpriteComponent.shouldRemove', () {
-    final game = MyGame()..onGameResize(size);
-
+  flameGame.test('remove depend SpriteComponent.shouldRemove', (game) async {
     // addLater here
-    game.add(SpriteComponent()..shouldRemove = true);
-    game.update(0);
+    await game.ensureAdd(SpriteComponent()..shouldRemove = true);
     expect(game.children.length, equals(1));
 
     // remove effected here
@@ -194,25 +167,20 @@ void main() {
     expect(game.children.isEmpty, equals(true));
   });
 
-  test('remove depend SpriteAnimationComponent.shouldRemove', () {
-    final game = MyGame()..onGameResize(size);
-    game.add(SpriteAnimationComponent()..shouldRemove = true);
-    game.update(0);
-    expect(game.children.length, equals(1));
+  flameGame.test(
+    'remove depend SpriteAnimationComponent.shouldRemove',
+    (game) async {
+      await game.ensureAdd(SpriteAnimationComponent()..shouldRemove = true);
+      expect(game.children.length, equals(1));
 
-    game.update(0);
-    expect(game.children.isEmpty, equals(true));
-  });
+      game.update(0);
+      expect(game.children.isEmpty, equals(true));
+    },
+  );
 
-  test('clear removes all components', () {
-    final game = MyGame();
-    final components = List.generate(3, (index) => MyComponent());
-
-    game.onGameResize(size);
-    game.addAll(components);
-
-    // The components are not added to the component list until an update has been performed
-    game.update(0.0);
+  flameGame.test('clear removes all components', (game) async {
+    final components = List.generate(3, (index) => Component());
+    await game.ensureAddAll(components);
     expect(game.children.length, equals(3));
 
     game.children.clear();
@@ -224,8 +192,8 @@ void main() {
   });
 
   test("can't add a component to a game that don't have layout yet", () {
-    final game = MyGame();
-    final component = MyComponent();
+    final game = FlameGame();
+    final component = Component();
 
     const message = '"prepare/add" called before the game is ready. '
         'Did you try to access it on the Game constructor? '
