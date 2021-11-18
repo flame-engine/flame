@@ -117,7 +117,9 @@ linter:
     - unnecessary_lambdas
     - unnecessary_new
     - unnecessary_null_aware_assignments
+    - unnecessary_null_checks
     - unnecessary_null_in_if_null_operators
+    - unnecessary_nullable_for_final_variable_declarations
     - unnecessary_overrides
     - unnecessary_parenthesis
     - unnecessary_raw_strings
@@ -131,4 +133,6 @@ linter:
     - use_function_type_syntax_for_parameters
     - use_is_even_rather_than_modulo
     - use_rethrow_when_possible
+    - use_test_throws_matchers
+    - valid_regexps
     - void_checks
