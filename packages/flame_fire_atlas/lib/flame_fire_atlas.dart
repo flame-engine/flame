@@ -64,7 +64,9 @@ class Selection {
 }
 
 /// {@template _base_selection}
-/// Base class for all FireAtlas selections.
+/// Base class for all FireAtlas selections, containing information for a section of the image.
+///
+/// Check [SpriteSelection] for [Sprite] based selections, and [AnimationSelection] for [SpriteAnimation] based selections.
 /// {@endtemplate}
 abstract class BaseSelection {
   final Selection _info;
@@ -109,7 +111,7 @@ class SpriteSelection extends BaseSelection {
     required Selection info,
   }) : super(info);
 
-  /// Creates a [SpriteSelection] from [json]
+  /// Creates a [SpriteSelection] from [json].
   @override
   factory SpriteSelection.fromJson(Map<String, dynamic> json) {
     final info = Selection.fromJson(json);
@@ -187,7 +189,7 @@ class FireAtlas {
 
   /// Creates a FireAtlas instance.
   ///
-  /// This constructor is often used internally, to load a FireAtlas instance into you game
+  /// This constructor is often used internally; to load a FireAtlas instance into you game,
   /// check [loadAsset].
   FireAtlas({
     required this.id,
@@ -261,7 +263,7 @@ class FireAtlas {
     return atlas;
   }
 
-  /// Load the FireAtlas from an asset.
+  /// Load the [FireAtlas] from an asset.
   static Future<FireAtlas> loadAsset(
     String fileName, {
     AssetsCache? assets,
@@ -288,7 +290,7 @@ class FireAtlas {
     return gzipBytes;
   }
 
-  /// Reads a FireAtlas instance from a byte array.
+  /// Reads a [FireAtlas] instance from a byte array.
   static FireAtlas deserialize(List<int> bytes) {
     final unzipedBytes = GZipDecoder().decodeBytes(bytes);
     final unzipedString = utf8.decode(unzipedBytes);
