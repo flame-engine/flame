@@ -44,11 +44,11 @@ class StandardEffectController extends EffectController {
     this.atMaxDuration = 0.0,
     this.atMinDuration = 0.0,
   })  : assert(
-          infinite ? repeatCount == null : true,
+          !infinite || repeatCount == null,
           'An infinite animation cannot have a repeat count',
         ),
         assert(
-          !infinite ? (repeatCount ?? 1) > 0 : true,
+          infinite || (repeatCount ?? 1) > 0,
           'repeatCount must be positive',
         ),
         assert(duration > 0, 'duration must be positive'),

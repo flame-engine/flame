@@ -6,14 +6,10 @@ import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
-  try {
-    WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
-    final game = ExampleGame();
-    runApp(GameWidget(game: game));
-  } catch (e) {
-    print(e);
-  }
+  final game = ExampleGame();
+  runApp(GameWidget(game: game));
 }
 
 class ExampleGame extends FlameGame with TapDetector {

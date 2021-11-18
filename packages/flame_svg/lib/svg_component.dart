@@ -4,9 +4,12 @@ import 'package:flame/components.dart';
 
 import './svg.dart';
 
+/// Wraps [Svg] in a Flame component.
 class SvgComponent extends PositionComponent {
+  /// The wrapped instance of [Svg].
   Svg svg;
 
+  /// Creates an [SvgComponent] from an [Svg] instance.
   SvgComponent.fromSvg(
     this.svg, {
     Vector2? position,
