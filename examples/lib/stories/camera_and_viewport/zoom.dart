@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
-class ZoomGame extends FlameGame with ScrollDetector, ScaleDetector {
+class ZoomExample extends FlameGame with ScrollDetector, ScaleDetector {
   static const String description = '''
     On web: use scroll to zoom in and out.\n
     On mobile: use scale gesture to zoom in and out.
@@ -13,7 +13,7 @@ class ZoomGame extends FlameGame with ScrollDetector, ScaleDetector {
 
   Vector2? lastScale;
 
-  ZoomGame({
+  ZoomExample({
     required this.viewportResolution,
   });
 

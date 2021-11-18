@@ -11,7 +11,7 @@ import 'package:flutter/widgets.dart';
 /// A game that allows for camera control and displays Tap, Drag & Scroll
 /// events information on the screen, to allow exploration of the 3 coordinate
 /// systems of Flame (global, widget, game).
-class CoordinateSystemsGame extends FlameGame
+class CoordinateSystemsExample extends FlameGame
     with
         MultiTouchTapDetector,
         MultiTouchDragDetector,
@@ -190,7 +190,7 @@ class _CoordinateSystemsState extends State<CoordinateSystemsWidget> {
             children: [
               ...createBlocks(index: 1, rotated: true, start: true),
               Expanded(
-                child: GameWidget(game: CoordinateSystemsGame()),
+                child: GameWidget(game: CoordinateSystemsExample()),
               ),
               ...createBlocks(index: 2, rotated: true, start: false),
             ],

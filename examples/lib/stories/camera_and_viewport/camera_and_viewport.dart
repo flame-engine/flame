@@ -13,7 +13,7 @@ void addCameraAndViewportStories(Dashbook dashbook) {
       'Follow Object',
       (context) {
         return GameWidget(
-          game: CameraAndViewportGame(
+          game: CameraAndViewportExample(
             viewportResolution: Vector2(
               context.numberProperty('viewport width', 500),
               context.numberProperty('viewport height', 500),
@@ -22,13 +22,13 @@ void addCameraAndViewportStories(Dashbook dashbook) {
         );
       },
       codeLink: baseLink('camera_and_viewport/follow_object.dart'),
-      info: CameraAndViewportGame.description,
+      info: CameraAndViewportExample.description,
     )
     ..add(
       'Zoom',
       (context) {
         return GameWidget(
-          game: ZoomGame(
+          game: ZoomExample(
             viewportResolution: Vector2(
               context.numberProperty('viewport width', 500),
               context.numberProperty('viewport height', 500),
@@ -37,13 +37,13 @@ void addCameraAndViewportStories(Dashbook dashbook) {
         );
       },
       codeLink: baseLink('camera_and_viewport/zoom.dart'),
-      info: ZoomGame.description,
+      info: ZoomExample.description,
     )
     ..add(
       'Fixed Resolution viewport',
       (context) {
         return GameWidget(
-          game: FixedResolutionGame(
+          game: FixedResolutionExample(
             viewportResolution: Vector2(
               context.numberProperty('viewport width', 600),
               context.numberProperty('viewport height', 1024),
@@ -52,12 +52,12 @@ void addCameraAndViewportStories(Dashbook dashbook) {
         );
       },
       codeLink: baseLink('camera_and_viewport/fixed_resolution.dart'),
-      info: FixedResolutionGame.description,
+      info: FixedResolutionExample.description,
     )
     ..add(
       'Coordinate Systems',
       (context) => CoordinateSystemsWidget(),
       codeLink: baseLink('camera_and_viewport/coordinate_systems.dart'),
-      info: CoordinateSystemsGame.description,
+      info: CoordinateSystemsExample.description,
     );
 }
