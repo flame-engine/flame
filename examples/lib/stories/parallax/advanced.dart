@@ -20,8 +20,8 @@ class AdvancedParallaxGame extends FlameGame {
         velocityMultiplier: Vector2(e.value, 1.0),
       ),
     );
-    final parallax = ParallaxComponent.fromParallax(
-      Parallax(
+    final parallax = ParallaxComponent(
+      parallax: Parallax(
         await Future.wait(layers),
         baseVelocity: Vector2(20, 0),
       ),

@@ -1,14 +1,13 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter/gestures.dart';
 import 'package:test/test.dart';
 
-class _GameWithDraggables extends FlameGame with HasDraggableComponents {}
+class _GameHasDraggables extends FlameGame with HasDraggables {}
 
-class _GameWithoutDraggables extends FlameGame {}
-
-class DraggableComponent extends PositionComponent with Draggable {
+class _DraggableComponent extends PositionComponent with Draggable {
   bool hasStartedDragging = false;
 
   @override
@@ -19,42 +18,42 @@ class DraggableComponent extends PositionComponent with Draggable {
 }
 
 void main() {
-  group('draggables test', () {
-    test('make sure they cannot be added to invalid games', () async {
-      final game1 = _GameWithDraggables();
-      game1.onGameResize(Vector2.all(100));
-      // should be ok
-      await game1.add(DraggableComponent());
+  final withDraggables = FlameTester(() => _GameHasDraggables());
 
-      final game2 = _GameWithoutDraggables();
-      game2.onGameResize(Vector2.all(100));
+  group('Draggables', () {
+    withDraggables.test(
+      'make sure they can be added to game with HasDraggables',
+      (game) async {
+        await game.add(_DraggableComponent());
+      },
+    );
 
-      const message =
-          'Draggable Components can only be added to a FlameGame with '
-          'HasDraggableComponents';
+    flameGame.test(
+      'make sure they cannot be added to invalid games',
+      (game) async {
+        const message =
+            'Draggable Components can only be added to a FlameGame with '
+            'HasDraggables';
 
-      expect(
-        () => game2.add(DraggableComponent()),
-        throwsA(
-          predicate(
-            (e) => e is AssertionError && e.message == message,
+        expect(
+          () => game.add(_DraggableComponent()),
+          throwsA(
+            predicate(
+              (e) => e is AssertionError && e.message == message,
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
 
-    test('can be dragged', () async {
-      final game = _GameWithDraggables();
-      game.onGameResize(Vector2.all(100));
-      final component = DraggableComponent()
+    withDraggables.test('can be dragged', (game) async {
+      final component = _DraggableComponent()
         ..x = 10
         ..y = 10
         ..width = 10
         ..height = 10;
 
-      await game.add(component);
-      // So component is added
-      game.update(0.01);
+      await game.ensureAdd(component);
       game.onDragStart(
         1,
         DragStartInfo.fromDetails(
@@ -68,19 +67,16 @@ void main() {
       expect(component.hasStartedDragging, true);
     });
 
-    test('when the game has camera zoom, can be dragged', () async {
-      final game = _GameWithDraggables();
-      game.onGameResize(Vector2.all(100));
-      final component = DraggableComponent()
+    withDraggables.test('when the game has camera zoom, can be dragged',
+        (game) async {
+      final component = _DraggableComponent()
         ..x = 10
         ..y = 10
         ..width = 10
         ..height = 10;
 
-      await game.add(component);
+      await game.ensureAdd(component);
       game.camera.zoom = 1.5;
-      // So component is added
-      game.update(0.01);
       game.onDragStart(
         1,
         DragStartInfo.fromDetails(
@@ -94,20 +90,17 @@ void main() {
       expect(component.hasStartedDragging, true);
     });
 
-    test('when the game has a moved camera, dragging works', () async {
-      final game = _GameWithDraggables();
-      game.onGameResize(Vector2.all(100));
-      final component = DraggableComponent()
+    withDraggables.test('when the game has a moved camera, dragging works',
+        (game) async {
+      final component = _DraggableComponent()
         ..x = 50
         ..y = 50
         ..width = 10
         ..height = 10;
 
-      await game.add(component);
+      await game.ensureAdd(component);
       game.camera.zoom = 1.5;
       game.camera.snapTo(Vector2.all(50));
-      // So component is added
-      game.update(0.01);
       game.onDragStart(
         1,
         DragStartInfo.fromDetails(
@@ -122,18 +115,14 @@ void main() {
     });
   });
 
-  test('isDragged is changed', () async {
-    final game = _GameWithDraggables();
-    game.onGameResize(Vector2.all(100));
-    final component = DraggableComponent()
+  withDraggables.test('isDragged is changed', (game) async {
+    final component = _DraggableComponent()
       ..x = 10
       ..y = 10
       ..width = 10
       ..height = 10;
 
-    await game.add(component);
-    // So component is added
-    game.update(0.01);
+    await game.ensureAdd(component);
     expect(component.isDragged, false);
     game.onDragStart(
       1,

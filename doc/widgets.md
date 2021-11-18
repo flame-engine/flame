@@ -23,7 +23,7 @@ is expanded both ways.
 The `NineTileBox` widget implements a `Container` using that standard. This pattern is also
 implemented as a component in the `NineTileBoxComponent` so that you can add this feature directly
 to your `FlameGame`. To get to know more about this, check the component docs
-[here](components.md#nine-tile-box-component).
+[here](components.md#ninetileboxcomponent).
 
 Here you can find an example of how to use it (without using the `NineTileBoxComponent`):
 
