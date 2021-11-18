@@ -4,13 +4,17 @@ import 'package:flame/components.dart';
 
 import 'renderable_tile_map.dart';
 
+/// {@template _tiled_component}
 /// A Flame [Component] to render a Tiled TiledMap.
 ///
 /// It uses a preloaded [RenderableTiledMap] to batch rendering calls into
 /// Sprite Batches.
+/// {@endtemplate}
 class TiledComponent extends Component {
+  /// Map instance of this component.
   RenderableTiledMap tileMap;
 
+  /// {@macro _tiled_component}
   TiledComponent(this.tileMap);
 
   @override
@@ -18,6 +22,7 @@ class TiledComponent extends Component {
     tileMap.render(canvas);
   }
 
+  /// Loads a [TiledComponent] from a file.
   static Future<TiledComponent> load(
     String fileName,
     Vector2 destTileSize,
