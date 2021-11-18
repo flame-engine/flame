@@ -4,9 +4,35 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
+class CustomPainterExample extends FlameGame with TapDetector {
+  static const description = '''
+    Example demonstration of how to use the CustomPainterComponent.
+
+    On the screen you can see a component using a custom painter being
+    rendered on a FlameGame, and if you tap, that same painter is used to
+    show the happy face on a widget overlay.
+  ''';
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+
+    add(Player());
+  }
+
+  @override
+  void onTap() {
+    if (overlays.isActive('HappyFace')) {
+      overlays.remove('HappyFace');
+    } else {
+      overlays.add('HappyFace');
+    }
+  }
+}
+
 Widget customPainterBuilder(DashbookContext ctx) {
   return GameWidget(
-    game: CustomPainterGame(),
+    game: CustomPainterExample(),
     overlayBuilderMap: {
       'HappyFace': (context, game) {
         return Center(
@@ -82,7 +108,8 @@ class PlayerCustomPainter extends CustomPainter {
   }
 }
 
-class Player extends CustomPainterComponent with HasGameRef<CustomPainterGame> {
+class Player extends CustomPainterComponent
+    with HasGameRef<CustomPainterExample> {
   static const speed = 150;
 
   int direction = 1;
@@ -106,32 +133,6 @@ class Player extends CustomPainterComponent with HasGameRef<CustomPainterGame> {
     if ((x + width >= gameRef.size.x && direction > 0) ||
         (x <= 0 && direction < 0)) {
       direction *= -1;
-    }
-  }
-}
-
-class CustomPainterGame extends FlameGame with TapDetector {
-  static const info = '''
-      Example demonstration how to use the CustomPainterComponent.
-
-      On the screen you can see a component using a custom painter being
-      rendered on a FlameGame, and if you tap, that same painter is used to
-      show the happy face on a widget overlay.
-  ''';
-
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-
-    add(Player());
-  }
-
-  @override
-  void onTap() {
-    if (overlays.isActive('HappyFace')) {
-      overlays.remove('HappyFace');
-    } else {
-      overlays.add('HappyFace');
     }
   }
 }

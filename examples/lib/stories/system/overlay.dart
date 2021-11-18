@@ -4,30 +4,13 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
-Widget _pauseMenuBuilder(BuildContext buildContext, ExampleGame game) {
-  return Center(
-    child: Container(
-      width: 100,
-      height: 100,
-      color: const Color(0xFFFF0000),
-      child: const Center(
-        child: Text('Paused'),
-      ),
-    ),
-  );
-}
+class OverlaysExample extends FlameGame with TapDetector {
+  static const String description = '''
+    In this example we show how the overlays system can be used.\n\n
+    If you tap the canvas the game will start and if you tap it again it will
+    pause.
+  ''';
 
-Widget overlayBuilder(DashbookContext ctx) {
-  return GameWidget<ExampleGame>(
-    game: ExampleGame()..paused = true,
-    overlayBuilderMap: const {
-      'PauseMenu': _pauseMenuBuilder,
-    },
-    initialActiveOverlays: const ['PauseMenu'],
-  );
-}
-
-class ExampleGame extends FlameGame with TapDetector {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -61,4 +44,27 @@ class ExampleGame extends FlameGame with TapDetector {
       pauseEngine();
     }
   }
+}
+
+Widget _pauseMenuBuilder(BuildContext buildContext, OverlaysExample game) {
+  return Center(
+    child: Container(
+      width: 100,
+      height: 100,
+      color: Colors.orange,
+      child: const Center(
+        child: Text('Paused'),
+      ),
+    ),
+  );
+}
+
+Widget overlayBuilder(DashbookContext ctx) {
+  return GameWidget<OverlaysExample>(
+    game: OverlaysExample()..paused = true,
+    overlayBuilderMap: const {
+      'PauseMenu': _pauseMenuBuilder,
+    },
+    initialActiveOverlays: const ['PauseMenu'],
+  );
 }
