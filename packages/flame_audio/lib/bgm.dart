@@ -80,7 +80,7 @@ class Bgm extends WidgetsBindingObserver {
     }
   }
 
-  /// Pauses the background music without unloading or resetting the audio.
+  /// Pauses the background music without unloading or resetting the audio
   /// player.
   Future<void> pause() async {
     if (audioPlayer != null) {
