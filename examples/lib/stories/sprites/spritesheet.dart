@@ -2,7 +2,12 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 
-class SpritesheetGame extends FlameGame {
+class SpritesheetExample extends FlameGame {
+  static const String description = '''
+    In this example we show how to load images and how to create animations from
+    sprite sheets.
+  ''';
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();

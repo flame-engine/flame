@@ -1,7 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-class BasicSpriteGame extends FlameGame {
+class BasicSpriteExample extends FlameGame {
+  static const String description = '''
+    In this example we load a sprite from the assets folder and put it into a
+    `SpriteComponent`.
+  ''';
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -9,8 +14,9 @@ class BasicSpriteGame extends FlameGame {
     add(
       SpriteComponent(
         sprite: sprite,
-        position: Vector2.all(100),
+        position: size / 2,
         size: sprite.srcSize * 2,
+        anchor: Anchor.center,
       ),
     );
   }

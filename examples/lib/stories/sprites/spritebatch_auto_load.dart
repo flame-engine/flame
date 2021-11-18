@@ -5,8 +5,22 @@ import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
+class SpritebatchAutoLoadExample extends FlameGame {
+  static const String description = '''
+    In this example we do the same thing as in the normal sprite batch example,
+    but in this example the logic and loading is moved into a component that
+    extends `SpriteBatchComponent`.
+  ''';
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    add(MySpriteBatchComponent());
+  }
+}
+
 class MySpriteBatchComponent extends SpriteBatchComponent
-    with HasGameRef<SpritebatchAutoLoadGame> {
+    with HasGameRef<SpritebatchAutoLoadExample> {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -40,13 +54,5 @@ class MySpriteBatchComponent extends SpriteBatchComponent
         offset: Vector2(x - 64, y - 64),
       );
     }
-  }
-}
-
-class SpritebatchAutoLoadGame extends FlameGame {
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    add(MySpriteBatchComponent());
   }
 }

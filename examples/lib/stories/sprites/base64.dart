@@ -1,7 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-class Base64SpriteGame extends FlameGame {
+class Base64SpriteExample extends FlameGame {
+  static const String description = '''
+    In this example we load a sprite from the a base64 string and put it into a
+    `SpriteComponent`.
+  ''';
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -11,8 +16,9 @@ class Base64SpriteGame extends FlameGame {
     add(
       SpriteComponent.fromImage(
         image,
-        position: Vector2.all(100),
+        position: size / 2,
         size: Vector2.all(100),
+        anchor: Anchor.center,
       ),
     );
   }
