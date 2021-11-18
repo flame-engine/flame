@@ -200,7 +200,7 @@ void main() {
   });
 }
 
-// TODO(luan) we can probably provide some helpers to facilitate testing events
+// TODO(luan): we can probably provide some helpers to facilitate testing events
 void _triggerMouseMove(HasHoverables game, double dx, double dy) {
   game.onMouseMove(
     PointerHoverInfo.fromDetails(

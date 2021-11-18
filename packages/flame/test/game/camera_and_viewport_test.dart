@@ -31,7 +31,7 @@ void main() {
     });
 
     flameGame.test('fixed ratio viewport has perfect ratio', (game) {
-      game..camera.viewport = FixedResolutionViewport(Vector2.all(50));
+      game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
       game.onGameResize(Vector2.all(200.0));
       expect(game.canvasSize, Vector2.all(200.00));
       expect(game.size, Vector2.all(50.00));
@@ -52,7 +52,7 @@ void main() {
     });
 
     flameGame.test('fixed ratio viewport maxes width', (game) {
-      game..camera.viewport = FixedResolutionViewport(Vector2.all(50));
+      game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
       game.onGameResize(Vector2(100.0, 200.0));
       expect(game.canvasSize, Vector2(100.0, 200.00));
       expect(game.size, Vector2.all(50.00));
@@ -74,7 +74,7 @@ void main() {
     });
 
     flameGame.test('fixed ratio viewport maxes height', (game) {
-      game..camera.viewport = FixedResolutionViewport(Vector2(100.0, 400.0));
+      game.camera.viewport = FixedResolutionViewport(Vector2(100.0, 400.0));
       game.onGameResize(Vector2(100.0, 200.0));
       expect(game.canvasSize, Vector2(100.0, 200.00));
       expect(game.size, Vector2(100.00, 400.0));

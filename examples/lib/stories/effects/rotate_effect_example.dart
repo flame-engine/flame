@@ -94,16 +94,14 @@ class Compass extends PositionComponent {
       final angle = Transform2D.tau * (i / 12);
       // Note: rim takes up 0.1radius, so the lengths must be > than that
       final markLength = (i % 3 == 0) ? _radius * 0.2 : _radius * 0.15;
-      _marksPath
-        ..moveTo(
-          _radius + _radius * sin(angle),
-          _radius + _radius * cos(angle),
-        );
-      _marksPath
-        ..lineTo(
-          _radius + (_radius - markLength) * sin(angle),
-          _radius + (_radius - markLength) * cos(angle),
-        );
+      _marksPath.moveTo(
+        _radius + _radius * sin(angle),
+        _radius + _radius * cos(angle),
+      );
+      _marksPath.lineTo(
+        _radius + (_radius - markLength) * sin(angle),
+        _radius + (_radius - markLength) * cos(angle),
+      );
     }
 
     arrow = CompassArrow(width: _radius * 0.3, radius: _radius * 0.7)

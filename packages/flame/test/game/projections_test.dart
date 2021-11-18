@@ -198,7 +198,7 @@ void main() {
         game.projector.unprojectVector(Vector2.all(5)),
         Vector2.all(-100),
       );
-      // TODO(luan) we might want to change the behaviour so that the zoom
+      // TODO(luan): we might want to change the behaviour so that the zoom
       // is applied w.r.t. the relativeOffset and not topLeft
 
       // for deltas, we consider only the zoom
