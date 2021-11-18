@@ -34,6 +34,9 @@
  - Use `FlameTester` everywhere where it makes sense in the tests
  - Improved `IsometricTileMap`
  - Initialization of all `PositionComponent`s can be done from `onLoad` instead of the constructor
+ - Rename `HasTappableComponents` to `HasTappables`
+ - Rename `HasDraggableComponents` to `HasDraggables`
+ - Rename `HasHoverableComponents` to `HasHoverableis`
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration

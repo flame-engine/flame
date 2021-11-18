@@ -8,7 +8,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/gestures.dart' show PointerHoverEvent;
 import 'package:test/test.dart';
 
-class _GameWithHoverables extends FlameGame with HasHoverableComponents {}
+class _GameWithHoverables extends FlameGame with HasHoverables {}
 
 class _HoverableComponent extends PositionComponent with Hoverable {
   int enterCount = 0;
@@ -57,7 +57,7 @@ void main() {
       (game) async {
         const message =
             'Hoverable Components can only be added to a FlameGame with '
-            'HasHoverableComponents';
+            'HasHoverables';
 
         expect(
           () => game.add(_HoverableComponent()),
@@ -201,7 +201,7 @@ void main() {
 }
 
 // TODO(luan) we can probably provide some helpers to facilitate testing events
-void _triggerMouseMove(HasHoverableComponents game, double dx, double dy) {
+void _triggerMouseMove(HasHoverables game, double dx, double dy) {
   game.onMouseMove(
     PointerHoverInfo.fromDetails(
       game,
