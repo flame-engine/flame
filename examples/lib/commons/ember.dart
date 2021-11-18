@@ -6,7 +6,7 @@ class Ember extends SpriteAnimationComponent with HasGameRef {
   Ember({Vector2? position, Vector2? size})
       : super(
           position: position,
-          size: size,
+          size: size ?? Vector2.all(100),
           anchor: Anchor.center,
         );
 

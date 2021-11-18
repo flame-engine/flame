@@ -4,6 +4,36 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/layers.dart';
 
+class LayerExample extends FlameGame {
+  static const String description = '''
+    In this example we show how layers can be used to produce a shadow effect.
+  ''';
+
+  late Layer gameLayer;
+  late Layer backgroundLayer;
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    final playerSprite = Sprite(await images.load('layers/player.png'));
+    final enemySprite = Sprite(await images.load('layers/enemy.png'));
+    final backgroundSprite = Sprite(await images.load('layers/background.png'));
+
+    gameLayer = GameLayer(playerSprite, enemySprite);
+    backgroundLayer = BackgroundLayer(backgroundSprite);
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    gameLayer.render(canvas);
+    backgroundLayer.render(canvas);
+  }
+
+  @override
+  Color backgroundColor() => const Color(0xFF38607C);
+}
+
 class GameLayer extends DynamicLayer {
   final Sprite playerSprite;
   final Sprite enemySprite;
@@ -42,30 +72,4 @@ class BackgroundLayer extends PreRenderedLayer {
       size: Vector2(300, 150),
     );
   }
-}
-
-class LayerGame extends FlameGame {
-  late Layer gameLayer;
-  late Layer backgroundLayer;
-
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    final playerSprite = Sprite(await images.load('layers/player.png'));
-    final enemySprite = Sprite(await images.load('layers/enemy.png'));
-    final backgroundSprite = Sprite(await images.load('layers/background.png'));
-
-    gameLayer = GameLayer(playerSprite, enemySprite);
-    backgroundLayer = BackgroundLayer(backgroundSprite);
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    gameLayer.render(canvas);
-    backgroundLayer.render(canvas);
-  }
-
-  @override
-  Color backgroundColor() => const Color(0xFF38607C);
 }

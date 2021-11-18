@@ -10,17 +10,20 @@ void addRenderingStories(Dashbook dashbook) {
   dashbook.storiesOf('Rendering')
     ..add(
       'Text',
-      (_) => GameWidget(game: TextGame()),
+      (_) => GameWidget(game: TextExample()),
       codeLink: baseLink('rendering/text.dart'),
+      info: TextExample.description,
     )
     ..add(
       'Flip Sprite',
-      (_) => GameWidget(game: FlipSpriteGame()),
+      (_) => GameWidget(game: FlipSpriteExample()),
       codeLink: baseLink('rendering/flip.dart'),
+      info: FlipSpriteExample.description,
     )
     ..add(
       'Layers',
-      (_) => GameWidget(game: LayerGame()),
+      (_) => GameWidget(game: LayerExample()),
       codeLink: baseLink('rendering/layers.dart'),
+      info: LayerExample.description,
     );
 }

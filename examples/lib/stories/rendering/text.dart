@@ -5,49 +5,11 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
-final _regularTextStyle =
-    TextStyle(fontSize: 18, color: BasicPalette.white.color);
-final _regular = TextPaint(style: _regularTextStyle);
-final _tiny = TextPaint(style: _regularTextStyle.copyWith(fontSize: 14.0));
-final _box = _regular.copyWith(
-  (style) => style.copyWith(
-    color: Colors.lightGreenAccent,
-    fontFamily: 'monospace',
-    letterSpacing: 2.0,
-  ),
-);
-final _shaded = TextPaint(
-  style: TextStyle(
-    color: BasicPalette.white.color,
-    fontSize: 40.0,
-    shadows: const [
-      Shadow(color: Colors.red, offset: Offset(2, 2), blurRadius: 2),
-      Shadow(color: Colors.yellow, offset: Offset(4, 4), blurRadius: 4),
-    ],
-  ),
-);
+class TextExample extends FlameGame {
+  static const String description = '''
+    In this example we show different ways of rendering text.
+  ''';
 
-class MyTextBox extends TextBoxComponent {
-  MyTextBox(String text)
-      : super(
-          text: text,
-          textRenderer: _box,
-          boxConfig: TextBoxConfig(
-            maxWidth: 400,
-            timePerChar: 0.05,
-            growingBox: true,
-            margins: const EdgeInsets.all(25),
-          ),
-        );
-
-  @override
-  void drawBackground(Canvas c) {
-    final rect = Rect.fromLTWH(0, 0, width, height);
-    c.drawRect(rect, Paint()..color = Colors.white10);
-  }
-}
-
-class TextGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -87,5 +49,47 @@ class TextGame extends FlameGame {
         ..anchor = Anchor.bottomLeft
         ..y = size.y,
     );
+  }
+}
+
+final _regularTextStyle =
+    TextStyle(fontSize: 18, color: BasicPalette.white.color);
+final _regular = TextPaint(style: _regularTextStyle);
+final _tiny = TextPaint(style: _regularTextStyle.copyWith(fontSize: 14.0));
+final _box = _regular.copyWith(
+  (style) => style.copyWith(
+    color: Colors.lightGreenAccent,
+    fontFamily: 'monospace',
+    letterSpacing: 2.0,
+  ),
+);
+final _shaded = TextPaint(
+  style: TextStyle(
+    color: BasicPalette.white.color,
+    fontSize: 40.0,
+    shadows: const [
+      Shadow(color: Colors.red, offset: Offset(2, 2), blurRadius: 2),
+      Shadow(color: Colors.yellow, offset: Offset(4, 4), blurRadius: 4),
+    ],
+  ),
+);
+
+class MyTextBox extends TextBoxComponent {
+  MyTextBox(String text)
+      : super(
+          text: text,
+          textRenderer: _box,
+          boxConfig: TextBoxConfig(
+            maxWidth: 400,
+            timePerChar: 0.05,
+            growingBox: true,
+            margins: const EdgeInsets.all(25),
+          ),
+        );
+
+  @override
+  void drawBackground(Canvas c) {
+    final rect = Rect.fromLTWH(0, 0, width, height);
+    c.drawRect(rect, Paint()..color = Colors.white10);
   }
 }
