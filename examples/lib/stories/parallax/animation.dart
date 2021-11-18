@@ -39,7 +39,7 @@ class AnimationParallaxGame extends FlameGame {
       baseVelocity: Vector2(20, 0),
     );
 
-    final parallaxComponent = ParallaxComponent.fromParallax(parallax);
+    final parallaxComponent = ParallaxComponent(parallax: parallax);
     add(parallaxComponent);
   }
 }

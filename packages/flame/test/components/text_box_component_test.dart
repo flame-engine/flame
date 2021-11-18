@@ -10,7 +10,7 @@ void main() {
   group('TextBoxComponent', () {
     test('size is properly computed', () async {
       final c = TextBoxComponent(
-        'The quick brown fox jumps over the lazy dog.',
+        text: 'The quick brown fox jumps over the lazy dog.',
         boxConfig: TextBoxConfig(
           maxWidth: 100.0,
         ),
@@ -21,7 +21,7 @@ void main() {
     });
 
     flameGame.test('onLoad waits for cache to be done', (game) async {
-      final c = TextBoxComponent('foo bar');
+      final c = TextBoxComponent(text: 'foo bar');
 
       await game.ensureAdd(c);
 

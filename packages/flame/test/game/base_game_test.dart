@@ -157,26 +157,13 @@ void main() {
     });
   });
 
-  flameGame.test('remove depend SpriteComponent.shouldRemove', (game) async {
-    // addLater here
-    await game.ensureAdd(SpriteComponent()..shouldRemove = true);
+  flameGame.test('removes PositionComponent when shouldRemove is true',
+      (game) async {
+    await game.ensureAdd(PositionComponent()..shouldRemove = true);
     expect(game.children.length, equals(1));
-
-    // remove effected here
     game.update(0);
     expect(game.children.isEmpty, equals(true));
   });
-
-  flameGame.test(
-    'remove depend SpriteAnimationComponent.shouldRemove',
-    (game) async {
-      await game.ensureAdd(SpriteAnimationComponent()..shouldRemove = true);
-      expect(game.children.length, equals(1));
-
-      game.update(0);
-      expect(game.children.isEmpty, equals(true));
-    },
-  );
 
   flameGame.test('clear removes all components', (game) async {
     final components = List.generate(3, (index) => Component());
