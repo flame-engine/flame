@@ -10,7 +10,7 @@ import 'zoom_example.dart';
 void addCameraAndViewportStories(Dashbook dashbook) {
   dashbook.storiesOf('Camera & Viewport')
     ..add(
-      'Follow Object',
+      'Follow Component',
       (context) {
         return GameWidget(
           game: FollowComponentExample(

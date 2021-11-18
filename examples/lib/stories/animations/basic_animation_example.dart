@@ -4,6 +4,8 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
+import '../../commons/ember.dart';
+
 class BasicAnimationsExample extends FlameGame with TapDetector {
   static const description = '''
     Basic example of `SpriteAnimation`s use in Flame's `FlameGame`\n\n
@@ -53,12 +55,12 @@ class BasicAnimationsExample extends FlameGame with TapDetector {
     );
 
     final spriteSize = Vector2.all(100.0);
-    final animationComponent2 = SpriteAnimationComponent(
+    final animationComponent = SpriteAnimationComponent(
       animation: animation,
       size: spriteSize,
     );
-    animationComponent2.x = size.x / 2 - spriteSize.x;
-    animationComponent2.y = spriteSize.y;
+    animationComponent.x = size.x / 2 - spriteSize.x;
+    animationComponent.y = spriteSize.y;
 
     final reversedAnimationComponent = SpriteAnimationComponent(
       animation: animation.reversed(),
@@ -67,8 +69,9 @@ class BasicAnimationsExample extends FlameGame with TapDetector {
     reversedAnimationComponent.x = size.x / 2;
     reversedAnimationComponent.y = spriteSize.y;
 
-    add(animationComponent2);
+    add(animationComponent);
     add(reversedAnimationComponent);
+    add(Ember()..position = size / 2);
   }
 
   void addAnimation(Vector2 position) {

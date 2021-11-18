@@ -1,26 +1,28 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../commons/square_component.dart';
+import '../../commons/ember.dart';
 
 class FollowComponentExample extends FlameGame
     with HasCollidables, HasTappables, HasKeyboardHandlerComponents {
   static const String description = '''
-    Move around with W, A, S, D and notice how the camera follows the white 
-    square.\n
-    If you collide with the blue squares, the camera reference is changed from
+    Move around with W, A, S, D and notice how the camera follows the ember 
+    sprite.\n
+    If you collide with the gray squares, the camera reference is changed from
     center to topCenter.\n
-    The blue squares can also be clicked to show how the coordinate system
+    The gray squares can also be clicked to show how the coordinate system
     respects the camera transformation.
   ''';
 
-  late MovableSquare square;
-
+  late MovableEmber ember;
   final Vector2 viewportResolution;
 
   FollowComponentExample({
@@ -33,9 +35,9 @@ class FollowComponentExample extends FlameGame
     camera.viewport = FixedResolutionViewport(viewportResolution);
     add(Map());
 
-    add(square = MovableSquare());
+    add(ember = MovableEmber());
     camera.speed = 1;
-    camera.followComponent(square, worldBounds: Map.bounds);
+    camera.followComponent(ember, worldBounds: Map.bounds);
 
     for (var i = 0; i < 30; i++) {
       add(Rock(Vector2(Map.genCoord(), Map.genCoord())));
@@ -43,48 +45,50 @@ class FollowComponentExample extends FlameGame
   }
 }
 
-class MovableSquare extends SquareComponent
-    with Collidable, HasGameRef<FollowComponentExample>, KeyboardHandler {
+class MovableEmber extends Ember<FollowComponentExample>
+    with HasHitboxes, Collidable, KeyboardHandler {
   static const double speed = 300;
   static final TextPaint textRenderer = TextPaint(
-    style: const TextStyle(fontSize: 12),
+    style: const TextStyle(color: Colors.white70, fontSize: 12),
   );
 
   final Vector2 velocity = Vector2.zero();
-  late Timer timer;
+  late final TextComponent positionText;
+  late final Vector2 textPosition;
 
-  MovableSquare() : super(priority: 1);
+  MovableEmber() : super(priority: 1);
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    timer = Timer(3.0)
-      ..stop()
-      ..onTick = () {
-        gameRef.camera.setRelativeOffset(Anchor.center);
-      };
+    positionText = TextComponent(
+      textRenderer: textRenderer,
+      position: (size / 2)..y = size.y / 2 + 30,
+      anchor: Anchor.center,
+    );
+    add(positionText);
+    addHitbox(HitboxCircle());
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    timer.update(dt);
-
-    final ds = velocity * (speed * dt);
-    position.add(ds);
-  }
-
-  @override
-  void render(Canvas c) {
-    final text = '(${x.toInt()}, ${y.toInt()})';
-    textRenderer.render(c, text, size / 2, anchor: Anchor.center);
+    final deltaPosition = velocity * (speed * dt);
+    position.add(deltaPosition);
+    positionText.text = '(${x.toInt()}, ${y.toInt()})';
   }
 
   @override
   void onCollision(Set<Vector2> points, Collidable other) {
     if (other is Rock) {
       gameRef.camera.setRelativeOffset(Anchor.topCenter);
-      timer.start();
+    }
+  }
+
+  @override
+  void onCollisionEnd(Collidable other) {
+    if (other is Rock) {
+      gameRef.camera.setRelativeOffset(Anchor.center);
     }
   }
 
@@ -92,76 +96,97 @@ class MovableSquare extends SquareComponent
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     final isKeyDown = event is RawKeyDownEvent;
 
+    final bool handled;
     if (event.logicalKey == LogicalKeyboardKey.keyA) {
       velocity.x = isKeyDown ? -1 : 0;
-      return false;
+      handled = true;
     } else if (event.logicalKey == LogicalKeyboardKey.keyD) {
       velocity.x = isKeyDown ? 1 : 0;
-      return false;
+      handled = true;
     } else if (event.logicalKey == LogicalKeyboardKey.keyW) {
       velocity.y = isKeyDown ? -1 : 0;
-      return false;
+      handled = true;
     } else if (event.logicalKey == LogicalKeyboardKey.keyS) {
       velocity.y = isKeyDown ? 1 : 0;
-      return false;
+      handled = true;
+    } else {
+      handled = false;
     }
 
-    return super.onKeyEvent(event, keysPressed);
+    if (handled) {
+      angle = -velocity.angleToSigned(Vector2(1, 0));
+      return false;
+    } else {
+      return super.onKeyEvent(event, keysPressed);
+    }
   }
 }
 
 class Map extends Component {
-  static const double S = 1500;
-  static const Rect bounds = Rect.fromLTWH(-S, -S, 2 * S, 2 * S);
+  static const double size = 1500;
+  static const Rect bounds = Rect.fromLTWH(-size, -size, 2 * size, 2 * size);
 
   static final Paint _paintBorder = Paint()
-    ..color = const Color(0xFFFFFFFF)
+    ..color = Colors.white12
     ..strokeWidth = 10
     ..style = PaintingStyle.stroke;
   static final Paint _paintBg = Paint()..color = const Color(0xFF333333);
 
   static final _rng = Random();
 
-  Map() : super(priority: 0);
+  late final List<Paint> _paintPool;
+  late final List<Rect> _rectPool;
+
+  Map() : super(priority: 0) {
+    _paintPool = List<Paint>.generate(
+      (size / 50).ceil(),
+      (_) => PaintExtension.random(rng: _rng)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2,
+      growable: false,
+    );
+    _rectPool = List<Rect>.generate(
+      (size / 50).ceil(),
+      (i) => Rect.fromCircle(center: Offset.zero, radius: size - i * 50),
+      growable: false,
+    );
+  }
 
   @override
   void render(Canvas canvas) {
     canvas.drawRect(bounds, _paintBg);
     canvas.drawRect(bounds, _paintBorder);
+    for (var i = 0; i < (size / 50).ceil(); i++) {
+      canvas.drawCircle(Offset.zero, size - i * 50, _paintPool[i]);
+      canvas.drawRect(_rectPool[i], _paintBorder);
+    }
   }
 
   static double genCoord() {
-    return -S + _rng.nextDouble() * (2 * S);
+    return -size + _rng.nextDouble() * (2 * size);
   }
 }
 
-class Rock extends SquareComponent with Collidable, Tappable {
-  static final unpressedPaint = Paint()..color = const Color(0xFF2222FF);
-  static final pressedPaint = Paint()..color = const Color(0xFF414175);
-
+class Rock extends SpriteComponent
+    with HasGameRef, HasHitboxes, Collidable, Tappable {
   Rock(Vector2 position)
       : super(
           position: position,
-          size: 50,
-          priority: 2,
-          paint: unpressedPaint,
+          size: Vector2.all(50),
+          priority: 1,
         );
 
   @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    sprite = await gameRef.loadSprite('nine-box.png');
+    //paint = Paint()..color = Colors.transparent;
+    addHitbox(HitboxRectangle());
+  }
+
+  @override
   bool onTapDown(_) {
-    paint = pressedPaint;
-    return true;
-  }
-
-  @override
-  bool onTapUp(_) {
-    paint = unpressedPaint;
-    return true;
-  }
-
-  @override
-  bool onTapCancel() {
-    paint = unpressedPaint;
+    add(ColorEffect(color: Colors.green, duration: 0.5, isAlternating: true));
     return true;
   }
 }
