@@ -157,6 +157,8 @@ There are a few things to consider when adding an example to the examples direct
 
  - Put your example in a fitting section.
  - Always add a description named `description` in the game object (if you have one).
+ - Always add that `description` to the `info` field of the story.
+ - Always add the path to the source of the example in `codeLink` on the story.
  - Always have the game class (if there exists one) in the top of your examples file.
  - Name your game class with a relevant name and suffix it with `Example`, for example
  `AnimationExample`.

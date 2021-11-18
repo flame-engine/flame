@@ -7,7 +7,7 @@ import 'draggables.dart';
 import 'hoverables.dart';
 import 'joystick.dart';
 import 'joystick_advanced.dart';
-import 'keyboard.dart';
+import 'keyboard_example.dart';
 import 'mouse_cursor.dart';
 import 'mouse_movement.dart';
 import 'multitap.dart';
@@ -21,7 +21,7 @@ void addInputStories(Dashbook dashbook) {
     ..add(
       'Keyboard',
       (_) => GameWidget(game: KeyboardExample()),
-      codeLink: baseLink('input/keyboard.dart'),
+      codeLink: baseLink('input/keyboard_example.dart'),
       info: KeyboardExample.description,
     )
     ..add(

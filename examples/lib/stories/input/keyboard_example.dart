@@ -3,9 +3,10 @@ import 'dart:ui';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
-import 'package:flame_example/commons/ember.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+
+import '../../commons/ember.dart';
 
 class KeyboardExample extends FlameGame with KeyboardEvents {
   static const String description = '''
