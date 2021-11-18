@@ -34,7 +34,7 @@ class Square extends PositionComponent with HasGameRef<Priority>, Tappable {
   }
 }
 
-class Priority extends FlameGame with HasTappableComponents {
+class Priority extends FlameGame with HasTappables {
   @override
   Future<void> onLoad() async {
     await super.onLoad();

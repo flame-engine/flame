@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class _GameWithTappables extends FlameGame with HasTappableComponents {}
+class _GameWithTappables extends FlameGame with HasTappables {}
 
 class _TappableComponent extends PositionComponent with Tappable {}
 
@@ -23,7 +23,7 @@ void main() {
       (game) async {
         const message =
             'Tappable Components can only be added to a FlameGame with '
-            'HasTappableComponents';
+            'HasTappables';
 
         expect(
           () => game.add(_TappableComponent()),

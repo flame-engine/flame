@@ -30,7 +30,7 @@ final _shaded = TextPaint(
 class MyTextBox extends TextBoxComponent {
   MyTextBox(String text)
       : super(
-          text,
+          text: text,
           textRenderer: _box,
           boxConfig: TextBoxConfig(
             maxWidth: 400,
@@ -52,26 +52,26 @@ class TextGame extends FlameGame {
   Future<void> onLoad() async {
     await super.onLoad();
     add(
-      TextComponent('Hello, Flame', textRenderer: _regular)
+      TextComponent(text: 'Hello, Flame', textRenderer: _regular)
         ..anchor = Anchor.topCenter
         ..x = size.x / 2
         ..y = 32.0,
     );
 
     add(
-      TextComponent('Text with shade', textRenderer: _shaded)
+      TextComponent(text: 'Text with shade', textRenderer: _shaded)
         ..anchor = Anchor.topRight
         ..position = size - Vector2.all(100),
     );
 
     add(
-      TextComponent('center', textRenderer: _tiny)
+      TextComponent(text: 'center', textRenderer: _tiny)
         ..anchor = Anchor.center
         ..position.setFrom(size / 2),
     );
 
     add(
-      TextComponent('bottomRight', textRenderer: _tiny)
+      TextComponent(text: 'bottomRight', textRenderer: _tiny)
         ..anchor = Anchor.bottomRight
         ..position.setFrom(size),
     );
