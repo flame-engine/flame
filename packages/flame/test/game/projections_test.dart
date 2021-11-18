@@ -5,19 +5,22 @@ import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {
+  final viewport = FixedResolutionViewport(Vector2.all(100));
   group('projections', () {
-    test('default viewport and camera should no-op projections', () {
-      final game = FlameGame(); // default viewport & camera
-      _assertIdentityOfProjector(game.projector);
+    flameGame.test(
+      'default viewport and camera should no-op projections',
+      (game) {
+        _assertIdentityOfProjector(game.projector);
 
-      expect(game.projector.projectVector(Vector2(1, 2)), Vector2(1, 2));
-      expect(game.projector.unprojectVector(Vector2(1, 2)), Vector2(1, 2));
-      expect(game.projector.scaleVector(Vector2(1, 2)), Vector2(1, 2));
-      expect(game.projector.unscaleVector(Vector2(1, 2)), Vector2(1, 2));
-    });
-    test('viewport only with scale projection (no camera)', () {
-      final viewport = FixedResolutionViewport(Vector2.all(100));
-      final game = FlameGame()..camera.viewport = viewport; // default camera
+        expect(game.projector.projectVector(Vector2(1, 2)), Vector2(1, 2));
+        expect(game.projector.unprojectVector(Vector2(1, 2)), Vector2(1, 2));
+        expect(game.projector.scaleVector(Vector2(1, 2)), Vector2(1, 2));
+        expect(game.projector.unscaleVector(Vector2(1, 2)), Vector2(1, 2));
+      },
+    );
+
+    flameGame.test('viewport only with scale projection (no camera)', (game) {
+      game.camera.viewport = viewport;
       game.onGameResize(Vector2(200, 200));
       expect(viewport.scale, 2);
       expect(viewport.resizeOffset, Vector2.zero()); // no translation
@@ -45,60 +48,66 @@ void main() {
         Vector2(1, 2),
       );
     });
-    test('viewport only with translation projection (no camera)', () {
-      final viewport = FixedResolutionViewport(Vector2.all(100));
-      final game = FlameGame()..camera.viewport = viewport; // default camera
-      game.onGameResize(Vector2(200, 100));
-      expect(viewport.scale, 1); // no scale
-      expect(viewport.resizeOffset, Vector2(50, 0)); // y is unchanged
-      _assertIdentityOfProjector(game.projector);
 
-      // click on x=0 means -50 in the game coordinates
-      expect(game.projector.unprojectVector(Vector2.zero()), Vector2(-50, 0));
-      // click on x=50 is right on the edge of the viewport
-      expect(game.projector.unprojectVector(Vector2.all(50)), Vector2(0, 50));
-      // click on x=150 is on the other edge
-      expect(
-        game.projector.unprojectVector(Vector2.all(150)),
-        Vector2(100, 150),
-      );
-      // 50 past the end
-      expect(
-        game.projector.unprojectVector(Vector2(200, 0)),
-        Vector2(150, 0),
-      );
+    flameGame.test(
+      'viewport only with translation projection (no camera)',
+      (game) {
+        game.camera.viewport = viewport;
+        game.onGameResize(Vector2(200, 100));
+        expect(viewport.scale, 1); // no scale
+        expect(viewport.resizeOffset, Vector2(50, 0)); // y is unchanged
+        _assertIdentityOfProjector(game.projector);
 
-      // translations should not affect projecting deltas
-      expect(game.projector.unscaleVector(Vector2.zero()), Vector2.zero());
-      expect(game.projector.unscaleVector(Vector2.all(50)), Vector2.all(50));
-      expect(
-        game.projector.unscaleVector(Vector2.all(150)),
-        Vector2.all(150),
-      );
-      expect(game.projector.unscaleVector(Vector2(200, 0)), Vector2(200, 0));
-    });
-    test('viewport only with both scale and translation (no camera)', () {
-      final viewport = FixedResolutionViewport(Vector2.all(100));
-      final game = FlameGame()..camera.viewport = viewport; // default camera
-      game.onGameResize(Vector2(200, 400));
-      expect(viewport.scale, 2);
-      expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
-      _assertIdentityOfProjector(game.projector);
+        // click on x=0 means -50 in the game coordinates
+        expect(game.projector.unprojectVector(Vector2.zero()), Vector2(-50, 0));
+        // click on x=50 is right on the edge of the viewport
+        expect(game.projector.unprojectVector(Vector2.all(50)), Vector2(0, 50));
+        // click on x=150 is on the other edge
+        expect(
+          game.projector.unprojectVector(Vector2.all(150)),
+          Vector2(100, 150),
+        );
+        // 50 past the end
+        expect(
+          game.projector.unprojectVector(Vector2(200, 0)),
+          Vector2(150, 0),
+        );
 
-      // click on y=0 means -100 in the game coordinates
-      expect(game.projector.unprojectVector(Vector2.zero()), Vector2(0, -50));
-      expect(game.projector.unprojectVector(Vector2(0, 100)), Vector2.zero());
-      expect(
-        game.projector.unprojectVector(Vector2(0, 300)),
-        Vector2(0, 100),
-      );
-      expect(
-        game.projector.unprojectVector(Vector2(0, 400)),
-        Vector2(0, 150),
-      );
-    });
-    test('camera only with zoom (default viewport)', () {
-      final game = FlameGame(); // default viewport
+        // translations should not affect projecting deltas
+        expect(game.projector.unscaleVector(Vector2.zero()), Vector2.zero());
+        expect(game.projector.unscaleVector(Vector2.all(50)), Vector2.all(50));
+        expect(
+          game.projector.unscaleVector(Vector2.all(150)),
+          Vector2.all(150),
+        );
+        expect(game.projector.unscaleVector(Vector2(200, 0)), Vector2(200, 0));
+      },
+    );
+
+    flameGame.test(
+      'viewport only with both scale and translation (no camera)',
+      (game) {
+        game.camera.viewport = viewport;
+        game.onGameResize(Vector2(200, 400));
+        expect(viewport.scale, 2);
+        expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
+        _assertIdentityOfProjector(game.projector);
+
+        // click on y=0 means -100 in the game coordinates
+        expect(game.projector.unprojectVector(Vector2.zero()), Vector2(0, -50));
+        expect(game.projector.unprojectVector(Vector2(0, 100)), Vector2.zero());
+        expect(
+          game.projector.unprojectVector(Vector2(0, 300)),
+          Vector2(0, 100),
+        );
+        expect(
+          game.projector.unprojectVector(Vector2(0, 400)),
+          Vector2(0, 150),
+        );
+      },
+    );
+
+    flameGame.test('camera only with zoom (default viewport)', (game) {
       game.onGameResize(Vector2.all(1));
 
       game.camera.zoom = 3; // 3x zoom
@@ -120,8 +129,8 @@ void main() {
       expect(game.projector.unscaleVector(Vector2.zero()), Vector2.zero());
       expect(game.projector.unscaleVector(Vector2(3, 6)), Vector2(1, 2));
     });
-    test('camera only with translation (default viewport)', () {
-      final game = FlameGame(); // default viewport
+
+    flameGame.test('camera only with translation (default viewport)', (game) {
       game.onGameResize(Vector2.all(1));
 
       // top left corner of the screen is (50, 100)
@@ -141,8 +150,10 @@ void main() {
       expect(game.projector.scaleVector(Vector2.zero()), Vector2.zero());
       expect(game.projector.scaleVector(Vector2(-50, 50)), Vector2(-50, 50));
     });
-    test('camera only with both zoom and translation (default viewport)', () {
-      final game = FlameGame(); // default viewport
+
+    flameGame
+        .test('camera only with both zoom and translation (default viewport)',
+            (game) {
       game.onGameResize(Vector2.all(10));
 
       // no-op because the default is already top left
@@ -187,16 +198,16 @@ void main() {
         game.projector.unprojectVector(Vector2.all(5)),
         Vector2.all(-100),
       );
-      // TODO(luan) we might want to change the behaviour so that the zoom
+      // TODO(luan): we might want to change the behaviour so that the zoom
       // is applied w.r.t. the relativeOffset and not topLeft
 
       // for deltas, we consider only the zoom
       expect(game.projector.unscaleVector(Vector2.zero()), Vector2.zero());
       expect(game.projector.unscaleVector(Vector2(2, 4)), Vector2(1, 2));
     });
-    test('camera & viewport - two translations', () {
-      final viewport = FixedResolutionViewport(Vector2.all(100));
-      final game = FlameGame()..camera.viewport = viewport; // default camera
+
+    flameGame.test('camera & viewport - two translations', (game) {
+      game.camera.viewport = viewport; // default camera
       game.onGameResize(Vector2(200, 100));
       game.camera.snapTo(Vector2(10, 100));
       expect(viewport.scale, 1); // no scale
@@ -228,9 +239,9 @@ void main() {
       expect(game.projector.unscaleVector(Vector2.zero()), Vector2.zero());
       expect(game.projector.unscaleVector(Vector2(1, 2)), Vector2(1, 2));
     });
-    test('camera zoom & viewport translation', () {
-      final viewport = FixedResolutionViewport(Vector2.all(100));
-      final game = FlameGame()..camera.viewport = viewport;
+
+    flameGame.test('camera zoom & viewport translation', (game) {
+      game.camera.viewport = viewport;
       game.onGameResize(Vector2(200, 100));
       game.camera.zoom = 2;
       game.camera.snap();
@@ -259,9 +270,9 @@ void main() {
       expect(game.projector.unscaleVector(Vector2.zero()), Vector2.zero());
       expect(game.projector.unscaleVector(Vector2(2, 4)), Vector2(1, 2));
     });
-    test('camera translation & viewport scale+translation', () {
-      final viewport = FixedResolutionViewport(Vector2.all(100));
-      final game = FlameGame()..camera.viewport = viewport;
+
+    flameGame.test('camera translation & viewport scale+translation', (game) {
+      game.camera.viewport = viewport;
       game.onGameResize(Vector2(200, 400));
       expect(viewport.scale, 2);
       expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
@@ -289,57 +300,60 @@ void main() {
       expect(game.projector.unscaleVector(Vector2.zero()), Vector2.zero());
       expect(game.projector.unscaleVector(Vector2(2, 4)), Vector2(1, 2));
     });
-    test('camera & viewport scale/zoom + translation (cancel out scaling)', () {
-      final viewport = FixedResolutionViewport(Vector2.all(100));
-      final game = FlameGame()..camera.viewport = viewport;
-      game.onGameResize(Vector2(200, 400));
-      expect(viewport.scale, 2);
-      expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
 
-      // the camera should apply a (10, 10) translation + a 0.5x zoom on top of
-      // the viewport coordinate system
-      game.camera.zoom = 0.5;
-      game.camera.snapTo(Vector2.all(10));
+    flameGame.test(
+      'camera & viewport scale/zoom + translation (cancel out scaling)',
+      (game) {
+        game.camera.viewport = viewport;
+        game.onGameResize(Vector2(200, 400));
+        expect(viewport.scale, 2);
+        expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged
 
-      _assertIdentityOfProjector(game.projector);
+        // the camera should apply a (10, 10) translation + a 0.5x zoom on top of
+        // the viewport coordinate system
+        game.camera.zoom = 0.5;
+        game.camera.snapTo(Vector2.all(10));
 
-      // in the viewport space the top left of the screen would be (0, -100)
-      // that means 100 screen units above the top left of the camera (10, 10)
-      // each viewport unit is exactly one camera unit, because the zoom
-      // cancels out the scale
-      expect(
-        game.projector.unprojectVector(Vector2.zero()),
-        Vector2(10, -90),
-      );
-      // the top-left most visible pixel on the viewport would be at (0, 100)
-      // in screen coordinates. That should be the top left of the camera that
-      // is snapped to 10,10 by definition.
-      expect(
-        game.projector.unprojectVector(Vector2(0, 100)),
-        Vector2(10, 10),
-      );
-      // now each unit we walk in screen space means only 2 units on the
-      // viewport space because of the scale. however, since the camera applies
-      // a 1/2x zoom, each unit step equals to 1 unit on the game space
-      expect(
-        game.projector.unprojectVector(Vector2(1, 100)),
-        Vector2(11, 10),
-      );
-      // the last pixel of the viewport is on screen coordinates of (200, 300)
-      // for the camera, that should be: top left (10,10) + effective size
-      // (100, 100) * zoom (1/2)
-      expect(
-        game.projector.unprojectVector(Vector2(200, 300)),
-        Vector2.all(210),
-      );
+        _assertIdentityOfProjector(game.projector);
 
-      // for deltas, since the scale and the zoom cancel out, this should no-op
-      expect(game.projector.unscaleVector(Vector2.zero()), Vector2.zero());
-      expect(game.projector.unscaleVector(Vector2(1, 2)), Vector2(1, 2));
-    });
-    test('camera & viewport scale/zoom + translation', () {
-      final viewport = FixedResolutionViewport(Vector2.all(100));
-      final game = FlameGame()..camera.viewport = viewport;
+        // in the viewport space the top left of the screen would be (0, -100)
+        // that means 100 screen units above the top left of the camera (10, 10)
+        // each viewport unit is exactly one camera unit, because the zoom
+        // cancels out the scale
+        expect(
+          game.projector.unprojectVector(Vector2.zero()),
+          Vector2(10, -90),
+        );
+        // the top-left most visible pixel on the viewport would be at (0, 100)
+        // in screen coordinates. That should be the top left of the camera that
+        // is snapped to 10,10 by definition.
+        expect(
+          game.projector.unprojectVector(Vector2(0, 100)),
+          Vector2(10, 10),
+        );
+        // now each unit we walk in screen space means only 2 units on the
+        // viewport space because of the scale. however, since the camera applies
+        // a 1/2x zoom, each unit step equals to 1 unit on the game space
+        expect(
+          game.projector.unprojectVector(Vector2(1, 100)),
+          Vector2(11, 10),
+        );
+        // the last pixel of the viewport is on screen coordinates of (200, 300)
+        // for the camera, that should be: top left (10,10) + effective size
+        // (100, 100) * zoom (1/2)
+        expect(
+          game.projector.unprojectVector(Vector2(200, 300)),
+          Vector2.all(210),
+        );
+
+        // for deltas, since the scale and the zoom cancel out, this should no-op
+        expect(game.projector.unscaleVector(Vector2.zero()), Vector2.zero());
+        expect(game.projector.unscaleVector(Vector2(1, 2)), Vector2(1, 2));
+      },
+    );
+
+    flameGame.test('camera & viewport scale/zoom + translation', (game) {
+      game.camera.viewport = viewport;
       game.onGameResize(Vector2(200, 400));
       expect(viewport.scale, 2);
       expect(viewport.resizeOffset, Vector2(0, 100)); // x is unchanged

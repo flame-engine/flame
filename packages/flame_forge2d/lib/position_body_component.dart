@@ -27,7 +27,7 @@ abstract class PositionBodyComponent<T extends Forge2DGame>
   Future<void> onLoad() async {
     await super.onLoad();
     updatePositionComponent();
-    positionComponent..anchor = Anchor.center;
+    positionComponent.anchor = Anchor.center;
     gameRef.add(positionComponent);
   }
 
@@ -46,7 +46,7 @@ abstract class PositionBodyComponent<T extends Forge2DGame>
   }
 
   void updatePositionComponent() {
-    positionComponent.position..setFrom(body.position);
+    positionComponent.position.setFrom(body.position);
     positionComponent.position.y *= -1;
     positionComponent
       ..angle = -angle

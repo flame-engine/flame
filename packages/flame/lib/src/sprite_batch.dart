@@ -264,7 +264,7 @@ class SpriteBatch {
 
     if (kIsWeb) {
       for (final batchItem in _batchItems) {
-        paint..blendMode = blendMode ?? paint.blendMode;
+        paint.blendMode = blendMode ?? paint.blendMode;
 
         canvas
           ..save()

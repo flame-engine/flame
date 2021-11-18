@@ -16,7 +16,7 @@ add it to your game.
 Check this example to get a better understanding:
 
 ```dart
-class MyGame extends FlameGame with HasDraggableComponents {
+class MyGame extends FlameGame with HasDraggables {
 
   MyGame() {
     joystick.addObserver(player);
@@ -95,7 +95,7 @@ These are the fields that should be used to know the state of the joystick:
   pulled from its base position to a edge of the joystick.
 
 If you want to create buttons to go with your joystick, check out
-[`MarginButtonComponent`](#HudButtonComponent).
+[`HudButtonComponent`](#hudbuttoncomponent).
 
 A full examples of how to use it can be found
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/joystick.dart).
@@ -115,9 +115,9 @@ setting `hudButtonComponent.isHud = false;`.
 
 If you want to act upon the button being pressed (which would be the common thing to do) you can either pass in
 a callback function as the `onPressed` argument, or you extend the component and override
-`onTapDown`, `onTapUp` and/or `onTapCancel` and implement your logic in there.
+`onTapDown`, `onTapUp` and/or `onTapCancel` and implement your logic there.
 
 ## Gamepad
 
-Flame has a separate plugin to support external game controllers (gamepads), checkout
+Flame has a separate plugin to support external game controllers (gamepads), check
 [here](https://github.com/flame-engine/flame_gamepad) for more information.

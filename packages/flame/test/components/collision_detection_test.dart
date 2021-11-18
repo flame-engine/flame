@@ -7,8 +7,8 @@ import 'package:flame/src/geometry/line_segment.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('LineSegment.isPointOnSegment tests', () {
-    test('Can catch simple point', () {
+  group('LineSegment.isPointOnSegment', () {
+    test('can catch simple point', () {
       final segment = LineSegment(
         Vector2.all(0),
         Vector2.all(1),
@@ -21,7 +21,7 @@ void main() {
       );
     });
 
-    test('Should not catch point outside of segment, but on line', () {
+    test('should not catch point outside of segment, but on line', () {
       final segment = LineSegment(
         Vector2.all(0),
         Vector2.all(1),
@@ -34,7 +34,7 @@ void main() {
       );
     });
 
-    test('Should not catch point outside of segment', () {
+    test('should not catch point outside of segment', () {
       final segment = LineSegment(
         Vector2.all(0),
         Vector2.all(1),
@@ -47,7 +47,7 @@ void main() {
       );
     });
 
-    test('Point on end of segment', () {
+    test('point on end of segment', () {
       final segment = LineSegment(
         Vector2.all(0),
         Vector2.all(1),
@@ -60,7 +60,7 @@ void main() {
       );
     });
 
-    test('Point on beginning of segment', () {
+    test('point on beginning of segment', () {
       final segment = LineSegment(
         Vector2.all(0),
         Vector2.all(1),
@@ -74,8 +74,8 @@ void main() {
     });
   });
 
-  group('LineSegment.intersections tests', () {
-    test('Simple intersection', () {
+  group('LineSegment.intersections', () {
+    test('simple intersection', () {
       final segmentA = LineSegment(Vector2.all(0), Vector2.all(1));
       final segmentB = LineSegment(Vector2(0, 1), Vector2(1, 0));
       final intersection = segmentA.intersections(segmentB);
@@ -87,7 +87,7 @@ void main() {
       expect(intersection.first == Vector2.all(0.5), true);
     });
 
-    test('No intersection', () {
+    test('no intersection', () {
       final segmentA = LineSegment(Vector2.all(0), Vector2.all(1));
       final segmentB = LineSegment(Vector2(0, 1), Vector2(1, 2));
       final intersection = segmentA.intersections(segmentB);
@@ -98,7 +98,7 @@ void main() {
       );
     });
 
-    test('Same line segments', () {
+    test('same line segments', () {
       final segmentA = LineSegment(Vector2.all(0), Vector2.all(1));
       final segmentB = LineSegment(Vector2.all(0), Vector2.all(1));
       final intersection = segmentA.intersections(segmentB);
@@ -110,7 +110,7 @@ void main() {
       expect(intersection.first == Vector2.all(0.5), true);
     });
 
-    test('Overlapping line segments', () {
+    test('overlapping line segments', () {
       final segmentA = LineSegment(Vector2.all(0), Vector2.all(1));
       final segmentB = LineSegment(Vector2.all(0.5), Vector2.all(1.5));
       final intersection = segmentA.intersections(segmentB);
@@ -122,7 +122,7 @@ void main() {
       expect(intersection.first == Vector2.all(0.75), true);
     });
 
-    test('One pixel overlap in different angles', () {
+    test('one pixel overlap in different angles', () {
       final segmentA = LineSegment(Vector2.all(0), Vector2.all(1));
       final segmentB = LineSegment(Vector2.all(0), Vector2(1, -1));
       final intersection = segmentA.intersections(segmentB);
@@ -134,7 +134,7 @@ void main() {
       expect(intersection.first == Vector2.all(0), true);
     });
 
-    test('One pixel parallel overlap in same angle', () {
+    test('one pixel parallel overlap in same angle', () {
       final segmentA = LineSegment(Vector2.all(0), Vector2.all(1));
       final segmentB = LineSegment(Vector2.all(1), Vector2.all(2));
       final intersection = segmentA.intersections(segmentB);
@@ -147,8 +147,8 @@ void main() {
     });
   });
 
-  group('Line.intersections tests', () {
-    test('Simple line intersection', () {
+  group('Line.intersections', () {
+    test('simple line intersection', () {
       const line1 = Line(1, -1, 0);
       const line2 = Line(1, 1, 0);
       final intersection = line1.intersections(line2);
@@ -156,7 +156,7 @@ void main() {
       expect(intersection.first == Vector2.all(0), true);
     });
 
-    test('Lines with c value', () {
+    test('lines with c value', () {
       const line1 = Line(1, 1, 1);
       const line2 = Line(1, -1, 1);
       final intersection = line1.intersections(line2);
@@ -164,7 +164,7 @@ void main() {
       expect(intersection.first == Vector2(1, 0), true);
     });
 
-    test('Does not catch parallel lines', () {
+    test('does not catch parallel lines', () {
       const line1 = Line(1, 1, -3);
       const line2 = Line(1, 1, 6);
       final intersection = line1.intersections(line2);
@@ -175,7 +175,7 @@ void main() {
       );
     });
 
-    test('Does not catch same line', () {
+    test('does not catch same line', () {
       const line1 = Line(1, 1, 1);
       const line2 = Line(1, 1, 1);
       final intersection = line1.intersections(line2);
@@ -187,29 +187,29 @@ void main() {
     });
   });
 
-  group('LinearEquation.fromPoints tests', () {
-    test('Simple line from points', () {
+  group('LinearEquation.fromPoints', () {
+    test('simple line from points', () {
       final line = Line.fromPoints(Vector2.zero(), Vector2.all(1));
       expect(line.a == 1.0, true, reason: 'a value is not correct');
       expect(line.b == -1.0, true, reason: 'b value is not correct');
       expect(line.c == 0.0, true, reason: 'c value is not correct');
     });
 
-    test('Line not going through origin', () {
+    test('line not going through origin', () {
       final line = Line.fromPoints(Vector2(-2, 0), Vector2(0, 2));
       expect(line.a == 2.0, true, reason: 'a value is not correct');
       expect(line.b == -2.0, true, reason: 'b value is not correct');
       expect(line.c == -4.0, true, reason: 'c value is not correct');
     });
 
-    test('Straight vertical line', () {
+    test('straight vertical line', () {
       final line = Line.fromPoints(Vector2.all(1), Vector2(1, -1));
       expect(line.a == -2.0, true, reason: 'a value is not correct');
       expect(line.b == 0.0, true, reason: 'b value is not correct');
       expect(line.c == -2.0, true, reason: 'c value is not correct');
     });
 
-    test('Straight horizontal line', () {
+    test('straight horizontal line', () {
       final line = Line.fromPoints(Vector2.all(1), Vector2(2, 1));
       expect(line.a == 0.0, true, reason: 'a value is not correct');
       expect(line.b == -1.0, true, reason: 'b value is not correct');
@@ -217,36 +217,36 @@ void main() {
     });
   });
 
-  group('LineSegment.pointsAt tests', () {
-    test('Simple pointing', () {
+  group('LineSegment.pointsAt', () {
+    test('simple pointing', () {
       final segment = LineSegment(Vector2.zero(), Vector2.all(1));
       const line = Line(1, 1, 3);
       final isPointingAt = segment.pointsAt(line);
       expect(isPointingAt, true, reason: 'Line should be pointed at');
     });
 
-    test('Is not pointed at when crossed', () {
+    test('is not pointed at when crossed', () {
       final segment = LineSegment(Vector2.zero(), Vector2.all(3));
       const line = Line(1, 1, 3);
       final isPointingAt = segment.pointsAt(line);
       expect(isPointingAt, false, reason: 'Line should not be pointed at');
     });
 
-    test('Is not pointed at when parallel', () {
+    test('is not pointed at when parallel', () {
       final segment = LineSegment(Vector2.zero(), Vector2(1, -1));
       const line = Line(1, 1, 3);
       final isPointingAt = segment.pointsAt(line);
       expect(isPointingAt, false, reason: 'Line should not be pointed at');
     });
 
-    test('Horizontal line can be pointed at', () {
+    test('horizontal line can be pointed at', () {
       final segment = LineSegment(Vector2.zero(), Vector2.all(1));
       const line = Line(0, 1, 2);
       final isPointingAt = segment.pointsAt(line);
       expect(isPointingAt, true, reason: 'Line should be pointed at');
     });
 
-    test('Vertical line can be pointed at', () {
+    test('vertical line can be pointed at', () {
       final segment = LineSegment(Vector2.zero(), Vector2.all(1));
       const line = Line(1, 0, 2);
       final isPointingAt = segment.pointsAt(line);
@@ -255,7 +255,7 @@ void main() {
   });
 
   group('Polygon intersections tests', () {
-    test('Simple polygon collision', () {
+    test('simple polygon collision', () {
       final polygonA = Polygon([
         Vector2(2, 2),
         Vector2(3, 1),
@@ -286,7 +286,7 @@ void main() {
       );
     });
 
-    test('Collision on shared line segment', () {
+    test('collision on shared line segment', () {
       final polygonA = Polygon([
         Vector2(1, 1),
         Vector2(1, 2),
@@ -316,7 +316,7 @@ void main() {
       );
     });
 
-    test('One point collision', () {
+    test('one point collision', () {
       final polygonA = Polygon([
         Vector2(1, 1),
         Vector2(1, 2),
@@ -342,7 +342,7 @@ void main() {
       );
     });
 
-    test('Collision while no corners are inside the other body', () {
+    test('collision while no corners are inside the other body', () {
       final polygonA = Polygon.fromDefinition(
         [
           Vector2(1, 1),
@@ -381,7 +381,7 @@ void main() {
       );
     });
 
-    test('Collision with advanced hitboxes in different quadrants', () {
+    test('collision with advanced hitboxes in different quadrants', () {
       final polygonA = Polygon([
         Vector2(0, 0),
         Vector2(-1, 1),
@@ -412,7 +412,7 @@ void main() {
   });
 
   group('Rectangle intersections tests', () {
-    test('Simple intersection', () {
+    test('simple intersection', () {
       final rectangleA = Rectangle(
         position: Vector2(4, 0),
         size: Vector2.all(4),
@@ -440,7 +440,7 @@ void main() {
   });
 
   group('Circle intersections tests', () {
-    test('Simple collision', () {
+    test('simple collision', () {
       final circleA = Circle.fromDefinition(
         position: Vector2(4, 0),
         size: Vector2.all(4),
@@ -462,7 +462,7 @@ void main() {
       );
     });
 
-    test('Two point collision', () {
+    test('two point collision', () {
       final circleA = Circle.fromDefinition(
         position: Vector2(3, 0),
         size: Vector2.all(4),
@@ -489,7 +489,7 @@ void main() {
       );
     });
 
-    test('Same size and position', () {
+    test('same size and position', () {
       final circleA = Circle.fromDefinition(
         position: Vector2.all(3),
         size: Vector2.all(4),
@@ -516,7 +516,7 @@ void main() {
       );
     });
 
-    test('Not overlapping', () {
+    test('not overlapping', () {
       final circleA = Circle.fromDefinition(
         position: Vector2.all(-1),
         size: Vector2.all(4),
@@ -533,7 +533,7 @@ void main() {
       );
     });
 
-    test('In third quadrant', () {
+    test('in third quadrant', () {
       final circleA = Circle.fromDefinition(
         position: Vector2.all(-1),
         size: Vector2.all(2),
@@ -558,7 +558,7 @@ void main() {
       );
     });
 
-    test('In different quadrants', () {
+    test('in different quadrants', () {
       final circleA = Circle.fromDefinition(
         position: Vector2.all(-1),
         size: Vector2.all(4),
@@ -585,7 +585,7 @@ void main() {
   });
 
   group('Circle-Polygon intersections tests', () {
-    test('Simple circle-polygon intersection', () {
+    test('simple circle-polygon intersection', () {
       final circle = Circle.fromDefinition(
         position: Vector2.zero(),
         size: Vector2.all(2),
@@ -609,7 +609,7 @@ void main() {
       );
     });
 
-    test('Single point circle-polygon intersection', () {
+    test('single point circle-polygon intersection', () {
       final circle = Circle.fromDefinition(
         position: Vector2(-1, 1),
         size: Vector2.all(2),
@@ -633,7 +633,7 @@ void main() {
       );
     });
 
-    test('Four point circle-polygon intersection', () {
+    test('four point circle-polygon intersection', () {
       final circle = Circle.fromDefinition(
         position: Vector2.all(1),
         size: Vector2.all(2),
@@ -662,7 +662,7 @@ void main() {
       );
     });
 
-    test('Polygon within circle, no intersections', () {
+    test('polygon within circle, no intersections', () {
       final circle = Circle.fromDefinition(
         position: Vector2.all(1),
         size: Vector2.all(2.1),

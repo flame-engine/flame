@@ -1,8 +1,6 @@
 import 'dart:math' as math;
 import 'dart:ui' hide Offset;
 
-import 'package:meta/meta.dart';
-
 import '../anchor.dart';
 import '../extensions/offset.dart';
 import '../extensions/rect.dart';
@@ -286,7 +284,7 @@ class PositionComponent extends Component {
   /// Flip the component horizontally around its center line.
   void flipHorizontallyAroundCenter() {
     if (_anchor.x != 0.5) {
-      final delta = (1 - 2 * _anchor.x) * width;
+      final delta = (1 - 2 * _anchor.x) * width * transform.scale.x;
       transform.x += delta * math.cos(transform.angle);
       transform.y += delta * math.sin(transform.angle);
     }
@@ -296,7 +294,7 @@ class PositionComponent extends Component {
   /// Flip the component vertically around its center line.
   void flipVerticallyAroundCenter() {
     if (anchor.y != 0.5) {
-      final delta = (1 - 2 * _anchor.y) * height;
+      final delta = (1 - 2 * _anchor.y) * height * transform.scale.y;
       transform.x += -delta * math.sin(transform.angle);
       transform.y += delta * math.cos(transform.angle);
     }
@@ -342,16 +340,11 @@ class PositionComponent extends Component {
     }
   }
 
-  @mustCallSuper
   @override
-  void preRender(Canvas canvas) {
+  void renderTree(Canvas canvas) {
     canvas.save();
     canvas.transform(transformMatrix.storage);
-  }
-
-  @mustCallSuper
-  @override
-  void postRender(Canvas canvas) {
+    super.renderTree(canvas);
     canvas.restore();
   }
 

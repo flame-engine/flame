@@ -12,7 +12,7 @@ import 'package:flutter/material.dart' hide Image, Draggable;
 enum Shapes { circle, rectangle, polygon }
 
 class MultipleShapesExample extends FlameGame
-    with HasCollidables, HasDraggableComponents, FPSCounter {
+    with HasCollidables, HasDraggables, FPSCounter {
   static const description = '''
     An example with many hitboxes that move around on the screen and during
     collisions they change color depending on what it is that they have collided
@@ -246,10 +246,10 @@ class SnowmanPart extends HitboxCircle {
   SnowmanPart(double definition, Vector2 relativeOffset, Color hitColor)
       : super(normalizedRadius: definition) {
     this.relativeOffset.setFrom(relativeOffset);
-    hitPaint..color = startColor;
+    hitPaint.color = startColor;
     onCollision = (Set<Vector2> intersectionPoints, HitboxShape other) {
       if (other.component is ScreenCollidable) {
-        hitPaint..color = startColor;
+        hitPaint.color = startColor;
       } else {
         hitPaint.color = hitColor.withOpacity(0.8);
       }

@@ -13,8 +13,7 @@ void main() async {
           margin: const EdgeInsets.only(right: 10, bottom: 20),
           size: Vector2.all(20),
         );
-        await game.add(marginComponent);
-        game.update(0);
+        await game.ensureAdd(marginComponent);
         // The position should be (470, 460) since the game size is (500, 500)
         // and the component has its anchor in the top left corner (which then
         // is were the margin will be calculated from).
