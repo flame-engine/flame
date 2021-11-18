@@ -33,6 +33,7 @@ void main() {
       expect(tp.style.fontSize, 12);
       expect(tp.style.fontFamily, 'Helvetica');
     });
+
     test('createDefault', () {
       final tp = TextRenderer.createDefault<TextPaint>();
       expect(tp, isNotNull);
@@ -42,6 +43,7 @@ void main() {
       expect(tr, isNotNull);
       expect(tr, isA<TextRenderer>());
     });
+
     test('change parameters of text component', () {
       final tc = TextComponent<TextPaint>('foo');
       tc.textRenderer = tc.textRenderer.copyWith(
@@ -49,12 +51,14 @@ void main() {
       );
       expect(tc.textRenderer.style.fontSize, 200);
     });
+
     test('custom renderer', () {
       TextRenderer.defaultRenderersRegistry[_CustomTextRenderer] =
           () => _CustomTextRenderer();
       final tc = TextComponent<_CustomTextRenderer>('foo');
       expect(tc.textRenderer, isA<_CustomTextRenderer>());
     });
+
     test('text component size is set', () {
       final t = TextComponent('foobar');
       expect(t.size, isNot(equals(Vector2.zero())));

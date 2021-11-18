@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 void main() async {
   final image = await generateImage();
 
-  group('SpriteComponent test', () {
+  group('SpriteComponent', () {
     test('check sizing of SpriteComponent', () {
       expect(image.width, 1);
       expect(image.height, 1);

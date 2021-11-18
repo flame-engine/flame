@@ -12,7 +12,8 @@ extension FlameFinds on CommonFinders {
   }
 }
 
-extension FlameGameExtension on FlameGame {
+@visibleForTesting
+extension FlameGameExtension on Component {
   /// Makes sure that the [component] is added to the tree if you wait for the
   /// returned future to resolve.
   Future<void> ensureAdd(Component component) async {

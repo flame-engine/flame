@@ -94,6 +94,6 @@ class IsometricTileMapGame extends FlameGame with MouseMovementDetector {
     final screenPosition = info.eventPosition.game;
     final block = base.getBlock(screenPosition);
     selector.show = base.containsBlock(block);
-    selector.position.setFrom(topLeft + base.getBlockPosition(block));
+    selector.position.setFrom(topLeft + base.getBlockRenderPosition(block));
   }
 }

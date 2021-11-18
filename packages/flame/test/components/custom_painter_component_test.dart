@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-class MockCustomPainter extends Mock implements CustomPainter {}
+class _MockCustomPainter extends Mock implements CustomPainter {}
 
 void main() {
   test('correctly calls the paint method of the painter', () {
-    final painter = MockCustomPainter();
+    final painter = _MockCustomPainter();
     final component = CustomPainterComponent(
       painter: painter,
     )..size = Vector2.all(100);

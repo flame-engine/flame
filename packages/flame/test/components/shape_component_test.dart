@@ -6,8 +6,8 @@ import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('ShapeComponent.containsPoint tests', () {
-    test('Simple circle contains point', () {
+  group('ShapeComponent.containsPoint', () {
+    test('circle contains point', () {
       final component = CircleComponent(
         radius: 1.0,
         position: Vector2(1, 1),
@@ -19,7 +19,7 @@ void main() {
       );
     });
 
-    test('Simple rectangle contains point', () {
+    test('rectangle contains point', () {
       final component = RectangleComponent(
         position: Vector2(1, 1),
         size: Vector2(1, 1),
@@ -30,7 +30,7 @@ void main() {
       );
     });
 
-    test('Simple polygon contains point', () {
+    test('polygon contains point', () {
       final component = PolygonComponent.fromPoints(
         [
           Vector2(2, 2),
@@ -46,7 +46,7 @@ void main() {
       );
     });
 
-    test('Rotated circle does not contain point', () {
+    test('rotated circle does not contain point', () {
       final component = CircleComponent(
         radius: 1.0,
         position: Vector2(1, 1),
@@ -59,7 +59,7 @@ void main() {
       );
     });
 
-    test('Rotated rectangle does not contain point', () {
+    test('rotated rectangle does not contain point', () {
       final component = RectangleComponent(
         position: Vector2.all(1.0),
         size: Vector2.all(2.0),
@@ -72,7 +72,7 @@ void main() {
       );
     });
 
-    test('Rotated polygon does not contain point', () {
+    test('rotated polygon does not contain point', () {
       final component = PolygonComponent.fromPoints(
         [
           Vector2(2, 2),
@@ -89,7 +89,7 @@ void main() {
       );
     });
 
-    test('Rotated circle contains point', () {
+    test('rotated circle contains point', () {
       final component = CircleComponent(
         radius: 1.0,
         position: Vector2(1, 1),
@@ -102,7 +102,7 @@ void main() {
       );
     });
 
-    test('Rotated rectangle contains point', () {
+    test('rotated rectangle contains point', () {
       final component = RectangleComponent(
         position: Vector2.all(1.0),
         size: Vector2.all(2.0),
@@ -115,7 +115,7 @@ void main() {
       );
     });
 
-    test('Rotated polygon contains point', () {
+    test('rotated polygon contains point', () {
       final component = PolygonComponent.fromPoints(
         [
           Vector2(2, 2),
@@ -132,7 +132,7 @@ void main() {
       );
     });
 
-    test('Horizontally flipped rectangle contains point', () {
+    test('horizontally flipped rectangle contains point', () {
       final component = RectangleComponent(
         position: Vector2.all(1.0),
         size: Vector2.all(2.0),
@@ -144,7 +144,7 @@ void main() {
       );
     });
 
-    test('Initially rotated CircleComponent does not contain point', () {
+    test('initially rotated CircleComponent does not contain point', () {
       final component = CircleComponent(
         radius: 1.0,
         position: Vector2(1, 1),
@@ -157,7 +157,7 @@ void main() {
       );
     });
 
-    test('Initially rotated RectangleComponent does not contain point', () {
+    test('initially rotated RectangleComponent does not contain point', () {
       final component = RectangleComponent(
         position: Vector2.all(1.0),
         size: Vector2.all(2.0),
@@ -170,7 +170,7 @@ void main() {
       );
     });
 
-    test('Initially rotated PolygonComponent does not contain point', () {
+    test('initially rotated PolygonComponent does not contain point', () {
       final component = PolygonComponent.fromPoints(
         [
           Vector2(2, 2),
@@ -187,7 +187,7 @@ void main() {
       );
     });
 
-    test('Rotated PolygonComponent contains point', () {
+    test('rotated PolygonComponent contains point', () {
       final component = PolygonComponent.fromPoints(
         [
           Vector2(2, 2),
@@ -204,7 +204,7 @@ void main() {
       );
     });
 
-    test('Moved CircleComponent contains point', () {
+    test('moved CircleComponent contains point', () {
       final component = CircleComponent(
         radius: 1.0,
         position: Vector2(2, 2),
@@ -216,7 +216,7 @@ void main() {
       );
     });
 
-    test('Moved RectangleComponent contains point', () {
+    test('moved RectangleComponent contains point', () {
       final component = RectangleComponent(
         position: Vector2(2, 2),
         size: Vector2(1, 1),
@@ -228,7 +228,7 @@ void main() {
       );
     });
 
-    test('Moved PolygonComponent contains point', () {
+    test('moved PolygonComponent contains point', () {
       final component = PolygonComponent.fromPoints(
         [
           Vector2(2, 0),
@@ -245,7 +245,7 @@ void main() {
       );
     });
 
-    test('Sized up CircleComponent does not contain point', () {
+    test('sized up CircleComponent does not contain point', () {
       final component = CircleComponent(
         radius: 1.0,
         position: Vector2(1, 1),
@@ -258,7 +258,7 @@ void main() {
       );
     });
 
-    test('Sized up RectangleComponent does not contain point', () {
+    test('sized up RectangleComponent does not contain point', () {
       final component = RectangleComponent(
         position: Vector2(1, 1),
         size: Vector2(2, 2),
@@ -270,7 +270,7 @@ void main() {
       );
     });
 
-    test('Sized PolygonComponent does not contain point', () {
+    test('sized PolygonComponent does not contain point', () {
       final component = PolygonComponent.fromPoints(
         [
           Vector2(2, 0),
@@ -287,45 +287,54 @@ void main() {
       );
     });
 
-    test('CircleComponent with default anchor (topLeft) contains point', () {
-      final component = CircleComponent(
-        radius: 1.0,
-        position: Vector2.all(1.0),
-        angle: pi / 4,
-      );
-      expect(
-        component.containsPoint(Vector2(0.9, 2.0)),
-        isTrue,
-      );
-    });
+    test(
+      'rotated CircleComponent with default anchor (topLeft) contains point',
+      () {
+        final component = CircleComponent(
+          radius: 1.0,
+          position: Vector2.all(1.0),
+          angle: pi / 4,
+        );
+        expect(
+          component.containsPoint(Vector2(0.9, 2.0)),
+          isTrue,
+        );
+      },
+    );
 
-    test('RectangleComponent with default anchor (topLeft) contains point', () {
-      final component = RectangleComponent(
-        position: Vector2.all(1.0),
-        size: Vector2.all(1.0),
-        angle: pi / 4,
-      );
-      expect(
-        component.containsPoint(Vector2(0.9, 2.0)),
-        isTrue,
-      );
-    });
+    test(
+      'rotated RectangleComponent with default anchor (topLeft) contains point',
+      () {
+        final component = RectangleComponent(
+          position: Vector2.all(1.0),
+          size: Vector2.all(1.0),
+          angle: pi / 4,
+        );
+        expect(
+          component.containsPoint(Vector2(0.9, 2.0)),
+          isTrue,
+        );
+      },
+    );
 
-    test('PolygonComponent with default anchor (topLeft) contains point', () {
-      final component = PolygonComponent.fromPoints(
-        [
-          Vector2(2, 0),
-          Vector2(1, 1),
-          Vector2(2, 2),
-          Vector2(3, 1),
-        ],
-        angle: pi / 4,
-      );
-      expect(
-        component.containsPoint(Vector2(1.0, 0.99)),
-        isTrue,
-      );
-    });
+    test(
+      'rotated PolygonComponent with default anchor (topLeft) contains point',
+      () {
+        final component = PolygonComponent.fromPoints(
+          [
+            Vector2(2, 0),
+            Vector2(1, 1),
+            Vector2(2, 2),
+            Vector2(3, 1),
+          ],
+          angle: pi / 4,
+        );
+        expect(
+          component.containsPoint(Vector2(1.0, 0.99)),
+          isTrue,
+        );
+      },
+    );
 
     flameGame.test(
       'CircleComponent with multiple parents contains point',

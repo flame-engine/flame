@@ -6,7 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class Callback {
+class _Callback {
   int calledNumber = 0;
 
   void call() => calledNumber++;
@@ -28,7 +28,7 @@ void effectTest(
   expectedPosition ??= Vector2.zero();
   expectedSize ??= Vector2.all(100.0);
   expectedScale ??= Vector2.all(1.0);
-  final callback = Callback();
+  final callback = _Callback();
   effect.onComplete = callback.call;
   final game = FlameGame();
   game.onGameResize(Vector2.all(200));
@@ -125,6 +125,7 @@ void effectTest(
   );
 }
 
+/// A component for testing, it's just a PositionComponent with size (100, 100)
 class TestComponent extends PositionComponent {
   TestComponent({
     Vector2? position,

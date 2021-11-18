@@ -2,30 +2,28 @@ import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:test/test.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-typedef VectorOperation = void Function(Vector2);
+void main() {
+  /// This helper function creates a "normal" Vector2 copy of [v1],
+  /// then applies [operation] to both vectors, and verifies that the
+  /// end result is the same. It also checks that [v1] produces a
+  /// notification during a modifying operation.
+  void check(NotifyingVector2 v1, void Function(Vector2) operation) {
+    final v2 = v1.clone();
+    expect(v2 is Vector2, true);
+    expect(v2 is NotifyingVector2, false);
+    var notified = 0;
+    void listener() {
+      notified++;
+    }
 
-/// This helper function creates a "normal" Vector2 copy of [v1],
-/// then applies [operation] to both vectors, and verifies that the
-/// end result is the same. It also checks that [v1] produces a
-/// notification during a modifying operation.
-void check(NotifyingVector2 v1, VectorOperation operation) {
-  final v2 = v1.clone();
-  expect(v2 is Vector2, true);
-  expect(v2 is NotifyingVector2, false);
-  var notified = 0;
-  void listener() {
-    notified++;
+    v1.addListener(listener);
+    operation(v1);
+    operation(v2);
+    v1.removeListener(listener);
+    expect(notified, 1);
+    expect(v1, v2);
   }
 
-  v1.addListener(listener);
-  operation(v1);
-  operation(v2);
-  v1.removeListener(listener);
-  expect(notified, 1);
-  expect(v1, v2);
-}
-
-void main() {
   group('NotifyingVector2', () {
     test('constructors', () {
       final nv0 = NotifyingVector2.zero();
@@ -37,6 +35,7 @@ void main() {
       final nv3 = NotifyingVector2.copy(Vector2(4, 9));
       expect(nv3, Vector2(4, 9));
     });
+
     test('full setters', () {
       final nv = NotifyingVector2.zero();
       check(nv, (v) => v.setValues(3, 2));
@@ -52,6 +51,7 @@ void main() {
       check(nv, (v) => v.st = Vector2(-5, -89));
       check(nv, (v) => v.ts = Vector2(-5, -89));
     });
+
     test('individual field setters', () {
       final nv = NotifyingVector2.zero();
       check(nv, (v) => v[0] = 2.5);
@@ -63,6 +63,7 @@ void main() {
       check(nv, (v) => v.s = 103);
       check(nv, (v) => v.t = 104);
     });
+
     test('modification methods', () {
       final nv = NotifyingVector2(23, 3);
       check(nv, (v) => v.length = 15);
@@ -86,6 +87,7 @@ void main() {
       nv.multiply(Vector2(1.23, -4.791));
       check(nv, (v) => v.roundToZero());
     });
+
     test('storage is read-only', () {
       final nv = NotifyingVector2.zero();
       expect(nv, Vector2.zero());

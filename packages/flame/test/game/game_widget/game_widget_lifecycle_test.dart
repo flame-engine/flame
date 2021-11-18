@@ -3,10 +3,10 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MyGame extends FlameGame {
+class _MyGame extends FlameGame {
   final List<String> events;
 
-  MyGame(this.events);
+  _MyGame(this.events);
 
   @override
   void onGameResize(Vector2 size) {
@@ -32,7 +32,7 @@ class MyGame extends FlameGame {
   }
 }
 
-class TitlePage extends StatelessWidget {
+class _TitlePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,10 +46,10 @@ class TitlePage extends StatelessWidget {
   }
 }
 
-class GamePage extends StatefulWidget {
-  final MyGame game;
+class _GamePage extends StatefulWidget {
+  final _MyGame game;
 
-  const GamePage(this.game);
+  const _GamePage(this.game);
 
   @override
   State<StatefulWidget> createState() {
@@ -57,8 +57,8 @@ class GamePage extends StatefulWidget {
   }
 }
 
-class _GamePageState extends State<GamePage> {
-  late MyGame _game;
+class _GamePageState extends State<_GamePage> {
+  late _MyGame _game;
 
   @override
   void initState() {
@@ -92,36 +92,38 @@ class _GamePageState extends State<GamePage> {
   }
 }
 
-class MyApp extends StatelessWidget {
+class _MyApp extends StatelessWidget {
   final List<String> events;
-  late final MyGame game;
+  late final _MyGame game;
 
-  MyApp(this.events) {
-    game = MyGame(events);
+  _MyApp(this.events) {
+    game = _MyGame(events);
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        '/': (_) => TitlePage(),
-        '/game': (_) => GamePage(game),
+        '/': (_) => _TitlePage(),
+        '/game': (_) => _GamePage(game),
       },
     );
   }
 }
 
-class MyContainer extends StatefulWidget {
+class _MyContainer extends StatefulWidget {
   final List<String> events;
 
-  const MyContainer(this.events, {Key? key}) : super(key: key);
+  const _MyContainer(this.events, {Key? key}) : super(key: key);
 
   @override
-  State<MyContainer> createState() => MyContainerState();
+  State<_MyContainer> createState() => _MyContainerState();
 }
 
-class MyContainerState extends State<MyContainer> {
+class _MyContainerState extends State<_MyContainer> {
   double size = 300;
+
+  late final game = _MyGame(widget.events);
 
   void causeResize() {
     setState(() => size = 400);
@@ -132,7 +134,7 @@ class MyContainerState extends State<MyContainer> {
     return Container(
       width: size,
       height: size,
-      child: GameWidget(game: MyGame(widget.events)),
+      child: GameWidget(game: game),
     );
   }
 }
@@ -141,7 +143,7 @@ void main() {
   group('Game Widget - Lifecycle', () {
     testWidgets('attach upon navigation', (tester) async {
       final events = <String>[];
-      await tester.pumpWidget(MyApp(events));
+      await tester.pumpWidget(_MyApp(events));
 
       await tester.tap(find.text('Play'));
 
@@ -160,7 +162,7 @@ void main() {
 
     testWidgets('detach when navigating out of the page', (tester) async {
       final events = <String>[];
-      await tester.pumpWidget(MyApp(events));
+      await tester.pumpWidget(_MyApp(events));
 
       await tester.tap(find.text('Play'));
 
@@ -187,21 +189,22 @@ void main() {
 
     testWidgets('on resize, parents are kept', (tester) async {
       final events = <String>[];
-      await tester.pumpWidget(MyContainer(events));
+      await tester.pumpWidget(_MyContainer(events));
 
       events.clear();
-      final state = tester.state<MyContainerState>(find.byType(MyContainer));
+      final state = tester.state<_MyContainerState>(find.byType(_MyContainer));
       state.causeResize();
 
       await tester.pump();
-      expect(events, ['onGameResize', 'onLoad', 'onMount']); // no onRemove
-      final game = tester.allWidgets.whereType<GameWidget<MyGame>>().first.game;
+      expect(events, ['onGameResize']); // no onRemove
+      final game =
+          tester.allWidgets.whereType<GameWidget<_MyGame>>().first.game;
       expect(game.children, everyElement((Component c) => c.parent == game));
     });
 
     testWidgets('all events are executed in the correct order', (tester) async {
       final events = <String>[];
-      await tester.pumpWidget(MyApp(events));
+      await tester.pumpWidget(_MyApp(events));
 
       await tester.tap(find.text('Play'));
 
