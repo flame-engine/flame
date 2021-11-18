@@ -472,7 +472,7 @@ class Parallax {
   /// used can also be passed in.
   /// If no image cache is set, the global flame cache is used.
   static Future<Parallax> load(
-    List<ParallaxData> dataList, {
+    Iterable<ParallaxData> dataList, {
     Vector2? size,
     Vector2? baseVelocity,
     Vector2? velocityMultiplierDelta,

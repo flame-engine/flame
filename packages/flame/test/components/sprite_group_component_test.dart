@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-enum SpriteState {
+enum _SpriteState {
   idle,
   running,
 }
@@ -11,14 +11,14 @@ void main() async {
   // Generate a image
   final image = await generateImage();
 
-  group('SpriteGroupComponent test', () {
+  group('SpriteGroupComponent', () {
     test('returns the correct sprite according to its state', () {
       final sprite1 = Sprite(image);
       final sprite2 = Sprite(image);
-      final component = SpriteGroupComponent<SpriteState>(
+      final component = SpriteGroupComponent<_SpriteState>(
         sprites: {
-          SpriteState.idle: sprite1,
-          SpriteState.running: sprite2,
+          _SpriteState.idle: sprite1,
+          _SpriteState.running: sprite2,
         },
       );
 
@@ -26,11 +26,11 @@ void main() async {
       expect(component.sprite, null);
 
       // Setting the idle state, we need to see the sprite1
-      component.current = SpriteState.idle;
+      component.current = _SpriteState.idle;
       expect(component.sprite, sprite1);
 
       // Setting the running state, we need to see the sprite2
-      component.current = SpriteState.running;
+      component.current = _SpriteState.running;
       expect(component.sprite, sprite2);
     });
   });

@@ -39,8 +39,8 @@ class SpritebatchGame extends FlameGame {
     }
 
     add(
-      SpriteBatchComponent.fromSpriteBatch(
-        spriteBatch,
+      SpriteBatchComponent(
+        spriteBatch: spriteBatch,
         blendMode: BlendMode.srcOver,
       ),
     );

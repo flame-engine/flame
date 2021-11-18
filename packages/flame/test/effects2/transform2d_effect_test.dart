@@ -5,8 +5,8 @@ import 'package:flame/src/effects2/transform2d_effect.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MyEffect extends Transform2DEffect {
-  MyEffect(EffectController controller) : super(controller);
+class _MyEffect extends Transform2DEffect {
+  _MyEffect(EffectController controller) : super(controller);
 }
 
 void main() {
@@ -18,12 +18,12 @@ void main() {
         game.add(obj);
         game.update(0);
 
-        final effect = MyEffect(StandardEffectController(duration: 1));
+        final effect = _MyEffect(StandardEffectController(duration: 1));
         obj.add(effect);
         game.update(0);
         expect(effect.target, obj.transform);
 
-        final effect2 = MyEffect(StandardEffectController(duration: 1));
+        final effect2 = _MyEffect(StandardEffectController(duration: 1));
         expect(
           () async => game.add(effect2),
           throwsA(isA<UnsupportedError>()),

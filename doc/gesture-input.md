@@ -179,7 +179,7 @@ children tree and then passed further down until a method returns `false`.
 
 ### Tappable components
 
-By adding the `HasTappableComponents` mixin to your game, and using the mixin `Tappable` on your
+By adding the `HasTappables` mixin to your game, and using the mixin `Tappable` on your
 components, you can override the following methods on your components:
 
 ```dart
@@ -216,21 +216,21 @@ class TappableComponent extends PositionComponent with Tappable {
   }
 }
 
-class MyGame extends FlameGame with HasTappableComponents {
+class MyGame extends FlameGame with HasTappables {
   MyGame() {
     add(TappableComponent());
   }
 }
 ```
 
-**Note**: `HasTappableComponents` uses an advanced gesture detector under the hood and as explained
+**Note**: `HasTappables` uses an advanced gesture detector under the hood and as explained
 further up on this page it shouldn't be used alongside basic detectors.
 
 ### Draggable components
 
 Just like with `Tappable`, Flame offers a mixin for `Draggable`.
 
-By adding the `HasDraggableComponents` mixin to your game, and by using the mixin `Draggable` on
+By adding the `HasDraggables` mixin to your game, and by using the mixin `Draggable` on
 your components, they can override the simple methods that enable an easy to use drag api on your
 components.
 
@@ -291,14 +291,14 @@ class DraggableComponent extends PositionComponent with Draggable {
   }
 }
 
-class MyGame extends FlameGame with HasDraggableComponents {
+class MyGame extends FlameGame with HasDraggables {
   MyGame() {
     add(DraggableComponent());
   }
 }
 ```
 
-**Note**: `HasDraggableComponents` uses an advanced gesture detector under the hood and as explained
+**Note**: `HasDraggables` uses an advanced gesture detector under the hood and as explained
 further up on this page, shouldn't be used alongside basic detectors.
 
 ### Hoverable components
@@ -306,7 +306,7 @@ further up on this page, shouldn't be used alongside basic detectors.
 Just like the others, this mixin allows for easy wiring of your component to listen to hover states
 and events.
 
-By adding the `HasHoverableComponents` mixin to your base game, and by using the mixin `Hoverable` on
+By adding the `HasHoverables` mixin to your base game, and by using the mixin `Hoverable` on
 your components, they get an `isHovered` field and a couple of methods (`onHoverStart`, `onHoverEnd`) that
 you can override if you want to listen to the events.
 

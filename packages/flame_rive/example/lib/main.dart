@@ -29,7 +29,7 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class RiveExampleGame extends FlameGame with HasTappableComponents {
+class RiveExampleGame extends FlameGame with HasTappables {
   @override
   Color backgroundColor() {
     return const Color(0xFFFFFFFF);

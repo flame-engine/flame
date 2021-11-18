@@ -12,8 +12,7 @@ import 'package:flutter/painting.dart';
 
 import 'joystick_player.dart';
 
-class JoystickAdvancedGame extends FlameGame
-    with HasDraggableComponents, HasTappableComponents {
+class JoystickAdvancedGame extends FlameGame with HasDraggables, HasTappables {
   late final JoystickPlayer player;
   late final JoystickComponent joystick;
   late final TextComponent speedText;
@@ -106,11 +105,11 @@ class JoystickAdvancedGame extends FlameGame
       style: TextStyle(color: BasicPalette.white.color),
     );
     speedText = TextComponent(
-      'Speed: 0',
+      text: 'Speed: 0',
       textRenderer: _regular,
     )..isHud = true;
     directionText = TextComponent(
-      'Direction: idle',
+      text: 'Direction: idle',
       textRenderer: _regular,
     )..isHud = true;
 

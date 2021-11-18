@@ -9,7 +9,7 @@ import 'package:forge2d/forge2d.dart';
 import 'balls.dart';
 import 'boundaries.dart';
 
-class DraggableSample extends Forge2DGame with HasDraggableComponents {
+class DraggableSample extends Forge2DGame with HasDraggables {
   DraggableSample() : super(gravity: Vector2.all(0.0));
 
   @override

@@ -1,5 +1,5 @@
 # Collision detection
-If you want to have a full blown physics engine in your game we recommend that you use
+If you want to have a full-blown physics engine in your game we recommend that you use
 Forge2D by adding [flame_forge2d](https://github.com/flame-engine/flame_forge2d) as a dependency.
 But if you have a simpler use-case and just want to check for collisions of components and improve
 the accuracy of gestures, Flame's built-in collision detection will serve you very well.
@@ -70,7 +70,7 @@ class MyCollidable extends PositionComponent with HasHitboxes, Collidable {
 ```
 
 The `HitboxPolygon` added to the `Collidable` here is a diamond shape(◇).
-More about how the different shapes are defined in the [Shapes](#Shapes) section.
+More about how the different shapes are defined in the [Shapes](#shapes) section.
 
 Remember that you can add as many `HitboxShape`s as you want to your `Collidable` to make up more
 complex hitboxes. For example a snowman with a hat could be represented by three `HitboxCircle`s and
@@ -111,7 +111,7 @@ implemented. The same goes for the `onCollisionEnd` method, which is called when
 shapes that were previously colliding no longer colliding with each other.
 
 If you want to check collisions with the screen edges, as we do in the example above, you can use
-the predefined [ScreenCollidable](#ScreenCollidable) class and since that one also is a `Collidable`
+the predefined [ScreenCollidable](#screencollidable) class and since that one also is a `Collidable`
 you can implement your own `onCollision` method for that class if needed.
 
 #### CollidableType
@@ -166,8 +166,7 @@ A Shape is the base class for representing a scalable geometrical shape. The sha
 ways of defining how they look, but they all have a size and angle that can be modified and the
 shape definition will scale or rotate the shape accordingly.
 
-There are currently three shapes: [Polygon](#Polygon), [Rectangle](#Rectangle) and
-[Cirlce](#Circle).
+There are currently three shapes: [](#polygon), [](#rectangle) and [](#circle).
 
 ### HitboxShape
 A `HitboxShape` is a `Shape` defined from the center position of the component that it is attached
@@ -182,10 +181,10 @@ the polygon needs to be convex. So always use convex polygons or you will most l
 problems if you don't really know what you are doing. It should also be noted that you should always
 define the vertices in your polygon in a clockwise order.
 
-In comparision to the normal `Polygon`, there is only one way to create a `HitboxPolygon`, the only
+In comparison to the normal `Polygon`, there is only one way to create a `HitboxPolygon`, the only
 mandatory argument is a list of `Vector2` which defines how your polygon should look, but not the
 size or position for it (since that sill be defined by the component that you attach it to).
-For example you could create a diamond like in the [Collidable](#Collidable) example like this:
+For example you could create a diamond like in the [](#collidable) example like this:
 
 ```dart
 HitboxPolygon([
@@ -203,7 +202,7 @@ definition in the constructor for this shape.
 
 The vectors in the example defines percentages of the length from the center to the edge of the
 screen in both x and y axis, so for our first item in our list (`Vector2(0, 1)`) we are pointing on
-on the middle of the top wall of the bounding box, since the cordinate system here is defined from
+on the middle of the top wall of the bounding box, since the coordinate system here is defined from
 the center of the polygon.
 
 ![An example of how to define a polygon shape](images/polygon_shape.png)
@@ -256,7 +255,7 @@ you can use the optional arguments `radius` and `position` to set those, if the 
 `size` of the `Circle` will be automatically set too.
 
 ## Examples
-https://examples.flame-engine.org/#/Collision%20Detection_Circles
-https://examples.flame-engine.org/#/Collision%20Detection_Multiple%20shapes
-https://examples.flame-engine.org/#/Collision%20Detection_Shapes%20without%20components
-https://github.com/flame-engine/flame/tree/main/examples/lib/stories/collision_detection
+- https://examples.flame-engine.org/#/Collision%20Detection_Circles
+- https://examples.flame-engine.org/#/Collision%20Detection_Multiple%20shapes
+- https://examples.flame-engine.org/#/Collision%20Detection_Shapes%20without%20components
+- https://github.com/flame-engine/flame/tree/main/examples/lib/stories/collision_detection

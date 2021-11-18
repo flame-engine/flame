@@ -59,7 +59,7 @@ class DraggableSquare extends PositionComponent with Draggable, HasGameRef {
   }
 }
 
-class DraggablesGame extends FlameGame with HasDraggableComponents {
+class DraggablesGame extends FlameGame with HasDraggables {
   final double zoom;
   late final DraggableSquare square;
 
