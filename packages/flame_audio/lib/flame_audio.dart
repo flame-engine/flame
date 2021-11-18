@@ -15,7 +15,7 @@ class FlameAudio {
     return audioCache.play(file, volume: volume, mode: PlayerMode.LOW_LATENCY);
   }
 
-  /// Plays, and keep looping the given [file].
+  /// Plays, and keeps looping the given [file].
   static Future<AudioPlayer> loop(String file, {double volume = 1.0}) {
     return audioCache.loop(file, volume: volume, mode: PlayerMode.LOW_LATENCY);
   }

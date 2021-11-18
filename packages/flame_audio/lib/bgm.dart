@@ -21,7 +21,7 @@ class Bgm extends WidgetsBindingObserver {
   /// The [AudioPlayer] instance that is currently playing the audio.
   AudioPlayer? audioPlayer;
 
-  /// If the [Bgm] is playing or not.
+  /// Whether [Bgm] is playing or not.
   bool isPlaying = false;
 
   /// {@macro _bgm}

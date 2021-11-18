@@ -59,7 +59,7 @@ class AudioPool {
     return instance;
   }
 
-  /// Starts playing the audio, returns a function that can stopped the audio.
+  /// Starts playing the audio, returns a function that can stop the audio.
   Future<Stoppable> start({double volume = 1.0}) async {
     return _lock.synchronized(() async {
       if (_availablePlayers.isEmpty) {
