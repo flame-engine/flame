@@ -5,7 +5,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:test/test.dart';
 
-class _GameHasDraggables extends FlameGame with HasDraggableComponents {}
+class _GameHasDraggables extends FlameGame with HasDraggables {}
 
 void main() {
   final withDraggables = FlameTester(() => _GameHasDraggables());

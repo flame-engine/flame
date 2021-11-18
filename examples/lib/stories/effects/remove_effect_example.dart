@@ -6,7 +6,7 @@ import 'package:flame/input.dart';
 import 'package:flame/src/effects2/remove_effect.dart'; // ignore: implementation_imports
 import 'package:flutter/material.dart';
 
-class RemoveEffectExample extends FlameGame with HasTappableComponents {
+class RemoveEffectExample extends FlameGame with HasTappables {
   static const description = '''
     Click on any circle to apply a RemoveEffect, which will make the circle
     disappear after a 0.5 second delay.

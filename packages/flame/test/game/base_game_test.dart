@@ -10,7 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart' as flutter;
 import 'package:flutter_test/flutter_test.dart';
 
-class _GameWithTappables extends FlameGame with HasTappableComponents {}
+class _GameWithTappables extends FlameGame with HasTappables {}
 
 class _MyTappableComponent extends _MyComponent with Tappable {
   bool tapped = false;

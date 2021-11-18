@@ -26,7 +26,7 @@ class GameChangeTimer extends TimerComponent with HasGameRef<GameInGame> {
   }
 }
 
-class GameInGame extends FlameGame with HasDraggableComponents {
+class GameInGame extends FlameGame with HasDraggables {
   @override
   bool debugMode = true;
   late final Composability composedGame;

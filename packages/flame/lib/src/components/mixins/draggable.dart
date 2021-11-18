@@ -68,15 +68,15 @@ mixin Draggable on Component {
     if (isPrepared) {
       final parentGame = findParent<FlameGame>();
       assert(
-        parentGame is HasDraggableComponents,
+        parentGame is HasDraggables,
         'Draggable Components can only be added to a FlameGame with '
-        'HasDraggableComponents',
+        'HasDraggables',
       );
     }
   }
 }
 
-mixin HasDraggableComponents on FlameGame {
+mixin HasDraggables on FlameGame {
   @mustCallSuper
   void onDragStart(int pointerId, DragStartInfo info) {
     _onGenericEventReceived((c) => c.handleDragStart(pointerId, info));
