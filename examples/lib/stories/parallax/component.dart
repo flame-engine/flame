@@ -2,7 +2,12 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 
-class ComponentParallaxGame extends FlameGame {
+class ComponentParallaxExample extends FlameGame {
+  static const String description = '''
+    Shows how to do initiation and loading of assets from within an extended
+    `ParallaxComponent`,
+  ''';
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -10,7 +15,7 @@ class ComponentParallaxGame extends FlameGame {
   }
 }
 
-class MyParallaxComponent extends ParallaxComponent<ComponentParallaxGame> {
+class MyParallaxComponent extends ParallaxComponent<ComponentParallaxExample> {
   @override
   Future<void> onLoad() async {
     await super.onLoad();

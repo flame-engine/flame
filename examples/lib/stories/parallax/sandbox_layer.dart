@@ -3,13 +3,19 @@ import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 import 'package:flutter/painting.dart';
 
-class SandBoxLayerParallaxGame extends FlameGame {
+class SandboxLayerParallaxExample extends FlameGame {
+  static const String description = '''
+    In this example, properties of a layer can be changed to preview the
+    different combination of values. You can change the properties by pressing
+    the pen in the upper right corner.
+  ''';
+
   final Vector2 planeSpeed;
   final ImageRepeat planeRepeat;
   final LayerFill planeFill;
   final Alignment planeAlignment;
 
-  SandBoxLayerParallaxGame({
+  SandboxLayerParallaxExample({
     required this.planeSpeed,
     required this.planeRepeat,
     required this.planeFill,

@@ -16,48 +16,45 @@ void addParallaxStories(Dashbook dashbook) {
   dashbook.storiesOf('Parallax')
     ..add(
       'Basic',
-      (_) => GameWidget(game: BasicParallaxGame()),
+      (_) => GameWidget(game: BasicParallaxExample()),
       codeLink: baseLink('parallax/basic.dart'),
-      info: 'Shows the simplest way to use a fullscreen ParallaxComponent',
+      info: BasicParallaxExample.description,
     )
     ..add(
       'Component',
-      (_) => GameWidget(game: ComponentParallaxGame()),
+      (_) => GameWidget(game: ComponentParallaxExample()),
       codeLink: baseLink('parallax/component.dart'),
-      info: 'Shows how to do initiation and loading of assets from within an '
-          'extended ParallaxComponent',
+      info: ComponentParallaxExample.description,
     )
     ..add(
       'Animation',
-      (_) => GameWidget(game: AnimationParallaxGame()),
+      (_) => GameWidget(game: AnimationParallaxExample()),
       codeLink: baseLink('parallax/animation.dart'),
-      info: 'Shows how to use animations in a parallax',
+      info: AnimationParallaxExample.description,
     )
     ..add(
       'Non-fullscreen',
-      (_) => GameWidget(game: SmallParallaxGame()),
+      (_) => GameWidget(game: SmallParallaxExample()),
       codeLink: baseLink('parallax/small_parallax.dart'),
-      info: 'Shows how to create a smaller parallax in the center of the '
-          'screen',
+      info: SmallParallaxExample.description,
     )
     ..add(
       'No FCS',
-      (_) => GameWidget(game: NoFCSParallaxGame()),
+      (_) => GameWidget(game: NoFCSParallaxExample()),
       codeLink: baseLink('parallax/no_fcs.dart'),
-      info: "Shows how to use the parallax without Flame's component system",
+      info: NoFCSParallaxExample.description,
     )
     ..add(
       'Advanced',
-      (_) => GameWidget(game: AdvancedParallaxGame()),
+      (_) => GameWidget(game: AdvancedParallaxExample()),
       codeLink: baseLink('parallax/advanced.dart'),
-      info: 'Shows how to create a parallax with different velocity deltas on '
-          'each layer',
+      info: AdvancedParallaxExample.description,
     )
     ..add(
       'Layer sandbox',
       (context) {
         return GameWidget(
-          game: SandBoxLayerParallaxGame(
+          game: SandboxLayerParallaxExample(
             planeSpeed: Vector2(
               context.numberProperty('plane x speed', 0),
               context.numberProperty('plane y speed', 0),
@@ -90,7 +87,6 @@ void addParallaxStories(Dashbook dashbook) {
         );
       },
       codeLink: baseLink('parallax/sandbox_layer.dart'),
-      info: 'In this example, properties of a layer can be changed to preview '
-          'the different combination of values',
+      info: SandboxLayerParallaxExample.description,
     );
 }

@@ -4,12 +4,15 @@ import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 import 'package:flutter/material.dart';
 
-/// This examples serves to test the Parallax feature outside of the
-/// Flame Component System (FCS), use the other files in this folder
-/// for examples on how to use parallax with FCS
-/// FCS is only used when you extend FlameGame, not Game,
-/// like we do in this example.
-class NoFCSParallaxGame with Loadable, Game {
+class NoFCSParallaxExample with Loadable, Game {
+  static const String description = '''
+    This examples serves to test the Parallax feature outside of the Flame
+    Component System (FCS), use the other files in this folder for examples on
+    how to use parallax with FCS.\n
+    FCS is only used when you extend FlameGame, not when you only use the Game
+    mixin, like we do in this example.
+  ''';
+
   late Parallax parallax;
 
   @override

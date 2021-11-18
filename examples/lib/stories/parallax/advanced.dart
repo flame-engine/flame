@@ -2,7 +2,11 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 
-class AdvancedParallaxGame extends FlameGame {
+class AdvancedParallaxExample extends FlameGame {
+  static const String description = '''
+    Shows how to create a parallax with different velocity deltas on each layer.
+  ''';
+
   final _layersMeta = {
     'parallax/bg.png': 1.0,
     'parallax/mountain-far.png': 1.5,
