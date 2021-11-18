@@ -90,7 +90,7 @@ abstract class Particle {
   ///
   /// See `SingleChildParticle` or [ComposedParticle] for details.
   void setLifespan(double lifespan) {
-    // TODO: Maybe make it into a setter/getter?
+    // TODO(wolfenrain): Maybe make it into a setter/getter?
     _lifespan = lifespan;
     _timer?.stop();
     _timer = Timer(lifespan, onTick: () => _shouldBeRemoved = true)..start();

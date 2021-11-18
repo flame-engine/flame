@@ -31,7 +31,7 @@ abstract class Transform2DEffect extends Effect {
     if (parent is PositionComponent) {
       target = (parent! as PositionComponent).transform;
     }
-    // TODO: add Camera support once it uses Transform2D
+    // TODO(st-pasha): add Camera support once it uses Transform2D
     else {
       throw UnsupportedError(
         'Can only apply a Transform2DEffect to a PositionComponent class',

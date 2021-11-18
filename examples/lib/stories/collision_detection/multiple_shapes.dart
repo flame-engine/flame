@@ -246,10 +246,10 @@ class SnowmanPart extends HitboxCircle {
   SnowmanPart(double definition, Vector2 relativeOffset, Color hitColor)
       : super(normalizedRadius: definition) {
     this.relativeOffset.setFrom(relativeOffset);
-    hitPaint..color = startColor;
+    hitPaint.color = startColor;
     onCollision = (Set<Vector2> intersectionPoints, HitboxShape other) {
       if (other.component is ScreenCollidable) {
-        hitPaint..color = startColor;
+        hitPaint.color = startColor;
       } else {
         hitPaint.color = hitColor.withOpacity(0.8);
       }
