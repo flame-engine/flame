@@ -23,13 +23,13 @@ bool hasBasicGestureDetectors(Game game) =>
 bool hasAdvancedGesturesDetectors(Game game) =>
     game is MultiTouchTapDetector ||
     game is MultiTouchDragDetector ||
-    game is HasTappableComponents ||
-    game is HasDraggableComponents;
+    game is HasTappables ||
+    game is HasDraggables;
 
 bool hasMouseDetectors(Game game) =>
     game is MouseMovementDetector ||
     game is ScrollDetector ||
-    game is HasHoverableComponents;
+    game is HasHoverables;
 
 Widget applyBasicGesturesDetectors(Game game, Widget child) {
   return GestureDetector(
@@ -236,7 +236,7 @@ Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
       instance.onTapCancel = game.onTapCancel;
       instance.onTap = game.onTap;
     });
-  } else if (game is HasTappableComponents) {
+  } else if (game is HasTappables) {
     addAndConfigureRecognizer(
       () => MultiTapGestureRecognizer(),
       (MultiTapGestureRecognizer instance) {
@@ -257,7 +257,7 @@ Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
         ..onEnd = ((details) => game.onDragEnd(pointerId, details))
         ..onCancel = (() => game.onDragCancel(pointerId));
     });
-  } else if (game is HasDraggableComponents) {
+  } else if (game is HasDraggables) {
     addDragRecognizer(game, (int pointerId, DragStartInfo position) {
       game.onDragStart(pointerId, position);
       return _DragEvent(game)
@@ -277,7 +277,7 @@ Widget applyAdvancedGesturesDetectors(Game game, Widget child) {
 Widget applyMouseDetectors(Game game, Widget child) {
   final mouseMoveFn = game is MouseMovementDetector
       ? game.onMouseMove
-      : (game is HasHoverableComponents ? game.onMouseMove : null);
+      : (game is HasHoverables ? game.onMouseMove : null);
   return Listener(
     child: MouseRegion(
       child: child,

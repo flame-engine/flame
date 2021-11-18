@@ -5,7 +5,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/gestures.dart';
 import 'package:test/test.dart';
 
-class _GameHasDraggables extends FlameGame with HasDraggableComponents {}
+class _GameHasDraggables extends FlameGame with HasDraggables {}
 
 class _DraggableComponent extends PositionComponent with Draggable {
   bool hasStartedDragging = false;
@@ -33,7 +33,7 @@ void main() {
       (game) async {
         const message =
             'Draggable Components can only be added to a FlameGame with '
-            'HasDraggableComponents';
+            'HasDraggables';
 
         expect(
           () => game.add(_DraggableComponent()),

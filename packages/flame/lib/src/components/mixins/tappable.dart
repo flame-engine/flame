@@ -53,15 +53,15 @@ mixin Tappable on Component {
     if (isPrepared) {
       final parentGame = findParent<FlameGame>();
       assert(
-        parentGame is HasTappableComponents,
+        parentGame is HasTappables,
         'Tappable Components can only be added to a FlameGame with '
-        'HasTappableComponents',
+        'HasTappables',
       );
     }
   }
 }
 
-mixin HasTappableComponents on FlameGame {
+mixin HasTappables on FlameGame {
   void _handleTapEvent(bool Function(Tappable child) tapEventHandler) {
     for (final c in children.reversed()) {
       var shouldContinue = c.propagateToChildren<Tappable>(tapEventHandler);
