@@ -56,7 +56,7 @@ class MovableEmber extends Ember<FollowComponentExample>
   late final TextComponent positionText;
   late final Vector2 textPosition;
 
-  MovableEmber() : super(priority: 1);
+  MovableEmber() : super(priority: 2);
 
   @override
   Future<void> onLoad() async {
