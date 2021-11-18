@@ -6,7 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class _HasTappablesGame extends FlameGame with HasTappableComponents {}
+class _HasTappablesGame extends FlameGame with HasTappables {}
 
 class _MyTap extends PositionComponent with Tappable {
   late Vector2 gameSize;

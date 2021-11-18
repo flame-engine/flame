@@ -8,7 +8,7 @@ import 'package:forge2d/forge2d.dart';
 import 'balls.dart';
 import 'boundaries.dart';
 
-class CompositionSample extends Forge2DGame with HasTappableComponents {
+class CompositionSample extends Forge2DGame with HasTappables {
   static const info = '''
 This example shows how to compose a `BodyComponent` together with a normal Flame
 component. Click the ball to see the number increment.
@@ -42,7 +42,10 @@ class TapableBall extends Ball with Tappable {
   Future<void> onLoad() async {
     super.onLoad();
     _textPaint = TextPaint(style: _textStyle);
-    textComponent = TextComponent(counter.toString(), textRenderer: _textPaint);
+    textComponent = TextComponent(
+      text: counter.toString(),
+      textRenderer: _textPaint,
+    );
     add(textComponent);
   }
 

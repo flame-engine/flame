@@ -65,6 +65,6 @@ class SandBoxLayerParallaxGame extends FlameGame {
       baseVelocity: Vector2(20, 0),
     );
 
-    add(ParallaxComponent.fromParallax(parallax));
+    add(ParallaxComponent(parallax: parallax));
   }
 }

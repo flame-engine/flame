@@ -8,7 +8,7 @@ This diagram might look intimidating, but don't worry, it is not as complex as i
 All components inherit from the abstract class `Component`.
 
 If you want to skip reading about abstract classes you can jump directly to
-[PositionComponent](#positioncomponent).
+[](#positioncomponent).
 
 Every `Component` has a few methods that you can optionally implement, which are used by the
 `FlameGame` class. If you are not using `FlameGame`, you can use these methods on your own game loop
@@ -90,15 +90,67 @@ class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
 
 ## PositionComponent
 
-This class represent a single object on the screen, being a floating rectangle or a rotating sprite.
+This class represent a positioned object on the screen, being a floating rectangle or a rotating
+sprite. It can also represent a group of positioned components if children are added to it.
 
-A `PositionComponent` has a `position`, `size` and `angle`, as well as some useful methods like
-`distance` and `angleBetween`.
+The base of the `PositionComponent` is that it has a `position`, `size`, `scale`, `angle` and
+`anchor` which transforms how the component is rendered.
+
+### Position
+
+The `position` is just a `Vector2` which represents the position of the component's anchor in
+relation to its parent; if the parent is a `FlameGame`, it is in relation to the viewport.
+
+### Size
+
+The `size` of the component when the zoom level of the camera is 1.0 (no zoom, default).
+The `size` is *not* in relation to the parent of the component.
+
+### Scale
+
+The `scale` is how much the component and its children should be scaled. Since it is represented
+by a `Vector2`, you can scale in a uniform way by changing `x` and `y` with the same amount, or in a
+non-uniform way, by change `x` or `y` by different amounts.
+
+### Angle
+
+The `angle` is the rotation angle around the anchor, represented as a double in radians. It is
+relative to the parent's angle.
+
+### Anchor
+
+The `anchor` is where on the component that the position and rotation should be defined from (the
+default is `Anchor.topLeft`). So if you have the anchor set as `Anchor.center` the component's
+position on the screen will be in the center of the component and if an `angle` is applied, it is
+rotated around the anchor, so in this case around the center of the component. You can think of it
+as the point within the component by which Flame "grabs" it.
+
+### PositionComponent children
+
+All children of the `PositionComponent` will be transformed in relation to the parent, which means
+that the `position`, `angle` and `scale` will be relative to the parents state.
+So if you, for example, wanted to position a child 50 logical pixels above the center of the parent
+you would do this:
+
+```
+final parent = PositionComponent(
+  position: Vector2(100, 100),
+  size: Vector2(100, 100),
+  anchor: Anchor.center,
+);
+final child = PositionComponent(position: Vector2(0, -50));
+parent.add(child);
+```
+
+Remember that most components that are rendered on the screen are `PositionComponent`s, so
+this pattern can be used in for example [](#spritecomponent) and [](#spriteanimationcomponent) too.
+
+### Render PositionComponent
 
 When implementing the `render` method for a component that extends `PositionComponent` remember to
 render from the top left corner (0.0). Your render method should not handle where on the screen your
 component should be rendered. To handle where and how your component should be rendered use the
-`position`, `angle` and `anchor` properties and flame will automatically handle the rest for you.
+`position`, `angle` and `anchor` properties and Flame will automatically handle the rest for you.
 
 If you want to know where on the screen the bounding box of the component is you can use the
 `toRect` method.
@@ -307,9 +359,9 @@ For a working example, check the example in the
 
 ## ParallaxComponent
 
-This `Component` can be used to render backgrounds with a depth feeling by drawing several transparent
-images on top of each other, where each image or animation (`ParallaxRenderer`) is moving with a
-different velocity.
+This `Component` can be used to render backgrounds with a depth feeling by drawing several
+transparent images on top of each other, where each image or animation (`ParallaxRenderer`) is
+moving with a different velocity.
 
 The rationale is that when you look at the horizon and moving, closer objects seem to move faster
 than distant ones.
@@ -378,8 +430,8 @@ parallax.velocityMultiplierDelta = Vector2(2.0, 1.0);
 By default, the images are aligned to the bottom left, repeated along the X-axis and scaled
 proportionally so that the image covers the height of the screen. If you want to change this
 behavior, for example if you are not making a side-scrolling game, you can set the `repeat`,
-`alignment` and `fill` parameters for each `ParallaxRenderer` and add them to `ParallaxLayer`s that you
-then pass in to the `ParallaxComponent`'s constructor.
+`alignment` and `fill` parameters for each `ParallaxRenderer` and add them to `ParallaxLayer`s that
+you then pass in to the `ParallaxComponent`'s constructor.
 
 Advanced example:
 ```dart
@@ -409,13 +461,16 @@ component (`game.add(parallaxComponent`).
 Also, don't forget to add you images to the `pubspec.yaml` file as assets or they wont be found.
 
 The `Parallax` file contains an extension of the game which adds `loadParallax`, `loadParallaxLayer`
-, `loadParallaxImage` and `loadParallaxAnimation` so that it automatically uses your game's image cache instead of the global
-one. The same goes for the `ParallaxComponent` file, but that provides `loadParallaxComponent`.
+, `loadParallaxImage` and `loadParallaxAnimation` so that it automatically uses your game's image
+cache instead of the global one. The same goes for the `ParallaxComponent` file, but that provides
+`loadParallaxComponent`.
 
 If you want a fullscreen `ParallaxComponent` simply omit the `size` argument and it will take the
 size of the game, it will also resize to fullscreen when the game changes size or orientation.
 
-Flame provides two kinds of `ParallaxRenderer`: `ParallaxImage` and `ParallaxAnimation`, `ParallaxImage` is a static image renderer and `ParallaxAnimation` is, as it's name implies, an animation and frame based renderer.
+Flame provides two kinds of `ParallaxRenderer`: `ParallaxImage` and `ParallaxAnimation`,
+`ParallaxImage` is a static image renderer and `ParallaxAnimation` is, as it's name implies, an
+animation and frame based renderer.
 It is also possible to create custom renderers by extending the `ParallaxRenderer` class.
 
 Three example implementations can be found in the
@@ -431,8 +486,8 @@ the shape of the specific component, it also takes all the arguments that can be
 There are three implementations of `ShapeComponent`, which are the following:
 
 ### CircleComponent
-A `CircleComponent` can be created only by defining its `radius`, but you most likely want to pass it
-a `position` and maybe `paint` (the default is white) too.
+A `CircleComponent` can be created only by defining its `radius`, but you most likely want to pass
+it a `position` and maybe `paint` (the default is white) too.
 
 Example:
 ```dart

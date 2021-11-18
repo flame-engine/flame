@@ -19,8 +19,7 @@ class HoverableSquare extends PositionComponent with Hoverable {
   }
 }
 
-class HoverablesGame extends FlameGame
-    with HasHoverableComponents, TapDetector {
+class HoverablesGame extends FlameGame with HasHoverables, TapDetector {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
