@@ -12,13 +12,21 @@ import 'package:xml/xml.dart';
 import 'flame_tsx_provider.dart';
 import 'simple_flips.dart';
 
+/// {@template _renderable_tiled_map}
 /// This is a wrapper over Tiled's [TiledMap] with pre-computed SpriteBatches
 /// for rendering each layer of the map.
+/// {@endtemplate}
 class RenderableTiledMap {
+  /// [TiledMap] instance for this map.
   final TiledMap map;
+
+  /// Cached [SpriteBatch]es of this map.
   final Map<String, SpriteBatch> batches;
+
+  /// The size of tile to be rendered on the game.
   final Vector2 destTileSize;
 
+  /// {@macro _renderable_tiled_map}
   RenderableTiledMap(
     this.map,
     this.batches,
@@ -27,6 +35,9 @@ class RenderableTiledMap {
     _fillBatches();
   }
 
+  /// Parses a file returning a [RenderableTiledMap].
+  ///
+  /// NOTE: this method looks for files under the path "assets/tiles/".
   static Future<RenderableTiledMap> fromFile(
     String fileName,
     Vector2 destTileSize,
@@ -35,6 +46,7 @@ class RenderableTiledMap {
     return fromString(contents, destTileSize);
   }
 
+  /// Parses a string returning a [RenderableTiledMap].
   static Future<RenderableTiledMap> fromString(
     String contents,
     Vector2 destTileSize,
