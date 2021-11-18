@@ -15,7 +15,7 @@ class FlameAudio {
     return audioCache.play(file, volume: volume, mode: PlayerMode.LOW_LATENCY);
   }
 
-  /// Plays, and keep looping the given [file]
+  /// Plays, and keeps looping the given [file].
   static Future<AudioPlayer> loop(String file, {double volume = 1.0}) {
     return audioCache.loop(file, volume: volume, mode: PlayerMode.LOW_LATENCY);
   }
@@ -31,7 +31,7 @@ class FlameAudio {
   ///
   /// NOTE: Length audio files on Android have an audio gap between loop
   /// iterations, this happens due to limitations on Android's native media
-  /// player features, if you need a gapless loop, prefer the loop method
+  /// player features. If you need a gapless loop, prefer the loop method.
   static Future<AudioPlayer> loopLongAudio(String file, {double volume = 1.0}) {
     return audioCache.loop(file, volume: volume);
   }
