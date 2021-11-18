@@ -1,5 +1,5 @@
 # Source of linter options:
-# http://dart-lang.github.io/linter/lints/options/options.html
+# https://dart-lang.github.io/linter/lints/options/options.html
 
 analyzer:
   strong-mode:
