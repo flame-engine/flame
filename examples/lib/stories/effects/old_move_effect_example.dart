@@ -6,7 +6,7 @@ import 'package:flame/input.dart';
 
 import '../../commons/square_component.dart';
 
-class MoveEffectGame extends FlameGame with TapDetector {
+class OldMoveEffectExample extends FlameGame with TapDetector {
   static const String description = '''
     This example showcases the `MoveEffect`. Click somewhere on the screen and
     the white square will go there and then it will follow the path that is

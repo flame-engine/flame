@@ -12,7 +12,7 @@ final green = Paint()..color = const Color(0xAA338833);
 final red = Paint()..color = const Color(0xAA883333);
 final orange = Paint()..color = const Color(0xAABB6633);
 
-class InfiniteEffectGame extends FlameGame with TapDetector {
+class InfiniteEffectExample extends FlameGame with TapDetector {
   static const String description = '''
     In this example we show how effects can run in infinity with the
     `isInfinite: true` argument. Click on the screen to start the effects.

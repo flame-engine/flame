@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 
 final anchorOptions = Anchor.values.map((e) => e.name).toList();
 
-Widget spriteSectionWidgetBuilder(DashbookContext ctx) {
+Widget partialSpriteWidgetBuilder(DashbookContext ctx) {
   return Container(
     width: ctx.numberProperty('container width', 400),
     height: ctx.numberProperty('container height', 200),

@@ -5,7 +5,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
-class ColorEffectGame extends FlameGame with TapDetector {
+class ColorEffectExample extends FlameGame with TapDetector {
   static const String description = '''
     In this example you can see the color of the sprite (the Flame logo) pulse
     towards a more green color and then back again. This is a non-interactive

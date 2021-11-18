@@ -4,50 +4,50 @@ import 'package:flame/parallax.dart';
 import 'package:flutter/painting.dart';
 
 import '../../commons/commons.dart';
-import 'advanced.dart';
-import 'animation.dart';
-import 'basic.dart';
-import 'component.dart';
-import 'no_fcs.dart';
-import 'sandbox_layer.dart';
-import 'small_parallax.dart';
+import 'advanced_parallax_example.dart';
+import 'animation_parallax_example.dart';
+import 'basic_parallax_example.dart';
+import 'component_parallax_example.dart';
+import 'no_fcs_parallax_example.dart';
+import 'sandbox_layer_parallax_example.dart';
+import 'small_parallax_example.dart';
 
 void addParallaxStories(Dashbook dashbook) {
   dashbook.storiesOf('Parallax')
     ..add(
       'Basic',
       (_) => GameWidget(game: BasicParallaxExample()),
-      codeLink: baseLink('parallax/basic.dart'),
+      codeLink: baseLink('parallax/basic_animation_example.dart'),
       info: BasicParallaxExample.description,
     )
     ..add(
       'Component',
       (_) => GameWidget(game: ComponentParallaxExample()),
-      codeLink: baseLink('parallax/component.dart'),
+      codeLink: baseLink('parallax/component_parallax_example.dart'),
       info: ComponentParallaxExample.description,
     )
     ..add(
       'Animation',
       (_) => GameWidget(game: AnimationParallaxExample()),
-      codeLink: baseLink('parallax/animation.dart'),
+      codeLink: baseLink('parallax/animation_parallax_example.dart'),
       info: AnimationParallaxExample.description,
     )
     ..add(
       'Non-fullscreen',
       (_) => GameWidget(game: SmallParallaxExample()),
-      codeLink: baseLink('parallax/small_parallax.dart'),
+      codeLink: baseLink('parallax/small_parallax_example.dart'),
       info: SmallParallaxExample.description,
     )
     ..add(
       'No FCS',
       (_) => GameWidget(game: NoFCSParallaxExample()),
-      codeLink: baseLink('parallax/no_fcs.dart'),
+      codeLink: baseLink('parallax/no_fcs_parallax_example.dart'),
       info: NoFCSParallaxExample.description,
     )
     ..add(
       'Advanced',
       (_) => GameWidget(game: AdvancedParallaxExample()),
-      codeLink: baseLink('parallax/advanced.dart'),
+      codeLink: baseLink('parallax/advanced_parallax_example.dart'),
       info: AdvancedParallaxExample.description,
     )
     ..add(
@@ -86,7 +86,7 @@ void addParallaxStories(Dashbook dashbook) {
           ),
         );
       },
-      codeLink: baseLink('parallax/sandbox_layer.dart'),
+      codeLink: baseLink('parallax/sandbox_layer_parallax_example.dart'),
       info: SandboxLayerParallaxExample.description,
     );
 }

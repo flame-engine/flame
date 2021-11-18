@@ -8,12 +8,12 @@ import 'package:flutter/material.dart';
 
 import '../../commons/square_component.dart';
 
-class ScaleEffectGame extends FlameGame with TapDetector {
+class SizeEffectExample extends FlameGame with TapDetector {
   static const String description = '''
-    The `ScaleEffect` scales up the canvas before drawing the components and its
-    children.
-    In this example you can tap the screen and the component will scale up or down,
-    depending on its current state.
+    The `SizeEffect` changes the size of the component, the sizes of the
+    children will stay the same.
+    In this example you can tap the screen and the component will size up or
+    down, depending on its current state.
   ''';
 
   late SquareComponent square;
@@ -22,26 +22,25 @@ class ScaleEffectGame extends FlameGame with TapDetector {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    square = SquareComponent()
-      ..position.setValues(200, 200)
-      ..anchor = Anchor.center;
-    square.paint = BasicPalette.white.paint()..style = PaintingStyle.stroke;
+    square = SquareComponent(
+      position: Vector2.all(200),
+      paint: BasicPalette.white.paint()..style = PaintingStyle.stroke,
+    );
     final childSquare = SquareComponent(position: Vector2.all(70), size: 20);
-
     square.add(childSquare);
     add(square);
   }
 
   @override
   void onTap() {
-    final s = grow ? 3.0 : 1.0;
+    final s = grow ? 300.0 : 100.0;
 
     grow = !grow;
     square.add(
-      ScaleEffect(
-        scale: Vector2.all(s),
-        speed: 2.0,
-        curve: Curves.linear,
+      SizeEffect(
+        size: Vector2.all(s),
+        speed: 250.0,
+        curve: Curves.bounceInOut,
       ),
     );
   }

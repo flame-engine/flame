@@ -7,30 +7,27 @@ import 'package:flutter/material.dart';
 import '../../commons/square_component.dart';
 
 final green = Paint()..color = const Color(0xAA338833);
-final red = Paint()..color = const Color(0xAA883333);
 
-class CombinedEffectGame extends FlameGame with TapDetector {
+class SequenceEffectExample extends FlameGame with TapDetector {
   static const String description = '''
-    In this example we show how multiple effects can be combined into one effect
-    with the `CombinedEffect`. Click anywhere on the screen to run the effect.
+    In this example we show how different effects can be chained in the
+    `SequenceEffect`. Click anywhere on the screen to start the effects
+    sequence.
   ''';
 
-  late SquareComponent greenSquare, redSquare;
+  late SquareComponent greenSquare;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     greenSquare = SquareComponent(position: Vector2.all(100), paint: green);
-    redSquare = SquareComponent(position: Vector2.all(100), paint: red);
-
     add(greenSquare);
-    add(redSquare);
   }
 
   @override
   void onTapUp(TapUpInfo info) {
-    greenSquare.clearEffects();
     final currentTap = info.eventPosition.game;
+    greenSquare.clearEffects();
 
     final move = MoveEffect(
       path: [
@@ -39,32 +36,27 @@ class CombinedEffectGame extends FlameGame with TapDetector {
         currentTap + Vector2(-50, -50),
         currentTap + Vector2(50, 0),
       ],
-      isAlternating: true,
-      duration: 4.0,
-      curve: Curves.bounceInOut,
-      initialDelay: 0.6,
+      speed: 150.0,
+      curve: Curves.easeIn,
     );
 
-    final scale = SizeEffect(
-      size: currentTap,
-      speed: 200.0,
-      curve: Curves.linear,
-      isAlternating: true,
-      peakDelay: 1.0,
+    final size = SizeEffect(
+      size: currentTap - greenSquare.position,
+      speed: 100.0,
+      curve: Curves.easeInCubic,
     );
 
     final rotate = RotateEffect(
       angle: currentTap.angleTo(Vector2.all(100)),
-      duration: 3,
+      duration: 0.8,
       curve: Curves.decelerate,
-      isAlternating: true,
-      initialDelay: 1.0,
-      peakDelay: 1.0,
     );
 
-    final combination = CombinedEffect(
-      effects: [move, rotate, scale],
+    final sequence = SequenceEffect(
+      effects: [size, rotate, move],
+      isAlternating: true,
     );
-    greenSquare.add(combination);
+    sequence.onComplete = () => print('sequence complete');
+    greenSquare.add(sequence);
   }
 }

@@ -162,3 +162,4 @@ There are a few things to consider when adding an example to the examples direct
  - Always have the game class (if there exists one) in the top of your examples file.
  - Name your game class with a relevant name and suffix it with `Example`, for example
  `AnimationExample`.
+ - The filename should be the game's (or example's) name, for example `move_effect_example.dart`

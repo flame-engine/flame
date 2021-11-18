@@ -2,10 +2,10 @@ import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
 
 import '../../commons/commons.dart';
-import 'coordinate_systems.dart';
-import 'fixed_resolution.dart';
-import 'follow_object.dart';
-import 'zoom.dart';
+import 'coordinate_systems_example.dart';
+import 'fixed_resolution_example.dart';
+import 'follow_component_example.dart';
+import 'zoom_example.dart';
 
 void addCameraAndViewportStories(Dashbook dashbook) {
   dashbook.storiesOf('Camera & Viewport')
@@ -13,7 +13,7 @@ void addCameraAndViewportStories(Dashbook dashbook) {
       'Follow Object',
       (context) {
         return GameWidget(
-          game: CameraAndViewportExample(
+          game: FollowComponentExample(
             viewportResolution: Vector2(
               context.numberProperty('viewport width', 500),
               context.numberProperty('viewport height', 500),
@@ -21,8 +21,8 @@ void addCameraAndViewportStories(Dashbook dashbook) {
           ),
         );
       },
-      codeLink: baseLink('camera_and_viewport/follow_object.dart'),
-      info: CameraAndViewportExample.description,
+      codeLink: baseLink('camera_and_viewport/follow_component_example.dart'),
+      info: FollowComponentExample.description,
     )
     ..add(
       'Zoom',
@@ -36,7 +36,7 @@ void addCameraAndViewportStories(Dashbook dashbook) {
           ),
         );
       },
-      codeLink: baseLink('camera_and_viewport/zoom.dart'),
+      codeLink: baseLink('camera_and_viewport/zoom_example.dart'),
       info: ZoomExample.description,
     )
     ..add(
@@ -51,13 +51,13 @@ void addCameraAndViewportStories(Dashbook dashbook) {
           ),
         );
       },
-      codeLink: baseLink('camera_and_viewport/fixed_resolution.dart'),
+      codeLink: baseLink('camera_and_viewport/fixed_resolution_example.dart'),
       info: FixedResolutionExample.description,
     )
     ..add(
       'Coordinate Systems',
       (context) => CoordinateSystemsWidget(),
-      codeLink: baseLink('camera_and_viewport/coordinate_systems.dart'),
+      codeLink: baseLink('camera_and_viewport/coordinate_systems_example.dart'),
       info: CoordinateSystemsExample.description,
     );
 }

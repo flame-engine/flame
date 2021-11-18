@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 
 import '../../commons/square_component.dart';
 
-class CameraAndViewportExample extends FlameGame
+class FollowComponentExample extends FlameGame
     with HasCollidables, HasTappables, HasKeyboardHandlerComponents {
   static const String description = '''
     Move around with W, A, S, D and notice how the camera follows the white 
@@ -23,7 +23,7 @@ class CameraAndViewportExample extends FlameGame
 
   final Vector2 viewportResolution;
 
-  CameraAndViewportExample({
+  FollowComponentExample({
     required this.viewportResolution,
   });
 
@@ -44,7 +44,7 @@ class CameraAndViewportExample extends FlameGame
 }
 
 class MovableSquare extends SquareComponent
-    with Collidable, HasGameRef<CameraAndViewportExample>, KeyboardHandler {
+    with Collidable, HasGameRef<FollowComponentExample>, KeyboardHandler {
   static const double speed = 300;
   static final TextPaint textRenderer = TextPaint(
     style: const TextStyle(fontSize: 12),

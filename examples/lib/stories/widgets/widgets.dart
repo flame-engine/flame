@@ -1,12 +1,12 @@
 import 'package:dashbook/dashbook.dart';
 
 import '../../commons/commons.dart';
-import 'custom_painter_component.dart';
-import 'nine_tile_box.dart';
-import 'sprite_animation_widget.dart';
-import 'sprite_button.dart';
-import 'sprite_widget.dart';
-import 'sprite_widget_section.dart';
+import 'custom_painter_example.dart';
+import 'nine_tile_box_example.dart';
+import 'partial_sprite_widget_example.dart';
+import 'sprite_animation_widget_example.dart';
+import 'sprite_button_example.dart';
+import 'sprite_widget_example.dart';
 
 void addWidgetsStories(Dashbook dashbook) {
   dashbook.storiesOf('Widgets')
@@ -14,7 +14,7 @@ void addWidgetsStories(Dashbook dashbook) {
     ..add(
       'Nine Tile Box',
       nineTileBoxBuilder,
-      codeLink: baseLink('widgets/nine_tile_box.dart'),
+      codeLink: baseLink('widgets/nine_tile_box_example.dart'),
       info: '''
         If you want to create a background for something that can stretch you
         can use the `NineTileBox` which is showcased here, don't forget to check
@@ -24,7 +24,7 @@ void addWidgetsStories(Dashbook dashbook) {
     ..add(
       'Sprite Button',
       spriteButtonBuilder,
-      codeLink: baseLink('widgets/sprite_button.dart'),
+      codeLink: baseLink('widgets/sprite_button_example.dart'),
       info: '''
         If you want to use sprites as a buttons within the flutter widget tree
         you can create a `SpriteButton`, don't forget to check out the settings
@@ -34,7 +34,7 @@ void addWidgetsStories(Dashbook dashbook) {
     ..add(
       'Sprite Widget (full image)',
       spriteWidgetBuilder,
-      codeLink: baseLink('widgets/sprite_widget.dart'),
+      codeLink: baseLink('widgets/sprite_widget_example.dart'),
       info: '''
         If you want to use a sprite within the flutter widget tree
         you can create a `SpriteWidget`, don't forget to check out the settings
@@ -43,8 +43,8 @@ void addWidgetsStories(Dashbook dashbook) {
     )
     ..add(
       'Sprite Widget (section of image)',
-      spriteSectionWidgetBuilder,
-      codeLink: baseLink('widgets/sprite_widget_section.dart'),
+      partialSpriteWidgetBuilder,
+      codeLink: baseLink('widgets/partial_sprite_widget_example.dart'),
       info: '''
         In this example we show how you can render only parts of a sprite within
         a `SpriteWidget`, don't forget to check out the settings on the pen
@@ -54,7 +54,7 @@ void addWidgetsStories(Dashbook dashbook) {
     ..add(
       'Sprite Animation Widget',
       spriteAnimationWidgetBuilder,
-      codeLink: baseLink('widgets/sprite_animation_widget.dart'),
+      codeLink: baseLink('widgets/sprite_animation_widget_example.dart'),
       info: '''
         If you want to use a sprite animation directly on the flutter widget
         tree you can create a `SpriteAnimationWidget`, don't forget to check out
@@ -64,7 +64,7 @@ void addWidgetsStories(Dashbook dashbook) {
     ..add(
       'CustomPainterComponent',
       customPainterBuilder,
-      codeLink: baseLink('widgets/custom_painter_component.dart'),
+      codeLink: baseLink('widgets/custom_painter_example.dart'),
       info: CustomPainterExample.description,
     );
 }
