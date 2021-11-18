@@ -150,3 +150,13 @@ Avoid documentation that just repeats the obvious. For example, `void doStuff()`
 
 You should use `[]` (brackets) to link dartdoc elements that can be referenced on the same file.
 Also, consider adding a "See also" section to element documentation.
+
+## Examples
+
+There are a few things to consider when adding an example to the examples directory:
+
+ - Put your example in a fitting section.
+ - Always add a description named `description` in the game object (if you have one).
+ - Always have the game class (if there exists one) in the top of your examples file.
+ - Name your game class with a relevant name and suffix it with `Example`, for example
+ `AnimationExample`.
