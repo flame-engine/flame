@@ -98,36 +98,35 @@ The base of the `PositionComponent` is that it has a `position`, `size`, `scale`
 
 ### Position
 
-The `position` is just a `Vector2` which represents the position of the component in relation to its
-parent, if the parent is a `FlameGame` it is in relation to the viewport.
+The `position` is just a `Vector2` which represents the position of the component's anchor in relation to its
+parent; if the parent is a `FlameGame`, it is in relation to the viewport.
 
 ### Size
 
-The `size` is the size of the component when the zoom level of the camera is 1.0 (no zoom, default).
-The `size` is not in relation to the parent of the component.
+The `size` of the component when the zoom level of the camera is 1.0 (no zoom, default).
+The `size` is *not* in relation to the parent of the component.
 
 ### Scale
 
-The `scale` is how much the component and its children should be scaled and since it is represented
-by a `Vector2` you can scale in uniform way by changing `x` and `y` with the same amount, if you
-want to scale in a non-uniform way, change `x` or `y` more than the other.
+The `scale` is how much the component and its children should be scaled. Since it is represented
+by a `Vector2`, you can scale in a uniform way by changing `x` and `y` with the same amount, or in a non-uniform way, by change `x` or `y` by different amounts.
 
 ### Angle
 
-The `angle` is the angle represented as a double in radians and it is relative to the parents angle.
+The `angle` is the rotation angle around the anchor, represented as a double in radians. It is relative to the parent's angle.
 
 ### Anchor
 
 The `anchor` is where on the component that the position and rotation should be defined from (the
 default is `Anchor.topLeft`). So if you have the anchor set as `Anchor.center` the component's
 position on the screen will be in the center of the component and if an `angle` is applied, it is
-rotated around the anchor, so in this case around the center of the component.
+rotated around the anchor, so in this case around the center of the component. You can think of it as the point within the component by which Flame "grabs" it.
 
 ### PositionComponent children
 
 All children of the `PositionComponent` will be transformed in relation to the parent, which means
 that the `position`, `angle` and `scale` will be relative to the parents state.
-So if you for example want to position a child 50 logical pixels above the center of the parent you
+So if you, for example, wanted to position a child 50 logical pixels above the center of the parent you
 would do this:
 
 ```
@@ -140,7 +139,7 @@ final child = PositionComponent(position: Vector2(0, -50));
 parent.add(child);
 ```
 
-Remember that almost all components that are rendered on the screen are `PositionComponent`s, so
+Remember that most components that are rendered on the screen are `PositionComponent`s, so
 this pattern can be used in for example [](#spritecomponent) and [](#spriteanimationcomponent) too.
 
 ### Render PositionComponent
