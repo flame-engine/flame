@@ -9,7 +9,7 @@ class SvgComponent extends PositionComponent {
   /// [Svg] instance
   Svg svg;
 
-  /// Creates a [SvgComponent] from a [Svg] instance.
+  /// Creates an [SvgComponent] from an [Svg] instance.
   SvgComponent.fromSvg(
     this.svg, {
     Vector2? position,

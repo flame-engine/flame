@@ -13,10 +13,10 @@ class Svg {
   /// The [DrawableRoot] that this [Svg] represents.
   DrawableRoot svgRoot;
 
-  /// Creates a [Svg] with the received [svgRoot].
+  /// Creates an [Svg] with the received [svgRoot].
   Svg(this.svgRoot);
 
-  /// Loads a [Svg] with the received [cache]. When no [cache] is provided, the global
+  /// Loads an [Svg] with the received [cache]. When no [cache] is provided, the global
   /// [Flame.assets] is used.
   static Future<Svg> load(String fileName, {AssetsCache? cache}) async {
     cache ??= Flame.assets;
@@ -43,6 +43,6 @@ class Svg {
 
 /// Provides a loading method for [Svg] on the [Game] class.
 extension SvgLoader on Game {
-  /// Loads a [Svg] using the [Game]'s own asset loader.
+  /// Loads an [Svg] using the [Game]'s own asset loader.
   Future<Svg> loadSvg(String fileName) => Svg.load(fileName, cache: assets);
 }
