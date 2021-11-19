@@ -28,16 +28,17 @@ class MyCrate extends SpriteComponent {
 
   @override
   void onGameResize(Vector2 gameSize) {
+    super.onGameResize(gameSize);
     // We don't need to set the position in the constructor, we can it directly here since it will
     // be called once before the first time it is rendered.
     position = gameSize / 2;
   }
 }
 
-class MyGame extends FlameGame {
-  MyGame() {
-    add(MyCrate());
-  }
+@override
+Future<void> onLoad() async {
+  await super.onLoad();
+  add(MyCrate());
 }
 
 main() {
