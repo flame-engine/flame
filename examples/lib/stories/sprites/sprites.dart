@@ -2,43 +2,49 @@ import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
 
 import '../../commons/commons.dart';
-import 'base64.dart';
-import 'basic.dart';
-import 'sprite_group.dart';
-import 'spritebatch.dart';
-import 'spritebatch_auto_load.dart';
-import 'spritesheet.dart';
+import 'base64_sprite_example.dart';
+import 'basic_sprite_example.dart';
+import 'sprite_group_example.dart';
+import 'spritebatch_example.dart';
+import 'spritebatch_load_example.dart';
+import 'spritesheet_example.dart';
 
 void addSpritesStories(Dashbook dashbook) {
   dashbook.storiesOf('Sprites')
     ..add(
       'Basic Sprite',
-      (_) => GameWidget(game: BasicSpriteGame()),
-      codeLink: baseLink('sprites/basic.dart'),
+      (_) => GameWidget(game: BasicSpriteExample()),
+      codeLink: baseLink('sprites/basic_animation_example.dart'),
+      info: BasicSpriteExample.description,
     )
     ..add(
       'Base64 Sprite',
-      (_) => GameWidget(game: Base64SpriteGame()),
-      codeLink: baseLink('sprites/base64.dart'),
+      (_) => GameWidget(game: Base64SpriteExample()),
+      codeLink: baseLink('sprites/base64_sprite_example.dart'),
+      info: Base64SpriteExample.description,
     )
     ..add(
       'Spritesheet',
-      (_) => GameWidget(game: SpritesheetGame()),
-      codeLink: baseLink('sprites/spritesheet.dart'),
+      (_) => GameWidget(game: SpritesheetExample()),
+      codeLink: baseLink('sprites/spritesheet_example.dart'),
+      info: SpritesheetExample.description,
     )
     ..add(
       'Spritebatch',
-      (_) => GameWidget(game: SpritebatchGame()),
-      codeLink: baseLink('sprites/spritebatch.dart'),
+      (_) => GameWidget(game: SpritebatchExample()),
+      codeLink: baseLink('sprites/spritebatch_example.dart'),
+      info: SpritebatchExample.description,
     )
     ..add(
       'Spritebatch Auto Load',
-      (_) => GameWidget(game: SpritebatchAutoLoadGame()),
-      codeLink: baseLink('sprites/spritebatch_auto_load.dart'),
+      (_) => GameWidget(game: SpritebatchLoadExample()),
+      codeLink: baseLink('sprites/spritebatch_load_example.dart'),
+      info: SpritebatchLoadExample.description,
     )
     ..add(
       'SpriteGroup',
       (_) => GameWidget(game: SpriteGroupExample()),
-      codeLink: baseLink('sprites/sprite_group.dart'),
+      codeLink: baseLink('sprites/sprite_group_example.dart'),
+      info: SpriteGroupExample.description,
     );
 }

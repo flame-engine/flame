@@ -4,60 +4,57 @@ import 'package:flame/parallax.dart';
 import 'package:flutter/painting.dart';
 
 import '../../commons/commons.dart';
-import 'advanced.dart';
-import 'animation.dart';
-import 'basic.dart';
-import 'component.dart';
-import 'no_fcs.dart';
-import 'sandbox_layer.dart';
-import 'small_parallax.dart';
+import 'advanced_parallax_example.dart';
+import 'animation_parallax_example.dart';
+import 'basic_parallax_example.dart';
+import 'component_parallax_example.dart';
+import 'no_fcs_parallax_example.dart';
+import 'sandbox_layer_parallax_example.dart';
+import 'small_parallax_example.dart';
 
 void addParallaxStories(Dashbook dashbook) {
   dashbook.storiesOf('Parallax')
     ..add(
       'Basic',
-      (_) => GameWidget(game: BasicParallaxGame()),
-      codeLink: baseLink('parallax/basic.dart'),
-      info: 'Shows the simplest way to use a fullscreen ParallaxComponent',
+      (_) => GameWidget(game: BasicParallaxExample()),
+      codeLink: baseLink('parallax/basic_animation_example.dart'),
+      info: BasicParallaxExample.description,
     )
     ..add(
       'Component',
-      (_) => GameWidget(game: ComponentParallaxGame()),
-      codeLink: baseLink('parallax/component.dart'),
-      info: 'Shows how to do initiation and loading of assets from within an '
-          'extended ParallaxComponent',
+      (_) => GameWidget(game: ComponentParallaxExample()),
+      codeLink: baseLink('parallax/component_parallax_example.dart'),
+      info: ComponentParallaxExample.description,
     )
     ..add(
       'Animation',
-      (_) => GameWidget(game: AnimationParallaxGame()),
-      codeLink: baseLink('parallax/animation.dart'),
-      info: 'Shows how to use animations in a parallax',
+      (_) => GameWidget(game: AnimationParallaxExample()),
+      codeLink: baseLink('parallax/animation_parallax_example.dart'),
+      info: AnimationParallaxExample.description,
     )
     ..add(
       'Non-fullscreen',
-      (_) => GameWidget(game: SmallParallaxGame()),
-      codeLink: baseLink('parallax/small_parallax.dart'),
-      info: 'Shows how to create a smaller parallax in the center of the '
-          'screen',
+      (_) => GameWidget(game: SmallParallaxExample()),
+      codeLink: baseLink('parallax/small_parallax_example.dart'),
+      info: SmallParallaxExample.description,
     )
     ..add(
       'No FCS',
-      (_) => GameWidget(game: NoFCSParallaxGame()),
-      codeLink: baseLink('parallax/no_fcs.dart'),
-      info: "Shows how to use the parallax without Flame's component system",
+      (_) => GameWidget(game: NoFCSParallaxExample()),
+      codeLink: baseLink('parallax/no_fcs_parallax_example.dart'),
+      info: NoFCSParallaxExample.description,
     )
     ..add(
       'Advanced',
-      (_) => GameWidget(game: AdvancedParallaxGame()),
-      codeLink: baseLink('parallax/advanced.dart'),
-      info: 'Shows how to create a parallax with different velocity deltas on '
-          'each layer',
+      (_) => GameWidget(game: AdvancedParallaxExample()),
+      codeLink: baseLink('parallax/advanced_parallax_example.dart'),
+      info: AdvancedParallaxExample.description,
     )
     ..add(
       'Layer sandbox',
       (context) {
         return GameWidget(
-          game: SandBoxLayerParallaxGame(
+          game: SandboxLayerParallaxExample(
             planeSpeed: Vector2(
               context.numberProperty('plane x speed', 0),
               context.numberProperty('plane y speed', 0),
@@ -89,8 +86,7 @@ void addParallaxStories(Dashbook dashbook) {
           ),
         );
       },
-      codeLink: baseLink('parallax/sandbox_layer.dart'),
-      info: 'In this example, properties of a layer can be changed to preview '
-          'the different combination of values',
+      codeLink: baseLink('parallax/sandbox_layer_parallax_example.dart'),
+      info: SandboxLayerParallaxExample.description,
     );
 }
