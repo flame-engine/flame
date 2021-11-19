@@ -114,19 +114,19 @@ void main() {
       game.update(1);
       expectVector2(
         component.scale,
-        Vector2.all(1),
+        Vector2.all(2),
         epsilon: 1e-15,
       ); // 5*1/10 + 0.5*1
       game.update(1);
       expectVector2(
         component.scale,
-        Vector2.all(1),
+        Vector2.all(2),
         epsilon: 1e-15,
       ); // 5*2/10 + 0.5*1 - 0.5*1
       for (var i = 0; i < 10; i++) {
         game.update(1);
       }
-      expectVector2(component.scale, Vector2.all(5), epsilon: 1e-15);
+      expectVector2(component.scale, Vector2.all(6), epsilon: 1e-15);
       expect(component.children.length, 0);
     });
 
@@ -154,7 +154,7 @@ void main() {
       game.update(1000 - totalTime);
       // Typically, `component.scale` could accumulate numeric discrepancy on
       // the order of 1e-11 .. 1e-12 by now.
-      expectVector2(component.scale, Vector2.zero(), epsilon: 1e-10);
+      expectVector2(component.scale, Vector2.all(1.0), epsilon: 1e-10);
     });
   });
 }
