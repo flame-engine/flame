@@ -112,8 +112,11 @@ void main() {
       );
 
       game.update(1);
-      expectVector2(component.size, Vector2.all(1),
-          epsilon: 1e-15); // 5*1/10 + 0.5*1
+      expectVector2(
+        component.size,
+        Vector2.all(1),
+        epsilon: 1e-15,
+      ); // 5*1/10 + 0.5*1
       game.update(1);
       expectVector2(
         component.size,
