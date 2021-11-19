@@ -128,9 +128,11 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   }
 
   /// Marks a list of components to be removed from the components list on the
-  /// next game tick.
-  void removeAll(Iterable<Component> components) {
+  /// next game tick. This will return the same list as sent in.
+  @override
+  Iterable<Component> removeAll(Iterable<Component> components) {
     _removeLater.addAll(components);
+    return components;
   }
 
   /// Marks all existing components to be removed from the components list on
@@ -138,11 +140,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   @override
   void clear() {
     _removeLater.addAll(this);
-  }
-
-  /// Materializes the component list in reversed order.
-  Iterable<Component> reversed() {
-    return toList().reversed;
   }
 
   /// Whether the component set is empty and that there are no components marked
