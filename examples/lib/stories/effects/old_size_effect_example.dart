@@ -10,9 +10,9 @@ import '../../commons/square_component.dart';
 
 class OldSizeEffectExample extends FlameGame with TapDetector {
   static const String description = '''
-    The `SizeEffect` changes the size of the component, the sizes of the
+    The `SizeEffect` changes the size of the component, but the sizes of its
     children will stay the same.
-    In this example you can tap the screen and the component will size up or
+    In this example, you can tap the screen and the component will size up or
     down, depending on its current state.
   ''';
 
