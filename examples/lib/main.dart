@@ -11,7 +11,6 @@ import 'stories/parallax/parallax.dart';
 import 'stories/rendering/rendering.dart';
 import 'stories/sprites/sprites.dart';
 import 'stories/system/system.dart';
-import 'stories/tile_maps/tile_maps.dart';
 import 'stories/utils/utils.dart';
 import 'stories/widgets/widgets.dart';
 
@@ -22,18 +21,17 @@ void main() async {
   );
 
   addAnimationStories(dashbook);
-  addComponentsStories(dashbook);
-  addCollisionDetectionStories(dashbook);
-  addEffectsStories(dashbook);
-  addTileMapStories(dashbook);
-  addInputStories(dashbook);
-  addSpritesStories(dashbook);
-  addRenderingStories(dashbook);
-  addUtilsStories(dashbook);
   addCameraAndViewportStories(dashbook);
+  addCollisionDetectionStories(dashbook);
+  addComponentsStories(dashbook);
+  addEffectsStories(dashbook);
+  addInputStories(dashbook);
   addParallaxStories(dashbook);
-  addWidgetsStories(dashbook);
+  addRenderingStories(dashbook);
+  addSpritesStories(dashbook);
   addSystemStories(dashbook);
+  addUtilsStories(dashbook);
+  addWidgetsStories(dashbook);
 
   runApp(dashbook);
 }

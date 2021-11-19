@@ -2,25 +2,49 @@ import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
 
 import '../../commons/commons.dart';
-import 'flip.dart';
-import 'layers.dart';
-import 'text.dart';
+import 'flip_sprite_example.dart';
+import 'isometric_tile_map_example.dart';
+import 'layers_example.dart';
+import 'nine_tile_box_example.dart';
+import 'particles_example.dart';
+import 'text_example.dart';
 
 void addRenderingStories(Dashbook dashbook) {
   dashbook.storiesOf('Rendering')
     ..add(
       'Text',
-      (_) => GameWidget(game: TextGame()),
-      codeLink: baseLink('rendering/text.dart'),
+      (_) => GameWidget(game: TextExample()),
+      codeLink: baseLink('rendering/text_example.dart'),
+      info: TextExample.description,
+    )
+    ..add(
+      'Isometric Tile Map',
+      (_) => GameWidget(game: IsometricTileMapExample()),
+      codeLink: baseLink('tile_maps/isometric_tile_map_example.dart'),
+      info: IsometricTileMapExample.description,
+    )
+    ..add(
+      'Nine Tile Box',
+      (_) => GameWidget(game: NineTileBoxExample()),
+      codeLink: baseLink('utils/nine_tile_box_example.dart'),
+      info: NineTileBoxExample.description,
     )
     ..add(
       'Flip Sprite',
-      (_) => GameWidget(game: FlipSpriteGame()),
-      codeLink: baseLink('rendering/flip.dart'),
+      (_) => GameWidget(game: FlipSpriteExample()),
+      codeLink: baseLink('rendering/flip_sprite_example.dart'),
+      info: FlipSpriteExample.description,
     )
     ..add(
       'Layers',
-      (_) => GameWidget(game: LayerGame()),
-      codeLink: baseLink('rendering/layers.dart'),
+      (_) => GameWidget(game: LayerExample()),
+      codeLink: baseLink('rendering/layers_example.dart'),
+      info: LayerExample.description,
+    )
+    ..add(
+      'Particles',
+      (_) => GameWidget(game: ParticlesExample()),
+      codeLink: baseLink('utils/particles_example.dart'),
+      info: ParticlesExample.description,
     );
 }

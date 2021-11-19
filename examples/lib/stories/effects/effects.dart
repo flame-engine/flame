@@ -2,74 +2,73 @@ import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
 
 import '../../commons/commons.dart';
-import 'color_effect.dart';
-import 'combined_effect.dart';
-import 'infinite_effect.dart';
-import 'move_effect.dart';
+import 'color_effect_example.dart';
+import 'combined_effect_example.dart';
+import 'infinite_effect_example.dart';
 import 'move_effect_example.dart';
-import 'opacity_effect.dart';
+import 'old_move_effect_example.dart';
+import 'old_rotate_effect_example.dart';
+import 'opacity_effect_example.dart';
 import 'remove_effect_example.dart';
-import 'rotate_effect.dart';
 import 'rotate_effect_example.dart';
-import 'scale_effect.dart';
-import 'sequence_effect.dart';
-import 'size_effect.dart';
-
-const scaleInfo = '''
-The `ScaleEffect` scales up the canvas before drawing the components and its
-children.
-In this example you can tap the screen and the component will scale up or down,
-depending on its current state.
-''';
+import 'scale_effect_example.dart';
+import 'sequence_effect_example.dart';
+import 'size_effect_example.dart';
 
 void addEffectsStories(Dashbook dashbook) {
   dashbook.storiesOf('Effects')
     ..add(
       'Size Effect',
-      (_) => GameWidget(game: SizeEffectGame()),
-      codeLink: baseLink('effects/size_effect.dart'),
-      info: sizeInfo,
+      (_) => GameWidget(game: SizeEffectExample()),
+      codeLink: baseLink('effects/size_effect_example.dart'),
+      info: SizeEffectExample.description,
     )
     ..add(
       'Scale Effect',
-      (_) => GameWidget(game: ScaleEffectGame()),
-      codeLink: baseLink('effects/scale_effect.dart'),
-      info: scaleInfo,
+      (_) => GameWidget(game: ScaleEffectExample()),
+      codeLink: baseLink('effects/scale_effect_example.dart'),
+      info: ScaleEffectExample.description,
     )
     ..add(
       'Move Effect',
-      (_) => GameWidget(game: MoveEffectGame()),
-      codeLink: baseLink('effects/move_effect.dart'),
+      (_) => GameWidget(game: OldMoveEffectExample()),
+      codeLink: baseLink('effects/old_move_effect_example.dart'),
+      info: OldMoveEffectExample.description,
     )
     ..add(
       'Rotate Effect',
-      (_) => GameWidget(game: RotateEffectGame()),
-      codeLink: baseLink('effects/rotate_effect.dart'),
+      (_) => GameWidget(game: OldRotateEffectExample()),
+      codeLink: baseLink('effects/old_rotate_effect_example.dart'),
+      info: OldRotateEffectExample.description,
     )
     ..add(
       'Sequence Effect',
-      (_) => GameWidget(game: SequenceEffectGame()),
-      codeLink: baseLink('effects/sequence_effect.dart'),
+      (_) => GameWidget(game: SequenceEffectExample()),
+      codeLink: baseLink('effects/sequence_effect_example.dart'),
+      info: SequenceEffectExample.description,
     )
     ..add(
       'Combined Effect',
-      (_) => GameWidget(game: CombinedEffectGame()),
-      codeLink: baseLink('effects/combined_effect.dart'),
+      (_) => GameWidget(game: CombinedEffectExample()),
+      codeLink: baseLink('effects/combined_effect_example.dart'),
+      info: CombinedEffectExample.description,
     )
     ..add(
       'Infinite Effect',
-      (_) => GameWidget(game: InfiniteEffectGame()),
-      codeLink: baseLink('effects/infinite_effect.dart'),
+      (_) => GameWidget(game: InfiniteEffectExample()),
+      codeLink: baseLink('effects/infinite_effect_example.dart'),
+      info: InfiniteEffectExample.description,
     )
     ..add(
       'Opacity Effect',
-      (_) => GameWidget(game: OpacityEffectGame()),
-      codeLink: baseLink('effects/opacity_effect.dart'),
+      (_) => GameWidget(game: OpacityEffectExample()),
+      codeLink: baseLink('effects/opacity_effect_example.dart'),
+      info: OpacityEffectExample.description,
     )
     ..add(
       'Color Effect',
-      (_) => GameWidget(game: ColorEffectGame()),
-      codeLink: baseLink('effects/color_effect.dart'),
+      (_) => GameWidget(game: ColorEffectExample()),
+      codeLink: baseLink('effects/color_effect_example.dart'),
     )
     ..add(
       'Move Effect (v2)',

@@ -29,11 +29,11 @@ class MoveEffectExample extends FlameGame {
     final paint1 = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 5.0
-      ..color = const Color(0xFFFF6622);
+      ..color = Colors.deepOrange;
     final paint2 = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 5.0
-      ..color = const Color(0xFF22FF66);
+      ..color = Colors.greenAccent;
 
     add(
       SquareComponent(position: Vector2(20, 50), size: 20, paint: paint1)
@@ -102,7 +102,7 @@ class MoveEffectExample extends FlameGame {
     for (var i = 0; i < 20; i++) {
       add(
         SquareComponent(size: 10)
-          ..paint = (Paint()..color = const Color(0xFF00FFF7))
+          ..paint = (Paint()..color = Colors.tealAccent)
           ..add(
             MoveEffect.along(
               path2,

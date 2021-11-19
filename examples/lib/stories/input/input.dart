@@ -3,94 +3,100 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 import '../../commons/commons.dart';
-import 'draggables.dart';
-import 'hoverables.dart';
-import 'joystick.dart';
-import 'joystick_advanced.dart';
-import 'keyboard.dart';
-import 'mouse_cursor.dart';
-import 'mouse_movement.dart';
-import 'multitap.dart';
-import 'multitap_advanced.dart';
-import 'overlapping_tappables.dart';
-import 'scroll.dart';
-import 'tappables.dart';
+import 'draggables_example.dart';
+import 'hoverables_example.dart';
+import 'joystick_advanced_example.dart';
+import 'joystick_example.dart';
+import 'keyboard_example.dart';
+import 'mouse_cursor_example.dart';
+import 'mouse_movement_example.dart';
+import 'multitap_advanced_example.dart';
+import 'multitap_example.dart';
+import 'overlapping_tappables_example.dart';
+import 'scroll_example.dart';
+import 'tappables_example.dart';
 
 void addInputStories(Dashbook dashbook) {
   dashbook.storiesOf('Input')
     ..add(
       'Keyboard',
-      (_) => GameWidget(game: KeyboardGame()),
-      codeLink: baseLink('input/keyboard.dart'),
-      info: keyboardInfo,
+      (_) => GameWidget(game: KeyboardExample()),
+      codeLink: baseLink('input/keyboard_example.dart'),
+      info: KeyboardExample.description,
     )
     ..add(
       'Mouse Movement',
-      (_) => GameWidget(game: MouseMovementGame()),
-      codeLink: baseLink('input/mouse_movement.dart'),
+      (_) => GameWidget(game: MouseMovementExample()),
+      codeLink: baseLink('input/mouse_movement_example.dart'),
+      info: MouseMovementExample.description,
     )
     ..add(
       'Mouse Cursor',
       (_) => GameWidget(
-        game: MouseCursorGame(),
+        game: MouseCursorExample(),
         mouseCursor: SystemMouseCursors.move,
       ),
-      codeLink: baseLink('input/mouse_cursor.dart'),
-      info: '''
-      Example showcasing the ability to change the game cursor in runtime
-      hover the little square to see the cursor changing
-      ''',
+      codeLink: baseLink('input/mouse_cursor_example.dart'),
+      info: MouseCursorExample.description,
     )
     ..add(
       'Scroll',
-      (_) => GameWidget(game: ScrollGame()),
-      codeLink: baseLink('input/scroll.dart'),
+      (_) => GameWidget(game: ScrollExample()),
+      codeLink: baseLink('input/scroll_example.dart'),
+      info: ScrollExample.description,
     )
     ..add(
       'Multitap',
-      (_) => GameWidget(game: MultitapGame()),
-      codeLink: baseLink('input/multitap.dart'),
+      (_) => GameWidget(game: MultitapExample()),
+      codeLink: baseLink('input/multitap_example.dart'),
+      info: MultitapExample.description,
     )
     ..add(
       'Multitap Advanced',
-      (_) => GameWidget(game: MultitapAdvancedGame()),
-      codeLink: baseLink('input/multitap_advanced.dart'),
+      (_) => GameWidget(game: MultitapAdvancedExample()),
+      codeLink: baseLink('input/multitap_advanced_example.dart'),
+      info: MultitapAdvancedExample.description,
     )
     ..add(
       'Tappables',
-      (_) => GameWidget(game: TappablesGame()),
-      codeLink: baseLink('input/tappables.dart'),
+      (_) => GameWidget(game: TappablesExample()),
+      codeLink: baseLink('input/tappables_example.dart'),
+      info: TappablesExample.description,
     )
     ..add(
-      'Overlaping Tappables',
-      (_) => GameWidget(game: OverlappingTappablesGame()),
-      codeLink: baseLink('input/overlaping_tappables.dart'),
+      'Overlapping Tappables',
+      (_) => GameWidget(game: OverlappingTappablesExample()),
+      codeLink: baseLink('input/overlapping_tappables_example.dart'),
+      info: OverlappingTappablesExample.description,
     )
     ..add(
       'Draggables',
       (context) {
         return GameWidget(
-          game: DraggablesGame(
+          game: DraggablesExample(
             zoom: context.listProperty('zoom', 1, [0.5, 1, 1.5]),
           ),
         );
       },
-      codeLink: baseLink('input/draggables.dart'),
+      codeLink: baseLink('input/draggables_example.dart'),
+      info: DraggablesExample.description,
     )
     ..add(
       'Hoverables',
-      (_) => GameWidget(game: HoverablesGame()),
-      codeLink: baseLink('input/hoverables.dart'),
-      info: 'Add more squares by clicking. Hover squares to change colors.',
+      (_) => GameWidget(game: HoverablesExample()),
+      codeLink: baseLink('input/hoverables_example.dart'),
+      info: HoverablesExample.description,
     )
     ..add(
       'Joystick',
-      (_) => GameWidget(game: JoystickGame()),
-      codeLink: baseLink('input/joystick.dart'),
+      (_) => GameWidget(game: JoystickExample()),
+      codeLink: baseLink('input/joystick_example.dart'),
+      info: JoystickExample.description,
     )
     ..add(
       'Joystick Advanced',
-      (_) => GameWidget(game: JoystickAdvancedGame()),
-      codeLink: baseLink('input/joystick_advanced.dart'),
+      (_) => GameWidget(game: JoystickAdvancedExample()),
+      codeLink: baseLink('input/joystick_advanced_example.dart'),
+      info: JoystickAdvancedExample.description,
     );
 }
