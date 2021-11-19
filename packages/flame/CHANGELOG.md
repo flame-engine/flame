@@ -38,6 +38,7 @@
  - Rename `HasTappableComponents` to `HasTappables`
  - Rename `HasDraggableComponents` to `HasDraggables`
  - Rename `HasHoverableComponents` to `HasHoverableis`
+ - Added `ScaleEffect` backed by the new effects engine
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
