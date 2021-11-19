@@ -39,6 +39,7 @@
  - Rename `HasDraggableComponents` to `HasDraggables`
  - Rename `HasHoverableComponents` to `HasHoverableis`
  - Update `OrderedSet` to 4.1.0
+ - Update `OrderedSet` to 5.0.0
 
 ## [1.0.0-releasecandidate.16]
  - `changePriority` no longer breaks game loop iteration
