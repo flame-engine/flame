@@ -35,10 +35,12 @@ class MyCrate extends SpriteComponent {
   }
 }
 
-@override
-Future<void> onLoad() async {
-  await super.onLoad();
-  add(MyCrate());
+class MyGame extends FlameGame {
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    add(MyCrate());
+  }
 }
 
 main() {
