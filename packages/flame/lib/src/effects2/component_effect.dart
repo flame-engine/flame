@@ -25,9 +25,7 @@ abstract class ComponentEffect<T extends Component> extends Effect {
     if (parent is T) {
       target = parent! as T;
     } else {
-      throw UnsupportedError(
-        'Can only apply this effect to $T',
-      );
+      throw UnsupportedError('Can only apply this effect to $T');
     }
   }
 
