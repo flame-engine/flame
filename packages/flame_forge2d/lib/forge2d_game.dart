@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
@@ -29,22 +27,6 @@ class Forge2DGame extends FlameGame {
   void update(double dt) {
     super.update(dt);
     world.stepDt(dt);
-  }
-
-  @override
-  void lifecycleStateChange(AppLifecycleState state) {
-    super.lifecycleStateChange(state);
-
-    switch (state) {
-      case AppLifecycleState.resumed:
-        resumeEngine();
-        break;
-      case AppLifecycleState.inactive:
-      case AppLifecycleState.paused:
-      case AppLifecycleState.detached:
-        pauseEngine();
-        break;
-    }
   }
 
   void addContactCallback(ContactCallback callback) {

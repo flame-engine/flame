@@ -14,7 +14,7 @@ class ChopperBody extends PositionBodyComponent {
   ChopperBody(
     this.position,
     PositionComponent component,
-  ) : super(component, component.size);
+  ) : super(positionComponent: component, size: component.size);
 
   @override
   Body createBody() {
