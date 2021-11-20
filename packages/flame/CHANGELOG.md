@@ -39,6 +39,7 @@
  - Rename `HasDraggableComponents` to `HasDraggables`
  - Rename `HasHoverableComponents` to `HasHoverableis`
  - Added `SizeEffect` backed by the new effects engine
+ - Added `ScaleEffect` backed by the new effects engine
  - Update `OrderedSet` to 4.1.0
  - Update `OrderedSet` to 5.0.0
 

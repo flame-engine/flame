@@ -8,6 +8,7 @@ import 'infinite_effect_example.dart';
 import 'move_effect_example.dart';
 import 'old_move_effect_example.dart';
 import 'old_rotate_effect_example.dart';
+import 'old_scale_effect_example.dart';
 import 'old_size_effect_example.dart';
 import 'opacity_effect_example.dart';
 import 'remove_effect_example.dart';
@@ -26,9 +27,9 @@ void addEffectsStories(Dashbook dashbook) {
     )
     ..add(
       'Scale Effect',
-      (_) => GameWidget(game: ScaleEffectExample()),
-      codeLink: baseLink('effects/scale_effect_example.dart'),
-      info: ScaleEffectExample.description,
+      (_) => GameWidget(game: OldScaleEffectExample()),
+      codeLink: baseLink('effects/old_scale_effect_example.dart'),
+      info: OldScaleEffectExample.description,
     )
     ..add(
       'Move Effect',
@@ -88,6 +89,11 @@ void addEffectsStories(Dashbook dashbook) {
       (_) => GameWidget(game: SizeEffectExample()),
       codeLink: baseLink('effects/size_effect_example.dart'),
       info: SizeEffectExample.description,
+    ..add(
+      'Scale Effect (v2)',
+      (_) => GameWidget(game: ScaleEffectExample()),
+      codeLink: baseLink('effects/scale_effect_example.dart'),
+      info: ScaleEffectExample.description,
     )
     ..add(
       'Remove Effect',
