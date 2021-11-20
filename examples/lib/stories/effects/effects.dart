@@ -89,6 +89,7 @@ void addEffectsStories(Dashbook dashbook) {
       (_) => GameWidget(game: SizeEffectExample()),
       codeLink: baseLink('effects/size_effect_example.dart'),
       info: SizeEffectExample.description,
+    )
     ..add(
       'Scale Effect (v2)',
       (_) => GameWidget(game: ScaleEffectExample()),
