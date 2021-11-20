@@ -78,7 +78,7 @@ class IsometricTileMapComponent extends PositionComponent {
   Vector2 get effectiveTileSize => destTileSize ?? tileset.srcSize;
 
   /// This is the vertical height of each block; by default it's half the tile size.
-  double get effectiveTileHeight => tileHeight ?? (effectiveTileSize.x / 2);
+  double get effectiveTileHeight => tileHeight ?? (effectiveTileSize.y / 2);
 
   @override
   void render(Canvas c) {
@@ -118,7 +118,7 @@ class IsometricTileMapComponent extends PositionComponent {
   Vector2 getBlockCenterPosition(Block block) {
     final tile = effectiveTileSize;
     return getBlockRenderPosition(block) +
-        Vector2(tile.x / 2, tile.y - effectiveTileHeight);
+        Vector2(tile.x / 2, tile.y - effectiveTileHeight - tile.y / 4);
   }
 
   /// Converts a coordinate from the isometric space to the cartesian space.
@@ -154,7 +154,9 @@ class IsometricTileMapComponent extends PositionComponent {
   /// This is the opposite of [getBlockRenderPosition].
   Block getBlockRenderedAt(Vector2 p) {
     final tile = effectiveTileSize;
-    return getBlock(p + Vector2(tile.x / 2, tile.y - effectiveTileHeight));
+    return getBlock(
+      p + Vector2(tile.x / 2, tile.y - effectiveTileHeight - tile.y / 4),
+    );
   }
 
   /// Sets the block value into the matrix.
