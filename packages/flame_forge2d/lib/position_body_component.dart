@@ -60,8 +60,8 @@ abstract class PositionBodyComponent<T extends Forge2DGame>
   }
 
   void _updatePositionComponent() {
-    positionComponent?.position.setFrom(body.position);
-    positionComponent?.position.y *= -1;
+    final bodyPosition = body.position;
+    positionComponent!.position.setValues(bodyPosition.x, bodyPosition.y * -1);
     positionComponent!.angle = -angle;
   }
 }
