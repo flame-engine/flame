@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import '../components/position_component.dart';
 import '../game/transform2d.dart';
 import 'effect.dart';
-import 'effect_controller.dart';
+import 'controllers/effect_controller.dart';
 
 /// Base class for effects that target a [Transform2D] property.
 ///

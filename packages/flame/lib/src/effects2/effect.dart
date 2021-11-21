@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 import '../../components.dart';
-import 'effect_controller.dart';
+import 'controllers/effect_controller.dart';
 
 /// An [Effect] is a component that changes properties or appearance of another
 /// component over time.

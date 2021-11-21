@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/effects2/rotate_effect.dart';
-import 'package:flame/src/effects2/standard_effect_controller.dart';
+import 'package:flame/src/effects2/controllers/standard_effect_controller.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 

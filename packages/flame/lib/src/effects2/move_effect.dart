@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:vector_math/vector_math_64.dart';
 
-import 'effect_controller.dart';
+import 'controllers/effect_controller.dart';
 import 'transform2d_effect.dart';
 
 /// Move a component to a new position.

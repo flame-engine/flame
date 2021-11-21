@@ -1,4 +1,4 @@
-import 'package:flame/src/effects2/simple_effect_controller.dart';
+import 'package:flame/src/effects2/controllers/simple_effect_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
