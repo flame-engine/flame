@@ -1,8 +1,8 @@
 import 'effect_controller.dart';
 
-/// A controller that progresses linearly over [duration] seconds.
+/// A controller that grows linearly from 0 to 1 over [duration] seconds.
 ///
-/// The [duration] can be 0, in which case the effect will jump from 0 to 1
+/// The [duration] can also be 0, in which case the effect will jump from 0 to 1
 /// instantaneously.
 class LinearEffectController extends EffectController {
   LinearEffectController(double duration)
@@ -17,29 +17,29 @@ class LinearEffectController extends EffectController {
   double? get duration => _duration;
 
   @override
-  bool get completed => _timer >= _duration;
+  bool get completed => _timer == _duration;
 
-  // If duration is 0, `completed` will always be true, avoiding division by 0.
+  // If duration is 0, `completed` will be true, and division by 0 avoided.
   @override
   double get progress => completed? 1 : (_timer / _duration);
 
   @override
   double advance(double dt) {
-    var extraTime = 0.0;
+    var leftoverTime = 0.0;
     if (goingForward) {
       _timer += dt;
       if (_timer > _duration) {
-        extraTime = _timer - _duration;
+        leftoverTime = _timer - _duration;
         _timer = _duration;
       }
     } else {
       _timer -= dt;
       if (_timer < 0) {
-        extraTime = 0 - _timer;
+        leftoverTime = 0 - _timer;
         _timer = 0;
       }
     }
-    return extraTime;
+    return leftoverTime;
   }
 
   @override
