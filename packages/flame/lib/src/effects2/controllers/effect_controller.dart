@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 /// Base "controller" class to facilitate animation of effects.
 ///
 /// The purpose of an effect controller is to define how an effect or an
@@ -25,6 +27,10 @@
 /// to keep track of time. Instead, it must be pushed through time manually, by
 /// calling the `update()` method within the game loop.
 abstract class EffectController {
+  /// Is the effect currently running in the "forward" direction?
+  bool get goingForward => _forward;
+  bool _forward = true;
+
   /// Will the effect continue to run forever (never completes)?
   bool get isInfinite => false;
 
@@ -51,10 +57,6 @@ abstract class EffectController {
   /// The current progress of the effect, a value between 0 and 1.
   double get progress;
 
-  /// Reverts the controller to its initial state, as it was before the start
-  /// of the animation.
-  void reset();
-
   /// Advances this controller's internal clock by [dt] seconds.
   ///
   /// If the controller is still running, the return value will be 0. If it
@@ -67,10 +69,20 @@ abstract class EffectController {
   /// class will take care of calling this method as necessary.
   double advance(double dt);
 
-  /// Instructs the controller to run backwards in time.
+  /// Reverts the controller to its initial state, as it was before the start
+  /// of the animation.
+  @mustCallSuper
+  void reset() {
+    _forward = true;
+  }
+
+  /// Force the controller to run backwards in time.
   ///
   /// The exact interpretation of this is left up to each controller, but the
   /// general idea is that the controller should appear as if it was recorded
   /// on video and then that video was played backwards.
-  void reverse() {}
+  @mustCallSuper
+  void reverse() {
+    _forward = !_forward;
+  }
 }
