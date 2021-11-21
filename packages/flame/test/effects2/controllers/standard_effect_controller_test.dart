@@ -15,18 +15,18 @@ void main() {
       expect(ec.completed, false);
       expect(ec.progress, 0.0);
 
-      ec.update(0.5);
+      ec.advance(0.5);
       expect(ec.started, true);
       expect(ec.completed, false);
       expect(ec.progress, 0.5);
 
-      ec.update(0.5);
+      ec.advance(0.5);
       expect(ec.started, true);
       expect(ec.completed, true);
       expect(ec.progress, 1.0);
 
       // Updating controller after it already finished is a no-op
-      ec.update(0.5);
+      ec.advance(0.5);
       expect(ec.started, true);
       expect(ec.completed, true);
       expect(ec.progress, 1.0);
@@ -38,11 +38,11 @@ void main() {
       expect(ec.started, false);
       expect(ec.progress, 0);
 
-      ec.update(1);
+      ec.advance(1);
       expect(ec.progress, 1);
-      ec.update(0);
+      ec.advance(0);
       expect(ec.progress, 0);
-      ec.update(1);
+      ec.advance(1);
       expect(ec.progress, 1);
       expect(ec.completed, true);
     });
@@ -57,19 +57,19 @@ void main() {
         expect(ec.started, false);
         expect(ec.completed, false);
         expect(ec.progress, 0);
-        ec.update(0.01);
+        ec.advance(0.01);
       }
       expect(ec.progress, closeTo(0, 1e-10));
 
       // progress from 0 to 1 over 1s
       for (var i = 0; i < 100; i++) {
-        ec.update(0.01);
+        ec.advance(0.01);
         expect(ec.started, true);
         expect(ec.progress, closeTo((i + 1) / 100, 1e-10));
       }
 
       // final update, to account for any rounding errors
-      ec.update(1e-10);
+      ec.advance(1e-10);
       expect(ec.completed, true);
       expect(ec.progress, 1);
     });
@@ -81,11 +81,11 @@ void main() {
       expect(ec.isInfinite, false);
       expect(ec.progress, 0);
 
-      ec.update(1.5);
+      ec.advance(1.5);
       expect(ec.progress, 1);
       expect(ec.started, true);
       expect(ec.completed, false);
-      ec.update(0);
+      ec.advance(0);
       expect(ec.progress, 1);
       expect(ec.completed, true);
     });
@@ -112,7 +112,7 @@ void main() {
       expect(ec.isSimpleAnimation, false);
 
       // Initial delay
-      ec.update(1.0);
+      ec.advance(1.0);
       expect(ec.started, true);
       expect(ec.progress, 0);
 
@@ -120,28 +120,28 @@ void main() {
       for (var iteration = 0; iteration < 5; iteration++) {
         // forward
         for (var i = 0; i < 200; i++) {
-          ec.update(0.01);
+          ec.advance(0.01);
           expect(ec.progress, closeTo((i + 1) / 200, 1e-10));
         }
         // atPeak
         for (var i = 0; i < 20; i++) {
-          ec.update(0.01);
+          ec.advance(0.01);
           expect(ec.progress, closeTo(1, i == 19 ? 1e-10 : 0));
         }
         // reverse
         for (var i = 0; i < 100; i++) {
-          ec.update(0.01);
+          ec.advance(0.01);
           expect(ec.progress, closeTo((99 - i) / 100, 1e-10));
         }
         // atPit
         for (var i = 0; i < 50; i++) {
-          ec.update(0.01);
+          ec.advance(0.01);
           expect(ec.progress, closeTo(0, i == 49 ? 1e-10 : 0));
         }
       }
 
       // In the end, the progress will remain at zero
-      ec.update(1e-10);
+      ec.advance(1e-10);
       expect(ec.started, true);
       expect(ec.completed, true);
       expect(ec.progress, 0);
@@ -154,7 +154,7 @@ void main() {
       expect(ec.progress, 0);
       expect(ec.started, false);
 
-      ec.update(0);
+      ec.advance(0);
       expect(ec.started, true);
       expect(ec.completed, false);
       expect(ec.progress, 0);
@@ -162,14 +162,14 @@ void main() {
       var stageTime = 0.0;
       for (var i = 0; i < 100; i++) {
         final dt = random.nextDouble() * 0.3;
-        ec.update(dt);
+        ec.advance(dt);
         stageTime += dt;
         if (stageTime >= ec.forwardDuration) {
           stageTime -= ec.forwardDuration;
           // The controller will report once `progress==1`, exactly, and then
           // once `progress==0`, also exactly.
           expect(ec.progress, 1);
-          ec.update(0);
+          ec.advance(0);
           expect(ec.progress, 0);
         } else {
           expect(ec.progress, closeTo(stageTime / ec.forwardDuration, 1e-10));
@@ -186,7 +186,7 @@ void main() {
       expect(ec.started, false);
       expect(ec.progress, 0);
 
-      ec.update(0.4);
+      ec.advance(0.4);
       expect(ec.started, true);
       expect(ec.completed, false);
       expect(ec.progress, closeTo(0.4 / 1.23, 1e-10));
@@ -196,12 +196,12 @@ void main() {
       expect(ec.completed, false);
       expect(ec.progress, 0);
 
-      ec.update(0.5);
+      ec.advance(0.5);
       expect(ec.started, true);
       expect(ec.completed, false);
       expect(ec.progress, closeTo(0.5 / 1.23, 1e-10));
 
-      ec.update(1);
+      ec.advance(1);
       expect(ec.started, true);
       expect(ec.completed, true);
       expect(ec.progress, 1);
@@ -258,17 +258,17 @@ void main() {
       expect(ec.cycleDuration, 1.8);
 
       for (var i = 0; i < 100; i++) {
-        ec.update(0.01);
+        ec.advance(0.01);
         expect(ec.progress, closeTo(curve.transform((i + 1) / 100), 1e-10));
       }
       for (var i = 0; i < 80; i++) {
-        ec.update(0.01);
+        ec.advance(0.01);
         expect(
           ec.progress,
           closeTo(curve.flipped.transform(1 - (i + 1) / 80), 1e-10),
         );
       }
-      ec.update(1e-10);
+      ec.advance(1e-10);
       expect(ec.completed, true);
       expect(ec.progress, 0);
     });
@@ -283,15 +283,15 @@ void main() {
       expect(ec.started, false);
       expect(ec.cycleDuration, 2);
 
-      ec.update(1);
+      ec.advance(1);
       expect(ec.progress, 1);
       expect(ec.completed, false);
 
       for (var i = 0; i < 100; i++) {
-        ec.update(0.01);
+        ec.advance(0.01);
         expect(ec.progress, closeTo(curve.transform(1 - (i + 1) / 100), 1e-10));
       }
-      ec.update(1e-10);
+      ec.advance(1e-10);
       expect(ec.completed, true);
     });
   });

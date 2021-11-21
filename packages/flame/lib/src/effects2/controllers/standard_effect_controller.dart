@@ -138,9 +138,9 @@ class StandardEffectController extends EffectController {
   double _remainingTimeAtCurrentStage;
 
   @override
-  void update(double dt) {
+  double advance(double dt) {
     if (completed) {
-      return;
+      return dt;
     }
     _remainingTimeAtCurrentStage -= dt;
     // When remaining time becomes zero or negative, it means we're
@@ -169,7 +169,7 @@ class StandardEffectController extends EffectController {
           if (_remainingIterationsCount == 1 && isSimpleAnimation) {
             _markCompleted();
           }
-          return;
+          return 0;
         case _AnimationStage.atMax:
           _remainingTimeAtCurrentStage += backwardDuration;
           _stage = _AnimationStage.backward;
@@ -177,14 +177,14 @@ class StandardEffectController extends EffectController {
               backwardDuration == 0 &&
               atMinDuration == 0) {
             _markCompleted();
-            return;
+            return 0;
           }
           break;
         case _AnimationStage.backward:
           _progress = 0;
           _remainingTimeAtCurrentStage += atMinDuration;
           _stage = _AnimationStage.atMin;
-          return;
+          return 0;
         case _AnimationStage.atMin:
           _remainingTimeAtCurrentStage += forwardDuration;
           _stage = _AnimationStage.forward;
@@ -192,7 +192,7 @@ class StandardEffectController extends EffectController {
             _remainingIterationsCount -= 1;
             if (_remainingIterationsCount == 0) {
               _markCompleted();
-              return;
+              return 0;
             }
           }
           break;
@@ -209,10 +209,12 @@ class StandardEffectController extends EffectController {
         _remainingTimeAtCurrentStage / backwardDuration,
       );
     }
+    return 0;
   }
 
   @override
   void reset() {
+    super.reset();
     _progress = 0;
     _stage = _AnimationStage.beforeStart;
     _remainingTimeAtCurrentStage = startDelay;
@@ -223,6 +225,9 @@ class StandardEffectController extends EffectController {
     _remainingTimeAtCurrentStage = double.infinity;
     _remainingIterationsCount = 0;
   }
+
+  @override
+  double? get duration => isInfinite? null : cycleDuration * repeatCount;
 }
 
 enum _AnimationStage {

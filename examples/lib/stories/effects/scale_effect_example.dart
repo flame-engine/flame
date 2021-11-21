@@ -3,8 +3,8 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
+import 'package:flame/src/effects2/controllers/standard_effect_controller.dart'; // ignore: implementation_imports
 import 'package:flame/src/effects2/scale_effect.dart'; // ignore: implementation_imports
-import 'package:flame/src/effects2/standard_effect_controller.dart'; // ignore: implementation_imports
 import 'package:flutter/material.dart';
 
 import '../../commons/square_component.dart';

@@ -17,7 +17,7 @@ void main() {
       game.update(0);
 
       object.add(
-        MoveEffect.by(Vector2(5, -1), SimpleEffectController(duration: 1)),
+        MoveEffect.by(Vector2(5, -1), SimpleEffectController(1)),
       );
       game.update(0.5);
       expect(object.position.x, closeTo(3 + 2.5, 1e-15));
@@ -35,7 +35,7 @@ void main() {
       game.update(0);
 
       object.add(
-        MoveEffect.to(Vector2(5, -1), SimpleEffectController(duration: 1)),
+        MoveEffect.to(Vector2(5, -1), SimpleEffectController(1)),
       );
       game.update(0.5);
       expect(object.position.x, closeTo(3 * 0.5 + 5 * 0.5, 1e-15));
@@ -57,7 +57,7 @@ void main() {
         MoveEffect.along(
           Path()
             ..addOval(Rect.fromCircle(center: const Offset(6, 10), radius: 50)),
-          SimpleEffectController(duration: 1),
+          SimpleEffectController(1),
         ),
       );
       game.update(0);
