@@ -1,13 +1,11 @@
 import 'effect_controller.dart';
 
-/// Simplest possible [EffectController], which supports an effect progressing
-/// linearly over [duration] seconds.
+/// A controller that progresses linearly over [duration] seconds.
 ///
 /// The [duration] can be 0, in which case the effect will jump from 0 to 1
 /// instantaneously.
-///
-class SimpleEffectController extends EffectController {
-  SimpleEffectController([double duration = 0.0])
+class LinearEffectController extends EffectController {
+  LinearEffectController(double duration)
       : _duration = duration,
         _timer = 0.0,
         assert(duration >= 0, 'duration cannot be negative: $duration');

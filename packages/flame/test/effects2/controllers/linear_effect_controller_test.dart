@@ -1,18 +1,18 @@
-import 'package:flame/src/effects2/controllers/simple_effect_controller.dart';
+import 'package:flame/src/effects2/controllers/linear_effect_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('SimpleEffectController', () {
-    test('duration == 0', () {
-      final ec = SimpleEffectController();
+    test('[duration==0]', () {
+      final ec = LinearEffectController(0);
       expect(ec.duration, 0);
       expect(ec.isInfinite, false);
       expect(ec.completed, true);
       expect(ec.progress, 1);
     });
 
-    test('duration == 1', () {
-      final ec = SimpleEffectController(1);
+    test('[duration==1]', () {
+      final ec = LinearEffectController(1);
       expect(ec.duration, 1);
       expect(ec.progress, 0);
       expect(ec.completed, false);
@@ -31,15 +31,15 @@ void main() {
       expect(ec.completed, true);
     });
 
-    test('reset', () {
-      final ec = SimpleEffectController();
+    test('[duration==0].reset()', () {
+      final ec = LinearEffectController(0);
       ec.reset();
       expect(ec.completed, true);
       expect(ec.progress, 1);
     });
 
-    test('reset 2', () {
-      final ec = SimpleEffectController(2);
+    test('[duration==2].reset()', () {
+      final ec = LinearEffectController(2);
       expect(ec.advance(3), 1);
       expect(ec.completed, true);
       expect(ec.progress, 1);
