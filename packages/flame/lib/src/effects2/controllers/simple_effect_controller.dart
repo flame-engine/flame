@@ -1,5 +1,4 @@
 import 'effect_controller.dart';
-import 'standard_effect_controller.dart';
 
 /// Simplest possible [EffectController], which supports an effect progressing
 /// linearly over [duration] seconds.
@@ -7,48 +6,47 @@ import 'standard_effect_controller.dart';
 /// The [duration] can be 0, in which case the effect will jump from 0 to 1
 /// instantaneously.
 ///
-/// The [delay] parameter allows to delay the start of the effect by the
-/// specified number of seconds.
-///
-/// See also: [StandardEffectController]
 class SimpleEffectController extends EffectController {
-  SimpleEffectController({
-    this.duration = 0.0,
-    this.delay = 0.0,
-  })  : assert(duration >= 0, 'duration cannot be negative: $duration'),
-        assert(delay >= 0, 'delay cannot be negative: $delay');
+  SimpleEffectController([double duration = 0.0])
+      : _duration = duration,
+        _timer = 0.0,
+        assert(duration >= 0, 'duration cannot be negative: $duration');
 
-  final double duration;
-  final double delay;
-  double _timer = 0.0;
+  final double _duration;
+  double _timer;
 
   @override
-  bool get started => _timer >= delay;
+  double? get duration => _duration;
 
   @override
-  bool get completed => _timer >= delay + duration;
+  bool get completed => _timer >= _duration;
+
+  // If duration is 0, `completed` will always be true, avoiding division by 0.
+  @override
+  double get progress => completed? 1 : (_timer / _duration);
 
   @override
-  bool get isInfinite => false;
-
-  @override
-  double get progress {
-    // If duration == 0, then `completed == started`, and the middle case
-    // (which divides by duration) cannot occur.
-    return completed
-        ? 1
-        : started
-            ? (_timer - delay) / duration
-            : 0;
-  }
-
-  @override
-  void update(double dt) {
-    _timer += dt;
+  double advance(double dt) {
+    var extraTime = 0.0;
+    if (goingForward) {
+      _timer += dt;
+      if (_timer > _duration) {
+        extraTime = _timer - _duration;
+        _timer = _duration;
+      }
+    } else {
+      _timer -= dt;
+      if (_timer < 0) {
+        extraTime = 0 - _timer;
+        _timer = 0;
+      }
+    }
+    return extraTime;
   }
 
   @override
   void reset() {
+    super.reset();
     _timer = 0;
   }
 }
