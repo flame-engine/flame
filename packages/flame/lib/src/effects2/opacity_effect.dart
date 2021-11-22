@@ -4,11 +4,6 @@ import 'effect_controller.dart';
 
 /// Change the opacity of a component over time.
 ///
-/// The following constructors are provided:
-///
-///   - [OpacityEffect.by] will set the opacity in relation to it's current opacity;
-///   - [OpacityEffect.to] will set the opacity to the specified opacity
-///
 /// This effect applies incremental changes to the component's opacity, and
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
@@ -17,6 +12,8 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
   double _roundingError = 0.0;
   final String? paintId;
 
+  /// This constructor will set the opacity in relation to it's current opacity
+  /// over time.
   OpacityEffect.by(
     double offset,
     EffectController controller, {
@@ -24,6 +21,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
   })  : _alphaOffset = (255 * offset).round(),
         super(controller);
 
+  /// This constructor will set the opacity to the specified opacity over time.
   factory OpacityEffect.to(
     double targetOpacity,
     EffectController controller, {
