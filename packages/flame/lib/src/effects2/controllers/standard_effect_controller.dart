@@ -213,6 +213,11 @@ class StandardEffectController extends EffectController {
   }
 
   @override
+  double recede(double dt) {
+    throw UnimplementedError();
+  }
+
+  @override
   void reset() {
     super.reset();
     _progress = 0;

@@ -21,7 +21,12 @@ class InfiniteEffectController extends EffectController {
   @override
   double advance(double dt) {
     // FIXME
-    if (goingForward) {}
+    return dt;
+  }
+
+  @override
+  double recede(double dt) {
+    // FIXME
     return dt;
   }
 

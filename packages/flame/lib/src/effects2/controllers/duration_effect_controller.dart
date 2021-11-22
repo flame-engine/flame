@@ -34,21 +34,24 @@ abstract class DurationEffectController extends EffectController {
 
   @override
   double advance(double dt) {
-    var leftoverTime = 0.0;
-    if (goingForward) {
-      _timer += dt;
-      if (_timer > _duration) {
-        leftoverTime = _timer - _duration;
-        _timer = _duration;
-      }
-    } else {
-      _timer -= dt;
-      if (_timer < 0) {
-        leftoverTime = 0 - _timer;
-        _timer = 0;
-      }
+    _timer += dt;
+    if (_timer > _duration) {
+      final leftoverTime = _timer - _duration;
+      _timer = _duration;
+      return leftoverTime;
     }
-    return leftoverTime;
+    return 0;
+  }
+
+  @override
+  double recede(double dt) {
+    _timer -= dt;
+    if (_timer < 0) {
+      final leftoverTime = 0 - _timer;
+      _timer = 0;
+      return leftoverTime;
+    }
+    return 0;
   }
 
   @override
