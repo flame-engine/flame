@@ -48,12 +48,20 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
   void apply(double progress) {
     final dProgress = progress - previousProgress;
     final currentAlpha = target.getAlpha(paintId: paintId);
-    final dOffset = (_alphaOffset * dProgress) + _roundingError;
-    _roundingError = dOffset.remainder(1.0) - 0.5 * dProgress.sign;
-    final unroundedAlpha = currentAlpha + dOffset;
-    final newAlpha = unroundedAlpha.round().clamp(0, 255);
-    target.setAlpha(newAlpha, paintId: paintId);
+    final dOffset =
+        (_alphaOffset * dProgress) + _roundingError * dProgress.sign;
+    _roundingError = (dOffset.remainder(1.0) - 0.5).abs();
+    final nextAlpha = (currentAlpha + dOffset).round().clamp(0, 255);
+    target.setAlpha(nextAlpha, paintId: paintId);
     super.apply(progress);
+  }
+
+  @override
+  void reset() {
+    super.reset();
+    // We can't accumulate rounding errors between resets because we don't know
+    // if the opacity has been affected by anything else in between.
+    _roundingError = 0.0;
   }
 }
 

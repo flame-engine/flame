@@ -26,13 +26,13 @@ void main() {
       expect(component.children.length, 1);
 
       game.update(0.5);
-      expect(component.getOpacity(), 0.4);
+      expectDouble(component.getOpacity(), 0.4, epsilon: _epsilon);
 
       game.update(0.5);
-      expect(component.getOpacity(), 0.6);
+      expectDouble(component.getOpacity(), 0.6, epsilon: _epsilon);
       game.update(0);
       expect(component.children.length, 0);
-      expect(component.getOpacity(), 0.6);
+      expectDouble(component.getOpacity(), 0.6, epsilon: _epsilon);
     });
 
     flameGame.test('absolute', (game) {
@@ -57,6 +57,8 @@ void main() {
       expectDouble(component.getOpacity(), 0.4, epsilon: _epsilon);
     });
 
+    // Since we can't accumulate rounding errors between resets we will get
+    // a slightly bigger discrepancy here.
     flameGame.test('reset relative', (game) {
       final component = _PaintComponent();
       game.ensureAdd(component);
@@ -67,12 +69,12 @@ void main() {
       );
       component.add(effect..removeOnFinish = false);
       for (var i = 0.0; i < 0.5; i += 0.1) {
-        expectDouble(component.getOpacity(), 1.0 - i, epsilon: _epsilon);
+        expectDouble(component.getOpacity(), 1.0 - i, epsilon: 3 * _epsilon);
         // After each reset the object will have its opacity modified by 0.1
         // relative to its opacity at the start of the effect.
         effect.reset();
         game.update(1);
-        expectDouble(component.getOpacity(), 0.9 - i, epsilon: _epsilon);
+        expectDouble(component.getOpacity(), 0.9 - i, epsilon: 3 * _epsilon);
       }
     });
 
@@ -91,7 +93,9 @@ void main() {
         // regardless of its initial opacity.
         effect.reset();
         game.update(1);
-        expect(component.getOpacity(), 0.0); // TODO: This is not good.
+        // TODO(spydon): This is not good, since it sometimes won't hit the
+        // minima.
+        expectDouble(component.getOpacity(), 0.0, epsilon: _epsilon);
       }
     });
 
