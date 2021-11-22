@@ -19,10 +19,13 @@ class DelayedEffectController extends EffectController {
   bool get isRandom => _child.isRandom;
 
   @override
-  double get progress => _timer < delay? 0 : _child.progress;
+  bool get started => _timer == delay;
 
   @override
-  bool get completed => _timer == delay && _child.completed;
+  bool get completed => started && _child.completed;
+
+  @override
+  double get progress => started? _child.progress : 0;
 
   @override
   double? get duration {
