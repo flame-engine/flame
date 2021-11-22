@@ -102,7 +102,7 @@ game.add(
 ```
 
 You can find more examples of how to use different built-in particles in various combinations
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/utils/particles.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/particles_example.dart).
 
 
 ## Lifecycle
