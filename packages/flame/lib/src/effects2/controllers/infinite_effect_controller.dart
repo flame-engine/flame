@@ -1,10 +1,11 @@
 import 'effect_controller.dart';
 
+/// Effect controller that wraps a [child] effect controller and repeats it
+/// infinitely.
 class InfiniteEffectController extends EffectController {
-  InfiniteEffectController(EffectController child)
-    : _child = child;
+  InfiniteEffectController(this.child);
 
-  final EffectController _child;
+  final EffectController child;
 
   @override
   bool get isInfinite => true;
@@ -16,23 +17,36 @@ class InfiniteEffectController extends EffectController {
   double? get duration => null;
 
   @override
-  double get progress => _child.progress;
+  double get progress => child.progress;
 
   @override
   double advance(double dt) {
-    // FIXME
-    return dt;
+    var t = dt;
+    for (;;) {
+      t = child.advance(t);
+      if (t == 0) {
+        break;
+      }
+      child.reset();
+    }
+    return 0;
   }
 
   @override
   double recede(double dt) {
-    // FIXME
-    return dt;
+    var t = dt;
+    for (;;) {
+      t = child.recede(t);
+      if (t == 0) {
+        break;
+      }
+      child.setToEnd();
+    }
+    return 0;
   }
 
   @override
-  void reverse() {
-    super.reverse();
-    _child.reverse();
+  void setToEnd() {
+    throw AssertionError('InfiniteEffectController does not have an end');
   }
 }

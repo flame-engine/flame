@@ -218,6 +218,14 @@ class StandardEffectController extends EffectController {
   }
 
   @override
+  void setToEnd() {
+    _progress = 1;
+    _stage = _AnimationStage.atMax;
+    _remainingTimeAtCurrentStage = double.infinity;
+    _remainingIterationsCount = 0;
+  }
+
+  @override
   void reset() {
     super.reset();
     _progress = 0;

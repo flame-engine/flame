@@ -59,4 +59,9 @@ abstract class DurationEffectController extends EffectController {
     super.reset();
     _timer = 0;
   }
+
+  @override
+  void setToEnd() {
+    _timer = duration;
+  }
 }
