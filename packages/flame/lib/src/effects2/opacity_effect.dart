@@ -13,14 +13,16 @@ import 'effect_controller.dart';
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
 class OpacityEffect extends ComponentEffect<HasPaint> {
-  double _offset;
+  int _alphaOffset;
+  double _roundingError = 0.0;
   final String? paintId;
 
   OpacityEffect.by(
-    this._offset,
+    double offset,
     EffectController controller, {
     this.paintId,
-  }) : super(controller);
+  })  : _alphaOffset = (255 * offset).round(),
+        super(controller);
 
   factory OpacityEffect.to(
     double targetOpacity,
@@ -47,8 +49,12 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
   @override
   void apply(double progress) {
     final dProgress = progress - previousProgress;
-    final currentOpacity = target.getOpacity(paintId: paintId);
-    target.setOpacity(currentOpacity + _offset * dProgress);
+    final currentAlpha = target.getAlpha(paintId: paintId);
+    final dOffset = (_alphaOffset * dProgress) + _roundingError;
+    _roundingError = dOffset.remainder(1.0) - 0.5 * _alphaOffset.sign;
+    final unroundedAlpha = currentAlpha + dOffset;
+    final newAlpha = unroundedAlpha.round().clamp(0, 255);
+    target.setAlpha(newAlpha, paintId: paintId);
     super.apply(progress);
   }
 }
@@ -65,6 +71,7 @@ class _OpacityToEffect extends OpacityEffect {
 
   @override
   void onStart() {
-    _offset = _targetOpacity - target.getOpacity(paintId: paintId);
+    _alphaOffset =
+        (_targetOpacity * 255 - target.getAlpha(paintId: paintId)).round();
   }
 }

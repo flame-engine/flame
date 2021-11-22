@@ -31,8 +31,7 @@ class OpacityEffectExample extends FlameGame with TapDetector {
         position: Vector2(300, 100),
         size: Vector2(149, 211),
       )..add(
-          OpacityEffect.to(
-            0.0,
+          OpacityEffect.fadeOut(
             StandardEffectController(
               duration: 1.5,
               reverseDuration: 1.5,
@@ -46,11 +45,10 @@ class OpacityEffectExample extends FlameGame with TapDetector {
   @override
   void onTap() {
     final opacity = sprite.paint.color.opacity;
-    print(opacity);
-    if (opacity == 1) {
-      sprite.add(OpacityEffect.fadeOut(StandardEffectController(duration: 3)));
-    } else if (opacity == 0) {
-      sprite.add(OpacityEffect.fadeIn(StandardEffectController(duration: 3)));
+    if (opacity >= 0.5) {
+      sprite.add(OpacityEffect.fadeOut(StandardEffectController(duration: 1)));
+    } else {
+      sprite.add(OpacityEffect.fadeIn(StandardEffectController(duration: 1)));
     }
   }
 }
