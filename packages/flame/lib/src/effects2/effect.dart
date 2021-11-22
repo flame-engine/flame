@@ -90,10 +90,10 @@ abstract class Effect extends Component {
     }
     super.update(dt);
     controller.update(dt);
-    // if (!_started && controller.started) {
-    //   _started = true;
-    //   onStart();
-    // }
+    if (!_started && controller.started) {
+      _started = true;
+      onStart();
+    }
     if (_started) {
       apply(controller.progress);
     }

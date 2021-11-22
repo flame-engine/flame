@@ -46,6 +46,11 @@ abstract class EffectController {
   /// this will return `null`.
   double? get duration;
 
+  /// Has the effect started running? Some effects use a "delay" parameter to
+  /// postpone the start of an animation. This property then tells you whether
+  /// this delay period has already passed.
+  bool get started => true;
+
   /// Has the effect already finished?
   ///
   /// For a finite animation, this property will turn `true` once the animation
