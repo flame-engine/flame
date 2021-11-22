@@ -28,7 +28,7 @@ import 'package:meta/meta.dart';
 /// calling the `update()` method within the game loop.
 abstract class EffectController {
   /// Is the effect currently running in the "forward" direction?
-  bool get goingForward => _forward;
+  bool get isRunningForward => _forward;
   bool _forward = true;
 
   /// Will the effect continue to run forever (never completes)?
@@ -53,7 +53,7 @@ abstract class EffectController {
   double get progress;
 
   /// Advances this controller's internal clock by [dt] seconds. This method
-  /// will be called when the effect controller is [goingForward].
+  /// will be called when the effect controller is [isRunningForward].
   ///
   /// If the controller is still running, the return value will be 0. If it
   /// already finished, then the return value will be the "leftover" part of
@@ -84,6 +84,19 @@ abstract class EffectController {
   @mustCallSuper
   void reverse() {
     _forward = !_forward;
+  }
+
+  /// Tell the controller that [dt] seconds has passed in-game.
+  ///
+  /// This method is for use by the `Effect` class only, and will ignore any
+  /// "leftover" parts of the timer.
+  @nonVirtual
+  void update(double dt) {
+    if (_forward) {
+      advance(dt);
+    } else {
+      recede(dt);
+    }
   }
 }
 

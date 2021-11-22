@@ -89,11 +89,7 @@ abstract class Effect extends Component {
       return;
     }
     super.update(dt);
-    if (controller.goingForward) {
-      controller.advance(dt);
-    } else {
-      controller.recede(dt);
-    }
+    controller.update(dt);
     // if (!_started && controller.started) {
     //   _started = true;
     //   onStart();
