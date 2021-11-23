@@ -4,7 +4,8 @@ import 'effect_controller.dart';
 /// child controller. While waiting, the progress will be reported at 0.
 class DelayedEffectController extends EffectController {
   DelayedEffectController(EffectController child, {required this.delay})
-      : _child = child,
+      : assert(delay >= 0, 'Delay must be non-negative: $delay'),
+        _child = child,
         _timer = 0;
 
   final EffectController _child;

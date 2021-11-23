@@ -80,9 +80,6 @@ void main() {
       ec.advance(1.5);
       expect(ec.progress, 1);
       expect(ec.started, true);
-      expect(ec.completed, false);
-      ec.advance(0);
-      expect(ec.progress, 1);
       expect(ec.completed, true);
     });
 
@@ -141,12 +138,8 @@ void main() {
       final ec = standardController(duration: duration, infinite: true);
       expect(ec.isInfinite, true);
       expect(ec.progress, 0);
-      expect(ec.started, false);
-
-      ec.advance(0);
       expect(ec.started, true);
       expect(ec.completed, false);
-      expect(ec.progress, 0);
 
       var stageTime = 0.0;
       for (var i = 0; i < 100; i++) {
@@ -155,14 +148,8 @@ void main() {
         stageTime += dt;
         if (stageTime >= duration) {
           stageTime -= duration;
-          // The controller will report once `progress==1`, exactly, and then
-          // once `progress==0`, also exactly.
-          expect(ec.progress, 1);
-          ec.advance(0);
-          expect(ec.progress, 0);
-        } else {
-          expect(ec.progress, closeTo(stageTime / duration, 1e-10));
         }
+        expect(ec.progress, closeTo(stageTime / duration, 1e-10));
       }
 
       expect(ec.started, true);
@@ -172,7 +159,7 @@ void main() {
 
     test('reset', () {
       final ec = standardController(duration: 1.23);
-      expect(ec.started, false);
+      expect(ec.started, true);
       expect(ec.progress, 0);
 
       ec.advance(0.4);
@@ -181,7 +168,7 @@ void main() {
       expect(ec.progress, closeTo(0.4 / 1.23, 1e-10));
 
       ec.setToStart();
-      expect(ec.started, false);
+      expect(ec.started, true);
       expect(ec.completed, false);
       expect(ec.progress, 0);
 
@@ -196,7 +183,7 @@ void main() {
       expect(ec.progress, 1);
 
       ec.setToStart();
-      expect(ec.started, false);
+      expect(ec.started, true);
       expect(ec.completed, false);
       expect(ec.progress, 0);
     });
@@ -243,12 +230,15 @@ void main() {
         curve: curve,
         reverseDuration: 0.8,
       );
-      expect(ec.started, false);
+      expect(ec.started, true);
       expect(ec.duration, 1.8);
 
       for (var i = 0; i < 100; i++) {
         ec.advance(0.01);
-        expect(ec.progress, closeTo(curve.transform((i + 1) / 100), 1e-10));
+        // Precision is less for final iteration, because it may flip over
+        // to the backwards curve.
+        final epsilon = i == 99 ? 1e-6 : 1e-10;
+        expect(ec.progress, closeTo(curve.transform((i + 1) / 100), epsilon));
       }
       for (var i = 0; i < 80; i++) {
         ec.advance(0.01);
@@ -269,7 +259,7 @@ void main() {
         reverseDuration: 1,
         reverseCurve: curve,
       );
-      expect(ec.started, false);
+      expect(ec.started, true);
       expect(ec.duration, 2);
 
       ec.advance(1);

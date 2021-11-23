@@ -50,12 +50,13 @@ EffectController standardController({
       LinearEffectController(duration)
     else
       CurvedEffectController(duration, curve),
-    if (atMaxDuration > 0) PauseEffectController(duration, level: 1),
-    if (reverseDuration > 0 && reverseCurve == null)
-      ReverseLinearEffectController(reverseDuration),
-    if (reverseDuration > 0 && reverseCurve != null)
-      ReverseCurvedEffectController(reverseDuration, reverseCurve),
-    if (atMinDuration > 0) PauseEffectController(atMinDuration, level: 0),
+    if (atMaxDuration != 0) PauseEffectController(atMaxDuration, level: 1),
+    if (reverseDuration != 0)
+      if (reverseCurve == null && curve == null)
+        ReverseLinearEffectController(reverseDuration)
+      else
+        ReverseCurvedEffectController(reverseDuration, reverseCurve ?? curve!.flipped),
+    if (atMinDuration != 0) PauseEffectController(atMinDuration, level: 0),
   ];
   assert(items.isNotEmpty);
   var ec = items.length == 1 ? items[0] : SequenceEffectController(items);
@@ -70,7 +71,7 @@ EffectController standardController({
     assert(repeatCount > 0, 'repeatCount must be positive');
     ec = RepeatedEffectController(ec, repeatCount);
   }
-  if (startDelay > 0) {
+  if (startDelay != 0) {
     ec = DelayedEffectController(ec, delay: startDelay);
   }
   return ec;
