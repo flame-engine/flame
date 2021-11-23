@@ -57,24 +57,29 @@ void main() {
       expectDouble(component.getOpacity(), 0.4, epsilon: _epsilon);
     });
 
-    // Since we can't accumulate rounding errors between resets we will get
-    // a slightly bigger discrepancy here.
     flameGame.test('reset relative', (game) {
       final component = _PaintComponent();
       game.ensureAdd(component);
 
+      // Since we'll have to change with multiples of 255 to not get rounding
+      // errors.
+      const step = 10 * 1 / 255;
       final effect = OpacityEffect.by(
-        -0.1,
+        -step,
         StandardEffectController(duration: 1),
       );
       component.add(effect..removeOnFinish = false);
-      for (var i = 0.0; i < 0.5; i += 0.1) {
-        expectDouble(component.getOpacity(), 1.0 - i, epsilon: 3 * _epsilon);
-        // After each reset the object will have its opacity modified by 0.1
+      for (var i = 0; i < 5; i++) {
+        expectDouble(component.getOpacity(), 1.0 - step * i, epsilon: _epsilon);
+        // After each reset the object will have its opacity modified by -10/255
         // relative to its opacity at the start of the effect.
         effect.reset();
         game.update(1);
-        expectDouble(component.getOpacity(), 0.9 - i, epsilon: 3 * _epsilon);
+        expectDouble(
+          component.getOpacity(),
+          1.0 - step * (i + 1),
+          epsilon: _epsilon,
+        );
       }
     });
 
