@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [Next]
+ - Forcing portrait and landscape mode is now supported on web
+
 ## [1.0.0-releasecandidate.17]
  - Added `StandardEffectController` class
  - Refactored `Effect` class to use `EffectController`, added `Transform2DEffect` class
