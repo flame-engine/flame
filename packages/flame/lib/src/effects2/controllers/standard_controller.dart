@@ -56,7 +56,9 @@ EffectController standardController({
         ReverseLinearEffectController(reverseDuration)
       else
         ReverseCurvedEffectController(
-            reverseDuration, reverseCurve ?? curve!.flipped),
+          reverseDuration,
+          reverseCurve ?? curve!.flipped,
+        ),
     if (atMinDuration != 0) PauseEffectController(atMinDuration, level: 0),
   ];
   assert(items.isNotEmpty);
