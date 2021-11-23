@@ -45,14 +45,15 @@ EffectController standardController({
   double atMaxDuration = 0.0,
   double atMinDuration = 0.0,
 }) {
+  final linear = (curve == null) || (curve == Curves.linear);
   final items = [
-    if (curve == null)
+    if (linear)
       LinearEffectController(duration)
     else
-      CurvedEffectController(duration, curve),
+      CurvedEffectController(duration, curve!),
     if (atMaxDuration != 0) PauseEffectController(atMaxDuration, level: 1),
     if (reverseDuration != 0)
-      if (reverseCurve == null && curve == null)
+      if (reverseCurve == null && linear)
         ReverseLinearEffectController(reverseDuration)
       else
         ReverseCurvedEffectController(
