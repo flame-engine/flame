@@ -62,20 +62,21 @@ EffectController standardController({
     if (atMinDuration != 0) PauseEffectController(atMinDuration, level: 0),
   ];
   assert(items.isNotEmpty);
-  var ec = items.length == 1 ? items[0] : SequenceEffectController(items);
+  var controller =
+      items.length == 1 ? items[0] : SequenceEffectController(items);
   if (infinite) {
     assert(
       repeatCount == null,
       'An infinite animation cannot have a repeat count',
     );
-    ec = InfiniteEffectController(ec);
+    controller = InfiniteEffectController(controller);
   }
   if (repeatCount != null && repeatCount != 1) {
     assert(repeatCount > 0, 'repeatCount must be positive');
-    ec = RepeatedEffectController(ec, repeatCount);
+    controller = RepeatedEffectController(controller, repeatCount);
   }
   if (startDelay != 0) {
-    ec = DelayedEffectController(ec, delay: startDelay);
+    controller = DelayedEffectController(controller, delay: startDelay);
   }
-  return ec;
+  return controller;
 }
