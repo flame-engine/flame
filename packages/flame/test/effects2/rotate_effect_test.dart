@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/effects2/rotate_effect.dart';
-import 'package:flame/src/effects2/controllers/standard_effect_controller.dart';
+import 'package:flame/src/effects2/controllers/standard_controller.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -18,7 +18,7 @@ void main() {
 
       object.angle = 1;
       object.add(
-        RotateEffect.by(1, StandardEffectController(duration: 1)),
+        RotateEffect.by(1, standardController(duration: 1)),
       );
       game.update(0);
       expect(object.angle, 1);
@@ -43,7 +43,7 @@ void main() {
 
       object.angle = 1;
       object.add(
-        RotateEffect.to(3, StandardEffectController(duration: 1)),
+        RotateEffect.to(3, standardController(duration: 1)),
       );
       game.update(0);
       expect(object.angle, 1);
@@ -65,7 +65,7 @@ void main() {
       game.add(object);
       game.update(0);
 
-      final effect = RotateEffect.by(1, StandardEffectController(duration: 1));
+      final effect = RotateEffect.by(1, standardController(duration: 1));
       object.add(effect..removeOnFinish = false);
       for (var i = 0; i < 5; i++) {
         expect(object.angle, i);
@@ -83,7 +83,7 @@ void main() {
       game.add(object);
       game.update(0);
 
-      final effect = RotateEffect.to(1, StandardEffectController(duration: 1));
+      final effect = RotateEffect.to(1, standardController(duration: 1));
       object.add(effect..removeOnFinish = false);
       for (var i = 0; i < 5; i++) {
         object.angle = 1 + 4.0 * i;
@@ -102,12 +102,12 @@ void main() {
       game.update(0);
 
       object.add(
-        RotateEffect.by(5, StandardEffectController(duration: 10)),
+        RotateEffect.by(5, standardController(duration: 10)),
       );
       object.add(
         RotateEffect.by(
           0.5,
-          StandardEffectController(
+          standardController(
             duration: 1,
             reverseDuration: 1,
             repeatCount: 5,
@@ -134,7 +134,7 @@ void main() {
 
       final effect = RotateEffect.by(
         1.0,
-        StandardEffectController(
+        standardController(
           duration: 1,
           reverseDuration: 1,
           infinite: true,

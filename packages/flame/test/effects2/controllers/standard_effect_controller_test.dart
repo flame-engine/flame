@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flame/src/effects2/controllers/standard_effect_controller.dart';
+import 'package:flame/src/effects2/controllers/standard_controller.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,9 +8,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('StandardEffectController', () {
     test('forward', () {
-      final ec = StandardEffectController(duration: 1.0);
+      final ec = standardController(duration: 1.0);
       expect(ec.isInfinite, false);
-      expect(ec.isSimpleAnimation, true);
       expect(ec.started, false);
       expect(ec.completed, false);
       expect(ec.progress, 0.0);
@@ -33,8 +32,7 @@ void main() {
     });
 
     test('forward x 2', () {
-      final ec = StandardEffectController(duration: 1, repeatCount: 2);
-      expect(ec.isSimpleAnimation, true);
+      final ec = standardController(duration: 1, repeatCount: 2);
       expect(ec.started, false);
       expect(ec.progress, 0);
 
@@ -48,9 +46,8 @@ void main() {
     });
 
     test('forward + delay', () {
-      final ec = StandardEffectController(duration: 1.0, startDelay: 0.2);
+      final ec = standardController(duration: 1.0, startDelay: 0.2);
       expect(ec.isInfinite, false);
-      expect(ec.isSimpleAnimation, true);
 
       // initial delay
       for (var i = 0; i < 20; i++) {
@@ -75,9 +72,8 @@ void main() {
     });
 
     test('forward + atMax', () {
-      final ec = StandardEffectController(duration: 1, atMaxDuration: 0.5);
-      expect(ec.cycleDuration, 1.5);
-      expect(ec.isSimpleAnimation, false);
+      final ec = standardController(duration: 1, atMaxDuration: 0.5);
+      expect(ec.duration, 1.5);
       expect(ec.isInfinite, false);
       expect(ec.progress, 0);
 
@@ -91,7 +87,7 @@ void main() {
     });
 
     test('(forward + reverse) x 5', () {
-      final ec = StandardEffectController(
+      final ec = standardController(
         startDelay: 1.0,
         duration: 2.0,
         reverseDuration: 1.0,
@@ -101,15 +97,8 @@ void main() {
       );
       expect(ec.isInfinite, false);
       expect(ec.progress, 0);
-      expect(ec.repeatCount, 5);
       expect(ec.started, false);
       expect(ec.completed, false);
-      expect(ec.forwardDuration, 2.0);
-      expect(ec.backwardDuration, 1.0);
-      expect(ec.atMaxDuration, 0.2);
-      expect(ec.atMinDuration, 0.5);
-      expect(ec.cycleDuration, 3.7);
-      expect(ec.isSimpleAnimation, false);
 
       // Initial delay
       ec.advance(1.0);
@@ -148,9 +137,9 @@ void main() {
     });
 
     testRandom('infinite', (Random random) {
-      final ec = StandardEffectController(duration: 1.4, infinite: true);
+      const duration = 1.4;
+      final ec = standardController(duration: duration, infinite: true);
       expect(ec.isInfinite, true);
-      expect(ec.isSimpleAnimation, true);
       expect(ec.progress, 0);
       expect(ec.started, false);
 
@@ -164,15 +153,15 @@ void main() {
         final dt = random.nextDouble() * 0.3;
         ec.advance(dt);
         stageTime += dt;
-        if (stageTime >= ec.forwardDuration) {
-          stageTime -= ec.forwardDuration;
+        if (stageTime >= duration) {
+          stageTime -= duration;
           // The controller will report once `progress==1`, exactly, and then
           // once `progress==0`, also exactly.
           expect(ec.progress, 1);
           ec.advance(0);
           expect(ec.progress, 0);
         } else {
-          expect(ec.progress, closeTo(stageTime / ec.forwardDuration, 1e-10));
+          expect(ec.progress, closeTo(stageTime / duration, 1e-10));
         }
       }
 
@@ -182,7 +171,7 @@ void main() {
     });
 
     test('reset', () {
-      final ec = StandardEffectController(duration: 1.23);
+      final ec = standardController(duration: 1.23);
       expect(ec.started, false);
       expect(ec.progress, 0);
 
@@ -218,44 +207,44 @@ void main() {
       }
 
       expectThrows(
-        () => StandardEffectController(duration: -1),
+        () => standardController(duration: -1),
       );
       expectThrows(
-        () => StandardEffectController(duration: 1, repeatCount: 0),
+        () => standardController(duration: 1, repeatCount: 0),
       );
       expectThrows(
-        () => StandardEffectController(
+        () => standardController(
           duration: 1,
           infinite: true,
           repeatCount: 3,
         ),
       );
       expectThrows(
-        () => StandardEffectController(duration: 1, repeatCount: -1),
+        () => standardController(duration: 1, repeatCount: -1),
       );
       expectThrows(
-        () => StandardEffectController(duration: 1, reverseDuration: -1),
+        () => standardController(duration: 1, reverseDuration: -1),
       );
       expectThrows(
-        () => StandardEffectController(duration: 1, startDelay: -1),
+        () => standardController(duration: 1, startDelay: -1),
       );
       expectThrows(
-        () => StandardEffectController(duration: 1, atMaxDuration: -1),
+        () => standardController(duration: 1, atMaxDuration: -1),
       );
       expectThrows(
-        () => StandardEffectController(duration: 1, atMinDuration: -1),
+        () => standardController(duration: 1, atMinDuration: -1),
       );
     });
 
     test('curve', () {
       final curve = Curves.easeIn;
-      final ec = StandardEffectController(
+      final ec = standardController(
         duration: 1,
         curve: curve,
         reverseDuration: 0.8,
       );
       expect(ec.started, false);
-      expect(ec.cycleDuration, 1.8);
+      expect(ec.duration, 1.8);
 
       for (var i = 0; i < 100; i++) {
         ec.advance(0.01);
@@ -275,13 +264,13 @@ void main() {
 
     test('reverse curve', () {
       final curve = Curves.easeInQuad;
-      final ec = StandardEffectController(
+      final ec = standardController(
         duration: 1,
         reverseDuration: 1,
         reverseCurve: curve,
       );
       expect(ec.started, false);
-      expect(ec.cycleDuration, 2);
+      expect(ec.duration, 2);
 
       ec.advance(1);
       expect(ec.progress, 1);
