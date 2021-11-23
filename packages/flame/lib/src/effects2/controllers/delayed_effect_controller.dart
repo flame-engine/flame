@@ -4,13 +4,12 @@ import 'effect_controller.dart';
 /// child controller. While waiting, the progress will be reported at 0.
 class DelayedEffectController extends EffectController {
   DelayedEffectController(EffectController child, {required this.delay})
-    : _child = child,
-      _timer = 0;
+      : _child = child,
+        _timer = 0;
 
   final EffectController _child;
   final double delay;
   double _timer;
-
 
   @override
   bool get isInfinite => _child.isInfinite;
@@ -25,12 +24,12 @@ class DelayedEffectController extends EffectController {
   bool get completed => started && _child.completed;
 
   @override
-  double get progress => started? _child.progress : 0;
+  double get progress => started ? _child.progress : 0;
 
   @override
   double? get duration {
     final d = _child.duration;
-    return d == null? null : d + delay;
+    return d == null ? null : d + delay;
   }
 
   @override
@@ -56,7 +55,7 @@ class DelayedEffectController extends EffectController {
       _timer -= dt;
     }
     if (_timer < 0) {
-      final leftoverTime = - _timer;
+      final leftoverTime = -_timer;
       _timer = 0;
       return leftoverTime;
     }

@@ -9,5 +9,5 @@ class ReverseLinearEffectController extends DurationEffectController {
 
   // If duration is 0, `completed` will be true, and division by 0 avoided.
   @override
-  double get progress => completed? 0 : 1 - (timer / duration);
+  double get progress => completed ? 0 : 1 - (timer / duration);
 }

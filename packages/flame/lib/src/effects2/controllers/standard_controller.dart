@@ -50,19 +50,18 @@ EffectController standardController({
       LinearEffectController(duration)
     else
       CurvedEffectController(duration, curve),
-    if (atMaxDuration > 0)
-      PauseEffectController(duration, level: 1),
+    if (atMaxDuration > 0) PauseEffectController(duration, level: 1),
     if (reverseDuration > 0 && reverseCurve == null)
       ReverseLinearEffectController(reverseDuration),
     if (reverseDuration > 0 && reverseCurve != null)
       ReverseCurvedEffectController(reverseDuration, reverseCurve),
-    if (atMinDuration > 0)
-      PauseEffectController( atMinDuration, level: 0),
+    if (atMinDuration > 0) PauseEffectController(atMinDuration, level: 0),
   ];
   assert(items.isNotEmpty);
-  var ec = items.length == 1? items[0] : SequenceEffectController(items);
+  var ec = items.length == 1 ? items[0] : SequenceEffectController(items);
   if (infinite) {
-    assert(repeatCount == null,
+    assert(
+      repeatCount == null,
       'An infinite animation cannot have a repeat count',
     );
     ec = InfiniteEffectController(ec);

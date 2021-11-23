@@ -4,12 +4,13 @@ import 'effect_controller.dart';
 /// another.
 class SequenceEffectController extends EffectController {
   SequenceEffectController(List<EffectController> controllers)
-    : assert(controllers.isNotEmpty, 'List of controllers cannot be empty'),
-      assert(!controllers.any((c) => c.isInfinite),
-        'Children controllers cannot be infinite',
-      ),
-      _children = controllers,
-      _currentIndex = 0;
+      : assert(controllers.isNotEmpty, 'List of controllers cannot be empty'),
+        assert(
+          !controllers.any((c) => c.isInfinite),
+          'Children controllers cannot be infinite',
+        ),
+        _children = controllers,
+        _currentIndex = 0;
 
   final List<EffectController> _children;
 

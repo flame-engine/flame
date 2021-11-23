@@ -1,4 +1,3 @@
-
 /// Base "controller" class to facilitate animation of effects.
 ///
 /// The purpose of an effect controller is to define how an effect or an
@@ -81,5 +80,3 @@ abstract class EffectController {
   /// Puts the controller into its final "completed" state.
   void setToEnd();
 }
-
-

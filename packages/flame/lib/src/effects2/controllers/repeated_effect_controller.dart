@@ -7,9 +7,9 @@ import 'effect_controller.dart';
 /// the last).
 class RepeatedEffectController extends EffectController {
   RepeatedEffectController(this.child, this.repeatCount)
-    : assert(repeatCount > 0, 'repeatCount must be positive'),
-      assert(!child.isInfinite, 'child cannot be infinite'),
-      _remainingCount = repeatCount;
+      : assert(repeatCount > 0, 'repeatCount must be positive'),
+        assert(!child.isInfinite, 'child cannot be infinite'),
+        _remainingCount = repeatCount;
 
   final EffectController child;
   final int repeatCount;
@@ -24,7 +24,7 @@ class RepeatedEffectController extends EffectController {
   @override
   double? get duration {
     final d = child.duration;
-    return d == null? null : d * repeatCount;
+    return d == null ? null : d * repeatCount;
   }
 
   @override
