@@ -67,12 +67,12 @@ class SequenceEffectController extends EffectController {
   @override
   void setToStart() {
     _currentIndex = 0;
-    _children.map((c) => c.setToStart());
+    _children.forEach((c) => c.setToStart());
   }
 
   @override
   void setToEnd() {
     _currentIndex = _children.length - 1;
-    _children.map((c) => c.setToEnd());
+    _children.forEach((c) => c.setToEnd());
   }
 }

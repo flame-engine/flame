@@ -2,11 +2,12 @@ import 'package:flame/src/effects2/controllers/linear_effect_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('SimpleEffectController', () {
+  group('LinearEffectController', () {
     test('[duration==0]', () {
       final ec = LinearEffectController(0);
       expect(ec.duration, 0);
       expect(ec.isInfinite, false);
+      expect(ec.started, true);
       expect(ec.completed, true);
       expect(ec.progress, 1);
     });
@@ -26,7 +27,7 @@ void main() {
       expect(ec.progress, 1);
       expect(ec.completed, true);
 
-      expect(ec.advance(0.00001), 0.00001);
+      expect(ec.advance(0.00001), closeTo(0.00001, 1e-15));
       expect(ec.progress, 1);
       expect(ec.completed, true);
     });
@@ -49,16 +50,16 @@ void main() {
       expect(ec.progress, 0);
 
       expect(ec.advance(1), 0);
-      expect(ec.completed, false);
       expect(ec.progress, closeTo(0.5, 1e-15));
+      expect(ec.completed, false);
 
       expect(ec.advance(1), 0);
-      expect(ec.completed, false);
       expect(ec.progress, 1);
+      expect(ec.completed, true);
 
       expect(ec.advance(1), 1);
-      expect(ec.completed, true);
       expect(ec.progress, 1);
+      expect(ec.completed, true);
     });
   });
 }
