@@ -51,7 +51,7 @@ EffectController standardController({
       LinearEffectController(duration)
     else
       CurvedEffectController(duration, curve!),
-    if (atMaxDuration != 0) PauseEffectController(atMaxDuration, level: 1),
+    if (atMaxDuration != 0) PauseEffectController(atMaxDuration, progress: 1),
     if (reverseDuration != 0)
       if (reverseCurve == null && linear)
         ReverseLinearEffectController(reverseDuration)
@@ -60,7 +60,7 @@ EffectController standardController({
           reverseDuration,
           reverseCurve ?? curve!.flipped,
         ),
-    if (atMinDuration != 0) PauseEffectController(atMinDuration, level: 0),
+    if (atMinDuration != 0) PauseEffectController(atMinDuration, progress: 0),
   ];
   assert(items.isNotEmpty);
   var controller =
