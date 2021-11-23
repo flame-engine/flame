@@ -9,7 +9,7 @@ import 'effect_controller.dart';
 /// also used incremental updates.
 class OpacityEffect extends ComponentEffect<HasPaint> {
   int _alphaOffset;
-  double _roundingError = 0.0;
+  double roundingError = 0.0;
   final String? paintId;
 
   /// This constructor will set the opacity in relation to it's current opacity
@@ -46,13 +46,19 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
 
   @override
   void apply(double progress) {
-    final dProgress = progress - previousProgress;
+    final deltaProgress = progress - previousProgress;
     final currentAlpha = target.getAlpha(paintId: paintId);
-    final dOffset =
-        (_alphaOffset * dProgress) + _roundingError * dProgress.sign;
-    final remainder = dOffset.remainder(1.0).abs();
-    _roundingError = remainder >= 0.5 ? 1.0 - remainder : remainder;
-    final nextAlpha = (currentAlpha + dOffset).round().clamp(0, 255);
+    final deltaAlpha =
+        (_alphaOffset * deltaProgress) + roundingError * deltaProgress.sign;
+    final remainder = deltaAlpha.remainder(1.0).abs();
+    roundingError = remainder >= 0.5 ? -1 * (1.0 - remainder) : remainder;
+    var nextAlpha = (currentAlpha + deltaAlpha).round();
+    if (nextAlpha < 0) {
+      roundingError += nextAlpha.abs();
+    } else if (nextAlpha > 255) {
+      roundingError += nextAlpha - 255;
+    }
+    nextAlpha = nextAlpha.clamp(0, 255);
     target.setAlpha(nextAlpha, paintId: paintId);
     super.apply(progress);
   }
@@ -62,7 +68,7 @@ class OpacityEffect extends ComponentEffect<HasPaint> {
     super.reset();
     // We can't accumulate rounding errors between resets because we don't know
     // if the opacity has been affected by anything else in between.
-    _roundingError = 0.0;
+    roundingError = 0.0;
   }
 }
 

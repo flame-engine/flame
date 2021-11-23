@@ -145,18 +145,17 @@ void main() {
 
     testRandom('a very long opacity change', (Random rng) {
       final game = FlameGame()..onGameResize(Vector2(1, 1));
-      final object = _PaintComponent();
-      game.ensureAdd(object);
+      final component = _PaintComponent();
+      game.ensureAdd(component);
 
-      final effect = OpacityEffect.by(
-        -1.0,
+      final effect = OpacityEffect.fadeOut(
         StandardEffectController(
           duration: 1,
           reverseDuration: 1,
           infinite: true,
         ),
       );
-      object.add(effect);
+      component.add(effect);
 
       var totalTime = 0.0;
       while (totalTime < 999.9) {
@@ -165,7 +164,12 @@ void main() {
         game.update(dt);
       }
       game.update(1000 - totalTime);
-      expectDouble(object.getOpacity(), 1.0);
+      // TODO(spydon): The loop above has an average of 100fps.
+      // It should change from 0-255 in 1s so it will change alpha with an
+      // average of 255/100=2.5 per tick, which should not result in a need of
+      // an epsilon value this high.
+      print(effect.roundingError);
+      expectDouble(component.getOpacity(), 1.0, epsilon: 4 * _epsilon);
     });
   });
 }
