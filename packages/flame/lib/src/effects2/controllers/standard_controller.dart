@@ -13,11 +13,11 @@ import 'sequence_effect_controller.dart';
 
 /// Factory function for producing common [EffectController]s.
 ///
-/// In the simplest case, [StandardEffectController] will have a positive
-/// `duration` and will change its [progress] linearly from 0 to 1 over the
-/// period of that duration.
+/// In the simplest case, when only `duration` is provided, this will return
+/// a [LinearEffectController] that grows linearly from 0 to 1 over the period
+/// of that duration.
 ///
-/// More generally, a [StandardEffectController] allows to add a delay before
+/// More generally, the produced effect controller allows to add a delay before
 /// the beginning of the animation, to animate both forward and in reverse,
 /// to iterate several times (or infinitely), to apply an arbitrary [Curve]
 /// making the effect progression non-linear, etc.
@@ -25,22 +25,15 @@ import 'sequence_effect_controller.dart';
 /// In the most general case, the animation proceeds through the following
 /// steps:
 ///   1. wait for [startDelay] seconds,
-///   2. repeat the following steps [repeatCount] times (or infinitely):
+///   2. repeat the following steps [repeatCount] times (or [infinite]ly):
 ///       a. progress from 0 to 1 over the [forwardDuration] seconds,
 ///       b. wait for [atMaxDuration] seconds,
 ///       c. progress from 1 to 0 over the [backwardDuration] seconds,
-///       d. wait for [atMinDuration] seconds,
-///   3. mark the animation as [completed].
+///       d. wait for [atMinDuration] seconds.
 ///
-/// If the animation is finite and there are no `backward` or `atMin` stages
+/// If the animation is finite and there are no "backward" or "atMin" stages
 /// then the animation will complete at `progress == 1`, otherwise it will
 /// complete at `progress == 0`.
-///
-/// The animation is "sticky" at the end of the `forward` and `backward` stages.
-/// This means that within a single [update()] call the animation may complete
-/// these stages but will not move on to the next ones. Thus, you're guaranteed
-/// to be able to observe `progress == 1` and `progress == 0` at least once
-/// within each iteration cycle.
 EffectController standardController({
   required double duration,
   Curve? curve,

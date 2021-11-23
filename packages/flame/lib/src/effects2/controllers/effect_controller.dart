@@ -55,8 +55,7 @@ abstract class EffectController {
   /// The current progress of the effect, a value between 0 and 1.
   double get progress;
 
-  /// Advances this controller's internal clock by [dt] seconds. This method
-  /// will be called when the effect controller is [isRunningForward].
+  /// Advances this controller's internal clock by [dt] seconds.
   ///
   /// If the controller is still running, the return value will be 0. If it
   /// already finished, then the return value will be the "leftover" part of
@@ -68,8 +67,11 @@ abstract class EffectController {
   /// class will take care of calling this method as necessary.
   double advance(double dt);
 
-  /// Similar to `advance()`, but invoked when the controller is going backwards
-  /// in time. Thus, this method is called when `goingForward == false`.
+  /// Similar to `advance()`, but makes the effect controller move back in time.
+  ///
+  /// If the supplied amount of time [dt] would push the effect past its
+  /// starting point, then the effect stops at the start and the "leftover"
+  /// portion of [dt] is returned.
   double recede(double dt);
 
   /// Reverts the controller to its initial state, as it was before the start
