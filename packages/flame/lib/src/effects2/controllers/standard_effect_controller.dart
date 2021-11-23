@@ -226,8 +226,7 @@ class StandardEffectController extends EffectController {
   }
 
   @override
-  void reset() {
-    super.reset();
+  void setToStart() {
     _progress = 0;
     _stage = _AnimationStage.beforeStart;
     _remainingTimeAtCurrentStage = startDelay;

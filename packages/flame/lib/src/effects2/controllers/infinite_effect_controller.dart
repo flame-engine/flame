@@ -27,7 +27,7 @@ class InfiniteEffectController extends EffectController {
       if (t == 0) {
         break;
       }
-      child.reset();
+      child.setToStart();
     }
     return 0;
   }
@@ -46,7 +46,12 @@ class InfiniteEffectController extends EffectController {
   }
 
   @override
+  void setToStart() {
+    child.setToStart();
+  }
+
+  @override
   void setToEnd() {
-    throw AssertionError('InfiniteEffectController does not have an end');
+    child.setToEnd();
   }
 }

@@ -75,7 +75,7 @@ abstract class Effect extends Component {
   /// it to the target.
   @mustCallSuper
   void reset() {
-    controller.reset();
+    controller.setToStart();
     _paused = false;
     _started = false;
     _finished = false;

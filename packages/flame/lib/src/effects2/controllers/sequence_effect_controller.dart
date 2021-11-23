@@ -64,10 +64,9 @@ class SequenceEffectController extends EffectController {
   }
 
   @override
-  void reset() {
-    super.reset();
+  void setToStart() {
     _currentIndex = 0;
-    _children.map((c) => c.reset());
+    _children.map((c) => c.setToStart());
   }
 
   @override

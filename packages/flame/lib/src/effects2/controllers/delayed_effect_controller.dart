@@ -64,8 +64,7 @@ class DelayedEffectController extends EffectController {
   }
 
   @override
-  void reset() {
-    super.reset();
+  void setToStart() {
     _timer = 0;
   }
 

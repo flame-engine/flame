@@ -191,7 +191,7 @@ void main() {
       expect(ec.completed, false);
       expect(ec.progress, closeTo(0.4 / 1.23, 1e-10));
 
-      ec.reset();
+      ec.setToStart();
       expect(ec.started, false);
       expect(ec.completed, false);
       expect(ec.progress, 0);
@@ -206,7 +206,7 @@ void main() {
       expect(ec.completed, true);
       expect(ec.progress, 1);
 
-      ec.reset();
+      ec.setToStart();
       expect(ec.started, false);
       expect(ec.completed, false);
       expect(ec.progress, 0);

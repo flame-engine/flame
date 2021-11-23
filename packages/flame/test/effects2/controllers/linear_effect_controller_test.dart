@@ -33,7 +33,7 @@ void main() {
 
     test('[duration==0].reset()', () {
       final ec = LinearEffectController(0);
-      ec.reset();
+      ec.setToStart();
       expect(ec.completed, true);
       expect(ec.progress, 1);
     });
@@ -44,7 +44,7 @@ void main() {
       expect(ec.completed, true);
       expect(ec.progress, 1);
 
-      ec.reset();
+      ec.setToStart();
       expect(ec.completed, false);
       expect(ec.progress, 0);
 

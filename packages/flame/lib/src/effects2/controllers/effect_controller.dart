@@ -81,11 +81,9 @@ abstract class EffectController {
 
   /// Reverts the controller to its initial state, as it was before the start
   /// of the animation.
-  @mustCallSuper
-  void reset() {
-    _forward = true;
-  }
+  void setToStart();
 
+  /// Puts the controller into its final "completed" state.
   void setToEnd();
 
   /// Force the controller to run backwards in time.
