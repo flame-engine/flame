@@ -32,8 +32,10 @@ class RepeatedEffectController extends EffectController {
     var t = child.advance(dt);
     while (t > 0 && _remainingCount > 0) {
       _remainingCount--;
-      child.setToStart();
-      t = child.advance(t);
+      if (_remainingCount != 0) {
+        child.setToStart();
+        t = child.advance(t);
+      }
     }
     return t;
   }
@@ -43,8 +45,10 @@ class RepeatedEffectController extends EffectController {
     var t = child.recede(dt);
     while (t > 0 && _remainingCount < repeatCount) {
       _remainingCount++;
-      child.setToEnd();
-      t = child.recede(t);
+      if (_remainingCount != repeatCount) {
+        child.setToEnd();
+        t = child.recede(t);
+      }
     }
     return t;
   }

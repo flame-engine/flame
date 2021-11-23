@@ -6,11 +6,11 @@ import 'package:flutter/animation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('StandardEffectController', () {
+  group('standardController', () {
     test('forward', () {
       final ec = standardController(duration: 1.0);
       expect(ec.isInfinite, false);
-      expect(ec.started, false);
+      expect(ec.started, true);
       expect(ec.completed, false);
       expect(ec.progress, 0.0);
 
@@ -33,13 +33,13 @@ void main() {
 
     test('forward x 2', () {
       final ec = standardController(duration: 1, repeatCount: 2);
-      expect(ec.started, false);
+      expect(ec.started, true);
       expect(ec.progress, 0);
 
       ec.advance(1);
       expect(ec.progress, 1);
-      ec.advance(0);
-      expect(ec.progress, 0);
+      ec.advance(1e-10);
+      expect(ec.progress, closeTo(1e-10, 1e-15));
       ec.advance(1);
       expect(ec.progress, 1);
       expect(ec.completed, true);
