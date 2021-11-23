@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 
 /// Base "controller" class to facilitate animation of effects.
 ///
@@ -23,19 +22,13 @@ import 'package:meta/meta.dart';
 ///   - the progress may briefly attain values outside of [0; 1] range (for
 ///     example if a "bouncy" easing curve is applied).
 ///
-/// In addition to its normal behavior, an [EffectController] can also be made
-/// to run backward in time using the `reverse()` method. The property
-/// [isRunningForward] indicates whether the controller was reversed or not.
-///
+/// An [EffectController] can be made to run forward in time (`advance()`), or
+/// backward in time (`recede()`).
 ///
 /// Unlike the `dart.ui.AnimationController`, this class does not use a `Ticker`
 /// to keep track of time. Instead, it must be pushed through time manually, by
 /// calling the `update()` method within the game loop.
 abstract class EffectController {
-  /// Is the effect currently running in the "forward" direction?
-  bool get isRunningForward => _forward;
-  bool _forward = true;
-
   /// Will the effect continue to run forever (never completes)?
   bool get isInfinite => false;
 
@@ -85,29 +78,6 @@ abstract class EffectController {
 
   /// Puts the controller into its final "completed" state.
   void setToEnd();
-
-  /// Force the controller to run backwards in time.
-  ///
-  /// The exact interpretation of this is left up to each controller, but the
-  /// general idea is that the controller should appear as if it was recorded
-  /// on video and then that video was played backwards.
-  @nonVirtual
-  void reverse() {
-    _forward = !_forward;
-  }
-
-  /// Tell the controller that [dt] seconds has passed in-game.
-  ///
-  /// This method is for use by the `Effect` class only, and will ignore any
-  /// "leftover" parts of the timer.
-  @nonVirtual
-  void update(double dt) {
-    if (_forward) {
-      advance(dt);
-    } else {
-      recede(dt);
-    }
-  }
 }
 
 
