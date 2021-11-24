@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [Next]
+## [0.8.2-releasecandidate.17]
  - Arguments of `PositionBodyComponent` are now optional so that initialization can be done in `onLoad`
 
 ## [0.8.2-releasecandidate.15]
