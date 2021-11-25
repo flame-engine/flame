@@ -7,6 +7,7 @@ import 'combined_effect_example.dart';
 import 'infinite_effect_example.dart';
 import 'move_effect_example.dart';
 import 'old_move_effect_example.dart';
+import 'old_opacity_effect_example.dart';
 import 'old_rotate_effect_example.dart';
 import 'old_scale_effect_example.dart';
 import 'old_size_effect_example.dart';
@@ -63,9 +64,9 @@ void addEffectsStories(Dashbook dashbook) {
     )
     ..add(
       'Opacity Effect',
-      (_) => GameWidget(game: OpacityEffectExample()),
-      codeLink: baseLink('effects/opacity_effect_example.dart'),
-      info: OpacityEffectExample.description,
+      (_) => GameWidget(game: OldOpacityEffectExample()),
+      codeLink: baseLink('effects/old_opacity_effect_example.dart'),
+      info: OldOpacityEffectExample.description,
     )
     ..add(
       'Color Effect',
@@ -95,6 +96,12 @@ void addEffectsStories(Dashbook dashbook) {
       (_) => GameWidget(game: ScaleEffectExample()),
       codeLink: baseLink('effects/scale_effect_example.dart'),
       info: ScaleEffectExample.description,
+    )
+    ..add(
+      'Opacity Effect (v2)',
+      (_) => GameWidget(game: OpacityEffectExample()),
+      codeLink: baseLink('effects/opacity_effect_example.dart'),
+      info: OpacityEffectExample.description,
     )
     ..add(
       'Remove Effect',
