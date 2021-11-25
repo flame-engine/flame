@@ -51,13 +51,12 @@ class HudMarginComponent<T extends FlameGame> extends PositionComponent
     super.onLoad();
     // If margin is not null we will update the position `onGameResize` instead
     if (margin == null) {
-      final screenSize = gameRef.canvasSize;
-      final topLeft = screenSize -
-          anchor.toOtherAnchorPosition(
-            position,
-            Anchor.topLeft,
-            scaledSize,
-          );
+      final screenSize = gameRef.size;
+      final topLeft = anchor.toOtherAnchorPosition(
+        position,
+        Anchor.topLeft,
+        scaledSize,
+      );
       final bottomRight = screenSize -
           anchor.toOtherAnchorPosition(
             position,
@@ -85,7 +84,7 @@ class HudMarginComponent<T extends FlameGame> extends PositionComponent
   }
 
   void _updateMargins() {
-    final screenSize = gameRef.canvasSize;
+    final screenSize = gameRef.size;
     final margin = this.margin!;
     final x = margin.left != 0
         ? margin.left + scaledSize.x / 2
@@ -94,7 +93,10 @@ class HudMarginComponent<T extends FlameGame> extends PositionComponent
         ? margin.top + scaledSize.y / 2
         : screenSize.y - margin.bottom - scaledSize.y / 2;
     position.setValues(x, y);
-    position =
-        Anchor.center.toOtherAnchorPosition(position, anchor, scaledSize);
+    position = Anchor.center.toOtherAnchorPosition(
+      position,
+      anchor,
+      scaledSize,
+    );
   }
 }
