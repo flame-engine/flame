@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [Next]
+## [1.0.0-releasecandidate.18]
  - Forcing portrait and landscape mode is now supported on web
  - Fixed margin calculation in `HudMarginComponent` when using a viewport
  - Fixed position calculation in `HudMarginComponent` when using a viewport
