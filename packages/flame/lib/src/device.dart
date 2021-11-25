@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 /// Provides methods for controlling the device (e.g. setting the screen to full-screen).
@@ -9,10 +8,6 @@ import 'package:flutter/services.dart';
 class Device {
   /// Sets the app to be full-screen (no buttons, bar or notifications on top).
   Future<void> fullScreen() {
-    if (kIsWeb) {
-      // TODO(erickzanardo): We probably could use dart:html and implement this for web as well
-      return Future.value();
-    }
     return SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
@@ -20,9 +15,6 @@ class Device {
   ///
   /// When it opens, it will automatically change orientation to the preferred one (if possible) depending on the physical orientation of the device.
   Future<void> setOrientation(DeviceOrientation orientation) {
-    if (kIsWeb) {
-      return Future.value();
-    }
     return SystemChrome.setPreferredOrientations(
       <DeviceOrientation>[orientation],
     );
@@ -32,9 +24,6 @@ class Device {
   ///
   /// When it opens, it will automatically change orientation to the preferred one (if possible) depending on the physical orientation of the device.
   Future<void> setOrientations(List<DeviceOrientation> orientations) {
-    if (kIsWeb) {
-      return Future.value();
-    }
     return SystemChrome.setPreferredOrientations(orientations);
   }
 
