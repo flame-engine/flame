@@ -168,7 +168,7 @@ void main() {
       // It should change from 0-255 in 1s so it will change alpha with an
       // average of 255/100=2.5 per tick, which should not result in a need of
       // an epsilon value this high.
-      expectDouble(component.getOpacity(), 1.0, epsilon: 4 * _epsilon);
+      expectDouble(component.getOpacity(), 1.0, epsilon: 6 * _epsilon);
     });
   });
 }
