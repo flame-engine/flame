@@ -71,8 +71,10 @@ void main() {
           expect(ec.progress, 1);
         } else {
           expect(leftoverTime, 0);
-          expect(ec.progress,
-              closeTo(curve.transform(totalTime / duration), 1e-15));
+          expect(
+            ec.progress,
+            closeTo(curve.transform(totalTime / duration), 1e-15),
+          );
         }
       }
       expect(ec.progress, 1);
@@ -85,8 +87,10 @@ void main() {
         final leftoverTime = ec.recede(dt);
         if (totalTime > 0) {
           expect(leftoverTime, 0);
-          expect(ec.progress,
-              closeTo(curve.transform(totalTime / duration), 1e-15));
+          expect(
+            ec.progress,
+            closeTo(curve.transform(totalTime / duration), 1e-15),
+          );
         } else {
           expect(leftoverTime, closeTo(-totalTime, 1e-15));
           expect(ec.progress, 0);
