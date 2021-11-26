@@ -8,48 +8,48 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('CurvedEffectController', () {
     const curves = <Curve>[
-        Curves.bounceIn,
-        Curves.bounceInOut,
-        Curves.bounceOut,
-        Curves.decelerate,
-        Curves.ease,
-        Curves.easeIn,
-        Curves.easeInBack,
-        Curves.easeInCirc,
-        Curves.easeInCubic,
-        Curves.easeInExpo,
-        Curves.easeInOut,
-        Curves.easeInOutBack,
-        Curves.easeInOutCirc,
-        Curves.easeInOutCubic,
-        Curves.easeInOutCubicEmphasized,
-        Curves.easeInOutExpo,
-        Curves.easeInOutQuad,
-        Curves.easeInOutQuart,
-        Curves.easeInOutQuint,
-        Curves.easeInOutSine,
-        Curves.easeInQuad,
-        Curves.easeInQuart,
-        Curves.easeInQuint,
-        Curves.easeInSine,
-        Curves.easeInToLinear,
-        Curves.easeOut,
-        Curves.easeOutBack,
-        Curves.easeOutCirc,
-        Curves.easeOutCubic,
-        Curves.easeOutExpo,
-        Curves.easeOutQuad,
-        Curves.easeOutQuart,
-        Curves.easeOutQuint,
-        Curves.easeOutSine,
-        Curves.elasticIn,
-        Curves.elasticInOut,
-        Curves.elasticOut,
-        Curves.fastLinearToSlowEaseIn,
-        Curves.fastOutSlowIn,
-        Curves.linear,
-        Curves.linearToEaseOut,
-        Curves.slowMiddle,
+      Curves.bounceIn,
+      Curves.bounceInOut,
+      Curves.bounceOut,
+      Curves.decelerate,
+      Curves.ease,
+      Curves.easeIn,
+      Curves.easeInBack,
+      Curves.easeInCirc,
+      Curves.easeInCubic,
+      Curves.easeInExpo,
+      Curves.easeInOut,
+      Curves.easeInOutBack,
+      Curves.easeInOutCirc,
+      Curves.easeInOutCubic,
+      Curves.easeInOutCubicEmphasized,
+      Curves.easeInOutExpo,
+      Curves.easeInOutQuad,
+      Curves.easeInOutQuart,
+      Curves.easeInOutQuint,
+      Curves.easeInOutSine,
+      Curves.easeInQuad,
+      Curves.easeInQuart,
+      Curves.easeInQuint,
+      Curves.easeInSine,
+      Curves.easeInToLinear,
+      Curves.easeOut,
+      Curves.easeOutBack,
+      Curves.easeOutCirc,
+      Curves.easeOutCubic,
+      Curves.easeOutExpo,
+      Curves.easeOutQuad,
+      Curves.easeOutQuart,
+      Curves.easeOutQuint,
+      Curves.easeOutSine,
+      Curves.elasticIn,
+      Curves.elasticInOut,
+      Curves.elasticOut,
+      Curves.fastLinearToSlowEaseIn,
+      Curves.fastOutSlowIn,
+      Curves.linear,
+      Curves.linearToEaseOut,
+      Curves.slowMiddle,
     ];
 
     testRandom('normal', (Random random) {
@@ -71,7 +71,8 @@ void main() {
           expect(ec.progress, 1);
         } else {
           expect(leftoverTime, 0);
-          expect(ec.progress, closeTo(curve.transform(totalTime / duration), 1e-15));
+          expect(ec.progress,
+              closeTo(curve.transform(totalTime / duration), 1e-15));
         }
       }
       expect(ec.progress, 1);
@@ -84,7 +85,8 @@ void main() {
         final leftoverTime = ec.recede(dt);
         if (totalTime > 0) {
           expect(leftoverTime, 0);
-          expect(ec.progress, closeTo(curve.transform(totalTime / duration), 1e-15));
+          expect(ec.progress,
+              closeTo(curve.transform(totalTime / duration), 1e-15));
         } else {
           expect(leftoverTime, closeTo(-totalTime, 1e-15));
           expect(ec.progress, 0);
@@ -96,11 +98,11 @@ void main() {
 
     test('errors', () {
       expect(
-          () => CurvedEffectController(0, Curves.linear),
-          throwsA(isA<AssertionError>()),
+        () => CurvedEffectController(0, Curves.linear),
+        throwsA(isA<AssertionError>()),
       );
       expect(
-            () => CurvedEffectController(-1, Curves.linear),
+        () => CurvedEffectController(-1, Curves.linear),
         throwsA(isA<AssertionError>()),
       );
     });

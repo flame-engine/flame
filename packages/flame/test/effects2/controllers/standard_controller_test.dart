@@ -224,7 +224,7 @@ void main() {
     });
 
     test('curve', () {
-      final curve = Curves.easeIn;
+      const curve = Curves.easeIn;
       final ec = standardController(
         duration: 1,
         curve: curve,
@@ -253,7 +253,7 @@ void main() {
     });
 
     test('reverse curve', () {
-      final curve = Curves.easeInQuad;
+      const curve = Curves.easeInQuad;
       final ec = standardController(
         duration: 1,
         reverseDuration: 1,
