@@ -1,3 +1,4 @@
+export 'src/components/input/button_component.dart';
 export 'src/components/input/hud_button_component.dart';
 export 'src/components/input/hud_margin_component.dart';
 export 'src/components/input/joystick_component.dart';
