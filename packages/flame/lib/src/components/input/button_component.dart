@@ -1,4 +1,3 @@
-import 'package:flutter/rendering.dart' show EdgeInsets, VoidCallback;
 import 'package:meta/meta.dart';
 
 import '../../../components.dart';
@@ -18,7 +17,7 @@ class ButtonComponent extends PositionComponent with Tappable {
   /// Callback for what should happen when the button is pressed.
   /// If you want to interact with [onTapUp] or [onTapCancel] it is recommended
   /// to extend [ButtonComponent].
-  VoidCallback? onPressed;
+  void Function()? onPressed;
 
   ButtonComponent({
     this.button,

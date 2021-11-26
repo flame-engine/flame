@@ -1,4 +1,4 @@
-import 'package:flutter/rendering.dart' show EdgeInsets, VoidCallback;
+import 'package:flutter/rendering.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
 
 import '../../../components.dart';
@@ -18,7 +18,7 @@ class HudButtonComponent extends HudMarginComponent with Tappable {
   /// Callback for what should happen when the button is pressed.
   /// If you want to interact with [onTapUp] or [onTapCancel] it is recommended
   /// to extend [HudButtonComponent].
-  VoidCallback? onPressed;
+  void Function()? onPressed;
 
   HudButtonComponent({
     this.button,
