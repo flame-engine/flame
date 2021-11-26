@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [1.0.0-releasecandidate.18]
+ - Forcing portrait and landscape mode is now supported on web
+ - Fixed margin calculation in `HudMarginComponent` when using a viewport
+ - Fixed position calculation in `HudMarginComponent` when using a viewport
+
 ## [1.0.0-releasecandidate.17]
  - Added `StandardEffectController` class
  - Refactored `Effect` class to use `EffectController`, added `Transform2DEffect` class
@@ -40,6 +45,7 @@
  - Rename `HasHoverableComponents` to `HasHoverableis`
  - Added `SizeEffect` backed by the new effects engine
  - Added `ScaleEffect` backed by the new effects engine
+ - Added `OpacityEffect` backed by the new effects engine
  - Update `OrderedSet` to 4.1.0
  - Update `OrderedSet` to 5.0.0
 

@@ -7,7 +7,7 @@ import 'effect.dart';
 /// Base class for effects that target a [Component] of type [T].
 ///
 /// A general abstraction for creating effects targeting [Component]s, currently
-/// only used by `SizeEffect` and `Transform2DEffect`.
+/// used by `SizeEffect`, `OpacityEffect` and `Transform2DEffect`.
 abstract class ComponentEffect<T extends Component> extends Effect {
   ComponentEffect(EffectController controller) : super(controller);
 

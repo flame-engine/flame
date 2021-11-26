@@ -176,7 +176,7 @@ void main() async {
       );
       final component = SpriteAnimationGroupComponent<_AnimationState>(
         animations: {_AnimationState.idle: animation},
-        // when omited, removeOnFinish is false for all states
+        // when omitted, removeOnFinish is false for all states
         current: _AnimationState.idle,
       );
 

@@ -6,5 +6,5 @@ void expectDouble(
   double epsilon = 0.01,
   String? reason,
 }) {
-  expect((d1 - d2).abs() <= epsilon, true, reason: reason);
+  expect(d1, closeTo(d2, epsilon), reason: reason);
 }
