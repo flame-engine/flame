@@ -4,6 +4,7 @@
  - Forcing portrait and landscape mode is now supported on web
  - Fixed margin calculation in `HudMarginComponent` when using a viewport
  - Fixed position calculation in `HudMarginComponent` when using a viewport
+ - Add a few missing helpers to SpriteAnimation
 
 ## [1.0.0-releasecandidate.17]
  - Added `StandardEffectController` class
