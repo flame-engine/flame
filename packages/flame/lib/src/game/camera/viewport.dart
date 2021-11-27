@@ -122,6 +122,10 @@ class DefaultViewport extends Viewport {
 /// transformation whatsoever, and if the a device with a different ratio is
 /// used it will try to adapt the best as possible.
 class FixedResolutionViewport extends Viewport {
+  /// By default, the viewport will clip anything rendered outside.
+  /// Use this variable to control that behaviour.
+  bool noClip;
+
   @override
   late Vector2 effectiveSize;
 
@@ -140,7 +144,7 @@ class FixedResolutionViewport extends Viewport {
   /// The Rect that is used to clip the canvas
   late Rect _clipRect;
 
-  FixedResolutionViewport(this.effectiveSize);
+  FixedResolutionViewport(this.effectiveSize, {this.noClip = false});
 
   @override
   void resize(Vector2 newCanvasSize) {
@@ -169,7 +173,9 @@ class FixedResolutionViewport extends Viewport {
   @override
   void render(Canvas c, void Function(Canvas) renderGame) {
     c.save();
-    c.clipRect(_clipRect);
+    if (!noClip) {
+      c.clipRect(_clipRect);
+    }
     c.transform(_transform.storage);
     renderGame(c);
     c.restore();
