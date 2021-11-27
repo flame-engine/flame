@@ -6,6 +6,48 @@ void main() async {
   // Generate an image
   final image = await generateImage();
 
+  group('SpriteAnimationComponent clone and reversed', () {
+    test(
+      'clone creates independent copy',
+      () {
+        final animation = SpriteAnimation.spriteList(
+          List.filled(5, Sprite(image)),
+          stepTime: 0.1,
+          loop: false,
+        );
+        final copy = animation.clone();
+        expect(copy.loop, animation.loop);
+
+        animation.update(0.1);
+        expect(animation.currentIndex, 1);
+        expect(copy.currentIndex, 0);
+
+        copy.update(0.2);
+        expect(animation.currentIndex, 1);
+        expect(copy.currentIndex, 2);
+      },
+    );
+    test(
+      'reversed creates independent copy',
+      () {
+        final animation = SpriteAnimation.spriteList(
+          List.filled(5, Sprite(image)),
+          stepTime: 0.1,
+          loop: false,
+        );
+        final copy = animation.reversed();
+        expect(copy.loop, animation.loop);
+
+        animation.update(0.1);
+        expect(animation.currentIndex, 1);
+        expect(copy.currentIndex, 0);
+
+        copy.update(0.2);
+        expect(animation.currentIndex, 1);
+        expect(copy.currentIndex, 2);
+      },
+    );
+  });
   group('SpriteAnimationComponent shouldRemove', () {
     flameGame.test(
       'removeOnFinish is true and animation#loop is false',
@@ -164,6 +206,23 @@ void main() async {
   });
 
   group('SpriteAnimation timing of animation frames', () {
+    test('Can move to last fram programtically', () {
+      // Non-looping animation, with the expected total duration of 0.500 s
+      final animation = SpriteAnimation.spriteList(
+        List.filled(5, Sprite(image)),
+        stepTime: 0.1,
+        loop: false,
+      );
+      var callbackInvoked = 0;
+      animation.onComplete = () {
+        callbackInvoked++;
+      };
+      animation.setToLast();
+      expect(animation.currentIndex, 4);
+      expect(animation.elapsed, 0.5);
+      expect(animation.done(), true);
+      expect(callbackInvoked, 1);
+    });
     // See https://github.com/flame-engine/flame/issues/895
     flameGame.test('Last animation frame is not skipped', (game) async {
       // Non-looping animation, with the expected total duration of 0.500 s
