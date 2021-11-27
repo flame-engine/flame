@@ -15,7 +15,7 @@ game.add(
   // which maps Component lifecycle hooks to Particle ones
   // and embeds a trigger for removing the component.
   ParticleComponent(
-    particle: CircleParticle(),
+    CircleParticle(),
   ),
 );
 ```
@@ -48,7 +48,7 @@ Vector2 randomVector2() => (Vector2.random(rnd) - Vector2.random(rnd)) * 200;
 //       > CircleParticle
 game.add(
   ParticleComponent(
-    particle: Particle.generate(
+    Particle.generate(
       count: 10,
       generator: (i) => AcceleratedParticle(
         acceleration: randomVector2(),
@@ -65,13 +65,12 @@ game.add(
 // Expresses the same behavior as above, but with a more fluent API.
 // Only Particles with SingleChildParticle mixin can be used as chainable behaviors.
 game.add(
-  Particle
-    .generate(
+  ParticleComponent(
+    Particle.generate(
       count: 10,
-      generator: (i) => CircleParticle(paint: Paint()..color = Colors.red)
-                    .accelerating(randomVector2())
-      )
-      .asComponent(),
+      generator: (i) => pt.CircleParticle(paint: Paint()..color = Colors.red)
+    )
+  )
 );
 
 // Computed Particle.
@@ -79,30 +78,30 @@ game.add(
 // All the behaviors are defined explicitly. Offers greater flexibility
 // compared to built-in behaviors.
 game.add(
-  Particle
-    .generate(
-      count: 10,
-      generator: (i) {
-        final position = Vector2.zero();
-        final speed = Vector2.zero();
-        final acceleration = randomVector2();
-        final paint = Paint()..color = Colors.red;
-
-        return ComputedParticle(
-          renderer: (canvas, _) {
-            speed += acceleration;
-            position += speed;
-            canvas.drawCircle(position, 10, paint);
-          }
+  ParticleComponent(
+      Particle.generate(
+        count: 10,
+        generator: (i) {
+          Vector2 position = Vector2.zero();
+          Vector2 speed = Vector2.zero();
+          final acceleration = randomVector2();
+          final paint = Paint()..color = Colors.red;
+          
+          return ComputedParticle(
+            renderer: (canvas, _) {
+              speed += acceleration;
+              position += speed;
+              canvas.drawCircle(Offset(position.x, position.y), 1, paint);
+            }
         );
       }
     )
-    .asComponent()
-)
+  )
+);
 ```
 
 You can find more examples of how to use different built-in particles in various combinations
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/utils/particles.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/particles_example.dart).
 
 
 ## Lifecycle
@@ -135,7 +134,7 @@ as the `value` property of the `AnimationController` class in Flutter.
 ```dart
 final particle = Particle(lifespan: 2.0);
 
-game.add(ParticleComponent(particle: particle));
+game.add(ParticleComponent(particle));
 
 // Will print values from 0 to 1 with step of .1: 0, 0.1, 0.2 ... 0.9, 1.0.
 Timer.periodic(duration * .1, () => print(particle.progress));
@@ -174,7 +173,7 @@ layer.
 ```dart
 game.add(
   ParticleComponent(
-    particle: TranslatedParticle(
+    TranslatedParticle(
       // Will translate the child Particle effect to the center of game canvas.
       offset: game.size / 2,
       child: Particle(),
@@ -191,11 +190,14 @@ Moves the child `Particle` between the `from` and `to` `Vector2`s during its lif
 ```dart
 game.add(
   ParticleComponent(
-    particle: MovingParticle(
+    MovingParticle(
       // Will move from corner to corner of the game canvas.
       from: Vector2.zero(),
       to: game.size,
-      child: Particle(),
+      child: CircleParticle(
+        radius: 2.0,
+        paint: Paint()..color = Colors.red,
+      ),
     ),
   ),
 );
@@ -210,19 +212,22 @@ limited to that. Unit of the `Vector2` value is _logical px/s_. So a speed of `V
 move a child `Particle` by 100 logical pixels of the device every second of game time.
 
 ```dart
-final rng = Random();
-Vector2 randomVector2() => (Vector2.random(random) - Vector2.random(rng)) * 100;
+final rnd = Random();
+Vector2 randomVector2() => (Vector2.random(rnd) - Vector2.random(rnd)) * 100;
 
 game.add(
   ParticleComponent(
-    particle: AcceleratedParticle(
+    AcceleratedParticle(
       // Will fire off in the center of game canvas
-      position: game.size.center(Vector2.zero()),
+      position: game.canvasSize/2,
       // With random initial speed of Vector2(-100..100, 0..-100)
       speed: Vector2(rnd.nextDouble() * 200 - 100, -rnd.nextDouble() * 100),
       // Accelerating downwards, simulating "gravity"
-      speed: Vector2(0, 100),
-      child: Particle(),
+      // speed: Vector2(0, 100),
+      child: CircleParticle(
+        radius: 2.0,
+        paint: Paint()..color = Colors.red,
+      ),
     ),
   ),
 );
@@ -237,7 +242,7 @@ desired positioning.
 ```dart
 game.add(
   ParticleComponent(
-    particle: CircleParticle(
+    CircleParticle(
       radius: game.size.x / 2,
       paint: Paint()..color = Colors.red.withOpacity(.5),
     ),
@@ -252,7 +257,7 @@ Allows you to embed a `Sprite` into your particle effects.
 ```dart
 game.add(
   ParticleComponent(
-  particle: SpriteParticle(
+    SpriteParticle(
       sprite: Sprite('sprite.png'),
       size: Vector2(64, 64),
     ),
@@ -277,7 +282,7 @@ final image = await Flame.images.load('image.png');
 
 game.add(
   ParticleComponent(
-    particle: ImageParticle(
+    ImageParticle(
       size: Vector2.all(24),
       image: image,
     );
@@ -299,7 +304,7 @@ final spritesheet = SpriteSheet(
 
 game.add(
   ParticleComponent(
-    particle: AnimationParticle(
+    AnimationParticle(
       animation: spritesheet.createAnimation(0, stepTime: 0.1),
     );
   ),
@@ -318,7 +323,7 @@ final longLivingRect = RectComponent();
 
 game.add(
   ParticleComponent(
-    particle: ComponentParticle(
+    ComponentParticle(
       component: longLivingRect
     );
   ),
@@ -358,7 +363,7 @@ flareAnimation.height = flareSize;
 // Somewhere in game
 game.add(
   ParticleComponent(
-    particle: FlareParticle(flare: flareAnimation),
+    FlareParticle(flare: flareAnimation),
   ),
 );
 ```
@@ -377,7 +382,7 @@ on each frame to perform necessary computations and render something to the `Can
 game.add(
   ParticleComponent(
     // Renders a circle which gradually changes its color and size during the particle lifespan.
-    particle: ComputedParticle(
+    ComputedParticle(
       renderer: (canvas, particle) => canvas.drawCircle(
         Offset.zero,
         particle.progress * 10,

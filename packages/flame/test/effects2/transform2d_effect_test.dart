@@ -14,14 +14,14 @@ void main() {
     flameGame.test(
       'onMount',
       (game) {
-        final obj = PositionComponent();
-        game.add(obj);
+        final component = PositionComponent();
+        game.add(component);
         game.update(0);
 
         final effect = _MyEffect(StandardEffectController(duration: 1));
-        obj.add(effect);
+        component.add(effect);
         game.update(0);
-        expect(effect.target, obj.transform);
+        expect(effect.transform, component.transform);
 
         final effect2 = _MyEffect(StandardEffectController(duration: 1));
         expect(

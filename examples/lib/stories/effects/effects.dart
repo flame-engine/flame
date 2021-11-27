@@ -7,8 +7,10 @@ import 'combined_effect_example.dart';
 import 'infinite_effect_example.dart';
 import 'move_effect_example.dart';
 import 'old_move_effect_example.dart';
+import 'old_opacity_effect_example.dart';
 import 'old_rotate_effect_example.dart';
 import 'old_scale_effect_example.dart';
+import 'old_size_effect_example.dart';
 import 'opacity_effect_example.dart';
 import 'remove_effect_example.dart';
 import 'rotate_effect_example.dart';
@@ -20,9 +22,9 @@ void addEffectsStories(Dashbook dashbook) {
   dashbook.storiesOf('Effects')
     ..add(
       'Size Effect',
-      (_) => GameWidget(game: SizeEffectExample()),
+      (_) => GameWidget(game: OldSizeEffectExample()),
       codeLink: baseLink('effects/size_effect_example.dart'),
-      info: SizeEffectExample.description,
+      info: OldSizeEffectExample.description,
     )
     ..add(
       'Scale Effect',
@@ -62,9 +64,9 @@ void addEffectsStories(Dashbook dashbook) {
     )
     ..add(
       'Opacity Effect',
-      (_) => GameWidget(game: OpacityEffectExample()),
-      codeLink: baseLink('effects/opacity_effect_example.dart'),
-      info: OpacityEffectExample.description,
+      (_) => GameWidget(game: OldOpacityEffectExample()),
+      codeLink: baseLink('effects/old_opacity_effect_example.dart'),
+      info: OldOpacityEffectExample.description,
     )
     ..add(
       'Color Effect',
@@ -84,10 +86,22 @@ void addEffectsStories(Dashbook dashbook) {
       info: RotateEffectExample.description,
     )
     ..add(
+      'Size Effect (v2)',
+      (_) => GameWidget(game: SizeEffectExample()),
+      codeLink: baseLink('effects/size_effect_example.dart'),
+      info: SizeEffectExample.description,
+    )
+    ..add(
       'Scale Effect (v2)',
       (_) => GameWidget(game: ScaleEffectExample()),
       codeLink: baseLink('effects/scale_effect_example.dart'),
       info: ScaleEffectExample.description,
+    )
+    ..add(
+      'Opacity Effect (v2)',
+      (_) => GameWidget(game: OpacityEffectExample()),
+      codeLink: baseLink('effects/opacity_effect_example.dart'),
+      info: OpacityEffectExample.description,
     )
     ..add(
       'Remove Effect',
