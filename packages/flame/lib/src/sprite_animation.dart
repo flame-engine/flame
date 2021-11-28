@@ -256,6 +256,14 @@ class SpriteAnimation {
     _done = false;
   }
 
+  /// Sets this animation to be on the last frame.
+  void setToLast() {
+    currentIndex = frames.length - 1;
+    clock = frames[currentIndex].stepTime;
+    elapsed = totalDuration();
+    update(0);
+  }
+
   /// Gets the current [Sprite] that should be shown.
   ///
   /// In case it reaches the end:
@@ -292,6 +300,11 @@ class SpriteAnimation {
         currentIndex++;
       }
     }
+  }
+
+  /// Returns a new Animation equal to this one in definition, but each copy can be run independently.
+  SpriteAnimation clone() {
+    return SpriteAnimation(frames.toList(), loop: loop);
   }
 
   /// Returns a new Animation based on this animation, but with its frames in reversed order
