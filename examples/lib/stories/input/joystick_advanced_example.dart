@@ -136,6 +136,27 @@ class JoystickAdvancedExample extends FlameGame
       ),
     );
 
+    final buttonSprites = await images.load('buttons.png');
+    final buttonSheet = SpriteSheet.fromColumnsAndRows(
+      image: buttonSprites,
+      columns: 1,
+      rows: 2,
+    );
+
+    // A sprite button, created from a shape, that adds a opacity effect to the
+    // player when it is pressed.
+    final spriteButtonComponent = SpriteButtonComponent(
+      button: buttonSheet.getSpriteById(0),
+      buttonDown: buttonSheet.getSpriteById(1),
+      position: Vector2(20, size.y - 360),
+      size: Vector2(185, 50),
+      onPressed: () => player.add(
+        OpacityEffect.fadeOut(
+          isAlternating: true,
+        ),
+      ),
+    );
+
     final _regular = TextPaint(
       style: TextStyle(color: BasicPalette.white.color),
     );
@@ -167,6 +188,7 @@ class JoystickAdvancedExample extends FlameGame
     add(flipButton);
     add(flopButton);
     add(buttonComponent);
+    add(spriteButtonComponent);
     add(shapeButton);
     add(speedWithMargin);
     add(directionWithMargin);
