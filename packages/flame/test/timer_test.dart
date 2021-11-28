@@ -1,4 +1,6 @@
+import 'package:flame/components.dart';
 import 'package:flame/timer.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -80,5 +82,31 @@ void main() {
       timer.update(1.1);
       expect(timer.finished, false);
     });
+
+    flameGame.test(
+      'broken test',
+      (game) async {
+        print('1');
+        await game.ensureAdd(Component());
+        print('2');
+        await game.ensureAdd(Component());
+        print('3');
+        await game.ensureAdd(Component());
+        print('4');
+        await game.ensureAdd(Component());
+        print('5');
+        await game.ensureAdd(Component());
+        print('6');
+        await game.ensureAdd(Component());
+        print('7');
+        await game.ensureAdd(Component());
+
+        print('8');
+        expect(game.children, -1);
+        print('9');
+        expect(true, false);
+        print('0');
+      },
+    );
   });
 }
