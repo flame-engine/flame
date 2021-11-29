@@ -260,34 +260,14 @@ class SpriteBatch {
     Rect? cullRect,
     Paint? paint,
   }) {
-    paint ??= Paint();
-
-    if (kIsWeb) {
-      for (final batchItem in _batchItems) {
-        paint.blendMode = blendMode ?? paint.blendMode;
-
-        canvas
-          ..save()
-          ..transform(batchItem.matrix.storage)
-          ..drawRect(batchItem.destination, batchItem.paint)
-          ..drawImageRect(
-            atlas,
-            batchItem.source,
-            batchItem.destination,
-            paint,
-          )
-          ..restore();
-      }
-    } else {
-      canvas.drawAtlas(
-        atlas,
-        _transforms,
-        _sources,
-        _colors,
-        blendMode ?? defaultBlendMode,
-        cullRect,
-        paint,
-      );
-    }
+    canvas.drawAtlas(
+      atlas,
+      _transforms,
+      _sources,
+      _colors,
+      blendMode ?? defaultBlendMode,
+      cullRect,
+      paint ?? Paint(),
+    );
   }
 }
