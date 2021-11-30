@@ -60,6 +60,10 @@ void main() {
       expect(ec.progress, 0);
       expect(ec.started, true);
       expect(ec.completed, false);
+      expect(ec.curve, curve);
+      expect(ec.isInfinite, false);
+      expect(ec.isRandom, false);
+      expect(ec.duration, duration);
 
       var totalTime = 0.0;
       while (totalTime < duration) {
