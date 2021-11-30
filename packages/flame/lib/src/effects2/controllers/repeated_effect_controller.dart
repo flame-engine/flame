@@ -13,6 +13,10 @@ class RepeatedEffectController extends EffectController {
 
   final EffectController child;
   final int repeatCount;
+
+  /// How many iterations this controller has remaining. When this reaches 0
+  /// the controller is considered completed.
+  int get remainingIterationsCount => _remainingCount;
   int _remainingCount;
 
   @override
@@ -37,18 +41,25 @@ class RepeatedEffectController extends EffectController {
         t = child.advance(t);
       }
     }
+    if (_remainingCount == 1 && child.completed) {
+      _remainingCount--;
+    }
     return t;
   }
 
   @override
   double recede(double dt) {
+    if (_remainingCount == 0 && dt > 0) {
+      // When advancing, we do not reset the child on last iteration. Hence,
+      // if we recede from the end position the remaining count must be
+      // adjusted.
+      _remainingCount = 1;
+    }
     var t = child.recede(dt);
     while (t > 0 && _remainingCount < repeatCount) {
       _remainingCount++;
-      if (_remainingCount != repeatCount) {
-        child.setToEnd();
-        t = child.recede(t);
-      }
+      child.setToEnd();
+      t = child.recede(t);
     }
     return t;
   }
