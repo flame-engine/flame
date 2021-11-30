@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:flame/src/effects2/controllers/infinite_effect_controller.dart';

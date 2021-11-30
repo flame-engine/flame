@@ -5,14 +5,18 @@ void main() {
   group('failsAssert', () {
     test('without message', () {
       expect(
-        () { assert(2 + 2 == 5); },
+        () {
+          assert(2 + 2 == 5);
+        },
         failsAssert(),
       );
     });
 
     test('with message', () {
       expect(
-        () { assert(2 + 2 == 5, 'Basic arithmetic error'); },
+        () {
+          assert(2 + 2 == 5, 'Basic arithmetic error');
+        },
         failsAssert('Basic arithmetic error'),
       );
     });

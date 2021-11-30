@@ -43,15 +43,15 @@ void main() {
       expect(ec.advance(1), 0);
       expect(ec.recede(0.5), 0);
       expect(ec.advance(0.5), 0);
-      expect(ec.advance(2), 0);  // 3/3 + 0/1
+      expect(ec.advance(2), 0); // 3/3 + 0/1
       expect(ec.progress, 0);
       expect(ec.started, true);
-      expect(ec.recede(0.5), 0);  // 2.5/3 + 0/1
+      expect(ec.recede(0.5), 0); // 2.5/3 + 0/1
       expect(ec.started, false);
-      expect(ec.advance(1), 0);  // 3/3 + 0.5/1
+      expect(ec.advance(1), 0); // 3/3 + 0.5/1
       expect(ec.started, true);
       expect(ec.progress, closeTo(0.5, 1e-15));
-      expect(ec.advance(1), closeTo(0.5, 1e-15));  // 3/3 + 1/1
+      expect(ec.advance(1), closeTo(0.5, 1e-15)); // 3/3 + 1/1
       expect(ec.completed, true);
       expect(ec.recede(0.5), 0); // 3/3 + 0.5/1
       expect(ec.completed, false);
