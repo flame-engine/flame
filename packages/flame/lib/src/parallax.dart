@@ -485,18 +485,18 @@ class Parallax {
     var depth = 0;
     final layers = await Future.wait<ParallaxLayer>(
       dataList.map((data) async {
-        final renderer = await data.load(
-          repeat,
-          alignment,
-          fill,
-          images,
-        );
         final velocityMultiplier =
             List.filled(depth, velocityDelta).fold<Vector2>(
           velocityDelta,
           (previousValue, delta) => previousValue.clone()..multiply(delta),
         );
         ++depth;
+        final renderer = await data.load(
+          repeat,
+          alignment,
+          fill,
+          images,
+        );
         return ParallaxLayer(
           renderer,
           velocityMultiplier: velocityMultiplier,
