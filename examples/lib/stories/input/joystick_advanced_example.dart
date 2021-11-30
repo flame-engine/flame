@@ -8,6 +8,7 @@ import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/animation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 import 'joystick_player.dart';
@@ -112,6 +113,50 @@ class JoystickAdvancedExample extends FlameGame
       ),
     );
 
+    // A button, created from a shape, that adds a scale effect to the player
+    // when it is pressed.
+    final buttonComponent = ButtonComponent(
+      button: RectangleComponent(
+        size: Vector2(185, 50),
+        paint: Paint()
+          ..color = Colors.orange
+          ..style = PaintingStyle.stroke,
+      ),
+      buttonDown: RectangleComponent(
+        size: Vector2(185, 50),
+        paint: BasicPalette.magenta.paint(),
+      ),
+      position: Vector2(20, size.y - 280),
+      onPressed: () => player.add(
+        ScaleEffect(
+          scale: Vector2.all(1.5),
+          duration: 1.0,
+          isAlternating: true,
+        ),
+      ),
+    );
+
+    final buttonSprites = await images.load('buttons.png');
+    final buttonSheet = SpriteSheet.fromColumnsAndRows(
+      image: buttonSprites,
+      columns: 1,
+      rows: 2,
+    );
+
+    // A sprite button, created from a shape, that adds a opacity effect to the
+    // player when it is pressed.
+    final spriteButtonComponent = SpriteButtonComponent(
+      button: buttonSheet.getSpriteById(0),
+      buttonDown: buttonSheet.getSpriteById(1),
+      position: Vector2(20, size.y - 360),
+      size: Vector2(185, 50),
+      onPressed: () => player.add(
+        OpacityEffect.fadeOut(
+          isAlternating: true,
+        ),
+      ),
+    );
+
     final _regular = TextPaint(
       style: TextStyle(color: BasicPalette.white.color),
     );
@@ -142,6 +187,8 @@ class JoystickAdvancedExample extends FlameGame
     add(joystick);
     add(flipButton);
     add(flopButton);
+    add(buttonComponent);
+    add(spriteButtonComponent);
     add(shapeButton);
     add(speedWithMargin);
     add(directionWithMargin);

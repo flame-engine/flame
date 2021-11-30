@@ -1,9 +1,15 @@
 # CHANGELOG
 
+## [Next]
+ - Add `ButtonComponent` backed by two `PositionComponent`s
+ - Add `SpriteButtonComponent` backed by two `Sprite`s
+
 ## [1.0.0-releasecandidate.18]
  - Forcing portrait and landscape mode is now supported on web
  - Fixed margin calculation in `HudMarginComponent` when using a viewport
  - Fixed position calculation in `HudMarginComponent` when using a viewport
+ - Add noClip option to `FixedResolutionViewport`
+ - Add a few missing helpers to SpriteAnimation
 
 ## [1.0.0-releasecandidate.17]
  - Added `StandardEffectController` class

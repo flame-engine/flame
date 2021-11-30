@@ -117,6 +117,19 @@ If you want to act upon the button being pressed (which would be the common thin
 a callback function as the `onPressed` argument, or you extend the component and override
 `onTapDown`, `onTapUp` and/or `onTapCancel` and implement your logic there.
 
+## SpriteButtonComponent
+
+A `SpriteButtonComponent` is a button that is defined by two `Sprite`s, one that represents
+when the button is pressed and one that represents when the button is released.
+
+## ButtonComponent
+
+A `ButtonComponent` is a button that is defined by two `PositionComponent`s, one that represents
+when the button is pressed and one that represents when the button is released. If you only want
+to use sprites for the button, use the [](#SpriteButtonComponent) instead, but this component can be
+good to use if you for example want to have a `SpriteAnimationComponent` as a button, or anything
+else which isn't a pure sprite.
+
 ## Gamepad
 
 Flame has a separate plugin to support external game controllers (gamepads), check
