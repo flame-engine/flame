@@ -36,7 +36,7 @@ void main() {
         final dt = random.nextDouble() * 0.1;
         totalTime += dt;
         expect(ec.advance(dt), 0);
-        expect(ec.progress, closeTo(totalTime % 1, 1e-14));
+        expect(ec.progress, closeTo(totalTime % 1, 5e-14));
       }
       expect(ec.completed, false);
     });
@@ -48,7 +48,7 @@ void main() {
         final dt = random.nextDouble() * 0.1;
         totalTime += dt;
         expect(ec.recede(dt), 0);
-        expect(ec.progress, closeTo((11 - totalTime) % 1, 1e-14));
+        expect(ec.progress, closeTo((11 - totalTime) % 1, 5e-14));
       }
       expect(ec.completed, false);
     });
