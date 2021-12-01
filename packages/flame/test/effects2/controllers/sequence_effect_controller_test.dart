@@ -54,12 +54,12 @@ void main() {
         expect(
           ec.progress,
           closeTo(
-              totalTime <= 1
-                  ? totalTime
-                  : totalTime <= 3
-                      ? (totalTime - 1) / 2
-                      : (totalTime - 3) / 3,
-              1e-15,
+            totalTime <= 1
+                ? totalTime
+                : totalTime <= 3
+                    ? (totalTime - 1) / 2
+                    : (totalTime - 3) / 3,
+            1e-15,
           ),
         );
         final dt = random.nextDouble();
@@ -87,8 +87,8 @@ void main() {
             totalTime <= 1
                 ? totalTime
                 : totalTime <= 3
-                ? (totalTime - 1) / 2
-                : (totalTime - 3) / 3,
+                    ? (totalTime - 1) / 2
+                    : (totalTime - 3) / 3,
             1e-14,
           ),
         );

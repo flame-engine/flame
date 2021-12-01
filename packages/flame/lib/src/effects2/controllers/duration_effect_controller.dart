@@ -23,6 +23,8 @@ abstract class DurationEffectController extends EffectController {
   @override
   double get duration => _duration;
 
+  set duration(double value) => _duration = value;
+
   @protected
   double get timer => _timer;
 
