@@ -9,10 +9,11 @@ class SequenceEffectController extends EffectController {
           !controllers.any((c) => c.isInfinite),
           'Children controllers cannot be infinite',
         ),
-        _children = controllers,
+        children = controllers,
         _currentIndex = 0;
 
-  final List<EffectController> _children;
+  /// Individual controllers in the sequence.
+  final List<EffectController> children;
 
   /// The index of the controller currently being executed. This starts with 0,
   /// and by the end it will be equal to `_children.length - 1`. This variable
@@ -21,14 +22,14 @@ class SequenceEffectController extends EffectController {
 
   @override
   bool get completed {
-    return _currentIndex == _children.length - 1 &&
-        _children[_currentIndex].completed;
+    return _currentIndex == children.length - 1 &&
+        children[_currentIndex].completed;
   }
 
   @override
   double? get duration {
     var totalDuration = 0.0;
-    for (final controller in _children) {
+    for (final controller in children) {
       final d = controller.duration;
       if (d == null) {
         return null;
@@ -39,27 +40,27 @@ class SequenceEffectController extends EffectController {
   }
 
   @override
-  bool get isRandom => _children.any((c) => c.isRandom);
+  bool get isRandom => children.any((c) => c.isRandom);
 
   @override
-  double get progress => _children[_currentIndex].progress;
+  double get progress => children[_currentIndex].progress;
 
   @override
   double advance(double dt) {
-    var t = _children[_currentIndex].advance(dt);
-    while (t > 0 && _currentIndex < _children.length - 1) {
+    var t = children[_currentIndex].advance(dt);
+    while (t > 0 && _currentIndex < children.length - 1) {
       _currentIndex++;
-      t = _children[_currentIndex].advance(t);
+      t = children[_currentIndex].advance(t);
     }
     return t;
   }
 
   @override
   double recede(double dt) {
-    var t = _children[_currentIndex].recede(dt);
+    var t = children[_currentIndex].recede(dt);
     while (t > 0 && _currentIndex > 0) {
       _currentIndex--;
-      t = _children[_currentIndex].recede(t);
+      t = children[_currentIndex].recede(t);
     }
     return t;
   }
@@ -67,12 +68,12 @@ class SequenceEffectController extends EffectController {
   @override
   void setToStart() {
     _currentIndex = 0;
-    _children.forEach((c) => c.setToStart());
+    children.forEach((c) => c.setToStart());
   }
 
   @override
   void setToEnd() {
-    _currentIndex = _children.length - 1;
-    _children.forEach((c) => c.setToEnd());
+    _currentIndex = children.length - 1;
+    children.forEach((c) => c.setToEnd());
   }
 }
