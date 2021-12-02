@@ -1,6 +1,10 @@
+import 'package:flame/assets.dart';
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flame/parallax.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 class _ParallaxGame extends FlameGame {
@@ -24,8 +28,47 @@ class _ParallaxGame extends FlameGame {
   }
 }
 
+class MockImages extends Mock implements Images {}
+
+class MockImage extends Mock implements Image {}
+
+class _SlowLoadParallaxGame extends _ParallaxGame {
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    final mockImageCache = MockImages();
+
+    void createMockAnswer(int imageNumber, int time) {
+      when(() => mockImageCache.load('$imageNumber.png')).thenAnswer(
+        (_) {
+          return Future<Image>.delayed(Duration(seconds: time))
+              .then((_) => MockImage());
+        },
+      );
+    }
+
+    // [3, 5, 1, 6, 2]
+    List<void>.generate(
+      5,
+      (i) => createMockAnswer(i, ((i % 2) + 1) * 3 - i % 3),
+    );
+
+    final imagesData = List.generate(5, (i) => ParallaxImageData('$i.png'));
+
+    parallaxComponent = await loadParallaxComponent(
+      imagesData,
+      size: parallaxSize,
+      baseVelocity: Vector2(20, 0),
+      velocityMultiplierDelta: Vector2(1.8, 1.0),
+      images: mockImageCache,
+    );
+    add(parallaxComponent);
+  }
+}
+
 void main() {
   final parallaxGame = FlameTester(() => _ParallaxGame());
+  final slowLoadParallaxGame = FlameTester(() => _SlowLoadParallaxGame());
 
   group('parallax test', () {
     parallaxGame.test(
@@ -39,6 +82,17 @@ void main() {
 
     parallaxGame.test('can have fullscreen ParallaxComponent', (game) async {
       expect(game.parallaxComponent.size, game.size);
+    });
+
+    slowLoadParallaxGame.test('can have layers with different loading times',
+        (game) async {
+      final parallax = game.parallaxComponent.parallax!;
+      var lastLength = 0.0;
+      for (final layer in parallax.layers) {
+        final velocityLength = layer.velocityMultiplier.length;
+        expect(velocityLength > lastLength, isTrue);
+        lastLength = velocityLength;
+      }
     });
   });
 }
