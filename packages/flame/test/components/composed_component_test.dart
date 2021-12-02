@@ -76,12 +76,12 @@ void main() {
 
       await wrapper.add(child);
       expect(wrapper.contains(child), false);
-      wrapper.update(0); // children are only added on the next tick
+      wrapper.updateTree(0); // children are only added on the next tick
       expect(wrapper.contains(child), true);
 
       wrapper.remove(child);
       expect(wrapper.contains(child), true);
-      wrapper.update(0); // children are only removed on the next tick
+      wrapper.updateTree(0); // children are only removed on the next tick
       expect(wrapper.contains(child), false);
     });
 
@@ -96,7 +96,7 @@ void main() {
         expect(wrapper.contains(child), false);
         await future;
         expect(wrapper.contains(child), false);
-        wrapper.update(0);
+        wrapper.updateTree(0);
         expect(wrapper.contains(child), true);
       },
     );
