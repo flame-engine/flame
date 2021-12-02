@@ -1,8 +1,6 @@
 import 'dart:collection';
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-
 import '../game.dart';
 import 'assets/images.dart';
 import 'extensions/image.dart';
