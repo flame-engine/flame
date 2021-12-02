@@ -14,7 +14,7 @@ class _MyComponent extends Component {
   bool isHud;
 
   _MyComponent(int priority, {this.isHud = false}) : super(priority: priority);
- 
+
   @override
   void render(Canvas canvas) {
     final p = Vector2Extension.fromInts(priority, priority);
@@ -49,7 +49,7 @@ void main() {
         );
       },
     );
-  
+
     flameGame.test(
       'only HUD components',
       (game) async {
@@ -71,7 +71,7 @@ void main() {
         );
       },
     );
-  
+
     flameGame.test(
       'mixed',
       (game) async {
