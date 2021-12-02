@@ -30,9 +30,22 @@ class _ParallaxGame extends FlameGame {
 
 class MockImages extends Mock implements Images {}
 
-class MockImage extends Mock implements Image {}
+class MockImage extends Mock implements Image {
+  @override
+  int get height => 100;
 
-class _SlowLoadParallaxGame extends _ParallaxGame {
+  @override
+  int get width => 100;
+}
+
+class _SlowLoadParallaxGame extends FlameGame {
+  late final ParallaxComponent parallaxComponent;
+  late final Vector2? parallaxSize;
+
+  _SlowLoadParallaxGame({this.parallaxSize}) {
+    onGameResize(Vector2.all(500));
+  }
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -41,8 +54,10 @@ class _SlowLoadParallaxGame extends _ParallaxGame {
     void createMockAnswer(int imageNumber, int time) {
       when(() => mockImageCache.load('$imageNumber.png')).thenAnswer(
         (_) {
-          return Future<Image>.delayed(Duration(seconds: time))
-              .then((_) => MockImage());
+          return Future<Image>.delayed(
+            Duration(milliseconds: time * 100),
+            () => Future.value(MockImage()),
+          );
         },
       );
     }
