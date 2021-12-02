@@ -4,6 +4,7 @@
  - Add `ButtonComponent` backed by two `PositionComponent`s
  - Add `SpriteButtonComponent` backed by two `Sprite`s
  - Introduce `updateTree` to follow the `renderTree` convention
+ - Fix `Parallax.load` with different loading times
 
 ## [1.0.0-releasecandidate.18]
  - Forcing portrait and landscape mode is now supported on web

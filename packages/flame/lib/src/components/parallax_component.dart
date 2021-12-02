@@ -19,6 +19,7 @@ extension ParallaxComponentExtension on FlameGame {
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
+    Images? images,
     Vector2? position,
     Vector2? size,
     Vector2? scale,
