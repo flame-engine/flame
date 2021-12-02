@@ -632,7 +632,8 @@ void main() {
           ..drawLine(const Offset(0, -2), const Offset(0, 2))
           ..drawLine(const Offset(-2, 0), const Offset(2, 0))
           ..drawParagraph(null, const Offset(-30, -15))
-          ..drawParagraph(null, const Offset(-20, 10)),
+          ..drawParagraph(null, const Offset(-20, 10))
+          ..translate(0, 0), // canvas.restore
       );
     });
 
@@ -650,7 +651,8 @@ void main() {
           ..translate(18, 12)
           ..drawRect(const Rect.fromLTWH(0, 0, 10, 10))
           ..drawLine(const Offset(5, 3), const Offset(5, 7))
-          ..drawLine(const Offset(3, 5), const Offset(7, 5)),
+          ..drawLine(const Offset(3, 5), const Offset(7, 5))
+          ..translate(0, 0), // canvas.restore
       );
     });
   });
