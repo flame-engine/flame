@@ -186,7 +186,12 @@ class Rock extends SpriteComponent
 
   @override
   bool onTapDown(_) {
-    add(ColorEffect(color: Colors.green, duration: 0.5, isAlternating: true));
+    add(
+      ScaleEffect.by(
+        Vector2.all(10),
+        StandardEffectController(duration: 0.3),
+      ),
+    );
     return true;
   }
 }

@@ -1,105 +1,90 @@
-import 'dart:ui';
+import '../../components.dart';
+import 'component_effect.dart';
+import 'effect_controller.dart';
 
-import 'package:flutter/animation.dart';
-
-import '../components/mixins/has_paint.dart';
-import 'effects.dart';
-
+/// Change the opacity of a component over time.
+///
+/// This effect applies incremental changes to the component's opacity, and
+/// requires that any other effect or update logic applied to the same component
+/// also used incremental updates.
 class OpacityEffect extends ComponentEffect<HasPaint> {
-  final double opacity;
-  final double duration;
+  int _alphaOffset;
+  double _roundingError = 0.0;
   final String? paintId;
 
-  late Color _original;
-  late Color _peak;
-
-  late double _difference;
-
-  OpacityEffect({
-    required this.opacity,
-    required this.duration,
+  /// This constructor will set the opacity in relation to it's current opacity
+  /// over time.
+  OpacityEffect.by(
+    double offset,
+    EffectController controller, {
     this.paintId,
-    bool isInfinite = false,
-    bool isAlternating = false,
-    double? initialDelay,
-    double? peakDelay,
-    Curve? curve,
-    bool? removeOnFinish,
-  }) : super(
-          isInfinite,
-          isAlternating,
-          initialDelay: initialDelay,
-          peakDelay: peakDelay,
-          curve: curve,
-          removeOnFinish: removeOnFinish,
-        );
+  })  : _alphaOffset = (255 * offset).round(),
+        super(controller);
 
-  OpacityEffect.fadeOut({
-    this.duration = 1,
-    this.paintId,
-    Curve? curve,
-    bool isInfinite = false,
-    bool isAlternating = false,
-  })  : opacity = 0,
-        super(
-          isInfinite,
-          isAlternating,
-          curve: curve,
-        );
+  /// This constructor will set the opacity to the specified opacity over time.
+  factory OpacityEffect.to(
+    double targetOpacity,
+    EffectController controller, {
+    String? paintId,
+  }) {
+    return _OpacityToEffect(targetOpacity, controller, paintId: paintId);
+  }
 
-  OpacityEffect.fadeIn({
-    this.duration = 1,
-    this.paintId,
-    Curve? curve,
-    bool isInfinite = false,
-    bool isAlternating = false,
-  })  : opacity = 1,
-        super(
-          isInfinite,
-          isAlternating,
-          curve: curve,
-        );
+  factory OpacityEffect.fadeIn(
+    EffectController controller, {
+    String? paintId,
+  }) {
+    return _OpacityToEffect(1.0, controller, paintId: paintId);
+  }
 
-  @override
-  Future<void> onLoad() async {
-    super.onLoad();
-    peakTime = duration;
-
-    _original = affectedParent.getPaint(paintId).color;
-    _peak = _original.withOpacity(opacity);
-
-    _difference = _original.opacity - opacity;
-    setPeakTimeFromDuration(duration);
+  factory OpacityEffect.fadeOut(
+    EffectController controller, {
+    String? paintId,
+  }) {
+    return _OpacityToEffect(0.0, controller, paintId: paintId);
   }
 
   @override
-  void setComponentToPeakState() {
-    affectedParent.setColor(
-      _peak,
-      paintId: paintId,
-    );
-  }
-
-  @override
-  void setComponentToOriginalState() {
-    affectedParent.setColor(
-      _original,
-      paintId: paintId,
-    );
-  }
-
-  @override
-  void update(double dt) {
-    if (isPaused) {
-      return;
+  void apply(double progress) {
+    final deltaProgress = progress - previousProgress;
+    final currentAlpha = target.getAlpha(paintId: paintId);
+    final deltaAlpha =
+        (_alphaOffset * deltaProgress) + _roundingError * deltaProgress.sign;
+    final remainder = deltaAlpha.remainder(1.0).abs();
+    _roundingError = remainder >= 0.5 ? -1 * (1.0 - remainder) : remainder;
+    var nextAlpha = (currentAlpha + deltaAlpha).round();
+    if (nextAlpha < 0) {
+      _roundingError += nextAlpha.abs();
+    } else if (nextAlpha > 255) {
+      _roundingError += nextAlpha - 255;
     }
-    super.update(dt);
-    if (hasCompleted()) {
-      return;
-    }
-    affectedParent.setOpacity(
-      _original.opacity - _difference * curveProgress,
-      paintId: paintId,
-    );
+    nextAlpha = nextAlpha.clamp(0, 255);
+    target.setAlpha(nextAlpha, paintId: paintId);
+    super.apply(progress);
+  }
+
+  @override
+  void reset() {
+    super.reset();
+    // We can't accumulate rounding errors between resets because we don't know
+    // if the opacity has been affected by anything else in between.
+    _roundingError = 0.0;
+  }
+}
+
+/// Implementation class for [OpacityEffect.to]
+class _OpacityToEffect extends OpacityEffect {
+  final double _targetOpacity;
+
+  _OpacityToEffect(
+    this._targetOpacity,
+    EffectController controller, {
+    String? paintId,
+  }) : super.by(0.0, controller, paintId: paintId);
+
+  @override
+  void onStart() {
+    _alphaOffset =
+        (_targetOpacity * 255 - target.getAlpha(paintId: paintId)).round();
   }
 }

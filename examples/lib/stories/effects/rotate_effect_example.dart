@@ -2,9 +2,8 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/effects2/rotate_effect.dart'; // ignore: implementation_imports
-import 'package:flame/src/effects2/standard_effect_controller.dart'; // ignore: implementation_imports
 import 'package:flutter/animation.dart';
 
 class RotateEffectExample extends FlameGame {
