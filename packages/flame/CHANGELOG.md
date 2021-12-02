@@ -3,6 +3,8 @@
 ## [Next]
  - Add `ButtonComponent` backed by two `PositionComponent`s
  - Add `SpriteButtonComponent` backed by two `Sprite`s
+ - Remove old effects system
+ - Export new effects system
 
 ## [1.0.0-releasecandidate.18]
  - Forcing portrait and landscape mode is now supported on web
