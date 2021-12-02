@@ -30,7 +30,6 @@ class _MyComponent extends PositionComponent with HasGameRef {
 
   @override
   void update(double dt) {
-    super.update(dt);
     isUpdateCalled = true;
   }
 

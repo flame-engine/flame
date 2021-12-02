@@ -111,7 +111,6 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
 
   @override
   void update(double dt) {
-    super.update(dt);
     animation?.update(dt);
   }
 }

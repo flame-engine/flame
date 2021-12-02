@@ -122,10 +122,14 @@ class Component with Loadable {
   /// your state considering this.
   /// All components in the tree are always updated by the same amount. The time
   /// each one takes to update adds up to the next update cycle.
-  @mustCallSuper
-  void update(double dt) {
+  void update(double dt) {}
+
+  void updateTree(double dt, {bool callUpdate = true}) {
     children.updateComponentList();
-    children.forEach((c) => c.update(dt));
+    if (callUpdate) {
+      update(dt);
+    }
+    children.forEach((c) => c.updateTree(dt));
   }
 
   void render(Canvas canvas) {}

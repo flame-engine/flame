@@ -18,13 +18,11 @@ class _MyTap extends PositionComponent with Tappable {
 
   @override
   void update(double dt) {
-    super.update(dt);
     updated = true;
   }
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     rendered = true;
   }
 

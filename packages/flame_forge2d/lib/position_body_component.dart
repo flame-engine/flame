@@ -47,7 +47,6 @@ abstract class PositionBodyComponent<T extends Forge2DGame>
 
   @override
   void update(double dt) {
-    super.update(dt);
     _updatePositionComponent();
   }
 

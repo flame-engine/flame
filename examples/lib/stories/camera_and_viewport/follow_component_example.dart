@@ -72,7 +72,6 @@ class MovableEmber extends Ember<FollowComponentExample>
 
   @override
   void update(double dt) {
-    super.update(dt);
     final deltaPosition = velocity * (speed * dt);
     position.add(deltaPosition);
     positionText.text = '(${x.toInt()}, ${y.toInt()})';
