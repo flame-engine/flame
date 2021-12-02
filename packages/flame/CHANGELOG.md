@@ -12,6 +12,7 @@
  - Fixed position calculation in `HudMarginComponent` when using a viewport
  - Add noClip option to `FixedResolutionViewport`
  - Add a few missing helpers to SpriteAnimation
+ - Fix render order of components and add tests
 
 ## [1.0.0-releasecandidate.17]
  - Added `StandardEffectController` class
