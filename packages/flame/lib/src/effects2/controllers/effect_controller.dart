@@ -68,7 +68,7 @@ abstract class EffectController {
   /// complete at `progress == 0`.
   factory EffectController({
     required double duration,
-    Curve? curve,
+    Curve curve = Curves.linear,
     double? reverseDuration,
     Curve? reverseCurve,
     bool infinite = false,
@@ -78,19 +78,20 @@ abstract class EffectController {
     double atMaxDuration = 0.0,
     double atMinDuration = 0.0,
   }) {
-    final isLinear = (curve == null) || (curve == Curves.linear);
+    final isLinear = curve == Curves.linear;
     final hasReverse = alternate || (reverseDuration != null);
-    final reverseIsLinear = (reverseCurve == null) && isLinear;
+    final reverseIsLinear =
+        reverseCurve == Curves.linear || ((reverseCurve == null) && isLinear);
     final items = [
       if (isLinear) LinearEffectController(duration),
-      if (!isLinear) CurvedEffectController(duration, curve!),
+      if (!isLinear) CurvedEffectController(duration, curve),
       if (atMaxDuration != 0) PauseEffectController(atMaxDuration, progress: 1),
       if (hasReverse && reverseIsLinear)
         ReverseLinearEffectController(reverseDuration ?? duration),
       if (hasReverse && !reverseIsLinear)
         ReverseCurvedEffectController(
           reverseDuration ?? duration,
-          reverseCurve ?? curve!.flipped,
+          reverseCurve ?? curve.flipped,
         ),
       if (atMinDuration != 0) PauseEffectController(atMinDuration, progress: 0),
     ];
