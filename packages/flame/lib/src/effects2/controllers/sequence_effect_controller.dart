@@ -10,7 +10,8 @@ class SequenceEffectController extends EffectController {
           'Children controllers cannot be infinite',
         ),
         children = controllers,
-        _currentIndex = 0;
+        _currentIndex = 0,
+        super.empty();
 
   /// Individual controllers in the sequence.
   final List<EffectController> children;

@@ -15,7 +15,8 @@ abstract class DurationEffectController extends EffectController {
   DurationEffectController(double duration)
       : assert(duration >= 0, 'Duration cannot be negative: $duration'),
         _duration = duration,
-        _timer = 0;
+        _timer = 0,
+        super.empty();
 
   double _duration;
   double _timer;

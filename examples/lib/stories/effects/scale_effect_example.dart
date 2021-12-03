@@ -3,7 +3,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/src/effects2/controllers/standard_controller.dart'; // ignore: implementation_imports
+import 'package:flame/src/effects2/controllers/effect_controller.dart'; // ignore: implementation_imports
 import 'package:flame/src/effects2/scale_effect.dart'; // ignore: implementation_imports
 import 'package:flutter/material.dart';
 
@@ -41,7 +41,7 @@ class ScaleEffectExample extends FlameGame with TapDetector {
     square.add(
       ScaleEffect.to(
         Vector2.all(s),
-        standardController(
+        EffectController(
           duration: 1.5,
           curve: Curves.bounceInOut,
         ),

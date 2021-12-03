@@ -1,14 +1,14 @@
 import 'dart:math';
 
-import 'package:flame/src/effects2/controllers/standard_controller.dart';
+import 'package:flame/src/effects2/controllers/effect_controller.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('standardController', () {
+  group('EffectController', () {
     test('forward', () {
-      final ec = standardController(duration: 1.0);
+      final ec = EffectController(duration: 1.0);
       expect(ec.isInfinite, false);
       expect(ec.started, true);
       expect(ec.completed, false);
@@ -32,7 +32,7 @@ void main() {
     });
 
     test('forward x 2', () {
-      final ec = standardController(duration: 1, repeatCount: 2);
+      final ec = EffectController(duration: 1, repeatCount: 2);
       expect(ec.started, true);
       expect(ec.progress, 0);
 
@@ -46,7 +46,7 @@ void main() {
     });
 
     test('forward + delay', () {
-      final ec = standardController(duration: 1.0, startDelay: 0.2);
+      final ec = EffectController(duration: 1.0, startDelay: 0.2);
       expect(ec.isInfinite, false);
 
       // initial delay
@@ -72,7 +72,7 @@ void main() {
     });
 
     test('forward + atMax', () {
-      final ec = standardController(duration: 1, atMaxDuration: 0.5);
+      final ec = EffectController(duration: 1, atMaxDuration: 0.5);
       expect(ec.duration, 1.5);
       expect(ec.isInfinite, false);
       expect(ec.progress, 0);
@@ -84,7 +84,7 @@ void main() {
     });
 
     test('(forward + reverse) x 5', () {
-      final ec = standardController(
+      final ec = EffectController(
         startDelay: 1.0,
         duration: 2.0,
         reverseDuration: 1.0,
@@ -135,7 +135,7 @@ void main() {
 
     testRandom('infinite', (Random random) {
       const duration = 1.4;
-      final ec = standardController(duration: duration, infinite: true);
+      final ec = EffectController(duration: duration, infinite: true);
       expect(ec.isInfinite, true);
       expect(ec.progress, 0);
       expect(ec.started, true);
@@ -158,7 +158,7 @@ void main() {
     });
 
     test('reset', () {
-      final ec = standardController(duration: 1.23);
+      final ec = EffectController(duration: 1.23);
       expect(ec.started, true);
       expect(ec.progress, 0);
 
@@ -194,38 +194,38 @@ void main() {
       }
 
       expectThrows(
-        () => standardController(duration: -1),
+        () => EffectController(duration: -1),
       );
       expectThrows(
-        () => standardController(duration: 1, repeatCount: 0),
+        () => EffectController(duration: 1, repeatCount: 0),
       );
       expectThrows(
-        () => standardController(
+        () => EffectController(
           duration: 1,
           infinite: true,
           repeatCount: 3,
         ),
       );
       expectThrows(
-        () => standardController(duration: 1, repeatCount: -1),
+        () => EffectController(duration: 1, repeatCount: -1),
       );
       expectThrows(
-        () => standardController(duration: 1, reverseDuration: -1),
+        () => EffectController(duration: 1, reverseDuration: -1),
       );
       expectThrows(
-        () => standardController(duration: 1, startDelay: -1),
+        () => EffectController(duration: 1, startDelay: -1),
       );
       expectThrows(
-        () => standardController(duration: 1, atMaxDuration: -1),
+        () => EffectController(duration: 1, atMaxDuration: -1),
       );
       expectThrows(
-        () => standardController(duration: 1, atMinDuration: -1),
+        () => EffectController(duration: 1, atMinDuration: -1),
       );
     });
 
     test('curve', () {
       const curve = Curves.easeIn;
-      final ec = standardController(
+      final ec = EffectController(
         duration: 1,
         curve: curve,
         reverseDuration: 0.8,
@@ -254,7 +254,7 @@ void main() {
 
     test('reverse curve', () {
       const curve = Curves.easeInQuad;
-      final ec = standardController(
+      final ec = EffectController(
         duration: 1,
         reverseDuration: 1,
         reverseCurve: curve,

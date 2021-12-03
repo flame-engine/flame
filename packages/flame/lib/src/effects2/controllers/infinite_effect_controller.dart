@@ -3,7 +3,7 @@ import 'effect_controller.dart';
 /// Effect controller that wraps a [child] effect controller and repeats it
 /// infinitely.
 class InfiniteEffectController extends EffectController {
-  InfiniteEffectController(this.child);
+  InfiniteEffectController(this.child) : super.empty();
 
   final EffectController child;
 

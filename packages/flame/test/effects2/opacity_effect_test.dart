@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/effects2/controllers/standard_controller.dart';
+import 'package:flame/src/effects2/controllers/effect_controller.dart';
 import 'package:flame/src/effects2/opacity_effect.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,7 +19,7 @@ void main() {
 
       component.setOpacity(0.2);
       component.add(
-        OpacityEffect.by(0.4, standardController(duration: 1)),
+        OpacityEffect.by(0.4, EffectController(duration: 1)),
       );
       game.update(0);
       expect(component.getOpacity(), 0.2);
@@ -41,7 +41,7 @@ void main() {
 
       component.setOpacity(0.2);
       component.add(
-        OpacityEffect.to(0.4, standardController(duration: 1)),
+        OpacityEffect.to(0.4, EffectController(duration: 1)),
       );
       game.update(0);
       expect(component.getOpacity(), 0.2);
@@ -66,7 +66,7 @@ void main() {
       const step = 10 * 1 / 255;
       final effect = OpacityEffect.by(
         -step,
-        standardController(duration: 1),
+        EffectController(duration: 1),
       );
       component.add(effect..removeOnFinish = false);
       for (var i = 0; i < 5; i++) {
@@ -89,7 +89,7 @@ void main() {
 
       final effect = OpacityEffect.to(
         0.0,
-        standardController(duration: 1),
+        EffectController(duration: 1),
       );
       component.add(effect..removeOnFinish = false);
       for (var i = 0; i < 5; i++) {
@@ -111,12 +111,12 @@ void main() {
       game.update(0);
 
       component.add(
-        OpacityEffect.by(0.5, standardController(duration: 10)),
+        OpacityEffect.by(0.5, EffectController(duration: 10)),
       );
       component.add(
         OpacityEffect.by(
           0.5,
-          standardController(
+          EffectController(
             duration: 1,
             reverseDuration: 1,
             repeatCount: 5,
@@ -149,7 +149,7 @@ void main() {
       game.ensureAdd(component);
 
       final effect = OpacityEffect.fadeOut(
-        standardController(
+        EffectController(
           duration: 1,
           reverseDuration: 1,
           infinite: true,

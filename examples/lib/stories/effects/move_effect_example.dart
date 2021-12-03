@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/effects2/controllers/standard_controller.dart'; // ignore: implementation_imports
+import 'package:flame/src/effects2/controllers/effect_controller.dart'; // ignore: implementation_imports
 import 'package:flame/src/effects2/move_effect.dart'; // ignore: implementation_imports
 import 'package:flutter/material.dart';
 
@@ -40,7 +40,7 @@ class MoveEffectExample extends FlameGame {
         ..add(
           MoveEffect.to(
             Vector2(380, 50),
-            standardController(
+            EffectController(
               duration: 3,
               reverseDuration: 3,
               infinite: true,
@@ -54,7 +54,7 @@ class MoveEffectExample extends FlameGame {
         ..add(
           MoveEffect.to(
             Vector2(380, 150),
-            standardController(
+            EffectController(
               duration: 3,
               reverseDuration: 3,
               infinite: true,
@@ -64,7 +64,7 @@ class MoveEffectExample extends FlameGame {
         ..add(
           MoveEffect.by(
             Vector2(0, -50),
-            standardController(
+            EffectController(
               duration: 0.25,
               reverseDuration: 0.25,
               startDelay: 1,
@@ -88,7 +88,7 @@ class MoveEffectExample extends FlameGame {
           ..add(
             MoveEffect.along(
               path1,
-              standardController(
+              EffectController(
                 duration: 10,
                 startDelay: i * 0.2,
                 infinite: true,
@@ -106,7 +106,7 @@ class MoveEffectExample extends FlameGame {
           ..add(
             MoveEffect.along(
               path2,
-              standardController(
+              EffectController(
                 duration: 6,
                 startDelay: i * 0.3,
                 infinite: true,

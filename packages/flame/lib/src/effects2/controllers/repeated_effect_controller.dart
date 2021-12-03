@@ -9,7 +9,8 @@ class RepeatedEffectController extends EffectController {
   RepeatedEffectController(this.child, this.repeatCount)
       : assert(repeatCount > 0, 'repeatCount must be positive'),
         assert(!child.isInfinite, 'child cannot be infinite'),
-        _remainingCount = repeatCount;
+        _remainingCount = repeatCount,
+        super.empty();
 
   final EffectController child;
   final int repeatCount;

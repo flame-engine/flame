@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/effects2/controllers/standard_controller.dart';
+import 'package:flame/src/effects2/controllers/effect_controller.dart';
 import 'package:flame/src/effects2/scale_effect.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,7 +15,7 @@ void main() {
 
       component.scale = Vector2.all(1.0);
       component.add(
-        ScaleEffect.by(Vector2.all(1.0), standardController(duration: 1)),
+        ScaleEffect.by(Vector2.all(1.0), EffectController(duration: 1)),
       );
       game.update(0);
       expectVector2(component.scale, Vector2.all(1.0));
@@ -37,7 +37,7 @@ void main() {
 
       component.scale = Vector2.all(1.0);
       component.add(
-        ScaleEffect.to(Vector2.all(3.0), standardController(duration: 1)),
+        ScaleEffect.to(Vector2.all(3.0), EffectController(duration: 1)),
       );
       game.update(0);
       expectVector2(component.scale, Vector2.all(1.0));
@@ -59,7 +59,7 @@ void main() {
 
       final effect = ScaleEffect.by(
         Vector2.all(1.0),
-        standardController(duration: 1),
+        EffectController(duration: 1),
       );
       component.add(effect..removeOnFinish = false);
       final expectedScale = Vector2.all(1.0);
@@ -80,7 +80,7 @@ void main() {
 
       final effect = ScaleEffect.to(
         Vector2.all(1.0),
-        standardController(duration: 1),
+        EffectController(duration: 1),
       );
       component.add(effect..removeOnFinish = false);
       for (var i = 0; i < 5; i++) {
@@ -98,12 +98,12 @@ void main() {
       game.ensureAdd(component);
 
       component.add(
-        ScaleEffect.by(Vector2.all(5), standardController(duration: 10)),
+        ScaleEffect.by(Vector2.all(5), EffectController(duration: 10)),
       );
       component.add(
         ScaleEffect.by(
           Vector2.all(0.5),
-          standardController(
+          EffectController(
             duration: 1,
             reverseDuration: 1,
             repeatCount: 5,
@@ -137,7 +137,7 @@ void main() {
 
       final effect = ScaleEffect.by(
         Vector2.all(1.0),
-        standardController(
+        EffectController(
           duration: 1,
           reverseDuration: 1,
           infinite: true,

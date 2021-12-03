@@ -6,7 +6,8 @@ class DelayedEffectController extends EffectController {
   DelayedEffectController(EffectController child, {required this.delay})
       : assert(delay >= 0, 'Delay must be non-negative: $delay'),
         _child = child,
-        _timer = 0;
+        _timer = 0,
+        super.empty();
 
   final EffectController _child;
   final double delay;
