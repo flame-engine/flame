@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/painting.dart';
 
 import '../game.dart';
@@ -482,21 +483,19 @@ class Parallax {
     Images? images,
   }) async {
     final velocityDelta = velocityMultiplierDelta ?? Vector2.all(1.0);
-    var depth = 0;
     final layers = await Future.wait<ParallaxLayer>(
-      dataList.map((data) async {
+      dataList.mapIndexed((depth, data) async {
+        final velocityMultiplier =
+            List.filled(depth, velocityDelta).fold<Vector2>(
+          velocityDelta,
+          (previousValue, delta) => previousValue.clone()..multiply(delta),
+        );
         final renderer = await data.load(
           repeat,
           alignment,
           fill,
           images,
         );
-        final velocityMultiplier =
-            List.filled(depth, velocityDelta).fold<Vector2>(
-          velocityDelta,
-          (previousValue, delta) => previousValue.clone()..multiply(delta),
-        );
-        ++depth;
         return ParallaxLayer(
           renderer,
           velocityMultiplier: velocityMultiplier,

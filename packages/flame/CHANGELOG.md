@@ -4,6 +4,8 @@
  - Add `ButtonComponent` backed by two `PositionComponent`s
  - Add `SpriteButtonComponent` backed by two `Sprite`s
  - Allow more flexible construction of `EffectController`s and make them able to run back in time
+ - Fix `Parallax.load` with different loading times
+ - Fix render order of components and add tests
 
 ## [1.0.0-releasecandidate.18]
  - Forcing portrait and landscape mode is now supported on web
