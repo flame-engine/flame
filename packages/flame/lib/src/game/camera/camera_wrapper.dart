@@ -24,7 +24,6 @@ class CameraWrapper extends Component {
 
   @override
   void render(Canvas canvas) {
-    print('reeender');
     camera.viewport.render(canvas, (_canvas) {
       var hasCamera = false; // so we don't apply unnecessary transformations
       world.forEach((component) {

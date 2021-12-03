@@ -140,8 +140,8 @@ class Component with Loadable {
 
   void render(Canvas canvas) {}
 
-  void renderTree(Canvas canvas, {bool callRender = true}) {
-    if (callRender) {
+  void renderTree(Canvas canvas, {bool callOwnRender = true}) {
+    if (callOwnRender) {
       render(canvas);
     }
     children.forEach((c) => c.renderTree(canvas));
