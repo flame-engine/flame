@@ -18,7 +18,7 @@ import '../../../game.dart';
 class HudMarginComponent<T extends FlameGame> extends PositionComponent
     with HasGameRef<T> {
   @override
-  bool respectCamera = true;
+  bool respectCamera = false;
 
   /// Instead of setting a position of the [HudMarginComponent] a margin
   /// from the edges of the viewport can be used instead.
