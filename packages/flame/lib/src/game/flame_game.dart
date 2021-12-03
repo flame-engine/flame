@@ -53,13 +53,6 @@ class FlameGame extends Component with Game {
     c.onGameResize(size);
   }
 
-  @override
-  @mustCallSuper
-  Future<void>? onLoad() {
-    super.onLoad();
-    children.add(_cameraWrapper);
-  }
-
   /// This implementation of render renders each component, making sure the
   /// canvas is reset for each one.
   ///
@@ -78,7 +71,7 @@ class FlameGame extends Component with Game {
   @override
   void renderTree(Canvas canvas) {
     // Don't call super.renderTree, since the tree is rendered by the camera
-    _cameraWrapper.renderTree(canvas);
+    _cameraWrapper.render(canvas);
   }
 
   /// This updates every component in the tree.
@@ -90,6 +83,8 @@ class FlameGame extends Component with Game {
   @override
   @mustCallSuper
   void update(double dt) {
+    super.update(dt);
+    _cameraWrapper.update(dt);
     if (parent == null) {
       super.updateTree(dt, callOwnUpdate: false);
     }
@@ -108,9 +103,7 @@ class FlameGame extends Component with Game {
   @override
   @mustCallSuper
   void onGameResize(Vector2 canvasSize) {
-    if (!hasLayout) {
-      camera.handleResize(canvasSize);
-    }
+    camera.handleResize(canvasSize);
     super.onGameResize(canvasSize);
   }
 

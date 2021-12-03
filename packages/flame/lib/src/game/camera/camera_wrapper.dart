@@ -10,28 +10,21 @@ import 'camera.dart';
 /// using it in any code other than the FlameGame class is unsafe and
 /// not recommended.
 @internal
-class CameraWrapper extends Component {
+class CameraWrapper {
+  // TODO(st-pasha): extend from Component
   CameraWrapper(this.camera, this.world);
 
   final Camera camera;
   final ComponentSet world;
 
-  @override
   void update(double dt) {
-    super.update(dt);
     camera.update(dt);
   }
 
-  @override
-  void renderTree(Canvas canvas) {
+  void render(Canvas canvas) {
     camera.viewport.render(canvas, (_canvas) {
       var hasCamera = false; // so we don't apply unnecessary transformations
-      for (final component in world) {
-        if (component == this) {
-          // Since the game's component tree is passed into the camera, the
-          // camera itself is also in the set.
-          continue;
-        }
+      world.forEach((component) {
         if (component.respectCamera && !hasCamera) {
           canvas.save();
           camera.apply(canvas);
@@ -43,33 +36,10 @@ class CameraWrapper extends Component {
         canvas.save();
         component.renderTree(canvas);
         canvas.restore();
-      }
+      });
       if (hasCamera) {
         canvas.restore();
       }
     });
-  }
-
-  @override
-  @mustCallSuper
-  void onGameResize(Vector2 canvasSize) {
-    super.onGameResize(canvasSize);
-    camera.handleResize(canvasSize);
-  }
-
-  @override
-  Future<void> add(Component component) async {
-    assert(
-      false,
-      'Components should not be added to the camera, but to the game',
-    );
-  }
-
-  @override
-  Future<void> addAll(Iterable<Component> components) async {
-    assert(
-      false,
-      'Components should not be added to the camera, but to the game',
-    );
   }
 }
