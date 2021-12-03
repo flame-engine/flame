@@ -26,11 +26,11 @@ class CameraWrapper extends Component {
   void renderTree(Canvas canvas) {
     camera.viewport.render(canvas, (_canvas) {
       var hasCamera = false; // so we don't apply unnecessary transformations
-      world.forEach((component) {
+      for (final component in world) {
         if (component == this) {
           // Since the game's component tree is passed into the camera, the
           // camera itself is also in the set.
-          return;
+          continue;
         }
         if (component.respectCamera && !hasCamera) {
           canvas.save();
@@ -43,7 +43,7 @@ class CameraWrapper extends Component {
         canvas.save();
         component.renderTree(canvas);
         canvas.restore();
-      });
+      }
       if (hasCamera) {
         canvas.restore();
       }
