@@ -74,7 +74,9 @@ class FlameGame extends Component with Game {
   @override
   @mustCallSuper
   void render(Canvas canvas) {
-    renderTree(canvas, callOwnRender: false);
+    if (parent == null) {
+      renderTree(canvas, callOwnRender: false);
+    }
   }
 
   /// This updates every component in the tree.
