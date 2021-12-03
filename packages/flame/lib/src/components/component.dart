@@ -140,10 +140,8 @@ class Component with Loadable {
 
   void render(Canvas canvas) {}
 
-  void renderTree(Canvas canvas, {bool callOwnRender = true}) {
-    if (callOwnRender) {
-      render(canvas);
-    }
+  void renderTree(Canvas canvas) {
+    render(canvas);
     children.forEach((c) => c.renderTree(canvas));
 
     // Any debug rendering should be rendered on top of everything
