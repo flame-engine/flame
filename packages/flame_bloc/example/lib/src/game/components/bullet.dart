@@ -80,8 +80,6 @@ class BulletComponent extends SpriteAnimationComponent
 
   @override
   void update(double dt) {
-    super.update(dt);
-
     y += bulletSpeed * dt;
     if (xDirection != 0) {
       x += bulletSpeed * dt * xDirection;

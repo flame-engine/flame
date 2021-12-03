@@ -39,7 +39,6 @@ class TimerComponent extends Component {
 
   @override
   void update(double dt) {
-    super.update(dt);
     timer.update(dt);
 
     if (removeOnFinish && timer.finished) {

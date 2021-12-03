@@ -5,6 +5,7 @@
  - Add `SpriteButtonComponent` backed by two `Sprite`s
  - Remove old effects system
  - Export new effects system
+ - Introduce `updateTree` to follow the `renderTree` convention
  - Fix `Parallax.load` with different loading times
 
 ## [1.0.0-releasecandidate.18]

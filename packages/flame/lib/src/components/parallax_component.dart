@@ -100,7 +100,6 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
 
   @override
   void update(double dt) {
-    super.update(dt);
     parallax?.update(dt);
   }
 
