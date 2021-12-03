@@ -18,6 +18,7 @@ class CameraWrapper extends Component {
 
   @override
   void update(double dt) {
+    super.update(dt);
     camera.update(dt);
   }
 
