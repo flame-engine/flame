@@ -3,6 +3,8 @@
 ## [Next]
  - Add `ButtonComponent` backed by two `PositionComponent`s
  - Add `SpriteButtonComponent` backed by two `Sprite`s
+ - Remove old effects system
+ - Export new effects system
  - Introduce `updateTree` to follow the `renderTree` convention
  - Fix `Parallax.load` with different loading times
 

@@ -1,60 +1,50 @@
-import 'dart:ui';
+import 'effect_controller.dart';
+import 'transform2d_effect.dart';
 
-import 'package:flutter/animation.dart';
+/// Rotate a component around its anchor.
+///
+/// Two constructors are provided:
+///   - [RotateEffect.by] will rotate the target by the specified `angle`
+///     relative to its orientation at the onset of the effect. For example,
+///     rotating by `angle = tau/4` will turn the component 90° clockwise
+///     relative to its initial direction;
+///   - [RotateEffect.to] will rotate the target to the fixed orientation
+///     specified by the `angle`. For example, rotating to `angle = tau/4` will
+///     turn the component to look East regardless of its initial bearing.
+///
+/// This effect applies incremental changes to the component's angle, and
+/// requires that any other effect or update logic applied to the same component
+/// also used incremental updates.
+class RotateEffect extends Transform2DEffect {
+  RotateEffect.by(double angle, EffectController controller)
+      : _angle = angle,
+        super(controller);
 
-import 'effects.dart';
-
-class RotateEffect extends PositionComponentEffect {
-  double angle;
-  late double _delta;
-
-  /// Duration or speed needs to be defined
-  RotateEffect({
-    required this.angle, // As many radians as you want to rotate
-    double? duration, // How long it should take for completion
-    double? speed, // The speed of rotation in radians/s
-    Curve? curve,
-    bool isInfinite = false,
-    bool isAlternating = false,
-    bool isRelative = false,
-    double? initialDelay,
-    double? peakDelay,
-    bool? removeOnFinish,
-    VoidCallback? onComplete,
-  }) : super(
-          isInfinite,
-          isAlternating,
-          duration: duration,
-          speed: speed,
-          curve: curve,
-          isRelative: isRelative,
-          removeOnFinish: removeOnFinish,
-          initialDelay: initialDelay,
-          peakDelay: peakDelay,
-          modifiesAngle: true,
-          onComplete: onComplete,
-        );
-
-  @override
-  Future<void> onLoad() async {
-    super.onLoad();
-    final startAngle = originalAngle!;
-    _delta = isRelative ? angle : angle - startAngle;
-    peakAngle = startAngle + _delta;
-    speed ??= _delta.abs() / duration!;
-    duration ??= _delta.abs() / speed!;
-    setPeakTimeFromDuration(duration!);
+  factory RotateEffect.to(double angle, EffectController controller) {
+    return _RotateToEffect(angle, controller);
   }
 
+  /// The magnitude of the effect: how much the target should turn as the
+  /// progress goes from 0 to 1.
+  double _angle;
+
   @override
-  void update(double dt) {
-    if (isPaused) {
-      return;
-    }
-    super.update(dt);
-    if (hasCompleted()) {
-      return;
-    }
-    affectedParent.angle = originalAngle! + _delta * curveProgress;
+  void apply(double progress) {
+    final dProgress = progress - previousProgress;
+    target.angle += _angle * dProgress;
+    super.apply(progress);
+  }
+}
+
+class _RotateToEffect extends RotateEffect {
+  _RotateToEffect(double angle, EffectController controller)
+      : _destinationAngle = angle,
+        super.by(0, controller);
+
+  final double _destinationAngle;
+
+  @override
+  void onStart() {
+    _angle = _destinationAngle - target.angle;
   }
 }

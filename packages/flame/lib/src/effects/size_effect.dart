@@ -1,62 +1,54 @@
-import 'dart:ui';
-
-import 'package:flutter/animation.dart';
-
 import '../../components.dart';
-import '../extensions/vector2.dart';
-import 'effects.dart';
+import '../../extensions.dart';
+import 'component_effect.dart';
+import 'effect_controller.dart';
 
-class SizeEffect extends PositionComponentEffect {
-  Vector2 size;
-  late Vector2 _delta;
+/// Change the size of a component over time.
+///
+/// This effect applies incremental changes to the component's size, and
+/// requires that any other effect or update logic applied to the same component
+/// also used incremental updates.
+class SizeEffect extends ComponentEffect<PositionComponent> {
+  /// This constructor will create an effect that sets the size in relation to
+  /// the [PositionComponent]'s  current size, for example if the [offset] is
+  /// set to `Vector2(10, -10)` and the size of the affected component is
+  /// `Vector2(100, 100)` at the start of the affected the effect will peak when
+  /// the size is `Vector2(110, 90)`, if there is nothing else affecting the
+  /// size at the same time.
+  SizeEffect.by(Vector2 offset, EffectController controller)
+      : _offset = offset.clone(),
+        super(controller);
 
-  /// Duration or speed needs to be defined
-  SizeEffect({
-    required this.size,
-    double? duration, // How long it should take for completion
-    double? speed, // The speed of the scaling in pixels per second
-    Curve? curve,
-    bool isInfinite = false,
-    bool isAlternating = false,
-    bool isRelative = false,
-    double? initialDelay,
-    double? peakDelay,
-    bool? removeOnFinish,
-    VoidCallback? onComplete,
-  }) : super(
-          isInfinite,
-          isAlternating,
-          duration: duration,
-          speed: speed,
-          curve: curve,
-          isRelative: isRelative,
-          modifiesSize: true,
-          initialDelay: initialDelay,
-          peakDelay: peakDelay,
-          removeOnFinish: removeOnFinish,
-          onComplete: onComplete,
-        );
+  /// This constructor will create an effect that sets the size to the absolute
+  /// size that is defined by [targetSize].
+  /// For example if the [targetSize] is set to `Vector2(200, 200)` and the size
+  /// of the affected component is `Vector2(100, 100)` at the start of the
+  /// affected the effect will peak when the size is `Vector2(200, 100)`, if
+  /// there is nothing else affecting the size at the same time.
+  factory SizeEffect.to(Vector2 targetSize, EffectController controller) =>
+      _SizeToEffect(targetSize, controller);
+
+  Vector2 _offset;
 
   @override
-  Future<void> onLoad() async {
-    super.onLoad();
-    final startSize = originalSize!;
-    _delta = isRelative ? size : size - startSize;
-    peakSize = startSize + _delta;
-    speed ??= _delta.length / duration!;
-    duration ??= _delta.length / speed!;
-    setPeakTimeFromDuration(duration!);
+  void apply(double progress) {
+    final dProgress = progress - previousProgress;
+    target.size += _offset * dProgress;
+    target.size.clampScalar(0, double.infinity);
+    super.apply(progress);
   }
+}
+
+/// Implementation class for [SizeEffect.to]
+class _SizeToEffect extends SizeEffect {
+  final Vector2 _targetSize;
+
+  _SizeToEffect(Vector2 targetSize, EffectController controller)
+      : _targetSize = targetSize.clone(),
+        super.by(Vector2.zero(), controller);
 
   @override
-  void update(double dt) {
-    if (isPaused) {
-      return;
-    }
-    super.update(dt);
-    if (hasCompleted()) {
-      return;
-    }
-    affectedParent.size.setFrom(originalSize! + _delta * curveProgress);
+  void onStart() {
+    _offset = _targetSize - target.size;
   }
 }

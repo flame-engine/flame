@@ -1,8 +1,13 @@
-export 'src/effects/combined_effect.dart';
-export 'src/effects/effects.dart';
+export 'src/effects/component_effect.dart';
+export 'src/effects/effect.dart';
+export 'src/effects/effect_controller.dart';
 export 'src/effects/move_effect.dart';
+export 'src/effects/opacity_effect.dart';
+export 'src/effects/remove_effect.dart';
 export 'src/effects/rotate_effect.dart';
 export 'src/effects/scale_effect.dart';
-export 'src/effects/sequence_effect.dart';
+export 'src/effects/simple_effect_controller.dart';
 export 'src/effects/size_effect.dart';
+export 'src/effects/standard_effect_controller.dart';
+export 'src/effects/transform2d_effect.dart';
 export 'src/extensions/vector2.dart';

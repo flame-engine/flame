@@ -89,12 +89,6 @@ class JoystickAdvancedExample extends FlameGame
       onPressed: player.flipVertically,
     );
 
-    final rotateEffect = RotateEffect(
-      angle: 0,
-      curve: Curves.bounceOut,
-      isAlternating: true,
-      speed: 2,
-    );
     final rng = Random();
     // A button, created from a shape, that adds a rotation effect to the player
     // when it is pressed.
@@ -109,7 +103,14 @@ class JoystickAdvancedExample extends FlameGame
         bottom: 150,
       ),
       onPressed: () => player.add(
-        rotateEffect..angle = 8 * rng.nextDouble(),
+        RotateEffect.by(
+          8 * rng.nextDouble(),
+          StandardEffectController(
+            duration: 1,
+            reverseDuration: 1,
+            curve: Curves.bounceOut,
+          ),
+        ),
       ),
     );
 
@@ -128,10 +129,9 @@ class JoystickAdvancedExample extends FlameGame
       ),
       position: Vector2(20, size.y - 280),
       onPressed: () => player.add(
-        ScaleEffect(
-          scale: Vector2.all(1.5),
-          duration: 1.0,
-          isAlternating: true,
+        ScaleEffect.by(
+          Vector2.all(1.5),
+          StandardEffectController(duration: 1.0, reverseDuration: 1.0),
         ),
       ),
     );
@@ -152,7 +152,7 @@ class JoystickAdvancedExample extends FlameGame
       size: Vector2(185, 50),
       onPressed: () => player.add(
         OpacityEffect.fadeOut(
-          isAlternating: true,
+          StandardEffectController(duration: 0.5, reverseDuration: 0.5),
         ),
       ),
     );
