@@ -91,7 +91,6 @@ class JoystickComponent extends HudMarginComponent with Draggable {
 
   @override
   void update(double dt) {
-    super.update(dt);
     final knobRadius2 = knobRadius * knobRadius;
     delta.setFrom(_unscaledDelta);
     if (delta.isZero() && _baseKnobPosition != knob!.position) {

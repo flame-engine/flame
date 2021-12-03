@@ -51,8 +51,8 @@ class Ball extends BodyComponent {
   }
 
   @override
+  @mustCallSuper
   void update(double dt) {
-    super.update(dt);
     _timeSinceNudge += dt;
     if (giveNudge) {
       giveNudge = false;

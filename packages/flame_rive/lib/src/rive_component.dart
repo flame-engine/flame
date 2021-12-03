@@ -51,7 +51,6 @@ class RiveComponent extends PositionComponent {
 
   @override
   void update(double dt) {
-    super.update(dt);
     _renderer.advance(dt);
   }
 }

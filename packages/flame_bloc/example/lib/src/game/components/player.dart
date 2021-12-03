@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
-
 import 'package:flame/timer.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +9,6 @@ import './bullet.dart';
 import '../../game_stats/bloc/game_stats_bloc.dart';
 import '../../inventory/bloc/inventory_bloc.dart';
 import '../game.dart';
-
 import 'enemy.dart';
 import 'explosion.dart';
 
@@ -91,10 +89,7 @@ class PlayerComponent extends SpriteAnimationComponent
 
   @override
   void update(double dt) {
-    super.update(dt);
-
     bulletCreator.update(dt);
-
     shouldRemove = destroyed;
   }
 

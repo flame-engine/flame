@@ -122,10 +122,19 @@ class Component with Loadable {
   /// your state considering this.
   /// All components in the tree are always updated by the same amount. The time
   /// each one takes to update adds up to the next update cycle.
-  @mustCallSuper
-  void update(double dt) {
+  void update(double dt) {}
+
+  /// This method traverses the component tree and calls [update] on all its
+  /// children according to their [priority] order, relative to the
+  /// priority of the direct siblings, not the children or the ancestors.
+  /// If you call this method from [update] you need to set [callOwnUpdate] to
+  /// false so that you don't get stuck in an infinite loop.
+  void updateTree(double dt, {bool callOwnUpdate = true}) {
     children.updateComponentList();
-    children.forEach((c) => c.update(dt));
+    if (callOwnUpdate) {
+      update(dt);
+    }
+    children.forEach((c) => c.updateTree(dt));
   }
 
   void render(Canvas canvas) {}
