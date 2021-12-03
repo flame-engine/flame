@@ -49,16 +49,19 @@ abstract class EffectController {
   /// More generally, the produced effect controller allows to add a delay
   /// before the beginning of the animation, to animate both forward and in
   /// reverse, to iterate several times (or infinitely), to apply an arbitrary
-  /// [Curve] making the effect progression non-linear, etc.
+  /// [curve] making the effect progression non-linear, etc.
   ///
   /// In the most general case, the animation proceeds through the following
   /// steps:
   ///   1. wait for [startDelay] seconds,
   ///   2. repeat the following steps [repeatCount] times (or [infinite]ly):
-  ///       a. progress from 0 to 1 over the [forwardDuration] seconds,
+  ///       a. progress from 0 to 1 over the [duration] seconds,
   ///       b. wait for [atMaxDuration] seconds,
-  ///       c. progress from 1 to 0 over the [backwardDuration] seconds,
+  ///       c. progress from 1 to 0 over the [reverseDuration] seconds,
   ///       d. wait for [atMinDuration] seconds.
+  ///
+  /// Setting parameter [alternate] to true is another way to create a
+  /// controller whose [reverseDuration] is the same as the forward [duration].
   ///
   /// If the animation is finite and there are no "backward" or "atMin" stages
   /// then the animation will complete at `progress == 1`, otherwise it will
@@ -66,29 +69,29 @@ abstract class EffectController {
   factory EffectController({
     required double duration,
     Curve? curve,
-    double reverseDuration = 0.0,
+    double? reverseDuration,
     Curve? reverseCurve,
     bool infinite = false,
+    bool alternate = false,
     int? repeatCount,
     double startDelay = 0.0,
     double atMaxDuration = 0.0,
     double atMinDuration = 0.0,
   }) {
-    final linear = (curve == null) || (curve == Curves.linear);
+    final isLinear = (curve == null) || (curve == Curves.linear);
+    final hasReverse = alternate || (reverseDuration != null);
+    final reverseIsLinear = (reverseCurve == null) && isLinear;
     final items = [
-      if (linear)
-        LinearEffectController(duration)
-      else
-        CurvedEffectController(duration, curve!),
+      if (isLinear) LinearEffectController(duration),
+      if (!isLinear) CurvedEffectController(duration, curve!),
       if (atMaxDuration != 0) PauseEffectController(atMaxDuration, progress: 1),
-      if (reverseDuration != 0)
-        if (reverseCurve == null && linear)
-          ReverseLinearEffectController(reverseDuration)
-        else
-          ReverseCurvedEffectController(
-            reverseDuration,
-            reverseCurve ?? curve!.flipped,
-          ),
+      if (hasReverse && reverseIsLinear)
+        ReverseLinearEffectController(reverseDuration ?? duration),
+      if (hasReverse && !reverseIsLinear)
+        ReverseCurvedEffectController(
+          reverseDuration ?? duration,
+          reverseCurve ?? curve!.flipped,
+        ),
       if (atMinDuration != 0) PauseEffectController(atMinDuration, progress: 0),
     ];
     assert(items.isNotEmpty);
