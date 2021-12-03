@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
+
 import '../../../components.dart';
 import 'camera.dart';
 
@@ -7,28 +9,29 @@ import 'camera.dart';
 /// converted into a proper Component in a future release, but until then
 /// using it in any code other than the FlameGame class is unsafe and
 /// not recommended.
-class CameraWrapper {
-  // TODO(st-pasha): extend from Component
+@internal
+class CameraWrapper extends Component {
   CameraWrapper(this.camera, this.world);
 
   final Camera camera;
   final ComponentSet world;
 
+  @override
   void update(double dt) {
     camera.update(dt);
   }
 
+  @override
   void render(Canvas canvas) {
-    // TODO(st-pasha): it would be easier to keep the world and the
-    // HUD as two separate component trees.
+    print('reeender');
     camera.viewport.render(canvas, (_canvas) {
-      var hasCamera = false; // so we don't apply unecessary transformations
+      var hasCamera = false; // so we don't apply unnecessary transformations
       world.forEach((component) {
-        if (!component.isHud && !hasCamera) {
+        if (component.respectCamera && !hasCamera) {
           canvas.save();
           camera.apply(canvas);
           hasCamera = true;
-        } else if (component.isHud && hasCamera) {
+        } else if (!component.respectCamera && hasCamera) {
           canvas.restore();
           hasCamera = false;
         }
@@ -40,5 +43,28 @@ class CameraWrapper {
         canvas.restore();
       }
     });
+  }
+
+  @override
+  @mustCallSuper
+  void onGameResize(Vector2 canvasSize) {
+    super.onGameResize(canvasSize);
+    camera.handleResize(canvasSize);
+  }
+
+  @override
+  Future<void> add(Component component) async {
+    assert(
+      false,
+      'Components should not be added to the camera, but to the game',
+    );
+  }
+
+  @override
+  Future<void> addAll(Iterable<Component> components) async {
+    assert(
+      false,
+      'Components should not be added to the camera, but to the game',
+    );
   }
 }

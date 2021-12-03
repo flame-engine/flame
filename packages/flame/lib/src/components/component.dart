@@ -18,11 +18,12 @@ import 'cache/value_cache.dart';
 /// called automatically once the component is added to the component tree in
 /// your game (with `game.add`).
 class Component with Loadable {
-  /// Whether this component is a HUD (Heads-up display) object or not.
+  /// Whether this component should respect the camera or not.
   ///
-  /// HUD objects ignore the FlameGame.camera when rendered (so their position
-  /// coordinates are considered relative to the device screen).
-  bool isHud = false;
+  /// Components that have this property set to false will ignore the
+  /// FlameGame.camera when rendered (so their position coordinates are
+  /// considered relative only to the viewport instead).
+  bool respectCamera = true;
 
   /// Whether this component has been prepared and is ready to be added to the
   /// game loop.
@@ -139,8 +140,10 @@ class Component with Loadable {
 
   void render(Canvas canvas) {}
 
-  void renderTree(Canvas canvas) {
-    render(canvas);
+  void renderTree(Canvas canvas, {bool callRender = true}) {
+    if (callRender) {
+      render(canvas);
+    }
     children.forEach((c) => c.renderTree(canvas));
 
     // Any debug rendering should be rendered on top of everything
@@ -153,7 +156,9 @@ class Component with Loadable {
 
   @protected
   Vector2 eventPosition(PositionInfo info) {
-    return isHud ? info.eventPosition.viewportOnly : info.eventPosition.game;
+    return respectCamera
+        ? info.eventPosition.game
+        : info.eventPosition.viewportOnly;
   }
 
   /// Remove the component from its parent in the next tick.

@@ -341,10 +341,10 @@ class PositionComponent extends Component {
   }
 
   @override
-  void renderTree(Canvas canvas) {
+  void renderTree(Canvas canvas, {bool callRender = true}) {
     canvas.save();
     canvas.transform(transformMatrix.storage);
-    super.renderTree(canvas);
+    super.renderTree(canvas, callRender: callRender);
     canvas.restore();
   }
 

@@ -17,6 +17,8 @@ import 'projector.dart';
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
 class FlameGame extends Component with Game {
+  late final CameraWrapper _cameraWrapper;
+
   FlameGame({Camera? camera}) {
     _cameraWrapper = CameraWrapper(camera ?? Camera(), children);
   }
@@ -55,6 +57,13 @@ class FlameGame extends Component with Game {
     c.onGameResize(size);
   }
 
+  @override
+  @mustCallSuper
+  Future<void>? onLoad() {
+    super.onLoad();
+    children.add(_cameraWrapper);
+  }
+
   /// This implementation of render renders each component, making sure the
   /// canvas is reset for each one.
   ///
@@ -64,7 +73,9 @@ class FlameGame extends Component with Game {
   /// interfering with each others rendering.
   @override
   @mustCallSuper
-  void render(Canvas canvas) => _cameraWrapper.render(canvas);
+  void render(Canvas canvas) {
+    renderTree(canvas, callRender: false);
+  }
 
   /// This updates every component in the tree.
   ///
@@ -78,7 +89,6 @@ class FlameGame extends Component with Game {
     if (parent == null) {
       super.updateTree(dt, callOwnUpdate: false);
     }
-    _cameraWrapper.update(dt);
   }
 
   /// This passes the new size along to every component in the tree via their
@@ -94,7 +104,9 @@ class FlameGame extends Component with Game {
   @override
   @mustCallSuper
   void onGameResize(Vector2 canvasSize) {
-    camera.handleResize(canvasSize);
+    if (!hasLayout) {
+      camera.handleResize(canvasSize);
+    }
     super.onGameResize(canvasSize);
   }
 
