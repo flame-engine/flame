@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/effects2/remove_effect.dart';
+import 'package:flame/src/effects/remove_effect.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,6 +1,6 @@
 import 'package:flame/src/components/component.dart';
-import 'package:flame/src/effects2/controllers/effect_controller.dart';
-import 'package:flame/src/effects2/effect.dart';
+import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/effect.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 

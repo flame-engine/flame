@@ -11,7 +11,7 @@ class MoveEffectExample extends FlameGame {
     straight line back and forth. The effect uses a non-linear progression
     curve, which makes the movement non-uniform.
 
-    The middle green square has a combination of two movement effects2: a
+    The middle green square has a combination of two movement effects: a
     `MoveEffect.to` and a `MoveEffect.by` which forces it to periodically jump.
 
     At the bottom there are 60 more components which demonstrate movement along

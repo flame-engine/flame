@@ -3,10 +3,10 @@ import '../game/transform2d.dart';
 import 'component_effect.dart';
 import 'controllers/effect_controller.dart';
 
-/// Base class for effects2 that target a [Transform2D] property.
+/// Base class for effects that target a [Transform2D] property.
 ///
-/// Examples of effects2 of this kind include move effects2, rotate effects2,
-/// shake effects2, scale effects2, etc. In order to apply such an effect to a
+/// Examples of effects of this kind include move effects, rotate effects,
+/// shake effects, scale effects, etc. In order to apply such an effect to a
 /// component simply add the effect as a child to that component.
 ///
 /// Currently this class only supports being attached to [PositionComponent]s,

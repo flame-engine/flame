@@ -1,5 +1,5 @@
-import 'package:flame/src/effects2/controllers/delayed_effect_controller.dart';
-import 'package:flame/src/effects2/controllers/linear_effect_controller.dart';
+import 'package:flame/src/effects/controllers/delayed_effect_controller.dart';
+import 'package:flame/src/effects/controllers/linear_effect_controller.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
