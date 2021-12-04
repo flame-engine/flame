@@ -111,7 +111,7 @@ you handle this through the `button` component.
 
 As the name suggests this button is a hud by default, which means that it will be static on your
 screen even if the camera for the game moves around. You can also use this component as a non-hud by
-setting `hudButtonComponent.isHud = false;`.
+setting `hudButtonComponent.respectCamera = true;`.
 
 If you want to act upon the button being pressed (which would be the common thing to do) you can either pass in
 a callback function as the `onPressed` argument, or you extend the component and override

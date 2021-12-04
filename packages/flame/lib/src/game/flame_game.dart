@@ -21,12 +21,10 @@ class FlameGame extends Component with Game {
     _cameraWrapper = CameraWrapper(camera ?? Camera(), children);
   }
 
+  late final CameraWrapper _cameraWrapper;
+
   /// The camera translates the coordinate space after the viewport is applied.
   Camera get camera => _cameraWrapper.camera;
-
-  // When the Game becomes a Component (#906), this could be added directly
-  // into the component tree.
-  late final CameraWrapper _cameraWrapper;
 
   /// This is overwritten to consider the viewport transformation.
   ///
@@ -64,7 +62,17 @@ class FlameGame extends Component with Game {
   /// interfering with each others rendering.
   @override
   @mustCallSuper
-  void render(Canvas canvas) => _cameraWrapper.render(canvas);
+  void render(Canvas canvas) {
+    if (parent == null) {
+      renderTree(canvas);
+    }
+  }
+
+  @override
+  void renderTree(Canvas canvas) {
+    // Don't call super.renderTree, since the tree is rendered by the camera
+    _cameraWrapper.render(canvas);
+  }
 
   /// This updates every component in the tree.
   ///
@@ -75,10 +83,11 @@ class FlameGame extends Component with Game {
   @override
   @mustCallSuper
   void update(double dt) {
+    super.update(dt);
+    _cameraWrapper.update(dt);
     if (parent == null) {
       super.updateTree(dt, callOwnUpdate: false);
     }
-    _cameraWrapper.update(dt);
   }
 
   /// This passes the new size along to every component in the tree via their
