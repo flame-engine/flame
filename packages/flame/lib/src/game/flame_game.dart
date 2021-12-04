@@ -17,11 +17,11 @@ import 'projector.dart';
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
 class FlameGame extends Component with Game {
-  late final CameraWrapper _cameraWrapper;
-
   FlameGame({Camera? camera}) {
     _cameraWrapper = CameraWrapper(camera ?? Camera(), children);
   }
+
+  late final CameraWrapper _cameraWrapper;
 
   /// The camera translates the coordinate space after the viewport is applied.
   Camera get camera => _cameraWrapper.camera;
