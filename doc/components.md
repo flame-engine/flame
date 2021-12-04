@@ -24,8 +24,9 @@ component before the next update loop. It will then no longer be rendered or upd
 `game.remove(Component c)` and `component.removeFromParent()` also can be used to remove components
 from its parent.
 
-The `isHUD` variable can be overridden or set to true (defaults to `false`) to make the `FlameGame`
-ignore the `camera` for this element, making it static in relation to the screen that is.
+The `respectCamera` variable can be overridden or set to `false` (defaults to `true`) to make the
+`FlameGame` ignore the `camera` for this component, making it static in relation to the viewport
+that is.
 Do note that this currently only works if the component is added directly to the root `FlameGame`.
 
 The `onRemove` method can be overridden to run code before the component is removed from the game,

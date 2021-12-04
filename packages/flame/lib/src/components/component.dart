@@ -21,8 +21,11 @@ class Component with Loadable {
   /// Whether this component should respect the camera or not.
   ///
   /// Components that have this property set to false will ignore the
-  /// FlameGame.camera when rendered (so their position coordinates are
+  /// `FlameGame.camera` when rendered (so their position coordinates are
   /// considered relative only to the viewport instead).
+  ///
+  /// Do note that this currently only works if the component is added directly
+  /// to the root `FlameGame`.
   bool respectCamera = true;
 
   /// Whether this component has been prepared and is ready to be added to the
