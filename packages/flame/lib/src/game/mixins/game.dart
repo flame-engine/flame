@@ -116,7 +116,7 @@ mixin Game on Loadable {
     onAttach();
   }
 
-  /// Called when the game has been attached. This can be overriden
+  /// Called when the game has been attached. This can be overridden
   /// to add logic that requires the game to already be attached
   /// to the widget tree.
   void onAttach() {}
@@ -131,7 +131,7 @@ mixin Game on Loadable {
   }
 
   /// Called after the game has left the widget tree.
-  /// This can be overriden to add logic that requires the game
+  /// This can be overridden to add logic that requires the game
   /// not be on the flutter widget tree anymore.
   void onDetach() {}
 
@@ -157,12 +157,14 @@ mixin Game on Loadable {
     return _gameRenderBox!.localToGlobal(point.toOffset()).toVector2();
   }
 
-  /// This is the projector used by non-isHUD components.
-  /// This can be overriden on your [Game] implementation.
+  /// This is the projector used by all components that respect the camera
+  /// (`respectCamera = true`).
+  /// This can be overridden on your [Game] implementation.
   Projector projector = IdentityProjector();
 
-  /// This is the projector used by isHUD components.
-  /// This can be overriden on your [Game] implementation.
+  /// This is the projector used by components that don't respect the camera
+  /// (`respectCamera = false`).
+  /// This can be overridden on your [Game] implementation.
   Projector viewportProjector = IdentityProjector();
 
   /// Utility method to load and cache the image for a sprite based on its
