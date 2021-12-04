@@ -8,7 +8,6 @@
  - Introduce `updateTree` to follow the `renderTree` convention
  - Fix `Parallax.load` with different loading times
  - `isHud` renamed to `respectCamera`
- - `CameraWrapper` to be used as an internal `Component`
 
 ## [1.0.0-releasecandidate.18]
  - Forcing portrait and landscape mode is now supported on web
