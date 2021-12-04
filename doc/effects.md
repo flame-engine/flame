@@ -71,7 +71,7 @@ instead of `speed`.
 
 Usage example:
 ```dart
-import 'package:flame/effects.dart';
+import 'package:flame/effects2.dart';
 
 // Square is a PositionComponent
 square.add(MoveEffect(
@@ -103,7 +103,7 @@ argument instead of `speed`.
 
 Usage example:
 ```dart
-import 'package:flame/effects.dart';
+import 'package:flame/effects2.dart';
 
 // Square is a PositionComponent
 square.add(ScaleEffect(
@@ -123,7 +123,7 @@ instead of `speed`.
 
 Usage example:
 ```dart
-import 'package:flame/effects.dart';
+import 'package:flame/effects2.dart';
 
 // Square is a PositionComponent
 square.add(SizeEffect(
@@ -149,7 +149,7 @@ Usage example:
 ```dart
 import 'dart:math';
 
-import 'package:flame/effects.dart';
+import 'package:flame/effects2.dart';
 
 // Square is a PositionComponent
 square.add(RotateEffect(

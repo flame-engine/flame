@@ -1,4 +1,4 @@
-/// Base "controller" class to facilitate animation of effects.
+/// Base "controller" class to facilitate animation of effects2.
 ///
 /// The purpose of an effect controller is to define how an effect or an
 /// animation should progress over time. To facilitate that, this class provides
@@ -28,7 +28,7 @@ abstract class EffectController {
   /// Will the effect continue to run forever (i.e. has no logical end)?
   bool get isInfinite;
 
-  /// Has the effect started running? Some effects use a "delay" parameter to
+  /// Has the effect started running? Some effects2 use a "delay" parameter to
   /// postpone the start of an animation. This property then tells you whether
   /// this delay period has already passed.
   bool get started;

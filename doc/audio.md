@@ -35,7 +35,7 @@ Then you have the following methods at your disposal:
 ```dart
 import 'package:flame_audio/flame_audio.dart';
 
-// For shorter reused audio clips, like sound effects
+// For shorter reused audio clips, like sound effects2
 FlameAudio.play('explosion.mp3');
 
 // For looping an audio file
