@@ -100,7 +100,6 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
 
   @override
   void update(double dt) {
-    super.update(dt);
     if (playing) {
       animation?.update(dt);
     }

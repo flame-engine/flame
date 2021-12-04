@@ -64,10 +64,7 @@ class FlameGame extends Component with Game {
   /// interfering with each others rendering.
   @override
   @mustCallSuper
-  void render(Canvas canvas) {
-    super.render(canvas);
-    _cameraWrapper.render(canvas);
-  }
+  void render(Canvas canvas) => _cameraWrapper.render(canvas);
 
   /// This updates every component in the tree.
   ///
@@ -78,7 +75,9 @@ class FlameGame extends Component with Game {
   @override
   @mustCallSuper
   void update(double dt) {
-    super.update(dt);
+    if (parent == null) {
+      super.updateTree(dt, callOwnUpdate: false);
+    }
     _cameraWrapper.update(dt);
   }
 

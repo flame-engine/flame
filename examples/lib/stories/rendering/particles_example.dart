@@ -267,7 +267,7 @@ class ParticlesExample extends FlameGame with FPSCounter {
   Particle? reusablePatricle;
 
   /// A burst of white circles which actually using a single circle
-  /// as a form of optimization. Look for reusing parts of particle effects
+  /// as a form of optimization. Look for reusing parts of particle effects2
   /// whenever possible, as there are limits which are relatively easy to reach.
   Particle reuseParticles() {
     reusablePatricle ??= circle();
@@ -393,7 +393,7 @@ class ParticlesExample extends FlameGame with FPSCounter {
 
   /// [ComponentParticle] proxies particle lifecycle hooks
   /// to its child [Component]. In example below, [Component] is
-  /// reused between particle effects and has internal behavior
+  /// reused between particle effects2 and has internal behavior
   /// which is independent from the parent [Particle].
   Particle componentParticle() {
     return MovingParticle(
@@ -570,7 +570,6 @@ class TrafficLightComponent extends Component {
 
   @override
   void update(double dt) {
-    super.update(dt);
     colorChangeTimer.update(dt);
   }
 

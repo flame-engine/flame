@@ -1,13 +1,12 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/src/effects2/controllers/effect_controller.dart'; // ignore: implementation_imports
-import 'package:flame/src/effects2/size_effect.dart'; // ignore: implementation_imports
-import 'package:flutter/material.dart';
-
-import '../../commons/square_component.dart';
+import 'package:flutter/animation.dart';
 
 class SizeEffectExample extends FlameGame with TapDetector {
   static const String description = '''
@@ -17,17 +16,21 @@ class SizeEffectExample extends FlameGame with TapDetector {
     down, depending on its current state.
   ''';
 
-  late SquareComponent square;
+  late RectangleComponent square;
   bool grow = true;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    square = SquareComponent(
+    square = RectangleComponent.square(
+      size: 100,
       position: Vector2.all(200),
       paint: BasicPalette.white.paint()..style = PaintingStyle.stroke,
     );
-    final childSquare = SquareComponent(position: Vector2.all(70), size: 20);
+    final childSquare = RectangleComponent.square(
+      position: Vector2.all(70),
+      size: 20,
+    );
     square.add(childSquare);
     add(square);
   }

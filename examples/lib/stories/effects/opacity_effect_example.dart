@@ -1,9 +1,7 @@
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flame/src/effects2/controllers/effect_controller.dart'; // ignore: implementation_imports
-import 'package:flame/src/effects2/opacity_effect.dart'; // ignore: implementation_imports
-
 import '../../commons/ember.dart';
 
 class OpacityEffectExample extends FlameGame with TapDetector {

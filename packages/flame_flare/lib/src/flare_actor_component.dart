@@ -28,7 +28,6 @@ class FlareActorComponent extends PositionComponent {
   @override
   @mustCallSuper
   void update(double dt) {
-    super.update(dt);
     flareAnimation.advance(dt);
   }
 

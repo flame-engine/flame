@@ -5,7 +5,7 @@ import 'curved_particle.dart';
 import 'particle.dart';
 
 /// A particle which renders its child with certain [Paint]
-/// Could be used for applying composite effects.
+/// Could be used for applying composite effects2.
 /// Be aware that any composite operation is relatively expensive, as involves
 /// copying portions of GPU memory. The less pixels copied - the faster it'll be.
 class PaintParticle extends CurvedParticle with SingleChildParticle {

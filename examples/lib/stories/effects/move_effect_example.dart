@@ -1,12 +1,9 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/effects2/controllers/effect_controller.dart'; // ignore: implementation_imports
-import 'package:flame/src/effects2/move_effect.dart'; // ignore: implementation_imports
 import 'package:flutter/material.dart';
-
-import '../../commons/square_component.dart';
 
 class MoveEffectExample extends FlameGame {
   static const description = '''
@@ -14,7 +11,7 @@ class MoveEffectExample extends FlameGame {
     straight line back and forth. The effect uses a non-linear progression
     curve, which makes the movement non-uniform.
 
-    The middle green square has a combination of two movement effects: a
+    The middle green square has a combination of two movement effects2: a
     `MoveEffect.to` and a `MoveEffect.by` which forces it to periodically jump.
 
     At the bottom there are 60 more components which demonstrate movement along
@@ -36,8 +33,11 @@ class MoveEffectExample extends FlameGame {
       ..color = Colors.greenAccent;
 
     add(
-      SquareComponent(position: Vector2(20, 50), size: 20, paint: paint1)
-        ..add(
+      RectangleComponent.square(
+        position: Vector2(20, 50),
+        size: 20,
+        paint: paint1,
+      )..add(
           MoveEffect.to(
             Vector2(380, 50),
             EffectController(
@@ -50,7 +50,11 @@ class MoveEffectExample extends FlameGame {
         ),
     );
     add(
-      SquareComponent(position: Vector2(20, 150), size: 20, paint: paint2)
+      RectangleComponent.square(
+        position: Vector2(20, 150),
+        size: 20,
+        paint: paint2,
+      )
         ..add(
           MoveEffect.to(
             Vector2(380, 150),
@@ -101,7 +105,7 @@ class MoveEffectExample extends FlameGame {
     final path2 = Path()..addOval(const Rect.fromLTRB(80, 230, 320, 470));
     for (var i = 0; i < 20; i++) {
       add(
-        SquareComponent(size: 10)
+        RectangleComponent.square(size: 10)
           ..paint = (Paint()..color = Colors.tealAccent)
           ..add(
             MoveEffect.along(
