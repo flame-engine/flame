@@ -1,7 +1,7 @@
 import '../../components.dart';
 import '../../extensions.dart';
 import 'component_effect.dart';
-import 'effect_controller.dart';
+import 'controllers/effect_controller.dart';
 
 /// Change the size of a component over time.
 ///

@@ -105,7 +105,7 @@ class JoystickAdvancedExample extends FlameGame
       onPressed: () => player.add(
         RotateEffect.by(
           8 * rng.nextDouble(),
-          StandardEffectController(
+          EffectController(
             duration: 1,
             reverseDuration: 1,
             curve: Curves.bounceOut,
@@ -131,7 +131,7 @@ class JoystickAdvancedExample extends FlameGame
       onPressed: () => player.add(
         ScaleEffect.by(
           Vector2.all(1.5),
-          StandardEffectController(duration: 1.0, reverseDuration: 1.0),
+          EffectController(duration: 1.0, reverseDuration: 1.0),
         ),
       ),
     );
@@ -152,7 +152,7 @@ class JoystickAdvancedExample extends FlameGame
       size: Vector2(185, 50),
       onPressed: () => player.add(
         OpacityEffect.fadeOut(
-          StandardEffectController(duration: 0.5, reverseDuration: 0.5),
+          EffectController(duration: 0.5, reverseDuration: 0.5),
         ),
       ),
     );

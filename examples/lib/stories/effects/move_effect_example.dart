@@ -40,7 +40,7 @@ class MoveEffectExample extends FlameGame {
       )..add(
           MoveEffect.to(
             Vector2(380, 50),
-            StandardEffectController(
+            EffectController(
               duration: 3,
               reverseDuration: 3,
               infinite: true,
@@ -58,7 +58,7 @@ class MoveEffectExample extends FlameGame {
         ..add(
           MoveEffect.to(
             Vector2(380, 150),
-            StandardEffectController(
+            EffectController(
               duration: 3,
               reverseDuration: 3,
               infinite: true,
@@ -68,7 +68,7 @@ class MoveEffectExample extends FlameGame {
         ..add(
           MoveEffect.by(
             Vector2(0, -50),
-            StandardEffectController(
+            EffectController(
               duration: 0.25,
               reverseDuration: 0.25,
               startDelay: 1,
@@ -92,7 +92,7 @@ class MoveEffectExample extends FlameGame {
           ..add(
             MoveEffect.along(
               path1,
-              StandardEffectController(
+              EffectController(
                 duration: 10,
                 startDelay: i * 0.2,
                 infinite: true,
@@ -110,7 +110,7 @@ class MoveEffectExample extends FlameGame {
           ..add(
             MoveEffect.along(
               path2,
-              StandardEffectController(
+              EffectController(
                 duration: 6,
                 startDelay: i * 0.3,
                 infinite: true,

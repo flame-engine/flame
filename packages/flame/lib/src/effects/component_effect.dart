@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../components.dart';
+import 'controllers/effect_controller.dart';
 import 'effect.dart';
-import 'effect_controller.dart';
 
 /// Base class for effects that target a [Component] of type [T].
 ///

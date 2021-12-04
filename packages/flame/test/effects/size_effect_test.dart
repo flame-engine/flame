@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/size_effect.dart';
-import 'package:flame/src/effects/standard_effect_controller.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -15,7 +15,7 @@ void main() {
 
       component.size = Vector2.all(1.0);
       component.add(
-        SizeEffect.by(Vector2.all(1.0), StandardEffectController(duration: 1)),
+        SizeEffect.by(Vector2.all(1.0), EffectController(duration: 1)),
       );
       game.update(0);
       expectVector2(component.size, Vector2.all(1.0));
@@ -37,7 +37,7 @@ void main() {
 
       component.size = Vector2.all(1.0);
       component.add(
-        SizeEffect.to(Vector2.all(3.0), StandardEffectController(duration: 1)),
+        SizeEffect.to(Vector2.all(3.0), EffectController(duration: 1)),
       );
       game.update(0);
       expectVector2(component.size, Vector2.all(1.0));
@@ -59,7 +59,7 @@ void main() {
 
       final effect = SizeEffect.by(
         Vector2.all(1.0),
-        StandardEffectController(duration: 1),
+        EffectController(duration: 1),
       );
       component.add(effect..removeOnFinish = false);
       final expectedSize = Vector2.zero();
@@ -80,7 +80,7 @@ void main() {
 
       final effect = SizeEffect.to(
         Vector2.all(1.0),
-        StandardEffectController(duration: 1),
+        EffectController(duration: 1),
       );
       component.add(effect..removeOnFinish = false);
       for (var i = 0; i < 5; i++) {
@@ -98,12 +98,12 @@ void main() {
       game.ensureAdd(component);
 
       component.add(
-        SizeEffect.by(Vector2.all(5), StandardEffectController(duration: 10)),
+        SizeEffect.by(Vector2.all(5), EffectController(duration: 10)),
       );
       component.add(
         SizeEffect.by(
           Vector2.all(0.5),
-          StandardEffectController(
+          EffectController(
             duration: 1,
             reverseDuration: 1,
             repeatCount: 5,
@@ -137,7 +137,7 @@ void main() {
 
       final effect = SizeEffect.by(
         Vector2.all(1.0),
-        StandardEffectController(
+        EffectController(
           duration: 1,
           reverseDuration: 1,
           infinite: true,

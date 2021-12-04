@@ -1,10 +1,12 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/animation.dart';
 
 class SizeEffectExample extends FlameGame with TapDetector {
   static const String description = '''
@@ -42,10 +44,7 @@ class SizeEffectExample extends FlameGame with TapDetector {
     square.add(
       SizeEffect.to(
         Vector2.all(s),
-        StandardEffectController(
-          duration: 1.5,
-          curve: Curves.bounceInOut,
-        ),
+        EffectController(duration: 1.5, curve: Curves.bounceInOut),
       ),
     );
   }

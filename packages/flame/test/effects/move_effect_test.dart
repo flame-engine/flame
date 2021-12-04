@@ -3,8 +3,8 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/effects/controllers/linear_effect_controller.dart';
 import 'package:flame/src/effects/move_effect.dart';
-import 'package:flame/src/effects/simple_effect_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -17,7 +17,7 @@ void main() {
       game.update(0);
 
       object.add(
-        MoveEffect.by(Vector2(5, -1), SimpleEffectController(duration: 1)),
+        MoveEffect.by(Vector2(5, -1), LinearEffectController(1)),
       );
       game.update(0.5);
       expect(object.position.x, closeTo(3 + 2.5, 1e-15));
@@ -35,7 +35,7 @@ void main() {
       game.update(0);
 
       object.add(
-        MoveEffect.to(Vector2(5, -1), SimpleEffectController(duration: 1)),
+        MoveEffect.to(Vector2(5, -1), LinearEffectController(1)),
       );
       game.update(0.5);
       expect(object.position.x, closeTo(3 * 0.5 + 5 * 0.5, 1e-15));
@@ -57,7 +57,7 @@ void main() {
         MoveEffect.along(
           Path()
             ..addOval(Rect.fromCircle(center: const Offset(6, 10), radius: 50)),
-          SimpleEffectController(duration: 1),
+          LinearEffectController(1),
         ),
       );
       game.update(0);
@@ -73,7 +73,7 @@ void main() {
     });
 
     test('#along wrong arguments', () {
-      final controller = SimpleEffectController();
+      final controller = LinearEffectController(0);
       expect(
         () => MoveEffect.along(Path(), controller),
         throwsArgumentError,

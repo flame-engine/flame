@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 import '../../components.dart';
-import 'effect_controller.dart';
+import 'controllers/effect_controller.dart';
 
 /// An [Effect] is a component that changes properties or appearance of another
 /// component over time.
@@ -30,7 +30,8 @@ abstract class Effect extends Component {
       : removeOnFinish = true,
         _paused = false,
         _started = false,
-        _finished = false;
+        _finished = false,
+        _reversed = false;
 
   /// An object that describes how the effect should evolve over time.
   final EffectController controller;
@@ -57,6 +58,13 @@ abstract class Effect extends Component {
   bool get isPaused => _paused;
   bool _paused;
 
+  /// Whether the effect is currently running back in time.
+  ///
+  /// Call `reverse()` in order to change this. When the effect is reset, this
+  /// is set to false.
+  bool get isReversed => _reversed;
+  bool _reversed;
+
   /// Pause the effect. The effect will not respond to updates while it is
   /// paused. Calling `resume()` or `reset()` will un-pause it. Pausing an
   /// already paused effect is a no-op.
@@ -65,6 +73,9 @@ abstract class Effect extends Component {
   /// Resume updates in a previously paused effect. If the effect is not
   /// currently paused, this call is a no-op.
   void resume() => _paused = false;
+
+  /// Cause the effect to run back in time.
+  void reverse() => _reversed = !_reversed;
 
   /// Restore the effect to its original state as it was when the effect was
   /// just created.
@@ -75,10 +86,11 @@ abstract class Effect extends Component {
   /// it to the target.
   @mustCallSuper
   void reset() {
-    controller.reset();
+    controller.setToStart();
     _paused = false;
     _started = false;
     _finished = false;
+    _reversed = false;
   }
 
   /// Implementation of [Component]'s `update()` method. Derived classes are
@@ -89,7 +101,11 @@ abstract class Effect extends Component {
       return;
     }
     super.update(dt);
-    controller.update(dt);
+    if (_reversed) {
+      controller.recede(dt);
+    } else {
+      controller.advance(dt);
+    }
     if (!_started && controller.started) {
       _started = true;
       onStart();

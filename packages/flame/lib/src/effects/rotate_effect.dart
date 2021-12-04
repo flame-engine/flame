@@ -1,4 +1,4 @@
-import 'effect_controller.dart';
+import 'controllers/effect_controller.dart';
 import 'transform2d_effect.dart';
 
 /// Rotate a component around its anchor.

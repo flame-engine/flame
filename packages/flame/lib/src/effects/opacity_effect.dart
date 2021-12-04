@@ -1,6 +1,6 @@
 import '../../components.dart';
 import 'component_effect.dart';
-import 'effect_controller.dart';
+import 'controllers/effect_controller.dart';
 
 /// Change the opacity of a component over time.
 ///

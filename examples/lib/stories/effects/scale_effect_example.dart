@@ -42,7 +42,7 @@ class ScaleEffectExample extends FlameGame with TapDetector {
     square.add(
       ScaleEffect.to(
         Vector2.all(s),
-        StandardEffectController(
+        EffectController(
           duration: 1.5,
           curve: Curves.bounceInOut,
         ),

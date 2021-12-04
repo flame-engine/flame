@@ -1,7 +1,6 @@
 import 'package:flame/src/components/component.dart';
+import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/effect.dart';
-import 'package:flame/src/effects/effect_controller.dart';
-import 'package:flame/src/effects/standard_effect_controller.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -39,7 +38,7 @@ class _MyEffect extends Effect {
 void main() {
   group('Effect', () {
     test('pause & resume', () {
-      final effect = _MyEffect(StandardEffectController(duration: 10));
+      final effect = _MyEffect(EffectController(duration: 10));
       expect(effect.x, -1);
       expect(effect.isPaused, false);
 
@@ -81,7 +80,7 @@ void main() {
       (game) {
         final obj = Component();
         game.add(obj);
-        final effect = _MyEffect(StandardEffectController(duration: 1));
+        final effect = _MyEffect(EffectController(duration: 1));
         obj.add(effect);
         game.update(0);
         expect(obj.children.length, 1);
@@ -102,7 +101,7 @@ void main() {
       (game) {
         final obj = Component();
         game.add(obj);
-        final effect = _MyEffect(StandardEffectController(duration: 1));
+        final effect = _MyEffect(EffectController(duration: 1));
         effect.removeOnFinish = false;
         obj.add(effect);
         game.update(0);
@@ -130,11 +129,9 @@ void main() {
         effect.reset();
         expect(effect.x, -1);
         expect(effect.controller.completed, false);
-        expect(effect.controller.started, false);
 
         game.update(0.5);
         expect(effect.x, 0.5);
-        expect(effect.controller.started, true);
         expect(effect.controller.completed, false);
 
         // Now the effect completes once again, but still remains mounted
@@ -149,7 +146,7 @@ void main() {
     test('onStart & onFinish', () {
       var nStarted = 0;
       var nFinished = 0;
-      final effect = _MyEffect(StandardEffectController(duration: 1))
+      final effect = _MyEffect(EffectController(duration: 1))
         ..onStartCallback = () {
           nStarted++;
         }
@@ -158,19 +155,16 @@ void main() {
         };
 
       effect.update(0);
-      expect(effect.controller.started, true);
       expect(effect.x, 0);
       expect(nStarted, 1);
       expect(nFinished, 0);
 
       effect.update(0.5);
-      expect(effect.controller.started, true);
       expect(effect.x, 0.5);
       expect(nStarted, 1);
       expect(nFinished, 0);
 
       effect.update(0.5);
-      expect(effect.controller.started, true);
       expect(effect.controller.completed, true);
       expect(effect.x, 1);
       expect(nStarted, 1);

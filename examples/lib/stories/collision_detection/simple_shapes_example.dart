@@ -65,7 +65,7 @@ class SimpleShapesExample extends FlameGame with HasTappables {
     component.add(
       MoveEffect.to(
         size / 2,
-        StandardEffectController(
+        EffectController(
           duration: 5,
           reverseDuration: 5,
           infinite: true,
@@ -75,7 +75,7 @@ class SimpleShapesExample extends FlameGame with HasTappables {
     component.add(
       RotateEffect.to(
         3,
-        StandardEffectController(
+        EffectController(
           duration: 1,
           reverseDuration: 1,
           infinite: true,

@@ -188,7 +188,7 @@ class Rock extends SpriteComponent
     add(
       ScaleEffect.by(
         Vector2.all(10),
-        StandardEffectController(duration: 0.3),
+        EffectController(duration: 0.3),
       ),
     );
     return true;
