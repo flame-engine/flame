@@ -30,7 +30,7 @@ extension FlameGameExtension on Component {
 }
 
 typedef GameCreateFunction<T extends Game> = T Function();
-typedef VerifyFunction<T extends Game> = void Function(T);
+typedef VerifyFunction<T extends Game> = dynamic Function(T);
 
 typedef GameWidgetCreateFunction<T extends Game> = GameWidget<T> Function(
   T game,
@@ -94,7 +94,7 @@ class GameTester<T extends Game> {
   ) {
     flutter_test.test(description, () async {
       final game = await initializeGame();
-      verify(game);
+      await verify(game);
     });
   }
 
