@@ -43,7 +43,8 @@ class Circle extends Shape {
     _scaledSize
       ..setFrom(size)
       ..multiply(scale);
-    return (min(_scaledSize.x, _scaledSize.y) / 2) * normalizedRadius;
+    return (min(_scaledSize.x.abs(), _scaledSize.y.abs()) / 2) *
+        normalizedRadius;
   }
 
   /// This render method doesn't rotate the canvas according to angle since a
