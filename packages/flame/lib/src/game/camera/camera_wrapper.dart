@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame/src/components/coordinate_system.dart';
 import 'package:meta/meta.dart';
 
 import '../../../components.dart';
