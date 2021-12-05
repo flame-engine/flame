@@ -23,23 +23,19 @@ class CameraWrapper {
 
   void render(Canvas canvas) {
     camera.viewport.render(canvas, (_canvas) {
-      var hasCamera = false; // so we don't apply unnecessary transformations
       world.forEach((component) {
-        if (component.respectCamera && !hasCamera) {
-          canvas.save();
-          camera.apply(canvas);
-          hasCamera = true;
-        } else if (!component.respectCamera && hasCamera) {
-          canvas.restore();
-          hasCamera = false;
-        }
         canvas.save();
+        if (component.respectCamera) {
+          if (!component.respectViewport) {
+            throw 'Invalid combination of respectCamera=true and respectViewport=false';
+          }
+          camera.apply(canvas);
+        } else if (component.respectViewport) {
+          camera.viewport.apply(canvas);
+        }
         component.renderTree(canvas);
         canvas.restore();
       });
-      if (hasCamera) {
-        canvas.restore();
-      }
     });
   }
 }
