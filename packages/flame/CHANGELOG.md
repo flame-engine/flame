@@ -10,6 +10,7 @@
  - Fix `Parallax.load` with different loading times
  - Fix render order of components and add tests
  - `isHud` renamed to `respectCamera`
+ - Fix `HitboxCircle` when component is flipped
 
 ## [1.0.0-releasecandidate.18]
  - Forcing portrait and landscape mode is now supported on web
