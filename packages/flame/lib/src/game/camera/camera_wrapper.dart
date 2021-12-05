@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/src/components/coordinate_system.dart';
 import 'package:meta/meta.dart';
 
 import '../../../components.dart';
@@ -22,20 +23,15 @@ class CameraWrapper {
   }
 
   void render(Canvas canvas) {
-    camera.viewport.render(canvas, (_canvas) {
-      world.forEach((component) {
-        canvas.save();
-        if (component.respectCamera) {
-          if (!component.respectViewport) {
-            throw 'Invalid combination of respectCamera=true and respectViewport=false';
-          }
-          camera.apply(canvas);
-        } else if (component.respectViewport) {
-          camera.viewport.apply(canvas);
-        }
-        component.renderTree(canvas);
-        canvas.restore();
-      });
+    world.forEach((component) {
+      canvas.save();
+      if (component.coordinateSystem == CoordinateSystem.game) {
+        camera.apply(canvas);
+      } else if (component.coordinateSystem == CoordinateSystem.viewportOnly) {
+        camera.viewport.apply(canvas);
+      }
+      component.renderTree(canvas);
+      canvas.restore();
     });
   }
 }
