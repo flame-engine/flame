@@ -6,11 +6,23 @@ import 'controllers/effect_controller.dart';
 import 'transform2d_effect.dart';
 
 /// This effect will move the target along the specified path, which may
-/// contain curved segments, but must be simply-connected. The `path` argument
-/// is taken as relative to the target's position at the start of the effect.
+/// contain curved segments, but must be simply-connected.
+///
+/// If `absolute` is false (default), the `path` argument will be taken as
+/// relative to the target's position at the start of the effect. It is
+/// recommended in this case to have a path that starts at the origin in order
+/// to avoid sudden jumps in the target's position.
+///
+/// If `absolute` flag is true, then the `path` will be assumed to be given in
+/// absolute coordinate space and the target will be placed at the beginning of
+/// the path when the effect starts.
 class MoveAlongPathEffect extends Transform2DEffect {
-  MoveAlongPathEffect(Path path, EffectController controller)
-      : super(controller) {
+  MoveAlongPathEffect(
+    Path path,
+    EffectController controller, {
+    bool absolute = false,
+  })  : _isAbsolute = absolute,
+        super(controller) {
     final metrics = path.computeMetrics().toList();
     if (metrics.length != 1) {
       throw ArgumentError(
@@ -22,12 +34,31 @@ class MoveAlongPathEffect extends Transform2DEffect {
     assert(_pathLength > 0);
   }
 
+  /// If true, the path is considered _absolute_, i.e. the component will be
+  /// put onto the start of the path and then follow that path. If false, the
+  /// path is considered _relative_, i.e. this path is added as an offset to
+  /// the current position of the target.
+  final bool _isAbsolute;
+
+  /// The path that the target will follow.
   late final PathMetric _pathMetric;
+
+  /// Pre-computed length of the path.
   late final double _pathLength;
+
+  /// Position offset that was applied to the target on the previous iteration.
+  /// This is needed in order to make updates to `target.position` incremental
+  /// (which in turn is necessary in order to allow multiple effects to be able
+  /// to apply to the same target simultaneously).
   late Vector2 _lastOffset;
 
   @override
   void onStart() {
+    if (_isAbsolute) {
+      final pathStart = _pathMetric.getTangentForOffset(0)!.position;
+      target.position.x = pathStart.dx;
+      target.position.y = pathStart.dy;
+    }
     _lastOffset = Vector2.zero();
   }
 
