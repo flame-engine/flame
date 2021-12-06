@@ -98,6 +98,6 @@ mixin HasPaint<T extends Object> on Component {
   /// things rendered with the paint looking like it was
   /// tinted with the given color.
   void tint(Color color, {T? paintId}) {
-    getPaint(paintId).colorFilter = ColorFilter.mode(color, BlendMode.multiply);
+    getPaint(paintId).colorFilter = ColorFilter.mode(color, BlendMode.srcATop);
   }
 }
