@@ -90,7 +90,7 @@ class MoveEffectExample extends FlameGame {
       add(
         CircleComponent(radius: 5)
           ..add(
-            MoveEffect.along(
+            MoveAlongPathEffect(
               path1,
               EffectController(
                 duration: 10,
@@ -108,7 +108,7 @@ class MoveEffectExample extends FlameGame {
         RectangleComponent.square(size: 10)
           ..paint = (Paint()..color = Colors.tealAccent)
           ..add(
-            MoveEffect.along(
+            MoveAlongPathEffect(
               path2,
               EffectController(
                 duration: 6,
