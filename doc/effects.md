@@ -6,6 +6,8 @@ If you want to create an effect for another component than the ones that already
 the `ComponentEffect` class and add your created effect to the component by calling
 `component.add(yourEffect)`.
 
+![Effect tree](images/effect_tree.png)
+
 ## Common for all effects
 
 All effects can be paused and resumed with `effect.pause()` and `effect.resume()`, and you can check
