@@ -10,8 +10,7 @@ import 'transform2d_effect.dart';
 /// is taken as relative to the target's position at the start of the effect.
 class MoveAlongPathEffect extends Transform2DEffect {
   MoveAlongPathEffect(Path path, EffectController controller)
-      : _lastPosition = Vector2.zero(),
-        super(controller) {
+      : super(controller) {
     final metrics = path.computeMetrics().toList();
     if (metrics.length != 1) {
       throw ArgumentError(
@@ -25,22 +24,22 @@ class MoveAlongPathEffect extends Transform2DEffect {
 
   late final PathMetric _pathMetric;
   late final double _pathLength;
-  late Vector2 _lastPosition;
+  late Vector2 _lastOffset;
+
+  @override
+  void onStart() {
+    _lastOffset = Vector2.zero();
+  }
 
   @override
   void apply(double progress) {
     final distance = progress * _pathLength;
     final tangent = _pathMetric.getTangentForOffset(distance)!;
     final offset = tangent.position;
-    target.position.x += offset.dx - _lastPosition.x;
-    target.position.y += offset.dy - _lastPosition.y;
-    _lastPosition.setValues(offset.dx, offset.dy);
+    target.position.x += offset.dx - _lastOffset.x;
+    target.position.y += offset.dy - _lastOffset.y;
+    _lastOffset.x = offset.dx;
+    _lastOffset.y = offset.dy;
     super.apply(progress);
-  }
-
-  @override
-  void reset() {
-    super.reset();
-    _lastPosition = Vector2.zero();
   }
 }
