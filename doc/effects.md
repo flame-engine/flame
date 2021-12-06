@@ -127,7 +127,8 @@ final effect = MoveEffect.along(
 ### `RotateEffect.by`
 
 Rotates the target clockwise by the specified angle relative to its current orientation. The angle
-is in radians. For example, the following effect will rotate the target 90º clockwise:
+is in radians. For example, the following effect will rotate the target 90º (=[tau]/4 in radians)
+clockwise:
 
 ```dart
 final effect = RotateEffect.by(tau/4, EffectController(2));
@@ -136,8 +137,8 @@ final effect = RotateEffect.by(tau/4, EffectController(2));
 
 ### `RotateEffect.to`
 
-Rotates the target clockwise to the specified azimuth. For example, the following will rotate the
-target to look east (0º is north, 90º east, 180º south, and 270º west):
+Rotates the target clockwise to the specified angle. For example, the following will rotate the
+target to look east (0º is north, 90º=[tau]/4 east, 180º=tau/2 south, and 270º=tau*3/4 west):
 
 ```dart
 final effect = RotateEffect.to(tau/4, EffectController(2));
@@ -176,8 +177,10 @@ final effect = SizeEffect.by(Vector2(20, -50), EffectController(1));
 The size of a `PositionComponent` cannot be negative. If an effect attempts to set the size to a
 negative value, the size will be clamped at zero.
 
-Note that for many components that have size, it is intended as an immutable property. Changing the
-size of such components may have undesirable effects. In such cases use `ScaleEffect.by` instead.
+Note that for this effect to work, the target component must take its own `size` into account when
+rendering, and not all of them do. In addition, changing the size of a component does not propagate
+to its children, if it has any. An alternative to `SizeEffect` is the `ScaleEffect`, which works
+more generally and scales the children components too.
 
 
 ### `SizeEffect.to`
@@ -270,7 +273,7 @@ EffectController({
   provided [curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
 
 - **`reverseDuration`** -- if provided, adds an additional step to the controller: after the effect
-  has had grown from 0 to 100% over the `duration` seconds, it will then grow back from 100% to 0
+  has grown from 0 to 100% over the `duration` seconds, it will then go backwards from 100% to 0
   over the `reverseDuration` seconds. In addition, the effect will complete at progress level of 0
   (normally the effect completes at progress 1).
 
@@ -426,3 +429,5 @@ final ec = DelayedEffectController(LinearEffectController(1), delay: 5);
 ## See also
 
 * [Examples of various effects](https://examples.flame-engine.org/#/).
+
+[tau]: https://en.wikipedia.org/wiki/Tau_(mathematical_constant)
