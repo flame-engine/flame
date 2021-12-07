@@ -22,15 +22,32 @@ class CameraWrapper {
   }
 
   void render(Canvas canvas) {
+    PositionType? _previousType;
+    canvas.save();
     world.forEach((component) {
-      canvas.save();
-      if (component.positionType == PositionType.game) {
-        camera.apply(canvas);
-      } else if (component.positionType == PositionType.viewport) {
-        camera.viewport.apply(canvas);
+      final sameType = component.positionType == _previousType;
+      if (!sameType) {
+        if (_previousType != null && _previousType != PositionType.widget) {
+          canvas.restore();
+          canvas.save();
+        }
+        switch (component.positionType) {
+          case PositionType.game:
+            camera.viewport.apply(canvas);
+            camera.apply(canvas);
+            break;
+          case PositionType.viewport:
+            camera.viewport.apply(canvas);
+            break;
+          case PositionType.widget:
+        }
       }
       component.renderTree(canvas);
-      canvas.restore();
+      _previousType = component.positionType;
     });
+
+    if (_previousType != PositionType.widget) {
+      canvas.restore();
+    }
   }
 }
