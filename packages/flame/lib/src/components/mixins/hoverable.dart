@@ -50,18 +50,6 @@ mixin Hoverable on Component {
 mixin HasHoverables on FlameGame {
   @mustCallSuper
   void onMouseMove(PointerHoverInfo info) {
-    bool _mouseMoveHandler(Hoverable c) {
-      return c.handleMouseMovement(info);
-    }
-
-    for (final c in children.reversed()) {
-      var shouldContinue = c.propagateToChildren<Hoverable>(_mouseMoveHandler);
-      if (c is Hoverable && shouldContinue) {
-        shouldContinue = _mouseMoveHandler(c);
-      }
-      if (!shouldContinue) {
-        break;
-      }
-    }
+    propagateToChildren<Hoverable>((c) => c.handleMouseMovement(info));
   }
 }
