@@ -243,26 +243,30 @@ myComponent.add(
 ```
 
 An example of how to use the `OpacityEffect` can be found
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects/opacity_effect.dart).
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects/opacity_effect_example.dart).
 
 ## ColorEffect
 
 This effect will change the base color of the paint, causing the rendered component to be tinted by
-the provided color.
+the provided color between a provided range.
 
 Usage example:
 
 ```dart
 myComponent.add(
   ColorEffect(
-    color: const Color(0xFF00FF00),
-    duration: 0.5,
+    const Color(0xFF00FF00),
+    const Offset(0.0, 0.8),
+    EffectController(duration: 1.5),
   ),
 );
 ```
 
+The informed `Offset` will determine "how much" of the color will be applied to the base component,
+on this example the effect will start with 0% and will go up to 80%.
+
 A more in-depth example can be found
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects/color_effect.dart).
+[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects/color_effect_example.dart).
 
 ## Examples
 

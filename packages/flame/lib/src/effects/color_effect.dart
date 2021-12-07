@@ -12,7 +12,7 @@ import 'controllers/effect_controller.dart';
 class ColorEffect extends ComponentEffect<HasPaint> {
   final String? paintId;
   final Color color;
-  late final Paint _original;
+  late final ColorFilter? _original;
   late final Tween<double> _tween;
 
   ColorEffect(
@@ -27,7 +27,7 @@ class ColorEffect extends ComponentEffect<HasPaint> {
   Future<void> onMount() async {
     super.onMount();
 
-    _original = target.getPaint(paintId);
+    _original = target.getPaint(paintId).colorFilter;
   }
 
   @override
@@ -42,7 +42,6 @@ class ColorEffect extends ComponentEffect<HasPaint> {
   @override
   void reset() {
     super.reset();
-    target.getPaint(paintId).color = _original.color;
-    target.getPaint(paintId).colorFilter = _original.colorFilter;
+    target.getPaint(paintId).colorFilter = _original;
   }
 }
