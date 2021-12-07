@@ -11,6 +11,7 @@
  - Fix render order of components and add tests
  - `isHud` renamed to `respectCamera`
  - Fix `HitboxCircle` when component is flipped
+ - `MoveAlongPathEffect` can now be absolute, and can auto-orient the object along the path
 
 ## [1.0.0-releasecandidate.18]
  - Forcing portrait and landscape mode is now supported on web
