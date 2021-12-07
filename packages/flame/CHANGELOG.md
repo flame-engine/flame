@@ -13,6 +13,7 @@
  - `MoveAlongPathEffect` can now be absolute, and can auto-orient the object along the path
  - `ScaleEffect.by` now applies multiplicatively instead of additively
  - `isHud` replaced with `PositionType`
+ - Remove web fallback for `drawAtlas` in SpriteBatch, but added flag `useAtlas` to activate it
 
 ## [1.0.0-releasecandidate.18]
  - Forcing portrait and landscape mode is now supported on web
