@@ -89,14 +89,16 @@ class MoveEffectExample extends FlameGame {
     for (var i = 0; i < 40; i++) {
       add(
         CircleComponent(radius: 5)
+          ..position = Vector2(0, -1000)
           ..add(
-            MoveEffect.along(
+            MoveAlongPathEffect(
               path1,
               EffectController(
                 duration: 10,
                 startDelay: i * 0.2,
                 infinite: true,
               ),
+              absolute: true,
             ),
           ),
       );
@@ -108,13 +110,14 @@ class MoveEffectExample extends FlameGame {
         RectangleComponent.square(size: 10)
           ..paint = (Paint()..color = Colors.tealAccent)
           ..add(
-            MoveEffect.along(
+            MoveAlongPathEffect(
               path2,
               EffectController(
                 duration: 6,
                 startDelay: i * 0.3,
                 infinite: true,
               ),
+              oriented: true,
             ),
           ),
       );
