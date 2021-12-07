@@ -155,14 +155,13 @@ class Component with Loadable {
 
   @protected
   Vector2 eventPosition(PositionInfo info) {
-    if (positioningType == PositioningType.game) {
-      return info.eventPosition.game;
-    } else if (positioningType == PositioningType.viewport) {
-      return info.eventPosition.viewport;
-    } else if (positioningType == PositioningType.widget) {
-      return info.eventPosition.widget;
-    } else {
-      throw 'Invalid coordinate system!';
+    switch (positioningType) {
+      case PositioningType.game:
+        return info.eventPosition.game;
+      case PositioningType.viewport:
+        return info.eventPosition.viewport;
+      case PositioningType.widget:
+        return info.eventPosition.widget;
     }
   }
 
