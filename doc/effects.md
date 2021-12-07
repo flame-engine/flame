@@ -33,7 +33,7 @@ There are multiple effects provided by Flame, and you can also
 [create your own](#creating-new-effects). The following effects are included:
 - [`MoveEffect.by`](#moveeffectby)
 - [`MoveEffect.to`](#moveeffectto)
-- [`MoveEffect.along`](#moveeffectalong)
+- [`MoveAlongPathEffect`](#movealongpatheffect)
 - [`RotateEffect.by`](#rotateeffectby)
 - [`RotateEffect.to`](#rotateeffectto)
 - [`ScaleEffect.by`](#scaleeffectby)
@@ -109,7 +109,7 @@ final effect = MoveEffect.to(Vector2(100, 500), EffectController(duration: 3));
 It is possible, but not recommended to attach multiple such effects to the same component.
 
 
-### `MoveEffect.along`
+### `MoveAlongPathEffect`
 
 This effect moves a `PositionComponent` along the specified path relative to the component's
 current position. The path can have non-linear segments, but must be singly connected. It is
@@ -117,11 +117,19 @@ recommended to start a path at `Vector2.zero()` in order to avoid sudden jumps i
 position.
 
 ```dart
-final effect = MoveEffect.along(
+final effect = MoveAlongPathEffect(
   Path() ..quadraticBezierTo(100, 0, 50, -50),
-  EffectController(duration: 1.5)
+  EffectController(duration: 1.5),
 );
 ```
+
+An optional flag `absolute: true` will declare the path within the effect as absolute. That is, the
+target will "jump" to the beginning of the path at start, and then follow that path as if it was a
+curve drawn on the canvas.
+
+Another flag `oriented: true` instructs the target not only move along the curve, but also rotate
+itself in the direction the curve is facing at each point. With this flag the effect becomes both
+the move- and the rotate- effect at the same time.
 
 
 ### `RotateEffect.by`
