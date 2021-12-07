@@ -167,10 +167,10 @@ void main() {
           ),
         );
 
-        expect(child2.tapped, true);
-        expect(child2.tapTimes, 1);
-        expect(child1.tapped, false);
-        expect(child1.tapTimes, 0);
+        expect(child2.tapped, isTrue);
+        expect(child2.tapTimes, equals(1));
+        expect(child1.tapped, isFalse);
+        expect(child1.tapTimes, equals(0));
       },
     );
 
