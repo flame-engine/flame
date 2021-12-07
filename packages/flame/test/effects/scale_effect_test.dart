@@ -93,7 +93,7 @@ void main() {
     });
 
     flameGame.test('scale composition', (game) {
-      final component = PositionComponent() ..flipVertically();
+      final component = PositionComponent()..flipVertically();
       game.ensureAdd(component);
 
       component.add(
