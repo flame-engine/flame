@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 import '../../../components.dart';
 import '../../../extensions.dart';
 import '../../../game.dart';
-import '../coordinate_system.dart';
+import '../positioning_type.dart';
 
 /// The [HudMarginComponent] positions itself by a margin to the edge of the
 /// screen instead of by an absolute position on the screen or on the game, so

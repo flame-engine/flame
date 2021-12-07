@@ -9,7 +9,7 @@ import '../../input.dart';
 import '../extensions/vector2.dart';
 import '../game/mixins/loadable.dart';
 import 'cache/value_cache.dart';
-import 'coordinate_system.dart';
+import 'positioning_type.dart';
 
 /// This represents a Component for your game.
 ///

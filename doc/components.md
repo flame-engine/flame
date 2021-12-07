@@ -114,6 +114,26 @@ void update(double dt) {
 }
 ```
 
+### Positioning types
+If you want to create a HUD (Head-up display) or another component that isn't positioned in relation
+to the game coordinates, you can change the `PositioningType` of the component.
+The default `PositioningType` is `positioningType = PositioningType.game` and that can be changed to
+either `PositioningType.viewport` or `PositioningType.widget` depending on how you want to position
+the component.
+
+ - `PositioningType.game` (Default) - Respects camera and viewport.
+ - `PositioningType.viewport` - Respects viewport only (ignores camera).
+ - `PositioningType.widget` - Position in relation to the coordinate system of the Flutter game
+   widget (i.e. the raw canvas).
+
+Most of your components will probably be positioned according to `PositioningType.game`, since you
+want them to respect the `Camera` and the `Viewport`. But quite often you want for example buttons
+and text to always show on the screen, no matter if you move the camera, then you want to use
+`PositioningType.viewport`. In some rare cases you want to use `PositioningType.widget` to position
+your widgets, when you don't want the component to respect the camera nor the viewport, this could
+for example be for controls or joysticks that would be unergonomic to use if they had to stay within
+the viewport.
+
 ## PositionComponent
 
 This class represent a positioned object on the screen, being a floating rectangle or a rotating

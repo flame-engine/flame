@@ -3,13 +3,13 @@
 /// Normally components live in the "game" coordinate system, which just means
 /// they respect both the camera and viewport.
 enum PositioningType {
-  /// Default system. Respects camera and viewport (applied on top of widget).
+  /// Default type. Respects camera and viewport (applied on top of widget).
   game,
 
   /// Respects viewport only (ignores camera) (applied on top of widget).
   viewport,
 
-  /// The coordinate system of the Flutter game widget (i.e. the raw canvas
-  /// system).
+  /// Position in relation to the coordinate system of the Flutter game widget
+  /// (i.e. the raw canvas).
   widget,
 }
