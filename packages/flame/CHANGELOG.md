@@ -11,6 +11,7 @@
  - Fix render order of components and add tests
  - `isHud` renamed to `respectCamera`
  - Fix `HitboxCircle` when component is flipped
+ - `MoveAlongPathEffect` can now be absolute, and can auto-orient the object along the path
  - `ScaleEffect.by` now applies multiplicatively instead of additively
 
 ## [1.0.0-releasecandidate.18]
