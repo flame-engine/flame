@@ -16,12 +16,19 @@ import 'transform2d_effect.dart';
 /// If `absolute` flag is true, then the `path` will be assumed to be given in
 /// absolute coordinate space and the target will be placed at the beginning of
 /// the path when the effect starts.
+///
+/// The `oriented` flag controls the direction of the target as it follows the
+/// path. If this flag is false (default), the target keeps its original
+/// orientation. If the flag is true, the target is automatically rotated as it
+/// follows the path so that it is always oriented tangent to the path.
 class MoveAlongPathEffect extends Transform2DEffect {
   MoveAlongPathEffect(
     Path path,
     EffectController controller, {
     bool absolute = false,
+    bool oriented = false,
   })  : _isAbsolute = absolute,
+        _followDirection = oriented,
         super(controller) {
     final metrics = path.computeMetrics().toList();
     if (metrics.length != 1) {
@@ -40,6 +47,10 @@ class MoveAlongPathEffect extends Transform2DEffect {
   /// the current position of the target.
   final bool _isAbsolute;
 
+  /// If true, then not only the target's position will follow the path, but
+  /// also the target's angle of rotation.
+  final bool _followDirection;
+
   /// The path that the target will follow.
   late final PathMetric _pathMetric;
 
@@ -52,15 +63,20 @@ class MoveAlongPathEffect extends Transform2DEffect {
   /// to apply to the same target simultaneously).
   late Vector2 _lastOffset;
 
+  /// Target's angle of rotation on the previous iteration.
+  late double _lastAngle;
+
   @override
   void onStart() {
+    _lastOffset = Vector2.zero();
+    _lastAngle = 0;
     if (_isAbsolute) {
-      final pathStart = _pathMetric.getTangentForOffset(0)!.position;
-      target.position.x = pathStart.dx;
-      target.position.y = pathStart.dy;
-      _lastOffset = Vector2(pathStart.dx, pathStart.dy);
-    } else {
-      _lastOffset = Vector2.zero();
+      final start = _pathMetric.getTangentForOffset(0)!;
+      target.position.x = _lastOffset.x = start.position.dx;
+      target.position.y = _lastOffset.y = start.position.dy;
+      if (_followDirection) {
+        target.angle = _lastAngle = -start.angle;
+      }
     }
   }
 
@@ -73,6 +89,10 @@ class MoveAlongPathEffect extends Transform2DEffect {
     target.position.y += offset.dy - _lastOffset.y;
     _lastOffset.x = offset.dx;
     _lastOffset.y = offset.dy;
+    if (_followDirection) {
+      target.angle += -tangent.angle - _lastAngle;
+      _lastAngle = -tangent.angle;
+    }
     super.apply(progress);
   }
 }

@@ -117,6 +117,7 @@ class MoveEffectExample extends FlameGame {
                 startDelay: i * 0.3,
                 infinite: true,
               ),
+              oriented: true,
             ),
           ),
       );
