@@ -27,7 +27,7 @@ class _MyComponent extends Component {
 void main() {
   group('components are rendered according to their priorities', () {
     flameGame.test(
-      'only camera components',
+      'PositionType.game',
       (game) async {
         await game.ensureAddAll([
           _MyComponent(4),
@@ -52,7 +52,7 @@ void main() {
     );
 
     flameGame.test(
-      'only HUD components',
+      'PositionType.viewport',
       (game) async {
         await game.ensureAddAll([
           _MyComponent(4, positionType: PositionType.viewport),
@@ -74,15 +74,40 @@ void main() {
     );
 
     flameGame.test(
+      'PositionType.widget',
+      (game) async {
+        await game.ensureAddAll([
+          _MyComponent(5, positionType: PositionType.widget),
+          _MyComponent(1, positionType: PositionType.widget),
+          _MyComponent(2, positionType: PositionType.widget),
+        ]);
+
+        final canvas = MockCanvas();
+        game.camera.snapTo(Vector2(12.0, 18.0));
+        game.render(canvas);
+
+        expect(
+          canvas,
+          MockCanvas()
+            ..drawRect(const Rect.fromLTWH(1, 1, 1, 1))
+            ..drawRect(const Rect.fromLTWH(2, 2, 1, 1))
+            ..drawRect(const Rect.fromLTWH(5, 5, 1, 1)),
+        );
+      },
+    );
+
+    flameGame.test(
       'mixed',
       (game) async {
         await game.ensureAddAll([
           _MyComponent(4),
           _MyComponent(1),
-          _MyComponent(2, positionType: PositionType.viewport),
+          _MyComponent(7, positionType: PositionType.viewport),
           _MyComponent(5, positionType: PositionType.viewport),
           _MyComponent(3, positionType: PositionType.viewport),
           _MyComponent(0),
+          _MyComponent(6, positionType: PositionType.widget),
+          _MyComponent(2, positionType: PositionType.widget),
         ]);
 
         final canvas = MockCanvas();
@@ -101,7 +126,9 @@ void main() {
             ..translate(-12.0, -18.0)
             ..drawRect(const Rect.fromLTWH(4, 4, 1, 1))
             ..translate(0.0, 0.0)
-            ..drawRect(const Rect.fromLTWH(5, 5, 1, 1)),
+            ..drawRect(const Rect.fromLTWH(5, 5, 1, 1))
+            ..drawRect(const Rect.fromLTWH(6, 6, 1, 1))
+            ..drawRect(const Rect.fromLTWH(7, 7, 1, 1)),
         );
       },
     );
