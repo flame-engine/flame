@@ -12,7 +12,7 @@
  - `isHud` renamed to `respectCamera`
  - Fix `HitboxCircle` when component is flipped
  - `ScaleEffect.by` now applies multiplicatively instead of additively
- - Remove fallback to not use `drawAtlas` in SpriteBatch, but added flag `useAtlas` to activate it
+ - Remove web fallback for `drawAtlas` in SpriteBatch, but added flag `useAtlas` to activate it
 
 ## [1.0.0-releasecandidate.18]
  - Forcing portrait and landscape mode is now supported on web
