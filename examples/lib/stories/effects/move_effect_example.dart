@@ -89,6 +89,7 @@ class MoveEffectExample extends FlameGame {
     for (var i = 0; i < 40; i++) {
       add(
         CircleComponent(radius: 5)
+          ..position = Vector2(0, -1000)
           ..add(
             MoveAlongPathEffect(
               path1,
@@ -97,6 +98,7 @@ class MoveEffectExample extends FlameGame {
                 startDelay: i * 0.2,
                 infinite: true,
               ),
+              absolute: true,
             ),
           ),
       );

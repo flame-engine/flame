@@ -58,8 +58,10 @@ class MoveAlongPathEffect extends Transform2DEffect {
       final pathStart = _pathMetric.getTangentForOffset(0)!.position;
       target.position.x = pathStart.dx;
       target.position.y = pathStart.dy;
+      _lastOffset = Vector2(pathStart.dx, pathStart.dy);
+    } else {
+      _lastOffset = Vector2.zero();
     }
-    _lastOffset = Vector2.zero();
   }
 
   @override

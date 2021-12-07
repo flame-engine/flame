@@ -2,18 +2,19 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/effects/controllers/linear_effect_controller.dart';
-import 'package:flame/src/effects/move_along_path_effect.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('MoveAlongPathEffect', () {
-    test('normal', () {
+    test('relative path', () {
       const tau = Transform2D.tau;
+      const x0 = 32.5;
+      const y0 = 14.88;
       final game = FlameGame();
       game.onGameResize(Vector2(100, 100));
-      final object = PositionComponent()..position = Vector2(3, 4);
+      final object = PositionComponent()..position = Vector2(x0, y0);
       game.add(object);
       game.update(0);
 
@@ -30,9 +31,30 @@ void main() {
         // Apparently, in Flutter circle paths are not truly circles, but only
         // appear circle-ish to an unsuspecting observer. Which is why the
         // precision in `closeTo()` is so low: only 0.1 pixels.
-        expect(object.position.x, closeTo(3 + 6 + 50 * cos(a), 0.1));
-        expect(object.position.y, closeTo(4 + 10 + 50 * sin(a), 0.1));
+        expect(object.position.x, closeTo(x0 + 6 + 50 * cos(a), 0.1));
+        expect(object.position.y, closeTo(y0 + 10 + 50 * sin(a), 0.1));
         game.update(0.01);
+      }
+    });
+
+    test('absolute path', () {
+      final game = FlameGame() ..onGameResize(Vector2(100, 100));
+      final component = PositionComponent() ..position = Vector2(17, -5);
+      game.add(component);
+      game.update(0);
+
+      component.add(
+        MoveAlongPathEffect(
+          Path() ..moveTo(1000, 300) ..lineTo(1200, 500),
+          EffectController(duration: 1),
+          absolute: true,
+        ),
+      );
+      game.update(0);
+      for (var i = 0; i < 10; i++) {
+        expect(component.position.x, closeTo(1000 + 200*(i/10), 1e-10));
+        expect(component.position.y, closeTo(300 + 200*(i/10), 1e-10));
+        game.update(0.1);
       }
     });
 
