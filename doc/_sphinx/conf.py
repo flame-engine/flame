@@ -21,6 +21,7 @@ root_doc = "index"
 # ones.
 extensions = [
     'myst_parser',  # Markdown support
+    'sphinxcontrib.mermaid',
 ]
 
 # Configuration options for MyST:
