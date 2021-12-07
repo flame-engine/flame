@@ -284,7 +284,7 @@ class Component with Loadable {
     bool Function(T) handler,
   ) {
     var shouldContinue = true;
-    for (final child in children) {
+    for (final child in children.reversed()) {
       if (child is Component) {
         shouldContinue = child.propagateToChildren(handler);
       }
