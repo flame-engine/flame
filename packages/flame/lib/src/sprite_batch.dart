@@ -15,7 +15,7 @@ extension SpriteBatchExtension on Game {
     Color defaultColor = const Color(0x00000000),
     BlendMode defaultBlendMode = BlendMode.srcOver,
     RSTransform? defaultTransform,
-    bool drawAtlas = true,
+    bool useAtlas = true,
   }) {
     return SpriteBatch.load(
       path,
@@ -23,7 +23,7 @@ extension SpriteBatchExtension on Game {
       defaultBlendMode: defaultBlendMode,
       defaultTransform: defaultTransform,
       images: images,
-      drawAtlas: drawAtlas,
+      useAtlas: useAtlas,
     );
   }
 }
@@ -87,7 +87,7 @@ class BatchItem {
 ///
 /// **Note**: If you are experiencing problems with ghost lines, the less
 /// performant [Canvas.drawImageRect] can be used instead of [Canvas.drawAtlas].
-/// To activate this mode, pass in `drawAtlas = false` to the constructor or
+/// To activate this mode, pass in `useAtlas = false` to the constructor or
 /// load method that you are using and each [BatchItem] will be rendered using
 /// the [Canvas.drawImageRect] method instead.
 class SpriteBatch {
@@ -147,14 +147,14 @@ class SpriteBatch {
   Vector2 get size => atlas.size;
 
   /// Whether to use [Canvas.drawAtlas] or not.
-  final bool drawAtlas;
+  final bool useAtlas;
 
   SpriteBatch(
     this.atlas, {
     this.defaultColor = const Color(0x00000000),
     this.defaultBlendMode = BlendMode.srcOver,
     this.defaultTransform,
-    this.drawAtlas = true,
+    this.useAtlas = true,
   });
 
   /// Takes a path of an image, and optional arguments for the SpriteBatch.
@@ -166,7 +166,7 @@ class SpriteBatch {
     BlendMode defaultBlendMode = BlendMode.srcOver,
     RSTransform? defaultTransform,
     Images? images,
-    bool drawAtlas = true,
+    bool useAtlas = true,
   }) async {
     final _images = images ?? Flame.images;
     return SpriteBatch(
@@ -174,7 +174,7 @@ class SpriteBatch {
       defaultColor: defaultColor,
       defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
       defaultBlendMode: defaultBlendMode,
-      drawAtlas: drawAtlas,
+      useAtlas: useAtlas,
     );
   }
 
@@ -280,7 +280,7 @@ class SpriteBatch {
   }) {
     paint ??= _emptyPaint;
 
-    if (!drawAtlas) {
+    if (!useAtlas) {
       for (final batchItem in _batchItems) {
         paint.blendMode = blendMode ?? paint.blendMode;
 
