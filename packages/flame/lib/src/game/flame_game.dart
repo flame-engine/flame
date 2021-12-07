@@ -74,16 +74,9 @@ class FlameGame extends Component with Game {
     _cameraWrapper.render(canvas);
   }
 
-  /// This updates every component in the tree.
-  ///
-  /// It also adds the components added via [add] since the previous tick, and
-  /// removes those that are marked for removal via the [remove] and
-  /// [Component.removeFromParent] methods.
-  /// You can override it to add more custom behavior.
   @override
   @mustCallSuper
   void update(double dt) {
-    super.update(dt);
     _cameraWrapper.update(dt);
     if (parent == null) {
       super.updateTree(dt, callOwnUpdate: false);
