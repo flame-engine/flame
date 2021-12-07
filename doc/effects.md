@@ -242,8 +242,8 @@ myComponent.add(
 );
 ```
 
-The informed `Offset` will determine "how much" of the color will be applied to the base component,
-on this example the effect will start with 0% and will go up to 80%.
+The `Offset` argument will determine "how much" of the color that will be applied to the component,
+in this example the effect will start with 0% and will go up to 80%.
 
 
 ## Creating new effects

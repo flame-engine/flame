@@ -8,7 +8,7 @@ import '../../commons/ember.dart';
 class ColorEffectExample extends FlameGame with TapDetector {
   static const String description = '''
     In this example we show how the `ColorEffect` can be used.
-    Ember will constantly pulse in and out a blue color.
+    Ember will constantly pulse in and out of a blue color.
   ''';
 
   late final SpriteComponent sprite;
