@@ -6,9 +6,9 @@ import 'controllers/effect_controller.dart';
 
 /// Change the color of a component over time.
 ///
-/// This effect applies incremental changes to the component's color, and
-/// requires that any other effect or update logic applied to the same component
-/// also used incremental updates.
+/// Due to how this effect is implemented, and how Flutter's [ColorFilter]
+/// class works, this effect can't be mixed with other [ColorEffect]s, when more
+/// than one is added to the component, only the last one will have effect.
 class ColorEffect extends ComponentEffect<HasPaint> {
   final String? paintId;
   final Color color;
