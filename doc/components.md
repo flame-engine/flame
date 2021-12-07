@@ -130,7 +130,7 @@ Most of your components will probably be positioned according to `PositionType.g
 want them to respect the `Camera` and the `Viewport`. But quite often you want for example buttons
 and text to always show on the screen, no matter if you move the camera, then you want to use
 `PositionType.viewport`. In some rare cases you want to use `PositionType.widget` to position
-your widgets, when you don't want the component to respect the camera nor the viewport, this could
+your widgets, when you don't want the component to respect the camera nor the viewport; this could
 for example be for controls or joysticks that would be unergonomic to use if they had to stay within
 the viewport.
 
