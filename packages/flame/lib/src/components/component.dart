@@ -18,11 +18,15 @@ import 'cache/value_cache.dart';
 /// called automatically once the component is added to the component tree in
 /// your game (with `game.add`).
 class Component with Loadable {
-  /// Whether this component is a HUD (Heads-up display) object or not.
+  /// Whether this component should respect the camera or not.
   ///
-  /// HUD objects ignore the FlameGame.camera when rendered (so their position
-  /// coordinates are considered relative to the device screen).
-  bool isHud = false;
+  /// Components that have this property set to false will ignore the
+  /// `FlameGame.camera` when rendered (so their position coordinates are
+  /// considered relative only to the viewport instead).
+  ///
+  /// Do note that this currently only works if the component is added directly
+  /// to the root `FlameGame`.
+  bool respectCamera = true;
 
   /// Whether this component has been prepared and is ready to be added to the
   /// game loop.
@@ -122,10 +126,19 @@ class Component with Loadable {
   /// your state considering this.
   /// All components in the tree are always updated by the same amount. The time
   /// each one takes to update adds up to the next update cycle.
-  @mustCallSuper
-  void update(double dt) {
+  void update(double dt) {}
+
+  /// This method traverses the component tree and calls [update] on all its
+  /// children according to their [priority] order, relative to the
+  /// priority of the direct siblings, not the children or the ancestors.
+  /// If you call this method from [update] you need to set [callOwnUpdate] to
+  /// false so that you don't get stuck in an infinite loop.
+  void updateTree(double dt, {bool callOwnUpdate = true}) {
     children.updateComponentList();
-    children.forEach((c) => c.update(dt));
+    if (callOwnUpdate) {
+      update(dt);
+    }
+    children.forEach((c) => c.updateTree(dt));
   }
 
   void render(Canvas canvas) {}
@@ -144,7 +157,9 @@ class Component with Loadable {
 
   @protected
   Vector2 eventPosition(PositionInfo info) {
-    return isHud ? info.eventPosition.viewportOnly : info.eventPosition.game;
+    return respectCamera
+        ? info.eventPosition.game
+        : info.eventPosition.viewportOnly;
   }
 
   /// Remove the component from its parent in the next tick.

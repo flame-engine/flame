@@ -11,9 +11,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 class _MyComponent extends Component {
   @override
-  bool isHud;
+  bool respectCamera;
 
-  _MyComponent(int priority, {this.isHud = false}) : super(priority: priority);
+  _MyComponent(int priority, {this.respectCamera = true})
+      : super(priority: priority);
 
   @override
   void render(Canvas canvas) {
@@ -54,9 +55,9 @@ void main() {
       'only HUD components',
       (game) async {
         await game.ensureAddAll([
-          _MyComponent(4, isHud: true),
-          _MyComponent(1, isHud: true),
-          _MyComponent(2, isHud: true),
+          _MyComponent(4, respectCamera: false),
+          _MyComponent(1, respectCamera: false),
+          _MyComponent(2, respectCamera: false),
         ]);
         final canvas = MockCanvas();
         game.camera.snapTo(Vector2(12.0, 18.0));
@@ -78,9 +79,9 @@ void main() {
         await game.ensureAddAll([
           _MyComponent(4),
           _MyComponent(1),
-          _MyComponent(2, isHud: true),
-          _MyComponent(5, isHud: true),
-          _MyComponent(3, isHud: true),
+          _MyComponent(2, respectCamera: false),
+          _MyComponent(5, respectCamera: false),
+          _MyComponent(3, respectCamera: false),
           _MyComponent(0),
         ]);
 

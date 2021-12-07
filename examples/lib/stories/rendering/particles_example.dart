@@ -570,7 +570,6 @@ class TrafficLightComponent extends Component {
 
   @override
   void update(double dt) {
-    super.update(dt);
     colorChangeTimer.update(dt);
   }
 

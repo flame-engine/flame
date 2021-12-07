@@ -63,19 +63,23 @@ class SimpleShapesExample extends FlameGame with HasTappables {
     final component = randomShape(tapPosition);
     add(component);
     component.add(
-      MoveEffect(
-        path: [size / 2],
-        speed: 30,
-        isAlternating: true,
-        isInfinite: true,
+      MoveEffect.to(
+        size / 2,
+        EffectController(
+          duration: 5,
+          reverseDuration: 5,
+          infinite: true,
+        ),
       ),
     );
     component.add(
-      RotateEffect(
-        angle: 3,
-        speed: 0.4,
-        isAlternating: true,
-        isInfinite: true,
+      RotateEffect.to(
+        3,
+        EffectController(
+          duration: 1,
+          reverseDuration: 1,
+          infinite: true,
+        ),
       ),
     );
   }

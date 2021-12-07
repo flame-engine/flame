@@ -61,8 +61,6 @@ class LogoComponent extends SpriteComponent with HasGameRef<DebugExample> {
 
   @override
   void update(double dt) {
-    super.update(dt);
-
     x += xDirection * speed * dt;
 
     final rect = toRect();

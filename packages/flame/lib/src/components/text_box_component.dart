@@ -232,7 +232,6 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   @override
   void update(double dt) {
-    super.update(dt);
     _lifeTime += dt;
     if (_previousChar != currentChar) {
       redraw();

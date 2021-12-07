@@ -27,7 +27,6 @@ class FlareParticle extends Particle {
 
   @override
   void update(double dt) {
-    super.update(dt);
     flareAnimation.advance(dt);
   }
 }

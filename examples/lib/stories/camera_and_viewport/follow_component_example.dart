@@ -72,7 +72,6 @@ class MovableEmber extends Ember<FollowComponentExample>
 
   @override
   void update(double dt) {
-    super.update(dt);
     final deltaPosition = velocity * (speed * dt);
     position.add(deltaPosition);
     positionText.text = '(${x.toInt()}, ${y.toInt()})';
@@ -186,7 +185,12 @@ class Rock extends SpriteComponent
 
   @override
   bool onTapDown(_) {
-    add(ColorEffect(color: Colors.green, duration: 0.5, isAlternating: true));
+    add(
+      ScaleEffect.by(
+        Vector2.all(10),
+        EffectController(duration: 0.3),
+      ),
+    );
     return true;
   }
 }

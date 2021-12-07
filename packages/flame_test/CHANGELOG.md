@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [Next]
+ - Fix tests with multiples futures finishing abruptly
+
 ## [1.0.0-releasecandidate.15]
  - Add `pumpWidget` to flame widget test
 

@@ -1,62 +1,56 @@
-import 'dart:ui';
+import 'package:vector_math/vector_math_64.dart';
 
-import 'package:flutter/animation.dart';
+import 'controllers/effect_controller.dart';
+import 'transform2d_effect.dart';
 
-import '../../components.dart';
-import '../extensions/vector2.dart';
-import 'effects.dart';
+/// Scale a component.
+///
+/// The following constructors are provided:
+///
+///   - [ScaleEffect.by] will scale the target by the given factor, relative to
+///     its current scale;
+///   - [ScaleEffect.to] will scale the target to the specified scale.
+///
+/// This effect applies incremental changes to the component's scale, and
+/// requires that any other effect or update logic applied to the same component
+/// also used incremental updates.
+class ScaleEffect extends Transform2DEffect {
+  ScaleEffect.by(Vector2 scaleFactor, EffectController controller)
+      : _scaleFactor = scaleFactor.clone(),
+        super(controller);
 
-class ScaleEffect extends PositionComponentEffect {
-  Vector2 scale;
-  late Vector2 _delta;
+  factory ScaleEffect.to(Vector2 targetScale, EffectController controller) =>
+      _ScaleToEffect(targetScale, controller);
 
-  /// Duration or speed needs to be defined
-  ScaleEffect({
-    required this.scale,
-    double? duration, // How long it should take for completion
-    double? speed, // The speed of the scaling in pixels per second
-    Curve? curve,
-    bool isInfinite = false,
-    bool isAlternating = false,
-    bool isRelative = false,
-    double? initialDelay,
-    double? peakDelay,
-    bool? removeOnFinish,
-    VoidCallback? onComplete,
-  }) : super(
-          isInfinite,
-          isAlternating,
-          duration: duration,
-          speed: speed,
-          curve: curve,
-          isRelative: isRelative,
-          modifiesScale: true,
-          initialDelay: initialDelay,
-          peakDelay: peakDelay,
-          removeOnFinish: removeOnFinish,
-          onComplete: onComplete,
-        );
+  final Vector2 _scaleFactor;
+  late Vector2 _scaleDelta;
 
   @override
-  Future<void> onLoad() async {
-    super.onLoad();
-    final startScale = originalScale!;
-    _delta = isRelative ? scale : scale - startScale;
-    peakScale = startScale + _delta;
-    speed ??= _delta.length / duration!;
-    duration ??= _delta.length / speed!;
-    setPeakTimeFromDuration(duration!);
+  void onStart() {
+    _scaleDelta = Vector2(
+      target.scale.x * (_scaleFactor.x - 1),
+      target.scale.y * (_scaleFactor.y - 1),
+    );
   }
 
   @override
-  void update(double dt) {
-    if (isPaused) {
-      return;
-    }
-    super.update(dt);
-    if (hasCompleted()) {
-      return;
-    }
-    affectedParent.scale.setFrom(originalScale! + _delta * curveProgress);
+  void apply(double progress) {
+    final dProgress = progress - previousProgress;
+    target.scale += _scaleDelta * dProgress;
+    super.apply(progress);
+  }
+}
+
+/// Implementation class for [ScaleEffect.to]
+class _ScaleToEffect extends ScaleEffect {
+  final Vector2 _targetScale;
+
+  _ScaleToEffect(Vector2 targetScale, EffectController controller)
+      : _targetScale = targetScale.clone(),
+        super.by(Vector2.zero(), controller);
+
+  @override
+  void onStart() {
+    _scaleDelta = _targetScale - target.scale;
   }
 }

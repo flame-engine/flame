@@ -3,6 +3,15 @@
 ## [Next]
  - Add `ButtonComponent` backed by two `PositionComponent`s
  - Add `SpriteButtonComponent` backed by two `Sprite`s
+ - Allow more flexible construction of `EffectController`s and make them able to run back in time
+ - Remove old effects system
+ - Export new effects system
+ - Introduce `updateTree` to follow the `renderTree` convention
+ - Fix `Parallax.load` with different loading times
+ - Fix render order of components and add tests
+ - `isHud` renamed to `respectCamera`
+ - Fix `HitboxCircle` when component is flipped
+ - `ScaleEffect.by` now applies multiplicatively instead of additively
 
 ## [1.0.0-releasecandidate.18]
  - Forcing portrait and landscape mode is now supported on web
@@ -10,7 +19,6 @@
  - Fixed position calculation in `HudMarginComponent` when using a viewport
  - Add noClip option to `FixedResolutionViewport`
  - Add a few missing helpers to SpriteAnimation
- - Fix render order of components and add tests
 
 ## [1.0.0-releasecandidate.17]
  - Added `StandardEffectController` class

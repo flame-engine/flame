@@ -1,12 +1,9 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/effects2/move_effect.dart'; // ignore: implementation_imports
-import 'package:flame/src/effects2/standard_effect_controller.dart'; // ignore: implementation_imports
 import 'package:flutter/material.dart';
-
-import '../../commons/square_component.dart';
 
 class MoveEffectExample extends FlameGame {
   static const description = '''
@@ -36,11 +33,14 @@ class MoveEffectExample extends FlameGame {
       ..color = Colors.greenAccent;
 
     add(
-      SquareComponent(position: Vector2(20, 50), size: 20, paint: paint1)
-        ..add(
+      RectangleComponent.square(
+        position: Vector2(20, 50),
+        size: 20,
+        paint: paint1,
+      )..add(
           MoveEffect.to(
             Vector2(380, 50),
-            StandardEffectController(
+            EffectController(
               duration: 3,
               reverseDuration: 3,
               infinite: true,
@@ -50,11 +50,15 @@ class MoveEffectExample extends FlameGame {
         ),
     );
     add(
-      SquareComponent(position: Vector2(20, 150), size: 20, paint: paint2)
+      RectangleComponent.square(
+        position: Vector2(20, 150),
+        size: 20,
+        paint: paint2,
+      )
         ..add(
           MoveEffect.to(
             Vector2(380, 150),
-            StandardEffectController(
+            EffectController(
               duration: 3,
               reverseDuration: 3,
               infinite: true,
@@ -64,7 +68,7 @@ class MoveEffectExample extends FlameGame {
         ..add(
           MoveEffect.by(
             Vector2(0, -50),
-            StandardEffectController(
+            EffectController(
               duration: 0.25,
               reverseDuration: 0.25,
               startDelay: 1,
@@ -88,7 +92,7 @@ class MoveEffectExample extends FlameGame {
           ..add(
             MoveEffect.along(
               path1,
-              StandardEffectController(
+              EffectController(
                 duration: 10,
                 startDelay: i * 0.2,
                 infinite: true,
@@ -101,12 +105,12 @@ class MoveEffectExample extends FlameGame {
     final path2 = Path()..addOval(const Rect.fromLTRB(80, 230, 320, 470));
     for (var i = 0; i < 20; i++) {
       add(
-        SquareComponent(size: 10)
+        RectangleComponent.square(size: 10)
           ..paint = (Paint()..color = Colors.tealAccent)
           ..add(
             MoveEffect.along(
               path2,
-              StandardEffectController(
+              EffectController(
                 duration: 6,
                 startDelay: i * 0.3,
                 infinite: true,

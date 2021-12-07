@@ -1,160 +1,157 @@
 import 'dart:math';
 
-import 'package:flame/effects.dart';
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/src/effects/rotate_effect.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'effect_test_utils.dart';
-
-const _defaultAngle = 6.0;
-
-class _Elements extends BaseElements {
-  _Elements(Random random) : super(random);
-
-  @override
-  TestComponent component() => TestComponent(angle: 0.5);
-
-  RotateEffect effect({
-    bool isInfinite = false,
-    bool isAlternating = false,
-    bool isRelative = false,
-    double angle = _defaultAngle,
-  }) {
-    return RotateEffect(
-      angle: angle,
-      duration: 1 + random.nextInt(5).toDouble(),
-      isInfinite: isInfinite,
-      isAlternating: isAlternating,
-      isRelative: isRelative,
-    )..skipEffectReset = true;
-  }
-}
-
 void main() {
   group('RotateEffect', () {
-    testWidgetsRandom(
-      'can rotate',
-      (Random random, WidgetTester tester) async {
-        final e = _Elements(random);
-        effectTest(
-          tester,
-          e.component(),
-          e.effect(),
-          expectedAngle: _defaultAngle,
-          random: random,
-        );
-      },
-    );
+    test('relative', () {
+      final game = FlameGame();
+      game.onGameResize(Vector2(1, 1));
+      final object = PositionComponent();
+      game.add(object);
+      game.update(0);
 
-    testWidgetsRandom(
-      'will stop rotating after it is done',
-      (Random random, WidgetTester tester) async {
-        final e = _Elements(random);
-        effectTest(
-          tester,
-          e.component(),
-          e.effect(),
-          expectedAngle: _defaultAngle,
-          iterations: 1.5,
-          random: random,
-        );
-      },
-    );
+      object.angle = 1;
+      object.add(
+        RotateEffect.by(1, EffectController(duration: 1)),
+      );
+      game.update(0);
+      expect(object.angle, 1);
+      expect(object.children.length, 1);
 
-    testWidgetsRandom(
-      'can alternate',
-      (Random random, WidgetTester tester) async {
-        final e = _Elements(random);
-        final positionComponent = e.component();
-        effectTest(
-          tester,
-          positionComponent,
-          e.effect(isAlternating: true),
-          expectedAngle: positionComponent.angle,
-          iterations: 2.0,
-          random: random,
-        );
-      },
-    );
+      game.update(0.5);
+      expect(object.angle, 1.5);
 
-    testWidgetsRandom(
-      'can alternate and be infinite',
-      (Random random, WidgetTester tester) async {
-        final e = _Elements(random);
-        final positionComponent = e.component();
-        effectTest(
-          tester,
-          positionComponent,
-          e.effect(isInfinite: true, isAlternating: true),
-          expectedAngle: positionComponent.angle,
-          shouldComplete: false,
-          random: random,
-        );
-      },
-    );
+      game.update(0.5);
+      expect(object.angle, 2);
+      game.update(0);
+      expect(object.children.length, 0);
+      expect(object.angle, 2);
+    });
 
-    testWidgetsRandom(
-      'alternation can peak',
-      (Random random, WidgetTester tester) async {
-        final e = _Elements(random);
-        final positionComponent = e.component();
-        effectTest(
-          tester,
-          positionComponent,
-          e.effect(isAlternating: true),
-          expectedAngle: _defaultAngle,
-          shouldComplete: false,
-          iterations: 0.5,
-          random: random,
-        );
-      },
-    );
+    test('absolute', () {
+      final game = FlameGame();
+      game.onGameResize(Vector2(1, 1));
+      final object = PositionComponent();
+      game.add(object);
+      game.update(0);
 
-    testWidgetsRandom(
-      'can be infinite',
-      (Random random, WidgetTester tester) async {
-        final e = _Elements(random);
-        final positionComponent = e.component();
-        effectTest(
-          tester,
-          positionComponent,
-          e.effect(isInfinite: true),
-          expectedAngle: _defaultAngle,
-          iterations: 3.0,
-          shouldComplete: false,
-          random: random,
-        );
-      },
-    );
+      object.angle = 1;
+      object.add(
+        RotateEffect.to(3, EffectController(duration: 1)),
+      );
+      game.update(0);
+      expect(object.angle, 1);
+      expect(object.children.length, 1);
 
-    testWidgetsRandom(
-      'can handle negative relative angles',
-      (Random random, WidgetTester tester) async {
-        final e = _Elements(random);
-        final positionComponent = e.component();
-        effectTest(
-          tester,
-          positionComponent,
-          e.effect(angle: -1, isRelative: true),
-          expectedAngle: e.component().angle - 1,
-          random: random,
-        );
-      },
-    );
+      game.update(0.5);
+      expect(object.angle, 2);
 
-    testWidgetsRandom(
-      'can handle absolute relative angles',
-      (Random random, WidgetTester tester) async {
-        final e = _Elements(random);
-        final positionComponent = e.component();
-        effectTest(
-          tester,
-          positionComponent,
-          e.effect(angle: -1),
-          expectedAngle: -1,
-          random: random,
-        );
-      },
-    );
+      game.update(0.5);
+      expect(object.angle, 3);
+      game.update(0);
+      expect(object.children.length, 0);
+      expect(object.angle, 3);
+    });
+
+    test('reset relative', () {
+      final game = FlameGame()..onGameResize(Vector2(1, 1));
+      final object = PositionComponent();
+      game.add(object);
+      game.update(0);
+
+      final effect = RotateEffect.by(1, EffectController(duration: 1));
+      object.add(effect..removeOnFinish = false);
+      for (var i = 0; i < 5; i++) {
+        expect(object.angle, i);
+        // After each reset the object will be rotated by 1 radian relative to
+        // its orientation at the start of the effect
+        effect.reset();
+        game.update(1);
+        expect(object.angle, i + 1);
+      }
+    });
+
+    test('reset absolute', () {
+      final game = FlameGame()..onGameResize(Vector2(1, 1));
+      final object = PositionComponent();
+      game.add(object);
+      game.update(0);
+
+      final effect = RotateEffect.to(1, EffectController(duration: 1));
+      object.add(effect..removeOnFinish = false);
+      for (var i = 0; i < 5; i++) {
+        object.angle = 1 + 4.0 * i;
+        // After each reset the object will be rotated to the value of
+        // `angle == 1`, regardless of its initial orientation.
+        effect.reset();
+        game.update(1);
+        expect(object.angle, 1);
+      }
+    });
+
+    test('rotation composition', () {
+      final game = FlameGame()..onGameResize(Vector2(1, 1));
+      final object = PositionComponent();
+      game.add(object);
+      game.update(0);
+
+      object.add(
+        RotateEffect.by(5, EffectController(duration: 10)),
+      );
+      object.add(
+        RotateEffect.by(
+          0.5,
+          EffectController(
+            duration: 1,
+            reverseDuration: 1,
+            repeatCount: 5,
+          ),
+        ),
+      );
+
+      game.update(1);
+      expect(object.angle, closeTo(1, 1e-15)); // 5*1/10 + 0.5*1
+      game.update(1);
+      expect(object.angle, closeTo(1, 1e-15)); // 5*2/10 + 0.5*1 - 0.5*1
+      for (var i = 0; i < 10; i++) {
+        game.update(1);
+      }
+      expect(object.angle, closeTo(5, 1e-15));
+      expect(object.children.length, 0);
+    });
+
+    testRandom('a very long rotation', (Random rng) {
+      final game = FlameGame()..onGameResize(Vector2(1, 1));
+      final object = PositionComponent();
+      game.add(object);
+      game.update(0);
+
+      final effect = RotateEffect.by(
+        1.0,
+        EffectController(
+          duration: 1,
+          reverseDuration: 1,
+          infinite: true,
+        ),
+      );
+      object.add(effect);
+
+      var totalTime = 0.0;
+      while (totalTime < 999.9) {
+        final dt = rng.nextDouble() * 0.02;
+        totalTime += dt;
+        game.update(dt);
+      }
+      game.update(1000 - totalTime);
+      // Typically, `object.angle` could accumulate numeric discrepancy on the
+      // order of 1e-11 .. 1e-12 by now.
+      expect(object.angle, closeTo(0, 1e-10));
+    });
   });
 }

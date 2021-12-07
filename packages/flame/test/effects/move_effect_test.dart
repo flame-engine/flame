@@ -1,121 +1,99 @@
 import 'dart:math';
+import 'dart:ui';
 
-import 'package:flame/effects.dart';
-import 'package:flame_test/flame_test.dart';
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flame/src/effects/controllers/linear_effect_controller.dart';
+import 'package:flame/src/effects/move_effect.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'effect_test_utils.dart';
-
-class _Elements extends BaseElements {
-  _Elements(Random random) : super(random);
-
-  @override
-  TestComponent component() => TestComponent(position: randomVector2());
-
-  MoveEffect effect({bool isInfinite = false, bool isAlternating = false}) {
-    return MoveEffect(
-      path: path,
-      duration: 1 + random.nextInt(100).toDouble(),
-      isInfinite: isInfinite,
-      isAlternating: isAlternating,
-    )..skipEffectReset = true;
-  }
-}
 
 void main() {
   group('MoveEffect', () {
-    testWidgetsRandom(
-      'can move',
-      (Random random, WidgetTester tester) async {
-        final e = _Elements(random);
-        effectTest(
-          tester,
-          e.component(),
-          e.effect(),
-          expectedPosition: e.path.last,
-          random: random,
-        );
-      },
-    );
+    test('#by', () {
+      final game = FlameGame();
+      game.onGameResize(Vector2(100, 100));
+      final object = PositionComponent()..position = Vector2(3, 4);
+      game.add(object);
+      game.update(0);
 
-    testWidgetsRandom(
-      'will stop moving after it is done',
-      (Random random, WidgetTester tester) async {
-        final e = _Elements(random);
-        effectTest(
-          tester,
-          e.component(),
-          e.effect(),
-          expectedPosition: e.path.last,
-          iterations: 1.5,
-          random: random,
-        );
-      },
-    );
+      object.add(
+        MoveEffect.by(Vector2(5, -1), LinearEffectController(1)),
+      );
+      game.update(0.5);
+      expect(object.position.x, closeTo(3 + 2.5, 1e-15));
+      expect(object.position.y, closeTo(4 + -0.5, 1e-15));
+      game.update(0.5);
+      expect(object.position.x, closeTo(3 + 5, 1e-15));
+      expect(object.position.y, closeTo(4 + -1, 1e-15));
+    });
 
-    testWidgetsRandom(
-      'can alternate',
-      (Random random, WidgetTester tester) async {
-        final e = _Elements(random);
-        final positionComponent = e.component();
-        effectTest(
-          tester,
-          positionComponent,
-          e.effect(isAlternating: true),
-          expectedPosition: positionComponent.position.clone(),
-          random: random,
-        );
-      },
-    );
+    test('#to', () {
+      final game = FlameGame();
+      game.onGameResize(Vector2(100, 100));
+      final object = PositionComponent()..position = Vector2(3, 4);
+      game.add(object);
+      game.update(0);
 
-    testWidgetsRandom(
-      'can alternate and be infinite',
-      (Random random, WidgetTester tester) async {
-        final e = _Elements(random);
-        final positionComponent = e.component();
-        effectTest(
-          tester,
-          positionComponent,
-          e.effect(isInfinite: true, isAlternating: true),
-          expectedPosition: positionComponent.position.clone(),
-          shouldComplete: false,
-          random: random,
-        );
-      },
-    );
+      object.add(
+        MoveEffect.to(Vector2(5, -1), LinearEffectController(1)),
+      );
+      game.update(0.5);
+      expect(object.position.x, closeTo(3 * 0.5 + 5 * 0.5, 1e-15));
+      expect(object.position.y, closeTo(4 * 0.5 + -1 * 0.5, 1e-15));
+      game.update(0.5);
+      expect(object.position.x, closeTo(5, 1e-15));
+      expect(object.position.y, closeTo(-1, 1e-15));
+    });
 
-    testWidgetsRandom(
-      'alternation can peak',
-      (Random random, WidgetTester tester) async {
-        final e = _Elements(random);
-        final positionComponent = e.component();
-        effectTest(
-          tester,
-          positionComponent,
-          e.effect(isAlternating: true),
-          expectedPosition: e.path.last,
-          shouldComplete: false,
-          iterations: 0.5,
-          random: random,
-        );
-      },
-    );
+    test('#along', () {
+      const tau = Transform2D.tau;
+      final game = FlameGame();
+      game.onGameResize(Vector2(100, 100));
+      final object = PositionComponent()..position = Vector2(3, 4);
+      game.add(object);
+      game.update(0);
 
-    testWidgetsRandom(
-      'can be infinite',
-      (Random random, WidgetTester tester) async {
-        final e = _Elements(random);
-        final positionComponent = e.component();
-        effectTest(
-          tester,
-          positionComponent,
-          e.effect(isInfinite: true),
-          expectedPosition: e.path.last,
-          iterations: 3.0,
-          shouldComplete: false,
-          random: random,
-        );
-      },
-    );
+      object.add(
+        MoveEffect.along(
+          Path()
+            ..addOval(Rect.fromCircle(center: const Offset(6, 10), radius: 50)),
+          LinearEffectController(1),
+        ),
+      );
+      game.update(0);
+      for (var i = 0; i < 100; i++) {
+        final a = tau * i / 100;
+        // Apparently, in Flutter circle paths are not truly circles, but only
+        // appear circle-ish to an unsuspecting observer. Which is why the
+        // precision in `closeTo()` is so low: only 0.1 pixels.
+        expect(object.position.x, closeTo(3 + 6 + 50 * cos(a), 0.1));
+        expect(object.position.y, closeTo(4 + 10 + 50 * sin(a), 0.1));
+        game.update(0.01);
+      }
+    });
+
+    test('#along wrong arguments', () {
+      final controller = LinearEffectController(0);
+      expect(
+        () => MoveEffect.along(Path(), controller),
+        throwsArgumentError,
+      );
+
+      final path2 = Path()
+        ..moveTo(10, 10)
+        ..lineTo(10, 10);
+      expect(
+        () => MoveEffect.along(path2, controller),
+        throwsArgumentError,
+      );
+
+      final path3 = Path()
+        ..addOval(const Rect.fromLTWH(0, 0, 1, 1))
+        ..addOval(const Rect.fromLTWH(2, 2, 1, 1));
+      expect(
+        () => MoveEffect.along(path3, controller),
+        throwsArgumentError,
+      );
+    });
   });
 }

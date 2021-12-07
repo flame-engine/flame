@@ -1,6 +1,6 @@
 # Components
 
-![Components Diagram](images/diagram.png)
+![Component tree](images/component_tree.png)
 
 This diagram might look intimidating, but don't worry, it is not as complex as it looks.
 
@@ -24,8 +24,9 @@ component before the next update loop. It will then no longer be rendered or upd
 `game.remove(Component c)` and `component.removeFromParent()` also can be used to remove components
 from its parent.
 
-The `isHUD` variable can be overridden or set to true (defaults to `false`) to make the `FlameGame`
-ignore the `camera` for this element, making it static in relation to the screen that is.
+The `respectCamera` variable can be overridden or set to `false` (defaults to `true`) to make the
+`FlameGame` ignore the `camera` for this component, making it static in relation to the viewport
+that is.
 Do note that this currently only works if the component is added directly to the root `FlameGame`.
 
 The `onRemove` method can be overridden to run code before the component is removed from the game,
@@ -85,6 +86,31 @@ class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
     if (visible) {
     } // If not visible none of the children will be rendered
   }
+}
+```
+
+### Querying child components
+
+The children that have been added to a component live in the `QueryableOrderedSet` called
+`components`. To query for a specific type of components in the set, a query first has to be
+registered on the set, and then the `query` function can be run efficiently at any later point. The
+register call is usually done in `onLoad`.
+
+Example:
+
+```dart
+Future<void> onLoad async {
+  await super.onLoad();
+  components.register<PositionComponent>();
+}
+```
+
+In the example above a query is registered for `PositionComponent`s, and an example of how to query
+the registered component type can be seen below.
+
+```dart
+void update(double dt) {
+  final allPositionComponents = components.query<PositionComponent>();
 }
 ```
 

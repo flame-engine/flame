@@ -52,9 +52,14 @@ main.bd-content > #main-content > div {
 #site-navigation {
     background-color: #202225;
     border: none;
+	overflow: hidden;
+}
+#site-navigation:hover {
+	overflow-y: auto;
+	padding-right: 7px;
 }
 #site-navigation::-webkit-scrollbar {
-    width: 4px;
+    width: 8px;
 }
 #site-navigation::-webkit-scrollbar-track {
     background: #202225;
@@ -311,47 +316,52 @@ div#search-results > h2 {
 
 /* Previous/next buttons */
 
-main.bd-content #main-content .prev-next-bottom {
+main.bd-content #main-content .prev-next-area {
     background: #202225;
+    height: 105px;
     margin: 0 -25px -20px -25px;
     padding: 20px 0;
 }
 
-main.bd-content #main-content .prev-next-bottom a.left-prev {
+main.bd-content #main-content .prev-next-area a.left-prev {
     border-radius: 100px 0 0 100px;
     padding-left: 15px;
     padding-right: 20px;
 }
 
-main.bd-content #main-content .prev-next-bottom a.right-next {
+main.bd-content #main-content .prev-next-area a.right-next {
     border-radius: 0 100px 100px 0;
     padding-left: 20px;
     padding-right: 15px;
 }
 
-main.bd-content #main-content .prev-next-bottom a.left-prev > i,
-main.bd-content #main-content .prev-next-bottom a.right-next > i {
+main.bd-content #main-content .prev-next-area a.left-prev > i,
+main.bd-content #main-content .prev-next-area a.right-next > i {
     font-size: 200%;
 }
 
-main.bd-content #main-content .prev-next-bottom a.right-next .prevnext-label,
-main.bd-content #main-content .prev-next-bottom a.left-prev .prevnext-label {
+main.bd-content #main-content .prev-next-area a.right-next .prevnext-label,
+main.bd-content #main-content .prev-next-area a.left-prev .prevnext-label {
     color: #808080;
 }
 
-main.bd-content #main-content .prev-next-bottom a.right-next:hover .prevnext-label,
-main.bd-content #main-content .prev-next-bottom a.left-prev:hover .prevnext-label {
+main.bd-content #main-content .prev-next-area a.right-next:hover .prevnext-label,
+main.bd-content #main-content .prev-next-area a.left-prev:hover .prevnext-label {
     color: #BBB;
 }
 
-main.bd-content #main-content .prev-next-bottom a.right-next:hover .prevnext-title,
-main.bd-content #main-content .prev-next-bottom a.left-prev:hover .prevnext-title {
+main.bd-content #main-content .prev-next-area a.right-next:hover .prevnext-title,
+main.bd-content #main-content .prev-next-area a.left-prev:hover .prevnext-title {
     color: #8CE4FF;
 }
 
-main.bd-content #main-content .prev-next-bottom a.left-prev:hover,
-main.bd-content #main-content .prev-next-bottom a.right-next:hover {
+main.bd-content #main-content .prev-next-area a.left-prev:hover,
+main.bd-content #main-content .prev-next-area a.right-next:hover {
     background: #484848;
     box-shadow: 1px 1px 2px #000;
+    text-decoration: none;
+}
+
+main.bd-content #main-content .prev-next-area a:hover p.prev-next-title {
     text-decoration: none;
 }

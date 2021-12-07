@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flame/src/effects2/remove_effect.dart'; // ignore: implementation_imports
 import 'package:flutter/material.dart';
 
 class RemoveEffectExample extends FlameGame with HasTappables {

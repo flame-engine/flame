@@ -39,20 +39,18 @@ class MyCollidable extends PositionComponent
           position: position,
           size: Vector2.all(100),
           anchor: Anchor.center,
-        ) {
-    addHitbox(HitboxCircle());
-  }
+        );
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+    addHitbox(HitboxCircle());
     final center = gameRef.size / 2;
     velocity = (center - position)..scaleTo(150);
   }
 
   @override
   void update(double dt) {
-    super.update(dt);
     if (_isWallHit) {
       removeFromParent();
       return;

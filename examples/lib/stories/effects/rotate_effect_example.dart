@@ -2,9 +2,8 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/effects2/rotate_effect.dart'; // ignore: implementation_imports
-import 'package:flame/src/effects2/standard_effect_controller.dart'; // ignore: implementation_imports
 import 'package:flutter/animation.dart';
 
 class RotateEffectExample extends FlameGame {
@@ -26,7 +25,7 @@ class RotateEffectExample extends FlameGame {
     compass.rim.add(
       RotateEffect.by(
         1.0,
-        StandardEffectController(
+        EffectController(
           duration: 6,
           reverseDuration: 3,
           curve: Curves.ease,
@@ -38,7 +37,7 @@ class RotateEffectExample extends FlameGame {
       ..add(
         RotateEffect.to(
           Transform2D.tau,
-          StandardEffectController(
+          EffectController(
             duration: 20,
             infinite: true,
           ),
@@ -47,7 +46,7 @@ class RotateEffectExample extends FlameGame {
       ..add(
         RotateEffect.by(
           Transform2D.tau * 0.015,
-          StandardEffectController(
+          EffectController(
             duration: 0.1,
             reverseDuration: 0.1,
             infinite: true,
@@ -57,7 +56,7 @@ class RotateEffectExample extends FlameGame {
       ..add(
         RotateEffect.by(
           Transform2D.tau * 0.021,
-          StandardEffectController(
+          EffectController(
             duration: 0.13,
             reverseDuration: 0.13,
             infinite: true,
