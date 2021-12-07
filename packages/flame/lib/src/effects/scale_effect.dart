@@ -7,27 +7,36 @@ import 'transform2d_effect.dart';
 ///
 /// The following constructors are provided:
 ///
-///   - [ScaleEffect.by] will scale the target in relation to it's current
-///     scale;
-///   - [ScaleEffect.to] will scale the target to the specified scale
+///   - [ScaleEffect.by] will scale the target by the given factor, relative to
+///     its current scale;
+///   - [ScaleEffect.to] will scale the target to the specified scale.
 ///
 /// This effect applies incremental changes to the component's scale, and
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
 class ScaleEffect extends Transform2DEffect {
-  ScaleEffect.by(Vector2 offset, EffectController controller)
-      : _offset = offset.clone(),
+  ScaleEffect.by(Vector2 scaleFactor, EffectController controller)
+      : _scaleFactor = scaleFactor.clone(),
         super(controller);
 
   factory ScaleEffect.to(Vector2 targetScale, EffectController controller) =>
       _ScaleToEffect(targetScale, controller);
 
-  Vector2 _offset;
+  final Vector2 _scaleFactor;
+  late Vector2 _scaleDelta;
+
+  @override
+  void onStart() {
+    _scaleDelta = Vector2(
+      target.scale.x * (_scaleFactor.x - 1),
+      target.scale.y * (_scaleFactor.y - 1),
+    );
+  }
 
   @override
   void apply(double progress) {
     final dProgress = progress - previousProgress;
-    target.scale += _offset * dProgress;
+    target.scale += _scaleDelta * dProgress;
     super.apply(progress);
   }
 }
@@ -42,6 +51,6 @@ class _ScaleToEffect extends ScaleEffect {
 
   @override
   void onStart() {
-    _offset = _targetScale - target.scale;
+    _scaleDelta = _targetScale - target.scale;
   }
 }

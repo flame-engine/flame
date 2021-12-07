@@ -13,9 +13,8 @@ void main() {
       final component = PositionComponent();
       game.ensureAdd(component);
 
-      component.scale = Vector2.all(1.0);
       component.add(
-        ScaleEffect.by(Vector2.all(1.0), EffectController(duration: 1)),
+        ScaleEffect.by(Vector2.all(2.0), EffectController(duration: 1)),
       );
       game.update(0);
       expectVector2(component.scale, Vector2.all(1.0));
@@ -58,18 +57,18 @@ void main() {
       game.ensureAdd(component);
 
       final effect = ScaleEffect.by(
-        Vector2.all(1.0),
+        Vector2.all(2.0),
         EffectController(duration: 1),
       );
       component.add(effect..removeOnFinish = false);
       final expectedScale = Vector2.all(1.0);
       for (var i = 0; i < 5; i++) {
         expectVector2(component.scale, expectedScale);
-        // After each reset the object will be scaled up by Vector2(1, 1)
+        // After each reset the object will be scaled up twice
         // relative to its scale at the start of the effect.
         effect.reset();
         game.update(1);
-        expectedScale.add(Vector2.all(1.0));
+        expectedScale.multiply(Vector2.all(2));
         expectVector2(component.scale, expectedScale);
       }
     });
@@ -94,7 +93,7 @@ void main() {
     });
 
     flameGame.test('scale composition', (game) {
-      final component = PositionComponent();
+      final component = PositionComponent() ..flipVertically();
       game.ensureAdd(component);
 
       component.add(
@@ -112,21 +111,17 @@ void main() {
       );
 
       game.update(1);
-      expectVector2(
-        component.scale,
-        Vector2.all(2),
-        epsilon: 1e-15,
-      ); // 5*1/10 + 0.5*1
+      expect(component.scale.x, closeTo(0.7, 1e-15)); // (1 + 0.4) * 0.5
+      expect(component.scale.y, closeTo(-0.7, 1e-15));
       game.update(1);
-      expectVector2(
-        component.scale,
-        Vector2.all(2),
-        epsilon: 1e-15,
-      ); // 5*2/10 + 0.5*1 - 0.5*1
-      for (var i = 0; i < 10; i++) {
+      expect(component.scale.x, closeTo(1.8, 1e-15)); // (1 + 2*0.4) * 1
+      expect(component.scale.y, closeTo(-1.8, 1e-15));
+      for (var i = 0; i < 8; i++) {
         game.update(1);
       }
-      expectVector2(component.scale, Vector2.all(6), epsilon: 1e-15);
+      expect(component.scale.x, closeTo(5, 1e-15));
+      expect(component.scale.y, closeTo(-5, 1e-15));
+      game.update(0);
       expect(component.children.length, 0);
     });
 
