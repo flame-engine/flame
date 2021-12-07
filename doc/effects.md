@@ -42,6 +42,7 @@ There are multiple effects provided by Flame, and you can also
 - [`SizeEffect.to`](#sizeeffectto)
 - [`OpacityEffect`](#opacityeffect)
 - [`RemoveEffect`](#removeeffect)
+- [`ColorEffect`](#coloreffect)
 
 An `EffectController` is an object that describes how the effect should evolve over time. If you
 think of the initial value of the effect as 0% progress, and the final value as 100% progress, then
@@ -223,6 +224,26 @@ tree after the specified delay has passed:
 ```dart
 final effect = RemoveEffect(delay: 10.0);
 ```
+
+## ColorEffect
+
+This effect will change the base color of the paint, causing the rendered component to be tinted by
+the provided color between a provided range.
+
+Usage example:
+
+```dart
+myComponent.add(
+  ColorEffect(
+    const Color(0xFF00FF00),
+    const Offset(0.0, 0.8),
+    EffectController(duration: 1.5),
+  ),
+);
+```
+
+The informed `Offset` will determine "how much" of the color will be applied to the base component,
+on this example the effect will start with 0% and will go up to 80%.
 
 
 ## Creating new effects
