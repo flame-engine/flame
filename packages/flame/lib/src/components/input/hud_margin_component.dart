@@ -19,7 +19,7 @@ import '../positioning_type.dart';
 class HudMarginComponent<T extends FlameGame> extends PositionComponent
     with HasGameRef<T> {
   @override
-  PositioningType positioningType = PositioningType.viewport;
+  PositionType positionType = PositionType.viewport;
 
   /// Instead of setting a position of the [HudMarginComponent] a margin
   /// from the edges of the viewport can be used instead.

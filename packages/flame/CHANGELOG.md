@@ -11,7 +11,7 @@
  - Fix render order of components and add tests
  - Fix `HitboxCircle` when component is flipped
  - `ScaleEffect.by` now applies multiplicatively instead of additively
- - `isHud` replaced with `positioningType`
+ - `isHud` replaced with `PositionType`
 
 ## [1.0.0-releasecandidate.18]
  - Forcing portrait and landscape mode is now supported on web

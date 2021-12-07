@@ -2,7 +2,7 @@
 ///
 /// Normally components live in the "game" coordinate system, which just means
 /// they respect both the camera and viewport.
-enum PositioningType {
+enum PositionType {
   /// Default type. Respects camera and viewport (applied on top of widget).
   game,
 

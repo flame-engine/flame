@@ -24,7 +24,7 @@ class Component with Loadable {
   ///
   /// Do note that this currently only works if the component is added directly
   /// to the root `FlameGame`.
-  PositioningType positioningType = PositioningType.game;
+  PositionType positionType = PositionType.game;
 
   /// Whether this component has been prepared and is ready to be added to the
   /// game loop.
@@ -155,12 +155,12 @@ class Component with Loadable {
 
   @protected
   Vector2 eventPosition(PositionInfo info) {
-    switch (positioningType) {
-      case PositioningType.game:
+    switch (positionType) {
+      case PositionType.game:
         return info.eventPosition.game;
-      case PositioningType.viewport:
+      case PositionType.viewport:
         return info.eventPosition.viewport;
-      case PositioningType.widget:
+      case PositionType.widget:
         return info.eventPosition.widget;
     }
   }

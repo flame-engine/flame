@@ -163,7 +163,7 @@ mixin Game on Loadable {
   Projector projector = IdentityProjector();
 
   /// This is the projector used by components that don't respect the camera
-  /// (`positioningType = PositioningType.viewport;`).
+  /// (`positionType = PositionType.viewport;`).
   /// This can be overridden on your [Game] implementation.
   Projector viewportProjector = IdentityProjector();
 

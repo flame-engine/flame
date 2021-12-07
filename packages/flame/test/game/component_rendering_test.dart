@@ -11,9 +11,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 class _MyComponent extends Component {
   @override
-  PositioningType positioningType;
+  PositionType positionType;
 
-  _MyComponent(int priority, {this.positioningType = PositioningType.game})
+  _MyComponent(int priority, {this.positionType = PositionType.game})
       : super(priority: priority);
 
   @override
@@ -55,9 +55,9 @@ void main() {
       'only HUD components',
       (game) async {
         await game.ensureAddAll([
-          _MyComponent(4, positioningType: PositioningType.viewport),
-          _MyComponent(1, positioningType: PositioningType.viewport),
-          _MyComponent(2, positioningType: PositioningType.viewport),
+          _MyComponent(4, positionType: PositionType.viewport),
+          _MyComponent(1, positionType: PositionType.viewport),
+          _MyComponent(2, positionType: PositionType.viewport),
         ]);
         final canvas = MockCanvas();
         game.camera.snapTo(Vector2(12.0, 18.0));
@@ -79,9 +79,9 @@ void main() {
         await game.ensureAddAll([
           _MyComponent(4),
           _MyComponent(1),
-          _MyComponent(2, positioningType: PositioningType.viewport),
-          _MyComponent(5, positioningType: PositioningType.viewport),
-          _MyComponent(3, positioningType: PositioningType.viewport),
+          _MyComponent(2, positionType: PositionType.viewport),
+          _MyComponent(5, positionType: PositionType.viewport),
+          _MyComponent(3, positionType: PositionType.viewport),
           _MyComponent(0),
         ]);
 

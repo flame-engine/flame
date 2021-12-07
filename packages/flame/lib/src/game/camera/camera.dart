@@ -38,7 +38,7 @@ import '../projector.dart';
 ///
 /// Note: in the context of the FlameGame, the camera effectively translates
 /// the position where components are rendered with relation to the Viewport.
-/// Components marked as `positioningType = PositioningType.viewport;` are
+/// Components marked as `positionType = PositionType.viewport;` are
 /// always rendered in screen coordinates, bypassing the camera altogether.
 class Camera extends Projector {
   Camera() : _viewport = DefaultViewport() {
