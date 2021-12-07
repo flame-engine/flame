@@ -12,6 +12,8 @@
  - `isHud` renamed to `respectCamera`
  - Fix `HitboxCircle` when component is flipped
  - Add `ColorEffect`
+ - `MoveAlongPathEffect` can now be absolute, and can auto-orient the object along the path
+ - `ScaleEffect.by` now applies multiplicatively instead of additively
 
 ## [1.0.0-releasecandidate.18]
  - Forcing portrait and landscape mode is now supported on web
