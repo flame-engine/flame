@@ -24,7 +24,7 @@ class Component with Loadable {
   ///
   /// Do note that this currently only works if the component is added directly
   /// to the root `FlameGame`.
-  CoordinateSystem coordinateSystem = CoordinateSystem.game;
+  PositioningType positioningType = PositioningType.game;
 
   /// Whether this component has been prepared and is ready to be added to the
   /// game loop.
@@ -155,11 +155,11 @@ class Component with Loadable {
 
   @protected
   Vector2 eventPosition(PositionInfo info) {
-    if (coordinateSystem == CoordinateSystem.game) {
+    if (positioningType == PositioningType.game) {
       return info.eventPosition.game;
-    } else if (coordinateSystem == CoordinateSystem.viewportOnly) {
-      return info.eventPosition.viewportOnly;
-    } else if (coordinateSystem == CoordinateSystem.widget) {
+    } else if (positioningType == PositioningType.viewport) {
+      return info.eventPosition.viewport;
+    } else if (positioningType == PositioningType.widget) {
       return info.eventPosition.widget;
     } else {
       throw 'Invalid coordinate system!';

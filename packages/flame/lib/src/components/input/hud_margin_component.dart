@@ -19,7 +19,7 @@ import '../coordinate_system.dart';
 class HudMarginComponent<T extends FlameGame> extends PositionComponent
     with HasGameRef<T> {
   @override
-  CoordinateSystem coordinateSystem = CoordinateSystem.viewportOnly;
+  PositioningType positioningType = PositioningType.viewport;
 
   /// Instead of setting a position of the [HudMarginComponent] a margin
   /// from the edges of the viewport can be used instead.

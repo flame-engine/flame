@@ -24,9 +24,9 @@ class CameraWrapper {
   void render(Canvas canvas) {
     world.forEach((component) {
       canvas.save();
-      if (component.coordinateSystem == CoordinateSystem.game) {
+      if (component.positioningType == PositioningType.game) {
         camera.apply(canvas);
-      } else if (component.coordinateSystem == CoordinateSystem.viewportOnly) {
+      } else if (component.positioningType == PositioningType.viewport) {
         camera.viewport.apply(canvas);
       }
       component.renderTree(canvas);
