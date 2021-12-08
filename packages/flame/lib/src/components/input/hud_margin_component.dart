@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import '../../../components.dart';
 import '../../../extensions.dart';
 import '../../../game.dart';
+import '../positioning_type.dart';
 
 /// The [HudMarginComponent] positions itself by a margin to the edge of the
 /// screen instead of by an absolute position on the screen or on the game, so
@@ -18,7 +19,7 @@ import '../../../game.dart';
 class HudMarginComponent<T extends FlameGame> extends PositionComponent
     with HasGameRef<T> {
   @override
-  bool respectCamera = false;
+  PositionType positionType = PositionType.viewport;
 
   /// Instead of setting a position of the [HudMarginComponent] a margin
   /// from the edges of the viewport can be used instead.

@@ -52,9 +52,18 @@ abstract class Viewport extends Projector {
   /// size changes.
   void resize(Vector2 newCanvasSize);
 
+  /// Applies to the Canvas all necessary transformations to apply this
+  /// viewport.
+  void apply(Canvas c);
+
   /// This transforms the canvas so that the coordinate system is viewport-
   /// -aware. All your rendering logic should be put inside the lambda.
-  void render(Canvas c, void Function(Canvas c) renderGame);
+  void render(Canvas c, void Function(Canvas) renderGame) {
+    c.save();
+    apply(c);
+    renderGame(c);
+    c.restore();
+  }
 
   /// This returns the effective size, after viewport transformation.
   /// This is not the game widget size but for all intents and purposes,
@@ -75,9 +84,7 @@ abstract class Viewport extends Projector {
 /// This basically no-ops the viewport.
 class DefaultViewport extends Viewport {
   @override
-  void render(Canvas c, void Function(Canvas c) renderGame) {
-    renderGame(c);
-  }
+  void apply(Canvas c) {}
 
   @override
   void resize(Vector2 newCanvasSize) {
@@ -122,7 +129,7 @@ class DefaultViewport extends Viewport {
 /// transformation whatsoever, and if the a device with a different ratio is
 /// used it will try to adapt the best as possible.
 class FixedResolutionViewport extends Viewport {
-  /// By default, the viewport will clip anything rendered outside.
+  /// By default, this viewport will clip anything rendered outside.
   /// Use this variable to control that behaviour.
   bool noClip;
 
@@ -171,14 +178,11 @@ class FixedResolutionViewport extends Viewport {
   }
 
   @override
-  void render(Canvas c, void Function(Canvas) renderGame) {
-    c.save();
+  void apply(Canvas c) {
     if (!noClip) {
       c.clipRect(_clipRect);
     }
     c.transform(_transform.storage);
-    renderGame(c);
-    c.restore();
   }
 
   @override

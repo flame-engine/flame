@@ -23,6 +23,47 @@ class _TestComponent extends PositionComponent {
 }
 
 void main() {
+  group('widget', () {
+    flameGame.test(
+      'viewport does not affect component with PositionType.widget',
+      (game) async {
+        game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
+        game.onGameResize(Vector2.all(200.0));
+        await game.ensureAdd(
+          _TestComponent(Vector2.zero())..positionType = PositionType.widget,
+        );
+
+        final canvas = MockCanvas();
+        game.render(canvas);
+        expect(
+          canvas,
+          MockCanvas()
+            ..translate(0, 0) // transform in PositionComponent.renderTree
+            ..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
+        );
+      },
+    );
+
+    flameGame.test(
+      'camera does not affect component with PositionType.widget',
+      (game) async {
+        await game.ensureAdd(
+          _TestComponent(Vector2.zero())..positionType = PositionType.widget,
+        );
+        game.camera.snapTo(Vector2(100, 100));
+
+        final canvas = MockCanvas();
+        game.render(canvas);
+        expect(
+          canvas,
+          MockCanvas()
+            ..translate(0, 0) // transform in PositionComponent.renderTree
+            ..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
+        );
+      },
+    );
+  });
+
   group('viewport', () {
     flameGame.test('default viewport does not change size', (game) {
       game.onGameResize(Vector2(100.0, 200.0));

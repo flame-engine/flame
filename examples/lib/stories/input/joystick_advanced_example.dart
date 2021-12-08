@@ -163,11 +163,11 @@ class JoystickAdvancedExample extends FlameGame
     speedText = TextComponent(
       text: 'Speed: 0',
       textRenderer: _regular,
-    )..respectCamera = false;
+    )..positionType = PositionType.viewport;
     directionText = TextComponent(
       text: 'Direction: idle',
       textRenderer: _regular,
-    )..respectCamera = false;
+    )..positionType = PositionType.viewport;
 
     final speedWithMargin = HudMarginComponent(
       margin: const EdgeInsets.only(

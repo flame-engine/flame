@@ -9,6 +9,7 @@ import '../../input.dart';
 import '../extensions/vector2.dart';
 import '../game/mixins/loadable.dart';
 import 'cache/value_cache.dart';
+import 'positioning_type.dart';
 
 /// This represents a Component for your game.
 ///
@@ -18,15 +19,12 @@ import 'cache/value_cache.dart';
 /// called automatically once the component is added to the component tree in
 /// your game (with `game.add`).
 class Component with Loadable {
-  /// Whether this component should respect the camera or not.
-  ///
-  /// Components that have this property set to false will ignore the
-  /// `FlameGame.camera` when rendered (so their position coordinates are
-  /// considered relative only to the viewport instead).
+  /// What coordinate system this component should respect (i.e. should it
+  /// observe camera, viewport, or use the raw canvas).
   ///
   /// Do note that this currently only works if the component is added directly
   /// to the root `FlameGame`.
-  bool respectCamera = true;
+  PositionType positionType = PositionType.game;
 
   /// Whether this component has been prepared and is ready to be added to the
   /// game loop.
@@ -157,9 +155,14 @@ class Component with Loadable {
 
   @protected
   Vector2 eventPosition(PositionInfo info) {
-    return respectCamera
-        ? info.eventPosition.game
-        : info.eventPosition.viewportOnly;
+    switch (positionType) {
+      case PositionType.game:
+        return info.eventPosition.game;
+      case PositionType.viewport:
+        return info.eventPosition.viewport;
+      case PositionType.widget:
+        return info.eventPosition.widget;
+    }
   }
 
   /// Remove the component from its parent in the next tick.

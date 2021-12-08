@@ -9,10 +9,10 @@
  - Introduce `updateTree` to follow the `renderTree` convention
  - Fix `Parallax.load` with different loading times
  - Fix render order of components and add tests
- - `isHud` renamed to `respectCamera`
  - Fix `HitboxCircle` when component is flipped
  - `MoveAlongPathEffect` can now be absolute, and can auto-orient the object along the path
  - `ScaleEffect.by` now applies multiplicatively instead of additively
+ - `isHud` replaced with `PositionType`
  - Remove web fallback for `drawAtlas` in SpriteBatch, but added flag `useAtlas` to activate it
 
 ## [1.0.0-releasecandidate.18]
