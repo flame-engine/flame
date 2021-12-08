@@ -24,7 +24,7 @@ The Flutter game engine.
 ## Documentation
 
 The full documentation for Flame can be found on the 
-[Flame-engine website](https://docs.flame-engine.org/)
+[docs.flame-engine.org](https://docs.flame-engine.org/).
 
 To change the version of the documentation, use the version selector noted with `version:` in the
 top of the page.
