@@ -41,10 +41,11 @@ Other useful links:
 
 ## Help
 
-We have a Flame community and help channel on [Blue Fire's Discord](https://discord.gg/5unKpdQD78).
+There is a Flame community on [Blue Fire's Discord server](https://discord.gg/5unKpdQD78) where you
+can ask any of your Flame related questions.
 
 If you are more comfortable with StackOverflow, you can also create a question there. Add the
-[Flame tag](https://stackoverflow.com/questions/tagged/flame) so that anyone following the tag can
+[Flame tag](https://stackoverflow.com/questions/tagged/flame), so that anyone following the tag can
 help out.
 
 
@@ -131,7 +132,8 @@ Do you want to contribute with a PR? PRs are always welcome, just make sure to c
 correct branch (main) and follow the [checklist](.github/pull_request_template.md) which will
 appear when you open the PR.
 
-If you want to talk about your contribution, you can always reach out to the team either via an issue or by using the
+For bigger changes, or if in doubt, make sure to talk about your contribution to the team. Either
+via an issue, GitHub discussion, or reach out to the team either using the
 [Discord server](https://discord.gg/pxrBmy4).
 
 
@@ -146,14 +148,14 @@ code for each example, press the `< >` button in the top right corner.
 ### Highlighted community tutorials
 
 - @Devowl's Flutter & Flame series: 
-  - Step 1: Create your game - https://medium.com/flutter-community/flutter-flame-step-1-create-your-game-b3b6ee387d77
-  - Step 2: Game basics - https://medium.com/flutter-community/flutter-flame-step-2-game-basics-48b4493424f3
-  - Step 3: Sprites and inputs - https://blog.devowl.de/flutter-flame-step-3-sprites-and-inputs-7ca9cc7c8b91
-  - Step 4: Collisions & Viewport - https://blog.devowl.de/flutter-flame-step-4-collisions-viewport-ff2da048e3a6
-  - Step 5: Level generation & camera - https://blog.devowl.de/flutter-flame-step-5-level-generation-camera-62a060a286e3 
+  - [Step 1: Create your game](https://medium.com/flutter-community/flutter-flame-step-1-create-your-game-b3b6ee387d77)
+  - [Step 2: Game basics](https://medium.com/flutter-community/flutter-flame-step-2-game-basics-48b4493424f3)
+  - [Step 3: Sprites and inputs](https://blog.devowl.de/flutter-flame-step-3-sprites-and-inputs-7ca9cc7c8b91)
+  - [Step 4: Collisions & Viewport](https://blog.devowl.de/flutter-flame-step-4-collisions-viewport-ff2da048e3a6)
+  - [Step 5: Level generation & camera](https://blog.devowl.de/flutter-flame-step-5-level-generation-camera-62a060a286e3 )
 
 - Other tutorials:
-  - Building Games in Flutter with Flame - [Getting Started](https://www.raywenderlich.com/27407121-building-games-in-flutter-with-flame-getting-started)
+  - @Vguzzi's article [Building Games in Flutter with Flame](https://www.raywenderlich.com/27407121-building-games-in-flutter-with-flame-getting-started)
   - @DevKage's YouTube series with the [Dino run tutorial](https://www.youtube.com/playlist?list=PLiZZKL9HLmWOmQgYxWHuOHOWsUUlhCCOY)
 
 We offer a curated list of Games, Libraries and Articles over at
