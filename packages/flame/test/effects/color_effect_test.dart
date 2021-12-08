@@ -19,7 +19,11 @@ void main() {
       game.update(0);
       expect(
         component.paint.colorFilter.toString(),
-        equals('ColorFilter.mode(Color(0x00f44336), BlendMode.srcATop)'),
+        // Once https://github.com/flutter/flutter/issues/89433 has been fixed
+        // the two equals lines should be swapped and the ColorEffect should go
+        // to opacity 0.
+        //equals('ColorFilter.mode(Color(0x00f44336), BlendMode.srcATop)'),
+        equals('ColorFilter.mode(Color(0x01f44336), BlendMode.srcATop)'),
       );
 
       game.update(0.5);
