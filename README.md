@@ -62,8 +62,8 @@ Currently Flame provides the following features:
  - Images, animations, sprites and sprite sheets.
  - Other utilities to make development easier.
 
-On top of those features we offer something that we call bridge libraries. Through these libraries
-we offer Flame components and bindings to other packages. Currently we have bridge
+On top of those features, you can augment Flame with bridge packages. Through these libraries,
+you will be able to access Flame components, helpers and bindings to other packages, in order to make integrations seamless. Currently, we have bridge
 libraries to the following packages:
 
 - [flame_audio](https://github.com/flame-engine/flame/tree/main/packages/flame_audio) for
