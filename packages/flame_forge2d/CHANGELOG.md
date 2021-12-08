@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.8.3]
+ - Update to Flame 1.0.0
+
 ## [0.8.2-releasecandidate.17]
  - Arguments of `PositionBodyComponent` are now optional so that initialization can be done in `onLoad`
 
