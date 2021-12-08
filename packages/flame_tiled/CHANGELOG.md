@@ -1,3 +1,9 @@
+# CHANGELOG
+
+## [1.0.0]
+
+* Updated to Flame 1.0.0
+
 ## [1.0.0-releasecandidate.15]
 
 * Upgrade to work with latest Flame version
