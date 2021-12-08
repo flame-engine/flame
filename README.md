@@ -41,8 +41,7 @@ Other useful links:
 
 ## Help
 
-We have a Flame community and help channel on Blue Fire's Discord, join it
-[here](https://discord.gg/5unKpdQD78).
+We have a Flame community and help channel on [Blue Fire's Discord](https://discord.gg/5unKpdQD78).
 
 If you are more comfortable with StackOverflow you can create a question with the
 [Flame tag](https://stackoverflow.com/questions/tagged/flame) and we'll reply as soon as we can.
@@ -50,10 +49,10 @@ If you are more comfortable with StackOverflow you can create a question with th
 
 ## Features
 
-The goal of this project is to provide a complete set of out-of-the-way solutions for the common
-problems every game developed in Flutter will share.
+The goal of Flame is to provide a complete set of out-of-the-way solutions for the common problems
+every game developed in Flutter will share.
 
-Currently Flame provides you with:
+Currently Flame provides:
  - A game loop.
  - A component/object system (FCS).
  - Effects and particles.
@@ -66,24 +65,24 @@ On top of those features we offer something that we call bridge libraries. Throu
 we offer Flame components and bindings to other packages. Currently we have bridge
 libraries to the following packages:
 
-- [flame_audio](https://github.com/flame-engine/flame/tree/main/packages/flame_audio))
-  - [AudioPlayers](https://github.com/bluefireteam/audioplayers): Play multiple audio files simultaneously.
-- [flame_bloc](https://github.com/flame-engine/flame/tree/main/packages/flame_bloc))
-  - [Bloc](https://github.com/felangel/bloc): A predictable state management library.
-- [flame_fire_atlas](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas))
-  - [FireAtlas](https://github.com/flame-engine/fire-atlas): Create texture atlases for games.
-- [flame_forge2d](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d))
-  - [Forge2D](https://github.com/flame-engine/forge2d): A Box2D physics engine.
-- [flame_lint](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d))
-  - Our set of linting (`analysis_options.yaml`) rules.
-- [flame_oxygen](https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen))
-  - [Oxygen](https://github.com/flame-engine/oxygen): A lightweight Entity Component System (ECS) framework.
-- [flame_rive](https://github.com/flame-engine/flame/tree/main/packages/flame_rive)
-  - [Rive](https://rive.app/): Create interactive animations.
-- [flame_svg](https://github.com/flame-engine/flame/tree/main/packages/flame_svg)  
-  - [flutter_svg](https://github.com/dnfield/flutter_svg): Draw SVG files in Flutter.
-- [flame_tiled](https://github.com/flame-engine/flame/tree/main/packages/flame_tiled)
-  - [Tiled](https://www.mapeditor.org/): 2D level editor.
+- [flame_audio](https://github.com/flame-engine/flame/tree/main/packages/flame_audio) for
+  [AudioPlayers](https://github.com/bluefireteam/audioplayers): Play multiple audio files simultaneously.
+- [flame_bloc](https://github.com/flame-engine/flame/tree/main/packages/flame_bloc) for
+  [Bloc](https://github.com/felangel/bloc): A predictable state management library.
+- [flame_fire_atlas](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas) for
+  [FireAtlas](https://github.com/flame-engine/fire-atlas): Create texture atlases for games.
+- [flame_forge2d](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d) for
+  [Forge2D](https://github.com/flame-engine/forge2d): A Box2D physics engine.
+- [flame_lint](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d) -
+  Our set of linting (`analysis_options.yaml`) rules.
+- [flame_oxygen](https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen) for
+  [Oxygen](https://github.com/flame-engine/oxygen): A lightweight Entity Component System (ECS) framework.
+- [flame_rive](https://github.com/flame-engine/flame/tree/main/packages/flame_rive) for
+  [Rive](https://rive.app/): Create interactive animations.
+- [flame_svg](https://github.com/flame-engine/flame/tree/main/packages/flame_svg) for
+  [flutter_svg](https://github.com/dnfield/flutter_svg): Draw SVG files in Flutter.
+- [flame_tiled](https://github.com/flame-engine/flame/tree/main/packages/flame_tiled) for
+  [Tiled](https://www.mapeditor.org/): 2D level editor.
 
 
 ## Sponsors
