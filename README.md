@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-A Flutter based game engine.
+A Flutter-based game engine.
 </p>
 
 <p align="center">
