@@ -112,9 +112,9 @@ Or by making a single donation by buying us a coffee:
 You can also show on your repository that your game is made with Flame by using one of the following
 badges:
 
-[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-black.svg)](https://flame-engine.org)
-[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-black.svg?style=flat-square)](https://flame-engine.org)
-[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-black.svg?style=for-the-badge)](https://flame-engine.org)
+[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg)](https://flame-engine.org)
+[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=flat-square)](https://flame-engine.org)
+[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=for-the-badge)](https://flame-engine.org)
 
 ```
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
