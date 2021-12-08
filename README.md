@@ -23,8 +23,8 @@ The Flutter game engine.
 
 ## Documentation
 
-The documentation for Flame can be found here:
-- Latest stable version: [Flame-engine website](https://docs.flame-engine.org/)
+The full documentation for Flame can be found on the 
+[Flame-engine website](https://docs.flame-engine.org/)
 
 To change the version of the documentation, use the version selector noted with `version:` in the
 top of the page.
@@ -32,12 +32,11 @@ top of the page.
 Note that the documentation in the main branch of this repo is newer than the latest released
 version.
 
-We provide many examples of different features which can be tried out from your browser
-[here](https://examples.flame-engine.org/). 
-You can also check the examples source code
-[here](https://github.com/flame-engine/flame/tree/main/examples).
-
-The official site for Flame can be found [here](https://flame-engine.org/).
+Other useful links:
+ - [](https://flame-engine.org/) - The official Flame site.
+ - [](https://examples.flame-engine.org/) - Examples of most features which can be tried out from your browser.
+ - [](https://tutorials.flame-engine.org/) - A simple tutorial to get started.
+ - [pub.dev/documentation/flame](https://pub.dev/documentation/flame/latest/) - The generated dartdoc API reference.
 
 
 ## Help
