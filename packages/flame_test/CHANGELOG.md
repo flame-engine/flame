@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.1]
+ - Bump versions not to use paths
+
 ## [1.0.0]
  - Fix tests with multiples futures finishing abruptly
 
