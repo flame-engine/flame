@@ -29,7 +29,7 @@ The full documentation for Flame can be found on the
 To change the version of the documentation, use the version selector noted with `version:` in the
 top of the page.
 
-Note that the documentation in the main branch of this repo is newer than the latest released
+**Note**: The documentation that resides in the main branch is newer than the released documentation on the docs website.
 version.
 
 Other useful links:
@@ -43,16 +43,17 @@ Other useful links:
 
 We have a Flame community and help channel on [Blue Fire's Discord](https://discord.gg/5unKpdQD78).
 
-If you are more comfortable with StackOverflow you can create a question with the
-[Flame tag](https://stackoverflow.com/questions/tagged/flame) and we'll reply as soon as we can.
+If you are more comfortable with StackOverflow you can also create a question there, add the
+[Flame tag](https://stackoverflow.com/questions/tagged/flame) so anyone following that tag can help you out.
 
 
 ## Features
 
-The goal of Flame is to provide a complete set of out-of-the-way solutions for the common problems
-every game developed in Flutter will share.
+The goal of the Flame Engine is to provide a complete set of out-of-the-way solutions for common problems
+that any game developed in Flutter could have.
 
-Currently Flame provides:
+Currently Flame provides the following features:
+
  - A game loop.
  - A component/object system (FCS).
  - Effects and particles.
@@ -129,8 +130,8 @@ Do you want to contribute with a PR? PRs are always welcome, just make sure to c
 correct branch (main) and follow the [checklist](.github/pull_request_template.md) which will
 appear when you open the PR.
 
-If in doubt, make sure to talk about your contribution to the team, either via an issue or
-[Discord](https://discord.gg/pxrBmy4).
+If you want to talk about your contribution, you can always reach out to the team either via an issue or by using the
+[Discord server](https://discord.gg/pxrBmy4).
 
 
 ## Getting started
@@ -138,7 +139,7 @@ If in doubt, make sure to talk about your contribution to the team, either via a
 A simple tutorial to get started can be found on
 [tutorials.flame-engine.org](https://tutorials.flame-engine.org) and examples of most features in
 Flame can be found on [examples.flame-engine.org](https://examples.flame-engine.org). To access the
-code for each example, press `< >` in the top right corner.
+code for each example, press the `< >` button in the top right corner.
 
 
 ### External tutorials
