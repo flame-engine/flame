@@ -166,6 +166,6 @@ Note that some of the articles might be slightly outdated, but can still be usef
 
 ## Credits
 
- - The [Flame Engine team](https://github.com/orgs/flame-engine/people), who are continuously
- working on maintaining and improving Flame.
+ - The [Blue Fire team](https://github.com/orgs/bluefireteam/people), who are continuously
+ working on maintaining and improving Flame and its ecosystem.
  - All the friendly contributors and people who are helping in the community.
