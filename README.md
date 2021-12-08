@@ -135,10 +135,10 @@ If in doubt, make sure to talk about your contribution to the team, either via a
 
 ## Getting started
 
-A simple tutorial to get started can be found [here](https://tutorials.flame-engine.org) and 
-examples of most features in Flame can be found on the
-[examples page](https://examples.flame-engine.org), to access the code for each example, press `< >`
-in the top right corner.
+A simple tutorial to get started can be found on
+[tutorials.flame-engine.org](https://tutorials.flame-engine.org) and examples of most features in
+Flame can be found on [examples.flame-engine.org](https://examples.flame-engine.org). To access the
+code for each example, press `< >` in the top right corner.
 
 
 ### External tutorials
@@ -153,9 +153,6 @@ in the top right corner.
 - Other tutorials:
   - Building Games in Flutter with Flame - [Getting Started](https://www.raywenderlich.com/27407121-building-games-in-flutter-with-flame-getting-started)
   - @DevKage's YouTube series with the [Dino run tutorial](https://www.youtube.com/playlist?list=PLiZZKL9HLmWOmQgYxWHuOHOWsUUlhCCOY)
-
-
-### Published games and articles
 
 We offer a curated list of Games, Libraries and Articles over at
 [awesome-flame](https://github.com/flame-engine/awesome-flame).
