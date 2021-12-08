@@ -23,7 +23,7 @@ The Flutter game engine.
 
 ## Documentation
 
-The full documentation for Flame can be found on the 
+The full documentation for Flame can be found on 
 [docs.flame-engine.org](https://docs.flame-engine.org/).
 
 To change the version of the documentation, use the version selector noted with `version:` in the
@@ -43,14 +43,15 @@ Other useful links:
 
 We have a Flame community and help channel on [Blue Fire's Discord](https://discord.gg/5unKpdQD78).
 
-If you are more comfortable with StackOverflow you can also create a question there, add the
-[Flame tag](https://stackoverflow.com/questions/tagged/flame) so anyone following that tag can help you out.
+If you are more comfortable with StackOverflow, you can also create a question there. Add the
+[Flame tag](https://stackoverflow.com/questions/tagged/flame) so that anyone following the tag can
+help out.
 
 
 ## Features
 
-The goal of the Flame Engine is to provide a complete set of out-of-the-way solutions for common problems
-that any game developed in Flutter could have.
+The goal of the Flame Engine is to provide a complete set of out-of-the-way solutions for common
+problems that games developed with Flutter might share.
 
 Currently Flame provides the following features:
 
@@ -142,7 +143,7 @@ Flame can be found on [examples.flame-engine.org](https://examples.flame-engine.
 code for each example, press the `< >` button in the top right corner.
 
 
-### External tutorials
+### Highlighted community tutorials
 
 - @Devowl's Flutter & Flame series: 
   - Step 1: Create your game - https://medium.com/flutter-community/flutter-flame-step-1-create-your-game-b3b6ee387d77
