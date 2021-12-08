@@ -33,10 +33,10 @@ Note that the documentation in the main branch of this repo is newer than the la
 version.
 
 Other useful links:
- - [](https://flame-engine.org/) - The official Flame site.
- - [](https://examples.flame-engine.org/) - Examples of most features which can be tried out from your browser.
- - [](https://tutorials.flame-engine.org/) - A simple tutorial to get started.
- - [pub.dev/documentation/flame](https://pub.dev/documentation/flame/latest/) - The generated dartdoc API reference.
+ - [The official Flame site](https://flame-engine.org/).
+ - [Examples](https://examples.flame-engine.org/) of most features which can be tried out from your browser.
+ - [Tutorials](https://tutorials.flame-engine.org/) - A simple tutorial to get started.
+ - [API Reference](https://pub.dev/documentation/flame/latest/) - The generated dartdoc API reference.
 
 
 ## Help
