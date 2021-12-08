@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [Next]
+## [1.0.0]
  - Add `ButtonComponent` backed by two `PositionComponent`s
  - Add `SpriteButtonComponent` backed by two `Sprite`s
  - Allow more flexible construction of `EffectController`s and make them able to run back in time
