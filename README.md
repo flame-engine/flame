@@ -83,7 +83,7 @@ libraries to the following packages:
 - [flame_svg](https://github.com/flame-engine/flame/tree/main/packages/flame_svg) for
   [flutter_svg](https://github.com/dnfield/flutter_svg): Draw SVG files in Flutter.
 - [flame_tiled](https://github.com/flame-engine/flame/tree/main/packages/flame_tiled) for
-  [Tiled](https://www.mapeditor.org/): 2D level editor.
+  [Tiled](https://www.mapeditor.org/): 2D tile map level editor.
 
 
 ## Sponsors
