@@ -20,13 +20,13 @@ void addRenderingStories(Dashbook dashbook) {
     ..add(
       'Isometric Tile Map',
       (_) => GameWidget(game: IsometricTileMapExample()),
-      codeLink: baseLink('tile_maps/isometric_tile_map_example.dart'),
+      codeLink: baseLink('rendering/isometric_tile_map_example.dart'),
       info: IsometricTileMapExample.description,
     )
     ..add(
       'Nine Tile Box',
       (_) => GameWidget(game: NineTileBoxExample()),
-      codeLink: baseLink('utils/nine_tile_box_example.dart'),
+      codeLink: baseLink('rendering/nine_tile_box_example.dart'),
       info: NineTileBoxExample.description,
     )
     ..add(
@@ -44,7 +44,7 @@ void addRenderingStories(Dashbook dashbook) {
     ..add(
       'Particles',
       (_) => GameWidget(game: ParticlesExample()),
-      codeLink: baseLink('utils/particles_example.dart'),
+      codeLink: baseLink('rendering/particles_example.dart'),
       info: ParticlesExample.description,
     );
 }

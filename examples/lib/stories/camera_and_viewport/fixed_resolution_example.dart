@@ -54,6 +54,7 @@ class Background extends PositionComponent with HasGameRef {
     await super.onLoad();
     white = BasicPalette.white.paint();
     hugeRect = size.toRect();
+    size * 2;
   }
 
   @override
