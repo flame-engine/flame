@@ -31,6 +31,7 @@ the final value is provided by the user explicitly, and progression over time is
 
 There are multiple effects provided by Flame, and you can also
 [create your own](#creating-new-effects). The following effects are included:
+- [`ColorEffect`](#coloreffect)
 - [`MoveEffect.by`](#moveeffectby)
 - [`MoveEffect.to`](#moveeffectto)
 - [`MoveAlongPathEffect`](#movealongpatheffect)
@@ -224,6 +225,30 @@ tree after the specified delay has passed:
 final effect = RemoveEffect(delay: 10.0);
 ```
 
+
+## ColorEffect
+
+This effect will change the base color of the paint, causing the rendered component to be tinted by
+the provided color between a provided range.
+
+Usage example:
+
+```dart
+myComponent.add(
+  ColorEffect(
+    const Color(0xFF00FF00),
+    const Offset(0.0, 0.8),
+    EffectController(duration: 1.5),
+  ),
+);
+```
+
+The `Offset` argument will determine "how much" of the color that will be applied to the component,
+in this example the effect will start with 0% and will go up to 80%.
+
+__Note :__Due to how this effect is implemented, and how Flutter's `ColorFilter` class works, this
+effect can't be mixed with other `ColorEffect`s, when more than one is added to the component, only
+the last one will have effect.
 
 ## Creating new effects
 

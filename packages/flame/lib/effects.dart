@@ -1,3 +1,4 @@
+export 'src/effects/color_effect.dart';
 export 'src/effects/component_effect.dart';
 export 'src/effects/controllers/curved_effect_controller.dart';
 export 'src/effects/controllers/delayed_effect_controller.dart';

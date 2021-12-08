@@ -2,6 +2,7 @@ import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
 
 import '../../commons/commons.dart';
+import 'color_effect_example.dart';
 import 'move_effect_example.dart';
 import 'opacity_effect_example.dart';
 import 'remove_effect_example.dart';
@@ -40,6 +41,12 @@ void addEffectsStories(Dashbook dashbook) {
       (_) => GameWidget(game: OpacityEffectExample()),
       codeLink: baseLink('effects/opacity_effect_example.dart'),
       info: OpacityEffectExample.description,
+    )
+    ..add(
+      'Color Effect',
+      (_) => GameWidget(game: ColorEffectExample()),
+      codeLink: baseLink('effects/color_effect_example.dart'),
+      info: ColorEffectExample.description,
     )
     ..add(
       'Remove Effect',
