@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [Next]
+## [1.0.0]
  - Fix tests with multiples futures finishing abruptly
 
 ## [1.0.0-releasecandidate.15]
