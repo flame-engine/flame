@@ -11,17 +11,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flame:
-    path: ../../flame
+  flame: ^1.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flame_test:
-    path: ../
+  flame_test: ^1.0.0
   test: ^1.17.10
-  flame_lint:
-    path: ../../flame_lint
+  flame_lint: ^0.0.1
 
 flutter:
   assets:
