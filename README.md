@@ -158,7 +158,7 @@ code for each example, press the `< >` button in the top right corner.
 We offer a curated list of Games, Libraries and Articles over at
 [awesome-flame](https://github.com/flame-engine/awesome-flame).
 
-Note that some of the articles might be slightly outdated, but they are still useful.
+Note that some of the articles might be slightly outdated, but can still be useful.
 
 
 ## Credits
