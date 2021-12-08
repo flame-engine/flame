@@ -29,8 +29,8 @@ The full documentation for Flame can be found on
 To change the version of the documentation, use the version selector noted with `version:` in the
 top of the page.
 
-**Note**: The documentation that resides in the main branch is newer than the released documentation on the docs website.
-version.
+**Note**: The documentation that resides in the main branch is newer than the released documentation
+on the docs website.
 
 Other useful links:
  - [The official Flame site](https://flame-engine.org/).
@@ -65,8 +65,8 @@ Currently Flame provides the following features:
  - Other utilities to make development easier.
 
 On top of those features, you can augment Flame with bridge packages. Through these libraries,
-you will be able to access Flame components, helpers and bindings to other packages, in order to make integrations seamless. Currently, we have bridge
-libraries to the following packages:
+you will be able to access Flame components, helpers and bindings to other packages, in order to
+make integrations seamless. Currently, we have bridge libraries to the following packages:
 
 - [flame_audio](https://github.com/flame-engine/flame/tree/main/packages/flame_audio) for
   [AudioPlayers](https://github.com/bluefireteam/audioplayers): Play multiple audio files simultaneously.
