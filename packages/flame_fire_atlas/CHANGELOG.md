@@ -1,3 +1,9 @@
+# CHANGELOG
+
+## [1.0.0]
+
+ * Update to Flame 1.0.0
+
 ## [1.0.0-rc2]
 
  * Compatibility with Flame v1.0.0-rc9 and null safe support
