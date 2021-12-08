@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.0]
+ - Update to Flame 1.0.0
+
 ## [1.0.0-releasecandidate.15]
  - Takes priority as an argument on SvgComponent
  - Simplify implementation of `renderPosition`
