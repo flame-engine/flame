@@ -17,7 +17,7 @@ void addParallaxStories(Dashbook dashbook) {
     ..add(
       'Basic',
       (_) => GameWidget(game: BasicParallaxExample()),
-      codeLink: baseLink('parallax/basic_animation_example.dart'),
+      codeLink: baseLink('parallax/basic_parallax_example.dart'),
       info: BasicParallaxExample.description,
     )
     ..add(

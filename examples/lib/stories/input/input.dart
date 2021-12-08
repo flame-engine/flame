@@ -19,6 +19,30 @@ import 'tappables_example.dart';
 void addInputStories(Dashbook dashbook) {
   dashbook.storiesOf('Input')
     ..add(
+      'Tappables',
+      (_) => GameWidget(game: TappablesExample()),
+      codeLink: baseLink('input/tappables_example.dart'),
+      info: TappablesExample.description,
+    )
+    ..add(
+      'Draggables',
+      (context) {
+        return GameWidget(
+          game: DraggablesExample(
+            zoom: context.listProperty('zoom', 1, [0.5, 1, 1.5]),
+          ),
+        );
+      },
+      codeLink: baseLink('input/draggables_example.dart'),
+      info: DraggablesExample.description,
+    )
+    ..add(
+      'Hoverables',
+      (_) => GameWidget(game: HoverablesExample()),
+      codeLink: baseLink('input/hoverables_example.dart'),
+      info: HoverablesExample.description,
+    )
+    ..add(
       'Keyboard',
       (_) => GameWidget(game: KeyboardExample()),
       codeLink: baseLink('input/keyboard_example.dart'),
@@ -58,34 +82,10 @@ void addInputStories(Dashbook dashbook) {
       info: MultitapAdvancedExample.description,
     )
     ..add(
-      'Tappables',
-      (_) => GameWidget(game: TappablesExample()),
-      codeLink: baseLink('input/tappables_example.dart'),
-      info: TappablesExample.description,
-    )
-    ..add(
       'Overlapping Tappables',
       (_) => GameWidget(game: OverlappingTappablesExample()),
       codeLink: baseLink('input/overlapping_tappables_example.dart'),
       info: OverlappingTappablesExample.description,
-    )
-    ..add(
-      'Draggables',
-      (context) {
-        return GameWidget(
-          game: DraggablesExample(
-            zoom: context.listProperty('zoom', 1, [0.5, 1, 1.5]),
-          ),
-        );
-      },
-      codeLink: baseLink('input/draggables_example.dart'),
-      info: DraggablesExample.description,
-    )
-    ..add(
-      'Hoverables',
-      (_) => GameWidget(game: HoverablesExample()),
-      codeLink: baseLink('input/hoverables_example.dart'),
-      info: HoverablesExample.description,
     )
     ..add(
       'Joystick',

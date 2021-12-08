@@ -14,7 +14,7 @@ void addSpritesStories(Dashbook dashbook) {
     ..add(
       'Basic Sprite',
       (_) => GameWidget(game: BasicSpriteExample()),
-      codeLink: baseLink('sprites/basic_animation_example.dart'),
+      codeLink: baseLink('sprites/basic_sprite_example.dart'),
       info: BasicSpriteExample.description,
     )
     ..add(
