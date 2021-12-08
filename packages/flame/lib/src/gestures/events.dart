@@ -3,11 +3,17 @@ import 'package:flutter/gestures.dart';
 import '../../extensions.dart';
 import '../game/mixins/game.dart';
 
-/// [EventPosition] converts position based events to three different coordinate systems (global, local and game).
+/// [EventPosition] converts position based events to three different coordinate
+/// systems (global, local and game).
 ///
-/// global: coordinate system relative to the entire app; same as `globalPosition` in Flutter
-/// widget: coordinate system relative to the GameWidget widget; same as `localPosition` in Flutter
-/// game: same as `widget` but also applies any transformations from the camera or viewport to the coordinate system
+/// global: coordinate system relative to the entire app; same as
+/// `globalPosition` in Flutter.
+/// widget: coordinate system relative to the GameWidget widget; same as
+/// `localPosition` in Flutter.
+/// viewport: same as `widget` but also applies any transformations from the
+/// viewport to the coordinate system.
+/// game: same as `widget` but also applies any transformations from the camera
+/// and viewport to the coordinate system.
 class EventPosition {
   final Game _game;
   final Offset _globalPosition;
@@ -18,20 +24,24 @@ class EventPosition {
   /// Coordinates of the event relative to the game widget position/size
   late final Vector2 widget = _game.convertGlobalToLocalCoordinate(global);
 
-  /// Coordinates of the event relative to the game position/size but applying only viewport transformations (not camera).
-  late final Vector2 viewportOnly =
-      _game.viewportProjector.unprojectVector(widget);
+  /// Coordinates of the event relative to the game position/size but applying
+  /// only viewport transformations (not camera).
+  late final Vector2 viewport = _game.viewportProjector.unprojectVector(widget);
 
-  /// Coordinates of the event relative to the game position/size and transformations
+  /// Coordinates of the event relative to the game position/size and
+  /// transformations
   late final Vector2 game = _game.projector.unprojectVector(widget);
 
   EventPosition(this._game, this._globalPosition);
 }
 
-/// [EventDelta] converts deltas based events to two different values (game and global).
+/// [EventDelta] converts deltas based events to two different values
+/// (game and global).
 ///
-/// [global]: this is the raw value received by the event without any scale applied to it; this is always the same as local because Flutter doesn't apply any scaling.
-/// [game]: the scalled value applied all the game transformations.
+/// [global]: this is the raw value received by the event without any scale
+/// applied to it; this is always the same as local because Flutter doesn't
+/// apply any scaling.
+/// [game]: the scaled value with all the game transformations applied.
 class EventDelta {
   final Game _game;
   final Offset _delta;
@@ -39,9 +49,9 @@ class EventDelta {
   /// Raw value relative to the game transformations
   late final Vector2 global = _delta.toVector2();
 
-  /// Scaled value relative to the game viewport only transformations (not camera).
-  late final Vector2 viewportOnly =
-      _game.viewportProjector.unscaleVector(global);
+  /// Scaled value relative to the game viewport only transformations (not
+  /// camera).
+  late final Vector2 viewport = _game.viewportProjector.unscaleVector(global);
 
   /// Scaled value relative to the game transformations
   late final Vector2 game = _game.projector.unscaleVector(global);
