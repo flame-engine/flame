@@ -79,33 +79,25 @@ mixin Draggable on Component {
 mixin HasDraggables on FlameGame {
   @mustCallSuper
   void onDragStart(int pointerId, DragStartInfo info) {
-    _onGenericEventReceived((c) => c.handleDragStart(pointerId, info));
+    propagateToChildren<Draggable>((c) => c.handleDragStart(pointerId, info));
   }
 
   @mustCallSuper
   void onDragUpdate(int pointerId, DragUpdateInfo details) {
-    _onGenericEventReceived((c) => c.handleDragUpdated(pointerId, details));
+    propagateToChildren<Draggable>(
+      (c) => c.handleDragUpdated(pointerId, details),
+    );
   }
 
   @mustCallSuper
   void onDragEnd(int pointerId, DragEndInfo details) {
-    _onGenericEventReceived((c) => c.handleDragEnded(pointerId, details));
+    propagateToChildren<Draggable>(
+      (c) => c.handleDragEnded(pointerId, details),
+    );
   }
 
   @mustCallSuper
   void onDragCancel(int pointerId) {
-    _onGenericEventReceived((c) => c.handleDragCanceled(pointerId));
-  }
-
-  void _onGenericEventReceived(bool Function(Draggable) handler) {
-    for (final c in children.reversed()) {
-      var shouldContinue = c.propagateToChildren<Draggable>(handler);
-      if (c is Draggable && shouldContinue) {
-        shouldContinue = handler(c);
-      }
-      if (!shouldContinue) {
-        break;
-      }
-    }
+    propagateToChildren<Draggable>((c) => c.handleDragCanceled(pointerId));
   }
 }
