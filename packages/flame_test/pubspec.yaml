@@ -9,7 +9,8 @@ environment:
   flutter: ">=2.5.0"
 
 dependencies:
-  flame: ^1.0.0
+  flame:
+    path: ../flame
   flutter:
     sdk: flutter
   flutter_test:
@@ -21,5 +22,6 @@ dependencies:
 dev_dependencies:
   dartdoc: ^0.42.0
   flutter_lints: ^1.0.0
-  flame_lint: ^0.0.1
+  flame_lint:
+    path: ../flame_lint
 
