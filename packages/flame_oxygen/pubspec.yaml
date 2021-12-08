@@ -1,6 +1,6 @@
 name: flame_oxygen
 description: Integrate the Oxygen ECS with the Flame Engine.
-version: 0.1.0-releasecandidate.17
+version: 0.1.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen
 publish_to: 'none'
 environment:

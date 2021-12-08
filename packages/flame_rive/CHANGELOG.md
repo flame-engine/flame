@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.0]
+* Update to Flame 1.0.0
+
 ## [1.0.0-releasecandidate.2]
 * Lower minimum sdk to 2.14.0
 

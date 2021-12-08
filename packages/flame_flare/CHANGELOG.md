@@ -1,4 +1,6 @@
-## [Next]
+# CHANGELOG
+
+## [1.0.0]
 
 - Migrate to Null-Safety
 - Migrate to Flame 1.0
