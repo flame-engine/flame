@@ -21,7 +21,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
-  flame_lint: ^0.0.1
+  flame_lint:
+    path: ../../flame_lint
 
 
 flutter:
