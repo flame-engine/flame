@@ -86,6 +86,7 @@ void testWidgetsRandom(
   int? seed,
   bool? skip,
   Timeout? timeout,
+  Duration? initialTimeout,
   bool semanticsEnabled = true,
   dynamic tags,
 }) {
@@ -95,6 +96,7 @@ void testWidgetsRandom(
     (WidgetTester widgetTester) => callback(Random(seed), widgetTester),
     skip: skip,
     timeout: timeout,
+    initialTimeout: initialTimeout,
     semanticsEnabled: semanticsEnabled,
     tags: tags,
   );
