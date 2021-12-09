@@ -280,9 +280,7 @@ class Component with Loadable {
   ) {
     var shouldContinue = true;
     for (final child in children.reversed()) {
-      if (child is Component) {
-        shouldContinue = child.propagateToChildren(handler);
-      }
+      shouldContinue = child.propagateToChildren(handler);
       if (shouldContinue && child is T) {
         shouldContinue = handler(child);
       } else if (shouldContinue && child is FlameGame) {
@@ -331,9 +329,7 @@ class Component with Loadable {
         'Did you try to access it on the Game constructor? '
         'Use the "onLoad" or "onMount" method instead.',
       );
-      if (parentGame is FlameGame) {
-        parentGame.prepareComponent(this);
-      }
+      parentGame.prepareComponent(this);
 
       debugMode |= parent.debugMode;
       isPrepared = true;
