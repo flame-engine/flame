@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 
 class JoystickPlayer extends SpriteComponent with HasGameRef {
   /// Pixels/s

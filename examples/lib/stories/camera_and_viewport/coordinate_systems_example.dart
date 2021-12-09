@@ -6,7 +6,6 @@ import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 /// A game that allows for camera control and displays Tap, Drag & Scroll
 /// events information on the screen, to allow exploration of the 3 coordinate

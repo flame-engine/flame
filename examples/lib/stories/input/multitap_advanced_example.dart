@@ -2,7 +2,6 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
-import 'package:flutter/material.dart';
 
 /// Showcases how to mix two advanced detectors
 class MultitapAdvancedExample extends FlameGame
