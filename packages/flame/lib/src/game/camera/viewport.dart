@@ -1,11 +1,7 @@
 import 'dart:math' as math;
-import 'dart:ui';
-
-import 'package:flutter/painting.dart';
 
 import '../../../extensions.dart';
 import '../../../game.dart';
-import '../projector.dart';
 
 /// A viewport is a class that potentially translates and resizes the screen.
 /// The reason you might want to have a viewport is to make sure you handle any

@@ -1,10 +1,8 @@
 import 'dart:math' as math;
-import 'dart:ui' show Rect, Canvas;
 
 import '../../../components.dart';
 import '../../../extensions.dart';
 import '../../../game.dart';
-import '../projector.dart';
 
 /// A camera translates your game coordinate system; this is useful when your
 /// world is not 1:1 with your screen size.

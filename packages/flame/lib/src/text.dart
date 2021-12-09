@@ -1,5 +1,3 @@
-import 'dart:ui' hide TextStyle, TextDirection;
-
 import 'package:flutter/material.dart';
 
 import 'anchor.dart';

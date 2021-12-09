@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/animation.dart';
 
 import '../../extensions.dart';

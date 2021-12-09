@@ -8,8 +8,6 @@ import '../game.dart';
 import 'assets/images.dart';
 import 'extensions/canvas.dart';
 import 'extensions/image.dart';
-import 'extensions/rect.dart';
-import 'extensions/vector2.dart';
 import 'flame.dart';
 import 'sprite_animation.dart';
 

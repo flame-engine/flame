@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:mocktail/mocktail.dart';
