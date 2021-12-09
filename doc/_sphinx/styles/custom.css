@@ -55,7 +55,7 @@ main.bd-content > #main-content > div {
 	overflow: hidden;
 }
 #site-navigation:hover {
-	overflow-y: auto;
+	overflow-y: scroll;
 	padding-right: 7px;
 }
 #site-navigation::-webkit-scrollbar {
