@@ -4,7 +4,6 @@ import 'dart:ui';
 import '../game.dart';
 import 'assets/images.dart';
 import 'extensions/image.dart';
-import 'extensions/vector2.dart';
 import 'flame.dart';
 
 extension SpriteBatchExtension on Game {

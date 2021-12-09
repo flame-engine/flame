@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import '../../assets.dart';
 import '../../extensions.dart';
 import '../anchor.dart';
-import '../sprite.dart';
 import 'animation_widget.dart';
 import 'base_future_builder.dart';
 import 'sprite_painter.dart';

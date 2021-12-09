@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import '../../components.dart';
 import '../../geometry.dart';
 import '../../palette.dart';
-import '../anchor.dart';
-import '../extensions/vector2.dart';
 
 /// A [ShapeComponent] is a [Shape] wrapped in a [PositionComponent] so that it
 /// can be added to a component tree and take the camera and viewport into

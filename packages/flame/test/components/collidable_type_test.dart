@@ -1,10 +1,8 @@
 import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 class _HasCollidablesGame extends FlameGame with HasCollidables {}
 

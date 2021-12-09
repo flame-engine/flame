@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 
 import '../../../components.dart';
 import '../../../game.dart';
-import 'game.dart';
 
 /// A [Component] mixin to add keyboard handling capability to components.
 /// Must be used in components that can only be added to games that are mixed

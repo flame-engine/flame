@@ -1,11 +1,7 @@
-import 'dart:ui';
-
 import 'package:flame/assets.dart';
-import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 /// A [Svg] to be rendered on a Flame [Game].

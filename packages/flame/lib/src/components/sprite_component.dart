@@ -4,11 +4,6 @@ import 'package:meta/meta.dart';
 
 import '../../components.dart';
 import '../extensions/image.dart';
-import '../extensions/vector2.dart';
-import '../sprite.dart';
-import 'component.dart';
-import 'mixins/has_paint.dart';
-import 'position_component.dart';
 
 export '../sprite.dart';
 

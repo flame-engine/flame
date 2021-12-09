@@ -1,9 +1,7 @@
 import 'package:meta/meta.dart';
 
 import '../../../components.dart';
-import '../../../extensions.dart';
 import '../../../input.dart';
-import '../../gestures/events.dart';
 
 /// The [ButtonComponent] bundles two [PositionComponent]s, one that shows while
 /// the button is being pressed, and one that shows otherwise.

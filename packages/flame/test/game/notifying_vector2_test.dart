@@ -9,7 +9,6 @@ void main() {
   /// notification during a modifying operation.
   void check(NotifyingVector2 v1, void Function(Vector2) operation) {
     final v2 = v1.clone();
-    expect(v2 is Vector2, true);
     expect(v2 is NotifyingVector2, false);
     var notified = 0;
     void listener() {

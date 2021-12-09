@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
 
 import '../../../components.dart';
-import '../../../extensions.dart';
 import '../../gestures/events.dart';
 import 'hud_margin_component.dart';
 

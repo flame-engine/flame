@@ -2,10 +2,7 @@ import 'package:meta/meta.dart';
 
 import '../../../components.dart';
 import '../../../game.dart';
-import '../../components/position_component.dart';
-import '../../extensions/vector2.dart';
 import '../../geometry/rectangle.dart';
-import 'hitbox.dart';
 
 /// [CollidableType.active] collides with other [Collidable]s of type active or static
 /// [CollidableType.passive] collides with other [Collidable]s of type active

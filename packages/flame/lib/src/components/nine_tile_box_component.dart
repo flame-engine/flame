@@ -3,9 +3,6 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 
 import '../../components.dart';
-import '../extensions/vector2.dart';
-import '../nine_tile_box.dart';
-import 'position_component.dart';
 
 export '../nine_tile_box.dart';
 

@@ -7,7 +7,6 @@ import '../extensions/canvas.dart';
 import '../extensions/offset.dart';
 import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
-import 'shape.dart';
 
 class Polygon extends Shape {
   final List<Vector2> normalizedVertices;
