@@ -11,6 +11,7 @@ Package to bridge the `tiled` library into easy-to-use Flame components.
 More [here](https://docs.flame-engine.org/main/tiled.html).
 
 ## Contributors (before the package moved in to the monorepo)
+ - [feroult](https://github.com/feroult)
  - [erickzanardo](https://github.com/erickzanardo)
  - [Schnurber](https://github.com/schnurber)
  - [Akida31](https://github.com/akida31)
