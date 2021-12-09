@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
