@@ -1,7 +1,6 @@
 library flame_fire_atlas;
 
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:archive/archive.dart';
 import 'package:flame/assets.dart';
