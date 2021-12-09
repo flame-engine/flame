@@ -1,8 +1,5 @@
 # CHANGELOG
 
-## [next]
- - `Component.childrenFactory` can be used to set up a global `ComponentSet` factory
-
 ## [1.0.0]
  - Add `ButtonComponent` backed by two `PositionComponent`s
  - Add `SpriteButtonComponent` backed by two `Sprite`s
