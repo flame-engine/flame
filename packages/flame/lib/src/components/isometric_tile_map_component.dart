@@ -3,9 +3,7 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 
 import '../../components.dart';
-import '../extensions/vector2.dart';
 import '../spritesheet.dart';
-import 'position_component.dart';
 
 /// This is just a pair of <int, int>.
 ///

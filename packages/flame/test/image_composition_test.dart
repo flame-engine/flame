@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:flame/extensions.dart';
 import 'package:flame/image_composition.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';

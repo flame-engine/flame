@@ -1,6 +1,5 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/sprite.dart';
 import 'package:flame/widgets.dart';
 import 'package:flutter/widgets.dart';
 

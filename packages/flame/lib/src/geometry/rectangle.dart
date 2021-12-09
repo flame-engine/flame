@@ -1,9 +1,5 @@
-import 'dart:ui';
-
 import '../../extensions.dart';
-import '../../game.dart';
 import '../../geometry.dart';
-import 'shape.dart';
 
 class Rectangle extends Polygon {
   static final _defaultNormalizedVertices = [

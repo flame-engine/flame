@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
@@ -7,9 +6,7 @@ import 'package:meta/meta.dart';
 import '../../components.dart';
 import '../../game.dart';
 import '../assets/images.dart';
-import '../extensions/vector2.dart';
 import '../parallax.dart';
-import 'position_component.dart';
 
 extension ParallaxComponentExtension on FlameGame {
   Future<ParallaxComponent> loadParallaxComponent(

@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/components/mixins/hoverable.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/gestures.dart' show PointerHoverEvent;

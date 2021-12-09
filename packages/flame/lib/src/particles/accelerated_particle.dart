@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import '../../extensions.dart';
 import '../components/mixins/single_child_particle.dart';
 import 'curved_particle.dart';

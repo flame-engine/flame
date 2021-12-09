@@ -3,7 +3,6 @@ import 'dart:ui' hide Offset;
 
 import '../anchor.dart';
 import '../extensions/offset.dart';
-import '../extensions/rect.dart';
 import '../extensions/vector2.dart';
 import '../game/notifying_vector2.dart';
 import '../game/transform2d.dart';

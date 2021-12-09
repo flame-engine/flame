@@ -1,13 +1,7 @@
 import 'dart:math';
-import 'dart:ui';
-
-import 'package:flutter/material.dart';
 
 import '../../extensions.dart';
 import '../../geometry.dart';
-import 'circle.dart';
-import 'polygon.dart';
-import 'shape.dart';
 
 abstract class Intersections<T1 extends Shape, T2 extends Shape> {
   Set<Vector2> intersect(T1 shapeA, T2 shapeB);
