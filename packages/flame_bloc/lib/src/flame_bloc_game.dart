@@ -13,8 +13,8 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
   S? _state;
 
   /// The current state of the [Bloc] that this [Component] is listening to.
-  /// Flame keeps a copy of the state on the [Component] so this can be directly accessed
-  /// in both the [update] and the [render] method.
+  /// Flame keeps a copy of the state on the [Component] so this can be directly
+  /// accessed in both the [update] and the [render] method.
   S? get state => _state;
 
   /// Makes this component subscribe to the Bloc changes.
@@ -36,7 +36,7 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
     });
   }
 
-  /// Makes this component stop listenning to the [Bloc] changes.
+  /// Makes this component stop listening to the [Bloc] changes.
   /// Visible only for test purposes.
   @visibleForTesting
   void unsubscribe() {
@@ -89,10 +89,12 @@ class FlameBlocGame extends FlameGame {
     _unsubscribe();
   }
 
-  /// Convenience method for obtaining the nearest ancestor provider of type [T].
+  /// Convenience method for obtaining the nearest ancestor provider of type
+  /// [T].
   ///
-  /// This method will do a lookup in the tree for [T], so avoid calling this inside
-  /// the game loop methods like [update] and [render] to avoid performance issues.
+  /// This method will do a lookup in the tree for [T], so avoid calling this
+  /// inside the game loop methods like [update] and [render] to avoid
+  /// performance issues.
   T read<T>() {
     final context = buildContext;
     if (context == null) {

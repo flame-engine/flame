@@ -4,13 +4,12 @@ import '../../../components.dart';
 import '../../../game.dart';
 import '../../geometry/rectangle.dart';
 
-/// [CollidableType.active] collides with other [Collidable]s of type active or static
-/// [CollidableType.passive] collides with other [Collidable]s of type active
-/// [CollidableType.inactive] will not collide with any other [Collidable]s
+/// The [CollidableType] is used to determine which other type of [Collidable]s
+/// that your component should collide with.
 enum CollidableType {
-  active,
-  passive,
-  inactive,
+  active, // Collides with other [Collidable]s of type active or passive.
+  passive, // Collides with other [Collidable]s of type active.
+  inactive, // Will not collide with any other [Collidable]s.
 }
 
 mixin Collidable on HasHitboxes {

@@ -28,17 +28,24 @@ class SpriteAnimationData {
   late List<SpriteAnimationFrameData> frames;
   final bool loop;
 
-  /// Creates a SpriteAnimationData from the given [frames] and [loop] parameters
+  /// Creates a SpriteAnimationData from the given [frames] and [loop]
+  /// parameters.
   SpriteAnimationData(this.frames, {this.loop = true});
 
-  /// Takes some parameters and automatically calculate and create the frames for the sprite animation data
+  /// Takes some parameters and automatically calculate and create the frames
+  /// for the sprite animation data.
   ///
-  /// [amount] The total amount of frames present on the image
-  /// [stepTimes] A list of times (in seconds) of each frame, should have a length equals to the amount parameter
-  /// [textureSize] The size of each frame
-  /// [amountPerRow] An optional parameter to inform how many frames there are on which row, useful for sprite sheets where the frames as disposed on multiple lines
-  /// [texturePosition] An optional parameter with the initial coordinate where the frames begin on the image, default to (top: 0, left: 0)
-  /// [loop] An optional parameter to inform if this animation loops or has a single iteration, defaults to true
+  /// [amount] The total amount of frames present on the image.
+  /// [stepTimes] A list of times (in seconds) of each frame, should have a
+  /// length equals to the amount parameter.
+  /// [textureSize] The size of each frame.
+  /// [amountPerRow] An optional parameter to inform how many frames there are
+  /// on which row, useful for sprite sheets where the frames as disposed on
+  /// multiple lines.
+  /// [texturePosition] An optional parameter with the initial coordinate where
+  /// the frames begin on the image, default to (top: 0, left: 0).
+  /// [loop] An optional parameter to inform if this animation loops or has a
+  /// single iteration, defaults to true.
   SpriteAnimationData.variable({
     required int amount,
     required List<double> stepTimes,
@@ -62,7 +69,8 @@ class SpriteAnimationData {
     });
   }
 
-  /// Works just like [SpriteAnimationData.variable] but uses the same [stepTime] for all frames
+  /// Works just like [SpriteAnimationData.variable] but uses the same
+  /// [stepTime] for all frames.
   factory SpriteAnimationData.sequenced({
     required int amount,
     required double stepTime,
@@ -161,11 +169,11 @@ class SpriteAnimation {
     loop = data.loop;
   }
 
-  /// Automatically creates an Animation Object using animation data provided by the json file
-  /// provided by Aseprite
+  /// Automatically creates an Animation Object using animation data provided by
+  /// the json file provided by Aseprite.
   ///
-  /// [imagePath]: Source of the sprite sheet animation
-  /// [dataPath]: Animation's exported data in json format
+  /// [imagePath]: Source of the sprite sheet animation.
+  /// [dataPath]: Animation's exported data in json format.
   SpriteAnimation.fromAsepriteData(
     Image image,
     Map<String, dynamic> jsonData,
@@ -214,8 +222,9 @@ class SpriteAnimation {
     );
   }
 
-  /// Takes a path of an image, a [SpriteAnimationData] and loads the sprite animation
-  /// When the [images] is omitted, the global [Flame.images] is used
+  /// Takes a path of an image, a [SpriteAnimationData] and loads the sprite
+  /// animation.
+  /// When the [images] is omitted, the global [Flame.images] is used.
   static Future<SpriteAnimation> load(
     String src,
     SpriteAnimationData data, {
@@ -232,10 +241,12 @@ class SpriteAnimation {
   /// Returns whether the animation is on the last frame.
   bool get isLastFrame => currentIndex == frames.length - 1;
 
-  /// Returns whether the animation has only a single frame (and is, thus, a still image).
+  /// Returns whether the animation has only a single frame (and is, thus, a
+  /// still image).
   bool get isSingleFrame => frames.length == 1;
 
-  /// Sets a different step time to each frame. The sizes of the arrays must match.
+  /// Sets a different step time to each frame.
+  /// The sizes of the arrays must match.
   set variableStepTimes(List<double> stepTimes) {
     assert(stepTimes.length == frames.length);
     for (var i = 0; i < frames.length; i++) {
@@ -267,18 +278,21 @@ class SpriteAnimation {
   /// Gets the current [Sprite] that should be shown.
   ///
   /// In case it reaches the end:
-  ///  * If [loop] is true, it will return the last sprite. Otherwise, it will go back to the first.
+  ///  * If [loop] is true, it will return the last sprite. Otherwise, it will
+  ///  go back to the first.
   Sprite getSprite() {
     return currentFrame.sprite;
   }
 
-  /// If [loop] is false, returns whether the animation is done (fixed in the last Sprite).
+  /// If [loop] is false, returns whether the animation is done (fixed in the
+  /// last Sprite).
   ///
   /// Always returns false otherwise.
   bool _done = false;
   bool done() => _done;
 
-  /// Updates this animation, ticking the lifeTime by an amount [dt] (in seconds).
+  /// Updates this animation, ticking the lifeTime by an amount [dt]
+  /// (in seconds).
   void update(double dt) {
     clock += dt;
     elapsed += dt;
@@ -302,17 +316,20 @@ class SpriteAnimation {
     }
   }
 
-  /// Returns a new Animation equal to this one in definition, but each copy can be run independently.
+  /// Returns a new Animation equal to this one in definition, but each copy can
+  /// be run independently.
   SpriteAnimation clone() {
     return SpriteAnimation(frames.toList(), loop: loop);
   }
 
-  /// Returns a new Animation based on this animation, but with its frames in reversed order
+  /// Returns a new Animation based on this animation, but with its frames in
+  /// reversed order
   SpriteAnimation reversed() {
     return SpriteAnimation(frames.reversed.toList(), loop: loop);
   }
 
-  /// Computes the total duration of this animation (before it's done or repeats).
+  /// Computes the total duration of this animation
+  /// (before it's done or repeats).
   double totalDuration() {
     return frames.map((f) => f.stepTime).reduce((a, b) => a + b);
   }
