@@ -17,10 +17,10 @@ read these instructions carefully.
 
 ## New Features
  - If you'd like to add a feature to the library that doesn't already exist, feel free to describe
- the feature in a new [Github issues](https://github.com/flame-engine/flame/issues/new).
+ the feature in a new [GitHub issue](https://github.com/flame-engine/flame/issues/new).
    - You can also join us on [Discord](https://discord.gg/pxrBmy4) to discuss some initials
    thoughts.
- - Issues that have been identified as a feature request will be labelled "enchanment".
+ - Issues that have been identified as a feature request will be labelled "enhancement".
  - If you'd like to implement the new feature, please wait for feedback from the project maintainers
  before spending too much time writing the code. In some cases, enhancements may not align well with
  the project objectives at the time.
