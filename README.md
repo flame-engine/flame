@@ -76,7 +76,7 @@ make integrations seamless. Currently, we have bridge libraries to the following
   [FireAtlas](https://github.com/flame-engine/fire-atlas): Create texture atlases for games.
 - [flame_forge2d](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d) for
   [Forge2D](https://github.com/flame-engine/forge2d): A Box2D physics engine.
-- [flame_lint](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d) -
+- [flame_lint](https://github.com/flame-engine/flame/tree/main/packages/flame_lint) -
   Our set of linting (`analysis_options.yaml`) rules.
 - [flame_oxygen](https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen) for
   [Oxygen](https://github.com/flame-engine/oxygen): A lightweight Entity Component System (ECS) framework.
