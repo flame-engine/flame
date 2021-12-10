@@ -34,21 +34,23 @@ class ScaleEffectExample extends FlameGame with TapDetector {
     add(square);
 
     add(
-        Star()
-          ..position=Vector2(200, 100)
-          ..add(ScaleEffect.to(
-              Vector2.all(1.2),
-              InfiniteEffectController(
-                SequenceEffectController([
-                  LinearEffectController(0.1),
-                  ReverseLinearEffectController(0.1),
-                  RandomEffectController.exponential(
-                    PauseEffectController(1, progress: 0),
-                    beta: 1,
-                  ),
-                ]),
-              ),
-          )),
+      Star()
+        ..position = Vector2(200, 100)
+        ..add(
+          ScaleEffect.to(
+            Vector2.all(1.2),
+            InfiniteEffectController(
+              SequenceEffectController([
+                LinearEffectController(0.1),
+                ReverseLinearEffectController(0.1),
+                RandomEffectController.exponential(
+                  PauseEffectController(1, progress: 0),
+                  beta: 1,
+                ),
+              ]),
+            ),
+          ),
+        ),
     );
   }
 
@@ -74,17 +76,18 @@ class Star extends PositionComponent {
   Star() {
     const smallR = 15.0;
     const bigR = 30.0;
-    shape = Path() ..moveTo(bigR, 0);
+    const tau = 2 * pi;
+    shape = Path()..moveTo(bigR, 0);
     for (var i = 1; i < 10; i++) {
-      final r = i.isEven? bigR : smallR;
-      final a = i / 10 * Transform2D.tau;
+      final r = i.isEven ? bigR : smallR;
+      final a = i / 10 * tau;
       shape.lineTo(r * cos(a), r * sin(a));
     }
     shape.close();
   }
 
   late final Path shape;
-  late final Paint paint = Paint() ..color=const Color(0xFFFFF127);
+  late final Paint paint = Paint()..color = const Color(0xFFFFF127);
 
   @override
   void render(Canvas canvas) {
