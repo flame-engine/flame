@@ -7,9 +7,14 @@ import '../../geometry/rectangle.dart';
 /// The [CollidableType] is used to determine which other type of [Collidable]s
 /// that your component should collide with.
 enum CollidableType {
-  active, // Collides with other [Collidable]s of type active or passive.
-  passive, // Collides with other [Collidable]s of type active.
-  inactive, // Will not collide with any other [Collidable]s.
+  /// Collides with other [Collidable]s of type active or passive.
+  active,
+
+  /// Collides with other [Collidable]s of type active.
+  passive,
+
+  /// Will not collide with any other [Collidable]s.
+  inactive,
 }
 
 mixin Collidable on HasHitboxes {
