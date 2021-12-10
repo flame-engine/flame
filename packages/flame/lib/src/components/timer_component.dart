@@ -2,7 +2,8 @@ import 'dart:ui';
 
 import '../../components.dart';
 
-/// A component that uses a [Timer] instance which you can react to when it has finished.
+/// A component that uses a [Timer] instance which you can react to when it has
+/// finished.
 class TimerComponent extends Component {
   late final Timer timer;
   final bool removeOnFinish;

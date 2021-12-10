@@ -86,8 +86,8 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
   /// Component will be removed after animation is done and the current state
   /// is true on [removeOnFinish].
   ///
-  /// Note: [SpriteAnimationGroupComponent] will not be removed automatically if loop
-  /// property of [SpriteAnimation] of the current state is true.
+  /// Note: [SpriteAnimationGroupComponent] will not be removed automatically if
+  /// loop property of [SpriteAnimation] of the current state is true.
   @override
   bool get shouldRemove {
     final stateRemoveOnFinish = removeOnFinish[current] ?? false;

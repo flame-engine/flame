@@ -1,18 +1,18 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-part 'inventory_state.dart';
 part 'inventory_event.dart';
+part 'inventory_state.dart';
 
 class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
   InventoryBloc() : super(const InventoryState.empty()) {
-    on<WeaponEquiped>(
+    on<WeaponEquipped>(
       (event, emit) => emit(
         state.copyWith(weapon: event.weapon),
       ),
     );
 
-    on<NextWeaponEquiped>((event, emit) {
+    on<NextWeaponEquipped>((event, emit) {
       const values = Weapon.values;
       final i = values.indexOf(state.weapon);
       if (i == values.length - 1) {

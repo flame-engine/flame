@@ -10,9 +10,11 @@ export '../nine_tile_box.dart';
 class NineTileBoxComponent extends PositionComponent {
   NineTileBox? nineTileBox;
 
-  /// Takes the [NineTileBox] instance used to render this box.
+  /// Takes the [NineTileBox] instance to render a box that can grow and shrink
+  /// seamlessly.
   ///
-  /// It uses the x, y, width and height coordinates from the [PositionComponent] to render.
+  /// It uses the x, y, width and height coordinates from the
+  /// [PositionComponent] to render.
   NineTileBoxComponent({
     this.nineTileBox,
     Vector2? position,

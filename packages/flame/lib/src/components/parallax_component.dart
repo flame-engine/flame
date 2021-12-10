@@ -111,14 +111,14 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
   /// and filled), otherwise load the [ParallaxLayer]s individually and use the
   /// normal constructor.
   ///
-  /// [load] takes a list of [ParallaxData] of all the images and a size that you want to use in the
-  /// parallax.
+  /// [load] takes a list of [ParallaxData] of all the images and a size that
+  /// you want to use in the parallax.
   ///
-  /// Optionally arguments for the [baseVelocity] and [velocityMultiplierDelta] can be passed
-  /// in, [baseVelocity] defines what the base velocity of the layers should be
-  /// and [velocityMultiplierDelta] defines how the velocity should change the
-  /// closer the layer is ([velocityMultiplierDelta ^ n], where n is the
-  /// layer index).
+  /// Optionally arguments for the [baseVelocity] and [velocityMultiplierDelta]
+  /// can be passed in, [baseVelocity] defines what the base velocity of the
+  /// layers should be and [velocityMultiplierDelta] defines how the velocity
+  /// should change the closer the layer is ([velocityMultiplierDelta ^ n],
+  /// where n is the layer index).
   /// Arguments for how all the images should repeat ([repeat]),
   /// which edge it should align with ([alignment]), which axis it should fill
   /// the image on ([fill]) and [images] which is the image cache that should be
