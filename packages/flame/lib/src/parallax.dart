@@ -122,10 +122,11 @@ class ParallaxImage extends ParallaxRenderer {
           fill: fill,
         );
 
-  /// Takes a path of an image, and optionally arguments for how the image should
-  /// repeat ([repeat]), which edge it should align with ([alignment]), which axis
-  /// it should fill the image on ([fill]) and [images] which is the image cache
-  /// that should be used. If no image cache is set, the global flame cache is used.
+  /// Takes a path of an image, and optionally arguments for how the image
+  /// should repeat ([repeat]), which edge it should align with ([alignment]),
+  /// which axis it should fill the image on ([fill]) and [images] which is the
+  /// image cache that should be used. If no image cache is set, the global
+  /// flame cache is used.
   static Future<ParallaxImage> load(
     String path, {
     ImageRepeat repeat = ImageRepeat.repeatX,
@@ -154,10 +155,10 @@ class ParallaxImage extends ParallaxRenderer {
 /// Specifications with a SpriteAnimation and how it should be drawn in
 /// relation to the device screen
 class ParallaxAnimation extends ParallaxRenderer {
-  /// The Animation
   final SpriteAnimation _animation;
 
-  /// The animation's frames prerended into images so it can be used in the parallax
+  /// The animation's frames pre-rendered into images so it can be used in the
+  /// parallax.
   final List<Image> _prerenderedFrames;
 
   ParallaxAnimation(
@@ -172,15 +173,17 @@ class ParallaxAnimation extends ParallaxRenderer {
           fill: fill,
         );
 
-  /// Takes a path of an image, a SpriteAnimationData, and optionally arguments for how the image should
-  /// repeat ([repeat]), which edge it should align with ([alignment]), which axis
-  /// it should fill the image on ([fill]) and [images] which is the image cache
-  /// that should be used. If no image cache is set, the global flame cache is used.
+  /// Takes a path of an image, a SpriteAnimationData, and optionally arguments
+  /// for how the image should repeat ([repeat]), which edge it should align
+  /// with ([alignment]), which axis it should fill the image on ([fill]) and
+  /// [images] which is the image cache that should be used. If no image cache
+  /// is set, the global flame cache is used.
   ///
-  /// _IMPORTANT_: This method pre render all the frames of the animation into image instances
-  /// so it can be used inside the parallax. Just keep that in mind when using animations in
-  /// in parallax, the over use of it, or the use of big animations (be it in number of frames
-  /// or the size of the images) can lead to high use of memory.
+  /// _IMPORTANT_: This method pre render all the frames of the animation into
+  /// image instances so it can be used inside the parallax. Just keep that in
+  /// mind when using animations in in parallax, the over use of it, or the use
+  /// of big animations (be it in number of frames or the size of the images)
+  /// can lead to high use of memory.
   static Future<ParallaxAnimation> load(
     String path,
     SpriteAnimationData animationData, {
@@ -216,7 +219,7 @@ class ParallaxAnimation extends ParallaxRenderer {
 }
 
 /// Represents one layer in the parallax, draws out an image on a canvas in the
-/// manner specified by the parallaxImage
+/// manner specified by the parallaxImage.
 class ParallaxLayer {
   final ParallaxRenderer parallaxRenderer;
   late Vector2 velocityMultiplier;
@@ -225,10 +228,10 @@ class ParallaxLayer {
   late Vector2 _imageSize;
   double _scale = 1.0;
 
-  /// [parallaxRenderer] is the representation of the renderer with data of how the
-  /// layer should behave.
-  /// [velocityMultiplier] will be used to determine the velocity of the layer by
-  /// multiplying the [Parallax.baseVelocity] with the [velocityMultiplier].
+  /// [parallaxRenderer] is the representation of the renderer with data of how
+  /// the layer should behave.
+  /// [velocityMultiplier] will be used to determine the velocity of the layer
+  /// by multiplying the [Parallax.baseVelocity] with the [velocityMultiplier].
   ParallaxLayer(
     this.parallaxRenderer, {
     Vector2? velocityMultiplier,
@@ -315,10 +318,11 @@ class ParallaxLayer {
     );
   }
 
-  /// Takes a data of a parallax renderer, and optionally arguments for how it should
-  /// repeat ([repeat]), which edge it should align with ([alignment]), which axis
-  /// it should fill the image on ([fill]) and [images] which is the image cache
-  /// that should be used. If no image cache is set, the global flame cache is used.
+  /// Takes a data of a parallax renderer, and optionally arguments for how it
+  /// should repeat ([repeat]), which edge it should align with ([alignment]),
+  /// which axis it should fill the image on ([fill]) and [images] which is the
+  /// image cache that should be used. If no image cache is set, the global
+  /// flame cache is used.
   static Future<ParallaxLayer> load(
     ParallaxData data, {
     Vector2? velocityMultiplier,
@@ -351,7 +355,7 @@ abstract class ParallaxData {
   );
 }
 
-/// Contains the fields and logic to load a [ParallaxImage]
+/// Contains the fields and logic to load a [ParallaxImage].
 class ParallaxImageData extends ParallaxData {
   final String path;
 
@@ -374,7 +378,7 @@ class ParallaxImageData extends ParallaxData {
   }
 }
 
-/// Contains the fields and logic to load a [ParallaxAnimation]
+/// Contains the fields and logic to load a [ParallaxAnimation].
 class ParallaxAnimationData extends ParallaxData {
   final String path;
   final SpriteAnimationData animationData;
@@ -409,7 +413,7 @@ class Parallax {
   bool isSized = false;
   late final Vector2 _size;
 
-  /// Do not modify this directly, since the layers won't be resized if you do
+  /// Do not modify this directly, since the layers won't be resized if you do.
   Vector2 get size => _size;
   set size(Vector2 newSize) {
     resize(newSize);
@@ -460,11 +464,11 @@ class Parallax {
   ///
   /// [load] takes a list of paths to all the images that you want to use in the
   /// parallax.
-  /// Optionally arguments for the [baseVelocity] and [velocityMultiplierDelta] can be passed
-  /// in, [baseVelocity] defines what the base velocity of the layers should be
-  /// and [velocityMultiplierDelta] defines how the velocity should change the
-  /// closer the layer is ([velocityMultiplierDelta ^ n], where n is the
-  /// layer index).
+  /// Optionally arguments for the [baseVelocity] and [velocityMultiplierDelta]
+  /// can be passed in, [baseVelocity] defines what the base velocity of the
+  /// layers should be and [velocityMultiplierDelta] defines how the velocity
+  /// should change the closer the layer is ([velocityMultiplierDelta ^ n],
+  /// where n is the layer index).
   /// Arguments for how all the images should repeat ([repeat]),
   /// which edge it should align with ([alignment]), which axis it should fill
   /// the image on ([fill]) and [images] which is the image cache that should be

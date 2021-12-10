@@ -48,8 +48,9 @@ class Anchor {
     return p - (toVector2()..multiply(size));
   }
 
-  /// Take your position [position] that is on this anchor and give back what that
-  /// position it would be on in anchor [otherAnchor] with a size of [size].
+  /// Take your position [position] that is on this anchor and give back what
+  /// that position it would be on in anchor [otherAnchor] with a size of
+  /// [size].
   Vector2 toOtherAnchorPosition(
     Vector2 position,
     Anchor otherAnchor,

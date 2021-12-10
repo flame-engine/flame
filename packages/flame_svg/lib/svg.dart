@@ -12,8 +12,8 @@ class Svg {
   /// Creates an [Svg] with the received [svgRoot].
   Svg(this.svgRoot);
 
-  /// Loads an [Svg] with the received [cache]. When no [cache] is provided, the global
-  /// [Flame.assets] is used.
+  /// Loads an [Svg] with the received [cache]. When no [cache] is provided,
+  /// the global [Flame.assets] is used.
   static Future<Svg> load(String fileName, {AssetsCache? cache}) async {
     cache ??= Flame.assets;
     final svgString = await cache.readFile(fileName);

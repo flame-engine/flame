@@ -310,8 +310,8 @@ class Component with Loadable {
   void changePriorityWithoutResorting(int priority) => _priority = priority;
 
   /// Prepares the [Component] to be added to a [parent], and if there is an
-  /// ancestor that is a [FlameGame] that game will do necessary preparations for
-  /// this component.
+  /// ancestor that is a [FlameGame] that game will do necessary preparations
+  /// for this component.
   /// If there are no parents that are a [Game] false will be returned and this
   /// will run again once an ancestor or the component itself is added to a
   /// [Game].

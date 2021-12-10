@@ -31,11 +31,12 @@ abstract class PositionBodyComponent<T extends Forge2DGame>
     super.onMount();
     assert(
       positionComponent != null,
-      'The positionComponent has to be either sent in as an argument or set in onLoad',
+      'The positionComponent has to be set either from the argument or in '
+      'onLoad',
     );
     assert(
       positionComponent != null,
-      'The size has to be either sent in as an argument or set in onLoad',
+      'The size has to be set either from the argument or in onLoad',
     );
     positionComponent!.anchor = Anchor.center;
     positionComponent!.size = size;
