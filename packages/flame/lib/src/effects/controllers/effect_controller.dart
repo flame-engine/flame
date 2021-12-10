@@ -123,8 +123,8 @@ abstract class EffectController {
   /// Is the effect's duration random or fixed?
   bool get isRandom => false;
 
-  /// Total duration of the effect. If the effect is either infinite or random,
-  /// this will return `null`.
+  /// Total duration of the effect. If the duration cannot be determined, this
+  /// will return `null`.
   double? get duration;
 
   /// Has the effect started running? Some effects use a "delay" parameter to
