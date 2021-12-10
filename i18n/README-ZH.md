@@ -5,59 +5,36 @@
 </p>
 
 <p align="center">
-一款轻量的 Flutter 游戏引擎.
+基于 Flutter 的游戏引擎。
 </p>
 
 <p align="center">
-  <a title="Pub" href="https://pub.dev/packages/flame/versions#prerelease" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout&include_prereleases" /></a>
-  <a title="Pub" href="https://pub.dev/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a>
-  <img src="https://github.com/flame-engine/flame/workflows/Test/badge.svg?branch=main&event=push" alt="Test" />
+  <a title="Pub" href="https://pub.flutter-io.cn/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a>
+  <img src="https://github.com/flame-engine/flame/workflows/cicd/badge.svg?branch=main&event=push" alt="Test" />
   <a title="Discord" href="https://discord.gg/pxrBmy4" ><img src="https://img.shields.io/discord/509714518008528896.svg" /></a>
 </p>
 
 ---
 
-[English](/README.md) | 简体中文 | [Polski](/i18n/README-PL.md) | [Русский](/i18n/README-RU.md)
-
----
-
-## 关于 1.0.0
-
-我们的目标是尽快发布 v1 版本。
-随着开发工作的推进，我们将按照周期发布预览版本，并且目前来看我们的进度十分可观（但仍需要一些后续改动）。
-
-我们希望你可以使用新版本的 Flame 进行体验，并且针对新的结构和功能给予我们团队反馈。
-
-目前在 pub 上已发布的 v1 版本为
-<a title="Pub" href="https://pub.flutter-io.cn/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout&include_prereleases" /></a>。
-最新的稳定版本为
-<a title="Pub" href="https://pub.flutter-io.cn/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a>。
-请根据你的需要选择合适的版本。
+[English](/README.md) | 简体中文 | [Polski](/i18n/README-PL.md) | [Русский](/i18n/README-RU.md) | [Español](/i18n/README-ES.md)
 
 ---
 
 ## 文档
 
-请注意，主分支的文档要比已发布的版本更新。
+完整的 Flame 文档可在 [docs.flame-engine.org](https://docs.flame-engine.org/) 查看。
 
-你可以在此处找到各版本的文档：
-- 最新稳定版: 
-    - [Flame 引擎官网](https://flame-engine.org/)
-    - [GitHub 文档](https://github.com/flame-engine/flame/tree/master-v0.x/doc)
+如果你需要查看其他版本的文档，请使用网站顶部的版本选择器进行切换。
 
-- v1.0.0 版本：
-    - [GitHub docs](https://github.com/flame-engine/flame/tree/1.0.0-releasecandidate.11/doc)
+**注意**：主分支的文档比已发布在网站上的文档版本更新。
 
-- 中文社区版文档（非官方，针对中文环境）：
-    - [Flame 中文网](https://www.flame-cn.com/)
-    - [Flame 中文文档](https://docs.flame-cn.com/)
-
-你可以在这里看到完整的 [开发文档](/doc/README.md) 。
-
-你可以在浏览器中尝试 [我们提供的一些示例](https://flame-engine.github.io/flame/)。
-你也可以在 [这里](/examples) 查看示例的源码。
-
-Flame 的官方网站（包含文档），请 [访问此处](https://flame-engine.org/)。
+其他资源：
+ - [官方网站](https://flame-engine.org/) 。
+ - [示例](https://examples.flame-engine.org/) 可在浏览器上尝试大部分功能。
+ - [教程](https://tutorials.flame-engine.org/) - 快速起步的教程。
+ - [API 文档](https://pub.flutter-io.cn/documentation/flame/latest/) - 基于 dartdoc 生成的 API 文档。
+ - [Flame 中文网（非官方）](https://www.flame-cn.com/) 。
+ - [Flame 中文文档（非官方）](https://docs.flame-cn.com/) 。
 
 ## 问题互助
 
@@ -65,33 +42,64 @@ Flame 的官方网站（包含文档），请 [访问此处](https://flame-engin
 欢迎加入 [「Flame 交流」QQ 群](https://jq.qq.com/?_wv=1027&k=5ETLFm3)
 （非官方, 针对国内用户的讨论群）。
 
-我们在 Discord 上有一个互助频道，[点击加入](https://discord.gg/pxrBmy4)。
+在 [Blue Fire 的 Discord 频道](https://discord.gg/5unKpdQD78)
+内有我们的 Flame 社区，你可以在该频道咨询有关 Flame 的问题。
 
-我们也有 [FAQ](/FAQ.md) ，
-所以在提问前，请先搜索是否有你需要的答案。
+如果你更倾向于使用 StackOverflow，你也可以在上面发表问题。
+添加 [Flame 标签](https://stackoverflow.com/questions/tagged/flame)
+后关注该标签的人可以看到并帮助解决问题。
 
-## 项目目标
+## 项目功能
 
-该项目的目的是为使用 Flutter 开发的游戏会遇到的常见问题提供一套完整的解决方案。
+Flame 引擎的目的是为使用 Flutter 开发的游戏会遇到的常见问题提供一套完整的解决方案。
 
-目前项目提供了以下内容：
+目前 Flame 提供了以下功能：
+
 - 游戏循环 (game loop)
-- 组件/对象系统
-- 内置物理引擎（Forge2D，通过 [flame_forge2d](https://github.com/flame-engine/flame_Forge2D) 提供）
-- 音频支持
+- 组件/对象系统 (FCS)
 - 特效与粒子效果
+- 碰撞检测
 - 手势和输入支持
-- 图片、精灵图 (sprite) 以及精灵图组
-- 基础 Rive 支持
+- 图片、动画、精灵图 (sprite) 以及精灵图组
 - 一些简化开发的实用工具类
 
-你可以按需使用它们，某种程度上来说它们是相互独立的。
+除了以上的功能以外，你可以使用一些桥接 Flame 的 package 来增强引擎本身的功能。
+通过这些桥接 package，你可以访问 Flame 的组件、帮助程序，
+或是与其他 package 进行绑定，从而达到平滑集成的效果。
+目前我们有以下的桥接 package：
+
+- [flame_audio](https://github.com/flame-engine/flame/tree/main/packages/flame_audio) 桥接
+  [AudioPlayers](https://github.com/bluefireteam/audioplayers) ：可同时播放多个音频。
+- [flame_bloc](https://github.com/flame-engine/flame/tree/main/packages/flame_bloc) 桥接
+  [Bloc](https://github.com/felangel/bloc) ：BloC 状态管理。
+- [flame_fire_atlas](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas) 桥接
+  [FireAtlas](https://github.com/flame-engine/fire-atlas) ：为游戏创建纹理图集。
+- [flame_forge2d](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d) 桥接
+  [Forge2D](https://github.com/flame-engine/forge2d) ：基于 Box2D 的物理引擎
+- [flame_lint](https://github.com/flame-engine/flame/tree/main/packages/flame_lint) -
+  引擎的代码格式规则 (`analysis_options.yaml`)。
+- [flame_oxygen](https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen) 桥接
+  [Oxygen](https://github.com/flame-engine/oxygen) ：轻量的实体-组件-系统 (ECS)。
+- [flame_rive](https://github.com/flame-engine/flame/tree/main/packages/flame_rive) 桥接
+  [Rive](https://rive.app/) ：创建可交互的动画。
+- [flame_svg](https://github.com/flame-engine/flame/tree/main/packages/flame_svg) 桥接
+  [flutter_svg](https://github.com/dnfield/flutter_svg) ：在 Flutter 中绘制 SVG。
+- [flame_tiled](https://github.com/flame-engine/flame/tree/main/packages/flame_tiled) 桥接
+  [Tiled](https://www.mapeditor.org/) ：二维平面的地图编辑器。
+
+## 赞助者
+
+Flame 引擎最大的赞助者：
+
+[![Cypher Stack](/media/logo_cypherstack.png)](https://cypherstack.com/)
+
+如果你想要赞助 Flame，请查看下方的 Pateron 信息，或在 Discord 频道中联系我们。
 
 ## 支持我们
 
-顺手点一颗 Star，就是你对我们的帮助！
+顺手点一颗 Star，就是你对我们的最直接的支持！
 
-你也可以成为赞助者，通过 Patreon 来支持我们：
+你也可以通过 Patreon 来支持我们：
 
 [![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/bluefireoss)
 
@@ -113,32 +121,47 @@ Flame 的官方网站（包含文档），请 [访问此处](https://flame-engin
 
 ## 贡献
 
-**注意**：我们目前在着手于发布 Flame 的第一个稳定版本，所以，除了严重的 BUG 修复以外，`0.x` 的版本更新将全部冻结。
-如果你想贡献该版本，请确保你的提交是在修复 BUG。
-若想贡献至稳定版本，请务必将你的 PR 指向 `main` 分支，并且与团队沟通你的贡献，
-可以是 issue 方式，或在 [Discord](https://discord.gg/pxrBmy4) 上沟通。
-
-我们感激你以任何形式帮助我们！评论、建议、提 issues、或是 PR (Pull Request)。
-
 如果你找到了 bug 或对 Flame 有更好的建议，请创建一个 issue，我们将会尽快处理。
 
-你想通过 PR 进行贡献吗？我们欢迎 PR，只要确保你的分支是 `develop`，
-并遵循 [PR 模板](/.github/pull_request_template.md) 即可。
+你想通过 PR 进行贡献吗？我们欢迎 PR，只要确保你的分支是从主分支 (main) 创建的，
+并遵循创建 PR 时的 [PR 检查单](/.github/pull_request_template.md) 即可。
+
+在处理大改动或对改动有疑问时，确保你和团队有充分的沟通。
+你可以通过 issue、GitHub 讨论 (discussion) 或是在
+[Discord 频道](https://discord.gg/pxrBmy4) 联系团队。
 
 ## 立即开始
 
-你可以在 [这里](/tutorials) 找到一系列教程。
-注意这些教程都基于主分支。
-如需查看你正在使用的版本的教程，请选择对应的版本标签。
+你可以在 [tutorials.flame-engine.org](https://tutorials.flame-engine.org)
+找到一个简单的新手教程，也可以在 [examples.flame-engine.org](https://examples.flame-engine.org)
+找到包含了大部分 Flame 功能的示例。
+若你想查看示例中的代码，点击右上角的 `< >` 按钮。
 
-系列内容仍然在更新中，会有更多的教程和指导内容加入。
+### 特别突出的社区教程
 
-我们还在 [awesome-flame](https://github.com/flame-engine/awesome-flame) 项目上提供了一些精选的游戏、库和文章。
+> 由于网络条件，以下内容你可能无法访问。
 
-部分文章可能会有内容过时，但仍然是有用的内容。
+- @Devowl 的 Flutter & Flame 系列：
+  - [第 1 步：构建你的游戏](https://medium.com/flutter-community/flutter-flame-step-1-create-your-game-b3b6ee387d77)
+  - [第 2 步：游戏的基础](https://medium.com/flutter-community/flutter-flame-step-2-game-basics-48b4493424f3)
+  - [第 3 步：精灵图和输入操作](https://blog.devowl.de/flutter-flame-step-3-sprites-and-inputs-7ca9cc7c8b91)
+  - [第 4 步：碰撞和视图区域](https://blog.devowl.de/flutter-flame-step-4-collisions-viewport-ff2da048e3a6)
+  - [第 5 步：逐级生成和相机视角](https://blog.devowl.de/flutter-flame-step-5-level-generation-camera-62a060a286e3)
+
+- 其他教程:
+  - @Vguzzi 的文章 [使用 Flame 在 Flutter 中制作游戏](https://www.raywenderlich.com/27407121-building-games-in-flutter-with-flame-getting-started)
+  - @DevKage 的 YouTube 系列视频：[Dino run tutorial](https://www.youtube.com/playlist?list=PLiZZKL9HLmWOmQgYxWHuOHOWsUUlhCCOY)
+
+我们还在 [awesome-flame](https://github.com/flame-engine/awesome-flame)
+提供了一系列精选的游戏、组件库和文章。
+
+请留意，部分文章的内容可能已稍微过时，但它们仍然有很好的指导意义。
 
 ## 感谢
 
- * 一直在尽力维护和改善 Flame 框架的 [Flame 引擎团队](https://github.com/orgs/flame-engine/people)。
- * 翻译：[HarrisonQI](https://github.com/HarrisonQi)、[Alex Li](https://github.com/AlexV525)。
+ * 一直在为 Flame 及其生态作出贡献和维护的 [Blue Fire 团队](https://github.com/orgs/bluefireteam/people) 。
  * 所有友善的贡献者和在社区中提供帮助的人。
+
+### 本地化文档翻译：
+ * [HarrisonQI](https://github.com/HarrisonQi)
+ * [Alex Li](https://github.com/AlexV525)
