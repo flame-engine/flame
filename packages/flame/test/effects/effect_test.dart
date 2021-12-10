@@ -27,12 +27,6 @@ class _MyEffect extends Effect {
     super.onStart();
     onStartCallback?.call();
   }
-
-  @override
-  void onFinish() {
-    super.onFinish();
-    onFinishCallback?.call();
-  }
 }
 
 void main() {
@@ -150,7 +144,7 @@ void main() {
         ..onStartCallback = () {
           nStarted++;
         }
-        ..onFinishCallback = () {
+        ..onFinish = () {
           nFinished++;
         };
 

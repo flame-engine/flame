@@ -79,6 +79,9 @@ functionality inherited by all other effects. This includes:
     removed from the game tree and garbage-collected once the effect completes. Set this to false
     if you plan to reuse the effect after it is finished.
 
+  - Optional user-provided `onFinish` callback, which will be invoked when the effect has just
+    completed its execution but before it is removed from the game.
+
   - The `reset()` method reverts the effect to its original state, allowing it to run once again.
 
 
