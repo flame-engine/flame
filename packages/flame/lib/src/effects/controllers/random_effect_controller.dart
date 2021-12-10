@@ -46,7 +46,7 @@ class RandomEffectController extends EffectController {
   }) {
     assert(beta > 0, 'Beta must be positive: $beta');
     return RandomEffectController(
-        child,
+      child,
       _ExponentialRandomVariable(beta, random),
     );
   }

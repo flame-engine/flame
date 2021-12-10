@@ -49,10 +49,10 @@ void main() {
     test('.uniform', () {
       final random = MyRandom();
       final ec = RandomEffectController.uniform(
-          LinearEffectController(1000),
-          min: 0,
-          max: 10,
-          random: random,
+        LinearEffectController(1000),
+        min: 0,
+        max: 10,
+        random: random,
       );
       expect(random.nextDouble(), 0.5);
       expect(ec.duration, 5);
@@ -74,12 +74,12 @@ void main() {
       );
       var sum = 0.0;
       for (var i = 0; i < n; i++) {
-        random.value = i/n;
+        random.value = i / n;
         ec.setToStart();
         expect(ec.duration! >= 0, true);
         sum += ec.duration!;
       }
-      expect(sum/n, closeTo(42, 400/n));
+      expect(sum / n, closeTo(42, 400 / n));
     });
   });
 }
