@@ -54,7 +54,7 @@ and it will be automatically reflected in the PR.
 
 ## Open an issue and fork the repository
  - If it is a bigger change or a new feature, first of all
-   [file an bug or feature report][GitHub issues]
+   [file a bug or feature report][GitHub issues]
  - [Fork the project][fork guide] on GitHub.
  - Clone the forked repository to your local development machine
    (e.g. `git clone git@github.com:<YOUR_GITHUB_USER>/flame.git`).
@@ -115,7 +115,7 @@ Examples of PR titles:
  - fix: avoid infinite loop in `FlameGame`
  - docs: added a `JoystickComponent` example
  - docs: improved the Mandarin README
- - test: added a test for `MoveEffect.to`
+ - test: infinity test for `MoveEffect.to`
  - refactor: optimized the structure of the game loop
 
 [GitHub issue]: https://github.com/flame-engine/flame/issues/new
