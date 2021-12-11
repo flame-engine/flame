@@ -1,0 +1,31 @@
+name: Flajme
+repository: https://github.com/flame-engine/flame
+
+packages:
+  - packages/**
+
+command:
+  version:
+    # Generate commit links in package changelogs.
+    linkToCommits: true
+    # Only allow versioning to happen on main branch.
+    branch: main
+    # Additionally build a changelog at the root of the workspace.
+    workspaceChangelog: true
+
+scripts:
+  lint:all:
+    run: melos run analyze && melos run format
+    description: Run all static analysis checks.
+
+  analyze:
+    run: |
+      melos exec -c 10 -- \
+        flutter analyze . --fatal-infos
+    description: |
+      Run `flutter analyze` in all packages.
+       - Note: you can also rely on your IDEs Dart Analysis / Issues window.
+  format:
+    run: flutter format .
+    description: |
+      Run `flutter format` in all packages.
