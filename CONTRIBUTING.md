@@ -65,12 +65,6 @@ Flame uses [Melos] to manage the project and dependencies.
 To install Melos, run the following command from your terminal:
 
 ```bash
-pub global activate melos
-```
-
-or
-
-```bash
 flutter pub global activate melos
 ```
 
