@@ -6,9 +6,10 @@ import 'sprite.dart';
 
 /// This allows you to create a rectangle textured with a 9-sliced image.
 ///
-/// How it works is that you have a template image in a 3x3 grid, made up of 9 tiles,
-/// and a new rectangle can be draw by keeping the 4 corners, expanding the 4 sides only
-/// in the direction in which they are located and expanding the center in both directions.
+/// How it works is that you have a template image in a 3x3 grid, made up of 9
+/// tiles, and a new rectangle can be draw by keeping the 4 corners, expanding
+/// the 4 sides only in the direction in which they are located and expanding
+/// the center in both directions.
 /// That allows you to have non distorted borders.
 class NineTileBox {
   static final _whitePaint = BasicPalette.white.paint();
@@ -19,7 +20,8 @@ class NineTileBox {
   /// The size of each tile in the source sprite image.
   int tileSize;
 
-  /// The size each tile becomes when rendered (optionally used to scale the src image).
+  /// The size each tile becomes when rendered
+  /// (optionally used to scale the src image).
   late int destTileSize;
 
   /// Creates a nine-box instance.
@@ -27,11 +29,11 @@ class NineTileBox {
   /// [sprite] is the 3x3 grid and [tileSize] is the size of each tile.
   /// The src sprite must a square of size 3*[tileSize].
   ///
-  /// If [tileSize] is not provided, the width of the sprite is assumed as the size.
-  /// Otherwise the width and height properties of the sprite are ignored.
+  /// If [tileSize] is not provided, the width of the sprite is assumed as the
+  /// size. Otherwise the width and height properties of the sprite are ignored.
   ///
-  /// If [destTileSize] is not provided, the evaluated [tileSize] is used instead
-  /// (so no scaling happens).
+  /// If [destTileSize] is not provided, the evaluated [tileSize] is used
+  /// instead (so no scaling happens).
   NineTileBox(this.sprite, {int? tileSize, int? destTileSize})
       : tileSize = tileSize ?? sprite.src.width.toInt() {
     this.destTileSize = destTileSize ?? this.tileSize;

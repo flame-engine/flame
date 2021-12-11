@@ -263,11 +263,11 @@ class PositionComponent extends Component {
   /// The [anchor]'s position in absolute (world) coordinates.
   Vector2 get absolutePosition => absolutePositionOfAnchor(_anchor);
 
-  /// Get the absolute top left position regardless of whether it is a child or not
+  /// The absolute top left position regardless of whether it is a child or not.
   Vector2 get absoluteTopLeftPosition =>
       absolutePositionOfAnchor(Anchor.topLeft);
 
-  /// Get the absolute center of the component
+  /// The absolute center of the component.
   Vector2 get absoluteCenter => absolutePositionOfAnchor(Anchor.center);
 
   //#endregion
@@ -377,7 +377,8 @@ class PositionComponent extends Component {
 
   /// Mutates position and size using the provided [rect] as basis.
   /// This is a relative rect, same definition that [toRect] use
-  /// (therefore both methods are compatible, i.e. setByRect ∘ toRect = identity).
+  /// (therefore both methods are compatible,
+  /// i.e. setByRect ∘ toRect = identity).
   void setByRect(Rect rect) {
     size.setValues(rect.width, rect.height);
     topLeftPosition = rect.topLeft.toVector2();

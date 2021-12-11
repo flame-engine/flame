@@ -86,7 +86,8 @@ void main() {
     });
 
     withTappables.test(
-      'when child is async loading, adds the child to the component after loading',
+      'when child is async loading, the child is added to the component after '
+      'loading',
       (game) async {
         final child = _MyAsyncChild();
         final wrapper = Component();

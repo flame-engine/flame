@@ -310,8 +310,8 @@ class Component with Loadable {
   void changePriorityWithoutResorting(int priority) => _priority = priority;
 
   /// Prepares the [Component] to be added to a [parent], and if there is an
-  /// ancestor that is a [FlameGame] that game will do necessary preparations for
-  /// this component.
+  /// ancestor that is a [FlameGame] that game will do necessary preparations
+  /// for this component.
   /// If there are no parents that are a [Game] false will be returned and this
   /// will run again once an ancestor or the component itself is added to a
   /// [Game].
@@ -336,13 +336,15 @@ class Component with Loadable {
     }
   }
 
-  /// This method sets up the `OrderedSet` instance used by this component to
-  /// handle its children,
-  /// This is set up before any lifecycle methods happen.
-  ///
-  /// You can return a specific sub-class of `OrderedSet`, like
-  /// `QueryableOrderedSet` for example.
-  ComponentSet createComponentSet() {
-    return ComponentSet.createDefault(this);
-  }
+  /// `Component.childrenFactory` is the default method for creating children
+  /// containers within all components. Replace this method if you want to have
+  /// customized (non-default) [ComponentSet] instances in your project.
+  static ComponentSetFactory childrenFactory = ComponentSet.createDefault;
+
+  /// This method creates the children container for the current component.
+  /// Override this method if you need to have a custom [ComponentSet] within
+  /// a particular class.
+  ComponentSet createComponentSet() => childrenFactory(this);
 }
+
+typedef ComponentSetFactory = ComponentSet Function(Component owner);

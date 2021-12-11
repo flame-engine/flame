@@ -38,9 +38,11 @@ class _Composed {
   );
 }
 
-/// The [ImageComposition] allows for composing multiple images onto a single image.
+/// The [ImageComposition] allows for composing multiple images onto a single
+/// image.
 ///
-/// **Note:** Composing images is a heavy async operation and should not be called inside the game loop.
+/// **Note:** Composing images is a heavy async operation and should not be
+/// called inside the game loop.
 class ImageComposition {
   /// The values that will be used to compose the image
   final List<_Composed> _composes = [];
@@ -65,8 +67,8 @@ class ImageComposition {
   /// [source] of the [image].
   ///
   /// An optional [angle] (in radians) can be used to rotate the image when it
-  /// gets added to the composition. It will be rotated in a clock-wise direction
-  /// around the [anchor].
+  /// gets added to the composition. It will be rotated in a clock-wise
+  /// direction around the [anchor].
   ///
   /// By default the [anchor] will be the [source].width and [source].height
   /// divided by `2`.
