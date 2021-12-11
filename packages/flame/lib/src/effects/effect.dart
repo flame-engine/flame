@@ -45,8 +45,8 @@ abstract class Effect extends Component {
   bool removeOnFinish;
 
   /// This method is called once when the effect is about to finish, but before
-  /// it is removed from parent. The notion of "about to finish" is defined by
-  /// the [controller]: this method is called when `controller.completed`
+  /// it is removed from its parent. The notion of "about to finish" is defined
+  /// by the [controller]: this method is called when `controller.completed`
   /// property first becomes true.
   ///
   /// If the effect is reset, its [onFinish] method will be called again after
