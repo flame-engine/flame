@@ -79,7 +79,7 @@ final regular = TextPaint(style: style);
 class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
-    add(TextComponent('Hello, Flame', textRenderer: regular)
+    add(TextComponent(text: 'Hello, Flame', textRenderer: regular)
       ..anchor = Anchor.topCenter
       ..x = size.width / 2 // size is a property from game
       ..y = 32.0);
@@ -101,7 +101,7 @@ Example usage:
 
 ```dart
 class MyTextBox extends TextBoxComponent {
-  MyTextBox(String text) : super(text, textRenderer: tiny, boxConfig: TextBoxConfig(timePerChar: 0.05));
+  MyTextBox(String text) : super(text: text, textRenderer: tiny, boxConfig: TextBoxConfig(timePerChar: 0.05));
 
   @override
   void drawBackground(Canvas c) {
