@@ -114,5 +114,18 @@ void main() {
         expect(game.children.length, 1);
       },
     );
+
+    test('childrenFactory', () {
+      Component.childrenFactory = (Component owner) {
+        return ComponentSet.createDefault(owner, strictMode: false);
+      };
+
+      final component1 = Component();
+      final component2 = Component();
+      component1.add(component2);
+      component2.add(Component());
+      expect(component1.children.strictMode, false);
+      expect(component2.children.strictMode, false);
+    });
   });
 }
