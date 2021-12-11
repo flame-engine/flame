@@ -23,9 +23,9 @@ scripts:
       melos exec -c 10 -- \
         flutter analyze . --fatal-infos
     description: |
-      Run `flutter analyze` in all packages.
+      Run `flutter analyze` for all packages.
        - Note: you can also rely on your IDEs Dart Analysis / Issues window.
   format:
-    run: flutter format .
+    run: melos exec flutter format .
     description: |
-      Run `flutter format` in all packages.
+      Run `flutter format` for all packages.
