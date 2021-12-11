@@ -146,7 +146,8 @@ void main() {
       // only be called once.
       component.removeFromParent();
       game.children.remove(component);
-      // The component is not removed from the component list until an update has been performed
+      // The component is not removed from the component list until an update
+      // has been performed.
       game.update(0.0);
 
       expect(component.onRemoveCallCounter, 1);

@@ -38,7 +38,7 @@ class Inventory extends StatelessWidget {
           GestureDetector(
             onTap: () {
               if (weapon != state.weapon) {
-                context.read<InventoryBloc>().add(WeaponEquiped(weapon));
+                context.read<InventoryBloc>().add(WeaponEquipped(weapon));
               }
             },
             child: Opacity(
