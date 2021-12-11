@@ -10,9 +10,9 @@ changed.*
 Before you create this PR confirm that it meets all requirements listed below by checking the relevant checkboxes (`[x]`). This will ensure a smooth and quick review process.
 
 - [ ] I read the [Contributor Guide] and followed the process outlined there for submitting PRs.
-- [ ] My PR includes unit or integration tests for *all* changed/updated/fixed behaviors and are passing (See [Contributor Guide]).
-- [ ] My PR does not decrease the code coverage, or I have __a very special case__ and explained on the PR description why this PR decreases the coverage.
-- [ ] My PR title starts with a [Conventional Commit] type (`fix:`, `feat:`, `doc:` etc).
+- [ ] My PR includes tests for ALL new/updated/fixed functionality.
+- [ ] My PR does not decrease the code coverage.
+- [ ] The title of my PR starts with a [Conventional Commit] prefix (`fix:`, `feat:`, `doc:` etc).
 - [ ] I updated/added relevant documentation (doc comments with `///`) and updated/added examples in `examples`.
 - [ ] I have formatted my code with `flutter format` and `flutter analyze` does not report any problems.
 - [ ] I read and followed the [Flame Style Guide].
