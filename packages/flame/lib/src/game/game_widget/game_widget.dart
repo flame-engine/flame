@@ -267,25 +267,21 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     final game = widget.game;
     Widget internalGameWidget = _GameRenderObjectWidget(game);
 
-    final hasBasicDetectors = hasBasicGestureDetectors(game);
-    final hasAdvancedDetectors = hasAdvancedGestureDetectors(game);
-
     assert(
-      !(game is MultiTouchDragDetector &&
-          (game is PanDetector || game is ScaleDetector)),
-      'WARNING: Both MultiTouchDragDetector and a PanDetector or ScaleDetector '
-      'detected. The MultiTouchDragDetector will override the basic detectors '
-      'and they will not receive events',
+      !(game is MultiTouchDragDetector && game is PanDetector),
+      'WARNING: Both MultiTouchDragDetector and a PanDetector detected. '
+      'The MultiTouchDragDetector will override the PanDetector and it will '
+      'not receive events',
     );
 
-    if (hasBasicDetectors) {
+    if (hasBasicGestureDetectors(game)) {
       internalGameWidget = applyBasicGesturesDetectors(
         game,
         internalGameWidget,
       );
     }
 
-    if (hasAdvancedDetectors) {
+    if (hasAdvancedGestureDetectors(game)) {
       internalGameWidget = applyAdvancedGesturesDetectors(
         game,
         internalGameWidget,
