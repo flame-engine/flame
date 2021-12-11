@@ -61,6 +61,7 @@ mixin Tappable on Component {
   }
 }
 
+// TODO(spydon): these methods should return the result of propagateToChildren.
 mixin HasTappables on FlameGame {
   @mustCallSuper
   void onTapCancel(int pointerId) {
