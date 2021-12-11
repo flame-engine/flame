@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:flame/extensions.dart';
-import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/body_component.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';

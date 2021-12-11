@@ -22,24 +22,32 @@ class CameraWrapper {
   }
 
   void render(Canvas canvas) {
-    camera.viewport.render(canvas, (_canvas) {
-      var hasCamera = false; // so we don't apply unnecessary transformations
-      world.forEach((component) {
-        if (component.respectCamera && !hasCamera) {
-          canvas.save();
-          camera.apply(canvas);
-          hasCamera = true;
-        } else if (!component.respectCamera && hasCamera) {
+    PositionType? _previousType;
+    canvas.save();
+    world.forEach((component) {
+      final sameType = component.positionType == _previousType;
+      if (!sameType) {
+        if (_previousType != null && _previousType != PositionType.widget) {
           canvas.restore();
-          hasCamera = false;
+          canvas.save();
         }
-        canvas.save();
-        component.renderTree(canvas);
-        canvas.restore();
-      });
-      if (hasCamera) {
-        canvas.restore();
+        switch (component.positionType) {
+          case PositionType.game:
+            camera.viewport.apply(canvas);
+            camera.apply(canvas);
+            break;
+          case PositionType.viewport:
+            camera.viewport.apply(canvas);
+            break;
+          case PositionType.widget:
+        }
       }
+      component.renderTree(canvas);
+      _previousType = component.positionType;
     });
+
+    if (_previousType != PositionType.widget) {
+      canvas.restore();
+    }
   }
 }

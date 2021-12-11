@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 
 import '../../../components.dart';
 import '../../../game.dart';
-import 'game.dart';
 
 /// A [Component] mixin to add keyboard handling capability to components.
 /// Must be used in components that can only be added to games that are mixed
@@ -23,32 +22,13 @@ mixin KeyboardHandler on Component {
 /// Attention: should not be used alongside [KeyboardEvents] in a game subclass.
 /// Using this mixin remove the necessity of [KeyboardEvents].
 mixin HasKeyboardHandlerComponents on FlameGame implements KeyboardEvents {
-  bool _handleKeyboardEvent(
-    bool Function(KeyboardHandler child) keyboardEventHandler,
-  ) {
-    var shouldContinue = true;
-    for (final c in children.toList().reversed) {
-      shouldContinue = c.propagateToChildren<KeyboardHandler>(
-        keyboardEventHandler,
-      );
-      if (c is KeyboardHandler && shouldContinue) {
-        shouldContinue = keyboardEventHandler(c);
-      }
-      if (!shouldContinue) {
-        break;
-      }
-    }
-
-    return shouldContinue;
-  }
-
   @override
   @mustCallSuper
   KeyEventResult onKeyEvent(
     RawKeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
-    final blockedPropagation = !_handleKeyboardEvent(
+    final blockedPropagation = !propagateToChildren<KeyboardHandler>(
       (KeyboardHandler child) => child.onKeyEvent(event, keysPressed),
     );
 

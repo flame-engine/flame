@@ -1,21 +1,20 @@
 import 'dart:collection';
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-
 import '../game.dart';
 import 'assets/images.dart';
 import 'extensions/image.dart';
-import 'extensions/vector2.dart';
 import 'flame.dart';
 
 extension SpriteBatchExtension on Game {
-  /// Utility method to load and cache the image for a [SpriteBatch] based on its options
+  /// Utility method to load and cache the image for a [SpriteBatch] based on
+  /// its options
   Future<SpriteBatch> loadSpriteBatch(
     String path, {
     Color defaultColor = const Color(0x00000000),
     BlendMode defaultBlendMode = BlendMode.srcOver,
     RSTransform? defaultTransform,
+    bool useAtlas = true,
   }) {
     return SpriteBatch.load(
       path,
@@ -23,22 +22,19 @@ extension SpriteBatchExtension on Game {
       defaultBlendMode: defaultBlendMode,
       defaultTransform: defaultTransform,
       images: images,
+      useAtlas: useAtlas,
     );
   }
 }
 
-/// This is the scale value used in [BatchItem.matrix], we can't determine this from the [BatchItem.transform],
-/// but we also don't need to do so because it is already calculated inside the transform values.
+/// This is the scale value used in [BatchItem.matrix], we can't determine this
+/// from the [BatchItem.transform], but we also don't need to do so because it
+/// is already calculated inside the transform values.
 const _defaultScale = 0.0;
 
 /// A single item in a SpriteBatch.
 ///
 /// Holds all the important information of a batch item,
-///
-/// Web currently does not support `Canvas.drawAtlas`, so a BatchItem will
-/// automatically calculate a transform matrix based on the [transform] value, to be
-/// used when rendering on the web. It will initialize a [destination] object
-/// and a [paint] object.
 class BatchItem {
   /// The source rectangle on the [SpriteBatch.atlas].
   final Rect source;
@@ -80,16 +76,19 @@ class BatchItem {
 /// The SpriteBatch API allows for rendering multiple items at once.
 ///
 /// This class allows for optimization when you want to draw many parts of an
-/// image onto the canvas. It is more efficient than using multiple calls to [Canvas.drawImageRect]
-/// and provides more functionality by allowing each [BatchItem] to have their own transform
-/// rotation and color.
+/// image onto the canvas. It is more efficient than using multiple calls to
+/// [Canvas.drawImageRect] and provides more functionality by allowing each
+/// [BatchItem] to have their own transform rotation and color.
 ///
-/// By collecting all the necessary transforms on a single image and sending those transforms
-/// in a single batch to the GPU, we can render multiple parts of a single image at once.
+/// By collecting all the necessary transforms on a single image and sending
+/// those transforms in a single batch to the GPU, we can render multiple parts
+/// of a single image at once.
 ///
-/// **Note**: Currently web does not support `Canvas.drawAtlas`, which SpriteBatch uses under
-/// the hood, instead it will render each [BatchItem] using `Canvas.drawImageRect`, so there
-/// might be a performance hit on web when working with many batch items.
+/// **Note**: If you are experiencing problems with ghost lines, the less
+/// performant [Canvas.drawImageRect] can be used instead of [Canvas.drawAtlas].
+/// To activate this mode, pass in `useAtlas = false` to the constructor or
+/// load method that you are using and each [BatchItem] will be rendered using
+/// the [Canvas.drawImageRect] method instead.
 class SpriteBatch {
   /// List of all the existing batch items.
   final _batchItems = <BatchItem>[];
@@ -130,7 +129,8 @@ class SpriteBatch {
   /// The default color, used as a background color for a [BatchItem].
   final Color defaultColor;
 
-  /// The default transform, used when a transform was not supplied for a [BatchItem].
+  /// The default transform, used when a transform was not supplied for a
+  /// [BatchItem].
   final RSTransform? defaultTransform;
 
   /// The default blend mode, used for blending a batch item.
@@ -145,11 +145,15 @@ class SpriteBatch {
   /// The size of the [atlas].
   Vector2 get size => atlas.size;
 
+  /// Whether to use [Canvas.drawAtlas] or not.
+  final bool useAtlas;
+
   SpriteBatch(
     this.atlas, {
     this.defaultColor = const Color(0x00000000),
     this.defaultBlendMode = BlendMode.srcOver,
     this.defaultTransform,
+    this.useAtlas = true,
   });
 
   /// Takes a path of an image, and optional arguments for the SpriteBatch.
@@ -161,6 +165,7 @@ class SpriteBatch {
     BlendMode defaultBlendMode = BlendMode.srcOver,
     RSTransform? defaultTransform,
     Images? images,
+    bool useAtlas = true,
   }) async {
     final _images = images ?? Flame.images;
     return SpriteBatch(
@@ -168,6 +173,7 @@ class SpriteBatch {
       defaultColor: defaultColor,
       defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
       defaultBlendMode: defaultBlendMode,
+      useAtlas: useAtlas,
     );
   }
 
@@ -175,14 +181,17 @@ class SpriteBatch {
   ///
   /// The [source] parameter is the source location on the [atlas].
   ///
-  /// You can position, rotate and scale it on the canvas using the [transform] parameter.
+  /// You can position, rotate and scale it on the canvas using the [transform]
+  /// parameter.
   ///
-  /// The [color] parameter allows you to render a color behind the batch item, as a background color.
+  /// The [color] parameter allows you to render a color behind the batch item,
+  /// as a background color.
   ///
-  /// The [add] method may be a simpler way to add a batch item to the batch. However,
-  /// if there is a way to factor out the computations of the sine and cosine of the
-  /// rotation so that they can be reused over multiple calls to this constructor,
-  /// it may be more efficient to directly use this method instead.
+  /// The [add] method may be a simpler way to add a batch item to the batch.
+  /// However, if there is a way to factor out the computations of the sine and
+  /// cosine of the rotation so that they can be reused over multiple calls to
+  /// this constructor, it may be more efficient to directly use this method
+  /// instead.
   void addTransform({
     required Rect source,
     RSTransform? transform,
@@ -203,17 +212,22 @@ class SpriteBatch {
 
   /// Add a new batch item.
   ///
-  /// The [source] parameter is the source location on the [atlas]. You can position it
-  /// on the canvas using the [offset] parameter.
+  /// The [source] parameter is the source location on the [atlas]. You can
+  /// position it on the canvas using the [offset] parameter.
   ///
-  /// You can transform the sprite from its [offset] using [scale], [rotation] and [anchor].
+  /// You can transform the sprite from its [offset] using [scale], [rotation]
+  /// and [anchor].
   ///
-  /// The [color] paramater allows you to render a color behind the batch item, as a background color.
+  /// The [color] paramater allows you to render a color behind the batch item,
+  /// as a background color.
   ///
-  /// This method creates a new [RSTransform] based on the given transform arguments. If many [RSTransform] objects are being
-  /// created and there is a way to factor out the computations of the sine and cosine of the rotation
-  /// (which are computed each time this method is called) and reuse them over multiple [RSTransform] objects,
-  /// it may be more efficient to directly use the more direct [addTransform] method instead.
+  /// This method creates a new [RSTransform] based on the given transform
+  /// arguments. If many [RSTransform] objects are being created and there is a
+  /// way to factor out the computations of the sine and cosine of the rotation
+  /// (which are computed each time this method is called) and reuse them over
+  /// multiple [RSTransform] objects,
+  /// it may be more efficient to directly use the more direct [addTransform]
+  /// method instead.
   void add({
     required Rect source,
     double scale = 1.0,
@@ -254,15 +268,18 @@ class SpriteBatch {
     _batchItems.clear();
   }
 
+  // Used to not create new paint objects in [render] on every tick.
+  final Paint _emptyPaint = Paint();
+
   void render(
     Canvas canvas, {
     BlendMode? blendMode,
     Rect? cullRect,
     Paint? paint,
   }) {
-    paint ??= Paint();
+    paint ??= _emptyPaint;
 
-    if (kIsWeb) {
+    if (!useAtlas) {
       for (final batchItem in _batchItems) {
         paint.blendMode = blendMode ?? paint.blendMode;
 

@@ -1,6 +1,4 @@
 import '../../../components.dart';
-import '../../../extensions.dart';
-import '../../../input.dart';
 
 enum _ButtonState {
   up,

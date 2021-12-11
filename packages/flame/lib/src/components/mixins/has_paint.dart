@@ -15,10 +15,7 @@ mixin HasPaint<T extends Object> on Component {
   Paint paint = BasicPalette.white.paint();
 
   void _assertGenerics() {
-    assert(
-      T != Object,
-      'When using the paint collection, component should declare a generic type',
-    );
+    assert(T != Object, 'A generics type is missing on the HasPaint mixin');
   }
 
   /// Gets a paint from the collection.
@@ -98,6 +95,6 @@ mixin HasPaint<T extends Object> on Component {
   /// things rendered with the paint looking like it was
   /// tinted with the given color.
   void tint(Color color, {T? paintId}) {
-    getPaint(paintId).colorFilter = ColorFilter.mode(color, BlendMode.multiply);
+    getPaint(paintId).colorFilter = ColorFilter.mode(color, BlendMode.srcATop);
   }
 }

@@ -1,10 +1,7 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart' as flutter;
@@ -149,7 +146,8 @@ void main() {
       // only be called once.
       component.removeFromParent();
       game.children.remove(component);
-      // The component is not removed from the component list until an update has been performed
+      // The component is not removed from the component list until an update
+      // has been performed.
       game.update(0.0);
 
       expect(component.onRemoveCallCounter, 1);

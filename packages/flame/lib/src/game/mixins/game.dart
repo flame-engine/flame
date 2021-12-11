@@ -3,16 +3,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../components.dart';
 import '../../assets/assets_cache.dart';
 import '../../assets/images.dart';
 import '../../extensions/offset.dart';
-import '../../extensions/vector2.dart';
-import '../../sprite.dart';
-import '../../sprite_animation.dart';
 import '../game_render_box.dart';
 import '../projector.dart';
 import 'loadable.dart';
@@ -163,7 +159,7 @@ mixin Game on Loadable {
   Projector projector = IdentityProjector();
 
   /// This is the projector used by components that don't respect the camera
-  /// (`respectCamera = false`).
+  /// (`positionType = PositionType.viewport;`).
   /// This can be overridden on your [Game] implementation.
   Projector viewportProjector = IdentityProjector();
 

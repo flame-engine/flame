@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [Next]
+## [1.0.0]
  - Add `ButtonComponent` backed by two `PositionComponent`s
  - Add `SpriteButtonComponent` backed by two `Sprite`s
  - Allow more flexible construction of `EffectController`s and make them able to run back in time
@@ -9,8 +9,12 @@
  - Introduce `updateTree` to follow the `renderTree` convention
  - Fix `Parallax.load` with different loading times
  - Fix render order of components and add tests
- - `isHud` renamed to `respectCamera`
  - Fix `HitboxCircle` when component is flipped
+ - Add `ColorEffect`
+ - `MoveAlongPathEffect` can now be absolute, and can auto-orient the object along the path
+ - `ScaleEffect.by` now applies multiplicatively instead of additively
+ - `isHud` replaced with `PositionType`
+ - Remove web fallback for `drawAtlas` in SpriteBatch, but added flag `useAtlas` to activate it
 
 ## [1.0.0-releasecandidate.18]
  - Forcing portrait and landscape mode is now supported on web

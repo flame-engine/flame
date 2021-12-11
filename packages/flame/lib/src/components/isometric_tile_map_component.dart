@@ -3,9 +3,7 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 
 import '../../components.dart';
-import '../extensions/vector2.dart';
 import '../spritesheet.dart';
-import 'position_component.dart';
 
 /// This is just a pair of <int, int>.
 ///
@@ -77,7 +75,8 @@ class IsometricTileMapComponent extends PositionComponent {
   /// This is the size the tiles will be drawn (either original or overwritten).
   Vector2 get effectiveTileSize => destTileSize ?? tileset.srcSize;
 
-  /// This is the vertical height of each block; by default it's half the tile size.
+  /// This is the vertical height of each block; by default it's half the tile
+  /// size.
   double get effectiveTileHeight => tileHeight ?? (effectiveTileSize.y / 2);
 
   @override

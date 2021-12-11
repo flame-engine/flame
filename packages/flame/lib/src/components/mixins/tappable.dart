@@ -62,30 +62,20 @@ mixin Tappable on Component {
 }
 
 mixin HasTappables on FlameGame {
-  void _handleTapEvent(bool Function(Tappable child) tapEventHandler) {
-    for (final c in children.reversed()) {
-      var shouldContinue = c.propagateToChildren<Tappable>(tapEventHandler);
-      if (c is Tappable && shouldContinue) {
-        shouldContinue = tapEventHandler(c);
-      }
-      if (!shouldContinue) {
-        break;
-      }
-    }
-  }
-
   @mustCallSuper
   void onTapCancel(int pointerId) {
-    _handleTapEvent((Tappable child) => child.handleTapCancel(pointerId));
+    propagateToChildren((Tappable child) => child.handleTapCancel(pointerId));
   }
 
   @mustCallSuper
   void onTapDown(int pointerId, TapDownInfo info) {
-    _handleTapEvent((Tappable child) => child.handleTapDown(pointerId, info));
+    propagateToChildren(
+      (Tappable child) => child.handleTapDown(pointerId, info),
+    );
   }
 
   @mustCallSuper
   void onTapUp(int pointerId, TapUpInfo info) {
-    _handleTapEvent((Tappable child) => child.handleTapUp(pointerId, info));
+    propagateToChildren((Tappable child) => child.handleTapUp(pointerId, info));
   }
 }

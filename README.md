@@ -5,11 +5,10 @@
 </p>
 
 <p align="center">
-A minimalistic Flutter game engine.
+A Flutter-based game engine.
 </p>
 
 <p align="center">
-  <a title="Pub" href="https://pub.dev/packages/flame/versions#prerelease" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout&include_prereleases" /></a>
   <a title="Pub" href="https://pub.dev/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a>
   <img src="https://github.com/flame-engine/flame/workflows/cicd/badge.svg?branch=main&event=push" alt="Test" />
   <a title="Discord" href="https://discord.gg/pxrBmy4" ><img src="https://img.shields.io/discord/509714518008528896.svg" /></a>
@@ -21,68 +20,73 @@ A minimalistic Flutter game engine.
 
 ---
 
-## About 1.0.0
-
-Our goal is to release v1 soon. We are periodically launching RCs (release candidates) as we evolve
-the code, and we are already quite happy with where we are (but there might still be further
-changes).
-
-Please use this version to get a preview of the new Flame version and also to give the team feedback
-about the new structure and/or features.
-
-The `main` branch is the bleeding edge of the v1 migration. The `master-v0.x` branch is the latest
-v0 release (where we are still merging some patches and crucial fixes).
-
-The current v1 release is
-<a title="Pub" href="https://pub.dev/packages/flame/versions#prerelease" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout&include_prereleases" /></a>
-on pub. The latest stable version so far is
-<a title="Pub" href="https://pub.dev/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a>.
-Feel free to choose the one that better suits your needs.
-
----
 
 ## Documentation
 
-Note that the documentation in the main branch of this repo is newer than the latest released
-version.
+The full documentation for Flame can be found on 
+[docs.flame-engine.org](https://docs.flame-engine.org/).
 
-Here you can find the documentation for different versions:
-- Latest stable version: [Flame-engine website](https://flame-engine.org/)
-- Latest stable version: [GitHub docs](https://github.com/flame-engine/flame/tree/master-v0.x/doc)
-- Latest v1.0.0 version: [GitHub docs](https://github.com/flame-engine/flame/tree/1.0.0-releasecandidate.14/doc)
+To change the version of the documentation, use the version selector noted with `version:` in the
+top of the page.
 
-The complete documentation can be found [here](https://github.com/flame-engine/flame/tree/main/doc).
+**Note**: The documentation that resides in the main branch is newer than the released documentation
+on the docs website.
 
-We provide many examples of different features which can be tried out from your browser
-[here](https://flame-engine.github.io/flame/). You can also check the examples source code [here](https://github.com/flame-engine/flame/tree/main/examples).
+Other useful links:
+ - [The official Flame site](https://flame-engine.org/).
+ - [Examples](https://examples.flame-engine.org/) of most features which can be tried out from your browser.
+ - [Tutorials](https://tutorials.flame-engine.org/) - A simple tutorial to get started.
+ - [API Reference](https://pub.dev/documentation/flame/latest/) - The generated dartdoc API reference.
 
-The official site for Flame, which also contains the documentation can be found
-[here](https://flame-engine.org/).
 
 ## Help
 
-We have a Flame help channel on Blue Fire's Discord, join it [here](https://discord.gg/5unKpdQD78).
+There is a Flame community on [Blue Fire's Discord server](https://discord.gg/5unKpdQD78) where you
+can ask any of your Flame related questions.
 
-We also have a [FAQ](FAQ.md), so please search for your question there first.
+If you are more comfortable with StackOverflow, you can also create a question there. Add the
+[Flame tag](https://stackoverflow.com/questions/tagged/flame), so that anyone following the tag can
+help out.
 
-## Goals
 
-The goal of this project is to provide a complete set of out-of-the-way solutions for the common
-problems every game developed in Flutter will share.
+## Features
 
-Currently it provides you with:
- - a game loop
- - a component/object system
- - a physics engine (Forge2D, available through
- [flame_forge2d](https://github.com/flame-engine/flame_Forge2D))
- - audio support
- - effects and particles
- - gesture and input support
- - images, sprites and sprite sheets
- - basic Rive support
- - and a few other utilities to make development easier
+The goal of the Flame Engine is to provide a complete set of out-of-the-way solutions for common
+problems that games developed with Flutter might share.
 
-You can use whichever ones you want, as they are all somewhat independent.
+Currently Flame provides the following features:
+
+ - A game loop.
+ - A component/object system (FCS).
+ - Effects and particles.
+ - Collision detection.
+ - Gesture and input support.
+ - Images, animations, sprites and sprite sheets.
+ - Other utilities to make development easier.
+
+On top of those features, you can augment Flame with bridge packages. Through these libraries,
+you will be able to access Flame components, helpers and bindings to other packages, in order to
+make integrations seamless. Currently, we have bridge libraries to the following packages:
+
+- [flame_audio](https://github.com/flame-engine/flame/tree/main/packages/flame_audio) for
+  [AudioPlayers](https://github.com/bluefireteam/audioplayers): Play multiple audio files simultaneously.
+- [flame_bloc](https://github.com/flame-engine/flame/tree/main/packages/flame_bloc) for
+  [Bloc](https://github.com/felangel/bloc): A predictable state management library.
+- [flame_fire_atlas](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas) for
+  [FireAtlas](https://github.com/flame-engine/fire-atlas): Create texture atlases for games.
+- [flame_forge2d](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d) for
+  [Forge2D](https://github.com/flame-engine/forge2d): A Box2D physics engine.
+- [flame_lint](https://github.com/flame-engine/flame/tree/main/packages/flame_lint) -
+  Our set of linting (`analysis_options.yaml`) rules.
+- [flame_oxygen](https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen) for
+  [Oxygen](https://github.com/flame-engine/oxygen): A lightweight Entity Component System (ECS) framework.
+- [flame_rive](https://github.com/flame-engine/flame/tree/main/packages/flame_rive) for
+  [Rive](https://rive.app/): Create interactive animations.
+- [flame_svg](https://github.com/flame-engine/flame/tree/main/packages/flame_svg) for
+  [flutter_svg](https://github.com/dnfield/flutter_svg): Draw SVG files in Flutter.
+- [flame_tiled](https://github.com/flame-engine/flame/tree/main/packages/flame_tiled) for
+  [Tiled](https://www.mapeditor.org/): 2D tile map level editor.
+
 
 ## Sponsors
 
@@ -90,7 +94,8 @@ The Flame Engine's top sponsors:
 
 [![Cypher Stack](/media/logo_cypherstack.png)](https://cypherstack.com/)
 
-Want to sponsor Flame? Check our Patreon on the section below or contact us on Discord.
+Want to sponsor Flame? Check our Patreon on the section below, or contact us on Discord.
+
 
 ## Support
 
@@ -107,48 +112,60 @@ Or by making a single donation by buying us a coffee:
 You can also show on your repository that your game is made with Flame by using one of the following
 badges:
 
-[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
-[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=flat-square)](https://flame-engine.org)
-[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=for-the-badge)](https://flame-engine.org)
+[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg)](https://flame-engine.org)
+[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=flat-square)](https://flame-engine.org)
+[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=for-the-badge)](https://flame-engine.org)
 
 ```
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=flat-square)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=for-the-badge)](https://flame-engine.org)
 ```
+
 
 ## Contributing
-
-__Warning__: We are working on bringing Flame to its first stable version, updates on `0.x` versions
-are frozen, except for crucial bug fixes. If you want to contribute to that version, please be
-mindful of that, and use the `master-v0.x` branch. For contributions for v1, your PR must point to
-the `main` branch. If in doubt, make sure to talk about your contribution to the team, either via an
-issue or [Discord](https://discord.gg/pxrBmy4).
-
-Any help is appreciated! Comments, suggestions, issues, PRs.
 
 Have you found a bug or have a suggestion of how to enhance Flame? Open an issue and we will take a
 look at it as soon as possible.
 
-Do you want to contribute with a PR? PRs are always welcome, just be sure to create it from the
-orrect branch (see above) and follow the [checklist](.github/pull_request_template.md) which will
+Do you want to contribute with a PR? PRs are always welcome, just make sure to create it from the
+correct branch (main) and follow the [checklist](.github/pull_request_template.md) which will
 appear when you open the PR.
+
+For bigger changes, or if in doubt, make sure to talk about your contribution to the team. Either
+via an issue, GitHub discussion, or reach out to the team either using the
+[Discord server](https://discord.gg/pxrBmy4).
+
 
 ## Getting started
 
-A collection of guides can be found [here](./tutorials). Note that these tutorials are based on the
-main branch. To make sure you are looking at the tutorials that work with your current version,
-select the correct version tag.
+A simple tutorial to get started can be found on
+[tutorials.flame-engine.org](https://tutorials.flame-engine.org) and examples of most features in
+Flame can be found on [examples.flame-engine.org](https://examples.flame-engine.org). To access the
+code for each example, press the `< >` button in the top right corner.
 
-This collection of guides is a work in progress, more guides and tutorials will be added soon.
 
-We also offer a curated list of Games, Libraries and Articles over at
+### Highlighted community tutorials
+
+- @Devowl's Flutter & Flame series: 
+  - [Step 1: Create your game](https://medium.com/flutter-community/flutter-flame-step-1-create-your-game-b3b6ee387d77)
+  - [Step 2: Game basics](https://medium.com/flutter-community/flutter-flame-step-2-game-basics-48b4493424f3)
+  - [Step 3: Sprites and inputs](https://blog.devowl.de/flutter-flame-step-3-sprites-and-inputs-7ca9cc7c8b91)
+  - [Step 4: Collisions & Viewport](https://blog.devowl.de/flutter-flame-step-4-collisions-viewport-ff2da048e3a6)
+  - [Step 5: Level generation & camera](https://blog.devowl.de/flutter-flame-step-5-level-generation-camera-62a060a286e3 )
+
+- Other tutorials:
+  - @Vguzzi's article [Building Games in Flutter with Flame](https://www.raywenderlich.com/27407121-building-games-in-flutter-with-flame-getting-started)
+  - @DevKage's YouTube series with the [Dino run tutorial](https://www.youtube.com/playlist?list=PLiZZKL9HLmWOmQgYxWHuOHOWsUUlhCCOY)
+
+We offer a curated list of Games, Libraries and Articles over at
 [awesome-flame](https://github.com/flame-engine/awesome-flame).
 
-Note that some of the articles might be slightly outdated, but they are still useful.
+Note that some of the articles might be slightly outdated, but can still be useful.
+
 
 ## Credits
 
- - The [Flame Engine team](https://github.com/orgs/flame-engine/people), who are continuously
- working on maintaining and improving Flame.
+ - The [Blue Fire team](https://github.com/orgs/bluefireteam/people), who are continuously
+ working on maintaining and improving Flame and its ecosystem.
  - All the friendly contributors and people who are helping in the community.

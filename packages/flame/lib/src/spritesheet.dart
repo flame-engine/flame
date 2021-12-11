@@ -1,19 +1,21 @@
 import 'dart:ui';
 
 import 'extensions/vector2.dart';
-import 'sprite.dart';
 import 'sprite_animation.dart';
 
-/// Utility class to help extract animations and sprites from a sprite sheet image.
+/// Utility class to help extract animations and sprites from a sprite sheet
+/// image.
 ///
-/// A sprite sheet is a single image in which several regions can be defined as individual sprites.
-/// For the purposes of this class, all of these regions must be identically sized rectangles.
+/// A sprite sheet is a single image in which several regions can be defined as
+/// individual sprites.
+/// For the purposes of this class, all of these regions must be identically
+/// sized rectangles.
 /// You can use the [Sprite] class directly if you want to have varying shapes.
 ///
-/// Each sprite in this sheet can be identified either by it's (row, col) pair or
-/// by it's "id", which is basically it's sequenced index if the image is put in a
-/// single line. The sprites can be used to compose an animation easily if they
-/// all the frames happen to be sequentially on the same row.
+/// Each sprite in this sheet can be identified either by it's (row, col) pair
+/// or by it's "id", which is basically it's sequenced index if the image is put
+/// in a single line. The sprites can be used to compose an animation easily if
+/// all the frames are sequentially on the same row.
 /// Sprites are lazily generated but cached.
 class SpriteSheet {
   /// The src image from which each sprite will be generated.
@@ -21,8 +23,8 @@ class SpriteSheet {
 
   /// The size of each rectangle within the image that define each sprite.
   ///
-  /// For example, if this sprite sheet is a tile map, this would be the tile size.
-  /// If it's an animation sheet, this would be the frame size.
+  /// For example, if this sprite sheet is a tile map, this would be the tile
+  /// size. If it's an animation sheet, this would be the frame size.
   final Vector2 srcSize;
 
   final Map<int, Sprite> _spriteCache = {};

@@ -1,5 +1,4 @@
 import '../../components.dart';
-import '../../extensions.dart';
 import 'component_effect.dart';
 import 'controllers/effect_controller.dart';
 

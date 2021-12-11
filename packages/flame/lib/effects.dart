@@ -1,3 +1,4 @@
+export 'src/effects/color_effect.dart';
 export 'src/effects/component_effect.dart';
 export 'src/effects/controllers/curved_effect_controller.dart';
 export 'src/effects/controllers/delayed_effect_controller.dart';
@@ -11,6 +12,7 @@ export 'src/effects/controllers/reverse_curved_effect_controller.dart';
 export 'src/effects/controllers/reverse_linear_effect_controller.dart';
 export 'src/effects/controllers/sequence_effect_controller.dart';
 export 'src/effects/effect.dart';
+export 'src/effects/move_along_path_effect.dart';
 export 'src/effects/move_effect.dart';
 export 'src/effects/opacity_effect.dart';
 export 'src/effects/remove_effect.dart';

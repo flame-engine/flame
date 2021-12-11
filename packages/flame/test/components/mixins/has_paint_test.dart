@@ -235,7 +235,7 @@ void main() {
 
         expect(
           comp.paint.colorFilter,
-          const ColorFilter.mode(color, BlendMode.multiply),
+          const ColorFilter.mode(color, BlendMode.srcATop),
         );
       },
     );
@@ -250,7 +250,7 @@ void main() {
 
         expect(
           comp.getPaint(_MyComponentKeys.background).colorFilter,
-          const ColorFilter.mode(color, BlendMode.multiply),
+          const ColorFilter.mode(color, BlendMode.srcATop),
         );
       },
     );

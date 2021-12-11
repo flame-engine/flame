@@ -10,7 +10,7 @@ class CustomPainterExample extends FlameGame with TapDetector {
 
     On the screen you can see a component using a custom painter being
     rendered on a FlameGame, and if you tap, that same painter is used to
-    show the happy face on a widget overlay.
+    show a smiley on a widget overlay.
   ''';
 
   @override
@@ -22,10 +22,10 @@ class CustomPainterExample extends FlameGame with TapDetector {
 
   @override
   void onTap() {
-    if (overlays.isActive('HappyFace')) {
-      overlays.remove('HappyFace');
+    if (overlays.isActive('Smiley')) {
+      overlays.remove('Smiley');
     } else {
-      overlays.add('HappyFace');
+      overlays.add('Smiley');
     }
   }
 }
@@ -34,10 +34,10 @@ Widget customPainterBuilder(DashbookContext ctx) {
   return GameWidget(
     game: CustomPainterExample(),
     overlayBuilderMap: {
-      'HappyFace': (context, game) {
+      'Smiley': (context, game) {
         return Center(
           child: Container(
-            color: Colors.white,
+            color: Colors.transparent,
             width: 200,
             height: 200,
             child: Column(
@@ -45,7 +45,7 @@ Widget customPainterBuilder(DashbookContext ctx) {
                 const Text(
                   'Hey, I can be a widget too!',
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white70,
                   ),
                 ),
                 const SizedBox(height: 32),

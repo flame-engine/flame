@@ -6,10 +6,7 @@ import 'package:flutter/widgets.dart' hide Image;
 import 'package:meta/meta.dart';
 
 import '../../components.dart';
-import '../extensions/vector2.dart';
 import '../palette.dart';
-import '../text.dart';
-import 'position_component.dart';
 
 /// A set of configurations for the [TextBoxComponent] itself, as opposed to
 /// the [TextRenderer], which contains the configuration for how to render the

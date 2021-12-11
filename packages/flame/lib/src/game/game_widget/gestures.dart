@@ -3,8 +3,6 @@ import 'package:flutter/widgets.dart';
 
 import '../../../components.dart';
 import '../../../extensions.dart';
-import '../../components/mixins/draggable.dart';
-import '../../extensions/offset.dart';
 import '../../gestures/detectors.dart';
 import '../../gestures/events.dart';
 import '../mixins/game.dart';

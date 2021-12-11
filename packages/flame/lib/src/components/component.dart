@@ -1,13 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
 import '../../components.dart';
 import '../../game.dart';
 import '../../input.dart';
-import '../extensions/vector2.dart';
-import '../game/mixins/loadable.dart';
 import 'cache/value_cache.dart';
 
 /// This represents a Component for your game.
@@ -18,15 +14,12 @@ import 'cache/value_cache.dart';
 /// called automatically once the component is added to the component tree in
 /// your game (with `game.add`).
 class Component with Loadable {
-  /// Whether this component should respect the camera or not.
-  ///
-  /// Components that have this property set to false will ignore the
-  /// `FlameGame.camera` when rendered (so their position coordinates are
-  /// considered relative only to the viewport instead).
+  /// What coordinate system this component should respect (i.e. should it
+  /// observe camera, viewport, or use the raw canvas).
   ///
   /// Do note that this currently only works if the component is added directly
   /// to the root `FlameGame`.
-  bool respectCamera = true;
+  PositionType positionType = PositionType.game;
 
   /// Whether this component has been prepared and is ready to be added to the
   /// game loop.
@@ -157,9 +150,14 @@ class Component with Loadable {
 
   @protected
   Vector2 eventPosition(PositionInfo info) {
-    return respectCamera
-        ? info.eventPosition.game
-        : info.eventPosition.viewportOnly;
+    switch (positionType) {
+      case PositionType.game:
+        return info.eventPosition.game;
+      case PositionType.viewport:
+        return info.eventPosition.viewport;
+      case PositionType.widget:
+        return info.eventPosition.widget;
+    }
   }
 
   /// Remove the component from its parent in the next tick.
@@ -281,10 +279,8 @@ class Component with Loadable {
     bool Function(T) handler,
   ) {
     var shouldContinue = true;
-    for (final child in children) {
-      if (child is Component) {
-        shouldContinue = child.propagateToChildren(handler);
-      }
+    for (final child in children.reversed()) {
+      shouldContinue = child.propagateToChildren(handler);
       if (shouldContinue && child is T) {
         shouldContinue = handler(child);
       } else if (shouldContinue && child is FlameGame) {
@@ -314,8 +310,8 @@ class Component with Loadable {
   void changePriorityWithoutResorting(int priority) => _priority = priority;
 
   /// Prepares the [Component] to be added to a [parent], and if there is an
-  /// ancestor that is a [FlameGame] that game will do necessary preparations for
-  /// this component.
+  /// ancestor that is a [FlameGame] that game will do necessary preparations
+  /// for this component.
   /// If there are no parents that are a [Game] false will be returned and this
   /// will run again once an ancestor or the component itself is added to a
   /// [Game].
@@ -333,22 +329,22 @@ class Component with Loadable {
         'Did you try to access it on the Game constructor? '
         'Use the "onLoad" or "onMount" method instead.',
       );
-      if (parentGame is FlameGame) {
-        parentGame.prepareComponent(this);
-      }
+      parentGame.prepareComponent(this);
 
       debugMode |= parent.debugMode;
       isPrepared = true;
     }
   }
 
-  /// This method sets up the `OrderedSet` instance used by this component to
-  /// handle its children,
-  /// This is set up before any lifecycle methods happen.
-  ///
-  /// You can return a specific sub-class of `OrderedSet`, like
-  /// `QueryableOrderedSet` for example.
-  ComponentSet createComponentSet() {
-    return ComponentSet.createDefault(this);
-  }
+  /// `Component.childrenFactory` is the default method for creating children
+  /// containers within all components. Replace this method if you want to have
+  /// customized (non-default) [ComponentSet] instances in your project.
+  static ComponentSetFactory childrenFactory = ComponentSet.createDefault;
+
+  /// This method creates the children container for the current component.
+  /// Override this method if you need to have a custom [ComponentSet] within
+  /// a particular class.
+  ComponentSet createComponentSet() => childrenFactory(this);
 }
+
+typedef ComponentSetFactory = ComponentSet Function(Component owner);

@@ -52,7 +52,8 @@ class FlareActorAnimation {
 
   FlareActorRenderObject? _renderObject;
 
-  // Flare only allows the render box to be loaded if it is considered "attached", we need this ugly dumb thing here to do that.
+  // Flare only allows the render box to be loaded if it is considered
+  // "attached", we need this ugly dumb thing here to do that.
   final _pipelineOwner = _FlareActorComponentPipelineOwner();
 
   // Fields are ported from flare actor widget
@@ -130,7 +131,8 @@ class FlareActorAnimation {
   void render(Canvas canvas, Vector2 size) {
     final renderObject = _renderObject;
     if (renderObject == null) {
-      throw 'FlareActorAnimation was rendered before initialization. Run FlareActorAnimation.init() before rendering it';
+      throw 'FlareActorAnimation was rendered before initialization. '
+          'Run FlareActorAnimation.init() before rendering it';
     }
     final bounds = renderObject.aabb;
     _paintActor(canvas, bounds, size);
@@ -139,7 +141,8 @@ class FlareActorAnimation {
   void advance(double dt) {
     final renderObject = _renderObject;
     if (renderObject == null) {
-      throw 'FlareActorAnimation was advanced before initialization. Run FlareActorAnimation.init() before calling .advance';
+      throw 'FlareActorAnimation was advanced before initialization. '
+          'Run FlareActorAnimation.init() before calling .advance';
     }
     renderObject.advance(dt);
   }
@@ -147,7 +150,8 @@ class FlareActorAnimation {
   void destroy() {
     final renderObject = _renderObject;
     if (renderObject == null) {
-      throw 'FlareActorAnimation was destroyed before initialization. Run FlareActorAnimation.init() before destroying it';
+      throw 'FlareActorAnimation was destroyed before initialization. '
+          'Run FlareActorAnimation.init() before destroying it';
     }
     renderObject.dispose();
   }
@@ -164,7 +168,8 @@ class FlareActorAnimation {
   void _paintActor(Canvas c, AABB bounds, Vector2 size) {
     final renderObject = _renderObject;
     if (renderObject == null) {
-      throw 'FlareActorAnimation was rendered before initialization. Run FlareActorAnimation.init() before rendering it';
+      throw 'FlareActorAnimation was rendered before initialization. '
+          'Run FlareActorAnimation.init() before rendering it';
     }
 
     final contentWidth = bounds[2] - bounds[0];

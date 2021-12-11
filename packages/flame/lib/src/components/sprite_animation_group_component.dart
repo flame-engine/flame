@@ -3,10 +3,6 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 
 import '../../components.dart';
-import '../extensions/vector2.dart';
-import '../sprite_animation.dart';
-import 'mixins/has_paint.dart';
-import 'position_component.dart';
 
 export '../sprite_animation.dart';
 
@@ -90,8 +86,8 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
   /// Component will be removed after animation is done and the current state
   /// is true on [removeOnFinish].
   ///
-  /// Note: [SpriteAnimationGroupComponent] will not be removed automatically if loop
-  /// property of [SpriteAnimation] of the current state is true.
+  /// Note: [SpriteAnimationGroupComponent] will not be removed automatically if
+  /// loop property of [SpriteAnimation] of the current state is true.
   @override
   bool get shouldRemove {
     final stateRemoveOnFinish = removeOnFinish[current] ?? false;

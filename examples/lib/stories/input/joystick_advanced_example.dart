@@ -2,14 +2,11 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
 import 'joystick_player.dart';
 
@@ -163,11 +160,11 @@ class JoystickAdvancedExample extends FlameGame
     speedText = TextComponent(
       text: 'Speed: 0',
       textRenderer: _regular,
-    )..respectCamera = false;
+    )..positionType = PositionType.viewport;
     directionText = TextComponent(
       text: 'Direction: idle',
       textRenderer: _regular,
-    )..respectCamera = false;
+    )..positionType = PositionType.viewport;
 
     final speedWithMargin = HudMarginComponent(
       margin: const EdgeInsets.only(

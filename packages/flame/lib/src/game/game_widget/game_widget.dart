@@ -1,4 +1,3 @@
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -197,7 +196,8 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       _initMouseCursor();
       addMouseCursorListener();
 
-      // Reset the loaderFuture so that onMount will run again (onLoad is still cached).
+      // Reset the loaderFuture so that onMount will run again
+      // (onLoad is still cached).
       oldWidget.game.onRemove();
       _loaderFuture = null;
     }

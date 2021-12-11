@@ -4,7 +4,6 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:forge2d/forge2d.dart' hide Timer, Vector2;
 
 import 'forge2d_game.dart';

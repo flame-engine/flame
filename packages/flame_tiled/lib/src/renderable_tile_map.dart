@@ -1,8 +1,5 @@
-import 'dart:async';
 import 'dart:math' as math;
-import 'dart:ui';
 
-import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';

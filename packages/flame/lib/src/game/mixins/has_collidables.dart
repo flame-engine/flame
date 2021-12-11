@@ -1,6 +1,5 @@
 import '../../../components.dart';
 import '../../../game.dart';
-import '../../components/mixins/collidable.dart';
 import '../../geometry/collision_detection.dart';
 
 /// Keeps track of all the [Collidable]s in the component tree and initiates

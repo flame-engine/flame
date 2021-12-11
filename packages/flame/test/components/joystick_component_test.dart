@@ -41,7 +41,8 @@ void main() {
 
   group('Joystick input tests', () {
     withDraggables.test(
-      'knob should stay on correct side when the total delta is larger than the size and then the knob is moved slightly back again',
+      'knob should stay on correct side when the total delta is larger than '
+      'the size and then the knob is moved slightly back again',
       (game) async {
         final joystick = JoystickComponent(
           knob: CircleComponent(radius: 5.0),

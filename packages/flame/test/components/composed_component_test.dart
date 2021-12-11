@@ -35,7 +35,7 @@ class _MyTap extends PositionComponent with Tappable {
   @override
   bool onTapDown(_) {
     ++tapTimes;
-    return true;
+    return false;
   }
 }
 
@@ -86,7 +86,8 @@ void main() {
     });
 
     withTappables.test(
-      'when child is async loading, adds the child to the component after loading',
+      'when child is async loading, the child is added to the component after '
+      'loading',
       (game) async {
         final child = _MyAsyncChild();
         final wrapper = Component();
@@ -147,6 +148,32 @@ void main() {
       expect(child.tapped, true);
       expect(child.tapTimes, 1);
     });
+
+    withTappables.test(
+      'tap on child on top of child without propagation',
+      (game) async {
+        final child1 = _MyTap()..size.setFrom(Vector2.all(100));
+        final child2 = _MyTap()..size.setFrom(Vector2.all(100));
+        final parent = PositionComponent()..size.setFrom(Vector2.all(300));
+
+        game.onGameResize(size);
+        await game.ensureAdd(parent);
+        await parent.ensureAdd(child1);
+        await parent.ensureAdd(child2);
+        game.onTapDown(
+          1,
+          createTapDownEvent(
+            game,
+            globalPosition: const Offset(50, 50),
+          ),
+        );
+
+        expect(child2.tapped, isTrue);
+        expect(child2.tapTimes, equals(1));
+        expect(child1.tapped, isFalse);
+        expect(child1.tapTimes, equals(0));
+      },
+    );
 
     withTappables.test('updates and renders children', (game) async {
       final child = _MyTap();

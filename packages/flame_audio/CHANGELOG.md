@@ -1,5 +1,7 @@
-## [1.0.0-rc.15]
+## [1.0.0]
+* Bump to Flame 1.0.0
 
+## [1.0.0-rc.15]
 * Bump audioplayers version to 0.20.1
 
 ## [1.0.0-rc.1]

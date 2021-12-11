@@ -30,7 +30,8 @@ class Images {
     final image = _loadedFiles[fileName];
     assert(
       image?.loadedImage != null,
-      'Tried to access an inexistent entry on cache "$fileName", make sure to use the load method before accessing a file on the cache',
+      'Tried to access an inexistent entry on cache "$fileName", make sure to '
+      'use the load method before accessing a file on the cache',
     );
     return image!.loadedImage!;
   }
@@ -72,11 +73,12 @@ class Images {
   /// Convert an array of pixel values into an [Image] object.
   ///
   /// The [pixels] parameter is the pixel data in the encoding described by
-  /// [PixelFormat.rgba8888], the encoding can't be changed to allow for web support.
+  /// [PixelFormat.rgba8888], the encoding can't be changed to allow for web
+  /// support.
   ///
   /// If you want the image to be decoded as it would be on the web you can set
-  /// [runAsWeb] to `true`. Keep in mind that it is slightly slower than the native
-  /// [ui.decodeImageFromPixels]. By default it is set to [kIsWeb].
+  /// [runAsWeb] to `true`. Keep in mind that it is slightly slower than the
+  /// native [ui.decodeImageFromPixels]. By default it is set to [kIsWeb].
   Future<Image> decodeImageFromPixels(
     Uint8List pixels,
     int width,

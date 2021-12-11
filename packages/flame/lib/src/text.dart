@@ -1,5 +1,3 @@
-import 'dart:ui' hide TextStyle, TextDirection;
-
 import 'package:flutter/material.dart';
 
 import 'anchor.dart';
@@ -37,9 +35,13 @@ abstract class TextRenderer {
   ///
   /// Example usage (Using TextPaint implementation):
   ///
-  ///     const TextStyle style = TextStyle(fontSize: 48.0, fontFamily: 'Awesome Font');
-  ///     const TextPaint textPaint = TextPaint(style: style);
-  ///     textPaint.render(canvas, Vector2(size.x - 10, size.y - 10, anchor: Anchor.bottomRight);
+  ///   const TextStyle style = TextStyle(fontSize: 48.0, fontFamily: 'Arial');
+  ///   const TextPaint textPaint = TextPaint(style: style);
+  ///   textPaint.render(
+  ///     canvas,
+  ///     Vector2(size.x - 10, size.y - 10,
+  ///     anchor: Anchor.bottomRight,
+  ///   );
   void render(
     Canvas canvas,
     String text,
@@ -67,7 +69,8 @@ abstract class TextRenderer {
     if (creator != null) {
       return creator() as T;
     } else {
-      throw 'Unknown implementation of TextRenderer: $T. Please register it under [defaultCreatorsRegistry].';
+      throw 'Unknown implementation of TextRenderer: $T. Please register it '
+          'under [defaultCreatorsRegistry].';
     }
   }
 }
@@ -121,9 +124,9 @@ class TextPaint extends TextRenderer {
   ///
   /// Example usage:
   ///
-  ///     const TextPaint config = TextPaint(fontSize: 48.0, fontFamily: 'Awesome Font');
-  ///     final tp = config.toTextPainter('Score: $score');
-  ///     tp.paint(c, Offset(size.width - p.width - 10, size.height - p.height - 10));
+  ///   const TextPaint config = TextPaint(fontSize: 48.0, fontFamily: 'Arial');
+  ///   final tp = config.toTextPainter('Score: $score');
+  ///   tp.paint(canvas, const Offset(10, 10));
   ///
   /// However, you probably want to use the [render] method which already
   /// takes the anchor into consideration.

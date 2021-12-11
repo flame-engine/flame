@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/animation.dart';
 
@@ -142,7 +141,8 @@ abstract class Particle {
     );
   }
 
-  /// Rotates this particle to a fixed angle in radians using [RotatingParticle].
+  /// Rotates this particle to a fixed angle in radians using the
+  /// [RotatingParticle].
   Particle rotated(double angle) {
     return RotatingParticle(
       child: this,

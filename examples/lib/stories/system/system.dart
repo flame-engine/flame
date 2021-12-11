@@ -17,13 +17,13 @@ void addSystemStories(Dashbook dashbook) {
     ..add(
       'Overlay',
       overlayBuilder,
-      codeLink: baseLink('widgets/overlays_example.dart'),
+      codeLink: baseLink('system/overlays_example.dart'),
       info: OverlaysExample.description,
     )
     ..add(
       'Without FlameGame',
       (_) => GameWidget(game: NoFlameGameExample()),
-      codeLink: baseLink('utils/without_flamegame_example.dart'),
+      codeLink: baseLink('system/without_flamegame_example.dart'),
       info: NoFlameGameExample.description,
     );
 }

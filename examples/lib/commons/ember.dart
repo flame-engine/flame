@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 
 class Ember<T extends FlameGame> extends SpriteAnimationComponent

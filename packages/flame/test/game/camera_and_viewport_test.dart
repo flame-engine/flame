@@ -23,6 +23,47 @@ class _TestComponent extends PositionComponent {
 }
 
 void main() {
+  group('widget', () {
+    flameGame.test(
+      'viewport does not affect component with PositionType.widget',
+      (game) async {
+        game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
+        game.onGameResize(Vector2.all(200.0));
+        await game.ensureAdd(
+          _TestComponent(Vector2.zero())..positionType = PositionType.widget,
+        );
+
+        final canvas = MockCanvas();
+        game.render(canvas);
+        expect(
+          canvas,
+          MockCanvas()
+            ..translate(0, 0) // transform in PositionComponent.renderTree
+            ..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
+        );
+      },
+    );
+
+    flameGame.test(
+      'camera does not affect component with PositionType.widget',
+      (game) async {
+        await game.ensureAdd(
+          _TestComponent(Vector2.zero())..positionType = PositionType.widget,
+        );
+        game.camera.snapTo(Vector2(100, 100));
+
+        final canvas = MockCanvas();
+        game.render(canvas);
+        expect(
+          canvas,
+          MockCanvas()
+            ..translate(0, 0) // transform in PositionComponent.renderTree
+            ..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
+        );
+      },
+    );
+  });
+
   group('viewport', () {
     flameGame.test('default viewport does not change size', (game) {
       game.onGameResize(Vector2(100.0, 200.0));
@@ -175,9 +216,10 @@ void main() {
 
       expect(game.camera.position, Vector2.all(0.0));
       p.position.setValues(10.0, 20.0);
-      // follow happens immediately because the object's movement is assumed to be smooth
+      // follow happens immediately because the object's movement is assumed to
+      // be smooth.
       game.update(0);
-      // (10,20) - half screen (50,50)
+      // (10,20) - half screen (50,50).
       expect(game.camera.position, Vector2(-40, -30));
 
       final canvas = MockCanvas();
@@ -203,7 +245,8 @@ void main() {
 
       expect(game.camera.position, Vector2.all(0.0));
       p.position.setValues(600.0, 2000.0);
-      // follow happens immediately because the object's movement is assumed to be smooth
+      // follow happens immediately because the object's movement is assumed to
+      // be smooth.
       game.update(0);
       // (600,2000) - fractional screen (50,80)
       expect(game.camera.position, Vector2(550, 1920));
@@ -263,7 +306,8 @@ void main() {
           worldBounds: const Rect.fromLTWH(0, 0, 100, 100),
         );
 
-        // in this case the camera will just center the world, no matter the player position
+        // In this case the camera will just center the world, no matter the
+        // player position.
         game.update(0);
         expect(game.camera.position, Vector2(50, 50));
 

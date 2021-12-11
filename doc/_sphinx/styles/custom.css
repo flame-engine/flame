@@ -52,9 +52,14 @@ main.bd-content > #main-content > div {
 #site-navigation {
     background-color: #202225;
     border: none;
+	overflow: hidden;
+}
+#site-navigation:hover {
+	overflow-y: scroll;
+	padding-right: 7px;
 }
 #site-navigation::-webkit-scrollbar {
-    width: 4px;
+    width: 8px;
 }
 #site-navigation::-webkit-scrollbar-track {
     background: #202225;

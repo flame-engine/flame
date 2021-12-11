@@ -1,7 +1,6 @@
 library flame_fire_atlas;
 
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:archive/archive.dart';
 import 'package:flame/assets.dart';
@@ -64,9 +63,11 @@ class Selection {
 }
 
 /// {@template _base_selection}
-/// Base class for all FireAtlas selections, containing information for a section of the image.
+/// Base class for all FireAtlas selections, containing information for a
+/// section of the image.
 ///
-/// Check [SpriteSelection] for [Sprite] based selections, and [AnimationSelection] for [SpriteAnimation] based selections.
+/// Check [SpriteSelection] for [Sprite] based selections, and
+/// [AnimationSelection] for [SpriteAnimation] based selections.
 /// {@endtemplate}
 abstract class BaseSelection {
   final Selection _info;
@@ -170,11 +171,13 @@ class AnimationSelection extends BaseSelection {
   }
 }
 
-/// FireAtlas is a mapping file that can hold several [Sprite]s and [SpriteAnimation]s.
+/// FireAtlas is a mapping file that can hold several [Sprite]s and
+/// [SpriteAnimation]s.
 ///
 /// Use [getSprite] and [getAnimation] to retrieve mapped assets.
 class FireAtlas {
-  /// Id of the FireAtlas, mainly used by the Fire Atlas Editor for file identification.
+  /// Id of the FireAtlas, mainly used by the Fire Atlas Editor for file
+  /// identification.
   String id;
 
   /// The width of the tile.
@@ -189,8 +192,8 @@ class FireAtlas {
 
   /// Creates a FireAtlas instance.
   ///
-  /// This constructor is often used internally; to load a FireAtlas instance into you game,
-  /// check [loadAsset].
+  /// This constructor is often used internally; to load a FireAtlas instance
+  /// into you game, check [loadAsset].
   FireAtlas({
     required this.id,
     required this.tileWidth,
@@ -205,8 +208,11 @@ class FireAtlas {
   /// is used internally by [loadAsset], prefer that method unless
   /// there is a very specific use case for it.
   ///
-  /// [clearImageData] Can be set to false to avoid clearing the stored information about the image on this object, this is true by default, its use is intended to enable serializing this object
-  /// [images] The images cache to be used, falls back to [Flame.images] when omitted.
+  /// [clearImageData] Can be set to false to avoid clearing the stored
+  /// information about the image on this object, this is true by default, its
+  /// use is intended to enable serializing this object
+  /// [images] The images cache to be used, falls back to [Flame.images] when
+  /// omitted.
   ///
   Future<void> loadImage({bool clearImageData = true, Images? images}) async {
     if (imageData == null) {
@@ -292,9 +298,9 @@ class FireAtlas {
 
   /// Reads a [FireAtlas] instance from a byte array.
   static FireAtlas deserialize(List<int> bytes) {
-    final unzipedBytes = GZipDecoder().decodeBytes(bytes);
-    final unzipedString = utf8.decode(unzipedBytes);
-    return _fromJson(jsonDecode(unzipedString) as Map<String, dynamic>);
+    final unzippedBytes = GZipDecoder().decodeBytes(bytes);
+    final unzippedString = utf8.decode(unzippedBytes);
+    return _fromJson(jsonDecode(unzippedString) as Map<String, dynamic>);
   }
 
   Image _assertImageLoaded() {

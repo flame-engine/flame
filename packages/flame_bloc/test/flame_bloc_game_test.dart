@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flame_test/flame_test.dart';
@@ -61,7 +60,7 @@ void main() {
     );
 
     blocGame.test(
-      'read throws exection when game is not attached yet',
+      'read throws exception when game is not attached yet',
       (game) {
         expect(() => game.read<InventoryCubit>(), throwsException);
       },

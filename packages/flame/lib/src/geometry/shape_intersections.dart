@@ -1,13 +1,7 @@
 import 'dart:math';
-import 'dart:ui';
-
-import 'package:flutter/material.dart';
 
 import '../../extensions.dart';
 import '../../geometry.dart';
-import 'circle.dart';
-import 'polygon.dart';
-import 'shape.dart';
 
 abstract class Intersections<T1 extends Shape, T2 extends Shape> {
   Set<Vector2> intersect(T1 shapeA, T2 shapeB);
@@ -97,21 +91,21 @@ class CircleCircleIntersections extends Intersections<Circle, Circle> {
         shapeA.absoluteCenter + Vector2(0, radiusA),
       };
     } else {
-      /// There are definitely collision points if we end up in here.
-      /// To calculate these we use the fact that we can form two triangles going
-      /// between the center of shapeA, the point in between the shapes which the
-      /// intersecting line goes through, and then two different triangles are
-      /// formed with the two intersection points as the last corners.
-      /// The length to the point in between the circles is first calculated,
-      /// this is [lengthA], then we calculate the length of the other cathetus
-      /// [lengthB]. Then the [centerPoint] is calculated, which is the point
-      /// which the intersecting line goes through in between the shapes.
-      /// At this point we know the two first points of the triangles, the center
-      /// of [shapeA] and the [centerPoint], the two third points of the
-      /// different triangles are the intersection points that we are looking for
-      /// and we get those points by calculating the [delta] from the
-      /// [centerPoint] to the intersection points.
-      /// The result is then [centerPoint] +- [delta].
+      // There are definitely collision points if we end up in here.
+      // To calculate these we use the fact that we can form two triangles going
+      // between the center of shapeA, the point in between the shapes which the
+      // intersecting line goes through, and then two different triangles are
+      // formed with the two intersection points as the last corners.
+      // The length to the point in between the circles is first calculated,
+      // this is [lengthA], then we calculate the length of the other cathetus
+      // [lengthB]. Then the [centerPoint] is calculated, which is the point
+      // which the intersecting line goes through in between the shapes.
+      // At this point we know the two first points of the triangles, the center
+      // of [shapeA] and the [centerPoint], the two third points of the
+      // different triangles are the intersection points that we are looking for
+      // and we get those points by calculating the [delta] from the
+      // [centerPoint] to the intersection points.
+      // The result is then [centerPoint] +- [delta].
       final lengthA = (pow(radiusA, 2) - pow(radiusB, 2) + pow(distance, 2)) /
           (2 * distance);
       final lengthB = sqrt((pow(radiusA, 2) - pow(lengthA, 2)).abs());
@@ -143,7 +137,8 @@ Set<Vector2> intersections(Shape shapeA, Shape shapeB) {
   final intersectionSystem = _intersectionSystems.firstWhere(
     (system) => system.supportsShapes(shapeA, shapeB),
     orElse: () {
-      throw 'Unsupported shape detected + ${shapeA.runtimeType} ${shapeB.runtimeType}';
+      throw 'Unsupported intersection detected between: '
+          '${shapeA.runtimeType} and ${shapeB.runtimeType}';
     },
   );
   return intersectionSystem.unorderedIntersect(shapeA, shapeB);
