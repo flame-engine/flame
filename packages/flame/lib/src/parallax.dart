@@ -38,6 +38,7 @@ extension ParallaxExtension on Game {
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
+    FilterQuality? filterQuality,
   }) {
     return ParallaxImage.load(
       path,
@@ -45,6 +46,7 @@ extension ParallaxExtension on Game {
       alignment: alignment,
       fill: fill,
       images: images,
+      filterQuality: filterQuality,
     );
   }
 
@@ -93,13 +95,17 @@ abstract class ParallaxRenderer {
   /// How to fill the screen with the image, always proportionally scaled.
   final LayerFill fill;
 
+  final FilterQuality filterQuality;
+
   ParallaxRenderer({
     ImageRepeat? repeat,
     Alignment? alignment,
     LayerFill? fill,
+    FilterQuality? filterQuality,
   })  : repeat = repeat ?? ImageRepeat.repeatX,
         alignment = alignment ?? Alignment.bottomLeft,
-        fill = fill ?? LayerFill.height;
+        fill = fill ?? LayerFill.height,
+        filterQuality = filterQuality ?? FilterQuality.low;
 
   void update(double dt);
   Image get image;
@@ -116,10 +122,12 @@ class ParallaxImage extends ParallaxRenderer {
     ImageRepeat? repeat,
     Alignment? alignment,
     LayerFill? fill,
+    FilterQuality? filterQuality,
   }) : super(
           repeat: repeat,
           alignment: alignment,
           fill: fill,
+          filterQuality: filterQuality,
         );
 
   /// Takes a path of an image, and optionally arguments for how the image
@@ -133,6 +141,7 @@ class ParallaxImage extends ParallaxRenderer {
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
     Images? images,
+    FilterQuality? filterQuality,
   }) async {
     images ??= Flame.images;
     return ParallaxImage(
@@ -140,6 +149,7 @@ class ParallaxImage extends ParallaxRenderer {
       repeat: repeat,
       alignment: alignment,
       fill: fill,
+      filterQuality: filterQuality,
     );
   }
 
@@ -315,6 +325,7 @@ class ParallaxLayer {
       repeat: parallaxRenderer.repeat,
       scale: _scale,
       alignment: parallaxRenderer.alignment,
+      filterQuality: parallaxRenderer.filterQuality,
     );
   }
 
