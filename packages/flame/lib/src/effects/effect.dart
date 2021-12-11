@@ -136,15 +136,6 @@ abstract class Effect extends Component {
   /// the effect is about to start.
   void onStart() {}
 
-  /// Apply the given [progress] level to the effect's target.
-  ///
-  /// Here [progress] is a variable that is typically in the range from 0 to 1,
-  /// with 0 being the initial state, and 1 the final state of the effect. See
-  /// [EffectController] for details.
-  ///
-  /// This is a main method that MUST be implemented in every derived class.
-  void apply(double progress);
-
   /// This method is called once when the effect is about to finish, but before
   /// it is removed from its parent. The notion of "about to finish" is defined
   /// by the [controller]: this method is called when `controller.completed`
@@ -156,6 +147,15 @@ abstract class Effect extends Component {
   void onFinish() {
     onComplete?.call();
   }
+
+  /// Apply the given [progress] level to the effect's target.
+  ///
+  /// Here [progress] is a variable that is typically in the range from 0 to 1,
+  /// with 0 being the initial state, and 1 the final state of the effect. See
+  /// [EffectController] for details.
+  ///
+  /// This is a main method that MUST be implemented in every derived class.
+  void apply(double progress);
 
   //#endregion
 }
