@@ -5,37 +5,35 @@ please read these instructions carefully.
 
 ## Contribution types
 
-### Bug fixes
- - If you find a bug, please first report it using
-   [Github issues](https://github.com/flame-engine/flame/issues/new).
+### Bug Reports
+ - If you find a bug, please first report it using [Github issues][issues]
    - First check if there is not already an issue for it; duplicated issues will be closed.
- - Issues that have already been identified as a bug will be labelled "bug".
+
+### Bug Fix
  - If you'd like to submit a fix for a bug, please read the [How To](#how-to-contribute) for how to
    send a Pull Request.
+ - Indicate on the open issue that you are working on fixing the bug and the issue will be assigned
+   to you.
+ - Write `Fixes #xxxx` in your PR text, where xxxx is the issue number (if there is one).
  - Include a test that isolates the bug and verifies that it was fixed.
- - Also update the examples and documentation if necessary.
 
 ### New Features
  - If you'd like to add a feature to the library that doesn't already exist, feel free to describe
-   the feature in a new [GitHub issue](https://github.com/flame-engine/flame/issues/new).
-   - You can also join us on [Discord](https://discord.gg/pxrBmy4) to discuss some initials
+   the feature in a new [GitHub issue][issues].
+   - You can also join us on [Discord][discord] to discuss some initials
    thoughts.
- - Issues that have been identified as a feature request will be labelled "enhancement".
  - If you'd like to implement the new feature, please wait for feedback from the project maintainers
-   before spending too much time writing the code. In some cases, enhancements may not align well 
+   before spending too much time writing the code. In some cases, enhancements may not align well
    with the project objectives at the time.
- - Implement your code and please read the [How To](#how-to-contribute).
- - Also update the examples and documentation where needed.
+ - Implement the code for the new feature and please read the [How To](#how-to-contribute).
 
 ### Documentation & Miscellaneous
  - If you have suggestions for improvements to the documentation, tutorial or examples (or something
    else), we would love to hear about it.
- - As always first file a [Github issue](https://github.com/flame-engine/flame/issues/new).
- - Issues that have been identified as a documentation change will be labelled "documentation".
+ - As always first file a [Github issue][issues].
  - Implement the changes to the documentation, please read the [How To](#how-to-contribute).
 
 ## How To Contribute
-If you want to open a PR
 
 ### Requirements
 For a contribution to be accepted:
@@ -45,7 +43,7 @@ For a contribution to be accepted:
 - Tests should always be updated or added.*
 - Format the Dart code accordingly with `flutter format`.
 - Your code should pass the analyzer checks `flutter analyze`.
-- Start your PR title with a [conventional commit](https://www.conventionalcommits.org) type
+- Start your PR title with a [conventional commit][conventional commits] type
   (`feat:`, `fix:` etc).
 
 *When applicable.
@@ -56,13 +54,13 @@ and it will be automatically reflected in the PR.
 
 ## Open an issue and fork the repository
  - If it is a bigger change or a new feature, first of all
-   [file an bug or feature report](https://github.com/flame-engine/flame/issues/new).
- - [Fork the project](https://guides.github.com/activities/forking/#fork) on GitHub.
+   [file an bug or feature report][issues]
+ - [Fork the project][fork guide] on GitHub.
  - Clone the forked repository to your local development machine
    (e.g. `git clone git@github.com:<YOUR_GITHUB_USER>/flame.git`).
 
 ### Environment Setup
-Flame uses [Melos](https://github.com/invertase/melos) to manage the project and dependencies.
+Flame uses [Melos][melos] to manage the project and dependencies.
 
 To install Melos, run the following command from your terminal:
 
@@ -77,7 +75,7 @@ melos bootstrap
 ```
 
 The bootstrap command locally links all dependencies within the project without having to
-provide manual [`dependency_overrides`](https://dart.dev/tools/pub/pubspec). This allows all
+provide manual [`dependency_overrides`][pubspec doc]. This allows all
 plugins, examples and tests to build from the local clone project.
 
 > You do not need to run `flutter pub get` once bootstrap has been completed.
@@ -91,11 +89,10 @@ plugins, examples and tests to build from the local clone project.
  (e.g. `git push origin my-new-feature`)
 
 ### Open a pull request
-Go to the [pull request page of Flame](https://github.com/flame-engine/flame/pulls) and in the top
+Go to the [pull request page of Flame][PRs] and in the top
 of the page it will ask you if you want to open a pull request from your newly created branch.
 
-The title of the pull request should start with a
-[conventional commit](https://www.conventionalcommits.org) type.
+The title of the pull request should start with a [conventional commit][conventional commits] type.
 
 Examples of such types:
  - `fix:` - patches a bug and is not a new feature.
@@ -114,3 +111,11 @@ Examples of PR titles:
  - docs: improved the Mandarin README
  - test: added a test for `MoveEffect.to`
  - refactor: optimized the structure of the game loop
+
+[issues]: https://github.com/flame-engine/flame/issues/new
+[PRs]: https://github.com/flame-engine/flame/pulls
+[fork guide]: https://guides.github.com/activities/forking/#fork
+[discord]: https://discord.gg/pxrBmy4
+[melos]: https://github.com/invertase/melos
+[pubspec doc]: https://dart.dev/tools/pub/pubspec
+[conventional commits]: https://www.conventionalcommits.org

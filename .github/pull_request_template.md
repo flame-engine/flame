@@ -13,9 +13,9 @@ Before you create this PR confirm that it meets all requirements listed below by
 - [ ] My PR includes tests for ALL new/updated/fixed functionality.
 - [ ] My PR does not decrease the code coverage.
 - [ ] The title of my PR starts with a [Conventional Commit] prefix (`fix:`, `feat:`, `doc:` etc).
-- [ ] I updated/added relevant documentation (doc comments with `///`) and updated/added examples in `examples`.
+- [ ] I updated/added relevant documentation in `docs` and added dartdoc comments with `///`.
+- [ ] I updated/added relevant examples in `examples`.
 - [ ] I have formatted my code with `flutter format` and `flutter analyze` does not report any problems.
-- [ ] I read and followed the [Flame Style Guide].
 
 ## Breaking Change
 
