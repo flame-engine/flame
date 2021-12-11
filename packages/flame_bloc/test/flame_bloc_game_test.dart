@@ -60,7 +60,7 @@ void main() {
     );
 
     blocGame.test(
-      'read throws exection when game is not attached yet',
+      'read throws exception when game is not attached yet',
       (game) {
         expect(() => game.read<InventoryCubit>(), throwsException);
       },

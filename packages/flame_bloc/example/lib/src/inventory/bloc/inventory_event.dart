@@ -4,17 +4,17 @@ abstract class InventoryEvent extends Equatable {
   const InventoryEvent();
 }
 
-class WeaponEquiped extends InventoryEvent {
+class WeaponEquipped extends InventoryEvent {
   final Weapon weapon;
 
-  const WeaponEquiped(this.weapon);
+  const WeaponEquipped(this.weapon);
 
   @override
   List<Object?> get props => [weapon];
 }
 
-class NextWeaponEquiped extends InventoryEvent {
-  const NextWeaponEquiped();
+class NextWeaponEquipped extends InventoryEvent {
+  const NextWeaponEquipped();
 
   @override
   List<Object?> get props => [];

@@ -216,9 +216,10 @@ void main() {
 
       expect(game.camera.position, Vector2.all(0.0));
       p.position.setValues(10.0, 20.0);
-      // follow happens immediately because the object's movement is assumed to be smooth
+      // follow happens immediately because the object's movement is assumed to
+      // be smooth.
       game.update(0);
-      // (10,20) - half screen (50,50)
+      // (10,20) - half screen (50,50).
       expect(game.camera.position, Vector2(-40, -30));
 
       final canvas = MockCanvas();
@@ -244,7 +245,8 @@ void main() {
 
       expect(game.camera.position, Vector2.all(0.0));
       p.position.setValues(600.0, 2000.0);
-      // follow happens immediately because the object's movement is assumed to be smooth
+      // follow happens immediately because the object's movement is assumed to
+      // be smooth.
       game.update(0);
       // (600,2000) - fractional screen (50,80)
       expect(game.camera.position, Vector2(550, 1920));
@@ -304,7 +306,8 @@ void main() {
           worldBounds: const Rect.fromLTWH(0, 0, 100, 100),
         );
 
-        // in this case the camera will just center the world, no matter the player position
+        // In this case the camera will just center the world, no matter the
+        // player position.
         game.update(0);
         expect(game.camera.position, Vector2(50, 50));
 
