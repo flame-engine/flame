@@ -144,7 +144,7 @@ void main() {
         ..onStartCallback = () {
           nStarted++;
         }
-        ..onFinish = () {
+        ..onComplete = () {
           nFinished++;
         };
 
