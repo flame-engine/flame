@@ -21,7 +21,7 @@ Before you create this PR confirm that it meets all requirements listed below by
 
 Does your PR require Flame users to manually update their apps to accommodate your change?
 
-- [ ] Yes, this is a breaking change. (indicate it in the [Conventional Commit] prefix with a `!`,
+- [ ] Yes, this is a breaking change. (Indicate it in the [Conventional Commit] prefix with a `!`,
   e.g. `feat!:`, `fix!:`).
 - [ ] No, this is *not* a breaking change.
 
