@@ -7,6 +7,7 @@ export 'src/effects/controllers/effect_controller.dart';
 export 'src/effects/controllers/infinite_effect_controller.dart';
 export 'src/effects/controllers/linear_effect_controller.dart';
 export 'src/effects/controllers/pause_effect_controller.dart';
+export 'src/effects/controllers/random_effect_controller.dart';
 export 'src/effects/controllers/repeated_effect_controller.dart';
 export 'src/effects/controllers/reverse_curved_effect_controller.dart';
 export 'src/effects/controllers/reverse_linear_effect_controller.dart';
