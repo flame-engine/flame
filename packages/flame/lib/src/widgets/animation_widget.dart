@@ -96,35 +96,28 @@ class _SpriteAnimationWidgetState extends State<_SpriteAnimationWidget>
   double? _lastUpdated;
 
   @override
-  void didUpdateWidget(_SpriteAnimationWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
+  void initState() {
+    super.initState();
+    widget.animation.onComplete = _pauseAnimation;
+    _setupController();
     if (widget.playing) {
       _initAnimation();
-    } else {
-      _pauseAnimation();
     }
   }
 
   @override
-  void initState() {
-    super.initState();
+  void didUpdateWidget(_SpriteAnimationWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
-    _controller = AnimationController(vsync: this)
-      ..addListener(() {
-        final now = DateTime.now().millisecond.toDouble();
-
-        final dt = max(0, (now - (_lastUpdated ?? 0)) / 1000).toDouble();
-        widget.animation.update(dt);
-
-        setState(() {
-          _lastUpdated = now;
-        });
-      });
-
-    widget.animation.onComplete = _pauseAnimation;
+    if (oldWidget.animation != widget.animation) {
+      oldWidget.animation.onComplete = null;
+      _setupController();
+    }
 
     if (widget.playing) {
       _initAnimation();
+    } else {
+      _pauseAnimation();
     }
   }
 
@@ -137,6 +130,24 @@ class _SpriteAnimationWidgetState extends State<_SpriteAnimationWidget>
         period: const Duration(milliseconds: 16),
       );
     });
+  }
+
+  void _setupController() {
+    if (_controller != null) {
+      _controller?.dispose();
+    }
+
+    _controller = AnimationController(vsync: this)
+      ..addListener(() {
+        final now = DateTime.now().millisecond.toDouble();
+
+        final dt = max(0, (now - (_lastUpdated ?? 0)) / 1000).toDouble();
+        widget.animation.update(dt);
+
+        setState(() {
+          _lastUpdated = now;
+        });
+      });
   }
 
   void _pauseAnimation() {
