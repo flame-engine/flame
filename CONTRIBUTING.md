@@ -81,7 +81,7 @@ plugins, examples and tests to build from the local clone project.
 > You do not need to run `flutter pub get` once bootstrap has been completed.
 
 ### Performing changes
- - Create a new local branch (e.g. `git checkout -b my-new-feature`)
+ - Create a new local branch from `main` (e.g. `git checkout -b my-new-feature`)
  - Make your changes.
  - When committing your changes, make sure that each commit message is clear
  (e.g. `git commit -m 'Take in an optional Camera as a parameter to FlameGame'`).
