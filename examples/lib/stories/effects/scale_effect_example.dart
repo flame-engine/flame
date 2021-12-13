@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
@@ -7,10 +9,10 @@ import 'package:flutter/material.dart';
 
 class ScaleEffectExample extends FlameGame with TapDetector {
   static const String description = '''
-    The `ScaleEffect` scales up the canvas before drawing the components and its
-    children.
     In this example you can tap the screen and the component will scale up or
     down, depending on its current state.
+    
+    The star pulsates randomly using a RandomEffectController.
   ''';
 
   late RectangleComponent square;
@@ -30,6 +32,26 @@ class ScaleEffectExample extends FlameGame with TapDetector {
     );
     square.add(childSquare);
     add(square);
+
+    add(
+      Star()
+        ..position = Vector2(200, 100)
+        ..add(
+          ScaleEffect.to(
+            Vector2.all(1.2),
+            InfiniteEffectController(
+              SequenceEffectController([
+                LinearEffectController(0.1),
+                ReverseLinearEffectController(0.1),
+                RandomEffectController.exponential(
+                  PauseEffectController(1, progress: 0),
+                  beta: 1,
+                ),
+              ]),
+            ),
+          ),
+        ),
+    );
   }
 
   @override
@@ -47,5 +69,28 @@ class ScaleEffectExample extends FlameGame with TapDetector {
         ),
       ),
     );
+  }
+}
+
+class Star extends PositionComponent {
+  Star() {
+    const smallR = 15.0;
+    const bigR = 30.0;
+    const tau = 2 * pi;
+    shape = Path()..moveTo(bigR, 0);
+    for (var i = 1; i < 10; i++) {
+      final r = i.isEven ? bigR : smallR;
+      final a = i / 10 * tau;
+      shape.lineTo(r * cos(a), r * sin(a));
+    }
+    shape.close();
+  }
+
+  late final Path shape;
+  late final Paint paint = Paint()..color = const Color(0xFFFFF127);
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawPath(shape, paint);
   }
 }
