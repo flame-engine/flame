@@ -80,6 +80,9 @@ functionality inherited by all other effects. This includes:
     removed from the game tree and garbage-collected once the effect completes. Set this to false
     if you plan to reuse the effect after it is finished.
 
+  - Optional user-provided `onFinishCallback`, which will be invoked when the effect has just
+    completed its execution but before it is removed from the game.
+
   - The `reset()` method reverts the effect to its original state, allowing it to run once again.
 
 
@@ -245,7 +248,7 @@ final effect = ColorEffect(
 The `Offset` argument will determine "how much" of the color that will be applied to the component,
 in this example the effect will start with 0% and will go up to 80%.
 
-__Note :__Due to how this effect is implemented, and how Flutter's `ColorFilter` class works, this
+__Note:__ Due to how this effect is implemented, and how Flutter's `ColorFilter` class works, this
 effect can't be mixed with other `ColorEffect`s, when more than one is added to the component, only
 the last one will have effect.
 
