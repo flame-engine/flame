@@ -31,7 +31,6 @@ the final value is provided by the user explicitly, and progression over time is
 
 There are multiple effects provided by Flame, and you can also
 [create your own](#creating-new-effects). The following effects are included:
-- [`ColorEffect`](#coloreffect)
 - [`MoveEffect.by`](#moveeffectby)
 - [`MoveEffect.to`](#moveeffectto)
 - [`MoveAlongPathEffect`](#movealongpatheffect)
@@ -42,6 +41,7 @@ There are multiple effects provided by Flame, and you can also
 - [`SizeEffect.by`](#sizeeffectby)
 - [`SizeEffect.to`](#sizeeffectto)
 - [`OpacityEffect`](#opacityeffect)
+- [`ColorEffect`](#coloreffect)
 - [`RemoveEffect`](#removeeffect)
 
 An `EffectController` is an object that describes how the effect should evolve over time. If you
@@ -60,6 +60,7 @@ There are multiple effect controllers provided by the Flame framework as well:
 - [`InfiniteEffectController`](#infiniteeffectcontroller)
 - [`SequenceEffectController`](#sequenceeffectcontroller)
 - [`DelayedEffectController`](#delayedeffectcontroller)
+- [`RandomEffectController`](#randomeffectcontroller)
 
 
 ## Built-in effects
@@ -78,6 +79,9 @@ functionality inherited by all other effects. This includes:
   - Property `removeOnFinish` (which is true by default) will cause the effect component to be
     removed from the game tree and garbage-collected once the effect completes. Set this to false
     if you plan to reuse the effect after it is finished.
+
+  - Optional user-provided `onFinishCallback`, which will be invoked when the effect has just
+    completed its execution but before it is removed from the game.
 
   - The `reset()` method reverts the effect to its original state, allowing it to run once again.
 
@@ -234,21 +238,20 @@ the provided color between a provided range.
 Usage example:
 
 ```dart
-myComponent.add(
-  ColorEffect(
-    const Color(0xFF00FF00),
-    const Offset(0.0, 0.8),
-    EffectController(duration: 1.5),
-  ),
+final effect = ColorEffect(
+  const Color(0xFF00FF00),
+  const Offset(0.0, 0.8),
+  EffectController(duration: 1.5),
 );
 ```
 
 The `Offset` argument will determine "how much" of the color that will be applied to the component,
 in this example the effect will start with 0% and will go up to 80%.
 
-__Note :__Due to how this effect is implemented, and how Flutter's `ColorFilter` class works, this
+__Note:__ Due to how this effect is implemented, and how Flutter's `ColorFilter` class works, this
 effect can't be mixed with other `ColorEffect`s, when more than one is added to the component, only
 the last one will have effect.
+
 
 ## Creating new effects
 
@@ -457,6 +460,25 @@ controller is executing the "delay" stage, the effect will be considered "not st
 ```dart
 final ec = DelayedEffectController(LinearEffectController(1), delay: 5);
 ```
+
+
+### `RandomEffectController`
+
+This controller wraps another controller and makes its duration random. The actual value for the
+duration is re-generated upon each reset, which makes this controller particularly useful within
+repeated contexts, such as [](#repeatedeffectcontroller) or [](#infiniteeffectcontroller).
+
+```dart
+final effect = RandomEffectController.uniform(
+  LinearEffectController(0),  // duration here is irrelevant
+  min: 0.5,
+  max: 1.5,
+);
+```
+
+The user has the ability to control which `Random` source to use, as well as the exact distribution
+of the produced random durations. Two distributions -- `.uniform` and `.exponential` are included,
+any other can be implemented by the user.
 
 
 ## See also

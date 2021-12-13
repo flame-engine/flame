@@ -44,6 +44,9 @@ abstract class Effect extends Component {
   /// in order to make it run once again.
   bool removeOnFinish;
 
+  /// Optional callback function to be invoked once the effect completes.
+  void Function()? onFinishCallback;
+
   /// Boolean indicators of the effect's state, their purpose is to ensure that
   /// the `onStart()` and `onFinish()` callbacks are called exactly once.
   bool _started;
@@ -141,13 +144,16 @@ abstract class Effect extends Component {
   void onStart() {}
 
   /// This method is called once when the effect is about to finish, but before
-  /// it is removed from parent. The notion of "about to finish" is defined by
-  /// the [controller]: this method is called when `controller.completed`
+  /// it is removed from its parent. The notion of "about to finish" is defined
+  /// by the [controller]: this method is called when `controller.completed`
   /// property first becomes true.
   ///
-  /// If the effect is reset, its `onFinish()` method will be called again after
+  /// If the effect is reset, its [onFinish] method will be called again after
   /// the effect has finished again.
-  void onFinish() {}
+  @mustCallSuper
+  void onFinish() {
+    onFinishCallback?.call();
+  }
 
   /// Apply the given [progress] level to the effect's target.
   ///
