@@ -9,7 +9,6 @@ class _MyEffect extends Effect {
 
   double x = -1;
   Function()? onStartCallback;
-  Function()? onFinishCallback;
 
   @override
   void apply(double progress) {
@@ -26,12 +25,6 @@ class _MyEffect extends Effect {
   void onStart() {
     super.onStart();
     onStartCallback?.call();
-  }
-
-  @override
-  void onFinish() {
-    super.onFinish();
-    onFinishCallback?.call();
   }
 }
 
