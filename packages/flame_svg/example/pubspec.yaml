@@ -1,4 +1,4 @@
-name: example
+name: flame_svg_example
 description: Example app of how to use the flame_svg package
 
 publish_to: 'none'

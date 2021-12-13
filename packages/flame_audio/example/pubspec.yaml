@@ -1,4 +1,4 @@
-name: example
+name: flame_audio_example
 description: Simple project to showcase the usage of flame_audio
 
 publish_to: 'none'
