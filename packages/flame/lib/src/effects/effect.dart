@@ -47,6 +47,9 @@ abstract class Effect extends Component {
   /// Boolean indicators of the effect's state, their purpose is to ensure that
   /// the `onStart()` and `onFinish()` callbacks are called exactly once.
   bool _started;
+
+  /// Whether the effect has finished running.
+  bool get isFinished => _finished;
   bool _finished;
 
   /// Whether the effect is paused or not.
@@ -100,7 +103,6 @@ abstract class Effect extends Component {
     if (_paused || _finished) {
       return;
     }
-    super.update(dt);
     if (_reversed) {
       controller.recede(dt);
     } else {
@@ -121,6 +123,11 @@ abstract class Effect extends Component {
       }
     }
   }
+
+  @protected
+  double runForward(double dt) => dt;
+  @protected
+  double runBackward(double dt) => dt;
 
   //#region API to be implemented by the derived classes
 
