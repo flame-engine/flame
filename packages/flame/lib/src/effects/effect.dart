@@ -45,7 +45,7 @@ abstract class Effect extends Component {
   bool removeOnFinish;
 
   /// Optional callback function to be invoked once the effect completes.
-  void Function()? onComplete;
+  void Function()? onFinishCallback;
 
   /// Boolean indicators of the effect's state, their purpose is to ensure that
   /// the `onStart()` and `onFinish()` callbacks are called exactly once.
@@ -145,7 +145,7 @@ abstract class Effect extends Component {
   /// the effect has finished again.
   @mustCallSuper
   void onFinish() {
-    onComplete?.call();
+    onFinishCallback?.call();
   }
 
   /// Apply the given [progress] level to the effect's target.

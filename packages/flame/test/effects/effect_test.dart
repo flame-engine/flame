@@ -9,7 +9,6 @@ class _MyEffect extends Effect {
 
   double x = -1;
   Function()? onStartCallback;
-  Function()? onFinishCallback;
 
   @override
   void apply(double progress) {
@@ -144,7 +143,7 @@ void main() {
         ..onStartCallback = () {
           nStarted++;
         }
-        ..onComplete = () {
+        ..onFinishCallback = () {
           nFinished++;
         };
 
