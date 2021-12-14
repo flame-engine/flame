@@ -1,6 +1,6 @@
-import 'package:example/main.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flame_test_example/main.dart';
 import 'package:test/test.dart';
 
 void main() {
