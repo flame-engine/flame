@@ -124,13 +124,9 @@ class Component with Loadable {
   /// This method traverses the component tree and calls [update] on all its
   /// children according to their [priority] order, relative to the
   /// priority of the direct siblings, not the children or the ancestors.
-  /// If you call this method from [update] you need to set [callOwnUpdate] to
-  /// false so that you don't get stuck in an infinite loop.
-  void updateTree(double dt, {bool callOwnUpdate = true}) {
+  void updateTree(double dt) {
     children.updateComponentList();
-    if (callOwnUpdate) {
-      update(dt);
-    }
+    update(dt);
     children.forEach((c) => c.updateTree(dt));
   }
 
