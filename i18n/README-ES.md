@@ -5,13 +5,12 @@
 </p>
 
 <p align="center">
-Motor minimalista para el desarrollo de videojuegos con Flutter.
+Un motor de video juegos basado en Flutter.
 </p>
 
 <p align="center">
-  <a title="Pub" href="https://pub.dev/packages/flame/versions#prerelease" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout&include_prereleases" /></a>
   <a title="Pub" href="https://pub.dev/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a>
-  <img src="https://github.com/flame-engine/flame/workflows/Test/badge.svg?branch=main&event=push" alt="Test" />
+  <img src="https://github.com/flame-engine/flame/workflows/cicd/badge.svg?branch=main&event=push" alt="Test" />
   <a title="Discord" href="https://discord.gg/pxrBmy4" ><img src="https://img.shields.io/discord/509714518008528896.svg" /></a>
 </p>
 
@@ -21,66 +20,75 @@ Motor minimalista para el desarrollo de videojuegos con Flutter.
 
 ---
 
-## Acerca de 1.0.0
-
-Nuestro objetivo es lanzar pronto la v1. Periódicamente lanzamos RCs (release candidates) a medida que el código evoluciona,
-y estamos bastante complacidos en el punto que nos encontramos (aunque aún pueden existir cambios).
-
-Favor de usar esta versión como un avance de la nueva versión de Flame y también para aportar feedback al equipo sobre
-la nueva estructura y/o características.
-
-La rama `main` es lo más próximo a una migración hacia la v1. La rama `master-v0.x` es el último lanzamiento v0
-(en la cual aún estamos fusionando algunos parches y arreglos críticos).
-
-La actual v1 lanzada es
-<a title="Pub" href="https://pub.dev/packages/flame/versions#prerelease" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout&include_prereleases" /></a>
-en pub. La última versión estable hasta ahora es
-<a title="Pub" href="https://pub.dev/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a>.
-Siéntase libre de elegir la versión que mejor se adapte a sus necesidades.
-
----
 
 ## Documentación
 
-Tome en cuenta que la documentación en la rama `main` de este repositorio es más nueva que la última versión lanzada.
+La documentación completa de Flame se encuentra en
+[docs.flame-engine.org](https://docs.flame-engine.org/).
 
-Aquí puede encontrar la documentación para las diferentes versiones:
-- Última versión estable: [Flame-engine website](https://flame-engine.org/)
-- Última versión estable: [GitHub docs](https://github.com/flame-engine/flame/tree/master-v0.x/doc)
-- Última versión v1.0.0: [GitHub docs](https://github.com/flame-engine/flame/tree/1.0.0-releasecandidate.11/doc)
+Para cambiar la versión de la documentación, use el selector de versión resaltado con `version:` arriba de la página.
 
-La documentación completa se puede encontrar [aquí](https://github.com/flame-engine/flame/tree/main/doc).
+**Nota**: La documentación que se encuentra en la rama principal es más reciente que la documentación lanzada en el sitio web de documentación.
 
-Proporcionamos muchos ejemplos de diversas características que pueden ser probadas desde su navegador de Internet
-[aquí](https://flame-engine.github.io/flame/). También puede examinar el código fuente de estos ejemplos [aquí](https://github.com/flame-engine/flame/tree/main/examples).
+Other useful links:
+ - [El sitio oficial de Flame](https://flame-engine.org/).
+ - [Ejemplos](https://examples.flame-engine.org/) de la mayoría de características las cuales pueden ser probadas desde el navegador.
+ - [Tutoriales](https://tutorials.flame-engine.org/) - Un sencillo tutorial para iniciar.
+ - [Referencia de la API](https://pub.dev/documentation/flame/latest/) - Referencias de la API generadas por dartdoc.
 
-El sitio oficial de Flame, el cual también contiene la documentación se puede encontrar
-[aquí](https://flame-engine.org/).
 
 ## Ayuda
 
-Tenemos un canal de ayuda en el servidor de Discord Blue Fire, únete [aquí](https://discord.gg/pxrBmy4).
+Tenemos una comunidad de Flame en el [Discord server de Blue Fire](https://discord.gg/5unKpdQD78) donde puedes preguntar cualquier pregunta relacionada con Flame que tengas.
 
-También contamos con un [FAQ](FAQ.md), por favor busque su respuesta primero ahí.
+Si te sientes más cómodo con StackOverFlow, también puedes crear una pregunta allí. Añade el
+[Tag de Flame](https://stackoverflow.com/questions/tagged/flame), de manera que cualquiera siguiendo el tag pueda ayudarte.
 
-## Objetivos
+## Características
 
-El objetivo de este proyecto es la de ofrecer un conjunto completo y sin obstáculos de soluciones para
-los problemas más comunes que comparten todos los desarrolladores de videojuegos en Flutter.
+El objetivo de Flame Engine es ofrecer un completo conjunto de soluciones para problemas comunes que comparten los desarrolladores de video juegos con Flutter.
 
-Actualmente te ofrece:
- - un ciclo de juego
- - un sistema de componentes/objectos
- - un motor de físicas (Forge2D, disponible con
- [flame_forge2d](https://github.com/flame-engine/flame_Forge2D))
- - soporte de audio
- - efectos y partículas
- - soporte de gestos y entradas
- - imágenes, sprites y sprite sheets
- - soporte básico de Rive
- - y algunas otras utilidades para facilitar el desarrollo
+Actualmente Flame ofrece las siguientes características:
 
-Puede utilizar cuales quiera que desee, ya que todas ellas son independientes
+ - Un ciclo de juego.
+ - Un sistema de componentes/objectos FCS).
+ - Efectos y partículas.
+ - Detección de colisiones.
+ - Soporte de gestos y entradas.
+ - Imágenes, animaciones, sprites y sprite sheets.
+ - Algunas otras utilidades para facilitar el desarrollo.
+
+A parte de estas características, puedes ampliar Flame con los bridge packages.
+Por medio de estas librerías, serás capaz de acceder a componentes de Flame, helpers y enlazar a otros paquetes con el fin de hacer integraciones sin contratiempos. Actualmente, tenemos librerías bridge para los siguientes paquetes:
+
+- [flame_audio](https://github.com/flame-engine/flame/tree/main/packages/flame_audio) para
+  [AudioPlayers](https://github.com/bluefireteam/audioplayers): Reproduce multiple archivos de audio de forma simultanea.
+- [flame_bloc](https://github.com/flame-engine/flame/tree/main/packages/flame_bloc) para
+  [Bloc](https://github.com/felangel/bloc): Una predecible librería de manejo de estados.
+- [flame_fire_atlas](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas) para
+  [FireAtlas](https://github.com/flame-engine/fire-atlas): Crea atlases texturas para video juegos.
+- [flame_forge2d](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d) para
+  [Forge2D](https://github.com/flame-engine/forge2d): Motor de fisicas Box2D.
+- [flame_lint](https://github.com/flame-engine/flame/tree/main/packages/flame_lint) -
+  Nuestro conjunto de reglas linting (`analysis_options.yaml`).
+- [flame_oxygen](https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen) para
+  [Oxygen](https://github.com/flame-engine/oxygen): Un ligero framework para Sistema Componente Entidad (ECS).
+- [flame_rive](https://github.com/flame-engine/flame/tree/main/packages/flame_rive) para
+  [Rive](https://rive.app/): Crea animaciones interactivas.
+- [flame_svg](https://github.com/flame-engine/flame/tree/main/packages/flame_svg) para
+  [flutter_svg](https://github.com/dnfield/flutter_svg): Dibuja archivos SVG en Flutter.
+- [flame_tiled](https://github.com/flame-engine/flame/tree/main/packages/flame_tiled) para
+  [Tiled](https://www.mapeditor.org/): Editor de mosaicos para  mapas y niveles en 2D.
+
+
+## Patrocinadores
+
+Top de patrocinadores del Flame Engine:
+
+[![Cypher Stack](/media/logo_cypherstack.png)](https://cypherstack.com/)
+
+¿Quieres patrocinar Flame? Mira nuestro Patreon en la siguiente sección, o contactanos en Discord. 
+
 
 ## Apoyo
 
@@ -108,14 +116,6 @@ Además puede mostrar en su repositorio que su juego está hecho con Flame al ut
 
 ## Contribuyendo
 
-__Advertencia__: Estamos trabajando en traer Flame a su primera versión estable, actualizaciones a versiones `0.x`
-están detenidas, excepto por arreglo de fallos críticos. Si desea contribuir a esa versión, por favor
-tenga esto presente, y utilice la rama `master-v0.x`. Para contribuciones a la v1, los PR deben apuntar
-hacia la rama `main`. Si aún mantiene dudas, asegúrese de conversar sobre su contribución con el equipo, ya sea por
-medio de un issue o [Discord](https://discord.gg/pxrBmy4).
-
-¡Toda ayuda es apreciada! Comentarios, sugerencias, reporte de errores, PRs.
-
 ¿Ha encontrado algún error o tiene alguna sugerencia para mejorar Flame? Inicie un issue y lo
 revisaremos lo antes posible.
 
@@ -123,22 +123,37 @@ revisaremos lo antes posible.
 rama correcta (ver arriba) y completar el [checklist](.github/pull_request_template.md) que aparecerá
 cuando se abra el PR.
 
+Para cambios mayores, o si tienes alguna duda, asegurate de conversar sobre tu idea con el equipo de Flame. Ya sea por un issue, por discusión en GitHub, o contacta con el equipo usando el
+[Servidor de Discord](https://discord.gg/pxrBmy4).
+
+
 ## Empezando
 
-Puede encontrar una colección de guías [aquí](./tutorials). Considere que estos tutoriales están basados
-en la rama `main`. Para asegurarse que está en los tutoriales que corresponden a la versión que utiliza,
-seleccione la etiqueta correcta de la versión utilizada.
+Puedes encontrar un sencillo tutorial para iniciar en 
+[tutorials.flame-engine.org](https://tutorials.flame-engine.org) y ejemplos de la mayoría de características de Flame en [examples.flame-engine.org](https://examples.flame-engine.org). Para acceder al código de cada ejemplo, preciona los botones `< >` en la esquina derecha superior.
 
-Esta colección de guías es un trabajo en progreso, más guías y tutoriales serán agregados próximamente.
 
-Además, ofrecemos una selecta lista de juegos, librerías y artículos en
+### Tutoriales destacados de la comunidad
+
+- @Devowl's Flutter & Flame series: 
+  - [Step 1: Create your game](https://medium.com/flutter-community/flutter-flame-step-1-create-your-game-b3b6ee387d77)
+  - [Step 2: Game basics](https://medium.com/flutter-community/flutter-flame-step-2-game-basics-48b4493424f3)
+  - [Step 3: Sprites and inputs](https://blog.devowl.de/flutter-flame-step-3-sprites-and-inputs-7ca9cc7c8b91)
+  - [Step 4: Collisions & Viewport](https://blog.devowl.de/flutter-flame-step-4-collisions-viewport-ff2da048e3a6)
+  - [Step 5: Level generation & camera](https://blog.devowl.de/flutter-flame-step-5-level-generation-camera-62a060a286e3 )
+
+- Otros tutoriales:
+  - @Vguzzi's article [Building Games in Flutter with Flame](https://www.raywenderlich.com/27407121-building-games-in-flutter-with-flame-getting-started)
+  - @DevKage's YouTube series with the [Dino run tutorial](https://www.youtube.com/playlist?list=PLiZZKL9HLmWOmQgYxWHuOHOWsUUlhCCOY)
+
+Ofrecemos una completa lista de Juegos, Librerías y Artículos en
 [awesome-flame](https://github.com/flame-engine/awesome-flame).
 
-Tome a consideración que algunos de los artículos podrían estar algo desactualizados, pero aún son de utilidad.
+Considere que algunos de los artículos podrían estar ligeramente desactualizados, pero aún pueden ser de ayuda.
+
 
 ## Créditos
 
- - El [Flame Engine team](https://github.com/orgs/flame-engine/people), quienes están trabajando
- continuamente en mantener y mejorar Flame.
+ - El [Blue Fire team](https://github.com/orgs/bluefireteam/people), quienes están trabajando
+ continuamente en mantener y mejorar Flame y su ecosistema.
  - Todos los amables contribuidores y las personas que ayudan en la comunidad.
- - 
