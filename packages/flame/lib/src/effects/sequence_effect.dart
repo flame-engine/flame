@@ -13,30 +13,24 @@ import 'effect.dart';
 /// reverse after it ran forward.
 ///
 class SequenceEffect extends Effect {
-  SequenceEffect(
+  factory SequenceEffect(
     List<Effect> effects, {
     bool alternate = false,
     bool infinite = false,
     int repeatCount = 1,
-  })  : assert(effects.isNotEmpty, 'The list of effects cannot be empty'),
-        super(_buildController(effects, alternate, infinite, repeatCount)) {
-    addAll(effects);
+  }) {
+    assert(effects.isNotEmpty, 'The list of effects cannot be empty');
+    EffectController ec = _SequenceEffectEffectController(effects, alternate);
+    if (infinite) {
+      ec = InfiniteEffectController(ec);
+    } else if (repeatCount > 1) {
+      ec = RepeatedEffectController(ec, repeatCount);
+    }
+    return SequenceEffect._(ec) ..addAll(effects);
   }
 
-  static EffectController _buildController(
-    List<Effect> effects,
-    bool alternate,
-    bool infinite,
-    int repeatCount,
-  ) {
-    final ec = _SequenceEffectEffectController(effects, alternate);
-    if (infinite) {
-      return InfiniteEffectController(ec);
-    } else if (repeatCount > 1) {
-      return RepeatedEffectController(ec, repeatCount);
-    }
-    return ec;
-  }
+  SequenceEffect._(EffectController ec) : super(ec);
+
 
   @override
   void apply(double progress) {}
