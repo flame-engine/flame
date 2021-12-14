@@ -1,6 +1,6 @@
-import 'package:flame/effects.dart';
-
 import 'controllers/effect_controller.dart';
+import 'controllers/infinite_effect_controller.dart';
+import 'controllers/repeated_effect_controller.dart';
 import 'effect.dart';
 
 /// Run multiple effects in a sequence, one after another.
@@ -40,48 +40,6 @@ class SequenceEffect extends Effect {
 
   @override
   void apply(double progress) {}
-
-
-
-  @override
-  double runForward(double dt) {
-    final n = effects.length;
-    var timeLeft = dt;
-    while (timeLeft > 0) {
-      var i = _index % n; // turns negative indices into positive
-      // "Forward" arm of a regular or an alternating effect
-      if (_index >= 0) {
-        timeLeft = effects[i].runForward(timeLeft);
-        if (timeLeft == 0) {
-          break;
-        }
-        i += 1;
-      }
-      // "Backward" arm of an alternating effect
-      else {
-        timeLeft = effects[i].runBackward(timeLeft);
-        if (timeLeft < 0) {
-          i -= 1;
-        }
-      }
-    }
-    return timeLeft;
-  }
-
-  double _goForwardOnForwardRun(double dt) {
-    assert(_index >= 0);
-    final remainingTime = effects[_index].runForward(dt);
-    if (remainingTime > 0) {
-      _index += 1;
-      // Reached the end of the run
-      if (_index == effects.length) {
-        if (alternate) {
-          _index = -1;
-        }
-      }
-    }
-    return remainingTime;
-  }
 }
 
 /// Not to be confused with `SequenceEffectController`!
@@ -105,36 +63,109 @@ class _SequenceEffectEffectController extends EffectController {
   /// where -1 is the last effect and -n is the first.
   int _index = 0;
 
-  @override
-  bool get completed => throw UnimplementedError();
+  Effect get currentEffect => effects[_index < 0 ? _index + n : _index];
+
+  /// Total number of effects in this sequence.
+  int get n => effects.length;
 
   @override
-  double advance(double dt) {
-    // TODO: implement advance
-    throw UnimplementedError();
+  bool get completed => _completed;
+  bool _completed = false;
+
+  @override
+  double? get duration {
+    var totalDuration = 0.0;
+    for (final effect in effects) {
+      totalDuration += effect.controller.duration ?? 0;
+    }
+    if (alternate) {
+      totalDuration *= 2;
+    }
+    return totalDuration;
   }
 
   @override
-  // TODO: implement duration
-  double? get duration => throw UnimplementedError();
+  double get progress => (_index + 1) / n;
 
   @override
-  // TODO: implement progress
-  double get progress => throw UnimplementedError();
+  double advance(double dt) {
+    var t = dt;
+    for (;;) {
+      if (_index >= 0) {
+        t = currentEffect.advance(dt);
+        if (t > 0) {
+          _index += 1;
+          if (_index == n) {
+            if (alternate) {
+              _index = -1;
+            } else {
+              _index = n - 1;
+              _completed = true;
+              break;
+            }
+          }
+        }
+      } else {
+        t = currentEffect.recede(dt);
+        if (t > 0) {
+          _index -= 1;
+          if (_index < -n) {
+            _index = -n;
+            _completed = true;
+            break;
+          }
+        }
+      }
+      if (t == 0) {
+        break;
+      }
+    }
+    return t;
+  }
 
   @override
   double recede(double dt) {
-    // TODO: implement recede
-    throw UnimplementedError();
+    if (_completed && dt > 0) {
+      _completed = false;
+    }
+    var t = dt;
+    for (;;) {
+      if (_index >= 0) {
+        t = currentEffect.recede(dt);
+        if (t > 0) {
+          _index -= 1;
+          if (_index < 0) {
+            _index = 0;
+            break;
+          }
+        }
+      } else {
+        t = currentEffect.advance(dt);
+        if (t > 0) {
+          _index += 1;
+          if (_index == 0) {
+            _index = n - 1;
+          }
+        }
+      }
+    }
+    return t;
   }
 
   @override
   void setToEnd() {
-    // TODO: implement setToEnd
+    if (alternate) {
+      _index = -n;
+      effects.forEach((e) => e.controller.setToStart());
+    } else {
+      _index = n - 1;
+      effects.forEach((e) => e.controller.setToEnd());
+    }
   }
 
   @override
   void setToStart() {
-    // TODO: implement setToStart
+    _index = 0;
+    effects.forEach((e) => e.reset());
   }
 }

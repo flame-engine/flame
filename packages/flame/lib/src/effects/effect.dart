@@ -127,10 +127,34 @@ abstract class Effect extends Component {
     }
   }
 
-  @protected
-  double runForward(double dt) => dt;
-  @protected
-  double runBackward(double dt) => dt;
+  @internal
+  double advance(double dt) {
+    final remainingDt = controller.advance(dt);
+    if (!_started && controller.started) {
+      _started = true;
+      onStart();
+    }
+    if (_started) {
+      apply(controller.progress);
+    }
+    if (!_finished && controller.completed) {
+      _finished = true;
+      onFinish();
+      if (removeOnFinish) {
+        removeFromParent();
+      }
+    }
+    return remainingDt;
+  }
+
+  @internal
+  double recede(double dt) {
+    final remainingDt = controller.recede(dt);
+    if (_started) {
+      apply(controller.progress);
+    }
+    return remainingDt;
+  }
 
   //#region API to be implemented by the derived classes
 
