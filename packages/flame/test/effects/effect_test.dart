@@ -75,15 +75,15 @@ void main() {
         game.add(obj);
         final effect = _MyEffect(EffectController(duration: 1));
         obj.add(effect);
-        game.update(0);
+        game.tick(0);
         expect(obj.children.length, 1);
 
         expect(effect.removeOnFinish, true);
         expect(effect.isMounted, true);
-        game.update(1);
+        game.tick(1);
 
         expect(effect.controller.completed, true);
-        game.update(0);
+        game.tick(0);
         expect(effect.isMounted, false);
         expect(obj.children.length, 0);
       },
@@ -97,23 +97,23 @@ void main() {
         final effect = _MyEffect(EffectController(duration: 1));
         effect.removeOnFinish = false;
         obj.add(effect);
-        game.update(0);
+        game.tick(0);
         expect(obj.children.length, 1);
 
         expect(effect.removeOnFinish, false);
         expect(effect.isMounted, true);
 
         // After the effect completes, it still remains mounted
-        game.update(1);
+        game.tick(1);
         expect(effect.x, 1);
         expect(effect.controller.completed, true);
-        game.update(0);
+        game.tick(0);
         expect(effect.isMounted, true);
         expect(obj.children.length, 1);
 
         // Even as more time is passing, the effect remains mounted and in
         // the completed state
-        game.update(10);
+        game.tick(10);
         expect(effect.x, 1);
         expect(effect.isMounted, true);
         expect(effect.controller.completed, true);
@@ -123,15 +123,15 @@ void main() {
         expect(effect.x, -1);
         expect(effect.controller.completed, false);
 
-        game.update(0.5);
+        game.tick(0.5);
         expect(effect.x, 0.5);
         expect(effect.controller.completed, false);
 
         // Now the effect completes once again, but still remains mounted
-        game.update(0.5);
+        game.tick(0.5);
         expect(effect.controller.completed, true);
         expect(effect.x, 1);
-        game.update(0);
+        game.tick(0);
         expect(effect.isMounted, true);
       },
     );

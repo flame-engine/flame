@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:meta/meta.dart';
 
 import '../../../components.dart';
 import '../../assets/assets_cache.dart';
@@ -29,6 +30,9 @@ mixin Game on Loadable {
 
   /// This should render the game.
   void render(Canvas canvas);
+
+  /// Called by GameRenderBox on every game loop cycle.
+  void tick(double dt) => update(dt);
 
   /// Just a reference back to the render box that is kept up to date by the
   /// engine.

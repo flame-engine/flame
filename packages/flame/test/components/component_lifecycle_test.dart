@@ -77,7 +77,7 @@ void main() {
       await parent.add(child);
       await game.ensureAdd(parent);
       child.changeParent(game);
-      game.update(0);
+      game.tick(0);
 
       expect(
         parentEvents,
