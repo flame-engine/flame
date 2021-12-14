@@ -26,14 +26,20 @@ class SequenceEffect extends Effect {
     } else if (repeatCount > 1) {
       ec = RepeatedEffectController(ec, repeatCount);
     }
-    return SequenceEffect._(ec) ..addAll(effects);
+    effects.forEach((e) => e.removeOnFinish = false);
+    return SequenceEffect._(ec)..addAll(effects);
   }
 
   SequenceEffect._(EffectController ec) : super(ec);
 
-
   @override
   void apply(double progress) {}
+
+  @override
+  void updateTree(double dt, {bool callOwnUpdate = true}) {
+    update(dt);
+    // Do not update children
+  }
 }
 
 /// Not to be confused with `SequenceEffectController`!
