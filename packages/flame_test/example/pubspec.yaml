@@ -1,4 +1,4 @@
-name: example
+name: flame_test_example
 description: Example of how to test with the flame_test package
 
 publish_to: 'none'
