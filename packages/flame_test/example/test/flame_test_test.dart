@@ -1,5 +1,5 @@
-import 'package:example/game.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flame_test_example/game.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final myGame = FlameTester(() => MyGame());

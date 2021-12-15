@@ -1,4 +1,4 @@
-name: example
+name: flame_tiled_example
 description: Simple project to showcase the usage of flame_tiled
 publish_to: 'none'
 version: 1.0.0+1

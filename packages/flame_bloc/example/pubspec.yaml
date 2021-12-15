@@ -1,4 +1,4 @@
-name: example
+name: flame_bloc_example
 description: Example game using the flame_bloc package
 
 publish_to: 'none'
