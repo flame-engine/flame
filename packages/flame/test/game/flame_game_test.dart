@@ -148,7 +148,7 @@ void main() {
       game.children.remove(component);
       // The component is not removed from the component list until an update
       // has been performed.
-      game.updateTree(0.0);
+      game.tick(0.0);
 
       expect(component.onRemoveCallCounter, 1);
     });
@@ -160,7 +160,7 @@ void main() {
     await game.ensureAdd(component);
     expect(game.children.length, equals(1));
     component.shouldRemove = true;
-    game.updateTree(0);
+    game.tick(0);
     expect(game.children.isEmpty, equals(true));
   });
 
@@ -173,7 +173,7 @@ void main() {
 
     // Ensure clear does not remove components directly
     expect(game.children.length, equals(3));
-    game.updateTree(0);
+    game.tick(0);
     expect(game.children.isEmpty, equals(true));
   });
 

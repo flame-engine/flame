@@ -67,11 +67,11 @@ void main() async {
       expect(component.shouldRemove, false);
       expect(game.children.length, 1);
 
-      game.updateTree(2);
+      game.tick(2);
       expect(component.shouldRemove, false);
 
       // runs a cycle and the component should still be there
-      game.updateTree(0.1);
+      game.tick(0.1);
       expect(game.children.length, 1);
     });
 
@@ -96,11 +96,11 @@ void main() async {
         expect(component.shouldRemove, false);
         expect(game.children.length, 1);
 
-        game.updateTree(2);
+        game.tick(2);
         expect(component.shouldRemove, true);
 
         // runs a cycle to remove the component
-        game.updateTree(0.1);
+        game.tick(0.1);
         expect(game.children.length, 0);
       },
     );
@@ -126,11 +126,11 @@ void main() async {
       expect(component.shouldRemove, false);
       expect(game.children.length, 1);
 
-      game.updateTree(2);
+      game.tick(2);
       expect(component.shouldRemove, false);
 
       // runs a cycle to remove the component, but failed
-      game.updateTree(0.1);
+      game.tick(0.1);
       expect(game.children.length, 1);
     });
 
@@ -155,11 +155,11 @@ void main() async {
       expect(component.shouldRemove, false);
       expect(game.children.length, 1);
 
-      game.updateTree(2);
+      game.tick(2);
       expect(component.shouldRemove, false);
 
       // runs a cycle to remove the component, but failed
-      game.updateTree(0.1);
+      game.tick(0.1);
       expect(game.children.length, 1);
     });
 
@@ -185,11 +185,11 @@ void main() async {
       expect(component.shouldRemove, false);
       expect(game.children.length, 1);
 
-      game.updateTree(2);
+      game.tick(2);
       expect(component.shouldRemove, false);
 
       // runs a cycle to remove the component, but failed
-      game.updateTree(0.1);
+      game.tick(0.1);
       expect(game.children.length, 1);
     });
   });

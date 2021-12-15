@@ -15,11 +15,11 @@ void main() {
       (game) {
         final component = PositionComponent();
         game.add(component);
-        game.updateTree(0);
+        game.tick(0);
 
         final effect = _MyEffect(EffectController(duration: 1));
         component.add(effect);
-        game.updateTree(0);
+        game.tick(0);
         expect(effect.transform, component.transform);
 
         final effect2 = _MyEffect(EffectController(duration: 1));

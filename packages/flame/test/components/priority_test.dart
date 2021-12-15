@@ -54,7 +54,7 @@ void main() {
         componentsSorted(components);
         expect(components.first, firstCompopnent);
         game.children.changePriority(firstCompopnent, 11);
-        game.updateTree(0);
+        game.tick(0);
         expect(components.last, firstCompopnent);
       },
     );
@@ -74,7 +74,7 @@ void main() {
         game.children.changePriority(last, -1);
         expect(components.first, first);
         expect(components.last, last);
-        game.updateTree(0);
+        game.tick(0);
         expect(components.first, last);
         expect(components.last, first);
       },
@@ -94,7 +94,7 @@ void main() {
         final first = children.first;
         game.children.changePriority(first, 20);
         expect(children.last, isNot(first));
-        game.updateTree(0);
+        game.tick(0);
         expect(children.last, first);
       },
     );
@@ -116,7 +116,7 @@ void main() {
         game.children.changePriority(last, -1);
         expect(children.first, first);
         expect(children.last, last);
-        game.updateTree(0);
+        game.tick(0);
         expect(children.first, last);
         expect(children.last, first);
       },
@@ -138,7 +138,7 @@ void main() {
         final first = children.first;
         game.children.changePriority(first, 20);
         expect(children.last, isNot(first));
-        game.updateTree(0);
+        game.tick(0);
         expect(children.last, first);
       },
     );
@@ -171,7 +171,7 @@ void main() {
         c.assertCalled(0);
 
         game.children.changePriority(a, 10);
-        game.updateTree(0);
+        game.tick(0);
 
         componentsSorted(game.children);
         componentsSorted(a.children);
@@ -185,7 +185,7 @@ void main() {
         game.children.changePriority(c3, 2);
         game.children.changePriority(c1, 10);
         game.children.changePriority(a2, 0);
-        game.updateTree(0);
+        game.tick(0);
 
         a.assertCalled(1);
         b.assertCalled(0);
@@ -199,7 +199,7 @@ void main() {
         // change of b now
         game.children.changePriority(b1, 2);
         game.children.changePriority(a1, 1); // no-op!
-        game.updateTree(0);
+        game.tick(0);
 
         a.assertCalled(0);
         b.assertCalled(1);

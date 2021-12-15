@@ -50,7 +50,7 @@ void main() {
           margin: const EdgeInsets.only(left: 20, top: 20),
         );
         await game.add(joystick);
-        game.updateTree(0);
+        game.tick(0);
         expectVector2(joystick.knob!.position, Vector2(10, 10));
         // Start dragging the joystick
         game.onDragStart(
@@ -63,7 +63,7 @@ void main() {
             ),
           ),
         );
-        game.updateTree(0);
+        game.tick(0);
         // Drag the knob outside of the size of the joystick in X-axis
         game.onDragUpdate(
           1,
@@ -76,7 +76,7 @@ void main() {
             ),
           ),
         );
-        game.updateTree(0);
+        game.tick(0);
         expectVector2(joystick.knob!.position, Vector2(20, 10));
         // Drag the knob back towards it's base position
         game.onDragUpdate(
@@ -90,7 +90,7 @@ void main() {
             ),
           ),
         );
-        game.updateTree(0);
+        game.tick(0);
         expectVector2(joystick.knob!.position, Vector2(20, 10));
       },
     );
