@@ -42,7 +42,8 @@ For a contribution to be accepted:
 - Examples should always be updated or added.*
 - Tests should always be updated or added.*
 - Format the Dart code accordingly with `flutter format`.
-- Your code should pass the analyzer checks `flutter analyze`.
+- Your code should pass the analyzer checks `melos run analyze`.
+- Your code should pass all tests `melos run test`.
 - Start your PR title with a [conventional commit] type
   (`feat:`, `fix:` etc).
 
@@ -54,7 +55,7 @@ and it will be automatically reflected in the PR.
 
 ## Open an issue and fork the repository
  - If it is a bigger change or a new feature, first of all
-   [file a bug or feature report][GitHub issues]
+   [file a bug or feature report][GitHub issues], so that we can discuss what direction to follow.
  - [Fork the project][fork guide] on GitHub.
  - Clone the forked repository to your local development machine
    (e.g. `git clone git@github.com:<YOUR_GITHUB_USER>/flame.git`).
@@ -76,7 +77,8 @@ melos bootstrap
 
 The bootstrap command locally links all dependencies within the project without having to
 provide manual [`dependency_overrides`][pubspec doc]. This allows all
-plugins, examples and tests to build from the local clone project.
+plugins, examples and tests to build from the local clone project. You should only need to run this
+command once.
 
 > You do not need to run `flutter pub get` once bootstrap has been completed.
 
@@ -86,7 +88,7 @@ plugins, examples and tests to build from the local clone project.
  - When committing your changes, make sure that each commit message is clear
  (e.g. `git commit -m 'Take in an optional Camera as a parameter to FlameGame'`).
  - Push your new branch to your own fork into the same remote branch
- (e.g. `git push origin my-new-feature`)
+ (e.g. `git push origin my-username.my-new-feature`, replace `origin` if you use another remote.)
 
 ### Open a pull request
 Go to the [pull request page of Flame][PRs] and in the top
@@ -106,11 +108,11 @@ mark (e.g. `feat!: remove the position argument from PositionComponent`).
 
 Examples of PR titles:
  - feat: Component.childrenFactory can be used to set up a global ComponentSet factory
- - fix: avoid infinite loop in `FlameGame`
- - docs: added a `JoystickComponent` example
- - docs: improved the Mandarin README
- - test: infinity test for `MoveEffect.to`
- - refactor: optimized the structure of the game loop
+ - fix: Avoid infinite loop in `FlameGame`
+ - docs: Add a `JoystickComponent` example
+ - docs: Improve the Mandarin README
+ - test: Add infinity test for `MoveEffect.to`
+ - refactor: Optimize the structure of the game loop
 
 [GitHub issue]: https://github.com/flame-engine/flame/issues/new
 [GitHub issues]: https://github.com/flame-engine/flame/issues/new

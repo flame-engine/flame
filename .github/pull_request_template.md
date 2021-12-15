@@ -15,7 +15,7 @@ Before you create this PR confirm that it meets all requirements listed below by
 - [ ] The title of my PR starts with a [Conventional Commit] prefix (`fix:`, `feat:`, `doc:` etc).
 - [ ] I updated/added relevant documentation in `docs` and added dartdoc comments with `///`.
 - [ ] I updated/added relevant examples in `examples`.
-- [ ] I have formatted my code with `flutter format` and `flutter analyze` does not report any problems.
+- [ ] This build is green (format, analyze, docs and test passes).
 
 ## Breaking Change
 
