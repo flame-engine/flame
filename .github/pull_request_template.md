@@ -7,15 +7,15 @@ changed.*
 
 ## Checklist
 
-Before you create this PR confirm that it meets all requirements listed below by checking the relevant checkboxes (`[x]`). This will ensure a smooth and quick review process.
+Before you create this PR confirm that it meets all requirements listed below by checking the
+relevant checkboxes (`[x]`). This will ensure a smooth and quick review process.
 
-- [ ] I read the [Contributor Guide] and followed the process outlined there for submitting PRs.
-- [ ] My PR includes tests for ALL new/updated/fixed functionality.
-- [ ] My PR does not decrease the code coverage.
+- [ ] I have read the [Contributor Guide] and followed the process outlined for submitting PRs.
 - [ ] The title of my PR starts with a [Conventional Commit] prefix (`fix:`, `feat:`, `doc:` etc).
-- [ ] I updated/added relevant documentation in `docs` and added dartdoc comments with `///`.
-- [ ] I updated/added relevant examples in `examples`.
-- [ ] This build is green (format, analyze, docs and test passes).
+- I have updated/added:
+  - [ ] tests for ALL new/updated/fixed functionality.
+  - [ ] relevant documentation in `docs` and added dartdoc comments with `///`.
+  - [ ] relevant examples in `examples`.
 
 ## Breaking Change
 
