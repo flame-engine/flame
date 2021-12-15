@@ -80,7 +80,7 @@ class GameTester<T extends Game> {
     game.onGameResize(size);
 
     await game.onLoad();
-    game.tick(0);
+    game.updateTree(0);
     return game;
   }
 

@@ -16,7 +16,7 @@ void main() {
       component.add(
         ColorEffect(color, const Offset(0, 1), EffectController(duration: 1)),
       );
-      game.tick(0);
+      game.updateTree(0);
       expect(
         component.paint.colorFilter.toString(),
         // Once https://github.com/flutter/flutter/issues/89433 has been fixed
@@ -26,7 +26,7 @@ void main() {
         equals('ColorFilter.mode(Color(0x01f44336), BlendMode.srcATop)'),
       );
 
-      game.tick(0.5);
+      game.updateTree(0.5);
       expect(
         component.paint.colorFilter.toString(),
         equals('ColorFilter.mode(Color(0x80f44336), BlendMode.srcATop)'),
@@ -47,7 +47,7 @@ void main() {
         EffectController(duration: 1),
       );
       component.add(effect);
-      game.tick(0.5);
+      game.updateTree(0.5);
 
       expect(
         originalColorFilter,

@@ -70,11 +70,11 @@ void main() async {
         expect(component.shouldRemove, false);
         expect(game.children.length, 1);
 
-        game.tick(2);
+        game.updateTree(2);
         expect(component.shouldRemove, true);
 
         // runs a cycle to remove the component
-        game.tick(0.1);
+        game.updateTree(0.1);
         expect(game.children.length, 0);
       },
     );
@@ -237,13 +237,13 @@ void main() async {
       };
       final component = SpriteAnimationComponent(animation: animation);
       await game.ensureAdd(component);
-      game.tick(0.01);
+      game.updateTree(0.01);
       expect(animation.currentIndex, 0);
-      game.tick(0.1);
+      game.updateTree(0.1);
       expect(animation.currentIndex, 1);
-      game.tick(0.3);
+      game.updateTree(0.3);
       expect(animation.currentIndex, 4);
-      game.tick(0.089);
+      game.updateTree(0.089);
       // At this point we're still on the last frame, which has
       // almost finished. Total clock time = 0.499 s
       expect(animation.currentIndex, 4);
@@ -252,14 +252,14 @@ void main() async {
       expect(callbackInvoked, 0);
       // This last tick moves the total clock to 0.5001 s,
       // completing the last animation frame.
-      game.tick(0.0011);
+      game.updateTree(0.0011);
       expect(callbackInvoked, 1);
       expect(animation.currentIndex, 4);
       expect(animation.done(), true);
       // Now move the timer forward again, and verify that the callback won't be
       // invoked multiple times.
       for (var i = 0; i < 10; i++) {
-        game.tick(1);
+        game.updateTree(1);
       }
       expect(callbackInvoked, 1);
       expect(animation.currentIndex, 4);
@@ -269,7 +269,7 @@ void main() async {
       animation.reset();
       expect(animation.currentIndex, 0);
       expect(animation.done(), false);
-      game.tick(100);
+      game.updateTree(100);
       expect(callbackInvoked, 1);
       expect(animation.currentIndex, 4);
       expect(animation.done(), true);

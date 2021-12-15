@@ -54,7 +54,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     if (!attached) {
       return;
     }
-    game.tick(dt);
+    game.updateTree(dt);
     markNeedsPaint();
   }
 

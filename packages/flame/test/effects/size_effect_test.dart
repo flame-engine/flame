@@ -17,16 +17,16 @@ void main() {
       component.add(
         SizeEffect.by(Vector2.all(1.0), EffectController(duration: 1)),
       );
-      game.tick(0);
+      game.updateTree(0);
       expectVector2(component.size, Vector2.all(1.0));
       expect(component.children.length, 1);
 
-      game.tick(0.5);
+      game.updateTree(0.5);
       expectVector2(component.size, Vector2.all(1.5));
 
-      game.tick(0.5);
+      game.updateTree(0.5);
       expectVector2(component.size, Vector2.all(2.0));
-      game.tick(0);
+      game.updateTree(0);
       expect(component.children.length, 0);
       expectVector2(component.size, Vector2.all(2.0));
     });
@@ -39,16 +39,16 @@ void main() {
       component.add(
         SizeEffect.to(Vector2.all(3.0), EffectController(duration: 1)),
       );
-      game.tick(0);
+      game.updateTree(0);
       expectVector2(component.size, Vector2.all(1.0));
       expect(component.children.length, 1);
 
-      game.tick(0.5);
+      game.updateTree(0.5);
       expectVector2(component.size, Vector2.all(2.0));
 
-      game.tick(0.5);
+      game.updateTree(0.5);
       expectVector2(component.size, Vector2.all(3.0));
-      game.tick(0);
+      game.updateTree(0);
       expect(component.children.length, 0);
       expectVector2(component.size, Vector2.all(3.0));
     });
@@ -68,7 +68,7 @@ void main() {
         // After each reset the object will be sized up by Vector2(1, 1)
         // relative to its size at the start of the effect.
         effect.reset();
-        game.tick(1);
+        game.updateTree(1);
         expectedSize.add(Vector2.all(1.0));
         expectVector2(component.size, expectedSize);
       }
@@ -88,7 +88,7 @@ void main() {
         // After each reset the object will be sized to the value of
         // `Vector2(1, 1)`, regardless of its initial orientation.
         effect.reset();
-        game.tick(1);
+        game.updateTree(1);
         expectVector2(component.size, Vector2.all(1.0));
       }
     });
@@ -111,20 +111,20 @@ void main() {
         ),
       );
 
-      game.tick(1);
+      game.updateTree(1);
       expectVector2(
         component.size,
         Vector2.all(1),
         epsilon: 1e-15,
       ); // 5*1/10 + 0.5*1
-      game.tick(1);
+      game.updateTree(1);
       expectVector2(
         component.size,
         Vector2.all(1),
         epsilon: 1e-15,
       ); // 5*2/10 + 0.5*1 - 0.5*1
       for (var i = 0; i < 10; i++) {
-        game.tick(1);
+        game.updateTree(1);
       }
       expectVector2(component.size, Vector2.all(5), epsilon: 1e-15);
       expect(component.children.length, 0);
@@ -149,9 +149,9 @@ void main() {
       while (totalTime < 999.9) {
         final dt = rng.nextDouble() * 0.02;
         totalTime += dt;
-        game.tick(dt);
+        game.updateTree(dt);
       }
-      game.tick(1000 - totalTime);
+      game.updateTree(1000 - totalTime);
       // Typically, `component.size` could accumulate numeric discrepancy on the
       // order of 1e-11 .. 1e-12 by now.
       expectVector2(component.size, Vector2.zero(), epsilon: 1e-10);

@@ -16,7 +16,7 @@ void main() {
       game.onGameResize(Vector2(100, 100));
       final object = PositionComponent()..position = Vector2(x0, y0);
       game.add(object);
-      game.tick(0);
+      game.updateTree(0);
 
       object.add(
         MoveAlongPathEffect(
@@ -25,7 +25,7 @@ void main() {
           LinearEffectController(1),
         ),
       );
-      game.tick(0);
+      game.updateTree(0);
       for (var i = 0; i < 100; i++) {
         final a = tau * i / 100;
         // Apparently, in Flutter circle paths are not truly circles, but only
@@ -33,7 +33,7 @@ void main() {
         // precision in `closeTo()` is so low: only 0.1 pixels.
         expect(object.position.x, closeTo(x0 + 6 + 50 * cos(a), 0.1));
         expect(object.position.y, closeTo(y0 + 10 + 50 * sin(a), 0.1));
-        game.tick(0.01);
+        game.updateTree(0.01);
       }
     });
 
@@ -41,7 +41,7 @@ void main() {
       final game = FlameGame()..onGameResize(Vector2(100, 100));
       final component = PositionComponent()..position = Vector2(17, -5);
       game.add(component);
-      game.tick(0);
+      game.updateTree(0);
 
       component.add(
         MoveAlongPathEffect(
@@ -52,11 +52,11 @@ void main() {
           absolute: true,
         ),
       );
-      game.tick(0);
+      game.updateTree(0);
       for (var i = 0; i < 10; i++) {
         expect(component.position.x, closeTo(1000 + 200 * (i / 10), 1e-10));
         expect(component.position.y, closeTo(300 + 200 * (i / 10), 1e-10));
-        game.tick(0.1);
+        game.updateTree(0.1);
       }
     });
 
@@ -67,7 +67,7 @@ void main() {
         angle: -30.5,
       );
       game.add(component);
-      game.tick(0);
+      game.updateTree(0);
 
       component.add(
         MoveAlongPathEffect(
@@ -81,7 +81,7 @@ void main() {
           oriented: true,
         ),
       );
-      game.tick(0);
+      game.updateTree(0);
       for (var i = 0; i < 60; i++) {
         if (i <= 15) {
           expect(component.position.x, closeTo(200 + 6 * i, 1e-10));
@@ -96,7 +96,7 @@ void main() {
           expect(component.position.y, closeTo(200, 1e-10));
           expect(component.angle, closeTo(pi, 1e-7));
         }
-        game.tick(0.1);
+        game.updateTree(0.1);
       }
     });
 

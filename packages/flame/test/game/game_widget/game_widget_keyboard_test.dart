@@ -128,7 +128,7 @@ void main() async {
       );
 
       game.onGameResize(size);
-      game.tick(0.1);
+      game.updateTree(0.1);
 
       await tester.pump();
 

@@ -11,15 +11,15 @@ void main() {
       game.onGameResize(Vector2(100, 100));
       final object = PositionComponent()..position = Vector2(3, 4);
       game.add(object);
-      game.tick(0);
+      game.updateTree(0);
 
       object.add(
         MoveEffect.by(Vector2(5, -1), LinearEffectController(1)),
       );
-      game.tick(0.5);
+      game.updateTree(0.5);
       expect(object.position.x, closeTo(3 + 2.5, 1e-15));
       expect(object.position.y, closeTo(4 + -0.5, 1e-15));
-      game.tick(0.5);
+      game.updateTree(0.5);
       expect(object.position.x, closeTo(3 + 5, 1e-15));
       expect(object.position.y, closeTo(4 + -1, 1e-15));
     });
@@ -29,15 +29,15 @@ void main() {
       game.onGameResize(Vector2(100, 100));
       final object = PositionComponent()..position = Vector2(3, 4);
       game.add(object);
-      game.tick(0);
+      game.updateTree(0);
 
       object.add(
         MoveEffect.to(Vector2(5, -1), LinearEffectController(1)),
       );
-      game.tick(0.5);
+      game.updateTree(0.5);
       expect(object.position.x, closeTo(3 * 0.5 + 5 * 0.5, 1e-15));
       expect(object.position.y, closeTo(4 * 0.5 + -1 * 0.5, 1e-15));
-      game.tick(0.5);
+      game.updateTree(0.5);
       expect(object.position.x, closeTo(5, 1e-15));
       expect(object.position.y, closeTo(-1, 1e-15));
     });
