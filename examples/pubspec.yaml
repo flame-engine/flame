@@ -1,5 +1,5 @@
-name: flame_example
-description: A set of small game examples showcasing each feature provided by the Flame Engine.
+name: examples
+description: A set of small examples showcasing each feature provided by the Flame Engine.
 homepage: https://github.com/flame-engine/flame/tree/main/examples
 publish_to: 'none'
 

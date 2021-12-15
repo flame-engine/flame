@@ -1,5 +1,5 @@
 name: flame_example
-description: A very basic example of Flame.
+description: Simple example of a Flame game
 version: 0.1.0
 publish_to: 'none'
 

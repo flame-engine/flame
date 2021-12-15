@@ -1,4 +1,4 @@
-name: example
+name: flame_rive_example
 description: A testbed for flame_rive
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
