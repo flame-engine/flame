@@ -22,8 +22,12 @@ abstract class ComponentEffect<T extends Component> extends Effect {
   void onMount() {
     super.onMount();
     assert(parent != null);
-    if (parent is T) {
-      target = parent! as T;
+    var p = parent;
+    while (p is Effect) {
+      p = p.parent;
+    }
+    if (p is T) {
+      target = p;
     } else {
       throw UnsupportedError('Can only apply this effect to $T');
     }
