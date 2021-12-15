@@ -10,12 +10,11 @@ changed.*
 Before you create this PR confirm that it meets all requirements listed below by checking the
 relevant checkboxes (`[x]`). This will ensure a smooth and quick review process.
 
-- [ ] I have read the [Contributor Guide] and followed the process outlined for submitting PRs.
 - [ ] The title of my PR starts with a [Conventional Commit] prefix (`fix:`, `feat:`, `doc:` etc).
-- I have updated/added:
-  - [ ] tests for ALL new/updated/fixed functionality.
-  - [ ] relevant documentation in `docs` and added dartdoc comments with `///`.
-  - [ ] relevant examples in `examples`.
+- [ ] I have read the [Contributor Guide] and followed the process outlined for submitting PRs.
+- [ ] I have updated/added tests for ALL new/updated/fixed functionality.
+- [ ] I have updated/added relevant documentation in `docs` and added dartdoc comments with `///`.
+- [ ] I have updated/added relevant examples in `examples`.
 
 ## Breaking Change
 
