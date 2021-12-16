@@ -264,34 +264,33 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   @override
   Widget build(BuildContext context) {
-    Widget internalGameWidget = _GameRenderObjectWidget(widget.game);
-
-    final hasBasicDetectors = hasBasicGestureDetectors(widget.game);
-    final hasAdvancedDetectors = hasAdvancedGesturesDetectors(widget.game);
+    final game = widget.game;
+    Widget internalGameWidget = _GameRenderObjectWidget(game);
 
     assert(
-      !(hasBasicDetectors && hasAdvancedDetectors),
-      '''
-        WARNING: Both Advanced and Basic detectors detected.
-        Advanced detectors will override basic detectors and the later will not receive events
-      ''',
+      !(game is MultiTouchDragDetector && game is PanDetector),
+      'WARNING: Both MultiTouchDragDetector and a PanDetector detected. '
+      'The MultiTouchDragDetector will override the PanDetector and it will '
+      'not receive events',
     );
 
-    if (hasBasicDetectors) {
+    if (hasBasicGestureDetectors(game)) {
       internalGameWidget = applyBasicGesturesDetectors(
-        widget.game,
-        internalGameWidget,
-      );
-    } else if (hasAdvancedDetectors) {
-      internalGameWidget = applyAdvancedGesturesDetectors(
-        widget.game,
+        game,
         internalGameWidget,
       );
     }
 
-    if (hasMouseDetectors(widget.game)) {
+    if (hasAdvancedGestureDetectors(game)) {
+      internalGameWidget = applyAdvancedGesturesDetectors(
+        game,
+        internalGameWidget,
+      );
+    }
+
+    if (hasMouseDetectors(game)) {
       internalGameWidget = applyMouseDetectors(
-        widget.game,
+        game,
         internalGameWidget,
       );
     }
@@ -312,10 +311,10 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
         child: Directionality(
           textDirection: textDir,
           child: Container(
-            color: widget.game.backgroundColor(),
+            color: game.backgroundColor(),
             child: LayoutBuilder(
               builder: (_, BoxConstraints constraints) {
-                widget.game.onGameResize(constraints.biggest.toVector2());
+                game.onGameResize(constraints.biggest.toVector2());
                 return FutureBuilder(
                   future: loaderFuture,
                   builder: (_, snapshot) {

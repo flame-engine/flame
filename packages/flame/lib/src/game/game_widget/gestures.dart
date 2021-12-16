@@ -7,27 +7,30 @@ import '../../gestures/detectors.dart';
 import '../../gestures/events.dart';
 import '../mixins/game.dart';
 
-bool hasBasicGestureDetectors(Game game) =>
-    game is TapDetector ||
-    game is SecondaryTapDetector ||
-    game is DoubleTapDetector ||
-    game is LongPressDetector ||
-    game is VerticalDragDetector ||
-    game is HorizontalDragDetector ||
-    game is ForcePressDetector ||
-    game is PanDetector ||
-    game is ScaleDetector;
+bool hasBasicGestureDetectors(Game game) {
+  return game is TapDetector ||
+      game is SecondaryTapDetector ||
+      game is DoubleTapDetector ||
+      game is LongPressDetector ||
+      game is VerticalDragDetector ||
+      game is HorizontalDragDetector ||
+      game is ForcePressDetector ||
+      game is PanDetector ||
+      game is ScaleDetector;
+}
 
-bool hasAdvancedGesturesDetectors(Game game) =>
-    game is MultiTouchTapDetector ||
-    game is MultiTouchDragDetector ||
-    game is HasTappables ||
-    game is HasDraggables;
+bool hasAdvancedGestureDetectors(Game game) {
+  return game is MultiTouchTapDetector ||
+      game is MultiTouchDragDetector ||
+      game is HasTappables ||
+      game is HasDraggables;
+}
 
-bool hasMouseDetectors(Game game) =>
-    game is MouseMovementDetector ||
-    game is ScrollDetector ||
-    game is HasHoverables;
+bool hasMouseDetectors(Game game) {
+  return game is MouseMovementDetector ||
+      game is ScrollDetector ||
+      game is HasHoverables;
+}
 
 Widget applyBasicGesturesDetectors(Game game, Widget child) {
   return GestureDetector(
