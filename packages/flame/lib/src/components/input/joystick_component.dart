@@ -52,6 +52,7 @@ class JoystickComponent extends HudMarginComponent with Draggable {
     double? size,
     double? knobRadius,
     Anchor anchor = Anchor.center,
+    int? priority,
   })  : assert(
           size != null || background != null,
           'Either size or background must be defined',
@@ -66,6 +67,7 @@ class JoystickComponent extends HudMarginComponent with Draggable {
           position: position,
           size: background?.size ?? Vector2.all(size ?? 0),
           anchor: anchor,
+          priority: priority,
         ) {
     this.knobRadius = knobRadius ?? this.size.x / 2;
   }
