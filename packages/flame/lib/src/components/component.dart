@@ -41,7 +41,14 @@ class Component with Loadable {
   /// removed from its current parent.
   Component? nextParent;
 
-  late final ComponentSet children = createComponentSet();
+  /// The iterable of children of the current component.
+  ///
+  /// This getter will automatically create the [ComponentSet] container within
+  /// the current object if it didn't exist before. Check the [hasChildren] in
+  /// order to avoid instantiating that object.
+  ComponentSet get children => _children ??= createComponentSet();
+  bool get hasChildren => _children?.isNotEmpty ?? false;
+  ComponentSet? _children;
 
   /// Render priority of this component. This allows you to control the order in
   /// which your components are rendered.
@@ -127,18 +134,18 @@ class Component with Loadable {
   /// If you call this method from [update] you need to set [callOwnUpdate] to
   /// false so that you don't get stuck in an infinite loop.
   void updateTree(double dt, {bool callOwnUpdate = true}) {
-    children.updateComponentList();
+    _children?.updateComponentList();
     if (callOwnUpdate) {
       update(dt);
     }
-    children.forEach((c) => c.updateTree(dt));
+    _children?.forEach((c) => c.updateTree(dt));
   }
 
   void render(Canvas canvas) {}
 
   void renderTree(Canvas canvas) {
     render(canvas);
-    children.forEach((c) => c.renderTree(canvas));
+    _children?.forEach((c) => c.renderTree(canvas));
 
     // Any debug rendering should be rendered on top of everything
     if (debugMode) {
@@ -191,7 +198,7 @@ class Component with Loadable {
   @mustCallSuper
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
-    children.forEach((child) => child.onGameResize(gameSize));
+    _children?.forEach((child) => child.onGameResize(gameSize));
   }
 
   /// Called right before the component is removed from the game.
@@ -199,9 +206,7 @@ class Component with Loadable {
   @mustCallSuper
   void onRemove() {
     super.onRemove();
-    children.forEach((child) {
-      child.onRemove();
-    });
+    _children?.forEach((child) => child.onRemove());
     isPrepared = false;
     isMounted = false;
     _parent = null;
@@ -237,32 +242,34 @@ class Component with Loadable {
   /// [onLoad] and [onMount] runs again. Used when a parent is changed
   /// further up the tree.
   Future<void> reAddChildren() async {
-    await Future.wait(children.map(add));
-    await Future.wait(children.addLater.map(add));
+    if (_children != null) {
+      await Future.wait(_children!.map(add));
+      await Future.wait(_children!.addLater.map(add));
+    }
   }
 
   /// Removes a component from the component tree, calling [onRemove] for it and
   /// its children.
   void remove(Component c) {
-    children.remove(c);
+    _children?.remove(c);
   }
 
   /// Removes all the children in the list and calls [onRemove] for all of them
   /// and their children.
   void removeAll(Iterable<Component> cs) {
-    children.removeAll(cs);
+    _children?.removeAll(cs);
   }
 
   /// Whether the children list contains the given component.
   ///
   /// This method uses reference equality.
-  bool contains(Component c) => children.contains(c);
+  bool contains(Component c) => _children?.contains(c) ?? false;
 
   /// Call this if any of this component's children priorities have changed
   /// at runtime.
   ///
   /// This will call [ComponentSet.rebalanceAll] on the [children] ordered set.
-  void reorderChildren() => children.rebalanceAll();
+  void reorderChildren() => _children?.rebalanceAll();
 
   /// This method first calls the passed handler on the leaves in the tree,
   /// the children without any children of their own.
@@ -279,22 +286,24 @@ class Component with Loadable {
     bool Function(T) handler,
   ) {
     var shouldContinue = true;
-    for (final child in children.reversed()) {
-      shouldContinue = child.propagateToChildren(handler);
-      if (shouldContinue && child is T) {
-        shouldContinue = handler(child);
-      } else if (shouldContinue && child is FlameGame) {
-        shouldContinue = child.propagateToChildren<T>(handler);
-      }
-      if (!shouldContinue) {
-        break;
+    if (_children != null) {
+      for (final child in _children!.reversed()) {
+        shouldContinue = child.propagateToChildren(handler);
+        if (shouldContinue && child is T) {
+          shouldContinue = handler(child);
+        } else if (shouldContinue && child is FlameGame) {
+          shouldContinue = child.propagateToChildren<T>(handler);
+        }
+        if (!shouldContinue) {
+          break;
+        }
       }
     }
     return shouldContinue;
   }
 
-  /// Finds the closest parent further up the hierarchy that satisfies type=T,
-  /// or null if none is found.
+  /// Returns the closest parent further up the hierarchy that satisfies type=T,
+  /// or null if no such parent can be found.
   T? findParent<T extends Component>() {
     return (parent is T ? parent : parent?.findParent<T>()) as T?;
   }
