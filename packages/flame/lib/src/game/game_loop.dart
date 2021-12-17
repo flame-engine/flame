@@ -10,39 +10,30 @@ class GameLoop {
   }
 
   void _tick(Duration timestamp) {
-    final dt = _computeDeltaT(timestamp);
+    final durationDelta = timestamp - previous;
+    final dt = durationDelta.inMicroseconds / Duration.microsecondsPerSecond;
+    previous = timestamp;
     callback(dt);
   }
 
-  double _computeDeltaT(Duration now) {
-    final delta = previous == Duration.zero ? Duration.zero : now - previous;
-    previous = now;
-    return delta.inMicroseconds / Duration.microsecondsPerSecond;
-  }
-
   void start() {
-    _ticker.start();
+    if (!_ticker.isActive) {
+      _ticker.start();
+    }
   }
 
   void stop() {
     _ticker.stop();
+    previous = Duration.zero;
   }
 
   void dispose() {
     _ticker.dispose();
   }
 
-  void pause() {
-    _ticker.muted = true;
-    previous = Duration.zero;
-  }
+  @Deprecated('Use stop() instead')
+  void pause() => stop();
 
-  void resume() {
-    _ticker.muted = false;
-    // If the game has started paused, we need to start the ticker
-    // as it would not have been started yet
-    if (!_ticker.isActive) {
-      start();
-    }
-  }
+  @Deprecated('Use start() instead')
+  void resume() => start();
 }
