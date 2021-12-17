@@ -14,22 +14,22 @@ void main() {
       game.onGameResize(Vector2(1, 1));
       final object = PositionComponent();
       game.add(object);
-      game.tick(0);
+      game.update(0);
 
       object.angle = 1;
       object.add(
         RotateEffect.by(1, EffectController(duration: 1)),
       );
-      game.tick(0);
+      game.update(0);
       expect(object.angle, 1);
       expect(object.children.length, 1);
 
-      game.tick(0.5);
+      game.update(0.5);
       expect(object.angle, 1.5);
 
-      game.tick(0.5);
+      game.update(0.5);
       expect(object.angle, 2);
-      game.tick(0);
+      game.update(0);
       expect(object.children.length, 0);
       expect(object.angle, 2);
     });
@@ -39,22 +39,22 @@ void main() {
       game.onGameResize(Vector2(1, 1));
       final object = PositionComponent();
       game.add(object);
-      game.tick(0);
+      game.update(0);
 
       object.angle = 1;
       object.add(
         RotateEffect.to(3, EffectController(duration: 1)),
       );
-      game.tick(0);
+      game.update(0);
       expect(object.angle, 1);
       expect(object.children.length, 1);
 
-      game.tick(0.5);
+      game.update(0.5);
       expect(object.angle, 2);
 
-      game.tick(0.5);
+      game.update(0.5);
       expect(object.angle, 3);
-      game.tick(0);
+      game.update(0);
       expect(object.children.length, 0);
       expect(object.angle, 3);
     });
@@ -63,7 +63,7 @@ void main() {
       final game = FlameGame()..onGameResize(Vector2(1, 1));
       final object = PositionComponent();
       game.add(object);
-      game.tick(0);
+      game.update(0);
 
       final effect = RotateEffect.by(1, EffectController(duration: 1));
       object.add(effect..removeOnFinish = false);
@@ -72,7 +72,7 @@ void main() {
         // After each reset the object will be rotated by 1 radian relative to
         // its orientation at the start of the effect
         effect.reset();
-        game.tick(1);
+        game.update(1);
         expect(object.angle, i + 1);
       }
     });
@@ -81,7 +81,7 @@ void main() {
       final game = FlameGame()..onGameResize(Vector2(1, 1));
       final object = PositionComponent();
       game.add(object);
-      game.tick(0);
+      game.update(0);
 
       final effect = RotateEffect.to(1, EffectController(duration: 1));
       object.add(effect..removeOnFinish = false);
@@ -90,7 +90,7 @@ void main() {
         // After each reset the object will be rotated to the value of
         // `angle == 1`, regardless of its initial orientation.
         effect.reset();
-        game.tick(1);
+        game.update(1);
         expect(object.angle, 1);
       }
     });
@@ -99,7 +99,7 @@ void main() {
       final game = FlameGame()..onGameResize(Vector2(1, 1));
       final object = PositionComponent();
       game.add(object);
-      game.tick(0);
+      game.update(0);
 
       object.add(
         RotateEffect.by(5, EffectController(duration: 10)),
@@ -115,12 +115,12 @@ void main() {
         ),
       );
 
-      game.tick(1);
+      game.update(1);
       expect(object.angle, closeTo(1, 1e-15)); // 5*1/10 + 0.5*1
-      game.tick(1);
+      game.update(1);
       expect(object.angle, closeTo(1, 1e-15)); // 5*2/10 + 0.5*1 - 0.5*1
       for (var i = 0; i < 10; i++) {
-        game.tick(1);
+        game.update(1);
       }
       expect(object.angle, closeTo(5, 1e-15));
       expect(object.children.length, 0);
@@ -130,7 +130,7 @@ void main() {
       final game = FlameGame()..onGameResize(Vector2(1, 1));
       final object = PositionComponent();
       game.add(object);
-      game.tick(0);
+      game.update(0);
 
       final effect = RotateEffect.by(
         1.0,
@@ -146,9 +146,9 @@ void main() {
       while (totalTime < 999.9) {
         final dt = rng.nextDouble() * 0.02;
         totalTime += dt;
-        game.tick(dt);
+        game.update(dt);
       }
-      game.tick(1000 - totalTime);
+      game.update(1000 - totalTime);
       // Typically, `object.angle` could accumulate numeric discrepancy on the
       // order of 1e-11 .. 1e-12 by now.
       expect(object.angle, closeTo(0, 1e-10));

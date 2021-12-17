@@ -105,7 +105,7 @@ void main() {
 
         await game.ensureAdd(component);
         component.removeFromParent();
-        game.tick(0);
+        game.update(0);
         expect(component.removeCounter, 1);
         component.shouldRemove = false;
         component.removeCounter = 0;

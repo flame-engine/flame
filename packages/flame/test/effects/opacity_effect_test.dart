@@ -21,16 +21,16 @@ void main() {
       component.add(
         OpacityEffect.by(0.4, EffectController(duration: 1)),
       );
-      game.tick(0);
+      game.update(0);
       expect(component.getOpacity(), 0.2);
       expect(component.children.length, 1);
 
-      game.tick(0.5);
+      game.update(0.5);
       expectDouble(component.getOpacity(), 0.4, epsilon: _epsilon);
 
-      game.tick(0.5);
+      game.update(0.5);
       expectDouble(component.getOpacity(), 0.6, epsilon: _epsilon);
-      game.tick(0);
+      game.update(0);
       expect(component.children.length, 0);
       expectDouble(component.getOpacity(), 0.6, epsilon: _epsilon);
     });
@@ -43,16 +43,16 @@ void main() {
       component.add(
         OpacityEffect.to(0.4, EffectController(duration: 1)),
       );
-      game.tick(0);
+      game.update(0);
       expect(component.getOpacity(), 0.2);
       expect(component.children.length, 1);
 
-      game.tick(0.5);
+      game.update(0.5);
       expectDouble(component.getOpacity(), 0.3, epsilon: _epsilon);
 
-      game.tick(0.5);
+      game.update(0.5);
       expectDouble(component.getOpacity(), 0.4, epsilon: _epsilon);
-      game.tick(0);
+      game.update(0);
       expect(component.children.length, 0);
       expectDouble(component.getOpacity(), 0.4, epsilon: _epsilon);
     });
@@ -74,7 +74,7 @@ void main() {
         // After each reset the object will have its opacity modified by -10/255
         // relative to its opacity at the start of the effect.
         effect.reset();
-        game.tick(1);
+        game.update(1);
         expectDouble(
           component.getOpacity(),
           1.0 - step * (i + 1),
@@ -97,7 +97,7 @@ void main() {
         // After each reset the object will have an opacity value of 0.0
         // regardless of its initial opacity.
         effect.reset();
-        game.tick(1);
+        game.update(1);
         // TODO(spydon): This is not good, since it sometimes won't hit the
         // minima.
         expectDouble(component.getOpacity(), 0.0, epsilon: _epsilon);
@@ -108,7 +108,7 @@ void main() {
       final component = _PaintComponent();
       component.setOpacity(0.0);
       game.add(component);
-      game.tick(0);
+      game.update(0);
 
       component.add(
         OpacityEffect.by(0.5, EffectController(duration: 10)),
@@ -124,20 +124,20 @@ void main() {
         ),
       );
 
-      game.tick(1);
+      game.update(1);
       expectDouble(
         component.getOpacity(),
         0.55, // 0.5/10 + 0.5*1
         epsilon: _epsilon,
       );
-      game.tick(1);
+      game.update(1);
       expectDouble(
         component.getOpacity(),
         0.1,
         epsilon: _epsilon,
       ); // 0.5*2/10 + 0.5*1 - 0.5*1
       for (var i = 0; i < 10; i++) {
-        game.tick(1);
+        game.update(1);
       }
       expectDouble(component.getOpacity(), 0.5, epsilon: _epsilon);
       expect(component.children.length, 0);
@@ -161,9 +161,9 @@ void main() {
       while (totalTime < 999.9) {
         final dt = rng.nextDouble() * 0.02;
         totalTime += dt;
-        game.tick(dt);
+        game.update(dt);
       }
-      game.tick(1000 - totalTime);
+      game.update(1000 - totalTime);
       // TODO(spydon): The loop above has an average of 100fps.
       // It should change from 0-255 in 1s so it will change alpha with an
       // average of 255/100=2.5 per tick, which should not result in a need of

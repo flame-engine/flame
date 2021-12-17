@@ -35,31 +35,31 @@ void main() {
     tester.test('runs the tick method', (game) {
       final timer = _MyTimerComponent();
       game.add(timer);
-      game.tick(0);
+      game.update(0);
 
-      game.tick(1.2);
+      game.update(1.2);
 
-      game.tick(0);
+      game.update(0);
       expect(timer.count, equals(1));
     });
 
     tester.test('never remove from the game when is repeating', (game) {
       game.add(_MyTimerComponent());
-      game.tick(0);
+      game.update(0);
 
-      game.tick(1.2);
+      game.update(1.2);
 
-      game.tick(0);
+      game.update(0);
       expect(game.children.length, equals(1));
     });
 
     tester.test('is removed from the game when is finished', (game) {
       game.add(_NonRepeatingTimerComponent());
-      game.tick(0);
+      game.update(0);
 
-      game.tick(1.2);
+      game.update(1.2);
 
-      game.tick(0);
+      game.update(0);
       expect(game.children.length, equals(0));
     });
 
@@ -73,8 +73,8 @@ void main() {
           },
         ),
       );
-      game.tick(0);
-      game.tick(1.2);
+      game.update(0);
+      game.update(1.2);
 
       expect(called, isTrue);
     });

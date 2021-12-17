@@ -11,15 +11,15 @@ void main() {
       expect(game.children.length, 0);
       final obj = Component();
       game.add(obj);
-      game.tick(0);
+      game.update(0);
       expect(game.children.length, 1);
 
       // First `game.update()` invokes the destroy effect and schedules `obj`
       // for deletion; second `game.update()` processes the deletion queue and
       // actually removes the component
       obj.add(RemoveEffect());
-      game.tick(0);
-      game.tick(0);
+      game.update(0);
+      game.update(0);
       expect(game.children.length, 0);
     });
 
@@ -29,16 +29,16 @@ void main() {
       expect(game.children.length, 0);
       final obj = Component();
       game.add(obj);
-      game.tick(0);
+      game.update(0);
       expect(game.children.length, 1);
 
       obj.add(RemoveEffect(delay: 1));
-      game.tick(0.5);
-      game.tick(0);
+      game.update(0.5);
+      game.update(0);
       expect(game.children.length, 1);
 
-      game.tick(0.5);
-      game.tick(0);
+      game.update(0.5);
+      game.update(0);
       expect(game.children.length, 0);
     });
   });

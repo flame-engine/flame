@@ -359,7 +359,7 @@ void main() {
 
       final p = _TestComponent(Vector2.all(100.0))..anchor = Anchor.center;
       game.add(p);
-      game.tick(10000);
+      game.update(10000);
 
       final canvas = MockCanvas();
       game.render(canvas);
