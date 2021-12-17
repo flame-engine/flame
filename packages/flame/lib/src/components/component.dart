@@ -202,10 +202,8 @@ class Component with Loadable {
   }
 
   /// Called right before the component is removed from the game.
-  @override
   @mustCallSuper
   void onRemove() {
-    super.onRemove();
     _children?.forEach((child) => child.onRemove());
     isPrepared = false;
     isMounted = false;

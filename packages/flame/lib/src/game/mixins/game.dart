@@ -131,6 +131,8 @@ mixin Game on Loadable {
   /// not be on the flutter widget tree anymore.
   void onDetach() {}
 
+  void onRemove() {}
+
   /// Converts a global coordinate (i.e. w.r.t. the app itself) to a local
   /// coordinate (i.e. w.r.t. he game widget).
   /// If the widget occupies the whole app ("full screen" games), or is not
