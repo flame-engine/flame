@@ -103,7 +103,6 @@ abstract class Effect extends Component {
     if (_paused || _finished) {
       return;
     }
-    super.update(dt);
     if (_reversed) {
       controller.recede(dt);
     } else {
