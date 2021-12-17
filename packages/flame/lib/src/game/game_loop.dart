@@ -32,17 +32,17 @@ class GameLoop {
   /// [callback] is invoked. It will be equal to zero while the game loop is
   /// stopped. It is also guaranteed to be equal to zero on the first invocation
   /// of the callback.
-  Duration previous = Duration.zero;
+  Duration _previous = Duration.zero;
 
   /// Internal object responsible for periodically calling the [callback]
   /// function.
-  late Ticker _ticker;
+  late final Ticker _ticker;
 
   /// This method is periodically invoked by the [_ticker].
   void _tick(Duration timestamp) {
-    final durationDelta = timestamp - previous;
+    final durationDelta = timestamp - _previous;
     final dt = durationDelta.inMicroseconds / Duration.microsecondsPerSecond;
-    previous = timestamp;
+    _previous = timestamp;
     callback(dt);
   }
 
@@ -60,7 +60,7 @@ class GameLoop {
   /// any amount of time has passed.
   void stop() {
     _ticker.stop();
-    previous = Duration.zero;
+    _previous = Duration.zero;
   }
 
   /// Call this before deleting the [GameLoop] object.
@@ -70,6 +70,9 @@ class GameLoop {
   void dispose() {
     _ticker.dispose();
   }
+
+  @Deprecated('Internal variable')
+  Duration get previous => _previous;
 
   @Deprecated('Use stop() instead')
   void pause() => stop();
