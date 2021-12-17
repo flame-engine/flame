@@ -128,12 +128,14 @@ mixin Game on Loadable {
     onDetach();
   }
 
+  /// Called when the game is about to be removed from the Flutter widget tree,
+  /// but before it is actually removed.
+  void onRemove() {}
+
   /// Called after the game has left the widget tree.
   /// This can be overridden to add logic that requires the game
   /// not be on the flutter widget tree anymore.
   void onDetach() {}
-
-  void onRemove() {}
 
   /// Converts a global coordinate (i.e. w.r.t. the app itself) to a local
   /// coordinate (i.e. w.r.t. he game widget).
