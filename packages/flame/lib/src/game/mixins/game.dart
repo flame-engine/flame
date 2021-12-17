@@ -95,6 +95,8 @@ mixin Game on Loadable {
   /// Use for calculating the FPS.
   void onTimingsCallback(List<FrameTiming> timings) {}
 
+  void onMount() {}
+
   /// Marks game as attached to any Flutter widget tree.
   ///
   /// Should not be called manually.
