@@ -40,8 +40,8 @@ class GameLoop {
 
   /// This method is periodically invoked by the [_ticker].
   void _tick(Duration timestamp) {
-    final delta = timestamp - previous;
-    final dt = delta.inMicroseconds / Duration.microsecondsPerSecond;
+    final durationDelta = timestamp - previous;
+    final dt = durationDelta.inMicroseconds / Duration.microsecondsPerSecond;
     previous = timestamp;
     callback(dt);
   }
