@@ -96,6 +96,7 @@ void main() {
         game.add(component);
 
         expect(component.state, equals(InventoryState.sword));
+        game.remove(component);
       },
     );
 
