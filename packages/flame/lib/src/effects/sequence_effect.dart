@@ -92,7 +92,7 @@ class _SequenceEffectEffectController extends EffectController {
     var t = dt;
     for (;;) {
       if (_index >= 0) {
-        t = currentEffect.advance(dt);
+        t = currentEffect.advance(t);
         if (t > 0) {
           _index += 1;
           if (_index == n) {
@@ -106,7 +106,7 @@ class _SequenceEffectEffectController extends EffectController {
           }
         }
       } else {
-        t = currentEffect.recede(dt);
+        t = currentEffect.recede(t);
         if (t > 0) {
           _index -= 1;
           if (_index < -n) {
@@ -131,7 +131,7 @@ class _SequenceEffectEffectController extends EffectController {
     var t = dt;
     for (;;) {
       if (_index >= 0) {
-        t = currentEffect.recede(dt);
+        t = currentEffect.recede(t);
         if (t > 0) {
           _index -= 1;
           if (_index < 0) {
@@ -140,7 +140,7 @@ class _SequenceEffectEffectController extends EffectController {
           }
         }
       } else {
-        t = currentEffect.advance(dt);
+        t = currentEffect.advance(t);
         if (t > 0) {
           _index += 1;
           if (_index == 0) {

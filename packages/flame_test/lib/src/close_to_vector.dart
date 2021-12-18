@@ -8,8 +8,8 @@ import 'package:vector_math/vector_math_64.dart';
 /// expect(scale, closeToVector(2, -2));
 /// expect(position, closeToVector(120, 150, epsilon: 1e-10));
 /// ```
-Matcher closeToVector(double x, double y, {double epsilon = 1e-15}) {
-  return _IsCloseTo(Vector2(x, y), epsilon);
+Matcher closeToVector(num x, num y, {double epsilon = 1e-15}) {
+  return _IsCloseTo(Vector2(x.toDouble(), y.toDouble()), epsilon);
 }
 
 class _IsCloseTo extends Matcher {
