@@ -1,9 +1,13 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 /// Returns a matcher which matches if the argument vector is within distance
-/// [epsilon] of point ([x], [y]).
+/// [epsilon] of point ([x], [y]). For example:
+///
+/// ```dart
+/// expect(scale, closeToVector(2, -2));
+/// expect(position, closeToVector(120, 150, epsilon: 1e-10));
+/// ```
 Matcher closeToVector(double x, double y, {double epsilon = 1e-15}) {
   return _IsCloseTo(Vector2(x, y), epsilon);
 }
@@ -25,11 +29,15 @@ class _IsCloseTo extends Matcher {
 
   @override
   Description describeMismatch(
-      dynamic item, Description mismatchDescription, Map matchState, bool verbose) {
+    dynamic item,
+    Description mismatchDescription,
+    Map matchState,
+    bool verbose,
+  ) {
     if (item is! Vector2) {
-      return mismatchDescription.add('not an instance of Vector2');
+      return mismatchDescription.add('is not an instance of Vector2');
     }
-    final diff = (item - _value).length;
-    return mismatchDescription.add('is at distance $diff');
+    final distance = (item - _value).length;
+    return mismatchDescription.add('is at distance $distance');
   }
 }
