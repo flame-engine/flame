@@ -104,7 +104,7 @@ Examples of such types:
  - `refactor:` - refactors code but doesn't introduce any changes or additions to the public API.
 
 If you introduce a **breaking change** the conventional commit type MUST end with an exclamation
-mark (e.g. `feat!: remove the position argument from PositionComponent`).
+mark (e.g. `feat!: Remove the position argument from PositionComponent`).
 
 Examples of PR titles:
  - feat: Component.childrenFactory can be used to set up a global ComponentSet factory
