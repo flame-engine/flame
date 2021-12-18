@@ -1,3 +1,4 @@
+import 'package:flame/src/geometry/collision_detection.dart';
 import 'package:meta/meta.dart';
 
 import '../../../components.dart';
@@ -27,6 +28,8 @@ mixin Collidable on HasHitboxes {
   void onRemove() {
     final parentGame = findParent<FlameGame>();
     if (parentGame is HasCollidables) {
+      final collidables = parentGame.collidables;
+      handleRemovedCollidable(this, collidables);
       parentGame.collidables.remove(this);
     }
     super.onRemove();

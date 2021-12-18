@@ -83,6 +83,33 @@ void main() {
       expect(blockB.endCounter, 1);
     });
 
+    withCollidables.test(
+      'collidable callbacks are called when removing a Collidable',
+      (game) async {
+        final blockA = _TestBlock(
+          Vector2.zero(),
+          Vector2.all(10),
+        );
+        final blockB = _TestBlock(
+          Vector2.all(1),
+          Vector2.all(10),
+        );
+        await game.ensureAddAll([blockA, blockB]);
+        expect(blockA.hasCollisionWith(blockB), true);
+        expect(blockB.hasCollisionWith(blockA), true);
+        expect(blockA.collisions.length, 1);
+        expect(blockB.collisions.length, 1);
+        game.remove(blockA);
+        game.update(0);
+        expect(blockA.endCounter, 1);
+        expect(blockB.endCounter, 1);
+        expect(blockA.hasCollisionWith(blockB), false);
+        expect(blockB.hasCollisionWith(blockA), false);
+        expect(blockA.collisions.length, 0);
+        expect(blockB.collisions.length, 0);
+      },
+    );
+
     withCollidables.test('hitbox callbacks are called', (game) async {
       final blockA = _TestBlock(
         Vector2.zero(),
@@ -112,4 +139,33 @@ void main() {
       expect(hitboxB.endCounter, 1);
     });
   });
+
+  withCollidables.test(
+    'hitbox callbacks are called when Collidable is removed',
+    (game) async {
+      final blockA = _TestBlock(
+        Vector2.zero(),
+        Vector2.all(10),
+      );
+      final blockB = _TestBlock(
+        Vector2.all(1),
+        Vector2.all(10),
+      );
+      final hitboxA = blockA.hitbox;
+      final hitboxB = blockB.hitbox;
+      await game.ensureAddAll([blockA, blockB]);
+      expect(hitboxA.hasCollisionWith(hitboxB), true);
+      expect(hitboxB.hasCollisionWith(hitboxA), true);
+      expect(hitboxA.collisions.length, 1);
+      expect(hitboxB.collisions.length, 1);
+      game.remove(blockA);
+      game.update(0);
+      expect(hitboxA.hasCollisionWith(hitboxB), false);
+      expect(hitboxB.hasCollisionWith(hitboxA), false);
+      expect(hitboxA.collisions.length, 0);
+      expect(hitboxB.collisions.length, 0);
+      expect(hitboxA.endCounter, 1);
+      expect(hitboxB.endCounter, 1);
+    },
+  );
 }
