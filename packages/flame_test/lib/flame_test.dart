@@ -1,3 +1,4 @@
+export 'src/close_to_vector.dart';
 export 'src/expect_double.dart';
 export 'src/expect_vector2.dart';
 export 'src/fails_assert.dart';
