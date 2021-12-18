@@ -30,9 +30,6 @@ mixin Game on Loadable {
   /// This should render the game.
   void render(Canvas canvas);
 
-  /// Called by GameRenderBox on every game loop cycle.
-  void tick(double dt) => update(dt);
-
   /// Just a reference back to the render box that is kept up to date by the
   /// engine.
   GameRenderBox? _gameRenderBox;
