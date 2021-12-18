@@ -119,14 +119,12 @@ class Component with Loadable {
 
   //#region Component lifecycle methods
 
-  /// Called after the component has successfully run [onLoad] and before the
-  /// component is added to its new parent.
+  /// Called after the component has finished running its [onLoad] method and
+  /// when the component is added to its new parent.
   ///
-  /// Whenever [onMount] returns something, the parent will wait for the
-  /// [Future] to be resolved before adding it.
-  /// If `null` is returned, the class is added right away.
-  ///
-  /// This can be overwritten to add custom logic to the component's mounting.
+  /// Whenever [onMount] returns something, the parent will wait for the future
+  /// to be resolved before adding it. If `null` is returned, the class is
+  /// added right away.
   ///
   /// Example:
   /// ```dart
