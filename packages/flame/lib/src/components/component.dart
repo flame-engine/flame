@@ -173,18 +173,15 @@ class Component with Loadable {
     nextParent = component;
   }
 
-  final List<Component> _ancestors = [];
-
-  /// A list containing the current parent and its parent, and so on, until it
-  /// reaches a component without a parent.
-  List<Component> ancestors() {
-    _ancestors.clear();
-    for (var currentParent = parent;
-        currentParent != null;
-        currentParent = currentParent.parent) {
-      _ancestors.add(currentParent);
+  /// An iterator producing this component's parent, then its parent's parent,
+  /// then the great-grand-parent, and so on, until it reaches a component
+  /// without a parent.
+  Iterable<Component> ancestors() sync* {
+    var current = parent;
+    while (current != null) {
+      yield current;
+      current = current.parent;
     }
-    return _ancestors;
   }
 
   /// It receives the new game size.
