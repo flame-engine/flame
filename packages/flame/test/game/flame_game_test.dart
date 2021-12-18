@@ -160,7 +160,7 @@ void main() {
     await game.ensureAdd(component);
     expect(game.children.length, equals(1));
     component.shouldRemove = true;
-    game.update(0);
+    game.updateTree(0);
     expect(game.children.isEmpty, equals(true));
   });
 
@@ -173,7 +173,7 @@ void main() {
 
     // Ensure clear does not remove components directly
     expect(game.children.length, equals(3));
-    game.update(0);
+    game.updateTree(0);
     expect(game.children.isEmpty, equals(true));
   });
 
