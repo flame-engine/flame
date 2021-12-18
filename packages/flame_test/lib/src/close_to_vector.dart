@@ -35,7 +35,7 @@ class _IsCloseTo extends Matcher {
     bool verbose,
   ) {
     if (item is! Vector2) {
-      return mismatchDescription.add('not an instance of Vector2');
+      return mismatchDescription.add('is not an instance of Vector2');
     }
     final distance = (item - _value).length;
     return mismatchDescription.add('is at distance $distance');
