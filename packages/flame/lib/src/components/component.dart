@@ -328,7 +328,7 @@ class Component with Loadable {
     final parentGame = findParent<FlameGame>();
     if (parentGame == null) {
       isPrepared = false;
-    } else {
+    } else if (!isPrepared) {
       assert(
         parentGame.hasLayout,
         '"prepare/add" called before the game is ready. '
