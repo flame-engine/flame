@@ -56,7 +56,7 @@ void addCameraAndViewportStories(Dashbook dashbook) {
     )
     ..add(
       'Coordinate Systems',
-      (context) => CoordinateSystemsWidget(),
+      (context) => const CoordinateSystemsWidget(),
       codeLink: baseLink('camera_and_viewport/coordinate_systems_example.dart'),
       info: CoordinateSystemsExample.description,
     );
