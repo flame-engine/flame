@@ -85,6 +85,11 @@ class _SequenceEffectEffectController extends EffectController {
   }
 
   @override
+  bool get isRandom {
+    return effects.any((e) => e.controller.isRandom);
+  }
+
+  @override
   double get progress => (_index + 1) / n;
 
   @override

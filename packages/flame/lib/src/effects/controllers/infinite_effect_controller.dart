@@ -20,6 +20,9 @@ class InfiniteEffectController extends EffectController {
   double get progress => child.progress;
 
   @override
+  bool get isRandom => child.isRandom;
+
+  @override
   double advance(double dt) {
     var t = dt;
     for (;;) {

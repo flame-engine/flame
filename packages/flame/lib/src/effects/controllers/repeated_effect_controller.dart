@@ -33,6 +33,9 @@ class RepeatedEffectController extends EffectController {
   }
 
   @override
+  bool get isRandom => child.isRandom;
+
+  @override
   double advance(double dt) {
     var t = child.advance(dt);
     while (t > 0 && _remainingCount > 0) {

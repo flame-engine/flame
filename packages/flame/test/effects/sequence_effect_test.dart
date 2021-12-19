@@ -6,6 +6,50 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('SequenceEffect', () {
+    test('properties:1', () {
+      final effect = SequenceEffect([
+        MoveEffect.to(Vector2(10, 10), EffectController(duration: 3)),
+        MoveEffect.by(
+          Vector2(1, 0),
+          EffectController(duration: 0.1, repeatCount: 15),
+        ),
+      ]);
+      expect(effect.controller.duration, 4.5);
+      expect(effect.controller.isRandom, false);
+    });
+
+    test('properties:2', () {
+      final effect = SequenceEffect(
+        [
+          MoveEffect.to(Vector2(10, 10), EffectController(duration: 3)),
+        ],
+        alternate: true,
+      );
+      expect(effect.controller.duration, 6);
+      expect(effect.controller.isRandom, false);
+    });
+
+    test('properties:3', () {
+      final randomEffect = MoveEffect.to(
+        Vector2(10, 10),
+        RandomEffectController.uniform(
+          LinearEffectController(0),
+          min: 1,
+          max: 5,
+        ),
+      );
+      final effect = SequenceEffect(
+        [randomEffect],
+        alternate: true,
+        repeatCount: 1000,
+      );
+      expect(
+        effect.controller.duration,
+        closeTo(randomEffect.controller.duration! * 2000, 1e-15),
+      );
+      expect(effect.controller.isRandom, true);
+    });
+
     test('simple sequence', () async {
       final effect = SequenceEffect([
         MoveEffect.by(Vector2(10, 0), EffectController(duration: 1)),
