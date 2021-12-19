@@ -17,6 +17,7 @@ void main() {
         ]);
         expect(effect.controller.duration, 4.5);
         expect(effect.controller.isRandom, false);
+        expect(effect.controller.completed, false);
       });
 
       test('alternating', () {
@@ -65,7 +66,7 @@ void main() {
 
       test('errors', () {
         expect(
-              () => SequenceEffect(<Effect>[]),
+          () => SequenceEffect(<Effect>[]),
           failsAssert('The list of effects cannot be empty'),
         );
       });
@@ -79,11 +80,9 @@ void main() {
           MoveEffect.by(Vector2(-10, 0), EffectController(duration: 3)),
           MoveEffect.by(Vector2(30, 30), EffectController(duration: 4)),
         ]);
-        final component = PositionComponent()
-          ..add(effect);
+        final component = PositionComponent()..add(effect);
 
-        final game = FlameGame()
-          ..onGameResize(Vector2.all(1000));
+        final game = FlameGame()..onGameResize(Vector2.all(1000));
         await game.ensureAdd(component);
         game.update(0);
 
@@ -92,17 +91,17 @@ void main() {
           final x = time <= 1
               ? time * 10
               : time <= 3
-              ? 10
-              : time <= 6
-              ? 10 - 10 * (time - 3) / 3
-              : 30 * (time - 6) / 4;
+                  ? 10
+                  : time <= 6
+                      ? 10 - 10 * (time - 3) / 3
+                      : 30 * (time - 6) / 4;
           final y = time <= 1
               ? 0
               : time <= 3
-              ? 10 * (time - 1) / 2
-              : time <= 6
-              ? 10
-              : 10 + 30 * (time - 6) / 4;
+                  ? 10 * (time - 1) / 2
+                  : time <= 6
+                      ? 10
+                      : 10 + 30 * (time - 6) / 4;
           expect(component.position, closeToVector(x, y, epsilon: 1e-12));
           time += 0.1;
           game.update(0.1);
@@ -116,11 +115,9 @@ void main() {
           MoveEffect.by(Vector2(-10, 0), EffectController(duration: 3)),
           MoveEffect.by(Vector2(30, 30), EffectController(duration: 4)),
         ]);
-        final component = PositionComponent()
-          ..add(effect);
+        final component = PositionComponent()..add(effect);
 
-        final game = FlameGame()
-          ..onGameResize(Vector2.all(1000));
+        final game = FlameGame()..onGameResize(Vector2.all(1000));
         await game.ensureAdd(component);
 
         game.update(10);
@@ -135,11 +132,8 @@ void main() {
           ],
           repeatCount: 5,
         );
-        final component = PositionComponent()
-          ..add(effect);
-
-        final game = FlameGame()
-          ..onGameResize(Vector2.all(1000));
+        final component = PositionComponent()..add(effect);
+        final game = FlameGame()..onGameResize(Vector2.all(1000));
         await game.ensureAdd(component);
 
         for (var i = 0; i < 10; i++) {
@@ -153,6 +147,36 @@ void main() {
         game.update(0); // Second update ensures the game deletes the component
         expect(effect.isMounted, false);
         expect(component.position, closeToVector(50, 50));
+      });
+
+      test('alternating sequence', () async {
+        final effect = SequenceEffect(
+          [
+            MoveEffect.by(Vector2(10, 0), EffectController(duration: 1)),
+            MoveEffect.by(Vector2(0, 10), EffectController(duration: 1)),
+          ],
+          alternate: true,
+        );
+        expect(effect.controller.duration, 4);
+
+        final component = PositionComponent()..add(effect);
+        final game = FlameGame()..onGameResize(Vector2.all(1000));
+        await game.ensureAdd(component);
+        game.update(0);
+
+        final expectedPath = <Vector2>[
+          for (var i = 0.0; i < 10; i++) Vector2(i, 0),
+          for (var i = 0.0; i < 10; i++) Vector2(10, i),
+          for (var i = 10.0; i > 0; i--) Vector2(10, i),
+          for (var i = 10.0; i > 0; i--) Vector2(i, 0),
+        ];
+        for (var i = 0; i < 40; i++) {
+          final p = expectedPath[i];
+          expect(component.position, closeToVector(p.x, p.y, epsilon: 1e-14));
+          game.update(0.1);
+        }
+        game.update(0.1);
+        expect(effect.controller.completed, true);
       });
     });
   });
