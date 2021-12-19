@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-/// Returns a matcher which matches if the argument vector is within distance
+/// Returns a matcher which checks if the argument is a vector within distance
 /// [epsilon] of point ([x], [y]). For example:
 ///
 /// ```dart

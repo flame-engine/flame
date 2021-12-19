@@ -79,8 +79,17 @@ class FlameGame extends Component with Game {
   void update(double dt) {
     _cameraWrapper.update(dt);
     if (parent == null) {
-      super.updateTree(dt, callOwnUpdate: false);
+      updateTree(dt);
     }
+  }
+
+  @override
+  void updateTree(double dt) {
+    children.updateComponentList();
+    if (parent != null) {
+      update(dt);
+    }
+    children.forEach((c) => c.updateTree(dt));
   }
 
   /// This passes the new size along to every component in the tree via their
