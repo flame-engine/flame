@@ -53,6 +53,7 @@ void main() {
         CollidableType.active,
       );
       await game.ensureAddAll([blockA, blockB]);
+      game.update(0);
       expect(blockA.collidedWith(blockB), true);
       expect(blockB.collidedWith(blockA), true);
       expect(blockA.collisions.length, 1);
@@ -70,7 +71,7 @@ void main() {
         Vector2.all(10),
         CollidableType.passive,
       );
-      await game.addAll([blockA, blockB]);
+      await game.ensureAddAll([blockA, blockB]);
       game.update(0);
       expect(blockA.collisions.isEmpty, true);
       expect(blockB.collisions.isEmpty, true);
@@ -88,6 +89,7 @@ void main() {
         CollidableType.inactive,
       );
       await game.ensureAddAll([blockA, blockB]);
+      game.update(0);
       expect(blockA.collisions.isEmpty, true);
       expect(blockB.collisions.isEmpty, true);
     });
@@ -104,6 +106,7 @@ void main() {
         CollidableType.passive,
       );
       await game.ensureAddAll([blockA, blockB]);
+      game.update(0);
       expect(blockA.collidedWith(blockB), true);
       expect(blockB.collidedWith(blockA), true);
       expect(blockA.collisions.length, 1);
@@ -122,6 +125,7 @@ void main() {
         CollidableType.active,
       );
       await game.ensureAddAll([blockA, blockB]);
+      game.update(0);
       expect(blockA.collidedWith(blockB), true);
       expect(blockB.collidedWith(blockA), true);
       expect(blockA.collisions.length, 1);
@@ -140,6 +144,7 @@ void main() {
         CollidableType.inactive,
       );
       await game.ensureAddAll([blockA, blockB]);
+      game.update(0);
       expect(blockA.collisions.length, 0);
       expect(blockB.collisions.length, 0);
     });
@@ -156,6 +161,7 @@ void main() {
         CollidableType.passive,
       );
       await game.ensureAddAll([blockA, blockB]);
+      game.update(0);
       expect(blockA.collisions.length, 0);
       expect(blockB.collisions.length, 0);
     });
@@ -172,6 +178,7 @@ void main() {
         CollidableType.inactive,
       );
       await game.ensureAddAll([blockA, blockB]);
+      game.update(0);
       expect(blockA.collisions.length, 0);
       expect(blockB.collisions.length, 0);
     });
@@ -188,6 +195,7 @@ void main() {
         CollidableType.active,
       );
       await game.ensureAddAll([blockA, blockB]);
+      game.update(0);
       expect(blockA.collisions.length, 0);
       expect(blockB.collisions.length, 0);
     });
@@ -220,6 +228,7 @@ void main() {
           ),
         );
         await game.ensureAddAll((actives + statics + inactives)..shuffle());
+        game.update(0);
         expect(
           actives.fold<bool>(
             true,
@@ -257,6 +266,7 @@ void main() {
         CollidableType.active,
       );
       await game.ensureAddAll([blockA, blockB]);
+      game.update(0);
       expect(blockA.collidedWith(blockB), false);
       expect(blockB.collidedWith(blockA), false);
       expect(blockA.collisions.length, 0);
@@ -276,6 +286,7 @@ void main() {
         CollidableType.active,
       );
       await game.ensureAdd(blockA);
+      game.update(0);
       expect(blockA.containsPoint(Vector2.all(11)), false);
       blockA.scale = Vector2.all(2.0);
       game.update(0);
@@ -308,6 +319,7 @@ void main() {
       blockB.add(innerBlockB);
 
       await game.ensureAddAll([blockA, blockB]);
+      game.update(0);
       expect(blockA.collisions, <Collidable>[blockB, innerBlockB]);
       expect(blockB.collisions, <Collidable>[blockA, innerBlockA]);
       expect(innerBlockA.collisions, <Collidable>[blockB, innerBlockB]);
