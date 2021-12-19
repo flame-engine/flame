@@ -127,6 +127,9 @@ abstract class Effect extends Component {
     }
   }
 
+  /// Used for SequenceEffect. This is similar to `update()`, but cannot be
+  /// paused, does not obey [removeOnFinish], and returns the "leftover time"
+  /// similar to `EffectController.advance`.
   @internal
   double advance(double dt) {
     final remainingDt = controller.advance(dt);
@@ -140,9 +143,6 @@ abstract class Effect extends Component {
     if (!_finished && controller.completed) {
       _finished = true;
       onFinish();
-      if (removeOnFinish) {
-        removeFromParent();
-      }
     }
     return remainingDt;
   }
