@@ -50,9 +50,6 @@ abstract class Effect extends Component {
   /// Boolean indicators of the effect's state, their purpose is to ensure that
   /// the `onStart()` and `onFinish()` callbacks are called exactly once.
   bool _started;
-
-  /// Whether the effect has finished running.
-  bool get isFinished => _finished;
   bool _finished;
 
   /// Whether the effect is paused or not.
