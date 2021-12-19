@@ -11,7 +11,8 @@ class BaseFutureBuilder<T> extends StatefulWidget {
     required this.builder,
     this.loadingBuilder,
     this.errorBuilder,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
