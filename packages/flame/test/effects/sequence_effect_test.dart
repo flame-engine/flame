@@ -80,7 +80,8 @@ void main() {
         }
         game.update(1);
       }
-      game.update(5);
+      game.update(5);  // Will schedule the `effect` component for deletion
+      game.update(0);  // Second update ensures the game deletes the component
       expect(effect.isMounted, false);
       expect(component.position, closeToVector(50, 50));
     });

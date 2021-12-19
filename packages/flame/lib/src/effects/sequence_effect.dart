@@ -36,7 +36,7 @@ class SequenceEffect extends Effect {
   void apply(double progress) {}
 
   @override
-  void updateTree(double dt, {bool callOwnUpdate = true}) {
+  void updateTree(double dt) {
     update(dt);
     // Do not update children
   }
@@ -161,11 +161,13 @@ class _SequenceEffectEffectController extends EffectController {
       _index = n - 1;
       effects.forEach((e) => e.controller.setToEnd());
     }
+    _completed = true;
   }
 
   @override
   void setToStart() {
     _index = 0;
+    _completed = false;
     effects.forEach((e) => e.reset());
   }
 }
