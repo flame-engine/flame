@@ -30,6 +30,18 @@ void main() {
         expect(effect.controller.isRandom, false);
       });
 
+      test('infinite', () {
+        final effect = SequenceEffect(
+          [
+            MoveEffect.to(Vector2.zero(), EffectController(duration: 1)),
+          ],
+          alternate: true,
+          infinite: true,
+        );
+        expect(effect.controller.duration, double.infinity);
+        expect(effect.controller.isRandom, false);
+      });
+
       test('with random effects', () {
         final randomEffect = MoveEffect.to(
           Vector2(10, 10),

@@ -14,7 +14,7 @@ class InfiniteEffectController extends EffectController {
   bool get completed => false;
 
   @override
-  double? get duration => null;
+  double? get duration => double.infinity;
 
   @override
   double get progress => child.progress;
