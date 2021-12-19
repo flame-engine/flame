@@ -75,9 +75,6 @@ void main() {
         final y = (i ~/ 2) * 10;
         expect(component.position, closeToVector(x, y));
         expect(effect.isMounted, true);
-        if (i == 8) {
-          print('no1');
-        }
         game.update(1);
       }
       game.update(5); // Will schedule the `effect` component for deletion
