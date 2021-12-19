@@ -19,7 +19,6 @@ extension FlameGameExtension on Component {
   Future<void> ensureAdd(Component component) async {
     await add(component);
     updateTree(0);
-    update(0);
   }
 
   /// Makes sure that the [components] are added to the tree if you wait for the
@@ -27,7 +26,6 @@ extension FlameGameExtension on Component {
   Future<void> ensureAddAll(Iterable<Component> components) async {
     await addAll(components);
     updateTree(0);
-    update(0);
   }
 }
 
