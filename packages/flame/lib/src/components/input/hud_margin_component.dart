@@ -83,7 +83,9 @@ class HudMarginComponent<T extends FlameGame> extends PositionComponent
   }
 
   void _updateMargins() {
-    final screenSize = gameRef.size;
+    final screenSize = positionType == PositionType.viewport
+        ? gameRef.camera.viewport.effectiveSize
+        : gameRef.canvasSize;
     final margin = this.margin!;
     final x = margin.left != 0
         ? margin.left + scaledSize.x / 2
