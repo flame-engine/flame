@@ -26,6 +26,8 @@ class _TestHitbox extends HitboxRectangle {
 class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
   final Set<Collidable> collisions = {};
   final hitbox = _TestHitbox();
+  int startCounter = 0;
+  int onCollisionCounter = 0;
   int endCounter = 0;
 
   _TestBlock(Vector2 position, Vector2 size)
@@ -41,8 +43,14 @@ class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, Collidable other) {
     collisions.add(other);
+    startCounter++;
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
+    onCollisionCounter++;
   }
 
   @override
@@ -71,6 +79,17 @@ void main() {
       expect(blockB.hasCollisionWith(blockA), true);
       expect(blockA.collisions.length, 1);
       expect(blockB.collisions.length, 1);
+      expect(blockA.startCounter, 1);
+      expect(blockB.startCounter, 1);
+      expect(blockA.onCollisionCounter, 0);
+      expect(blockB.onCollisionCounter, 0);
+      game.update(0);
+      expect(blockA.collisions.length, 1);
+      expect(blockB.collisions.length, 1);
+      expect(blockA.startCounter, 1);
+      expect(blockB.startCounter, 1);
+      expect(blockA.onCollisionCounter, 1);
+      expect(blockB.onCollisionCounter, 1);
       blockB.position = Vector2.all(21);
       expect(blockA.endCounter, 0);
       expect(blockB.endCounter, 0);

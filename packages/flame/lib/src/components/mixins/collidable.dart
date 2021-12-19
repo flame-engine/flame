@@ -21,6 +21,7 @@ mixin Collidable on HasHitboxes {
   CollidableType collidableType = CollidableType.active;
 
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {}
+  void onCollisionStart(Set<Vector2> intersectionPoints, Collidable other) {}
   void onCollisionEnd(Collidable other) {}
 
   @override
