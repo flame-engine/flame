@@ -15,4 +15,14 @@ void main() {
       });
     },
   );
+  group(
+    'Test input vector does not get modified while function call',
+    () {
+      test('Camera should not modify the input vector while projecting it', () {
+        final vec = Vector2(5, 6);
+        TestGame().camera.projectVector(vec);
+        expect(vec, Vector2(5, 6));
+      });
+    },
+  );
 }
