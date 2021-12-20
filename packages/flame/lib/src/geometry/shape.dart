@@ -58,7 +58,7 @@ abstract class Shape {
   }
 
   /// The angle of the parent that has to be taken into consideration for some
-  /// applications of [Shape], for example [HitboxShape]
+  /// applications of [Shape], for example `HitboxShape`.
   double parentAngle = 0;
 
   /// Whether the context that the shape is in has already prepared (rotated

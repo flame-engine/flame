@@ -32,6 +32,7 @@ class EnemyComponent extends SpriteAnimationComponent
 
   @override
   void update(double dt) {
+    super.update(dt);
     y += enemySpeed * dt;
     shouldRemove = destroyed || y >= gameRef.size.y;
   }

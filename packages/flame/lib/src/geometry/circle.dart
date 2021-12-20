@@ -1,10 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
 
-import '../../game.dart';
+import '../../extensions.dart';
 import '../../geometry.dart';
-import '../extensions/vector2.dart';
-import 'hitbox_shape.dart';
 
 class Circle extends Shape {
   /// The [normalizedRadius] is what ratio (0.0, 1.0] of the shortest edge of

@@ -88,6 +88,7 @@ class PlayerComponent extends SpriteAnimationComponent
 
   @override
   void update(double dt) {
+    super.update(dt);
     bulletCreator.update(dt);
     shouldRemove = destroyed;
   }
