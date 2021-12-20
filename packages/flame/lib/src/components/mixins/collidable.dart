@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 
 import '../../../components.dart';
 import '../../../game.dart';
+import '../../geometry/collision_detection.dart';
 import '../../geometry/rectangle.dart';
 
 /// The [CollidableType] is used to determine which other type of [Collidable]s
@@ -28,6 +29,8 @@ mixin Collidable on HasHitboxes {
   void onRemove() {
     final parentGame = findParent<FlameGame>();
     if (parentGame is HasCollidables) {
+      final collidables = parentGame.collidables;
+      handleRemovedCollidable(this, collidables);
       parentGame.collidables.remove(this);
     }
     super.onRemove();
