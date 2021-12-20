@@ -12,6 +12,7 @@ import 'draggable_sample.dart';
 import 'joint_sample.dart';
 import 'mouse_joint_sample.dart';
 import 'position_body_sample.dart';
+import 'raycast_sample.dart';
 import 'sprite_body_sample.dart';
 import 'tappable_sample.dart';
 import 'widget_sample.dart';
@@ -90,6 +91,12 @@ void main() async {
       (DashbookContext ctx) => const BodyWidgetSample(),
       info: widgetSampleDescription,
       codeLink: link('widget_sample.dart'),
+    )
+    ..add(
+      'Raycast sample',
+      (DashbookContext ctx) => GameWidget(game: RaycastSample()),
+      codeLink: link('raycast_sample.dart'),
+      info: raycastSampleDescription,
     );
   runApp(dashbook);
 }
