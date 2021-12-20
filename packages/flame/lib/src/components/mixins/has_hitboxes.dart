@@ -1,12 +1,37 @@
 import 'dart:collection';
+import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
+
+import '../../../components.dart';
 import '../../../extensions.dart';
-import '../../geometry/shape.dart';
-import '../position_component.dart';
+import '../../../geometry.dart';
 
 mixin HasHitboxes on PositionComponent {
   final List<HitboxShape> _hitboxes = <HitboxShape>[];
+  final Aabb2 _aabb = Aabb2();
+  bool _validAabb = false;
+  final Vector2 _maxHalfExtents = Vector2.zero();
+
+  @override
+  @mustCallSuper
+  void update(double dt) {
+    super.update(dt);
+    _validAabb = false;
+  }
+
+  Aabb2 get aabb {
+    if (_validAabb) {
+      return _aabb;
+    }
+    final size = scaledSize;
+    final maxHalfExtent = max(size.x, size.y) / 2;
+    _maxHalfExtents.setValues(maxHalfExtent, maxHalfExtent);
+    _aabb.setCenterAndHalfExtents(absoluteCenter, _maxHalfExtents);
+    _validAabb = true;
+    return _aabb;
+  }
 
   UnmodifiableListView<HitboxShape> get hitboxes {
     return UnmodifiableListView(_hitboxes);
@@ -43,9 +68,7 @@ mixin HasHitboxes on PositionComponent {
   /// check can be done first to see if it even is possible that the shapes can
   /// overlap, since the shapes have to be within the size of the component.
   bool possiblyOverlapping(HasHitboxes other) {
-    final maxDistance = other.scaledSize.length + scaledSize.length;
-    return other.absoluteCenter.distanceToSquared(absoluteCenter) <=
-        maxDistance * maxDistance;
+    return aabb.intersectsWithAabb2(other.aabb);
   }
 
   /// Since this is a cheaper calculation than checking towards all shapes this
@@ -53,6 +76,6 @@ mixin HasHitboxes on PositionComponent {
   /// contain the point, since the shapes have to be within the size of the
   /// component.
   bool possiblyContainsPoint(Vector2 point) {
-    return absoluteCenter.distanceToSquared(point) <= scaledSize.length2;
+    return aabb.containsVector2(point);
   }
 }

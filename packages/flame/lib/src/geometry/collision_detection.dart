@@ -1,6 +1,7 @@
 import '../../extensions.dart';
 import '../../geometry.dart';
 import '../components/mixins/collidable.dart';
+import 'hitbox_shape.dart';
 
 final Set<int> _collidableHashes = {};
 final Set<int> _shapeHashes = {};
