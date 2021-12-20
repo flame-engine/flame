@@ -6,12 +6,26 @@ import 'effect.dart';
 /// Run multiple effects in a sequence, one after another.
 ///
 /// The provided effects will be added as child components; however the custom
-/// `updateTree()` implementation ensures that only one of them is "active" at
-/// a time.
+/// `updateTree()` implementation ensures that only one of them runs at any
+/// point in time. The flags `paused` or `removeOnFinish` will be ignored for
+/// children effects.
 ///
 /// If the `alternate` flag is provided, then the sequence will run in the
 /// reverse after it ran forward.
 ///
+/// Parameter `repeatCount` will make the sequence repeat a certain number of
+/// times. If `alternate` is also true, then the sequence will first run
+/// forward, then back, and then repeat this pattern `repeatCount` times in
+/// total.
+///
+/// The flag `infinite = true` makes the sequence repeat infinitely. This is
+/// equivalent to setting `repeatCount = infinity`. If both the `infinite` and
+/// the `repeatCount` parameters are given, then `infinite` takes precedence.
+///
+/// Note that unlike other effects, [SequenceEffect] does not take an
+/// [EffectController] as a parameter. This is because the timing of a sequence
+/// effect depends on the timings of individual effects, and cannot be
+/// represented as a regular effect controller.
 class SequenceEffect extends Effect {
   factory SequenceEffect(
     List<Effect> effects, {
@@ -38,19 +52,26 @@ class SequenceEffect extends Effect {
   @override
   void updateTree(double dt) {
     update(dt);
-    // Do not update children
+    // Do not update children: the controller will take care of it
   }
 }
 
-/// Not to be confused with `SequenceEffectController`!
+/// Helper class that implements the functionality of a [SequenceEffect]. This
+/// class should not be confused with `SequenceEffectController` (which runs
+/// a sequence of effect controllers).
 ///
-///
+/// This effect controller does not strictly adheres to the interface of a
+/// proper [EffectController]: in particular, its [progress] is ill-defined.
+/// The provided implementation returns a value proportional to the number of
+/// effects that has already completed, however this is not used anywhere since
+/// `SequenceEffect.apply()` is empty.
 class _SequenceEffectEffectController extends EffectController {
   _SequenceEffectEffectController(
     this.effects,
     this.alternate,
   ) : super.empty();
 
+  /// The list of children effects.
   final List<Effect> effects;
 
   /// If this flag is true, then after the sequence runs to the end, it will
@@ -63,6 +84,7 @@ class _SequenceEffectEffectController extends EffectController {
   /// where -1 is the last effect and -n is the first.
   int _index = 0;
 
+  /// The effect that is currently being executed.
   Effect get currentEffect => effects[_index < 0 ? _index + n : _index];
 
   /// Total number of effects in this sequence.
