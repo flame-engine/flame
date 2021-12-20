@@ -165,6 +165,8 @@ class CoordinateSystemsExample extends FlameGame
 /// on each direction (top, bottom, left and right) and allow adding
 /// or removing containers.
 class CoordinateSystemsWidget extends StatefulWidget {
+  const CoordinateSystemsWidget({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _CoordinateSystemsState();

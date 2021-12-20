@@ -66,6 +66,7 @@ void main() {
         Vector2.all(10),
       );
       await game.ensureAddAll([blockA, blockB]);
+      game.update(0);
       expect(blockA.hasCollisionWith(blockB), true);
       expect(blockB.hasCollisionWith(blockA), true);
       expect(blockA.collisions.length, 1);
@@ -122,6 +123,7 @@ void main() {
       final hitboxA = blockA.hitbox;
       final hitboxB = blockB.hitbox;
       await game.ensureAddAll([blockA, blockB]);
+      game.update(0);
       expect(hitboxA.hasCollisionWith(hitboxB), true);
       expect(hitboxB.hasCollisionWith(hitboxA), true);
       expect(hitboxA.collisions.length, 1);

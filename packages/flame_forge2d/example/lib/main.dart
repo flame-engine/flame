@@ -87,7 +87,7 @@ void main() async {
     )
     ..add(
       'Widget sample',
-      (DashbookContext ctx) => BodyWidgetSample(),
+      (DashbookContext ctx) => const BodyWidgetSample(),
       info: widgetSampleDescription,
       codeLink: link('widget_sample.dart'),
     );
