@@ -45,4 +45,10 @@ abstract class ComponentEffect<T extends Component> extends Effect {
     super.reset();
     _lastProgress = 0;
   }
+
+  @override
+  void resetToEnd() {
+    super.resetToEnd();
+    _lastProgress = 1;
+  }
 }

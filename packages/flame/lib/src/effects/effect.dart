@@ -84,6 +84,13 @@ abstract class Effect extends Component {
     _finished = false;
   }
 
+  @mustCallSuper
+  void resetToEnd() {
+    controller.setToEnd();
+    _started = true;
+    _finished = true;
+  }
+
   /// Implementation of [Component]'s `update()` method. Derived classes are
   /// not expected to redefine this.
   @override
@@ -134,6 +141,9 @@ abstract class Effect extends Component {
   /// `EffectController.recede`.
   @internal
   double recede(double dt) {
+    if (_finished && dt > 0) {
+      _finished = false;
+    }
     final remainingDt = controller.recede(dt);
     if (_started) {
       apply(controller.progress);

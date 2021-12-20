@@ -59,6 +59,7 @@ class RepeatedEffectController extends EffectController {
       // if we recede from the end position the remaining count must be
       // adjusted.
       _remainingCount = 1;
+      assert(child.completed);
     }
     var t = child.recede(dt);
     while (t > 0 && _remainingCount < repeatCount) {

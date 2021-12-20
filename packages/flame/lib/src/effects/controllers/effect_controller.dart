@@ -148,7 +148,8 @@ abstract class EffectController {
   /// If the controller is still running, the return value will be 0. If it
   /// already finished, then the return value will be the "leftover" part of
   /// the [dt]. That is, the amount of time [dt] that remains after the
-  /// controller has finished.
+  /// controller has finished. In all cases, the return value can be positive
+  /// only when `completed == true`.
   ///
   /// Normally, this method will be called by the owner of the controller class.
   /// For example, if the controller is passed to an `Effect` class, then that

@@ -164,10 +164,10 @@ class _SequenceEffectEffectController extends EffectController {
   void setToEnd() {
     if (alternate) {
       _index = -n;
-      effects.forEach((e) => e.controller.setToStart());
+      effects.forEach((e) => e.reset());
     } else {
       _index = n - 1;
-      effects.forEach((e) => e.controller.setToEnd());
+      effects.forEach((e) => e.resetToEnd());
     }
     _completed = true;
   }
