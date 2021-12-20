@@ -133,10 +133,10 @@ class RaycastSample extends Forge2DGame
     bluePoints.add(worldToScreen(rayStart.clone()));
 
     final farthestCallback = FarthestBoxRayCastCallback();
-    world.raycast(farthestCallback, rayStart.clone(), blueRayTarget);
+    world.raycast(farthestCallback, rayStart, blueRayTarget);
 
     if (farthestCallback.farthestPoint != null) {
-      bluePoints.add(worldToScreen(farthestCallback.farthestPoint!.clone()));
+      bluePoints.add(worldToScreen(farthestCallback.farthestPoint!));
     } else {
       bluePoints.add(worldToScreen(blueRayTarget));
     }
@@ -148,10 +148,10 @@ class RaycastSample extends Forge2DGame
     redPoints.add(worldToScreen(rayStart.clone()));
 
     final nearestCallback = NearestBoxRayCastCallback();
-    world.raycast(nearestCallback, rayStart.clone(), rayTarget);
+    world.raycast(nearestCallback, rayStart, rayTarget);
 
     if (nearestCallback.nearestPoint != null) {
-      redPoints.add(worldToScreen(nearestCallback.nearestPoint!.clone()));
+      redPoints.add(worldToScreen(nearestCallback.nearestPoint!));
     } else {
       redPoints.add(worldToScreen(rayTarget));
     }
@@ -177,7 +177,7 @@ class RaycastSample extends Forge2DGame
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    print(redPoints.length);
+
     for (var i = 0; i < redPoints.length - 1; ++i) {
       canvas.drawLine(
         redPoints[i].toOffset(),
@@ -187,6 +187,7 @@ class RaycastSample extends Forge2DGame
           ..strokeWidth = 4,
       );
     }
+
     for (var i = 0; i < bluePoints.length - 1; ++i) {
       canvas.drawLine(
         bluePoints[i].toOffset(),
