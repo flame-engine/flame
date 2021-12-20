@@ -26,7 +26,9 @@ mixin HasHitboxes on PositionComponent {
       return _aabb;
     }
     final size = scaledSize;
-    final maxHalfExtent = max(size.x, size.y) / 2;
+    // This has +1 since a point on the edge of the bounding box is currently
+    // counted as inside.
+    final maxHalfExtent = (max(size.x, size.y) / 2) + 1;
     _maxHalfExtents.setValues(maxHalfExtent, maxHalfExtent);
     _aabb.setCenterAndHalfExtents(absoluteCenter, _maxHalfExtents);
     _validAabb = true;
