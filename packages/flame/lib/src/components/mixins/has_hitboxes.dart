@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 
@@ -11,7 +10,8 @@ mixin HasHitboxes on PositionComponent {
   final List<HitboxShape> _hitboxes = <HitboxShape>[];
   final Aabb2 _aabb = Aabb2();
   bool _validAabb = false;
-  final Vector2 _maxHalfExtents = Vector2.zero();
+  final Vector2 _halfExtents = Vector2.zero();
+  final Matrix3 _rotationMatrix = Matrix3.zero();
 
   @override
   @mustCallSuper
@@ -27,9 +27,11 @@ mixin HasHitboxes on PositionComponent {
     final size = scaledSize;
     // This has +1 since a point on the edge of the bounding box is currently
     // counted as inside.
-    final maxHalfExtent = (max(size.x, size.y) / 2) + 1;
-    _maxHalfExtents.setValues(maxHalfExtent, maxHalfExtent);
-    _aabb.setCenterAndHalfExtents(absoluteCenter, _maxHalfExtents);
+    _halfExtents.setValues(size.x + 1, size.y + 1);
+    _rotationMatrix.setRotationZ(absoluteAngle);
+    _aabb
+      ..setCenterAndHalfExtents(absoluteCenter, _halfExtents)
+      ..rotate(_rotationMatrix);
     _validAabb = true;
     return _aabb;
   }
