@@ -118,13 +118,13 @@ abstract class EffectController {
   EffectController.empty();
 
   /// Will the effect continue to run forever (never completes)?
-  bool get isInfinite => false;
+  bool get isInfinite => duration == double.infinity;
 
   /// Is the effect's duration random or fixed?
   bool get isRandom => false;
 
   /// Total duration of the effect. If the duration cannot be determined, this
-  /// will return `null`.
+  /// will return `null`. For an infinite effect the duration is infinity.
   double? get duration;
 
   /// Has the effect started running? Some effects use a "delay" parameter to

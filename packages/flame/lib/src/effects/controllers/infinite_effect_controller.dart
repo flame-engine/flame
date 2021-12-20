@@ -8,9 +8,6 @@ class InfiniteEffectController extends EffectController {
   final EffectController child;
 
   @override
-  bool get isInfinite => true;
-
-  @override
   bool get completed => false;
 
   @override

@@ -14,9 +14,6 @@ class DelayedEffectController extends EffectController {
   double _timer;
 
   @override
-  bool get isInfinite => _child.isInfinite;
-
-  @override
   bool get isRandom => _child.isRandom;
 
   @override

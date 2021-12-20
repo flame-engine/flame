@@ -39,6 +39,7 @@ class RepeatedEffectController extends EffectController {
   double advance(double dt) {
     var t = child.advance(dt);
     while (t > 0 && _remainingCount > 0) {
+      assert(child.completed);
       _remainingCount--;
       if (_remainingCount != 0) {
         child.setToStart();
