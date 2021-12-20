@@ -179,8 +179,8 @@ void main() {
       });
 
       test('sequence of alternates', () async {
-        EffectController controller()
-            => EffectController(duration: 1, alternate: true);
+        EffectController controller() =>
+            EffectController(duration: 1, alternate: true);
         final effect = SequenceEffect(
           [
             MoveEffect.by(Vector2(1, 0), controller()),
@@ -195,10 +195,10 @@ void main() {
         game.update(0);
 
         final forwardPath = <Vector2>[
-          for (var i = 0; i < 10; i++) Vector2(i*0.1, 0),
-          for (var i = 10; i > 0; i--) Vector2(i*0.1, 0),
-          for (var i = 0; i < 10; i++) Vector2(0, i*0.1),
-          for (var i = 10; i > 0; i--) Vector2(0, i*0.1),
+          for (var i = 0; i < 10; i++) Vector2(i * 0.1, 0),
+          for (var i = 10; i > 0; i--) Vector2(i * 0.1, 0),
+          for (var i = 0; i < 10; i++) Vector2(0, i * 0.1),
+          for (var i = 10; i > 0; i--) Vector2(0, i * 0.1),
         ];
         final expectedPath = [
           ...forwardPath,
