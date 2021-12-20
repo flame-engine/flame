@@ -27,10 +27,13 @@ void collisionDetection(List<Collidable> collidables) {
 
       final intersectionPoints = intersections(collidableX, collidableY);
       if (intersectionPoints.isNotEmpty) {
+        final collisionHash = _combinedHash(collidableX, collidableY);
+        if (_collidableHashes.add(collisionHash)) {
+          collidableX.onCollisionStart(intersectionPoints, collidableY);
+          collidableY.onCollisionStart(intersectionPoints, collidableX);
+        }
         collidableX.onCollision(intersectionPoints, collidableY);
         collidableY.onCollision(intersectionPoints, collidableX);
-        final collisionHash = _combinedHash(collidableX, collidableY);
-        _collidableHashes.add(collisionHash);
       } else {
         _handleCollisionEnd(collidableX, collidableY);
       }
@@ -92,10 +95,13 @@ Set<Vector2> intersections(
       if (currentResult.isNotEmpty) {
         result.addAll(currentResult);
         // Do callbacks to the involved shapes
+        if (_shapeHashes.add(_combinedHash(shapeA, shapeB))) {
+          shapeA.onCollisionStart(currentResult, shapeB);
+          shapeB.onCollisionStart(currentResult, shapeA);
+        }
         shapeA.onCollision(currentResult, shapeB);
         shapeB.onCollision(currentResult, shapeA);
         currentResult.clear();
-        _shapeHashes.add(_combinedHash(shapeA, shapeB));
       } else {
         _handleShapeCollisionEnd(shapeA, shapeB);
       }
