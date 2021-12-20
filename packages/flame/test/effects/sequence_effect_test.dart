@@ -211,20 +211,20 @@ void main() {
         game.update(0);
 
         final expectedPath = <Vector2>[
-          for (var i = 0; i < 100; i++) Vector2(i*0.1, i*0.1),
-          for (var i = 0; i < 100; i++) Vector2(10 + i*0.1, 10 - i*0.1),
-          for (var i = 0; i < 100; i++) Vector2(20 + i*0.1, i*0.1),
-          for (var i = 100; i > 0; i--) Vector2(20 + i*0.1, i*0.1),
-          for (var i = 100; i > 0; i--) Vector2(10 + i*0.1, 10 - i*0.1),
-          for (var i = 0; i < 100; i++) Vector2(10 + i*0.1, 10 - i*0.1),
-          for (var i = 0; i < 100; i++) Vector2(20 + i*0.1, i*0.1),
-          for (var i = 100; i > 0; i--) Vector2(20 + i*0.1, i*0.1),
-          for (var i = 100; i > 0; i--) Vector2(10 + i*0.1, 10 - i*0.1),
-          for (var i = 0; i < 200; i++) Vector2(10, 10 + i*0.1),
+          for (var i = 0; i < 100; i++) Vector2(i * 0.1, i * 0.1),
+          for (var i = 0; i < 100; i++) Vector2(10 + i * 0.1, 10 - i * 0.1),
+          for (var i = 0; i < 100; i++) Vector2(20 + i * 0.1, i * 0.1),
+          for (var i = 100; i > 0; i--) Vector2(20 + i * 0.1, i * 0.1),
+          for (var i = 100; i > 0; i--) Vector2(10 + i * 0.1, 10 - i * 0.1),
+          for (var i = 0; i < 100; i++) Vector2(10 + i * 0.1, 10 - i * 0.1),
+          for (var i = 0; i < 100; i++) Vector2(20 + i * 0.1, i * 0.1),
+          for (var i = 100; i > 0; i--) Vector2(20 + i * 0.1, i * 0.1),
+          for (var i = 100; i > 0; i--) Vector2(10 + i * 0.1, 10 - i * 0.1),
+          for (var i = 0; i < 200; i++) Vector2(10, 10 + i * 0.1),
           for (var j = 0; j < 5; j++)
             for (var i = 0; i < 200; i++)
-              Vector2(i<100? i*0.01 : 1, i<100? 0 : i*0.01 - 1)
-                ..add(Vector2(10 + j*1.0, 30 + j*1.0)),
+              Vector2(i < 100 ? i * 0.01 : 1, i < 100 ? 0 : i * 0.01 - 1)
+                ..add(Vector2(10 + j * 1.0, 30 + j * 1.0)),
           Vector2(15, 35),
         ];
         // expectedPath.addAll(expectedPath.reversed.skip(1).toList());
