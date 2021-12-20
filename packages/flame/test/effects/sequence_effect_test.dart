@@ -170,12 +170,47 @@ void main() {
           for (var i = 10.0; i > 0; i--) Vector2(10, i),
           for (var i = 10.0; i > 0; i--) Vector2(i, 0),
         ];
-        for (var i = 0; i < 40; i++) {
-          final p = expectedPath[i];
+        for (final p in expectedPath) {
           expect(component.position, closeToVector(p.x, p.y, epsilon: 1e-14));
           game.update(0.1);
         }
-        game.update(0.1);
+        game.update(0.001);
+        expect(effect.controller.completed, true);
+      });
+
+      test('sequence of alternates', () async {
+        EffectController controller()
+            => EffectController(duration: 1, alternate: true);
+        final effect = SequenceEffect(
+          [
+            MoveEffect.by(Vector2(1, 0), controller()),
+            MoveEffect.by(Vector2(0, 1), controller()),
+          ],
+          alternate: true,
+        );
+
+        final component = PositionComponent()..add(effect);
+        final game = FlameGame()..onGameResize(Vector2.all(1000));
+        await game.ensureAdd(component);
+        game.update(0);
+
+        final forwardPath = <Vector2>[
+          for (var i = 0; i < 10; i++) Vector2(i*0.1, 0),
+          for (var i = 10; i > 0; i--) Vector2(i*0.1, 0),
+          for (var i = 0; i < 10; i++) Vector2(0, i*0.1),
+          for (var i = 10; i > 0; i--) Vector2(0, i*0.1),
+        ];
+        final expectedPath = [
+          ...forwardPath,
+          Vector2.zero(),
+          ...forwardPath.reversed,
+        ];
+        for (final p in expectedPath) {
+          expect(component.position, closeToVector(p.x, p.y, epsilon: 1e-14));
+          game.update(0.1);
+        }
+        game.update(0.001);
+        expect(component.position, closeToVector(0, 0));
         expect(effect.controller.completed, true);
       });
 
