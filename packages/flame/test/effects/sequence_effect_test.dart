@@ -178,6 +178,64 @@ void main() {
         game.update(0.1);
         expect(effect.controller.completed, true);
       });
+
+      test('sequence in sequence', () async {
+        EffectController duration(double t) => EffectController(duration: t);
+        final effect = SequenceEffect(
+          [
+            MoveEffect.by(Vector2(10, 10), duration(1)),
+            SequenceEffect(
+              [
+                MoveEffect.to(Vector2(20, 0), duration(1)),
+                MoveEffect.to(Vector2(30, 10), duration(1)),
+              ],
+              alternate: true,
+              repeatCount: 2,
+            ),
+            MoveEffect.by(Vector2(0, 20), duration(2)),
+            SequenceEffect(
+              [
+                MoveEffect.by(Vector2(1, 0), duration(1)),
+                MoveEffect.by(Vector2(0, 1), duration(1)),
+              ],
+              repeatCount: 5,
+            ),
+          ],
+          alternate: true,
+        );
+        expect(effect.controller.duration, 42);
+
+        final component = PositionComponent()..add(effect);
+        final game = FlameGame()..onGameResize(Vector2.all(1000));
+        await game.ensureAdd(component);
+        game.update(0);
+
+        final expectedPath = <Vector2>[
+          for (var i = 0; i < 100; i++) Vector2(i*0.1, i*0.1),
+          for (var i = 0; i < 100; i++) Vector2(10 + i*0.1, 10 - i*0.1),
+          for (var i = 0; i < 100; i++) Vector2(20 + i*0.1, i*0.1),
+          for (var i = 100; i > 0; i--) Vector2(20 + i*0.1, i*0.1),
+          for (var i = 100; i > 0; i--) Vector2(10 + i*0.1, 10 - i*0.1),
+          for (var i = 0; i < 100; i++) Vector2(10 + i*0.1, 10 - i*0.1),
+          for (var i = 0; i < 100; i++) Vector2(20 + i*0.1, i*0.1),
+          for (var i = 100; i > 0; i--) Vector2(20 + i*0.1, i*0.1),
+          for (var i = 100; i > 0; i--) Vector2(10 + i*0.1, 10 - i*0.1),
+          for (var i = 0; i < 200; i++) Vector2(10, 10 + i*0.1),
+          for (var j = 0; j < 5; j++)
+            for (var i = 0; i < 200; i++)
+              Vector2(i<100? i*0.01 : 1, i<100? 0 : i*0.01 - 1)
+                ..add(Vector2(10 + j*1.0, 30 + j*1.0)),
+          Vector2(15, 35),
+        ];
+        // expectedPath.addAll(expectedPath.reversed.skip(1).toList());
+        for (final p in expectedPath) {
+          // final x = (component.position.x * 100).roundToDouble() / 100;
+          // final y = (component.position.y * 100).roundToDouble() / 100;
+          // print('position = [$x,$y],  expected = $p');
+          expect(component.position, closeToVector(p.x, p.y, epsilon: 1e-10));
+          game.update(0.01);
+        }
+      });
     });
   });
 }

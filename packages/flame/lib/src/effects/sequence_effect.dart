@@ -153,6 +153,9 @@ class _SequenceEffectEffectController extends EffectController {
           }
         }
       }
+      if (t == 0) {
+        break;
+      }
     }
     return t;
   }
