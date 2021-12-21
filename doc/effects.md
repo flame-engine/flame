@@ -61,6 +61,7 @@ There are multiple effect controllers provided by the Flame framework as well:
 - [`SequenceEffectController`](#sequenceeffectcontroller)
 - [`DelayedEffectController`](#delayedeffectcontroller)
 - [`RandomEffectController`](#randomeffectcontroller)
+- [`SineEffectController`](#sineeffectcontroller)
 
 
 ## Built-in effects
@@ -481,8 +482,21 @@ of the produced random durations. Two distributions -- `.uniform` and `.exponent
 any other can be implemented by the user.
 
 
+### `SineEffectController`
+
+An effect controller that represents a single period of the sine function. Use this to create
+natural-looking harmonic oscillations. Two perpendicular move effects governed by
+`SineEffectControllers` with different periods, will create a [Lissajous curve].
+
+```dart
+final ec = SineEffectController(period: 1);
+```
+
+
 ## See also
 
 * [Examples of various effects](https://examples.flame-engine.org/#/).
 
+
 [tau]: https://en.wikipedia.org/wiki/Tau_(mathematical_constant)
+[Lissajous curve]: https://en.wikipedia.org/wiki/Lissajous_curve
