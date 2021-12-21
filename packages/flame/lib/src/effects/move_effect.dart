@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import 'controllers/effect_controller.dart';
@@ -21,24 +20,23 @@ import 'transform2d_effect.dart';
 /// also used incremental updates.
 class MoveEffect extends Transform2DEffect implements MeasurableEffect {
   MoveEffect.by(Vector2 offset, EffectController controller)
-      : vector = offset.clone(),
+      : _offset = offset.clone(),
         super(controller);
 
   factory MoveEffect.to(Vector2 destination, EffectController controller) =>
       _MoveToEffect(destination, controller);
 
-  @protected
-  Vector2 vector;
+  Vector2 _offset;
 
   @override
   void apply(double progress) {
     final dProgress = progress - previousProgress;
-    target.position += vector * dProgress;
+    target.position += _offset * dProgress;
     super.apply(progress);
   }
 
   @override
-  double measure() => vector.length;
+  double measure() => _offset.length;
 }
 
 /// Implementation class for [MoveEffect.to]
@@ -51,6 +49,6 @@ class _MoveToEffect extends MoveEffect {
 
   @override
   void onStart() {
-    vector = _destination - target.position;
+    _offset = _destination - target.position;
   }
 }
