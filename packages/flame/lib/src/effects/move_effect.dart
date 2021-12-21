@@ -1,7 +1,7 @@
-import 'package:flame/src/effects/measurable_effect.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import 'controllers/effect_controller.dart';
+import 'measurable_effect.dart';
 import 'transform2d_effect.dart';
 
 /// Move a component to a new position.

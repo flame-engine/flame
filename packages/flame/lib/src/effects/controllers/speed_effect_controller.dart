@@ -60,7 +60,7 @@ class SpeedEffectController extends EffectController {
   void onMount(Effect parent) {
     assert(
       parent is MeasurableEffect,
-        'SpeedEffectController can only be applied to a MeasurableEffect',
+      'SpeedEffectController can only be applied to a MeasurableEffect',
     );
     _parentEffect = parent as MeasurableEffect;
     child.onMount(parent);
