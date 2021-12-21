@@ -133,9 +133,7 @@ class _SpriteAnimationWidgetState extends State<_SpriteAnimationWidget>
   }
 
   void _setupController() {
-    if (_controller != null) {
-      _controller?.dispose();
-    }
+    _controller?.dispose();
 
     _controller = AnimationController(vsync: this)
       ..addListener(() {
@@ -144,9 +142,7 @@ class _SpriteAnimationWidgetState extends State<_SpriteAnimationWidget>
         final dt = max(0, (now - (_lastUpdated ?? 0)) / 1000).toDouble();
         widget.animation.update(dt);
 
-        setState(() {
-          _lastUpdated = now;
-        });
+        setState(() => _lastUpdated = now);
       });
   }
 
