@@ -17,6 +17,7 @@ class EffectControllersExample extends FlameGame {
   @override
   void onMount() {
     camera.viewport = FixedResolutionViewport(Vector2(400, 600));
+    /*
     add(
       RectangleComponent.square(
         position: Vector2(20, 50),
@@ -44,6 +45,6 @@ class EffectControllersExample extends FlameGame {
         ),
       ]),
     );
-
+    */
   }
 }
