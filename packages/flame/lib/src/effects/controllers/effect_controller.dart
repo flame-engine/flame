@@ -155,7 +155,7 @@ abstract class EffectController {
           CurvedEffectController(duration, curve)
         else
           SpeedEffectController(
-            CurvedEffectController(0, curve),
+            CurvedEffectController(1, curve),
             speed: speed!,
           ),
 
@@ -180,7 +180,7 @@ abstract class EffectController {
           )
         else
           SpeedEffectController(
-            ReverseCurvedEffectController(0, reverseCurve ?? curve.flipped),
+            ReverseCurvedEffectController(1, reverseCurve ?? curve.flipped),
             speed: reverseSpeed ?? speed!,
           ),
 

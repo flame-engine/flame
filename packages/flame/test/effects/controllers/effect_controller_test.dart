@@ -1,6 +1,8 @@
 import 'dart:math';
 
-import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
+import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -157,6 +159,56 @@ void main() {
       expect(ec.isInfinite, true);
     });
 
+    test('with speed', () async {
+      final ec = EffectController(speed: 1);
+      expect(ec.duration, isNaN);
+
+      final game = FlameGame()..onGameResize(Vector2.zero());
+      final component = PositionComponent();
+      final effect = MoveEffect.by(Vector2(10, 0), ec);
+      component.add(effect);
+      await game.ensureAdd(component);
+      game.update(0);
+      expect(ec.duration, 10);
+    });
+
+    test('curved with speed', () {
+      final ec = EffectController(speed: 1, curve: Curves.ease);
+      expect(ec, isA<SpeedEffectController>());
+      expect(
+        (ec as SpeedEffectController).child,
+        isA<CurvedEffectController>(),
+      );
+    });
+
+    test('reverse speed-1', () {
+      final ec = EffectController(speed: 1, alternate: true);
+      expect(ec, isA<SequenceEffectController>());
+      final seq = (ec as SequenceEffectController).children;
+      expect(seq.length, 2);
+      expect(seq[0], isA<SpeedEffectController>());
+      expect(seq[1], isA<SpeedEffectController>());
+      expect(
+        (seq[0] as SpeedEffectController).child,
+        isA<LinearEffectController>(),
+      );
+      expect(
+        (seq[1] as SpeedEffectController).child,
+        isA<ReverseLinearEffectController>(),
+      );
+    });
+
+    test('reverse speed-2', () {
+      final ec = EffectController(speed: 1, reverseSpeed: 2);
+      expect(ec, isA<SequenceEffectController>());
+      final seq = (ec as SequenceEffectController).children;
+      expect(seq.length, 2);
+      expect(seq[0], isA<SpeedEffectController>());
+      expect(seq[1], isA<SpeedEffectController>());
+      expect((seq[0] as SpeedEffectController).speed, 1);
+      expect((seq[1] as SpeedEffectController).speed, 2);
+    });
+
     test('reset', () {
       final ec = EffectController(duration: 1.23);
       expect(ec.started, true);
@@ -237,6 +289,27 @@ void main() {
       }
       ec.advance(1e-10);
       expect(ec.completed, true);
+    });
+
+    test('reverse curve with speed', () {
+      final ec = EffectController(
+        speed: 1,
+        curve: Curves.easeIn,
+        alternate: true,
+      );
+      expect(ec, isA<SequenceEffectController>());
+      final seq = (ec as SequenceEffectController).children;
+      expect(seq.length, 2);
+      expect(seq[0], isA<SpeedEffectController>());
+      expect(seq[1], isA<SpeedEffectController>());
+      expect(
+        (seq[0] as SpeedEffectController).child,
+        isA<CurvedEffectController>(),
+      );
+      expect(
+        (seq[1] as SpeedEffectController).child,
+        isA<ReverseCurvedEffectController>(),
+      );
     });
 
     group('errors', () {
