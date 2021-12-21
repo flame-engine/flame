@@ -8,10 +8,15 @@ class EffectControllersExample extends FlameGame {
   static const description = '''
     This page demonstrates application of various non-standard effect 
     controllers.
-    
+
     The first white square has a ZigzagEffectController with period 1. The
-    orange square next to it has two move effects, each with a 
+    orange square next to it has two move effects, each with a
     ZigzagEffectController.
+
+    The lime square has a SineEffectController with the same period of 1s. The
+    violet square next to it has two move effects, each with a
+    SineEffectController with periods, but one of the effects is slightly 
+    delayed.
   ''';
 
   @override
