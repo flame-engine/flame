@@ -25,7 +25,7 @@ class SpeedEffectController extends EffectController {
   bool get completed => child.completed;
 
   @override
-  double? get duration => _initialized? child.duration : double.nan;
+  double? get duration => _initialized ? child.duration : double.nan;
 
   @override
   double get progress => child.progress;
