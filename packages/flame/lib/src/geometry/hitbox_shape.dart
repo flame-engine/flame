@@ -23,6 +23,10 @@ mixin HitboxShape on Shape {
   /// shape collides with another [HitboxShape]
   CollisionCallback onCollision = emptyCollisionCallback;
 
+  /// Assign your own [CollisionCallback] if you want a callback when this
+  /// shape starts to collide with another [HitboxShape].
+  CollisionCallback onCollisionStart = emptyCollisionCallback;
+
   /// Assign your own [CollisionEndCallback] if you want a callback when this
   /// shape stops colliding with another [HitboxShape]
   CollisionEndCallback onCollisionEnd = emptyCollisionEndCallback;
