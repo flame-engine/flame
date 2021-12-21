@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -16,7 +15,7 @@ void main() {
         final ec = SpeedEffectController(LinearEffectController(1), speed: 10);
         expect(ec.duration, isNaN);
         expect(ec.progress, 0);
-        expect(ec.isRandom, false);
+        expect(ec.isRandom, true);
         expect(ec.started, true);
         expect(ec.completed, false);
       });
@@ -24,11 +23,11 @@ void main() {
       test('assert speed positive', () {
         expect(
           () => SpeedEffectController(LinearEffectController(1), speed: 0),
-          failsAssert('speed must be positive: 0.0'),
+          failsAssert('Speed must be positive: 0.0'),
         );
         expect(
           () => SpeedEffectController(LinearEffectController(1), speed: -1),
-          failsAssert('speed must be positive: -1.0'),
+          failsAssert('Speed must be positive: -1.0'),
         );
       });
 
@@ -116,7 +115,7 @@ void main() {
         );
         final game = FlameGame()..onGameResize(Vector2.all(100));
         final component = PositionComponent();
-        component.add(effect ..removeOnFinish=false);
+        component.add(effect..removeOnFinish = false);
         await game.ensureAdd(component);
         game.update(0);
 

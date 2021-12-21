@@ -3,9 +3,21 @@ import '../measurable_effect.dart';
 import 'duration_effect_controller.dart';
 import 'effect_controller.dart';
 
+/// This controller can force execution of an effect at a predefined speed.
+///
+/// For most of the effect controllers, their duration is set by the user in
+/// advance. This controller is different: it knows the target speed at which
+/// the parent effect wants to proceed, communicates with the effect to
+/// determine its total distance, and uses that to calculate the desired
+/// duration for the [child] effect controller.
+///
+/// Some restrictions apply:
+///   - the [speed] cannot be zero (or negative),
+///   - the [child] controller must be a [DurationEffectController],
+///   - the parent effect must be a [MeasurableEffect].
 class SpeedEffectController extends EffectController {
   SpeedEffectController(this.child, {required this.speed})
-      : assert(speed > 0, 'speed must be positive: $speed'),
+      : assert(speed > 0, 'Speed must be positive: $speed'),
         super.empty();
 
   final DurationEffectController child;
@@ -19,7 +31,7 @@ class SpeedEffectController extends EffectController {
   bool _initialized = false;
 
   @override
-  bool get isRandom => child.isRandom;
+  bool get isRandom => true;
 
   @override
   bool get completed => child.completed;
