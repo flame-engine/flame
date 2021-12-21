@@ -92,11 +92,11 @@ and horizontal drags, so not all of them can be used together.
 
 It is also not possible to mix advanced detectors (`MultiTouch*`) with basic detectors as they will
 *always win the gesture arena* and the basic detectors will never be triggered. So for example, you
-can use both `MultiTouchDragDetector` and `MultiTouchDragDetector` together, but if you try to use
+can use both `MultiTouchTapDetector` and `MultiTouchDragDetector` together, but if you try to use
 `MultiTouchTapDetector` and `PanDetector`, no events will be triggered for the latter.
 
 Flame's GestureApi is provided by Flutter's Gesture Widgets, including
-GestureDetector widget](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html),
+[GestureDetector widget](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html),
 [RawGestureDetector widget](https://api.flutter.dev/flutter/widgets/RawGestureDetector-class.html)
 and [MouseRegion widget](https://api.flutter.dev/flutter/widgets/MouseRegion-class.html), you can
 also read more about Flutter's gestures
@@ -147,14 +147,14 @@ class MyGame extends Game with TapDetector {
   // Other methods omitted
 
   @override
-  bool onTapDown(TapDownInfo event) {
-    print("Player tap down on ${event.eventPosition.game}");
+  bool onTapDown(TapDownInfo info) {
+    print("Player tap down on ${info.eventPosition.game}");
     return true;
   }
 
   @override
-  bool onTapUp(TapUpInfo event) {
-    print("Player tap up on ${event.eventPosition.game}");
+  bool onTapUp(TapUpInfo info) {
+    print("Player tap up on ${info.eventPosition.game}");
     return true;
   }
 }
@@ -184,8 +184,8 @@ components, you can override the following methods on your components:
 
 ```dart
 bool onTapCancel();
-bool onTapDown(TapDownInfo event);
-bool onTapUp(TapUpInfo event);
+bool onTapDown(TapDownInfo info);
+bool onTapUp(TapUpInfo info);
 ```
 
 Minimal component example:
@@ -198,13 +198,13 @@ class TappableComponent extends PositionComponent with Tappable {
   // update and render omitted
 
   @override
-  bool onTapUp(TapUpInfo event) {
+  bool onTapUp(TapUpInfo info) {
     print("tap up");
     return true;
   }
 
   @override
-  bool onTapDown(TapDownInfo event) {
+  bool onTapDown(TapDownInfo info) {
     print("tap down");
     return true;
   }
@@ -235,9 +235,9 @@ your components, they can override the simple methods that enable an easy to use
 components.
 
 ```dart
-  bool onDragStart(int pointerId, Vector2 startPosition);
-  bool onDragUpdate(int pointerId, DragUpdateInfo event);
-  bool onDragEnd(int pointerId, DragEndInfo event);
+  bool onDragStart(int pointerId, DragStartInfo info);
+  bool onDragUpdate(int pointerId, DragUpdateInfo info);
+  bool onDragEnd(int pointerId, DragEndInfo info);
   bool onDragCancel(int pointerId);
 ```
 
@@ -246,11 +246,11 @@ between different simultaneous drags.
 
 The default implementation provided by `Draggable` will already check:
 
- - upon drag start, the component only receives the event if the position is within its bounds; keep
+- upon drag start, the component only receives the event if the position is within its bounds; keep
  track of pointerId.
- - when handling updates/end/cancel, the component only receives the event if the pointerId was
+- when handling updates/end/cancel, the component only receives the event if the pointerId was
  tracked (regardless of position).
- - on end/cancel, stop tracking pointerId.
+- on end/cancel, stop tracking pointerId.
 
 Minimal component example (this example ignores pointerId so it wont work well if you try to
 multi-drag):
@@ -266,20 +266,20 @@ class DraggableComponent extends PositionComponent with Draggable {
   bool get isDragging => dragDeltaPosition != null;
 
   @override
-  bool onDragStart(int pointerId, Vector2 startPosition) {
-    dragDeltaPosition = startPosition - position;
+  bool onDragStart(int pointerId, DragStartInfo info) {
+    dragDeltaPosition = info.eventPosition.game - position;
     return false;
   }
 
   @override
-  bool onDragUpdate(int pointerId, DragUpdateInfo event) {
-    final localCoords = event.eventPosition.game;
+  bool onDragUpdate(int pointerId, DragUpdateInfo info) {
+    final localCoords = info.eventPosition.game;
     position = localCoords - dragDeltaPosition;
     return false;
   }
 
   @override
-  bool onDragEnd(int pointerId, DragEndInfo event) {
+  bool onDragEnd(int pointerId, DragEndInfo info) {
     dragDeltaPosition = null;
     return false;
   }
@@ -312,11 +312,11 @@ you can override if you want to listen to the events.
 
 ```dart
   bool isHovered = false;
-  bool onHoverEnter(PointerHoverInfo event) {
+  bool onHoverEnter(PointerHoverInfo info) {
     print("hover enter");
     return true;
   }
-  bool onHoverLeave(PointerHoverInfo event) {
+  bool onHoverLeave(PointerHoverInfo info) {
    print("hover leave");
    return true;
   }
@@ -327,6 +327,7 @@ While the mouse movement is kept inside or outside, no events are fired and thos
 not propagated. Only when the state is changed the handlers are triggered.
 
 ## HasHitboxes
+
 The `HasHitboxes` mixin is used to make detection of gestures on top of your `PositionComponent`s 
 more accurate. Say that you have a fairly round rock as a `SpriteComponent` for example, then you 
 don't want to register input that is in the corner of the image where the rock is not displayed. 
