@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [next]
+ - Fixed `SpriteAnimationWidget` to upate animation state based on the `playing` param. 
+
 ## [1.0.0]
  - Add `ButtonComponent` backed by two `PositionComponent`s
  - Add `SpriteButtonComponent` backed by two `Sprite`s
