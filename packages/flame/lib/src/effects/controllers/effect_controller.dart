@@ -65,6 +65,10 @@ abstract class EffectController {
   /// Setting parameter [alternate] to true is another way to create a
   /// controller whose [reverseDuration] is the same as the forward [duration].
   ///
+  /// As an alternative to specifying durations, you can also provide [speed]
+  /// and [reverseSpeed] parameters, but only for effects where the notion of
+  /// a speed is well-defined (`MeasurableEffect`s).
+  ///
   /// If the animation is finite and there are no "backward" or "atMin" stages
   /// then the animation will complete at `progress == 1`, otherwise it will
   /// complete at `progress == 0`.
