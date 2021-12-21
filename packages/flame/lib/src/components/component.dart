@@ -131,13 +131,9 @@ class Component with Loadable {
   /// This method traverses the component tree and calls [update] on all its
   /// children according to their [priority] order, relative to the
   /// priority of the direct siblings, not the children or the ancestors.
-  /// If you call this method from [update] you need to set [callOwnUpdate] to
-  /// false so that you don't get stuck in an infinite loop.
-  void updateTree(double dt, {bool callOwnUpdate = true}) {
+  void updateTree(double dt) {
     _children?.updateComponentList();
-    if (callOwnUpdate) {
-      update(dt);
-    }
+    update(dt);
     _children?.forEach((c) => c.updateTree(dt));
   }
 
@@ -177,18 +173,15 @@ class Component with Loadable {
     nextParent = component;
   }
 
-  final List<Component> _ancestors = [];
-
-  /// A list containing the current parent and its parent, and so on, until it
-  /// reaches a component without a parent.
-  List<Component> ancestors() {
-    _ancestors.clear();
-    for (var currentParent = parent;
-        currentParent != null;
-        currentParent = currentParent.parent) {
-      _ancestors.add(currentParent);
+  /// An iterator producing this component's parent, then its parent's parent,
+  /// then the great-grand-parent, and so on, until it reaches a component
+  /// without a parent.
+  Iterable<Component> ancestors() sync* {
+    var current = parent;
+    while (current != null) {
+      yield current;
+      current = current.parent;
     }
-    return _ancestors;
   }
 
   /// It receives the new game size.
@@ -331,7 +324,7 @@ class Component with Loadable {
     final parentGame = findParent<FlameGame>();
     if (parentGame == null) {
       isPrepared = false;
-    } else {
+    } else if (!isPrepared) {
       assert(
         parentGame.hasLayout,
         '"prepare/add" called before the game is ready. '

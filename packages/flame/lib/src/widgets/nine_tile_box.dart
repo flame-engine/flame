@@ -153,7 +153,9 @@ class NineTileBox extends StatelessWidget {
     this.child,
     this.errorBuilder,
     this.loadingBuilder,
-  }) : _imageFuture = (() => Future.value(image));
+    Key? key,
+  })  : _imageFuture = (() => Future.value(image)),
+        super(key: key);
 
   NineTileBox.asset({
     required String path,
@@ -165,7 +167,9 @@ class NineTileBox extends StatelessWidget {
     this.child,
     this.errorBuilder,
     this.loadingBuilder,
-  }) : _imageFuture = (() => (images ?? Flame.images).load(path));
+    Key? key,
+  })  : _imageFuture = (() => (images ?? Flame.images).load(path)),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
