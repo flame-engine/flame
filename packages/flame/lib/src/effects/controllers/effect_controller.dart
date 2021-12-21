@@ -135,59 +135,70 @@ abstract class EffectController {
       atMinDuration >= 0,
       'At-min duration cannot be negative: $atMinDuration',
     );
+    final items = <EffectController>[];
+
+    // FORWARD
     final isLinear = curve == Curves.linear;
+    if (isLinear) {
+      items.add(
+        duration != null
+            ? LinearEffectController(duration)
+            : SpeedEffectController(LinearEffectController(0), speed: speed!),
+      );
+    } else {
+      items.add(
+        duration != null
+            ? CurvedEffectController(duration, curve)
+            : SpeedEffectController(
+                CurvedEffectController(1, curve),
+                speed: speed!,
+              ),
+      );
+    }
+
+    // AT-MAX
+    if (atMaxDuration != 0) {
+      items.add(PauseEffectController(atMaxDuration, progress: 1.0));
+    }
+
+    // REVERSE
     final hasReverse =
         alternate || (reverseDuration != null) || (reverseSpeed != null);
-    final reverseIsLinear =
-        reverseCurve == Curves.linear || ((reverseCurve == null) && isLinear);
-    final reverseHasDuration =
-        (reverseDuration != null) || (reverseSpeed == null && duration != null);
+    if (hasReverse) {
+      final reverseIsLinear =
+          reverseCurve == Curves.linear || ((reverseCurve == null) && isLinear);
+      final reverseHasDuration = (reverseDuration != null) ||
+          (reverseSpeed == null && duration != null);
+      if (reverseIsLinear) {
+        items.add(
+          reverseHasDuration
+              ? ReverseLinearEffectController(reverseDuration ?? duration!)
+              : SpeedEffectController(
+                  ReverseLinearEffectController(0),
+                  speed: reverseSpeed ?? speed!,
+                ),
+        );
+      } else {
+        reverseCurve ??= curve.flipped;
+        items.add(
+          reverseHasDuration
+              ? ReverseCurvedEffectController(
+                  reverseDuration ?? duration!,
+                  reverseCurve,
+                )
+              : SpeedEffectController(
+                  ReverseCurvedEffectController(1, reverseCurve),
+                  speed: reverseSpeed ?? speed!,
+                ),
+        );
+      }
+    }
 
-    final items = [
-      // FORWARD
-      if (isLinear)
-        if (duration != null)
-          LinearEffectController(duration)
-        else
-          SpeedEffectController(LinearEffectController(0), speed: speed!),
-      if (!isLinear)
-        if (duration != null)
-          CurvedEffectController(duration, curve)
-        else
-          SpeedEffectController(
-            CurvedEffectController(1, curve),
-            speed: speed!,
-          ),
+    // AT-MIN
+    if (atMinDuration != 0) {
+      items.add(PauseEffectController(atMinDuration, progress: 0.0));
+    }
 
-      // AT-MAX
-      if (atMaxDuration != 0)
-        PauseEffectController(atMaxDuration, progress: 1.0),
-
-      // REVERSE
-      if (hasReverse && reverseIsLinear)
-        if (reverseHasDuration)
-          ReverseLinearEffectController(reverseDuration ?? duration!)
-        else
-          SpeedEffectController(
-            ReverseLinearEffectController(0),
-            speed: reverseSpeed ?? speed!,
-          ),
-      if (hasReverse && !reverseIsLinear)
-        if (reverseHasDuration)
-          ReverseCurvedEffectController(
-            reverseDuration ?? duration!,
-            reverseCurve ?? curve.flipped,
-          )
-        else
-          SpeedEffectController(
-            ReverseCurvedEffectController(1, reverseCurve ?? curve.flipped),
-            speed: reverseSpeed ?? speed!,
-          ),
-
-      // AT-MIN
-      if (atMinDuration != 0)
-        PauseEffectController(atMinDuration, progress: 0.0),
-    ];
     assert(items.isNotEmpty);
     var controller =
         items.length == 1 ? items[0] : SequenceEffectController(items);
