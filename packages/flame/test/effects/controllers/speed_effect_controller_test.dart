@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -92,6 +93,43 @@ void main() {
         expect(effect.controller.duration, 25);
         game.update(25);
         expect(component.position, closeToVector(10, 30));
+      });
+
+      test('speed on RotateEffect', () async {
+        const tau = Transform2D.tau;
+        final effect = RotateEffect.to(tau, EffectController(speed: 1));
+        final game = FlameGame()..onGameResize(Vector2.all(100));
+        final component = PositionComponent(position: Vector2(5, 8));
+        component.add(effect);
+        await game.ensureAdd(component);
+        game.update(0);
+
+        expect(effect.controller.duration, tau);
+        game.update(tau);
+        expect(component.angle, closeTo(tau, 1e-15));
+      });
+
+      test('reset', () async {
+        final effect = MoveEffect.to(
+          Vector2(10, 0),
+          SpeedEffectController(LinearEffectController(0), speed: 1),
+        );
+        final game = FlameGame()..onGameResize(Vector2.all(100));
+        final component = PositionComponent();
+        component.add(effect ..removeOnFinish=false);
+        await game.ensureAdd(component);
+        game.update(0);
+
+        game.update(0);
+        expect(effect.controller.duration, 10);
+        game.update(10);
+        expect(effect.controller.completed, true);
+
+        expect(component.position, closeToVector(10, 0));
+        component.position = Vector2.all(40);
+        effect.reset();
+        game.update(0);
+        expect(effect.controller.duration, 50);
       });
     });
   });

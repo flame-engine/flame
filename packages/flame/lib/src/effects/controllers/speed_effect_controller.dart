@@ -55,7 +55,7 @@ class SpeedEffectController extends EffectController {
 
   @override
   void setToEnd() {
-    _initialized = true;
+    _initialized = false;
     child.setToEnd();
   }
 

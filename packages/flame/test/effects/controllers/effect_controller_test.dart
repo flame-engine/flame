@@ -273,5 +273,9 @@ void main() {
       ec.advance(1e-10);
       expect(ec.completed, true);
     });
+
+    group('errors', () {
+
+    });
   });
 }
