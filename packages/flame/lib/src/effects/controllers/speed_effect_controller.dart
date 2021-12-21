@@ -30,6 +30,10 @@ class SpeedEffectController extends EffectController {
     if (!_started) {
       _started = true;
       final measure = _parentEffect.measure();
+      assert(
+        measure >= 0,
+        'measure returned by $_parentEffect is negative: $measure',
+      );
       child.duration = measure / speed;
     }
     return child.advance(dt);
