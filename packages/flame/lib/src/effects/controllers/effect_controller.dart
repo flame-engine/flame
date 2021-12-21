@@ -83,13 +83,53 @@ abstract class EffectController {
     double atMinDuration = 0.0,
   }) {
     assert(
-      (duration == null) != (speed == null),
-      'Either duration or speed must be specified, but not both',
+      (duration ?? 1) >= 0,
+      'Duration cannot be negative: $duration',
+    );
+    assert(
+      (reverseDuration ?? 1) >= 0,
+      'Reverse duration cannot be negative: $reverseDuration',
+    );
+    assert(
+      (duration != null) || (speed != null),
+      'Either duration or speed must be specified',
+    );
+    assert(
+      !(duration != null && speed != null),
+      'Both duration and speed cannot be specified at the same time',
     );
     assert(
       !(reverseDuration != null && reverseSpeed != null),
       'Both reverseDuration and reverseSpeed cannot be specified at the '
       'same time',
+    );
+    assert(
+      (speed ?? 1) > 0,
+      'Speed must be positive: $speed',
+    );
+    assert(
+      (reverseSpeed ?? 1) > 0,
+      'Reverse speed must be positive: $reverseSpeed',
+    );
+    assert(
+      !(infinite && repeatCount != null),
+      'An infinite effect cannot have a repeat count',
+    );
+    assert(
+      (repeatCount ?? 1) > 0,
+      'Repeat count must be positive: $repeatCount',
+    );
+    assert(
+      startDelay >= 0,
+      'Start delay cannot be negative: $startDelay',
+    );
+    assert(
+      atMaxDuration >= 0,
+      'At-max duration cannot be negative: $atMaxDuration',
+    );
+    assert(
+      atMinDuration >= 0,
+      'At-min duration cannot be negative: $atMinDuration',
     );
     final isLinear = curve == Curves.linear;
     final hasReverse =
@@ -148,14 +188,9 @@ abstract class EffectController {
     var controller =
         items.length == 1 ? items[0] : SequenceEffectController(items);
     if (infinite) {
-      assert(
-        repeatCount == null,
-        'An infinite animation cannot have a repeat count',
-      );
       controller = InfiniteEffectController(controller);
     }
     if (repeatCount != null && repeatCount != 1) {
-      assert(repeatCount > 0, 'repeatCount must be positive');
       controller = RepeatedEffectController(controller, repeatCount);
     }
     if (startDelay != 0) {
