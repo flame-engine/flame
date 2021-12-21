@@ -46,5 +46,34 @@ class EffectControllersExample extends FlameGame {
       ]),
     );
     */
+    add(
+      RectangleComponent.square(
+        position: Vector2(140, 50),
+        size: 20,
+        paint: Paint()..color = const Color(0xffbeff63),
+      )..add(
+          MoveEffect.by(
+            Vector2(0, 20),
+            InfiniteEffectController(SineEffectController(period: 1)),
+          ),
+        ),
+    );
+    add(
+      RectangleComponent.square(
+        position: Vector2(190, 50),
+        size: 10,
+        paint: Paint()..color = const Color(0xffb663ff),
+      )..addAll([
+          MoveEffect.by(
+            Vector2(0, 20),
+            InfiniteEffectController(SineEffectController(period: 1))
+              ..advance(0.25),
+          ),
+          MoveEffect.by(
+            Vector2(10, 0),
+            InfiniteEffectController(SineEffectController(period: 1)),
+          ),
+        ]),
+    );
   }
 }
