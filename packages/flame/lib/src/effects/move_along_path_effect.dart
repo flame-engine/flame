@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'measurable_effect.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import 'controllers/effect_controller.dart';
@@ -21,7 +22,7 @@ import 'transform2d_effect.dart';
 /// path. If this flag is false (default), the target keeps its original
 /// orientation. If the flag is true, the target is automatically rotated as it
 /// follows the path so that it is always oriented tangent to the path.
-class MoveAlongPathEffect extends Transform2DEffect {
+class MoveAlongPathEffect extends Transform2DEffect implements MeasurableEffect {
   MoveAlongPathEffect(
     Path path,
     EffectController controller, {
@@ -95,4 +96,7 @@ class MoveAlongPathEffect extends Transform2DEffect {
     }
     super.apply(progress);
   }
+
+  @override
+  double measure() => _pathLength;
 }

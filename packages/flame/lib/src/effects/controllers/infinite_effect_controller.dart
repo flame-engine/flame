@@ -1,3 +1,4 @@
+import '../effect.dart';
 import 'effect_controller.dart';
 
 /// Effect controller that wraps a [child] effect controller and repeats it
@@ -54,4 +55,7 @@ class InfiniteEffectController extends EffectController {
   void setToEnd() {
     child.setToEnd();
   }
+
+  @override
+  void onMount(Effect parent) => child.onMount(parent);
 }

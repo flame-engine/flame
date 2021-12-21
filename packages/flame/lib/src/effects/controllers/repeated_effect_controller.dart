@@ -1,3 +1,4 @@
+import '../effect.dart';
 import 'effect_controller.dart';
 
 /// Effect controller that repeats [child] controller a certain number of times.
@@ -76,4 +77,7 @@ class RepeatedEffectController extends EffectController {
     _remainingCount = 0;
     child.setToEnd();
   }
+
+  @override
+  void onMount(Effect parent) => child.onMount(parent);
 }

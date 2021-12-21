@@ -1,5 +1,6 @@
 import 'package:flutter/animation.dart';
 
+import '../effect.dart' show Effect;
 import 'curved_effect_controller.dart';
 import 'delayed_effect_controller.dart';
 import 'infinite_effect_controller.dart';
@@ -12,7 +13,7 @@ import 'sequence_effect_controller.dart';
 
 /// Base "controller" class to facilitate animation of effects.
 ///
-/// The purpose of an effect controller is to define how an effect or an
+/// The purpose of an effect controller is to define how an [Effect] or an
 /// animation should progress over time. To facilitate that, this class provides
 /// variable [progress], which will grow from 0.0 to 1.0. The value of 0
 /// corresponds to the beginning of an animation, and the value of 1.0 is
@@ -151,7 +152,7 @@ abstract class EffectController {
   /// controller has finished.
   ///
   /// Normally, this method will be called by the owner of the controller class.
-  /// For example, if the controller is passed to an `Effect` class, then that
+  /// For example, if the controller is passed to an [Effect] class, then that
   /// class will take care of calling this method as necessary.
   double advance(double dt);
 
@@ -168,4 +169,9 @@ abstract class EffectController {
 
   /// Puts the controller into its final "completed" state.
   void setToEnd();
+
+  /// This is called by the [Effect] class when the controller is attached to
+  /// that effect. Controllers with children should propagate this to their
+  /// children.
+  void onMount(Effect parent) {}
 }

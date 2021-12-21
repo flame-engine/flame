@@ -1,4 +1,5 @@
 import 'controllers/effect_controller.dart';
+import 'measurable_effect.dart';
 import 'transform2d_effect.dart';
 
 /// Rotate a component around its anchor.
@@ -15,7 +16,7 @@ import 'transform2d_effect.dart';
 /// This effect applies incremental changes to the component's angle, and
 /// requires that any other effect or update logic applied to the same component
 /// also used incremental updates.
-class RotateEffect extends Transform2DEffect {
+class RotateEffect extends Transform2DEffect implements MeasurableEffect {
   RotateEffect.by(double angle, EffectController controller)
       : _angle = angle,
         super(controller);
@@ -34,6 +35,9 @@ class RotateEffect extends Transform2DEffect {
     target.angle += _angle * dProgress;
     super.apply(progress);
   }
+
+  @override
+  double measure() => _angle;
 }
 
 class _RotateToEffect extends RotateEffect {
