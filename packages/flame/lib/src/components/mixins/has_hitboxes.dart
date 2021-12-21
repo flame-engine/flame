@@ -17,12 +17,9 @@ mixin HasHitboxes on PositionComponent {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    void addCallback(PositionComponent c) {
-      c.transform.addListener(() => _validAabb = false);
-    }
-
-    ancestors().whereType<PositionComponent>().forEach(addCallback);
-    addCallback(this);
+    ancestors(includeSelf: true)
+        .whereType<PositionComponent>()
+        .forEach((c) => c.transform.addListener(() => _validAabb = false));
   }
 
   Aabb2 get aabb {
