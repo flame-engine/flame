@@ -15,7 +15,7 @@ class TiledComponent extends Component {
   RenderableTiledMap tileMap;
 
   /// {@macro _tiled_component}
-  TiledComponent(this.tileMap);
+  TiledComponent(this.tileMap, {int? priority}) : super(priority: priority);
 
   @override
   void render(Canvas canvas) {
@@ -25,10 +25,12 @@ class TiledComponent extends Component {
   /// Loads a [TiledComponent] from a file.
   static Future<TiledComponent> load(
     String fileName,
-    Vector2 destTileSize,
-  ) async {
+    Vector2 destTileSize, {
+    int? priority,
+  }) async {
     return TiledComponent(
       await RenderableTiledMap.fromFile(fileName, destTileSize),
+      priority: priority,
     );
   }
 }
