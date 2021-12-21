@@ -11,7 +11,12 @@ class SpeedEffectController extends EffectController {
   final DurationEffectController child;
   final double speed;
   late MeasurableEffect _parentEffect;
-  bool _started = false;
+
+  /// Note that this controller's [started] property is true even if the
+  /// controller is not initialized yet. This is because we want the [Effect]
+  /// to run its `onStart()` callback before we initialize the controller
+  /// (which will happen at the first call to `advance()`).
+  bool _initialized = false;
 
   @override
   bool get isRandom => child.isRandom;
@@ -20,19 +25,19 @@ class SpeedEffectController extends EffectController {
   bool get completed => child.completed;
 
   @override
-  double? get duration => child.duration;
+  double? get duration => _initialized? child.duration : double.nan;
 
   @override
   double get progress => child.progress;
 
   @override
   double advance(double dt) {
-    if (!_started) {
-      _started = true;
+    if (!_initialized) {
+      _initialized = true;
       final measure = _parentEffect.measure();
       assert(
         measure >= 0,
-        'measure returned by $_parentEffect is negative: $measure',
+        'negative measure returned by ${_parentEffect.runtimeType}: $measure',
       );
       child.duration = measure / speed;
     }
@@ -43,20 +48,20 @@ class SpeedEffectController extends EffectController {
   double recede(double dt) {
     final t = child.recede(dt);
     if (t > 0) {
-      _started = false;
+      _initialized = false;
     }
     return t;
   }
 
   @override
   void setToEnd() {
-    _started = true;
+    _initialized = true;
     child.setToEnd();
   }
 
   @override
   void setToStart() {
-    _started = false;
+    _initialized = false;
     child.setToStart();
   }
 

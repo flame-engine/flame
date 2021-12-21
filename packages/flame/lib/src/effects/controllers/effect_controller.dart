@@ -1,4 +1,4 @@
-import 'package:flutter/animation.dart';
+import 'package:flutter/animation.dart' show Curve, Curves;
 
 import '../effect.dart' show Effect;
 import 'curved_effect_controller.dart';
@@ -10,6 +10,7 @@ import 'repeated_effect_controller.dart';
 import 'reverse_curved_effect_controller.dart';
 import 'reverse_linear_effect_controller.dart';
 import 'sequence_effect_controller.dart';
+import 'speed_effect_controller.dart';
 
 /// Base "controller" class to facilitate animation of effects.
 ///
@@ -68,9 +69,11 @@ abstract class EffectController {
   /// then the animation will complete at `progress == 1`, otherwise it will
   /// complete at `progress == 0`.
   factory EffectController({
-    required double duration,
+    double? duration,
+    double? speed,
     Curve curve = Curves.linear,
     double? reverseDuration,
+    double? reverseSpeed,
     Curve? reverseCurve,
     bool infinite = false,
     bool alternate = false,
@@ -79,22 +82,67 @@ abstract class EffectController {
     double atMaxDuration = 0.0,
     double atMinDuration = 0.0,
   }) {
+    assert(
+      (duration == null) != (speed == null),
+      'Either duration or speed must be specified, but not both',
+    );
+    assert(
+      !(reverseDuration != null && reverseSpeed != null),
+      'Both reverseDuration and reverseSpeed cannot be specified at the '
+      'same time',
+    );
     final isLinear = curve == Curves.linear;
-    final hasReverse = alternate || (reverseDuration != null);
+    final hasReverse =
+        alternate || (reverseDuration != null) || (reverseSpeed != null);
     final reverseIsLinear =
         reverseCurve == Curves.linear || ((reverseCurve == null) && isLinear);
+    final reverseHasDuration =
+        (reverseDuration != null) || (reverseSpeed == null && duration != null);
+
     final items = [
-      if (isLinear) LinearEffectController(duration),
-      if (!isLinear) CurvedEffectController(duration, curve),
-      if (atMaxDuration != 0) PauseEffectController(atMaxDuration, progress: 1),
+      // FORWARD
+      if (isLinear)
+        if (duration != null)
+          LinearEffectController(duration)
+        else
+          SpeedEffectController(LinearEffectController(0), speed: speed!),
+      if (!isLinear)
+        if (duration != null)
+          CurvedEffectController(duration, curve)
+        else
+          SpeedEffectController(
+            CurvedEffectController(0, curve),
+            speed: speed!,
+          ),
+
+      // AT-MAX
+      if (atMaxDuration != 0)
+        PauseEffectController(atMaxDuration, progress: 1.0),
+
+      // REVERSE
       if (hasReverse && reverseIsLinear)
-        ReverseLinearEffectController(reverseDuration ?? duration),
+        if (reverseHasDuration)
+          ReverseLinearEffectController(reverseDuration ?? duration!)
+        else
+          SpeedEffectController(
+            ReverseLinearEffectController(0),
+            speed: reverseSpeed ?? speed!,
+          ),
       if (hasReverse && !reverseIsLinear)
-        ReverseCurvedEffectController(
-          reverseDuration ?? duration,
-          reverseCurve ?? curve.flipped,
-        ),
-      if (atMinDuration != 0) PauseEffectController(atMinDuration, progress: 0),
+        if (reverseHasDuration)
+          ReverseCurvedEffectController(
+            reverseDuration ?? duration!,
+            reverseCurve ?? curve.flipped,
+          )
+        else
+          SpeedEffectController(
+            ReverseCurvedEffectController(0, reverseCurve ?? curve.flipped),
+            speed: reverseSpeed ?? speed!,
+          ),
+
+      // AT-MIN
+      if (atMinDuration != 0)
+        PauseEffectController(atMinDuration, progress: 0.0),
     ];
     assert(items.isNotEmpty);
     var controller =
