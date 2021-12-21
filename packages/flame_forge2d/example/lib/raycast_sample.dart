@@ -130,7 +130,7 @@ class RaycastSample extends Forge2DGame
   }
 
   void fireBlueRay(Vector2 rayStart, Vector2 blueRayTarget) {
-    bluePoints.add(worldToScreen(rayStart.clone()));
+    bluePoints.add(worldToScreen(rayStart));
 
     final farthestCallback = FarthestBoxRayCastCallback();
     world.raycast(farthestCallback, rayStart, blueRayTarget);
@@ -145,7 +145,7 @@ class RaycastSample extends Forge2DGame
 
   void fireRedRay(Vector2 rayStart, Vector2 rayTarget) {
     redPoints.clear();
-    redPoints.add(worldToScreen(rayStart.clone()));
+    redPoints.add(worldToScreen(rayStart));
 
     final nearestCallback = NearestBoxRayCastCallback();
     world.raycast(nearestCallback, rayStart, rayTarget);
