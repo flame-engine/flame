@@ -44,10 +44,10 @@ void testRandom(
 }) {
   assert(repeatCount > 0);
   for (var i = 0; i < repeatCount; i++) {
-    seed ??= _seedGenerator.nextInt(_maxSeed);
+    final seed0 = seed ?? _seedGenerator.nextInt(_maxSeed);
     test(
-      '$name [seed=$seed]',
-      () => body(Random(seed)),
+      '$name [seed=$seed0]',
+      () => body(Random(seed0)),
       testOn: testOn,
       timeout: timeout,
       skip: skip,
