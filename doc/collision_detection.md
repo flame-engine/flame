@@ -107,8 +107,12 @@ In this example it can be seen how the Dart `is` keyword is used to check which 
 that your component collided with. The set of points is where the edges of the hitboxes collided.
 Note that the `onCollision` method will be called on both collidable components if they
 have both implemented the `onCollision` method, and also on both shapes if they have that method
-implemented. The same goes for the `onCollisionEnd` method, which is called when two components or
-shapes that were previously colliding no longer colliding with each other.
+implemented. The same goes for the `onCollisionStart` and `onCollisionEnd` methods, which are
+called when two components or shapes starts or stops colliding with each other.
+
+When a `Collidable` (or `HitboxShape`) starts to collide with another `Collidable` both
+`onCollisionStart` and `onCollision` are called, so if you don't need to do something specific when
+a collision starts you only need to override `onCollision`, and vice versa.
 
 If you want to check collisions with the screen edges, as we do in the example above, you can use
 the predefined [ScreenCollidable](#screencollidable) class and since that one also is a `Collidable`

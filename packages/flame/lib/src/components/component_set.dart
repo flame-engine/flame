@@ -103,7 +103,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     // Should run every time the component gets a new parent, including its
     // first parent.
     component.onMount();
-    if (component.children.isNotEmpty) {
+    if (component.hasChildren) {
       await component.reAddChildren();
     }
 

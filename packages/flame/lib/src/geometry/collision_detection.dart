@@ -27,10 +27,13 @@ void collisionDetection(List<Collidable> collidables) {
 
       final intersectionPoints = intersections(collidableX, collidableY);
       if (intersectionPoints.isNotEmpty) {
+        final collisionHash = _combinedHash(collidableX, collidableY);
+        if (_collidableHashes.add(collisionHash)) {
+          collidableX.onCollisionStart(intersectionPoints, collidableY);
+          collidableY.onCollisionStart(intersectionPoints, collidableX);
+        }
         collidableX.onCollision(intersectionPoints, collidableY);
         collidableY.onCollision(intersectionPoints, collidableX);
-        final collisionHash = _combinedHash(collidableX, collidableY);
-        _collidableHashes.add(collisionHash);
       } else {
         _handleCollisionEnd(collidableX, collidableY);
       }
@@ -50,20 +53,42 @@ bool hasActiveShapeCollision(HitboxShape shapeA, HitboxShape shapeB) {
   );
 }
 
-void _handleCollisionEnd(Collidable collidableA, Collidable collidableB) {
-  if (hasActiveCollision(collidableA, collidableB)) {
+bool _handleCollisionEnd(Collidable collidableA, Collidable collidableB) {
+  final activeCollision = hasActiveCollision(collidableA, collidableB);
+  if (activeCollision) {
     collidableA.onCollisionEnd(collidableB);
     collidableB.onCollisionEnd(collidableA);
     _collidableHashes.remove(_combinedHash(collidableA, collidableB));
   }
+  return activeCollision;
 }
 
-void _handleShapeCollisionEnd(HitboxShape shapeA, HitboxShape shapeB) {
-  if (hasActiveShapeCollision(shapeA, shapeB)) {
-    shapeA.onCollisionEnd(shapeB);
-    shapeB.onCollisionEnd(shapeA);
-    _shapeHashes.remove(_combinedHash(shapeA, shapeB));
+bool _handleHitboxCollisionEnd(HitboxShape hitboxA, HitboxShape hitboxB) {
+  final activeCollision = hasActiveShapeCollision(hitboxA, hitboxB);
+  if (activeCollision) {
+    hitboxA.onCollisionEnd(hitboxB);
+    hitboxB.onCollisionEnd(hitboxA);
+    _shapeHashes.remove(_combinedHash(hitboxA, hitboxB));
   }
+  return activeCollision;
+}
+
+/// Used to call [Collidable.onCollisionEnd] and [HitboxShape.onCollisionEnd]
+/// for [Collidable]s that are removed from the game.
+void handleRemovedCollidable(
+  final Collidable collidable,
+  final List<Collidable> collidables,
+) {
+  collidables.forEach((otherCollidable) {
+    final activeCollision = _handleCollisionEnd(collidable, otherCollidable);
+    if (activeCollision) {
+      for (final hitboxA in collidable.hitboxes) {
+        for (final hitboxB in otherCollidable.hitboxes) {
+          _handleHitboxCollisionEnd(hitboxA, hitboxB);
+        }
+      }
+    }
+  });
 }
 
 /// Check what the intersection points of two collidables are
@@ -77,7 +102,7 @@ Set<Vector2> intersections(
     if (hasActiveCollision(collidableA, collidableB)) {
       for (final shapeA in collidableA.hitboxes) {
         for (final shapeB in collidableB.hitboxes) {
-          _handleShapeCollisionEnd(shapeA, shapeB);
+          _handleHitboxCollisionEnd(shapeA, shapeB);
         }
       }
     }
@@ -92,12 +117,15 @@ Set<Vector2> intersections(
       if (currentResult.isNotEmpty) {
         result.addAll(currentResult);
         // Do callbacks to the involved shapes
+        if (_shapeHashes.add(_combinedHash(shapeA, shapeB))) {
+          shapeA.onCollisionStart(currentResult, shapeB);
+          shapeB.onCollisionStart(currentResult, shapeA);
+        }
         shapeA.onCollision(currentResult, shapeB);
         shapeB.onCollision(currentResult, shapeA);
         currentResult.clear();
-        _shapeHashes.add(_combinedHash(shapeA, shapeB));
       } else {
-        _handleShapeCollisionEnd(shapeA, shapeB);
+        _handleHitboxCollisionEnd(shapeA, shapeB);
       }
     }
   }

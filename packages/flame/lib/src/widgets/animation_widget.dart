@@ -32,7 +32,9 @@ class SpriteAnimationWidget extends StatelessWidget {
     this.anchor = Anchor.topLeft,
     this.errorBuilder,
     this.loadingBuilder,
-  }) : _animationFuture = (() => Future.value(animation));
+    Key? key,
+  })  : _animationFuture = (() => Future.value(animation)),
+        super(key: key);
 
   SpriteAnimationWidget.asset({
     required String path,
@@ -42,8 +44,13 @@ class SpriteAnimationWidget extends StatelessWidget {
     this.anchor = Anchor.topLeft,
     this.errorBuilder,
     this.loadingBuilder,
-  }) : _animationFuture =
-            (() => SpriteAnimation.load(path, data, images: images));
+    Key? key,
+  })  : _animationFuture = (() => SpriteAnimation.load(
+              path,
+              data,
+              images: images,
+            )),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {

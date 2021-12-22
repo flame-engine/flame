@@ -1,9 +1,7 @@
-name: position_component
-description: A new Flutter project.
-
-publish_to: 'none'
-
+name: flame_example
+description: Simple example of a Flame game
 version: 0.1.0
+publish_to: 'none'
 
 environment:
   sdk: ">=2.14.0 <3.0.0"

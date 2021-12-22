@@ -1,0 +1,50 @@
+name: Flame
+repository: https://github.com/flame-engine/flame
+
+packages:
+  - packages/**
+  - examples/**
+  - tutorials/**
+
+command:
+  version:
+    # Generate commit links in package changelogs.
+    linkToCommits: true
+    # Only allow versioning to happen on main branch.
+    branch: main
+    # Additionally build a changelog at the root of the workspace.
+    workspaceChangelog: true
+
+scripts:
+  lint:all:
+    run: melos run analyze && melos run format
+    description: Run all static analysis checks.
+
+  analyze:
+    run: |
+      melos exec -c 10 -- \
+        flutter analyze --fatal-infos
+    description: Run `flutter analyze` for all packages.
+
+  format:
+    run: melos exec flutter format .
+    description: Run `flutter format` for all packages.
+
+  test:select:
+    run: melos exec -- flutter test
+    select-package:
+      dir-exists:
+        - test
+    description: Run `flutter test` for selected packages.
+
+  test:
+    run: melos run test:select --no-select
+    description: Run all Flutter tests in this project.
+
+  coverage:
+    run: |
+      melos exec -- flutter test --coverage &&
+      melos exec -- genhtml coverage/lcov.info --output-directory=coverage/
+    select-package:
+      dir-exists: test
+    description: Generate coverage for the selected package.

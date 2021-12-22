@@ -12,6 +12,7 @@ A Flutter-based game engine.
   <a title="Pub" href="https://pub.dev/packages/flame" ><img src="https://img.shields.io/pub/v/flame.svg?style=popout" /></a>
   <img src="https://github.com/flame-engine/flame/workflows/cicd/badge.svg?branch=main&event=push" alt="Test" />
   <a title="Discord" href="https://discord.gg/pxrBmy4" ><img src="https://img.shields.io/discord/509714518008528896.svg" /></a>
+  <a title="Melos" href="https://github.com/invertase/melos"><img src="https://img.shields.io/badge/maintained%20with-melos-f700ff.svg"/></a>
 </p>
 
 ---
@@ -23,7 +24,7 @@ A Flutter-based game engine.
 
 ## Documentation
 
-The full documentation for Flame can be found on 
+The full documentation for Flame can be found on
 [docs.flame-engine.org](https://docs.flame-engine.org/).
 
 To change the version of the documentation, use the version selector noted with `version:` in the
@@ -54,19 +55,21 @@ help out.
 The goal of the Flame Engine is to provide a complete set of out-of-the-way solutions for common
 problems that games developed with Flutter might share.
 
-Currently Flame provides the following features:
+Some of the key features provided are:
 
  - A game loop.
  - A component/object system (FCS).
  - Effects and particles.
  - Collision detection.
- - Gesture and input support.
- - Images, animations, sprites and sprite sheets.
- - Other utilities to make development easier.
+ - Gesture and input handling.
+ - Images, animations, sprites, and sprite sheets.
+ - General utilities to make development easier.
 
 On top of those features, you can augment Flame with bridge packages. Through these libraries,
-you will be able to access Flame components, helpers and bindings to other packages, in order to
-make integrations seamless. Currently, we have bridge libraries to the following packages:
+you will be able to access bindings to other packages, including custom Flame components and
+helpers, in order to make integrations seamless.
+
+Flame officially provides bridge libraries to the following packages:
 
 - [flame_audio](https://github.com/flame-engine/flame/tree/main/packages/flame_audio) for
   [AudioPlayers](https://github.com/bluefireteam/audioplayers): Play multiple audio files simultaneously.
@@ -147,7 +150,7 @@ code for each example, press the `< >` button in the top right corner.
 
 ### Highlighted community tutorials
 
-- @Devowl's Flutter & Flame series: 
+- @Devowl's Flutter & Flame series:
   - [Step 1: Create your game](https://medium.com/flutter-community/flutter-flame-step-1-create-your-game-b3b6ee387d77)
   - [Step 2: Game basics](https://medium.com/flutter-community/flutter-flame-step-2-game-basics-48b4493424f3)
   - [Step 3: Sprites and inputs](https://blog.devowl.de/flutter-flame-step-3-sprites-and-inputs-7ca9cc7c8b91)
