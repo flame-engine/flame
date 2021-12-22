@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/queryable_ordered_set.dart';
 
@@ -51,12 +52,37 @@ class ComponentSet extends QueryableOrderedSet<Component> {
 
   /// Registers the component to be added on the next call to
   /// `updateComponentList()`.
+  @internal
   void addChild(Component component) {
     _addLater.add(component);
   }
 
-  /// Marks a component to be removed from the components list on the next game
-  /// tick.
+  /// Prohibit method `add()` inherited from the [QueryableOrderedSet]. If this
+  /// was allowed, then the user would be able to bypass standard lifecycle
+  /// methods of the [Component] class.
+  @Deprecated('Do not use')
+  @override
+  bool add(Component c) {
+    throw UnsupportedError(
+      'Adding elements directly to a ComponentSet is prohibited; use '
+      'Component.add() instead',
+    );
+  }
+
+  /// Prohibit method `addAll()` inherited from the [QueryableOrderedSet]. If
+  /// this was allowed, then the user would be able to bypass standard lifecycle
+  /// methods of the [Component] class.
+  @Deprecated('Do not use')
+  @override
+  int addAll(Iterable<Component> c) {
+    throw UnsupportedError(
+      'Adding elements directly to a ComponentSet is prohibited; use '
+      'Component.addAll() instead',
+    );
+  }
+
+  /// Marks the component to be removed on the next call to
+  /// `updateComponentList()`.
   @override
   bool remove(Component c) {
     _removeLater.add(c);
