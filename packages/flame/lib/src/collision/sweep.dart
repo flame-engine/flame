@@ -2,10 +2,10 @@ import '../../components.dart';
 import 'broadphase.dart';
 import 'tuple.dart';
 
-class Sweep<T> extends Broadphase<T> {
-  Sweep(List<CollisionItem<T>> items) : super(items);
+class Sweep<T extends CollisionItem> extends Broadphase<T> {
+  Sweep(List<T> items) : super(items);
 
-  final List<CollisionItem<T>> _active = [];
+  final List<T> _active = [];
   final List<Potential<T>> _potentials = [];
 
   @override
@@ -24,9 +24,9 @@ class Sweep<T> extends Broadphase<T> {
         final activeItem = _active[i];
         final activeBox = activeItem.aabb;
         if (activeBox.max.x >= currentMin) {
-          if (item.type == CollidableType.active ||
-              activeItem.type == CollidableType.active) {
-            _potentials.add(Potential<T>(item.content, activeItem.content));
+          if (item.collidableType == CollidableType.active ||
+              activeItem.collidableType == CollidableType.active) {
+            _potentials.add(Potential<T>(item, activeItem));
           }
         } else {
           _active.remove(activeItem);

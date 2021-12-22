@@ -6,28 +6,42 @@ import 'hitbox_shape.dart';
 import 'sweep.dart';
 import 'tuple.dart';
 
-/// Check whether any [Collidable] in [items] collide with each other and
-/// call their onCollision methods accordingly.
-class CollisionDetection {
-  final List<CollisionItem<Collidable>> items = [];
-  late final Broadphase<Collidable> broadphase;
-
-  final Set<int> _collidableHashes = {};
-  final Set<int> _shapeHashes = {};
+abstract class CollisionDetection<T extends CollisionItem> {
+  final List<T> items = [];
+  late final Broadphase<T> broadphase;
 
   CollisionDetection({BroadphaseType type = BroadphaseType.sweep}) {
     switch (type) {
       case BroadphaseType.sweep:
-        broadphase = Sweep<Collidable>(items);
+        broadphase = Sweep<T>(items);
     }
   }
 
+  void add(T item);
+  void addAll(Iterable<T> items) => items.forEach(add);
+
+  /// Removes the [item] from the collision detection, if you just want
+  /// to temporarily inactivate it you can set
+  /// `collidableType = CollidableType.inactive;` instead.
+  void remove(T item);
+  void removeAll(Iterable<T> items) => items.forEach(remove);
+
+  /// Run the collision detection on the current state of the [items].
+  void run();
+}
+
+/// Check whether any [Collidable] in [items] collide with each other and
+/// call their onCollision methods accordingly.
+class CollidableCollisionDetection extends CollisionDetection<Collidable> {
+  final Set<int> _collidableHashes = {};
+  final Set<int> _shapeHashes = {};
+
+  CollidableCollisionDetection({BroadphaseType type = BroadphaseType.sweep})
+      : super(type: type);
+
+  @override
   void add(Collidable collidable) {
-    items.add(CollisionItem(
-      collidable,
-      collidable.aabb,
-      collidable.collidableType,
-    ));
+    items.add(collidable);
   }
 
   /// Removes the [collidable] from the collision detection, if you just want
@@ -35,11 +49,11 @@ class CollisionDetection {
   /// `collidableType = CollidableType.inactive;` instead.
   /// This calls [Collidable.onCollisionEnd] and [HitboxShape.onCollisionEnd]
   /// for [Collidable]s that are removed from the game.
+  @override
   void remove(Collidable collidable) {
-    items.removeWhere((item) => item.content == collidable);
+    items.remove(collidable);
     // TODO(spydon): make more efficient
-    items.forEach((item) {
-      final otherCollidable = item.content;
+    items.forEach((otherCollidable) {
       final activeCollision = _handleCollisionEnd(collidable, otherCollidable);
       if (activeCollision) {
         for (final hitboxA in collidable.hitboxes) {
@@ -51,6 +65,7 @@ class CollisionDetection {
     });
   }
 
+  @override
   void run() {
     broadphase.query().forEach((tuple) {
       final collidableX = tuple.a;

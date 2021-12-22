@@ -1,3 +1,4 @@
+import 'package:flame/src/collision/tuple.dart';
 import 'package:meta/meta.dart';
 
 import '../../../components.dart';
@@ -18,7 +19,11 @@ enum CollidableType {
   inactive,
 }
 
-mixin Collidable on HasHitboxes {
+mixin Collidable on HasHitboxes implements CollisionItem {
+  @override
+  Aabb2 get aabb => super.aabb;
+
+  @override
   CollidableType collidableType = CollidableType.active;
 
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {}
