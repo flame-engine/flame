@@ -1,4 +1,4 @@
-import 'package:flame/algos.dart';
+import 'package:flame/algorithms.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
