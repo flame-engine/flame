@@ -157,9 +157,7 @@ void main() {
     );
 
     test('childrenFactory', () {
-      Component.childrenFactory = (Component owner) {
-        return ComponentSet.createDefault(owner, strictMode: false);
-      };
+      Component.childrenFactory = () => ComponentSet(strictMode: false);
 
       final component1 = Component();
       final component2 = Component();
