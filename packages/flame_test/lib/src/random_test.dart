@@ -47,7 +47,7 @@ void testRandom(
     seed ??= _seedGenerator.nextInt(_maxSeed);
     test(
       '$name [seed=$seed]',
-          () => body(Random(seed)),
+      () => body(Random(seed)),
       testOn: testOn,
       timeout: timeout,
       skip: skip,
