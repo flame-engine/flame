@@ -11,6 +11,13 @@ import 'dart:typed_data';
 // and 4D functions were implemented by Stefan Gustavson.
 
 /// 1D float Perlin noise
+///
+/// Perlin noise is a procedurally-generated smooth yet chaotic-looking
+/// function that has variety of applications. The function is NOT random: it
+/// returns fixed values for each argument `x`. The return value is in the
+/// range of approximately [-0.752 .. +0.705].
+///
+/// Note that the function returns 0 for every integer value of x.
 double noise1(double x) {
   var ix0 = x.floor(); // integer part of x
   final fx0 = x - ix0; // fractional part of x
