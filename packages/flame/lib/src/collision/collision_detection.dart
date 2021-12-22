@@ -6,9 +6,10 @@ import 'hitbox_shape.dart';
 import 'sweep.dart';
 import 'tuple.dart';
 
-abstract class CollisionDetection<T extends CollisionItem> {
+abstract class CollisionDetection<T extends CollisionItem<T>> {
   final List<T> items = [];
   late final Broadphase<T> broadphase;
+  final Set<int> _collisionHashes = {};
 
   CollisionDetection({BroadphaseType type = BroadphaseType.sweep}) {
     switch (type) {
@@ -24,32 +25,12 @@ abstract class CollisionDetection<T extends CollisionItem> {
   /// to temporarily inactivate it you can set
   /// `collidableType = CollidableType.inactive;` instead.
   void remove(T item);
-  void removeAll(Iterable<T> items) => items.forEach(remove);
-
-  /// Run the collision detection on the current state of the [items].
-  void run();
-}
-
-/// Check whether any [Collidable] in [items] collide with each other and
-/// call their onCollision methods accordingly.
-class CollidableCollisionDetection extends CollisionDetection<Collidable> {
-  final Set<int> _collidableHashes = {};
-  final Set<int> _shapeHashes = {};
-
-  CollidableCollisionDetection({BroadphaseType type = BroadphaseType.sweep})
-      : super(type: type);
-
-  @override
-  void add(Collidable collidable) {
-    items.add(collidable);
-  }
 
   /// Removes the [collidable] from the collision detection, if you just want
   /// to temporarily inactivate it you can set
   /// `collidableType = CollidableType.inactive;` instead.
   /// This calls [Collidable.onCollisionEnd] and [HitboxShape.onCollisionEnd]
   /// for [Collidable]s that are removed from the game.
-  @override
   void remove(Collidable collidable) {
     items.remove(collidable);
     // TODO(spydon): make more efficient
@@ -65,29 +46,68 @@ class CollidableCollisionDetection extends CollisionDetection<Collidable> {
     });
   }
 
-  @override
+  void removeAll(Iterable<T> items) => items.forEach(remove);
+
+  int _combinedHash(Object o1, Object o2) {
+    return o1.hashCode ^ o2.hashCode;
+  }
+
+  /// Run the collision detection on the current state of the [items].
   void run() {
     broadphase.query().forEach((tuple) {
-      final collidableX = tuple.a;
-      final collidableY = tuple.b;
+      final itemA = tuple.a;
+      final itemB = tuple.b;
 
-      final intersectionPoints = intersections(collidableX, collidableY);
+      final intersectionPoints = intersections(itemA, itemB);
       if (intersectionPoints.isNotEmpty) {
-        final collisionHash = _combinedHash(collidableX, collidableY);
-        if (_collidableHashes.add(collisionHash)) {
-          collidableX.onCollisionStart(intersectionPoints, collidableY);
-          collidableY.onCollisionStart(intersectionPoints, collidableX);
+        final collisionHash = _combinedHash(itemA, itemB);
+        if (_collisionHashes.add(collisionHash)) {
+          itemA.onCollisionStart(intersectionPoints, itemB);
+          itemB.onCollisionStart(intersectionPoints, itemA);
         }
-        collidableX.onCollision(intersectionPoints, collidableY);
-        collidableY.onCollision(intersectionPoints, collidableX);
+        itemA.onCollision(intersectionPoints, itemB);
+        itemB.onCollision(intersectionPoints, itemA);
       } else {
-        _handleCollisionEnd(collidableX, collidableY);
+        _handleCollisionEnd(itemA, itemB);
       }
     });
   }
 
+  bool hasActiveCollision(T itemA, T itemB) {
+    return _collisionHashes.contains(_combinedHash(itemA, itemB));
+  }
+
+  bool _handleCollisionEnd(T itemA, T itemB) {
+    final activeCollision = hasActiveCollision(itemA, itemB);
+    if (activeCollision) {
+      itemA.onCollisionEnd(itemB);
+      itemB.onCollisionEnd(itemA);
+      _collisionHashes.remove(_combinedHash(itemA, itemB));
+    }
+    return activeCollision;
+  }
+
+  /// Check what the intersection points of two items are,
+  /// returns an empty list if there are no intersections.
+  Set<Vector2> intersections(T itemA, T itemB);
+}
+
+/// Check whether any [Collidable] in [items] collide with each other and
+/// call their onCollision methods accordingly.
+class CollidableCollisionDetection extends CollisionDetection<Collidable> {
+  final Set<int> _shapeHashes = {};
+
+  CollidableCollisionDetection({BroadphaseType type = BroadphaseType.sweep})
+      : super(type: type);
+
+  @override
+  void add(Collidable collidable) {
+    items.add(collidable);
+  }
+
   /// Check what the intersection points of two collidables are,
   /// returns an empty list if there are no intersections.
+  @override
   Set<Vector2> intersections(
     Collidable collidableA,
     Collidable collidableB,
@@ -115,30 +135,10 @@ class CollidableCollisionDetection extends CollisionDetection<Collidable> {
     return result;
   }
 
-  bool hasActiveCollision(Collidable collidableA, Collidable collidableB) {
-    return _collidableHashes.contains(
-      _combinedHash(collidableA, collidableB),
-    );
-  }
-
   bool hasActiveShapeCollision(HitboxShape shapeA, HitboxShape shapeB) {
     return _shapeHashes.contains(
       _combinedHash(shapeA, shapeB),
     );
-  }
-
-  int _combinedHash(Object o1, Object o2) {
-    return o1.hashCode ^ o2.hashCode;
-  }
-
-  bool _handleCollisionEnd(Collidable collidableA, Collidable collidableB) {
-    final activeCollision = hasActiveCollision(collidableA, collidableB);
-    if (activeCollision) {
-      collidableA.onCollisionEnd(collidableB);
-      collidableB.onCollisionEnd(collidableA);
-      _collidableHashes.remove(_combinedHash(collidableA, collidableB));
-    }
-    return activeCollision;
   }
 
   bool _handleHitboxCollisionEnd(HitboxShape hitboxA, HitboxShape hitboxB) {

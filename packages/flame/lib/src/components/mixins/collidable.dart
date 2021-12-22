@@ -19,15 +19,20 @@ enum CollidableType {
   inactive,
 }
 
-mixin Collidable on HasHitboxes implements CollisionItem {
+mixin Collidable on HasHitboxes implements CollisionItem<Collidable> {
   @override
   Aabb2 get aabb => super.aabb;
 
   @override
   CollidableType collidableType = CollidableType.active;
 
+  @override
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {}
+
+  @override
   void onCollisionStart(Set<Vector2> intersectionPoints, Collidable other) {}
+
+  @override
   void onCollisionEnd(Collidable other) {}
 
   @override
