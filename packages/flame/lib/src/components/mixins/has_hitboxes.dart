@@ -8,7 +8,7 @@ import '../../../geometry.dart';
 
 mixin HasHitboxes on PositionComponent {
   final List<HitboxShape> _hitboxes = <HitboxShape>[];
-  final Aabb2 _aabb = Aabb2();
+  final Aabb2 aabb = Aabb2();
   bool _validAabb = false;
   final Vector2 _halfExtents = Vector2.zero();
   final Matrix3 _rotationMatrix = Matrix3.zero();
@@ -20,22 +20,27 @@ mixin HasHitboxes on PositionComponent {
     ancestors(includeSelf: true)
         .whereType<PositionComponent>()
         .forEach((c) => c.transform.addListener(() => _validAabb = false));
+    _recalculateAabb();
   }
 
-  Aabb2 get aabb {
-    if (_validAabb) {
-      return _aabb;
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (!_validAabb) {
+      _recalculateAabb();
     }
+  }
+
+  void _recalculateAabb() {
     final size = scaledSize;
     // This has +1 since a point on the edge of the bounding box is currently
     // counted as inside.
     _halfExtents.setValues(size.x + 1, size.y + 1);
     _rotationMatrix.setRotationZ(absoluteAngle);
-    _aabb
+    aabb
       ..setCenterAndHalfExtents(absoluteCenter, _halfExtents)
       ..rotate(_rotationMatrix);
     _validAabb = true;
-    return _aabb;
   }
 
   UnmodifiableListView<HitboxShape> get hitboxes {

@@ -28,9 +28,7 @@ mixin Collidable on HasHitboxes {
   @override
   void onRemove() {
     final parentGame = findGame()! as HasCollidables;
-    final collidables = parentGame.collidables;
-    handleRemovedCollidable(this, collidables);
-    parentGame.collidables.remove(this);
+    parentGame.collisionDetection.remove(this);
     super.onRemove();
   }
 
@@ -44,7 +42,6 @@ mixin Collidable on HasHitboxes {
       'You can only use the HasHitboxes/Collidable feature with games that '
       'has the HasCollidables mixin',
     );
-    (game as HasCollidables).collidables.add(this);
   }
 }
 
