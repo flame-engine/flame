@@ -55,12 +55,15 @@ class Pursue extends SteeringBehavior {
     this.maxPredictionTime = 1.0,
   }) : super(owner);
 
+  /// The target that is being pursued.
   Steerable target;
 
+  /// Maximum prediction horizon (in seconds). The pursuer ([owner]) will try
+  /// to guess the [target]'s position this far into the future, and will aim
+  /// to intercept the target at that point.
   final double maxPredictionTime;
 
   @override
-  @protected
   void calculateRealSteering(SteeringAcceleration steering) {
     final targetPosition = target.position;
     // Square distance to the evader (the target)
