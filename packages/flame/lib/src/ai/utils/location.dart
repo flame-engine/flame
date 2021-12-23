@@ -15,7 +15,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // -----------------------------------------------------------------------------
-// TRANSLATED INTO DART from original $GDXAI/utils/Location.java
+// TRANSLATED INTO DART WITH MODIFICATIONS from
+// $GDX/ai/utils/Location.java
 // -----------------------------------------------------------------------------
 import 'dart:math' as math;
 import 'package:vector_math/vector_math_64.dart';

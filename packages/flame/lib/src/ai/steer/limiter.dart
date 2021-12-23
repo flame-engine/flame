@@ -15,7 +15,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // -----------------------------------------------------------------------------
-// TRANSLATED INTO DART from original $GDXAI/steer/Limiter.java
+// TRANSLATED INTO DART WITH MODIFICATIONS from
+// $GDX/ai/steer/Limiter.java
 // -----------------------------------------------------------------------------
 import 'package:meta/meta.dart';
 

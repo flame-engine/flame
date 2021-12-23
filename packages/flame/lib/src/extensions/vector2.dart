@@ -75,10 +75,13 @@ extension Vector2Extension on Vector2 {
     }
   }
 
-  /// Add to this vector [other] * [scale].
-  void mulAdd(Vector2 other, double scale) {
-    x += other.x * scale;
-    y += other.y * scale;
+  /// Ensure that the vector is no larger than [max] in magnitude. Scales the
+  /// vector down without changing its direction if necessary.
+  void clampMagnitude(double max) {
+    final l = length;
+    if (l > max) {
+      scale(max / l);
+    }
   }
 
   /// Smoothly moves this [Vector2] in the direction [target] by a displacement

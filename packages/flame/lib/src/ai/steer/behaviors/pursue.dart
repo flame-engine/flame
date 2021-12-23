@@ -15,12 +15,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // -----------------------------------------------------------------------------
-// TRANSLATED INTO DART from original $GDXAI/steer/behaviors/Pursue.java
+// TRANSLATED INTO DART WITH MODIFICATIONS from
+// $GDX/ai/steer/behaviors/Pursue.java
 // -----------------------------------------------------------------------------
 import 'dart:math' as math;
 import 'package:meta/meta.dart';
 
-import '../../../extensions/vector2.dart';
 import '../steerable.dart';
 import '../steering_acceleration.dart';
 import '../steering_behavior.dart';
@@ -64,10 +64,9 @@ class Pursue extends SteeringBehavior {
   final double maxPredictionTime;
 
   @override
-  void calculateRealSteering(SteeringAcceleration steering) {
-    final targetPosition = target.position;
+  void calculateRealSteering(double dt, SteeringAcceleration steering) {
     // Square distance to the evader (the target)
-    final squareDistance = (targetPosition - owner.position).length2;
+    final squareDistance = (target.position - owner.position).length2;
     // Our current square speed
     final squareSpeed = owner.linearVelocity.length2;
 
@@ -82,13 +81,13 @@ class Pursue extends SteeringBehavior {
     }
 
     // Calculate and seek/flee the predicted position of the target
-    steering.linear
-      ..setFrom(targetPosition)
-      ..mulAdd(target.linearVelocity, predictionTime)
+    steering.linearAcceleration
+      ..setFrom(target.position)
+      ..addScaled(target.linearVelocity, predictionTime)
       ..sub(owner.position)
       ..length = actualMaxLinearAcceleration;
     // No angular acceleration
-    steering.angular = 0;
+    steering.angularAcceleration = 0;
   }
 
   /// Returns the actual linear acceleration to be applied. This method is

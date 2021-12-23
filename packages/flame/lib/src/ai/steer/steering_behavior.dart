@@ -15,7 +15,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // -----------------------------------------------------------------------------
-// TRANSLATED INTO DART from original $GDXAI/steer/SteeringBehavior.java
+// TRANSLATED INTO DART WITH MODIFICATIONS from
+// $GDX/ai/steer/SteeringBehavior.java
 // -----------------------------------------------------------------------------
 
 import 'package:meta/meta.dart';
@@ -47,9 +48,9 @@ abstract class SteeringBehavior {
   /// If this behavior is enabled, calculates the steering acceleration and
   /// writes it into the given [steering] output. If it is disabled, the
   /// [steering] output is set to zero.
-  void calculateSteering(SteeringAcceleration steering) {
+  void calculateSteering(double dt, SteeringAcceleration steering) {
     if (enabled) {
-      calculateRealSteering(steering);
+      calculateRealSteering(dt, steering);
     } else {
       steering.setZero();
     }
@@ -60,5 +61,5 @@ abstract class SteeringBehavior {
   ///
   /// This method must be implemented by the subclasses.
   @protected
-  void calculateRealSteering(SteeringAcceleration steering);
+  void calculateRealSteering(double dt, SteeringAcceleration steering);
 }

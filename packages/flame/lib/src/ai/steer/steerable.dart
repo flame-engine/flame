@@ -15,7 +15,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // -----------------------------------------------------------------------------
-// TRANSLATED INTO DART from original $GDXAI/steer/Steerable.java
+// TRANSLATED INTO DART WITH MODIFICATIONS from
+// $GDX/ai/steer/Steerable.java
 // -----------------------------------------------------------------------------
 
 import 'package:vector_math/vector_math_64.dart';
@@ -34,7 +35,7 @@ abstract class Steerable extends Location with Limiter {
   Vector2 get linearVelocity;
 
   /// The angular velocity in radians of this Steerable.
-  double get angularVelocity;
+  double get angularSpeed;
 
   /// The bounding radius of this Steerable.
   double get boundingRadius;
