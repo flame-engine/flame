@@ -1,7 +1,6 @@
 // Copyright 2021 Blue Fire team, MIT license
 //
-// Original license notice:
-// -----------------------------------------------------------------------------
+// -- Original license notice: -------------------------------------------------
 // Copyright 2014 See AUTHORS file.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
