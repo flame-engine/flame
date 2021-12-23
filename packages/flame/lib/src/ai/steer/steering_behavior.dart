@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // -----------------------------------------------------------------------------
-// TRANSLATED INTO DART from original $GDXAI/steer/Steerable.java
+// TRANSLATED INTO DART from original $GDXAI/steer/SteeringBehavior.java
 // -----------------------------------------------------------------------------
 
 import 'package:meta/meta.dart';
