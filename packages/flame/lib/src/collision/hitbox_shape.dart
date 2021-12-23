@@ -1,6 +1,7 @@
 import '../../components.dart';
 import '../../geometry.dart';
 
+// TODO(spydon): implement CollisionItem?
 mixin HitboxShape on Shape {
   late PositionComponent component;
 

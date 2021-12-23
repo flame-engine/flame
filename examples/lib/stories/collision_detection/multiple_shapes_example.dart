@@ -100,7 +100,6 @@ abstract class MyCollidable extends PositionComponent
   bool _isDragged = false;
   late final Paint _activePaint;
   final Color _defaultColor = Colors.blue.withOpacity(0.8);
-  final Set<Collidable> _activeCollisions = {};
   final ScreenCollidable screenCollidable;
 
   MyCollidable(
@@ -146,17 +145,15 @@ abstract class MyCollidable extends PositionComponent
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
-    final isNew = _activeCollisions.add(other);
-    if (isNew) {
-      _activePaint.color = collisionColor(other).withOpacity(0.8);
-    }
+  void onCollisionStart(Set<Vector2> intersectionPoints, Collidable other) {
+    super.onCollisionStart(intersectionPoints, other);
+    _activePaint.color = collisionColor(other).withOpacity(0.8);
   }
 
   @override
   void onCollisionEnd(Collidable other) {
-    _activeCollisions.remove(other);
-    if (_activeCollisions.isEmpty) {
+    super.onCollisionEnd(other);
+    if (activeCollisions.isEmpty) {
       _activePaint.color = _defaultColor;
     }
   }

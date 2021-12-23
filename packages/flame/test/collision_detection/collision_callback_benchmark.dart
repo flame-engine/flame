@@ -21,7 +21,8 @@ class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
   }
 
   @override
-  void onCollisionStart(Set<Vector2> _, Collidable __) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, Collidable other) {
+    super.onCollisionStart(intersectionPoints, other);
     collisionCounter++;
   }
 

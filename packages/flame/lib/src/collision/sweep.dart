@@ -1,8 +1,8 @@
 import '../../components.dart';
 import 'broadphase.dart';
-import 'tuple.dart';
+import 'collision_item.dart';
 
-class Sweep<T extends CollisionItem> extends Broadphase<T> {
+class Sweep<T extends CollisionItem<T>> extends Broadphase<T> {
   Sweep(List<T> items) : super(items);
 
   final List<T> _active = [];

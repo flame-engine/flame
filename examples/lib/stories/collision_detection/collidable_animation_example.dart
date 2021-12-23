@@ -51,7 +51,6 @@ class CollidableAnimationExample extends FlameGame with HasCollidables {
 class AnimatedComponent extends SpriteAnimationComponent
     with HasHitboxes, Collidable, HasGameRef {
   final Vector2 velocity;
-  final List<Collidable> activeCollisions = [];
 
   AnimatedComponent(this.velocity, Vector2 position, {double angle = -pi / 4})
       : super(
@@ -104,16 +103,9 @@ class AnimatedComponent extends SpriteAnimationComponent
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
-    if (!activeCollisions.contains(other)) {
-      velocity.negate();
-      flipVertically();
-      activeCollisions.add(other);
-    }
-  }
-
-  @override
-  void onCollisionEnd(Collidable other) {
-    activeCollisions.remove(other);
+  void onCollisionStart(Set<Vector2> intersectionPoints, Collidable other) {
+    super.onCollisionStart(intersectionPoints, other);
+    velocity.negate();
+    flipVertically();
   }
 }

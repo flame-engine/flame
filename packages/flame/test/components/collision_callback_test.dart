@@ -33,7 +33,6 @@ class _TestHitbox extends HitboxRectangle {
 }
 
 class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
-  final Set<Collidable> collisions = {};
   final hitbox = _TestHitbox();
   int startCounter = 0;
   int onCollisionCounter = 0;
@@ -48,12 +47,12 @@ class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
   }
 
   bool hasCollisionWith(Collidable otherCollidable) {
-    return collisions.contains(otherCollidable);
+    return activeCollisions.contains(otherCollidable);
   }
 
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, Collidable other) {
-    collisions.add(other);
+    super.onCollisionStart(intersectionPoints, other);
     startCounter++;
   }
 
@@ -64,8 +63,8 @@ class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
 
   @override
   void onCollisionEnd(Collidable other) {
+    super.onCollisionEnd(other);
     endCounter++;
-    collisions.remove(other);
   }
 }
 
@@ -86,15 +85,15 @@ void main() {
       game.update(0);
       expect(blockA.hasCollisionWith(blockB), true);
       expect(blockB.hasCollisionWith(blockA), true);
-      expect(blockA.collisions.length, 1);
-      expect(blockB.collisions.length, 1);
+      expect(blockA.activeCollisions.length, 1);
+      expect(blockB.activeCollisions.length, 1);
       expect(blockA.startCounter, 1);
       expect(blockB.startCounter, 1);
       expect(blockA.onCollisionCounter, 1);
       expect(blockB.onCollisionCounter, 1);
       game.update(0);
-      expect(blockA.collisions.length, 1);
-      expect(blockB.collisions.length, 1);
+      expect(blockA.activeCollisions.length, 1);
+      expect(blockB.activeCollisions.length, 1);
       expect(blockA.startCounter, 1);
       expect(blockB.startCounter, 1);
       expect(blockA.onCollisionCounter, 2);
@@ -105,8 +104,8 @@ void main() {
       game.update(0);
       expect(blockA.hasCollisionWith(blockB), false);
       expect(blockB.hasCollisionWith(blockA), false);
-      expect(blockA.collisions.length, 0);
-      expect(blockB.collisions.length, 0);
+      expect(blockA.activeCollisions.length, 0);
+      expect(blockB.activeCollisions.length, 0);
       game.update(0);
       expect(blockA.endCounter, 1);
       expect(blockB.endCounter, 1);
@@ -127,16 +126,16 @@ void main() {
         game.update(0);
         expect(blockA.hasCollisionWith(blockB), true);
         expect(blockB.hasCollisionWith(blockA), true);
-        expect(blockA.collisions.length, 1);
-        expect(blockB.collisions.length, 1);
+        expect(blockA.activeCollisions.length, 1);
+        expect(blockB.activeCollisions.length, 1);
         game.remove(blockA);
         game.update(0);
         expect(blockA.endCounter, 1);
         expect(blockB.endCounter, 1);
         expect(blockA.hasCollisionWith(blockB), false);
         expect(blockB.hasCollisionWith(blockA), false);
-        expect(blockA.collisions.length, 0);
-        expect(blockB.collisions.length, 0);
+        expect(blockA.activeCollisions.length, 0);
+        expect(blockB.activeCollisions.length, 0);
       },
     );
 
