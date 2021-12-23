@@ -19,22 +19,17 @@ class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
   }
 
   bool collidedWith(Collidable otherCollidable) {
-    return collisions.contains(otherCollidable);
+    return activeCollisions.contains(otherCollidable);
   }
 
   bool collidedWithAll(
     List<Collidable> otherCollidables, {
     bool containsSelf = true,
   }) {
-    return collisions
-            .toSet()
+    return activeCollisions
             .containsAll(otherCollidables.toList()..remove(this)) &&
-        collisions.length == otherCollidables.length - (containsSelf ? 1 : 0);
-  }
-
-  @override
-  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
-    collisions.add(other);
+        activeCollisions.length ==
+            otherCollidables.length - (containsSelf ? 1 : 0);
   }
 
   @override
@@ -64,8 +59,8 @@ void main() {
       game.update(0);
       expect(blockA.collidedWith(blockB), true);
       expect(blockB.collidedWith(blockA), true);
-      expect(blockA.collisions.length, 1);
-      expect(blockB.collisions.length, 1);
+      expect(blockA.activeCollisions.length, 1);
+      expect(blockB.activeCollisions.length, 1);
     });
 
     withCollidables.test('sensors do not collide', (game) async {
@@ -81,8 +76,8 @@ void main() {
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
-      expect(blockA.collisions.isEmpty, true);
-      expect(blockB.collisions.isEmpty, true);
+      expect(blockA.activeCollisions.isEmpty, true);
+      expect(blockB.activeCollisions.isEmpty, true);
     });
 
     withCollidables.test('inactives do not collide', (game) async {
@@ -98,8 +93,8 @@ void main() {
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
-      expect(blockA.collisions.isEmpty, true);
-      expect(blockB.collisions.isEmpty, true);
+      expect(blockA.activeCollisions.isEmpty, true);
+      expect(blockB.activeCollisions.isEmpty, true);
     });
 
     withCollidables.test('active collides with static', (game) async {
@@ -117,8 +112,8 @@ void main() {
       game.update(0);
       expect(blockA.collidedWith(blockB), true);
       expect(blockB.collidedWith(blockA), true);
-      expect(blockA.collisions.length, 1);
-      expect(blockB.collisions.length, 1);
+      expect(blockA.activeCollisions.length, 1);
+      expect(blockB.activeCollisions.length, 1);
     });
 
     withCollidables.test('sensor collides with active', (game) async {
@@ -136,8 +131,8 @@ void main() {
       game.update(0);
       expect(blockA.collidedWith(blockB), true);
       expect(blockB.collidedWith(blockA), true);
-      expect(blockA.collisions.length, 1);
-      expect(blockB.collisions.length, 1);
+      expect(blockA.activeCollisions.length, 1);
+      expect(blockB.activeCollisions.length, 1);
     });
 
     withCollidables.test('sensor does not collide with inactive', (game) async {
@@ -153,8 +148,8 @@ void main() {
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
-      expect(blockA.collisions.length, 0);
-      expect(blockB.collisions.length, 0);
+      expect(blockA.activeCollisions.length, 0);
+      expect(blockB.activeCollisions.length, 0);
     });
 
     withCollidables.test('inactive does not collide with static', (game) async {
@@ -170,8 +165,8 @@ void main() {
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
-      expect(blockA.collisions.length, 0);
-      expect(blockB.collisions.length, 0);
+      expect(blockA.activeCollisions.length, 0);
+      expect(blockB.activeCollisions.length, 0);
     });
 
     withCollidables.test('active does not collide with inactive', (game) async {
@@ -187,8 +182,8 @@ void main() {
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
-      expect(blockA.collisions.length, 0);
-      expect(blockB.collisions.length, 0);
+      expect(blockA.activeCollisions.length, 0);
+      expect(blockB.activeCollisions.length, 0);
     });
 
     withCollidables.test('inactive does not collide with active', (game) async {
@@ -204,8 +199,8 @@ void main() {
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
-      expect(blockA.collisions.length, 0);
-      expect(blockB.collisions.length, 0);
+      expect(blockA.activeCollisions.length, 0);
+      expect(blockB.activeCollisions.length, 0);
     });
 
     withCollidables.test(
@@ -255,7 +250,7 @@ void main() {
         expect(
           inactives.fold<bool>(
             true,
-            (hasCorrectCollisions, c) => c.collisions.isEmpty,
+            (hasCorrectCollisions, c) => c.activeCollisions.isEmpty,
           ),
           true,
         );
@@ -277,14 +272,14 @@ void main() {
       game.update(0);
       expect(blockA.collidedWith(blockB), false);
       expect(blockB.collidedWith(blockA), false);
-      expect(blockA.collisions.length, 0);
-      expect(blockB.collisions.length, 0);
+      expect(blockA.activeCollisions.length, 0);
+      expect(blockB.activeCollisions.length, 0);
       blockA.scale = Vector2.all(2.0);
       game.update(0);
       expect(blockA.collidedWith(blockB), true);
       expect(blockB.collidedWith(blockA), true);
-      expect(blockA.collisions.length, 1);
-      expect(blockB.collisions.length, 1);
+      expect(blockA.activeCollisions.length, 1);
+      expect(blockB.activeCollisions.length, 1);
     });
 
     withCollidables.test('testPoint detects point after scale', (game) async {
@@ -332,10 +327,10 @@ void main() {
 
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
-      expect(blockA.collisions, <Collidable>{blockB, innerBlockB});
-      expect(blockB.collisions, <Collidable>{blockA, innerBlockA});
-      expect(innerBlockA.collisions, <Collidable>{blockB, innerBlockB});
-      expect(innerBlockB.collisions, <Collidable>{blockA, innerBlockA});
+      expect(blockA.activeCollisions, {blockB, innerBlockB});
+      expect(blockB.activeCollisions, {blockA, innerBlockA});
+      expect(innerBlockA.activeCollisions, {blockB, innerBlockB});
+      expect(innerBlockB.activeCollisions, {blockA, innerBlockA});
     });
   });
 }

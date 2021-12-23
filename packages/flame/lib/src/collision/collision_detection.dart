@@ -41,7 +41,7 @@ abstract class CollisionDetection<T extends CollisionItem<T>> {
         }
         itemA.onCollision(intersectionPoints, itemB);
         itemB.onCollision(intersectionPoints, itemA);
-      } else {
+      } else if (_hasActiveCollision(itemA, itemB)) {
         _handleCollisionEnd(itemA, itemB);
       }
     });
@@ -71,7 +71,9 @@ class CollidableCollisionDetection extends CollisionDetection<Collidable> {
   @override
   void remove(Collidable collidable) {
     super.remove(collidable);
-    collidable.activeCollisions.forEach((otherCollidable) {
+    collidable.activeCollisions
+        .toList(growable: false)
+        .forEach((otherCollidable) {
       _handleCollisionEnd(collidable, otherCollidable);
     });
   }

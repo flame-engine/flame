@@ -14,13 +14,16 @@ class Sweep<T extends CollisionItem<T>> extends Broadphase<T> {
     _potentials.clear();
     items.sort((a, b) => (a.aabb.min.x - b.aabb.min.x).ceil());
     for (final item in items) {
+      if (item.collidableType == CollidableType.inactive) {
+        continue;
+      }
       if (_active.isEmpty) {
         _active.add(item);
         continue;
       }
       final currentBox = item.aabb;
       final currentMin = currentBox.min.x;
-      for (var i = _active.length - 1; i > 0; i--) {
+      for (var i = _active.length - 1; i >= 0; i--) {
         final activeItem = _active[i];
         final activeBox = activeItem.aabb;
         if (activeBox.max.x >= currentMin) {

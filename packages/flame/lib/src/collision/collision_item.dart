@@ -1,6 +1,6 @@
 import '../../components.dart';
 
-abstract class CollisionItem<T> {
+mixin CollisionItem<T> {
   Aabb2 get aabb;
   CollidableType get collidableType;
 

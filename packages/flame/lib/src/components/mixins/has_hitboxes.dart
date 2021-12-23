@@ -1,6 +1,7 @@
 import 'dart:collection';
+import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 
 import '../../../components.dart';
 import '../../../extensions.dart';
@@ -8,8 +9,9 @@ import '../../../geometry.dart';
 
 mixin HasHitboxes on PositionComponent {
   final List<HitboxShape> _hitboxes = <HitboxShape>[];
-  final Aabb2 aabb = Aabb2();
+  final Aabb2 _aabb = Aabb2();
   bool _validAabb = false;
+  Aabb2 get aabb => _validAabb ? _aabb : _recalculateAabb();
   final Vector2 _halfExtents = Vector2.zero();
   final Matrix3 _rotationMatrix = Matrix3.zero();
 
@@ -20,27 +22,18 @@ mixin HasHitboxes on PositionComponent {
     ancestors(includeSelf: true)
         .whereType<PositionComponent>()
         .forEach((c) => c.transform.addListener(() => _validAabb = false));
-    _recalculateAabb();
   }
 
-  @override
-  void update(double dt) {
-    super.update(dt);
-    if (!_validAabb) {
-      _recalculateAabb();
-    }
-  }
-
-  void _recalculateAabb() {
+  Aabb2 _recalculateAabb() {
     final size = scaledSize;
     // This has +1 since a point on the edge of the bounding box is currently
     // counted as inside.
     _halfExtents.setValues(size.x + 1, size.y + 1);
     _rotationMatrix.setRotationZ(absoluteAngle);
-    aabb
+    _validAabb = true;
+    return _aabb
       ..setCenterAndHalfExtents(absoluteCenter, _halfExtents)
       ..rotate(_rotationMatrix);
-    _validAabb = true;
   }
 
   UnmodifiableListView<HitboxShape> get hitboxes {
@@ -78,7 +71,8 @@ mixin HasHitboxes on PositionComponent {
   /// check can be done first to see if it even is possible that the shapes can
   /// overlap, since the shapes have to be within the size of the component.
   bool possiblyOverlapping(HasHitboxes other) {
-    return aabb.intersectsWithAabb2(other.aabb);
+    final test = aabb.intersectsWithAabb2(other.aabb);
+    return test;
   }
 
   /// Since this is a cheaper calculation than checking towards all shapes this
