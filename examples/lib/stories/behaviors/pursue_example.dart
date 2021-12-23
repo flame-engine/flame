@@ -7,6 +7,9 @@ import 'package:flame/steer.dart';
 
 class PursueExample extends FlameGame {
   static const description = '''
+    In this example the red square (Predator) chases after blue circles (Prey)
+    using the Pursue behavior. Thin blue line shows the current predator's
+    velocity, and yellow line is its acceleration.
   ''';
 
   late Predator predator;
@@ -16,9 +19,9 @@ class PursueExample extends FlameGame {
     super.onLoad();
     // camera.viewport = FixedResolutionViewport(Vector2(400, 800));
     predator = Predator(position: Vector2(200, 400))
-      ..behavior = Pursue()
+      ..behavior = Pursue(maxPredictionTime: 3)
       ..maxLinearSpeed = 100
-      ..maxLinearAcceleration = 20;
+      ..maxLinearAcceleration = 50;
     add(predator);
     makePrey();
   }
@@ -28,11 +31,11 @@ class PursueExample extends FlameGame {
     final random = Random();
 
     final preyX = random.nextDouble() * 200 + 100.0;
-    final preyY = random.nextDouble() * 300 + 250.0;
+    final preyY = random.nextDouble() * 300 + 100.0;
     final prey = Prey(
       position: Vector2(preyX, preyY),
       velocity: Vector2(0, 30)..rotate(random.nextDouble() * tau),
-    ) ..maxLinearSpeed = 30;
+    )..maxLinearSpeed = 30;
     add(prey);
     predator.target = prey;
   }
@@ -53,9 +56,17 @@ class Prey extends SteerableComponent {
 
 class Predator extends SteerableComponent with HasGameRef<PursueExample> {
   Predator({Vector2? position})
-      : super(size: Vector2.all(40), position: position);
+      : super(size: Vector2.all(20), position: position);
 
-  final bgPaint = Paint()..color = const Color(0xffcd006a);
+  final bgPaint = Paint()..color = const Color(0xffe21515);
+  final speedPaint = Paint()
+    ..color = const Color(0xff52a569)
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 1;
+  final accelerationPaint = Paint()
+    ..color = const Color(0xffe8bf28)
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 2;
 
   Steerable? get target => (behavior! as Pursue).target;
   set target(Steerable? target) {
@@ -64,7 +75,21 @@ class Predator extends SteerableComponent with HasGameRef<PursueExample> {
 
   @override
   void render(Canvas canvas) {
+    // print(linearVelocity);
     canvas.drawRect(Rect.fromLTWH(0, 0, width, height), bgPaint);
+    canvas.drawPath(
+      Path()
+        ..moveTo(width / 2, height / 2)
+        ..relativeLineTo(linearVelocity.x, linearVelocity.y),
+      speedPaint,
+    );
+    final acceleration = steering.linearAcceleration;
+    canvas.drawPath(
+      Path()
+        ..moveTo(width / 2, height / 2)
+        ..relativeLineTo(acceleration.x, acceleration.y),
+      accelerationPaint,
+    );
   }
 
   @override

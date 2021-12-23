@@ -17,44 +17,32 @@
 // -----------------------------------------------------------------------------
 // TRANSLATED INTO DART WITH MODIFICATIONS from
 // $GDX/ai/steer/behaviors/Pursue.java
+// (logic significantly altered from the original)
 // -----------------------------------------------------------------------------
 import 'dart:math' as math;
-import 'package:meta/meta.dart';
 
 import '../steerable.dart';
 import '../steering_acceleration.dart';
 import '../steering_behavior.dart';
 
-/// [Pursue] behavior produces a force that steers the agent towards the evader
-/// (the target).
+/// [Pursue] behavior produces a force that steers the agent towards the target.
 ///
-/// Actually it predicts where an agent will be in time `t` and seeks towards
-/// that point to intercept it. We did this naturally playing tag as children,
-/// which is why the most difficult tag players to catch were those who kept
-/// switching direction, foiling our predictions.
+/// Actually it predicts where the target will be in the near future, and seeks
+/// towards that point to intercept it. The "near future" here means the amount
+/// of time it would take for the pursuer to reach the target at the current
+/// speed, but no more than [maxPredictionTime].
 ///
-/// This implementation performs the prediction by assuming the target will
-/// continue moving with the same velocity it currently has. This is a
-/// reasonable assumption over short distances, and even over longer distances
-/// it doesn't appear too stupid. The algorithm works out the distance between
-/// the character and the target and works out how long it would take to get
-/// there, at maximum speed. It uses this time interval as its prediction
-/// lookahead. It calculates the position of the target if it continues to move
-/// with its current velocity. This new position is then used as the target of
-/// a standard seek behavior.
+/// After we determine the point where the target is moving towards, we set as
+/// our goal to move to that point at maximum speed. Then, we apply the steering
+/// force in such a way as to achieve the desired velocity given the current
+/// velocity. The force applied is equal to `maxLinearAcceleration`, unless
+/// current speed is sufficiently close to the target speed. This prevents
+/// random jerking behavior when the pursuer is already moving at max speed.
 ///
-/// If the character is moving slowly, or the target is a long way away, the
-/// prediction time could be very large. The target is less likely to follow
-/// the same path forever, so we'd like to set a limit on how far ahead we aim.
-/// The algorithm has a [maxPredictionTime] for this reason. If the prediction
-/// time is beyond this, then the maximum time is used.
+/// Overall, this behavior aims to intercept the target at the maximum possible
+/// speed.
 class Pursue extends SteeringBehavior {
-  Pursue({
-    Steerable? target,
-    this.maxPredictionTime = 1.0,
-  }) {
-    this.target = target; // uses setter
-  }
+  Pursue({this.maxPredictionTime = 1.0});
 
   /// The target that is being pursued. This property can only be accessed if
   /// the target exists (check with [hasTarget]). The behavior is automatically
@@ -76,37 +64,35 @@ class Pursue extends SteeringBehavior {
 
   @override
   void calculateRealSteering(double dt, SteeringAcceleration steering) {
-    // Square distance to the evader (the target)
-    final squareDistance = (target.position - owner.position).length2;
-    // Our current square speed
-    final squareSpeed = owner.linearVelocity.length2;
+    final vectorToTarget = target.position - owner.position;
+    final squareDistanceToTarget = vectorToTarget.length2;
+    final currentSquareSpeedDelta =
+        (target.linearVelocity - owner.linearVelocity).length2;
 
     var predictionTime = maxPredictionTime;
-    if (squareSpeed > 0) {
+    if (currentSquareSpeedDelta > 0) {
       // Calculate prediction time if speed is not too small to give a
       // reasonable value
-      final squarePredictionTime = squareDistance / squareSpeed;
+      final squarePredictionTime =
+          squareDistanceToTarget / currentSquareSpeedDelta;
       if (squarePredictionTime < maxPredictionTime * maxPredictionTime) {
         predictionTime = math.sqrt(squarePredictionTime);
       }
     }
 
     // Calculate and seek/flee the predicted position of the target
-    steering.linearAcceleration
-      ..setFrom(target.position)
+    final targetDeltaVelocity = vectorToTarget
       ..addScaled(target.linearVelocity, predictionTime)
-      ..sub(owner.position)
-      ..normalize()
-      ..scale(actualMaxLinearAcceleration);
+      ..length = actualLimiter.maxLinearSpeed
+      ..sub(owner.linearVelocity);
+    steering.linearAcceleration
+      ..setFrom(targetDeltaVelocity)
+      ..length = math.min(
+        actualLimiter.maxLinearAcceleration,
+        targetDeltaVelocity.length / dt,
+      );
+
     // No angular acceleration
     steering.angularAcceleration = 0;
-  }
-
-  /// Returns the actual linear acceleration to be applied. This method is
-  /// overridden by the `Evade` behavior to invert the maximum linear
-  /// acceleration in order to evade the target.
-  @protected
-  double get actualMaxLinearAcceleration {
-    return actualLimiter.maxLinearAcceleration;
   }
 }
