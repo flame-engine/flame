@@ -50,13 +50,24 @@ import '../steering_behavior.dart';
 /// time is beyond this, then the maximum time is used.
 class Pursue extends SteeringBehavior {
   Pursue({
-    required Steerable owner,
-    required this.target,
+    Steerable? target,
     this.maxPredictionTime = 1.0,
-  }) : super(owner);
+  }) {
+    this.target = target; // uses setter
+  }
 
-  /// The target that is being pursued.
-  Steerable target;
+  /// The target that is being pursued. This property can only be accessed if
+  /// the target exists (check with [hasTarget]). The behavior is automatically
+  /// disabled if there is no target, and re-enabled when the target is
+  /// acquired.
+  Steerable get target => _target!;
+  bool get hasTarget => _target != null;
+  Steerable? _target;
+
+  set target(Steerable? value) {
+    _target = value;
+    enabled = _target != null;
+  }
 
   /// Maximum prediction horizon (in seconds). The pursuer ([owner]) will try
   /// to guess the [target]'s position this far into the future, and will aim
@@ -85,7 +96,8 @@ class Pursue extends SteeringBehavior {
       ..setFrom(target.position)
       ..addScaled(target.linearVelocity, predictionTime)
       ..sub(owner.position)
-      ..length = actualMaxLinearAcceleration;
+      ..normalize()
+      ..scale(actualMaxLinearAcceleration);
     // No angular acceleration
     steering.angularAcceleration = 0;
   }

@@ -1,28 +1,46 @@
 import 'dart:math' as math;
+
 import 'package:meta/meta.dart';
 
 import '../ai/steer/steerable.dart';
 import '../ai/steer/steering_acceleration.dart';
 import '../ai/steer/steering_behavior.dart';
+import '../anchor.dart';
 import '../extensions/vector2.dart';
 import 'position_component.dart';
 
 class SteerableComponent extends PositionComponent implements Steerable {
-  Vector2 _linearVelocity = Vector2.zero();
+  SteerableComponent({
+    Vector2? velocity,
+    double? angularSpeed,
+    Vector2? position,
+    double? angle,
+    Vector2? size,
+    Anchor? anchor,
+  })  : _linearVelocity = velocity ?? Vector2.zero(),
+        _angularSpeed = angularSpeed ?? 0,
+        super(
+          position: position,
+          angle: angle,
+          size: size,
+          anchor: anchor ?? Anchor.center,
+        );
+
+  Vector2 _linearVelocity;
   double _maxLinearSpeed = 0;
   double _maxLinearAcceleration = 0;
-  double _angularSpeed = 0;
+  double _angularSpeed;
   double _maxAngularSpeed = 0;
   double _maxAngularAcceleration = 0;
   double _zeroLinearSpeedThreshold = 0.2;
 
-  SteeringBehavior? behavior;
+  SteeringBehavior? _behavior;
   SteeringAcceleration steering = SteeringAcceleration();
 
   @mustCallSuper
   @override
   void update(double dt) {
-    behavior?.calculateSteering(dt, steering);
+    _behavior?.calculateSteering(dt, steering);
     position.x += _linearVelocity.x * dt;
     position.y += _linearVelocity.y * dt;
     angle += _angularSpeed * dt;
@@ -90,4 +108,10 @@ class SteerableComponent extends PositionComponent implements Steerable {
 
   @override
   bool tagged = false;
+
+  SteeringBehavior? get behavior => _behavior;
+  set behavior(SteeringBehavior? value) {
+    _behavior = value;
+    _behavior?.owner = this;
+  }
 }

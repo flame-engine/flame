@@ -2,6 +2,7 @@ import 'package:dashbook/dashbook.dart';
 import 'package:flutter/material.dart';
 
 import 'stories/animations/animations.dart';
+import 'stories/behaviors/behaviors.dart';
 import 'stories/camera_and_viewport/camera_and_viewport.dart';
 import 'stories/collision_detection/collision_detection.dart';
 import 'stories/components/components.dart';
@@ -21,6 +22,7 @@ void main() async {
   );
 
   addAnimationStories(dashbook);
+  addBehaviorStories(dashbook);
   addCameraAndViewportStories(dashbook);
   addCollisionDetectionStories(dashbook);
   addComponentsStories(dashbook);

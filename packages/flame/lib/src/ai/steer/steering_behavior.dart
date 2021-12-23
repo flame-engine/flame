@@ -28,16 +28,12 @@ import 'steering_acceleration.dart';
 /// A [SteeringBehavior] calculates the linear and/or angular accelerations to
 /// be applied to its owner.
 abstract class SteeringBehavior {
-  /// Creates a [SteeringBehavior] for the specified owner. The behavior is
-  /// initially enabled and has no explicit limiter, meaning that the owner is
-  /// used instead.
-  SteeringBehavior(this.owner, {this.limiter, this.enabled = true});
-
   /// A flag indicating whether this steering behavior is enabled or not.
-  bool enabled;
+  bool enabled = true;
 
-  /// The owner of this steering behavior
-  Steerable owner;
+  /// The owner of this steering behavior. The owner must be set by the user
+  /// prior to using this class.
+  late Steerable owner;
 
   /// The limiter of this steering behavior
   Limiter? limiter;
