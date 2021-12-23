@@ -18,7 +18,7 @@
 // TRANSLATED INTO DART from original $GDXAI/steer/SteeringAcceleration.java
 // -----------------------------------------------------------------------------
 
-import 'package:vector_math/vector_math_64.dart';
+import '../../extensions/vector2.dart';
 
 /// [SteeringAcceleration] is a movement requested by the steering system. It
 /// is made up of two components, linear and angular acceleration.
@@ -35,7 +35,7 @@ class SteeringAcceleration {
 
   /// Returns true if both linear and angular components of this steering
   /// acceleration are zero, false otherwise.
-  bool get isZero => angular == 0 && linear.x == 0 && linear.y == 0;
+  bool get isZero => angular == 0 && linear.isZero();
 
   /// Sets the linear and angular components of this steering acceleration to
   /// zero.
@@ -53,8 +53,7 @@ class SteeringAcceleration {
   /// First apply [scale] to the supplied [steering], then add it to this
   /// steering acceleration.
   void mulAdd (SteeringAcceleration steering, double scale) {
-    linear.x += steering.linear.x * scale;
-    linear.y += steering.linear.y * scale;
+    linear.mulAdd(steering.linear, scale);
     angular += steering.angular * scale;
   }
 

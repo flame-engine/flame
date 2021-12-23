@@ -75,6 +75,12 @@ extension Vector2Extension on Vector2 {
     }
   }
 
+  /// Add to this vector [other] * [scale].
+  void mulAdd(Vector2 other, double scale) {
+    x += other.x * scale;
+    y += other.y * scale;
+  }
+
   /// Smoothly moves this [Vector2] in the direction [target] by a displacement
   /// given by a distance [ds] in that direction.
   ///
