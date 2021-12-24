@@ -6,9 +6,10 @@ your custom components that implement `Steerable` interface.
 
 The following behaviors are provided:
   
-  -[`Pursue`](#pursue)
+  - [`Pursue`](#pursue)
   
 
 ## Pursue
 
-This behavior forces the agent to follow its target.
+This behavior forces the agent to follow its target. The agent will try to anticipate future
+movement of the target and will attempt to intercept 

@@ -12,13 +12,13 @@ import 'position_component.dart';
 class SteerableComponent extends PositionComponent implements Steerable {
   SteerableComponent({
     Vector2? velocity,
-    double? angularSpeed,
+    double? angularVelocity,
     Vector2? position,
     double? angle,
     Vector2? size,
     Anchor? anchor,
   })  : _linearVelocity = velocity ?? Vector2.zero(),
-        _angularSpeed = angularSpeed ?? 0,
+        _angularVelocity = angularVelocity ?? 0,
         super(
           position: position,
           angle: angle,
@@ -29,7 +29,7 @@ class SteerableComponent extends PositionComponent implements Steerable {
   Vector2 _linearVelocity;
   double _maxLinearSpeed = 0;
   double _maxLinearAcceleration = 0;
-  double _angularSpeed;
+  double _angularVelocity;
   double _maxAngularSpeed = 0;
   double _maxAngularAcceleration = 0;
   double _zeroLinearSpeedThreshold = 0.2;
@@ -43,10 +43,10 @@ class SteerableComponent extends PositionComponent implements Steerable {
     _behavior?.calculateSteering(dt, steering);
     position.x += _linearVelocity.x * dt;
     position.y += _linearVelocity.y * dt;
-    angle += _angularSpeed * dt;
+    angle += _angularVelocity * dt;
     _linearVelocity += steering.linearAcceleration * dt;
     _linearVelocity.clampMagnitude(_maxLinearSpeed);
-    _angularSpeed = (_angularSpeed + steering.angularAcceleration * dt)
+    _angularVelocity = (_angularVelocity + steering.angularAcceleration * dt)
         .clamp(-_maxAngularAcceleration, _maxAngularAcceleration);
   }
 
@@ -54,7 +54,7 @@ class SteerableComponent extends PositionComponent implements Steerable {
   Vector2 get linearVelocity => _linearVelocity;
 
   @override
-  double get angularSpeed => _angularSpeed;
+  double get angularSpeed => _angularVelocity;
 
   @override
   double get maxLinearSpeed => _maxLinearSpeed;
