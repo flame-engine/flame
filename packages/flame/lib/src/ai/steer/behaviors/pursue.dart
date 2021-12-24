@@ -42,7 +42,9 @@ import '../steering_behavior.dart';
 /// Overall, this behavior aims to intercept the target at the maximum possible
 /// speed.
 class Pursue extends SteeringBehavior {
-  Pursue({this.maxPredictionTime = 1.0});
+  Pursue({Steerable? target, this.maxPredictionTime = 1.0}) {
+    this.target = target;
+  }
 
   /// The target that is being pursued. This property can only be accessed if
   /// the target exists (check with [hasTarget]). The behavior is automatically

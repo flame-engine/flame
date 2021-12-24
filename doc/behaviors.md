@@ -11,5 +11,12 @@ The following behaviors are provided:
 
 ## Pursue
 
-This behavior forces the agent to follow its target. The agent will try to anticipate future
-movement of the target and will attempt to intercept 
+This behavior forces the agent to follow its target. The agent will try to anticipate where the
+target will be in the future, and intercept it at that point. 
+
+```dart
+final missile = MissileSteerableComponent()
+    ..maxLinearSpeed = 1000
+    ..maxLinearAcceleration = 200
+    ..behavior = Pursue(target: player);
+```
