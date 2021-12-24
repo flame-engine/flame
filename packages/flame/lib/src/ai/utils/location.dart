@@ -33,14 +33,10 @@ abstract class Location {
   double get orientation;
 
   /// Returns the angle in radians pointing along the specified vector.
-  double vectorToAngle(Vector2 vector) {
-    return math.atan2(-vector.x, vector.y);
-  }
+  double vectorToAngle(Vector2 vector);
 
   /// Returns the unit vector in the direction of the specified angle
   /// expressed in radians. This method must be consistent with
   /// `vector2Angle()`.
-  Vector2 angleToVector(double angle) {
-    return Vector2(-math.sin(angle), math.cos(angle));
-  }
+  Vector2 angleToVector(double angle);
 }
