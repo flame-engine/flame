@@ -18,11 +18,9 @@
 // TRANSLATED INTO DART WITH MODIFICATIONS from
 // $GDX/ai/steer/Limiter.java
 // -----------------------------------------------------------------------------
-import 'package:meta/meta.dart';
 
 /// A [Limiter] provides the maximum magnitudes of speed and acceleration for
-/// both linear and angular components.
-@experimental
+/// linear and angular movement.
 abstract class Limiter {
   /// The threshold below which the linear speed can be considered zero. It
   /// must be a small positive value near to zero. Usually it is used to avoid

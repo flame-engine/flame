@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:meta/meta.dart';
 
+import '../ai/steer/limiter.dart';
 import '../ai/steer/steerable.dart';
 import '../ai/steer/steering_acceleration.dart';
 import '../ai/steer/steering_behavior.dart';
@@ -9,6 +10,14 @@ import '../anchor.dart';
 import '../extensions/vector2.dart';
 import 'position_component.dart';
 
+/// [SteerableComponent] is a component that has a position, orientation,
+/// movement velocity, and a rotational velocity. It also has a
+/// [SteeringBehavior] attached to control movement of this component.
+///
+/// This component also implements the [Limiter] api which sets the limits for
+/// the allowed speeds and accelerations of the component. By default these
+/// parameters are set to zero, which means that without overriding them the
+/// component will not be able to move.
 class SteerableComponent extends PositionComponent implements Steerable {
   SteerableComponent({
     Vector2? velocity,

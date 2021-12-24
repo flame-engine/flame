@@ -2,6 +2,9 @@
 Most of the code in this directory was ported from [gdxAI] project by libGDX, licensed under
 Apache v2.0. The text of the license is given below.
 
+For now, all ai-related code in Flame should be considered experimental, and its API may change
+multiple times before the next release.
+
 -------
 ```text
 
