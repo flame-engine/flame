@@ -106,9 +106,6 @@ class SteerableComponent extends PositionComponent implements Steerable {
     _zeroLinearSpeedThreshold = value;
   }
 
-  @override
-  bool tagged = false;
-
   SteeringBehavior? get behavior => _behavior;
   set behavior(SteeringBehavior? value) {
     _behavior = value;

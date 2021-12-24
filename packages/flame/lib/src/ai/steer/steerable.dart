@@ -39,7 +39,4 @@ abstract class Steerable extends Location with Limiter {
 
   /// The bounding radius of this Steerable.
   double get boundingRadius;
-
-  /// Generic flag utilized in a variety of ways.
-  bool tagged = false;
 }

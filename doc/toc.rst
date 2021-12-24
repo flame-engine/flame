@@ -37,6 +37,12 @@
     Layers                          <layers.md>
 
 .. toctree::
+	:caption: AI
+	:hidden:
+
+	Behaviors      <behaviors.md>
+
+.. toctree::
     :caption: Other Modules
     :hidden:
 
