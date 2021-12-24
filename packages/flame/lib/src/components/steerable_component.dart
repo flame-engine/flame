@@ -16,8 +16,9 @@ import 'position_component.dart';
 ///
 /// This component also implements the [Limiter] api which sets the limits for
 /// the allowed speeds and accelerations of the component. By default these
-/// parameters are set to zero, which means that without overriding them the
-/// component will not be able to move.
+/// parameters are set to the initial speed and rotation speed of the component.
+/// If you ever need the component to go faster than that, those parameters
+/// must be overridden.
 class SteerableComponent extends PositionComponent implements Steerable {
   SteerableComponent({
     Vector2? velocity,
@@ -28,6 +29,8 @@ class SteerableComponent extends PositionComponent implements Steerable {
     Anchor? anchor,
   })  : _linearVelocity = velocity ?? Vector2.zero(),
         _angularVelocity = angularVelocity ?? 0,
+        _maxLinearSpeed = velocity?.length ?? 0,
+        _maxAngularSpeed = angularVelocity?.abs() ?? 0,
         super(
           position: position,
           angle: angle,
