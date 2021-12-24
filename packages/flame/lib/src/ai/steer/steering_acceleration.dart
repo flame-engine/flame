@@ -24,11 +24,15 @@ import '../../extensions/vector2.dart';
 /// [SteeringAcceleration] is a movement requested by the steering system. It
 /// is made up of two components: linear and angular acceleration.
 class SteeringAcceleration {
+  SteeringAcceleration({Vector2? linear, double angular = 0})
+    : angularAcceleration = angular,
+      linearAcceleration = linear ?? Vector2.zero();
+
   /// The linear component of this steering acceleration.
-  Vector2 linearAcceleration = Vector2.zero();
+  Vector2 linearAcceleration;
 
   /// The angular component of this steering acceleration.
-  double angularAcceleration = 0;
+  double angularAcceleration;
 
   /// Returns true if both linear and angular components of this steering
   /// acceleration are zero, false otherwise.
