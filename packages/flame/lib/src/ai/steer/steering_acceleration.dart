@@ -25,8 +25,8 @@ import '../../extensions/vector2.dart';
 /// is made up of two components: linear and angular acceleration.
 class SteeringAcceleration {
   SteeringAcceleration({Vector2? linear, double angular = 0})
-    : angularAcceleration = angular,
-      linearAcceleration = linear ?? Vector2.zero();
+      : angularAcceleration = angular,
+        linearAcceleration = linear ?? Vector2.zero();
 
   /// The linear component of this steering acceleration.
   Vector2 linearAcceleration;
