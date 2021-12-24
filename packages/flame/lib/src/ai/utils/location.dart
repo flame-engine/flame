@@ -18,7 +18,6 @@
 // TRANSLATED INTO DART WITH MODIFICATIONS from
 // $GDX/ai/utils/Location.java
 // -----------------------------------------------------------------------------
-import 'dart:math' as math;
 import 'package:vector_math/vector_math_64.dart';
 
 /// The [Location] interface represents any game object having a position and
