@@ -7,6 +7,19 @@ import 'package:vector_math/vector_math_64.dart';
 
 void main() {
   group('Pursue', () {
+    test('properties', () {
+      final target = SteerableComponent();
+      final behavior = Pursue();
+      expect(behavior.enabled, false);
+      expect(behavior.hasTarget, false);
+      behavior.target = target;
+      expect(behavior.hasTarget, true);
+      expect(behavior.enabled, true);
+      behavior.target = null;
+      expect(behavior.enabled, false);
+      expect(behavior.hasTarget, false);
+    });
+
     group('fast pursuit', () {
       /// Given the target that starts at [targetPosition] and then moves at a
       /// constant [targetVelocity], and the pursuer that starts at the origin
