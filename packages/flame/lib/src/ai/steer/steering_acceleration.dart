@@ -53,7 +53,7 @@ class SteeringAcceleration {
 
   /// First apply [scale] to the supplied [steering], then add it to this
   /// steering acceleration.
-  void mulAdd(SteeringAcceleration steering, double scale) {
+  void addScaled(SteeringAcceleration steering, double scale) {
     linearAcceleration.addScaled(steering.linearAcceleration, scale);
     angularAcceleration += steering.angularAcceleration * scale;
   }

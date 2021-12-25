@@ -39,7 +39,7 @@ void main() {
     test('mulAdd()', () {
       final sa1 = SteeringAcceleration(linear: Vector2(1, 1), angular: 3);
       final sa2 = SteeringAcceleration(linear: Vector2(3, -1), angular: -2);
-      sa1.mulAdd(sa2, 3);
+      sa1.addScaled(sa2, 3);
       expect(sa1.linearAcceleration, closeToVector(10, -2, epsilon: 0));
       expect(sa1.angularAcceleration, -3);
       expect(sa2.linearAcceleration, closeToVector(3, -1, epsilon: 0));
