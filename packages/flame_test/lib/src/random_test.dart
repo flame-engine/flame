@@ -26,6 +26,9 @@ const _maxSeed = 1 << 32;
 /// Then if the test output shows that the test failed with seed `s`,
 /// simply adding parameter `seed=s` into the function will force it
 /// to use that specific seed.
+///
+/// Optional parameter `repeatCount` allows the test to be repeated multiple
+/// times, each time with a different seed.
 @isTest
 void testRandom(
   String name,
@@ -37,18 +40,22 @@ void testRandom(
   dynamic tags,
   Map<String, dynamic>? onPlatform,
   int? retry,
+  int repeatCount = 1,
 }) {
-  seed ??= _seedGenerator.nextInt(_maxSeed);
-  test(
-    '$name [seed=$seed]',
-    () => body(Random(seed)),
-    testOn: testOn,
-    timeout: timeout,
-    skip: skip,
-    tags: tags,
-    onPlatform: onPlatform,
-    retry: retry,
-  );
+  assert(repeatCount > 0);
+  for (var i = 0; i < repeatCount; i++) {
+    final seed0 = seed ?? _seedGenerator.nextInt(_maxSeed);
+    test(
+      '$name [seed=$seed0]',
+      () => body(Random(seed0)),
+      testOn: testOn,
+      timeout: timeout,
+      skip: skip,
+      tags: tags,
+      onPlatform: onPlatform,
+      retry: retry,
+    );
+  }
 }
 
 typedef TestWidgetsCallback = Future<void> Function(
