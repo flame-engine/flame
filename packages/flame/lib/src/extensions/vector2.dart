@@ -77,7 +77,7 @@ extension Vector2Extension on Vector2 {
 
   /// Ensure that the vector is no larger than [max] in magnitude. Scales the
   /// vector down without changing its direction if necessary.
-  void clampMagnitude(double max) {
+  void clampLength(double max) {
     final l = length;
     if (l > max) {
       scale(max / l);

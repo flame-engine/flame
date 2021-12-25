@@ -57,7 +57,7 @@ class SteerableComponent extends PositionComponent implements Steerable {
     position.y += _linearVelocity.y * dt;
     angle += _angularVelocity * dt;
     _linearVelocity += steering.linearAcceleration * dt;
-    _linearVelocity.clampMagnitude(_maxLinearSpeed);
+    _linearVelocity.clampLength(_maxLinearSpeed);
     _angularVelocity = (_angularVelocity + steering.angularAcceleration * dt)
         .clamp(-_maxAngularAcceleration, _maxAngularAcceleration);
   }

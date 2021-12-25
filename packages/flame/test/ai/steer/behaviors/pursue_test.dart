@@ -110,7 +110,7 @@ void main() {
         expect(t, closeTo(14.34, 0.02));
       });
 
-        test('pursuit 3', () async {
+      test('pursuit 3', () async {
         final t = await simulateFastPursuit(
           targetPosition: Vector2(50, 0),
           targetVelocity: Vector2(0, 20),
