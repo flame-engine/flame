@@ -96,21 +96,21 @@ void main() {
           maxSpeed: 50,
           maxAcceleration: 20,
         );
-        expect(t, closeTo(4.28, 0.05));
+        expect(t, closeTo(4.28, 0.02));
       });
 
       test('pursuit 2', () async {
         final t = await simulateFastPursuit(
           targetPosition: Vector2(100, 30),
           targetVelocity: Vector2(10, 10),
-          agentInitialVelocity: Vector2.zero(),
+          agentInitialVelocity: Vector2(0, -50),
           maxSpeed: 50,
-          maxAcceleration: 20,
+          maxAcceleration: 10,
         );
-        expect(t, closeTo(4.28, 0.05));
+        expect(t, closeTo(14.34, 0.02));
       });
 
-      test('pursuit 3', () async {
+        test('pursuit 3', () async {
         final t = await simulateFastPursuit(
           targetPosition: Vector2(50, 0),
           targetVelocity: Vector2(0, 20),
@@ -118,7 +118,7 @@ void main() {
           maxSpeed: 50,
           maxAcceleration: 20,
         );
-        expect(t, closeTo(2.6, 0.05));
+        expect(t, closeTo(2.6, 0.02));
       });
 
       test('pursuit 4', () async {
@@ -129,7 +129,7 @@ void main() {
           maxSpeed: 50,
           maxAcceleration: 20,
         );
-        expect(t, closeTo(4.8, 0.1));
+        expect(t, closeTo(4.8, 0.02));
       });
 
       test('pursuit 5', () async {
@@ -196,7 +196,7 @@ void main() {
         return (target.position - agent.position).length;
       }
 
-      test('pursuit 1', () async {
+      test('chase 1', () async {
         final distance = await simulateSlowPursuit(
           targetPosition: Vector2(50, 30),
           targetVelocity: Vector2(0, 30),
@@ -207,7 +207,7 @@ void main() {
         expect(distance, closeTo(302.8, 0.1));
       });
 
-      test('pursuit 2', () async {
+      test('chase 2', () async {
         final distance = await simulateSlowPursuit(
           targetPosition: Vector2(50, -20),
           targetVelocity: Vector2(0, 30),
@@ -218,7 +218,7 @@ void main() {
         expect(distance, closeTo(250.4, 0.1));
       });
 
-      test('pursuit 3', () async {
+      test('chase 3', () async {
         final distance = await simulateSlowPursuit(
           targetPosition: Vector2(50, 0),
           targetVelocity: Vector2(0, 30),
