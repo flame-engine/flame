@@ -1,5 +1,10 @@
 # Behaviors
 
+```{warning}
+For now, all AI-related code in Flame should be considered experimental, and its API may change
+multiple times before the next release.
+```
+
 `SteeringBehavior`s are a collection of composable classes that can be used to imbue components
 in your game with desired behaviors. These behaviors can be applied to `SteerableComponent`s, or
 your custom components that implement `Steerable` interface.

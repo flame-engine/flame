@@ -8,6 +8,12 @@
     --pst-color-sidebar-link-active: 80, 190, 255;
     --pst-color-text-base: 211, 211, 211;
     --pst-color-toc-link: 130, 130, 130;
+    --pst-color-admonition-warning: 255, 155, 0;
+}
+
+div.admonition {
+  background: #444;
+  box-shadow: 0 0 3px black;
 }
 
 body,
