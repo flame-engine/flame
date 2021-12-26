@@ -69,6 +69,17 @@ void main() {
           () => SequenceEffect(<Effect>[]),
           failsAssert('The list of effects cannot be empty'),
         );
+        expect(
+          () => SequenceEffect(
+            [MoveEffect.to(Vector2.zero(), EffectController(duration: 1))],
+            infinite: true,
+            repeatCount: 10,
+          ),
+          failsAssert(
+            'Parameters infinite and repeatCount cannot be specified '
+            'simultaneously',
+          ),
+        );
       });
     });
 

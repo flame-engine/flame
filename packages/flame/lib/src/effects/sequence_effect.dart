@@ -34,6 +34,10 @@ class SequenceEffect extends Effect {
     int repeatCount = 1,
   }) {
     assert(effects.isNotEmpty, 'The list of effects cannot be empty');
+    assert(
+      !(infinite && repeatCount != 1),
+      'Parameters infinite and repeatCount cannot be specified simultaneously',
+    );
     EffectController ec = _SequenceEffectEffectController(effects, alternate);
     if (infinite) {
       ec = InfiniteEffectController(ec);
