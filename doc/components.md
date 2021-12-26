@@ -96,10 +96,9 @@ The children that have been added to a component live in a `QueryableOrderedSet`
 used. By default `strictMode` is `false` in the children set, but if you set it to true, then the
 queries will have to be registered with `children.register` before a query can be used.
 
-If you know in compile time that you will later will run a query of a specific type it is
-recommended to register the query no matter if the `strictMode` is set to `true` or `false`, since
-there are some performance benefits to gain from it. The `register` call is usually done in
-`onLoad`.
+If you know in compile time that you later will run a query of a specific type it is recommended to
+register the query, no matter if the `strictMode` is set to `true` or `false`, since there are some
+performance benefits to gain from it. The `register` call is usually done in `onLoad`.
 
 Example:
 
