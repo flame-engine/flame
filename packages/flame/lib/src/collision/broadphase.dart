@@ -1,10 +1,10 @@
 import 'package:meta/meta.dart';
 
-import 'collision_item.dart';
+import 'collision_callbacks.dart';
 
 enum BroadphaseType { sweep }
 
-abstract class Broadphase<T extends CollisionItem<T>> {
+abstract class Broadphase<T extends Collidable<T>> {
   final List<T> items;
   Broadphase(this.items);
 

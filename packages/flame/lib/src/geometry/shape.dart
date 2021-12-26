@@ -1,14 +1,11 @@
-import 'dart:ui';
-
 import '../../components.dart';
-import '../cache/value_cache.dart';
-import 'shape_intersections.dart' as intersection_system;
+import '../components/cache/value_cache.dart';
 
 /// A shape can represent any geometrical shape with optionally a size, position
 /// and angle. It can also have an anchor if it shouldn't be rotated around its
 /// center.
 /// A point can be determined to be within of outside of a shape.
-abstract class Shape {
+abstract class Shape extends PositionComponent with HasPaint {
   final ValueCache<Vector2> _halfSizeCache = ValueCache();
   final ValueCache<Vector2> _localCenterCache = ValueCache();
   final ValueCache<Vector2> _absoluteCenterCache = ValueCache();
@@ -17,17 +14,32 @@ abstract class Shape {
   // These are used to avoid creating new vector objects on some method calls
   final Vector2 _identityVector2 = Vector2Extension.identity();
 
-  /// Should be the center of that [offsetPosition] and [relativeOffset]
-  /// should be calculated from, if they are not set this is the center of the
-  /// shape
-  Vector2 position = Vector2.zero();
+  /// The local position of your shape, so the diff from the [position] of the
+  /// shape.
+  Vector2 offsetPosition;
 
-  /// The size is the bounding box of the [Shape]
-  Vector2 size;
+  /// The position of your shape in relation to its size from (-1,-1) to (1,1).
+  Vector2 relativeOffset;
 
-  /// The scaled size of the bounding box of the [Shape], if no scaling of the
-  /// parent is supported this will return [size].
-  Vector2 get scale => _identityVector2;
+  Shape({
+    Vector2? offsetPosition,
+    Vector2? relativeOffset,
+    Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
+    int? priority,
+  })  : offsetPosition = offsetPosition ?? Vector2.zero(),
+        relativeOffset = relativeOffset ?? Vector2.zero(),
+        super(
+          position: position,
+          size: size,
+          scale: scale,
+          angle: angle,
+          anchor: anchor,
+          priority: priority,
+        );
 
   Vector2 get halfSize {
     if (!_halfSizeCache.isCacheValid([size])) {
@@ -35,16 +47,6 @@ abstract class Shape {
     }
     return _halfSizeCache.value!;
   }
-
-  /// The angle of the shape from its initial definition
-  double angle;
-
-  /// The local position of your shape, so the diff from the [position] of the
-  /// shape
-  Vector2 offsetPosition = Vector2.zero();
-
-  /// The position of your shape in relation to its size from (-1,-1) to (1,1)
-  Vector2 relativeOffset = Vector2.zero();
 
   /// The [relativeOffset] converted to a length vector
   Vector2 get relativePosition {
@@ -56,14 +58,6 @@ abstract class Shape {
     }
     return _relativePositionCache.value!;
   }
-
-  /// The angle of the parent that has to be taken into consideration for some
-  /// applications of [Shape], for example `HitboxShape`.
-  double parentAngle = 0;
-
-  /// Whether the context that the shape is in has already prepared (rotated
-  /// and translated) the canvas before coming to the shape's render method.
-  bool isCanvasPrepared = false;
 
   /// The center position of the shape within itself, without rotation
   Vector2 get localCenter {
@@ -85,49 +79,31 @@ abstract class Shape {
   }
 
   /// The shape's absolute center with rotation taken into account
+  @override
   Vector2 get absoluteCenter {
-    final stateValues = [
+    final stateValues = <dynamic>[
       position,
       offsetPosition,
       relativeOffset,
-      angle,
-      parentAngle,
+      absoluteAngle,
     ];
-    if (!_absoluteCenterCache.isCacheValid(stateValues)) {
+    if (!_absoluteCenterCache.isCacheValid<dynamic>(stateValues)) {
       /// The center of the shape, before any rotation
       final center = position + offsetPosition;
       if (!relativeOffset.isZero()) {
         center.add(relativePosition);
       }
-      if (angle != 0 || parentAngle != 0) {
-        center.rotate(parentAngle + angle, center: position);
+      if (absoluteAngle != 0) {
+        center.rotate(absoluteAngle, center: position);
       }
       _absoluteCenterCache.updateCache(center, [
         position.clone(),
         offsetPosition.clone(),
         relativeOffset.clone(),
-        angle,
-        parentAngle,
+        absoluteAngle,
       ]);
     }
     return _absoluteCenterCache.value!;
-  }
-
-  Shape({
-    Vector2? position,
-    Vector2? size,
-    this.angle = 0,
-  })  : position = position ?? Vector2.zero(),
-        size = size ?? Vector2.zero();
-
-  /// Whether the point [p] is within the shapes boundaries or not
-  bool containsPoint(Vector2 p);
-
-  void render(Canvas canvas, Paint paint);
-
-  /// Where this [Shape] has intersection points with another shape
-  Set<Vector2> intersections(Shape other) {
-    return intersection_system.intersections(this, other);
   }
 }
 

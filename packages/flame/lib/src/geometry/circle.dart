@@ -1,5 +1,6 @@
 import 'dart:math';
-import 'dart:ui';
+
+import 'package:flame/components.dart';
 
 import '../../extensions.dart';
 import '../../geometry.dart';
@@ -49,7 +50,7 @@ class Circle extends Shape {
   /// This render method doesn't rotate the canvas according to angle since a
   /// circle will look the same rotated as not rotated.
   @override
-  void render(Canvas canvas, Paint paint) {
+  void render(Canvas canvas) {
     canvas.drawCircle(localCenter.toOffset(), radius, paint);
   }
 
@@ -109,7 +110,7 @@ class Circle extends Shape {
   }
 }
 
-class HitboxCircle extends Circle with HitboxShape {
+class HitboxCircle extends Circle with HasHitboxes, HitboxShape {
   HitboxCircle({
     double? normalizedRadius,
     Vector2? position,

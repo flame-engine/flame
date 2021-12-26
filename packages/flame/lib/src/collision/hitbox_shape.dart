@@ -1,44 +1,30 @@
 import '../../components.dart';
+import '../../extensions.dart';
 import '../../geometry.dart';
+import '../geometry/shape_intersections.dart' as intersection_system;
 
-// TODO(spydon): implement CollisionItem?
-mixin HitboxShape on Shape {
-  late PositionComponent component;
+mixin HitboxShape on Shape implements HasHitboxes {
+  @override
+  void render(_) {}
 
   @override
-  bool isCanvasPrepared = true;
+  void renderDebugMode(Canvas c) {
+    super.render(c);
+  }
 
+  /// Checks whether the [HitboxShape] contains the [point].
   @override
-  Vector2 get size => component.size;
+  bool containsPoint(Vector2 point) {
+    return possiblyContainsPoint(point) && super.containsPoint(point);
+  }
 
+  /// Where this [Shape] has intersection points with another shape
   @override
-  Vector2 get scale => component.scale;
-
-  @override
-  double get parentAngle => component.absoluteAngle;
-
-  @override
-  Vector2 get position => component.absoluteCenter;
-
-  /// Assign your own [CollisionCallback] if you want a callback when this
-  /// shape collides with another [HitboxShape]
-  CollisionCallback onCollision = emptyCollisionCallback;
-
-  /// Assign your own [CollisionCallback] if you want a callback when this
-  /// shape starts to collide with another [HitboxShape].
-  CollisionCallback onCollisionStart = emptyCollisionCallback;
-
-  /// Assign your own [CollisionEndCallback] if you want a callback when this
-  /// shape stops colliding with another [HitboxShape]
-  CollisionEndCallback onCollisionEnd = emptyCollisionEndCallback;
+  Set<Vector2> intersections(HasHitboxes other) {
+    assert(
+      other is Shape,
+      'The intersection can only be performed between shapes',
+    );
+    return intersection_system.intersections(this, other as Shape);
+  }
 }
-
-typedef CollisionCallback = void Function(
-  Set<Vector2> intersectionPoints,
-  HitboxShape other,
-);
-
-typedef CollisionEndCallback = void Function(HitboxShape other);
-
-void emptyCollisionCallback(Set<Vector2> _, HitboxShape __) {}
-void emptyCollisionEndCallback(HitboxShape _) {}

@@ -1,21 +1,19 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
+import 'package:flame/src/collision/collision_callbacks.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 class _HasCollidablesGame extends FlameGame with HasCollidables {}
 
-class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
-  final List<Collidable> collisions = List.empty(growable: true);
+class _TestBlock extends PositionComponent with HasHitboxes {
   String? name;
 
   _TestBlock(Vector2 position, Vector2 size, CollidableType type, {this.name})
       : super(position: position, size: size) {
     collidableType = type;
-    addHitbox(
-      HitboxRectangle(),
-    );
+    add(HitboxRectangle());
   }
 
   bool collidedWith(Collidable otherCollidable) {

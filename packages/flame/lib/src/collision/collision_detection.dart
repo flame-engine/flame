@@ -1,12 +1,9 @@
-import '../../extensions.dart';
-import '../../geometry.dart';
-import '../components/mixins/collidable.dart';
+import '../../components.dart';
 import 'broadphase.dart';
-import 'collision_item.dart';
-import 'hitbox_shape.dart';
+import 'collision_callbacks.dart';
 import 'sweep.dart';
 
-abstract class CollisionDetection<T extends CollisionItem<T>> {
+abstract class CollisionDetection<T extends Collidable<T>> {
   final List<T> items = [];
   late final Broadphase<T> broadphase;
 
@@ -55,35 +52,35 @@ abstract class CollisionDetection<T extends CollisionItem<T>> {
   void _handleCollisionEnd(T itemA, T itemB);
 }
 
-/// Check whether any [Collidable] in [items] collide with each other and
-/// call their onCollision methods accordingly.
-class CollidableCollisionDetection extends CollisionDetection<Collidable> {
+/// Check whether any [HasHitboxes] in [items] collide with each other and
+/// call their callback methods accordingly.
+class StandardCollisionDetection extends CollisionDetection<HasHitboxes> {
   final Set<int> _shapeHashes = {};
 
-  CollidableCollisionDetection({BroadphaseType type = BroadphaseType.sweep})
+  StandardCollisionDetection({BroadphaseType type = BroadphaseType.sweep})
       : super(type: type);
 
   /// Removes the [collidable] from the collision detection, if you just want
   /// to temporarily inactivate it you can set
   /// `collidableType = CollidableType.inactive;` instead.
-  /// This calls [Collidable.onCollisionEnd] and [HitboxShape.onCollisionEnd]
-  /// for [Collidable]s that are removed from the game.
+  /// This calls [HasHitboxes.onCollisionEnd] for [HasHitboxes]s and their
+  /// children that are removed from the game.
   @override
-  void remove(Collidable collidable) {
-    super.remove(collidable);
+  void remove(HasHitboxes collidable) {
     collidable.activeCollisions
         .toList(growable: false)
         .forEach((otherCollidable) {
       _handleCollisionEnd(collidable, otherCollidable);
     });
+    super.remove(collidable);
   }
 
   /// Check what the intersection points of two collidables are,
   /// returns an empty list if there are no intersections.
   @override
   Set<Vector2> intersections(
-    Collidable collidableA,
-    Collidable collidableB,
+    HasHitboxes collidableA,
+    HasHitboxes collidableB,
   ) {
     final result = <Vector2>{};
     final currentResult = <Vector2>{};
@@ -115,15 +112,15 @@ class CollidableCollisionDetection extends CollisionDetection<Collidable> {
   @override
   void _handleCollisionStart(
     Set<Vector2> intersectionPoints,
-    Collidable collidableA,
-    Collidable collidableB,
+    HasHitboxes collidableA,
+    HasHitboxes collidableB,
   ) {
     collidableA.onCollisionStart(intersectionPoints, collidableB);
     collidableB.onCollisionStart(intersectionPoints, collidableA);
   }
 
   @override
-  void _handleCollisionEnd(Collidable collidableA, Collidable collidableB) {
+  void _handleCollisionEnd(HasHitboxes collidableA, HasHitboxes collidableB) {
     collidableA.onCollisionEnd(collidableB);
     collidableB.onCollisionEnd(collidableA);
     for (final hitboxA in collidableA.hitboxes) {
@@ -134,16 +131,12 @@ class CollidableCollisionDetection extends CollisionDetection<Collidable> {
   }
 
   @override
-  bool _hasActiveCollision(Collidable collidableA, Collidable collidableB) {
+  bool _hasActiveCollision(HasHitboxes collidableA, HasHitboxes collidableB) {
     return collidableA.activeCollisions.contains(collidableB);
   }
 
-  bool hasActiveHitboxCollision(HitboxShape shapeA, HitboxShape shapeB) {
-    return _shapeHashes.contains(_combinedHash(shapeA, shapeB));
-  }
-
-  bool _handleHitboxCollisionEnd(HitboxShape hitboxA, HitboxShape hitboxB) {
-    final activeCollision = hasActiveHitboxCollision(hitboxA, hitboxB);
+  bool _handleHitboxCollisionEnd(HasHitboxes hitboxA, HasHitboxes hitboxB) {
+    final activeCollision = hitboxA.contains(hitboxB);
     if (activeCollision) {
       hitboxA.onCollisionEnd(hitboxB);
       hitboxB.onCollisionEnd(hitboxA);

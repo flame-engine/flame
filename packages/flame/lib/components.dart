@@ -1,12 +1,10 @@
 /// {@canonicalFor anchor.Anchor}
-
 export 'src/anchor.dart';
 export 'src/components/component.dart';
 export 'src/components/component_set.dart';
 export 'src/components/custom_painter_component.dart';
 export 'src/components/input/joystick_component.dart';
 export 'src/components/isometric_tile_map_component.dart';
-export 'src/components/mixins/collidable.dart';
 export 'src/components/mixins/draggable.dart';
 export 'src/components/mixins/has_game_ref.dart';
 export 'src/components/mixins/has_hitboxes.dart';

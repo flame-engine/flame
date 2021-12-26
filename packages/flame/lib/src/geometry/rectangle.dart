@@ -1,3 +1,4 @@
+import '../../components.dart';
 import '../../extensions.dart';
 import '../../geometry.dart';
 
@@ -67,7 +68,7 @@ class Rectangle extends Polygon {
   }
 }
 
-class HitboxRectangle extends Rectangle with HitboxShape {
+class HitboxRectangle extends Rectangle with HasHitboxes, HitboxShape {
   HitboxRectangle({Vector2? relation})
       : super.fromDefinition(
           relation: relation ?? Vector2.all(1),

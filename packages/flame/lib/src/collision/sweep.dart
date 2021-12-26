@@ -1,8 +1,8 @@
 import '../../components.dart';
 import 'broadphase.dart';
-import 'collision_item.dart';
+import 'collision_callbacks.dart';
 
-class Sweep<T extends CollisionItem<T>> extends Broadphase<T> {
+class Sweep<T extends Collidable<T>> extends Broadphase<T> {
   Sweep(List<T> items) : super(items);
 
   final List<T> _active = [];

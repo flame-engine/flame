@@ -1,5 +1,6 @@
 import 'dart:ui' hide Canvas;
 
+import '../../components.dart';
 import '../../game.dart';
 import '../../geometry.dart';
 import '../cache/value_cache.dart';
@@ -115,14 +116,14 @@ class Polygon extends Shape {
   /// Gives back the shape vectors multiplied by the size and scale
   List<Vector2> globalVertices() {
     final scale = this.scale;
-    if (!_cachedGlobalVertices.isCacheValid([
+    final totalAngle = absoluteAngle;
+    if (!_cachedGlobalVertices.isCacheValid<dynamic>(<dynamic>[
       position,
       offsetPosition,
       relativeOffset,
       size,
       scale,
-      parentAngle,
-      angle,
+      absoluteAngle,
     ])) {
       var i = 0;
       final center = absoluteCenter;
@@ -133,7 +134,7 @@ class Polygon extends Shape {
           ..multiply(halfSize)
           ..multiply(scale)
           ..add(center)
-          ..rotate(parentAngle + angle, center: center);
+          ..rotate(absoluteAngle, center: center);
         i++;
       }
       if (scale.y.isNegative || scale.x.isNegative) {
@@ -141,53 +142,45 @@ class Polygon extends Shape {
         // become counterclockwise.
         _reverseList(_globalVertices);
       }
-      _cachedGlobalVertices.updateCache(_globalVertices, [
+      _cachedGlobalVertices.updateCache<dynamic>(_globalVertices, <dynamic>[
         position.clone(),
         offsetPosition.clone(),
         relativeOffset.clone(),
         size.clone(),
         scale.clone(),
-        parentAngle,
-        angle,
+        totalAngle
       ]);
     }
     return _cachedGlobalVertices.value!;
   }
 
   @override
-  void render(Canvas canvas, Paint paint) {
+  void render(Canvas canvas) {
     if (!_cachedRenderPath.isCacheValid([
       offsetPosition,
       relativeOffset,
       size,
-      parentAngle,
       angle,
     ])) {
       var i = 0;
-      (isCanvasPrepared ? localVertices() : globalVertices()).forEach((point) {
+      localVertices().forEach((point) {
         _renderVertices[i] = point.toOffset();
         i++;
       });
-      _cachedRenderPath.updateCache(
+      _cachedRenderPath.updateCache<dynamic>(
         _path
           ..reset()
           ..addPolygon(_renderVertices, true),
-        [
+        <dynamic>[
           offsetPosition.clone(),
           relativeOffset.clone(),
           size.clone(),
-          parentAngle,
           angle,
         ],
       );
     }
     canvas.drawPath(_cachedRenderPath.value!, paint);
   }
-
-  /// Gives back the vertices represented as a list of points which
-  /// are the "corners" of the hitbox rotated with [angle].
-  /// These are in the global hitbox coordinate space since all hitboxes are
-  /// compared towards each other.
 
   /// Checks whether the polygon contains the [point].
   /// Note: The polygon needs to be convex for this to work.
@@ -246,7 +239,7 @@ class Polygon extends Shape {
   }
 }
 
-class HitboxPolygon extends Polygon with HitboxShape {
+class HitboxPolygon extends Polygon with HasHitboxes, HitboxShape {
   HitboxPolygon(List<Vector2> definition) : super.fromDefinition(definition);
 
   factory HitboxPolygon.fromPolygon(Polygon polygon) =>
