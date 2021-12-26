@@ -44,7 +44,7 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   ComponentSet(
     int Function(Component e1, Component e2)? comparator,
     this.parent, {
-    bool strictMode = true,
+    bool strictMode = false,
   }) : super(comparator: comparator, strictMode: strictMode);
 
   /// Prepares and registers one component to be added on the next game tick.
