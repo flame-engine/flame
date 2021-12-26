@@ -91,10 +91,15 @@ class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
 
 ### Querying child components
 
-The children that have been added to a component live in the `QueryableOrderedSet` called
-`components`. To query for a specific type of components in the set, a query first has to be
-registered on the set, and then the `query` function can be run efficiently at any later point. The
-register call is usually done in `onLoad`.
+The children that have been added to a component live in a `QueryableOrderedSet` called
+`children`. To query for a specific type of components in the set, the `query<T>()` function can be
+used. By default `strictMode` is `false` in the children set, but if you set it to true, then the
+queries will have to be registered with `children.register` before a query can be used.
+
+If you know in compile time that you will later will run a query of a specific type it is
+recommended to register the query no matter if the `strictMode` is set to `true` or `false`, since
+there are some performance benefits to gain from it. The `register` call is usually done in
+`onLoad`.
 
 Example:
 
