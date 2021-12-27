@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
@@ -219,22 +221,30 @@ void main() {
 
       test('sequence in sequence', () async {
         EffectController duration(double t) => EffectController(duration: t);
+        const dt = 0.01;
+        const x0 = 0.0, y0 = 0.0;
+        const x1 = 10.0, y1 = 10.0;
+        const x2 = 20.0, y2 = 0.0;
+        const x3 = 30.0, y3 = 10.0;
+        const x4 = 10.0, y4 = 30.0;
+        const dx5 = 1.6, dy5 = 0.9;
+
         final effect = SequenceEffect(
           [
-            MoveEffect.by(Vector2(10, 10), duration(1)),
+            MoveEffect.by(Vector2(x1 - x0, y1 - y0), duration(1)),
             SequenceEffect(
               [
-                MoveEffect.to(Vector2(20, 0), duration(1)),
-                MoveEffect.to(Vector2(30, 10), duration(1)),
+                MoveEffect.to(Vector2(x2, y2), duration(1)),
+                MoveEffect.to(Vector2(x3, y3), duration(1)),
               ],
               alternate: true,
               repeatCount: 2,
             ),
-            MoveEffect.by(Vector2(0, 20), duration(2)),
+            MoveEffect.by(Vector2(x4 - x1, y4 - y1), duration(2)),
             SequenceEffect(
               [
-                MoveEffect.by(Vector2(1, 0), duration(1)),
-                MoveEffect.by(Vector2(0, 1), duration(1)),
+                MoveEffect.by(Vector2(dx5, 0), duration(1)),
+                MoveEffect.by(Vector2(0, dy5), duration(1)),
               ],
               repeatCount: 5,
             ),
@@ -248,30 +258,48 @@ void main() {
         await game.ensureAdd(component);
         game.update(0);
 
+        // All points here are spaced `dt = 0.01` apart
         final forwardPath = <Vector2>[
-          for (var i = 0; i < 100; i++) Vector2(i * 0.1, i * 0.1),
-          for (var i = 0; i < 100; i++) Vector2(10 + i * 0.1, 10 - i * 0.1),
-          for (var i = 0; i < 100; i++) Vector2(20 + i * 0.1, i * 0.1),
-          for (var i = 100; i > 0; i--) Vector2(20 + i * 0.1, i * 0.1),
-          for (var i = 100; i > 0; i--) Vector2(10 + i * 0.1, 10 - i * 0.1),
-          for (var i = 0; i < 100; i++) Vector2(10 + i * 0.1, 10 - i * 0.1),
-          for (var i = 0; i < 100; i++) Vector2(20 + i * 0.1, i * 0.1),
-          for (var i = 100; i > 0; i--) Vector2(20 + i * 0.1, i * 0.1),
-          for (var i = 100; i > 0; i--) Vector2(10 + i * 0.1, 10 - i * 0.1),
-          for (var i = 0; i < 200; i++) Vector2(10, 10 + i * 0.1),
+          // First MoveEffect
+          for (var t = 0.0; t < 1; t += dt)
+            Vector2(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t),
+          // First SequenceEffect
+          for (var t = 0.0; t < 1; t += dt)
+            Vector2(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t),
+          for (var t = 0.0; t < 1; t += dt)
+            Vector2(x2 + (x3 - x2) * t, y2 + (y3 - y2) * t),
+          for (var t = 1.0; t > 0; t -= dt)
+            Vector2(x2 + (x3 - x2) * t, y2 + (y3 - y2) * t),
+          for (var t = 1.0; t > 0; t -= dt)
+            Vector2(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t),
+          // First SequenceEffect, repeated second time
+          for (var t = 0.0; t < 1; t += dt)
+            Vector2(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t),
+          for (var t = 0.0; t < 1; t += dt)
+            Vector2(x2 + (x3 - x2) * t, y2 + (y3 - y2) * t),
+          for (var t = 1.0; t > 0; t -= dt)
+            Vector2(x2 + (x3 - x2) * t, y2 + (y3 - y2) * t),
+          for (var t = 1.0; t > 0; t -= dt)
+            Vector2(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t),
+          // Second MoveEffect, duration = 2
+          for (var t = 0.0; t < 2; t += dt)
+            Vector2(x1 + (x4 - x1) * t, y1 + (y4 - y1) * t / 2),
+          // Second sequence effect, repeated 5 times
           for (var j = 0; j < 5; j++)
-            for (var i = 0; i < 200; i++)
-              Vector2(i < 100 ? i * 0.01 : 1, i < 100 ? 0 : i * 0.01 - 1)
-                ..add(Vector2(10 + j * 1.0, 30 + j * 1.0)),
+            for (var t = 0.0; t < 2; t += dt)
+              Vector2(
+                x4 + min(j + t, j + 1) * dx5,
+                y4 + max(j + t - 1, j) * dy5,
+              ),
         ];
         final expectedPath = <Vector2>[
           ...forwardPath,
-          Vector2(15, 35),
+          Vector2(x4 + 5 * dx5, y4 + 5 * dy5),
           ...forwardPath.reversed,
         ];
         for (final p in expectedPath) {
           expect(component.position, closeToVector(p.x, p.y, epsilon: 1e-12));
-          game.update(0.01);
+          game.update(dt);
         }
         game.update(1e-5);
         expect(effect.controller.completed, true);
