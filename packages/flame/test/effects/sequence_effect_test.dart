@@ -97,10 +97,11 @@ void main() {
         await game.ensureAdd(component);
         game.update(0);
 
+        // Each point here is spaced 0.1 seconds apart
         final expectedPositions = [
           for (var i = 0; i < 10; i++) Vector2(i * 1.0, 0),
           for (var i = 0; i < 20; i++) Vector2(10, i * 0.5),
-          for (var i = 0; i < 30; i++) Vector2(10 - i/3, 10),
+          for (var i = 0; i < 30; i++) Vector2(10 - i / 3, 10),
           for (var i = 0; i < 40; i++) Vector2(i * 0.75, 10 + i * 0.75),
           Vector2(30, 40),
         ];
