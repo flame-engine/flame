@@ -22,7 +22,7 @@ class _MyDebugComponent extends PositionComponent {
 }
 
 void main() {
-  group('PositionComponent overlap test', () {
+  group('PositionComponent', () {
     test('overlap', () {
       final component = PositionComponent();
       component.position.setValues(2.0, 2.0);
@@ -412,43 +412,45 @@ void main() {
         ..scale = Vector2(2.0, 3.0)
         ..position = startPosition;
       final centerPosition = component.center;
+      final x = centerPosition.x;
+      final y = centerPosition.y;
 
       component.flipVerticallyAroundCenter();
       // Same position after one vertical flip.
-      expectVector2(component.center, centerPosition);
+      expect(component.center, closeToVector(x, y, epsilon: 1e-14));
 
       component.flipVerticallyAroundCenter();
       // Same position after flipping back the vertical flip.
-      expectVector2(component.center, centerPosition);
+      expect(component.center, closeToVector(x, y, epsilon: 1e-14));
 
       component.flipHorizontallyAroundCenter();
       // Same position after one horizontal flip.
-      expectVector2(component.center, centerPosition);
+      expect(component.center, closeToVector(x, y, epsilon: 1e-14));
 
       component.flipHorizontallyAroundCenter();
       // Same position after flipping back the horizontal flip.
-      expectVector2(component.center, centerPosition);
+      expect(component.center, closeToVector(x, y, epsilon: 1e-14));
 
       component.flipVerticallyAroundCenter();
       component.flipHorizontallyAroundCenter();
       // Same position after flipping both vertically and horizontally.
-      expectVector2(component.center, centerPosition);
+      expect(component.center, closeToVector(x, y, epsilon: 1e-14));
 
       component.flipVerticallyAroundCenter();
       component.flipHorizontallyAroundCenter();
       // Same position after flipping back both vertically and horizontally.
-      expectVector2(component.center, centerPosition);
+      expect(component.center, closeToVector(x, y, epsilon: 1e-14));
 
       component.flipHorizontallyAroundCenter();
       component.flipVerticallyAroundCenter();
       // Same position after flipping both horizontally and vertically.
-      expectVector2(component.center, centerPosition);
+      expect(component.center, closeToVector(x, y, epsilon: 1e-14));
 
       component.flipVerticallyAroundCenter();
       component.flipHorizontallyAroundCenter();
       // Same position after flipping back both horizontally and vertically in
       // the reverse order.
-      expectVector2(component.center, centerPosition);
+      expect(component.center, closeToVector(x, y, epsilon: 1e-14));
     });
 
     test('rotations', () {
