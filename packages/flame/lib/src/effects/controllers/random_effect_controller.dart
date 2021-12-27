@@ -56,9 +56,6 @@ class RandomEffectController extends EffectController {
   final RandomVariable randomGenerator;
 
   @override
-  bool get isInfinite => false;
-
-  @override
   bool get isRandom => true;
 
   @override

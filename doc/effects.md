@@ -42,6 +42,7 @@ There are multiple effects provided by Flame, and you can also
 - [`SizeEffect.to`](#sizeeffectto)
 - [`OpacityEffect`](#opacityeffect)
 - [`ColorEffect`](#coloreffect)
+- [`SequenceEffect`](#sequenceeffect)
 - [`RemoveEffect`](#removeeffect)
 
 An `EffectController` is an object that describes how the effect should evolve over time. If you
@@ -146,7 +147,7 @@ is in radians. For example, the following effect will rotate the target 90º (=[
 clockwise:
 
 ```dart
-final effect = RotateEffect.by(tau/4, EffectController(2));
+final effect = RotateEffect.by(tau/4, EffectController(duration: 2));
 ```
 
 
@@ -156,7 +157,7 @@ Rotates the target clockwise to the specified angle. For example, the following 
 target to look east (0º is north, 90º=[tau]/4 east, 180º=tau/2 south, and 270º=tau*3/4 west):
 
 ```dart
-final effect = RotateEffect.to(tau/4, EffectController(2));
+final effect = RotateEffect.to(tau/4, EffectController(duration: 2));
 ```
 
 
@@ -166,7 +167,7 @@ This effect will change the target's scale by the specified amount. For example,
 the component to grow 50% larger:
 
 ```dart
-final effect = ScaleEffect.by(Vector2.all(1.5), EffectController(0.3));
+final effect = ScaleEffect.by(Vector2.all(1.5), EffectController(duration: 0.3));
 ```
 
 
@@ -175,7 +176,7 @@ final effect = ScaleEffect.by(Vector2.all(1.5), EffectController(0.3));
 This effect works similar to `ScaleEffect.by`, but sets the absolute value of the target's scale.
 
 ```dart
-final effect = ScaleEffect.to(Vector2.zero(), EffectController(0.5));
+final effect = ScaleEffect.to(Vector2.zero(), EffectController(duration: 0.5));
 ```
 
 
@@ -186,7 +187,7 @@ if the target has size `Vector2(100, 100)`, then after the following effect is a
 course, the new size will be `Vector2(120, 50)`:
 
 ```dart
-final effect = SizeEffect.by(Vector2(20, -50), EffectController(1));
+final effect = SizeEffect.by(Vector2(20, -50), EffectController(duration: 1));
 ```
 
 The size of a `PositionComponent` cannot be negative. If an effect attempts to set the size to a
@@ -203,7 +204,7 @@ more generally and scales the children components too.
 Changes the size of the target component to the specified size. Target size cannot be negative:
 
 ```dart
-final effect = SizeEffect.to(Vector2(120, 120), EffectController(1));
+final effect = SizeEffect.to(Vector2(120, 120), EffectController(duration: 1));
 ```
 
 
@@ -214,12 +215,30 @@ this effect can only be applied to components that have a `HasPaint` mixin. If t
 uses multiple paints, the effect can target any individual color using the `paintId` parameter.
 
 ```dart
-final effect = OpacityEffect.to(0.5, EffectController(0.75));
+final effect = OpacityEffect.to(0.5, EffectController(duration: 0.75));
 ```
 
 The opacity value of 0 corresponds to a fully transparent component, and the opacity value of 1 is
 fully opaque. Convenience constructors `OpacityEffect.fadeOut()` and `OpacityEffect.fadeIn()` will
 animate the target into full transparency / full visibility respectively.
+
+
+### `SequenceEffect`
+
+This effect can be used to run multiple other effects one after another. The constituent effects
+may have different types.
+
+The sequence effect can also be alternating (the sequence will first run forward, and then 
+backward); and also repeat a certain predetermined number of times, or infinitely.
+
+```dart
+final effect = SequenceEffect([
+  ScaleEffect.by(1.5, EffectController(duration: 0.2, alternate: true)),
+  MoveEffect.by(Vector2(30, -50), EffectController(duration: 0.5)),
+  OpacityEffect.to(0, EffectController(duration: 0.3)),
+  RemoveEffect(),
+]);
+```
 
 
 ### `RemoveEffect`
