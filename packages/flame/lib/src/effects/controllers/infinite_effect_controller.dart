@@ -9,16 +9,16 @@ class InfiniteEffectController extends EffectController {
   final EffectController child;
 
   @override
-  bool get isInfinite => true;
-
-  @override
   bool get completed => false;
 
   @override
-  double? get duration => null;
+  double? get duration => double.infinity;
 
   @override
   double get progress => child.progress;
+
+  @override
+  bool get isRandom => child.isRandom;
 
   @override
   double advance(double dt) {

@@ -217,13 +217,13 @@ abstract class EffectController {
   EffectController.empty();
 
   /// Will the effect continue to run forever (never completes)?
-  bool get isInfinite => false;
+  bool get isInfinite => duration == double.infinity;
 
   /// Is the effect's duration random or fixed?
   bool get isRandom => false;
 
   /// Total duration of the effect. If the duration cannot be determined, this
-  /// will return `null`.
+  /// will return `null`. For an infinite effect the duration is infinity.
   double? get duration;
 
   /// Has the effect started running? Some effects use a "delay" parameter to
@@ -247,7 +247,8 @@ abstract class EffectController {
   /// If the controller is still running, the return value will be 0. If it
   /// already finished, then the return value will be the "leftover" part of
   /// the [dt]. That is, the amount of time [dt] that remains after the
-  /// controller has finished.
+  /// controller has finished. In all cases, the return value can be positive
+  /// only when `completed == true`.
   ///
   /// Normally, this method will be called by the owner of the controller class.
   /// For example, if the controller is passed to an [Effect] class, then that
