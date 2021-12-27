@@ -97,24 +97,15 @@ void main() {
         await game.ensureAdd(component);
         game.update(0);
 
-        var time = 0.0;
-        while (time < 10) {
-          final x = time <= 1
-              ? time * 10
-              : time <= 3
-                  ? 10
-                  : time <= 6
-                      ? 10 - 10 * (time - 3) / 3
-                      : 30 * (time - 6) / 4;
-          final y = time <= 1
-              ? 0
-              : time <= 3
-                  ? 10 * (time - 1) / 2
-                  : time <= 6
-                      ? 10
-                      : 10 + 30 * (time - 6) / 4;
-          expect(component.position, closeToVector(x, y, epsilon: 1e-12));
-          time += 0.1;
+        final expectedPositions = [
+          for (var i = 0; i < 10; i++) Vector2(i * 1.0, 0),
+          for (var i = 0; i < 20; i++) Vector2(10, i * 0.5),
+          for (var i = 0; i < 30; i++) Vector2(10 - i/3, 10),
+          for (var i = 0; i < 40; i++) Vector2(i * 0.75, 10 + i * 0.75),
+          Vector2(30, 40),
+        ];
+        for (final p in expectedPositions) {
+          expect(component.position, closeToVector(p.x, p.y, epsilon: 1e-12));
           game.update(0.1);
         }
       });
