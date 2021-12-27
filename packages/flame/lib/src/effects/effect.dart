@@ -30,7 +30,9 @@ abstract class Effect extends Component {
       : removeOnFinish = true,
         _paused = false,
         _started = false,
-        _finished = false;
+        _finished = false {
+    controller.onMount(this);
+  }
 
   /// An object that describes how the effect should evolve over time.
   final EffectController controller;

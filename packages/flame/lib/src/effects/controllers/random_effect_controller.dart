@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import '../effect.dart';
 import 'duration_effect_controller.dart';
 import 'effect_controller.dart';
 
@@ -80,6 +81,9 @@ class RandomEffectController extends EffectController {
     child.setToStart();
     _initializeDuration();
   }
+
+  @override
+  void onMount(Effect parent) => child.onMount(parent);
 
   void _initializeDuration() {
     final duration = randomGenerator.nextValue();

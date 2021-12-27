@@ -34,7 +34,7 @@ void main() {
         tileHeight: 8.0,
       );
 
-      expectVector2(c.getBlockCenterPosition(const Block(0, 0)), Vector2(0, 0));
+      expect(c.getBlockCenterPosition(const Block(0, 0)), closeToVector(0, 0));
     });
   });
 }
