@@ -32,7 +32,7 @@ void main() {
       final matrix4 = Matrix4.translation(Vector3(0, 10, 0));
       final input = Vector2.all(10);
 
-      expectVector2(matrix4.transform2(input), Vector2(10, 20));
+      expect(matrix4.transform2(input), closeToVector(10, 20));
     });
 
     test('test transformed2', () {
@@ -41,8 +41,8 @@ void main() {
       final out = Vector2.zero();
       final result = matrix4.transformed2(input, out);
 
-      expectVector2(out, input);
-      expectVector2(result, Vector2(10, 20));
+      expect(out, closeToVector(input.x, input.y));
+      expect(result, closeToVector(10, 20));
     });
   });
 }

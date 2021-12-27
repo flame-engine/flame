@@ -6,7 +6,9 @@ void main() {
   group('expectVector2', () {
     test('can test vector2', () {
       final vector = Vector2.all(1.0);
+      // ignore: deprecated_member_use_from_same_package
       expectVector2(vector + Vector2.all(1.0), Vector2.all(2.0));
+      // ignore: deprecated_member_use_from_same_package
       expectVector2(vector + Vector2.all(1.1), Vector2.all(2.0), epsilon: 0.2);
     });
   });

@@ -100,6 +100,20 @@ void main() {
     );
 
     blocGame.widgetTest(
+      'Components can be removed',
+      (game, tester) async {
+        final component = InventoryComponent();
+        game.add(component);
+        game.update(0);
+        expect(game.children.length, 1);
+
+        game.remove(component);
+        game.update(0);
+        expect(game.children.length, 0);
+      },
+    );
+
+    blocGame.widgetTest(
       'components listen to changes',
       (game, tester) async {
         final component = InventoryComponent();

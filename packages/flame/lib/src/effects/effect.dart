@@ -31,7 +31,9 @@ abstract class Effect extends Component {
         _paused = false,
         _started = false,
         _finished = false,
-        _reversed = false;
+        _reversed = false {
+    controller.onMount(this);
+  }
 
   /// An object that describes how the effect should evolve over time.
   final EffectController controller;
@@ -103,15 +105,14 @@ abstract class Effect extends Component {
     if (_paused || _finished) {
       return;
     }
-    super.update(dt);
+    if (!_started && controller.started) {
+      _started = true;
+      onStart();
+    }
     if (_reversed) {
       controller.recede(dt);
     } else {
       controller.advance(dt);
-    }
-    if (!_started && controller.started) {
-      _started = true;
-      onStart();
     }
     if (_started) {
       apply(controller.progress);

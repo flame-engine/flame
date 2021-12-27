@@ -1,6 +1,8 @@
 import 'dart:math';
 
-import 'package:flame/src/effects/controllers/effect_controller.dart';
+import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
+import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -157,6 +159,56 @@ void main() {
       expect(ec.isInfinite, true);
     });
 
+    test('with speed', () async {
+      final ec = EffectController(speed: 1);
+      expect(ec.duration, isNaN);
+
+      final game = FlameGame()..onGameResize(Vector2.zero());
+      final component = PositionComponent();
+      final effect = MoveEffect.by(Vector2(10, 0), ec);
+      component.add(effect);
+      await game.ensureAdd(component);
+      game.update(0);
+      expect(ec.duration, 10);
+    });
+
+    test('curved with speed', () {
+      final ec = EffectController(speed: 1, curve: Curves.ease);
+      expect(ec, isA<SpeedEffectController>());
+      expect(
+        (ec as SpeedEffectController).child,
+        isA<CurvedEffectController>(),
+      );
+    });
+
+    test('reverse speed-1', () {
+      final ec = EffectController(speed: 1, alternate: true);
+      expect(ec, isA<SequenceEffectController>());
+      final seq = (ec as SequenceEffectController).children;
+      expect(seq.length, 2);
+      expect(seq[0], isA<SpeedEffectController>());
+      expect(seq[1], isA<SpeedEffectController>());
+      expect(
+        (seq[0] as SpeedEffectController).child,
+        isA<LinearEffectController>(),
+      );
+      expect(
+        (seq[1] as SpeedEffectController).child,
+        isA<ReverseLinearEffectController>(),
+      );
+    });
+
+    test('reverse speed-2', () {
+      final ec = EffectController(speed: 1, reverseSpeed: 2);
+      expect(ec, isA<SequenceEffectController>());
+      final seq = (ec as SequenceEffectController).children;
+      expect(seq.length, 2);
+      expect(seq[0], isA<SpeedEffectController>());
+      expect(seq[1], isA<SpeedEffectController>());
+      expect((seq[0] as SpeedEffectController).speed, 1);
+      expect((seq[1] as SpeedEffectController).speed, 2);
+    });
+
     test('reset', () {
       final ec = EffectController(duration: 1.23);
       expect(ec.started, true);
@@ -186,41 +238,6 @@ void main() {
       expect(ec.started, true);
       expect(ec.completed, false);
       expect(ec.progress, 0);
-    });
-
-    test('errors', () {
-      void expectThrows(void Function() func) {
-        expect(func, throwsA(isA<AssertionError>()));
-      }
-
-      expectThrows(
-        () => EffectController(duration: -1),
-      );
-      expectThrows(
-        () => EffectController(duration: 1, repeatCount: 0),
-      );
-      expectThrows(
-        () => EffectController(
-          duration: 1,
-          infinite: true,
-          repeatCount: 3,
-        ),
-      );
-      expectThrows(
-        () => EffectController(duration: 1, repeatCount: -1),
-      );
-      expectThrows(
-        () => EffectController(duration: 1, reverseDuration: -1),
-      );
-      expectThrows(
-        () => EffectController(duration: 1, startDelay: -1),
-      );
-      expectThrows(
-        () => EffectController(duration: 1, atMaxDuration: -1),
-      );
-      expectThrows(
-        () => EffectController(duration: 1, atMinDuration: -1),
-      );
     });
 
     test('curve', () {
@@ -272,6 +289,147 @@ void main() {
       }
       ec.advance(1e-10);
       expect(ec.completed, true);
+    });
+
+    test('reverse curve with speed', () {
+      final ec = EffectController(
+        speed: 1,
+        curve: Curves.easeIn,
+        alternate: true,
+      );
+      expect(ec, isA<SequenceEffectController>());
+      final seq = (ec as SequenceEffectController).children;
+      expect(seq.length, 2);
+      expect(seq[0], isA<SpeedEffectController>());
+      expect(seq[1], isA<SpeedEffectController>());
+      expect(
+        (seq[0] as SpeedEffectController).child,
+        isA<CurvedEffectController>(),
+      );
+      expect(
+        (seq[1] as SpeedEffectController).child,
+        isA<ReverseCurvedEffectController>(),
+      );
+    });
+
+    group('errors', () {
+      test('empty', () {
+        expect(
+          () => EffectController(),
+          failsAssert('Either duration or speed must be specified'),
+        );
+      });
+
+      test('duration and speed', () {
+        expect(
+          () => EffectController(duration: 1, speed: 1),
+          failsAssert(
+            'Both duration and speed cannot be specified at the same time',
+          ),
+        );
+      });
+
+      test('reverseDuration and reverseSpeed', () {
+        expect(
+          () => EffectController(
+            duration: 1,
+            reverseDuration: 1,
+            reverseSpeed: 1,
+          ),
+          failsAssert(
+            'Both reverseDuration and reverseSpeed cannot be specified at the '
+            'same time',
+          ),
+        );
+      });
+
+      test('negative duration', () {
+        expect(
+          () => EffectController(duration: -1),
+          failsAssert('Duration cannot be negative: -1.0'),
+        );
+      });
+
+      test('negative reverse duration', () {
+        expect(
+          () => EffectController(duration: 1, reverseDuration: -1),
+          failsAssert('Reverse duration cannot be negative: -1.0'),
+        );
+      });
+
+      test('zero speed', () {
+        expect(
+          () => EffectController(speed: 0),
+          failsAssert('Speed must be positive: 0.0'),
+        );
+      });
+
+      test('negative speed', () {
+        expect(
+          () => EffectController(speed: -1),
+          failsAssert('Speed must be positive: -1.0'),
+        );
+      });
+
+      test('zero reverseSpeed', () {
+        expect(
+          () => EffectController(speed: 1, reverseSpeed: 0),
+          failsAssert('Reverse speed must be positive: 0.0'),
+        );
+      });
+
+      test('negative reverseSpeed', () {
+        expect(
+          () => EffectController(speed: 1, reverseSpeed: -1),
+          failsAssert('Reverse speed must be positive: -1.0'),
+        );
+      });
+
+      test('zero repeat count', () {
+        expect(
+          () => EffectController(duration: 1, repeatCount: 0),
+          failsAssert('Repeat count must be positive: 0'),
+        );
+      });
+
+      test('negative repeat count', () {
+        expect(
+          () => EffectController(duration: 1, repeatCount: -1),
+          failsAssert('Repeat count must be positive: -1'),
+        );
+      });
+
+      test('repeated and infinite', () {
+        expect(
+          () => EffectController(
+            duration: 1,
+            infinite: true,
+            repeatCount: 3,
+          ),
+          failsAssert('An infinite effect cannot have a repeat count'),
+        );
+      });
+
+      test('negative startDelay', () {
+        expect(
+          () => EffectController(duration: 1, startDelay: -1),
+          failsAssert('Start delay cannot be negative: -1.0'),
+        );
+      });
+
+      test('negative atMinDuration', () {
+        expect(
+          () => EffectController(duration: 1, atMinDuration: -1),
+          failsAssert('At-min duration cannot be negative: -1.0'),
+        );
+      });
+
+      test('negative atMaxDuration', () {
+        expect(
+          () => EffectController(duration: 1, atMaxDuration: -1),
+          failsAssert('At-max duration cannot be negative: -1.0'),
+        );
+      });
     });
   });
 }

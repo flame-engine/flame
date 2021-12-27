@@ -59,9 +59,11 @@ There are multiple effect controllers provided by the Flame framework as well:
 - [`RepeatedEffectController`](#repeatedeffectcontroller)
 - [`InfiniteEffectController`](#infiniteeffectcontroller)
 - [`SequenceEffectController`](#sequenceeffectcontroller)
+- [`SpeedEffectController`](#speedeffectcontroller)
 - [`DelayedEffectController`](#delayedeffectcontroller)
 - [`RandomEffectController`](#randomeffectcontroller)
 - [`SineEffectController`](#sineeffectcontroller)
+- [`ZigzagEffectController`](#zigzageffectcontroller)
 
 
 ## Built-in effects
@@ -452,6 +454,28 @@ final ec = SequenceEffectController([
 ```
 
 
+### `SpeedEffectController`
+
+Alters the duration of its child effect controller so that the effect proceeds at the predefined
+speed. The initial duration of the child EffectController is irrelevant. The child controller must
+be the subclass of `DurationEffectController`.
+
+The `SpeedEffectController` can only be applied to effects for which the notion of speed is
+well-defined. Such effects must implement the `MeasurableEffect` interface. For example, the
+following effects qualify: [`MoveEffect.by`](#moveeffectby), [`MoveEffect.to`](#moveeffectto),
+[`MoveAlongPathEffect`](#movealongpatheffect), [`RotateEffect.by`](#rotateeffectby),
+[`RotateEffect.to`](#rotateeffectto).
+
+The parameter `speed` is in units per second, where the notion of a "unit" depends on the target
+effect. For example, for move effects, they refer to the distance travelled; for rotation effects
+the units are radians.
+
+```dart
+final ec1 = SpeedEffectController(LinearEffectController(0), speed: 1);
+final ec2 = EffectController(speed: 1); // same as ec1
+```
+
+
 ### `DelayedEffectController`
 
 Effect controller that executes its child controller after the prescribed `delay`. While the
@@ -470,7 +494,7 @@ duration is re-generated upon each reset, which makes this controller particular
 repeated contexts, such as [](#repeatedeffectcontroller) or [](#infiniteeffectcontroller).
 
 ```dart
-final effect = RandomEffectController.uniform(
+final ec = RandomEffectController.uniform(
   LinearEffectController(0),  // duration here is irrelevant
   min: 0.5,
   max: 1.5,
@@ -490,6 +514,18 @@ natural-looking harmonic oscillations. Two perpendicular move effects governed b
 
 ```dart
 final ec = SineEffectController(period: 1);
+```
+
+
+### `ZigzagEffectController`
+
+Simple alternating effect controller. Over the course of one `period`, this controller will proceed
+linearly from 0 to 1, then to -1, and then back to 0. Use this for oscillating effects where the
+starting position should be the center of the oscillations, rather than the extreme (as provided
+by the standard alternating `EffectController`).
+
+```dart
+final ec = ZigzagEffectController(period: 2);
 ```
 
 

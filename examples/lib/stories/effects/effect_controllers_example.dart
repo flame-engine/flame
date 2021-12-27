@@ -22,7 +22,6 @@ class EffectControllersExample extends FlameGame {
   @override
   void onMount() {
     camera.viewport = FixedResolutionViewport(Vector2(400, 600));
-    /*
     add(
       RectangleComponent.square(
         position: Vector2(20, 50),
@@ -38,19 +37,19 @@ class EffectControllersExample extends FlameGame {
       RectangleComponent.square(
         position: Vector2(70, 50),
         size: 20,
-        paint: Paint() ..color=const Color(0xffffbc63),
+        paint: Paint()..color = const Color(0xffffbc63),
       )..addAll([
-        MoveEffect.by(
-          Vector2(0, 20),
-          InfiniteEffectController(ZigzagEffectController(period: 8/7)),
-        ),
-        MoveEffect.by(
-          Vector2(10, 0),
-          InfiniteEffectController(ZigzagEffectController(period: 2/3)),
-        ),
-      ]),
+          MoveEffect.by(
+            Vector2(0, 20),
+            InfiniteEffectController(ZigzagEffectController(period: 8 / 7)),
+          ),
+          MoveEffect.by(
+            Vector2(10, 0),
+            InfiniteEffectController(ZigzagEffectController(period: 2 / 3)),
+          ),
+        ]),
     );
-    */
+
     add(
       RectangleComponent.square(
         position: Vector2(140, 50),
