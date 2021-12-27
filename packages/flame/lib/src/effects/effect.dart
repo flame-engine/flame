@@ -100,11 +100,11 @@ abstract class Effect extends Component {
     if (_paused || _finished) {
       return;
     }
-    controller.advance(dt);
     if (!_started && controller.started) {
       _started = true;
       onStart();
     }
+    controller.advance(dt);
     if (_started) {
       apply(controller.progress);
     }
