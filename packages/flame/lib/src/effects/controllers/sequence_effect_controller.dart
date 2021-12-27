@@ -1,3 +1,4 @@
+import '../effect.dart';
 import 'effect_controller.dart';
 
 /// An effect controller that executes a list of other controllers one after
@@ -77,4 +78,7 @@ class SequenceEffectController extends EffectController {
     _currentIndex = children.length - 1;
     children.forEach((c) => c.setToEnd());
   }
+
+  @override
+  void onMount(Effect parent) => children.forEach((c) => c.onMount(parent));
 }

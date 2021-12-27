@@ -59,6 +59,7 @@ There are multiple effect controllers provided by the Flame framework as well:
 - [`RepeatedEffectController`](#repeatedeffectcontroller)
 - [`InfiniteEffectController`](#infiniteeffectcontroller)
 - [`SequenceEffectController`](#sequenceeffectcontroller)
+- [`SpeedEffectController`](#speedeffectcontroller)
 - [`DelayedEffectController`](#delayedeffectcontroller)
 - [`RandomEffectController`](#randomeffectcontroller)
 - [`ZigzagEffectController`](#zigzageffectcontroller)
@@ -449,6 +450,28 @@ final ec = SequenceEffectController([
   PauseEffectController(0.2),
   ReverseLinearEffectController(1),
 ]);
+```
+
+
+### `SpeedEffectController`
+
+Alters the duration of its child effect controller so that the effect proceeds at the predefined
+speed. The initial duration of the child EffectController is irrelevant. The child controller must
+be the subclass of `DurationEffectController`.
+
+The `SpeedEffectController` can only be applied to effects for which the notion of speed is
+well-defined. Such effects must implement the `MeasurableEffect` interface. For example, the
+following effects qualify: [`MoveEffect.by`](#moveeffectby), [`MoveEffect.to`](#moveeffectto),
+[`MoveAlongPathEffect`](#movealongpatheffect), [`RotateEffect.by`](#rotateeffectby),
+[`RotateEffect.to`](#rotateeffectto).
+
+The parameter `speed` is in units per second, where the notion of a "unit" depends on the target
+effect. For example, for move effects, they refer to the distance travelled; for rotation effects
+the units are radians.
+
+```dart
+final ec1 = SpeedEffectController(LinearEffectController(0), speed: 1);
+final ec2 = EffectController(speed: 1); // same as ec1
 ```
 
 

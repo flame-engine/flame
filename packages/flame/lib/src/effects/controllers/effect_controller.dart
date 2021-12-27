@@ -1,5 +1,6 @@
-import 'package:flutter/animation.dart';
+import 'package:flutter/animation.dart' show Curve, Curves;
 
+import '../effect.dart' show Effect;
 import 'curved_effect_controller.dart';
 import 'delayed_effect_controller.dart';
 import 'infinite_effect_controller.dart';
@@ -9,10 +10,11 @@ import 'repeated_effect_controller.dart';
 import 'reverse_curved_effect_controller.dart';
 import 'reverse_linear_effect_controller.dart';
 import 'sequence_effect_controller.dart';
+import 'speed_effect_controller.dart';
 
 /// Base "controller" class to facilitate animation of effects.
 ///
-/// The purpose of an effect controller is to define how an effect or an
+/// The purpose of an effect controller is to define how an [Effect] or an
 /// animation should progress over time. To facilitate that, this class provides
 /// variable [progress], which will grow from 0.0 to 1.0. The value of 0
 /// corresponds to the beginning of an animation, and the value of 1.0 is
@@ -63,13 +65,19 @@ abstract class EffectController {
   /// Setting parameter [alternate] to true is another way to create a
   /// controller whose [reverseDuration] is the same as the forward [duration].
   ///
+  /// As an alternative to specifying durations, you can also provide [speed]
+  /// and [reverseSpeed] parameters, but only for effects where the notion of
+  /// a speed is well-defined (`MeasurableEffect`s).
+  ///
   /// If the animation is finite and there are no "backward" or "atMin" stages
   /// then the animation will complete at `progress == 1`, otherwise it will
   /// complete at `progress == 0`.
   factory EffectController({
-    required double duration,
+    double? duration,
+    double? speed,
     Curve curve = Curves.linear,
     double? reverseDuration,
+    double? reverseSpeed,
     Curve? reverseCurve,
     bool infinite = false,
     bool alternate = false,
@@ -78,35 +86,126 @@ abstract class EffectController {
     double atMaxDuration = 0.0,
     double atMinDuration = 0.0,
   }) {
+    assert(
+      (duration ?? 1) >= 0,
+      'Duration cannot be negative: $duration',
+    );
+    assert(
+      (reverseDuration ?? 1) >= 0,
+      'Reverse duration cannot be negative: $reverseDuration',
+    );
+    assert(
+      (duration != null) || (speed != null),
+      'Either duration or speed must be specified',
+    );
+    assert(
+      !(duration != null && speed != null),
+      'Both duration and speed cannot be specified at the same time',
+    );
+    assert(
+      !(reverseDuration != null && reverseSpeed != null),
+      'Both reverseDuration and reverseSpeed cannot be specified at the '
+      'same time',
+    );
+    assert(
+      (speed ?? 1) > 0,
+      'Speed must be positive: $speed',
+    );
+    assert(
+      (reverseSpeed ?? 1) > 0,
+      'Reverse speed must be positive: $reverseSpeed',
+    );
+    assert(
+      !(infinite && repeatCount != null),
+      'An infinite effect cannot have a repeat count',
+    );
+    assert(
+      (repeatCount ?? 1) > 0,
+      'Repeat count must be positive: $repeatCount',
+    );
+    assert(
+      startDelay >= 0,
+      'Start delay cannot be negative: $startDelay',
+    );
+    assert(
+      atMaxDuration >= 0,
+      'At-max duration cannot be negative: $atMaxDuration',
+    );
+    assert(
+      atMinDuration >= 0,
+      'At-min duration cannot be negative: $atMinDuration',
+    );
+    final items = <EffectController>[];
+
+    // FORWARD
     final isLinear = curve == Curves.linear;
-    final hasReverse = alternate || (reverseDuration != null);
-    final reverseIsLinear =
-        reverseCurve == Curves.linear || ((reverseCurve == null) && isLinear);
-    final items = [
-      if (isLinear) LinearEffectController(duration),
-      if (!isLinear) CurvedEffectController(duration, curve),
-      if (atMaxDuration != 0) PauseEffectController(atMaxDuration, progress: 1),
-      if (hasReverse && reverseIsLinear)
-        ReverseLinearEffectController(reverseDuration ?? duration),
-      if (hasReverse && !reverseIsLinear)
-        ReverseCurvedEffectController(
-          reverseDuration ?? duration,
-          reverseCurve ?? curve.flipped,
-        ),
-      if (atMinDuration != 0) PauseEffectController(atMinDuration, progress: 0),
-    ];
+    if (isLinear) {
+      items.add(
+        duration != null
+            ? LinearEffectController(duration)
+            : SpeedEffectController(LinearEffectController(0), speed: speed!),
+      );
+    } else {
+      items.add(
+        duration != null
+            ? CurvedEffectController(duration, curve)
+            : SpeedEffectController(
+                CurvedEffectController(1, curve),
+                speed: speed!,
+              ),
+      );
+    }
+
+    // AT-MAX
+    if (atMaxDuration != 0) {
+      items.add(PauseEffectController(atMaxDuration, progress: 1.0));
+    }
+
+    // REVERSE
+    final hasReverse =
+        alternate || (reverseDuration != null) || (reverseSpeed != null);
+    if (hasReverse) {
+      final reverseIsLinear =
+          reverseCurve == Curves.linear || ((reverseCurve == null) && isLinear);
+      final reverseHasDuration = (reverseDuration != null) ||
+          (reverseSpeed == null && duration != null);
+      if (reverseIsLinear) {
+        items.add(
+          reverseHasDuration
+              ? ReverseLinearEffectController(reverseDuration ?? duration!)
+              : SpeedEffectController(
+                  ReverseLinearEffectController(0),
+                  speed: reverseSpeed ?? speed!,
+                ),
+        );
+      } else {
+        reverseCurve ??= curve.flipped;
+        items.add(
+          reverseHasDuration
+              ? ReverseCurvedEffectController(
+                  reverseDuration ?? duration!,
+                  reverseCurve,
+                )
+              : SpeedEffectController(
+                  ReverseCurvedEffectController(1, reverseCurve),
+                  speed: reverseSpeed ?? speed!,
+                ),
+        );
+      }
+    }
+
+    // AT-MIN
+    if (atMinDuration != 0) {
+      items.add(PauseEffectController(atMinDuration, progress: 0.0));
+    }
+
     assert(items.isNotEmpty);
     var controller =
         items.length == 1 ? items[0] : SequenceEffectController(items);
     if (infinite) {
-      assert(
-        repeatCount == null,
-        'An infinite animation cannot have a repeat count',
-      );
       controller = InfiniteEffectController(controller);
     }
     if (repeatCount != null && repeatCount != 1) {
-      assert(repeatCount > 0, 'repeatCount must be positive');
       controller = RepeatedEffectController(controller, repeatCount);
     }
     if (startDelay != 0) {
@@ -151,7 +250,7 @@ abstract class EffectController {
   /// controller has finished.
   ///
   /// Normally, this method will be called by the owner of the controller class.
-  /// For example, if the controller is passed to an `Effect` class, then that
+  /// For example, if the controller is passed to an [Effect] class, then that
   /// class will take care of calling this method as necessary.
   double advance(double dt);
 
@@ -168,4 +267,9 @@ abstract class EffectController {
 
   /// Puts the controller into its final "completed" state.
   void setToEnd();
+
+  /// This is called by the [Effect] class when the controller is attached to
+  /// that effect. Controllers with children should propagate this to their
+  /// children.
+  void onMount(Effect parent) {}
 }
