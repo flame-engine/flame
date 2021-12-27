@@ -56,7 +56,7 @@ mixin Draggable on Component {
     if (_checkPointerId(pointerId)) {
       _isDragged = false;
       _currentPointerIds.remove(pointerId);
-      return handleDragCanceled(pointerId);
+      return onDragCancel(pointerId);
     }
     return true;
   }
