@@ -10,7 +10,7 @@ class Forge2DCamera extends Camera {
 
   @override
   Vector2 projectVector(Vector2 worldCoordinates) {
-    return ((worldCoordinates..y *= -1) - position)..scale(zoom);
+    return ((worldCoordinates.clone()..y *= -1) - position)..scale(zoom);
   }
 
   @override
