@@ -3,6 +3,7 @@ import 'package:flame/game.dart';
 
 import '../../commons/commons.dart';
 import 'color_effect_example.dart';
+import 'effect_controllers_example.dart';
 import 'move_effect_example.dart';
 import 'opacity_effect_example.dart';
 import 'remove_effect_example.dart';
@@ -53,5 +54,11 @@ void addEffectsStories(Dashbook dashbook) {
       (_) => GameWidget(game: RemoveEffectExample()),
       codeLink: baseLink('effects/remove_effect_example.dart'),
       info: RemoveEffectExample.description,
+    )
+    ..add(
+      'EffectControllers',
+      (_) => GameWidget(game: EffectControllersExample()),
+      codeLink: baseLink('effects/effect_controllers_example.dart'),
+      info: EffectControllersExample.description,
     );
 }
