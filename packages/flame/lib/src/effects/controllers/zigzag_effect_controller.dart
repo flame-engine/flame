@@ -20,11 +20,14 @@ class ZigzagEffectController extends DurationEffectController {
 
   @override
   double get progress {
-    final f = timer / _quarterPeriod;
-    return f <= 1
-        ? f
-        : f >= 3
-            ? f - 4
-            : 2 - f;
+    // Assume zigzag's period is 4 units of length. Within that period, there
+    // are 3 linear segments: at first it's y = x, for 0 ≤ x ≤ 1, then it's
+    // y = -x + 2, for 1 ≤ x ≤ 3, and finally it's y = x + (-4), for 3 ≤ x ≤ 4.
+    final x = timer / _quarterPeriod;
+    return x <= 1
+        ? x
+        : x >= 3
+            ? x - 4
+            : 2 - x;
   }
 }
