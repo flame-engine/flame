@@ -23,10 +23,10 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// that uses the Component's priority for sorting.
   ComponentSet({
     int Function(Component e1, Component e2)? comparator,
-    bool strictMode = true,
+    bool? strictMode,
   }) : super(
           comparator: comparator ?? Comparing.on<Component>((c) => c.priority),
-          strictMode: strictMode,
+          strictMode: strictMode ?? defaultStrictMode,
         );
 
   // When we switch to Dart 2.15 this can be replaced with constructor tear-off
@@ -49,6 +49,8 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// When priorities change we need to re-balance the component set, but
   /// we can only do that after each update to avoid concurrency issues.
   final Set<Component> _changedPriorities = {};
+
+  static bool defaultStrictMode = false;
 
   /// Registers the component to be added on the next call to
   /// `updateComponentList()`.
