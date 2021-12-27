@@ -2,7 +2,7 @@
 
 ```{warning}
 For now, all AI-related code in Flame should be considered experimental, and its API may change
-multiple times before the next release.
+before the next release.
 ```
 
 `SteeringBehavior`s are a collection of composable classes that can be used to imbue components
