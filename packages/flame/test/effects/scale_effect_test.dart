@@ -17,17 +17,17 @@ void main() {
         ScaleEffect.by(Vector2.all(2.0), EffectController(duration: 1)),
       );
       game.update(0);
-      expectVector2(component.scale, Vector2.all(1.0));
+      expect(component.scale, closeToVector(1, 1));
       expect(component.children.length, 1);
 
       game.update(0.5);
-      expectVector2(component.scale, Vector2.all(1.5));
+      expect(component.scale, closeToVector(1.5, 1.5));
 
       game.update(0.5);
-      expectVector2(component.scale, Vector2.all(2.0));
+      expect(component.scale, closeToVector(2, 2));
       game.update(0);
       expect(component.children.length, 0);
-      expectVector2(component.scale, Vector2.all(2.0));
+      expect(component.scale, closeToVector(2, 2));
     });
 
     flameGame.test('absolute', (game) {
@@ -39,17 +39,17 @@ void main() {
         ScaleEffect.to(Vector2.all(3.0), EffectController(duration: 1)),
       );
       game.update(0);
-      expectVector2(component.scale, Vector2.all(1.0));
+      expect(component.scale, closeToVector(1, 1));
       expect(component.children.length, 1);
 
       game.update(0.5);
-      expectVector2(component.scale, Vector2.all(2.0));
+      expect(component.scale, closeToVector(2, 2));
 
       game.update(0.5);
-      expectVector2(component.scale, Vector2.all(3.0));
+      expect(component.scale, closeToVector(3, 3));
       game.update(0);
       expect(component.children.length, 0);
-      expectVector2(component.scale, Vector2.all(3.0));
+      expect(component.scale, closeToVector(3, 3));
     });
 
     flameGame.test('reset relative', (game) {
@@ -61,15 +61,14 @@ void main() {
         EffectController(duration: 1),
       );
       component.add(effect..removeOnFinish = false);
-      final expectedScale = Vector2.all(1.0);
+      var expectedScale = 1.0;
       for (var i = 0; i < 5; i++) {
-        expectVector2(component.scale, expectedScale);
         // After each reset the object will be scaled up twice
         // relative to its scale at the start of the effect.
         effect.reset();
         game.update(1);
-        expectedScale.multiply(Vector2.all(2));
-        expectVector2(component.scale, expectedScale);
+        expectedScale *= 2;
+        expect(component.scale, closeToVector(expectedScale, expectedScale));
       }
     });
 
@@ -88,7 +87,7 @@ void main() {
         // `Vector2(1, 1)`, regardless of its initial orientation.
         effect.reset();
         game.update(1);
-        expectVector2(component.scale, Vector2.all(1.0));
+        expect(component.scale, closeToVector(1, 1));
       }
     });
 
@@ -149,7 +148,7 @@ void main() {
       game.update(1000 - totalTime);
       // Typically, `component.scale` could accumulate numeric discrepancy on
       // the order of 1e-11 .. 1e-12 by now.
-      expectVector2(component.scale, Vector2.all(1.0), epsilon: 1e-10);
+      expect(component.scale, closeToVector(1, 1, epsilon: 1e-10));
     });
   });
 }
