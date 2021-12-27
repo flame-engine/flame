@@ -9,10 +9,17 @@ class _GameHasDraggables extends FlameGame with HasDraggables {}
 
 class _DraggableComponent extends PositionComponent with Draggable {
   bool hasStartedDragging = false;
+  bool hasCanceledDragging = false;
 
   @override
   bool onDragStart(int pointerId, DragStartInfo info) {
     hasStartedDragging = true;
+    return true;
+  }
+
+  @override
+  bool onDragCancel(int pointerId) {
+    hasCanceledDragging = true;
     return true;
   }
 }
@@ -154,7 +161,9 @@ void main() {
       ),
     );
     expect(component.isDragged, true);
+    expect(component.hasCanceledDragging, false);
     game.onDragCancel(1);
     expect(component.isDragged, false);
+    expect(component.hasCanceledDragging, true);
   });
 }

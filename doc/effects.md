@@ -62,6 +62,7 @@ There are multiple effect controllers provided by the Flame framework as well:
 - [`SequenceEffectController`](#sequenceeffectcontroller)
 - [`DelayedEffectController`](#delayedeffectcontroller)
 - [`RandomEffectController`](#randomeffectcontroller)
+- [`ZigzagEffectController`](#zigzageffectcontroller)
 
 
 ## Built-in effects
@@ -488,7 +489,7 @@ duration is re-generated upon each reset, which makes this controller particular
 repeated contexts, such as [](#repeatedeffectcontroller) or [](#infiniteeffectcontroller).
 
 ```dart
-final effect = RandomEffectController.uniform(
+final ec = RandomEffectController.uniform(
   LinearEffectController(0),  // duration here is irrelevant
   min: 0.5,
   max: 1.5,
@@ -498,6 +499,18 @@ final effect = RandomEffectController.uniform(
 The user has the ability to control which `Random` source to use, as well as the exact distribution
 of the produced random durations. Two distributions -- `.uniform` and `.exponential` are included,
 any other can be implemented by the user.
+
+
+### `ZigzagEffectController`
+
+Simple alternating effect controller. Over the course of one `period`, this controller will proceed
+linearly from 0 to 1, then to -1, and then back to 0. Use this for oscillating effects where the
+starting position should be the center of the oscillations, rather than the extreme (as provided
+by the standard alternating `EffectController`).
+
+```dart
+final ec = ZigzagEffectController(period: 2);
+```
 
 
 ## See also
