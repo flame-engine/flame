@@ -1,3 +1,4 @@
+import '../effect.dart';
 import 'effect_controller.dart';
 
 /// Effect controller that wraps a [child] effect controller and repeats it
@@ -8,16 +9,16 @@ class InfiniteEffectController extends EffectController {
   final EffectController child;
 
   @override
-  bool get isInfinite => true;
-
-  @override
   bool get completed => false;
 
   @override
-  double? get duration => null;
+  double? get duration => double.infinity;
 
   @override
   double get progress => child.progress;
+
+  @override
+  bool get isRandom => child.isRandom;
 
   @override
   double advance(double dt) {
@@ -54,4 +55,7 @@ class InfiniteEffectController extends EffectController {
   void setToEnd() {
     child.setToEnd();
   }
+
+  @override
+  void onMount(Effect parent) => child.onMount(parent);
 }

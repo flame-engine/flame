@@ -49,7 +49,8 @@ void main() {
         await Future<void>.delayed(const Duration(milliseconds: 50));
         await tester.tapAt(tapPosition);
         expect(game.doubleTapRegistered, isTrue);
-        expectVector2(game.doubleTapPosition!, tapPosition.toVector2());
+        final tapVector = tapPosition.toVector2();
+        expect(game.doubleTapPosition, closeToVector(tapVector.x, tapVector.y));
       },
     );
   });

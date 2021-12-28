@@ -83,6 +83,15 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
         );
 
   @override
+  set text(String value) {
+    if (text != value) {
+      super.text = value;
+      // This ensures that the component will redraw on next update
+      _previousChar = -1;
+    }
+  }
+
+  @override
   @mustCallSuper
   Future<void> onLoad() async {
     await super.onLoad();

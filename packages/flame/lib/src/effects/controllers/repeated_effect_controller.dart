@@ -1,3 +1,4 @@
+import '../effect.dart';
 import 'effect_controller.dart';
 
 /// Effect controller that repeats [child] controller a certain number of times.
@@ -33,9 +34,13 @@ class RepeatedEffectController extends EffectController {
   }
 
   @override
+  bool get isRandom => child.isRandom;
+
+  @override
   double advance(double dt) {
     var t = child.advance(dt);
     while (t > 0 && _remainingCount > 0) {
+      assert(child.completed);
       _remainingCount--;
       if (_remainingCount != 0) {
         child.setToStart();
@@ -55,6 +60,7 @@ class RepeatedEffectController extends EffectController {
       // if we recede from the end position the remaining count must be
       // adjusted.
       _remainingCount = 1;
+      assert(child.completed);
     }
     var t = child.recede(dt);
     while (t > 0 && _remainingCount < repeatCount) {
@@ -76,4 +82,7 @@ class RepeatedEffectController extends EffectController {
     _remainingCount = 0;
     child.setToEnd();
   }
+
+  @override
+  void onMount(Effect parent) => child.onMount(parent);
 }
