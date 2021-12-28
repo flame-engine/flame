@@ -403,23 +403,6 @@ void main() {
 // project ∘ unproject = identity = unproject ∘ project
 // by evaluating an arbitrary list of parameters.
 void _assertIdentityOfProjector(Projector projector) {
-  // unproject combined with project no-ops
-  Vector2 identity1(Vector2 v) {
-    return projector.projectVector(projector.unprojectVector(v));
-  }
-
-  Vector2 identity2(Vector2 v) {
-    return projector.unprojectVector(projector.projectVector(v));
-  }
-
-  Vector2 identity3(Vector2 v) {
-    return projector.scaleVector(projector.unscaleVector(v));
-  }
-
-  Vector2 identity4(Vector2 v) {
-    return projector.unscaleVector(projector.scaleVector(v));
-  }
-
   final someValues = <double>[-1, 0, 1, 2, 10, 100];
   final someVectors = [
     for (final x in someValues)
@@ -427,9 +410,21 @@ void _assertIdentityOfProjector(Projector projector) {
   ];
 
   someVectors.forEach((e) {
-    expectVector2(identity1(e), e);
-    expectVector2(identity2(e), e);
-    expectVector2(identity3(e), e);
-    expectVector2(identity4(e), e);
+    expect(
+      projector.projectVector(projector.unprojectVector(e)),
+      closeToVector(e.x, e.y, epsilon: 1e-13),
+    );
+    expect(
+      projector.unprojectVector(projector.projectVector(e)),
+      closeToVector(e.x, e.y, epsilon: 1e-13),
+    );
+    expect(
+      projector.scaleVector(projector.unscaleVector(e)),
+      closeToVector(e.x, e.y, epsilon: 1e-13),
+    );
+    expect(
+      projector.unscaleVector(projector.scaleVector(e)),
+      closeToVector(e.x, e.y, epsilon: 1e-13),
+    );
   });
 }

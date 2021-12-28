@@ -14,6 +14,8 @@ import 'cache/value_cache.dart';
 /// called automatically once the component is added to the component tree in
 /// your game (with `game.add`).
 class Component with Loadable {
+  Component({int? priority}) : _priority = priority ?? 0;
+
   /// What coordinate system this component should respect (i.e. should it
   /// observe camera, viewport, or use the raw canvas).
   ///
@@ -115,7 +117,23 @@ class Component with Loadable {
     return _debugTextPaintCache.value!;
   }
 
-  Component({int? priority}) : _priority = priority ?? 0;
+  //#region Component lifecycle methods
+
+  /// Called after the component has finished running its [onLoad] method and
+  /// when the component is added to its new parent.
+  ///
+  /// Whenever [onMount] returns something, the parent will wait for the future
+  /// to be resolved before adding it. If `null` is returned, the class is
+  /// added right away.
+  ///
+  /// Example:
+  /// ```dart
+  /// @override
+  /// void onMount() {
+  ///   position = parent!.size / 2;
+  /// }
+  /// ```
+  void onMount() {}
 
   /// This method is called periodically by the game engine to request that your
   /// component updates itself.
@@ -148,6 +166,8 @@ class Component with Loadable {
       renderDebugMode(canvas);
     }
   }
+
+  //#endregion
 
   void renderDebugMode(Canvas canvas) {}
 
@@ -195,10 +215,8 @@ class Component with Loadable {
   }
 
   /// Called right before the component is removed from the game.
-  @override
   @mustCallSuper
   void onRemove() {
-    super.onRemove();
     _children?.forEach((child) => child.onRemove());
     isPrepared = false;
     isMounted = false;
