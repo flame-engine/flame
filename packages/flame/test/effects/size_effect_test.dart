@@ -18,17 +18,17 @@ void main() {
         SizeEffect.by(Vector2.all(1.0), EffectController(duration: 1)),
       );
       game.update(0);
-      expectVector2(component.size, Vector2.all(1.0));
+      expect(component.size, closeToVector(1, 1));
       expect(component.children.length, 1);
 
       game.update(0.5);
-      expectVector2(component.size, Vector2.all(1.5));
+      expect(component.size, closeToVector(1.5, 1.5));
 
       game.update(0.5);
-      expectVector2(component.size, Vector2.all(2.0));
+      expect(component.size, closeToVector(2, 2));
       game.update(0);
       expect(component.children.length, 0);
-      expectVector2(component.size, Vector2.all(2.0));
+      expect(component.size, closeToVector(2, 2));
     });
 
     flameGame.test('absolute', (game) {
@@ -40,17 +40,17 @@ void main() {
         SizeEffect.to(Vector2.all(3.0), EffectController(duration: 1)),
       );
       game.update(0);
-      expectVector2(component.size, Vector2.all(1.0));
+      expect(component.size, closeToVector(1, 1));
       expect(component.children.length, 1);
 
       game.update(0.5);
-      expectVector2(component.size, Vector2.all(2.0));
+      expect(component.size, closeToVector(2, 2));
 
       game.update(0.5);
-      expectVector2(component.size, Vector2.all(3.0));
+      expect(component.size, closeToVector(3, 3));
       game.update(0);
       expect(component.children.length, 0);
-      expectVector2(component.size, Vector2.all(3.0));
+      expect(component.size, closeToVector(3, 3));
     });
 
     flameGame.test('reset relative', (game) {
@@ -64,13 +64,12 @@ void main() {
       component.add(effect..removeOnFinish = false);
       final expectedSize = Vector2.zero();
       for (var i = 0; i < 5; i++) {
-        expectVector2(component.size, expectedSize);
         // After each reset the object will be sized up by Vector2(1, 1)
         // relative to its size at the start of the effect.
         effect.reset();
         game.update(1);
         expectedSize.add(Vector2.all(1.0));
-        expectVector2(component.size, expectedSize);
+        expect(component.size, closeToVector(expectedSize.x, expectedSize.y));
       }
     });
 
@@ -89,7 +88,7 @@ void main() {
         // `Vector2(1, 1)`, regardless of its initial orientation.
         effect.reset();
         game.update(1);
-        expectVector2(component.size, Vector2.all(1.0));
+        expect(component.size, closeToVector(1, 1));
       }
     });
 
@@ -112,21 +111,13 @@ void main() {
       );
 
       game.update(1);
-      expectVector2(
-        component.size,
-        Vector2.all(1),
-        epsilon: 1e-15,
-      ); // 5*1/10 + 0.5*1
+      expect(component.size, closeToVector(1, 1)); // 5*1/10 + 0.5*1
       game.update(1);
-      expectVector2(
-        component.size,
-        Vector2.all(1),
-        epsilon: 1e-15,
-      ); // 5*2/10 + 0.5*1 - 0.5*1
+      expect(component.size, closeToVector(1, 1)); // 5*2/10 + 0.5*1 - 0.5*1
       for (var i = 0; i < 10; i++) {
         game.update(1);
       }
-      expectVector2(component.size, Vector2.all(5), epsilon: 1e-15);
+      expect(component.size, closeToVector(5, 5));
       expect(component.children.length, 0);
     });
 
@@ -154,7 +145,7 @@ void main() {
       game.update(1000 - totalTime);
       // Typically, `component.size` could accumulate numeric discrepancy on the
       // order of 1e-11 .. 1e-12 by now.
-      expectVector2(component.size, Vector2.zero(), epsilon: 1e-10);
+      expect(component.size, closeToVector(0, 0, epsilon: 1e-10));
     });
   });
 }
