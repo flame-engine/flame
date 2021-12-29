@@ -44,7 +44,7 @@ class PlayerComponent extends SpriteAnimationComponent
       : super(size: Vector2(50, 75), position: Vector2(100, 500)) {
     bulletCreator = Timer(0.5, repeat: true, onTick: _createBullet);
 
-    addHitbox(HitboxRectangle());
+    add(HitboxRectangle());
   }
 
   @override

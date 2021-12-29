@@ -1,27 +1,28 @@
 import 'dart:math';
 
-import 'package:flame/components.dart';
-
+import '../../components.dart';
 import '../../extensions.dart';
 import '../../geometry.dart';
 
 class Circle extends Shape {
-  /// The [normalizedRadius] is what ratio (0.0, 1.0] of the shortest edge of
-  /// [size]/2 that the circle should cover.
-  double normalizedRadius = 1.0;
+  double radius;
 
   /// With this constructor you can create your [Circle] from a radius and
   /// a position. It will also calculate the bounding rectangle [size] for the
   /// [Circle].
   Circle({
-    double? radius,
+    required this.radius,
     Vector2? position,
-    double angle = 0,
+    double? angle,
+    int? priority,
   }) : super(
           position: position,
-          size: Vector2.all((radius ?? 0) * 2),
+          size: Vector2.all(radius * 2),
           angle: angle,
-        );
+          priority: priority,
+        ) {
+    size.addListener(() => radius = min(size.x, size.y) / 2);
+  }
 
   /// This constructor is used by [HitboxCircle]
   ///
@@ -39,19 +40,18 @@ class Circle extends Shape {
   final Vector2 _scaledSize = Vector2.zero();
 
   /// Get the radius of the circle after it has been sized and scaled.
-  double get radius {
+  double get scaledRadius {
     _scaledSize
       ..setFrom(size)
       ..multiply(scale);
-    return (min(_scaledSize.x.abs(), _scaledSize.y.abs()) / 2) *
-        normalizedRadius;
+    return min(_scaledSize.x, _scaledSize.y) / 2;
   }
 
   /// This render method doesn't rotate the canvas according to angle since a
   /// circle will look the same rotated as not rotated.
   @override
   void render(Canvas canvas) {
-    canvas.drawCircle(localCenter.toOffset(), radius, paint);
+    canvas.drawCircle(Offset.zero, radius, paint);
   }
 
   /// Checks whether the represented circle contains the [point].

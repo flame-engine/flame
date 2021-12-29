@@ -17,7 +17,7 @@ class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
           position: position,
           size: size,
         ) {
-    addHitbox(HitboxCircle());
+    add(HitboxCircle());
   }
 
   @override

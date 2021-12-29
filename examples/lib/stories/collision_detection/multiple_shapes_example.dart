@@ -206,7 +206,7 @@ class CollidablePolygon extends MyCollidable {
       Vector2(0, -1.0),
       Vector2(-0.8, -0.8),
     ]);
-    addHitbox(hitbox);
+    add(hitbox);
   }
 }
 
@@ -217,7 +217,7 @@ class CollidableRectangle extends MyCollidable {
     Vector2 velocity,
     ScreenCollidable screenCollidable,
   ) : super(position, size, velocity, screenCollidable) {
-    addHitbox(HitboxRectangle());
+    add(HitboxRectangle());
   }
 }
 
@@ -228,7 +228,7 @@ class CollidableCircle extends MyCollidable {
     Vector2 velocity,
     ScreenCollidable screenCollidable,
   ) : super(position, size, velocity, screenCollidable) {
-    addHitbox(HitboxCircle());
+    add(HitboxCircle());
   }
 }
 
@@ -267,9 +267,9 @@ class CollidableSnowman extends MyCollidable {
     final top = SnowmanPart(0.4, Vector2(0, -0.8), Colors.red);
     final middle = SnowmanPart(0.6, Vector2(0, -0.3), Colors.yellow);
     final bottom = SnowmanPart(1.0, Vector2(0, 0.5), Colors.green);
-    addHitbox(top);
-    addHitbox(middle);
-    addHitbox(bottom);
+    add(top);
+    add(middle);
+    add(bottom);
     add(
       randomCollidable(
         Vector2(size.x / 2, size.y * 0.75),

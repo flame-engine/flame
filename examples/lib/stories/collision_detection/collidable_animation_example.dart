@@ -79,7 +79,7 @@ class AnimatedComponent extends SpriteAnimationComponent
       Vector2(0.2, 0.4),
       Vector2(1.0, -0.1),
     ]);
-    addHitbox(hitbox);
+    add(hitbox);
   }
 
   @override

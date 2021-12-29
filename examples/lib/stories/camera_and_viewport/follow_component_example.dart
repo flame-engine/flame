@@ -66,7 +66,7 @@ class MovableEmber extends Ember<FollowComponentExample>
       anchor: Anchor.center,
     );
     add(positionText);
-    addHitbox(HitboxCircle());
+    add(HitboxCircle());
   }
 
   @override
@@ -180,7 +180,7 @@ class Rock extends SpriteComponent
   Future<void> onLoad() async {
     sprite = await gameRef.loadSprite('nine-box.png');
     paint = Paint()..color = Colors.white;
-    addHitbox(HitboxRectangle());
+    add(HitboxRectangle());
   }
 
   @override

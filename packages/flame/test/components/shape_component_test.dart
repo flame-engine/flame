@@ -1,13 +1,14 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('ShapeComponent.containsPoint', () {
     test('circle contains point', () {
-      final component = CircleComponent(
+      final component = Circle(
         radius: 1.0,
         position: Vector2(1, 1),
         anchor: Anchor.center,
