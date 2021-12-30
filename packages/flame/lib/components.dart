@@ -23,7 +23,6 @@ export 'src/components/sprite_animation_group_component.dart';
 export 'src/components/sprite_batch_component.dart';
 export 'src/components/sprite_component.dart';
 export 'src/components/sprite_group_component.dart';
-export 'src/components/steerable_component.dart';
 export 'src/components/text_box_component.dart';
 export 'src/components/text_component.dart';
 export 'src/components/timer_component.dart';
