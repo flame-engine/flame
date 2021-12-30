@@ -1,4 +1,3 @@
-import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/ai/steer/behaviors/pursue.dart';
 import 'package:flame/src/components/steerable_component.dart';
