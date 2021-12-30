@@ -1,6 +1,10 @@
 # flame_tiled
 
-> :warning: Under the current sprite batch implementation, Flips are not working prperly. Any help is appreciated looking into this issue.
+> :warning: Under the current sprite batch implementation, Flips are not working properly. 
+> Any help is appreciated looking into this issue.
+> 
+> You might also experience extra lines while rendering due to a bug in Flutter,
+> see [this issue](https://github.com/flame-engine/flame/issues/1152).
 
 Package to bridge the `tiled` library into easy-to-use Flame components.
 
