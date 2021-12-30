@@ -1,9 +1,12 @@
+// ignore_for_file: implementation_imports
 import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/steer.dart';
+import 'package:flame/src/ai/steer/behaviors/pursue.dart';
+import 'package:flame/src/ai/steer/steerable.dart';
+import 'package:flame/src/components/steerable_component.dart';
 
 class PursueExample extends FlameGame {
   static const description = '''
