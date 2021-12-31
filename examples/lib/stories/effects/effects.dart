@@ -19,6 +19,12 @@ void addEffectsStories(Dashbook dashbook) {
       info: MoveEffectExample.description,
     )
     ..add(
+      'Dual Effect Removal',
+          (_) => GameWidget(game: DualEffectRemovalExample()),
+      codeLink: baseLink('effects/dual_effect_removal_example.dart'),
+      info: DualEffectRemovalExample.description,
+    )
+    ..add(
       'Rotate Effect',
       (_) => GameWidget(game: RotateEffectExample()),
       codeLink: baseLink('effects/rotate_effect_example.dart'),
