@@ -38,7 +38,9 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
     mySprite.add(opfx);
   }
   
-
+///apply(0) sends the animation to its initial starting state. if this isnt called, the fx could be removed at its presently animating state, and then that look
+/// of the sprite cant be changed. Hence when you want an effect to be removed and the sprite must go back to exactly how it looked, prior to the effect, you must call apply(0)
+///befor you call on the removeFromParent()
   @override
   void onTap() {
     count++;
