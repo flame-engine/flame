@@ -16,9 +16,9 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
   late  ColorEffect fx;
   late OpacityEffect opfx;
   int count = 0;
-  EffectController controller1 = EffectController(duration: 2,reverseDuration: 2,infinite: true,);
-  EffectController controller2 = EffectController(duration: 1,reverseDuration: 1,infinite: true,);
-
+  late EffectController controller1;
+  late EffectController controller2;
+  
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -28,13 +28,16 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
     Vector2 pos = Vector2(50,50);
     mySprite = SpriteComponent(sprite: flameSprite,position: pos,size: sz);
     add(mySprite);
+    
+    controller1 = EffectController(duration: 2,reverseDuration: 2,infinite: true,);
     fx = ColorEffect(Colors.blue, const Offset(0.0, 0.8,), controller1 );
     mySprite.add(fx);
+
+    controller2 = EffectController(duration: 1,reverseDuration: 1,infinite: true,);
     opfx = OpacityEffect.fadeOut(controller2);
     mySprite.add(opfx);
-
-
   }
+  
 
   @override
   void onTap() {
