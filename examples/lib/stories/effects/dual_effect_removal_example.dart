@@ -7,9 +7,9 @@ import '../../commons/ember.dart';
 
 class DualEffectRemovalExample extends FlameGame with TapDetector {
   static const String description = '''
-    In this example we show how a dual effect can be used.
-    And removed.To remove just tap anywhere on the screen.
-    1st tap will remove Opacity Effect 2nd tap removes the color effect.    
+    In this example we show how a dual effect can be used and removed.
+    To remove an effect just tap anywhere on the screen.
+    The 1st tap will remove the OpacityEffect and the 2nd tap removes the ColorEffect.
   ''';
 
   late final SpriteComponent mySprite;
