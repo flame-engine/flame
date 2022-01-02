@@ -24,9 +24,9 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
     await super.onLoad();
 
     Sprite flameSprite = await loadSprite('flame.png');
-    Vector2 sz = flameSprite.srcSize;
-    Vector2 pos = Vector2(50,50);
-    mySprite = SpriteComponent(sprite: flameSprite,position: pos,size: sz);
+    Vector2 spriteSize = flameSprite.srcSize;
+    Vector2 spritePostion = Vector2(50,50);
+    mySprite = SpriteComponent(sprite: flameSprite,position: spritePostion,size: spriteSize);
     add(mySprite);
     
     controller1 = EffectController(duration: 2,reverseDuration: 2,infinite: true,);
