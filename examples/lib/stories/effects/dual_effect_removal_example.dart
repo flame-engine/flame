@@ -3,7 +3,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
-import '../../commons/ember.dart';
+
 
 class DualEffectRemovalExample extends FlameGame with TapDetector {
   static const String description = '''
@@ -23,14 +23,29 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
     Sprite flameSprite = await loadSprite('flame.png');
     Vector2 spriteSize = flameSprite.srcSize;
     Vector2 spritePostion = Vector2(50,50);
-    mySprite = SpriteComponent(sprite: flameSprite,position: spritePostion,size: spriteSize);
+    mySprite = SpriteComponent(
+        sprite: flameSprite, position: spritePostion, size: spriteSize);
     add(mySprite);
-    
-    EffectController controller1 = EffectController(duration: 2,reverseDuration: 2,infinite: true,);
-    colorEffect = ColorEffect(Colors.blue, const Offset(0.0, 0.8,), controller1 );
+
+    EffectController controller1 = EffectController(
+      duration: 2,
+      reverseDuration: 2,
+      infinite: true,
+    );
+    colorEffect = ColorEffect(
+        Colors.blue,
+        const Offset(
+          0.0,
+          0.8,
+        ),
+        controller1);
     mySprite.add(colorEffect);
 
-    EffectController controller2 = EffectController(duration: 1,reverseDuration: 1,infinite: true,);
+    EffectController controller2 = EffectController(
+      duration: 1,
+      reverseDuration: 1,
+      infinite: true,
+    );
     opacityEffect = OpacityEffect.fadeOut(controller2);
     mySprite.add(opacityEffect);
   }
