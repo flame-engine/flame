@@ -13,11 +13,8 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
   ''';
 
   late final SpriteComponent mySprite;
-  late  ColorEffect fx;
-  late OpacityEffect opfx;
-  int count = 0;
-  late EffectController controller1;
-  late EffectController controller2;
+  late  ColorEffect colorEffect;
+  late OpacityEffect opacityEffect;
   
   @override
   Future<void> onLoad() async {
@@ -29,13 +26,13 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
     mySprite = SpriteComponent(sprite: flameSprite,position: spritePostion,size: spriteSize);
     add(mySprite);
     
-    controller1 = EffectController(duration: 2,reverseDuration: 2,infinite: true,);
-    fx = ColorEffect(Colors.blue, const Offset(0.0, 0.8,), controller1 );
-    mySprite.add(fx);
+    EffectController controller1 = EffectController(duration: 2,reverseDuration: 2,infinite: true,);
+    colorEffect = ColorEffect(Colors.blue, const Offset(0.0, 0.8,), controller1 );
+    mySprite.add(colorEffect);
 
-    controller2 = EffectController(duration: 1,reverseDuration: 1,infinite: true,);
-    opfx = OpacityEffect.fadeOut(controller2);
-    mySprite.add(opfx);
+    EffectController controller2 = EffectController(duration: 1,reverseDuration: 1,infinite: true,);
+    opacityEffect = OpacityEffect.fadeOut(controller2);
+    mySprite.add(opacityEffect);
   }
   
 ///apply(0) sends the animation to its initial starting state. if this isnt called, the fx could be removed at its presently animating state, and then that look
@@ -43,14 +40,13 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
 ///befor you call on the removeFromParent()
   @override
   void onTap() {
-    count++;
-    if (count > 1) {
-      fx.apply(0);
-      fx.removeFromParent();
+    if (opacityEffect.isMounted) {
+      opacityEffect.apply(0);
+      opacityEffect.removeFromParent();
     }
-    else{
-      opfx.apply(0);
-      opfx.removeFromParent();
+    else if(colorEffect.isMounted){
+      colorEffect.apply(0);
+      colorEffect.removeFromParent();
     }
   }
 
