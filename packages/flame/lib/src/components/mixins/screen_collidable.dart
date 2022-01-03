@@ -1,7 +1,6 @@
-import 'package:flame/src/collision/collision_callbacks.dart';
-
 import '../../../components.dart';
 import '../../../game.dart';
+import '../../collision/collision_callbacks.dart';
 import '../../geometry/rectangle.dart';
 
 class ScreenCollidable<T extends FlameGame> extends PositionComponent

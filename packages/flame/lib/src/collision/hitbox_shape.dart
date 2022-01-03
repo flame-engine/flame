@@ -4,33 +4,24 @@ import '../../geometry.dart';
 import '../geometry/shape_intersections.dart' as intersection_system;
 
 mixin HitboxShape on Shape implements HasHitboxes {
-  /// The position of your shape in relation to its parent's size from
-  /// (-1,-1) to (1,1), where (0,0) is the center (default).
-  Vector2 relativeOffset = Vector2.zero();
   late PositionComponent _hitboxParent;
   late void Function() _parentSizeListener;
-
-  @override
-  Anchor anchor = Anchor.center;
+  bool fillParent = true;
 
   @override
   void onMount() {
     super.onMount();
-    _hitboxParent = ancestors().firstWhere(
-      (c) => c is PositionComponent,
-      orElse: () {
-        throw StateError('A HitboxShape needs a PositionComponent ancestor');
-      },
-    ) as PositionComponent;
-    _parentSizeListener = () {
-      size = _hitboxParent.size;
-      // TODO: Check that the size listener has been called here and that halfSize is correct
-      position = (halfSize + halfSize.clone()
-            ..multiply(relativeOffset)) +
-          initialPosition;
-    };
-    _parentSizeListener();
-    _hitboxParent.size.addListener(_parentSizeListener);
+    if (fillParent) {
+      _hitboxParent = ancestors().firstWhere(
+        (c) => c is PositionComponent,
+        orElse: () {
+          throw StateError('A HitboxShape needs a PositionComponent ancestor');
+        },
+      ) as PositionComponent;
+      _parentSizeListener = () => size = _hitboxParent.size;
+      _parentSizeListener();
+      _hitboxParent.size.addListener(_parentSizeListener);
+    }
   }
 
   @override

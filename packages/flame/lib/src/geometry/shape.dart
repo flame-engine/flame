@@ -9,14 +9,12 @@ abstract class Shape extends PositionComponent with HasPaint {
   final Vector2 halfSize;
   late void Function() _sizeListener;
 
-  @override
-  final Anchor anchor = Anchor.center;
-
   Shape({
     Vector2? position,
     Vector2? size,
     Vector2? scale,
     double? angle,
+    Anchor? anchor,
     int? priority,
   })  : initialPosition = position ?? Vector2.zero(),
         halfSize = (size ?? Vector2.zero()) / 2,
@@ -25,6 +23,7 @@ abstract class Shape extends PositionComponent with HasPaint {
           size: size,
           scale: scale,
           angle: angle,
+          anchor: anchor,
           priority: priority,
         );
 

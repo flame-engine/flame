@@ -5,36 +5,27 @@ import '../../extensions.dart';
 import '../../geometry.dart';
 
 class Circle extends Shape {
-  double radius;
-
   /// With this constructor you can create your [Circle] from a radius and
   /// a position. It will also calculate the bounding rectangle [size] for the
   /// [Circle].
   Circle({
-    required this.radius,
+    double? radius,
     Vector2? position,
     double? angle,
+    Anchor? anchor,
     int? priority,
   }) : super(
           position: position,
-          size: Vector2.all(radius * 2),
+          size: Vector2.all((radius ?? 0) * 2),
           angle: angle,
+          anchor: anchor,
           priority: priority,
-        ) {
-    size.addListener(() => radius = min(size.x, size.y) / 2);
-  }
+        );
 
-  /// This constructor is used by [HitboxCircle]
-  ///
-  /// [relation] is the relation `[0.0, 1.0]` of the shortest edge of [size]
-  /// that the circle should fill.
-  Circle.fromDefinition({
-    double? relation,
-    Vector2? position,
-    Vector2? size,
-    double? angle,
-  })  : normalizedRadius = relation ?? 1.0,
-        super(position: position, size: size, angle: angle ?? 0);
+  /// Get the radius of the circle before scaling.
+  double get radius {
+    return min(size.x, size.y) / 2;
+  }
 
   // Used to not create new Vector2 objects every time radius is called.
   final Vector2 _scaledSize = Vector2.zero();
@@ -57,7 +48,9 @@ class Circle extends Shape {
   /// Checks whether the represented circle contains the [point].
   @override
   bool containsPoint(Vector2 point) {
-    return absoluteCenter.distanceToSquared(point) < radius * radius;
+    final scaledRadius = this.scaledRadius;
+    return absoluteCenter.distanceToSquared(point) <
+        scaledRadius * scaledRadius;
   }
 
   /// Returns the locus of points in which the provided line segment intersect
@@ -81,7 +74,7 @@ class Circle extends Shape {
 
     final A = sq(delta.x) + sq(delta.y);
     final B = 2 * (delta.x * (point1.x - cx) + delta.y * (point1.y - cy));
-    final C = sq(point1.x - cx) + sq(point1.y - cy) - sq(radius);
+    final C = sq(point1.x - cx) + sq(point1.y - cy) - sq(radius ?? 0);
 
     final det = B * B - 4 * A * C;
     final result = <Vector2>[];
@@ -108,18 +101,4 @@ class Circle extends Shape {
     result.removeWhere((v) => !line.containsPoint(v));
     return result;
   }
-}
-
-class HitboxCircle extends Circle with HasHitboxes, HitboxShape {
-  HitboxCircle({
-    double? normalizedRadius,
-    Vector2? position,
-    Vector2? size,
-    double? angle,
-  }) : super.fromDefinition(
-          relation: normalizedRadius,
-          position: position,
-          size: size,
-          angle: angle ?? 0,
-        );
 }
