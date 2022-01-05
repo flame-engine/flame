@@ -14,9 +14,13 @@ class HudButtonComponent extends HudMarginComponent with Tappable {
   late final PositionComponent? buttonDown;
 
   /// Callback for what should happen when the button is pressed.
+  /// If you want to directly interact with [onTapUp], [onTapDown] or
+  /// [onTapCancel] it is recommended to extend [HudButtonComponent].
   void Function()? onPressed;
 
   /// Callback for what should happen when the button is released.
+  /// If you want to directly interact with [onTapUp], [onTapDown] or
+  /// [onTapCancel] it is recommended to extend [HudButtonComponent].
   void Function()? onReleased;
 
   HudButtonComponent({
@@ -71,6 +75,7 @@ class HudButtonComponent extends HudMarginComponent with Tappable {
   @mustCallSuper
   bool onTapUp(TapUpInfo info) {
     onTapCancel();
+    onReleased?.call();
     return true;
   }
 
@@ -83,7 +88,6 @@ class HudButtonComponent extends HudMarginComponent with Tappable {
         add(button!);
       }
     }
-    onReleased?.call();
     return false;
   }
 }
