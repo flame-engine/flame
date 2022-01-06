@@ -10,6 +10,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   BuildContext buildContext;
   Game game;
   GameLoop? gameLoop;
+  Rect? _clipRect;
 
   GameRenderBox(this.buildContext, this.game) {
     WidgetsBinding.instance!.addTimingsCallback(game.onTimingsCallback);
@@ -61,13 +62,14 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   @override
   void performLayout() {
     size = constraints.biggest;
+    _clipRect = Rect.fromLTWH(0, 0, size.width, size.height);
   }
 
   @override
   void paint(PaintingContext context, Offset offset) {
     context.canvas.save();
     context.canvas.translate(offset.dx, offset.dy);
-    context.canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
+    context.canvas.clipRect(_clipRect!, doAntiAlias: false);
     game.render(context.canvas);
     context.canvas.restore();
   }
