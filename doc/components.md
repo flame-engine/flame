@@ -138,6 +138,9 @@ your widgets, when you don't want the component to respect the camera nor the vi
 for example be for controls or joysticks that would be unergonomic to use if they had to stay within
 the viewport.
 
+Do note that this setting is only respected if the component is added directly to the root
+`FlameGame` and not as a child component of another component.
+
 ## PositionComponent
 
 This class represent a positioned object on the screen, being a floating rectangle or a rotating
