@@ -128,6 +128,7 @@ void main() {
         renderBox.attach(PipelineOwner());
         renderBox.gameLoopCallback(1.0);
         expect(component.isUpdateCalled, true);
+        renderBox.layout(BoxConstraints.tight(const Size.square(1000)));
         renderBox.paint(
           PaintingContext(ContainerLayer(), Rect.zero),
           Offset.zero,
