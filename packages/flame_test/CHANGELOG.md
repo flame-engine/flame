@@ -1,4 +1,8 @@
-# CHANGELOG
+## 1.1.0
+
+ - Add `closeToVector` matcher.
+
+# OLD CHANGELOG
 
 ## [1.0.1]
  - Bump versions not to use paths
