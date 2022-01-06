@@ -67,6 +67,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   void paint(PaintingContext context, Offset offset) {
     context.canvas.save();
     context.canvas.translate(offset.dx, offset.dy);
+    context.canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
     game.render(context.canvas);
     context.canvas.restore();
   }
