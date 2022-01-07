@@ -66,4 +66,3 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
     }
   }
 }
-
