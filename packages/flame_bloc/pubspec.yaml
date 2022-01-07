@@ -12,7 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   bloc: ^7.2.0
-  flame: ^1.0.0
+  flame:
+    path: ../flame
   flutter_bloc: ^7.3.0
 
 dev_dependencies:
@@ -20,6 +21,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
-  flame_test: ^1.1.0
+  flame_test:
+    path: ../flame_test
   mocktail: ^0.1.4
-  flame_lint: ^0.0.1
+  flame_lint:
+    path: ../flame_lint
