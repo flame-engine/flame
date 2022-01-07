@@ -61,7 +61,6 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
       opacityEffect.apply(0);
       opacityEffect.removeFromParent();
     } else if (colorEffect.isMounted) {
-
       colorEffect.apply(0);
       colorEffect.removeFromParent();
     }
