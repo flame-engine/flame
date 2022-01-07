@@ -22,9 +22,10 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
     await super.onLoad();
 
     final mySprite = SpriteComponent(
-        sprite: await loadSprite('flame.png'), 
-        position: Vector2(50,50), 
+      sprite: await loadSprite('flame.png'),
+      position: Vector2(50,50),
     );
+
     add(mySprite);
 
     final colorController = EffectController(
@@ -50,7 +51,7 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
   
   @override
   void onTap() {
-    // apply(0) sends the animation to its initial starting state. 
+    // apply(0) sends the animation to its initial starting state.
     // If this isn't called, the effect would be removed and leave the
     // component at its current state.
     // Hence when you want an effect to be removed and the component to go
