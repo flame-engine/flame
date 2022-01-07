@@ -53,9 +53,9 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
     // apply(0) sends the animation to its initial starting state. 
     // If this isn't called, the effect would be removed and leave the
     // component at its current state.
-    // Hence when you want an effect to be removed and the component to go back
-    // to how it looked prior to the effect, you must call apply(0) before you
-    // call removeFromParent().
+    // Hence when you want an effect to be removed and the component to go
+    // back to how it looked prior to the effect, you must call apply(0) before
+    // you call removeFromParent().
     if (opacityEffect.isMounted) {
       opacityEffect.apply(0);
       opacityEffect.removeFromParent();

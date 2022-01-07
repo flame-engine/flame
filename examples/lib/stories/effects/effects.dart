@@ -23,7 +23,7 @@ void addEffectsStories(Dashbook dashbook) {
     )
     ..add(
       'Dual Effect Removal',
-          (_) => GameWidget(game: DualEffectRemovalExample()),
+      (_) => GameWidget(game: DualEffectRemovalExample()),
       codeLink: baseLink('effects/dual_effect_removal_example.dart'),
       info: DualEffectRemovalExample.description,
     )
