@@ -43,6 +43,7 @@ class SpriteComponent extends PositionComponent with HasPaint {
     Image image, {
     Vector2? srcPosition,
     Vector2? srcSize,
+    Paint? paint,
     Vector2? position,
     Vector2? size,
     Vector2? scale,
@@ -55,6 +56,7 @@ class SpriteComponent extends PositionComponent with HasPaint {
             srcPosition: srcPosition,
             srcSize: srcSize,
           ),
+          paint: paint,
           position: position,
           size: size ?? srcSize ?? image.size,
           scale: scale,

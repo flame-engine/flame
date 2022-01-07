@@ -1,6 +1,7 @@
 import 'package:flame/extensions.dart';
 import 'package:test/test.dart';
 
+@Deprecated('Use closeToVector() instead')
 void expectVector2(
   Vector2 actual,
   Vector2 expected, {
