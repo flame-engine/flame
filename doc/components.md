@@ -209,12 +209,15 @@ If you want to know where on the screen the bounding box of the component is you
 `toRect` method.
 
 In the event that you want to change the direction of your components rendering, you can also use
-`renderFlipX` and `renderFlipY` to flip anything drawn to canvas during `render(Canvas canvas)`.
-This is available on all `PositionComponent` objects, and is especially useful on `SpriteComponent`
-and `SpriteAnimationComponent`. For example set `component.renderFlipX = true` to mirror the
-horizontal rendering.
+`flipHorizontally()` and `flipVertically()` to flip anything drawn to canvas during `render(Canvas canvas)`,
+around the anchor point. These methods are available on all `PositionComponent` objects, and are especially
+useful on `SpriteComponent` and `SpriteAnimationComponent`.
+
+In case you want to flip a component around its center without having to change the anchor to `Anchor.center`,
+you can use `flipHorizontallyAroundCenter()` and `flipVerticallyAroundCenter()`.
 
 ## SpriteComponent
+
 The most commonly used implementation of `PositionComponent` is `SpriteComponent`, and it can be
 created with a `Sprite`:
 
