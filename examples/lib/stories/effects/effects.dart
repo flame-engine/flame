@@ -3,6 +3,7 @@ import 'package:flame/game.dart';
 
 import '../../commons/commons.dart';
 import 'color_effect_example.dart';
+import 'dual_effect_removal_example.dart';
 import 'effect_controllers_example.dart';
 import 'move_effect_example.dart';
 import 'opacity_effect_example.dart';
@@ -19,6 +20,12 @@ void addEffectsStories(Dashbook dashbook) {
       (_) => GameWidget(game: MoveEffectExample()),
       codeLink: baseLink('effects/move_effect_example.dart'),
       info: MoveEffectExample.description,
+    )
+    ..add(
+      'Dual Effect Removal',
+      (_) => GameWidget(game: DualEffectRemovalExample()),
+      codeLink: baseLink('effects/dual_effect_removal_example.dart'),
+      info: DualEffectRemovalExample.description,
     )
     ..add(
       'Rotate Effect',
