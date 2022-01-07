@@ -211,8 +211,7 @@ If you want to know where on the screen the bounding box of the component is you
 In the event that you want to change the direction of your components rendering, you can also use
 `flipHorizontally()` and `flipVertically()` to flip anything drawn to canvas during `render(Canvas canvas)`,
 around the anchor point. These methods are available on all `PositionComponent` objects, and are especially
-useful on `SpriteComponent` and `SpriteAnimationComponent`. For example call `component.flipHorizontally()`
-to mirror the horizontal rendering.
+useful on `SpriteComponent` and `SpriteAnimationComponent`.
 
 In case you want to flip a component around its center without having to change the anchor to `Anchor.center`,
 you can use `flipHorizontallyAroundCenter()` and `flipVerticallyAroundCenter()`.
