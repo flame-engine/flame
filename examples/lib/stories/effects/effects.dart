@@ -2,8 +2,8 @@ import 'package:dashbook/dashbook.dart';
 import 'package:flame/game.dart';
 
 import '../../commons/commons.dart';
-import 'dual_effect_removal_example.dart';
 import 'color_effect_example.dart';
+import 'dual_effect_removal_example.dart';
 import 'effect_controllers_example.dart';
 import 'move_effect_example.dart';
 import 'opacity_effect_example.dart';
