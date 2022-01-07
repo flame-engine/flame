@@ -16,6 +16,7 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
 
   late ColorEffect colorEffect;
   late OpacityEffect opacityEffect;
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -47,6 +48,7 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
     opacityEffect = OpacityEffect.fadeOut(opacityController);
     mySprite.add(opacityEffect);
   }
+
   @override
   void onTap() {
     // apply(0) sends the animation to its initial starting state.
@@ -64,3 +66,4 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
     }
   }
 }
+
