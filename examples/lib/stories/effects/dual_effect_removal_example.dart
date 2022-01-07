@@ -4,7 +4,6 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
-
 class DualEffectRemovalExample extends FlameGame with TapDetector {
   static const String description = '''
     In this example we show how a dual effect can be used and removed.
@@ -40,7 +39,7 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
     );
     mySprite.add(colorEffect);
 
-    EffectController opacityController = EffectController(
+    final opacityController = EffectController(
       duration: 1,
       reverseDuration: 1,
       infinite: true,
