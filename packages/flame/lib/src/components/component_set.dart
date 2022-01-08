@@ -187,6 +187,10 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     _addLater.forEach((c) {
       super.add(c);
       c.isMounted = true;
+      final parentGame = c.findParent<FlameGame>();
+      if (parentGame != null) {
+        c.onGameResize(parentGame.size);
+      }
     });
     _addLater.clear();
   }
