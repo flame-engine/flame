@@ -1,7 +1,6 @@
+import 'package:flame/collision_detection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
-import 'package:flame/src/collision/collision_callbacks.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
@@ -268,14 +267,14 @@ void main() {
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
-      expect(blockA.collidedWith(blockB), false);
-      expect(blockB.collidedWith(blockA), false);
+      expect(blockA.collidedWith(blockB), isFalse);
+      expect(blockB.collidedWith(blockA), isFalse);
       expect(blockA.activeCollisions.length, 0);
       expect(blockB.activeCollisions.length, 0);
       blockA.scale = Vector2.all(2.0);
       game.update(0);
-      expect(blockA.collidedWith(blockB), true);
-      expect(blockB.collidedWith(blockA), true);
+      expect(blockA.collidedWith(blockB), isTrue);
+      expect(blockB.collidedWith(blockA), isTrue);
       expect(blockA.activeCollisions.length, 1);
       expect(blockB.activeCollisions.length, 1);
     });

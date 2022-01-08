@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../../components.dart';
 import '../../extensions.dart';
 import '../../geometry.dart';
@@ -6,19 +8,23 @@ import '../geometry/shape_intersections.dart' as intersection_system;
 mixin HitboxShape on Shape implements HasHitboxes {
   late PositionComponent _hitboxParent;
   late void Function() _parentSizeListener;
-  bool fillParent = true;
+  @protected
+  bool shouldFillParent = false;
 
   @override
   void onMount() {
     super.onMount();
-    if (fillParent) {
+    if (shouldFillParent) {
       _hitboxParent = ancestors().firstWhere(
         (c) => c is PositionComponent,
         orElse: () {
           throw StateError('A HitboxShape needs a PositionComponent ancestor');
         },
       ) as PositionComponent;
-      _parentSizeListener = () => size = _hitboxParent.size;
+      _parentSizeListener = () {
+        size = _hitboxParent.size;
+        fillParent();
+      };
       _parentSizeListener();
       _hitboxParent.size.addListener(_parentSizeListener);
     }
@@ -53,4 +59,6 @@ mixin HitboxShape on Shape implements HasHitboxes {
     );
     return intersection_system.intersections(this, other as Shape);
   }
+
+  void fillParent();
 }

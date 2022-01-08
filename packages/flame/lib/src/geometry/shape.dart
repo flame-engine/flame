@@ -5,7 +5,9 @@ import '../../components.dart';
 /// center.
 /// A point can be determined to be within of outside of a shape.
 abstract class Shape extends PositionComponent with HasPaint {
+  // TODO(spydon): is this needed
   final Vector2 initialPosition;
+  // TODO(spydon): is this needed
   final Vector2 halfSize;
   late void Function() _sizeListener;
 

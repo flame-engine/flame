@@ -74,7 +74,7 @@ class Circle extends Shape {
 
     final A = sq(delta.x) + sq(delta.y);
     final B = 2 * (delta.x * (point1.x - cx) + delta.y * (point1.y - cy));
-    final C = sq(point1.x - cx) + sq(point1.y - cy) - sq(radius ?? 0);
+    final C = sq(point1.x - cx) + sq(point1.y - cy) - sq(radius);
 
     final det = B * B - 4 * A * C;
     final result = <Vector2>[];

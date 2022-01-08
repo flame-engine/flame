@@ -1,137 +1,108 @@
 import 'dart:ui' hide Canvas;
 
 import '../../components.dart';
-import '../../game.dart';
 import '../../geometry.dart';
-import '../cache/value_cache.dart';
+import '../components/cache/value_cache.dart';
 import '../extensions/canvas.dart';
 import '../extensions/offset.dart';
 import '../extensions/rect.dart';
-import '../extensions/vector2.dart';
 
 class Polygon extends Shape {
-  final List<Vector2> normalizedVertices;
+  late final List<Vector2> vertices;
   // These lists are used to minimize the amount of objects that are created,
   // and only change the contained object if the corresponding `ValueCache` is
   // deemed outdated.
-  late final List<Vector2> _localVertices;
   late final List<Vector2> _globalVertices;
-  late final List<Offset> _renderVertices;
   late final List<LineSegment> _lineSegments;
-  final _path = Path();
+  late final Path _path;
 
-  final _cachedLocalVertices = ValueCache<Iterable<Vector2>>();
   final _cachedGlobalVertices = ValueCache<List<Vector2>>();
-  final _cachedRenderPath = ValueCache<Path>();
 
   /// With this constructor you create your [Polygon] from positions in your
-  /// intended space. It will automatically calculate the [size] and center
-  /// ([position]) of the Polygon.
-  factory Polygon(
-    List<Vector2> points, {
-    double angle = 0,
-  }) {
-    assert(
-      points.length > 2,
-      'List of points is too short to create a polygon',
-    );
-    final path = Path()
+  /// intended space. It will automatically calculate the [size] and [position]
+  /// of the Polygon.
+  /// NOTE: Always define your polygon in a counter-clockwise fashion (in the
+  /// screen coordinate system).
+  Polygon(
+    this.vertices, {
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
+    int? priority,
+  })  : assert(
+          vertices.length > 3,
+          'List of vertices is too short to create a polygon',
+        ),
+        super(scale: scale, angle: angle, anchor: anchor, priority: priority) {
+    final verticesLength = vertices.length;
+    _path = Path()
       ..addPolygon(
-        points.map((p) => p.toOffset()).toList(growable: false),
+        vertices.map((p) => p.toOffset()).toList(growable: false),
         true,
       );
-    final boundingRect = path.getBounds();
-    final centerOffset = boundingRect.center;
-    final center = centerOffset.toVector2();
-    final halfSize = (boundingRect.bottomRight - centerOffset).toVector2();
-    final definition =
-        points.map<Vector2>((v) => (v - center)..divide(halfSize)).toList();
-    return Polygon.fromDefinition(
-      definition,
-      position: center,
-      size: halfSize * 2,
-      angle: angle,
-    );
-  }
+    final boundingRect = _path.getBounds();
+    final center = boundingRect.center.toVector2();
+    size = boundingRect.bottomRight.toVector2();
+    position = Anchor.center.toOtherAnchorPosition(center, this.anchor, size);
 
-  /// With this constructor you define the [Polygon] from the center of and with
-  /// percentages of the size of the shape.
-  ///
-  /// Example: `[[1.0, 0.0], [0.0, -1.0], [-1.0, 0.0], [0.0, 1.0]]`
-  /// This will form a diamond shape within the bounding size box.
-  /// NOTE: Always define your shape in a counter-clockwise fashion (in the
-  /// screen coordinate system).
-  Polygon.fromDefinition(
-    this.normalizedVertices, {
-    Vector2? position,
-    Vector2? size,
-    double? angle,
-  }) : super(
-          position: position,
-          size: size,
-          angle: angle ?? 0,
-        ) {
-    List<Vector2> generateList() {
-      return List.generate(
-        normalizedVertices.length,
-        (_) => Vector2.zero(),
-        growable: false,
-      );
-    }
-
-    _localVertices = generateList();
-    _globalVertices = generateList();
-    _renderVertices = List.filled(
-      normalizedVertices.length,
-      Offset.zero,
+    _globalVertices = List.generate(
+      verticesLength,
+      (_) => Vector2.zero(),
       growable: false,
     );
     _lineSegments = List.generate(
-      normalizedVertices.length,
+      verticesLength,
       (_) => LineSegment.zero(),
       growable: false,
     );
   }
 
+  // TODO(spydon): Move to HitboxPolygon.fill
+  /// With this constructor you define the [Polygon] from the center of and with
+  /// percentages of the size of the shape.
+  /// Example: [[1.0, 0.0], [0.0, -1.0], [-1.0, 0.0], [0.0, 1.0]]
+  /// This will form a diamond shape within the bounding size box.
+
   /// Gives back the shape vectors multiplied by the size
-  Iterable<Vector2> localVertices() {
-    final center = this.center;
-    if (!_cachedLocalVertices.isCacheValid([size, center])) {
-      final halfSize = this.halfSize;
-      for (var i = 0; i < _localVertices.length; i++) {
-        final point = normalizedVertices[i];
-        (_localVertices[i]..setFrom(point))
-          ..multiply(halfSize)
-          ..add(center)
-          ..rotate(angle, center: center);
-      }
-      _cachedLocalVertices.updateCache(_localVertices, [
-        size.clone(),
-        center.clone(),
-      ]);
-    }
-    return _cachedLocalVertices.value!;
-  }
+  //Iterable<Vector2> localVertices() {
+  //  final center = this.center;
+  //  if (!_cachedLocalVertices.isCacheValid([size, center])) {
+  //    final halfSize = this.halfSize;
+  //    for (var i = 0; i < _localVertices.length; i++) {
+  //      final point = normalizedVertices[i];
+  //      (_localVertices[i]..setFrom(point))
+  //        ..multiply(halfSize)
+  //        ..add(center)
+  //        ..rotate(angle, center: center);
+  //    }
+  //    _cachedLocalVertices.updateCache(_localVertices, [
+  //      size.clone(),
+  //      center.clone(),
+  //    ]);
+  //  }
+  //  return _cachedLocalVertices.value!;
+  //}
 
   /// Gives back the shape vectors multiplied by the size and scale
   List<Vector2> globalVertices() {
-    final scale = this.scale;
-    final totalAngle = absoluteAngle;
+    final scale = absoluteScale;
+    final angle = absoluteAngle;
+    final position = absolutePosition;
     if (!_cachedGlobalVertices.isCacheValid<dynamic>(<dynamic>[
       position,
-      size,
       scale,
-      absoluteAngle,
+      angle,
     ])) {
       var i = 0;
-      final center = absoluteCenter;
-      for (final normalizedPoint in normalizedVertices) {
+      for (final vertex in vertices) {
         _globalVertices[i]
-          ..setFrom(normalizedPoint)
-          ..multiply(halfSize)
+          ..setFrom(vertex)
           ..multiply(scale)
-          ..add(center)
-          ..rotate(absoluteAngle, center: center);
+          ..add(position)
+          ..rotate(
+            absoluteAngle,
+            center: position, // TODO(spydon): Should this only accept center?
+          );
         i++;
       }
       if (scale.y.isNegative || scale.x.isNegative) {
@@ -139,34 +110,15 @@ class Polygon extends Shape {
         // become counterclockwise.
         _reverseList(_globalVertices);
       }
-      _cachedGlobalVertices.updateCache<dynamic>(_globalVertices,
-          <dynamic>[position.clone(), size.clone(), scale.clone(), totalAngle]);
+      _cachedGlobalVertices.updateCache<dynamic>(
+          _globalVertices, <dynamic>[position.clone(), scale.clone(), angle]);
     }
     return _cachedGlobalVertices.value!;
   }
 
   @override
   void render(Canvas canvas) {
-    if (!_cachedRenderPath.isCacheValid<dynamic>(<dynamic>[
-      size,
-      angle,
-    ])) {
-      var i = 0;
-      localVertices().forEach((point) {
-        _renderVertices[i] = point.toOffset();
-        i++;
-      });
-      _cachedRenderPath.updateCache<dynamic>(
-        _path
-          ..reset()
-          ..addPolygon(_renderVertices, true),
-        <dynamic>[
-          size.clone(),
-          angle,
-        ],
-      );
-    }
-    canvas.drawPath(_cachedRenderPath.value!, paint);
+    canvas.drawPath(_path, paint);
   }
 
   /// Checks whether the polygon contains the [point].
@@ -224,11 +176,4 @@ class Polygon extends Shape {
       list[list.length - 1 - i] = temp;
     }
   }
-}
-
-class HitboxPolygon extends Polygon with HasHitboxes, HitboxShape {
-  HitboxPolygon(List<Vector2> definition) : super.fromDefinition(definition);
-
-  factory HitboxPolygon.fromPolygon(Polygon polygon) =>
-      HitboxPolygon(polygon.normalizedVertices);
 }

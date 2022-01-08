@@ -1,4 +1,3 @@
-export 'src/collision/hitbox_shape.dart';
 export 'src/geometry/circle.dart';
 export 'src/geometry/line.dart';
 export 'src/geometry/line_segment.dart';

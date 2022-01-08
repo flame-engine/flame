@@ -167,9 +167,16 @@ class PositionComponent extends Component {
   /// The resulting angle after all the ancestors and the components own angle
   /// has been applied.
   double get absoluteAngle {
-    return ancestors()
-        .whereType<PositionComponent>()
+    // TODO(spydon): take scale into consideration
+    return ancestors<PositionComponent>()
         .fold<double>(angle, (totalAngle, c) => totalAngle + c.angle);
+  }
+
+  /// The resulting scale after all the ancestors and the components own scale
+  /// has been applied.
+  Vector2 get absoluteScale {
+    return ancestors<PositionComponent>()
+        .fold<Vector2>(scale, (totalScale, c) => totalScale..add(c.scale));
   }
 
   /// Measure the distance (in parent's coordinate space) between this

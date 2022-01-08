@@ -2,13 +2,12 @@ import 'package:meta/meta.dart';
 
 import '../../../components.dart';
 import '../../../game.dart';
-import '../../../geometry.dart';
-import '../../collision/collision_callbacks.dart';
-import '../../collision/collision_detection.dart';
+import '../../collision_detection/collision_callbacks.dart';
+import '../../collision_detection/collision_detection.dart';
+import '../../collision_detection/hitbox_shape.dart';
 
 // TODO(spydon): Rename?
-mixin HasHitboxes on PositionComponent
-    implements Collidable<HasHitboxes> {
+mixin HasHitboxes on PositionComponent implements Collidable<HasHitboxes> {
   @override
   CollidableType collidableType = CollidableType.active;
 
