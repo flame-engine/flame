@@ -6,9 +6,9 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class _HasCollidablesGame extends FlameGame with HasCollidables {}
+class _HasCollidablesGame extends FlameGame with HasCollisionDetection {}
 
-class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
+class _TestBlock extends PositionComponent with HasHitboxes {
   final Vector2 velocity;
   static int collisionCounter = 0;
 
@@ -21,7 +21,7 @@ class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, Collidable other) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, HasHitboxes other) {
     super.onCollisionStart(intersectionPoints, other);
     collisionCounter++;
   }

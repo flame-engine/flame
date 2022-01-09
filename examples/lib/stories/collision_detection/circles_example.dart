@@ -5,7 +5,7 @@ import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
-class CirclesExample extends FlameGame with HasCollidables, TapDetector {
+class CirclesExample extends FlameGame with HasCollisionDetection, TapDetector {
   static const description = '''
     This example will create a circle every time you tap on the screen. It will
     have the initial velocity towards the center of the screen and if it touches

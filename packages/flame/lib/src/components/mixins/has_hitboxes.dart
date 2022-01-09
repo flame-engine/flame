@@ -19,6 +19,10 @@ mixin HasHitboxes on PositionComponent implements Collidable<HasHitboxes> {
   @override
   Set<HasHitboxes> get activeCollisions => _activeCollisions ??= {};
   Set<HasHitboxes>? _activeCollisions;
+  @override
+  bool activeCollision(HasHitboxes other) {
+    return _activeCollisions != null && activeCollisions.contains(other);
+  }
 
   CollisionDetection? _collisionDetection;
 
@@ -42,8 +46,9 @@ mixin HasHitboxes on PositionComponent implements Collidable<HasHitboxes> {
 
     if (this is! HitboxShape) {
       final parentGame = findParent<FlameGame>();
-      if (parentGame is HasCollidables) {
+      if (parentGame is HasCollisionDetection) {
         _collisionDetection = parentGame.collisionDetection;
+        _collisionDetection?.add(this);
       }
     }
   }

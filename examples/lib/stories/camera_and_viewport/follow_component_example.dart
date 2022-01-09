@@ -12,7 +12,7 @@ import 'package:flutter/services.dart';
 import '../../commons/ember.dart';
 
 class FollowComponentExample extends FlameGame
-    with HasCollidables, HasTappables, HasKeyboardHandlerComponents {
+    with HasCollisionDetection, HasTappables, HasKeyboardHandlerComponents {
   static const String description = '''
     Move around with W, A, S, D and notice how the camera follows the ember 
     sprite.\n

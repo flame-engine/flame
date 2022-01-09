@@ -1,38 +1,34 @@
+import 'package:flame/collision_detection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class _HasCollidablesGame extends FlameGame with HasCollidables {}
+class _HasCollidablesGame extends FlameGame with HasCollisionDetection {}
 
 class _TestHitbox extends HitboxRectangle {
-  final Set<HitboxShape> collisions = {};
   int startCounter = 0;
   int onCollisionCounter = 0;
   int endCounter = 0;
 
   _TestHitbox() {
-    onCollision = (_, shape) {
+    collisionCallback = (_, __) {
       onCollisionCounter++;
-      collisions.add(shape);
     };
-    onCollisionStart = (_, shape) {
+    collisionStartCallback = (_, __) {
       startCounter++;
-      collisions.add(shape);
     };
-    onCollisionEnd = (shape) {
+    collisionEndCallback = (_) {
       endCounter++;
-      collisions.remove(shape);
     };
   }
 
   bool hasCollisionWith(HitboxShape otherShape) {
-    return collisions.contains(otherShape);
+    return activeCollisions.contains(otherShape);
   }
 }
 
-class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
+class _TestBlock extends PositionComponent with HasHitboxes {
   final hitbox = _TestHitbox();
   int startCounter = 0;
   int onCollisionCounter = 0;
@@ -51,18 +47,19 @@ class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, Collidable other) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, HasHitboxes other) {
     super.onCollisionStart(intersectionPoints, other);
     startCounter++;
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
+  void onCollision(Set<Vector2> intersectionPoints, HasHitboxes other) {
+    super.onCollision(intersectionPoints, other);
     onCollisionCounter++;
   }
 
   @override
-  void onCollisionEnd(Collidable other) {
+  void onCollisionEnd(HasHitboxes other) {
     super.onCollisionEnd(other);
     endCounter++;
   }
@@ -83,8 +80,8 @@ void main() {
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
-      expect(blockA.hasCollisionWith(blockB), true);
-      expect(blockB.hasCollisionWith(blockA), true);
+      expect(blockA.hasCollisionWith(blockB), isTrue);
+      expect(blockB.hasCollisionWith(blockA), isTrue);
       expect(blockA.activeCollisions.length, 1);
       expect(blockB.activeCollisions.length, 1);
       expect(blockA.startCounter, 1);
@@ -102,8 +99,10 @@ void main() {
       expect(blockA.endCounter, 0);
       expect(blockB.endCounter, 0);
       game.update(0);
-      expect(blockA.hasCollisionWith(blockB), false);
-      expect(blockB.hasCollisionWith(blockA), false);
+      print(blockA.topLeftPosition);
+      print(blockB.topLeftPosition);
+      expect(blockA.hasCollisionWith(blockB), isFalse);
+      expect(blockB.hasCollisionWith(blockA), isFalse);
       expect(blockA.activeCollisions.length, 0);
       expect(blockB.activeCollisions.length, 0);
       game.update(0);
@@ -154,8 +153,8 @@ void main() {
       game.update(0);
       expect(hitboxA.hasCollisionWith(hitboxB), true);
       expect(hitboxB.hasCollisionWith(hitboxA), true);
-      expect(hitboxA.collisions.length, 1);
-      expect(hitboxB.collisions.length, 1);
+      expect(hitboxA.activeCollisions.length, 1);
+      expect(hitboxB.activeCollisions.length, 1);
       expect(hitboxA.startCounter, 1);
       expect(hitboxB.startCounter, 1);
       expect(hitboxA.onCollisionCounter, 1);
@@ -171,8 +170,8 @@ void main() {
       game.update(0);
       expect(hitboxA.hasCollisionWith(hitboxB), false);
       expect(hitboxB.hasCollisionWith(hitboxA), false);
-      expect(hitboxA.collisions.length, 0);
-      expect(hitboxB.collisions.length, 0);
+      expect(hitboxA.activeCollisions.length, 0);
+      expect(hitboxB.activeCollisions.length, 0);
       expect(hitboxA.endCounter, 1);
       expect(hitboxB.endCounter, 1);
     });
@@ -195,14 +194,14 @@ void main() {
       game.update(0);
       expect(hitboxA.hasCollisionWith(hitboxB), true);
       expect(hitboxB.hasCollisionWith(hitboxA), true);
-      expect(hitboxA.collisions.length, 1);
-      expect(hitboxB.collisions.length, 1);
+      expect(hitboxA.activeCollisions.length, 1);
+      expect(hitboxB.activeCollisions.length, 1);
       game.remove(blockA);
       game.update(0);
       expect(hitboxA.hasCollisionWith(hitboxB), false);
       expect(hitboxB.hasCollisionWith(hitboxA), false);
-      expect(hitboxA.collisions.length, 0);
-      expect(hitboxB.collisions.length, 0);
+      expect(hitboxA.activeCollisions.length, 0);
+      expect(hitboxB.activeCollisions.length, 0);
       expect(hitboxA.endCounter, 1);
       expect(hitboxB.endCounter, 1);
     },

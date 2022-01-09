@@ -6,7 +6,8 @@ import '../../geometry.dart';
 import '../geometry/shape_intersections.dart' as intersection_system;
 
 mixin HitboxShape on Shape implements HasHitboxes {
-  late PositionComponent _hitboxParent;
+  @protected
+  late PositionComponent hitboxParent;
   late void Function() _parentSizeListener;
   @protected
   bool shouldFillParent = false;
@@ -15,18 +16,18 @@ mixin HitboxShape on Shape implements HasHitboxes {
   void onMount() {
     super.onMount();
     if (shouldFillParent) {
-      _hitboxParent = ancestors().firstWhere(
+      hitboxParent = ancestors().firstWhere(
         (c) => c is PositionComponent,
         orElse: () {
           throw StateError('A HitboxShape needs a PositionComponent ancestor');
         },
       ) as PositionComponent;
       _parentSizeListener = () {
-        size = _hitboxParent.size;
+        size = hitboxParent.size;
         fillParent();
       };
       _parentSizeListener();
-      _hitboxParent.size.addListener(_parentSizeListener);
+      hitboxParent.size.addListener(_parentSizeListener);
     }
   }
 
@@ -40,7 +41,7 @@ mixin HitboxShape on Shape implements HasHitboxes {
 
   @override
   void onRemove() {
-    _hitboxParent.size.removeListener(_parentSizeListener);
+    hitboxParent.size.removeListener(_parentSizeListener);
     super.onRemove();
   }
 

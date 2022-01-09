@@ -21,6 +21,10 @@ mixin Collidable<T> {
 
   Set<T>? _activeCollisions;
   Set<T> get activeCollisions => _activeCollisions ??= {};
+  bool activeCollision(HasHitboxes hasHitboxes) {
+    // TODO(spydon): check so that the second part isn't executed
+    return _activeCollisions != null && activeCollisions.contains(hasHitboxes);
+  }
 
   /// Since this is a cheaper calculation than checking towards all shapes, this
   /// check can be done first to see if it even is possible that the shapes can

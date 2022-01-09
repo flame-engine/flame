@@ -10,7 +10,7 @@ import 'package:flutter/material.dart' hide Image, Draggable;
 enum Shapes { circle, rectangle, polygon }
 
 class MultipleShapesExample extends FlameGame
-    with HasCollidables, HasDraggables, FPSCounter {
+    with HasCollisionDetection, HasDraggables, FPSCounter {
   static const description = '''
     An example with many hitboxes that move around on the screen and during
     collisions they change color depending on what it is that they have collided

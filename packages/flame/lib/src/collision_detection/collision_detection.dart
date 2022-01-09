@@ -34,12 +34,11 @@ abstract class CollisionDetection<T extends Collidable<T>> {
       final intersectionPoints = intersections(itemA, itemB);
       if (intersectionPoints.isNotEmpty) {
         if (!_hasActiveCollision(itemA, itemB)) {
-          _handleCollisionStart(intersectionPoints, itemA, itemB);
+          handleCollisionStart(intersectionPoints, itemA, itemB);
         }
-        itemA.onCollision(intersectionPoints, itemB);
-        itemB.onCollision(intersectionPoints, itemA);
+        handleCollision(intersectionPoints, itemA, itemB);
       } else if (_hasActiveCollision(itemA, itemB)) {
-        _handleCollisionEnd(itemA, itemB);
+        handleCollisionEnd(itemA, itemB);
       }
     });
   }
@@ -48,15 +47,14 @@ abstract class CollisionDetection<T extends Collidable<T>> {
   /// returns an empty list if there are no intersections.
   Set<Vector2> intersections(T itemA, T itemB);
   bool _hasActiveCollision(T itemA, T itemB);
-  void _handleCollisionStart(Set<Vector2> intersectionPoints, T itemA, T itemB);
-  void _handleCollisionEnd(T itemA, T itemB);
+  void handleCollisionStart(Set<Vector2> intersectionPoints, T itemA, T itemB);
+  void handleCollision(Set<Vector2> intersectionPoints, T itemA, T itemB);
+  void handleCollisionEnd(T itemA, T itemB);
 }
 
 /// Check whether any [HasHitboxes] in [items] collide with each other and
 /// call their callback methods accordingly.
 class StandardCollisionDetection extends CollisionDetection<HasHitboxes> {
-  final Set<int> _shapeHashes = {};
-
   StandardCollisionDetection({BroadphaseType type = BroadphaseType.sweep})
       : super(type: type);
 
@@ -70,10 +68,14 @@ class StandardCollisionDetection extends CollisionDetection<HasHitboxes> {
     collidable.activeCollisions
         .toList(growable: false)
         .forEach((otherCollidable) {
-      _handleCollisionEnd(collidable, otherCollidable);
+      handleCollisionEnd(collidable, otherCollidable);
     });
     super.remove(collidable);
   }
+
+  // This is created outside of `intersections` so that it doesn't have to be
+  // created for every intersections call.
+  final _currentResult = <Vector2>{};
 
   /// Check what the intersection points of two collidables are,
   /// returns an empty list if there are no intersections.
@@ -83,34 +85,28 @@ class StandardCollisionDetection extends CollisionDetection<HasHitboxes> {
     HasHitboxes collidableB,
   ) {
     final result = <Vector2>{};
-    final currentResult = <Vector2>{};
+    _currentResult.clear();
     for (final shapeA in collidableA.hitboxes) {
       for (final shapeB in collidableB.hitboxes) {
-        currentResult.addAll(shapeA.intersections(shapeB));
-        if (currentResult.isNotEmpty) {
-          result.addAll(currentResult);
+        _currentResult.addAll(shapeA.intersections(shapeB));
+        if (_currentResult.isNotEmpty) {
+          result.addAll(_currentResult);
           // Do callbacks to the involved shapes
-          if (_shapeHashes.add(_combinedHash(shapeA, shapeB))) {
-            shapeA.onCollisionStart(currentResult, shapeB);
-            shapeB.onCollisionStart(currentResult, shapeA);
+          if (!_hasActiveCollision(shapeA, shapeB)) {
+            handleCollisionStart(_currentResult, shapeA, shapeB);
           }
-          shapeA.onCollision(currentResult, shapeB);
-          shapeB.onCollision(currentResult, shapeA);
-          currentResult.clear();
+          handleCollision(_currentResult, shapeA, shapeB);
+          _currentResult.clear();
         } else {
-          _handleHitboxCollisionEnd(shapeA, shapeB);
+          handleCollisionEnd(shapeA, shapeB);
         }
       }
     }
     return result;
   }
 
-  int _combinedHash(Object o1, Object o2) {
-    return o1.hashCode ^ o2.hashCode;
-  }
-
   @override
-  void _handleCollisionStart(
+  void handleCollisionStart(
     Set<Vector2> intersectionPoints,
     HasHitboxes collidableA,
     HasHitboxes collidableB,
@@ -120,28 +116,23 @@ class StandardCollisionDetection extends CollisionDetection<HasHitboxes> {
   }
 
   @override
-  void _handleCollisionEnd(HasHitboxes collidableA, HasHitboxes collidableB) {
+  void handleCollision(
+    Set<Vector2> intersectionPoints,
+    HasHitboxes collidableA,
+    HasHitboxes collidableB,
+  ) {
+    collidableA.onCollision(intersectionPoints, collidableB);
+    collidableB.onCollision(intersectionPoints, collidableA);
+  }
+
+  @override
+  void handleCollisionEnd(HasHitboxes collidableA, HasHitboxes collidableB) {
     collidableA.onCollisionEnd(collidableB);
     collidableB.onCollisionEnd(collidableA);
-    for (final hitboxA in collidableA.hitboxes) {
-      for (final hitboxB in collidableB.hitboxes) {
-        _handleHitboxCollisionEnd(hitboxA, hitboxB);
-      }
-    }
   }
 
   @override
   bool _hasActiveCollision(HasHitboxes collidableA, HasHitboxes collidableB) {
-    return collidableA.activeCollisions.contains(collidableB);
-  }
-
-  bool _handleHitboxCollisionEnd(HasHitboxes hitboxA, HasHitboxes hitboxB) {
-    final activeCollision = hitboxA.contains(hitboxB);
-    if (activeCollision) {
-      hitboxA.onCollisionEnd(hitboxB);
-      hitboxB.onCollisionEnd(hitboxA);
-      _shapeHashes.remove(_combinedHash(hitboxA, hitboxB));
-    }
-    return activeCollision;
+    return collidableA.activeCollision(collidableB);
   }
 }

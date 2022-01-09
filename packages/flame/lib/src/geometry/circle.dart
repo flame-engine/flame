@@ -34,7 +34,7 @@ class Circle extends Shape {
   double get scaledRadius {
     _scaledSize
       ..setFrom(size)
-      ..multiply(scale);
+      ..multiply(absoluteScale);
     return min(_scaledSize.x, _scaledSize.y) / 2;
   }
 

@@ -21,6 +21,11 @@ class HitboxRectangle extends Rectangle with HasHitboxes, HitboxShape {
 
   @override
   void fillParent() {
+    final parentSize = hitboxParent.size;
+    final zero = Vector2.zero();
+    vertices.clear();
+    vertices
+        .add(anchor.toOtherAnchorPosition(zero, Anchor.topLeft, parentSize));
     // No need to do anything since the size already is bound to the parent size
   }
 }

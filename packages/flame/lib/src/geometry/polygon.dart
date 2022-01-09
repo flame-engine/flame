@@ -111,7 +111,9 @@ class Polygon extends Shape {
         _reverseList(_globalVertices);
       }
       _cachedGlobalVertices.updateCache<dynamic>(
-          _globalVertices, <dynamic>[position.clone(), scale.clone(), angle]);
+        _globalVertices,
+        <dynamic>[position.clone(), scale.clone(), angle],
+      );
     }
     return _cachedGlobalVertices.value!;
   }
