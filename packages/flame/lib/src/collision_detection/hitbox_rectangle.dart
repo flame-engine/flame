@@ -21,11 +21,12 @@ class HitboxRectangle extends Rectangle with HasHitboxes, HitboxShape {
 
   @override
   void fillParent() {
-    final parentSize = hitboxParent.size;
-    final zero = Vector2.zero();
+    const topLeft = Anchor.topLeft;
     vertices.clear();
     vertices
-        .add(anchor.toOtherAnchorPosition(zero, Anchor.topLeft, parentSize));
-    // No need to do anything since the size already is bound to the parent size
+      ..add(topLeft.toOtherAnchorPosition(Vector2.zero(), anchor, size))
+      ..add(topLeft.toOtherAnchorPosition(Vector2(0, size.y), anchor, size))
+      ..add(topLeft.toOtherAnchorPosition(size, anchor, size))
+      ..add(topLeft.toOtherAnchorPosition(Vector2(size.x, 0), anchor, size));
   }
 }

@@ -60,9 +60,9 @@ mixin HasHitboxes on PositionComponent implements Collidable<HasHitboxes> {
   }
 
   Aabb2 _recalculateAabb() {
-    final size = scaledSize;
+    final size = absoluteScaledSize;
     // This has +1 since a point on the edge of the bounding box is currently
-    // counted as inside.
+    // counted as outside.
     _halfExtents.setValues(size.x + 1, size.y + 1);
     _rotationMatrix.setRotationZ(absoluteAngle);
     _validAabb = true;
@@ -77,8 +77,9 @@ mixin HasHitboxes on PositionComponent implements Collidable<HasHitboxes> {
   /// contains the [point].
   @override
   bool containsPoint(Vector2 point) {
+    print(possiblyContainsPoint(point));
     return possiblyContainsPoint(point) &&
-        hitboxes.any((shape) => shape.containsPoint(point));
+        hitboxes.any((hitbox) => hitbox.containsPoint(point));
   }
 
   //#region [CollisionCallbacks] methods

@@ -248,12 +248,19 @@ void main() {
       print(blockA.hitbox.size);
       print(blockB.hitbox.size);
       print(blockA.hitbox.vertices);
+      print(blockB.hitbox.vertices);
+      print(blockA.hitbox.absoluteScale);
+      print(blockB.hitbox.absoluteScale);
+      print(blockA.hitbox.globalVertices());
+      print(blockB.hitbox.globalVertices());
       expect(blockA.activeCollision(blockB), isFalse);
       expect(blockB.activeCollision(blockA), isFalse);
       expect(blockA.activeCollisions.length, 0);
       expect(blockB.activeCollisions.length, 0);
       blockA.scale = Vector2.all(2.0);
       game.update(0);
+      print(blockA.hitbox.globalVertices());
+      print(blockB.hitbox.globalVertices());
       expect(blockA.activeCollision(blockB), isTrue);
       expect(blockB.activeCollision(blockA), isTrue);
       expect(blockA.activeCollisions.length, 1);
@@ -271,6 +278,8 @@ void main() {
       expect(blockA.containsPoint(Vector2.all(11)), false);
       blockA.scale = Vector2.all(2.0);
       game.update(0);
+      print(blockA.hitbox.absoluteScale);
+      print(blockA.hitbox.globalVertices());
       expect(blockA.containsPoint(Vector2.all(11)), true);
     });
 

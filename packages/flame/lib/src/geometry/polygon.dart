@@ -88,6 +88,7 @@ class Polygon extends Shape {
     final scale = absoluteScale;
     final angle = absoluteAngle;
     final position = absolutePosition;
+    final center = absoluteCenter;
     if (!_cachedGlobalVertices.isCacheValid<dynamic>(<dynamic>[
       position,
       scale,
@@ -99,10 +100,8 @@ class Polygon extends Shape {
           ..setFrom(vertex)
           ..multiply(scale)
           ..add(position)
-          ..rotate(
-            absoluteAngle,
-            center: position, // TODO(spydon): Should this only accept center?
-          );
+          ..rotate(absoluteAngle - angle, center: center)
+          ..rotate(angle, center: position);
         i++;
       }
       if (scale.y.isNegative || scale.x.isNegative) {
@@ -129,6 +128,7 @@ class Polygon extends Shape {
   bool containsPoint(Vector2 point) {
     // If the size is 0 then it can't contain any points
     if (size.x == 0 || size.y == 0) {
+      print("size is 0");
       return false;
     }
 
@@ -150,6 +150,12 @@ class Polygon extends Shape {
   /// is null return all vertices as [LineSegment]s.
   List<LineSegment> possibleIntersectionVertices(Rect? rect) {
     final rectIntersections = <LineSegment>[];
+    if ((rect?.width == 0 || false) ||
+        (rect?.height == 0 || false) ||
+        width == 0 ||
+        height == 0) {
+      return rectIntersections;
+    }
     final vertices = globalVertices();
     for (var i = 0; i < vertices.length; i++) {
       final edge = getEdge(i, vertices: vertices);
