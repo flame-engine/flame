@@ -126,9 +126,9 @@ class Polygon extends Shape {
   /// Note: The polygon needs to be convex for this to work.
   @override
   bool containsPoint(Vector2 point) {
+    print('THIS IS CALLED');
     // If the size is 0 then it can't contain any points
     if (size.x == 0 || size.y == 0) {
-      print("size is 0");
       return false;
     }
 

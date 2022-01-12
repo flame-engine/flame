@@ -6,9 +6,11 @@ import '../../geometry.dart';
 import '../geometry/shape_intersections.dart' as intersection_system;
 
 mixin HitboxShape on Shape implements HasHitboxes {
+  @override
+  bool isLeafHitbox = true;
   @protected
   late PositionComponent hitboxParent;
-  late void Function() _parentSizeListener;
+  void Function()? _parentSizeListener;
   @protected
   bool shouldFillParent = false;
 
@@ -26,8 +28,8 @@ mixin HitboxShape on Shape implements HasHitboxes {
         size = hitboxParent.size;
         fillParent();
       };
-      _parentSizeListener();
-      hitboxParent.size.addListener(_parentSizeListener);
+      _parentSizeListener?.call();
+      hitboxParent.size.addListener(_parentSizeListener!);
     }
   }
 
@@ -41,14 +43,16 @@ mixin HitboxShape on Shape implements HasHitboxes {
 
   @override
   void onRemove() {
-    hitboxParent.size.removeListener(_parentSizeListener);
+    if (_parentSizeListener != null) {
+      hitboxParent.size.removeListener(_parentSizeListener!);
+    }
     super.onRemove();
   }
 
   /// Checks whether the [HitboxShape] contains the [point].
   @override
   bool containsPoint(Vector2 point) {
-    return possiblyContainsPoint(point) && super.containsPoint(point);
+    return super.containsPoint(point);
   }
 
   /// Where this [Shape] has intersection points with another shape

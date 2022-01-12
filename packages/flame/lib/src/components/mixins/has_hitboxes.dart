@@ -10,6 +10,7 @@ import '../../collision_detection/hitbox_shape.dart';
 mixin HasHitboxes on PositionComponent implements Collidable<HasHitboxes> {
   @override
   CollidableType collidableType = CollidableType.active;
+  bool isLeafHitbox = false;
 
   @override
   Aabb2 get aabb => _validAabb ? _aabb : _recalculateAabb();
@@ -77,19 +78,15 @@ mixin HasHitboxes on PositionComponent implements Collidable<HasHitboxes> {
   /// contains the [point].
   @override
   bool containsPoint(Vector2 point) {
-    print(possiblyContainsPoint(point));
+    print('possibly: ${possiblyContainsPoint(point)}');
+    print('hitboxes: ${hitboxes.any((hitbox) => hitbox.containsPoint(point))}');
+    print('size hitboxes: ${hitboxes.length}');
     return possiblyContainsPoint(point) &&
-        hitboxes.any((hitbox) => hitbox.containsPoint(point));
-  }
-
-  //#region [CollisionCallbacks] methods
-
-  /// Since this is a cheaper calculation than checking towards all shapes, this
-  /// check can be done first to see if it even is possible that the shapes can
-  /// overlap, since the shapes have to be within the size of the component.
-  @override
-  bool possiblyOverlapping(Collidable other) {
-    return aabb.intersectsWithAabb2(other.aabb);
+        (isLeafHitbox
+            ? super.containsPoint(point)
+            : hitboxes.any(
+                (hitbox) => hitbox.containsPoint(point),
+              ));
   }
 
   /// Since this is a cheaper calculation than checking towards all shapes this
@@ -101,6 +98,14 @@ mixin HasHitboxes on PositionComponent implements Collidable<HasHitboxes> {
     return aabb.containsVector2(point);
   }
 
+  /// Since this is a cheaper calculation than checking towards all shapes, this
+  /// check can be done first to see if it even is possible that the shapes can
+  /// overlap, since the shapes have to be within the size of the component.
+  @override
+  bool possiblyOverlapping(Collidable other) {
+    return aabb.intersectsWithAabb2(other.aabb);
+  }
+
   @override
   Set<Vector2> intersections(HasHitboxes other) {
     assert(
@@ -109,6 +114,8 @@ mixin HasHitboxes on PositionComponent implements Collidable<HasHitboxes> {
     );
     return _collisionDetection!.intersections(this, other);
   }
+
+  //#region [CollisionCallbacks] methods
 
   @override
   @mustCallSuper
@@ -138,5 +145,6 @@ mixin HasHitboxes on PositionComponent implements Collidable<HasHitboxes> {
 
   @override
   CollisionEndCallback<HasHitboxes>? collisionEndCallback;
+
   //#endregion
 }

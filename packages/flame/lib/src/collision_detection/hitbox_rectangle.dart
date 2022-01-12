@@ -1,4 +1,5 @@
 import '../../components.dart';
+import '../../flame.dart';
 import '../../geometry.dart';
 import 'hitbox_shape.dart';
 
