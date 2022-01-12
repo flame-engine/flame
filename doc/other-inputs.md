@@ -113,9 +113,9 @@ As the name suggests this button is a hud by default, which means that it will b
 screen even if the camera for the game moves around. You can also use this component as a non-hud by
 setting `hudButtonComponent.respectCamera = true;`.
 
-If you want to act upon the button being pressed (which would be the common thing to do) you can either pass in
-a callback function as the `onPressed` argument, or you extend the component and override
-`onTapDown`, `onTapUp` and/or `onTapCancel` and implement your logic there.
+If you want to act upon the button being pressed (which would be the common thing to do) and released,
+you can either pass in callback functions as the `onPressed` and `onReleased` arguments, or you can
+extend the component and override `onTapDown`, `onTapUp` and/or `onTapCancel` and implement your logic there.
 
 ## SpriteButtonComponent
 
