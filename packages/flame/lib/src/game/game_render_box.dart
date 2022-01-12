@@ -1,7 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
-import '../extensions/size.dart';
 import 'game_loop.dart';
 import 'mixins/game.dart';
 
