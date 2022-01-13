@@ -17,12 +17,14 @@ class NineTileBoxExample extends FlameGame with TapDetector, DoubleTapDetector {
     final sprite = Sprite(await images.load('nine-box.png'));
     final boxSize = Vector2.all(300);
     final nineTileBox = NineTileBox(sprite, destTileSize: 148);
-    add(nineTileBoxComponent = NineTileBoxComponent(
-      nineTileBox: nineTileBox,
-      position: size / 2,
-      size: boxSize,
-      anchor: Anchor.center,
-    ));
+    add(
+      nineTileBoxComponent = NineTileBoxComponent(
+        nineTileBox: nineTileBox,
+        position: size / 2,
+        size: boxSize,
+        anchor: Anchor.center,
+      ),
+    );
   }
 
   @override
