@@ -1,7 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 
-import '../extensions/size.dart';
 import 'game_loop.dart';
 import 'mixins/game.dart';
 
@@ -19,10 +18,10 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   bool get isRepaintBoundary => true;
 
   @override
-  void performResize() {
-    super.performResize();
-    game.onGameResize(constraints.biggest.toVector2());
-  }
+  bool get sizedByParent => true;
+
+  @override
+  Size computeDryLayout(BoxConstraints constraints) => constraints.biggest;
 
   @override
   void attach(PipelineOwner owner) {
@@ -59,11 +58,6 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   }
 
   @override
-  void performLayout() {
-    size = constraints.biggest;
-  }
-
-  @override
   void paint(PaintingContext context, Offset offset) {
     context.canvas.save();
     context.canvas.translate(offset.dx, offset.dy);
@@ -83,7 +77,4 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     game.lifecycleStateChange(state);
   }
-
-  @override
-  Size computeDryLayout(BoxConstraints constraints) => constraints.biggest;
 }
