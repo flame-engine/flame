@@ -17,11 +17,14 @@ class Images {
 
   /// Remove the image with the specified [fileName] from the cache.
   void clear(String fileName) {
-    _loadedFiles.remove(fileName);
+    _loadedFiles.remove(fileName)?.loadedImage?.dispose();
   }
 
   /// Clear all cached images.
   void clearCache() {
+    _loadedFiles.forEach((_, imageAssetLoader) {
+      imageAssetLoader.loadedImage?.dispose();
+    });
     _loadedFiles.clear();
   }
 
