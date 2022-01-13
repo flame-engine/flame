@@ -11,9 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^7.2.0
+  bloc: ^8.0.2
   flame: ^1.0.0
-  flutter_bloc: ^7.3.0
+  flutter_bloc: ^8.0.1
 
 dev_dependencies:
   dartdoc: ^0.42.0
