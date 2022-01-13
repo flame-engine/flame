@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,7 @@ class RemoveEffectExample extends FlameGame with HasTappables {
   }
 }
 
-class _RandomCircle extends CircleComponent with Tappable {
+class _RandomCircle extends Circle with Tappable {
   _RandomCircle(double radius, {Vector2? position, Paint? paint})
       : super(radius: radius, position: position, paint: paint);
 

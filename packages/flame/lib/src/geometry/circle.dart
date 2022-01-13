@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import '../../components.dart';
 import '../../extensions.dart';
@@ -14,12 +15,14 @@ class Circle extends Shape {
     double? angle,
     Anchor? anchor,
     int? priority,
+    Paint? paint,
   }) : super(
           position: position,
           size: Vector2.all((radius ?? 0) * 2),
           angle: angle,
           anchor: anchor,
           priority: priority,
+          paint: paint,
         );
 
   /// Get the radius of the circle before scaling.

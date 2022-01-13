@@ -29,11 +29,18 @@ class Polygon extends Shape {
     double? angle,
     Anchor? anchor,
     int? priority,
+    Paint? paint,
   })  : assert(
           vertices.length > 3,
           'List of vertices is too short to create a polygon',
         ),
-        super(scale: scale, angle: angle, anchor: anchor, priority: priority) {
+        super(
+          scale: scale,
+          angle: angle,
+          anchor: anchor,
+          priority: priority,
+          paint: paint,
+        ) {
     final verticesLength = vertices.length;
     _path = Path()
       ..addPolygon(

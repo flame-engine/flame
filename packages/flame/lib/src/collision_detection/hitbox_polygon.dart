@@ -13,6 +13,20 @@ class HitboxPolygon extends Polygon with HasHitboxes, HitboxShape {
     ) as HitboxPolygon;
   }
 
+  // TODO(spydon): Change name
+  factory HitboxPolygon.fromNormal({
+  required List<Vector2> normals,
+    required Vector2 size,
+    Anchor anchor = Anchor.center,
+  double angle = 0,
+  }) {
+    final position = anchor.
+    return Polygon(
+      normals.map((v) => v.clone()..multiply(),
+      angle: angle,
+    ) as HitboxPolygon;
+  }
+
   @override
   void fillParent() {
     throw UnsupportedError(

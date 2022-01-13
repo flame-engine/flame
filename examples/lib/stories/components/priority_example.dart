@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 
 class PriorityExample extends FlameGame with HasTappables {
@@ -21,8 +22,7 @@ class PriorityExample extends FlameGame with HasTappables {
   }
 }
 
-class Square extends RectangleComponent
-    with HasGameRef<PriorityExample>, Tappable {
+class Square extends Rectangle with HasGameRef<PriorityExample>, Tappable {
   Square(Vector2 position)
       : super(
           position: position,

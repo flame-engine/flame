@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
@@ -89,8 +90,8 @@ class JoystickAdvancedExample extends FlameGame
     // A button, created from a shape, that adds a rotation effect to the player
     // when it is pressed.
     final shapeButton = HudButtonComponent(
-      button: CircleComponent(radius: 35),
-      buttonDown: RectangleComponent(
+      button: Circle(radius: 35),
+      buttonDown: Rectangle(
         size: buttonSize,
         paint: BasicPalette.blue.paint(),
       ),
@@ -113,13 +114,13 @@ class JoystickAdvancedExample extends FlameGame
     // A button, created from a shape, that adds a scale effect to the player
     // when it is pressed.
     final buttonComponent = ButtonComponent(
-      button: RectangleComponent(
+      button: Rectangle(
         size: Vector2(185, 50),
         paint: Paint()
           ..color = Colors.orange
           ..style = PaintingStyle.stroke,
       ),
-      buttonDown: RectangleComponent(
+      buttonDown: Rectangle(
         size: Vector2(185, 50),
         paint: BasicPalette.magenta.paint(),
       ),

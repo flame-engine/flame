@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/collision_detection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 
@@ -47,7 +47,7 @@ class SimpleShapesExample extends FlameGame with HasTappables {
           Vector2.random(_rng)..x *= -1,
         ];
         return MyShapeComponent(
-          HitboxPolygon(points),
+          HitboxPolygon(vertices: points),
           position: position,
           size: shapeSize,
           angle: shapeAngle,
@@ -84,17 +84,17 @@ class SimpleShapesExample extends FlameGame with HasTappables {
   }
 }
 
-class MyShapeComponent extends ShapeComponent with Tappable {
+class MyShapeComponent extends PositionComponent with HasHitboxes, Tappable {
   @override
   final Paint paint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
+  final HitboxShape shape;
 
   MyShapeComponent(
-    HitboxShape shape, {
+    this.shape, {
     Vector2? position,
     Vector2? size,
     double? angle,
   }) : super(
-          shape,
           position: position,
           size: size,
           angle: angle,
@@ -102,8 +102,20 @@ class MyShapeComponent extends ShapeComponent with Tappable {
         );
 
   @override
+  Future<void> onLoad() async {
+    super.onLoad();
+    add(shape);
+  }
+
+  @override
   bool onTapDown(TapDownInfo _) {
     removeFromParent();
     return true;
+  }
+
+  @override
+  void render(Canvas c) {
+    super.render(c);
+    shape.renderDebugMode(c);
   }
 }

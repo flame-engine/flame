@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
@@ -15,17 +16,17 @@ class ScaleEffectExample extends FlameGame with TapDetector {
     The star pulsates randomly using a RandomEffectController.
   ''';
 
-  late RectangleComponent square;
+  late Rectangle square;
   bool grow = true;
 
   @override
   Future<void> onLoad() async {
-    square = RectangleComponent.square(
+    square = Rectangle.square(
       size: 100,
       position: Vector2.all(200),
       paint: BasicPalette.white.paint()..style = PaintingStyle.stroke,
     );
-    final childSquare = RectangleComponent.square(
+    final childSquare = Rectangle.square(
       position: Vector2.all(70),
       size: 20,
     );

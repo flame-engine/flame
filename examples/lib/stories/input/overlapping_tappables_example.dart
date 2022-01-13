@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 
 class OverlappingTappablesExample extends FlameGame with HasTappables {
   static const String description = '''
@@ -17,7 +18,7 @@ class OverlappingTappablesExample extends FlameGame with HasTappables {
   }
 }
 
-class TappableSquare extends RectangleComponent with Tappable {
+class TappableSquare extends Rectangle with Tappable {
   TappableSquare({Vector2? position})
       : super(
           position: position ?? Vector2.all(100),

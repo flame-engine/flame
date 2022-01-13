@@ -1,9 +1,9 @@
 import 'dart:math';
 
+import 'package:flame/collision_detection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
@@ -92,7 +92,7 @@ class MultipleShapesExample extends FlameGame
 }
 
 abstract class MyCollidable extends PositionComponent
-    with Draggable, HasHitboxes, Collidable {
+    with Draggable, HasHitboxes {
   double rotationSpeed = 0.0;
   final Vector2 velocity;
   final delta = Vector2.zero();
@@ -145,13 +145,13 @@ abstract class MyCollidable extends PositionComponent
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, Collidable other) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, HasHitboxes other) {
     super.onCollisionStart(intersectionPoints, other);
     _activePaint.color = collisionColor(other).withOpacity(0.8);
   }
 
   @override
-  void onCollisionEnd(Collidable other) {
+  void onCollisionEnd(HasHitboxes other) {
     super.onCollisionEnd(other);
     if (activeCollisions.isEmpty) {
       _activePaint.color = _defaultColor;

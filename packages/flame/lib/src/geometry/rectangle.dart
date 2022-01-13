@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import '../../components.dart';
 import '../../extensions.dart';
 import '../../geometry.dart';
@@ -9,6 +11,7 @@ class Rectangle extends Polygon {
     double? angle,
     Anchor? anchor,
     int? priority,
+    Paint? paint,
   }) : super(
           [
             _toCorner(position, size, anchor, Anchor.topLeft),
@@ -19,6 +22,23 @@ class Rectangle extends Polygon {
           angle: angle,
           anchor: anchor,
           priority: priority,
+          paint: paint,
+        );
+
+  Rectangle.square({
+    Vector2? position,
+    double? size,
+    double? angle,
+    Anchor? anchor,
+    int? priority,
+    Paint? paint,
+  }) : this(
+          position: position,
+          size: size != null ? Vector2.all(size) : null,
+          angle: angle,
+          anchor: anchor,
+          priority: priority,
+          paint: paint,
         );
 
   /// This factory will create a [Rectangle] from a positioned [Rect].

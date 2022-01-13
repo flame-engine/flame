@@ -1,7 +1,7 @@
-import '../../../components.dart';
-import '../../../game.dart';
-import '../../collision_detection/collision_callbacks.dart';
-import '../../collision_detection/hitbox_rectangle.dart';
+import '../../components.dart';
+import '../../game.dart';
+import 'collision_callbacks.dart';
+import 'hitbox_rectangle.dart';
 
 class ScreenCollidable<T extends FlameGame> extends PositionComponent
     with HasHitboxes, HasGameRef<T> {

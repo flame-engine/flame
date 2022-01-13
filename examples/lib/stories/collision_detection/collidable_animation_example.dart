@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/collision_detection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
 
 class CollidableAnimationExample extends FlameGame with HasCollisionDetection {
@@ -49,7 +49,7 @@ class CollidableAnimationExample extends FlameGame with HasCollisionDetection {
 }
 
 class AnimatedComponent extends SpriteAnimationComponent
-    with HasHitboxes, Collidable, HasGameRef {
+    with HasHitboxes, HasGameRef {
   final Vector2 velocity;
 
   AnimatedComponent(this.velocity, Vector2 position, {double angle = -pi / 4})
@@ -79,6 +79,7 @@ class AnimatedComponent extends SpriteAnimationComponent
       Vector2(0.2, 0.4),
       Vector2(1.0, -0.1),
     ]);
+    hitbox.debugMode = true;
     add(hitbox);
   }
 
@@ -93,17 +94,7 @@ class AnimatedComponent extends SpriteAnimationComponent
   final Paint dotPaint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
 
   @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    // This is just to clearly see the vertices in the hitboxes
-    hitbox.render(canvas, hitboxPaint);
-    hitbox
-        .localVertices()
-        .forEach((p) => canvas.drawCircle(p.toOffset(), 4, dotPaint));
-  }
-
-  @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, Collidable other) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, HasHitboxes other) {
     super.onCollisionStart(intersectionPoints, other);
     velocity.negate();
     flipVertically();

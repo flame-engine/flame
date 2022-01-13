@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/animation.dart';
@@ -15,17 +16,17 @@ class SizeEffectExample extends FlameGame with TapDetector {
     down, depending on its current state.
   ''';
 
-  late RectangleComponent square;
+  late Rectangle square;
   bool grow = true;
 
   @override
   Future<void> onLoad() async {
-    square = RectangleComponent.square(
+    square = Rectangle.square(
       size: 100,
       position: Vector2.all(200),
       paint: BasicPalette.white.paint()..style = PaintingStyle.stroke,
     );
-    final childSquare = RectangleComponent.square(
+    final childSquare = Rectangle.square(
       position: Vector2.all(70),
       size: 20,
     );

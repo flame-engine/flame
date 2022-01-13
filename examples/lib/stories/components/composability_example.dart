@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,7 @@ class ComposabilityExample extends FlameGame with HasDraggables {
   }
 }
 
-class ParentSquare extends RectangleComponent with HasGameRef {
+class ParentSquare extends Rectangle with HasGameRef {
   static final defaultPaint = BasicPalette.white.paint()
     ..style = PaintingStyle.stroke;
 
@@ -52,25 +53,25 @@ class ParentSquare extends RectangleComponent with HasGameRef {
     // All positions here are in relation to the parent's position
     const childSize = 50.0;
     final children = [
-      RectangleComponent.square(
+      Rectangle.square(
         position: Vector2(100, 100),
         size: childSize,
         angle: 2,
         paint: defaultPaint,
       ),
-      RectangleComponent.square(
+      Rectangle.square(
         position: Vector2(160, 100),
         size: childSize,
         angle: 3,
         paint: defaultPaint,
       ),
-      RectangleComponent.square(
+      Rectangle.square(
         position: Vector2(170, 150),
         size: childSize,
         angle: 4,
         paint: defaultPaint,
       ),
-      RectangleComponent.square(
+      Rectangle.square(
         position: Vector2(70, 200),
         size: childSize,
         angle: 5,

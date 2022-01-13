@@ -5,4 +5,5 @@ export 'src/collision_detection/hitbox_circle.dart';
 export 'src/collision_detection/hitbox_polygon.dart';
 export 'src/collision_detection/hitbox_rectangle.dart';
 export 'src/collision_detection/hitbox_shape.dart';
+export 'src/collision_detection/screen_collidable.dart';
 export 'src/collision_detection/sweep.dart';

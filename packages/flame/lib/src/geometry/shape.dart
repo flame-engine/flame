@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import '../../components.dart';
 
 /// A shape can represent any geometrical shape with optionally a size, position
@@ -18,6 +20,7 @@ abstract class Shape extends PositionComponent with HasPaint {
     double? angle,
     Anchor? anchor,
     int? priority,
+    Paint? paint,
   })  : initialPosition = position ?? Vector2.zero(),
         halfSize = (size ?? Vector2.zero()) / 2,
         super(
@@ -27,7 +30,9 @@ abstract class Shape extends PositionComponent with HasPaint {
           angle: angle,
           anchor: anchor,
           priority: priority,
-        );
+        ) {
+    this.paint = paint ?? this.paint;
+  }
 
   @override
   void onMount() {
