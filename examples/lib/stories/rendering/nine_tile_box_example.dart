@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flutter/material.dart';
 
 class NineTileBoxExample extends FlameGame with TapDetector, DoubleTapDetector {
   static const String description = '''
@@ -10,30 +9,29 @@ class NineTileBoxExample extends FlameGame with TapDetector, DoubleTapDetector {
     Tap to make the box bigger and double tap to make it smaller.
   ''';
 
-  late NineTileBox nineTileBox;
-  final Vector2 boxSize = Vector2.all(300);
+  late NineTileBoxComponent nineTileBoxComponent;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     final sprite = Sprite(await images.load('nine-box.png'));
-    nineTileBox = NineTileBox(sprite, tileSize: 8, destTileSize: 24);
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    final position = (size - boxSize) / 2;
-    nineTileBox.draw(canvas, position, boxSize);
+    final boxSize = Vector2.all(300);
+    final nineTileBox = NineTileBox(sprite, destTileSize: 148);
+    add(nineTileBoxComponent = NineTileBoxComponent(
+      nineTileBox: nineTileBox,
+      position: size / 2,
+      size: boxSize,
+      anchor: Anchor.center,
+    ));
   }
 
   @override
   void onTap() {
-    boxSize.scale(1.2);
+    nineTileBoxComponent.scale.scale(1.2);
   }
 
   @override
   void onDoubleTap() {
-    boxSize.scale(0.8);
+    nineTileBoxComponent.scale.scale(0.8);
   }
 }
