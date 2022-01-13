@@ -8,19 +8,19 @@ mixin Draggable on Component {
   bool _isDragged = false;
   bool get isDragged => _isDragged;
 
-  bool onDragStart(int pointerId, DragStartInfo info) {
+  bool onDragStart(DragStartInfo info) {
     return true;
   }
 
-  bool onDragUpdate(int pointerId, DragUpdateInfo info) {
+  bool onDragUpdate(DragUpdateInfo info) {
     return true;
   }
 
-  bool onDragEnd(int pointerId, DragEndInfo info) {
+  bool onDragEnd(DragEndInfo info) {
     return true;
   }
 
-  bool onDragCancel(int pointerId) {
+  bool onDragCancel() {
     return true;
   }
 
@@ -31,23 +31,23 @@ mixin Draggable on Component {
     if (containsPoint(eventPosition(info))) {
       _isDragged = true;
       _currentPointerIds.add(pointerId);
-      return onDragStart(pointerId, info);
+      return onDragStart(info);
     }
     return true;
   }
 
-  bool handleDragUpdated(int pointerId, DragUpdateInfo details) {
+  bool handleDragUpdated(int pointerId, DragUpdateInfo info) {
     if (_checkPointerId(pointerId)) {
-      return onDragUpdate(pointerId, details);
+      return onDragUpdate(info);
     }
     return true;
   }
 
-  bool handleDragEnded(int pointerId, DragEndInfo details) {
+  bool handleDragEnded(int pointerId, DragEndInfo info) {
     if (_checkPointerId(pointerId)) {
       _isDragged = false;
       _currentPointerIds.remove(pointerId);
-      return onDragEnd(pointerId, details);
+      return onDragEnd(info);
     }
     return true;
   }
@@ -56,7 +56,7 @@ mixin Draggable on Component {
     if (_checkPointerId(pointerId)) {
       _isDragged = false;
       _currentPointerIds.remove(pointerId);
-      return onDragCancel(pointerId);
+      return onDragCancel();
     }
     return true;
   }
