@@ -55,14 +55,14 @@ class RenderableTiledMap {
     final map = await _loadMap(contents);
     final batches = await _loadImages(map);
     final batchesByLayer = await Future.wait(
-      map.layers
-          .where((layer) => layer.visible)
-          .whereType<TileLayer>()
-          .map((e) => _deepCopySpriteBatchMap(batches)),
+      _renderableTileLayers(map).map((e) => _deepCopySpriteBatchMap(batches)),
     );
 
     return RenderableTiledMap(map, batches, destTileSize, batchesByLayer);
   }
+
+  static Iterable<TileLayer> _renderableTileLayers(TiledMap map) =>
+      map.layers.where((layer) => layer.visible).whereType<TileLayer>();
 
   static Future<TiledMap> _loadMap(String contents) async {
     final tsxSourcePath = XmlDocument.parse(contents)
@@ -117,9 +117,7 @@ class RenderableTiledMap {
     }
 
     var layerInd = 0;
-    map.layers
-        .where((layer) => layer.visible)
-        .whereType<TileLayer>()
+    _renderableTileLayers(map)
         .map((e) => e.tileData)
         .whereType<List<List<Gid>>>()
         .forEach(
