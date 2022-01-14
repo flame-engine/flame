@@ -8,18 +8,37 @@ mixin Draggable on Component {
   bool _isDragged = false;
   bool get isDragged => _isDragged;
 
+  /// Override this to handle the start of a drag/pan gesture that is within the
+  /// boundaries (or hitboxes) of the component that this mixin is used on.
+  /// Return `true` if you want this event to continue to be passed on to
+  /// components underneath (lower priority) this component.
   bool onDragStart(DragStartInfo info) {
     return true;
   }
 
+  /// Override this to handle the update of a drag/pan gesture that is within
+  /// the boundaries (or hitboxes) of the component that this mixin is used on.
+  /// Return `true` if you want this event to continue to be passed on to
+  /// components underneath (lower priority) this component.
   bool onDragUpdate(DragUpdateInfo info) {
     return true;
   }
 
+  /// Override this to handle the end of a drag/pan gesture that is within
+  /// the boundaries (or hitboxes) of the component that this mixin is used on.
+  /// Return `true` if you want this event to continue to be passed on to
+  /// components underneath (lower priority) this component.
   bool onDragEnd(DragEndInfo info) {
     return true;
   }
 
+  /// Override this to handle if a drag/pan gesture is cancelled that was
+  /// previously started on the component that this mixin is used on.
+  /// Return `true` if you want this event to continue to be passed on to
+  /// components underneath (lower priority) this component.
+  ///
+  /// This event is not that common, it can happen for example when the user
+  /// is interrupted by a system-modal dialog in the middle of the drag.
   bool onDragCancel() {
     return true;
   }
