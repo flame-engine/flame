@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
@@ -10,22 +11,121 @@ import 'package:test/test.dart';
 
 void main() {
   test('correct loads the file', () async {
-    Flame.bundle = TestAssetBundle();
+    Flame.bundle = TestAssetBundle(
+      imageNames: ['map-level1.png'],
+      mapPath: 'test/assets/map.tmx',
+    );
     final tiled = await TiledComponent.load('x', Vector2.all(16));
-    expect(tiled.tileMap.batches, isNotEmpty);
+    expect(tiled.tileMap.batchesByLayer, isNotEmpty);
+  });
+
+  group('Layered tiles render correctly with layered sprite batch', () {
+    late Uint8List canvasPixelData;
+
+    setUp(() async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          'green_sprite.png',
+          'red_sprite.png',
+        ],
+        mapPath: 'test/assets/2_tiles-green_on_red.tmx',
+      );
+      final overlapMap = await RenderableTiledMap.fromFile(
+        '2_tiles-green_on_red.tmx',
+        Vector2.all(16),
+      );
+      final canvasRecorder = PictureRecorder();
+      final canvas = Canvas(canvasRecorder);
+      overlapMap.render(canvas);
+      final picture = canvasRecorder.endRecording();
+
+      final image = await picture.toImage(32, 16);
+      final bytes = await image.toByteData();
+      canvasPixelData = bytes!.buffer.asUint8List();
+    });
+
+    test(
+      'Canvas pixel dimensions match',
+      () => expect(
+        canvasPixelData.length == 16 * 32 * 4,
+        true,
+      ),
+    );
+
+    test('Base test - right tile pixel is red', () {
+      expect(
+        canvasPixelData[16 * 4] == 255 &&
+            canvasPixelData[(16 * 4) + 1] == 0 &&
+            canvasPixelData[(16 * 4) + 2] == 0 &&
+            canvasPixelData[(16 * 4) + 3] == 255,
+        true,
+      );
+      final rightTilePixels = <int>[];
+      for (var ind = 16 * 4; ind < 16 * 32 * 4; ind += 32 * 4) {
+        rightTilePixels.addAll(canvasPixelData.getRange(ind, ind + (16 * 4)));
+      }
+
+      var allRed = true;
+      for (var indRed = 0; indRed < rightTilePixels.length; indRed += 4) {
+        allRed &= rightTilePixels[indRed] == 255 &&
+            rightTilePixels[indRed + 1] == 0 &&
+            rightTilePixels[indRed + 2] == 0 &&
+            rightTilePixels[indRed + 3] == 255;
+      }
+      expect(allRed, true);
+    });
+
+    test('Left tile pixel is green', () {
+      expect(
+        canvasPixelData[15 * 4] == 0 &&
+            canvasPixelData[(15 * 4) + 1] == 255 &&
+            canvasPixelData[(15 * 4) + 2] == 0 &&
+            canvasPixelData[(15 * 4) + 3] == 255,
+        true,
+      );
+
+      final leftTilePixels = <int>[];
+      for (var ind = 0; ind < 15 * 32 * 4; ind += 32 * 4) {
+        leftTilePixels.addAll(canvasPixelData.getRange(ind, ind + (16 * 4)));
+      }
+
+      var allGreen = true;
+      for (var indGreen = 0; indGreen < leftTilePixels.length; indGreen += 4) {
+        allGreen &= leftTilePixels[indGreen] == 0 &&
+            leftTilePixels[indGreen + 1] == 255 &&
+            leftTilePixels[indGreen + 2] == 0 &&
+            leftTilePixels[indGreen + 3] == 255;
+      }
+      expect(allGreen, true);
+    });
   });
 }
 
 class TestAssetBundle extends CachingAssetBundle {
+  TestAssetBundle({
+    required this.imageNames,
+    required this.mapPath,
+  });
+
+  final List<String> imageNames;
+  final String mapPath;
+
   @override
   Future<ByteData> load(String key) async {
-    return File('test/assets/map-level1.png')
+    final split = key.split('/');
+    final imgName = split.isNotEmpty ? split.last : key;
+
+    var toLoadName = key.split('/').last;
+    if (!imageNames.contains(imgName) && imageNames.isNotEmpty) {
+      toLoadName = imageNames.first;
+    }
+    return File('test/assets/$toLoadName')
         .readAsBytes()
         .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer));
   }
 
   @override
   Future<String> loadString(String key, {bool cache = true}) {
-    return File('test/assets/map.tmx').readAsString();
+    return File(mapPath).readAsString();
   }
 }
