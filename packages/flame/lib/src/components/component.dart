@@ -238,21 +238,39 @@ class Component with Loadable {
   /// only be called after the game already has its layout set, this can be
   /// verified by the [Game.hasLayout] property, to add components upon game
   /// initialization, the [onLoad] method can be used instead.
-  Future<void> add(Component component) {
-    return children.addChild(component);
+  Future<void> add(Component component) async {
+    component.prepare(/*parent=*/ this);
+    if (component.isPrepared) {
+      // [Component.onLoad] (if it is defined) should only run the first time
+      // the component is added to a parent.
+      if (!component.isLoaded) {
+        final onLoad = component.onLoadCache;
+        if (onLoad != null) {
+          await onLoad;
+        }
+        component.isLoaded = true;
+      }
+      // Should run every time the component gets a new parent, including its
+      // first parent.
+      component.onMount();
+      if (component.hasChildren) {
+        await component._reAddChildren();
+      }
+    }
+    children.addChild(component);
   }
 
   /// Adds multiple children.
   ///
   /// See [add] for details.
   Future<void> addAll(Iterable<Component> components) {
-    return children.addChildren(components);
+    return Future.wait(components.map(add));
   }
 
   /// The children are added again to the component set so that [prepare],
   /// [onLoad] and [onMount] runs again. Used when a parent is changed
   /// further up the tree.
-  Future<void> reAddChildren() async {
+  Future<void> _reAddChildren() async {
     if (_children != null) {
       await Future.wait(_children!.map(add));
       await Future.wait(_children!.addLater.map(add));
@@ -335,6 +353,7 @@ class Component with Loadable {
   /// If there are no parents that are a [Game] false will be returned and this
   /// will run again once an ancestor or the component itself is added to a
   /// [Game].
+  @protected
   @mustCallSuper
   void prepare(Component parent) {
     _parent = parent;
@@ -364,7 +383,7 @@ class Component with Loadable {
   /// This method creates the children container for the current component.
   /// Override this method if you need to have a custom [ComponentSet] within
   /// a particular class.
-  ComponentSet createComponentSet() => childrenFactory(this);
+  ComponentSet createComponentSet() => childrenFactory();
 }
 
-typedef ComponentSetFactory = ComponentSet Function(Component owner);
+typedef ComponentSetFactory = ComponentSet Function();
