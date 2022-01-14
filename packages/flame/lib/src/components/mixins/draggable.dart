@@ -9,7 +9,8 @@ mixin Draggable on Component {
   bool get isDragged => _isDragged;
 
   /// Override this to handle the start of a drag/pan gesture that is within the
-  /// boundaries (or hitboxes) of the component that this mixin is used on.
+  /// boundaries (determined by [Component.containsPoint]) of the component that
+  /// this mixin is used on.
   /// Return `true` if you want this event to continue to be passed on to
   /// components underneath (lower priority) this component.
   bool onDragStart(DragStartInfo info) {
@@ -17,7 +18,8 @@ mixin Draggable on Component {
   }
 
   /// Override this to handle the update of a drag/pan gesture that is within
-  /// the boundaries (or hitboxes) of the component that this mixin is used on.
+  /// the boundaries (determined by [Component.containsPoint]) of the component
+  /// that this mixin is used on.
   /// Return `true` if you want this event to continue to be passed on to
   /// components underneath (lower priority) this component.
   bool onDragUpdate(DragUpdateInfo info) {
@@ -25,7 +27,8 @@ mixin Draggable on Component {
   }
 
   /// Override this to handle the end of a drag/pan gesture that is within
-  /// the boundaries (or hitboxes) of the component that this mixin is used on.
+  /// the boundaries (determined by [Component.containsPoint]) of the component
+  /// that this mixin is used on.
   /// Return `true` if you want this event to continue to be passed on to
   /// components underneath (lower priority) this component.
   bool onDragEnd(DragEndInfo info) {
