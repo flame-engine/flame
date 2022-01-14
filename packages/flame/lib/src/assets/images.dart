@@ -23,11 +23,16 @@ class Images {
   }
 
   /// Remove the image with the specified [name] from the cache.
+  /// This calls [Image.dispose], so make sure that you don't use the previously
+  /// cached image once it is cleared (removed) from the cache.
   void clear(String name) {
     _loadedFiles.remove(name)?.loadedImage?.dispose();
   }
 
   /// Clear all cached images.
+  /// This calls [Image.dispose] for all images in the cache, so make sure that
+  /// you don't use any of the previously cached images once [clearCache] has
+  /// been called.
   void clearCache() {
     _loadedFiles.forEach((_, imageAssetLoader) {
       imageAssetLoader.loadedImage?.dispose();

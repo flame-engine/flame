@@ -29,6 +29,12 @@ They return a `Future` for the loaded Image.
 To synchronously retrieve a previously cached image, the `fromCache` method can be used. If an image
 with that key was not previously loaded, it will throw an exception.
 
+To add an already loaded image to the cache, the `add` method can be used and you can set the key
+that the image should have in the cache.
+
+For `clear` and `clearCache`, do note that `dispose` is called for each removed image from the
+cache, so make sure that you don't use the image afterwards.
+
 ### Standalone usage
 
 It can manually be used by instantiating it:
