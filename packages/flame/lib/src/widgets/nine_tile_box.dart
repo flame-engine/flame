@@ -37,8 +37,11 @@ class _Painter extends CustomPainter {
   bool shouldRepaint(_) => false;
 }
 
+@Deprecated('Renamed to [NineTileBoxWidget')
+typedef NineTileBox = NineTileBoxWidget;
+
 /// A [StatelessWidget] that renders NineTileBox
-class NineTileBox extends StatelessWidget {
+class NineTileBoxWidget extends StatelessWidget {
   final Future<ui.Image> Function() _imageFuture;
 
   /// The size of the tile on the image
@@ -57,7 +60,7 @@ class NineTileBox extends StatelessWidget {
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
-  NineTileBox({
+  NineTileBoxWidget({
     required ui.Image image,
     required this.tileSize,
     required this.destTileSize,
@@ -70,7 +73,7 @@ class NineTileBox extends StatelessWidget {
   })  : _imageFuture = (() => Future.value(image)),
         super(key: key);
 
-  NineTileBox.asset({
+  NineTileBoxWidget.asset({
     required String path,
     required this.tileSize,
     required this.destTileSize,
