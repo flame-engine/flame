@@ -96,14 +96,10 @@ class RenderableTiledMap {
 
   static Future<Map<String, SpriteBatch>> _deepCopySpriteBatchMap(
     Map<String, SpriteBatch> copyFrom,
-  ) async {
-    final result = <String, SpriteBatch>{};
-
-    await Future.forEach(copyFrom.keys, (String src) async {
-      result[src] = await SpriteBatch.load(src);
-    });
-    return result;
-  }
+  ) async =>
+      {
+        for (var key in copyFrom.keys) key: await SpriteBatch.load(key),
+      };
 
   void _fillBatches() {
     if (batchesByLayer == null) {
