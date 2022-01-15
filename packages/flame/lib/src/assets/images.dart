@@ -15,22 +15,37 @@ class Images {
 
   Images({this.prefix = 'assets/images/'});
 
-  /// Remove the image with the specified [fileName] from the cache.
-  void clear(String fileName) {
-    _loadedFiles.remove(fileName);
+  /// Adds an [image] to the cache that can be fetched with with the specified
+  /// [name].
+  void add(String name, Image image) {
+    _loadedFiles[name] = _ImageAssetLoader(Future.value(image))
+      ..loadedImage = image;
+  }
+
+  /// Remove the image with the specified [name] from the cache.
+  /// This calls [Image.dispose], so make sure that you don't use the previously
+  /// cached image once it is cleared (removed) from the cache.
+  void clear(String name) {
+    _loadedFiles.remove(name)?.loadedImage?.dispose();
   }
 
   /// Clear all cached images.
+  /// This calls [Image.dispose] for all images in the cache, so make sure that
+  /// you don't use any of the previously cached images once [clearCache] has
+  /// been called.
   void clearCache() {
+    _loadedFiles.forEach((_, imageAssetLoader) {
+      imageAssetLoader.loadedImage?.dispose();
+    });
     _loadedFiles.clear();
   }
 
-  /// Gets the specified image with [fileName] from the cache.
-  Image fromCache(String fileName) {
-    final image = _loadedFiles[fileName];
+  /// Gets the specified image with [name] from the cache.
+  Image fromCache(String name) {
+    final image = _loadedFiles[name];
     assert(
       image?.loadedImage != null,
-      'Tried to access an inexistent entry on cache "$fileName", make sure to '
+      'Tried to access an inexistent entry on cache "$name", make sure to '
       'use the load method before accessing a file on the cache',
     );
     return image!.loadedImage!;
