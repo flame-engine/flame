@@ -37,7 +37,7 @@ class _Painter extends CustomPainter {
   bool shouldRepaint(_) => false;
 }
 
-@Deprecated('Renamed to [NineTileBoxWidget')
+@Deprecated('Renamed to [NineTileBoxWidget]')
 typedef NineTileBox = NineTileBoxWidget;
 
 /// A [StatelessWidget] that renders NineTileBox
