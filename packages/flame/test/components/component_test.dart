@@ -157,16 +157,16 @@ void main() {
     );
 
     test('childrenFactory', () {
-      Component.childrenFactory = (Component owner) {
-        return ComponentSet.createDefault(owner, strictMode: false);
-      };
+      final component0 = Component();
+      expect(component0.children.strictMode, false);
 
+      Component.childrenFactory = () => ComponentSet(strictMode: true);
       final component1 = Component();
       final component2 = Component();
       component1.add(component2);
       component2.add(Component());
-      expect(component1.children.strictMode, false);
-      expect(component2.children.strictMode, false);
+      expect(component1.children.strictMode, true);
+      expect(component2.children.strictMode, true);
     });
   });
 }
