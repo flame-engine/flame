@@ -1,8 +1,7 @@
 name: flame_bloc
 description: Bloc integration to Flame games
-version: 1.0.0
+version: 1.1.0
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_bloc
-publish_to: 'none'
 
 environment:
   sdk: ">=2.14.0 <3.0.0"
