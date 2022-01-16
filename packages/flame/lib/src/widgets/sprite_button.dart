@@ -52,10 +52,12 @@ class SpriteButton extends StatelessWidget {
     this.pressedSrcSize,
     this.errorBuilder,
     this.loadingBuilder,
-  }) : _buttonsFuture = (() => Future.wait([
+    Key? key,
+  })  : _buttonsFuture = (() => Future.wait([
               Future.value(sprite),
               Future.value(pressedSprite),
-            ]));
+            ])),
+        super(key: key);
 
   SpriteButton.asset({
     required String path,
@@ -71,7 +73,8 @@ class SpriteButton extends StatelessWidget {
     this.pressedSrcSize,
     this.errorBuilder,
     this.loadingBuilder,
-  }) : _buttonsFuture = (() => Future.wait([
+    Key? key,
+  })  : _buttonsFuture = (() => Future.wait([
               Sprite.load(
                 path,
                 srcSize: srcSize,
@@ -84,7 +87,8 @@ class SpriteButton extends StatelessWidget {
                 srcPosition: pressedSrcPosition,
                 images: images,
               ),
-            ]));
+            ])),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -11,7 +11,7 @@ void main() {
       final ec = InfiniteEffectController(LinearEffectController(1));
       expect(ec.isInfinite, true);
       expect(ec.isRandom, false);
-      expect(ec.duration, null);
+      expect(ec.duration, double.infinity);
       expect(ec.started, true);
       expect(ec.completed, false);
       expect(ec.progress, 0);

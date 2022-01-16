@@ -95,6 +95,8 @@ mixin Game on Loadable {
   /// Use for calculating the FPS.
   void onTimingsCallback(List<FrameTiming> timings) {}
 
+  void onMount() {}
+
   /// Marks game as attached to any Flutter widget tree.
   ///
   /// Should not be called manually.
@@ -125,6 +127,10 @@ mixin Game on Loadable {
 
     onDetach();
   }
+
+  /// Called when the game is about to be removed from the Flutter widget tree,
+  /// but before it is actually removed.
+  void onRemove() {}
 
   /// Called after the game has left the widget tree.
   /// This can be overridden to add logic that requires the game

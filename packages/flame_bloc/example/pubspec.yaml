@@ -15,7 +15,7 @@ dependencies:
   equatable: ^2.0.3
   flame_bloc:
     path: ../
-  flutter_bloc: ^7.3.0
+  flutter_bloc: ^8.0.1
 
 dev_dependencies:
   flutter_test:

@@ -32,7 +32,9 @@ class SpriteAnimationWidget extends StatelessWidget {
     this.anchor = Anchor.topLeft,
     this.errorBuilder,
     this.loadingBuilder,
-  }) : _animationFuture = (() => Future.value(animation));
+    Key? key,
+  })  : _animationFuture = (() => Future.value(animation)),
+        super(key: key);
 
   SpriteAnimationWidget.asset({
     required String path,
@@ -42,8 +44,13 @@ class SpriteAnimationWidget extends StatelessWidget {
     this.anchor = Anchor.topLeft,
     this.errorBuilder,
     this.loadingBuilder,
-  }) : _animationFuture =
-            (() => SpriteAnimation.load(path, data, images: images));
+    Key? key,
+  })  : _animationFuture = (() => SpriteAnimation.load(
+              path,
+              data,
+              images: images,
+            )),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -89,35 +96,28 @@ class _SpriteAnimationWidgetState extends State<_SpriteAnimationWidget>
   double? _lastUpdated;
 
   @override
-  void didUpdateWidget(_SpriteAnimationWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
+  void initState() {
+    super.initState();
+    widget.animation.onComplete = _pauseAnimation;
+    _setupController();
     if (widget.playing) {
       _initAnimation();
-    } else {
-      _pauseAnimation();
     }
   }
 
   @override
-  void initState() {
-    super.initState();
+  void didUpdateWidget(_SpriteAnimationWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
-    _controller = AnimationController(vsync: this)
-      ..addListener(() {
-        final now = DateTime.now().millisecond.toDouble();
-
-        final dt = max(0, (now - (_lastUpdated ?? 0)) / 1000).toDouble();
-        widget.animation.update(dt);
-
-        setState(() {
-          _lastUpdated = now;
-        });
-      });
-
-    widget.animation.onComplete = _pauseAnimation;
+    if (oldWidget.animation != widget.animation) {
+      oldWidget.animation.onComplete = null;
+      _setupController();
+    }
 
     if (widget.playing) {
       _initAnimation();
+    } else {
+      _pauseAnimation();
     }
   }
 
@@ -130,6 +130,20 @@ class _SpriteAnimationWidgetState extends State<_SpriteAnimationWidget>
         period: const Duration(milliseconds: 16),
       );
     });
+  }
+
+  void _setupController() {
+    _controller?.dispose();
+
+    _controller = AnimationController(vsync: this)
+      ..addListener(() {
+        final now = DateTime.now().millisecond.toDouble();
+
+        final dt = max(0, (now - (_lastUpdated ?? 0)) / 1000).toDouble();
+        widget.animation.update(dt);
+
+        setState(() => _lastUpdated = now);
+      });
   }
 
   void _pauseAnimation() {

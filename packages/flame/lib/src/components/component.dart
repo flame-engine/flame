@@ -14,6 +14,8 @@ import 'cache/value_cache.dart';
 /// called automatically once the component is added to the component tree in
 /// your game (with `game.add`).
 class Component with Loadable {
+  Component({int? priority}) : _priority = priority ?? 0;
+
   /// What coordinate system this component should respect (i.e. should it
   /// observe camera, viewport, or use the raw canvas).
   ///
@@ -115,7 +117,23 @@ class Component with Loadable {
     return _debugTextPaintCache.value!;
   }
 
-  Component({int? priority}) : _priority = priority ?? 0;
+  //#region Component lifecycle methods
+
+  /// Called after the component has finished running its [onLoad] method and
+  /// when the component is added to its new parent.
+  ///
+  /// Whenever [onMount] returns something, the parent will wait for the future
+  /// to be resolved before adding it. If `null` is returned, the class is
+  /// added right away.
+  ///
+  /// Example:
+  /// ```dart
+  /// @override
+  /// void onMount() {
+  ///   position = parent!.size / 2;
+  /// }
+  /// ```
+  void onMount() {}
 
   /// This method is called periodically by the game engine to request that your
   /// component updates itself.
@@ -131,13 +149,9 @@ class Component with Loadable {
   /// This method traverses the component tree and calls [update] on all its
   /// children according to their [priority] order, relative to the
   /// priority of the direct siblings, not the children or the ancestors.
-  /// If you call this method from [update] you need to set [callOwnUpdate] to
-  /// false so that you don't get stuck in an infinite loop.
-  void updateTree(double dt, {bool callOwnUpdate = true}) {
+  void updateTree(double dt) {
     _children?.updateComponentList();
-    if (callOwnUpdate) {
-      update(dt);
-    }
+    update(dt);
     _children?.forEach((c) => c.updateTree(dt));
   }
 
@@ -152,6 +166,8 @@ class Component with Loadable {
       renderDebugMode(canvas);
     }
   }
+
+  //#endregion
 
   void renderDebugMode(Canvas canvas) {}
 
@@ -177,18 +193,15 @@ class Component with Loadable {
     nextParent = component;
   }
 
-  final List<Component> _ancestors = [];
-
-  /// A list containing the current parent and its parent, and so on, until it
-  /// reaches a component without a parent.
-  List<Component> ancestors() {
-    _ancestors.clear();
-    for (var currentParent = parent;
-        currentParent != null;
-        currentParent = currentParent.parent) {
-      _ancestors.add(currentParent);
+  /// An iterator producing this component's parent, then its parent's parent,
+  /// then the great-grand-parent, and so on, until it reaches a component
+  /// without a parent.
+  Iterable<Component> ancestors() sync* {
+    var current = parent;
+    while (current != null) {
+      yield current;
+      current = current.parent;
     }
-    return _ancestors;
   }
 
   /// It receives the new game size.
@@ -202,10 +215,8 @@ class Component with Loadable {
   }
 
   /// Called right before the component is removed from the game.
-  @override
   @mustCallSuper
   void onRemove() {
-    super.onRemove();
     _children?.forEach((child) => child.onRemove());
     isPrepared = false;
     isMounted = false;
@@ -227,21 +238,39 @@ class Component with Loadable {
   /// only be called after the game already has its layout set, this can be
   /// verified by the [Game.hasLayout] property, to add components upon game
   /// initialization, the [onLoad] method can be used instead.
-  Future<void> add(Component component) {
-    return children.addChild(component);
+  Future<void> add(Component component) async {
+    component.prepare(/*parent=*/ this);
+    if (component.isPrepared) {
+      // [Component.onLoad] (if it is defined) should only run the first time
+      // the component is added to a parent.
+      if (!component.isLoaded) {
+        final onLoad = component.onLoadCache;
+        if (onLoad != null) {
+          await onLoad;
+        }
+        component.isLoaded = true;
+      }
+      // Should run every time the component gets a new parent, including its
+      // first parent.
+      component.onMount();
+      if (component.hasChildren) {
+        await component._reAddChildren();
+      }
+    }
+    children.addChild(component);
   }
 
   /// Adds multiple children.
   ///
   /// See [add] for details.
   Future<void> addAll(Iterable<Component> components) {
-    return children.addChildren(components);
+    return Future.wait(components.map(add));
   }
 
   /// The children are added again to the component set so that [prepare],
   /// [onLoad] and [onMount] runs again. Used when a parent is changed
   /// further up the tree.
-  Future<void> reAddChildren() async {
+  Future<void> _reAddChildren() async {
     if (_children != null) {
       await Future.wait(_children!.map(add));
       await Future.wait(_children!.addLater.map(add));
@@ -324,6 +353,7 @@ class Component with Loadable {
   /// If there are no parents that are a [Game] false will be returned and this
   /// will run again once an ancestor or the component itself is added to a
   /// [Game].
+  @protected
   @mustCallSuper
   void prepare(Component parent) {
     _parent = parent;
@@ -331,7 +361,7 @@ class Component with Loadable {
     final parentGame = findParent<FlameGame>();
     if (parentGame == null) {
       isPrepared = false;
-    } else {
+    } else if (!isPrepared) {
       assert(
         parentGame.hasLayout,
         '"prepare/add" called before the game is ready. '
@@ -353,7 +383,7 @@ class Component with Loadable {
   /// This method creates the children container for the current component.
   /// Override this method if you need to have a custom [ComponentSet] within
   /// a particular class.
-  ComponentSet createComponentSet() => childrenFactory(this);
+  ComponentSet createComponentSet() => childrenFactory();
 }
 
-typedef ComponentSetFactory = ComponentSet Function(Component owner);
+typedef ComponentSetFactory = ComponentSet Function();

@@ -204,5 +204,5 @@ The order in which the overlays are declared in the `overlayBuilderMap` defines 
 overlays will be rendered.
 
 Here you can see a
-[working example](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widgets/overlay.dart)
+[working example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/system/overlays_example.dart)
 of this feature.
