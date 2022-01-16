@@ -91,10 +91,14 @@ class GameOverPanel extends PositionComponent with HasGameRef<MyGame> {
 
 ### Querying child components
 
-The children that have been added to a component live in the `QueryableOrderedSet` called
-`components`. To query for a specific type of components in the set, a query first has to be
-registered on the set, and then the `query` function can be run efficiently at any later point. The
-register call is usually done in `onLoad`.
+The children that have been added to a component live in a `QueryableOrderedSet` called
+`children`. To query for a specific type of components in the set, the `query<T>()` function can be
+used. By default `strictMode` is `false` in the children set, but if you set it to true, then the
+queries will have to be registered with `children.register` before a query can be used.
+
+If you know in compile time that you later will run a query of a specific type it is recommended to
+register the query, no matter if the `strictMode` is set to `true` or `false`, since there are some
+performance benefits to gain from it. The `register` call is usually done in `onLoad`.
 
 Example:
 
@@ -133,6 +137,9 @@ and text to always show on the screen, no matter if you move the camera, then yo
 your widgets, when you don't want the component to respect the camera nor the viewport; this could
 for example be for controls or joysticks that would be unergonomic to use if they had to stay within
 the viewport.
+
+Do note that this setting is only respected if the component is added directly to the root
+`FlameGame` and not as a child component of another component.
 
 ## PositionComponent
 
@@ -202,12 +209,15 @@ If you want to know where on the screen the bounding box of the component is you
 `toRect` method.
 
 In the event that you want to change the direction of your components rendering, you can also use
-`renderFlipX` and `renderFlipY` to flip anything drawn to canvas during `render(Canvas canvas)`.
-This is available on all `PositionComponent` objects, and is especially useful on `SpriteComponent`
-and `SpriteAnimationComponent`. For example set `component.renderFlipX = true` to mirror the
-horizontal rendering.
+`flipHorizontally()` and `flipVertically()` to flip anything drawn to canvas during `render(Canvas canvas)`,
+around the anchor point. These methods are available on all `PositionComponent` objects, and are especially
+useful on `SpriteComponent` and `SpriteAnimationComponent`.
+
+In case you want to flip a component around its center without having to change the anchor to `Anchor.center`,
+you can use `flipHorizontallyAroundCenter()` and `flipVerticallyAroundCenter()`.
 
 ## SpriteComponent
+
 The most commonly used implementation of `PositionComponent` is `SpriteComponent`, and it can be
 created with a `Sprite`:
 

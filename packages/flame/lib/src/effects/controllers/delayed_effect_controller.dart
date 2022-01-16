@@ -1,3 +1,4 @@
+import '../effect.dart';
 import 'effect_controller.dart';
 
 /// An effect controller that waits for [delay] seconds before running the
@@ -12,9 +13,6 @@ class DelayedEffectController extends EffectController {
   final EffectController _child;
   final double delay;
   double _timer;
-
-  @override
-  bool get isInfinite => _child.isInfinite;
 
   @override
   bool get isRandom => _child.isRandom;
@@ -74,4 +72,7 @@ class DelayedEffectController extends EffectController {
     _timer = delay;
     _child.setToEnd();
   }
+
+  @override
+  void onMount(Effect parent) => _child.onMount(parent);
 }

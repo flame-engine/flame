@@ -29,6 +29,14 @@ They return a `Future` for the loaded Image.
 To synchronously retrieve a previously cached image, the `fromCache` method can be used. If an image
 with that key was not previously loaded, it will throw an exception.
 
+To add an already loaded image to the cache, the `add` method can be used and you can set the key
+that the image should have in the cache.
+
+You can also use `ImageExtension.fromPixels()` to dynamically create an image during the game.
+
+For `clear` and `clearCache`, do note that `dispose` is called for each removed image from the
+cache, so make sure that you don't use the image afterwards.
+
 ### Standalone usage
 
 It can manually be used by instantiating it:
@@ -379,17 +387,3 @@ spritesheet.getSprite(0, 0) // row, column;
 
 You can see a full example of the `SpriteSheet` class
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/sprites/spritesheet.dart).
-
-## `Flame.images.decodeImageFromPixels()`
-
-The [dart-ui decodeImageFromPixels](https://api.flutter.dev/flutter/dart-ui/decodeImageFromPixels.html)
-currently does not support the web platform. So if you are looking for a way to manipulate pixel
-data on the web this method can be used as a replacement for `dart-ui decodeImageFromPixels`:
-
-```dart
-Image image = await Flame.images.decodeImageFromPixels(
-  data, // A Uint8List containing pixel data in the RGBA format.
-  200,
-  200,
-);
-```

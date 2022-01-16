@@ -10,27 +10,44 @@ import 'package:flutter/services.dart';
 import '../flame.dart';
 
 class Images {
+  Images({this.prefix = 'assets/images/'})
+      : assert(prefix.isEmpty || prefix.endsWith('/'));
+
   final String prefix;
   final Map<String, _ImageAssetLoader> _loadedFiles = {};
 
-  Images({this.prefix = 'assets/images/'});
-
-  /// Remove the image with the specified [fileName] from the cache.
-  void clear(String fileName) {
-    _loadedFiles.remove(fileName);
+  /// Adds an [image] into the cache under the key [name].
+  void add(String name, Image image) {
+    _loadedFiles[name] = _ImageAssetLoader(Future.value(image))
+      ..loadedImage = image;
   }
 
-  /// Clear all cached images.
+  /// Remove the image [name] from the cache.
+  ///
+  /// This calls [Image.dispose], so make sure that you don't use the previously
+  /// cached image once it is cleared (removed) from the cache.
+  void clear(String name) {
+    _loadedFiles.remove(name)?.loadedImage?.dispose();
+  }
+
+  /// Remove all cached images.
+  ///
+  /// This calls [Image.dispose] for all images in the cache, so make sure that
+  /// you don't use any of the previously cached images once [clearCache] has
+  /// been called.
   void clearCache() {
+    _loadedFiles.forEach((_, imageAssetLoader) {
+      imageAssetLoader.loadedImage?.dispose();
+    });
     _loadedFiles.clear();
   }
 
-  /// Gets the specified image with [fileName] from the cache.
-  Image fromCache(String fileName) {
-    final image = _loadedFiles[fileName];
+  /// Gets the specified image [name] from the cache.
+  Image fromCache(String name) {
+    final image = _loadedFiles[name];
     assert(
       image?.loadedImage != null,
-      'Tried to access an inexistent entry on cache "$fileName", make sure to '
+      'Tried to access a nonexistent entry on cache "$name", make sure to '
       'use the load method before accessing a file on the cache',
     );
     return image!.loadedImage!;
@@ -79,25 +96,23 @@ class Images {
   /// If you want the image to be decoded as it would be on the web you can set
   /// [runAsWeb] to `true`. Keep in mind that it is slightly slower than the
   /// native [ui.decodeImageFromPixels]. By default it is set to [kIsWeb].
+  @Deprecated(
+    'Use Image.fromPixels() instead. This function will be removed in 1.1.0',
+  )
   Future<Image> decodeImageFromPixels(
     Uint8List pixels,
     int width,
     int height, {
-    bool runAsWeb = kIsWeb,
+    bool runAsWeb = false,
   }) {
     final completer = Completer<Image>();
-    if (runAsWeb) {
-      completer.complete(_createBmp(pixels, width, height));
-    } else {
-      ui.decodeImageFromPixels(
-        pixels,
-        width,
-        height,
-        PixelFormat.rgba8888,
-        completer.complete,
-      );
-    }
-
+    ui.decodeImageFromPixels(
+      pixels,
+      width,
+      height,
+      PixelFormat.rgba8888,
+      completer.complete,
+    );
     return completer.future;
   }
 
@@ -124,34 +139,6 @@ class Images {
     final completer = Completer<Image>();
     decodeImageFromList(bytes, completer.complete);
     return completer.future;
-  }
-
-  Future<Image> _createBmp(Uint8List pixels, int width, int height) async {
-    final size = (width * height * 4) + 122;
-    final bmp = Uint8List(size);
-    bmp.buffer.asByteData()
-      ..setUint8(0x0, 0x42)
-      ..setUint8(0x1, 0x4d)
-      ..setInt32(0x2, size, Endian.little)
-      ..setInt32(0xa, 122, Endian.little)
-      ..setUint32(0xe, 108, Endian.little)
-      ..setUint32(0x12, width, Endian.little)
-      ..setUint32(0x16, -height, Endian.little)
-      ..setUint16(0x1a, 1, Endian.little)
-      ..setUint32(0x1c, 32, Endian.little)
-      ..setUint32(0x1e, 3, Endian.little)
-      ..setUint32(0x22, width * height * 4, Endian.little)
-      ..setUint32(0x36, 0x000000ff, Endian.little)
-      ..setUint32(0x3a, 0x0000ff00, Endian.little)
-      ..setUint32(0x3e, 0x00ff0000, Endian.little)
-      ..setUint32(0x42, 0xff000000, Endian.little);
-
-    bmp.setRange(122, size, pixels);
-
-    final codec = await instantiateImageCodec(bmp);
-    final frame = await codec.getNextFrame();
-
-    return frame.image;
   }
 }
 

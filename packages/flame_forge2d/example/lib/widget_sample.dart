@@ -61,6 +61,8 @@ class WidgetSample extends Forge2DGame with TapDetector {
 }
 
 class BodyWidgetSample extends StatelessWidget {
+  const BodyWidgetSample({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GameWidget<WidgetSample>(
@@ -82,7 +84,11 @@ class BodyButtonWidget extends StatefulWidget {
   final WidgetSample _game;
   final int _bodyId;
 
-  const BodyButtonWidget(this._game, this._bodyId);
+  const BodyButtonWidget(
+    this._game,
+    this._bodyId, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
