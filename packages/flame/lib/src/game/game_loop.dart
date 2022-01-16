@@ -2,47 +2,41 @@ import 'package:flutter/scheduler.dart';
 
 class GameLoop {
   void Function(double dt) callback;
-  Duration previous = Duration.zero;
-  late Ticker _ticker;
+  Duration _previous = Duration.zero;
+  late final Ticker _ticker;
 
   GameLoop(this.callback) {
     _ticker = Ticker(_tick);
   }
 
   void _tick(Duration timestamp) {
-    final dt = _computeDeltaT(timestamp);
+    final durationDelta = timestamp - _previous;
+    final dt = durationDelta.inMicroseconds / Duration.microsecondsPerSecond;
+    _previous = timestamp;
     callback(dt);
   }
 
-  double _computeDeltaT(Duration now) {
-    final delta = previous == Duration.zero ? Duration.zero : now - previous;
-    previous = now;
-    return delta.inMicroseconds / Duration.microsecondsPerSecond;
-  }
-
   void start() {
-    _ticker.start();
+    if (!_ticker.isActive) {
+      _ticker.start();
+    }
   }
 
   void stop() {
     _ticker.stop();
+    _previous = Duration.zero;
   }
 
   void dispose() {
     _ticker.dispose();
   }
 
-  void pause() {
-    _ticker.muted = true;
-    previous = Duration.zero;
-  }
+  @Deprecated('Internal variable')
+  Duration get previous => _previous;
 
-  void resume() {
-    _ticker.muted = false;
-    // If the game has started paused, we need to start the ticker
-    // as it would not have been started yet
-    if (!_ticker.isActive) {
-      start();
-    }
-  }
+  @Deprecated('Use stop() instead')
+  void pause() => stop();
+
+  @Deprecated('Use start() instead')
+  void resume() => start();
 }

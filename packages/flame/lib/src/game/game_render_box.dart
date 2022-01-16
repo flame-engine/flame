@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart' hide WidgetBuilder;
 import 'game_loop.dart';
 import 'mixins/game.dart';
 
-// ignore: prefer_mixin
 class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   BuildContext buildContext;
   Game game;
@@ -30,8 +29,8 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
 
     final gameLoop = this.gameLoop = GameLoop(gameLoopCallback);
 
-    game.pauseEngineFn = gameLoop.pause;
-    game.resumeEngineFn = gameLoop.resume;
+    game.pauseEngineFn = gameLoop.stop;
+    game.resumeEngineFn = gameLoop.start;
 
     if (!game.paused) {
       gameLoop.start();
