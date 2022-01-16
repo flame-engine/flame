@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:collection/collection.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
@@ -17,20 +18,28 @@ class RenderableTiledMap {
   /// [TiledMap] instance for this map.
   final TiledMap map;
 
-  /// Cached [SpriteBatch]es of this map.
-  final Map<String, SpriteBatch> batches;
-
   /// The size of tile to be rendered on the game.
   final Vector2 destTileSize;
+
+  /// Cached list of [SpriteBatch]es, ordered by layer.
+  final List<Map<String, SpriteBatch>> batchesByLayer;
 
   /// {@macro _renderable_tiled_map}
   RenderableTiledMap(
     this.map,
-    this.batches,
+    this.batchesByLayer,
     this.destTileSize,
   ) {
     _fillBatches();
   }
+
+  /// Cached [SpriteBatch]es of this map.
+  @Deprecated(
+    'If you take a direct dependency on batches, use batchesByLayer instead',
+  )
+  Map<String, SpriteBatch> get batches => batchesByLayer.isNotEmpty
+      ? batchesByLayer.first
+      : <String, SpriteBatch>{};
 
   /// Parses a file returning a [RenderableTiledMap].
   ///
@@ -49,9 +58,19 @@ class RenderableTiledMap {
     Vector2 destTileSize,
   ) async {
     final map = await _loadMap(contents);
-    final batches = await _loadImages(map);
+    final batchesByLayer = await Future.wait(
+      _renderableTileLayers(map).map((e) => _loadImages(map)),
+    );
 
-    return RenderableTiledMap(map, batches, destTileSize);
+    return RenderableTiledMap(
+      map,
+      batchesByLayer,
+      destTileSize,
+    );
+  }
+
+  static Iterable<TileLayer> _renderableTileLayers(TiledMap map) {
+    return map.layers.where((layer) => layer.visible).whereType<TileLayer>();
   }
 
   static Future<TiledMap> _loadMap(String contents) async {
@@ -80,23 +99,26 @@ class RenderableTiledMap {
         result[src] = await SpriteBatch.load(src);
       }
     });
+
     return result;
   }
 
   void _fillBatches() {
-    for (final batch in batches.keys) {
-      batches[batch]!.clear();
-    }
+    batchesByLayer.forEach(
+      (batchMap) => batchMap.values.forEach((batch) => batch.clear),
+    );
 
-    map.layers
-        .where((layer) => layer.visible)
-        .whereType<TileLayer>()
+    _renderableTileLayers(map)
         .map((e) => e.tileData)
         .whereType<List<List<Gid>>>()
-        .forEach(_renderLayer);
+        .forEachIndexed(_renderLayer);
   }
 
-  void _renderLayer(List<List<Gid>> tileData) {
+  void _renderLayer(
+    int mapIndex,
+    List<List<Gid>> tileData,
+  ) {
+    final batchMap = batchesByLayer.elementAt(mapIndex);
     tileData.asMap().forEach((ty, tileRow) {
       tileRow.asMap().forEach((tx, tile) {
         if (tile.tile == 0) {
@@ -106,7 +128,7 @@ class RenderableTiledMap {
         final ts = map.tilesetByTileGId(tile.tile);
         final img = t.image ?? ts.image;
         if (img != null) {
-          final batch = batches[img.source];
+          final batch = batchMap[img.source];
           final src = ts.computeDrawRect(t).toRect();
           final flips = SimpleFlips.fromFlips(tile.flips);
           final size = destTileSize;
@@ -123,9 +145,11 @@ class RenderableTiledMap {
     });
   }
 
-  /// Render all [batches] that compose this tile map.
+  /// Render [batchesByLayer] that compose this tile map.
   void render(Canvas c) {
-    batches.forEach((_, batch) => batch.render(c));
+    batchesByLayer.forEach((batchMap) {
+      batchMap.forEach((_, batch) => batch.render(c));
+    });
   }
 
   /// This returns an object group fetch by name from a given layer.
