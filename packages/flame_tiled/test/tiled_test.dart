@@ -16,7 +16,6 @@ void main() {
       mapPath: 'test/assets/map.tmx',
     );
     final tiled = await TiledComponent.load('x', Vector2.all(16));
-    expect(tiled.tileMap.batches, isNotEmpty);
     expect(tiled.tileMap.batchesByLayer, isNotEmpty);
   });
 
