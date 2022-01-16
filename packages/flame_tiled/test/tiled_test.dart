@@ -16,12 +16,12 @@ void main() {
       mapPath: 'test/assets/map.tmx',
     );
     final tiled = await TiledComponent.load('x', Vector2.all(16));
-    expect(tiled.tileMap.batchesByLayer, isNotEmpty);
+    expect(tiled.tileMap.batchesByLayer.length == 1, true);
   });
 
   group('Layered tiles render correctly with layered sprite batch', () {
     late Uint8List canvasPixelData;
-
+    late RenderableTiledMap overlapMap;
     setUp(() async {
       Flame.bundle = TestAssetBundle(
         imageNames: [
@@ -30,7 +30,7 @@ void main() {
         ],
         mapPath: 'test/assets/2_tiles-green_on_red.tmx',
       );
-      final overlapMap = await RenderableTiledMap.fromFile(
+      overlapMap = await RenderableTiledMap.fromFile(
         '2_tiles-green_on_red.tmx',
         Vector2.all(16),
       );
@@ -43,6 +43,11 @@ void main() {
       final bytes = await image.toByteData();
       canvasPixelData = bytes!.buffer.asUint8List();
     });
+
+    test(
+      'Correctly loads batches list',
+      () => expect(overlapMap.batchesByLayer.length == 2, true),
+    );
 
     test(
       'Canvas pixel dimensions match',

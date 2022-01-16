@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:collection/collection.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
@@ -68,8 +69,9 @@ class RenderableTiledMap {
     );
   }
 
-  static Iterable<TileLayer> _renderableTileLayers(TiledMap map) =>
-      map.layers.where((layer) => layer.visible).whereType<TileLayer>();
+  static Iterable<TileLayer> _renderableTileLayers(TiledMap map) {
+    return map.layers.where((layer) => layer.visible).whereType<TileLayer>();
+  }
 
   static Future<TiledMap> _loadMap(String contents) async {
     final tsxSourcePath = XmlDocument.parse(contents)
@@ -106,22 +108,17 @@ class RenderableTiledMap {
       (batchMap) => batchMap.values.forEach((batch) => batch.clear),
     );
 
-    var layerInd = 0;
     _renderableTileLayers(map)
         .map((e) => e.tileData)
         .whereType<List<List<Gid>>>()
-        .forEach(
-          (List<List<Gid>> tileData) async => _renderLayer(
-            tileData,
-            batchesByLayer[layerInd++],
-          ),
-        );
+        .forEachIndexed(_renderLayer);
   }
 
   void _renderLayer(
+    int mapIndex,
     List<List<Gid>> tileData,
-    Map<String, SpriteBatch> batchMap,
   ) {
+    final batchMap = batchesByLayer.elementAt(mapIndex);
     tileData.asMap().forEach((ty, tileRow) {
       tileRow.asMap().forEach((tx, tile) {
         if (tile.tile == 0) {
