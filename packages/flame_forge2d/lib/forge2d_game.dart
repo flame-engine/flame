@@ -27,18 +27,6 @@ class Forge2DGame extends FlameGame {
     world.stepDt(dt);
   }
 
-  void addContactCallback(ContactCallback callback) {
-    _contactCallbacks.register(callback);
-  }
-
-  void removeContactCallback(ContactCallback callback) {
-    _contactCallbacks.deregister(callback);
-  }
-
-  void clearContactCallbacks() {
-    _contactCallbacks.clear();
-  }
-
   Vector2 worldToScreen(Vector2 position) {
     return projector.projectVector(position);
   }
