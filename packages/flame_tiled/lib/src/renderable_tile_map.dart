@@ -30,7 +30,7 @@ class RenderableTiledMap {
     this.batchesByLayer,
     this.destTileSize,
   ) {
-    _fillBatches();
+    update();
   }
 
   /// Cached [SpriteBatch]es of this map.
@@ -103,9 +103,10 @@ class RenderableTiledMap {
     return result;
   }
 
-  void _fillBatches() {
+ /// Uptates the cache
+  void update() {
     batchesByLayer.forEach(
-      (batchMap) => batchMap.values.forEach((batch) => batch.clear),
+      (batchMap) => batchMap.values.forEach((batch) => batch.clear()),
     );
 
     _renderableTileLayers(map)
@@ -146,9 +147,12 @@ class RenderableTiledMap {
   }
 
   /// Render [batchesByLayer] that compose this tile map.
-  void render(Canvas c) {
+void render(Canvas c) {
+    var i = 0;
     batchesByLayer.forEach((batchMap) {
-      batchMap.forEach((_, batch) => batch.render(c));
+      if (map.layers[i++].visible) {
+        batchMap.forEach((_, batch) => batch.render(c));
+      }
     });
   }
 
