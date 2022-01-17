@@ -6,7 +6,6 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:tiled/tiled.dart';
 import 'package:xml/xml.dart';
-
 import 'flame_tsx_provider.dart';
 import 'simple_flips.dart';
 
@@ -30,7 +29,7 @@ class RenderableTiledMap {
     this.batchesByLayer,
     this.destTileSize,
   ) {
-    update();
+    refreshCache();
   }
 
   /// Cached [SpriteBatch]es of this map.
@@ -103,8 +102,8 @@ class RenderableTiledMap {
     return result;
   }
 
- /// Uptates the cache
-  void update() {
+ /// Rebuilds the cache for rendering
+  void refreshCache() {
     batchesByLayer.forEach(
       (batchMap) => batchMap.values.forEach((batch) => batch.clear()),
     );
@@ -148,9 +147,8 @@ class RenderableTiledMap {
 
   /// Render [batchesByLayer] that compose this tile map.
 void render(Canvas c) {
-    var i = 0;
-    batchesByLayer.forEach((batchMap) {
-      if (map.layers[i++].visible) {
+    batchesByLayer.forEachIndexed((i, batchMap) {
+      if (map.layers[i].visible) {
         batchMap.forEach((_, batch) => batch.render(c));
       }
     });
