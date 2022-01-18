@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 import 'package:xml/xml.dart';
 import 'flame_tsx_provider.dart';
@@ -39,6 +40,45 @@ class RenderableTiledMap {
   Map<String, SpriteBatch> get batches => batchesByLayer.isNotEmpty
       ? batchesByLayer.first
       : <String, SpriteBatch>{};
+
+  /// Changes the visibility of the corresponding layer, if different
+  void setLayerVisibility(int layerId, bool visibility) {
+    if (map.layers[layerId].visible != visibility) {
+      map.layers[layerId].visible = visibility;
+      refreshCache();
+    }
+  }
+
+  /// Gets the visibility of the corresponding layer
+  bool getLayerVisibility(int layerId) {
+    return map.layers[layerId].visible;
+  }
+
+  /// Changes the Gid of the corresponding layer at the given position, if different
+  void setTileData({
+    required int layerId,
+    required int x,
+    required int y,
+    required Gid gid,
+  }) {
+    final layer = map.layers[layerId] as TileLayer;
+    final td = layer.tileData;
+    if (td != null) {
+      td[y][x] = gid;
+      refreshCache();
+    }
+  }
+
+  /// Gets the Gid  of the corresponding layer at the given position
+  Gid? getTileData({required int layerId, required int x, required int y}) {
+    final layer = map.layers[layerId] as TileLayer;
+    final td = layer.tileData;
+    if (td != null) {
+      return td[y][x];
+    } else {
+      return null;
+    }
+  }
 
   /// Parses a file returning a [RenderableTiledMap].
   ///
