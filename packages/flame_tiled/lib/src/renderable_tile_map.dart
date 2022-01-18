@@ -102,7 +102,7 @@ class RenderableTiledMap {
     return result;
   }
 
- /// Rebuilds the cache for rendering
+  /// Rebuilds the cache for rendering
   void refreshCache() {
     batchesByLayer.forEach(
       (batchMap) => batchMap.values.forEach((batch) => batch.clear()),
@@ -146,7 +146,7 @@ class RenderableTiledMap {
   }
 
   /// Render [batchesByLayer] that compose this tile map.
-void render(Canvas c) {
+  void render(Canvas c) {
     batchesByLayer.forEachIndexed((i, batchMap) {
       if (map.layers[i].visible) {
         batchMap.forEach((_, batch) => batch.render(c));
