@@ -26,20 +26,20 @@ class DraggableBall extends Ball with Draggable {
   }
 
   @override
-  bool onDragStart(int pointerId, DragStartInfo details) {
+  bool onDragStart(DragStartInfo info) {
     paint = randomPaint();
     return true;
   }
 
   @override
-  bool onDragUpdate(int pointerId, DragUpdateInfo details) {
-    final worldDelta = Vector2(1, -1)..multiply(details.delta.game);
+  bool onDragUpdate(DragUpdateInfo info) {
+    final worldDelta = Vector2(1, -1)..multiply(info.delta.game);
     body.applyLinearImpulse(worldDelta * 1000);
     return true;
   }
 
   @override
-  bool onDragEnd(int pointerId, DragEndInfo details) {
+  bool onDragEnd(DragEndInfo info) {
     paint = originalPaint;
     return true;
   }
