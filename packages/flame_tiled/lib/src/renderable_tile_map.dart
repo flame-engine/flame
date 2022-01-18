@@ -82,7 +82,7 @@ class RenderableTiledMap {
     if (td != null) {
       return td[y][x];
     } else {
-      return null;
+      return td?[y][x];
     }
   }
 
