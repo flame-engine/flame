@@ -4,7 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
-import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 import 'package:xml/xml.dart';
 import 'flame_tsx_provider.dart';
