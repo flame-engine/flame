@@ -1,18 +1,20 @@
-# CHANGELOG
+## 1.1.0
 
-## [1.0.0]
+ - Change Tiled batched rendering to batched rendering per layer.
 
-* Updated to Flame 1.0.0
+## 1.0.0
 
-## [1.0.0-releasecandidate.15]
+ - Updated to Flame 1.0.0
 
-* Upgrade to work with latest Flame version
-* Move to the mono-repo
+## 1.0.0-releasecandidate.15
 
-## [0.1.0]
+ - Upgrade to work with latest Flame version
+ - Move to the mono-repo
 
-* Updated the Tiled class to use the SpriteBatch API for efficient drawing to canvas.
+## 0.1.0
 
-## [0.0.1]
+ - Updated the Tiled class to use the SpriteBatch API for efficient drawing to canvas.
 
-* Moving code from main repository to its own package
+## 0.0.1
+
+ - Moving code from main repository to its own package

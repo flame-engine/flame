@@ -433,7 +433,7 @@ Future<void> onLoad() async {
     ParallaxImageData('bg.png'),
     ParallaxImageData('trees.png'),
   ]);
-  add(parallax);
+  add(parallaxComponent);
 }
 ```
 
