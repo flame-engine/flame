@@ -54,7 +54,8 @@ class RenderableTiledMap {
     return map.layers[layerId].visible;
   }
 
-  /// Changes the Gid of the corresponding layer at the given position, if different
+  /// Changes the Gid of the corresponding layer at the given position,
+  /// if different
   void setTileData({
     required int layerId,
     required int x,
@@ -64,8 +65,13 @@ class RenderableTiledMap {
     final layer = map.layers[layerId] as TileLayer;
     final td = layer.tileData;
     if (td != null) {
-      td[y][x] = gid;
-      refreshCache();
+      if (td[y][x].tile != gid.tile ||
+          td[y][x].flips.horizontally != gid.flips.horizontally ||
+          td[y][x].flips.vertically != gid.flips.vertically ||
+          td[y][x].flips.diagonally != gid.flips.diagonally) {
+        td[y][x] = gid;
+        refreshCache();
+      }
     }
   }
 
