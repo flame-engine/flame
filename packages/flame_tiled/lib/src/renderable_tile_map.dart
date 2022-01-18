@@ -147,10 +147,8 @@ class RenderableTiledMap {
 
   /// Render [batchesByLayer] that compose this tile map.
   void render(Canvas c) {
-    batchesByLayer.forEachIndexed((i, batchMap) {
-      if (map.layers[i].visible) {
-        batchMap.forEach((_, batch) => batch.render(c));
-      }
+    batchesByLayer.forEach((batchMap) {
+      batchMap.forEach((_, batch) => batch.render(c));
     });
   }
 
