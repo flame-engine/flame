@@ -8,19 +8,41 @@ mixin Draggable on Component {
   bool _isDragged = false;
   bool get isDragged => _isDragged;
 
-  bool onDragStart(int pointerId, DragStartInfo info) {
+  /// Override this to handle the start of a drag/pan gesture that is within the
+  /// boundaries (determined by [Component.containsPoint]) of the component that
+  /// this mixin is used on.
+  /// Return `true` if you want this event to continue to be passed on to
+  /// components underneath (lower priority) this component.
+  bool onDragStart(DragStartInfo info) {
     return true;
   }
 
-  bool onDragUpdate(int pointerId, DragUpdateInfo info) {
+  /// Override this to handle the update of a drag/pan gesture that is within
+  /// the boundaries (determined by [Component.containsPoint]) of the component
+  /// that this mixin is used on.
+  /// Return `true` if you want this event to continue to be passed on to
+  /// components underneath (lower priority) this component.
+  bool onDragUpdate(DragUpdateInfo info) {
     return true;
   }
 
-  bool onDragEnd(int pointerId, DragEndInfo info) {
+  /// Override this to handle the end of a drag/pan gesture that is within
+  /// the boundaries (determined by [Component.containsPoint]) of the component
+  /// that this mixin is used on.
+  /// Return `true` if you want this event to continue to be passed on to
+  /// components underneath (lower priority) this component.
+  bool onDragEnd(DragEndInfo info) {
     return true;
   }
 
-  bool onDragCancel(int pointerId) {
+  /// Override this to handle if a drag/pan gesture is cancelled that was
+  /// previously started on the component that this mixin is used on.
+  /// Return `true` if you want this event to continue to be passed on to
+  /// components underneath (lower priority) this component.
+  ///
+  /// This event is not that common, it can happen for example when the user
+  /// is interrupted by a system-modal dialog in the middle of the drag.
+  bool onDragCancel() {
     return true;
   }
 
@@ -31,23 +53,23 @@ mixin Draggable on Component {
     if (containsPoint(eventPosition(info))) {
       _isDragged = true;
       _currentPointerIds.add(pointerId);
-      return onDragStart(pointerId, info);
+      return onDragStart(info);
     }
     return true;
   }
 
-  bool handleDragUpdated(int pointerId, DragUpdateInfo details) {
+  bool handleDragUpdated(int pointerId, DragUpdateInfo info) {
     if (_checkPointerId(pointerId)) {
-      return onDragUpdate(pointerId, details);
+      return onDragUpdate(info);
     }
     return true;
   }
 
-  bool handleDragEnded(int pointerId, DragEndInfo details) {
+  bool handleDragEnded(int pointerId, DragEndInfo info) {
     if (_checkPointerId(pointerId)) {
       _isDragged = false;
       _currentPointerIds.remove(pointerId);
-      return onDragEnd(pointerId, details);
+      return onDragEnd(info);
     }
     return true;
   }
@@ -56,7 +78,7 @@ mixin Draggable on Component {
     if (_checkPointerId(pointerId)) {
       _isDragged = false;
       _currentPointerIds.remove(pointerId);
-      return onDragCancel(pointerId);
+      return onDragCancel();
     }
     return true;
   }

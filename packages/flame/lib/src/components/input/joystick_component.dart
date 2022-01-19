@@ -108,24 +108,24 @@ class JoystickComponent extends HudMarginComponent with Draggable {
   }
 
   @override
-  bool onDragStart(int pointerId, DragStartInfo info) {
+  bool onDragStart(DragStartInfo info) {
     return false;
   }
 
   @override
-  bool onDragUpdate(_, DragUpdateInfo info) {
+  bool onDragUpdate(DragUpdateInfo info) {
     _unscaledDelta.add(info.delta.global);
     return false;
   }
 
   @override
-  bool onDragEnd(int id, __) {
-    onDragCancel(id);
+  bool onDragEnd(_) {
+    onDragCancel();
     return false;
   }
 
   @override
-  bool onDragCancel(_) {
+  bool onDragCancel() {
     _unscaledDelta.setZero();
     return false;
   }

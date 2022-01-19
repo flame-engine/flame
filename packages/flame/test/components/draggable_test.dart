@@ -12,13 +12,13 @@ class _DraggableComponent extends PositionComponent with Draggable {
   bool hasCanceledDragging = false;
 
   @override
-  bool onDragStart(int pointerId, DragStartInfo info) {
+  bool onDragStart(DragStartInfo info) {
     hasStartedDragging = true;
     return true;
   }
 
   @override
-  bool onDragCancel(int pointerId) {
+  bool onDragCancel() {
     hasCanceledDragging = true;
     return true;
   }
