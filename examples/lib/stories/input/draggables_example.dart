@@ -49,13 +49,13 @@ class DraggableSquare extends Ember with Draggable {
   }
 
   @override
-  bool onDragStart(int pointerId, DragStartInfo info) {
+  bool onDragStart(DragStartInfo info) {
     dragDeltaPosition = info.eventPosition.game - position;
     return false;
   }
 
   @override
-  bool onDragUpdate(int pointerId, DragUpdateInfo info) {
+  bool onDragUpdate(DragUpdateInfo info) {
     if (parent is! DraggablesExample) {
       return true;
     }
@@ -69,13 +69,13 @@ class DraggableSquare extends Ember with Draggable {
   }
 
   @override
-  bool onDragEnd(int pointerId, _) {
+  bool onDragEnd(_) {
     dragDeltaPosition = null;
     return false;
   }
 
   @override
-  bool onDragCancel(int pointerId) {
+  bool onDragCancel() {
     dragDeltaPosition = null;
     return false;
   }
