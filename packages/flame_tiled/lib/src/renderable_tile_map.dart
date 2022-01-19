@@ -78,17 +78,11 @@ class RenderableTiledMap {
 
   /// Gets the Gid  of the corresponding layer at the given position
   Gid? getTileData({required int layerId, required int x, required int y}) {
-    final layer = map.layers[layerId];
-    if (layer is TileLayer) {
-      final td = layer.tileData;
-      if (td != null) {
-        return td[y][x];
-      } else {
-        return td?[y][x];
-      }
-    } else {
-      return null;
-    }
+   final layer = map.layers[layerId];
+   if (layer is TileLayer) {
+     return layer.tileData?[y][x];
+   }  
+   return null;
   }
 
   /// Parses a file returning a [RenderableTiledMap].
