@@ -7,11 +7,13 @@ For other input documents, see also:
 - [Keyboard Input](keyboard-input.md): for keystrokes
 - [Other Inputs](other-inputs.md): For joysticks, game pads, etc.
 
+
 ## Intro
 
 Inside `package:flame/gestures.dart` you can find a whole set of `mixin`s which can be included on
 your game class instance to be able to receive touch input events. Below you can see the full list
 of these `mixin`s and its methods:
+
 
 ## Touch and mouse detectors
 ```
@@ -87,13 +89,11 @@ Mouse only events
   - onScroll
 ```
 
-Many of these detectors can conflict with each other. For example, you can't register both vertical
-and horizontal drags, so not all of them can be used together.
 
-It is also not possible to mix advanced detectors (`MultiTouch*`) with basic detectors as they will
-*always win the gesture arena* and the basic detectors will never be triggered. So for example, you
-can use both `MultiTouchTapDetector` and `MultiTouchDragDetector` together, but if you try to use
-`MultiTouchTapDetector` and `PanDetector`, no events will be triggered for the latter.
+It is not possible to mix advanced detectors (`MultiTouch*`) with basic detectors of the same
+kind, since the advanced detectors will *always win the gesture arena* and the basic detectors will
+never be triggered. So for example, you can't use both `MultiTouchTapDetector` and `PanDetector`
+together, since no events will be triggered for the latter (there is also an assertion for this).
 
 Flame's GestureApi is provided by Flutter's Gesture Widgets, including
 [GestureDetector widget](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html),
@@ -101,6 +101,55 @@ Flame's GestureApi is provided by Flutter's Gesture Widgets, including
 and [MouseRegion widget](https://api.flutter.dev/flutter/widgets/MouseRegion-class.html), you can
 also read more about Flutter's gestures
 [here](https://api.flutter.dev/flutter/gestures/gestures-library.html).
+
+
+## PanDetector and ScaleDetector
+
+If you add a `PanDetector` together with a `ScaleDetector` you will be prompted with a quite
+cryptic assertion from Flutter that says:
+
+```
+Having both a pan gesture recognizer and a scale gesture recognizer is redundant; scale is a
+superset of pan.
+
+Just use the scale gesture recognizer.
+```
+
+This might seem strange, but `onScaleUpdate` is not only triggered when the scale should be changed,
+but for all pan/drag events too. So if you need to use both of those detectors you'll have to handle
+both of their logic inside `onScaleUpdate` (+`onScaleStart` and `onScaleEnd`).
+
+For example you could do something like this if you want to move the camera on pan events and zoom
+on scale events:
+
+```dart
+  late double startZoom;
+
+  @override
+  void onScaleStart(_) {
+    startZoom = camera.zoom;
+  }
+
+  @override
+  void onScaleUpdate(ScaleUpdateInfo info) {
+    final currentScale = info.scale.global;
+    if (!currentScale.isIdentity()) {
+      camera.zoom = startZoom * currentScale.y;
+    } else {
+      camera.translateBy(-info.delta.game);
+      camera.snap();
+    }
+  }
+```
+
+In the example above the pan events are handled with `info.delta` and the scale events with
+`info.scale`, although they are theoretically both from underlying scale events.
+
+This can also be seen in the
+[zoom example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/camera_and_viewport/zoom_example.dart).
+
+
+## Mouse cursor
 
 It is also possible to change the current mouse cursor displayed on the `GameWidget` region. To do
 so the following code can be used inside the `Game` class
@@ -118,27 +167,32 @@ GameWidget(
 );
 ```
 
+
 ## Event coordinate system
 
 On events that have positions, like for example `Tap*` or `Drag`, you will notice that the `eventPosition`
 attribute includes 3 fields: `game`, `widget` and `global`. Below you will find a brief explanation
 about each one of them.
 
+
 ### global
 
 The position where the event occurred considering the entire screen, same as
 `globalPosition` in Flutter's native events.
+
 
 ### widget
 
 The position where the event occurred relative to the `GameWidget` position and size
 , same as `localPosition` in Flutter's native events.
 
+
 ### game
 
 The position where the event ocurred relative to the `GameWidget` and with any
 transformations that the game applied to the game (e.g. camera). If the game doesn't have any
 transformations, this will be equal to the `widget` attribute.
+
 
 ## Example
 
@@ -163,6 +217,7 @@ class MyGame extends Game with TapDetector {
 You can also check more complete examples
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/controls/).
 
+
 ## Tappable, Draggable and Hoverable components
 
 Any component derived from `Component` (most components) can add the `Tappable`, the
@@ -176,6 +231,7 @@ you should return `true`.
 
 The same applies if your component has children, then the event is first sent to the leaves in the
 children tree and then passed further down until a method returns `false`.
+
 
 ### Tappable components
 
@@ -225,6 +281,7 @@ class MyGame extends FlameGame with HasTappables {
 
 **Note**: `HasTappables` uses an advanced gesture detector under the hood and as explained
 further up on this page it shouldn't be used alongside basic detectors.
+
 
 ### Draggable components
 
@@ -298,8 +355,6 @@ class MyGame extends FlameGame with HasDraggables {
 }
 ```
 
-**Note**: `HasDraggables` uses an advanced gesture detector under the hood and as explained
-further up on this page, shouldn't be used alongside basic detectors.
 
 ### Hoverable components
 
@@ -325,6 +380,7 @@ you can override if you want to listen to the events.
 The provided event info is from the mouse move that triggered the action (entering or leaving).
 While the mouse movement is kept inside or outside, no events are fired and those mouse move events are
 not propagated. Only when the state is changed the handlers are triggered.
+
 
 ## HasHitboxes
 
