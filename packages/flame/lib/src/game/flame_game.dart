@@ -106,7 +106,11 @@ class FlameGame extends Component with Game {
   @mustCallSuper
   void onGameResize(Vector2 canvasSize) {
     camera.handleResize(canvasSize);
-    super.onGameResize(canvasSize);
+    super.onGameResize(canvasSize); // Game.onGameResize
+    // [onGameResize] is declared both in [Component] and in [Game]. Since
+    // there is no way to explicitly call the [Component]'s implementation,
+    // we propagate the event to [FlameGame]'s children manually.
+    children.forEach((child) => child.onGameResize(canvasSize));
   }
 
   /// Whether a point is within the boundaries of the visible part of the game.

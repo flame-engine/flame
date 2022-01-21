@@ -9,10 +9,6 @@ import '../../../game.dart';
 /// component/class can be certain that [onLoad] only runs once which then gives
 /// the possibility to do late initializations in [onLoad].
 mixin Loadable {
-  /// This receives the new bounding size from its parent, which could be for
-  /// example a [GameWidget] or a `Component`.
-  void onGameResize(Vector2 size) {}
-
   /// Whenever [onLoad] returns something, the parent will wait for the [Future]
   /// to be resolved before adding it.
   /// If `null` is returned, the class is added right away.

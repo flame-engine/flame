@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
@@ -69,10 +68,8 @@ mixin Game on Loadable {
   /// is called.
   ///
   /// The default implementation just sets the new size on the size field
-  @override
   @mustCallSuper
   void onGameResize(Vector2 size) {
-    super.onGameResize(size);
     _size = (_size ?? Vector2.zero())..setFrom(size);
   }
 

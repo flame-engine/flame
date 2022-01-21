@@ -119,6 +119,15 @@ class Component with Loadable {
 
   //#region Component lifecycle methods
 
+  /// Called whenever the size of the top-level Canvas changes.
+  ///
+  /// In addition, this method will be invoked once after the component is
+  /// attached to the game tree, and before [onLoad] is called.
+  @mustCallSuper
+  void onGameResize(Vector2 gameSize) {
+    _children?.forEach((child) => child.onGameResize(gameSize));
+  }
+
   /// Called after the component has finished running its [onLoad] method and
   /// when the component is added to its new parent.
   ///
@@ -202,16 +211,6 @@ class Component with Loadable {
       yield current;
       current = current.parent;
     }
-  }
-
-  /// It receives the new game size.
-  /// Executed right after the component is attached to a game and right before
-  /// [onLoad] is called.
-  @override
-  @mustCallSuper
-  void onGameResize(Vector2 gameSize) {
-    super.onGameResize(gameSize);
-    _children?.forEach((child) => child.onGameResize(gameSize));
   }
 
   /// Called right before the component is removed from the game.
