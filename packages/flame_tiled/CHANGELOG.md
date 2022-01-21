@@ -1,3 +1,7 @@
+## 1.2.0
+
+ - **FEAT**: modifiable Layer and TileData in RenderableTileMap (#1324). ([b56d5f3c](https://github.com/flame-engine/flame/commit/b56d5f3cd7d87a07ab0063defbf14a56c0cca1a5))
+
 ## 1.1.0
 
  - Change Tiled batched rendering to batched rendering per layer.
