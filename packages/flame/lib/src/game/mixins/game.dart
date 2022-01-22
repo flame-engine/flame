@@ -96,7 +96,12 @@ mixin Game {
   /// Use for calculating the FPS.
   void onTimingsCallback(List<FrameTiming> timings) {}
 
-  /// Override this method to perform late initialization of the [Game] class.
+  /// Method to perform late initialization of the [Game] class.
+  ///
+  /// Usually, this method is the main place where you initialize your [Game]
+  /// class. This has several advantages over the traditional constructor:
+  ///   - this method can be `async`;
+  ///   - it is invoked when the size of the game widget is already known.
   ///
   /// The default implementation returns `null`, indicating that there is no
   /// need to await anything. When overriding this method, you have a choice
