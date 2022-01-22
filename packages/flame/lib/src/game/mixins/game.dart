@@ -18,7 +18,7 @@ import '../projector.dart';
 /// methods to use it in a `GameWidget`.
 /// Flame will deal with calling these methods properly when the game's widget
 /// is rendered.
-abstract class Game {
+mixin Game {
   final images = Images();
   final assets = AssetsCache();
 
