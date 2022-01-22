@@ -70,7 +70,7 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
 /// {@endtemplate}
 class FlameBlocGame extends FlameGame {
   ///FlameBlocGame contructor with an optional [Camera] as a parameter to FlameGame
-  FlameBlocGame(Camera? camera) : super(camera: camera);
+  FlameBlocGame({Camera? camera}) : super(camera: camera);
 
   @visibleForTesting
 
