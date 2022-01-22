@@ -18,7 +18,7 @@ BlocProvider<ExampleGame>(
 To access the bloc from inside your game, the `read` method can be used.
 
 ```dart
-class ExampleGame example FlameBlocGame {
+class ExampleGame extends FlameBlocGame {
   void selectWeapon() {
     read<InventoryBloc>.add(WeaponSelected('axe'));
   }
