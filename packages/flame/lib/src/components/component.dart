@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
