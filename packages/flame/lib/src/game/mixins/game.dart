@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:meta/meta.dart';
 
 import '../../../components.dart';
 import '../../assets/assets_cache.dart';
@@ -10,7 +11,6 @@ import '../../assets/images.dart';
 import '../../extensions/offset.dart';
 import '../game_render_box.dart';
 import '../projector.dart';
-import 'loadable.dart';
 
 /// This gives access to a low-level game API, to not build everything from a
 /// low level `FlameGame` should be used.
@@ -19,7 +19,7 @@ import 'loadable.dart';
 /// methods to use it in a `GameWidget`.
 /// Flame will deal with calling these methods properly when the game's widget
 /// is rendered.
-mixin Game on Loadable {
+mixin Game {
   final images = Images();
   final assets = AssetsCache();
 
@@ -44,6 +44,10 @@ mixin Game on Loadable {
   ///
   /// Use [size] and [hasLayout] for safe access.
   Vector2? _size;
+
+  /// This variable ensures that Game's [onLoad] is called no more than once.
+  @internal
+  late Future<void>? onLoadFuture = onLoad();
 
   /// Current game viewport size, updated every resize via the [onGameResize]
   /// method hook.
@@ -91,6 +95,8 @@ mixin Game on Loadable {
 
   /// Use for calculating the FPS.
   void onTimingsCallback(List<FrameTiming> timings) {}
+
+  Future<void>? onLoad() => null;
 
   void onMount() {}
 
