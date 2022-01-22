@@ -52,7 +52,6 @@ class JointSample extends Forge2DGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
     addAll(createBoundaries(this));
   }
 

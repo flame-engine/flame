@@ -5,7 +5,6 @@ import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/queryable_ordered_set.dart';
 
 import '../../components.dart';
-import '../../game.dart';
 
 /// This is a simple wrapper over [QueryableOrderedSet] to be used by
 /// [Component].
@@ -16,7 +15,7 @@ import '../../game.dart';
 /// This will avoid any concurrent modification exceptions while the game
 /// iterates through the component list.
 ///
-/// This wrapper also guaranteed that [Component.prepare], [Loadable.onLoad]
+/// This wrapper also guaranteed that [Component.prepare]
 /// and all the lifecycle methods are called properly.
 class ComponentSet extends QueryableOrderedSet<Component> {
   /// With default settings, creates a [ComponentSet] with the compare function

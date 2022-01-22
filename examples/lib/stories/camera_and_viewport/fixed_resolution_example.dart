@@ -22,7 +22,6 @@ class FixedResolutionExample extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final flameSprite = await loadSprite('layers/player.png');
 
     camera.viewport = FixedResolutionViewport(viewportResolution);

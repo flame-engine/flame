@@ -14,8 +14,6 @@ class Player extends PositionComponent {
 class SpaceShooterGame extends FlameGame {
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-
     add(
       Player()
         ..position = size / 2

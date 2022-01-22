@@ -29,7 +29,6 @@ class JoystickAdvancedExample extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final image = await images.load('joystick.png');
     final sheet = SpriteSheet.fromColumnsAndRows(
       image: image,

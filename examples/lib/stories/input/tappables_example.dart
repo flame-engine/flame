@@ -12,7 +12,6 @@ class TappablesExample extends FlameGame with HasTappables {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     add(TappableSquare()..anchor = Anchor.center);
     add(TappableSquare()..y = 350);
   }

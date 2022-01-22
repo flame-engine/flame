@@ -31,7 +31,6 @@ class FollowComponentExample extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     camera.viewport = FixedResolutionViewport(viewportResolution);
     add(Map());
 

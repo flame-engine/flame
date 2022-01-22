@@ -17,7 +17,6 @@ class _ParallaxGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     parallaxComponent = await loadParallaxComponent(
       [],
       size: parallaxSize,
@@ -48,7 +47,6 @@ class _SlowLoadParallaxGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final mockImageCache = MockImages();
 
     void createMockAnswer(int imageNumber, int time) {

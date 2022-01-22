@@ -34,8 +34,7 @@ class RiveExampleGame extends FlameGame with HasTappables {
   }
 
   @override
-  Future<void>? onLoad() async {
-    await super.onLoad();
+  Future<void> onLoad() async {
     final skillsArtboard =
         await loadArtboard(RiveFile.asset('assets/skills.riv'));
     add(SkillsAnimationComponent(skillsArtboard));

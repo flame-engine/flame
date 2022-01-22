@@ -22,7 +22,6 @@ class MyGame extends FlameGame with DoubleTapDetector, HasTappables {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     add(Square(Vector2(100, 200)));
   }
 

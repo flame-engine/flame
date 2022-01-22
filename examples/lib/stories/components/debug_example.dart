@@ -17,7 +17,6 @@ class DebugExample extends FlameGame with FPSCounter {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final flameLogo = await loadSprite('flame.png');
 
     final flame1 = LogoComponent(flameLogo);

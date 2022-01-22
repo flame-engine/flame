@@ -12,7 +12,6 @@ class SpriteGroupExample extends FlameGame with HasTappables {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     add(
       ButtonComponent()
         ..position = size / 2

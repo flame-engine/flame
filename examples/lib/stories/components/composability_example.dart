@@ -20,7 +20,6 @@ class ComposabilityExample extends FlameGame with HasDraggables {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     parentSquare = ParentSquare(Vector2.all(200), Vector2.all(300))
       ..anchor = Anchor.center;
     add(parentSquare);

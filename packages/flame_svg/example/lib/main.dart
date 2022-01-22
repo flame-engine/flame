@@ -17,7 +17,6 @@ class MyGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     svgInstance = await loadSvg('android.svg');
     final android = SvgComponent.fromSvg(
       svgInstance,

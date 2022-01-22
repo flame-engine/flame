@@ -11,7 +11,6 @@ class ContactCallbacksSample extends Forge2DGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final boundaries = createBoundaries(this);
     boundaries.forEach(add);
     addContactCallback(BallContactCallback());

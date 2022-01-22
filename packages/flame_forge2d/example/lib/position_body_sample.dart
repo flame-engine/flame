@@ -43,7 +43,6 @@ class PositionBodySample extends Forge2DGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     chopper = await images.load('chopper.png');
 
     animation = SpriteAnimation.fromFrameData(

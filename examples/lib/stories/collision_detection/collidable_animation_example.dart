@@ -17,7 +17,6 @@ class CollidableAnimationExample extends FlameGame with HasCollidables {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     add(ScreenCollidable());
     // Top left component
     add(

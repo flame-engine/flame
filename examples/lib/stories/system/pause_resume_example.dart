@@ -16,8 +16,6 @@ class PauseResumeExample extends FlameGame with TapDetector, DoubleTapDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-
     final animation = await loadSpriteAnimation(
       'animations/chopper.png',
       SpriteAnimationData.sequenced(

@@ -13,7 +13,6 @@ class OverlaysExample extends FlameGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final animation = await loadSpriteAnimation(
       'animations/chopper.png',
       SpriteAnimationData.sequenced(

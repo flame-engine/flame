@@ -19,8 +19,6 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-
     final mySprite = SpriteComponent(
       sprite: await loadSprite('flame.png'),
       position: Vector2(50, 50),

@@ -15,7 +15,6 @@ class NoFCSParallaxExample with Game {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     parallax = await loadParallax(
       [
         ParallaxImageData('parallax/bg.png'),

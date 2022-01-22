@@ -14,7 +14,6 @@ class CirclesExample extends FlameGame with HasCollidables, TapDetector {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
     add(ScreenCollidable());
   }
 

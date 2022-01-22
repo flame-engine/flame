@@ -96,7 +96,6 @@ class RaycastSample extends Forge2DGame
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     addAll(createBoundaries(this));
 
     final worldCenter = screenToWorld(camera.viewport.effectiveSize / 2);

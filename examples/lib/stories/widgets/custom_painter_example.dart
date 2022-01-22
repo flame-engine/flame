@@ -15,8 +15,6 @@ class CustomPainterExample extends FlameGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-
     add(Player());
   }
 

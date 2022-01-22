@@ -39,7 +39,6 @@ class _HasKeyboardHandlerComponentsGame extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     keyboardHandler = _KeyboardHandlerComponent();
     add(keyboardHandler);
   }
