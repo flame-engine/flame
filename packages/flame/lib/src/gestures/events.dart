@@ -208,6 +208,7 @@ class ScaleEndInfo extends BaseInfo<ScaleEndDetails> {
 class ScaleUpdateInfo extends PositionInfo<ScaleUpdateDetails> {
   int get pointerCount => raw.pointerCount;
   double get rotation => raw.rotation;
+  late final EventDelta delta = EventDelta(_game, raw.focalPointDelta);
   late final EventDelta scale = EventDelta(
     _game,
     Offset(raw.horizontalScale, raw.verticalScale),

@@ -11,8 +11,6 @@ class ZoomExample extends FlameGame with ScrollDetector, ScaleDetector {
   final Vector2 viewportResolution;
   late SpriteComponent flame;
 
-  Vector2? lastScale;
-
   ZoomExample({
     required this.viewportResolution,
   });
@@ -24,7 +22,7 @@ class ZoomExample extends FlameGame with ScrollDetector, ScaleDetector {
 
     camera.viewport = FixedResolutionViewport(viewportResolution);
     camera.setRelativeOffset(Anchor.center);
-    camera.speed = 1;
+    camera.speed = 100;
 
     final flameSize = Vector2(149, 211);
     add(
@@ -35,28 +33,34 @@ class ZoomExample extends FlameGame with ScrollDetector, ScaleDetector {
     );
   }
 
-  void resetIfZero() {
-    if (camera.zoom < 0) {
-      camera.zoom = 1.0;
-    }
+  void clampZoom() {
+    camera.zoom = camera.zoom.clamp(0.05, 3.0);
   }
 
-  static const zoomPerScrollUnit = 0.01;
+  static const zoomPerScrollUnit = 0.02;
+
   @override
   void onScroll(PointerScrollInfo info) {
     camera.zoom += info.scrollDelta.game.y.sign * zoomPerScrollUnit;
-    resetIfZero();
+    clampZoom();
+  }
+
+  late double startZoom;
+
+  @override
+  void onScaleStart(_) {
+    startZoom = camera.zoom;
   }
 
   @override
   void onScaleUpdate(ScaleUpdateInfo info) {
-    final scale = lastScale;
-    if (scale != null) {
-      final delta = info.scale.game - scale;
-      camera.zoom += delta.y;
-      resetIfZero();
+    final currentScale = info.scale.global;
+    if (!currentScale.isIdentity()) {
+      camera.zoom = startZoom * currentScale.y;
+      clampZoom();
+    } else {
+      camera.translateBy(-info.delta.game);
+      camera.snap();
     }
-
-    lastScale = info.scale.game;
   }
 }
