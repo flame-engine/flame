@@ -114,8 +114,6 @@ class Player extends CustomPainterComponent
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-
     painter = PlayerCustomPainter();
     size = Vector2.all(100);
 

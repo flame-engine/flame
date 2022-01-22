@@ -22,7 +22,6 @@ class MySpriteBatchComponent extends SpriteBatchComponent
     with HasGameRef<SpritebatchLoadExample> {
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final spriteBatch = await gameRef.loadSpriteBatch('boom.png');
     this.spriteBatch = spriteBatch;
 

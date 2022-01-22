@@ -25,7 +25,6 @@ class ButtonComponent extends SpriteGroupComponent<ButtonState>
     with HasGameRef<SpriteGroupExample>, Tappable {
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final pressedSprite = await gameRef.loadSprite(
       'buttons.png',
       srcPosition: Vector2(0, 20),

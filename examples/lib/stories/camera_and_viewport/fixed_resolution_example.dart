@@ -50,7 +50,6 @@ class Background extends PositionComponent with HasGameRef {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     white = BasicPalette.white.paint();
     hugeRect = size.toRect();
   }

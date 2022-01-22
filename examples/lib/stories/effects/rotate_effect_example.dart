@@ -87,7 +87,6 @@ class Compass extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
     _marksPath = Path();
     for (var i = 0; i < 12; i++) {
       final angle = Transform2D.tau * (i / 12);
@@ -134,7 +133,6 @@ class CompassArrow extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
     _northPath = Path()
       ..moveTo(0, _radius)
       ..lineTo(_width / 2, 0)
@@ -177,7 +175,6 @@ class CompassRim extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
     _bgPaint.strokeWidth = _width;
     _marksPath = Path();
     final innerRadius = _radius - _width;

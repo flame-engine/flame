@@ -45,7 +45,6 @@ class ParentSquare extends RectangleComponent with HasGameRef {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
     createChildren();
   }
 
