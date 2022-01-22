@@ -96,6 +96,10 @@ mixin Game {
   /// Use for calculating the FPS.
   void onTimingsCallback(List<FrameTiming> timings) {}
 
+  /// Override this method to perform late initialization of the [Game] class.
+  ///
+  /// The engine ensures that this method will be called exactly once during
+  /// the lifetime of the [Game] instance. Do not call this method manually.
   Future<void>? onLoad() => null;
 
   void onMount() {}

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
@@ -13,7 +15,7 @@ import 'cache/value_cache.dart';
 /// is a good idea to have as a [Component], since [update] and [render] will be
 /// called automatically once the component is added to the component tree in
 /// your game (with `game.add`).
-class Component with Loadable {
+class Component {
   Component({int? priority}) : _priority = priority ?? 0;
 
   /// What coordinate system this component should respect (i.e. should it
@@ -127,6 +129,8 @@ class Component with Loadable {
   void onGameResize(Vector2 gameSize) {
     _children?.forEach((child) => child.onGameResize(gameSize));
   }
+
+  Future<void>? onLoad() => null;
 
   /// Called after the component has finished running its [onLoad] method and
   /// when the component is added to its new parent.
@@ -243,9 +247,9 @@ class Component with Loadable {
       // [Component.onLoad] (if it is defined) should only run the first time
       // the component is added to a parent.
       if (!component.isLoaded) {
-        final onLoad = component.onLoadCache;
-        if (onLoad != null) {
-          await onLoad;
+        final onLoadFuture = component.onLoad();
+        if (onLoadFuture != null) {
+          await onLoadFuture;
         }
         component.isLoaded = true;
       }
