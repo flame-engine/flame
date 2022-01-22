@@ -98,6 +98,29 @@ mixin Game {
 
   /// Override this method to perform late initialization of the [Game] class.
   ///
+  /// The default implementation returns `null`, indicating that there is no
+  /// need to await anything. When overriding this method, you have a choice
+  /// whether to create a regular or async function.
+  ///
+  /// If you need an async [onLoad], then make your override return non-nullable
+  /// `Future<void>`:
+  /// ```dart
+  /// @override
+  /// Future<void> onLoad() async {
+  ///   // your code here
+  /// }
+  /// ```
+  ///
+  /// Alternatively, if your [onLoad] function doesn't use any `await`ing, then
+  /// you can declare it as a regular method and then return `null`:
+  /// ```dart
+  /// @override
+  /// Future<void>? onLoad() {
+  ///   // your code here
+  ///   return null;
+  /// }
+  /// ```
+  ///
   /// The engine ensures that this method will be called exactly once during
   /// the lifetime of the [Game] instance. Do not call this method manually.
   Future<void>? onLoad() => null;

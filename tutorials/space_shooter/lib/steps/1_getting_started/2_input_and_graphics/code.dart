@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 class Player extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-
     sprite = await gameRef.loadSprite('player-sprite.png');
 
     position = gameRef.size / 2;
@@ -25,12 +23,10 @@ class SpaceShooterGame extends FlameGame with PanDetector {
   late Player player;
 
   @override
-  Future<void>? onLoad() async {
-    await super.onLoad();
-
+  Future<void>? onLoad() {
     player = Player();
-
     add(player);
+    return null;
   }
 
   @override
