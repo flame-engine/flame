@@ -130,6 +130,42 @@ class Component {
     _children?.forEach((child) => child.onGameResize(gameSize));
   }
 
+  /// Late initialization method for [Component].
+  ///
+  /// Usually, this method is the main place where you initialize your
+  /// component. This has several advantages over the traditional constructor:
+  ///   - this method can be `async`;
+  ///   - it is invoked when the size of the game canvas is already known.
+  ///
+  /// If your loading logic requires knowing the size of the game canvas, then
+  /// add `HasGameRef` mixin and then query `gameRef.size` or
+  /// `gameRef.canvasSize`.
+  ///
+  /// The default implementation returns `null`, indicating that there is no
+  /// need to await anything. When overriding this method, you have a choice
+  /// whether to create a regular or async function.
+  ///
+  /// If you need an asynchronous [onLoad], make your override return
+  /// non-nullable `Future<void>`:
+  /// ```dart
+  /// @override
+  /// Future<void> onLoad() async {
+  ///   // your code here
+  /// }
+  /// ```
+  ///
+  /// Alternatively, if your [onLoad] function doesn't use any `await`ing, then
+  /// you can declare it as a regular method and then return `null`:
+  /// ```dart
+  /// @override
+  /// Future<void>? onLoad() {
+  ///   // your code here
+  ///   return null;
+  /// }
+  /// ```
+  ///
+  /// The engine ensures that this method will be called exactly once during
+  /// the lifetime of the [Component] object. Do not call this method manually.
   Future<void>? onLoad() => null;
 
   /// Called after the component has finished running its [onLoad] method and
