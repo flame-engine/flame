@@ -21,7 +21,6 @@ class KeyboardExample extends FlameGame with KeyboardEvents {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     ember = Ember(position: size / 2, size: Vector2.all(100));
     add(ember);
   }

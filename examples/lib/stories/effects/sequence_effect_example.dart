@@ -14,7 +14,6 @@ class SequenceEffectExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
     const tau = Transform2D.tau;
     EffectController duration(double x) => EffectController(duration: x);
     add(

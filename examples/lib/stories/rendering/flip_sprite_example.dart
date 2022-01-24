@@ -10,8 +10,6 @@ class FlipSpriteExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-
     final regular = Ember(position: Vector2(size.x / 2 - 100, 200));
     add(regular);
 

@@ -17,7 +17,6 @@ class JoystickExample extends FlameGame with HasDraggables {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final knobPaint = BasicPalette.blue.withAlpha(200).paint();
     final backgroundPaint = BasicPalette.blue.withAlpha(100).paint();
     joystick = JoystickComponent(

@@ -11,7 +11,7 @@ import 'flame_world.dart';
 /// [OxygenGame] should be extended to add your own game logic.
 ///
 /// It is based on the Oxygen package.
-abstract class OxygenGame with Loadable, Game {
+abstract class OxygenGame with Game {
   late final FlameWorld world;
 
   OxygenGame() {
@@ -40,8 +40,6 @@ abstract class OxygenGame with Loadable, Game {
   @override
   @mustCallSuper
   Future<void> onLoad() async {
-    await super.onLoad();
-
     // Registering default components.
     world.registerComponent<SizeComponent, Vector2>(() => SizeComponent());
     world.registerComponent<PositionComponent, Vector2>(

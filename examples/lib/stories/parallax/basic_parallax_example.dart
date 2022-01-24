@@ -17,7 +17,6 @@ class BasicParallaxExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final parallax = await loadParallaxComponent(
       _imageNames,
       baseVelocity: Vector2(20, 0),

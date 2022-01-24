@@ -10,7 +10,6 @@ class TextExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     add(
       TextComponent(text: 'Hello, Flame', textRenderer: _regular)
         ..anchor = Anchor.topCenter

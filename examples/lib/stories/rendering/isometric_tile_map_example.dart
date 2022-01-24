@@ -32,7 +32,6 @@ class IsometricTileMapExample extends FlameGame with MouseMovementDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final tilesetImage = await images.load('tile_maps/tiles$suffix.png');
     final tileset = SpriteSheet(
       image: tilesetImage,

@@ -13,7 +13,6 @@ class SpriteBodySample extends Forge2DGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     addAll(createBoundaries(this));
   }
 

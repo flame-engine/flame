@@ -10,7 +10,6 @@ class AnimationParallaxExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final cityLayer = await loadParallaxLayer(
       ParallaxImageData('parallax/city.png'),
     );

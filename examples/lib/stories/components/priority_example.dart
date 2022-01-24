@@ -11,7 +11,6 @@ class PriorityExample extends FlameGame with HasTappables {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final squares = [
       Square(Vector2(100, 100)),
       Square(Vector2(160, 100)),

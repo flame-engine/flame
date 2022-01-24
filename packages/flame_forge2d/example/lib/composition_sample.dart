@@ -16,7 +16,6 @@ component. Click the ball to see the number increment.
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final boundaries = createBoundaries(this);
     boundaries.forEach(add);
     final center = screenToWorld(camera.viewport.effectiveSize / 2);

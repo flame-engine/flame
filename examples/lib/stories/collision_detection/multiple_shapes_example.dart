@@ -28,7 +28,6 @@ class MultipleShapesExample extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final screenCollidable = ScreenCollidable();
     final snowman = CollidableSnowman(
       Vector2.all(150),
@@ -113,7 +112,6 @@ abstract class MyCollidable extends PositionComponent
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     _activePaint = Paint()..color = _defaultColor;
   }
 
