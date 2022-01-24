@@ -73,15 +73,16 @@ void main() {
       final child = Component();
       final wrapper = Component();
       await game.ensureAdd(wrapper);
+      expect(wrapper.isMounted, true);
 
       await wrapper.add(child);
       expect(wrapper.contains(child), false);
-      wrapper.updateTree(0); // children are only added on the next tick
+      game.updateTree(0); // children are only added on the next tick
       expect(wrapper.contains(child), true);
 
       wrapper.remove(child);
       expect(wrapper.contains(child), true);
-      wrapper.updateTree(0); // children are only removed on the next tick
+      game.updateTree(0); // children are only removed on the next tick
       expect(wrapper.contains(child), false);
     });
 
@@ -97,7 +98,7 @@ void main() {
         expect(wrapper.contains(child), false);
         await future;
         expect(wrapper.contains(child), false);
-        wrapper.updateTree(0);
+        game.updateTree(0);
         expect(wrapper.contains(child), true);
       },
     );
@@ -179,8 +180,10 @@ void main() {
       final child = _MyTap();
       final wrapper = Component();
 
-      await wrapper.ensureAdd(child);
-      await game.ensureAdd(wrapper);
+      wrapper.add(child);
+      game.add(wrapper);
+      await game.ready();
+      game.update(0);
       game.render(MockCanvas());
 
       expect(child.rendered, true);

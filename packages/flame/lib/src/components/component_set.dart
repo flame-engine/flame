@@ -59,6 +59,11 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     _addLater.add(component);
   }
 
+  @internal
+  void addInstant(Component component) {
+    super.add(component);
+  }
+
   /// Prohibit method `add()` inherited from the [QueryableOrderedSet]. If this
   /// was allowed, then the user would be able to bypass standard lifecycle
   /// methods of the [Component] class.

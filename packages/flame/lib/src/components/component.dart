@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
@@ -237,7 +239,13 @@ class Component with Loadable {
   /// only be called after the game already has its layout set, this can be
   /// verified by the [Game.hasLayout] property, to add components upon game
   /// initialization, the [onLoad] method can be used instead.
-  Future<void> add(Component component) async {
+  Future<void> add(Component component) {
+    return _addImpl(component);
+    /*
+    // assert(component._parent == null || component._parent == this);
+    // assert(!component.isMounted);
+    // assert(!component.isPrepared);
+    component._parent = this;
     component.prepare(/*parent=*/ this);
     if (component.isPrepared) {
       // [Component.onLoad] (if it is defined) should only run the first time
@@ -257,6 +265,7 @@ class Component with Loadable {
       }
     }
     children.addChild(component);
+    */
   }
 
   /// Adds multiple children.
@@ -355,8 +364,6 @@ class Component with Loadable {
   @protected
   @mustCallSuper
   void prepare(Component parent) {
-    _parent = parent;
-
     final parentGame = findParent<FlameGame>();
     if (parentGame == null) {
       isPrepared = false;
@@ -369,9 +376,82 @@ class Component with Loadable {
       );
       parentGame.prepareComponent(this);
 
-      debugMode |= parent.debugMode;
+      debugMode |= _parent!.debugMode;
       isPrepared = true;
     }
+  }
+
+  static final Map<Component, Queue<Component>> _childrenQueue = {};
+  static final Map<Component, Queue<Component>> _addQueue = {};
+
+  Future<void> _addImpl(Component child) async {
+    assert(
+      child._parent == null,
+      'Component $child cannot be added to $this because it already has a '
+      'parent: ${child._parent}',
+    );
+    if (!isMounted) {
+      (_addQueue[this] ??= Queue()).addLast(child);
+      return;
+    }
+    child._parent = this;
+    (_childrenQueue[this] ??= Queue()).addLast(child);
+    child.prepare(this);
+    assert(child.isPrepared);
+    if (!child.isLoaded) {
+      final onLoadFuture = child.onLoad();
+      if (onLoadFuture != null) {
+        await onLoadFuture;
+      }
+      child.isLoaded = true;
+    }
+  }
+
+  /// Must not be called when the iterating the component tree.
+  @internal
+  static void processComponentQueues() {
+    _processAddQueue();
+    _processChildrenQueue();
+  }
+
+  static void _processAddQueue() {
+    final keysToRemove = <Component>[];
+    _addQueue.forEach((Component parent, Queue<Component> queue) {
+      if (parent.isMounted) {
+        queue.forEach(parent.add);
+        keysToRemove.add(parent);
+      }
+    });
+    keysToRemove.forEach(_addQueue.remove);
+  }
+
+  static void _processChildrenQueue() {
+    final keysToRemove = <Component>[];
+    _childrenQueue.forEach((Component parent, Queue<Component> queue) {
+      while (queue.isNotEmpty) {
+        final x = queue.first;
+        if (x.isLoaded) {
+          queue.removeFirst();
+          x.onMount();
+          parent.children.addInstant(x);
+          x.isMounted = true;
+        } else {
+          break;
+        }
+      }
+      if (queue.isEmpty) {
+        keysToRemove.add(parent);
+      }
+    });
+    keysToRemove.forEach(_childrenQueue.remove);
+  }
+
+  @visibleForTesting
+  static Future<void> flushTree() {
+    return Future.doWhile(() async {
+      processComponentQueues();
+      return _addQueue.isNotEmpty || _childrenQueue.isNotEmpty;
+    });
   }
 
   /// `Component.childrenFactory` is the default method for creating children

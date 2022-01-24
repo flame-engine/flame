@@ -19,6 +19,11 @@ extension FlameGameExtension on Component {
   Future<void> ensureAdd(Component component) async {
     await add(component);
     updateTree(0);
+    await Component.flushTree();
+  }
+
+  Future<void> ready() {
+    return Component.flushTree();
   }
 
   /// Makes sure that the [components] are added to the tree if you wait for the

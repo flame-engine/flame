@@ -85,6 +85,7 @@ class FlameGame extends Component with Game {
 
   @override
   void updateTree(double dt) {
+    Component.processComponentQueues();
     children.updateComponentList();
     if (parent != null) {
       update(dt);
@@ -105,6 +106,7 @@ class FlameGame extends Component with Game {
   @override
   @mustCallSuper
   void onGameResize(Vector2 canvasSize) {
+    isMounted = true;
     camera.handleResize(canvasSize);
     super.onGameResize(canvasSize); // Game.onGameResize
     // [onGameResize] is declared both in [Component] and in [Game]. Since
