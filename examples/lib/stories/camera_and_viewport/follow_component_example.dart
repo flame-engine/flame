@@ -31,7 +31,6 @@ class FollowComponentExample extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     camera.viewport = FixedResolutionViewport(viewportResolution);
     add(Map());
 
@@ -177,7 +176,6 @@ class Rock extends SpriteComponent
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     sprite = await gameRef.loadSprite('nine-box.png');
     paint = Paint()..color = Colors.white;
     addHitbox(HitboxRectangle());

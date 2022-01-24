@@ -9,7 +9,6 @@ class SmallParallaxExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final component = await loadParallaxComponent(
       [
         ParallaxImageData('parallax/bg.png'),

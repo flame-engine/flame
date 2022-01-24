@@ -13,7 +13,6 @@ class NineTileBoxExample extends FlameGame with TapDetector, DoubleTapDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final sprite = Sprite(await images.load('nine-box.png'));
     final boxSize = Vector2.all(300);
     final nineTileBox = NineTileBox(sprite, destTileSize: 148);

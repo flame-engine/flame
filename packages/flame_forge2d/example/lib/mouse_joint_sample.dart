@@ -15,7 +15,6 @@ class MouseJointSample extends Forge2DGame with MultiTouchDragDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final boundaries = createBoundaries(this);
     boundaries.forEach(add);
 

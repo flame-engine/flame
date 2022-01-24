@@ -2,7 +2,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 
-class NoFCSParallaxExample with Loadable, Game {
+class NoFCSParallaxExample with Game {
   static const String description = '''
     This examples serves to test the Parallax feature outside of the Flame
     Component System (FCS), use the other files in this folder for examples on
@@ -15,7 +15,6 @@ class NoFCSParallaxExample with Loadable, Game {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     parallax = await loadParallax(
       [
         ParallaxImageData('parallax/bg.png'),

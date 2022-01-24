@@ -37,7 +37,6 @@ class ParticlesExample extends FlameGame with FPSCounter {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     await images.load('zap.png');
     await images.load('boom.png');
   }

@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:meta/meta.dart';
 
 class Ember<T extends FlameGame> extends SpriteAnimationComponent
     with HasGameRef<T> {
@@ -11,9 +12,9 @@ class Ember<T extends FlameGame> extends SpriteAnimationComponent
           anchor: Anchor.center,
         );
 
+  @mustCallSuper
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     animation = await gameRef.loadSpriteAnimation(
       'animations/ember.png',
       SpriteAnimationData.sequenced(

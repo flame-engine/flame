@@ -138,7 +138,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   MouseCursor? _mouseCursor;
 
   Future<void> get loaderFuture => _loaderFuture ??= (() async {
-        final onLoad = widget.game.onLoadCache;
+        final onLoad = widget.game.onLoadFuture;
         if (onLoad != null) {
           await onLoad;
         }

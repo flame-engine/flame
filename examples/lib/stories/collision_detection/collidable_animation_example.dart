@@ -17,7 +17,6 @@ class CollidableAnimationExample extends FlameGame with HasCollidables {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     add(ScreenCollidable());
     // Top left component
     add(
@@ -66,7 +65,6 @@ class AnimatedComponent extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     animation = await gameRef.loadSpriteAnimation(
       'bomb_ptero.png',
       SpriteAnimationData.sequenced(

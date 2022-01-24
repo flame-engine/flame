@@ -10,7 +10,6 @@ class ComponentParallaxExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     add(MyParallaxComponent());
   }
 }
@@ -18,7 +17,6 @@ class ComponentParallaxExample extends FlameGame {
 class MyParallaxComponent extends ParallaxComponent<ComponentParallaxExample> {
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     parallax = await gameRef.loadParallax(
       [
         ParallaxImageData('parallax/bg.png'),

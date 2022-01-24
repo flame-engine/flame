@@ -24,7 +24,6 @@ class SandboxLayerParallaxExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final bgLayer = await loadParallaxLayer(
       ParallaxImageData('parallax/bg.png'),
     );

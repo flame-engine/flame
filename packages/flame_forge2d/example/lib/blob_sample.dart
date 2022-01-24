@@ -89,7 +89,6 @@ class BlobSample extends Forge2DGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final worldCenter = screenToWorld(size * camera.zoom / 2);
     final blobCenter = worldCenter + Vector2(0, 30);
     final blobRadius = Vector2.all(6.0);

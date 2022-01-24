@@ -17,7 +17,6 @@ class ZoomExample extends FlameGame with ScrollDetector, ScaleDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final flameSprite = await loadSprite('flame.png');
 
     camera.viewport = FixedResolutionViewport(viewportResolution);

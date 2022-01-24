@@ -20,7 +20,6 @@ class SizeEffectExample extends FlameGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     square = RectangleComponent.square(
       size: 100,
       position: Vector2.all(200),

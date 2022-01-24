@@ -22,7 +22,6 @@ class AnimationGroupExample extends FlameGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     final running = await loadSpriteAnimation(
       'animations/robot.png',
       SpriteAnimationData.sequenced(

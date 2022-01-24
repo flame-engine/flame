@@ -20,7 +20,6 @@ class TimerExample extends FlameGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     countdown = Timer(5);
     interval = Timer(
       1,
