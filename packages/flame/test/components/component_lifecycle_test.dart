@@ -79,6 +79,7 @@ void main() {
       await game.ready();
       child.changeParent(game);
       game.update(0);
+      game.update(0);
 
       expect(
         parentEvents,
