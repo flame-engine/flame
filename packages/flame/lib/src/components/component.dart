@@ -412,7 +412,6 @@ class Component with Loadable {
     keysToRemove.forEach(_childrenQueue.remove);
   }
 
-  @visibleForTesting
   static Future<void> flushTree() {
     return Future.doWhile(() async {
       processComponentQueues();

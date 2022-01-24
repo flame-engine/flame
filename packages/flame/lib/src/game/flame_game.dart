@@ -115,6 +115,15 @@ class FlameGame extends Component with Game {
     children.forEach((child) => child.onGameResize(canvasSize));
   }
 
+  /// Ensure that all pending loading / tree operations finish.
+  ///
+  /// This is mainly intended for testing purposes: awaiting on this future
+  /// ensures that the game is fully loaded, and that all pending operations
+  /// of adding the components into the tree are fully materialized.
+  Future<void> ready() {
+    return Component.flushTree();
+  }
+
   /// Whether a point is within the boundaries of the visible part of the game.
   @override
   bool containsPoint(Vector2 p) {
