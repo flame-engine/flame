@@ -40,7 +40,7 @@ class _ParentOnPrepareComponent extends _OnPrepareComponent {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    await add(_OnPrepareComponent());
+    add(_OnPrepareComponent());
   }
 }
 

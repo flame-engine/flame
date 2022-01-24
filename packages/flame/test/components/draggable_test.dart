@@ -31,7 +31,8 @@ void main() {
     withDraggables.test(
       'make sure they can be added to game with HasDraggables',
       (game) async {
-        await game.add(_DraggableComponent());
+        game.add(_DraggableComponent());
+        await game.ready();
       },
     );
 
@@ -43,7 +44,10 @@ void main() {
             'HasDraggables';
 
         expect(
-          () => game.add(_DraggableComponent()),
+          () async {
+            game.add(_DraggableComponent());
+            await game.ready();
+          },
           throwsA(
             predicate(
               (e) => e is AssertionError && e.message == message,
@@ -60,7 +64,8 @@ void main() {
         ..width = 10
         ..height = 10;
 
-      await game.ensureAdd(component);
+      game.add(component);
+      await game.ready();
       game.onDragStart(
         1,
         DragStartInfo.fromDetails(
@@ -82,8 +87,9 @@ void main() {
         ..width = 10
         ..height = 10;
 
-      await game.ensureAdd(component);
+      game.add(component);
       game.camera.zoom = 1.5;
+      await game.ready();
       game.onDragStart(
         1,
         DragStartInfo.fromDetails(
@@ -105,9 +111,10 @@ void main() {
         ..width = 10
         ..height = 10;
 
-      await game.ensureAdd(component);
+      game.add(component);
       game.camera.zoom = 1.5;
       game.camera.snapTo(Vector2.all(50));
+      await game.ready();
       game.onDragStart(
         1,
         DragStartInfo.fromDetails(

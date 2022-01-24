@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/painting.dart';
@@ -239,50 +240,15 @@ class Component with Loadable {
   /// only be called after the game already has its layout set, this can be
   /// verified by the [Game.hasLayout] property, to add components upon game
   /// initialization, the [onLoad] method can be used instead.
-  Future<void> add(Component component) {
-    return _addImpl(component);
-    /*
-    // assert(component._parent == null || component._parent == this);
-    // assert(!component.isMounted);
-    // assert(!component.isPrepared);
-    component._parent = this;
-    component.prepare(/*parent=*/ this);
-    if (component.isPrepared) {
-      // [Component.onLoad] (if it is defined) should only run the first time
-      // the component is added to a parent.
-      if (!component.isLoaded) {
-        final onLoad = component.onLoadCache;
-        if (onLoad != null) {
-          await onLoad;
-        }
-        component.isLoaded = true;
-      }
-      // Should run every time the component gets a new parent, including its
-      // first parent.
-      component.onMount();
-      if (component.hasChildren) {
-        await component._reAddChildren();
-      }
-    }
-    children.addChild(component);
-    */
+  void add(Component component) {
+    unawaited(_addImpl(component));
   }
 
   /// Adds multiple children.
   ///
   /// See [add] for details.
-  Future<void> addAll(Iterable<Component> components) {
-    return Future.wait(components.map(add));
-  }
-
-  /// The children are added again to the component set so that [prepare],
-  /// [onLoad] and [onMount] runs again. Used when a parent is changed
-  /// further up the tree.
-  Future<void> _reAddChildren() async {
-    if (_children != null) {
-      await Future.wait(_children!.map(add));
-      await Future.wait(_children!.addLater.map(add));
-    }
+  void addAll(Iterable<Component> components) {
+    components.forEach(add);
   }
 
   /// Removes a component from the component tree, calling [onRemove] for it and

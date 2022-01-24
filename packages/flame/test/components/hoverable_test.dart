@@ -47,7 +47,8 @@ void main() {
     withHoverables.test(
       'make sure they can be added to game with HasHoverables',
       (game) async {
-        await game.add(_HoverableComponent());
+        game.add(_HoverableComponent());
+        await game.ready();
       },
     );
 
@@ -182,8 +183,9 @@ void main() {
         final child = _NonPropagatingComponent()
           ..position = Vector2.all(0)
           ..size = Vector2.all(10);
-        await parent.add(child);
-        await game.ensureAdd(parent);
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
         _triggerMouseMove(game, 15, 15);
         expect(child.isHovered, true);
         expect(parent.isHovered, false);

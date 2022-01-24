@@ -47,8 +47,9 @@ void main() {
       final parentEvents = <String>[];
       final childEvents = <String>[];
       final parent = _MyComponent(parentEvents);
-      await parent.add(_MyComponent(childEvents));
-      await game.ensureAdd(parent);
+      parent.add(_MyComponent(childEvents));
+      game.add(parent);
+      await game.ready();
 
       // The parent tries to prepare the component before it is added to the
       // game and fails since it doesn't have a game root and therefore re-adds
@@ -60,7 +61,6 @@ void main() {
       expect(
         childEvents,
         [
-          'prepared: false',
           'onGameResize',
           'prepared: true',
           'onLoad',
@@ -74,8 +74,9 @@ void main() {
       final childEvents = <String>[];
       final parent = _MyComponent(parentEvents);
       final child = _MyComponent(childEvents);
-      await parent.add(child);
-      await game.ensureAdd(parent);
+      parent.add(child);
+      game.add(parent);
+      await game.ready();
       child.changeParent(game);
       game.update(0);
 
@@ -93,7 +94,6 @@ void main() {
       expect(
         childEvents,
         [
-          'prepared: false',
           'onGameResize',
           'prepared: true',
           'onLoad',

@@ -56,7 +56,7 @@ void main() {
         (game) async {
       final child = Component();
       final wrapper = Component();
-      await wrapper.add(child);
+      wrapper.add(child);
 
       expect(child.isPrepared, false);
       expect(child.isLoaded, false);
@@ -75,7 +75,7 @@ void main() {
       await game.ensureAdd(wrapper);
       expect(wrapper.isMounted, true);
 
-      await wrapper.add(child);
+      wrapper.add(child);
       expect(wrapper.contains(child), false);
       game.updateTree(0); // children are only added on the next tick
       expect(wrapper.contains(child), true);
@@ -94,11 +94,9 @@ void main() {
         final wrapper = Component();
         await game.ensureAdd(wrapper);
 
-        final future = wrapper.add(child);
+        wrapper.add(child);
         expect(wrapper.contains(child), false);
-        await future;
-        expect(wrapper.contains(child), false);
-        game.updateTree(0);
+        await game.ready();
         expect(wrapper.contains(child), true);
       },
     );
@@ -109,8 +107,9 @@ void main() {
 
       game.onGameResize(size);
       child.size.setValues(1.0, 1.0);
-      await game.ensureAdd(wrapper);
-      await wrapper.ensureAdd(child);
+      game.add(wrapper);
+      wrapper.add(child);
+      await game.ready();
       game.onTapDown(1, createTapDownEvent(game));
 
       expect(child.gameSize, size);
@@ -120,7 +119,7 @@ void main() {
     withTappables.test('add multiple children with addAll', (game) async {
       final children = List.generate(10, (_) => _MyTap());
       final wrapper = Component();
-      await wrapper.addAll(children);
+      wrapper.addAll(children);
 
       await game.ensureAdd(wrapper);
       expect(wrapper.children.length, children.length);
