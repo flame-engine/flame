@@ -7,7 +7,6 @@ import 'package:meta/meta.dart';
 import '../../components.dart';
 import '../../game.dart';
 import '../../input.dart';
-import '../game/fcs_root.dart';
 import 'cache/value_cache.dart';
 
 /// This represents a Component for your game.
@@ -404,12 +403,12 @@ class Component {
   @protected
   void prepare(Component parent) {}
 
-  static FcsRoot? root;
+  static ComponentTreeRoot? root;
 
   /// `Component.childrenFactory` is the default method for creating children
   /// containers within all components. Replace this method if you want to have
   /// customized (non-default) [ComponentSet] instances in your project.
-  static ComponentSetFactory childrenFactory = ComponentSet.createDefault;
+  static ComponentSet Function() childrenFactory = ComponentSet.createDefault;
 
   /// This method creates the children container for the current component.
   /// Override this method if you need to have a custom [ComponentSet] within
@@ -417,4 +416,66 @@ class Component {
   ComponentSet createComponentSet() => childrenFactory();
 }
 
-typedef ComponentSetFactory = ComponentSet Function();
+mixin ComponentTreeRoot {
+  final Map<Component, Queue<Component>> childrenQueue = {};
+  final Map<Component, Queue<Component>> addQueue = {};
+
+  Vector2 canvasSize = Vector2.zero();
+
+  /// This method is called for every component before it is added to the
+  /// component tree.
+  /// It does preparation on a component before any update or render method is
+  /// called on it.
+  void prepareComponent(Component c) {}
+
+  /// Ensure that all pending tree operations finish.
+  ///
+  /// This is mainly intended for testing purposes: awaiting on this future
+  /// ensures that the game is fully loaded, and that all pending operations
+  /// of adding the components into the tree are fully materialized.
+  Future<void> ready() {
+    return Future.doWhile(() async {
+      processComponentQueues();
+      return addQueue.isNotEmpty || childrenQueue.isNotEmpty;
+    });
+  }
+
+  /// Must not be called when iterating the component tree.
+  @internal
+  void processComponentQueues() {
+    _processAddQueue();
+    _processChildrenQueue();
+  }
+
+  void _processAddQueue() {
+    final keysToRemove = <Component>[];
+    addQueue.forEach((Component parent, Queue<Component> queue) {
+      if (parent.isMounted) {
+        queue.forEach(parent.add);
+        keysToRemove.add(parent);
+      }
+    });
+    keysToRemove.forEach(addQueue.remove);
+  }
+
+  void _processChildrenQueue() {
+    final keysToRemove = <Component>[];
+    childrenQueue.forEach((Component parent, Queue<Component> queue) {
+      while (queue.isNotEmpty) {
+        final x = queue.first;
+        if (x.isLoaded) {
+          queue.removeFirst();
+          x.onMount();
+          parent.children.addInstant(x);
+          x.isMounted = true;
+        } else {
+          break;
+        }
+      }
+      if (queue.isEmpty) {
+        keysToRemove.add(parent);
+      }
+    });
+    keysToRemove.forEach(childrenQueue.remove);
+  }
+}

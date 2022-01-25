@@ -6,7 +6,6 @@ import '../components/component.dart';
 import '../extensions/vector2.dart';
 import 'camera/camera.dart';
 import 'camera/camera_wrapper.dart';
-import 'fcs_root.dart';
 import 'mixins/game.dart';
 import 'projector.dart';
 
@@ -17,7 +16,7 @@ import 'projector.dart';
 ///
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
-class FlameGame extends Component with Game, FcsRoot {
+class FlameGame extends Component with Game, ComponentTreeRoot {
   FlameGame({Camera? camera}) {
     _cameraWrapper = CameraWrapper(camera ?? Camera(), children);
     Component.root = this;
