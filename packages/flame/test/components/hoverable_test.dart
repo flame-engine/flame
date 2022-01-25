@@ -44,13 +44,13 @@ void main() {
   final withHoverables = FlameTester(() => _GameWithHoverables());
 
   group('Hoverable', () {
-    // withHoverables.test(
-    //   'make sure they can be added to game with HasHoverables',
-    //   (game) async {
-    //     game.add(_HoverableComponent());
-    //     await game.ready();
-    //   },
-    // );
+    withHoverables.test(
+      'make sure they can be added to game with HasHoverables',
+      (game) async {
+        game.add(_HoverableComponent());
+        await game.ready();
+      },
+    );
 
     flameGame.test(
       'make sure they cannot be added to invalid games',
