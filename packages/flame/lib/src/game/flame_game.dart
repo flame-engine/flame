@@ -6,6 +6,7 @@ import '../components/component.dart';
 import '../extensions/vector2.dart';
 import 'camera/camera.dart';
 import 'camera/camera_wrapper.dart';
+import 'fcs_root.dart';
 import 'mixins/game.dart';
 import 'projector.dart';
 
@@ -16,9 +17,10 @@ import 'projector.dart';
 ///
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
-class FlameGame extends Component with Game {
+class FlameGame extends Component with Game, FcsRoot {
   FlameGame({Camera? camera}) {
     _cameraWrapper = CameraWrapper(camera ?? Camera(), children);
+    Component.root = this;
   }
 
   late final CameraWrapper _cameraWrapper;
@@ -113,15 +115,6 @@ class FlameGame extends Component with Game {
     // there is no way to explicitly call the [Component]'s implementation,
     // we propagate the event to [FlameGame]'s children manually.
     children.forEach((child) => child.onGameResize(canvasSize));
-  }
-
-  /// Ensure that all pending loading / tree operations finish.
-  ///
-  /// This is mainly intended for testing purposes: awaiting on this future
-  /// ensures that the game is fully loaded, and that all pending operations
-  /// of adding the components into the tree are fully materialized.
-  Future<void> ready() {
-    return Component.flushTree();
   }
 
   /// Whether a point is within the boundaries of the visible part of the game.

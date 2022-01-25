@@ -183,7 +183,7 @@ void main() {
 
     game.add(component);
     game.onGameResize(Vector2.all(100));
-    await Component.flushTree();
+    await game.ready();
     expect(component.isMounted, true);
   });
 }

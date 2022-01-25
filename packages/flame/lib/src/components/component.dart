@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 import '../../components.dart';
 import '../../game.dart';
 import '../../input.dart';
+import '../game/fcs_root.dart';
 import 'cache/value_cache.dart';
 
 /// This represents a Component for your game.
@@ -46,11 +47,11 @@ class Component {
   /// removed from its current parent.
   Component? nextParent;
 
-  /// The iterable of children of the current component.
+  /// The children of the current component.
   ///
   /// This getter will automatically create the [ComponentSet] container within
-  /// the current object if it didn't exist before. Check the [hasChildren] in
-  /// order to avoid instantiating that object.
+  /// the current object if it didn't exist before. Check the [hasChildren]
+  /// property in order to avoid instantiating the children container.
   ComponentSet get children => _children ??= createComponentSet();
   bool get hasChildren => _children?.isNotEmpty ?? false;
   ComponentSet? _children;
@@ -169,12 +170,19 @@ class Component {
   /// the lifetime of the [Component] object. Do not call this method manually.
   Future<void>? onLoad() => null;
 
-  /// Called after the component has finished running its [onLoad] method and
-  /// when the component is added to its new parent.
+  /// Called when the component is added to its parent.
   ///
-  /// Whenever [onMount] returns something, the parent will wait for the future
-  /// to be resolved before adding it. If `null` is returned, the class is
-  /// added right away.
+  /// This method only runs when the component is fully loaded, i.e. after
+  /// [onLoad]. However, [onLoad] only ever runs once for the component, whereas
+  /// [onMount] runs every time the component is inserted into the game tree.
+  ///
+  /// This method runs when the component is about to be added to its parent.
+  /// At this point the [parent] property already holds a reference to this
+  /// component's parent, however the parent doesn't have this component among
+  /// its [children] yet.
+  ///
+  /// After this method completes, the component is added to the parent's
+  /// children set, and then the flag [isMounted] set to true.
   ///
   /// Example:
   /// ```dart
@@ -279,7 +287,7 @@ class Component {
   /// verified by the [Game.hasLayout] property, to add components upon game
   /// initialization, the [onLoad] method can be used instead.
   void add(Component component) {
-    unawaited(_addImpl(component));
+    _addImpl(component);
   }
 
   /// Adds multiple children.
@@ -385,33 +393,36 @@ class Component {
     }
   }
 
-  static final Map<Component, Queue<Component>> _childrenQueue = {};
-  static final Map<Component, Queue<Component>> _addQueue = {};
+  static FcsRoot? root;
 
-  Future<void> _addImpl(Component child) async {
+  void _addImpl(Component child) {
     assert(
       child._parent == null,
       'Component $child cannot be added to $this because it already has a '
       'parent: ${child._parent}',
     );
+    assert(root != null, 'ComponentTree root was not initialized');
     if (!isMounted) {
-      (_addQueue[this] ??= Queue()).addLast(child);
+      (root!.addQueue[this] ??= Queue()).addLast(child);
       return;
     }
     child._parent = this;
-    (_childrenQueue[this] ??= Queue()).addLast(child);
+    (root!.childrenQueue[this] ??= Queue()).addLast(child);
     child.prepare(this);
     assert(child.isPrepared);
     if (!child.isLoaded) {
       final onLoadFuture = child.onLoad();
-      if (onLoadFuture != null) {
-        await onLoadFuture;
+      if (onLoadFuture == null) {
+        child.isLoaded = true;
+      } else {
+        onLoadFuture.then<void>((_) {
+          child.isLoaded = true;
+        });
       }
-      child.isLoaded = true;
     }
   }
 
-  /// Must not be called when the iterating the component tree.
+  /// Must not be called when iterating the component tree.
   @internal
   static void processComponentQueues() {
     _processAddQueue();
@@ -420,18 +431,18 @@ class Component {
 
   static void _processAddQueue() {
     final keysToRemove = <Component>[];
-    _addQueue.forEach((Component parent, Queue<Component> queue) {
+    root!.addQueue.forEach((Component parent, Queue<Component> queue) {
       if (parent.isMounted) {
         queue.forEach(parent.add);
         keysToRemove.add(parent);
       }
     });
-    keysToRemove.forEach(_addQueue.remove);
+    keysToRemove.forEach(root!.addQueue.remove);
   }
 
   static void _processChildrenQueue() {
     final keysToRemove = <Component>[];
-    _childrenQueue.forEach((Component parent, Queue<Component> queue) {
+    root!.childrenQueue.forEach((Component parent, Queue<Component> queue) {
       while (queue.isNotEmpty) {
         final x = queue.first;
         if (x.isLoaded) {
@@ -447,14 +458,7 @@ class Component {
         keysToRemove.add(parent);
       }
     });
-    keysToRemove.forEach(_childrenQueue.remove);
-  }
-
-  static Future<void> flushTree() {
-    return Future.doWhile(() async {
-      processComponentQueues();
-      return _addQueue.isNotEmpty || _childrenQueue.isNotEmpty;
-    });
+    keysToRemove.forEach(root!.childrenQueue.remove);
   }
 
   /// `Component.childrenFactory` is the default method for creating children
