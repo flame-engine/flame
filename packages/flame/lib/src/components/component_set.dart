@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/queryable_ordered_set.dart';
@@ -31,12 +29,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   // When we switch to Dart 2.15 this can be replaced with constructor tear-off
   static ComponentSet createDefault() => ComponentSet();
 
-  /// Components to be added on the next update.
-  ///
-  /// The component list is only changed at the start of each update to avoid
-  /// concurrency issues.
-  final Set<Component> _addLater = {};
-
   /// Components to be removed on the next update.
   ///
   /// The component list is only changed at the start of each update to avoid
@@ -55,11 +47,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// `updateComponentList()`.
   @internal
   void addChild(Component component) {
-    _addLater.add(component);
-  }
-
-  @internal
-  void addInstant(Component component) {
     super.add(component);
   }
 
@@ -110,20 +97,11 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     _removeLater.addAll(this);
   }
 
-  /// Whether the component set is empty and that there are no components marked
-  /// to be added later.
-  @override
-  bool get isEmpty => super.isEmpty && _addLater.isEmpty;
-
   /// Whether the component set contains components or that there are components
   /// marked to be added later.
   @override
   bool get isNotEmpty => !isEmpty;
 
-  /// All the children that has been queued to be added to the component set.
-  UnmodifiableListView<Component> get addLater {
-    return UnmodifiableListView<Component>(_addLater);
-  }
 
   /// Call this on your update method.
   ///
@@ -133,7 +111,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   void updateComponentList() {
     _actuallyUpdatePriorities();
     _actuallyRemove();
-    _actuallyAdd();
   }
 
   void _actuallyRemove() {
@@ -144,14 +121,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
       c.shouldRemove = false;
     });
     _removeLater.clear();
-  }
-
-  void _actuallyAdd() {
-    _addLater.forEach((c) {
-      super.add(c);
-      c.isMounted = true;
-    });
-    _addLater.clear();
   }
 
   @override

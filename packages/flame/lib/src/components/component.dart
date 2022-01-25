@@ -504,7 +504,7 @@ mixin ComponentTreeRoot on Game {
         if (x.isLoaded) {
           queue.removeFirst();
           x.onMount();
-          parent.children.addInstant(x);
+          parent.children.addChild(x);
           x.isMounted = true;
         } else {
           break;
