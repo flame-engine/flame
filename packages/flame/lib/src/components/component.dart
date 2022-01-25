@@ -292,7 +292,8 @@ class Component {
       'Component $component cannot be added to $this because it already has a '
       'parent: ${component._parent}',
     );
-    assert(root != null, 'ComponentTree root was not initialized');
+    assert(!component.isPrepared);
+    assert(root != null, 'The root of the component tree was not initialized');
     if (!isMounted) {
       (root!.addQueue[this] ??= Queue()).addLast(component);
       return;
@@ -300,8 +301,11 @@ class Component {
     component._parent = this;
     (root!.childrenQueue[this] ??= Queue()).addLast(component);
     component.onGameResize(root!.canvasSize);
+    root!.prepareComponent(component);
+    component.debugMode |= debugMode;
+    component.isPrepared = true;
     component.prepare(this);
-    assert(component.isPrepared);
+
     if (!component.isLoaded) {
       final onLoadFuture = component.onLoad();
       if (onLoadFuture == null) {
@@ -398,25 +402,7 @@ class Component {
   /// will run again once an ancestor or the component itself is added to a
   /// [Game].
   @protected
-  @mustCallSuper
-  void prepare(Component parent) {
-    final parentGame = findParent<FlameGame>();
-    assert(parentGame != null);
-    if (parentGame == null) {
-      isPrepared = false;
-    } else if (!isPrepared) {
-      assert(
-        parentGame.hasLayout,
-        '"prepare/add" called before the game is ready. '
-        'Did you try to access it on the Game constructor? '
-        'Use the "onLoad" or "onMount" method instead.',
-      );
-      root!.prepareComponent(this);
-
-      debugMode |= _parent!.debugMode;
-      isPrepared = true;
-    }
-  }
+  void prepare(Component parent) {}
 
   static FcsRoot? root;
 
