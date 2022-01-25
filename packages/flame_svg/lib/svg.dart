@@ -22,8 +22,10 @@ class Svg {
 
   /// Renders the svg on the [canvas] using the dimensions provided by [size].
   void render(Canvas canvas, Vector2 size) {
+    canvas.save();
     svgRoot.scaleCanvasToViewBox(canvas, size.toSize());
     svgRoot.draw(canvas, svgRoot.viewport.viewBoxRect);
+    canvas.restore();
   }
 
   /// Renders the svg on the [canvas] on the given [position] using the
