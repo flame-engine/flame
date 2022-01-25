@@ -102,7 +102,6 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   @override
   bool get isNotEmpty => !isEmpty;
 
-
   /// Call this on your update method.
   ///
   /// This method effectuates any pending operations of insertion or removal,
