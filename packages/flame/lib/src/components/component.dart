@@ -287,7 +287,31 @@ class Component {
   /// verified by the [Game.hasLayout] property, to add components upon game
   /// initialization, the [onLoad] method can be used instead.
   void add(Component component) {
-    _addImpl(component);
+    assert(
+      component._parent == null,
+      'Component $component cannot be added to $this because it already has a '
+      'parent: ${component._parent}',
+    );
+    assert(root != null, 'ComponentTree root was not initialized');
+    if (!isMounted) {
+      (root!.addQueue[this] ??= Queue()).addLast(component);
+      return;
+    }
+    component._parent = this;
+    (root!.childrenQueue[this] ??= Queue()).addLast(component);
+    component.onGameResize(root!.canvasSize);
+    component.prepare(this);
+    assert(component.isPrepared);
+    if (!component.isLoaded) {
+      final onLoadFuture = component.onLoad();
+      if (onLoadFuture == null) {
+        component.isLoaded = true;
+      } else {
+        onLoadFuture.then<void>((_) {
+          component.isLoaded = true;
+        });
+      }
+    }
   }
 
   /// Adds multiple children.
@@ -395,34 +419,6 @@ class Component {
   }
 
   static FcsRoot? root;
-
-  void _addImpl(Component child) {
-    assert(
-      child._parent == null,
-      'Component $child cannot be added to $this because it already has a '
-      'parent: ${child._parent}',
-    );
-    assert(root != null, 'ComponentTree root was not initialized');
-    if (!isMounted) {
-      (root!.addQueue[this] ??= Queue()).addLast(child);
-      return;
-    }
-    child._parent = this;
-    (root!.childrenQueue[this] ??= Queue()).addLast(child);
-    child.onGameResize(root!.canvasSize);
-    child.prepare(this);
-    assert(child.isPrepared);
-    if (!child.isLoaded) {
-      final onLoadFuture = child.onLoad();
-      if (onLoadFuture == null) {
-        child.isLoaded = true;
-      } else {
-        onLoadFuture.then<void>((_) {
-          child.isLoaded = true;
-        });
-      }
-    }
-  }
 
   /// `Component.childrenFactory` is the default method for creating children
   /// containers within all components. Replace this method if you want to have
