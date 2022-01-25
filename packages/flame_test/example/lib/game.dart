@@ -17,6 +17,6 @@ class MyGame extends FlameGame {
     await super.onLoad();
 
     final citySprite = await loadSprite('city.png');
-    await add(SpriteComponent(sprite: citySprite, size: Vector2.all(200)));
+    add(SpriteComponent(sprite: citySprite, size: Vector2.all(200)));
   }
 }

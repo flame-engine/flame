@@ -9,7 +9,7 @@ import '../../game.dart';
 import '../../input.dart';
 import 'cache/value_cache.dart';
 
-/// This represents a Component for your game.
+/// [Component]s are the basic building blocks for your game.
 ///
 /// Components can be for example bullets flying on the screen, a spaceship, a
 /// timer or an enemy. Anything that either needs to be rendered and/or updated
@@ -272,19 +272,23 @@ class Component {
     nextParent = null;
   }
 
-  /// Prepares and registers a component to be added on the next game tick
+  /// Schedules [component] to be added as a child to this component.
   ///
-  /// This method is an async operation since it await the [onLoad] method of
-  /// the component. Nevertheless, this method only need to be waited to finish
-  /// if by some reason, your logic needs to be sure that the component has
-  /// finished loading, otherwise, this method can be called without waiting
-  /// for it to finish as the FlameGame already handle the loading of the
-  /// component.
+  /// This method is robust towards being called from any place in the user
+  /// code: you can call it while iterating over the component tree, during
+  /// mounting or async loading, when the Game object is already loaded or not.
   ///
-  /// *Note:* Do not add components on the game constructor. This method can
-  /// only be called after the game already has its layout set, this can be
-  /// verified by the [Game.hasLayout] property, to add components upon game
-  /// initialization, the [onLoad] method can be used instead.
+  /// The cost of this flexibility is that the component won't be added right
+  /// away. Instead, it will be placed into a queue, and then added later, after
+  /// it has finished loading, but no sooner than on the next game tick.
+  ///
+  /// When multiple children are scheduled to be added to the same parent, we
+  /// start loading all of them as soon as possible. Despite that, the children
+  /// will end up being added to the parent in exactly the same order as they
+  /// were originally scheduled by the user, regardless of how fast or slow
+  /// each of them loads.
+  ///
+  ///
   void add(Component component) {
     assert(
       component._parent == null,
@@ -403,6 +407,13 @@ class Component {
   @protected
   void prepare(Component parent) {}
 
+  /// Component at the root of the component tree. This node serves as the
+  /// central place for resolving lifecycle event queues, and also facilitates
+  /// `onGameResize` and `prepareComponent` events. This variable MUST be
+  /// initialized before using components can be combined.
+  ///
+  /// Usually, [FlameGame] is the root of the component tree, and it declares
+  /// itself as such automatically.
   static ComponentTreeRoot? root;
 
   /// `Component.childrenFactory` is the default method for creating children
