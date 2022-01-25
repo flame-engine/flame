@@ -224,6 +224,17 @@ class Component {
     }
   }
 
+  /// Called right before the component is removed from the game.
+  @mustCallSuper
+  void onRemove() {
+    _children?.forEach((child) => child.onRemove());
+    isPrepared = false;
+    isMounted = false;
+    _parent = null;
+    nextParent?.add(this);
+    nextParent = null;
+  }
+
   //#endregion
 
   void renderDebugMode(Canvas canvas) {}
@@ -261,17 +272,6 @@ class Component {
     }
   }
 
-  /// Called right before the component is removed from the game.
-  @mustCallSuper
-  void onRemove() {
-    _children?.forEach((child) => child.onRemove());
-    isPrepared = false;
-    isMounted = false;
-    _parent = null;
-    nextParent?.add(this);
-    nextParent = null;
-  }
-
   /// Schedules [component] to be added as a child to this component.
   ///
   /// This method is robust towards being called from any place in the user
@@ -283,12 +283,22 @@ class Component {
   /// it has finished loading, but no sooner than on the next game tick.
   ///
   /// When multiple children are scheduled to be added to the same parent, we
-  /// start loading all of them as soon as possible. Despite that, the children
+  /// start loading all of them as soon as possible. Nevertheless, the children
   /// will end up being added to the parent in exactly the same order as they
   /// were originally scheduled by the user, regardless of how fast or slow
   /// each of them loads.
   ///
+  /// A component can be added to a parent which may not be mounted to the game
+  /// tree yet. In such case, loading and mounting of the [component] will be
+  /// delayed until such time when the parent becomes mounted. For this reason
+  /// [add] cannot be an async operation. However, if you still need to await
+  /// until the component is actually added to the game (for example for testing
+  /// purposes), then use [ComponentTreeRoot.ready].
   ///
+  /// A component can only be added to one parent at a time. It is an error to
+  /// try to add it to multiple parents, or even to the same parent multiple
+  /// times. If you need to change the parent of a component, use [changeParent]
+  /// method.
   void add(Component component) {
     assert(
       component._parent == null,
@@ -303,7 +313,7 @@ class Component {
     }
     component._parent = this;
     (root!.childrenQueue[this] ??= Queue()).addLast(component);
-    component.onGameResize(root!.canvasSize);
+    component.onGameResize(root!.size);
     root!.prepareComponent(component);
     component.debugMode |= debugMode;
     component.isPrepared = true;
@@ -427,11 +437,23 @@ class Component {
   ComponentSet createComponentSet() => childrenFactory();
 }
 
-mixin ComponentTreeRoot {
+/// This mixin is used to designate a class as a root of the component tree.
+///
+/// There should be only one [ComponentTreeRoot] in an application. Usually this
+/// role is fulfilled by the [FlameGame], so this class shouldn't be used
+/// directly.
+///
+/// The purpose of this mixin is to collect common facilities for component
+/// lifecycle management. These include: lifecycle event queues, the canvas size
+/// for [Component.onGameResize], and [prepareComponent] handler.
+///
+/// In order to use this mixin in a custom [Game], do the following:
+///   - add this mixin to your game class;
+///   - set it as the default [Component.root];
+///   - call [processComponentQueues] on every game tick.
+mixin ComponentTreeRoot on Game {
   final Map<Component, Queue<Component>> childrenQueue = {};
   final Map<Component, Queue<Component>> addQueue = {};
-
-  Vector2 canvasSize = Vector2.zero();
 
   /// This method is called for every component before it is added to the
   /// component tree.
@@ -444,6 +466,10 @@ mixin ComponentTreeRoot {
   /// This is mainly intended for testing purposes: awaiting on this future
   /// ensures that the game is fully loaded, and that all pending operations
   /// of adding the components into the tree are fully materialized.
+  ///
+  /// Warning: awaiting on a game that was not fully connected will result in an
+  /// infinite loop. For example, this could occur if you run `x.add(y)` but
+  /// then forget to mount `x` into the game.
   Future<void> ready() {
     return Future.doWhile(() async {
       processComponentQueues();
@@ -451,8 +477,9 @@ mixin ComponentTreeRoot {
     });
   }
 
+  /// Attempts to resolve pending events in all lifecycle event queues.
+  ///
   /// Must not be called when iterating the component tree.
-  @internal
   void processComponentQueues() {
     _processAddQueue();
     _processChildrenQueue();

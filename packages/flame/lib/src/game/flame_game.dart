@@ -36,6 +36,9 @@ class FlameGame extends Component with Game, ComponentTreeRoot {
   @override
   Vector2 get size => camera.gameSize;
 
+  /// This is the original Flutter widget size, without any transformation.
+  Vector2 get canvasSize => camera.canvasSize;
+
   /// This implementation of render renders each component, making sure the
   /// canvas is reset for each one.
   ///
@@ -88,15 +91,14 @@ class FlameGame extends Component with Game, ComponentTreeRoot {
   /// the coordinate system appropriately.
   @override
   @mustCallSuper
-  void onGameResize(Vector2 size) {
+  void onGameResize(Vector2 canvasSize) {
     isMounted = true;
-    canvasSize.setFrom(size);
-    camera.handleResize(size);
-    super.onGameResize(size); // Game.onGameResize
+    camera.handleResize(canvasSize);
+    super.onGameResize(canvasSize); // Game.onGameResize
     // [onGameResize] is declared both in [Component] and in [Game]. Since
     // there is no way to explicitly call the [Component]'s implementation,
     // we propagate the event to [FlameGame]'s children manually.
-    children.forEach((child) => child.onGameResize(size));
+    children.forEach((child) => child.onGameResize(canvasSize));
   }
 
   /// Whether a point is within the boundaries of the visible part of the game.
