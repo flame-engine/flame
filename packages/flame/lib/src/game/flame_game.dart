@@ -37,24 +37,6 @@ class FlameGame extends Component with Game, FcsRoot {
   @override
   Vector2 get size => camera.gameSize;
 
-  /// This is the original Flutter widget size, without any transformation.
-  Vector2 get canvasSize => camera.canvasSize;
-
-  /// This method is called for every component before it is added to the
-  /// component tree.
-  /// It does preparation on a component before any update or render method is
-  /// called on it.
-  ///
-  /// You can use this to set up your mixins or pre-calculate things for
-  /// example.
-  /// By default, this calls the first [onGameResize] for every component, so
-  /// don't forget to call `super.prepareComponent` when overriding.
-  @mustCallSuper
-  void prepareComponent(Component c) {
-    // First time resize
-    c.onGameResize(size);
-  }
-
   /// This implementation of render renders each component, making sure the
   /// canvas is reset for each one.
   ///
@@ -87,7 +69,7 @@ class FlameGame extends Component with Game, FcsRoot {
 
   @override
   void updateTree(double dt) {
-    Component.processComponentQueues();
+    processComponentQueues();
     children.updateComponentList();
     if (parent != null) {
       update(dt);
@@ -107,14 +89,15 @@ class FlameGame extends Component with Game, FcsRoot {
   /// the coordinate system appropriately.
   @override
   @mustCallSuper
-  void onGameResize(Vector2 canvasSize) {
+  void onGameResize(Vector2 size) {
     isMounted = true;
-    camera.handleResize(canvasSize);
-    super.onGameResize(canvasSize); // Game.onGameResize
+    canvasSize.setFrom(size);
+    camera.handleResize(size);
+    super.onGameResize(size); // Game.onGameResize
     // [onGameResize] is declared both in [Component] and in [Game]. Since
     // there is no way to explicitly call the [Component]'s implementation,
     // we propagate the event to [FlameGame]'s children manually.
-    children.forEach((child) => child.onGameResize(canvasSize));
+    children.forEach((child) => child.onGameResize(size));
   }
 
   /// Whether a point is within the boundaries of the visible part of the game.

@@ -377,6 +377,7 @@ class Component {
   @mustCallSuper
   void prepare(Component parent) {
     final parentGame = findParent<FlameGame>();
+    assert(parentGame != null);
     if (parentGame == null) {
       isPrepared = false;
     } else if (!isPrepared) {
@@ -386,7 +387,7 @@ class Component {
         'Did you try to access it on the Game constructor? '
         'Use the "onLoad" or "onMount" method instead.',
       );
-      parentGame.prepareComponent(this);
+      root!.prepareComponent(this);
 
       debugMode |= _parent!.debugMode;
       isPrepared = true;
@@ -408,6 +409,7 @@ class Component {
     }
     child._parent = this;
     (root!.childrenQueue[this] ??= Queue()).addLast(child);
+    child.onGameResize(root!.canvasSize);
     child.prepare(this);
     assert(child.isPrepared);
     if (!child.isLoaded) {
@@ -420,45 +422,6 @@ class Component {
         });
       }
     }
-  }
-
-  /// Must not be called when iterating the component tree.
-  @internal
-  static void processComponentQueues() {
-    _processAddQueue();
-    _processChildrenQueue();
-  }
-
-  static void _processAddQueue() {
-    final keysToRemove = <Component>[];
-    root!.addQueue.forEach((Component parent, Queue<Component> queue) {
-      if (parent.isMounted) {
-        queue.forEach(parent.add);
-        keysToRemove.add(parent);
-      }
-    });
-    keysToRemove.forEach(root!.addQueue.remove);
-  }
-
-  static void _processChildrenQueue() {
-    final keysToRemove = <Component>[];
-    root!.childrenQueue.forEach((Component parent, Queue<Component> queue) {
-      while (queue.isNotEmpty) {
-        final x = queue.first;
-        if (x.isLoaded) {
-          queue.removeFirst();
-          x.onMount();
-          parent.children.addInstant(x);
-          x.isMounted = true;
-        } else {
-          break;
-        }
-      }
-      if (queue.isEmpty) {
-        keysToRemove.add(parent);
-      }
-    });
-    keysToRemove.forEach(root!.childrenQueue.remove);
   }
 
   /// `Component.childrenFactory` is the default method for creating children

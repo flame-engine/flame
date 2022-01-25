@@ -12,10 +12,10 @@ void main() {
   group('Transform2DEffect', () {
     flameGame.test(
       'onMount',
-      (game) {
+      (game) async {
         final component = PositionComponent();
         game.add(component);
-        game.update(0);
+        await game.ready();
 
         final effect = _MyEffect(EffectController(duration: 1));
         component.add(effect);
@@ -24,7 +24,10 @@ void main() {
 
         final effect2 = _MyEffect(EffectController(duration: 1));
         expect(
-          () async => game.add(effect2),
+          () async {
+            game.add(effect2);
+            await game.ready();
+          },
           throwsA(isA<UnsupportedError>()),
         );
       },
