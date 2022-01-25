@@ -158,7 +158,7 @@ void main() {
     );
 
     test('childrenFactory', () {
-      final game = FlameGame() ..onGameResize(Vector2.all(100));
+      final game = FlameGame()..onGameResize(Vector2.all(100));
       assert(game.isMounted, true);
       final component0 = Component();
       expect(component0.children.strictMode, false);
