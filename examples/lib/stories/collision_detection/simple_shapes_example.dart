@@ -27,14 +27,14 @@ class SimpleShapesExample extends FlameGame with HasTappables {
     switch (shapeType) {
       case Shapes.circle:
         return MyShapeComponent(
-          HitboxCircle(),
+          HitboxCircle(anchor: Anchor.topLeft),
           position: position,
           size: shapeSize,
           angle: shapeAngle,
         );
       case Shapes.rectangle:
         return MyShapeComponent(
-          HitboxRectangle(),
+          HitboxRectangle(anchor: Anchor.center),
           position: position,
           size: shapeSize,
           angle: shapeAngle,
@@ -47,7 +47,11 @@ class SimpleShapesExample extends FlameGame with HasTappables {
           Vector2.random(_rng)..x *= -1,
         ];
         return MyShapeComponent(
-          HitboxPolygon(vertices: points),
+          HitboxPolygon.fromNormals(
+            points,
+            size: shapeSize,
+            anchor: Anchor.center,
+          ),
           position: position,
           size: shapeSize,
           angle: shapeAngle,
@@ -104,6 +108,8 @@ class MyShapeComponent extends PositionComponent with HasHitboxes, Tappable {
   @override
   Future<void> onLoad() async {
     super.onLoad();
+    debugMode = true;
+    shape.paint = BasicPalette.white.paint()..style = PaintingStyle.stroke;
     add(shape);
   }
 
@@ -116,6 +122,5 @@ class MyShapeComponent extends PositionComponent with HasHitboxes, Tappable {
   @override
   void render(Canvas c) {
     super.render(c);
-    shape.renderDebugMode(c);
   }
 }

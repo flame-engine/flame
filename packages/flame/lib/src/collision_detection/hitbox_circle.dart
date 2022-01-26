@@ -10,17 +10,18 @@ class HitboxCircle extends Circle with HasHitboxes, HitboxShape {
     double? radius,
     Vector2? position,
     double? angle,
-    int? priority,
+    Anchor? anchor,
   })  : shouldFillParent = radius == null && position == null,
         super(
           radius: radius,
           position: position,
           angle: angle,
-          priority: priority,
+          anchor: anchor,
         );
 
   @override
   void fillParent() {
-    // No need to do anything since the size already is bound to the parent size
+    // There is no need to do anything here since the size already is bound to
+    // the parent size and the radius is defined from the shortest side.
   }
 }

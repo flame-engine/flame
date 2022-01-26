@@ -78,9 +78,9 @@ mixin HasHitboxes on PositionComponent implements Collidable<HasHitboxes> {
   /// contains the [point].
   @override
   bool containsPoint(Vector2 point) {
-    print('possibly: ${possiblyContainsPoint(point)}');
-    print('hitboxes: ${hitboxes.any((hitbox) => hitbox.containsPoint(point))}');
-    print('size hitboxes: ${hitboxes.length}');
+    //print('possibly: ${possiblyContainsPoint(point)}');
+    //print('hitboxes: ${hitboxes.any((hitbox) => hitbox.containsPoint(point))}');
+    //print('size hitboxes: ${hitboxes.length}');
     return possiblyContainsPoint(point) &&
         (isLeafHitbox
             ? super.containsPoint(point)

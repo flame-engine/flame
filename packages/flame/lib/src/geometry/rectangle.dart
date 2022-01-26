@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
+
 import '../../components.dart';
 import '../../extensions.dart';
 import '../../geometry.dart';
@@ -14,10 +16,10 @@ class Rectangle extends Polygon {
     Paint? paint,
   }) : super(
           [
-            _toCorner(position, size, anchor, Anchor.topLeft),
-            _toCorner(position, size, anchor, Anchor.bottomLeft),
-            _toCorner(position, size, anchor, Anchor.bottomRight),
-            _toCorner(position, size, anchor, Anchor.topRight),
+            toCorner(position, size, anchor, Anchor.topLeft),
+            toCorner(position, size, anchor, Anchor.bottomLeft),
+            toCorner(position, size, anchor, Anchor.bottomRight),
+            toCorner(position, size, anchor, Anchor.topRight),
           ],
           angle: angle,
           anchor: anchor,
@@ -49,11 +51,13 @@ class Rectangle extends Polygon {
     int? priority,
   }) {
     return Rectangle(
-      position: Anchor.center.toOtherAnchorPosition(
-        rect.center.toVector2(),
-        anchor,
-        rect.size.toVector2(),
-      ),
+      position: anchor == Anchor.topLeft
+          ? rect.topLeft.toVector2()
+          : Anchor.topLeft.toOtherAnchorPosition(
+              rect.topLeft.toVector2(),
+              anchor,
+              rect.size.toVector2(),
+            ),
       size: rect.size.toVector2(),
       angle: angle,
       anchor: anchor,
@@ -61,7 +65,8 @@ class Rectangle extends Polygon {
     );
   }
 
-  static Vector2 _toCorner(
+  @protected
+  static Vector2 toCorner(
     Vector2? position,
     Vector2? size,
     Anchor? anchor,

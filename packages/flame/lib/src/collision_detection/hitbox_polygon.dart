@@ -3,29 +3,29 @@ import '../../geometry.dart';
 import 'hitbox_shape.dart';
 
 class HitboxPolygon extends Polygon with HasHitboxes, HitboxShape {
-  factory HitboxPolygon({
-    required List<Vector2> vertices,
-    double angle = 0,
-  }) {
-    return Polygon(
-      vertices,
-      angle: angle,
-    ) as HitboxPolygon;
-  }
+  HitboxPolygon(
+    List<Vector2> vertices, {
+    double? angle,
+    Anchor? anchor,
+  }) : super(
+          vertices,
+          angle: angle,
+          anchor: anchor,
+        );
 
-  // TODO(spydon): Change name
-  factory HitboxPolygon.fromNormal({
-  required List<Vector2> normals,
+  HitboxPolygon.fromNormals(
+    List<Vector2> normals, {
+    Vector2? position,
     required Vector2 size,
-    Anchor anchor = Anchor.center,
-  double angle = 0,
-  }) {
-    final position = anchor.
-    return Polygon(
-      normals.map((v) => v.clone()..multiply(),
-      angle: angle,
-    ) as HitboxPolygon;
-  }
+    double angle = 0,
+    Anchor? anchor,
+  }) : super.fromNormals(
+          normals,
+          position: position,
+          size: size,
+          angle: angle,
+          anchor: anchor,
+        );
 
   @override
   void fillParent() {

@@ -137,7 +137,6 @@ abstract class MyCollidable extends PositionComponent
 
   @override
   void render(Canvas canvas) {
-    renderHitboxes(canvas, paint: _activePaint);
     if (_isDragged) {
       final localCenter = (scaledSize / 2).toOffset();
       canvas.drawCircle(localCenter, 5, _activePaint);
@@ -234,24 +233,22 @@ class CollidableCircle extends MyCollidable {
 
 class SnowmanPart extends HitboxCircle {
   final startColor = Colors.blue.withOpacity(0.8);
-  final hitPaint = Paint();
 
-  SnowmanPart(double definition, Vector2 relativeOffset, Color hitColor)
-      : super(normalizedRadius: definition) {
-    this.relativeOffset.setFrom(relativeOffset);
-    hitPaint.color = startColor;
-    onCollision = (Set<Vector2> intersectionPoints, HitboxShape other) {
-      if (other.component is ScreenCollidable) {
-        hitPaint.color = startColor;
+  SnowmanPart(double radius, Vector2 position, Color hitColor)
+      : super(radius: radius, position: position) {
+    paint.color = startColor;
+    collisionCallback = (Set<Vector2> intersectionPoints, HasHitboxes other) {
+      if (other is ScreenCollidable) {
+        paint.color = startColor;
       } else {
-        hitPaint.color = hitColor.withOpacity(0.8);
+        paint.color = hitColor.withOpacity(0.8);
       }
     };
   }
 
   @override
-  void render(Canvas canvas, _) {
-    super.render(canvas, hitPaint);
+  void render(Canvas canvas) {
+    super.renderDebugMode(canvas);
   }
 }
 
@@ -264,9 +261,17 @@ class CollidableSnowman extends MyCollidable {
   ) : super(position, size, velocity, screenCollidable) {
     rotationSpeed = 0.3;
     anchor = Anchor.topLeft;
-    final top = SnowmanPart(0.4, Vector2(0, -0.8), Colors.red);
-    final middle = SnowmanPart(0.6, Vector2(0, -0.3), Colors.yellow);
-    final bottom = SnowmanPart(1.0, Vector2(0, 0.5), Colors.green);
+    final top = SnowmanPart(
+      size.x * 0.4,
+      Vector2(size.x / 2, size.y * 0.1),
+      Colors.red,
+    );
+    final middle = SnowmanPart(
+      size.x * 0.6,
+      Vector2(size.x / 2, size.y * 0.45),
+      Colors.yellow,
+    );
+    final bottom = SnowmanPart(size.x * 1.0, size / 2, Colors.green);
     add(top);
     add(middle);
     add(bottom);

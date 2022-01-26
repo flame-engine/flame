@@ -1,20 +1,22 @@
 import 'dart:ui' hide Canvas;
 
+import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
+
 import '../../components.dart';
+import '../../extensions.dart';
 import '../../geometry.dart';
 import '../components/cache/value_cache.dart';
-import '../extensions/canvas.dart';
-import '../extensions/offset.dart';
-import '../extensions/rect.dart';
 
 class Polygon extends Shape {
-  late final List<Vector2> vertices;
+  final List<Vector2> _vertices;
+  UnmodifiableListView<Vector2> get vertices => UnmodifiableListView(_vertices);
   // These lists are used to minimize the amount of objects that are created,
   // and only change the contained object if the corresponding `ValueCache` is
   // deemed outdated.
   late final List<Vector2> _globalVertices;
   late final List<LineSegment> _lineSegments;
-  late final Path _path;
+  final Path _path = Path();
 
   final _cachedGlobalVertices = ValueCache<List<Vector2>>();
 
@@ -24,15 +26,15 @@ class Polygon extends Shape {
   /// NOTE: Always define your polygon in a counter-clockwise fashion (in the
   /// screen coordinate system).
   Polygon(
-    this.vertices, {
+    this._vertices, {
     Vector2? scale,
     double? angle,
     Anchor? anchor,
     int? priority,
     Paint? paint,
   })  : assert(
-          vertices.length > 3,
-          'List of vertices is too short to create a polygon',
+          _vertices.length > 3,
+          'Number of vertices are too few to create a polygon',
         ),
         super(
           scale: scale,
@@ -42,15 +44,8 @@ class Polygon extends Shape {
           paint: paint,
         ) {
     final verticesLength = vertices.length;
-    _path = Path()
-      ..addPolygon(
-        vertices.map((p) => p.toOffset()).toList(growable: false),
-        true,
-      );
-    final boundingRect = _path.getBounds();
-    final center = boundingRect.center.toVector2();
-    size = boundingRect.bottomRight.toVector2();
-    position = Anchor.center.toOtherAnchorPosition(center, this.anchor, size);
+    print('Vertices: $vertices');
+    refreshVertices();
 
     _globalVertices = List.generate(
       verticesLength,
@@ -62,6 +57,68 @@ class Polygon extends Shape {
       (_) => LineSegment.zero(),
       growable: false,
     );
+  }
+
+  @protected
+  void refreshVertices({List<Vector2>? newVertices}) {
+    assert(
+      newVertices == null || newVertices.length == _vertices.length,
+      'A polygon can not change their number of vertices',
+    );
+    newVertices?.forEachIndexed((i, vertex) => _vertices[i].setFrom(vertex));
+    _path
+      ..reset()
+      ..addPolygon(
+        vertices.map((p) => p.toOffset()).toList(growable: false),
+        true,
+      );
+    //final boundingRect = _path.getBounds();
+    //TODO: Should this be center?
+    //final topLeft = boundingRect.topLeft.toVector2();
+    //size = boundingRect.size.toVector2();
+    //position = Anchor.topLeft.toOtherAnchorPosition(topLeft, anchor, size);
+  }
+
+  // TODO: Should we take an anchor into consideration here too?
+  Polygon.fromNormals(
+    List<Vector2> normals, {
+    required Vector2 size,
+    Vector2? position,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
+    int? priority,
+    Paint? paint,
+  }) : this(
+          normalsToVertices(normals, size, position, anchor),
+          angle: angle,
+          anchor: anchor,
+          scale: scale,
+          priority: priority,
+          paint: paint,
+        );
+
+  @internal
+  static List<Vector2> normalsToVertices(
+    List<Vector2> normals,
+    Vector2 size,
+    Vector2? position,
+    Anchor? anchor,
+  ) {
+    final anchorPosition = position ?? Vector2.zero();
+    print('anchorPosition: $anchorPosition');
+    print('size: $size');
+    print('normals: $normals');
+    final anchorVector = (anchor ?? Anchor.topLeft).toVector2();
+    return normals
+        .map(
+          (v) =>
+              anchorPosition +
+              (anchorVector.clone()
+                ..multiply(size)
+                ..multiply(v)),
+        )
+        .toList(growable: false);
   }
 
   // TODO(spydon): Move to HitboxPolygon.fill

@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/geometry.dart' as geometry;
@@ -253,19 +254,30 @@ void main() {
 
   group('Polygon intersections tests', () {
     test('simple polygon collision', () {
-      final polygonA = Polygon([
-        Vector2(2, 2),
-        Vector2(3, 1),
-        Vector2(2, 0),
-        Vector2(1, 1),
-      ]);
-      final polygonB = Polygon([
-        Vector2(1, 2),
-        Vector2(2, 1),
-        Vector2(1, 0),
-        Vector2(0, 1),
-      ]);
+      final polygonA = Polygon(
+        [
+          Vector2(2, 2),
+          Vector2(3, 1),
+          Vector2(2, 0),
+          Vector2(1, 1),
+        ],
+      );
+      final polygonB = Polygon(
+        [
+          Vector2(1, 2),
+          Vector2(2, 1),
+          Vector2(1, 0),
+          Vector2(0, 1),
+        ],
+      );
       final intersections = geometry.intersections(polygonA, polygonB);
+      print(intersections);
+      //print(polygonA.position);
+      //print(polygonA.anchor);
+      //print(polygonA.size);
+      //print(polygonB.position);
+      //print(polygonB.anchor);
+      //print(polygonB.size);
       expect(
         intersections.contains(Vector2(1.5, 0.5)),
         true,
@@ -340,7 +352,7 @@ void main() {
     });
 
     test('collision while no corners are inside the other body', () {
-      final polygonA = Polygon.fromDefinition(
+      final polygonA = Polygon.fromNormals(
         [
           Vector2(1, 1),
           Vector2(1, -1),
@@ -350,7 +362,7 @@ void main() {
         position: Vector2.zero(),
         size: Vector2(2, 4),
       );
-      final polygonB = Polygon.fromDefinition(
+      final polygonB = Polygon.fromNormals(
         [
           Vector2(1, 1),
           Vector2(1, -1),
@@ -438,14 +450,8 @@ void main() {
 
   group('Circle intersections tests', () {
     test('simple collision', () {
-      final circleA = Circle.fromDefinition(
-        position: Vector2(4, 0),
-        size: Vector2.all(4),
-      );
-      final circleB = Circle.fromDefinition(
-        position: Vector2.zero(),
-        size: Vector2.all(4),
-      );
+      final circleA = Circle(radius: 4.0, position: Vector2(4, 0));
+      final circleB = Circle(radius: 4.0, position: Vector2.zero());
       final intersections = geometry.intersections(circleA, circleB);
       expect(
         intersections.contains(Vector2(2, 0)),
@@ -460,14 +466,8 @@ void main() {
     });
 
     test('two point collision', () {
-      final circleA = Circle.fromDefinition(
-        position: Vector2(3, 0),
-        size: Vector2.all(4),
-      );
-      final circleB = Circle.fromDefinition(
-        position: Vector2.zero(),
-        size: Vector2.all(4),
-      );
+      final circleA = Circle(radius: 4.0, position: Vector2(3, 0));
+      final circleB = Circle(radius: 4.0, position: Vector2.zero());
       final intersections = geometry.intersections(circleA, circleB);
       expect(
         intersections.contains(Vector2(1.5, -1.3228756555322954)),
@@ -487,14 +487,8 @@ void main() {
     });
 
     test('same size and position', () {
-      final circleA = Circle.fromDefinition(
-        position: Vector2.all(3),
-        size: Vector2.all(4),
-      );
-      final circleB = Circle.fromDefinition(
-        position: Vector2.all(3),
-        size: Vector2.all(4),
-      );
+      final circleA = Circle(radius: 4.0, position: Vector2.all(3));
+      final circleB = Circle(radius: 4.0, position: Vector2.all(3));
       final intersections = geometry.intersections(circleA, circleB);
       expect(
         intersections.containsAll([
@@ -514,14 +508,8 @@ void main() {
     });
 
     test('not overlapping', () {
-      final circleA = Circle.fromDefinition(
-        position: Vector2.all(-1),
-        size: Vector2.all(4),
-      );
-      final circleB = Circle.fromDefinition(
-        position: Vector2.all(3),
-        size: Vector2.all(4),
-      );
+      final circleA = Circle(radius: 4.0, position: Vector2.all(-1));
+      final circleB = Circle(radius: 4.0, position: Vector2.all(3));
       final intersections = geometry.intersections(circleA, circleB);
       expect(
         intersections.isEmpty,
@@ -531,14 +519,8 @@ void main() {
     });
 
     test('in third quadrant', () {
-      final circleA = Circle.fromDefinition(
-        position: Vector2.all(-1),
-        size: Vector2.all(2),
-      );
-      final circleB = Circle.fromDefinition(
-        position: Vector2.all(-2),
-        size: Vector2.all(2),
-      );
+      final circleA = Circle(radius: 4.0, position: Vector2.all(-1));
+      final circleB = Circle(radius: 4.0, position: Vector2.all(-2));
       final intersections = geometry.intersections(circleA, circleB).toList();
       expect(
         intersections.any((v) => v.distanceTo(Vector2(-1, -2)) < 0.000001),
@@ -556,14 +538,8 @@ void main() {
     });
 
     test('in different quadrants', () {
-      final circleA = Circle.fromDefinition(
-        position: Vector2.all(-1),
-        size: Vector2.all(4),
-      );
-      final circleB = Circle.fromDefinition(
-        position: Vector2.all(1),
-        size: Vector2.all(4),
-      );
+      final circleA = Circle(radius: 4.0, position: Vector2.all(-1));
+      final circleB = Circle(radius: 4.0, position: Vector2.all(1));
       final intersections = geometry.intersections(circleA, circleB).toList();
       expect(
         intersections.any((v) => v.distanceTo(Vector2(1, -1)) < 0.000001),
@@ -583,10 +559,7 @@ void main() {
 
   group('Circle-Polygon intersections tests', () {
     test('simple circle-polygon intersection', () {
-      final circle = Circle.fromDefinition(
-        position: Vector2.zero(),
-        size: Vector2.all(2),
-      );
+      final circle = Circle(radius: 2.0, position: Vector2.zero());
       final polygon = Polygon([
         Vector2(1, 2),
         Vector2(2, 1),
@@ -607,10 +580,7 @@ void main() {
     });
 
     test('single point circle-polygon intersection', () {
-      final circle = Circle.fromDefinition(
-        position: Vector2(-1, 1),
-        size: Vector2.all(2),
-      );
+      final circle = Circle(radius: 2.0, position: Vector2(-1, 1));
       final polygon = Polygon([
         Vector2(1, 2),
         Vector2(2, 1),
@@ -631,10 +601,7 @@ void main() {
     });
 
     test('four point circle-polygon intersection', () {
-      final circle = Circle.fromDefinition(
-        position: Vector2.all(1),
-        size: Vector2.all(2),
-      );
+      final circle = Circle(radius: 2.0, position: Vector2.all(1));
       final polygon = Polygon([
         Vector2(1, 2),
         Vector2(2, 1),
@@ -660,10 +627,7 @@ void main() {
     });
 
     test('polygon within circle, no intersections', () {
-      final circle = Circle.fromDefinition(
-        position: Vector2.all(1),
-        size: Vector2.all(2.1),
-      );
+      final circle = Circle(radius: 2.1, position: Vector2.all(1));
       final polygon = Polygon([
         Vector2(1, 2),
         Vector2(2, 1),

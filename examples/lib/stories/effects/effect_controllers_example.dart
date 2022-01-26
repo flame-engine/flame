@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 
 class EffectControllersExample extends FlameGame {
   static const description = '''
@@ -23,7 +24,7 @@ class EffectControllersExample extends FlameGame {
   void onMount() {
     camera.viewport = FixedResolutionViewport(Vector2(400, 600));
     add(
-      RectangleComponent.square(
+      Rectangle.square(
         position: Vector2(20, 50),
         size: 20,
       )..add(
@@ -34,7 +35,7 @@ class EffectControllersExample extends FlameGame {
         ),
     );
     add(
-      RectangleComponent.square(
+      Rectangle.square(
         position: Vector2(70, 50),
         size: 20,
         paint: Paint()..color = const Color(0xffffbc63),
@@ -51,7 +52,7 @@ class EffectControllersExample extends FlameGame {
     );
 
     add(
-      RectangleComponent.square(
+      Rectangle.square(
         position: Vector2(140, 50),
         size: 20,
         paint: Paint()..color = const Color(0xffbeff63),
@@ -63,7 +64,7 @@ class EffectControllersExample extends FlameGame {
         ),
     );
     add(
-      RectangleComponent.square(
+      Rectangle.square(
         position: Vector2(190, 50),
         size: 10,
         paint: Paint()..color = const Color(0xffb663ff),

@@ -1,33 +1,38 @@
 import '../../components.dart';
-import '../../flame.dart';
 import '../../geometry.dart';
 import 'hitbox_shape.dart';
 
 class HitboxRectangle extends Rectangle with HasHitboxes, HitboxShape {
+  @override
+  final bool shouldFillParent;
+
   HitboxRectangle({
     Vector2? position,
     Vector2? size,
     double? angle,
     Anchor? anchor,
     int? priority,
-  }) : super(
+  })  : shouldFillParent = size == null && position == null,
+        super(
           position: position,
           size: size,
           angle: angle,
           anchor: anchor,
           priority: priority,
-        ) {
-    shouldFillParent = position == null && size == null;
-  }
+        );
 
   @override
   void fillParent() {
-    const topLeft = Anchor.topLeft;
-    vertices.clear();
-    vertices
-      ..add(topLeft.toOtherAnchorPosition(Vector2.zero(), anchor, size))
-      ..add(topLeft.toOtherAnchorPosition(Vector2(0, size.y), anchor, size))
-      ..add(topLeft.toOtherAnchorPosition(size, anchor, size))
-      ..add(topLeft.toOtherAnchorPosition(Vector2(size.x, 0), anchor, size));
+    final newVertices = [
+      Rectangle.toCorner(position, size, anchor, Anchor.topLeft),
+      Rectangle.toCorner(position, size, anchor, Anchor.bottomLeft),
+      Rectangle.toCorner(position, size, anchor, Anchor.bottomRight),
+      Rectangle.toCorner(position, size, anchor, Anchor.topRight),
+    ];
+    print(vertices);
+    refreshVertices(newVertices: newVertices);
+    print(position);
+    print(anchor);
+    print(size);
   }
 }

@@ -45,7 +45,7 @@ class Circle extends Shape {
   /// circle will look the same rotated as not rotated.
   @override
   void render(Canvas canvas) {
-    canvas.drawCircle(Offset.zero, radius, paint);
+    canvas.drawCircle((size / 2).toOffset(), radius, paint);
   }
 
   /// Checks whether the represented circle contains the [point].
