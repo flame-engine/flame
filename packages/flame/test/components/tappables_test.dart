@@ -14,23 +14,22 @@ void main() {
     withTappables.test(
       'make sure Tappables can be added to valid games',
       (game) async {
-        await game.ensureAdd(_TappableComponent());
+        game.add(_TappableComponent());
+        await game.ready();
       },
     );
 
     flameGame.test(
       'make sure Tappables cannot be added to invalid games',
-      (game) async {
-        const message =
-            'Tappable Components can only be added to a FlameGame with '
-            'HasTappables';
-
+      (game) {
         expect(
-          () => game.add(_TappableComponent()),
-          throwsA(
-            predicate(
-              (e) => e is AssertionError && e.message == message,
-            ),
+          () async {
+            game.add(_TappableComponent());
+            await game.ready();
+          },
+          failsAssert(
+            'Tappable Components can only be added to a FlameGame with '
+            'HasTappables',
           ),
         );
       },
