@@ -34,16 +34,13 @@ mixin Hoverable on Component {
 
   @override
   @mustCallSuper
-  void prepare(Component component) {
-    super.prepare(component);
-    if (isPrepared) {
-      final parentGame = findParent<FlameGame>();
-      assert(
-        parentGame is HasHoverables,
-        'Hoverable Components can only be added to a FlameGame with '
-        'HasHoverables',
-      );
-    }
+  void onMount() {
+    super.onMount();
+    assert(
+      Component.root is HasHoverables,
+      'Hoverable Components can only be added to a FlameGame with '
+      'HasHoverables',
+    );
   }
 }
 
