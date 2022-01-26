@@ -177,13 +177,19 @@ void main() {
     expect(game.children.isEmpty, equals(true));
   });
 
-  test('can add components to a game without a layout', () async {
+  test("can't add a component to a game without a layout", () {
     final game = FlameGame();
     final component = Component();
-
-    game.add(component);
-    game.onGameResize(Vector2.all(100));
-    await game.ready();
-    expect(component.isMounted, true);
+    const message =
+        'add() called before the game has a layout. Did you try to add '
+        'components from the constructor? Use the onLoad() method instead.';
+    expect(() => game.add(component), failsAssert(message));
+    expect(() => PrematurelyInitializedGame(), failsAssert(message));
   });
+}
+
+class PrematurelyInitializedGame extends FlameGame {
+  PrematurelyInitializedGame() {
+    add(Component());
+  }
 }

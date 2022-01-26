@@ -52,20 +52,22 @@ void main() {
   final withTappables = FlameTester(() => _HasTappablesGame());
 
   group('Composability', () {
-    withTappables.test('child is not added until the component is prepared',
-        (game) async {
-      final child = Component();
-      final wrapper = Component();
-      wrapper.add(child);
+    withTappables.test(
+      'child is not added until the component is prepared',
+      (game) async {
+        final child = Component();
+        final wrapper = Component();
+        wrapper.add(child);
 
-      expect(child.isLoaded, false);
-      expect(wrapper.contains(child), false);
+        expect(child.isLoaded, false);
+        expect(wrapper.contains(child), false);
 
-      await game.ensureAdd(wrapper);
+        await game.ensureAdd(wrapper);
 
-      expect(child.isLoaded, true);
-      expect(wrapper.contains(child), true);
-    });
+        expect(child.isLoaded, true);
+        expect(wrapper.contains(child), true);
+      },
+    );
 
     withTappables.test('removes the child from the component', (game) async {
       final child = Component();

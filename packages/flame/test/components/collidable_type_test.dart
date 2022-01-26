@@ -8,8 +8,9 @@ class _HasCollidablesGame extends FlameGame with HasCollidables {}
 
 class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
   final List<Collidable> collisions = List.empty(growable: true);
+  String? name;
 
-  _TestBlock(Vector2 position, Vector2 size, CollidableType type)
+  _TestBlock(Vector2 position, Vector2 size, CollidableType type, {this.name})
       : super(position: position, size: size) {
     collidableType = type;
     addHitbox(
@@ -34,6 +35,13 @@ class _TestBlock extends PositionComponent with HasHitboxes, Collidable {
   @override
   void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
     collisions.add(other);
+  }
+
+  @override
+  String toString() {
+    return name == null
+        ? '_TestBlock[${identityHashCode(this)}]'
+        : '_TestBlock[$name]';
   }
 }
 
@@ -298,11 +306,13 @@ void main() {
         Vector2.zero(),
         Vector2.all(10),
         CollidableType.active,
+        name: 'A',
       );
       final innerBlockA = _TestBlock(
         blockA.size / 4,
         blockA.size / 2,
         CollidableType.active,
+        name: 'iA',
       );
       blockA.add(innerBlockA);
 
@@ -310,20 +320,23 @@ void main() {
         Vector2.all(5),
         Vector2.all(10),
         CollidableType.active,
+        name: 'B',
       );
       final innerBlockB = _TestBlock(
         blockA.size / 4,
         blockA.size / 2,
         CollidableType.active,
+        name: 'iB',
       );
       blockB.add(innerBlockB);
 
-      await game.ensureAddAll([blockA, blockB]);
+      game.addAll([blockA, blockB]);
+      await game.ready();
       game.update(0);
-      expect(blockA.collisions, <Collidable>[blockB, innerBlockB]);
-      expect(blockB.collisions, <Collidable>[blockA, innerBlockA]);
-      expect(innerBlockA.collisions, <Collidable>[blockB, innerBlockB]);
-      expect(innerBlockB.collisions, <Collidable>[blockA, innerBlockA]);
+      expect(blockA.collisions, {blockB, innerBlockB});
+      expect(blockB.collisions, {blockA, innerBlockA});
+      expect(innerBlockA.collisions, {blockB, innerBlockB});
+      expect(innerBlockB.collisions, {blockA, innerBlockA});
     });
   });
 }

@@ -301,10 +301,16 @@ class Component {
       'parent: ${component._parent}',
     );
     assert(root != null, 'The root of the component tree was not initialized');
+    assert(
+      root!.hasLayout,
+      'add() called before the game has a layout. Did you try to add '
+      'components from the constructor? Use the onLoad() method instead.',
+    );
     if (!isMounted) {
       (root!.addQueue[this] ??= Queue()).addLast(component);
       return;
     }
+
     component._parent = this;
     component.debugMode |= debugMode;
     component.onGameResize(root!.canvasSize);
@@ -317,9 +323,15 @@ class Component {
       } else {
         onLoadFuture.then<void>((_) {
           component.isLoaded = true;
+          component.onMount();
         });
+        return;
       }
     }
+    component.onMount();
+    // Component will only be marked [isMounted] after it was added to the
+    // `children` set of its parent.
+    // See [ComponentTreeRoot._processChildrenQueue].
   }
 
   /// Adds multiple children.
@@ -500,7 +512,6 @@ mixin ComponentTreeRoot on Game {
         final x = queue.first;
         if (x.isLoaded) {
           queue.removeFirst();
-          x.onMount();
           parent.children.addChild(x);
           x.isMounted = true;
         } else {
