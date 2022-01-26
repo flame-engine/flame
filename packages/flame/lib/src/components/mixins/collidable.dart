@@ -43,6 +43,7 @@ mixin Collidable on HasHitboxes {
       'You can only use the HasHitboxes/Collidable feature with games that '
       'has the HasCollidables mixin',
     );
+    (Component.root! as HasCollidables).collidables.add(this);
   }
 }
 
