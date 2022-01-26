@@ -306,10 +306,9 @@ class Component {
       return;
     }
     component._parent = this;
-    (root!.childrenQueue[this] ??= Queue()).addLast(component);
-    component.onGameResize(root!.size);
-    root!.prepareComponent(component);
     component.debugMode |= debugMode;
+    component.onGameResize(root!.size);
+    root!._enqueueChild(parent: this, child: component);
 
     if (!component.isLoaded) {
       final onLoadFuture = component.onLoad();
@@ -402,8 +401,8 @@ class Component {
 
   /// Component at the root of the component tree. This node serves as the
   /// central place for resolving lifecycle event queues, and also facilitates
-  /// `onGameResize` and `prepareComponent` events. This variable MUST be
-  /// initialized before using components can be combined.
+  /// `onGameResize` events. This variable MUST be initialized before components
+  /// may be combined into a tree.
   ///
   /// Usually, [FlameGame] is the root of the component tree, and it declares
   /// itself as such automatically.
@@ -427,8 +426,8 @@ class Component {
 /// directly.
 ///
 /// The purpose of this mixin is to collect common facilities for component
-/// lifecycle management. These include: lifecycle event queues, the canvas size
-/// for [Component.onGameResize], and [prepareComponent] handler.
+/// lifecycle management. These include: lifecycle event queues, and the canvas
+/// size for [Component.onGameResize].
 ///
 /// In order to use this mixin in a custom [Game], do the following:
 ///   - add this mixin to your game class;
@@ -437,12 +436,6 @@ class Component {
 mixin ComponentTreeRoot on Game {
   final Map<Component, Queue<Component>> childrenQueue = {};
   final Map<Component, Queue<Component>> addQueue = {};
-
-  /// This method is called for every component before it is added to the
-  /// component tree.
-  /// It does preparation on a component before any update or render method is
-  /// called on it.
-  void prepareComponent(Component c) {}
 
   /// Ensure that all pending tree operations finish.
   ///
@@ -458,6 +451,12 @@ mixin ComponentTreeRoot on Game {
       processComponentQueues();
       return addQueue.isNotEmpty || childrenQueue.isNotEmpty;
     });
+  }
+
+  /// Enlist [child] to be added to [parent]'s `children` when the child becomes
+  /// ready.
+  void _enqueueChild({required Component parent, required Component child}) {
+    (childrenQueue[parent] ??= Queue()).addLast(child);
   }
 
   /// Attempts to resolve pending events in all lifecycle event queues.

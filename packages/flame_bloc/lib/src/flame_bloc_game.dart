@@ -57,6 +57,22 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
 
   @override
   @mustCallSuper
+  void onMount() {
+    super.onMount();
+    assert(
+      Component.root is FlameBlocGame,
+      'BlocComponent can only be added to a FlameBlocGame',
+    );
+    final game = Component.root! as FlameBlocGame;
+    if (game.isAttached) {
+      subscribe(game);
+    } else {
+      game.subscriptionQueue.add(this);
+    }
+  }
+
+  @override
+  @mustCallSuper
   void onRemove() {
     super.onRemove();
     unsubscribe();
@@ -85,7 +101,6 @@ class FlameBlocGame extends FlameGame {
   @mustCallSuper
   void onRemove() {
     super.onRemove();
-
     _unsubscribe();
   }
 
@@ -102,20 +117,6 @@ class FlameBlocGame extends FlameGame {
     }
 
     return context.read<T>();
-  }
-
-  @override
-  @mustCallSuper
-  void prepareComponent(Component c) {
-    super.prepareComponent(c);
-
-    if (c is BlocComponent) {
-      if (isAttached) {
-        c.subscribe(this);
-      } else {
-        subscriptionQueue.add(c);
-      }
-    }
   }
 
   void _runSubscriptionQueue() {
