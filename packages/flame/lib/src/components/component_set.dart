@@ -12,9 +12,6 @@ import '../../components.dart';
 ///
 /// This will avoid any concurrent modification exceptions while the game
 /// iterates through the component list.
-///
-/// This wrapper also guaranteed that [Component.prepare]
-/// and all the lifecycle methods are called properly.
 class ComponentSet extends QueryableOrderedSet<Component> {
   /// With default settings, creates a [ComponentSet] with the compare function
   /// that uses the Component's priority for sorting.

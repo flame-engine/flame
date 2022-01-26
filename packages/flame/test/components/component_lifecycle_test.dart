@@ -8,12 +8,6 @@ class _MyComponent extends Component {
   _MyComponent(this.events);
 
   @override
-  void prepare(Component parent) {
-    super.prepare(parent);
-    events.add('prepared: $isPrepared');
-  }
-
-  @override
   Future<void> onLoad() async {
     await super.onLoad();
     events.add('onLoad');
@@ -39,10 +33,11 @@ void main() {
 
       expect(
         events,
-        ['onGameResize', 'prepared: true', 'onLoad', 'onMount'],
+        ['onGameResize', 'onLoad', 'onMount'],
       );
     });
 
+    // Obsolete scenario, when we used to have a separate "prepare" stage
     flameGame.test('parent prepares the component', (game) async {
       final parentEvents = <String>[];
       final childEvents = <String>[];
@@ -54,19 +49,8 @@ void main() {
       // The parent tries to prepare the component before it is added to the
       // game and fails since it doesn't have a game root and therefore re-adds
       // the child when it has a proper root.
-      expect(
-        parentEvents,
-        ['onGameResize', 'prepared: true', 'onLoad', 'onMount'],
-      );
-      expect(
-        childEvents,
-        [
-          'onGameResize',
-          'prepared: true',
-          'onLoad',
-          'onMount',
-        ],
-      );
+      expect(parentEvents, ['onGameResize', 'onLoad', 'onMount']);
+      expect(childEvents, ['onGameResize', 'onLoad', 'onMount']);
     });
 
     flameGame.test('correct lifecycle on parent change', (game) async {
@@ -81,28 +65,12 @@ void main() {
       game.update(0);
       game.update(0);
 
-      expect(
-        parentEvents,
-        [
-          'onGameResize',
-          'prepared: true',
-          'onLoad',
-          'onMount',
-        ],
-      );
+      expect(parentEvents, ['onGameResize', 'onLoad', 'onMount']);
       // onLoad should only be called the first time that the component is
       // loaded.
       expect(
         childEvents,
-        [
-          'onGameResize',
-          'prepared: true',
-          'onLoad',
-          'onMount',
-          'onGameResize',
-          'prepared: true',
-          'onMount',
-        ],
+        ['onGameResize', 'onLoad', 'onMount', 'onGameResize', 'onMount'],
       );
     });
   });

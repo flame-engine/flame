@@ -26,10 +26,6 @@ class Component {
   /// to the root `FlameGame`.
   PositionType positionType = PositionType.game;
 
-  /// Whether this component has been prepared and is ready to be added to the
-  /// game loop.
-  bool isPrepared = false;
-
   /// Whether this component is done loading through [onLoad].
   bool isLoaded = false;
 
@@ -228,7 +224,6 @@ class Component {
   @mustCallSuper
   void onRemove() {
     _children?.forEach((child) => child.onRemove());
-    isPrepared = false;
     isMounted = false;
     _parent = null;
     nextParent?.add(this);
@@ -305,7 +300,6 @@ class Component {
       'Component $component cannot be added to $this because it already has a '
       'parent: ${component._parent}',
     );
-    assert(!component.isPrepared);
     assert(root != null, 'The root of the component tree was not initialized');
     if (!isMounted) {
       (root!.addQueue[this] ??= Queue()).addLast(component);
@@ -316,8 +310,6 @@ class Component {
     component.onGameResize(root!.size);
     root!.prepareComponent(component);
     component.debugMode |= debugMode;
-    component.isPrepared = true;
-    component.prepare(this);
 
     if (!component.isLoaded) {
       final onLoadFuture = component.onLoad();
@@ -407,15 +399,6 @@ class Component {
   /// component list isn't re-ordered when it is called.
   /// See FlameGame.changePriority instead.
   void changePriorityWithoutResorting(int priority) => _priority = priority;
-
-  /// Prepares the [Component] to be added to a [parent], and if there is an
-  /// ancestor that is a [FlameGame] that game will do necessary preparations
-  /// for this component.
-  /// If there are no parents that are a [Game] false will be returned and this
-  /// will run again once an ancestor or the component itself is added to a
-  /// [Game].
-  @protected
-  void prepare(Component parent) {}
 
   /// Component at the root of the component tree. This node serves as the
   /// central place for resolving lifecycle event queues, and also facilitates
