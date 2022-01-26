@@ -170,5 +170,32 @@ void main() {
       expect(component1.children.strictMode, true);
       expect(component2.children.strictMode, true);
     });
+
+    test('game resize while components are being added', () async {
+      final game = FlameGame()..onGameResize(Vector2.all(100));
+      final component = ComponentWithSizeHistory();
+      game.add(component);
+      expect(component.history, equals([Vector2(100, 100)]));
+      expect(component.isMounted, false);
+      game.onGameResize(Vector2(500, 300));
+      game.onGameResize(Vector2(300, 500));
+      expect(
+        component.history,
+        equals([Vector2(100, 100), Vector2(500, 300), Vector2(300, 500)]),
+      );
+      await game.ready();
+      expect(component.history.length, 3);
+      expect(component.history.last, equals(Vector2(300, 500)));
+    });
   });
+}
+
+class ComponentWithSizeHistory extends Component {
+  List<Vector2> history = [];
+
+  @override
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    history.add(size.clone());
+  }
 }

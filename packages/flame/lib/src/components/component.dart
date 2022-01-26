@@ -453,6 +453,19 @@ mixin ComponentTreeRoot on Game {
     });
   }
 
+  @override
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    // Components that wait in the queue to be added, still need to be informed
+    // about changes in the game canvas size.
+    addQueue.forEach((_, queue) {
+      queue.forEach((c) => c.onGameResize(size));
+    });
+    childrenQueue.forEach((_, queue) {
+      queue.forEach((c) => c.onGameResize(size));
+    });
+  }
+
   /// Enlist [child] to be added to [parent]'s `children` when the child becomes
   /// ready.
   void _enqueueChild({required Component parent, required Component child}) {
