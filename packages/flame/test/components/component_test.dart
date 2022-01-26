@@ -187,6 +187,21 @@ void main() {
       expect(component.history.length, 3);
       expect(component.history.last, equals(Vector2(300, 500)));
     });
+
+    test('game resize in zoomed game', () async {
+      final game = FlameGame()
+        ..camera.zoom = 10
+        ..onGameResize(Vector2(300, 200));
+      final component = ComponentWithSizeHistory();
+      game.add(component);
+      await game.ready();
+
+      game.onGameResize(Vector2(400, 500));
+      expect(
+        component.history,
+        equals([Vector2(300, 200), Vector2(400, 500)]),
+      );
+    });
   });
 }
 

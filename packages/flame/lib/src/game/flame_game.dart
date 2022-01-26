@@ -37,6 +37,7 @@ class FlameGame extends Component with Game, ComponentTreeRoot {
   Vector2 get size => camera.gameSize;
 
   /// This is the original Flutter widget size, without any transformation.
+  @override
   Vector2 get canvasSize => camera.canvasSize;
 
   /// This implementation of render renders each component, making sure the

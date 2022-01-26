@@ -307,7 +307,7 @@ class Component {
     }
     component._parent = this;
     component.debugMode |= debugMode;
-    component.onGameResize(root!.size);
+    component.onGameResize(root!.canvasSize);
     root!._enqueueChild(parent: this, child: component);
 
     if (!component.isLoaded) {
@@ -436,6 +436,8 @@ class Component {
 mixin ComponentTreeRoot on Game {
   final Map<Component, Queue<Component>> childrenQueue = {};
   final Map<Component, Queue<Component>> addQueue = {};
+
+  Vector2 get canvasSize;
 
   /// Ensure that all pending tree operations finish.
   ///
