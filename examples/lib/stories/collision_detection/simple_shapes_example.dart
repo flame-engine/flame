@@ -17,10 +17,14 @@ class SimpleShapesExample extends FlameGame with HasTappables {
     with a new one.
   ''';
 
+  @override
+  final debugMode = true;
+
   final _rng = Random();
 
-  MyShapeComponent randomShape(Vector2 position) {
-    final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
+  PositionComponent randomShape(Vector2 position) {
+    //final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
+    final shapeType = Shapes.rectangle;
     final shapeSize =
         Vector2.all(100) + Vector2.all(50.0).scaled(_rng.nextDouble());
     final shapeAngle = _rng.nextDouble() * 6;
@@ -34,7 +38,7 @@ class SimpleShapesExample extends FlameGame with HasTappables {
         );
       case Shapes.rectangle:
         return MyShapeComponent(
-          HitboxRectangle(anchor: Anchor.center),
+          HitboxRectangle(anchor: Anchor.bottomRight),
           position: position,
           size: shapeSize,
           angle: shapeAngle,
@@ -46,16 +50,18 @@ class SimpleShapesExample extends FlameGame with HasTappables {
           -Vector2.random(_rng),
           Vector2.random(_rng)..x *= -1,
         ];
-        return MyShapeComponent(
-          HitboxPolygon.fromNormals(
-            points,
-            size: shapeSize,
-            anchor: Anchor.center,
-          ),
-          position: position,
-          size: shapeSize,
-          angle: shapeAngle,
-        );
+
+        return HitboxPolygon.fromNormals(points,
+            size: shapeSize, position: position, anchor: Anchor.center);
+      //return MyShapeComponent(
+      //  HitboxPolygon.fromNormals(
+      //    points,
+      //    size: shapeSize,
+      //  ),
+      //  position: position,
+      //  size: shapeSize,
+      //  angle: shapeAngle,
+      //);
     }
   }
 
@@ -75,22 +81,20 @@ class SimpleShapesExample extends FlameGame with HasTappables {
         ),
       ),
     );
-    component.add(
-      RotateEffect.to(
-        3,
-        EffectController(
-          duration: 1,
-          reverseDuration: 1,
-          infinite: true,
-        ),
-      ),
-    );
+    //component.add(
+    //  RotateEffect.to(
+    //    3,
+    //    EffectController(
+    //      duration: 1,
+    //      reverseDuration: 1,
+    //      infinite: true,
+    //    ),
+    //  ),
+    //);
   }
 }
 
 class MyShapeComponent extends PositionComponent with HasHitboxes, Tappable {
-  @override
-  final Paint paint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
   final HitboxShape shape;
 
   MyShapeComponent(
@@ -108,7 +112,6 @@ class MyShapeComponent extends PositionComponent with HasHitboxes, Tappable {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    debugMode = true;
     shape.paint = BasicPalette.white.paint()..style = PaintingStyle.stroke;
     add(shape);
   }
@@ -117,10 +120,5 @@ class MyShapeComponent extends PositionComponent with HasHitboxes, Tappable {
   bool onTapDown(TapDownInfo _) {
     removeFromParent();
     return true;
-  }
-
-  @override
-  void render(Canvas c) {
-    super.render(c);
   }
 }

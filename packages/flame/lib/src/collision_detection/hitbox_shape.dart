@@ -39,6 +39,7 @@ mixin HitboxShape on Shape implements HasHitboxes {
   @override
   void renderDebugMode(Canvas c) {
     super.render(c);
+    super.renderDebugMode(c);
   }
 
   @override

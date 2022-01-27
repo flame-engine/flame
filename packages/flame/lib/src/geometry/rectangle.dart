@@ -15,12 +15,8 @@ class Rectangle extends Polygon {
     int? priority,
     Paint? paint,
   }) : super(
-          [
-            toCorner(position, size, anchor, Anchor.topLeft),
-            toCorner(position, size, anchor, Anchor.bottomLeft),
-            toCorner(position, size, anchor, Anchor.bottomRight),
-            toCorner(position, size, anchor, Anchor.topRight),
-          ],
+          sizeToVertices(size ?? Vector2.zero()),
+          position: position,
           angle: angle,
           anchor: anchor,
           priority: priority,
@@ -66,16 +62,12 @@ class Rectangle extends Polygon {
   }
 
   @protected
-  static Vector2 toCorner(
-    Vector2? position,
-    Vector2? size,
-    Anchor? anchor,
-    Anchor corner,
-  ) {
-    return (anchor ?? Anchor.topLeft).toOtherAnchorPosition(
-      position ?? Vector2.zero(),
-      corner,
-      size ?? Vector2.zero(),
-    );
+  static List<Vector2> sizeToVertices(Vector2 size) {
+    return [
+      Vector2.zero(),
+      Vector2(0, size.y),
+      size.clone(),
+      Vector2(size.x, 0),
+    ];
   }
 }

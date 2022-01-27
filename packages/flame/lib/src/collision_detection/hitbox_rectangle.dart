@@ -23,14 +23,9 @@ class HitboxRectangle extends Rectangle with HasHitboxes, HitboxShape {
 
   @override
   void fillParent() {
-    final newVertices = [
-      Rectangle.toCorner(position, size, anchor, Anchor.topLeft),
-      Rectangle.toCorner(position, size, anchor, Anchor.bottomLeft),
-      Rectangle.toCorner(position, size, anchor, Anchor.bottomRight),
-      Rectangle.toCorner(position, size, anchor, Anchor.topRight),
-    ];
     print(vertices);
-    refreshVertices(newVertices: newVertices);
+    refreshVertices(newVertices: Rectangle.sizeToVertices(size));
+    print(vertices);
     print(position);
     print(anchor);
     print(size);

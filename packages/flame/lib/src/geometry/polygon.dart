@@ -21,12 +21,12 @@ class Polygon extends Shape {
   final _cachedGlobalVertices = ValueCache<List<Vector2>>();
 
   /// With this constructor you create your [Polygon] from positions in your
-  /// intended space. It will automatically calculate the [size] and [position]
-  /// of the Polygon.
+  /// intended space. It will automatically calculate the [size] of the Polygon.
   /// NOTE: Always define your polygon in a counter-clockwise fashion (in the
   /// screen coordinate system).
   Polygon(
     this._vertices, {
+    Vector2? position,
     Vector2? scale,
     double? angle,
     Anchor? anchor,
@@ -37,6 +37,7 @@ class Polygon extends Shape {
           'Number of vertices are too few to create a polygon',
         ),
         super(
+          position: position,
           scale: scale,
           angle: angle,
           anchor: anchor,
@@ -65,21 +66,28 @@ class Polygon extends Shape {
       newVertices == null || newVertices.length == _vertices.length,
       'A polygon can not change their number of vertices',
     );
-    newVertices?.forEachIndexed((i, vertex) => _vertices[i].setFrom(vertex));
+    newVertices?.forEachIndexed((i, vertex) {
+      _vertices[i].setFrom(newVertices[i]);
+    });
     _path
       ..reset()
       ..addPolygon(
         vertices.map((p) => p.toOffset()).toList(growable: false),
         true,
       );
+    // These bounds also have a start position
+    final bounds = _path.getBounds();
+    print(size);
+    size = (bounds.size + bounds.topLeft).toVector2();
+    // TODO: Do we need to set the size here so that it has a better AABB
     //final boundingRect = _path.getBounds();
-    //TODO: Should this be center?
     //final topLeft = boundingRect.topLeft.toVector2();
     //size = boundingRect.size.toVector2();
     //position = Anchor.topLeft.toOtherAnchorPosition(topLeft, anchor, size);
   }
 
-  // TODO: Should we take an anchor into consideration here too?
+  /// Normals are always defined from the center
+  /// //TODO: add old description here
   Polygon.fromNormals(
     List<Vector2> normals, {
     required Vector2 size,
@@ -90,7 +98,8 @@ class Polygon extends Shape {
     int? priority,
     Paint? paint,
   }) : this(
-          normalsToVertices(normals, size, position, anchor),
+          normalsToVertices(normals, size),
+          position: position,
           angle: angle,
           anchor: anchor,
           scale: scale,
@@ -102,21 +111,13 @@ class Polygon extends Shape {
   static List<Vector2> normalsToVertices(
     List<Vector2> normals,
     Vector2 size,
-    Vector2? position,
-    Anchor? anchor,
   ) {
-    final anchorPosition = position ?? Vector2.zero();
-    print('anchorPosition: $anchorPosition');
-    print('size: $size');
-    print('normals: $normals');
-    final anchorVector = (anchor ?? Anchor.topLeft).toVector2();
+    final halfSize = size / 2;
     return normals
         .map(
-          (v) =>
-              anchorPosition +
-              (anchorVector.clone()
-                ..multiply(size)
-                ..multiply(v)),
+          (v) => v.clone()
+            ..multiply(halfSize)
+            ..add(halfSize),
         )
         .toList(growable: false);
   }
