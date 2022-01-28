@@ -19,6 +19,12 @@ class _MyComponent extends Component {
   }
 
   @override
+  void onRemove() {
+    events.add('onRemove');
+    super.onRemove();
+  }
+
+  @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
     events.add('onGameResize');
@@ -42,9 +48,8 @@ void main() {
       final parentEvents = <String>[];
       final childEvents = <String>[];
       final parent = _MyComponent(parentEvents);
-      parent.add(_MyComponent(childEvents));
-      game.add(parent);
-      await game.ready();
+      await parent.add(_MyComponent(childEvents));
+      await game.ensureAdd(parent);
 
       // The parent tries to prepare the component before it is added to the
       // game and fails since it doesn't have a game root and therefore re-adds
@@ -58,11 +63,9 @@ void main() {
       final childEvents = <String>[];
       final parent = _MyComponent(parentEvents);
       final child = _MyComponent(childEvents);
-      parent.add(child);
-      game.add(parent);
-      await game.ready();
+      await parent.add(child);
+      await game.ensureAdd(parent);
       child.changeParent(game);
-      game.update(0);
       game.update(0);
 
       expect(parentEvents, ['onGameResize', 'onLoad', 'onMount']);
@@ -70,7 +73,14 @@ void main() {
       // loaded.
       expect(
         childEvents,
-        ['onGameResize', 'onLoad', 'onMount', 'onGameResize', 'onMount'],
+        [
+          'onGameResize',
+          'onLoad',
+          'onMount',
+          'onRemove',
+          'onGameResize',
+          'onMount',
+        ],
       );
     });
   });

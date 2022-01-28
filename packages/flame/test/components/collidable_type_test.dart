@@ -330,7 +330,7 @@ void main() {
       );
       blockB.add(innerBlockB);
 
-      game.addAll([blockA, blockB]);
+      await game.ensureAddAll([blockA, blockB]);
       await game.ready();
       game.update(0);
       expect(blockA.collisions, {blockB, innerBlockB});

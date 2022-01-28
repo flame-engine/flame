@@ -31,7 +31,7 @@ void main() {
     withDraggables.test(
       'make sure they can be added to game with HasDraggables',
       (game) async {
-        game.add(_DraggableComponent());
+        await game.add(_DraggableComponent());
         await game.ready();
       },
     );
@@ -56,8 +56,7 @@ void main() {
         ..width = 10
         ..height = 10;
 
-      game.add(component);
-      await game.ready();
+      await game.ensureAdd(component);
       game.onDragStart(
         1,
         DragStartInfo.fromDetails(
@@ -79,9 +78,8 @@ void main() {
         ..width = 10
         ..height = 10;
 
-      game.add(component);
+      await game.ensureAdd(component);
       game.camera.zoom = 1.5;
-      await game.ready();
       game.onDragStart(
         1,
         DragStartInfo.fromDetails(
@@ -103,10 +101,9 @@ void main() {
         ..width = 10
         ..height = 10;
 
-      game.add(component);
+      await game.ensureAdd(component);
       game.camera.zoom = 1.5;
       game.camera.snapTo(Vector2.all(50));
-      await game.ready();
       game.onDragStart(
         1,
         DragStartInfo.fromDetails(

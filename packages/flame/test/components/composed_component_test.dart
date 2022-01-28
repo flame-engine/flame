@@ -57,7 +57,7 @@ void main() {
       (game) async {
         final child = Component();
         final wrapper = Component();
-        wrapper.add(child);
+        await wrapper.add(child);
 
         expect(child.isLoaded, true);
         expect(child.isPrepared, false);
@@ -80,7 +80,7 @@ void main() {
       await game.ensureAdd(wrapper);
       expect(wrapper.isMounted, true);
 
-      wrapper.add(child);
+      await wrapper.add(child);
       expect(wrapper.contains(child), false);
       game.updateTree(0); // children are only added on the next tick
       expect(wrapper.contains(child), true);
@@ -99,7 +99,9 @@ void main() {
         final wrapper = Component();
         await game.ensureAdd(wrapper);
 
-        wrapper.add(child);
+        final future = wrapper.add(child);
+        expect(wrapper.contains(child), false);
+        await future;
         expect(wrapper.contains(child), false);
         await game.ready();
         expect(wrapper.contains(child), true);
@@ -112,9 +114,8 @@ void main() {
 
       game.onGameResize(size);
       child.size.setValues(1.0, 1.0);
-      game.add(wrapper);
-      wrapper.add(child);
-      await game.ready();
+      await game.ensureAdd(wrapper);
+      await wrapper.ensureAdd(child);
       game.onTapDown(1, createTapDownEvent(game));
 
       expect(child.gameSize, size);
@@ -124,7 +125,7 @@ void main() {
     withTappables.test('add multiple children with addAll', (game) async {
       final children = List.generate(10, (_) => _MyTap());
       final wrapper = Component();
-      wrapper.addAll(children);
+      await wrapper.addAll(children);
 
       await game.ensureAdd(wrapper);
       expect(wrapper.children.length, children.length);
@@ -184,14 +185,13 @@ void main() {
       final child = _MyTap();
       final wrapper = Component();
 
-      wrapper.add(child);
-      game.add(wrapper);
-      await game.ready();
-      game.update(0);
-      game.render(MockCanvas());
+      await wrapper.add(child);
+      await game.ensureAdd(wrapper);
 
-      expect(child.rendered, true);
+      game.update(0);
       expect(child.updated, true);
+      game.render(MockCanvas());
+      expect(child.rendered, true);
     });
 
     withTappables.test('initially same debugMode as parent', (game) async {

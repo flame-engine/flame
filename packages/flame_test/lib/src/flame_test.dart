@@ -17,14 +17,14 @@ extension FlameGameExtension on Component {
   /// Makes sure that the [component] is added to the tree if you wait for the
   /// returned future to resolve.
   Future<void> ensureAdd(Component component) async {
-    add(component);
+    await add(component);
     await Component.root!.ready();
   }
 
   /// Makes sure that the [components] are added to the tree if you wait for the
   /// returned future to resolve.
   Future<void> ensureAddAll(Iterable<Component> components) async {
-    addAll(components);
+    await addAll(components);
     await Component.root!.ready();
   }
 }

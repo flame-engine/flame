@@ -20,24 +20,24 @@ class _PrepareGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    add(prepareParent = _ParentOnPrepareComponent());
+    await add(prepareParent = _ParentOnPrepareComponent());
   }
 }
 
 class _OnPrepareComponent extends Component {
-  int mountRuns = 0;
+  int prepareRuns = 0;
 
   @override
   void onMount() {
     super.onMount();
-    mountRuns++;
+    prepareRuns++;
   }
 }
 
 class _ParentOnPrepareComponent extends _OnPrepareComponent {
   @override
   Future<void> onLoad() async {
-    add(_OnPrepareComponent());
+    await add(_OnPrepareComponent());
   }
 }
 
@@ -149,9 +149,9 @@ void main() {
       'run double onPrepare',
       (game) async {
         final parent = game.prepareParent;
-        expect(parent.mountRuns, 1);
+        expect(parent.prepareRuns, 1);
         expect(parent.children.isNotEmpty, true);
-        expect((parent.children.first as _OnPrepareComponent).mountRuns, 1);
+        expect((parent.children.first as _OnPrepareComponent).prepareRuns, 1);
       },
     );
 
