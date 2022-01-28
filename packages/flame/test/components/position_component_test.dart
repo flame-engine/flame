@@ -307,6 +307,9 @@ void main() {
   });
 
   group('coordinates transforms test', () {
+    final game = FlameGame();
+    game.onGameResize(Vector2.all(100));
+
     test('width and height', () {
       final component = PositionComponent(size: Vector2.all(3));
       component.scale = Vector2(5, -7);

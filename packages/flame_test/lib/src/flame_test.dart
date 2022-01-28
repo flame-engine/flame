@@ -81,6 +81,9 @@ class GameTester<T extends Game> {
 
     await game.onLoad();
     game.update(0);
+    if (game is FlameGame) {
+      await game.ready();
+    }
     return game;
   }
 

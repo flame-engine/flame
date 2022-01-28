@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
@@ -29,6 +28,11 @@ class Component {
 
   /// Whether this component is done loading through [onLoad].
   bool isLoaded = false;
+
+  /// This is set to true when the component finishes running [onMount]. This
+  /// signals that the component can now be added to the parent's children list.
+  @internal
+  bool isReadyToMount = false;
 
   /// Whether this component is currently added to a component tree.
   bool isMounted = false;
@@ -311,32 +315,27 @@ class Component {
       'add() called before the game has a layout. Did you try to add '
       'components from the constructor? Use the onLoad() method instead.',
     );
-    if (!parent.isMounted) {
-      (root!.addQueue[parent] ??= Queue()).addLast(this);
-      return;
-    }
 
     _parent = parent;
     debugMode |= parent.debugMode;
     onGameResize(root!.canvasSize);
     root!.enqueueChild(parent: parent, child: this);
 
-    if (!isLoaded) {
+    if (isLoaded) {
+      mount();
+    } else {
       final onLoadFuture = onLoad();
       if (onLoadFuture == null) {
         isLoaded = true;
+        mount();
       } else {
         onLoadFuture.then<void>((_) {
           isLoaded = true;
-          onMount();
+          mount();
         });
         return;
       }
     }
-    onMount();
-    // Component will only be marked [isMounted] after it was added to the
-    // `children` set of its parent.
-    // See [ComponentTreeRoot._processChildrenQueue].
   }
 
   /// Removes a component from the component tree, calling [onRemove] for it and
@@ -359,6 +358,22 @@ class Component {
   void changeParent(Component component) {
     parent?.remove(this);
     nextParent = component;
+  }
+
+  @internal
+  void mount() {
+    assert(_parent != null);
+    assert(isLoaded && !isMounted);
+    isReadyToMount = false;
+    if (_parent!.isMounted) {
+      onMount();
+      isReadyToMount = true;
+      // Component will only be marked [isMounted] after it was added to the
+      // `children` set of its parent.
+      // See [ComponentTreeRoot._processChildrenQueue].
+    } else {
+      root!.enqueueMount(this);
+    }
   }
 
   //#endregion

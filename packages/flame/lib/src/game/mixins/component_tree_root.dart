@@ -21,7 +21,7 @@ import 'game.dart';
 ///   - call [processComponentQueues] on every game tick.
 mixin ComponentTreeRoot on Game {
   final Map<Component, Queue<Component>> childrenQueue = {};
-  final Map<Component, Queue<Component>> addQueue = {};
+  final Queue<Component> mountQueue = Queue();
 
   /// Current size of the game widget.
   ///
@@ -42,7 +42,7 @@ mixin ComponentTreeRoot on Game {
   Future<void> ready() {
     return Future.doWhile(() async {
       processComponentQueues();
-      return addQueue.isNotEmpty || childrenQueue.isNotEmpty;
+      return childrenQueue.isNotEmpty || mountQueue.isNotEmpty;
     });
   }
 
@@ -50,40 +50,33 @@ mixin ComponentTreeRoot on Game {
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
     canvasSize.setFrom(size);
-    // Components that wait in the queue to be added, still need to be informed
-    // about changes in the game canvas size.
-    addQueue.forEach((_, queue) {
-      queue.forEach((c) => c.onGameResize(size));
-    });
+    // Components that wait in the queues, still need to be informed about
+    // changes in the game canvas size.
     childrenQueue.forEach((_, queue) {
       queue.forEach((c) => c.onGameResize(size));
     });
+    mountQueue.forEach((c) => c.onGameResize(size));
   }
 
   /// Enlist [child] to be added to [parent]'s `children` when the child becomes
   /// ready.
   @internal
   void enqueueChild({required Component parent, required Component child}) {
+    assert(child.parent == parent);
     (childrenQueue[parent] ??= Queue()).add(child);
+  }
+
+  @internal
+  void enqueueMount(Component component) {
+    mountQueue.add(component);
   }
 
   /// Attempts to resolve pending events in all lifecycle event queues.
   ///
   /// Must not be called when iterating the component tree.
   void processComponentQueues() {
-    _processAddQueue();
     _processChildrenQueue();
-  }
-
-  void _processAddQueue() {
-    final keysToRemove = <Component>[];
-    addQueue.forEach((Component parent, Queue<Component> queue) {
-      if (parent.isMounted) {
-        queue.forEach(parent.add);
-        keysToRemove.add(parent);
-      }
-    });
-    keysToRemove.forEach(addQueue.remove);
+    _processMountQueue();
   }
 
   void _processChildrenQueue() {
@@ -91,7 +84,7 @@ mixin ComponentTreeRoot on Game {
     childrenQueue.forEach((Component parent, Queue<Component> queue) {
       while (queue.isNotEmpty) {
         final x = queue.first;
-        if (x.isLoaded) {
+        if (x.isReadyToMount) {
           queue.removeFirst();
           parent.children.addChild(x);
           x.isMounted = true;
@@ -104,5 +97,26 @@ mixin ComponentTreeRoot on Game {
       }
     });
     keysToRemove.forEach(childrenQueue.remove);
+  }
+
+  void _processMountQueue() {
+    if (mountQueue.isEmpty) {
+      return;
+    }
+    var searchForMountCandidates = true;
+    while (searchForMountCandidates) {
+      searchForMountCandidates = false;
+      // Find the first component eligible for mounting, and mount it. Then we
+      // remove that element from the queue, and break out of loop because it's
+      // illegal to continue iteration after modifying the queue.
+      for (final component in mountQueue) {
+        if (component.parent!.isMounted) {
+          mountQueue.remove(component);
+          component.mount();
+          searchForMountCandidates = true;
+          break;
+        }
+      }
+    }
   }
 }

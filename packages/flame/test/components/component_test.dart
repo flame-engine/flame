@@ -21,7 +21,6 @@ class _PrepareGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     add(prepareParent = _ParentOnPrepareComponent());
-    await ready();
   }
 }
 

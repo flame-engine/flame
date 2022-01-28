@@ -59,12 +59,17 @@ void main() {
         final wrapper = Component();
         wrapper.add(child);
 
-        expect(child.isLoaded, false);
+        expect(child.isLoaded, true);
+        expect(child.isReadyToMount, false);
+        expect(child.isMounted, false);
         expect(wrapper.contains(child), false);
 
-        await game.ensureAdd(wrapper);
+        game.add(wrapper);
+        await game.ready();
 
         expect(child.isLoaded, true);
+        expect(child.isReadyToMount, true);
+        expect(child.isMounted, true);
         expect(wrapper.contains(child), true);
       },
     );
