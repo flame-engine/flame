@@ -6,6 +6,7 @@ import '../components/component.dart';
 import '../extensions/vector2.dart';
 import 'camera/camera.dart';
 import 'camera/camera_wrapper.dart';
+import 'mixins/component_tree_root.dart';
 import 'mixins/game.dart';
 import 'projector.dart';
 
@@ -35,10 +36,6 @@ class FlameGame extends Component with Game, ComponentTreeRoot {
   /// This does not match the Flutter widget size; for that see [canvasSize].
   @override
   Vector2 get size => camera.gameSize;
-
-  /// This is the original Flutter widget size, without any transformation.
-  @override
-  Vector2 get canvasSize => camera.canvasSize;
 
   /// This implementation of render renders each component, making sure the
   /// canvas is reset for each one.
