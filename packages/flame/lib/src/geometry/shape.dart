@@ -12,6 +12,7 @@ abstract class Shape extends PositionComponent with HasPaint {
   // TODO(spydon): is this needed
   final Vector2 halfSize;
   late void Function() _sizeListener;
+  bool renderShape = true;
 
   Shape({
     Vector2? position,

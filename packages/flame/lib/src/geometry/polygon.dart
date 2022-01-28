@@ -17,16 +17,19 @@ class Polygon extends Shape {
   late final List<Vector2> _globalVertices;
   late final List<LineSegment> _lineSegments;
   final Path _path = Path();
+  final bool _manuallySized;
 
   final _cachedGlobalVertices = ValueCache<List<Vector2>>();
 
   /// With this constructor you create your [Polygon] from positions in your
-  /// intended space. It will automatically calculate the [size] of the Polygon.
+  /// intended space. It will automatically calculate the [size] of the Polygon
+  /// if no size it given.
   /// NOTE: Always define your polygon in a counter-clockwise fashion (in the
   /// screen coordinate system).
   Polygon(
     this._vertices, {
     Vector2? position,
+    Vector2? size,
     Vector2? scale,
     double? angle,
     Anchor? anchor,
@@ -36,18 +39,20 @@ class Polygon extends Shape {
           _vertices.length > 3,
           'Number of vertices are too few to create a polygon',
         ),
+        _manuallySized = size != null,
         super(
           position: position,
+          size: size,
           scale: scale,
           angle: angle,
           anchor: anchor,
           priority: priority,
           paint: paint,
         ) {
-    final verticesLength = vertices.length;
     print('Vertices: $vertices');
     refreshVertices();
 
+    final verticesLength = vertices.length;
     _globalVertices = List.generate(
       verticesLength,
       (_) => Vector2.zero(),
@@ -58,32 +63,6 @@ class Polygon extends Shape {
       (_) => LineSegment.zero(),
       growable: false,
     );
-  }
-
-  @protected
-  void refreshVertices({List<Vector2>? newVertices}) {
-    assert(
-      newVertices == null || newVertices.length == _vertices.length,
-      'A polygon can not change their number of vertices',
-    );
-    newVertices?.forEachIndexed((i, vertex) {
-      _vertices[i].setFrom(newVertices[i]);
-    });
-    _path
-      ..reset()
-      ..addPolygon(
-        vertices.map((p) => p.toOffset()).toList(growable: false),
-        true,
-      );
-    // These bounds also have a start position
-    final bounds = _path.getBounds();
-    print(size);
-    size = (bounds.size + bounds.topLeft).toVector2();
-    // TODO: Do we need to set the size here so that it has a better AABB
-    //final boundingRect = _path.getBounds();
-    //final topLeft = boundingRect.topLeft.toVector2();
-    //size = boundingRect.size.toVector2();
-    //position = Anchor.topLeft.toOtherAnchorPosition(topLeft, anchor, size);
   }
 
   /// Normals are always defined from the center
@@ -100,6 +79,7 @@ class Polygon extends Shape {
   }) : this(
           normalsToVertices(normals, size),
           position: position,
+          size: size,
           angle: angle,
           anchor: anchor,
           scale: scale,
@@ -120,6 +100,34 @@ class Polygon extends Shape {
             ..add(halfSize),
         )
         .toList(growable: false);
+  }
+
+  @protected
+  void refreshVertices({List<Vector2>? newVertices}) {
+    assert(
+      newVertices == null || newVertices.length == _vertices.length,
+      'A polygon can not change their number of vertices',
+    );
+    newVertices?.forEachIndexed((i, vertex) {
+      _vertices[i].setFrom(newVertices[i]);
+    });
+    _path
+      ..reset()
+      ..addPolygon(
+        vertices.map((p) => p.toOffset()).toList(growable: false),
+        true,
+      );
+    // These bounds also have a start position
+    final bounds = _path.getBounds();
+    print('refresh size: $size');
+    if (!_manuallySized) {
+      size = (bounds.size + bounds.topLeft).toVector2();
+    }
+    // TODO: Do we need to set the size here so that it has a better AABB
+    //final boundingRect = _path.getBounds();
+    //final topLeft = boundingRect.topLeft.toVector2();
+    //size = boundingRect.size.toVector2();
+    //position = Anchor.topLeft.toOtherAnchorPosition(topLeft, anchor, size);
   }
 
   // TODO(spydon): Move to HitboxPolygon.fill
@@ -184,14 +192,15 @@ class Polygon extends Shape {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawPath(_path, paint);
+    if (renderShape) {
+      canvas.drawPath(_path, paint);
+    }
   }
 
   /// Checks whether the polygon contains the [point].
   /// Note: The polygon needs to be convex for this to work.
   @override
   bool containsPoint(Vector2 point) {
-    print('THIS IS CALLED');
     // If the size is 0 then it can't contain any points
     if (size.x == 0 || size.y == 0) {
       return false;

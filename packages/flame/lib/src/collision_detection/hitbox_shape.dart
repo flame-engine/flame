@@ -8,6 +8,13 @@ import '../geometry/shape_intersections.dart' as intersection_system;
 mixin HitboxShape on Shape implements HasHitboxes {
   @override
   bool isLeafHitbox = true;
+
+  @override
+  bool get renderShape => _renderShape || debugMode;
+  @override
+  set renderShape(bool shouldRender) => _renderShape = shouldRender;
+  bool _renderShape = false;
+
   @protected
   late PositionComponent hitboxParent;
   void Function()? _parentSizeListener;
@@ -31,15 +38,6 @@ mixin HitboxShape on Shape implements HasHitboxes {
       _parentSizeListener?.call();
       hitboxParent.size.addListener(_parentSizeListener!);
     }
-  }
-
-  @override
-  void render(_) {}
-
-  @override
-  void renderDebugMode(Canvas c) {
-    super.render(c);
-    super.renderDebugMode(c);
   }
 
   @override
