@@ -31,12 +31,13 @@ class Component {
   bool _loaded = false;
 
   /// Whether this component is currently added to a component tree.
-  bool isMounted = false;
+  bool get isMounted => _mounted;
+  bool _mounted = false;
 
   /// This is set to true when the component finishes running [onMount]. This
   /// signals that the component can now be added to the parent's children list.
-  @internal
-  bool isPrepared = false;
+  bool get isPrepared => _prepared;
+  bool _prepared = false;
 
   /// If the component has a parent it will be set here.
   Component? _parent;
@@ -230,7 +231,8 @@ class Component {
   @mustCallSuper
   void onRemove() {
     _children?.forEach((child) => child.onRemove());
-    isMounted = false;
+    _mounted = false;
+    _prepared = false;
     _parent = null;
     nextParent?.add(this);
     nextParent = null;
@@ -363,11 +365,10 @@ class Component {
   @internal
   void mount() {
     assert(_parent != null);
-    assert(isLoaded && !isMounted);
-    isPrepared = false;
+    assert(_loaded && !_mounted && !_prepared);
     if (_parent!.isMounted) {
       onMount();
-      isPrepared = true;
+      _prepared = true;
       // Component will only be marked [isMounted] after it was added to the
       // `children` set of its parent.
       // See [ComponentTreeRoot._processChildrenQueue].
@@ -435,6 +436,11 @@ class Component {
   /// component list isn't re-ordered when it is called.
   /// See FlameGame.changePriority instead.
   void changePriorityWithoutResorting(int priority) => _priority = priority;
+
+  /// Invoked from [ComponentTreeRoot] to inform that the component is now
+  /// fully mounted (i.e. it was added to the parent's children list).
+  @internal
+  void doneMounting() => _mounted = true;
 
   /// Component at the root of the component tree. This node serves as the
   /// central place for resolving lifecycle event queues, and also facilitates

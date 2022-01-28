@@ -90,7 +90,7 @@ class FlameGame extends Component with Game, ComponentTreeRoot {
   @override
   @mustCallSuper
   void onGameResize(Vector2 canvasSize) {
-    isMounted = true;
+    doneMounting();
     camera.handleResize(canvasSize);
     super.onGameResize(canvasSize); // Game.onGameResize
     // [onGameResize] is declared both in [Component] and in [Game]. Since

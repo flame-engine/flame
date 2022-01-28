@@ -87,7 +87,7 @@ mixin ComponentTreeRoot on Game {
         if (x.isPrepared) {
           queue.removeFirst();
           parent.children.addChild(x);
-          x.isMounted = true;
+          x.doneMounting();
         } else {
           break;
         }
