@@ -327,6 +327,12 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                     if (snapshot.hasError) {
                       final errorBuilder = widget.errorBuilder;
                       if (errorBuilder == null) {
+                        // @Since('2.16')
+                        // throw Error.throwWithStackTrace(
+                        //   snapshot.error!,
+                        //   snapshot.stackTrace,
+                        // )
+                        print(snapshot.stackTrace);
                         throw snapshot.error!;
                       } else {
                         return errorBuilder(context, snapshot.error!);
