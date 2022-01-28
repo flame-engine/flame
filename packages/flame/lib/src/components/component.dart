@@ -39,11 +39,9 @@ class Component {
   bool get isPrepared => _prepared;
   bool _prepared = false;
 
-  /// If the component has a parent it will be set here.
-  Component? _parent;
-
-  /// Get the current parent of the component, if there is one, otherwise null.
+  /// The current parent of the component, or null if there is none.
   Component? get parent => _parent;
+  Component? _parent;
 
   /// If the component should be added to another parent once it has been
   /// removed from its current parent.
