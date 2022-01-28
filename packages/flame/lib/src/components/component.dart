@@ -282,29 +282,31 @@ class Component {
   /// each of them loads.
   ///
   /// A component can be added to a parent which may not be mounted to the game
-  /// tree yet. In such case, loading and mounting of the [component] will be
-  /// delayed until such time when the parent becomes mounted. For this reason
-  /// [add] cannot be an async operation. However, if you still need to await
-  /// until the component is actually added to the game (for example for testing
-  /// purposes), then use [ComponentTreeRoot.ready].
+  /// tree yet. In such case, the component will start loading immediately, but
+  /// its mounting will be delayed until such time when the parent becomes
+  /// mounted.
+  ///
+  /// This method returns a future that completes when the component is done
+  /// loading, and mounting if the parent is currently mounted. However, this
+  /// future will not guarantee that the component will become "fully mounted":
+  /// it still needs to be added to the parent's children list, and that
+  /// operation will only be done on the next game tick.
   ///
   /// A component can only be added to one parent at a time. It is an error to
   /// try to add it to multiple parents, or even to the same parent multiple
   /// times. If you need to change the parent of a component, use [changeParent]
   /// method.
-  void add(Component component) => component.addToParent(this);
+  Future<void> add(Component component) => component.addToParent(this);
 
-  /// Adds multiple children.
-  ///
-  /// See [add] for details.
-  void addAll(Iterable<Component> components) {
-    components.forEach(add);
+  /// A convenience method to [add] multiple children once.
+  Future<void> addAll(Iterable<Component> components) {
+    return Future.wait(components.map(add));
   }
 
   /// Adds this component to the given [parent].
   ///
   /// See [add] for details.
-  void addToParent(Component parent) {
+  Future<void> addToParent(Component parent) async {
     assert(
       _parent == null,
       'Component $this cannot be added to $parent because it already has a '
@@ -322,20 +324,14 @@ class Component {
     onGameResize(root!.canvasSize);
     root!.enqueueChild(parent: parent, child: this);
 
-    if (isLoaded) {
-      mount();
-    } else {
+    if (!isLoaded) {
       final onLoadFuture = onLoad();
-      if (onLoadFuture == null) {
-        _loaded = true;
-        mount();
-      } else {
-        onLoadFuture.then<void>((_) {
-          _loaded = true;
-          mount();
-        });
+      if (onLoadFuture != null) {
+        await onLoadFuture;
       }
+      _loaded = true;
     }
+    mount();
   }
 
   /// Removes a component from the component tree, calling [onRemove] for it and
