@@ -84,7 +84,7 @@ mixin ComponentTreeRoot on Game {
     childrenQueue.forEach((Component parent, Queue<Component> queue) {
       while (queue.isNotEmpty) {
         final x = queue.first;
-        if (x.isReadyToMount) {
+        if (x.isPrepared) {
           queue.removeFirst();
           parent.children.addChild(x);
           x.isMounted = true;

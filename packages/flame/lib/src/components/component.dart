@@ -26,16 +26,17 @@ class Component {
   /// to the root `FlameGame`.
   PositionType positionType = PositionType.game;
 
-  /// Whether this component is done loading through [onLoad].
-  bool isLoaded = false;
+  /// Whether this component has completed its [onLoad] step.
+  bool get isLoaded => _loaded;
+  bool _loaded = false;
+
+  /// Whether this component is currently added to a component tree.
+  bool isMounted = false;
 
   /// This is set to true when the component finishes running [onMount]. This
   /// signals that the component can now be added to the parent's children list.
   @internal
-  bool isReadyToMount = false;
-
-  /// Whether this component is currently added to a component tree.
-  bool isMounted = false;
+  bool isPrepared = false;
 
   /// If the component has a parent it will be set here.
   Component? _parent;
@@ -326,14 +327,13 @@ class Component {
     } else {
       final onLoadFuture = onLoad();
       if (onLoadFuture == null) {
-        isLoaded = true;
+        _loaded = true;
         mount();
       } else {
         onLoadFuture.then<void>((_) {
-          isLoaded = true;
+          _loaded = true;
           mount();
         });
-        return;
       }
     }
   }
@@ -364,10 +364,10 @@ class Component {
   void mount() {
     assert(_parent != null);
     assert(isLoaded && !isMounted);
-    isReadyToMount = false;
+    isPrepared = false;
     if (_parent!.isMounted) {
       onMount();
-      isReadyToMount = true;
+      isPrepared = true;
       // Component will only be marked [isMounted] after it was added to the
       // `children` set of its parent.
       // See [ComponentTreeRoot._processChildrenQueue].
