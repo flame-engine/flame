@@ -1,4 +1,3 @@
-
 import 'dart:collection';
 
 import 'package:meta/meta.dart';
@@ -65,7 +64,7 @@ mixin ComponentTreeRoot on Game {
   /// ready.
   @internal
   void enqueueChild({required Component parent, required Component child}) {
-    (childrenQueue[parent] ??= Queue()).addLast(child);
+    (childrenQueue[parent] ??= Queue()).add(child);
   }
 
   /// Attempts to resolve pending events in all lifecycle event queues.

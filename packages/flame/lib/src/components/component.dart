@@ -247,16 +247,6 @@ class Component {
     }
   }
 
-  /// Remove the component from its parent in the next tick.
-  void removeFromParent() => shouldRemove = true;
-
-  /// Changes the current parent for another parent and prepares the tree under
-  /// the new root.
-  void changeParent(Component component) {
-    parent?.remove(this);
-    nextParent = component;
-  }
-
   /// An iterator producing this component's parent, then its parent's parent,
   /// then the great-grand-parent, and so on, until it reaches a component
   /// without a parent.
@@ -267,6 +257,8 @@ class Component {
       current = current.parent;
     }
   }
+
+  //#region Add/remove components
 
   /// Schedules [component] to be added as a child to this component.
   ///
@@ -295,11 +287,23 @@ class Component {
   /// try to add it to multiple parents, or even to the same parent multiple
   /// times. If you need to change the parent of a component, use [changeParent]
   /// method.
-  void add(Component component) {
+  void add(Component component) => component.addToParent(this);
+
+  /// Adds multiple children.
+  ///
+  /// See [add] for details.
+  void addAll(Iterable<Component> components) {
+    components.forEach(add);
+  }
+
+  /// Adds this component to the given [parent].
+  ///
+  /// See [add] for details.
+  void addToParent(Component parent) {
     assert(
-      component._parent == null,
-      'Component $component cannot be added to $this because it already has a '
-      'parent: ${component._parent}',
+      _parent == null,
+      'Component $this cannot be added to $parent because it already has a '
+      'parent: $_parent',
     );
     assert(root != null, 'The root of the component tree was not initialized');
     assert(
@@ -307,39 +311,32 @@ class Component {
       'add() called before the game has a layout. Did you try to add '
       'components from the constructor? Use the onLoad() method instead.',
     );
-    if (!isMounted) {
-      (root!.addQueue[this] ??= Queue()).addLast(component);
+    if (!parent.isMounted) {
+      (root!.addQueue[parent] ??= Queue()).addLast(this);
       return;
     }
 
-    component._parent = this;
-    component.debugMode |= debugMode;
-    component.onGameResize(root!.canvasSize);
-    root!.enqueueChild(parent: this, child: component);
+    _parent = parent;
+    debugMode |= parent.debugMode;
+    onGameResize(root!.canvasSize);
+    root!.enqueueChild(parent: parent, child: this);
 
-    if (!component.isLoaded) {
-      final onLoadFuture = component.onLoad();
+    if (!isLoaded) {
+      final onLoadFuture = onLoad();
       if (onLoadFuture == null) {
-        component.isLoaded = true;
+        isLoaded = true;
       } else {
         onLoadFuture.then<void>((_) {
-          component.isLoaded = true;
-          component.onMount();
+          isLoaded = true;
+          onMount();
         });
         return;
       }
     }
-    component.onMount();
+    onMount();
     // Component will only be marked [isMounted] after it was added to the
     // `children` set of its parent.
     // See [ComponentTreeRoot._processChildrenQueue].
-  }
-
-  /// Adds multiple children.
-  ///
-  /// See [add] for details.
-  void addAll(Iterable<Component> components) {
-    components.forEach(add);
   }
 
   /// Removes a component from the component tree, calling [onRemove] for it and
@@ -353,6 +350,18 @@ class Component {
   void removeAll(Iterable<Component> cs) {
     _children?.removeAll(cs);
   }
+
+  /// Remove the component from its parent in the next tick.
+  void removeFromParent() => shouldRemove = true;
+
+  /// Changes the current parent for another parent and prepares the tree under
+  /// the new root.
+  void changeParent(Component component) {
+    parent?.remove(this);
+    nextParent = component;
+  }
+
+  //#endregion
 
   /// Whether the children list contains the given component.
   ///
