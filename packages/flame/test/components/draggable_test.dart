@@ -39,19 +39,11 @@ void main() {
     flameGame.test(
       'make sure they cannot be added to invalid games',
       (game) async {
-        const message =
-            'Draggable Components can only be added to a FlameGame with '
-            'HasDraggables';
-
         expect(
-          () async {
-            game.add(_DraggableComponent());
-            await game.ready();
-          },
-          throwsA(
-            predicate(
-              (e) => e is AssertionError && e.message == message,
-            ),
+          () => game.add(_DraggableComponent()),
+          failsAssert(
+            'Draggable Components can only be added to a FlameGame with '
+            'HasDraggables',
           ),
         );
       },

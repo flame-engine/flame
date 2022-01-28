@@ -184,12 +184,5 @@ void main() {
         'add() called before the game has a layout. Did you try to add '
         'components from the constructor? Use the onLoad() method instead.';
     expect(() => game.add(component), failsAssert(message));
-    expect(() => PrematurelyInitializedGame(), failsAssert(message));
   });
-}
-
-class PrematurelyInitializedGame extends FlameGame {
-  PrematurelyInitializedGame() {
-    add(Component());
-  }
 }

@@ -56,10 +56,7 @@ void main() {
       'make sure they cannot be added to invalid games',
       (game) {
         expect(
-          () async {
-            game.add(_HoverableComponent());
-            await game.ready();
-          },
+          () => game.add(_HoverableComponent()),
           failsAssert(
             'Hoverable Components can only be added to a FlameGame with '
             'HasHoverables',

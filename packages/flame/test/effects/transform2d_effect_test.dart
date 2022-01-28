@@ -24,10 +24,7 @@ void main() {
 
         final effect2 = _MyEffect(EffectController(duration: 1));
         expect(
-          () async {
-            game.add(effect2);
-            await game.ready();
-          },
+          () => game.add(effect2),
           throwsA(isA<UnsupportedError>()),
         );
       },

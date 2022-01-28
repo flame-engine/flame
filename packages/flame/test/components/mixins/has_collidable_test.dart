@@ -10,10 +10,7 @@ void main() {
       "can't add collidables to a game without HasCollidables",
       (game) {
         expect(
-          () async {
-            game.add(_MyCollidable());
-            await game.ready();
-          },
+          () => game.add(_MyCollidable()),
           failsAssert(
             'You can only use the HasHitboxes/Collidable feature with games '
             'that has the HasCollidables mixin',
