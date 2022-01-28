@@ -32,8 +32,9 @@ class Component {
   bool get isMounted => _mounted;
   bool _mounted = false;
 
-  /// This is set to true when the component finishes running [onMount]. This
-  /// signals that the component can now be added to the parent's children list.
+  /// Set to true once the component finishes running [onMount]; set to false
+  /// when the component unmounts. This signals that the component is allowed
+  /// to be added to the parent's children list.
   bool get isPrepared => _prepared;
   bool _prepared = false;
 
@@ -223,17 +224,6 @@ class Component {
     }
   }
 
-  /// Called right before the component is removed from the game.
-  @mustCallSuper
-  void onRemove() {
-    _children?.forEach((child) => child.onRemove());
-    _mounted = false;
-    _prepared = false;
-    _parent = null;
-    nextParent?.add(this);
-    nextParent = null;
-  }
-
   //#endregion
 
   void renderDebugMode(Canvas canvas) {}
@@ -250,6 +240,16 @@ class Component {
     }
   }
 
+  /// Remove the component from its parent in the next tick.
+  void removeFromParent() => shouldRemove = true;
+
+  /// Changes the current parent for another parent and prepares the tree under
+  /// the new root.
+  void changeParent(Component component) {
+    parent?.remove(this);
+    nextParent = component;
+  }
+
   /// An iterator producing this component's parent, then its parent's parent,
   /// then the great-grand-parent, and so on, until it reaches a component
   /// without a parent.
@@ -259,6 +259,17 @@ class Component {
       yield current;
       current = current.parent;
     }
+  }
+
+  /// Called right before the component is removed from the game.
+  @mustCallSuper
+  void onRemove() {
+    _children?.forEach((child) => child.onRemove());
+    _mounted = false;
+    _prepared = false;
+    _parent = null;
+    nextParent?.add(this);
+    nextParent = null;
   }
 
   //#region Add/remove components
@@ -296,19 +307,17 @@ class Component {
   /// method.
   Future<void> add(Component component) => component.addToParent(this);
 
-  /// A convenience method to [add] multiple children once.
+  /// A convenience method to [add] multiple children at once.
   Future<void> addAll(Iterable<Component> components) {
     return Future.wait(components.map(add));
   }
 
-  /// Adds this component to the given [parent].
-  ///
-  /// See [add] for details.
+  /// Adds this component to the provided [parent] (see [add] for details).
   Future<void> addToParent(Component parent) async {
     assert(
       _parent == null,
-      'Component $this cannot be added to $parent because it already has a '
-      'parent: $_parent',
+      '$this cannot be added to $parent because it already has a parent: '
+      '$_parent',
     );
     assert(root != null, 'The root of the component tree was not initialized');
     assert(
@@ -342,16 +351,6 @@ class Component {
   /// and their children.
   void removeAll(Iterable<Component> cs) {
     _children?.removeAll(cs);
-  }
-
-  /// Remove the component from its parent in the next tick.
-  void removeFromParent() => shouldRemove = true;
-
-  /// Changes the current parent for another parent and prepares the tree under
-  /// the new root.
-  void changeParent(Component component) {
-    parent?.remove(this);
-    nextParent = component;
   }
 
   @internal
@@ -446,10 +445,12 @@ class Component {
   /// `Component.childrenFactory` is the default method for creating children
   /// containers within all components. Replace this method if you want to have
   /// customized (non-default) [ComponentSet] instances in your project.
-  static ComponentSet Function() childrenFactory = ComponentSet.createDefault;
+  static ComponentSetFactory childrenFactory = ComponentSet.createDefault;
 
   /// This method creates the children container for the current component.
   /// Override this method if you need to have a custom [ComponentSet] within
   /// a particular class.
   ComponentSet createComponentSet() => childrenFactory();
 }
+
+typedef ComponentSetFactory = ComponentSet Function();
