@@ -31,7 +31,7 @@ void main() {
       expect(component.size, closeToVector(2, 2));
     });
 
-    flameGame.test('absolute', (game) async{
+    flameGame.test('absolute', (game) async {
       final component = PositionComponent();
       await game.ensureAdd(component);
 
