@@ -14,8 +14,7 @@ void main() {
     withTappables.test(
       'make sure Tappables can be added to valid games',
       (game) async {
-        game.add(_TappableComponent());
-        await game.ready();
+        await game.ensureAdd(_TappableComponent());
       },
     );
 

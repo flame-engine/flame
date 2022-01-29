@@ -64,8 +64,7 @@ void main() {
         expect(child.isMounted, false);
         expect(wrapper.contains(child), false);
 
-        game.add(wrapper);
-        await game.ready();
+        await game.ensureAdd(wrapper);
 
         expect(child.isLoaded, true);
         expect(child.isPrepared, true);
