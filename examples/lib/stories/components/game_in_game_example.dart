@@ -24,8 +24,9 @@ class GameInGameExample extends FlameGame with HasDraggables {
     composedGame = ComposabilityExample();
     draggablesGame = DraggablesExample(zoom: 1.0);
     Component.root = this;
-    add(composedGame);
-    add(draggablesGame);
+    await add(composedGame);
+    await add(draggablesGame);
+
     add(GameChangeTimer());
   }
 }

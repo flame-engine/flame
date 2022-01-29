@@ -83,5 +83,56 @@ void main() {
         ],
       );
     });
+
+    flameGame.test(
+      'components added in correct order even with different load times',
+      (game) async {
+        final a = SlowComponent(0.1);
+        final b = SlowComponent(0.02);
+        final c = SlowComponent(0.05);
+        final d = SlowComponent(0);
+        game.add(a);
+        game.add(b);
+        game.add(c);
+        game.add(d);
+        await game.ready();
+        expect(game.children.toList(), equals([a, b, c, d]));
+      },
+    );
+
+    flameGame.test(
+      'Component starts loading before the parent is mounted',
+      (game) async {
+        final parent = Component();
+        final child = SlowComponent(0.01);
+        final future = child.addToParent(parent);
+        expect(parent.isMounted, false);
+        expect(parent.isLoaded, false);
+        expect(child.isMounted, false);
+        expect(child.isLoaded, false); // not yet..
+        await future;
+        expect(parent.isMounted, false);
+        expect(child.isLoaded, true);
+        expect(child.isPrepared, false); // can't prepare until parent mounted
+        expect(child.isMounted, false);
+
+        game.add(parent);
+        expect(parent.isLoaded, true);
+        await game.ready();
+        expect(child.isPrepared, true);
+        expect(child.isMounted, true);
+      },
+    );
   });
+}
+
+class SlowComponent extends Component {
+  SlowComponent(this.loadTime);
+  final double loadTime;
+
+  @override
+  Future<void> onLoad() async {
+    final ms = (loadTime * 1000).toInt();
+    await Future<int?>.delayed(Duration(milliseconds: ms));
+  }
 }

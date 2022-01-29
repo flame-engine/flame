@@ -64,6 +64,8 @@ mixin ComponentTreeRoot on Game {
   Future<void> ready() {
     return Future.doWhile(() async {
       processComponentQueues();
+      // Give chance to other futures to execute too
+      await Future<void>.delayed(const Duration());
       return childrenQueue.isNotEmpty || mountQueue.isNotEmpty;
     });
   }

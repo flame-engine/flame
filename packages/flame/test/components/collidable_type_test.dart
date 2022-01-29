@@ -332,10 +332,10 @@ void main() {
 
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
-      expect(blockA.collisions, {blockB, innerBlockB});
-      expect(blockB.collisions, {blockA, innerBlockA});
-      expect(innerBlockA.collisions, {blockB, innerBlockB});
-      expect(innerBlockB.collisions, {blockA, innerBlockA});
+      expect(blockA.collisions, <Collidable>{blockB, innerBlockB});
+      expect(blockB.collisions, <Collidable>{blockA, innerBlockA});
+      expect(innerBlockA.collisions, <Collidable>{blockB, innerBlockB});
+      expect(innerBlockB.collisions, <Collidable>{blockA, innerBlockA});
     });
   });
 }
