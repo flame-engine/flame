@@ -9,18 +9,40 @@ import 'game.dart';
 /// This mixin is used to designate a class as a root of the component tree.
 ///
 /// There should be only one [ComponentTreeRoot] in an application. Usually this
-/// role is fulfilled by the `FlameGame`, so this class is rarely used directly.
+/// role is fulfilled by the `FlameGame`, so you rarely use this mixin directly.
 ///
-/// The purpose of this mixin is to collect common facilities for component
+/// The purpose of this mixin is to host common facilities for component
 /// lifecycle management. These include: lifecycle event queues, and the canvas
-/// size for [Component.onGameResize].
+/// size used during [Component.onGameResize].
 ///
 /// In order to use this mixin in a custom [Game], do the following:
 ///   - add this mixin to your game class;
 ///   - set it as the default [Component.root];
 ///   - call [processComponentQueues] on every game tick.
 mixin ComponentTreeRoot on Game {
+  /// Global queues for adding children to components.
+  ///
+  /// The keys in this map are the parents, and the values are the queues of
+  /// components that need to be added to the parents.
+  ///
+  /// When the user `add()`s a component to a parent, we immediately place it
+  /// into the parent's queue, and only after that do the standard lifecycle
+  /// processing: resizing, loading, mounting, etc. After all that is finished,
+  /// the component is retrieved from the queue and placed into the parent's
+  /// children list.
+  ///
+  /// Since the components are processed in the FIFO order, this ensures that
+  /// they will be added to the parent in exactly the same order as the user
+  /// invoked `add()`s, even though they are loading asynchronously and may
+  /// finish loading in arbitrary order.
   final Map<Component, Queue<Component>> childrenQueue = {};
+
+  /// Global queue of components that need to be mounted.
+  ///
+  /// Occasionally, a component may be added to a parent that hasn't been
+  /// mounted yet. In such a case, the child component must wait until its
+  /// parent mounts before it can mount too. Such components are placed into
+  /// this queue.
   final Queue<Component> mountQueue = Queue();
 
   /// Current size of the game widget.
@@ -66,14 +88,21 @@ mixin ComponentTreeRoot on Game {
     (childrenQueue[parent] ??= Queue()).add(child);
   }
 
+  /// Put [component] into the waiting list to be mounted.
   @internal
   void enqueueMount(Component component) {
     mountQueue.add(component);
   }
 
-  /// Attempts to resolve pending events in all lifecycle event queues.
+  /// Attempt to resolve pending events in all lifecycle event queues.
   ///
-  /// Must not be called when iterating the component tree.
+  /// This method must be periodically invoked by the game engine, in order to
+  /// ensure that the components get properly added/removed from the component
+  /// tree.
+  ///
+  /// This method must not be called when iterating the component tree, as it
+  /// may attempt to modify that tree, which would result in a "concurrent
+  /// modification during iteration" error.
   void processComponentQueues() {
     _processChildrenQueue();
     _processMountQueue();
