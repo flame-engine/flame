@@ -303,8 +303,8 @@ class Component {
   ///
   /// A component can only be added to one parent at a time. It is an error to
   /// try to add it to multiple parents, or even to the same parent multiple
-  /// times. If you need to change the parent of a component, use [changeParent]
-  /// method.
+  /// times. If you need to change the parent of a component, use the
+  /// [changeParent] method.
   Future<void> add(Component component) => component.addToParent(this);
 
   /// A convenience method to [add] multiple children at once.
