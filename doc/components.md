@@ -39,7 +39,7 @@ like loading an image for example. This method is executed after `onGameResize`,
 you can think of it as an "asynchronous constructor". 
 
 The `onMount` method runs every time when the component is mounted into a game tree. This means that 
-you should not initialize `late` variables here, since this method might run several times 
+you should not initialize `late final` variables here, since this method might run several times
 throughout the component's lifetime. This method will only run if the parent is already mounted.
 If the parent is not mounted yet, then this method will wait in a queue (this will have no effect
 on the rest of the game engine). 
