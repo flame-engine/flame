@@ -9,7 +9,7 @@ class FlameTsxProvider implements TsxProvider {
   /// Parsed data for this tsx file.
   final String data;
 
-  // Stored filename for corresponding tsx file.
+  /// Stored filename for corresponding tsx file.
   final String _filename;
 
   FlameTsxProvider._(this.data, this._filename);
