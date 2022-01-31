@@ -20,10 +20,20 @@ void main() {
   });
 
   test('correctly loads external tileset', () async {
-    final externalTileset =
-        await FlameTsxProvider().loadSource('external_tileset_1.tsx');
+    final tsxProvider = await FlameTsxProvider.parse('external_tileset_1.tsx');
+
+    expect(tsxProvider.getChachedSource() != null, true);
     expect(
-      externalTileset.getSingleChild('tileset').getString('name') == 'level1',
+      tsxProvider
+              .getChachedSource()!
+              .getSingleChild('tileset')
+              .getString('name') ==
+          'level1',
+      true,
+    );
+
+    expect(
+      tsxProvider.filename == 'external_tileset_1.tsx',
       true,
     );
   });
