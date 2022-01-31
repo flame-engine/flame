@@ -37,14 +37,6 @@ mixin ComponentTreeRoot on Game {
   /// finish loading in arbitrary order.
   final Map<Component, Queue<Component>> childrenQueue = {};
 
-  /// Global queue of components that need to be mounted.
-  ///
-  /// Occasionally, a component may be added to a parent that hasn't been
-  /// mounted yet. In such a case, the child component must wait until its
-  /// parent mounts before it can mount too. Such components are placed into
-  /// this queue.
-  final Queue<Component> mountQueue = Queue();
-
   /// Current size of the game widget.
   ///
   /// The [onGameResize] callback will keep this variable up-to-date whenever
@@ -66,7 +58,7 @@ mixin ComponentTreeRoot on Game {
       processComponentQueues();
       // Give chance to other futures to execute too
       await Future<void>.delayed(const Duration());
-      return childrenQueue.isNotEmpty || mountQueue.isNotEmpty;
+      return childrenQueue.isNotEmpty;
     });
   }
 
@@ -79,7 +71,6 @@ mixin ComponentTreeRoot on Game {
     childrenQueue.forEach((_, queue) {
       queue.forEach((c) => c.onGameResize(size));
     });
-    mountQueue.forEach((c) => c.onGameResize(size));
   }
 
   /// Enlist [child] to be added to [parent]'s `children` when the child becomes
@@ -88,12 +79,6 @@ mixin ComponentTreeRoot on Game {
   void enqueueChild({required Component parent, required Component child}) {
     assert(child.parent == parent);
     (childrenQueue[parent] ??= Queue()).add(child);
-  }
-
-  /// Put [component] into the waiting list to be mounted.
-  @internal
-  void enqueueMount(Component component) {
-    mountQueue.add(component);
   }
 
   /// Attempt to resolve pending events in all lifecycle event queues.
@@ -107,7 +92,6 @@ mixin ComponentTreeRoot on Game {
   /// modification during iteration" error.
   void processComponentQueues() {
     _processChildrenQueue();
-    _processMountQueue();
   }
 
   void _processChildrenQueue() {
@@ -128,26 +112,5 @@ mixin ComponentTreeRoot on Game {
       }
     });
     keysToRemove.forEach(childrenQueue.remove);
-  }
-
-  void _processMountQueue() {
-    if (mountQueue.isEmpty) {
-      return;
-    }
-    var searchForMountCandidates = true;
-    while (searchForMountCandidates) {
-      searchForMountCandidates = false;
-      // Find the first component eligible for mounting, and mount it. Then we
-      // remove that element from the queue, and break out of loop because it's
-      // illegal to continue iteration after modifying the queue.
-      for (final component in mountQueue) {
-        if (component.parent!.isMounted) {
-          mountQueue.remove(component);
-          component.mount();
-          searchForMountCandidates = true;
-          break;
-        }
-      }
-    }
   }
 }
