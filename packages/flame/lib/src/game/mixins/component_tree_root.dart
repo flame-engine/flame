@@ -53,13 +53,12 @@ mixin ComponentTreeRoot on Game {
   /// Warning: awaiting on a game that was not fully connected will result in an
   /// infinite loop. For example, this could occur if you run `x.add(y)` but
   /// then forget to mount `x` into the game.
-  Future<void> ready() {
-    return Future.doWhile(() async {
-      processComponentQueues();
-      // Give chance to other futures to execute too
+  Future<void> ready() async {
+    while (childrenQueue.isNotEmpty) {
+      // Give chance to other futures to execute first
       await Future<void>.delayed(const Duration());
-      return childrenQueue.isNotEmpty;
-    });
+      processComponentQueues();
+    }
   }
 
   @override
