@@ -363,8 +363,42 @@ class Component {
       // Component will only be marked [isMounted] after it was added to the
       // `children` set of its parent.
       // See [ComponentTreeRoot._processChildrenQueue].
-    } else {
-      root!.enqueueMount(this);
+    }
+  }
+
+  /// Used to mount components that are already in the [children] list of a
+  /// component that was just mounted. The difference from regular [mount] is
+  /// that since the component is already in [children], it can be marked as
+  /// [isMounted] immediately. Also, we need to trigger [onGameResize], since
+  /// this mounting is not caused by [add].
+  @internal
+  void remount() {
+    assert(_loaded && !_prepared && !_mounted);
+    assert(_parent!.isMounted);
+    onGameResize(root!.canvasSize);
+    onMount();
+    _prepared = true;
+    _mounted = true;
+    if (_children != null) {
+      _children!.forEach((child) => child.remount());
+    }
+  }
+
+  /// Invoked from [ComponentTreeRoot] to inform that the component is now
+  /// fully mounted (i.e. it was added to the parent's children list).
+  @internal
+  void doneMounting() {
+    _mounted = true;
+    if (_children != null) {
+      _children!.forEach((child) => child.remount());
+    }
+    if (root!.childrenQueue.containsKey(this)) {
+      final queue = root!.childrenQueue[this]!;
+      queue.forEach((child) {
+        if (child.isLoaded) {
+          child.mount();
+        }
+      });
     }
   }
 
@@ -427,11 +461,6 @@ class Component {
   /// component list isn't re-ordered when it is called.
   /// See FlameGame.changePriority instead.
   void changePriorityWithoutResorting(int priority) => _priority = priority;
-
-  /// Invoked from [ComponentTreeRoot] to inform that the component is now
-  /// fully mounted (i.e. it was added to the parent's children list).
-  @internal
-  void doneMounting() => _mounted = true;
 
   /// Component at the root of the component tree. This node serves as the
   /// central place for resolving lifecycle event queues, and also facilitates
