@@ -133,7 +133,7 @@ class RenderableTiledMap {
 
     return TileMapParser.parseTmx(
       contents,
-      tsx: tsxProviders.isEmpty ? null : tsxProviders,
+      tsxList: tsxProviders.isEmpty ? null : tsxProviders,
     );
   }
 
