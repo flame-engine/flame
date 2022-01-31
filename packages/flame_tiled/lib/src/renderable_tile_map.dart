@@ -127,7 +127,7 @@ class RenderableTiledMap {
 
     TsxProvider? tsxProvider;
     if (tsxSourcePath != null) {
-      tsxProvider = await FlameTsxProvider.parse(tsxSourcePath);
+      tsxProvider = FlameTsxProvider();
     } else {
       tsxProvider = null;
     }
