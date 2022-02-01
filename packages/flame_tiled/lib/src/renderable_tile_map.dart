@@ -118,20 +118,23 @@ class RenderableTiledMap {
   }
 
   static Future<TiledMap> _loadMap(String contents) async {
-    final tsxSourcePath = XmlDocument.parse(contents)
+    final tsxSourcePaths = XmlDocument.parse(contents)
         .rootElement
         .children
         .whereType<XmlElement>()
-        .firstWhere((element) => element.name.local == 'tileset')
-        .getAttribute('source');
+        .where((element) => element.name.local == 'tileset')
+        .map((e) => e.getAttribute('source'));
 
-    TsxProvider? tsxProvider;
-    if (tsxSourcePath != null) {
-      tsxProvider = await FlameTsxProvider.parse(tsxSourcePath);
-    } else {
-      tsxProvider = null;
-    }
-    return TileMapParser.parseTmx(contents, tsx: tsxProvider);
+    final tsxProviders = await Future.wait(
+      tsxSourcePaths
+          .where((key) => key != null)
+          .map((key) async => FlameTsxProvider.parse(key!)),
+    );
+
+    return TileMapParser.parseTmx(
+      contents,
+      tsxList: tsxProviders.isEmpty ? null : tsxProviders,
+    );
   }
 
   static Future<Map<String, SpriteBatch>> _loadImages(TiledMap map) async {
