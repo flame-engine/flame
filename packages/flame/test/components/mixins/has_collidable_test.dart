@@ -10,7 +10,7 @@ void main() {
       "can't add collidables to a game without HasCollidables",
       (game) {
         expect(
-          () => game.add(_MyCollidable()),
+          () => game.ensureAdd(_MyCollidable()),
           failsAssert(
             'You can only use the HasHitboxes/Collidable feature with games '
             'that has the HasCollidables mixin',

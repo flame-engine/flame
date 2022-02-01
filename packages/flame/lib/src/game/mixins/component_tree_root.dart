@@ -94,22 +94,24 @@ mixin ComponentTreeRoot on Game {
   }
 
   void _processChildrenQueue() {
-    final keysToRemove = <Component>[];
-    childrenQueue.forEach((Component parent, Queue<Component> queue) {
+    final numChildrenQueues = childrenQueue.length;
+    for (final queue in childrenQueue.values) {
       while (queue.isNotEmpty) {
         final x = queue.first;
-        if (x.isPrepared) {
-          queue.removeFirst();
-          parent.children.addChild(x);
-          x.doneMounting();
-        } else {
+        if (!x.isLoaded || !x.parent!.isMounted) {
           break;
         }
+        x.mount();
+        x.parent!.children.addChild(x);
+        x.doneMounting();
+        queue.removeFirst();
       }
-      if (queue.isEmpty) {
-        keysToRemove.add(parent);
+      // Check if [childrenQueue] was modified, in which case we need to stop
+      // iteration, or otherwise an exception will occur.
+      if (childrenQueue.length != numChildrenQueues) {
+        break;
       }
-    });
-    keysToRemove.forEach(childrenQueue.remove);
+    }
+    childrenQueue.removeWhere((parent, queue) => queue.isEmpty);
   }
 }

@@ -338,7 +338,7 @@ class Component {
       }
       _loaded = true;
     }
-    mount();
+    // mount();
   }
 
   /// Removes a component from the component tree, calling [onRemove] for it and
@@ -356,7 +356,7 @@ class Component {
   @internal
   void mount() {
     assert(_parent != null);
-    assert(_loaded && !_mounted && !_prepared);
+    // assert(_loaded && !_mounted && !_prepared);
     if (_parent!.isMounted) {
       onMount();
       _prepared = true;
@@ -392,14 +392,14 @@ class Component {
     if (_children != null) {
       _children!.forEach((child) => child.remount());
     }
-    if (root!.childrenQueue.containsKey(this)) {
-      final queue = root!.childrenQueue[this]!;
-      queue.forEach((child) {
-        if (child.isLoaded) {
-          child.mount();
-        }
-      });
-    }
+    // if (root!.childrenQueue.containsKey(this)) {
+    //   final queue = root!.childrenQueue[this]!;
+    //   queue.forEach((child) {
+    //     if (child.isLoaded) {
+    //       child.mount();
+    //     }
+    //   });
+    // }
   }
 
   //#endregion

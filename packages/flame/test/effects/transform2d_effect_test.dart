@@ -24,7 +24,7 @@ void main() {
 
         final effect2 = _MyEffect(EffectController(duration: 1));
         expect(
-          () => game.add(effect2),
+          () => game.ensureAdd(effect2),
           throwsA(isA<UnsupportedError>()),
         );
       },

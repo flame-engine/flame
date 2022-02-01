@@ -4,8 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 class _MyComponent extends Component {
   final List<String> events;
+  final String? name;
 
-  _MyComponent(this.events);
+  _MyComponent(this.events, [this.name]);
 
   @override
   Future<void> onLoad() async {
@@ -47,8 +48,8 @@ void main() {
     flameGame.test('parent prepares the component', (game) async {
       final parentEvents = <String>[];
       final childEvents = <String>[];
-      final parent = _MyComponent(parentEvents);
-      await parent.add(_MyComponent(childEvents));
+      final parent = _MyComponent(parentEvents, 'parent');
+      await parent.add(_MyComponent(childEvents, 'child'));
       await game.ensureAdd(parent);
 
       // The parent tries to prepare the component before it is added to the
@@ -61,12 +62,13 @@ void main() {
     flameGame.test('correct lifecycle on parent change', (game) async {
       final parentEvents = <String>[];
       final childEvents = <String>[];
-      final parent = _MyComponent(parentEvents);
-      final child = _MyComponent(childEvents);
+      final parent = _MyComponent(parentEvents, 'parent');
+      final child = _MyComponent(childEvents, 'child');
       await parent.add(child);
       await game.ensureAdd(parent);
       child.changeParent(game);
       game.update(0);
+      await game.ready();
 
       expect(parentEvents, ['onGameResize', 'onLoad', 'onMount']);
       // onLoad should only be called the first time that the component is

@@ -22,7 +22,7 @@ void main() {
       'make sure Tappables cannot be added to invalid games',
       (game) {
         expect(
-          () => game.add(_TappableComponent()),
+          () => game.ensureAdd(_TappableComponent()),
           failsAssert(
             'Tappable Components can only be added to a FlameGame with '
             'HasTappables',

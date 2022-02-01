@@ -40,7 +40,7 @@ void main() {
       'make sure they cannot be added to invalid games',
       (game) async {
         expect(
-          () => game.add(_DraggableComponent()),
+          () => game.ensureAdd(_DraggableComponent()),
           failsAssert(
             'Draggable Components can only be added to a FlameGame with '
             'HasDraggables',
