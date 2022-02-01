@@ -137,7 +137,7 @@ Flame を使用して開発を始める際の簡単なチュートリアルは [
   - @Vguzzi の記事 [Building Games in Flutter with Flame](https://www.raywenderlich.com/27407121-building-games-in-flutter-with-flame-getting-started)
   - @DevKage の YouTube シリーズ [Dino run tutorial](https://www.youtube.com/playlist?list=PLiZZKL9HLmWOmQgYxWHuOHOWsUUlhCCOY)
 
-私たちは、ゲーム、ライブラリ、記事に関する精選されたリストを [awesome-flame](https://github.com/flame-engine/awesome-flame) で提供しています。
+私たちはゲーム、ライブラリ、記事に関する精選されたリストを [awesome-flame](https://github.com/flame-engine/awesome-flame) で提供しています。
 
 ここまでで紹介した記事の一部は若干古くなっている可能性がありますが、参考にしてください。
 
