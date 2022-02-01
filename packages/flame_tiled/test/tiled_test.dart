@@ -19,6 +19,25 @@ void main() {
     expect(tiled.tileMap.batchesByLayer.length == 1, true);
   });
 
+  test('correctly loads external tileset', () async {
+    final tsxProvider = await FlameTsxProvider.parse('external_tileset_1.tsx');
+
+    expect(tsxProvider.getChachedSource() != null, true);
+    expect(
+      tsxProvider
+              .getChachedSource()!
+              .getSingleChild('tileset')
+              .getString('name') ==
+          'level1',
+      true,
+    );
+
+    expect(
+      tsxProvider.filename == 'external_tileset_1.tsx',
+      true,
+    );
+  });
+
   group('Layered tiles render correctly with layered sprite batch', () {
     late Uint8List canvasPixelData;
     late RenderableTiledMap overlapMap;
