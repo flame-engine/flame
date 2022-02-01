@@ -35,7 +35,7 @@ mixin ComponentTreeRoot on Game {
   /// they will be added to the parent in exactly the same order as the user
   /// invoked `add()`s, even though they are loading asynchronously and may
   /// finish loading in arbitrary order.
-  final Map<Component, Queue<Component>> childrenQueue = {};
+  final Map<Component, Queue<Component>> childrenQueues = {};
 
   /// Current size of the game widget.
   ///
@@ -54,7 +54,7 @@ mixin ComponentTreeRoot on Game {
   /// infinite loop. For example, this could occur if you run `x.add(y)` but
   /// then forget to mount `x` into the game.
   Future<void> ready() async {
-    while (childrenQueue.isNotEmpty) {
+    while (childrenQueues.isNotEmpty) {
       // Give chance to other futures to execute first
       await Future<void>.delayed(const Duration());
       processComponentQueues();
@@ -67,7 +67,7 @@ mixin ComponentTreeRoot on Game {
     canvasSize.setFrom(size);
     // Components that wait in the queues, still need to be informed about
     // changes in the game canvas size.
-    childrenQueue.forEach((_, queue) {
+    childrenQueues.forEach((_, queue) {
       queue.forEach((c) => c.onGameResize(size));
     });
   }
@@ -77,7 +77,7 @@ mixin ComponentTreeRoot on Game {
   @internal
   void enqueueChild({required Component parent, required Component child}) {
     assert(child.parent == parent);
-    (childrenQueue[parent] ??= Queue()).add(child);
+    (childrenQueues[parent] ??= Queue()).add(child);
   }
 
   /// Attempt to resolve pending events in all lifecycle event queues.
@@ -94,8 +94,8 @@ mixin ComponentTreeRoot on Game {
   }
 
   void _processChildrenQueue() {
-    final numChildrenQueues = childrenQueue.length;
-    for (final queue in childrenQueue.values) {
+    final numChildrenQueues = childrenQueues.length;
+    for (final queue in childrenQueues.values) {
       while (queue.isNotEmpty) {
         final mounted = queue.first.tryMounting();
         if (mounted) {
@@ -106,10 +106,10 @@ mixin ComponentTreeRoot on Game {
       }
       // Check if [childrenQueue] was modified, in which case we need to stop
       // iteration, or otherwise an exception will occur.
-      if (childrenQueue.length != numChildrenQueues) {
+      if (childrenQueues.length != numChildrenQueues) {
         break;
       }
     }
-    childrenQueue.removeWhere((parent, queue) => queue.isEmpty);
+    childrenQueues.removeWhere((parent, queue) => queue.isEmpty);
   }
 }
