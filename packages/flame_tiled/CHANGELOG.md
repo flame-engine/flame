@@ -1,6 +1,6 @@
-## 2.0.0
+## 1.2.1
 
-> Note: This release has breaking changes.
+> Note: This release has breaking changes that were supposed to be in 1.2.0
 
  - **BREAKING** **FIX**: fix multiple external tilesets (#1344). ([80a483f8](https://github.com/flame-engine/flame/commit/80a483f80df57ce6339f84d03d836efcbbf09579))
 
