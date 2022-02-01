@@ -40,7 +40,7 @@ Flame に関する全てのドキュメントは [docs.flame-engine.org](https:/
 
 あなたの Flame 関連のどんな疑問も質問できる Flame コミュニティが [Blue Fire's Discord server](https://discord.gg/5unKpdQD78) にあります。
 
-もしあなたが StackOverflow のほうが好きなのであれば、そこで質問することもできます。その際にはあなたの質問をフォローできるように [Flame tag](https://stackoverflow.com/questions/tagged/flame) を付けてください。
+もしあなたが StackOverflow のほうが好きなのであればそこで質問することもできます。その際にはあなたの質問をフォローできるように [Flame tag](https://stackoverflow.com/questions/tagged/flame) を付けてください。
 
 ## 機能
 
@@ -89,7 +89,7 @@ Flame のスポンサーになることを希望する方は、以下のセク�
 
 ## サポート
 
-最もあなたのサポートを私たちに表明する方法はプロジェクトに星を付けることです。
+最も簡単にあなたのサポートを私たちに表明する方法はプロジェクトに星を付けることです。
 
 Patreon でパトロンになることでも私たちをサポートできます:
 
@@ -99,7 +99,7 @@ Patreon でパトロンになることでも私たちをサポートできます
 
 [![Buy Me A Coffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/bluefire)
 
-また、以下のいずれかを使用することであなたのゲームが Flame で作られていることをリポジトリに表示することができます。:
+また、以下のいずれかを使用することであなたのゲームが Flame で作られていることをリポジトリに表示することができます:
 
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg)](https://flame-engine.org)
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=flat-square)](https://flame-engine.org)
@@ -139,7 +139,7 @@ Flame を使用して開発を始める際の簡単なチュートリアルは [
 
 私たちは、ゲーム、ライブラリ、記事に関する精選されたリストを [awesome-flame](https://github.com/flame-engine/awesome-flame) で提供しています。
 
-なお、記事の一部は若干古くなっている可能性がありますが、参考にしてください。
+ここまでで紹介した記事の一部は若干古くなっている可能性がありますが、参考にしてください。
 
 ## クレジット
 
