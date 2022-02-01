@@ -97,8 +97,9 @@ mixin ComponentTreeRoot on Game {
     final numChildrenQueues = childrenQueues.length;
     for (final queue in childrenQueues.values) {
       while (queue.isNotEmpty) {
-        final mounted = queue.first.tryMounting();
-        if (mounted) {
+        final first = queue.first;
+        if (first.isLoaded && first.parent!.isMounted) {
+          first.mount();
           queue.removeFirst();
         } else {
           break;

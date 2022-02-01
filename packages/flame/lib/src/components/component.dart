@@ -345,38 +345,27 @@ class Component {
     _children?.removeAll(cs);
   }
 
-  /// Attempt to mount the component, and return true if successful. This will
-  /// return false only if mounting not possible right now, for example because
-  /// the component hasn't loaded yet, or if its parent is not mounted yet.
+  /// Mount the component that is already loaded and has a mounted parent.
+  ///
+  /// The flag [existingChild] allows us to distinguish between components that
+  /// are new versus those that are already children of their parents. The
+  /// latter ones may exist if a parent was detached from the component tree,
+  /// and later re-mounted. For these components we need to run [onGameResize]
+  /// (since they haven't passed through [add]), but we don't have to add them
+  /// to the parent's children because they are already there.
   @internal
-  bool tryMounting() {
-    assert(!_mounted && _parent != null);
-    if (!_loaded || !_parent!._mounted) {
-      return false;
+  void mount({bool existingChild = false}) {
+    assert(_loaded && !_mounted && _parent!._mounted);
+    if (existingChild) {
+      onGameResize(root!.canvasSize);
     }
     onMount();
-    _parent!.children.addChild(this);
     _mounted = true;
-    if (_children != null) {
-      _children!.forEach((child) => child.remount());
+    if (!existingChild) {
+      _parent!.children.addChild(this);
     }
-    return true;
-  }
-
-  /// Used to mount components that are already in the [children] list of a
-  /// component that was just mounted. The difference from regular mounting is
-  /// that since the component is already in [children], it can be marked as
-  /// [isMounted] immediately. Also, we need to trigger [onGameResize], since
-  /// this mounting is not caused by [add].
-  @internal
-  void remount() {
-    assert(_loaded && !_mounted);
-    assert(_parent!.isMounted);
-    onGameResize(root!.canvasSize);
-    onMount();
-    _mounted = true;
     if (_children != null) {
-      _children!.forEach((child) => child.remount());
+      _children!.forEach((child) => child.mount(existingChild: true));
     }
   }
 
