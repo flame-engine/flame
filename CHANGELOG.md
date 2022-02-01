@@ -11,7 +11,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 Packages with breaking changes:
 
-- [`flame_tiled` - `v2.0.0`](#flame_tiled---v200)
+- [`flame_tiled` - `v1.2.1`](#flame_tiled---v121)
 
 Packages with other changes:
 
@@ -19,7 +19,7 @@ Packages with other changes:
 
 ---
 
-#### `flame_tiled` - `v2.0.0`
+#### `flame_tiled` - `v1.2.1`
 
  - **BREAKING** **FIX**: fix multiple external tilesets (#1344).
 
