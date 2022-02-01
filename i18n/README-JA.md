@@ -21,7 +21,7 @@ Flutter ベースのゲームエンジンです。
 
 ---
 
-## Documentation
+## ドキュメント
 
 Flame に関する全てのドキュメントは [docs.flame-engine.org](https://docs.flame-engine.org/) で確認できます。
 
@@ -40,7 +40,7 @@ Flame に関する全てのドキュメントは [docs.flame-engine.org](https:/
 
 あなたの Flame 関連のどんな疑問も質問できる Flame コミュニティが [Blue Fire's Discord server](https://discord.gg/5unKpdQD78) にあります。
 
-もしあなたが StackOverflow のほうが好きなのであればそこで質問することもできます。その際にはあなたの質問をフォローできるように [Flame tag](https://stackoverflow.com/questions/tagged/flame) を付けてください。
+もしあなたが StackOverflow のほうが好きなのであればそこで質問することもできます。その際にはあなたの質問をフォローできるように [Flame タグ](https://stackoverflow.com/questions/tagged/flame) を付けてください。
 
 ## 機能
 
