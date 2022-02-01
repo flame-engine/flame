@@ -91,7 +91,8 @@ class FlameGame extends Component with Game, ComponentTreeRoot {
   @mustCallSuper
   void onGameResize(Vector2 canvasSize) {
     if (!isMounted) {
-      doneMounting();
+      // TODO(st-pasha): remove this hack, which is for test purposes only
+      setMounted();
     }
     camera.handleResize(canvasSize);
     super.onGameResize(canvasSize); // Game.onGameResize

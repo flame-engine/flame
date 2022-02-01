@@ -97,14 +97,12 @@ mixin ComponentTreeRoot on Game {
     final numChildrenQueues = childrenQueue.length;
     for (final queue in childrenQueue.values) {
       while (queue.isNotEmpty) {
-        final x = queue.first;
-        if (!x.isLoaded || !x.parent!.isMounted) {
+        final mounted = queue.first.tryMounting();
+        if (mounted) {
+          queue.removeFirst();
+        } else {
           break;
         }
-        x.mount();
-        x.parent!.children.addChild(x);
-        x.doneMounting();
-        queue.removeFirst();
       }
       // Check if [childrenQueue] was modified, in which case we need to stop
       // iteration, or otherwise an exception will occur.

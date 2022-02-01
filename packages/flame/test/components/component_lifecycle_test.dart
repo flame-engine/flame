@@ -115,13 +115,11 @@ void main() {
         await future;
         expect(parent.isMounted, false);
         expect(child.isLoaded, true);
-        expect(child.isPrepared, false); // can't prepare until parent mounted
         expect(child.isMounted, false);
 
         game.add(parent);
         expect(parent.isLoaded, true);
         await game.ready();
-        expect(child.isPrepared, true);
         expect(child.isMounted, true);
       },
     );

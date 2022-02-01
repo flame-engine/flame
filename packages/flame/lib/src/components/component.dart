@@ -32,12 +32,6 @@ class Component {
   bool get isMounted => _mounted;
   bool _mounted = false;
 
-  /// Set to true once the component finishes running [onMount]; set to false
-  /// when the component unmounts. This signals that the component is allowed
-  /// to be added to the parent's children list.
-  bool get isPrepared => _prepared;
-  bool _prepared = false;
-
   /// The current parent of the component, or null if there is none.
   Component? get parent => _parent;
   Component? _parent;
@@ -266,7 +260,6 @@ class Component {
   void onRemove() {
     _children?.forEach((child) => child.onRemove());
     _mounted = false;
-    _prepared = false;
     _parent = null;
     nextParent?.add(this);
     nextParent = null;
@@ -338,7 +331,6 @@ class Component {
       }
       _loaded = true;
     }
-    // mount();
   }
 
   /// Removes a component from the component tree, calling [onRemove] for it and
@@ -353,54 +345,43 @@ class Component {
     _children?.removeAll(cs);
   }
 
+  /// Attempt to mount the component, and return true if successful. This will
+  /// return false only if mounting not possible right now, for example because
+  /// the component hasn't loaded yet, or if its parent is not mounted yet.
   @internal
-  void mount() {
-    assert(_parent != null);
-    // assert(_loaded && !_mounted && !_prepared);
-    if (_parent!.isMounted) {
-      onMount();
-      _prepared = true;
-      // Component will only be marked [isMounted] after it was added to the
-      // `children` set of its parent.
-      // See [ComponentTreeRoot._processChildrenQueue].
+  bool tryMounting() {
+    assert(!_mounted && _parent != null);
+    if (!_loaded || !_parent!._mounted) {
+      return false;
     }
+    onMount();
+    _parent!.children.addChild(this);
+    _mounted = true;
+    if (_children != null) {
+      _children!.forEach((child) => child.remount());
+    }
+    return true;
   }
 
   /// Used to mount components that are already in the [children] list of a
-  /// component that was just mounted. The difference from regular [mount] is
+  /// component that was just mounted. The difference from regular mounting is
   /// that since the component is already in [children], it can be marked as
   /// [isMounted] immediately. Also, we need to trigger [onGameResize], since
   /// this mounting is not caused by [add].
   @internal
   void remount() {
-    assert(_loaded && !_prepared && !_mounted);
+    assert(_loaded && !_mounted);
     assert(_parent!.isMounted);
     onGameResize(root!.canvasSize);
     onMount();
-    _prepared = true;
     _mounted = true;
     if (_children != null) {
       _children!.forEach((child) => child.remount());
     }
   }
 
-  /// Invoked from [ComponentTreeRoot] to inform that the component is now
-  /// fully mounted (i.e. it was added to the parent's children list).
   @internal
-  void doneMounting() {
-    _mounted = true;
-    if (_children != null) {
-      _children!.forEach((child) => child.remount());
-    }
-    // if (root!.childrenQueue.containsKey(this)) {
-    //   final queue = root!.childrenQueue[this]!;
-    //   queue.forEach((child) {
-    //     if (child.isLoaded) {
-    //       child.mount();
-    //     }
-    //   });
-    // }
-  }
+  void setMounted() => _mounted = true;
 
   //#endregion
 
