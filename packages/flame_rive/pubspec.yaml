@@ -11,7 +11,7 @@ environment:
 dependencies:
   flame:
     path: ../flame
-  rive: ^0.7.30
+  rive: ^0.8.1
   flutter:
     sdk: flutter
 
