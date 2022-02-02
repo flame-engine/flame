@@ -18,6 +18,11 @@ import 'projector.dart';
 /// It is based on the Flame Component System (also known as FCS).
 class FlameGame extends Component with Game {
   FlameGame({Camera? camera}) {
+    assert(
+      Component.staticGameInstance == null,
+      '$this instantiated, while another game ${Component.staticGameInstance} '
+      'declares itself to be a singleton',
+    );
     _cameraWrapper = CameraWrapper(camera ?? Camera(), children);
   }
 
