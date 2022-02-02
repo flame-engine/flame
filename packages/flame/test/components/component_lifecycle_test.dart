@@ -110,7 +110,9 @@ void main() {
     test(
       'Component starts loading before the parent is mounted',
       () async {
-        final game = SingletonGame()..onGameResize(Vector2.all(100))..onMount();
+        final game = SingletonGame()
+          ..onGameResize(Vector2.all(100))
+          ..onMount();
         final parent = Component();
         final child = SlowComponent(0.01);
         final future = child.addToParent(parent);

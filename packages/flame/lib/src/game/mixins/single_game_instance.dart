@@ -1,4 +1,3 @@
-
 import '../../components/component.dart';
 import 'game.dart';
 

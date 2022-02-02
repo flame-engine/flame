@@ -54,6 +54,7 @@ mixin Game {
     assertHasLayout();
     return _size!;
   }
+
   Vector2 get canvasSize {
     assertHasLayout();
     return _size!;

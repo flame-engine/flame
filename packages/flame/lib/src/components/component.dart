@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 import '../../components.dart';
 import '../../game.dart';
 import '../../input.dart';
-import '../game/mixins/component_tree_root.dart';
 import 'cache/value_cache.dart';
 
 /// [Component]s are the basic building blocks for your game.
@@ -34,6 +33,8 @@ class Component {
   bool get isMounted => _mounted;
   bool _mounted = false;
 
+  /// The component currently runs its `onLoad()` method asynchronously. This
+  /// is used for internal management only.
   bool _loading = false;
 
   /// The current parent of the component, or null if there is none.
@@ -135,7 +136,9 @@ class Component {
   void handleResize(Vector2 size) {
     _children?.forEach((child) => child.onGameResize(size));
     _lifecycleManager?._children.forEach((child) {
-      if (child._loading) child.onGameResize(size);
+      if (child._loading) {
+        child.onGameResize(size);
+      }
     });
   }
 
@@ -336,7 +339,7 @@ class Component {
     );
     _parent = parent;
     debugMode |= parent.debugMode;
-    parent._enqueueChild(this);
+    parent.lifecycle._children.add(this);
 
     final root = parent.findGame();
     if (root != null) {
@@ -406,19 +409,20 @@ class Component {
   @internal
   void setMounted() => _mounted = true;
 
-  void _enqueueChild(Component child) {
-    lifecycle._children.add(child);
-  }
-
   //#endregion
 
   bool get hasPendingLifecycleEvents {
-    return _lifecycleManager?._children.isNotEmpty ?? false;
+    return _lifecycleManager?.hasPendingEvents ?? false;
   }
 
   /// Attempt to resolve any pending lifecycle events on this component.
   void processPendingLifecycleEvents() {
-    _lifecycleManager?.processChildrenQueue();
+    if (_lifecycleManager != null) {
+      _lifecycleManager!.processChildrenQueue();
+      if (!_lifecycleManager!.hasPendingEvents) {
+        _lifecycleManager = null;
+      }
+    }
   }
 
   static Game? staticGameInstance;
@@ -449,8 +453,10 @@ class Component {
   /// apply an action to the whole component chain.
   /// It will only consider components of type T in the hierarchy,
   /// so use T = Component to target everything.
-  bool propagateToChildren<T extends Component>(bool Function(T) handler,
-      {bool includeSelf = false}) {
+  bool propagateToChildren<T extends Component>(
+    bool Function(T) handler, {
+    bool includeSelf = false,
+  }) {
     var shouldContinue = true;
     if (includeSelf && this is T) {
       shouldContinue = handler(this as T);
@@ -503,9 +509,37 @@ class Component {
 
 typedef ComponentSetFactory = ComponentSet Function();
 
+/// Helper class to assist [Component] with its lifecycle.
+///
+/// Most lifecycle events -- add, remove, change parent -- live for a very short
+/// period of time, usually until the next game tick. When such events are
+/// resolved, there is no longer a need to carry around their supporting event
+/// queues. Which is why these queues are placed into a separate class, so that
+/// they can be easily disposed of at the end.
 class _LifecycleManager {
+  /// Queues for adding children to a component.
+  ///
+  /// When the user `add()`s a child to a component, we immediately place it
+  /// into the component's queue, and only after that do the standard lifecycle
+  /// processing: resizing, loading, mounting, etc. After all that is finished,
+  /// the component is retrieved from the queue and placed into the parent's
+  /// children list.
+  ///
+  /// Since the components are processed in the FIFO order, this ensures that
+  /// they will be added to the parent in exactly the same order as the user
+  /// invoked `add()`s, even though they are loading asynchronously and may
+  /// finish loading in arbitrary order.
   final Queue<Component> _children = Queue();
 
+  bool get hasPendingEvents {
+    return _children.isNotEmpty;
+  }
+
+  /// Attempt to resolve pending events in all lifecycle event queues.
+  ///
+  /// This method must be periodically invoked by the game engine, in order to
+  /// ensure that the components get properly added/removed from the component
+  /// tree.
   void processChildrenQueue() {
     while (_children.isNotEmpty) {
       final child = _children.first;
