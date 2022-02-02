@@ -6,7 +6,6 @@ import '../components/component.dart';
 import '../extensions/vector2.dart';
 import 'camera/camera.dart';
 import 'camera/camera_wrapper.dart';
-import 'mixins/component_tree_root.dart';
 import 'mixins/game.dart';
 import 'projector.dart';
 
@@ -17,10 +16,9 @@ import 'projector.dart';
 ///
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
-class FlameGame extends Component with Game, ComponentTreeRoot {
+class FlameGame extends Component with Game {
   FlameGame({Camera? camera}) {
     _cameraWrapper = CameraWrapper(camera ?? Camera(), children);
-    Component.root = this;
   }
 
   late final CameraWrapper _cameraWrapper;
@@ -69,7 +67,8 @@ class FlameGame extends Component with Game, ComponentTreeRoot {
 
   @override
   void updateTree(double dt) {
-    processComponentQueues();
+    // processComponentQueues();
+    lifecycle.processChildrenQueue();
     children.updateComponentList();
     if (parent != null) {
       update(dt);
@@ -99,7 +98,33 @@ class FlameGame extends Component with Game, ComponentTreeRoot {
     // [onGameResize] is declared both in [Component] and in [Game]. Since
     // there is no way to explicitly call the [Component]'s implementation,
     // we propagate the event to [FlameGame]'s children manually.
-    children.forEach((child) => child.onGameResize(canvasSize));
+    handleResize(canvasSize);
+  }
+
+  /// Ensure that all pending tree operations finish.
+  ///
+  /// This is mainly intended for testing purposes: awaiting on this future
+  /// ensures that the game is fully loaded, and that all pending operations
+  /// of adding the components into the tree are fully materialized.
+  ///
+  /// Warning: awaiting on a game that was not fully connected will result in an
+  /// infinite loop. For example, this could occur if you run `x.add(y)` but
+  /// then forget to mount `x` into the game.
+  Future<void> ready() async {
+    var repeat = true;
+    while (repeat) {
+      // Give chance to other futures to execute first
+      await Future<void>.delayed(const Duration());
+      repeat = false;
+      propagateToChildren(
+        (Component child) {
+          child.processPendingLifecycleEvents();
+          repeat |= child.hasPendingLifecycleEvents;
+          return true;
+        },
+        includeSelf: true,
+      );
+    }
   }
 
   /// Whether a point is within the boundaries of the visible part of the game.

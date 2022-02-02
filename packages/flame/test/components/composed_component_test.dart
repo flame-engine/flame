@@ -59,7 +59,7 @@ void main() {
         final wrapper = Component();
         await wrapper.add(child);
 
-        expect(child.isLoaded, true);
+        expect(child.isLoaded, false);
         expect(child.isMounted, false);
         expect(wrapper.contains(child), false);
 

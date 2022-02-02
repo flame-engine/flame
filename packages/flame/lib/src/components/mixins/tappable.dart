@@ -51,7 +51,7 @@ mixin Tappable on Component {
   void onMount() {
     super.onMount();
     assert(
-      Component.root is HasTappables,
+      findGame()! is HasTappables,
       'Tappable Components can only be added to a FlameGame with '
       'HasTappables',
     );

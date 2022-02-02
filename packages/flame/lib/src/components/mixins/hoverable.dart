@@ -37,7 +37,7 @@ mixin Hoverable on Component {
   void onMount() {
     super.onMount();
     assert(
-      Component.root is HasHoverables,
+      findGame()! is HasHoverables,
       'Hoverable Components can only be added to a FlameGame with '
       'HasHoverables',
     );

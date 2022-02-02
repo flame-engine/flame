@@ -1,4 +1,6 @@
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flame/src/game/mixins/single_game_instance.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -36,7 +38,8 @@ void main() {
   group('Component Lifecycle', () {
     flameGame.test('correct order', (game) async {
       final events = <String>[];
-      await game.ensureAdd(_MyComponent(events));
+      await game.add(_MyComponent(events));
+      await game.ready();
 
       expect(
         events,
@@ -49,8 +52,10 @@ void main() {
       final parentEvents = <String>[];
       final childEvents = <String>[];
       final parent = _MyComponent(parentEvents, 'parent');
-      await parent.add(_MyComponent(childEvents, 'child'));
-      await game.ensureAdd(parent);
+      final child = _MyComponent(childEvents, 'child');
+      await parent.add(child);
+      await game.add(parent);
+      await game.ready();
 
       // The parent tries to prepare the component before it is added to the
       // game and fails since it doesn't have a game root and therefore re-adds
@@ -102,9 +107,10 @@ void main() {
       },
     );
 
-    flameGame.test(
+    test(
       'Component starts loading before the parent is mounted',
-      (game) async {
+      () async {
+        final game = SingletonGame()..onGameResize(Vector2.all(100))..onMount();
         final parent = Component();
         final child = SlowComponent(0.01);
         final future = child.addToParent(parent);
@@ -136,3 +142,5 @@ class SlowComponent extends Component {
     await Future<int?>.delayed(Duration(milliseconds: ms));
   }
 }
+
+class SingletonGame extends FlameGame with SingleGameInstance {}

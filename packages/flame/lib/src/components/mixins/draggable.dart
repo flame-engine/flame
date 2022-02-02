@@ -88,7 +88,7 @@ mixin Draggable on Component {
   void onMount() {
     super.onMount();
     assert(
-      Component.root is HasDraggables,
+      findGame()! is HasDraggables,
       'Draggable Components can only be added to a FlameGame with '
       'HasDraggables',
     );

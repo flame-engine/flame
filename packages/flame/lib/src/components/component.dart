@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
@@ -32,6 +34,8 @@ class Component {
   bool get isMounted => _mounted;
   bool _mounted = false;
 
+  bool _loading = false;
+
   /// The current parent of the component, or null if there is none.
   Component? get parent => _parent;
   Component? _parent;
@@ -48,6 +52,10 @@ class Component {
   ComponentSet get children => _children ??= createComponentSet();
   bool get hasChildren => _children?.isNotEmpty ?? false;
   ComponentSet? _children;
+
+  @protected
+  _LifecycleManager get lifecycle => _lifecycleManager ??= _LifecycleManager();
+  _LifecycleManager? _lifecycleManager;
 
   /// Render priority of this component. This allows you to control the order in
   /// which your components are rendered.
@@ -121,8 +129,14 @@ class Component {
   /// In addition, this method will be invoked once after the component is
   /// attached to the game tree, and before [onLoad] is called.
   @mustCallSuper
-  void onGameResize(Vector2 gameSize) {
-    _children?.forEach((child) => child.onGameResize(gameSize));
+  void onGameResize(Vector2 size) => handleResize(size);
+
+  @internal
+  void handleResize(Vector2 size) {
+    _children?.forEach((child) => child.onGameResize(size));
+    _lifecycleManager?._children.forEach((child) {
+      if (child._loading) child.onGameResize(size);
+    });
   }
 
   /// Late initialization method for [Component].
@@ -202,6 +216,7 @@ class Component {
   /// priority of the direct siblings, not the children or the ancestors.
   void updateTree(double dt) {
     _children?.updateComponentList();
+    _lifecycleManager?.processChildrenQueue();
     update(dt);
     _children?.forEach((c) => c.updateTree(dt));
   }
@@ -298,38 +313,41 @@ class Component {
   /// try to add it to multiple parents, or even to the same parent multiple
   /// times. If you need to change the parent of a component, use the
   /// [changeParent] method.
-  Future<void> add(Component component) => component.addToParent(this);
+  Future<void>? add(Component component) => component.addToParent(this);
 
   /// A convenience method to [add] multiple children at once.
   Future<void> addAll(Iterable<Component> components) {
-    return Future.wait(components.map(add));
+    final futures = <Future<void>>[];
+    for (final component in components) {
+      final future = add(component);
+      if (future != null) {
+        futures.add(future);
+      }
+    }
+    return Future.wait(futures);
   }
 
   /// Adds this component to the provided [parent] (see [add] for details).
-  Future<void> addToParent(Component parent) async {
+  Future<void>? addToParent(Component parent) {
     assert(
       _parent == null,
       '$this cannot be added to $parent because it already has a parent: '
       '$_parent',
     );
-    assert(root != null, 'The root of the component tree was not initialized');
-    assert(
-      root!.hasLayout,
-      'add() called before the game has a layout. Did you try to add '
-      'components from the constructor? Use the onLoad() method instead.',
-    );
-
     _parent = parent;
     debugMode |= parent.debugMode;
-    onGameResize(root!.canvasSize);
-    root!.enqueueChild(parent: parent, child: this);
+    parent._enqueueChild(this);
 
-    if (!isLoaded) {
-      final onLoadFuture = onLoad();
-      if (onLoadFuture != null) {
-        await onLoadFuture;
+    final root = parent.findGame();
+    if (root != null) {
+      if (!isLoaded) {
+        assert(
+          root.hasLayout,
+          'add() called before the game has a layout. Did you try to add '
+          'components from the constructor? Use the onLoad() method instead.',
+        );
+        return _load();
       }
-      _loaded = true;
     }
   }
 
@@ -345,6 +363,20 @@ class Component {
     _children?.removeAll(cs);
   }
 
+  Future<void>? _load() {
+    assert(!_loaded);
+    _loading = true;
+    onGameResize(findGame()!.canvasSize);
+    final onLoadFuture = onLoad();
+    if (onLoadFuture == null) {
+      _loaded = true;
+    } else {
+      return onLoadFuture.then((_) {
+        _loaded = true;
+      });
+    }
+  }
+
   /// Mount the component that is already loaded and has a mounted parent.
   ///
   /// The flag [existingChild] allows us to distinguish between components that
@@ -356,9 +388,10 @@ class Component {
   @internal
   void mount({bool existingChild = false}) {
     assert(_loaded && !_mounted && _parent!._mounted);
-    if (existingChild) {
-      onGameResize(root!.canvasSize);
+    if (existingChild || !_loading) {
+      onGameResize(findGame()!.canvasSize);
     }
+    _loading = false;
     onMount();
     _mounted = true;
     if (!existingChild) {
@@ -367,12 +400,32 @@ class Component {
     if (_children != null) {
       _children!.forEach((child) => child.mount(existingChild: true));
     }
+    _lifecycleManager?.processChildrenQueue();
   }
 
   @internal
   void setMounted() => _mounted = true;
 
+  void _enqueueChild(Component child) {
+    lifecycle._children.add(child);
+  }
+
   //#endregion
+
+  bool get hasPendingLifecycleEvents {
+    return _lifecycleManager?._children.isNotEmpty ?? false;
+  }
+
+  /// Attempt to resolve any pending lifecycle events on this component.
+  void processPendingLifecycleEvents() {
+    _lifecycleManager?.processChildrenQueue();
+  }
+
+  static Game? staticGameInstance;
+  Game? findGame() {
+    return staticGameInstance ??
+        ((this is Game) ? (this as Game) : _parent?.findGame());
+  }
 
   /// Whether the children list contains the given component.
   ///
@@ -396,10 +449,15 @@ class Component {
   /// apply an action to the whole component chain.
   /// It will only consider components of type T in the hierarchy,
   /// so use T = Component to target everything.
-  bool propagateToChildren<T extends Component>(
-    bool Function(T) handler,
-  ) {
+  bool propagateToChildren<T extends Component>(bool Function(T) handler,
+      {bool includeSelf = false}) {
     var shouldContinue = true;
+    if (includeSelf && this is T) {
+      shouldContinue = handler(this as T);
+      if (!shouldContinue) {
+        return false;
+      }
+    }
     if (_children != null) {
       for (final child in _children!.reversed()) {
         shouldContinue = child.propagateToChildren(handler);
@@ -432,15 +490,6 @@ class Component {
   /// See FlameGame.changePriority instead.
   void changePriorityWithoutResorting(int priority) => _priority = priority;
 
-  /// Component at the root of the component tree. This node serves as the
-  /// central place for resolving lifecycle event queues, and also facilitates
-  /// `onGameResize` events. This variable MUST be initialized before components
-  /// may be combined into a tree.
-  ///
-  /// Usually, [FlameGame] is the root of the component tree, and it declares
-  /// itself as such automatically.
-  static ComponentTreeRoot? root;
-
   /// `Component.childrenFactory` is the default method for creating children
   /// containers within all components. Replace this method if you want to have
   /// customized (non-default) [ComponentSet] instances in your project.
@@ -453,3 +502,22 @@ class Component {
 }
 
 typedef ComponentSetFactory = ComponentSet Function();
+
+class _LifecycleManager {
+  final Queue<Component> _children = Queue();
+
+  void processChildrenQueue() {
+    while (_children.isNotEmpty) {
+      final child = _children.first;
+      assert(child.parent!.isMounted);
+      if (child.isLoaded) {
+        child.mount();
+        _children.removeFirst();
+      } else if (child._loading) {
+        break;
+      } else {
+        child._load();
+      }
+    }
+  }
+}

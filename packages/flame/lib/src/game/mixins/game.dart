@@ -54,6 +54,10 @@ mixin Game {
     assertHasLayout();
     return _size!;
   }
+  Vector2 get canvasSize {
+    assertHasLayout();
+    return _size!;
+  }
 
   /// Indicates if this game instance is connected to a GameWidget that is live
   /// in the flutter widget tree.

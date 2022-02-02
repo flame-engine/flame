@@ -35,14 +35,12 @@ mixin ComponentTreeRoot on Game {
   /// they will be added to the parent in exactly the same order as the user
   /// invoked `add()`s, even though they are loading asynchronously and may
   /// finish loading in arbitrary order.
-  final Map<Component, Queue<Component>> childrenQueues = {};
+  // final Map<Component, Queue<Component>> childrenQueues = {};
 
   /// Current size of the game widget.
   ///
   /// The [onGameResize] callback will keep this variable up-to-date whenever
   /// the size of the hosting widget changes.
-  Vector2 get canvasSize => _canvasSize;
-  final Vector2 _canvasSize = Vector2.zero();
 
   /// Ensure that all pending tree operations finish.
   ///
@@ -53,32 +51,35 @@ mixin ComponentTreeRoot on Game {
   /// Warning: awaiting on a game that was not fully connected will result in an
   /// infinite loop. For example, this could occur if you run `x.add(y)` but
   /// then forget to mount `x` into the game.
-  Future<void> ready() async {
-    while (childrenQueues.isNotEmpty) {
-      // Give chance to other futures to execute first
-      await Future<void>.delayed(const Duration());
-      processComponentQueues();
-    }
-  }
+  // Future<void> ready() async {
+  //   update(0);
+  //   update(0);
+  //   update(0);
+  //   // while (childrenQueues.isNotEmpty) {
+  //   //   // Give chance to other futures to execute first
+  //   //   await Future<void>.delayed(const Duration());
+  //   //   processComponentQueues();
+  //   // }
+  // }
 
-  @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-    canvasSize.setFrom(size);
-    // Components that wait in the queues, still need to be informed about
-    // changes in the game canvas size.
-    childrenQueues.forEach((_, queue) {
-      queue.forEach((c) => c.onGameResize(size));
-    });
-  }
+  // @override
+  // void onGameResize(Vector2 size) {
+  //   super.onGameResize(size);
+  //   canvasSize.setFrom(size);
+  //   // Components that wait in the queues, still need to be informed about
+  //   // changes in the game canvas size.
+  //   // childrenQueues.forEach((_, queue) {
+  //   //   queue.forEach((c) => c.onGameResize(size));
+  //   // });
+  // }
 
   /// Enlist [child] to be added to [parent]'s `children` when the child becomes
   /// ready.
-  @internal
-  void enqueueChild({required Component parent, required Component child}) {
-    assert(child.parent == parent);
-    (childrenQueues[parent] ??= Queue()).add(child);
-  }
+  // @internal
+  // void enqueueChild({required Component parent, required Component child}) {
+  //   assert(child.parent == parent);
+  //   (childrenQueues[parent] ??= Queue()).add(child);
+  // }
 
   /// Attempt to resolve pending events in all lifecycle event queues.
   ///
@@ -89,28 +90,28 @@ mixin ComponentTreeRoot on Game {
   /// This method must not be called when iterating the component tree, as it
   /// may attempt to modify that tree, which would result in a "concurrent
   /// modification during iteration" error.
-  void processComponentQueues() {
-    _processChildrenQueue();
-  }
+  // void processComponentQueues() {
+  //   // _processChildrenQueue();
+  // }
 
-  void _processChildrenQueue() {
-    final numChildrenQueues = childrenQueues.length;
-    for (final queue in childrenQueues.values) {
-      while (queue.isNotEmpty) {
-        final first = queue.first;
-        if (first.isLoaded && first.parent!.isMounted) {
-          first.mount();
-          queue.removeFirst();
-        } else {
-          break;
-        }
-      }
-      // Check if [childrenQueue] was modified, in which case we need to stop
-      // iteration, or otherwise an exception will occur.
-      if (childrenQueues.length != numChildrenQueues) {
-        break;
-      }
-    }
-    childrenQueues.removeWhere((parent, queue) => queue.isEmpty);
-  }
+  // void _processChildrenQueue() {
+  //   final numChildrenQueues = childrenQueues.length;
+  //   for (final queue in childrenQueues.values) {
+  //     while (queue.isNotEmpty) {
+  //       final first = queue.first;
+  //       if (first.isLoaded && first.parent!.isMounted) {
+  //         first.mount();
+  //         queue.removeFirst();
+  //       } else {
+  //         break;
+  //       }
+  //     }
+  //     // Check if [childrenQueue] was modified, in which case we need to stop
+  //     // iteration, or otherwise an exception will occur.
+  //     if (childrenQueues.length != numChildrenQueues) {
+  //       break;
+  //     }
+  //   }
+  //   childrenQueues.removeWhere((parent, queue) => queue.isEmpty);
+  // }
 }

@@ -27,7 +27,7 @@ mixin Collidable on HasHitboxes {
 
   @override
   void onRemove() {
-    final parentGame = Component.root! as HasCollidables;
+    final parentGame = findGame()! as HasCollidables;
     final collidables = parentGame.collidables;
     handleRemovedCollidable(this, collidables);
     parentGame.collidables.remove(this);
@@ -38,12 +38,13 @@ mixin Collidable on HasHitboxes {
   @mustCallSuper
   void onMount() {
     super.onMount();
+    final game = findGame()!;
     assert(
-      Component.root is HasCollidables,
+      game is HasCollidables,
       'You can only use the HasHitboxes/Collidable feature with games that '
       'has the HasCollidables mixin',
     );
-    (Component.root! as HasCollidables).collidables.add(this);
+    (game as HasCollidables).collidables.add(this);
   }
 }
 
