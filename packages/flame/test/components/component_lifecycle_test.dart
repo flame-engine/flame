@@ -1,6 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
-import 'package:flame/src/game/mixins/single_game_instance.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -106,31 +104,6 @@ void main() {
         expect(game.children.toList(), equals([a, b, c, d]));
       },
     );
-
-    test(
-      'Component starts loading before the parent is mounted',
-      () async {
-        final game = SingletonGame()
-          ..onGameResize(Vector2.all(100))
-          ..onMount();
-        final parent = Component();
-        final child = SlowComponent(0.01);
-        final future = child.addToParent(parent);
-        expect(parent.isMounted, false);
-        expect(parent.isLoaded, false);
-        expect(child.isMounted, false);
-        expect(child.isLoaded, false); // not yet..
-        await future;
-        expect(parent.isMounted, false);
-        expect(child.isLoaded, true);
-        expect(child.isMounted, false);
-
-        game.add(parent);
-        expect(parent.isLoaded, true);
-        await game.ready();
-        expect(child.isMounted, true);
-      },
-    );
   });
 }
 
@@ -144,5 +117,3 @@ class SlowComponent extends Component {
     await Future<int?>.delayed(Duration(milliseconds: ms));
   }
 }
-
-class SingletonGame extends FlameGame with SingleGameInstance {}
