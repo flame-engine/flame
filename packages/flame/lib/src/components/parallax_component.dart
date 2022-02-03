@@ -46,6 +46,9 @@ extension ParallaxComponentExtension on FlameGame {
 /// layer moves with different velocities to give an effect of depth.
 class ParallaxComponent<T extends FlameGame> extends PositionComponent
     with HasGameRef<T> {
+  @override
+  PositionType positionType = PositionType.viewport;
+
   bool isFullscreen = true;
   Parallax? _parallax;
 
