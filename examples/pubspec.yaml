@@ -10,8 +10,9 @@ environment:
   flutter: ">=2.5.0"
 
 dependencies:
-  flame:
-    path: ../packages/flame
+  flame: ^1.0.0
+  flame_svg:
+    path: ../packages/flame_svg
   dashbook: 0.1.5
   flutter:
     sdk: flutter
@@ -32,3 +33,4 @@ flutter:
     - assets/images/tile_maps/
     - assets/images/layers/
     - assets/images/parallax/
+    - assets/svgs/
