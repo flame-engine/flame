@@ -5,6 +5,14 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('SingleGameInstance', () {
+    test('game instance becomes statically available', () async {
+      final game = SingletonGame()
+        ..onGameResize(Vector2.all(100))
+        ..onMount();
+      expect(Component.staticGameInstance, game);
+      game.onRemove();
+    });
+
     test('guard against multiple game instances', () async {
       final game = SingletonGame()
         ..onGameResize(Vector2.all(100))
