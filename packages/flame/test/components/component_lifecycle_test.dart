@@ -112,11 +112,12 @@ void main() {
       },
     );
 
-    testWidgets('Multi-widget game', (WidgetTester tester) async {
-      await tester.runAsync(() async {
+    testWidgets('Multi-widget game', (WidgetTester tester) {
+      return tester.runAsync(() async {
         final game1 = FlameGame();
         final game2 = FlameGame();
-        await tester.pumpWidget( // Device size is set to 800x600
+        // Device size is set to 800x600
+        await tester.pumpWidget(
           Row(
             textDirection: TextDirection.ltr,
             children: [
@@ -125,8 +126,6 @@ void main() {
             ],
           ),
         );
-        await tester.pump();
-        await Future<void>.delayed(const Duration());
         final component1 = _MyComponent('A')..addToParent(game1);
         final component2 = _MyComponent('B')..addToParent(game2);
         await game1.ready();
