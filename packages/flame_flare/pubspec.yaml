@@ -16,7 +16,7 @@ dependencies:
     sdk: flutter
 
 dev_dependencies:
-  dartdoc: ^0.42.0
+  dartdoc: ^4.1.0
   flutter_test:
     sdk: flutter
   test: ^1.9.4

@@ -19,7 +19,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   test: ^1.17.10
-  dartdoc: ^0.42.0
+  dartdoc: ^4.1.0
   mocktail: ^0.2.0
   canvas_test: ^0.2.0
   flame_test:

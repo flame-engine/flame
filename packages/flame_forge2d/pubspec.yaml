@@ -20,7 +20,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   test: ^1.16.0
-  dartdoc: ^0.42.0
+  dartdoc: ^4.1.0
   flame_lint:
     path: ../flame_lint
-

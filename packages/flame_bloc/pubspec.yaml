@@ -17,7 +17,7 @@ dependencies:
   flutter_bloc: ^8.0.1
 
 dev_dependencies:
-  dartdoc: ^0.42.0
+  dartdoc: ^4.1.0
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
