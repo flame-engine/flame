@@ -9,8 +9,7 @@ environment:
   flutter: ">=2.5.0"
 
 dependencies:
-  flame:
-    path: ../flame
+  flame: ^1.0.0
   audioplayers: ^0.20.1
   synchronized: ^3.0.0
   flutter:
@@ -21,5 +20,4 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   test: ^1.9.4
-  flame_lint:
-    path: ../flame_lint
+  flame_lint: ^0.0.1

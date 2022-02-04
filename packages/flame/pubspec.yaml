@@ -22,7 +22,5 @@ dev_dependencies:
   dartdoc: ^4.1.0
   mocktail: ^0.2.0
   canvas_test: ^0.2.0
-  flame_test:
-    path: ../flame_test
-  flame_lint:
-    path: ../flame_lint
+  flame_test: ^1.1.0
+  flame_lint: ^0.0.1

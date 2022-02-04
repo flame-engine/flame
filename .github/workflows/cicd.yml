@@ -50,6 +50,7 @@ jobs:
         with:
           channel: 'stable'
       - uses: bluefireteam/melos-action@main
+      - run: melos -v
       - run: melos bootstrap
       - run: melos run analyze
   # END LINTING STAGE
