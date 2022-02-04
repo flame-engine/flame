@@ -65,7 +65,7 @@ extension PaintExtension on Paint {
   /// You can pass in a random number generator [rng], if omitted the function
   /// will create a new [Random] object without a seed and use that.
   /// [base] can be used to get the random colors in only a lighter spectrum, it
-  /// should be between [0-256].
+  /// should be between 0 and 256.
   static Paint random({
     double withAlpha = 1.0,
     int base = 0,
