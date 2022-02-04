@@ -19,7 +19,8 @@ import '../../../game.dart';
 ///
 /// When using a viewport, [resize] should be called by the engine with
 /// the raw canvas size (on startup and subsequent resizes) and that will
-/// configure [getEffectiveSize()] and [getCanvasSize()].
+/// configure [effectiveSize] and [canvasSize].
+///
 /// The Viewport can also apply an offset to render and clip the canvas adding
 /// borders (clipping) when necessary.
 /// When rendering, call [render] and put all your rendering inside the lambda

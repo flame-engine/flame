@@ -22,7 +22,7 @@ extension Vector2Extension on Vector2 {
   /// to the origin, and whose size is the right-hand-side operand.
   Rect operator &(Vector2 size) => toPositionedRect(size);
 
-  /// Creates a [Rect] starting from [x, y] and having the size of the
+  /// Creates a [Rect] starting from (x, y) and having the size of the
   /// argument [Vector2]
   Rect toPositionedRect(Vector2 size) => Rect.fromLTWH(x, y, size.x, size.y);
 

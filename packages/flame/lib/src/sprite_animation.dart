@@ -102,8 +102,6 @@ class SpriteAnimationFrame {
   SpriteAnimationFrame(this.sprite, this.stepTime);
 }
 
-typedef OnCompleteSpriteAnimation = void Function();
-
 /// Represents a sprite animation, that is, a list of sprites that change with
 /// time.
 class SpriteAnimation {
@@ -127,7 +125,7 @@ class SpriteAnimation {
   bool loop = true;
 
   /// Registered method to be triggered when the animation complete.
-  OnCompleteSpriteAnimation? onComplete;
+  void Function()? onComplete;
 
   /// Creates an animation given a list of frames.
   SpriteAnimation(this.frames, {this.loop = true});
@@ -172,8 +170,8 @@ class SpriteAnimation {
   /// Automatically creates an Animation Object using animation data provided by
   /// the json file provided by Aseprite.
   ///
-  /// [imagePath]: Source of the sprite sheet animation.
-  /// [dataPath]: Animation's exported data in json format.
+  /// [image]: sprite sheet animation image.
+  /// [jsonData]: animation's data in json format.
   SpriteAnimation.fromAsepriteData(
     Image image,
     Map<String, dynamic> jsonData,
