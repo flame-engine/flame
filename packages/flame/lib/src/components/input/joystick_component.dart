@@ -23,7 +23,8 @@ class JoystickComponent extends HudMarginComponent with Draggable {
   late final PositionComponent? knob;
   late final PositionComponent? background;
 
-  /// The percentage [0.0, 1.0] the knob is dragged from the center to the edge.
+  /// The percentage `[0.0, 1.0]` the knob is dragged from the center to the
+  /// edge.
   double intensity = 0.0;
 
   /// The amount the knob is dragged from the center, scaled to fit inside the

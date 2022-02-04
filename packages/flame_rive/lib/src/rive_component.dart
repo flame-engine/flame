@@ -85,7 +85,7 @@ class RiveArtboardRenderer {
   }
 
   void _paint(Canvas canvas, AABB bounds, ui.Size size) {
-    final position = Offset.zero;
+    const position = Offset.zero;
 
     final contentWidth = bounds[2] - bounds[0];
     final contentHeight = bounds[3] - bounds[1];

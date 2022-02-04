@@ -24,8 +24,9 @@ class Circle extends Shape {
         );
 
   /// This constructor is used by [HitboxCircle]
-  /// [relation] is the relation [0.0, 1.0] of the shortest edge of [size] that
-  /// the circle should fill.
+  ///
+  /// [relation] is the relation `[0.0, 1.0]` of the shortest edge of [size]
+  /// that the circle should fill.
   Circle.fromDefinition({
     double? relation,
     Vector2? position,

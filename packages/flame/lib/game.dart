@@ -1,3 +1,6 @@
+/// {@canonicalFor text.TextPaint}
+/// {@canonicalFor text.TextRenderer}
+
 export 'src/extensions/vector2.dart';
 export 'src/game/camera/camera.dart';
 export 'src/game/camera/viewport.dart';

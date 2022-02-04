@@ -21,6 +21,4 @@ dev_dependencies:
   flame_lint:
     path: ../flame_lint
   mocktail: ^0.1.2
-  dartdoc: ^0.42.0
-
-flutter:
+  dartdoc: ^4.1.0

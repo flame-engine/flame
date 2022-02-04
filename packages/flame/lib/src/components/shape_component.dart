@@ -104,7 +104,7 @@ class RectangleComponent extends ShapeComponent {
 
 class PolygonComponent extends ShapeComponent {
   /// The [normalizedVertices] should be a list of points that range between
-  /// [-1.0, 1.0] which defines the relation of the vertices in the polygon
+  /// `[-1.0, 1.0]` which defines the relation of the vertices in the polygon
   /// from the center of the component to the size of the component.
   PolygonComponent({
     required List<Vector2> normalizedVertices,
