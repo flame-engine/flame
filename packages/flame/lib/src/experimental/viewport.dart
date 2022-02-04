@@ -33,11 +33,12 @@ abstract class Viewport extends Component {
 
   @override
   void renderTree(Canvas canvas) {
+    final camera = parent! as Camera2;
     canvas.save();
     canvas.translate(_position.x, _position.y);
     canvas.save();
     clip(canvas);
-    (parent! as Camera2).viewfinder.renderFromViewport(canvas);
+    camera.viewfinder.renderFromViewport(canvas);
     canvas.restore();
     // Render viewport's children
     super.renderTree(canvas);
