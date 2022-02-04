@@ -1,3 +1,5 @@
+/// {@canonicalFor anchor.Anchor}
+
 export 'src/anchor.dart';
 export 'src/components/component.dart';
 export 'src/components/component_set.dart';
