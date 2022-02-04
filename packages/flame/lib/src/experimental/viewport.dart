@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../components/component.dart';
+import 'camera.dart';
 import 'viewfinder.dart';
 
 abstract class Viewport extends Component {
@@ -30,18 +31,13 @@ abstract class Viewport extends Component {
     handleResize();
   }
 
-  late Viewfinder _viewfinder;
-
-  @internal
-  void setViewfinder(Viewfinder vf) => _viewfinder = vf;
-
   @override
   void renderTree(Canvas canvas) {
     canvas.save();
     canvas.translate(_position.x, _position.y);
     canvas.save();
     clip(canvas);
-    _viewfinder.renderFromViewport(canvas);
+    (parent! as Camera2).viewfinder.renderFromViewport(canvas);
     canvas.restore();
     // Render viewport's children
     super.renderTree(canvas);
