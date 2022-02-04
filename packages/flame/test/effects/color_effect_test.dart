@@ -11,7 +11,7 @@ void main() {
     flameGame.test('applies the correct color filter', (game) async {
       final component = _PaintComponent();
       await game.ensureAdd(component);
-      final color = Colors.red;
+      const color = Colors.red;
       await component.add(
         ColorEffect(color, const Offset(0, 1), EffectController(duration: 1)),
       );
@@ -39,7 +39,7 @@ void main() {
         await game.ensureAdd(component);
 
         final originalColorFilter = component.paint.colorFilter;
-        final color = Colors.red;
+        const color = Colors.red;
 
         final effect = ColorEffect(
           color,

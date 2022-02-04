@@ -356,6 +356,7 @@ class Component {
         return _load();
       }
     }
+    return null;
   }
 
   /// Removes a component from the component tree, calling [onRemove] for it and
@@ -382,6 +383,7 @@ class Component {
         _state = LifecycleState.loaded;
       });
     }
+    return null;
   }
 
   /// Mount the component that is already loaded and has a mounted parent.
