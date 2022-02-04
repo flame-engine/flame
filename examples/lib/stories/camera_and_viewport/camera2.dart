@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/experimental/camera.dart'; // ignore: implementation_imports
+import 'package:flame/src/experimental/world.dart'; // ignore: implementation_imports
 import 'package:flutter/widgets.dart';
 
 Future<void> main() async {
@@ -14,9 +16,23 @@ class Camera2Example extends FlameGame {
 
   @override
   Future<void> onLoad() async {
+    final world = AntWorld();
+    await add(world);
+    final camera = Camera2(world: world);
+    await add(camera);
+    final center = world.curve.boundingRect().center;
+    camera.viewfinder.position = Vector2(center.dx, center.dy);
+  }
+}
+
+class AntWorld extends World {
+  late final DragonCurve curve;
+
+  @override
+  Future<void> onLoad() async {
     final random = Random();
-    final curve = DragonCurve();
-    add(curve);
+    curve = DragonCurve();
+    await add(curve);
 
     const baseColor = HSVColor.fromAHSV(1, 38.5, 0.63, 0.68);
     for (var i = 0; i < 20; i++) {
@@ -27,9 +43,6 @@ class Camera2Example extends FlameGame {
           ..setTravelPath(curve.path),
       );
     }
-    final center = curve.boundingRect().center;
-    camera.snapTo(Vector2(center.dx, center.dy));
-    camera.setRelativeOffset(Anchor.center);
   }
 }
 
@@ -76,7 +89,7 @@ class DragonCurve extends PositionComponent {
   }
 
   @override
-  void onMount() {
+  Future<void> onLoad() async {
     borderPaint = Paint()
       ..color = const Color(0xFF041D1F)
       ..style = PaintingStyle.stroke
@@ -95,7 +108,6 @@ class DragonCurve extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     canvas.drawPath(dragon, borderPaint);
     canvas.drawPath(dragon, mainPaint);
   }
@@ -149,8 +161,7 @@ class Ant extends PositionComponent {
   }
 
   @override
-  void onMount() {
-    super.onMount();
+  Future<void> onLoad() async {
     bodyPaint = Paint()..color = color;
     eyesPaint = Paint()..color = black;
     borderPaint = Paint()

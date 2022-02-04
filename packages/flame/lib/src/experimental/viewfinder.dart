@@ -9,14 +9,14 @@ import 'camera.dart';
 class Viewfinder extends Component {
   final Transform2D _transform = Transform2D();
 
-  Vector2 get position => _transform.position;
-  set position(Vector2 value) => _transform.position = value;
+  Vector2 get position => -_transform.position;
+  set position(Vector2 value) => _transform.position = -value;
 
   double get zoom => _transform.scale.x;
   set zoom(double value) => _transform.scale = Vector2.all(value);
 
-  double get angle => _transform.angle;
-  set angle(double value) => _transform.angle;
+  double get angle => -_transform.angle;
+  set angle(double value) => _transform.angle = -value;
 
   double? get visibleGameWidth => _visibleGameWidth;
   double? _visibleGameWidth;
@@ -62,7 +62,7 @@ class Viewfinder extends Component {
       try {
         Camera2.currentCameras.add(camera);
         canvas.transform(_transform.transformMatrix.storage);
-        world.renderTree(canvas);
+        world.renderFromCamera(canvas);
       } finally {
         Camera2.currentCameras.removeLast();
       }
