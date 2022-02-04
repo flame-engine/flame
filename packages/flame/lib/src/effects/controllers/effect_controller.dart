@@ -32,7 +32,7 @@ import 'speed_effect_controller.dart';
 ///   - the progress may change over a finite or infinite period of time;
 ///   - the value of 0 corresponds to the logical start of an animation;
 ///   - the value of 1 is either the end or the "peak" of an animation;
-///   - the progress may briefly attain values outside of [0; 1] range (for
+///   - the progress may briefly attain values outside of `[0; 1]` range (for
 ///     example if a "bouncy" easing curve is applied).
 ///
 /// An [EffectController] can be made to run forward in time (`advance()`), or

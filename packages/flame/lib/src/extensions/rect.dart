@@ -13,7 +13,7 @@ extension RectExtension on Rect {
   /// Creates an [Offset] from this [Rect]
   Offset toOffset() => Offset(width, height);
 
-  /// Creates a [Vector2] starting in top left and going to [width, height].
+  /// Creates a [Vector2] starting in top left and going to (width, height).
   Vector2 toVector2() => Vector2(width, height);
 
   /// Converts this [Rect] into a [math.Rectangle].
