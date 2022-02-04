@@ -49,6 +49,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
+      - uses: bluefireteam/melos-action@main
       - uses: flame-engine/flame-analyze-action@v2
   # END LINTING STAGE
 
@@ -61,5 +62,6 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
+      - uses: bluefireteam/melos-action@main
       - uses: flame-engine/flame-test-action@v1
   # END TESTING STAGE
