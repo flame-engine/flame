@@ -50,6 +50,7 @@ jobs:
         with:
           channel: 'stable'
       - uses: bluefireteam/melos-action@main
+      - run: which melos
       - run: melos bootstrap
       - uses: flame-engine/flame-analyze-action@v2
   # END LINTING STAGE
@@ -64,6 +65,7 @@ jobs:
         with:
           channel: 'stable'
       - uses: bluefireteam/melos-action@main
+      - run: which melos
       - run: melos bootstrap
       - uses: flame-engine/flame-test-action@v1
   # END TESTING STAGE
