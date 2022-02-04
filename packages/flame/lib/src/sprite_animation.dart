@@ -170,8 +170,8 @@ class SpriteAnimation {
   /// Automatically creates an Animation Object using animation data provided by
   /// the json file provided by Aseprite.
   ///
-  /// [imagePath]: Source of the sprite sheet animation.
-  /// [dataPath]: Animation's exported data in json format.
+  /// [image]: sprite sheet animation image.
+  /// [jsonData]: animation's data in json format.
   SpriteAnimation.fromAsepriteData(
     Image image,
     Map<String, dynamic> jsonData,
