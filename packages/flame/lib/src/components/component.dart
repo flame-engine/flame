@@ -25,17 +25,16 @@ class Component {
   /// to the root `FlameGame`.
   PositionType positionType = PositionType.game;
 
+  LifecycleState _state = LifecycleState.uninitialized;
+
   /// Whether this component has completed its [onLoad] step.
-  bool get isLoaded => _loaded;
-  bool _loaded = false;
+  bool get isLoaded {
+    return (_state != LifecycleState.uninitialized) &&
+        (_state != LifecycleState.loading);
+  }
 
   /// Whether this component is currently added to a component tree.
-  bool get isMounted => _mounted;
-  bool _mounted = false;
-
-  /// The component currently runs its `onLoad()` method asynchronously. This
-  /// is used for internal management only.
-  bool _loading = false;
+  bool get isMounted => _state == LifecycleState.mounted;
 
   /// The current parent of the component, or null if there is none.
   Component? get parent => _parent;
@@ -136,7 +135,8 @@ class Component {
   void handleResize(Vector2 size) {
     _children?.forEach((child) => child.onGameResize(size));
     _lifecycleManager?._children.forEach((child) {
-      if (child._loading) {
+      final state = child._state;
+      if (state == LifecycleState.loading || state == LifecycleState.loaded) {
         child.onGameResize(size);
       }
     });
@@ -277,7 +277,7 @@ class Component {
   @mustCallSuper
   void onRemove() {
     _children?.forEach((child) => child.onRemove());
-    _mounted = false;
+    _state = LifecycleState.removed;
     _parent = null;
     nextParent?.add(this);
     nextParent = null;
@@ -337,6 +337,10 @@ class Component {
       '$this cannot be added to $parent because it already has a parent: '
       '$_parent',
     );
+    assert(
+      _state == LifecycleState.uninitialized ||
+          _state == LifecycleState.removed,
+    );
     _parent = parent;
     debugMode |= parent.debugMode;
     parent.lifecycle._children.add(this);
@@ -367,15 +371,15 @@ class Component {
   }
 
   Future<void>? _load() {
-    assert(!_loaded);
-    _loading = true;
+    assert(_state == LifecycleState.uninitialized);
+    _state = LifecycleState.loading;
     onGameResize(findGame()!.canvasSize);
     final onLoadFuture = onLoad();
     if (onLoadFuture == null) {
-      _loaded = true;
+      _state = LifecycleState.loaded;
     } else {
       return onLoadFuture.then((_) {
-        _loaded = true;
+        _state = LifecycleState.loaded;
       });
     }
   }
@@ -390,13 +394,13 @@ class Component {
   /// to the parent's children because they are already there.
   @internal
   void mount({bool existingChild = false}) {
-    assert(_loaded && !_mounted && _parent!._mounted);
-    if (existingChild || !_loading) {
+    assert(_parent!.isMounted);
+    assert(_state == LifecycleState.loaded || _state == LifecycleState.removed);
+    if (existingChild || _state == LifecycleState.removed) {
       onGameResize(findGame()!.canvasSize);
     }
-    _loading = false;
     onMount();
-    _mounted = true;
+    _state = LifecycleState.mounted;
     if (!existingChild) {
       _parent!.children.addChild(this);
     }
@@ -408,7 +412,7 @@ class Component {
 
   // TODO(st-pasha): remove this after #1351 is done
   @internal
-  void setMounted() => _mounted = true;
+  void setMounted() => _state = LifecycleState.mounted;
 
   //#endregion
 
@@ -510,6 +514,37 @@ class Component {
 
 typedef ComponentSetFactory = ComponentSet Function();
 
+/// This enum keeps track of the [Component]'s current stage in its lifecycle.
+///
+/// The progression between states happens as follows:
+/// ```
+///   uninitialized -> loading -> loaded -> mounted -> removed -,
+///                                           ^-----------------'
+/// ```
+///
+/// Publicly visible flags `isLoaded` and `isMounted` are derived from this
+/// state:
+///   - isLoaded = loaded | mounted | removed
+///   - isMounted = mounted
+enum LifecycleState {
+  /// The original state of a [Component], when it was just constructed.
+  uninitialized,
+
+  /// The component is currently running its `onLoad` method.
+  loading,
+
+  /// The component has just finished running its `onLoad` step, but before it
+  /// is mounted.
+  loaded,
+
+  /// The component has finished running its `onMount` step, and was added to
+  /// its parent's `children` list.
+  mounted,
+
+  /// The component which was mounted before, is now removed from its parent.
+  removed,
+}
+
 /// Helper class to assist [Component] with its lifecycle.
 ///
 /// Most lifecycle events -- add, remove, change parent -- live for a very short
@@ -548,7 +583,7 @@ class _LifecycleManager {
       if (child.isLoaded) {
         child.mount();
         _children.removeFirst();
-      } else if (child._loading) {
+      } else if (child._state == LifecycleState.loading) {
         break;
       } else {
         child._load();
