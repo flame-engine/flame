@@ -32,8 +32,8 @@ class Camera2 extends Component {
     required this.world,
     Viewport? viewport,
     Viewfinder? viewfinder,
-  }) : viewport = viewport ?? MaxViewport(),
-      viewfinder = viewfinder ?? Viewfinder();
+  })  : viewport = viewport ?? MaxViewport(),
+        viewfinder = viewfinder ?? Viewfinder();
 
   /// The [viewport] is the "window" through which the game world is observed.
   ///
@@ -78,7 +78,7 @@ class Camera2 extends Component {
   /// this particular camera, and reset back to `null` at the end. This variable
   /// is not set when rendering components that are attached to the viewport.
   static Camera2? get currentCamera {
-    return currentCameras.isEmpty? null : currentCameras[0];
+    return currentCameras.isEmpty ? null : currentCameras[0];
   }
 
   /// Stack of all current cameras in the render tree.

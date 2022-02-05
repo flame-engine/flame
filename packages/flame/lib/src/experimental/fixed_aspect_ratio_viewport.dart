@@ -6,7 +6,7 @@ import 'viewport.dart';
 
 class FixedAspectRatioViewport extends Viewport {
   FixedAspectRatioViewport({required this.aspectRatio})
-    : assert(aspectRatio > 0);
+      : assert(aspectRatio > 0);
 
   final double aspectRatio;
   Rect _clipRect = Rect.zero;
