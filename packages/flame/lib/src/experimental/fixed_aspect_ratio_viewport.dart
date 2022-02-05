@@ -19,6 +19,9 @@ class FixedAspectRatioViewport extends Viewport {
   }
 
   @override
+  void clip(Canvas canvas) => canvas.clipRect(_clipRect);
+
+  @override
   void handleResize() {
     final desiredWidth = size.y * aspectRatio;
     if (desiredWidth > size.x) {
@@ -31,7 +34,4 @@ class FixedAspectRatioViewport extends Viewport {
     final y = size.y / 2;
     _clipRect = Rect.fromLTRB(-x, -y, x, y);
   }
-
-  @override
-  void clip(Canvas canvas) => canvas.clipRect(_clipRect);
 }

@@ -13,12 +13,12 @@ class CircularViewport extends Viewport {
   Path _clipPath = Path();
 
   @override
+  void clip(Canvas canvas) => canvas.clipPath(_clipPath, doAntiAlias: false);
+
+  @override
   void handleResize() {
     final x = size.x / 2;
     final y = size.y / 2;
     _clipPath = Path()..addOval(Rect.fromLTRB(-x, -y, x, y));
   }
-
-  @override
-  void clip(Canvas canvas) => canvas.clipPath(_clipPath, doAntiAlias: false);
 }
