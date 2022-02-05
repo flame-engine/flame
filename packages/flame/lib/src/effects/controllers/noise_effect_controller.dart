@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/animation.dart' show Curve, Curves;
 import 'package:vector_math/vector_math_64.dart';
 import 'duration_effect_controller.dart';
@@ -21,12 +23,15 @@ class NoiseEffectController extends DurationEffectController {
     required double duration,
     required this.frequency,
     this.taperingCurve = Curves.easeInOutCubic,
-  })  : assert(frequency > 0, 'frequency parameter must be positive'),
+    Random? random,
+  })  : assert(duration > 0, 'duration must be positive'),
+        assert(frequency > 0, 'frequency parameter must be positive'),
+        noise = SimplexNoise(random),
         super(duration);
 
   final double frequency;
   final Curve taperingCurve;
-  final noise = SimplexNoise();
+  final SimplexNoise noise;
 
   @override
   double get progress {
