@@ -404,7 +404,7 @@ class Component {
     onMount();
     _state = LifecycleState.mounted;
     if (!existingChild) {
-      _parent!.children.addChild(this);
+      _parent!.children.add(this);
     }
     if (_children != null) {
       _children!.forEach((child) => child.mount(existingChild: true));

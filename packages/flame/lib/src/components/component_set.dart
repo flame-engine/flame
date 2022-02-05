@@ -40,24 +40,11 @@ class ComponentSet extends QueryableOrderedSet<Component> {
 
   static bool defaultStrictMode = false;
 
-  /// Registers the component to be added on the next call to
-  /// `updateComponentList()`.
+  /// Marked as internal, because the users shouldn't be able to add elements
+  /// into the [ComponentSet] directly, bypassing the normal lifecycle handling.
   @internal
-  void addChild(Component component) {
-    super.add(component);
-  }
-
-  /// Prohibit method `add()` inherited from the [QueryableOrderedSet]. If this
-  /// was allowed, then the user would be able to bypass standard lifecycle
-  /// methods of the [Component] class.
-  @Deprecated('Do not use')
   @override
-  bool add(Component c) {
-    throw UnsupportedError(
-      'Adding elements directly to a ComponentSet is prohibited; use '
-      'Component.add() instead',
-    );
-  }
+  bool add(Component component) => super.add(component);
 
   /// Prohibit method `addAll()` inherited from the [QueryableOrderedSet]. If
   /// this was allowed, then the user would be able to bypass standard lifecycle
