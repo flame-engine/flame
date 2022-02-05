@@ -432,6 +432,7 @@ class Component {
     }
   }
 
+  @internal
   static Game? staticGameInstance;
   Game? findGame() {
     return staticGameInstance ??
