@@ -8,7 +8,6 @@ import 'package:flame/src/experimental/circular_viewport.dart'; // ignore: imple
 import 'package:flame/src/experimental/world.dart'; // ignore: implementation_imports
 import 'package:flutter/painting.dart';
 
-
 class Camera2Example extends FlameGame with PanDetector {
   static const description = '''
     This example shows how a camera can be dynamically added into a game via
