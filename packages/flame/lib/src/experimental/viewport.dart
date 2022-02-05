@@ -82,5 +82,4 @@ abstract class Viewport extends Component {
     super.renderTree(canvas);
     canvas.restore();
   }
-
 }
