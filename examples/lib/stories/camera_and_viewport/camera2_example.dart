@@ -33,7 +33,6 @@ class Camera2Example extends FlameGame with PanDetector {
     final camera = Camera2(world: world);
     await add(camera);
     final offset = world.curve.boundingRect().center;
-    print(world.curve.boundingRect());
     center = Vector2(offset.dx, offset.dy);
     camera.viewfinder.position = Vector2(center.x, center.y);
 

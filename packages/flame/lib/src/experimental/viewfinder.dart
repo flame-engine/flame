@@ -63,6 +63,7 @@ class Viewfinder extends Component {
         Camera2.currentCameras.add(camera);
         canvas.transform(_transform.transformMatrix.storage);
         world.renderFromCamera(canvas);
+        super.renderTree(canvas);
       } finally {
         Camera2.currentCameras.removeLast();
       }
