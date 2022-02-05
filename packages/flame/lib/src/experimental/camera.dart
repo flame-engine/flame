@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 import '../components/component.dart';
 import 'max_viewport.dart';
 import 'viewfinder.dart';
@@ -36,6 +38,7 @@ class Camera2 extends Component {
   }) : viewport = viewport ?? MaxViewport(),
       viewfinder = viewfinder ?? Viewfinder();
 
+  @mustCallSuper
   @override
   Future<void> onLoad() async {
     await add(viewport);

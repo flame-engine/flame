@@ -2,15 +2,22 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/input.dart';
 import 'package:flame/src/experimental/camera.dart'; // ignore: implementation_imports
+import 'package:flame/src/experimental/circular_viewport.dart'; // ignore: implementation_imports
 import 'package:flame/src/experimental/world.dart'; // ignore: implementation_imports
-import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart' hide Draggable;
 
 Future<void> main() async {
   runApp(GameWidget(game: Camera2Example()));
 }
 
-class Camera2Example extends FlameGame {
+class Camera2Example extends FlameGame with PanDetector {
+  late final Camera2 magnifyingGlass;
+  late final Vector2 center;
+  static const zoom = 10.0;
+  static const radius = 130.0;
+
   @override
   Color backgroundColor() => const Color(0xFFffffff);
 
@@ -20,19 +27,139 @@ class Camera2Example extends FlameGame {
     await add(world);
     final camera = Camera2(world: world);
     await add(camera);
-    final center = world.curve.boundingRect().center;
-    camera.viewfinder.position = Vector2(center.dx, center.dy);
+    final offset = world.curve.boundingRect().center;
+    print(world.curve.boundingRect());
+    center = Vector2(offset.dx, offset.dy);
+    camera.viewfinder.position = Vector2(center.x, center.y);
+
+    magnifyingGlass = Camera2(world: world, viewport: CircularViewport(radius));
+    magnifyingGlass.viewport.add(Bezel(radius));
+    magnifyingGlass.viewfinder.zoom = zoom;
+  }
+
+  @override
+  bool onPanStart(DragStartInfo info) {
+    _updateMagnifyingGlassPosition(info.eventPosition.widget);
+    add(magnifyingGlass);
+    return false;
+  }
+
+  @override
+  bool onPanUpdate(DragUpdateInfo info) {
+    _updateMagnifyingGlassPosition(info.eventPosition.widget);
+    return false;
+  }
+
+  @override
+  bool onPanEnd(DragEndInfo info) {
+    onPanCancel();
+    return false;
+  }
+
+  @override
+  bool onPanCancel() {
+    remove(magnifyingGlass);
+    return false;
+  }
+
+  void _updateMagnifyingGlassPosition(Vector2 point) {
+    // shifts the original [point] by 1.4142*radius, which happens to be in the
+    // middle of a handle
+    final handlePoint = point - Vector2.all(radius);
+    magnifyingGlass.viewport.position = handlePoint;
+    magnifyingGlass.viewfinder.position =
+        (handlePoint - canvasSize / 2 + center) * zoom;
+  }
+}
+
+class Bezel extends Component {
+  Bezel(this.radius);
+
+  final double radius;
+  late final Path rim;
+  late final Path rimBorder;
+  late final Path handle;
+  late final Path connector;
+  late final Path specularHighlight;
+  static const rimWidth = 20.0;
+  static const handleWidth = 40.0;
+  static const handleLength = 100.0;
+  late final Paint glassPaint;
+  late final Paint rimPaint;
+  late final Paint rimBorderPaint;
+  late final Paint handlePaint;
+  late final Paint connectorPaint;
+  late final Paint specularPaint;
+
+  @override
+  Future<void> onLoad() async {
+    rim = Path()..addOval(Rect.fromLTRB(-radius, -radius, radius, radius));
+    final outer = radius + rimWidth / 2;
+    final inner = radius - rimWidth / 2;
+    rimBorder = Path()
+      ..addOval(Rect.fromLTRB(-outer, -outer, outer, outer))
+      ..addOval(Rect.fromLTRB(-inner, -inner, inner, inner));
+    handle = (Path()
+          ..addRRect(
+            RRect.fromLTRBR(
+              radius,
+              -handleWidth / 2,
+              handleLength + radius,
+              handleWidth / 2,
+              const Radius.circular(5.0),
+            ),
+          ))
+        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
+    connector = (Path()
+          ..addArc(Rect.fromLTRB(-outer, -outer, outer, outer), -0.22, 0.44))
+        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
+    specularHighlight = (Path()
+          ..addOval(Rect.fromLTWH(-radius * 0.8, -8, 16, radius * 0.3)))
+        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
+
+    glassPaint = Paint()..color = const Color(0x1400ffae);
+    rimBorderPaint = Paint()
+      ..strokeWidth = 1.0
+      ..style = PaintingStyle.stroke
+      ..color = const Color(0xff61382a);
+    rimPaint = Paint()
+      ..strokeWidth = rimWidth
+      ..style = PaintingStyle.stroke
+      ..color = const Color(0xffffdf70);
+    connectorPaint = Paint()
+      ..strokeWidth = 20.0
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..color = const Color(0xff654510);
+    handlePaint = Paint()..color = const Color(0xffdbbf9f);
+    specularPaint = Paint()
+      ..color = const Color(0xccffffff)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
+  }
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawPath(rim, glassPaint);
+    canvas.drawPath(specularHighlight, specularPaint);
+    canvas.drawPath(handle, handlePaint);
+    canvas.drawPath(handle, rimBorderPaint);
+    canvas.drawPath(connector, connectorPaint);
+    canvas.drawPath(rim, rimPaint);
+    canvas.drawPath(rimBorder, rimBorderPaint);
   }
 }
 
 class AntWorld extends World {
   late final DragonCurve curve;
+  late final Rect bgRect;
+  final Paint bgPaint = Paint()..color = const Color(0xffffffff);
 
   @override
   Future<void> onLoad() async {
     final random = Random();
     curve = DragonCurve();
     await add(curve);
+    bgRect = curve.boundingRect().inflate(100);
 
     const baseColor = HSVColor.fromAHSV(1, 38.5, 0.63, 0.68);
     for (var i = 0; i < 20; i++) {
@@ -44,13 +171,16 @@ class AntWorld extends World {
       );
     }
   }
+
+  @override
+  void render(Canvas canvas) {
+    // Render white backdrop, to prevent the world in the magnifying glass from
+    // being "see-through"
+    canvas.drawRect(bgRect, bgPaint);
+  }
 }
 
 class DragonCurve extends PositionComponent {
-  DragonCurve() {
-    initPath();
-  }
-
   late final Paint borderPaint;
   late final Paint mainPaint;
   late final Path dragon;
@@ -90,6 +220,7 @@ class DragonCurve extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
+    initPath();
     borderPaint = Paint()
       ..color = const Color(0xFF041D1F)
       ..style = PaintingStyle.stroke
