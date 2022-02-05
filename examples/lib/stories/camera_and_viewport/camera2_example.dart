@@ -6,20 +6,25 @@ import 'package:flame/input.dart';
 import 'package:flame/src/experimental/camera.dart'; // ignore: implementation_imports
 import 'package:flame/src/experimental/circular_viewport.dart'; // ignore: implementation_imports
 import 'package:flame/src/experimental/world.dart'; // ignore: implementation_imports
-import 'package:flutter/widgets.dart' hide Draggable;
+import 'package:flutter/painting.dart';
 
-Future<void> main() async {
-  runApp(GameWidget(game: Camera2Example()));
-}
 
 class Camera2Example extends FlameGame with PanDetector {
+  static const description = '''
+    This example shows how a camera can be dynamically added into a game via
+    the Camera2 component.
+    
+    Click and hold the mouse to bring up a magnifying glass, then have a better
+    look at the world underneath! 
+  ''';
+
   late final Camera2 magnifyingGlass;
   late final Vector2 center;
   static const zoom = 10.0;
   static const radius = 130.0;
 
   @override
-  Color backgroundColor() => const Color(0xFFffffff);
+  Color backgroundColor() => const Color(0xFFeeeeee);
 
   @override
   Future<void> onLoad() async {
@@ -152,7 +157,7 @@ class Bezel extends Component {
 class AntWorld extends World {
   late final DragonCurve curve;
   late final Rect bgRect;
-  final Paint bgPaint = Paint()..color = const Color(0xffffffff);
+  final Paint bgPaint = Paint()..color = const Color(0xffeeeeee);
 
   @override
   Future<void> onLoad() async {
