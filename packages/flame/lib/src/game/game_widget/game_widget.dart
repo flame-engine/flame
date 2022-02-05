@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -332,7 +334,11 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                         //   snapshot.error!,
                         //   snapshot.stackTrace,
                         // )
-                        print(snapshot.stackTrace);
+                        log(
+                          'Error while loading Game widget',
+                          error: snapshot.error,
+                          stackTrace: snapshot.stackTrace,
+                        );
                         throw snapshot.error!;
                       } else {
                         return errorBuilder(context, snapshot.error!);
