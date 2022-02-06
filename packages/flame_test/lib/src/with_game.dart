@@ -60,6 +60,7 @@ AsyncVoidFunction withUserGame<T extends FlameGame>(
 
     game.onRemove();
   }
+
   return testFn;
 }
 
