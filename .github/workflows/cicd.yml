@@ -9,6 +9,30 @@ on:
 
 jobs:
   # BEGIN LINTING STAGE
+  get-packages-paths:
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.set-packages.outputs.packages }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: set-packages
+        run: echo "::set-output name=packages::$(find ./packages -maxdepth 2 -type f -name "pubspec.yaml" | jq -R -s -c 'split("\n")[:-1]')"
+
+  dartdoc:
+    runs-on: ubuntu-latest
+    needs: [get-packages-paths]
+    strategy:
+      matrix:
+        package: ${{fromJson(needs.get-packages-paths.outputs.packages)}}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+      - uses: flame-engine/flame-dartdoc-action@v2
+        with:
+          package-path: ${{ matrix.package }}
+
   format:
     runs-on: ubuntu-latest
     steps:
@@ -27,23 +51,6 @@ jobs:
           channel: 'stable'
       - uses: bluefireteam/melos-action@main
       - run: melos run analyze
-
-  dartdoc:
-    runs-on: ubuntu-latest
-    needs: [get-packages-paths]
-    strategy:
-      matrix:
-        package: ${{fromJson(needs.get-packages-paths.outputs.packages)}}
-    steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
-        with:
-          channel: 'stable'
-      - uses: bluefireteam/melos-action@main
-      - uses: flame-engine/flame-dartdoc-action@v2
-        with:
-          package-path: ${{ matrix.package }}
-
   # END LINTING STAGE
 
   # BEGIN TESTING STAGE
