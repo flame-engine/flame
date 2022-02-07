@@ -105,7 +105,7 @@ div.sidebar-left {
   box-sizing: border-box;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 20px 0 0 6px;
+  padding: 20px 0 0 12px;
   position: absolute;
   top: 0;
   width: var(--left-menu-width);
@@ -142,13 +142,14 @@ div.sidebar-left {
 
 #search-form {
   position: relative;
-  margin: 0 5px 0 -10px;
-  padding: 1rem 15px;
+  margin: 0;
+  padding: 12px 12px 12px 0;
 }
 
 #search-form #search-input {
+  background: #2c2c2c;
   border: none;
-  border-bottom: 1px solid #ffe689;
+  border-radius: 6px;
   color: #ffe689;
   height: calc(1.5em + 0.75rem + 2px);
   line-height: 1.5;
@@ -158,19 +159,18 @@ div.sidebar-left {
 }
 
 #search-form #search-input:focus {
-  background: #222;
+  background: #303030;
   border-bottom: none;
-  border-radius: 6px;
-  box-shadow: 0 0 5px 1px #ffe689;
+  box-shadow: inset 0 0 5px 1px #1c1c1c;
   opacity: 1.0;
   outline: none;
 }
 
 #search-form i.icon.fa-search {
   color: #a99a2f;
-  left: 25px;
+  left: 9px;
   position: absolute;
-  top: 25px;
+  top: 21px;
 }
 
 #search-form:focus-within .form-control::placeholder,
@@ -209,7 +209,7 @@ div.nav-left li > a {
 }
 
 div.nav-left li > a:hover {
-  background-color: #E5E5E5;
+  background-color: #303030;
 }
 
 div.nav-left li > a:not(:only-child)::before {
