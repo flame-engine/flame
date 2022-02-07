@@ -1,7 +1,6 @@
 import 'dart:typed_data';
-import 'dart:ui';
 
-import 'package:flame/flame.dart';
+import 'package:flame/extensions.dart';
 
 Future<Image> generateImage() {
   final data = Uint8List(4);
@@ -11,5 +10,5 @@ Future<Image> generateImage() {
     data[i + 2] = 255;
     data[i + 3] = 255;
   }
-  return Flame.images.decodeImageFromPixels(data, 1, 1);
+  return ImageExtension.fromPixels(data, 1, 1);
 }
