@@ -44,5 +44,14 @@ void main() {
       expect(out, closeToVector(input.x, input.y));
       expect(result, closeToVector(10, 20));
     });
+
+    test('test transformRect', () {
+      final matrix4 = Matrix4.translation(Vector3(10, 10, 0));
+      const input = Rect.fromLTWH(0, 0, 10, 10);
+      final result = matrix4.transformRect(input);
+
+      expect(result.topLeft.toVector2(), closeToVector(10, 10));
+      expect(result.bottomRight.toVector2(), closeToVector(20, 20));
+    });
   });
 }
