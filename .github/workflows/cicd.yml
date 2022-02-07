@@ -30,10 +30,7 @@ jobs:
         with:
           channel: 'stable'
       - uses: bluefireteam/melos-action@main
-      - uses: bluefireteam/melos-action@main
-      - uses: flame-engine/flame-dartdoc-action@v2
-        with:
-          package-path: ${{ matrix.package }}
+      - run: cd ${{ matrix.package }} && melos run dartdoc
 
   format:
     runs-on: ubuntu-latest
