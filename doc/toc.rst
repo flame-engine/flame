@@ -19,12 +19,6 @@
     Keyboard input  <keyboard-input.md>
     Other inputs    <other-inputs.md>
 
-.. toctree::
-    :caption: Audio
-    :hidden:
-
-    General audio    <audio.md>
-    Background music <bgm.md>
 
 .. toctree::
     :caption: Rendering
@@ -40,6 +34,7 @@
     :caption: Other Modules
     :hidden:
 
+    flame_audio    <flame_audio/index.md>
     Util           <util.md>
     Widgets        <widgets.md>
     Forge2D        <forge2d.md>

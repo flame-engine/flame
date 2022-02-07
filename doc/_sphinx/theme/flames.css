@@ -7,7 +7,7 @@
   --document-width: 900px;
   --document-x-margin: clamp(10px, 2.5vw, 40px);
   --document-padding: min(40px, 4vw);
-  --font-sans: Lato, proxima-nova, "Segoe UI", Roboto, Helvetica Neue, Arial, sans-serif;
+  --font-sans: 'Ubuntu', Roboto, Helvetica Neue, Arial, sans-serif;
   --font-mono: "SF Mono", Menlo, monospace;
   --left-menu-width: clamp(250px, 25vw, 350px);
   --right-menu-width: 240px;
@@ -24,11 +24,21 @@ body {
   background-color: #484848;
   color: #b8b8b8;
   font-family: var(--font-sans);
+  font-size: 15px;
   line-height: 1.5;
   margin: 0;
   padding: 0;
-  position: relative;
+  position: relative; /* needed by Scrollspy */
   text-align: left;
+}
+
+a {
+  color: #ffbb3e;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #ddbb99;
 }
 
 div.expander {
@@ -213,11 +223,10 @@ div.nav-left li > a:hover {
 }
 
 div.nav-left li > a:not(:only-child)::before {
-  color: #b1cbde;
   content: "\f0da";
   font-family: 'FontAwesome';
   font-size: 70%;
-  left: -7px;
+  left: -9px;
   position: absolute;
   top: 5px;
 }
@@ -233,13 +242,15 @@ div.nav-left li.current > ul {
 div.nav-left li.current > a.current {
   background: #222;
   color: #aaa;
+  margin-left: -14px;
+  padding-left: 15px;
   position: relative;
   z-index: 40;
 }
 
 div.nav-left li.current > a:not(:only-child)::before {
   content: "\f0d7";
-  left: -8px;
+  left: -10px;
 }
 
 div.nav-left li.current > a.current:not(:only-child)::before {
@@ -271,11 +282,45 @@ div.sidebar-right {
 }
 
 div.nav-right > #toc-local {
-    border-left: 4px solid #2d659c;
-    border-radius: 0;
-    margin: 0 0 0 20px;
-    max-width: var(--right-menu-width);
-    padding: 0 0 0 10px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 0 6px;
+  max-width: var(--right-menu-width);
+  padding: 0 0 0 10px;
+}
+
+div.nav-right > #toc-local > div.header {
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+div.nav-right > #toc-local > a.list-group-item {
+  border: none;
+  border-left: 4px solid transparent;
+  color: #857d69;
+  display: block;
+  font-size: 13px;
+  line-height: 1.2;
+  list-style-type: none;
+  padding: 4px 0 4px 6px;
+  text-decoration: none;
+  margin-left: -9px;
+}
+
+div.nav-right > #toc-local > a.list-group-item.level-2 {
+  padding-left: 15px;
+  padding-top: 0px;
+  font-size: 12px;
+}
+
+div.nav-right > #toc-local > a.list-group-item.active {
+  border-left-color: #4684b6;
+  color: #212529;
+}
+
+div.nav-right > #toc-local > a.list-group-item:hover {
+  color: white;
+  text-decoration: none;
 }
 
 
@@ -317,7 +362,7 @@ div.document-wrapper {
 
 div.document {
   background-color: #282828;
-  color: #b8b8b8;
+  color: #aaa;
   border-radius: 2pt;
   box-shadow: 0 0 4px 1px rgb(80 80 80 / 25%);
   padding: var(--document-padding);
@@ -327,4 +372,49 @@ div.copyright {
   font-size: 12px;
   margin-top: 3px;
   opacity: 0.5;
+}
+
+div.document code {
+  background-color: #101010;
+  border-radius: 3pt;
+  color: #8b9fb1;
+  font-family: var(--font-mono);
+  font-size: 85%;
+  padding: 2pt 3pt;
+}
+
+div.document h1 {
+  border-bottom: 1px solid #555;
+  color: #ccc;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0 0 20px 0;
+}
+
+div.document h1 > a.headerlink,
+div.document h2 > a.headerlink,
+div.document h3 > a.headerlink,
+div.document h4 > a.headerlink {
+  display: none;
+  font-size: 60%;
+  visibility: hidden;
+}
+
+div.document h1 > a.headerlink::after,
+div.document h2 > a.headerlink::after,
+div.document h3 > a.headerlink::after,
+div.document h4 > a.headerlink::after {
+  content: "\f0c1";
+  font-family: 'FontAwesome';
+  left: -3px;
+  position: relative;
+  top: -2px;
+  visibility: visible;
+}
+
+div.document h1:hover > a.headerlink,
+div.document h2:hover > a.headerlink,
+div.document h3:hover > a.headerlink,
+div.document h4:hover > a.headerlink {
+  display: initial;
 }

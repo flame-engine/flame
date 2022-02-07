@@ -15,8 +15,8 @@
     - [Other Inputs](other-inputs.md)
 
 - Audio
-    - [General Audio](audio.md)
-    - [Looping Background Music](bgm.md)
+    - [General Audio](flame_audio/audio.md)
+    - [Looping Background Music](flame_audio/bgm.md)
 
 - Rendering
     - [Images, Sprites and Animations](images.md)

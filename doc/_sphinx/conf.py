@@ -63,7 +63,6 @@ html_static_path = ['images', 'styles', 'scripts', 'theme', 'fonts']
 html_css_files = ['custom.css']
 html_js_files = ['versions.js']
 
-
 # -- Custom setup ------------------------------------------------------------
 class TitleCollector(docutils.nodes.SparseNodeVisitor):
     def __init__(self, document):
@@ -102,7 +101,7 @@ def get_local_toc(document):
     h1_seen = False
     ul_level = 0
     html_text = "<div id='toc-local' class='list-group'>\n"
-    html_text += " <b>Table of contents</b>\n"
+    html_text += " <div class='header'><i class='fa fa-list'></i> Contents</div>\n"
     for title, node_id, level in titles:
         if level <= 1:
             return document.reporter.error("More than one <h1> title on the page")
