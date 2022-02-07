@@ -30,6 +30,7 @@ jobs:
         with:
           channel: 'stable'
       - uses: bluefireteam/melos-action@main
+      - uses: bluefireteam/melos-action@main
       - uses: flame-engine/flame-dartdoc-action@v2
         with:
           package-path: ${{ matrix.package }}
@@ -41,7 +42,8 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - uses: flame-engine/flame-format-action@v1
+      - uses: bluefireteam/melos-action@main
+      - run: melos run format-check
 
   analyze:
     runs-on: ubuntu-latest
