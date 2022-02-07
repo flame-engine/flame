@@ -30,7 +30,7 @@ jobs:
         with:
           channel: 'stable'
       - uses: bluefireteam/melos-action@main
-      - run: cd ${{ matrix.package }} && melos run dartdoc
+      - run: cd $(dirname ${{ matrix.package }}) && melos run dartdoc
 
   format:
     runs-on: ubuntu-latest
