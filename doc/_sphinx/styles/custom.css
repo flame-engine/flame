@@ -10,29 +10,6 @@
     --pst-color-toc-link: 130, 130, 130;
 }
 
-body,
-.topbar .topbar-main {
-    background-color: #202225;
-    color: #d3d3d3;
-}
-
-.topbar .topbar-main {
-    padding-left: 0 !important;
-}
-
-.topbar .topbar-main button.topbarbtn {
-    background-color: #484848;
-    color: #020202;
-}
-
-.scrolled .topbar {
-    box-shadow: none;
-}
-
-.scrolled .topbar-main {
-    box-shadow: 0 3px 6px 0 #000000AA;
-}
-
 main.bd-content {
     padding-left: 0 !important;
 }
@@ -247,9 +224,7 @@ main.bd-content #main-content h5 {
 .form-control {
     background-color: transparent;
 }
-.topbar {
-    background-color: #3a3a3a;
-}
+
 .tocsection {
     border-color: black;
 }
