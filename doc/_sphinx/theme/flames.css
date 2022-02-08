@@ -121,7 +121,7 @@ div.sidebar-left {
   bottom: 0;
   box-sizing: border-box;
   overflow: hidden;
-  padding: 20px 0 0 12px;
+  padding: calc(20px + var(--top-menu-height)) 0 0 12px;
   position: fixed;
   top: 0;
   width: var(--left-menu-width);
