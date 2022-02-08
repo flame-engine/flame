@@ -424,3 +424,57 @@ div.document h3:hover > a.headerlink,
 div.document h4:hover > a.headerlink {
   display: initial;
 }
+
+/* Previous/next buttons */
+
+.prev-next-area {
+  display: flex;
+  padding: 20px 0;
+}
+
+.prev-next-area > a {
+  align-items: center;
+  color: #bbb;
+  display: flex;
+  padding: 10px;
+  max-width: 45%;
+  overflow-x: hidden;
+}
+
+.prev-next-area > a.left-prev {
+  border-radius: 100px 0 0 100px;
+  padding-left: 15px;
+}
+
+.prev-next-area > a.right-next {
+  border-radius: 0 100px 100px 0;
+  padding-right: 15px;
+}
+
+.prev-next-area > a:hover {
+  background: #323232;
+  box-shadow: 1px 1px 2px #000;
+}
+
+.prev-next-area > a > i {
+  font-size: 200%;
+  font-weight: bold;
+}
+
+.prev-next-area > a > .prev-next-info {
+  flex-direction: column;
+  margin: 0 0.5em;
+}
+
+.prev-next-area > a > .prev-next-info > p {
+  margin: 0 0.3em;
+  line-height: 1.3em;
+}
+
+.prev-next-area > a > .prev-next-info > p.prev-next-subtitle {
+  color: #888;
+}
+
+.prev-next-area > a:hover > .prev-next-info > p.prev-next-title {
+  color: #8CE4FF;
+}

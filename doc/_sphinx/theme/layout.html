@@ -108,6 +108,27 @@
       <nobr>(CC BY 4.0)</nobr>,
       and code samples are licensed under the <a href="https://opensource.org/licenses/MIT">MIT License</a>.
     </div>
+    <div class="prev-next-area">
+      {%- if prev %}
+      <a class="left-prev" id="prev-link" href="{{ prev.link|e }}" title="previous page">
+        <i class="fa fa-angle-left"></i>
+        <div class="prev-next-info">
+          <p class="prev-next-subtitle">Previous:</p>
+          <p class="prev-next-title">{{ prev.title|striptags|e }}</p>
+        </div>
+      </a>
+      {%- endif %}
+      <div class='expander'></div>
+      {%- if next %}
+      <a class="right-next" id="next-link" href="{{ next.link|e }}" title="next page">
+        <div class="prev-next-info">
+          <p class="prev-next-subtitle">Next:</p>
+          <p class="prev-next-title">{{ next.title|striptags|e }}</p>
+        </div>
+        <i class="fa fa-angle-right"></i>
+      </a>
+      {%- endif %}
+    </div>
   </div>
 
   <div class="sidebar-right">
