@@ -1,7 +1,5 @@
 import 'package:vector_math/vector_math_64.dart';
 
-import '../../extensions.dart';
-
 export 'package:vector_math/vector_math_64.dart' hide Colors;
 
 extension Matrix4Extension on Matrix4 {
@@ -78,13 +76,6 @@ extension Matrix4Extension on Matrix4 {
       out.setFrom(position);
     }
     return transform2(out);
-  }
-
-  /// Transform [rect] of type [Rect] using the transformation defined by this.
-  Rect transformRect(Rect rect) {
-    final topLeft = transform2(rect.topLeft.toVector2());
-    final bottomRight = transform2(rect.bottomRight.toVector2());
-    return Rect.fromLTRB(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
   }
 
   /// Create a scaled matrix.
