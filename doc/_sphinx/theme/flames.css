@@ -12,6 +12,7 @@
   --left-menu-width: clamp(250px, 25vw, 350px);
   --right-menu-width: 240px;
   --top-menu-height: 50px;
+  color-theme: dark; /* makes scrollbars dark */
 }
 
 @media (max-width: 900px) {
@@ -112,14 +113,18 @@ div.sidebar-left-bg {
 }
 
 div.sidebar-left {
+  bottom: 0;
   box-sizing: border-box;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
   padding: 20px 0 0 12px;
-  position: absolute;
+  position: fixed;
   top: 0;
   width: var(--left-menu-width);
   z-index: 60;
+}
+
+div.sidebar-left:hover {
+  overflow-y: auto;
 }
 
 /* On small displays the sidebar becomes hidden and can be toggled via a menu
@@ -210,7 +215,7 @@ div.nav-left li {
 
 div.nav-left li > a {
   border-radius: 5px 0 0 5px;
-  color: #696e8e;
+  color: #857d69;
   display: block;
   font-size: 13px;
   margin-left: -12px;
@@ -223,6 +228,7 @@ div.nav-left li > a:hover {
 }
 
 div.nav-left li > a:not(:only-child)::before {
+  color: #ffbb3e;
   content: "\f0da";
   font-family: 'FontAwesome';
   font-size: 70%;
@@ -232,7 +238,7 @@ div.nav-left li > a:not(:only-child)::before {
 }
 
 div.nav-left li > a:not(:only-child):not(.current):hover::before {
-  color: #69698e;
+  color: #fff;
 }
 
 div.nav-left li.current > ul {
