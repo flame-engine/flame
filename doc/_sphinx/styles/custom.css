@@ -11,49 +11,6 @@
 }
 
 
-pre {
-    background: #424242;
-    border: none;
-    box-shadow: 0px 0px 3px black;
-    color: #888;
-    position: relative;
-}
-
-code {
-    background-color: #282828;
-    border-radius: 3pt;
-    color: #FFC479;
-    padding: 2pt 3pt;
-}
-
-div[class^="highlight-"] pre:before {
-    background: black;
-    border-bottom-left-radius: 5px;
-    border-top-right-radius: 5px;
-    color: #58d0ff;
-    font-size: 80%;
-    padding: 1px 8px;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-div.highlight-console pre:before {
-    content: "bash";
-    color: #666;
-}
-div.highlight-dart pre:before {
-    content: "dart";
-}
-div.highlight-yaml pre:before {
-    content: "yaml";
-    color: #5f5;
-}
-div.highlight-text pre:before {
-    content: "text";
-    color: #666;
-}
-
 
 
 div.bd-toc.show {
