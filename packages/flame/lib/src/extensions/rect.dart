@@ -53,13 +53,12 @@ extension RectExtension on Rect {
     ];
   }
 
-
   /// Transform Rect using the transformation defined by [matrix].
-  /// 
-  /// **Note:** Rotation matrices will increase the size of the [Rect] but they 
+  ///
+  /// **Note:** Rotation matrices will increase the size of the [Rect] but they
   /// will not rotate it as [Rect] does not have any rotational values.
-  /// 
-  /// **Note:** Only non-negative scale transforms are allowed, if a negative 
+  ///
+  /// **Note:** Only non-negative scale transforms are allowed, if a negative
   /// scale is applied it will return a zero-based [Rect].
   Rect transform(Matrix4 matrix) {
     final topLeft = matrix.transform2(this.topLeft.toVector2());
