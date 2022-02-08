@@ -23,7 +23,7 @@ is expanded both ways.
 The `NineTileBox` widget implements a `Container` using that standard. This pattern is also
 implemented as a component in the `NineTileBoxComponent` so that you can add this feature directly
 to your `FlameGame`. To get to know more about this, check the component docs
-[here](components.md#ninetileboxcomponent).
+[here](../flame/components.md#ninetileboxcomponent).
 
 Here you can find an example of how to use it (without using the `NineTileBoxComponent`):
 
@@ -60,7 +60,7 @@ SpriteButton.asset(
 
 ## SpriteWidget
 
-`SpriteWidget` is a widget used to display a [Sprite](images.md#sprite) inside a widget
+`SpriteWidget` is a widget used to display a [Sprite](../flame/rendering/images.md#sprite) inside a widget
 tree.
 
 This is how to use it:
@@ -74,7 +74,7 @@ SpriteWidget.asset(
 
 ## SpriteAnimationWidget
 
-`SpriteAnimationWidget` is a widget used to display [SpriteAnimations](images.md#animation) inside
+`SpriteAnimationWidget` is a widget used to display [SpriteAnimations](../flame/rendering/images.md#animation) inside
 a widget tree.
 
 This is how to use it:

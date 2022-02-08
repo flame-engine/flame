@@ -1,6 +1,6 @@
 # Components
 
-![Component tree](images/component_tree.png)
+![Component tree](../images/component_tree.png)
 
 This diagram might look intimidating, but don't worry, it is not as complex as it looks.
 
@@ -14,7 +14,7 @@ Every `Component` has a few methods that you can optionally implement, which are
 `FlameGame` class. If you are not using `FlameGame`, you can use these methods on your own game loop
 if you wish.
 
-![Component Lifecycle Diagram](images/component_lifecycle.png)
+![Component Lifecycle Diagram](../images/component_lifecycle.png)
 
 The `onGameResize` method is called whenever the screen is resized, and once in the beginning when
 the component is added to the game via the `add` method.
@@ -261,7 +261,7 @@ this.player = SpriteAnimationComponent(
 ```
 
 If you have a sprite sheet, you can use the `sequenced` constructor from the `SpriteAnimationData`
-class (check more details on [Images &gt; Animation](images.md#Animation)):
+class (check more details on [Images &gt; Animation](rendering/images.md#animation)):
 
 ```dart
 final size = Vector2.all(64.0);
@@ -628,7 +628,7 @@ final diamond = PolygonComponent.fromPoints(vertices);
 
 ## SpriteBodyComponent
 
-See [SpriteBodyComponent](forge2d.md#SpriteBodyComponent) in the Forge2D documentation.
+See [SpriteBodyComponent](../other/forge2d.md#spritebodycomponent) in the Forge2D documentation.
 
 ## TiledComponent
 
@@ -664,11 +664,11 @@ planes of each cuboid in your tile. Basically, it's the height of the front-most
 cuboid; normally it's half (default) or a quarter of the tile size. On the image below you can see
 the height colored in the darker tone:
 
-![An example of how to determine the tileHeight](images/tile-height-example.png)
+![An example of how to determine the tileHeight](../images/tile-height-example.png)
 
 This is an example of how a quarter-length map looks like:
 
-![An example of a isometric map with selector](images/isometric.png)
+![An example of a isometric map with selector](../images/isometric.png)
 
 Flame's Example app contains a more in-depth example, featuring how to parse coordinates to make a
 selector. The code can be found

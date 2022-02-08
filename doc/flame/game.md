@@ -67,7 +67,7 @@ simply by doing `yourComponent.remove();`.
 
 ## Lifecycle
 
-![Game Lifecycle Diagram](images/component_lifecycle.png)
+![Game Lifecycle Diagram](../images/component_lifecycle.png)
 
 When a game first is added to a Flutter widget tree the following lifecycle methods will be called
 in order: `onGameResize`, `onLoad` and `onMount`. After that it goes on to call `update` and
@@ -95,11 +95,11 @@ however, be set to `true` to enable debug features for the components of the gam
 the value of this variable is passed through to its components when they are added to the game, so
 if you change the `debugMode` at runtime, it will not affect already added components by default.
 
-To read more about the `debugMode` on Flame, please refer to the [Debug Docs](debug.md)
+To read more about the `debugMode` on Flame, please refer to the [Debug Docs](../other/debug.md)
 
 # Low-level Game API
 
-![Game low-level API](images/game_mixin.png)
+![Game low-level API](../images/game_mixin.png)
 
 The `Game` mixin is a low-level API that can be used when you want to implement the functionality of
 how the game engine should be structured. `Game` does not implement any `update` or
