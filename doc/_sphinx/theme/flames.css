@@ -153,7 +153,7 @@ div.top-bar #menu-button {
 }
 
 #versions-menu.active > .dropdown-buttons {
-  background: #303030;
+  background: #383838;
   border-radius: 4px;
   box-shadow: 1px 1px 4px black;
   box-sizing: border-box;
@@ -596,7 +596,7 @@ div.highlight-text pre:before {
 
 
 /*----------------------------------------------------------------------------*
- * Search page
+ * Search elements
  *----------------------------------------------------------------------------*/
 
 /* On the search page the first header is H2 instead of H1 */
@@ -634,6 +634,12 @@ div.highlight-box {
   padding: 3px 8px;
   position: absolute;
   top: 0;
+}
+
+@media (max-width: 900px) {
+  div.highlight-box {
+    left: 54px;
+  }
 }
 
 div.highlight-box div.title {
