@@ -103,9 +103,9 @@ performance benefits to gain from it. The `register` call is usually done in `on
 Example:
 
 ```dart
-Future<void> onLoad async {
-  await super.onLoad();
-  components.register<PositionComponent>();
+@override
+Future<void> onLoad() async {
+  children.register<PositionComponent>();
 }
 ```
 
@@ -113,6 +113,7 @@ In the example above a query is registered for `PositionComponent`s, and an exam
 the registered component type can be seen below.
 
 ```dart
+@override
 void update(double dt) {
   final allPositionComponents = components.query<PositionComponent>();
 }
@@ -185,7 +186,7 @@ that the `position`, `angle` and `scale` will be relative to the parents state.
 So if you, for example, wanted to position a child 50 logical pixels above the center of the parent
 you would do this:
 
-```
+```dart
 final parent = PositionComponent(
   position: Vector2(100, 100),
   size: Vector2(100, 100),
