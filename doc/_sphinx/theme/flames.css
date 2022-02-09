@@ -184,6 +184,10 @@ div.top-bar #menu-button {
   width: -webkit-fill-available;
 }
 
+#versions-menu.active > .dropdown-buttons > a > button > i.fa {
+  padding-right: 6px;
+}
+
 
 /*----------------------------------------------------------------------------*
  * Left sidebar area

@@ -24,7 +24,11 @@ function convertVersionsToHtmlLinks(versionsList, currentVersion) {
     if (version === currentVersion) {
       classes += ' selected';
     }
-    out += `<a href="/${version}/"><button class="${classes}">${version}</button></a>`;
+    out += `<a href="/${version}/">
+      <button class="${classes}">
+        <i class="fa fa-code-branch"></i> ${version}
+      </button>
+    </a>`;
   }
   return out;
 }
