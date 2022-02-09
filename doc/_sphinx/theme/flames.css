@@ -5,6 +5,7 @@
   --document-padding: min(40px, 4vw);
   --font-sans: 'Ubuntu', Roboto, Helvetica Neue, Arial, sans-serif;
   --font-mono: "SF Mono", Menlo, monospace;
+  --highlight-color: 255, 233, 92;
   --left-menu-width: clamp(250px, 25vw, 330px);
   --right-menu-width: 240px;
   --top-menu-height: 50px;
@@ -543,4 +544,82 @@ div.highlight-yaml pre:before {
 div.highlight-text pre:before {
   content: "text";
   color: #666;
+}
+
+
+/*----------------------------------------------------------------------------*
+ * Search page
+ *----------------------------------------------------------------------------*/
+
+/* On the search page the first header is H2 instead of H1 */
+div#search-results > h2 {
+  margin-top: 0;
+}
+
+p.search-summary {
+    opacity: 35%;
+}
+
+span.highlighted {
+  background: inherit; /* undo style from basic.css */
+}
+
+span.highlighted:not(.off) {
+  background: #ffe000;
+  color: black;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+
+div.highlight-box {
+  background: black linear-gradient(rgba(var(--highlight-color), 100%),
+                                    rgba(var(--highlight-color), 85%),
+                                    rgba(var(--highlight-color), 50%));
+  border: 1px solid #5a441b;
+  border-style: none solid;
+  display: flex;
+  height: 100%;
+  left: calc(var(--left-menu-width) + var(--document-x-margin));
+  margin: 0;
+  padding: 3px 8px;
+  position: absolute;
+  top: 0;
+}
+
+div.highlight-box div.title {
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 12px;
+  font-variant: small-caps;
+  line-height: 16px;
+  opacity: 0.5;
+}
+
+div.highlight-box div.content {
+  display: flex;
+}
+
+div.highlight-box div.content > span {
+  background: rgb(var(--highlight-color));
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+  color: #000;
+  cursor: pointer;
+  margin-right: 4px;
+  padding: 1px 6px 2px 6px;
+  user-select: none;
+}
+
+div.highlight-box div.content > span.off {
+  background: none;
+  border-style: dashed;
+}
+
+div.highlight-box button.close {
+  background: transparent;
+  border: none;
+  color: black;
+  cursor: pointer;
+  font-size: 20px;
+  margin: 0 0 0 20px;
 }
