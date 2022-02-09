@@ -5,6 +5,7 @@
   --document-padding: min(40px, 4vw);
   --font-sans: 'Ubuntu', Roboto, Helvetica Neue, Arial, sans-serif;
   --font-mono: "SF Mono", Menlo, monospace;
+  --font-awesome: 'Font Awesome 5 Solid';
   --highlight-color: 255, 233, 92;
   --left-menu-width: clamp(250px, 25vw, 330px);
   --right-menu-width: 240px;
@@ -37,6 +38,16 @@ a {
 
 a:hover {
   color: #ddbb99;
+}
+
+a.reference.external::after {
+  content: "\f35d";
+  font-family: var(--font-awesome);
+  font-size: 60%;
+  opacity: 60%;
+  padding-left: 2px;
+  position: relative;
+  top: -5px;
 }
 
 code {
@@ -167,6 +178,7 @@ div.top-bar #menu-button {
 
 #versions-menu.active > .dropdown-buttons > a > button {
   justify-content: flex-start;
+  min-width: 60px;
   width: fill-available;
   width: -moz-fill-available;
   width: -webkit-fill-available;
@@ -297,7 +309,7 @@ div.nav-left li > a:hover {
 div.nav-left li > a:not(:only-child)::before {
   color: #ffbb3e;
   content: "\f0da";
-  font-family: 'Font Awesome 5 Solid';
+  font-family: var(--font-awesome);
   font-size: 70%;
   font-weight: 900;
   left: -9px;
@@ -474,7 +486,7 @@ div.document :is(h1, h2, h3, h4) > a.headerlink {
 
 div.document :is(h1, h2, h3, h4) > a.headerlink::after {
   content: "\f0c1";
-  font-family: 'Font Awesome 5 Solid';
+  font-family: var(--font-awesome);
   left: -3px;
   position: relative;
   top: -2px;
