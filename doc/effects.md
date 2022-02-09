@@ -62,6 +62,7 @@ There are multiple effect controllers provided by the Flame framework as well:
 - [`SequenceEffectController`](#sequenceeffectcontroller)
 - [`SpeedEffectController`](#speedeffectcontroller)
 - [`DelayedEffectController`](#delayedeffectcontroller)
+- [`NoiseEffectController`](#noiseffectcontroller)
 - [`RandomEffectController`](#randomeffectcontroller)
 - [`SineEffectController`](#sineeffectcontroller)
 - [`ZigzagEffectController`](#zigzageffectcontroller)
@@ -503,6 +504,16 @@ controller is executing the "delay" stage, the effect will be considered "not st
 
 ```dart
 final ec = DelayedEffectController(LinearEffectController(1), delay: 5);
+```
+
+
+### `NoiseEffectController`
+
+This effect controller exhibits noisy behavior, i.e. it oscillates randomly around zero. Such effect
+controller can be used to implement a variety of shake effects.
+
+```dart
+final ec = NoiseEffectController(duration: 0.6, frequency: 10);
 ```
 
 
