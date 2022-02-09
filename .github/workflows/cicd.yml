@@ -55,7 +55,7 @@ jobs:
 
   # BEGIN TESTING STAGE
   test:
-    needs: [dartdoc, format, analyze]
+    needs: [format, analyze]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
