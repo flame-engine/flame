@@ -10,7 +10,7 @@ function getCurrentDocVersion() {
       return parts[1];
     }
   }
-  return '--';
+  return 'main';
 }
 
 // Given a list of versions (as plain strings), convert them into HTML <A/>
@@ -32,15 +32,18 @@ function convertVersionsToHtmlLinks(versionsList, currentVersion) {
 function buildVersionsMenu(data) {
   const currentVersion = getCurrentDocVersion();
   const versionButtons = convertVersionsToHtmlLinks(data.split('\n'), currentVersion);
-  $('div.topbar-main').append(`
-    <div class="dropdown-buttons-trigger" id="versions-menu">
-      <button class="btn btn-secondary topbarbtn">
-        <span class="tag">version:</span>
+  $('div.versions-placeholder').append(`
+    <div id="versions-menu">
+      <div class="btn">
+        <i class="fa fa-code-branch"></i>
         <span class="version-id">${currentVersion}</span>
-      </button>
+      </div>
       <div class="dropdown-buttons">${versionButtons}</div>
     </div>
   `);
+  $("#versions-menu").click(function() {
+    $(this).toggleClass("active");
+  });
 }
 
 // Start loading the versions list as soon as possible, don't wait for DOM
@@ -51,5 +54,9 @@ const versionsRequest = $.get(
 // Now wait for DOM to finish loading
 $(function() {
   // Lastly, wait for versions to finish loading too.
-  versionsRequest.then(buildVersionsMenu);
+  versionsRequest.then(buildVersionsMenu)
+    .fail(function() {
+      console.log("Failed to load versions.txt, using default version list");
+      buildVersionsMenu("main\n1.0.0\n");
+    });
 });

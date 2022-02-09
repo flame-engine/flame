@@ -66,7 +66,6 @@ div.topbar {
   background: #303030;
   box-shadow: 0px 3px 7px #00000066, 0 1px 2px #000000bf;
   box-sizing: border-box;
-  contain: strict;
   display: flex;
   height: var(--top-menu-height);
   margin-left: auto;
@@ -115,6 +114,65 @@ div.topbar #menu-button {
   display: none;
 }
 
+@media (max-width: 900px) {
+  div.topbar #menu-button {
+    display: inline-block;
+    margin-left: -8px;
+    margin-right: 8px;
+  }
+
+  div.topbar #menu-button.active {
+    background-color: #8d7a39;
+  }
+}
+
+/*----------------------------------------------------------------------------*
+ * Version menu
+ *----------------------------------------------------------------------------*/
+
+#versions-menu {
+  position: relative;
+}
+
+#versions-menu > .btn {
+  padding: 0 8px;
+  width: auto;
+}
+
+#versions-menu.active > .btn {
+  background-color: #8d7a39;
+}
+
+#versions-menu > .btn > .version-id {
+  color: #ffe95c;
+  font-weight: bold;
+  padding: 0 0 0 6px;
+}
+
+#versions-menu > .dropdown-buttons {
+  display: none;
+}
+
+#versions-menu.active > .dropdown-buttons {
+  background: #303030;
+  border-radius: 4px;
+  box-shadow: 1px 1px 4px black;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  position: absolute;
+  right: 0;
+  top: calc(var(--top-menu-height) - 4px);
+}
+
+#versions-menu.active > .dropdown-buttons > a > button {
+  justify-content: flex-start;
+  width: fill-available;
+  width: -moz-fill-available;
+  width: -webkit-fill-available;
+}
+
 
 /*----------------------------------------------------------------------------*
  * Left sidebar area
@@ -149,15 +207,6 @@ div.sidebar-left:hover {
 /* On small displays the sidebar becomes hidden and can be toggled via a menu
    button. */
 @media (max-width: 900px) {
-  div.topbar #menu-button {
-    display: inline-block;
-    margin-left: -8px;
-    margin-right: 8px;
-  }
-
-  div.topbar #menu-button.active {
-    background-color: #8d7a39;
-  }
 
   div.sidebar-left-area {
     position: absolute;
@@ -578,6 +627,7 @@ div.highlight-box {
                                     rgba(var(--highlight-color), 50%));
   border: 1px solid #5a441b;
   border-style: none solid;
+  box-sizing: border-box;
   display: flex;
   height: 100%;
   left: calc(var(--left-menu-width) + var(--document-x-margin));
