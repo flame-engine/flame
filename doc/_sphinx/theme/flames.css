@@ -61,7 +61,7 @@ div.expander {
  * Top navigation bar
  *----------------------------------------------------------------------------*/
 
-div.topbar {
+div.top-bar {
   align-items: center;
   background: #303030;
   box-shadow: 0px 3px 7px #00000066, 0 1px 2px #000000bf;
@@ -77,14 +77,13 @@ div.topbar {
   z-index: 100;
 }
 
-
-div.topbar .logo_image img {
+div.top-bar .logo_image img {
   height: calc(var(--top-menu-height) * 0.65);
   position: relative;
   top: 3px; /* correct for logo having slightly asymmetrical spacing */
 }
 
-div.topbar .btn {
+div.top-bar .btn {
   align-items: center;
   background-color: transparent;
   border: none;
@@ -101,27 +100,27 @@ div.topbar .btn {
   width: 40px;
 }
 
-div.topbar .btn:hover {
+div.top-bar .btn:hover {
   background-color: #b7b7b740;
 }
 
-div.topbar #github-button,
-div.topbar #discord-button {
+div.top-bar #github-button,
+div.top-bar #discord-button {
   font-size: 1.4em;
 }
 
-div.topbar #menu-button {
+div.top-bar #menu-button {
   display: none;
 }
 
 @media (max-width: 900px) {
-  div.topbar #menu-button {
+  div.top-bar #menu-button {
     display: inline-block;
     margin-left: -8px;
     margin-right: 8px;
   }
 
-  div.topbar #menu-button.active {
+  div.top-bar #menu-button.active {
     background-color: #8d7a39;
   }
 }
