@@ -176,6 +176,13 @@ div.top-bar #menu-button {
   top: calc(var(--top-menu-height) - 4px);
 }
 
+#versions-menu.active > .dropdown-buttons .header {
+  font-size: 80%;
+  font-style: italic;
+  min-width: 200px;
+  opacity: 0.6;
+}
+
 #versions-menu.active > .dropdown-buttons > a > button {
   justify-content: flex-start;
   min-width: 60px;

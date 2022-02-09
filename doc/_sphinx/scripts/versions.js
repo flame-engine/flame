@@ -37,15 +37,18 @@ function buildVersionsMenu(data) {
   const currentVersion = getCurrentDocVersion();
   const versionButtons = convertVersionsToHtmlLinks(data.split('\n'), currentVersion);
   $('div.versions-placeholder').append(`
-    <div id="versions-menu">
+    <div id="versions-menu" tabindex="-1">
       <div class="btn">
         <i class="fa fa-code-branch"></i>
         <span class="version-id">${currentVersion}</span>
       </div>
-      <div class="dropdown-buttons">${versionButtons}</div>
+      <div class="dropdown-buttons">
+        <div class="header">View documentation for version:</div>
+        ${versionButtons}
+      </div>
     </div>
   `);
-  $("#versions-menu").click(function() {
+  $("#versions-menu").on("click blur", function() {
     $(this).toggleClass("active");
   });
 }
