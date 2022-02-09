@@ -15,7 +15,6 @@ import 'viewport.dart';
 /// The viewfinder contains the game point that is currently at the
 /// "cross-hairs" of the viewport ([position]), the [zoom] level, and the
 /// [angle] of rotation of the camera.
-///
 class Viewfinder extends Component {
   /// Internal transform matrix used by the viewfinder.
   final Transform2D _transform = Transform2D();
