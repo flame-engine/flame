@@ -105,7 +105,7 @@ Example:
 ```dart
 Future<void> onLoad async {
   await super.onLoad();
-  components.register<PositionComponent>();
+  children.register<PositionComponent>();
 }
 ```
 
