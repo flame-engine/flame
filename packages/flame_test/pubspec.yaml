@@ -15,7 +15,6 @@ dependencies:
     sdk: flutter
   meta: ^1.7.0
   test: ^1.17.10
-  vector_math: '>=2.1.0 <3.0.0'
 
 dev_dependencies:
   dartdoc: ^4.1.0
