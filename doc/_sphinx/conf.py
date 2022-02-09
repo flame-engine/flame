@@ -122,5 +122,4 @@ def setup(app):
     theme_dir = os.path.abspath(os.path.join(this_dir, 'theme'))
     app.add_css_file('flames.css')
     app.add_html_theme('flames', theme_dir)
-    app.add_js_file("https://use.fontawesome.com/0f455d5fb2.js")
     app.connect("html-page-context", on_html_page_context)

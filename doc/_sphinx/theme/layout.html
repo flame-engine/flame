@@ -27,15 +27,16 @@
   {%- endif %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-  {%- if use_opensearch %}
-  <link rel="search" type="application/opensearchdescription+xml"
-        title="{% trans docstitle=docstitle|e %}Search within {{ docstitle }}{% endtrans %}"
-        href="{{ pathto('_static/opensearch.xml', 1) }}"/>
-  {%- endif %}
-  {%- if favicon %}
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,400;0,700;1,400;1,700&display=swap">
+  <link rel="preload" as="font" type="font/woff2" crossorigin=""
+        href="{{ pathto('_static/fontawesome/fa-brands-400.woff2', 1) }}">
+
+  <link rel="preload" as="font" type="font/woff2" crossorigin=""
+        href="{{ pathto('_static/fontawesome/fa-solid-900.woff2', 1) }}">
+  <link rel="stylesheet"
+        href="{{ pathto('_static/fontawesome/all.min.css', 1) }}">
   <link rel="shortcut icon" href="{{ pathto('_static/favicon.ico', 1)|e }}"/>
-  {%- endif %}
   {%- if hasdoc('genindex') %}
   <link rel="index" title="{{ _('Index') }}" href="{{ pathto('genindex') }}" />
   {%- endif %}
@@ -80,6 +81,14 @@
   </div>
   <div class="expander"></div>
 
+  <a href="https://discord.com/channels/509714518008528896/516639688581316629" id="discord-button"
+     class="btn" title="Flame Discord channel">
+    <i class="fab fa-discord"></i>
+  </a>
+  <a href="https://github.com/flame-engine/flame/" id="github-button" class="btn"
+     title="GitHub repository">
+    <i class="fab fa-github"></i>
+  </a>
 </div>
 
 <div class="sidebar-left-area">

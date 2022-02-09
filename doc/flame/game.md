@@ -97,7 +97,7 @@ if you change the `debugMode` at runtime, it will not affect already added compo
 
 To read more about the `debugMode` on Flame, please refer to the [Debug Docs](../other/debug.md)
 
-# Low-level Game API
+## Low-level Game API
 
 ![Game low-level API](../images/game_mixin.png)
 
@@ -142,7 +142,7 @@ main() {
 }
 ```
 
-# GameLoop
+## Game Loop
 
 The `GameLoop` module is a simple abstraction over the game loop concept. Basically most games are
 built upon two methods:
@@ -153,7 +153,7 @@ built upon two methods:
 
 The `GameLoop` is used by all of Flame's `Game` implementations.
 
-# Pause/Resuming game execution
+## Pause/Resuming game execution
 
 A Flame `Game` can be paused and resumed in two ways:
 
@@ -163,7 +163,7 @@ A Flame `Game` can be paused and resumed in two ways:
 When pausing a Flame `Game`, the `GameLoop` is effectively paused, meaning that no updates or new
 renders will happen until it is resumed.
 
-# Flutter Widgets and Game instances
+## Flutter Widgets and Game instances
 
 Since a Flame game can be wrapped in a widget, it is quite easy to use it alongside other Flutter
 widgets. But still, there is the Widgets Overlay API that makes things even easier.
