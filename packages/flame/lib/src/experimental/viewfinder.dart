@@ -95,6 +95,7 @@ class Viewfinder extends Component {
     _initZoom();
   }
 
+  @mustCallSuper
   @override
   void onMount() {
     assert(parent! is Camera2, 'Viewfinder can only be mounted to a Camera2');
