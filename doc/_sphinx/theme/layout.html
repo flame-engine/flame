@@ -17,7 +17,7 @@
   {%- for js in script_files %}
   {{ js_tag(js) }}
   {%- endfor %}
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="searchindex.js" defer></script>
   {%- endblock %}
 
   {%- block links %}
@@ -27,15 +27,10 @@
   {%- endif %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,400;0,700;1,400;1,700&display=swap">
-  <link rel="preload" as="font" type="font/woff2" crossorigin=""
-        href="{{ pathto('_static/fontawesome/fa-brands-400.woff2', 1) }}">
-
-  <link rel="preload" as="font" type="font/woff2" crossorigin=""
-        href="{{ pathto('_static/fontawesome/fa-solid-900.woff2', 1) }}">
-  <link rel="stylesheet"
-        href="{{ pathto('_static/fontawesome/all.min.css', 1) }}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,400;0,700;1,400;1,700&display=swap">
+  <link rel="preload" as="font" type="font/woff2" crossorigin="" href="{{ pathto('_static/fontawesome/fa-brands-400.woff2', 1) }}">
+  <link rel="preload" as="font" type="font/woff2" crossorigin="" href="{{ pathto('_static/fontawesome/fa-solid-900.woff2', 1) }}">
+  <link rel="stylesheet" href="{{ pathto('_static/fontawesome/all.min.css', 1) }}">
   <link rel="shortcut icon" href="{{ pathto('_static/favicon.ico', 1)|e }}"/>
   {%- if hasdoc('genindex') %}
   <link rel="index" title="{{ _('Index') }}" href="{{ pathto('genindex') }}" />
@@ -113,9 +108,8 @@
       {% block body %} {% endblock %}
     </div>
     <div class="copyright">
-      The content on this page is licensed under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 License</a>
-      <nobr>(CC BY 4.0)</nobr>,
-      and code samples are licensed under the <a href="https://opensource.org/licenses/MIT">MIT License</a>.
+      The content on this page is licensed under the <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0 License</a>,
+      and code samples under the <a href="https://opensource.org/licenses/MIT">MIT License</a>.
     </div>
     <div class="prev-next-area">
       {%- if prev %}

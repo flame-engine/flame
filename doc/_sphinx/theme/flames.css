@@ -39,7 +39,7 @@ a:hover {
 }
 
 code {
-  background-color: #101010;
+  background-color: #181818;
   border-radius: 3pt;
   color: #8b9fb1;
   font-family: var(--font-mono);
@@ -505,7 +505,7 @@ div.document :is(h1, h2, h3, h4) > code {
  *----------------------------------------------------------------------------*/
 
 pre {
-  background: #424242;
+  background: #202020;
   border: none;
   border-radius: 0.4em;
   box-shadow: 0px 0px 3px black;
