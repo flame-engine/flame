@@ -8,7 +8,8 @@ environment:
   flutter: ">=2.5.0"
 
 dependencies:
-  flame: ^1.0.0
+  flame:
+    path: ../flame
   flutter:
     sdk: flutter
   flutter_test:
