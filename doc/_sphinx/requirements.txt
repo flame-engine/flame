@@ -2,5 +2,4 @@ linkify-it-py>=1.0
 myst-parser>=0.15.2
 pygments>=2.10
 sphinx>=4.2
-sphinx-book-theme>=0.1.4
 sphinxcontrib-mermaid>=0.7.1
