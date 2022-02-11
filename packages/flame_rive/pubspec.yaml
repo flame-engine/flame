@@ -17,5 +17,4 @@ dev_dependencies:
   dartdoc: ^4.1.0
   flutter_test:
     sdk: flutter
-  dart_code_metrics: ^4.10.0
   flame_lint: ^0.0.1
