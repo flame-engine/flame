@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import '../../components.dart';
-import '../components/cache/value_cache.dart';
+import '../cache/value_cache.dart';
 import 'shape_intersections.dart' as intersection_system;
 
 /// A shape can represent any geometrical shape with optionally a size, position
