@@ -71,8 +71,9 @@ void main() {
     flameGame.test('correct lifecycle on parent change', (game) async {
       final parent = _MyComponent('parent');
       final child = _MyComponent('child');
-      await parent.add(child);
-      await game.ensureAdd(parent);
+      parent.add(child);
+      game.add(parent);
+      await game.ready();
       child.changeParent(game);
       game.update(0);
       await game.ready();
