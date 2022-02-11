@@ -6,19 +6,16 @@ version: 1.0.0
 
 environment:
   sdk: ">=2.14.0 <3.0.0"
-  flutter: ">=1.17.0"
+  flutter: ">=2.5.0"
 
 dependencies:
-  flame:
-    path: ../flame
+  flame: ^1.0.0
   rive: ^0.8.1
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  dartdoc: ^0.42.0
+  dartdoc: ^4.1.0
   flutter_test:
     sdk: flutter
-  dart_code_metrics: ^3.2.2
-  flame_lint:
-    path: ../flame_lint
+  flame_lint: ^0.0.1

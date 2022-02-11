@@ -18,11 +18,7 @@ dependencies:
     sdk: flutter
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  dart_code_metrics: ^3.2.2
-  flame_lint:
-    path: ../packages/flame_lint
+  flame_lint: ^0.0.1
 
 flutter:
   uses-material-design: true

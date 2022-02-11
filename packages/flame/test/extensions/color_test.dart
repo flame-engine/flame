@@ -1,16 +1,17 @@
 import 'package:flame/extensions.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Color test', () {
-    test('test parse short RGB', () {
+  group('ColorExtension', () {
+    test('parse short RGB', () {
       expect(ColorExtension.fromRGBHexString('#234'), const Color(0xFF223344));
       expect(ColorExtension.fromRGBHexString('1f0'), const Color(0xFF11FF00));
       expect(ColorExtension.fromRGBHexString('#ccc'), const Color(0xFFCCCCCC));
       expect(ColorExtension.fromRGBHexString('b1f'), const Color(0xFFBB11FF));
     });
 
-    test('test parse long RGB', () {
+    test('parse long RGB', () {
       expect(
         ColorExtension.fromRGBHexString('#121314'),
         const Color(0xFF121314),
@@ -24,19 +25,19 @@ void main() {
         const Color(0xFFCCCCCC),
       );
       expect(
-        ColorExtension.fromRGBHexString('b210af'),
-        const Color(0xFFB210AF),
+        ColorExtension.fromRGBHexString('decade'),
+        const Color(0xFFDECADE),
       );
     });
 
-    test('test parse short ARGB', () {
+    test('parse short ARGB', () {
       expect(
         ColorExtension.fromARGBHexString('#fccc'),
         const Color(0xFFCCCCCC),
       );
       expect(
-        ColorExtension.fromARGBHexString('fccc'),
-        const Color(0xFFCCCCCC),
+        ColorExtension.fromARGBHexString('dead'),
+        const Color(0xDDEEAADD),
       );
       expect(
         ColorExtension.fromARGBHexString('#8cc0'),
@@ -48,14 +49,14 @@ void main() {
       );
     });
 
-    test('test parse long ARGB', () {
+    test('parse long ARGB', () {
       expect(
         ColorExtension.fromARGBHexString('#ffcc1050'),
         const Color(0xFFCC1050),
       );
       expect(
-        ColorExtension.fromARGBHexString('ffccbbaa'),
-        const Color(0xFFCCBBAA),
+        ColorExtension.fromARGBHexString('0defaced'),
+        const Color(0x0DEFACED),
       );
       expect(
         ColorExtension.fromARGBHexString('#80cccc00'),
@@ -64,6 +65,17 @@ void main() {
       expect(
         ColorExtension.fromARGBHexString('01234567'),
         const Color(0x01234567),
+      );
+    });
+
+    test('random: errors', () {
+      expect(
+        () => ColorExtension.random(base: -1),
+        failsAssert('The base argument should be in the range 0..256'),
+      );
+      expect(
+        () => ColorExtension.random(base: 257),
+        failsAssert('The base argument should be in the range 0..256'),
       );
     });
   });

@@ -1,3 +1,6 @@
+/// {@canonicalFor joystick_component.JoystickComponent}
+/// {@canonicalFor joystick_component.JoystickDirection}
+
 export 'src/components/input/button_component.dart';
 export 'src/components/input/hud_button_component.dart';
 export 'src/components/input/hud_margin_component.dart';

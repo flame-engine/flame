@@ -11,16 +11,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flame:
-    path: ../flame
+  flame: ^1.0.0
   archive: ^3.1.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flame_lint:
-    path: ../flame_lint
+  flame_lint: ^0.0.1
   mocktail: ^0.1.2
-  dartdoc: ^0.42.0
-
-flutter:
+  dartdoc: ^4.1.0

@@ -10,15 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flame:
-    path: ../flame
+  flame: ^1.0.0
   oxygen: ^0.2.0
 
 dev_dependencies:
-  dartdoc: ^0.42.0
+  dartdoc: ^4.1.0
   flutter_test:
     sdk: flutter
-  test: ^1.9.4
-  flame_lint:
-    path: ../flame_lint
-
+  test: ^1.19.3
+  flame_lint: ^0.0.1
