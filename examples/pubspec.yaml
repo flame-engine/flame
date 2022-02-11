@@ -10,18 +10,15 @@ environment:
   flutter: ">=2.5.0"
 
 dependencies:
-  flame:
-    path: ../packages/flame
+  flame: ^1.0.0
+  flame_svg:
+    path: ../packages/flame_svg
   dashbook: 0.1.5
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  dart_code_metrics: ^3.2.2
-  flame_lint:
-    path: ../packages/flame_lint
+  flame_lint: ^0.0.1
 
 flutter:
   uses-material-design: true
@@ -32,3 +29,4 @@ flutter:
     - assets/images/tile_maps/
     - assets/images/layers/
     - assets/images/parallax/
+    - assets/svgs/
