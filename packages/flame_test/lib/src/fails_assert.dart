@@ -1,4 +1,4 @@
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 /// Matcher that can be used in a test that expects an assertion error.
 ///

@@ -10,7 +10,7 @@ import 'package:meta/meta.dart';
 ///
 /// Example of usage:
 /// ```dart
-/// flameGameTest(
+/// testFlameGame(
 ///   'MyComponent can be added to a game',
 ///   (game) async {
 ///     final component = MyComponent()..addToParent(game);
@@ -22,13 +22,13 @@ import 'package:meta/meta.dart';
 ///
 /// The `game` instance supplied by this function to your test [testBody] is a
 /// standard [FlameGame]. If you want to have any other game instance, use the
-/// [userGameTest] function.
+/// [testUserGame] function.
 @isTest
-Future<void> flameGameTest(
+Future<void> testFlameGame(
   String testName,
   AsyncGameFunction<FlameGame> testBody,
 ) {
-  return userGameTest<FlameGame>(testName, () => FlameGame(), testBody);
+  return testUserGame<FlameGame>(testName, () => FlameGame(), testBody);
 }
 
 /// Utility function for writing tests that require a custom game instance.
@@ -39,7 +39,7 @@ Future<void> flameGameTest(
 ///
 /// Example of usage:
 /// ```dart
-/// userGameTest(
+/// testUserGame<MyGame>(
 ///   'MyComponent can be added to MyGame',
 ///   () => MyGame(mySecret: 3781),
 ///   (MyGame game) async {
@@ -50,7 +50,7 @@ Future<void> flameGameTest(
 /// );
 /// ```
 @isTest
-Future<void> userGameTest<T extends FlameGame>(
+Future<void> testUserGame<T extends FlameGame>(
   String testName,
   CreateFunction<T> create,
   AsyncGameFunction<T> testBody,

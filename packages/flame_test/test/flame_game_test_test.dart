@@ -1,10 +1,10 @@
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('withFlameGame', () {
-    flameGameTest(
+    testFlameGame(
       'game is properly initialized',
       (game) async {
         // Can be fixed after #1337
@@ -17,7 +17,7 @@ void main() {
   group('withUserGame', () {
     List<String>? storedEvents;
 
-    userGameTest<RecordedGame>(
+    testUserGame<RecordedGame>(
       'correct event sequence',
       () => RecordedGame(),
       (game) async {
