@@ -10,7 +10,7 @@ function getCurrentDocVersion() {
       return parts[1];
     }
   }
-  return 'main';
+  return 'local';
 }
 
 // Given a list of versions (as plain strings), convert them into HTML <A/>
@@ -64,6 +64,6 @@ $(function() {
   versionsRequest.then(buildVersionsMenu)
     .fail(function() {
       console.log("Failed to load versions.txt, using default version list");
-      buildVersionsMenu("main\n1.0.0\n");
+      buildVersionsMenu("local\nmain\n1.0.0\n");
     });
 });
