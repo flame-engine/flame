@@ -629,7 +629,7 @@ final diamond = PolygonComponent.fromPoints(vertices);
 
 ## SpriteBodyComponent
 
-See [SpriteBodyComponent](../other/forge2d.md#spritebodycomponent) in the Forge2D documentation.
+See [SpriteBodyComponent](../other_modules/forge2d.md#spritebodycomponent) in the Forge2D documentation.
 
 ## TiledComponent
 

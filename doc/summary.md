@@ -26,12 +26,12 @@
     - [Layers](flame/rendering/layers.md)
 
 - Other Modules
-    - [Util](other/util.md)
-    - [Widgets](other/widgets.md)
-    - [Forge2D](other/forge2d.md)
-    - [Oxygen](other/oxygen.md)
-    - [Tiled](other/tiled.md)
-    - [Debugging](other/debug.md)
-    - [Splash screen](other/splash_screen.md)
+    - [Util](flame/other/util.md)
+    - [Widgets](flame/other/widgets.md)
+    - [Forge2D](other_modules/forge2d.md)
+    - [Oxygen](other_modules/oxygen.md)
+    - [Tiled](other_modules/tiled.md)
+    - [Debugging](flame/other/debug.md)
+    - [Splash screen](other_modules/splash_screen.md)
 
 - [Tutorials](https://github.com/flame-engine/flame/tree/main/tutorials)

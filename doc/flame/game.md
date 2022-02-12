@@ -95,7 +95,7 @@ however, be set to `true` to enable debug features for the components of the gam
 the value of this variable is passed through to its components when they are added to the game, so
 if you change the `debugMode` at runtime, it will not affect already added components by default.
 
-To read more about the `debugMode` on Flame, please refer to the [Debug Docs](../other/debug.md)
+To read more about the `debugMode` on Flame, please refer to the [Debug Docs](other/debug.md)
 
 ## Low-level Game API
 

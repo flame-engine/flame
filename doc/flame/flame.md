@@ -13,4 +13,5 @@
     Camera & Viewport    <camera_and_viewport.md>
     Inputs               <inputs/inputs.md>
     Rendering            <rendering/rendering.md>
+    Other                <other/other.md>
 ```
