@@ -305,7 +305,7 @@ div.nav-left li {
 
 div.nav-left li > a {
   border-radius: 5px 0 0 5px;
-  color: #857d69;
+  color: #9d9175;
   display: block;
   font-size: 13px;
   margin-left: -15px;
@@ -394,7 +394,7 @@ div.nav-right > #toc-local > div.header {
 div.nav-right > #toc-local > a.list-group-item {
   border: none;
   border-left: 4px solid transparent;
-  color: #857d69;
+  color: #9d9175;
   display: block;
   font-size: 13px;
   line-height: 1.2;
@@ -459,7 +459,7 @@ div.document-wrapper {
 
 div.document {
   background-color: #282828;
-  color: #aaa;
+  color: #c0c0c0;
   border-radius: 2pt;
   box-shadow: 2px 2px 3px 0 #000;
   padding: var(--document-padding);
