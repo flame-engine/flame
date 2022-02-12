@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'anchor.dart';
-import 'components/cache/memory_cache.dart';
+import 'cache/memory_cache.dart';
 import 'components/text_component.dart';
 import 'extensions/size.dart';
 import 'extensions/vector2.dart';

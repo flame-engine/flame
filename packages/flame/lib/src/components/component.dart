@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 import '../../components.dart';
 import '../../game.dart';
 import '../../input.dart';
-import 'cache/value_cache.dart';
+import '../cache/value_cache.dart';
 
 /// This represents a Component for your game.
 ///
