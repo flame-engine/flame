@@ -1,4 +1,6 @@
 import 'package:flame/game.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:meta/meta.dart';
 
 /// Utility function for writing tests that require a [FlameGame] instance.
 ///
@@ -8,21 +10,25 @@ import 'package:flame/game.dart';
 ///
 /// Example of usage:
 /// ```dart
-/// test(
+/// flameGameTest(
 ///   'MyComponent can be added to a game',
-///   withFlameGame((game) async {
+///   (game) async {
 ///     final component = MyComponent()..addToParent(game);
 ///     await game.ready();
 ///     expect(component.isMounted, true);
-///   }),
+///   },
 /// );
 /// ```
 ///
 /// The `game` instance supplied by this function to your test [testBody] is a
 /// standard [FlameGame]. If you want to have any other game instance, use the
-/// [withUserGame] function.
-AsyncVoidFunction withFlameGame(AsyncGameFunction<FlameGame> testBody) {
-  return withUserGame<FlameGame>(() => FlameGame(), testBody);
+/// [userGameTest] function.
+@isTest
+Future<void> flameGameTest(
+  String testName,
+  AsyncGameFunction<FlameGame> testBody,
+) {
+  return userGameTest<FlameGame>(testName, () => FlameGame(), testBody);
 }
 
 /// Utility function for writing tests that require a custom game instance.
@@ -33,23 +39,23 @@ AsyncVoidFunction withFlameGame(AsyncGameFunction<FlameGame> testBody) {
 ///
 /// Example of usage:
 /// ```dart
-/// test(
+/// userGameTest(
 ///   'MyComponent can be added to MyGame',
-///   withUserGame(
-///     () => MyGame(mySecret: 3781),
-///     (MyGame game) async {
-///       final component = MyComponent()..addToParent(game);
-///       await game.ready();
-///       expect(component.isMounted, true);
-///     },
-///   ),
+///   () => MyGame(mySecret: 3781),
+///   (MyGame game) async {
+///     final component = MyComponent()..addToParent(game);
+///     await game.ready();
+///     expect(component.isMounted, true);
+///   },
 /// );
 /// ```
-AsyncVoidFunction withUserGame<T extends FlameGame>(
+@isTest
+Future<void> userGameTest<T extends FlameGame>(
+  String testName,
   CreateFunction<T> create,
   AsyncGameFunction<T> testBody,
-) {
-  Future<void> testFn() async {
+) async {
+  test(testName, () async {
     final game = create();
     game.onGameResize(Vector2(800, 600));
     await game.onLoad();
@@ -59,9 +65,7 @@ AsyncVoidFunction withUserGame<T extends FlameGame>(
     await testBody(game);
 
     game.onRemove();
-  }
-
-  return testFn;
+  });
 }
 
 typedef CreateFunction<T> = T Function();

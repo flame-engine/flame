@@ -24,9 +24,9 @@ class _TestComponent extends PositionComponent {
 
 void main() {
   group('widget', () {
-    test(
+    testFlameGame(
       'viewport does not affect component with PositionType.widget',
-      withFlameGame((game) async {
+      (game) async {
         game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
         game.onGameResize(Vector2.all(200.0));
         await game.ensureAdd(
@@ -41,7 +41,7 @@ void main() {
             ..translate(0, 0) // transform in PositionComponent.renderTree
             ..drawRect(const Rect.fromLTWH(0, 0, 1, 1)),
         );
-      }),
+      },
     );
 
     test(

@@ -4,33 +4,40 @@ import 'package:test/test.dart';
 
 void main() {
   group('withFlameGame', () {
-    test(
+    flameGameTest(
       'game is properly initialized',
-      withFlameGame((game) async {
+      (game) async {
         // Can be fixed after #1337
         // expect(game.isLoaded, true);
         // expect(game.isMounted, true);
-      }),
+      },
     );
   });
 
   group('withUserGame', () {
-    test(
+    List<String>? storedEvents;
+
+    userGameTest<RecordedGame>(
       'correct event sequence',
-      () async {
+      () => RecordedGame(),
+      (game) async {
         var events = <String>[];
-        await withUserGame<RecordedGame>(
-          () => RecordedGame(),
-          (game) async {
-            events = game.events;
-            expect(
-              events,
-              ['onGameResize [800.0,600.0]', 'onLoad', 'onMount'],
-            );
-          },
-        )();
+        events = game.events;
         expect(
           events,
+          ['onGameResize [800.0,600.0]', 'onLoad', 'onMount'],
+        );
+        // Save for the next test
+        storedEvents = events;
+      },
+    );
+
+    // This test may only be called after the previous test has run
+    test(
+      'Game.onRemove is called',
+      () {
+        expect(
+          storedEvents,
           ['onGameResize [800.0,600.0]', 'onLoad', 'onMount', 'onRemove'],
         );
       },
