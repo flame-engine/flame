@@ -2,7 +2,7 @@ import 'dart:ui' hide Canvas;
 
 import '../../game.dart';
 import '../../geometry.dart';
-import '../components/cache/value_cache.dart';
+import '../cache/value_cache.dart';
 import '../extensions/canvas.dart';
 import '../extensions/offset.dart';
 import '../extensions/rect.dart';

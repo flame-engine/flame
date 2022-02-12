@@ -9,17 +9,12 @@ environment:
   flutter: ">=2.5.0"
 
 dependencies:
-  flame:
-    path: ../flame
+  flame: ^1.0.0
   forge2d: ^0.8.1
 
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  test: ^1.16.0
   dartdoc: ^4.1.0
-  flame_lint:
-    path: ../flame_lint
+  flame_lint: ^0.0.1

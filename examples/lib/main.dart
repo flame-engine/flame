@@ -10,6 +10,7 @@ import 'stories/input/input.dart';
 import 'stories/parallax/parallax.dart';
 import 'stories/rendering/rendering.dart';
 import 'stories/sprites/sprites.dart';
+import 'stories/svg/svg.dart';
 import 'stories/system/system.dart';
 import 'stories/utils/utils.dart';
 import 'stories/widgets/widgets.dart';
@@ -29,6 +30,7 @@ void main() async {
   addParallaxStories(dashbook);
   addRenderingStories(dashbook);
   addSpritesStories(dashbook);
+  addSvgStories(dashbook);
   addSystemStories(dashbook);
   addUtilsStories(dashbook);
   addWidgetsStories(dashbook);

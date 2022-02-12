@@ -22,7 +22,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
-  dart_code_metrics: ^4.1.0
   flame_lint:
     path: ../../packages/flame_lint
 
