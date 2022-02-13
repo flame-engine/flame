@@ -3,10 +3,10 @@ import 'dart:ui' hide Canvas;
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
+import '../../cache.dart';
 import '../../components.dart';
 import '../../extensions.dart';
 import '../../geometry.dart';
-import '../components/cache/value_cache.dart';
 
 class Polygon extends Shape {
   final List<Vector2> _vertices;
