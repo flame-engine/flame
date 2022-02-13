@@ -48,8 +48,11 @@ function buildVersionsMenu(data) {
       </div>
     </div>
   `);
-  $("#versions-menu").on("click blur", function() {
+  $("#versions-menu").on("click", function() {
     $(this).toggleClass("active");
+  }).on("blur", function() {
+    // A timeout ensures that `click` can propagate to child <A/> elements.
+    setTimeout(() => $(this).removeClass("active"), 200);
   });
 }
 
