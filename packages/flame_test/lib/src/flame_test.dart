@@ -66,6 +66,11 @@ class GameTester<T extends Game> {
   /// By default it will be a 500x500 square.
   final Vector2? gameSize;
 
+  /// If true, the game will be brought into the "fully ready" state (meaning
+  /// all its pending lifecycle events will be resolved) before the start of
+  /// the test.
+  bool makeReady = true;
+
   GameTester(
     this.createGame, {
     this.gameSize,
@@ -81,7 +86,7 @@ class GameTester<T extends Game> {
 
     await game.onLoad();
     game.update(0);
-    if (game is FlameGame) {
+    if (game is FlameGame && makeReady) {
       await game.ready();
     }
     return game;
