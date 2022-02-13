@@ -28,7 +28,8 @@ class _TestHitbox extends HitboxRectangle {
   }
 }
 
-class _TestBlock extends PositionComponent with HasHitboxes {
+class _TestBlock extends PositionComponent
+    with CollisionCallbacks<PositionComponent> {
   final hitbox = _TestHitbox();
   int startCounter = 0;
   int onCollisionCounter = 0;
@@ -42,24 +43,25 @@ class _TestBlock extends PositionComponent with HasHitboxes {
     add(hitbox);
   }
 
-  bool hasCollisionWith(CollisionCallbacks otherCollidable) {
-    return activeCollisions.contains(otherCollidable);
+  bool hasCollisionWith(PositionComponent other) {
+    return activeCollisions.contains(other);
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, HasHitboxes other) {
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
     startCounter++;
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, HasHitboxes other) {
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
     onCollisionCounter++;
   }
 
   @override
-  void onCollisionEnd(HasHitboxes other) {
+  void onCollisionEnd(PositionComponent other) {
     super.onCollisionEnd(other);
     endCounter++;
   }

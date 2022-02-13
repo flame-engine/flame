@@ -1,5 +1,5 @@
+import 'package:flame/collision_detection.dart';
 import 'package:flame/components.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/services.dart';
@@ -33,8 +33,7 @@ class PlayerController extends Component
 class PlayerComponent extends SpriteAnimationComponent
     with
         HasGameRef<SpaceShooterGame>,
-        HasHitboxes,
-        Collidable,
+        CollisionCallbacks<PositionComponent>,
         KeyboardHandler,
         BlocComponent<InventoryBloc, InventoryState> {
   bool destroyed = false;
@@ -112,7 +111,8 @@ class PlayerComponent extends SpriteAnimationComponent
   }
 
   @override
-  void onCollision(Set<Vector2> points, Collidable other) {
+  void onCollision(Set<Vector2> points, PositionComponent other) {
+    super.onCollision(points, other);
     if (other is EnemyComponent) {
       takeHit();
       other.takeHit();

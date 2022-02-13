@@ -8,14 +8,16 @@ import 'package:test/test.dart';
 
 class _HasCollidablesGame extends FlameGame with HasCollisionDetection {}
 
-class _TestBlock extends PositionComponent with HasHitboxes {
+class _TestBlock extends PositionComponent
+    with CollisionCallbacks<PositionComponent> {
   late final HitboxRectangle hitbox;
   String? name;
 
   _TestBlock(Vector2 position, Vector2 size, CollidableType type, {this.name})
       : super(position: position, size: size) {
-    collidableType = type;
-    add(hitbox = HitboxRectangle());
+    children.register<HitboxShape>();
+    hitbox = HitboxRectangle()..collidableType = type;
+    add(hitbox);
   }
 
   bool collidedWithExactly(List<CollisionCallbacks> collidables) {
@@ -29,6 +31,16 @@ class _TestBlock extends PositionComponent with HasHitboxes {
     return name == null
         ? '_TestBlock[${identityHashCode(this)}]'
         : '_TestBlock[$name]';
+  }
+
+  Set<Vector2> intersections(_TestBlock other) {
+    final result = <Vector2>{};
+    for (final hitboxA in children.query<HitboxShape>()) {
+      for (final hitboxB in other.children.query<HitboxShape>()) {
+        result.addAll(hitboxA.intersections(hitboxB));
+      }
+    }
+    return result;
   }
 }
 

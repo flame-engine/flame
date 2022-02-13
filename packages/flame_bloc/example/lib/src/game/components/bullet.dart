@@ -1,12 +1,12 @@
+import 'package:flame/collision_detection.dart';
 import 'package:flame/components.dart';
-import 'package:flame/geometry.dart';
 
 import '../../inventory/bloc/inventory_bloc.dart';
 import '../game.dart';
 import 'enemy.dart';
 
 class BulletComponent extends SpriteAnimationComponent
-    with HasGameRef<SpaceShooterGame>, HasHitboxes, Collidable {
+    with HasGameRef<SpaceShooterGame>, CollisionCallbacks<PositionComponent> {
   static const bulletSpeed = -500;
 
   bool destroyed = false;
@@ -71,7 +71,8 @@ class BulletComponent extends SpriteAnimationComponent
   }
 
   @override
-  void onCollision(Set<Vector2> points, Collidable other) {
+  void onCollision(Set<Vector2> points, PositionComponent other) {
+    super.onCollision(points, other);
     if (other is EnemyComponent) {
       destroyed = true;
       other.takeHit();

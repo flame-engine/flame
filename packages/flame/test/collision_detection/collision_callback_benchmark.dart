@@ -8,7 +8,8 @@ import 'package:test/test.dart';
 
 class _HasCollidablesGame extends FlameGame with HasCollisionDetection {}
 
-class _TestBlock extends PositionComponent with HasHitboxes {
+class _TestBlock extends PositionComponent
+    with CollisionCallbacks<PositionComponent> {
   final Vector2 velocity;
   static int collisionCounter = 0;
 
@@ -21,7 +22,8 @@ class _TestBlock extends PositionComponent with HasHitboxes {
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, HasHitboxes other) {
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
     collisionCounter++;
   }

@@ -15,6 +15,7 @@ enum CollidableType {
   inactive,
 }
 
+// TODO(spydon): Don't keep this as T, or create another one
 mixin CollisionCallbacks<T> {
   Set<T>? _activeCollisions;
   Set<T> get activeCollisions => _activeCollisions ??= {};
