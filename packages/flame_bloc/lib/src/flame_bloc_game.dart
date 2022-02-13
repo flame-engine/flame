@@ -63,14 +63,11 @@ mixin BlocComponent<B extends BlocBase<S>, S> on Component {
   }
 }
 
-/// {@template flame_bloc_game}
 /// An enhanced [FlameGame] that has the capability to listen
 /// and emit changes to a [Bloc] state.
-///
-/// {@endtemplate}
 class FlameBlocGame extends FlameGame {
-  ///FlameBlocGame constructor with an optional [Camera] as a parameter to
-  ///FlameGame.
+  /// FlameBlocGame constructor with an optional [Camera] as a parameter to
+  /// FlameGame
   FlameBlocGame({Camera? camera}) : super(camera: camera);
 
   /// Contains a list of all of the [BlocComponent]s with an active
