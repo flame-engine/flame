@@ -92,7 +92,7 @@ class MultipleShapesExample extends FlameGame
 }
 
 abstract class MyCollidable extends PositionComponent
-    with Draggable, HasHitboxes {
+    with Draggable, CollisionCallbacks<PositionComponent> {
   double rotationSpeed = 0.0;
   final Vector2 velocity;
   final delta = Vector2.zero();
@@ -144,20 +144,21 @@ abstract class MyCollidable extends PositionComponent
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, HasHitboxes other) {
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
     _activePaint.color = collisionColor(other).withOpacity(0.8);
   }
 
   @override
-  void onCollisionEnd(HasHitboxes other) {
+  void onCollisionEnd(PositionComponent other) {
     super.onCollisionEnd(other);
     if (activeCollisions.isEmpty) {
       _activePaint.color = _defaultColor;
     }
   }
 
-  Color collisionColor(CollisionCallbacks other) {
+  Color collisionColor(PositionComponent other) {
     switch (other.runtimeType) {
       case ScreenCollidable:
         return Colors.teal;
@@ -237,7 +238,10 @@ class SnowmanPart extends HitboxCircle {
   SnowmanPart(double radius, Vector2 position, Color hitColor)
       : super(radius: radius, position: position) {
     paint.color = startColor;
-    collisionCallback = (Set<Vector2> intersectionPoints, HasHitboxes other) {
+    collisionCallback = (
+      Set<Vector2> intersectionPoints,
+      PositionComponent other,
+    ) {
       if (other is ScreenCollidable) {
         paint.color = startColor;
       } else {

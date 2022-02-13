@@ -24,7 +24,7 @@ class CirclesExample extends FlameGame with HasCollisionDetection, TapDetector {
 }
 
 class MyCollidable extends PositionComponent
-    with HasGameRef<CirclesExample>, HasHitboxes {
+    with HasGameRef<CirclesExample>, CollisionCallbacks<PositionComponent> {
   late Vector2 velocity;
   final _collisionColor = Colors.amber;
   final _defaultColor = Colors.cyan;
@@ -63,7 +63,8 @@ class MyCollidable extends PositionComponent
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, CollisionCallbacks other) {
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
     if (other is ScreenCollidable) {
       _isWallHit = true;
       return;

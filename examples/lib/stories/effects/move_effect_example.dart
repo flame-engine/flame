@@ -88,7 +88,7 @@ class MoveEffectExample extends FlameGame {
     );
 
     add(
-      RectangleComponent.square(
+      Rectangle.square(
         size: 15,
         position: Vector2(40, 240),
         paint: paint3,

@@ -49,7 +49,7 @@ class CollidableAnimationExample extends FlameGame with HasCollisionDetection {
 }
 
 class AnimatedComponent extends SpriteAnimationComponent
-    with HasHitboxes, HasGameRef {
+    with CollisionCallbacks<PositionComponent>, HasGameRef {
   final Vector2 velocity;
 
   AnimatedComponent(this.velocity, Vector2 position, {double angle = -pi / 4})
@@ -94,7 +94,8 @@ class AnimatedComponent extends SpriteAnimationComponent
   final Paint dotPaint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, HasHitboxes other) {
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
     velocity.negate();
     flipVertically();

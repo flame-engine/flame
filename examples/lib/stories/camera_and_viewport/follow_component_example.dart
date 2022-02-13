@@ -45,7 +45,7 @@ class FollowComponentExample extends FlameGame
 }
 
 class MovableEmber extends Ember<FollowComponentExample>
-    with HasHitboxes, KeyboardHandler {
+    with CollisionCallbacks<PositionComponent>, KeyboardHandler {
   static const double speed = 300;
   static final TextPaint textRenderer = TextPaint(
     style: const TextStyle(color: Colors.white70, fontSize: 12),
@@ -78,7 +78,7 @@ class MovableEmber extends Ember<FollowComponentExample>
   }
 
   @override
-  void onCollision(Set<Vector2> points, HasHitboxes other) {
+  void onCollision(Set<Vector2> points, PositionComponent other) {
     super.onCollision(points, other);
     if (other is Rock) {
       gameRef.camera.setRelativeOffset(Anchor.topCenter);
@@ -86,7 +86,7 @@ class MovableEmber extends Ember<FollowComponentExample>
   }
 
   @override
-  void onCollisionEnd(HasHitboxes other) {
+  void onCollisionEnd(PositionComponent other) {
     super.onCollisionEnd(other);
     if (other is Rock) {
       gameRef.camera.setRelativeOffset(Anchor.center);
@@ -168,7 +168,8 @@ class Map extends Component {
   }
 }
 
-class Rock extends SpriteComponent with HasGameRef, HasHitboxes, Tappable {
+class Rock extends SpriteComponent
+    with HasGameRef, CollisionCallbacks<PositionComponent>, Tappable {
   Rock(Vector2 position)
       : super(
           position: position,

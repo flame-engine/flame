@@ -79,7 +79,7 @@ class SimpleShapesExample extends FlameGame with HasTappables {
   }
 }
 
-class MyShapeComponent extends PositionComponent with HasHitboxes, Tappable {
+class MyShapeComponent extends PositionComponent with Tappable {
   MyShapeComponent({
     Vector2? position,
     Vector2? size,
