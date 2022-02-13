@@ -1,8 +1,8 @@
+import '../../collision_detection.dart';
 import '../../components.dart';
 import '../../geometry.dart';
-import 'hitbox_shape.dart';
 
-class HitboxPolygon extends Polygon with HasHitboxes, HitboxShape {
+class HitboxPolygon extends Polygon with HitboxShape {
   HitboxPolygon(
     List<Vector2> vertices, {
     double? angle,

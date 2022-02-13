@@ -18,7 +18,7 @@ class _TestBlock extends PositionComponent with HasHitboxes {
     add(hitbox = HitboxRectangle());
   }
 
-  bool collidedWithExactly(List<Collidable> collidables) {
+  bool collidedWithExactly(List<CollisionCallbacks> collidables) {
     final otherCollidables = collidables.toSet()..remove(this);
     return activeCollisions.containsAll(otherCollidables) &&
         otherCollidables.containsAll(activeCollisions);

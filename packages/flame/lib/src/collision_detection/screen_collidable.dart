@@ -4,7 +4,7 @@ import 'collision_callbacks.dart';
 import 'hitbox_rectangle.dart';
 
 class ScreenCollidable<T extends FlameGame> extends PositionComponent
-    with HasHitboxes, HasGameRef<T> {
+    with CollisionCallbacks<PositionComponent>, HasGameRef<T> {
   @override
   CollidableType collidableType = CollidableType.passive;
 

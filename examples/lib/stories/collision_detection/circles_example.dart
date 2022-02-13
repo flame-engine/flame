@@ -63,7 +63,7 @@ class MyCollidable extends PositionComponent
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, Collidable other) {
+  void onCollision(Set<Vector2> intersectionPoints, CollisionCallbacks other) {
     if (other is ScreenCollidable) {
       _isWallHit = true;
       return;

@@ -157,7 +157,7 @@ abstract class MyCollidable extends PositionComponent
     }
   }
 
-  Color collisionColor(Collidable other) {
+  Color collisionColor(CollisionCallbacks other) {
     switch (other.runtimeType) {
       case ScreenCollidable:
         return Colors.teal;

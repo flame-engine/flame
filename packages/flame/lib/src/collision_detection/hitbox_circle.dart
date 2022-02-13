@@ -1,8 +1,8 @@
+import '../../collision_detection.dart';
 import '../../components.dart';
 import '../../geometry.dart';
-import 'hitbox_shape.dart';
 
-class HitboxCircle extends Circle with HasHitboxes, HitboxShape {
+class HitboxCircle extends Circle with HitboxShape {
   @override
   final bool shouldFillParent;
 

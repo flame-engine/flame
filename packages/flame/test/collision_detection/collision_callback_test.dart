@@ -42,7 +42,7 @@ class _TestBlock extends PositionComponent with HasHitboxes {
     add(hitbox);
   }
 
-  bool hasCollisionWith(Collidable otherCollidable) {
+  bool hasCollisionWith(CollisionCallbacks otherCollidable) {
     return activeCollisions.contains(otherCollidable);
   }
 

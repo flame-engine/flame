@@ -1,15 +1,14 @@
 import '../../../collision_detection.dart';
-import '../../../components.dart';
 import '../../../game.dart';
+import '../../collision_detection/hitbox.dart';
 
 /// Keeps track of all the [HitboxShape]s in the component tree and initiates
 /// collision detection every tick.
 mixin HasCollisionDetection on FlameGame {
-  CollisionDetection<HasHitboxes> _collisionDetection =
-      StandardCollisionDetection();
-  CollisionDetection<HasHitboxes> get collisionDetection => _collisionDetection;
+  CollisionDetection<Hitbox> _collisionDetection = StandardCollisionDetection();
+  CollisionDetection<Hitbox> get collisionDetection => _collisionDetection;
 
-  set collisionDetection(CollisionDetection<HasHitboxes> cd) {
+  set collisionDetection(CollisionDetection<Hitbox> cd) {
     cd.addAll(_collisionDetection.items);
     _collisionDetection = cd;
   }

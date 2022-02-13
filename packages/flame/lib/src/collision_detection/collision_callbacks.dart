@@ -15,31 +15,12 @@ enum CollidableType {
   inactive,
 }
 
-mixin Collidable<T> {
-  Aabb2 get aabb;
-  CollidableType collidableType = CollidableType.active;
-
+mixin CollisionCallbacks<T> {
   Set<T>? _activeCollisions;
   Set<T> get activeCollisions => _activeCollisions ??= {};
-  bool activeCollision(HasHitboxes hasHitboxes) {
-    // TODO(spydon): check so that the second part isn't executed
-    return _activeCollisions != null && activeCollisions.contains(hasHitboxes);
+  bool activeCollision(T other) {
+    return _activeCollisions != null && activeCollisions.contains(other);
   }
-
-  /// Since this is a cheaper calculation than checking towards all shapes, this
-  /// check can be done first to see if it even is possible that the shapes can
-  /// overlap, since the shapes have to be within the size of the component.
-  bool possiblyOverlapping(Collidable other) {
-    return aabb.intersectsWithAabb2(other.aabb);
-  }
-
-  /// Since this is a cheaper calculation than checking towards all shapes this
-  /// check can be done first to see if it even is possible that the shapes can
-  /// contain the point, since the shapes have to be within the size of the
-  /// component.
-  bool possiblyContainsPoint(Vector2 point) => aabb.containsVector2(point);
-
-  Set<Vector2> intersections(T other);
 
   @mustCallSuper
   void onCollision(Set<Vector2> intersectionPoints, T other) {

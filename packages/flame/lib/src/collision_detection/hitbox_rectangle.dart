@@ -1,8 +1,8 @@
+import '../../collision_detection.dart';
 import '../../components.dart';
 import '../../geometry.dart';
-import 'hitbox_shape.dart';
 
-class HitboxRectangle extends Rectangle with HasHitboxes, HitboxShape {
+class HitboxRectangle extends Rectangle with HitboxShape {
   @override
   final bool shouldFillParent;
 

@@ -1,9 +1,7 @@
+import '../../collision_detection.dart';
 import '../../components.dart';
-import 'broadphase.dart';
-import 'collision_callbacks.dart';
-import 'sweep.dart';
 
-abstract class CollisionDetection<T extends Collidable<T>> {
+abstract class CollisionDetection<T extends Hitbox<T>> {
   final List<T> items = [];
   late final Broadphase<T> broadphase;
 
@@ -54,85 +52,72 @@ abstract class CollisionDetection<T extends Collidable<T>> {
 
 /// Check whether any [HasHitboxes] in [items] collide with each other and
 /// call their callback methods accordingly.
-class StandardCollisionDetection extends CollisionDetection<HasHitboxes> {
+class StandardCollisionDetection extends CollisionDetection<HitboxShape> {
   StandardCollisionDetection({BroadphaseType type = BroadphaseType.sweep})
       : super(type: type);
 
-  /// Removes the [collidable] from the collision detection, if you just want
+  /// Removes the [hitbox] from the collision detection, if you just want
   /// to temporarily inactivate it you can set
   /// `collidableType = CollidableType.inactive;` instead.
   /// This calls [HasHitboxes.onCollisionEnd] for [HasHitboxes]s and their
   /// children that are removed from the game.
   @override
-  void remove(HasHitboxes collidable) {
-    collidable.activeCollisions
-        .toList(growable: false)
-        .forEach((otherCollidable) {
-      handleCollisionEnd(collidable, otherCollidable);
+  void remove(HitboxShape hitbox) {
+    hitbox.activeCollisions.toList(growable: false).forEach((otherCollidable) {
+      handleCollisionEnd(hitbox, otherCollidable);
     });
-    super.remove(collidable);
+    super.remove(hitbox);
   }
-
-  // This is created outside of `intersections` so that it doesn't have to be
-  // created for every intersections call.
-  final _currentResult = <Vector2>{};
 
   /// Check what the intersection points of two collidables are,
   /// returns an empty list if there are no intersections.
   @override
   Set<Vector2> intersections(
-    HasHitboxes collidableA,
-    HasHitboxes collidableB,
+    HitboxShape hitboxA,
+    HitboxShape hitboxB,
   ) {
-    final result = <Vector2>{};
-    _currentResult.clear();
-    for (final shapeA in collidableA.hitboxes) {
-      for (final shapeB in collidableB.hitboxes) {
-        _currentResult.addAll(shapeA.intersections(shapeB));
-        if (_currentResult.isNotEmpty) {
-          result.addAll(_currentResult);
-          // Do callbacks to the involved shapes
-          if (!_hasActiveCollision(shapeA, shapeB)) {
-            handleCollisionStart(_currentResult, shapeA, shapeB);
-          }
-          handleCollision(_currentResult, shapeA, shapeB);
-          _currentResult.clear();
-        } else {
-          handleCollisionEnd(shapeA, shapeB);
-        }
+    final result = hitboxA.intersections(hitboxB);
+    if (result.isNotEmpty) {
+      // Do callbacks to the involved shapes
+      if (!_hasActiveCollision(hitboxA, hitboxB)) {
+        handleCollisionStart(result, hitboxA, hitboxB);
       }
+      handleCollision(result, hitboxA, hitboxB);
+    } else if (hitboxA.activeCollision(hitboxB)) {
+      handleCollisionEnd(hitboxA, hitboxB);
     }
+
     return result;
   }
 
   @override
   void handleCollisionStart(
     Set<Vector2> intersectionPoints,
-    HasHitboxes collidableA,
-    HasHitboxes collidableB,
+    HitboxShape hitboxA,
+    HitboxShape hitboxB,
   ) {
-    collidableA.onCollisionStart(intersectionPoints, collidableB);
-    collidableB.onCollisionStart(intersectionPoints, collidableA);
+    hitboxA.onCollisionStart(intersectionPoints, hitboxB);
+    hitboxB.onCollisionStart(intersectionPoints, hitboxA);
   }
 
   @override
   void handleCollision(
     Set<Vector2> intersectionPoints,
-    HasHitboxes collidableA,
-    HasHitboxes collidableB,
+    HitboxShape hitboxA,
+    HitboxShape hitboxB,
   ) {
-    collidableA.onCollision(intersectionPoints, collidableB);
-    collidableB.onCollision(intersectionPoints, collidableA);
+    hitboxA.onCollision(intersectionPoints, hitboxB);
+    hitboxB.onCollision(intersectionPoints, hitboxA);
   }
 
   @override
-  void handleCollisionEnd(HasHitboxes collidableA, HasHitboxes collidableB) {
-    collidableA.onCollisionEnd(collidableB);
-    collidableB.onCollisionEnd(collidableA);
+  void handleCollisionEnd(HitboxShape hitboxA, HitboxShape hitboxB) {
+    hitboxA.onCollisionEnd(hitboxB);
+    hitboxB.onCollisionEnd(hitboxA);
   }
 
   @override
-  bool _hasActiveCollision(HasHitboxes collidableA, HasHitboxes collidableB) {
-    return collidableA.activeCollision(collidableB);
+  bool _hasActiveCollision(HitboxShape hitboxA, HitboxShape hitboxB) {
+    return hitboxA.activeCollision(hitboxB);
   }
 }
