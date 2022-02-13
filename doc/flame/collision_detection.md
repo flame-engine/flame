@@ -209,7 +209,7 @@ screen in both x and y axis, so for our first item in our list (`Vector2(0, 1)`)
 on the middle of the top wall of the bounding box, since the coordinate system here is defined from
 the center of the polygon.
 
-![An example of how to define a polygon shape](images/polygon_shape.png)
+![An example of how to define a polygon shape](../images/polygon_shape.png)
 
 In the image you can see how the polygon shape formed by the purple arrows is defined by the red
 arrows.

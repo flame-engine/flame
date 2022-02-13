@@ -1,4 +1,4 @@
-import 'package:flame/src/components/cache/memory_cache.dart';
+import 'package:flame/cache.dart';
 import 'package:test/test.dart';
 
 void main() {

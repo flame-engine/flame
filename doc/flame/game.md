@@ -67,7 +67,7 @@ simply by doing `yourComponent.remove();`.
 
 ## Lifecycle
 
-![Game Lifecycle Diagram](images/component_lifecycle.png)
+![Game Lifecycle Diagram](../images/component_lifecycle.png)
 
 When a game first is added to a Flutter widget tree the following lifecycle methods will be called
 in order: `onGameResize`, `onLoad` and `onMount`. After that it goes on to call `update` and
@@ -95,7 +95,7 @@ however, be set to `true` to enable debug features for the components of the gam
 the value of this variable is passed through to its components when they are added to the game, so
 if you change the `debugMode` at runtime, it will not affect already added components by default.
 
-To read more about the `debugMode` on Flame, please refer to the [Debug Docs](debug.md)
+To read more about the `debugMode` on Flame, please refer to the [Debug Docs](other/debug.md)
 
 
 ## SingleGameInstance mixin
@@ -117,9 +117,9 @@ class MyGame extends FlameGame with SingleGameInstance {
 ```
 
 
-# Low-level Game API
+## Low-level Game API
 
-![Game low-level API](images/game_mixin.png)
+![Game low-level API](../images/game_mixin.png)
 
 The `Game` mixin is a low-level API that can be used when you want to implement the functionality of
 how the game engine should be structured. `Game` does not implement any `update` or
@@ -159,7 +159,7 @@ main() {
 }
 ```
 
-# GameLoop
+## Game Loop
 
 The `GameLoop` module is a simple abstraction over the game loop concept. Basically most games are
 built upon two methods:
@@ -170,7 +170,7 @@ built upon two methods:
 
 The `GameLoop` is used by all of Flame's `Game` implementations.
 
-# Pause/Resuming game execution
+## Pause/Resuming game execution
 
 A Flame `Game` can be paused and resumed in two ways:
 
@@ -180,7 +180,7 @@ A Flame `Game` can be paused and resumed in two ways:
 When pausing a Flame `Game`, the `GameLoop` is effectively paused, meaning that no updates or new
 renders will happen until it is resumed.
 
-# Flutter Widgets and Game instances
+## Flutter Widgets and Game instances
 
 Since a Flame game can be wrapped in a widget, it is quite easy to use it alongside other Flutter
 widgets. But still, there is the Widgets Overlay API that makes things even easier.

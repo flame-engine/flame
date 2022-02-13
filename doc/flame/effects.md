@@ -62,7 +62,7 @@ There are multiple effect controllers provided by the Flame framework as well:
 - [`SequenceEffectController`](#sequenceeffectcontroller)
 - [`SpeedEffectController`](#speedeffectcontroller)
 - [`DelayedEffectController`](#delayedeffectcontroller)
-- [`NoiseEffectController`](#noiseffectcontroller)
+- [`NoiseEffectController`](#noiseeffectcontroller)
 - [`RandomEffectController`](#randomeffectcontroller)
 - [`SineEffectController`](#sineeffectcontroller)
 - [`ZigzagEffectController`](#zigzageffectcontroller)

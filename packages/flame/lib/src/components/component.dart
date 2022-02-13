@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 import '../../components.dart';
 import '../../game.dart';
 import '../../input.dart';
-import 'cache/value_cache.dart';
+import '../cache/value_cache.dart';
 
 /// [Component]s are the basic building blocks for your game.
 ///
