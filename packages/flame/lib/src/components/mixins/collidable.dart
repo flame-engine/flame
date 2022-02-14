@@ -27,28 +27,24 @@ mixin Collidable on HasHitboxes {
 
   @override
   void onRemove() {
-    final parentGame = findParent<FlameGame>();
-    if (parentGame is HasCollidables) {
-      final collidables = parentGame.collidables;
-      handleRemovedCollidable(this, collidables);
-      parentGame.collidables.remove(this);
-    }
+    final parentGame = findGame()! as HasCollidables;
+    final collidables = parentGame.collidables;
+    handleRemovedCollidable(this, collidables);
+    parentGame.collidables.remove(this);
     super.onRemove();
   }
 
   @override
   @mustCallSuper
-  void prepare(Component parent) {
-    super.prepare(parent);
-
-    if (isPrepared) {
-      final parentGame = findParent<FlameGame>();
-      assert(
-        parentGame is HasCollidables,
-        'You can only use the HasHitboxes/Collidable feature with games that '
-        'has the HasCollidables mixin',
-      );
-    }
+  void onMount() {
+    super.onMount();
+    final game = findGame()!;
+    assert(
+      game is HasCollidables,
+      'You can only use the HasHitboxes/Collidable feature with games that '
+      'has the HasCollidables mixin',
+    );
+    (game as HasCollidables).collidables.add(this);
   }
 }
 
@@ -59,7 +55,6 @@ class ScreenCollidable<T extends FlameGame> extends PositionComponent
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     size = gameRef.size;
     addHitbox(HitboxRectangle());
   }
@@ -67,7 +62,6 @@ class ScreenCollidable<T extends FlameGame> extends PositionComponent
   final _zeroVector = Vector2.zero();
   @override
   void update(double dt) {
-    super.update(dt);
     position = gameRef.camera.unprojectVector(_zeroVector);
     size = gameRef.size;
   }

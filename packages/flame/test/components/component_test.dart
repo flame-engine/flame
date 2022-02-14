@@ -22,22 +22,21 @@ class _PrepareGame extends FlameGame {
   Future<void> onLoad() async {
     await add(prepareParent = _ParentOnPrepareComponent());
   }
-
-  @override
-  void prepareComponent(Component c) {
-    super.prepareComponent(c);
-    (c as _OnPrepareComponent).prepareRuns++;
-  }
 }
 
 class _OnPrepareComponent extends Component {
   int prepareRuns = 0;
+
+  @override
+  void onMount() {
+    super.onMount();
+    prepareRuns++;
+  }
 }
 
 class _ParentOnPrepareComponent extends _OnPrepareComponent {
   @override
   Future<void> onLoad() async {
-    super.onLoad();
     await add(_OnPrepareComponent());
   }
 }
@@ -151,11 +150,14 @@ void main() {
       (game) async {
         final parent = game.prepareParent;
         expect(parent.prepareRuns, 1);
+        expect(parent.children.isNotEmpty, true);
         expect((parent.children.first as _OnPrepareComponent).prepareRuns, 1);
       },
     );
 
     test('childrenFactory', () {
+      final game = FlameGame()..onGameResize(Vector2.all(100));
+      assert(game.isMounted, true);
       final component0 = Component();
       expect(component0.children.strictMode, false);
 
@@ -167,5 +169,47 @@ void main() {
       expect(component1.children.strictMode, true);
       expect(component2.children.strictMode, true);
     });
+
+    test('game resize while components are being added', () async {
+      final game = FlameGame()..onGameResize(Vector2.all(100));
+      final component = ComponentWithSizeHistory();
+      game.add(component);
+      expect(component.history, equals([Vector2(100, 100)]));
+      expect(component.isMounted, false);
+      game.onGameResize(Vector2(500, 300));
+      game.onGameResize(Vector2(300, 500));
+      expect(
+        component.history,
+        equals([Vector2(100, 100), Vector2(500, 300), Vector2(300, 500)]),
+      );
+      await game.ready();
+      expect(component.history.length, 3);
+      expect(component.history.last, equals(Vector2(300, 500)));
+    });
+
+    test('game resize in zoomed game', () async {
+      final game = FlameGame()
+        ..camera.zoom = 10
+        ..onGameResize(Vector2(300, 200));
+      final component = ComponentWithSizeHistory();
+      game.add(component);
+      await game.ready();
+
+      game.onGameResize(Vector2(400, 500));
+      expect(
+        component.history,
+        equals([Vector2(300, 200), Vector2(400, 500)]),
+      );
+    });
   });
+}
+
+class ComponentWithSizeHistory extends Component {
+  List<Vector2> history = [];
+
+  @override
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    history.add(size.clone());
+  }
 }

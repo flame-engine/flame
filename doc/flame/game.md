@@ -19,18 +19,19 @@ A `FlameGame` implementation example can be seen below:
 ```dart
 class MyCrate extends SpriteComponent {
   // creates a component that renders the crate.png sprite, with size 16 x 16
-  MyCrate() : super(size: Vector2.all(16));
+  MyCrate() : super(size: Vector2.all(16), anchor: Anchor.center);
 
+  @override
   Future<void> onLoad() async {
     sprite = await Sprite.load('crate.png');
-    anchor = Anchor.center;
   }
 
   @override
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
-    // We don't need to set the position in the constructor, we can set it directly here since it will
-    // be called once before the first time it is rendered.
+    // We don't need to set the position in the constructor, we can set it 
+    // directly here since it will be called once before the first time it 
+    // is rendered.
     position = gameSize / 2;
   }
 }
@@ -38,8 +39,7 @@ class MyCrate extends SpriteComponent {
 class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-    add(MyCrate());
+    await add(MyCrate());
   }
 }
 
@@ -97,6 +97,26 @@ if you change the `debugMode` at runtime, it will not affect already added compo
 
 To read more about the `debugMode` on Flame, please refer to the [Debug Docs](other/debug.md)
 
+
+## SingleGameInstance mixin
+
+An optional mixin `SingleGameInstance` can be applied to your game if you are making a single-game
+application. This is a common scenario when building games: there is a single full-screen 
+`GameWidget` which hosts a single `Game` instance.
+
+Adding this mixin provides performance advantages in certain scenarios. In particular, a component's
+`onLoad` method is guaranteed to start when that component is added to its parent, even if the
+parent is not yet mounted itself. Consequently, `await`-ing on `parent.add(component)` is guaranteed
+to always finish loading the component.
+
+Using this mixin is simple:
+```dart
+class MyGame extends FlameGame with SingleGameInstance {
+  // ...
+}
+```
+
+
 ## Low-level Game API
 
 ![Game low-level API](../images/game_mixin.png)
@@ -104,9 +124,6 @@ To read more about the `debugMode` on Flame, please refer to the [Debug Docs](ot
 The `Game` mixin is a low-level API that can be used when you want to implement the functionality of
 how the game engine should be structured. `Game` does not implement any `update` or
 `render` function for example.
-
-As you can see in the image above you'll have to use the `Loadable` and `Game` mixins if you want to
-create your own game class, which is what is done with `OxygenGame`.
 
 The `Loadable` mixin has the lifecycle methods `onLoad`, `onMount` and `onRemove` in it, which are
 called from the `GameWidget` (or another parent) when the game is loaded + mounted, or removed.
@@ -120,14 +137,14 @@ missing out on all of the built-in features in Flame if you use it.
 An example of how a `Game` implementation could look like:
 
 ```dart
-class MyGameSubClass with Loadable, Game {
+class MyGameSubClass with Game {
   @override
   void render(Canvas canvas) {
     // ...
   }
 
   @override
-  void update(double t) {
+  void update(double dt) {
     // ...
   }
 }

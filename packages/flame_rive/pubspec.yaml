@@ -1,7 +1,6 @@
 name: flame_rive
 description: Rive support for the Flame game engine. This uses the rive package and provides wrappers and components to be used inside Flame.
 homepage: https://github.com/flame-engine/flame
-publish_to: 'none'
 version: 1.0.0
 
 environment:

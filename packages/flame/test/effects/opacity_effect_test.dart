@@ -13,12 +13,12 @@ void main() {
   const _epsilon = 0.004; // 1/255, since alpha only holds 8 bits
 
   group('OpacityEffect', () {
-    flameGame.test('relative', (game) {
+    flameGame.test('relative', (game) async {
       final component = _PaintComponent();
-      game.ensureAdd(component);
+      await game.ensureAdd(component);
 
       component.setOpacity(0.2);
-      component.add(
+      await component.add(
         OpacityEffect.by(0.4, EffectController(duration: 1)),
       );
       game.update(0);
@@ -35,12 +35,12 @@ void main() {
       expectDouble(component.getOpacity(), 0.6, epsilon: _epsilon);
     });
 
-    flameGame.test('absolute', (game) {
+    flameGame.test('absolute', (game) async {
       final component = _PaintComponent();
-      game.ensureAdd(component);
+      await game.ensureAdd(component);
 
       component.setOpacity(0.2);
-      component.add(
+      await component.add(
         OpacityEffect.to(0.4, EffectController(duration: 1)),
       );
       game.update(0);
@@ -57,9 +57,9 @@ void main() {
       expectDouble(component.getOpacity(), 0.4, epsilon: _epsilon);
     });
 
-    flameGame.test('reset relative', (game) {
+    flameGame.test('reset relative', (game) async {
       final component = _PaintComponent();
-      game.ensureAdd(component);
+      await game.ensureAdd(component);
 
       // Since we'll have to change with multiples of 255 to not get rounding
       // errors.
@@ -83,9 +83,9 @@ void main() {
       }
     });
 
-    flameGame.test('reset absolute', (game) {
+    flameGame.test('reset absolute', (game) async {
       final component = _PaintComponent();
-      game.ensureAdd(component);
+      await game.ensureAdd(component);
 
       final effect = OpacityEffect.to(
         0.0,
@@ -104,16 +104,15 @@ void main() {
       }
     });
 
-    flameGame.test('opacity composition', (game) {
+    flameGame.test('opacity composition', (game) async {
       final component = _PaintComponent();
       component.setOpacity(0.0);
-      game.add(component);
-      game.update(0);
+      await game.ensureAdd(component);
 
-      component.add(
+      await component.add(
         OpacityEffect.by(0.5, EffectController(duration: 10)),
       );
-      component.add(
+      await component.add(
         OpacityEffect.by(
           0.5,
           EffectController(
@@ -143,10 +142,10 @@ void main() {
       expect(component.children.length, 0);
     });
 
-    testRandom('a very long opacity change', (Random rng) {
+    testRandom('a very long opacity change', (Random rng) async {
       final game = FlameGame()..onGameResize(Vector2(1, 1));
       final component = _PaintComponent();
-      game.ensureAdd(component);
+      await game.ensureAdd(component);
 
       final effect = OpacityEffect.fadeOut(
         EffectController(
@@ -155,7 +154,7 @@ void main() {
           infinite: true,
         ),
       );
-      component.add(effect);
+      await component.add(effect);
 
       var totalTime = 0.0;
       while (totalTime < 999.9) {

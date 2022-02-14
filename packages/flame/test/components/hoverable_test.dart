@@ -48,22 +48,21 @@ void main() {
       'make sure they can be added to game with HasHoverables',
       (game) async {
         await game.add(_HoverableComponent());
+        await game.ready();
       },
     );
 
     flameGame.test(
       'make sure they cannot be added to invalid games',
-      (game) async {
-        const message =
-            'Hoverable Components can only be added to a FlameGame with '
-            'HasHoverables';
-
+      (game) {
         expect(
-          () => game.add(_HoverableComponent()),
-          throwsA(
-            predicate(
-              (e) => e is AssertionError && e.message == message,
-            ),
+          () async {
+            await game.add(_HoverableComponent());
+            await game.ready();
+          },
+          failsAssert(
+            'Hoverable Components can only be added to a FlameGame with '
+            'HasHoverables',
           ),
         );
       },

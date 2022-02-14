@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
@@ -6,7 +8,7 @@ import '../../game.dart';
 import '../../input.dart';
 import '../cache/value_cache.dart';
 
-/// This represents a Component for your game.
+/// [Component]s are the basic building blocks for your game.
 ///
 /// Components can be for example bullets flying on the screen, a spaceship, a
 /// timer or an enemy. Anything that either needs to be rendered and/or updated
@@ -23,34 +25,37 @@ class Component {
   /// to the root `FlameGame`.
   PositionType positionType = PositionType.game;
 
-  /// Whether this component has been prepared and is ready to be added to the
-  /// game loop.
-  bool isPrepared = false;
+  var _state = LifecycleState.uninitialized;
 
-  /// Whether this component is done loading through [onLoad].
-  bool isLoaded = false;
+  /// Whether this component has completed its [onLoad] step.
+  bool get isLoaded {
+    return (_state != LifecycleState.uninitialized) &&
+        (_state != LifecycleState.loading);
+  }
 
   /// Whether this component is currently added to a component tree.
-  bool isMounted = false;
+  bool get isMounted => _state == LifecycleState.mounted;
 
-  /// If the component has a parent it will be set here.
-  Component? _parent;
-
-  /// Get the current parent of the component, if there is one, otherwise null.
+  /// The current parent of the component, or null if there is none.
   Component? get parent => _parent;
+  Component? _parent;
 
   /// If the component should be added to another parent once it has been
   /// removed from its current parent.
   Component? nextParent;
 
-  /// The iterable of children of the current component.
+  /// The children of the current component.
   ///
   /// This getter will automatically create the [ComponentSet] container within
-  /// the current object if it didn't exist before. Check the [hasChildren] in
-  /// order to avoid instantiating that object.
+  /// the current object if it didn't exist before. Check the [hasChildren]
+  /// property in order to avoid instantiating the children container.
   ComponentSet get children => _children ??= createComponentSet();
   bool get hasChildren => _children?.isNotEmpty ?? false;
   ComponentSet? _children;
+
+  @protected
+  _LifecycleManager get lifecycle => _lifecycleManager ??= _LifecycleManager();
+  _LifecycleManager? _lifecycleManager;
 
   /// Render priority of this component. This allows you to control the order in
   /// which your components are rendered.
@@ -124,8 +129,17 @@ class Component {
   /// In addition, this method will be invoked once after the component is
   /// attached to the game tree, and before [onLoad] is called.
   @mustCallSuper
-  void onGameResize(Vector2 gameSize) {
-    _children?.forEach((child) => child.onGameResize(gameSize));
+  void onGameResize(Vector2 size) => handleResize(size);
+
+  @internal
+  void handleResize(Vector2 size) {
+    _children?.forEach((child) => child.onGameResize(size));
+    _lifecycleManager?._children.forEach((child) {
+      final state = child._state;
+      if (state == LifecycleState.loading || state == LifecycleState.loaded) {
+        child.onGameResize(size);
+      }
+    });
   }
 
   /// Late initialization method for [Component].
@@ -166,12 +180,19 @@ class Component {
   /// the lifetime of the [Component] object. Do not call this method manually.
   Future<void>? onLoad() => null;
 
-  /// Called after the component has finished running its [onLoad] method and
-  /// when the component is added to its new parent.
+  /// Called when the component is added to its parent.
   ///
-  /// Whenever [onMount] returns something, the parent will wait for the future
-  /// to be resolved before adding it. If `null` is returned, the class is
-  /// added right away.
+  /// This method only runs when the component is fully loaded, i.e. after
+  /// [onLoad]. However, [onLoad] only ever runs once for the component, whereas
+  /// [onMount] runs every time the component is inserted into the game tree.
+  ///
+  /// This method runs when the component is about to be added to its parent.
+  /// At this point the [parent] property already holds a reference to this
+  /// component's parent, however the parent doesn't have this component among
+  /// its [children] yet.
+  ///
+  /// After this method completes, the component is added to the parent's
+  /// children set, and then the flag [isMounted] set to true.
   ///
   /// Example:
   /// ```dart
@@ -198,6 +219,7 @@ class Component {
   /// priority of the direct siblings, not the children or the ancestors.
   void updateTree(double dt) {
     _children?.updateComponentList();
+    _lifecycleManager?.processChildrenQueue();
     update(dt);
     _children?.forEach((c) => c.updateTree(dt));
   }
@@ -255,63 +277,86 @@ class Component {
   @mustCallSuper
   void onRemove() {
     _children?.forEach((child) => child.onRemove());
-    isPrepared = false;
-    isMounted = false;
+    _state = LifecycleState.removed;
     _parent = null;
     nextParent?.add(this);
     nextParent = null;
   }
 
-  /// Prepares and registers a component to be added on the next game tick
-  ///
-  /// This method is an async operation since it await the [onLoad] method of
-  /// the component. Nevertheless, this method only need to be waited to finish
-  /// if by some reason, your logic needs to be sure that the component has
-  /// finished loading, otherwise, this method can be called without waiting
-  /// for it to finish as the FlameGame already handle the loading of the
-  /// component.
-  ///
-  /// *Note:* Do not add components on the game constructor. This method can
-  /// only be called after the game already has its layout set, this can be
-  /// verified by the [Game.hasLayout] property, to add components upon game
-  /// initialization, the [onLoad] method can be used instead.
-  Future<void> add(Component component) async {
-    component.prepare(/*parent=*/ this);
-    if (component.isPrepared) {
-      // [Component.onLoad] (if it is defined) should only run the first time
-      // the component is added to a parent.
-      if (!component.isLoaded) {
-        final onLoadFuture = component.onLoad();
-        if (onLoadFuture != null) {
-          await onLoadFuture;
-        }
-        component.isLoaded = true;
-      }
-      // Should run every time the component gets a new parent, including its
-      // first parent.
-      component.onMount();
-      if (component.hasChildren) {
-        await component._reAddChildren();
-      }
-    }
-    children.addChild(component);
-  }
+  //#region Add/remove components
 
-  /// Adds multiple children.
+  /// Schedules [component] to be added as a child to this component.
   ///
-  /// See [add] for details.
+  /// This method is robust towards being called from any place in the user
+  /// code: you can call it while iterating over the component tree, during
+  /// mounting or async loading, when the Game object is already loaded or not.
+  ///
+  /// The cost of this flexibility is that the component won't be added right
+  /// away. Instead, it will be placed into a queue, and then added later, after
+  /// it has finished loading, but no sooner than on the next game tick.
+  ///
+  /// When multiple children are scheduled to be added to the same parent, we
+  /// start loading all of them as soon as possible. Nevertheless, the children
+  /// will end up being added to the parent in exactly the same order as they
+  /// were originally scheduled by the user, regardless of how fast or slow
+  /// each of them loads.
+  ///
+  /// A component can be added to a parent which may not be mounted to the game
+  /// tree yet. In such case, the component will start loading immediately, but
+  /// its mounting will be delayed until such time when the parent becomes
+  /// mounted.
+  ///
+  /// This method returns a future that completes when the component is done
+  /// loading, and mounting if the parent is currently mounted. However, this
+  /// future will not guarantee that the component will become "fully mounted":
+  /// it still needs to be added to the parent's children list, and that
+  /// operation will only be done on the next game tick.
+  ///
+  /// A component can only be added to one parent at a time. It is an error to
+  /// try to add it to multiple parents, or even to the same parent multiple
+  /// times. If you need to change the parent of a component, use the
+  /// [changeParent] method.
+  Future<void>? add(Component component) => component.addToParent(this);
+
+  /// A convenience method to [add] multiple children at once.
   Future<void> addAll(Iterable<Component> components) {
-    return Future.wait(components.map(add));
+    final futures = <Future<void>>[];
+    for (final component in components) {
+      final future = add(component);
+      if (future != null) {
+        futures.add(future);
+      }
+    }
+    return Future.wait(futures);
   }
 
-  /// The children are added again to the component set so that [prepare],
-  /// [onLoad] and [onMount] runs again. Used when a parent is changed
-  /// further up the tree.
-  Future<void> _reAddChildren() async {
-    if (_children != null) {
-      await Future.wait(_children!.map(add));
-      await Future.wait(_children!.addLater.map(add));
+  /// Adds this component to the provided [parent] (see [add] for details).
+  Future<void>? addToParent(Component parent) {
+    assert(
+      _parent == null,
+      '$this cannot be added to $parent because it already has a parent: '
+      '$_parent',
+    );
+    assert(
+      _state == LifecycleState.uninitialized ||
+          _state == LifecycleState.removed,
+    );
+    _parent = parent;
+    debugMode |= parent.debugMode;
+    parent.lifecycle._children.add(this);
+
+    final root = parent.findGame();
+    if (root != null) {
+      if (!isLoaded) {
+        assert(
+          root.hasLayout,
+          'add() called before the game has a layout. Did you try to add '
+          'components from the constructor? Use the onLoad() method instead.',
+        );
+        return _load();
+      }
     }
+    return null;
   }
 
   /// Removes a component from the component tree, calling [onRemove] for it and
@@ -324,6 +369,74 @@ class Component {
   /// and their children.
   void removeAll(Iterable<Component> cs) {
     _children?.removeAll(cs);
+  }
+
+  Future<void>? _load() {
+    assert(_state == LifecycleState.uninitialized);
+    _state = LifecycleState.loading;
+    onGameResize(findGame()!.canvasSize);
+    final onLoadFuture = onLoad();
+    if (onLoadFuture == null) {
+      _state = LifecycleState.loaded;
+    } else {
+      return onLoadFuture.then((_) {
+        _state = LifecycleState.loaded;
+      });
+    }
+    return null;
+  }
+
+  /// Mount the component that is already loaded and has a mounted parent.
+  ///
+  /// The flag [existingChild] allows us to distinguish between components that
+  /// are new versus those that are already children of their parents. The
+  /// latter ones may exist if a parent was detached from the component tree,
+  /// and later re-mounted. For these components we need to run [onGameResize]
+  /// (since they haven't passed through [add]), but we don't have to add them
+  /// to the parent's children because they are already there.
+  @internal
+  void mount({bool existingChild = false}) {
+    assert(_parent!.isMounted);
+    assert(_state == LifecycleState.loaded || _state == LifecycleState.removed);
+    if (existingChild || _state == LifecycleState.removed) {
+      onGameResize(findGame()!.canvasSize);
+    }
+    onMount();
+    _state = LifecycleState.mounted;
+    if (!existingChild) {
+      _parent!.children.add(this);
+    }
+    if (_children != null) {
+      _children!.forEach((child) => child.mount(existingChild: true));
+    }
+    _lifecycleManager?.processChildrenQueue();
+  }
+
+  // TODO(st-pasha): remove this after #1351 is done
+  @internal
+  void setMounted() => _state = LifecycleState.mounted;
+
+  //#endregion
+
+  bool get hasPendingLifecycleEvents {
+    return _lifecycleManager?.hasPendingEvents ?? false;
+  }
+
+  /// Attempt to resolve any pending lifecycle events on this component.
+  void processPendingLifecycleEvents() {
+    if (_lifecycleManager != null) {
+      _lifecycleManager!.processChildrenQueue();
+      if (!_lifecycleManager!.hasPendingEvents) {
+        _lifecycleManager = null;
+      }
+    }
+  }
+
+  @internal
+  static Game? staticGameInstance;
+  Game? findGame() {
+    return staticGameInstance ??
+        ((this is Game) ? (this as Game) : _parent?.findGame());
   }
 
   /// Whether the children list contains the given component.
@@ -349,9 +462,16 @@ class Component {
   /// It will only consider components of type T in the hierarchy,
   /// so use T = Component to target everything.
   bool propagateToChildren<T extends Component>(
-    bool Function(T) handler,
-  ) {
+    bool Function(T) handler, {
+    bool includeSelf = false,
+  }) {
     var shouldContinue = true;
+    if (includeSelf && this is T) {
+      shouldContinue = handler(this as T);
+      if (!shouldContinue) {
+        return false;
+      }
+    }
     if (_children != null) {
       for (final child in _children!.reversed()) {
         shouldContinue = child.propagateToChildren(handler);
@@ -384,34 +504,6 @@ class Component {
   /// See FlameGame.changePriority instead.
   void changePriorityWithoutResorting(int priority) => _priority = priority;
 
-  /// Prepares the [Component] to be added to a [parent], and if there is an
-  /// ancestor that is a [FlameGame] that game will do necessary preparations
-  /// for this component.
-  /// If there are no parents that are a [Game] false will be returned and this
-  /// will run again once an ancestor or the component itself is added to a
-  /// [Game].
-  @protected
-  @mustCallSuper
-  void prepare(Component parent) {
-    _parent = parent;
-
-    final parentGame = findParent<FlameGame>();
-    if (parentGame == null) {
-      isPrepared = false;
-    } else if (!isPrepared) {
-      assert(
-        parentGame.hasLayout,
-        '"prepare/add" called before the game is ready. '
-        'Did you try to access it on the Game constructor? '
-        'Use the "onLoad" or "onMount" method instead.',
-      );
-      parentGame.prepareComponent(this);
-
-      debugMode |= parent.debugMode;
-      isPrepared = true;
-    }
-  }
-
   /// `Component.childrenFactory` is the default method for creating children
   /// containers within all components. Replace this method if you want to have
   /// customized (non-default) [ComponentSet] instances in your project.
@@ -424,3 +516,81 @@ class Component {
 }
 
 typedef ComponentSetFactory = ComponentSet Function();
+
+/// This enum keeps track of the [Component]'s current stage in its lifecycle.
+///
+/// The progression between states happens as follows:
+/// ```
+///   uninitialized -> loading -> loaded -> mounted -> removed -,
+///                                           ^-----------------'
+/// ```
+///
+/// Publicly visible flags `isLoaded` and `isMounted` are derived from this
+/// state:
+///   - isLoaded = loaded | mounted | removed
+///   - isMounted = mounted
+enum LifecycleState {
+  /// The original state of a [Component], when it was just constructed.
+  uninitialized,
+
+  /// The component is currently running its `onLoad` method.
+  loading,
+
+  /// The component has just finished running its `onLoad` step, but before it
+  /// is mounted.
+  loaded,
+
+  /// The component has finished running its `onMount` step, and was added to
+  /// its parent's `children` list.
+  mounted,
+
+  /// The component which was mounted before, is now removed from its parent.
+  removed,
+}
+
+/// Helper class to assist [Component] with its lifecycle.
+///
+/// Most lifecycle events -- add, remove, change parent -- live for a very short
+/// period of time, usually until the next game tick. When such events are
+/// resolved, there is no longer a need to carry around their supporting event
+/// queues. Which is why these queues are placed into a separate class, so that
+/// they can be easily disposed of at the end.
+class _LifecycleManager {
+  /// Queues for adding children to a component.
+  ///
+  /// When the user `add()`s a child to a component, we immediately place it
+  /// into the component's queue, and only after that do the standard lifecycle
+  /// processing: resizing, loading, mounting, etc. After all that is finished,
+  /// the component is retrieved from the queue and placed into the parent's
+  /// children list.
+  ///
+  /// Since the components are processed in the FIFO order, this ensures that
+  /// they will be added to the parent in exactly the same order as the user
+  /// invoked `add()`s, even though they are loading asynchronously and may
+  /// finish loading in arbitrary order.
+  final Queue<Component> _children = Queue();
+
+  bool get hasPendingEvents {
+    return _children.isNotEmpty;
+  }
+
+  /// Attempt to resolve pending events in all lifecycle event queues.
+  ///
+  /// This method must be periodically invoked by the game engine, in order to
+  /// ensure that the components get properly added/removed from the component
+  /// tree.
+  void processChildrenQueue() {
+    while (_children.isNotEmpty) {
+      final child = _children.first;
+      assert(child.parent!.isMounted);
+      if (child.isLoaded) {
+        child.mount();
+        _children.removeFirst();
+      } else if (child._state == LifecycleState.loading) {
+        break;
+      } else {
+        child._load();
+      }
+    }
+  }
+}

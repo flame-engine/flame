@@ -8,14 +8,6 @@ mixin HasCollidables on FlameGame {
   final List<Collidable> collidables = [];
 
   @override
-  void prepareComponent(Component component) {
-    super.prepareComponent(component);
-    if (component is Collidable) {
-      collidables.add(component);
-    }
-  }
-
-  @override
   void update(double dt) {
     super.update(dt);
     handleCollidables();
