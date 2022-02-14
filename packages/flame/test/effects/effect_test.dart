@@ -70,12 +70,12 @@ void main() {
 
     flameGame.test(
       'removeOnFinish = true',
-      (game) {
+      (game) async {
         final obj = Component();
         game.add(obj);
         final effect = _MyEffect(EffectController(duration: 1));
         obj.add(effect);
-        game.update(0);
+        await game.ready();
         expect(obj.children.length, 1);
 
         expect(effect.removeOnFinish, true);
@@ -91,13 +91,13 @@ void main() {
 
     flameGame.test(
       'removeOnFinish = false',
-      (game) {
+      (game) async {
         final obj = Component();
         game.add(obj);
         final effect = _MyEffect(EffectController(duration: 1));
         effect.removeOnFinish = false;
         obj.add(effect);
-        game.update(0);
+        await game.ready();
         expect(obj.children.length, 1);
 
         expect(effect.removeOnFinish, false);

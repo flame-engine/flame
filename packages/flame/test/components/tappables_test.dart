@@ -20,17 +20,12 @@ void main() {
 
     flameGame.test(
       'make sure Tappables cannot be added to invalid games',
-      (game) async {
-        const message =
-            'Tappable Components can only be added to a FlameGame with '
-            'HasTappables';
-
+      (game) {
         expect(
-          () => game.add(_TappableComponent()),
-          throwsA(
-            predicate(
-              (e) => e is AssertionError && e.message == message,
-            ),
+          () => game.ensureAdd(_TappableComponent()),
+          failsAssert(
+            'Tappable Components can only be added to a FlameGame with '
+            'HasTappables',
           ),
         );
       },

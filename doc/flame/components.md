@@ -1,6 +1,6 @@
 # Components
 
-![Component tree](images/component_tree.png)
+![Component tree](../images/component_tree.png)
 
 This diagram might look intimidating, but don't worry, it is not as complex as it looks.
 
@@ -14,7 +14,7 @@ Every `Component` has a few methods that you can optionally implement, which are
 `FlameGame` class. If you are not using `FlameGame`, you can use these methods on your own game loop
 if you wish.
 
-![Component Lifecycle Diagram](images/component_lifecycle.png)
+![Component Lifecycle Diagram](../images/component_lifecycle.png)
 
 The `onGameResize` method is called whenever the screen is resized, and once in the beginning when
 the component is added to the game via the `add` method.
@@ -34,17 +34,16 @@ it is only run once even if the component is removed both by using the parents r
 the `Component` remove method.
 
 The `onLoad` method can be overridden to run asynchronous initialization code for the component,
-like loading an image for example. This method is executed after the initial "preparation" of the
-component has finished the first time, meaning that this method is executed after the first
-`onGameResize` call and just before the inclusion of the component in the `FlameGame`'s (or another
-`Component`'s) list of components.
+like loading an image for example. This method is executed after `onGameResize`, but before
+`onMount`. This method is guaranteed to execute only once during the lifetime of the component, so
+you can think of it as an "asynchronous constructor". 
 
-The `onMount` method can be overridden to run asynchronous initialization code that should
-run every time the component is added to a new parent. This means that you should not initialize
-`late` variables here, since this method might run several times throughout the component's
-lifetime. This method is executed after the initial "preparation" of the component is done and after
-`onGameResize` and `onLoad`, but before the inclusion of the component in the parent's list of
-components.
+The `onMount` method runs every time when the component is mounted into a game tree. This means that 
+you should not initialize `late final` variables here, since this method might run several times
+throughout the component's lifetime. This method will only run if the parent is already mounted.
+If the parent is not mounted yet, then this method will wait in a queue (this will have no effect
+on the rest of the game engine). 
+
 
 ## Component
 Usually if you are going to make your own component you want to extend `PositionComponent`, but if
@@ -103,8 +102,8 @@ performance benefits to gain from it. The `register` call is usually done in `on
 Example:
 
 ```dart
-Future<void> onLoad async {
-  await super.onLoad();
+@override
+Future<void> onLoad() async {
   children.register<PositionComponent>();
 }
 ```
@@ -113,8 +112,9 @@ In the example above a query is registered for `PositionComponent`s, and an exam
 the registered component type can be seen below.
 
 ```dart
+@override
 void update(double dt) {
-  final allPositionComponents = components.query<PositionComponent>();
+  final allPositionComponents = children.query<PositionComponent>();
 }
 ```
 
@@ -140,6 +140,7 @@ the viewport.
 
 Do note that this setting is only respected if the component is added directly to the root
 `FlameGame` and not as a child component of another component.
+
 
 ## PositionComponent
 
@@ -185,14 +186,16 @@ that the `position`, `angle` and `scale` will be relative to the parents state.
 So if you, for example, wanted to position a child 50 logical pixels above the center of the parent
 you would do this:
 
-```
-final parent = PositionComponent(
-  position: Vector2(100, 100),
-  size: Vector2(100, 100),
-  anchor: Anchor.center,
-);
-final child = PositionComponent(position: Vector2(0, -50));
-parent.add(child);
+```dart
+Future<void> onLoad() async {
+  final parent = PositionComponent(
+    position: Vector2(100, 100),
+    size: Vector2(100, 100),
+    anchor: Anchor.center,
+  );
+  final child = PositionComponent(position: Vector2(0, -50));
+  await parent.add(child);
+}
 ```
 
 Remember that most components that are rendered on the screen are `PositionComponent`s, so
@@ -261,7 +264,7 @@ this.player = SpriteAnimationComponent(
 ```
 
 If you have a sprite sheet, you can use the `sequenced` constructor from the `SpriteAnimationData`
-class (check more details on [Images &gt; Animation](images.md#Animation)):
+class (check more details on [Images &gt; Animation](rendering/images.md#animation)):
 
 ```dart
 final size = Vector2.all(64.0);
@@ -628,7 +631,7 @@ final diamond = PolygonComponent.fromPoints(vertices);
 
 ## SpriteBodyComponent
 
-See [SpriteBodyComponent](forge2d.md#SpriteBodyComponent) in the Forge2D documentation.
+See [SpriteBodyComponent](../other_modules/forge2d.md#spritebodycomponent) in the Forge2D documentation.
 
 ## TiledComponent
 
@@ -664,11 +667,11 @@ planes of each cuboid in your tile. Basically, it's the height of the front-most
 cuboid; normally it's half (default) or a quarter of the tile size. On the image below you can see
 the height colored in the darker tone:
 
-![An example of how to determine the tileHeight](images/tile-height-example.png)
+![An example of how to determine the tileHeight](../images/tile-height-example.png)
 
 This is an example of how a quarter-length map looks like:
 
-![An example of a isometric map with selector](images/isometric.png)
+![An example of a isometric map with selector](../images/isometric.png)
 
 Flame's Example app contains a more in-depth example, featuring how to parse coordinates to make a
 selector. The code can be found

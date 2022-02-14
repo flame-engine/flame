@@ -3,7 +3,6 @@ import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
 enum InventoryState {
   sword,
@@ -27,8 +26,15 @@ class MyBlocGame extends FlameBlocGame {}
 class InventoryComponent extends Component
     with BlocComponent<InventoryCubit, InventoryState> {}
 
-// ignore: implicit_dynamic_type
-class MockInventoryComponent extends Mock implements BlocComponent {}
+class MockInventoryComponent extends Component
+    with BlocComponent<InventoryCubit, InventoryState> {
+  int numSubscribeCalls = 0;
+
+  @override
+  void subscribe(FlameBlocGame game) {
+    numSubscribeCalls++;
+  }
+}
 
 void main() {
   group('FlameBlocGame', () {
@@ -80,12 +86,12 @@ void main() {
       'runs the queue when game is attached',
       (game) {
         final component = MockInventoryComponent();
-
-        game.prepareComponent(component);
-
+        game.add(component);
+        game.update(0);
+        expect(game.subscriptionQueue.length, 1);
         game.onAttach();
 
-        verify(() => component.subscribe(game)).called(1);
+        expect(component.numSubscribeCalls, 1);
       },
     );
 
@@ -94,6 +100,7 @@ void main() {
       (game, tester) async {
         final component = InventoryComponent();
         game.add(component);
+        await game.ready();
 
         expect(component.state, equals(InventoryState.sword));
       },
@@ -118,6 +125,7 @@ void main() {
       (game, tester) async {
         final component = InventoryComponent();
         game.add(component);
+        await game.ready();
         game.read<InventoryCubit>().selectBow();
 
         expect(component.state, equals(InventoryState.sword));

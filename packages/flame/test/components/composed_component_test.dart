@@ -52,36 +52,39 @@ void main() {
   final withTappables = FlameTester(() => _HasTappablesGame());
 
   group('Composability', () {
-    withTappables.test('child is not added until the component is prepared',
-        (game) async {
-      final child = Component();
-      final wrapper = Component();
-      await wrapper.add(child);
+    withTappables.test(
+      'child is not added until the component is prepared',
+      (game) async {
+        final child = Component();
+        final wrapper = Component();
+        await wrapper.add(child);
 
-      expect(child.isPrepared, false);
-      expect(child.isLoaded, false);
-      expect(wrapper.contains(child), false);
+        expect(child.isLoaded, false);
+        expect(child.isMounted, false);
+        expect(wrapper.contains(child), false);
 
-      await game.ensureAdd(wrapper);
+        await game.ensureAdd(wrapper);
 
-      expect(child.isPrepared, true);
-      expect(child.isLoaded, true);
-      expect(wrapper.contains(child), true);
-    });
+        expect(child.isLoaded, true);
+        expect(child.isMounted, true);
+        expect(wrapper.contains(child), true);
+      },
+    );
 
     withTappables.test('removes the child from the component', (game) async {
       final child = Component();
       final wrapper = Component();
       await game.ensureAdd(wrapper);
+      expect(wrapper.isMounted, true);
 
       await wrapper.add(child);
       expect(wrapper.contains(child), false);
-      wrapper.updateTree(0); // children are only added on the next tick
+      game.updateTree(0); // children are only added on the next tick
       expect(wrapper.contains(child), true);
 
       wrapper.remove(child);
       expect(wrapper.contains(child), true);
-      wrapper.updateTree(0); // children are only removed on the next tick
+      game.updateTree(0); // children are only removed on the next tick
       expect(wrapper.contains(child), false);
     });
 
@@ -97,7 +100,7 @@ void main() {
         expect(wrapper.contains(child), false);
         await future;
         expect(wrapper.contains(child), false);
-        wrapper.updateTree(0);
+        await game.ready();
         expect(wrapper.contains(child), true);
       },
     );
@@ -179,12 +182,13 @@ void main() {
       final child = _MyTap();
       final wrapper = Component();
 
-      await wrapper.ensureAdd(child);
+      await wrapper.add(child);
       await game.ensureAdd(wrapper);
-      game.render(MockCanvas());
 
-      expect(child.rendered, true);
+      game.update(0);
       expect(child.updated, true);
+      game.render(MockCanvas());
+      expect(child.rendered, true);
     });
 
     withTappables.test('initially same debugMode as parent', (game) async {

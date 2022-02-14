@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'dart:math';
 import 'dart:ui';
 
@@ -71,7 +70,7 @@ void main() {
       final component = PositionComponent();
       component.position.setValues(2.0, 2.0);
       component.size.setValues(2.0, 2.0);
-      component.angle = math.pi / 4;
+      component.angle = pi / 4;
       component.anchor = Anchor.center;
 
       final point = Vector2(3.1, 2.0);
@@ -82,7 +81,7 @@ void main() {
       final component = PositionComponent();
       component.position.setValues(2.0, 2.0);
       component.size.setValues(2.0, 2.0);
-      component.angle = math.pi / 4;
+      component.angle = pi / 4;
       component.anchor = Anchor.center;
 
       final point = Vector2(1.0, 0.1);
@@ -93,7 +92,7 @@ void main() {
       final component = PositionComponent();
       component.position.setValues(1.0, 1.0);
       component.size.setValues(2.0, 2.0);
-      component.angle = math.pi / 4;
+      component.angle = pi / 4;
       component.anchor = Anchor.topLeft;
 
       final point = Vector2(1.0, 3.1);
@@ -224,7 +223,8 @@ void main() {
       expect(component.absoluteCenter, component.position + component.size / 2);
     });
 
-    test('component with parent has the correct center', () {
+    test('component with parent has the correct center', () async {
+      final game = FlameGame()..onGameResize(Vector2.all(100));
       final parent = PositionComponent();
       parent.position.setValues(2.0, 1.0);
       parent.anchor = Anchor.topLeft;
@@ -234,6 +234,8 @@ void main() {
       child.angle = 0.0;
       child.anchor = Anchor.topLeft;
       parent.add(child);
+      game.add(parent);
+      await game.ready();
 
       expect(child.absoluteTopLeftPosition, child.position + parent.position);
       expect(
@@ -305,6 +307,9 @@ void main() {
   });
 
   group('coordinates transforms test', () {
+    final game = FlameGame();
+    game.onGameResize(Vector2.all(100));
+
     test('width and height', () {
       final component = PositionComponent(size: Vector2.all(3));
       component.scale = Vector2(5, -7);
@@ -463,8 +468,8 @@ void main() {
       // and track the coordinate of its top-right corner
       for (var i = 0; i < 30; i++) {
         component.angle = -i / 10;
-        final cosA = math.cos(i / 10);
-        final sinA = math.sin(i / 10);
+        final cosA = cos(i / 10);
+        final sinA = sin(i / 10);
         // The component's diagonal is 10, so it's radius (distance from the
         // center to any vertex) is 5. If we denote φ the angle that the
         // diagonal makes with a bimedian, then the cosine of that angle is
@@ -582,7 +587,8 @@ void main() {
       expect(comp1.distance(comp2), 50);
     });
 
-    test('deep nested', () {
+    test('deep nested', () async {
+      final game = FlameGame()..onGameResize(Vector2.all(100));
       final c1 = PositionComponent()..position = Vector2(10, 20);
       final c2 = Component();
       final c3 = PositionComponent()..position = Vector2(-1, -1);
@@ -592,17 +598,22 @@ void main() {
       c2.add(c3);
       c3.add(c4);
       c4.add(c5);
+      game.add(c1);
+      await game.ready();
       // Verify that the absolute coordinate is computed correctly even
       // if the component is part of a nested tree where not all of
       // the components are [PositionComponent]s.
       expect(c5.absoluteToLocal(Vector2(14, 19)), Vector2.zero());
     });
 
-    test('auxiliary getters/setters', () {
+    test('auxiliary getters/setters', () async {
+      final game = FlameGame()..onGameResize(Vector2.all(100));
       final parent = PositionComponent(position: Vector2(12, 19));
       final child =
           PositionComponent(position: Vector2(11, -1), size: Vector2(4, 6));
       parent.add(child);
+      game.add(parent);
+      await game.ready();
 
       expect(child.anchor, Anchor.topLeft);
       expect(child.topLeftPosition, Vector2(11, -1));
@@ -697,16 +708,17 @@ void main() {
         expect(
           component.toRect(),
           Rect.fromLTRB(
-            -h * math.sin(a),
+            -h * sin(a),
             0,
-            w * math.cos(a),
-            w * math.sin(a) + h * math.cos(a),
+            w * cos(a),
+            w * sin(a) + h * cos(a),
           ),
         );
       }
     });
 
-    test('absolute toRect', () {
+    test('absolute toRect', () async {
+      final game = FlameGame()..onGameResize(Vector2.all(100));
       final parent = PositionComponent(
         position: Vector2(10, 10),
         size: Vector2(6, 6),
@@ -716,6 +728,8 @@ void main() {
         size: Vector2(1, 1),
       );
       parent.add(child);
+      game.add(parent);
+      await game.ready();
       expect(child.toRect(), const Rect.fromLTWH(-3, 3, 1, 1));
       expect(child.toAbsoluteRect(), const Rect.fromLTWH(7, 13, 1, 1));
     });

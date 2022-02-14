@@ -48,6 +48,7 @@ class HudButtonComponent extends HudMarginComponent with Tappable {
   @override
   @mustCallSuper
   void onMount() {
+    super.onMount();
     assert(
       button != null,
       'The button has to either be passed in as an argument or set in onLoad',
