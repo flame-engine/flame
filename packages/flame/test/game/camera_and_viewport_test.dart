@@ -24,7 +24,7 @@ class _TestComponent extends PositionComponent {
 
 void main() {
   group('widget', () {
-    testFlameGame(
+    testWithFlameGame(
       'viewport does not affect component with PositionType.widget',
       (game) async {
         game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
@@ -44,7 +44,7 @@ void main() {
       },
     );
 
-    testFlameGame(
+    testWithFlameGame(
       'camera does not affect component with PositionType.widget',
       (game) async {
         await game.ensureAdd(
@@ -65,7 +65,7 @@ void main() {
   });
 
   group('viewport', () {
-    testFlameGame(
+    testWithFlameGame(
       'default viewport does not change size',
       (game) async {
         game.onGameResize(Vector2(100.0, 200.0));
@@ -74,7 +74,7 @@ void main() {
       },
     );
 
-    testFlameGame(
+    testWithFlameGame(
       'fixed ratio viewport has perfect ratio',
       (game) async {
         game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
@@ -102,7 +102,7 @@ void main() {
       },
     );
 
-    testFlameGame(
+    testWithFlameGame(
       'fixed ratio viewport maxes width',
       (game) async {
         game.camera.viewport = FixedResolutionViewport(Vector2.all(50));
@@ -131,7 +131,7 @@ void main() {
       },
     );
 
-    testFlameGame(
+    testWithFlameGame(
       'fixed ratio viewport maxes height',
       (game) async {
         game.camera.viewport = FixedResolutionViewport(Vector2(100.0, 400.0));
@@ -162,7 +162,7 @@ void main() {
   });
 
   group('camera', () {
-    testFlameGame(
+    testWithFlameGame(
       'default camera applies no translation',
       (game) async {
         game.onGameResize(Vector2.all(100.0));
@@ -182,7 +182,7 @@ void main() {
       },
     );
 
-    testFlameGame(
+    testWithFlameGame(
       'camera snap movement',
       (game) async {
         game.onGameResize(Vector2.all(100.0));
@@ -209,7 +209,7 @@ void main() {
       },
     );
 
-    testFlameGame(
+    testWithFlameGame(
       'camera smooth movement',
       (game) async {
         game.onGameResize(Vector2.all(100.0));
@@ -228,7 +228,7 @@ void main() {
       },
     );
 
-    testFlameGame(
+    testWithFlameGame(
       'camera follow',
       (game) async {
         game.onGameResize(Vector2.all(100.0));
@@ -259,7 +259,7 @@ void main() {
       },
     );
 
-    testFlameGame(
+    testWithFlameGame(
       'camera follow with relative position',
       (game) async {
         game.onGameResize(Vector2.all(100.0));
@@ -290,7 +290,7 @@ void main() {
       },
     );
 
-    testFlameGame(
+    testWithFlameGame(
       'camera follow with world boundaries',
       (game) async {
         game.onGameResize(Vector2.all(100.0));
@@ -325,7 +325,7 @@ void main() {
       },
     );
 
-    testFlameGame(
+    testWithFlameGame(
       'camera follow with world boundaries smaller than the screen',
       (game) async {
         game.onGameResize(Vector2.all(200.0));
@@ -352,7 +352,7 @@ void main() {
       },
     );
 
-    testFlameGame(
+    testWithFlameGame(
       'camera relative offset without follow',
       (game) async {
         game.onGameResize(Vector2.all(200.0));
@@ -367,7 +367,7 @@ void main() {
       },
     );
 
-    testFlameGame(
+    testWithFlameGame(
       'camera zoom',
       (game) async {
         game.onGameResize(Vector2.all(200.0));
@@ -389,7 +389,7 @@ void main() {
       },
     );
 
-    testFlameGame(
+    testWithFlameGame(
       'camera zoom with setRelativeOffset',
       (game) async {
         game.onGameResize(Vector2.all(200.0));
@@ -415,7 +415,7 @@ void main() {
       },
     );
 
-    testFlameGame(
+    testWithFlameGame(
       'camera shake should return to where it started',
       (game) async {
         final camera = game.camera;
@@ -431,7 +431,7 @@ void main() {
   });
 
   group('viewport & camera', () {
-    testFlameGame(
+    testWithFlameGame(
       'default ratio viewport + camera with world boundaries',
       (game) async {
         final game = FlameGame()

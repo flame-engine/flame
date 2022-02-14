@@ -3,8 +3,8 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('withFlameGame', () {
-    testFlameGame(
+  group('testWithFlameGame', () {
+    testWithFlameGame(
       'game is properly initialized',
       (game) async {
         // Can be fixed after #1337
@@ -14,10 +14,10 @@ void main() {
     );
   });
 
-  group('withUserGame', () {
+  group('testWithGame', () {
     List<String>? storedEvents;
 
-    testUserGame<RecordedGame>(
+    testWithGame<RecordedGame>(
       'correct event sequence',
       () => RecordedGame(),
       (game) async {

@@ -5,12 +5,12 @@ import 'package:meta/meta.dart';
 /// Utility function for writing tests that require a [FlameGame] instance.
 ///
 /// This function creates a [FlameGame] object, properly initializes it, then
-/// passes on to the user-provided test [testBody], and in the end disposes of
-/// the game object.
+/// passes on to the user-provided [testBody], and in the end disposes of the
+/// game object.
 ///
 /// Example of usage:
 /// ```dart
-/// testFlameGame(
+/// testWithFlameGame(
 ///   'MyComponent can be added to a game',
 ///   (game) async {
 ///     final component = MyComponent()..addToParent(game);
@@ -20,26 +20,25 @@ import 'package:meta/meta.dart';
 /// );
 /// ```
 ///
-/// The `game` instance supplied by this function to your test [testBody] is a
+/// The `game` instance supplied by this function to your [testBody] is a
 /// standard [FlameGame]. If you want to have any other game instance, use the
-/// [testUserGame] function.
+/// [testWithGame] function.
 @isTest
-Future<void> testFlameGame(
+Future<void> testWithFlameGame(
   String testName,
   AsyncGameFunction<FlameGame> testBody,
 ) {
-  return testUserGame<FlameGame>(testName, () => FlameGame(), testBody);
+  return testWithGame<FlameGame>(testName, () => FlameGame(), testBody);
 }
 
 /// Utility function for writing tests that require a custom game instance.
 ///
 /// This function [create]s the game instance, initializes it, then passes it
-/// to the user-provided test [testBody], and in the end disposes of the game
-/// object.
+/// to the user-provided [testBody], and in the end disposes of the game object.
 ///
 /// Example of usage:
 /// ```dart
-/// testUserGame<MyGame>(
+/// testWithGame<MyGame>(
 ///   'MyComponent can be added to MyGame',
 ///   () => MyGame(mySecret: 3781),
 ///   (MyGame game) async {
@@ -50,7 +49,7 @@ Future<void> testFlameGame(
 /// );
 /// ```
 @isTest
-Future<void> testUserGame<T extends FlameGame>(
+Future<void> testWithGame<T extends FlameGame>(
   String testName,
   CreateFunction<T> create,
   AsyncGameFunction<T> testBody,
