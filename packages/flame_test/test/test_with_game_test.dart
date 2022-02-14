@@ -7,9 +7,8 @@ void main() {
     testWithFlameGame(
       'game is properly initialized',
       (game) async {
-        // Can be fixed after #1337
-        // expect(game.isLoaded, true);
-        // expect(game.isMounted, true);
+        expect(game.isLoaded, true);
+        expect(game.isMounted, true);
       },
     );
   });
