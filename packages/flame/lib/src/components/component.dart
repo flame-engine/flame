@@ -25,7 +25,7 @@ class Component {
   /// to the root `FlameGame`.
   PositionType positionType = PositionType.game;
 
-  LifecycleState _state = LifecycleState.uninitialized;
+  var _state = LifecycleState.uninitialized;
 
   /// Whether this component has completed its [onLoad] step.
   bool get isLoaded {
