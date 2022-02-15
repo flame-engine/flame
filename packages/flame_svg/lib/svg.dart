@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flame/assets.dart';
+import 'package:flame/cache.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -12,6 +15,12 @@ class Svg {
   /// Creates an [Svg] with the received [svgRoot].
   Svg(this.svgRoot);
 
+  final MemoryCache<Vector2, Image> _imageCache = MemoryCache();
+
+  final _paint = Paint()..filterQuality = FilterQuality.high;
+
+  final List<Vector2> _lock = [];
+
   /// Loads an [Svg] with the received [cache]. When no [cache] is provided,
   /// the global [Flame.assets] is used.
   static Future<Svg> load(String fileName, {AssetsCache? cache}) async {
@@ -22,10 +31,11 @@ class Svg {
 
   /// Renders the svg on the [canvas] using the dimensions provided by [size].
   void render(Canvas canvas, Vector2 size) {
-    canvas.save();
-    svgRoot.scaleCanvasToViewBox(canvas, size.toSize());
-    svgRoot.draw(canvas, svgRoot.viewport.viewBoxRect);
-    canvas.restore();
+    final image = _getImage(size);
+
+    if (image != null) {
+      canvas.drawImage(image, Offset.zero, _paint);
+    }
   }
 
   /// Renders the svg on the [canvas] on the given [position] using the
@@ -36,6 +46,28 @@ class Svg {
     Vector2 size,
   ) {
     canvas.renderAt(position, (c) => render(c, size));
+  }
+
+  Image? _getImage(Vector2 size) {
+    final image = _imageCache.getValue(size);
+
+    if (image == null && !_lock.contains(size)) {
+      _lock.add(size);
+      final recorder = PictureRecorder();
+
+      final canvas = Canvas(recorder);
+      svgRoot.scaleCanvasToViewBox(canvas, size.toSize());
+      svgRoot.draw(canvas, svgRoot.viewport.viewBoxRect);
+      final _picture = recorder.endRecording();
+
+      _picture.toImage(size.x.toInt(), size.y.toInt()).then((image) {
+        _imageCache.setValue(size, image);
+        _lock.remove(size);
+        _picture.dispose();
+      });
+    }
+
+    return image;
   }
 }
 
