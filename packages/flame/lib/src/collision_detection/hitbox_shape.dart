@@ -20,8 +20,14 @@ mixin HitboxShape on Shape implements Hitbox<HitboxShape> {
   @override
   Set<HitboxShape> get activeCollisions => _activeCollisions ??= {};
   Set<HitboxShape>? _activeCollisions;
+
   @override
-  bool activeCollision(Hitbox other) {
+  bool get isColliding {
+    return _activeCollisions != null && _activeCollisions!.isNotEmpty;
+  }
+
+  @override
+  bool collidingWith(Hitbox other) {
     return _activeCollisions != null && activeCollisions.contains(other);
   }
 

@@ -19,7 +19,12 @@ enum CollidableType {
 mixin CollisionCallbacks<T> {
   Set<T>? _activeCollisions;
   Set<T> get activeCollisions => _activeCollisions ??= {};
-  bool activeCollision(T other) {
+
+  bool get isColliding {
+    return _activeCollisions != null && _activeCollisions!.isNotEmpty;
+  }
+
+  bool collidingWith(T other) {
     return _activeCollisions != null && activeCollisions.contains(other);
   }
 

@@ -28,8 +28,7 @@ class MyCollidable extends PositionComponent
   late Vector2 velocity;
   final _collisionColor = Colors.amber;
   final _defaultColor = Colors.cyan;
-  bool _isWallHit = false;
-  bool _isCollision = false;
+  late HitboxShape hitbox;
 
   MyCollidable(Vector2 position)
       : super(
@@ -40,7 +39,13 @@ class MyCollidable extends PositionComponent
 
   @override
   Future<void> onLoad() async {
-    add(HitboxCircle());
+    final defaultPaint = Paint()
+      ..color = _defaultColor
+      ..style = PaintingStyle.stroke;
+    hitbox = HitboxCircle()
+      ..paint = defaultPaint
+      ..renderShape = true;
+    add(hitbox);
     final center = gameRef.size / 2;
     velocity = (center - position)..scaleTo(150);
   }
@@ -48,27 +53,27 @@ class MyCollidable extends PositionComponent
   @override
   void update(double dt) {
     super.update(dt);
-    if (_isWallHit) {
+    position.add(velocity * dt);
+  }
+
+  @override
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    super.onCollisionStart(intersectionPoints, other);
+    hitbox.paint.color = _collisionColor;
+    if (other is ScreenCollidable) {
       removeFromParent();
       return;
     }
-    debugColor = _isCollision ? _collisionColor : _defaultColor;
-    position.add(velocity * dt);
-    _isCollision = false;
   }
 
   @override
-  void render(Canvas canvas) {
-    renderDebugMode(canvas);
-  }
-
-  @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollision(intersectionPoints, other);
-    if (other is ScreenCollidable) {
-      _isWallHit = true;
-      return;
+  void onCollisionEnd(PositionComponent other) {
+    super.onCollisionEnd(other);
+    if (!isColliding) {
+      hitbox.paint.color = _defaultColor;
     }
-    _isCollision = true;
   }
 }

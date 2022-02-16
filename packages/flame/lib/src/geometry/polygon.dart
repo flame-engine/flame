@@ -119,7 +119,6 @@ class Polygon extends Shape {
       );
     // These bounds also have a start position
     final bounds = _path.getBounds();
-    print('refresh size: $size');
     if (!_manuallySized) {
       size = (bounds.size + bounds.topLeft).toVector2();
     }

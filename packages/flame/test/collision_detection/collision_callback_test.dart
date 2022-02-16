@@ -22,10 +22,6 @@ class _TestHitbox extends HitboxRectangle {
       endCounter++;
     };
   }
-
-  bool hasCollisionWith(HitboxShape otherShape) {
-    return activeCollisions.contains(otherShape);
-  }
 }
 
 class _TestBlock extends PositionComponent
@@ -43,7 +39,7 @@ class _TestBlock extends PositionComponent
     add(hitbox);
   }
 
-  bool hasCollisionWith(PositionComponent other) {
+  bool collidingWith(PositionComponent other) {
     return activeCollisions.contains(other);
   }
 
@@ -82,8 +78,8 @@ void main() {
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
-      expect(blockA.hasCollisionWith(blockB), isTrue);
-      expect(blockB.hasCollisionWith(blockA), isTrue);
+      expect(blockA.collidingWith(blockB), isTrue);
+      expect(blockB.collidingWith(blockA), isTrue);
       expect(blockA.activeCollisions.length, 1);
       expect(blockB.activeCollisions.length, 1);
       expect(blockA.startCounter, 1);
@@ -103,8 +99,8 @@ void main() {
       game.update(0);
       print(blockA.topLeftPosition);
       print(blockB.topLeftPosition);
-      expect(blockA.hasCollisionWith(blockB), isFalse);
-      expect(blockB.hasCollisionWith(blockA), isFalse);
+      expect(blockA.collidingWith(blockB), isFalse);
+      expect(blockB.collidingWith(blockA), isFalse);
       expect(blockA.activeCollisions.length, 0);
       expect(blockB.activeCollisions.length, 0);
       game.update(0);
@@ -125,16 +121,16 @@ void main() {
         );
         await game.ensureAddAll([blockA, blockB]);
         game.update(0);
-        expect(blockA.hasCollisionWith(blockB), true);
-        expect(blockB.hasCollisionWith(blockA), true);
+        expect(blockA.collidingWith(blockB), true);
+        expect(blockB.collidingWith(blockA), true);
         expect(blockA.activeCollisions.length, 1);
         expect(blockB.activeCollisions.length, 1);
         game.remove(blockA);
         game.update(0);
         expect(blockA.endCounter, 1);
         expect(blockB.endCounter, 1);
-        expect(blockA.hasCollisionWith(blockB), false);
-        expect(blockB.hasCollisionWith(blockA), false);
+        expect(blockA.collidingWith(blockB), false);
+        expect(blockB.collidingWith(blockA), false);
         expect(blockA.activeCollisions.length, 0);
         expect(blockB.activeCollisions.length, 0);
       },
@@ -153,8 +149,8 @@ void main() {
       final hitboxB = blockB.hitbox;
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
-      expect(hitboxA.hasCollisionWith(hitboxB), true);
-      expect(hitboxB.hasCollisionWith(hitboxA), true);
+      expect(hitboxA.collidingWith(hitboxB), true);
+      expect(hitboxB.collidingWith(hitboxA), true);
       expect(hitboxA.activeCollisions.length, 1);
       expect(hitboxB.activeCollisions.length, 1);
       expect(hitboxA.startCounter, 1);
@@ -170,8 +166,8 @@ void main() {
       expect(hitboxA.endCounter, 0);
       expect(hitboxB.endCounter, 0);
       game.update(0);
-      expect(hitboxA.hasCollisionWith(hitboxB), false);
-      expect(hitboxB.hasCollisionWith(hitboxA), false);
+      expect(hitboxA.collidingWith(hitboxB), false);
+      expect(hitboxB.collidingWith(hitboxA), false);
       expect(hitboxA.activeCollisions.length, 0);
       expect(hitboxB.activeCollisions.length, 0);
       expect(hitboxA.endCounter, 1);
@@ -194,14 +190,14 @@ void main() {
       final hitboxB = blockB.hitbox;
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
-      expect(hitboxA.hasCollisionWith(hitboxB), true);
-      expect(hitboxB.hasCollisionWith(hitboxA), true);
+      expect(hitboxA.collidingWith(hitboxB), true);
+      expect(hitboxB.collidingWith(hitboxA), true);
       expect(hitboxA.activeCollisions.length, 1);
       expect(hitboxB.activeCollisions.length, 1);
       game.remove(blockA);
       game.update(0);
-      expect(hitboxA.hasCollisionWith(hitboxB), false);
-      expect(hitboxB.hasCollisionWith(hitboxA), false);
+      expect(hitboxA.collidingWith(hitboxB), false);
+      expect(hitboxB.collidingWith(hitboxA), false);
       expect(hitboxA.activeCollisions.length, 0);
       expect(hitboxB.activeCollisions.length, 0);
       expect(hitboxA.endCounter, 1);

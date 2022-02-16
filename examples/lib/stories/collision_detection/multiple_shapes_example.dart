@@ -31,7 +31,7 @@ class MultipleShapesExample extends FlameGame
     final screenCollidable = ScreenCollidable();
     final snowman = CollidableSnowman(
       Vector2.all(150),
-      Vector2(100, 200),
+      Vector2(120, 250),
       Vector2(-100, 100),
       screenCollidable,
     );
@@ -233,26 +233,24 @@ class CollidableCircle extends MyCollidable {
 }
 
 class SnowmanPart extends HitboxCircle {
-  final startColor = Colors.blue.withOpacity(0.8);
+  @override
+  final renderShape = true;
+  final startColor = Colors.white.withOpacity(0.8);
 
   SnowmanPart(double radius, Vector2 position, Color hitColor)
-      : super(radius: radius, position: position) {
+      : super(radius: radius, position: position, anchor: Anchor.center) {
     paint.color = startColor;
     collisionCallback = (
       Set<Vector2> intersectionPoints,
       PositionComponent other,
     ) {
+      print('verdamnt');
       if (other is ScreenCollidable) {
         paint.color = startColor;
       } else {
         paint.color = hitColor.withOpacity(0.8);
       }
     };
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.renderDebugMode(canvas);
   }
 }
 
@@ -266,27 +264,23 @@ class CollidableSnowman extends MyCollidable {
     rotationSpeed = 0.3;
     anchor = Anchor.topLeft;
     final top = SnowmanPart(
-      size.x * 0.4,
-      Vector2(size.x / 2, size.y * 0.1),
+      size.x * 0.3,
+      Vector2(size.x / 2, size.y * 0.15),
       Colors.red,
     );
     final middle = SnowmanPart(
-      size.x * 0.6,
-      Vector2(size.x / 2, size.y * 0.45),
+      size.x * 0.4,
+      Vector2(size.x / 2, size.y * 0.40),
       Colors.yellow,
     );
-    final bottom = SnowmanPart(size.x * 1.0, size / 2, Colors.green);
-    add(top);
-    add(middle);
-    add(bottom);
-    add(
-      randomCollidable(
-        Vector2(size.x / 2, size.y * 0.75),
-        size / 4,
-        Vector2.zero(),
-        screenCollidable,
-      ),
+    final bottom = SnowmanPart(
+      size.x / 2,
+      Vector2(size.x / 2, size.y - size.y / 4),
+      Colors.green,
     );
+    add(bottom);
+    add(middle);
+    add(top);
   }
 }
 

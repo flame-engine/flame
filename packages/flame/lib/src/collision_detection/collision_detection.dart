@@ -31,11 +31,11 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
 
       final intersectionPoints = intersections(itemA, itemB);
       if (intersectionPoints.isNotEmpty) {
-        if (!_hasActiveCollision(itemA, itemB)) {
+        if (!itemA.collidingWith(itemB)) {
           handleCollisionStart(intersectionPoints, itemA, itemB);
         }
         handleCollision(intersectionPoints, itemA, itemB);
-      } else if (_hasActiveCollision(itemA, itemB)) {
+      } else if (itemA.collidingWith(itemB)) {
         handleCollisionEnd(itemA, itemB);
       }
     });
@@ -44,7 +44,6 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   /// Check what the intersection points of two items are,
   /// returns an empty list if there are no intersections.
   Set<Vector2> intersections(T itemA, T itemB);
-  bool _hasActiveCollision(T itemA, T itemB);
   void handleCollisionStart(Set<Vector2> intersectionPoints, T itemA, T itemB);
   void handleCollision(Set<Vector2> intersectionPoints, T itemA, T itemB);
   void handleCollisionEnd(T itemA, T itemB);
@@ -78,12 +77,11 @@ class StandardCollisionDetection extends CollisionDetection<HitboxShape> {
   ) {
     final result = hitboxA.intersections(hitboxB);
     if (result.isNotEmpty) {
-      // Do callbacks to the involved shapes
-      if (!_hasActiveCollision(hitboxA, hitboxB)) {
+      if (!hitboxA.collidingWith(hitboxB)) {
         handleCollisionStart(result, hitboxA, hitboxB);
       }
       handleCollision(result, hitboxA, hitboxB);
-    } else if (hitboxA.activeCollision(hitboxB)) {
+    } else if (hitboxA.collidingWith(hitboxB)) {
       handleCollisionEnd(hitboxA, hitboxB);
     }
 
@@ -114,10 +112,5 @@ class StandardCollisionDetection extends CollisionDetection<HitboxShape> {
   void handleCollisionEnd(HitboxShape hitboxA, HitboxShape hitboxB) {
     hitboxA.onCollisionEnd(hitboxB);
     hitboxB.onCollisionEnd(hitboxA);
-  }
-
-  @override
-  bool _hasActiveCollision(HitboxShape hitboxA, HitboxShape hitboxB) {
-    return hitboxA.activeCollision(hitboxB);
   }
 }

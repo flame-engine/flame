@@ -23,11 +23,6 @@ class HitboxRectangle extends Rectangle with HitboxShape {
 
   @override
   void fillParent() {
-    print(vertices);
     refreshVertices(newVertices: Rectangle.sizeToVertices(size));
-    print(vertices);
-    print(position);
-    print(anchor);
-    print(size);
   }
 }

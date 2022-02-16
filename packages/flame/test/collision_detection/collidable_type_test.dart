@@ -61,8 +61,8 @@ void main() {
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
-      expect(blockA.activeCollision(blockB), true);
-      expect(blockB.activeCollision(blockA), true);
+      expect(blockA.collidingWith(blockB), true);
+      expect(blockB.collidingWith(blockA), true);
       expect(blockA.activeCollisions.length, 1);
       expect(blockB.activeCollisions.length, 1);
     });
@@ -114,8 +114,8 @@ void main() {
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
-      expect(blockA.activeCollision(blockB), true);
-      expect(blockB.activeCollision(blockA), true);
+      expect(blockA.collidingWith(blockB), true);
+      expect(blockB.collidingWith(blockA), true);
       expect(blockA.activeCollisions.length, 1);
       expect(blockB.activeCollisions.length, 1);
     });
@@ -133,8 +133,8 @@ void main() {
       );
       await game.ensureAddAll([blockA, blockB]);
       game.update(0);
-      expect(blockA.activeCollision(blockB), true);
-      expect(blockB.activeCollision(blockA), true);
+      expect(blockA.collidingWith(blockB), true);
+      expect(blockB.collidingWith(blockA), true);
       expect(blockA.activeCollisions.length, 1);
       expect(blockB.activeCollisions.length, 1);
     });
@@ -247,9 +247,9 @@ void main() {
         Vector2.all(10),
         CollidableType.active,
       );
-      expect(blockA.activeCollision(blockB), isFalse);
+      expect(blockA.collidingWith(blockB), isFalse);
       await game.ensureAddAll([blockA, blockB]);
-      expect(blockA.activeCollision(blockB), isFalse);
+      expect(blockA.collidingWith(blockB), isFalse);
       game.update(0);
       print(blockA.intersections(blockB));
       print(game.collisionDetection.items);
@@ -265,16 +265,16 @@ void main() {
       print(blockB.hitbox.absoluteScale);
       print(blockA.hitbox.globalVertices());
       print(blockB.hitbox.globalVertices());
-      expect(blockA.activeCollision(blockB), isFalse);
-      expect(blockB.activeCollision(blockA), isFalse);
+      expect(blockA.collidingWith(blockB), isFalse);
+      expect(blockB.collidingWith(blockA), isFalse);
       expect(blockA.activeCollisions.length, 0);
       expect(blockB.activeCollisions.length, 0);
       blockA.scale = Vector2.all(2.0);
       game.update(0);
       print(blockA.hitbox.globalVertices());
       print(blockB.hitbox.globalVertices());
-      expect(blockA.activeCollision(blockB), isTrue);
-      expect(blockB.activeCollision(blockA), isTrue);
+      expect(blockA.collidingWith(blockB), isTrue);
+      expect(blockB.collidingWith(blockA), isTrue);
       expect(blockA.activeCollisions.length, 1);
       expect(blockB.activeCollisions.length, 1);
     });
