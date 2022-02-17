@@ -51,7 +51,7 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
   void handleCollisionEnd(T itemA, T itemB);
 }
 
-/// Check whether any [HasHitboxes] in [items] collide with each other and
+/// Check whether any [HitboxShape]s in [items] collide with each other and
 /// call their callback methods accordingly.
 class StandardCollisionDetection extends CollisionDetection<HitboxShape> {
   StandardCollisionDetection({BroadphaseType type = BroadphaseType.sweep})
@@ -60,8 +60,9 @@ class StandardCollisionDetection extends CollisionDetection<HitboxShape> {
   /// Removes the [hitbox] from the collision detection, if you just want
   /// to temporarily inactivate it you can set
   /// `collidableType = CollidableType.inactive;` instead.
-  /// This calls [HasHitboxes.onCollisionEnd] for [HasHitboxes]s and their
-  /// children that are removed from the game.
+  /// This calls [CollisionCallbacks.onCollisionEnd] for [HitboxShape]s and
+  /// their hitbox parents if a hitbox that they currently are colliding with is
+  /// removed from the game.
   @override
   void remove(HitboxShape hitbox) {
     hitbox.activeCollisions.toList(growable: false).forEach((otherCollidable) {

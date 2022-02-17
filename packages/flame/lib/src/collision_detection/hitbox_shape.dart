@@ -2,11 +2,9 @@ import 'package:flutter/cupertino.dart';
 
 import '../../collision_detection.dart';
 import '../../components.dart';
-import '../../extensions.dart';
 import '../../game.dart';
 import '../../geometry.dart';
 import '../geometry/shape_intersections.dart' as intersection_system;
-import 'hitbox.dart';
 
 mixin HitboxShape on Shape implements Hitbox<HitboxShape> {
   @override

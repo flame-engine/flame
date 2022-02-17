@@ -121,38 +121,7 @@ class Polygon extends Shape {
     if (!_manuallySized) {
       size = (bounds.size + bounds.topLeft).toVector2();
     }
-    // TODO: Do we need to set the size here so that it has a better AABB
-    //final boundingRect = _path.getBounds();
-    //final topLeft = boundingRect.topLeft.toVector2();
-    //size = boundingRect.size.toVector2();
-    //position = Anchor.topLeft.toOtherAnchorPosition(topLeft, anchor, size);
   }
-
-  // TODO(spydon): Move to HitboxPolygon.fill
-  /// With this constructor you define the [Polygon] from the center of and with
-  /// percentages of the size of the shape.
-  /// Example: [[1.0, 0.0], [0.0, -1.0], [-1.0, 0.0], [0.0, 1.0]]
-  /// This will form a diamond shape within the bounding size box.
-
-  /// Gives back the shape vectors multiplied by the size
-  //Iterable<Vector2> localVertices() {
-  //  final center = this.center;
-  //  if (!_cachedLocalVertices.isCacheValid([size, center])) {
-  //    final halfSize = this.halfSize;
-  //    for (var i = 0; i < _localVertices.length; i++) {
-  //      final point = normalizedVertices[i];
-  //      (_localVertices[i]..setFrom(point))
-  //        ..multiply(halfSize)
-  //        ..add(center)
-  //        ..rotate(angle, center: center);
-  //    }
-  //    _cachedLocalVertices.updateCache(_localVertices, [
-  //      size.clone(),
-  //      center.clone(),
-  //    ]);
-  //  }
-  //  return _cachedLocalVertices.value!;
-  //}
 
   /// Gives back the shape vectors multiplied by the size and scale
   List<Vector2> globalVertices() {

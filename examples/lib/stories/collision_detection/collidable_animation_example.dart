@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flame/collision_detection.dart';
 import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 
@@ -95,7 +94,9 @@ class AnimatedComponent extends SpriteAnimationComponent
 
   @override
   void onCollisionStart(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
     super.onCollisionStart(intersectionPoints, other);
     velocity.negate();
     flipVertically();

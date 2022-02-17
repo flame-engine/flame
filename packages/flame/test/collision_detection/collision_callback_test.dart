@@ -38,13 +38,16 @@ class _TestBlock extends PositionComponent with CollisionCallbacks {
     add(hitbox);
   }
 
+  @override
   bool collidingWith(PositionComponent other) {
     return activeCollisions.contains(other);
   }
 
   @override
   void onCollisionStart(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
     super.onCollisionStart(intersectionPoints, other);
     startCounter++;
   }

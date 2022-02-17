@@ -22,7 +22,9 @@ class _TestBlock extends PositionComponent with CollisionCallbacks {
 
   @override
   void onCollisionStart(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
     super.onCollisionStart(intersectionPoints, other);
     collisionCounter++;
   }

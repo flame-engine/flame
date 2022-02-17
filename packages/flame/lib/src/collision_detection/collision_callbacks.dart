@@ -83,7 +83,9 @@ mixin CollisionCallbacks
   @override
   @mustCallSuper
   void onCollisionStart(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
     activeCollisions.add(other);
     collisionStartCallback?.call(intersectionPoints, other);
   }

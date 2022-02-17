@@ -1,6 +1,5 @@
 import '../../../collision_detection.dart';
 import '../../../game.dart';
-import '../../collision_detection/hitbox.dart';
 
 /// Keeps track of all the [HitboxShape]s in the component tree and initiates
 /// collision detection every tick.
