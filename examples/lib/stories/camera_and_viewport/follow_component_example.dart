@@ -45,7 +45,7 @@ class FollowComponentExample extends FlameGame
 }
 
 class MovableEmber extends Ember<FollowComponentExample>
-    with CollisionCallbacks<PositionComponent>, KeyboardHandler {
+    with CollisionCallbacks, KeyboardHandler {
   static const double speed = 300;
   static final TextPaint textRenderer = TextPaint(
     style: const TextStyle(color: Colors.white70, fontSize: 12),
@@ -168,8 +168,7 @@ class Map extends Component {
   }
 }
 
-class Rock extends SpriteComponent
-    with HasGameRef, CollisionCallbacks<PositionComponent>, Tappable {
+class Rock extends SpriteComponent with HasGameRef, Tappable {
   Rock(Vector2 position)
       : super(
           position: position,

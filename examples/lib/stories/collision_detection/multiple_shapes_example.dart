@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame/palette.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
 enum Shapes { circle, rectangle, polygon }
@@ -92,32 +93,35 @@ class MultipleShapesExample extends FlameGame
 }
 
 abstract class MyCollidable extends PositionComponent
-    with Draggable, CollisionCallbacks<PositionComponent> {
+    with Draggable, CollisionCallbacks {
   double rotationSpeed = 0.0;
   final Vector2 velocity;
   final delta = Vector2.zero();
   double angleDelta = 0;
-  bool _isDragged = false;
-  late final Paint _activePaint;
   final Color _defaultColor = Colors.blue.withOpacity(0.8);
+  late final Paint _dragIndicatorPaint;
   final ScreenCollidable screenCollidable;
+  HitboxShape? hitbox;
 
   MyCollidable(
     Vector2 position,
     Vector2 size,
     this.velocity,
     this.screenCollidable,
-  ) : super(position: position, size: size, anchor: Anchor.center);
+  ) : super(position: position, size: size, anchor: Anchor.center) {
+    _dragIndicatorPaint = BasicPalette.white.paint();
+  }
 
   @override
-  Future<void> onLoad() async {
-    _activePaint = Paint()..color = _defaultColor;
+  void onMount() {
+    hitbox?.paint.color = _defaultColor;
+    super.onMount();
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    if (_isDragged) {
+    if (isDragged) {
       return;
     }
     delta.setFrom(velocity * dt);
@@ -137,24 +141,26 @@ abstract class MyCollidable extends PositionComponent
 
   @override
   void render(Canvas canvas) {
-    if (_isDragged) {
+    if (isDragged) {
       final localCenter = (scaledSize / 2).toOffset();
-      canvas.drawCircle(localCenter, 5, _activePaint);
+      canvas.drawCircle(localCenter, 5, _dragIndicatorPaint);
     }
   }
 
   @override
   void onCollisionStart(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
     super.onCollisionStart(intersectionPoints, other);
-    _activePaint.color = collisionColor(other).withOpacity(0.8);
+    hitbox?.paint.color = collisionColor(other).withOpacity(0.8);
   }
 
   @override
   void onCollisionEnd(PositionComponent other) {
     super.onCollisionEnd(other);
     if (activeCollisions.isEmpty) {
-      _activePaint.color = _defaultColor;
+      hitbox?.paint.color = _defaultColor;
     }
   }
 
@@ -176,15 +182,8 @@ abstract class MyCollidable extends PositionComponent
   }
 
   @override
-  bool onDragUpdate(_) {
-    _isDragged = true;
-    return true;
-  }
-
-  @override
   bool onDragEnd(DragEndInfo info) {
     velocity.setFrom(info.velocity / 10);
-    _isDragged = false;
     return true;
   }
 }
@@ -196,17 +195,20 @@ class CollidablePolygon extends MyCollidable {
     Vector2 velocity,
     ScreenCollidable screenCollidable,
   ) : super(position, size, velocity, screenCollidable) {
-    final hitbox = HitboxPolygon([
-      Vector2(-1.0, 0.0),
-      Vector2(-0.8, 0.6),
-      Vector2(0.0, 1.0),
-      Vector2(0.6, 0.9),
-      Vector2(1.0, 0.0),
-      Vector2(0.6, -0.8),
-      Vector2(0, -1.0),
-      Vector2(-0.8, -0.8),
-    ]);
-    add(hitbox);
+    hitbox = HitboxPolygon.fromNormals(
+      [
+        Vector2(-1.0, 0.0),
+        Vector2(-0.8, 0.6),
+        Vector2(0.0, 1.0),
+        Vector2(0.6, 0.9),
+        Vector2(1.0, 0.0),
+        Vector2(0.6, -0.8),
+        Vector2(0, -1.0),
+        Vector2(-0.8, -0.8),
+      ],
+      size: size,
+    )..renderShape = true;
+    add(hitbox!);
   }
 }
 
@@ -217,7 +219,8 @@ class CollidableRectangle extends MyCollidable {
     Vector2 velocity,
     ScreenCollidable screenCollidable,
   ) : super(position, size, velocity, screenCollidable) {
-    add(HitboxRectangle());
+    hitbox = HitboxRectangle()..renderShape = true;
+    add(hitbox!);
   }
 }
 
@@ -228,7 +231,8 @@ class CollidableCircle extends MyCollidable {
     Vector2 velocity,
     ScreenCollidable screenCollidable,
   ) : super(position, size, velocity, screenCollidable) {
-    add(HitboxCircle());
+    hitbox = HitboxCircle()..renderShape = true;
+    add(hitbox!);
   }
 }
 
@@ -236,21 +240,29 @@ class SnowmanPart extends HitboxCircle {
   @override
   final renderShape = true;
   final startColor = Colors.white.withOpacity(0.8);
+  final Color hitColor;
 
-  SnowmanPart(double radius, Vector2 position, Color hitColor)
+  SnowmanPart(double radius, Vector2 position, this.hitColor)
       : super(radius: radius, position: position, anchor: Anchor.center) {
     paint.color = startColor;
-    collisionCallback = (
-      Set<Vector2> intersectionPoints,
-      PositionComponent other,
-    ) {
-      print('verdamnt');
-      if (other is ScreenCollidable) {
-        paint.color = startColor;
-      } else {
-        paint.color = hitColor.withOpacity(0.8);
-      }
-    };
+  }
+
+  @override
+  void update(double dt) {
+    if (!isColliding) {
+      paint.color = startColor;
+    }
+  }
+
+  @override
+  void onCollisionStart(Set<Vector2> intersectionPoints, HitboxShape other) {
+    super.onCollisionStart(intersectionPoints, other);
+
+    if (other.hitboxParent is ScreenCollidable) {
+      paint.color = startColor;
+    } else {
+      paint.color = hitColor.withOpacity(0.8);
+    }
   }
 }
 

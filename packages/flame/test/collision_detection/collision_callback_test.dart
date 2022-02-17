@@ -24,8 +24,7 @@ class _TestHitbox extends HitboxRectangle {
   }
 }
 
-class _TestBlock extends PositionComponent
-    with CollisionCallbacks<PositionComponent> {
+class _TestBlock extends PositionComponent with CollisionCallbacks {
   final hitbox = _TestHitbox();
   int startCounter = 0;
   int onCollisionCounter = 0;

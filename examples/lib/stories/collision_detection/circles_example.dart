@@ -24,7 +24,7 @@ class CirclesExample extends FlameGame with HasCollisionDetection, TapDetector {
 }
 
 class MyCollidable extends PositionComponent
-    with HasGameRef<CirclesExample>, CollisionCallbacks<PositionComponent> {
+    with HasGameRef<CirclesExample>, CollisionCallbacks {
   late Vector2 velocity;
   final _collisionColor = Colors.amber;
   final _defaultColor = Colors.cyan;

@@ -33,7 +33,7 @@ class PlayerController extends Component
 class PlayerComponent extends SpriteAnimationComponent
     with
         HasGameRef<SpaceShooterGame>,
-        CollisionCallbacks<PositionComponent>,
+        CollisionCallbacks,
         KeyboardHandler,
         BlocComponent<InventoryBloc, InventoryState> {
   bool destroyed = false;

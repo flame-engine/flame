@@ -49,7 +49,6 @@ class Polygon extends Shape {
           priority: priority,
           paint: paint,
         ) {
-    print('Vertices: $vertices');
     refreshVertices();
 
     final verticesLength = vertices.length;

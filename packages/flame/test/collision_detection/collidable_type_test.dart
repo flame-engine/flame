@@ -8,8 +8,7 @@ import 'package:test/test.dart';
 
 class _HasCollidablesGame extends FlameGame with HasCollisionDetection {}
 
-class _TestBlock extends PositionComponent
-    with CollisionCallbacks<PositionComponent> {
+class _TestBlock extends PositionComponent with CollisionCallbacks {
   late final HitboxRectangle hitbox;
   String? name;
 

@@ -12,6 +12,10 @@ mixin HitboxShape on Shape implements Hitbox<HitboxShape> {
   @override
   CollidableType collidableType = CollidableType.active;
 
+  /// Whether the hitbox is allowed to collide with another hitbox that is
+  /// added to the same parent.
+  bool allowSiblingCollision = false;
+
   @override
   Aabb2 get aabb => _validAabb ? _aabb : _recalculateAabb();
   final Aabb2 _aabb = Aabb2();
@@ -59,11 +63,6 @@ mixin HitboxShape on Shape implements Hitbox<HitboxShape> {
         throw StateError('A HitboxShape needs a PositionComponent ancestor');
       },
     ) as PositionComponent;
-    //hitboxParent = ancestors<PositionComponent>().firstWhere(
-    //  (_) => true,
-    //  orElse:
-    //      throw StateError('A HitboxShape needs a PositionComponent ancestor'),
-    //);
 
     _transformListener = () => _validAabb = false;
     ancestors(includeSelf: true).whereType<PositionComponent>().forEach((c) {
@@ -92,8 +91,6 @@ mixin HitboxShape on Shape implements Hitbox<HitboxShape> {
     if (_parentSizeListener != null) {
       hitboxParent.size.removeListener(_parentSizeListener!);
     }
-    // TODO(spydon): One problem here is that if an ancestor that is not the
-    // direct parent is swapped that ancestor still has the listener.
     _transformAncestors.forEach((t) => t.removeListener(_transformListener));
     _collisionDetection?.remove(this);
     super.onRemove();
@@ -141,7 +138,9 @@ mixin HitboxShape on Shape implements Hitbox<HitboxShape> {
   /// overlap, since the shapes have to be within the size of the component.
   @override
   bool possiblyOverlapping(HitboxShape other) {
-    return aabb.intersectsWithAabb2(other.aabb);
+    final collisionAllowed =
+        allowSiblingCollision || hitboxParent != other.hitboxParent;
+    return collisionAllowed && aabb.intersectsWithAabb2(other.aabb);
   }
 
   void fillParent();

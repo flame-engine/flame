@@ -29,14 +29,16 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
       final itemA = tuple.a;
       final itemB = tuple.b;
 
-      final intersectionPoints = intersections(itemA, itemB);
-      if (intersectionPoints.isNotEmpty) {
-        if (!itemA.collidingWith(itemB)) {
-          handleCollisionStart(intersectionPoints, itemA, itemB);
+      if (itemA.possiblyOverlapping(itemB)) {
+        final intersectionPoints = intersections(itemA, itemB);
+        if (intersectionPoints.isNotEmpty) {
+          if (!itemA.collidingWith(itemB)) {
+            handleCollisionStart(intersectionPoints, itemA, itemB);
+          }
+          handleCollision(intersectionPoints, itemA, itemB);
+        } else if (itemA.collidingWith(itemB)) {
+          handleCollisionEnd(itemA, itemB);
         }
-        handleCollision(intersectionPoints, itemA, itemB);
-      } else if (itemA.collidingWith(itemB)) {
-        handleCollisionEnd(itemA, itemB);
       }
     });
   }

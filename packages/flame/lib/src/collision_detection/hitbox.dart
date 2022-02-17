@@ -1,7 +1,7 @@
 import '../../collision_detection.dart';
 import '../../extensions.dart';
 
-mixin Hitbox<T extends Hitbox<T>> implements CollisionCallbacks<T> {
+mixin Hitbox<T extends Hitbox<T>> implements GenericCollisionCallbacks<T> {
   CollidableType get collidableType;
   Aabb2 get aabb;
 
