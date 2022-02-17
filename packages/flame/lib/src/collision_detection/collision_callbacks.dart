@@ -57,7 +57,7 @@ mixin GenericCollisionCallbacks<T> {
   CollisionEndCallback<T>? collisionEndCallback;
 }
 
-mixin CollisionCallbacks
+mixin CollisionCallbacks on PositionComponent
     implements GenericCollisionCallbacks<PositionComponent> {
   @override
   Set<PositionComponent>? _activeCollisions;
