@@ -219,7 +219,7 @@ class Component {
   /// priority of the direct siblings, not the children or the ancestors.
   void updateTree(double dt) {
     _children?.updateComponentList();
-    _lifecycleManager?.processChildrenQueue();
+    _lifecycleManager?.processQueues();
     update(dt);
     _children?.forEach((c) => c.updateTree(dt));
   }
@@ -409,7 +409,7 @@ class Component {
     if (_children != null) {
       _children!.forEach((child) => child.mount(existingChild: true));
     }
-    _lifecycleManager?.processChildrenQueue();
+    _lifecycleManager?.processQueues();
   }
 
   // TODO(st-pasha): remove this after #1351 is done
@@ -425,7 +425,7 @@ class Component {
   /// Attempt to resolve any pending lifecycle events on this component.
   void processPendingLifecycleEvents() {
     if (_lifecycleManager != null) {
-      _lifecycleManager!.processChildrenQueue();
+      _lifecycleManager!.processQueues();
       if (!_lifecycleManager!.hasPendingEvents) {
         _lifecycleManager = null;
       }
@@ -574,12 +574,16 @@ class _LifecycleManager {
     return _children.isNotEmpty;
   }
 
+  void processQueues() {
+    _processChildrenQueue();
+  }
+
   /// Attempt to resolve pending events in all lifecycle event queues.
   ///
   /// This method must be periodically invoked by the game engine, in order to
   /// ensure that the components get properly added/removed from the component
   /// tree.
-  void processChildrenQueue() {
+  void _processChildrenQueue() {
     while (_children.isNotEmpty) {
       final child = _children.first;
       assert(child.parent!.isMounted);
