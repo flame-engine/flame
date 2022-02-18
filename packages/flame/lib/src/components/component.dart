@@ -258,7 +258,7 @@ class Component {
   /// Changes the current parent for another parent and prepares the tree under
   /// the new root.
   void changeParent(Component component) {
-    parent?.remove(this);
+    parent?._children?.remove(this);
     nextParent = component;
   }
 
@@ -362,7 +362,7 @@ class Component {
   /// Removes a component from the component tree, calling [onRemove] for it and
   /// its children.
   void remove(Component c) {
-    _children?.remove(c);
+    lifecycle._dead.add(c);
   }
 
   /// Removes all the children in the list and calls [onRemove] for all of them
@@ -415,6 +415,13 @@ class Component {
   // TODO(st-pasha): remove this after #1351 is done
   @internal
   void setMounted() => _state = LifecycleState.mounted;
+
+  void _remove() {
+    final p = _parent!;
+    onRemove();
+    p.children.removeNow(this);
+    _parent = null;
+  }
 
   //#endregion
 
@@ -570,12 +577,15 @@ class _LifecycleManager {
   /// finish loading in arbitrary order.
   final Queue<Component> _children = Queue();
 
+  final Queue<Component> _dead = Queue();
+
   bool get hasPendingEvents {
-    return _children.isNotEmpty;
+    return _children.isNotEmpty || _dead.isNotEmpty;
   }
 
   void processQueues() {
     _processChildrenQueue();
+    _processDeathQueue();
   }
 
   /// Attempt to resolve pending events in all lifecycle event queues.
@@ -595,6 +605,14 @@ class _LifecycleManager {
       } else {
         child._load();
       }
+    }
+  }
+
+  void _processDeathQueue() {
+    while (_dead.isNotEmpty) {
+      final component = _dead.removeFirst();
+      component._remove();
+      assert(component._state == LifecycleState.removed);
     }
   }
 }

@@ -58,6 +58,9 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     );
   }
 
+  @internal
+  void removeNow(Component component) => super.remove(component);
+
   /// Marks the component to be removed on the next call to
   /// `updateComponentList()`.
   @override
