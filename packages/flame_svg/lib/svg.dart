@@ -10,7 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 /// A [Svg] to be rendered on a Flame [Game].
 class Svg {
   /// The [DrawableRoot] that this [Svg] represents.
-  DrawableRoot svgRoot;
+  final DrawableRoot svgRoot;
 
   /// Creates an [Svg] with the received [svgRoot].
   Svg(this.svgRoot);
@@ -35,6 +35,8 @@ class Svg {
 
     if (image != null) {
       canvas.drawImage(image, Offset.zero, _paint);
+    } else {
+      _render(canvas, size);
     }
   }
 
@@ -56,8 +58,7 @@ class Svg {
       final recorder = PictureRecorder();
 
       final canvas = Canvas(recorder);
-      svgRoot.scaleCanvasToViewBox(canvas, size.toSize());
-      svgRoot.draw(canvas, svgRoot.viewport.viewBoxRect);
+      _render(canvas, size);
       final _picture = recorder.endRecording();
 
       _picture.toImage(size.x.toInt(), size.y.toInt()).then((image) {
@@ -68,6 +69,20 @@ class Svg {
     }
 
     return image;
+  }
+
+  void _render(Canvas canvas, Vector2 size) {
+    svgRoot.scaleCanvasToViewBox(canvas, size.toSize());
+    svgRoot.draw(canvas, svgRoot.viewport.viewBoxRect);
+  }
+
+  /// Clear all the stored cache from this SVG, be sure to call
+  /// this method once the instance is no longer needed to avoid
+  /// memory leaks
+  void dispose() {
+    _imageCache.keys.forEach((key) {
+      _imageCache.getValue(key)?.dispose();
+    });
   }
 }
 

@@ -7,18 +7,18 @@ import './svg.dart';
 /// Wraps [Svg] in a Flame component.
 class SvgComponent extends PositionComponent {
   /// The wrapped instance of [Svg].
-  Svg? svg;
+  Svg? _svg;
 
   /// Creates an [SvgComponent]
   SvgComponent({
-    this.svg,
+    required Svg svg,
     Vector2? position,
     Vector2? size,
     Vector2? scale,
     double? angle,
     Anchor? anchor,
     int? priority,
-  }) : super(
+  }) : _svg = svg, super(
           position: position,
           size: size,
           scale: scale,
@@ -50,8 +50,27 @@ class SvgComponent extends PositionComponent {
           priority: priority,
         );
 
+  /// Sets a new [svg] instance
+  set svg(Svg? svg) {
+    if (_svg != null) {
+      _svg!.dispose();
+    }
+
+    _svg = svg;
+  }
+
+  /// Returns the current [svg] instance
+  Svg? get svg => _svg;
+
   @override
   void render(Canvas canvas) {
-    svg?.render(canvas, size);
+    _svg?.render(canvas, size);
+  }
+
+  @override
+  void onRemove() {
+    super.onRemove();
+
+    _svg?.dispose();
   }
 }
