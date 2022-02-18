@@ -74,7 +74,10 @@ class Component {
   ///
   /// It will be checked once per component per tick, and if it is true,
   /// FlameGame will remove it.
-  bool shouldRemove = false;
+  @nonVirtual
+  bool get shouldRemove => _shouldRemove;
+  set shouldRemove(bool v) => _shouldRemove = v;
+  bool _shouldRemove = false;
 
   /// Returns whether this [Component] is in debug mode or not.
   /// When a child is added to the [Component] it gets the same [debugMode] as
