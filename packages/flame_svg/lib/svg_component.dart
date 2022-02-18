@@ -18,7 +18,8 @@ class SvgComponent extends PositionComponent {
     double? angle,
     Anchor? anchor,
     int? priority,
-  }) : _svg = svg, super(
+  })  : _svg = svg,
+        super(
           position: position,
           size: size,
           scale: scale,
