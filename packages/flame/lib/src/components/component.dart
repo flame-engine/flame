@@ -253,7 +253,9 @@ class Component {
   }
 
   /// Remove the component from its parent in the next tick.
-  void removeFromParent() => shouldRemove = true;
+  void removeFromParent() {
+    _parent?.remove(this);
+  }
 
   /// Changes the current parent for another parent and prepares the tree under
   /// the new root.
@@ -367,8 +369,8 @@ class Component {
 
   /// Removes all the children in the list and calls [onRemove] for all of them
   /// and their children.
-  void removeAll(Iterable<Component> cs) {
-    _children?.removeAll(cs);
+  void removeAll(Iterable<Component> components) {
+    components.forEach(remove);
   }
 
   Future<void>? _load() {
@@ -611,7 +613,9 @@ class _LifecycleManager {
   void _processDeathQueue() {
     while (_dead.isNotEmpty) {
       final component = _dead.removeFirst();
-      component._remove();
+      if (component.isMounted) {
+        component._remove();
+      }
       assert(component._state == LifecycleState.removed);
     }
   }

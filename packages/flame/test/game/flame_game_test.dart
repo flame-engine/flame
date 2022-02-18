@@ -139,13 +139,13 @@ void main() {
 
     flameGame.test('onRemove is only called once on component', (game) async {
       final component = _MyComponent();
-
       await game.ensureAdd(component);
+
       // The component is removed both by removing it on the game instance and
       // by the function on the component, but the onRemove callback should
       // only be called once.
       component.removeFromParent();
-      game.children.remove(component);
+      game.remove(component);
       // The component is not removed from the component list until an update
       // has been performed.
       game.update(0.0);
