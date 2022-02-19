@@ -368,7 +368,7 @@ class Component {
   /// its children.
   void remove(Component component) {
     if (component._state != LifecycleState.removing) {
-      lifecycle._dying.add(component);
+      lifecycle._removals.add(component);
       component._state = LifecycleState.removing;
     }
   }
@@ -603,18 +603,18 @@ class _LifecycleManager {
   ///
   /// Components that were placed into this queue will be removed from [parent]
   /// when the pending events are resolved.
-  final Queue<Component> _dying = Queue();
+  final Queue<Component> _removals = Queue();
 
   /// Queue for moving components from another parent to this one.
   final Queue<Component> _adoption = Queue();
 
   bool get hasPendingEvents {
-    return !(_children.isEmpty && _dying.isEmpty && _adoption.isEmpty);
+    return !(_children.isEmpty && _removals.isEmpty && _adoption.isEmpty);
   }
 
   void processQueues() {
     _processChildrenQueue();
-    _processDyingQueue();
+    _processRemovalQueue();
     _processAdoptionQueue();
   }
 
@@ -638,9 +638,9 @@ class _LifecycleManager {
     }
   }
 
-  void _processDyingQueue() {
-    while (_dying.isNotEmpty) {
-      final component = _dying.removeFirst();
+  void _processRemovalQueue() {
+    while (_removals.isNotEmpty) {
+      final component = _removals.removeFirst();
       if (component.isMounted) {
         component._remove();
       }
