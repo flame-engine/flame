@@ -8,7 +8,7 @@ abstract class Broadphase<T extends Hitbox<T>> {
   final List<T> items;
   Broadphase(this.items);
 
-  Iterable<Potential<T>> query();
+  Set<Potential<T>> query({Function(T) collisionEndHandler});
 }
 
 @immutable
@@ -17,4 +17,10 @@ class Potential<T> {
   final T b;
 
   const Potential(this.a, this.b);
+
+  @override
+  bool operator ==(Object o) => o is Potential && o.a == a && o.b == b;
+
+  @override
+  int get hashCode => Object.hash(a.hashCode, b.hashCode);
 }

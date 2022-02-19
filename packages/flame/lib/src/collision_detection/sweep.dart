@@ -6,10 +6,10 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
   Sweep(List<T> items) : super(items);
 
   final List<T> _active = [];
-  final List<Potential<T>> _potentials = [];
+  final Set<Potential<T>> _potentials = {};
 
   @override
-  Iterable<Potential<T>> query() {
+  Set<Potential<T>> query({Function(T)? collisionEndHandler}) {
     _active.clear();
     _potentials.clear();
     items.sort((a, b) => (a.aabb.min.x - b.aabb.min.x).ceil());

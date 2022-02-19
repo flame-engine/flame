@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 
 import '../../collision_detection.dart';
 import '../../components.dart';
@@ -35,7 +35,7 @@ mixin HitboxShape on Shape implements Hitbox<HitboxShape> {
 
   CollisionDetection? _collisionDetection;
   final List<Transform2D> _transformAncestors = [];
-  late VoidCallback _transformListener;
+  late Function() _transformListener;
 
   final Vector2 _halfExtents = Vector2.zero();
   final Matrix3 _rotationMatrix = Matrix3.zero();

@@ -4,6 +4,7 @@ import '../../components.dart';
 abstract class CollisionDetection<T extends Hitbox<T>> {
   final List<T> items = [];
   late final Broadphase<T> broadphase;
+  Set<Potential<T>> _lastPotentials = {};
 
   CollisionDetection({BroadphaseType type = BroadphaseType.sweep}) {
     switch (type) {
@@ -25,7 +26,8 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
 
   /// Run collision detection for the current state of [items].
   void run() {
-    broadphase.query().forEach((tuple) {
+    final potentials = broadphase.query();
+    potentials.forEach((tuple) {
       final itemA = tuple.a;
       final itemB = tuple.b;
 
@@ -43,6 +45,13 @@ abstract class CollisionDetection<T extends Hitbox<T>> {
         handleCollisionEnd(itemA, itemB);
       }
     });
+
+    // Handles callbacks for an ended collision that the broadphase didn't
+    // reports as a potential collision anymore.
+    _lastPotentials.difference(potentials).forEach((tuple) {
+      handleCollisionEnd(tuple.a, tuple.b);
+    });
+    _lastPotentials = potentials;
   }
 
   /// Check what the intersection points of two items are,
