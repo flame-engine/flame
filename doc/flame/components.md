@@ -34,11 +34,6 @@ throughout the component's lifetime. This method will only run if the parent is 
 If the parent is not mounted yet, then this method will wait in a queue (this will have no effect
 on the rest of the game engine). 
 
-The `respectCamera` variable can be overridden or set to `false` (defaults to `true`) to make the
-`FlameGame` ignore the `camera` for this component, making it static in relation to the viewport
-that is.
-Do note that this currently only works if the component is added directly to the root `FlameGame`.
-
 
 ## Component
 Usually if you are going to make your own component you want to extend `PositionComponent`, but if
